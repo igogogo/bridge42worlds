@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="$lang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/$lang/index.html">main</a>
+            <a href="/lang/$lang/tags/" class="active">tags</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$lang/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<h1>🏷️ $tags_title</h1>
+<div class="subtitle">$tags_subtitle</div>
+
+<div class="selected-bar" id="selected-bar">$selected_tags_html</div>
+
+<div class="view-toggle" id="view-toggle">
+    <button type="button" id="view-list" class="active" aria-label="List">☰</button>
+    <button type="button" id="view-graph" aria-label="Graph">◉</button>
+</div>
+
+<div class="tag-cloud" id="tag-cloud">$tags_cloud_html</div>
+<div id="tag-graph" style="display:none"><canvas id="tgcanvas"></canvas></div>
+
+<footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/force-graph.js?v=15"></script>
+<script src="/js/graph.js?v=15"></script>
+<script>
+(function(){
+  var lb=document.getElementById('view-list'),gb=document.getElementById('view-graph');
+  var cloud=document.getElementById('tag-cloud'),graph=document.getElementById('tag-graph');
+  function set(g){cloud.style.display=g?'none':'';graph.style.display=g?'block':'none';
+    gb.classList.toggle('active',g);lb.classList.toggle('active',!g);
+    if(g&&window.__graphResize)window.__graphResize();
+    try{localStorage.setItem('b42_tagview',g?'graph':'list');}catch(e){}}
+  lb.onclick=function(){set(false);};gb.onclick=function(){set(true);};
+  try{if(localStorage.getItem('b42_tagview')==='graph')set(true);}catch(e){}
+})();
+</script>
+</body>
+</html>

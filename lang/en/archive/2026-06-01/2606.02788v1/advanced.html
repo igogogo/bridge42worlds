@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neutrino Fingerprints: Images for Direction Reconstruction in IceCube — bridge42worlds</title>
+    <meta name="description" content="Researchers developed a method to encode events from the IceCube neutrino observatory into 72×72 pixel images (neutrino fingerprints). Using a standard ResNet18 network, they achieved a mean angular error of 1.10 rad, only 0.15 rad worse than top Kaggle solutions based on graph neural networks and t">
+    <meta property="og:title" content="Neutrino Fingerprints: Images for Direction Reconstruction in IceCube">
+    <meta property="og:description" content="Encoding IceCube detector data into compact RGB images allows a convolutional neural network to achieve neutrino direction reconstruction accuracy close to complex ensemble models.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/0.jpg">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="zh" href="https://bridge42worlds.org/lang/zh/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="fr" href="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.org/lang/ar/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Neutrino Fingerprints: Images for Direction Reconstruction in IceCube", "description": "Encoding IceCube detector data into compact RGB images allows a convolutional neural network to achieve neutrino direction reconstruction accuracy close to complex ensemble models.", "inLanguage": "en", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/0.jpg", "author": [{"@type": "Person", "name": "Floriano Tori"}, {"@type": "Person", "name": "Brecht Verbeken"}, {"@type": "Person", "name": "Vincent Ginis"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02788v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle"><a href="/lang/en/archive/2026-06-01/2606.02788v1/index.html">Popular</a><a href="/lang/en/archive/2026-06-01/2606.02788v1/simple.html">Simple</a><a href="/lang/en/archive/2026-06-01/2606.02788v1/advanced.html" class="active">Advanced</a></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search articles, #tags, @authors" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div class="authors-top"><a href="/lang/ru/authors/Floriano_Tori.html" class="text-author-link" data-author="Floriano Tori">Floriano Tori</a>, <a href="/lang/ru/authors/Brecht_Verbeken.html" class="text-author-link" data-author="Brecht Verbeken">Brecht Verbeken</a>, <a href="/lang/ru/authors/Vincent_Ginis.html" class="text-author-link" data-author="Vincent Ginis">Vincent Ginis</a></div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.02788v1">2606.02788v1</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 2 min</span> · <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span>
+</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 I am the author — verify & edit</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author — verify & edit</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.02788v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1>Neutrino Fingerprints: Images for Direction Reconstruction in IceCube</h1>
+        <div class="original-title">Original: "Neutrino Fingerprints: Image-Based Encodings of IceCube Events for CNN Direction Reconstruction"</div>
+        <div class="oneliner">Encoding IceCube detector data into compact RGB images allows a convolutional neural network to achieve neutrino direction reconstruction accuracy close to complex ensemble models.</div>
+        <div class="ai-cover ai-cover-ph"></div>
+        <div class="mosaic"></div>
+        <section id="context"><h2>Context</h2><p>The IceCube neutrino <a href="/lang/en/tags/telescope.html" class="text-tag" data-tag="telescope">telescope</a> detects Cherenkov radiation emitted by charged particles produced when <a href="/lang/en/tags/lepton.html" class="text-tag" data-tag="lepton">neutrinos</a> interact with the ice. <a href="/lang/en/tags/photon.html" class="text-tag" data-tag="photon">Photons</a> are captured by a network of 5160 photomultipliers. Neutrinos are <a href="/lang/en/tags/fermion.html" class="text-tag" data-tag="fermion">fermions</a> participating only in weak interaction. Reconstructing neutrino direction is key for identifying their astrophysical sources.</p></section><section id="methods"><h2>Methods</h2><p>The authors developed a method called <a href="/lang/en/tags/computer_simulation.html" class="text-tag" data-tag="computer_simulation">neutrino fingerprints</a> — compact RGB images of size 72×72×3, where each pixel corresponds to one detector. Color channels encode normalized arrival time, total charge, and their difference. This representation transforms sparse pulse sequences into dense images suitable for convolutional networks. Training was performed on 140 million simulated events from the Kaggle competition using a ResNet18 network and various loss functions, including angular loss and combined angular loss with von Mises–Fisher distribution.</p></section><section id="results"><h2>Results</h2><p>The best model achieved a mean angular error (MAE) of 1.10 radians on the test set. For comparison, top Kaggle solutions using graph neural networks and transformers with ensembling achieved around 0.95 radians. Thus, the proposed simple convolutional approach lags behind the state-of-the-art by only 0.15 radians, demonstrating that proper data representation allows the <a href="/lang/en/tags/standard_model.html" class="text-tag" data-tag="standard_model">Standard Model</a> of particle physics to be competitive. Interestingly, the model was trained without complex techniques — learning rate schedulers, restarts, or augmentations.</p></section><section id="implications"><h2>Implications</h2><p>The work shows that abandoning complex architectures in favor of simple convolutional networks with thoughtful data encoding can be an effective strategy. The <a href="/lang/en/tags/weak_interaction.html" class="text-tag" data-tag="weak_interaction">weak interaction</a> of the <a href="/lang/en/tags/standard_model.html" class="text-tag" data-tag="standard_model">Standard Model</a>, through which neutrinos interact, makes their detection difficult, but this study simplifies the reconstruction step. The proposed 'neutrino fingerprints' are intuitive: each pixel corresponds to a specific detector, facilitating error diagnosis. This could be important for interpreting AI decisions in high-energy physics.</p></section><section id="future_development"><h2>Future development</h2><p>Further improvement is possible by using space-filling curves to better preserve locality, adding extra color channels (e.g., energy), and applying more modern architectures such as Vision Transformer or depthwise-separable convolutions. <a href="/lang/en/tags/electroweak_interaction.html" class="text-tag" data-tag="electroweak_interaction">Electroweak interaction</a> may be considered in modeling finer effects, although not addressed in this work. Also promising is the use of von Mises–Fisher distribution for calibrated directional uncertainties.</p></section><section id="impact_on"><h2>Impact</h2><p>The results can be applied in astrophysics for automatic processing of neutrino telescope data, and in machine learning for parameter reconstruction from sparse signals.</p></section><section id="next_steps"><h2>Next steps</h2><p>Integration of the proposed encoding method into the real IceCube data processing pipeline, and testing on data from other neutrino observatories such as KM3NeT. Use of space-filling curves and augmentations may further improve accuracy.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>This work is related to the unresolved problem of accurate reconstruction of high-energy neutrino direction, which is critical for multi-messenger astronomy.</p></section>
+        <div class="fun-fact">🎯 The neutrino fingerprint image of size 72×72 pixels contains information from thousands of photomultiplier pulses but itself occupies only 15 kilobytes.</div>
+        <div class="formula"><div class="formula-render">\text{Angular} = \arccos(\text{clamp}(\cos\theta))</div><div class="formula-meaning">Geodesic distance between predicted and true direction</div></div>
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>mean angular error:</strong> 1.10 rad</li><li><strong>image size:</strong> 72×72×3</li><li><strong>number of detectors:</strong> 5160</li><li><strong>number of events:</strong> 140 million</li></ul></div>
+        
+        <div class="actions">
+            <div class="likes" data-article-id="2606.02788v1">
+                <button onclick="toggleLike('2606.02788v1')" class="like-btn">♥ <span id="like-count-2606.02788v1">…</span></button>
+            </div>
+            <button onclick="shareArticle('Neutrino Fingerprints: Images for Direction Reconstruction in IceCube','https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/index.html')">Share</button>
+        </div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><a href="/lang/en/tags/computer_simulation.html" class="side-tag" data-tag="computer_simulation">computer simulation</a>
+<a href="/lang/en/tags/lepton.html" class="side-tag" data-tag="lepton">Lepton</a>
+<a href="/lang/en/tags/photon.html" class="side-tag" data-tag="photon">Photon</a>
+<a href="/lang/en/tags/telescope.html" class="side-tag" data-tag="telescope">telescope</a>
+<a href="/lang/en/tags/standard_model.html" class="side-tag" data-tag="standard_model">Standard Model</a>
+<a href="/lang/en/tags/fermion.html" class="side-tag" data-tag="fermion">Fermion</a>
+<a href="/lang/en/tags/weak_interaction.html" class="side-tag" data-tag="weak_interaction">Weak Interaction</a>
+<a href="/lang/en/tags/electroweak_interaction.html" class="side-tag" data-tag="electroweak_interaction">Electroweak Interaction</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2606.02788v1">arXiv:2606.02788v1</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=15"></script>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/scroll.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

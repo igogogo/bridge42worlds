@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="$lang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$clickbait — bridge42worlds</title>
+    <meta name="description" content="$description">
+    <meta property="og:title" content="$clickbait">
+    <meta property="og:description" content="$oneliner_og">
+    <meta property="og:image" content="$site_url/lang/$authors_lang/archive/$date/$id/0.jpg">
+    <meta property="og:url" content="$canonical_url">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="$canonical_url">
+    $hreflang_links
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    $jsonld_html
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/$lang/index.html">main</a>
+            <a href="/lang/$lang/tags/">tags</a>
+            <a href="/lang/$lang/laws/">laws</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$lang/about.html">about</a>
+        </div>
+        $version_toggle_html
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint">$search_hint</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div class="authors-top">$authors_full</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/$id">$id</a> · $date · <a href="$license_url">$license_name</a> · $reading_html $categories_html
+</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 $author_verify_label</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>$author_verify_label</h3>
+        <p>$author_verify_body</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%20$id">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+$nav_html
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1>$clickbait</h1>
+        <div class="original-title">Original: "$original_title"</div>
+        <div class="oneliner">$oneliner</div>
+        $ai_cover_html
+        <div class="mosaic">$mosaic_html</div>
+        $text_html
+        $fun_fact_html
+        $formulas_html
+        $key_numbers_html
+        $scientists_html
+        <div class="actions">
+            <div class="likes" data-article-id="$id">
+                <button onclick="toggleLike('$id')" class="like-btn">♥ <span id="like-count-$id">…</span></button>
+            </div>
+            <button onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')">$share_label</button>
+        </div>
+        <div class="next-divider">
+            <button class="next-btn">$next_label →</button>
+        </div>
+        <div class="related" id="related" data-label="$related_label"></div>
+    </div>
+    <div class="article-side">$tags_side_html</div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">$license_label: <a href="https://arxiv.org/abs/$id">arXiv:$id</a> · <a href="$license_url">$license_name</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=15"></script>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/scroll.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

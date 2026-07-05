@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Algèbre de Lie — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/fr/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/fr/index.html">main</a>
+            <a href="/lang/fr/tags/">tags</a>
+            <a href="/lang/fr/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/fr/scientists/">scientists</a>
+            <a href="/lang/fr/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Populaire</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Avancé</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Algèbre de Lie</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">L'algèbre de Lie est une « table de multiplication » mathématique pour les symétries infinitésimales, par exemple, comment décrire une rotation d'un très petit angle.</div>
+        <div class="fun-fact">💡 Les algèbres de Lie sont utilisées en robotique pour contrôler les mouvements des robots : elles décrivent comment un robot peut se déplacer en douceur.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Une algèbre de Lie est un espace vectoriel muni d'une opération bilinéaire — le crochet de Lie — qui satisfait les propriétés d'antisymétrie et l'identité de Jacobi. C'est une linéarisation d'un groupe de Lie au voisinage de l'identité. Par exemple, l'algèbre de Lie du groupe des rotations SO(3) est constituée de matrices antisymétriques 3×3, et le crochet est le commutateur de matrices.</div>
+        <div class="section"><h2>Histoire</h2><p>Le concept d'algèbre de Lie a été introduit par Sophus Lie en même temps que les groupes de Lie à la fin du XIXe siècle. Élie Cartan a classifié toutes les algèbres de Lie simples sur les nombres complexes, ce qui a été une étape importante pour la physique.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>Imaginez que vous voulez décrire une très petite rotation d'un cube. Au lieu d'utiliser un angle de rotation, vous prenez un générateur « infinitésimal » — un élément de l'algèbre de Lie. La combinaison de deux de ces petites rotations en donne une troisième, et le crochet de Lie montre à quel point le résultat diffère de la somme.</p></div>
+        <div class="fun-fact">💡 Les algèbres de Lie sont à la base de la mécanique quantique : les relations de commutation des opérateurs de position et d'impulsion forment l'algèbre de Heisenberg.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Une algèbre de Lie est un espace vectoriel g sur un corps (généralement ℝ ou ℂ) muni d'une opération bilinéaire [,]: g×g→g, appelée crochet de Lie, qui est antisymétrique ([X,Y] = -[Y,X]) et satisfait l'identité de Jacobi ([X,[Y,Z]] + [Y,[Z,X]] + [Z,[X,Y]] = 0). Les algèbres de Lie sont classifiées en semi-simples, résolubles et nilpotentes. Les algèbres de Lie semi-simples sont complètement classifiées par les diagrammes de Dynkin. Ce sont les espaces tangents aux groupes de Lie et elles décrivent les symétries infinitésimales.</div>
+        <div class="section"><h2>Histoire</h2><p>Sophus Lie a introduit les algèbres de Lie comme groupes de transformations infinitésimaux. Élie Cartan, dans sa thèse (1894), a classifié toutes les algèbres de Lie simples complexes. Hermann Weyl et Eugene Wigner ont appliqué la théorie des représentations des algèbres de Lie à la mécanique quantique. Au milieu du XXe siècle, les algèbres de Lie sont devenues la base des théories de jauge et de la théorie des cordes.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>L'algèbre de Lie g est associée à un groupe de Lie G comme espace tangent à l'identité. Le crochet de Lie provient du commutateur des champs de vecteurs invariants à gauche. Une représentation d'une algèbre de Lie est un homomorphisme g→gl(V) préservant le crochet. La classification des algèbres de Lie simples donne les séries A_n, B_n, C_n, D_n et les exceptions E6, E7, E8, F4, G2. Les constantes de structure f^c_{ab} sont définies par [e_a, e_b] = f^c_{ab} e_c.</p></div>
+        <div class="formula"><div class="formula-render">[X, [Y, Z]] + [Y, [Z, X]] + [Z, [X, Y]] = 0</div><div class="formula-meaning">L'identité de Jacobi est une condition nécessaire pour le crochet de Lie, assurant la cohérence.</div></div><div class="formula"><div class="formula-render">[e_a, e_b] = f^c_{ab} e_c</div><div class="formula-meaning">Le crochet de Lie des éléments de base s'exprime par les constantes de structure f^c_{ab}.</div></div>
+        <div class="section"><h2>Problèmes ouverts et anecdotes</h2><p>Classification de toutes les représentations de dimension finie pour les algèbres de Lie exceptionnelles.; Construction des groupes quantiques (déformations des algèbres de Lie) et de leurs représentations.</p><p class="fact">💡 Les algèbres de Lie sont à la base de la mécanique quantique : les relations de commutation des opérateurs de position et d'impulsion forment l'algèbre de Heisenberg.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientifiques :</strong> <a href="/lang/fr/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Tags associés:</strong>
+    <a href="/lang/fr/tags/lie_group.html" data-tag="lie_group">Groupe de Lie</a><a href="/lang/fr/tags/symmetry.html" data-tag="symmetry">Symétrie</a><a href="/lang/fr/tags/gauge_invariance.html" data-tag="gauge_invariance">Invariance de jauge</a><a href="/lang/fr/tags/standard_model.html" data-tag="standard_model">Modèle standard</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Rechercher..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ auteur · ! scientifique</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="lie_algebra"><p>Pas encore d'articles</p></div>
+
+<footer><p>bridge42worlds — la science simplifiée · <a href="/lang/fr/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Protostar — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Protostar</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">This is a 'stellar embryo'—a cloud of gas and dust that contracts and heats up to become a real star.</div>
+        <div class="fun-fact">💡 A protostar shines mainly in the infrared range because it is still too cold for visible light.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A protostar is an early stage of star formation, when a huge cloud of gas and dust contracts under its own gravity. Imagine a snowball that becomes harder and warmer as you squeeze it. The temperature in the center of a protostar rises, but nuclear reactions have not yet begun.</div>
+        <div class="section"><h2>History</h2><p>The idea of star formation from gas clouds was proposed in the 18th century by Immanuel Kant and Pierre-Simon Laplace. Modern observations of protostars became possible with the development of infrared astronomy in the 20th century.</p></div>
+        <div class="section"><h2>How it works</h2><p>Gravity pulls gas toward the center, releasing energy that heats the protostar. When the core temperature reaches millions of degrees, thermonuclear fusion begins, and the protostar becomes a full-fledged star.</p></div>
+        <div class="fun-fact">💡 A protostar may be surrounded by a protoplanetary disk, from which planets subsequently form.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A protostar is a stage of stellar evolution following the collapse of a molecular cloud. It consists of a dense core surrounded by an accretion disk and a gas-dust envelope. The protostar shines due to gravitational energy released as matter falls in. Its temperature can reach several thousand kelvins, but nuclear reactions have not yet started. The protostar stage lasts from 100,000 to several million years depending on mass.</div>
+        <div class="section"><h2>History</h2><p>The concept of protostars follows from the Kant-Laplace nebular hypothesis (18th century). In the 20th century, the development of infrared astronomy allowed observations of protostars in dense clouds. Important contributions were made by Chandrasekhar and other astrophysicists on cloud collapse.</p></div>
+        <div class="section"><h2>How it works</h2><p>A molecular cloud contracts under gravity, fragmenting into clumps. At the center of a clump, a hydrostatic core—a protostar—forms. Matter continues to fall onto it through an accretion disk, releasing energy. When the core temperature reaches ~10^7 K, hydrogen fusion begins, and the protostar transitions to the main sequence star stage.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>The mechanisms of accretion termination and the onset of nuclear reactions are not fully understood.; The role of magnetic fields and rotation in protostar formation.</p><p class="fact">💡 A protostar may be surrounded by a protoplanetary disk, from which planets subsequently form.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Subrahmanyan_Chandrasekhar.html" class="text-scientist" data-scientist="Subrahmanyan Chandrasekhar">Subrahmanyan Chandrasekhar</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/nebula.html" data-tag="nebula">Nebula</a><a href="/lang/en/tags/brown_dwarf.html" data-tag="brown_dwarf">Brown Dwarf</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="protostar"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

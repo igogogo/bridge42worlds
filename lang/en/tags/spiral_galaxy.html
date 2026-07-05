@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Spiral Galaxy — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Spiral Galaxy</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">This is a galaxy resembling a giant whirlpool with twisted arms of stars and gas.</div>
+        <div class="fun-fact">💡 Our Milky Way Galaxy is a spiral galaxy with two main arms and several smaller ones.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A spiral galaxy is a disk of stars, gas, and dust that rotates around a center, forming spiral arms. Imagine a fireworks display frozen in the shape of a rotating spiral. At the center there is usually a bright bulge, and sometimes a bar of stars.</div>
+        <div class="section"><h2>History</h2><p>In 1845, Lord Ross first noticed the spiral structure in the Whirlpool Galaxy. Edwin Hubble in 1926 classified spiral galaxies as a separate type.</p></div>
+        <div class="section"><h2>How it works</h2><p>The arms are not solid structures but regions of higher density where stars and gas accumulate, like traffic jams on a highway. Gravity and rotation create density waves that form the spiral pattern.</p></div>
+        <div class="fun-fact">💡 Spiral galaxies make up about 60% of all galaxies in the nearby universe.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A spiral galaxy is a type of galaxy characterized by a flat rotating disk with a central bulge and spiral arms. The arms contain many young hot stars, gas, and dust, giving them a bluish tint. Spiral galaxies are divided into ordinary (S) and barred (SB), where the bar is a strip of stars passing through the center. Examples: Milky Way (SBbc), Andromeda Galaxy (Sb), Whirlpool (Sc).</div>
+        <div class="section"><h2>History</h2><p>The first observation of a spiral structure was made by William Parsons (Lord Rosse) in 1845. In 1926, Edwin Hubble developed the Hubble sequence, classifying galaxies by shape. Modern research using telescopes such as Hubble and JWST studies the evolution of spiral galaxies.</p></div>
+        <div class="section"><h2>How it works</h2><p>Spiral arms form due to density waves that propagate through the galactic disk. Gravity compresses gas in the arms, triggering star formation. Young stars shine brightly, making the arms visible. Over time, stars leave the arms, but the density wave persists, creating the illusion of a rotating pattern.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>The mechanism of long-term stability of spiral arms is not fully understood.; The role of dark matter in the formation and maintenance of the spiral structure.</p><p class="fact">💡 Spiral galaxies make up about 60% of all galaxies in the nearby universe.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Edwin_Hubble.html" class="text-scientist" data-scientist="Edwin Hubble">Edwin Hubble</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/milky_way.html" data-tag="milky_way">Milky Way</a><a href="/lang/en/tags/galaxy.html" data-tag="galaxy">Galaxy</a><a href="/lang/en/tags/nebula.html" data-tag="nebula">Nebula</a><a href="/lang/en/tags/galaxy_cluster.html" data-tag="galaxy_cluster">Galaxy cluster</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="spiral_galaxy"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

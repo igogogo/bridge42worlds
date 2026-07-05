@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Hawking Radiation — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Hawking Radiation</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Hawking radiation is a process by which black holes evaporate, emitting particles like a hot object cools down.</div>
+        <div class="fun-fact">💡 Hawking radiation predicts that black holes are not eternal—they slowly lose mass and eventually disappear.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Hawking radiation is a quantum effect in which black holes emit particles due to quantum vacuum fluctuations near the event horizon. This leads to a loss of black hole mass.</div>
+        <div class="section"><h2>History</h2><p>Hawking radiation was predicted by Stephen Hawking in 1974 based on quantum field theory in curved spacetime.</p></div>
+        <div class="section"><h2>How it works</h2><p>Near the event horizon, virtual particle-antiparticle pairs are created. One particle falls into the black hole, the other escapes, carrying away energy, which reduces the black hole's mass.</p></div>
+        <div class="fun-fact">💡 Hawking radiation is extremely weak: for a black hole with the mass of the Sun, the temperature is only 60 nanokelvins.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Hawking radiation is a predicted quantum effect in which black holes emit thermal radiation. It arises from quantum vacuum fluctuations in a strong gravitational field. The radiation spectrum is blackbody with a temperature inversely proportional to the black hole's mass.</div>
+        <div class="section"><h2>History</h2><p>Stephen Hawking in 1974 published a paper showing that black holes can radiate. This discovery united quantum mechanics, general relativity, and thermodynamics. Hawking radiation has not yet been observed experimentally due to its weakness.</p></div>
+        <div class="section"><h2>How it works</h2><p>In quantum field theory, the vacuum is not empty but contains virtual particle pairs. Near the event horizon, one particle may fall into the black hole, and the other escapes outward. The escaping particle has positive energy, while the infalling one has negative energy, reducing the black hole's mass. The process is analogous to evaporation.</p></div>
+        <div class="formula"><div class="formula-render">T_H = \frac{\hbar c^3}{8\pi G M k_B}</div><div class="formula-meaning">The temperature of a black hole is inversely proportional to its mass M.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Hawking radiation has not been observed; the information loss problem in black hole evaporation.</p><p class="fact">💡 Hawking radiation is extremely weak: for a black hole with the mass of the Sun, the temperature is only 60 nanokelvins.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Stephen_Hawking.html" class="text-scientist" data-scientist="Stephen Hawking">Stephen Hawking</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/black_hole.html" data-tag="black_hole">Black Hole</a><a href="/lang/en/tags/entropy.html" data-tag="entropy">Entropy</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="hawking_radiation"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

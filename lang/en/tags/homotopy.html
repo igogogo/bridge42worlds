@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Homotopy — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Homotopy</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Imagine you can smoothly deform one shape into another without cutting it—for example, a donut turns into a cup because they both have one hole.</div>
+        <div class="fun-fact">💡 Homotopy is the reason topologists cannot tell a donut from a coffee cup with a handle.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Homotopy is a continuous deformation of one mapping into another. If two paths can be smoothly transformed into each other without breaking, they are homotopic. For example, a circle can be contracted to a point, but not to a figure eight.</div>
+        <div class="section"><h2>History</h2><p>The concept of homotopy was introduced by Henri Poincaré at the end of the 19th century to classify surfaces and spaces.</p></div>
+        <div class="section"><h2>How it works</h2><p>Two maps f and g from X to Y are homotopic if there exists a continuous family of maps h(t,x) such that h(0,x)=f(x) and h(1,x)=g(x). This is like a smooth transition from one shape to another.</p></div>
+        <div class="fun-fact">💡 Homotopy groups are algebraic invariants that distinguish spaces by the number of 'holes' of different dimensions.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Homotopy is an equivalence relation between continuous maps based on the possibility of continuous deformation. Two maps f, g: X → Y are homotopic if there exists a continuous map H: X×[0,1] → Y such that H(x,0)=f(x) and H(x,1)=g(x). This concept generalizes the idea of 'paths' and 'loops'. Homotopy groups π_n(X) measure classes of maps from an n-dimensional sphere to a space X up to homotopy, providing information about topological defects.</div>
+        <div class="section"><h2>History</h2><p>Henri Poincaré in 1895 in his work 'Analysis situs' introduced the fundamental group (π_1) and laid the foundations of algebraic topology. Later, Witold Hurewicz generalized this to higher homotopy groups in the 1930s. The development of homotopy theory is associated with names such as John Milnor, John Adams, and others.</p></div>
+        <div class="section"><h2>How it works</h2><p>Homotopy defines an equivalence relation on the set of maps. Composition of paths induces a group structure on the set of homotopy classes of loops. Higher homotopy groups are abelian. Computing homotopy groups is a difficult problem; for spheres they are only partially known. Spectral sequences and obstruction theory are used.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>Computation of homotopy groups of spheres (still unknown for many dimensions); Friedman's conjecture on the classification of 4-manifolds</p><p class="fact">💡 Homotopy groups are algebraic invariants that distinguish spaces by the number of 'holes' of different dimensions.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/homology.html" data-tag="homology">Homology</a><a href="/lang/en/tags/cohomology.html" data-tag="cohomology">Cohomology</a><a href="/lang/en/tags/fiber_bundle.html" data-tag="fiber_bundle">Fiber Bundle</a><a href="/lang/en/tags/manifold.html" data-tag="manifold">Manifold</a><a href="/lang/en/tags/category_theory.html" data-tag="category_theory">Category Theory</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="homotopy"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

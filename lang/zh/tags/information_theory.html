@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#信息论 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>信息论</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">信息论研究如何测量和传输信息：传输一条消息需要多少比特，以及如何保护它免受干扰。</div>
+        <div class="fun-fact">💡 信息单位——比特——由克劳德·香农在1948年引入。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">信息论是由克劳德·香农发展的通信数学理论。它提供了测量信息量（熵）、数据压缩和纠错编码的方法。例如，俄语文本的熵约为每个字符1.5比特。</div>
+        <div class="section"><h2>历史</h2><p>由克劳德·香农在1948年的论文《通信的数学理论》中创立。后来由诺伯特·维纳和安德烈·柯尔莫哥洛夫进一步发展。</p></div>
+        <div class="section"><h2>工作原理</h2><p>信息通过不确定性测量：事件越不可能，它携带的信息越多。熵H = -∑ p_i log p_i ——每个符号的平均信息量。通信信道具有容量，限制了传输速率。</p></div>
+        <div class="fun-fact">💡 信息论是所有现代通信系统的基础：从Wi-Fi到卫星电视。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">信息论是数学的一个分支，研究信息的定量方面。基本概念：香农熵、互信息、信道容量。熵H(X) = -∑ p(x) log p(x) 测量随机变量的不确定性。香农信源编码定理指出，数据可以无损压缩到熵。香农-哈特利定理给出了有噪声信道的最大传输速率。信息论与统计物理（玻尔兹曼熵）和机器学习密切相关。</div>
+        <div class="section"><h2>历史</h2><p>克劳德·香农在1948年发表《通信的数学理论》，奠定了基础。1949年香农和韦弗出版了著作。拉尔夫·哈特利在1928年引入了信息的对数度量。1950年代发展了纠错编码（汉明码、里德-所罗门码）。1960年代出现了算法信息论（柯尔莫哥洛夫、所罗门诺夫、柴廷）。</p></div>
+        <div class="section"><h2>工作原理</h2><p>信息以比特度量。熵是编码给定分布的一个符号所需的平均比特数。互信息I(X;Y) = H(X) - H(X|Y) 度量Y中包含的关于X的信息量。信道容量C = max_{p(x)} I(X;Y)。纠错码添加冗余以抵御噪声。</p></div>
+        <div class="formula"><div class="formula-render">H(X) = -\sum_{i} p(x_i) \log_2 p(x_i)</div><div class="formula-meaning">描述随机变量X所需的平均信息量（以比特为单位）。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>构建达到任意噪声信道容量的码; 量子系统信息论的发展</p><p class="fact">💡 信息论是所有现代通信系统的基础：从Wi-Fi到卫星电视。</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/shannon_entropy.html" data-tag="shannon_entropy">香农熵</a><a href="/lang/zh/tags/probability_theory.html" data-tag="probability_theory">概率论</a><a href="/lang/zh/tags/stochastic_process.html" data-tag="stochastic_process">随机过程</a><a href="/lang/zh/tags/markov_chain.html" data-tag="markov_chain">马尔可夫链</a><a href="/lang/zh/tags/quantum_entanglement.html" data-tag="quantum_entanglement">量子纠缠</a><a href="/lang/zh/tags/combinatorics.html" data-tag="combinatorics">组合数学</a><a href="/lang/zh/tags/game_theory.html" data-tag="game_theory">博弈论</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="information_theory"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

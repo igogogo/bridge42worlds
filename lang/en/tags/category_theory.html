@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Category Theory — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Category Theory</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Imagine you study not individual objects but the connections between them—like in a social network, where the important thing is not the people but their friendships.</div>
+        <div class="fun-fact">💡 Category theory is so abstract that it is called the 'general theory of everything' in mathematics.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Category theory is a branch of mathematics that studies the general properties of mathematical structures through arrows (morphisms) between objects. Imagine describing not the cities themselves but the roads between them—then you can understand how the entire transport network is organized.</div>
+        <div class="section"><h2>History</h2><p>Category theory was introduced by Samuel Eilenberg and Saunders Mac Lane in 1945 to study topology and algebra.</p></div>
+        <div class="section"><h2>How it works</h2><p>A category consists of objects and arrows between them, which can be composed like a sequence of actions. For example, in the category of sets, objects are sets and arrows are functions.</p></div>
+        <div class="fun-fact">💡 Category theory is used in programming to describe data types and functional languages.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Category theory is a formal mathematical structure that studies abstract properties of mathematical objects and their relations. A category consists of a class of objects and a class of morphisms (arrows) between them, satisfying axioms of associativity and existence of identity morphisms. It allows unifying different mathematical disciplines by revealing common patterns. For example, categories of sets, groups, topological spaces have similar constructions such as products and colimits.</div>
+        <div class="section"><h2>History</h2><p>Category theory was proposed by Samuel Eilenberg and Saunders Mac Lane in 1945 in the paper 'General Theory of Natural Equivalences'. Initially it served as a tool for algebraic topology, but later spread to algebra, logic, and computer science. Important contributions were made by Alexander Grothendieck, who developed sheaf theory and topoi, and William Lawvere, who applied categories to the foundations of mathematics.</p></div>
+        <div class="section"><h2>How it works</h2><p>A category is defined by a collection of objects and morphisms, where each morphism has a domain and codomain. Composition of morphisms is associative, and for each object there exists an identity morphism. Functors are mappings between categories that preserve structure, and natural transformations are morphisms between functors. These concepts allow formulating universal properties such as limits and colimits.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>Development of higher categories and their application in homotopy type theory; Construction of a satisfactory theory of topoi for the foundations of mathematics</p><p class="fact">💡 Category theory is used in programming to describe data types and functional languages.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/homotopy.html" data-tag="homotopy">Homotopy</a><a href="/lang/en/tags/homology.html" data-tag="homology">Homology</a><a href="/lang/en/tags/cohomology.html" data-tag="cohomology">Cohomology</a><a href="/lang/en/tags/fiber_bundle.html" data-tag="fiber_bundle">Fiber Bundle</a><a href="/lang/en/tags/lie_group.html" data-tag="lie_group">Lie Group</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="category_theory"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

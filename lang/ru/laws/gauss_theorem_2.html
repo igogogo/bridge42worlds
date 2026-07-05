@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теорема Гаусса — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/" class="active">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="law-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Теорема Гаусса<span class="law-type">теорема</span></h1>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Теорема Гаусса связывает поток поля через замкнутую поверхность с источниками внутри. Например, поток электрического поля через сферу равен заряду внутри, деленному на ε₀.</div>
+        <div class="fun-fact">💡 Теорема Гаусса — одна из четырех уравнений Максвелла в интегральной форме.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Теорема Гаусса (или теорема о дивергенции) утверждает, что поток векторного поля через замкнутую поверхность равен интегралу дивергенции этого поля по объему, ограниченному поверхностью. В физике она связывает заряд с электрическим полем.</div>
+        <div class="section"><h2>Как работает</h2><p>Используется для расчета электрических полей симметричных распределений зарядов (сфера, цилиндр, плоскость) и в гидродинамике для потока жидкости.</p></div>
+        <div class="fun-fact">💡 Теорема была открыта Карлом Фридрихом Гауссом в 1813 году, хотя частные случаи знал еще Лагранж.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Теорема Гаусса — фундаментальная теорема векторного анализа: ∫∫_S F · dS = ∫∫∫_V (∇·F) dV. Она связывает поток поля через замкнутую поверхность с дивергенцией внутри объема. В электродинамике это закон Гаусса для электрического поля: ∇·E = ρ/ε₀.</div>
+        <div class="section"><h2>История открытия</h2><p>Сформулирована Карлом Фридрихом Гауссом в 1813 году в работе по теории притяжения. Независимо открыта Михаилом Остроградским в 1826 году. В физике применена для электричества Джеймсом Клерком Максвеллом.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Применяется в электростатике, магнитостатике, гравитации, гидродинамике. Границы: требует непрерывно дифференцируемого поля; для сингулярных полей (точечный заряд) используется обобщение с дельта-функцией.</p></div>
+        
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\oint_S \mathbf{E} \cdot d\mathbf{A} = \frac{Q_{\text{enc}}}{\varepsilon_0}</div><div class="formula-meaning">Поток электрического поля через замкнутую поверхность равен заряду внутри, деленному на электрическую постоянную.</div></div></div>
+    <div class="scientists-section"><strong>Открыли:</strong> <a href="/lang/ru/scientists/Carl_Friedrich_Gauss.html" class="text-scientist" data-scientist="Carl Friedrich Gauss">Carl Friedrich Gauss</a> <a href="/lang/ru/scientists/Mikhail_Ostrogradsky.html" class="text-scientist" data-scientist="Mikhail Ostrogradsky">Mikhail Ostrogradsky</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Связанные понятия:</strong>
+    <a href="/lang/ru/tags/vector_calculus.html" data-tag="vector_calculus">Векторный анализ</a>
+</div>
+
+<div class="related-tags"><strong>Связанные законы:</strong> <a href="/lang/ru/laws/maxwells_equations_2.html" class="law-chip">Уравнения Максвелла</a> <a href="/lang/ru/laws/coulombs_law.html" class="law-chip">Закон Кулона</a></div>
+
+<h2 class="section-title">Статьи по теме</h2>
+<div id="search-results" data-context-tag="vector_calculus"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    var toggle = document.getElementById('law-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

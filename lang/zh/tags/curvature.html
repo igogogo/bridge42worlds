@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#曲率 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>曲率</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">曲率表示曲面或空间偏离平面的程度，例如球如何弯曲，或太阳周围的空间如何弯曲。</div>
+        <div class="fun-fact">💡 时空曲率就是我们感受到的引力：质量越大，弯曲越强。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">曲率是衡量几何对象（曲线、曲面、流形）偏离平坦（欧几里得）空间的程度。对于曲面，一点处的曲率可以是正的（球面）、负的（马鞍面）或零（平面）。在微分几何中，曲率由黎曼张量描述，它显示向量沿闭合回路平行移动后方向的变化。</div>
+        <div class="section"><h2>历史</h2><p>高斯于1827年引入了曲面的高斯曲率。黎曼将概念推广到多维流形。爱因斯坦于1915年通过场方程将时空曲率与物质分布联系起来。</p></div>
+        <div class="section"><h2>工作原理</h2><p>想象你走在球面上，手持一个指向前方的箭头。如果你绕闭合回路一周，箭头相对于初始方向会转动。转动的角度与回路内的曲率成正比。在平面上不会转动，在球面上会转动，在马鞍面上则向相反方向转动。</p></div>
+        <div class="fun-fact">💡 曲率可以实验测量：例如，日食期间恒星光线在太阳附近的偏转证实了广义相对论。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">曲率是描述流形偏离平坦空间的几何特征。对于黎曼流形，曲率由黎曼张量Rⁱⱼₖₗ给出，它满足代数恒等式（对称性、比安基恒等式）。黎曼张量的缩并给出里奇张量Rᵢⱼ和标量曲率R。在广义相对论中，爱因斯坦张量G_μν = R_μν - (1/2)R g_μν与能量-动量张量相关。曲率还决定测地偏离——相邻轨迹如何发散或收敛。</div>
+        <div class="section"><h2>历史</h2><p>高斯于1827年引入高斯曲率并证明了绝妙定理（曲率是曲面的内在性质）。黎曼于1854年将曲率推广到多维流形。爱因斯坦于1915年使用曲率描述引力。20世纪中叶，复几何中的曲率理论和规范理论得到了发展。</p></div>
+        <div class="section"><h2>工作原理</h2><p>黎曼曲率张量R(X,Y)Z = [∇_X, ∇_Y]Z - ∇_{[X,Y]}Z。在坐标中：Rⁱⱼₖₗ = ∂ₖ Γⁱⱼₗ - ∂ₗ Γⁱⱼₖ + Γⁱₖₘ Γᵐⱼₗ - Γⁱₗₘ Γᵐⱼₖ。截面曲率K(u,v) = R(u,v,u,v) / (|u|²|v|² - ⟨u,v⟩²) 衡量二维方向上的曲率。里奇曲率Rᵢⱼ = Rᵏᵢₖⱼ是方向上的平均曲率。标量曲率R = gⁱⱼ Rᵢⱼ是总曲率。</p></div>
+        <div class="formula"><div class="formula-render">R^i_{jkl} = \partial_k \Gamma^i_{jl} - \partial_l \Gamma^i_{jk} + \Gamma^i_{km} \Gamma^m_{jl} - \Gamma^i_{lm} \Gamma^m_{jk}</div><div class="formula-meaning">黎曼张量用克里斯托费尔符号及其导数表示。</div></div><div class="formula"><div class="formula-render">R_{\mu\nu} - \frac{1}{2} R g_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}</div><div class="formula-meaning">时空曲率（左边）与物质和能量的分布（右边）相关。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>在给定流形上存在正标量曲率度量的问题。; 理解曲率在量子引力中的作用（例如圈量子引力）。</p><p class="fact">💡 曲率可以实验测量：例如，日食期间恒星光线在太阳附近的偏转证实了广义相对论。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Albert_Einstein.html" class="text-scientist" data-scientist="Albert Einstein">Albert Einstein</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/differential_geometry.html" data-tag="differential_geometry">微分几何</a><a href="/lang/zh/tags/connection.html" data-tag="connection">联络</a><a href="/lang/zh/tags/tensor.html" data-tag="tensor">张量</a><a href="/lang/zh/tags/manifold.html" data-tag="manifold">流形</a><a href="/lang/zh/tags/fiber_bundle.html" data-tag="fiber_bundle">纤维丛</a><a href="/lang/zh/tags/characteristic_class.html" data-tag="characteristic_class">示性类</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="curvature"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

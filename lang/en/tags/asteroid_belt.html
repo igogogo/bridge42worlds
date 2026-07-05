@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Asteroid belt — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Asteroid belt</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">A region of the Solar System between the orbits of Mars and Jupiter, where most asteroids are concentrated. The belt contains millions of objects, from dust grains to dwarf planets. Imagine a ring of rocks orbiting the Sun between two planets.</div>
+        <div class="fun-fact">💡 The dwarf planet Ceres, the largest object in the asteroid belt, contains more fresh water than all of Earth.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A region of the Solar System between the orbits of Mars and Jupiter, where most asteroids are concentrated. The belt contains millions of objects, from dust grains to dwarf planets. Imagine a ring of rocks orbiting the Sun between two planets.</div>
+        <div class="section"><h2>History</h2><p>The asteroid belt was discovered in the early 19th century when astronomers were searching for a 'missing' planet between Mars and Jupiter. The first discovered was Ceres (1801), followed by Pallas, Juno, and Vesta. By mid-century, it became clear that this was not a planet but a collection of bodies. Modern missions like Dawn have studied Vesta and Ceres.</p></div>
+        <div class="section"><h2>How it works</h2><p>Asteroids in the belt orbit the Sun; their total mass is small (about 4% of the Moon's mass). Jupiter's gravity prevents them from forming a planet, causing resonances and perturbations. Collisions fragment asteroids, creating dust and meteoroids. Analogy: it is like a construction site with many leftover stones, but the foreman (Jupiter) constantly interferes with their assembly.</p></div>
+        <div class="fun-fact">💡 The dwarf planet Ceres, the largest object in the asteroid belt, contains more fresh water than all of Earth.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A region of the Solar System between the orbits of Mars and Jupiter, where most asteroids are concentrated. The belt contains millions of objects, from dust grains to dwarf planets. Imagine a ring of rocks orbiting the Sun between two planets.</div>
+        <div class="section"><h2>History</h2><p>The asteroid belt was discovered in the early 19th century when astronomers were searching for a 'missing' planet between Mars and Jupiter. The first discovered was Ceres (1801), followed by Pallas, Juno, and Vesta. By mid-century, it became clear that this was not a planet but a collection of bodies. Modern missions like Dawn have studied Vesta and Ceres.</p></div>
+        <div class="section"><h2>How it works</h2><p>Asteroids in the belt orbit the Sun; their total mass is small (about 4% of the Moon's mass). Jupiter's gravity prevents them from forming a planet, causing resonances and perturbations. Collisions fragment asteroids, creating dust and meteoroids. Analogy: it is like a construction site with many leftover stones, but the foreman (Jupiter) constantly interferes with their assembly.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>What is the history of the asteroid belt's formation and why did it not become a planet?; How do asteroids from the belt reach near-Earth orbits?</p><p class="fact">💡 The dwarf planet Ceres, the largest object in the asteroid belt, contains more fresh water than all of Earth.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/asteroid.html" data-tag="asteroid">Asteroid</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="asteroid_belt"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

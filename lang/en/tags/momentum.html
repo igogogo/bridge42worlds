@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#momentum — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=5">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/archive/">archive</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>momentum</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Momentum is a vector quantity equal to the product of a body's mass and its velocity. It indicates how difficult it is to stop a moving body. Imagine catching a tennis ball and a cannonball at the same speed: the cannonball has much greater momentum and will knock you off your feet.</div>
+        <div class="fun-fact">💡 In quantum mechanics, a particle's momentum cannot be precisely determined simultaneously with its position — this is Heisenberg's uncertainty principle.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Momentum is a vector quantity equal to the product of a body's mass and its velocity. It indicates how difficult it is to stop a moving body. Imagine catching a tennis ball and a cannonball at the same speed: the cannonball has much greater momentum and will knock you off your feet.</div>
+        <div class="section"><h2>History</h2><p>The concept of momentum was introduced by René Descartes, but the law of conservation of momentum was formulated by Newton. Huygens and other scientists developed the theory of elastic collisions. In quantum mechanics, momentum plays a key role in Heisenberg's uncertainty principle.</p></div>
+        <div class="section"><h2>How it works</h2><p>In a closed system, the total momentum of all bodies is conserved. For example, when firing a rifle, the bullet moves forward and the rifle recoils backward — the momenta are equal in magnitude and opposite in direction. This also explains how rockets move in space: by expelling gas backward, they gain forward momentum.</p></div>
+        <div class="fun-fact">💡 In quantum mechanics, a particle's momentum cannot be precisely determined simultaneously with its position — this is Heisenberg's uncertainty principle.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Momentum is a vector quantity equal to the product of a body's mass and its velocity. It indicates how difficult it is to stop a moving body. Imagine catching a tennis ball and a cannonball at the same speed: the cannonball has much greater momentum and will knock you off your feet.</div>
+        <div class="section"><h2>History</h2><p>The concept of momentum was introduced by René Descartes, but the law of conservation of momentum was formulated by Newton. Huygens and other scientists developed the theory of elastic collisions. In quantum mechanics, momentum plays a key role in Heisenberg's uncertainty principle.</p></div>
+        <div class="section"><h2>How it works</h2><p>In a closed system, the total momentum of all bodies is conserved. For example, when firing a rifle, the bullet moves forward and the rifle recoils backward — the momenta are equal in magnitude and opposite in direction. This also explains how rockets move in space: by expelling gas backward, they gain forward momentum.</p></div>
+        <div class="formula"><div class="formula-render">\vec{p} = m \vec{v}</div><div class="formula-meaning">Momentum equals mass times velocity.</div></div><div class="formula"><div class="formula-render">\sum \vec{p}_{\text{before}} = \sum \vec{p}_{\text{after}}</div><div class="formula-meaning">The total momentum of a closed system does not change.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>In quantum gravity, the concept of momentum may require modification at Planck scales.</p><p class="fact">💡 In quantum mechanics, a particle's momentum cannot be precisely determined simultaneously with its position — this is Heisenberg's uncertainty principle.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Werner_Heisenberg.html" class="text-scientist" data-scientist="Werner Heisenberg">Werner Heisenberg</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/force.html" data-tag="force">force</a><a href="/lang/en/tags/energy.html" data-tag="energy">energy</a><a href="/lang/en/tags/angular_momentum.html" data-tag="angular_momentum">angular momentum</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="momentum"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple</p></footer>
+<script src="/js/search.js?v=5"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

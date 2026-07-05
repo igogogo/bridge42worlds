@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#费米悖论 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>费米悖论</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">费米悖论的问题是：如果宇宙中有许多文明，为什么我们看不到它们？</div>
+        <div class="fun-fact">💡 恩里科·费米于1950年在午餐时提出这个问题，至今没有明确答案。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">费米悖论是外星文明存在的高概率与缺乏观测证据之间的矛盾。宇宙应该充满生命，但我们看不到痕迹。</div>
+        <div class="section"><h2>历史</h2><p>悖论由物理学家恩里科·费米于1950年在非正式谈话中提出。</p></div>
+        <div class="section"><h2>工作原理</h2><p>如果存在发达文明，其痕迹（无线电信号、探测器）应该可见，但我们一无所获，这引发了对宇宙沉默原因的思考。</p></div>
+        <div class="fun-fact">💡 一种可能的解释是“大过滤器”：某种灾难在文明变得可见之前将其摧毁。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">费米悖论是银河系中智慧文明数量高估（德雷克方程）与缺乏任何观测证据之间的明显矛盾。这引发了关于生命普遍性、技术文明及其寿命的问题。</div>
+        <div class="section"><h2>历史</h2><p>1950年恩里科·费米在洛斯阿拉莫斯午餐时问道：“他们在哪里？”后来弗兰克·德雷克于1961年推导出估计文明数量的方程。该悖论在天体生物学和SETI中广泛讨论。</p></div>
+        <div class="section"><h2>工作原理</h2><p>悖论基于估计：银河系有数十亿颗恒星，许多拥有行星，宇宙年龄很大。如果至少一个文明开始殖民，其痕迹应可见。缺乏信号和人工制品导致结论：要么文明罕见，要么短命，要么避免接触。</p></div>
+        <div class="formula"><div class="formula-render">N = R^* \cdot f_p \cdot n_e \cdot f_l \cdot f_i \cdot f_c \cdot L</div><div class="formula-meaning">银河系中可接触的文明数量N取决于七个因素。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>缺乏外星文明的观测数据。; 生命和智慧出现的概率未知。</p><p class="fact">💡 一种可能的解释是“大过滤器”：某种灾难在文明变得可见之前将其摧毁。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Enrico_Fermi.html" class="text-scientist" data-scientist="Enrico Fermi">Enrico Fermi</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/exoplanet.html" data-tag="exoplanet">系外行星</a><a href="/lang/zh/tags/galaxy.html" data-tag="galaxy">星系</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="fermi_paradox"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Moon — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=5">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/archive/">archive</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Moon</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">A natural satellite of a planet. Earth's Moon is the fifth largest moon in the Solar System and the only one visited by humans. Imagine a rocky sphere orbiting Earth, reflecting sunlight and creating tides.</div>
+        <div class="fun-fact">💡 The Moon is gradually moving away from Earth at a rate of about 3.8 cm per year — eventually it will appear smaller in the sky.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A natural satellite of a planet. Earth's Moon is the fifth largest moon in the Solar System and the only one visited by humans. Imagine a rocky sphere orbiting Earth, reflecting sunlight and creating tides.</div>
+        <div class="section"><h2>History</h2><p>The Moon has always been an object of fascination. In 1609, Galileo first pointed a telescope at the Moon and saw mountains and craters. In 1969, Apollo 11 landed the first humans on the Moon. Soviet Luna missions returned soil samples. New missions are planned, including the establishment of a lunar base.</p></div>
+        <div class="section"><h2>How it works</h2><p>The Moon orbits Earth in an elliptical path, always showing the same face (tidal locking). Its gravity causes tides on Earth. The Moon has no atmosphere, so its surface is covered with impact craters. Analogy: the Moon is like a stone tied to a string that you swing overhead — it always faces you with one side.</p></div>
+        <div class="fun-fact">💡 The Moon is gradually moving away from Earth at a rate of about 3.8 cm per year — eventually it will appear smaller in the sky.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A natural satellite of a planet. Earth's Moon is the fifth largest moon in the Solar System and the only one visited by humans. Imagine a rocky sphere orbiting Earth, reflecting sunlight and creating tides.</div>
+        <div class="section"><h2>History</h2><p>The Moon has always been an object of fascination. In 1609, Galileo first pointed a telescope at the Moon and saw mountains and craters. In 1969, Apollo 11 landed the first humans on the Moon. Soviet Luna missions returned soil samples. New missions are planned, including the establishment of a lunar base.</p></div>
+        <div class="section"><h2>How it works</h2><p>The Moon orbits Earth in an elliptical path, always showing the same face (tidal locking). Its gravity causes tides on Earth. The Moon has no atmosphere, so its surface is covered with impact craters. Analogy: the Moon is like a stone tied to a string that you swing overhead — it always faces you with one side.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>How did the Moon form? The leading theory is a giant impact between Earth and a protoplanet called Theia, but questions remain.; Is there water ice in permanently shadowed craters on the Moon, and can it be used?</p><p class="fact">💡 The Moon is gradually moving away from Earth at a rate of about 3.8 cm per year — eventually it will appear smaller in the sky.</p></div>
+    </div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/planet.html" data-tag="planet">Planet</a><a href="/lang/en/tags/solar_system.html" data-tag="solar_system">solar_system</a><a href="/lang/en/tags/earth.html" data-tag="earth">earth</a><a href="/lang/en/tags/tidal_forces.html" data-tag="tidal_forces">tidal_forces</a><a href="/lang/en/tags/impact_crater.html" data-tag="impact_crater">impact_crater</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="moon"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple</p></footer>
+<script src="/js/search.js?v=5"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

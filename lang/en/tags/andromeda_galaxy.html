@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Andromeda Galaxy — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=5">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/archive/">archive</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Andromeda Galaxy</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">The nearest large spiral galaxy to us, located 2.5 million light-years away. It's like a neighboring city visible to the naked eye, but impossible to reach with modern spacecraft.</div>
+        <div class="fun-fact">💡 Andromeda is approaching us, but due to the expansion of the Universe, most galaxies are moving away.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">The nearest large spiral galaxy to us, located 2.5 million light-years away. It's like a neighboring city visible to the naked eye, but impossible to reach with modern spacecraft.</div>
+        <div class="section"><h2>History</h2><p>Known since antiquity as a fuzzy patch. In 1923, Edwin Hubble determined its distance, proving it is a separate galaxy, not a nebula in the Milky Way.</p></div>
+        <div class="section"><h2>How it works</h2><p>Andromeda contains about a trillion stars and is moving toward the Milky Way at about 110 km/s. Gravity is pulling the galaxies together, and in billions of years they will merge into one elliptical galaxy.</p></div>
+        <div class="fun-fact">💡 Andromeda is approaching us, but due to the expansion of the Universe, most galaxies are moving away.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">The nearest large spiral galaxy to us, located 2.5 million light-years away. It's like a neighboring city visible to the naked eye, but impossible to reach with modern spacecraft.</div>
+        <div class="section"><h2>History</h2><p>Known since antiquity as a fuzzy patch. In 1923, Edwin Hubble determined its distance, proving it is a separate galaxy, not a nebula in the Milky Way.</p></div>
+        <div class="section"><h2>How it works</h2><p>Andromeda contains about a trillion stars and is moving toward the Milky Way at about 110 km/s. Gravity is pulling the galaxies together, and in billions of years they will merge into one elliptical galaxy.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>The exact collision trajectory with the Milky Way and its consequences for the Solar System.</p><p class="fact">💡 Andromeda is approaching us, but due to the expansion of the Universe, most galaxies are moving away.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Edwin_Hubble.html" class="text-scientist" data-scientist="Edwin Hubble">Edwin Hubble</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/galaxy.html" data-tag="galaxy">Galaxy</a><a href="/lang/en/tags/milky_way.html" data-tag="milky_way">Milky Way</a><a href="/lang/en/tags/galaxy_cluster.html" data-tag="galaxy_cluster">Galaxy cluster</a><a href="/lang/en/tags/expansion_of_the_universe.html" data-tag="expansion_of_the_universe">Expansion of the Universe</a><a href="/lang/en/tags/star.html" data-tag="star">Star</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="andromeda_galaxy"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple</p></footer>
+<script src="/js/search.js?v=5"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

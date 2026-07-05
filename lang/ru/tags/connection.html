@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Связность — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Связность</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Связность — это правило, которое говорит, как переносить векторы из одной точки в другую вдоль кривой, не меняя их направления, как если бы вы несли стрелку компаса по изогнутой дороге.</div>
+        <div class="fun-fact">💡 Связность используется в общей теории относительности: она определяет, как движутся частицы по искривлённому пространству-времени.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Связность — это дополнительная структура на многообразии, которая позволяет сравнивать векторы в разных точках, то есть задаёт параллельное перенесение. Она определяет, как вектор меняется при движении вдоль кривой, чтобы он оставался «параллельным самому себе». Связность также задаёт ковариантную производную — способ дифференцирования векторных полей.</div>
+        <div class="section"><h2>История</h2><p>Понятие связности ввёл Туллио Леви-Чивита в 1917 году для римановых многообразий. Затем Эли Картан обобщил его на произвольные расслоения, введя понятие связности на главном расслоении. В физике связность стала ключевой в калибровочных теориях.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте, что вы идёте по изогнутой поверхности и несёте копьё, стараясь держать его в одном направлении. Связность — это правило, которое говорит, как поворачивать копьё, чтобы оно оставалось «параллельным» относительно поверхности. Если поверхность искривлена, то после обхода замкнутого пути копьё может оказаться повёрнутым — это эффект кривизны.</p></div>
+        <div class="fun-fact">💡 Связность в калибровочных теориях (например, электродинамике) — это то же самое, что векторный потенциал A_μ, который описывает электромагнитное поле.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Связность — это математический объект, задающий правило параллельного перенесения векторов вдоль кривых на многообразии. На римановом многообразии существует единственная метрическая связность без кручения — связность Леви-Чивиты. В общем случае связность на векторном расслоении — это линейный оператор ∇: Γ(E) → Γ(E⊗T^*M), удовлетворяющий правилу Лейбница. Связность на главном расслоении задаётся 1-формой со значениями в алгебре Ли структурной группы. Кривизна связности — это 2-форма, измеряющая некоммутативность ковариантных производных.</div>
+        <div class="section"><h2>История</h2><p>Туллио Леви-Чивита в 1917 году ввёл параллельное перенесение на римановых многообразиях. Эли Картан в 1920-х годах разработал общую теорию связностей, включая связности на расслоениях реперов. В 1950-х годах Чжэнь Шэньшэнь и другие применили связности к калибровочным теориям. В физике связность стала основой для описания фундаментальных взаимодействий: электромагнитного, слабого и сильного.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Связность ∇ задаёт ковариантную производную: для векторного поля X и векторного поля Y, ∇_X Y — это производная Y в направлении X. В координатах связность определяется символами Кристоффеля Γ^k_{ij}: ∇_{∂_i} ∂_j = Γ^k_{ij} ∂_k. Параллельное перенесение вектора v вдоль кривой γ(t) — это решение уравнения ∇_{γ'(t)} v(t) = 0. Кривизна R(X,Y) = [∇_X, ∇_Y] - ∇_{[X,Y]} измеряет некоммутативность ковариантных производных.</p></div>
+        <div class="formula"><div class="formula-render">\nabla_{\partial_i} \partial_j = \Gamma^k_{ij} \partial_k</div><div class="formula-meaning">Ковариантная производная базисного векторного поля ∂_j по направлению ∂_i выражается через символы Кристоффеля Γ^k_{ij}.</div></div><div class="formula"><div class="formula-render">R(X,Y)Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]} Z</div><div class="formula-meaning">Кривизна измеряет некоммутативность ковариантных производных.</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Построение квантовой теории гравитации как теории связности на спиновом расслоении (петлевая квантовая гравитация).; Классификация связностей с заданными свойствами кривизны (например, инстантоны).</p><p class="fact">💡 Связность в калибровочных теориях (например, электродинамике) — это то же самое, что векторный потенциал A_μ, который описывает электромагнитное поле.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Albert_Einstein.html" class="text-scientist" data-scientist="Albert Einstein">Albert Einstein</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/differential_geometry.html" data-tag="differential_geometry">Дифференциальная геометрия</a><a href="/lang/ru/tags/curvature.html" data-tag="curvature">Кривизна</a><a href="/lang/ru/tags/fiber_bundle.html" data-tag="fiber_bundle">Расслоение</a><a href="/lang/ru/tags/gauge_invariance.html" data-tag="gauge_invariance">Калибровочная инвариантность</a><a href="/lang/ru/tags/manifold.html" data-tag="manifold">Многообразие</a><a href="/lang/ru/tags/characteristic_class.html" data-tag="characteristic_class">Характеристический класс</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="connection"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

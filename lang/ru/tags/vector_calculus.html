@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Векторный анализ — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Векторный анализ</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Это математический язык для описания потоков, вихрей и полей, например, как вода течёт в реке или воздух закручивается в торнадо.</div>
+        <div class="fun-fact">💡 Векторный анализ помог инженерам создать первую компьютерную томографию (КТ), которая «видит» тело человека с помощью математики полей.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Векторный анализ — это раздел математики, изучающий векторные поля, такие как скорость ветра или магнитное поле Земли. Он позволяет вычислять, сколько «вещества» проходит через поверхность (поток) или как сильно поле закручивается (ротор). Например, с его помощью можно рассчитать, сколько воды протекает через плотину за секунду.</div>
+        <div class="section"><h2>История</h2><p>Основы векторного анализа заложили Джеймс Клерк Максвелл и Оливер Хевисайд в XIX веке для описания электромагнетизма. Максвелл использовал его для своих знаменитых уравнений, объединивших электричество и магнетизм.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте, что вы стоите в поле ветра: в каждой точке ветер дует с определённой силой и направлением. Векторный анализ даёт инструменты, чтобы измерить, как ветер «расходится» от вас (дивергенция) или как он «закручивается» вокруг вас (ротор). Это как смотреть на водоворот: можно понять, где вода втекает и вытекает.</p></div>
+        <div class="fun-fact">💡 Без векторного анализа невозможно было бы создать современные системы GPS, так как они используют расчёты гравитационного поля Земли.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Векторный анализ — это раздел математики, изучающий векторные поля и скалярные поля, а также операции над ними: градиент, дивергенцию, ротор и лапласиан. Он предоставляет язык для формулировки законов физики, таких как уравнения Максвелла в электродинамике и уравнения Навье-Стокса в гидродинамике. Основные теоремы — теорема Гаусса-Остроградского (связь потока поля через замкнутую поверхность с дивергенцией внутри объёма) и теорема Стокса (связь циркуляции поля по контуру с ротором через поверхность). Векторный анализ незаменим в физике сплошных сред, теории поля и дифференциальной геометрии.</div>
+        <div class="section"><h2>История</h2><p>Векторный анализ развивался в XIX веке благодаря работам Джеймса Клерка Максвелла, который в 1860-х годах использовал кватернионы для формулировки электромагнетизма. Позже Оливер Хевисайд и Джозайя Уиллард Гиббс упростили обозначения, введя современные векторные операции. Максвелл, будучи одним из ключевых учёных, заложил основы, а Гиббс и Хевисайд популяризировали векторный анализ как самостоятельную дисциплину.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Векторный анализ оперирует с векторными полями F(x,y,z), где каждой точке пространства сопоставлен вектор. Градиент скалярного поля f указывает направление наибольшего возрастания f. Дивергенция ∇·F измеряет, насколько поле «расходится» из точки (источники/стоки). Ротор ∇×F измеряет «закрученность» поля. Эти операции связаны интегральными теоремами: поток через замкнутую поверхность равен интегралу дивергенции по объёму (теорема Гаусса), а циркуляция по замкнутому контуру равна потоку ротора через поверхность (теорема Стокса).</p></div>
+        <div class="formula"><div class="formula-render">\oint_S \mathbf{F} \cdot d\mathbf{S} = \int_V (\nabla \cdot \mathbf{F}) \, dV</div><div class="formula-meaning">Поток векторного поля F через замкнутую поверхность S равен интегралу дивергенции поля по объёму V, ограниченному этой поверхностью.</div></div><div class="formula"><div class="formula-render">\oint_C \mathbf{F} \cdot d\mathbf{r} = \int_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}</div><div class="formula-meaning">Циркуляция векторного поля F по замкнутому контуру C равна потоку ротора поля через поверхность S, натянутую на этот контур.</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Трёхмерная задача Навье-Стокса (существование и гладкость решений) — одна из проблем тысячелетия.; Разработка эффективных численных методов для моделирования турбулентности.</p><p class="fact">💡 Без векторного анализа невозможно было бы создать современные системы GPS, так как они используют расчёты гравитационного поля Земли.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/James_Clerk_Maxwell.html" class="text-scientist" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a></div>
+    <div class="tag-laws"><strong>Законы:</strong> <a href="/lang/ru/laws/gauss_theorem.html" class="law-chip">Теорема Гаусса</a> <a href="/lang/ru/laws/gauss_theorem_2.html" class="law-chip">Теорема Гаусса</a> <a href="/lang/ru/laws/stokes_theorem.html" class="law-chip">Теорема Стокса</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/differential_geometry.html" data-tag="differential_geometry">Дифференциальная геометрия</a><a href="/lang/ru/tags/tensor.html" data-tag="tensor">Тензор</a><a href="/lang/ru/tags/fourier_transform.html" data-tag="fourier_transform">Преобразование Фурье</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="vector_calculus"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

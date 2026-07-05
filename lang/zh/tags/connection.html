@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#联络 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>联络</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">联络是一种规则，它告诉如何沿着曲线将向量从一点移动到另一点而不改变其方向，就像你沿着弯曲的道路携带一个指南针箭头。</div>
+        <div class="fun-fact">💡 联络用于广义相对论：它决定了粒子如何在弯曲的时空中运动。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">联络是流形上的一种附加结构，允许比较不同点的向量，即定义平行移动。它决定了向量沿曲线移动时如何变化，以使其保持“平行于自身”。联络还定义了协变导数——一种对向量场求导的方法。</div>
+        <div class="section"><h2>历史</h2><p>联络的概念由图利奥·列维-奇维塔于1917年为黎曼流形引入。随后埃利·嘉当将其推广到任意纤维丛，引入了主丛上的联络概念。在物理学中，联络在规范理论中成为关键。</p></div>
+        <div class="section"><h2>工作原理</h2><p>想象你走在弯曲的表面上，手持一支长矛，尽量保持其方向不变。联络是一种规则，告诉你如何转动长矛，使其相对于表面保持“平行”。如果表面弯曲，那么绕闭合路径一周后，长矛可能会转动——这就是曲率效应。</p></div>
+        <div class="fun-fact">💡 规范理论（如电动力学）中的联络就是矢量势A_μ，它描述电磁场。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">联络是一种数学对象，定义了流形上向量沿曲线平行移动的规则。在黎曼流形上，存在唯一的无挠度量联络——列维-奇维塔联络。一般情况下，向量丛上的联络是一个线性算子∇: Γ(E) → Γ(E⊗T*M)，满足莱布尼茨法则。主丛上的联络由取值于结构群李代数的1-形式给出。联络的曲率是一个2-形式，衡量协变导数的非交换性。</div>
+        <div class="section"><h2>历史</h2><p>图利奥·列维-奇维塔于1917年引入了黎曼流形上的平行移动。埃利·嘉当在20世纪20年代发展了联络的一般理论，包括标架丛上的联络。20世纪50年代，陈省身等人将联络应用于规范理论。在物理学中，联络成为描述基本相互作用（电磁、弱、强）的基础。</p></div>
+        <div class="section"><h2>工作原理</h2><p>联络∇定义了协变导数：对于向量场X和Y，∇_X Y是Y沿X方向的导数。在坐标中，联络由克里斯托费尔符号Γᵏᵢⱼ给出：∇_{∂ᵢ} ∂ⱼ = Γᵏᵢⱼ ∂ₖ。向量v沿曲线γ(t)的平行移动是方程∇_{γ'(t)} v(t) = 0的解。曲率R(X,Y) = [∇_X, ∇_Y] - ∇_{[X,Y]}衡量协变导数的非交换性。</p></div>
+        <div class="formula"><div class="formula-render">\nabla_{\partial_i} \partial_j = \Gamma^k_{ij} \partial_k</div><div class="formula-meaning">基向量场∂ⱼ沿∂ᵢ方向的协变导数通过克里斯托费尔符号Γᵏᵢⱼ表示。</div></div><div class="formula"><div class="formula-render">R(X,Y)Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]} Z</div><div class="formula-meaning">曲率衡量协变导数的非交换性。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>将量子引力构建为自旋丛上的联络理论（圈量子引力）。; 分类具有给定曲率性质的联络（例如瞬子）。</p><p class="fact">💡 规范理论（如电动力学）中的联络就是矢量势A_μ，它描述电磁场。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Albert_Einstein.html" class="text-scientist" data-scientist="Albert Einstein">Albert Einstein</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/differential_geometry.html" data-tag="differential_geometry">微分几何</a><a href="/lang/zh/tags/curvature.html" data-tag="curvature">曲率</a><a href="/lang/zh/tags/fiber_bundle.html" data-tag="fiber_bundle">纤维丛</a><a href="/lang/zh/tags/gauge_invariance.html" data-tag="gauge_invariance">规范不变性</a><a href="/lang/zh/tags/manifold.html" data-tag="manifold">流形</a><a href="/lang/zh/tags/characteristic_class.html" data-tag="characteristic_class">示性类</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="connection"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

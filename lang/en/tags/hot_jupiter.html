@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Hot Jupiter — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Hot Jupiter</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">This is a planet the size of Jupiter, but located very close to its star, causing its atmosphere to be heated to thousands of degrees.</div>
+        <div class="fun-fact">💡 The first hot Jupiter, 51 Pegasi b, was discovered in 1995 and launched the era of exoplanet discovery.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A hot Jupiter is a gas giant that orbits its star at a very close distance, often less than 0.1 AU (for comparison, Mercury is 0.4 AU from the Sun). Due to its proximity to the star, its atmosphere is heated to 1000–3000 K. Such planets usually have elongated orbits and may be tidally locked.</div>
+        <div class="section"><h2>History</h2><p>The discovery of 51 Pegasi b in 1995 by Michel Mayor and Didier Queloz was a sensation, as such a planet did not fit existing formation theories.</p></div>
+        <div class="section"><h2>How it works</h2><p>Hot Jupiters likely form farther from the star and then migrate inward due to interactions with the protoplanetary disk or other planets. Proximity to the star causes strong heating, atmospheric expansion, and even evaporation.</p></div>
+        <div class="fun-fact">💡 Some hot Jupiters have a 'tail' of evaporating gas, like a comet.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A hot Jupiter is an exoplanet of the gas giant class with a mass on the order of Jupiter's mass, but with an orbital period of less than 10 days. Due to proximity to the star, their atmospheres are highly heated, leading to expansion and mass loss. They are often on tidally locked orbits, with one side always facing the star. Studying hot Jupiters provides information on planet migration and atmospheric evolution.</div>
+        <div class="section"><h2>History</h2><p>The first hot Jupiter, 51 Pegasi b, was discovered in 1995 by Michel Mayor and Didier Queloz (Nobel Prize 2019). This discovery prompted a revision of planet formation theories. Since then, hundreds of hot Jupiters have been detected, including HD 209458b, whose atmosphere was first measured.</p></div>
+        <div class="section"><h2>How it works</h2><p>Hot Jupiters form beyond the snow line, where there is plenty of ice, and then migrate inward due to gravitational interactions with the disk or other planets. Approaching the star, they experience strong heating, causing atmospheric expansion and mass loss. Some hot Jupiters may be destroyed by tidal forces.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>The migration mechanism of hot Jupiters (disk migration vs. gravitational scattering) is unclear.; Why do some systems have hot Jupiters and others not?</p><p class="fact">💡 Some hot Jupiters have a 'tail' of evaporating gas, like a comet.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/exoplanet.html" data-tag="exoplanet">Exoplanet</a><a href="/lang/en/tags/gas_giant.html" data-tag="gas_giant">Gas Giant</a><a href="/lang/en/tags/transit_method.html" data-tag="transit_method">Transit Method</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="hot_jupiter"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExoVeil: Detecting Exoplanets by Single Transit via Self-Supervision — bridge42worlds</title>
+    <meta name="description" content="The ExoVeil system is presented, using a transformer world model to predict stellar brightness and detect transits from residuals. The system does not require phase folding and can find planets with a single transit. It demonstrates recovery of 47 confirmed TESS planets without retraining and sensit">
+    <meta property="og:title" content="ExoVeil: Detecting Exoplanets by Single Transit via Self-Supervision">
+    <meta property="og:description" content="The ExoVeil system learns to predict stellar brightness and finds single transits that classifiers miss.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="zh" href="https://bridge42worlds.org/lang/zh/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="fr" href="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.org/lang/ar/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "ExoVeil: Detecting Exoplanets by Single Transit via Self-Supervision", "description": "The ExoVeil system learns to predict stellar brightness and finds single transits that classifiers miss.", "inLanguage": "en", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg", "author": [{"@type": "Person", "name": "Pratik Priyanshu"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02778v3"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle"><a href="/lang/en/archive/2026-06-01/2606.02778v3/index.html">Popular</a><a href="/lang/en/archive/2026-06-01/2606.02778v3/simple.html">Simple</a><a href="/lang/en/archive/2026-06-01/2606.02778v3/advanced.html" class="active">Advanced</a></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search articles, #tags, @authors" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div class="authors-top"><a href="/lang/ru/authors/Pratik_Priyanshu.html" class="text-author-link" data-author="Pratik Priyanshu">Pratik Priyanshu</a></div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.02778v3">2606.02778v3</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 2 min</span> · <span class="cat-badge" data-cat="astro-ph.EP">Exoplanets</span> <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span>
+</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 I am the author — verify & edit</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author — verify & edit</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.02778v3">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1>ExoVeil: Detecting Exoplanets by Single Transit via Self-Supervision</h1>
+        <div class="original-title">Original: "One Transit Is All You Need: Detecting Exoplanets Through Learned Stellar Behaviour with EXOVEIL"</div>
+        <div class="oneliner">The ExoVeil system learns to predict stellar brightness and finds single transits that classifiers miss.</div>
+        <div class="ai-cover ai-cover-ph"></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg" target="_blank"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg" alt="TheExoVeilpipeline." title="TheExoVeilpipeline." loading="lazy"></a><figcaption>TheExoVeilpipeline.</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/1.jpg" target="_blank"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/1.jpg" alt="Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve" title="Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve" loading="lazy"></a><figcaption>Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/2.jpg" target="_blank"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/2.jpg" alt="Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require" title="Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require" loading="lazy"></a><figcaption>Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require</figcaption></figure></div></div>
+        <section id="context"><h2>Context</h2><p>Modern machine learning methods for transit detection, such as ExoMiner and AstroNet, require a known orbital period and phase folding. This makes them useless for single-transit planets, which are a priority for missions like PLATO. <a href="/lang/en/tags/exoplanet.html" class="text-tag" data-tag="exoplanet">Exoplanets</a> with long periods are the main target, but a structural flaw in pipelines prevents their detection.</p></section><section id="methods"><h2>Methods</h2><p>The author trained a <a href="/lang/en/tags/computer_simulation.html" class="text-tag" data-tag="computer_simulation">transformer world model</a> on 16,499 Kepler light curves with self-supervised learning, masking known transits. The model predicts the expected flux, and a <a href="/lang/en/tags/transit_method.html" class="text-tag" data-tag="transit_method">matched filter</a> with variance weighting extracts signals from residuals. Then an <a href="/lang/en/tags/photometry.html" class="text-tag" data-tag="photometry">XGBoost classifier</a> on 21 features separates planets from false positives. Conformal prediction is used for uncertainty estimation.</p></section><section id="results"><h2>Results</h2><p>A blind search of 3,737 Kepler stars revealed 179 transit-like anomalies not in the DR25 catalog. When injecting single transits, the system recovers 32% at 1000 ppm depth, while classifiers give 0% by design. With zero-shot transfer to the TESS mission, all 47 confirmed planets in the PLATO LOPS2 field are recovered (100% recovery). At PLATO's 25-second cadence, sensitivity reaches 100 ppm, approaching <a href="/lang/en/tags/superearth.html" class="text-tag" data-tag="superearth">Earth analogs</a>.</p></section><section id="implications"><h2>Implications</h2><p>The results show that the prediction paradigm, rather than classification, can fill the gap in detecting exoplanets with few transits. Stellar brightness is modeled via learning, paving the way for detecting Earth-like planets with next-generation <a href="/lang/en/tags/telescope.html" class="text-tag" data-tag="telescope">telescopes</a>.</p></section><section id="future_development"><h2>Future development</h2><p>Plans include replacing the transformer with a linear architecture (Mamba) to process full light curves without windows, adding automatic rejection of four classes of false positives (post-flare bump, rotation tracking error, etc.), and extending to the multi-objective PLATO mission with 24 cameras.</p></section><section id="impact_on"><h2>Impact</h2><p>It will impact data processing pipelines for PLATO and other surveys, as well as candidate selection strategies for ground-based confirmation.</p></section><section id="next_steps"><h2>Next steps</h2><p>Conduct large-scale injections with PlatoSim, include centroid analysis and <a href="/lang/en/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">spectroscopy</a> for candidate verification.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>This work directly addresses the problem of detecting Earth-like exoplanets around Sun-like stars, which is central to the PLATO mission and is being tackled using machine learning methods.</p></section>
+        <div class="fun-fact">🎯 The ExoVeil system applies conformal prediction to transit vetting for the first time, providing a formal coverage guarantee of 95.9%.</div>
+        
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>recuperation_1000ppm:</strong> 32%</li><li><strong>tess_loops2_recovery:</strong> 100% (47/47)</li><li><strong>blind_search_anomalies:</strong> 179</li><li><strong>conformal_coverage:</strong> 95.9%</li><li><strong>plato_sensitivity:</strong> 100 ppm</li></ul></div>
+        
+        <div class="actions">
+            <div class="likes" data-article-id="2606.02778v3">
+                <button onclick="toggleLike('2606.02778v3')" class="like-btn">♥ <span id="like-count-2606.02778v3">…</span></button>
+            </div>
+            <button onclick="shareArticle('ExoVeil: Detecting Exoplanets by Single Transit via Self-Supervision','https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html')">Share</button>
+        </div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><a href="/lang/en/tags/exoplanet.html" class="side-tag" data-tag="exoplanet">Exoplanet</a>
+<a href="/lang/en/tags/transit_method.html" class="side-tag" data-tag="transit_method">Transit Method</a>
+<a href="/lang/en/tags/photometry.html" class="side-tag" data-tag="photometry">Photometry</a>
+<a href="/lang/en/tags/computer_simulation.html" class="side-tag" data-tag="computer_simulation">computer simulation</a>
+<a href="/lang/en/tags/telescope.html" class="side-tag" data-tag="telescope">telescope</a>
+<a href="/lang/en/tags/star.html" class="side-tag" data-tag="star">star</a>
+<a href="/lang/en/tags/planet.html" class="side-tag" data-tag="planet">planet</a>
+<a href="/lang/en/tags/superearth.html" class="side-tag" data-tag="superearth">Super-Earth</a>
+<a href="/lang/en/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">Spectroscopy</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2606.02778v3">arXiv:2606.02778v3</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=15"></script>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/scroll.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

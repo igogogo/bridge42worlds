@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Антропный принцип — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Антропный принцип</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Антропный принцип говорит, что мы видим Вселенную такой, потому что только в такой Вселенной могли появиться наблюдатели.</div>
+        <div class="fun-fact">💡 Этот принцип часто используют для объяснения, почему физические константы имеют именно такие значения, как будто они подстроены под нас.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Антропный принцип — это философский принцип, который утверждает, что наблюдаемые свойства Вселенной должны быть совместимы с существованием наблюдателей. Слабый антропный принцип: мы находимся в той части Вселенной, где условия подходят для жизни. Сильный: Вселенная должна иметь свойства, допускающие жизнь.</div>
+        <div class="section"><h2>История</h2><p>Термин введён Брэндоном Картером в 1973 году, хотя идея восходит к древним временам.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Если бы физические константы были немного другими, жизнь не могла бы возникнуть. Поэтому мы наблюдаем именно такие константы, потому что иначе нас бы не было.</p></div>
+        <div class="fun-fact">💡 Антропный принцип иногда критикуют как тавтологию: «Мы существуем, потому что существуем».</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Антропный принцип — это философское утверждение о связи между свойствами Вселенной и существованием в ней наблюдателей. Слабый антропный принцип: условия в наблюдаемой Вселенной должны быть совместимы с существованием жизни. Сильный антропный принцип: Вселенная обязана иметь свойства, позволяющие развиться жизни.</div>
+        <div class="section"><h2>История</h2><p>Идея восходит к античности, но современная формулировка дана Брэндоном Картером в 1973 году на симпозиуме, посвящённом 500-летию Коперника. Картер различал слабый и сильный антропные принципы. Позже Джон Барроу и Фрэнк Типлер развили эту концепцию.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Антропный принцип используется для объяснения «тонкой настройки» физических констант. Например, если бы гравитационная постоянная была немного больше, Вселенная схлопнулась бы; если меньше — не образовались бы звёзды. Принцип не является физической теорией, а скорее методологическим подходом.</p></div>
+        
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Является ли антропный принцип научным? Он не поддаётся фальсификации.</p><p class="fact">💡 Антропный принцип иногда критикуют как тавтологию: «Мы существуем, потому что существуем».</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/multiverse.html" data-tag="multiverse">Мультивселенная</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="anthropic_principle"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

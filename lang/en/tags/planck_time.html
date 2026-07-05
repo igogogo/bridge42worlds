@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Planck Time — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Planck Time</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Planck time is the shortest possible interval of time, about 5.4×10⁻⁴⁴ seconds, below which time loses meaning.</div>
+        <div class="fun-fact">💡 In Planck time, light travels a distance equal to the Planck length.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Planck time is the time it takes for light to travel the Planck length. It is the smallest time interval that can be measured within known physics.</div>
+        <div class="section"><h2>History</h2><p>Like the Planck length, Planck time was introduced by Max Planck in 1899.</p></div>
+        <div class="section"><h2>How it works</h2><p>On times shorter than Planck time, quantum effects of gravity become important, and the concept of continuous time may be replaced by discrete 'quanta' of time.</p></div>
+        <div class="fun-fact">💡 Planck time is 10⁴³ times smaller than the time it takes light to cross a proton.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Planck time t_P = √(ħG/c⁵) ≈ 5.391×10⁻⁴⁴ s is a fundamental unit of time associated with the Planck length. It is believed that processes shorter than this time cannot be described by classical physics and require quantum gravity.</div>
+        <div class="section"><h2>History</h2><p>Max Planck in 1899 defined Planck time as a natural unit of time. In modern cosmology, the Universe is thought to have originated at the Planck time after the Big Bang.</p></div>
+        <div class="section"><h2>How it works</h2><p>Planck time is the time it takes for light to travel the Planck length. It is also the characteristic time for quantum gravity effects. For example, the age of the Universe in Planck units is about 8×10⁶⁰ t_P.</p></div>
+        <div class="formula"><div class="formula-render">t_P = \sqrt{\frac{\hbar G}{c^5}}</div><div class="formula-meaning">Planck time is expressed in terms of Planck's constant, the gravitational constant, and the speed of light.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>What does the quantum structure of time look like at Planck scales?</p><p class="fact">💡 Planck time is 10⁴³ times smaller than the time it takes light to cross a proton.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Max_Planck.html" class="text-scientist" data-scientist="Max Planck">Max Planck</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/planck_length.html" data-tag="planck_length">Planck Length</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="planck_time"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

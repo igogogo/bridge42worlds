@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="$lang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$author_name — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/$lang/index.html">main</a>
+            <a href="/lang/$lang/tags/">tags</a>
+            <a href="/lang/$lang/laws/">laws</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$lang/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<h1>👤 $author_name</h1>
+<div class="tag-stats">📊 $article_count $articles_label · $coauthor_count $coauthors_word · $last_seen</div>
+
+<div class="related-tags">
+    <strong>$coauthors_label:</strong>
+    $coauthors_html
+</div>
+
+<div id="cograph" data-author="$author_name_attr"><canvas id="cgcanvas"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint">$search_hint</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-author="$author_slug">$articles_list_html</div>
+
+<footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/coauthor-graph.js?v=15"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Large Hadron Collider — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=5">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/archive/">archive</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Large Hadron Collider</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">The world's most powerful particle accelerator, located at CERN. Like a giant microscope, allowing us to peer into the deepest depths of matter and recreate the conditions of the first moments after the Big Bang.</div>
+        <div class="fun-fact">💡 The LHC consumes about 200 MW of electricity—like a small city.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">The world's most powerful particle accelerator, located at CERN. Like a giant microscope, allowing us to peer into the deepest depths of matter and recreate the conditions of the first moments after the Big Bang.</div>
+        <div class="section"><h2>History</h2><p>Construction began in 1998, launch in 2008. In 2012, the Higgs boson was discovered, predicted 50 years earlier. An upgrade to HL-LHC is planned.</p></div>
+        <div class="section"><h2>How it works</h2><p>Protons are accelerated in a 27 km ring to an energy of 6.5 TeV and collide. Detectors (ATLAS, CMS) record collision products. Data analysis allows testing the Standard Model and searching for new physics.</p></div>
+        <div class="fun-fact">💡 The LHC consumes about 200 MW of electricity—like a small city.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">The world's most powerful particle accelerator, located at CERN. Like a giant microscope, allowing us to peer into the deepest depths of matter and recreate the conditions of the first moments after the Big Bang.</div>
+        <div class="section"><h2>History</h2><p>Construction began in 1998, launch in 2008. In 2012, the Higgs boson was discovered, predicted 50 years earlier. An upgrade to HL-LHC is planned.</p></div>
+        <div class="section"><h2>How it works</h2><p>Protons are accelerated in a 27 km ring to an energy of 6.5 TeV and collide. Detectors (ATLAS, CMS) record collision products. Data analysis allows testing the Standard Model and searching for new physics.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>Search for dark matter particles.; Explanation of particle mass hierarchy.</p><p class="fact">💡 The LHC consumes about 200 MW of electricity—like a small city.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Peter_Higgs.html" class="text-scientist" data-scientist="Peter Higgs">Peter Higgs</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/collider.html" data-tag="collider">collider</a><a href="/lang/en/tags/standard_model.html" data-tag="standard_model">Standard Model</a><a href="/lang/en/tags/higgs_boson.html" data-tag="higgs_boson">Higgs Boson</a><a href="/lang/en/tags/quarkgluon_plasma.html" data-tag="quarkgluon_plasma">Quark-Gluon Plasma</a><a href="/lang/en/tags/antimatter.html" data-tag="antimatter">Antimatter</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="large_hadron_collider"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple</p></footer>
+<script src="/js/search.js?v=5"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

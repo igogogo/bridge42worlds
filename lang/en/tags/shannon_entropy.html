@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Shannon entropy — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Shannon entropy</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Shannon entropy is a measure of uncertainty: the more possible outcomes, the higher the entropy. For example, a fair coin has an entropy of 1 bit, while a coin with two heads has 0.</div>
+        <div class="fun-fact">💡 Shannon entropy coincides in formula with Boltzmann entropy in statistical physics.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Shannon entropy is the average amount of information carried by one symbol of a message. For a random variable X with distribution p(x), it is H(X) = -∑ p(x) log p(x). The more uniform the distribution, the higher the entropy.</div>
+        <div class="section"><h2>History</h2><p>Introduced by Claude Shannon in 1948 as a measure of information. The name 'entropy' was suggested by John von Neumann due to its similarity to thermodynamic entropy.</p></div>
+        <div class="section"><h2>How it works</h2><p>If an event has probability p, its information content is -log p. Entropy is the average of such values. For example, for a uniform distribution with 8 outcomes, entropy is 3 bits.</p></div>
+        <div class="fun-fact">💡 Shannon entropy is used in machine learning to build decision trees (information gain criterion).</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Shannon entropy is a fundamental measure of uncertainty in information theory. For a discrete random variable X with values {x_i} and probabilities p_i, entropy H(X) = -∑ p_i log_b p_i, where the base of the logarithm determines the unit (bit, nat, hartley). Properties: non-negativity, maximum for uniform distribution, additivity for independent variables. Entropy is a special case of Rényi entropy. It is related to the minimum lossless code length (Shannon's source coding theorem).</div>
+        <div class="section"><h2>History</h2><p>Claude Shannon introduced entropy in 1948. John von Neumann suggested the name 'entropy' because it resembles Boltzmann's formula S = k log W. In the 1950s, entropy became a key concept in coding theory. Later it was generalized to continuous distributions (differential entropy) and quantum systems (von Neumann entropy).</p></div>
+        <div class="section"><h2>How it works</h2><p>Entropy is computed from the probability distribution. For the discrete case, H = -∑ p_i log_2 p_i (bits). For the continuous case, differential entropy h(X) = -∫ f(x) log f(x) dx. Entropy can be conditional H(Y|X) and joint H(X,Y). Mutual information I(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X).</p></div>
+        <div class="formula"><div class="formula-render">H(X) = -\sum_{i=1}^{n} p_i \log_2 p_i</div><div class="formula-meaning">Average amount of information (in bits) per symbol for a source with distribution p_i.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Generalization of entropy for non-extensive systems (Tsallis entropy); Connection between Shannon entropy and computational complexity</p><p class="fact">💡 Shannon entropy is used in machine learning to build decision trees (information gain criterion).</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/information_theory.html" data-tag="information_theory">Information Theory</a><a href="/lang/en/tags/probability_theory.html" data-tag="probability_theory">Probability Theory</a><a href="/lang/en/tags/entropy.html" data-tag="entropy">Entropy</a><a href="/lang/en/tags/quantum_entanglement.html" data-tag="quantum_entanglement">Quantum Entanglement</a><a href="/lang/en/tags/stochastic_process.html" data-tag="stochastic_process">Stochastic Process</a><a href="/lang/en/tags/markov_chain.html" data-tag="markov_chain">Markov Chain</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="shannon_entropy"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

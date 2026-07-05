@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#对数导数 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>对数导数</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">对数导数表示函数相对于自身的变化速度——如同银行存款的百分比增长。</div>
+        <div class="fun-fact">💡 对数导数在物理学中用于描述指数增长过程，例如放射性衰变。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">函数f(x)的对数导数是ln|f(x)|的导数，即f'(x)/f(x)。它衡量函数的相对变化率。如果f(x)指数增长，对数导数为常数。</div>
+        <div class="section"><h2>历史</h2><p>该概念可追溯到莱布尼茨和牛顿的工作，但在微分方程和概率论中系统使用。</p></div>
+        <div class="section"><h2>工作原理</h2><p>对于函数f(x)，对数导数计算为f'(x)/f(x)。例如，对于f(x)=e^{kx}，它为k。这在处理乘积和商时很方便，因为对数将乘积转化为和。</p></div>
+        <div class="fun-fact">💡 对数导数用于数学物理中求解薛定谔方程。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">对数导数是函数自然对数的导数：(ln f)' = f'/f。它在f ≠ 0处有定义。性质：乘积的对数导数等于各因子对数导数之和；商的对数导数等于差。它对缩放不变：(cf)'/(cf) = f'/f。应用于微分方程、概率论（似然函数）、复分析（对数留数）。</div>
+        <div class="section"><h2>历史</h2><p>对数导数的概念在17世纪隐式用于解微分方程。19世纪成为分析中的标准工具。在概率论中，对数导数与似然函数相关。在复分析中，用于计算亚纯函数的零点和极点。</p></div>
+        <div class="section"><h2>工作原理</h2><p>对于可微函数f(x)，对数导数等于f'(x)/f(x)。如果f(x) = ∏ g_i(x)，则(ln f)' = ∑ (ln g_i)'。这一性质简化了复杂表达式的微分。在复分析中，沿闭合回路的对数导数积分给出回路内零点与极点数目之差。</p></div>
+        <div class="formula"><div class="formula-render">\frac{d}{dx} \ln f(x) = \frac{f'(x)}{f(x)}</div><div class="formula-meaning">函数f(x)的相对变化率。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>在微分方程奇点理论中的应用; 与数论中对数导数的联系（切比雪夫函数）</p><p class="fact">💡 对数导数用于数学物理中求解薛定谔方程。</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/probability_theory.html" data-tag="probability_theory">概率论</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="logarithmic_derivative"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

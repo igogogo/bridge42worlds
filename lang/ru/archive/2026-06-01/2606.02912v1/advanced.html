@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СейсмоGPT: предсказание землетрясений с помощью ИИ для защиты обсерваторий гравитационных волн — bridge42worlds</title>
+    <meta name="description" content="SeismoGPT — 26-миллионный causal transformer, предсказывающий трёхкомпонентные сейсмограммы. Модель обучается на синтетических данных и достигает медианной NCC выше 0.93. Прогнозы ухудшаются на больших расстояниях и при малых магнитудах. Работа открывает путь к применению ИИ в сейсмическом предупреж">
+    <meta property="og:title" content="СейсмоGPT: предсказание землетрясений с помощью ИИ для защиты обсерваторий гравитационных волн">
+    <meta property="og:description" content="Нейросеть SeismoGPT на основе трансформеров научилась предсказывать сейсмические волны, что может помочь в работе будущих детекторов гравитационных волн.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/0.jpg">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="zh" href="https://bridge42worlds.org/lang/zh/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="fr" href="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.org/lang/ar/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "СейсмоGPT: предсказание землетрясений с помощью ИИ для защиты обсерваторий гравитационных волн", "description": "Нейросеть SeismoGPT на основе трансформеров научилась предсказывать сейсмические волны, что может помочь в работе будущих детекторов гравитационных волн.", "inLanguage": "ru", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/0.jpg", "author": [{"@type": "Person", "name": "Waleed Esmail"}, {"@type": "Person", "name": "Stuart Russell"}, {"@type": "Person", "name": "Jana Klinge"}, {"@type": "Person", "name": "Alexander Kappes"}, {"@type": "Person", "name": "Christine Thomas"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02912v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle"><a href="/lang/ru/archive/2026-06-01/2606.02912v1/index.html">Популярно</a><a href="/lang/ru/archive/2026-06-01/2606.02912v1/simple.html">Просто</a><a href="/lang/ru/archive/2026-06-01/2606.02912v1/advanced.html" class="active">Подробно</a></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск статей, #теги, @авторы" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div class="authors-top"><a href="/lang/ru/authors/Waleed_Esmail.html" class="text-author-link" data-author="Waleed Esmail">Waleed Esmail</a>, <a href="/lang/ru/authors/Stuart_Russell.html" class="text-author-link" data-author="Stuart Russell">Stuart Russell</a>, <a href="/lang/ru/authors/Jana_Klinge.html" class="text-author-link" data-author="Jana Klinge">Jana Klinge</a>, <a href="/lang/ru/authors/Alexander_Kappes.html" class="text-author-link" data-author="Alexander Kappes">Alexander Kappes</a>, <a href="/lang/ru/authors/Christine_Thomas.html" class="text-author-link" data-author="Christine Thomas">Christine Thomas</a></div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.02912v1">2606.02912v1</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 2 мин</span> · <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span> <span class="cat-badge" data-cat="gr-qc">General Relativity</span> <span class="cat-badge" data-cat="physics.geo-ph">Geophysics</span>
+</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 Я автор — подтвердить и редактировать</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор — подтвердить и редактировать</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.02912v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Контекст</a></li><li><a href="#methods">Методы</a></li><li><a href="#results">Результаты</a></li><li><a href="#implications">Значение</a></li><li><a href="#future_development">Развитие</a></li><li><a href="#impact_on">Влияние</a></li><li><a href="#next_steps">Следующие шаги</a></li><li><a href="#key_problems_connection">Ключевые проблемы</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1>СейсмоGPT: предсказание землетрясений с помощью ИИ для защиты обсерваторий гравитационных волн</h1>
+        <div class="original-title">Original: "Data-Driven Forecasting of three-Component Seismograms Using Transformer Architectures"</div>
+        <div class="oneliner">Нейросеть SeismoGPT на основе трансформеров научилась предсказывать сейсмические волны, что может помочь в работе будущих детекторов гравитационных волн.</div>
+        <div class="ai-cover ai-cover-ph"></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02912v1/0.jpg" target="_blank"><img src="/lang/ru/archive/2026-06-01/2606.02912v1/0.jpg" alt="To evaluate the feasibility of this formulation in a controlled and reproducible setting, in" title="To evaluate the feasibility of this formulation in a controlled and reproducible setting, in" loading="lazy"></a><figcaption>To evaluate the feasibility of this formulation in a controlled and reproducible setting, in</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02912v1/1.jpg" target="_blank"><img src="/lang/ru/archive/2026-06-01/2606.02912v1/1.jpg" alt="Table 1 summarizes the parameters used for synthetic waveform generation and process-" title="Table 1 summarizes the parameters used for synthetic waveform generation and process-" loading="lazy"></a><figcaption>Table 1 summarizes the parameters used for synthetic waveform generation and process-</figcaption></figure></div></div>
+        <section id="context"><h2>Контекст</h2><p>Точное прогнозирование сейсмических волн критически важно для раннего предупреждения землетрясений и защиты чувствительного оборудования. Особенно остро эта проблема стоит для будущих гравитационно-волновых обсерваторий, таких как <a href="/lang/ru/tags/telescope.html" class="text-tag" data-tag="telescope">Эйнштейновский телескоп</a>, предсказанных <a href="/lang/ru/scientists/Albert_Einstein.html" class="text-scientist" data-scientist="Albert Einstein">Альбертом Эйнштейном</a>. Сейсмический шум (ньютоновский шум) доминирует в бюджете шума. Современные численные методы слишком медленны для реального времени. <a href="/lang/ru/tags/computer_simulation.html" class="text-tag" data-tag="computer_simulation">Компьютерное моделирование</a> требует огромных вычислительных ресурсов. Поэтому исследователи обратились к машинному обучению.</p></section><section id="methods"><h2>Методы</h2><p>Авторы создали SeismoGPT — основанный на трансформерах алгоритм, который предсказывает сейсмограммы как задачу продолжения. Сейсмограмма разбивается на токены (патчи по 16 отсчетов). Модель использует каузальное самовнимание для предсказания следующего токена. Обучение проводилось на синтетических данных, сгенерированных с помощью Instaseis и AxiSEM. Использовалась комбинированная функция потерь, включающая временную и спектральную составляющие.</p></section><section id="results"><h2>Результаты</h2><p>Модель достигла медианной нормализованной кросс-корреляции (NCC) выше 0.93 во всех конфигурациях. При удвоении горизонта прогноза со 120 до 240 с NCC падала на 2%, но удвоение контекста восстанавливало качество. Наилучшие результаты получены для сильных землетрясений на малых расстояниях; на больших расстояниях и малых магнитудах (Mw<4) качество ухудшалось. Важно: модель генерирует физически правдоподобные волны, но иногда с фазовым сдвигом.</p></section><section id="implications"><h2>Значение</h2><p>SeismoGPT доказывает, что трансформеры могут изучать устойчивое продолжение сейсмических волновых полей без явного решения уравнений. Это открывает путь к созданию <a href="/lang/ru/tags/gravity.html" class="text-tag" data-tag="gravity">гравитационно-волновых</a> обсерваторий нового поколения с активным подавлением ньютоновского шума. Метод также может быть применен в системах раннего предупреждения.</p></section><section id="future_development"><h2>Развитие</h2><p>Дальнейшее развитие SeismoGPT включает: (1) переход к реальным данным с учётом шума и трёхмерной неоднородности Земли; (2) увеличение масштаба модели и объёма данных; (3) использование более сложной токенизации, например, латентных представлений. <a href="/lang/ru/scientists/Kip_Thorne.html" class="text-scientist" data-scientist="Kip Thorne">Кип Торн</a> подчёркивает важность таких методов для <a href="/lang/ru/tags/ligo.html" class="text-tag" data-tag="ligo">LIGO</a> и <a href="/lang/ru/tags/black_hole.html" class="text-tag" data-tag="black_hole">Эйнштейновского телескопа</a>.</p></section><section id="impact_on"><h2>Влияние</h2><p>Результаты повлияют на сейсмологию, системы раннего предупреждения, проектирование гравитационно-волновых обсерваторий и машинное обучение для физических симуляций.</p></section><section id="next_steps"><h2>Следующие шаги</h2><p>Следующий шаг — валидация на реальных записях сейсмометров и расширение на многостанционные массивы. Также планируется исследовать связь предсказаний с внутренним строением Земли.</p></section><section id="key_problems_connection"><h2>Ключевые проблемы</h2><p>Работа связана с проблемой точного прогнозирования <a href="/lang/ru/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">сейсмический волн</a> в реальном времени для защиты инфраструктуры.</p></section>
+        <div class="fun-fact">🎯 SeismoGPT обучался на 3.9 миллионах синтетических сейсмограмм, что эквивалентно примерно 50 годам непрерывной записи.</div>
+        <div class="formula"><div class="formula-render">NCC(y,\hat{y}) = \frac{\langle y, \hat{y} \rangle}{\|y\|_2 \|\hat{y}\|_2 + \epsilon}</div><div class="formula-meaning">Мера сходства формы сигнала, нечувствительная к масштабу амплитуд.</div></div>
+        <div class="key-numbers"><h3>Ключевые числа</h3><ul><li><strong>Медианная NCC:</strong> >0.93</li><li><strong>Параметры модели:</strong> 26 млн</li><li><strong>Горизонт прогноза:</strong> 120–240 с</li><li><strong>Объём данных:</strong> 3.9 млн сейсмограмм</li><li><strong>Контекст до S-волны:</strong> 1–2 × (S-P)</li></ul></div>
+        <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Albert_Einstein.html" class="text-scientist" data-scientist="Albert Einstein">Albert Einstein</a>, <a href="/lang/ru/scientists/Kip_Thorne.html" class="text-scientist" data-scientist="Kip Thorne">Kip Thorne</a></div>
+        <div class="actions">
+            <div class="likes" data-article-id="2606.02912v1">
+                <button onclick="toggleLike('2606.02912v1')" class="like-btn">♥ <span id="like-count-2606.02912v1">…</span></button>
+            </div>
+            <button onclick="shareArticle('СейсмоGPT: предсказание землетрясений с помощью ИИ для защиты обсерваторий гравитационных волн','https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02912v1/index.html')">Поделиться</button>
+        </div>
+        <div class="next-divider">
+            <button class="next-btn">Следующая статья →</button>
+        </div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><a href="/lang/ru/tags/gravitational_waves.html" class="side-tag" data-tag="gravitational_waves">gravitational_waves</a>
+<a href="/lang/ru/tags/computer_simulation.html" class="side-tag" data-tag="computer_simulation">компьютерное моделирование</a>
+<a href="/lang/ru/tags/ligo.html" class="side-tag" data-tag="ligo">LIGO</a>
+<a href="/lang/ru/tags/general_relativity.html" class="side-tag" data-tag="general_relativity">general_relativity</a>
+<a href="/lang/ru/tags/gravity.html" class="side-tag" data-tag="gravity">Гравитация</a>
+<a href="/lang/ru/tags/telescope.html" class="side-tag" data-tag="telescope">телескоп</a>
+<a href="/lang/ru/tags/spacetime_curvature.html" class="side-tag" data-tag="spacetime_curvature">spacetime_curvature</a>
+<a href="/lang/ru/tags/black_hole.html" class="side-tag" data-tag="black_hole">Чёрная дыра</a>
+<a href="/lang/ru/tags/neutron_star.html" class="side-tag" data-tag="neutron_star">Нейтронная звезда</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Оригинал: <a href="https://arxiv.org/abs/2606.02912v1">arXiv:2606.02912v1</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=15"></script>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/scroll.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

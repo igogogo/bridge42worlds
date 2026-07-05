@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#人择原理 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>人择原理</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">人择原理认为，我们看到宇宙如此，是因为只有在这样的宇宙中才能出现观察者。</div>
+        <div class="fun-fact">💡 这一原理常被用来解释为什么物理常数恰好是现在这样的值，仿佛它们是为我们量身定制的。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">人择原理是一个哲学原理，它断言宇宙的可观测性质必须与观察者的存在相容。弱人择原理：我们处于宇宙中适合生命存在的部分。强人择原理：宇宙必须具有允许生命存在的性质。</div>
+        <div class="section"><h2>历史</h2><p>该术语由布兰登·卡特于1973年提出，尽管其思想可追溯到古代。</p></div>
+        <div class="section"><h2>工作原理</h2><p>如果物理常数稍有不同，生命就无法产生。因此我们观察到这样的常数，因为否则我们就不会存在。</p></div>
+        <div class="fun-fact">💡 人择原理有时被批评为同义反复：“我们存在，因为我们存在。”</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">人择原理是一个关于宇宙性质与其中观察者存在之间关系的哲学论断。弱人择原理：可观测宇宙中的条件必须与生命存在相容。强人择原理：宇宙必须具有允许生命发展的性质。</div>
+        <div class="section"><h2>历史</h2><p>这一思想可追溯到古代，但现代表述由布兰登·卡特于1973年在纪念哥白尼诞辰500周年的研讨会上提出。卡特区分了弱人择原理和强人择原理。后来约翰·巴罗和弗兰克·蒂普勒进一步发展了这一概念。</p></div>
+        <div class="section"><h2>工作原理</h2><p>人择原理用于解释物理常数的“精细调节”。例如，如果引力常数稍大，宇宙会坍缩；稍小，则无法形成恒星。该原理并非物理理论，而是一种方法论。</p></div>
+        
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>人择原理是否具有科学性？它无法被证伪。</p><p class="fact">💡 人择原理有时被批评为同义反复：“我们存在，因为我们存在。”</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/multiverse.html" data-tag="multiverse">多重宇宙</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="anthropic_principle"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

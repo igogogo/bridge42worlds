@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Gas Giant — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Gas Giant</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">This is a huge planet consisting mainly of gas, with no solid surface, like Jupiter and Saturn in our solar system.</div>
+        <div class="fun-fact">💡 Jupiter is so large that more than 1,300 Earths could fit inside it.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A gas giant is a planet composed mainly of hydrogen and helium, with a small rocky core. Imagine a huge ball of gas that becomes denser toward the center. Such planets have no solid surface to land on. They also have powerful atmospheres and systems of rings and moons.</div>
+        <div class="section"><h2>History</h2><p>Gas giants have been known since antiquity (Jupiter, Saturn). Their nature as planets without a solid surface was understood with the development of astronomy in the 17th–18th centuries.</p></div>
+        <div class="section"><h2>How it works</h2><p>Gravity compresses gas in the center, creating high pressure and temperature. Hydrogen can transition to a metallic state, generating a magnetic field. The outer layers form bands and storms, like the Great Red Spot on Jupiter.</p></div>
+        <div class="fun-fact">💡 Saturn has the fastest winds in the solar system—speeds can reach 1800 km/h.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A gas giant is a giant planet composed predominantly of hydrogen and helium, with a mass greater than 10 Earth masses. It has no solid surface; below the atmosphere, the gas transitions to a supercritical fluid. In the interior, hydrogen under high pressure becomes metallic, generating a powerful magnetic field. Gas giants have many moons and rings. Examples: Jupiter, Saturn, and many exoplanets such as hot Jupiters.</div>
+        <div class="section"><h2>History</h2><p>Jupiter and Saturn have been known since antiquity. In 1610, Galileo discovered their moons. In the 20th century, the study of gas giants advanced with space probes (Voyagers, Galileo, Cassini). The discovery of exoplanets showed that gas giants are common in other star systems.</p></div>
+        <div class="section"><h2>How it works</h2><p>A gas giant forms from a protoplanetary disk, accreting gas onto a solid core. Internal pressure compresses hydrogen, turning it into liquid and then metallic. Convection in the atmosphere creates bands and vortices. The magnetic field is generated in the metallic hydrogen. The planet emits more heat than it receives from the star due to gravitational contraction.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>The exact composition and structure of gas giant cores are unknown.; The formation mechanism of hot Jupiters on close orbits remains unclear.</p><p class="fact">💡 Saturn has the fastest winds in the solar system—speeds can reach 1800 km/h.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/hot_jupiter.html" data-tag="hot_jupiter">Hot Jupiter</a><a href="/lang/en/tags/ice_giant.html" data-tag="ice_giant">Ice Giant</a><a href="/lang/en/tags/exoplanet.html" data-tag="exoplanet">Exoplanet</a><a href="/lang/en/tags/brown_dwarf.html" data-tag="brown_dwarf">Brown Dwarf</a><a href="/lang/en/tags/ammonia.html" data-tag="ammonia">Ammonia</a><a href="/lang/en/tags/phosphine.html" data-tag="phosphine">Phosphine</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="gas_giant"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

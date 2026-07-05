@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Transformée de Laplace — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/fr/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/fr/index.html">main</a>
+            <a href="/lang/fr/tags/">tags</a>
+            <a href="/lang/fr/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/fr/scientists/">scientists</a>
+            <a href="/lang/fr/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Populaire</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Avancé</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Transformée de Laplace</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">La transformée de Laplace est un outil mathématique qui transforme des équations différentielles complexes en simples équations algébriques, comme si vous traduisiez un problème dans une autre langue où il est plus facile à résoudre.</div>
+        <div class="fun-fact">💡 La transformée de Laplace est utilisée en électrotechnique pour analyser les circuits : elle transforme les lois de Kirchhoff en équations algébriques.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">La transformée de Laplace est une transformation intégrale qui transforme une fonction f(t) (généralement définie pour t≥0) en une fonction F(s) d'une variable complexe s : F(s) = ∫_0^∞ f(t) e^{-st} dt. Elle est particulièrement utile pour résoudre des équations différentielles linéaires à coefficients constants, car elle remplace la dérivation par une multiplication par s et l'intégration par une division par s.</div>
+        <div class="section"><h2>Histoire</h2><p>La transformée de Laplace a été introduite par Pierre-Simon Laplace en 1782 dans son travail sur la théorie des probabilités. Cependant, son utilisation généralisée en ingénierie a commencé au début du XXe siècle grâce aux travaux d'Oliver Heaviside, qui a utilisé le calcul opérationnel.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>Imaginez que vous avez une équation décrivant le mouvement d'un pendule avec frottement. La résoudre directement est difficile. La transformée de Laplace transforme cette équation en une équation algébrique en F(s). Vous la résolvez, puis appliquez la transformée inverse pour obtenir la réponse dans le domaine temporel. C'est comme utiliser un dictionnaire pour traduire de l'anglais vers le langage mathématique.</p></div>
+        <div class="fun-fact">💡 La transformée de Laplace est la base de la théorie de l'automatique : les fonctions de transfert des systèmes sont décrites dans le domaine s.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">La transformée de Laplace est une transformation intégrale de la forme F(s) = ∫_0^∞ f(t) e^{-st} dt, où s = σ + iω est une variable complexe. Elle est définie pour des fonctions croissant au plus exponentiellement. Propriétés : linéarité, dérivation (L{f'(t)} = sF(s) - f(0)), intégration, convolution. La transformée de Laplace inverse se calcule via l'intégrale de Mellin : f(t) = (1/2πi) ∫_{c-i∞}^{c+i∞} F(s) e^{st} ds. Les tables de transformées de Laplace sont largement utilisées.</div>
+        <div class="section"><h2>Histoire</h2><p>Pierre-Simon Laplace a introduit la transformée en 1782 dans le contexte de la théorie des probabilités. Oliver Heaviside à la fin du XIXe siècle a développé indépendamment le calcul opérationnel pour résoudre des équations différentielles en électrotechnique. Une justification rigoureuse a été donnée par Thomas Bromwich et Gustav Doetsch au début du XXe siècle. Aujourd'hui, la transformée de Laplace est un outil standard en ingénierie et en physique.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>La transformée de Laplace transforme les équations différentielles en équations algébriques grâce à la propriété : L{f^{(n)}(t)} = s^n F(s) - s^{n-1}f(0) - ... - f^{(n-1)}(0). Les conditions initiales sont automatiquement prises en compte. Pour résoudre une équation, on applique d'abord la transformée, on résout l'équation algébrique, puis on trouve la transformée inverse (souvent à l'aide de tables). La méthode est également utilisée pour analyser la stabilité des systèmes : les pôles de F(s) déterminent le comportement de la solution.</p></div>
+        <div class="formula"><div class="formula-render">F(s) = \int_0^\infty f(t) e^{-st} dt</div><div class="formula-meaning">Transforme la fonction f(t) (t≥0) en fonction F(s) de la variable complexe s.</div></div><div class="formula"><div class="formula-render">\mathcal{L}\{f'(t)\} = sF(s) - f(0)</div><div class="formula-meaning">La dérivée dans le domaine temporel correspond à une multiplication par s dans le domaine s, moins la condition initiale.</div></div>
+        <div class="section"><h2>Problèmes ouverts et anecdotes</h2><p>Développement de méthodes numériques efficaces pour la transformée de Laplace inverse.; Généralisation aux fonctions de plusieurs variables et aux systèmes non linéaires.</p><p class="fact">💡 La transformée de Laplace est la base de la théorie de l'automatique : les fonctions de transfert des systèmes sont décrites dans le domaine s.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Tags associés:</strong>
+    <a href="/lang/fr/tags/fourier_transform.html" data-tag="fourier_transform">Transformée de Fourier</a><a href="/lang/fr/tags/distribution.html" data-tag="distribution">Distribution</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Rechercher..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ auteur · ! scientifique</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="laplace_transform"><p>Pas encore d'articles</p></div>
+
+<footer><p>bridge42worlds — la science simplifiée · <a href="/lang/fr/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уравнения Максвелла — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/" class="active">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="law-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Уравнения Максвелла<span class="law-type">уравнение</span></h1>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Уравнения Максвелла описывают, как электричество и магнетизм связаны друг с другом и как они создают свет. Они — основа всей электродинамики.</div>
+        <div class="fun-fact">💡 Из уравнений Максвелла следует, что свет — это электромагнитная волна, и что скорость света постоянна.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Уравнения Максвелла — это четыре уравнения, которые описывают, как электрические и магнитные поля порождаются зарядами и токами, и как они изменяются. Первое: электрическое поле создаётся зарядами (закон Гаусса). Второе: магнитное поле не имеет источников (нет магнитных монополей). Третье: изменяющееся магнитное поле создаёт электрическое (закон Фарадея). Четвёртое: электрический ток и изменяющееся электрическое поле создают магнитное (закон Ампера-Максвелла).</div>
+        <div class="section"><h2>Как работает</h2><p>Эти уравнения объясняют работу электродвигателей, генераторов, радиоволн, света. Например, радиоволны — это электромагнитные волны, предсказанные Максвеллом.</p></div>
+        <div class="fun-fact">💡 Максвелл добавил в четвёртое уравнение член с током смещения, чтобы сделать теорию самосогласованной, и это привело к предсказанию электромагнитных волн.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Уравнения Максвелла — система дифференциальных уравнений, описывающих электромагнитное поле и его взаимодействие с зарядами и токами. В интегральной форме: (1) ∮ E·dA = Q/ε₀, (2) ∮ B·dA = 0, (3) ∮ E·dl = -dΦ_B/dt, (4) ∮ B·dl = μ₀(I + ε₀ dΦ_E/dt). Они объединяют электричество, магнетизм и оптику, предсказывают существование электромагнитных волн.</div>
+        <div class="section"><h2>История открытия</h2><p>Джеймс Клерк Максвелл опубликовал уравнения в 1865 году. Он обобщил законы Гаусса, Фарадея и Ампера, добавив ток смещения. Позже Хевисайд и Герц придали им современный вид. Герц экспериментально подтвердил существование электромагнитных волн. Уравнения Максвелла стали основой специальной теории относительности.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Уравнения Максвелла лежат в основе всей электротехники, радиосвязи, оптики. Они используются для расчёта полей в антеннах, волноводах, резонаторах. Границы применимости: классические уравнения не учитывают квантовые эффекты; для описания фотонов нужна квантовая электродинамика.</p></div>
+        <div class="section"><h2>Нюансы</h2><p>Уравнения Максвелла не описывают квантовые явления, такие как фотоэффект.; Они предсказывают бесконечную собственную энергию точечного заряда (проблема расходимости).</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}</div><div class="formula-meaning">Дивергенция электрического поля равна плотности заряда, делённой на электрическую постоянную.</div></div><div class="formula"><div class="formula-render">\nabla \cdot \vec{B} = 0</div><div class="formula-meaning">Дивергенция магнитного поля равна нулю (нет магнитных монополей).</div></div><div class="formula"><div class="formula-render">\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}</div><div class="formula-meaning">Ротор электрического поля равен скорости изменения магнитного поля со знаком минус.</div></div><div class="formula"><div class="formula-render">\nabla \times \vec{B} = \mu_0 \vec{J} + \mu_0 \varepsilon_0 \frac{\partial \vec{E}}{\partial t}</div><div class="formula-meaning">Ротор магнитного поля равен плотности тока плюс ток смещения.</div></div></div>
+    <div class="scientists-section"><strong>Открыли:</strong> <a href="/lang/ru/scientists/James_Clerk_Maxwell.html" class="text-scientist" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Связанные понятия:</strong>
+    <a href="/lang/ru/tags/electromagnetism.html" data-tag="electromagnetism">Электромагнетизм</a> <a href="/lang/ru/tags/photon.html" data-tag="photon">Фотон</a>
+</div>
+
+<div class="related-tags"><strong>Связанные законы:</strong> <a href="/lang/ru/laws/gauss_theorem.html" class="law-chip">Теорема Гаусса</a> <a href="/lang/ru/laws/special_relativity_2.html" class="law-chip">Специальная теория относительности</a></div>
+
+<h2 class="section-title">Статьи по теме</h2>
+<div id="search-results" data-context-tag="electromagnetism"><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-06-01/2606.02788v1/index.html">Как поймать невидимку: нейтрино в картинках</a></h3><div class="oneliner">Исследователи из проекта IceCube в Антарктиде разработали метод, который превращает сигналы от нейтрино в RGB-изображения размером 72×72 пикселя. Нейросеть по этим картинкам определяет направление частицы почти так же точно, как сложные модели.</div><div class="meta">arXiv:2606.02788v1 · 2026-06-01</div></div></div></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    var toggle = document.getElementById('law-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

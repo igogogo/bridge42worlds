@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Fractale — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/fr/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/fr/index.html">main</a>
+            <a href="/lang/fr/tags/">tags</a>
+            <a href="/lang/fr/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/fr/scientists/">scientists</a>
+            <a href="/lang/fr/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Populaire</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Avancé</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Fractale</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Une fractale est une figure qui se répète à différentes échelles : comme les branches d'un arbre ressemblent à l'arbre entier.</div>
+        <div class="fun-fact">💡 Le flocon de Koch est une fractale classique : son périmètre est infini, bien que sa surface soit finie.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Une fractale est un ensemble possédant la propriété d'auto-similarité : ses parties ressemblent au tout. Les fractales ont souvent une dimension fractionnaire (par exemple, dimension 1,26 pour le flocon de Koch). Elles apparaissent dans la nature : littoral, nuages, vaisseaux sanguins.</div>
+        <div class="section"><h2>Histoire</h2><p>Le terme « fractale » a été introduit par Benoît Mandelbrot en 1975, bien que des exemples (ensemble de Cantor, tapis de Sierpinski) étaient connus auparavant.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>Les fractales sont construites itérativement : on prend une figure initiale et on lui applique une règle qui remplace chaque élément par une copie réduite de la figure entière. La répétition donne une structure complexe.</p></div>
+        <div class="fun-fact">💡 L'ensemble de Mandelbrot est l'une des fractales les plus célèbres ; son image est obtenue à partir d'une simple formule récurrente z = z^2 + c.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Une fractale est une figure géométrique possédant la propriété d'auto-similarité et une dimension de Hausdorff fractionnaire. Formellement, une fractale est un ensemble dont la dimension de Hausdorff est strictement supérieure à la dimension topologique. Les fractales peuvent être déterministes (flocon de Koch) ou aléatoires (arbre brownien). Elles sont décrites par des systèmes de fonctions itérées (IFS). La dimension fractale mesure le degré de remplissage de l'espace. Applications : infographie, compression d'images, modélisation d'objets naturels.</div>
+        <div class="section"><h2>Histoire</h2><p>Georg Cantor a construit l'ensemble de Cantor en 1883. Wacław Sierpiński a créé le triangle et le tapis en 1915. Benoît Mandelbrot a introduit le terme « fractale » en 1975 et les a popularisés en montrant leur lien avec les formes naturelles. En 1980, l'ensemble de Mandelbrot est apparu. Les fractales sont devenues importantes dans la théorie du chaos et les systèmes dynamiques.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>Les fractales sont construites récursivement. Par exemple, le flocon de Koch : on commence par un triangle équilatéral, on divise chaque côté en trois parties et on remplace la partie centrale par un triangle équilatéral. On répète indéfiniment. La dimension de Hausdorff D = log(4)/log(3) ≈ 1,26. Pour les fractales aléatoires (par exemple, le mouvement brownien), la dimension de la trajectoire est 2.</p></div>
+        <div class="formula"><div class="formula-render">D = \frac{\log 4}{\log 3} \approx 1.26</div><div class="formula-meaning">La dimension fractale montre comment le nombre de détails augmente lorsque l'échelle diminue.</div></div>
+        <div class="section"><h2>Problèmes ouverts et anecdotes</h2><p>Détermination de la dimension fractale exacte pour les objets naturels; Lien entre fractales et théorie du groupe de renormalisation en physique</p><p class="fact">💡 L'ensemble de Mandelbrot est l'une des fractales les plus célèbres ; son image est obtenue à partir d'une simple formule récurrente z = z^2 + c.</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Tags associés:</strong>
+    <a href="/lang/fr/tags/chaos_theory.html" data-tag="chaos_theory">Théorie du chaos</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Rechercher..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ auteur · ! scientifique</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="fractal"><p>Pas encore d'articles</p></div>
+
+<footer><p>bridge42worlds — la science simplifiée · <a href="/lang/fr/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

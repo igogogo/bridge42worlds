@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Markov Chain — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Markov Chain</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">This is a random process where the future depends only on the present, not on the past — like a snake game where the next step is determined by the current position.</div>
+        <div class="fun-fact">💡 Markov chains are used in Google's PageRank algorithm for ranking web pages.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A Markov chain is a sequence of random events where the probability of each next event depends only on the current state. For example, weather: if today is sunny, then tomorrow with 70% probability it will be sunny, and with 30% rainy.</div>
+        <div class="section"><h2>History</h2><p>Named after Andrey Markov, who in 1906 published the first works on chains with a finite number of states.</p></div>
+        <div class="section"><h2>How it works</h2><p>The chain is defined by a transition probability matrix P(i→j). States change over time: if the current state is i, the next state is chosen according to the i-th row of the matrix.</p></div>
+        <div class="fun-fact">💡 Markov chains have the property of 'forgetting' the past — after sufficiently many steps, the distribution of states stabilizes (stationary distribution).</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A Markov chain is a stochastic process with discrete time and discrete state space, possessing the Markov property: P(X_{n+1}=j | X_n=i, X_{n-1},...,X_0) = P(X_{n+1}=j | X_n=i). The chain is fully described by the initial distribution and the transition probability matrix P. Classification of states: recurrent, transient, periodic, ergodic. Stationary distribution π satisfies π = πP. Markov's theorem: for an irreducible aperiodic chain, the distribution converges to the stationary one.</div>
+        <div class="section"><h2>History</h2><p>Andrey Markov in 1906 introduced chains for analyzing the alternation of vowels and consonants in Pushkin's poem 'Eugene Onegin'. In the 1930s, Kolmogorov generalized to continuous time. In the 1950s, chains began to be applied in physics (Ising chains), biology (population models), and computer science. The Metropolis-Hastings algorithm (1953) uses Markov chains for sampling.</p></div>
+        <div class="section"><h2>How it works</h2><p>The chain is defined by a matrix P of size N×N, where P_{ij} = P(X_{n+1}=j|X_n=i). States are updated: X_{n+1} ~ P_{X_n,·}. The stationary distribution is an eigenvector of P with eigenvalue 1. For ergodic chains, there exists a unique stationary distribution to which the chain converges regardless of the initial state.</p></div>
+        <div class="formula"><div class="formula-render">P^{(n+m)} = P^{(n)} P^{(m)}</div><div class="formula-meaning">The transition probability matrix for n+m steps equals the product of matrices for n and m steps.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Estimation of mixing time (rate of convergence to stationary distribution); Problem of degeneracy in chains with large state space</p><p class="fact">💡 Markov chains have the property of 'forgetting' the past — after sufficiently many steps, the distribution of states stabilizes (stationary distribution).</p></div>
+    </div>
+    
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/probability_theory.html" data-tag="probability_theory">Probability Theory</a><a href="/lang/en/tags/stochastic_process.html" data-tag="stochastic_process">Stochastic Process</a><a href="/lang/en/tags/information_theory.html" data-tag="information_theory">Information Theory</a><a href="/lang/en/tags/shannon_entropy.html" data-tag="shannon_entropy">Shannon entropy</a><a href="/lang/en/tags/graph_theory.html" data-tag="graph_theory">Graph theory</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="markov_chain"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

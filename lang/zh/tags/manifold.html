@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#流形 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>流形</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">流形是一种空间，它在每个点附近看起来都像普通的平坦空间，但整体上可能是弯曲的，就像地球表面一样。</div>
+        <div class="fun-fact">💡 甜甜圈（环面）的表面也是一个流形，数学家可以在不切开甜甜圈的情况下研究它的形状。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">流形是一个拓扑空间，它局部同胚于欧几里得空间ℝⁿ。这意味着每个点都有一个邻域，类似于平面或空间的“一小块”。例子：球面、环面、莫比乌斯带。流形可以有边界（例如圆盘）或无边界。它们是微分几何和拓扑学的主要研究对象。</div>
+        <div class="section"><h2>历史</h2><p>流形的概念由伯恩哈德·黎曼于1854年在其演讲《关于几何基础的假设》中引入。后来亨利·庞加莱发展了流形拓扑学，20世纪流形成为广义相对论和弦理论的核心。</p></div>
+        <div class="section"><h2>工作原理</h2><p>想象你生活在地球表面。周围的地形看起来是平坦的，像一张纸。但如果你走得很远，你会注意到曲率。流形就是这种表面的数学模型：局部看起来像平面，但整体可能是弯曲的。</p></div>
+        <div class="fun-fact">💡 广义相对论中的宇宙被建模为一个四维流形（时空），由质量弯曲。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">流形是一个具有可数基的豪斯多夫拓扑空间，其每个点都有一个邻域同胚于ℝⁿ的开子集。光滑流形还配备了一个光滑图册——一组具有光滑转移函数的坐标卡。流形可以有不同维度：1维流形（曲线）、2维流形（曲面）、3维流形等。它们可以是可定向的或不可定向的（例如莫比乌斯带）。重要例子：球面Sⁿ、环面Tⁿ、射影空间ℝPⁿ。</div>
+        <div class="section"><h2>历史</h2><p>伯恩哈德·黎曼于1854年在其就职演讲中引入了多维流形的概念。亨利·庞加莱在19世纪末通过研究流形的基本群奠定了代数拓扑学的基础。1915年，爱因斯坦使用四维流形来描述时空。20世纪中叶，莫尔斯理论、配边理论和流形分类得到了发展。</p></div>
+        <div class="section"><h2>工作原理</h2><p>n维流形M由坐标卡(Uᵢ, φᵢ)覆盖，其中φᵢ: Uᵢ → ℝⁿ是同胚。在坐标卡的交集上，转移函数φⱼ ∘ φᵢ⁻¹必须是光滑的（对于光滑流形）。可以在流形上引入附加结构：黎曼度量、联络、张量场。点p处的切空间TₚM是一个n维向量空间，由通过p的曲线的速度组成。</p></div>
+        <div class="formula"><div class="formula-render">\phi_j \circ \phi_i^{-1}: \phi_i(U_i \cap U_j) \to \phi_j(U_i \cap U_j) \text{ — гладкое}</div><div class="formula-meaning">坐标卡之间的转移函数对于光滑流形必须是光滑的（无限可微）。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>庞加莱猜想（由佩雷尔曼证明）——三维流形的分类。; 拓扑流形上光滑结构的存在性和唯一性问题（例如，ℝ⁴上存在无穷多个奇异光滑结构）。</p><p class="fact">💡 广义相对论中的宇宙被建模为一个四维流形（时空），由质量弯曲。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/differential_geometry.html" data-tag="differential_geometry">微分几何</a><a href="/lang/zh/tags/tensor.html" data-tag="tensor">张量</a><a href="/lang/zh/tags/connection.html" data-tag="connection">联络</a><a href="/lang/zh/tags/curvature.html" data-tag="curvature">曲率</a><a href="/lang/zh/tags/lie_group.html" data-tag="lie_group">李群</a><a href="/lang/zh/tags/fiber_bundle.html" data-tag="fiber_bundle">纤维丛</a><a href="/lang/zh/tags/homotopy.html" data-tag="homotopy">同伦</a><a href="/lang/zh/tags/homology.html" data-tag="homology">同调</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="manifold"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#路径积分 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>路径积分</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">路径积分是一种量子物理方法，它求和粒子从A点到B点的所有可能路径，就好像粒子同时“尝试”所有路线。</div>
+        <div class="fun-fact">💡 理查德·费曼看着水面的涟漪想出了这个方法：波沿着所有可能的路径传播。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">路径积分是一种计算量子系统从一个状态到另一个状态跃迁概率的方法，通过对所有可能路径（轨迹）求和，每条路径的权重由作用量决定。每条路径的贡献为exp(iS/ħ)，其中S是经典作用量。在经典极限ħ→0下，最小化作用量的路径占主导（最小作用量原理）。</div>
+        <div class="section"><h2>历史</h2><p>该方法由理查德·费曼于1948年基于保罗·狄拉克的思想发展而来。费曼用它重新表述了量子力学和量子电动力学，并因此于1965年获得诺贝尔奖。</p></div>
+        <div class="section"><h2>工作原理</h2><p>想象你想从一个城市到另一个城市。路径积分说：需要考虑所有可能的路线——直线、绕行、环路——并将它们的贡献相加，考虑相位。结果得到概率幅。实际上，对无穷多条路径的求和通过泛函分析方法解析地进行。</p></div>
+        <div class="fun-fact">💡 路径积分不仅用于量子力学，还用于金融数学中的期权定价（布莱克-舒尔斯模型）。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">路径积分（费曼积分）是一个泛函积分，将跃迁幅表示为对构型空间或相空间中所有路径的求和。形式上：⟨x_f|e^{-iHt/ħ}|x_i⟩ = ∫ Dx(t) exp(iS[x]/ħ)，其中S[x]是作用量。路径积分是量子场论的基础，在那里它被推广到场。它允许计算相关函数和散射幅。该方法需要正则化和重正化以消除发散。</div>
+        <div class="section"><h2>历史</h2><p>路径积分的思想可追溯到保罗·狄拉克（1933），他注意到量子幅与经典作用量有关。理查德·费曼于1948年发展了完整的表述，发表了论文《量子电动力学的时空方法》。费曼使用图表可视化贡献。该方法成为量子场论和统计力学的关键。由于量子电动力学的发展，费曼于1965年获得诺贝尔奖。</p></div>
+        <div class="section"><h2>工作原理</h2><p>路径积分定义为时间离散化的极限：将时间间隔分成N步，每一步插入完备性，然后取连续极限。对于自由粒子，积分是高斯型的，可以精确计算。对于相互作用场，使用微扰论方法（费曼图）。路径积分也用于欧几里得表述（虚时间）以计算配分函数。</p></div>
+        <div class="formula"><div class="formula-render">\langle x_f | e^{-iHt/\hbar} | x_i \rangle = \int \mathcal{D}x(t) \, e^{iS[x]/\hbar}</div><div class="formula-meaning">从xᵢ到x_f在时间t内的跃迁概率幅等于对所有路径x(t)的积分，权重为exp(iS/ħ)。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>路径积分的严格数学定义（泛函积分不是通常意义上的测度）。; 非微扰方法的问题：如何计算强相互作用理论（如QCD）的积分。</p><p class="fact">💡 路径积分不仅用于量子力学，还用于金融数学中的期权定价（布莱克-舒尔斯模型）。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/quantum_field.html" data-tag="quantum_field">量子场</a><a href="/lang/zh/tags/standard_model.html" data-tag="standard_model">标准模型</a><a href="/lang/zh/tags/action.html" data-tag="action">作用量</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="path_integral"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

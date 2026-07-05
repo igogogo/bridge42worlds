@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Интеграл по траекториям — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Интеграл по траекториям</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Интеграл по траекториям — это метод квантовой физики, который суммирует все возможные пути частицы из точки А в точку Б, как если бы частица «пробовала» все маршруты одновременно.</div>
+        <div class="fun-fact">💡 Ричард Фейнман придумал этот метод, глядя на рябь на воде: волны распространяются по всем возможным путям.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Интеграл по траекториям — это способ вычисления вероятности перехода квантовой системы из одного состояния в другое путём суммирования по всем возможным путям (траекториям) с весом, определяемым действием. Каждый путь вносит вклад exp(iS/ħ), где S — классическое действие. В классическом пределе ħ→0 доминирует путь, минимизирующий действие (принцип наименьшего действия).</div>
+        <div class="section"><h2>История</h2><p>Метод был разработан Ричардом Фейнманом в 1948 году на основе идей Поля Дирака. Фейнман использовал его для переформулировки квантовой механики и квантовой электродинамики, за что получил Нобелевскую премию в 1965 году.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте, что вы хотите перейти из одного города в другой. Интеграл по траекториям говорит: нужно рассмотреть все возможные маршруты — по прямой, с объездами, петлями — и сложить их вклады, учитывая фазу. В результате получается амплитуда вероятности. На практике суммирование бесконечного числа путей выполняется аналитически с помощью методов функционального анализа.</p></div>
+        <div class="fun-fact">💡 Интеграл по траекториям используется не только в квантовой механике, но и в финансовой математике для оценки опционов (модель Блэка-Шоулза).</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Интеграл по траекториям (фейнмановский интеграл) — это функциональный интеграл, представляющий амплитуду перехода как сумму по всем путям в конфигурационном или фазовом пространстве. Формально: ⟨x_f|e^{-iHt/ħ}|x_i⟩ = ∫ Dx(t) exp(iS[x]/ħ), где S[x] — действие. Интеграл по траекториям является основой квантовой теории поля, где он обобщается на поля. Он позволяет вычислять корреляционные функции и амплитуды рассеяния. Метод требует регуляризации и перенормировки для устранения расходимостей.</div>
+        <div class="section"><h2>История</h2><p>Идея интеграла по траекториям восходит к Полю Дираку (1933), который заметил, что квантовая амплитуда связана с классическим действием. Ричард Фейнман в 1948 году развил полную формулировку, опубликовав статью «Пространственно-временной подход к квантовой электродинамике». Фейнман использовал диаграммы для визуализации вкладов. Метод стал ключевым в квантовой теории поля и статистической механике. За разработку квантовой электродинамики Фейнман получил Нобелевскую премию в 1965 году.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Интеграл по траекториям определяется как предел дискретизации времени: разбиение временного интервала на N шагов, вставка полноты на каждом шаге, затем переход к непрерывному пределу. Для свободной частицы интеграл гауссов и вычисляется точно. Для взаимодействующих полей используются методы теории возмущений (диаграммы Фейнмана). Интеграл по траекториям также применяется в евклидовой формулировке (мнимое время) для вычисления статистической суммы.</p></div>
+        <div class="formula"><div class="formula-render">\langle x_f | e^{-iHt/\hbar} | x_i \rangle = \int \mathcal{D}x(t) \, e^{iS[x]/\hbar}</div><div class="formula-meaning">Амплитуда вероятности перехода из x_i в x_f за время t равна интегралу по всем путям x(t) с весом exp(iS/ħ).</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Строгое математическое определение интеграла по траекториям (функциональный интеграл не является мерой в обычном смысле).; Проблема непертурбативных методов: как вычислять интегралы для сильно взаимодействующих теорий (например, КХД).</p><p class="fact">💡 Интеграл по траекториям используется не только в квантовой механике, но и в финансовой математике для оценки опционов (модель Блэка-Шоулза).</p></div>
+    </div>
+    <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/quantum_field.html" data-tag="quantum_field">квантовое поле</a><a href="/lang/ru/tags/standard_model.html" data-tag="standard_model">Стандартная модель</a><a href="/lang/ru/tags/action.html" data-tag="action">Действие</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="path_integral"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

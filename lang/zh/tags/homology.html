@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#同调 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>同调</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">同调是一种计算空间中孔洞的方法：有多少一维孔洞（如甜甜圈）、二维孔洞（如球面）等等。</div>
+        <div class="fun-fact">💡 同调可以区分球面和环面，但无法区分咖啡杯和甜甜圈——它们具有相同的同调。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">同调是一种代数工具，它为拓扑空间赋予一个阿贝尔群序列，反映其不同维度的“孔洞”。例如，圆周有一个一维孔洞，球面有一个二维孔洞。</div>
+        <div class="section"><h2>历史</h2><p>同调起源于亨利·庞加莱和埃米·诺特的工作，后者在20世纪20年代将同调群形式化。</p></div>
+        <div class="section"><h2>工作原理</h2><p>从单纯形（三角形、四面体等）构建链复形，然后取边界和闭链。同调群是闭链模边界的商群。这些群的维数（贝蒂数）指示孔洞的数量。</p></div>
+        <div class="fun-fact">💡 同调用于数据分析：持续同调帮助发现点云中的结构。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">同调是从拓扑空间范畴到分次阿贝尔群范畴的函子，它测量空间的“孔洞”。对于空间X，构造奇异链复形：群C_n(X)是n维单纯形到X的连续映射的形式线性组合。边界算子∂: C_n → C_{n-1}满足∂^2=0。同调H_n(X) = Ker ∂_n / Im ∂_{n+1}。贝蒂数b_n = rank H_n(X)给出n维孔洞的数量。</div>
+        <div class="section"><h2>历史</h2><p>亨利·庞加莱于1895年引入同调概念以分类流形。埃米·诺特于1925年赋予同调代数形式，使用群。20世纪30年代，利奥波德·维托里斯和所罗门·莱夫谢茨发展了该理论。后来出现了带系数的同调、上同调和同调代数。</p></div>
+        <div class="section"><h2>工作原理</h2><p>对于空间，构造链复形，其中单纯形的边界是其面的交错和。闭链是边界为零的链，边界是更高维链的边界。同调是闭链模边界。同调在伦型等价下不变。通过胞腔分解或谱序列计算。</p></div>
+        
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>庞加莱猜想（三维已解决，但高维推广部分开放）; 任意空间的同调计算仍然困难</p><p class="fact">💡 同调用于数据分析：持续同调帮助发现点云中的结构。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/cohomology.html" data-tag="cohomology">上同调</a><a href="/lang/zh/tags/homotopy.html" data-tag="homotopy">同伦</a><a href="/lang/zh/tags/manifold.html" data-tag="manifold">流形</a><a href="/lang/zh/tags/fiber_bundle.html" data-tag="fiber_bundle">纤维丛</a><a href="/lang/zh/tags/category_theory.html" data-tag="category_theory">范畴论</a><a href="/lang/zh/tags/knot_theory.html" data-tag="knot_theory">纽结理论</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="homology"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

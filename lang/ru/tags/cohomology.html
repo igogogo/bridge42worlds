@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Когомология — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Когомология</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Если гомология считает дырки, то когомология — это способ измерять, как функции на пространстве могут «закручиваться» вокруг этих дырок.</div>
+        <div class="fun-fact">💡 Когомологии позволяют умножать классы — это даёт кольцевую структуру, которой нет у гомологий.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Когомология — это двойственное понятие к гомологии: вместо цепей рассматриваются коцепи (функции на симплексах), а граничный оператор заменяется кограницей. Когомологические группы H^n(X) — это фактор коциклов по кограницам. Они образуют кольцо с умножением (чашкой).</div>
+        <div class="section"><h2>История</h2><p>Когомологии появились в 1930-х годах в работах Джеймса Александера, Андре Вейля и Хасслера Уитни.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Для пространства строится коцепной комплекс: группы C^n(X) — это функции от n-мерных симплексов к абелевой группе. Кограничный оператор δ: C^n → C^{n+1} определяется двойственно границе. Коциклы — коцепи с δ=0, кограницы — образы δ. Когомологии — коциклы по модулю кограниц.</p></div>
+        <div class="fun-fact">💡 Когомологии Де Рама — это вариант когомологий, использующий дифференциальные формы, и они изоморфны сингулярным когомологиям для гладких многообразий.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Когомология — это контравариантный функтор из категории топологических пространств в категорию градуированных колец. Она двойственна гомологии: коцепной комплекс C^n(X; G) = Hom(C_n(X), G), где C_n — сингулярные цепи. Кограница δ = ∂^T. Когомологии H^n(X; G) = Ker δ_n / Im δ_{n-1}. Умножение чашкой ∪: H^p × H^q → H^{p+q} превращает прямую сумму H^*(X) в градуированное кольцо. Когомологии дают более тонкие инварианты, чем гомологии.</div>
+        <div class="section"><h2>История</h2><p>Когомологии были введены в 1930-х годах. Джеймс Александер и Андре Вейль построили когомологии для симплициальных комплексов. Хасслер Уитни дал аксиоматическое определение. В 1940-х Сэмюэль Эйленберг и Норман Стинрод разработали аксиомы Стинрода-Эйленберга для гомологий и когомологий. Позже появились когомологии пучков (Гротендик) и этальные когомологии.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Коцепной комплекс строится двойственно цепному. Коциклы — это коцепи, которые обращаются в нуль на границах. Кограницы — это коцепи, которые являются кограницами других. Когомологии — это классы эквивалентности коциклов по модулю кограниц. Умножение чашкой индуцировано диагональным отображением пространства. Когомологии вычисляются с помощью спектральных последовательностей и теории препятствий.</p></div>
+        
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Гипотеза Ходжа о представлении когомологий комплексных проективных многообразий; Вычисление когомологий для пространств с особенностями</p><p class="fact">💡 Когомологии Де Рама — это вариант когомологий, использующий дифференциальные формы, и они изоморфны сингулярным когомологиям для гладких многообразий.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/homology.html" data-tag="homology">Гомология</a><a href="/lang/ru/tags/homotopy.html" data-tag="homotopy">Гомотопия</a><a href="/lang/ru/tags/manifold.html" data-tag="manifold">Многообразие</a><a href="/lang/ru/tags/fiber_bundle.html" data-tag="fiber_bundle">Расслоение</a><a href="/lang/ru/tags/characteristic_class.html" data-tag="characteristic_class">Характеристический класс</a><a href="/lang/ru/tags/category_theory.html" data-tag="category_theory">Теория категорий</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="cohomology"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

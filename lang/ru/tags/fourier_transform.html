@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Преобразование Фурье — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Популярно</span><span class="" data-version="simple">Просто</span><span class="" data-version="advanced">Подробно</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Преобразование Фурье</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">Преобразование Фурье — это математический метод, который разбивает любой сложный сигнал (например, музыку) на простые синусоидальные волны разных частот.</div>
+        <div class="fun-fact">💡 MP3-файлы используют преобразование Фурье для сжатия звука: они отбрасывают неслышимые высокие частоты.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">Преобразование Фурье — это интегральное преобразование, которое разлагает функцию (сигнал) на сумму синусоидальных компонент с разными частотами. Оно переводит функцию из временной области в частотную. Например, звуковой сигнал можно представить как набор частот (нот). Обратное преобразование Фурье восстанавливает исходный сигнал.</div>
+        <div class="section"><h2>История</h2><p>Жан Батист Жозеф Фурье в 1822 году ввёл ряды Фурье для решения уравнения теплопроводности. Позже развитие получило интегральное преобразование Фурье. В XX веке быстрое преобразование Фурье (БПФ) стало ключевым для цифровой обработки сигналов.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте, что вы слушаете оркестр. Преобразование Фурье — это как «слуховой анализатор», который раскладывает звук на отдельные ноты: скрипка играет ля 440 Гц, труба — до 523 Гц и т.д. Математически это интеграл от произведения сигнала на комплексную экспоненту e^{-iωt}.</p></div>
+        <div class="fun-fact">💡 Быстрое преобразование Фурье (БПФ) — один из самых важных алгоритмов XX века, используемый в сжатии изображений (JPEG), обработке аудио и даже в криптографии.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">Преобразование Фурье — это интегральное преобразование, определяемое как F(ω) = ∫_{-∞}^{∞} f(t) e^{-iωt} dt. Оно переводит функцию f(t) из временной области в частотную область F(ω). Свойства: линейность, сдвиг, свёртка (теорема о свёртке). Обратное преобразование: f(t) = (1/2π) ∫ F(ω) e^{iωt} dω. Преобразование Фурье обобщается на многомерные функции, распределения и группы (гармонический анализ).</div>
+        <div class="section"><h2>История</h2><p>Жан Батист Жозеф Фурье в 1822 году опубликовал «Аналитическую теорию тепла», где ввёл ряды Фурье. Огюстен Луи Коши и другие математики развили интегральное преобразование. В 1965 году Джеймс Кули и Джон Тьюки опубликовали алгоритм быстрого преобразования Фурье (БПФ), что произвело революцию в цифровой обработке сигналов. Сегодня преобразование Фурье используется повсеместно: от физики до финансов.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Преобразование Фурье существует для функций из L^1(ℝ) и L^2(ℝ). Оно может быть определено на пространстве обобщённых функций (распределений). Дискретное преобразование Фурье (DFT) применяется к конечным последовательностям. БПФ — это эффективный алгоритм вычисления DFT за O(N log N) операций. Преобразование Фурье является унитарным оператором на L^2(ℝ) (с точностью до нормировки).</p></div>
+        <div class="formula"><div class="formula-render">F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt</div><div class="formula-meaning">Преобразование Фурье переводит функцию f(t) в функцию F(ω), где ω — угловая частота.</div></div><div class="formula"><div class="formula-render">f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} F(\omega) e^{i\omega t} d\omega</div><div class="formula-meaning">Восстанавливает исходную функцию f(t) по её спектру F(ω).</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Разработка эффективных алгоритмов для негармонического анализа (например, вейвлет-преобразования).; Проблема восстановления фазы: по модулю преобразования Фурье восстановить исходный сигнал.</p><p class="fact">💡 Быстрое преобразование Фурье (БПФ) — один из самых важных алгоритмов XX века, используемый в сжатии изображений (JPEG), обработке аудио и даже в криптографии.</p></div>
+    </div>
+    
+    <div class="tag-laws"><strong>Законы:</strong> <a href="/lang/ru/laws/fourier_transform.html" class="law-chip">Преобразование Фурье</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/laplace_transform.html" data-tag="laplace_transform">Преобразование Лапласа</a><a href="/lang/ru/tags/distribution.html" data-tag="distribution">Распределение</a><a href="/lang/ru/tags/spectroscopy.html" data-tag="spectroscopy">спектроскопия</a><a href="/lang/ru/tags/vector_calculus.html" data-tag="vector_calculus">Векторный анализ</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="fourier_transform"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

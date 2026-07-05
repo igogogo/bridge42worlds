@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empreintes de neutrinos : des images pour reconstruire la direction dans IceCube — bridge42worlds</title>
+    <meta name="description" content="Des chercheurs ont développé une méthode pour encoder les événements de l'observatoire de neutrinos IceCube en images de 72×72 pixels (empreintes de neutrinos). En utilisant un réseau standard ResNet18, ils ont obtenu une erreur angulaire moyenne de 1,10 rad, soit seulement 0,15 rad de moins que les">
+    <meta property="og:title" content="Empreintes de neutrinos : des images pour reconstruire la direction dans IceCube">
+    <meta property="og:description" content="La conversion des données du détecteur IceCube en images RGB compactes permet à un réseau de neurones convolutif d'atteindre une précision de reconstruction de la direction des neutrinos proche de cel">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/0.jpg">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="zh" href="https://bridge42worlds.org/lang/zh/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="fr" href="https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.org/lang/ar/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Empreintes de neutrinos : des images pour reconstruire la direction dans IceCube", "description": "La conversion des données du détecteur IceCube en images RGB compactes permet à un réseau de neurones convolutif d'atteindre une précision de reconstruction de la direction des neutrinos proche de celle de modèles ensemblistes complexes.", "inLanguage": "fr", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02788v1/0.jpg", "author": [{"@type": "Person", "name": "Floriano Tori"}, {"@type": "Person", "name": "Brecht Verbeken"}, {"@type": "Person", "name": "Vincent Ginis"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02788v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/fr/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/fr/index.html">main</a>
+            <a href="/lang/fr/tags/">tags</a>
+            <a href="/lang/fr/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/fr/scientists/">scientists</a>
+            <a href="/lang/fr/about.html">about</a>
+        </div>
+        <div class="version-toggle"><a href="/lang/fr/archive/2026-06-01/2606.02788v1/index.html">Populaire</a><a href="/lang/fr/archive/2026-06-01/2606.02788v1/simple.html">Simple</a><a href="/lang/fr/archive/2026-06-01/2606.02788v1/advanced.html" class="active">Avancé</a></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Rechercher des articles, #tags, @auteurs" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ auteur · ! scientifique</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div class="authors-top"><a href="/lang/ru/authors/Floriano_Tori.html" class="text-author-link" data-author="Floriano Tori">Floriano Tori</a>, <a href="/lang/ru/authors/Brecht_Verbeken.html" class="text-author-link" data-author="Brecht Verbeken">Brecht Verbeken</a>, <a href="/lang/ru/authors/Vincent_Ginis.html" class="text-author-link" data-author="Vincent Ginis">Vincent Ginis</a></div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.02788v1">2606.02788v1</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 3 min</span> · <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span>
+</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 Je suis l'auteur — vérifier et modifier</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Je suis l'auteur — vérifier et modifier</h3>
+        <p>Êtes-vous l'un des auteurs de cet article ? Envoyez-nous un e-mail depuis votre adresse professionnelle ou institutionnelle en mentionnant l'ID arXiv de cet article, et nous vous vérifierons pour vous donner accès à la modification de cette page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.02788v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Contexte</a></li><li><a href="#methods">Méthodes</a></li><li><a href="#results">Résultats</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Développements futurs</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Prochaines étapes</a></li><li><a href="#key_problems_connection">Problèmes ouverts clés</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1>Empreintes de neutrinos : des images pour reconstruire la direction dans IceCube</h1>
+        <div class="original-title">Original: "Neutrino Fingerprints: Image-Based Encodings of IceCube Events for CNN Direction Reconstruction"</div>
+        <div class="oneliner">La conversion des données du détecteur IceCube en images RGB compactes permet à un réseau de neurones convolutif d'atteindre une précision de reconstruction de la direction des neutrinos proche de celle de modèles ensemblistes complexes.</div>
+        <div class="ai-cover ai-cover-ph"></div>
+        <div class="mosaic"></div>
+        <section id="context"><h2>Contexte</h2><p>Le <a href="/lang/fr/tags/telescope.html" class="text-tag" data-tag="telescope">télescope</a> à neutrinos IceCube détecte le rayonnement Tcherenkov émis par les particules chargées produites lors de l'interaction des <a href="/lang/fr/tags/lepton.html" class="text-tag" data-tag="lepton">neutrinos</a> avec la glace. Les <a href="/lang/fr/tags/photon.html" class="text-tag" data-tag="photon">photons</a> sont captés par un réseau de 5160 photomultiplicateurs. Les neutrinos sont des <a href="/lang/fr/tags/fermion.html" class="text-tag" data-tag="fermion">fermions</a> qui n'interagissent que par l'interaction faible. La reconstruction de la direction des neutrinos est une tâche clé pour identifier leurs sources astrophysiques.</p></section><section id="methods"><h2>Méthodes</h2><p>Les auteurs ont développé une méthode d'<a href="/lang/fr/tags/computer_simulation.html" class="text-tag" data-tag="computer_simulation">empreintes de neutrinos</a> : des images RGB compactes de taille 72×72×3, où chaque pixel correspond à un détecteur. Les canaux de couleur encodent le temps d'arrivée normalisé, la charge totale et leur différence. Cette représentation transforme des séquences d'impulsions éparses en images denses, exploitables par des réseaux convolutifs. L'entraînement a été réalisé sur 140 millions d'événements simulés issus du concours Kaggle, en utilisant un réseau ResNet18 et diverses fonctions de perte, dont la perte angulaire et une perte angulaire combinée avec une distribution de von Mises–Fisher.</p></section><section id="results"><h2>Résultats</h2><p>Le meilleur modèle a atteint une erreur angulaire moyenne (MAE) de 1,10 radian sur l'ensemble de test. En comparaison, les meilleures solutions du concours Kaggle, utilisant des réseaux de neurones graphiques et des transformeurs avec ensemblage, ont donné environ 0,95 radian. Ainsi, l'approche convolutive simple proposée n'est en retard que de 0,15 radian sur l'état de l'art, montrant qu'une représentation des données bien choisie permet au <a href="/lang/fr/tags/standard_model.html" class="text-tag" data-tag="standard_model">Modèle standard</a> de la physique des particules d'être compétitif. Fait intéressant, le modèle a été entraîné sans techniques complexes — planificateurs de taux d'apprentissage, redémarrages ou augmentations.</p></section><section id="implications"><h2>Implications</h2><p>Ce travail montre que renoncer aux architectures complexes au profit de réseaux convolutifs simples avec un encodage réfléchi des données peut être une stratégie efficace. L'<a href="/lang/fr/tags/weak_interaction.html" class="text-tag" data-tag="weak_interaction">interaction faible</a> du <a href="/lang/fr/tags/standard_model.html" class="text-tag" data-tag="standard_model">Modèle standard</a>, par laquelle les neutrinos interagissent, rend leur détection difficile, mais cette étude simplifie l'étape de reconstruction. Les 'empreintes de neutrinos' proposées sont intuitives : chaque pixel correspond à un détecteur spécifique, ce qui facilite le diagnostic des erreurs du réseau. Cela peut être important pour l'interprétation des décisions de l'IA en physique des hautes énergies.</p></section><section id="future_development"><h2>Développements futurs</h2><p>Une amélioration supplémentaire est possible en utilisant des courbes de remplissage d'espace pour mieux préserver la localité, en ajoutant des canaux de couleur supplémentaires (par exemple l'énergie), et en appliquant des architectures plus modernes comme Vision Transformer ou des convolutions séparables en profondeur. L'<a href="/lang/fr/tags/electroweak_interaction.html" class="text-tag" data-tag="electroweak_interaction">interaction électrofaible</a> pourrait être prise en compte dans la modélisation d'effets plus fins, bien qu'elle ne soit pas abordée ici. L'utilisation de la distribution de von Mises–Fisher pour obtenir des incertitudes de direction calibrées est également prometteuse.</p></section><section id="impact_on"><h2>Impact</h2><p>Les résultats peuvent être appliqués en astrophysique pour le traitement automatique des données des télescopes à neutrinos, ainsi que dans le domaine de l'apprentissage automatique pour des problèmes de reconstruction de paramètres à partir de signaux épars.</p></section><section id="next_steps"><h2>Prochaines étapes</h2><p>Intégration de la méthode d'encodage proposée dans le pipeline de traitement réel des données d'IceCube, et test sur les données d'autres observatoires de neutrinos comme KM3NeT. L'utilisation de courbes de remplissage d'espace et d'augmentations pourrait encore améliorer la précision.</p></section><section id="key_problems_connection"><h2>Problèmes ouverts clés</h2><p>Ce travail est lié au problème non résolu de la reconstruction précise de la direction des neutrinos de haute énergie, ce qui est crucial pour l'astronomie multimessager.</p></section>
+        <div class="fun-fact">🎯 Une image d'empreinte de neutrinos de 72×72 pixels contient des informations sur des milliers d'impulsions de photomultiplicateurs, mais n'occupe elle-même que 15 kilo-octets.</div>
+        <div class="formula"><div class="formula-render">\text{Angular} = \arccos(\text{clamp}(\cos\theta))</div><div class="formula-meaning">Distance géodésique entre la direction prédite et la direction réelle</div></div>
+        <div class="key-numbers"><h3>Chiffres clés</h3><ul><li><strong>erreur angulaire moyenne:</strong> 1.10 rad</li><li><strong>taille de l'image:</strong> 72×72×3</li><li><strong>nombre de détecteurs:</strong> 5160</li><li><strong>nombre d'événements:</strong> 140 millions</li></ul></div>
+        
+        <div class="actions">
+            <div class="likes" data-article-id="2606.02788v1">
+                <button onclick="toggleLike('2606.02788v1')" class="like-btn">♥ <span id="like-count-2606.02788v1">…</span></button>
+            </div>
+            <button onclick="shareArticle('Empreintes de neutrinos : des images pour reconstruire la direction dans IceCube','https://bridge42worlds.org/lang/fr/archive/2026-06-01/2606.02788v1/index.html')">Partager</button>
+        </div>
+        <div class="next-divider">
+            <button class="next-btn">Article suivant →</button>
+        </div>
+        <div class="related" id="related" data-label="Articles similaires"></div>
+    </div>
+    <div class="article-side"><a href="/lang/fr/tags/computer_simulation.html" class="side-tag" data-tag="computer_simulation">simulation informatique</a>
+<a href="/lang/fr/tags/lepton.html" class="side-tag" data-tag="lepton">Lepton</a>
+<a href="/lang/fr/tags/photon.html" class="side-tag" data-tag="photon">Photon</a>
+<a href="/lang/fr/tags/telescope.html" class="side-tag" data-tag="telescope">télescope</a>
+<a href="/lang/fr/tags/standard_model.html" class="side-tag" data-tag="standard_model">Modèle standard</a>
+<a href="/lang/fr/tags/fermion.html" class="side-tag" data-tag="fermion">Fermion</a>
+<a href="/lang/fr/tags/weak_interaction.html" class="side-tag" data-tag="weak_interaction">Interaction faible</a>
+<a href="/lang/fr/tags/electroweak_interaction.html" class="side-tag" data-tag="electroweak_interaction">Interaction électrofaible</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2606.02788v1">arXiv:2606.02788v1</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=15"></script>
+<script src="/js/search.js?v=15"></script>
+<script src="/js/scroll.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

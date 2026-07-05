@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Transformée de Fourier — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/fr/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/fr/index.html">main</a>
+            <a href="/lang/fr/tags/">tags</a>
+            <a href="/lang/fr/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/fr/scientists/">scientists</a>
+            <a href="/lang/fr/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Populaire</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Avancé</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Transformée de Fourier</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">La transformée de Fourier est une méthode mathématique qui décompose tout signal complexe (par exemple, la musique) en ondes sinusoïdales simples de différentes fréquences.</div>
+        <div class="fun-fact">💡 Les fichiers MP3 utilisent la transformée de Fourier pour compresser le son : ils suppriment les hautes fréquences inaudibles.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">La transformée de Fourier est une transformation intégrale qui décompose une fonction (signal) en une somme de composantes sinusoïdales de différentes fréquences. Elle transforme une fonction du domaine temporel en domaine fréquentiel. Par exemple, un signal sonore peut être représenté comme un ensemble de fréquences (notes). La transformée de Fourier inverse reconstruit le signal original.</div>
+        <div class="section"><h2>Histoire</h2><p>Jean Baptiste Joseph Fourier a introduit les séries de Fourier en 1822 pour résoudre l'équation de la chaleur. Plus tard, la transformation intégrale de Fourier a été développée. Au XXe siècle, la transformée de Fourier rapide (FFT) est devenue clé pour le traitement numérique du signal.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>Imaginez que vous écoutez un orchestre. La transformée de Fourier est comme un « analyseur auditif » qui décompose le son en notes individuelles : le violon joue un la 440 Hz, la trompette un do 523 Hz, etc. Mathématiquement, c'est l'intégrale du produit du signal par une exponentielle complexe e^{-iωt}.</p></div>
+        <div class="fun-fact">💡 La transformée de Fourier rapide (FFT) est l'un des algorithmes les plus importants du XXe siècle, utilisé dans la compression d'images (JPEG), le traitement audio et même la cryptographie.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">La transformée de Fourier est une transformation intégrale définie par F(ω) = ∫_{-∞}^{∞} f(t) e^{-iωt} dt. Elle transforme une fonction f(t) du domaine temporel en domaine fréquentiel F(ω). Propriétés : linéarité, translation, convolution (théorème de convolution). Transformée inverse : f(t) = (1/2π) ∫ F(ω) e^{iωt} dω. La transformée de Fourier se généralise aux fonctions multidimensionnelles, aux distributions et aux groupes (analyse harmonique).</div>
+        <div class="section"><h2>Histoire</h2><p>Jean Baptiste Joseph Fourier a publié en 1822 la « Théorie analytique de la chaleur », où il a introduit les séries de Fourier. Augustin Louis Cauchy et d'autres mathématiciens ont développé la transformation intégrale. En 1965, James Cooley et John Tukey ont publié l'algorithme de transformée de Fourier rapide (FFT), révolutionnant le traitement numérique du signal. Aujourd'hui, la transformée de Fourier est utilisée partout : de la physique à la finance.</p></div>
+        <div class="section"><h2>Fonctionnement</h2><p>La transformée de Fourier existe pour les fonctions de L^1(ℝ) et L^2(ℝ). Elle peut être définie sur l'espace des distributions. La transformée de Fourier discrète (DFT) s'applique aux séquences finies. La FFT est un algorithme efficace pour calculer la DFT en O(N log N) opérations. La transformée de Fourier est un opérateur unitaire sur L^2(ℝ) (à une normalisation près).</p></div>
+        <div class="formula"><div class="formula-render">F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt</div><div class="formula-meaning">La transformée de Fourier transforme la fonction f(t) en fonction F(ω), où ω est la fréquence angulaire.</div></div><div class="formula"><div class="formula-render">f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} F(\omega) e^{i\omega t} d\omega</div><div class="formula-meaning">Reconstruit la fonction originale f(t) à partir de son spectre F(ω).</div></div>
+        <div class="section"><h2>Problèmes ouverts et anecdotes</h2><p>Développement d'algorithmes efficaces pour l'analyse non harmonique (par exemple, transformée en ondelettes).; Problème de la reconstruction de phase : à partir du module de la transformée de Fourier, reconstruire le signal original.</p><p class="fact">💡 La transformée de Fourier rapide (FFT) est l'un des algorithmes les plus importants du XXe siècle, utilisé dans la compression d'images (JPEG), le traitement audio et même la cryptographie.</p></div>
+    </div>
+    
+    <div class="tag-laws"><strong>Lois :</strong> <a href="/lang/fr/laws/fourier_transform.html" class="law-chip">Преобразование Фурье</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>Tags associés:</strong>
+    <a href="/lang/fr/tags/laplace_transform.html" data-tag="laplace_transform">Transformée de Laplace</a><a href="/lang/fr/tags/distribution.html" data-tag="distribution">Distribution</a><a href="/lang/fr/tags/spectroscopy.html" data-tag="spectroscopy">spectroscopie</a><a href="/lang/fr/tags/vector_calculus.html" data-tag="vector_calculus">Analyse vectorielle</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Rechercher..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ auteur · ! scientifique</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="fourier_transform"><p>Pas encore d'articles</p></div>
+
+<footer><p>bridge42worlds — la science simplifiée · <a href="/lang/fr/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

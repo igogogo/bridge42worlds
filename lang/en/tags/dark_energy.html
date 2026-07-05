@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Dark Energy — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">Popular</span><span class="" data-version="simple">Simple</span><span class="" data-version="advanced">Advanced</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>Dark Energy</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">A mysterious form of energy permeating all space and causing the accelerated expansion of the universe. It constitutes about 68% of the total energy of the universe. Imagine the universe not just expanding, but accelerating, as if something is pushing it from within.</div>
+        <div class="fun-fact">💡 If dark energy were stronger in the early universe, galaxies could not have formed; if weaker, the universe might have collapsed.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">A mysterious form of energy permeating all space and causing the accelerated expansion of the universe. It constitutes about 68% of the total energy of the universe. Imagine the universe not just expanding, but accelerating, as if something is pushing it from within.</div>
+        <div class="section"><h2>History</h2><p>The discovery of the accelerated expansion of the universe was made in 1998 by two groups: the Supernova Cosmology Project (Perlmutter) and the High-Z Supernova Search Team (Riess, Schmidt). They observed type Ia supernovae and found they were dimmer than expected, indicating acceleration. This discovery earned the Nobel Prize in 2011.</p></div>
+        <div class="section"><h2>How it works</h2><p>Dark energy manifests as negative pressure, which counteracts gravity. Its nature is unknown; the simplest model is the cosmological constant Λ (vacuum energy). Other models include quintessence — a dynamic field. Dark energy has dominated the dynamics of the universe for the last 5 billion years.</p></div>
+        <div class="fun-fact">💡 If dark energy were stronger in the early universe, galaxies could not have formed; if weaker, the universe might have collapsed.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">A mysterious form of energy permeating all space and causing the accelerated expansion of the universe. It constitutes about 68% of the total energy of the universe. Imagine the universe not just expanding, but accelerating, as if something is pushing it from within.</div>
+        <div class="section"><h2>History</h2><p>The discovery of the accelerated expansion of the universe was made in 1998 by two groups: the Supernova Cosmology Project (Perlmutter) and the High-Z Supernova Search Team (Riess, Schmidt). They observed type Ia supernovae and found they were dimmer than expected, indicating acceleration. This discovery earned the Nobel Prize in 2011.</p></div>
+        <div class="section"><h2>How it works</h2><p>Dark energy manifests as negative pressure, which counteracts gravity. Its nature is unknown; the simplest model is the cosmological constant Λ (vacuum energy). Other models include quintessence — a dynamic field. Dark energy has dominated the dynamics of the universe for the last 5 billion years.</p></div>
+        <div class="formula"><div class="formula-render">w = \frac{p}{\rho}</div><div class="formula-meaning">Ratio of pressure to density; for cosmological constant w = -1</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>What is dark energy? (cosmological constant or dynamic field?); Why is its density so small but not zero? (cosmological constant problem)</p><p class="fact">💡 If dark energy were stronger in the early universe, galaxies could not have formed; if weaker, the universe might have collapsed.</p></div>
+    </div>
+    <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Alan_Guth.html" class="text-scientist" data-scientist="Alan Guth">Alan Guth</a></div>
+    
+</div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/expansion_of_the_universe.html" data-tag="expansion_of_the_universe">Expansion of the Universe</a><a href="/lang/en/tags/cosmic_microwave_background.html" data-tag="cosmic_microwave_background">Cosmic Microwave Background</a><a href="/lang/en/tags/cosmological_constant.html" data-tag="cosmological_constant">Cosmological Constant</a><a href="/lang/en/tags/dark_matter.html" data-tag="dark_matter">Dark Matter</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="dark_energy"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>

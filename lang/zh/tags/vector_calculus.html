@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#向量分析 — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/zh/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/zh/index.html">main</a>
+            <a href="/lang/zh/tags/">tags</a>
+            <a href="/lang/zh/laws/">laws</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/zh/scientists/">scientists</a>
+            <a href="/lang/zh/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="tag-version-toggle"><span class="active" data-version="popular">科普</span><span class="" data-version="simple">简明</span><span class="" data-version="advanced">深入</span></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <h1>向量分析</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc">这是描述流、涡旋和场的数学语言，例如水在河流中流动或空气在龙卷风中旋转。</div>
+        <div class="fun-fact">💡 向量分析帮助工程师创造了第一台计算机断层扫描（CT），它利用场的数学“看到”人体。</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc">向量分析是数学的一个分支，研究向量场，如风速或地球磁场。它可以计算通过表面的“物质”量（通量）或场的旋转程度（旋度）。例如，它可以计算每秒通过大坝的水量。</div>
+        <div class="section"><h2>历史</h2><p>向量分析的基础由詹姆斯·克拉克·麦克斯韦和奥利弗·亥维赛在19世纪为描述电磁学奠定。麦克斯韦用它来建立著名的方程组，统一了电和磁。</p></div>
+        <div class="section"><h2>工作原理</h2><p>想象你站在风场中：每一点的风都有一定的强度和方向。向量分析提供了工具来测量风如何从你“发散”（散度）或如何在你周围“旋转”（旋度）。这就像观察漩涡：可以知道水从哪里流入和流出。</p></div>
+        <div class="fun-fact">💡 没有向量分析，现代GPS系统将无法实现，因为它们利用地球重力场的计算。</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc">向量分析是数学的一个分支，研究向量场和标量场及其运算：梯度、散度、旋度和拉普拉斯算子。它为表述物理定律提供了语言，如电动力学中的麦克斯韦方程组和流体动力学中的纳维-斯托克斯方程。基本定理包括高斯-奥斯特罗格拉茨基定理（场通过闭合曲面的通量与体积内散度的关系）和斯托克斯定理（场沿闭合回路的环量与通过曲面的旋度的关系）。向量分析在连续介质物理、场论和微分几何中不可或缺。</div>
+        <div class="section"><h2>历史</h2><p>向量分析在19世纪因詹姆斯·克拉克·麦克斯韦的工作而发展，他在1860年代使用四元数表述电磁学。后来奥利弗·亥维赛和约西亚·威拉德·吉布斯简化了符号，引入了现代向量运算。麦克斯韦作为关键科学家奠定了基础，而吉布斯和亥维赛将向量分析推广为一门独立学科。</p></div>
+        <div class="section"><h2>工作原理</h2><p>向量分析处理向量场F(x,y,z)，其中空间每一点对应一个向量。标量场f的梯度指示f增长最快的方向。散度∇·F测量场从一点“发散”的程度（源/汇）。旋度∇×F测量场的“旋转”程度。这些运算通过积分定理相联系：通过闭合曲面的通量等于体积内散度的积分（高斯定理），而沿闭合回路的环量等于通过曲面的旋度的通量（斯托克斯定理）。</p></div>
+        <div class="formula"><div class="formula-render">\oint_S \mathbf{F} \cdot d\mathbf{S} = \int_V (\nabla \cdot \mathbf{F}) \, dV</div><div class="formula-meaning">向量场F通过闭合曲面S的通量等于该曲面所围体积V内散度的积分。</div></div><div class="formula"><div class="formula-render">\oint_C \mathbf{F} \cdot d\mathbf{r} = \int_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}</div><div class="formula-meaning">向量场F沿闭合回路C的环量等于通过以该回路为边界的曲面S的旋度的通量。</div></div>
+        <div class="section"><h2>未解决的问题与趣味知识</h2><p>三维纳维-斯托克斯问题（解的存在性和光滑性）——千禧年问题之一。; 开发有效的数值方法模拟湍流。</p><p class="fact">💡 没有向量分析，现代GPS系统将无法实现，因为它们利用地球重力场的计算。</p></div>
+    </div>
+    <div class="scientists-section"><strong>科学家：</strong> <a href="/lang/zh/scientists/James_Clerk_Maxwell.html" class="text-scientist" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a></div>
+    <div class="tag-laws"><strong>定律：</strong> <a href="/lang/zh/laws/gauss_theorem.html" class="law-chip">Теорема Гаусса</a> <a href="/lang/zh/laws/gauss_theorem_2.html" class="law-chip">Теорема Гаусса</a> <a href="/lang/zh/laws/stokes_theorem.html" class="law-chip">Теорема Стокса</a></div>
+</div>
+
+<div class="related-tags">
+    <strong>相关标签:</strong>
+    <a href="/lang/zh/tags/differential_geometry.html" data-tag="differential_geometry">微分几何</a><a href="/lang/zh/tags/tensor.html" data-tag="tensor">张量</a><a href="/lang/zh/tags/fourier_transform.html" data-tag="fourier_transform">傅里叶变换</a>
+</div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="搜索..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># 标签 · @ 作者 · ! 科学家</div>
+
+<div class="filters" id="active-filters"></div>
+
+<div id="search-results" data-context-tag="vector_calculus"><p>暂无文章</p></div>
+
+<footer><p>bridge42worlds — 让科学变简单 · <a href="/lang/zh/archive/">archive</a></p></footer>
+<script src="/js/search.js?v=15"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var toggle = document.getElementById('tag-version-toggle');
+    if (toggle) {
+        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
+        function setVer(v) {
+            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
+            try { localStorage.setItem('b42_version', v); } catch(e) {}
+        }
+        toggle.querySelectorAll('span').forEach(function(s) {
+            s.addEventListener('click', function() { setVer(this.dataset.version); });
+        });
+        setVer(cur);
+    }
+});
+</script>
+</body>
+</html>
