@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="$lang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$graph_title — bridge42worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=$asset_ver">
+    <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/$lang/index.html">main</a>
+            <a href="/lang/$lang/tags/">tags</a>
+            <a href="/lang/$lang/laws/">laws</a>
+            <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/graph/" class="active">graph</a>
+            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/about.html">about</a>
+        </div>
+        $version_toggle_html
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<h1 class="kg-h1">🕸 $graph_title</h1>
+
+<div class="kg-controls">
+    <div class="kg-row kg-filter-row">
+        <span class="kg-search-wrap">
+            <input type="text" id="kg-search-tag" class="kg-search-input" placeholder="$search_tag_placeholder" autocomplete="off">
+            <div class="kg-suggest" id="kg-suggest-tag"></div>
+        </span>
+        <span class="kg-search-wrap">
+            <input type="text" id="kg-search-law" class="kg-search-input" placeholder="$search_law_placeholder" autocomplete="off">
+            <div class="kg-suggest" id="kg-suggest-law"></div>
+        </span>
+        <span class="kg-search-wrap">
+            <input type="text" id="kg-search-sci" class="kg-search-input" placeholder="$search_sci_placeholder" autocomplete="off">
+            <div class="kg-suggest" id="kg-suggest-sci"></div>
+        </span>
+        <button type="button" id="kg-search-clear" title="$clear_label">✕</button>
+        <span class="kg-sep"></span>
+        <strong>$depth_label</strong>
+        <button type="button" id="kg-depth-minus">−</button>
+        <span id="kg-depth-val">1</span>
+        <button type="button" id="kg-depth-plus">+</button>
+    </div>
+    <div class="kg-chips" id="kg-chips-all"></div>
+    <div class="kg-row"><strong>$nodes_label</strong>
+        <label><input type="checkbox" class="kg-kind" value="tag"> <span style="color:#7F77DD">●</span> $tags_label</label>
+        <label><input type="checkbox" class="kg-kind" value="law" checked> <span style="color:#C0392B">●</span> $laws_label</label>
+        <label><input type="checkbox" class="kg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> $scientists_label</label>
+        <span class="kg-sep"></span>
+        <strong>$edges_label</strong>
+        <label><input type="checkbox" class="kg-edge" value="tag-tag"> тег↔тег</label>
+        <label><input type="checkbox" class="kg-edge" value="law-law" checked> закон↔закон</label>
+        <label><input type="checkbox" class="kg-edge" value="sci-sci" checked> учёный↔учёный</label>
+        <label><input type="checkbox" class="kg-edge" value="law-tag"> закон↔тег</label>
+        <label><input type="checkbox" class="kg-edge" value="sci-tag"> учёный↔тег</label>
+        <label><input type="checkbox" class="kg-edge" value="law-sci" checked> закон↔учёный</label>
+    </div>
+    <div class="kg-row"><strong>$presets_label</strong>
+        <button type="button" onclick="kgPreset('core')">каркас</button>
+        <button type="button" onclick="kgPreset('all')">всё</button>
+        <button type="button" onclick="kgPreset('tag-sci')">тег↔учёный</button>
+        <button type="button" onclick="kgPreset('law-sci')">закон↔учёный</button>
+        <button type="button" onclick="kgPreset('law-tag')">закон↔тег</button>
+        <button type="button" onclick="kgPreset('tags')">теги</button>
+        <button type="button" onclick="kgPreset('laws')">законы</button>
+        <button type="button" onclick="kgPreset('sci')">учёные</button>
+    </div>
+</div>
+
+<div id="kg-graph"><canvas id="kgcanvas"></canvas></div>
+
+<footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=$asset_ver"></script>
+<script src="/js/search.js?v=$asset_ver"></script>
+<script src="/js/force-graph.js?v=$asset_ver"></script>
+<script src="/js/knowledge-graph.js?v=$asset_ver"></script>
+</body>
+</html>

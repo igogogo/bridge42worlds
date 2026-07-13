@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Markov chain — bridge42worlds</title>
+    <meta name="description" content="A Markov chain is a stochastic model describing a sequence of states in which the probability of transitioning to the next state depends solely on the current state (Markov property). Formally: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Chains can be discrete or continuous in time, with a finite or countable number of states. Main tools: transition probability matrix, stationary distribution, Chapman–Kolmogorov equations.">
+    <meta property="og:title" content="#Markov chain — bridge42worlds">
+    <meta property="og:description" content="A Markov chain is a stochastic model describing a sequence of states in which the probability of transitioning to the next state depends solely on the current state (Markov property). Formally: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Chains can be discrete or continuous in time, with a finite or countable number of states. Main tools: transition probability matrix, stationary distribution, Chapman–Kolmogorov equations.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/tags/markov_chain.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>Markov chain</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Weather forecast: tomorrow hardly remembers what happened a week ago and depends only on today's state. The future is determined by the present, not the past.</p><div class="practical-app"><strong>In practice:</strong> Markov chains model queues in stores, search engine algorithms (Google's PageRank), random walks of stock prices, and text generation by artificial intelligence.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">A Markov chain is a stochastic model describing a sequence of states in which the probability of transitioning to the next state depends solely on the current state (Markov property). Formally: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Chains can be discrete or continuous in time, with a finite or countable number of states. Main tools: transition probability matrix, stationary distribution, Chapman–Kolmogorov equations.</div>
+        <div class="fun-fact">💡 The first practical application of Markov chains was the analysis of the alternation of vowels and consonants in "Eugene Onegin" — Markov showed that it is not random and predicted future letters of the text.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">A Markov chain is a sequence of events where each new event depends only on the previous one, but not on the history beyond that. For example, if you are playing a board game, your next move depends only on the current square of the board, not on how you got there. The chain is defined by states (possible squares) and transition probabilities (chances of jumping from one state to another).</div>
+        <div class="section"><h2>History</h2><p>Russian mathematician Andrey Markov in the early 20th century studied sequences of dependent random variables and introduced the concept of a chain to show that even in random texts, statistical regularities can be found.</p></div>
+        <div class="section"><h2>How it works</h2><p>Like in the game "Snake" on a phone, where the snake moves across cells, choosing a direction randomly, but only from the current position. If you know where it is now, it doesn't matter how it got there — this is the memoryless property.</p></div>
+        <div class="fun-fact">💡 Markov chains underlie the PageRank algorithm that originally brought success to Google: web pages are modeled as states, transitions are hyperlinks; the page rank is the stationary probability of visiting during a random walk with return.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">A Markov chain is a random process with discrete time and a finite or countable state space, possessing the Markov property: the conditional distribution of future states depends only on the current state and not on the past trajectory. It is defined by an initial distribution and a transition probability matrix P = (p_{ij}), where p_{ij} = P(X_{n+1}=j | X_n=i). The chain is called homogeneous if p_{ij} do not depend on n. Key concepts: classification of states (recurrent, transient, periodicity), ergodicity (existence of a limiting distribution), stationary distribution π (πP = π). For irreducible aperiodic finite chains, there exists a unique stationary distribution to which the state distributions converge. Continuous-time Markov chains are described by an intensity matrix Q. Applications: Metropolis–Hastings algorithm in Monte Carlo, hidden Markov models in speech recognition, queueing theory.</div>
+        <div class="section"><h2>History</h2><p>Andrey Andreyevich Markov introduced chains in 1906 while studying the law of large numbers for dependent quantities. He was motivated by a desire to refute Nekrasov's claim that independence is necessary for statistical laws. Later, in the 1930s, Kolmogorov developed the general theory of Markov processes. In the mid-20th century, Markov chains became a central tool in operations research, physics (Ising model), and computer science (text generation, PageRank).</p></div>
+        <div class="section"><h2>How it works</h2><p>Mathematically, a Markov chain is defined by an initial probability vector π^{(0)} and a stochastic matrix P. Then the distribution after n steps: π^{(n)} = π^{(0)} P^n. The memoryless property means that to predict the future, it is sufficient to know only the current state. The long-term behavior is determined by the spectral decomposition of the matrix P: if there exists a unique left eigenvector with eigenvalue 1 (the stationary distribution), then π^{(n)} → π as n→∞. Chapman–Kolmogorov equations: P^{(n+m)} = P^{(n)} P^{(m)}, expressing the composition of transitions. For continuous time: dπ/dt = πQ, where Q is the transition intensity matrix.</p></div>
+        <div class="formula"><div class="formula-render">p_{ij}^{(n+m)} = \sum_{k} p_{ik}^{(n)} p_{kj}^{(m)}</div><div class="formula-meaning">p_{ij}^{(n)} is the probability of transitioning from state i to state j in n steps; summation over all intermediate states k.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>The problem of accelerating convergence for chains with slow mixing (e.g., in high-dimensional distributions with sharp peaks).; Development of efficient algorithms for estimating probabilities of rare events in complex systems.; Analysis of hidden Markov models with high-dimensional continuous hidden states.</p><p class="fact">💡 Markov chains underlie the PageRank algorithm that originally brought success to Google: web pages are modeled as states, transitions are hyperlinks; the page rank is the stationary probability of visiting during a random walk with return.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="markov_chain_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="markov_chain" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="feedback" id="feedback" data-article-id="markov_chain_en_page" data-entity-type="tag"><div class="fb-title">How does it read? (helps us improve)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/entropy.html" data-tag="entropy">entropy</a> · <a href="/lang/en/tags/critical_point.html" data-tag="critical_point">critical point</a> · <a href="/lang/en/tags/phase_transition.html" data-tag="phase_transition">Phase transition</a> · <a href="/lang/en/tags/numerical_simulation.html" data-tag="numerical_simulation">numerical simulation</a> · <a href="/lang/en/tags/turbulence.html" data-tag="turbulence">turbulence</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label></div>
+<div class="mini-graph" data-node="t:markov_chain"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="markov_chain"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('markov_chain', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

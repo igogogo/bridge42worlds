@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#simulación numérica — bridge42worlds</title>
+    <meta name="description" content="La simulación numérica sustituye las ecuaciones diferenciales continuas que describen la física por esquemas en diferencias, en los que el dominio de cálculo se divide en una malla discreta o una nube de partículas. En cada paso de tiempo, los valores de los campos (densidad, velocidad, temperatura) se actualizan según fórmulas aproximadas que respetan las leyes de conservación. Este enfoque permite estudiar sistemas no lineales como la turbulencia o la formación de galaxias, para los cuales no existen soluciones analíticas.">
+    <meta property="og:title" content="#simulación numérica — bridge42worlds">
+    <meta property="og:description" content="La simulación numérica sustituye las ecuaciones diferenciales continuas que describen la física por esquemas en diferencias, en los que el dominio de cálculo se divide en una malla discreta o una nube de partículas. En cada paso de tiempo, los valores de los campos (densidad, velocidad, temperatura) se actualizan según fórmulas aproximadas que respetan las leyes de conservación. Este enfoque permite estudiar sistemas no lineales como la turbulencia o la formación de galaxias, para los cuales no existen soluciones analíticas.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/tags/numerical_simulation.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>simulación numérica</h1>
+    <div class="tag-stats">📊 25 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Un universo digital en una supercomputadora, donde las leyes de la física se transforman en píxeles y fotogramas, prediciendo el destino de las galaxias y la danza de las partículas elementales.</p><div class="practical-app"><strong>In practice:</strong> Creación de prototipos virtuales en aviación, predicción climática, descubrimiento de ondas gravitacionales mediante la comparación de señales reales con plantillas simuladas.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">La simulación numérica sustituye las ecuaciones diferenciales continuas que describen la física por esquemas en diferencias, en los que el dominio de cálculo se divide en una malla discreta o una nube de partículas. En cada paso de tiempo, los valores de los campos (densidad, velocidad, temperatura) se actualizan según fórmulas aproximadas que respetan las leyes de conservación. Este enfoque permite estudiar sistemas no lineales como la turbulencia o la formación de galaxias, para los cuales no existen soluciones analíticas.</div>
+        <div class="fun-fact">💡 En el proyecto IllustrisTNG se reprodujo la evolución de un cubo de 300 millones de años luz de lado, que contiene millones de galaxias, y los científicos pueden "volar" dentro de cualquiera de ellas.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Inicia un juego de computadora en el que, en lugar de teclas, defines las leyes de la física: cómo se atraen los cuerpos, cómo sopla el viento estelar, cómo explotan las supernovas. La computadora divide el mundo en miles de millones de celdas y, paso a paso, recalcula lo que sucederá después. Así nace una película sobre la vida de una galaxia, imposible de filmar en la realidad.</div>
+        <div class="section"><h2>History</h2><p>Los primeros experimentos numéricos se realizaron manualmente ya en el siglo XVII, pero realmente comenzaron con la aparición de las computadoras en los años 40 para calcular explosiones nucleares. En astrofísica, desde los años 60 se empezó a modelar cúmulos estelares.</p></div>
+        <div class="section"><h2>How it works</h2><p>Tomamos una ecuación compleja que describe, por ejemplo, cómo se mueven los planetas, y la descomponemos en pequeños pasos en el tiempo: ¿dónde estará el planeta dentro de un segundo? ¿Y dentro de otro segundo? Repitiendo esto millones de veces, obtenemos la trayectoria. Cuanto más pequeño es el paso, más preciso, pero se requiere más potencia de cálculo.</p></div>
+        <div class="fun-fact">💡 La simulación «GigaEris» utilizó más de 250 mil millones de partículas para un solo cúmulo de galaxias, requiriendo cerca de 1 petabyte de espacio en disco.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">La simulación numérica es un método de investigación de sistemas físicos basado en la aproximación de las ecuaciones fundamentales (mecánica de medios continuos, electrodinámica, gravitación, mecánica cuántica) mediante análogos discretos y su posterior integración en el tiempo en una computadora. Un esquema típico incluye: elección del modelo matemático (por ejemplo, ecuaciones de Navier-Stokes o ecuaciones de Einstein), discretización del espacio y el tiempo (diferencias finitas, elementos finitos, métodos espectrales), establecimiento de condiciones iniciales y de contorno, selección del algoritmo de solución numérica y del paso de tiempo, verificación de la estabilidad y convergencia, visualización y análisis de resultados.</div>
+        <div class="section"><h2>History</h2><p>Los orígenes se remontan a los cálculos numéricos manuales de órbitas realizados por astrónomos del siglo XIX. El impulso decisivo lo dieron las investigaciones sobre turbulencia y física nuclear a mediados del siglo XX (trabajos de von Neumann y Ulam sobre el método de Monte Carlo). En astrofísica, fueron pioneros los trabajos de Hénon y Aarseth sobre modelado de cúmulos estelares en los años 60. Henri Poincaré sentó las bases de la teoría de sistemas dinámicos, crítica para comprender el caos en los cálculos numéricos. Con el crecimiento de las supercomputadoras en los años 80-2000, surgieron simulaciones cosmológicas a gran escala (Millennium, EAGLE, Illustris).</p></div>
+        <div class="section"><h2>How it works</h2><p>En esencia, se basa en la discretización de ecuaciones diferenciales en derivadas parciales. Por ejemplo, en hidrodinámica se utiliza la ley de conservación de masa, momento y energía, escrita como ∂U/∂t + ∇·F = S, donde U es el vector de variables conservativas, F los flujos y S las fuentes. El corazón del algoritmo es la condición de Courant-Friedrichs-Lewy (CFL), que garantiza la estabilidad: número de Courant C = c·Δt/Δx ≤ 1, donde c es la velocidad de propagación de perturbaciones, Δt y Δx son los pasos de tiempo y espacio. Los códigos modernos emplean refinamiento de malla adaptable y paralelización en miles de núcleos. Para problemas gravitatorios se usa la transformada rápida de Fourier o métodos jerárquicos de árbol.</p></div>
+        <div class="formula"><div class="formula-render">C = \frac{c \Delta t}{\Delta x} \leq 1</div><div class="formula-meaning">C — número de Courant (parámetro adimensional de estabilidad), c — velocidad máxima de propagación de perturbaciones en el medio (m/s), Δt — paso de tiempo (s), Δx — paso espacial de la malla (m)</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Resolución espacial insuficiente para describir la turbulencia y la formación estelar; Parametrización de procesos sub-malla (formación estelar, retroalimentación); Inestabilidades en abanico y acumulación de errores de redondeo; Convergencia y verificación del código en régimen de fuerte no linealidad</p><p class="fact">💡 La simulación «GigaEris» utilizó más de 250 mil millones de partículas para un solo cúmulo de galaxias, requiriendo cerca de 1 petabyte de espacio en disco.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="numerical_simulation_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="numerical_simulation" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="feedback" id="feedback" data-article-id="numerical_simulation_es_page" data-entity-type="tag"><div class="fb-title">How does it read?</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Related:</strong>
+    <a href="/lang/es/tags/galaxy_merger.html" data-tag="galaxy_merger">fusión de galaxias</a> · <a href="/lang/es/tags/star_formation.html" data-tag="star_formation">formación estelar</a> · <a href="/lang/es/tags/accretion_disk.html" data-tag="accretion_disk">disco de acreción</a> · <a href="/lang/es/tags/gravitational_waves.html" data-tag="gravitational_waves">ondas gravitacionales</a> · <a href="/lang/es/tags/stellar_evolution.html" data-tag="stellar_evolution">evolución estelar</a> · <a href="/lang/es/tags/planetary_migration.html" data-tag="planetary_migration">migración planetaria</a> · <a href="/lang/es/tags/turbulence.html" data-tag="turbulence">turbulencia</a> · <a href="/lang/es/tags/fourier_series.html" data-tag="fourier_series">serie de Fourier</a>
+</div>
+
+<div class="related-tags"><strong>Scientists:</strong> <a href="/lang/es/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+
+<div class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label></div>
+<div class="mini-graph" data-node="t:numerical_simulation"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="numerical_simulation"><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-01/2605.00780v1/index.html">Rayo sobre el horizonte: el colapso de la gravedad semiclásica en la evaporación de agujeros negros</a></h3>
+                <div class="oneliner">La paradoja de la información de los agujeros negros exige tener en cuenta los efectos cuánticos en la gravedad fuerte. El enfoque semiclásico, propuesto por Stephen Hawking, asume que los campos cuánticos sobre un fondo curvado fijo conducen a la radiación y pérdida de masa, pero la influencia inve</div>
+                <div class="meta">arXiv:2605.00780v1 · 2026-05-01</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-01/2605.00735v1/index.html">El director con nota falsa: por qué la quintaesencia no salvó la inflación</a></h3>
+                <div class="oneliner">El modelo de inflación quintaesencial basado en atractores α describe la inflación y la energía oscura actual como diferentes roles de un mismo campo escalar. Su predicción clave es la fase de kinesis, que amplifica las ondas gravitacionales de alta frecuencia y deja huella en la radiación cósmica d</div>
+                <div class="meta">arXiv:2605.00735v1 · 2026-05-01</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-02/2605.01216v1/index.html">El gong cósmico: cómo un agujero negro hace sonar un agujero de gusano</a></h3>
+                <div class="oneliner">Los científicos han calculado la radiación gravitacional de un agujero negro de masa estelar que cae radialmente en un agujero de gusano de pared delgada. La señal se asemeja a golpes rítmicos: un estallido cuando el agujero negro se acerca a la garganta desde nuestro lado, y una caída profunda cuan</div>
+                <div class="meta">arXiv:2605.01216v1 · 2026-05-02</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-04/2605.02136v2/index.html">La huella del espín del agujero negro: ondulaciones polarimétricas en su sombra</a></h3>
+                <div class="oneliner">Una nueva investigación revela un mecanismo sutil: la polarización no solo ilumina la sombra del agujero negro, sino que la deforma. El efecto, predicho para agujeros en rotación, es extremadamente pequeño pero fundamental: la polarimetría deja de ser un espectador pasivo para convertirse en una son</div>
+                <div class="meta">arXiv:2605.02136v2 · 2026-05-04</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-05/2605.04224v1/index.html">Polígono gravitacional: calibrando agujeros negros</a></h3>
+                <div class="oneliner">Por primera vez se realizan simulaciones no lineales de sobrevuelos de agujeros negros en gravedad modificada: disparos de control en un campo de pruebas cósmico. La comparación de los ángulos de dispersión con los modelos analíticos dio casi en el blanco: la diferencia no superó un grado. Esto abre</div>
+                <div class="meta">arXiv:2605.04224v1 · 2026-05-05</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-06/2605.05454v1/index.html">El cosmos curvado: la vida secreta del universo local</a></h3>
+                <div class="oneliner">Con Cosmicflows-4++, los científicos estimaron directamente las correcciones relativistas y descubrieron que la curvatura aporta alrededor del 10% a la dinámica de expansión en escalas de hasta 300 Mpc/h, mientras que la reacción cinemática es insignificante. Esto pone en duda la globalidad del mode</div>
+                <div class="meta">arXiv:2605.05454v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-06/2605.05357v1/index.html">Estructura de waffle del vacío: de los flujos de cuerdas a la energía oscura</a></h3>
+                <div class="oneliner">Investigadores modificaron el modelo clásico de Bousso–Polchinski, representando la energía del vacío como la diferencia de contribuciones en el espacio de flujos. Como resultado, los pequeños valores de la constante cosmológica no forman esferas, sino finísimos «waffles» — hiperdiscos. El análisis </div>
+                <div class="meta">arXiv:2605.05357v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-06/2605.05317v2/index.html">Universo-toro: el premio gordo cuántico del Big Bang</a></h3>
+                <div class="oneliner">La cosmología cuántica ha enfrentado durante mucho tiempo una paradoja: la elegante idea del nacimiento del universo a partir de la 'nada' favorecía inexorablemente mundos microscópicos y sombríos. Una nueva investigación muestra que al reemplazar la esfera habitual por un toro tridimensional, el es</div>
+                <div class="meta">arXiv:2605.05317v2 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-06/2605.04631v1/index.html">Reloj de arena cósmico: la sombra titilante de un agujero de gusano</a></h3>
+                <div class="oneliner">Simulaciones numéricas revelaron cómo el plasma queda atrapado en la garganta de un agujero de gusano rotante, dibujando un fino borde luminoso en su sombra y haciéndola titilar con un período dictado por la masa y el espín. Estas firmas, al alcance del Telescopio del Horizonte de Sucesos a 230 GHz,</div>
+                <div class="meta">arXiv:2605.04631v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-07/2605.06577v1/index.html">Cuando la gravedad teje el encaje cuántico: lecciones del modelo Schrödinger–Newton</a></h3>
+                <div class="oneliner">La ecuación híbrida de Schrödinger–Newton ha permitido por primera vez separar analíticamente dos facetas de la gravedad: la autointeracción y la atracción mutua. Resulta que la autogravedad no modifica el espectro de Schmidt, y por tanto la medida del entrelazamiento cuántico; en cambio, el potenci</div>
+                <div class="meta">arXiv:2605.06577v1 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-07/2605.06093v1/index.html">La singularidad que nunca fue: cómo el tango cuántico borra el origen del Universo</a></h3>
+                <div class="oneliner">En la cosmología cuántica, la singularidad del Big Bang resulta ser un espejismo. Usando el tiempo relacional, que surge del entrelazamiento entre subsistemas del Universo, los físicos demostraron: la probabilidad de un volumen cero es estrictamente nula. El formalismo de Page-Wootters convierte la </div>
+                <div class="meta">arXiv:2605.06093v1 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-07/2605.05635v3/index.html">El artista invisible: cómo la materia oscura distorsiona los retratos de los agujeros negros</a></h3>
+                <div class="oneliner">La simulación de imágenes de agujeros negros con diferentes perfiles de materia oscura ha revelado una flexibilidad alarmante: el halo aplanado de tipo cored-NFW infla notablemente el anillo brillante, desplaza su centro y aumenta la asimetría, reproduciendo casi exactamente los datos reales del Tel</div>
+                <div class="meta">arXiv:2605.05635v3 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-08/2605.10976v1/index.html">Marcha fúnebre de la masa negativa: por qué LIGO no oye los antichirridos</a></h3>
+                <div class="oneliner">Un nuevo estudio presenta una prueba observacional sencilla: cualquier sistema binario con un componente negativo debe producir o bien una señal anómala con frecuencia decreciente, o desintegrarse al instante. No se ha encontrado ni una sola «nota» de este tipo en los archivos de LIGO, Virgo y KAGRA</div>
+                <div class="meta">arXiv:2605.10976v1 · 2026-05-08</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-08/2605.07848v2/index.html">Fuzzy-nova: La ola cuántica que disuelve los agujeros negros</a></h3>
+                <div class="oneliner">Según la teoría clásica, el colapso de una estrella masiva termina en un agujero negro con una singularidad, donde cae el telón de las leyes físicas. Roger Penrose demostró la inevitabilidad de las singularidades, y Stephen Hawking mostró que los efectos cuánticos generan la paradoja de la informaci</div>
+                <div class="meta">arXiv:2605.07848v2 · 2026-05-08</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-09/2605.08584v2/index.html">La sinfonía de quarks de la estrella de neutrones</a></h3>
+                <div class="oneliner">Un conjunto bayesiano de ecuaciones de estado, construido sobre procesos gaussianos, reconstruye la termodinámica de la materia fría y superdensa sin parametrizaciones sesgadas. Las restricciones de las observaciones de rayos X de NICER y la señal de ondas gravitacionales GW170817 obligan a que la v</div>
+                <div class="meta">arXiv:2605.08584v2 · 2026-05-09</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-10/2605.09521v1/index.html">Звёздная мимикрия: бозонные звёзды притворяются чёрными дырами</a></h3>
+                <div class="oneliner">Сердце Млечного Пути, объект Стрелец A*, может оказаться не чёрной дырой, а её идеальной космической подделкой — бозонной звездой. Данные инфракрасного интерферометра GRAVITY сравнили с моделями двенадцати таких звёзд — гигантских скалярных сгустков — и байесовский вердикт не отличил их от классичес</div>
+                <div class="meta">arXiv:2605.09521v1 · 2026-05-10</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-10/2605.09426v1/index.html">Instrumento cósmico: las canciones resonantes de los agujeros de gusano giratorios</a></h3>
+                <div class="oneliner">Investigando numéricamente la dispersión de ondas escalares en un agujero de gusano transitable y giratorio, los científicos hallaron resonancias de Breit-Wigner. Estas se intensifican bruscamente con la rotación rápida y para modos contra-rotantes, creando una huella espectral radicalmente distinta</div>
+                <div class="meta">arXiv:2605.09426v1 · 2026-05-10</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-11/2605.11332v2/index.html">Sous-vide cósmico: cómo el calentamiento lento revive los agujeros negros primordiales</a></h3>
+                <div class="oneliner">Los agujeros negros primordiales (ANP) — candidatos a materia oscura — durante mucho tiempo se consideraron un producto imposible de las transiciones de fase debido a la dependencia de calibre del contraste de densidad. Sin embargo, una nueva investigación muestra que el calentamiento lento después </div>
+                <div class="meta">arXiv:2605.11332v2 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-11/2605.11065v1/index.html">Cristal cósmico: cómo los defectos del vacío giran la luz</a></h3>
+                <div class="oneliner">La radiación de fondo cósmico no solo trae un mapa del universo temprano, sino también una débil rotación de polarización, de apenas milésimas de radián. Durante mucho tiempo se atribuyó a axiones ultraligeros, pero estos contradicen los experimentos. La nueva explicación es más elegante: la rotació</div>
+                <div class="meta">arXiv:2605.11065v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-11/2605.10587v1/index.html">Astromes: leviatanes eléctricos que desafían la cosmología</a></h3>
+                <div class="oneliner">Los astrones — hipotéticos vestigios del universo temprano con una masa del orden de 10¹² masas solares y una carga eléctrica gigantesca — podrían explicar la energía oscura. Sin embargo, un análisis riguroso destruye las esperanzas simples: la acreción ordinaria no proporciona la carga necesaria, y</div>
+                <div class="meta">arXiv:2605.10587v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-12/2605.11565v1/index.html">El rugido silencioso del horizonte: el tañido amortiguado de los agujeros negro-blancos analógicos</a></h3>
+                <div class="oneliner">Un nuevo estudio teórico demuestra cómo los agujeros negro-blancos analógicos, creados en cadenas superconductoras SNAIL, responden a las perturbaciones: no explotan, sino que se extinguen silenciosamente, emitiendo un tono puramente disipativo. Gracias a la mecánica cuántica supersimétrica, se prue</div>
+                <div class="meta">arXiv:2605.11565v1 · 2026-05-12</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-12/2605.11499v1/index.html">Eco de polarización: la luz atrapa el repique gravitacional de un agujero negro</a></h3>
+                <div class="oneliner">Se ha desarrollado un enfoque covariante que muestra que la luz en la 'tormenta' gravitacional de agujeros negros en fusión cambia su polarización siguiendo la melodía amortiguada del ringdown. Simulaciones numéricas basadas en la teoría de perturbaciones de Kerr confirman: la rotación acromática de</div>
+                <div class="meta">arXiv:2605.11499v1 · 2026-05-12</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-13/2605.16413v2/index.html">Agujeros de gusano de garganta larga: cómo los delatan las notas Doppler</a></h3>
+                <div class="oneliner">Un nuevo estudio muestra que los agujeros de gusano con una longitud de garganta ajustada con precisión pueden proyectar una sombra indistinguible de la de un agujero negro de Schwarzschild. Sin embargo, las simulaciones numéricas revelan una falla crítica en el camuflaje: el disco de acreción del a</div>
+                <div class="meta">arXiv:2605.16413v2 · 2026-05-13</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-13/2605.13557v1/index.html">Sinfonía del momento angular: cuando la gravedad débil es fuerte</a></h3>
+                <div class="oneliner">El parámetro diagnóstico \(\tilde{\alpha}\) muestra que en galaxias y cúmulos, la aproximación postnewtoniana pierde fiabilidad debido a la acumulación de correlaciones gravitacionales no locales. Su valor se dispara precisamente donde tradicionalmente se introduce la materia oscura, y este descubri</div>
+                <div class="meta">arXiv:2605.13557v1 · 2026-05-13</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/es/archive/2026-05-13/2605.13042v1/index.html">El bosque de radio gravitacional: cómo el detector cuántico de hidrógeno revela la materia oscura</a></h3>
+                <div class="oneliner">Los astrofísicos han propuesto un nuevo método para buscar materia oscura: no rastrear los agujeros negros, sino escuchar el eco cuántico de la gravedad. En las regiones de hidrógeno ionizado, las fuerzas de marea de los agujeros negros primordiales desdoblan el nivel atómico 2P₃/₂, convirtiendo la </div>
+                <div class="meta">arXiv:2605.13042v1 · 2026-05-13</div></div></div></div>
+
+<footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('numerical_simulation', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

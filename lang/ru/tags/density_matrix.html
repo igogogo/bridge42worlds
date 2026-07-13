@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#матрица плотности — bridge42worlds</title>
+    <meta name="description" content="Матрица плотности — оператор, описывающий статистический ансамбль квантовых состояний. Чистое состояние |ψ⟩ задаётся проектором ρ = |ψ⟩⟨ψ|, а смешанное — взвешенной суммой ρ = Σ pᵢ |ψᵢ⟩⟨ψᵢ| (pᵢ — классические вероятности). Основные свойства: эрмитовость, единичный след (Tr(ρ)=1) и положительная полуопределённость. Чистоту состояния проверяют через Tr(ρ²): для чистого состояния она равна 1, для смешанного — меньше 1. Формализм широко используется в квантовой оптике, статистической физике и теории квантовой информации для вычисления средних величин и описания открытых систем.">
+    <meta property="og:title" content="#матрица плотности — bridge42worlds">
+    <meta property="og:description" content="Матрица плотности — оператор, описывающий статистический ансамбль квантовых состояний. Чистое состояние |ψ⟩ задаётся проектором ρ = |ψ⟩⟨ψ|, а смешанное — взвешенной суммой ρ = Σ pᵢ |ψᵢ⟩⟨ψᵢ| (pᵢ — классические вероятности). Основные свойства: эрмитовость, единичный след (Tr(ρ)=1) и положительная полуопределённость. Чистоту состояния проверяют через Tr(ρ²): для чистого состояния она равна 1, для смешанного — меньше 1. Формализм широко используется в квантовой оптике, статистической физике и теории квантовой информации для вычисления средних величин и описания открытых систем.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/tags/density_matrix.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/tags/img/density_matrix.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/tags/img/density_matrix.jpg" alt=""></div>
+    <h1>матрица плотности</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <label class="refine-switch" title="Сравнить с сырым описанием (до шлифовки)"><input type="checkbox" onchange="toggleRawDesc(this)"> показать сырое описание</label>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Матрица плотности — это квантовый «паспорт» системы, где записаны все возможные состояния и их вероятности. Если волновая функция — один снимок, то матрица плотности — целый фотоальбом.</p><div class="practical-app"><strong>На практике:</strong> При проектировании квантовых компьютеров матрицы плотности описывают декогеренцию — искажение состояний из-за взаимодействия с окружением — и помогают разрабатывать методы коррекции ошибок. Также она применяется в квантовой томографии для восстановления неизвестных состояний.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="Матрица плотности — оператор, описывающий статистический ансамбль квантовых состояний. Чистое состояние |ψ⟩ задаётся проектором ρ = |ψ⟩⟨ψ|, а смешанное — взвешенной суммой ρ = Σ pᵢ |ψᵢ⟩⟨ψᵢ| (pᵢ — классические вероятности). Свойства: эрмитовость, единичный след (Tr(ρ)=1) и положительная полуопределённость. Чистота проверяется через Tr(ρ²): для чистого состояния она равна 1, для смешанного меньше 1. Инструмент широко применяется в квантовой оптике, статистической физике и теории квантовой информации для вычисления средних и описания открытых систем.">Матрица плотности — оператор, описывающий статистический ансамбль квантовых состояний. Чистое состояние |ψ⟩ задаётся проектором ρ = |ψ⟩⟨ψ|, а смешанное — взвешенной суммой ρ = Σ pᵢ |ψᵢ⟩⟨ψᵢ| (pᵢ — классические вероятности). Основные свойства: эрмитовость, единичный след (Tr(ρ)=1) и положительная полуопределённость. Чистоту состояния проверяют через Tr(ρ²): для чистого состояния она равна 1, для смешанного — меньше 1. Формализм широко используется в квантовой оптике, статистической физике и теории квантовой информации для вычисления средних величин и описания открытых систем.</div>
+        <div class="fun-fact">💡 Мысленный эксперимент «кот Шрёдингера» в терминах матрицы плотности соответствует смеси: 50% кот жив, 50% мёртв, но без квантовой интерференции. Это классическая неопределённость, а не суперпозиция. Процесс декогеренции превращает суперпозицию в подобную смесь, поэтому в макроскопическом мире мы не наблюдаем квантовых состояний вроде кота-суперпозиции.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="В квантовой физике для сложных или не полностью известных систем используют матрицу плотности — таблицу чисел. Числа на диагонали дают вероятности состояний, а внедиагональные — меру квантовой связи (когерентность). Если волновая функция — это одна фотография, то матрица плотности — досье со всеми приметами и их вероятностями.">Для описания сложных или не полностью известных квантовых систем используют матрицу плотности — набор чисел, организованных в таблицу. Числа на диагонали этой таблицы задают вероятности обнаружить систему в том или ином состоянии, а внедиагональные элементы отражают квантовую когерентность — меру «связности» состояний. Если волновая функция — это один кадр, то матрица плотности — подробное досье со всеми вариантами и их вероятностями.</div>
+        <div class="section"><h2>История</h2><p>Формализм матрицы плотности независимо разработали Джон фон Нейман и Лев Ландау в 1927 году как инструмент статистической квантовой механики.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте монетку: классическая смесь орла и решки с вероятностями 50/50 описывается матрицей плотности с диагональными элементами 0.5. Квантовая суперпозиция — одновременное существование орла и решки — добавляет внедиагональные элементы. Матрица плотности чётко различает эти случаи. При взаимодействии с окружением внедиагональные элементы исчезают — это декогеренция, объясняющая, почему окружающий мир выглядит классически.</p></div>
+        <div class="fun-fact">💡 Одна и та же матрица плотности ρ может быть разложена на чистые состояния разными способами (ансамбли Гиббса). Теорема о неоднозначности разложения утверждает, что различные способы приготовления состояния могут приводить к одинаковому ρ. Это свойство используется в квантовой криптографии для защиты от подслушивания.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="Матрица плотности ρ — самосопряжённый, положительный, следовый 1 оператор в гильбертовом пространстве. Чистое состояние описывается ρ = |ψ⟩⟨ψ| и эволюционирует по уравнению фон Неймана: iħ dρ/dt = [H, ρ]. Для открытых систем добавляются операторы Линдблада, описывающие диссипацию и декогеренцию. Энтропия фон Неймана S(ρ) = –Tr(ρ ln ρ) обобщает энтропию Шеннона; для чистого состояния S=0. Состояние подсистемы получается частичным следом из полной матрицы: ρ_A = Tr_B(ρ_AB). Это вводит понятие запутанности: даже чистая составная система может иметь смешанную подсистему. Формализм лежит в основе квантовой томографии, квантовой термодинамики и теории декогеренции.">Матрица плотности ρ — эрмитов, положительно полуопределённый оператор с единичным следом (Tr(ρ)=1) в гильбертовом пространстве. Чистое состояние описывается как ρ = |ψ⟩⟨ψ| и эволюционирует унитарно согласно уравнению фон Неймана: iħ dρ/dt = [H, ρ]. Для открытых систем добавляются линдбладовы операторы, описывающие диссипацию и декогеренцию. Энтропия фон Неймана S(ρ) = –Tr(ρ ln ρ) обобщает энтропию Шеннона; для чистого состояния S=0. Состояние подсистемы получают взятием частичного следа: ρ_A = Tr_B(ρ_AB). Это приводит к понятию запутанности: даже чистая составная система может иметь смешанную подсистему. Формализм матрицы плотности лежит в основе квантовой томографии, квантовой термодинамики и теории декогеренции.</div>
+        <div class="section"><h2>История</h2><p>Формализм введён Ландау и фон Нейманом в 1927 году. Фон Нейман представил строгую математическую основу в книге «Математические основы квантовой механики» (1932), определив энтропию и уравнение эволюции. Ландау применил матрицу плотности к задачам столкновений. Позднее теорию открытых систем развивали Гейзенберг, Зеема, Линдблад. В 1990-е годы матрица плотности стала центральным инструментом в изучении квантовой декогеренции (Журек, Цех) и квантовых информационных технологий.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Матрица плотности ρ содержит всю статистическую информацию о системе. Средние значения наблюдаемых вычисляются как ⟨A⟩ = Tr(ρA). Для замкнутой системы эволюция унитарна: ρ(t) = U(t) ρ(0) U†(t). Для открытых систем применяют уравнение Линдблада: dρ/dt = –i[H, ρ]/ħ + Σ_k (L_k ρ L_k† – ½{L_k† L_k, ρ}), где L_k — операторы Линдблада, моделирующие влияние окружения. В квантовой томографии матрицу плотности восстанавливают по множеству измерений. Меры запутанности (concurrence, отрицательность) также вычисляются через матрицу плотности.</p></div>
+        <div class="formula"><div class="formula-render">\rho = |\psi\rangle\langle\psi|</div><div class="formula-meaning">|ψ⟩ — вектор состояния системы</div></div><div class="formula"><div class="formula-render">\rho = \sum_i p_i |\psi_i\rangle\langle\psi_i|</div><div class="formula-meaning">p_i — вероятность чистого состояния |ψ_i⟩, ∑ p_i = 1</div></div><div class="formula"><div class="formula-render">S(\rho) = -\mathrm{Tr}(\rho \ln \rho)</div><div class="formula-meaning">S — мера неопределённости (в кубитах); для чистого состояния S=0</div></div><div class="formula"><div class="formula-render">i\hbar \frac{d\rho}{dt} = [H, \rho]</div><div class="formula-meaning">H — гамильтониан системы, [H, ρ] = Hρ − ρH — коммутатор, i — мнимая единица</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Разработать эффективные протоколы томографии для систем с экспоненциально большой размерностью.; Понять точный механизм декогеренции макроскопических систем для создания стабильных квантовых компьютеров.; Обобщить эволюцию на случай искривлённого пространства-времени (ковариантная квантовая теория поля).</p><p class="fact">💡 Одна и та же матрица плотности ρ может быть разложена на чистые состояния разными способами (ансамбли Гиббса). Теорема о неоднозначности разложения утверждает, что различные способы приготовления состояния могут приводить к одинаковому ρ. Это свойство используется в квантовой криптографии для защиты от подслушивания.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="density_matrix_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="density_matrix" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="density_matrix_ru_page" data-entity-type="tag"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/decoherence.html" data-tag="decoherence">декогеренция</a> · <a href="/lang/ru/tags/entropy.html" data-tag="entropy">энтропия</a> · <a href="/lang/ru/tags/quantum_entanglement.html" data-tag="quantum_entanglement">квантовая запутанность</a> · <a href="/lang/ru/tags/wave_function.html" data-tag="wave_function">волновая функция</a> · <a href="/lang/ru/tags/hilbert_space.html" data-tag="hilbert_space">гильбертово пространство</a> · <a href="/lang/ru/tags/quantum_information.html" data-tag="quantum_information">квантовая информация</a> · <a href="/lang/ru/tags/quantum_decoherence.html" data-tag="quantum_decoherence">квантовая декогеренция</a> · <a href="/lang/ru/tags/von_neumann_entropy.html" data-tag="von_neumann_entropy">энтропия фон Неймана</a>
+</div>
+<div class="related-tags"><strong>Законы:</strong> <a href="/lang/ru/laws/born_rule.html" class="law-chip" data-law="born_rule">принцип Борна</a> · <a href="/lang/ru/laws/fluctuationdissipation_theorem.html" class="law-chip" data-law="fluctuationdissipation_theorem">флуктуационно-диссипационная теорема</a></div>
+
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="t:density_matrix"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="density_matrix"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('density_matrix', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

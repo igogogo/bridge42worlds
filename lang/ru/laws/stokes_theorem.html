@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>теорема Стокса — bridge42worlds</title>
+    <meta name="description" content="Представьте себе кусок плёнки, натянутой на проволочную рамку. Теорема Стокса говорит, что движение жидкости вдоль этой рамки равно сумме всех маленьких завихрений, проходящих через плёнку. Как если бы вы размешивали чай в чашке: вращение ложки внутри (ротор) передаётся жидкости, и по ободку чашки вы чувствуете то же самое движение. Это связь между тем, что происходит на поверхности, и тем, что творится на её границе.">
+    <meta property="og:title" content="теорема Стокса — bridge42worlds">
+    <meta property="og:description" content="Представьте себе кусок плёнки, натянутой на проволочную рамку. Теорема Стокса говорит, что движение жидкости вдоль этой рамки равно сумме всех маленьких завихрений, проходящих через плёнку. Как если бы вы размешивали чай в чашке: вращение ложки внутри (ротор) передаётся жидкости, и по ободку чашки вы чувствуете то же самое движение. Это связь между тем, что происходит на поверхности, и тем, что творится на её границе.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/laws/stokes_theorem.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/laws/img/stokes_theorem.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/" class="active">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/laws/img/stokes_theorem.jpg" alt=""></div>
+    <h1>теорема Стокса<span class="law-type">теорема</span></h1>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Представьте себе кусок плёнки, натянутой на проволочную рамку. Теорема Стокса говорит, что движение жидкости вдоль этой рамки равно сумме всех маленьких завихрений, проходящих через плёнку. Как если бы вы размешивали чай в чашке: вращение ложки внутри (ротор) передаётся жидкости, и по ободку чашки вы чувствуете то же самое движение. Это связь между тем, что происходит на поверхности, и тем, что творится на её границе.</div>
+        <div class="fun-fact">💡 Если вы когда-нибудь размешивали чай и видели, как чаинки бегут по кругу, вы наблюдали теорему Стокса в действии! Чем сильнее вы крутите внутри, тем быстрее движение у стенок чашки.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Теорема Стокса — это мост между интегралами по поверхности и контурными интегралами. В классической векторной форме она утверждает, что циркуляция векторного поля вдоль замкнутого контура равна потоку его ротора через любую поверхность, натянутую на этот контур. Это элегантное обобщение Грина и Гаусса, которое лежит в основе всей современной физики полей. Аналогия: если вы проходите вдоль забора вокруг сада и меряете ветер, то суммарное усилие ветра вдоль забора равно тому, сколько вихрей ветра пролетело над садом.</div>
+        <div class="section"><h2>Как работает</h2><p>Теорема активно используется в электродинамике: закон Ампера и закон Фарадея записываются именно через неё. В гидродинамике она помогает рассчитывать циркуляцию жидкости. В топологии с её помощью доказываются важные утверждения о векторных полях (например, теорема о неподвижной точке). Даже обычный расчёт работы силы вдоль замкнутого пути часто упрощают, сводя его к интегралу по «дну» этого пути.</p></div>
+        <div class="fun-fact">💡 История названия — настоящий курьёз. Лорд Кельвин (Уильям Томсон) в 1850 году сообщил эту теорему Джорджу Стоксу, который был тогда главным экзаменатором Кембриджа. Стоксу она так понравилась, что он тут же включил её в сложнейшую премию Смита. С тех пор теорема носит его имя, а роль Кельвина почти забыта.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">В своём наиболее общем виде (дифференциальная геометрия) теорема Стокса утверждает: для ориентированного гладкого многообразия M с краем ∂M и дифференциальной формы ω выполняется ∫_{∂M} ω = ∫_{M} dω. Для векторного анализа это означает: ∮_{∂S} F·dr = ∬_{S} (∇×F)·dS, то есть циркуляция поля по замкнутому контуру равна потоку ротора через поверхность, ограниченную этим контуром. Теорема объединяет в себе частные случаи Грина, Гаусса-Остроградского и формулу Ньютона-Лейбница, показывая глубокое единство дифференцирования и интегрирования.</div>
+        <div class="section"><h2>История открытия</h2><p>Уильям Томсон (лорд Кельвин) сформулировал ключевую идею в письме к Джорджу Стоксу около 1850 года. Стокс сделал теорему широко известной, включив её в задания на премию Смита в 1854 году. Однако специальные случаи были известны ещё раньше: Джордж Грин (1828) доказал формулу Грина, а Михаил Остроградский (1820-е) — теорему о дивергенции. В XX веке Эли Картан и Анри Пуанкаре развили язык дифференциальных форм, на котором теорема Стокса стала фундаментом теории когомологий де Рама и современной топологии.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Теорема Стокса связывает локальное поведение поля (ротор, дивергенцию) с его глобальными характеристиками (циркуляция, поток). На практике она позволяет переводить объёмные интегралы в поверхностные и обратно, что критически важно в уравнениях Максвелла, гидродинамике, термодинамике необратимых процессов. Границы применимости: многообразие должно быть ориентируемым, а формы — достаточно гладкими; для негладких границ или пространств с особенностями требуются обобщения в рамках теории распределений.</p></div>
+        <div class="section"><h2>Нюансы</h2><p>Необходимость согласованной ориентации: формулировка строго зависит от выбора ориентации поверхности и края, что создаёт трудности в неориентируемых пространствах.; Обобщение на фрактальные границы: классическая теорема требует кусочной гладкости, тогда как для фрактальных объектов (например, снежинка Коха) интегралы могут расходиться или требовать новых определений.; Квантовые аналогии: в квантовой физике на дискретных пространствах или в неархимедовой геометрии аналог теоремы Стокса ещё ждёт полного развития.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\oint_{\partial S} \mathbf{F} \cdot d\mathbf{r} = \iint_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}</div><div class="formula-meaning">F — векторное поле; ∂S — ориентированная граница поверхности S; dr — бесконечно малый элемент кривой; ∇×F — ротор поля; dS — направленный элемент площади поверхности (вектор нормали, умноженный на площадь элемента).</div></div><div class="formula"><div class="formula-render">\int_{\partial M} \omega = \int_M d\omega</div><div class="formula-meaning">M — ориентированное гладкое многообразие с краем ∂M; ω — дифференциальная форма степени k; dω — её внешний дифференциал (форма степени k+1).</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="stokes_theorem_ru_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="stokes_theorem" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="stokes_theorem_ru_page" data-entity-type="law"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные понятия:</strong>
+    <a href="/lang/ru/tags/electromagnetism.html" data-tag="electromagnetism">электромагнетизм</a> · <a href="/lang/ru/tags/manifold.html" data-tag="manifold">многообразие</a> · <a href="/lang/ru/tags/topology.html" data-tag="topology">топология</a>
+</div>
+<div class="related-tags"><strong>Связанные законы:</strong> <a href="/lang/ru/laws/maxwells_equations.html" class="law-chip" data-law="maxwells_equations">уравнения Максвелла</a></div>
+
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="l:stokes_theorem"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="electromagnetism,manifold,topology"><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-01/2505.00266v1/index.html">Танец скирмиона: как магнитный вихрь дирижирует квантовым оркестром</a></h3><div class="oneliner">Предложена гибридная квантовая система, объединяющая долгоживущую спиновую память, быстрый сверхпроводящий процессор и топологически защищённого посредника — магнитный скирмион. Его колебания связывают атомный мир дефектов с макроконтурами, преодолевая пропасть масштабов. Расчёты обещают сильную свя</div><div class="meta">arXiv:2505.00266v1 · 2025-05-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-01/2505.00483v1/index.html">Космическое танго: как спины танцуют с тёмной материей</a></h3><div class="oneliner">Вооружившись квантовым магнитометром, считывающим ядерные спины с невероятной точностью, учёные охотились на экзотические силы, нарушающие зеркальную симметрию. Тандем из вращающихся свинцовых масс и облачка атомов неона позволил в тысячу раз улучшить прежние ограничения. Установка работает как мини</div><div class="meta">arXiv:2505.00483v1 · 2025-05-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-01/2505.00872v4/index.html">Танец электрона-осьминога: что квантовое туннелирование говорит о природе реальности</a></h3><div class="oneliner">Квантовое туннелирование — не просто трюк, позволяющий электронам просачиваться сквозь непреодолимые барьеры. Это окно в глубочайшие загадки мироустройства. Оказывается, электрон ведёт себя не как точка, а как распределённая сущность — что-то вроде осьминога, просовывающего щупальца сквозь щель. Так</div><div class="meta">arXiv:2505.00872v4 · 2025-05-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-01/2505.00919v1/index.html">Квантовая симфония из шума: как спонтанное излучение рождает запутанность</a></h3><div class="oneliner">Вопреки устоявшемуся мнению о спонтанном излучении как о некогерентном процессе, разрушающем квантовую запутанность, группа физиков теоретически продемонстрировала возможность генерации почти идеальной бипартитной запутанности между двумя яркими световыми полями. В основе схемы — четырёхуровневая ат</div><div class="meta">arXiv:2505.00919v1 · 2025-05-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-02/2505.01506v2/index.html">Ридберговский вальс: как танец потерь обостряет квантовое чутьё</a></h3><div class="oneliner">Квантовые сенсоры на ридберговских атомах способны улавливать ничтожные электромагнитные поля, но оптическое считывание обычно губит почти все сигнальные фотоны. Физики из Варшавы пошли наперекор очевидности и намеренно усилили нелинейные потери через диполь-дипольные столкновения возбуждений. Это п</div><div class="meta">arXiv:2505.01506v2 · 2025-05-02</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-02/2505.01519v1/index.html">Танец радикалов, замороженный хиральностью: как птицы видят магнитное поле</a></h3><div class="oneliner">Работа показывает, как хиральность — способность молекулы не совпадать с зеркальным отражением — превращает слабый магнитный сигнал в надёжный компас. Хиральность не просто создаёт квантовую когерентность, а индуцирует спиновую поляризацию, которая заставляет систему бесконечно «замирать» в одном со</div><div class="meta">arXiv:2505.01519v1 · 2025-05-02</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-02/2505.05490v1/index.html">Семь жизней фотона: исключительные точки управляют спонтанным излучением</a></h3><div class="oneliner">Объединив ниобат лития и арсенид галлия, учёные создали чип. В нём квантовые точки взаимодействуют с модами микрорезонатора, а электрооптическая настройка фазы обратной связи выводит систему в исключительную точку. В этой сингулярности две моды сливаются, и спектральная плотность состояний меняет фо</div><div class="meta">arXiv:2505.05490v1 · 2025-05-02</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-05-04/2505.02057v4/index.html">Квантовый интернет: как запутанность стала пакетом данных</a></h3><div class="oneliner">Сверхпроводящие кубиты и оптические фотоны разделяет пропасть в пять порядков частоты. Прямой перевод кубита — инженерный тупик, но архитектурный трюк, вдохновлённый пакетной коммутацией, превращает слабые преобразователи в генераторы запутанности. Так квантовый интернет из утопии становится чертежо</div><div class="meta">arXiv:2505.02057v4 · 2025-05-04</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-11/2605.11065v1/index.html">Космический кристалл: как дефекты вакуума поворачивают свет</a></h3><div class="oneliner">Реликтовое излучение приносит не только карту ранней Вселенной, но и слабый поворот поляризации — всего на тысячные доли радиана. Долгое время его приписывали сверхлёгким аксионам, но те противоречат экспериментам. Новое объяснение изящнее: поворот возникает при проходе фотонов через невидимые грани</div><div class="meta">arXiv:2605.11065v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-11/2605.10548v1/index.html">Вселенные в бокалах: как кротовые норы совместили несовместимое</a></h3><div class="oneliner">Исследование объединяет два полюса квантовой космологии: туннелирование из существующего пространства и безграничное состояние Хартла–Хокинга. Численное решение уравнений Эйнштейна с аксионным (или магнитным) зарядом и скалярным полем выявило семейство евклидовых кротовых нор — профиль их масштабног</div><div class="meta">arXiv:2605.10548v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-12/2605.12246v2/index.html">Немая струна гравитации: охота на κ</a></h3><div class="oneliner">Слабый принцип эквивалентности проверен с фантастической точностью, но всегда с заземлёнными образцами — словно одна струна гравитационной скрипки намеренно заглушена. Параметр κ количественно описывает, зависит ли ускорение от электрического заряда: это отношение разницы ускорений к разнице удельны</div><div class="meta">arXiv:2605.12246v2 · 2026-05-12</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-13/2605.14050v1/index.html">Гравитонный лазер: как перевести гравитацию на язык света</a></h3><div class="oneliner">Главное препятствие для гравитонного лазера — гравитационные волны невозможно отразить: они проходят сквозь любое вещество. Решение скрыто в эффекте Герценштейна. Под действием мощного магнитного поля частицы гравитации временно становятся фотонами, которые легко отражаются обычными зеркалами. Обрат</div><div class="meta">arXiv:2605.14050v1 · 2026-05-13</div></div></div></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('stokes_theorem', 'law', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

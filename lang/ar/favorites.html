@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bridge42worlds — Science Made Simple</title>
+    <link rel="alternate" type="application/atom+xml" title="bridge42worlds (ar)" href="/feed-ar.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=1f7719196d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html" class="active">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-toggle" id="version-toggle"><span class="" data-version="advanced" title="بالمعادلات والقصة الكاملة">متقدم</span><span class="active" data-version="popular" title="أغنى من «مبسّط» - إذا كان العلم يثيرك">مبسّط</span><span class="" data-version="simple" title="الأبسط - لأول نظرة">بسيط</span><span class="" data-version="mini" title="الخلاصة في 10 ثوانٍ">مصغّر</span></div>
+    </div>
+</div>
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <div class="cal-bar">
+        <button type="button" id="calendar-btn" class="cal-btn" title="تصفح حسب التاريخ">📅</button>
+        <div class="calendar-panel" id="calendar-panel"></div>
+    </div>
+</div>
+<div class="intro-wrap">
+    <button type="button" id="intro-toggle" class="intro-toggle" title="عن الموقع">ℹ️</button>
+    <p class="home-intro" id="home-intro">يحوّل bridge42worlds أحدث الأبحاث العلمية من arXiv إلى مقالات يفهمها الجميع - كل يوم، دون الحاجة لشهادة في الفيزياء. اختر مستواك: <b>مبسّط</b> لأول نظرة، <b>شائع</b> إذا كان العلم يثير شغفك، <b>متقدّم</b> للمعادلات والقصة كاملة، <b>مختصر</b> للخلاصة في 10 ثوانٍ. بالإضافة إلى خريطة حية للعلم: الوسوم والقوانين والعلماء وراء كل اكتشاف.</p>
+</div>
+<script>
+(function () {
+    var KEY = 'b42_intro_seen';
+    var box = document.getElementById('home-intro'), btn = document.getElementById('intro-toggle');
+    if (!box || !btn) return;
+    var seen = false;
+    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    function setOpen(v) { box.classList.toggle('open', v); btn.classList.toggle('active', v); }
+    setOpen(!seen);
+    if (!seen) { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+    btn.addEventListener('click', function () { setOpen(!box.classList.contains('open')); });
+})();
+</script>
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="ابحث عن مقالات، #وسوم، @مؤلفين" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+<div class="category-bar" id="category-bar"></div>
+<div class="site-stats" id="site-stats"></div>
+<div class="filters" id="active-filters"></div>
+<div id="search-results"><p style="color:var(--soft);text-align:center;padding:40px">جارٍ التحميل...</p></div>
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a> · <a href="/feed-ar.xml">RSS</a></p></footer>
+<script src="/js/likes.js?v=1f7719196d"></script>
+<script src="/js/search.js?v=1f7719196d"></script>
+</body>
+</html>

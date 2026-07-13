@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#статистическая сумма — bridge42worlds</title>
+    <meta name="description" content="Статистическая сумма (или сумма состояний) — центральная величина статистической физики, связывающая микроскопические свойства частиц с макроскопическими параметрами, такими как температура и давление. Она служит для нормировки вероятностей: сумма экспоненциальных множителей Больцмана по всем доступным микросостояниям гарантирует, что полная вероятность равна единице. Для системы с фиксированным числом частиц, объёмом и температурой Z = Σ e^(-E_i/(k_B T)), где E_i — энергия i-го состояния, k_B — постоянная Больцмана, T — абсолютная температура. Зная Z, можно найти свободную энергию и любые средние характеристики, продифференцировав её по соответствующим переменным.">
+    <meta property="og:title" content="#статистическая сумма — bridge42worlds">
+    <meta property="og:description" content="Статистическая сумма (или сумма состояний) — центральная величина статистической физики, связывающая микроскопические свойства частиц с макроскопическими параметрами, такими как температура и давление. Она служит для нормировки вероятностей: сумма экспоненциальных множителей Больцмана по всем доступным микросостояниям гарантирует, что полная вероятность равна единице. Для системы с фиксированным числом частиц, объёмом и температурой Z = Σ e^(-E_i/(k_B T)), где E_i — энергия i-го состояния, k_B — постоянная Больцмана, T — абсолютная температура. Зная Z, можно найти свободную энергию и любые средние характеристики, продифференцировав её по соответствующим переменным.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/tags/partition_function.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>статистическая сумма</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <label class="refine-switch" title="Сравнить с сырым описанием (до шлифовки)"><input type="checkbox" onchange="toggleRawDesc(this)"> показать сырое описание</label>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Статистическая сумма — это всеохватный каталог микросостояний системы, где для каждого указан его «вес», зависящий от энергии и температуры. Словно список нарядов с сезонной уценкой: самые «горячие» (высокоэнергичные) состояния получают наименьший вес, и именно этот список предсказывает среднее поведение системы.</p><div class="practical-app"><strong>На практике:</strong> С её помощью рассчитывают теплоёмкость, энтропию и другие термодинамические параметры веществ, а также предсказывают фазовые переходы — например, кипение жидкости или намагничивание металла.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="Статистическая сумма (или сумма состояний) — центральная величина статистической физики, связывающая микроскопические свойства частиц с макроскопическими термодинамическими параметрами системы. Она представляет собой нормировочный множитель, обеспечивающий правильное вероятностное распределение по энергетическим уровням. Для системы с фиксированным числом частиц, объёмом и температурой она записывается как сумма экспоненциальных факторов Больцмана для всех доступных микросостояний.">Статистическая сумма (или сумма состояний) — центральная величина статистической физики, связывающая микроскопические свойства частиц с макроскопическими параметрами, такими как температура и давление. Она служит для нормировки вероятностей: сумма экспоненциальных множителей Больцмана по всем доступным микросостояниям гарантирует, что полная вероятность равна единице. Для системы с фиксированным числом частиц, объёмом и температурой Z = Σ e^(-E_i/(k_B T)), где E_i — энергия i-го состояния, k_B — постоянная Больцмана, T — абсолютная температура. Зная Z, можно найти свободную энергию и любые средние характеристики, продифференцировав её по соответствующим переменным.</div>
+        <div class="fun-fact">💡 Статистическая сумма естественно включает второе начало термодинамики, поэтому с её помощью можно формально доказать невозможность вечного двигателя второго рода.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="Представьте себе огромный магазин одежды, где каждая вещь — это одно из состояний, в котором может находиться система (например, молекулы газа). Статистическая сумма — это общая цена, которую вы заплатите, если сложите цены всех вещей с учётом сезонной скидки (скидка зависит от энергии состояния и температуры: чем выше энергия, тем меньше скидка). Эта сумма говорит о том, какие состояния будут чаще 'покупаться' (т.е. куда в среднем движется система).">Статистическую сумму можно представить как итог голосования, где каждое микросостояние системы (например, определённое расположение молекул газа) получает «количество голосов», убывающее с ростом его энергии при данной температуре. Общая сумма голосов — это и есть Z. Состояния с наибольшим весом вносят главный вклад в средние величины, что позволяет вычислить, скажем, насколько нагреется чайник при включении: учёные перебирают возможные микросостояния, взвешивают их, а затем из Z извлекают среднюю энергию и предсказывают поведение системы.</div>
+        <div class="section"><h2>История</h2><p>Понятие ввёл в конце XIX века австрийский физик Людвиг Больцман, создавая статистическую механику.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Чтобы рассчитать термодинамические свойства, сначала перечисляют все возможные микросостояния системы (положения и скорости частиц). Каждому приписывают вес, экспоненциально уменьшающийся с энергией: e^(-E/(k_B T)). Сумма всех весов даёт статистическую сумму Z. Логарифм Z напрямую связан со свободной энергией, а производные от логарифма по температуре или объёму дают среднюю энергию, давление, энтропию — то есть все привычные характеристики, измеряемые в эксперименте.</p></div>
+        <div class="fun-fact">💡 Для идеального бозе-газа при температурах ниже критической наивная замена суммы интегрированием по энергиям приводит к расходимости, так как не учитывает макроскопическое заполнение основного состояния. Поэтому при описании конденсации Бозе–Эйнштейна конденсатную компоненту выделяют явно.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="Статистическая сумма (partition function) — фундаментальная функция в статистической механике, определяющая все термодинамические свойства равновесной системы. В каноническом ансамбле она равна Z = Σ_i e^{-β E_i}, где суммирование идёт по всем возможным микросостояниям системы. Для квантовых систем это след матрицы плотности: Z = Tr e^{-β Ĥ}. Статистическая сумма выступает производящей функцией для термодинамических потенциалов: свободная энергия Гельмгольца F = -k_B T ln Z, а её производные дают среднюю энергию, теплоёмкость, энтропию и другие величины. Различные ансамбли (микроканонический, канонический, большой канонический) имеют свои виды статистической суммы, но все они кодируют распределение вероятностей состояний.">Статистическая сумма (partition function) — фундаментальная функция в статистической механике, определяющая все термодинамические свойства равновесной системы. В каноническом ансамбле она равна Z = Σ_i e^{-β E_i}, где β = 1/(k_B T), и суммирование идёт по всем микросостояниям системы. Для квантовых систем Z = Tr e^{-β Ĥ} — след матрицы плотности. Статистическая сумма является производящей функцией для термодинамических потенциалов: свободная энергия Гельмгольца F = -k_B T ln Z, а её производные дают среднюю энергию ⟨E⟩ = -∂ ln Z/∂β, теплоёмкость, энтропию S = k_B (ln Z + β⟨E⟩) и другие величины. В микроканоническом, каноническом и большом каноническом ансамблях определения Z различаются, но все они задают распределение вероятностей состояний.</div>
+        <div class="section"><h2>История</h2><p>Корни понятия уходят в работы Людвига Больцмана (1870-е гг.), который развивал статистическую трактовку энтропии. Термин «Zustandssumme» (сумма состояний) был предложен Максом Планком. Позднее Джозайя Уиллард Гиббс систематизировал формализм ансамблей и ввёл современное обозначение Z. В квантовой статистической механике метод был расширен Феликсом Блохом и другими в первой половине XX века.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Микросостояния системы перечисляются с их энергиями E_i; каждому придаётся вес e^{-E_i/(k_B T)}, убывающий с ростом энергии. Сумма этих весов даёт Z. Все средние термодинамические величины извлекаются дифференцированием логарифма Z по сопряжённым переменным: например, средняя энергия ⟨E⟩ = -∂ ln Z/∂β, где β = 1/(k_B T). В квантовом случае используется оператор Гамильтона Ĥ и след Tr e^{-β Ĥ}, не зависящий от выбора базиса. Вблизи фазовых переходов метод перенормировочной группы опирается на анализ особенностей Z. Распределение вероятностей состояний p_i = e^{-β E_i}/Z напрямую приводит к формуле энтропии Гиббса S = -k_B Σ p_i ln p_i.</p></div>
+        <div class="formula"><div class="formula-render">Z = \sum_i e^{-\beta E_i}</div><div class="formula-meaning">Z — статистическая сумма, i — индекс микросостояния, E_i — энергия i-го микросостояния, \beta = 1/(k_B T) — обратная температура, k_B ≈ 1,38×10^{-23} Дж/К — постоянная Больцмана, T — абсолютная температура в кельвинах.</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Построение статистической суммы для систем с дальнодействующими корреляциями (например, гравитирующих) сталкивается с проблемой неаддитивности.; Вычисление реалистичных квантовых многочастичных Z экспоненциально сложно из-за «знаковой проблемы» в методах Монте-Карло.; Распространение на неравновесные системы остаётся открытой задачей, особенно для сильно коррелированных сред.</p><p class="fact">💡 Для идеального бозе-газа при температурах ниже критической наивная замена суммы интегрированием по энергиям приводит к расходимости, так как не учитывает макроскопическое заполнение основного состояния. Поэтому при описании конденсации Бозе–Эйнштейна конденсатную компоненту выделяют явно.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="partition_function_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="partition_function" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="partition_function_ru_page" data-entity-type="tag"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/entropy.html" data-tag="entropy">энтропия</a> · <a href="/lang/ru/tags/phase_transition.html" data-tag="phase_transition">фазовый переход</a> · <a href="/lang/ru/tags/phase_space.html" data-tag="phase_space">фазовое пространство</a> · <a href="/lang/ru/tags/critical_point.html" data-tag="critical_point">критическая точка</a> · <a href="/lang/ru/tags/bose_einstein_condensate.html" data-tag="bose_einstein_condensate">конденсат Бозе — Эйнштейна</a> · <a href="/lang/ru/tags/enthalpy.html" data-tag="enthalpy">энтальпия</a>
+</div>
+<div class="related-tags"><strong>Законы:</strong> <a href="/lang/ru/laws/fluctuationdissipation_theorem.html" class="law-chip" data-law="fluctuationdissipation_theorem">флуктуационно-диссипационная теорема</a></div>
+<div class="related-tags"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Ludwig_Boltzmann.html" class="text-scientist" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a></div>
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="t:partition_function"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="partition_function"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('partition_function', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

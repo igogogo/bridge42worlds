@@ -1,0 +1,358 @@
+{
+  "id": "2607.01372v1",
+  "original_title": "AI-enabled gravitational-waves searches for binary neutron stars at optimal sensitivity",
+  "authors": [
+    "Bhavya Gupta",
+    "Deep Chatterjee",
+    "William Benoit",
+    "Ethan Marx",
+    "Christina Reissel",
+    "Seiya Tsukamoto",
+    "Kyungseop Yoon",
+    "Michael W. Coughlin",
+    "Philip Harris",
+    "Erik Katsavounidis"
+  ],
+  "date": "2026-07-01",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "neutron_star",
+    "gravitational_waves",
+    "black_hole",
+    "pulsar",
+    "supernova",
+    "speed_of_light",
+    "standard_model"
+  ],
+  "main_tag": "neutron_star",
+  "scientists": [
+    "Jocelyn Bell Burnell",
+    "Fritz Zwicky",
+    "Rainer Weiss"
+  ],
+  "categories": [
+    "astro-ph.HE",
+    "astro-ph.IM",
+    "cs.AI"
+  ],
+  "primary_category": "astro-ph.HE",
+  "cited_arxiv": [],
+  "threads": "Сто лет назад радиоинженеры придумали приём, чтобы выуживать сигнал из шума. Сегодня тот же трюк сжимает минутные «чирики» нейтронных звёзд до полутора секунд. Нейросеть вгрызается в эти сжатые всплески и находит слияния быстрее, чем человек успевает моргнуть. Так мы приближаемся к тому, чтобы видеть гравитационное небо в реальном времени — словно вселенная обретает голос.",
+  "abstract": {
+    "ru": {
+      "popular": "Поиск сигналов от слияний нейтронных звезд в данных гравитационных детекторов обычно требует больших вычислительных ресурсов: метод согласованной фильтрации перебирает миллионы шаблонов на тысячах процессоров. Нейросеть Aframe, обученная на черных дырах, была доработана для нейтронных звезд с помощью гетеродинирования (сдвига частоты), что позволило использовать ту же архитектуру. Чувствительность модели сравнима с традиционными методами, но для работы в реальном времени достаточно одной видеокарты. Алгоритм как опытный музыкант: слышит нужную ноту даже в какофонии, снижая вычислительные затраты на порядки.",
+      "simple": "Ученые научили нейросеть быстро находить в данных гравитационных обсерваторий сигналы от слияний нейтронных звезд. Раньше для этого требовались тысячи процессоров, а теперь хватает одной видеокарты. Такой подход не уступает по точности традиционным методам и открывает путь к оперативному обнаружению этих редких событий. Представьте: космос говорит с нами на языке гравитации, а мы учимся слышать его всё четче.",
+      "advanced": "Гравитационно-волновая астрономия обогатилась многоканальными наблюдениями после слияния нейтронных звезд GW170817, однако поиск подобных событий в реальном времени вычислительно затратен. Представлен алгоритм Aframe на основе нейросетей, впервые примененный для детектирования бинарных черных дыр в наблюдательном сеансе O4. Работа демонстрирует расширение метода на слияния нейтронных звезд: для учета большей длительности сигналов используется гетеродинирование данных, после чего исходная архитектура сети эффективно выделяет события. Чувствительность нового подхода сопоставима с классическими конвейерами согласованной фильтрации, но требует только один неспециализированный графический процессор для онлайн-обработки. Внедрение инструментов «инференс как услуга» масштабирует офлайн-анализ на распределенных GPU-ресурсах. Таким образом, Aframe обеспечивает не только оперативный, но и ресурсоэффективный анализ как потоковых, так и архивных данных."
+    },
+    "en": {
+      "popular": "Searching for signals from neutron star mergers in gravitational wave detector data usually demands massive computing power: matched filtering sweeps through millions of templates using thousands of processors. The neural network Aframe, originally trained on black holes, was adapted for neutron stars using a technique called heterodyning (shifting the frequency), allowing the same architecture to be reused. Its sensitivity rivals traditional methods, yet real-time operation requires just a single GPU. The algorithm is like a seasoned musician: it picks out the right note even in a cacophony, slashing computational costs by orders of magnitude.",
+      "simple": "Scientists have trained a neural network to rapidly spot signals from neutron star collisions in gravitational wave observatory data. What used to take thousands of processors now runs on a single graphics card. This approach matches the accuracy of conventional methods and paves the way for real-time detection of these rare events. Imagine: the cosmos speaks to us in the language of gravity, and we are learning to hear it ever more clearly.",
+      "advanced": "Gravitational-wave astronomy gained multi-messenger richness after the neutron star merger GW170817, yet real-time detection of similar events remains computationally expensive. We present the neural network–based algorithm Aframe, first deployed for binary black hole detection during the O4 observing run. This work extends the method to neutron star mergers: to handle their longer-duration signals, we apply heterodyning to the data, after which the original network architecture efficiently identifies events. The sensitivity of this novel approach is on par with classic matched-filter pipelines while requiring only a single off-the-shelf GPU for online processing. By adopting inference-as-a-service tools, offline analysis can be scaled across distributed GPU resources. Thus, Aframe delivers not only prompt but also resource-efficient analysis for both streaming and archival data."
+    },
+    "es": {
+      "popular": "Buscar señales de fusiones de estrellas de neutrones en los datos de detectores gravitacionales normalmente requiere grandes recursos computacionales: el método de filtrado adaptado prueba millones de plantillas en miles de procesadores. La red neuronal Aframe, entrenada originalmente con agujeros negros, se adaptó para estrellas de neutrones mediante heterodinación (desplazamiento de frecuencia), lo que permitió usar la misma arquitectura. La sensibilidad del modelo es comparable a la de los métodos tradicionales, pero para funcionar en tiempo real basta con una sola tarjeta gráfica. El algoritmo es como un músico experimentado: oye la nota correcta incluso en medio de la cacofonía, reduciendo los costes computacionales en órdenes de magnitud.",
+      "simple": "Los científicos han enseñado a una red neuronal a encontrar rápidamente en los datos de los observatorios gravitacionales las señales de fusiones de estrellas de neutrones. Antes se necesitaban miles de procesadores, pero ahora basta con una sola tarjeta gráfica. Este enfoque no tiene nada que envidiar en precisión a los métodos tradicionales y abre el camino para detectar en tiempo real estos eventos tan raros. Imagínate: el cosmos nos habla en el lenguaje de la gravedad, y nosotros aprendemos a oírlo cada vez con más claridad.",
+      "advanced": "La astronomía de ondas gravitacionales se enriqueció con observaciones multicanal tras la fusión de estrellas de neutrones GW170817, pero la búsqueda de estos eventos en tiempo real es computacionalmente costosa. Se presenta el algoritmo Aframe, basado en redes neuronales, que fue usado por primera vez para detectar agujeros negros binarios en la campaña de observación O4. Este trabajo muestra cómo ampliar el método a fusiones de estrellas de neutrones: para tener en cuenta la mayor duración de las señales se aplica heterodinación de los datos, tras lo cual la arquitectura original de la red identifica eficazmente los eventos. La sensibilidad del nuevo enfoque es comparable a la de las cadenas clásicas de filtrado adaptado, pero solo necesita una única GPU no especializada para el procesamiento en línea. La introducción de herramientas de «inferencia como servicio» permite escalar el análisis fuera de línea en recursos GPU distribuidos. Así, Aframe no solo permite un análisis rápido, sino también eficiente en recursos, tanto para datos en tiempo real como para archivos históricos."
+    }
+  },
+  "thumbs": 0,
+  "refined": false,
+  "popular": {
+    "ru": {
+      "title": "Космическое радио: как нейросеть ловит шёпот нейтронных звёзд",
+      "oneliner": "Aframe — первый нейросетевой детектор, сравнявшийся по чувствительности с лучшими классическими методами для двойных нейтронных звёзд.",
+      "description": "Алгоритм Aframe, ранее отточенный на слияниях чёрных дыр, научился за доли секунды выуживать из шума гравитационных антенн сигналы двойных нейтронных звёзд. Благодаря приёму из арсенала радиоинженеров — гетеродинированию — минутные «чирики» сжимаются до полутора секунд, что открывает путь молниеносным оповещениям астрономов. Испытания на архивных данных LIGO-Virgo подтвердили: чувствительность нейросети не уступает классическим пайплайнам, а задержка — всего 4,7 секунды. Этот прорыв означает, что машинный интеллект готов к полноправному дежурству на передовой гравитационно-волновой астрономии.",
+      "text": "Вселенная говорит на языке [tag:gravitational_waves]гравитационных волн[/tag] — дрожи самого пространства-времени. Когда две [tag:neutron_star]нейтронные звезды[/tag], эти сверхплотные остатки давно отгремевших [tag:supernova]сверхновых[/tag], сливаются в финальном танце, они испускают протяжный, нарастающий по частоте «чирик». Сами нейтронные звёзды, предсказанные [scientist:Fritz Zwicky]Фрицем Цвикки[/scientist], иногда заявляют о себе как [tag:pulsar]пульсары[/tag] — мерцающие радиомаяки, обнаруженные [scientist:Jocelyn Bell Burnell]Джоселин Белл[/scientist]. Поймать этот шёпот в грохоте детекторов LIGO и Virgo, созданных усилиями поколений учёных, включая [scientist:Rainer Weiss]Райнера Вайсса[/scientist], — задача, десятилетиями решавшаяся изощрёнными математическими фильтрами. Но у классики есть ахиллесова пята: скорость. Пока алгоритмы просчитывают согласование с шаблонами, драгоценные секунды утекают, а ведь каждая из них может стоить потери электромагнитного послесвечения — вспышки, которая раскрывает тайны ядерной материи, подчиняющейся [tag:standard_model]Стандартной модели[/tag]. Именно здесь на сцену выходит нейросеть Aframe, вооружённая идеей родом из радиотехники.\n\n[callout]Сто лет назад радиоинженеры придумали приём, чтобы выуживать сигнал из шума. Сегодня тот же трюк сжимает минутные «чирики» нейтронных звёзд до полутора секунд.[/callout]\n\nКлюч к быстродействию — гетеродинирование, метод, знакомый любому, кто слушал FM-радио. Подобно тому, как радиоприёмник смешивает входящий сигнал с частотой гетеродина, чтобы выделить нужную станцию, Aframe «очищает» данные детекторов от быстрых осцилляций, настраиваясь на предполагаемую чирп-массу системы. Эта величина, \\(\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}\\), дирижирует всем ходом слияния: от неё зависит, как быстро растёт частота. Сотня таких «радиоканалов» одновременно прочёсывает шум, и в момент слияния энергия вспыхивает в узком окне. Остаточная свёрточная сеть анализирует всего полуторасекундный отрезок — и выносит вердикт. Вся цепочка, от сырых данных до оповещения, укладывается в 4,7 секунды, что сравнимо со временем, за которое [tag:speed_of_light]свет[/tag] пробегает полтора миллиона километров. А благодаря конечности [tag:speed_of_light]скорости света[/tag] задержка сигнала между разнесёнными детекторами позволяет вычислить положение источника на небе.\n\n[callout]Техника гетеродинирования была изобретена для радиоприёмников более ста лет назад и до сих пор лежит в основе Bluetooth и Wi-Fi. Теперь она помогает слушать рождение чёрных дыр.[/callout]\n\nРезультаты ошеломляют: на независимых тестах Aframe обнаружил 671 сигнал при том же уровне ложных тревог, что и у традиционного пайплайна, нашедшего 528. Для канонической пары нейтронных звёзд по 1,4 солнечных массы чувствительный объём вырос до 120 мегапарсек, а для более массивных систем нейросеть и вовсе обошла классику. И всё это — без подгонок под конкретный шум детектора, без упрощающих предположений о стационарности. Модель, обученная на реальных данных, сохраняет нюх месяцами, не требуя перенастройки. Так машинное обучение перестаёт быть игрушкой на задворках гравитационной астрономии и становится полноправным участником охоты за сокровищами неба.\n\nЭта работа — не просто технический подвиг. Она взламывает бутылочное горлышко многоканальной астрономии. Когда нейросеть за 5 секунд выдаёт координаты слияния, телескопы успевают навестись и поймать килоновую — космический тигель, где рождаются золото и платина. А значит, мы приближаемся к разгадке уравнения состояния ядерной материи при плотностях, недостижимых в лабораториях. В перспективе единый нейросетевой детектор перехватит все типы слияний — от [tag:black_hole]чёрных дыр[/tag] до смешанных систем, а будущие обсерватории, такие как Einstein Telescope, вероятно, положат эти алгоритмы в основу своей чувствительной электроники. Радиоприёмник вселенной, настроенный на шёпот нейтронных звёзд, уже включён — и его динамики обещают звучать всё громче.",
+      "fun_fact": "Техника гетеродинирования, сжимающая гравитационные сигналы, была изобретена для радиоприёмников более ста лет назад и до сих пор лежит в основе Bluetooth и Wi-Fi.",
+      "scifi": "В романе «Контакт» Карла Сагана инопланетный сигнал обнаруживают после долгих проверок. Наши нейросети, «вслушивающиеся» в шум пространства-времени в поисках слабых чириков, напоминают это сочетание рутины и чуда.",
+      "threads": "Сто лет назад радиоинженеры придумали приём, чтобы выуживать сигнал из шума. Сегодня тот же трюк сжимает минутные «чирики» нейтронных звёзд до полутора секунд. Нейросеть вгрызается в эти сжатые всплески и находит слияния быстрее, чем человек успевает моргнуть. Так мы приближаемся к тому, чтобы видеть гравитационное небо в реальном времени — словно вселенная обретает голос.",
+      "formulas": [
+        {
+          "description": "Чирп-масса — главный параметр, определяющий рост частоты гравитационного сигнала.",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "чирп-масса, m1 и m2 — массы компонентов"
+        }
+      ],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    },
+    "en": {
+      "title": "Cosmic Radio: How a Neural Network Catches the Whisper of Neutron Stars",
+      "oneliner": "Aframe is the first neural network detector to match the sensitivity of the best classical methods for binary neutron stars.",
+      "description": "The Aframe algorithm, previously honed on black hole mergers, now teases out signals from binary neutron star mergers from the noise of gravitational wave detectors in fractions of a second. Thanks to a trick from the radio engineer's toolbox—heterodyning—minute-long 'chirps' are compressed to just one and a half seconds, paving the way for lightning-fast astronomer alerts. Tests on archival LIGO-Virgo data confirmed: the neural network's sensitivity rivals classical pipelines, and the latency is just 4.7 seconds. This breakthrough means machine intelligence is ready for full-time duty on the front lines of gravitational-wave astronomy.",
+      "text": "The universe speaks in the language of [tag:gravitational_waves]gravitational waves[/tag]—ripples in the fabric of spacetime itself. When two [tag:neutron_star]neutron stars[/tag], the ultradense remnants of long-gone [tag:supernova]supernovae[/tag], merge in a final dance, they emit a long, frequency-rising 'chirp.' Neutron stars, first predicted by [scientist:Fritz Zwicky]Fritz Zwicky[/scientist], sometimes reveal themselves as [tag:pulsar]pulsars[/tag]—blinking radio beacons, discovered by [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. Catching this whisper amid the roar of LIGO and Virgo detectors, built through the efforts of generations of scientists including [scientist:Rainer Weiss]Rainer Weiss[/scientist], is a task that for decades relied on sophisticated mathematical filters. But classical methods have an Achilles' heel: speed. While algorithms compute template matches, precious seconds slip away—each one potentially costing the loss of the electromagnetic afterglow, a flash that reveals the secrets of nuclear matter governed by the [tag:standard_model]Standard Model[/tag]. This is where the Aframe neural network steps in, armed with a concept borrowed from radio engineering.\n\n[callout]A century ago, radio engineers devised a technique to fish signals out of noise. Today, the same trick compresses minute-long neutron star 'chirps' to just one and a half seconds.[/callout]\n\nThe key to speed is heterodyning, a method familiar to anyone who has listened to FM radio. Just as a radio receiver mixes an incoming signal with a local oscillator frequency to isolate a desired station, Aframe 'cleans' detector data of fast oscillations by tuning to the system's expected chirp mass. This quantity, \\(\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}\\), conducts the entire merger: it determines how quickly the frequency rises. A hundred such 'radio channels' simultaneously comb through the noise, and at the moment of merger the energy flares in a narrow window. A residual convolutional network analyzes just a one-and-a-half-second snippet—and delivers a verdict. The entire chain, from raw data to alert, fits within 4.7 seconds, comparable to the time it takes [tag:speed_of_light]light[/tag] to travel one and a half million kilometers. And thanks to the finite [tag:speed_of_light]speed of light[/tag], the signal delay between separated detectors allows pinpointing the source's position in the sky.\n\n[callout]The heterodyning technique was invented for radio receivers over a hundred years ago and still underpins Bluetooth and Wi-Fi. Now it helps us listen to the birth of black holes.[/callout]\n\nResults are staggering: in independent tests, Aframe detected 671 signals at the same false-alarm rate as the traditional pipeline, which found 528. For a canonical pair of 1.4-solar-mass neutron stars, the sensitive volume increased to 120 megaparsecs, and for more massive systems the neural network outright outperformed classical methods. And all this—without tuning to specific detector noise, without simplifying assumptions about stationarity. A model trained on real data retains its knack for months, requiring no retuning. Thus machine learning ceases to be a toy on the sidelines of gravitational astronomy and becomes a full-fledged participant in the hunt for celestial treasures.\n\nThis work is more than a technical feat. It cracks open the bottleneck of multimessenger astronomy. When the neural network outputs merger coordinates within 5 seconds, telescopes can slew in time to catch a kilonova—a cosmic crucible where gold and platinum are forged. That brings us closer to solving the equation of state of nuclear matter at densities unattainable in labs. In the future, a unified neural network detector will catch all types of mergers—from [tag:black_hole]black holes[/tag] to mixed systems—and future observatories like Einstein Telescope will likely embed such algorithms into their sensitive electronics. The universe's radio receiver, tuned to the whisper of neutron stars, is already turned on—and its speakers promise to sound ever louder.",
+      "fun_fact": "The heterodyning technique, which compresses gravitational signals, was invented for radio receivers over a hundred years ago and still underpins Bluetooth and Wi-Fi.",
+      "scifi": "In Carl Sagan's novel 'Contact,' an alien signal is detected after lengthy checks. Our neural networks, 'listening' to the noise of spacetime for faint chirps, echo that blend of routine and miracle.",
+      "threads": "A century ago, radio engineers devised a technique to fish signals out of noise. Today, the same trick compresses minute-long neutron star 'chirps' to one and a half seconds. The neural network bites into these compressed bursts and finds mergers faster than the blink of an eye. We're getting closer to seeing the gravitational sky in real time—as if the universe gains a voice.",
+      "formulas": [
+        {
+          "description": "Chirp mass—the main parameter that determines the frequency growth of a gravitational signal.",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "chirp mass, m1 and m2 are the component masses"
+        }
+      ],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    },
+    "es": {
+      "title": "Radio cósmico: cómo una red neuronal capta el susurro de las estrellas de neutrones",
+      "oneliner": "Aframe es el primer detector neuronal que iguala la sensibilidad de los mejores métodos clásicos para estrellas de neutrones binarias.",
+      "description": "El algoritmo Aframe, previamente perfeccionado en fusiones de agujeros negros, ha aprendido a extraer en fracciones de segundo señales de estrellas de neutrones binarias del ruido de las antenas gravitacionales. Gracias a una técnica del arsenal de los ingenieros de radio —la heterodinación—, los \"chirridos\" de minutos se comprimen a medio segundo, abriendo paso a alertas ultrarrápidas para los astrónomos. Las pruebas con datos de archivo de LIGO-Virgo confirmaron que la sensibilidad de la red neuronal no es inferior a los pipelines clásicos, con un retardo de apenas 4,7 segundos. Este avance significa que la inteligencia artificial está lista para asumir plenamente la guardia en la vanguardia de la astronomía de ondas gravitacionales.",
+      "text": "El universo habla el lenguaje de las [tag:gravitational_waves]ondas gravitacionales[/tag] — vibraciones del propio espacio-tiempo. Cuando dos [tag:neutron_star]estrellas de neutrones[/tag], esos remanentes superdensos de [tag:supernova]supernovas[/tag] que estallaron hace eones, se funden en una danza final, emiten un prolongado y creciente \"chirrido\". Las propias estrellas de neutrones, predichas por [scientist:Fritz Zwicky]Fritz Zwicky[/scientist], a veces se manifiestan como [tag:pulsar]púlsares[/tag] — balizas de radio titilantes descubiertas por [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. Captar este susurro en medio del estruendo de los detectores LIGO y Virgo, construidos gracias a generaciones de científicos, incluido [scientist:Rainer Weiss]Rainer Weiss[/scientist], es una tarea que durante décadas se resolvió con sofisticados filtros matemáticos. Pero los métodos clásicos tienen un talón de Aquiles: la velocidad. Mientras los algoritmos calculan la coincidencia con plantillas, se pierden segundos preciosos, y cada uno de ellos puede costar la pérdida de la luminiscencia electromagnética — ese destello que revela los secretos de la materia nuclear, regida por el [tag:standard_model]Modelo Estándar[/tag]. Es aquí donde entra en escena la red neuronal Aframe, armada con una idea procedente de la ingeniería de radio.\n\n[callout]Hace cien años, los ingenieros de radio inventaron un truco para extraer la señal del ruido. Hoy ese mismo truco comprime los \"chirridos\" de minutos de las estrellas de neutrones a apenas un segundo y medio.[/callout]\n\nLa clave de la rapidez es la heterodinación, un método familiar para cualquiera que haya escuchado la radio FM. Del mismo modo que un receptor de radio mezcla la señal entrante con una frecuencia local para aislar la emisora deseada, Aframe \"limpia\" los datos de los detectores de oscilaciones rápidas, sintonizando la masa de chirrido estimada del sistema. Esta magnitud, \\(\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}\\), dirige toda la fusión: de ella depende la rapidez con que aumenta la frecuencia. Un centenar de estos \"radiocanales\" peinan el ruido simultáneamente, y en el momento de la fusión la energía destella en una ventana estrecha. Una red convolucional residual analiza un segmento de apenas un segundo y medio — y emite su veredicto. Toda la cadena, desde los datos brutos hasta la alerta, se completa en 4,7 segundos, comparable al tiempo que tarda la [tag:speed_of_light]luz[/tag] en recorrer un millón y medio de kilómetros. Y gracias a la finitud de la [tag:speed_of_light]velocidad de la luz[/tag], el retardo de la señal entre detectores distantes permite calcular la posición de la fuente en el cielo.\n\n[callout]La técnica de heterodinación se inventó para receptores de radio hace más de cien años y aún es la base del Bluetooth y el Wi‑Fi. Ahora ayuda a escuchar el nacimiento de agujeros negros.[/callout]\n\nLos resultados son asombrosos: en pruebas independientes, Aframe detectó 671 señales con el mismo nivel de falsas alarmas que el pipeline tradicional, que encontró 528. Para un par canónico de estrellas de neutrones de 1,4 masas solares, el volumen sensible aumentó a 120 megapársecs, y para sistemas más masivos la red neuronal superó por completo a los métodos clásicos. Y todo ello sin ajustes al ruido específico del detector, sin suposiciones simplificadoras sobre la estacionariedad. El modelo, entrenado con datos reales, mantiene su olfato durante meses sin necesidad de reconfiguración. Así, el aprendizaje automático deja de ser un juguete en los márgenes de la astronomía gravitacional y se convierte en un participante pleno en la búsqueda de los tesoros del cielo.\n\nEste trabajo no es solo una proeza técnica. Rompe el cuello de botella de la astronomía multicanal. Cuando la red neuronal proporciona en 5 segundos las coordenadas de la fusión, los telescopios pueden apuntar a tiempo y captar la kilonova: el crisol cósmico donde nacen el oro y el platino. Esto significa que nos acercamos a desvelar la ecuación de estado de la materia nuclear a densidades inalcanzables en laboratorios. En el futuro, un detector neuronal unificado abarcará todos los tipos de fusiones, desde [tag:black_hole]agujeros negros[/tag] hasta sistemas mixtos, y observatorios venideros como el Einstein Telescope probablemente integrarán estos algoritmos en su electrónica sensible. El radiorreceptor del universo, sintonizado con el susurro de las estrellas de neutrones, ya está encendido, y sus altavoces prometen sonar cada vez más fuerte.",
+      "fun_fact": "La técnica de heterodinación, que comprime las señales gravitacionales, fue inventada para receptores de radio hace más de cien años y aún es la base del Bluetooth y el Wi‑Fi.",
+      "scifi": "En la novela \"Contacto\" de Carl Sagan, una señal extraterrestre se detecta tras largas comprobaciones. Nuestras redes neuronales, que \"escuchan\" el ruido del espacio-tiempo en busca de débiles chirridos, recuerdan esa mezcla de rutina y milagro.",
+      "threads": "Hace cien años, los ingenieros de radio inventaron un truco para extraer la señal del ruido. Hoy ese mismo truco comprime los \"chirridos\" de minutos de las estrellas de neutrones a apenas un segundo y medio. La red neuronal muerde estos estallidos comprimidos y encuentra fusiones más rápido de lo que tardamos en parpadear. Así nos acercamos a ver el cielo gravitacional en tiempo real, como si el universo cobrara voz.",
+      "formulas": [
+        {
+          "description": "La masa de chirrido es el parámetro principal que determina el aumento de frecuencia de la señal gravitacional.",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "masa de chirrido, m1 y m2 son las masas de los componentes"
+        }
+      ],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Нейросеть догнала классические методы в поиске слияний нейтронных звёзд",
+      "oneliner": "Aframe — нейросеть, которая находит слияния нейтронных звёзд в данных гравитационных антенн не хуже традиционных алгоритмов, но за считанные секунды.",
+      "description": "Учёные обучили нейросеть Aframe быстро обнаруживать гравитационные волны от слияний нейтронных звёзд. Раньше такие сигналы искали сложными математическими методами, требующими много времени. Новая нейросеть работает почти мгновенно и находит столько же событий, сколько лучшие традиционные программы. Это важно, чтобы сразу после обнаружения волны навести телескопы на нужный участок неба и увидеть вспышку света.",
+      "text": "[tag:neutron_star]Нейтронные звёзды[/tag] — это сверхплотные остатки взорвавшихся [tag:supernova]сверхновых[/tag], предсказанные [scientist:Fritz Zwicky]Фрицем Цвикки[/scientist]. Их быстро вращающиеся разновидности — [tag:pulsar]пульсары[/tag] — открыла [scientist:Jocelyn Bell Burnell]Джоселин Белл[/scientist]. Когда две такие звезды сближаются и сливаются, рождаются [tag:gravitational_waves]гравитационные волны[/tag] — рябь самого пространства-времени. Эти события не только колеблют ткань космоса, но и выбрасывают тяжёлые элементы вроде золота и платины, а также дают вспышки света, которые могут поймать телескопы. Проблема в том, чтобы вовремя заметить слабый сигнал в шуме детекторов — как услышать знакомую мелодию в гудящей толпе.\n\nРаньше поиск вёлся «в лоб»: заранее просчитывали тысячи возможных форм сигнала и непрерывно сравнивали с показаниями датчиков — словно перебирали колоду карт в поисках нужной. Это надёжно, но медленно. Нейросеть Aframe действует иначе. Длинный «чирикающий» сигнал сначала сжимают с помощью гетеродинирования — приёма, похожего на настройку старого радиоприёмника: убирают несущую частоту и оставляют чистый, медленный звук. Остаётся отрезок длиной всего полторы секунды, и нейросеть мгновенно говорит, есть ли в нём слияние.\n[callout]Этот трюк пришёл из радиофизики и сегодня работает в каждом Bluetooth-устройстве и Wi-Fi-роутере.[/callout]\n\nИспытания на данных гравитационных обсерваторий LIGO, созданных при участии [scientist:Rainer Weiss]Райнера Вайсса[/scientist], показали: Aframe находит слияния [tag:neutron_star]нейтронных звёзд[/tag] не хуже, а для более тяжёлых систем даже лучше классических алгоритмов. Оповещение о событии уходит астрономам меньше чем через пять секунд. Это даёт реальный шанс успеть навести телескопы и увидеть свет от космического катаклизма, а заодно заглянуть в недра звёзд, где материя сжата до немыслимых плотностей и подчиняется [tag:standard_model]Стандартной модели[/tag] физики на грани возможного.\n[callout]Сигналы [tag:gravitational_waves]гравитационных волн[/tag] летят к нам со [tag:speed_of_light]скоростью света[/tag], и крошечная разница во времени их прихода на разные детекторы позволяет понять, откуда они пришли. Чем быстрее мы это вычислим, тем точнее наведутся телескопы.[/callout]\n\nВ будущем такие нейросети смогут искать любые слияния — и с [tag:black_hole]чёрными дырами[/tag], и смешанные пары. Это сделает многоканальную астрономию по-настоящему оперативной.",
+      "fun_fact": "Приём гетеродинирования, позволивший сжать сигналы для нейросети, был придуман для радиоприёмников больше века назад и сегодня лежит в основе Wi-Fi и Bluetooth.",
+      "scifi": "В романе «Контакт» Карла Сагана инопланетный сигнал ищут долгие месяцы — современные нейросети «слышат» космические слияния почти мгновенно.",
+      "formulas": [],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    },
+    "en": {
+      "title": "Neural network catches up with classical methods in the search for neutron star mergers",
+      "oneliner": "Aframe is a neural network that finds neutron star mergers in gravitational wave detector data as well as traditional algorithms, but in a matter of seconds.",
+      "description": "Scientists trained the Aframe neural network to quickly detect gravitational waves from neutron star mergers. Previously, such signals were searched for using complex mathematical methods that took a lot of time. The new neural network works almost instantly and finds as many events as the best traditional programs. This is important so that immediately after detecting a wave, telescopes can be pointed at the right patch of sky to see the flash of light.",
+      "text": "[tag:neutron_star]Neutron stars[/tag] are the super-dense remnants of exploded [tag:supernova]supernovae[/tag], predicted by [scientist:Fritz Zwicky]Fritz Zwicky[/scientist]. Their rapidly spinning varieties — [tag:pulsar]pulsars[/tag] — were discovered by [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. When two such stars spiral together and merge, they create [tag:gravitational_waves]gravitational waves[/tag] — ripples in the fabric of spacetime. These events not only shake the cosmos but also spew out heavy elements like gold and platinum, and produce flashes of light that telescopes can catch. The challenge is to spot the faint signal amid detector noise — like picking out a familiar tune in a noisy crowd.\n\nPreviously, the search was done \"head-on\": scientists pre-calculated thousands of possible signal shapes and continuously compared them with sensor readings — akin to riffling through a deck of cards looking for a specific one. It’s reliable, but slow. The Aframe neural network does things differently. The long \"chirping\" signal is first compressed using heterodyning — a trick similar to tuning an old radio: you strip away the carrier frequency and leave just the pure, slow sound. That leaves a snippet only a second and a half long, and the neural network instantly says whether it contains a merger.\n[callout]This trick came from radio physics and today works inside every Bluetooth device and Wi-Fi router.[/callout]\n\nTests on data from the LIGO gravitational-wave observatories, built with the involvement of [scientist:Rainer Weiss]Rainer Weiss[/scientist], showed that Aframe finds [tag:neutron_star]neutron star[/tag] mergers just as well, and for heavier systems even better than classical algorithms. An alert about the event reaches astronomers in less than five seconds. That gives a real chance to slew telescopes and see the light from a cosmic cataclysm, while also peering into the hearts of stars where matter is squeezed to unimaginable densities and follows the [tag:standard_model]Standard Model[/tag] of physics at its limits.\n[callout]Signals of [tag:gravitational_waves]gravitational waves[/tag] travel to us at the [tag:speed_of_light]speed of light[/tag], and the tiny difference in their arrival times at different detectors lets us figure out where they came from. The faster we calculate that, the more accurately telescopes can be aimed.[/callout]\n\nIn the future, such neural networks could search for any mergers — with [tag:black_hole]black holes[/tag], and mixed pairs. This will make multi-messenger astronomy truly real-time.",
+      "fun_fact": "The heterodyning method, which made it possible to compress signals for the neural network, was invented for radio receivers over a century ago and today underpins Wi-Fi and Bluetooth.",
+      "scifi": "In Carl Sagan's novel 'Contact,' an alien signal is searched for over many months — modern neural networks 'hear' cosmic mergers almost instantly.",
+      "formulas": [],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    },
+    "es": {
+      "title": "La red neuronal alcanza a los métodos clásicos en la búsqueda de fusiones de estrellas de neutrones",
+      "oneliner": "Aframe es una red neuronal que encuentra fusiones de estrellas de neutrones en los datos de las antenas gravitacionales tan bien como los algoritmos tradicionales, pero en cuestión de segundos.",
+      "description": "Científicos entrenaron la red neuronal Aframe para detectar rápidamente ondas gravitacionales de fusiones de estrellas de neutrones. Antes, estas señales se buscaban con métodos matemáticos complejos que requerían mucho tiempo. La nueva red neuronal funciona casi instantáneamente y encuentra tantos eventos como los mejores programas tradicionales. Esto es importante para poder apuntar los telescopios a la región correcta del cielo inmediatamente después de detectar la onda y ver el destello de luz.",
+      "text": "[tag:neutron_star]Las estrellas de neutrones[/tag] son los restos superdensos de [tag:supernova]supernovas[/tag] que explotaron, predichas por [scientist:Fritz Zwicky]Fritz Zwicky[/scientist]. Sus variedades de rápida rotación — [tag:pulsar]púlsares[/tag] — fueron descubiertas por [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. Cuando dos de estas estrellas se acercan y se fusionan, nacen [tag:gravitational_waves]ondas gravitacionales[/tag] — ondulaciones en el propio espacio-tiempo. Estos eventos no solo hacen vibrar el tejido del cosmos, sino que también expulsan elementos pesados como oro y platino, y producen destellos de luz que los telescopios pueden captar. El desafío es detectar a tiempo la débil señal en medio del ruido de los detectores, como escuchar una melodía conocida en una multitud bulliciosa.\n\nAntes, la búsqueda se hacía «a lo bruto»: se calculaban de antemano miles de formas posibles de la señal y se comparaban continuamente con las lecturas de los sensores, como si se repasara una baraja de cartas en busca de la correcta. Es fiable, pero lento. La red neuronal Aframe actúa de otra manera. La larga señal «chirriante» se comprime primero mediante heterodinación, una técnica similar a sintonizar una radio antigua: se elimina la frecuencia portadora y se deja un sonido puro y lento. Queda un segmento de solo un segundo y medio, y la red neuronal dice instantáneamente si hay una fusión en él.\n[callout]Este truco proviene de la radiofísica y hoy funciona en cada dispositivo Bluetooth y enrutador Wi-Fi.[/callout]\n\nLas pruebas con datos de los observatorios gravitacionales LIGO, creados con la participación de [scientist:Rainer Weiss]Rainer Weiss[/scientist], mostraron: Aframe encuentra fusiones de [tag:neutron_star]estrellas de neutrones[/tag] igual de bien, y para sistemas más pesados incluso mejor que los algoritmos clásicos. La alerta del evento se envía a los astrónomos en menos de cinco segundos. Esto da una oportunidad real de apuntar los telescopios a tiempo y ver la luz de un cataclismo cósmico, así como de asomarse al interior de las estrellas, donde la materia está comprimida a densidades inimaginables y obedece el [tag:standard_model]Modelo Estándar[/tag] de la física en el límite de lo posible.\n[callout]Las señales de [tag:gravitational_waves]ondas gravitacionales[/tag] viajan hacia nosotros a la [tag:speed_of_light]velocidad de la luz[/tag], y la minúscula diferencia en el tiempo de llegada a distintos detectores permite determinar de dónde provienen. Cuanto más rápido lo calculemos, con mayor precisión apuntarán los telescopios.[/callout]\n\nEn el futuro, estas redes neuronales podrán buscar cualquier tipo de fusión: con [tag:black_hole]agujeros negros[/tag], y también pares mixtos. Esto hará que la astronomía multimensajero sea verdaderamente operativa.",
+      "fun_fact": "La técnica de heterodinación, que permitió comprimir las señales para la red neuronal, fue ideada para los receptores de radio hace más de un siglo y hoy es la base del Wi-Fi y Bluetooth.",
+      "scifi": "En la novela 'Contacto' de Carl Sagan, se busca una señal extraterrestre durante largos meses; las redes neuronales modernas 'escuchan' las fusiones cósmicas casi al instante.",
+      "formulas": [],
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Нейросеть Aframe сравнивается с классикой в поиске гравитационных волн от нейтронных звёзд",
+      "oneliner": "Aframe — первый ИИ-поисковик, достигший паритета с согласованным фильтром по чувствительности для двойных нейтронных звёзд.",
+      "description": "Алгоритм Aframe, ранее зарекомендовавший себя на слияниях чёрных дыр, расширен на двойные нейтронные звёзды. Благодаря предобработке гетеродинированием, длинные сигналы сжимаются до секундных отрезков, что позволяет использовать компактную нейросеть. В тестах на архивных данных LIGO-Virgo третьего наблюдательного сезона чувствительный объём Aframe сопоставим с лучшими традиционными пайплайнами, а задержка выдачи оповещения составляет менее 5 секунд. Это открывает дорогу к полностью автоматизированным нейросетевым поискам в гравитационно-волновой астрономии.",
+      "context": "Слияния нейтронных звёзд — уникальные космические лаборатории. Помимо [tag:gravitational_waves]гравитационных волн[/tag], они рождают вспышки электромагнитного излучения, позволяя заглянуть в недра сверхплотной материи, описываемой [tag:standard_model]Стандартной моделью[/tag]. Такие системы появляются после взрывов [tag:supernova]сверхновых[/tag], а их быстро вращающиеся остатки наблюдаются как [tag:pulsar]пульсары[/tag], открытые впервые [scientist:Jocelyn Bell Burnell]Джоселин Белл[/scientist]. Сами [tag:neutron_star]нейтронные звёзды[/tag] были предсказаны [scientist:Fritz Zwicky]Фрицем Цвикки[/scientist] ещё в 1930-х. Чтобы поймать момент слияния, требуются сверхбыстрые алгоритмы анализа данных с интерферометров, подобных созданным благодаря [scientist:Rainer Weiss]Райнеру Вайссу[/scientist]. Нейросети обещают радикальное ускорение, однако длительность сигналов (минуты) была вызовом для стандартных архитектур.",
+      "methods": "Ключевым приёмом стало [tag:gravitational_waves]гетеродинирование[/tag] — метод, заимствованный из радиофизики. Данные с детекторов «очищаются» от быстрых осцилляций с помощью набора опорных фаз, зависящих от чирп-массы системы. Это сжимает энергию сигнала в окрестности слияния, превращая минуты в секунды. Затем из ста каналов отбирается десяток наиболее информативных, и короткий отрезок длительностью 1.5 секунды подаётся на вход остаточной свёрточной нейросети. Архитектура обучена на реальных шумах без упрощающих предположений, что обеспечивает устойчивость к нестационарным помехам. При обработке критична скорость: ведь [tag:speed_of_light]скорость света[/tag] конечна, и задержка сигнала между детекторами помогает определить положение источника на небе.",
+      "results": "Тесты на данных третьего наблюдательного сезона LIGO показали, что для двойных [tag:neutron_star]нейтронных звёзд[/tag] с массами около 1.4–2.0 солнечных масс чувствительный объём Aframe сравним с результатами классических пайплайнов (MBTA, GstLAL, PyCBC), а для более тяжёлых систем даже превосходит их. На независимом срезе данных (Mock Data Challenge) алгоритм обнаружил 671 сигнал при частоте ложных тревог 1/месяц против 528 у одного из традиционных методов. При этом задержка от поступления данных до выдачи оповещения составила всего 4.7 секунды. В сравнении с предыдущими машинно-обучаемыми поисками чувствительная дистанция выросла втрое и достигла 120 мегапарсек для канонической системы 1.4+1.4 солнечных масс.",
+      "implications": "Это означает, что нейросетевые поиски [tag:gravitational_waves]гравитационных волн[/tag] перестали быть лишь полигонными разработками и могут применяться в реальном времени наравне с отлаженными десятилетиями алгоритмами. Особенно важно для редких событий с [tag:neutron_star]нейтронными звёздами[/tag], где каждая минута на счету для наведения телескопов. Кроме того, продемонстрирована долговременная стабильность: модель не требует частого переобучения при изменении шумов детекторов в течение месяцев.",
+      "future_development": "В перспективе подобные методы позволят создать единый нейросетевой поиск для всех типов компактных слияний — от [tag:black_hole]чёрных дыр[/tag] до нейтронных звёзд и смешанных систем. Увеличение длительности анализируемого сегмента обещает поднять чувствительность для лёгких нейтронных звёзд. Не исключено, что будущие обсерватории, такие как Einstein Telescope, будут использовать гибридные схемы.",
+      "impact_on": "Разработка повлияет на все сферы многоканальной астрономии, где критична скорость: от электромагнитных телескопов до нейтринных обсерваторий.",
+      "next_steps": "Ближайшие шаги — оптимизация отбора гетеродинированных каналов и расширение на системы нейтронная звезда–чёрная дыра.",
+      "key_problems_connection": "Эта работа напрямую связана с нерешёнными проблемами: уравнение состояния ядерной материи при экстремальных плотностях, природа коротких гамма-всплесков и происхождение тяжёлых элементов во Вселенной.",
+      "fun_fact": "Техника гетеродинирования, сжимающая гравитационные сигналы, была изобретена для радиоприёмников более ста лет назад и до сих пор лежит в основе Bluetooth и Wi-Fi.",
+      "scifi": "В романе «Контакт» Карла Сагана инопланетный сигнал обнаруживают после долгих проверок. Наши нейросети, «вслушивающиеся» в шум пространства-времени в поисках слабых чириков, напоминают это сочетание рутины и чуда.",
+      "formulas": [
+        {
+          "description": "Чирп-масса — главный параметр, определяющий рост частоты гравитационного сигнала",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "чирп-масса, m1 и m2 — массы компонентов"
+        }
+      ],
+      "key_numbers": {
+        "Чувствительная дистанция для 1.4+1.4 Msun": "120 Мпк",
+        "Задержка выдачи оповещения": "4.7 с",
+        "Количество гетеродинирующих каналов": "100",
+        "Длительность входного окна нейросети": "1.5 с",
+        "Время обучения на GPU": "96 часов"
+      },
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ],
+      "image_prompt": "Cold moonlight softly illuminates an atmospheric concept art scene: a tilted Dutch angle reveals an intimate and quiet AI neural lattice detecting faint gravitational waves from binary neutron stars, depicted as subtle spacetime ripples in a muted pastel palette, set against a bright airy background of luminous cosmic haze."
+    },
+    "en": {
+      "title": "Aframe AI Matches Classic Sensitivity in Neutron Star Gravitational Wave Search",
+      "oneliner": "Aframe is the first AI search engine to match the sensitivity of matched filters for binary neutron stars.",
+      "description": "The Aframe algorithm, previously proven on black hole mergers, has been extended to binary neutron stars. By preprocessing with heterodyning, long signals are compressed into second-long chunks, enabling the use of a compact neural network. In tests on archival LIGO-Virgo data from the third observing run, Aframe's sensitive volume is comparable to top traditional pipelines, and the alert latency is under 5 seconds. This paves the way for fully automated neural network searches in gravitational-wave astronomy.",
+      "context": "Neutron star mergers are unique cosmic laboratories. In addition to [tag:gravitational_waves]gravitational waves[/tag], they produce electromagnetic flares, offering a glimpse into the interior of ultradense matter described by the [tag:standard_model]Standard Model[/tag]. Such systems emerge after [tag:supernova]supernova[/tag] explosions, and their rapidly spinning remnants are observed as [tag:pulsar]pulsars[/tag], first discovered by [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. The [tag:neutron_star]neutron stars[/tag] themselves were predicted by [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] back in the 1930s. To catch the moment of merger, ultrafast data-analysis algorithms are needed for interferometers like those made possible by [scientist:Rainer Weiss]Rainer Weiss[/scientist]. Neural networks promise dramatic acceleration, but the minutes-long duration of signals has been a challenge for standard architectures.",
+      "methods": "The key technique was [tag:gravitational_waves]heterodyning[/tag] — a method borrowed from radio physics. Data from the detectors are 'cleaned' of rapid oscillations using a bank of reference phases that depend on the system's chirp mass. This compresses the signal energy around the merger, turning minutes into seconds. Then, from a hundred channels, a dozen of the most informative are selected, and a short 1.5-second snippet is fed into a residual convolutional neural network. The architecture is trained on real noise without simplifying assumptions, ensuring robustness against non-stationary glitches. Speed is critical in processing: after all, the [tag:speed_of_light]speed of light[/tag] is finite, and the time delay between detectors helps pinpoint the source's location in the sky.",
+      "results": "Tests on LIGO's third observing run data showed that for binary [tag:neutron_star]neutron stars[/tag] with masses around 1.4–2.0 solar masses, Aframe's sensitive volume is on par with classic pipelines (MBTA, GstLAL, PyCBC), and for heavier systems it even surpasses them. On an independent data slice (Mock Data Challenge), the algorithm detected 671 signals at a false-alarm rate of 1/month, compared to 528 for one traditional method. Meanwhile, the latency from data arrival to alert issuance was just 4.7 seconds. Compared to previous machine-learning searches, the sensitive distance tripled, reaching 120 megaparsecs for a canonical 1.4+1.4 solar-mass system.",
+      "implications": "This means neural network searches for [tag:gravitational_waves]gravitational waves[/tag] are no longer just testbed projects — they can be deployed in real time alongside algorithms refined over decades. This is especially important for rare events with [tag:neutron_star]neutron stars[/tag], where every minute counts for telescope follow-up. Additionally, long-term stability has been demonstrated: the model does not require frequent retraining as detector noise evolves over months.",
+      "future_development": "In the future, such methods could lead to a unified neural network search for all types of compact mergers — from [tag:black_hole]black holes[/tag] to neutron stars and mixed systems. Increasing the length of the analyzed segment promises to boost sensitivity for lightweight neutron stars. Future observatories like the Einstein Telescope might employ hybrid schemes.",
+      "impact_on": "This development will influence all areas of multimessenger astronomy where speed is crucial: from electromagnetic telescopes to neutrino observatories.",
+      "next_steps": "Next steps: optimizing the selection of heterodyned channels and extending to neutron star–black hole systems.",
+      "key_problems_connection": "This work directly connects to unsolved problems: the nuclear equation of state at extreme densities, the nature of short gamma-ray bursts, and the origin of heavy elements in the universe.",
+      "fun_fact": "The heterodyning technique that compresses gravitational signals was invented for radio receivers over a century ago and still underpins Bluetooth and Wi-Fi.",
+      "scifi": "In Carl Sagan's novel 'Contact,' an alien signal is discovered after painstaking checks. Our neural networks, 'listening' to the noise of spacetime for faint chirps, echo that blend of routine and wonder.",
+      "formulas": [
+        {
+          "description": "Chirp mass — the main parameter governing the frequency evolution of a gravitational signal",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "chirp mass, m1 and m2 are the component masses"
+        }
+      ],
+      "key_numbers": {
+        "Sensitive distance for 1.4+1.4 Msun": "120 Mpc",
+        "Alert latency": "4.7 s",
+        "Number of heterodyning channels": "100",
+        "Neural network input window length": "1.5 s",
+        "Training time on GPU": "96 hours"
+      },
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ],
+      "image_prompt": "Cold moonlight softly illuminates an atmospheric concept art scene: a tilted Dutch angle reveals an intimate and quiet AI neural lattice detecting faint gravitational waves from binary neutron stars, depicted as subtle spacetime ripples in a muted pastel palette, set against a bright airy background of luminous cosmic haze."
+    },
+    "es": {
+      "title": "La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrellas de neutrones",
+      "oneliner": "Aframe es el primer buscador de IA que alcanza la paridad con el filtro adaptado en sensibilidad para binarias de estrellas de neutrones.",
+      "description": "El algoritmo Aframe, previamente exitoso en fusiones de agujeros negros, ahora se extiende a binarias de estrellas de neutrones. Gracias al preprocesado por heterodinaje, las largas señales se comprimen en segmentos de segundos, lo que permite usar una red neuronal compacta. En pruebas con datos archivados de la tercera temporada de observación de LIGO-Virgo, el volumen sensible de Aframe es comparable al de los mejores pipelines tradicionales, y el retraso en la emisión de alertas es inferior a 5 segundos. Esto abre el camino a búsquedas completamente automatizadas con redes neuronales en astronomía de ondas gravitacionales.",
+      "context": "Las fusiones de estrellas de neutrones son laboratorios cósmicos únicos. Además de [tag:gravitational_waves]ondas gravitacionales[/tag], generan destellos de radiación electromagnética, lo que permite asomarse al interior de la materia superdensa, descrita por el [tag:standard_model]Modelo Estándar[/tag]. Estos sistemas aparecen tras explosiones de [tag:supernova]supernovas[/tag], y sus remanentes de rápida rotación se observan como [tag:pulsar]púlsares[/tag], descubiertos por primera vez por [scientist:Jocelyn Bell Burnell]Jocelyn Bell Burnell[/scientist]. Las propias [tag:neutron_star]estrellas de neutrones[/tag] fueron predichas por [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] ya en los años 1930. Para capturar el momento de la fusión, se requieren algoritmos ultrarrápidos de análisis de datos de interferómetros, como los creados gracias a [scientist:Rainer Weiss]Rainer Weiss[/scientist]. Las redes neuronales prometen una aceleración radical, pero la duración de las señales (minutos) ha sido un desafío para las arquitecturas estándar.",
+      "methods": "La técnica clave fue el [tag:gravitational_waves]heterodinaje[/tag], un método tomado de la radiofísica. Los datos de los detectores se 'limpian' de oscilaciones rápidas mediante un conjunto de fases de referencia que dependen de la masa de chirp del sistema. Esto comprime la energía de la señal en las cercanías de la fusión, convirtiendo minutos en segundos. Luego, de cien canales se seleccionan una decena de los más informativos, y un segmento corto de 1.5 segundos se introduce en una red neuronal convolucional residual. La arquitectura se entrena con ruido real sin suposiciones simplificadoras, lo que garantiza robustez frente a perturbaciones no estacionarias. La velocidad es crítica en el procesamiento: después de todo, la [tag:speed_of_light]velocidad de la luz[/tag] es finita, y el retardo de la señal entre detectores ayuda a localizar la fuente en el cielo.",
+      "results": "Las pruebas con datos de la tercera temporada de observación de LIGO mostraron que, para binarias de [tag:neutron_star]estrellas de neutrones[/tag] con masas alrededor de 1.4–2.0 masas solares, el volumen sensible de Aframe es comparable al de los pipelines clásicos (MBTA, GstLAL, PyCBC), e incluso los supera para sistemas más pesados. En un corte independiente de datos (Mock Data Challenge), el algoritmo detectó 671 señales con una tasa de falsas alarmas de 1 por mes, frente a 528 de uno de los métodos tradicionales. El retraso desde la llegada de los datos hasta la emisión de la alerta fue de solo 4.7 segundos. En comparación con búsquedas previas basadas en aprendizaje automático, la distancia sensible se triplicó, alcanzando 120 megapársecs para el sistema canónico de 1.4+1.4 masas solares.",
+      "implications": "Esto significa que las búsquedas de [tag:gravitational_waves]ondas gravitacionales[/tag] con redes neuronales han dejado de ser meros desarrollos experimentales y pueden aplicarse en tiempo real a la par de algoritmos refinados durante décadas. Es especialmente importante para eventos raros con [tag:neutron_star]estrellas de neutrones[/tag], donde cada minuto cuenta para apuntar telescopios. Además, se ha demostrado estabilidad a largo plazo: el modelo no requiere reentrenamiento frecuente ante cambios en el ruido de los detectores a lo largo de meses.",
+      "future_development": "En el futuro, estos métodos permitirán crear una búsqueda neuronal unificada para todo tipo de fusiones compactas, desde [tag:black_hole]agujeros negros[/tag] hasta estrellas de neutrones y sistemas mixtos. Aumentar la duración del segmento analizado promete elevar la sensibilidad para estrellas de neutrones ligeras. No se descarta que futuros observatorios, como el Einstein Telescope, utilicen esquemas híbridos.",
+      "impact_on": "El desarrollo impactará en todos los ámbitos de la astronomía multicanal donde la velocidad es crítica: desde telescopios electromagnéticos hasta observatorios de neutrinos.",
+      "next_steps": "Los próximos pasos son optimizar la selección de canales heterodinados y extenderlo a sistemas de estrella de neutrones–agujero negro.",
+      "key_problems_connection": "Este trabajo está directamente relacionado con problemas no resueltos: la ecuación de estado de la materia nuclear a densidades extremas, la naturaleza de los estallidos cortos de rayos gamma y el origen de los elementos pesados en el Universo.",
+      "fun_fact": "La técnica de heterodinaje, que comprime las señales gravitacionales, se inventó para receptores de radio hace más de cien años y sigue siendo la base de Bluetooth y Wi-Fi.",
+      "scifi": "En la novela 'Contacto' de Carl Sagan, una señal extraterrestre se detecta tras largas comprobaciones. Nuestras redes neuronales, 'escuchando' el ruido del espacio-tiempo en busca de débiles chirridos, recuerdan esa mezcla de rutina y maravilla.",
+      "formulas": [
+        {
+          "description": "Masa de chirp: el principal parámetro que determina el aumento de frecuencia de la señal gravitacional",
+          "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+          "meaning": "masa de chirp, m1 y m2 son las masas de los componentes"
+        }
+      ],
+      "key_numbers": {
+        "Distancia sensible para 1.4+1.4 Msun": "120 Mpc",
+        "Retraso en la emisión de alerta": "4.7 s",
+        "Número de canales heterodinados": "100",
+        "Duración de la ventana de entrada de la red": "1.5 s",
+        "Tiempo de entrenamiento en GPU": "96 horas"
+      },
+      "main_tag": "neutron_star",
+      "extra_tags": [
+        "gravitational_waves",
+        "black_hole",
+        "pulsar",
+        "supernova",
+        "speed_of_light",
+        "standard_model"
+      ],
+      "scientists": [
+        "Jocelyn Bell Burnell",
+        "Fritz Zwicky",
+        "Rainer Weiss"
+      ],
+      "image_prompt": "Luz de luna fría ilumina suavemente una escena conceptual atmosférica: un ángulo holandés inclinado revela una íntima y tranquila red neuronal de IA detectando débiles ondas gravitacionales de estrellas de neutrones binarias, representadas como sutiles ondulaciones espacio-temporales en una paleta de colores pastel apagados, sobre un fondo brillante y etéreo de neblina cósmica luminosa."
+    }
+  }
+}

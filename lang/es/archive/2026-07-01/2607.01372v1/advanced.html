@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrellas de neutrones — bridge42worlds</title>
+    <meta name="description" content="El algoritmo Aframe, previamente exitoso en fusiones de agujeros negros, ahora se extiende a binarias de estrellas de neutrones. Gracias al preprocesado por heterodinaje, las largas señales se comprimen en segmentos de segundos, lo que permite usar una red neuronal compacta. En pruebas con datos arc">
+    <meta property="og:title" content="La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrellas de neutrones">
+    <meta property="og:description" content="Aframe es el primer buscador de IA que alcanza la paridad con el filtro adaptado en sensibilidad para binarias de estrellas de neutrones.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-07-01/2607.01372v1/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/archive/2026-07-01/2607.01372v1/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/es/archive/2026-07-01/2607.01372v1/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-07-01/2607.01372v1/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-07-01/2607.01372v1/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2026-07-01/2607.01372v1/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-07-01/2607.01372v1/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrella", "description": "Aframe es el primer buscador de IA que alcanza la paridad con el filtro adaptado en sensibilidad para binarias de estrellas de neutrones.", "inLanguage": "es", "datePublished": "2026-07-01", "url": "https://bridge42worlds.org/lang/es/archive/2026-07-01/2607.01372v1/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-07-01/2607.01372v1/ai.jpg", "author": [{"@type": "Person", "name": "Bhavya Gupta"}, {"@type": "Person", "name": "Deep Chatterjee"}, {"@type": "Person", "name": "William Benoit"}, {"@type": "Person", "name": "Ethan Marx"}, {"@type": "Person", "name": "Christina Reissel"}, {"@type": "Person", "name": "Seiya Tsukamoto"}, {"@type": "Person", "name": "Kyungseop Yoon"}, {"@type": "Person", "name": "Michael W. Coughlin"}, {"@type": "Person", "name": "Philip Harris"}, {"@type": "Person", "name": "Erik Katsavounidis"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.01372v1", "abstract": "La astronomía de ondas gravitacionales se enriqueció con observaciones multicanal tras la fusión de estrellas de neutrones GW170817, pero la búsqueda de estos eventos en tiempo real es computacionalmente costosa. Se presenta el algoritmo Aframe, basado en redes neuronales, que fue usado por primera vez para detectar agujeros negros binarios en la campaña de observación O4. Este trabajo muestra cómo ampliar el método a fusiones de estrellas de neutrones: para tener en cuenta la mayor duración de las señales se aplica heterodinación de los datos, tras lo cual la arquitectura original de la red identifica eficazmente los eventos. La sensibilidad del nuevo enfoque es comparable a la de las cadenas clásicas de filtrado adaptado, pero solo necesita una única GPU no especializada para el procesamiento en línea. La introducción de herramientas de «inferencia como servicio» permite escalar el análisis fuera de línea en recursos GPU distribuidos. Así, Aframe no solo permite un análisis rápido, sino también eficiente en recursos, tanto para datos en tiempo real como para archivos históricos."}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Avanzado</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-07-01/2607.01372v1/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-07-01/2607.01372v1/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/es/archive/2026-07-01/2607.01372v1/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-07-01/2607.01372v1/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
+
+<h1 class="article-title-top">La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrellas de neutrones </h1>
+
+<div class="authors-top"><a href="/lang/ru/authors/Bhavya_Gupta.html" class="text-author-link" data-author="Bhavya Gupta">Bhavya Gupta</a>, <a href="/lang/ru/authors/Deep_Chatterjee.html" class="text-author-link" data-author="Deep Chatterjee">Deep Chatterjee</a>, <a href="/lang/ru/authors/William_Benoit.html" class="text-author-link" data-author="William Benoit">William Benoit</a>, <a href="/lang/ru/authors/Ethan_Marx.html" class="text-author-link" data-author="Ethan Marx">Ethan Marx</a>, <a href="/lang/ru/authors/Christina_Reissel.html" class="text-author-link" data-author="Christina Reissel">Christina Reissel</a>, <a href="/lang/ru/authors/Seiya_Tsukamoto.html" class="text-author-link" data-author="Seiya Tsukamoto">Seiya Tsukamoto</a>, <a href="/lang/ru/authors/Kyungseop_Yoon.html" class="text-author-link" data-author="Kyungseop Yoon">Kyungseop Yoon</a>, <a href="/lang/ru/authors/Michael_W_Coughlin.html" class="text-author-link" data-author="Michael W. Coughlin">Michael W. Coughlin</a>, <a href="/lang/ru/authors/Philip_Harris.html" class="text-author-link" data-author="Philip Harris">Philip Harris</a>, <a href="/lang/ru/authors/Erik_Katsavounidis.html" class="text-author-link" data-author="Erik Katsavounidis">Erik Katsavounidis</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2607.01372v1">2607.01372v1</a> · 2026-07-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 3 min</span> · <span class="cat-badge" data-cat="astro-ph.HE">High Energy</span> <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.AI">Artificial Intelligence</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202607.01372v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li><li class="article-nav-sep"></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "AI-enabled gravitational-waves searches for binary neutron stars at optimal sensitivity"</div>
+        <div class="oneliner">Aframe es el primer buscador de IA que alcanza la paridad con el filtro adaptado en sensibilidad para binarias de estrellas de neutrones.</div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>La astronomía de ondas gravitacionales se enriqueció con observaciones multicanal tras la fusión de estrellas de neutrones GW170817, pero la búsqueda de estos eventos en tiempo real es computacionalmente costosa. Se presenta el algoritmo Aframe, basado en redes neuronales, que fue usado por primera vez para detectar agujeros negros binarios en la campaña de observación O4. Este trabajo muestra cómo ampliar el método a fusiones de estrellas de neutrones: para tener en cuenta la mayor duración de las señales se aplica heterodinación de los datos, tras lo cual la arquitectura original de la red identifica eficazmente los eventos. La sensibilidad del nuevo enfoque es comparable a la de las cadenas clásicas de filtrado adaptado, pero solo necesita una única GPU no especializada para el procesamiento en línea. La introducción de herramientas de «inferencia como servicio» permite escalar el análisis fuera de línea en recursos GPU distribuidos. Así, Aframe no solo permite un análisis rápido, sino también eficiente en recursos, tanto para datos en tiempo real como para archivos históricos.</p></div>
+        <div class="ai-cover"><a href="/lang/ru/archive/2026-07-01/2607.01372v1/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-07-01/2607.01372v1/ai.jpg" alt=""></a></div>
+        <div class="mosaic"></div>
+        <section id="context"><h2>Context</h2><p>Las fusiones de estrellas de neutrones son laboratorios cósmicos únicos. Además de <a href="/lang/es/tags/gravitational_waves.html" class="text-tag" data-tag="gravitational_waves">ondas gravitacionales</a>, generan destellos de radiación electromagnética, lo que permite asomarse al interior de la materia superdensa, descrita por el <a href="/lang/es/tags/standard_model.html" class="text-tag" data-tag="standard_model">Modelo Estándar</a>. Estos sistemas aparecen tras explosiones de <a href="/lang/es/tags/supernova.html" class="text-tag" data-tag="supernova">supernovas</a>, y sus remanentes de rápida rotación se observan como <a href="/lang/es/tags/pulsar.html" class="text-tag" data-tag="pulsar">púlsares</a>, descubiertos por primera vez por <a href="/lang/es/scientists/Jocelyn_Bell_Burnell.html" class="text-scientist" data-scientist="Jocelyn Bell Burnell">Jocelyn Bell Burnell</a>. Las propias <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrellas de neutrones</a> fueron predichas por <a href="/lang/es/scientists/Fritz_Zwicky.html" class="text-scientist" data-scientist="Fritz Zwicky">Fritz Zwicky</a> ya en los años 1930. Para capturar el momento de la fusión, se requieren algoritmos ultrarrápidos de análisis de datos de interferómetros, como los creados gracias a <a href="/lang/es/scientists/Rainer_Weiss.html" class="text-scientist" data-scientist="Rainer Weiss">Rainer Weiss</a>. Las redes neuronales prometen una aceleración radical, pero la duración de las señales (minutos) ha sido un desafío para las arquitecturas estándar.</p></section><section id="methods"><h2>Methods</h2><p>La técnica clave fue el <a href="/lang/es/tags/gravitational_waves.html" class="text-tag" data-tag="gravitational_waves">heterodinaje</a>, un método tomado de la radiofísica. Los datos de los detectores se 'limpian' de oscilaciones rápidas mediante un conjunto de fases de referencia que dependen de la masa de chirp del sistema. Esto comprime la energía de la señal en las cercanías de la fusión, convirtiendo minutos en segundos. Luego, de cien canales se seleccionan una decena de los más informativos, y un segmento corto de 1.5 segundos se introduce en una red neuronal convolucional residual. La arquitectura se entrena con ruido real sin suposiciones simplificadoras, lo que garantiza robustez frente a perturbaciones no estacionarias. La velocidad es crítica en el procesamiento: después de todo, la <a href="/lang/es/tags/speed_of_light.html" class="text-tag" data-tag="speed_of_light">velocidad de la luz</a> es finita, y el retardo de la señal entre detectores ayuda a localizar la fuente en el cielo.</p></section><section id="results"><h2>Results</h2><p>Las pruebas con datos de la tercera temporada de observación de LIGO mostraron que, para binarias de <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrellas de neutrones</a> con masas alrededor de 1.4–2.0 masas solares, el volumen sensible de Aframe es comparable al de los pipelines clásicos (MBTA, GstLAL, PyCBC), e incluso los supera para sistemas más pesados. En un corte independiente de datos (Mock Data Challenge), el algoritmo detectó 671 señales con una tasa de falsas alarmas de 1 por mes, frente a 528 de uno de los métodos tradicionales. El retraso desde la llegada de los datos hasta la emisión de la alerta fue de solo 4.7 segundos. En comparación con búsquedas previas basadas en aprendizaje automático, la distancia sensible se triplicó, alcanzando 120 megapársecs para el sistema canónico de 1.4+1.4 masas solares.</p></section><section id="implications"><h2>Implications</h2><p>Esto significa que las búsquedas de <a href="/lang/es/tags/gravitational_waves.html" class="text-tag" data-tag="gravitational_waves">ondas gravitacionales</a> con redes neuronales han dejado de ser meros desarrollos experimentales y pueden aplicarse en tiempo real a la par de algoritmos refinados durante décadas. Es especialmente importante para eventos raros con <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrellas de neutrones</a>, donde cada minuto cuenta para apuntar telescopios. Además, se ha demostrado estabilidad a largo plazo: el modelo no requiere reentrenamiento frecuente ante cambios en el ruido de los detectores a lo largo de meses.</p></section><section id="future_development"><h2>Future development</h2><p>En el futuro, estos métodos permitirán crear una búsqueda neuronal unificada para todo tipo de fusiones compactas, desde <a href="/lang/es/tags/black_hole.html" class="text-tag" data-tag="black_hole">agujeros negros</a> hasta estrellas de neutrones y sistemas mixtos. Aumentar la duración del segmento analizado promete elevar la sensibilidad para estrellas de neutrones ligeras. No se descarta que futuros observatorios, como el Einstein Telescope, utilicen esquemas híbridos.</p></section><section id="impact_on"><h2>Impact</h2><p>El desarrollo impactará en todos los ámbitos de la astronomía multicanal donde la velocidad es crítica: desde telescopios electromagnéticos hasta observatorios de neutrinos.</p></section><section id="next_steps"><h2>Next steps</h2><p>Los próximos pasos son optimizar la selección de canales heterodinados y extenderlo a sistemas de estrella de neutrones–agujero negro.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>Este trabajo está directamente relacionado con problemas no resueltos: la ecuación de estado de la materia nuclear a densidades extremas, la naturaleza de los estallidos cortos de rayos gamma y el origen de los elementos pesados en el Universo.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 La técnica de heterodinaje, que comprime las señales gravitacionales, se inventó para receptores de radio hace más de cien años y sigue siendo la base de Bluetooth y Wi-Fi.</p><p class="fact fact-scifi">🎬 En la novela 'Contacto' de Carl Sagan, una señal extraterrestre se detecta tras largas comprobaciones. Nuestras redes neuronales, 'escuchando' el ruido del espacio-tiempo en busca de débiles chirridos, recuerdan esa mezcla de rutina y maravilla.</p></div>
+        <div class="formula"><div class="formula-render">\mathcal{M} = \frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}</div><div class="formula-meaning">masa de chirp, m1 y m2 son las masas de los componentes</div></div>
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>Distancia sensible para 1.4+1.4 Msun:</strong> 120 Mpc</li><li><strong>Retraso en la emisión de alerta:</strong> 4.7 s</li><li><strong>Número de canales heterodinados:</strong> 100</li><li><strong>Duración de la ventana de entrada de la red:</strong> 1.5 s</li><li><strong>Tiempo de entrenamiento en GPU:</strong> 96 horas</li></ul></div>
+        <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/es/scientists/Jocelyn_Bell_Burnell.html" class="text-scientist" data-scientist="Jocelyn Bell Burnell">Jocelyn Bell Burnell</a>, <a href="/lang/es/scientists/Fritz_Zwicky.html" class="text-scientist" data-scientist="Fritz Zwicky">Fritz Zwicky</a>, <a href="/lang/es/scientists/Rainer_Weiss.html" class="text-scientist" data-scientist="Rainer Weiss">Rainer Weiss</a></div>
+        <div class="actions" data-article-id="2607.01372v1_es_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.01372v1" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('La red neuronal Aframe se compara con los métodos clásicos en la búsqueda de ondas gravitacionales de estrellas de neutrones','https://bridge42worlds.org/lang/es/archive/2026-07-01/2607.01372v1/index.html')">Share</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.01372v1_es_advanced" data-entity-type="article"><div class="fb-title">How does it read?</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">Tags</div><a href="/lang/es/tags/neutron_star.html" class="side-tag" data-tag="neutron_star">estrella de neutrones</a>
+<a href="/lang/es/tags/gravitational_waves.html" class="side-tag" data-tag="gravitational_waves">ondas gravitacionales</a>
+<a href="/lang/es/tags/black_hole.html" class="side-tag" data-tag="black_hole">agujero negro</a>
+<a href="/lang/es/tags/pulsar.html" class="side-tag" data-tag="pulsar">púlsar</a>
+<a href="/lang/es/tags/supernova.html" class="side-tag" data-tag="supernova">supernova</a>
+<a href="/lang/es/tags/speed_of_light.html" class="side-tag" data-tag="speed_of_light">velocidad de la luz</a>
+<a href="/lang/es/tags/standard_model.html" class="side-tag" data-tag="standard_model">modelo estándar</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/fermidirac_statistics.html" class="side-law" data-law="fermidirac_statistics">estadística de Fermi-Dirac</a><a href="/lang/es/laws/boseeinstein_statistics.html" class="side-law" data-law="boseeinstein_statistics">estadística de Bose-Einstein</a><a href="/lang/es/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">efecto Doppler</a><a href="/lang/es/laws/hawking_radiation.html" class="side-law" data-law="hawking_radiation">radiación de Hawking</a><a href="/lang/es/laws/gravitational_lensing.html" class="side-law" data-law="gravitational_lensing">lente gravitacional</a><a href="/lang/es/laws/principle_of_constancy_of_speed_of_light.html" class="side-law" data-law="principle_of_constancy_of_speed_of_light">principio de constancia de la velocidad de la luz</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2607.01372v1">arXiv:2607.01372v1</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/scroll.js?v=f31547ad85"></script>
+<script src="/js/lightbox.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.01372v1', 'article', 'es');
+    if (false && window.logExpressInterest) logExpressInterest('2607.01372v1', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#численное моделирование — bridge42worlds</title>
+    <meta name="description" content="Численное моделирование заменяет непрерывные дифференциальные уравнения, описывающие физику, на разностные схемы, в которых расчётная область разбивается на дискретную сетку или облако частиц. На каждом временном шаге значения полей (плотность, скорость, температура) обновляются по приближённым формулам, уважающим законы сохранения. Такой подход позволяет изучать нелинейные системы вроде турбулентности или образования галактик, для которых аналитические решения отсутствуют.">
+    <meta property="og:title" content="#численное моделирование — bridge42worlds">
+    <meta property="og:description" content="Численное моделирование заменяет непрерывные дифференциальные уравнения, описывающие физику, на разностные схемы, в которых расчётная область разбивается на дискретную сетку или облако частиц. На каждом временном шаге значения полей (плотность, скорость, температура) обновляются по приближённым формулам, уважающим законы сохранения. Такой подход позволяет изучать нелинейные системы вроде турбулентности или образования галактик, для которых аналитические решения отсутствуют.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/tags/numerical_simulation.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>численное моделирование</h1>
+    <div class="tag-stats">📊 25 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Цифровая вселенная в суперкомпьютере, где законы физики превращаются в пиксели и кадры, предсказывая судьбу галактик и танец элементарных частиц.</p><div class="practical-app"><strong>На практике:</strong> Создание виртуальных прототипов в авиации, прогноз климата, открытие гравитационных волн через сопоставление реальных сигналов с симулированными шаблонами.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Численное моделирование заменяет непрерывные дифференциальные уравнения, описывающие физику, на разностные схемы, в которых расчётная область разбивается на дискретную сетку или облако частиц. На каждом временном шаге значения полей (плотность, скорость, температура) обновляются по приближённым формулам, уважающим законы сохранения. Такой подход позволяет изучать нелинейные системы вроде турбулентности или образования галактик, для которых аналитические решения отсутствуют.</div>
+        <div class="fun-fact">💡 В проекте IllustrisTNG воспроизведена эволюция куба с ребром 300 миллионов световых лет, содержащего миллионы галактик, и учёные могут «залетать» внутрь любой из них.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Запустите компьютерную игру, где вместо клавиш вы задаёте законы физики: как тела притягиваются, как дует звёздный ветер, как взрываются сверхновые. Компьютер разбивает мир на миллиарды клеточек и шаг за шагом пересчитывает, что будет дальше. Так рождается фильм о жизни галактики, который нельзя записать с натуры.</div>
+        <div class="section"><h2>История</h2><p>Первые численные эксперименты проводились вручную ещё в XVII веке, но по-настоящему всё началось с появлением ЭВМ в 1940‑х для расчёта ядерных взрывов. В астрофизике с 1960‑х начали моделировать скопления звёзд.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Мы берём сложное уравнение, описывающее, например, как двигаются планеты, и раскладываем его на простые шажки во времени: где будет планета через секунду? А через ещё секунду? Повторяя это миллионы раз, получаем путь. Чем мельче шаг, тем точнее, но требуется больше вычислительной силы.</p></div>
+        <div class="fun-fact">💡 Симуляция «GigaEris» использовала более 250 миллиардов частиц для одного скопления галактик, требуя около 1 петабайта дискового пространства.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Численное моделирование — метод исследования физических систем, основанный на аппроксимации основных уравнений (механики сплошных сред, электродинамики, гравитации, квантовой механики) дискретными аналогами с последующим интегрированием во времени на компьютере. Типичная схема включает: выбор математической модели (например, система уравнений Навье–Стокса или уравнения Эйнштейна), дискретизацию пространства и времени (конечные разности, конечные элементы, спектральные методы), постановку начальных и граничных условий, выбор алгоритма численного решения и шага по времени, проверку устойчивости и сходимости, визуализацию и анализ результатов.</div>
+        <div class="section"><h2>История</h2><p>Истоки восходят к ручным численным расчётам орбит, выполненным астрономами XIX века. Решающий толчок дали исследования турбулентности и ядерной физики в середине XX века (работы фон Неймана и Улама по методу Монте-Карло). В астрофизике новаторскими были работы Хенона и Аарсета по моделированию звёздных скоплений в 1960‑х. Анри Пуанкаре заложил основы теории динамических систем, критически важной для понимания хаоса в численных расчётах. С ростом суперкомпьютеров в 1980‑х–2000‑х появились полномасштабные космологические симуляции (Millennium, EAGLE, Illustris).</p></div>
+        <div class="section"><h2>Как работает</h2><p>В основе лежит дискретизация дифференциальных уравнений в частных производных. Например, в гидродинамике используется закон сохранения массы, импульса и энергии, записанный в виде ∂U/∂t + ∇·F = S, где U — вектор консервативных переменных, F — потоки, S — источники. Сердце алгоритма — условие Куранта–Фридрихса–Леви (CFL), обеспечивающее устойчивость: число Куранта C = c·Δt/Δx ≤ 1, где c — скорость распространения возмущений, Δt и Δx — шаги по времени и пространству. Современные коды применяют адаптивное измельчение сетки и распараллеливание на тысячи ядер. Для задач гравитации используется быстрое преобразование Фурье или иерархические методы дерева.</p></div>
+        <div class="formula"><div class="formula-render">C = \frac{c \Delta t}{\Delta x} \leq 1</div><div class="formula-meaning">C — число Куранта (безразмерный параметр стабильности), c — максимальная скорость распространения возмущений в среде (м/с), Δt — шаг по времени (с), Δx — пространственный шаг сетки (м)</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Недостаточное пространственное разрешение для описания турбулентности и формирования звёзд; Параметризация субсеточных процессов (звездообразование, обратная связь); Веерные неустойчивости и накопление ошибок округления; Сходимость и верификация кода в режиме сильной нелинейности</p><p class="fact">💡 Симуляция «GigaEris» использовала более 250 миллиардов частиц для одного скопления галактик, требуя около 1 петабайта дискового пространства.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="numerical_simulation_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="numerical_simulation" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="numerical_simulation_ru_page" data-entity-type="tag"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/galaxy_merger.html" data-tag="galaxy_merger">слияние галактик</a> · <a href="/lang/ru/tags/star_formation.html" data-tag="star_formation">звездообразование</a> · <a href="/lang/ru/tags/accretion_disk.html" data-tag="accretion_disk">аккреционный диск</a> · <a href="/lang/ru/tags/gravitational_waves.html" data-tag="gravitational_waves">гравитационные волны</a> · <a href="/lang/ru/tags/stellar_evolution.html" data-tag="stellar_evolution">звёздная эволюция</a> · <a href="/lang/ru/tags/planetary_migration.html" data-tag="planetary_migration">планетная миграция</a> · <a href="/lang/ru/tags/turbulence.html" data-tag="turbulence">турбулентность</a> · <a href="/lang/ru/tags/fourier_series.html" data-tag="fourier_series">ряд Фурье</a>
+</div>
+
+<div class="related-tags"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="t:numerical_simulation"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="numerical_simulation"><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-01/2605.00780v1/index.html">Молния над горизонтом: крах полуклассической гравитации при испарении чёрных дыр</a></h3>
+                <div class="oneliner">Информационный парадокс чёрных дыр требует учёта квантовых эффектов в сильной гравитации. Полуклассический подход, предложенный Стивеном Хокингом, предполагает, что квантовые поля на фиксированном искривлённом фоне приводят к излучению и потере массы, но обратное влияние излучения на геометрию — кри</div>
+                <div class="meta">arXiv:2605.00780v1 · 2026-05-01</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-01/2605.00735v1/index.html">Дирижёр с фальшивой нотой: почему квинтэссенция не спасла инфляцию</a></h3>
+                <div class="oneliner">Модель квинтэссенциальной инфляции на базе α-аттракторов описывает инфляцию и современную тёмную энергию как разные роли одного скалярного поля. Её ключевое предсказание — стадия кейншена, усиливающая высокочастотные гравитационные волны и оставляющая отпечаток в реликтовом излучении и первичном нук</div>
+                <div class="meta">arXiv:2605.00735v1 · 2026-05-01</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-02/2605.01216v1/index.html">Космический гонг: как чёрная дыра звонит в кротовую нору</a></h3>
+                <div class="oneliner">Учёные рассчитали гравитационное излучение от чёрной дыры звёздной массы, радиально падающей в тонкостенную кротовую нору. Сигнал напоминает ритмичные удары: всплеск, когда чёрная дыра приближается к горловине с нашей стороны, и глубокий провал, когда она ныряет в другую вселенную. Расчёты показываю</div>
+                <div class="meta">arXiv:2605.01216v1 · 2026-05-02</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-04/2605.02136v2/index.html">Спиновой почерк чёрной дыры: поляризационная рябь на её тени</a></h3>
+                <div class="oneliner">Новое исследование вскрывает тонкий механизм: поляризация не просто подсвечивает тень чёрной дыры — она её деформирует. Эффект, предсказанный для вращающихся дыр, исчезающе мал, но принципиален: поляриметрия из пассивного зрителя превращается в активного зонда экстремальной гравитации. В статике сим</div>
+                <div class="meta">arXiv:2605.02136v2 · 2026-05-04</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-05/2605.04224v1/index.html">Гравитационный тир: пристрелка по чёрным дырам</a></h3>
+                <div class="oneliner">Впервые проведены нелинейные симуляции пролётов чёрных дыр в модифицированной гравитации — контрольные выстрелы на космическом полигоне. Сравнение углов рассеяния с аналитикой дало попадание почти в яблочко: разница не превысила одного градуса. Это открывает путь к быстрым шаблонам гравитационных во</div>
+                <div class="meta">arXiv:2605.04224v1 · 2026-05-05</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-06/2605.05454v1/index.html">Искривлённый космос: тайная жизнь локальной Вселенной</a></h3>
+                <div class="oneliner">С помощью Cosmicflows-4++ учёные напрямую оценили релятивистские поправки и обнаружили, что кривизна вносит порядка 10% в динамику расширения на масштабах до 300 Мпк/ч, а кинематическая обратная реакция пренебрежимо мала. Это ставит под сомнение глобальность ΛCDM и угрожает систематическими ошибками</div>
+                <div class="meta">arXiv:2605.05454v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-06/2605.05357v1/index.html">Вафельная структура вакуума: от струнных потоков к тёмной энергии</a></h3>
+                <div class="oneliner">Исследователи модифицировали классическую модель Буссо–Полчински, представив энергию вакуума как разность вкладов в пространстве потоков. В результате малые значения космологической постоянной образуют не сферы, а тончайшие «вафли» — гипердиски. Анализ базы данных из 532 миллионов многообразий Калаб</div>
+                <div class="meta">arXiv:2605.05357v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-06/2605.05317v2/index.html">Вселенная-тор: квантовый джекпот для Большого взрыва</a></h3>
+                <div class="oneliner">Квантовая космология долго сталкивалась с парадоксом: изящная идея рождения Вселенной из «ничего» неумолимо отдавала предпочтение унылым микроскопическим мирам. Новое исследование показывает, что стоит заменить привычную сферу на трёхмерный тор — и сценарий переписывается. Суммирование по всем возмо</div>
+                <div class="meta">arXiv:2605.05317v2 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-06/2605.04631v1/index.html">Космические песочные часы: мерцающая тень кротовой норы</a></h3>
+                <div class="oneliner">Численное моделирование раскрыло, как плазма застревает в горловине вращающейся кротовой норы, рисуя на её тени тонкий световой обод и заставляя её мерцать с периодом, заданным массой и спином. Эти сигнатуры, доступные Телескопу горизонта событий на 230 ГГц, превращают активные ядра галактик в приро</div>
+                <div class="meta">arXiv:2605.04631v1 · 2026-05-06</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-07/2605.06577v1/index.html">Когда гравитация вяжет квантовое кружево: уроки модели Шрёдингера — Ньютона</a></h3>
+                <div class="oneliner">Гибридное уравнение Шрёдингера — Ньютона впервые позволило аналитически развести два лика гравитации: самодействие и взаимное притяжение. Оказалось, что самогравитация не меняет спектр Шмидта, а значит, и меру квантовой запутанности; зато парный потенциал активно её порождает. Численные симуляции в </div>
+                <div class="meta">arXiv:2605.06577v1 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-07/2605.06093v1/index.html">Сингулярность, которой не было: как квантовое танго стирает начало Вселенной</a></h3>
+                <div class="oneliner">В квантовой космологии сингулярность Большого взрыва оказывается миражом. Используя реляционное время, возникающее из запутанности между подсистемами Вселенной, физики показали: вероятность нулевого объёма строго равна нулю. Формализм Пейджа-Вуттерса превращает статичную волновую функцию в эволюцион</div>
+                <div class="meta">arXiv:2605.06093v1 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-07/2605.05635v3/index.html">Невидимый художник: как тёмная материя искажает портреты чёрных дыр</a></h3>
+                <div class="oneliner">Моделирование изображений чёрных дыр на фоне разных профилей тёмной материи показало пугающую гибкость: уплощённое гало типа cored-NFW заметно раздувает яркое кольцо, сдвигает его центр и усиливает асимметрию — почти в точности повторяя реальные данные Телескопа горизонта событий. Профиль Эйнасто, н</div>
+                <div class="meta">arXiv:2605.05635v3 · 2026-05-07</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-08/2605.10976v1/index.html">Траурный марш отрицательной массы: почему LIGO не слышит анти-чирпы</a></h3>
+                <div class="oneliner">Новое исследование предъявляет простой наблюдательный тест: любая двойная система с отрицательным компонентом обязана выдавать либо аномальный сигнал с падающей частотой, либо моментально распадаться. Ни одной такой «ноты» в архивах LIGO, Virgo и KAGRA не найдено. Тишина закрывает целый класс космол</div>
+                <div class="meta">arXiv:2605.10976v1 · 2026-05-08</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-08/2605.07848v2/index.html">Fuzzy-nova: Квантовая волна, растворяющая чёрные дыры</a></h3>
+                <div class="oneliner">Согласно классической теории, коллапс массивной звезды заканчивается чёрной дырой с сингулярностью, где падает занавес физических законов. Роджер Пенроуз доказал неизбежность сингулярностей, а Стивен Хокинг показал, что квантовые эффекты порождают информационный парадокс. Новая работа предлагает ино</div>
+                <div class="meta">arXiv:2605.07848v2 · 2026-05-08</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-09/2605.08584v2/index.html">Кварковая симфония нейтронной звезды</a></h3>
+                <div class="oneliner">Байесовский ансамбль уравнений состояния, построенный на гауссовских процессах, восстанавливает термодинамику холодной сверхплотной материи без предвзятых параметризаций. Ограничения от рентгеновских наблюдений NICER и гравитационно-волнового сигнала GW170817 заставляют скорость звука сначала взлете</div>
+                <div class="meta">arXiv:2605.08584v2 · 2026-05-09</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-10/2605.09521v1/index.html">Звёздная мимикрия: бозонные звёзды притворяются чёрными дырами</a></h3>
+                <div class="oneliner">Сердце Млечного Пути, объект Стрелец A*, может оказаться не чёрной дырой, а её идеальной космической подделкой — бозонной звездой. Данные инфракрасного интерферометра GRAVITY сравнили с моделями двенадцати таких звёзд — гигантских скалярных сгустков — и байесовский вердикт не отличил их от классичес</div>
+                <div class="meta">arXiv:2605.09521v1 · 2026-05-10</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-10/2605.09426v1/index.html">Космический инструмент: резонансные песни вращающихся кротовых нор</a></h3>
+                <div class="oneliner">Численно исследовав рассеяние скалярных волн на вращающейся проходимой кротовой норе, учёные обнаружили резонансы Брейта-Вигнера. Они резко усиливаются при быстром вращении и для противо-вращающихся мод, создавая спектральный отпечаток, кардинально отличный от чёрных дыр без горизонта событий. Это н</div>
+                <div class="meta">arXiv:2605.09426v1 · 2026-05-10</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-11/2605.11332v2/index.html">Вселенский су-вид: как медленный разогрев воскрешает первичные чёрные дыры</a></h3>
+                <div class="oneliner">Первичные чёрные дыры (ПЧД) — кандидаты в тёмную материю — долгое время считались невозможным продуктом фазовых переходов из-за калибровочной зависимости контраста плотности. Однако новое исследование показывает: медленный разогрев после перехода создаёт эру доминирования вещества, где даже слабые в</div>
+                <div class="meta">arXiv:2605.11332v2 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-11/2605.11065v1/index.html">Космический кристалл: как дефекты вакуума поворачивают свет</a></h3>
+                <div class="oneliner">Реликтовое излучение приносит не только карту ранней Вселенной, но и слабый поворот поляризации — всего на тысячные доли радиана. Долгое время его приписывали сверхлёгким аксионам, но те противоречат экспериментам. Новое объяснение изящнее: поворот возникает при проходе фотонов через невидимые грани</div>
+                <div class="meta">arXiv:2605.11065v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-11/2605.10587v1/index.html">Астроны: электрические левиафаны, бросающие вызов космологии</a></h3>
+                <div class="oneliner">Астроны — гипотетические реликты ранней Вселенной с массой порядка 10¹² солнечных и гигантским электрическим зарядом — могли бы объяснить тёмную энергию. Однако строгий анализ разрушает простые надежды: обычная аккреция не даёт нужного заряда, а феноменологически интересные параметры переводят геоме</div>
+                <div class="meta">arXiv:2605.10587v1 · 2026-05-11</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-12/2605.11565v1/index.html">Безмолвный рёв горизонта: затухающий звон аналоговых чёрно-белых дыр</a></h3>
+                <div class="oneliner">Новое теоретическое исследование демонстрирует, как аналоговые чёрно-белые дыры, созданные в сверхпроводящих SNAIL-цепях, отвечают на возмущения: они не взрываются, а тихо гаснут, излучая чистый диссипативный тон. С помощью суперсимметричной квантовой механики доказано отсутствие растущих мод, а выч</div>
+                <div class="meta">arXiv:2605.11565v1 · 2026-05-12</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-12/2605.11499v1/index.html">Поляризационное эхо: свет ловит гравитационный звон чёрной дыры</a></h3>
+                <div class="oneliner">Разработан ковариантный подход, показывающий, что свет в гравитационном «шторме» сливающихся чёрных дыр меняет поляризацию, следуя затухающей мелодии рингдауна. Численное моделирование на основе теории возмущений Керра подтверждает: ахроматический поворот на ~10 градусов — это прямое отображение ква</div>
+                <div class="meta">arXiv:2605.11499v1 · 2026-05-12</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-13/2605.16413v2/index.html">Кротовые норы с длинным горлом: как их выдают доплеровские ноты</a></h3>
+                <div class="oneliner">Новое исследование показывает: кротовые норы с точно настроенной длиной горловины способны отбрасывать тень, неотличимую от тени чёрной дыры Шварцшильда. Однако численное моделирование выявляет критический провал в маскировке — аккреционный диск кротовой норы испускает гораздо более энергичное излуч</div>
+                <div class="meta">arXiv:2605.16413v2 · 2026-05-13</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-13/2605.13557v1/index.html">Симфония углового момента: когда слабая гравитация сильна</a></h3>
+                <div class="oneliner">Диагностический параметр \(\tilde{\alpha}\) показывает, что в галактиках и скоплениях постньютоновское приближение теряет надёжность из-за накопления нелокальных гравитационных корреляций. Его величина взлетает именно там, где традиционно вводят тёмную материю, — и это открытие способно перевернуть </div>
+                <div class="meta">arXiv:2605.13557v1 · 2026-05-13</div></div></div><div class="article-card"><div class="card-content">
+                <h3><a href="/lang/ru/archive/2026-05-13/2605.13042v1/index.html">Гравитационный радио-лес: как водородный квантовый детектор выдаёт тёмную материю</a></h3>
+                <div class="oneliner">Астрофизики предложили новый метод охоты на тёмную материю — не искать сами чёрные дыры, а слушать квантовое эхо гравитации. В областях ионизированного водорода приливные силы первичных чёрных дыр расщепляют атомный уровень 2P₃/₂, превращая одиночную линию поглощения 9,9 ГГц в широкий «радио-лес». У</div>
+                <div class="meta">arXiv:2605.13042v1 · 2026-05-13</div></div></div></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('numerical_simulation', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

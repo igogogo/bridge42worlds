@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Fourier series — bridge42worlds</title>
+    <meta name="description" content="A Fourier series is a representation of a periodic function f(x) with period T as a sum of trigonometric functions: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. The coefficients a_n and b_n are calculated as projections of the function onto the corresponding cosine and sine waves and show how strongly each harmonic is expressed in the original signal. The expansion is possible due to the orthogonality of sines and cosines. Fourier series are a powerful tool for solving differential equations (e.g., the heat equation) and underpin spectral analysis.">
+    <meta property="og:title" content="#Fourier series — bridge42worlds">
+    <meta property="og:description" content="A Fourier series is a representation of a periodic function f(x) with period T as a sum of trigonometric functions: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. The coefficients a_n and b_n are calculated as projections of the function onto the corresponding cosine and sine waves and show how strongly each harmonic is expressed in the original signal. The expansion is possible due to the orthogonality of sines and cosines. Fourier series are a powerful tool for solving differential equations (e.g., the heat equation) and underpin spectral analysis.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/tags/fourier_series.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>Fourier series</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">The musical analyzer of mathematics: it breaks any complex periodic signal — from ocean tides to electrical oscillations — into elementary sinusoidal notes.</p><div class="practical-app"><strong>In practice:</strong> Audio and image compression (MP3, JPEG), vibration analysis in structures, seismic data processing, and quantum computing.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">A Fourier series is a representation of a periodic function f(x) with period T as a sum of trigonometric functions: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. The coefficients a_n and b_n are calculated as projections of the function onto the corresponding cosine and sine waves and show how strongly each harmonic is expressed in the original signal. The expansion is possible due to the orthogonality of sines and cosines. Fourier series are a powerful tool for solving differential equations (e.g., the heat equation) and underpin spectral analysis.</div>
+        <div class="fun-fact">💡 When expanding a rectangular signal into a Fourier series, the sum of all odd harmonics yields a staircase that approaches a rectangle as the number of terms increases, but near the discontinuity, 'bumps' of about 9% of the signal amplitude remain — this is the Gibbs phenomenon, occurring in any series with discontinuities.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">A Fourier series is a way to write any periodic (repeating) function as a sum of simple waves — sines and cosines — with different frequency, amplitude, and phase. Just as an artist mixes basic colors to obtain a complex hue, a Fourier series mixes simple waves to recreate a complex shape. For example, the sound of a guitar string is not one note, but a fundamental tone plus many overtones (harmonics) that together create the timbre.</div>
+        <div class="section"><h2>History</h2><p>French mathematician Jean-Baptiste Joseph Fourier developed this method in the early 19th century while studying how heat propagates in solid bodies.</p></div>
+        <div class="section"><h2>How it works</h2><p>Imagine swinging on a swing: our motion repeats (is periodic). The Fourier series says: this motion can be assembled from several pendulums swinging at different speeds — one slow, another twice as fast, a third three times as fast, and so on. If we correctly adjust the amplitudes (weights) of these pendulums, their sum will give our trajectory.</p></div>
+        <div class="fun-fact">💡 The fast Cooley–Tukey algorithm (1965) revolutionized digital processing; according to some estimates, FFT is among the top five most used algorithms in the world — every time you listen to music or watch a video, FFT is at work.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">The classical Fourier series is the expansion of a function f(x), integrable on the interval [-π, π], into a complete orthogonal system of functions {1, cos(nx), sin(nx)}n∈N, possessing the property of best approximation in the sense of mean square deviation. The coefficients are calculated by the formulas a_n = (1/π)∫ f(x) cos(nx) dx, b_n = (1/π)∫ f(x) sin(nx) dx. In complex form, this is equivalent to expansion in exponentials e^{inx}, linking the Fourier series to the Fourier transform. For the series to converge to f(x) at point x, Dirichlet conditions must be satisfied (piecewise monotonicity and a finite number of discontinuities). In practice, the Fast Fourier Transform (FFT) is widely used — an algorithm that computes coefficients in O(N log N) operations. Fourier series are generalized to arbitrary orthonormal systems in Hilbert spaces, applied in quantum mechanics (expansion of the wave function over eigenstates) and signal processing.</div>
+        <div class="section"><h2>History</h2><p>The origins of the idea go back to Daniel Bernoulli (1753), who represented string motion as a sum of harmonics. Jean-Baptiste Joseph Fourier in 1807, in his memoir on heat conduction, systematically used trigonometric series and proposed a method for computing coefficients. His work 'The Analytical Theory of Heat' (1822) established this apparatus, despite criticism from contemporaries for lack of rigor. A rigorous convergence theory was built by Peter Gustav Lejeune Dirichlet in 1829, and later developed by Riemann, Lebesgue, and others.</p></div>
+        <div class="section"><h2>How it works</h2><p>When expanding f(x), harmonics with numbers n form a spectrum. Low n correspond to slow changes, high n to fast details. The integrals for coefficients a_n and b_n are the scalar product of the function and the cosine/sine; thanks to the orthogonality of the basis ∫ cos(nx) cos(mx) = 0 for n≠m, each harmonic 'picks out' only its part of the signal. The sum of all harmonics gives the original function almost everywhere, and when truncated to a finite number, ensures minimum mean square error. The Fast Fourier Transform exploits the symmetry of complex roots of unity, recursively reducing the computation of an N-point DFT to two N/2-point ones, dramatically accelerating processing. In physics, harmonic decomposition is used for time series analysis (astronomy), mode composition of laser beams, plasma diagnostics, and solving Schrödinger equations.</p></div>
+        <div class="formula"><div class="formula-render">f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left( a_n \cos\left(\frac{2\pi n x}{T}\right) + b_n \sin\left(\frac{2\pi n x}{T}\right) \right)</div><div class="formula-meaning">f(x) — periodic function with period T, a_0/2 — average value of the function over the period, a_n and b_n — Fourier coefficients, x — argument (e.g., time or coordinate), n — harmonic number (integer).</div></div><div class="formula"><div class="formula-render">a_n = \frac{2}{T} \int_0^T f(x) \cos\left(\frac{2\pi n x}{T}\right) dx, \quad b_n = \frac{2}{T} \int_0^T f(x) \sin\left(\frac{2\pi n x}{T}\right) dx</div><div class="formula-meaning">a_n and b_n — amplitudes of the nth cosine and sine components respectively, T — period of the function, f(x) — original function, n — integer (harmonic number). The integral is taken over one full period.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Gibbs phenomenon: with a finite number of terms, overshoots remain at the discontinuity and do not vanish with increasing N; Expansion of functions not satisfying Dirichlet conditions may diverge at individual points; Need to adapt to non-periodic signals via windowed Fourier transform or wavelets</p><p class="fact">💡 The fast Cooley–Tukey algorithm (1965) revolutionized digital processing; according to some estimates, FFT is among the top five most used algorithms in the world — every time you listen to music or watch a video, FFT is at work.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="fourier_series_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fourier_series" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="feedback" id="feedback" data-article-id="fourier_series_en_page" data-entity-type="tag"><div class="fb-title">How does it read? (helps us improve)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Related tags:</strong>
+    <a href="/lang/en/tags/hilbert_space.html" data-tag="hilbert_space">Hilbert space</a> · <a href="/lang/en/tags/interference.html" data-tag="interference">interference</a> · <a href="/lang/en/tags/spectroscopy.html" data-tag="spectroscopy">spectroscopy</a> · <a href="/lang/en/tags/numerical_simulation.html" data-tag="numerical_simulation">numerical simulation</a> · <a href="/lang/en/tags/quantum_information.html" data-tag="quantum_information">quantum information</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label></div>
+<div class="mini-graph" data-node="t:fourier_series"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="fourier_series"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fourier_series', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

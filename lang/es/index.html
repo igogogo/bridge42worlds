@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bridge42worlds — Science Made Simple</title>
+    <link rel="alternate" type="application/atom+xml" title="bridge42worlds (es)" href="/feed-es.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="top-bar">
+    <span class="logo-wrap">
+        <a href="/lang/es/index.html" class="logo">bridge42worlds</a><button type="button" id="intro-toggle" class="logo-info" title="About this site">i</button>
+        <div class="intro-popup" id="intro-popup">
+            <p class="home-intro" id="home-intro">bridge42worlds convierte los últimos preprints de arXiv en artículos que cualquiera puede leer — cada día, sin necesidad de un título en física. Elige tu nivel: <b>Simple</b> para una primera mirada, <b>Popular</b> si la ciencia ya te apasiona, <b>Avanzado</b> para fórmulas e historia completa, <b>Mini</b> para la idea esencial en 10 segundos. Además, un mapa vivo de la ciencia: las etiquetas, leyes y científicos detrás de cada descubrimiento.</p>
+        </div>
+    </span>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html" class="active">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+    </div>
+</div>
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <div class="cal-bar">
+        <button type="button" id="calendar-btn" class="cal-btn" title="Browse by date">📅</button>
+        <div class="calendar-panel" id="calendar-panel"></div>
+    </div>
+</div>
+<script>
+(function () {
+    var KEY = 'b42_intro_seen';
+    var popup = document.getElementById('intro-popup'), btn = document.getElementById('intro-toggle');
+    if (!popup || !btn) return;
+    var seen = false;
+    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    function setOpen(v) { popup.classList.toggle('open', v); btn.classList.toggle('active', v); }
+    setOpen(!seen);
+    if (!seen) { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+    btn.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!popup.classList.contains('open')); });
+    document.addEventListener('click', function (e) {
+        if (popup.classList.contains('open') && !popup.contains(e.target) && e.target !== btn) setOpen(false);
+    });
+})();
+</script>
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Buscar artículos, #etiquetas, @autores" oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># etiqueta · @ autor · ! científico</div>
+<div class="category-bar" id="category-bar"></div>
+<div class="site-stats" id="site-stats"></div>
+<div class="filters" id="active-filters"></div>
+<div id="search-results"><p style="color:var(--soft);text-align:center;padding:40px">Cargando...</p></div>
+<footer><p>bridge42worlds — la ciencia simplificada · <a href="/lang/es/archive/">archive</a> · <a href="/feed-es.xml">RSS</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+</body>
+</html>

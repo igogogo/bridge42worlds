@@ -1,0 +1,404 @@
+{
+  "id": "2607.02663v1",
+  "original_title": "Polar coordinate transformations for machine learning based dark matter subhalo detection in strong gravitational lenses",
+  "authors": [
+    "Jacob M Campbell",
+    "Simon Dye",
+    "Emma Chapman",
+    "Adam Moss"
+  ],
+  "date": "2026-07-02",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "dark_matter",
+    "gravitational_lensing",
+    "hubble",
+    "galaxy",
+    "standard_model",
+    "big_bang",
+    "dark_energy"
+  ],
+  "main_tag": "dark_matter",
+  "scientists": [
+    "Fritz Zwicky",
+    "Vera Rubin",
+    "Edwin Hubble"
+  ],
+  "categories": [
+    "astro-ph.GA",
+    "astro-ph.CO"
+  ],
+  "primary_category": "astro-ph.GA",
+  "cited_arxiv": [
+    "2605.21212",
+    "2402.11963",
+    "2401.16624",
+    "2005.05353"
+  ],
+  "threads": "Когда астрономы смотрят на кольцо Эйнштейна, они видят искажённое отражение далёкой галактики, но внутри этого светового узора могут прятаться сгустки тёмной материи. Чтобы их найти, достаточно развернуть кольцо в прямую линию — как цилиндрическое зеркало, которое превращает хаос в осмысленный образ. Нейросеть, обученная на таких «развёрнутых» снимках, ловит невидимые комки в полтора раза чаще. Возможно, именно так мы наконец увидим истинное лицо тёмной материи.",
+  "abstract": {
+    "ru": {
+      "popular": "Сильное гравитационное линзирование создаёт вытянутые дуги — искажённые изображения далёких галактик. В этих дугах могут скрываться признаки крошечных сгустков тёмной материи (субгало). Оказалось, что если представить изображение в полярных координатах, как бы «развернув» дугу в прямую линию, нейросети лучше распознают эти сгустки: прирост точности составил около 15% для субгало определённой массы. Улучшение особенно заметно там, где сигнал слаб или сгустки менее плотные — а это самые интересные случаи.",
+      "simple": "Гравитационное линзирование работает как гигантская космическая лупа, искажая свет далёких галактик в длинные дуги. Учёные нашли способ лучше замечать в этих дугах следы крошечных сгустков тёмной материи — просто «поворачивая» изображение особым образом. Может ли такой простой геометрический приём приблизить нас к разгадке тёмной материи?",
+      "advanced": "Сильное гравитационное линзирование позволяет исследовать тёмную материю на малых масштабах через возмущения, вносимые субгало в изображения дуг. В работе изучается, улучшает ли перевод изображений в полярные координаты способность свёрточных нейросетей оценивать массу субгало. Предложена архитектура, которая выдаёт предсказание массы вместе с оценкой неопределённости. На симулированных данных, имитирующих наблюдения телескопа «Хаббл», сравнивались модели на декартовых и полярных представлениях при разных инициализациях, уровнях шума и концентрациях субгало (c=60, c=30). Полярные представления стабильно дают более высокую долю обнаруженных субгало для всех протестированных масс; для масс 10^9–10^9.5 M⊙ эта доля возрастает примерно на 15%. Преимущество сохраняется и в сложных условиях: при низком отношении сигнал/шум и для субгало с низкой концентрацией, где возмущения наименее заметны. Преобразование в полярные координаты оказывается вычислительно дешёвым способом улучшить детектирование субгало нейросетями."
+    },
+    "en": {
+      "popular": "Strong gravitational lensing creates stretched arcs — distorted images of distant galaxies. Hidden within these arcs may be signs of tiny clumps of dark matter (subhalos). It turns out that if you represent the image in polar coordinates, essentially 'unrolling' the arc into a straight line, neural networks get better at spotting these clumps: accuracy jumped by about 15% for subhalos of a certain mass. The improvement is especially striking where the signal is faint or the clumps are less dense — and those are the most intriguing cases.",
+      "simple": "Gravitational lensing acts like a giant cosmic magnifying glass, smearing the light of far-off galaxies into long arcs. Scientists have figured out a way to better pick out traces of tiny dark matter clumps in those arcs — just by 'rotating' the image in a clever way. Could a simple geometric trick like this bring us closer to cracking the dark matter puzzle?",
+      "advanced": "Strong gravitational lensing lets us probe dark matter on small scales through perturbations that subhalos introduce into arc images. The study explores whether switching images to polar coordinates boosts the ability of convolutional neural networks to estimate subhalo mass. An architecture is proposed that predicts mass along with an uncertainty estimate. Using simulated data mimicking Hubble Space Telescope observations, models were pitted against each other on Cartesian versus polar representations under varied initializations, noise levels, and subhalo concentrations (c=60, c=30). Polar representations consistently score a higher detection fraction of subhalos across all tested masses; for masses 10^9–10^9.5 M⊙, that fraction climbs by roughly 15%. The edge holds even under tough conditions: at low signal-to-noise ratios and for low-concentration subhalos, where perturbations are barely visible. Transforming to polar coordinates turns out to be a computationally cheap way to sharpen neural network detection of subhalos."
+    },
+    "es": {
+      "popular": "El lente gravitacional fuerte crea arcos alargados: imágenes distorsionadas de galaxias lejanas. En esos arcos pueden esconderse rastros de pequeños grumos de materia oscura (subhalos). Resultó que si representamos la imagen en coordenadas polares, como si «desenrolláramos» el arco en una línea recta, las redes neuronales reconocen mejor estos grumos: la precisión aumentó alrededor del 15% para subhalos de cierta masa. La mejora es especialmente notable donde la señal es débil o los grumos son menos densos: precisamente los casos más interesantes.",
+      "simple": "El lente gravitacional funciona como una gigantesca lupa cósmica, deformando la luz de galaxias lejanas en largos arcos. Los científicos encontraron una forma de detectar mejor en esos arcos las huellas de diminutos grumos de materia oscura: simplemente «girando» la imagen de una manera especial. ¿Puede un truco geométrico tan simple acercarnos a resolver el misterio de la materia oscura?",
+      "advanced": "El lente gravitacional fuerte permite investigar la materia oscura a pequeñas escalas mediante las perturbaciones que los subhalos introducen en las imágenes de los arcos. En este trabajo se estudia si la transformación de imágenes a coordenadas polares mejora la capacidad de las redes neuronales convolucionales para estimar la masa de los subhalos. Se propone una arquitectura que emite una predicción de masa junto con una estimación de la incertidumbre. Sobre datos simulados que imitan observaciones del telescopio Hubble, se compararon modelos con representaciones cartesianas y polares bajo diferentes inicializaciones, niveles de ruido y concentraciones de subhalo (c=60, c=30). Las representaciones polares consistentemente dan una mayor fracción de subhalos detectados para todas las masas probadas; para masas de 10^9–10^9.5 M⊙, esa fracción aumenta aproximadamente un 15%. La ventaja se mantiene incluso en condiciones difíciles: baja relación señal/ruido y para subhalos de baja concentración, donde las perturbaciones son menos visibles. La transformación a coordenadas polares resulta ser una forma computacionalmente barata de mejorar la detección de subhalos con redes neuronales."
+    }
+  },
+  "thumbs": 4,
+  "refined": false,
+  "captions": {
+    "en": [
+      "Thearchitectureofthenetworkusedinthiswork,consistingofaConvNeXtfeatureencoderandcustomlinearheads.Theoverallarchitectureconsists",
+      "2.4 Network Training",
+      "The output of the pretrained network trained on polar-transformed",
+      "Thedistributionofpredictionuncertaintiesacrossthetestingdataset"
+    ],
+    "ru": [
+      "Архитектура сети, использованной в данной работе, состоящая из кодировщика признаков ConvNeXt и пользовательских линейных головок. Общая архитектура состоит",
+      "2.4 Обучение сети",
+      "Выход предварительно обученной сети, обученной на полярно-преобразованных",
+      "Распределение неопределенностей предсказаний по тестовому набору данных"
+    ],
+    "es": [
+      "La arquitectura de la red utilizada en este trabajo, que consiste en un codificador de características ConvNeXt y cabezas lineales personalizadas. La arquitectura general consiste",
+      "2.4 Entrenamiento de la red",
+      "La salida de la red preentrenada entrenada en transformados polares",
+      "La distribución de las incertidumbres de predicción en el conjunto de datos de prueba"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полярное зрение: как развернуть гравитационную линзу и найти следы тёмной материи",
+      "oneliner": "Переход от декартовых к полярным координатам повышает эффективность нейросетей в обнаружении субгало тёмной материи на снимках сильного гравитационного линзирования, особенно для самых лёгких и размытых сгустков.",
+      "description": "Охота за тёмной материей требует умения читать тончайшие искажения света. В новом исследовании астрофизики превратили изогнутые дуги гравитационных линз в прямые линии с помощью полярного преобразования — и нейросеть стала замечать невидимые ранее субгало. На симулированных данных космического телескопа «Хаббл» доля надёжных обнаружений маломассивных сгустков выросла до 15 процентов. Метод предельно прост, не требует перестройки моделей и обещает стать стандартной предобработкой для будущих обзоров неба. Этот трюк приближает нас к разгадке природы тёмного вещества, открывая путь к картографированию скрытой массы с беспрецедентной детализацией.",
+      "text": "Спустя почти век после того, как [scientist:Fritz Zwicky]Фриц Цвикки[/scientist] заподозрил неладное в движении галактик скопления Волос Вероники, а [scientist:Vera Rubin]Вера Рубин[/scientist] измерила звёздные скорости в спиральных рукавах, природа [tag:dark_matter]тёмной материи[/tag] остаётся одной из самых мучительных загадок. В рамках [tag:standard_model]стандартной космологической модели[/tag] она отвечает за формирование структур после [tag:big_bang]Большого взрыва[/tag] и вместе с [tag:dark_energy]тёмной энергией[/tag] дирижирует расширением Вселенной. Но из чего она состоит? Ответ может прятаться в мельчайших деталях — в численности и свойствах субгало, миниатюрных сгустков тёмного вещества, которые роятся внутри крупных [tag:galaxy]галактических[/tag] гало подобно пчелиному рою вокруг улья.\n\nУвидеть эти сгустки напрямую нельзя. Единственный способ — уловить их гравитационное влияние, и здесь на сцену выходит [tag:gravitational_lensing]сильное гравитационное линзирование[/tag]. Когда массивная галактика или скопление искажает свет далёкого источника, возникают дуги и кольца Эйнштейна — космические миражи, запечатлённые такими инструментами, как [tag:hubble]«Хаббл»[/tag], названный в честь [scientist:Edwin Hubble]Эдвина Хаббла[/scientist]. Каждое субгало, затесавшееся в линзе, оставляет едва заметную рябь на этих световых узорах. Однако извлечь сигнал из шума — всё равно что пытаться расслышать шёпот на рок-концерте.\n\n[callout]Превращение кольца Эйнштейна в прямую линию напоминает цилиндрическую анаморфозу — искусство искажённых зеркал, где образ обретает смысл, только если смотреть с правильной точки. Для нейросети такой точкой становится полярная система координат: изогнутые дуги распрямляются в текстурные полосы, и скрытые аномалии проступают, словно тайнопись на разглаженном пергаменте.[/callout]\n\nИдея проста и изящна. Вместо того чтобы скармливать нейросети прямоугольные снимки с закрученными дугами, учёные перевели изображения в полярные координаты. Кадр размером 64×64 пикселя развернули как рулон: по радиусу и углу. В результате кольцо превратилось в подобие полосатой ткани, где любые неровности от субгало становятся заметными искажениями текстуры. Архитектура на основе ConvNeXt-Tiny, предварительно обученная на ImageNet, предсказывала массу спрятанного сгустка с оценкой неопределённости. Сравнив работу на одинаковых данных в декартовом и полярном виде, исследователи увидели: для субгало с массами от 10^9 до 10^{9.5} солнечных доля надёжных обнаружений выросла почти на 15%. Особенно ярко преимущество проявилось для самых лёгких и разряженных сгустков — именно тех, что несут ключевую информацию о физике [tag:dark_matter]тёмной материи[/tag].\n\n[callout]При низком отношении сигнал/шум — например, всего одна орбита «Хаббла» вместо пятидесяти — выигрыш скромнее, 1–5 процентов. Но он устойчиво сохраняется, доказывая, что метод полезен даже для быстрых обзоров, где каждый сэкономленный процент на счету.[/callout]\n\nМетафора анаморфозы работает и в обратную сторону: многие десятилетия мы смотрели на гравитационные линзы сквозь призму декартовой геометрии и видели лишь хаотичное переплетение дуг. Полярное преобразование — это поворот цилиндра, при котором изображение обретает ясность. Теперь, зная это, можно настраивать телескопы и нейросети так, чтобы они смотрели на Вселенную под нужным углом. В перспективе метод будет проверен на реалистичных симуляциях с множеством субгало и на реальных данных от наследников «Хаббла» — «Евклида» и «Римского космического телескопа Нэнси Грейс». Если всё сработает, мы получим карту распределения тёмных сгустков с невиданной детализацией. А это прямой путь к ответу на вопрос, является ли тёмная материя холодной, тёплой или самодействующей — развилка, определяющая всю физику микромира.",
+      "fun_fact": "Превращение кольца Эйнштейна в прямую линию с помощью полярных координат заставляет нейросеть «видеть» его как обычную текстуру — это напоминает цилиндрическую анаморфозу, где искажённое изображение обретает смысл только под правильным углом.",
+      "scifi": "В романе «Тёмный лес» Лю Цысиня гравитационные линзы служат инструментом межзвёздной коммуникации, а превращение кольца в линию перекликается с идеей развернуть пространство, чтобы извлечь скрытую информацию — почти как детектор лжи для тёмной материи.",
+      "threads": "Когда астрономы смотрят на кольцо Эйнштейна, они видят искажённое отражение далёкой галактики, но внутри этого светового узора могут прятаться сгустки тёмной материи. Чтобы их найти, достаточно развернуть кольцо в прямую линию — как цилиндрическое зеркало, которое превращает хаос в осмысленный образ. Нейросеть, обученная на таких «развёрнутых» снимках, ловит невидимые комки в полтора раза чаще. Возможно, именно так мы наконец увидим истинное лицо тёмной материи.",
+      "formulas": [
+        {
+          "description": "Усечённый профиль Наварро–Френка–Уайта для субгало",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho — плотность тёмной материи на радиусе r, r_s — масштабный радиус, r_t — радиус обрезания, M_0 — масштаб массы."
+        },
+        {
+          "description": "Функция потерь отрицательного логарифмического правдоподобия",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L — значение потерь для N изображений, \\hat{y}_i — истинная логарифмическая масса, \\mu_i и \\sigma_i^2 — предсказанные среднее и дисперсия."
+        }
+      ],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "en": {
+      "title": "Polar Vision: How to Unfold a Gravitational Lens and Find Traces of Dark Matter",
+      "oneliner": "Switching from Cartesian to polar coordinates boosts neural networks' efficiency in detecting dark matter subhalos in images of strong gravitational lensing, especially for the lightest and most diffuse clumps.",
+      "description": "The hunt for dark matter demands the ability to read the subtlest distortions of light. In a new study, astrophysicists transformed the curved arcs of gravitational lenses into straight lines using a polar transform — and the neural network started noticing previously invisible subhalos. On simulated data from the Hubble Space Telescope, the fraction of reliable detections of low-mass clumps rose to 15 percent. The method is elegantly simple, requires no model retraining, and promises to become standard preprocessing for future sky surveys. This trick brings us closer to solving the nature of dark matter, paving the way to mapping hidden mass with unprecedented detail.",
+      "text": "Almost a century after [scientist:Fritz Zwicky]Фриц Цвикки[/scientist] suspected something was amiss in the motion of galaxies in the Coma cluster, and [scientist:Vera Rubin]Вера Рубин[/scientist] measured stellar velocities in spiral arms, the nature of [tag:dark_matter]тёмной материи[/tag] remains one of the most vexing mysteries. Within the [tag:standard_model]стандартной космологической модели[/tag], it is responsible for structure formation after the [tag:big_bang]Большого взрыва[/tag] and, together with [tag:dark_energy]тёмной энергией[/tag], orchestrates the expansion of the Universe. But what is it made of? The answer may be hiding in the tiniest details — in the abundance and properties of subhalos, miniature clumps of dark matter that swarm inside larger [tag:galaxy]галактических[/tag] halos like a beehive around a hive.\n\nThese clumps cannot be seen directly. The only way is to detect their gravitational influence, and here [tag:gravitational_lensing]сильное гравитационное линзирование[/tag] takes the stage. When a massive galaxy or cluster distorts the light of a distant source, arcs and Einstein rings appear — cosmic mirages captured by instruments such as [tag:hubble]«Хаббл»[/tag], named after [scientist:Edwin Hubble]Эдвина Хаббла[/scientist]. Each subhalo embedded in the lens leaves a barely perceptible ripple on these light patterns. However, extracting the signal from the noise is like trying to hear a whisper at a rock concert.\n\n[callout]Turning an Einstein ring into a straight line resembles cylindrical anamorphosis — the art of distorted mirrors, where the image gains meaning only when viewed from the right angle. For the neural network, that angle becomes the polar coordinate system: the curved arcs straighten into textured stripes, and hidden anomalies emerge like secret writing on smoothed parchment.[/callout]\n\nThe idea is simple and elegant. Instead of feeding rectangular images with twisted arcs to the network, the scientists transformed the images into polar coordinates. A 64×64-pixel frame was unrolled like a scroll: along radius and angle. As a result, the ring turned into a striped fabric, where any irregularities from subhalos become visible texture distortions. The ConvNeXt-Tiny architecture, pre-trained on ImageNet, predicted the mass of the hidden clump with uncertainty estimation. Comparing performance on the same data in Cartesian and polar form, the researchers found: for subhalos with masses from 10^9 to 10^{9.5} solar masses, the fraction of reliable detections increased by almost 15%. The advantage was especially pronounced for the lightest and most diffuse clumps — precisely those that carry key information about the physics of [tag:dark_matter]тёмной материи[/tag].\n\n[callout]At low signal-to-noise ratios — for example, just one Hubble orbit instead of fifty — the gain is more modest, 1–5 percent. But it persistently holds, proving that the method is useful even for rapid surveys where every saved percentage point counts.[/callout]\n\nThe anamorphosis metaphor works in reverse too: for many decades, we looked at gravitational lenses through the prism of Cartesian geometry and saw only a chaotic tangle of arcs. The polar transform is a turn of the cylinder that brings the image into clarity. Now, knowing this, we can tune telescopes and neural networks to look at the Universe from the right angle. In the future, the method will be tested on realistic simulations with many subhalos and on real data from Hubble's successors — Euclid and the Nancy Grace Roman Space Telescope. If it all works, we will obtain a map of dark clump distribution with unprecedented detail. And that is a direct path to answering whether dark matter is cold, warm, or self-interacting — a fork in the road that determines all of microphysics.",
+      "fun_fact": "Turning an Einstein ring into a straight line using polar coordinates makes the neural network 'see' it as ordinary texture — it's reminiscent of cylindrical anamorphosis, where a distorted image gains meaning only from the right angle.",
+      "scifi": "In Liu Cixin's novel 'The Dark Forest,' gravitational lenses serve as tools for interstellar communication, and the transformation of a ring into a line echoes the idea of unfolding space to extract hidden information — almost like a lie detector for dark matter.",
+      "threads": "When astronomers look at an Einstein ring, they see a distorted reflection of a distant galaxy, but lumps of dark matter might be hiding inside that light pattern. To find them, it's enough to unroll the ring into a straight line — like a cylindrical mirror that turns chaos into a meaningful image. A neural network trained on such 'unrolled' images catches invisible clumps one and a half times more often. Perhaps this is how we'll finally see the true face of dark matter.",
+      "formulas": [
+        {
+          "description": "Truncated Navarro-Frenk-White profile for a subhalo",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho — dark matter density at radius r, r_s — scale radius, r_t — truncation radius, M_0 — mass scale."
+        },
+        {
+          "description": "Negative log-likelihood loss function",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L — loss value for N images, \\hat{y}_i — true logarithmic mass, \\mu_i and \\sigma_i^2 — predicted mean and variance."
+        }
+      ],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "es": {
+      "title": "Visión polar: cómo desplegar una lente gravitacional y encontrar rastros de materia oscura",
+      "oneliner": "El cambio de coordenadas cartesianas a polares aumenta la eficacia de las redes neuronales en la detección de subhalos de materia oscura en imágenes de lentes gravitacionales fuertes, especialmente para los cúmulos más ligeros y difusos.",
+      "description": "La caza de materia oscura requiere la habilidad de leer las más sutiles distorsiones de la luz. En un nuevo estudio, astrofísicos convirtieron los arcos curvos de las lentes gravitacionales en líneas rectas mediante una transformación polar, y la red neuronal comenzó a detectar subhalos antes invisibles. En datos simulados del telescopio espacial Hubble, la fracción de detecciones fiables de cúmulos de baja masa aumentó hasta un 15 por ciento. El método es extremadamente simple, no requiere reentrenar modelos y promete convertirse en un preprocesamiento estándar para futuros relevantamientos del cielo. Este truco nos acerca a descifrar la naturaleza de la materia oscura, abriendo el camino hacia un mapeo de la masa oculta con un detalle sin precedentes.",
+      "text": "Casi un siglo después de que [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] sospechara que algo andaba mal en el movimiento de las galaxias del cúmulo de Coma, y [scientist:Vera Rubin]Vera Rubin[/scientist] midiera las velocidades estelares en los brazos espirales, la naturaleza de la [tag:dark_matter]materia oscura[/tag] sigue siendo uno de los enigmas más acuciantes. En el marco del [tag:standard_model]modelo cosmológico estándar[/tag], es responsable de la formación de estructuras tras el [tag:big_bang]Big Bang[/tag] y, junto con la [tag:dark_energy]energía oscura[/tag], dirige la expansión del Universo. Pero, ¿de qué está hecha? La respuesta podría esconderse en los detalles más diminutos: en el número y las propiedades de los subhalos, esos minúsculos cúmulos de materia oscura que pululan dentro de los halos [tag:galaxy]galácticos[/tag] como un enjambre de abejas alrededor de una colmena.\n\nEstos cúmulos no se pueden ver directamente. La única forma es captar su influencia gravitacional, y aquí entra en escena la [tag:gravitational_lensing]lente gravitacional fuerte[/tag]. Cuando una galaxia masiva o un cúmulo distorsiona la luz de una fuente lejana, aparecen arcos y anillos de Einstein — espejismos cósmicos capturados por instrumentos como el [tag:hubble]Hubble[/tag], nombrado en honor a [scientist:Edwin Hubble]Edwin Hubble[/scientist]. Cada subhalo que se cuela en la lente deja una ondulación apenas perceptible en estos patrones de luz. Pero extraer la señal del ruido es como intentar oír un susurro en un concierto de rock.\n\n[callout]Convertir el anillo de Einstein en una línea recta recuerda a la anamorfosis cilíndrica — el arte de los espejos distorsionados, donde la imagen cobra sentido solo si se mira desde el ángulo correcto. Para la red neuronal, ese ángulo es el sistema de coordenadas polares: los arcos curvos se enderezan en bandas texturizadas, y las anomalías ocultas emergen como escritura secreta en un pergamino alisado.[/callout]\n\nLa idea es simple y elegante. En lugar de alimentar a la red neuronal con imágenes rectangulares de arcos retorcidos, los científicos transformaron las imágenes a coordenadas polares. Un fotograma de 64×64 píxeles se desenrolló como un pergamino: según radio y ángulo. El resultado fue que el anillo se convirtió en una especie de tejido a rayas, donde cualquier irregularidad debida a un subhalo se vuelve una distorsión visible de la textura. Una arquitectura basada en ConvNeXt-Tiny, preentrenada en ImageNet, predecía la masa del cúmulo oculto con una estimación de incertidumbre. Al comparar el rendimiento sobre los mismos datos en formato cartesiano y polar, los investigadores observaron que, para subhalos con masas entre 10^9 y 10^{9.5} masas solares, la fracción de detecciones fiables aumentaba casi un 15%. La ventaja fue especialmente notable para los cúmulos más ligeros y difusos — precisamente aquellos que contienen información clave sobre la física de la [tag:dark_matter]materia oscura[/tag].\n\n[callout]Con una relación señal/ruido baja — por ejemplo, una sola órbita del Hubble en lugar de cincuenta — la mejora es más modesta, del 1 al 5 por ciento. Pero se mantiene de forma consistente, lo que demuestra que el método es útil incluso para relevantamientos rápidos, donde cada punto porcentual ahorrado cuenta.[/callout]\n\nLa metáfora de la anamorfosis también funciona al revés: durante décadas, miramos las lentes gravitacionales a través del prisma de la geometría cartesiana y solo vimos un entretejido caótico de arcos. La transformación polar es como girar un cilindro, haciendo que la imagen cobre claridad. Ahora, sabiendo esto, podemos ajustar telescopios y redes neuronales para que observen el Universo desde el ángulo correcto. En el futuro, el método se probará en simulaciones realistas con muchos subhalos y en datos reales de los sucesores del Hubble: Euclid y el Telescopio Espacial Romano Nancy Grace. Si funciona, obtendremos un mapa de la distribución de los cúmulos oscuros con un detalle sin precedentes. Y ese es el camino directo para responder si la materia oscura es fría, caliente o autointeractuante, una encrucijada que define toda la física del micromundo.",
+      "fun_fact": "Convertir el anillo de Einstein en una línea recta mediante coordenadas polares hace que la red neuronal lo «vea» como una textura común, lo que recuerda a la anamorfosis cilíndrica, donde una imagen distorsionada solo cobra sentido desde el ángulo correcto.",
+      "scifi": "En la novela «El bosque oscuro» de Liu Cixin, las lentes gravitacionales se usan como herramienta de comunicación interestelar, y la transformación del anillo en una línea evoca la idea de desplegar el espacio para extraer información oculta, casi como un detector de mentiras para la materia oscura.",
+      "threads": "Cuando los astrónomos observan un anillo de Einstein, ven el reflejo distorsionado de una galaxia lejana, pero dentro de ese patrón de luz pueden esconderse cúmulos de materia oscura. Para encontrarlos, basta con desplegar el anillo en una línea recta, como un espejo cilíndrico que convierte el caos en una imagen con sentido. Una red neuronal entrenada con estas imágenes «desplegadas» detecta los grumos invisibles con una frecuencia una vez y media mayor. Quizá sea así como finalmente veamos el verdadero rostro de la materia oscura.",
+      "formulas": [
+        {
+          "description": "Perfil truncado de Navarro-Frenk-White para subhalos",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho: densidad de materia oscura en el radio r, r_s: radio de escala, r_t: radio de truncamiento, M_0: escala de masa."
+        },
+        {
+          "description": "Función de pérdida de verosimilitud logarítmica negativa",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L: valor de pérdida para N imágenes, \\hat{y}_i: masa logarítmica verdadera, \\mu_i y \\sigma_i^2: media y varianza predichas."
+        }
+      ],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Как разглядеть невидимую основу галактик",
+      "oneliner": "Простая перестройка космических снимков помогает лучше находить сгустки тёмной материи.",
+      "description": "Учёные показали, что если изображения гравитационных линз повернуть из квадратной сетки в круговую, нейросеть на 15% точнее находит крошечные скопления тёмной материи. Это улучшает поиск невидимой массы в космосе. Простой трюк ускорит обработку данных с будущих телескопов и приблизит разгадку природы тёмной материи.",
+      "text": "Современная наука описывает Вселенную [tag:standard_model]стандартной моделью[/tag], где всё началось с [tag:big_bang]Большого взрыва[/tag] и продолжает расширяться благодаря [tag:dark_energy]тёмной энергии[/tag]. Но больше всего в этой истории загадок оставляет [tag:dark_matter]тёмная материя[/tag] — невидимый каркас, удерживающий [tag:galaxy]галактики[/tag] от распада. Её нельзя потрогать, но её гравитация искривляет свет, словно линза — это [tag:gravitational_lensing]гравитационное линзирование[/tag]. Иногда из-за такого искажения далёкая галактика превращается в яркое кольцо, а внутри него прячутся крохотные сгустки тёмной материи.\n\n[callout]Ещё в 1930-х [scientist:Fritz Zwicky]Фриц Цвикки[/scientist] заметил, что галактики движутся слишком быстро, и предположил невидимую массу. Позже [scientist:Vera Rubin]Вера Рубин[/scientist] доказала это, изучая вращение звёзд.[/callout]\n\nИсследователи обучили программу находить такие сгустки на снимках с телескопа [tag:hubble]«Хаббл»[/tag]. Обычно компьютер смотрит на картинку как на лист в клетку. Но кольцо от линзы — круглое. Тогда учёные просто разрезали его и выпрямили в линию, как ленту от карусели. На ровной дорожке любые неровности сразу заметны. Этот поворот данных позволил программе чаще видеть даже самые маленькие сгустки.\n\n[callout]Телескоп «Хаббл», названный в честь [scientist:Edwin Hubble]Эдвина Хаббла[/scientist], работает на орбите больше 30 лет и сделал множество снимков гравитационных линз.[/callout]\n\nУверенное обнаружение крошечных скоплений тёмной материи поможет понять, из чего она состоит — как по крупинкам угадать рецепт супа. От свойств её частиц зависит, сколько образуется сгустков. Новый метод ускорит разгадку главной космической тайны.",
+      "fun_fact": "По оценкам, через обычную комнату каждую секунду пролетают миллиарды частиц тёмной материи — вы просто их не замечаете.",
+      "scifi": "В фантастическом романе «Тёмный лес» Лю Цысиня гравитационные линзы используют как исполинские антенны для связи между звёздами — почти как в реальной космологии.",
+      "formulas": [],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "en": {
+      "title": "How to Spot the Invisible Backbone of Galaxies",
+      "oneliner": "A simple twist on space images improves the hunt for dark matter clumps.",
+      "description": "Scientists have shown that converting gravitational lens images from a square grid to a circular one improves a neural network's accuracy in detecting tiny dark matter clumps by 15%. This sharpens the search for invisible mass in space. A simple trick will speed up data processing from future telescopes and bring us closer to unraveling the nature of dark matter.",
+      "text": "Modern science describes the Universe with the [tag:standard_model]standard model[/tag], where it all started with the [tag:big_bang]Big Bang[/tag] and continues to expand thanks to [tag:dark_energy]dark energy[/tag]. But the most mysterious part of this story is [tag:dark_matter]dark matter[/tag] – an invisible scaffold that keeps [tag:galaxy]galaxies[/tag] from flying apart. You can't touch it, but its gravity bends light like a lens – that's [tag:gravitational_lensing]gravitational lensing[/tag]. Sometimes, this distortion turns a distant galaxy into a bright ring, with tiny clumps of dark matter hidden inside.\n\n[callout]Back in the 1930s, [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] noticed galaxies moving too fast and suggested invisible mass. Later, [scientist:Vera Rubin]Vera Rubin[/scientist] proved it by studying star rotation.[/callout]\n\nResearchers trained a program to find these clumps in images from the [tag:hubble]Hubble[/tag] telescope. Usually, a computer sees an image like a sheet of graph paper. But a lens ring is round. So the scientists simply cut it and straightened it into a line, like a carousel ribbon. On a straight path, any bumps are immediately noticeable. This twist of the data let the program spot even the tiniest clumps more often.\n\n[callout]The Hubble telescope, named after [scientist:Edwin Hubble]Edwin Hubble[/scientist], has been operating in orbit for over 30 years and has captured numerous images of gravitational lenses.[/callout]\n\nConfidently detecting these tiny dark matter clumps will help us understand what it's made of – like guessing a soup recipe from its crumbs. The number of clumps depends on the properties of its particles. This new method will speed up solving the biggest cosmic mystery.",
+      "fun_fact": "By some estimates, billions of dark matter particles zip through an ordinary room every second — you just don't notice them.",
+      "scifi": "In Liu Cixin's sci-fi novel 'The Dark Forest,' gravitational lenses are used as colossal antennas for interstellar communication — almost like in real cosmology.",
+      "formulas": [],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "es": {
+      "title": "Cómo divisar la estructura invisible de las galaxias",
+      "oneliner": "Una simple reorganización de las imágenes cósmicas ayuda a encontrar mejor los grumos de materia oscura.",
+      "description": "Los científicos demostraron que si las imágenes de lentes gravitacionales se transforman de una cuadrícula a una disposición circular, una red neuronal encuentra con un 15% más de precisión los minúsculos grumos de materia oscura. Esto mejora la búsqueda de masa invisible en el cosmos. Un simple truco acelerará el procesamiento de datos de futuros telescopios y nos acercará a desentrañar la naturaleza de la materia oscura.",
+      "text": "La ciencia moderna describe el universo con el [tag:standard_model]modelo estándar[/tag], donde todo comenzó con el [tag:big_bang]Big Bang[/tag] y continúa expandiéndose gracias a la [tag:dark_energy]energía oscura[/tag]. Pero lo que más misterios deja en esta historia es la [tag:dark_matter]materia oscura[/tag], el armazón invisible que evita que las [tag:galaxy]galaxias[/tag] se desintegren. No podemos tocarla, pero su gravedad curva la luz como una lente: esto es el [tag:gravitational_lensing]lente gravitacional[/tag]. A veces, debido a esta distorsión, una galaxia lejana se convierte en un brillante anillo, dentro del cual se esconden diminutos grumos de materia oscura.\n\n[callout]Ya en la década de 1930, [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] notó que las galaxias se movían demasiado rápido y sugirió la existencia de una masa invisible. Más tarde, [scientist:Vera Rubin]Vera Rubin[/scientist] lo demostró al estudiar la rotación de las estrellas.[/callout]\n\nLos investigadores entrenaron un programa para encontrar esos grumos en imágenes del telescopio [tag:hubble]Hubble[/tag]. Normalmente, la computadora ve la imagen como una hoja cuadriculada. Pero el anillo de la lente es circular. Así que los científicos simplemente lo cortaron y lo enderezaron como una cinta de carrusel. En un camino plano, cualquier irregularidad se nota de inmediato. Este giro en los datos permitió al programa detectar incluso los grumos más pequeños con mayor frecuencia.\n\n[callout]El telescopio Hubble, bautizado en honor a [scientist:Edwin Hubble]Edwin Hubble[/scientist], lleva más de 30 años en órbita y ha tomado numerosas imágenes de lentes gravitacionales.[/callout]\n\nLa detección fiable de minúsculos cúmulos de materia oscura ayudará a entender de qué está hecha, como adivinar la receta de una sopa a partir de sus migas. Cuántos grumos se forman depende de las propiedades de sus partículas. El nuevo método acelerará la resolución del mayor misterio cósmico.",
+      "fun_fact": "Se estima que miles de millones de partículas de materia oscura atraviesan una habitación normal cada segundo, simplemente no las notas.",
+      "scifi": "En la novela de ciencia ficción «El bosque oscuro» de Liu Cixin, las lentes gravitacionales se utilizan como antenas gigantescas para la comunicación interestelar, casi como en la cosmología real.",
+      "formulas": [],
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полярные координаты улучшают обнаружение тёмных субгало в сильных линзах",
+      "oneliner": "Преобразование изображений сильных гравитационных линз в полярные координаты повышает эффективность нейросетей в поиске субгало тёмной материи до 15%.",
+      "description": "В исследовании изучается, как переход от декартовых к полярным координатам влияет на способность свёрточных нейронных сетей (CNN) определять массы тёмных субгало в симулированных изображениях космического телескопа «Хаббл». Авторы разработали архитектуру машинного обучения, которая предсказывает массу субгало вместе с неопределённостью, и сравнили модели, обученные на полярных и декартовых представлениях. Результаты показывают стабильное преимущество полярного преобразования, особенно для субгало малых масс и малых концентраций, что демонстрирует простой и вычислительно недорогой способ повысить точность CNN-анализа данных сильного линзирования.",
+      "context": "В рамках [tag:standard_model]стандартной модели[/tag], описывающей эволюцию Вселенной от [tag:big_bang]Большого взрыва[/tag] и включающей [tag:dark_energy]тёмную энергию[/tag], природа [tag:dark_matter]тёмной материи[/tag] остаётся одной из главных нерешённых загадок. На галактических масштабах тёмная материя образует иерархические структуры, включая [tag:galaxy]галактические[/tag] гало и популяции субгало, масса которых чувствительна к конкретной модели тёмной материи. Обнаружение этих субгало, особенно полностью тёмных, возможно только через их гравитационное влияние — например, через возмущения в дугах [tag:gravitational_lensing]сильного гравитационного линзирования[/tag]. Ещё пионеры изучения тёмной материи, такие как [scientist:Fritz Zwicky]Фриц Цвикки[/scientist] и [scientist:Vera Rubin]Вера Рубин[/scientist], показали необходимость скрытой массы, а наблюдения на [tag:hubble]«Хаббле»[/tag], названном в честь [scientist:Edwin Hubble]Эдвина Хаббла[/scientist], позволили изучать гравитационные линзы в далёких галактиках.",
+      "methods": "Для исследования использовались симулированные наблюдения [tag:hubble]космического телескопа «Хаббл»[/tag] (камера WFC3 IR, фильтр F160W) с различным отношением сигнал/шум (50 орбит и 1 орбита). Изображения содержали одиночное субгало, описываемое усечённым профилем NFW, на фоне гладкого линзирующего потенциала с мультипольными искажениями. Данные преобразовывались из декартовых координат в полярные: для каждой точки сетки (64×64 по радиусу и углу) значения пикселей интерполировались билинейно. Архитектура нейросети основана на ConvNeXt-Tiny с предобучением на ImageNet и специальной регрессионной головой, предсказывающей среднее и логарифм дисперсии массы. Функция потерь — отрицательное логарифмическое правдоподобие, включающее алеаторическую неопределённость. Сравнивались четыре варианта: декартовы/полярные входы, со случайной инициализацией и с предобучением.",
+      "results": "Во всех протестированных режимах (высокое и низкое отношение сигнал/шум, концентрации субгало c=60 и c=30) сети, обученные на полярных данных, показали лучшую долю обнаружения. Для субгало с массами от 10^9 до 10^{9.5} M⊙ прирост составил около 15% по сравнению с декартовым представлением. Предобучение также существенно улучшало результаты, а относительное преимущество полярного преобразования возрастало при уменьшении массы субгало и при переходе к менее концентрированным профилям (c=30). В случае низкого сигнала/шума выигрыш сокращался до 1–5%, но сохранялся для источников с малыми звёздными величинами. Сети успешно разделяли предсказания на уверенные и неуверенные с помощью порога по неопределённости, что позволяло отсеивать ненадёжные оценки.",
+      "implications": "Показано, что простое полярное преобразование служит эффективным способом повысить качество извлечения признаков из изображений сильного линзирования без модификации архитектуры нейросети. Это особенно важно для будущих крупных обзоров (например, с помощью [tag:hubble]«Хаббла»[/tag] и его преемников), где требуется быстрая обработка больших объёмов данных. Улучшение детектируемости маломассивных субгало поможет наложить более жёсткие ограничения на функцию масс субгало, что в свою очередь сузит круг допустимых моделей [tag:dark_matter]тёмной материи[/tag] и прольёт свет на проблему «касп-ядро».",
+      "future_development": "Дальнейшее развитие метода предполагает тестирование на реалистичных симуляциях с несколькими субгало, а также на реальных наблюдательных данных, где потребуется точное центрирование полярной сетки. Кроме того, перспективно изучить сочетание полярного преобразования с другими архитектурами, такими как U-Net для сегментации или трансформеры, а также сравнить его с групповыми эквивариантными свёртками, которые изначально учитывают вращательную симметрию.",
+      "impact_on": "Результаты окажут влияние на наблюдательную космологию и астрофизику частиц, предоставляя более надёжный инструмент для косвенного детектирования [tag:dark_matter]тёмной материи[/tag] через [tag:gravitational_lensing]гравитационное линзирование[/tag]. Это также способствует развитию методологии применения глубокого обучения в астрономии, где учёт симметрий данных может значительно повысить производительность.",
+      "next_steps": "Ближайшие шаги включают адаптацию метода к данным реальных телескопов, в том числе к изображениям, полученным [tag:hubble]«Хабблом»[/tag], и проверку устойчивости преимущества полярного преобразования при наличии нескольких субгало или сложных линзовых конфигураций.",
+      "key_problems_connection": "Данная работа напрямую связана с фундаментальной проблемой природы [tag:dark_matter]тёмной материи[/tag] и малыми масштабами [tag:standard_model]стандартной космологической модели[/tag], в частности с задачей определения функции масс субгало, которая критически зависит от свойств частиц тёмной материи. Улучшенное детектирование субгало с помощью сильного линзирования приближает нас к различению холодной, тёплой и самодействующей тёмной материи, что является одним из ключевых вызовов современной физики.",
+      "fun_fact": "Если превратить кольцо Эйнштейна в прямую линию с помощью полярных координат, нейросеть начинает «видеть» его как обычную текстуру, что напоминает фокус с цилиндрической анаморфозой, где искажённое изображение обретает смысл при взгляде под правильным углом.",
+      "scifi": "В романе «Тёмный лес» Лю Цысиня упоминаются гравитационные линзы как инструмент межзвёздной коммуникации, а идея «развернуть» изображение вокруг центра масс перекликается с концепцией преобразования пространства для извлечения скрытой информации — почти как детектор лжи для тёмной материи.",
+      "formulas": [
+        {
+          "description": "Усечённый профиль Наварро–Френка–Уайта для субгало",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho — плотность тёмной материи на радиусе r, r_s — масштабный радиус, r_t — радиус обрезания, M_0 — масштаб массы."
+        },
+        {
+          "description": "Функция потерь отрицательного логарифмического правдоподобия",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L — значение потерь для N изображений, \\hat{y}_i — истинная логарифмическая масса, \\mu_i и \\sigma_i^2 — предсказанные среднее и дисперсия."
+        }
+      ],
+      "key_numbers": {
+        "увеличение доли обнаружения": "~15% для субгало с массами 10^9–10^{9.5} M⊙",
+        "концентрации субгало": "c=60 и c=30",
+        "орбиты HST для SNR": "50 орбит (высокий) и 1 орбита (низкий)",
+        "пиксельный масштаб": "0.08 угловой секунды/пиксель",
+        "размер изображения": "64×64 пикселя"
+      },
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "en": {
+      "title": "Polar Coordinates Improve Detection of Dark Subhalos in Strong Lenses",
+      "oneliner": "Transforming images of strong gravitational lenses into polar coordinates boosts neural network efficiency in detecting dark matter subhalos by up to 15%.",
+      "description": "This study explores how switching from Cartesian to polar coordinates affects the ability of convolutional neural networks (CNNs) to infer the masses of dark subhalos in simulated Hubble Space Telescope images. The authors designed a machine learning architecture that predicts subhalo mass along with its uncertainty, and compared models trained on polar versus Cartesian representations. The results show a consistent advantage for the polar transform, especially for subhalos of low mass and low concentration, demonstrating a simple and computationally cheap way to improve the accuracy of CNN analysis of strong lensing data.",
+      "context": "Within the [tag:standard_model]standard model[/tag] that describes the evolution of the Universe from the [tag:big_bang]Big Bang[/tag] and includes [tag:dark_energy]dark energy[/tag], the nature of [tag:dark_matter]dark matter[/tag] remains one of the biggest unsolved mysteries. On galactic scales, dark matter forms hierarchical structures, including [tag:galaxy]galactic[/tag] halos and populations of subhalos whose mass is sensitive to the specific dark matter model. Detecting these subhalos, especially completely dark ones, is only possible through their gravitational influence—for example, via perturbations in the arcs of [tag:gravitational_lensing]strong gravitational lensing[/tag]. Early pioneers of dark matter research such as [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] and [scientist:Vera Rubin]Vera Rubin[/scientist] demonstrated the need for hidden mass, and observations with [tag:hubble]Hubble[/tag], named after [scientist:Edwin Hubble]Edwin Hubble[/scientist], made it possible to study gravitational lenses in distant galaxies.",
+      "methods": "The study used simulated observations of the [tag:hubble]Hubble Space Telescope[/tag] (WFC3 IR camera, F160W filter) at different signal-to-noise ratios (50 orbits and 1 orbit). The images contained a single subhalo modeled with a truncated NFW profile, set against a smooth lensing potential with multipole distortions. The data were transformed from Cartesian to polar coordinates: for each grid point (64×64 in radius and angle), pixel values were bilinearly interpolated. The neural network architecture is based on ConvNeXt-Tiny with ImageNet pretraining and a special regression head that predicts the mean and log variance of the mass. The loss function is the negative log-likelihood, incorporating aleatoric uncertainty. Four variants were compared: Cartesian/polar inputs, with random initialization and with pretraining.",
+      "results": "In all tested regimes (high and low signal-to-noise ratio, subhalo concentrations c=60 and c=30), networks trained on polar data achieved a better detection fraction. For subhalos with masses from 10^9 to 10^{9.5} M⊙, the improvement was about 15% compared to the Cartesian representation. Pretraining also significantly improved the results, and the relative advantage of the polar transform increased with decreasing subhalo mass and when moving to less concentrated profiles (c=30). In the low signal-to-noise case, the gain narrowed to 1–5% but persisted for sources with faint magnitudes. The networks successfully separated confident from unconfident predictions using an uncertainty threshold, allowing unreliable estimates to be filtered out.",
+      "implications": "The study shows that a simple polar transform is an effective way to improve feature extraction from strong lensing images without modifying the neural network architecture. This is especially important for future large surveys (for example, with [tag:hubble]Hubble[/tag] and its successors), where rapid processing of large data volumes is required. Improved detectability of low-mass subhalos will help place tighter constraints on the subhalo mass function, which in turn will narrow down the viable [tag:dark_matter]dark matter[/tag] models and shed light on the \"core-cusp problem\".",
+      "future_development": "Further development of the method will involve testing on realistic simulations with multiple subhalos, as well as on real observational data, where precise centering of the polar grid will be required. In addition, it is promising to explore combining the polar transform with other architectures, such as U-Net for segmentation or transformers, and to compare it with group equivariant convolutions that inherently account for rotational symmetry.",
+      "impact_on": "The results will impact observational cosmology and particle astrophysics, providing a more reliable tool for indirect detection of [tag:dark_matter]dark matter[/tag] through [tag:gravitational_lensing]gravitational lensing[/tag]. This also advances the methodology of applying deep learning in astronomy, where accounting for data symmetries can significantly boost performance.",
+      "next_steps": "The next steps include adapting the method to real telescope data, including images from [tag:hubble]Hubble[/tag], and testing the robustness of the polar transform advantage in the presence of multiple subhalos or complex lens configurations.",
+      "key_problems_connection": "This work is directly connected to the fundamental problem of the nature of [tag:dark_matter]dark matter[/tag] and the small-scale issues of the [tag:standard_model]standard cosmological model[/tag], in particular to determining the subhalo mass function, which critically depends on the properties of dark matter particles. Improved detection of subhalos via strong lensing brings us closer to distinguishing between cold, warm, and self-interacting dark matter, one of the key challenges in modern physics.",
+      "fun_fact": "If you turn an Einstein ring into a straight line using polar coordinates, the neural network begins to 'see' it as an ordinary texture, reminiscent of the trick with cylindrical anamorphosis, where a distorted image makes sense when viewed from the right angle.",
+      "scifi": "In Liu Cixin's novel 'The Dark Forest', gravitational lenses are mentioned as a tool for interstellar communication, and the idea of 'unfolding' an image around the center of mass echoes the concept of transforming space to extract hidden information—almost like a lie detector for dark matter.",
+      "formulas": [
+        {
+          "description": "Truncated Navarro–Frenk–White profile for a subhalo",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho — dark matter density at radius r, r_s — scale radius, r_t — truncation radius, M_0 — mass scale."
+        },
+        {
+          "description": "Negative log-likelihood loss function",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L — loss value for N images, \\hat{y}_i — true logarithmic mass, \\mu_i and \\sigma_i^2 — predicted mean and variance."
+        }
+      ],
+      "key_numbers": {
+        "increase in detection fraction": "~15% for subhalos with masses 10^9–10^{9.5} M⊙",
+        "subhalo concentrations": "c=60 and c=30",
+        "HST orbits for SNR": "50 orbits (high) and 1 orbit (low)",
+        "pixel scale": "0.08 arcseconds/pixel",
+        "image size": "64×64 pixels"
+      },
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    },
+    "es": {
+      "title": "Las coordenadas polares mejoran la detección de subhalos oscuros en lentes fuertes",
+      "oneliner": "La transformación de imágenes de lentes gravitacionales fuertes a coordenadas polares aumenta la eficiencia de las redes neuronales en la búsqueda de subhalos de materia oscura hasta en un 15%.",
+      "description": "El estudio investiga cómo la transición de coordenadas cartesianas a polares afecta la capacidad de las redes neuronales convolucionales (CNN) para determinar las masas de subhalos oscuros en imágenes simuladas del telescopio espacial Hubble. Los autores desarrollaron una arquitectura de aprendizaje automático que predice la masa del subhalo junto con la incertidumbre, y compararon modelos entrenados con representaciones polares y cartesianas. Los resultados muestran una ventaja estable de la transformación polar, especialmente para subhalos de masas pequeñas y concentraciones bajas, lo que demuestra una manera sencilla y computacionalmente económica de mejorar la precisión del análisis de datos de lentes fuertes con CNN.",
+      "context": "Dentro del [tag:standard_model]modelo estándar[/tag], que describe la evolución del Universo desde el [tag:big_bang]Big Bang[/tag] e incluye la [tag:dark_energy]energía oscura[/tag], la naturaleza de la [tag:dark_matter]materia oscura[/tag] sigue siendo uno de los principales misterios sin resolver. A escala galáctica, la materia oscura forma estructuras jerárquicas, incluidos los halos [tag:galaxy]galácticos[/tag] y poblaciones de subhalos, cuya masa es sensible al modelo concreto de materia oscura. La detección de estos subhalos, especialmente los completamente oscuros, solo es posible a través de su influencia gravitacional —por ejemplo, mediante perturbaciones en los arcos de [tag:gravitational_lensing]lentes gravitacionales fuertes[/tag]. Ya los pioneros del estudio de la materia oscura, como [scientist:Fritz Zwicky]Fritz Zwicky[/scientist] y [scientist:Vera Rubin]Vera Rubin[/scientist], demostraron la necesidad de masa oculta, y las observaciones con el [tag:hubble]Hubble[/tag], nombrado en honor a [scientist:Edwin Hubble]Edwin Hubble[/scientist], permitieron estudiar las lentes gravitacionales en galaxias lejanas.",
+      "methods": "Para la investigación se utilizaron observaciones simuladas del [tag:hubble]telescopio espacial Hubble[/tag] (cámara WFC3 IR, filtro F160W) con diferente relación señal/ruido (50 órbitas y 1 órbita). Las imágenes contenían un único subhalo, descrito por un perfil NFW truncado, sobre un fondo de potencial lente suave con distorsiones multipolares. Los datos se transformaron de coordenadas cartesianas a polares: para cada punto de la cuadrícula (64×64 en radio y ángulo), los valores de píxel se interpolaron bilinealmente. La arquitectura de la red neuronal se basa en ConvNeXt-Tiny con preentrenamiento en ImageNet y una cabeza de regresión especial que predice la media y el logaritmo de la varianza de la masa. La función de pérdida es la verosimilitud logarítmica negativa, que incluye incertidumbre aleatoria. Se compararon cuatro variantes: entradas cartesianas/polares, con inicialización aleatoria y con preentrenamiento.",
+      "results": "En todos los modos probados (relación señal/ruido alta y baja, concentraciones de subhalo c=60 y c=30), las redes entrenadas con datos polares mostraron una mejor tasa de detección. Para subhalos con masas de 10^9 a 10^{9.5} M⊙, la mejora fue de aproximadamente un 15% en comparación con la representación cartesiana. El preentrenamiento también mejoró significativamente los resultados, y la ventaja relativa de la transformación polar aumentó al disminuir la masa del subhalo y al pasar a perfiles menos concentrados (c=30). En el caso de baja señal/ruido, la ganancia se redujo al 1–5%, pero se mantuvo para fuentes con magnitudes estelares pequeñas. Las redes separaron con éxito las predicciones en seguras e inseguras mediante un umbral de incertidumbre, lo que permitió filtrar las estimaciones poco fiables.",
+      "implications": "Se ha demostrado que la simple transformación polar sirve como una forma eficaz de mejorar la calidad de la extracción de características de las imágenes de lentes fuertes sin modificar la arquitectura de la red neuronal. Esto es especialmente importante para futuros grandes relevamientos (por ejemplo, con el [tag:hubble]Hubble[/tag] y sus sucesores), donde se requiere un procesamiento rápido de grandes volúmenes de datos. La mejora en la detectabilidad de subhalos de baja masa ayudará a imponer restricciones más estrictas a la función de masa de los subhalos, lo que a su vez reducirá el conjunto de modelos admisibles de [tag:dark_matter]materia oscura[/tag] y arrojará luz sobre el problema del 'cuspe-núcleo'.",
+      "future_development": "El desarrollo futuro del método implica pruebas en simulaciones realistas con múltiples subhalos, así como en datos observacionales reales, donde se requerirá un centrado preciso de la cuadrícula polar. Además, es prometedor estudiar la combinación de la transformación polar con otras arquitecturas, como U-Net para segmentación o transformers, así como compararla con convoluciones equivariantes grupales, que tienen en cuenta intrínsecamente la simetría rotacional.",
+      "impact_on": "Los resultados tendrán un impacto en la cosmología observacional y la astrofísica de partículas, al proporcionar una herramienta más fiable para la detección indirecta de [tag:dark_matter]materia oscura[/tag] a través de [tag:gravitational_lensing]lentes gravitacionales[/tag]. Esto también contribuye al desarrollo de la metodología de aplicación del aprendizaje profundo en astronomía, donde la consideración de las simetrías de los datos puede mejorar significativamente el rendimiento.",
+      "next_steps": "Los próximos pasos incluyen la adaptación del método a datos de telescopios reales, incluidas las imágenes obtenidas por el [tag:hubble]Hubble[/tag], y la verificación de la solidez de la ventaja de la transformación polar en presencia de múltiples subhalos o configuraciones de lentes complejas.",
+      "key_problems_connection": "Este trabajo está directamente relacionado con el problema fundamental de la naturaleza de la [tag:dark_matter]materia oscura[/tag] y las pequeñas escalas del [tag:standard_model]modelo cosmológico estándar[/tag], en particular con la tarea de determinar la función de masa de los subhalos, que depende críticamente de las propiedades de las partículas de materia oscura. La mejora en la detección de subhalos mediante lentes fuertes nos acerca a distinguir entre materia oscura fría, caliente y autointeractuante, lo que constituye uno de los principales desafíos de la física moderna.",
+      "fun_fact": "Si convertimos un anillo de Einstein en una línea recta usando coordenadas polares, la red neuronal empieza a «verlo» como una textura normal, lo que recuerda al truco de la anamorfosis cilíndrica, donde una imagen distorsionada cobra sentido al mirarla desde el ángulo correcto.",
+      "scifi": "En la novela 'El bosque oscuro' de Liu Cixin, se mencionan las lentes gravitacionales como herramienta de comunicación interestelar, y la idea de «desplegar» la imagen alrededor del centro de masas resuena con el concepto de transformar el espacio para extraer información oculta, casi como un detector de mentiras para la materia oscura.",
+      "formulas": [
+        {
+          "description": "Perfil truncado de Navarro-Frenk-White para subhalos",
+          "latex": "\\rho(r) = \\frac{M_0}{4\\pi r (r + r_s)^2} \\left( \\frac{r_t^2}{r^2 + r_t^2} \\right)",
+          "meaning": "\\rho — densidad de materia oscura en el radio r, r_s — radio de escala, r_t — radio de truncamiento, M_0 — escala de masa."
+        },
+        {
+          "description": "Función de pérdida de verosimilitud logarítmica negativa",
+          "latex": "L = \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\frac{(\\hat{y}_i - \\mu_i)^2}{2\\sigma_i^2} + \\log \\sigma_i \\right]",
+          "meaning": "L — valor de pérdida para N imágenes, \\hat{y}_i — masa logarítmica verdadera, \\mu_i y \\sigma_i^2 — media y varianza predichas."
+        }
+      ],
+      "key_numbers": {
+        "aumento de la tasa de detección": "~15% para subhalos con masas de 10^9–10^{9.5} M⊙",
+        "concentraciones de subhalo": "c=60 y c=30",
+        "órbitas del HST para SNR": "50 órbitas (alta) y 1 órbita (baja)",
+        "escala de píxel": "0.08 segundos de arco/píxel",
+        "tamaño de imagen": "64×64 píxeles"
+      },
+      "main_tag": "dark_matter",
+      "extra_tags": [
+        "gravitational_lensing",
+        "hubble",
+        "galaxy",
+        "standard_model",
+        "big_bang",
+        "dark_energy"
+      ],
+      "scientists": [
+        "Fritz Zwicky",
+        "Vera Rubin",
+        "Edwin Hubble"
+      ]
+    }
+  },
+  "image_prompt": "A luminous Einstein ring arcs around a central galaxy"
+}

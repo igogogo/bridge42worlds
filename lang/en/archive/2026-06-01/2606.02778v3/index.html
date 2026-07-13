@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Orthography: How ExoVeil Reads Missed Planets — bridge42worlds</title>
+    <meta name="description" content="Traditionally, astronomers caught planets by waiting for multiple passes across stars. ExoVeil breaks this mold: a transformer neural network learns to predict the star's normal twinkling and spots even a lone shadow. A blind analysis of Kepler data revealed 179 new candidates, and on TESS data with">
+    <meta property="og:title" content="Stellar Orthography: How ExoVeil Reads Missed Planets">
+    <meta property="og:description" content="ExoVeil's machine learning algorithm finds exoplanets from a single transit, learning the 'grammar' of stellar brightness and reacting to any anomalies.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.02778v3/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Stellar Orthography: How ExoVeil Reads Missed Planets", "description": "ExoVeil's machine learning algorithm finds exoplanets from a single transit, learning the 'grammar' of stellar brightness and reacting to any anomalies.", "inLanguage": "en", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg", "author": [{"@type": "Person", "name": "Pratik Priyanshu"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02778v3", "abstract": "EXOVEIL is a transit-finding system that operates on raw flux time series and can detect single transits. Based on a Transformer model trained with transit masking on 16,499 Kepler light curves, it predicts the expected stellar flux; a variance-weighted matched filter extracts signals from the prediction residuals. An XGBoost classifier separates planets from false positives (AUC 0.938 on Kepler DR25). When injecting single transits with 1000 ppm depth, the system recovers 32%—a task where all classification methods show 0%. A blind search of 3737 Kepler stars revealed 179 new transit-like signals, including 46 single-transit candidates. Without retraining, the system detected all 47 confirmed TESS planets in the PLATO LOPS2 field, demonstrating cross-mission transferability. At PLATO’s 25-second cadence, transits down to 100 ppm are detectable, approaching the Earth-analog regime. Conformal prediction was applied for the first time, with an empirical coverage of 95.9%. The code, pre-trained weights, and candidate catalog are open-source (pip install exoveil)."}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/en/archive/2026-06-01/2606.02778v3/mini.html" data-label="Mini" title="Mini — The gist in 10 seconds"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/en/archive/2026-06-01/2606.02778v3/simple.html" data-label="Simple" title="Simple — As simple as it gets — for a first look"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/en/archive/2026-06-01/2606.02778v3/index.html" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/en/archive/2026-06-01/2606.02778v3/advanced.html" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
+
+<h1 class="article-title-top">Stellar Orthography: How ExoVeil Reads Missed Planets <span class="refine-badge" title="Отшлифовано редактором">✦</span></h1>
+<label class="refine-switch" title="Сравнить с сырым текстом (до шлифовки)"><input type="checkbox" onchange="toggleRaw(this)" data-raw-url="/lang/en/archive/2026-06-01/2606.02778v3/api/popular-ru.json"> показать сырой вариант (до шлифовки)</label>
+<div class="authors-top"><a href="/lang/ru/authors/Pratik_Priyanshu.html" class="text-author-link" data-author="Pratik Priyanshu">Pratik Priyanshu</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.02778v3">2606.02778v3</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 4 min</span> · <span class="cat-badge" data-cat="astro-ph.EP">Exoplanets</span> <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.02778v3">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "One Transit Is All You Need: Detecting Exoplanets Through Learned Stellar Behaviour with EXOVEIL"</div>
+        <div class="oneliner">ExoVeil's machine learning algorithm finds exoplanets from a single transit, learning the 'grammar' of stellar brightness and reacting to any anomalies.</div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>Scientists have created EXOVEIL, a system that finds exoplanets from single dips in starlight, without needing repeated signals as before. It uses a ‘predictor’ neural network (a Transformer) trained on thousands of light curves from Kepler, to reconstruct the star’s ideal brightness; then a special filter catches the tiniest deviations. Among the finds are 179 new candidates, including 46 single transits missed by standard catalogs. The system works without retraining even on data from other telescopes, and it’s edging toward detecting Earth-like planets. It’s like teaching a clock to notice a single missing second instead of waiting for minute-long glitches.</p></div>
+        <div class="ai-cover"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg" alt=""></a></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/0.jpg" alt="TheExoVeilpipeline." title="TheExoVeilpipeline." loading="lazy"></a><figcaption>TheExoVeilpipeline.</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/1.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/1.jpg" alt="Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve" title="Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve" loading="lazy"></a><figcaption>Example detection of a confirmed Kepler planet (KIC 11449844,P= 38.5d) byExoVeil.Top:Kepler light curve</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/2.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/2.jpg" alt="Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require" title="Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require" loading="lazy"></a><figcaption>Single-transit recovery rate vs. injected depth. ExoMiner and AstroNet score 0% at every depth because they require</figcaption></figure></div></div>
+        <p>A star's light curve is not chaotic noise, but a text written by pulsations, spots, and the steady glow of a thermonuclear furnace. Any planet slipping across the disk leaves a typo in this text: a tiny dip in brightness lasting hours. Classic <a href="/lang/en/tags/exoplanet.html" class="text-tag" data-tag="exoplanet">exoplanet</a> search methods required the typo to repeat—word after word, orbit after orbit. But what if the planet passes only once in years of observations? That's exactly how potential Earth twins on wide orbits behave. Catching them with old tools is like searching for a single missing 'not' in a multi-volume novel without knowing the language.</p><p>The ExoVeil system works like a genius proofreader who has mastered the grammar of starlight. At its core is a transformer neural network with six layers and eight attention heads, trained on 16,499 <a href="/lang/en/tags/photometry.html" class="text-tag" data-tag="photometry">photometry</a> curves from the Kepler telescope. The trick: during training, sections with known planets were masked and replaced with smooth background interpolation—the model never saw real transits. It only learned to predict the next brightness reading, much like a language model predicts the next word based on full context. When a real light curve is fed in, the difference between prediction and observation becomes an anomaly map. [callout]A star pulsates with a rhythm set by convection, rotation, and magnetic cycles. ExoVeil catches this melody, and a transit sounds like a sour note, instantly standing out against the symphony.[/callout]</p><p>The residuals are processed by a matched filter—a detector that weights each deviation inversely to noise variance. Calm stretches of the curve where the star 'is silent' get more weight, while turbulent ones get less. This mathematical trick is captured by a simple signal-to-noise ratio formula:</p><p>\[ \text{SNR} = \frac{\sum_i (r_i \cdot m_i) / \sigma_i^2}{\sqrt{\sum_i m_i^2 / \sigma_i^2}} \]</p><p>where \(r_i\) are prediction residuals, \(m_i\) is the transit template, and \(\sigma_i^2\) is local variance. Thanks to this approach, the system recovers 32% of single transits as shallow as 1000 ppm—without the phase folding that traditional methods require. Then an XGBoost-based classifier filters out false alarms, like eclipsing binaries with <a href="/lang/en/tags/white_dwarf.html" class="text-tag" data-tag="white_dwarf">white dwarfs</a>, and conformal prediction provides formal guarantees for ranking candidates. [callout]ExoVeil was trained solely on Kepler data, yet it instantly worked on TESS images—a telescope with different optics and noise systematics. This raises hope that each new mission won't require starting from scratch.[/callout]</p><p>A blind search on 3,737 Kepler stars yielded 179 transit-like anomalies not listed in the DR25 catalog. Transferring to TESS data without retraining confirmed the method's power: all 47 known planets in the PLATO LOPS2 field were detected, including long-period and small ones. Simulations of the future PLATO mission cadence with 25-second exposures show sensitivity will improve to 100 ppm—right down to Earth-like scales. Transit depth is given by another elegant formula:</p><p>\[ \delta = \left(\frac{R_p}{R_s}\right)^2 \]</p><p>showing that an Earth-sized planet blocks only 0.008% of a <a href="/lang/en/tags/sun.html" class="text-tag" data-tag="sun">sun-like</a> star's light. ExoVeil learns to discern such minuscule shadows, effectively doubling the available observing time for analysis and paving the way to search for Earth analogues in our <a href="/lang/en/tags/galaxy.html" class="text-tag" data-tag="galaxy">Galaxy</a>. And if one day the PLATO telescope captures a single fleeting dimming, ExoVeil could not only spot it but also suggest: 'This is an Earth-sized planet, and its year lasts 365 days.'</p><p>The method's future lies in integration with PLATO simulations. Lighter architectures like Mamba will allow processing full light curves without cutting corners. Automatic filtering of false alarms will make the search routine. Confirming candidates will require radial velocity measurements using the <a href="/lang/en/scientists/Christian_Doppler.html" class="text-scientist" data-scientist="Christian Doppler">Doppler</a> effect and subsequent <a href="/lang/en/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">spectroscopy</a> of atmospheres, where absorption lines are described by the <a href="/lang/en/scientists/Johannes_Rydberg.html" class="text-scientist" data-scientist="Johannes Rydberg">Rydberg</a> formula. In the long run, such planets will become targets for biomarker searches—<a href="/lang/en/tags/water.html" class="text-tag" data-tag="water">water</a>, <a href="/lang/en/tags/methane.html" class="text-tag" data-tag="methane">methane</a>, <a href="/lang/en/tags/carbon_dioxide.html" class="text-tag" data-tag="carbon_dioxide">carbon dioxide</a>. ExoVeil doesn't just hunt worlds; it teaches us to read the language of stars, so that one day we may find a text where, among familiar symbols, the word 'life' emerges.</p>
+        <div class="fun-fact"><p class="fact">🎯 The first version of the detector, based on hand-crafted rules, yielded an AUC of 0.36—worse than random guessing (0.5). The residuals from eclipsing binaries turned out deeper than planetary ones, and the algorithm deemed them more reliable signals.</p></div>
+        <div class="formula"><div class="formula-render">\delta = \left(\frac{R_p}{R_s}\right)^2</div><div class="formula-meaning">Transit depth—the fraction of light blocked by the planet—is set by the ratio of squared radii. Jupiter covers 1% of the Sun's disk area, Earth only 0.008%.</div></div><div class="formula"><div class="formula-render">\text{SNR} = \frac{\sum_i (r_i \cdot m_i) / \sigma_i^2}{\sqrt{\sum_i m_i^2 / \sigma_i^2}}</div><div class="formula-meaning">The matched filter weights prediction residuals r_i with the transit template m_i and inverse noise variance. Quiet sections of the light curve get more weight, boosting sensitivity.</div></div>
+        
+        <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Christian_Doppler.html" class="text-scientist" data-scientist="Christian Doppler">Christian Doppler</a>, <a href="/lang/en/scientists/Johannes_Rydberg.html" class="text-scientist" data-scientist="Johannes Rydberg">Johannes Rydberg</a></div>
+        <div class="actions" data-article-id="2606.02778v3_en_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2606.02778v3" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('Stellar Orthography: How ExoVeil Reads Missed Planets','https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html')">Share</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2606.02778v3_en_popular" data-entity-type="article"><div class="fb-title">How does it read? (helps us improve)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">Tags</div><a href="/lang/en/tags/exoplanet.html" class="side-tag" data-tag="exoplanet">exoplanet</a>
+<a href="/lang/en/tags/transit_method.html" class="side-tag" data-tag="transit_method">transit method</a>
+<a href="/lang/en/tags/photometry.html" class="side-tag" data-tag="photometry">photometry</a>
+<a href="/lang/en/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">spectroscopy</a>
+<a href="/lang/en/tags/sun.html" class="side-tag" data-tag="sun">Sun</a>
+<a href="/lang/en/tags/red_dwarf.html" class="side-tag" data-tag="red_dwarf">red dwarf</a>
+<a href="/lang/en/tags/white_dwarf.html" class="side-tag" data-tag="white_dwarf">white dwarf</a>
+<a href="/lang/en/tags/galaxy.html" class="side-tag" data-tag="galaxy">galaxy</a>
+<a href="/lang/en/tags/water.html" class="side-tag" data-tag="water">water</a>
+<a href="/lang/en/tags/methane.html" class="side-tag" data-tag="methane">methane</a>
+<a href="/lang/en/tags/carbon_dioxide.html" class="side-tag" data-tag="carbon_dioxide">carbon dioxide</a><div class="side-laws-label">Laws</div><a href="/lang/en/laws/law_of_universal_gravitation.html" class="side-law" data-law="law_of_universal_gravitation">law of universal gravitation</a><a href="/lang/en/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">Doppler effect</a><a href="/lang/en/laws/keplers_third_law.html" class="side-law" data-law="keplers_third_law">Kepler's third law</a><a href="/lang/en/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">Maxwell's equations</a><a href="/lang/en/laws/plancks_law.html" class="side-law" data-law="plancks_law">Planck's law</a><a href="/lang/en/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">Planck–Einstein relation</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2606.02778v3">arXiv:2606.02778v3</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/scroll.js?v=f31547ad85"></script>
+<script src="/js/lightbox.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2606.02778v3', 'article', 'en');
+    if (false && window.logExpressInterest) logExpressInterest('2606.02778v3', 'en');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

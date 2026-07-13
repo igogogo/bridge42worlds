@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#предел — bridge42worlds</title>
+    <meta name="description" content="Предел функции f(x) при x, стремящемся к a, равен L, если для любого положительного ε можно указать такую окрестность точки a, что значения f(x) отличаются от L не больше чем на ε, как только x попадает в эту окрестность (кроме, возможно, самой точки a). Ключевой момент: мы не требуем, чтобы f(a) существовало или равнялось L. Предел описывает лишь устремление, а не достижение.">
+    <meta property="og:title" content="#предел — bridge42worlds">
+    <meta property="og:description" content="Предел функции f(x) при x, стремящемся к a, равен L, если для любого положительного ε можно указать такую окрестность точки a, что значения f(x) отличаются от L не больше чем на ε, как только x попадает в эту окрестность (кроме, возможно, самой точки a). Ключевой момент: мы не требуем, чтобы f(a) существовало или равнялось L. Предел описывает лишь устремление, а не достижение.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/tags/limit.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>предел</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Предел — направление взгляда математики в точку, куда функция стремится, но не обязана прийти. Как приближение к горизонту: сколько ни иди, он уходит дальше, но его положение определено чётко.</p><div class="practical-app"><strong>На практике:</strong> Без предела не вычислить мгновенную скорость автомобиля по изменению координат — GPS-навигаторы и автопилоты опираются на это понятие постоянно.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Предел функции f(x) при x, стремящемся к a, равен L, если для любого положительного ε можно указать такую окрестность точки a, что значения f(x) отличаются от L не больше чем на ε, как только x попадает в эту окрестность (кроме, возможно, самой точки a). Ключевой момент: мы не требуем, чтобы f(a) существовало или равнялось L. Предел описывает лишь устремление, а не достижение.</div>
+        <div class="fun-fact">💡 Задолго до формализации Зенон Элейский сформулировал парадокс об Ахиллесе и черепахе: Ахиллес никогда не догонит черепаху, поскольку каждый раз сокращает расстояние на долю. Современное объяснение парадокса — как раз в понятии предела: сумма бесконечно многих отрезков может давать конечное время.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Предел описывает поведение функции, когда её аргумент (вход) подходит сколь угодно близко к какому-то числу. Это как если наливать воду в стакан: уровень стремится к краю, но никогда его не достигнет, если вода не переливается. В математике предел — точное число, к которому значения функции приближаются, даже если сама функция в той точке не определена или равна другому.</div>
+        <div class="section"><h2>История</h2><p>Интуитивно пределы использовали ещё в Древней Греции: метод исчерпывания Архимеда вычислял площади криволинейных фигур. Строгое определение предела с эпсилон-дельта появилось в XIX веке благодаря Огюстену Луи Коши и Карлу Вейерштрассу.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представь удаляющуюся лестницу: каждый шаг вдвое короче предыдущего. Ты никогда не коснёшься дальней стены, но с каждым шагом расстояние до неё становится меньше любого наперёд заданного числа. Математически это и есть предел — гарантированная близость без необходимости касания.</p></div>
+        <div class="fun-fact">💡 Предел последовательности (1 + 1/n)^n при n→∞ равен числу e ≈ 2.71828 — основанию натуральных логарифмов. Это же число — единственное, для которого производная показательной функции a^x равна a^x.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Фундаментальное понятие математического анализа, лежащее в основе непрерывности, производных, интегралов. Говорят, что предел функции f при x, стремящемся к c, равен L ( lim_{x→c} f(x)=L ), если для любого ε>0 существует δ>0 такое, что из 0<|x−c|<δ следует |f(x)−L|<ε. Это определение исключает точку c из рассмотрения, подчёркивая локальный характер предела. Предел может быть односторонним (слева или справа), бесконечным (x→∞ или значение стремится к бесконечности) или не существовать вовсе. Обобщается на метрические и топологические пространства через понятие направления и фильтра.</div>
+        <div class="section"><h2>История</h2><p>Интуитивное понятие предела появилось в античности в работах Евдокса и Архимеда (метод исчерпывания). В XVII веке Ньютон и Лейбниц использовали бесконечно малые («флюксии» и «дифференциалы») для создания анализа, но критиковались за нестрогость. Огюстен Луи Коши в 1821 году предложил определение на языке ε-δ, позднее уточнённое Вейерштрассом. Это положило конец эпохе инфинитезималей и дало фундамент современному анализу.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Классическое ε-δ определение формализует интуицию «приближения без достижения». На практике для вычисления пределов используют алгебраические преобразования, теорему о сжатии (двух милиционеров), правило Лопиталя (для неопределённостей) или асимптотические оценки. Пределы незаменимы при определении непрерывности (f непрерывна в c, если lim_{x→c} f(x)=f(c)), производной ( lim_{h→0} (f(x+h)−f(x))/h ) и интеграла Римана ( lim_{n→∞} Σ f(x_i^*)Δx ). В функциональном анализе предел обобщается на нормированные пространства.</p></div>
+        <div class="formula"><div class="formula-render">\lim_{x \to c} f(x) = L \iff \forall \varepsilon > 0, \exists \delta > 0 : 0 < |x - c| < \delta \implies |f(x) - L| < \varepsilon</div><div class="formula-meaning">ε — сколь угодно малое положительное число, требуемая точность приближения значений функции к L; δ — положительное число, определяющее окрестность точки c, в которой значения функции обязаны быть ε-близкими к L (не включая саму точку c); f — функция; c — точка, к которой стремится аргумент; L — значение предела; символы ∀ и ∃ — кванторы всеобщности и существования соответственно.</div></div><div class="formula"><div class="formula-render">e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n</div><div class="formula-meaning">e — число Эйлера, иррациональное; n — натуральное число, неограниченно возрастающее; предел последовательности, заданной выражением (1+1/n)^n.</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Построение строгой теории бесконечно малых, лишённой противоречий (нестандартный анализ Абрахама Робинсона); Вычисление пределов сложных последовательностей и функций без явного аналитического задания</p><p class="fact">💡 Предел последовательности (1 + 1/n)^n при n→∞ равен числу e ≈ 2.71828 — основанию натуральных логарифмов. Это же число — единственное, для которого производная показательной функции a^x равна a^x.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="limit_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="limit" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="limit_ru_page" data-entity-type="tag"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/manifold.html" data-tag="manifold">многообразие</a> · <a href="/lang/ru/tags/differential_equation.html" data-tag="differential_equation">дифференциальное уравнение</a> · <a href="/lang/ru/tags/topology.html" data-tag="topology">топология</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="t:limit"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="limit"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('limit', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

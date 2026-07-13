@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свет в криостате: как несовершенные преобразователи строят квантовые мосты — bridge42worlds</title>
+    <meta name="description" content="Сверхпроводниковые [tag:quantum_computer]квантовые компьютеры[/tag] упираются в проблему охлаждения: одиночный криостат не вместит миллионы кубитов. Выход — оптические каналы, но для них нужны микроволново-оптические преобразователи, которые пока далеки от идеала. Авторы показали, что благодаря прот">
+    <meta property="og:title" content="Свет в криостате: как несовершенные преобразователи строят квантовые мосты">
+    <meta property="og:description" content="Шумные и неэффективные преобразователи фотонов могут надежно связывать квантовые модули — путь к распределённым вычислениям открыт уже сегодня.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Свет в криостате: как несовершенные преобразователи строят квантовые мосты", "description": "Шумные и неэффективные преобразователи фотонов могут надежно связывать квантовые модули — путь к распределённым вычислениям открыт уже сегодня.", "inLanguage": "ru", "datePublished": "2025-05-01", "url": "https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html", "image": "https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg", "author": [{"@type": "Person", "name": "M. J. Weaver"}, {"@type": "Person", "name": "G. Arnold"}, {"@type": "Person", "name": "H. Weaver"}, {"@type": "Person", "name": "S. Gröblacher"}, {"@type": "Person", "name": "R. Stockill"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2505.00542v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2025-05-01/2505.00542v1/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2025-05-01/2505.00542v1/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/ru/archive/2025-05-01/2505.00542v1/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ru/archive/2025-05-01/2505.00542v1/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Следующая статья →</button></div>
+
+<h1 class="article-title-top">Свет в криостате: как несовершенные преобразователи строят квантовые мосты <span class="refine-badge" title="Отшлифовано редактором">✦</span></h1>
+<label class="refine-switch" title="Сравнить с сырым текстом (до шлифовки)"><input type="checkbox" onchange="toggleRaw(this)" data-raw-url="/lang/ru/archive/2025-05-01/2505.00542v1/api/popular-ru.json"> показать сырой вариант (до шлифовки)</label>
+<div class="authors-top"><a href="/lang/ru/authors/M_J_Weaver.html" class="text-author-link" data-author="M. J. Weaver">M. J. Weaver</a>, <a href="/lang/ru/authors/G_Arnold.html" class="text-author-link" data-author="G. Arnold">G. Arnold</a>, <a href="/lang/ru/authors/H_Weaver.html" class="text-author-link" data-author="H. Weaver">H. Weaver</a>, <a href="/lang/ru/authors/S_Gröblacher.html" class="text-author-link" data-author="S. Gröblacher">S. Gröblacher</a>, <a href="/lang/ru/authors/R_Stockill.html" class="text-author-link" data-author="R. Stockill">R. Stockill</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2505.00542v1">2505.00542v1</a> · 2025-05-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · <span class="reading-time">⏱ 2 мин</span> · <span class="cat-badge" data-cat="quant-ph">Quantum Physics</span> <span class="cat-badge" data-cat="physics.optics">Optics</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202505.00542v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "Scalable Quantum Computing with Optical Links"</div>
+        <div class="oneliner">Шумные и неэффективные преобразователи фотонов могут надежно связывать квантовые модули — путь к распределённым вычислениям открыт уже сегодня.</div>
+        
+        <div class="ai-cover"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg" alt=""></a></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/0.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/0.jpg" alt="Следовательно, преобразователи" title="Следовательно, преобразователи" loading="lazy"></a><figcaption>Следовательно, преобразователи</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/1.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/1.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/2.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/2.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/3.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/3.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/4.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/4.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/5.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/5.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/6.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/6.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/7.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/7.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/8.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/8.jpg" alt="" loading="lazy"></a></figure></div><button type="button" class="mosaic-arrow mosaic-prev" aria-label="Prev" onclick="this.parentElement.querySelector('.mosaic-track').scrollBy({left:-this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})">‹</button><button type="button" class="mosaic-arrow mosaic-next" aria-label="More images" onclick="this.parentElement.querySelector('.mosaic-track').scrollBy({left:this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})">›</button></div>
+        <p>Квантовый процессор на сверхпроводниках — как микроскопический мегаполис, запертый в криогенном холодильнике: улицы из сверхпроводящих линий, кварталы кубитов. Каждый житель требует тишины и холода, но расширять город внутри одного криостата всё равно что надстраивать небоскрёбы в тесном дворе — провода греют среду, шумы нарастают, когерентность грозит обрушиться. Городу нужны внешние магистрали — оптические линии, по которым <a href="/lang/ru/tags/quantum_information.html" class="text-tag" data-tag="quantum_information">квантовая информация</a> улетает на почти невесомых фотонах, не нагревая окружение. У этой магистрали есть подвесной мост между мирами: микроволново-оптический преобразователь. Он переводит «язык» кубитов (гигагерцы) на «язык» света (сотни терагерц).</p><div class="callout">Одно оптоволокно способно переносить одиночные фотоны на сотни километров почти без потерь — в отличие от металлических линий, чьё сопротивление съедает сигнал и рождает паразитное тепло.</div><p>Пока эти мосты напоминают шаткие канатные переправы: эффективность конверсии — от долей процента до нескольких десятков, каждый шаг добавляет шум. Но исследователи не стали ждать совершенства. В духе идей <a href="/lang/ru/scientists/Charles_Bennett.html" class="text-scientist" data-scientist="Charles Bennett">Чарльза Беннетта</a> о дистилляции <a href="/lang/ru/tags/quantum_entanglement.html" class="text-tag" data-tag="quantum_entanglement">запутанности</a> и <a href="/lang/ru/scientists/John_Stewart_Bell.html" class="text-scientist" data-scientist="John Stewart Bell">Джона Стюарта Белла</a> о нелокальности, они предложили протокол, где множество параллельных попыток и очистка состояний компенсируют неидеальность. Представьте команду курьеров, которые несут части зашифрованного ключа: даже если некоторые теряют пакеты или ошибаются, при сборке на месте можно восстановить точную копию. Глубинная аналогия — алгоритмы консенсуса в ненадёжных сетях: истина рождается из множества искажённых голосов.</p><p>Моделирование показало: при реалистичных параметрах (шум 0.1 фотона на попытку, частота повторений 1 МГц, 20 параллельных линий) за 15 микросекунд рождается <a href="/lang/ru/tags/quantum_entanglement.html" class="text-tag" data-tag="quantum_entanglement">запутанная</a> пара с точностью 91%. Четыре раунда <a href="/lang/ru/tags/quantum_measurement.html" class="text-tag" data-tag="quantum_measurement">квантовой дистилляции</a> поднимают её до 99% — выше порога коррекции ошибок. Такая пара способна телепортировать состояние кубита между модулями или стать звеном в большом GHZ-состоянии для <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">алгоритмических прорывов</a>. Идея <a href="/lang/ru/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Ричарда Фейнмана</a> о том, что квантовые системы должны симулировать природу, обретает реальный масштаб.</p><p>Будущее не за гигантским холодильником, а за оптической паутиной, соединяющей криогенные острова. Достижение эффективности выше 50% и шума ниже 0.01 откроет решёточную хирургию: логические кубиты, разорванные между модулями, будут «сшиваться» светом на каждом такте коррекции <a href="/lang/ru/tags/quantum_decoherence.html" class="text-tag" data-tag="quantum_decoherence">декогеренции</a>. Уже сегодня ясно: можно не ждать идеального преобразователя — пора строить <a href="/lang/ru/tags/quantum_optics.html" class="text-tag" data-tag="quantum_optics">квантовые оптические сети</a> из подручных материалов. Так обычное оптоволокно, доставляющее сериалы в наши дома, однажды будет передавать <a href="/lang/ru/tags/superconductivity.html" class="text-tag" data-tag="superconductivity">сверхпроводящие</a> мысли квантовых компьютеров.</p>
+        <div class="fun-fact"><p class="fact">🎯 Оптоволокно, по которому мы смотрим видео, способно передавать одиночные фотоны на сотни километров с минимальным затуханием — именно это свойство превращает его в идеальную основу для квантового интернета.</p></div>
+        <div class="formula"><div class="formula-render">C_{EO} = \frac{4 G_{EO}^2}{\kappa_{MW} \kappa_O} \approx 1</div><div class="formula-meaning">Кооперативность электрооптического взаимодействия — баланс между усилением связи и потерями в резонаторах. Значение порядка единицы даёт максимальную эффективность преобразования микроволн в свет.</div></div>
+        
+        <div class="scientists-section"><strong>Учёные:</strong> <a href="/lang/ru/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a>, <a href="/lang/ru/scientists/John_Stewart_Bell.html" class="text-scientist" data-scientist="John Stewart Bell">John Stewart Bell</a>, <a href="/lang/ru/scientists/Charles_Bennett.html" class="text-scientist" data-scientist="Charles Bennett">Charles Bennett</a></div>
+        <div class="actions" data-article-id="2505.00542v1_ru_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2505.00542v1" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('Свет в криостате: как несовершенные преобразователи строят квантовые мосты','https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html')">Поделиться</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2505.00542v1_ru_popular" data-entity-type="article"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">Следующая статья →</button>
+        </div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/quantum_computer.html" class="side-tag" data-tag="quantum_computer">квантовый компьютер</a>
+<a href="/lang/ru/tags/superconductivity.html" class="side-tag" data-tag="superconductivity">сверхпроводимость</a>
+<a href="/lang/ru/tags/quantum_entanglement.html" class="side-tag" data-tag="quantum_entanglement">квантовая запутанность</a>
+<a href="/lang/ru/tags/quantum_information.html" class="side-tag" data-tag="quantum_information">квантовая информация</a>
+<a href="/lang/ru/tags/quantum_optics.html" class="side-tag" data-tag="quantum_optics">квантовая оптика</a>
+<a href="/lang/ru/tags/quantum_measurement.html" class="side-tag" data-tag="quantum_measurement">квантовое измерение</a>
+<a href="/lang/ru/tags/quantum_decoherence.html" class="side-tag" data-tag="quantum_decoherence">квантовая декогеренция</a>
+<a href="/lang/ru/tags/quantum_algorithm.html" class="side-tag" data-tag="quantum_algorithm">квантовый алгоритм</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/schrdinger_equation.html" class="side-law" data-law="schrdinger_equation">уравнение Шрёдингера</a><a href="/lang/ru/laws/pauli_exclusion_principle.html" class="side-law" data-law="pauli_exclusion_principle">принцип Паули</a><a href="/lang/ru/laws/hawking_radiation.html" class="side-law" data-law="hawking_radiation">излучение хокинга</a><a href="/lang/ru/laws/boseeinstein_statistics.html" class="side-law" data-law="boseeinstein_statistics">статистика Бозе — Эйнштейна</a><a href="/lang/ru/laws/spectral_theorem.html" class="side-law" data-law="spectral_theorem">спектральная теорема</a><a href="/lang/ru/laws/bells_theorem.html" class="side-law" data-law="bells_theorem">теорема Белла</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Оригинал: <a href="https://arxiv.org/abs/2505.00542v1">arXiv:2505.00542v1</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/scroll.js?v=f31547ad85"></script>
+<script src="/js/lightbox.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2505.00542v1', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2505.00542v1', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#cadena de Markov — bridge42worlds</title>
+    <meta name="description" content="Una cadena de Markov es un modelo estocástico que describe una secuencia de estados en la que la probabilidad de transición al siguiente estado depende exclusivamente del estado actual (propiedad de Markov). Formalmente: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Las cadenas pueden ser discretas o continuas en el tiempo, con un número finito o numerable de estados. Herramientas principales: matriz de probabilidades de transición, distribución estacionaria, ecuaciones de Chapman–Kolmogorov.">
+    <meta property="og:title" content="#cadena de Markov — bridge42worlds">
+    <meta property="og:description" content="Una cadena de Markov es un modelo estocástico que describe una secuencia de estados en la que la probabilidad de transición al siguiente estado depende exclusivamente del estado actual (propiedad de Markov). Formalmente: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Las cadenas pueden ser discretas o continuas en el tiempo, con un número finito o numerable de estados. Herramientas principales: matriz de probabilidades de transición, distribución estacionaria, ecuaciones de Chapman–Kolmogorov.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/tags/markov_chain.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>cadena de Markov</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Pronóstico del tiempo: el día de mañana apenas recuerda lo que pasó hace una semana y depende solo del estado de hoy. El futuro está determinado por el presente, no por el pasado.</p><div class="practical-app"><strong>In practice:</strong> Las cadenas de Markov modelan colas en tiendas, algoritmos de motores de búsqueda (PageRank de Google), paseos aleatorios de precios en bolsa y generación de texto por inteligencia artificial.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Una cadena de Markov es un modelo estocástico que describe una secuencia de estados en la que la probabilidad de transición al siguiente estado depende exclusivamente del estado actual (propiedad de Markov). Formalmente: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). Las cadenas pueden ser discretas o continuas en el tiempo, con un número finito o numerable de estados. Herramientas principales: matriz de probabilidades de transición, distribución estacionaria, ecuaciones de Chapman–Kolmogorov.</div>
+        <div class="fun-fact">💡 La primera aplicación práctica de las cadenas de Markov fue el análisis de la alternancia de vocales y consonantes en 'Eugenio Oneguin': Markov demostró que no era aleatoria y predijo las letras futuras del texto.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Una cadena de Markov es una secuencia de eventos donde cada nuevo evento depende solo del anterior, pero no de la historia más allá. Por ejemplo, si juegas un juego de mesa, tu siguiente movimiento depende solo de la casilla actual del tablero, no de cómo llegaste a ella. La cadena se define por estados (las casillas posibles) y probabilidades de transición (posibilidades de saltar de un estado a otro).</div>
+        <div class="section"><h2>History</h2><p>El matemático ruso Andréi Markov, a principios del siglo XX, estudió secuencias de variables aleatorias dependientes e introdujo el concepto de cadena para mostrar que incluso en textos aleatorios se pueden encontrar regularidades estadísticas.</p></div>
+        <div class="section"><h2>How it works</h2><p>Como en el juego de la 'Serpiente' en el teléfono, donde la serpiente se mueve por las casillas eligiendo la dirección aleatoriamente, pero solo desde la posición actual. Si se sabe dónde está ahora, no importa cómo llegó allí: es la propiedad de falta de memoria.</p></div>
+        <div class="fun-fact">💡 Las cadenas de Markov subyacen al algoritmo PageRank que originalmente dio éxito a Google: las páginas de internet se modelan como estados, y las transiciones son los hipervínculos; el rango de una página es la probabilidad estacionaria de visita en un paseo aleatorio con retorno.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Una cadena de Markov es un proceso estocástico con tiempo discreto y espacio de estados finito o numerable que posee la propiedad de Markov: la distribución condicional de los estados futuros depende solo del estado actual y no de la trayectoria pasada. Se define por una distribución inicial y una matriz de probabilidades de transición P = (p_{ij}), donde p_{ij} = P(X_{n+1}=j | X_n=i). La cadena se llama homogénea si los p_{ij} no dependen de n. Conceptos clave: clasificación de estados (recurrentes, transitorios, periodicidad), ergodicidad (existencia de una distribución límite), distribución estacionaria π (πP = π). Para cadenas finitas irreducibles y aperiódicas existe una única distribución estacionaria a la que convergen las distribuciones de los estados. Las cadenas de Markov de tiempo continuo se describen mediante una matriz de intensidades Q. Aplicaciones: algoritmo de Metropolis–Hastings en Monte Carlo, modelos ocultos de Markov en reconocimiento de voz, teoría de colas.</div>
+        <div class="section"><h2>History</h2><p>Andréi Andréyevich Markov introdujo las cadenas en 1906 al estudiar la ley de los grandes números para variables dependientes. Su motivación fue refutar la afirmación de Nekrasov de que la independencia es necesaria para las leyes estadísticas. Más tarde, en la década de 1930, Kolmogorov desarrolló la teoría general de los procesos de Markov. A mediados del siglo XX, las cadenas de Markov se convirtieron en una herramienta central en investigación de operaciones, física (modelo de Ising) e informática (generación de texto, PageRank).</p></div>
+        <div class="section"><h2>How it works</h2><p>Matemáticamente, una cadena de Markov se define por un vector de probabilidades inicial π^{(0)} y una matriz estocástica P. Entonces la distribución después de n pasos es: π^{(n)} = π^{(0)} P^n. La propiedad de falta de memoria significa que para predecir el futuro basta con conocer solo el estado actual. El comportamiento a largo plazo se determina por la descomposición espectral de la matriz P: si existe un único vector propio por la izquierda con valor propio 1 (distribución estacionaria), entonces π^{(n)} → π cuando n→∞. Ecuaciones de Chapman–Kolmogorov: P^{(n+m)} = P^{(n)} P^{(m)}, que expresan la composición de transiciones. Para tiempo continuo: dπ/dt = πQ, donde Q es la matriz de intensidades de transición.</p></div>
+        <div class="formula"><div class="formula-render">p_{ij}^{(n+m)} = \sum_{k} p_{ik}^{(n)} p_{kj}^{(m)}</div><div class="formula-meaning">p_{ij}^{(n)} es la probabilidad de transición del estado i al estado j en n pasos; suma sobre todos los estados intermedios k.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Problema de aceleración de la convergencia para cadenas con mezcla lenta (por ejemplo, en distribuciones multidimensionales con picos agudos).; Desarrollo de algoritmos eficientes para estimar probabilidades de eventos raros en sistemas complejos.; Análisis de modelos ocultos de Markov con estados ocultos continuos de alta dimensionalidad.</p><p class="fact">💡 Las cadenas de Markov subyacen al algoritmo PageRank que originalmente dio éxito a Google: las páginas de internet se modelan como estados, y las transiciones son los hipervínculos; el rango de una página es la probabilidad estacionaria de visita en un paseo aleatorio con retorno.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="markov_chain_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="markov_chain" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="feedback" id="feedback" data-article-id="markov_chain_es_page" data-entity-type="tag"><div class="fb-title">How does it read?</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Related:</strong>
+    <a href="/lang/es/tags/entropy.html" data-tag="entropy">entropía</a> · <a href="/lang/es/tags/critical_point.html" data-tag="critical_point">punto crítico</a> · <a href="/lang/es/tags/phase_transition.html" data-tag="phase_transition">transición de fase</a> · <a href="/lang/es/tags/numerical_simulation.html" data-tag="numerical_simulation">simulación numérica</a> · <a href="/lang/es/tags/turbulence.html" data-tag="turbulence">turbulencia</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label></div>
+<div class="mini-graph" data-node="t:markov_chain"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="markov_chain"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('markov_chain', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

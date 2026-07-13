@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#квантовое преобразование Фурье — bridge42worlds</title>
+    <meta name="description" content="Квантовое преобразование Фурье — это унитарное отображение, которое переводит вычислительный базис |j⟩ в равномерную суперпозицию с фазами exp(2π i j k / N), где N = 2^n. Оно является квантовым аналогом дискретного преобразования Фурье и может быть реализовано с помощью O(n^2) гейтов, что даёт экспоненциальное ускорение относительно классического БПФ, требующего O(N log N) операций над N-элементным вектором. QFT лежит в основе алгоритмов поиска скрытой периодичности и оценки фазы.">
+    <meta property="og:title" content="#квантовое преобразование Фурье — bridge42worlds">
+    <meta property="og:description" content="Квантовое преобразование Фурье — это унитарное отображение, которое переводит вычислительный базис |j⟩ в равномерную суперпозицию с фазами exp(2π i j k / N), где N = 2^n. Оно является квантовым аналогом дискретного преобразования Фурье и может быть реализовано с помощью O(n^2) гейтов, что даёт экспоненциальное ускорение относительно классического БПФ, требующего O(N log N) операций над N-элементным вектором. QFT лежит в основе алгоритмов поиска скрытой периодичности и оценки фазы.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/tags/quantum_fourier_transform.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover ai-cover-ph"></div>
+    <h1>квантовое преобразование Фурье</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Квантовый способ разложить сигнал на чистые тона — так же, как ухо различает ноты в аккорде, но с невообразимой скоростью для гигантских «аккордов» данных.</p><div class="practical-app"><strong>На практике:</strong> Сердце алгоритма Шора, угрожающего современным системам шифрования RSA, а также ключевой этап оценки фазы в квантовых вычислениях — от поиска собственных чисел до оценки периодичности скрытых закономерностей.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Квантовое преобразование Фурье — это унитарное отображение, которое переводит вычислительный базис |j⟩ в равномерную суперпозицию с фазами exp(2π i j k / N), где N = 2^n. Оно является квантовым аналогом дискретного преобразования Фурье и может быть реализовано с помощью O(n^2) гейтов, что даёт экспоненциальное ускорение относительно классического БПФ, требующего O(N log N) операций над N-элементным вектором. QFT лежит в основе алгоритмов поиска скрытой периодичности и оценки фазы.</div>
+        <div class="fun-fact">💡 Квантовое преобразование Фурье не может быть напрямую использовано для сжатия фото или видео, потому что результат остаётся внутри квантового чипа и разрушается при считывании; зато для выуживания глобальных периодичностей оно в тысячи раз экономит время.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Обычное преобразование Фурье берёт запись звука и показывает, из каких частот он состоит: бас, скрипка, шёпот. Квантовое преобразование Фурье (QFT) делает то же самое с квантовым состоянием, которое есть «суп из вероятностей» (суперпозиция множества вариантов). QFT перераспределяет вероятностные амплитуды так, что после измерения с большой вероятностью проступает номер гармоники, связанной с периодичностью исходной функции. Оно работает лавинообразно быстро: для тысячи вариантов обычному компьютеру надо перебрать тысячу чисел, а квантовый справляется, жонглируя фазами десятка кубитов.</div>
+        <div class="section"><h2>История</h2><p>Квантовое преобразование Фурье появилось в 1994 году как центральный блок алгоритма факторизации Питера Шора. Оно обобщило классический метод быстрого преобразования Фурье, открытый в 1965 году, на квантовые состояния.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Представьте ряд волчков с цифрами. Каждому волчку можно придать своё вращение (сдвиг фазы). QFT запускает цепочку поворотов так, что вращения интерферируют (складываются или гасят друг друга), и в итоге остаётся один «сигнал» с узором, соответствующим частоте. В квантовом регистре это реализуется каскадом простых операций — гейтов Адамара и управляемых поворотов фаз.</p></div>
+        <div class="fun-fact">💡 Теоретически QFT на 4000 идеальных кубитах факторизовал бы ключ RSA-2048 меньше чем за минуту, однако рекордная реализация на реальном железе (2019) использовала всего 13 кубитов и факторизовала число 15.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Квантовое преобразование Фурье — это унитарное преобразование, действующее на n-кубитный регистр как QFT |j⟩ = (1/√N) Σ_k ω^{j k} |k⟩, где ω = exp(2π i / N), N = 2^n. Эффективная реализация разлагается на последовательность вентилей: на первом кубите выполняется вентиль Адамара H, затем управляемые фазовые сдвиги R_k = diag(1, ω^{1/2^{k}}) с последующими кубитами, после чего процедура рекурсивно повторяется для оставшихся кубитов. Обратное преобразование QFT^† используется для отображения оценённой фазы в битовый результат в алгоритмах типа Шора и Гарроу-Хассана.</div>
+        <div class="section"><h2>История</h2><p>Впервые описано в рамках алгоритма факторизации Питера Шора (1994). Эффективная конструкция с полиномиальным числом вентилей разработана Доном Копперсмитом (1994) и одновременно группой Дойча. Ранее, в 1985 году, Дэвид Дойч показал принципиальную возможность ускорения с помощью квантового параллелизма. С математической точки зрения QFT является реализацией преобразования Вигнера над конечным полем и тесно связано с теорией представлений групп.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Квантовая схема начинается с состояния |x_1 x_2 ... x_n⟩. Применяется H к первому кубиту, создавая суперпозицию (|0⟩ + e^{2π i 0.x_1}|1⟩). Затем подаётся управляемый R_2 от второго кубита, добавляя к фазе вклад exp(2π i 0.x_1 x_2), и так далее до R_n. Те же операции повторяются на втором кубите с поворотами R_2...R_{n-1}, и т.д. Итоговая амплитуда для состояния |k⟩ равна (1/√N) Σ_j exp(2π i j k / N) x_j, где x_j — входная амплитуда. При измерении на выходе распределение вероятностей сосредоточено вблизи частоты, кратной 1/T, если во входных данных была скрыта периодичность T.</p></div>
+        <div class="formula"><div class="formula-render">\langle k | QFT | j \rangle = \frac{1}{\sqrt{N}} \exp\left(\frac{2\pi i j k}{N}\right)</div><div class="formula-meaning">|j⟩ — входное базисное состояние (j в десятичном представлении), |k⟩ — состояние вычислительного базиса на выходе, N = 2^n — размерность гильбертова пространства (n — число кубитов), i — мнимая единица, exp — экспонента.</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Точность реализации страдает от декогеренции и шума в многокубитных вентилях, что ограничивает размер регистра десятками кубитов в современных экспериментах.; QFT даёт ускорение только для задач со скрытой периодичностью; для произвольного преобразования Фурье массива данных квантовый метод не даёт преимущества.; Необходимость в обратном QFT для большинства алгоритмов удваивает требуемую длину последовательности.</p><p class="fact">💡 Теоретически QFT на 4000 идеальных кубитах факторизовал бы ключ RSA-2048 меньше чем за минуту, однако рекордная реализация на реальном железе (2019) использовала всего 13 кубитов и факторизовала число 15.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="quantum_fourier_transform_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_fourier_transform" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="quantum_fourier_transform_ru_page" data-entity-type="tag"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные теги:</strong>
+    <a href="/lang/ru/tags/quantum_algorithm.html" data-tag="quantum_algorithm">квантовый алгоритм</a> · <a href="/lang/ru/tags/quantum_computer.html" data-tag="quantum_computer">квантовый компьютер</a> · <a href="/lang/ru/tags/superposition.html" data-tag="superposition">суперпозиция</a> · <a href="/lang/ru/tags/interference.html" data-tag="interference">интерференция</a>
+</div>
+
+<div class="related-tags"><strong>Учёные:</strong> <a href="/lang/ru/scientists/David_Deutsch.html" class="text-scientist" data-scientist="David Deutsch">David Deutsch</a></div>
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="t:quantum_fourier_transform"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># тег · @ автор · ! учёный</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="quantum_fourier_transform"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('quantum_fourier_transform', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

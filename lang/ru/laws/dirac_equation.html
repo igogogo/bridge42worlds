@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>уравнение Дирака — bridge42worlds</title>
+    <meta name="description" content="В 1928 году Поль Дирак искал уравнение, которое описывало бы электрон на релятивистских скоростях. Результат — (iħγ^μ ∂_μ - mc)ψ = 0 — не только согласовался с теорией относительности, но и естественно включал спин, который раньше приходилось вводить вручную. Однако уравнение давало решения с отрицательной энергией. Дирак предположил, что они соответствуют частицам с той же массой, но противоположным зарядом — позитронам. Через несколько лет Карл Андерсон обнаружил их в космических лучах, подтвердив гениальную догадку.">
+    <meta property="og:title" content="уравнение Дирака — bridge42worlds">
+    <meta property="og:description" content="В 1928 году Поль Дирак искал уравнение, которое описывало бы электрон на релятивистских скоростях. Результат — (iħγ^μ ∂_μ - mc)ψ = 0 — не только согласовался с теорией относительности, но и естественно включал спин, который раньше приходилось вводить вручную. Однако уравнение давало решения с отрицательной энергией. Дирак предположил, что они соответствуют частицам с той же массой, но противоположным зарядом — позитронам. Через несколько лет Карл Андерсон обнаружил их в космических лучах, подтвердив гениальную догадку.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/laws/dirac_equation.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/laws/img/dirac_equation.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/" class="active">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/laws/img/dirac_equation.jpg" alt=""></div>
+    <h1>уравнение Дирака<span class="law-type">уравнение</span></h1>
+    <label class="refine-switch" title="Сравнить с сырым описанием (до шлифовки)"><input type="checkbox" onchange="toggleRawDesc(this)"> показать сырое описание</label>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Уравнение Дирака превращает электрон в танец между частицей и античастицей, где спин и релятивизм сплетены в единое целое.</p><div class="practical-app"><strong>На практике:</strong> Предсказание позитрона и работа ПЭТ-сканеров, расчёт быстрых электронов в тяжёлых атомах и графене — всё это немыслимо без уравнения Дирака.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="Поль Дирак в 1928 году вывел уравнение, пытаясь устранить недостатки уравнения Шрёдингера для релятивистских скоростей. Он получил линейное матричное уравнение, которое выглядит как (iħγ^μ ∂_μ - mc)ψ = 0. Решения содержали состояния с отрицательной энергией — Дирак интерпретировал их как частицы с противоположным зарядом, предсказав позитрон, открытый позже Андерсоном.">В 1928 году Поль Дирак искал уравнение, которое описывало бы электрон на релятивистских скоростях. Результат — (iħγ^μ ∂_μ - mc)ψ = 0 — не только согласовался с теорией относительности, но и естественно включал спин, который раньше приходилось вводить вручную. Однако уравнение давало решения с отрицательной энергией. Дирак предположил, что они соответствуют частицам с той же массой, но противоположным зарядом — позитронам. Через несколько лет Карл Андерсон обнаружил их в космических лучах, подтвердив гениальную догадку.</div>
+        <div class="fun-fact">💡 Сначала Дирак подумал, что «дырки» в море отрицательной энергии — это протоны, но быстро понял, что масса должна совпадать с электронной, и смело предсказал антиэлектрон.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="Уравнение Дирака описывает поведение очень быстрых электронов с учётом теории относительности. Оно объединило специальную теорию относительности (учёт высоких скоростей) и квантовую механику (правила микромира). В отличие от прежних уравнений, оно естественно ввело спин (врождённое вращение частиц) и предсказало антивещество.">Уравнение Дирака — первое успешное объединение квантовой механики и специальной теории относительности для электрона. Оно показало, что спин (внутреннее вращение) — не дополнительное свойство, а прямое следствие релятивистской физики. Более того, уравнение неизбежно приводило к выводу: у каждой частицы должен существовать антипод с обратным зарядом.</div>
+        <div class="section"><h2>Как работает</h2><p>Объясняет, откуда берутся позитроны в ПЭТ-сканерах, и помогает рассчитывать свойства материалов, где электроны движутся с околосветовыми скоростями — например, в атомах золота и свинца, в графене и топологических изоляторах.</p></div>
+        <div class="fun-fact">💡 Дирак славился немногословностью; своё уравнение он часто записывал в краткой форме (p̸ - m)ψ = 0, используя фейнмановский слэш-нотацию. Рассказывают, что на вопросы студентов он мог просто повторить уравнение, считая это идеальным объяснением.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="Уравнение Дирака — релятивистское волновое уравнение для фермионов со спином 1/2. В ковариантной форме: (iħγ^μ ∂_μ - mc)ψ = 0; γ^μ — матрицы 4×4 (матрицы Дирака), ψ — четырёхкомпонентный спинор, m — масса покоя. Уравнение линейно по производным и автоматически включает спин и релятивистские эффекты. Для свободной частицы решение даёт спектр E = ±√(p²c² + m²c⁴), интерпретируемый как частицы и античастицы.">Уравнение Дирака — релятивистское волновое уравнение для фермионов со спином 1/2. В ковариантной форме: (iħγ^μ ∂_μ - mc)ψ = 0; γ^μ — матрицы 4×4 (матрицы Дирака), ψ — четырёхкомпонентный спинор, m — масса покоя. Уравнение линейно по производным и автоматически включает спин и релятивистские эффекты. Для свободной частицы решение даёт спектр E = ±√(p²c² + m²c⁴), интерпретируемый как частицы и античастицы.</div>
+        <div class="section"><h2>История открытия</h2><p>Британский физик Поль Адриен Морис Дирак, работая в Кембридже, опубликовал уравнение в 1928 году. Он искал релятивистский аналог уравнения Шрёдингера с положительной плотностью вероятности. Уравнение естественно объяснило спин электрона и предсказало позитрон — первую античастицу. Дирак разделил Нобелевскую премию 1933 года с Шрёдингером. Позже уравнение стало основой квантовой электродинамики и описания кварков.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Уравнение точно описывает поведение электронов (и других фермионов) при энергиях, где важна специальная теория относительности. Применяется в атомной физике (тонкая структура спектров), физике твёрдого тела (электроны в графене, топологические изоляторы), физике высоких энергий. Границы: не учитывает сильные поля, где необходима КЭД во внешнем поле, и требует вторичного квантования.</p></div>
+        <div class="section"><h2>Нюансы</h2><p>Интерпретация состояний с отрицательной энергией исторически была сложной; даже после открытия позитрона остались вопросы о вакууме как море Дирака.; Уравнение само по себе не объясняет массы нейтрино — для этого нужны майорановские расширения.; В сильных гравитационных полях необходимо объединение с ОТО, что до сих пор не завершено.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">(i\hbar \gamma^\mu \partial_\mu - mc) \psi = 0</div><div class="formula-meaning">i — мнимая единица (i² = -1), ħ — редуцированная постоянная Планка, ħ ≈ 1.0546×10⁻³⁴ Дж·с, γ^μ — матрицы Дирака (4×4-матрицы, μ = 0,1,2,3), ∂_μ — частная производная по координатам пространства-времени (∂/∂t, ∂/∂x,…), m — масса покоя частицы (кг), c — скорость света в вакууме, c ≈ 2.9979×10⁸ м/с, ψ — дираковский спинор (четырёхкомпонентная волновая функция).</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="dirac_equation_ru_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="dirac_equation" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="dirac_equation_ru_page" data-entity-type="law"><div class="fb-title">Как читается? (поможет улучшить тексты)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span><span class="fb-chip" data-opt="too_simple">Слишком упрощено</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="комментарий (необязательно)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">отправить</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>Связанные понятия:</strong>
+    <a href="/lang/ru/tags/neutrino.html" data-tag="neutrino">нейтрино</a> · <a href="/lang/ru/tags/wave_function.html" data-tag="wave_function">волновая функция</a> · <a href="/lang/ru/tags/hilbert_space.html" data-tag="hilbert_space">гильбертово пространство</a>
+</div>
+<div class="related-tags"><strong>Связанные законы:</strong> <a href="/lang/ru/laws/schrdinger_equation.html" class="law-chip" data-law="schrdinger_equation">уравнение Шрёдингера</a> · <a href="/lang/ru/laws/kleingordon_equation.html" class="law-chip" data-law="kleingordon_equation">уравнение Клейна — Гордона</a></div>
+<div class="related-tags"><strong>Открыли:</strong> <a href="/lang/ru/scientists/Paul_Dirac.html" class="text-scientist" data-scientist="Paul Dirac">Paul Dirac</a></div>
+
+<div class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label></div>
+<div class="mini-graph" data-node="l:dirac_equation"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="neutrino,wave_function,hilbert_space"><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-01/2605.00735v1/index.html">Дирижёр с фальшивой нотой: почему квинтэссенция не спасла инфляцию</a></h3><div class="oneliner">Модель квинтэссенциальной инфляции на базе α-аттракторов описывает инфляцию и современную тёмную энергию как разные роли одного скалярного поля. Её ключевое предсказание — стадия кейншена, усиливающая высокочастотные гравитационные волны и оставляющая отпечаток в реликтовом излучении и первичном нук</div><div class="meta">arXiv:2605.00735v1 · 2026-05-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-05-06/2605.05304v1/index.html">Космический станок: загадка пропавшего антивещества и инфляция</a></h3><div class="oneliner">Новый сценарий лептогенезиса показывает: тяжёлые майорановские нейтрино, рождённые из вакуума расширением после инфляции, дали начало всей барионной асимметрии. Их масса почти мистически совпадает с масштабом инфляции — и это не случайность: амплитуда первичных гравитационных волн оказывается прямым</div><div class="meta">arXiv:2605.05304v1 · 2026-05-06</div></div></div></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/force-graph.js?v=f31547ad85"></script>
+<script src="/js/mini-graph.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('dirac_equation', 'law', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

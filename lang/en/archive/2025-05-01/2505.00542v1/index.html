@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light in a Cryostat: How Imperfect Converters Build Quantum Bridges — bridge42worlds</title>
+    <meta name="description" content="Superconducting [tag:quantum_computer]quantum computers[/tag] hit a cooling wall: a single cryostat can't hold millions of qubits. The solution is optical channels, but they need microwave-to-optical converters, which are still far from perfect. The authors showed that with feedback protocols, paral">
+    <meta property="og:title" content="Light in a Cryostat: How Imperfect Converters Build Quantum Bridges">
+    <meta property="og:description" content="Noisy and inefficient photon converters can reliably link quantum modules—the road to distributed computing is already open.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Light in a Cryostat: How Imperfect Converters Build Quantum Bridges", "description": "Noisy and inefficient photon converters can reliably link quantum modules—the road to distributed computing is already open.", "inLanguage": "en", "datePublished": "2025-05-01", "url": "https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html", "image": "https://bridge42worlds.org/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg", "author": [{"@type": "Person", "name": "M. J. Weaver"}, {"@type": "Person", "name": "G. Arnold"}, {"@type": "Person", "name": "H. Weaver"}, {"@type": "Person", "name": "S. Gröblacher"}, {"@type": "Person", "name": "R. Stockill"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2505.00542v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/en/archive/2025-05-01/2505.00542v1/mini.html" data-label="Mini" title="Mini — The gist in 10 seconds"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/en/archive/2025-05-01/2505.00542v1/simple.html" data-label="Simple" title="Simple — As simple as it gets — for a first look"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/en/archive/2025-05-01/2505.00542v1/index.html" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/en/archive/2025-05-01/2505.00542v1/advanced.html" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
+
+<h1 class="article-title-top">Light in a Cryostat: How Imperfect Converters Build Quantum Bridges <span class="refine-badge" title="Отшлифовано редактором">✦</span></h1>
+<label class="refine-switch" title="Сравнить с сырым текстом (до шлифовки)"><input type="checkbox" onchange="toggleRaw(this)" data-raw-url="/lang/en/archive/2025-05-01/2505.00542v1/api/popular-ru.json"> показать сырой вариант (до шлифовки)</label>
+<div class="authors-top"><a href="/lang/ru/authors/M_J_Weaver.html" class="text-author-link" data-author="M. J. Weaver">M. J. Weaver</a>, <a href="/lang/ru/authors/G_Arnold.html" class="text-author-link" data-author="G. Arnold">G. Arnold</a>, <a href="/lang/ru/authors/H_Weaver.html" class="text-author-link" data-author="H. Weaver">H. Weaver</a>, <a href="/lang/ru/authors/S_Gröblacher.html" class="text-author-link" data-author="S. Gröblacher">S. Gröblacher</a>, <a href="/lang/ru/authors/R_Stockill.html" class="text-author-link" data-author="R. Stockill">R. Stockill</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2505.00542v1">2505.00542v1</a> · 2025-05-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · <span class="reading-time">⏱ 2 min</span> · <span class="cat-badge" data-cat="quant-ph">Quantum Physics</span> <span class="cat-badge" data-cat="physics.optics">Optics</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202505.00542v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "Scalable Quantum Computing with Optical Links"</div>
+        <div class="oneliner">Noisy and inefficient photon converters can reliably link quantum modules—the road to distributed computing is already open.</div>
+        
+        <div class="ai-cover"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/ai.jpg" alt=""></a></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/0.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/0.jpg" alt="Therefore, transducers" title="Therefore, transducers" loading="lazy"></a><figcaption>Therefore, transducers</figcaption></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/1.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/1.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/2.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/2.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/3.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/3.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/4.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/4.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/5.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/5.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/6.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/6.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/7.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/7.jpg" alt="" loading="lazy"></a></figure><figure class="mosaic-item"><a href="/lang/ru/archive/2025-05-01/2505.00542v1/8.jpg" class="mosaic-open"><img src="/lang/ru/archive/2025-05-01/2505.00542v1/8.jpg" alt="" loading="lazy"></a></figure></div><button type="button" class="mosaic-arrow mosaic-prev" aria-label="Prev" onclick="this.parentElement.querySelector('.mosaic-track').scrollBy({left:-this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})">‹</button><button type="button" class="mosaic-arrow mosaic-next" aria-label="More images" onclick="this.parentElement.querySelector('.mosaic-track').scrollBy({left:this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})">›</button></div>
+        <p>A superconducting quantum processor is like a microscopic metropolis locked in a cryogenic fridge: streets of superconducting lines, blocks of qubits. Each resident demands silence and cold, but expanding the city inside a single cryostat is like stacking skyscrapers in a cramped courtyard—wires heat the environment, noise builds up, coherence threatens to collapse. The city needs external highways—optical lines along which <a href="/lang/en/tags/quantum_information.html" class="text-tag" data-tag="quantum_information">quantum information</a> flies off on nearly weightless photons, without heating the surroundings. For this highway, there's a suspension bridge between worlds: the microwave-to-optical converter. It translates the "language" of qubits (gigahertz) into the "language" of light (hundreds of terahertz).</p><div class="callout">A single optical fiber can carry single photons hundreds of kilometers with almost no loss—unlike metal lines, whose resistance eats the signal and generates parasitic heat.</div><p>For now, these bridges resemble rickety rope crossings: conversion efficiency ranges from fractions of a percent to a few tens, and each step adds noise. But researchers didn't wait for perfection. In the spirit of <a href="/lang/en/scientists/Charles_Bennett.html" class="text-scientist" data-scientist="Charles Bennett">Charles Bennett</a>'s ideas on entanglement distillation and <a href="/lang/en/scientists/John_Stewart_Bell.html" class="text-scientist" data-scientist="John Stewart Bell">John Stewart Bell</a>'s on nonlocality, they proposed a protocol where many parallel attempts and state purification compensate for imperfection. Imagine a team of couriers carrying pieces of an encrypted key: even if some lose packets or make mistakes, upon reassembly you can recover an exact copy. The deeper analogy is consensus algorithms in unreliable networks: truth emerges from many distorted voices.</p><p>Simulations showed that with realistic parameters (noise 0.1 photons per attempt, repetition rate 1 MHz, 20 parallel lines) an <a href="/lang/en/tags/quantum_entanglement.html" class="text-tag" data-tag="quantum_entanglement">entangled</a> pair is born in 15 microseconds with 91% fidelity. Four rounds of <a href="/lang/en/tags/quantum_measurement.html" class="text-tag" data-tag="quantum_measurement">quantum distillation</a> raise it to 99%—above the error-correction threshold. Such a pair can teleport a qubit state between modules or become a link in a large GHZ state for <a href="/lang/en/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">algorithmic breakthroughs</a>. <a href="/lang/en/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a>'s idea that quantum systems should simulate nature takes on a real scale.</p><p>The future isn't a giant fridge, but an optical web connecting cryogenic islands. Achieving efficiency above 50% and noise below 0.01 will enable lattice surgery: logical qubits, split between modules, will be "stitched" by light at each <a href="/lang/en/tags/quantum_decoherence.html" class="text-tag" data-tag="quantum_decoherence">decoherence</a> correction cycle. It's already clear: we don't have to wait for a perfect converter—it's time to build <a href="/lang/en/tags/quantum_optics.html" class="text-tag" data-tag="quantum_optics">quantum optical networks</a> from off-the-shelf materials. So the ordinary fiber optic that brings us streaming shows might one day carry the <a href="/lang/en/tags/superconductivity.html" class="text-tag" data-tag="superconductivity">superconducting</a> thoughts of quantum computers.</p>
+        <div class="fun-fact"><p class="fact">🎯 The optical fiber that streams our videos can carry single photons for hundreds of kilometers with minimal attenuation—precisely the property that makes it the ideal backbone for a quantum internet.</p></div>
+        <div class="formula"><div class="formula-render">C_{EO} = \frac{4 G_{EO}^2}{\kappa_{MW} \kappa_O} \approx 1</div><div class="formula-meaning">The cooperativity of the electro-optic interaction—a balance between coupling strength and resonator losses. A value around unity yields maximum conversion efficiency from microwaves to light.</div></div>
+        
+        <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a>, <a href="/lang/en/scientists/John_Stewart_Bell.html" class="text-scientist" data-scientist="John Stewart Bell">John Stewart Bell</a>, <a href="/lang/en/scientists/Charles_Bennett.html" class="text-scientist" data-scientist="Charles Bennett">Charles Bennett</a></div>
+        <div class="actions" data-article-id="2505.00542v1_en_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2505.00542v1" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('Light in a Cryostat: How Imperfect Converters Build Quantum Bridges','https://bridge42worlds.org/lang/en/archive/2025-05-01/2505.00542v1/index.html')">Share</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2505.00542v1_en_popular" data-entity-type="article"><div class="fb-title">How does it read? (helps us improve)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">Tags</div><a href="/lang/en/tags/quantum_computer.html" class="side-tag" data-tag="quantum_computer">quantum computer</a>
+<a href="/lang/en/tags/superconductivity.html" class="side-tag" data-tag="superconductivity">superconductivity</a>
+<a href="/lang/en/tags/quantum_entanglement.html" class="side-tag" data-tag="quantum_entanglement">quantum entanglement</a>
+<a href="/lang/en/tags/quantum_information.html" class="side-tag" data-tag="quantum_information">quantum information</a>
+<a href="/lang/en/tags/quantum_optics.html" class="side-tag" data-tag="quantum_optics">quantum optics</a>
+<a href="/lang/en/tags/quantum_measurement.html" class="side-tag" data-tag="quantum_measurement">quantum measurement</a>
+<a href="/lang/en/tags/quantum_decoherence.html" class="side-tag" data-tag="quantum_decoherence">quantum decoherence</a>
+<a href="/lang/en/tags/quantum_algorithm.html" class="side-tag" data-tag="quantum_algorithm">quantum algorithm</a><div class="side-laws-label">Laws</div><a href="/lang/en/laws/schrdinger_equation.html" class="side-law" data-law="schrdinger_equation">Schrödinger equation</a><a href="/lang/en/laws/pauli_exclusion_principle.html" class="side-law" data-law="pauli_exclusion_principle">Pauli exclusion principle</a><a href="/lang/en/laws/hawking_radiation.html" class="side-law" data-law="hawking_radiation">Hawking radiation</a><a href="/lang/en/laws/boseeinstein_statistics.html" class="side-law" data-law="boseeinstein_statistics">Bose–Einstein statistics</a><a href="/lang/en/laws/spectral_theorem.html" class="side-law" data-law="spectral_theorem">Spectral theorem</a><a href="/lang/en/laws/bells_theorem.html" class="side-law" data-law="bells_theorem">Bell's theorem</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2505.00542v1">arXiv:2505.00542v1</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/scroll.js?v=f31547ad85"></script>
+<script src="/js/lightbox.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2505.00542v1', 'article', 'en');
+    if (false && window.logExpressInterest) logExpressInterest('2505.00542v1', 'en');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

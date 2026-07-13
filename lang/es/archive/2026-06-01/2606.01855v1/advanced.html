@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caos cósmico: lo que el diagrama de Pincus-Lyapunov reveló sobre los estallidos rápidos de radio — bridge42worlds</title>
+    <meta name="description" content="Para dilucidar la naturaleza de los estallidos rápidos de radio (FRB) de milisegundos, los astrofísicos compararon sus propiedades estadísticas con otros fenómenos no estacionarios, desde glitches de púlsares hasta erupciones solares y terremotos. Aplicando métodos de dinámica no lineal (índice de P">
+    <meta property="og:title" content="Caos cósmico: lo que el diagrama de Pincus-Lyapunov reveló sobre los estallidos rápidos de radio">
+    <meta property="og:description" content="Los estallidos rápidos de radio resultaron ser únicos en el espectro de estocasticidad y caos, distintos tanto de las erupciones de magnetares como de los terremotos.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.01855v1/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.01855v1/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.01855v1/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.01855v1/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.01855v1/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.01855v1/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.01855v1/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=f31547ad85">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Caos cósmico: lo que el diagrama de Pincus-Lyapunov reveló sobre los estallidos rápidos de radio", "description": "Los estallidos rápidos de radio resultaron ser únicos en el espectro de estocasticidad y caos, distintos tanto de las erupciones de magnetares como de los terremotos.", "inLanguage": "es", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.01855v1/advanced.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.01855v1/ai.jpg", "author": [{"@type": "Person", "name": "Si-Lu Xu"}, {"@type": "Person", "name": "Yong-Kun Zhang"}, {"@type": "Person", "name": "Pei Wang"}, {"@type": "Person", "name": "Di Li"}, {"@type": "Person", "name": "Jun-Shuo Zhang"}, {"@type": "Person", "name": "Tian-Cheng Lv"}, {"@type": "Person", "name": "Yong-Feng Huang"}, {"@type": "Person", "name": "Tian-Cong Wang"}, {"@type": "Person", "name": "Long-Xuan Zhang"}, {"@type": "Person", "name": "Pei-Xin Zhu"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.01855v1"}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Avanzado</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-06-01/2606.01855v1/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-06-01/2606.01855v1/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/es/archive/2026-06-01/2606.01855v1/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-06-01/2606.01855v1/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
+
+<h1 class="article-title-top">Caos cósmico: lo que el diagrama de Pincus-Lyapunov reveló sobre los estallidos rápidos de radio <span class="refine-badge" title="Отшлифовано редактором">✦</span></h1>
+
+<div class="authors-top"><a href="/lang/ru/authors/Si-Lu_Xu.html" class="text-author-link" data-author="Si-Lu Xu">Si-Lu Xu</a>, <a href="/lang/ru/authors/Yong-Kun_Zhang.html" class="text-author-link" data-author="Yong-Kun Zhang">Yong-Kun Zhang</a>, <a href="/lang/ru/authors/Pei_Wang.html" class="text-author-link" data-author="Pei Wang">Pei Wang</a>, <a href="/lang/ru/authors/Di_Li.html" class="text-author-link" data-author="Di Li">Di Li</a>, <a href="/lang/ru/authors/Jun-Shuo_Zhang.html" class="text-author-link" data-author="Jun-Shuo Zhang">Jun-Shuo Zhang</a>, <a href="/lang/ru/authors/Tian-Cheng_Lv.html" class="text-author-link" data-author="Tian-Cheng Lv">Tian-Cheng Lv</a>, <a href="/lang/ru/authors/Yong-Feng_Huang.html" class="text-author-link" data-author="Yong-Feng Huang">Yong-Feng Huang</a>, <a href="/lang/ru/authors/Tian-Cong_Wang.html" class="text-author-link" data-author="Tian-Cong Wang">Tian-Cong Wang</a>, <a href="/lang/ru/authors/Long-Xuan_Zhang.html" class="text-author-link" data-author="Long-Xuan Zhang">Long-Xuan Zhang</a>, <a href="/lang/ru/authors/Pei-Xin_Zhu.html" class="text-author-link" data-author="Pei-Xin Zhu">Pei-Xin Zhu</a>, <a href="/lang/ru/authors/Jin-Huang_Cao.html" class="text-author-link" data-author="Jin-Huang Cao">Jin-Huang Cao</a>, <a href="/lang/ru/authors/Yi_Feng.html" class="text-author-link" data-author="Yi Feng">Yi Feng</a>, <a href="/lang/ru/authors/He_Gao.html" class="text-author-link" data-author="He Gao">He Gao</a>, <a href="/lang/ru/authors/Jian_Li.html" class="text-author-link" data-author="Jian Li">Jian Li</a>, <a href="/lang/ru/authors/Wan-Jin_Lu.html" class="text-author-link" data-author="Wan-Jin Lu">Wan-Jin Lu</a>, <a href="/lang/ru/authors/Chen-Chen_Miao.html" class="text-author-link" data-author="Chen-Chen Miao">Chen-Chen Miao</a>, <a href="/lang/ru/authors/Chen-Hui_Niu.html" class="text-author-link" data-author="Chen-Hui Niu">Chen-Hui Niu</a>, <a href="/lang/ru/authors/Qing-Yue_Qu.html" class="text-author-link" data-author="Qing-Yue Qu">Qing-Yue Qu</a>, <a href="/lang/ru/authors/Chao-Wei_Tsai.html" class="text-author-link" data-author="Chao-Wei Tsai">Chao-Wei Tsai</a>, <a href="/lang/ru/authors/Yi-Dan_Wang.html" class="text-author-link" data-author="Yi-Dan Wang">Yi-Dan Wang</a>, <a href="/lang/ru/authors/Wen-Ting_Wang.html" class="text-author-link" data-author="Wen-Ting Wang">Wen-Ting Wang</a>, <a href="/lang/ru/authors/Su-Ming_Weng.html" class="text-author-link" data-author="Su-Ming Weng">Su-Ming Weng</a>, <a href="/lang/ru/authors/Jia-Fu_Wu.html" class="text-author-link" data-author="Jia-Fu Wu">Jia-Fu Wu</a>, <a href="/lang/ru/authors/Ru-Shuang_Zhao.html" class="text-author-link" data-author="Ru-Shuang Zhao">Ru-Shuang Zhao</a>, <a href="/lang/ru/authors/Yuan-Chuan_Zou.html" class="text-author-link" data-author="Yuan-Chuan Zou">Yuan-Chuan Zou</a>, <a href="/lang/ru/authors/Yu-Hao_Zhu.html" class="text-author-link" data-author="Yu-Hao Zhu">Yu-Hao Zhu</a>, <a href="/lang/ru/authors/Ya-Biao_Wang.html" class="text-author-link" data-author="Ya-Biao Wang">Ya-Biao Wang</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.01855v1">2606.01855v1</a> · 2026-06-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · <span class="reading-time">⏱ 5 min</span> · <span class="cat-badge" data-cat="astro-ph.HE">High Energy</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.01855v1">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li><li class="article-nav-sep"></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "Fast radio bursts, magnetars and earthquakes: their "family feud"?"</div>
+        <div class="oneliner">Los estallidos rápidos de radio resultaron ser únicos en el espectro de estocasticidad y caos, distintos tanto de las erupciones de magnetares como de los terremotos.</div>
+        
+        <div class="ai-cover ai-cover-ph"></div>
+        <div class="mosaic"></div>
+        <section id="context"><h2>Context</h2><p>El enigma de los FRB ha intrigado a los astrofísicos desde el descubrimiento del primer evento en 2007. Estos destellos duran milisegundos pero liberan una energía comparable a la luminosidad mensual del Sol. La mayoría de los FRB provienen de lejanas <a href="/lang/es/tags/galaxy.html" class="text-tag" data-tag="galaxy">galaxias</a>, lo que indica su origen cosmológico: su señal de radio viajó miles de millones de años hasta nosotros, sufriendo retraso por <a href="/lang/es/tags/time_dilation.html" class="text-tag" data-tag="time_dilation">dilatación relativista del tiempo</a> y dispersión en el medio intergaláctico. Esto permite utilizarlos como sondas para estudiar la <a href="/lang/es/tags/expansion_of_the_universe.html" class="text-tag" data-tag="expansion_of_the_universe">expansión del Universo</a> y la distribución de materia bariónica. Históricamente, las <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrellas de neutrones</a>, predichas por <a href="/lang/es/scientists/Fritz_Zwicky.html" class="text-scientist" data-scientist="Fritz Zwicky">Fritz Zwicky</a> como remanentes de <a href="/lang/es/tags/supernova.html" class="text-tag" data-tag="supernova">supernovas</a>, se convirtieron en candidatas clave después de que <a href="/lang/es/scientists/Jocelyn_Bell_Burnell.html" class="text-scientist" data-scientist="Jocelyn Bell Burnell">Jocelyn Bell Burnell</a> descubriera los <a href="/lang/es/tags/pulsar.html" class="text-tag" data-tag="pulsar">púlsares</a> y <a href="/lang/es/scientists/Subrahmanyan_Chandrasekhar.html" class="text-scientist" data-scientist="Subrahmanyan Chandrasekhar">Subrahmanyan Chandrasekhar</a> estableciera el límite de su estabilidad. Hoy los modelos se dividen en dos bandos: unos proponen estrellamotos en la corteza, otros, erupciones magnetosféricas. Ni unos ni otros ofrecen una explicación completa.</p></section><section id="methods"><h2>Methods</h2><p>Los investigadores recopilaron una amplia colección de secuencias de eventos: para cinco FRB repetitivos (incluyendo al campeón FRB 20240114A con más de 10 000 estallidos en 8 meses), erupciones de rayos X de magnetares, glitches de <a href="/lang/es/tags/pulsar.html" class="text-tag" data-tag="pulsar">púlsares</a>, erupciones solares y terremotos. Para cada secuencia se calcularon los tiempos de espera y los cambios de energía. Luego, mediante el índice de Pincus (PI), que mide la complejidad <a href="/lang/es/tags/entropy.html" class="text-tag" data-tag="entropy">entrópica</a>, se evaluó el grado de estocasticidad, y a través del exponente de Lyapunov (LE), la caoticidad. Dado que las señales de radio viajan a la <a href="/lang/es/tags/speed_of_light.html" class="text-tag" data-tag="speed_of_light">velocidad de la luz</a>, la sincronización precisa es crítica. Combinando PI y LE, se construyó un diagrama bidimensional «estocasticidad–caos» (PLD) donde cada fenómeno está representado por un punto. La ventaja clave del método es que el diagnóstico no depende de la energía absoluta, sino que captura patrones relativos.</p></section><section id="results"><h2>Results</h2><p>En el diagrama PLD, todas las clases investigadas se distribuyeron de manera regular. Los terremotos ocuparon la región de alta caoticidad y baja estocasticidad: sus secuencias «recuerdan» las sacudidas pasadas. Las erupciones solares y de magnetares se situaron en el centro, lo que concuerda con su naturaleza de reconexión magnética. Los glitches de <a href="/lang/es/tags/pulsar.html" class="text-tag" data-tag="pulsar">púlsares</a> mostraron alta estocasticidad y caos débil. Lo más interesante: los FRB repetitivos se agruparon en una nube compacta, claramente aislada de los demás. Una prueba estadística basada en la distancia energética con permutaciones confirmó la significación de la diferencia de los FRB respecto a las erupciones de magnetares (p=0.031) y los glitches (p=0.020). Además, la consistencia interna de la clase FRB es alta: la partición de la muestra da p=0.984, lo que indica homogeneidad. Merece especial atención el repetidor más activo, FRB 20240114A. Su monitoreo con el telescopio FAST reveló enormes variaciones en la tasa, desde decenas hasta casi 730 estallidos por hora. Sin embargo, su posición en el PLD permaneció notablemente estable: durante ocho meses de observaciones, el PI osciló alrededor de 0.90 y el LE alrededor de 0.10, sin tendencias significativas. La prueba de Dickey-Fuller rechazó la no estacionariedad con valores p cercanos a $10^{-3}$. Esto significa que la «firma» estadística de la fuente no depende de la actividad instantánea.</p></section><section id="implications"><h2>Implications</h2><p>El aislamiento de los FRB en el espacio de fase «estocasticidad–caos» indica que su mecanismo físico es más complejo de lo que se pensaba. Un PI alto (cercano a uno) evidencia una carencia casi total de memoria determinista: cada estallido apenas depende de los anteriores. El LE bajo señala una caoticidad débil. Juntos, esto pinta una imagen de una fuente ruidosa y de alta entropía, posiblemente una <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrella de neutrones</a> con una magnetosfera extremadamente turbulenta o con múltiples centros de emisión independientes. Esto concuerda con la ausencia de una periodicidad de rotación estable, que se ha buscado sin éxito en los FRB repetitivos. En los campos gravitatorios extremos de estos objetos, los efectos de <a href="/lang/es/tags/time_dilation.html" class="text-tag" data-tag="time_dilation">dilatación del tiempo</a> einsteiniana son notables y pueden influir en la observación. Los escenarios tradicionales —erupciones magnetosféricas aisladas o estrellamotos-glitches discretos— no reproducen la estadística observada.</p></section><section id="future_development"><h2>Future development</h2><p>El método PLD propuesto abre una nueva vía para clasificar transitorios. En el futuro se podrá aplicar a otros tipos de estallidos cósmicos, como los de <a href="/lang/es/tags/black_hole.html" class="text-tag" data-tag="black_hole">agujeros negros</a> en acreción en <a href="/lang/es/tags/quasar.html" class="text-tag" data-tag="quasar">cuásares</a> o eventos registrados por detectores de <a href="/lang/es/tags/gravitational_waves.html" class="text-tag" data-tag="gravitational_waves">ondas gravitacionales</a> (LIGO y Virgo). Conforme se acumulen datos de nuevos repetidores y de instrumentos más sensibles, será posible refinar los patrones estadísticos y, quizás, identificar subclases dentro de la población de FRB.</p></section><section id="impact_on"><h2>Impact</h2><p>El estudio conecta áreas aparentemente lejanas: astrofísica de estrellas de neutrones, física de plasmas, sismología y dinámica no lineal. Los resultados son importantes para entender los estados extremos de la materia en campos magnéticos superintensos y pueden tener eco en experimentos de laboratorio con láseres de alta potencia.</p></section><section id="next_steps"><h2>Next steps</h2><p>El siguiente paso es registrar más estallidos de una misma fuente en distintos rangos espectrales para comprobar si la longitud de onda influye en la posición en el PLD. También es importante incluir en el análisis a los no repetidores para entender si se deben a una física diferente o al mismo mecanismo con baja tasa de repetición.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>La naturaleza de los FRB sigue siendo uno de los problemas clave no resueltos de la astrofísica moderna, junto con los enigmas de la <a href="/lang/es/tags/dark_matter.html" class="text-tag" data-tag="dark_matter">materia oscura</a> y la <a href="/lang/es/tags/dark_energy.html" class="text-tag" data-tag="dark_energy">energía oscura</a>. Este estudio acota el abanico de modelos posibles, pero la cuestión fundamental —cómo se libera exactamente una energía colosal en un pulso de radio de milisegundos— sigue abierta. Además, la conexión con los glitches de <a href="/lang/es/tags/pulsar.html" class="text-tag" data-tag="pulsar">púlsares</a> y las reconfiguraciones súbitas del campo magnético arroja luz sobre la estructura interna de las <a href="/lang/es/tags/neutron_star.html" class="text-tag" data-tag="neutron_star">estrellas de neutrones</a> y la ecuación de estado de la materia nuclear.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 ¡En un solo segundo, el repetidor más activo, FRB 20240114A, emite hasta 12 estallidos! Y su número total de eventos registrados iguala al de estrellas en algunos cúmulos globulares. Cada uno de esos estallidos transporta la energía que el Sol emite en varios días.</p><p class="fact fact-scifi">🎬 En la novela «Contacto» de Carl Sagan, las señales de radio procedentes de la constelación de Vega se convierten en un puente hacia el diálogo interestelar. Los FRB, descubiertos décadas después, también suscitaron al principio hipótesis sobre un origen artificial, aunque hoy los científicos se inclinan por explicaciones naturales, pero no menos fascinantes.</p></div>
+        <div class="formula"><div class="formula-render">|\delta(t)| \approx |\delta_0| e^{\lambda t}</div><div class="formula-meaning">El exponente de Lyapunov λ determina la tasa característica de divergencia: un valor positivo indica caos, uno negativo, estabilidad.</div></div><div class="formula"><div class="formula-render">d_i = \sqrt{(\text{PI}_i - \text{PI}_0)^2 + (\text{LE}_i - \text{LE}_0)^2}</div><div class="formula-meaning">Medida de cuán lejos se encuentra una fuente dada del FRB repetitivo típico en el espacio de estocasticidad–caoticidad.</div></div>
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>número de estallidos de FRB 20240114A en 8 meses:</strong> más de 10 000</li><li><strong>frecuencia máxima de estallidos:</strong> 729 por hora</li><li><strong>p-valor de diferencia entre FRB y erupciones de magnetares:</strong> 0.031</li><li><strong>p-valor de consistencia interna de los FRB:</strong> 0.984</li><li><strong>cobertura temporal del monitoreo de FRB 20240114A:</strong> 8 meses (enero–agosto 2024)</li></ul></div>
+        <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/es/scientists/Fritz_Zwicky.html" class="text-scientist" data-scientist="Fritz Zwicky">Fritz Zwicky</a>, <a href="/lang/es/scientists/Jocelyn_Bell_Burnell.html" class="text-scientist" data-scientist="Jocelyn Bell Burnell">Jocelyn Bell Burnell</a>, <a href="/lang/es/scientists/Subrahmanyan_Chandrasekhar.html" class="text-scientist" data-scientist="Subrahmanyan Chandrasekhar">Subrahmanyan Chandrasekhar</a></div>
+        <div class="actions" data-article-id="2606.01855v1_es_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2606.01855v1" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('Caos cósmico: lo que el diagrama de Pincus-Lyapunov reveló sobre los estallidos rápidos de radio','https://bridge42worlds.org/lang/es/archive/2026-06-01/2606.01855v1/index.html')">Share</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2606.01855v1_es_advanced" data-entity-type="article"><div class="fb-title">How does it read?</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">Next article →</button>
+        </div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">Tags</div><a href="/lang/es/tags/neutron_star.html" class="side-tag" data-tag="neutron_star">estrella de neutrones</a>
+<a href="/lang/es/tags/pulsar.html" class="side-tag" data-tag="pulsar">púlsar</a>
+<a href="/lang/es/tags/entropy.html" class="side-tag" data-tag="entropy">entropía</a>
+<a href="/lang/es/tags/supernova.html" class="side-tag" data-tag="supernova">supernova</a>
+<a href="/lang/es/tags/speed_of_light.html" class="side-tag" data-tag="speed_of_light">velocidad de la luz</a>
+<a href="/lang/es/tags/time_dilation.html" class="side-tag" data-tag="time_dilation">dilatación del tiempo</a>
+<a href="/lang/es/tags/expansion_of_the_universe.html" class="side-tag" data-tag="expansion_of_the_universe">expansión del universo</a>
+<a href="/lang/es/tags/galaxy.html" class="side-tag" data-tag="galaxy">galaxia</a>
+<a href="/lang/es/tags/gravitational_waves.html" class="side-tag" data-tag="gravitational_waves">ondas gravitacionales</a>
+<a href="/lang/es/tags/black_hole.html" class="side-tag" data-tag="black_hole">agujero negro</a>
+<a href="/lang/es/tags/dark_matter.html" class="side-tag" data-tag="dark_matter">materia oscura</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/boltzmann_distribution.html" class="side-law" data-law="boltzmann_distribution">distribución de Boltzmann</a><a href="/lang/es/laws/fermidirac_statistics.html" class="side-law" data-law="fermidirac_statistics">estadística de Fermi-Dirac</a><a href="/lang/es/laws/second_law_of_thermodynamics.html" class="side-law" data-law="second_law_of_thermodynamics">segunda ley de la termodinámica</a><a href="/lang/es/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">efecto Doppler</a><a href="/lang/es/laws/hawking_radiation.html" class="side-law" data-law="hawking_radiation">radiación de Hawking</a><a href="/lang/es/laws/gravitational_lensing.html" class="side-law" data-law="gravitational_lensing">lente gravitacional</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">Original: <a href="https://arxiv.org/abs/2606.01855v1">arXiv:2606.01855v1</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=f31547ad85"></script>
+<script src="/js/search.js?v=f31547ad85"></script>
+<script src="/js/scroll.js?v=f31547ad85"></script>
+<script src="/js/lightbox.js?v=f31547ad85"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2606.01855v1', 'article', 'es');
+    if (false && window.logExpressInterest) logExpressInterest('2606.01855v1', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>
