@@ -138,7 +138,8 @@ def cmd_bulk_select(args):
 def cmd_bulk_generate(args):
     import generate
     generate.bulk_generate(args.file, batch_size=args.batch_size, express=not args.full,
-                            force=args.force, skip_peak_check=args.skip_peak_check)
+                            force=args.force, skip_peak_check=args.skip_peak_check,
+                            max_batches=args.max_batches)
 
 
 def cmd_regen_day(args):
@@ -644,6 +645,7 @@ def build_parser():
     s = sub.add_parser("bulk-generate", help="генерирует статьи из data/bulk-select/<run>.json батчами, с учётом пиковых часов DeepSeek")
     s.add_argument("--file", required=True, metavar="PATH", help="путь к data/bulk-select/<run>.json")
     s.add_argument("--batch-size", type=int, default=100)
+    s.add_argument("--max-batches", type=int, metavar="N", help="остановиться после N батчей (напр. пробный прогон)")
     s.add_argument("--full", action="store_true", help="полный цикл вместо экспресс (дороже)")
     s.add_argument("--force", action="store_true", help="пересоздать уже существующие статьи")
     s.add_argument("--skip-peak-check", action="store_true", help="игнорировать пиковые часы DeepSeek (не рекомендуется)")

@@ -558,6 +558,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         clickbait=safe(scipop.get("title", article["title"])),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
         refine_badge='<span class="refine-badge" title="Отшлифовано редактором">✦</span>' if article.get("refined") else "",
+        express_badge='<span class="express-badge" title="Экспресс-версия: по аннотации автора, без разбора полного текста статьи">⚡ экспресс</span>' if article.get("express") else "",
         refine_toggle=(
             f'<label class="refine-switch" title="Сравнить с сырым текстом (до шлифовки)">'
             f'<input type="checkbox" onchange="toggleRaw(this)" '
@@ -661,6 +662,7 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         "reading": reading_minutes(scipop),
         "categories": article.get("categories", []),
         "primary_category": article.get("primary_category", ""),
+        "express": article.get("express", False),
     })
     ip.write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -1905,6 +1907,7 @@ def regenerate_all_html():
             "categories": data.get("categories", []),
             "primary_category": data.get("primary_category", ""),
             "refined": data.get("refined", False),
+            "express": data.get("express", False),
         }
         abstract = data.get("abstract") or {}
         for version in VERSIONS:
@@ -2234,6 +2237,7 @@ def _index_entry(scipop, data, date_str, lang, version):
         "reading": reading_minutes(scipop),
         "categories": data.get("categories", []),
         "primary_category": data.get("primary_category", ""),
+        "express": data.get("express", False),
     }
 
 
@@ -2425,13 +2429,14 @@ def generate_ids(id_list, force=False):
     return len(prepared)
 
 
-def bulk_generate(selection_path, batch_size=100, express=True, force=False, skip_peak_check=False):
+def bulk_generate(selection_path, batch_size=100, express=True, force=False, skip_peak_check=False, max_batches=None):
     """Читает результат article_bulk_select.py (уже отобранный/ранжированный/license-audited
     список) и генерит его батчами по batch_size — в порядке приоритета (score), не по дате.
     Перед КАЖДЫМ батчем — проверка DeepSeek peak-hour: если сейчас пик или пик начнётся меньше
     чем через 2ч, останавливаемся (батч может не успеть проехать по обычной цене). Возобновляемо:
     повторный запуск с тем же файлом просто пропустит уже сгенерированные статьи (build_article
-    сам идемпотентен) и продолжит с того места, где остановились."""
+    сам идемпотентен) и продолжит с того места, где остановились. max_batches — остановиться
+    после N батчей (напр. для пробного прогона), даже если очередь и бюджет позволяют больше."""
     for lang in LANGUAGES: ensure_lang_structure(lang)
     data = json.loads(Path(selection_path).read_text(encoding="utf-8"))
     ready = data.get("ready", [])
@@ -2443,6 +2448,9 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
     for bi in range(0, len(ready), batch_size):
         batch = ready[bi:bi + batch_size]
         batch_num = bi // batch_size + 1
+        if max_batches and batch_num > max_batches:
+            print(f"\n🏁 Достигнут лимит --max-batches {max_batches} — останавливаюсь раньше срока.")
+            break
         if not skip_peak_check:
             is_peak, hrs = deepseek_peak_status()
             if is_peak or hrs < 2:
@@ -2707,7 +2715,7 @@ def translate_article_lang(aid, target_lang, force=False):
         "authors": data.get("authors", []), "license_url": data.get("license", ""),
         "license_name": data.get("license_name", "CC BY"),
         "categories": data.get("categories", []), "primary_category": data.get("primary_category", ""),
-        "refined": data.get("refined", False),
+        "refined": data.get("refined", False), "express": data.get("express", False),
     }
     lang_folder = Path(LANG_DIR) / target_lang / "archive" / date_str / aid
     lang_folder.mkdir(parents=True, exist_ok=True)
