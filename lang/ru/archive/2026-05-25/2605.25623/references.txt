@@ -1,0 +1,823 @@
+IMR posterior 67.8 +1.0
+−1.0 0.67+0.01
+−0.01
+estimate is not tied to a single choice of ringdown start
+time, we repeat the Kerr remnant inference for the pre-
+merger-informed analytically marginalized runs at three
+start-time offsets, 8t RD
+Mf , 9t RD
+Mf , and 10t RD
+Mf , relative to
+the H1 peak time. The resulting posteriors are shown
+in Fig. 5, with numerical summaries given in Table IV.
+The three posteriors occupy broadly similar regions of the
+(Mf , χf ) plane and remain consistent with the reference
+IMR remnant posterior. The 10t RD
+Mf result is somewhat
+60 65 70 75 80 85
+Mf [M⊙]
+0.5
+0.6
+0.7
+0.8
+0.9
+χf
+8tRD
+Mf
+9tRD
+Mf
+10tRD
+Mf
+IMR posterior
+1
+FIG. 5. Kerr remnant posteriors inferred from the pre-
+merger-informed agnostic 2DS spectral likelihood functions
+at different ringdown-start offsets. Colored contours show
+the 90% credible regions for 8t RD
+Mf , 9t RD
+Mf , and 10t RD
+Mf , using
+the amplitude scales obtained from the IMR posterior input
+and listed in Table I. The reference IMR posterior is shown
+in black. Gray solid and dotted curves indicate constant-
+frequency and constant-damping-time contours of the Kerr
+220 QNM mode, respectively.
+broader and extends further toward largerM f andχ f ,
+consistent with the lower effective ringdown SNR avail-
+able at later start times. This indicates that the Kerr
+remnant inference from the pre-merger-informed spectral
+likelihood function is reasonably stable under moderate
+changes of the ringdown fitting start time.
+D. Robustness to the amplitude scale
+We finally assess the robustness of the analysis with
+respect to the overall scale of the pre-merger-informed
+amplitude prior. For this test, we keep the ringdown fit-
+ting start time fixed at the 9t RD
+Mf offset and use the 9t Mf
+amplitude scales constructed from the IMR posterior in-
+put and listed in Table I. We then repeat the agnostic
+spectral inference and the subsequent Kerr remnant in-
+ference under the global rescalings
+σk →0.75σ k, σ k →σ k, σ k →1.5σ k.(7.8)
+This rescaling changes the overall amplitude scale while
+preserving the relative excitation strengths between the
+two DS components.
+Across the three amplitude-scale choices, the one- and
+two-dimensional marginalized spectral posteriors remain
+13
+55 60 65 70 75 80
+Mf [M⊙]
+0.4
+0.5
+0.6
+0.7
+0.8
+χf
+0.75 σk
+σk
+1.5 σk
+IMR posterior
+1
+FIG. 6. Robustness of the Kerr remnant posterior under
+global rescalings of the pre-merger-informed amplitude scale
+constructed from the IMR posterior input. Colored contours
+show the 90% credible regions obtained with amplitude-scale
+factors 0.75σk,σ k, and 1.5σk at the 9tRD
+Mf ringdown-start off-
+set, whereσ k denotes the unrescaled amplitude scale listed
+in Table I. The reference IMR posterior is shown in black.
+Gray solid and dotted curves indicate constant-frequency and
+constant-damping-time contours of the Kerr 220 QNM mode,
+respectively.
+broadly consistent. The log Bayes factors also differ only
+mildly, with differences of order ∆ lnB≃0.3. Figure 6
+shows the corresponding Kerr remnant posteriors. The
+three posteriors remain close to one another and all stay
+aligned with the reference IMR remnant posterior. Thus,
+the moderate global rescalings of the adopted amplitude
+scale do not qualitatively change either the agnostic spec-
+tral inference or the theory-side Kerr remnant inference.
+Together with the small variation in the log Bayes factor,
+this indicates that the improvement in Bayesian support
+found in Sec. VII B is not the result of fine-tuning the
+overall scale of the amplitude prior. This supports the in-
+terpretation of the pre-merger-informed amplitude scale
+as a soft, physically motivated prior scale rather than a
+finely tuned amplitude constraint.
+VIII. DISCUSSION
+Having introduced theSPRINGframework and demon-
+strated its application to GW250114, we now discuss
+the interpretation and broader implications of the frame-
+work. Compared with existing ringdown analyses, the
+most distinctive feature ofSPRINGis that it explicitly dis-
+entangles agnostic ringdown spectral measurement from
+subsequent theory-side interpretation. This separation
+is enabled by the construction of the spectral likelihood
+functionL spec(s). Starting from the marginalized spec-
+tral likelihood obtained in the agnostic DS inference
+layer,SPRINGdefinesL spec(s) as a likelihood function
+on spectral space and then evaluates this function on
+theory-predicted QNM spectra.
+In the present implementation, this connection be-
+tween the agnostic DS spectral inference and the selected
+QNM content is made through several modeling choices.
+The DS inference is performed in a ringdown interval
+where the selected QNM description is expected to be
+meaningful. The number of DS components is chosen to
+match the selected QNM content, the DS components are
+ordered by damping time, and the pre-merger-informed
+amplitude scales guide the inference toward physically
+motivated amplitude regions. Under this identification,
+the marginalized likelihoodp(d|s) obtained from the ag-
+nostic DS analysis is interpreted, in the theory-inference
+layer, as the spectral likelihood functionL spec(s) associ-
+ated with the selected QNM content.
+This identification should not be interpreted as imply-
+ing that each measured DS component is exactly the cor-
+responding selected QNM in the data. Rather, it should
+be understood as part of the spectral-level modeling as-
+sumption ofSPRING. This is analogous in spirit to as-
+sumptions such as those made in Kerr-template ringdown
+analyses [13, 19–21, 27, 62], where the post-t0 data are as-
+sumed to be well described by a chosen set of Kerr QNMs.
+The difference is thatSPRINGmakes this assumption only
+after extracting the ringdown spectral information from
+the data, rather than by imposing the Kerr spectral rela-
+tions during waveform modeling. This separation makes
+the assumption more explicit and provides an intermedi-
+ate spectral-space object,L spec(s), that can be inspected,
+reused, and evaluated under different theory-side spectral
+maps.
+The GW250114 application provides a useful consis-
+tency check of this identification. After the spectral
+likelihood function constructed in the spectral-inference
+layer is evaluated on the Kerr 220 + 221 spectral map,
+the resulting remnant posterior is closely consistent with
+the IMR estimate. This agreement suggests that, for
+the present event and analysis choices, the agnostic 2DS
+spectral likelihood contains physically relevant informa-
+tion about the selected 220 + 221 QNM content. At the
+same time, this should not be interpreted as requiring the
+low-dimensional marginalized spectral posteriors them-
+selves to appear directly Kerr-like. Indeed, in the ag-
+nostic spectral-inference results shown in Fig. 3, some
+one- and two-dimensional projections, especially those
+involving the shorter-lived DS componentk= 2, can
+appear displaced from the reference Kerr values. This
+does not preclude obtaining a physically reasonable rem-
+nant posterior, because marginalizing a high-dimensional
+spectral likelihood onto low-dimensional subspaces can
+discard correlations and geometric information that are
+relevant for theory-side inference.
+14
+This observation motivates a high-dimensional
+spectral-manifold viewpoint for BH spectroscopy. The
+object relevant for remnant or beyond-Kerr inference is
+not the low-dimensional marginalized spectral posteriors
+themselves, but the full spectral likelihood function
+Lspec(s). A theory predicts a spectral manifold em-
+bedded in this higher-dimensional spectral space, and
+inference proceeds by evaluating the likelihood along
+that manifold. For the Kerr 220+221 case, this manifold
+is parametrized by (M f , χf ) inside the four-dimensional
+spectral space (f 220, τ220, f221, τ221). From this view-
+point, apparent disagreement in a projected spectral
+posterior does not by itself imply inconsistency with
+Kerr, nor does apparent agreement in a projection
+guarantee a faithful test. A systematic spectral-manifold
+analysis may therefore be important for future no-hair
+tests [63–67] and for searches for deviations from GR
+[19, 20, 24, 68, 69], where small beyond-Kerr effects may
+appear as directions in spectral space that cannot be
+absorbed by changes in the remnant mass and spin.
+The present results also emphasize the value of
+pre-merger information for ringdown inference. In
+our GW250114 application, incorporating pre-merger-
+informed amplitude scales improves the Bayesian support
+for the agnostic 2DS signal model. This is consistent with
+recent work emphasizing that pre-merger binary dynam-
+ics and QNM excitation systematics can play an impor-
+tant role in ringdown inference [18, 46, 70]. A natural
+direction for future work is therefore to develop more sys-
+tematic ways of propagating pre-merger information into
+ringdown inference to improve its precision and stability.
+Although the present application focuses on a single
+event, a deterministic Kerr spectral map, and a 2DS
+model, the formalism itself is more general. As shown in
+Sec. V, the same spectral-likelihood construction applies
+to multi-event analyses with event-dependent remnant
+parameters and shared beyond-Kerr parameters. Beyond
+the 2DS setting considered here, the framework can be
+extended to a larger number of spectral components. The
+present 220 + 221 configuration represents a useful in-
+termediate case: it contains more spectral information
+than a single-mode analysis, while avoiding the addi-
+tional degeneracies and interpretational ambiguities that
+may arise when more components are introduced. Appli-
+cations with larger mode content will require a more care-
+ful treatment of component identification, prior struc-
+ture, and spectral-likelihood geometry.
+Finally, the analytic marginalization over the linear
+amplitude–phase coefficients reduces the effective sam-
+pling dimensionality of the data-side spectral inference
+and improves its computational efficiency. The resulting
+spectral likelihood functionL spec(s) can then be reused
+under different theory-side spectral maps without repeat-
+ing the time-domain data analysis, providing a modular
+route to larger event samples and broader theory spaces.
+IX. CONCLUSION
+In this work, we introducedSPRING, a spectral-level
+pre-merger-informed framework for black-hole ringdown
+inference. The framework is built around three layers.
+First, pre-merger information is used to estimate charac-
+teristic amplitude scales for a selected set of QNM com-
+ponents. Second, the ringdown data are analyzed with
+an agnostic DS model whose linear amplitude–phase co-
+efficients are assigned prior scales from the pre-merger-
+informed layer, and these coefficients are analytically
+marginalized to construct the spectral likelihood function
+Lspec(s). Third, remnant or beyond-Kerr parameters are
+inferred by evaluating this spectral likelihood function on
+theory-predicted QNM spectra.
+We appliedSPRINGto GW250114 in a 2DS analysis
+associated with the selected QNM content{220,221}.
+Compared with analyses using broad, uniform ampli-
+tude priors, the pre-merger-informed amplitude scales in-
+creased the log Bayes factor for the agnostic 2DS signal
+model by ∆ lnB∼5–10. Using the resulting spectral
+likelihood function for Kerr remnant inference, we ob-
+tained remnant posteriors that are closely consistent with
+the IMR estimate. The results obtained using amplitude
+scales constructed from IMR and inspiral-only posterior
+inputs are mutually consistent. We also found that the
+remnant inference remains reasonably stable under mod-
+erate changes of the ringdown fitting start time and under
+global rescalings of the adopted amplitude scale.
+Taken together, these results support the spectral like-
+lihood function as the interface between agnostic spec-
+tral inference and theory-side interpretation. By separat-
+ing the data-side measurement of the ringdown spectrum
+from the inference of remnant or beyond-Kerr parame-
+ters,SPRINGenables different theoretical models to be
+compared using the same data-side likelihood, through
+their predicted QNM spectral maps. Its modular struc-
+ture also provides a natural route toward multi-event
+analyses and broader theory spaces. In this sense,SPRING
+provides a methodological foundation for spectral-level
+black-hole spectroscopy in the era of next-generation
+gravitational-wave observations [71–75].
+ACKNOWLEDGMENTS
+This paper employs the following software, listed
+in alphabetical order:Astropy[76–78],corner[79],
+cpnest[56],GWpy[80],H5py[81],LALSuite[82,
+83],Matplotlib[84],NumPy[85],pandas[86],
+PESummary[87],pyseobnr[32],qnm[31],SciPy[88], and
+tdinf[59–61].
+The authors are grateful to Lorenzo Pompili for the
+helpful suggestion onpyseobnr. They also thank Harri-
+son Siegel for the valuable advice on data preprocessing.
+This work was supported in part by the National Natural
+Science Foundation of China under Grant No. 12175108.
+15
+DATA AVAILABILITY
+The gravitational-wave strain andSEOBNRv5PHM-based
+IMR posterior samples used in this work are publicly
+available from GWOSC. The inspiral-only posterior sam-
+ples are publicly available from the LVK data release [89].
+The numerical implementation ofSPRINGused in this
+work is being prepared for public release and is not yet
+publicly available. Additional materials needed to repro-
+duce the main results are available from the correspond-
+ing author upon reasonable request.
+Appendix A: Dominant waveform-mode diagnostics
+In Sec. III, the target waveform used for QNM
+amplitude-scale extraction is constructed from the pro-
+jected (ℓ, m) = (2,2) waveform mode. This choice is
+motivated by the general expectation from NR studies
+that, for nearly equal-mass, nonprecessing, quasicircular
+binaries, theℓ=|m|= 2 modes dominate the ringdown
+emission and the retrograde contribution is subdominant.
+Here we provide two windowed diagnostics to assess this
+expectation for the specific GW250114 application. The
+first diagnostic quantifies how well the projected (2,±2)
+waveform reproduces the projected all-mode waveform
+over the relevant post-peak time windows. The second
+diagnostic quantifies the projected strength of the (2,−2)
+retrograde contribution relative to the (2,2) prograde
+contribution.
+For any mode setM, we defineh M(t) by the same pro-
+jection formula as Eq. (3.3), with the summation taken
+over (ℓ, m)∈ M. The peak timet peak is defined by
+Eq. (3.4) and is evaluated separately for each posterior
+sample used in the amplitude-scale construction. For the
+diagnostic scan, we define a candidate fitting start time
+t0(∆t0) =t peak + ∆t0,(A.1)
+where ∆t0 is the post-peak fitting start offset. For a time
+window starting at this candidate fitting start time, we
+define
+W(∆t0) ={t: ∆t 0 ≤t−t peak ≤∆t max},(A.2)
+with ∆tmax = 30 ms. Equivalently, this window extends
+fromt 0(∆t0) tot peak + ∆tmax. For two projected com-
+plex waveformsx(t) andy(t), we use the discrete inner
+product and norm
+⟨x, y⟩W =
+X
+ta∈W
+x(ta)y∗(ta),∥x∥ W =
+ X
+ta∈W
+|x(ta)|2
+!1/2
+.
+(A.3)
+We first define a projected mode-overlap diagnostic.
+For the (2,±2) comparison mode setM 2±2 and an all-
+mode reference setM all, the windowed overlap is
+O(∆t0) =
+
+
+hMall , hM2±2
+
+W(∆t0)
+
+∥hMall ∥W(∆t0)
+hM2±2
+
+W(∆t0)
+.(A.4)
+0 5 10 15 20 25 30
+t0 − tpeak [ms]
+0.9985
+0.9990
+0.9995
+1.0000Overlap
+inspiral-only
+IMR
+1
+FIG. 7. Median windowed overlap between the projected
+(2,±2) waveform and the projected all-mode reference wave-
+form as a function of the fitting start offset ∆t 0 =t 0 −t peak.
+The window extends fromt 0(∆t0) tot peak + 30 ms. The two
+curves correspond to waveforms generated using IMR and
+inspiral-only posterior samples.
+In the diagnostic used here, we take
+M2±2 ={(2,2),(2,−2)},M all =M peak.(A.5)
+HereM all denotes the mode set used to construct the
+projected all-mode reference waveform. In the present
+implementation, it is taken to be the same as the peak-
+time mode setM peak, namely the available modes with
+ℓ= 2,3,4 specified in Eq. (7.1). Thus,O(∆t 0) measures
+how well the projected (2,±2) contribution reproduces
+the projected all-mode reference waveform in the window
+fromt peak + ∆t0 tot peak + 30 ms.
+We also define a projected retrograde-to-prograde
+strength ratio. For the reference prograde mode (ℓ, m) =
+(2,2), this ratio is
+Rretro
+22 (∆t0) =
+hproj
+2,−2
+
+W(∆t0)hproj
+2,2
+
+W(∆t0)
+,(A.6)
+whereh proj
+2,±2 denotes the individually projected (2,±2)
+waveform mode, constructed using the same projection
+prescription as Eq. (3.3). This quantity measures the
+windowed projected strength of the retrograde (2,−2)
+contribution relative to the prograde (2,2) contribution.
+Figure 7 shows the median windowed overlap for wave-
+forms generated using either IMR or inspiral-only poste-
+rior samples. For both posterior inputs, the projected
+(2,±2) contribution has an overlap very close to unity
+with the projected all-mode reference waveform through-
+out the post-peak range considered. This indicates that
+the (2,±2) modes dominate the projected waveform over
+the windows relevant for the amplitude-scale construc-
+tion.
+16
+0 5 10 15 20 25 30
+t0 −tpeak [ms]
+0.075
+0.076
+0.077
+0.078
+0.079
+∥hproj
+2, −2∥/∥hproj
+2, 2 ∥
+inspiral-only
+IMR
+1
+FIG. 8. Median windowed projected retrograde-to-prograde
+strength ratioR retro
+22 =∥h proj
+2,−2∥W /∥hproj
+2,2 ∥W as a function of
+the fitting start offset ∆t 0 =t 0 −t peak. The window extends
+fromt 0(∆t0) tot peak + 30 ms. The two curves correspond to
+waveforms generated using IMR and inspiral-only posterior
+samples.
+Figure 8 shows the median projected retrograde-to-
+prograde strength ratio. For both posterior inputs, the
+projected (2,−2) retrograde contribution remains below
+10% of the projected (2,2) prograde contribution. This
+supports the approximation used in Sec. III, where the
+target waveform for QNM amplitude-scale extraction is
+taken to be the projected (2,2) waveform.
+Appendix B: Comparison of induced amplitude
+priors
+In Sec. VI B, we specify three amplitude-prior choices
+used in the agnostic DS analyses. The direct amplitude–
+phase sampling analyses use either a prior uniform in
+Ak or a prior uniform in log 10Ak, while the analytically
+marginalized analyses use a zero-mean Gaussian prior on
+the linear coefficients (pk, qk). Here we compare the cor-
+responding induced prior densities on the physical am-
+plitudeA k, after marginalizing over the phaseϕ k.
+For the direct amplitude prior uniform inA k, the
+marginal density is constant within the adopted ampli-
+tude range,
+π(Ak)∝1.(B.1)
+For the prior uniform in log 10Ak, the induced marginal
+density onA k is
+π(Ak)∝ 1
+Ak
+,(B.2)
+within the same amplitude range. By contrast, the Gaus-
+sian prior on the linear coefficients,
+pk, qk∼ N(0, σ2
+k),(B.3)
+induces a Rayleigh distribution on the amplitudeA k =
+(p2
+k+q 2
+k)1/2,
+π(Ak) = Ak
+σ2
+k
+exp
+
+− A2
+k
+2σ2
+k
+
+, A k≥0.(B.4)
+The corresponding joint prior in (A k, ϕk) is given in
+Eq. (4.15).
+Figure 9 compares these induced marginal amplitude
+priors. The uniform-in-A k prior assigns equal density
+per unit amplitude, while the uniform-in-log 10Ak prior
+places substantially more prior density toward small am-
+plitudes. The Rayleigh prior induced by the Gaussian
+prior on (p k, qk) is regular atA k = 0 and peaks at
+Ak =σ k, thereby introducing the pre-merger-informed
+amplitude scale as a soft preference rather than a fixed
+amplitude value. This illustrates how the analytically
+marginalized analysis incorporates amplitude-scale infor-
+mation without imposing a deterministic amplitude con-
+straint.
+Appendix C: Residuals of the QNM amplitude fits
+In the pre-merger-informed layer, the amplitude scales
+are extracted by fitting a selected QNM basis to a pro-
+jected target waveform. Here we examine the residuals
+of these complex least-squares fits as a diagnostic of the
+fit quality.
+For this diagnostic, we use the same target waveform-
+mode setM tar as in Sec. III. The projected target wave-
+form is
+htar(t) =h Mtar(t),(C.1)
+whereh Mtar(t) is constructed using the projection pre-
+scription in Eq. (3.3). In the application considered here,
+we take
+Mtar ={(2,2)}.(C.2)
+We use the same diagnostic scan of candidate fitting
+start timest 0(∆t0) defined in Eq. (A.1), with ∆t 0 ∈
+[0,30] ms. For eacht 0, we fit the target waveform over
+the post-t0 interval using the selected QNM basis. For a
+QNM componentj∈ J, the basis function is
+bj(t−t 0) = exp [−iωj(t−t 0)], t≥t 0,(C.3)
+where the complex QNM frequencyω jis evaluated at the
+remnant mass and spin associated with the same poste-
+rior sample. In the present diagnostic, the QNM content
+is
+J={(2,2,0),(2,2,1)}.(C.4)
+At discrete timest a ≥t 0, the complex least-squares
+problem is
+htar(ta)≃
+X
+j∈J
+Aj(t0)b j(ta−t 0).(C.5)
+17
+10−24 10−23 10−22 10−21 10−20 10−19
+Ak
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Probability density
+1e22 (a)
+uniform inAk
+uniform in log10 Ak
+Rayleigh prior
+10−21
+Ak
+0
+1
+2
+3
+4
+5Probability density
+1e20 (b)
+1
+FIG. 9. Comparison of induced marginal prior densities on the amplitudeA k, after marginalizing over the phaseϕ k. The
+curves show the priors uniform inA k, uniform in log 10 Ak, and the Rayleigh prior induced by a zero-mean Gaussian prior on
+the linear coefficients (p k, qk). For the two direct-amplitude priors, the amplitude interval is taken to beA k ∈[10 −23,10 −19],
+while the Rayleigh prior is shown forσ k = 1.72×10 −21. Panel (b) shows a zoomed-in view of the amplitude range relevant for
+the pre-merger-informed scale; the black dashed line marksA k =σ k.
+0 5 10 15 20 25 30
+t0 − tpeak [ms]
+0.00
+0.05
+0.10
+0.15
+0.20Relative residual norm
+inspiral-only
+IMR
+1
+FIG. 10. Median relative residual norm of the complex
+least-squares QNM amplitude fits as a function of the fit-
+ting start offset ∆t 0 =t 0 −t peak. The target waveform
+is the projected (2,2) waveform, and the fitting basis is
+J={(2,2,0),(2,2,1)}. The two curves correspond to wave-
+forms generated using IMR and inspiral-only posterior sam-
+ples.
+Equivalently, in matrix form,
+htar≃B(t 0)A(t0),(C.6)
+with
+Baj(t0) =b j(ta−t 0).(C.7)
+The fitted complex amplitudes are obtained from
+bA(t0) = arg min
+A
+∥htar−B(t 0)A∥2
+2.(C.8)
+We quantify the fit quality using the relative residual
+norm
+Rtar(t0) =
+htar−B(t 0) bA(t0)
+
+2
+∥htar∥2
+.(C.9)
+This quantity measures the fractional mismatch between
+the projected target waveform and its best-fit 220 + 221
+QNM representation over the fitting interval.
+Figure 10 shows the median relative residual norm as a
+function of the fitting start offset ∆t 0 =t 0−t peak, using
+waveforms generated from either IMR or inspiral-only
+posterior samples. For both posterior inputs, the residual
+decreases rapidly after the peak and becomes small once
+the fitting start time is shifted a few milliseconds into
+the post-peak regime. This behavior supports the use
+of the 220 + 221 QNM basis for extracting characteristic
+amplitude scales over the post-peak fitting windows used
+in the main analysis.
+[1] S. A. Teukolsky, ApJ185, 635 (1973).
+[2] S. Chandrasekhar and S. Detweiler, Proceedings of the
+Royal Society of London. A. Mathematical and Physical
+Sciences344, 441 (1975).
+18
+[3] E. W. Leaver, Proceedings of the Royal Society of Lon-
+don. A. Mathematical and Physical Sciences402, 285
+(1985).
+[4] K. D. Kokkotas and B. G. Schmidt, Living Rev. Relativ.
+2, 2 (1999).
+[5] E. Berti, V. Cardoso, and A. O. Starinets, Class. Quan-
+tum Grav.26, 163001 (2009), arXiv:0905.2975 [gr-qc].
+[6] O. Dreyer, B. Kelly, B. Krishnan, L. S. Finn, D. Garrison,
+and R. Lopez-Aleman, Class. Quantum Grav.21, 787
+(2004), arXiv:gr-qc/0309007.
+[7] V. Baibhav and E. Berti, Phys. Rev. D99, 024005 (2019),
+arXiv:1809.03500 [gr-qc].
+[8] E. Bertiet al., Black hole spectroscopy: From theory to
+experiment (2025), arXiv:2505.23895 [gr-qc].
+[9] E. Berti, M. H.-Y. Cheung, and S. Yi, Physics Today78,
+32 (2025).
+[10] G. Carullo, Gen Relativ Gravit57, 76 (2025).
+[11] M. Giesler, M. Isi, M. A. Scheel, and S. A. Teukolsky,
+Phys. Rev. X9, 041060 (2019).
+[12] R. Cotesta, G. Carullo, E. Berti, and V. Cardoso, Phys.
+Rev. Lett.129, 111102 (2022), arXiv:2201.00822 [gr-qc].
+[13] C. D. Capano, M. Cabero, J. Westerweck, J. Abedi,
+S. Kastha, A. H. Nitz, Y.-F. Wang, A. B. Nielsen, and
+B. Krishnan, Phys. Rev. Lett.131, 221402 (2023).
+[14] H. Siegel, N. M. Khusid, M. Isi, and W. M. Farr,
+GW231123 ringdown: Interpretation as multimodal Kerr
+signal (2025), arXiv:2511.02691 [gr-qc].
+[15] M. H.-Y. Cheung, E. Berti, V. Baibhav, and R. Cotesta,
+Phys. Rev. D109, 044069 (2024), arXiv:2310.04489 [gr-
+qc].
+[16] Y. Yang, C. Shi, and Y.-M. Hu, Contribution from
+Nonlinear Quasi-normal Modes in GW250114 (2025),
+arXiv:2510.16903 [gr-qc].
+[17] M. Giesler, S. Ma, K. Mitman, N. Oshita, S. A. Teukol-
+sky, M. Boyle, N. Deppe, L. E. Kidder, J. Moxon, K. C.
+Nelli, H. P. Pfeiffer, M. A. Scheel, W. Throwe, and N. L.
+Vu, Phys. Rev. D111, 084041 (2025), arXiv:2411.11269
+[gr-qc].
+[18] Y.-F. Wang, S. Ma, N. Khera, and H. Yang, A
+nonlinear voice from GW250114 ringdown (2026),
+arXiv:2601.05734 [gr-qc].
+[19] R. Abbottet al.(LIGO Scientific, Virgo, KAGRA),
+Tests of General Relativity with GWTC-3 (2021),
+arXiv:2112.06861 [gr-qc].
+[20] R. Abbottet al.(LIGO Scientific, Virgo), Phys. Rev. D
+103, 122002 (2021), arXiv:2010.14529 [gr-qc].
+[21] H. Siegel, M. Isi, and W. Farr, The Ringdown of
+GW190521: Hints of Multiple Quasinormal Modes with a
+Precessional Interpretation (2023), arXiv:2307.11975 [gr-
+qc].
+[22] V. Gennari, G. Carullo, and W. D. Pozzo, Eur. Phys. J.
+C84, 233 (2024), arXiv:2312.12515 [gr-qc].
+[23] A. K.-W. Chung and N. Yunes, Probing quadratic
+gravity with black-hole ringdown gravitational waves
+measured by LIGO-Virgo-KAGRA detectors (2025),
+arXiv:2506.14695 [gr-qc].
+[24] LIGO Scientific Collaboration, Virgo Collaboration, and
+KAGRA Collaboration, Black Hole Spectroscopy and
+Tests of General Relativity with GW250114 (2025),
+arXiv:2509.08099 [gr-qc].
+[25] A. G. Abacet al.(LIGO Scientific, Virgo, KAGRA),
+Phys. Rev. Lett.135, 111403 (2025), arXiv:2509.08054
+[gr-qc].
+[26] B. P. Abbottet al.(LIGO Scientific, Virgo), Phys. Rev.
+Lett.116, 221101 (2016), arXiv:1602.03841 [gr-qc].
+[27] G. Carullo, W. D. Pozzo, and J. Veitch, Phys. Rev. D
+99, 123029 (2019), arXiv:1902.07527 [gr-qc].
+[28] S. Guo and Y.-G. Miao, A theory-agnostic hierarchical
+Bayesian framework for black-hole spectroscopy: A case
+study on GW250114 in Einstein-dilaton-Gauss-Bonnet
+gravity (2025), arXiv:2512.03713 [gr-qc].
+[29] I. Kamaretsos, M. Hannam, S. Husa, and B. S.
+Sathyaprakash, Phys. Rev. D85, 024018 (2012).
+[30] I. Kamaretsos, M. Hannam, and B. S. Sathyaprakash,
+Phys. Rev. Lett.109, 141102 (2012).
+[31] L. C. Stein, J. Open Source Softw.4, 1683 (2019),
+arXiv:1908.10377 [gr-qc].
+[32] D. P. Mihaylov, S. Ossokine, A. Buonanno, H. Es-
+telles, L. Pompili, M. P¨ urrer, and A. Ramos-Buades, py-
+SEOBNR: A software package for the next generation of
+effective-one-body multipolar waveform models (2023),
+arXiv:2303.18203 [gr-qc].
+[33] A. Buonanno and T. Damour, Phys. Rev. D59, 084006
+(1999), arXiv:gr-qc/9811091.
+[34] A. Buonanno and T. Damour, Phys. Rev. D62, 064015
+(2000), arXiv:gr-qc/0001013.
+[35] T. Damour, Phys. Rev. D64, 124013 (2001), arXiv:gr-
+qc/0103018.
+[36] A. Buonanno, Y. Chen, and T. Damour, Phys. Rev. D
+74, 104005 (2006), arXiv:gr-qc/0508067.
+[37] A. Buonanno and B. S. Sathyaprakash, Sources of
+Gravitational Waves: Theory and Observations (2015),
+arXiv:1410.7832 [gr-qc].
+[38] A. Ramos-Buades, A. Buonanno, H. Estell´ es, M. Khalil,
+D. P. Mihaylov, S. Ossokine, L. Pompili, and
+M. Shiferaw, Phys. Rev. D108, 124037 (2023),
+arXiv:2303.18046 [gr-qc].
+[39] L. Pompiliet al., Phys. Rev. D108, 124035 (2023),
+arXiv:2303.18039 [gr-qc].
+[40] L. Pompili, E. Maggio, H. O. Silva, and A. Buonanno,
+Phys. Rev. D111, 124040 (2025).
+[41] B. P. Abbottet al.(LIGO Scientific, Virgo), Phys. Rev.
+Lett.116, 241102 (2016).
+[42] B. P. Abbottet al.(LIGO Scientific, Virgo), Phys. Rev.
+Lett.116, 061102 (2016), arXiv:1602.03837 [gr-qc].
+[43] X. J. Forteza, S. Bhagwat, P. Pani, and V. Ferrari, Phys.
+Rev. D102, 044053 (2020), arXiv:2005.03260 [gr-qc].
+[44] A. Dhani, Phys. Rev. D103, 104048 (2021),
+arXiv:2010.08602 [gr-qc].
+[45] X. Li, L. Sun, R. K. L. Lo, E. Payne, and Y. Chen, Phys-
+ical Review D105, 10.1103/physrevd.105.024016 (2022).
+[46] K. Mitmanet al., Probing the ringdown perturba-
+tion in binary black hole coalescences with an im-
+proved quasi-normal mode extraction algorithm (2025),
+arXiv:2503.09678 [gr-qc].
+[47] L. Gao, G. B. Cook, L. E. Kidder, H. P. Pfeiffer,
+M. A. Scheel, N. Deppe, W. Throwe, N. L. Vu, K. C.
+Nelli, J. Moxon, and M. Boyle, Physical Review D112,
+10.1103/3jj6-jc8q (2025).
+[48] A. Buonanno, G. B. Cook, and F. Pretorius, Phys. Rev.
+D75, 124018 (2007).
+[49] L. London, J. Healy, and D. Shoemaker, Phys. Rev. D
+90, 124032 (2014), arXiv:1404.3197 [gr-qc].
+[50] C. Pacilio, S. Bhagwat, F. Nobili, and D. Gerosa, Phys.
+Rev. D110, 103037 (2024), arXiv:2408.05276 [gr-qc].
+[51] L. M. Zertuche, L. C. Stein, K. Mitman, S. E. Field,
+V. Varma, M. Boyle, N. Deppe, L. E. Kidder, J. Moxon,
+H. P. Pfeiffer, M. A. Scheel, K. C. Nelli, W. Throwe,
+19
+and N. L. Vu, Phys. Rev. D112, 024077 (2025),
+arXiv:2408.05300 [gr-qc].
+[52] R. Prix,Bayesian QNM search on black hole ring-
+down modes (applied to GW150914), Tech. Rep. LIGO-
+T1500618-v4 (LIGO Scientific Collaboration, 2016) lIGO
+Technical Report.
+[53] D. W. Hogg, A. M. Price-Whelan, and B. Leistedt, Data
+Analysis Recipes: Products of multivariate Gaussians in
+Bayesian inferences (2020), arXiv:2005.14199 [stat].
+[54] M. Isi and W. M. Farr, Analyzing black-hole ringdowns
+(2021), arXiv:2107.05609 [gr-qc].
+[55] H. Siegel, M. Isi, and W. M. Farr, Phys. Rev. D111,
+044070 (2025), arXiv:2410.02704 [gr-qc].
+[56] J. Veitch, W. D. Pozzo, Cody, M. Pitkin, and Ed1d1a8d,
+Johnveitch/cpnest: Minor optimisation, Zenodo (2017).
+[57] M. Khalil, A. Buonanno, H. Estell´ es, D. P. Mihaylov,
+S. Ossokine, L. Pompili, and A. Ramos-Buades, Theo-
+retical groundwork supporting the precessing-spin two-
+body dynamics of the effective-one-body waveform mod-
+els seobnrv5 (2023), arXiv:2303.18143 [gr-qc].
+[58] M. van de Meent, A. Buonanno, D. P. Mihaylov, S. Os-
+sokine, L. Pompili, N. Warburton, A. Pound, B. Wardell,
+L. Durkan, and J. Miller, Enhancing the seobnrv5
+effective-one-body waveform model with second-order
+gravitational self-force fluxes (2023), arXiv:2303.18026
+[gr-qc].
+[59] S. J. Miller, M. Isi, K. Chatziioannou, V. Varma,
+and I. Mandel, Physical Review D109, 10.1103/phys-
+revd.109.024024 (2024).
+[60] S. J. Miller, M. Isi, K. Chatziioannou, V. Varma, and
+S. Hourihane, Physical Review D112, 10.1103/xq5g-
+zm7z (2025).
+[61] S. J. Miller, S. Hourihane, M. Isi, R. Udall, and
+K. Chatziioannou,tdinf: time domain parameter esti-
+mation for gravitational-wave signals (2025).
+[62] S. Ma, L. Sun, and Y. Chen, Phys. Rev. D107, 084010
+(2023).
+[63] J. Meidam, M. Agathos, C. V. D. Broeck, J. Veitch, and
+B. S. Sathyaprakash, Phys. Rev. D90, 064009 (2014),
+arXiv:1406.3201 [gr-qc].
+[64] G. Carullo, L. van der Schaaf, L. London, P. T. H. Pang,
+K. W. Tsang, O. A. Hannuksela, J. Meidam, M. Agathos,
+A. Samajdar, A. Ghosh, T. G. F. Li, W. D. Pozzo,
+and C. V. D. Broeck, Phys. Rev. D98, 104020 (2018),
+arXiv:1805.04760 [gr-qc].
+[65] M. Isi, M. Giesler, W. M. Farr, M. A. Scheel, and
+S. A. Teukolsky, Phys. Rev. Lett.123, 111102 (2019),
+arXiv:1905.00869 [gr-qc].
+[66] S. Bhagwat, X. J. Forteza, P. Pani, and V. Ferrari, Phys.
+Rev. D101, 044033 (2020), arXiv:1910.08708 [gr-qc].
+[67] J. C. Bustillo, P. D. Lasky, and E. Thrane, Phys. Rev. D
+103, 024041 (2021), arXiv:2010.01857 [gr-qc].
+[68] B. P. Abbottet al.(LIGO Scientific, Virgo), Phys. Rev.
+Lett.116, 221101 (2016).
+[69] S. Mezzasoma and N. Yunes, Phys. Rev. D106, 024026
+(2022), arXiv:2203.15934 [gr-qc].
+[70] K. Chandra and J. C. Bustillo, Black-hole ringdown anal-
+ysis with inspiral-merger informed templates and limita-
+tions of classical spectroscopy (2025), arXiv:2509.17315
+[gr-qc].
+[71] M. Branchesiet al., J. Cosmol. Astropart. Phys.2023
+(07), 068, arXiv:2303.15923 [gr-qc].
+[72] M. Evanset al., A Horizon Study for Cosmic Ex-
+plorer: Science, Observatories, and Community (2021),
+arXiv:2109.09882 [astro-ph].
+[73] J. Luoet al., Class. Quantum Grav.33, 035010 (2016),
+arXiv:1512.02076 [astro-ph].
+[74] P. Amaro-Seoaneet al., Laser Interferometer Space An-
+tenna (2017), arXiv:1702.00786 [astro-ph].
+[75] W.-H. Ruan, Z.-K. Guo, R.-G. Cai, and Y.-Z. Zhang, Int.
+J. Mod. Phys. A35, 2050075 (2020), arXiv:1807.09495
+[gr-qc].
+[76] The Astropy Collaboration, A&A558, A33 (2013),
+arXiv:1307.6212 [astro-ph].
+[77] The Astropy Collaboration, AJ156, 123 (2018),
+arXiv:1801.02634 [astro-ph].
+[78] The Astropy Collaboration, ApJ935, 167 (2022),
+arXiv:2206.14220 [astro-ph].
+[79] D. Foreman-Mackey, The Journal of Open Source Soft-
+ware1, 24 (2016).
+[80] D. M. Macleod, J. S. Areeda, S. B. Coughlin, T. J.
+Massinger, and A. L. Urban, SoftwareX13, 100657
+(2021).
+[81] A. Collette,Python and HDF5(O’Reilly Media, Inc.,
+Sebastopol, Calif., 2013).
+[82] LIGO Scientific Collaboration, Virgo Collaboration, and
+KAGRA Collaboration, LVK Algorithm Library - LAL-
+Suite, Free software (GPL) (2018).
+[83] K. Wette, SoftwareX12, 100634 (2020).
+[84] J. D. Hunter, Computing in Science & Engineering9, 90
+(2007).
+[85] C. R. Harriset al., Nature585, 357 (2020).
+[86] The pandas development team, Pandas-dev/pandas:
+Pandas, Zenodo (2024).
+[87] C. Hoy and V. Raymond, SoftwareX15, 100765 (2021),
+arXiv:2006.06639 [astro-ph].
+[88] P. Virtanen, R. Gommers, T. E. Oliphant,et al., Nature
+Methods17, 261 (2020).
+[89] LIGO Scientific Collaboration, Virgo Collaboration and
+KAGRA Collaboration, GW250114 discovery: Data re-
+lease (2025).
