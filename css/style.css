@@ -97,10 +97,13 @@ html[data-theme="dark"] img { opacity: 0.92; }
     font-weight: 600; line-height: 15px; text-align: center;
 }
 html[lang="ar"] .cal-dot { right: auto; left: -5px; }
-.ai-cover { margin: 0 0 16px; border-radius: 12px; overflow: hidden; }
-.ai-cover img { width: 100%; height: auto; display: block; }
+/* Обложка — по ширине текстовой колонки (620px, как .article-main p), не во всю ширину блока.
+   FLUX генерит 1536x1024 (3:2) — контейнер той же пропорции, чтобы ничего не обрезалось
+   (квадрат пробовали — съедает слишком много высоты; cover в чужую пропорцию — терял края). */
+.ai-cover { margin: 0 0 16px; max-width: 620px; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; }
+.ai-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ai-cover-ph {
-    aspect-ratio: 16 / 9; background: var(--tag-bg);
+    aspect-ratio: 3 / 2; background: var(--tag-bg);
     display: flex; align-items: center; justify-content: center;
 }
 .ai-cover-ph::after { content: "✦"; color: var(--soft); font-size: 28px; }
@@ -110,20 +113,149 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     width: 34px; height: 30px; border-radius: var(--radius); cursor: pointer; font-size: 15px;
 }
 .view-toggle button.active { color: var(--text); border-color: var(--link); }
-#tag-graph, #scientist-graph, #laws-graph {
-    border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
-    width: 100vw; margin-left: calc(-50vw + 50%);
+#tag-graph, #scientist-graph, #laws-graph, #kg-graph {
+    position: relative; border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
+    max-width: 900px; margin: 0 auto;   /* выровнено по ширине контента, не 100vw */
 }
-#tgcanvas, #scicanvas, #lawcanvas { width: 100%; height: 640px; display: block; touch-action: none; cursor: grab; }
+#tgcanvas, #scicanvas, #lawcanvas, #kgcanvas { width: 100%; height: 640px; display: block; touch-action: none; cursor: grab; }
+
+/* Мини-граф на странице сущности — встроенный, компактный, по ширине текстовой колонки (620px,
+   как .article-main p), слева, не по центру — единообразно с остальными блоками страницы. */
+.mini-graph {
+    position: relative; max-width: 620px; margin: 18px 0; border: 0.5px solid var(--border);
+    border-radius: 12px; background: var(--tag-bg);
+}
+#minigraph { width: 100%; height: 300px; display: block; touch-action: none; cursor: grab; }
+
+/* Кнопка «развернуть на весь экран» — добавляется JS-ом (force-graph.js) во ВСЕ графы разом
+   (общий движок), т.к. канвас у каждого графа лежит прямо в этом бордер-боксе. Разворачиваем не
+   через Fullscreen API (на iOS Safari поддержка нестабильна для произвольных элементов), а через
+   CSS-оверлей на весь вьюпорт — одинаково работает на десктопе и мобиле. */
+.graph-fs-btn {
+    position: absolute; top: 8px; right: 8px; z-index: 5; width: 26px; height: 26px;
+    border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 13px; line-height: 1; opacity: 0.7;
+}
+.graph-fs-btn:hover { opacity: 1; border-color: var(--link); color: var(--link); }
+/* Тултип узла графа — общий для главного графа и мини-графов (force-graph.js), появляется у
+   курсора при наведении. display управляется JS-ом, не через :hover (канвас — не DOM-узлы). */
+.graph-tooltip {
+    display: none; position: absolute; z-index: 6; max-width: 220px;
+    padding: 5px 9px; border-radius: 6px; font-size: 12px; line-height: 1.4;
+    background: #1c1c1e; color: #fff; pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.graph-fs-active {
+    position: fixed !important; inset: 0 !important; z-index: 1000;
+    max-width: none !important; width: 100vw !important; height: 100vh !important;
+    margin: 0 !important; border-radius: 0 !important;
+}
+.graph-fs-active canvas { height: 100% !important; }
+body.graph-fs-open { overflow: hidden; }
+.mini-graph-label {
+    max-width: 620px; margin: 14px 0 2px; font-size: 13px; color: var(--soft);
+    display: flex; align-items: center; justify-content: space-between;
+}
+/* Фильтр типов узлов мини-графа (тег/закон/учёный) — те же чекбоксы, что на большом графе. */
+.mini-graph-filters {
+    max-width: 620px; margin: 4px 0 0; font-size: 11px; color: var(--soft);
+    display: flex; gap: 12px;
+}
+.mini-graph-filters:empty { display: none; }
+.mini-graph-filters label { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }
+.mini-graph-filters input[type="checkbox"] { width: 12px; height: 12px; }
+.mini-depth-ctrl { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
+.mini-depth-ctrl button {
+    width: 18px; height: 18px; padding: 0; border-radius: 50%; line-height: 1; cursor: pointer;
+    background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.mini-depth-ctrl button:hover { border-color: var(--link); color: var(--link); }
+.mini-depth-ctrl span { min-width: 10px; text-align: center; font-weight: 600; }
+
+/* ── Граф знаний: компактная шапка, панель в одну строку, граф поднят и виден весь на экране ── */
+.kg-h1 { margin: 4px auto 6px; font-size: 20px; }
+#kg-graph #kgcanvas { height: 720px; }
+.kg-controls-wrap { max-width: 900px; margin: 12px auto 0; }
+.kg-controls-wrap > summary {
+    cursor: pointer; font-size: 13px; color: var(--soft); padding: 8px 12px;
+    border: 0.5px solid var(--border); border-radius: 10px; background: var(--tag-bg);
+    list-style: none; user-select: none;
+}
+.kg-controls-wrap > summary::-webkit-details-marker { display: none; }
+.kg-controls-wrap[open] > summary { margin-bottom: 10px; }
+
+/* ── Граф знаний: панель фильтров — компактно, в одну строку на desktop ── */
+.kg-controls {
+    max-width: 900px; margin: 0 auto 12px; font-size: 11.5px;
+    padding: 12px 16px; border: 0.5px solid var(--border); border-radius: 10px;
+}
+.kg-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 4px 0; }
+.kg-row + .kg-row { margin-top: 4px; }
+.kg-row strong { color: var(--soft); font-weight: 600; }
+.kg-sep { width: 1px; align-self: stretch; background: var(--border); margin: 0 4px; }
+.kg-row label { display: inline-flex; align-items: center; gap: 2px; cursor: pointer; white-space: nowrap; }
+.kg-row input[type="checkbox"] { width: 12px; height: 12px; }
+.kg-row button {
+    font-size: 11px; padding: 2px 9px; border-radius: 14px; cursor: pointer;
+    background: var(--card-bg); border: 1px solid var(--border); color: var(--text); transition: all 0.15s;
+}
+.kg-row button:hover { border-color: var(--link); color: var(--link); }
+/* Три отдельных поля (тег/закон/учёный) — уже, чтобы все влезали в ряд; было одно общее
+   поле на все типы — с учётом ~60 узлов один выпадающий список был перегружен/путался. */
+.kg-search-input {
+    font-size: 11.5px; padding: 3px 8px; border-radius: 14px; width: 130px; flex: 1 1 130px; max-width: 160px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+}
+.kg-search-input:focus { outline: none; border-color: var(--link); }
+
+/* Обёртка поля поиска — якорь для выпадашки подсказок (свой список вместо нативного
+   datalist: нужен контроль сортировки/подстрочного поиска, datalist это не даёт). */
+.kg-search-wrap { position: relative; flex: 1 1 130px; max-width: 160px; }
+.kg-search-wrap .kg-search-input { width: 100%; }
+.kg-suggest {
+    display: none; position: absolute; left: 0; top: calc(100% + 3px); z-index: 40;
+    min-width: 100%; max-width: 240px; max-height: 220px; overflow-y: auto;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.14); padding: 3px 0;
+}
+.kg-suggest.open { display: block; }
+.kg-suggest-item { padding: 4px 10px; font-size: 11.5px; cursor: pointer; color: var(--text); white-space: nowrap; }
+.kg-suggest-item:hover, .kg-suggest-item.hl { background: var(--tag-bg); color: var(--link); }
+.kg-suggest-empty { padding: 4px 10px; font-size: 11px; color: var(--soft); }
+
+/* Выбранные фильтры — одна общая строка чипов под панелью поиска (не по три узких колонки —
+   так поле не растягивается по высоте). Строго, без эффектов: тёмный фон + белый текст, никаких
+   градиентов/теней/hover-анимаций. Цветная полоска слева — тип (тег/закон/учёный). Кросс-фильтр
+   всегда «И», но только МЕЖДУ типами — свой тип от своего же выбора не сужается (см. JS). */
+.kg-chips { display: flex; flex-wrap: wrap; gap: 6px; max-width: 900px; margin: 8px auto 0; }
+.kg-chips:empty { display: none; }
+.kg-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
+    padding: 3px 6px 3px 9px; border-radius: 4px; white-space: nowrap;
+    background: #1c1c1e; color: #fff; border-left: 3px solid #666;
+}
+.kg-chip[data-kind="tag"] { border-left-color: #7F77DD; }
+.kg-chip[data-kind="law"] { border-left-color: #C0392B; }
+.kg-chip[data-kind="sci"] { border-left-color: #2e7d32; }
+.kg-chip-x {
+    font-size: 12px; line-height: 1; padding: 0 2px; border: none; background: none;
+    color: #fff; opacity: 0.65; cursor: pointer;
+}
+.kg-chip-x:hover { opacity: 1; }
+#kg-depth-minus, #kg-depth-plus {
+    width: 20px; height: 20px; padding: 0; border-radius: 50%; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+#kg-depth-val { min-width: 12px; text-align: center; color: var(--text); font-weight: 600; }
 .selected-bar:empty, .filters:empty { display: none; }
 
 /* ── Оживление: появление на скролле ── */
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
-.article-card { transition: transform .18s ease, box-shadow .18s ease; }
-.article-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-.article-main p { font-size: 16.5px; line-height: 1.8; margin-bottom: 18px; }
+.article-main p { font-size: 16.5px; line-height: 1.8; margin-bottom: 18px; max-width: 620px; }
 .reading-time { color: var(--soft); white-space: nowrap; }
 .site-stats { text-align: center; font-size: 13px; color: var(--soft); margin: 2px 0 14px; }
 .site-stats b { color: var(--text); font-weight: 600; }
@@ -134,6 +266,7 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     color: var(--link); text-decoration: none; font-size: 15px;
 }
 .related-item:hover { color: var(--red); }
+.related-oneliner { display: block; font-size: 12.5px; color: var(--soft); margin-top: 2px; line-height: 1.4; }
 .au-count { margin-left: 6px; font-size: 11px; color: var(--soft); opacity: 0.8; }
 .author-item.recent { border-color: var(--scientist-color); }
 .author-item.recent::before { content: "•"; color: var(--scientist-color); margin-right: 3px; font-weight: 700; }
@@ -159,6 +292,9 @@ body {
     margin-bottom: 8px;
     flex-wrap: wrap;
     gap: 10px;
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg); padding: 8px 0; margin-top: -8px;
+    border-bottom: 0.5px solid var(--border);
 }
 .logo {
     font-family: 'Source Serif 4', 'Georgia', serif;
@@ -179,32 +315,80 @@ body {
 .nav-links a:hover { color: var(--text); }
 .nav-links a.active { color: var(--text); font-weight: 600; border-bottom-color: var(--link); }
 
-/* ── Version toggle ───────────── */
-.version-toggle {
-    display: flex; border: 1px solid var(--border);
-    border-radius: 20px; font-size: 11px; overflow: hidden;
+/* ── Version slider (бегунок сложности) ───────────────
+   Всегда развёрнут целиком в шапке — не попап (было — юзер попросил убрать клик-открытие).
+   Точки — <button> (JS-режим, главная/ленты/теги/законы/учёные) или <a href> (режим навигации
+   на странице статьи, работает без JS вообще; лево→право = от простого к сложному). */
+.version-slider {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--card-bg);
 }
-.version-toggle a, .version-toggle span {
-    padding: 5px 14px; cursor: pointer; color: var(--soft);
-    text-decoration: none; transition: all 0.15s;
+.vs-current { font-size: 11px; font-weight: 700; color: var(--text); white-space: nowrap; }
+
+.vs-track { position: relative; width: 90px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 10px; }
+.vs-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: var(--link); transition: width 0.18s ease; }
+.vs-thumb {
+    position: absolute; top: 50%; width: 15px; height: 15px; border-radius: 50%;
+    background: var(--link); border: 2px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    transform: translate(-50%, -50%); transition: left 0.18s ease; cursor: grab; z-index: 2;
 }
-.version-toggle a:first-child, .version-toggle span:first-child { border-radius: 20px 0 0 20px; }
-.version-toggle a:last-child, .version-toggle span:last-child { border-radius: 0 20px 20px 0; }
-.version-toggle a.active, .version-toggle span.active { background: var(--link); color: #fff; }
-.version-toggle a:not(.active):hover, .version-toggle span:not(.active):hover { background: #f5f5f5; }
+.vs-thumb:active { cursor: grabbing; }
+.vs-dot {
+    position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px;
+    border-radius: 50%; background: transparent; border: none; cursor: pointer; padding: 0;
+    text-decoration: none; z-index: 3;
+}
+.vs-dot:nth-child(3) { left: 0%; }
+.vs-dot:nth-child(4) { left: 33.33%; }
+.vs-dot:nth-child(5) { left: 66.67%; }
+.vs-dot:nth-child(6) { left: 100%; }
+.vs-dot:hover::after { opacity: 1; }
+.vs-dot::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--soft); opacity: 0.5; transform: translate(-50%, -50%);
+    transition: opacity 0.15s;
+}
+.vs-dot.active::after { opacity: 0; }
+
+/* ── Homepage intro ───────────── */
+/* Раньше — отдельная центрированная строка под шапкой (кружок ℹ️ + разворачивающийся текст),
+   болталась по центру и занимала место сама по себе. Теперь — маленький значок-«степень»
+   (как ™) сразу у названия сайта, текст — во всплывающем поповере по клику, а не в потоке. */
+.logo-wrap { position: relative; }
+.logo-info {
+    display: inline-block; vertical-align: super; margin-left: 2px;
+    width: 14px; height: 14px; border-radius: 50%; padding: 0; font-size: 9px; line-height: 14px;
+    font-family: Georgia, serif; font-style: italic; font-weight: 700; text-align: center;
+    background: none; border: 1px solid var(--border); color: var(--soft);
+    cursor: pointer; opacity: 0.65; transition: all 0.15s;
+}
+.logo-info:hover, .logo-info.active { opacity: 1; border-color: var(--link); color: var(--link); }
+.intro-popup {
+    display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 60;
+    width: 340px; max-width: 80vw; text-align: left;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.intro-popup.open { display: block; }
+.home-intro { margin: 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.home-intro b { color: var(--text); font-weight: 600; }
 
 /* ── Calendar filter (main) ────── */
-.cal-bar { max-width: 760px; margin: 8px auto 0; text-align: center; position: relative; }
+/* Живёт справа от язык-бара (.langs-row) — редко нужная функция, не должна бросаться в глаза
+   отдельной центрированной строкой, как раньше. Панель — выпадашка от кнопки, не по центру страницы. */
+.cal-bar { position: relative; flex-shrink: 0; }
 .cal-btn {
-    font-size: 12px; padding: 5px 16px; border-radius: 20px; cursor: pointer;
+    width: 24px; height: 24px; padding: 0; font-size: 12px; border-radius: 50%; cursor: pointer;
     background: var(--card-bg, #f5f5f5); border: 1px solid var(--border); color: var(--soft);
     transition: all 0.15s;
 }
 .cal-btn:hover { border-color: var(--link); color: var(--link); }
 .calendar-panel {
-    display: none; margin: 8px auto 0; max-width: 420px; text-align: left;
+    display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 20;
+    width: 320px; max-width: 80vw; text-align: left;
     background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
-    padding: 10px 14px; max-height: 340px; overflow-y: auto;
+    padding: 10px 14px; max-height: 340px; overflow-y: auto; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 .calendar-panel.open { display: block; }
 .cal-all { font-size: 13px; padding: 6px 4px; cursor: pointer; color: var(--link); border-bottom: 1px solid var(--border); margin-bottom: 4px; }
@@ -229,15 +413,22 @@ body {
 .cal-day:hover sup { color: #e0e0e0; }
 
 /* ── Category filter chips (main) ── */
-.category-bar { max-width: 760px; margin: 10px auto 0; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.cat-chip {
-    font-size: 12px; padding: 3px 10px; border-radius: 14px; cursor: pointer;
-    background: var(--card-bg); border: 1px solid var(--border); color: var(--soft);
-    display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; user-select: none;
+/* Раньше — крупные плашки-пилюли (border+background каждая), занимали 2-3 строки. Теперь — плоский
+   текстовый список через « · », как «Связанные X» на тегах/законах: видно, что это разделы, но
+   не так ярко, и в 1-2 строки помещается гораздо больше пунктов. */
+.category-bar {
+    max-width: 868px; margin: 8px auto 0; display: flex; flex-wrap: wrap;
+    justify-content: flex-start; font-size: 11.5px; line-height: 1.9;
 }
-.cat-chip:hover { border-color: var(--link); color: var(--link); }
-.cat-chip.active { background: var(--link); border-color: var(--link); color: #fff; }
-.cat-chip-n { font-size: 10px; opacity: 0.7; }
+.cat-chip {
+    cursor: pointer; color: var(--muted); padding: 0 8px; user-select: none; transition: color 0.15s;
+    border-right: 1px solid var(--border);
+}
+.cat-chip:last-child { border-right: none; }
+.cat-chip:hover { color: var(--link); }
+.cat-chip.active { color: var(--link); font-weight: 600; }
+.cat-chip-n { font-size: 9.5px; color: var(--soft); margin-left: 2px; }
+.cat-chip.active .cat-chip-n { color: var(--link); opacity: 0.75; }
 
 /* ── Законы: облако имён (как теги) + страница-карточка + связи ── */
 .law-item .law-type-dot {
@@ -250,19 +441,21 @@ body {
     margin-left: 8px; vertical-align: middle;
 }
 .law-formulas { margin: 14px 0; }
-.law-formulas .formula { margin: 10px 0; padding: 10px 14px; background: var(--tag-bg); border-radius: 8px; overflow-x: auto; }
 .law-formulas .formula-meaning { font-size: 13px; color: var(--soft); margin-top: 4px; }
 /* секция «Законы» на странице тега + чипы-ссылки на страницы законов */
-.tag-laws { margin-top: 12px; font-size: 14px; }
+.tag-laws { margin-top: 12px; font-size: 12px; color: var(--soft); }
+.tag-laws strong { color: var(--soft); font-weight: 600; margin-right: 4px; }
 .law-chip {
-    display: inline-block; margin: 3px 4px 0 0; padding: 3px 10px; border-radius: 12px; font-size: 13px;
-    background: var(--card-bg); border: 1px solid var(--border); color: var(--text); text-decoration: none;
+    font-size: 12px; color: var(--muted); text-decoration: none;
 }
-.law-chip:hover { border-color: var(--link); color: var(--link); }
-.section-title { max-width: 760px; margin: 24px auto 8px; font-size: 18px; }
+.law-chip:hover { color: var(--link); text-decoration: underline; }
+.section-title { margin: 28px 0 10px; font-size: 19px; font-weight: 600; }
 
 /* ── Languages ────────────────── */
-.langs { display: flex; flex-wrap: wrap; margin-bottom: 14px; }
+/* На главной язык-бар и календарь делят одну строку — календарь (редко нужен) едет вправо,
+   а не отдельной заметной центрированной строкой, как раньше. */
+.langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.langs { display: flex; flex-wrap: wrap; }
 .langs a {
     font-size: 10px; color: var(--soft); text-decoration: none;
     padding: 0 4px; border-right: 1px solid var(--border);
@@ -296,26 +489,54 @@ body {
 .filter-tag .remove, .filter-author .remove, .filter-scientist .remove { cursor: pointer; opacity: 0.5; font-size: 13px; }
 .filter-tag .remove:hover, .filter-author .remove:hover, .filter-scientist .remove:hover { opacity: 1; }
 
+/* ── Title ────────────────────── */
+/* Заголовок теперь первый элемент в шапке статьи (выше списка авторов) — раньше был
+   погребён под authors/meta/«я автор», сейчас первым бросается в глаза. */
+h1 {
+    font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+    font-size: 27px; color: var(--text); line-height: 1.3; margin-bottom: 8px;
+}
+.article-title-top { max-width: 620px; margin-top: 2px; }
+
 /* ── Authors top ──────────────── */
-.authors-top { font-size: 12px; color: var(--soft); margin-bottom: 4px; }
+/* max-height+overflow — не display:none, весь текст остаётся в HTML и индексируется
+   поисковиком как обычно; ограничение чисто визуальное (для коллабораций на сотни авторов). */
+.authors-top { font-size: 12px; line-height: 1.5; color: var(--soft); margin-bottom: 4px;
+    max-width: 620px; max-height: 4.5em; overflow-y: auto; }
 
 /* ── Meta ─────────────────────── */
 .meta { font-size: 13px; color: var(--soft); margin-bottom: 10px; }
 .meta a { color: var(--link); text-decoration: none; }
-.cat-badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 8px;
+.cat-badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 2px;
   background: var(--card-bg, #f0f0f0); border: 1px solid var(--border, #ddd); color: var(--soft);
   margin-left: 2px; cursor: default; white-space: nowrap; }
-
-/* ── Title ────────────────────── */
-h1 { font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.35; margin-bottom: 4px; }
-.original-title { font-size: 14px; color: var(--soft); margin-bottom: 14px; font-style: italic; }
-.oneliner { font-size: 15px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+.original-title { font-size: 13px; color: var(--soft); margin-bottom: 16px; font-style: italic; }
+.oneliner { font-size: 15px; color: var(--muted); margin-bottom: 22px; line-height: 1.6; }
+/* «Аннотация» — лид из авторского arXiv-abstract; лёгкий фон только цветом, без рамок/линий */
+.abstract-lead { margin: 14px 0 18px; padding: 12px 16px; max-width: 620px; background: rgba(74,106,146,0.06); border-radius: 10px; }
+.abstract-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--soft); margin-bottom: 5px; }
+.abstract-lead p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--text); }
+/* Врезка внутри сплошного текста статьи — акцент/любопытный факт, оживляет монолит */
+.callout { margin: 16px 0; padding: 12px 16px; max-width: 620px; background: rgba(74,106,146,0.07); border-radius: 10px;
+    font-size: 15.5px; line-height: 1.6; color: var(--text); }
+.callout::before { content: "💡"; margin-right: 8px; }
 
 /* ── Article wrapper ──────────── */
+/* sticky (не fixed!) — важно: sticky остаётся ВНУТРИ flex-раскладки, поэтому .article-main
+   корректно сужается на её ширину. fixed выпадает из потока → текст наезжает на сайдбар,
+   а сам сайдбар «залипает» у самого верха вместо того чтобы начинаться на уровне заголовка. */
 .article-wrapper { display: flex; gap: 20px; align-items: flex-start; }
 .article-main { flex: 1 1 0; min-width: 0; }
+/* Весь контент статьи держим в ширину обложки (620px) — иначе заголовки/секции/формулы
+   растягиваются на всю ширину .article-main и торчат правее картинки, неровно. */
+.article-main > * { max-width: 620px; }
+/* Формулы — исключение: длинная запись (несколько дробей подряд) не влезает в 620px и
+   упирается в overflow-x:auto (горизонтальный скролл). Даём им всю ширину .article-main —
+   так меньше формул реально скроллятся, а совсем гигантские всё равно проскроллятся мягко. */
+.article-main > .formula { max-width: none; }
 .article-side {
-    width: 130px; flex-shrink: 0; position: sticky; top: 20px;
+    width: 130px; flex-shrink: 0; position: sticky; top: 64px;
+    max-height: calc(100vh - 84px); overflow-y: auto;
 }
 .article-side .side-tag {
     display: block; font-size: 11px; color: var(--muted);
@@ -324,6 +545,15 @@ h1 { font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.35; m
     text-align: center; transition: all 0.15s;
 }
 .article-side .side-tag:hover { background: #e0e0e0; color: var(--text); }
+.article-side .side-tags-label, .article-side .side-laws-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--soft); margin: 10px 0 4px; text-align: center; }
+.article-side .side-tags-label { margin-top: 0; }
+.article-side .side-law {
+    display: block; font-size: 11px; color: #4a6a92; text-align: center;
+    background: rgba(74,106,146,0.10); border: 0.5px solid rgba(74,106,146,0.24);
+    text-decoration: none; padding: 4px 8px; margin-bottom: 3px; border-radius: 5px; transition: all 0.15s;
+}
+.article-side .side-law:hover { background: rgba(74,106,146,0.20); color: var(--link); }
 
 /* ── Section navigation ───────── */
 .article-nav {
@@ -343,6 +573,7 @@ h1 { font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.35; m
     text-decoration: none; border-radius: 4px; transition: all 0.15s;
 }
 .article-nav a:hover, .article-nav a.active { background: #f0f4f8; color: var(--link); }
+.article-nav-sep { height: 1px; background: var(--border); margin: 6px 10px 8px; list-style: none; }
 
 /* Nav only fits in the left margin once the viewport is wide enough
    to fit the 900px content column plus the 160px nav without overlap */
@@ -392,8 +623,41 @@ section h2 { font-size: 15px; font-weight: 600; color: var(--text); margin-botto
 .mosaic-arrow:hover { background: #fff; }
 html[data-theme="dark"] .mosaic-arrow { background: rgba(30,32,34,0.92); }
 
+/* ── Lightbox (картинки статьи открываются на месте, не в новой вкладке) ── */
+/* [hidden] должен реально прятать — иначе .lightbox{display:flex} ниже (тот же вес
+   специфичности, но авторский стиль) перебивает встроенное [hidden]{display:none} браузера,
+   и close() выставляет hidden=true, а оверлей остаётся на экране как ни в чём не бывало. */
+.lightbox[hidden] { display: none; }
+.lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.9); padding: 40px;
+}
+.lightbox-frame { margin: 0; max-width: min(90vw, 1100px); max-height: 90vh; display: flex; flex-direction: column; align-items: center; }
+.lightbox-img { max-width: 100%; max-height: 78vh; object-fit: contain; border-radius: 4px; }
+.lightbox-caption {
+    color: #f0f0f0; font-size: 14px; line-height: 1.5; text-align: center;
+    margin-top: 12px; max-width: 100%;
+}
+.lightbox-close, .lightbox-prev, .lightbox-next {
+    position: absolute; border: none; background: rgba(255,255,255,0.12); color: #fff;
+    cursor: pointer; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+}
+.lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.24); }
+.lightbox-close { top: 16px; right: 16px; width: 40px; height: 40px; font-size: 24px; }
+.lightbox-prev, .lightbox-next { top: 50%; transform: translateY(-50%); width: 48px; height: 48px; font-size: 26px; }
+.lightbox-prev { left: 16px; }
+.lightbox-next { right: 16px; }
+@media (max-width: 640px) {
+    .lightbox { padding: 16px; }
+    .lightbox-prev, .lightbox-next { width: 40px; height: 40px; }
+    .lightbox-prev { left: 4px; }
+    .lightbox-next { right: 4px; }
+}
+
 /* ── Text ─────────────────────── */
-p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+p { margin-bottom: 16px; color: var(--text); text-align: left; }
 
 /* ── Actions ──────────────────── */
 .actions { display: flex; gap: 10px; margin: 20px 0; font-size: 13px; }
@@ -406,24 +670,24 @@ p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto;
 .actions button.liked { color: var(--red); border-color: #fcc; }
 
 /* ── License ──────────────────── */
-.license { font-size: 12px; color: var(--soft); margin-top: 16px; }
+.license { font-size: 12px; color: var(--soft); margin-top: 16px; max-width: 620px; }
 .license a { color: var(--soft); }
 
 /* ── Support ──────────────────── */
 .support {
-    margin: 20px 0; padding: 12px 16px; background: #fafafa;
+    margin: 20px 0; padding: 12px 16px; max-width: 620px; background: #fafafa;
     border: 1px solid var(--border); border-radius: 4px;
     text-align: center; font-size: 13px; color: var(--muted);
 }
 .support a { color: var(--red); text-decoration: none; font-weight: 600; }
 
-/* ── Author verify ────────────── */
-.author-verify-top { margin: 8px 0 4px; }
+/* ── Author verify (без плашки, без подчёркивания/эмодзи — тихая ссылка) ── */
+.author-verify-top { margin: 2px 0 8px; max-width: 620px; }
 .author-verify-btn {
-    background: none; border: 1px solid var(--border); border-radius: 20px;
-    padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--text);
+    background: none; border: none; padding: 0; font-size: 12px; cursor: pointer;
+    color: var(--soft); text-decoration: none;
 }
-.author-verify-btn:hover { background: var(--tag-bg); }
+.author-verify-btn:hover { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
 
 .modal-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
@@ -443,25 +707,98 @@ p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto;
 .modal-close:hover { color: var(--text); }
 
 /* ── Next article ─────────────── */
-.next-divider { margin: 20px 0; }
+.next-divider { margin: 20px 0; max-width: 620px; }
 .next-btn {
     display: block; width: 100%; padding: 14px; font-size: 14px;
-    font-family: inherit; background: #fafafa;
+    font-family: inherit; background: none;
     border: 1px solid var(--border); border-radius: 4px;
     color: var(--text); cursor: pointer; text-align: center; transition: all 0.15s;
 }
-.next-btn:hover { background: #f0f0f0; border-color: #ccc; }
+.next-btn:hover { background: var(--tag-bg); border-color: var(--link); color: var(--link); }
 .next-btn:disabled { opacity: 0.5; cursor: default; }
 
+/* Дубль кнопки «следующая статья» вверху страницы — на случай если не долистали
+   до низа (та же .next-btn, JS обновляет оба разом); компактная пилюля справа. */
+.next-top { display: flex; justify-content: flex-end; max-width: 620px; margin: 0 0 10px; }
+.next-btn-top {
+    display: block; width: auto; max-width: 100%; padding: 6px 14px; font-size: 12px;
+    font-family: inherit; background: none;
+    border: 1px solid var(--border); border-radius: 20px;
+    color: var(--soft); cursor: pointer; text-align: center; transition: all 0.15s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.next-btn-top:hover { background: var(--tag-bg); border-color: var(--link); color: var(--link); }
+.next-btn-top:disabled { opacity: 0.5; cursor: default; }
+
 /* ── Article card (list) ──────── */
-.article-card { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
-.card-img { width: 80px; height: 56px; border-radius: 4px; overflow: hidden; flex-shrink: 0; background: #eee; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; }
+/* Картинка — маленькая врезка (float), текст ОБТЕКАЕТ её сверху (заголовок/лейбл рядом
+   с картинкой), а как только картинка кончается — текст возвращается на всю ширину
+   карточки. Раньше картинка держала свою колонку на всю высоту (flex row) — отъедала
+   много места и мало оставляла тексту. clearfix на .article-card — иначе высота
+   родителя схлопывается вокруг float-only контента и разделитель между карточками
+   наезжает на картинку. */
+.article-card { padding: 0 0 28px; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
+.article-card::after { content: ""; display: table; clear: both; }
+.article-card:last-child { border-bottom: 0; margin-bottom: 0; }
+.card-img-wrap { float: left; width: 130px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 10px; background: var(--border); display: block; margin: 2px 16px 8px 0; }
+.card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
+.article-card:hover .card-img-wrap img { transform: scale(1.03); }
+.card-img-wrap .no-img { width: 100%; height: 100%; display: none; align-items: center; justify-content: center; color: var(--soft); font-size: 22px; }
+.card-body { display: block; }
+.card-cat { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--link); text-decoration: none; margin-bottom: 6px; }
+.card-title { display: block; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; font-weight: 600; line-height: 1.3; color: var(--text); text-decoration: none; margin-bottom: 7px; }
+.article-card:hover .card-title { color: var(--link); }
+/* Обрезка длины — ТЕКСТОМ в JS (cardHTML), не CSS line-clamp/max-height: и -webkit-box,
+   и overflow:hidden создают новый Block Formatting Context — такой блок обтекает float
+   ЦЕЛИКОМ прямоугольником (даже строки НИЖЕ картинки почему-то поджимались), а не построчно.
+   Обычный блок без overflow построчно уважает float. */
+.card-desc { font-size: 13px; line-height: 1.55; color: var(--soft); margin-bottom: 7px; }
+.card-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.card-meta a { color: var(--muted); text-decoration: none; }
+.card-meta a:hover { color: var(--link); }
+.card-meta .sep, .card-tags .sep { margin: 0 5px; opacity: .45; }
+.card-tags { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
+.card-tags a { color: var(--muted); text-decoration: none; }
+.card-tags a:hover { color: var(--link); }
+/* clear:both — реакции всегда под картинкой, даже если текста было мало и он не дотянул
+   до её нижнего края (иначе кнопки продолжали бы жаться в узкой колонке рядом с картинкой). */
+.card-actions { clear: both; }
+@media (max-width: 700px) {
+  .card-img-wrap { float: none; width: 100%; aspect-ratio: 16 / 9; margin: 0 0 12px; }
+  .card-title { font-size: 18px; }
+}
+
+/* ── Engagement: реакции / избранное / обратная связь / рефайн ── */
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; max-width: 620px; margin: 16px 0; }
+.reactions { display: flex; gap: 6px; }
+.react-btn, .fav-btn { cursor: pointer; background: var(--card, transparent); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 14px; color: var(--fg, inherit); }
+.react-btn .rc { opacity: .7; font-size: 12px; margin-left: 2px; }
+.react-btn.active { border-color: var(--accent, #4a90d9); background: rgba(74,144,217,.14); }
+.fav-btn.active { border-color: #e0a800; background: rgba(224,168,0,.14); }
+.refine-switch { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted, #888); cursor: pointer; margin: 2px 0 10px; }
+.refine-raw { margin: 12px 0; padding: 12px 16px; background: rgba(184,134,11,.10); border-left: 3px solid #b8860b; border-radius: 4px; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+.feedback { margin: 14px 0; padding: 12px 14px; max-width: 620px; border: 1px solid var(--border); border-radius: 8px; }
+.feedback .fb-title { font-size: 13px; color: var(--muted, #888); margin-bottom: 8px; }
+.feedback .fb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.feedback .fb-chip { cursor: pointer; font-size: 12px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 14px; user-select: none; }
+.feedback .fb-chip.active { background: var(--accent, #4a90d9); color: #fff; border-color: var(--accent, #4a90d9); }
+.feedback .fb-comment-toggle { background: none; border: none; color: var(--accent, #4a90d9); cursor: pointer; font-size: 12px; padding: 0 0 8px; }
+.feedback .fb-comment { width: 100%; box-sizing: border-box; resize: vertical; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font: inherit; font-size: 13px; background: var(--bg, transparent); color: var(--fg, inherit); }
+.feedback .fb-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.feedback .fb-send { cursor: pointer; background: var(--accent, #4a90d9); color: #fff; border: none; border-radius: 6px; padding: 6px 14px; font-size: 13px; }
+.feedback .fb-status { font-size: 12px; color: var(--muted, #888); }
+/* margin-top: auto — прижимает реакции к низу карточки (заполняет пустоту под коротким
+   описанием, если картинка слева выше текста) вместо того чтобы висеть сразу под текстом. */
+.card-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 8px; }
+.card-actions .react-btn.sm, .card-actions .fav-btn.sm { padding: 3px 7px; font-size: 13px; line-height: 1; }
 .card-content { flex: 1; min-width: 0; }
 .card-content h3 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
 .card-content h3 a { color: var(--text); text-decoration: none; }
 .card-content h3 a:hover { color: var(--link); }
 .card-content .oneliner { font-size: 13px; color: var(--muted); margin-bottom: 4px; line-height: 1.5; }
+/* «мини»-режим ленты: полный threads-текст как самодостаточный анонс */
+.card-content .oneliner.card-mini { font-size: 14px; color: var(--text); line-height: 1.6; margin: 4px 0 8px;
+    padding-left: 10px; border-left: 2px solid var(--link); white-space: pre-line; }
 .card-content .meta { font-size: 12px; color: var(--soft); }
 .card-cats { margin-top: 3px; }
 .card-cats .cat-badge { cursor: pointer; transition: background 0.15s; }
@@ -469,6 +806,22 @@ p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto;
 .card-tags { margin-top: 4px; }
 .card-tags a { font-size: 11px; color: var(--soft); text-decoration: none; }
 .card-tags a:hover { color: var(--link); }
+.card-scientists { margin-top: 3px; font-size: 11px; }
+.card-scientists a { font-size: 11px; }
+/* Авторы карточки — отдельным блоком, переносится на несколько строк */
+.card-authors { margin-top: 3px; font-size: 12px; color: var(--soft); line-height: 1.55; }
+.card-authors .text-author-link { color: var(--soft); text-decoration: none; }
+.card-authors .text-author-link:hover { color: var(--link); }
+.card-authors .au-more { color: var(--link); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.card-authors .au-more:hover { text-decoration: underline; }
+/* строка законов в карточке ленты — под тегами, белым по тёмно-синему */
+.card-laws { margin-top: 4px; padding-left: 2px; }
+.card-laws a {
+    display: inline-block; font-size: 11px; color: #4a6a92;
+    background: rgba(74,106,146,0.10); border: 0.5px solid rgba(74,106,146,0.28);
+    padding: 1px 7px; border-radius: 3px; margin: 2px 4px 0 0; text-decoration: none;
+}
+.card-laws a:hover { background: rgba(74,106,146,0.20); color: var(--link); }
 
 /* ── Text tags (highlighted) ──── */
 .text-tag { color: var(--link); cursor: pointer; text-decoration: none; border-bottom: 1px dotted var(--link); }
@@ -485,53 +838,69 @@ p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto;
     padding: 12px 16px; max-width: 320px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1); font-size: 13px; line-height: 1.5;
 }
-.tag-tooltip strong { display: block; margin-bottom: 4px; color: var(--text); }
-.tag-tooltip p { color: var(--muted); margin-bottom: 6px; font-size: 12px; }
+.tag-tooltip strong { color: var(--text); }
+.tag-tooltip .tip-desc { color: var(--muted); font-size: 12px; }
+.tag-tooltip a { color: var(--link); font-size: 12px; }
 .tag-tooltip a { color: var(--link); font-size: 12px; }
 
-/* ── Formulas ─────────────────── */
-.formula {
-    margin: 16px 0; padding: 12px 16px; background: #fafafa;
-    border-left: 3px solid var(--link); border-radius: 0 4px 4px 0;
+/* ── Refine badge / toggle ────── */
+.refine-badge { font-size: 14px; color: #b8860b; vertical-align: super; cursor: help; }
+.refine-toggle {
+    font-size: 16px; padding: 0 8px; border: 1px solid #b8860b; border-radius: 4px;
+    background: transparent; color: #b8860b; cursor: pointer; margin-left: 8px;
+    vertical-align: middle; line-height: 1.4; transition: all 0.15s;
 }
-.formula-render { font-size: 15px; margin-bottom: 4px; }
-.formula-meaning { font-size: 12px; color: var(--muted); }
+.refine-toggle:hover { background: #b8860b; color: #fff; }
+
+/* ── Formulas (без подложки — тонкие линии-разделители) ── */
+.formula {
+    margin: 20px 0; padding: 16px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+/* overflow-x:auto САМ ПО СЕБЕ заставляет браузер включить и overflow-y:auto (спецификация не
+   допускает auto по одной оси + visible по другой) — из-за этого у высоких формул (вложенные
+   дроби, пределы, матрицы) иногда вылезал вертикальный скролл. overflow-y:visible явно — только
+   горизонтальный скролл для широких формул, по вертикали КaTeX всегда просто растягивает блок. */
+.formula-render { font-size: 17px; margin-bottom: 6px; overflow-x: auto; overflow-y: visible; padding-bottom: 4px; }
+.formula-meaning { font-size: 13px; color: var(--muted); }
+.formula + .formula { margin-top: -1px; border-top: none; }
 
 /* ── Scientists section ───────── */
-.scientists-section {
-    margin: 16px 0; padding: 12px 16px; background: var(--scientist-bg);
-    border-radius: 4px; font-size: 13px; color: var(--scientist-color);
-}
-.scientists-section a { color: var(--scientist-color); font-weight: 600; }
+.scientists-section { margin: 12px 0; font-size: 12px; color: var(--soft); }
+.scientists-section a, .scientists-section .text-scientist { color: var(--muted); text-decoration: none; }
+.scientists-section a:hover { color: var(--link); text-decoration: underline; }
 
-/* ── Key numbers ──────────────── */
+/* ── Key numbers (без подложки, по ширине текста) ── */
 .key-numbers {
-    margin: 16px 0; padding: 12px 16px; background: #fafafa;
-    border: 1px solid var(--border); border-radius: 4px;
+    margin: 20px 0; padding: 14px 0; max-width: 620px;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
 }
-.key-numbers h3 { font-size: 14px; margin-bottom: 8px; }
+.key-numbers h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--soft); text-transform: uppercase; letter-spacing: .03em; }
 .key-numbers ul { list-style: none; }
 .key-numbers li { font-size: 13px; margin-bottom: 4px; color: var(--muted); }
 .key-numbers li strong { color: var(--text); }
 
-/* ── Impact ───────────────────── */
+/* ── Impact (без подложки, по ширине текста) ── */
 .impact {
-    margin: 12px 0; padding: 10px 14px; background: #fef9e7;
-    border-left: 3px solid #f39c12; border-radius: 0 4px 4px 0;
+    margin: 16px 0; padding: 12px 0; max-width: 620px;
+    border-top: 1px solid var(--border);
     font-size: 13px; color: var(--muted);
 }
 
-/* ── Fun fact ─────────────────── */
+/* ── Fun fact (+ sci-fi, единый блок, без подложки, по ширине текста) ── */
 .fun-fact {
-    margin: 16px 0; padding: 12px 16px; background: #fce4ec;
-    border-left: 3px solid #e91e63; border-radius: 0 4px 4px 0;
+    margin: 20px 0; padding: 14px 0; max-width: 620px;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     font-size: 14px; color: var(--muted);
 }
+.fun-fact .fact { margin: 0; }
+.fun-fact .fact + .fact { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+.fun-fact .fact-scifi { font-style: italic; }
 
-/* ── Quote ────────────────────── */
+/* ── Quote (без подложки, по ширине текста) ── */
 .quote {
-    margin: 16px 0; padding: 12px 16px; background: #fafafa;
-    border-left: 3px solid #ccc; border-radius: 0 4px 4px 0;
+    margin: 16px 0; padding: 12px 0; max-width: 620px;
+    border-top: 1px solid var(--border);
     font-size: 14px; color: var(--muted); font-style: italic;
 }
 
@@ -539,59 +908,118 @@ p { margin-bottom: 16px; color: var(--text); text-align: justify; hyphens: auto;
 .discoveries-list { list-style: disc; padding-left: 20px; }
 .discoveries-list li { margin-bottom: 6px; font-size: 14px; color: var(--muted); }
 
+/* ── Entity body (тег/закон/учёный/автор: реакции, related, мини-граф, поиск) — та же ширина
+   620px, что и шапка. Список статей (#search-results) раньше был вынесен на полную ширину —
+   карточкам со старым флекс-макетом (300px-картинка) было тесно; с компактным float-макетом
+   (130px) тесноты больше нет, поэтому список тоже сведён к 620px — единая видимая ширина
+   везде (текст закона/тега = список статей = текст на странице статьи). */
+.entity-body { max-width: 620px; }
+#search-results.entity-list { max-width: 620px; }
+#search-results.entity-list .card-title { font-size: 18px; }
+
 /* ── Tag header ───────────────── */
-.tag-header { margin-bottom: 20px; }
-.tag-header h1 { font-size: 28px; margin-bottom: 8px; }
-.scientist-header h1 { font-size: 22px; }
-.tag-header .desc { font-size: 15px; color: var(--muted); margin-bottom: 10px; }
+.tag-header { margin-bottom: 30px; max-width: 620px; }
+.tag-header h1 { font-size: 30px; margin-bottom: 10px; }
+.scientist-header h1 { font-size: 24px; }
+.tag-header .desc { font-size: 15.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.65; }
 .tag-header .fact { font-size: 13px; color: var(--soft); margin-bottom: 10px; }
-.tag-stats { font-size: 13px; color: var(--soft); margin-bottom: 10px; }
-.related-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-.related-tags a {
-    font-size: 12px; color: var(--muted); background: var(--tag-bg);
-    text-decoration: none; padding: 4px 10px; border-radius: 5px;
+/* ── Мини-уровень (тег/закон): суть за 10 секунд + где применяется на практике ── */
+.mini-desc { font-size: 17px; line-height: 1.6; color: var(--text); margin-bottom: 14px; }
+.practical-app {
+    font-size: 14px; color: var(--muted); line-height: 1.6;
+    padding-top: 12px; border-top: 1px solid var(--border);
 }
-.related-tags a:hover { background: #e0e0e0; }
+.practical-app strong { color: var(--soft); font-weight: 600; }
+.tag-stats { font-size: 13px; color: var(--soft); margin-bottom: 14px; }
+/* Плоский список без плашек: подпись + ссылки через « · », мелким шрифтом. */
+.related-tags { margin-bottom: 14px; font-size: 12px; line-height: 1.7; }
+.related-tags strong { color: var(--soft); font-weight: 600; margin-right: 4px; }
+.related-tags a {
+    font-size: 12px; color: var(--muted); text-decoration: none;
+}
+.related-tags a:hover { color: var(--link); text-decoration: underline; }
 
 /* ── Section ──────────────────── */
-.section { margin-bottom: 18px; }
-.section h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.section { margin-bottom: 26px; }
+.section h2 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
 
 /* ── Suggestion item ──────────── */
 .suggestion-item:hover { background: #f5f8fa; }
 
-/* ── Tags cloud ───────────────── */
-.tag-cloud, .author-cloud, .scientist-cloud {
-    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 20px 0;
+/* ── Alphabet nav ─────────────── */
+.alphabet-nav {
+    display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+    padding: 12px 0; margin-bottom: 8px; border-bottom: 1px solid var(--border);
 }
-.tag-item, .author-item, .scientist-item {
+.alphabet-nav a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 6px; font-size: 14px; font-weight: 600;
+    color: var(--link); text-decoration: none; transition: background 0.15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active { background: var(--tag-bg); }
+.alphabet-nav a.active { color: var(--text); }
+.alphabet-nav .alpha-empty { color: var(--border); cursor: default; }
+
+/* ── Author sections list ─────── */
+.author-sections { padding: 10px 0; }
+.letter-section { margin-bottom: 24px; }
+.letter-heading {
+    font-size: 20px; font-weight: 700; color: var(--text);
+    border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 10px;
+    position: sticky; top: 0; background: var(--bg); z-index: 1;
+}
+.author-list { display: flex; flex-direction: column; gap: 1px; }
+.author-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px; border-radius: 4px; text-decoration: none;
+    color: var(--text); font-size: 14px; transition: background 0.12s;
+}
+.author-row:hover { background: var(--tag-bg); }
+.author-row .author-count {
+    font-size: 12px; color: var(--soft); white-space: nowrap; margin-left: 12px;
+}
+.author-row .author-tags {
+    flex: 1; margin: 0 12px; display: flex; gap: 3px; flex-wrap: wrap;
+    max-height: 2.6em; overflow: hidden;
+}
+.author-row .author-tags span {
+    font-size: 10px; padding: 1px 6px; border-radius: 10px; line-height: 1.6;
+    background: var(--tag-bg); color: var(--link); white-space: nowrap;
+    border-bottom: none;
+}
+.author-row .author-tags span:hover { background: #d8dde8; }
+
+/* ── Author cloud (главная страница авторов — отдельно от A–Z списка) ── */
+.author-cloud { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 20px 0; }
+.author-item {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 16px; border-radius: 24px; cursor: pointer;
-    transition: all 0.2s; border: 1px solid transparent; color: var(--muted);
+    padding: 5px 12px; border-radius: 24px; cursor: pointer;
+    transition: all 0.2s; border: 1px solid transparent; color: #6b5b7a;
+    font-size: 12px; background: var(--author-bg);
 }
-.tag-item { background: var(--tag-bg); font-size: 14px; }
-.author-item { background: var(--author-bg); font-size: 14px; color: #6b5b7a; }
-.scientist-item { background: var(--scientist-bg); font-size: 14px; color: #4a6b4a; }
-.tag-item:hover, .author-item:hover, .scientist-item:hover { border-color: #ccc; }
-/* Образовательные (справочные) теги — отдельный тип карточек: контурные, приглушённые. */
-.tag-item.educational {
-    background: transparent; border: 1.5px dashed var(--soft); color: var(--soft); font-size: 13px; opacity: 0.7;
-}
-.tag-item.educational:hover { border-color: var(--link); color: var(--link); }
-.tag-item.educational .check { display: none; }
-.tag-item.selected { background: #e0ecf8; border-color: var(--link); color: var(--text); font-weight: 600; }
+.author-item:hover { border-color: #ccc; }
 .author-item.selected { background: #f0e8f8; border-color: var(--author-color); color: var(--text); font-weight: 600; }
-.scientist-item.selected { background: #d0e8d0; border-color: var(--scientist-color); color: var(--text); font-weight: 600; }
-.tag-item .check, .author-item .check, .scientist-item .check {
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px;
+
+/* ── Tags/Laws/Scientists cloud → компактные колоночные списки, без плашек ──
+   Группировка (раздел или буква) — заголовок-лейбл + плоский список ссылок,
+   раскладка колонками через CSS columns (как телефонная книга). */
+.tag-cloud, .scientist-cloud {
+    column-width: 220px; column-gap: 32px; padding: 20px 0 4px;
 }
-.tag-item.selected .check { background: var(--link); border-color: var(--link); color: #fff; }
-.author-item.selected .check { background: var(--author-color); border-color: var(--author-color); color: #fff; }
-.scientist-item.selected .check { background: var(--scientist-color); border-color: var(--scientist-color); color: #fff; }
-.size-s { font-size: 12px; padding: 5px 12px; }
-.size-m { font-size: 15px; }
-.size-l { font-size: 18px; font-weight: 600; }
+.cloud-group-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--soft); margin: 18px 0 6px; break-after: avoid-column; break-inside: avoid;
+}
+.cloud-group-label:first-child { margin-top: 0; }
+.tag-item, .scientist-item, .law-item {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 3px 2px; cursor: pointer; text-decoration: none;
+    color: var(--text); font-size: 13.5px; break-inside: avoid;
+}
+.tag-item:hover, .scientist-item:hover, .law-item:hover { color: var(--link); }
+.tag-item.educational { color: var(--soft); font-style: italic; }
+.tag-item.educational:hover { color: var(--link); font-style: normal; }
+.tag-item .cat-chip-n, .scientist-item .cat-chip-n, .law-item .cat-chip-n { flex-shrink: 0; }
 
 /* ── Selected bar ─────────────── */
 .selected-bar {

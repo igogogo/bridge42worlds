@@ -1,31 +1,140 @@
 {
-  "languages": ["ru", "en", "zh", "fr", "ar"],
+  "languages": [
+    "ru",
+    "en",
+    "es"
+  ],
   "default_lang": "ru",
   "lang_dir": "lang",
   "site_url": "https://bridge42worlds.org",
   "site_name": "bridge42worlds",
   "goatcounter": "bridge42worlds",
-  "max_articles": 10,
+  "max_articles": 20,
   "selection_percent": 20,
-  "article_workers": 3,
+  "article_workers": 4,
+  "keep_pdf": true,
+  "card_pdf_thumbs": 6,
   "tags": {
-    "active_count": 120,
-    "educational_count": 50,
+    "active_count": 60,
+    "educational_count": 72,
     "list_batch": 60,
-    "describe_batch": 20,
-    "workers": 5
+    "describe_batch": 3,
+    "workers": 10,
+    "max_rounds": 30
   },
   "scientists": {
-    "total": 100,
+    "total": 60,
     "per_request": 5,
     "max_requests": 80,
     "sample_tags": 20,
-    "workers": 4
+    "workers": 10
+  },
+  "growth": {
+    "tags_active_max": 150,
+    "tags_educational_max": 150,
+    "laws_max": 100,
+    "scientists_max": 100,
+    "step": 12
+  },
+  "express": {
+    "tiers": [
+      "mini",
+      "simple"
+    ],
+    "tags_file": "lang/ru/data/tags-list-express.json",
+    "tag_count": 25
   },
   "laws": {
-    "count": 50,
-    "list_batch": 40,
-    "describe_batch": 12,
-    "workers": 5
+    "count": 60,
+    "list_batch": 20,
+    "describe_batch": 3,
+    "workers": 10,
+    "max_rounds": 20
+  },
+  "translate": {
+    "batch": 5,
+    "workers": 10
+  },
+  "agents": {
+    "select": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.7,
+      "max_tokens": 32000
+    },
+    "article_advanced": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.6,
+      "max_tokens": 32000
+    },
+    "article_simple": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.7,
+      "max_tokens": 32000
+    },
+    "article_express": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.7,
+      "max_tokens": 8000
+    },
+    "article_popular": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.7,
+      "max_tokens": 32000
+    },
+    "translate": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.4,
+      "max_tokens": 32000
+    },
+    "image_prompt": {
+      "model": "deepseek-v4-pro",
+      "temperature": 1.0,
+      "max_tokens": 800
+    },
+    "tags_list": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.5,
+      "max_tokens": 32000
+    },
+    "tags_educational": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.6,
+      "max_tokens": 32000
+    },
+    "tags_describe": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.5,
+      "max_tokens": 32000
+    },
+    "scientists": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.6,
+      "max_tokens": 32000
+    },
+    "laws_list": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.5,
+      "max_tokens": 32000
+    },
+    "laws_describe": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.5,
+      "max_tokens": 32000
+    },
+    "translate_ref": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.3,
+      "max_tokens": 32000
+    },
+    "abstract": {
+      "model": "deepseek-v4-pro",
+      "temperature": 0.4,
+      "max_tokens": 12000
+    },
+    "image": {
+      "provider": "deepinfra",
+      "model": "black-forest-labs/FLUX-2-pro",
+      "size": "1440x960"
+    }
   }
 }

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>#$tag_name — bridge42worlds</title>
+    $og_meta_html
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=15">
+    <link rel="stylesheet" href="/css/style.css?v=$asset_ver">
     <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -21,8 +22,10 @@
             <a href="/lang/$lang/index.html">main</a>
             <a href="/lang/$lang/tags/">tags</a>
             <a href="/lang/$lang/laws/">laws</a>
-            <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/graph/">graph</a>
+            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
             <a href="/lang/$lang/about.html">about</a>
         </div>
         $tag_version_toggle
@@ -32,33 +35,46 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    $ai_cover_html
     <h1>$tag_name</h1>
     <div class="tag-stats">📊 $article_count articles</div>
+    $compare_toggle_html
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        $tag_mini_html
+    </div>
     <div class="tag-ver" data-ver="popular">
-        <div class="desc">$tag_description_popular</div>
+        <div class="desc" data-raw="$tag_desc_popular_raw">$tag_description_popular</div>
         $fun_fact_popular_html
     </div>
     <div class="tag-ver" data-ver="simple" style="display:none">
-        <div class="desc">$tag_description_simple</div>
+        <div class="desc" data-raw="$tag_desc_simple_raw">$tag_description_simple</div>
         <div class="section"><h2>$history_label</h2><p>$tag_history_simple</p></div>
         <div class="section"><h2>$how_label</h2><p>$tag_how_it_works_simple</p></div>
         $fun_fact_html
     </div>
     <div class="tag-ver" data-ver="advanced" style="display:none">
-        <div class="desc">$tag_description</div>
+        <div class="desc" data-raw="$tag_desc_adv_raw">$tag_description</div>
         <div class="section"><h2>$history_label</h2><p>$tag_history</p></div>
         <div class="section"><h2>$how_label</h2><p>$tag_how_it_works</p></div>
         $formulas_html
         $problems_and_fact_html
     </div>
-    $scientists_section_html
-    $laws_section_html
 </div>
+
+<div class="entity-body">
+$actions_html
+$feedback_html
 
 <div class="related-tags">
     <strong>$related_label:</strong>
     $related_tags_html
 </div>
+$laws_section_html
+$scientists_section_html
+
+<div class="mini-graph-label">🕸 $graph_mini_label <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters">$mini_graph_filters_html</div>
+<div class="mini-graph" data-node="t:$tag_id"><canvas id="minigraph"></canvas></div>
 
 <div class="search-row">
     <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
@@ -67,29 +83,22 @@
 <div class="search-hint">$search_hint</div>
 
 <div class="filters" id="active-filters"></div>
+</div>
 
-<div id="search-results" data-context-tag="$tag_id">$articles_list_html</div>
+<div id="search-results" class="entity-list" data-context-tag="$tag_id">$articles_list_html</div>
 
 <footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a></p></footer>
-<script src="/js/search.js?v=15"></script>
+<script src="/js/likes.js?v=$asset_ver"></script>
+<script src="/js/search.js?v=$asset_ver"></script>
+<script src="/js/force-graph.js?v=$asset_ver"></script>
+<script src="/js/mini-graph.js?v=$asset_ver"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('$tag_id', 'tag', '$lang');
     document.querySelectorAll('.formula-render').forEach(function(el) {
         try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
     });
-    var toggle = document.getElementById('tag-version-toggle');
-    if (toggle) {
-        var cur = (function(){ try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; } })();
-        function setVer(v) {
-            document.querySelectorAll('.tag-ver').forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
-            toggle.querySelectorAll('span').forEach(function(s) { s.className = s.dataset.version === v ? 'active' : ''; });
-            try { localStorage.setItem('b42_version', v); } catch(e) {}
-        }
-        toggle.querySelectorAll('span').forEach(function(s) {
-            s.addEventListener('click', function() { setVer(this.dataset.version); });
-        });
-        setVer(cur);
-    }
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
 });
 </script>
 </body>

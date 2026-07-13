@@ -1,6 +1,7 @@
 let searchIndex = [];
 let tagsLoc = {};
 let scientistsData = {};
+let lawsData = {};
 let authorsGraph = {};
 // Уровни сложности: popular (по умолчанию) → simple → advanced.
 var VERSION_INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
@@ -8,6 +9,12 @@ var VERSION_INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-in
 let currentVersion = (function() {
     try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; }
 })();
+// «мини» — не отдельный индекс, а режим ленты (полный threads-текст). Работает только там,
+// где есть кнопка «мини» (главная). На прочих страницах трактуем как popular, чтобы ленты/описания не пустовали.
+if (currentVersion === 'mini' && !document.querySelector('[data-version="mini"]')) currentVersion = 'popular';
+// Эффективная версия для выборки статей: мини берёт popular-статьи.
+function effVersion() { return currentVersion === 'mini' ? 'popular' : currentVersion; }
+window.__favoritesPage = /\/favorites(\.html)?([?#]|$)/.test(location.pathname);
 
 // Тёмная тема: применяем сохранённый выбор как можно раньше, чтобы не мигало светлым.
 (function initTheme() {
@@ -63,19 +70,22 @@ var pagePath = getPagePath();
 var UI_STRINGS = {
     ru: { tagNotFound: 'Тег не найден', selectTag: 'Выберите тег:', scientistNotFound: 'Учёный не найден',
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
-          articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →' },
+          articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
-          articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →' },
+          articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min' },
+    es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
+          selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
+          articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
-          articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →' },
+          articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
-          articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →' },
+          articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
-          articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←' }
+          articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
@@ -95,15 +105,22 @@ var ARXIV_CAT_NAMES = {
 };
 
 var resultsEl = document.getElementById('search-results');
+// Тег-страница передаёт один id, страница закона — ВСЕ свои теги через запятую (закон
+// показывает статьи, у которых есть ХОТЯ БЫ ОДИН из его тегов — раньше здесь бралась только
+// первая точка, из-за чего «Статьи по теме» у закона могли уйти в пустоту, если первый по
+// алфавиту тег закона случайно оказывался образовательным и ни разу не встречался в статьях).
 var pageContext = {
-    tag: resultsEl ? (resultsEl.dataset.contextTag || '') : '',
+    tags: resultsEl && resultsEl.dataset.contextTag ? resultsEl.dataset.contextTag.split(',').filter(Boolean) : [],
     scientist: resultsEl ? (resultsEl.dataset.contextScientist || '') : '',
     author: resultsEl ? (resultsEl.dataset.contextAuthor || '') : ''
 };
+pageContext.tag = pageContext.tags[0] || ''; // назад-совместимость: код, читающий одиночный tag (напр. filters.tags UI), видит первый
 
 function applyPageContext(results) {
-    if (pageContext.tag) {
-        results = results.filter(function(item) { return (item.tags || []).indexOf(pageContext.tag) !== -1; });
+    if (pageContext.tags.length) {
+        results = results.filter(function(item) {
+            return pageContext.tags.some(function(t) { return (item.tags || []).indexOf(t) !== -1; });
+        });
     }
     if (pageContext.scientist) {
         results = results.filter(function(item) { return (item.scientists || []).indexOf(pageContext.scientist) !== -1; });
@@ -170,24 +187,31 @@ Promise.all([
     }),
     fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
         return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
-    })
+    }),
+    fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
 ]).then(function(results) {
     searchIndex = results[0].concat(results[1]).concat(results[2]);
     authorsGraph = results[3];
     tagsLoc = results[4];
     scientistsData = results[5];
+    lawsData = results[6] || {};
 
     window.searchIndex = searchIndex;
     window.tagsLoc = tagsLoc;
     window.scientistsData = scientistsData;
+    window.lawsData = lawsData;
     window.authorsGraph = authorsGraph;
 
     var container = document.getElementById('search-results');
     if (container && !document.querySelector('.search-box')?.value) {
-        showLatest();
+        _defaultFeed();
     }
-    initCalendar();
-    initCategoryBar();
+    if (window.__favoritesPage) {
+        ['calendar-btn', 'calendar-panel', 'category-bar'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+    } else {
+        initCalendar();
+        initCategoryBar();
+    }
     initAllTooltips();
     renderSiteStats();
 }).catch(function(e) {
@@ -251,7 +275,7 @@ function doFullSearch(query) {
     renderActiveFilters(query);
     var filters = parseSearchQuery(query);
     var results = searchIndex.filter(function(item) {
-        return item.version === currentVersion;
+        return item.version === effVersion();
     });
     results = applyPageContext(results);
 
@@ -441,13 +465,83 @@ function filterCloudItems(containerId, query) {
     var container = document.getElementById(containerId);
     if (!container) return;
     var q = query.trim().toLowerCase();
-    container.querySelectorAll(':scope > a').forEach(function(el) {
-        var text = el.textContent.toLowerCase();
-        el.style.display = (!q || text.includes(q)) ? '' : 'none';
+    var group = null, groupHasVisible = false;
+    Array.prototype.forEach.call(container.children, function(el) {
+        if (el.classList.contains('cloud-group-label')) {
+            if (group) group.style.display = groupHasVisible ? '' : 'none';
+            group = el; groupHasVisible = false;
+            return;
+        }
+        if (!el.matches('a')) return;
+        var visible = !q || el.textContent.toLowerCase().includes(q);
+        el.style.display = visible ? '' : 'none';
+        if (visible) groupHasVisible = true;
     });
+    if (group) group.style.display = groupHasVisible ? '' : 'none';
 }
 
-function filterAuthors(query) { filterCloudItems('author-cloud', query); }
+// Индексная страница авторов рендерит на сервере только ОДНУ букву-по-умолчанию (список из
+// тысяч авторов сразу целиком слишком длинный) — определяем это по отсутствию активной буквы
+// в алфавитной навигации. На таких страницах поиск не может просто скрывать/показывать DOM-строки
+// (там только одна буква) — вместо этого строит результаты из authorsGraph (уже загружен целиком
+// для тултипов) и подменяет содержимое контейнера, а при очистке строки возвращает исходный вид.
+var _authorsDefaultHTML = null;
+function isAuthorsIndexPage() {
+    var nav = document.getElementById('alphabet-nav');
+    return !!nav && !nav.querySelector('.alpha-link.active');
+}
+
+function authorTagsFor(name) {
+    var seen = {}, tags = [];
+    searchIndex.forEach(function(item) {
+        if ((item.authors || []).indexOf(name) === -1) return;
+        (item.tags || []).forEach(function(t) { if (!seen[t]) { seen[t] = 1; tags.push(t); } });
+    });
+    return tags.slice(0, 6);
+}
+
+function authorRowHTML(name, data) {
+    var slug = authorSlug(name);
+    var count = data ? (data.article_count || (data.articles || []).length || 0) : 0;
+    var tagsHtml = authorTagsFor(name).map(function(t) {
+        return '<span onclick="event.stopPropagation();window.location=\'/lang/' + lang + '/tags/' + t + '.html\'" class="text-tag" data-tag="' + t + '">' +
+            ((tagsLoc[t] && tagsLoc[t].name) || t) + '</span>';
+    }).join(' ');
+    return '<a href="/lang/' + lang + '/authors/' + slug + '.html" class="author-row" data-author="' + name + '">' +
+        '<span class="author-name">' + name + '</span>' +
+        '<span class="author-tags">' + tagsHtml + '</span>' +
+        '<span class="author-count">' + count + ' ' + UI.articlesWord + '</span></a>';
+}
+
+function filterAuthors(query) {
+    var container = document.getElementById('author-cloud');
+    if (!container) return;
+    var q = query.trim().toLowerCase();
+
+    if (isAuthorsIndexPage()) {
+        if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
+        if (!q) { container.innerHTML = _authorsDefaultHTML; return; }
+        var names = Object.keys(authorsGraph)
+            .filter(function(name) { return name.toLowerCase().includes(q); })
+            .sort(function(a, b) { return a.localeCompare(b); });
+        container.innerHTML = names.length
+            ? names.map(function(n) { return authorRowHTML(n, authorsGraph[n]); }).join('')
+            : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
+        return;
+    }
+
+    container.querySelectorAll('.author-row').forEach(function(el) {
+        var text = el.textContent.toLowerCase();
+        var show = !q || text.includes(q);
+        el.style.display = show ? '' : 'none';
+    });
+    container.querySelectorAll('.letter-section').forEach(function(section) {
+        var visible = section.querySelectorAll('.author-row[style*="display: none"]').length === 0
+            ? section.querySelector('.author-row') !== null
+            : Array.from(section.querySelectorAll('.author-row')).some(function(r) { return r.style.display !== 'none'; });
+        section.style.display = visible ? '' : 'none';
+    });
+}
 function filterScientists(query) { filterCloudItems('scientist-cloud', query); }
 window.filterAuthors = filterAuthors;
 window.filterScientists = filterScientists;
@@ -471,32 +565,53 @@ window.initReveal = initReveal;
 document.addEventListener('DOMContentLoaded', initReveal);
 
 function cardHTML(item) {
-    var imgSrc = '/lang/' + defaultLang + '/archive/' + item.date + '/' + item.id + '/0.jpg';
-    var authorsHtml = (item.authors || []).slice(0,4).map(function(a) {
-        return '<a href="/lang/' + lang + '/authors/' + authorSlug(a) + '.html" class="text-author-link" data-author="' + a + '">' + a + '</a>';
-    }).join(', ');
-    if ((item.authors || []).length > 4) authorsHtml += ' +' + (item.authors.length - 4) + ' more';
-    var tagsHtml = (item.tags || []).slice(0,6).map(function(t) {
-        return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (tagsLoc[t]?.name || t) + '</a>';
-    }).join(' · ');
-    var scientistsHtml = '';
-    if ((item.scientists || []).length) {
-        scientistsHtml = '<div class="card-scientists">' + item.scientists.slice(0,3).map(function(s) {
-            return '<a href="/lang/' + lang + '/scientists/' + authorSlug(s) + '.html" class="text-scientist" data-scientist="' + s + '">' + s + '</a>';
-        }).join(' · ') + '</div>';
-    }
-    return '<div class="article-card">' +
-        '<div class="card-img"><img src="' + imgSrc + '" onerror="this.style.display=\'none\'" alt=""></div>' +
-        '<div class="card-content">' +
-        '<h3><a href="' + item.url + '">' + item.title + '</a></h3>' +
-        '<div class="oneliner">' + (item.oneliner || item.description || '') + '</div>' +
-        '<div class="meta">arXiv:' + item.id + ' · ' + item.date + (item.reading ? ' · ⏱ ' + item.reading : '') + ' · ' + authorsHtml + '</div>' +
-        ((item.categories && item.categories.length) ? '<div class="card-cats">' + item.categories.slice(0,4).map(function(c) {
-            return '<span class="cat-badge" data-cat="' + c + '" onclick="filterByCategory(\'' + c + '\')">' + (ARXIV_CAT_NAMES[c] || c) + '</span>';
-        }).join('') + '</div>' : '') +
-        '<div class="card-tags">' + tagsHtml + '</div>' +
-        scientistsHtml +
-        '</div></div>';
+    var base = '/lang/' + defaultLang + '/archive/' + item.date + '/' + item.id + '/';
+    var isMini = (currentVersion === 'mini' && item.threads);
+    // В мини-режиме ссылка карточки должна вести на mini.html, иначе клик «сбрасывает»
+    // выбор на popular (item.url всегда указывает на index.html — версия mini своего URL в индексе не имеет).
+    var url = isMini ? (base + 'mini.html') : (item.url || (base + 'index.html'));
+    // В списках — полная аннотация (адаптация авторского arXiv-abstract) БЕЗ обрезки на дисплее —
+    // нужный размер уже задан в промпте генерации (data/prompts/adapt-abstract.txt: 350/550/900
+    // символов на popular/simple/advanced), здесь всегда показываем как есть, целиком.
+    // Мини — свой threads-текст, короче по своей природе, но и он не режется.
+    var bodyText = isMini ? item.threads : (item.abstract || item.description || item.oneliner || '');
+    var cat = (item.categories || [])[0] || '';
+    var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
+    // Авторы: до 3 в мете, приглушённо (полный список — на странице статьи)
+    var au = item.authors || [];
+    var authorsHtml = au.slice(0, 3).map(function(a) {
+        return '<a href="/lang/' + lang + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
+    }).join(', ') + (au.length > 3 ? ' <span class="au-more-lite">+' + (au.length - 3) + '</span>' : '');
+    var tagsHtml = (item.tags || []).slice(0, 6).map(function(t) {
+        return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
+    }).join('<span class="sep">·</span>');
+    // Реакции + избранное прямо в карточке (клики — через делегирование в likes.js; подсветка — на этапе сборки)
+    var _likeId = item.id + '_' + lang + '_' + currentVersion;
+    var _myR = (typeof myReaction === 'function' ? (myReaction(_likeId) || '') : '');
+    var _favOn = (typeof isFavorite === 'function' && isFavorite(item.id));
+    var cardActions =
+        '<div class="card-actions" data-article-id="' + _likeId + '">' +
+        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">👍</button>' +
+        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">👎</button>' +
+        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">⭐</button>' +
+        '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
+        '</div>';
+    var img = base + 't_ai.jpg';
+    var imgFb = base + 'ai.jpg';
+    return '<article class="article-card">' +
+        '<a class="card-img-wrap" href="' + url + '">' +
+            '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">' +
+            '<span class="no-img" style="display:none">📄</span>' +
+        '</a>' +
+        '<div class="card-body">' +
+            (catName ? '<a class="card-cat" href="#" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
+            (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
+            '<div class="card-meta">' + authorsHtml + (item.reading ? '<span class="sep">·</span>⏱ ' + item.reading + ' ' + UI.min : '') + '<span class="sep">·</span>arXiv:' + item.id + '</div>' +
+            (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
+            cardActions +
+        '</div>' +
+    '</article>';
 }
 
 function renderResults(items) {
@@ -515,19 +630,52 @@ function renderResults(items) {
 // Лента: сортировка по дате (новые сверху), группировка по дням, подгрузка на скролле.
 var feed = { items: [], shown: 0, batch: 12, lastDay: null, active: false };
 
+// На странице тега/закона/учёного/автора строка поиска не нужна, если у сущности вообще нет
+// статей — искать в пустом списке незачем. На главной (нет page-контекста) не трогаем.
+var isEntityPage = !!(pageContext.tag || pageContext.scientist || pageContext.author);
+function updateSearchRowVisibility() {
+    if (!isEntityPage) return;
+    var row = document.querySelector('.search-row'), hint = document.querySelector('.search-hint');
+    var show = feed.items.length > 0;
+    if (row) row.style.display = show ? '' : 'none';
+    if (hint) hint.style.display = show ? '' : 'none';
+}
+
 function showLatest() {
-    feed.items = applyPageContext(searchIndex.filter(function(item) { return item.version === currentVersion; }))
+    feed.items = applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); }))
         .sort(function(a, b) { return b.date.localeCompare(a.date); });
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
     if (c) c.innerHTML = feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
     renderMoreFeed();
+    updateSearchRowVisibility();
 }
 window.showLatest = showLatest;
 
+// Вкладка «Избранное»: карточки из localStorage.favorites (клиент, без сервера).
+function showFavorites() {
+    var favs = [];
+    try { favs = JSON.parse(localStorage.getItem('favorites') || '[]'); } catch (e) {}
+    var favSet = {};
+    favs.forEach(function(id) { favSet[id] = true; });
+    feed.items = searchIndex.filter(function(item) { return item.version === effVersion() && favSet[item.id]; })
+        .sort(function(a, b) { return b.date.localeCompare(a.date); });
+    feed.shown = 0; feed.lastDay = null; feed.active = true;
+    var T = { ru: 'Избранное', en: 'Favorites', zh: '收藏', fr: 'Favoris', ar: 'المفضلة' }[lang] || 'Favorites';
+    var E = { ru: 'Пока пусто — добавляйте статьи кнопкой ★.', en: 'No saved articles yet — add with ★.', zh: '暂无收藏 — 点 ★ 添加。', fr: 'Aucun favori — ajoutez avec ★.', ar: 'لا مقالات محفوظة — أضف بـ ★.' }[lang] || 'No saved articles yet.';
+    var c = document.getElementById('search-results');
+    if (!c) return;
+    c.innerHTML = '<div class="feed-day">★ ' + T + ' (' + feed.items.length + ')</div>' +
+        (feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + E + '</p>');
+    if (feed.items.length) renderMoreFeed();
+}
+window.showFavorites = showFavorites;
+
+function _defaultFeed() { if (window.__favoritesPage) showFavorites(); else showLatest(); }
+
 function filterByCategory(cat) {
     var items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === currentVersion && (item.categories || []).indexOf(cat) !== -1;
+        return item.version === effVersion() && (item.categories || []).indexOf(cat) !== -1;
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
     var c = document.getElementById('search-results');
     if (!c) return;
@@ -550,7 +698,7 @@ var CAL_LABELS = {
 
 function filterByDate(prefix, label) {
     feed.items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === currentVersion && (item.date || '').indexOf(prefix) === 0;
+        return item.version === effVersion() && (item.date || '').indexOf(prefix) === 0;
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
@@ -568,9 +716,9 @@ function initCalendar() {
     var btn = document.getElementById('calendar-btn');
     if (!panel || !btn) return;
     var L = CAL_LABELS[lang] || CAL_LABELS.en;
-    btn.textContent = L.title;
+    btn.title = L.title;
     var tree = {};
-    searchIndex.filter(function(i) { return i.version === currentVersion && i.date; }).forEach(function(i) {
+    searchIndex.filter(function(i) { return i.version === effVersion() && i.date; }).forEach(function(i) {
         var y = i.date.slice(0, 4), m = i.date.slice(5, 7), d = i.date.slice(8, 10);
         (tree[y] = tree[y] || { c: 0, m: {} }).c++;
         (tree[y].m[m] = tree[y].m[m] || { c: 0, d: {} }).c++;
@@ -608,7 +756,7 @@ function initCategoryBar() {
     var bar = document.getElementById('category-bar');
     if (!bar) return;
     var counts = {};
-    searchIndex.filter(function(i) { return i.version === currentVersion; }).forEach(function(i) {
+    searchIndex.filter(function(i) { return i.version === effVersion(); }).forEach(function(i) {
         (i.categories || []).forEach(function(c) { counts[c] = (counts[c] || 0) + 1; });
     });
     var cats = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
@@ -632,7 +780,7 @@ function applyCategoryFilter() {
     var sel = Object.keys(selectedCats);
     if (!sel.length) { showLatest(); return; }
     feed.items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === currentVersion && (item.categories || []).some(function(c) { return selectedCats[c]; });
+        return item.version === effVersion() && (item.categories || []).some(function(c) { return selectedCats[c]; });
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
@@ -688,8 +836,17 @@ function scheduleHideTooltip() {
     }, 300);
 }
 
+// Описание тега/закона под ТЕКУЩУЮ выбранную версию (popular/simple/advanced) — раньше тултипы
+// всегда показывали advanced-уровень (тег) или popular (закон) независимо от переключателя.
+function descByVersion(obj) {
+    var v = effVersion();
+    if (v === 'advanced') return obj.description || obj.description_simple || obj.description_popular || '';
+    if (v === 'simple') return obj.description_simple || obj.description_popular || obj.description || '';
+    return obj.description_popular || obj.description_simple || obj.description || '';
+}
+
 function initAllTooltips() {
-    document.querySelectorAll('[data-tag], [data-scientist], [data-author]').forEach(function(el) {
+    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author]').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
@@ -700,18 +857,23 @@ function initAllTooltips() {
             var content = '';
             if (el.dataset.tag) {
                 var t = tagsLoc[el.dataset.tag];
-                if (t) {
-                    content = '<strong>' + t.name + '</strong><p>' + (t.description || '') + '</p><a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>';
-                }
+                content = t
+                    ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + descByVersion(t) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
+                    : '<strong>' + (el.textContent || el.dataset.tag) + '</strong> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.scientist) {
                 var s = scientistsData[el.dataset.scientist];
-                if (s) {
-                    content = '<strong>' + s.name + '</strong> (' + s.lifespan + ')<p>' + (s.description || '').substring(0, 200) + '...</p><a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>';
-                }
+                content = s
+                    ? '<strong>' + s.name + '</strong> (' + s.lifespan + ') &mdash; <span class="tip-desc">' + (s.description || '').substring(0, 200) + '...</span> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>'
+                    : '<strong>' + el.dataset.scientist + '</strong> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.profile + '</a>';
+            } else if (el.dataset.law) {
+                var lw = lawsData[el.dataset.law];
+                content = lw
+                    ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + descByVersion(lw).substring(0, 200) + '...</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
+                    : '<strong>' + (el.textContent || el.dataset.law) + '</strong> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.author) {
                 var a = authorsGraph[el.dataset.author];
                 var count = a ? (a.article_count || (a.articles || []).length || 0) : 0;
-                content = '<strong>' + el.dataset.author + '</strong><p>' + count + ' ' + UI.articlesWord + '</p><a href="/lang/' + lang + '/authors/' + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
+                content = '<strong>' + el.dataset.author + '</strong> &mdash; <span class="tip-desc">' + count + ' ' + UI.articlesWord + '</span> <a href="/lang/' + lang + '/authors/' + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
             }
 
             if (content) {
@@ -727,23 +889,86 @@ function initAllTooltips() {
     });
 }
 
+// ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
+// Всегда развёрнут целиком в шапке (без попапа). Один обработчик для ВСЕХ типов страниц.
+// Точки внутри — либо <button data-version> (JS-переключение: главная/ленты/теги/законы/
+// учёные), либо <a href data-version> (обычная навигация на странице статьи — работает
+// без JS вообще). На тег/закон-страницах тот же клик ещё переключает видимые блоки
+// .tag-ver — раньше это был отдельный дублированный инлайн-скрипт в каждом шаблоне.
 document.addEventListener('DOMContentLoaded', function() {
-    var toggle = document.getElementById('version-toggle');
-    if (toggle) {
-        toggle.querySelectorAll('span').forEach(function(el) {
-            el.classList.toggle('active', el.dataset.version === currentVersion);
-            el.addEventListener('click', function() {
-                toggle.querySelectorAll('span').forEach(function(s) { s.classList.remove('active'); });
-                el.classList.add('active');
-                currentVersion = el.dataset.version;
-                try { localStorage.setItem('b42_version', currentVersion); } catch(e) {}
-                var input = document.querySelector('.search-box');
-                if (input && input.value.trim()) {
-                    doSearch(input.value);
-                } else {
-                    showLatest();
-                }
-            });
+    var wrap = document.getElementById('version-toggle');
+    if (!wrap) return;
+    var track = wrap.querySelector('.vs-track');
+    var fill = wrap.querySelector('.vs-fill');
+    var thumb = wrap.querySelector('.vs-thumb');
+    var currentLabelEl = wrap.querySelector('.vs-current');
+    var dots = Array.prototype.slice.call(wrap.querySelectorAll('.vs-dot'));
+    if (!dots.length) return;
+    var isLinkMode = dots[0].tagName === 'A';
+
+    function paint(idx) {
+        var pct = dots.length > 1 ? (idx / (dots.length - 1) * 100) : 0;
+        if (fill) fill.style.width = pct + '%';
+        if (thumb) thumb.style.left = pct + '%';
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+        if (currentLabelEl) currentLabelEl.textContent = dots[idx].dataset.label;
+    }
+
+    var tagVerBlocks = document.querySelectorAll('.tag-ver');
+    function showTagVer(v) {
+        if (!tagVerBlocks.length) return;
+        tagVerBlocks.forEach(function(el) { el.style.display = el.dataset.ver === v ? '' : 'none'; });
+    }
+
+    function setActive(v, fromUser) {
+        var idx = -1;
+        dots.forEach(function(d, i) { if (d.dataset.version === v) idx = i; });
+        if (idx === -1) return;
+        paint(idx);
+        showTagVer(v);
+        if (!isLinkMode && fromUser) {
+            currentVersion = v;
+            try { localStorage.setItem('b42_version', currentVersion); } catch (e) {}
+            var input = document.querySelector('.search-box');
+            if (input && input.value.trim()) { doSearch(input.value); } else { _defaultFeed(); }
+        }
+    }
+
+    if (isLinkMode) {
+        // Ссылки — переход нативный (работает без JS). Тут только красим начальное состояние.
+        var activeIdx = 0;
+        dots.forEach(function(d, i) { if (d.classList.contains('active')) activeIdx = i; });
+        paint(activeIdx);
+        showTagVer(dots[activeIdx].dataset.version);
+    } else {
+        dots.forEach(function(d) {
+            d.addEventListener('click', function() { setActive(d.dataset.version, true); });
         });
+        setActive(currentVersion, false);
+
+        wrap.addEventListener('keydown', function(e) {
+            var idx = 0;
+            dots.forEach(function(d, i) { if (d.classList.contains('active')) idx = i; });
+            if (e.key === 'ArrowRight' && idx < dots.length - 1) setActive(dots[idx + 1].dataset.version, true);
+            if (e.key === 'ArrowLeft' && idx > 0) setActive(dots[idx - 1].dataset.version, true);
+        });
+
+        // Драг бегунка — тянем к ближайшей точке (мышь и тач).
+        var dragging = false;
+        function pctFromEvent(e) {
+            var rect = track.getBoundingClientRect();
+            var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            return Math.max(0, Math.min(1, x / rect.width));
+        }
+        function nearestIdx(pct) { return Math.round(pct * (dots.length - 1)); }
+        function onMove(e) { if (dragging) setActive(dots[nearestIdx(pctFromEvent(e))].dataset.version, true); }
+        function onDown(e) { dragging = true; onMove(e); if (e.cancelable) e.preventDefault(); }
+        function onUp() { dragging = false; }
+        if (thumb) { thumb.addEventListener('mousedown', onDown); thumb.addEventListener('touchstart', onDown, { passive: true }); }
+        if (track) { track.addEventListener('mousedown', onDown); track.addEventListener('touchstart', onDown, { passive: true }); }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: true });
+        document.addEventListener('mouseup', onUp);
+        document.addEventListener('touchend', onUp);
     }
 });

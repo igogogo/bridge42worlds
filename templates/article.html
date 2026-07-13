@@ -7,7 +7,9 @@
     <meta name="description" content="$description">
     <meta property="og:title" content="$clickbait">
     <meta property="og:description" content="$oneliner_og">
-    <meta property="og:image" content="$site_url/lang/$authors_lang/archive/$date/$id/0.jpg">
+    <meta property="og:image" content="$site_url/lang/$authors_lang/archive/$date/$id/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
     <meta property="og:url" content="$canonical_url">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +20,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=15">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=$asset_ver">
     <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     $jsonld_html
 </head>
@@ -31,8 +34,10 @@
             <a href="/lang/$lang/index.html">main</a>
             <a href="/lang/$lang/tags/">tags</a>
             <a href="/lang/$lang/laws/">laws</a>
-            <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$authors_lang/authors/">authors</a>
+            <a href="/lang/$lang/graph/">graph</a>
+            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
             <a href="/lang/$lang/about.html">about</a>
         </div>
         $version_toggle_html
@@ -41,20 +46,16 @@
 
 <div class="langs" id="langs-bar"></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">$search_hint</div>
+<div class="next-top"><button type="button" class="next-btn next-btn-top">$next_label →</button></div>
 
-<div class="filters" id="active-filters"></div>
-
+<h1 class="article-title-top">$clickbait $refine_badge</h1>
+$refine_toggle
 <div class="authors-top">$authors_full</div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button>
+</div>
 <div class="meta">
     arXiv:<a href="https://arxiv.org/abs/$id">$id</a> · $date · <a href="$license_url">$license_name</a> · $reading_html $categories_html
-</div>
-<div class="author-verify-top">
-    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">👨‍🔬 $author_verify_label</button>
 </div>
 
 <div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
@@ -69,9 +70,9 @@
 $nav_html
 <div class="article-wrapper">
     <div class="article-main">
-        <h1>$clickbait</h1>
         <div class="original-title">Original: "$original_title"</div>
         <div class="oneliner">$oneliner</div>
+        $abstract_html
         $ai_cover_html
         <div class="mosaic">$mosaic_html</div>
         $text_html
@@ -79,12 +80,16 @@ $nav_html
         $formulas_html
         $key_numbers_html
         $scientists_html
-        <div class="actions">
-            <div class="likes" data-article-id="$id">
-                <button onclick="toggleLike('$id')" class="like-btn">♥ <span id="like-count-$id">…</span></button>
+        <div class="actions" data-article-id="$like_id">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
             </div>
+            <button class="fav-btn" data-fav="$id" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
             <button onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')">$share_label</button>
         </div>
+        $feedback_html
         <div class="next-divider">
             <button class="next-btn">$next_label →</button>
         </div>
@@ -96,11 +101,30 @@ $nav_html
 <div class="support">⭐ Free article. <a href="#">Support us</a></div>
 <div class="license">$license_label: <a href="https://arxiv.org/abs/$id">arXiv:$id</a> · <a href="$license_url">$license_name</a> · bridge42worlds</div>
 
-<script src="/js/likes.js?v=15"></script>
-<script src="/js/search.js?v=15"></script>
-<script src="/js/scroll.js?v=15"></script>
+<script src="/js/likes.js?v=$asset_ver"></script>
+<script src="/js/search.js?v=$asset_ver"></script>
+<script src="/js/scroll.js?v=$asset_ver"></script>
+<script src="/js/lightbox.js?v=$asset_ver"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('$id', 'article', '$lang');
+    if ($express_locked_js && window.logExpressInterest) logExpressInterest('$id', '$lang');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
     document.querySelectorAll('.formula-render').forEach(function(el) {
         try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
     });

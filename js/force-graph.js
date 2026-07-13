@@ -8,6 +8,7 @@
 //   hollow: (node) => bool,             // полое кольцо (вторичные узлы) vs сплошной
 //   labelAlways: (node) => bool,        // показывать подпись всегда (не только на ховере/deg>=3)
 //   href:   (node, lang) => url|null    // куда вести по клику
+//   tooltip: (node) => string|null      // необязательно: текст всплывающей подсказки при наведении
 // }
 window.createForceGraph = function (opts) {
     var cv = document.getElementById(opts.canvas);
@@ -19,20 +20,70 @@ window.createForceGraph = function (opts) {
     var txtCol = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#2c2c2a';
     var nodes = [], links = [], adj = [], alpha = 1, drag = -1, hover = -1, px = 0, py = 0, downXY = null, ready = false;
 
+    // Кнопка «развернуть на весь экран» — CSS-оверлей поверх текущего канваса (не Fullscreen API:
+    // на iOS Safari поддержка нестабильна для произвольных элементов). Канвас всегда лежит прямо
+    // в бордер-боксе графа (.mini-graph / #tag-graph / #kg-graph / ...), так что один обработчик
+    // здесь в общем движке покрывает все графы сайта разом.
+    var fsContainer = cv.parentElement, isFs = false;
+
+    // Тултип при наведении на узел — один div на граф, позиционируется у курсора. Только
+    // hover (десктоп); на тач-устройствах наведения нет, там как раньше — тап сразу ведёт по href.
+    var tip = null;
+    if (opts.tooltip && fsContainer) {
+        tip = document.createElement('div');
+        tip.className = 'graph-tooltip';
+        fsContainer.appendChild(tip);
+    }
+    function showTip(node, x, y) {
+        if (!tip) return;
+        var text = opts.tooltip(node);
+        if (!text) { tip.style.display = 'none'; return; }
+        tip.textContent = text;
+        tip.style.left = x + 'px'; tip.style.top = y + 'px';
+        tip.style.display = 'block';
+    }
+    function hideTip() { if (tip) tip.style.display = 'none'; }
+
+    if (fsContainer) {
+        var fsBtn = document.createElement('button');
+        fsBtn.type = 'button'; fsBtn.className = 'graph-fs-btn'; fsBtn.setAttribute('aria-label', 'fullscreen');
+        fsBtn.textContent = '⛶';
+        fsBtn.addEventListener('click', function (e) { e.stopPropagation(); setFs(!isFs); });
+        fsContainer.appendChild(fsBtn);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isFs) setFs(false); });
+    }
+    function setFs(v) {
+        isFs = v;
+        fsContainer.classList.toggle('graph-fs-active', v);
+        document.body.classList.toggle('graph-fs-open', v);
+        fsBtn.textContent = v ? '✕' : '⛶';
+        // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
+        // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.
+        // restart() пересоздаёт позиции узлов уже в новых границах — граф сразу расправляется.
+        restart();
+    }
+
     function resize() {
         var r = cv.getBoundingClientRect(); W = r.width; H = r.height || 460;
         cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    opts.build(lang).then(function (g) {
+    function _ingest(g) {
         nodes = g.nodes || []; links = g.links || [];
         nodes.forEach(function (n) { n.x = Math.random() * (W - 60) + 30; n.y = Math.random() * (H - 60) + 30; n.vx = 0; n.vy = 0; n.deg = 0; });
         links.forEach(function (l) { nodes[l[0]].deg++; nodes[l[1]].deg++; });
         nodes.forEach(function (n) { n.r = opts.radius(n); });
         adj = nodes.map(function () { return {}; });
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
-        ready = true;
-    });
+        alpha = 1; hover = -1; drag = -1; ready = true;
+    }
+
+    function rebuild() {  // перестроить по новому фильтру (opts.build читает актуальное состояние)
+        ready = false;
+        opts.build(lang).then(_ingest);
+    }
+
+    opts.build(lang).then(_ingest);
 
     function step() {
         var cx = W / 2, cy = H / 2;
@@ -53,6 +104,24 @@ window.createForceGraph = function (opts) {
             if (k === drag) { n.x = px; n.y = py; n.vx = n.vy = 0; continue; }
             n.vx *= 0.85; n.vy *= 0.85; n.x += n.vx * alpha; n.y += n.vy * alpha;
             var m = 30 + n.r; n.x = Math.max(m, Math.min(W - m, n.x)); n.y = Math.max(m, Math.min(H - m, n.y));
+        }
+        // Мягкое вписывание облака в окно: масштабируем к ~85% канваса + центрируем,
+        // чтобы граф не скучивался по центру, а занимал всё место (не трогаем во время драга).
+        if (nodes.length > 1 && drag < 0) {
+            var minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
+            for (var q = 0; q < nodes.length; q++) {
+                var nq = nodes[q];
+                if (nq.x < minx) minx = nq.x; if (nq.x > maxx) maxx = nq.x;
+                if (nq.y < miny) miny = nq.y; if (nq.y > maxy) maxy = nq.y;
+            }
+            var mgn = 44, bw = (maxx - minx) || 1, bh = (maxy - miny) || 1;
+            var s = Math.max(0.6, Math.min(Math.min((W - 2 * mgn) / bw, (H - 2 * mgn) / bh), 2.2));
+            var ccx = (minx + maxx) / 2, ccy = (miny + maxy) / 2, ease = 0.06;
+            for (var t = 0; t < nodes.length; t++) {
+                var nt = nodes[t];
+                nt.x += ((W / 2 + (nt.x - ccx) * s) - nt.x) * ease;
+                nt.y += ((H / 2 + (nt.y - ccy) * s) - nt.y) * ease;
+            }
         }
         if (alpha > 0.03) alpha *= 0.992;
     }
@@ -93,7 +162,16 @@ window.createForceGraph = function (opts) {
     function pos(e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
     function pick(x, y) { var bi = -1, bd = 1e9; for (var i = 0; i < nodes.length; i++) { var a = nodes[i], d = Math.hypot(a.x - x, a.y - y); if (d < a.r + 6 && d < bd) { bd = d; bi = i; } } return bi; }
     cv.addEventListener('pointerdown', function (e) { var p = pos(e), i = pick(p[0], p[1]); downXY = p; if (i >= 0) { drag = i; px = p[0]; py = p[1]; alpha = Math.max(alpha, 0.5); cv.setPointerCapture(e.pointerId); } });
-    cv.addEventListener('pointermove', function (e) { var p = pos(e); if (drag >= 0) { px = p[0]; py = p[1]; } else { hover = pick(p[0], p[1]); cv.style.cursor = hover >= 0 ? 'pointer' : 'grab'; } });
+    cv.addEventListener('pointermove', function (e) {
+        var p = pos(e);
+        if (drag >= 0) { px = p[0]; py = p[1]; hideTip(); }
+        else {
+            hover = pick(p[0], p[1]);
+            cv.style.cursor = hover >= 0 ? 'pointer' : 'grab';
+            if (hover >= 0 && opts.tooltip) showTip(nodes[hover], p[0] + 14, p[1] + 14); else hideTip();
+        }
+    });
+    cv.addEventListener('pointerleave', hideTip);
     cv.addEventListener('pointerup', function (e) {
         var p = pos(e), moved = downXY && (Math.abs(p[0] - downXY[0]) + Math.abs(p[1] - downXY[1]) > 6);
         var i = pick(p[0], p[1]);
@@ -110,5 +188,6 @@ window.createForceGraph = function (opts) {
         alpha = 1;
     }
     window[opts.resizeKey] = restart;
+    if (opts.rebuildKey) window[opts.rebuildKey] = rebuild;
     resize(); loop();
 };
