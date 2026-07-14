@@ -1,0 +1,443 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Уравнения Максвелла: как рождается свет</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-pulse{ animation: heroPulse 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroPulse{ 0%{ transform:translateX(0); } 60%{ transform:translateX(260px); } 100%{ transform:translateX(260px); } }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.single{ height:80px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 Фарадей: магнит въезжает в катушку */
+.coil-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.coil-loop{ position:absolute; top:50%; left:60%; width:60px; height:44px; margin-top:-22px; margin-left:-30px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.55; }
+.magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.magnet .n{ flex:1; background:var(--brass-fill); }
+.magnet .s{ flex:1; background:var(--steel-fill); }
+@media (prefers-reduced-motion: no-preference){
+  .magnet.slide{ animation: magnetSlide 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes magnetSlide{ 0%{ left:16px; } 45%{ left:56%; } 55%{ left:56%; } 100%{ left:calc(100% - 44px); } }
+
+/* §5 Ампер: круговое поле B вокруг провода с током */
+.wire-strip{ height:120px; }
+.wire-line{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.wire-ring{ position:absolute; left:50%; top:50%; border:2px solid var(--steel-fill); border-radius:50%; opacity:0; }
+.wire-ring.r1{ width:40px; height:40px; margin:-20px 0 0 -20px; }
+.wire-ring.r2{ width:70px; height:70px; margin:-35px 0 0 -35px; }
+.wire-ring.r3{ width:100px; height:100px; margin:-50px 0 0 -50px; }
+@media (prefers-reduced-motion: no-preference){
+  .wire-ring.pulse{ animation: ringPulse 6s cubic-bezier(.3,0,.5,1) infinite; }
+  .wire-ring.r2.pulse{ animation-delay:.15s; }
+  .wire-ring.r3.pulse{ animation-delay:.3s; }
+}
+@keyframes ringPulse{ 0%{ opacity:.9; } 45%{ opacity:.15; } 60%{ opacity:0; } 100%{ opacity:0; } }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Четыре уравнения в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Гаусса: заряд как источник поля</a></li>
+      <li><a href="#s3"><span class="n">03</span>Закон Гаусса для B: монополей нет</a></li>
+      <li><a href="#s4"><span class="n">04</span>Закон Фарадея: магнетизм рождает ток</a></li>
+      <li><a href="#s5"><span class="n">05</span>Закон Ампера-Максвелла: ток рождает магнетизм</a></li>
+      <li><a href="#s6"><span class="n">06</span>Сквозной пример: рождение света</a></li>
+      <li><a href="#s7"><span class="n">07</span>Куда это ведёт: относительность полей</a></li>
+      <li><a href="#s8"><span class="n">08</span>Эксперимент дома</a></li>
+      <li><a href="#s9"><span class="n">09</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; электромагнетизм &middot; часть IV</p>
+        <h1>Уравнения Максвелла: как рождается свет</h1>
+        <p class="subtitle">Четыре коротких уравнения, которые объяснили магниты, генераторы, радиоволны — и, неожиданно для самого Максвелла, оказались формулой для самого света.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="100" x2="410" y2="100" stroke="var(--rule)" stroke-width="1"/>
+          <path d="M10,100 C 27,72 45,72 62,100 C 79,128 97,128 114,100 C131,72 149,72 166,100 C183,128 201,128 218,100 C235,72 253,72 270,100 C287,128 305,128 322,100 C339,72 357,72 374,100 C391,128 409,128 410,100" fill="none" stroke="var(--steel-fill)" stroke-width="2.4"/>
+          <path d="M10,100 C 27,86 45,86 62,100 C 79,114 97,114 114,100 C131,86 149,86 166,100 C183,114 201,114 218,100 C235,86 253,86 270,100 C287,114 305,114 322,100 C339,86 357,86 374,100 C391,114 409,114 410,100" fill="none" stroke="var(--brass-fill)" stroke-width="2.4" opacity=".85"/>
+          <text x="14" y="62" font-family="Cascadia Code, monospace" font-size="12" fill="var(--steel)">E</text>
+          <text x="14" y="122" font-family="Cascadia Code, monospace" font-size="12" fill="var(--brass)">B</text>
+          <circle class="hero-pulse" cx="30" cy="100" r="6" fill="var(--ink)"/>
+          <text x="210" y="175" text-anchor="middle" font-family="Futura, sans-serif" font-size="13" fill="var(--moss)">E и B поддерживают друг друга — волна бежит сама, без проводов</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1860-х Джеймс Клерк Максвелл собрал разрозненные экспериментальные законы Кулона, Гаусса, Ампера и Фарадея в систему из четырёх уравнений — и обнаружил недостающий кусочек: без него уравнения противоречили сохранению заряда. Добавив «ток смещения», он не просто починил математику — уравнения тут же предсказали волны, бегущие со скоростью, которая идеально совпала со скоростью света. Свет оказался электромагнитной волной. В этой заметке — все четыре уравнения по отдельности, а затем сборка: как из них рождается самораспространяющаяся волна.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Четыре уравнения в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>№</th><th>Название</th><th>Смысл одной фразой</th></tr>
+          <tr><td class="sym">I</td><td>Гаусса (E)</td><td>заряд — источник электрического поля, разбегающегося наружу</td></tr>
+          <tr><td class="sym">II</td><td>Гаусса (B)</td><td>у магнитного поля нет источника-«заряда» — оно всегда замкнуто</td></tr>
+          <tr><td class="sym">III</td><td>Фарадея</td><td>меняющийся магнетизм рождает вихревое электрическое поле</td></tr>
+          <tr><td class="sym">IV</td><td>Ампера-Максвелла</td><td>ток И меняющееся электрическое поле рождают вихревое магнитное</td></tr>
+        </table>
+        <p>Симметрия почти идеальна: III и IV — зеркальные утверждения («меняющееся B рождает E» и «меняющееся E рождает B»), а I и II — «заряд для E есть, для B — нет». Именно эта почти-симметрия и «нехватка» одного члена в исходном законе Ампера навела Максвелла на мысль, что чего-то не хватает — и привела к открытию тока смещения (§5).</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Гаусса: заряд как источник поля</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Электрическое поле «расходится» из заряда пропорционально его величине:</p>
+        <div class="plate">
+          <div class="eq-body">&nabla;&middot;<span class="vec">E</span> = &rho;/&epsilon;<sub>0</sub></div>
+          <div class="cap">&rho; — плотность заряда, &epsilon;<sub>0</sub> &asymp; 8.854&times;10&#8315;&sup1;&sup2; Ф/м — электрическая постоянная</div>
+        </div>
+        <p>В интегральной, более наглядной форме: поток электрического поля через любую замкнутую поверхность пропорционален заряду внутри неё. Наглядно — представьте заряд как «кран», из которого во все стороны бьют струи силовых линий; сколько бы поверхность вы ни нарисовали вокруг крана, через неё пройдёт одно и то же количество «воды», зависящее только от мощности крана (величины заряда), не от формы и размера поверхности.</p>
+        <div class="callout steel">
+          <span class="tag">Частный случай — закон Кулона</span>
+          <p>Если применить закон Гаусса к одиночному точечному заряду и посчитать поле на сфере радиуса r вокруг него, получается ровно закон Кулона (сила между двумя зарядами убывает как 1/r²) — исторически более ранний, найденный экспериментально ещё в 1785 году, за 80 лет до Максвелла. Закон Гаусса — не новый факт, а более общая и мощная переформулировка того же самого.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Закон Гаусса для B: монополей нет</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> У магнитного поля нет источника — оно нигде не «начинается» и не «заканчивается»:</p>
+        <div class="plate">
+          <div class="eq-body">&nabla;&middot;<span class="vec">B</span> = 0</div>
+          <div class="cap">в отличие от электрического поля, у магнитного нет аналога «одиночного заряда»</div>
+        </div>
+        <p>Разломите магнит пополам, надеясь получить отдельно «северный» кусок и отдельно «южный» — не выйдет: у каждого обломка снова будут оба полюса. Магнитные силовые линии всегда замкнуты сами на себя (выходят из северного полюса и обязательно возвращаются в южный), в отличие от электрических, которые начинаются на положительном заряде и обрываются на отрицательном (или уходят в бесконечность).</p>
+        <div class="callout brass">
+          <span class="tag">Открытый вопрос</span>
+          <p>Некоторые теории за пределами уравнений Максвелла (в частности, теория Великого объединения) предсказывают существование магнитных монополей — отдельных «северных» или «южных» зарядов. Их искали десятилетиями (включая знаменитый ложный сигнал детектора Блас Кабреры в 1982 году), но убедительно не нашли — в рамках классической электродинамики закон &nabla;&middot;B&nbsp;=&nbsp;0 остаётся точным экспериментальным фактом, не просто удобным приближением.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Закон Фарадея: магнетизм рождает ток</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Меняющееся во времени магнитное поле порождает вихревое электрическое поле — а значит, и ток в замкнутом проводнике:</p>
+        <div class="plate">
+          <div class="eq-body">&epsilon; = &minus;d&Phi;<sub>B</sub>/dt</div>
+          <div class="cap">&epsilon; — наведённая ЭДС (В), &Phi;<sub>B</sub> — магнитный поток через контур (Вб); знак минус — правило Ленца (§4-сноска)</div>
+        </div>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="coil-track"></div>
+          <div class="coil-loop"></div>
+          <div class="magnet slide"><span class="n"></span><span class="s"></span></div>
+          <div class="anim-label left">магнит въезжает в катушку — поток меняется, стрелка вольтметра дёргается</div>
+        </div>
+        <p>Именно так работает любой электрогенератор: механически вращают магнит рядом с катушкой (или катушку рядом с магнитом — по закону важна только относительная скорость изменения потока), поток постоянно меняется, и в проводе непрерывно наводится ЭДС. Знак минус — <strong>правило Ленца</strong>: наведённый ток течёт в таком направлении, что его собственное магнитное поле противодействует изменению, которое его вызвало (иначе получился бы вечный двигатель — эффект «подпитывал» бы сам себя всё сильнее, что запрещено законом сохранения энергии).</p>
+        <p>Численный пример: катушка из N&nbsp;=&nbsp;100&nbsp;витков находится в магнитном поле, поток через один виток растёт равномерно от 0.02&nbsp;Вб до 0.05&nbsp;Вб за 0.5&nbsp;с. Найдите наведённую ЭДС.</p>
+        <div class="eq"><div class="eq-body">&epsilon; = &minus;N&middot;&Delta;&Phi;/&Delta;t = &minus;100&middot;(0.05&minus;0.02)/0.5 = <strong>&minus;6&nbsp;В</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Модуль ЭДС — 6&nbsp;вольт; знак говорит только о направлении тока (противодействующем росту потока), не о величине.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Закон Ампера-Максвелла: ток рождает магнетизм</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Электрический ток И меняющееся во времени электрическое поле порождают вихревое магнитное поле:</p>
+        <div class="plate">
+          <div class="eq-body">&nabla;&times;<span class="vec">B</span> = &mu;<sub>0</sub><span class="vec">J</span> + &mu;<sub>0</sub>&epsilon;<sub>0</sub>&part;<span class="vec">E</span>/&part;t</div>
+          <div class="cap">&mu;<sub>0</sub> &asymp; 1.257&times;10&#8315;&sup6; Гн/м — магнитная постоянная; J — плотность тока</div>
+        </div>
+        <div class="anim-strip wire-strip" aria-hidden="true">
+          <div class="wire-line"></div>
+          <div class="wire-ring r1 pulse"></div>
+          <div class="wire-ring r2 pulse"></div>
+          <div class="wire-ring r3 pulse"></div>
+          <div class="anim-label">ток по проводу — вокруг рождаются концентрические кольца B</div>
+        </div>
+        <p>Первое слагаемое (&mu;<sub>0</sub>J) — это исходный закон Ампера (1826): ток создаёт вокруг себя круговое магнитное поле, легко проверить компасом рядом с проводом под напряжением. <strong>Второе слагаемое — вклад самого Максвелла</strong>, «ток смещения»: даже там, где реального тока нет (например, между обкладками заряжающегося конденсатора, в вакууме), быстро меняющееся электрическое поле производит тот же эффект — рождает магнитное поле.</p>
+        <div class="callout moss">
+          <span class="tag">Зачем Максвеллу понадобился этот член</span>
+          <p>Без тока смещения закон Ампера в старом виде математически противоречил сохранению заряда при разрыве цепи (например, у конденсатора): применённый к двум разным поверхностям, натянутым на один контур, он давал разные ответы — абсурд. Добавление члена &mu;<sub>0</sub>&epsilon;<sub>0</sub>&part;E/&part;t устранило противоречие — и, как оказалось, заодно сделало уравнения симметричными и способными описывать самораспространяющуюся волну (§6). Редкий в истории физики случай, когда починка математической нестыковки привела к величайшему открытию.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Сквозной пример: рождение света</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Соберём законы Фарадея (§4) и Ампера-Максвелла (§5) вместе — и увидим, почему электромагнитное поле умеет распространяться само, без проводов и магнитов.</p>
+        <ol>
+          <li>Пусть где-то в пространстве электрическое поле E начинает меняться во времени (например, из-за колебания заряда в антенне).</li>
+          <li>По <strong>закону Ампера-Максвелла</strong> (§5, второе слагаемое) это меняющееся E прямо здесь же порождает вихревое магнитное поле B — рядом, в соседней точке пространства, без всякого провода.</li>
+          <li>Но у этого B тоже нет причин быть постоянным — оно тоже меняется во времени. А по <strong>закону Фарадея</strong> (§4) меняющееся B порождает вихревое E — уже ещё чуть дальше от источника.</li>
+          <li>Получается цепная реакция: E рождает B, B рождает E, каждое — на следующем шаге чуть дальше от источника. Поле «убегает» от антенны само, без посторонней помощи — это и есть электромагнитная волна.</li>
+        </ol>
+        <p>Подставив оба уравнения друг в друга (математически — взяв ротор от одного и подставив в другое), получается обычное волновое уравнение, а скорость волны выражается только через две константы — электрическую и магнитную постоянные:</p>
+        <div class="eq"><div class="eq-body">c = 1/&radic;(&epsilon;<sub>0</sub>&mu;<sub>0</sub>) = 1/&radic;(8.854&times;10&#8315;&sup1;&sup2;&middot;1.257&times;10&#8315;&sup6;) &asymp; <strong>3&times;10&sup8;&nbsp;м/с</strong></div><div class="eq-tag">(2)</div></div>
+        <div class="callout brass">
+          <span class="tag">Момент открытия</span>
+          <p>Эти две константы (&epsilon;<sub>0</sub> и &mu;<sub>0</sub>) были известны из чисто электрических и чисто магнитных лабораторных опытов — измерялись конденсаторами и катушками, безо всякого упоминания оптики. Когда Максвелл в 1862 году подставил их числа в формулу (2) и получил величину, совпавшую с уже измеренной скоростью света, он написал: «мы вряд ли можем избежать вывода, что свет состоит из поперечных колебаний той же среды, которая является причиной электрических и магнитных явлений». Оптика оказалась разделом электромагнетизма — этого никто не ожидал.</p>
+        </div>
+        <p>Видимый свет, радиоволны, рентген, микроволны — всё это одна и та же электромагнитная волна, различающаяся только длиной волны (частотой колебаний E и B). Разница между FM-радио и рентгеновским снимком — не в физике явления, а только в числах.</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Куда это ведёт: относительность полей</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Уравнения Максвелла хранят ещё один сюрприз, замеченный не сразу: они не меняют форму при преобразованиях Лоренца (то есть уже «релятивистски правильны»), в отличие от механики Ньютона, которую пришлось модифицировать. Более того — то, что один наблюдатель назовёт «чистым магнитным полем», другой наблюдатель, движущийся относительно первого, увидит как смесь электрического И магнитного полей.</p>
+        <div class="callout steel">
+          <span class="tag">E и B — одна сущность, а не два разных поля</span>
+          <p>Классический пример: неподвижный заряд рядом с проводом с током не испытывает электрической силы (провод электрически нейтрален), только магнитную (если движется). Но для наблюдателя, который сам движется вместе с зарядом, ситуация выглядит иначе: из-за лоренцева сокращения длины плотности положительных и отрицательных зарядов в проводе перестают в точности компенсироваться — провод выглядит слегка заряженным, и появляется настоящая электрическая сила. Один и тот же физический эффект — в зависимости от системы отсчёта его можно назвать «магнитным» или «электрическим». Именно эта связь — одна из исторических дорог, по которой Эйнштейн пришёл к специальной теории относительности (1905), отталкиваясь именно от загадки уравнений Максвелла, а не от механики.</p>
+        </div>
+        <p>На сайте это отдельный закон, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/maxwells_equations.html">Уравнения Максвелла</a> ·
+          <a href="/lang/ru/laws/faradays_law_of_induction.html">Закон индукции Фарадея</a> ·
+          <a href="/lang/ru/laws/amperes_law.html">Закон Ампера</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; самодельный электромагнит</span>
+          <p>Намотайте 30-40 витков изолированного медного провода на большой железный гвоздь, подключите концы к пальчиковой батарейке (1.5&nbsp;В) на несколько секунд (не дольше — провод и батарейка нагреваются).</p>
+          <p><span class="qlabel">Что заметить</span> гвоздь начнёт притягивать скрепки и другие мелкие металлические предметы — прямая демонстрация закона Ампера (§5, первое слагаемое): ток в проводе создаёт магнитное поле, а намотка витками в катушку концентрирует и усиливает это поле внутри и вокруг гвоздя (который к тому же сам намагничивается, усиливая эффект).</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; статическое электричество притягивает воду</span>
+          <p>Расчешите сухие волосы пластиковой расчёской (или потрите воздушный шарик о шерстяной свитер) и поднесите к тонкой струйке воды из крана.</p>
+          <p><span class="qlabel">Что заметить</span> струйка воды заметно отклонится в сторону расчёски. Трение «выбило» электроны с одного материала на другой, создав на расчёске заряд — а по закону Гаусса (§2) вокруг заряда есть электрическое поле, которое наводит на нейтральных, но поляризующихся молекулах воды слабый противоположный заряд и притягивает их (эффект называется поляризацией диэлектрика).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s9">
+      <div class="sec-head"><span class="sec-num">§9</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. FM-радиостанция вещает на частоте 100 МГц. Какая длина волны у этого радиосигнала?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> f&nbsp;=&nbsp;100&nbsp;МГц&nbsp;=&nbsp;10&sup8;&nbsp;Гц, c&nbsp;&asymp;&nbsp;3&times;10&sup8;&nbsp;м/с (§6).</p>
+            <p><span class="qlabel">Закон</span> связь длины волны, частоты и скорости для любой волны: &lambda;&nbsp;=&nbsp;c/f.</p>
+            <p><span class="qlabel">Решение</span> &lambda;&nbsp;=&nbsp;3&times;10&sup8;/10&sup8;&nbsp;=&nbsp;3&nbsp;м.</p>
+            <p><span class="qlabel">Ответ</span> <strong>3 метра</strong> — примерно длина небольшой антенны на радиовышке (четверть волны, 0.75 м, — стандартная практическая длина).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Катушка из 50 витков находится в поле, магнитный поток через которое падает с 0.03 Вб до 0.01 Вб за 0.4 с. Найдите модуль наведённой ЭДС.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> N&nbsp;=&nbsp;50, &Delta;&Phi;&nbsp;=&nbsp;0.01&minus;0.03&nbsp;=&nbsp;&minus;0.02&nbsp;Вб, &Delta;t&nbsp;=&nbsp;0.4&nbsp;с.</p>
+            <p><span class="qlabel">Закон</span> закон Фарадея (§4): &epsilon;&nbsp;=&nbsp;&minus;N&Delta;&Phi;/&Delta;t.</p>
+            <p><span class="qlabel">Решение</span> &epsilon;&nbsp;=&nbsp;&minus;50&middot;(&minus;0.02)/0.4&nbsp;=&nbsp;2.5&nbsp;В.</p>
+            <p><span class="qlabel">Ответ</span> <strong>2.5 В</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Рентгеновское излучение имеет длину волны около 1 нанометра (10⁻⁹ м). Это та же физическая природа, что и видимый свет, или разные явления? Обоснуйте, ссылаясь на конкретный вывод из уравнений Максвелла.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> вывод волнового уравнения из уравнений Максвелла (§6) — единая природа электромагнитных волн.</p>
+            <p><span class="qlabel">Решение</span> уравнения Максвелла не содержат никакого параметра, который отличал бы «свет» от «рентгена» — из них следует единое волновое уравнение с единственной характерной скоростью c. Разные названия (радио, свет, рентген) — это просто разные диапазоны одной и той же величины: длины волны (или частоты).</p>
+            <p><span class="qlabel">Ответ</span> <strong>та же природа</strong> — электромагнитная волна, отличие только в длине волны (у рентгена она примерно в 500 000 раз короче, чем у зелёного света).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Почему при попытке разломить магнит на «отдельный северный полюс» и «отдельный южный полюс» всегда получаются два новых полных магнита? Какое уравнение Максвелла это запрещает нарушать?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> закон Гаусса для магнитного поля (§3): &nabla;&middot;B&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Решение</span> ноль в правой части (в отличие от закона Гаусса для E, §2, где справа стоит плотность заряда) означает: у магнитного поля нет аналога заряда-источника — линии поля обязаны быть замкнутыми и не могут «обрываться» на изолированном полюсе, сколько бы раз вы ни делили магнит.</p>
+            <p><span class="qlabel">Ответ</span> <strong>закон Гаусса для B</strong> — отсутствие магнитных монополей заложено прямо в форме уравнения.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Заряжающийся конденсатор в вакууме создаёт магнитное поле вокруг себя, хотя реального тока между его пластинами нет (заряд просто накапливается на пластинах). Как уравнения Максвелла это объясняют?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> закон Ампера-Максвелла (§5), второе слагаемое — ток смещения.</p>
+            <p><span class="qlabel">Решение</span> между пластинами конденсатора электрическое поле быстро растёт по мере накопления заряда — это и есть &part;E/&part;t, «ток смещения», который по уравнению (§5) действует точно так же, как настоящий ток проводимости, и создаёт вихревое магнитное поле вокруг области между пластинами.</p>
+            <p><span class="qlabel">Ответ</span> <strong>ток смещения</strong> — именно это слагаемое Максвелл добавил к старому закону Ампера, чтобы объяснить подобные случаи.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Maxwell%20equations%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть IV серии, электромагнетизм</p>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>
