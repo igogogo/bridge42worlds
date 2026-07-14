@@ -72,31 +72,31 @@ var UI_STRINGS = {
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
           express: 'экспресс', expressTip: 'Экспресс-версия: по аннотации автора, без разбора полного текста статьи',
-          hideExpress: 'Скрыть экспресс-статьи' },
+          hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express version: based on the author\'s abstract, not the full paper text',
-          hideExpress: 'Hide express articles' },
+          hideExpress: 'Hide express articles', showLess: 'Collapse' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Versión exprés: basada en el resumen del autor, no en el texto completo',
-          hideExpress: 'Ocultar artículos exprés' },
+          hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
-          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章' },
+          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
-          hideExpress: 'Masquer les articles express' },
+          hideExpress: 'Masquer les articles express', showLess: 'Réduire' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل',
-          hideExpress: 'إخفاء المقالات السريعة' }
+          hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
@@ -817,6 +817,26 @@ function initCategoryBar() {
         else { selectedCats[c] = 1; chip.classList.add('active'); }
         applyCategoryFilter();
     };
+    // Сворачиваем в ~2 строки, показываем "ещё", если реально не влезло — не показываем
+    // кнопку зря, когда список и так короткий (мало категорий на этой ленте).
+    var moreBtn = document.getElementById('category-bar-more');
+    if (!moreBtn) {
+        moreBtn = document.createElement('button');
+        moreBtn.type = 'button';
+        moreBtn.id = 'category-bar-more';
+        moreBtn.className = 'category-bar-more';
+        bar.insertAdjacentElement('afterend', moreBtn);
+    }
+    bar.classList.add('collapsed');
+    moreBtn.style.display = 'none';
+    moreBtn.textContent = UI.moreWord + ' ▾';
+    moreBtn.onclick = function() {
+        var collapsed = bar.classList.toggle('collapsed');
+        moreBtn.textContent = (collapsed ? UI.moreWord + ' ▾' : UI.showLess + ' ▴');
+    };
+    requestAnimationFrame(function() {
+        if (bar.scrollHeight > bar.clientHeight + 2) moreBtn.style.display = 'inline-block';
+    });
 }
 window.initCategoryBar = initCategoryBar;
 

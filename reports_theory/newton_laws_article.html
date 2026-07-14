@@ -1,0 +1,767 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Три закона Ньютона: как рождается динамика</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+.g   { color:var(--brass); font-style:italic; }
+.om, .kin { color:var(--steel); font-style:italic; }
+b.g  { color:var(--brass); }
+
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{
+  display:none;
+}
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{
+    display:block;
+    position:sticky; top:36px; align-self:start;
+    padding-top:64px;
+  }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{
+  text-decoration:none; color:var(--ink-soft);
+  font-size:.82rem; line-height:1.35; display:block;
+}
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{
+  padding: 56px 0 40px;
+  display:grid; gap:28px;
+}
+@media (min-width:760px){
+  .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; }
+}
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  text-wrap:balance;
+  color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+.hero-rig{ transform:translate(90px,175px); }
+@media (prefers-reduced-motion: no-preference){
+  .hero-rig{ animation: heroSlide 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. Группы для
+   сравнения (§3 три груза, §4 два шарика) — ОДНА и та же длительность на все элементы группы
+   (иначе разъедутся по фазе), а момент прибытия у каждого свой % — только так на каждом цикле
+   у них будет общий синхронный старт «с одной линии». */
+@keyframes heroSlide{ 0%{ transform:translate(90px,175px); } 55%{ transform:translate(330px,175px); } 100%{ transform:translate(330px,175px); } }
+
+/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+   как принято визуально отличать advanced-глубину от основного текста. */
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:22px 26px;
+  margin: 8px 0 8px;
+  box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{
+  display:flex; align-items:baseline; gap:.6em;
+  margin:0 0 .3em;
+  max-width:680px;
+}
+.sec-num{
+  font-family:var(--font-mono); color:var(--brass);
+  font-size:.95rem;
+}
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0;
+  text-wrap:balance;
+}
+h3{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px;
+}
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{
+  width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em;
+  font-size:.92rem;
+}
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap: 16px;
+  max-width:680px;
+  margin: 1.5em 0;
+  padding: 14px 4px;
+}
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  padding: 22px 26px;
+  margin: 1.6em 0;
+  box-shadow: var(--shadow);
+}
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin-top:.9em;
+}
+
+sup, sub{ font-size:.68em; }
+
+.callout{
+  max-width:680px;
+  border-left: 3px solid var(--rule);
+  padding: 4px 0 4px 18px;
+  margin: 1.5em 0;
+}
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em;
+  text-transform:uppercase; margin-bottom:.4em; display:block;
+}
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+.callout ol{ margin-bottom:0; }
+.callout li{ margin-bottom:.7em; }
+.callout li:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{
+  font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px;
+}
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+.fig-row{ display:grid; gap:24px; max-width:920px; }
+@media (min-width:760px){ .fig-row{ grid-template-columns:1fr 1fr; } }
+.fig-row figure{ max-width:none; }
+
+code, .code{
+  font-family:var(--font-mono); font-size:.86em; background:var(--paper-raised);
+  border:1px solid var(--rule); border-radius:3px; padding:.1em .4em;
+}
+
+footer{
+  max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule);
+  color:var(--ink-soft); font-size:.85rem;
+}
+.feedback-box{
+  max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:18px 22px;
+}
+.feedback-box .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brass); display:block; margin-bottom:.5em;
+}
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- animated strips — реальные объекты (груз/шарик/ракета), не абстрактные точки:
+   размер тела ~ масса, стрелка F видна как причина, скорость на экране ~ скорость в примере. ---------- */
+.anim-strip{
+  position:relative; max-width:680px; margin:1.5em 0 1.9em;
+  background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.anim-strip.single{ height:64px; }
+.anim-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+
+/* Груз — прямоугольник со скруглением, размер прямо кодирует массу (больше груз = больше блок). */
+.anim-block{
+  position:absolute; top:50%; border-radius:3px; border:1.5px solid var(--ink);
+  background:var(--paper); box-shadow:0 1px 2px rgba(27,34,43,.12); left:16px;
+}
+.anim-block.sz-sm{ width:14px; height:14px; margin-top:-7px; }
+.anim-block.sz-md{ width:20px; height:20px; margin-top:-10px; }
+.anim-block.sz-lg{ width:28px; height:28px; margin-top:-14px; }
+
+/* Шарик — конькобежец/тело в §4, размер круга ~ масса. */
+.anim-ball{
+  position:absolute; top:50%; border-radius:50%; background:var(--steel-fill); left:50%;
+}
+.anim-ball.b-light{ width:14px; height:14px; margin-top:-7px; margin-left:-7px; }
+.anim-ball.b-heavy{ width:22px; height:22px; margin-top:-11px; margin-left:-11px; background:var(--brass-fill); }
+
+/* Стрелка силы F — короткая, у старта, видна как причина движения груза следом. */
+.anim-force{
+  position:absolute; top:50%; height:2px; background:var(--steel-fill); left:16px; width:26px; margin-top:-1px;
+}
+.anim-force::after{
+  content:""; position:absolute; right:-1px; top:-4px; width:0; height:0;
+  border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:6px solid var(--steel-fill);
+}
+.anim-force-label{
+  position:absolute; left:16px; top:6px; font-family:var(--font-display); font-size:.68rem;
+  font-weight:700; color:var(--steel);
+}
+
+.anim-label{
+  position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft);
+  text-align:right;
+}
+.anim-label.left{ right:auto; left:14px; }
+
+/* Многорядная полоса — три груза разной массы под одной F, как в таблице/Рис.1 §3. */
+.anim-strip.multi{ padding:10px 0; }
+.anim-row{ position:relative; height:38px; }
+.anim-row .anim-track{ left:52px; }
+.anim-row .anim-block{ left:52px; }
+.anim-row .anim-row-label{
+  position:absolute; left:12px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.72rem; color:var(--ink-soft); width:36px;
+}
+/* Живой числовой счётчик — "функциональная" анимация: не просто едет груз, а рядом честно
+   пересчитывается v=at на каждый кадр (JS в конце документа, формула, не чтение CSS-состояния). */
+.anim-readout{
+  position:absolute; right:10px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; min-width:78px; text-align:right;
+}
+.graph-mini{
+  max-width:340px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:10px;
+}
+.graph-mini svg{ width:100%; height:auto; display:block; }
+
+.anim-strip.vertical{ height:150px; }
+.anim-strip.vertical .anim-track{ left:50%; top:14px; bottom:14px; right:auto; width:1px; height:auto; }
+
+/* Ракета §5 — треугольный корпус + факел, поднимается вверх. */
+.anim-rocket{
+  position:absolute; left:50%; bottom:14px; width:16px; height:26px; margin-left:-8px;
+}
+.anim-rocket .body{
+  position:absolute; left:0; top:0; width:16px; height:20px; border-radius:8px 8px 2px 2px;
+  background:var(--paper); border:1.5px solid var(--ink);
+}
+.anim-rocket .flame{
+  position:absolute; left:3px; top:19px; width:10px; height:10px;
+  background:var(--brass-fill); clip-path:polygon(50% 100%, 0 0, 100% 0); opacity:.9;
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .anim-block.const{ animation: moveConst 6s linear infinite; }
+  .anim-block.decel-stop{ animation: moveDecelStop 6s cubic-bezier(.25,.85,.45,1) infinite; }
+  .anim-block.accel-sm{ animation: moveAccelSm 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-md{ animation: moveAccelMd 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-lg{ animation: moveAccelLg 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.apart-a{ animation: moveApartFar 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-ball.apart-b{ animation: moveApartNear 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-rocket.rise{ animation: moveRise 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+@keyframes moveConst{ 0%{ left:52px; } 70%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+/* §3: одна и та же длительность (6с) на все три груза, финиш у каждого на своём % шкалы —
+   пропорционально sqrt(m) (t ~ sqrt(m/F) при равной F) — лёгкий приезжает первым, но у ВСЕХ
+   троих следующий цикл стартует одновременно (общая шкала 0-100%), это и даёт эффект «заезда». */
+@keyframes moveAccelSm{ 0%{ left:52px; } 25%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelMd{ 0%{ left:52px; } 35%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelLg{ 0%{ left:52px; } 50%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveDecelStop{ 0%{ left:16px; } 40%{ left:58%; } 100%{ left:58%; } }
+@keyframes moveApartFar{ 0%{ left:50%; } 40%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
+@keyframes moveApartNear{ 0%{ left:50%; } 40%{ left:38%; } 100%{ left:38%; } }
+@keyframes moveRise{ 0%{ bottom:14px; } 55%{ bottom:calc(100% - 40px); } 100%{ bottom:calc(100% - 40px); } }
+
+/* ---------- задачи с раскрывающимся решением ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+}
+.problem summary{
+  cursor:pointer; font-weight:600; color:var(--ink); list-style:none;
+}
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule);
+  color:var(--ink-soft); font-size:.95rem;
+}
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); margin-right:.5em;
+}
+
+/* ---------- сноска "величины и единицы" под формулой ---------- */
+.units{
+  font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
+}
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Три закона в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Первый закон: инерция</a></li>
+      <li><a href="#s3"><span class="n">03</span>Второй закон: F&nbsp;=&nbsp;ma</a></li>
+      <li><a href="#s4"><span class="n">04</span>Третий закон: действие и противодействие</a></li>
+      <li><a href="#s5"><span class="n">05</span>Все три вместе: разгон ракеты</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: принцип наименьшего действия</a></li>
+      <li><a href="#s7"><span class="n">07</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; классическая динамика &middot; часть I</p>
+        <h1>Три закона Ньютона: как рождается динамика</h1>
+        <p class="subtitle">Инерция, F&nbsp;=&nbsp;ma и «действие равно противодействию» — не три отдельных факта, а одна связная схема: как посчитать движение тела, если знаешь силы, действующие на него и на его соседей.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+          <line x1="20" y1="220" x2="400" y2="220" stroke="var(--rule)" stroke-width="1.5"/>
+          <!-- Груз, стрелка F и подпись m едут ВМЕСТЕ одной группой — сила приложена
+               непрерывно (толкает сзади), груз у неё на глазах ускоряется вправо. -->
+          <g class="hero-rig">
+            <line x1="-88" y1="0" x2="-6" y2="0" stroke="var(--steel)" stroke-width="2.4" marker-end="url(#arrowF)"/>
+            <text x="-86" y="-13" font-family="Futura, sans-serif" font-size="16" font-weight="700" fill="var(--steel)">F</text>
+            <rect x="0" y="-25" width="70" height="50" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+            <text x="85" y="5" font-family="Cascadia Code, monospace" font-size="13" fill="var(--brass)">m</text>
+          </g>
+          <text x="210" y="250" text-anchor="middle" font-family="Futura, sans-serif" font-size="14" fill="var(--moss)">a = F/m — груз ускоряется, не едет с постоянной v</text>
+          <defs>
+            <marker id="arrowF" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="var(--steel)"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Три закона Ньютона (1687, «Математические начала натуральной философии») — минимальный набор аксиом, из которого выводится вся классическая механика: почему тело без сил движется прямо и равномерно, как связаны сила, масса и ускорение, и почему на любое действие есть равное противодействие. В этой заметке — все три закона по отдельности с числовыми примерами и графиками, а затем один сквозной пример (разгон ракеты), где работают сразу все три. Материал рассчитан на тех, кто только начинает динамику: из математики нужна только арифметика и идея производной «на пальцах».</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Три закона в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Ньютон сформулировал три закона, но по сути это одна идея, поданная с трёх сторон: <strong>сила меняет движение, и мера этого изменения — масса тела</strong>.</p>
+        <table class="symtab">
+          <tr><th>Закон</th><th>Формулировка</th><th>Что даёт</th></tr>
+          <tr><td class="sym">I</td><td>Тело сохраняет скорость (в том числе нулевую), пока на него не действует нескомпенсированная сила</td><td>определяет, что такое «отсутствие сил»</td></tr>
+          <tr><td class="sym">II</td><td><span class="vec">F</span> = m<span class="vec">a</span></td><td>количественная связь силы, массы и ускорения</td></tr>
+          <tr><td class="sym">III</td><td><span class="vec">F</span><sub>A→B</sub> = &minus;<span class="vec">F</span><sub>B→A</sub></td><td>силы всегда возникают парами между двумя телами</td></tr>
+        </table>
+        <p>Первый закон — не частный случай второго при F&nbsp;=&nbsp;0, а отдельное утверждение: он <em>определяет</em> класс систем отсчёта (инерциальных), в которых второй закон вообще верен в этой простой форме. Порядок в заметке такой же, как исторически и педагогически принятый: сначала что такое «нет сил» (§2), потом что делают силы (§3), потом откуда силы вообще берутся — из взаимодействия тел (§4).</p>
+        <table class="symtab">
+          <tr><th>Величина</th><th>Обозначение</th><th>Единица СИ</th></tr>
+          <tr><td>Сила</td><td class="sym"><span class="vec">F</span></td><td class="sym">Н (ньютон = кг&middot;м/с&sup2;)</td></tr>
+          <tr><td>Масса</td><td class="sym">m</td><td class="sym">кг</td></tr>
+          <tr><td>Ускорение</td><td class="sym"><span class="vec">a</span></td><td class="sym">м/с&sup2;</td></tr>
+          <tr><td>Скорость</td><td class="sym"><span class="vec">v</span></td><td class="sym">м/с</td></tr>
+          <tr><td>Импульс (количество движения)</td><td class="sym"><span class="vec">p</span> = m<span class="vec">v</span></td><td class="sym">кг&middot;м/с</td></tr>
+          <tr><td>Время</td><td class="sym">t</td><td class="sym">с</td></tr>
+          <tr><td>Ускорение свободного падения</td><td class="sym">g</td><td class="sym">9.8&nbsp;м/с&sup2; (у поверхности Земли)</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Первый закон: инерция</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Если равнодействующая всех сил, приложенных к телу, равна нулю, тело движется с постоянной скоростью — в частности, покоится, если покоилось. Это утверждение нетривиально: до Ньютона (и Галилея) интуиция была «для движения нужна сила», потому что на Земле всё тормозит трением. Первый закон — идеализация: убери трение и сопротивление воздуха, и шайба, скользящая по льду, катится вечно.</p>
+        <div class="plate">
+          <div class="eq-body">&Sigma;<span class="vec">F</span> = 0&nbsp;&nbsp;&rArr;&nbsp;&nbsp;<span class="vec">v</span> = const</div>
+          <div class="cap">инерциальное движение — прямая линия, постоянная по модулю скорость</div>
+        </div>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-block sz-md const"></div>
+          <div class="anim-label">шайба, &Sigma;F&nbsp;=&nbsp;0 — катится вечно (I закон)</div>
+        </div>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-block sz-md decel-stop" style="background:var(--brass-fill);border-color:var(--brass)"></div>
+          <div class="anim-label">та же шайба с трением — сила есть, тормозит и встаёт</div>
+        </div>
+        <p>Ключевое слово — <em>равнодействующая</em>. Силы на тело действовать могут, и даже немаленькие — важно, чтобы их векторная сумма была нулевой. Книга, лежащая на столе, испытывает и гравитацию, и реакцию опоры — обе не равны нулю, но уравновешивают друг друга.</p>
+        <div class="callout steel">
+          <span class="tag">Бытовой пример</span>
+          <p>Фокус со скатертью: резко выдёргиваешь скатерть из-под сервированной посуды, посуда остаётся на месте. Пока скатерть под тарелкой, трение между ними мало и действует очень короткое время — импульс, переданный тарелке, ничтожен. Как только скатерть выдернута, единственная горизонтальная сила на тарелку исчезает, и по первому закону она просто остаётся там, где была.</p>
+        </div>
+        <p>Второй важный вывод первого закона — само существование <strong>инерциальных систем отсчёта</strong>: он выполняется не в любой системе координат, а только в тех, что сами не ускоряются и не вращаются относительно «неподвижных звёзд». Во вращающейся системе (например, в кабине карусели) свободное тело, на взгляд наблюдателя внутри, отклоняется без видимой силы — это и есть сигнал, что система неинерциальна.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Второй закон: F&nbsp;=&nbsp;ma</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Равнодействующая сила, приложенная к телу, равна произведению его массы на ускорение — или, точнее и общее, скорости изменения импульса:</p>
+        <div class="eq"><div class="eq-body"><span class="vec">F</span> = d<span class="vec">p</span>/dt = d(m<span class="vec">v</span>)/dt</div><div class="eq-tag">(1)</div></div>
+        <p>Если масса постоянна (не ракета, теряющая топливо, а обычное тело), производная упрощается:</p>
+        <div class="plate">
+          <div class="eq-body"><span class="vec">F</span> = m<span class="vec">a</span></div>
+          <div class="cap">при m = const — самая узнаваемая форма закона</div>
+        </div>
+        <div class="units">F [Н], m [кг], <span class="u">a</span> [м/с&sup2;] — все три величины из таблицы в §1.</div>
+        <div class="anim-strip multi" aria-hidden="true">
+          <div class="anim-row" data-mass="1" data-accel="6">
+            <span class="anim-row-label">1&nbsp;кг</span>
+            <div class="anim-track"></div>
+            <div class="anim-force"></div>
+            <div class="anim-block sz-sm accel-sm"></div>
+            <span class="anim-readout" data-readout>v=0.0 м/с</span>
+          </div>
+          <div class="anim-row" data-mass="2" data-accel="3">
+            <span class="anim-row-label">2&nbsp;кг</span>
+            <div class="anim-track"></div>
+            <div class="anim-force"></div>
+            <div class="anim-block sz-md accel-md"></div>
+            <span class="anim-readout" data-readout>v=0.0 м/с</span>
+          </div>
+          <div class="anim-row" data-mass="4" data-accel="1.5">
+            <span class="anim-row-label">4&nbsp;кг</span>
+            <div class="anim-track"></div>
+            <div class="anim-force"></div>
+            <div class="anim-block sz-lg accel-lg"></div>
+            <span class="anim-readout" data-readout>v=0.0 м/с</span>
+          </div>
+        </div>
+        <p class="units" style="margin-top:-1.2em">Одна и та же сила F толкает три груза разной массы — тот же расклад, что на Рис.&nbsp;1: лёгкий вырывается вперёд, тяжёлый отстаёт. Счётчик v — не украшение, а честный live-расчёт по v=at (те же цифры, что в таблице выше на t=2с).</p>
+        <div class="graph-mini" aria-hidden="true">
+          <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+            <line x1="40" y1="10" x2="40" y2="140" stroke="var(--rule)" stroke-width="1"/>
+            <line x1="40" y1="140" x2="290" y2="140" stroke="var(--rule)" stroke-width="1"/>
+            <text x="8" y="16" font-family="Cascadia Code, monospace" font-size="11" fill="var(--ink-soft)">v, м/с</text>
+            <text x="265" y="156" font-family="Cascadia Code, monospace" font-size="11" fill="var(--ink-soft)">t, с</text>
+            <text x="30" y="18" text-anchor="end" font-family="Cascadia Code, monospace" font-size="10" fill="var(--ink-soft)">12</text>
+            <text x="30" y="143" text-anchor="end" font-family="Cascadia Code, monospace" font-size="10" fill="var(--ink-soft)">0</text>
+            <text x="40" y="155" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="10" fill="var(--ink-soft)">0</text>
+            <text x="290" y="155" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="10" fill="var(--ink-soft)">2</text>
+            <!-- v=at для трёх масс: наклон прямой = a. 1кг: v=6t (крутая), 2кг: v=3t, 4кг: v=1.5t (пологая). -->
+            <line x1="40" y1="140" x2="290" y2="10" stroke="var(--brass-fill)" stroke-width="2"/>
+            <line x1="40" y1="140" x2="290" y2="75" stroke="var(--steel-fill)" stroke-width="2"/>
+            <line x1="40" y1="140" x2="290" y2="107.5" stroke="var(--moss-fill)" stroke-width="2"/>
+            <circle id="graphDotSm" r="4" fill="var(--brass-fill)" cx="40" cy="140"/>
+            <circle id="graphDotMd" r="4" fill="var(--steel-fill)" cx="40" cy="140"/>
+            <circle id="graphDotLg" r="4" fill="var(--moss-fill)" cx="40" cy="140"/>
+          </svg>
+        </div>
+        <p class="units" style="margin-top:-.8em">Три точки едут ПО ГРАФИКУ v(t) в реальном времени — та же анимация, что у грузов выше, только как функция, а не как сцена. Наклон прямой = ускорение a.</p>
+        <p>Масса здесь выступает как <strong>мера инертности</strong>: чем она больше, тем меньшее ускорение даёт та же сила. Численный пример — тележка массой m на гладком (без трения) горизонтальном столе, к которой приложена постоянная сила F&nbsp;=&nbsp;6&nbsp;Н:</p>
+        <table class="symtab">
+          <tr><th>Масса тележки</th><th>Ускорение a = F/m</th><th>Скорость через 2&nbsp;с</th></tr>
+          <tr><td class="sym">1&nbsp;кг</td><td class="sym">6&nbsp;м/с&sup2;</td><td class="sym">12&nbsp;м/с</td></tr>
+          <tr><td class="sym">2&nbsp;кг</td><td class="sym">3&nbsp;м/с&sup2;</td><td class="sym">6&nbsp;м/с</td></tr>
+          <tr><td class="sym">4&nbsp;кг</td><td class="sym">1.5&nbsp;м/с&sup2;</td><td class="sym">3&nbsp;м/с</td></tr>
+        </table>
+        <figure>
+          <img src="newton_second_law.png" alt="График v(t) для трёх масс при постоянной силе 6 Н — прямые с разным наклоном, наклон равен ускорению a=F/m">
+          <figcaption><span class="fign">Рис. 1</span>Скорость растёт линейно (v&nbsp;=&nbsp;at), а наклон прямой — это и есть ускорение. Одна и та же сила разгоняет лёгкую тележку вчетверо быстрее, чем в четыре раза более тяжёлую — прямое следствие обратной пропорции a&nbsp;=&nbsp;F/m.</figcaption>
+        </figure>
+        <div class="callout brass">
+          <span class="tag">Частая ошибка</span>
+          <p>«Сила нужна, чтобы тело двигалось» — нет: сила нужна, чтобы <em>изменить</em> движение (ускорение). Тело, на которое действует постоянная сила, не движется с постоянной скоростью — оно постоянно <em>разгоняется</em>. Постоянная скорость — это F&nbsp;=&nbsp;0 (первый закон), а не F&nbsp;=&nbsp;const.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Третий закон: действие и противодействие</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Если тело A действует на тело B с силой <span class="vec">F</span><sub>A→B</sub>, то тело B действует на тело A с силой той же величины и противоположного направления:</p>
+        <div class="plate">
+          <div class="eq-body"><span class="vec">F</span><sub>A→B</sub> = &minus;<span class="vec">F</span><sub>B→A</sub></div>
+          <div class="cap">силы возникают парами; каждая пара приложена к <em>разным</em> телам, поэтому не «сокращается»</div>
+        </div>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-ball b-heavy apart-b"></div>
+          <div class="anim-ball b-light apart-a"></div>
+          <div class="anim-label left">m<sub>A</sub>&nbsp;=&nbsp;60&nbsp;кг, v<sub>A</sub>&nbsp;=&nbsp;3&nbsp;м/с — маленький, улетает дальше и быстрее</div>
+        </div>
+        <p class="units" style="margin-top:-1.2em">Размер шарика ~ масса конькобежца, скорость на экране ~ реальная v<sub>A</sub>/v<sub>B</sub> из расчёта — тот же расклад, что на Рис.&nbsp;2.</p>
+        <p>Частая путаница — считать, что раз силы равны и противоположны, они должны компенсировать друг друга и никакого движения быть не может. Ошибка в том, что <span class="vec">F</span><sub>A→B</sub> приложена к телу B, а <span class="vec">F</span><sub>B→A</sub> — к телу A: складывать их во втором законе (&Sigma;<span class="vec">F</span> для ОДНОГО тела) нельзя, они действуют на разные объекты.</p>
+        <p>Числовой пример: два конькобежца массой m<sub>A</sub>&nbsp;=&nbsp;60&nbsp;кг и m<sub>B</sub>&nbsp;=&nbsp;90&nbsp;кг стоят неподвижно и отталкиваются друг от друга руками. Сила взаимодействия в каждый момент одна и та же для обоих (третий закон) — значит, импульс, переданный каждому (интеграл силы по времени), тоже одинаков по модулю:</p>
+        <div class="eq"><div class="eq-body">m<sub>A</sub>v<sub>A</sub> = &minus;m<sub>B</sub>v<sub>B</sub>&nbsp;&nbsp;&nbsp; (импульс до толчка был нулевым)</div><div class="eq-tag">(2)</div></div>
+        <p>Числа подобраны так, чтобы ответ вышел целым (стандартный приём — сначала закон, потом уже конкретные цифры под него). При импульсе толчка J&nbsp;=&nbsp;180&nbsp;кг&middot;м/с: v<sub>A</sub>&nbsp;=&nbsp;J/m<sub>A</sub>&nbsp;=&nbsp;180/60&nbsp;=&nbsp;<strong>3&nbsp;м/с</strong>, v<sub>B</sub>&nbsp;=&nbsp;&minus;J/m<sub>B</sub>&nbsp;=&nbsp;&minus;180/90&nbsp;=&nbsp;<strong>&minus;2&nbsp;м/с</strong> — лёгкий конькобежец улетает быстрее тяжёлого, но суммарный импульс системы всё время остаётся нулевым.</p>
+        <figure>
+          <img src="newton_third_law.png" alt="График импульса двух конькобежцев во время толчка: p_A растёт, p_B падает симметрично, сумма остаётся нулевой">
+          <figcaption><span class="fign">Рис. 2</span>Импульс каждого конькобежца растёт по модулю линейно во время толчка (сила примерно постоянна), но с противоположными знаками — сумма (пунктир) держится на нуле в любой момент. Это прямое следствие третьего закона, а не отдельный постулат.</figcaption>
+        </figure>
+        <div class="callout moss">
+          <span class="tag">Почему летает ракета</span>
+          <p>Ракета не «отталкивается от воздуха» (в вакууме нет воздуха, а ракеты там прекрасно работают) — она отталкивается от <em>собственного топлива</em>, выбрасывая его назад с высокой скоростью. Сила, с которой ракета выталкивает газ назад, равна по модулю силе, с которой газ толкает ракету вперёд — это и есть третий закон в чистом виде.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Все три вместе: разгон ракеты</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Соберём все три закона на одном примере. Ракета массой m&nbsp;=&nbsp;1000&nbsp;кг стоит на пусковой площадке.</p>
+        <ol>
+          <li><strong>Первый закон</strong> объясняет, почему она вообще неподвижна: сила тяги двигателей пока равна нулю, а гравитация уравновешена реакцией опоры — равнодействующая нулевая, скорость остаётся нулевой.</li>
+          <li>Двигатели запускаются и выбрасывают газ назад с силой реакции F&nbsp;=&nbsp;15000&nbsp;Н, направленной вверх — это прямое следствие <strong>третьего закона</strong>: газ толкает ракету с той же по модулю силой, с которой ракета толкает газ.</li>
+          <li>Пока масса ракеты примерно постоянна (в первые секунды сожжено мало топлива), <strong>второй закон</strong> даёт её ускорение: сила тяги минус вес.</li>
+        </ol>
+        <div class="eq"><div class="eq-body">ma = F<sub>тяги</sub> &minus; mg&nbsp;&nbsp;&rArr;&nbsp;&nbsp;a = F<sub>тяги</sub>/m &minus; g</div><div class="eq-tag">(3)</div></div>
+        <div class="anim-strip vertical" style="max-width:120px" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-rocket rise"><div class="body"></div><div class="flame"></div></div>
+        </div>
+        <div class="units">Здесь и далее для чистоты счёта берём g&nbsp;&asymp;&nbsp;10&nbsp;м/с&sup2; (реальное значение 9.8 — округление меняет ответ на доли процента, а считать в уме проще).</div>
+        <div class="plate">
+          <div class="eq-body">a = 15000/1000 &minus; 10 = <strong>5</strong>&nbsp;м/с&sup2;</div>
+          <div class="cap">ракета отрывается от площадки и разгоняется вверх с ускорением 5 м/с² — пока масса не изменилась заметно</div>
+        </div>
+        <p>По мере выгорания топлива масса m в знаменателе падает, и при той же тяге ускорение растёт — отсюда характерное «увеличивающееся» ускорение настоящих ракет на старте, которое здесь для простоты не учитывается (это следующий уровень задачи, где уже нельзя считать m постоянной и нужна полная форма (1)).</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: принцип наименьшего действия</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>F&nbsp;=&nbsp;ma — не самая фундаментальная формулировка механики, а её частный (хоть и самый практичный) случай. Есть более общее утверждение, из которого все три закона Ньютона <em>выводятся</em>, а не постулируются: тело движется так, чтобы величина, называемая <strong>действием</strong> S, была стационарна (в простых случаях — минимальна) на реальной траектории по сравнению с любой другой мыслимой траекторией между теми же двумя точками:</p>
+        <div class="eq"><div class="eq-body">S = &int; L&nbsp;dt,&nbsp;&nbsp;&nbsp; L = T &minus; U&nbsp;&nbsp;(кинетическая минус потенциальная энергия)</div><div class="eq-tag">(4)</div></div>
+        <p>Применение вариационного исчисления (уравнение Эйлера–Лагранжа) к (4) для обычной частицы в потенциальном поле даёт ровно второй закон Ньютона — не приближённо, а тождественно. Но формулировка через действие работает и там, где «сила» — неудобное или вовсе отсутствующее понятие (общая теория относительности, квантовая механика через интеграл по траекториям Фейнмана), поэтому она, а не F&nbsp;=&nbsp;ma, — рабочий язык современной теоретической физики.</p>
+        <div class="callout brass">
+          <span class="tag">Симметрии рождают законы сохранения</span>
+          <p><strong>Теорема Нётер</strong> (1918) связывает это с §4 напрямую: каждой непрерывной симметрии действия (4) отвечает свой закон сохранения. Однородность времени (законы физики не меняются от момента к моменту) даёт сохранение энергии; однородность пространства (сдвинь эксперимент на метр влево — результат тот же) даёт сохранение импульса — то есть закон сохранения импульса из §4 не отдельный факт, а следствие того, что пространство однородно. Изотропность пространства (нет выделенного направления) точно так же даёт сохранение момента импульса.</p>
+        </div>
+        <p>Здесь механика соприкасается с философией — не случайно, а исторически: сам принцип впервые сформулировал в 1740-х Пьер-Луи Мопертюи как <em>телеологический</em> — природа «экономна» и действует с минимальными затратами, почти замысел. Современное прочтение (после Фейнмана) — не телеологическое: частица не «выбирает» лучший путь заранее, а реально проходит все мыслимые пути одновременно, и они складываются (интерферируют) так, что в классическом пределе выживает именно путь стационарного действия. Тем не менее вопрос «почему природа вообще устроена как задача оптимизации» остаётся открытым и обсуждается уже философией физики, а не только самой физикой — соединение теорфизики, математики вариационного исчисления и философии науки здесь неразделимо.</p>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/principle_of_least_action.html">Принцип наименьшего действия</a> ·
+          <a href="/lang/ru/laws/noethers_theorem.html">Теорема Нётер</a> ·
+          <a href="/lang/ru/laws/law_of_conservation_of_momentum.html">Закон сохранения импульса</a> ·
+          <a href="/lang/ru/laws/law_of_conservation_of_energy.html">Закон сохранения энергии</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение — раскрывающийся блок под условием. Числа во всех задачах подобраны так, чтобы ответ выходил целым (стандартный приём для учебных задач: сначала фиксируется закон, а уже под него подгоняются удобные данные) — считать можно в уме, без калькулятора. Решение везде идёт по одной и той же схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Тело массой 3&nbsp;кг разгоняется из состояния покоя силой 9&nbsp;Н по гладкой поверхности. Найдите скорость через 4&nbsp;с и пройденный путь.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m&nbsp;=&nbsp;3&nbsp;кг, F&nbsp;=&nbsp;9&nbsp;Н, t&nbsp;=&nbsp;4&nbsp;с, v<sub>0</sub>&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Закон</span> второй закон Ньютона (a&nbsp;=&nbsp;F/m) + кинематика равноускоренного движения (v&nbsp;=&nbsp;at, s&nbsp;=&nbsp;&frac12;at&sup2;).</p>
+            <p><span class="qlabel">Решение</span> a&nbsp;=&nbsp;9/3&nbsp;=&nbsp;3&nbsp;м/с&sup2;;&nbsp; v&nbsp;=&nbsp;3&middot;4&nbsp;=&nbsp;12&nbsp;м/с;&nbsp; s&nbsp;=&nbsp;&frac12;&middot;3&middot;4&sup2;&nbsp;=&nbsp;24&nbsp;м.</p>
+            <p><span class="qlabel">Ответ</span> <strong>v&nbsp;=&nbsp;12&nbsp;м/с, путь&nbsp;=&nbsp;24&nbsp;м</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Почему в невесомости (на орбитальной станции) космонавт, оттолкнувшись от стены, продолжает лететь по прямой с постоянной скоростью, пока не встретит противоположную стену? Какой закон это описывает и почему условие для него там выполнено особенно точно?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> первый закон Ньютона (инерция, §2).</p>
+            <p><span class="qlabel">Решение</span> равнодействующая сил на свободно летящего космонавта равна нулю — гравитация есть, но станция и космонавт падают в ней вместе (это и есть невесомость, а не «отсутствие гравитации»), значит по первому закону скорость постоянна. Условие выполнено точнее, чем на Земле, потому что нет сопротивления воздуха и трения о поверхность — единственных сил, которые на Земле мешают наблюдать инерцию в чистом виде.</p>
+            <p><span class="qlabel">Ответ</span> <strong>первый закон; условие «нет сил» там ближе к идеальному, чем на Земле</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Человек массой 60&nbsp;кг прыгает с неподвижной лодки массой 90&nbsp;кг на берег, придав себе горизонтальную скорость 3&nbsp;м/с. С какой скоростью откатится лодка?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m<sub>чел</sub>&nbsp;=&nbsp;60&nbsp;кг, v<sub>чел</sub>&nbsp;=&nbsp;3&nbsp;м/с, m<sub>лодки</sub>&nbsp;=&nbsp;90&nbsp;кг, суммарный импульс системы до прыжка&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Закон</span> сохранение суммарного импульса (§4, тот же приём, что для конькобежцев): 0&nbsp;=&nbsp;m<sub>чел</sub>v<sub>чел</sub>&nbsp;+&nbsp;m<sub>лодки</sub>v<sub>лодки</sub>.</p>
+            <p><span class="qlabel">Решение</span> v<sub>лодки</sub>&nbsp;=&nbsp;&minus;m<sub>чел</sub>v<sub>чел</sub>/m<sub>лодки</sub>&nbsp;=&nbsp;&minus;60&middot;3/90&nbsp;=&nbsp;&minus;2&nbsp;м/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>2&nbsp;м/с, в сторону, противоположную прыжку</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Тягач тянет два одинаковых прицепа массой 2000&nbsp;кг каждый, соединённых последовательно, с общим ускорением 1&nbsp;м/с². Найдите силу натяжения сцепки между первым и вторым прицепом.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m<sub>2</sub>&nbsp;=&nbsp;2000&nbsp;кг (второй, задний прицеп), a&nbsp;=&nbsp;1&nbsp;м/с&sup2;.</p>
+            <p><span class="qlabel">Закон</span> второй закон Ньютона, применённый отдельно к ВТОРОМУ прицепу — единственная сила, действующая на него, это натяжение сцепки T со стороны первого.</p>
+            <p><span class="qlabel">Решение</span> T&nbsp;=&nbsp;m<sub>2</sub>a&nbsp;=&nbsp;2000&middot;1&nbsp;=&nbsp;2000&nbsp;Н.</p>
+            <p><span class="qlabel">Ответ</span> <strong>2000&nbsp;Н</strong> (сцепка тягач↔первый прицеп натянута сильнее — 4000 Н, там нужно тянуть оба прицепа сразу).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Мяч бросают вертикально вверх со скоростью 20&nbsp;м/с. Через сколько секунд он вернётся в исходную точку? (Возьмите g&nbsp;&asymp;&nbsp;10&nbsp;м/с² — с 9.8 в уме не посчитать.)</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> v<sub>0</sub>&nbsp;=&nbsp;20&nbsp;м/с (вверх), g&nbsp;&asymp;&nbsp;10&nbsp;м/с² (округлили специально, чтобы не считать в столбик).</p>
+            <p><span class="qlabel">Закон</span> второй закон Ньютона для свободного падения (единственная сила — тяжесть, a&nbsp;=&nbsp;&minus;g) — время подъёма до высшей точки (v&nbsp;=&nbsp;0): t<sub>вверх</sub>&nbsp;=&nbsp;v<sub>0</sub>/g; полёт вверх-вниз симметричен, полное время&nbsp;=&nbsp;2t<sub>вверх</sub>.</p>
+            <p><span class="qlabel">Решение</span> t<sub>вверх</sub>&nbsp;=&nbsp;20/10&nbsp;=&nbsp;2&nbsp;с;&nbsp; полное время&nbsp;=&nbsp;2&middot;2&nbsp;=&nbsp;4&nbsp;с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>4&nbsp;с</strong> (с точным g&nbsp;=&nbsp;9.8 вышло бы 4.08&nbsp;с — округление меняет ответ меньше чем на 2%, а считать не надо).</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Newton%20laws%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; прототип «учебного пособия» к слою законов &middot; часть I из серии по классической динамике</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // "Функциональная" анимация §3: не просто едет груз — рядом честно пересчитывается v=at
+  // на каждый кадр по формуле (не чтение CSS-состояния), и та же величина двигает точку
+  // по графику v(t) — визуальная сцена, число и график синхронно связаны одной физикой.
+  var rows = document.querySelectorAll('#s3 .anim-row[data-accel]');
+  if (!rows.length || !window.requestAnimationFrame) return;
+  var dotByMass = {
+    1: document.getElementById('graphDotSm'),
+    2: document.getElementById('graphDotMd'),
+    4: document.getElementById('graphDotLg')
+  };
+  var CYCLE = 6000, T_MAX = 2;              // 6с цикл (см. CSS keyframes), t на графике — до 2с, как в таблице
+  var PHASE_FRAC = {1: 0.25, 2: 0.35, 4: 0.5}; // должно совпадать с % финиша в @keyframes moveAccelSm/Md/Lg
+  var PX_PER_S = (290 - 40) / T_MAX, PX_PER_V = (140 - 10) / 12;
+  function tick(ts){
+    rows.forEach(function(row){
+      var a = parseFloat(row.dataset.accel), m = parseFloat(row.dataset.mass);
+      var phaseMs = CYCLE * (PHASE_FRAC[m] || 0.3);
+      var t = Math.min(ts % CYCLE, phaseMs) / phaseMs * T_MAX;
+      var v = a * t;
+      var ro = row.querySelector('[data-readout]');
+      if (ro) ro.textContent = 'v=' + v.toFixed(1) + ' м/с';
+      var dot = dotByMass[m];
+      if (dot) { dot.setAttribute('cx', 40 + t * PX_PER_S); dot.setAttribute('cy', 140 - v * PX_PER_V); }
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

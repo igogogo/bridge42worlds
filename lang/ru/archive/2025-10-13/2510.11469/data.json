@@ -1,0 +1,300 @@
+{
+  "id": "2510.11469",
+  "original_title": "Optimised neural networks for online processing of ATLAS calorimeter data on FPGAs",
+  "authors": [
+    "Georges Aad",
+    "Raphael Bertrand",
+    "Lauri Laatu",
+    "Emmanuel Monnier",
+    "Arno Straessner",
+    "Nairit Sur",
+    "Johann C. Voigt"
+  ],
+  "date": "2025-10-13",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "standard_model",
+    "spectroscopy",
+    "dark_matter",
+    "entropy",
+    "hydrogen"
+  ],
+  "main_tag": "standard_model",
+  "scientists": [],
+  "categories": [
+    "physics.ins-det"
+  ],
+  "primary_category": "physics.ins-det",
+  "cited_arxiv": [
+    "1804.06913",
+    "1910.09970",
+    "2108.03986",
+    "2202.04976",
+    "2302.07555",
+    "2202.07384",
+    "1808.03314",
+    "1206.2944",
+    "1603.02934",
+    "1812.03848"
+  ],
+  "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+  "abstract": {
+    "ru": {
+      "popular": "Для модернизации детектора ATLAS на Большом адронном коллайдере исследователи оптимизировали нейросети для восстановления энергии в калориметрах в условиях высокой множественности событий (pile-up). С помощью байесовской оптимизации они нашли баланс между точностью и размером сетей, подходящих для ПЛИС (FPGA) — программируемых микросхем, работающих в реальном времени. Лучшие архитектуры, включая полносвязные, свёрточные и гибридные, достигли поперечного энергетического разрешения около 80 МэВ, превзойдя традиционный метод оптимальной фильтрации. Дополнительно внедрили глубокое очевидностное регрессионное моделирование (Deep Evidential Regression), которое оценивает погрешность для каждого события, не увеличивая сложность сети.",
+      "simple": "Учёные разработали нейросети, способные точно измерять энергию частиц в детекторе ATLAS, несмотря на интенсивный фон (как расслышать шёпот в шумной комнате). Эти программы умещаются на компактных платах и работают в реальном времени. В будущем они помогут открыть новые явления на Большом адронном коллайдере. Смогут ли они услышать сигнал, который перевернёт физику?",
+      "advanced": "Представлены нейросетевые архитектуры для восстановления энергии, выделившейся в ячейках жидко-аргоновых калориметров ATLAS при ожидаемых на HL-LHC высоких уровнях наложения событий (pile-up). Сети предназначены для выполнения на считывающей электронике на основе ПЛИС (FPGA) с жёсткими ограничениями по размеру и задержке. Полносвязные (Dense), рекуррентные (RNN) и свёрточные (CNN) сети оптимизированы байесовской процедурой, балансирующей энергетическое разрешение и число параметров. Оптимизированные Dense, CNN и комбинированная Dense+RNN архитектуры достигают поперечного энергетического разрешения около 80 МэВ, превосходя как используемый в настоящее время метод оптимальной фильтрации (OF), так и RNN сравнимой сложности. Детальное сравнение во всём динамическом диапазоне показывает, что Dense, CNN и Dense+RNN точно воспроизводят энергетическую шкалу, тогда как OF и RNN занижают энергию. Для получения надёжных неопределённостей для каждого события в Dense-архитектуру внедрена глубокая очевидностная регрессия (Deep Evidential Regression); этот подход даёт оценки предсказательной неопределённости с минимальным увеличением размера сети."
+    },
+    "en": {
+      "popular": "To upgrade the ATLAS detector at the Large Hadron Collider, researchers optimized neural networks for energy reconstruction in calorimeters under high pile-up conditions (multiple simultaneous collisions). Using Bayesian optimization, they struck a balance between accuracy and network size suitable for FPGAs — programmable chips that operate in real time. Top architectures, including fully connected, convolutional, and hybrid ones, achieved a transverse energy resolution of about 80 MeV, outperforming the traditional optimal filtering method. They additionally implemented Deep Evidential Regression, which estimates uncertainty for each event without increasing network complexity.",
+      "simple": "Scientists have developed neural networks that can precisely measure particle energies in the ATLAS detector, even against heavy background noise (like hearing a whisper in a crowded room). These programs fit onto compact boards and run in real time. In the future, they could help uncover new phenomena at the Large Hadron Collider. Will they be able to catch the signal that turns physics upside down?",
+      "advanced": "Neural network architectures are presented for reconstructing the energy deposited in the cells of the ATLAS liquid-argon calorimeters under the high pile-up conditions expected at the HL-LHC. The networks are designed to run on readout electronics based on FPGAs with strict size and latency constraints. Fully connected (Dense), recurrent (RNN), and convolutional (CNN) networks are optimized using a Bayesian procedure that balances energy resolution and parameter count. The optimized Dense, CNN, and combined Dense+RNN architectures achieve a transverse energy resolution of about 80 MeV, surpassing both the currently used optimal filtering (OF) method and an RNN of comparable complexity. A detailed comparison across the full dynamic range shows that Dense, CNN, and Dense+RNN accurately reproduce the energy scale, whereas OF and RNN underestimate the energy. To obtain robust per-event uncertainties, Deep Evidential Regression is embedded in the Dense architecture; this approach provides predictive uncertainty estimates with minimal increase in network size."
+    },
+    "es": {
+      "popular": "Para la modernización del detector ATLAS en el Gran Colisionador de Hadrones, los investigadores optimizaron redes neuronales para la reconstrucción de energía en los calorímetros en condiciones de alta multiplicidad de eventos (pile-up). Mediante optimización bayesiana, encontraron un equilibrio entre precisión y tamaño de las redes, aptas para FPGA (matrices de puertas lógicas programables) — chips programables que funcionan en tiempo real. Las mejores arquitecturas, incluyendo las completamente conectadas, convolucionales e híbridas, alcanzaron una resolución energética transversal de aproximadamente 80 MeV, superando al método tradicional de filtrado óptimo. Además, implementaron la regresión evidencial profunda (Deep Evidential Regression), que estima la incertidumbre para cada evento sin aumentar la complejidad de la red.",
+      "simple": "Los científicos desarrollaron redes neuronales capaces de medir con precisión la energía de las partículas en el detector ATLAS, a pesar del intenso ruido de fondo (como escuchar un susurro en una habitación ruidosa). Estos programas caben en placas compactas y funcionan en tiempo real. En el futuro, ayudarán a descubrir nuevos fenómenos en el Gran Colisionador de Hadrones. ¿Podrán oír la señal que revolucionará la física?",
+      "advanced": "Se presentan arquitecturas de redes neuronales para la reconstrucción de la energía depositada en las celdas de los calorímetros de argón líquido de ATLAS ante los altos niveles de superposición de eventos (pile-up) previstos en el HL-LHC. Las redes están diseñadas para ejecutarse en la electrónica de lectura basada en FPGA (matrices de puertas lógicas programables) con estrictas limitaciones de tamaño y latencia. Las redes completamente conectadas (Dense), recurrentes (RNN) y convolucionales (CNN) se optimizaron mediante un procedimiento bayesiano que equilibra la resolución energética y el número de parámetros. Las arquitecturas optimizadas Dense, CNN y la combinada Dense+RNN alcanzan una resolución energética transversal de aproximadamente 80 MeV, superando tanto al método de filtrado óptimo (OF) actualmente en uso como a las RNN de complejidad comparable. Una comparación detallada en todo el rango dinámico muestra que Dense, CNN y Dense+RNN reproducen fielmente la escala de energía, mientras que OF y RNN subestiman la energía. Para obtener incertidumbres fiables evento a evento, se incorporó la regresión evidencial profunda (Deep Evidential Regression) en la arquitectura Dense; este enfoque proporciona estimaciones de incertidumbre predictiva con un aumento mínimo del tamaño de la red."
+    }
+  },
+  "thumbs": 0,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Нейросеть на слух: как поймать энергию частицы",
+      "oneliner": "Нейросеть, встроенная в детектор, вслушивается в шум коллайдера и с рекордной точностью измеряет энергию частиц.",
+      "description": "На Большом адронном коллайдере шум мешает точно измерить энергию частиц. Нейросеть, встроенная в детектор, выхватывает нужные сигналы и честно оценивает свою неуверенность — это повышает надёжность физических открытий.",
+      "text": "Измерить энергию частицы в [tag:standard_model]Большом адронном коллайдере[/tag] — то же, что расслышать шёпот в ревущей толпе. При столкновении протонов рождается шквал частиц, их сигналы сливаются в какофонию. Обычные методы, как забитое шумом ухо, систематически занижают энергию.\n\nУчёные создали нейросеть, которая работает прямо в детекторе. Она вслушивается в этот гул и улавливает слабый голос нужной частицы. Лучшие версии сети ошибаются на доли процента — как перепутать 80 песчинок из миллиона. При этом сеть учили на моделированных событиях, но она безошибочно распознаёт реальные данные.\n\n[callout]Самое ценное — сеть честно сообщает, когда сомневается. Как слухач, который говорит: «Вроде слышу шёпот, но поручиться не могу». Такая откровенность уберегает от ложных открытий.[/callout]\n\nТеперь физики точнее изучат неуловимые частицы, например, [tag:dark_matter]тёмную материю[/tag], даже в сильном шуме. А вся эта проницательность умещается на чипе меньше спичечного коробка.",
+      "fun_fact": "Детектор ATLAS размером с восьмиэтажный дом, а нейросеть, обрабатывающая его сигналы, умещается на чипе меньше спичечного коробка.",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": []
+    },
+    "en": {
+      "title": "Neural Network by Ear: How to Capture a Particle's Energy",
+      "oneliner": "A neural network built into the detector listens in on the collider's noise and measures particle energy with record accuracy.",
+      "description": "At the Large Hadron Collider, noise hinders precise particle energy measurement. A neural network embedded in the detector picks out the right signals and honestly assesses its own uncertainty — boosting the reliability of physics discoveries.",
+      "text": "Measuring a particle’s energy at the [tag:standard_model]Large Hadron Collider[/tag] is like trying to catch a whisper in a roaring crowd. When protons collide, a flurry of particles is born, their signals blending into a cacophony. Old-school methods, like a noise-clogged ear, systematically underestimate the energy.\n\nScientists built a neural network that works right inside the detector. It tunes into the din and picks out the faint voice of the wanted particle. The top versions of the network are off by mere fractions of a percent — like mistaking 80 grains of sand out of a million. And while the network was trained on simulated events, it flawlessly recognizes real data.\n\n[callout]The real gem: the network honestly tells you when it's unsure. Like a sound guy who says, “I think I hear a whisper, but I can’t swear to it.” That kind of candor guards against false discoveries.[/callout]\n\nNow physicists can study elusive particles, like [tag:dark_matter]dark matter[/tag], more precisely, even in heavy noise. And all this insight fits on a chip smaller than a matchbox.",
+      "fun_fact": "The ATLAS detector is as big as an eight-story building, but the neural network processing its signals fits on a chip smaller than a matchbox.",
+      "scifi": "",
+      "mini": "In a particle collider, a cacophony of signals drowns out important events, just as crowd noise hides a whisper. Engineers created a 'super-hearing' neural network that works directly in the detector, accurately measures energy, and honestly admits when it’s unsure. This brings us closer to unraveling dark matter.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": []
+    },
+    "es": {
+      "title": "Red neuronal al oído: cómo capturar la energía de una partícula",
+      "oneliner": "Una red neuronal incrustada en el detector escucha el ruido del colisionador y mide la energía de las partículas con una precisión récord.",
+      "description": "En el Gran Colisionador de Hadrones, el ruido dificulta medir con precisión la energía de las partículas. Una red neuronal incrustada en el detector capta las señales necesarias y evalúa honestamente su incertidumbre, lo que aumenta la fiabilidad de los descubrimientos físicos.",
+      "text": "Medir la energía de una partícula en el [tag:standard_model]Gran Colisionador de Hadrones[/tag] es como escuchar un susurro entre una multitud rugiente. Al colisionar protones, nace una avalancha de partículas cuyas señales se funden en una cacofonía. Los métodos convencionales, como un oído tapado por el ruido, subestiman sistemáticamente la energía.\n\nLos científicos crearon una red neuronal que opera directamente en el detector. Escucha atentamente este bullicio y capta la débil voz de la partícula deseada. Las mejores versiones de la red se equivocan en fracciones de un por ciento, como confundir 80 granos de arena entre un millón. Además, la red se entrenó con eventos simulados, pero reconoce sin error los datos reales.\n\n[callout]Lo más valioso es que la red informa honestamente cuando duda. Como un escucha que dice: “Creo oír un susurro, pero no puedo garantizarlo”. Esta sinceridad protege de falsos descubrimientos.[/callout]\n\nAhora los físicos podrán estudiar con más precisión partículas esquivas, como la [tag:dark_matter]materia oscura[/tag], incluso en medio de un fuerte ruido. Y toda esta perspicacia cabe en un chip más pequeño que una caja de cerillas.",
+      "fun_fact": "El detector ATLAS tiene el tamaño de un edificio de ocho pisos, pero la red neuronal que procesa sus señales cabe en un chip más pequeño que una caja de cerillas.",
+      "scifi": "",
+      "mini": "En el colisionador de partículas, una cacofonía de señales ahoga los eventos importantes, como los gritos de una multitud ocultan un susurro. Los ingenieros crearon una red neuronal “superoído” que opera directamente en el detector, mide la energía con precisión y admite honestamente cuando duda. Esto acerca la resolución del enigma de la materia oscura.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": []
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "formulas": [],
+      "main_tag": "standard_model",
+      "extra_tags": [
+        "spectroscopy",
+        "dark_matter",
+        "entropy",
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "В коллайдере частиц какофония сигналов заглушает важные события, как крики толпы скрывают шёпот. Инженеры создали нейросеть-«суперслух», которая работает прямо в детекторе, точно измеряет энергию и честно признаётся, когда сомневается. Это приближает разгадку тёмной материи.",
+      "express_locked": true
+    }
+  }
+}

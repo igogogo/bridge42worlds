@@ -1,0 +1,306 @@
+{
+  "id": "2511.23406",
+  "original_title": "Quantum Private Distributed Matrix Multiplication With Degree Tables",
+  "authors": [
+    "Mohamed Nomeir",
+    "Alptug Aytekin",
+    "Lei Hu",
+    "Sennur Ulukus"
+  ],
+  "date": "2025-11-28",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "entropy",
+    "standard_model"
+  ],
+  "main_tag": "entropy",
+  "scientists": [
+    "Albert Einstein",
+    "Charles Bennett"
+  ],
+  "categories": [
+    "cs.IT",
+    "cs.CR",
+    "cs.NI",
+    "eess.SP",
+    "math.IT",
+    "quant-ph"
+  ],
+  "primary_category": "cs.IT",
+  "cited_arxiv": [
+    "2501.12371",
+    "2311.07829",
+    "2407.01498"
+  ],
+  "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+  "abstract": {
+    "ru": {
+      "popular": "Распределённое умножение матриц с сохранением приватности (PDMM) — задача, где пользователь разбивает матрицы на блоки и рассылает серверам. Даже несколько серверов не должны восстановить данные. Квантовая запутанность позволяет уменьшить число серверов. Исследованы режимы высокой и низкой приватности. Для высокоприватного режима для кода GASP найдено условие максимальной квантовой эффективности; иначе предложены новые коды. Для низкой приватности условие из GASP адаптировано для CAT и DOG, разработаны дополнительные схемы. Квантовые эффекты делают вычисления экономичнее и безопаснее.",
+      "simple": "Когда нужно тайно перемножить две большие матрицы, можно разбить их на кусочки и дать серверам. Чтобы сберечь секрет, обычно требуется много серверов. Квантовая запутанность (особая связь частиц) позволяет обойтись меньшим числом машин и лучше защитить данные. Природа помогает хранить тайну надёжнее любого кода.",
+      "advanced": "Статья исследует применение квантовых ресурсов для ускорения приватного распределённого умножения матриц (PDMM). Задача: пользователь делит матрицы A и B на K и L подблоков и отправляет N серверам, требуя приватность относительно любых T серверов. В квантовой постановке серверы разделяют запутанное состояние и отвечают по квантовым каналам; пользователь выполняет измерение для получения результата A·B. Рассмотрены два режима приватности: высокий (T < K и L) и низкий. В высокоприватном режиме классическим эталоном служит код GASP. Определено условие выполнимости для GASP в квантовой среде, при котором достигается максимальная производительность. Когда условие нарушено, исследуется связь между минимальными требованиями приватности и размерами матриц, а также предлагается новое семейство квантовых кодов. В низкоприватном режиме, где GASP уступает кодам CAT и DOG, показано, что условие выполнимости из GASP может быть адаптировано для CAT и DOG. Дополнительно разработан набор кодов для низкоприватного режима, когда условие не выполняется."
+    },
+    "en": {
+      "popular": "Privacy-preserving distributed matrix multiplication (PDMM) is a way to secretly multiply large matrices by breaking them into chunks and sending them to servers. Even if several servers team up, they shouldn't crack your data. Quantum entanglement (that eerie link between particles) can cut down the number of servers you need. Researchers looked at two scenarios: high privacy and low privacy. For the high-privacy case, they found a sweet spot where the GASP code hits peak quantum performance; if that’s not possible, they cooked up new codes. For low privacy, they tweaked the GASP condition to work with CAT and DOG codes, and designed extra schemes. Quantum weirdness makes the math cheaper and safer.",
+      "simple": "When you need to secretly multiply two huge matrices, you can break them into pieces and hand them out to servers. Normally, to keep the secret safe, you need a lot of servers. Quantum entanglement—a special connection between particles—lets you get by with fewer machines and protect your data better. Nature helps you keep a secret more firmly than any code can.",
+      "advanced": "The paper explores using quantum resources to speed up private distributed matrix multiplication (PDMM). The setup: a user splits matrices A and B into K and L subblocks and sends them to N servers, requiring privacy against any T colluding servers. In the quantum version, servers share an entangled state and respond over quantum channels; the user performs a measurement to obtain A·B. Two privacy regimes are considered: high privacy (T < K and L) and low privacy. In the high-privacy regime, the classical benchmark is the GASP code. A feasibility condition is established for GASP in the quantum setting, under which maximum performance is achieved. When the condition is violated, the relationship between minimum privacy requirements and matrix sizes is studied, and a new family of quantum codes is proposed. In the low-privacy regime, where GASP is outperformed by CAT and DOG codes, it is shown that the feasibility condition from GASP can be adapted for CAT and DOG. Additionally, a set of codes is developed for the low-privacy regime when the condition does not hold."
+    },
+    "es": {
+      "popular": "La multiplicación distribuida de matrices con preservación de la privacidad (PDMM) es una tarea en la que el usuario divide las matrices en bloques y los envía a servidores. Incluso un grupo de servidores no debería poder reconstruir los datos. El entrelazamiento cuántico permite reducir el número de servidores necesarios. Se investigaron los modos de alta y baja privacidad. Para el modo de alta privacidad, se encontró una condición de máxima eficiencia cuántica para el código GASP; de lo contrario, se proponen nuevos códigos. En la baja privacidad, la condición de GASP se adaptó para CAT y DOG, y se desarrollaron esquemas adicionales. Los efectos cuánticos hacen que los cálculos sean más económicos y seguros.",
+      "simple": "Cuando necesitas multiplicar en secreto dos matrices grandes, puedes partirlas en pedazos y dárselos a los servidores. Para mantener el secreto, normalmente se necesitan muchos servidores. El entrelazamiento cuántico (una conexión especial entre partículas) permite usar menos máquinas y proteger mejor los datos. La naturaleza ayuda a guardar el secreto de forma más confiable que cualquier código.",
+      "advanced": "El artículo investiga la aplicación de recursos cuánticos para acelerar la multiplicación distribuida privada de matrices (PDMM). Problema: el usuario divide las matrices A y B en K y L subbloques y los envía a N servidores, exigiendo privacidad respecto a cualquier subconjunto de T servidores. En el entorno cuántico, los servidores comparten un estado entrelazado y responden a través de canales cuánticos; el usuario realiza una medición para obtener el resultado A·B. Se consideran dos modos de privacidad: alto (T < K y L) y bajo. En el modo de alta privacidad, el código GASP sirve como referencia clásica. Se determina una condición de factibilidad para GASP en el entorno cuántico, bajo la cual se alcanza el máximo rendimiento. Cuando la condición no se cumple, se investiga la relación entre los requisitos mínimos de privacidad y los tamaños de las matrices, y se propone una nueva familia de códigos cuánticos. En el modo de baja privacidad, donde GASP es superado por los códigos CAT y DOG, se muestra que la condición de factibilidad de GASP puede adaptarse para CAT y DOG. Además, se desarrolla un conjunto de códigos para el modo de baja privacidad cuando la condición no se satisface."
+    }
+  },
+  "thumbs": 1,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "Quantum circuit for two entangled transmitters with the entangled state |β00⟩ ="
+    ],
+    "ru": [
+      "Квантовая схема для двух запутанных передатчиков с запутанным состоянием |β00⟩ ="
+    ],
+    "es": [
+      "Circuito cuántico para dos transmisores entrelazados con el estado entrelazado |β00⟩ ="
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Квантовая запутанность ускоряет тайные вычисления",
+      "oneliner": "Квантовая запутанность позволяет быстро и безопасно перемножать гигантские таблицы чисел на удалённых серверах.",
+      "description": "Чтобы сохранить данные в тайне при вычислениях, обычно привлекают множество серверов. Учёные нашли способ сократить их количество с помощью квантовой запутанности. Новый подход работает даже в сложных условиях и обещает сделать облачные сервисы безопаснее и дешевле.",
+      "text": "Если компьютер не справляется с умножением двух гигантских таблиц чисел, их режут на мелкие куски и рассылают десяткам серверов-помощников. Для секретных данных применяют математические уловки, чтобы помощники не видели исходных чисел. Обычно чем выше секретность, тем больше серверов требуется.\n\nАвторы предложили использовать особое [tag:entropy]квантовое свойство[/tag] — [tag:entropy]запутанность[/tag] между серверами. [callout][tag:entropy]Запутанные частицы[/tag] всегда связаны: измерив одну, состояние другой мгновенно определяется. [scientist:Albert Einstein]Эйнштейн[/scientist] называл это «жутким дальнодействием».[/callout] Благодаря этому серверы, получая лишь бессмысленные обрывки, совместно вычисляют результат. Число серверов резко сокращается. Учёные вывели оптимальные условия и разработали новые семейства кодов. [callout]При неидеальных условиях защита надёжна, хоть и с компромиссами.[/callout] Самое неожиданное: любая попытка подслушать мгновенно разрушает запутанность — перехват данных становится бессмысленным.\n\nОблачные сервисы смогут обрабатывать конфиденциальные данные — банковские расчёты, медицинские анализы — быстро и надёжно. [scientist:Albert Einstein]Эйнштейн[/scientist], скептик запутанности, был бы поражён. Идеи [scientist:Charles Bennett]Чарльза Беннета[/scientist] превратили квантовую странность в мощный инструмент приватности.",
+      "fun_fact": "С квантовой запутанностью подслушать передачу не получится: любая попытка сразу разрушает связь и выдаёт шпиона.",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ]
+    },
+    "en": {
+      "title": "Quantum Entanglement Speeds Up Secret Computations",
+      "oneliner": "Quantum entanglement enables fast and secure multiplication of giant tables of numbers on remote servers.",
+      "description": "To keep data secret during computations, many servers are usually involved. Scientists have found a way to reduce their number using quantum entanglement. The new approach works even in challenging conditions and promises to make cloud services safer and cheaper.",
+      "text": "When a computer can't handle multiplying two giant tables of numbers, they're sliced into tiny pieces and sent out to dozens of helper servers. For secret data, mathematical tricks are used so the helpers never see the original numbers. Usually, the higher the secrecy, the more servers you need.\n\nThe authors proposed using a special [tag:entropy]quantum property[/tag] — [tag:entropy]entanglement[/tag] between the servers. [callout][tag:entropy]Entangled particles[/tag] are always connected: measure one, and the state of the other is instantly determined. [scientist:Albert Einstein]Einstein[/scientist] called this \"spooky action at a distance.\"[/callout] Thanks to this, the servers, receiving only meaningless scraps, jointly compute the result. The number of servers is drastically reduced. Scientists worked out the optimal conditions and developed new families of codes. [callout]Under imperfect conditions, the protection is reliable, though with trade-offs.[/callout] The most surprising part: any attempt to eavesdrop instantly destroys the entanglement — data interception becomes pointless.\n\nCloud services will be able to process confidential data — bank calculations, medical analyses — quickly and reliably. [scientist:Albert Einstein]Einstein[/scientist], a skeptic of entanglement, would be amazed. The ideas of [scientist:Charles Bennett]Charles Bennett[/scientist] turned quantum weirdness into a powerful tool for privacy.",
+      "fun_fact": "With quantum entanglement, eavesdropping on a transmission is impossible: any attempt instantly destroys the link and gives the spy away.",
+      "scifi": "",
+      "mini": "Huge secret tables need to be multiplied in secret, but your own computer can't handle it. Slice them up, send them to helpers, but how to keep the data hidden? Quantum entanglement of the servers is the key: they work together, but alone each sees only nonsense. That way, cloud computing becomes both faster and safer.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ]
+    },
+    "es": {
+      "title": "El entrelazamiento cuántico acelera los cálculos secretos",
+      "oneliner": "El entrelazamiento cuántico permite multiplicar de forma rápida y segura tablas gigantes de números en servidores remotos.",
+      "description": "Para mantener los datos en secreto durante los cálculos, normalmente se usan muchos servidores. Los científicos hallaron una forma de reducir su número mediante el entrelazamiento cuántico. El nuevo enfoque funciona incluso en condiciones complejas y promete hacer los servicios en la nube más seguros y económicos.",
+      "text": "Si un ordenador no puede con la multiplicación de dos tablas de números gigantes, se cortan en pedazos pequeños y se envían a decenas de servidores auxiliares. Para los datos secretos se usan trucos matemáticos para que los auxiliares no vean los números originales. Normalmente, cuanto mayor es el secreto, más servidores se necesitan.\n\nLos autores propusieron usar una propiedad cuántica especial — [tag:entropy]entrelazamiento[/tag] entre servidores. [callout][tag:entropy]Las partículas entrelazadas[/tag] siempre están conectadas: al medir una, el estado de la otra se determina al instante. [scientist:Albert Einstein]Einstein[/scientist] lo llamaba \"fantasmagórica acción a distancia\".[/callout] Gracias a esto, los servidores, al recibir solo fragmentos sin sentido, calculan el resultado conjuntamente. El número de servidores se reduce drásticamente. Los científicos hallaron condiciones óptimas y desarrollaron nuevas familias de códigos. [callout]En condiciones no ideales, la protección es fiable, aunque con concesiones.[/callout] Lo más sorprendente: cualquier intento de escucha destruye instantáneamente el entrelazamiento: interceptar los datos se vuelve inútil.\n\nLos servicios en la nube podrán procesar datos confidenciales —cálculos bancarios, análisis médicos— de forma rápida y fiable. [scientist:Albert Einstein]Einstein[/scientist], escéptico del entrelazamiento, quedaría asombrado. Las ideas de [scientist:Charles Bennett]Charles Bennett[/scientist] convirtieron la rareza cuántica en una poderosa herramienta de privacidad.",
+      "fun_fact": "Con el entrelazamiento cuántico es imposible escuchar la transmisión: cualquier intento destruye inmediatamente la conexión y delata al espía.",
+      "scifi": "",
+      "mini": "Hay que multiplicar en secreto tablas enormes y tu ordenador no da abasto. Las cortas en trozos y los envías a ayudantes, pero ¿cómo no revelar los datos? El entrelazamiento cuántico de los servidores es la clave: trabajan en equipo, pero por separado solo ven sinsentidos. Así, la computación en la nube será más rápida y segura.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "standard_model"
+      ],
+      "scientists": [
+        "Albert Einstein",
+        "Charles Bennett"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Огромные секретные таблицы нужно тайно перемножить, а свой компьютер не тянет. Разрезаем на куски, шлём помощникам, но как не раскрыть данные? Квантовая запутанность серверов — вот ключ: они работают сообща, а в одиночку видят лишь бессмыслицу. Так облачные вычисления станут и быстрее, и безопаснее.",
+      "express_locked": true
+    }
+  }
+}

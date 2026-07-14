@@ -1,0 +1,336 @@
+{
+  "id": "2501.00037",
+  "original_title": "Effects of Turbulence Modeling and Parcel Approach on Dispersed   Two-Phase Swirling Flow",
+  "authors": [
+    "Osama A. Marzouk",
+    "E. David Huckaby"
+  ],
+  "date": "2024-12-24",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "entropy",
+    "water",
+    "carbon"
+  ],
+  "main_tag": "entropy",
+  "scientists": [
+    "Ludwig Boltzmann",
+    "James Clerk Maxwell",
+    "Isaac Newton"
+  ],
+  "categories": [
+    "physics.flu-dyn",
+    "cs.CE",
+    "cs.NA",
+    "math.NA"
+  ],
+  "primary_category": "physics.flu-dyn",
+  "cited_arxiv": [],
+  "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+  "abstract": {
+    "ru": {
+      "popular": "Вихревой поток воздуха с частицами в трубе моделировался с помощью осреднённых уравнений Навье-Стокса и лагранжева отслеживания частиц с двусторонним взаимодействием. Из трёх вариантов k-ε модели турбулентности стандартная точнее всего предсказала скорости; realizable ошиблась в радиальной скорости и оказалась самой затратной; RNG добавила лишние рециркуляционные зоны. Приём «посылок» — объединения идентичных частиц в пакеты — резко снижает вычислительную нагрузку, подобно тому как почту эффективнее развозить мешками, а не отдельными письмами.",
+      "simple": "Представьте закрученный поток воздуха с пылью в трубе. Компьютерные модели показали: простейшая точнее сложных предсказывает движение, а одна из сложных ошибается в боковом смещении. Ускорить расчёты помогает «группировка» частиц, как если считать песок горстями, а не песчинками.",
+      "advanced": "Выполнено численное моделирование закрученного потока воздуха с твёрдыми частицами в вертикальной круглой трубе. Течение газа описывалось нестационарными уравнениями Навье-Стокса, осреднёнными по Фавру; движение частиц рассчитывалось в лагранжевой постановке с двусторонним обменом импульсом между фазами. Проведено сравнение трёх вариантов k-ε модели турбулентности (стандартной, RNG и realizable) с экспериментальными профилями средней скорости. Наилучшее согласие показала стандартная модель. Realizable модель не смогла удовлетворительно предсказать радиальную скорость и оказалась наиболее ресурсоёмкой. Моделирование с RNG выявило дополнительные зоны рециркуляции. Также сопоставлены подходы «частица» и «посылка»: во втором случае множество одинаковых частиц объединяется в одну расчётную посылку, что резко сокращает вычислительные затраты."
+    },
+    "en": {
+      "popular": "Swirling airflow with particles inside a pipe was modeled using averaged Navier-Stokes equations and Lagrangian particle tracking with two-way coupling. Among three k-ε turbulence model variants, the standard one predicted velocities the most accurately; the realizable version misjudged radial velocity and was the most computationally expensive; RNG introduced extra recirculation zones. The 'parcel' technique—grouping identical particles into packets—dramatically cuts computational load, much like delivering mail in sacks rather than individual letters.",
+      "simple": "Imagine a swirling stream of air with dust in a pipe. Computer models showed that the simplest one predicts the motion more accurately than the complex ones, and one of the complex models gets the sideways drift wrong. Calculations can be sped up by 'clumping' particles together, like counting sand by the handful instead of grain by grain.",
+      "advanced": "Numerical simulation was performed for a swirling airflow with solid particles in a vertical circular pipe. The gas flow was governed by unsteady Favre-averaged Navier-Stokes equations; particle motion was computed in a Lagrangian framework with two-way momentum exchange between phases. Three variants of the k-ε turbulence model (standard, RNG, and realizable) were compared against experimental mean velocity profiles. The standard model showed the best agreement. The realizable model failed to satisfactorily predict radial velocity and was the most resource-intensive. The RNG simulation revealed additional recirculation zones. A comparison was also made between the 'particle' and 'parcel' approaches: in the latter, numerous identical particles are combined into a single computational parcel, drastically reducing computational cost."
+    },
+    "es": {
+      "popular": "El flujo arremolinado de aire con partículas en un tubo se modeló usando las ecuaciones promediadas de Navier-Stokes y un rastreo lagrangiano de partículas con interacción bidireccional. De tres versiones del modelo de turbulencia k-ε, la estándar predijo las velocidades con mayor precisión; la 'realizable' falló en la velocidad radial y resultó la más costosa; la RNG añadió zonas de recirculación extra. La técnica de 'paquetes' —unir partículas idénticas en grupos— reduce drásticamente la carga computacional, parecido a cómo es más eficiente repartir el correo en sacos que carta por carta.",
+      "simple": "Imagina un flujo de aire giratorio con polvo dentro de un tubo. Los modelos informáticos mostraron: el más sencillo predice el movimiento mejor que los complejos, y uno de los complejos se equivoca en el desplazamiento lateral. Agrupar las partículas acelera los cálculos, como si contáramos la arena a puñados en lugar de grano a grano.",
+      "advanced": "Se realizó una simulación numérica del flujo arremolinado de aire con partículas sólidas en un tubo vertical circular. El flujo del gas se describió mediante las ecuaciones no estacionarias de Navier-Stokes promediadas según Favre; el movimiento de las partículas se calculó en un enfoque lagrangiano con intercambio bidireccional de momento entre fases. Se compararon tres variantes del modelo de turbulencia k-ε (estándar, RNG y realizable) con perfiles experimentales de velocidad media. La concordancia más alta la ofreció el modelo estándar. El modelo realizable no logró predecir satisfactoriamente la velocidad radial y fue el que más recursos consumió. La simulación con RNG reveló zonas de recirculación adicionales. También se contrastaron los enfoques de 'partícula' y 'paquete': en el segundo caso, muchas partículas iguales se agrupan en un solo paquete computacional, lo que reduce drásticamente los costes computacionales."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "Illustration of the jet ﬂow.",
+      "Parcel motion using the standard k − ϵ model at t = 0 . 05s (left), t = 0 . 10s (middle), and t = 0 . 15s (right).",
+      "The negative mean ax-",
+      "As in the earlier stations, the standard",
+      "Comparison of the mean velocity components at x = 3 mm with three k − ϵ turbulence models.",
+      "Comparison of the mean velocity components at x = 52 mm with three k − ϵ turbulence models.",
+      "Comparison of the mean velocity components at x = 112 mm with three k − ϵ turbulence models."
+    ],
+    "ru": [
+      "Иллюстрация струйного течения.",
+      "Движение жидкой частицы при использовании стандартной модели k-ε в моменты времени t = 0,05 с (слева), t = 0,10 с (в центре) и t = 0,15 с (справа).",
+      "Отрицательное среднее осев-",
+      "Как и на предыдущих сечениях, стандартная",
+      "Сравнение компонент средней скорости при x = 3 мм для трёх k-ε моделей турбулентности.",
+      "Сравнение компонент средней скорости при x = 52 мм для трёх k-ε моделей турбулентности.",
+      "Сравнение компонент средней скорости при x = 112 мм для трёх k-ε моделей турбулентности."
+    ],
+    "es": [
+      "Ilustración del flujo del chorro.",
+      "Movimiento de la parcela usando el modelo k − ϵ estándar en t = 0.05 s (izquierda), t = 0.10 s (centro) y t = 0.15 s (derecha).",
+      "La media negativa ax-",
+      "Como en las estaciones anteriores, el estándar",
+      "Comparación de las componentes de velocidad media en x = 3 mm con tres modelos de turbulencia k − ϵ.",
+      "Comparación de las componentes de velocidad media en x = 52 mm con tres modelos de turbulencia k − ϵ.",
+      "Comparación de las componentes de velocidad media en x = 112 mm con tres modelos de turbulencia k − ϵ."
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Танцующие частицы в трубе: какая модель точнее",
+      "oneliner": "Учёные сравнили компьютерные симуляции вихревого потока с частицами и выяснили, что простая модель бьёт новейшие аналоги.",
+      "description": "В промышленных трубах воздух с пылью или каплями закручивается, подобно танцорам в вихре вальса. Но какую математическую модель выбрать для расчёта? Проверка показала: стандартный подход работает точнее модных новинок. Это ускорит проектирование сушилок, фильтров и распылителей.",
+      "text": "Внутри заводской трубы воздух, насыщенный мелкими частицами, кружится, словно пары в бальном зале. Инженеры используют компьютерные симуляции, чтобы предсказывать поведение этого вихревого танца, — так удаётся экономить время и материалы при создании оборудования.\n\nИсследователи испытали три модели: привычную стандартную, RNG и «реализуемую». Стандартная, как опытный хореограф, безошибочно вела частицы по нужным траекториям. RNG изобретала несуществующие обратные течения, а новейшая модель вдобавок дольше считала и плохо предсказывала движение поперёк потока. При этом для ускорения расчётов частицы собирали в «пакеты» — будто считают не каждого танцора, а целые пары. Точность почти не пострадала.\n\nНеожиданный штрих: частота вибраций в этой закрученной воронке совпадает с колебаниями, которые возникают в [tag:water]воде[/tag] и в звёздной плазме. От водяных смерчей до космических вихрей — природа любит повторять изящные узоры. А простота проверенной модели теперь поможет точнее проектировать фильтры, улавливающие частицы с [tag:carbon]углерод[/tag]ом, и сушилки, сводя [tag:entropy]энтропию[/tag] — меру беспорядка — к минимуму в расчётах.",
+      "fun_fact": "Циклонные пылеуловители, работающие на этом принципе, могут отделять частицы размером всего несколько микрон — тоньше человеческого волоса.",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ]
+    },
+    "en": {
+      "title": "Dancing Particles in a Pipe: Which Model Is More Accurate?",
+      "oneliner": "Scientists compared computer simulations of swirling particle-laden flow and found that a simple model outperforms the latest ones.",
+      "description": "In industrial pipes, air laced with dust or droplets swirls like dancers in a waltz. But which math model to pick for the simulation? Tests show: the standard approach is more accurate than trendy new ones. This will speed up the design of dryers, filters, and sprayers.",
+      "text": "Inside a factory pipe, air thick with fine particles swirls like couples on a ballroom floor. Engineers use computer simulations to predict this swirling dance, saving time and materials when designing equipment.\n\nResearchers tested three models: the familiar standard one, RNG, and the 'realizable' model. The standard, like a seasoned choreographer, guided particles flawlessly along the right paths. RNG invented phantom reverse flows, while the newest model also took longer to compute and poorly predicted cross-flow motion. To speed things up, they bundled particles into 'parcels' — as if counting dance couples instead of individual dancers. Accuracy barely suffered.\n\nA surprising twist: the vibration frequency inside this swirling funnel matches oscillations found in [tag:water]water[/tag] and stellar plasma. From waterspouts to cosmic vortices, nature loves to repeat elegant patterns. And the simplicity of this proven model will now enable more precise design of filters that trap [tag:carbon]carbon[/tag]-laden particles and dryers, bringing [tag:entropy]entropy[/tag] — the measure of disorder — to a minimum in calculations.",
+      "fun_fact": "Cyclone dust collectors, based on this principle, can separate particles just a few microns across — thinner than a human hair.",
+      "scifi": "",
+      "mini": "Air mixed with particles swirls in a pipe like coffee grounds in a cup. After comparing three computer models, scientists found the good old 'standard' one more accurate than the trendy ones. To save time, they bundle particles into 'parcels' — with almost no loss of accuracy. Now engineers can design filters and dryers faster.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ]
+    },
+    "es": {
+      "title": "Partículas danzantes en el tubo: ¿qué modelo es más preciso?",
+      "oneliner": "Científicos compararon simulaciones computacionales de flujo vorticoso con partículas y descubrieron que el modelo simple supera a las alternativas más modernas.",
+      "description": "En las tuberías industriales, el aire con polvo o gotas se arremolina, como bailarines en un torbellino de vals. Pero, ¿qué modelo matemático elegir para el cálculo? La verificación demostró que el enfoque estándar funciona con mayor precisión que las novedades de moda. Esto acelerará el diseño de secadores, filtros y pulverizadores.",
+      "text": "Dentro de la tubería de una fábrica, el aire, cargado de partículas diminutas, gira como parejas en un salón de baile. Los ingenieros utilizan simulaciones computacionales para predecir el comportamiento de esta danza vorticial, lo que permite ahorrar tiempo y materiales en el diseño de equipos.\n\nLos investigadores probaron tres modelos: el modelo estándar habitual, el RNG y el 'realizable'. El estándar, como un coreógrafo experimentado, guiaba sin error las partículas por las trayectorias deseadas. El RNG inventaba corrientes inversas inexistentes, y el modelo más nuevo, además, tardaba más en los cálculos y predecía mal el movimiento transversal al flujo. Para acelerar los cálculos, las partículas se agrupaban en 'paquetes', como si no se contara a cada bailarín, sino a parejas completas. La precisión apenas se resentía.\n\nUn detalle inesperado: la frecuencia de oscilación en este remolino coincide con las oscilaciones que aparecen en el [tag:water]воде[/tag] y en el plasma estelar. Desde las trombas marinas hasta los vórtices cósmicos, la naturaleza le encanta repetir patrones elegantes. Y la simplicidad del modelo comprobado ahora ayudará a diseñar con mayor precisión filtros que capturen partículas con [tag:carbon]углерод[/tag]ом y secadores, reduciendo al mínimo la [tag:entropy]энтропию[/tag] —medida del desorden— en los cálculos.",
+      "fun_fact": "Los separadores ciclónicos de partículas, basados en este principio, pueden separar partículas de apenas unas micras, más finas que un cabello humano.",
+      "scifi": "",
+      "mini": "El aire con partículas gira en el tubo como los posos del café en un vaso. Comparando tres modelos computacionales, los científicos encontraron que el viejo y querido 'estándar' calcula con más precisión que los modernos. Y para ahorrar tiempo, las partículas se agrupan en 'paquetes' — la precisión casi no baja. Ahora los ingenieros podrán diseñar filtros y secadores más rápido.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "water",
+        "carbon"
+      ],
+      "scientists": [
+        "Ludwig Boltzmann",
+        "James Clerk Maxwell",
+        "Isaac Newton"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Воздух с частицами кружится в трубе, как кофейная гуща в стакане. Сравнив три компьютерные модели, учёные нашли: старая добрая «стандартная» считает точнее новомодных. А чтобы сэкономить время, частицы собирают в «пачки» — точность почти не падает. Теперь инженеры смогут быстрее проектировать фильтры и сушилки.",
+      "express_locked": true
+    }
+  }
+}

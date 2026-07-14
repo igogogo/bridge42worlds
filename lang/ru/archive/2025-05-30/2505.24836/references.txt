@@ -1,0 +1,76 @@
+[1] Bouabça, A., et al., Half-metallic completely compensated ferrimagnets in Cr 
+doped BaP. Chinese Journal of Physics, 2016. 54(4): p. 489-494. 
+[2] Springborg, M., Methods of electronic-structure calculations: from molecules 
+to solids2000. 
+[3] Rappe, A.M., et al., Optimized pseudopotentials. Physical Review B, 1990. 
+41(2): p. 1227.  
+[4] Shirley, E.L., et al., Extended norm -conserving pseudopotentials. Physical 
+Review B, 1989. 40(6): p. 3652.  
+[5] Ritchie, L., et al., Magnetic, structural, and transport properties of the Heusler 
+alloys Co 2 MnSi and NiMnSb. Physical Review B, 2003. 68(10): p. 104430.  
+[6] Nishino, Y., et al., Semiconductorlike behavior of electrical resistivity in 
+Heusler-type Fe 2 VAl compound. Physical review letters, 1997. 79(10): p. 1909.  
+[7] Morcrette, M., et al., Influence of electrode microstructure on the reactivity of 
+Cu2Sb with lithium. Electrochimica acta, 2007. 52(17): p. 5339-5345.  
+[8] Fang, C.M., G. De Wijs, and R. De Groot, Spin -polarization in half-metals. 
+Journal of Applied Physics, 2002. 91(10): p. 8340-8344.  
+[9] Miura, Y., K. Nagao, and M. Shirai, Atomic disorder effects on half -
+metallicity of the full-Heusler alloys Co 2 (Cr (1− x)Fe(x)) Al: A first-principles 
+study. Physical Review B, 2004. 69(14): p. 144413.  
+[10] Chadov, S., et al., Tunable multifunctional topological insulators in ternary 
+Heusler compounds. Nature materials, 2010. 9(7): p. 541.  
+[11] De Groot, R., RA de Groot, FM Mueller, PG van Engen, and KHJ Buschow, 
+Phys. Rev. Lett. 50, 2024 (1983). Phys. Rev. Lett., 1983. 50: p. 2024.  
+[12] Watanabe, K., Magetic Properties of Clb -Type Mn Base Compounds. 
+Transactions of the Japan Institute of Metals, 1976. 17(4): p. 220-226.  
+[13] HEHN, M., F. MONTAIGNE, and A. SCHUHL, Magnétorésistance géante 
+et électronique de spin. Techniques de l'ingénieur. Electronique, 2002. 3(E2135): 
+p. 1-15. 
+[14] M. Mouatassime, Y. Selmani, S. Idrissi, L. Bahmad, F. Goumrhar, H. 
+Labrim,A. Benyoussef, Magnetic properties and half metallic behavior of the 
+Full-Heusler Co2FeGe alloy:DFT and Monte Carlo studies, Journal of Solid State 
+Chemistry (2021), doi: https://doi.org/10.1016/ j.jssc.2021.122534. 
+[15] Ma, J., et al., New Half -Metallic Materials: FeRuCrP and FeRhCrP 
+Quaternary Heusler Compounds. Materials, 2017. 10(12): p. 1367.  
+[16] Gao, Y. and X. Gao, The half -metallicity of LiMgPdSn -type quaternary 
+Heusler alloys FeMnScZ (Z= Al, Ga, In): A first-principle study. AIP Advances, 
+2015. 5(5): p. 057157.  
+[17] Heusler, O., Kristallstruktur und Ferromagnetismus der Mangan‐
+Aluminium‐Kupferlegierungen. Annalen der Physik, 1934. 411(2): p. 155-201.  
+[18] J.P. Perdew, J. A. Chevary, S. H. Vosko, K.A. Jackson, M.R. Pederson, D.J. 
+Singh, and  C. Fiolhais, Phys. Rev. B 46, 6671 (1992). 
+[19] Brooks, J. and J. Williams, Magnetic Hyperfine Interactions in the 
+Ferromagnetic Heusler‐Type Alloy Co2TiSn Studied by Means of the Mössbauer 
+Effect in 119Sn. physica status solidi (a), 1975. 32(2): p. 413-417.  
+[20] H.C. Kandpal, G.H. Fecher, C. Felser, arXiv:cond-mat/0611179v1 (2006). 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Appendix: Input preparation for the Co2FeGe Heusler: 
+We create our AKAI KKR input using the Xband  software. We start by choosing the system 
+creation method. In our case, we opted to create the crystal system using the space group of the 
+Co2FeGe compound, which is Fm-3m[225]. 
+Hence, we insert the atomic positions of Cobalt (Co), Germanium (Ge), and Iron (Fe) that form 
+the unit cell. The rest of the lattice is then obtained by translating these coordinates and by 
+symmetry. And then we input the lattice parameters given in the li terature: a=b=c = 4.057 
+Angstrom, and convert them into atomic units (a.u.), see Fig. 1.  
+ 
+ 
+ 
+.  
+Figure 5: This figure displays a dialog box titled "set lattice parameter" from 
+the software application, related to materials science or crystallography. 
+        
+ 
+And so, we obtain all the necessary information about the Co2FeGe compound to generate the 
+AKAI-KKR input for the Go instruction calculation. 
+During the process of generating our Go Input, we choose the GGA (generalized gradient 
+approximation) as the approximation, with a maximum of 520 iterations and 15 K-points.  
+ 
+ 
+Figure III.4 : Les informations sur la structure de Co2FeGe Figure 6: Information on the structure of the Heusler Co2FeGe. 
+Figure 7 The input for the Go calculation

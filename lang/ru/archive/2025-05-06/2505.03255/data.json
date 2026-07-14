@@ -1,0 +1,376 @@
+{
+  "id": "2505.03255",
+  "original_title": "Deep learning spinfoam vertex amplitudes: the Euclidean Barrett-Crane   model",
+  "authors": [
+    "Hanno Sahlmann",
+    "Waleed Sherif"
+  ],
+  "date": "2025-05-06",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "spacetime_curvature",
+    "black_hole",
+    "big_bang"
+  ],
+  "main_tag": "spacetime_curvature",
+  "scientists": [
+    "Roger Penrose",
+    "Carlo Rovelli",
+    "John Archibald Wheeler"
+  ],
+  "categories": [
+    "gr-qc",
+    "hep-th",
+    "physics.comp-ph"
+  ],
+  "primary_category": "gr-qc",
+  "cited_arxiv": [
+    "2205.10779",
+    "2412.20272",
+    "2412.20257",
+    "2402.10622",
+    "2405.00661",
+    "1205.2019",
+    "2310.20147",
+    "2403.09364",
+    "0909.0939",
+    "1010.4787",
+    "0705.2388",
+    "2212.14396",
+    "1903.12624",
+    "2107.13952",
+    "2202.04360",
+    "0711.0146",
+    "2004.12911",
+    "2206.14755",
+    "2207.02881",
+    "2012.11515",
+    "2302.00072",
+    "2407.19036",
+    "2403.04836",
+    "2406.19676",
+    "2110.10670",
+    "2301.02930",
+    "2404.10563",
+    "2206.13540",
+    "1508.07961",
+    "1605.07649",
+    "2004.07013",
+    "2104.00485",
+    "2011.14468",
+    "2105.10808",
+    "2203.02409",
+    "2207.03307",
+    "0708.0883",
+    "0708.1595",
+    "0908.4476",
+    "1912.01703",
+    "1907.10902",
+    "1711.05101",
+    "2010.16061",
+    "1701.06538",
+    "1707.06347",
+    "1406.1078"
+  ],
+  "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+  "abstract": {
+    "ru": {
+      "popular": "В квантовой гравитации метод спиновых пен описывает пространство-время из квантовых «кирпичиков», но расчёт амплитуд очень затратен. Для модели Баррета–Крейна применили глубокие нейросети: классификатор предсказывает, равен ли результат нулю, а регрессор — точное значение. Классификатор удивил способностью обобщать далеко за пределы обучения, словно угадывая невидимые закономерности. Это ускорит вычисления в поисках квантовой структуры гравитации.",
+      "simple": "Учёные учат нейросеть предсказывать важные числа в теории квантовой гравитации — примерно как программа распознаёт лица на фото, а не пересчитывает пиксели. Одна сеть проверяет, ноль ли результат, другая выдаёт точное значение. Так вычисления ускоряются в разы. Узнает ли когда-нибудь машина, из чего соткана Вселенная?",
+      "advanced": "В рамках спиновых пен — кандидата на формулировку квантовой гравитации через интеграл по путям — вычисление амплитуд крайне ресурсоёмко. На примере хорошо изученной евклидовой модели Баррета–Крейна показано, что вершинную амплитуду можно аппроксимировать с помощью глубокого обучения. Задача разделена на классификацию (определение, равна ли амплитуда нулю) и регрессию (предсказание точного численного значения); для каждой обучена отдельная нейросеть. Проверка на тестовых данных выявила, что классификатор демонстрирует устойчивую обобщающую способность далеко за пределами области обучения, а регрессор — высокую точность в своей обучающей области. Подход открывает перспективы для ускорения численных исследований в спиновых пенах, обсуждаются ограничения и направления развития."
+    },
+    "en": {
+      "popular": "In quantum gravity, the spin foam method describes spacetime from quantum 'bricks,' but calculating amplitudes is very expensive. For the Barrett–Crane model, deep neural networks were applied: a classifier predicts whether the result is zero, and a regressor predicts the exact value. The classifier surprised with its ability to generalize far beyond its training, as if guessing invisible patterns. This will speed up computations in the search for the quantum structure of gravity.",
+      "simple": "Scientists are teaching a neural network to predict important numbers in quantum gravity theory — much like a program recognizes faces in photos rather than recalculating pixels. One network checks if the result is zero, another gives the exact value. This speeds up computations many times over. Will a machine ever learn what the universe is woven from?",
+      "advanced": "Within spin foams — a candidate formulation of quantum gravity via path integral — computing amplitudes is extremely resource-intensive. Using the well-studied Euclidean Barrett–Crane model as an example, it is shown that the vertex amplitude can be approximated using deep learning. The task is divided into classification (determining whether the amplitude is zero) and regression (predicting the exact numerical value); separate neural networks are trained for each. Testing on the data revealed that the classifier demonstrates robust generalization ability far beyond its training region, and the regressor shows high accuracy within its training region. The approach opens prospects for accelerating numerical studies in spin foams, and limitations and development directions are discussed."
+    },
+    "es": {
+      "popular": "En la gravedad cuántica, el método de espumas de espín describe el espacio-tiempo a partir de 'ladrillos' cuánticos, pero el cálculo de amplitudes es muy costoso. Para el modelo de Barrett–Crane se aplicaron redes neuronales profundas: un clasificador predice si el resultado es cero y un regresor el valor exacto. El clasificador sorprendió por su capacidad de generalizar mucho más allá del entrenamiento, como si adivinara regularidades invisibles. Esto acelerará los cálculos en la búsqueda de la estructura cuántica de la gravedad.",
+      "simple": "Los científicos enseñan a una red neuronal a predecir números importantes en la teoría de la gravedad cuántica, algo así como un programa que reconoce rostros en fotos en vez de contar píxeles. Una red comprueba si el resultado es cero, y otra da el valor exacto. De este modo, los cálculos se aceleran enormemente. ¿Llegará algún día la máquina a saber de qué está tejido el universo?",
+      "advanced": "En el marco de las espumas de espín —un candidato para formular la gravedad cuántica mediante la integral de caminos— el cálculo de amplitudes consume muchísimos recursos. Con el bien estudiado modelo euclidiano de Barrett–Crane se demuestra que la amplitud de vértice puede aproximarse mediante aprendizaje profundo. La tarea se divide en clasificación (determinar si la amplitud es cero) y regresión (predecir el valor numérico exacto); para cada una se entrena una red neuronal distinta. Las pruebas con datos de test revelaron que el clasificador muestra una capacidad de generalización robusta mucho más allá de la región de entrenamiento, mientras que el regresor alcanza alta precisión en su propia región de entrenamiento. Este enfoque abre perspectivas para acelerar la investigación numérica en espumas de espín, y se discuten sus limitaciones y direcciones futuras."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "Percentage of non-zero to zero vertex amplitudes at different cutoffs with the",
+      "Figure 2: The confusion matrices for the classifier at different stages of training tested on",
+      "As can be seen in Figure 3, both the false positives and false negatives fall drasti-",
+      "The training loss during the regressor training at cutoffs of 1.0 and 1.5",
+      "A True vs. Prediction plot in log space for the regressors trained at cutoffs 1.0"
+    ],
+    "ru": [
+      "Процентное соотношение ненулевых и нулевых амплитуд вершин при различных значениях обрезания с",
+      "Рисунок 2: Матрицы ошибок для классификатора на разных этапах обучения, протестированные на",
+      "Как видно на рисунке 3, как ложноположительные, так и ложноотрицательные срабатывания резко пада-",
+      "Функция потерь при обучении регрессора при обрезаниях 1.0 и 1.5",
+      "График 'Истина против Предсказания' в логарифмическом пространстве для регрессоров, обученных при обрезании 1.0"
+    ],
+    "es": [
+      "Porcentaje de amplitudes de vértices no nulas frente a nulas en diferentes puntos de corte con el",
+      "Figura 2: Las matrices de confusión para el clasificador en diferentes etapas del entrenamiento probadas en",
+      "Como se puede ver en la Figura 3, tanto los falsos positivos como los falsos negativos caen drásti-",
+      "La pérdida de entrenamiento durante el entrenamiento del regresor en cortes de 1.0 y 1.5",
+      "Un gráfico de valores reales frente a predicciones en espacio logarítmico para los regresores entrenados en cortes 1.0"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Как нейросеть научилась видеть квантовую пену",
+      "oneliner": "Нейросеть мгновенно обсчитывает квантовую пену, заменяя часы работы мощных компьютеров.",
+      "description": "Пространство и время на квантовом уровне напоминают пену из микроскопических пузырьков. Нейросети научились мгновенно вычислять их взаимодействия, заменяя часы расчётов. Это приближает нас к пониманию устройства Вселенной в самых малых масштабах.",
+      "text": "Идея квантовой пены восходит к [scientist:Roger Penrose]Роджеру Пенроузу[/scientist] и [scientist:Carlo Rovelli]Карло Ровелли[/scientist]: пространство похоже на мыльную пену, где каждый пузырёк — микроскопический сгусток реальности. Эти пузырьки постоянно лопаются и сливаются, и чтобы понять, как устроена Вселенная на самом глубоком уровне, нужно вычислять вероятности их взаимодействий. Раньше такие расчёты занимали часы даже на мощных компьютерах.\n\nНейросети справились за миллисекунды. Первая сеть, как дотошный сортировщик, мгновенно отбрасывает невозможные варианты (где вероятность равна нулю). Вторая — как опытный оценщик — выдаёт точное значение для остальных. Поразительно, что она верно отсеивает нули даже в незнакомых сценариях — подобно тому, как человек, видевший пару кошек, узнает любую породу.\n\nЭто пока работает на простейшей модели, но открывает путь к тестированию гипотез о моменте [tag:big_bang]Большого взрыва[/tag] и устройстве [tag:spacetime_curvature]искривлённого пространства[/tag] внутри [tag:black_hole]чёрных дыр[/tag]. Так мыльная пена приближает разгадку рождения Вселенной.",
+      "fun_fact": "Идея, что пространство может быть не сплошным, а состоять из мельчайших зерён, восходит ещё к древнегреческим атомистам. В современной физике её возродил [scientist:John Archibald Wheeler]Джон Уилер[/scientist], который и придумал термин «квантовая пена».",
+      "scifi": "В романе «Ложная слепота» инопланетяне общаются мгновенно благодаря квантовой природе пространства. Возможно, понимание квантовой пены сделает эту фантастику явью.",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ]
+    },
+    "en": {
+      "title": "How a Neural Network Learned to See Quantum Foam",
+      "oneliner": "A neural network instantly computes quantum foam, replacing hours of work by powerful computers.",
+      "description": "At the quantum level, space and time resemble a foam of microscopic bubbles. Neural networks have learned to instantly compute their interactions, replacing hours of calculations. This brings us closer to understanding the structure of the Universe at the smallest scales.",
+      "text": "The concept of quantum foam dates back to [scientist:Roger Penrose]Roger Penrose[/scientist] and [scientist:Carlo Rovelli]Carlo Rovelli[/scientist]: space is like soap foam, where each bubble is a microscopic chunk of reality. These bubbles constantly burst and merge, and to understand how the Universe works at its deepest level, one must compute the probabilities of their interactions. Previously, such calculations took hours even on powerful computers.\n\nNeural networks handled it in milliseconds. The first network, like a meticulous sorter, instantly discards impossible variants (where probability is zero). The second, like an experienced appraiser, gives precise values for the rest. Astonishingly, it correctly filters out zeros even in unfamiliar scenarios—much like a person who has seen a couple of cats recognizes any breed.\n\nSo far, this works on a simplified model, but it paves the way to testing hypotheses about the moment of the [tag:big_bang]Big Bang[/tag] and the structure of [tag:spacetime_curvature]curved spacetime[/tag] inside [tag:black_hole]black holes[/tag]. Thus, soap foam brings us closer to solving the mystery of the birth of the Universe.",
+      "fun_fact": "The idea that space may not be continuous but consists of minuscule grains dates back to the ancient Greek atomists. In modern physics, it was revived by [scientist:John Archibald Wheeler]John Archibald Wheeler[/scientist], who coined the term 'quantum foam'.",
+      "scifi": "In the novel 'Blindsight', aliens communicate instantaneously thanks to the quantum nature of space. Perhaps understanding quantum foam will turn this science fiction into reality.",
+      "mini": "Soap foam gave physicists a clue on how to speed up calculations for quantum gravity. Space can be represented as a network of tiny bubbles — calculating their interactions used to take hours. A neural network learned to predict the outcome in an instant and even find 'empty' options. This brings us closer to unraveling what happened at the very beginning of the Universe and inside black holes.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ]
+    },
+    "es": {
+      "title": "Cómo una red neuronal aprendió a ver la espuma cuántica",
+      "oneliner": "Una red neuronal calcula instantáneamente la espuma cuántica, reemplazando horas de trabajo de potentes computadoras.",
+      "description": "El espacio y el tiempo a nivel cuántico parecen una espuma de burbujas microscópicas. Las redes neuronales aprendieron a calcular instantáneamente sus interacciones, reemplazando horas de cálculo. Esto nos acerca a comprender cómo funciona el universo a las escalas más pequeñas.",
+      "text": "La idea de la espuma cuántica se remonta a [scientist:Roger Penrose]Roger Penrose[/scientist] y [scientist:Carlo Rovelli]Carlo Rovelli[/scientist]: el espacio es como una espuma de jabón, donde cada burbuja es un grumo microscópico de realidad. Estas burbujas estallan y se fusionan constantemente, y para entender cómo funciona el universo en su nivel más profundo, necesitamos calcular las probabilidades de sus interacciones. Antes, esos cálculos tomaban horas incluso en computadoras potentes.\n\nLas redes neuronales lo lograron en milisegundos. La primera red, como un meticuloso clasificador, descarta instantáneamente las opciones imposibles (donde la probabilidad es cero). La segunda —como un evaluador experimentado— da el valor exacto para el resto. Es sorprendente que filtre correctamente los ceros incluso en escenarios desconocidos, similar a cómo una persona que ha visto un par de gatos reconoce cualquier raza.\n\nPor ahora funciona en el modelo más simple, pero abre el camino para probar hipótesis sobre el momento del [tag:big_bang]Big Bang[/tag] y la estructura del [tag:spacetime_curvature]espacio-tiempo curvado[/tag] dentro de los [tag:black_hole]agujeros negros[/tag]. Así, la espuma de jabón nos acerca a desentrañar el nacimiento del universo.",
+      "fun_fact": "La idea de que el espacio podría no ser continuo, sino estar compuesto de granos diminutos, se remonta a los atomistas de la antigua Grecia. En la física moderna, fue revivida por [scientist:John Archibald Wheeler]John Wheeler[/scientist], quien acuñó el término «espuma cuántica».",
+      "scifi": "En la novela «Visión ciega», los alienígenas se comunican instantáneamente gracias a la naturaleza cuántica del espacio. Quizás, comprender la espuma cuántica convierta esta fantasía en realidad.",
+      "mini": "La espuma de jabón sugirió a los físicos cómo acelerar los cálculos para la gravedad cuántica. El espacio puede imaginarse como una red de diminutas burbujas: calcular sus interacciones antes tomaba horas. Una red neuronal aprendió a predecir el resultado en un instante e incluso a encontrar opciones «vacías». Esto nos acerca a desvelar lo que ocurrió en el origen del universo y dentro de los agujeros negros.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "formulas": [],
+      "main_tag": "spacetime_curvature",
+      "extra_tags": [
+        "black_hole",
+        "big_bang"
+      ],
+      "scientists": [
+        "Roger Penrose",
+        "Carlo Rovelli",
+        "John Archibald Wheeler"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Мыльная пена подсказала физикам, как ускорить расчёты для квантовой гравитации. Пространство можно представить как сеть из крошечных пузырьков — расчёт их взаимодействий раньше занимал часы. Нейросеть научилась предсказывать результат за мгновение и даже находить «пустые» варианты. Это приближает разгадку того, что было в самом начале Вселенной и внутри чёрных дыр.",
+      "express_locked": true
+    }
+  }
+}

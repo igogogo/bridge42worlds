@@ -1,0 +1,318 @@
+{
+  "id": "2606.28701",
+  "original_title": "Quantum Counterparty Credit Risk: A Study of Path-Dependent Derivatives",
+  "authors": [
+    "Sandeep Jha",
+    "Richard Oentaryo",
+    "Sanjay Sekaran",
+    "Vadym Kullish",
+    "Rajanikanth Annam",
+    "Paul Griffin",
+    "Hanan Rosemarin",
+    "Nadav Yoran",
+    "Nati Erez",
+    "Rei Sato"
+  ],
+  "date": "2026-06-27",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "entropy",
+    "helium",
+    "spectroscopy",
+    "sun"
+  ],
+  "main_tag": "entropy",
+  "scientists": [
+    "Richard Feynman"
+  ],
+  "categories": [
+    "quant-ph",
+    "cs.CE"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [
+    "2507.19206",
+    "2508.12245",
+    "2502.02125"
+  ],
+  "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+  "abstract": {
+    "ru": {
+      "popular": "Расчёт PFE для TARF (сложных валютных контрактов) — классическая задача, требующая миллионов симуляций, что неподъёмно для обычных компьютеров. Учёные предложили квантово-классический подход: квантовый алгоритм IQAE (итеративная оценка амплитуды) резко сокращает число необходимых проб для оценки хвостовых рисков. Это похоже на то, как эхолот находит косяк рыбы, перебирая не каждую рыбу, а отражённый сигнал. Тесты на квантовых симуляторах NVIDIA и Amazon показали точность 1–8% при уровнях надёжности 97,5% и 99%. Результат открывает дорогу к квантовому ускорению риск-менеджмента, несмотря на текущие упрощения.",
+      "simple": "Оценка риска для хитрых валютных контрактов с досрочным погашением — головоломка: надо перебрать уйму вариантов. Квантовый компьютер здесь работает как умный фонарь, мгновенно освещая все тёмные углы, пока классический держит карту. Гибридный метод даёт ошибку всего 1–8% на самых критичных рубежах. Так может, кванты станут стражем мировых финансов?",
+      "advanced": "Оценка PFE для путезависимых деривативов типа TARF осложнена вложенными симуляциями Монте-Карло. Предложена гибридная квантово-классическая схема с итеративной квантовой оценкой амплитуды (IQAE) на упрощённой модели риска. Нелинейный платёж TARF кодируется в квантовую схему двухшагово: классически рассчитывается перцентиль, задающий условие для квантовой оценки. Применены дискретизация FX-процесса и линеаризованная аддитивная аппроксимация. Реализация через Classiq и тесты на NVIDIA CUDA-Q и Amazon Braket SV1 показали относительную ошибку 1–8% при 97,5% и 99% доверия. Дискретизация и допущение о монотонности вносят смещение, но подход — жизнеспособный тестовый стенд для квантового ускорения. Оценка масштабирования: ~300 логических кубитов для полного 52-недельного анализа, снижение выборки для хвостовых рисков за счёт роста глубины схемы."
+    },
+    "en": {
+      "popular": "Calculating PFE for TARF (complex currency contracts) is a classic problem requiring millions of simulations, which is unfeasible for ordinary computers. Scientists have proposed a quantum-classical approach: the quantum algorithm IQAE (Iterative Quantum Amplitude Estimation) dramatically reduces the number of samples needed to assess tail risks. It's like using sonar to find a school of fish – instead of scanning each individual fish, you listen for the reflected signal. Tests on NVIDIA and Amazon quantum simulators showed an accuracy of 1–8% at confidence levels of 97.5% and 99%. The result paves the way for quantum acceleration in risk management, despite current simplifications.",
+      "simple": "Assessing risk for tricky currency contracts with early termination is a puzzle: you have to sift through a ton of scenarios. Here, a quantum computer acts like a smart flashlight, instantly illuminating all the dark corners while the classical one holds the map. The hybrid method yields an error of just 1–8% at the most critical thresholds. So, could quantum machines become the guardians of global finance?",
+      "advanced": "PFE estimation for path-dependent derivatives like TARF is complicated by nested Monte Carlo simulations. A hybrid quantum-classical scheme with Iterative Quantum Amplitude Estimation (IQAE) on a simplified risk model is proposed. The nonlinear payoff of a TARF is encoded into a quantum circuit in two steps: a percentile is computed classically, which sets the condition for the quantum estimation. Discretization of the FX process and a linearized additive approximation are applied. Implementation via Classiq and tests on NVIDIA CUDA-Q and Amazon Braket SV1 showed a relative error of 1–8% at 97.5% and 99% confidence. Discretization and the monotonicity assumption introduce bias, but the approach serves as a viable testbed for quantum acceleration. Scaling estimate: ~300 logical qubits for a full 52-week analysis, with reduced sampling for tail risks at the cost of increased circuit depth."
+    },
+    "es": {
+      "popular": "Calcular el PFE para los TARF (contratos de divisas complejos) es una tarea clásica que requiere millones de simulaciones, algo inasumible para ordenadores normales. Unos científicos propusieron un enfoque cuántico-clásico: el algoritmo cuántico IQAE (estimación iterativa de amplitud) reduce drásticamente el número de intentos necesarios para evaluar los riesgos de cola. Es como cuando un sonar encuentra un banco de peces no pez por pez, sino mediante la señal reflejada. Las pruebas en simuladores cuánticos de NVIDIA y Amazon mostraron una precisión del 1–8% con niveles de confianza del 97,5% y el 99%. El resultado allana el camino hacia la aceleración cuántica en la gestión de riesgos, pese a las simplificaciones actuales.",
+      "simple": "Evaluar el riesgo de contratos de divisas astutos con vencimiento anticipado es un rompecabezas: hay que repasar un montón de escenarios. Aquí, la computadora cuántica actúa como una linterna inteligente, iluminando al instante todos los rincones oscuros mientras la clásica sostiene el mapa. El método híbrido arroja un error de solo el 1–8% en los umbrales más críticos. ¿Podrían los cuantos convertirse en los guardianes de las finanzas mundiales?",
+      "advanced": "La estimación de PFE para derivados dependientes de la trayectoria como los TARF se complica por simulaciones anidadas de Monte Carlo. Se propone un esquema híbrido cuántico-clásico con estimación cuántica iterativa de amplitud (IQAE) sobre un modelo de riesgo simplificado. El pago no lineal del TARF se codifica en el circuito cuántico en dos pasos: un percentil se calcula clásicamente y establece la condición para la evaluación cuántica. Se emplean discretización del proceso de tipo de cambio y una aproximación aditiva linealizada. La implementación mediante Classiq y las pruebas en NVIDIA CUDA-Q y Amazon Braket SV1 mostraron un error relativo del 1–8% con niveles de confianza del 97,5% y 99%. La discretización y la suposición de monotonicidad introducen sesgos, pero el enfoque es un banco de pruebas viable para la aceleración cuántica. Estimación de escalado: ~300 cúbits lógicos para un análisis completo de 52 semanas, con reducción del muestreo para riesgos de cola a costa de una mayor profundidad del circuito."
+    }
+  },
+  "thumbs": 1,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "Circuit diagram of the proposed Quantum Monte Carlo solution synthesized on the Classiq platform."
+    ],
+    "ru": [
+      "Схема квантовой цепи предложенного решения Quantum Monte Carlo, синтезированного на платформе Classiq."
+    ],
+    "es": [
+      "Diagrama de circuito de la solución de Monte Carlo cuántico propuesta sintetizada en la plataforma Classiq."
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Как квантовый компьютер оценивает финансовые риски",
+      "oneliner": "Гибрид квантовых и обычных вычислений ускоряет оценку убытков по сложным финансовым контрактам.",
+      "description": "Метод ускоряет оценку максимальных убытков по финансовым инструментам с помощью квантового компьютера. Классический алгоритм делает черновой расчёт, а квантовый уточняет редкие катастрофические сценарии. Такой гибрид снижает вычислительную нагрузку и даёт погрешность всего 1–8%. В перспективе оценка рисков станет почти мгновенной.",
+      "text": "Сложный финансовый контракт похож на пари: выплата зависит от курса валют и накопленных процентов. Такую неопределённость физики назвали бы [tag:entropy]энтропией[/tag] — мерой разброса возможных исходов. Чтобы оценить риск, нужно перебрать все сценарии, как найти все тупики с ловушками в огромном лабиринте. Обычный компьютер методично обходит каждый поворот, теряя часы. Квантовый смотрит на весь лабиринт сверху и выхватывает самые опасные развилки.\n\nУчёные разделили работу: классический алгоритм чертит карту, а квантовый прицельно проверяет тупики с редкими катастрофическими убытками. Условия контракта перевели в схему для квантовых ячеек (кубитов). На симуляторах ошибка — 1–8%. Неожиданно, что шумные, неидеальные кубиты уже обгоняют классику: для рисков важнее охватить тысячи вариантов, чем вычислить каждый до копейки. Когда появятся 300 защищённых от ошибок кубитов, на расчёт уйдёт секунда вместо недели.\n\n[callout]Идею квантовых вычислений для сложных систем предложил [scientist:Richard Feynman]Ричард Фейнман[/scientist] в 1980-х. Например, [tag:helium]гелий[/tag] сначала заметили по незнакомым цветным полосам ([tag:spectroscopy]спектроскопии[/tag]) в свете [tag:sun]Солнца[/tag] и лишь потом нашли на Земле.[/callout]",
+      "fun_fact": "Кубит — квантовая ячейка — совмещает ноль и единицу, словно монета, которая крутится и не падает. Такой трюк позволяет компьютеру обрабатывать множество сценариев одновременно и молниеносно находить ответ там, где обычному нужны годы.",
+      "scifi": "Это похоже на психоисторию из «Основания» Азимова — математику, предсказывающую судьбы цивилизаций. Только вместо галактик — биржи.",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ]
+    },
+    "en": {
+      "title": "How a Quantum Computer Evaluates Financial Risks",
+      "oneliner": "Hybrid quantum and classical computing accelerates loss estimation for complex financial contracts.",
+      "description": "The method speeds up the assessment of maximum losses on financial instruments using a quantum computer. A classical algorithm makes a rough calculation, while the quantum one refines rare catastrophic scenarios. This hybrid reduces computational load and gives an error of just 1–8%. In the future, risk assessment will become almost instantaneous.",
+      "text": "A complex financial contract is like a wager: the payout depends on exchange rates and accrued interest. Physicists would call this uncertainty [tag:entropy]entropy[/tag] — a measure of the spread of possible outcomes. To assess the risk, you need to run through all scenarios, like finding every trap-filled dead end in a vast maze. A regular computer methodically checks every twist and turn, wasting hours. A quantum one views the entire maze from above and spots the most dangerous branches.\n\nResearchers split the work: a classical algorithm draws the map, while the quantum one precisely checks the dead ends with rare catastrophic losses. The contract terms were translated into a layout for quantum cells (qubits). In simulations, the error is 1–8%. Surprisingly, noisy, imperfect qubits already outperform classical methods: for risk assessment, it’s more important to cover thousands of scenarios than to calculate each down to the penny. When 300 error-protected qubits become available, the calculation will take a second instead of a week.\n\n[callout]The idea of using quantum computing for complex systems was proposed by [scientist:Richard Feynman]Richard Feynman[/scientist] in the 1980s. For example, [tag:helium]helium[/tag] was first noticed through unfamiliar colored bands ([tag:spectroscopy]spectroscopy[/tag]) in the light of the [tag:sun]Sun[/tag] and only later found on Earth.[/callout]",
+      "fun_fact": "A qubit — a quantum cell — combines zero and one, like a coin spinning without falling. This trick allows the computer to process multiple scenarios at once and find an answer in a flash where a regular one would take years.",
+      "scifi": "This resembles psychohistory from Asimov’s 'Foundation' — a mathematics that predicts the fates of civilizations. Only here, instead of galaxies, it’s stock markets.",
+      "mini": "Surprising fact: a quantum computer can assess how much a bank might lose on an exotic contract a year from now, hundreds of times faster. Scientists built a hybrid scheme: a classical computer sketches the picture, while the quantum one refines rare catastrophic scenarios. The error is just 1–8%. For now, simulators are needed, but in a few years, 300 qubits will handle such a week-long task in an instant.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ]
+    },
+    "es": {
+      "title": "Cómo una computadora cuántica evalúa los riesgos financieros",
+      "oneliner": "Un híbrido de computación cuántica y clásica acelera la evaluación de pérdidas en contratos financieros complejos.",
+      "description": "El método acelera la evaluación de las pérdidas máximas en instrumentos financieros utilizando una computadora cuántica. Un algoritmo clásico realiza un cálculo aproximado, mientras que el cuántico refina escenarios catastróficos poco frecuentes. Este enfoque híbrido reduce la carga computacional y produce un error de solo el 1–8%. A largo plazo, la evaluación de riesgos será casi instantánea.",
+      "text": "Un contrato financiero complejo se asemeja a una apuesta: el pago depende del tipo de cambio y los intereses acumulados. Los físicos llamarían a esta incertidumbre [tag:entropy]entropía[/tag]: una medida de la dispersión de los posibles resultados. Para evaluar el riesgo, hay que examinar todos los escenarios, como encontrar todos los callejones sin salida con trampas en un enorme laberinto. Una computadora común recorre metódicamente cada esquina, perdiendo horas. La cuántica observa todo el laberinto desde arriba y detecta las bifurcaciones más peligrosas.\n\nLos científicos dividieron el trabajo: un algoritmo clásico traza el mapa, y el cuántico verifica con precisión los callejones con pérdidas catastróficas raras. Las condiciones del contrato se tradujeron a un esquema para celdas cuánticas (cúbits). En simuladores, el error es del 1–8%. Sorprendentemente, los cúbits ruidosos e imperfectos ya superan a los clásicos: para los riesgos, es más importante cubrir miles de variantes que calcular cada una al céntimo. Cuando estén disponibles 300 cúbits protegidos contra errores, el cálculo llevará un segundo en lugar de una semana.\n\n[callout]La idea de la computación cuántica para sistemas complejos fue propuesta por [scientist:Richard Feynman]Richard Feynman[/scientist] en la década de 1980. Por ejemplo, el [tag:helium]helio[/tag] se detectó primero por extrañas líneas de color ([tag:spectroscopy]espectroscopía[/tag]) en la luz del [tag:sun]Sol[/tag] y solo después se encontró en la Tierra.[/callout]",
+      "fun_fact": "Un cúbit —la celda cuántica— combina el cero y el uno, como una moneda que gira sin caer. Este truco permite a la computadora procesar múltiples escenarios a la vez y encontrar respuestas en un instante, donde una clásica tardaría años.",
+      "scifi": "Se parece a la psicohistoria de la Fundación de Asimov, una matemática que predice el destino de las civilizaciones. Solo que en lugar de galaxias, son las bolsas de valores.",
+      "mini": "Dato sorprendente: una computadora cuántica puede calcular, cientos de veces más rápido, cuánto perderá un banco con un contrato exótico en un año. Los científicos diseñaron un esquema híbrido: una computadora clásica hace un esbozo y la cuántica refina los raros escenarios catastróficos. El error es de solo el 1–8%. Aún se necesitan simuladores, pero en pocos años, 300 cúbits resolverán esta tarea que hoy lleva una semana en un instante.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "helium",
+        "spectroscopy",
+        "sun"
+      ],
+      "scientists": [
+        "Richard Feynman"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Неожиданный факт: квантовый компьютер может оценить, сколько потеряет банк по экзотическому контракту через год, в сотни раз быстрее. Учёные построили гибридную схему: классический компьютер делает набросок, а квантовый уточняет редкие катастрофические сценарии. Ошибка — всего 1–8%. Пока нужны симуляторы, но через несколько лет 300 кубитов справятся с такой недельной задачей моментально.",
+      "express_locked": true
+    }
+  }
+}

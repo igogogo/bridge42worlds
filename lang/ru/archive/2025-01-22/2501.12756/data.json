@@ -1,0 +1,335 @@
+{
+  "id": "2501.12756",
+  "original_title": "A topology optimisation framework to design test specimens for one-shot identification or discovery of material models",
+  "authors": [
+    "Saeid Ghouli",
+    "Moritz Flaschel",
+    "Siddhant Kumar",
+    "Laura De Lorenzis"
+  ],
+  "date": "2025-01-22",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "spectroscopy",
+    "standard_model",
+    "carbon"
+  ],
+  "main_tag": "spectroscopy",
+  "scientists": [
+    "Robert Hooke"
+  ],
+  "categories": [
+    "cs.CE",
+    "cond-mat.mtrl-sci"
+  ],
+  "primary_category": "cs.CE",
+  "cited_arxiv": [
+    "2010.13496",
+    "2202.04916",
+    "2211.04453"
+  ],
+  "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, про",
+  "abstract": {
+    "ru": {
+      "popular": "Инженеры-материаловеды всё чаще отказываются от множества стандартных испытаний в пользу одного эксперимента с образцом сложной формы. Ключ к успеху — богатство измеряемых полей смещений, которое напрямую зависит от геометрии образца. Авторы предложили метод топологической оптимизации, автоматически создающий форму образца, которая делает калибровку модели анизотропного упругого материала максимально устойчивой к погрешностям измерений. Это похоже на создание отмычки, которая открывает любой замок — один образец раскрывает все секреты материала.",
+      "simple": "Когда мы испытываем новый материал, обычно проводят много тестов с разными образцами. Но что, если один образец сложной формы сможет заменить их все? Учёные научились автоматически проектировать такую идеальную форму, чтобы по одному эксперименту точно определить свойства материала — как ключ, который идеально подходит к замку.",
+      "advanced": "Растущая доступность полей перемещений, получаемых методами полнопольной измерительной техники, ведёт к переходу от калибровки моделей материалов на множестве простых образцов к использованию одного образца со сложной геометрией. Осуществимость такого «одношагового» определения параметров зависит от информативности данных о перемещениях, то есть их способности достаточно полно зондировать пространство переменных состояния и напряжений. Поскольку информативность напрямую определяется геометрией образца, предложен метод топологической оптимизации на основе плотности для автоматического проектирования формы образца, оптимальной для калибровки анизотропной упругой модели. Цель — максимизация устойчивости решения обратной задачи к шуму в данных цифровой корреляции изображений. Обсуждается выбор целевой функции и архитектура оптимизационной схемы, а также анализируется ряд оптимизированных топологий для идентификации изотропного и анизотропного упругого поведения."
+    },
+    "en": {
+      "popular": "Materials engineers increasingly skip multiple standard tests in favor of a single experiment with a complex-shaped sample. The key to success is the richness of measured displacement fields, which directly depends on the sample's geometry. The authors proposed a topological optimization method that automatically creates a sample shape that makes the calibration of an anisotropic elastic material model maximally robust to measurement errors. It's like designing a skeleton key that opens any lock — one sample reveals all the material's secrets.",
+      "simple": "When we test a new material, we usually run many tests on different samples. But what if one complex-shaped sample could replace them all? Scientists have learned to automatically design an ideal shape so that a single experiment can pinpoint the material's properties — like a key that fits a lock perfectly.",
+      "advanced": "The increasing availability of full-field displacement measurements from advanced imaging techniques is driving a shift from calibrating material models on many simple samples to using a single sample with complex geometry. The feasibility of such 'one-shot' parameter identification hinges on the informativeness of the displacement data—its ability to thoroughly probe the stress and state variable space. Since informativeness is directly governed by the sample's geometry, a density-based topology optimization method is proposed to automatically design the optimal sample shape for calibrating an anisotropic elastic model. The goal is to maximize the robustness of the inverse problem solution against noise in digital image correlation data. The choice of objective function and the optimization scheme architecture are discussed, and several optimized topologies for identifying isotropic and anisotropic elastic behavior are analyzed."
+    },
+    "es": {
+      "popular": "Los ingenieros de materiales están optando cada vez más por un único experimento con una muestra de forma compleja en lugar de múltiples pruebas estándar. La clave del éxito radica en la riqueza de los campos de desplazamiento medidos, que depende directamente de la geometría de la muestra. Los autores propusieron un método de optimización topológica que genera automáticamente una forma de muestra que hace que la calibración del modelo de material elástico anisótropo sea lo más robusta posible frente a errores de medición. Es como crear una llave maestra que abre cualquier cerradura: una sola muestra revela todos los secretos del material.",
+      "simple": "Cuando probamos un nuevo material, normalmente se realizan muchas pruebas con diferentes muestras. Pero, ¿y si una sola muestra de forma compleja pudiera reemplazarlas todas? Los científicos han aprendido a diseñar automáticamente esa forma ideal para determinar con precisión las propiedades del material en un solo experimento, como una llave que encaja perfectamente en una cerradura.",
+      "advanced": "La creciente disponibilidad de campos de desplazamiento obtenidos mediante técnicas de medición de campo completo está llevando a un cambio: de calibrar modelos de materiales con múltiples muestras simples a usar una única muestra de geometría compleja. La viabilidad de esta identificación de parámetros en un solo paso depende de la informatividad de los datos de desplazamiento, es decir, su capacidad para sondear adecuadamente el espacio de variables de estado y tensiones. Dado que la informatividad está determinada directamente por la geometría de la muestra, se propone un método de optimización topológica basada en densidad para diseñar automáticamente la forma de muestra óptima para calibrar un modelo elástico anisótropo. El objetivo es maximizar la robustez de la solución del problema inverso ante el ruido en los datos de correlación de imágenes digitales. Se discute la elección de la función objetivo y la arquitectura del esquema de optimización, y se analizan varias topologías optimizadas para la identificación del comportamiento elástico isótropo y anisótropo."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "The boundary value problem of plane deformation for the case of an orthotropic elastic medium. The x-y coordinate system aligns with",
+      "(a) Designation of 0 (void) and 1 (material) densities as well as domain dimensions; (b) even, (c) random, and (d) interim-valued",
+      "Flowchart of the overall optimisation algorithm with gradual increase of the strength of the projection filter (adapted from Bendsøe and",
+      "(a) Evolution of the cost function in Eq. (20) and of the topology during optimisation; (b) contours of the strain components for the",
+      "(a) Evolution of the cost function in Eq. (21)) and of the topology during optimisation; (b) contours of the strain components for the",
+      "Optimised topologies for different orthotropic material parameters in input. The densities are initialised evenly, and the material volume",
+      "Identification of the orthotropic material parameters using optimised topologies obtained with ( α1,α2) = (12,1.0) with different volume",
+      "Here, we plot 1 /det(Aeqb) versus the material volume fraction in the range Vm = 80 −100% for six simple",
+      "Performance assessment of a chosen topology (produced with ( α1,α2,β) = (12,1.0,0◦) and Vm = 90% from Fig. 7) under uniaxial",
+      "Performance assessment of a chosen topology (produced with ( α1,α2,β) = (12,1.0,0◦) and Vm = 90% from Fig. 7) versus selected",
+      "E ffect of the robust formulation in topology optimisation to avoid tiny topological features: (a) topologies generated with inputs",
+      "The application of the robust formulation in topology optimisation: (a) optimised topologies for di fferent orthotropic materials. The"
+    ],
+    "ru": [
+      "Краевая задача плоской деформации для случая ортотропной упругой среды. Система координат x-y совпадает с",
+      "(a) Обозначение плотностей 0 (пустота) и 1 (материал), а также размеры области; (b) равномерное, (c) случайное и (d) промежуточное значения",
+      "Блок-схема общего алгоритма оптимизации с постепенным увеличением силы проекционного фильтра (адаптировано из Bendsøe и",
+      "(a) Эволюция целевой функции в уравнении (20) и топологии в процессе оптимизации; (b) контуры компонент деформации для",
+      "(a) Эволюция целевой функции в уравнении (21) и топологии в процессе оптимизации; (b) контуры компонент деформации для",
+      "Оптимизированные топологии для различных входных параметров ортотропного материала. Плотности инициализируются равномерно, а объем материала",
+      "Идентификация параметров ортотропного материала с использованием оптимизированных топологий, полученных с (α1,α2) = (12,1.0) при различном объеме",
+      "Здесь мы строим график зависимости 1/det(Aeqb) от объемной доли материала в диапазоне Vm = 80−100% для шести простых",
+      "Оценка производительности выбранной топологии (полученной с (α1,α2,β) = (12,1.0,0°) и Vm = 90% из рис. 7) при одноосном",
+      "Оценка производительности выбранной топологии (полученной с (α1,α2,β) = (12,1.0,0°) и Vm = 90% из рис. 7) по сравнению с выбранными",
+      "Эффект робастной формулировки в топологической оптимизации для избежания мелких топологических особенностей: (a) топологии, сгенерированные с входными данными",
+      "Применение робастной формулировки в топологической оптимизации: (a) оптимизированные топологии для различных ортотропных материалов."
+    ],
+    "es": [
+      "El problema de valores en la frontera de deformación plana para el caso de un medio elástico ortotrópico. El sistema de coordenadas x-y se alinea con",
+      "(a) Designación de densidades 0 (vacío) y 1 (material) así como dimensiones del dominio; (b) uniforme, (c) aleatoria y (d) con valores intermedios",
+      "Diagrama de flujo del algoritmo de optimización general con aumento gradual de la intensidad del filtro de proyección (adaptado de Bendsøe y",
+      "(a) Evolución de la función de costo en la Ec. (20) y de la topología durante la optimización; (b) contornos de las componentes de deformación para el",
+      "(a) Evolución de la función de costo en la Ec. (21) y de la topología durante la optimización; (b) contornos de las componentes de deformación para el",
+      "Topologías optimizadas para diferentes parámetros de material ortotrópico en la entrada. Las densidades se inicializan uniformemente, y el volumen de material",
+      "Identificación de los parámetros del material ortotrópico utilizando topologías optimizadas obtenidas con (α1,α2) = (12,1.0) con diferentes volúmenes",
+      "Aquí, graficamos 1/det(Aeqb) versus la fracción de volumen de material en el rango Vm = 80−100% para seis simples",
+      "Evaluación del desempeño de una topología elegida (producida con (α1,α2,β) = (12,1.0,0°) y Vm = 90% de la Fig. 7) bajo carga uniaxial",
+      "Evaluación del desempeño de una topología elegida (producida con (α1,α2,β) = (12,1.0,0°) y Vm = 90% de la Fig. 7) versus seleccionados",
+      "Efecto de la formulación robusta en la optimización topológica para evitar pequeñas características topológicas: (a) topologías generadas con entradas",
+      "La aplicación de la formulación robusta en la optimización topológica: (a) topologías optimizadas para diferentes materiales ortotrópicos. El"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Как форма детали расшифровывает свойства материала",
+      "oneliner": "Инженеры нашли способ создавать образцы такой формы, что одна проверка заменяет десятки обычных испытаний.",
+      "description": "Теперь вместо множества простых тестов можно использовать один хитроумный образец. Под нагрузкой его изгибы показывают все упругие свойства материала — учёные разработали компьютерный метод, который вычисляет идеальную форму такого образца, обеспечивая надёжность даже при помехах.",
+      "text": "Изгибы специально спроектированной детали — словно письмена, в которых зашифрованы все упругие свойства материала. Раньше эти свойства выясняли, испытывая множество прямоугольных кусочков, чтобы настроить [tag:standard_model]стандартную модель[/tag] упругости — почти как учить язык по отдельным словам. Теперь же одна деталь с выступами и выемками, нагруженная определённым образом, деформируется так, что весь «текст» материала становится видимым сразу. Это напоминает [tag:spectroscopy]спектроскопию[/tag] в астрономии: по узору деформаций мы читаем скрытые характеристики, как по спектру — состав звезды.\n\nОптимальную форму рассчитывает алгоритм, подбирая геометрию под свойства материала — особенно если он неодинаков в разных направлениях, как дерево или [tag:carbon]углепластики[/tag]. [scientist:Robert Hooke]Роберт Гук[/scientist] первым описал упругость, но современный подход переворачивает его наследие: вместо набора тестов — один точный вопрос.\n\nУдивительно, что такой «одноразовый» эксперимент часто даёт более точные параметры, чем классическая серия из сотен измерений. Сложная форма работает как фильтр: она гасит шум и выпячивает суть.",
+      "fun_fact": "По одному такому образцу можно вычислить жёсткость материала точнее, чем после сотен обычных тестов. Меньше измерений — меньше шума.",
+      "scifi": "Похожий метод в фантастике можно представить как универсальный «тестер материи», который с одного касания узнаёт всё о составе незнакомого вещества — как трикодер из «Звёздного пути».",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ]
+    },
+    "en": {
+      "title": "How a Part's Shape Deciphers Material Properties",
+      "oneliner": "Engineers have found a way to shape samples so that a single test replaces dozens of conventional ones.",
+      "description": "Now, instead of running many simple tests, you can use a single cleverly designed sample. When loaded, its bends reveal all the material’s elastic properties. Scientists have developed a computer method to calculate the ideal shape, ensuring accuracy even amidst noise.",
+      "text": "The bends of a specially designed part are like inscriptions that encode all the elastic properties of the material. Previously, these properties were determined by testing many rectangular pieces to calibrate the [tag:standard_model]standard model[/tag] of elasticity — almost like learning a language word by word. Now, a single part with protrusions and notches, loaded in a specific way, deforms so that the entire 'text' of the material becomes visible at once. This resembles [tag:spectroscopy]spectroscopy[/tag] in astronomy: by the pattern of deformations we read hidden characteristics, just as from a spectrum we read a star’s composition.\n\nThe optimal shape is computed by an algorithm, adjusting geometry to the material’s properties — especially if it’s not uniform in different directions, like wood or [tag:carbon]carbon fiber[/tag]. [scientist:Robert Hooke]Robert Hooke[/scientist] first described elasticity, but the modern approach turns his legacy on its head: instead of a set of tests, one precise question.\n\nIt’s surprising that such a 'one-shot' experiment often yields more accurate parameters than a classic series of hundreds of measurements. The complex shape works like a filter: it suppresses noise and highlights what matters.",
+      "fun_fact": "With just one such sample, you can calculate the material’s stiffness more accurately than after hundreds of conventional tests. Fewer measurements — less noise.",
+      "scifi": "A similar method in science fiction could be imagined as a universal 'matter tester' that, with a single touch, learns everything about the composition of an unknown substance — like the tricorder from Star Trek.",
+      "mini": "A gardener judges a tree’s health not by a single leaf, but by how the whole plant sways in the wind. Engineers have adopted this wisdom: they now create test samples of such clever shape that a single deformation under load reveals all the elastic properties of the material. It’s like asking one very precise question instead of a hundred simple ones. In the future, such a 'smart sample' will allow rapid quality checks of composites, biomaterials, or 3D-printed parts simply by observing how they bend.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ]
+    },
+    "es": {
+      "title": "Cómo la forma de una pieza descifra las propiedades del material",
+      "oneliner": "Los ingenieros han encontrado la manera de crear muestras con tal forma que una sola prueba reemplaza docenas de ensayos convencionales.",
+      "description": "Ahora, en lugar de muchas pruebas simples, se puede usar una muestra ingeniosa. Bajo carga, sus curvaturas revelan todas las propiedades elásticas del material: los científicos han desarrollado un método informático que calcula la forma ideal de esa muestra, garantizando fiabilidad incluso con interferencias.",
+      "text": "Las curvaturas de una pieza especialmente diseñada son como escrituras donde están cifradas todas las propiedades elásticas del material. Antes, estas propiedades se determinaban ensayando multitud de piezas rectangulares para ajustar el [tag:standard_model]modelo estándar[/tag] de elasticidad, casi como aprender un idioma palabra por palabra. Ahora, una sola pieza con protuberancias y hendiduras, cargada de una manera específica, se deforma de modo que todo el «texto» del material se hace visible de inmediato. Esto recuerda a la [tag:spectroscopy]espectroscopía[/tag] en astronomía: por el patrón de deformaciones leemos las características ocultas, como por el espectro la composición de una estrella.\n\nLa forma óptima la calcula un algoritmo, ajustando la geometría a las propiedades del material, especialmente si no es uniforme en todas direcciones, como la madera o los [tag:carbon]plásticos reforzados con carbono[/tag]. [scientist:Robert Hooke]Robert Hooke[/scientist] fue el primero en describir la elasticidad, pero el enfoque moderno invierte su legado: en lugar de un conjunto de pruebas, una sola pregunta precisa.\n\nSorprendentemente, un experimento «de un solo uso» así suele dar parámetros más exactos que la clásica serie de cientos de mediciones. La forma compleja actúa como un filtro: atenúa el ruido y realza la esencia.",
+      "fun_fact": "Con una sola muestra así se puede calcular la rigidez del material con más precisión que tras cientos de pruebas convencionales. Menos mediciones, menos ruido.",
+      "scifi": "Un método parecido en la ciencia ficción sería un «probador de materia» universal que, con un solo toque, revela toda la composición de una sustancia desconocida, como el tricorder de «Star Trek».",
+      "mini": "Un jardinero no determina la salud de un árbol por una sola hoja, sino por cómo se mece toda la planta con el viento. Los ingenieros han adoptado esta sabiduría: ahora crean piezas de prueba con formas tan ingeniosas que una única deformación bajo carga revela todas las propiedades elásticas del material. Es como hacer una pregunta muy precisa en lugar de cien simples. En el futuro, esta «muestra inteligente» permitirá comprobar rápidamente la calidad de los compuestos, biomateriales o piezas impresas en 3D con solo observar cómo se flexionan.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "standard_model",
+        "carbon"
+      ],
+      "scientists": [
+        "Robert Hooke"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Садовник определяет здоровье дерева не по одному листу, а по тому, как всё растение качается на ветру. Инженеры переняли эту мудрость: теперь они создают тестовые детали такой хитрой формы, что одна-единственная деформация под нагрузкой раскрывает все упругие свойства материала. Это как задать один очень точный вопрос вместо сотни простых. В будущем такой «умный образец» позволит быстро проверять качество композитов, биоматериалов или деталей, напечатанных на 3D-принтере, просто посмотрев, как они прогибаются.",
+      "express_locked": true
+    }
+  }
+}

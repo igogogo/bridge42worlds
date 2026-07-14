@@ -1,0 +1,278 @@
+{
+  "id": "2510.22176",
+  "original_title": "Interpretable Geometry Sensitivity for Inverse Design of Integrated Photonics",
+  "authors": [
+    "Junho Park",
+    "Taehan Kim",
+    "Mohammad Ali",
+    "Di Liang"
+  ],
+  "date": "2025-10-25",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "spectroscopy",
+    "water",
+    "photometry"
+  ],
+  "main_tag": "spectroscopy",
+  "scientists": [],
+  "categories": [
+    "physics.optics",
+    "physics.comp-ph"
+  ],
+  "primary_category": "physics.optics",
+  "cited_arxiv": [],
+  "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+  "abstract": {
+    "ru": {
+      "popular": "Инверсный дизайн (автоматическая оптимизация) создаёт сверхкомпактные фотонные схемы, но порождает неочевидные формы, чувствительные к дефектам. Чтобы решить эту проблему, исследователи обучили суррогатную нейросеть предсказывать характеристики устройства и применили метод интегрированных градиентов (IG) для построения пиксельных карт важности. Оказалось, что «горячие» точки точно соответствуют физически осмысленным элементам — разветвителям и крутым изгибам. Эксперименты подтвердили: точечные повреждения в этих зонах усиливают потери до 11 раз сильнее, чем в нейтральных областях. Это похоже на диагностику моста: зная самые нагруженные балки, можно заранее их укрепить.",
+      "simple": "Обратный дизайн создаёт замысловатые световые микросхемы, но понять их логику почти невозможно. Учёные придумали метод, который подсвечивает критически важные зоны — словно тепловизор показывает утечки тепла. Малейшее изменение в такой зоне усиливает потери сигнала в 11 раз. Так где же у вашей идеи самое уязвимое место?",
+      "advanced": "Инверсный дизайн на основе сопряжённых методов оптимизации порождает нетривиальные свободные формы, интерпретация которых с точки зрения чувствительности к разбросу параметров изготовления затруднена. Предложен экспериментально проверенный подход к объяснению таких структур: лёгкая свёрточная суррогатная модель обучается регрессии показателей качества, после чего метод интегрированных градиентов (IG) определяет вклад каждого пикселя бинарной маски в целевую характеристику. На примере мультиплексоров с разделением по длине волны (1310/1550 нм) показано, что максимумы атрибуции соответствуют физически значимым элементам — узлам разветвления и участкам с высокой кривизной границ. Контролируемые точечные возмущения в областях с высокой чувствительностью вызывают до 11-кратного увеличения избыточных вносимых потерь по сравнению с невозмущёнными зонами, что согласуется с полноценным электродинамическим моделированием. Метод добавляет в существующие инженерные цепочки слой интерпретируемости, позволяя проводить анализ производственных ограничений без модификации электромагнитного решателя."
+    },
+    "en": {
+      "popular": "Inverse design (automatic optimization) creates ultra-compact photonic circuits, but it generates non-obvious shapes that are sensitive to defects. To solve this problem, researchers trained a surrogate neural network to predict device performance and applied the integrated gradients (IG) method to build pixel-level importance maps. It turned out that 'hot' spots exactly correspond to physically meaningful elements — splitters and sharp bends. Experiments confirmed: point defects in these zones increase losses up to 11 times more than in neutral areas. It's like bridge diagnostics: knowing the most stressed beams, you can reinforce them in advance.",
+      "simple": "Inverse design produces intricate optical microcircuits, but understanding their logic is nearly impossible. Scientists developed a method that highlights critically important areas — like a thermal camera revealing heat leaks. The slightest change in such an area amplifies signal loss by 11 times. So, where's the most vulnerable spot in your idea?",
+      "advanced": "Inverse design based on adjoint optimization methods yields non-trivial freeform shapes, whose interpretation in terms of sensitivity to fabrication parameter variations is challenging. We propose an experimentally validated approach to explain such structures: a lightweight convolutional surrogate model is trained to regress quality metrics, after which the integrated gradients (IG) method determines the contribution of each pixel in a binary mask to the target characteristic. Using wavelength-division multiplexers (1310/1550 nm) as an example, we show that attribution maxima correspond to physically meaningful elements — branch nodes and regions of high boundary curvature. Controlled point perturbations in high-sensitivity areas cause up to an 11-fold increase in excess insertion loss compared to unperturbed zones, consistent with full-wave electromagnetic simulations. The method adds an interpretability layer to existing engineering workflows, enabling analysis of fabrication constraints without modifying the electromagnetic solver."
+    },
+    "es": {
+      "popular": "El diseño inverso (optimización automática) crea circuitos fotónicos ultracompactos, pero genera formas no evidentes que son sensibles a defectos. Para resolver esto, los investigadores entrenaron una red neuronal sustituta para predecir las características del dispositivo y aplicaron el método de gradientes integrados (IG) para construir mapas de importancia por píxel. Resultó que los puntos «calientes» coinciden exactamente con elementos físicamente significativos: divisores y curvas pronunciadas. Los experimentos confirmaron que los daños puntuales en estas zonas aumentan las pérdidas hasta 11 veces más que en áreas neutras. Es como inspeccionar un puente: si se conocen las vigas más cargadas, se pueden reforzar de antemano.",
+      "simple": "El diseño inverso crea intrincados microchips ópticos, pero entender su lógica es casi imposible. Los científicos idearon un método que resalta las zonas críticas, como una cámara térmica que muestra fugas de calor. El más mínimo cambio en esa zona multiplica por 11 las pérdidas de señal. Entonces, ¿cuál es el punto más vulnerable de tu idea?",
+      "advanced": "El diseño inverso basado en métodos de optimización adjuntos produce formas libres no triviales, cuya interpretación en términos de sensibilidad a las variaciones de fabricación es difícil. Se propone un enfoque validado experimentalmente para explicar estas estructuras: se entrena un modelo ligero de red convolucional sustituta para predecir métricas de rendimiento, y luego el método de gradientes integrados (IG) determina la contribución de cada píxel de la máscara binaria a la característica objetivo. Usando el ejemplo de multiplexores por división de longitud de onda (1310/1550 nm), se muestra que los máximos de atribución corresponden a elementos físicamente significativos: nodos de ramificación y regiones con alta curvatura de los límites. Las perturbaciones puntuales controladas en áreas de alta sensibilidad provocan un aumento de hasta 11 veces en las pérdidas de inserción excesivas en comparación con zonas no perturbadas, lo cual concuerda con simulaciones electrodinámicas completas. El método añade una capa de interpretabilidad a los flujos de trabajo de ingeniería existentes, permitiendo el análisis de restricciones de fabricación sin modificar el solucionador electromagnético."
+    }
+  },
+  "thumbs": 5,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "B. Convolutional Surrogate Model"
+    ],
+    "ru": [
+      "B. Свёрточная суррогатная модель"
+    ],
+    "es": [
+      "B. Modelo Subrogado Convolucional"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Световой чип: карта сокровищ в море хаоса",
+      "oneliner": "Новый метод превращает неразборчивый дизайн световых микросхем в наглядную карту, где указано, какие зоны критичны для работы.",
+      "description": "Инженеры всё чаще доверяют компьютерам проектирование крошечных световых схем, но результат напоминает причудливую мозаику. Учёные разработали инструмент, который подсвечивает самые уязвимые участки таких схем, помогая избежать дорогого брака при производстве.",
+      "text": "Компьютерные алгоритмы проектируют световые чипы, которые [tag:spectroscopy]разделяют сигналы по цветам[/tag], не по прямым линиям, а через загадочные извилистые лабиринты. Эти хаотичные, почти органические узоры отлично работают, но до сих пор никто не знал, какая часть рисунка действительно важна. Малейшее отклонение на заводе могло вывести устройство из строя, но инженеры не могли предсказать, где оно критично.\n\nУчёные нашли решение: дополнительный искусственный интеллект рисует поверх проекта карту чувствительности. Яркие пятна на ней, словно отметки на карте сокровищ или [tag:water]подводные камни[/tag], указывают на места, где любая неточность катастрофична. Проверка на реальном чипе подтвердила: повреждение «горячей» точки увеличивает [tag:photometry]потери сигнала[/tag] в 11 раз сильнее, чем порча неважной зоны.\n\nЭтот метод не требует менять сложные компьютерные модели, а просто добавляет ясности. Проектировщики теперь заранее видят, выдержит ли схема неизбежные производственные огрехи. В перспективе это ускорит выпуск надёжных световых чипов для новых поколений интернета или квантовых компьютеров.",
+      "fun_fact": "Многие компьютерные дизайны неожиданно напоминают биологические формы: причудливые изгибы, похожие на кораллы или сосуды, хотя подчиняются строгим физическим законам.",
+      "scifi": "В фантастике искусственный интеллект порождает чертежи, неподвластные человеческой логике; теперь у нас есть ключ к их расшифровке.",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": []
+    },
+    "en": {
+      "title": "The Light Chip: A Treasure Map in a Sea of Chaos",
+      "oneliner": "A new method turns the cryptic blueprints of light microchips into a clear map, highlighting the zones that make or break the device.",
+      "description": "Engineers are leaning on computers more to design minuscule light circuits, but the output can be a whimsical mosaic. Now, scientists have a tool that shines a light on the weakest links, preventing expensive production flops.",
+      "text": "Computer algorithms design light chips that [tag:spectroscopy]separate signals by color[/tag] not along straight lines but through mysterious, winding mazes. These chaotic, almost organic patterns work brilliantly, but until now, no one knew which parts of the design truly mattered. The slightest manufacturing deviation could cripple the device, yet engineers couldn't predict where it would be fatal.\n\nScientists found a solution: an additional AI draws a sensitivity map over the blueprint. Bright spots on it, like marks on a treasure map or [tag:water]hidden reefs[/tag], point to areas where any inaccuracy is catastrophic. Real-world chip tests confirmed: damaging a \"hot\" spot increases [tag:photometry]signal loss[/tag] by 11 times more than wrecking an unimportant zone.\n\nThis method doesn't require changing complex computer models—it just adds clarity. Designers can now see in advance whether a circuit will survive inevitable manufacturing imperfections. In the future, this will speed up the production of reliable light chips for next-generation internet or quantum computers.",
+      "fun_fact": "Many computer-generated designs surprisingly resemble biological forms: whimsical curves that look like coral or blood vessels, yet they obey strict physical laws.",
+      "scifi": "In science fiction, AI spawns blueprints that defy human logic; now we have a key to decipher them.",
+      "mini": "Computer-designed light chips look like chaotic mosaics. A new method turns them into treasure maps: it highlights the pixels that keep everything running. Tests proved that damaging these \"golden\" spots multiplies signal loss by 11. It's the dawn of a language where neural networks explain their enigmatic choices.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": []
+    },
+    "es": {
+      "title": "Chip óptico: mapa del tesoro en un mar de caos",
+      "oneliner": "Un nuevo método convierte el diseño confuso de los microchips ópticos en un mapa visual que indica qué zonas son críticas para su funcionamiento.",
+      "description": "Los ingenieros confían cada vez más en los ordenadores para diseñar diminutos circuitos ópticos, pero el resultado parece un mosaico caprichoso. Los científicos han desarrollado una herramienta que resalta las zonas más vulnerables de estos circuitos, ayudando a evitar costosos defectos durante la fabricación.",
+      "text": "Los algoritmos informáticos diseñan chips ópticos que [tag:spectroscopy]separan las señales por colores[/tag] no mediante líneas rectas, sino a través de misteriosos laberintos sinuosos. Estos patrones caóticos, casi orgánicos, funcionan perfectamente, pero hasta ahora nadie sabía qué parte del diseño era realmente importante. La más mínima desviación en la fábrica podía inutilizar el dispositivo, pero los ingenieros no podían predecir dónde era crítico.\n\nLos científicos encontraron una solución: una inteligencia artificial adicional dibuja un mapa de sensibilidad sobre el diseño. Las manchas brillantes en él, como marcas en un mapa del tesoro o [tag:water]escollos submarinos[/tag], señalan los lugares donde cualquier imprecisión es catastrófica. La verificación en un chip real confirmó que dañar un punto «caliente» aumenta [tag:photometry]la pérdida de señal[/tag] 11 veces más que dañar una zona no importante.\n\nEste método no requiere cambiar los complejos modelos informáticos, sino que simplemente añade claridad. Los diseñadores ahora ven de antemano si el circuito resistirá los inevitables defectos de fabricación. A largo plazo, esto acelerará la producción de chips ópticos fiables para las nuevas generaciones de internet o los ordenadores cuánticos.",
+      "fun_fact": "Muchos diseños informáticos recuerdan sorprendentemente a formas biológicas: curvas caprichosas que parecen corales o vasos sanguíneos, aunque obedecen a estrictas leyes físicas.",
+      "scifi": "En la ciencia ficción, la inteligencia artificial genera planos que desafían la lógica humana; ahora tenemos la clave para descifrarlos.",
+      "mini": "Los chips ópticos diseñados por ordenador parecen un mosaico caótico. Un nuevo método los convierte en un mapa del tesoro: resalta los píxeles sin los cuales todo deja de funcionar. Las pruebas demostraron que dañar los puntos «dorados» aumenta la pérdida de señal 11 veces. Así nace un lenguaje con el que las redes neuronales explican sus enigmáticas decisiones.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": []
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "formulas": [],
+      "main_tag": "spectroscopy",
+      "extra_tags": [
+        "water",
+        "photometry"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Световые чипы, спроектированные компьютером, выглядят как хаотичная мозаика. Новый метод превращает их в карту сокровищ: подсвечивает пиксели, без которых всё перестаёт работать. Испытания доказали: повреждение «золотых» точек увеличивает потери сигнала в 11 раз. Так рождается язык, на котором нейросети объясняют свои загадочные решения.",
+      "express_locked": true
+    }
+  }
+}

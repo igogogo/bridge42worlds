@@ -1070,6 +1070,9 @@ EXPRESS_LOCKED = {
     "en": {"oneliner": "Full version coming soon",
            "text": "Only a lightweight express version of this article exists right now. Add it "
                     "to favorites — articles people are waiting for get the full treatment first."},
+    "es": {"oneliner": "Versión completa próximamente",
+           "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a "
+                    "favoritos — los artículos más esperados reciben antes el tratamiento completo."},
     "zh": {"oneliner": "完整版本准备中",
            "text": "目前只有这篇文章的精简速览版。收藏它——大家关注的文章会优先制作完整版本。"},
     "fr": {"oneliner": "Version complète à venir",
@@ -1093,15 +1096,19 @@ EXPRESS_LOCKED_HINT = {
 
 
 def express_locked_scipop(base, lang):
-    """base — реальный express-результат (title/main_tag/extra_tags/scientists/mini сохраняем,
-    иначе сломается сайдбар/индекс/mini-версия); тело текста подменяем на «скоро полная версия».
+    """base — реальный express-результат (main_tag/extra_tags/scientists/mini сохраняем, иначе
+    сломается сайдбар/индекс/mini-версия); тело текста подменяем на «скоро полная версия».
     ВАЖНО: advanced рендерится ИНАЧЕ, чем popular/simple/mini (gen_article_html: SIMPLE_LIKE
     читает поле text, advanced — секции context/methods/... маркерами) — заполняем оба пути,
-    иначе на advanced-вкладке страница окажется пустой."""
+    иначе на advanced-вкладке страница окажется пустой.
+    title ТОЖЕ переопределяем (раньше не трогали — комментарий говорил «title... сохраняем», но
+    base всегда RU-контент независимо от lang, на которую эта заглушка рендерится: на en/es
+    страницах title/<h1> молча оставался русским, хотя весь остальной текст уже был на языке
+    страницы) — берём тот же локализованный oneliner, что и в тексте, не настоящий заголовок."""
     loc = EXPRESS_LOCKED.get(lang, EXPRESS_LOCKED["en"])
     return {
         **base,
-        "oneliner": loc["oneliner"], "description": "", "text": loc["text"],
+        "title": loc["oneliner"], "oneliner": loc["oneliner"], "description": "", "text": loc["text"],
         "fun_fact": "", "scifi": "", "formulas": [], "key_numbers": {},
         "context": loc["text"], "methods": "", "results": "", "implications": "",
         "future_development": "", "impact_on": "", "next_steps": "", "key_problems_connection": "",

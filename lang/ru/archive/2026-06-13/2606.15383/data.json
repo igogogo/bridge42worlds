@@ -1,0 +1,300 @@
+{
+  "id": "2606.15383",
+  "original_title": "Quantum optimal control of steady orbits",
+  "authors": [
+    "Shebha Anandhi Jegadeesan",
+    "Yujie Zhao",
+    "Robert Hunter",
+    "Hassane El Mkami",
+    "Maximilian Keitel",
+    "Callum Musselwhite",
+    "Graham Smith",
+    "Guinevere Mathies",
+    "Ilya Kuprov"
+  ],
+  "date": "2026-06-13",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "entropy",
+    "hydrogen",
+    "spectroscopy"
+  ],
+  "main_tag": "entropy",
+  "scientists": [],
+  "categories": [
+    "quant-ph",
+    "math-ph",
+    "math.MP",
+    "physics.chem-ph"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [],
+  "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+  "abstract": {
+    "ru": {
+      "popular": "Квантовые устройства (лазеры, атомные часы) часто должны выходить на устойчивые периодические орбиты — предельные циклы. Обычный метод оптимизации импульсов GRAPE не справляется, так как требует бесконечного моделирования замкнутого цикла. Предложен прямой подход: вместо расчёта всей орбиты задаются ключевые точки, через которые система должна пройти, и алгоритм строит управляющие импульсы. Сложность та же, что у GRAPE, но без бесконечных итераций. Аналогия — анимация по опорным кадрам: плавный цикл воспроизводится по нескольким меткам.",
+      "simple": "Лазеры, атомные часы, магнитометры — все они полагаются на то, что квантовые частицы «ходят по кругу» устойчивыми маршрутами. Но как заставить систему выйти на такой вечный цикл? Прежние методы требовали бесконечных расчётов. Авторы нашли способ быстро проектировать правильную последовательность толчков, как опытный хореограф, который ставит танец.",
+      "advanced": "Периодически возбуждаемые диссипативные квантовые системы могут выходить на стационарные орбиты — замкнутые петли в фазовом пространстве. Такие режимы лежат в основе работы охлаждающих устройств для инициализации кубитов, лазеров, атомных часов, магнитометров и методов магнитного резонанса (установившаяся свободная прецессия, динамическая поляризация ядер). Управление этими состояниями методами квантового оптимального контроля затруднено: стандартный алгоритм GRAPE требует численного распространения во времени и не справляется с бесконечным повторением цикла. Предложена эффективная стратегия синтеза управляющих последовательностей, которые асимптотически выводят систему на предельный цикл, проходящий через заданные пользователем опорные точки. В отличие от подходов на основе формализма Флоке–Линдблада и эффективных гамильтонианов, метод непосредственно строит импульсы для достижения нужной орбиты. Вычислительные затраты сопоставимы с GRAPE; реализация — в библиотеке Spinach."
+    },
+    "en": {
+      "popular": "Quantum devices (lasers, atomic clocks) often need to settle into stable periodic orbits—limit cycles. The usual GRAPE pulse optimization method fails because it requires endless simulation of a closed loop. A direct approach is proposed: instead of calculating the whole orbit, you specify key points the system must pass through, and the algorithm builds the control pulses. The complexity is the same as GRAPE, but without infinite iterations. Think of it like keyframe animation: a smooth cycle replayed from just a few markers.",
+      "simple": "Lasers, atomic clocks, magnetometers—they all rely on quantum particles 'going in circles' along stable paths. But how do you nudge a system into such an eternal loop? Old methods demanded infinite calculations. The authors found a way to quickly design the right sequence of pushes, like a skilled choreographer setting a dance.",
+      "advanced": "Periodically driven dissipative quantum systems can fall into stationary orbits—closed loops in phase space. Such regimes underpin cooling devices for qubit initialization, lasers, atomic clocks, magnetometers, and magnetic resonance techniques (steady-state free precession, dynamic nuclear polarization). Controlling these states with quantum optimal control is tricky: the standard GRAPE algorithm requires numerical time propagation and can't handle an infinitely repeating cycle. An efficient strategy is proposed for synthesizing control sequences that asymptotically steer the system onto a limit cycle passing through user-specified anchor points. Unlike approaches based on the Floquet-Lindblad formalism and effective Hamiltonians, the method directly constructs pulses to achieve the desired orbit. Computational cost is comparable to GRAPE; implementation is in the Spinach library."
+    },
+    "es": {
+      "popular": "Los dispositivos cuánticos (láseres, relojes atómicos) a menudo necesitan alcanzar órbitas periódicas estables: los ciclos límite. El método habitual de optimización de pulsos GRAPE no funciona, ya que requiere simular indefinidamente el ciclo cerrado. Se propone un enfoque directo: en lugar de calcular toda la órbita, se definen puntos clave por los que el sistema debe pasar, y el algoritmo construye los pulsos de control. La complejidad es similar a la de GRAPE, pero sin iteraciones infinitas. Una analogía: es como una animación con fotogramas clave, donde un ciclo suave se reproduce a partir de unas pocas marcas.",
+      "simple": "Láseres, relojes atómicos, magnetómetros: todos dependen de que las partículas cuánticas «caminen en círculos» por rutas estables. Pero, ¿cómo logramos que el sistema entre en ese ciclo eterno? Los métodos anteriores requerían cálculos interminables. Los autores encontraron una forma de diseñar rápidamente la secuencia correcta de empujones, como un coreógrafo experimentado que monta una danza.",
+      "advanced": "Los sistemas cuánticos disipativos excitados periódicamente pueden alcanzar órbitas estacionarias: bucles cerrados en el espacio de fases. Estos regímenes son la base del funcionamiento de dispositivos de enfriamiento para la inicialización de cúbits, láseres, relojes atómicos, magnetómetros y métodos de resonancia magnética (precesión libre estacionaria, polarización dinámica nuclear). Controlar estos estados mediante métodos de control óptimo cuántico es difícil: el algoritmo estándar GRAPE requiere propagación numérica en el tiempo y no puede manejar la repetición infinita del ciclo. Se propone una estrategia eficiente para sintetizar secuencias de control que llevan asintóticamente al sistema a un ciclo límite que pasa por puntos de referencia definidos por el usuario. A diferencia de los enfoques basados en el formalismo de Floquet-Lindblad y hamiltonianos efectivos, el método construye directamente los pulsos para alcanzar la órbita deseada. El costo computacional es comparable al de GRAPE; la implementación está en la biblioteca Spinach."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "A schematic illustration of steady orbit optimal control. The system starts at the initial state ρ0 and evolves",
+      "Briefly, shaped microwave pulses are generated at 1.8 GHz with a resolution of approxi-",
+      "Distribution of the electron Rabi frequencies in the HiPER instru-",
+      "HiPER instrument filter function including the detection circuit. (Left panel) Ideal X-inverse-X pulse se-",
+      "General scheme of a pulsed DNP experiment. The microwave pulse",
+      "Spectrograms and asymptotic 1H magnetisation histograms (over the ensemble) for SO -GRAPE opti-"
+    ],
+    "ru": [
+      "Схематическая иллюстрация оптимального управления установившейся орбитой. Система стартует из начального состояния ρ0 и эволюционирует",
+      "Кратко, сформированные микроволновые импульсы генерируются на частоте 1,8 ГГц с разрешением приблизи-",
+      "Распределение электронных частот Раби в приборе HiPER",
+      "Функция фильтра прибора HiPER, включая цепь детектирования. (Левая панель) Идеальная последовательность импульсов X-инверсный-X",
+      "Общая схема импульсного эксперимента ДЯП. Микроволновый импульс",
+      "Спектрограммы и асимптотические гистограммы намагниченности 1H (по ансамблю) для оптимизации SO-GRAPE"
+    ],
+    "es": [
+      "Una ilustración esquemática del control óptimo de órbita estacionaria. El sistema comienza en el estado inicial ρ0 y evoluciona",
+      "Brevemente, se generan pulsos de microondas conformados a 1.8 GHz con una resolución de aproxima-",
+      "Distribución de las frecuencias Rabi del electrón en el HiPER instru-",
+      "Función de filtro del instrumento HiPER incluyendo el circuito de detección. (Panel izquierdo) Pulso X-inverso-X ideal se-",
+      "Esquema general de un experimento DNP pulsado. El pulso de microondas",
+      "Espectrogramas e histogramas de magnetización de 1H asintóticos (sobre el conjunto) para SO -GRAPE opti-"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Умные толчки для квантовых качелей",
+      "oneliner": "Учёные нашли быстрый способ рассчитывать умные толчки, которые заставляют атомные системы бесконечно повторять нужные движения, несмотря на потери энергии.",
+      "description": "Квантовые приборы — от мазеров до сверхточных часов — опираются на повторяющиеся движения внутри себя. Потери энергии мешают этим ритмам, но точные «толчки» могут их поддерживать. Раньше расчёт таких толчков съедал часы машинного времени. Теперь математический приём делает это почти мгновенно, открывая путь к новым сверхстабильным устройствам.",
+      "text": "В мире атомов и частиц всё стремится к покою: частицы теряют энергию, как качели затухают из-за [tag:entropy]потери энергии[/tag] (то есть трения). Но многие приборы — от [tag:hydrogen]водородных мазеров[/tag] до [tag:spectroscopy]атомных часов[/tag] — живут за счёт повторяющихся циклов. Чтобы удержать их, нужны точные внешние толчки — короткие лазерные импульсы, подаваемые в строго выверенные моменты.\n\nРаньше поиск таких толчков напоминал попытки раскачать качели случайными рывками: компьютеры часами моделировали тысячи шагов, пока система не выходила на стабильный ритм. Новый метод вычисляет импульсы лишь для нескольких контрольных позиций — словно зная, что три точных толчка в нужных точках дуги заставят качели качаться вечно. Этот трюк радикально ускоряет расчёты, превращая их в рядовую оптимизационную задачу.\n\nСюрприз в том, что математический секрет позаимствован у космической навигации: там тоже строят траекторию через опорные точки. Алгоритм уже живёт в библиотеке Spinach и помогает создавать сверхстабильные квантовые компьютеры и сенсоры, где каждый «толчок» должен быть безупречен.",
+      "fun_fact": "Атомные часы теряют секунду лишь за миллиарды лет. Новый алгоритм обещает улучшить даже эту фантастическую стабильность.",
+      "scifi": "Идея управляемых квантовых циклов напоминает «петли времени» из фантастики, но здесь они помогают создавать сверхточные приборы.",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": []
+    },
+    "en": {
+      "title": "Smart Pushes for Quantum Swings",
+      "oneliner": "Scientists have found a quick way to calculate smart pushes that make atomic systems endlessly repeat desired movements despite energy losses.",
+      "description": "Quantum devices — from masers to ultra-precise clocks — rely on repetitive motions within themselves. Energy losses disrupt these rhythms, but precise 'pushes' can sustain them. Previously, calculating such pushes consumed hours of computer time. Now a mathematical trick does it almost instantly, paving the way for new ultra-stable devices.",
+      "text": "In the world of atoms and particles, everything tends toward rest: particles lose energy, just as a swing slows down due to [tag:entropy]energy loss[/tag] (friction). But many devices — from [tag:hydrogen]hydrogen masers[/tag] to [tag:spectroscopy]atomic clocks[/tag] — live by repetitive cycles. To sustain them, precise external pushes are needed — short laser pulses delivered at exactly calculated moments.\n\nPreviously, finding such pushes resembled trying to swing by random pushes: computers spent hours simulating thousands of steps until the system settled into a steady rhythm. The new method calculates pulses for only a few control positions — as if knowing that three precise pushes at the right points on the arc will keep the swing going forever. This trick dramatically speeds up calculations, turning them into a routine optimization problem.\n\nThe surprise is that the mathematical secret is borrowed from space navigation: there too, trajectories are built through reference points. The algorithm already lives in the Spinach library and helps create ultra-stable quantum computers and sensors, where each 'push' must be flawless.",
+      "fun_fact": "Atomic clocks lose a second only over billions of years. The new algorithm promises to improve even this fantastic stability.",
+      "scifi": "The idea of controlled quantum cycles resembles 'time loops' from science fiction, but here they help create ultra-precise instruments.",
+      "mini": "Scientists have found a quick way to calculate ideal 'pushes' for quantum systems, making them endlessly orbit along the desired path, like perpetual swings. This will speed up the creation of ultra-precise instruments.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": []
+    },
+    "es": {
+      "title": "Empujones inteligentes para columpios cuánticos",
+      "oneliner": "Los científicos han encontrado una forma rápida de calcular empujones inteligentes que hacen que los sistemas atómicos repitan sin cesar los movimientos deseados, a pesar de las pérdidas de energía.",
+      "description": "Los dispositivos cuánticos —desde los máseres hasta los relojes ultraprecisos— se basan en movimientos repetitivos en su interior. Las pérdidas de energía perturban estos ritmos, pero unos «empujones» precisos pueden mantenerlos. Antes, calcular dichos empujones consumía horas de tiempo de máquina. Ahora, un truco matemático lo hace casi al instante, abriendo el camino a nuevos dispositivos ultraestables.",
+      "text": "En el mundo de los átomos y las partículas, todo tiende al reposo: las partículas pierden energía, como un columpio se amortigua por la [tag:entropy]pérdida de energía[/tag] (es decir, la fricción). Pero muchos dispositivos —desde los [tag:hydrogen]máseres de hidrógeno[/tag] hasta los [tag:spectroscopy]relojes atómicos[/tag]— viven gracias a ciclos repetitivos. Para mantenerlos, se necesitan empujones externos precisos: pulsos láser cortos, aplicados en momentos rigurosamente determinados.\n\nAntes, buscar esos empujones era como intentar balancear un columpio con tirones aleatorios: las computadoras modelaban miles de pasos durante horas, hasta que el sistema alcanzaba un ritmo estable. El nuevo método calcula los pulsos solo para unas pocas posiciones de control, como si supiéramos que tres empujones exactos en los puntos adecuados del arco harán que el columpio se balancee eternamente. Este truco acelera radicalmente los cálculos, convirtiéndolos en un problema de optimización rutinario.\n\nLa sorpresa es que el secreto matemático se tomó prestado de la navegación espacial: allí también se construye una trayectoria a través de puntos de referencia. El algoritmo ya reside en la biblioteca Spinach y ayuda a crear computadoras y sensores cuánticos ultraestables, donde cada «empujón» debe ser impecable.",
+      "fun_fact": "Los relojes atómicos pierden un segundo solo cada miles de millones de años. El nuevo algoritmo promete mejorar incluso esa fantástica estabilidad.",
+      "scifi": "La idea de ciclos cuánticos controlados recuerda a los «bucles temporales» de la ciencia ficción, pero aquí ayudan a crear dispositivos ultraprecisos.",
+      "mini": "Los científicos han encontrado una forma rápida de calcular «empujones» ideales para sistemas cuánticos, haciéndolos girar sin fin en la órbita deseada, como un columpio perpetuo. Esto acelerará la creación de dispositivos ultraprecisos.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": []
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    }
+  }
+}
