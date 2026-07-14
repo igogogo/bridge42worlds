@@ -206,37 +206,16 @@ function fetchIndex(version) {
         .then(function(r) { return r.json(); }).catch(function() { return []; });
 }
 
-Promise.all([
-    fetchIndex('popular'),
-    fetchIndex('simple'),
-    fetchIndex('advanced'),
-    fetch('/data/authors-graph.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-    fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
-        return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
-    }),
-    fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
-        return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
-    }),
-    fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-    fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-    fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
-]).then(function(results) {
-    searchIndex = results[0].concat(results[1]).concat(results[2]);
-    authorsGraph = results[3];
-    tagsLoc = results[4];
-    scientistsData = results[5];
-    lawsData = results[6] || {};
-    // Единый источник правды для названий разделов arXiv — Python-словарь ARXIV_CATEGORIES
-    // (gen_base.py), экспортируемый в data/arxiv-categories.json. Раньше тут была отдельная
-    // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
-    Object.assign(ARXIV_CAT_NAMES, results[7] || {});
-    Object.assign(ARXIV_CAT_DESC, results[8] || {});
-
+// Первая отрисовка ленты не должна ждать ~20МБ данных (3 тира индекса + граф авторов +
+// теги/законы/учёные) — раньше все они грузились одним Promise.all ПЕРЕД первым showLatest(),
+// из-за чего главная страница висела пустой, пока не скачается и не распарсится всё разом
+// (граф авторов сам по себе ~7МБ на 11000+ авторов). Теперь: сначала грузим ТОЛЬКО индекс
+// текущего тира (нужен для видимой ленты прямо сейчас) — отрисовываем немедленно; всё
+// остальное (два других тира для переключалки сложности, теги/учёные/законы для тултипов,
+// граф авторов) грузится ПАРАЛЛЕЛЬНО, но не блокирует первую отрисовку.
+fetchIndex(effVersion()).then(function(primary) {
+    searchIndex = primary;
     window.searchIndex = searchIndex;
-    window.tagsLoc = tagsLoc;
-    window.scientistsData = scientistsData;
-    window.lawsData = lawsData;
-    window.authorsGraph = authorsGraph;
 
     var container = document.getElementById('search-results');
     if (container && !document.querySelector('.search-box')?.value) {
@@ -253,6 +232,57 @@ Promise.all([
     renderSiteStats();
 }).catch(function(e) {
     console.error('Init error:', e);
+});
+
+var OTHER_VERSIONS = ['popular', 'simple', 'advanced'].filter(function(v) { return v !== effVersion(); });
+Promise.all(
+    OTHER_VERSIONS.map(fetchIndex).concat([
+        fetch('/data/authors-graph.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
+            return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
+        }),
+        fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
+            return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
+        }),
+        fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
+    ])
+).then(function(results) {
+    var otherIndexes = results.slice(0, OTHER_VERSIONS.length);
+    var rest = results.slice(OTHER_VERSIONS.length);
+
+    var byVersion = {};
+    byVersion[effVersion()] = searchIndex;
+    OTHER_VERSIONS.forEach(function(v, i) { byVersion[v] = otherIndexes[i]; });
+    searchIndex = (byVersion.popular || []).concat(byVersion.simple || []).concat(byVersion.advanced || []);
+    window.searchIndex = searchIndex;
+
+    authorsGraph = rest[0];
+    tagsLoc = rest[1];
+    scientistsData = rest[2];
+    lawsData = rest[3] || {};
+    // Единый источник правды для названий разделов arXiv — Python-словарь ARXIV_CATEGORIES
+    // (gen_base.py), экспортируемый в data/arxiv-categories.json. Раньше тут была отдельная
+    // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
+    Object.assign(ARXIV_CAT_NAMES, rest[4] || {});
+    Object.assign(ARXIV_CAT_DESC, rest[5] || {});
+
+    window.tagsLoc = tagsLoc;
+    window.scientistsData = scientistsData;
+    window.lawsData = lawsData;
+    window.authorsGraph = authorsGraph;
+
+    renderSiteStats();
+    // Первая лента уже отрисована с тегами как raw id (tagsLoc ещё не пришёл) — теперь, когда
+    // справочники подгрузились, перерисовываем дефолтный фид начисто, чтобы подтянуть красивые
+    // названия тегов. Если пользователь уже начал искать — его результаты не трогаем.
+    var container = document.getElementById('search-results');
+    if (container && !document.querySelector('.search-box')?.value) {
+        _defaultFeed();
+    }
+}).catch(function(e) {
+    console.error('Background data load error:', e);
 });
 
 var STATS_LABELS = {
