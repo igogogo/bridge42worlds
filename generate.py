@@ -181,6 +181,18 @@ def valid_scientist_ids():
     return _VALID_SCI
 
 
+def scientist_link_or_text(s, lang, label=None):
+    """Ссылка на страницу учёного — только если он реально есть в курируемом реестре
+    (valid_scientist_ids(), ключи одинаковы для всех языков). Законы/теги/статьи нередко
+    упоминают в истории открытия учёных, которые в 129-реестр не попали (не влезли по конфигу,
+    либо второстепенная фигура) — тогда просто текст, а не мёртвая ссылка на /scientists/....html."""
+    label = label if label is not None else s
+    if s not in valid_scientist_ids():
+        return safe(label)
+    return (f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" '
+            f'class="text-scientist" data-scientist="{attr_safe(s)}">{safe(label)}</a>')
+
+
 def reading_minutes(scipop):
     """Оценка времени чтения (мин), ~180 слов/мин."""
     parts = [scipop.get("text", "")]
@@ -448,7 +460,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
     authors = article.get("authors", [])
     authors_html = ", ".join(
-        f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
+        (f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
+         if any(c.isalpha() for c in a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
         for a in authors
     )
     scientists = scipop.get("scientists", [])
@@ -494,12 +507,23 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                "".join(f"<li><strong>{k}:</strong> {v}</li>" for k, v in kn.items()) + '</ul></div>'
         fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""))
 
+    if scipop.get("express_locked"):
+        # Заглушка ("полная версия готовится") иначе не говорит, что вообще-то часть уровней
+        # уже готова — ссылка на реально существующий (не текущий) уровень строится на лету при
+        # рендере из article["express_tiers"], не при генерации (общая для всех статей заглушка).
+        avail = [v for v in ("popular", "simple", "mini") if v in (article.get("express_tiers") or [])]
+        if avail:
+            target = avail[0]
+            tier_name = (MINI_VERSION_LABEL.get(lang, MINI_VERSION_LABEL["en"]) if target == "mini"
+                         else version_label(target, lang))
+            target_url = f'/{LANG_DIR}/{lang}/archive/{date_str}/{article["id"]}/{VERSION_FILES[target]}'
+            hint_tpl = EXPRESS_LOCKED_HINT.get(lang, EXPRESS_LOCKED_HINT["en"])
+            text_html += f'<p>{hint_tpl.format(tier=safe(tier_name), url=target_url)}</p>'
+
     scientists_html = ""
     if scientists:
         scientists_html = f'<div class="scientists-section"><strong>{safe(loc["scientists"])}</strong> ' + \
-                          ', '.join(
-                              f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="text-scientist" data-scientist="{attr_safe(s)}">{s}</a>' for s
-                              in scientists) + '</div>'
+                          ', '.join(scientist_link_or_text(s, lang) for s in scientists) + '</div>'
 
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions)
     ai_jpg = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"] / "ai.jpg"
@@ -907,10 +931,7 @@ def generate_tag_page(tag_id, lang):
     if ff_pop:
         fun_fact_popular_html = f'<div class="fun-fact">💡 {safe(ff_pop)}</div>'
 
-    scientists_link_list = [
-        f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="text-scientist" data-scientist="{attr_safe(s)}">{s}</a>'
-        for s in tag_data.get("scientists", [])
-    ]
+    scientists_link_list = [scientist_link_or_text(s, lang) for s in tag_data.get("scientists", [])]
     scientists_section_html = related_row(loc["scientists"].rstrip(":"), scientists_link_list)
 
     mini_html = f'<p class="mini-desc">{safe(tag_data["mini"])}</p>' if tag_data.get("mini") else ""
@@ -1059,6 +1080,17 @@ EXPRESS_LOCKED = {
                     "المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا."},
 }
 
+# Подсказка со ссылкой на реально доступный уровень (mini/simple/popular — какой из них
+# express_tiers содержит), добавляется К тексту-заглушке EXPRESS_LOCKED при рендере (не при
+# генерации — заглушка одна и та же для всех статей, ссылка/URL подставляются на лету).
+EXPRESS_LOCKED_HINT = {
+    "ru": 'Сейчас доступна статья в изложении «{tier}» — <a href="{url}">открыть</a>.',
+    "en": 'Right now the article is available in "{tier}" mode — <a href="{url}">open it</a>.',
+    "zh": '目前该文章有"{tier}"版本可看 — <a href="{url}">打开</a>。',
+    "fr": 'L’article est disponible en version « {tier} » — <a href="{url}">l’ouvrir</a>.',
+    "ar": 'يتوفر المقال حاليًا بمستوى «{tier}» — <a href="{url}">فتحه</a>.',
+}
+
 
 def express_locked_scipop(base, lang):
     """base — реальный express-результат (title/main_tag/extra_tags/scientists/mini сохраняем,
@@ -1154,12 +1186,15 @@ def generate_law_page(law_id, lang):
     law_img_url = entity_image_url("laws", law_id)
     ai_cover_html = f'<div class="ai-cover"><img src="{law_img_url}" alt=""></div>' if law_img_url else ""
     formulas_html = render_formulas(L.get("formulas", []))
-    related_tags_html = " · ".join(
-        f'<a href="/{LANG_DIR}/{lang}/tags/{t}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
-        for t in law_tags if t)
-    sci_links = [
-        f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="text-scientist" data-scientist="{attr_safe(s)}">{safe(s)}</a>'
-        for s in (L.get("scientists") or [])]
+    def _law_tag_link(t):
+        label = safe(tags_loc.get(t, {}).get("name", t))
+        # t не в valid_tag_ids() — обычно перевод закона положил в "tags" локализованное имя
+        # вместо канонического id (гэп в reference_translate.py), ссылка на такой id 404-ит.
+        if t not in valid_tag_ids():
+            return label
+        return f'<a href="/{LANG_DIR}/{lang}/tags/{t}.html" data-tag="{attr_safe(t)}">{label}</a>'
+    related_tags_html = " · ".join(_law_tag_link(t) for t in law_tags if t)
+    sci_links = [scientist_link_or_text(s, lang) for s in (L.get("scientists") or [])]
     scientists_section_html = related_row(loc["scientists"].rstrip(":"), sci_links)
     related_laws = [rl for rl in (L.get("related_laws") or []) if rl in laws]
     related_laws_links = [
@@ -1254,27 +1289,32 @@ GRAPH_LABELS = {
            "nodes": "Узлы:", "edges": "Связи:", "presets": "Пресеты:",
            "tags": "теги", "laws": "законы", "scientists": "учёные", "footer": "наука простыми словами",
            "search_tag": "Найти тег…", "search_law": "Найти закон…", "search_sci": "Найти учёного…",
-           "depth": "Глубина:", "clear": "Сбросить"},
+           "depth": "Глубина:", "clear": "Сбросить",
+           "warning": "⚠ Отображение оптимизировано под большой экран, формирование графа может занять некоторое время."},
     "en": {"title": "Knowledge graph", "subtitle": "Tags, laws and scientists and all their links. Toggle what to show.",
            "nodes": "Nodes:", "edges": "Edges:", "presets": "Presets:",
            "tags": "tags", "laws": "laws", "scientists": "scientists", "footer": "science made simple",
            "search_tag": "Find a tag…", "search_law": "Find a law…", "search_sci": "Find a scientist…",
-           "depth": "Depth:", "clear": "Clear"},
+           "depth": "Depth:", "clear": "Clear",
+           "warning": "⚠ Optimized for large screens — building the graph may take a moment."},
     "zh": {"title": "知识图谱", "subtitle": "标签、定律与科学家及其关联。切换显示内容。",
            "nodes": "节点：", "edges": "关联：", "presets": "预设：",
            "tags": "标签", "laws": "定律", "scientists": "科学家", "footer": "让科学变简单",
            "search_tag": "查找标签…", "search_law": "查找定律…", "search_sci": "查找科学家…",
-           "depth": "深度：", "clear": "重置"},
+           "depth": "深度：", "clear": "重置",
+           "warning": "⚠ 界面针对大屏幕优化，图谱生成可能需要一些时间。"},
     "fr": {"title": "Graphe des savoirs", "subtitle": "Tags, lois et scientifiques et leurs liens. Choisissez l'affichage.",
            "nodes": "Nœuds :", "edges": "Liens :", "presets": "Préréglages :",
            "tags": "tags", "laws": "lois", "scientists": "scientifiques", "footer": "la science simplifiée",
            "search_tag": "Trouver un tag…", "search_law": "Trouver une loi…", "search_sci": "Trouver un scientifique…",
-           "depth": "Profondeur :", "clear": "Réinitialiser"},
+           "depth": "Profondeur :", "clear": "Réinitialiser",
+           "warning": "⚠ Optimisé pour grand écran — la construction du graphe peut prendre un moment."},
     "ar": {"title": "شبكة المعرفة", "subtitle": "الوسوم والقوانين والعلماء وكل روابطهم. بدّل ما تريد عرضه.",
            "nodes": "العقد:", "edges": "الروابط:", "presets": "إعدادات:",
            "tags": "وسوم", "laws": "قوانين", "scientists": "علماء", "footer": "العلم ببساطة",
            "search_tag": "ابحث عن وسم…", "search_law": "ابحث عن قانون…", "search_sci": "ابحث عن عالِم…",
-           "depth": "العمق:", "clear": "إعادة تعيين"},
+           "depth": "العمق:", "clear": "إعادة تعيين",
+           "warning": "⚠ الواجهة محسّنة للشاشات الكبيرة، وقد يستغرق إنشاء الرسم البياني بعض الوقت."},
 }
 
 
@@ -1293,7 +1333,7 @@ def generate_knowledge_graph_page(lang):
         tags_label=safe(loc["tags"]), laws_label=safe(loc["laws"]), scientists_label=safe(loc["scientists"]),
         search_tag_placeholder=safe(loc["search_tag"]), search_law_placeholder=safe(loc["search_law"]),
         search_sci_placeholder=safe(loc["search_sci"]), depth_label=safe(loc["depth"]), clear_label=safe(loc["clear"]),
-        footer_text=safe(loc["footer"])
+        footer_text=safe(loc["footer"]), graph_warning=safe(loc["warning"])
     ), encoding="utf-8")
 
 
@@ -1607,6 +1647,20 @@ def update_all_authors():
             alphabet_nav_html=letter_nav, search_placeholder=safe(loc["find"]),
             author_sections_html=section_html, footer_text=safe(loc["footer"])
         ), encoding="utf-8")
+    # "#" (имена не A-Z) — gen_alphabet_nav безусловно ссылается на other.html, если в
+    # sections["#"] что-то есть, но саму страницу раньше нигде не писали (цикл выше — только
+    # A-Z) — отсюда битая ссылка на every letter page.
+    if sections.get("#"):
+        section_html = gen_letter_section("#")
+        other_nav = gen_alphabet_nav(active_letter="#")
+        (Path(LANG_DIR) / DEFAULT_LANG / "authors" / "other.html").write_text(tpl_cloud.substitute(
+            lang=DEFAULT_LANG, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+            version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
+            page_title=safe(f"{loc['title']} — #"), authors_title=loc["title"],
+            authors_subtitle=safe(f"# — {len(sections['#'])} {author_count_label}"),
+            alphabet_nav_html=other_nav, search_placeholder=safe(loc["find"]),
+            author_sections_html=section_html, footer_text=safe(loc["footer"])
+        ), encoding="utf-8")
     # Индекс по id ЗАРАНЕЕ, один раз на язык — раньше здесь на КАЖДОГО из тысяч авторов ×
     # каждый язык заново читался и парсился весь articles-index.json с диска (O(авторы×языки×
     # статьи)) — на 10000+ авторов и растущем архиве это тянулось по 15+ минут на пустом месте.
@@ -1858,10 +1912,13 @@ def generate_feeds(limit=50):
 def write_arxiv_categories_json():
     """Экспортирует ARXIV_CATEGORIES (gen_base.py) в data/arxiv-categories.json — search.js
     подтягивает его вместо своей отдельной хардкоженной копии ARXIV_CAT_NAMES, которая
-    неизбежно расходилась с Python-словарём при каждом добавлении новой категории."""
+    неизбежно расходилась с Python-словарём при каждом добавлении новой категории.
+    Заодно — ARXIV_CATEGORY_DESCRIPTIONS в data/arxiv-category-descriptions.json (тултипы)."""
     Path("data").mkdir(exist_ok=True)
     Path("data/arxiv-categories.json").write_text(
         json.dumps(ARXIV_CATEGORIES, ensure_ascii=False, indent=2), encoding="utf-8")
+    Path("data/arxiv-category-descriptions.json").write_text(
+        json.dumps(ARXIV_CATEGORY_DESCRIPTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def regenerate_all_html():
@@ -1887,6 +1944,7 @@ def regenerate_all_html():
             "primary_category": data.get("primary_category", ""),
             "refined": data.get("refined", False),
             "express": data.get("express", False),
+            "express_tiers": data.get("express_tiers", []),
         }
         abstract = data.get("abstract") or {}
         for version in VERSIONS:
@@ -2220,6 +2278,7 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
 def _index_entry(scipop, data, date_str, lang, version):
     url = f"/{LANG_DIR}/{lang}/archive/{date_str}/{data['id']}/{VERSION_FILES[version]}"
     abstract = abstract_for(data.get("abstract"), lang, version)
+    has_image = (Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / data["id"] / "ai.jpg").exists()
     return {
         "id": data["id"], "version": version,
         "title": scipop.get("title", data.get("original_title", "")),
@@ -2235,6 +2294,7 @@ def _index_entry(scipop, data, date_str, lang, version):
         "categories": data.get("categories", []),
         "primary_category": data.get("primary_category", ""),
         "express": data.get("express", False),
+        "image": has_image,
     }
 
 
@@ -2727,6 +2787,7 @@ def translate_article_lang(aid, target_lang, force=False):
         "license_name": data.get("license_name", "CC BY"),
         "categories": data.get("categories", []), "primary_category": data.get("primary_category", ""),
         "refined": data.get("refined", False), "express": data.get("express", False),
+        "express_tiers": data.get("express_tiers", []),
     }
     lang_folder = Path(LANG_DIR) / target_lang / "archive" / date_str / aid
     lang_folder.mkdir(parents=True, exist_ok=True)

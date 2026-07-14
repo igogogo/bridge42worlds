@@ -171,6 +171,7 @@ body.graph-fs-open { overflow: hidden; }
 
 /* ── Граф знаний: компактная шапка, панель в одну строку, граф поднят и виден весь на экране ── */
 .kg-h1 { margin: 4px auto 6px; font-size: 20px; }
+.kg-notice { max-width: 900px; margin: 0 auto 10px; font-size: 12.5px; color: var(--soft); text-align: center; }
 #kg-graph #kgcanvas { height: 720px; }
 .kg-controls-wrap { max-width: 900px; margin: 12px auto 0; }
 .kg-controls-wrap > summary {
@@ -537,23 +538,44 @@ h1 {
 .article-side {
     width: 130px; flex-shrink: 0; position: sticky; top: 64px;
     max-height: calc(100vh - 84px); overflow-y: auto;
+    background: rgba(128,128,128,0.07); border-radius: 14px; padding: 10px 8px;
 }
+/* На широком экране — по-настоящему закреплённая колонка (как .article-nav слева),
+   а не sticky внутри flex: sticky отвязывается от верха, как только заканчивается
+   короткая статья (.article-side короче .article-main), и дальше едет вместе со страницей.
+   fixed игнорирует высоту соседа — держится у самого верха весь скролл. Текст не наезжает,
+   т.к. .article-main > * и так упирается в свои 620px, независимо от того, сколько места
+   реально отдано .article-main во flex-раскладке. */
+@media (min-width: 1280px) {
+    .article-side {
+        position: fixed; top: 64px;
+        right: max(12px, calc((100vw - 900px) / 2 - 140px));
+        max-height: calc(100vh - 84px);
+    }
+    html[lang="ar"] .article-side, html[lang="he"] .article-side,
+    html[lang="fa"] .article-side, html[lang="ur"] .article-side {
+        right: auto; left: max(12px, calc((100vw - 900px) / 2 - 140px));
+    }
+}
+/* Тот же язык, что у .express-badge — контур, капс, разрядка букв — просто мельче под узкую колонку. */
 .article-side .side-tag {
-    display: block; font-size: 11px; color: var(--muted);
-    background: var(--tag-bg); text-decoration: none;
-    padding: 4px 8px; margin-bottom: 3px; border-radius: 5px;
+    display: block; font-size: 9px; font-weight: 600; color: var(--muted);
+    background: transparent; border: 1px solid var(--border); text-decoration: none;
+    text-transform: uppercase; letter-spacing: .3px;
+    padding: 3px 6px; margin-bottom: 3px; border-radius: 3px;
     text-align: center; transition: all 0.15s;
 }
-.article-side .side-tag:hover { background: #e0e0e0; color: var(--text); }
+.article-side .side-tag:hover { border-color: var(--link); color: var(--link); }
 .article-side .side-tags-label, .article-side .side-laws-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
     color: var(--soft); margin: 10px 0 4px; text-align: center; }
 .article-side .side-tags-label { margin-top: 0; }
 .article-side .side-law {
-    display: block; font-size: 11px; color: #4a6a92; text-align: center;
-    background: rgba(74,106,146,0.10); border: 0.5px solid rgba(74,106,146,0.24);
-    text-decoration: none; padding: 4px 8px; margin-bottom: 3px; border-radius: 5px; transition: all 0.15s;
+    display: block; font-size: 9px; font-weight: 600; color: #4a6a92; text-align: center;
+    background: transparent; border: 1px solid rgba(74,106,146,0.4);
+    text-decoration: none; text-transform: uppercase; letter-spacing: .3px;
+    padding: 3px 6px; margin-bottom: 3px; border-radius: 3px; transition: all 0.15s;
 }
-.article-side .side-law:hover { background: rgba(74,106,146,0.20); color: var(--link); }
+.article-side .side-law:hover { background: rgba(74,106,146,0.10); border-color: var(--link); color: var(--link); }
 
 /* ── Section navigation ───────── */
 .article-nav {
@@ -870,11 +892,14 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
     margin: 20px 0; padding: 16px 0;
     border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
 }
-/* overflow-x:auto САМ ПО СЕБЕ заставляет браузер включить и overflow-y:auto (спецификация не
-   допускает auto по одной оси + visible по другой) — из-за этого у высоких формул (вложенные
-   дроби, пределы, матрицы) иногда вылезал вертикальный скролл. overflow-y:visible явно — только
-   горизонтальный скролл для широких формул, по вертикали КaTeX всегда просто растягивает блок. */
-.formula-render { font-size: 17px; margin-bottom: 6px; overflow-x: auto; overflow-y: visible; padding-bottom: 4px; }
+/* overflow-x:auto САМ ПО СЕБЕ заставляет браузер резолвить overflow-y:visible в auto (спецификация
+   не допускает auto по одной оси + visible по другой — computed-value visible молча заменяется на
+   auto), так что явный overflow-y:visible браузер всё равно игнорирует. Высота блока не задана
+   (auto), поэтому overflow-y:hidden ничего не обрежет — контейнер и так растягивается под контент
+   (высокие формулы: дроби, пределы, матрицы — просто выше). А вот KaTeX иногда даёт scrollHeight на
+   1px больше clientHeight (субпиксельное округление, особенно у дробей) — с auto это иногда рисовало
+   тонкий вертикальный скроллбар на ровном месте; hidden молча съедает этот 1px, скроллбара нет никогда. */
+.formula-render { font-size: 17px; margin-bottom: 6px; overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; }
 .formula-meaning { font-size: 13px; color: var(--muted); }
 .formula + .formula { margin-top: -1px; border-top: none; }
 

@@ -104,6 +104,10 @@ var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 // см. Promise.all ниже — раньше тут была отдельная хардкоженная копия, расходившаяся с сервером.
 var ARXIV_CAT_NAMES = {};
 window.ARXIV_CAT_NAMES = ARXIV_CAT_NAMES;
+// Развёрнутые описания (англ., официальный текст arXiv) — для title= у бейджей категорий,
+// см. ARXIV_CATEGORY_DESCRIPTIONS в gen_base.py / data/arxiv-category-descriptions.json.
+var ARXIV_CAT_DESC = {};
+window.ARXIV_CAT_DESC = ARXIV_CAT_DESC;
 
 var resultsEl = document.getElementById('search-results');
 // Тег-страница передаёт один id, страница закона — ВСЕ свои теги через запятую (закон
@@ -214,7 +218,8 @@ Promise.all([
         return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
     }),
     fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-    fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
+    fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+    fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
 ]).then(function(results) {
     searchIndex = results[0].concat(results[1]).concat(results[2]);
     authorsGraph = results[3];
@@ -225,6 +230,7 @@ Promise.all([
     // (gen_base.py), экспортируемый в data/arxiv-categories.json. Раньше тут была отдельная
     // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
     Object.assign(ARXIV_CAT_NAMES, results[7] || {});
+    Object.assign(ARXIV_CAT_DESC, results[8] || {});
 
     window.searchIndex = searchIndex;
     window.tagsLoc = tagsLoc;
@@ -608,6 +614,7 @@ function cardHTML(item) {
     var bodyText = isMini ? item.threads : (item.abstract || item.description || item.oneliner || '');
     var cat = (item.categories || [])[0] || '';
     var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
+    var catDesc = (window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[cat]) || '';
     // Авторы: своя строка (переносится на 1-2 строки по ширине карточки), до 20 — с "+N" на остаток
     var au = item.authors || [];
     var authorsHtml = au.slice(0, 20).map(function(a) {
@@ -629,12 +636,16 @@ function cardHTML(item) {
         '</div>';
     var img = base + 't_ai.jpg';
     var imgFb = base + 'ai.jpg';
+    // item.image === false — решено уже при генерации (нет ai.jpg), не пытаемся грузить и не
+    // резервируем место под картинку. undefined (старый индекс до пересборки) — считаем как есть.
+    var hasImg = item.image !== false;
     return '<article class="article-card">' +
+        (hasImg ? (
         '<a class="card-img-wrap" href="' + url + '">' +
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
-        '</a>' +
+        '</a>') : '') +
         '<div class="card-body">' +
-            (catName ? '<a class="card-cat" href="#" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (catName ? '<a class="card-cat" href="#" title="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
             (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
@@ -794,7 +805,8 @@ function initCategoryBar() {
     var cats = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
     if (!cats.length) { bar.innerHTML = ''; return; }
     bar.innerHTML = cats.map(function(c) {
-        return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '">' +
+        var desc = (ARXIV_CAT_DESC[c] || '').replace(/"/g, '&quot;');
+        return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '" title="' + desc + '">' +
             (ARXIV_CAT_NAMES[c] || c) + '<span class="cat-chip-n">' + counts[c] + '</span></span>';
     }).join('');
     bar.onclick = function(e) {

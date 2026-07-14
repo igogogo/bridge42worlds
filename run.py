@@ -444,7 +444,17 @@ def cmd_regen(args):
 def cmd_check(args):
     import generate
     problems = generate.integrity_check(fix=args.fix)
-    sys.exit(1 if problems and not args.fix else 0)
+    broken = {}
+    if args.links:
+        import link_check
+        broken = link_check.check_links()
+    sys.exit(1 if (problems and not args.fix) or broken else 0)
+
+
+def cmd_links(args):
+    import link_check
+    broken = link_check.check_links()
+    sys.exit(1 if broken else 0)
 
 
 def cmd_ids(args):
@@ -724,7 +734,11 @@ def build_parser():
 
     s = sub.add_parser("check", help="проверка целостности")
     s.add_argument("--fix", action="store_true", help="починить HTML/индексы офлайн")
+    s.add_argument("--links", action="store_true", help="+ проверка внутренних ссылок на 404 (офлайн, без API)")
     s.set_defaults(func=cmd_check)
+
+    s = sub.add_parser("links", help="офлайн-проверка внутренних ссылок сайта на 404 (без API, перед публикацией)")
+    s.set_defaults(func=cmd_links)
 
     s = sub.add_parser("images", help="Обложки статей (из PDF, бесплатно) + тегов/законов (промпты, FLUX только с --gen-images)")
     s.add_argument("--force", action="store_true", help="пересоздать даже если уже есть")
