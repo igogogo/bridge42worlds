@@ -246,7 +246,7 @@ def parse_markers(text, lang):
 def render_formulas(formulas):
     return "".join(
         f'<div class="formula"><div class="formula-render">{f["latex"]}</div><div class="formula-meaning">{f.get("meaning", "")}</div></div>'
-        for f in formulas
+        for f in formulas if f.get("latex")
     )
 
 
@@ -507,7 +507,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.jpg'
         ai_cover_html = f'<div class="ai-cover"><a href="{ai_url}" class="mosaic-open"><img src="{ai_url}" alt=""></a></div>'
     else:
-        ai_cover_html = '<div class="ai-cover ai-cover-ph"></div>'
+        ai_cover_html = ""
     tags_side_html = gen_tags_side(tags, lang)
     if tags_side_html:
         tags_lbl = SIDE_TAGS_LABEL.get(lang, SIDE_TAGS_LABEL["en"])
@@ -559,12 +559,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
         refine_badge='<span class="refine-badge" title="Отшлифовано редактором">✦</span>' if article.get("refined") else "",
         express_badge='<span class="express-badge" title="Экспресс-версия: по аннотации автора, без разбора полного текста статьи">⚡ экспресс</span>' if article.get("express") else "",
-        refine_toggle=(
-            f'<label class="refine-switch" title="Сравнить с сырым текстом (до шлифовки)">'
-            f'<input type="checkbox" onchange="toggleRaw(this)" '
-            f'data-raw-url="/{LANG_DIR}/{lang}/archive/{date_str}/{article["id"]}/api/{version}-ru.json"> '
-            f'показать сырой вариант (до шлифовки)</label>'
-        ) if (article.get("refined") and version in ("popular", "simple")) else "",
         original_title=safe(article["title"]),
         oneliner=safe(scipop.get("oneliner", "")),
         oneliner_short=safe(scipop.get("oneliner", "")[:160]),
@@ -667,15 +661,25 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
     ip.write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+MAX_COAUTHORS = 30  # авторская страница показывает только первые 15 (см. generate_author_page) —
+# без кэпа мега-коллаборации (сотни/тысячи авторов на статью, обычное дело в hep-ex/astro-ph)
+# раздували authors-graph.json до 80+ МБ, которые целиком грузились на главной при каждом визите.
+
+
 def update_authors_graph(article):
     ap = Path("data/authors-graph.json")
     graph = json.loads(ap.read_text(encoding="utf-8")) if ap.exists() else {}
-    for a in article.get("authors", []):
+    # Мусорные "авторы" (голая пунктуация — артефакт парсинга списка авторов, напр. одинокий
+    # ":") ломали author_slug()/запись файла страницы автора — отсекаем на входе в граф.
+    authors = [a for a in article.get("authors", []) if any(c.isalpha() for c in a)]
+    for a in authors:
         if a not in graph: graph[a] = {"articles": [], "coauthors": [], "article_count": 0}
         if article["id"] not in graph[a]["articles"]:
             graph[a]["articles"].append(article["id"])
             graph[a]["article_count"] = len(graph[a]["articles"])
-        for ca in article.get("authors", []):
+        for ca in authors:
+            if len(graph[a]["coauthors"]) >= MAX_COAUTHORS:
+                break
             if ca != a and ca not in graph[a]["coauthors"]: graph[a]["coauthors"].append(ca)
     ap.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -914,8 +918,7 @@ def generate_tag_page(tag_id, lang):
         mini_html += f'<div class="practical-app"><strong>{safe(loc["practical"])}:</strong> {safe(tag_data["practical_application"])}</div>'
 
     tag_img_url = entity_image_url("tags", tag_id)
-    ai_cover_html = (f'<div class="ai-cover"><img src="{tag_img_url}" alt=""></div>' if tag_img_url
-                      else '<div class="ai-cover ai-cover-ph"></div>')
+    ai_cover_html = f'<div class="ai-cover"><img src="{tag_img_url}" alt=""></div>' if tag_img_url else ""
 
     # id НЕ переименовываем в tag-version-toggle: search.js слушает именно #version-toggle,
     # чтобы синхронно перерисовать список статей внизу при смене версии (был баг — текст тега
@@ -926,16 +929,10 @@ def generate_tag_page(tag_id, lang):
     desc_simple = tag_data.get("description_simple") or tag_data.get("description", "")
     hist_simple = tag_data.get("history_simple") or tag_data.get("history", "")
     how_simple = tag_data.get("how_it_works_simple") or tag_data.get("how_it_works", "")
-    # Сравнение сырое⇄шлифованное (Unit 4): raw-описания + чекбокс, если тег был отшлифован
     raw = tag_data.get("raw") or {}
     raw_pop = raw.get("description_popular") or raw.get("description_simple") or raw.get("description", "")
     raw_simple = raw.get("description_simple") or raw.get("description", "")
     raw_adv = raw.get("description", "")
-    compare_toggle_html = (
-        '<label class="refine-switch" title="Сравнить с сырым описанием (до шлифовки)">'
-        '<input type="checkbox" onchange="toggleRawDesc(this)"> показать сырое описание</label>'
-    ) if (tag_data.get("refined") and raw) else ""
-
     tag_like_id = f"{tag_id}_{lang}_page"
     actions_html = build_actions_html(tag_like_id, tag_id, lang, "tag")
     feedback_html = build_feedback_html(tag_like_id, lang, "tag")
@@ -951,7 +948,6 @@ def generate_tag_page(tag_id, lang):
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html,
         tag_version_toggle=tag_version_toggle,
-        compare_toggle_html=compare_toggle_html,
         tag_mini_html=mini_html,
         tag_desc_popular_raw=attr_safe(raw_pop),
         tag_desc_simple_raw=attr_safe(raw_simple),
@@ -1156,8 +1152,7 @@ def generate_law_page(law_id, lang):
     # синхронизируется с переключением версии.
     toggle = version_toggle_spans(lang, "popular", include_mini=True)
     law_img_url = entity_image_url("laws", law_id)
-    ai_cover_html = (f'<div class="ai-cover"><img src="{law_img_url}" alt=""></div>' if law_img_url
-                      else '<div class="ai-cover ai-cover-ph"></div>')
+    ai_cover_html = f'<div class="ai-cover"><img src="{law_img_url}" alt=""></div>' if law_img_url else ""
     formulas_html = render_formulas(L.get("formulas", []))
     related_tags_html = " · ".join(
         f'<a href="/{LANG_DIR}/{lang}/tags/{t}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
@@ -1203,11 +1198,6 @@ def generate_law_page(law_id, lang):
     raw_pop = lraw.get("description_popular") or lraw.get("description_simple") or lraw.get("description", "")
     raw_simple = lraw.get("description_simple") or lraw.get("description", "")
     raw_adv = lraw.get("description", "")
-    compare_toggle_html = (
-        '<label class="refine-switch" title="Сравнить с сырым описанием (до шлифовки)">'
-        '<input type="checkbox" onchange="toggleRawDesc(this)"> показать сырое описание</label>'
-    ) if (L.get("refined") and lraw) else ""
-
     law_like_id = f"{law_id}_{lang}_page"
     actions_html = build_actions_html(law_like_id, law_id, lang, "law")
     feedback_html = build_feedback_html(law_like_id, lang, "law")
@@ -1223,7 +1213,6 @@ def generate_law_page(law_id, lang):
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html,
         law_version_toggle=toggle,
-        compare_toggle_html=compare_toggle_html,
         law_mini_html=mini_html,
         desc_popular_raw=attr_safe(raw_pop),
         desc_simple_raw=attr_safe(raw_simple),
@@ -1587,10 +1576,11 @@ def update_all_authors():
         return f'<div class="letter-section" id="letter-{letter}"><h2 class="letter-heading">{letter}</h2><div class="author-list">{rows}</div></div>'
 
     # Index page — БЕЗ выбранной буквы список из тысяч авторов слишком длинный, поэтому
-    # рендерим только один ярус-по-умолчанию (буква с контентом, предпочтительно "S") как
-    # ориентир; поиск на странице (js/search.js) всё равно ищет по ВСЕМ авторам через
-    # authors-graph.json, независимо от того, какая буква отрендерена в HTML.
-    default_letter = "S" if sections.get("S") else next(iter(letters_with_content), None)
+    # рендерим только один ярус-по-умолчанию как ориентир; поиск на странице (js/search.js)
+    # всё равно ищет по ВСЕМ авторам через authors-graph.json, независимо от того, какая
+    # буква отрендерена в HTML. Буква — случайная (не всегда "S", который у западных имён
+    # непропорционально большой сам по себе) — так дефолтный список обычно меньше и легче.
+    default_letter = random.choice(letters_with_content) if letters_with_content else None
     index_sections = gen_letter_section(default_letter) if default_letter else ""
     index_nav = gen_alphabet_nav()
     index_subtitle = loc["subtitle"] + (
@@ -1617,14 +1607,23 @@ def update_all_authors():
             alphabet_nav_html=letter_nav, search_placeholder=safe(loc["find"]),
             author_sections_html=section_html, footer_text=safe(loc["footer"])
         ), encoding="utf-8")
+    # Индекс по id ЗАРАНЕЕ, один раз на язык — раньше здесь на КАЖДОГО из тысяч авторов ×
+    # каждый язык заново читался и парсился весь articles-index.json с диска (O(авторы×языки×
+    # статьи)) — на 10000+ авторов и растущем архиве это тянулось по 15+ минут на пустом месте.
+    articles_by_lang = {}
+    for lc in LANGUAGES:
+        ip = Path(LANG_DIR) / lc / "articles-index.json"
+        if ip.exists():
+            articles_by_lang[lc] = {a["id"]: a for a in json.loads(ip.read_text(encoding="utf-8"))}
+
     for author_name, data in graph.items():
         slug = author_slug(author_name)
         articles_html = ""
+        author_article_ids = data.get("articles", [])
         for lc in LANGUAGES:
-            ip = Path(LANG_DIR) / lc / "articles-index.json"
-            if not ip.exists(): continue
-            for a in json.loads(ip.read_text(encoding="utf-8")):
-                if a["id"] in data.get("articles", []):
+            for aid in author_article_ids:
+                a = articles_by_lang.get(lc, {}).get(aid)
+                if a:
                     articles_html += f"""<div class="article-card"><div class="card-content">
                         <h3><a href="{a['url']}">{a['title']}</a></h3>
                         <div class="oneliner">{a.get('description', a.get('oneliner', ''))}</div>
@@ -1671,57 +1670,20 @@ def update_all_authors():
 
 
 # ── Main ──
-def _archive_calendar(counts, lang):
-    """Календарь-навигация над архивом: по месяцу-сетке (год→месяц→день), новые сверху.
-    Дни со статьями подсвечены и ведут якорем на секцию дня; горизонт — годы, поэтому
-    рисуем только те месяцы, где что-то есть."""
-    if not counts: return ""
-    months = MONTH_NAMES.get(lang, MONTH_NAMES["en"])
-    wds = WEEKDAY_ABBR.get(lang, WEEKDAY_ABBR["en"])
-    present = sorted({d[:7] for d in counts}, reverse=True)  # 'YYYY-MM'
-    cal = calendar.Calendar(firstweekday=0)  # понедельник первый
-    blocks = ""
-    for ym in present:
-        y, m = int(ym[:4]), int(ym[5:7])
-        head = "".join(f'<span class="cal-wd">{w}</span>' for w in wds)
-        cells = ""
-        for week in cal.monthdayscalendar(y, m):
-            for dnum in week:
-                if dnum == 0:
-                    cells += '<span class="cal-cell cal-blank"></span>'
-                    continue
-                ds = f"{y:04d}-{m:02d}-{dnum:02d}"
-                n = counts.get(ds, 0)
-                if n:
-                    cells += (f'<a class="cal-cell cal-has" href="#{ds}" title="{n}">'
-                              f'{dnum}<i class="cal-dot">{n}</i></a>')
-                else:
-                    cells += f'<span class="cal-cell cal-off">{dnum}</span>'
-        blocks += (f'<div class="cal-month"><div class="cal-mtitle">{months[m - 1]} {y}</div>'
-                   f'<div class="cal-grid">{head}{cells}</div></div>')
-    return f'<div class="archive-calendar">{blocks}</div>'
 
 
 def generate_archive_page(lang):
-    """Страница /archive: календарь-навигация + статьи, сгруппированные по дням
-    (crawlable ссылки для SEO)."""
-    idx = Path(LANG_DIR) / lang / "articles-index.json"
-    if not idx.exists(): return
-    items = json.loads(idx.read_text(encoding="utf-8"))
-    by_day = {}
-    for a in sorted(items, key=lambda x: x["date"], reverse=True):
-        by_day.setdefault(a["date"], []).append(a)
-    loc = {"ru": {"title": "Архив", "footer": "наука простыми словами", "art": "статей"},
-           "en": {"title": "Archive", "footer": "science made simple", "art": "articles"},
-           "zh": {"title": "存档", "footer": "让科学变简单", "art": "篇"},
-           "fr": {"title": "Archives", "footer": "la science simplifiée", "art": "articles"},
-           "ar": {"title": "الأرشيف", "footer": "العلم ببساطة", "art": "مقالات"}}.get(lang,
-           {"title": "Archive", "footer": "science made simple", "art": "articles"})
-    calendar_html = _archive_calendar({d: len(a) for d, a in by_day.items()}, lang)
-    days_html = ""
-    for day, arts in by_day.items():
-        links = "".join(f'<a href="{a["url"]}" class="related-item">{a["title"]}</a>' for a in arts)
-        days_html += (f'<div class="feed-day" id="{day}">{day} · {len(arts)} {loc["art"]}</div>{links}')
+    """Страница /archive: та же лента+календарь-фильтр, что на главной (js/search.js
+    showLatest()/initCalendar()) — новые статьи сверху, подгрузка по скроллу батчами.
+    Раньше рендерили ВСЕ статьи по всем дням разом одной гигантской HTML-страницей (якорные
+    ссылки календаря вели на #{date} внутри неё) — при росте архива до тысяч статей это
+    и тяжёлая страница, и всё видно сразу без фильтрации. Теперь — тот же ленивый JS-фид."""
+    loc = {"ru": {"title": "Архив", "footer": "наука простыми словами"},
+           "en": {"title": "Archive", "footer": "science made simple"},
+           "zh": {"title": "存档", "footer": "让科学变简单"},
+           "fr": {"title": "Archives", "footer": "la science simplifiée"},
+           "ar": {"title": "الأرشيف", "footer": "العلم ببساطة"}}.get(lang,
+           {"title": "Archive", "footer": "science made simple"})
     html = f'''<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{loc["title"]} — bridge42worlds</title>
 <link rel="stylesheet" href="/css/style.css?v={asset_ver()}">
@@ -1734,10 +1696,17 @@ def generate_archive_page(lang):
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="Избранное">★</a>
 <a href="/{LANG_DIR}/{lang}/about.html">about</a>
 </div></div></div>
-<div class="langs" id="langs-bar"></div>
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <div class="cal-bar">
+        <button type="button" id="calendar-btn" class="cal-btn" title="{loc["title"]}">📅</button>
+        <div class="calendar-panel" id="calendar-panel"></div>
+    </div>
+</div>
 <h1>🗓️ {loc["title"]}</h1>
-{calendar_html}
-{days_html}
+<div class="category-bar" id="category-bar"></div>
+<label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
+<div id="search-results"></div>
 <footer><p>bridge42worlds — {loc["footer"]}</p></footer>
 <script src="/js/search.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
@@ -1886,10 +1855,20 @@ def generate_feeds(limit=50):
         print(f"  📡 Feeds: {', '.join(made)}")
 
 
+def write_arxiv_categories_json():
+    """Экспортирует ARXIV_CATEGORIES (gen_base.py) в data/arxiv-categories.json — search.js
+    подтягивает его вместо своей отдельной хардкоженной копии ARXIV_CAT_NAMES, которая
+    неизбежно расходилась с Python-словарём при каждом добавлении новой категории."""
+    Path("data").mkdir(exist_ok=True)
+    Path("data/arxiv-categories.json").write_text(
+        json.dumps(ARXIV_CATEGORIES, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def regenerate_all_html():
     """Пересобирает HTML всех статей из data.json (без API). Идёт по источнику правды,
     а не по индексам — устойчиво к их повреждению."""
     print("🔄 Regenerate HTML only (no API)")
+    write_arxiv_categories_json()
     for lang in LANGUAGES: ensure_lang_structure(lang)
     count = 0
     for data, folder in iter_articles():
@@ -1925,21 +1904,25 @@ def regenerate_all_html():
         # (заглушка express_locked уже несёт туда express-поле mini — см. express_locked_scipop),
         # а title/oneliner — из simple, если popular оказался экспресс-заглушкой (у simple нет
         # своего threads, только у popular/заглушки — брать threads из simple было бы пусто).
-        base_scipop = version_scipop(data, "popular", DEFAULT_LANG) or version_scipop(data, "simple", DEFAULT_LANG) or {}
-        threads_text = base_scipop.get("threads", "")
-        if base_scipop.get("express_locked"):
-            base_scipop = version_scipop(data, "simple", DEFAULT_LANG) or base_scipop
-        if threads_text:
+        # ПО ЯЗЫКУ: version_scipop(data, v, lang) сам делает откат на DEFAULT_LANG, если перевода
+        # нет — раньше здесь везде стоял DEFAULT_LANG жёстко, и mini у en/es всегда был русским.
+        for lang in LANGUAGES:
+            base_scipop = version_scipop(data, "popular", lang) or version_scipop(data, "simple", lang) or {}
+            if base_scipop.get("express_locked"):
+                base_scipop = version_scipop(data, "simple", lang) or base_scipop
+            # express: реальный тир хранит короткий текст в "mini", не "threads" (см. write_article_pages)
+            threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
+            if not threads_text:
+                continue
             mini_scipop = dict(base_scipop)
             mini_scipop["text"] = threads_text
-            for lang in LANGUAGES:
-                out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / "mini.html"
-                out.parent.mkdir(parents=True, exist_ok=True)
-                html = gen_article_html(mini_scipop, article_obj, date_str,
-                                        [str(p) for p in images], lang, "mini",
-                                        captions_for_lang(captions, lang), abstract)
-                out.write_text(html, encoding="utf-8")
-                count += 1
+            out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / "mini.html"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            html = gen_article_html(mini_scipop, article_obj, date_str,
+                                    [str(p) for p in images], lang, "mini",
+                                    captions_for_lang(captions, lang), abstract)
+            out.write_text(html, encoding="utf-8")
+            count += 1
     build_knowledge_graph_data()
     for lang in LANGUAGES:
         update_all_tags(lang)
@@ -2165,24 +2148,34 @@ def write_article_pages(item, date_str):
             (lang_folder / VERSION_FILES[v]).write_text(
                 gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract), encoding="utf-8")
             update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
-        # Mini-версия — threads-текст (полный, до обрезки). Источник title/oneliner для мини —
-        # popular, ЕСЛИ он настоящий контент; если popular — экспресс-заглушка (express_locked),
-        # берём simple (реально сгенерированный тир) — иначе на mini-странице повиснет
-        # заглушечный oneliner «Полная версия готовится» вместо настоящего заголовка.
-        if lang == DEFAULT_LANG:
-            threads_text = (versions_ru.get("popular", {})).get("threads", "") or ""
-            if threads_text:
+    # Mini-версия — threads-текст (полный, до обрезки). Источник title/oneliner для мини —
+    # popular, ЕСЛИ он настоящий контент; если popular — экспресс-заглушка (express_locked),
+    # берём simple (реально сгенерированный тир) — иначе на mini-странице повиснет
+    # заглушечный oneliner «Полная версия готовится» вместо настоящего заголовка.
+    # ПО ЯЗЫКУ: раньше mini_scipop строился один раз из versions_ru (русской версии) ВНЕ цикла
+    # по языкам и переиспользовался для всех — на mini у en/es был русский текст под локализованной
+    # обвязкой. Теперь источник берём per-язык: свой tier из translations, не всегда RU.
+    if (versions_ru.get("popular", {})).get("threads"):
+        for l in LANGUAGES:
+            if l == DEFAULT_LANG:
                 mini_source = versions_ru["popular"]
                 if mini_source.get("express_locked"):
                     mini_source = versions_ru.get("simple") or mini_source
-                mini_scipop = dict(mini_source)
-                mini_scipop["text"] = threads_text
-                for l in LANGUAGES:
-                    lf = Path(LANG_DIR) / l / "archive" / date_str / a["id"]
-                    lf.mkdir(parents=True, exist_ok=True)
-                    (lf / "mini.html").write_text(
-                        gen_article_html(mini_scipop, a, date_str, images, l, "mini",
-                                         captions_for_lang(captions, l), abstract), encoding="utf-8")
+            else:
+                mini_source = translations.get("popular", {}).get(l) or versions_ru["popular"]
+                if mini_source.get("express_locked"):
+                    mini_source = translations.get("simple", {}).get(l) or versions_ru.get("simple") or mini_source
+            # express: реальный тир (simple) хранит короткий текст в поле "mini", не "threads"
+            # ("threads" — только у попап-заглушки, express_locked_scipop бэкфиллит его из RU).
+            threads_text = (mini_source.get("threads") or mini_source.get("mini")
+                             or (versions_ru.get("popular", {})).get("threads", ""))
+            mini_scipop = dict(mini_source)
+            mini_scipop["text"] = threads_text
+            lf = Path(LANG_DIR) / l / "archive" / date_str / a["id"]
+            lf.mkdir(parents=True, exist_ok=True)
+            (lf / "mini.html").write_text(
+                gen_article_html(mini_scipop, a, date_str, images, l, "mini",
+                                 captions_for_lang(captions, l), abstract), encoding="utf-8")
     update_authors_graph(a)
     update_tag_counts(versions_ru["advanced"])
     print(f"  ✅ {a['id']} done")
@@ -2204,7 +2197,11 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
         prepared = [r for r in ex.map(lambda a: build_article(a, date_str, inputs, force, express), best) if r]
 
     for item in prepared:
-        write_article_pages(item, date_str)
+        try:
+            write_article_pages(item, date_str)
+        except Exception as e:
+            print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — LLM-контент уже оплачен, но не записан; пропускаю, остальные статьи не теряем")
+            traceback.print_exc()
 
     if refresh_aggregates and prepared:
         for lang in LANGUAGES:
@@ -2277,12 +2274,16 @@ def rebuild_author_graph():
     """authors-graph.json полностью выводится из статей — пересобираем начисто."""
     graph = {}
     for data, _ in iter_articles():
-        authors = data.get("authors", [])
+        # Мусорные "авторы" (голая пунктуация — артефакт парсинга списка авторов) ломали
+        # author_slug()/запись файла страницы автора — отсекаем на входе в граф.
+        authors = [a for a in data.get("authors", []) if any(c.isalpha() for c in a)]
         for a in authors:
             g = graph.setdefault(a, {"articles": [], "coauthors": [], "article_count": 0})
             if data["id"] not in g["articles"]:
                 g["articles"].append(data["id"])
             for ca in authors:
+                if len(g["coauthors"]) >= MAX_COAUTHORS:
+                    break
                 if ca != a and ca not in g["coauthors"]:
                     g["coauthors"].append(ca)
     for a, g in graph.items():
@@ -2422,7 +2423,11 @@ def generate_ids(id_list, force=False):
     with ThreadPoolExecutor(max_workers=ARTICLE_WORKERS) as ex:
         prepared = [r for r in ex.map(prep, id_list) if r]
     for item in prepared:
-        write_article_pages(item, item["date_str"])
+        try:
+            write_article_pages(item, item["date_str"])
+        except Exception as e:
+            print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — пропускаю, остальные статьи не теряем")
+            traceback.print_exc()
     if prepared:
         _refresh_all_aggregates()
     print(f"\n✅ Сгенерировано по id: {len(prepared)} из {len(id_list)}")
@@ -2469,10 +2474,16 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
 
         with ThreadPoolExecutor(max_workers=ARTICLE_WORKERS) as ex:
             prepared = [r for r in ex.map(_prep, batch) if r]
+        written = 0
         for item in prepared:
-            write_article_pages(item, item["date_str"])
-        total_generated += len(prepared)
-        print(f"  ✅ Батч {batch_num}: {len(prepared)}/{len(batch)} сгенерировано (остальные — уже есть/лицензия/ошибка)")
+            try:
+                write_article_pages(item, item["date_str"])
+                written += 1
+            except Exception as e:
+                print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — пропускаю, остальные статьи не теряем")
+                traceback.print_exc()
+        total_generated += written
+        print(f"  ✅ Батч {batch_num}: {written}/{len(batch)} сгенерировано (остальные — уже есть/лицензия/ошибка)")
 
     if total_generated:
         print("\n🔄 Финальный пересчёт агрегатов...")
@@ -2608,7 +2619,7 @@ def backfill_tag_law_images(force=False, gen_images=False):
 
     gen_images=False (по умолчанию) — реальную FLUX-генерацию НЕ трогаем, только промпт (дёшево).
     Новые сущности без картинки помечаются entry["image_pending"]=True (честно: промпт готов,
-    картинки нет — ждёт бюджета), рендерятся плейсхолдером (.ai-cover-ph, уже есть в CSS).
+    картинки нет — ждёт бюджета); блок .ai-cover просто не рендерится, место не теряется.
     gen_images=True — реальная трата (нужен бюджет): генерит картинку через FLUX и снимает pending
     у тех, кому реально досталась картинка. Уже существующие картинки этот флаг не трогает."""
     has_key = bool(os.environ.get("DEEPINFRA_API_KEY", "")) and gen_images
@@ -2727,7 +2738,9 @@ def translate_article_lang(aid, target_lang, force=False):
                                  target_lang, version, lang_captions, data.get("abstract") or {})
         (lang_folder / VERSION_FILES[version]).write_text(html, encoding="utf-8")
     base_scipop = version_scipop(data, "popular", target_lang) or version_scipop(data, "simple", target_lang) or {}
-    threads_text = base_scipop.get("threads", "")
+    if base_scipop.get("express_locked"):
+        base_scipop = version_scipop(data, "simple", target_lang) or base_scipop
+    threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
     if threads_text:
         mini_scipop = dict(base_scipop)
         mini_scipop["text"] = threads_text

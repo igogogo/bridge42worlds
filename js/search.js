@@ -70,39 +70,40 @@ var pagePath = getPagePath();
 var UI_STRINGS = {
     ru: { tagNotFound: 'Тег не найден', selectTag: 'Выберите тег:', scientistNotFound: 'Учёный не найден',
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
-          articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин' },
+          articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
+          express: 'экспресс', expressTip: 'Экспресс-версия: по аннотации автора, без разбора полного текста статьи',
+          hideExpress: 'Скрыть экспресс-статьи' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
-          articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min' },
+          articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
+          express: 'express', expressTip: 'Express version: based on the author\'s abstract, not the full paper text',
+          hideExpress: 'Hide express articles' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
-          articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min' },
+          articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
+          express: 'exprés', expressTip: 'Versión exprés: basada en el resumen del autor, no en el texto completo',
+          hideExpress: 'Ocultar artículos exprés' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
-          articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟' },
+          articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
+          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
-          articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min' },
+          articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
+          express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
+          hideExpress: 'Masquer les articles express' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
-          articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة' }
+          articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
+          express: 'سريع', expressTip: 'نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل',
+          hideExpress: 'إخفاء المقالات السريعة' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
-var ARXIV_CAT_NAMES = {
-    'astro-ph.CO':'Cosmology','astro-ph.EP':'Exoplanets','astro-ph.GA':'Galaxies',
-    'astro-ph.HE':'High Energy','astro-ph.IM':'Instrumentation','astro-ph.SR':'Stellar',
-    'gr-qc':'General Relativity','hep-ex':'HEP Experiment','hep-ph':'HEP Phenomenology',
-    'hep-th':'HEP Theory','hep-lat':'HEP Lattice','math-ph':'Math Physics',
-    'nucl-ex':'Nuclear Exp','nucl-th':'Nuclear Theory','quant-ph':'Quantum Physics',
-    'cond-mat':'Condensed Matter','cond-mat.mes-hall':'Mesoscale','cond-mat.mtrl-sci':'Materials',
-    'cond-mat.stat-mech':'Statistical Mech','cond-mat.str-el':'Strongly Correlated',
-    'cond-mat.supr-con':'Superconductivity','physics.space-ph':'Space Physics',
-    'physics.geo-ph':'Geophysics','physics.plasm-ph':'Plasma Physics','physics.optics':'Optics',
-    'physics.atom-ph':'Atomic Physics','physics.flu-dyn':'Fluid Dynamics',
-    'cs.LG':'Machine Learning','cs.AI':'Artificial Intelligence','cs.CV':'Computer Vision',
-    'cs.NE':'Neural Computing','stat.ML':'Statistical ML','eess.SP':'Signal Processing','eess.IV':'Image Processing'
-};
+// Заполняется из /data/arxiv-categories.json (единый источник — ARXIV_CATEGORIES в gen_base.py),
+// см. Promise.all ниже — раньше тут была отдельная хардкоженная копия, расходившаяся с сервером.
+var ARXIV_CAT_NAMES = {};
+window.ARXIV_CAT_NAMES = ARXIV_CAT_NAMES;
 
 var resultsEl = document.getElementById('search-results');
 // Тег-страница передаёт один id, страница закона — ВСЕ свои теги через запятую (закон
@@ -130,8 +131,32 @@ function applyPageContext(results) {
             return (item.authors || []).some(function(a) { return authorSlug(a) === pageContext.author; });
         });
     }
+    if (hideExpress) {
+        results = results.filter(function(item) { return !item.express; });
+    }
     return results;
 }
+
+// Глобальный тумблер «скрыть экспресс-статьи» — персистится в localStorage, применяется через
+// applyPageContext() (общий фильтр-чокпоинт для showLatest/filterByDate/applyCategoryFilter/doSearch).
+var hideExpress = false;
+try { hideExpress = localStorage.getItem('b42_hide_express') === '1'; } catch (e) {}
+
+function initExpressFilter() {
+    var cb = document.getElementById('express-filter-toggle');
+    if (!cb) return;
+    var label = document.getElementById('express-filter-label');
+    if (label) label.textContent = UI.hideExpress;
+    cb.checked = hideExpress;
+    cb.onchange = function() {
+        hideExpress = cb.checked;
+        try { localStorage.setItem('b42_hide_express', hideExpress ? '1' : '0'); } catch (e) {}
+        // Тумблер — глобальный фильтр поверх текущего вида; проще всего сбросить на «последние»,
+        // чем пытаться помнить, какой именно фильтр (дата/категория/поиск) был активен.
+        _defaultFeed();
+    };
+}
+window.initExpressFilter = initExpressFilter;
 
 fetch('/config.json')
     .then(function(r) { return r.json(); })
@@ -188,13 +213,18 @@ Promise.all([
     fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
         return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
     }),
-    fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
+    fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+    fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
 ]).then(function(results) {
     searchIndex = results[0].concat(results[1]).concat(results[2]);
     authorsGraph = results[3];
     tagsLoc = results[4];
     scientistsData = results[5];
     lawsData = results[6] || {};
+    // Единый источник правды для названий разделов arXiv — Python-словарь ARXIV_CATEGORIES
+    // (gen_base.py), экспортируемый в data/arxiv-categories.json. Раньше тут была отдельная
+    // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
+    Object.assign(ARXIV_CAT_NAMES, results[7] || {});
 
     window.searchIndex = searchIndex;
     window.tagsLoc = tagsLoc;
@@ -211,6 +241,7 @@ Promise.all([
     } else {
         initCalendar();
         initCategoryBar();
+        initExpressFilter();
     }
     initAllTooltips();
     renderSiteStats();
@@ -577,11 +608,11 @@ function cardHTML(item) {
     var bodyText = isMini ? item.threads : (item.abstract || item.description || item.oneliner || '');
     var cat = (item.categories || [])[0] || '';
     var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
-    // Авторы: до 3 в мете, приглушённо (полный список — на странице статьи)
+    // Авторы: своя строка (переносится на 1-2 строки по ширине карточки), до 20 — с "+N" на остаток
     var au = item.authors || [];
-    var authorsHtml = au.slice(0, 3).map(function(a) {
+    var authorsHtml = au.slice(0, 20).map(function(a) {
         return '<a href="/lang/' + lang + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
-    }).join(', ') + (au.length > 3 ? ' <span class="au-more-lite">+' + (au.length - 3) + '</span>' : '');
+    }).join(', ') + (au.length > 20 ? ' <span class="au-more-lite">+' + (au.length - 20) + '</span>' : '');
     var tagsHtml = (item.tags || []).slice(0, 6).map(function(t) {
         return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
     }).join('<span class="sep">·</span>');
@@ -600,14 +631,15 @@ function cardHTML(item) {
     var imgFb = base + 'ai.jpg';
     return '<article class="article-card">' +
         '<a class="card-img-wrap" href="' + url + '">' +
-            '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">' +
-            '<span class="no-img" style="display:none">📄</span>' +
+            '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
         '</a>' +
         '<div class="card-body">' +
             (catName ? '<a class="card-cat" href="#" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
-            '<div class="card-meta">' + authorsHtml + (item.reading ? '<span class="sep">·</span>⏱ ' + item.reading + ' ' + UI.min : '') + '<span class="sep">·</span>arXiv:' + item.id + '</div>' +
+            (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
+            '<div class="card-meta">' + (item.reading ? '⏱ ' + item.reading + ' ' + UI.min + '<span class="sep">·</span>' : '') + 'arXiv:' + item.id + '</div>' +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
             cardActions +
         '</div>' +

@@ -31,7 +31,12 @@ CULTURE_NOTES = {
            "уважением к исламским ценностям и обычаям арабских стран Персидского залива. Избегай "
            "аналогий и примеров, связанных с алкоголем, свининой, азартными играми, романтическими "
            "или интимными отношениями, и любых образов, которые могут быть восприняты как неуважение "
-           "к религии. Сохраняй достоинство и уважительный, уместный для региона тон."),
+           "к религии. Сохраняй достоинство и уважительный, уместный для региона тон. Если в тексте "
+           "уместен исторический или культурный мостик — например, речь идёт об оптике, алгебре, "
+           "астрономии, медицине — можно бережно и ненавязчиво упомянуть вклад арабских учёных, "
+           "философов и мыслителей (Ибн аль-Хайсам/Альхазен, Аль-Хорезми, Ибн Сина/Авиценна, "
+           "Аль-Бируни и т.п.), если это органично и не притянуто за уши — не в каждом тексте, "
+           "только где это действительно уместно."),
 }
 
 IMG_VARIATIONS = {
@@ -390,7 +395,8 @@ def translate_captions(captions_en, target_lang):
         return []
     target_language = LANG_NAMES.get(target_lang, target_lang)
     prompt = load_prompt("caption-translate").format(
-        captions_json=json.dumps(captions_en, ensure_ascii=False), target_language=target_language)
+        captions_json=json.dumps(captions_en, ensure_ascii=False), target_language=target_language,
+        culture_note=CULTURE_NOTES.get(target_lang, ""))
     try:
         r = chat("translate", prompt)
         data = json.loads(clean_json(r.choices[0].message.content))

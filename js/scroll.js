@@ -1,5 +1,13 @@
 let articlesIndex = [];
+// Персистим между переходами (sessionStorage) — иначе viewedIds обнулялся на каждой
+// новой странице (полная навигация через window.location.href), и если у двух статей
+// лучший кандидат друг на друга, кнопка "следующая" зацикливалась A→B→A→B...
 let viewedIds = new Set();
+try { viewedIds = new Set(JSON.parse(sessionStorage.getItem('b42_viewed') || '[]')); } catch (e) {}
+
+function persistViewed() {
+    try { sessionStorage.setItem('b42_viewed', JSON.stringify(Array.from(viewedIds))); } catch (e) {}
+}
 
 function getLang() {
     var pp = window.location.pathname.split('/');
@@ -40,6 +48,7 @@ async function initScroll() {
             currentId = parts[0];
         }
         viewedIds.add(currentId);
+        persistViewed();
     }
 
     updateNextButton();
@@ -103,6 +112,7 @@ function updateNextButton() {
             btn.textContent = label + ': ' + next.title.substring(0, isTop ? 30 : 60) + '... →';
             btn.onclick = function() {
                 viewedIds.add(next.id);
+                persistViewed();
                 window.location.href = next.url;
             };
             btn.disabled = false;

@@ -18,6 +18,7 @@ from threading import Lock
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from common import CONFIG, LANGUAGES, DEFAULT_LANG, chat, load_prompt, parse_json_salvage
+from gen_llm import CULTURE_NOTES
 
 TCFG = CONFIG.get("translate", {})
 BATCH = TCFG.get("batch", 5)
@@ -31,9 +32,10 @@ LANG_NAMES = {
 }
 
 
-def translate_chunk(chunk, lang_name):
+def translate_chunk(chunk, lang_name, lang=""):
     prompt = Template(load_prompt("reference-translate")).safe_substitute(
-        lang_name=lang_name, payload=json.dumps(chunk, ensure_ascii=False))
+        lang_name=lang_name, payload=json.dumps(chunk, ensure_ascii=False),
+        culture_note=CULTURE_NOTES.get(lang, ""))
     r = chat("translate_ref", prompt)
     data = parse_json_salvage(r.choices[0].message.content)
     if data is None:
@@ -66,7 +68,8 @@ def translate_scientists(targets):
             for sid in sids
         ]
         prompt = Template(load_prompt("scientist-translate")).safe_substitute(
-            lang_name=lang_name, payload=json.dumps(payload, ensure_ascii=False))
+            lang_name=lang_name, payload=json.dumps(payload, ensure_ascii=False),
+            culture_note=CULTURE_NOTES.get(lang, ""))
         try:
             r = chat("translate_ref", prompt)
             data = parse_json_salvage(r.choices[0].message.content)
@@ -152,7 +155,7 @@ def main():
         def work(task):
             key, chunk, lang_name = task
             try:
-                items = translate_chunk(chunk, lang_name)
+                items = translate_chunk(chunk, lang_name, lang=key[1])
             except Exception as e:
                 return (key, 0, str(e))
             st = states[key]

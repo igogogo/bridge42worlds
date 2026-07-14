@@ -7,6 +7,7 @@
 import os
 import sys
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from string import Template
@@ -103,6 +104,13 @@ ARXIV_CATEGORIES = {
     "cs.NI": "Networking", "stat.ML": "Statistical ML", "eess.SP": "Signal Processing",
     "eess.IV": "Image Processing", "physics.app-ph": "Applied Physics", "physics.bio-ph": "Biological Physics",
     "physics.med-ph": "Medical Physics", "q-bio.NC": "Neurons and Cognition",
+    "physics.ins-det": "Instrumentation and Detectors", "physics.ao-ph": "Atmospheric and Oceanic Physics",
+    "physics.hist-ph": "History and Philosophy of Physics", "physics.chem-ph": "Chemical Physics",
+    "physics.pop-ph": "Popular Physics", "physics.comp-ph": "Computational Physics",
+    "physics.class-ph": "Classical Physics", "physics.soc-ph": "Physics and Society",
+    "physics.atm-clus": "Atomic and Molecular Clusters", "stat.AP": "Applied Statistics",
+    "cs.MS": "Mathematical Software", "cs.IT": "Information Theory", "math.IT": "Information Theory",
+    "cs.CL": "Computation and Language", "cs.RO": "Robotics",
 }
 
 TARGET_DATE = os.environ.get("DATE", (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d"))
@@ -122,8 +130,12 @@ def attr_safe(s):
 def author_slug(name):
     # "/" реально встречается в именах коллабораций (напр. «The CHIME/FRB Collaboration») —
     # без замены Path(...) / f"{slug}.html" читает его как вложенный путь и падает
-    # FileNotFoundError (родительской директории не существует).
-    return name.replace(" ", "_").replace(".", "").replace("/", "-").replace("\\", "-")
+    # FileNotFoundError (родительской директории не существует). Остальные символы,
+    # запрещённые в именах файлов на Windows (: < > " | ? *) — тоже на "-": однажды словили
+    # мусорного "автора" с именем ровно ":" (артефакт парсинга списка авторов) — падало
+    # с OSError [Errno 22] на записи файла.
+    slug = name.replace(" ", "_").replace(".", "").replace("/", "-").replace("\\", "-")
+    return re.sub(r'[:<>"|?*]', "-", slug)
 
 
 def page_dir(lang):

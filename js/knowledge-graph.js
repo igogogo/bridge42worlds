@@ -315,8 +315,9 @@
 
     // Пресеты: выставляют нужные рёбра и вовлечённые типы узлов.
     var PRESETS = {
-        // «каркас» — дефолт: законы+учёные и их связи, БЕЗ тегов (не грузим весь хайрбол сразу)
-        core: ['law-law', 'sci-sci', 'law-sci'],
+        // «каркас» — дефолт: законы+учёные и связи МЕЖДУ ними (не внутри типа), БЕЗ тегов
+        // (не грузим весь хайрбол сразу)
+        core: ['law-sci'],
         all: ['tag-tag', 'law-law', 'sci-sci', 'law-tag', 'sci-tag', 'law-sci'],
         tags: ['tag-tag'], laws: ['law-law', 'law-tag'], sci: ['sci-tag', 'sci-sci'],
         'tag-sci': ['sci-tag'], 'law-sci': ['law-sci'], 'law-tag': ['law-tag']
