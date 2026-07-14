@@ -1,0 +1,471 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Формула Эйлера: как вращение стало алгеброй</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- функциональная анимация: точка на единичной окружности ---------- */
+.circle-fig{ max-width:400px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.circle-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:400px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- AC-фазор анимация ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:110px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Три взгляда на одну формулу</a></li>
+      <li><a href="#s2"><span class="n">02</span>Геометрия: точка на окружности</a></li>
+      <li><a href="#s3"><span class="n">03</span>Откуда берётся: ряды Тейлора</a></li>
+      <li><a href="#s4"><span class="n">04</span>Тождество Эйлера</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: переменный ток</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: квантовая фаза</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; математика &middot; часть V</p>
+        <h1>Формула Эйлера: как вращение стало алгеброй</h1>
+        <p class="subtitle">Одна строчка 1748 года, связавшая экспоненциальный рост с вращением по кругу — и заодно предъявившая уравнение, которое Фейнман называл «самой замечательной формулой в математике».</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="150" cy="150" r="100" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+          <line x1="40" y1="150" x2="260" y2="150" stroke="var(--rule)" stroke-width="1"/>
+          <line x1="150" y1="40" x2="150" y2="260" stroke="var(--rule)" stroke-width="1"/>
+          <line id="heroRadius" x1="150" y1="150" x2="250" y2="150" stroke="var(--ink)" stroke-width="2"/>
+          <line id="heroDropX" x1="250" y1="150" x2="250" y2="150" stroke="var(--steel-fill)" stroke-width="2" stroke-dasharray="3,3"/>
+          <line id="heroDropY" x1="150" y1="150" x2="250" y2="150" stroke="var(--brass-fill)" stroke-width="2" stroke-dasharray="3,3"/>
+          <circle id="heroPoint" cx="250" cy="150" r="7" fill="var(--ink)"/>
+          <text x="150" y="285" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">e^i&theta; = cos&theta; + i&middot;sin&theta;</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1748 году Леонард Эйлер, раскладывая e<sup>x</sup>, cos&nbsp;x и sin&nbsp;x в бесконечные ряды и подставляя мнимое число вместо x, обнаружил, что все три функции — на самом деле разные проекции одного и того же объекта: вращения. Формула e<sup>i&theta;</sup>&nbsp;=&nbsp;cos&theta;&nbsp;+&nbsp;i&nbsp;sin&theta; переводит язык «роста» на язык «поворота» — и превращает анализ колебаний и волн в простую алгебру степеней. Частный случай при &theta;&nbsp;=&nbsp;&pi; — тождество, объединяющее пять важнейших констант математики в одной строке.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Три взгляда на одну формулу</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Взгляд</th><th>Что видно</th></tr>
+          <tr><td>Алгебраический</td><td>e<sup>i&theta;</sup> — комплексное число, равное cos&theta;&nbsp;+&nbsp;i&nbsp;sin&theta;</td></tr>
+          <tr><td>Геометрический</td><td>точка на единичной окружности комплексной плоскости под углом &theta; от оси</td></tr>
+          <tr><td>Аналитический</td><td>совпадение бесконечных рядов e<sup>x</sup>, cos&nbsp;x, sin&nbsp;x после подстановки x&nbsp;=&nbsp;i&theta; (§3)</td></tr>
+        </table>
+        <p>Ни один из трёх взглядов не «главнее» — сила формулы Эйлера именно в том, что она одновременно алгебраическая тождественность, геометрический факт и аналитическое совпадение рядов. Начнём с самого наглядного — геометрии.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Геометрия: точка на окружности</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Комплексное число e<sup>i&theta;</sup> — это точка на единичной окружности (радиус 1) комплексной плоскости, отложенная под углом &theta; от положительной вещественной оси:</p>
+        <div class="plate">
+          <div class="eq-body">e<sup>i&theta;</sup> = cos&theta; + i&middot;sin&theta;</div>
+          <div class="cap">действительная часть — cos&theta; (горизонтальная координата), мнимая — sin&theta; (вертикальная)</div>
+        </div>
+        <div class="circle-fig" aria-hidden="true">
+          <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="150" cy="150" r="100" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+            <line x1="30" y1="150" x2="270" y2="150" stroke="var(--rule)" stroke-width="1"/>
+            <line x1="150" y1="30" x2="150" y2="270" stroke="var(--rule)" stroke-width="1"/>
+            <text x="275" y="155" font-family="Cascadia Code, monospace" font-size="12" fill="var(--ink-soft)">Re</text>
+            <text x="155" y="25" font-family="Cascadia Code, monospace" font-size="12" fill="var(--ink-soft)">Im</text>
+            <line id="s2Radius" x1="150" y1="150" x2="250" y2="150" stroke="var(--ink)" stroke-width="2"/>
+            <line id="s2DropX" x1="250" y1="150" x2="250" y2="150" stroke="var(--steel-fill)" stroke-width="2" stroke-dasharray="3,3"/>
+            <line id="s2DropY" x1="150" y1="150" x2="250" y2="150" stroke="var(--brass-fill)" stroke-width="2" stroke-dasharray="3,3"/>
+            <circle id="s2Point" cx="250" cy="150" r="7" fill="var(--ink)"/>
+            <text x="205" y="168" font-family="Cascadia Code, monospace" font-size="11" fill="var(--steel)">cos&theta;</text>
+            <text x="255" y="128" font-family="Cascadia Code, monospace" font-size="11" fill="var(--brass)">sin&theta;</text>
+          </svg>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>&theta;</b><span data-readout="theta">0.00</span> рад</span>
+          <span><b>cos&theta;</b><span data-readout="cos" style="color:var(--steel)">1.00</span></span>
+          <span><b>sin&theta;</b><span data-readout="sin" style="color:var(--brass)">0.00</span></span>
+        </div>
+        <p>Пока точка обходит окружность (&theta; растёт от 0 до 2&pi;), её горизонтальная координата честно вычерчивает косинус, а вертикальная — синус — те же самые функции, что вы видели на графиках тригонометрии, только теперь как проекции РАВНОМЕРНОГО вращения, а не как отдельные волнистые кривые. Именно эта картинка и есть содержание формулы: «e в мнимой степени» — это не какое-то абстрактное число, а координата точки при равномерном движении по кругу.</p>
+        <div class="callout steel">
+          <span class="tag">Почему модуль всегда равен 1</span>
+          <p>cos²&theta;&nbsp;+&nbsp;sin²&theta;&nbsp;=&nbsp;1 — основное тригонометрическое тождество, известное со школы. Для e<sup>i&theta;</sup> это означает: расстояние от начала координат до точки всегда ровно 1, при любом &theta; — точка физически не может сойти с единичной окружности, только бегать по ней. Отсюда и роль &theta; — это буквально пройденный угол, единственное, что меняется.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Откуда берётся: ряды Тейлора</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Формула — не постулат, а следствие того, что e<sup>x</sup>, cos&nbsp;x и sin&nbsp;x можно записать как бесконечные суммы (ряды Тейлора):</p>
+        <div class="eq"><div class="eq-body">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + x&#8308;/4! + ...</div><div class="eq-tag">(1)</div></div>
+        <div class="eq"><div class="eq-body">cos&nbsp;x = 1 &minus; x²/2! + x&#8308;/4! &minus; ...,&nbsp;&nbsp;&nbsp; sin&nbsp;x = x &minus; x³/3! + x&#8309;/5! &minus; ...</div><div class="eq-tag">(2)</div></div>
+        <p>Подставим в ряд для e<sup>x</sup> вместо x мнимое число i&theta; и вспомним, что i²&nbsp;=&nbsp;&minus;1, i³&nbsp;=&nbsp;&minus;i, i&#8308;&nbsp;=&nbsp;1 (степени i циклически повторяются с периодом 4):</p>
+        <div class="eq"><div class="eq-body">e<sup>i&theta;</sup> = 1 + i&theta; &minus; &theta;²/2! &minus; i&theta;³/3! + &theta;&#8308;/4! + i&theta;&#8309;/5! &minus; ...</div><div class="eq-tag">(3)</div></div>
+        <p>Сгруппируем отдельно слагаемые без i (чётные степени &theta;) и слагаемые с i (нечётные степени) — первая группа в точности совпадёт с рядом для cos&theta;, вторая (без общего множителя i) — с рядом для sin&theta;:</p>
+        <div class="plate">
+          <div class="eq-body">e<sup>i&theta;</sup> = &#40;1 &minus; &theta;²/2! + &theta;&#8308;/4! &minus; ...&#41; + i&#40;&theta; &minus; &theta;³/3! + ...&#41; = cos&theta; + i&middot;sin&theta;</div>
+          <div class="cap">чистая алгебра — никакой дополнительной геометрической аксиомы не потребовалось</div>
+        </div>
+        <p>Совпадение не «подогнано» — оно неизбежно, стоит только определить e<sup>x</sup> для комплексных чисел через тот же самый ряд, что и для вещественных. Это и объясняет, почему формула работает: три, казалось бы, совсем разных объекта (экспонента, косинус, синус) математически являются одним семейством функций, различающихся только тем, какой аргумент — вещественный, чисто мнимый, — в них подставлен.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Тождество Эйлера</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Подставим в формулу Эйлера конкретный угол &theta;&nbsp;=&nbsp;&pi; (пол-оборота, точка на окружности оказывается ровно слева от центра, в точке &minus;1):</p>
+        <div class="eq"><div class="eq-body">e<sup>i&pi;</sup> = cos&pi; + i&middot;sin&pi; = &minus;1 + i&middot;0 = <strong>&minus;1</strong></div><div class="eq-tag">(4)</div></div>
+        <div class="plate">
+          <div class="eq-body">e<sup>i&pi;</sup> + 1 = 0</div>
+          <div class="cap">пять фундаментальных констант — 0, 1, e, i, &pi; — в одной строке, каждая ровно по одному разу</div>
+        </div>
+        <div class="callout brass">
+          <span class="tag">Почему это «самая красивая формула»</span>
+          <p>В опросах математиков (например, опрос журнала <em>Mathematical Intelligencer</em>, 1990) тождество Эйлера стабильно занимает первое место. Причина не в мистике, а в предельной экономности: пять констант из совершенно разных областей математики (0 и 1 — арифметика, e — анализ/рост, i — алгебра/комплексные числа, &pi; — геометрия/окружности) связаны тремя простейшими операциями (сложение, умножение, возведение в степень) без единого лишнего символа. Ричард Фейнман называл его «нашей жемчужиной» и «самой замечательной формулой в математике».</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: переменный ток</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Инженеры-электрики редко пишут cos и sin явно — вместо этого напряжение переменного тока представляют как вращающийся вектор (<strong>фазор</strong>) на комплексной плоскости, используя формулу Эйлера:</p>
+        <div class="plate">
+          <div class="eq-body">U(t) = U<sub>0</sub>&middot;e<sup>i&omega;t</sup></div>
+          <div class="cap">реальное напряжение — это мнимая (или действительная, по соглашению) часть U(t); &omega; — угловая частота сети</div>
+        </div>
+        <div class="anim-strip" aria-hidden="true">
+          <svg viewBox="0 0 400 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <line x1="40" y1="55" x2="380" y2="55" stroke="var(--rule)" stroke-width="1"/>
+            <path id="acWave" d="M40,55 L380,55" fill="none" stroke="var(--steel-fill)" stroke-width="2.2"/>
+            <circle cx="40" cy="55" r="35" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <line id="acRadius" x1="40" y1="55" x2="75" y2="55" stroke="var(--ink)" stroke-width="2"/>
+            <circle id="acPoint" cx="75" cy="55" r="4" fill="var(--brass-fill)"/>
+          </svg>
+          <div class="anim-label left">фазор слева крутится — справа рисует ту же синусоиду, что вы видите в розетке</div>
+        </div>
+        <p>Почему это удобнее, чем работать с cos/sin напрямую: сложение двух переменных напряжений одной частоты (например, в сети) сводится к сложению комплексных чисел (векторов) — простая геометрия параллелограмма, вместо громоздких тригонометрических формул сложения углов. Формула Эйлера — это словарь-переводчик между «неудобной» тригонометрией и «удобной» алгеброй комплексных экспонент.</p>
+        <div class="callout moss">
+          <span class="tag">Та же идея — в JPEG и MP3</span>
+          <p>Преобразование Фурье (раскладывающее любой сигнал — звук, изображение — в сумму простых колебаний разных частот) в своей практической форме почти всегда записывается через e<sup>i&theta;</sup>, а не через cos/sin по отдельности — ровно по той же причине: складывать и умножать комплексные экспоненты вычислительно проще. Именно это лежит в основе сжатия аудио (MP3) и изображений (JPEG).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: квантовая фаза</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Формула Эйлера не осталась математической диковинкой — в 1920-х Эрвин Шрёдингер обнаружил, что волновая функция квантовой частицы естественно записывается через ту же самую экспоненту с мнимым показателем:</p>
+        <div class="eq"><div class="eq-body">&Psi;(x,t) &sim; e<sup>i(px &minus; Et)/&hbar;</sup></div><div class="eq-tag">(5)</div></div>
+        <p>Здесь роль «угла &theta;» играет комбинация импульса p, энергии E и времени t частицы. Модуль такой волновой функции (расстояние точки от центра, §2) всегда равен 1 — это математически гарантирует <strong>унитарность</strong> квантовой эволюции: полная вероятность найти частицу где-нибудь всегда остаётся равной 100%, как бы ни менялась фаза. Без формулы Эйлера пришлось бы отдельно следить за косинусной и синусной частями волновой функции — с ней всё сводится к одной вращающейся экспоненте.</p>
+        <div class="callout steel">
+          <span class="tag">Фаза одной частицы не наблюдаема — но разница фаз двух частиц наблюдаема</span>
+          <p>Любопытный квантовый нюанс: угол &theta; отдельной волновой функции в изоляции физически не измерим (можно domножить всю формулу на любое e<sup>i&alpha;</sup>, и предсказания не изменятся). Но если частица может пройти по двум разным путям одновременно (как в эксперименте с двумя щелями), РАЗНИЦА фаз между путями становится измеримой — она и создаёт интерференционную картину. Реальность самого вращения на комплексной плоскости остаётся предметом философских споров, но его математические следствия — нет.</p>
+        </div>
+        <p>На сайте это отдельный закон, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/schrdinger_equation.html">Уравнение Шрёдингера</a> ·
+          <a href="/lang/ru/laws/de_broglie_wavelength.html">Формула де Бройля</a> ·
+          <a href="/lang/ru/laws/planckeinstein_relation.html">Уравнение Планка-Эйнштейна</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; круг из верёвки и тень от фонарика</span>
+          <p>Прикрепите верёвку к гвоздю или ручке двери, привяжите к другому концу небольшой груз (яблоко, ключи) и раскрутите его так, чтобы он равномерно вращался по кругу в горизонтальной плоскости (как игрушка poi). Посветите на него фонариком сбоку, строго горизонтально, так, чтобы тень падала на стену.</p>
+          <p><span class="qlabel">Что заметить</span> тень на стене будет двигаться не по кругу, а строго туда-сюда по прямой, синусоидально замедляясь у краёв и ускоряясь в центре — это и есть проекция равномерного вращения на одну ось (§2, cos&theta; или sin&theta;, в зависимости от того, откуда светите). Ровно то же самое проделывает формула Эйлера математически: берёт круговое движение и честно вычисляет его проекцию.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; спирограф</span>
+          <p>Если дома есть спирограф (набор шестерёнок с отверстиями для рисования узоров) или можно найти онлайн-симулятор — порисуйте несколько узоров, меняя соотношение радиусов шестерёнок.</p>
+          <p><span class="qlabel">Что заметить</span> красивые «цветочные» узоры спирографа — это буквально суммы нескольких вращений с разными частотами (математически — сумма нескольких e<sup>i&theta;</sup> с разными коэффициентами при &theta;), тот же принцип, что лежит в основе разложения Фурье любого сложного сигнала на простые колебания (§5).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Чему равно e^(iπ/2) в алгебраической форме (a + bi)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> &theta;&nbsp;=&nbsp;&pi;/2 (четверть оборота).</p>
+            <p><span class="qlabel">Закон</span> формула Эйлера (§2): e<sup>i&theta;</sup>&nbsp;=&nbsp;cos&theta;&nbsp;+&nbsp;i&middot;sin&theta;.</p>
+            <p><span class="qlabel">Решение</span> cos(&pi;/2)&nbsp;=&nbsp;0, sin(&pi;/2)&nbsp;=&nbsp;1 &rArr; e<sup>i&pi;/2</sup>&nbsp;=&nbsp;0&nbsp;+&nbsp;i&middot;1.</p>
+            <p><span class="qlabel">Ответ</span> <strong>i</strong> — точка ровно наверху единичной окружности.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Не вычисляя явно, объясните, почему |e^(iθ)| (модуль числа) равен 1 при ЛЮБОМ значении θ.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> геометрический смысл формулы Эйлера (§2) + основное тригонометрическое тождество.</p>
+            <p><span class="qlabel">Решение</span> |e<sup>i&theta;</sup>|&nbsp;=&nbsp;&radic;(cos²&theta;&nbsp;+&nbsp;sin²&theta;)&nbsp;=&nbsp;&radic;1&nbsp;=&nbsp;1 — тождество cos²+sin²=1 верно для любого угла, поэтому расстояние точки от центра всегда ровно единица, вне зависимости от &theta;.</p>
+            <p><span class="qlabel">Ответ</span> <strong>всегда 1</strong> — точка обязана оставаться на единичной окружности.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Чему равно e^(i·2π) (полный оборот)? Что это говорит о периодичности e^(iθ)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> &theta;&nbsp;=&nbsp;2&pi; (полный оборот).</p>
+            <p><span class="qlabel">Закон</span> формула Эйлера (§2).</p>
+            <p><span class="qlabel">Решение</span> cos(2&pi;)&nbsp;=&nbsp;1, sin(2&pi;)&nbsp;=&nbsp;0 &rArr; e<sup>i&middot;2&pi;</sup>&nbsp;=&nbsp;1&nbsp;+&nbsp;i&middot;0&nbsp;=&nbsp;1.</p>
+            <p><span class="qlabel">Ответ</span> <strong>e<sup>i&middot;2&pi;</sup>&nbsp;=&nbsp;1</strong> — после полного оборота точка возвращается в старт; e<sup>i&theta;</sup> периодична с периодом 2&pi;, как и полагается точке на окружности.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Два переменных напряжения одной частоты представлены фазорами U₁ = 3 (вдоль вещественной оси) и U₂ = 4i (вдоль мнимой оси). Чему равен модуль суммарного напряжения?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> U<sub>1</sub>&nbsp;=&nbsp;3, U<sub>2</sub>&nbsp;=&nbsp;4i (перпендикулярные фазоры, §5).</p>
+            <p><span class="qlabel">Закон</span> сложение комплексных чисел (геометрически — параллелограмм) + модуль комплексного числа |a+bi|&nbsp;=&nbsp;&radic;(a²+b²).</p>
+            <p><span class="qlabel">Решение</span> U<sub>1</sub>+U<sub>2</sub>&nbsp;=&nbsp;3+4i; |3+4i|&nbsp;=&nbsp;&radic;(9+16)&nbsp;=&nbsp;&radic;25&nbsp;=&nbsp;5.</p>
+            <p><span class="qlabel">Ответ</span> <strong>5</strong> — классическая тройка 3-4-5, суммарное напряжение больше каждого из слагаемых по отдельности, но меньше их арифметической суммы (7), потому что фазоры не совпадают по направлению.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Выразите cos θ через e^(iθ) и e^(-iθ), пользуясь тем, что e^(-iθ) = cos θ − i·sin θ.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> e<sup>i&theta;</sup>&nbsp;=&nbsp;cos&theta;+i&middot;sin&theta;, e<sup>&minus;i&theta;</sup>&nbsp;=&nbsp;cos&theta;&minus;i&middot;sin&theta;.</p>
+            <p><span class="qlabel">Закон</span> сложение двух форм формулы Эйлера — мнимые части сокращаются.</p>
+            <p><span class="qlabel">Решение</span> e<sup>i&theta;</sup>+e<sup>&minus;i&theta;</sup>&nbsp;=&nbsp;2cos&theta; &rArr; cos&theta;&nbsp;=&nbsp;(e<sup>i&theta;</sup>+e<sup>&minus;i&theta;</sup>)/2.</p>
+            <p><span class="qlabel">Ответ</span> <strong>cos&theta; = (e<sup>i&theta;</sup>+e<sup>&minus;i&theta;</sup>)/2</strong> — стандартная формула, которой физики и инженеры пользуются едва ли не чаще, чем самим определением косинуса.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Euler%20formula%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть V серии, математика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  var CX = 150, CY = 150, R = 100, PERIOD = 6000; // 6с на полный оборот — держим общий темп серии
+  function wire(prefix, radiusId, dropXId, dropYId, pointId, thetaEl, cosEl, sinEl){
+    var radius = document.getElementById(radiusId), dropX = document.getElementById(dropXId),
+        dropY = document.getElementById(dropYId), point = document.getElementById(pointId);
+    return function(theta){
+      var x = CX + R * Math.cos(theta), y = CY - R * Math.sin(theta); // экранный y растёт вниз
+      if (radius) { radius.setAttribute('x2', x); radius.setAttribute('y2', y); }
+      if (dropX) { dropX.setAttribute('x1', x); dropX.setAttribute('y1', y); dropX.setAttribute('x2', x); dropX.setAttribute('y2', CY); }
+      if (dropY) { dropY.setAttribute('x1', CX); dropY.setAttribute('y1', CY); dropY.setAttribute('x2', x); dropY.setAttribute('y2', CY); }
+      if (point) { point.setAttribute('cx', x); point.setAttribute('cy', y); }
+      if (thetaEl) thetaEl.textContent = theta.toFixed(2);
+      if (cosEl) cosEl.textContent = Math.cos(theta).toFixed(2);
+      if (sinEl) sinEl.textContent = Math.sin(theta).toFixed(2);
+    };
+  }
+  var heroDraw = wire('hero', 'heroRadius', 'heroDropX', 'heroDropY', 'heroPoint');
+  var s2Draw = wire('s2', 's2Radius', 's2DropX', 's2DropY', 's2Point',
+    document.querySelector('[data-readout="theta"]'), document.querySelector('[data-readout="cos"]'), document.querySelector('[data-readout="sin"]'));
+
+  // AC-фазор §5: тот же принцип, но рисует ещё и бегущую синусоиду справа от круга.
+  var acRadius = document.getElementById('acRadius'), acPoint = document.getElementById('acPoint'), acWave = document.getElementById('acWave');
+  var acR = 35, acCx = 40, acCy = 55, acWaveStart = 75, acWaveEnd = 380, acAmp = 32;
+  function drawAC(theta){
+    var x = acCx + acR * Math.cos(theta), y = acCy - acR * Math.sin(theta);
+    if (acRadius) { acRadius.setAttribute('x2', x); acRadius.setAttribute('y2', y); }
+    if (acPoint) { acPoint.setAttribute('cx', x); acPoint.setAttribute('cy', y); }
+    if (acWave) {
+      var pts = 'M' + acWaveStart + ',' + acCy;
+      var span = acWaveEnd - acWaveStart, steps = 60;
+      for (var i = 0; i <= steps; i++) {
+        var px = acWaveStart + span * i / steps;
+        var ang = theta - (2 * Math.PI) * (i / steps) * 1.4;
+        var py = acCy - acAmp * Math.sin(ang);
+        pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      }
+      acWave.setAttribute('d', pts);
+    }
+  }
+
+  if (!window.requestAnimationFrame) return;
+  function tick(ts){
+    var theta = (ts % PERIOD) / PERIOD * 2 * Math.PI;
+    heroDraw(theta);
+    s2Draw(theta);
+    drawAC(theta);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
