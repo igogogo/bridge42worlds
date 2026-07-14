@@ -1,0 +1,666 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Что сохраняется при движении: импульс, энергия, момент импульса</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+.g   { color:var(--brass); font-style:italic; }
+.om, .kin { color:var(--steel); font-style:italic; }
+b.g  { color:var(--brass); }
+
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{
+  display:none;
+}
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{
+    display:block;
+    position:sticky; top:36px; align-self:start;
+    padding-top:64px;
+  }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{
+  text-decoration:none; color:var(--ink-soft);
+  font-size:.82rem; line-height:1.35; display:block;
+}
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{
+  padding: 56px 0 40px;
+  display:grid; gap:28px;
+}
+@media (min-width:760px){
+  .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; }
+}
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  text-wrap:balance;
+  color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-ballA{ animation: heroBallA 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .hero-ballB{ animation: heroBallB 6s cubic-bezier(.3,0,.6,1) infinite; }
+}
+/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. */
+@keyframes heroBallA{ 0%{ transform:translateX(0); } 38%{ transform:translateX(150px); } 40%{ transform:translateX(150px); opacity:0; } 100%{ transform:translateX(150px); opacity:0; } }
+@keyframes heroBallB{ 0%{ transform:translateX(0); opacity:0; } 39%{ transform:translateX(0); opacity:0; } 40%{ opacity:1; } 68%{ transform:translateX(150px); } 100%{ transform:translateX(150px); } }
+
+/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+   как принято визуально отличать advanced-глубину от основного текста. */
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:22px 26px;
+  margin: 8px 0 8px;
+  box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{
+  display:flex; align-items:baseline; gap:.6em;
+  margin:0 0 .3em;
+  max-width:680px;
+}
+.sec-num{
+  font-family:var(--font-mono); color:var(--brass);
+  font-size:.95rem;
+}
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0;
+  text-wrap:balance;
+}
+h3{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px;
+}
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{
+  width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em;
+  font-size:.92rem;
+}
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap: 16px;
+  max-width:680px;
+  margin: 1.5em 0;
+  padding: 14px 4px;
+}
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  padding: 22px 26px;
+  margin: 1.6em 0;
+  box-shadow: var(--shadow);
+}
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin-top:.9em;
+}
+
+sup, sub{ font-size:.68em; }
+
+.callout{
+  max-width:680px;
+  border-left: 3px solid var(--rule);
+  padding: 4px 0 4px 18px;
+  margin: 1.5em 0;
+}
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em;
+  text-transform:uppercase; margin-bottom:.4em; display:block;
+}
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+.callout ol{ margin-bottom:0; }
+.callout li{ margin-bottom:.7em; }
+.callout li:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{
+  font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px;
+}
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+.fig-row{ display:grid; gap:24px; max-width:920px; }
+@media (min-width:760px){ .fig-row{ grid-template-columns:1fr 1fr; } }
+.fig-row figure{ max-width:none; }
+
+code, .code{
+  font-family:var(--font-mono); font-size:.86em; background:var(--paper-raised);
+  border:1px solid var(--rule); border-radius:3px; padding:.1em .4em;
+}
+
+footer{
+  max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule);
+  color:var(--ink-soft); font-size:.85rem;
+}
+.feedback-box{
+  max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:18px 22px;
+}
+.feedback-box .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brass); display:block; margin-bottom:.5em;
+}
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- animated strips — реальные объекты, не абстрактные точки ---------- */
+.anim-strip{
+  position:relative; max-width:680px; margin:1.5em 0 1.9em;
+  background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.anim-strip.single{ height:64px; }
+.anim-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+
+.anim-ball{
+  position:absolute; top:50%; border-radius:50%; background:var(--steel-fill); left:16px;
+}
+.anim-ball.b-light{ width:14px; height:14px; margin-top:-7px; }
+.anim-ball.b-heavy{ width:22px; height:22px; margin-top:-11px; background:var(--brass-fill); }
+.anim-ball.b-med{ width:18px; height:18px; margin-top:-9px; background:var(--moss-fill); }
+
+.anim-label{
+  position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft);
+  text-align:right;
+}
+.anim-label.left{ right:auto; left:14px; }
+
+.anim-readout{
+  position:absolute; right:10px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; min-width:78px; text-align:right;
+}
+.graph-mini{
+  max-width:340px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:10px;
+}
+.graph-mini svg{ width:100%; height:auto; display:block; }
+
+/* §4 — фигурист, руки к телу: угловая скорость видна как скорость вращения полоски-«руки». */
+.anim-strip.spin{ height:130px; display:flex; align-items:center; justify-content:center; }
+.spin-rig{ position:relative; width:100px; height:100px; }
+.spin-arms{
+  position:absolute; left:50%; top:50%; width:90px; height:6px; margin-left:-45px; margin-top:-3px;
+  border-radius:3px; background:var(--steel-fill); transform-origin:center;
+}
+.spin-body{
+  position:absolute; left:50%; top:50%; width:16px; height:16px; margin-left:-8px; margin-top:-8px;
+  border-radius:50%; background:var(--ink); opacity:.15;
+}
+@media (prefers-reduced-motion: no-preference){
+  .spin-arms.slow{ animation: spinSlow 6s linear infinite, armsIn 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes spinSlow{ 0%{ transform:rotate(0deg); } 40%{ transform:rotate(288deg); } 100%{ transform:rotate(288deg) rotate(1152deg); } }
+@keyframes armsIn{ 0%{ width:90px; margin-left:-45px; } 40%{ width:90px; margin-left:-45px; } 100%{ width:34px; margin-left:-17px; } }
+
+@media (prefers-reduced-motion: no-preference){
+  .anim-ball.rec-light{ animation: moveRecLight 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.rec-heavy{ animation: moveRecHeavy 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.swap-in{ animation: moveSwapIn 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.swap-out{ animation: moveSwapOut 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-ball.stick-a{ animation: moveStickA 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.stick-b{ animation: moveStickB 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+/* Пушка-ядро: тяжёлая пушка чуть откатывается влево, лёгкое ядро улетает далеко и быстро вправо —
+   одна и та же длительность 6с на оба, финиш на разных % (ядро летит дальше и быстрее). */
+@keyframes moveRecLight{ 0%{ left:50%; } 45%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
+@keyframes moveRecHeavy{ 0%{ left:50%; } 45%{ left:38%; } 100%{ left:38%; } }
+/* Упругий столкновение равных масс: шар A подъезжает и «передаёт» скорость B (A останавливается). */
+@keyframes moveSwapIn{ 0%{ left:16px; } 40%{ left:50%; opacity:1; } 41%{ opacity:0; } 100%{ opacity:0; left:50%; } }
+@keyframes moveSwapOut{ 0%{ left:50%; opacity:0; } 40%{ left:50%; opacity:0; } 41%{ opacity:1; } 75%{ left:calc(100% - 22px); } 100%{ left:calc(100% - 22px); } }
+/* Неупругое столкновение: два тела слипаются и едут вместе медленнее суммарной массой. */
+@keyframes moveStickA{ 0%{ left:16px; } 40%{ left:44%; } 100%{ left:44%; } }
+@keyframes moveStickB{ 0%{ left:60%; } 40%{ left:60%; } 55%{ left:70%; } 100%{ left:70%; } }
+
+/* ---------- задачи с раскрывающимся решением ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{
+  cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem;
+}
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule);
+  color:var(--ink-soft); font-size:.86rem;
+}
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); margin-right:.5em;
+}
+
+/* ---------- сноска "величины и единицы" под формулой ---------- */
+.units{
+  font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
+}
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Три сохраняющиеся величины</a></li>
+      <li><a href="#s2"><span class="n">02</span>Импульс: сумма не меняется</a></li>
+      <li><a href="#s3"><span class="n">03</span>Энергия: меняет костюмы</a></li>
+      <li><a href="#s4"><span class="n">04</span>Момент импульса: фигурист ускоряется</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: упругий и неупругий удар</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: теорема Нётер</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; классическая динамика &middot; часть II</p>
+        <h1>Что сохраняется при движении: импульс, энергия, момент импульса</h1>
+        <p class="subtitle">Три величины, которые физика запрещено тратить впустую: сколько бы ни менялась картина внутри системы, их сумма — если система замкнута — остаётся одной и той же до и после.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+          <line x1="20" y1="150" x2="400" y2="150" stroke="var(--rule)" stroke-width="1.5"/>
+          <circle class="hero-ballA" cx="70" cy="150" r="16" fill="var(--brass-fill)"/>
+          <circle class="hero-ballB" cx="220" cy="150" r="16" fill="var(--steel-fill)"/>
+          <text x="70" y="190" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="12" fill="var(--ink-soft)">A: v&#8594;0</text>
+          <text x="220" y="190" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="12" fill="var(--ink-soft)">B: 0&#8594;v</text>
+          <text x="210" y="240" text-anchor="middle" font-family="Futura, sans-serif" font-size="14" fill="var(--moss)">A передаёт всё B — сумма импульсов не меняется</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Из трёх законов Ньютона (см. часть I) следуют три величины, которые в замкнутой системе не меняются со временем: импульс, энергия и момент импульса. Это не случайные совпадения, а прямое следствие симметрий пространства и времени (теорема Нётер, §6). В этой заметке — все три закона сохранения по отдельности с числовыми примерами, а затем один сквозной пример (упругий и неупругий удар), где видно, что импульс сохраняется всегда, а энергия — только иногда.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Три сохраняющиеся величины</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Ньютоновская механика даёт не только уравнение движения, но и три «счёта», сумма на которых не меняется, пока систему никто не трогает снаружи.</p>
+        <table class="symtab">
+          <tr><th>Величина</th><th>Формула</th><th>Сохраняется, когда...</th></tr>
+          <tr><td>Импульс</td><td class="sym"><span class="vec">p</span> = m<span class="vec">v</span></td><td>нет внешних сил (&Sigma;<span class="vec">F</span><sub>внеш</sub> = 0)</td></tr>
+          <tr><td>Энергия</td><td class="sym">E = K + U</td><td>нет трения/сопротивления (силы консервативны)</td></tr>
+          <tr><td>Момент импульса</td><td class="sym"><span class="vec">L</span> = I&omega;</td><td>нет внешнего вращающего момента (&Sigma;&tau;<sub>внеш</sub> = 0)</td></tr>
+        </table>
+        <p>Важно сразу разделить два разных смысла слова «сохраняется»: внутри системы величина может свободно <strong>перераспределяться</strong> между частями (импульс — от одного тела к другому, энергия — из кинетической в потенциальную) — сохраняется только <em>сумма по всей системе</em>, а не значение у каждого тела в отдельности.</p>
+        <p>Заметьте: условия для трёх законов — разные. Столкновение двух пластилиновых шаров сохраняет импульс всегда, но не сохраняет механическую энергию (часть уходит в тепло деформации) — это разбирается подробно в §5.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Импульс: сумма не меняется</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Если на систему тел не действуют внешние силы (или их равнодействующая равна нулю), суммарный импульс системы остаётся постоянным. Это прямое следствие третьего закона Ньютона (часть I, §4): силы взаимодействия внутри системы всегда парные и противоположные, значит в сумме по системе они сокращаются.</p>
+        <div class="plate">
+          <div class="eq-body">&Sigma;<span class="vec">p</span><sub>до</sub> = &Sigma;<span class="vec">p</span><sub>после</sub></div>
+          <div class="cap">полный импульс замкнутой системы одинаков в любой момент времени</div>
+        </div>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-ball b-heavy rec-heavy"></div>
+          <div class="anim-ball b-light rec-light" style="background:var(--moss-fill)"></div>
+          <div class="anim-label left">пушка (тяжёлая) откатывается назад, ядро (лёгкое) улетает вперёд намного дальше</div>
+        </div>
+        <p class="units" style="margin-top:-1.2em">Пушка массой 500&nbsp;кг стоит неподвижно и стреляет ядром массой 5&nbsp;кг со скоростью 100&nbsp;м/с. Импульс ядра вперёд равен импульсу отдачи пушки назад — по величине, не по скорости (у пушки скорость меньше, потому что масса больше).</p>
+        <div class="eq"><div class="eq-body">0 = m<sub>ядра</sub>v<sub>ядра</sub> + m<sub>пушки</sub>v<sub>пушки</sub>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;v<sub>пушки</sub> = &minus;5&middot;100/500 = <strong>&minus;1&nbsp;м/с</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Тот же расчёт, что и для конькобежцев в части&nbsp;I, §4 — там силы возникают в паре и импульс просто «переливается» от одного тела к другому, суммарно оставаясь нулевым, если до взаимодействия система была неподвижна.</p>
+        <div class="callout steel">
+          <span class="tag">Столкновения: упругие и неупругие</span>
+          <p>Импульс сохраняется в <strong>любом</strong> столкновении — упругом (шарики разлетаются, суммарная кинетическая энергия та же) и неупругом (тела слипаются или деформируются, часть энергии уходит в тепло/звук). Разница между ними — про энергию, не про импульс. Подробный числовой пример обоих типов — §5.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Энергия: меняет костюмы</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> В системе, где действуют только консервативные силы (гравитация, упругость — но не трение), полная механическая энергия — сумма кинетической и потенциальной — постоянна:</p>
+        <div class="plate">
+          <div class="eq-body">E = K + U = const,&nbsp;&nbsp;&nbsp; K = &frac12;m<span class="vec">v</span>&sup2;,&nbsp;&nbsp;&nbsp; U = mgh</div>
+          <div class="cap">энергия не исчезает, а перетекает между кинетической и потенциальной формами</div>
+        </div>
+        <div class="units">K [Дж], U [Дж], m [кг], v [м/с], g&nbsp;&asymp;&nbsp;10&nbsp;м/с&sup2; (округлено, как в части I — считать в уме), h [м].</div>
+        <p>Классический пример — маятник или качели: в крайней точке скорость нулевая (K&nbsp;=&nbsp;0), вся энергия — потенциальная; в нижней точке высота минимальна (U&nbsp;=&nbsp;0), вся энергия — кинетическая. В середине пути — какая-то доля от каждой, но сумма одна и та же в любой точке качания.</p>
+        <figure>
+          <img src="conservation_energy.png" alt="График K(t), U(t) и их суммы E для одного качания маятника — кривые K и U пересекаются, сумма остаётся горизонтальной прямой">
+          <figcaption><span class="fign">Рис. 1</span>Кинетическая (K) и потенциальная (U) энергии меняются местами дважды за одно качание, но их сумма (пунктир) держится ровной горизонтальной линией — ни на миг не проседает и не подскакивает.</figcaption>
+        </figure>
+        <p>Численный пример: тело падает с высоты h&nbsp;=&nbsp;5&nbsp;м без начальной скорости (сопротивлением воздуха пренебрегаем). Какая у него скорость у земли?</p>
+        <div class="eq"><div class="eq-body">mgh = &frac12;mv&sup2;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;v = &radic;(2gh) = &radic;(2&middot;10&middot;5) = <strong>10&nbsp;м/с</strong></div><div class="eq-tag">(2)</div></div>
+        <p>Масса сократилась — падение без сопротивления воздуха не зависит от массы тела (тот же результат для пёрышка и гири, если убрать воздух — знаменитый опыт с пером и молотком на Луне).</p>
+        <div class="callout brass">
+          <span class="tag">Почему вечный двигатель невозможен</span>
+          <p>Закон сохранения энергии — не эмпирическое наблюдение, а прямой запрет: чтобы устройство работало вечно и совершало полезную работу, ему нужно откуда-то брать энергию на эту работу без внешнего источника — то есть создавать её из ничего. Реальные механизмы всегда теряют часть энергии на трение и сопротивление (переходит в тепло — тоже энергия, просто менее «полезной» формы), поэтому останавливаются, если их не подпитывать.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Момент импульса: фигурист ускоряется</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Если на тело не действует внешний вращающий момент, его момент импульса постоянен. Для вращающегося твёрдого тела L&nbsp;=&nbsp;I&omega;, где I — момент инерции (мера «сложности раскрутить», зависит от того, как масса распределена относительно оси), &omega; — угловая скорость:</p>
+        <div class="plate">
+          <div class="eq-body">L = I&omega; = const</div>
+          <div class="cap">если I уменьшается (масса ближе к оси) — &omega; обязана вырасти, чтобы L не изменился</div>
+        </div>
+        <div class="anim-strip spin" aria-hidden="true">
+          <div class="spin-rig">
+            <div class="spin-body"></div>
+            <div class="spin-arms slow"></div>
+          </div>
+        </div>
+        <p class="units" style="margin-top:-.6em">Фигурист раскручивается с разведёнными руками (большой I, медленно), затем прижимает руки к телу (I падает вчетверо) — вращение резко ускоряется, ровно чтобы L осталось тем же. Это не притянутая метафора: именно так фигуристы физически ускоряют вращение, без какой-либо дополнительной силы.</p>
+        <p>Числовой пример: фигурист вращается с разведёнными руками с моментом инерции I<sub>1</sub>&nbsp;=&nbsp;4&nbsp;кг&middot;м&sup2; и угловой скоростью &omega;<sub>1</sub>&nbsp;=&nbsp;2&nbsp;рад/с. Прижимая руки, он снижает момент инерции до I<sub>2</sub>&nbsp;=&nbsp;1&nbsp;кг&middot;м&sup2;. Найдите новую угловую скорость.</p>
+        <div class="eq"><div class="eq-body">I<sub>1</sub>&omega;<sub>1</sub> = I<sub>2</sub>&omega;<sub>2</sub>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&omega;<sub>2</sub> = 4&middot;2/1 = <strong>8&nbsp;рад/с</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Вращение ускорилось вчетверо — ровно во столько раз, во сколько раз упал момент инерции. Никакая мышца фигуриста не совершает работы «на ускорение вращения» напрямую в момент прижатия рук — источник роста кинетической энергии вращения здесь другой (работа мышц против «центробежного» эффекта при подтягивании рук к телу), но сохранение L держится точно в любом случае, независимо от механизма.</p>
+        <div class="callout moss">
+          <span class="tag">Кеплер увидел это первым — в небе, не в спорте</span>
+          <p>Второй закон Кеплера (1609): планета заметает равные площади за равные времена, двигаясь по эллиптической орбите быстрее вблизи Солнца и медленнее вдали от него. Это в точности сохранение момента импульса планеты относительно Солнца — за 70 лет до того, как Ньютон вообще сформулировал законы динамики. Подробнее — <a href="/lang/ru/laws/keplers_second_law.html">второй закон Кеплера</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: упругий и неупругий удар</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Возьмём два одинаковых по массе шара (m&nbsp;=&nbsp;2&nbsp;кг каждый): шар A летит со скоростью 6&nbsp;м/с и сталкивается с неподвижным шаром B. Разберём оба сценария удара.</p>
+        <h3>Упругий удар (энергия тоже сохраняется)</h3>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-ball b-med swap-in"></div>
+          <div class="anim-ball b-med swap-out"></div>
+          <div class="anim-label left">A подъезжает и полностью «передаёт» скорость B (равные массы)</div>
+        </div>
+        <p class="units" style="margin-top:-1.2em">При равных массах в идеально упругом ударе скорости просто <em>меняются местами</em>: A останавливается (v<sub>A</sub>&nbsp;=&nbsp;0), B улетает со скоростью, которая была у A (v<sub>B</sub>&nbsp;=&nbsp;6&nbsp;м/с). Проверка по обоим законам:</p>
+        <table class="symtab">
+          <tr><th></th><th>До удара</th><th>После удара</th></tr>
+          <tr><td>Импульс, кг&middot;м/с</td><td class="sym">2&middot;6 + 2&middot;0 = 12</td><td class="sym">2&middot;0 + 2&middot;6 = 12</td></tr>
+          <tr><td>Кин. энергия, Дж</td><td class="sym">&frac12;&middot;2&middot;6&sup2; = 36</td><td class="sym">&frac12;&middot;2&middot;6&sup2; = 36</td></tr>
+        </table>
+        <h3>Неупругий удар (энергия НЕ сохраняется)</h3>
+        <div class="anim-strip single" aria-hidden="true">
+          <div class="anim-track"></div>
+          <div class="anim-ball b-heavy stick-a" style="background:var(--brass-fill)"></div>
+          <div class="anim-ball b-light stick-b" style="background:var(--steel-fill)"></div>
+          <div class="anim-label left">тележки слипаются и едут вместе медленнее, чем ехала первая</div>
+        </div>
+        <p class="units" style="margin-top:-1.2em">Тележка m<sub>1</sub>&nbsp;=&nbsp;3&nbsp;кг едет со скоростью 4&nbsp;м/с и сцепляется с неподвижной тележкой m<sub>2</sub>&nbsp;=&nbsp;1&nbsp;кг, дальше они едут вместе:</p>
+        <div class="eq"><div class="eq-body">m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>общ</sub>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;v<sub>общ</sub> = 3&middot;4/4 = <strong>3&nbsp;м/с</strong></div><div class="eq-tag">(4)</div></div>
+        <table class="symtab">
+          <tr><th></th><th>До удара</th><th>После удара</th></tr>
+          <tr><td>Импульс, кг&middot;м/с</td><td class="sym">3&middot;4 + 1&middot;0 = 12</td><td class="sym">4&middot;3 = 12</td></tr>
+          <tr><td>Кин. энергия, Дж</td><td class="sym">&frac12;&middot;3&middot;4&sup2; = 24</td><td class="sym">&frac12;&middot;4&middot;3&sup2; = 18</td></tr>
+        </table>
+        <figure>
+          <img src="conservation_momentum.png" alt="График импульса двух тележек при неупругом столкновении: p1 падает, p2 растёт, сумма остаётся постоянной">
+          <figcaption><span class="fign">Рис. 2</span>Импульс каждой тележки меняется во время короткого столкновения, но их сумма (пунктир) остаётся строго постоянной и до, и во время, и после удара — импульс сохраняется, даже когда энергия — нет.</figcaption>
+        </figure>
+        <div class="callout brass">
+          <span class="tag">Куда делись 6 Дж</span>
+          <p>24&nbsp;&minus;&nbsp;18&nbsp;=&nbsp;6&nbsp;Дж кинетической энергии «пропало» — на самом деле не пропало, а перешло в тепло и звук деформации сцепки (закон сохранения энергии §3 не нарушен, просто механическая энергия перешла в немеханическую форму). Импульс же — векторная величина без «немеханических» форм, ему просто некуда деться, кроме как остаться в движении тел — отсюда и разница в поведении двух законов.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: теорема Нётер</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В части I (§6) уже был анонс: <strong>теорема Нётер</strong> (Эмми Нётер, 1918) связывает каждый из трёх законов сохранения с симметрией пространства-времени — не совпадением, а строгим математическим следствием принципа наименьшего действия.</p>
+        <table class="symtab">
+          <tr><th>Симметрия</th><th>Что значит</th><th>Даёт сохранение</th></tr>
+          <tr><td>Однородность времени</td><td>законы физики не меняются от эпохи к эпохе — эксперимент, поставленный вчера и сегодня, даёт тот же результат</td><td>энергии</td></tr>
+          <tr><td>Однородность пространства</td><td>законы физики не меняются от точки к точке — сдвинь лабораторию на километр, результат тот же</td><td>импульса</td></tr>
+          <tr><td>Изотропность пространства</td><td>законы физики не зависят от направления — нет выделенной оси Вселенной</td><td>момента импульса</td></tr>
+        </table>
+        <p>Это переворачивает интуитивный порядок причины и следствия: обычно кажется, что «сначала есть законы сохранения, а симметрии — их следствие». На самом деле наоборот — симметрии пространства-времени первичны, а законы сохранения из них <em>выводятся</em> формально, через уравнение Эйлера–Лагранжа применительно к действию S (см. часть I, §6, формула (4)).</p>
+        <div class="callout steel">
+          <span class="tag">За пределами классической механики</span>
+          <p>Все три закона переживают переход в квантовую механику (импульс, энергия и момент импульса становятся операторами, но их сохранение для изолированной системы остаётся точным) и в специальную теорию относительности (энергия и импульс объединяются в единый 4-вектор энергии-импульса, а масса покоя связана с ним через E&nbsp;=&nbsp;mc&sup2; — отдельная большая тема). Общая теория относительности — исключение: там сохранение энергии в общем случае перестаёт быть локально точно определённым из-за отсутствия глобальной симметрии времени в искривлённом пространстве-времени, что до сих пор обсуждается на границе физики и философии науки.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/law_of_conservation_of_momentum.html">Закон сохранения импульса</a> ·
+          <a href="/lang/ru/laws/law_of_conservation_of_energy.html">Закон сохранения энергии</a> ·
+          <a href="/lang/ru/laws/law_of_conservation_of_angular_momentum.html">Закон сохранения момента импульса</a> ·
+          <a href="/lang/ru/laws/noethers_theorem.html">Теорема Нётер</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; вращающийся стул</span>
+          <p>Сядьте на офисный стул, который свободно крутится, возьмите в каждую руку что-нибудь тяжёлое (книги, гантели, бутылки воды) и разведите руки в стороны. Попросите кого-нибудь несильно раскрутить вас (или оттолкнитесь ногами от пола сами). Пока вращаетесь — резко прижмите руки к груди.</p>
+          <p><span class="qlabel">Что заметить</span> скорость вращения заметно вырастет прямо на глазах, без какого-либо дополнительного толчка — ровно та же физика, что у фигуриста в §4: момент инерции упал, угловая скорость выросла, чтобы L&nbsp;=&nbsp;I&omega; осталось прежним. Разведите руки обратно в стороны — вращение снова замедлится.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; шарики-подшипники на нитках (маятник Ньютона)</span>
+          <p>Если дома есть настольный «маятник Ньютона» (5 металлических шариков на нитках в ряд) — отведите крайний шарик и отпустите. Заметьте: с другого края отскакивает ровно ОДИН шарик, с той же скоростью, а не, скажем, два шарика с половинной скоростью каждый.</p>
+          <p><span class="qlabel">Что заметить</span> оба варианта («1 шарик быстро» и «2 шарика вдвое медленнее») формально сохраняют импульс — но только вариант с одним шариком сохраняет ЕЩЁ и кинетическую энергию (удар между шариками почти идеально упругий, металл почти не деформируется). Природа «выбирает» тот исход, который совместим сразу с обоими законами.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Числа подобраны так, чтобы ответ выходил целым. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Космонавт массой 80 кг в открытом космосе неподвижен относительно станции и бросает от себя гаечный ключ массой 0.5 кг со скоростью 8 м/с. С какой скоростью начнёт дрейфовать сам космонавт?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m<sub>косм</sub>&nbsp;=&nbsp;80&nbsp;кг, m<sub>ключ</sub>&nbsp;=&nbsp;0.5&nbsp;кг, v<sub>ключ</sub>&nbsp;=&nbsp;8&nbsp;м/с, суммарный импульс до броска&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Закон</span> сохранение импульса (§2): 0&nbsp;=&nbsp;m<sub>косм</sub>v<sub>косм</sub>&nbsp;+&nbsp;m<sub>ключ</sub>v<sub>ключ</sub>.</p>
+            <p><span class="qlabel">Решение</span> v<sub>косм</sub>&nbsp;=&nbsp;&minus;0.5&middot;8/80&nbsp;=&nbsp;&minus;0.05&nbsp;м/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>0.05 м/с</strong>, в сторону, противоположную броску — медленно, но неостановимо без посторонней помощи.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Шар массой 4 кг скатывается без трения с горки высотой 2 м. Какая у него скорость внизу?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m&nbsp;=&nbsp;4&nbsp;кг, h&nbsp;=&nbsp;2&nbsp;м, g&nbsp;&asymp;&nbsp;10&nbsp;м/с&sup2;.</p>
+            <p><span class="qlabel">Закон</span> сохранение энергии (§3): mgh&nbsp;=&nbsp;&frac12;mv&sup2;.</p>
+            <p><span class="qlabel">Решение</span> v&nbsp;=&nbsp;&radic;(2gh)&nbsp;=&nbsp;&radic;(2&middot;10&middot;2)&nbsp;=&nbsp;&radic;40&nbsp;&asymp;&nbsp;6.3&nbsp;м/с — масса в ответ не входит.</p>
+            <p><span class="qlabel">Ответ</span> <strong>&asymp;6.3 м/с</strong> (масса шара роли не играет — совпадёт с любым другим шаром без трения).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Фигурист вращается с моментом инерции 6 кг·м² и угловой скоростью 1.5 рад/с, затем прижимает руки и снижает момент инерции до 2 кг·м². Найдите новую угловую скорость.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> I<sub>1</sub>&nbsp;=&nbsp;6&nbsp;кг&middot;м&sup2;, &omega;<sub>1</sub>&nbsp;=&nbsp;1.5&nbsp;рад/с, I<sub>2</sub>&nbsp;=&nbsp;2&nbsp;кг&middot;м&sup2;.</p>
+            <p><span class="qlabel">Закон</span> сохранение момента импульса (§4): I<sub>1</sub>&omega;<sub>1</sub>&nbsp;=&nbsp;I<sub>2</sub>&omega;<sub>2</sub>.</p>
+            <p><span class="qlabel">Решение</span> &omega;<sub>2</sub>&nbsp;=&nbsp;6&middot;1.5/2&nbsp;=&nbsp;4.5&nbsp;рад/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>4.5 рад/с</strong> — втрое быстрее (I упал втрое).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Два вагона по 5000 кг каждый сцепляются на скорости: первый едет со скоростью 6 м/с, второй неподвижен. Найдите общую скорость после сцепки и потерю кинетической энергии.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m<sub>1</sub>&nbsp;=&nbsp;m<sub>2</sub>&nbsp;=&nbsp;5000&nbsp;кг, v<sub>1</sub>&nbsp;=&nbsp;6&nbsp;м/с, v<sub>2</sub>&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Закон</span> сохранение импульса при неупругом ударе (§5): m<sub>1</sub>v<sub>1</sub>&nbsp;=&nbsp;(m<sub>1</sub>+m<sub>2</sub>)v<sub>общ</sub>.</p>
+            <p><span class="qlabel">Решение</span> v<sub>общ</sub>&nbsp;=&nbsp;5000&middot;6/10000&nbsp;=&nbsp;3&nbsp;м/с. K<sub>до</sub>&nbsp;=&nbsp;&frac12;&middot;5000&middot;6&sup2;&nbsp;=&nbsp;90000&nbsp;Дж. K<sub>после</sub>&nbsp;=&nbsp;&frac12;&middot;10000&middot;3&sup2;&nbsp;=&nbsp;45000&nbsp;Дж.</p>
+            <p><span class="qlabel">Ответ</span> <strong>3 м/с, потеряно 45000 Дж</strong> (ровно половина — ушла в грохот и деформацию сцепки).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Мальчик массой 40 кг стоит на неподвижном скейтборде массой 4 кг и спрыгивает вперёд со скоростью 2 м/с относительно земли. С какой скоростью откатится скейтборд?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m<sub>маль</sub>&nbsp;=&nbsp;40&nbsp;кг, v<sub>маль</sub>&nbsp;=&nbsp;2&nbsp;м/с, m<sub>борд</sub>&nbsp;=&nbsp;4&nbsp;кг, суммарный импульс до прыжка&nbsp;=&nbsp;0.</p>
+            <p><span class="qlabel">Закон</span> сохранение импульса (§2, тот же приём, что для лодки в части I).</p>
+            <p><span class="qlabel">Решение</span> v<sub>борд</sub>&nbsp;=&nbsp;&minus;40&middot;2/4&nbsp;=&nbsp;&minus;20&nbsp;м/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>20 м/с</strong>, в сторону, противоположную прыжку — маленькая масса скейтборда даёт ему непропорционально большую скорость отдачи.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Conservation%20laws%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть II из серии по классической динамике</p>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>
