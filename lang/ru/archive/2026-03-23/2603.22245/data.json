@@ -1,0 +1,340 @@
+{
+  "id": "2603.22245",
+  "original_title": "RotorMap and Quantum Fingerprints of DNA Sequences via Rotary Position Embeddings",
+  "authors": [
+    "Danylo Yakymenko",
+    "Maksym Chernyshev",
+    "Illia Savchenko",
+    "Sergii Strelchuk"
+  ],
+  "date": "2026-03-23",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "entropy",
+    "carbon",
+    "speed_of_light",
+    "spectroscopy"
+  ],
+  "main_tag": "entropy",
+  "scientists": [
+    "John Preskill"
+  ],
+  "categories": [
+    "quant-ph"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [],
+  "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+  "abstract": {
+    "ru": {
+      "popular": "Использованы идеи из языковых моделей для квантового кодирования ДНК: редакционное расстояние (вставки, удаления, замены) преобразуется в меру близости квантовых состояний. Классическая реализация, RotorMap, ускоряет картирование генома до 700 раз; квантовая, Angular encoding, тестировалась на 98-кубитном Helios-1. Подобно тому, как вращающийся ротор задаёт угловые координаты, буквы кода получают уникальные позиции, делая сходство «видимым» для квантового компьютера. Возможно, это приведёт к квантовому превосходству в задаче идентификации ДНК.",
+      "simple": "Представьте, что ДНК — это текст, а мутации в нём — опечатки. Учёные придумали, как кодировать генетические последовательности так, чтобы квантовый компьютер «чувствовал» степень их похожести почти как эксперт. Это открывает путь к сверхбыстрому сравнению геномов и даже квантовой проверке подлинности ДНК. Сможет ли такая технология когда-нибудь заменить привычную расшифровку генов?",
+      "advanced": "Предложено квантовое кодирование последовательностей ДНК, при котором расстояние Левенштейна коррелирует с точностью (fidelity) квантовых состояний. Кодирование основано на ротационных позиционных вложениях (RoPE) из больших языковых моделей. Классическая реализация, RotorMap, представляет собой GPU-ускоренный алгоритм картирования ДНК, который в тестах на геномах человека и кукурузы показал ускорение в 50–700 раз по сравнению с однопоточным Minimap2. Квантовый вариант, Angular encoding, генерирует схемы приготовления состояний и был проверен на квантовых компьютерах Quantinuum: 56-кубитных H2-1, H2-2 и новейшем 98-кубитном Helios-1. В качестве возможного применения рассматривается задача квантовой аутентификации ДНК; предполагается, что в односторонней коммуникационной сложности может быть достигнуто квантовое превосходство над любым классическим решением."
+    },
+    "en": {
+      "popular": "Borrowing ideas from language models, scientists encode DNA for quantum computers, turning edit distances (insertions, deletions, substitutions) into a measure of quantum state similarity. The classical version, RotorMap, speeds up genome mapping by up to 700 times; the quantum version, Angular encoding, has been tested on the 98-qubit Helios-1 quantum computer. Much like a spinning rotor defines angular positions, each DNA letter gains a unique coordinate, making sequence similarity 'visible' to the quantum processor. This could bring quantum advantage to DNA identification tasks.",
+      "simple": "What if DNA were like a text and mutations were just typos? Scientists have developed a way to encode genetic sequences so a quantum computer can 'feel' how similar they are—almost like an expert. This opens up possibilities for lightning-fast genome comparisons and even quantum DNA verification. Could this someday replace traditional gene decoding?",
+      "advanced": "A quantum encoding of DNA sequences is proposed where the Levenshtein distance correlates with the fidelity of quantum states. The encoding is based on rotary positional embeddings (RoPE) from large language models. The classical implementation, RotorMap, is a GPU-accelerated DNA mapping algorithm that, in tests on human and maize genomes, showed a 50–700x speedup compared to single-threaded Minimap2. The quantum variant, Angular encoding, generates state preparation circuits and was tested on Quantinuum quantum computers: the 56-qubit H2-1, H2-2, and the latest 98-qubit Helios-1. A potential application considered is quantum DNA authentication; it is suggested that in one-way communication complexity, a quantum advantage over any classical solution could be achieved."
+    },
+    "es": {
+      "popular": "Ideas de modelos de lenguaje se utilizan para la codificación cuántica del ADN: la distancia de edición (inserciones, eliminaciones, sustituciones) se transforma en una medida de cercanía de estados cuánticos. La implementación clásica, RotorMap, acelera el mapeo del genoma hasta 700 veces; la cuántica, Angular encoding, se probó en el Helios-1 de 98 cúbits. Al igual que un rotor giratorio define coordenadas angulares, las letras del código obtienen posiciones únicas, haciendo la similitud «visible» para la computadora cuántica. Posiblemente esto conduzca a la supremacía cuántica en la identificación del ADN.",
+      "simple": "Imagina que el ADN es un texto y las mutaciones son erratas. Los científicos idearon cómo codificar secuencias genéticas para que una computadora cuántica «sienta» el grado de parecido casi como un experto. Esto abre el camino a una comparación ultrarrápida de genomas e incluso a la verificación cuántica de autenticidad del ADN. ¿Podrá esta tecnología algún día reemplazar la descodificación genética tradicional?",
+      "advanced": "Se propone una codificación cuántica de secuencias de ADN donde la distancia de Levenshtein se correlaciona con la fidelidad de los estados cuánticos. La codificación se basa en incrustaciones posicionales rotacionales (RoPE) de grandes modelos de lenguaje. La implementación clásica, RotorMap, es un algoritmo de mapeo de ADN acelerado por GPU que en pruebas con genomas humanos y de maíz mostró una aceleración de 50 a 700 veces en comparación con Minimap2 de un solo hilo. La versión cuántica, Angular encoding, genera circuitos de preparación de estados y se verificó en las computadoras cuánticas de Quantinuum: H2-1 de 56 cúbits, H2-2 y el novedoso Helios-1 de 98 cúbits. Como posible aplicación se considera la autenticación cuántica de ADN; se supone que en complejidad de comunicación unidireccional podría lograrse la supremacía cuántica sobre cualquier solución clásica."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "For a random 20,000-long DNA sequence and",
+      "Surprisingly, the encoding works even for",
+      "Non-random DNA strings",
+      "c mer is a sum of complex units that correspond to",
+      "For 1000 random 20,000-long DNA sequences and",
+      "D. Scoring the correlations",
+      "The fitting curve (red) to the correlation obtained",
+      "It is apparent that this correlation is not very",
+      "The correlation colored red is obtained for muta-",
+      "In this figure, random mu-",
+      "The standard variation of Angular encoding. The example is constructed from a complex vector of dimension 26",
+      "A RoPE encoding of 10,000-mers on 11 qubits (red"
+    ],
+    "ru": [
+      "Для случайной последовательности ДНК длиной 20 000 и",
+      "Удивительно, но кодирование работает даже для",
+      "Неслучайные строки ДНК",
+      "c-мер представляет собой сумму комплексных единиц, соответствующих",
+      "Для 1000 случайных последовательностей ДНК длиной 20 000 и",
+      "D. Оценка корреляций",
+      "Аппроксимирующая кривая (красная) для полученной корреляции",
+      "Очевидно, что эта корреляция не очень",
+      "Корреляция, выделенная красным, получена для мута-",
+      "На этом рисунке случайные му-",
+      "Стандартное отклонение углового кодирования. Пример построен на основе комплексного вектора размерности 26",
+      "Кодирование RoPE для 10 000-меров на 11 кубитах (красный"
+    ],
+    "es": [
+      "Para una secuencia aleatoria de ADN de 20 000 bases y",
+      "Sorprendentemente, la codificación funciona incluso para",
+      "Secuencias de ADN no aleatorias",
+      "c mer es una suma de unidades complejas que corresponden a",
+      "Para 1000 secuencias aleatorias de ADN de 20 000 bases y",
+      "D. Puntuación de las correlaciones",
+      "La curva de ajuste (roja) a la correlación obtenida",
+      "Es evidente que esta correlación no es muy",
+      "La correlación coloreada en rojo se obtiene para muta-",
+      "En esta figura, mu- aleatorio",
+      "La variación estándar de la codificación angular. El ejemplo se construye a partir de un vector complejo de dimensión 26",
+      "Una codificación RoPE de 10 000-mers en 11 qubits (rojo"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Квантовые стрелки для ДНК: новый рекорд скорости",
+      "oneliner": "Вращающиеся стрелки вместо букв ДНК позволяют сравнивать геномы в сотни раз быстрее и открывают путь к квантовой аутентификации.",
+      "description": "Учёные закодировали ДНК как систему стрелок, которые вращаются в зависимости от контекста. Это ускорило сравнение геномов на видеокартах до 700 раз, а на квантовых компьютерах позволило создать сверхзащищённую ДНК-идентификацию.",
+      "text": "ДНК — это длинное [tag:carbon]углеродное ожерелье[/tag] из четырёх типов бусин. Биологам часто нужно сравнить две цепочки, чтобы найти различия. Обычно это требует долгого перебора. Исследователи придумали хитрый способ: закодировать каждую бусину в виде стрелки, которая вращается в зависимости от соседей. Идею взяли из языковых моделей, где слова тоже «знают» контекст.\n\n[callout]У похожих последовательностей ДНК стрелки указывают почти в одну сторону. Сходство измеряют, сравнивая направления стрелок, — это сводится к оценке [tag:entropy]энтропии[/tag] системы.[/callout]\n\nМетод RotorMap, использующий [tag:speed_of_light]молниеносные вычисления[/tag] на видеокартах, обгоняет стандартные инструменты в 50–700 раз. Для квантовых компьютеров создали версию, где направления стрелок задают состояния частиц. На квантовых машинах Quantinuum алгоритм проверили, считывая данные с помощью [tag:spectroscopy]спектроскопии[/tag] — анализа излучения.\n\n[callout]Применение — квантовая ДНК-подпись, подобная конверту, который светится при вскрытии. Любая попытка перехвата сразу заметна, что даёт [scientist:John Preskill]квантовую защиту[/scientist] данных.[/callout]",
+      "fun_fact": "Человеческий геном — это 3 миллиарда букв. Раньше сравнение двух геномов занимало часы, теперь — секунды.",
+      "scifi": "Квантовая ДНК-подпись напоминает технологии из «Гаттаки», но с защитой, которую невозможно взломать.",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ]
+    },
+    "en": {
+      "title": "Quantum Arrows for DNA: A New Speed Record",
+      "oneliner": "Rotating arrows instead of DNA letters allow comparing genomes hundreds of times faster and pave the way for quantum authentication.",
+      "description": "Scientists encoded DNA as a system of arrows that rotate depending on context. This accelerated genome comparisons on GPUs up to 700 times, and on quantum computers it enabled ultra-secure DNA identification.",
+      "text": "DNA is a long [tag:carbon]carbon necklace[/tag] made of four types of beads. Biologists often need to compare two strands to find differences. Normally this requires a lengthy brute-force search. Researchers came up with a clever trick: encode each bead as an arrow that rotates based on its neighbors. The idea came from language models, where words also 'know' context.\n\n[callout]For similar DNA sequences, the arrows point in nearly the same direction. Similarity is measured by comparing arrow directions — which boils down to estimating the system's [tag:entropy]entropy[/tag].[/callout]\n\nThe RotorMap method, using [tag:speed_of_light]lightning-fast computation[/tag] on GPUs, outperforms standard tools by 50–700 times. For quantum computers, a version was created where arrow directions determine particle states. The algorithm was tested on Quantinuum quantum machines, reading data via [tag:spectroscopy]spectroscopy[/tag] — analysis of emitted radiation.\n\n[callout]The application is a quantum DNA signature, akin to an envelope that glows when opened. Any interception attempt is immediately noticeable, providing [scientist:John Preskill]quantum protection[/scientist] for data.[/callout]",
+      "fun_fact": "The human genome is 3 billion letters. Comparing two genomes used to take hours, now it takes seconds.",
+      "scifi": "Quantum DNA signatures resemble technology from 'Gattaca', but with protection that can't be hacked.",
+      "mini": "DNA chains were turned into a set of rotating arrows: the closer the sequences, the more their directions align. This sped up genome comparisons by hundreds of times and allowed the algorithm to run on quantum computers. Perhaps soon a quantum passport will replace traditional genetic testing.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ]
+    },
+    "es": {
+      "title": "Flechas cuánticas para el ADN: nuevo récord de velocidad",
+      "oneliner": "Flechas giratorias en lugar de letras de ADN permiten comparar genomas cientos de veces más rápido y abren paso a la autenticación cuántica.",
+      "description": "Científicos codificaron el ADN como un sistema de flechas que giran según el contexto. Esto aceleró la comparación de genomas en tarjetas gráficas hasta 700 veces, y en computadoras cuánticas permitió crear una identificación de ADN ultraprotegida.",
+      "text": "El ADN es un largo collar de [tag:carbon]carbono[/tag] formado por cuatro tipos de cuentas. Los biólogos a menudo necesitan comparar dos cadenas para encontrar diferencias. Normalmente esto requiere un largo proceso de comparación. Los investigadores idearon un truco ingenioso: codificar cada cuenta como una flecha que gira según sus vecinos. La idea se tomó de los modelos de lenguaje, donde las palabras también “conocen” el contexto.\n\n[callout]En secuencias de ADN similares, las flechas apuntan casi en la misma dirección. La similitud se mide comparando las direcciones de las flechas, lo que se reduce a estimar la [tag:entropy]entropía[/tag] del sistema.[/callout]\n\nEl método RotorMap, que utiliza [tag:speed_of_light]cálculos ultrarrápidos[/tag] en tarjetas gráficas, supera a las herramientas estándar entre 50 y 700 veces. Para computadoras cuánticas se creó una versión donde las direcciones de las flechas determinan los estados de las partículas. En las máquinas cuánticas Quantinuum, el algoritmo se probó leyendo los datos mediante [tag:spectroscopy]espectroscopía[/tag], el análisis de la radiación.\n\n[callout]La aplicación es una firma cuántica de ADN, como un sobre que brilla al abrirlo. Cualquier intento de interceptación se nota de inmediato, lo que proporciona [scientist:John Preskill]protección cuántica[/scientist] de datos.[/callout]",
+      "fun_fact": "El genoma humano tiene 3 mil millones de letras. Antes comparar dos genomas llevaba horas, ahora segundos.",
+      "scifi": "La firma cuántica de ADN recuerda a las tecnologías de ‘Gattaca’, pero con una protección imposible de vulnerar.",
+      "mini": "Las cadenas de ADN se convirtieron en un conjunto de flechas giratorias: cuanto más cercanas son las secuencias, más coinciden sus direcciones. Esto permitió acelerar la comparación de genomas cientos de veces y ejecutar el algoritmo en computadoras cuánticas. Quizás pronto el pasaporte cuántico reemplace al análisis genético convencional.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "carbon",
+        "speed_of_light",
+        "spectroscopy"
+      ],
+      "scientists": [
+        "John Preskill"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Цепочки ДНК превратили в набор вращающихся стрелок: чем ближе последовательности, тем сильнее совпадают их направления. Это позволило ускорить сравнение геномов в сотни раз и запустить алгоритм на квантовых компьютерах. Возможно, скоро квантовый паспорт заменит обычную генетическую экспертизу.",
+      "express_locked": true
+    }
+  }
+}

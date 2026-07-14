@@ -1,0 +1,280 @@
+{
+  "id": "2606.27411",
+  "original_title": "Compression-Driven Anomaly Detection in Brain MRI Using an Interpretable Quantum Autoencoder",
+  "authors": [
+    "Santanu Ganguly",
+    "Xing Liang",
+    "Dimitrios Makris"
+  ],
+  "date": "2026-06-25",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "entropy",
+    "hydrogen"
+  ],
+  "main_tag": "entropy",
+  "scientists": [],
+  "categories": [
+    "quant-ph",
+    "cs.AI",
+    "eess.IV"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [],
+  "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+  "abstract": {
+    "ru": {
+      "popular": "Ученые применили квантовый автоэнкодер для поиска опухолей на МРТ мозга. Сначала квантовая схема учится сжимать здоровые участки изображений, а затем помечает как аномалию всё, что сжатию сопротивляется. Метод достиг высокой точности (около 0,95 ROC-AUC на уровне срезов), обойдя классические аналоги. Самое любопытное: ключевую роль играет не декодер, а структурированное сжатие в кодере — почти как опытный архивариус, который безошибочно отделяет шаблонные документы от необычных.",
+      "simple": "Представьте, что мозг — это губка, а опухоль — твердый комок. Квантовый автоэнкодер учится сжимать здоровые участки, как воду из губки, а комок не сжимается и сразу привлекает внимание. На тестах такой метод безошибочно находил опухоли и наглядно их подсвечивал.",
+      "advanced": "Исследован квантовый автоэнкодер (QAE) для поиска аномалий на МРТ мозга на основе сжатия. Патчи изображений преобразуются в квантовые состояния через угловое кодирование, после чего вариационная архитектура «кодер–декодер» обучается отбрасывать информацию с помощью вспомогательных «мусорных» кубитов. Степень сопротивления сжатию служит оценкой аномальности: чем хуже сжатие, тем выше вероятность патологии. На общедоступных данных метод показал AUC ROC около 0.95 на уровне снимков и около 0.813 на уровне патчей, превзойдя классический автоэнкодер и PCA. Анализ параметров выявил асимметрию кодера и декодера: эффективное обнаружение возникает благодаря структурированному сжатию в кодере, а не за счёт сложности декодера. Это обеспечивает контролируемый компромисс между сжатием и восстановлением с чётким рабочим режимом, что упрощает выбор порога. Качественно тепловые карты аномалий локализуют опухолевые области. Результаты показывают, что такой подход даёт интерпретируемый и управляемый инструмент для поиска аномалий, перспективный для медицинской диагностики."
+    },
+    "en": {
+      "popular": "Scientists used a quantum autoencoder to find tumors in brain MRI scans. First, the quantum circuit learns to compress healthy tissue in the images, and then flags anything that resists compression as an anomaly. The method achieved high accuracy (around 0.95 ROC-AUC at the slice level), outperforming classical counterparts. The most intriguing part: the key role is played not by the decoder, but by the structured compression in the encoder — much like an experienced archivist who effortlessly separates template documents from unusual ones.",
+      "simple": "Imagine the brain is a sponge, and a tumor is a hard lump. The quantum autoencoder learns to compress healthy areas, like squeezing water out of a sponge, but the lump doesn't compress and immediately draws attention. In tests, this method found tumors flawlessly and highlighted them clearly.",
+      "advanced": "A quantum autoencoder (QAE) for anomaly detection in brain MRI based on compression is investigated. Image patches are converted into quantum states via angle encoding, after which a variational encoder-decoder architecture learns to discard information using auxiliary trash qubits. The degree of compression resistance serves as an anomaly score: the worse the compression, the higher the pathology probability. On publicly available data, the method achieved an AUC ROC of approximately 0.95 at the slice level and around 0.813 at the patch level, surpassing classical autoencoders and PCA. Parameter analysis revealed an asymmetry between encoder and decoder: effective detection stems from structured compression in the encoder, not from decoder complexity. This provides a controlled trade-off between compression and reconstruction with a clear operational regime, simplifying threshold selection. Qualitatively, anomaly heatmaps localize tumor regions. The results show that this approach offers an interpretable and controllable tool for anomaly detection, promising for medical diagnostics."
+    },
+    "es": {
+      "popular": "Los científicos aplicaron un autoencoder cuántico para buscar tumores en resonancias magnéticas cerebrales. Primero, el circuito cuántico aprende a comprimir las áreas sanas de las imágenes y luego marca como anomalía todo lo que se resiste a la compresión. El método alcanzó una alta precisión (alrededor de 0,95 ROC-AUC a nivel de cortes), superando a sus análogos clásicos. Lo más curioso: el papel clave no lo desempeña el decodificador, sino la compresión estructurada en el codificador, casi como un archivista experimentado que separa sin error los documentos comunes de los inusuales.",
+      "simple": "Imagina que el cerebro es una esponja y un tumor es un bulto duro. El autoencoder cuántico aprende a comprimir las áreas sanas, como el agua de la esponja, pero el bulto no se comprime y llama la atención de inmediato. En las pruebas, este método encontró tumores sin errores y los resaltó visualmente.",
+      "advanced": "Se investigó un autoencoder cuántico (QAE) para la detección de anomalías en resonancias magnéticas cerebrales basado en compresión. Los parches de imágenes se convierten en estados cuánticos mediante codificación angular, tras lo cual la arquitectura variacional 'codificador-decodificador' se entrena para descartar información utilizando cúbits auxiliares 'basura'. El grado de resistencia a la compresión sirve como medida de anomalía: cuanto peor es la compresión, mayor es la probabilidad de patología. En datos públicos, el método mostró un AUC ROC de alrededor de 0,95 a nivel de imágenes completas y de alrededor de 0,813 a nivel de parches, superando al autoencoder clásico y al PCA. El análisis de parámetros reveló una asimetría entre el codificador y el decodificador: la detección efectiva surge gracias a la compresión estructurada en el codificador, y no por la complejidad del decodificador. Esto proporciona un equilibrio controlable entre compresión y reconstrucción, con un régimen de trabajo claro que simplifica la elección del umbral. Cualitativamente, los mapas de calor de anomalías localizan las regiones tumorales. Los resultados muestran que este enfoque ofrece una herramienta interpretable y manejable para la búsqueda de anomalías, prometedora para el diagnóstico médico."
+    }
+  },
+  "thumbs": 5,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "General structure of (a) Classical and (b) Quantum autoencoders",
+      "Sample DICOM image for a tumorous brain",
+      "Fig. 3. QAE circuit used in this study. Produced with PennyLane [57] as output of the code run.",
+      "Trash loss (compression objective) is plotted against reconstruction loss (infidelity) across",
+      "The training (trash) loss & reconstruction loss against infidelity for the QAE."
+    ],
+    "ru": [
+      "Общая структура (a) классического и (b) квантового автоэнкодеров",
+      "Пример DICOM-изображения опухолевого мозга",
+      "Рис. 3. Схема квантового автоэнкодера, использованная в данном исследовании. Создано с помощью PennyLane [57] как результат выполнения кода.",
+      "Потери «мусорного» кубита (цель сжатия) в сравнении с потерями реконструкции (неверностью) на протяжении",
+      "Потери обучения («мусорные» потери) и потери реконструкции в зависимости от неверности для квантового автоэнкодера."
+    ],
+    "es": [
+      "Estructura general de autoencoders (a) clásicos y (b) cuánticos",
+      "Imagen DICOM de muestra de un cerebro con tumor",
+      "Fig. 3. Circuito QAE utilizado en este estudio. Producido con PennyLane [57] como salida de la ejecución del código.",
+      "Se representa la pérdida de descarte (objetivo de compresión) frente a la pérdida de reconstrucción (infidelidad) a lo largo de",
+      "Pérdida de entrenamiento (descarte) y pérdida de reconstrucción frente a la infidelidad para el QAE."
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Квантовый сжиматель: новый способ найти опухоль мозга",
+      "oneliner": "Квантовый сжиматель учится сжимать снимки МРТ и замечает аномалии там, где сжатие не удаётся.",
+      "description": "Учёные создали квантовый алгоритм, который сжимает изображения здорового мозга почти без потерь. Опухоль же ломает сжатие, и программа не только обнаруживает недуг, но и подсвечивает поражённый участок. Точность выше традиционных методов — ещё один шаг к надёжным помощникам врачей.",
+      "text": "Повар годами оттачивает умение сводить рецепт к трём-четырём сущностям и по ним воссоздавать блюдо. Если состав знаком, на тарелке ожидаемый обед. Чужеродный ингредиент нарушает компрессию, и получается не пойми что. Квантовый сжиматель действует так же с медицинскими снимками. Он дробит изображение на крошечные лоскуты, переводит в абстрактный код и тренируется на здоровых образцах, понижая [tag:entropy]энтропию[/tag] — информационный мусор. В основе снимков — слабые сигналы от атомов [tag:hydrogen]водорода[/tag].\n\nПосле обучения алгоритм легко пакует и распаковывает нормальные ткани. Опухоль ведёт себя как незваный ингредиент: сжатие выдаёт высокую ошибку, которую можно измерить. На целых срезах точность достигла 95% — лучше, чем у классических сжимателей и простого статистического анализа.\n\n[callout]Самое неожиданное: метод не просто ставит диагноз, а рисует карту подозрительных участков — врачу не нужно гадать, куда смотреть.[/callout]",
+      "fun_fact": "Для работы программе хватило всего 4 кубитов — это как приготовить званый ужин на игрушечной плите.",
+      "scifi": "Медицинские сканеры из «Звёздного пути» находили болезни мгновенно — первые шаги к такому будущему рождаются в квантовых лабораториях.",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": []
+    },
+    "en": {
+      "title": "The Quantum Compressor: A New Way to Find Brain Tumors",
+      "oneliner": "The Quantum Compressor learns to compress MRI scans and spots anomalies where compression fails.",
+      "description": "Scientists have created a quantum algorithm that compresses images of a healthy brain almost losslessly. A tumor breaks the compression, and the program not only detects the disease but also highlights the affected area. Accuracy outperforms traditional methods — another step toward reliable assistants for doctors.",
+      "text": "A cook spends years honing the skill of reducing a recipe to three or four essentials and recreating the dish from them. If the ingredients are familiar, the expected meal lands on the plate. A foreign ingredient disrupts compression, and you get something unrecognizable. The Quantum Compressor does the same with medical scans. It slices the image into tiny patches, encodes them into an abstract code, and trains on healthy samples, lowering [tag:entropy]entropy[/tag] — information junk. The scans rely on faint signals from [tag:hydrogen]hydrogen[/tag] atoms.\n\nAfter training, the algorithm easily packs and unpacks normal tissue. A tumor acts like an uninvited ingredient: compression throws a high error that can be measured. On full slices, accuracy reached 95% — better than classical compressors and simple statistical analysis.\n\n[callout]The most surprising part: the method doesn't just diagnose; it draws a map of suspicious areas — the doctor doesn't have to guess where to look.[/callout]",
+      "fun_fact": "The program needed just 4 qubits to work — like cooking a dinner party on a toy stove.",
+      "scifi": "The medical scanners on Star Trek found diseases instantly — the first steps toward that future are being born in quantum labs.",
+      "mini": "A cook who only makes familiar dishes: if the recipe doesn't compress to its usual essence, there's something off. A quantum autoencoder does the same with brain scans. A tumor refuses to be compressed — and the program sounds the alarm, drawing a precise map of the problem.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": []
+    },
+    "es": {
+      "title": "El compresor cuántico: una nueva forma de detectar tumores cerebrales",
+      "oneliner": "El compresor cuántico aprende a comprimir imágenes de resonancia magnética y detecta anomalías donde la compresión falla.",
+      "description": "Los científicos crearon un algoritmo cuántico que comprime imágenes de cerebros sanos casi sin pérdida. El tumor rompe la compresión, y el programa no solo detecta la enfermedad, sino que también resalta la zona afectada. La precisión es mayor que con los métodos tradicionales: un paso más hacia asistentes médicos confiables.",
+      "text": "Un cocinero perfecciona durante años la habilidad de reducir una receta a tres o cuatro esencias y reconstruir el plato a partir de ellas. Si los ingredientes son conocidos, en el plato aparece la comida esperada. Un ingrediente extraño rompe la compresión y resulta algo irreconocible. El compresor cuántico actúa igual con las imágenes médicas. Divide la imagen en diminutos parches, los convierte en un código abstracto y se entrena con muestras sanas, reduciendo la [tag:entropy]entropía[/tag] —basura informativa—. En la base de las imágenes hay señales débiles de átomos de [tag:hydrogen]hidrógeno[/tag].\n\nTras el entrenamiento, el algoritmo empaqueta y desempaqueta con facilidad los tejidos normales. El tumor se comporta como un ingrediente intruso: la compresión produce un error alto, que se puede medir. En cortes completos, la precisión alcanzó el 95 %, mejor que con compresores clásicos y análisis estadísticos simples.\n\n[callout]Lo más sorprendente: el método no solo diagnostica, sino que dibuja un mapa de las zonas sospechosas, así el médico no tiene que adivinar dónde mirar.[/callout]",
+      "fun_fact": "Para funcionar, el programa solo necesitó 4 cúbits: es como preparar una cena de gala en una cocina de juguete.",
+      "scifi": "Los escáneres médicos de «Star Trek» detectaban enfermedades al instante: los primeros pasos hacia ese futuro nacen en los laboratorios cuánticos.",
+      "mini": "Un cocinero que solo prepara platos conocidos: si la receta no se comprime a su esencia habitual, algo va mal. El autoencoder cuántico hace lo mismo con las imágenes cerebrales. El tumor no se deja comprimir y el programa da la alarma, dibujando un mapa preciso del problema.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": []
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    }
+  }
+}
