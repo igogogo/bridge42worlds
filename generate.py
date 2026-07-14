@@ -598,6 +598,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         author_verify_body=safe(loc.get("author_verify_body", "")),
         share_label=safe(loc.get("share", "Share")),
         next_label=safe(loc.get("next", "Next article")),
+        next_arrow="←" if lang in RTL_LANGS else "→",
         express_locked_js="true" if scipop.get("express_locked") else "false",
         license_label=safe(loc.get("license", "Original")),
         license_url=lic, license_name=lic_name,

@@ -11,6 +11,22 @@ html[lang="ar"] .article-nav { left: auto; right: max(12px, calc((100vw - 900px)
 html[lang="ar"] .mosaic-arrow { right: auto; left: 6px; transform: translateY(-50%) scaleX(-1); }
 /* латиница/цифры/URL внутри RTL держим как есть */
 html[lang="ar"] .meta, html[lang="ar"] .license, html[lang="ar"] .original-title { unicode-bidi: plaintext; }
+/* картинка карточки статьи — обтекание с другой стороны */
+html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 8px 16px; }
+/* разделитель чипов категорий — тоже зеркалим */
+html[lang="ar"] .cat-chip { border-right: none; border-left: 1px solid var(--border); }
+html[lang="ar"] .cat-chip:last-child { border-left: none; }
+/* разделитель переключателя языков */
+html[lang="ar"] .langs a { border-right: none; border-left: 1px solid var(--border); }
+html[lang="ar"] .langs a:last-child { border-left: none; }
+/* абзацы текста статей — выравнивание по правому краю */
+html[lang="ar"] p { text-align: right; }
+/* «мини»-цитата карточки — акцентная полоса с другой стороны */
+html[lang="ar"] .card-content .oneliner.card-mini { padding-left: 0; padding-right: 10px; border-left: none; border-right: 2px solid var(--link); }
+/* блок «сырого» refine-текста — акцентная полоса с другой стороны */
+html[lang="ar"] .refine-raw { border-left: none; border-right: 3px solid #b8860b; }
+/* маркированный список открытий учёного — отступ с другой стороны */
+html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
 
 :root {
     --text: #2c2c2c;
