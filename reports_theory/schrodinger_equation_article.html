@@ -1,0 +1,455 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Уравнение Шрёдингера: частица как стоячая волна</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- стоячая волна: частица в ящике ---------- */
+.box-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.box-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+.level-btns{ display:flex; gap:8px; margin:.8em 0 1.2em; flex-wrap:wrap; }
+.level-btn{
+  font-family:var(--font-mono); font-size:.82rem; padding:5px 14px; border-radius:14px;
+  border:1px solid var(--rule); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+}
+.level-btn.active{ background:var(--steel-fill); border-color:var(--steel-fill); color:var(--paper); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Волновая функция в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Само уравнение</a></li>
+      <li><a href="#s3"><span class="n">03</span>Частица в ящике</a></li>
+      <li><a href="#s4"><span class="n">04</span>Квантование энергии</a></li>
+      <li><a href="#s5"><span class="n">05</span>Туннельный эффект</a></li>
+      <li><a href="#s6"><span class="n">06</span>Сквозной пример: уровни энергии</a></li>
+      <li><a href="#s7"><span class="n">07</span>Куда это ведёт: суперпозиция и кот</a></li>
+      <li><a href="#s8"><span class="n">08</span>Эксперимент дома</a></li>
+      <li><a href="#s9"><span class="n">09</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; квантовая механика &middot; часть VI</p>
+        <h1>Уравнение Шрёдингера: частица как стоячая волна</h1>
+        <p class="subtitle">Электрон в атоме — не шарик на орбите, а нечто гораздо ближе к звучащей струне: у него есть собственные «ноты», и только эти ноты он может «сыграть».</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="100" x2="310" y2="100" stroke="var(--rule)" stroke-width="1.5"/>
+          <line x1="30" y1="40" x2="30" y2="160" stroke="var(--ink)" stroke-width="3"/>
+          <line x1="310" y1="40" x2="310" y2="160" stroke="var(--ink)" stroke-width="3"/>
+          <path id="heroWave" d="M30,100 Q170,40 310,100" fill="none" stroke="var(--steel-fill)" stroke-width="2.6"/>
+          <text x="170" y="185" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">только целое число полуволн умещается в ящике</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1926 году Эрвин Шрёдингер, развивая идею Луи де Бройля о волновой природе материи (см. формулу Эйлера, часть V), вывел уравнение, определяющее эволюцию волновой функции &psi; — математического объекта, квадрат модуля которого даёт вероятность найти частицу в данной точке. Уравнение линейно и детерминистично, но управляет вероятностями, а не точными траекториями. В этой заметке — само уравнение, его простейшее точное решение (частица в ящике) и то, откуда берётся квантование энергии.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Волновая функция в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В квантовой механике частица не имеет одновременно точной координаты и точной скорости (принцип неопределённости Гейзенберга) — вместо этого её полностью описывает волновая функция &psi;(x,t), комплексное число в каждой точке пространства и момент времени.</p>
+        <table class="symtab">
+          <tr><th>Объект</th><th>Что значит</th></tr>
+          <tr><td>&psi;(x,t)</td><td>волновая функция — полное описание состояния частицы (комплексное число)</td></tr>
+          <tr><td>|&psi;(x,t)|&sup2;</td><td>плотность вероятности найти частицу вблизи точки x в момент t (правило Борна)</td></tr>
+          <tr><td>&int;|&psi;|&sup2;dx = 1</td><td>частица где-то обязательно есть — полная вероятность равна 100%</td></tr>
+        </table>
+        <p>Это не означает «частица размазана в пространстве, как облако пыли» — правильнее сказать: до измерения нет факта о том, где именно частица находится, есть только распределение вероятностей, куда попадёт результат измерения.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Само уравнение</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка (временное уравнение).</strong> Волновая функция эволюционирует во времени по правилу:</p>
+        <div class="plate">
+          <div class="eq-body">i&#8462;&part;&psi;/&part;t = &Hscr;&psi;</div>
+          <div class="cap">&#8462; &asymp; 1.0546&times;10&#8315;&sup3;&sup4; Дж&middot;с — редуцированная постоянная Планка, &Hscr; — оператор Гамильтона (полная энергия)</div>
+        </div>
+        <p>Мнимая единица i здесь не украшение — вспомните формулу Эйлера (часть V): именно она гарантирует, что решение — вращающаяся на комплексной плоскости фаза, а значит |&psi;|&sup2; остаётся постоянным во времени, если систему не трогать (унитарность, полная вероятность не «протекает» никуда).</p>
+        <p>Для состояний с точно определённой энергией E (<strong>стационарные состояния</strong>) уравнение упрощается до задачи на собственные значения:</p>
+        <div class="eq"><div class="eq-body">&Hscr;&psi; = E&psi;</div><div class="eq-tag">(1)</div></div>
+        <p>Именно эта, более простая, стационарная форма используется в §3 — она превращает поиск решения в чисто геометрическую задачу: «какая форма волны умещается в данных условиях».</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Частица в ящике</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Простейшая точно решаемая система — частица, запертая в одномерном «ящике» шириной L с бесконечно высокими стенками (&psi;&nbsp;=&nbsp;0 на границах, как у струны, закреплённой с двух концов). Решения стационарного уравнения (1) для такого ящика — это в точности стоячие волны:</p>
+        <div class="plate">
+          <div class="eq-body">&psi;<sub>n</sub>(x) = &radic;(2/L)&middot;sin(n&pi;x/L),&nbsp;&nbsp;&nbsp; n = 1, 2, 3, ...</div>
+          <div class="cap">n — «квантовое число», считает число полуволн, умещающихся в ящике</div>
+        </div>
+        <div class="box-fig" aria-hidden="true">
+          <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+            <line x1="30" y1="80" x2="370" y2="80" stroke="var(--rule)" stroke-width="1"/>
+            <line x1="30" y1="20" x2="30" y2="140" stroke="var(--ink)" stroke-width="3"/>
+            <line x1="370" y1="20" x2="370" y2="140" stroke="var(--ink)" stroke-width="3"/>
+            <path id="boxWave" d="M30,80 L370,80" fill="none" stroke="var(--steel-fill)" stroke-width="2.6"/>
+          </svg>
+        </div>
+        <div class="level-btns">
+          <button class="level-btn active" data-n="1">n = 1</button>
+          <button class="level-btn" data-n="2">n = 2</button>
+          <button class="level-btn" data-n="3">n = 3</button>
+          <button class="level-btn" data-n="4">n = 4</button>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>E<sub>n</sub>/E<sub>1</sub></b><span data-readout="energy">1</span></span>
+          <span><b>узлов внутри</b><span data-readout="nodes">0</span></span>
+          <span><b>&lambda;<sub>n</sub></b><span data-readout="wavelength">2L</span></span>
+        </div>
+        <p>Нажмите на n выше — форма волны меняется, а вместе с ней и число узлов (точек внутри ящика, где &psi;&nbsp;=&nbsp;0, частицу там найти нельзя вообще). Ровно как у струны гитары: n&nbsp;=&nbsp;1 — основной тон без узлов, n&nbsp;=&nbsp;2 — первый обертон с одним узлом посередине, и так далее.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Квантование энергии</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Подставив &psi;<sub>n</sub> в уравнение (1), получаем энергию каждого уровня:</p>
+        <div class="plate">
+          <div class="eq-body">E<sub>n</sub> = n&sup2;&pi;&sup2;&#8462;&sup2;/(2mL&sup2;) = n&sup2;&middot;E<sub>1</sub></div>
+          <div class="cap">энергия растёт как n&sup2; — не любое значение энергии разрешено, только эта дискретная лестница</div>
+        </div>
+        <p>Это и есть <strong>квантование</strong>: в отличие от классической частицы (мячик в коробке может иметь любую энергию — толкните слабее или сильнее), квантовая частица в ящике может иметь только энергии из списка E<sub>1</sub>, 4E<sub>1</sub>, 9E<sub>1</sub>, 16E<sub>1</sub>, ... — ни один промежуточный уровень не разрешён.</p>
+        <div class="callout brass">
+          <span class="tag">Почему нельзя иметь энергию 0 (нулевая энергия)</span>
+          <p>Наименьшая разрешённая энергия — E<sub>1</sub>, не ноль. Это прямое следствие принципа неопределённости Гейзенберга: если бы частица имела E&nbsp;=&nbsp;0, она была бы абсолютно неподвижна (нулевой импульс) И заперта в ящике конечного размера (точно известная координата) — оба факта точно одновременно, что запрещено. «Дрожание» на нулевом уровне (zero-point energy) — не техническая деталь, а фундаментальный запрет.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Туннельный эффект</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В реальности стенки ящика никогда не бывают бесконечно высокими. Если стенка конечной высоты (энергетический барьер), решение уравнения Шрёдингера показывает: волновая функция не обрывается резко на границе барьера, а лишь быстро затухает <strong>внутри</strong> него, оставаясь ненулевой — а значит, существует небольшая, но не нулевая вероятность обнаружить частицу с ДРУГОЙ стороны барьера, даже если классически у неё не хватает энергии его перепрыгнуть.</p>
+        <div class="callout steel">
+          <span class="tag">Не мысленный эксперимент — работающая технология</span>
+          <p>Именно на туннельном эффекте работает сканирующий туннельный микроскоп (1981, Бинниг и Рорер, Нобелевская премия): тончайшая игла подводится почти вплотную к поверхности (не касаясь!), электроны туннелируют через зазор, и по силе туннельного тока восстанавливается рельеф поверхности с разрешением до отдельных атомов. Тот же эффект объясняет альфа-распад ядер и работу флэш-памяти.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Сквозной пример: уровни энергии</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Пусть в некотором ящике энергия основного уровня E<sub>1</sub>&nbsp;=&nbsp;2&nbsp;эВ (условное значение для чистоты счёта). По формуле §4 (E<sub>n</sub>&nbsp;=&nbsp;n&sup2;E<sub>1</sub>) найдём несколько следующих уровней:</p>
+        <table class="symtab">
+          <tr><th>n</th><th>E<sub>n</sub>/E<sub>1</sub></th><th>E<sub>n</sub>, эВ</th></tr>
+          <tr><td class="sym">1</td><td class="sym">1</td><td class="sym">2</td></tr>
+          <tr><td class="sym">2</td><td class="sym">4</td><td class="sym">8</td></tr>
+          <tr><td class="sym">3</td><td class="sym">9</td><td class="sym">18</td></tr>
+          <tr><td class="sym">4</td><td class="sym">16</td><td class="sym">32</td></tr>
+        </table>
+        <p>Расстояние между соседними уровнями РАСТЁТ с n (8&minus;2=6, затем 18&minus;8=10, затем 32&minus;18=14) — не постоянный шаг, как могло бы показаться из слова «квантование». Частица, переходящая с уровня 2 на уровень 1, излучает квант света точно с энергией 8&minus;2=6&nbsp;эВ — ни больше, ни меньше; это и есть механизм, порождающий линейчатые спектры атомов (см. также уравнение Планка-Эйнштейна).</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Куда это ведёт: суперпозиция и кот</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Уравнение Шрёдингера линейно — значит, если &psi;<sub>1</sub> и &psi;<sub>2</sub> оба являются решениями, их сумма (<strong>суперпозиция</strong>) c<sub>1</sub>&psi;<sub>1</sub>&nbsp;+&nbsp;c<sub>2</sub>&psi;<sub>2</sub> тоже решение. Частица может находиться одновременно «немного в состоянии 1 и немного в состоянии 2» — не в переносном смысле, а буквально, пока над ней не совершено измерение.</p>
+        <div class="callout moss">
+          <span class="tag">Кот Шрёдингера — насмешка, ставшая знаменитой</span>
+          <p>Сам Шрёдингер придумал мысленный эксперимент с котом в 1935 году как <strong>критику</strong>, а не как одобрение копенгагенской интерпретации: кот заперт в ящике с механизмом, который с 50% вероятностью выпускает яд, если распадается радиоактивный атом (квантовое событие). Формальное применение уравнения ко ВСЕЙ системе «атом+механизм+кот» до открытия ящика даёт суперпозицию «кот жив» и «кот мёртв» одновременно — абсурдный вывод для макроскопического объекта, которым Шрёдингер и указывал на нерешённую <strong>проблему измерения</strong> (§7, key_problems): где именно и почему суперпозиция превращается в один определённый исход, уравнение само по себе не говорит.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/schrdinger_equation.html">Уравнение Шрёдингера</a> ·
+          <a href="/lang/ru/laws/heisenberg_uncertainty_principle.html">Принцип неопределённости Гейзенберга</a> ·
+          <a href="/lang/ru/laws/superposition_principle.html">Принцип суперпозиции</a> ·
+          <a href="/lang/ru/laws/de_broglie_wavelength.html">Формула де Бройля</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; стоячие волны на верёвке или слинки</span>
+          <p>Натяните бельевую верёвку или пружину-слинки между двумя неподвижными точками (или попросите кого-то держать один конец) и потрясите её рукой с разной частотой, подбирая скорость, пока не «поймаете» чёткую стоячую волну — сначала с одной «пучностью», затем (потрясите быстрее) с двумя.</p>
+          <p><span class="qlabel">Что заметить</span> волна «встаёт» на чёткое место только на определённых частотах встряхивания — на промежуточных частотах получается хаотичное дрожание без чёткой формы. Это НАГЛЯДНАЯ механическая модель §3-§4: закреплённые концы верёвки играют роль стенок ящика, а разрешённые чёткие формы волны — это в точности разрешённые квантовые уровни n=1,2,3, только для верёвки — с частотой звука, а для электрона — с энергией.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; лазерная указка и волосок</span>
+          <p>В тёмной комнате направьте лазерную указку на тонкий волос (свой или из щётки), закреплённый вертикально, так чтобы луч проходил рядом с ним, на белую стену на расстоянии 2-3 метра.</p>
+          <p><span class="qlabel">Что заметить</span> на стене появится не просто тень, а серия чередующихся светлых и тёмных полос (дифракционная картина) — прямое доказательство того, что свет ведёт себя как волна, огибающая препятствие, а не как поток частиц-шариков, летящих по прямой. Та же волновая природа, что описывает уравнение Шрёдингера для электронов, здесь видна невооружённым глазом для света.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s9">
+      <div class="sec-head"><span class="sec-num">§9</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Энергия основного уровня частицы в ящике E₁ = 3 эВ. Чему равна энергия уровня n = 3?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> E<sub>1</sub>&nbsp;=&nbsp;3&nbsp;эВ, n&nbsp;=&nbsp;3.</p>
+            <p><span class="qlabel">Закон</span> квантование энергии в ящике (§4): E<sub>n</sub>&nbsp;=&nbsp;n&sup2;E<sub>1</sub>.</p>
+            <p><span class="qlabel">Решение</span> E<sub>3</sub>&nbsp;=&nbsp;3&sup2;&middot;3&nbsp;=&nbsp;9&middot;3&nbsp;=&nbsp;27&nbsp;эВ.</p>
+            <p><span class="qlabel">Ответ</span> <strong>27 эВ</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Ширину ящика увеличили вдвое, ничего больше не меняя. Как изменилась энергия основного уровня E₁?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> L<sub>нов</sub>&nbsp;=&nbsp;2L (ширина удвоена).</p>
+            <p><span class="qlabel">Закон</span> формула §4: E<sub>1</sub>&nbsp;&prop;&nbsp;1/L&sup2;.</p>
+            <p><span class="qlabel">Решение</span> E<sub>1,нов</sub>/E<sub>1</sub>&nbsp;=&nbsp;L&sup2;/(2L)&sup2;&nbsp;=&nbsp;1/4.</p>
+            <p><span class="qlabel">Ответ</span> <strong>уменьшилась в 4 раза</strong> — чем просторнее ящик, тем ниже энергия запертой частицы (интуитивно: меньше «стеснена», меньше кинетическая энергия локализации).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Сколько узлов (внутренних точек с ψ = 0) у волновой функции уровня n = 5?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> n&nbsp;=&nbsp;5.</p>
+            <p><span class="qlabel">Закон</span> число внутренних узлов &psi;<sub>n</sub> равно n&nbsp;&minus;&nbsp;1 (§3: n=1 — 0 узлов, n=2 — 1 узел, и так далее).</p>
+            <p><span class="qlabel">Решение</span> узлов&nbsp;=&nbsp;5&nbsp;&minus;&nbsp;1&nbsp;=&nbsp;4.</p>
+            <p><span class="qlabel">Ответ</span> <strong>4 узла</strong> — ещё 2 «узла» на самих стенках, но их обычно не считают, так как это границы, а не внутренние точки.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Электрон переходит с уровня n = 2 (E = 8 эВ) на уровень n = 1 (E = 2 эВ), излучая один фотон. Какова энергия этого фотона?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> E<sub>2</sub>&nbsp;=&nbsp;8&nbsp;эВ, E<sub>1</sub>&nbsp;=&nbsp;2&nbsp;эВ.</p>
+            <p><span class="qlabel">Закон</span> сохранение энергии (часть II) + квантование (§6): энергия фотона равна разности уровней.</p>
+            <p><span class="qlabel">Решение</span> E<sub>фотона</sub>&nbsp;=&nbsp;E<sub>2</sub>&nbsp;&minus;&nbsp;E<sub>1</sub>&nbsp;=&nbsp;8&nbsp;&minus;&nbsp;2&nbsp;=&nbsp;6&nbsp;эВ.</p>
+            <p><span class="qlabel">Ответ</span> <strong>6 эВ</strong> — ни больше, ни меньше; именно так рождаются чёткие линии в атомных спектрах.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему частица в ящике не может иметь энергию точно 0 (полностью покоиться)? Какой принцип это запрещает?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> принцип неопределённости Гейзенберга (§4-сноска).</p>
+            <p><span class="qlabel">Решение</span> E&nbsp;=&nbsp;0 означало бы одновременно точно нулевой импульс И точно известную координату (частица заперта в ящике конечного размера) — оба факта точно одновременно запрещены принципом неопределённости &Delta;x&middot;&Delta;p&nbsp;&ge;&nbsp;&#8462;/2.</p>
+            <p><span class="qlabel">Ответ</span> <strong>принцип неопределённости Гейзенберга</strong> — отсюда минимальная, «нулевая» энергия E<sub>1</sub>, никогда не ноль.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Schrodinger%20equation%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть VI серии, квантовая механика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  var LEFT = 30, RIGHT = 370, MID = 80, AMP = 55, PERIOD = 6000;
+  var heroPath = document.getElementById('heroWave');
+  var boxPath = document.getElementById('boxWave');
+  var buttons = document.querySelectorAll('.level-btn');
+  var eReadout = document.querySelector('[data-readout="energy"]');
+  var nodesReadout = document.querySelector('[data-readout="nodes"]');
+  var waveReadout = document.querySelector('[data-readout="wavelength"]');
+  var currentN = 1;
+
+  function pathFor(n, phase){
+    var span = RIGHT - LEFT, steps = 80, d = 'M' + LEFT + ',' + MID;
+    for (var i = 1; i <= steps; i++){
+      var x = LEFT + span * i / steps;
+      var xi = (x - LEFT) / span;
+      var y = MID - AMP * Math.sin(n * Math.PI * xi) * Math.cos(phase);
+      d += ' L' + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    return d;
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentN = parseInt(btn.dataset.n, 10);
+      if (eReadout) eReadout.textContent = (currentN * currentN);
+      if (nodesReadout) nodesReadout.textContent = (currentN - 1);
+      if (waveReadout) waveReadout.textContent = currentN === 1 ? '2L' : ('2L/' + currentN);
+    });
+  });
+
+  if (!window.requestAnimationFrame) return;
+  function tick(ts){
+    var phase = (ts % PERIOD) / PERIOD * 2 * Math.PI;
+    if (heroPath) heroPath.setAttribute('d', pathFor(1, phase));
+    if (boxPath) boxPath.setAttribute('d', pathFor(currentN, phase));
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
