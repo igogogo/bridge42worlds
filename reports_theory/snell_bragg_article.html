@@ -1,0 +1,405 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Снеллиус и Брэгг: как свет ломается и как рентген видит атомы</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: преломление и дифракция ---------- */
+.refr-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.refr-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Два закона отражения-преломления</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Снеллиуса: почему свет «ломается»</a></li>
+      <li><a href="#s3"><span class="n">03</span>Полное внутреннее отражение и оптоволокно</a></li>
+      <li><a href="#s4"><span class="n">04</span>Закон Брэгга: свет как линейка для атомов</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: как увидели двойную спираль ДНК</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: снова принцип Ферма</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; оптика &middot; часть XV</p>
+        <h1>Снеллиус и Брэгг: как свет ломается и как рентген видит атомы</h1>
+        <p class="subtitle">Один закон объясняет, почему ложка в стакане чая выглядит сломанной; второй — тем же самым математическим приёмом — позволил впервые увидеть форму молекулы ДНК.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="340" height="90" fill="var(--paper)"/>
+          <rect x="0" y="90" width="340" height="110" fill="var(--steel-fill)" opacity=".15"/>
+          <line x1="0" y1="90" x2="340" y2="90" stroke="var(--rule)" stroke-width="1.5"/>
+          <line x1="170" y1="20" x2="170" y2="180" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="80" y1="20" x2="170" y2="90" stroke="var(--brass-fill)" stroke-width="2.4"/>
+          <line id="heroRefracted" x1="170" y1="90" x2="220" y2="180" stroke="var(--brass-fill)" stroke-width="2.4"/>
+          <text x="170" y="195" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">n&#8321;sin&theta;&#8321; = n&#8322;sin&theta;&#8322;</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В части X мы уже встречали задачу «спасателя на пляже» — намёк на то, как свет выбирает путь наименьшего времени. Здесь — полный разбор двух законов, управляющих отражением и преломлением волн: закон Снеллиуса (1621) для видимого света на границе сред и закон Брэгга (1913) для рентгеновских лучей на кристаллической решётке. Формально они выглядят по-разному, но оба — следствия одной и той же волновой интерференции, и вместе они охватывают весь путь от школьной физики линз до расшифровки структуры ДНК.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Два закона отражения-преломления</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Формула</th><th>Работает для</th></tr>
+          <tr><td>Снеллиуса (1621)</td><td class="sym">n&#8321;sin&theta;&#8321; = n&#8322;sin&theta;&#8322;</td><td>преломление луча на границе двух сред</td></tr>
+          <tr><td>Брэгга (1913)</td><td class="sym">n&lambda; = 2d&middot;sin&theta;</td><td>дифракция волны на периодической решётке (кристалле)</td></tr>
+        </table>
+        <p>Снеллиус описывает ОДНУ границу раздела (например, воздух-стекло). Брэгг описывает МНОЖЕСТВО параллельных плоскостей внутри кристалла — но математика в основе обоих законов родственна: волна взаимодействует с периодической или граничной структурой, и результат определяется геометрией углов.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Снеллиуса: почему свет «ломается»</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> При переходе луча из одной прозрачной среды в другую:</p>
+        <div class="plate">
+          <div class="eq-body">n&#8321;sin&theta;&#8321; = n&#8322;sin&theta;&#8322;</div>
+          <div class="cap">n — показатель преломления (n = c/v, во сколько раз свет медленнее в среде, чем в вакууме); &theta; — угол ОТ ПЕРПЕНДИКУЛЯРА к границе</div>
+        </div>
+        <div class="refr-fig" aria-hidden="true">
+          <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="300" height="100" fill="var(--paper)"/>
+            <rect x="0" y="100" width="300" height="100" fill="var(--steel-fill)" opacity=".12"/>
+            <line x1="0" y1="100" x2="300" y2="100" stroke="var(--rule)" stroke-width="1.5"/>
+            <line x1="150" y1="20" x2="150" y2="180" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="70" y1="30" x2="150" y2="100" stroke="var(--brass-fill)" stroke-width="2.4"/>
+            <line id="refractedRay" x1="150" y1="100" x2="192" y2="180" stroke="var(--brass-fill)" stroke-width="2.4"/>
+          </svg>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>угол падения</b><span data-readout="theta1">41.8</span>&deg;</span>
+          <span><b>угол преломления</b><span data-readout="theta2">30.0</span>&deg;</span>
+        </div>
+        <p>Численный пример: луч света из воздуха (n&#8321;&nbsp;=&nbsp;1) падает на воду (n&#8322;&nbsp;=&nbsp;4/3&nbsp;&asymp;&nbsp;1.33) под углом &theta;&#8321;, где sin&theta;&#8321;&nbsp;=&nbsp;2/3 (&theta;&#8321;&nbsp;&asymp;&nbsp;41.8&deg;). Найдите угол преломления.</p>
+        <div class="eq"><div class="eq-body">sin&theta;&#8322; = n&#8321;sin&theta;&#8321;/n&#8322; = 1&middot;(2/3)/(4/3) = <strong>0.5</strong>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&theta;&#8322; = <strong>30&deg;</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Луч приблизился к перпендикуляру (41.8&deg;&nbsp;&rarr;&nbsp;30&deg;) — так всегда бывает при переходе в оптически более плотную среду (n растёт). Именно поэтому карандаш в стакане воды выглядит «переломленным»: свет от подводной части идёт к вашему глазу по излому, а мозг достраивает прямую линию.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Полное внутреннее отражение и оптоволокно</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>При переходе из плотной среды в менее плотную (n&#8321;&nbsp;&gt;&nbsp;n&#8322;, например, стекло&nbsp;&rarr;&nbsp;воздух) угол преломления ВСЕГДА больше угла падения. При достаточно большом угле падения преломлённый луч «прижимается» к самой границе (&theta;&#8322;&nbsp;=&nbsp;90&deg;) — а если падать ещё круче, преломление вообще прекращается: весь свет отражается обратно внутрь среды. Этот критический угол находится из условия sin&theta;<sub>крит</sub>&nbsp;=&nbsp;n&#8322;/n&#8321;.</p>
+        <p>Для стекла (n&#8321;&nbsp;=&nbsp;1.5) на границе с воздухом (n&#8322;&nbsp;=&nbsp;1): sin&theta;<sub>крит</sub>&nbsp;=&nbsp;1/1.5&nbsp;=&nbsp;2/3, &theta;<sub>крит</sub>&nbsp;&asymp;&nbsp;41.8&deg; — та же цифра, что и в §2, не совпадение: стекло и вода имеют похожие показатели преломления.</p>
+        <div class="callout steel">
+          <span class="tag">Как интернет плывёт по стеклянной нити</span>
+          <p>Оптоволоконный кабель — тонкая стеклянная нить, внутри которой свет заходит под углом больше критического и отражается от внутренней стенки СНОВА и СНОВА, тысячи раз, без единой потери энергии на каждом отражении (в отличие от зеркал, теряющих часть света при каждом отражении). Именно полное внутреннее отражение, а не какое-то специальное покрытие, удерживает сигнал внутри волокна на протяжении десятков и сотен километров.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Закон Брэгга: свет как линейка для атомов</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Рентгеновские лучи, отражённые от параллельных атомных плоскостей кристалла, усиливают друг друга (конструктивная интерференция) только при определённых углах:</p>
+        <div class="plate">
+          <div class="eq-body">n&lambda; = 2d&middot;sin&theta;</div>
+          <div class="cap">d — расстояние между атомными плоскостями, &theta; — угол СКОЛЬЖЕНИЯ (от плоскости, не от перпендикуляра — отличие от закона Снеллиуса!), n — целое число (порядок отражения)</div>
+        </div>
+        <p>Атомные слои кристалла работают как полупрозрачные зеркала — часть волны отражается от верхнего слоя, часть проходит глубже и отражается от следующего. Если разница хода между этими двумя отражёнными волнами (геометрически равная 2d&middot;sin&theta;) кратна длине волны, волны складываются «в фазе» и дают яркий сигнал; если нет — гасят друг друга.</p>
+        <p>Численный пример: рентгеновские лучи с длиной волны &lambda;&nbsp;=&nbsp;0.15&nbsp;нм направлены на кристалл с межплоскостным расстоянием d&nbsp;=&nbsp;0.15&nbsp;нм. Найдите угол первого (n&nbsp;=&nbsp;1) яркого отражения.</p>
+        <div class="eq"><div class="eq-body">sin&theta; = n&lambda;/(2d) = 0.15/0.30 = <strong>0.5</strong>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&theta; = <strong>30&deg;</strong></div><div class="eq-tag">(2)</div></div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: как увидели двойную спираль ДНК</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В 1952 году Розалинд Франклин направила рентгеновские лучи на кристаллизованные волокна ДНК и получила знаменитый «снимок&nbsp;51» — крестообразный узор из тёмных пятен. Каждое пятно — это яркая точка, где для конкретного угла и конкретного межплоскостного расстояния выполнилось условие Брэгга (§4). Характерная Х-образная форма узора напрямую указывала на СПИРАЛЬНУЮ (не прямую, не случайную) структуру молекулы — Джеймс Уотсон, увидев этот снимок, за несколько недель построил правильную модель двойной спирали.</p>
+        <div class="callout brass">
+          <span class="tag">Один закон — множество Нобелевских премий</span>
+          <p>Закон Брэгга (Нобелевская премия по физике 1915 года — отцу и сыну Брэггам, самая молодая пара нобелевских лауреатов в истории: Уильяму Лоренсу было всего 25 лет) с тех пор напрямую или косвенно стоит за расшифровкой структуры инсулина, гемоглобина, рибосомы и тысяч других биомолекул — рентгеноструктурный анализ остаётся одним из главных методов структурной биологии и сегодня, спустя больше века.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: снова принцип Ферма</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Закон Снеллиуса — не отдельный постулат оптики, а прямое следствие принципа Ферма (часть X, §5): свет выбирает путь наименьшего ВРЕМЕНИ, и минимизация этого времени на границе двух сред с разной скоростью света математически даёт ровно n&#8321;sin&theta;&#8321;&nbsp;=&nbsp;n&#8322;sin&theta;&#8322;. Задача «спасателя на пляже», разобранная в части X, была не метафорой для разминки, а буквально той же самой математикой.</p>
+        <p>Закон Брэгга, в свою очередь, можно вывести из более общего волнового принципа интерференции — условия, при котором складывающиеся волны усиливают, а не гасят друг друга. Обе картины (лучевая оптика Снеллиуса и волновая интерференция Брэгга) сходятся в единую электромагнитную теорию света, описываемую уравнениями Максвелла (часть IV).</p>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/snells_law.html">Закон преломления Снеллиуса</a> ·
+          <a href="/lang/ru/laws/braggs_law.html">Закон Брэгга</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; сломанный карандаш в стакане</span>
+          <p>Опустите карандаш (или соломинку) наполовину в прозрачный стакан с водой под углом (не строго вертикально) и посмотрите сбоку, чуть сверху.</p>
+          <p><span class="qlabel">Что заметить</span> карандаш выглядит «переломленным» точно на границе воды и воздуха — свет от подводной части карандаша преломляется по закону Снеллиуса (§2), меняя направление на границе, и глаз, достраивая прямую линию по последнему направлению луча, «видит» излом там, где реального излома в карандаше нет.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; лазер в струе воды</span>
+          <p>В тёмной комнате проделайте небольшое отверстие сбоку в пластиковой бутылке с водой (ближе ко дну), дайте воде вытекать тонкой струйкой в раковину, и направьте лазерную указку через бутылку так, чтобы луч входил в струю ИЗНУТРИ, у самого отверстия.</p>
+          <p><span class="qlabel">Что заметить</span> луч лазера «плывёт» вместе с изогнутой водяной струёй, а не летит по прямой — это полное внутреннее отражение (§3) в чистом виде: вода изнутри работает как гибкий световод, ровно тот же принцип, что и в оптоволоконном кабеле, только видимый невооружённым глазом.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Свет переходит из воды (n = 4/3) в воздух (n = 1) под углом падения, где sinθ₁ = 0.6. Найдите sinθ₂.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> n&#8321;&nbsp;=&nbsp;4/3, n&#8322;&nbsp;=&nbsp;1, sin&theta;&#8321;&nbsp;=&nbsp;0.6.</p>
+            <p><span class="qlabel">Закон</span> закон Снеллиуса (§2): n&#8321;sin&theta;&#8321;&nbsp;=&nbsp;n&#8322;sin&theta;&#8322;.</p>
+            <p><span class="qlabel">Решение</span> sin&theta;&#8322;&nbsp;=&nbsp;(4/3)&middot;0.6/1&nbsp;=&nbsp;0.8.</p>
+            <p><span class="qlabel">Ответ</span> <strong>sinθ₂ = 0.8</strong> (&theta;&#8322;&nbsp;&asymp;&nbsp;53.1&deg;) — угол вырос, так как свет выходит в МЕНЕЕ плотную среду.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Найдите критический угол полного внутреннего отражения для алмаза (n = 2.4) на границе с воздухом (n = 1).</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> n&#8321;&nbsp;=&nbsp;2.4, n&#8322;&nbsp;=&nbsp;1.</p>
+            <p><span class="qlabel">Закон</span> критический угол (§3): sin&theta;<sub>крит</sub>&nbsp;=&nbsp;n&#8322;/n&#8321;.</p>
+            <p><span class="qlabel">Решение</span> sin&theta;<sub>крит</sub>&nbsp;=&nbsp;1/2.4&nbsp;&asymp;&nbsp;0.417&nbsp;&rArr;&nbsp;&theta;<sub>крит</sub>&nbsp;&asymp;&nbsp;24.6&deg;.</p>
+            <p><span class="qlabel">Ответ</span> <strong>≈24.6°</strong> — очень маленький угол (у алмаза огромный n), поэтому огранённый алмаз «играет» так ярко: свет внутри почти всегда отражается полностью, а не выходит наружу.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Рентгеновские лучи с длиной волны 0.2 нм дают первый (n=1) яркий отблеск от кристалла под углом скольжения 30°. Найдите межплоскостное расстояние d.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> &lambda;&nbsp;=&nbsp;0.2&nbsp;нм, &theta;&nbsp;=&nbsp;30&deg;, n&nbsp;=&nbsp;1.</p>
+            <p><span class="qlabel">Закон</span> закон Брэгга (§4): n&lambda;&nbsp;=&nbsp;2d&middot;sin&theta;.</p>
+            <p><span class="qlabel">Решение</span> d&nbsp;=&nbsp;n&lambda;/(2sin&theta;)&nbsp;=&nbsp;0.2/(2&middot;0.5)&nbsp;=&nbsp;0.2&nbsp;нм.</p>
+            <p><span class="qlabel">Ответ</span> <strong>0.2 нм</strong> — типичный масштаб межатомных расстояний в кристаллах.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Почему полное внутреннее отражение возможно только при переходе из БОЛЕЕ плотной среды в МЕНЕЕ плотную, а не наоборот?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §3 — вывод условия критического угла.</p>
+            <p><span class="qlabel">Решение</span> sin&theta;<sub>крит</sub>&nbsp;=&nbsp;n&#8322;/n&#8321; должно быть &le;&nbsp;1 (синус не может быть больше 1) — это возможно только когда n&#8322;&nbsp;&le;&nbsp;n&#8321;, то есть при переходе в менее плотную среду. При переходе в БОЛЕЕ плотную среду (n&#8322;&nbsp;&gt;&nbsp;n&#8321;) отношение n&#8322;/n&#8321; больше 1, у уравнения sin&theta;<sub>крит</sub> нет решения — преломление происходит при ЛЮБОМ угле падения, критического угла просто не существует.</p>
+            <p><span class="qlabel">Ответ</span> <strong>математическое ограничение синуса (&le;1)</strong> делает эффект возможным только в одном направлении перехода.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Чем принципиально отличается угол θ в законе Снеллиуса от угла θ в законе Брэгга (помимо того, что один для преломления, а другой для дифракции)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> сравнение определений (§2 и §4).</p>
+            <p><span class="qlabel">Решение</span> в законе Снеллиуса угол &theta; отсчитывается от ПЕРПЕНДИКУЛЯРА (нормали) к границе раздела — стандартное соглашение геометрической оптики. В законе Брэгга угол &theta; отсчитывается от САМОЙ ПЛОСКОСТИ (угол скольжения) — историческое соглашение кристаллографии. Это чисто соглашение об отсчёте, не физическое различие, но частая причина ошибок при переключении между этими двумя законами.</p>
+            <p><span class="qlabel">Ответ</span> <strong>разные точки отсчёта угла</strong> — от нормали (Снеллиус) против от плоскости (Брэгг).</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Snell%20Bragg%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XV серии, оптика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2: угол преломления живо пересчитывается по закону Снеллиуса при плавно меняющемся угле падения —
+  // честный расчёт по формуле на каждый кадр, не заранее нарисованная картинка.
+  function wireRefraction(rayEl, cx, cy, len, n1, n2, theta1Readout, theta2Readout, periodMs){
+    var lastTs = null;
+    var THETA1_MIN = 10, THETA1_MAX = 70; // диапазон угла падения в градусах для анимации
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % periodMs) / periodMs;
+      var theta1Deg = THETA1_MIN + (THETA1_MAX - THETA1_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI));
+      var theta1 = theta1Deg * Math.PI / 180;
+      var sinTheta2 = n1 * Math.sin(theta1) / n2;
+      sinTheta2 = Math.max(-1, Math.min(1, sinTheta2));
+      var theta2 = Math.asin(sinTheta2);
+      var x2 = cx + len * Math.sin(theta2);
+      var y2 = cy + len * Math.cos(theta2);
+      if (rayEl) { rayEl.setAttribute('x2', x2.toFixed(1)); rayEl.setAttribute('y2', y2.toFixed(1)); }
+      if (theta1Readout) theta1Readout.textContent = theta1Deg.toFixed(1);
+      if (theta2Readout) theta2Readout.textContent = (theta2 * 180 / Math.PI).toFixed(1);
+      requestAnimationFrame(tick);
+    }
+    if (window.requestAnimationFrame) requestAnimationFrame(tick);
+  }
+
+  wireRefraction(document.getElementById('heroRefracted'), 170, 90, 100, 1, 1.5, null, null, 6000);
+  wireRefraction(document.getElementById('refractedRay'), 150, 100, 90, 1, 1.33,
+    document.querySelector('[data-readout="theta1"]'), document.querySelector('[data-readout="theta2"]'), 6000);
+})();
+</script>
+</body>
+</html>
