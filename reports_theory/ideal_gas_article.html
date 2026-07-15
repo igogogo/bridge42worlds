@@ -1,0 +1,481 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Уравнение идеального газа: молекулы как барабанная дробь по стенкам</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: молекулы в поршневом цилиндре ---------- */
+.piston-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.piston-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+.mode-btns{ display:flex; gap:8px; margin:.8em 0 1.2em; flex-wrap:wrap; }
+.mode-btn{
+  font-family:var(--font-mono); font-size:.8rem; padding:5px 14px; border-radius:14px;
+  border:1px solid var(--rule); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+}
+.mode-btn.active{ background:var(--steel-fill); border-color:var(--steel-fill); color:var(--paper); }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Уравнение в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Три частных закона внутри одного</a></li>
+      <li><a href="#s3"><span class="n">03</span>Микроскопическая картина</a></li>
+      <li><a href="#s4"><span class="n">04</span>Объединённый закон</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: воздушный шар</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: когда газ не идеален</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; термодинамика &middot; часть XI</p>
+        <h1>Уравнение идеального газа: молекулы как барабанная дробь по стенкам</h1>
+        <p class="subtitle">Одна формула из четырёх букв — pV=nRT — управляет и надуванием шарика на солнце, и работой автомобильного двигателя, и прогнозом погоды.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="40" width="220" height="140" fill="none" stroke="var(--ink)" stroke-width="3"/>
+          <circle id="heroM1" cx="120" cy="80" r="6" fill="var(--steel-fill)"/>
+          <circle id="heroM2" cx="200" cy="130" r="6" fill="var(--brass-fill)"/>
+          <circle id="heroM3" cx="240" cy="90" r="6" fill="var(--moss-fill)"/>
+          <text x="170" y="205" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">pV = nRT</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1834 году Эмиль Клапейрон объединил три независимых экспериментальных закона (Бойля, Шарля, Гей-Люссака) в одно уравнение состояния идеального газа. За простой формулой pV&nbsp;=&nbsp;nRT стоит честная микроскопическая картина: давление — это статистика ударов миллиардов молекул о стенки сосуда. В этой заметке — все три частных закона, вывод из кинетической теории и сквозной численный пример на воздушном шаре.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Уравнение в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="plate">
+          <div class="eq-body">pV = nRT</div>
+          <div class="cap">R &asymp; 8.314 Дж/(моль&middot;К) — универсальная газовая постоянная, одна и та же для ЛЮБОГО идеального газа</div>
+        </div>
+        <table class="symtab">
+          <tr><th>Величина</th><th>Смысл</th><th>Единица СИ</th></tr>
+          <tr><td>p</td><td>давление</td><td class="sym">Па</td></tr>
+          <tr><td>V</td><td>объём</td><td class="sym">м&sup3;</td></tr>
+          <tr><td>n</td><td>количество вещества</td><td class="sym">моль</td></tr>
+          <tr><td>T</td><td>абсолютная температура</td><td class="sym">К (не &deg;C!)</td></tr>
+        </table>
+        <p>«Идеальный» газ — модель, где молекулы считаются точками без собственного объёма, не притягивающими друг друга (взаимодействуют только упругими столкновениями). Реальные газы (воздух, азот, кислород) при обычных комнатных условиях следуют этому уравнению с точностью, которой достаточно для инженерных расчётов — отклонения становятся заметны только при очень высоком давлении или очень низкой температуре (§6).</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Три частных закона внутри одного</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>pV&nbsp;=&nbsp;nRT «содержит» три более ранних экспериментальных закона как частные случаи — каждый получается, если зафиксировать одну переменную:</p>
+        <table class="symtab">
+          <tr><th>Закон</th><th>Условие</th><th>Связь</th></tr>
+          <tr><td>Бойля (1662)</td><td>T = const</td><td class="sym">pV = const</td></tr>
+          <tr><td>Шарля (1787)</td><td>p = const</td><td class="sym">V/T = const</td></tr>
+          <tr><td>Гей-Люссака (1802)</td><td>V = const</td><td class="sym">p/T = const</td></tr>
+        </table>
+        <p>Три учёных, работавших в разное время и независимо, на самом деле измеряли одну и ту же формулу с разных сторон — как три слепых мудреца, ощупывающих слона за разные части. Клапейрон в 1834 году первым увидел целое.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Микроскопическая картина</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="piston-fig" aria-hidden="true">
+          <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+            <rect id="gasBox" x="40" y="20" width="150" height="140" fill="var(--steel-fill)" opacity=".08" stroke="var(--ink)" stroke-width="2.5"/>
+            <rect id="piston" x="190" y="20" width="10" height="140" fill="var(--brass-fill)" stroke="var(--ink)" stroke-width="1.5"/>
+            <circle class="gasMol" cx="80" cy="60" r="5" fill="var(--steel-fill)"/>
+            <circle class="gasMol" cx="130" cy="100" r="5" fill="var(--brass-fill)"/>
+            <circle class="gasMol" cx="100" cy="130" r="5" fill="var(--moss-fill)"/>
+            <circle class="gasMol" cx="160" cy="50" r="5" fill="var(--steel-fill)"/>
+          </svg>
+        </div>
+        <div class="mode-btns">
+          <button class="mode-btn active" data-mode="normal">Обычная T</button>
+          <button class="mode-btn" data-mode="hot">Нагрели (T выше)</button>
+          <button class="mode-btn" data-mode="compressed">Сжали (V меньше)</button>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>относительное p</b><span data-readout="pressure">1.00</span></span>
+        </div>
+        <p>Нажмите на режимы выше: молекулы летают быстрее при нагреве (больше ударов о стенку в секунду И каждый удар сильнее — оба эффекта поднимают давление) или чаще сталкиваются со стенками в меньшем объёме при сжатии. Из кинетической теории газов можно строго вывести:</p>
+        <div class="eq"><div class="eq-body">p = (2/3)&middot;n<sub>V</sub>&middot;&#10216;E<sub>k</sub>&#10217;</div><div class="eq-tag">(1)</div></div>
+        <p>где n<sub>V</sub> — число молекул в единице объёма, &#10216;E<sub>k</sub>&#10217; — средняя кинетическая энергия одной молекулы. Давление — это не какая-то отдельная субстанция, а прямое статистическое следствие того, что триллионы молекул ежесекундно бомбардируют стенки сосуда.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Объединённый закон</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Для фиксированного количества газа (n не меняется) из pV&nbsp;=&nbsp;nRT следует удобная практическая форма — сравнение двух состояний одного и того же газа без необходимости знать R или n вообще:</p>
+        <div class="plate">
+          <div class="eq-body">p&#8321;V&#8321;/T&#8321; = p&#8322;V&#8322;/T&#8322;</div>
+          <div class="cap">работает для ЛЮБОГО перехода между состояниями 1 и 2 — R и n сокращаются</div>
+        </div>
+        <p>Численный пример (закон Бойля, T&nbsp;=&nbsp;const): газ при давлении p&#8321;&nbsp;=&nbsp;100&nbsp;кПа занимает объём V&#8321;&nbsp;=&nbsp;2&nbsp;л. Его сжимают до V&#8322;&nbsp;=&nbsp;0.5&nbsp;л при той же температуре. Найдите новое давление.</p>
+        <div class="eq"><div class="eq-body">p&#8322; = p&#8321;V&#8321;/V&#8322; = 100&middot;2/0.5 = <strong>400&nbsp;кПа</strong></div><div class="eq-tag">(2)</div></div>
+        <p>Сжали в 4 раза по объёму — давление выросло ровно в 4 раза. Простая обратная пропорциональность закона Бойля.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: воздушный шар</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Воздушный шар на земле (p&#8321;&nbsp;=&nbsp;100&nbsp;кПа, V&#8321;&nbsp;=&nbsp;3&nbsp;л, T&#8321;&nbsp;=&nbsp;300&nbsp;К) занесли в тёплую комнату у батареи, где он одновременно чуть сжался соседями в толпе до V&#8322;&nbsp;=&nbsp;2&nbsp;л и нагрелся до T&#8322;&nbsp;=&nbsp;330&nbsp;К. Найдите новое давление внутри шарика.</p>
+        <div class="eq"><div class="eq-body">p&#8322; = p&#8321;V&#8321;T&#8322;/(T&#8321;V&#8322;) = 100&middot;3&middot;330/(300&middot;2) = 99000/600 = <strong>165&nbsp;кПа</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Все три эффекта — исходное давление, сжатие и нагрев — учтены одной формулой сразу, без необходимости считать n или R. Именно так на практике инженеры и метеорологи работают с газом: не через абсолютные величины, а через отношение двух состояний.</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: когда газ не идеален</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Модель идеального газа — приближение, работающее тем хуже, чем плотнее газ и чем ближе он к точке конденсации в жидкость. Два допущения, которые нарушаются в реальных условиях: молекулы ИМЕЮТ собственный объём (не точки), и между ними ЕСТЬ слабое притяжение (силы Ван-дер-Ваальса) — при высоком давлении молекулы упаковываются плотнее, а притяжение начинает заметно стягивать газ, уменьшая эффективное давление на стенки по сравнению с идеальной моделью.</p>
+        <div class="callout brass">
+          <span class="tag">Уравнение Ван-дер-Ваальса</span>
+          <p>Йоханнес Ван-дер-Ваальс в 1873 году поправил уравнение состояния двумя добавочными членами, учитывающими собственный объём молекул и их взаимное притяжение: (p&nbsp;+&nbsp;a/V&sup2;)(V&nbsp;&minus;&nbsp;b)&nbsp;=&nbsp;nRT. При достаточно низкой температуре это уравнение предсказывает не только газовую, но и жидкую фазу того же вещества — модель, из которой родилось современное понимание фазовых переходов и критической точки (за что Ван-дер-Ваальс получил Нобелевскую премию 1910 года).</p>
+        </div>
+        <p>На сайте это отдельный закон, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/ideal_gas_law.html">Уравнение состояния идеального газа</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; шарик в холодильнике</span>
+          <p>Надуйте воздушный шарик до среднего размера при комнатной температуре, отметьте маркером примерный диаметр, затем положите его в холодильник на 15-20 минут (не в морозилку — там резина задубеет).</p>
+          <p><span class="qlabel">Что заметить</span> шарик заметно уменьшится в размере (при том же количестве воздуха внутри и почти том же давлении атмосферы снаружи) — прямая демонстрация закона Шарля/Гей-Люссака: понижение T при почти постоянном p требует уменьшения V. Достаньте обратно в тепло — шарик снова раздуется до исходного размера.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; шприц с запертым воздухом</span>
+          <p>Возьмите медицинский шприц без иглы, наберите немного воздуха, плотно закройте отверстие пальцем (чтобы воздух не мог выйти) и попробуйте вдавить поршень.</p>
+          <p><span class="qlabel">Что заметить</span> чем сильнее вы сжимаете (уменьшаете V), тем сильнее шприц сопротивляется пальцу — растущее давление в точности следует закону Бойля pV&nbsp;=&nbsp;const (§4): вдвое меньший объём — вдвое больше давление, вы физически чувствуете это своей рукой.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Газ при давлении 200 кПа и объёме 4 л (постоянная T) расширяется до 8 л. Найдите новое давление.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> p&#8321;&nbsp;=&nbsp;200&nbsp;кПа, V&#8321;&nbsp;=&nbsp;4&nbsp;л, V&#8322;&nbsp;=&nbsp;8&nbsp;л, T&nbsp;=&nbsp;const.</p>
+            <p><span class="qlabel">Закон</span> закон Бойля (§2): p&#8321;V&#8321;&nbsp;=&nbsp;p&#8322;V&#8322;.</p>
+            <p><span class="qlabel">Решение</span> p&#8322;&nbsp;=&nbsp;p&#8321;V&#8321;/V&#8322;&nbsp;=&nbsp;200&middot;4/8&nbsp;=&nbsp;100&nbsp;кПа.</p>
+            <p><span class="qlabel">Ответ</span> <strong>100 кПа</strong> — объём вдвое больше, давление вдвое меньше.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Газ при постоянном давлении занимает 2 л при температуре 300 К. До какого объёма он расширится при нагреве до 450 К?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> V&#8321;&nbsp;=&nbsp;2&nbsp;л, T&#8321;&nbsp;=&nbsp;300&nbsp;К, T&#8322;&nbsp;=&nbsp;450&nbsp;К, p&nbsp;=&nbsp;const.</p>
+            <p><span class="qlabel">Закон</span> закон Шарля (§2): V&#8321;/T&#8321;&nbsp;=&nbsp;V&#8322;/T&#8322;.</p>
+            <p><span class="qlabel">Решение</span> V&#8322;&nbsp;=&nbsp;V&#8321;&middot;T&#8322;/T&#8321;&nbsp;=&nbsp;2&middot;450/300&nbsp;=&nbsp;3&nbsp;л.</p>
+            <p><span class="qlabel">Ответ</span> <strong>3 л</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Закрытый баллон с газом при 300 К имеет давление 150 кПа. До какой температуры его нужно нагреть, чтобы давление выросло до 200 кПа (объём баллона не меняется)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> p&#8321;&nbsp;=&nbsp;150&nbsp;кПа, T&#8321;&nbsp;=&nbsp;300&nbsp;К, p&#8322;&nbsp;=&nbsp;200&nbsp;кПа, V&nbsp;=&nbsp;const.</p>
+            <p><span class="qlabel">Закон</span> закон Гей-Люссака (§2): p&#8321;/T&#8321;&nbsp;=&nbsp;p&#8322;/T&#8322;.</p>
+            <p><span class="qlabel">Решение</span> T&#8322;&nbsp;=&nbsp;T&#8321;&middot;p&#8322;/p&#8321;&nbsp;=&nbsp;300&middot;200/150&nbsp;=&nbsp;400&nbsp;К.</p>
+            <p><span class="qlabel">Ответ</span> <strong>400 К</strong> (127&nbsp;&deg;C).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Почему давление газа, по кинетической теории (§3), растёт при нагревании даже если объём и число молекул не меняются?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> формула (1), §3: p&nbsp;=&nbsp;(2/3)n<sub>V</sub>&#10216;E<sub>k</sub>&#10217;.</p>
+            <p><span class="qlabel">Решение</span> температура — это, по сути, мера средней кинетической энергии молекул &#10216;E<sub>k</sub>&#10217;. При нагреве (n<sub>V</sub> не меняется, объём и число молекул те же) молекулы в среднем движутся быстрее — каждый удар о стенку сильнее И удары происходят чаще (частица успевает долететь до стенки и обратно быстрее) — оба эффекта повышают p.</p>
+            <p><span class="qlabel">Ответ</span> <strong>рост средней кинетической энергии молекул</strong> — более сильные и более частые удары о стенки.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. При каких условиях (высокое/низкое давление, высокая/низкая температура) реальный газ хуже всего описывается уравнением идеального газа? Почему?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> ограничения модели (§6).</p>
+            <p><span class="qlabel">Решение</span> хуже всего — при ВЫСОКОМ давлении и НИЗКОЙ температуре: молекулы сближаются, их собственный объём перестаёт быть пренебрежимо малым по сравнению со свободным пространством, а силы притяжения (Ван-дер-Ваальса) становятся заметны — оба допущения идеальной модели (точечные, невзаимодействующие частицы) нарушаются. При этих же условиях газ обычно и приближается к точке конденсации в жидкость.</p>
+            <p><span class="qlabel">Ответ</span> <strong>высокое давление + низкая температура</strong> — условия, близкие к конденсации.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ideal%20gas%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XI серии, термодинамика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §3: молекулы отскакивают от стенок сосуда (упругие столкновения) — реальное численное
+  // интегрирование положений/скоростей, не CSS-заглушка. Три режима меняют скорость и/или объём.
+  var box = document.getElementById('gasBox');
+  var piston = document.getElementById('piston');
+  var mols = Array.prototype.slice.call(document.querySelectorAll('.gasMol'));
+  var pReadout = document.querySelector('[data-readout="pressure"]');
+  var buttons = document.querySelectorAll('.mode-btn');
+
+  var BOX_X0 = 40, BOX_Y0 = 20, BOX_Y1 = 160;
+  var boxX1 = 190; // правая стенка — двигается с поршнем при сжатии
+  var speedMul = 1; // растёт в режиме "нагрели"
+
+  var state = mols.map(function(el, i){
+    return {
+      el: el,
+      x: parseFloat(el.getAttribute('cx')),
+      y: parseFloat(el.getAttribute('cy')),
+      vx: (i % 2 === 0 ? 1 : -1) * (60 + i * 10),
+      vy: (i % 3 === 0 ? -1 : 1) * (50 + i * 8)
+    };
+  });
+
+  var bounceCount = 0, lastPressureCalcTs = 0;
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.dataset.mode;
+      speedMul = mode === 'hot' ? 1.7 : 1;
+      var targetX1 = mode === 'compressed' ? 120 : 190;
+      boxX1 = targetX1;
+      box.setAttribute('width', (boxX1 - BOX_X0));
+      piston.setAttribute('x', boxX1);
+    });
+  });
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+
+    var wallsHit = 0;
+    state.forEach(function(m){
+      m.x += m.vx * speedMul * dtSec;
+      m.y += m.vy * speedMul * dtSec;
+      if (m.x < BOX_X0 + 6) { m.x = BOX_X0 + 6; m.vx *= -1; wallsHit++; }
+      if (m.x > boxX1 - 6) { m.x = boxX1 - 6; m.vx *= -1; wallsHit++; }
+      if (m.y < BOX_Y0 + 6) { m.y = BOX_Y0 + 6; m.vy *= -1; wallsHit++; }
+      if (m.y > BOX_Y1 - 6) { m.y = BOX_Y1 - 6; m.vy *= -1; wallsHit++; }
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    bounceCount += wallsHit;
+
+    // «Давление» на индикаторе — не физически точная величина, а иллюстративная прокси-оценка:
+    // среднее число ударов о стенку в секунду, нормированное на baseline (обычный режим).
+    if (ts - lastPressureCalcTs > 500) {
+      var boxArea = (boxX1 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var baseline = (190 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var relP = (baseline / boxArea) * speedMul;
+      if (pReadout) pReadout.textContent = relP.toFixed(2);
+      lastPressureCalcTs = ts;
+    }
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+
+  // Декоративные молекулы в hero — просто мягко дрейфуют, без претензии на количественность.
+  var heroMols = [document.getElementById('heroM1'), document.getElementById('heroM2'), document.getElementById('heroM3')];
+  var heroState = heroMols.map(function(el, i){
+    return { el: el, x: parseFloat(el.getAttribute('cx')), y: parseFloat(el.getAttribute('cy')),
+              vx: (i - 1) * 40 + 20, vy: (i % 2 === 0 ? -1 : 1) * 35 };
+  });
+  var lastHeroTs = null;
+  function heroTick(ts){
+    if (lastHeroTs === null) lastHeroTs = ts;
+    var dt = Math.min((ts - lastHeroTs) / 1000, 0.05);
+    lastHeroTs = ts;
+    heroState.forEach(function(m){
+      m.x += m.vx * dt; m.y += m.vy * dt;
+      if (m.x < 66 || m.x > 274) m.vx *= -1;
+      if (m.y < 46 || m.y > 174) m.vy *= -1;
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    requestAnimationFrame(heroTick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(heroTick);
+})();
+</script>
+</body>
+</html>
