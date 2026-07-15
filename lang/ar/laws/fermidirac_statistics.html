@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إحصاء فيرمي-ديراك — bridge42worlds</title>
+    <meta name="description" content="في عام 1926، اكتشف إنريكو فيرمي وبول ديراك بشكل مستقل إحصاءً للجسيمات ذات اللف المغزلي نصف الصحيح، والتي تخضع لمبدأ باولي – الذي يمنع وجود جسيمين في نفس الحالة. والفرق عن الكلاسيكي: يظهر +1 في المقام في التوزيع، مما يضمن أن عدد الجسيمات في الحالة لا يتجاوز 1. عند درجات الحرارة العالية أو الكثافة المنخفضة، عندما يكون الفرق E-μ كبيرًا، يتحول إلى توزيع بولتزمان. وعند درجة حرارة الصفر المطلق، يصبح التوزيع درجًا: جميع المستويات تحت الجهد الكيميائي ممتلئة، وفوقها فارغة.">
+    <meta property="og:title" content="إحصاء فيرمي-ديراك — bridge42worlds">
+    <meta property="og:description" content="في عام 1926، اكتشف إنريكو فيرمي وبول ديراك بشكل مستقل إحصاءً للجسيمات ذات اللف المغزلي نصف الصحيح، والتي تخضع لمبدأ باولي – الذي يمنع وجود جسيمين في نفس الحالة. والفرق عن الكلاسيكي: يظهر +1 في المقام في التوزيع، مما يضمن أن عدد الجسيمات في الحالة لا يتجاوز 1. عند درجات الحرارة العالية أو الكثافة المنخفضة، عندما يكون الفرق E-μ كبيرًا، يتحول إلى توزيع بولتزمان. وعند درجة حرارة الصفر المطلق، يصبح التوزيع درجًا: جميع المستويات تحت الجهد الكيميائي ممتلئة، وفوقها فارغة.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/laws/fermidirac_statistics.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/laws/img/fermidirac_statistics.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/" class="active">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/laws/img/fermidirac_statistics.jpg" alt=""></div>
+    <h1>إحصاء فيرمي-ديراك<span class="law-type">مبدأ</span></h1>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">الإلكترونات في المعدن كركاب في حافلة ذات مقاعد مرقمة: لا يمكن لاثنين الجلوس على نفس المقعد. إنها تملأ جميع مستويات الطاقة السفلية حتى الحد، وما فوقها يكون شاغرًا إلى أن تحصل على قدر من الطاقة.</p><div class="practical-app"><strong>في الواقع:</strong> هذه القاعدة بالذات تتحكم في أشباه الموصلات: تقفز الإلكترونات إلى المستويات الشاغرة فقط عند توفر طاقة كافية، وهذا هو أساس عمل الثنائيات والترانزستورات والرقائق.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="في عام 1926، وفي نفس الوقت تقريبًا، اقترح الإيطالي إنريكو فيرمي والبريطاني بول ديراك إحصاءً للجسيمات الخاضعة لمبدأ حظر باولي. وعلى عكس توزيع بولتزمان الكلاسيكي، يحتوي المقام هنا على +1، مما يضمن أن عدد الجسيمات في الحالة الواحدة لا يتجاوز الواحد. يتحول توزيع فيرمي-ديراك إلى توزيع بولتزمان عند درجات الحرارة العالية أو الكثافة المنخفضة، عندما يكون (E-μ) >> kT، أي عندما تكون قيود الامتلاء غير مهمة.">في عام 1926، اكتشف إنريكو فيرمي وبول ديراك بشكل مستقل إحصاءً للجسيمات ذات اللف المغزلي نصف الصحيح، والتي تخضع لمبدأ باولي – الذي يمنع وجود جسيمين في نفس الحالة. والفرق عن الكلاسيكي: يظهر +1 في المقام في التوزيع، مما يضمن أن عدد الجسيمات في الحالة لا يتجاوز 1. عند درجات الحرارة العالية أو الكثافة المنخفضة، عندما يكون الفرق E-μ كبيرًا، يتحول إلى توزيع بولتزمان. وعند درجة حرارة الصفر المطلق، يصبح التوزيع درجًا: جميع المستويات تحت الجهد الكيميائي ممتلئة، وفوقها فارغة.</div>
+        <div class="fun-fact">💡 تتنافر الإلكترونات في المعدن، لكنها تتصرف بشكل شبه مستقل – وهذا الإحصاء الفيرمي يفسر التوصيل الكهربائي والتوصيل الحراري ولمعان المعادن.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="الإلكترونات والفرميونات الأخرى (جسيمات ذات لف مغزلي نصف صحيح — عزم دوران ذاتي) لا تتحمل جيرانًا في نفس الحالة: هذا هو مبدأ باولي. يصف إحصاء فيرمي-ديراك كيفية توزعها على مستويات الطاقة عند درجة حرارة معينة. يُعطى احتمال امتلاء مستوى ذي طاقة E بالصيغة f(E) = 1 / (e^{(E-μ)/(kT)} + 1). هنا μ هو الجهد الكيميائي (مستوى الطاقة الذي تكون تحته جميع الأماكن مشغولة تقريبًا عند درجة حرارة الصفر).">لا يمكن للإلكترونات والفرميونات الأخرى أن تتجمع في نفس الحالة - فكل مستوى طاقة يتسع لجسيم واحد فقط. ويحدد إحصاء فيرمي-ديراك عدد الجسيمات التي ستكون في كل مستوى عند درجة حرارة معينة. المعامل الأساسي هو الجهد الكيميائي μ: عند درجة حرارة الصفر، تكون جميع المستويات تحته مشغولة، وفوقه فارغة. ومع التسخين، تتلاشى الحدود، وتكتسب بعض الإلكترونات طاقات أعلى من μ.</div>
+        <div class="section"><h2>كيف يعمل</h2><p>في المعادن، تملأ الإلكترونات نطاق التوصيل حتى طاقة فيرمي، مثلما يملأ السائل خزانًا. لذلك، لا يشارك في العمليات الحرارية إلا نسبة صغيرة من الإلكترونات القريبة من الحد – وهذا يفسر السعة الحرارية المنخفضة للمعادن. وفي الأقزام البيضاء، يقاوم ضغط غاز الإلكترون المنحل، الخاضع لإحصاء فيرمي، الجاذبية.</p></div>
+        <div class="fun-fact">💡 طاقة فيرمي للنحاس حوالي 7 إلكترون فولت، وهو ما يعادل درجة حرارة 80,000 كلفن، لذلك عند درجة حرارة الغرفة، لا 'يشعر' غاز الإلكترون عمليًا بالإثارة الحرارية.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="يصف إحصاء فيرمي-ديراك توزيع الفرميونات المتطابقة على مستويات الطاقة في حالة التوازن الترموديناميكي. دالة التوزيع (متوسط عدد الجسيمات في الحالة) تأخذ الشكل f(E) = 1 / (e^{(E-μ)/(k_B T)} + 1). عند درجة حرارة الصفر، تتحول إلى دالة درجية: جميع الحالات حيث E < μ تكون مشغولة، وحيث E > μ تكون شاغرة. عند درجة حرارة محدودة، تتشوش الدرجة على عرض بمقدار k_B T بالقرب من الجهد الكيميائي μ، الذي يتطابق مع طاقة فيرمي عند T = 0.">إحصاء فيرمي-ديراك هو أساس الميكانيكا الإحصائية الكمومية للفرميونات. متوسط عدد الجسيمات في حالة ذات طاقة E: f(E) = 1/(e^{(E-μ)/(k_B T)}+1). عند T=0، تصبح الدالة درجًا مع قفزة عند E=μ (طاقة فيرمي). وعند قيم T المحدودة، تتشوش على فترة بمقدار k_B T. يعتمد الجهد الكيميائي μ على درجة الحرارة والكثافة.</div>
+        <div class="section"><h2>تاريخ الاكتشاف</h2><p>طبق إنريكو فيرمي في عام 1926 الإحصاء الجديد على غاز الإلكترون في المعادن، مفسرًا السعة الحرارية لها. واستنتجها بول ديراك بشكل مستقل من عدم تماثل الدوال الموجية ومبدأ باولي. وتوجت هذه الأعمال بإنشاء الإحصاء الكمومي، مكملة إحصاء بوز-أينشتاين.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>على أساس هذا الإحصاء، بنيت نظرية النطاق للأجسام الصلبة، وتشرح خصائص المعادن وأشباه الموصلات والعوازل. كما ينطبق أيضًا على النجوم النيوترونية والأقزام البيضاء والنوى الذرية. وهو صالح للأنظمة المتوازنة؛ وقد يتعدل في المادة شديدة التفاعل.</p></div>
+        <div class="section"><h2>ملاحظات</h2><p>يعتمد الجهد الكيميائي μ نفسه على درجة الحرارة وكثافة الجسيمات، مما يتطلب حسابًا ذاتي الاتساق.; عند التفاعلات القوية (على سبيل المثال، في المادة الكواركية)، قد يتعدل التوزيع.; ينطبق الإحصاء فقط على الأنظمة المتوازنة، وتتطلب التأثيرات الديناميكية معادلة حركية.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">f(E) = \frac{1}{e^{(E-\mu)/(k_{\text{B}} T)} + 1}</div><div class="formula-meaning">f(E) — متوسط عدد الفرميونات في حالة كمومية واحدة ذات طاقة E (احتمال غير بعدي)؛ E — طاقة الحالة؛ μ — الجهد الكيميائي (طاقة فيرمي عند T = 0)؛ k_B — ثابت بولتزمان، k_B ≈ 1.380649×10⁻²³ جول/كلفن؛ T — درجة الحرارة المطلقة، كلفن.</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="fermidirac_statistics_ar_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fermidirac_statistics" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="fermidirac_statistics_ar_page" data-entity-type="law"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>مفاهيم ذات صلة:</strong>
+    <a href="/lang/ar/tags/neutron_star.html" data-tag="neutron_star">النجم النيوتروني</a> · <a href="/lang/ar/tags/spin.html" data-tag="spin">اللف المغزلي</a> · <a href="/lang/ar/tags/white_dwarf.html" data-tag="white_dwarf">القزم الأبيض</a>
+</div>
+<div class="related-tags"><strong>قوانين ذات صلة:</strong> <a href="/lang/ar/laws/pauli_exclusion_principle.html" class="law-chip" data-law="pauli_exclusion_principle">مبدأ باولي</a> · <a href="/lang/ar/laws/boltzmann_distribution.html" class="law-chip" data-law="boltzmann_distribution">توزيع بولتزمان</a> · <a href="/lang/ar/laws/boseeinstein_statistics.html" class="law-chip" data-law="boseeinstein_statistics">إحصاء بوز-أينشتاين</a></div>
+<div class="related-tags"><strong>اكتشفه:</strong> <a href="/lang/ar/scientists/Enrico_Fermi.html" class="text-scientist" data-scientist="Enrico Fermi">Enrico Fermi</a> · <a href="/lang/ar/scientists/Paul_Dirac.html" class="text-scientist" data-scientist="Paul Dirac">Paul Dirac</a></div>
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="l:fermidirac_statistics"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="neutron_star,spin,white_dwarf"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fermidirac_statistics', 'law', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

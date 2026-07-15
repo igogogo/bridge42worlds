@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مبرهنة غاوس — bridge42worlds</title>
+    <meta name="description" content="في الرياضيات، هي مبرهنة التباعد، صيغت مستقلةً على يد كارل فريدريش غاوس (في سياق الجاذبية) وميخائيل أوستروغرادسكي (في صورة أعمّ) وجورج غرين. وفي الفيزياء غدت أساسًا لقانون غاوس في الكهرباء (أحد معادلات ماكسويل) وفي الجاذبية. الفكرة: مجموع «التباعد» للمجال داخل حجمٍ ما يساوي التدفّق عبر السطح الذي يحدّه. وبالنسبة للكهرباء: ∮ E·dA = Q/ε₀ – الشحنة تخلق مجالًا، وتدفّقه عبر أيّ سطح مغلق يحيط بها ثابت.">
+    <meta property="og:title" content="مبرهنة غاوس — bridge42worlds">
+    <meta property="og:description" content="في الرياضيات، هي مبرهنة التباعد، صيغت مستقلةً على يد كارل فريدريش غاوس (في سياق الجاذبية) وميخائيل أوستروغرادسكي (في صورة أعمّ) وجورج غرين. وفي الفيزياء غدت أساسًا لقانون غاوس في الكهرباء (أحد معادلات ماكسويل) وفي الجاذبية. الفكرة: مجموع «التباعد» للمجال داخل حجمٍ ما يساوي التدفّق عبر السطح الذي يحدّه. وبالنسبة للكهرباء: ∮ E·dA = Q/ε₀ – الشحنة تخلق مجالًا، وتدفّقه عبر أيّ سطح مغلق يحيط بها ثابت.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/laws/gausss_divergence_theorem.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/" class="active">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>مبرهنة غاوس<span class="law-type">مبرهنة</span></h1>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">الماء المتدفّق عبر مصفاة لا تحدّده إلّا قوّة المنبع في الداخل، لا نمط الثقوب.</p><div class="practical-app"><strong>في الواقع:</strong> حساب المجالَين الكهربائي والجذبي، وتصميم الدروع الكهروستاتيكية ومانعات الصواعق.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">في الرياضيات، هي مبرهنة التباعد، صيغت مستقلةً على يد كارل فريدريش غاوس (في سياق الجاذبية) وميخائيل أوستروغرادسكي (في صورة أعمّ) وجورج غرين. وفي الفيزياء غدت أساسًا لقانون غاوس في الكهرباء (أحد معادلات ماكسويل) وفي الجاذبية. الفكرة: مجموع «التباعد» للمجال داخل حجمٍ ما يساوي التدفّق عبر السطح الذي يحدّه. وبالنسبة للكهرباء: ∮ E·dA = Q/ε₀ – الشحنة تخلق مجالًا، وتدفّقه عبر أيّ سطح مغلق يحيط بها ثابت.</div>
+        <div class="fun-fact">💡 تظلّ المبرهنة تعمل حتّى في الزمكان المنحني للنسبية العامة، حيث تدخل في معادلات أينشتاين للجاذبية.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">تربط مبرهنة غاوس بين التدفّق الكلّي الخارج من سطح مغلق وبين عدد «المنابع» أو «المصارف» الموجودة بداخله. وإذا تحدّثنا عن الكهرباء: فبقياس كمّية المجال الكهربائي «الخارج» عبر فقّاعة وهمية، نستطيع معرفة الشحنة المحتجزة في الداخل. وينطبق هذا على أيّ مجال يُشبه انسياب مائع، كقوّة الجاذبية مثلًا.</div>
+        <div class="section"><h2>كيف يعمل</h2><p>مثال: حول كرة مشحونة، يتناقص المجال الكهربائي تناقصًا يتبع 1/r²، ويظلّ التدفّق عبر أيّ كرة تحيط بها ثابتًا. فإن لم تكن داخل الكرة أيّ شحنة، فإنّ ما يدخل من خطوط المجال يساوي ما يخرج، فيكون التدفّق صفرًا. وعلى هذا المبدأ يعمل مانع الصواعق: يُنشئ الرأس المدبَّب مجالًا قويًّا تنساب منه الشحنة الزائدة فتمنع ضربة الصاعقة.</p></div>
+        <div class="fun-fact">💡 في فضاء ذي n بُعدًا، تأخذ مبرهنة غاوس صيغة مبرهنة ستوكس المعمّمة: ∫_∂M ω = ∫_M dω، رابطًة بين الصِيَغ التفاضلية، وهذا أساس من أسس الطوبولوجيا الحديثة.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">مبرهنة غاوس (مبرهنة التباعد) تقرير أساسي في التحليل المتّجهي: تكامل تباعد حقل متّجهي F على حجم V يساوي تدفّق هذا الحقل عبر السطح المغلق ∂V الذي يحدّ ذلك الحجم: ∮_{∂V} F·dS = ∫_V (∇·F) dV. وتظهر في الفيزياء بصورة قانون غاوس في الكهروستاتيك (∮ E·dA = Q/ε₀) وفي الجاذبية (∮ g·dA = -4πGM)، رابطةً تدفّقات الحقول بمصادرها (شحنات، كتل). تسري المبرهنة على الحقول المتّجهية الملساء في أيّ عدد من الأبعاد، وتقوم جسرًا بين الصيغتَين التفاضلية والتكاملية لقوانين الانحفاظ.</div>
+        <div class="section"><h2>تاريخ الاكتشاف</h2><p>استعمل كارل فريدريش غاوس هذه النتيجة عام 1813 في نظرية الكمون المغناطيسي، ثمّ قدّم ميخائيل أوستروغرادسكي عام 1828 أوّل برهان عامّ عليها. وكذلك استنبط جورج غرين مبرهنات قريبة منها. أدخل غاوس المبرهنة إلى الفيزياء بصياغته قانون الحقول الكهربائية عام 1835. لاحقًا، أدرج جيمس كلارك ماكسويل قانون غاوس في منظومة معادلاته، وفي القرن العشرين وجدت المبرهنة تطبيقاتها في النظرية النسبية ونظرية الحقل الكمومي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تتيح مبرهنة غاوس حساب مجالات ذات تناظر عالٍ (كرات، أسطوانات، مستويات) دون حاجة إلى مكاملة معقّدة. وتُستعمل في الحسابات الهندسية للدروع الكهروستاتيكية، والعدسات الجذبية، وفي الهيدروديناميك. أمّا قيودها: فهي تقتضي قابلية الحقل للاشتقاق ونعومة السطح؛ وفي المناطق ذات الانقطاعات (كالصفائح المشحونة) نلجأ إلى الشروط الحدّية.</p></div>
+        <div class="section"><h2>ملاحظات</h2><p>يتطلّب تعميمها على الحُزَم المتقطّعة والحقول الكمومية أدوات التحليل الدالّي.; في حال وجود أحاديات قطب مغناطيسي، يتعدّل الشكل المتضمّن للتباعد.; في حقول الجاذبية الشديدة، يتطلّب تعريف الحجم والتدفّق حذرًا بسبب الانحناء.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\oint_{\partial V} \mathbf{F} \cdot d\mathbf{S} = \int_V (\nabla \cdot \mathbf{F}) dV</div><div class="formula-meaning">∮_{∂V}: التكامل على السطح المغلق ∂V الذي يحدّ الحجم V؛ F: الحقل المتّجهي؛ dS: عنصر السطح المتّجهي (يتّجه للخارج)؛ ∇·F: تباعد الحقل F؛ dV: عنصر الحجم.</div></div><div class="formula"><div class="formula-render">\oint_{\partial V} \mathbf{E} \cdot d\mathbf{A} = \frac{Q_{\text{enc}}}{\varepsilon_0}</div><div class="formula-meaning">∮_{∂V}: التكامل على السطح المغلق؛ E: شدّة المجال الكهربائي؛ dA: متّجه عنصر المساحة؛ Q_enc: الشحنة الكهربائية المحتجزة داخل السطح؛ ε₀: الثابت الكهربائي (ε₀ ≈ 8.8541878188×10⁻¹² فاراد/م).</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="gausss_divergence_theorem_ar_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="gausss_divergence_theorem" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="gausss_divergence_theorem_ar_page" data-entity-type="law"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>مفاهيم ذات صلة:</strong>
+    المجال الكهربائي · الجاذبية · انحناء الزمكان
+</div>
+<div class="related-tags"><strong>قوانين ذات صلة:</strong> <a href="/lang/ar/laws/maxwells_equations.html" class="law-chip" data-law="maxwells_equations">معادلات ماكسويل</a> · <a href="/lang/ar/laws/stokes_theorem.html" class="law-chip" data-law="stokes_theorem">مبرهنة ستوكس</a></div>
+
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="l:gausss_divergence_theorem"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="المجال الكهربائي,الجاذبية,انحناء الزمكان"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('gausss_divergence_theorem', 'law', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

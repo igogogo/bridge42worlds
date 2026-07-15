@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#متسلسلة فورييه — bridge42worlds</title>
+    <meta name="description" content="متسلسلة فورييه هي تمثيل لدالة دورية f(x) ذات دور T كمجموع دوال مثلثية: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. تحسب المعاملات a_n و b_n بوصفها مساقط الدالة على الموجات الجيبية وجيب التمام المقابلة وتُظهر مدى قوة كل توافقية في الإشارة الأصلية. يمكن التحليل بفضل تعامد الجيوب وجيوب التمام. متسلسلات فورييه أداة قوية لحل المعادلات التفاضلية (مثلاً معادلة الحرارة) وهي أساس التحليل الطيفي.">
+    <meta property="og:title" content="#متسلسلة فورييه — bridge42worlds">
+    <meta property="og:description" content="متسلسلة فورييه هي تمثيل لدالة دورية f(x) ذات دور T كمجموع دوال مثلثية: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. تحسب المعاملات a_n و b_n بوصفها مساقط الدالة على الموجات الجيبية وجيب التمام المقابلة وتُظهر مدى قوة كل توافقية في الإشارة الأصلية. يمكن التحليل بفضل تعامد الجيوب وجيوب التمام. متسلسلات فورييه أداة قوية لحل المعادلات التفاضلية (مثلاً معادلة الحرارة) وهي أساس التحليل الطيفي.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/tags/fourier_series.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>متسلسلة فورييه</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">محلل الموسيقى الرياضي: يتيح تفكيك أي إشارة دورية معقدة — من المد البحري إلى التذبذبات الكهربائية — إلى نغمات جيبية أولية.</p><div class="practical-app"><strong>في الواقع:</strong> ضغط الصوت والصورة (MP3, JPEG)، تحليل الاهتزازات في المنشآت، معالجة البيانات الزلزالية، والحوسبة الكمومية.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">متسلسلة فورييه هي تمثيل لدالة دورية f(x) ذات دور T كمجموع دوال مثلثية: f(x) = a0/2 + Σ[a_n cos(2π n x/T) + b_n sin(2π n x/T)]. تحسب المعاملات a_n و b_n بوصفها مساقط الدالة على الموجات الجيبية وجيب التمام المقابلة وتُظهر مدى قوة كل توافقية في الإشارة الأصلية. يمكن التحليل بفضل تعامد الجيوب وجيوب التمام. متسلسلات فورييه أداة قوية لحل المعادلات التفاضلية (مثلاً معادلة الحرارة) وهي أساس التحليل الطيفي.</div>
+        <div class="fun-fact">💡 عند تفكيك إشارة مستطيلة إلى متسلسلة فورييه، يعطي مجموع التوافقيات الفردية درجًا يقترب من المستطيل كلما زاد عدد الحدود، لكن تبقى عند نقاط الانقطاع «قفزات» بارتفاع نحو 9% من سعة الإشارة — هذه ظاهرة غيبس التي تظهر في أي متسلسلة بانقطاعات.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">متسلسلة فورييه وسيلة لكتابة أي دالة دورية (تتكرر) كمجموع موجات بسيطة — جيوب وجيب تمام — بترددات وارتفاعات وإزاحات مختلفة. كما يمزج الفنان الألوان البسيطة ليحصل على لون مركب، تمزج متسلسلة فورييه موجات بسيطة لإعادة تكوين شكل معقد. فصوت وتر الغيتار مثلاً ليس نغمة واحدة، بل نغمة أساسية مع توافقيات كثيرة تمنحه الجرس.</div>
+        <div class="section"><h2>التاريخ</h2><p>طور الرياضي الفرنسي جان باتيست جوزيف فورييه هذه الطريقة في أوائل القرن التاسع عشر خلال دراسته لانتشار الحرارة في الأجسام الصلبة.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تخيل أننا نتأرجح على أرجوحة: حركتنا تتكرر (دورية). تقول متسلسلة فورييه: يمكن تركيب هذه الحركة من عدة بندولات تتأرجح بسرعات مختلفة — أحدها بطيء، وآخر أسرع بمرتين، وآخر بثلاث مرات وهكذا. إذا اخترنا سعات (أوزان) هذه البندولات بشكل صحيح، ستعطي في مجموعها مسارنا.</p></div>
+        <div class="fun-fact">💡 أحدثت خوارزمية كولي-توكي السريعة (1965) ثورة في المعالجة الرقمية؛ وحسب بعض التقديرات، يعد FFT من بين الخوارزميات الخمس الأكثر استخدامًا في العالم — ففي كل مرة تستمع إلى الموسيقى أو تشاهد الفيديو، يعمل FFT.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">متسلسلة فورييه التقليدية هي تفكيك الدالة f(x) القابلة للتكامل على الفترة [-π, π] في جملة دوال متعامدة كاملة {1, cos(nx), sin(nx)}n∈N، تمتلك خاصية التقريب الأفضل بمربع المتوسط. تحسب المعاملات من الصيغ a_n = (1/π)∫ f(x) cos(nx) dx, b_n = (1/π)∫ f(x) sin(nx) dx. في الشكل العقدي هذا يكافئ التفكيك على أسس e^{inx}، مما يربط متسلسلة فورييه بتحويل فورييه. لتقارب المتسلسلة إلى f(x) عند نقطة x يلزم توفر شروط ديريشليه (الرتابة القطعية وعدد محدود من الانقطاعات). يستخدم عمليًا التحويل السريع لفورييه (FFT) — خوارزمية تسمح بحساب المعاملات خلال O(N log N) عملية. تعمم متسلسلات فورييه على جمل متعامدة نظامية اعتباطية في فضاءات هيلبرت، مما يطبق في ميكانيكا الكم (تفكيك دالة الموجة على الحالات الذاتية) ومعالجة الإشارات.</div>
+        <div class="section"><h2>التاريخ</h2><p>ترجع جذور الفكرة إلى دانييل برنولي (1753) الذي مثل حركة الوتر بمجموع توافقيات. جان باتيست جوزيف فورييه في 1807 استخدم المتسلسلات المثلثية منهجيًا في مذكرته عن التوصيل الحراري واقترح طريقة لحساب المعاملات. رسخ كتابه «النظرية التحليلية للحرارة» (1822) هذا الجهاز رغم انتقادات المعاصرين لعدم الدقة. بنى بيتر غوستاف لوجون ديريشليه في 1829 نظرية دقيقة للتقارب، ثم طورها ريمان وليبيسغ وآخرون.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تعطي التوافقيات ذات الأرقام n طيفًا. الترددات المنخفضة تقابل تغيرات بطيئة، والمرتفعة تقابل تفاصيل سريعة. تكاملات المعاملات a_n و b_n هي الجداء القياسي للدالة مع الجيب وجيب التمام؛ وبفضل تعامد الأساس ∫ cos(nx) cos(mx) = 0 عند n≠m، «تنتشل» كل توافقية جزئها فقط من الإشارة. مجموع التوافقيات يعطي الدالة الأصلية في كل مكان تقريبًا، وعند الاقتطاع المنتهي يعطي أصغر خطأ مربع متوسط. يستخدم التحويل السريع لفورييه تناظر الجذور العقدية للوحدة، مختزلاً حساب DFT ذي N نقطة إلى اثنتين N/2-نقطة بشكل تكراري، مما يسرع المعالجة جذريًا. في الفيزياء، يستخدم تفكيك التوافقيات لتحليل السلاسل الزمنية (الفلك)، وتركيب الأنماط في حزم الليزر، وتشخيص البلازما، وحل معادلات شرودنغر.</p></div>
+        <div class="formula"><div class="formula-render">f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left( a_n \cos\left(\frac{2\pi n x}{T}\right) + b_n \sin\left(\frac{2\pi n x}{T}\right) \right)</div><div class="formula-meaning">f(x) — دالة دورية بدور T، a_0/2 — القيمة المتوسطة للدالة خلال الدور، a_n و b_n — معاملات فورييه، x — المتغير (مثل الزمن أو الإحداثي)، n — رقم التوافقية (عدد صحيح).</div></div><div class="formula"><div class="formula-render">a_n = \frac{2}{T} \int_0^T f(x) \cos\left(\frac{2\pi n x}{T}\right) dx, \quad b_n = \frac{2}{T} \int_0^T f(x) \sin\left(\frac{2\pi n x}{T}\right) dx</div><div class="formula-meaning">a_n و b_n — سعات المركبتين الجيب وجيب التمام للتوافقية n، T — دور الدالة، f(x) — الدالة الأصلية، n — عدد صحيح (رقم التوافقية). يحسب التكامل على دور كامل واحد.</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>ظاهرة غيبس: عند عدد منتهٍ من الحدود، تبقى قفزات عند الانقطاع لا تختفي بزيادة N.; تفكيك دوال لا تحقق شروط ديريشليه قد يتباعد في نقاط مفردة.; الحاجة إلى تكييف الإشارات غير الدورية باستخدام تحويل فورييه النافذ أو المويجات.</p><p class="fact">💡 أحدثت خوارزمية كولي-توكي السريعة (1965) ثورة في المعالجة الرقمية؛ وحسب بعض التقديرات، يعد FFT من بين الخوارزميات الخمس الأكثر استخدامًا في العالم — ففي كل مرة تستمع إلى الموسيقى أو تشاهد الفيديو، يعمل FFT.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="fourier_series_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fourier_series" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="fourier_series_ar_page" data-entity-type="tag"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>وسوم ذات صلة:</strong>
+    <a href="/lang/ar/tags/hilbert_space.html" data-tag="hilbert_space">فضاء هيلبرت</a> · <a href="/lang/ar/tags/interference.html" data-tag="interference">interference</a> · <a href="/lang/ar/tags/spectroscopy.html" data-tag="spectroscopy">التحليل الطيفي</a> · <a href="/lang/ar/tags/numerical_simulation.html" data-tag="numerical_simulation">المحاكاة العددية</a> · <a href="/lang/ar/tags/quantum_information.html" data-tag="quantum_information">المعلومات الكمومية</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="t:fourier_series"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="fourier_series"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fourier_series', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

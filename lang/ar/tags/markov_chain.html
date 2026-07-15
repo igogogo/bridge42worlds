@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#سلسلة ماركوف — bridge42worlds</title>
+    <meta name="description" content="سلسلة ماركوف نموذج احتمالي يصف تتابع حالات، حيث احتمال الانتقال إلى الحالة التالية يعتمد فقط على الحالة الحالية (خاصية ماركوف). رسميًا: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). تكون السلاسل متقطعة أو مستمرة في الزمن، بعدد حالات منتهٍ أو معدود. الأدوات الرئيسية: مصفوفة احتمالات الانتقال، التوزيع المستقر، معادلات تشابمان-كولموغوروف.">
+    <meta property="og:title" content="#سلسلة ماركوف — bridge42worlds">
+    <meta property="og:description" content="سلسلة ماركوف نموذج احتمالي يصف تتابع حالات، حيث احتمال الانتقال إلى الحالة التالية يعتمد فقط على الحالة الحالية (خاصية ماركوف). رسميًا: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). تكون السلاسل متقطعة أو مستمرة في الزمن، بعدد حالات منتهٍ أو معدود. الأدوات الرئيسية: مصفوفة احتمالات الانتقال، التوزيع المستقر، معادلات تشابمان-كولموغوروف.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/tags/markov_chain.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>سلسلة ماركوف</h1>
+    <div class="tag-stats">📊 0 articles</div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">توقعات الطقس: يوم الغد لا يكاد يذكر ما كان قبل أسبوع، ويعتمد فقط على حالة اليوم. المستقبل تحدده الحاضر لا الماضي.</p><div class="practical-app"><strong>في الواقع:</strong> نمذجة سلاسل ماركوف لصفوف الانتظار في المتاجر، خوارزميات محركات البحث (PageRank في غوغل)، السير العشوائي لأسعار الأسهم، وتوليد النصوص بالذكاء الاصطناعي.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">سلسلة ماركوف نموذج احتمالي يصف تتابع حالات، حيث احتمال الانتقال إلى الحالة التالية يعتمد فقط على الحالة الحالية (خاصية ماركوف). رسميًا: P(X_{n+1}=x | X_n=x_n,...,X_0=x_0) = P(X_{n+1}=x | X_n=x_n). تكون السلاسل متقطعة أو مستمرة في الزمن، بعدد حالات منتهٍ أو معدود. الأدوات الرئيسية: مصفوفة احتمالات الانتقال، التوزيع المستقر، معادلات تشابمان-كولموغوروف.</div>
+        <div class="fun-fact">💡 كان أول تطبيق عملي لسلاسل ماركوف هو تحليل تناوب حروف العلة والسواكن في رواية «يفغيني أونيغين» — أظهر ماركوف أنه ليس عشوائيًا وتنبأ بحروف النص المستقبلية.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">سلسلة ماركوف هي تتابع أحداث يعتمد كل حدث جديد فيها فقط على سابقه، لا على التاريخ الأبعد. مثلاً، إذا لعبت لعبة لوحية، فإن حركتك التالية تعتمد فقط على موقعك الحالي على الرقعة، لا على كيفية وصولك إليه. تُعطى السلسلة بالحالات (المواقع الممكنة) واحتمالات الانتقال (فرص القفز من حالة لأخرى).</div>
+        <div class="section"><h2>التاريخ</h2><p>درس الرياضي الروسي أندريه ماركوف في بداية القرن العشرين تتابعات المتغيرات العشوائية المرتبطة وأدخل مفهوم السلسلة ليبين أنه حتى في النصوص العشوائية يمكن إيجاد أنماط إحصائية.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>كما في لعبة «الثعبان» على الهاتف، حيث يتحرك الثعبان عبر الخلايا مختارًا اتجاهه عشوائيًا، لكن فقط من موضعه الحالي. إذا عُرفت أين هو الآن، فلا يهم كيف وصل — هذه خاصية انعدام الذاكرة.</p></div>
+        <div class="fun-fact">💡 قامت سلاسل ماركوف بدور أساسي في خوارزمية PageRank التي جلبت النجاح الأولي لغوغل: تُنمذج صفحات الإنترنت كحالات، والانتقالات كارتباطات؛ ترتيب الصفحة هو الاحتمال المستقر للزيارة في سير عشوائي مع ارتداد.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">سلسلة ماركوف عملية عشوائية بزمن متقطع وفضاء حالات منتهٍ أو معدود، تتمتع بخاصية ماركوف: التوزيع الشرطي للحالات المستقبلية يعتمد فقط على الحالة الحالية ولا يتعلق بالمسار السابق. تُعرف بالتوزيع الابتدائي ومصفوفة احتمالات الانتقال P = (p_{ij})، حيث p_{ij} = P(X_{n+1}=j | X_n=i). تسمى السلسلة متجانسة إذا كانت p_{ij} لا تعتمد على n. المفاهيم المفاتيح: تصنيف الحالات (متكررة، غير متكررة، الدورية)، الإرغودية (وجود توزيع نهائي)، التوزيع المستقر π (πP = π). للسلاسل غير القابلة للاختزال وغير الدورية المنتهية، يوجد توزيع مستقر وحيد تتقارب إليه توزيعات الحالات. توصف سلاسل ماركوف بزمن مستمر بمصفوفة الشدات Q. تطبيقات: خوارزمية متروبوليس-هاستينغز في مونت كارلو، نماذج ماركوف المخفية في التعرف على الكلام، نظرية صفوف الانتظار.</div>
+        <div class="section"><h2>التاريخ</h2><p>أدخل أندريه أندرييفيتش ماركوف السلاسل عام 1906 أثناء دراسته لقانون الأعداد الكبيرة للمتغيرات المرتبطة. كان دافعه الرغبة في دحض مزاعم نيكراسوف بأن الاستقلال ضروري للقوانين الإحصائية. لاحقًا في ثلاثينيات القرن العشرين، طور كولموغوروف النظرية العامة للعمليات الماركوفية. في منتصف القرن العشرين، صارت سلاسل ماركوف أداة مركزية في بحوث العمليات والفيزياء (نموذج إيزينغ) والمعلوماتية (توليد النصوص، PageRank).</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>رياضيًا، تُعطى سلسلة ماركوف بمتجه الاحتمالات الابتدائي π^{(0)} ومصفوفة عشوائية P. عندئذٍ التوزيع بعد n خطوة: π^{(n)} = π^{(0)} P^n. تعني خاصية انعدام الذاكرة أن التنبؤ بالمستقبل يكفي فيه معرفة الحالة الحالية فقط. السلوك طويل الأمد تحدده مفكوكية طيف المصفوفة P: إذا وجد متجه ذاتي أيسر وحيد بقيمة ذاتية 1 (التوزيع المستقر)، فإن π^{(n)} → π عندما n→∞. معادلات تشابمان-كولموغوروف: P^{(n+m)} = P^{(n)} P^{(m)}، تعبر عن تركيب الانتقالات. للحالة المستمرة: dπ/dt = πQ، حيث Q مصفوفة شدات الانتقال.</p></div>
+        <div class="formula"><div class="formula-render">p_{ij}^{(n+m)} = \sum_{k} p_{ik}^{(n)} p_{kj}^{(m)}</div><div class="formula-meaning">p_{ij}^{(n)} — احتمال الانتقال من الحالة i إلى الحالة j في n خطوة؛ الجمع على جميع الحالات الوسيطة k.</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>مشكلة تسريع التقارب للسلاسل بطيئة المزج (مثلاً في التوزيعات عالية الأبعاد ذات القمم الحادة).; تطوير خوارزميات فعالة لتقدير احتمالات الأحداث النادرة في الأنظمة المعقدة.; تحليل نماذج ماركوف المخفية ذات الحالات المخفية المستمرة عالية الأبعاد.</p><p class="fact">💡 قامت سلاسل ماركوف بدور أساسي في خوارزمية PageRank التي جلبت النجاح الأولي لغوغل: تُنمذج صفحات الإنترنت كحالات، والانتقالات كارتباطات؛ ترتيب الصفحة هو الاحتمال المستقر للزيارة في سير عشوائي مع ارتداد.</p></div>
+    </div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="markov_chain_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="markov_chain" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="markov_chain_ar_page" data-entity-type="tag"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>وسوم ذات صلة:</strong>
+    <a href="/lang/ar/tags/entropy.html" data-tag="entropy">الإنتروبيا</a> · <a href="/lang/ar/tags/critical_point.html" data-tag="critical_point">النقطة الحرجة</a> · <a href="/lang/ar/tags/phase_transition.html" data-tag="phase_transition">التحول الطوري</a> · <a href="/lang/ar/tags/numerical_simulation.html" data-tag="numerical_simulation">المحاكاة العددية</a> · <a href="/lang/ar/tags/turbulence.html" data-tag="turbulence">الاضطراب</a>
+</div>
+
+
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="t:markov_chain"><canvas id="minigraph"></canvas></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+
+<div id="search-results" class="entity-list" data-context-tag="markov_chain"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('markov_chain', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

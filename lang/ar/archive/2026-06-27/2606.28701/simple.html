@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Как квантовый компьютер оценивает финансовые риски — bridge42worlds</title>
+    <meta name="description" content="Метод ускоряет оценку максимальных убытков по финансовым инструментам с помощью квантового компьютера. Классический алгоритм делает черновой расчёт, а квантовый уточняет редкие катастрофические сценарии. Такой гибрид снижает вычислительную нагрузку и даёт погрешность всего 1–8%. В перспективе оценка">
+    <meta property="og:title" content="Как квантовый компьютер оценивает финансовые риски">
+    <meta property="og:description" content="Гибрид квантовых и обычных вычислений ускоряет оценку убытков по сложным финансовым контрактам.">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/archive/2026-06-27/2606.28701/simple.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.org/lang/ar/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.org/lang/en/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.org/lang/es/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.org/lang/ar/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/simple.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Как квантовый компьютер оценивает финансовые риски", "description": "Гибрид квантовых и обычных вычислений ускоряет оценку убытков по сложным финансовым контрактам.", "inLanguage": "ar", "datePublished": "2026-06-27", "url": "https://bridge42worlds.org/lang/ar/archive/2026-06-27/2606.28701/simple.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/ai.jpg", "author": [{"@type": "Person", "name": "Sandeep Jha"}, {"@type": "Person", "name": "Richard Oentaryo"}, {"@type": "Person", "name": "Sanjay Sekaran"}, {"@type": "Person", "name": "Vadym Kullish"}, {"@type": "Person", "name": "Rajanikanth Annam"}, {"@type": "Person", "name": "Paul Griffin"}, {"@type": "Person", "name": "Hanan Rosemarin"}, {"@type": "Person", "name": "Nadav Yoran"}, {"@type": "Person", "name": "Nati Erez"}, {"@type": "Person", "name": "Rei Sato"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.28701", "abstract": "Оценка PFE для путезависимых деривативов типа TARF осложнена вложенными симуляциями Монте-Карло. Предложена гибридная квантово-классическая схема с итеративной квантовой оценкой амплитуды (IQAE) на упрощённой модели риска. Нелинейный платёж TARF кодируется в квантовую схему двухшагово: классически рассчитывается перцентиль, задающий условие для квантовой оценки. Применены дискретизация FX-процесса и линеаризованная аддитивная аппроксимация. Реализация через Classiq и тесты на NVIDIA CUDA-Q и Amazon Braket SV1 показали относительную ошибку 1–8% при 97,5% и 99% доверия. Дискретизация и допущение о монотонности вносят смещение, но подход — жизнеспособный тестовый стенд для квантового ускорения. Оценка масштабирования: ~300 логических кубитов для полного 52-недельного анализа, снижение выборки для хвостовых рисков за счёт роста глубины схемы."}</script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">بسيط</span><div class="vs-track"><div class="vs-fill" style="width:33.33%"></div><div class="vs-thumb" style="left:33.33%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ar/archive/2026-06-27/2606.28701/mini.html" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></a><a class="vs-dot active" data-version="simple" data-idx="1" href="/lang/ar/archive/2026-06-27/2606.28701/simple.html" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/ar/archive/2026-06-27/2606.28701/index.html" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ar/archive/2026-06-27/2606.28701/advanced.html" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">المقال التالي →</button></div>
+
+<h1 class="article-title-top">Как квантовый компьютер оценивает финансовые риски  <span class="express-badge" title="Экспресс-версия: по аннотации автора, без разбора полного текста статьи">⚡ экспресс</span></h1>
+<div class="authors-top"><a href="/lang/ru/authors/Sandeep_Jha.html" class="text-author-link" data-author="Sandeep Jha">Sandeep Jha</a>, <a href="/lang/ru/authors/Richard_Oentaryo.html" class="text-author-link" data-author="Richard Oentaryo">Richard Oentaryo</a>, <a href="/lang/ru/authors/Sanjay_Sekaran.html" class="text-author-link" data-author="Sanjay Sekaran">Sanjay Sekaran</a>, <a href="/lang/ru/authors/Vadym_Kullish.html" class="text-author-link" data-author="Vadym Kullish">Vadym Kullish</a>, <a href="/lang/ru/authors/Rajanikanth_Annam.html" class="text-author-link" data-author="Rajanikanth Annam">Rajanikanth Annam</a>, <a href="/lang/ru/authors/Paul_Griffin.html" class="text-author-link" data-author="Paul Griffin">Paul Griffin</a>, <a href="/lang/ru/authors/Hanan_Rosemarin.html" class="text-author-link" data-author="Hanan Rosemarin">Hanan Rosemarin</a>, <a href="/lang/ru/authors/Nadav_Yoran.html" class="text-author-link" data-author="Nadav Yoran">Nadav Yoran</a>, <a href="/lang/ru/authors/Nati_Erez.html" class="text-author-link" data-author="Nati Erez">Nati Erez</a>, <a href="/lang/ru/authors/Rei_Sato.html" class="text-author-link" data-author="Rei Sato">Rei Sato</a></div>
+<div class="author-verify-top">
+    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">أنا المؤلف</button>
+</div>
+<div class="meta">
+    arXiv:<a href="https://arxiv.org/abs/2606.28701">2606.28701</a> · 2026-06-27 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · <span class="reading-time">⏱ 1 دقيقة</span> · <span class="cat-badge" data-cat="quant-ph">Quantum Physics</span> <span class="cat-badge" data-cat="cs.CE">cs.CE</span>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>أنا المؤلف</h3>
+        <p>هل أنت أحد مؤلفي هذا البحث؟ راسلنا من بريدك المؤسسي أو المهني مع ذكر رقم arXiv لهذا المقال، وسنتحقق منك ونمنحك صلاحية تحرير هذه الصفحة.</p>
+        <p><a href="mailto:author@bridge42worlds.org?subject=Verify%20author%20-%202606.28701">author@bridge42worlds.org</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li><a href="#feedback">التعليقات</a></li><li><a href="#related">مقالات ذات صلة</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="original-title">Original: "Quantum Counterparty Credit Risk: A Study of Path-Dependent Derivatives"</div>
+        <div class="oneliner">Гибрид квантовых и обычных вычислений ускоряет оценку убытков по сложным финансовым контрактам.</div>
+        <div class="abstract-lead"><div class="abstract-label">الملخّص</div><p>Оценка риска для хитрых валютных контрактов с досрочным погашением — головоломка: надо перебрать уйму вариантов. Квантовый компьютер здесь работает как умный фонарь, мгновенно освещая все тёмные углы, пока классический держит карту. Гибридный метод даёт ошибку всего 1–8% на самых критичных рубежах. Так может, кванты станут стражем мировых финансов?</p></div>
+        <div class="ai-cover"><a href="/lang/ru/archive/2026-06-27/2606.28701/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-27/2606.28701/ai.jpg" alt=""></a></div>
+        <div class="mosaic"><div class="mosaic-track"><figure class="mosaic-item"><a href="/lang/ru/archive/2026-06-27/2606.28701/0.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-27/2606.28701/0.jpg" alt="Circuit diagram of the proposed Quantum Monte Carlo solution synthesized on the Classiq platform." title="Circuit diagram of the proposed Quantum Monte Carlo solution synthesized on the Classiq platform." loading="lazy"></a><figcaption>Circuit diagram of the proposed Quantum Monte Carlo solution synthesized on the Classiq platform.</figcaption></figure></div></div>
+        <p>Сложный финансовый контракт похож на пари: выплата зависит от курса валют и накопленных процентов. Такую неопределённость физики назвали бы <a href="/lang/ar/tags/entropy.html" class="text-tag" data-tag="entropy">энтропией</a> — мерой разброса возможных исходов. Чтобы оценить риск, нужно перебрать все сценарии, как найти все тупики с ловушками в огромном лабиринте. Обычный компьютер методично обходит каждый поворот, теряя часы. Квантовый смотрит на весь лабиринт сверху и выхватывает самые опасные развилки.</p><p>Учёные разделили работу: классический алгоритм чертит карту, а квантовый прицельно проверяет тупики с редкими катастрофическими убытками. Условия контракта перевели в схему для квантовых ячеек (кубитов). На симуляторах ошибка — 1–8%. Неожиданно, что шумные, неидеальные кубиты уже обгоняют классику: для рисков важнее охватить тысячи вариантов, чем вычислить каждый до копейки. Когда появятся 300 защищённых от ошибок кубитов, на расчёт уйдёт секунда вместо недели.</p><div class="callout">Идею квантовых вычислений для сложных систем предложил <a href="/lang/ar/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Ричард Фейнман</a> в 1980-х. Например, <a href="/lang/ar/tags/helium.html" class="text-tag" data-tag="helium">гелий</a> сначала заметили по незнакомым цветным полосам (<a href="/lang/ar/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">спектроскопии</a>) в свете <a href="/lang/ar/tags/sun.html" class="text-tag" data-tag="sun">Солнца</a> и лишь потом нашли на Земле.</div>
+        <div class="fun-fact"><p class="fact">🎯 Кубит — квантовая ячейка — совмещает ноль и единицу, словно монета, которая крутится и не падает. Такой трюк позволяет компьютеру обрабатывать множество сценариев одновременно и молниеносно находить ответ там, где обычному нужны годы.</p><p class="fact fact-scifi">🎬 Это похоже на психоисторию из «Основания» Азимова — математику, предсказывающую судьбы цивилизаций. Только вместо галактик — биржи.</p></div>
+        
+        
+        <div class="scientists-section"><strong>العلماء:</strong> <a href="/lang/ar/scientists/Richard_Feynman.html" class="text-scientist" data-scientist="Richard Feynman">Richard Feynman</a></div>
+        <div class="actions" data-article-id="2606.28701_ar_simple">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2606.28701" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button onclick="shareArticle('Как квантовый компьютер оценивает финансовые риски','https://bridge42worlds.org/lang/ar/archive/2026-06-27/2606.28701/index.html')">مشاركة</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2606.28701_ar_simple" data-entity-type="article"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+        <div class="next-divider">
+            <button class="next-btn">المقال التالي →</button>
+        </div>
+        <div class="related" id="related" data-label="مقالات ذات صلة"></div>
+    </div>
+    <div class="article-side"><div class="side-tags-label">الوسوم</div><a href="/lang/ar/tags/entropy.html" class="side-tag" data-tag="entropy">الإنتروبيا</a>
+<a href="/lang/ar/tags/helium.html" class="side-tag" data-tag="helium">helium</a>
+<a href="/lang/ar/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">التحليل الطيفي</a>
+<a href="/lang/ar/tags/sun.html" class="side-tag" data-tag="sun">sun</a><div class="side-laws-label">قوانين</div><a href="/lang/ar/laws/bekensteinhawking_entropy.html" class="side-law" data-law="bekensteinhawking_entropy">إنتروبيا بيكينشتاين-هوكينج</a><a href="/lang/ar/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">معادلات ماكسويل</a><a href="/lang/ar/laws/plancks_law.html" class="side-law" data-law="plancks_law">قانون بلانك للإشعاع</a><a href="/lang/ar/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">معادلة بلانك-أينشتاين</a><a href="/lang/ar/laws/wiens_displacement_law.html" class="side-law" data-law="wiens_displacement_law">قانون فين للإزاحة</a><a href="/lang/ar/laws/stefanboltzmann_law.html" class="side-law" data-law="stefanboltzmann_law">قانون ستيفان-بولتزمان</a></div>
+</div>
+
+<div class="support">⭐ Free article. <a href="#">Support us</a></div>
+<div class="license">الأصل: <a href="https://arxiv.org/abs/2606.28701">arXiv:2606.28701</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/scroll.js?v=eda3218e44"></script>
+<script src="/js/lightbox.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2606.28701', 'article', 'ar');
+    if (false && window.logExpressInterest) logExpressInterest('2606.28701', 'ar');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+});
+</script>
+</body>
+</html>

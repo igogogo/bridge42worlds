@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحويلات لورينتز — bridge42worlds</title>
+    <meta name="description" content="في عام 1904، حاول هندريك لورينتز &quot;إنقاذ&quot; الأثير من التناقضات، فوجد معادلات دقيقة تجعل معادلات ماكسويل ثابتة. أعطى هنري بوانكاريه وألبرت أينشتاين المعنى الحقيقي لها في عام 1905: قدم بوانكاريه مصطلح &quot;تحويلات لورينتز&quot; وتفسيرًا رباعي الأبعاد، بينما اشتقها أينشتاين من مبدأين كونيين. الفكرة الأساسية: يتشابك الزمان والمكان، ويخضع إعادة الحساب للتعبيرات t' = γ(t – vx/c²), x' = γ(x – vt).">
+    <meta property="og:title" content="تحويلات لورينتز — bridge42worlds">
+    <meta property="og:description" content="في عام 1904، حاول هندريك لورينتز &quot;إنقاذ&quot; الأثير من التناقضات، فوجد معادلات دقيقة تجعل معادلات ماكسويل ثابتة. أعطى هنري بوانكاريه وألبرت أينشتاين المعنى الحقيقي لها في عام 1905: قدم بوانكاريه مصطلح &quot;تحويلات لورينتز&quot; وتفسيرًا رباعي الأبعاد، بينما اشتقها أينشتاين من مبدأين كونيين. الفكرة الأساسية: يتشابك الزمان والمكان، ويخضع إعادة الحساب للتعبيرات t' = γ(t – vx/c²), x' = γ(x – vt).">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/laws/lorentz_transformations.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/laws/img/lorentz_transformations.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/" class="active">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/laws/img/lorentz_transformations.jpg" alt=""></div>
+    <h1>تحويلات لورينتز<span class="law-type">уравнение</span></h1>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">عند السرعات القريبة من سرعة الضوء، يتباطأ الزمن وتنكمش المسافات — وهذه ليست حيلًا، بل قواعد صارمة لإعادة حساب الإحداثيات، بدونها لما عملت الملاحة عبر الأقمار الصناعية.</p><div class="practical-app"><strong>في الواقع:</strong> أساس الملاحة عبر الأقمار الصناعية (GPS/GLONASS): بدون التصحيحات اللورينتزية لانحرفت الإحداثيات بعشرات الكيلومترات في اليوم.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="اشتق هندريك لورينتز هذه التحويلات عام 1904، محاولًا تفسير تجربة مايكلسون-مورلي ضمن نظرية الأثير. لكن لم تعطَ شكلها الرياضي الحديث واسمها إلا في عام 1905 على يد هنري بوانكاريه، بينما أعلن أينشتاين أنها نتيجة لمبدأ النسبية وثبات سرعة الضوء. تمزج هذه الصيغ بين المكان والزمان: t' = γ(t – vx/c²), x' = γ(x – vt).">في عام 1904، حاول هندريك لورينتز "إنقاذ" الأثير من التناقضات، فوجد معادلات دقيقة تجعل معادلات ماكسويل ثابتة. أعطى هنري بوانكاريه وألبرت أينشتاين المعنى الحقيقي لها في عام 1905: قدم بوانكاريه مصطلح "تحويلات لورينتز" وتفسيرًا رباعي الأبعاد، بينما اشتقها أينشتاين من مبدأين كونيين. الفكرة الأساسية: يتشابك الزمان والمكان، ويخضع إعادة الحساب للتعبيرات t' = γ(t – vx/c²), x' = γ(x – vt).</div>
+        <div class="fun-fact">💡 يُحكى أن لورينتز سُئل مرة عن سبب تأخر ساعته، فأجاب مبتسمًا: «أنا فقط أتحرك بسرعة».</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="تبين تحويلات لورينتز كيف تتغير المسافات والفترات الزمنية عند الانتقال من إطار مرجعي إلى آخر، إذا كان أحدهما يتحرك بسرعة ثابتة بالنسبة للآخر. عند السرعات المنخفضة، كل شيء كالمعتاد (كما عند غاليليو)، لكن عندما تقترب السرعة من سرعة الضوء، يبدأ الزمن بالتباطؤ، وتنكمش الأجسام في اتجاه الحركة. على سبيل المثال، سفينة فضاء طولها 100 متر تمر بجانب الأرض بسرعة 0.9c ستبدو للمراقب الأرضي أقصر.">تحويلات لورينتز هي صيغ لإعادة حساب الإحداثيات والزمن عند الانتقال إلى نظام مرجعي متحرك بسرعة منتظمة. عند السرعات المنخفضة تتحول إلى تحويلات غاليليو المألوفة، لكن بالقرب من سرعة الضوء يتمدد الزمن وينكمش الطول في اتجاه الحركة. على سبيل المثال، سفينة فضاء طولها 100 متر تمر بجانب الأرض بسرعة 90% من سرعة الضوء ستبدو للمراقب الأرضي منضغطة إلى حوالي 44 مترًا.</div>
+        <div class="section"><h2>كيف يعمل</h2><p>بفضل هذه الصيغ، نعرف بالضبط مقدار تصحيح حركة الساعات الذرية على أقمار GPS لكي تعمل الملاحة على الأرض دون أخطاء.</p></div>
+        <div class="fun-fact">💡 عند سرعة 0.999999c، يصل معامل لورينتز إلى 707 — وهذا يعني أن ثانية واحدة على متن سفينة الفضاء تماثل حوالي 12 دقيقة على الأرض.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="تحويلات لورينتز هي تحويلات خطية للإحداثيات (t, x, y, z) في زمكان مينكوفسكي الرباعي، تحافظ على ثبات الفاصل s² = c²Δt² – Δx² – Δy² – Δz². بالنسبة للدفع على طول المحور x: t' = γ(t – vx/c²), x' = γ(x – vt), y' = y, z' = z، حيث γ = 1/√(1 – v²/c²) هو معامل لورينتز. تشكل هذه التحويلات زمرة لورينتز — التناظر الأساسي لنظرية النسبية.">تحويلات لورينتز هي تطبيقات خطية تحافظ على الفاصل الزمكاني s² = c²Δt² – Δx² – Δy² – Δz². في أبسط حالة للحركة على طول المحور x، تُكتب على النحو: t' = γ(t – vx/c²)، x' = γ(x – vt)، ولا تتغير y و z. هنا γ = 1/√(1 – v²/c²). معًا تشكل زمرة لورينتز التي تعبر عن تناظر الزمكان الفارغ في نظرية النسبية الخاصة.</div>
+        <div class="section"><h2>تاريخ الاكتشاف</h2><p>اشتق لورينتز الصيغ الرياضية في عام 1904، لكن هنري بوانكاريه هو من نفخ فيها المعنى الفيزيائي في عام 1905، حيث أظهر أنها تترك جميع القوانين الفيزيائية ثابتة وأعطاها اسمها الحديث. وفي العام نفسه، اشتقها ألبرت أينشتاين بصورة مستقلة انطلاقًا من مبدأي النسبية وثبات سرعة الضوء، وبنى عليها الميكانيكا الجديدة.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تُعد هذه التحويلات أداة عمل في فيزياء الطاقة العالية والفيزياء الفلكية وأنظمة التموضع العالمي. ومع ذلك، فهي تصف فقط العلاقة بين المراقبين القصوريين؛ وفي ظل الجاذبية القوية يتم تعميمها لتشمل تحويلات إحداثية عشوائية في النظرية النسبية العامة.</p></div>
+        <div class="section"><h2>ملاحظات</h2><p>التوافق مع نظرية الكم على مقياس بلانك; مفارقة بيل (انقطاع الحبل بين سفينتين تتسارعان بصورة متماثلة); البحث عن انتهاكات محتملة لثبات لورينتز في نظريات الجاذبية الكمومية</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">t' = \gamma \left(t - \frac{v x}{c^2}\right), \quad x' = \gamma (x - v t), \quad y' = y, \quad z' = z</div><div class="formula-meaning">t, x, y, z — الإحداثيات في النظام القصوري الأصلي؛ t', x', y', z' — الإحداثيات في النظام الذي يتحرك بسرعة v على طول المحور x؛ c — سرعة الضوء (≈3×10⁸ م/ث)</div></div><div class="formula"><div class="formula-render">\gamma = \frac{1}{\sqrt{1 - \frac{v^2}{c^2}}}</div><div class="formula-meaning">γ — معامل لورينتز (كمية لا بعدية، ≥1)؛ v — السرعة النسبية بين النظامين؛ c — سرعة الضوء</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="lorentz_transformations_ar_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="lorentz_transformations" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="lorentz_transformations_ar_page" data-entity-type="law"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>مفاهيم ذات صلة:</strong>
+    <a href="/lang/ar/tags/spacetime.html" data-tag="spacetime">الزمكان</a> · <a href="/lang/ar/tags/speed_of_light.html" data-tag="speed_of_light">سرعة الضوء</a>
+</div>
+<div class="related-tags"><strong>قوانين ذات صلة:</strong> <a href="/lang/ar/laws/principle_of_constancy_of_speed_of_light.html" class="law-chip" data-law="principle_of_constancy_of_speed_of_light">مبدأ ثبات سرعة الضوء</a> · <a href="/lang/ar/laws/massenergy_equivalence.html" class="law-chip" data-law="massenergy_equivalence">تكافؤ الكتلة والطاقة</a> · <a href="/lang/ar/laws/maxwells_equations.html" class="law-chip" data-law="maxwells_equations">معادلات ماكسويل</a></div>
+<div class="related-tags"><strong>اكتشفه:</strong> <a href="/lang/ar/scientists/Hendrik_Lorentz.html" class="text-scientist" data-scientist="Hendrik Lorentz">Hendrik Lorentz</a> · <a href="/lang/ar/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="l:lorentz_transformations"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="spacetime,speed_of_light"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('lorentz_transformations', 'law', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

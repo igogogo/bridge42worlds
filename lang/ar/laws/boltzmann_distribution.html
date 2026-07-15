@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توزيع بولتزمان — bridge42worlds</title>
+    <meta name="description" content="في سبعينيات القرن التاسع عشر، أظهر لودفيج بولتزمان أنه في حالة التوازن، يخضع توزيع الطاقة للجسيمات لقانون أسي. لاحقًا، عمم جوزيه غيبس النتيجة لتشمل أي أنظمة كلاسيكية على اتصال بثرموستات. الفكرة الرئيسية: الحالة ذات الطاقة E تظهر نادرًا كلما زادت E، ومقياس ذلك هو الدالة الأسية e^{-E/(kT)}. هنا k هو ثابت بولتزمان، وT درجة الحرارة المطلقة. التوزيع كلاسيكي - يعمل للجسيمات القابلة للتمييز وعندما يمكن تجاهل التأثيرات الكمومية.">
+    <meta property="og:title" content="توزيع بولتزمان — bridge42worlds">
+    <meta property="og:description" content="في سبعينيات القرن التاسع عشر، أظهر لودفيج بولتزمان أنه في حالة التوازن، يخضع توزيع الطاقة للجسيمات لقانون أسي. لاحقًا، عمم جوزيه غيبس النتيجة لتشمل أي أنظمة كلاسيكية على اتصال بثرموستات. الفكرة الرئيسية: الحالة ذات الطاقة E تظهر نادرًا كلما زادت E، ومقياس ذلك هو الدالة الأسية e^{-E/(kT)}. هنا k هو ثابت بولتزمان، وT درجة الحرارة المطلقة. التوزيع كلاسيكي - يعمل للجسيمات القابلة للتمييز وعندما يمكن تجاهل التأثيرات الكمومية.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/laws/boltzmann_distribution.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bridge42worlds.org/lang/ru/laws/img/boltzmann_distribution.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/" class="active">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    <div class="ai-cover"><img src="/lang/ru/laws/img/boltzmann_distribution.jpg" alt=""></div>
+    <h1>توزيع بولتزمان<span class="law-type">قانون</span></h1>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">تخيل حشدًا: بعضهم يركضون بأقصى سرعة، وآخرون يمشون بهدوء، وغيرهم يقفون. تتصرف الجزيئات في الغاز بنفس الطريقة: كلما زادت الطاقة، قل عدد هذه الجزيئات. فرصة العثور على جزيء سريع تتناقص بشكل أسي.</p><div class="practical-app"><strong>في الواقع:</strong> يشرح توزيع بولتزمان لماذا يكون الهواء في الجبال خفيفًا: حيث أن الصعود يتطلب طاقة، ولا يمتلكها إلا جزء صغير من الجزيئات، لذلك ينخفض الضغط مع الارتفاع بشكل أسي.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="أظهر لودفيج بولتزمان، أحد آباء الميكانيكا الإحصائية، في سبعينيات القرن التاسع عشر أن توزيع الجسيمات حسب الطاقات في حالة التوازن يخضع لقانون أسي. ولاحقًا، تم تعميم هذه النتيجة بواسطة جوزيه غيبس لتشمل المجموعة القانونية. الفكرة الأساسية: عند أي درجة حرارة محدودة، تظهر الطاقات الأعلى بشكل أسي أقل تكرارًا. توزيع بولتزمان كلاسيكي، أي أنه صحيح للجسيمات القابلة للتمييز ويهمل التأثيرات الكمومية.">في سبعينيات القرن التاسع عشر، أظهر لودفيج بولتزمان أنه في حالة التوازن، يخضع توزيع الطاقة للجسيمات لقانون أسي. لاحقًا، عمم جوزيه غيبس النتيجة لتشمل أي أنظمة كلاسيكية على اتصال بثرموستات. الفكرة الرئيسية: الحالة ذات الطاقة E تظهر نادرًا كلما زادت E، ومقياس ذلك هو الدالة الأسية e^{-E/(kT)}. هنا k هو ثابت بولتزمان، وT درجة الحرارة المطلقة. التوزيع كلاسيكي - يعمل للجسيمات القابلة للتمييز وعندما يمكن تجاهل التأثيرات الكمومية.</div>
+        <div class="fun-fact">💡 في الغلاف الجوي للأرض، ينخفض الضغط بمقدار النصف كل 5-6 كم. وهذا نتيجة مباشرة لتوزيع بولتزمان: فقط عدد قليل من الجزيئات تمتلك الطاقة الكافية للصعود إلى ارتفاعات عالية.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="في أي مادة، تتحرك الجسيمات (ذرات، جزيئات) باستمرار وتتصادم. عند درجة حرارة ثابتة (في حالة توازن حراري)، لا تبقى طاقتها ثابتة بل تتغير. توزيع بولتزمان هو قاعدة رياضية توضح احتمال امتلاك جسيم لطاقة معينة. تحتوي الصيغة على دالة أسية (دالة تتناقص بسرعة كبيرة): احتمال امتلاك طاقة E يتناقص كـ e^{-E/(kT)}. هنا k هو ثابت بولتزمان (رقم صغير جدًا يحول درجة الحرارة إلى طاقة)، وT هي درجة الحرارة المطلقة (بالكلفن).">في أي مادة، تتحرك الجسيمات وتتصادم. حتى عند درجة حرارة ثابتة، لا تكون طاقاتها متساوية، بل تخضع لقاعدة: كلما زادت الطاقة، قل عدد الجسيمات التي تمتلكها. يوضح توزيع بولتزمان مدى سرعة تناقص عددها مع زيادة الطاقة. نسبة الجسيمات ذات الطاقة E تتناسب مع e^{-E/(kT)}، حيث k معامل صغير يحول الدرجات إلى طاقة، وT درجة الحرارة بالكلفن.</div>
+        <div class="section"><h2>كيف يعمل</h2><p>عند مستوى الأرض، يوجد عدد أكبر من الجزيئات مقارنة بالارتفاعات العالية، لأن الصعود يتطلب طاقة. في أشباه الموصلات، لا يصل إلى نطاق التوصيل سوى عدد قليل من الإلكترونات مما ينتج تيارًا. التسخين يزيد من عدد هذه الإلكترونات، لأن التوزيع ينزاح لصالح الطاقات العالية.</p></div>
+        <div class="fun-fact">💡 ثابت بولتزمان k ≈ 1.38×10⁻²³ جول/كلفن يربط الطاقة المجهرية بدرجة الحرارة العيانية. لقد أدخل بولتزمان العامل الأسي، بينما حصل ماكسويل سابقًا على توزيع السرعات كحالة خاصة.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="توزيع بولتزمان هو قانون أساسي في الفيزياء الإحصائية، يحدد الاحتمال P_i لوجود نظام كلاسيكي في حالة مجهرية ذات طاقة E_i داخل ثرموستات عند درجة حرارة T: P_i = (1/Z) e^{-E_i/(k_B T)}، حيث Z هو المجموع الإحصائي (عامل التطبيع). وهو صالح للأنظمة ذات الجسيمات القابلة للتمييز أو في النظام الذي يمكن فيه إهمال التأثيرات الكمومية (درجة حرارة عالية، كثافة منخفضة). يؤدي مبدأ الإنتروبيا القصوى عند متوسط طاقة ثابت إلى هذا الشكل الأسي بالتحديد.">يُعد توزيع بولتزمان أساس الفيزياء الإحصائية. بالنسبة لنظام في ثرموستات عند درجة حرارة T، فإن احتمال وجوده في حالة مجهرية ذات طاقة E_i هو P_i = (1/Z) e^{-E_i/(k_B T)}، حيث Z هو المجموع الإحصائي. ينطبق على الأنظمة الكلاسيكية (جسيمات قابلة للتمييز، درجات حرارة عالية، كثافات منخفضة). يؤدي مبدأ القيمة العظمى للإنتروبيا عند متوسط طاقة معين بشكل طبيعي إلى هذا الشكل.</div>
+        <div class="section"><h2>تاريخ الاكتشاف</h2><p>لودفيج بولتزمان في سبعينيات القرن التاسع عشر، أثناء تطويره للنظرية الحركية للغازات، حصل على توزيع الطاقات. وكان جيمس كليرك ماكسويل قد استنتج سابقًا توزيع السرعات كحالة خاصة. عمم بولتزمان ذلك وأثبت علاقته بالإنتروبيا. وعلى الرغم من الانتقادات، أصبح عمله حجر الزاوية في الميكانيكا الإحصائية.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يُستخدم لوصف الأنظمة الكلاسيكية المتوازنة: الغازات المثالية، معادلة الضغط الجوي، توزيع الشوائب في أشباه الموصلات، عمليات التنشيط. يفقد قابليته للتطبيق عندما تصبح التأثيرات الكمومية مهمة (غازات فيرمي أو بوز) أو عندما يكون النظام بعيدًا عن التوازن. كما يفترض أيضًا غياب التفاعلات.</p></div>
+        <div class="section"><h2>ملاحظات</h2><p>بالنسبة للأنظمة الكمومية ذات الجسيمات غير القابلة للتمييز، يلزم استخدام إحصائيات فيرمي-ديراك وبوز-أينشتاين.; يفترض التوزيع وجود توازن ترموديناميكي، ولا يعمل بعيدًا عن التوازن.; عند درجات الحرارة المنخفضة، يختل الاعتبار الكلاسيكي، ويجب أخذ تكميم الطاقة في الحسبان.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">P_i = \frac{1}{Z} e^{-E_i/(k_{\text{B}} T)}</div><div class="formula-meaning">P_i — احتمال وجود النظام في حالة مجهرية ذات طاقة E_i؛ Z — المجموع الإحصائي (عامل تطبيع)، Z = Σ_j e^{-E_j/(k_B T)}؛ E_i — طاقة الحالة i؛ k_B — ثابت بولتزمان، k_B ≈ 1.380649×10⁻²³ جول/كلفن؛ T — درجة الحرارة المطلقة، كلفن.</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="boltzmann_distribution_ar_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="boltzmann_distribution" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="boltzmann_distribution_ar_page" data-entity-type="law"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>مفاهيم ذات صلة:</strong>
+    <a href="/lang/ar/tags/entropy.html" data-tag="entropy">الإنتروبيا</a>
+</div>
+<div class="related-tags"><strong>قوانين ذات صلة:</strong> <a href="/lang/ar/laws/fermidirac_statistics.html" class="law-chip" data-law="fermidirac_statistics">إحصاء فيرمي-ديراك</a> · <a href="/lang/ar/laws/boseeinstein_statistics.html" class="law-chip" data-law="boseeinstein_statistics">إحصاء بوز-أينشتاين</a></div>
+<div class="related-tags"><strong>اكتشفه:</strong> <a href="/lang/ar/scientists/Ludwig_Boltzmann.html" class="text-scientist" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a> · <a href="/lang/ar/scientists/James_Clerk_Maxwell.html" class="text-scientist" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a></div>
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="l:boltzmann_distribution"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="entropy"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('boltzmann_distribution', 'law', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

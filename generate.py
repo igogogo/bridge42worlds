@@ -220,15 +220,26 @@ def build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_full="
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + '</script>'
 
 
-CALLOUT_RE = re.compile(r'^\[callout\](.+?)\[/callout\]$', re.S | re.I)
+CALLOUT_RE = re.compile(r'\[callout\](.+?)\[/callout\]', re.S | re.I)
 
 
 def _render_paragraph(p, lang):
-    """Абзац текста статьи: если это врезка [callout]…[/callout] — блок .callout, иначе <p>."""
-    m = CALLOUT_RE.match(p.strip())
-    if m:
-        return f'<div class="callout">{parse_markers(m.group(1).strip(), lang)}</div>'
-    return f"<p>{parse_markers(p, lang)}</p>"
+    """Абзац текста статьи: врезки [callout]…[/callout] выделяются в блок .callout.
+    Модель иногда ставит врезку не отдельным абзацем, а вперемешку с обычным текстом —
+    поэтому режем по всем вхождениям, а не требуем точного совпадения всего абзаца."""
+    chunks = CALLOUT_RE.split(p)
+    if len(chunks) == 1:
+        return f"<p>{parse_markers(p, lang)}</p>"
+    html_parts = []
+    for i, chunk in enumerate(chunks):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if i % 2 == 1:
+            html_parts.append(f'<div class="callout">{parse_markers(chunk, lang)}</div>')
+        else:
+            html_parts.append(f"<p>{parse_markers(chunk, lang)}</p>")
+    return "".join(html_parts)
 
 
 def parse_markers(text, lang):

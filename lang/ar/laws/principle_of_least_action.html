@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مبدأ الفعل الأصغر — bridge42worlds</title>
+    <meta name="description" content="في العصور القديمة، لاحظ هيرون الإسكندري أن الضوء ينعكس بزوايا متساوية، وكأنه يسعى لسلوك أقصر طريق. في عام 1744، صاغ بيير لويس موبيرتيوس مبدأً عامًا: الطبيعة دائمًا ما تعمل بأكثر الطرق اقتصادًا. طور ليونارد أويلر وجوزيف-لويس لاغرانج الرياضيات: للأنظمة الميكانيكية، توجد دالة لاغرانج L (الفرق بين الطاقة الحركية والطاقة الكامنة)، وتكاملها عبر الزمن — الفعل S — يجب أن يكون أدنى عند المسار الحقيقي. أعاد ويليام هاملتون صياغة الميكانيكا من خلال الفعل، وأظهرت إيمي نويثر أن من ثبات (عدم تغير) الفعل بالنسبة للتحويلات تنبثق قوانين الحفظ — الطاقة، الزخم، الشحنة. اليوم، يُعد مبدأ الفعل الأصغر أساس الفيزياء النظرية بأكملها.">
+    <meta property="og:title" content="مبدأ الفعل الأصغر — bridge42worlds">
+    <meta property="og:description" content="في العصور القديمة، لاحظ هيرون الإسكندري أن الضوء ينعكس بزوايا متساوية، وكأنه يسعى لسلوك أقصر طريق. في عام 1744، صاغ بيير لويس موبيرتيوس مبدأً عامًا: الطبيعة دائمًا ما تعمل بأكثر الطرق اقتصادًا. طور ليونارد أويلر وجوزيف-لويس لاغرانج الرياضيات: للأنظمة الميكانيكية، توجد دالة لاغرانج L (الفرق بين الطاقة الحركية والطاقة الكامنة)، وتكاملها عبر الزمن — الفعل S — يجب أن يكون أدنى عند المسار الحقيقي. أعاد ويليام هاملتون صياغة الميكانيكا من خلال الفعل، وأظهرت إيمي نويثر أن من ثبات (عدم تغير) الفعل بالنسبة للتحويلات تنبثق قوانين الحفظ — الطاقة، الزخم، الشحنة. اليوم، يُعد مبدأ الفعل الأصغر أساس الفيزياء النظرية بأكملها.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/laws/principle_of_least_action.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/" class="active">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/about.html">about</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>مبدأ الفعل الأصغر<span class="law-type">مبدأ</span></h1>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">الطبيعة دائمًا ما تجد المسار الأقل 'تكلفة' — مثل المياه التي تنساب عبر أقصر وأسهل مجرى.</p><div class="practical-app"><strong>في الواقع:</strong> يسمح ببناء مسارات مثلى للمركبات الفضائية وتصميم آليات موفرة للطاقة.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">في العصور القديمة، لاحظ هيرون الإسكندري أن الضوء ينعكس بزوايا متساوية، وكأنه يسعى لسلوك أقصر طريق. في عام 1744، صاغ بيير لويس موبيرتيوس مبدأً عامًا: الطبيعة دائمًا ما تعمل بأكثر الطرق اقتصادًا. طور ليونارد أويلر وجوزيف-لويس لاغرانج الرياضيات: للأنظمة الميكانيكية، توجد دالة لاغرانج L (الفرق بين الطاقة الحركية والطاقة الكامنة)، وتكاملها عبر الزمن — الفعل S — يجب أن يكون أدنى عند المسار الحقيقي. أعاد ويليام هاملتون صياغة الميكانيكا من خلال الفعل، وأظهرت إيمي نويثر أن من ثبات (عدم تغير) الفعل بالنسبة للتحويلات تنبثق قوانين الحفظ — الطاقة، الزخم، الشحنة. اليوم، يُعد مبدأ الفعل الأصغر أساس الفيزياء النظرية بأكملها.</div>
+        <div class="fun-fact">💡 باستخدام هذا المبدأ، تُستنتج معادلات ماكسويل للكهرومغناطيسية ومعادلة شرودنغر في ميكانيكا الكم.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">ينص مبدأ الفعل الأصغر: من بين جميع الطرق الممكنة للحركة من النقطة أ إلى النقطة ب، 'تختار' المنظومة الطريقة التي فيها كمية خاصة — الفعل (يُرمز له بـ S) — تصل إلى القيمة الدنيا. الفعل أشبه بـ 'تكلفة' كلية للمسار: تتكون من الفرق بين طاقة الحركة الحركية (طاقة السرعة) والطاقة الكامنة (طاقة الموضع) في كل لحظة زمنية. 'تدفع' الطبيعة هذه التكلفة بأصغر طريقة ممكنة. الشرط δS = 0 (يُقرأ 'تغاير الفعل يساوي صفرًا') — هو طريقة رياضية للقول بأن المسار هو ذاته ذو الفعل المتطرف.</div>
+        <div class="section"><h2>كيف يعمل</h2><p>يُفسر هذا المبدأ لماذا تطير الكرة المقذوفة في مسار قطع مكافئ: القطع المكافئ هو المسار ذو الفعل الأصغر. إنه يعمل في كل مكان: من حركة الكواكب إلى تبعثر الجسيمات الأولية.</p></div>
+        <div class="fun-fact">💡 بنى ريتشارد فاينمان ميكانيكا الكم بافتراض أن الجسيم 'يُجرب' جميع المسارات، في حين أن المسار الكلاسيكي ذي الفعل الأصغر ليس إلا الأكثر احتمالًا. وقد اختبر طريقته على مسائل من أولمبياد مدرسي.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">يؤكد مبدأ الفعل الأصغر (أو مبدأ الفعل المستقر) أن ديناميكا المنظومة الفيزيائية تُحدد بالكامل باشتراط كون تابعي الفعل S = ∫ L dt متطرفًا، حيث L هو لاغرانجيان المنظومة. شرط التغاير δS = 0 يُعطي معادلات أويلر-لاغرانج. في الميكانيكا الكلاسيكية، L = T - V، وفي نظرية الحقل — كثافة اللاغرانجيان. تاريخيًا، يعود المبدأ إلى موبيرتيوس وأويلر ولاغرانج؛ وقد أظهر هاملتون التكافؤ مع الصياغة عبر معادلات هاملتون. ربطت نويثر (1918) تماثلات الفعل بالكميات المحفوظة. يُمتد المبدأ إلى ميكانيكا الكم عبر تكاملات المسار لفاينمان، حيث يُكبت إسهام المسارات ذات الفعل غير المتطرف بالتداخل.</div>
+        <div class="section"><h2>تاريخ الاكتشاف</h2><p>استخدم الميكانيكيون القدماء (هيرون) فكرة أقصر طريق للضوء. طرح بيير لويس موبيرتيوس في 1744 'قانون الاقتصاد' الغائي. أعاد ليونارد أويلر صياغته للميكانيكا، وأنشأ جوزيف-لويس لاغرانج (1788) الميكانيكا التحليلية على أساس حساب التغايرات. قدم ويليام روان هاملتون (1834–35) مفهوم الفعل كمفهوم أساسي. أثبتت إيمي نويثر في 1918 الصلة بين تماثلات الفعل وقوانين الحفظ. طور هنري بوانكاريه نظرية مبادئ التغاير في الميكانيكا السماوية والنظرية النسبية.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>ينطبق المبدأ على أي منظومات ذات عدد درجات حرية محدود أو غير محدود شريطة إمكانية اشتقاق معادلات الحركة من مبدأ تغايري. القيود: قد لا تكون المنظومات المبددة (ذات الاحتكاك) تغايرية دون إدخال متغيرات إضافية. في ميكانيكا الكم، يمثل مبدأ الفعل الأصغر حالة نهاية ℏ → 0، لكن التصحيحات الكمومية توصف بجمع على جميع المسارات. تعتمد النظريات الحديثة، بما فيها النظرية الوترية، على الصياغة اللاغرانجية.</p></div>
+        <div class="section"><h2>ملاحظات</h2><p>هل يُنتهك المبدأ في المنظومات غير القابلة للعكس وذات التبديد دون لاغرانجيات معممة؟; هل المبدأ أساسي أم خاصية ناشئة للاحتمالات الكمومية؟; كيف تُصاغ الفعل في نظريات الجاذبية الكمومية دون زمكان خلفي؟</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">S = \int_{t_1}^{t_2} L(q, \dot{q}, t) \, dt</div><div class="formula-meaning">S — الفعل (تابعي على المسارات)، L — اللاغرانجيان (دالة الإحداثيات q، السرعات \dot{q} والزمن t، وعادةً ما يكون الفرق بين الطاقة الحركية والطاقة الكامنة)، t_1, t_2 — اللحظتان الابتدائية والنهائية.</div></div><div class="formula"><div class="formula-render">\delta S = 0</div><div class="formula-meaning">δ — التغاير، δS = 0 تعني أن الفعل يأخذ قيمة متطرفة (عادةً دنيا) على المسار الحقيقي.</div></div><div class="formula"><div class="formula-render">\frac{d}{dt} \frac{\partial L}{\partial \dot{q}} - \frac{\partial L}{\partial q} = 0</div><div class="formula-meaning">q — إحداثي معمم، \dot{q} — مشتقته الزمنية، L — اللاغرانجيان. تصف هذه المعادلة تطور المنظومة مع الزمن.</div></div></div>
+</div>
+
+<div class="entity-body">
+<div class="actions" data-article-id="principle_of_least_action_ar_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="principle_of_least_action" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="feedback" id="feedback" data-article-id="principle_of_least_action_ar_page" data-entity-type="law"><div class="fb-title">كيف كانت القراءة؟ (يساعدنا على التحسين)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span><span class="fb-chip" data-opt="too_simple">مبسّط جدًا</span></div><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><textarea class="fb-comment" rows="2" placeholder="تعليق (اختياري)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">إرسال</button><span class="fb-status"></span></div></div>
+
+<div class="related-tags">
+    <strong>مفاهيم ذات صلة:</strong>
+    <a href="/lang/ar/tags/lagrangian.html" data-tag="lagrangian">لاغرانجيان</a> · <a href="/lang/ar/tags/spacetime.html" data-tag="spacetime">الزمكان</a> · <a href="/lang/ar/tags/quantum_field.html" data-tag="quantum_field">الحقل الكمومي</a>
+</div>
+<div class="related-tags"><strong>قوانين ذات صلة:</strong> <a href="/lang/ar/laws/noethers_theorem.html" class="law-chip" data-law="noethers_theorem">مبرهنة نويثر</a></div>
+<div class="related-tags"><strong>اكتشفه:</strong> Pierre Louis Maupertuis · Leonhard Euler · Joseph-Louis Lagrange · William Rowan Hamilton · <a href="/lang/ar/scientists/Emmy_Noether.html" class="text-scientist" data-scientist="Emmy Noether">Emmy Noether</a> · <a href="/lang/ar/scientists/Henri_Poincaré.html" class="text-scientist" data-scientist="Henri Poincaré">Henri Poincaré</a></div>
+
+<div class="mini-graph-label">🕸 الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> علماء</label></div>
+<div class="mini-graph" data-node="l:principle_of_least_action"><canvas id="minigraph"></canvas></div>
+</div>
+
+<h2 class="section-title">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="lagrangian,spacetime,quantum_field"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+<script src="/js/force-graph.js?v=eda3218e44"></script>
+<script src="/js/mini-graph.js?v=eda3218e44"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('principle_of_least_action', 'law', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>
