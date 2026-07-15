@@ -341,6 +341,16 @@ def related_row(label, links):
     return f'<div class="related-tags"><strong>{safe(label)}:</strong> {" · ".join(links)}</div>'
 
 
+def side_chip_group(label, chip_html_list):
+    """Колонка-плашек для правого сайдбара (.side-sci/.side-tag/.side-law уже стилизованы в
+    css/style.css под .article-side) — та же визуальная логика, что и на странице статьи,
+    применённая теперь и к странице тега/закона/учёного (юзер-фидбек 2026-07-15: "тот же
+    принцип... везде один подход"). chip_html_list — уже готовые <a class="side-...">...</a>."""
+    if not chip_html_list:
+        return ""
+    return f'<div class="side-tags-label">{safe(label)}</div>' + "".join(chip_html_list)
+
+
 def mini_graph_filters_html(lang):
     """Чекбоксы типов узлов для мини-графа на странице тега/закона/учёного — тот же набор
     типов (тег/закон/учёный), что и на большом графе-эксплорере, все включены по умолчанию.
@@ -1255,6 +1265,24 @@ def generate_law_page(law_id, lang):
         for rl in related_laws]
     related_laws_block = related_row(loc["related_laws"], related_laws_links)
 
+    # Правый сайдбар (эксперимент, тот же подход, что на странице статьи): учёные сверху,
+    # затем теги, затем связанные законы — те же .side-sci/.side-tag/.side-law чипы.
+    all_sci_ids = ((L.get("scientists") or []) + (L.get("influenced_by") or []))[:6]
+    side_sci_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="side-sci" '
+        f'data-scientist="{attr_safe(s)}">{safe(s)}</a>' for s in all_sci_ids if s in valid_scientist_ids()]
+    side_tag_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html" class="side-tag" data-tag="{attr_safe(t)}">'
+        f'{safe(tags_loc.get(t, {}).get("name", t))}</a>' for t in law_tags[:8] if t in valid_tag_ids()]
+    side_law_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(rl)}.html" class="side-law" data-law="{attr_safe(rl)}">'
+        f'{safe(laws[rl].get("name", rl))}</a>' for rl in related_laws[:6]]
+    entity_side_html = (
+        side_chip_group(loc["scientists"].rstrip(":"), side_sci_chips)
+        + side_chip_group(loc["tags"], side_tag_chips)
+        + side_chip_group(loc["related_laws"], side_law_chips)
+    )
+
     def sec(label, text):
         return f'<div class="section"><h2>{safe(label)}</h2><p>{safe(text)}</p></div>' if text else ""
     mini_html = f'<p class="mini-desc">{safe(L["mini"])}</p>' if L.get("mini") else ""
@@ -1300,6 +1328,7 @@ def generate_law_page(law_id, lang):
         law_name=safe(L.get("name", law_id)), law_type=safe(L.get("type", "")),
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html,
+        entity_side_html=entity_side_html,
         law_version_toggle=toggle,
         law_mini_html=mini_html,
         desc_popular_raw=attr_safe(raw_pop),

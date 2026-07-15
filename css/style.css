@@ -1024,6 +1024,11 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
    (130px) тесноты больше нет, поэтому список тоже сведён к 620px — единая видимая ширина
    везде (текст закона/тега = список статей = текст на странице статьи). */
 .entity-body { max-width: 620px; }
+/* Правый сайдбар для тега/закона/учёного (эксперимент, юзер-фидбек 2026-07-15: "тот же
+   принцип, что для статей... везде один подход") — reuse .article-wrapper/.article-side
+   flex-раскладку, но без левого .article-nav (тут нет оглавления), поэтому просто flex row. */
+.entity-wrapper { display: flex; gap: 20px; align-items: flex-start; }
+.entity-wrapper .entity-body { flex: 1 1 0; min-width: 0; }
 #search-results.entity-list { max-width: 620px; }
 #search-results.entity-list .card-title { font-size: 18px; }
 /* Главная — тот же узкий список (юзер-фидбек 2026-07-15): без отдельной колонки-даты и
