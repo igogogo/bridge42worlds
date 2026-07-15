@@ -1,0 +1,394 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Закон Кулона и закон Ома: от неподвижного заряда к текущему току</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s5 .measure{ font-size:.94rem; line-height:1.55; }
+#s5 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:100px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Два закона, одна структура</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Кулона: сила между зарядами</a></li>
+      <li><a href="#s3"><span class="n">03</span>Закон Ома: ток как поток</a></li>
+      <li><a href="#s4"><span class="n">04</span>Сквозной пример: от заряда к току</a></li>
+      <li><a href="#s5"><span class="n">05</span>Куда это ведёт: откуда берётся сопротивление</a></li>
+      <li><a href="#s6"><span class="n">06</span>Эксперимент дома</a></li>
+      <li><a href="#s7"><span class="n">07</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; электромагнетизм &middot; часть XIII</p>
+        <h1>Закон Кулона и закон Ома: от неподвижного заряда к текущему току</h1>
+        <p class="subtitle">Один закон описывает застывшие заряды, отталкивающиеся или притягивающиеся в пространстве; другой — что происходит, когда эти заряды срываются с места и начинают течь.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="90" cy="100" r="22" fill="none" stroke="var(--brass-fill)" stroke-width="2.5"/>
+          <text x="90" y="107" text-anchor="middle" font-family="Futura, sans-serif" font-size="20" fill="var(--brass)">+</text>
+          <circle id="heroCharge" cx="250" cy="100" r="18" fill="none" stroke="var(--steel-fill)" stroke-width="2.5"/>
+          <text id="heroChargeSign" x="250" y="107" text-anchor="middle" font-family="Futura, sans-serif" font-size="18" fill="var(--steel)">+</text>
+          <line id="heroArrow" x1="115" y1="100" x2="225" y2="100" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Шарль Кулон в 1785 году измерил, как электрическая сила убывает с расстоянием — точно так же, как гравитация (закон обратных квадратов, часть VII). Спустя 41 год Георг Ом обнаружил другую, не менее простую закономерность: ток через проводник прямо пропорционален приложенному напряжению. В этой заметке — оба закона с числами и то, как одна и та же величина — электрический заряд — связывает статику Кулона с динамикой Ома через простое определение тока: I = q/t.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Два закона, одна структура</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Формула</th><th>О чём</th></tr>
+          <tr><td>Кулона (1785)</td><td class="sym">F = kq&#8321;q&#8322;/r&sup2;</td><td>сила между двумя НЕПОДВИЖНЫМИ зарядами</td></tr>
+          <tr><td>Ома (1826)</td><td class="sym">I = U/R</td><td>ток через проводник под напряжением</td></tr>
+        </table>
+        <p>Кулон работает со СТАТИЧЕСКИМИ зарядами — просто силой притяжения/отталкивания в пространстве, без движения. Ом описывает ДИНАМИКУ — что происходит, когда заряды организованно движутся по проводнику под действием разности потенциалов. Мост между ними — простое определение: сила тока I — это количество заряда q, проходящее через сечение проводника за время t: I&nbsp;=&nbsp;q/t (подробный численный переход — §4).</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Кулона: сила между зарядами</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Сила взаимодействия двух точечных зарядов пропорциональна их произведению и обратно пропорциональна квадрату расстояния:</p>
+        <div class="plate">
+          <div class="eq-body">F = k&middot;q&#8321;q&#8322;/r&sup2;</div>
+          <div class="cap">k &asymp; 9&times;10&#8313; Н&middot;м&sup2;/Кл&sup2; — постоянная Кулона (округлено для удобного счёта, как g&asymp;10 в механике)</div>
+        </div>
+        <div class="anim-strip" aria-hidden="true">
+          <svg viewBox="0 0 300 100" style="position:absolute;inset:0;width:100%;height:100%">
+            <circle cx="60" cy="50" r="18" fill="none" stroke="var(--brass-fill)" stroke-width="2.5"/>
+            <text x="60" y="57" text-anchor="middle" font-family="Futura, sans-serif" font-size="16" fill="var(--brass)">+</text>
+            <circle id="pairCharge" cx="240" cy="50" r="14" fill="none" stroke="var(--steel-fill)" stroke-width="2.5"/>
+            <text id="pairChargeSign" x="240" y="56" text-anchor="middle" font-family="Futura, sans-serif" font-size="14" fill="var(--steel)">&minus;</text>
+          </svg>
+          <div class="anim-label left">разноимённые — притягиваются; одноимённые — оттолкнутся</div>
+        </div>
+        <p>Численный пример: два заряда по q&#8321;&nbsp;=&nbsp;q&#8322;&nbsp;=&nbsp;1&nbsp;мкКл (микрокулон) находятся на расстоянии r&nbsp;=&nbsp;3&nbsp;см&nbsp;=&nbsp;0.03&nbsp;м. Найдите силу их взаимодействия.</p>
+        <div class="eq"><div class="eq-body">F = 9&times;10&#8313;&middot;(10&#8315;&#8310;)&sup2;/0.03&sup2; = 9&times;10&#8313;&middot;10&#8315;&sup1;&sup2;/9&times;10&#8315;&#8308; = <strong>10&nbsp;Н</strong></div><div class="eq-tag">(1)</div></div>
+        <div class="callout brass">
+          <span class="tag">Электричество умопомрачительно сильнее гравитации</span>
+          <p>Сравните: гравитационное притяжение между двумя телами по 1 кг на расстоянии 1 м — примерно 6.674&times;10&#8315;&sup1;&sup9;&nbsp;Н, ничтожно мало. Электрическая сила между двумя электронами на том же расстоянии — примерно 2.3&times;10&#8315;&sup2;&#8312;&nbsp;Н, но это ВСЁ РАВНО в ~10&#8308;&#8304; (десять тысяч триллионов триллионов триллионов) раз сильнее их взаимного гравитационного притяжения. Единственная причина, почему в повседневной жизни гравитация «главнее» электричества — то, что обычная материя почти идеально электрически нейтральна (заряды скомпенсированы), а массы складываются без такой компенсации.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Закон Ома: ток как поток</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Сила тока прямо пропорциональна напряжению и обратно пропорциональна сопротивлению:</p>
+        <div class="plate">
+          <div class="eq-body">I = U/R</div>
+          <div class="cap">U [В], R [Ом], I [А]</div>
+        </div>
+        <p>Классическая аналогия — водопровод: напряжение U — это «напор» (разница давлений на концах трубы), сопротивление R — узость самой трубы, ток I — сколько воды в секунду реально протекает. Широкая труба (маленькое R) при том же напоре пропускает больше воды (тока); узкая труба (большое R) — меньше.</p>
+        <p>Численный пример: автомобильный аккумулятор (U&nbsp;=&nbsp;12&nbsp;В) подключён к лампочке с сопротивлением R&nbsp;=&nbsp;4&nbsp;Ом. Найдите ток через лампочку.</p>
+        <div class="eq"><div class="eq-body">I = U/R = 12/4 = <strong>3&nbsp;А</strong></div><div class="eq-tag">(2)</div></div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Сквозной пример: от заряда к току</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Свяжем оба закона напрямую. Заряд q&nbsp;=&nbsp;2&nbsp;Кл равномерно перетекает через проводник за время t&nbsp;=&nbsp;4&nbsp;с (это и есть определение тока — §1):</p>
+        <div class="eq"><div class="eq-body">I = q/t = 2/4 = <strong>0.5&nbsp;А</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Теперь применим закон Ома: какое напряжение нужно, чтобы через сопротивление R&nbsp;=&nbsp;10&nbsp;Ом протекал именно такой ток?</p>
+        <div class="eq"><div class="eq-body">U = I&middot;R = 0.5&middot;10 = <strong>5&nbsp;В</strong></div><div class="eq-tag">(4)</div></div>
+        <p>Вся цепочка рассуждений — от статического заряда q (мир Кулона) через определение тока I=q/t к закону Ома (мир движущихся зарядов) — показывает, что это не два изолированных факта, а один и тот же объект (электрический заряд), рассмотренный сначала в покое, потом в движении.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Куда это ведёт: откуда берётся сопротивление</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Закон Ома — не фундаментальный закон природы вроде закона Кулона, а эмпирическая закономерность, справедливая для многих (но не всех) материалов. На микроуровне сопротивление возникает из-за столкновений движущихся электронов с колеблющимися атомами кристаллической решётки проводника — чем сильнее решётка «трясётся» (выше температура), тем чаще столкновения, тем выше сопротивление. Именно поэтому сопротивление большинства металлов растёт с нагревом.</p>
+        <p>При столкновениях кинетическая энергия направленного движения электронов превращается в тепло — эта же энергия связана с законом Джоуля-Ленца, P&nbsp;=&nbsp;I&sup2;R (мощность, рассеиваемая в виде тепла), прямое применение закона сохранения энергии (часть II) к электрической цепи. В нашем примере §3: P&nbsp;=&nbsp;3&sup2;&middot;4&nbsp;=&nbsp;36&nbsp;Вт — именно столько тепла лампочка выделяет ежесекундно.</p>
+        <div class="callout steel">
+          <span class="tag">Сверхпроводники нарушают закон Ома — в хорошем смысле</span>
+          <p>При охлаждении некоторых материалов ниже критической температуры (иногда всего на несколько градусов выше абсолютного нуля, иногда — для «высокотемпературных» сверхпроводников — при температуре жидкого азота) электрическое сопротивление падает РОВНО до нуля. Ток может течь по замкнутому сверхпроводящему кольцу практически вечно, без всякого напряжения — прямое противоречие с U&nbsp;=&nbsp;IR при R&nbsp;=&nbsp;0 и I&nbsp;&ne;&nbsp;0. Оба закона этой заметки уже встречались в единой картине уравнений Максвелла (часть IV) — они частные случаи более общей теории электромагнитного поля.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/coulombs_law.html">Закон Кулона</a> ·
+          <a href="/lang/ru/laws/ohms_law.html">Закон Ома</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; расчёска притягивает воду и бумагу</span>
+          <p>Расчешите сухие волосы пластиковой расчёской несколько раз (или потрите воздушный шарик о шерстяной свитер), затем поднесите её к мелким кусочкам бумаги или к тонкой струйке воды из-под крана.</p>
+          <p><span class="qlabel">Что заметить</span> кусочки бумаги подпрыгивают и прилипают к расчёске, струйка воды заметно отклоняется — трение «сорвало» электроны с одной поверхности на другую, зарядив расчёску, а закон Кулона (§2) заставляет её притягивать любые заряженные (или поляризующиеся, как вода) объекты поблизости.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; карандашный грифель как переменное сопротивление</span>
+          <p>Если дома есть простая схема «батарейка-лампочка(светодиод)-провода» (или соберите её из батарейки-таблетки, светодиода и двух проводков), вставьте в разрыв цепи грифель простого карандаша (заточенный с двух концов) вместо одного из проводков.</p>
+          <p><span class="qlabel">Что заметить</span> светодиод горит тусклее, чем при прямом соединении проводом — грифель (в отличие от металла) обладает заметным сопротивлением. Если есть возможность зажать контакты в разных точках вдоль грифеля, меняя длину рабочего участка — яркость будет меняться на глазах: длиннее путь через грифель — больше R — меньше I по закону Ома (§3), тусклее свет.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Расстояние между двумя зарядами увеличили вдвое. Во сколько раз изменилась сила их взаимодействия?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> r<sub>нов</sub>&nbsp;=&nbsp;2r.</p>
+            <p><span class="qlabel">Закон</span> закон Кулона (§2): F&nbsp;&prop;&nbsp;1/r&sup2;.</p>
+            <p><span class="qlabel">Решение</span> F<sub>нов</sub>/F&nbsp;=&nbsp;r&sup2;/(2r)&sup2;&nbsp;=&nbsp;1/4.</p>
+            <p><span class="qlabel">Ответ</span> <strong>уменьшилась в 4 раза</strong> — та же математика, что у гравитации (часть VII).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Два заряда по 2 мкКл находятся на расстоянии 6 см. Найдите силу их взаимодействия (k ≈ 9×10⁹ Н·м²/Кл²).</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> q&#8321;&nbsp;=&nbsp;q&#8322;&nbsp;=&nbsp;2&times;10&#8315;&#8310;&nbsp;Кл, r&nbsp;=&nbsp;0.06&nbsp;м.</p>
+            <p><span class="qlabel">Закон</span> закон Кулона (§2): F&nbsp;=&nbsp;kq&#8321;q&#8322;/r&sup2;.</p>
+            <p><span class="qlabel">Решение</span> F&nbsp;=&nbsp;9&times;10&#8313;&middot;4&times;10&#8315;&sup1;&sup2;/3.6&times;10&#8315;&sup3;&nbsp;=&nbsp;3.6&times;10&#8315;&sup2;/3.6&times;10&#8315;&sup3;&nbsp;=&nbsp;10&nbsp;Н.</p>
+            <p><span class="qlabel">Ответ</span> <strong>10 Н</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Через резистор сопротивлением 5 Ом течёт ток 4 А. Найдите напряжение на резисторе и мощность, выделяемую в виде тепла.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> R&nbsp;=&nbsp;5&nbsp;Ом, I&nbsp;=&nbsp;4&nbsp;А.</p>
+            <p><span class="qlabel">Закон</span> закон Ома (§3): U&nbsp;=&nbsp;IR; закон Джоуля-Ленца (§5): P&nbsp;=&nbsp;I&sup2;R.</p>
+            <p><span class="qlabel">Решение</span> U&nbsp;=&nbsp;4&middot;5&nbsp;=&nbsp;20&nbsp;В; P&nbsp;=&nbsp;4&sup2;&middot;5&nbsp;=&nbsp;80&nbsp;Вт.</p>
+            <p><span class="qlabel">Ответ</span> <strong>U = 20 В, P = 80 Вт</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Заряд 6 Кл прошёл через проводник за 3 секунды. Какое сопротивление нужно, чтобы для такого тока хватило напряжения 4 В?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> q&nbsp;=&nbsp;6&nbsp;Кл, t&nbsp;=&nbsp;3&nbsp;с, U&nbsp;=&nbsp;4&nbsp;В.</p>
+            <p><span class="qlabel">Закон</span> определение тока (§1, §4): I&nbsp;=&nbsp;q/t; закон Ома: R&nbsp;=&nbsp;U/I.</p>
+            <p><span class="qlabel">Решение</span> I&nbsp;=&nbsp;6/3&nbsp;=&nbsp;2&nbsp;А; R&nbsp;=&nbsp;4/2&nbsp;=&nbsp;2&nbsp;Ом.</p>
+            <p><span class="qlabel">Ответ</span> <strong>2 Ом</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему обычная материя вокруг нас почти не проявляет электрических сил на больших расстояниях, хотя электрическая сила в ~10⁴⁰ раз сильнее гравитационной?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §2 — сравнение силы Кулона и силы тяготения.</p>
+            <p><span class="qlabel">Решение</span> обычные тела почти идеально электрически нейтральны: положительные заряды ядер практически в точности компенсируются отрицательными зарядами электронов, поэтому суммарная электрическая сила между двумя нейтральными телами близка к нулю. Гравитация же не имеет «отрицательной массы» для компенсации — массы всех частиц складываются без исключения, поэтому на больших масштабах гравитация побеждает, несмотря на свою фундаментальную слабость.</p>
+            <p><span class="qlabel">Ответ</span> <strong>электрическая нейтральность обычной материи</strong> — заряды скомпенсированы, массы — нет.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Coulomb%20Ohm%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XIII серии, электромагнетизм</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2/hero: два заряда — если одноимённые, отталкиваются (расходятся); если разноимённые, притягиваются.
+  // Честное численное покачивание позиции по циклу, синхронное со сменой знака заряда.
+  function wireChargePair(chargeEl, signEl, x0, x1) {
+    var PERIOD = 6000;
+    var lastTs = null;
+    var attracting = true;
+    setInterval(function(){
+      attracting = !attracting;
+      signEl.textContent = attracting ? '−' : '+';
+    }, PERIOD);
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % PERIOD) / PERIOD;
+      var t = phase < 0.5 ? phase * 2 : (1 - phase) * 2; // туда-обратно за один период
+      var target = attracting ? x0 + (x1 - x0) * 0.35 : x1; // притяжение — сближаются; отталкивание — расходятся
+      var x = x1 + (target - x1) * Math.sin(t * Math.PI / 2);
+      chargeEl.setAttribute('cx', x.toFixed(1));
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var heroCharge = document.getElementById('heroCharge');
+  var heroSign = document.getElementById('heroChargeSign');
+  if (heroCharge) wireChargePair(heroCharge, heroSign, 115, 250);
+
+  var pairCharge = document.getElementById('pairCharge');
+  var pairSign = document.getElementById('pairChargeSign');
+  if (pairCharge) wireChargePair(pairCharge, pairSign, 80, 240);
+})();
+</script>
+</body>
+</html>
