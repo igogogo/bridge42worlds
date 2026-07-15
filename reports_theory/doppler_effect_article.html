@@ -1,0 +1,429 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Эффект Доплера: почему сирена меняет тон, а звёзды — цвет</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: источник движется, волны сжимаются впереди/растягиваются позади ---------- */
+.wave-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.wave-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Эффект в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Звук: сирена скорой помощи</a></li>
+      <li><a href="#s3"><span class="n">03</span>Свет: красное и синее смещение</a></li>
+      <li><a href="#s4"><span class="n">04</span>Сквозной пример: как работает радар ГИБДД</a></li>
+      <li><a href="#s5"><span class="n">05</span>Куда это ведёт: закон Хаббла</a></li>
+      <li><a href="#s6"><span class="n">06</span>Эксперимент дома</a></li>
+      <li><a href="#s7"><span class="n">07</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; оптика и акустика &middot; часть XVI</p>
+        <h1>Эффект Доплера: почему сирена меняет тон, а звёзды — цвет</h1>
+        <p class="subtitle">Один и тот же геометрический эффект — источник волны сближается или удаляется от вас — заставляет сирену «петь» и позволяет astronомам взвесить всю наблюдаемую Вселенную.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <circle id="heroSource" cx="170" cy="100" r="8" fill="var(--brass-fill)"/>
+          <g id="heroWaves"></g>
+          <text x="170" y="185" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">волны спереди сжаты, сзади растянуты</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1842 году Кристиан Доплер предсказал: частота волны, которую вы слышите или видите, зависит от того, как источник движется относительно вас. Источник, летящий вам навстречу, «поджимает» волны впереди себя — вы слышите более высокий тон или видите более синий свет. Тот же эффект, применённый не к сирене, а к далёким галактикам, привёл к открытию расширяющейся Вселенной. В этой заметке — звуковой и световой варианты эффекта с числами, и то, как он превратился в инструмент измерения скорости разбегания космоса.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Эффект в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Волна</th><th>Приближается</th><th>Удаляется</th></tr>
+          <tr><td>Звук</td><td>тон выше (частота растёт)</td><td>тон ниже (частота падает)</td></tr>
+          <tr><td>Свет</td><td>синее смещение (частота растёт)</td><td>красное смещение (частота падает)</td></tr>
+        </table>
+        <p>Наглядная аналогия из описания самого Доплера: если вы бросаете камешек в пруд каждую секунду, стоя на месте, круги расходятся равномерно. Если вы при этом ИДЁТЕ вперёд, круги впереди вас оказываются сближены (вы почти догоняете предыдущий), а позади — растянуты. Ровно то же происходит с гребнями звуковой или световой волны, когда источник движется.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Звук: сирена скорой помощи</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка (движущийся источник).</strong> Частота, которую слышит неподвижный наблюдатель, когда источник приближается со скоростью v<sub>s</sub>:</p>
+        <div class="plate">
+          <div class="eq-body">f' = f&middot;c/(c &minus; v<sub>s</sub>)</div>
+          <div class="cap">c &asymp; 340 м/с — скорость звука в воздухе; знак меняется на «+» при удалении источника</div>
+        </div>
+        <div class="wave-fig" aria-hidden="true">
+          <svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="70" x2="380" y2="70" stroke="var(--rule)" stroke-width="1"/>
+            <circle id="sourceDot" cx="200" cy="70" r="8" fill="var(--brass-fill)"/>
+            <g id="waveGroup"></g>
+          </svg>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>частота спереди</b><span data-readout="fFront">1000</span> Гц</span>
+          <span><b>частота сзади</b><span data-readout="fBack">818</span> Гц</span>
+        </div>
+        <p>Численный пример: сирена скорой помощи излучает f&nbsp;=&nbsp;900&nbsp;Гц, машина приближается со скоростью v<sub>s</sub>&nbsp;=&nbsp;34&nbsp;м/с (122&nbsp;км/ч). Найдите частоту, которую слышит человек впереди.</p>
+        <div class="eq"><div class="eq-body">f' = 900&middot;340/(340&minus;34) = 900&middot;340/306 = 900&middot;(10/9) = <strong>1000&nbsp;Гц</strong></div><div class="eq-tag">(1)</div></div>
+        <p>После того как машина проедет мимо, частота резко упадёт (удаление, знак «+» в знаменателе) — именно этот скачок тона вниз в момент проезда мимо вас все слышали хотя бы раз в жизни.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Свет: красное и синее смещение</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Для скоростей, много меньших скорости света (v&nbsp;&ll;&nbsp;c), сдвиг длины волны пропорционален скорости:</p>
+        <div class="plate">
+          <div class="eq-body">&Delta;&lambda;/&lambda; = v/c</div>
+          <div class="cap">v &gt; 0 при УДАЛЕНИИ источника (красное смещение, &lambda; растёт); v &lt; 0 при сближении (синее смещение)</div>
+        </div>
+        <p>Численный пример: спектральная линия звезды в лаборатории имеет длину волны &lambda;&nbsp;=&nbsp;500&nbsp;нм. У далёкой звезды та же линия наблюдается на &lambda;'&nbsp;=&nbsp;505&nbsp;нм. Найдите скорость звезды относительно нас.</p>
+        <div class="eq"><div class="eq-body">v = c&middot;&Delta;&lambda;/&lambda; = (3&times;10&#8312;)&middot;5/500 = <strong>3&times;10&#8310; м/с</strong> (3000&nbsp;км/с)</div><div class="eq-tag">(2)</div></div>
+        <p>Линия сдвинулась в сторону БОЛЬШИХ длин волн (в красную сторону спектра) — значит, звезда УДАЛЯЕТСЯ от нас со скоростью 3000&nbsp;км/с (1% скорости света). Астрономы измеряют скорости звёзд и галактик именно так — не гоняясь за ними с радаром, а сравнивая положение знакомых спектральных линий (например, линий водорода) с их лабораторными значениями.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Сквозной пример: как работает радар ГИБДД</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Радар не просто ловит доплеровский сдвиг один раз — сигнал проходит ДВОЙНОЙ путь: радар излучает волну на автомобиль (первый сдвиг, автомобиль «видит» смещённую частоту как движущийся наблюдатель), автомобиль отражает её обратно (второй сдвиг, теперь уже автомобиль — движущийся источник для неподвижного радара). Оба сдвига складываются, и для v&nbsp;&ll;&nbsp;c общая формула упрощается до:</p>
+        <div class="eq"><div class="eq-body">&Delta;f/f &asymp; 2v/c</div><div class="eq-tag">(3)</div></div>
+        <p>Численный пример: радар на частоте f&nbsp;=&nbsp;10&nbsp;ГГц измеряет сдвиг от автомобиля, приближающегося со скоростью v&nbsp;=&nbsp;30&nbsp;м/с (108&nbsp;км/ч). Найдите доплеровский сдвиг частоты.</p>
+        <div class="eq"><div class="eq-body">&Delta;f = 2vf/c = 2&middot;30&middot;(10&times;10&#8313;)/(3&times;10&#8312;) = <strong>2000&nbsp;Гц</strong> (2&nbsp;кГц)</div><div class="eq-tag">(4)</div></div>
+        <p>Электроника радара измеряет именно эти 2&nbsp;кГц сдвига (ничтожная доля от 10&nbsp;ГГц несущей частоты, но легко измеримая современной электроникой) и мгновенно пересчитывает их обратно в скорость по той же формуле — весь расчёт занимает доли секунды.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Куда это ведёт: закон Хаббла</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В 1920-х годах Эдвин Хаббл, измеряя доплеровское красное смещение далёких галактик тем же методом из §3, заметил закономерность: ПОЧТИ ВСЕ галактики удаляются от нас, и чем дальше галактика, тем БЫСТРЕЕ она удаляется. Это открытие — прямая экспериментальная основа теории расширяющейся Вселенной и Большого взрыва.</p>
+        <div class="callout brass">
+          <span class="tag">Важная тонкость — это не совсем «обычный» Доплер</span>
+          <p>Строго говоря, космологическое красное смещение далёких галактик — это НЕ движение галактик СКВОЗЬ пространство (как у сирены или автомобиля), а растяжение самого ПРОСТРАНСТВА между нами и галактикой по мере расширения Вселенной, которое растягивает и длину волны света, летящего через это пространство. На малых расстояниях и скоростях математика неотличима от обычного эффекта Доплера (§3), но при очень больших скоростях (сравнимых со скоростью света) для точных расчётов нужна уже общая теория относительности, а не просто формула Доплера. Полный разбор закона Хаббла — следующая заметка серии, про космологию.</p>
+        </div>
+        <p>На сайте это отдельный закон, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/doppler_effect.html">Эффект Доплера</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; жужжащая игрушка на верёвке</span>
+          <p>Привяжите небольшой звучащий предмет (например, телефон с включённым будильником/непрерывным звуком, завёрнутый в носок для мягкости, или специальную «доплеровскую» жужжалку-свисток на верёвке, если есть) к прочной верёвке длиной около метра и раскрутите над головой по кругу с постоянной скоростью, стоя на открытом пространстве.</p>
+          <p><span class="qlabel">Что заметить</span> тон звука заметно «плавает» — выше, когда источник летит В ВАШУ сторону (приближается к вам по касательной окружности), ниже, когда улетает от вас на противоположной стороне круга. Это тот же эффект, что у сирены (§2), только источник движется по кругу, а не по прямой.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; послушайте проезжающий транспорт осознанно</span>
+          <p>В следующий раз, когда мимо будет проезжать поезд, машина с открытым окном (играющая музыку с чёткой нотой) или сирена — прислушайтесь специально к моменту, когда источник проезжает мимо вас.</p>
+          <p><span class="qlabel">Что заметить</span> резкий скачок тона ВНИЗ ровно в момент, когда источник оказывается точно напротив вас (v<sub>вдоль луча</sub> меняет знак с «приближение» на «удаление») — эффект, который вы наверняка слышали тысячи раз, не задумываясь, что это именно формула §2 в чистом виде.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Поезд гудит на частоте 500 Гц и удаляется от вас со скоростью 20 м/с (скорость звука 340 м/с). Какую частоту вы слышите?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> f&nbsp;=&nbsp;500&nbsp;Гц, v<sub>s</sub>&nbsp;=&nbsp;20&nbsp;м/с (удаление), c&nbsp;=&nbsp;340&nbsp;м/с.</p>
+            <p><span class="qlabel">Закон</span> эффект Доплера для удаляющегося источника (§2): f'&nbsp;=&nbsp;f&middot;c/(c+v<sub>s</sub>).</p>
+            <p><span class="qlabel">Решение</span> f'&nbsp;=&nbsp;500&middot;340/360&nbsp;&asymp;&nbsp;472.2&nbsp;Гц.</p>
+            <p><span class="qlabel">Ответ</span> <strong>≈472 Гц</strong> — ниже исходных 500 Гц, как и ожидается при удалении.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Спектральная линия галактики (лабораторная длина волны 400 нм) наблюдается смещённой до 404 нм. Найдите скорость галактики и направление (приближается/удаляется).</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> &lambda;&nbsp;=&nbsp;400&nbsp;нм, &lambda;'&nbsp;=&nbsp;404&nbsp;нм.</p>
+            <p><span class="qlabel">Закон</span> формула Доплера для света (§3): v&nbsp;=&nbsp;c&Delta;&lambda;/&lambda;.</p>
+            <p><span class="qlabel">Решение</span> &Delta;&lambda;&nbsp;=&nbsp;4&nbsp;нм; v&nbsp;=&nbsp;(3&times;10&#8312;)&middot;4/400&nbsp;=&nbsp;3&times;10&#8310;&nbsp;м/с&nbsp;=&nbsp;3000&nbsp;км/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>3000 км/с, удаляется</strong> (длина волны выросла — красное смещение).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Радар на частоте 20 ГГц регистрирует сдвиг 4 кГц от приближающегося автомобиля. Найдите скорость автомобиля.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> f&nbsp;=&nbsp;20&nbsp;ГГц, &Delta;f&nbsp;=&nbsp;4&nbsp;кГц.</p>
+            <p><span class="qlabel">Закон</span> формула радара (§4): &Delta;f&nbsp;=&nbsp;2vf/c.</p>
+            <p><span class="qlabel">Решение</span> v&nbsp;=&nbsp;&Delta;f&middot;c/(2f)&nbsp;=&nbsp;4000&middot;(3&times;10&#8312;)/(2&middot;20&times;10&#8313;)&nbsp;=&nbsp;1.2&times;10&#185;&sup2;/4&times;10&#185;&#8304;&nbsp;=&nbsp;30&nbsp;м/с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>30 м/с</strong> (108 км/ч).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Почему при использовании радара сдвиг частоты вычисляют по формуле с множителем 2, а не по обычной однократной формуле Доплера?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §4 — механика работы радара.</p>
+            <p><span class="qlabel">Решение</span> сигнал испытывает Доплеровский сдвиг ДВАЖДЫ: сначала при распространении от радара к движущемуся автомобилю (автомобиль как движущийся приёмник видит смещённую частоту), затем при отражении обратно от автомобиля к радару (автомобиль теперь выступает как движущийся ИСТОЧНИК отражённой волны для неподвижного радара-приёмника). Два одинаковых по знаку сдвига складываются, отсюда множитель 2.</p>
+            <p><span class="qlabel">Ответ</span> <strong>двойное прохождение сигнала</strong> — туда до цели и обратно до радара.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Чем принципиально отличается космологическое красное смещение далёких галактик от «обычного» эффекта Доплера у сирены?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §5, важная тонкость закона Хаббла.</p>
+            <p><span class="qlabel">Решение</span> у сирены источник физически движется СКВОЗЬ неподвижное пространство/воздух. У далёких галактик смещение вызвано растяжением самого пространства между нами и галактикой по мере расширения Вселенной — галактика не обязательно «летит» сквозь пространство в привычном смысле, скорее пространство между нами увеличивается, растягивая и длину волны проходящего через него света.</p>
+            <p><span class="qlabel">Ответ</span> <strong>движение сквозь пространство (сирена) против растяжения самого пространства (космологическое смещение)</strong> — на малых скоростях математически неразличимо, на больших — требует общей теории относительности.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Doppler%20effect%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XVI серии, оптика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2: волновые фронты честно расширяются от текущей позиции источника на каждый момент излучения —
+  // впереди по движению источника кольца буквально гуще (меньше расстояние между centрами), не рисуночная иллюзия.
+  var svg = document.getElementById('waveGroup');
+  var sourceDot = document.getElementById('sourceDot');
+  var fFrontEl = document.querySelector('[data-readout="fFront"]');
+  var fBackEl = document.querySelector('[data-readout="fBack"]');
+
+  var C_SOUND = 340, V_SOURCE = 34, F0 = 900;
+  var X0 = 60, X1 = 340, Y = 70;
+  var PERIOD_MS = 6000;
+  var EMIT_INTERVAL = 500; // виртуальный «щелчок» источника каждые 500мс модельного времени
+
+  var emissions = []; // {emitTime, emitX}
+  var lastEmitTs = 0;
+  var lastTs = null;
+
+  function tick(ts){
+    if (lastTs === null) { lastTs = ts; lastEmitTs = ts; }
+    var loopedTs = ts % PERIOD_MS;
+    var sourceX = X0 + (X1 - X0) * (loopedTs / PERIOD_MS);
+    if (sourceDot) sourceDot.setAttribute('cx', sourceX.toFixed(1));
+
+    if (ts - lastEmitTs > EMIT_INTERVAL) {
+      lastEmitTs = ts;
+      emissions.push({ t: ts, x: sourceX });
+      if (emissions.length > 14) emissions.shift();
+    }
+
+    var html = '';
+    emissions.forEach(function(e){
+      var age = (ts - e.t) / 1000; // секунд с момента излучения
+      var r = age * 22; // масштаб скорости расширения фронта на экране
+      if (r > 0 && r < 200) {
+        html += '<circle cx="' + e.x.toFixed(1) + '" cy="' + Y + '" r="' + r.toFixed(1) + '" fill="none" stroke="var(--steel-fill)" stroke-width="1.5" opacity="' + Math.max(0, 1 - r / 200).toFixed(2) + '"/>';
+      }
+    });
+    if (svg) svg.innerHTML = html;
+
+    if (fFrontEl) fFrontEl.textContent = Math.round(F0 * C_SOUND / (C_SOUND - V_SOURCE));
+    if (fBackEl) fBackEl.textContent = Math.round(F0 * C_SOUND / (C_SOUND + V_SOURCE));
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+
+  // hero: упрощённая декоративная версия того же принципа — несимметричные кольца вокруг движущейся точки.
+  var heroSvg = document.getElementById('heroWaves');
+  var heroSource = document.getElementById('heroSource');
+  var hEmissions = [];
+  var hLastEmit = 0;
+  var HX0 = 60, HX1 = 280, HY = 100;
+  function heroTick(ts){
+    var loopedTs = ts % PERIOD_MS;
+    var sx = HX0 + (HX1 - HX0) * (loopedTs / PERIOD_MS);
+    if (heroSource) heroSource.setAttribute('cx', sx.toFixed(1));
+    if (ts - hLastEmit > 500) {
+      hLastEmit = ts;
+      hEmissions.push({ t: ts, x: sx });
+      if (hEmissions.length > 10) hEmissions.shift();
+    }
+    var html = '';
+    hEmissions.forEach(function(e){
+      var age = (ts - e.t) / 1000;
+      var r = age * 18;
+      if (r > 0 && r < 140) {
+        html += '<circle cx="' + e.x.toFixed(1) + '" cy="' + HY + '" r="' + r.toFixed(1) + '" fill="none" stroke="var(--steel-fill)" stroke-width="1.3" opacity="' + Math.max(0, 1 - r / 140).toFixed(2) + '"/>';
+      }
+    });
+    if (heroSvg) heroSvg.innerHTML = html;
+    requestAnimationFrame(heroTick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(heroTick);
+})();
+</script>
+</body>
+</html>
