@@ -1,0 +1,437 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ампер и Фарадей: ток рождает поле, поле рождает ток</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+.compass-strip{ height:110px; }
+.compass-wire{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.compass-body{ position:absolute; left:14px; top:50%; margin-top:-20px; width:40px; height:40px; border-radius:50%; border:2px solid var(--ink-soft); background:var(--paper); }
+.compass-needle{ position:absolute; left:50%; top:50%; width:26px; height:3px; margin-left:-13px; margin-top:-1.5px; background:var(--brass-fill); transform-origin:center; }
+
+.gen-strip{ height:110px; }
+.gen-coil{ position:absolute; left:50%; top:50%; width:60px; height:44px; margin-left:-30px; margin-top:-22px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.6; }
+.gen-magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.gen-magnet .n{ flex:1; background:var(--brass-fill); }
+.gen-magnet .s{ flex:1; background:var(--steel-fill); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Два закона, одна пара</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Ампера: ток создаёт поле</a></li>
+      <li><a href="#s3"><span class="n">03</span>Закон Фарадея: поле создаёт ток</a></li>
+      <li><a href="#s4"><span class="n">04</span>Правило Ленца: природа сопротивляется</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: мотор наоборот — генератор</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: трансформатор без движущихся частей</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; электромагнетизм &middot; часть XIV</p>
+        <h1>Ампер и Фарадей: ток рождает поле, поле рождает ток</h1>
+        <p class="subtitle">Два закона-зеркала: один говорит, что электричество умеет создавать магнетизм, второй — что магнетизм умеет создавать электричество. Вместе они и есть весь принцип работы генератора на электростанции.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <line x1="170" y1="30" x2="170" y2="170" stroke="var(--ink)" stroke-width="3"/>
+          <circle id="heroRing1" cx="170" cy="100" r="30" fill="none" stroke="var(--steel-fill)" stroke-width="2" opacity="0"/>
+          <circle id="heroRing2" cx="170" cy="100" r="50" fill="none" stroke="var(--steel-fill)" stroke-width="2" opacity="0"/>
+          <circle id="heroRing3" cx="170" cy="100" r="70" fill="none" stroke="var(--steel-fill)" stroke-width="2" opacity="0"/>
+          <text x="170" y="190" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">ток → кольца магнитного поля</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В 1820 году Ганс Эрстед случайно заметил, что провод с током отклоняет стрелку компаса — и за одну неделю Андре-Мари Ампер построил из этого количественный закон. Одиннадцать лет спустя Майкл Фарадей нашёл обратную связь: движущийся магнит наводит ток в проводе. Эти два закона — не совпадение, а зеркальное отражение друг друга, и вместе они образуют принцип работы электродвигателей, генераторов и трансформаторов. В этой заметке — оба закона с числами и разбор того, почему мотор и генератор — по сути одно и то же устройство.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Два закона, одна пара</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Формула</th><th>Направление эффекта</th></tr>
+          <tr><td>Ампера (1820)</td><td class="sym">&oint;B&middot;dl = &mu;&#8320;I</td><td>ток&nbsp;&rarr;&nbsp;магнитное поле</td></tr>
+          <tr><td>Фарадея (1831)</td><td class="sym">&epsilon; = &minus;d&Phi;/dt</td><td>меняющееся поле&nbsp;&rarr;&nbsp;ток</td></tr>
+        </table>
+        <p>Оба закона уже встречались как ДВЕ ИЗ ЧЕТЫРЁХ строчек уравнений Максвелла (часть IV) — здесь мы разбираем их подробнее, с практическими приложениями: электромагнитами, генераторами и трансформаторами.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Ампера: ток создаёт поле</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Циркуляция магнитного поля вдоль замкнутого контура пропорциональна току, охваченному этим контуром:</p>
+        <div class="plate">
+          <div class="eq-body">&oint;B&middot;dl = &mu;&#8320;I</div>
+          <div class="cap">&mu;&#8320; = 4&pi;&times;10&#8315;&#8311; Н/А&sup2; — магнитная постоянная</div>
+        </div>
+        <div class="anim-strip compass-strip" aria-hidden="true">
+          <div class="compass-wire"></div>
+          <div class="compass-body"><div class="compass-needle" id="compassNeedle"></div></div>
+          <div class="anim-label left">ток в проводе — стрелка компаса рядом отклоняется</div>
+        </div>
+        <p>Один из самых практичных выводов закона Ампера — сила взаимодействия между двумя параллельными проводниками с током (именно эта формула долгое время служила ОПРЕДЕЛЕНИЕМ единицы силы тока — ампера):</p>
+        <div class="eq"><div class="eq-body">F/L = (&mu;&#8320;/2&pi;)&middot;I&#8321;I&#8322;/d = 2&times;10&#8315;&#8311;&middot;I&#8321;I&#8322;/d</div><div class="eq-tag">(1)</div></div>
+        <p>Численный пример: два параллельных провода с током I&#8321;&nbsp;=&nbsp;I&#8322;&nbsp;=&nbsp;5&nbsp;А на расстоянии d&nbsp;=&nbsp;0.1&nbsp;м. Найдите силу притяжения на единицу длины.</p>
+        <div class="eq"><div class="eq-body">F/L = 2&times;10&#8315;&#8311;&middot;5&middot;5/0.1 = <strong>5&times;10&#8315;&#8309; Н/м</strong></div><div class="eq-tag">(2)</div></div>
+        <p>Провода с током в одном направлении ПРИТЯГИВАЮТСЯ (как параллельные молекулярные токи в постоянном магните), в противоположных — отталкиваются.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Закон Фарадея: поле создаёт ток</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Наведённая ЭДС равна скорости изменения магнитного потока через контур, взятой с обратным знаком:</p>
+        <div class="plate">
+          <div class="eq-body">&epsilon; = &minus;N&middot;d&Phi;/dt</div>
+          <div class="cap">N — число витков катушки, &Phi; — магнитный поток через один виток (Вб)</div>
+        </div>
+        <div class="anim-strip gen-strip" aria-hidden="true">
+          <div class="gen-coil"></div>
+          <div class="gen-magnet" id="genMagnet"><span class="n"></span><span class="s"></span></div>
+          <div class="anim-label left">магнит въезжает в катушку — стрелка вольтметра дёргается</div>
+        </div>
+        <p>Численный пример: катушка из N&nbsp;=&nbsp;200&nbsp;витков находится в поле, магнитный поток через один виток растёт от 0 до 0.02&nbsp;Вб за &Delta;t&nbsp;=&nbsp;0.1&nbsp;с. Найдите наведённую ЭДС.</p>
+        <div class="eq"><div class="eq-body">&epsilon; = 200&middot;0.02/0.1 = <strong>40&nbsp;В</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Именно так работает педальное динамо на велосипеде и генератор на электростанции — механическое движение (вращение) меняет магнитный поток через катушку, и закон Фарадея превращает это изменение в напряжение.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Правило Ленца: природа сопротивляется</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Знак «минус» в законе Фарадея — не формальность, а отдельное содержательное правило (Эмилий Ленц, 1833): наведённый ток течёт в таком направлении, что его СОБСТВЕННОЕ магнитное поле противодействует изменению, которое его вызвало.</p>
+        <div class="callout brass">
+          <span class="tag">Почему не может быть иначе</span>
+          <p>Если бы знак был противоположным (наведённый ток УСИЛИВАЛ бы исходное изменение потока), система раскручивала бы сама себя до бесконечности — готовый вечный двигатель. Закон сохранения энергии (часть II) прямо запрещает такой сценарий, поэтому правило Ленца — не отдельный произвольный факт, а необходимое следствие того, что энергию нельзя получить из ничего.</p>
+        </div>
+        <p>Практическое следствие: чтобы двигать магнит через катушку и наводить в ней ток, нужно совершать РАБОТУ против сопротивления, которое сама катушка оказывает движению магнита (наведённое поле «тормозит» магнит) — именно эта работа и превращается в электрическую энергию. Бесплатного электричества закон Фарадея не даёт.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: мотор наоборот — генератор</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Электродвигатель и электрогенератор — механически одно и то же устройство (катушка в магнитном поле), различие только в том, что «на входе», а что «на выходе»:</p>
+        <table class="symtab">
+          <tr><th></th><th>Вход</th><th>Выход</th><th>Работающий закон</th></tr>
+          <tr><td>Двигатель</td><td>электрический ток</td><td>вращение (механическая работа)</td><td>сила Ампера на ток в поле</td></tr>
+          <tr><td>Генератор</td><td>вращение (механическая работа)</td><td>электрический ток</td><td>закон Фарадея</td></tr>
+        </table>
+        <p>Возьмите одну и ту же катушку в поле магнита: подайте на неё ток — по закону Ампера возникнет сила, катушка провернётся (двигатель). Или, наоборот, прокрутите катушку рукой — по закону Фарадея в ней наведётся ЭДС (генератор). Электромобили используют это буквально: при разгоне мотор работает как двигатель (потребляет ток от батареи), а при торможении — как генератор (рекуперация энергии, ток течёт обратно в батарею, подзаряжая её за счёт кинетической энергии автомобиля).</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: трансформатор без движущихся частей</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Трансформатор — устройство без единой движущейся детали, но полностью основанное на законе Фарадея. Переменный ток в первичной катушке (закон Ампера — ток создаёт меняющееся поле) создаёт меняющийся магнитный поток в общем железном сердечнике; этот меняющийся поток пронизывает вторичную катушку и наводит в ней ЭДС (закон Фарадея). Соотношение витков определяет соотношение напряжений — так работает повышение/понижение напряжения на каждой подстанции по пути от электростанции до розетки.</p>
+        <div class="callout steel">
+          <span class="tag">Почему трансформатор не работает на постоянном токе</span>
+          <p>Если ток в первичной катушке ПОСТОЯННЫЙ (не меняется во времени), магнитный поток тоже постоянен — d&Phi;/dt&nbsp;=&nbsp;0, и по закону Фарадея никакая ЭДС во вторичной катушке не наводится вообще. Именно поэтому вся энергосистема построена на переменном токе — только он позволяет непрерывно менять напряжение трансформаторами без потерь на преобразование.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/amperes_law.html">Закон Ампера</a> ·
+          <a href="/lang/ru/laws/faradays_law_of_induction.html">Закон индукции Фарадея</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; опыт Эрстеда с компасом</span>
+          <p>Положите обычный компас на стол, протяните над ним прямой провод, подключённый к батарейке (ПАРАЛЛЕЛЬНО стрелке компаса, буквально повторяя опыт 1820 года), и на секунду замкните цепь.</p>
+          <p><span class="qlabel">Что заметить</span> стрелка компаса заметно отклонится от направления на север, пока идёт ток, и вернётся обратно, как только цепь разомкнута — ровно то, что случайно заметил Эрстед на лекции, готовя демонстрацию для студентов, и что за неделю превратил в точный закон Ампер.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; ручной фонарик-динамо</span>
+          <p>Если дома есть фонарик с ручным заводом (динамо-механизм, без батареек — вращаете рычаг, светит лампочка/светодиод), покрутите его сначала БЕЗ нагрузки (лампочка/светодиод выключены или сняты), а затем ПОДКЛЮЧИТЕ нагрузку и покрутите снова.</p>
+          <p><span class="qlabel">Что заметить</span> крутить рычаг заметно ТЯЖЕЛЕЕ, когда лампочка подключена и горит — прямая демонстрация правила Ленца (§4): наведённый ток создаёт собственное поле, тормозящее вращение, и именно преодоление этого торможения — механическая работа, которую вы совершаете рукой, — превращается в электрическую энергию, светящую лампочку.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Два параллельных провода с токами по 10 А каждый находятся на расстоянии 0.2 м. Найдите силу взаимодействия на единицу длины.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> I&#8321;&nbsp;=&nbsp;I&#8322;&nbsp;=&nbsp;10&nbsp;А, d&nbsp;=&nbsp;0.2&nbsp;м.</p>
+            <p><span class="qlabel">Закон</span> сила между параллельными проводниками (§2): F/L&nbsp;=&nbsp;2&times;10&#8315;&#8311;&middot;I&#8321;I&#8322;/d.</p>
+            <p><span class="qlabel">Решение</span> F/L&nbsp;=&nbsp;2&times;10&#8315;&#8311;&middot;100/0.2&nbsp;=&nbsp;2&times;10&#8315;&#8311;&middot;500&nbsp;=&nbsp;10&#8315;&#8308;&nbsp;Н/м.</p>
+            <p><span class="qlabel">Ответ</span> <strong>10&#8315;&#8308; Н/м</strong> (0.0001 Н на метр длины).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Катушка из 150 витков находится в поле, магнитный поток через виток падает с 0.04 Вб до 0.01 Вб за 0.3 с. Найдите модуль наведённой ЭДС.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> N&nbsp;=&nbsp;150, &Delta;&Phi;&nbsp;=&nbsp;0.03&nbsp;Вб, &Delta;t&nbsp;=&nbsp;0.3&nbsp;с.</p>
+            <p><span class="qlabel">Закон</span> закон Фарадея (§3): &epsilon;&nbsp;=&nbsp;N&Delta;&Phi;/&Delta;t.</p>
+            <p><span class="qlabel">Решение</span> &epsilon;&nbsp;=&nbsp;150&middot;0.03/0.3&nbsp;=&nbsp;15&nbsp;В.</p>
+            <p><span class="qlabel">Ответ</span> <strong>15 В</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Почему при резком выдёргивании магнита из катушки стрелка гальванометра дёргается сильнее, чем при медленном вытягивании (тот же магнит, то же расстояние)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> закон Фарадея (§3): &epsilon;&nbsp;=&nbsp;N&Delta;&Phi;/&Delta;t — важна СКОРОСТЬ изменения потока, не только его итоговая величина.</p>
+            <p><span class="qlabel">Решение</span> при резком движении то же самое изменение потока &Delta;&Phi; происходит за намного меньшее время &Delta;t, значит &Delta;&Phi;/&Delta;t (и, соответственно, &epsilon;) больше.</p>
+            <p><span class="qlabel">Ответ</span> <strong>резкое движение даёт бо́льшую скорость изменения потока</strong>, а не бо́льшее изменение потока как таковое.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Трансформатор понижает напряжение с 220 В до 11 В. Если первичная обмотка имеет 2000 витков, сколько витков у вторичной?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> U&#8321;&nbsp;=&nbsp;220&nbsp;В, U&#8322;&nbsp;=&nbsp;11&nbsp;В, N&#8321;&nbsp;=&nbsp;2000.</p>
+            <p><span class="qlabel">Закон</span> отношение витков трансформатора (§6): U&#8321;/U&#8322;&nbsp;=&nbsp;N&#8321;/N&#8322;.</p>
+            <p><span class="qlabel">Решение</span> N&#8322;&nbsp;=&nbsp;N&#8321;&middot;U&#8322;/U&#8321;&nbsp;=&nbsp;2000&middot;11/220&nbsp;=&nbsp;100.</p>
+            <p><span class="qlabel">Ответ</span> <strong>100 витков</strong> — понижение в 20 раз соответствует отношению витков 20:1.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему при торможении электромобиля (рекуперация) аккумулятор заряжается, хотя мотор в этот момент не потребляет ток от батареи?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §5 — реверсивность мотора/генератора.</p>
+            <p><span class="qlabel">Решение</span> при торможении колёса продолжают вращать обмотку электромотора по инерции — в этом режиме устройство работает как ГЕНЕРАТОР (закон Фарадея: вращение катушки в поле магнита наводит в ней ЭДС), а не как двигатель. Наведённый ток течёт в обратном направлении — от мотора к батарее, заряжая её за счёт кинетической энергии автомобиля вместо того, чтобы просто рассеивать её в тепло через тормозные колодки.</p>
+            <p><span class="qlabel">Ответ</span> <strong>мотор переключается в режим генератора</strong> — та же катушка, тот же магнит, обратное направление энергии.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ampere%20Faraday%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XIV серии, электромагнетизм</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2 hero: концентрические кольца поля вокруг провода то появляются, то гаснут — намёк на пульсацию тока.
+  var rings = [document.getElementById('heroRing1'), document.getElementById('heroRing2'), document.getElementById('heroRing3')];
+  var PERIOD = 6000;
+  var lastTs = null;
+  function tickRings(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD) / PERIOD;
+    rings.forEach(function(r, i){
+      var delay = i * 0.12;
+      var local = ((phase - delay) % 1 + 1) % 1;
+      var op = local < 0.5 ? local * 2 * 0.7 : Math.max(0, 0.7 - (local - 0.5) * 1.4);
+      r.setAttribute('opacity', op.toFixed(2));
+    });
+    requestAnimationFrame(tickRings);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickRings);
+
+  // §2 демо-полоса: стрелка компаса отклоняется, когда «идёт ток» (циклически), возвращается к северу иначе.
+  var needle = document.getElementById('compassNeedle');
+  var COMPASS_PERIOD = 6000;
+  var lastTs2 = null;
+  function tickCompass(ts){
+    if (lastTs2 === null) lastTs2 = ts;
+    var phase = (ts % COMPASS_PERIOD) / COMPASS_PERIOD;
+    // ток «включён» первую половину цикла — стрелка отклонена на 40°, иначе — 0°.
+    var target = phase < 0.5 ? 40 : 0;
+    var t = phase < 0.5 ? Math.min(1, phase / 0.15) : Math.min(1, (phase - 0.5) / 0.15);
+    var prevTarget = phase < 0.5 ? 0 : 40;
+    var angle = prevTarget + (target - prevTarget) * t;
+    if (needle) needle.style.transform = 'rotate(' + angle.toFixed(1) + 'deg)';
+    requestAnimationFrame(tickCompass);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickCompass);
+
+  // §3: магнит въезжает в катушку и выезжает обратно — та же анимация паттерна, что в части IV (Максвелл).
+  var magnet = document.getElementById('genMagnet');
+  var LEFT = 16, MID = 60, PERIOD3 = 6000;
+  var lastTs3 = null;
+  function tickGen(ts){
+    if (lastTs3 === null) lastTs3 = ts;
+    var phase = (ts % PERIOD3) / PERIOD3;
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    if (magnet) magnet.style.left = (LEFT + (MID - LEFT) * t) + 'px';
+    requestAnimationFrame(tickGen);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickGen);
+})();
+</script>
+</body>
+</html>
