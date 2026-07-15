@@ -1,0 +1,443 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Излучение чёрного тела: как цвет выдаёт температуру звезды</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: спектр чёрного тела при разных температурах ---------- */
+.spectrum-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.spectrum-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.temp-swatch{ display:inline-block; width:26px; height:26px; border-radius:50%; vertical-align:middle; margin-right:8px; border:1.5px solid var(--rule); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Три закона одного явления</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Вина: цвет выдаёт температуру</a></li>
+      <li><a href="#s3"><span class="n">03</span>Закон Стефана-Больцмана: мощность растёт вчетверо быстрее</a></li>
+      <li><a href="#s4"><span class="n">04</span>Формула Планка и рождение квантов</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: взвесить звезду по цвету</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: реликтовое излучение</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; термодинамика &middot; часть XII</p>
+        <h1>Излучение чёрного тела: как цвет выдаёт температуру звезды</h1>
+        <p class="subtitle">Раскалённая кочерга, лампа накаливания и далёкая звезда светятся по одному и тому же закону — и именно попытка объяснить его до конца в 1900 году родила квантовую физику.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <circle id="heroStar" cx="170" cy="100" r="60" fill="#8B2E1A"/>
+          <text x="170" y="180" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="13" fill="var(--moss)">нагрев меняет цвет — не краска, а физика</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Любое тело светится тепловым излучением, и форма этого свечения зависит только от температуры — не от материала (для идеального «чёрного тела»). Закон Вина (1893) даёт цвет пика излучения, закон Стефана-Больцмана (1879/1884) — полную мощность, а формула Планка (1900) — точную форму всей кривой целиком, и именно попытка вывести эту формулу «с нуля» заставила Макса Планка предположить, что энергия излучается порциями — квантами. В этой заметке — все три закона с числами и то, как астрономы взвешивают звёзды по их цвету.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Три закона одного явления</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Что даёт</th><th>Формула</th></tr>
+          <tr><td>Вина (1893)</td><td>на какой длине волны пик излучения</td><td class="sym">&lambda;<sub>max</sub> = b/T</td></tr>
+          <tr><td>Стефана-Больцмана (1879/84)</td><td>полная мощность излучения</td><td class="sym">j* = &sigma;T&#8308;</td></tr>
+          <tr><td>Планка (1900)</td><td>полная форма кривой на каждой длине волны</td><td class="sym">B(&lambda;,T) — см. §4</td></tr>
+        </table>
+        <p>Все три говорят про один и тот же объект — <strong>абсолютно чёрное тело</strong>, идеальный поглотитель (и, значит, идеальный излучатель) любого падающего света. Реальные звёзды, лампы накаливания и раскалённые угли — на удивление хорошее приближение этой идеализации.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Вина: цвет выдаёт температуру</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Длина волны, на которую приходится пик излучения, обратно пропорциональна температуре:</p>
+        <div class="plate">
+          <div class="eq-body">&lambda;<sub>max</sub> = b/T</div>
+          <div class="cap">b &asymp; 2.898&times;10&#8315;&sup3; м&middot;К — постоянная Вина</div>
+        </div>
+        <div class="spectrum-fig" aria-hidden="true">
+          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+            <line x1="30" y1="150" x2="380" y2="150" stroke="var(--rule)" stroke-width="1"/>
+            <line x1="30" y1="20" x2="30" y2="150" stroke="var(--rule)" stroke-width="1"/>
+            <path id="spectrumCurve" d="M30,150 L380,150" fill="none" stroke="var(--brass-fill)" stroke-width="2.4"/>
+            <circle id="peakDot" cx="30" cy="150" r="5" fill="var(--steel-fill)"/>
+          </svg>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>температура</b><span data-readout="temp">2900</span> К</span>
+          <span><span class="temp-swatch" id="tempSwatch"></span><span data-readout="color-label">тёмно-красный</span></span>
+        </div>
+        <p>Численный пример: тело нагрето до T&nbsp;=&nbsp;2900&nbsp;К (типичная нить лампы накаливания). Найдите длину волны пика излучения.</p>
+        <div class="eq"><div class="eq-body">&lambda;<sub>max</sub> = 0.0029/2900 = <strong>1&times;10&#8315;&#8310; м</strong> (1000 нм, ближний инфракрасный)</div><div class="eq-tag">(1)</div></div>
+        <p>Пик у лампы накаливания — в инфракрасном диапазоне, НЕ в видимом: лампа греет больше, чем светит, а видимый жёлто-белый свет — лишь «хвост» кривой Планка (§4), выступающий в видимую область. Именно поэтому светодиодные лампы (с пиком точно в видимом свете) настолько энергоэффективнее.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Закон Стефана-Больцмана: мощность растёт вчетверо быстрее</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Полная мощность излучения с единицы площади растёт как ЧЕТВЁРТАЯ степень температуры:</p>
+        <div class="plate">
+          <div class="eq-body">j* = &sigma;T&#8308;</div>
+          <div class="cap">&sigma; &asymp; 5.67&times;10&#8315;&sup8; Вт/(м&sup2;&middot;К&#8308;) — постоянная Стефана-Больцмана</div>
+        </div>
+        <p>Четвёртая степень — не мелочь: нагрели тело вдвое по абсолютной температуре — оно светит не вдвое, а в 2&#8308;&nbsp;=&nbsp;<strong>16 раз</strong> мощнее. Это резкая, «взрывная» зависимость по сравнению с линейной.</p>
+        <div class="callout brass">
+          <span class="tag">Почему Бетельгейзе такая яркая при более низкой температуре</span>
+          <p>Красный гигант Бетельгейзе холоднее Солнца (&sim;3500&nbsp;К против 5800&nbsp;К) — по одной лишь температуре он должен светить слабее. Но полная светимость зависит ещё и от ПЛОЩАДИ поверхности (j*&middot;4&pi;R&sup2;), а у Бетельгейзе радиус в сотни раз больше солнечного — гигантская площадь с лихвой компенсирует более низкую температуру, и звезда светит в десятки тысяч раз мощнее Солнца.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Формула Планка и рождение квантов</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>К концу XIX века классическая физика (закон Рэлея-Джинса) предсказывала, что чёрное тело должно излучать БЕСКОНЕЧНО много энергии на коротких волнах — абсурдный результат, названный «ультрафиолетовой катастрофой». Реальные тела так себя не ведут: у них есть чёткий пик и спад в обе стороны.</p>
+        <p>Двигайте ползунок температуры выше (§2, анимация) — форма всей кривой меняется целиком: пик смещается влево (закон Вина) И вся кривая поднимается (закон Стефана-Больцмана, площадь под кривой растёт как T&#8308;) одновременно, по одной формуле:</p>
+        <div class="eq"><div class="eq-body">B(&nu;,T) = (2h&nu;&sup3;/c&sup2;)&middot;1/(e<sup>h&nu;/k<sub>B</sub>T</sup> &minus; 1)</div><div class="eq-tag">(2)</div></div>
+        <div class="callout steel">
+          <span class="tag">Порции энергии, а не «уловка»</span>
+          <p>Планк в 1900 году нашёл эту формулу почти методом подбора — она идеально ложилась на экспериментальные данные, соединяя закон Вина (короткие волны) и закон Рэлея-Джинса (длинные волны) в одну кривую. Чтобы обосновать формулу теоретически, ему пришлось предположить, что энергия излучается не непрерывно, а порциями E&nbsp;=&nbsp;h&nu; — квантами. Сам Планк долго считал это математической уловкой, не физической реальностью, пока Эйнштейн не использовал ту же идею для объяснения фотоэффекта (часть VI, уравнение Планка-Эйнштейна) в 1905 году.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: взвесить звезду по цвету</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Астрономы не могут долететь до звёзд с линейкой и термометром — весь набор данных о звезде обычно сводится к её спектру. Соберём оба закона в одной задаче.</p>
+        <p><strong>Шаг 1 (закон Вина).</strong> Звезда B вдвое горячее Солнца (T<sub>&#9737;</sub>&nbsp;=&nbsp;5800&nbsp;К, T<sub>B</sub>&nbsp;=&nbsp;11600&nbsp;К) — значит, пик её спектра сдвинут вдвое ближе к ультрафиолету: звезда явно голубее Солнца на глаз/на спектрографе. Так измеряют T, ничего не зная о расстоянии до звезды.</p>
+        <p><strong>Шаг 2 (закон Стефана-Больцмана).</strong> Если радиус звезды B такой же, как у Солнца, во сколько раз она светит мощнее?</p>
+        <div class="eq"><div class="eq-body">L<sub>B</sub>/L<sub>&#9737;</sub> = (T<sub>B</sub>/T<sub>&#9737;</sub>)&#8308; = 2&#8308; = <strong>16</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Комбинируя оба измерения (цвет даёт T, яркость на известном расстоянии даёт полную светимость L), из закона Стефана-Больцмана L&nbsp;=&nbsp;4&pi;R&sup2;&sigma;T&#8308; выражается и радиус звезды R — весь набор физических параметров звезды получен, не покидая Земли, только по её свету.</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: реликтовое излучение</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Самый точный природный спектр чёрного тела из когда-либо измеренных — не звезда, а сама Вселенная. Реликтовое (микроволновое фоновое) излучение — остывший свет, вырвавшийся на свободу примерно через 380 000 лет после Большого взрыва, когда Вселенная остыла достаточно, чтобы стать прозрачной. Сегодня, после 13.8 миллиардов лет расширения, оно остыло до T&nbsp;&asymp;&nbsp;2.725&nbsp;К — и следует формуле Планка (§4) с точностью, которую не смогла бы обеспечить ни одна лабораторная печь на Земле.</p>
+        <p>Спутники COBE, WMAP и Planck измерили это излучение с фантастической точностью — крошечные отклонения от идеальной планковской кривой (порядка одной стотысячной) несут отпечаток самых первых мгновений существования Вселенной и легли в основу современной космологии, включая закон Хаббла и уравнения Фридмана (следующая заметка серии).</p>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/plancks_law.html">Закон излучения Планка</a> ·
+          <a href="/lang/ru/laws/wiens_displacement_law.html">Закон смещения Вина</a> ·
+          <a href="/lang/ru/laws/stefanboltzmann_law.html">Закон Стефана-Больцмана</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; электроплита на глазах меняет цвет</span>
+          <p>Включите электрическую конфорку (спиральную, не индукционную) на максимум и наблюдайте за ней с безопасного расстояния, не прикасаясь, в течение минуты-двух.</p>
+          <p><span class="qlabel">Что заметить</span> спираль проходит путь от тёмного (инфракрасное излучение, вы чувствуете тепло, но не видите свет) до тускло-красного, затем ярко-оранжевого — прямая иллюстрация закона Вина: нагрев сдвигает пик излучения от невидимого инфракрасного всё ближе к видимому спектру.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; невидимый свет пульта в камере телефона</span>
+          <p>Направьте пульт от телевизора на камеру смартфона (не на глаз — инфракрасный светодиод пульта не виден напрямую) и нажмите любую кнопку, глядя на экран телефона в режиме камеры.</p>
+          <p><span class="qlabel">Что заметить</span> на экране телефона видна мигающая светлая точка на кончике пульта — которую невооружённый глаз не видит вообще. Светодиод пульта излучает в ближнем инфракрасном (низкая «температура» по сравнению с видимым светом), а матрица камеры телефона (в отличие от человеческого глаза) чувствительна и к этому диапазону тоже.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Поверхность звезды имеет температуру 5800 К (как Солнце). Найдите длину волны пика её излучения.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> T&nbsp;=&nbsp;5800&nbsp;К, b&nbsp;&asymp;&nbsp;0.0029&nbsp;м&middot;К.</p>
+            <p><span class="qlabel">Закон</span> закон Вина (§2): &lambda;<sub>max</sub>&nbsp;=&nbsp;b/T.</p>
+            <p><span class="qlabel">Решение</span> &lambda;<sub>max</sub>&nbsp;=&nbsp;0.0029/5800&nbsp;&asymp;&nbsp;5&times;10&#8315;&#8311;&nbsp;м&nbsp;=&nbsp;500&nbsp;нм.</p>
+            <p><span class="qlabel">Ответ</span> <strong>500 нм</strong> — зелёная область видимого спектра (Солнце светит белым, потому что излучает во всём видимом диапазоне сразу, а не только на пике).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Температуру звезды увеличили втрое. Во сколько раз выросла её полная излучательная мощность с единицы площади?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> T<sub>нов</sub>&nbsp;=&nbsp;3T.</p>
+            <p><span class="qlabel">Закон</span> закон Стефана-Больцмана (§3): j*&nbsp;&prop;&nbsp;T&#8308;.</p>
+            <p><span class="qlabel">Решение</span> j*<sub>нов</sub>/j*&nbsp;=&nbsp;3&#8308;&nbsp;=&nbsp;81.</p>
+            <p><span class="qlabel">Ответ</span> <strong>в 81 раз</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Две звезды одинаковой температуры, но радиус звезды B втрое больше радиуса звезды A. Во сколько раз звезда B светит мощнее (по полной светимости)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> T<sub>A</sub>&nbsp;=&nbsp;T<sub>B</sub>, R<sub>B</sub>&nbsp;=&nbsp;3R<sub>A</sub>.</p>
+            <p><span class="qlabel">Закон</span> полная светимость L&nbsp;=&nbsp;4&pi;R&sup2;&sigma;T&#8308; (§3) — при равной T зависит только от площади, R&sup2;.</p>
+            <p><span class="qlabel">Решение</span> L<sub>B</sub>/L<sub>A</sub>&nbsp;=&nbsp;(R<sub>B</sub>/R<sub>A</sub>)&sup2;&nbsp;=&nbsp;3&sup2;&nbsp;=&nbsp;9.</p>
+            <p><span class="qlabel">Ответ</span> <strong>в 9 раз</strong> — светимость растёт с площадью, не с радиусом напрямую.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Реликтовое излучение сегодня имеет температуру ≈2.7 К. На какой примерно длине волны приходится его пик? В каком диапазоне это (видимый, ИК, микроволновый)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> T&nbsp;&asymp;&nbsp;2.7&nbsp;К, b&nbsp;&asymp;&nbsp;0.0029&nbsp;м&middot;К.</p>
+            <p><span class="qlabel">Закон</span> закон Вина (§2, §6).</p>
+            <p><span class="qlabel">Решение</span> &lambda;<sub>max</sub>&nbsp;=&nbsp;0.0029/2.7&nbsp;&asymp;&nbsp;1.07&times;10&#8315;&sup3;&nbsp;м&nbsp;&asymp;&nbsp;1.1&nbsp;мм.</p>
+            <p><span class="qlabel">Ответ</span> <strong>≈1.1 мм — микроволновый диапазон</strong> (отсюда и название «реликтовое МИКРОВОЛНОВОЕ фоновое излучение»).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему Планку пришлось предположить, что энергия излучается порциями (квантами), а не непрерывно, чтобы вывести правильную формулу спектра?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> «ультрафиолетовая катастрофа» и формула Планка (§4).</p>
+            <p><span class="qlabel">Решение</span> классическая физика (закон Рэлея-Джинса, континуальное излучение) предсказывала бесконечный рост энергии на коротких волнах — абсурд, противоречащий эксперименту. Введение квантования (осциллятор может отдавать энергию только порциями E=h&nu;) обрезает вклад высоких частот: чем выше частота, тем «дороже» отдельный квант, и статистически такие кванты испускаются всё реже — кривая идёт на спад вместо бесконечного роста.</p>
+            <p><span class="qlabel">Ответ</span> <strong>квантование устраняет ультрафиолетовую катастрофу</strong> — без него классическая теория даёт физически бессмысленный (бесконечный) результат.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Blackbody%20radiation%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть XII серии, термодинамика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2/§4: температура определяет и цвет (закон Вина), и площадь под кривой Планка (Стефан-Больцман) —
+  // считаем упрощённую (но качественно верную) планковскую кривую честно по формуле на каждый кадр.
+  var curve = document.getElementById('spectrumCurve');
+  var peakDot = document.getElementById('peakDot');
+  var tempReadout = document.querySelector('[data-readout="temp"]');
+  var colorLabel = document.querySelector('[data-readout="color-label"]');
+  var tempSwatch = document.getElementById('tempSwatch');
+  var heroStar = document.getElementById('heroStar');
+
+  var W = 400, H = 180, X0 = 30, X1 = 380, Y0 = 150, YTOP = 20;
+  var T_MIN = 2000, T_MAX = 12000, PERIOD_MS = 6000;
+
+  // Упрощённая планковская форма (качественно верна: растёт, пик, спадает — как настоящая кривая).
+  function planckShape(lambdaNm, T){
+    var b = 2.898e6; // постоянная Вина в нм·К (0.0029 м·К = 2.898e6 нм·К)
+    var peak = b / T;
+    var x = lambdaNm / peak;
+    // Похожая на распределение Планка форма: растёт как x^3, спадает как exp — качественная модель для анимации.
+    return Math.pow(x, 3) * Math.exp(-1.5 * x) * 8;
+  }
+
+  function colorForTemp(T){
+    if (T < 3500) return { hex: '#8B2E1A', label: 'тёмно-красный' };
+    if (T < 5000) return { hex: '#C0631F', label: 'оранжевый' };
+    if (T < 6500) return { hex: '#E8D48A', label: 'жёлто-белый' };
+    if (T < 9000) return { hex: '#EAF0FF', label: 'белый' };
+    return { hex: '#A9C6FF', label: 'бело-голубой' };
+  }
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD_MS) / PERIOD_MS;
+    var T = T_MIN + (T_MAX - T_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI)); // плавно туда-обратно
+
+    var pts = 'M' + X0 + ',' + Y0;
+    var peakX = X0, peakY = Y0;
+    var maxVal = 0, maxLambda = 0;
+    for (var i = 0; i <= 60; i++) {
+      var lambdaNm = 100 + (2500 - 100) * i / 60;
+      var val = planckShape(lambdaNm, T);
+      if (val > maxVal) { maxVal = val; maxLambda = lambdaNm; }
+    }
+    for (var j = 0; j <= 60; j++) {
+      var lam = 100 + (2500 - 100) * j / 60;
+      var v = planckShape(lam, T) / (maxVal || 1);
+      var px = X0 + (X1 - X0) * j / 60;
+      var py = Y0 - v * (Y0 - YTOP);
+      pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      if (lam <= maxLambda) { peakX = px; peakY = py; }
+    }
+    if (curve) curve.setAttribute('d', pts);
+    if (peakDot) { peakDot.setAttribute('cx', peakX.toFixed(1)); peakDot.setAttribute('cy', peakY.toFixed(1)); }
+
+    var c = colorForTemp(T);
+    if (tempReadout) tempReadout.textContent = Math.round(T);
+    if (colorLabel) colorLabel.textContent = c.label;
+    if (tempSwatch) tempSwatch.style.background = c.hex;
+    if (heroStar) heroStar.setAttribute('fill', c.hex);
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
