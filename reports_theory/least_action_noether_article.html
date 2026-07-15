@@ -1,0 +1,442 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Принцип наименьшего действия: одна идея, из которой следует вся физика</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- сравнение путей: пучок траекторий, реальная выделена ---------- */
+.paths-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.paths-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- рефракция света: излом луча на границе сред ---------- */
+.refraction-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.refraction-fig svg{ width:100%; height:auto; display:block; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Одна идея вместо трёх законов</a></li>
+      <li><a href="#s2"><span class="n">02</span>Что такое действие</a></li>
+      <li><a href="#s3"><span class="n">03</span>Из принципа — обратно к Ньютону</a></li>
+      <li><a href="#s4"><span class="n">04</span>Теорема Нётер: симметрии рождают законы</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: почему свет преломляется</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: сумма по всем путям</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; аналитическая механика &middot; часть X (капстоун серии)</p>
+        <h1>Принцип наименьшего действия: одна идея, из которой следует вся физика</h1>
+        <p class="subtitle">Три закона Ньютона, сохранение энергии и импульса, преломление света, уравнения Максвелла и Шрёдингера — всё это можно вывести из одной строчки: δS&nbsp;=&nbsp;0.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="170" r="5" fill="var(--ink)"/>
+          <circle cx="310" cy="30" r="5" fill="var(--ink)"/>
+          <path d="M30,170 Q100,130 170,100 T310,30" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <path d="M30,170 Q90,100 170,100 T310,30" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <path id="heroPath" d="M30,170 Q120,120 170,100 T310,30" fill="none" stroke="var(--steel-fill)" stroke-width="2.6"/>
+          <circle id="heroDot" cx="30" cy="170" r="6" fill="var(--brass-fill)"/>
+          <text x="170" y="190" text-anchor="middle" font-family="Futura, sans-serif" font-size="13" fill="var(--moss)">из всех путей — реальный даёт минимум S</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>В частях I и II этой серии мы уже дважды встречали намёк на более глубокий уровень: и у Ньютона, и в законах сохранения был §6-тизер про принцип наименьшего действия и теорему Нётер. Здесь — полный разбор: что такое действие S, почему природа «выбирает» путь с его минимумом, как из этого выводятся уравнения Ньютона, и как теорема Нётер 1918 года объясняет, ПОЧЕМУ вообще существуют законы сохранения — не как отдельные счастливые совпадения, а как прямое следствие симметрий пространства и времени.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Одна идея вместо трёх законов</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>До сих пор в этой серии физика строилась «снизу вверх»: силы, ускорения, траектории — вычисляем шаг за шагом. Принцип наименьшего действия предлагает взгляд «сверху»: не считать траекторию пошагово, а сразу спросить — какая ИЗ ВСЕХ МЫСЛИМЫХ траекторий между точкой А и точкой Б настоящая? Ответ: та, для которой особая величина, действие S, минимальна (точнее — стационарна, но для большинства повседневных задач это минимум).</p>
+        <table class="symtab">
+          <tr><th>Подход</th><th>Что вычисляем</th></tr>
+          <tr><td>Ньютон (части I-IX)</td><td>силу в каждый момент → ускорение → следующее положение, шаг за шагом</td></tr>
+          <tr><td>Наименьшее действие</td><td>единственное число S для КАЖДОЙ целой траектории целиком → выбираем минимум</td></tr>
+        </table>
+        <p>Оба подхода дают ОДИНАКОВЫЙ ответ для классической механики (§3) — это не конкурирующие теории, а два языка описания одной физики. Но язык действия оказывается универсальнее: он одинаково хорошо работает там, где понятие «сила» неудобно или не существует — в оптике, электромагнетизме, квантовой механике, общей теории относительности.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Что такое действие</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Действие — это число, вычисляемое для целой траектории движения:</p>
+        <div class="plate">
+          <div class="eq-body">S = &int;<sub>t&#8321;</sub><sup>t&#8322;</sup> L&nbsp;dt,&nbsp;&nbsp;&nbsp; L = K &minus; U</div>
+          <div class="cap">L — лагранжиан (кинетическая энергия минус потенциальная), интеграл берётся вдоль ВСЕЙ траектории от начала до конца</div>
+        </div>
+        <p>Проверим на простейшем случае — свободной частице (без сил, U&nbsp;=&nbsp;0), которая должна пройти путь x&nbsp;=&nbsp;8&nbsp;м за время T&nbsp;=&nbsp;4&nbsp;с. Сравним действие для двух разных «кандидатов» в траекторию:</p>
+        <div class="paths-fig" aria-hidden="true">
+          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+            <line x1="40" y1="150" x2="360" y2="150" stroke="var(--rule)" stroke-width="1"/>
+            <path d="M40,150 L360,50" fill="none" stroke="var(--moss-fill)" stroke-width="2.4"/>
+            <path d="M40,150 L200,150 L360,50" fill="none" stroke="var(--brass-fill)" stroke-width="2.4" stroke-dasharray="5,4"/>
+            <circle id="pathDotUniform" cx="40" cy="150" r="6" fill="var(--moss-fill)"/>
+            <circle id="pathDotStop" cx="40" cy="150" r="6" fill="var(--brass-fill)"/>
+          </svg>
+        </div>
+        <table class="symtab">
+          <tr><th>Кандидат</th><th>Описание</th><th>Действие S</th></tr>
+          <tr><td>A (зелёный)</td><td>равномерное движение, v&nbsp;=&nbsp;2&nbsp;м/с всё время</td><td class="sym">16&nbsp;Дж&middot;с</td></tr>
+          <tr><td>B (оранжевый, пунктир)</td><td>стоит 2с, потом резко разгоняется до 4&nbsp;м/с</td><td class="sym">32&nbsp;Дж&middot;с</td></tr>
+        </table>
+        <p>Расчёт для A (m&nbsp;=&nbsp;2&nbsp;кг): L&nbsp;=&nbsp;K&nbsp;=&nbsp;&frac12;&middot;2&middot;2&sup2;&nbsp;=&nbsp;4&nbsp;Дж постоянно, S&#8321;&nbsp;=&nbsp;4&middot;4&nbsp;=&nbsp;<strong>16&nbsp;Дж&middot;с</strong>. Для B: первые 2с K&nbsp;=&nbsp;0, вторые 2с K&nbsp;=&nbsp;&frac12;&middot;2&middot;4&sup2;&nbsp;=&nbsp;16&nbsp;Дж, S&#8322;&nbsp;=&nbsp;0&middot;2+16&middot;2&nbsp;=&nbsp;<strong>32&nbsp;Дж&middot;с</strong>. Равномерное движение выигрывает — ровно то, что предсказывает первый закон Ньютона (часть I, §2): свободное тело движется с постоянной скоростью. Принцип наименьшего действия не просто СОГЛАСУЕТСЯ с этим — он его порождает.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Из принципа — обратно к Ньютону</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Условие минимума действия (вариационное исчисление, δS&nbsp;=&nbsp;0) даёт универсальный рецепт — <strong>уравнение Эйлера-Лагранжа</strong>:</p>
+        <div class="eq"><div class="eq-body">d/dt(&part;L/&part;&#7794;) &minus; &part;L/&part;q = 0</div><div class="eq-tag">(1)</div></div>
+        <p>Подставим L&nbsp;=&nbsp;&frac12;m&#7794;&sup2;&nbsp;&minus;&nbsp;U(q) для обычной частицы (q — координата, &#7794; — скорость). &part;L/&part;&#7794;&nbsp;=&nbsp;m&#7794;&nbsp;=&nbsp;p (импульс), &part;L/&part;q&nbsp;=&nbsp;&minus;&part;U/&part;q&nbsp;=&nbsp;F (сила — минус градиент потенциальной энергии). Уравнение (1) превращается в:</p>
+        <div class="plate">
+          <div class="eq-body">dp/dt = F,&nbsp;&nbsp;&nbsp; то есть m&middot;a = F</div>
+          <div class="cap">второй закон Ньютона (часть I, §3) — не постулат, а следствие условия минимума действия</div>
+        </div>
+        <p>Это не совпадение и не подгонка — уравнение Эйлера-Лагранжа тождественно F&nbsp;=&nbsp;ma для ЛЮБОГО потенциала U. Вся классическая механика — частный случай одного вариационного принципа.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Теорема Нётер: симметрии рождают законы</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>В 1918 году Эмми Нётер доказала одну из самых глубоких теорем физики: <strong>каждой непрерывной симметрии действия S соответствует своя сохраняющаяся величина</strong>. Не по отдельности открытые эмпирические факты, а единый источник для всех законов сохранения:</p>
+        <table class="symtab">
+          <tr><th>Симметрия действия</th><th>Сохраняющаяся величина</th></tr>
+          <tr><td>однородность времени (сдвиг t&nbsp;&rarr;&nbsp;t+&Delta;t ничего не меняет)</td><td>энергия (часть II, §3)</td></tr>
+          <tr><td>однородность пространства (сдвиг x&nbsp;&rarr;&nbsp;x+&Delta;x ничего не меняет)</td><td>импульс (часть II, §2)</td></tr>
+          <tr><td>изотропность пространства (поворот на любой угол ничего не меняет)</td><td>момент импульса (часть II, §4; часть VII, §4)</td></tr>
+        </table>
+        <p>Это переворачивает привычный порядок причины и следствия: не «так уж вышло, что энергия сохраняется», а «время однородно, а значит энергия ОБЯЗАНА сохраняться» — строгое математическое следствие, не эмпирическое наблюдение. Более абстрактные симметрии (не пространства-времени, а внутренних «фазовых» степеней свободы полей) точно так же порождают сохранение электрического заряда и других квантовых чисел — теорема работает далеко за пределами механики.</p>
+        <div class="callout brass">
+          <span class="tag">Судьба первооткрывательницы</span>
+          <p>Эмми Нётер вывела теорему в Гёттингене, работая над проблемой сохранения энергии в общей теории относительности по просьбе Гильберта и Клейна. Эйнштейн называл её результат «памятником математического мышления». При этом из-за дискриминации женщин в науке того времени Нётер долгие годы не могла получить оплачиваемую профессорскую должность — читала лекции формально «под именем» Гильберта.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: почему свет преломляется</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Принцип Ферма (частный случай принципа наименьшего действия для оптики, ещё XVII век): свет распространяется по пути, требующему НАИМЕНЬШЕГО времени — не обязательно кратчайшего расстояния.</p>
+        <div class="refraction-fig" aria-hidden="true">
+          <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="300" height="100" fill="var(--paper)"/>
+            <rect x="0" y="100" width="300" height="120" fill="var(--steel-fill)" opacity=".15"/>
+            <line x1="0" y1="100" x2="300" y2="100" stroke="var(--rule)" stroke-width="1.5"/>
+            <circle cx="50" cy="20" r="5" fill="var(--ink)"/>
+            <circle cx="230" cy="190" r="5" fill="var(--ink)"/>
+            <line x1="50" y1="20" x2="150" y2="100" stroke="var(--brass-fill)" stroke-width="2.4"/>
+            <line x1="150" y1="100" x2="230" y2="190" stroke="var(--brass-fill)" stroke-width="2.4"/>
+            <text x="20" y="15" font-family="Cascadia Code, monospace" font-size="11" fill="var(--ink-soft)">воздух (быстро)</text>
+            <text x="200" y="210" font-family="Cascadia Code, monospace" font-size="11" fill="var(--ink-soft)">вода (медленно)</text>
+          </svg>
+        </div>
+        <p>Представьте спасателя на пляже, который должен добежать до тонущего пловца — бежать по песку он может быстро, плыть в воде медленнее. Кратчайший ПУТЬ (по прямой) — не самый быстрый: выгоднее пробежать чуть больше по песку, чтобы сократить медленный отрезок в воде. Оптимальная точка входа в воду — не там, где прямая линия, а там, где чуть «наискосок». Свет ведёт себя ровно так же на границе воздух/вода, и точный расчёт оптимального угла даёт в точности закон преломления Снеллиуса.</p>
+        <div class="callout steel">
+          <span class="tag">Одна математика — три раздела физики</span>
+          <p>Задача «спасателя на пляже» математически ИДЕНТИЧНА принципу наименьшего действия для частицы, переходящей из области с одной потенциальной энергией в область с другой (преломление траектории заряженной частицы на границе полей) — оптика и механика частиц оказываются двумя переодетыми версиями одной и той же вариационной задачи. Подробный разбор закона преломления с формулами и числами — отдельная заметка серии, следующая по оптике.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/principle_of_least_action.html">Принцип наименьшего действия</a> ·
+          <a href="/lang/ru/laws/noethers_theorem.html">Теорема Нётер</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: сумма по всем путям</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Первым принцип наименьшего действия сформулировал Пьер Луи Мопертюи в 1740-х как <em>телеологический</em> — будто природа заранее «знает» лучший путь и стремится к цели, почти замысел. Современное прочтение, после работ Ричарда Фейнмана (1940-е), — совсем другое, и не менее удивительное: частица не выбирает путь заранее, а в квантовом смысле проходит СРАЗУ ВСЕ мыслимые пути одновременно, каждый со своей комплексной «фазовой» амплитудой. Пути складываются (интерферируют) так, что для большинства из них вклады взаимно гасятся, и в макроскопическом пределе выживает практически только путь с экстремальным (минимальным) действием — отсюда и классическая механика Ньютона как предельный случай.</p>
+        <p>Уравнение Шрёдингера (часть VI) и уравнения Максвелла (часть IV) — оба выводятся из подходящим образом подобранного действия S через ровно ту же математику δS&nbsp;=&nbsp;0, что и обычное F&nbsp;=&nbsp;ma здесь. Это и есть смысл фразы «одна идея, из которой следует вся физика»: не поэтическое преувеличение, а рабочий факт современной теоретической физики — от школьной механики до квантовой теории поля и струнной теории.</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; мыльная плёнка на проволочном каркасе</span>
+          <p>Согните проволоку (например, из вешалки) в любую неплоскую форму — например, два кольца, соединённых крест-накрест перемычкой — и окуните в мыльный раствор (вода + жидкое мыло для посуды, немного глицерина для прочности).</p>
+          <p><span class="qlabel">Что заметить</span> плёнка сама «находит» поверхность МИНИМАЛЬНОЙ площади, натянутую на каркас (минимальную поверхность) — поверхностное натяжение в каждой точке действует так, чтобы уменьшить общую энергию (пропорциональную площади), и результат — точное решение вариационной задачи «минимизировать функционал» — та же математическая идея, что и минимизация действия, просто для другой физической величины.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; шарик на разных горках</span>
+          <p>Сделайте два одинаковых по длине жёлоба между одной и той же начальной и конечной точкой (перепад высоты одинаковый) — один прямой (наклонная плоскость), другой изогнутый вогнутой дугой у старта. Одновременно отпустите два одинаковых шарика.</p>
+          <p><span class="qlabel">Что заметить</span> шарик на вогнутой дорожке обычно приходит к финишу быстрее прямого, хотя путь у него длиннее — исторически именно эта задача (брахистохрона, «кривая кратчайшего времени») в XVII веке подтолкнула математиков к созданию вариационного исчисления, того самого аппарата, на котором стоит принцип наименьшего действия.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Свободная частица массой 4 кг должна пройти 12 м за 3 с. Найдите действие S для равномерного движения.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m&nbsp;=&nbsp;4&nbsp;кг, расстояние&nbsp;=&nbsp;12&nbsp;м, T&nbsp;=&nbsp;3&nbsp;с, U&nbsp;=&nbsp;0 (свободная частица).</p>
+            <p><span class="qlabel">Закон</span> §2: S&nbsp;=&nbsp;&int;L&nbsp;dt, L&nbsp;=&nbsp;K для свободной частицы, при равномерном движении K постоянна.</p>
+            <p><span class="qlabel">Решение</span> v&nbsp;=&nbsp;12/3&nbsp;=&nbsp;4&nbsp;м/с; K&nbsp;=&nbsp;&frac12;&middot;4&middot;4&sup2;&nbsp;=&nbsp;32&nbsp;Дж; S&nbsp;=&nbsp;32&middot;3&nbsp;=&nbsp;96&nbsp;Дж&middot;с.</p>
+            <p><span class="qlabel">Ответ</span> <strong>96 Дж&middot;с</strong> — и это МИНИМАЛЬНО возможное действие среди всех траекторий с тем же началом/концом (§2).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Какая симметрия действия, по теореме Нётер, отвечает за сохранение импульса?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> теорема Нётер (§4).</p>
+            <p><span class="qlabel">Решение</span> импульс сохраняется, если действие не меняется при сдвиге системы в пространстве — то есть законы физики одинаковы в любой точке пространства (нет «особого места» во Вселенной).</p>
+            <p><span class="qlabel">Ответ</span> <strong>однородность пространства</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Почему принцип Ферма (свет идёт по пути наименьшего ВРЕМЕНИ) не означает, что свет всегда идёт по кратчайшему РАССТОЯНИЮ?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> §5 — задача «спасателя на пляже».</p>
+            <p><span class="qlabel">Решение</span> время равно расстоянию, делённому на скорость, а скорость света разная в разных средах (медленнее в воде/стекле, чем в воздухе) — минимизация ВРЕМЕНИ иногда требует пройти БОЛЬШЕЕ расстояние в быстрой среде, чтобы сократить путь в медленной, ровно как спасателю выгоднее пробежать лишний участок по песку.</p>
+            <p><span class="qlabel">Ответ</span> <strong>потому что скорость света зависит от среды</strong> — кратчайшее время и кратчайшее расстояние совпадают только в однородной среде.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Уравнение Эйлера-Лагранжа, применённое к L = ½m·q̇² − U(q), даёт F = ma. Что символ q̇ обозначает физически?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> обозначения вариационного исчисления (§3).</p>
+            <p><span class="qlabel">Решение</span> точка над q — стандартное обозначение производной по времени (принятое ещё Ньютоном); q̇ = dq/dt.</p>
+            <p><span class="qlabel">Ответ</span> <strong>скорость</strong> (производная координаты q по времени).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему теорема Нётер не применяется напрямую к дискретным симметриям (например, зеркальной чётности — отражению пространства)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> ограничения теоремы Нётер (§4, key_problems закона).</p>
+            <p><span class="qlabel">Решение</span> теорема Нётер требует НЕПРЕРЫВНОЙ симметрии — преобразования, которое можно выполнить на сколь угодно малую величину (сдвиг на 0.0001 м, поворот на 0.0001°). Отражение (чётность) — дискретная операция, её нельзя выполнить «немного» — либо отразили, либо нет, поэтому классическая формулировка теоремы к ней неприменима напрямую (хотя в квантовой теории поля есть отдельные, более тонкие результаты о дискретных симметриях, например теорема CPT).</p>
+            <p><span class="qlabel">Ответ</span> <strong>чётность — дискретная, а не непрерывная симметрия</strong> — она вне области действия исходной теоремы Нётер.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Least%20action%20Noether%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть X серии, капстоун классической механики</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // Иллюстративная анимация: точка движется по «настоящему» (минимальному) пути из пучка кандидатов.
+  // Здесь чисто наглядно (не привязано к числам §2) — по SVG-path через getPointAtLength, честно по длине дуги.
+  function animatePath(pathEl, dotEl, periodMs){
+    if (!pathEl || !dotEl) return;
+    var len = pathEl.getTotalLength();
+    var lastTs = null;
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var t = (ts % periodMs) / periodMs;
+      var pt = pathEl.getPointAtLength(t * len);
+      dotEl.setAttribute('cx', pt.x.toFixed(1));
+      dotEl.setAttribute('cy', pt.y.toFixed(1));
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  animatePath(document.getElementById('heroPath'), document.getElementById('heroDot'), 6000);
+
+  // §2: два «кандидата» едут одновременно вдоль своих путей с СОБСТВЕННОЙ скоростью, честно
+  // отражающей их описание (A — равномерно, B — стоит, потом резко разгоняется) — не одинаковый темп.
+  var uniform = document.getElementById('pathDotUniform');
+  var stopgo = document.getElementById('pathDotStop');
+  var X0 = 40, X1 = 200, X2 = 360, Y0 = 150, Y1 = 50;
+  var PERIOD = 6000;
+  var lastTs2 = null;
+  function tick2(ts){
+    if (lastTs2 === null) lastTs2 = ts;
+    var phase = (ts % PERIOD) / PERIOD; // 0..1 по полному циклу (соответствует T=4с задачи, масштабировано под 6с темп)
+    if (uniform) {
+      uniform.setAttribute('cx', (X0 + (X2 - X0) * phase).toFixed(1));
+      uniform.setAttribute('cy', (Y0 + (Y1 - Y0) * phase).toFixed(1));
+    }
+    if (stopgo) {
+      // первая половина цикла — стоит на месте, вторая — резко проезжает весь оставшийся путь
+      var t2 = phase < 0.5 ? 0 : (phase - 0.5) * 2;
+      stopgo.setAttribute('cx', (X0 + (X2 - X0) * t2).toFixed(1));
+      stopgo.setAttribute('cy', (Y0 + (Y1 - Y0) * t2).toFixed(1));
+    }
+    requestAnimationFrame(tick2);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick2);
+})();
+</script>
+</body>
+</html>
