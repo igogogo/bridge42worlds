@@ -131,18 +131,16 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     text-decoration: none;
 }
 .view-audit-link:hover { color: var(--text); border-color: var(--link); }
-.theory-img-pair {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0 28px;
+/* Одна картинка вместо пары бок о бок (юзер-фидбек 2026-07-15: пара по ширине вылезала
+   за край текстовой колонки) — .tip-frame даёт стрелочкам точку отсчёта по высоте только
+   картинки, подпись вынесена под рамку отдельным элементом (theory-img-pair.js). */
+.theory-img-pair { max-width: 680px; margin: 18px 0 28px; }
+.tip-frame { position: relative; border-radius: 10px; }
+.tip-frame img {
+    width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 10px; display: block; cursor: zoom-in;
 }
-.theory-img-pair figure { margin: 0; }
-.theory-img-pair img {
-    width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 10px; display: block;
-}
-.theory-img-pair figcaption {
-    margin-top: 6px; font-size: .78rem; color: var(--soft); text-align: center; line-height: 1.4;
-}
-@media (max-width: 640px) {
-    .theory-img-pair { grid-template-columns: 1fr; }
+.tip-caption {
+    margin: 6px 0 0; font-size: .78rem; color: var(--soft); text-align: center; line-height: 1.4;
 }
 #tag-graph, #scientist-graph, #laws-graph, #kg-graph {
     position: relative; border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
@@ -580,9 +578,8 @@ h1 {
     background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
     padding: 24px clamp(16px, 4vw, 40px);
 }
-/* Страница статьи — серый холст вокруг белой карточки контента (юзер-фидбек 2026-07-15):
-   .article-main выше явно белый (--bg), тут красим ТОЛЬКО фон body у статьи, не сайт целиком. */
-body.article-page { background: var(--card-bg); }
+/* Серый холст вокруг белой карточки статьи откачен (юзер-фидбек 2026-07-15: "сделай на
+   статьях просто белый фон, убери серый" — серый оставляем только для обучающих статей). */
 /* 750px-эксперимент откачен (юзер-фидбек 2026-07-15, тот же день: "верни обратно, ширина
    для глаз была хорошей") — колонка стоит как и раньше на 620px ниже, ничего не переопределяем. */
 /* Весь контент статьи держим в ширину обложки (620px) — иначе заголовки/секции/формулы
