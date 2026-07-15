@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>الجاذبية والمدارات: لماذا لا تسقط الكواكب ولا تطير بعيدًا — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- эллиптическая орбита: живое ускорение/замедление по 2 закону Кеплера ---------- */
+.orbit-fig{ max-width:600px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.orbit-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:600px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:90px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>أربعة قوانين، صورة واحدة</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون الجاذبية: قوة بين اثنين</a></li>
+<li><a href="#s3"><span class="n">03</span>قانون كبلر الأول: القطع الناقص، ليس الدائرة</a></li>
+<li><a href="#s4"><span class="n">04</span>قانون كبلر الثاني: المساحات المتساوية</a></li>
+<li><a href="#s5"><span class="n">05</span>قانون كبلر الثالث: ميزان للنجوم</a></li>
+<li><a href="#s6"><span class="n">06</span>مثال شامل: كيف تُكتشف الكواكب الخارجية</a></li>
+<li><a href="#s7"><span class="n">07</span>إلى أين يقود هذا: من كبلر إلى أينشتاين</a></li>
+<li><a href="#s8"><span class="n">08</span>تجربة منزلية</a></li>
+<li><a href="#s9"><span class="n">09</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · الميكانيكا السماوية · الجزء السابع</p>
+<h1>الجاذبية والمدارات: لماذا لا تسقط الكواكب ولا تطير بعيدًا</h1>
+<p class="subtitle">نفس القوة التي تُسقط التفاحة تُبقي القمر في مداره منذ 4.5 مليار سنة — إنه ببساطة «يُخطئ» الأرض بشكل دائري، ولا يسقط مباشرة نحوها.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="150" cy="110" fill="none" rx="110" ry="88" stroke="var(--rule)" stroke-width="1.5"></ellipse>
+<circle cx="216" cy="110" fill="var(--brass-fill)" r="12"></circle>
+<circle cx="260" cy="110" fill="var(--steel-fill)" id="heroPlanet" r="7"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="170" y="205">эллипс, Солнце — в фокусе, не в центре</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>يوهان كبلر، عند تحليله لملاحظات تيخو براهي، استنتج ثلاث قواعد تجريبية لحركة الكواكب — قبل وقت طويل من شرح نيوتن من أين تأتي. اتضح أن قوانين كبلر الثلاثة هي نتيجة رياضية مباشرة لقوة بسيطة واحدة تتناقص مع مربع المسافة. في هذه الملاحظة: قانون الجاذبية، قوانين كبلر الثلاثة مع أمثلة عددية، وكيف تُستخدم معًا لإيجاد كواكب حول نجوم أخرى.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Эллиптическая орбита планеты вокруг звезды" src="/lang/ru/theory/img/gravity_kepler_hero.jpg"/><figcaption>مدار كوكب إهليلجي حول نجم</figcaption></figure>
+<figure><img alt="Шарик на резиновой мембране — модель гравитационной ямы" src="/lang/ru/theory/img/gravity_kepler_concept.jpg"/><figcaption>كرة على غشاء مطاطي — نموذج لبئر الجاذبية</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>أربعة قوانين، صورة واحدة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>ماذا يقول</th></tr>
+<tr><td>الجاذبية (نيوتن)</td><td>قوة الجذب ~ حاصل ضرب الكتلتين / مربع المسافة</td></tr>
+<tr><td>كبلر الأول</td><td>المدار — قطع ناقص، النجم في البؤرة، ليس في المركز</td></tr>
+<tr><td>كبلر الثاني</td><td>مساحات متساوية في أزمنة متساوية — أسرع عند النجم، أبطأ بعيدًا</td></tr>
+<tr><td>كبلر الثالث</td><td>مربع الدورة ~ مكعب حجم المدار</td></tr>
+</table>
+<p>وجد كبلر القانونين الأولين عام 1609 والثالث عام 1619، بشكل تجريبي بحت، بمواءمة الصيغ لبيانات تيخو براهي. أظهر نيوتن عام 1687: الثلاثة ليست قواعد منفصلة، بل نتائج رياضية لقوة واحدة (§2). هذه حالة نادرة في تاريخ الفيزياء حيث اكتُشف القانون «مقلوبًا» — من الملاحظات إلى الصيغة، وليس من النظرية إلى التنبؤ.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون الجاذبية: قوة بين اثنين</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> أي جسمين يتجاذبان بقوة تتناسب طرديًا مع حاصل ضرب كتلتيهما وعكسيًا مع مربع المسافة بينهما:</p>
+<div class="plate">
+<div class="eq-body">F = G·m<sub>1</sub>m<sub>2</sub>/r²</div>
+<div class="cap">G ≈ 6.674×10⁻¹&amp;sup9 نيوتن·م²/كغ² — ثابت الجاذبية، هو نفسه في كل أنحاء الكون</div>
+</div>
+<p>«التربيع العكسي» — تفصيل أساسي: ضاعف المسافة ثلاث مرات، تقل القوة ليس ثلاث مرات بل تسع مرات. وهذا يفسر أيضًا لماذا المدارات مستقرة بشكل عام (لا تتبعثر ولا تنهار) — مع أسس أخرى (غير 2) تكون المدارات غير مستقرة لأدنى اضطرابات.</p>
+<div class="callout brass">
+<span class="tag">لماذا لا يسقط القمر على الأرض</span>
+<p>التباس شائع: «بما أن هناك جاذبية، لماذا لا يسقط القمر؟» إنه يسقط — باستمرار، طوال الوقت. لكن لديه أيضًا سرعة جانبية (باتجاه مماسي للمدار)، والسقوط يعوض بالضبط مقدار «هروب» سطح الأرض للأسفل بسبب انحنائها. أوضح نيوتن هذا بتجربة فكرية «مدفع على جبل»: كلما أسرعت في إطلاق القذيفة أفقيًا، كلما طارت أبعد قبل أن تسقط — وعند سرعة كافية، «تسقط» حول الأرض كلها، دون أن تصل إلى الأرض أبدًا. هذا هو المدار.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>قانون كبلر الأول: القطع الناقص، ليس الدائرة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> مدار الكوكب — قطع ناقص، في إحدى بؤرتيه يقع النجم (ليس في مركز القطع الناقص):</p>
+<div class="plate">
+<div class="eq-body">r = a(1 − e²)/(1 + e·cosθ)</div>
+<div class="cap">a — المحور شبه الرئيسي، e — الاختلاف المركزي (0 — دائرة، أقرب إلى 1 — قطع ناقص طويل جدًا)</div>
+</div>
+<p>على مدى 2000 عام قبل كبلر، اعتبر الجميع (بمن فيهم كوبرنيكوس) المدارات دوائر مثالية — الشكل «المثالي» بدا فلسفيًا ضروريًا للسماوات. كافح كبلر لمدة ثماني سنوات مع مدار المريخ، محاولًا ملاءمة دائرة للبيانات الدقيقة جدًا لتيخو براهي، حتى استسلم وجرب القطع الناقص — وقد تطابق تمامًا من المحاولة الأولى.</p>
+<div class="callout steel">
+<span class="tag">للأرض أيضًا قطع ناقص، لكنه شبه دائري</span>
+<p>الاختلاف المركزي لمدار الأرض هو فقط e ≈ 0.017 — تقريبًا دائرة بالنظر، لكن لهذا السبب في يناير تكون الأرض أقرب إلى الشمس بحوالي 5 ملايين كم مما هي عليه في يوليو (لا علاقة له بفصول السنة — تلك يسببها ميل المحور، وليس الاختلاف المركزي).</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>قانون كبلر الثاني: المساحات المتساوية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> الخط الواصل بين النجم والكوكب يمسح مساحات متساوية في أزمنة متساوية:</p>
+<div aria-hidden="true" class="orbit-fig">
+<svg viewbox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="200" cy="120" fill="none" rx="140" ry="112" stroke="var(--rule)" stroke-width="1.5"></ellipse>
+<circle cx="284" cy="120" fill="var(--brass-fill)" r="10"></circle>
+<!-- широкий угол, короткий радиус — сектор у периапсиса (планета близко и быстро) -->
+<polygon fill="var(--steel-fill)" opacity=".4" points="284,120 340,120 336,72"></polygon>
+<!-- узкий угол, длинный радиус — сектор у апоапсиса (планета далеко и медленно), та же площадь -->
+<polygon fill="var(--moss-fill)" opacity=".4" points="284,120 62,113 62,127"></polygon>
+<circle cx="340" cy="120" fill="var(--ink)" id="orbitPlanet" r="7"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>المسافة إلى النجم</b><span data-readout="dist">0.40</span></span>
+<span><b>السرعة</b><span data-readout="speed">2.50</span></span>
+</div>
+<p>المساحتان الزرقاء والخضراء في الشكل — «قطاعان» يمسحهما الكوكب في نفس الزمن: عريض زاويًا لكن قصير نصف قطريًا عند النجم (الكوكب يطير سريعًا، الزاوية كبيرة) وضيق زاويًا لكن طويل نصف قطريًا بعيدًا (الكوكب يزحف ببطء، الزاوية لا تتغير تقريبًا) — مساحتاهما متساويتان. الكوكب يبطئ ويتسارع أمام العينين في الرسوم المتحركة أعلاه: تابع كيف يمر سريعًا بالحافة اليمنى من المدار (قريبًا من النجم) وكيف يمر ببطء — بالحافة اليسرى (بعيدًا).</p>
+<p>هذه ليست فرضية منفصلة، بل نتيجة مباشرة لـ <strong>حفظ الزخم الزاوي</strong> (الجزء الثاني، §4) — جاذبية النجم دائمًا ما تكون موجهة باتجاه الخط إلى الكوكب (قوة مركزية)، مما يعني أن عزم القوة بالنسبة للنجم يساوي صفرًا، وأن L = r × p محفوظ. بما أن L ثابت، و r يتناقص عند النجم — يجب أن تزداد السرعة الزاوية لتعويض ذلك (نفس الرياضيات تمامًا التي تنطبق على متزلج الجليد عندما يضم ذراعيه — الجزء الثاني، §4).</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>قانون كبلر الثالث: ميزان للنجوم</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> مربع مدة الدورة يتناسب مع مكعب المحور شبه الرئيسي للمدار:</p>
+<div class="plate">
+<div class="eq-body">T² = (4π²/GM)·a³</div>
+<div class="cap">M — كتلة الجسم المركزي (النجم)؛ كلما كانت أكبر، كانت الدورة أقصر عند نفس المسافة</div>
+</div>
+<div class="units">حيلة مريحة: بوحدات «الوحدات الفلكية» (a — بالوحدة الفلكية، T — بالسنوات، M — بكتل الشمس) تتبسط الصيغة إلى <span class="u">T² = a³/M</span> — لا حاجة لحساب G أو π، لأنه بالنسبة للأرض (a=1 و.ف، T=1 سنة، M=1 M<sub>☉</sub>) طرفا المعادلة يساويان 1 بالتعريف.</div>
+<p>مثال عددي: كوكب افتراضي يدور حول الشمس على مسافة a = 4 و.ف. كم تبلغ مدة دورته؟</p>
+<div class="eq"><div class="eq-body">T² = a³ = 4³ = 64  ⇒  T = <strong>8 سنوات</strong></div><div class="eq-tag">(1)</div></div>
+<p>هكذا تمامًا اكتُشف نبتون (1846) — من خلال الاضطرابات التي أحدثها في مدار أورانوس، حسب الفلكيون أين يبحثون عن الكوكب المجهول، حتى قبل رؤيته بالتلسكوب.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>مثال شامل: كيف تُكتشف الكواكب الخارجية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنجمع كل القوانين في مسألة فلكية حقيقية: لاحظ تلسكوب أن نجمًا ما يخفت قليلاً بانتظام — كوكب يمر أمامه (طريقة العبور)، مدة الكسوف T = 2 سنة.</p>
+<ol>
+<li>من طيف النجم يقدر الفلكيون كتلته بشكل مستقل: لنفرض M = 2 M<sub>☉</sub>.</li>
+<li><strong>قانون كبلر الثالث</strong> بصيغة الوحدة الفلكية/السنة/كتلة الشمس يعطي مسافة الكوكب إلى النجم:</li>
+</ol>
+<div class="eq"><div class="eq-body">a³ = T²·M = 2²·2 = 8  ⇒  a = <strong>2 و.ف.</strong></div><div class="eq-tag">(2)</div></div>
+<p>لم تذهب أي بعثة إلى هذا الكوكب — المسافة حُسبت فقط من مدة وميض النجم وكتلته. <strong>القانون الأول</strong> (§3) يحدد شكل المدار من تفاصيل منحنى الضوء (تناظر الانخفاض يشير إلى الاختلاف المركزي)، و <strong>القانون الثاني</strong> (§4) — لماذا تحدث العبورات على فترات زمنية متساوية، وليس بشكل عشوائي: السرعة الزاوية للكوكب يمكن التنبؤ بها في أي نقطة من المدار.</p>
+<div class="callout moss">
+<span class="tag">اسم الموقع متصل</span>
+<p>هذه الطريقة بالضبط هي وراء معظم المقالات عن الكواكب الخارجية على bridge42worlds — تلسكوبات TESS وكبلر (المسمى تيمنًا بيوهان كبلر نفسه) بحثت عن مثل هذه الكسوفات الدورية، والقوانين من هذه الملاحظة — هي الرياضيات المباشرة التي يستخدمها مؤلفو هذه المقالات.</p>
+</div>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>إلى أين يقود هذا: من كبلر إلى أينشتاين</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>قوانين كبلر-نيوتن تعمل بدقة هائلة في كل مكان تقريبًا في الكون — لكن ليس بدقة مطلقة. مدار عطارد (الكوكب الأقرب إلى الشمس، حيث الجاذبية أقوى ما يمكن) يَدور ببطء كَكُل — القطع الناقص لا يبقى في مكانه، بل يتحرك بدارية. الميكانيكا النيوتونية تتنبأ بمعظم هذه البدارية (اضطرابات من كواكب أخرى)، لكن 43 ثانية قوسية في القرن ظلت غير مفسرة لما يقرب من 60 عامًا.</p>
+<div class="callout brass">
+<span class="tag">أول انتصار للنظرية النسبية العامة</span>
+<p>في عام 1915، طبق أينشتاين معادلات النسبية العامة التي استنتجها حديثًا على مدار عطارد — وحصل بالضبط على الـ 43 ثانية قوسية الناقصة، دون أي معامل توافق. كان هذا أول تأكيد تجريبي حقيقي للنسبية العامة، حتى قبل الكسوف الشهير عام 1919 مع انحراف ضوء النجوم. اليوم نعرف: قانون نيوتن للجاذبية هو تقريب ممتاز للنظرية النسبية العامة في المجالات الضعيفة والسرعات غير العالية جدًا، لكنه ليس الكلمة الأخيرة في الفيزياء.</p>
+</div>
+<p>على الموقع هذه قوانين منفصلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/law_of_universal_gravitation.html">قانون الجاذبية العامة</a> ·
+          <a href="/lang/ar/laws/keplers_first_law.html">قانون كبلر الأول</a> ·
+          <a href="/lang/ar/laws/keplers_second_law.html">قانون كبلر الثاني</a> ·
+          <a href="/lang/ar/laws/keplers_third_law.html">قانون كبلر الثالث</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · نرسم قطعًا ناقصًا حقيقيًا</span>
+<p>اغرس دبوسين (أو قلمي رصاص) في ورق مقوى على مسافة 10-15 سم عن بعضهما، ضع عليهما حلقة من خيط بطول يساوي ثلاثة أضعاف المسافة بين الدبابيس تقريبًا. شد الخيط بقلم الرصاص وارسم دائرة، مع إبقائه مشدودًا طوال الوقت.</p>
+<p><span class="qlabel">ما الذي ستلاحظه</span> ستحصل على قطع ناقص حقيقي، والدبابيس هما بؤرتاه (§3). أبعد الدبابيس أكثر — سيصبح القطع الناقص أكثر استطالة (اختلاف مركزي أكبر)؛ قربهما كثيرًا — ستحصل على ما يشبه الدائرة. هذه هي الحقيقة الهندسية نفسها أن «مجموع المسافات إلى البؤرتين ثابت» — وعليها تقوم الميكانيكا المدارية حرفيًا.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · ثقل على خيط عبر أنبوب</span>
+<p>أدخل خيطًا قويًا عبر أنبوب قصير (قلم حبر جاف قديم يفي بالغرض)، اربط ثقلًا صغيرًا (صامولة، مفتاح) من أحد الطرفين، وأمسك الخيط من الطرف الآخر بيدك. أدر الثقل في دائرة فوق الأنبوب، ثم اسحب الطرف الحر من الخيط بسلاسة، مقصرًا نصف قطر الدوران.</p>
+<p><span class="qlabel">ما الذي ستلاحظه</span> سيتسارع الثقل فجأة في دورانه عندما يقل نصف القطر — هذه نسخة ميكانيكية من قانون كبلر الثاني (§4) وحفظ الزخم الزاوي (الجزء الثاني): شد الخيط، مثل جاذبية النجم، موجه نحو المركز تمامًا، لذا L محفوظ، وعندما يقل r يجب أن تزداد السرعة الزاوية.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل دائمًا يتبع المخطط: <strong>المعطى → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. ضوعفت المسافة بين جسمين ثلاث مرات، دون تغير الكتلتين. بكم مرة تغيرت قوة الجاذبية؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> r<sub>الجديد</sub> = 3r.</p>
+<p><span class="qlabel">القانون</span> قانون الجاذبية (§2): F ∝ 1/r².</p>
+<p><span class="qlabel">الحل</span> F<sub>الجديد</sub>/F = r²/(3r)² = 1/9.</p>
+<p><span class="qlabel">الجواب</span> <strong>انخفضت بمقدار 9 مرات</strong> — «التربيع العكسي» في العمل.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. كوكب خارجي يدور حول نجم كتلته 4 كتل شمسية على مسافة 2 و.ف. جد مدة الدورة بالسنوات.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> M = 4 M<sub>☉</sub>، a = 2 و.ف.</p>
+<p><span class="qlabel">القانون</span> قانون كبلر الثالث بوحدات الوحدة الفلكية/السنة/كتلة الشمس (§5): T² = a³/M.</p>
+<p><span class="qlabel">الحل</span> T² = 2³/4 = 8/4 = 2 ⇒ T = √2 ≈ 1.41 سنة.</p>
+<p><span class="qlabel">الجواب</span> <strong>≈1.41 سنة</strong> — النجم الكبير «يُسرّع» المدار أكثر من الشمس عند نفس المسافة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. كوكب في الحضيض (أقرب نقطة إلى النجم) أقرب مرتين إلى النجم مما هو في الأوج (أبعد نقطة). بكم مرة تكون سرعته في الحضيض أكبر منها في الأوج؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> r<sub>أوج</sub> = 2r<sub>حضيض</sub>.</p>
+<p><span class="qlabel">القانون</span> حفظ الزخم الزاوي (§4): L = mvr = ثابت في هاتين النقطتين (السرعة عمودية على نصف القطر في كليهما).</p>
+<p><span class="qlabel">الحل</span> v<sub>حض</sub>·r<sub>حض</sub> = v<sub>أوج</sub>·r<sub>أوج</sub> = v<sub>أوج</sub>·2r<sub>حض</sub> ⇒ v<sub>حض</sub> = 2v<sub>أوج</sub>.</p>
+<p><span class="qlabel">الجواب</span> <strong>ضعف</strong> في الحضيض — تمامًا كما يتسارع متزلج الجليد عند اقترابه من محور الدوران.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. قمر صناعي يدور حول الأرض في 90 دقيقة على مدار منخفض. قمر آخر يطير على بُعد ضعف المسافة من مركز الأرض. بكم مرة تكون مدته أكبر؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> a<sub>2</sub> = 2a<sub>1</sub>، M نفسه (الأرض).</p>
+<p><span class="qlabel">القانون</span> قانون كبلر الثالث (§5): T² ∝ a³.</p>
+<p><span class="qlabel">الحل</span> T<sub>2</sub>²/T<sub>1</sub>² = (2a<sub>1</sub>)³/a<sub>1</sub>³ = 8 ⇒ T<sub>2</sub>/T<sub>1</sub> = √8 ≈ 2.83.</p>
+<p><span class="qlabel">الجواب</span> <strong>≈2.83 مرة أكبر</strong> — المدة تزداد أسرع من المسافة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. لماذا لا يعمل قانون كبلر الأول («المدار — قطع ناقص») في نظام مكون من ثلاثة أجسام أو أكثر ذات كتل متقاربة (مثلاً نجم ثلاثي)؟ ما الفرض الذي يُنتهك عندها؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> استنتاج قوانين كبلر صالح بدقة لمسألة جسمين (§1-§5 — في كل مكان يُفترض نجم واحد وكوكب واحد).</p>
+<p><span class="qlabel">الحل</span> عند وجود جسم ثالث كبير، لم تعد قوة الجاذبية قوة مركزية موجهة بدقة إلى بؤرة واحدة — يتأثر الكوكب بعدة قوى جذب في آن واحد، ويتوقف المدار عن كونه قطعًا ناقصًا مغلقًا ويصبح فوضويًا (مسألة الأجسام الثلاثة، بشكل عام لا تحل تحليليًا).</p>
+<p><span class="qlabel">الجواب</span> <strong>يُنتَهك فرض «جسمان فقط»</strong> — قوانين كبلر في صورتها النقية تصف فقط التفاعل الجذبي الثنائي.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">وجدت عدم دقة؟</span>
+<p>خطأ مطبعي، صيغة خاطئة، رقم لا يتوافق، شرح غير واضح — اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Gravity%20Kepler%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعليًا، وتُدرس، ويُجرى التصحيح بناءً عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء السابع من السلسلة، الميكانيكا السماوية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // Численное интегрирование движения по эллипсу с сохранением L = r²dθ/dt = const (2 закон Кеплера) —
+  // не читаем CSS-состояние, а честно считаем позицию по физике на каждый кадр (как и весь сайт).
+  // θ — истинная аномалия, отсчитанная от периапсиса (ближайшей к фокусу точки, θ=0).
+  // Фокус (звезда) смещён от геометрического центра эллипса на c=A·e вдоль большой оси — стандартная
+  // полярная параметризация r(θ) уже даёт координаты ОТНОСИТЕЛЬНО ФОКУСА, поэтому при переводе в
+  // экранные координаты (где рисуем эллипс через центр) добавляем это смещение c.
+  function orbitPoint(cx, cy, a, e, theta){
+    var r = a * (1 - e * e) / (1 + e * Math.cos(theta));
+    var c = a * e;
+    return { x: cx + c + r * Math.cos(theta), y: cy - r * Math.sin(theta), r: r };
+  }
+
+  // По второму закону Кеплера площадь заметается с постоянной скоростью dA/dt = k/2 (k = r²dθ/dt = const),
+  // а площадь всего эллипса = πab — значит период T = πab/(k/2) = 2πab/k. Задаём T=6с (общий темп сайта)
+  // и решаем обратную задачу — какое k этому соответствует — вместо того чтобы подбирать множитель
+  // на глаз (так и получился прошлый баг: планета зависала в афелии на ~40 минут вместо 6 секунд).
+  var PERIOD_SEC = 6;
+  function kFor(a, e){ var b = a * Math.sqrt(1 - e * e); return 2 * Math.PI * a * b / PERIOD_SEC; }
+
+  var MAIN = { cx: 200, cy: 120, a: 140, e: 0.6, theta: Math.PI * 0.85, el: document.getElementById('orbitPlanet') };
+  MAIN.k = kFor(MAIN.a, MAIN.e);
+  var HERO = { cx: 150, cy: 110, a: 110, e: 0.6, theta: Math.PI * 0.55, el: document.getElementById('heroPlanet') };
+  HERO.k = kFor(HERO.a, HERO.e);
+  var distEl = document.querySelector('[data-readout="dist"]');
+  var speedEl = document.querySelector('[data-readout="speed"]');
+
+  var lastTs = null;
+  if (!window.requestAnimationFrame) return;
+  function advance(body, dtSec){
+    var p = orbitPoint(body.cx, body.cy, body.a, body.e, body.theta);
+    body.theta += (body.k / (p.r * p.r)) * dtSec; // dθ/dt = k/r² — сохранение момента импульса (2 закон Кеплера)
+    if (body.el) { body.el.setAttribute('cx', p.x.toFixed(1)); body.el.setAttribute('cy', p.y.toFixed(1)); }
+    return p;
+  }
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05); // защита от скачка таба
+    lastTs = ts;
+
+    var mainPoint = advance(MAIN, dtSec);
+    advance(HERO, dtSec);
+
+    if (distEl) distEl.textContent = (mainPoint.r / MAIN.a).toFixed(2);
+    if (speedEl) speedEl.textContent = (L / mainPoint.r).toFixed(2);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

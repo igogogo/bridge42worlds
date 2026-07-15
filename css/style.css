@@ -6,7 +6,7 @@
 html[lang="ar"], html[lang="he"], html[lang="fa"], html[lang="ur"] { direction: rtl; }
 html[lang="ar"] body { font-family: 'Noto Naskh Arabic', 'Inter', 'Helvetica Neue', Arial, sans-serif; }
 /* боковое оглавление статьи — на другую сторону */
-html[lang="ar"] .article-nav { left: auto; right: max(12px, calc((100vw - 900px) / 2 - 170px)); }
+html[lang="ar"] .article-nav { left: auto; right: max(12px, calc((100vw - 1000px) / 2 - 170px)); }
 /* стрелка мозаики — к левому краю и зеркально */
 html[lang="ar"] .mosaic-arrow { right: auto; left: 6px; transform: translateY(-50%) scaleX(-1); }
 /* латиница/цифры/URL внутри RTL держим как есть */
@@ -576,7 +576,26 @@ h1 {
 }
 /* Страница статьи — серый холст вокруг белой карточки контента (юзер-фидбек 2026-07-15):
    .article-main выше явно белый (--bg), тут красим ТОЛЬКО фон body у статьи, не сайт целиком. */
-body.article-page { background: var(--card-bg); }
+body.article-page { background: var(--card-bg); max-width: 1000px; }
+/* Контентная колонка статьи была узковата (юзер-фидбек 2026-07-15) — 620px -> 750px (+~20%).
+   Выше специфичность (body.article-page ...), чем у общих 620px-правил ниже — сознательно
+   переопределяем только тут, не трогая тот же 620px на страницах тега/закона/учёного, где он
+   ещё нужен как есть. body.article-page уже выросла до 1000px (см. выше) — есть куда расти. */
+body.article-page .article-main > *,
+body.article-page .article-main p,
+body.article-page .ai-cover,
+body.article-page .abstract-lead,
+body.article-page .callout,
+body.article-page .article-title-top,
+body.article-page .oneliner,
+body.article-page .authors-top,
+body.article-page .author-verify-top,
+body.article-page .meta,
+body.article-page .next-top,
+body.article-page .next-divider,
+body.article-page .license {
+    max-width: 750px;
+}
 /* Весь контент статьи держим в ширину обложки (620px) — иначе заголовки/секции/формулы
    растягиваются на всю ширину .article-main и торчат правее картинки, неровно. */
 .article-main > * { max-width: 620px; }
@@ -601,12 +620,12 @@ body.article-page { background: var(--card-bg); }
 @media (min-width: 1280px) {
     .article-side {
         position: fixed; top: 64px;
-        right: max(12px, calc((100vw - 900px) / 2 - 170px));
+        right: max(12px, calc((100vw - 1000px) / 2 - 170px));
         max-height: calc(100vh - 84px);
     }
     html[lang="ar"] .article-side, html[lang="he"] .article-side,
     html[lang="fa"] .article-side, html[lang="ur"] .article-side {
-        right: auto; left: max(12px, calc((100vw - 900px) / 2 - 170px));
+        right: auto; left: max(12px, calc((100vw - 1000px) / 2 - 170px));
     }
 }
 /* Тот же язык, что у .express-badge — контур, капс, разрядка букв — просто мельче под узкую колонку. */
@@ -641,7 +660,7 @@ body.article-page { background: var(--card-bg); }
 /* ── Section navigation ───────── */
 .article-nav {
     position: fixed;
-    left: max(12px, calc((100vw - 900px) / 2 - 170px));
+    left: max(12px, calc((100vw - 1000px) / 2 - 170px));
     top: 245px;
     width: 160px;
     max-height: calc(100vh - 265px);

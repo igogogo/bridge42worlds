@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>قانون كولوم وقانون أوم: من الشحنة الساكنة إلى التيار المتدفق — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s5 .measure{ font-size:.94rem; line-height:1.55; }
+#s5 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:100px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتوى</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>قانونان، بنية واحدة</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون كولوم: القوة بين الشحنات</a></li>
+<li><a href="#s3"><span class="n">03</span>قانون أوم: التيار كتيار متدفق</a></li>
+<li><a href="#s4"><span class="n">04</span>مثال شامل: من الشحنة إلى التيار</a></li>
+<li><a href="#s5"><span class="n">05</span>إلى أين يقودنا هذا: من أين تأتي المقاومة</a></li>
+<li><a href="#s6"><span class="n">06</span>تجربة منزلية</a></li>
+<li><a href="#s7"><span class="n">07</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · الكهرومغناطيسية · الجزء الثالث عشر</p>
+<h1>قانون كولوم وقانون أوم: من الشحنة الساكنة إلى التيار المتدفق</h1>
+<p class="subtitle">أحد القانونين يصف الشحنات الساكنة، المتنافرة أو المتجاذبة في الفضاء؛ والآخر يصف ما يحدث عندما تنطلق هذه الشحنات من مكانها وتبدأ في التدفق.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="90" cy="100" fill="none" r="22" stroke="var(--brass-fill)" stroke-width="2.5"></circle>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="20" text-anchor="middle" x="90" y="107">+</text>
+<circle cx="250" cy="100" fill="none" id="heroCharge" r="18" stroke="var(--steel-fill)" stroke-width="2.5"></circle>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="18" id="heroChargeSign" text-anchor="middle" x="250" y="107">+</text>
+<line id="heroArrow" stroke="var(--ink)" stroke-dasharray="4,3" stroke-width="1.5" x1="115" x2="225" y1="100" y2="100"></line>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>قام شارل كولوم في عام 1785 بقياس كيفية تناقص القوة الكهربائية مع المسافة — تمامًا مثل الجاذبية (قانون التربيع العكسي، الجزء السابع). وبعد 41 عامًا، اكتشف جورج أوم نمطًا آخر لا يقل بساطة: التيار عبر موصل يتناسب طرديًا مع الجهد المطبق. في هذه الملاحظة — كلا القانونين مع الأرقام وكيف أن الكمية نفسها — الشحنة الكهربائية — تربط سكون كولوم بديناميكية أوم من خلال تعريف بسيط للتيار: I = q/t.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Два заряда и силовые линии поля между ними" src="/lang/ru/theory/img/coulomb_ohm_hero.jpg"/><figcaption>شحنتان وخطوط المجال بينهما</figcaption></figure>
+<figure><img alt="Ток течёт по проводу — заряды в направленном движении" src="/lang/ru/theory/img/coulomb_ohm_concept.jpg"/><figcaption>التيار يتدفق عبر السلك — شحنات في حركة موجهة</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>قانونان، بنية واحدة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>الصيغة</th><th>عن ماذا</th></tr>
+<tr><td>كولوم (1785)</td><td class="sym">F = kq₁q₂/r²</td><td>القوة بين شحنتين ساكنتين</td></tr>
+<tr><td>أوم (1826)</td><td class="sym">I = U/R</td><td>التيار عبر موصل تحت جهد</td></tr>
+</table>
+<p>يعمل كولوم مع الشحنات الساكنة — ببساطة قوة التجاذب/التنافر في الفضاء، بدون حركة. يصف أوم الديناميكية — ما يحدث عندما تتحرك الشحنات بشكل منظم عبر موصل تحت تأثير فرق الجهد. الجسر بينهما — تعريف بسيط: شدة التيار I هي كمية الشحنة q المارة عبر مقطع الموصل في الزمن t: I = q/t (الانتقال العددي المفصل — §4).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون كولوم: القوة بين الشحنات</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> قوة التفاعل بين شحنتين نقطيتين تتناسب طرديًا مع حاصل ضربهما وعكسيًا مع مربع المسافة:</p>
+<div class="plate">
+<div class="eq-body">F = k·q₁q₂/r²</div>
+<div class="cap">k ≈ 9×10⁹ Н·м²/كولوم² — ثابت كولوم (مقرب لتسهيل الحساب، مثل g≈10 في الميكانيكا)</div>
+</div>
+<div aria-hidden="true" class="anim-strip">
+<svg style="position:absolute;inset:0;width:100%;height:100%" viewbox="0 0 300 100">
+<circle cx="60" cy="50" fill="none" r="18" stroke="var(--brass-fill)" stroke-width="2.5"></circle>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="60" y="57">+</text>
+<circle cx="240" cy="50" fill="none" id="pairCharge" r="14" stroke="var(--steel-fill)" stroke-width="2.5"></circle>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="14" id="pairChargeSign" text-anchor="middle" x="240" y="56">−</text>
+</svg>
+<div class="anim-label left">المختلفة — تتجاذب؛ المتشابهة — تتنافر</div>
+</div>
+<p>مثال عددي: شحنتان كل منهما q₁ = q₂ = 1 ميكروكولوم على مسافة r = 3 سم = 0.03 м. أوجد قوة التفاعل بينهما.</p>
+<div class="eq"><div class="eq-body">F = 9×10⁹·(10⁻⁶)²/0.03² = 9×10⁹·10⁻¹²/9×10⁻⁴ = <strong>10 نيوتن</strong></div><div class="eq-tag">(1)</div></div>
+<div class="callout brass">
+<span class="tag">الكهرباء أقوى من الجاذبية بشكل لا يُصدق</span>
+<p>قارن: التجاذب الجاذبي بين جسمين كتلة كل منهما 1 كجم على مسافة 1 м — حوالي 6.674×10⁻¹&amp;sup9 نيوتن، ضئيل جدًا. القوة الكهربائية بين إلكترونين على نفس المسافة — حوالي 2.3×10⁻²⁸ نيوتن، لكنها لا تزال أقوى بحوالي ~10⁴⁰ (عشرة آلاف تريليون تريليون تريليون) مرة من تجاذبهما الجذبي المتبادل. السبب الوحيد لكون الجاذبية «أهم» من الكهرباء في الحياة اليومية هو أن المادة العادية شبه متعادلة كهربائيًا تمامًا (الشحنات متوازنة)، بينما تتجمع الكتل بدون هذا التوازن.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>قانون أوم: التيار كتيار متدفق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> شدة التيار تتناسب طرديًا مع الجهد وعكسيًا مع المقاومة:</p>
+<div class="plate">
+<div class="eq-body">I = U/R</div>
+<div class="cap">U [فولت], R [أوم], I [أمبير]</div>
+</div>
+<p>التشبيه الكلاسيكي — أنابيب المياه: الجهد U هو «الضغط» (فرق الضغط عند طرفي الأنبوب)، المقاومة R هي ضيق الأنبوب نفسه، التيار I هو كمية الماء التي تتدفق فعليًا في الثانية. الأنبوب العريض (R صغير) عند نفس الضغط يسمح بمرور ماء (تيار) أكثر؛ الأنبوب الضيق (R كبير) — أقل.</p>
+<p>مثال عددي: بطارية سيارة (U = 12 فولت) موصولة بمصباح مقاومته R = 4 أوم. أوجد التيار المار عبر المصباح.</p>
+<div class="eq"><div class="eq-body">I = U/R = 12/4 = <strong>3 أمبير</strong></div><div class="eq-tag">(2)</div></div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>مثال شامل: من الشحنة إلى التيار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنربط القانونين مباشرة. الشحنة q = 2 كولوم تتدفق بانتظام عبر موصل خلال زمن t = 4 ث (هذا هو تعريف التيار — §1):</p>
+<div class="eq"><div class="eq-body">I = q/t = 2/4 = <strong>0.5 أمبير</strong></div><div class="eq-tag">(3)</div></div>
+<p>الآن لنطبق قانون أوم: ما الجهد اللازم ليمر مثل هذا التيار عبر مقاومة R = 10 أوم؟</p>
+<div class="eq"><div class="eq-body">U = I·R = 0.5·10 = <strong>5 فولت</strong></div><div class="eq-tag">(4)</div></div>
+<p>سلسلة الاستدلال كاملة — من الشحنة الساكنة q (عالم كولوم) عبر تعريف التيار I=q/t إلى قانون أوم (عالم الشحنات المتحركة) — تُظهر أن هذين ليسا حقيقتين منعزلتين، بل كائن واحد (الشحنة الكهربائية) يتم النظر إليه أولاً في حالة السكون، ثم في الحركة.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>إلى أين يقودنا هذا: من أين تأتي المقاومة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>قانون أوم — ليس قانونًا أساسيًا في الطبيعة مثل قانون كولوم، بل هو نمط تجريبي صحيح للعديد من المواد (وليس كلها). على المستوى الميكروي، تنشأ المقاومة بسبب تصادم الإلكترونات المتحركة مع ذرات الشبكة البلورية المهتزة للموصل — كلما «اهتزت» الشبكة بقوة (ارتفاع درجة الحرارة)، زادت التصادمات، وزادت المقاومة. لهذا تزداد مقاومة معظم الفلزات مع التسخين.</p>
+<p>عند التصادمات، تتحول الطاقة الحركية للحركة الموجهة للإلكترونات إلى حرارة — هذه الطاقة نفسها مرتبطة بقانون جول-لينز، P = I²R (القدرة المتبددة على شكل حرارة)، تطبيق مباشر لقانون حفظ الطاقة (الجزء الثاني) على الدائرة الكهربائية. في مثالنا §3: P = 3²·4 = 36 واط — هذه بالضبط كمية الحرارة التي يطلقها المصباح كل ثانية.</p>
+<div class="callout steel">
+<span class="tag">الموصلات الفائقة تخالف قانون أوم — بالمعنى الجيد</span>
+<p>عند تبريد بعض المواد دون درجة حرارة حرجة (أحيانًا بضع درجات فوق الصفر المطلق، وأحيانًا — للموصلات الفائقة «عالية الحرارة» — عند درجة حرارة النيتروجين السائل) تنخفض المقاومة الكهربائية تمامًا إلى الصفر. يمكن للتيار أن يتدفق في حلقة فائقة التوصيل مغلقة عمليًا إلى الأبد، بدون أي جهد — تناقض مباشر مع U = IR عند R = 0 و I ≠ 0. كلا القانونين في هذه الملاحظة قد ظهرا بالفعل في الصورة الموحدة لمعادلات ماكسويل (الجزء الرابع) — إنهما حالات خاصة لنظرية أكثر عمومية للمجال الكهرومغناطيسي.</p>
+</div>
+<p>على الموقع هذه قوانين منفصلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/coulombs_law.html">قانون كولوم</a> ·
+          <a href="/lang/ar/laws/ohms_law.html">قانون أوم</a>
+</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · المشط يجذب الماء والورق</span>
+<p>مشط الشعر الجاف بمشط بلاستيكي عدة مرات (أو افرك بالونًا بسترة صوفية)، ثم قربه من قطع صغيرة من الورق أو من تيار ماء رفيع من الصنبور.</p>
+<p><span class="qlabel">ما ستلاحظه</span> قطع الورق تقفز وتلتصق بالمشط، تيار الماء ينحرف بشكل ملحوظ — الاحتكاك «انتزع» الإلكترونات من سطح إلى آخر، شاحنًا المشط، وقانون كولوم (§2) يجعله يجذب أي أجسام مشحونة (أو قابلة للاستقطاب، مثل الماء) قريبة.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · قلم الرصاص كمقاومة متغيرة</span>
+<p>إذا كان لديك دارة بسيطة في المنزل «بطارية-مصباح (LED)-أسلاك» (أو قم بتجميعها من بطارية خلية زر، و LED وسلكين)، ضع قلم رصاص عادي (مبروز من الطرفين) في فجوة الدارة بدلًا من أحد الأسلاك.</p>
+<p><span class="qlabel">ما ستلاحظه</span> LED يضيء بشكل أخفت مما هو عليه عند التوصيل المباشر بسلك — قلم الرصاص (بعكس المعدن) يمتلك مقاومة ملحوظة. إذا أمكنك تثبيت التلامس في نقاط مختلفة على طول القلم، مع تغيير طول الجزء الفعّال — سوف يتغير السطوع أمام عينيك: كلما زاد المسار عبر القلم — زادت R — قلت I حسب قانون أوم (§3)، أصبح الضوء أخفت.</p>
+</div>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل في كل مكان يتبع المخطط: <strong>المعطى → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. ضوعفت المسافة بين شحنتين. كم مرة تغيرت قوة التفاعل بينهما؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> r<sub>جديد</sub> = 2r.</p>
+<p><span class="qlabel">القانون</span> قانون كولوم (§2): F ∝ 1/r².</p>
+<p><span class="qlabel">الحل</span> F<sub>جديد</sub>/F = r²/(2r)² = 1/4.</p>
+<p><span class="qlabel">الجواب</span> <strong>انخفضت بمقدار 4 مرات</strong> — نفس الرياضيات كما في الجاذبية (الجزء السابع).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. شحنتان كل منهما 2 ميكروكولوم على مسافة 6 سم. أوجد قوة التفاعل بينهما (k ≈ 9×10⁹ Н·м²/كولوم²).</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> q₁ = q₂ = 2×10⁻⁶ كولوم, r = 0.06 м.</p>
+<p><span class="qlabel">القانون</span> قانون كولوم (§2): F = kq₁q₂/r².</p>
+<p><span class="qlabel">الحل</span> F = 9×10⁹·4×10⁻¹²/3.6×10⁻³ = 3.6×10⁻²/3.6×10⁻³ = 10 نيوتن.</p>
+<p><span class="qlabel">الجواب</span> <strong>10 نيوتن</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. يمر تيار 4 أمبير عبر مقاومة 5 أوم. أوجد الجهد على المقاومة والقدرة المتبددة على شكل حرارة.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> R = 5 أوم, I = 4 أمبير.</p>
+<p><span class="qlabel">القانون</span> قانون أوم (§3): U = IR; قانون جول-لينز (§5): P = I²R.</p>
+<p><span class="qlabel">الحل</span> U = 4·5 = 20 فولت; P = 4²·5 = 80 واط.</p>
+<p><span class="qlabel">الجواب</span> <strong>U = 20 فولت, P = 80 واط</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. مرت شحنة 6 كولوم عبر موصل في 3 ثوان. ما المقاومة اللازمة ليكفي جهد 4 فولت لمثل هذا التيار؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> q = 6 كولوم, t = 3 ث, U = 4 فولت.</p>
+<p><span class="qlabel">القانون</span> تعريف التيار (§1, §4): I = q/t; قانون أوم: R = U/I.</p>
+<p><span class="qlabel">الحل</span> I = 6/3 = 2 أمبير; R = 4/2 = 2 أوم.</p>
+<p><span class="qlabel">الجواب</span> <strong>2 أوم</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. لماذا لا تُظهر المادة العادية من حولنا تقريبًا أي قوى كهربائية على مسافات كبيرة، رغم أن القوة الكهربائية أقوى بـ ~10⁴⁰ مرة من قوة الجاذبية؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> §2 — مقارنة قوة كولوم وقوة الجذب العام.</p>
+<p><span class="qlabel">الحل</span> الأجسام العادية شبه متعادلة كهربائيًا تمامًا: الشحنات الموجبة للأنوية تُعوض تقريبًا بالضبط بالشحنات السالبة للإلكترونات، لذلك القوة الكهربائية الكلية بين جسمين متعادلين تقترب من الصفر. أما الجاذبية فليس لها «كتلة سالبة» للتعويض — كتل جميع الجسيمات تتجمع بدون استثناء، لذلك على المقاييس الكبيرة تنتصر الجاذبية، رغم ضعفها الأساسي.</p>
+<p><span class="qlabel">الجواب</span> <strong>التعادل الكهربائي للمادة العادية</strong> — الشحنات متوازنة، الكتل — لا.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت عدم دقة؟</span>
+<p>خطأ إملائي، صيغة خاطئة، رقم لا يتطابق، شرح ركيك — اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Coulomb%20Ohm%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ بالفعل، وتُفحص، ويُجرى التصحيح بناءً عليها — هذا ليس «للوهن».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الثالث عشر من السلسلة، الكهرومغناطيسية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2/hero: два заряда — если одноимённые, отталкиваются (расходятся); если разноимённые, притягиваются.
+  // Честное численное покачивание позиции по циклу, синхронное со сменой знака заряда.
+  function wireChargePair(chargeEl, signEl, x0, x1) {
+    var PERIOD = 6000;
+    var lastTs = null;
+    var attracting = true;
+    setInterval(function(){
+      attracting = !attracting;
+      signEl.textContent = attracting ? '−' : '+';
+    }, PERIOD);
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % PERIOD) / PERIOD;
+      var t = phase < 0.5 ? phase * 2 : (1 - phase) * 2; // туда-обратно за один период
+      var target = attracting ? x0 + (x1 - x0) * 0.35 : x1; // притяжение — сближаются; отталкивание — расходятся
+      var x = x1 + (target - x1) * Math.sin(t * Math.PI / 2);
+      chargeEl.setAttribute('cx', x.toFixed(1));
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var heroCharge = document.getElementById('heroCharge');
+  var heroSign = document.getElementById('heroChargeSign');
+  if (heroCharge) wireChargePair(heroCharge, heroSign, 115, 250);
+
+  var pairCharge = document.getElementById('pairCharge');
+  var pairSign = document.getElementById('pairChargeSign');
+  if (pairCharge) wireChargePair(pairCharge, pairSign, 80, 240);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+
