@@ -45,20 +45,25 @@
 </div>
 
 <div class="scientist-cloud" id="scientist-cloud">$scientists_cloud_html</div>
-<div id="scientist-graph" style="display:none"><canvas id="scicanvas"></canvas></div>
+<div id="scientist-graph" style="display:none">
+    <div class="mini-graph-filters">$mini_graph_filters_html</div>
+    <div class="mini-graph mini-graph--full" data-node="">
+        <canvas id="minigraph"></canvas>
+    </div>
+</div>
 
 <footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a></p></footer>
 <script src="/js/likes.js?v=$asset_ver"></script>
 <script src="/js/search.js?v=$asset_ver"></script>
 <script src="/js/force-graph.js?v=$asset_ver"></script>
-<script src="/js/scientist-graph.js?v=$asset_ver"></script>
+<script src="/js/mini-graph.js?v=$asset_ver"></script>
 <script>
 (function(){
   var lb=document.getElementById('view-list'),gb=document.getElementById('view-graph');
   var cloud=document.getElementById('scientist-cloud'),graph=document.getElementById('scientist-graph');
   function set(g){cloud.style.display=g?'none':'';graph.style.display=g?'block':'none';
     gb.classList.toggle('active',g);lb.classList.toggle('active',!g);
-    if(g&&window.__sciGraphResize)window.__sciGraphResize();
+    if(g&&window.__miniResize)window.__miniResize();
     try{localStorage.setItem('b42_sciview',g?'graph':'list');}catch(e){}}
   lb.onclick=function(){set(false);};gb.onclick=function(){set(true);};
   try{if(localStorage.getItem('b42_sciview')==='graph')set(true);}catch(e){}

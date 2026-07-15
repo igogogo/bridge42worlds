@@ -357,16 +357,22 @@ GRAPH_CROSS_EDGES = {frozenset(("tag", "law")): "tag-law", frozenset(("tag", "sc
 
 
 def mini_graph_filters_html(lang, center_kind="tag"):
-    """Чекбоксы типов узлов + типов связей для мини-графа на странице тега/закона/учёного —
-    та же логика фильтра, что и на большом графе-эксплорере, но с умным дефолтом вместо
-    "всё включено": центр + следующий по приоритету тег→закон→учёный тип, и только связь
-    МЕЖДУ ними (не сам-на-себя). Третий тип и любые "сам-на-себя" рёбра пользователь включает
-    вручную — авто-переключение кросс-рёбер при смене типов делает js/mini-graph.js
-    (юзер-фидбек 2026-07-15: "тот же подход... на каждый тип логика одинакова")."""
+    """Чекбоксы типов узлов + типов связей для мини-графа — та же логика фильтра, что и на
+    большом графе-эксплорере. center_kind=None (страницы-облака тегов/законов/учёных без
+    привязки к одному узлу, мультицентровой граф статьи) — единый дефолт "все 3 типа + все
+    кросс-рёбра, без сам-на-себя" (юзер-фидбек 2026-07-15: "цинфицировать везде один подход").
+    center_kind="tag"/"law"/"sci" (страница одной сущности) — умный дефолт: центр + следующий
+    по приоритету тег→закон→учёный тип, и только связь МЕЖДУ ними. Третий тип и любые
+    "сам-на-себя" рёбра пользователь включает вручную — авто-переключение кросс-рёбер при
+    смене типов делает js/mini-graph.js."""
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
-    next_kind = GRAPH_KIND_PRIORITY[(GRAPH_KIND_PRIORITY.index(center_kind) + 1) % 3]
-    default_kinds = {center_kind, next_kind}
-    default_cross_edge = GRAPH_CROSS_EDGES[frozenset((center_kind, next_kind))]
+    if center_kind is None:
+        default_kinds = {"tag", "law", "sci"}
+        default_cross_edges = {"tag-law", "tag-sci", "law-sci"}
+    else:
+        next_kind = GRAPH_KIND_PRIORITY[(GRAPH_KIND_PRIORITY.index(center_kind) + 1) % 3]
+        default_kinds = {center_kind, next_kind}
+        default_cross_edges = {GRAPH_CROSS_EDGES[frozenset((center_kind, next_kind))]}
 
     def kind_box(value, color, label):
         checked = " checked" if value in default_kinds else ""
@@ -382,9 +388,9 @@ def mini_graph_filters_html(lang, center_kind="tag"):
         return f'<label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="{value}"{" checked" if checked else ""}> {safe(label)}</label>'
 
     edge_boxes = (
-        edge_box("tag-law", "тег↔закон", default_cross_edge == "tag-law")
-        + edge_box("tag-sci", "тег↔учёный", default_cross_edge == "tag-sci")
-        + edge_box("law-sci", "закон↔учёный", default_cross_edge == "law-sci")
+        edge_box("tag-law", "тег↔закон", "tag-law" in default_cross_edges)
+        + edge_box("tag-sci", "тег↔учёный", "tag-sci" in default_cross_edges)
+        + edge_box("law-sci", "закон↔учёный", "law-sci" in default_cross_edges)
         + edge_box("tag-tag", "тег↔тег", False)
         + edge_box("law-law", "закон↔закон", False)
         + edge_box("sci-sci", "учёный↔учёный", False)
@@ -627,6 +633,24 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" '
             f'data-law="{attr_safe(lid)}">{safe(name)}</a>' for lid, name in side_laws))
 
+    # Мини-граф статьи — те же теги/законы/учёные, что уже в сайдбаре, но как несколько
+    # центров сразу (мульти-BFS в js/mini-graph.js), тот же фирменный компонент, что и на
+    # страницах тег/закон/учёный (юзер-фидбек 2026-07-15: "в статью добавить граф... готовый
+    # фильтр класс будет везде фирменный подход"). Меньше 2 узлов — граф бессмысленен, не рисуем.
+    article_graph_ids = (
+        [f"t:{t}" for t in tags] + [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids]
+    )[:8]
+    article_graph_html = ""
+    if len(article_graph_ids) >= 2:
+        mini_lbl = MINI_LABEL.get(lang, MINI_LABEL["en"])
+        article_graph_html = (
+            f'<div class="mini-graph-label">🕸 {safe(mini_lbl)} '
+            f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
+            f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
+            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, None)}</div>'
+            f'<div class="mini-graph" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
+        )
+
     page_file = VERSION_FILES[version]
     version_toggle_html = version_toggle_links(lang, version, date_str, article["id"])
     # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
@@ -679,7 +703,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         license_label=safe(loc.get("license", "Original")),
         license_url=lic, license_name=lic_name,
         canonical_url=canonical_url, hreflang_links=hreflang_links,
-        tags_side_html=tags_side_html, mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
+        tags_side_html=tags_side_html, article_graph_html=article_graph_html,
+        mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
         abstract_html=abstract_html,
         feedback_html=feedback_html,
         nav_html=nav_html, text_html=text_html,
@@ -941,7 +966,8 @@ def generate_tags_cloud(lang):
         lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         tags_title=safe(loc["title"]), tags_subtitle=safe(loc["subtitle"]),
-        footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html
+        footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html,
+        mini_graph_filters_html=mini_graph_filters_html(lang, None)
     ), encoding="utf-8")
 
 
@@ -1255,7 +1281,8 @@ def generate_laws_cloud(lang):
         laws_title=safe(loc["title"]), laws_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]),
         laws_cloud_html=cloud or f'<p>{safe(loc["subtitle"])}</p>',
-        footer_text=safe(loc["footer"])
+        footer_text=safe(loc["footer"]),
+        mini_graph_filters_html=mini_graph_filters_html(lang, None)
     ), encoding="utf-8")
 
 
@@ -1507,7 +1534,8 @@ def generate_scientists_cloud(lang):
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         scientists_title=safe(loc["title"]), scientists_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]), scientists_cloud_html=cloud_html,
-        footer_text=safe(loc["footer"])
+        footer_text=safe(loc["footer"]),
+        mini_graph_filters_html=mini_graph_filters_html(lang, None)
     ), encoding="utf-8")
 
 

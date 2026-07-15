@@ -142,11 +142,11 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
 .tip-caption {
     margin: 6px 0 0; font-size: .78rem; color: var(--soft); text-align: center; line-height: 1.4;
 }
-#tag-graph, #scientist-graph, #laws-graph, #kg-graph {
+#kg-graph {
     position: relative; border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
     max-width: 900px; margin: 0 auto;   /* выровнено по ширине контента, не 100vw */
 }
-#tgcanvas, #scicanvas, #lawcanvas, #kgcanvas { width: 100%; height: 640px; display: block; touch-action: none; cursor: grab; }
+#kgcanvas { width: 100%; height: 640px; display: block; touch-action: none; cursor: grab; }
 
 /* Мини-граф на странице сущности — встроенный, компактный, по ширине текстовой колонки (620px,
    как .article-main p), слева, не по центру — единообразно с остальными блоками страницы. */
@@ -155,6 +155,11 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     border-radius: 12px; background: var(--tag-bg);
 }
 #minigraph { width: 100%; height: 300px; display: block; touch-action: none; cursor: grab; }
+/* Тот же движок и класс на страницах-облаках (◉ на тегах/законах/учёных) — без центра, весь
+   knowledge-graph.json целиком, поэтому по ширине контента и повыше, как большой граф-эксплорер
+   (юзер-фидбек 2026-07-15: "цинфицировать везде один подход... фирменный подход везде"). */
+.mini-graph--full { max-width: 900px; margin: 0 auto; }
+.mini-graph--full #minigraph { height: 640px; }
 
 /* Кнопка «развернуть на весь экран» — добавляется JS-ом (force-graph.js) во ВСЕ графы разом
    (общий движок), т.к. канвас у каждого графа лежит прямо в этом бордер-боксе. Разворачиваем не
@@ -186,10 +191,13 @@ body.graph-fs-open { overflow: hidden; }
     max-width: 620px; margin: 14px 0 2px; font-size: 13px; color: var(--soft);
     display: flex; align-items: center; justify-content: space-between;
 }
-/* Фильтр типов узлов мини-графа (тег/закон/учёный) — те же чекбоксы, что на большом графе. */
+/* Фильтр типов узлов мини-графа (тег/закон/учёный) — те же чекбоксы, что на большом графе.
+   flex-wrap — на широкой колонке (620px, страница тега/закона/учёного) в 1 строку и так
+   помещается, ничего не меняет; в узком сайдбаре статьи (160px) не даёт строке чекбоксов
+   вылезти за край рамки (юзер-фидбек 2026-07-15: "рамка шире... двигает правый край"). */
 .mini-graph-filters {
     max-width: 620px; margin: 4px 0 0; font-size: 11px; color: var(--soft);
-    display: flex; gap: 12px;
+    display: flex; flex-wrap: wrap; gap: 6px 12px;
 }
 .mini-graph-filters:empty { display: none; }
 .mini-graph-filters label { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }

@@ -1,12 +1,16 @@
-// Мини-граф на странице сущности (тег/закон/учёный): узел + его N-хоп соседи из
-// knowledge-graph.json (глубина управляется кнопками +/-, как на большом графе). Движок — force-graph.js.
-// Контейнер: <div class="mini-graph" data-node="t:tagid|l:lawid|s:Name"><canvas id="minigraph"></canvas></div>
-// Фильтр типов (.mg-kind чекбоксы, если есть в разметке) — как на большом графе, но центр
-// всегда показан независимо от галочек (спрятать сам узел страницы было бы бессмысленно).
+// Мини-граф bridge42worlds — три режима на одном движке (force-graph.js), фирменный подход
+// один везде (юзер-фидбек 2026-07-15: "цинфицировать везде один поход"):
+//  1) страница сущности (тег/закон/учёный): один центр + N-хоп соседи, data-node="t:x".
+//  2) страница статьи: НЕСКОЛЬКО центров сразу (её теги+законы+учёные), data-node="t:x,l:y,s:Name".
+//  3) страницы-облака (◉ на списках тегов/законов/учёных): без центра, data-node="" —
+//     показываем весь knowledge-graph.json, отфильтрованный по типам узлов/рёбер, узлы без
+//     ни одной видимой связи прячем (иначе тысячи точек без единой линии).
+// Фильтр типов (.mg-kind/.mg-edge чекбоксы, если есть в разметке) — как на большом графе.
 (function () {
     var box = document.querySelector('.mini-graph[data-node]');
     if (!box || !window.createForceGraph || !document.getElementById('minigraph')) return;
-    var center = box.getAttribute('data-node');
+    var centersAttr = box.getAttribute('data-node') || '';
+    var centers = centersAttr ? centersAttr.split(',').filter(Boolean) : [];
     var BUST = '?_=' + Date.now();
     var TAG_COLORS = { concept: '#7F77DD', object: '#D85A30', substance: '#1D9E75', method: '#378ADD', instrument: '#BA7517' };
     var LAW_COLORS = { 'закон': '#C0392B', 'принцип': '#8E44AD', 'теорема': '#2471A3', 'эффект': '#B9770E', 'уравнение': '#148F77', 'теория': '#5D6D7E' };
@@ -54,29 +58,34 @@
                 var kg = res[0], tn = res[1], ln = res[2], sn = res[3];
                 var edgeTypes = checkedEdgeKgTypes();
                 var visibleEdges = kg.edges.filter(function (e) { return !edgeTypes || edgeTypes[e.t]; });
-                // BFS от центра на глубину __miniDepth (1 хоп по умолчанию — как раньше), только
-                // по рёбрам, прошедшим фильтр типов связи — иначе узел мог бы остаться виден без
-                // единой видимой линии к нему (нашёлся бы по скрытому ребру другого типа).
-                var adj = {};
-                visibleEdges.forEach(function (e) {
-                    (adj[e.a] = adj[e.a] || []).push(e.b);
-                    (adj[e.b] = adj[e.b] || []).push(e.a);
-                });
-                var dist = {}; dist[center] = 0;
-                var queue = [center], head = 0, depth = window.__miniDepth;
-                while (head < queue.length) {
-                    var cur = queue[head++], d = dist[cur];
-                    if (d >= depth) continue;
-                    (adj[cur] || []).forEach(function (nb) {
-                        if (dist[nb] === undefined) { dist[nb] = d + 1; queue.push(nb); }
-                    });
-                }
                 var kinds = checkedKinds();
+
+                // BFS (мультиисточник — все центры на дистанции 0) на глубину __miniDepth, только по
+                // рёбрам, прошедшим фильтр типов связи. В "облачном" режиме (centers пуст) BFS не
+                // нужен — кандидаты все узлы, дальше отсекаем изолированные после фильтра рёбер.
+                var dist = {};
+                if (centers.length) {
+                    var adj = {};
+                    visibleEdges.forEach(function (e) {
+                        (adj[e.a] = adj[e.a] || []).push(e.b);
+                        (adj[e.b] = adj[e.b] || []).push(e.a);
+                    });
+                    var queue = centers.slice(), head = 0, depth = window.__miniDepth;
+                    centers.forEach(function (c) { dist[c] = 0; });
+                    while (head < queue.length) {
+                        var cur = queue[head++], d = dist[cur];
+                        if (d >= depth) continue;
+                        (adj[cur] || []).forEach(function (nb) {
+                            if (dist[nb] === undefined) { dist[nb] = d + 1; queue.push(nb); }
+                        });
+                    }
+                }
+
                 var idx = {}, nodes = [];
                 kg.nodes.forEach(function (n) {
-                    if (dist[n.id] === undefined) return;
-                    var isCenter = n.id === center;
-                    if (kinds && !isCenter && !kinds[n.kind]) return;  // фильтр типов — центр не трогаем
+                    var isCenter = centers.indexOf(n.id) > -1;
+                    if (centers.length && dist[n.id] === undefined) return;  // не облачный режим — держим BFS-границу
+                    if (kinds && !isCenter && !kinds[n.kind]) return;  // фильтр типов — центры не трогаем
                     var rawid = n.id.slice(2), name, tip;
                     if (n.kind === 'tag') {
                         var t = tn[rawid] || {};
@@ -97,16 +106,35 @@
                 visibleEdges.forEach(function (e) {
                     if (idx[e.a] !== undefined && idx[e.b] !== undefined) links.push([idx[e.a], idx[e.b]]);
                 });
-                return { nodes: nodes, links: links };
+
+                if (centers.length) return { nodes: nodes, links: links };
+
+                // Облачный режим: без единой видимой связи узел — просто шум, прячем (юзер-фидбек
+                // "неприкаянные сущности" — та же логика, что и у большого графа-эксплорера).
+                var deg = {};
+                links.forEach(function (l) { deg[l[0]] = (deg[l[0]] || 0) + 1; deg[l[1]] = (deg[l[1]] || 0) + 1; });
+                var remap = {}, nodes2 = [];
+                nodes.forEach(function (n, i) {
+                    if (!deg[i]) return;
+                    remap[i] = nodes2.length; nodes2.push(n);
+                });
+                var links2 = links
+                    .filter(function (l) { return deg[l[0]] && deg[l[1]]; })
+                    .map(function (l) { return [remap[l[0]], remap[l[1]]]; });
+                return { nodes: nodes2, links: links2 };
             });
         },
-        radius: function (n) { return n.center ? 9 : (n.kind === 'tag' ? 4 : 6); },
+        radius: function (n) { return n.center ? 9 : (3 + Math.min(n.deg, 16) * 0.7); },
         color: function (n) {
             return n.kind === 'tag' ? (TAG_COLORS[n.sub] || '#888')
                 : n.kind === 'law' ? (LAW_COLORS[n.sub] || '#C0392B') : SCI_COLOR;
         },
         hollow: function (n) { return n.kind === 'tag' && !n.center; },
-        labelAlways: function () { return true; },  // соседей мало — подписываем все
+        // Один центр (страница тега/закона/учёного) — узлов мало, подписываем все, как раньше.
+        // Несколько центров (граф статьи) или облачный режим без центра — узлов может быть
+        // много, подписываем только сами центры, соседей — по ховеру/степени (force-graph.js
+        // сам покажет подпись при deg>=3), иначе на 10+ центрах подписи заливают весь холст.
+        labelAlways: function (n) { return centers.length <= 1 || n.center; },
         tooltip: function (n) { return n.name + (n.tip ? ' — ' + n.tip : ''); },
         href: function (n, lang) {
             if (n.kind === 'tag') return '/lang/' + lang + '/tags/' + encodeURIComponent(n.rawid) + '.html';
@@ -115,7 +143,8 @@
         }
     });
 
-    // Кнопки +/- глубины (если есть в разметке — не на всех страницах обязательны).
+    // Кнопки +/- глубины (если есть в разметке — не на всех страницах обязательны; в облачном
+    // режиме без центра глубина BFS не используется, кнопки там просто не вставляются в шаблон).
     var depthVal = document.getElementById('mini-depth-val');
     function setMiniDepth(d) {
         window.__miniDepth = Math.max(1, Math.min(4, d));

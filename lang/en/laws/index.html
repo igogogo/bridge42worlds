@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=850d02aef4">
+    <link rel="stylesheet" href="/css/style.css?v=8748673b1e">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -145,13 +145,18 @@
 <a href="/lang/en/laws/spinstatistics_theorem.html" class="tag-item law-item" data-law="spinstatistics_theorem"><span><span class="law-type-dot" style="background:#888"></span>spin–statistics theorem</span><span class="cat-chip-n">236</span></a>
 <a href="/lang/en/laws/virial_theorem.html" class="tag-item law-item" data-law="virial_theorem"><span><span class="law-type-dot" style="background:#888"></span>virial theorem</span><span class="cat-chip-n">316</span></a>
 </div>
-<div id="laws-graph" style="display:none"><canvas id="lawcanvas"></canvas></div>
+<div id="laws-graph" style="display:none">
+    <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div>
+    <div class="mini-graph mini-graph--full" data-node="">
+        <canvas id="minigraph"></canvas>
+    </div>
+</div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a></p></footer>
-<script src="/js/likes.js?v=850d02aef4"></script>
-<script src="/js/search.js?v=850d02aef4"></script>
-<script src="/js/force-graph.js?v=850d02aef4"></script>
-<script src="/js/law-graph.js?v=850d02aef4"></script>
+<script src="/js/likes.js?v=8748673b1e"></script>
+<script src="/js/search.js?v=8748673b1e"></script>
+<script src="/js/force-graph.js?v=8748673b1e"></script>
+<script src="/js/mini-graph.js?v=8748673b1e"></script>
 <script>
 function filterLaws(q) {
     q = (q || '').toLowerCase().trim();
@@ -175,7 +180,7 @@ function filterLaws(q) {
   var cloud=document.getElementById('law-cloud'),graph=document.getElementById('laws-graph');
   function set(g){cloud.style.display=g?'none':'';graph.style.display=g?'block':'none';
     gb.classList.toggle('active',g);lb.classList.toggle('active',!g);
-    if(g&&window.__lawGraphResize)window.__lawGraphResize();
+    if(g&&window.__miniResize)window.__miniResize();
     try{localStorage.setItem('b42_lawview',g?'graph':'list');}catch(e){}}
   lb.onclick=function(){set(false);};gb.onclick=function(){set(true);};
   try{if(localStorage.getItem('b42_lawview')==='graph')set(true);}catch(e){}
