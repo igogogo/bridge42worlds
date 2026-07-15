@@ -60,7 +60,8 @@
 *{box-sizing:border-box;}
 html{background:var(--paper);}
 body{
-  margin:0;
+  max-width:1180px;
+  margin:0 auto;
   background:var(--paper);
   color:var(--ink);
   font-family:var(--font-body);
@@ -69,6 +70,13 @@ body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
+/* Меню сайта поверх страницы — та же бумажная подложка и чернильный текст, что и у самой
+   заметки (не белый фон/синие ссылки сайта по умолчанию): визуально маркирует раздел
+   "теория" как отдельную образовательную зону (юзер-фидбек 2026-07-15). */
+.top-bar{ background:var(--paper); }
+.top-bar a{ color:var(--ink); }
+.top-bar a.active{ color:var(--brass); }
+.top-bar .logo{ color:var(--ink); font-weight:700; }
 ::selection{ background:var(--steel-fill); color:var(--paper); }
 
 .vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
