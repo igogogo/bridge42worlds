@@ -351,16 +351,45 @@ def side_chip_group(label, chip_html_list):
     return f'<div class="side-tags-label">{safe(label)}</div>' + "".join(chip_html_list)
 
 
-def mini_graph_filters_html(lang):
-    """Чекбоксы типов узлов для мини-графа на странице тега/закона/учёного — тот же набор
-    типов (тег/закон/учёный), что и на большом графе-эксплорере, все включены по умолчанию.
-    Метки берём из GRAPH_LABELS (определён ниже в файле — ок, резолвится при вызове, не при импорте)."""
+GRAPH_KIND_PRIORITY = ["tag", "law", "sci"]
+GRAPH_CROSS_EDGES = {frozenset(("tag", "law")): "tag-law", frozenset(("tag", "sci")): "tag-sci",
+                     frozenset(("law", "sci")): "law-sci"}
+
+
+def mini_graph_filters_html(lang, center_kind="tag"):
+    """Чекбоксы типов узлов + типов связей для мини-графа на странице тега/закона/учёного —
+    та же логика фильтра, что и на большом графе-эксплорере, но с умным дефолтом вместо
+    "всё включено": центр + следующий по приоритету тег→закон→учёный тип, и только связь
+    МЕЖДУ ними (не сам-на-себя). Третий тип и любые "сам-на-себя" рёбра пользователь включает
+    вручную — авто-переключение кросс-рёбер при смене типов делает js/mini-graph.js
+    (юзер-фидбек 2026-07-15: "тот же подход... на каждый тип логика одинакова")."""
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
-    return (
-        f'<label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> {safe(loc["tags"])}</label>'
-        f'<label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> {safe(loc["laws"])}</label>'
-        f'<label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> {safe(loc["scientists"])}</label>'
+    next_kind = GRAPH_KIND_PRIORITY[(GRAPH_KIND_PRIORITY.index(center_kind) + 1) % 3]
+    default_kinds = {center_kind, next_kind}
+    default_cross_edge = GRAPH_CROSS_EDGES[frozenset((center_kind, next_kind))]
+
+    def kind_box(value, color, label):
+        checked = " checked" if value in default_kinds else ""
+        return f'<label><input type="checkbox" class="mg-kind" value="{value}"{checked}> <span style="color:{color}">●</span> {safe(label)}</label>'
+
+    kind_boxes = (
+        kind_box("tag", "#7F77DD", loc["tags"])
+        + kind_box("law", "#C0392B", loc["laws"])
+        + kind_box("sci", "#2e7d32", loc["scientists"])
     )
+
+    def edge_box(value, label, checked):
+        return f'<label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="{value}"{" checked" if checked else ""}> {safe(label)}</label>'
+
+    edge_boxes = (
+        edge_box("tag-law", "тег↔закон", default_cross_edge == "tag-law")
+        + edge_box("tag-sci", "тег↔учёный", default_cross_edge == "tag-sci")
+        + edge_box("law-sci", "закон↔учёный", default_cross_edge == "law-sci")
+        + edge_box("tag-tag", "тег↔тег", False)
+        + edge_box("law-law", "закон↔закон", False)
+        + edge_box("sci-sci", "учёный↔учёный", False)
+    )
+    return kind_boxes + f'<div class="mg-edges">{edge_boxes}</div>'
 
 
 def build_og_meta(title, description, url, image_url=""):
@@ -1037,7 +1066,7 @@ def generate_tag_page(tag_id, lang):
         related_label=safe(loc["related"]),
         related_tags_html=related_html, search_placeholder=safe(loc["search"]),
         search_hint=safe(loc["hint"]), graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
-        mini_graph_filters_html=mini_graph_filters_html(lang),
+        mini_graph_filters_html=mini_graph_filters_html(lang, "tag"),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>', footer_text=safe(loc["footer"])
     ), encoding="utf-8")
 
@@ -1349,7 +1378,7 @@ def generate_law_page(law_id, lang):
         tags_label=safe(loc["tags"]), related_tags_html=related_tags_html,
         related_laws_block=related_laws_block,
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
-        mini_graph_filters_html=mini_graph_filters_html(lang),
+        mini_graph_filters_html=mini_graph_filters_html(lang, "law"),
         articles_label=safe(loc["articles"]),
         primary_tag=attr_safe(",".join(law_tags)),
         articles_list_html=articles_html or f'<p style="color:var(--soft)">—</p>',
@@ -1570,6 +1599,7 @@ def generate_scientist_page(sid, lang):
         related_scientists_html=related_scientists_html,
         search_placeholder=safe(loc["search"]),
         search_hint=safe(loc["hint"]), graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
+        mini_graph_filters_html=mini_graph_filters_html(lang, "sci"),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>', footer_text=safe(loc["footer"])
     ), encoding="utf-8")
 

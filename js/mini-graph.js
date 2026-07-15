@@ -23,6 +23,25 @@
         return s;
     }
 
+    // Типы рёбер (.mg-edge, если есть): null = разметки нет, показываем все рёбра как раньше.
+    // "tag-law"/"tag-sci"/"law-sci" — компактные ярлыки чекбоксов; в graph.json кросс-рёбра
+    // называются иначе (law-tag/sci-tag/law-sci) + law-sci заодно покрывает law-influence
+    // (мини-граф не различает "открыл" от "оказал влияние" — упрощение для компактного вида).
+    var EDGE_KG_TYPES = {
+        'tag-law': ['law-tag'], 'tag-sci': ['sci-tag'], 'law-sci': ['law-sci', 'law-influence'],
+        'tag-tag': ['tag-tag'], 'law-law': ['law-law'], 'sci-sci': ['sci-sci']
+    };
+    function checkedEdgeKgTypes() {
+        var boxes = document.querySelectorAll('.mg-edge');
+        if (!boxes.length) return null;
+        var s = {};
+        boxes.forEach(function (c) {
+            if (!c.checked) return;
+            (EDGE_KG_TYPES[c.value] || []).forEach(function (t) { s[t] = 1; });
+        });
+        return s;
+    }
+
     createForceGraph({
         canvas: 'minigraph', resizeKey: '__miniResize', rebuildKey: '__miniRebuild',
         build: function (lang) {
@@ -33,9 +52,13 @@
                 fetch('/lang/' + lang + '/data/scientists.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
             ]).then(function (res) {
                 var kg = res[0], tn = res[1], ln = res[2], sn = res[3];
-                // BFS от центра на глубину __miniDepth (1 хоп по умолчанию — как раньше).
+                var edgeTypes = checkedEdgeKgTypes();
+                var visibleEdges = kg.edges.filter(function (e) { return !edgeTypes || edgeTypes[e.t]; });
+                // BFS от центра на глубину __miniDepth (1 хоп по умолчанию — как раньше), только
+                // по рёбрам, прошедшим фильтр типов связи — иначе узел мог бы остаться виден без
+                // единой видимой линии к нему (нашёлся бы по скрытому ребру другого типа).
                 var adj = {};
-                kg.edges.forEach(function (e) {
+                visibleEdges.forEach(function (e) {
                     (adj[e.a] = adj[e.a] || []).push(e.b);
                     (adj[e.b] = adj[e.b] || []).push(e.a);
                 });
@@ -71,7 +94,7 @@
                     nodes.push({ rawid: rawid, name: name, kind: n.kind, sub: n.sub, center: isCenter, tip: tip });
                 });
                 var links = [];
-                kg.edges.forEach(function (e) {
+                visibleEdges.forEach(function (e) {
                     if (idx[e.a] !== undefined && idx[e.b] !== undefined) links.push([idx[e.a], idx[e.b]]);
                 });
                 return { nodes: nodes, links: links };
@@ -104,8 +127,32 @@
     var plus = document.getElementById('mini-depth-plus');
     if (plus) plus.addEventListener('click', function () { setMiniDepth(window.__miniDepth + 1); });
 
-    // Чекбоксы типов узлов → перестроить.
-    document.querySelectorAll('.mg-kind').forEach(function (c) {
+    // Чекбоксы типов узлов → перестроить + авто-переключить КРОСС-рёбра (не "сам-на-себя" —
+    // те юзер крутит вручную, см. mg-edges). Тип X только что появился среди отмеченных типов —
+    // включаем связи X с каждым уже отмеченным ДРУГИМ типом; тип X пропал — гасим все рёбра,
+    // где он участвует (юзер-фидбек 2026-07-15: "тот же принцип... на каждый тип одинаково").
+    var CROSS_EDGE_OF = {
+        'tag,law': 'tag-law', 'law,tag': 'tag-law',
+        'tag,sci': 'tag-sci', 'sci,tag': 'tag-sci',
+        'law,sci': 'law-sci', 'sci,law': 'law-sci'
+    };
+    function edgeCheckbox(value) { return document.querySelector('.mg-edge[value="' + value + '"]'); }
+    document.querySelectorAll('.mg-kind').forEach(function (kindBox) {
+        kindBox.addEventListener('change', function () {
+            var kinds = checkedKinds() || {};
+            ['tag', 'law', 'sci'].forEach(function (other) {
+                if (other === kindBox.value) return;
+                var edgeVal = CROSS_EDGE_OF[kindBox.value + ',' + other];
+                var box = edgeCheckbox(edgeVal);
+                if (!box) return;
+                // Оба конца теперь отмечены — включаем связь; конец пропал — гасим.
+                box.checked = !!(kinds[kindBox.value] && kinds[other]);
+            });
+            if (window.__miniRebuild) window.__miniRebuild();
+        });
+    });
+    // Рёбра-чекбоксы (кросс — авто, "сам-на-себя" — вручную) → просто перестроить.
+    document.querySelectorAll('.mg-edge').forEach(function (c) {
         c.addEventListener('change', function () { if (window.__miniRebuild) window.__miniRebuild(); });
     });
 })();

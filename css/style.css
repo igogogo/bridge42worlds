@@ -196,6 +196,12 @@ body.graph-fs-open { overflow: hidden; }
 .mini-graph-filters:empty { display: none; }
 .mini-graph-filters label { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }
 .mini-graph-filters input[type="checkbox"] { width: 12px; height: 12px; }
+/* Вторая строка — типы связей (не типы узлов выше): кросс-типы (тег↔закон и т.п.) переключаются
+   сами при смене узловых типов (js/mini-graph.js), "сам-на-себя" — свободный выбор юзера,
+   по умолчанию выключены (юзер-фидбек 2026-07-15). Своя строка — flex-basis:100% рвёт родительский
+   flex row на новую строку без отдельного grid/wrapper. */
+.mg-edges { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 2px; opacity: .8; }
+.mg-edge-label { font-size: 10px; }
 .mini-depth-ctrl { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
 .mini-depth-ctrl button {
     width: 18px; height: 18px; padding: 0; border-radius: 50%; line-height: 1; cursor: pointer;
