@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Black-body radiation: how color reveals a star's temperature — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: спектр чёрного тела при разных температурах ---------- */
+.spectrum-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.spectrum-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.temp-swatch{ display:inline-block; width:26px; height:26px; border-radius:50%; vertical-align:middle; margin-right:8px; border:1.5px solid var(--rule); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Three laws of one phenomenon</a></li>
+<li><a href="#s2"><span class="n">02</span>Wien's law: color reveals temperature</a></li>
+<li><a href="#s3"><span class="n">03</span>Stefan-Boltzmann law: power grows four times faster</a></li>
+<li><a href="#s4"><span class="n">04</span>Planck's formula and the birth of quanta</a></li>
+<li><a href="#s5"><span class="n">05</span>A worked example: weighing a star by its color</a></li>
+<li><a href="#s6"><span class="n">06</span>Where it leads: cosmic microwave background</a></li>
+<li><a href="#s7"><span class="n">07</span>Experiment at home</a></li>
+<li><a href="#s8"><span class="n">08</span>Check-up problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · thermodynamics · part XII</p>
+<h1>Black-body radiation: how color reveals a star's temperature</h1>
+<p class="subtitle">A red-hot poker, an incandescent lamp, and a distant star all glow according to the same law — and the attempt to fully explain it in 1900 gave birth to quantum physics.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="170" cy="100" fill="#8B2E1A" id="heroStar" r="60"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">нагрев меняет цвет — не краска, а физика</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>Any body emits thermal radiation, and the shape of this glow depends only on temperature — not on the material (for an ideal 'black body'). Wien's law (1893) gives the color of the radiation peak, the Stefan-Boltzmann law (1879/1884) gives the total power, and Planck's formula (1900) gives the exact shape of the entire curve; it was the attempt to derive this formula 'from scratch' that forced Max Planck to assume that energy is emitted in portions — quanta. This note covers all three laws with numbers and how astronomers weigh stars by their color.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Металл, раскалённый от чёрного до бело-горячего" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>Metal heated from black to white-hot</figcaption></figure>
+<figure><img alt="Свет звезды, разложенный призмой на спектр" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>Starlight split into a spectrum by a prism</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Three laws of one phenomenon</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Law</th><th>What it gives</th><th>Formula</th></tr>
+<tr><td>Wien (1893)</td><td>at what wavelength the radiation peak occurs</td><td class="sym">λ<sub>max</sub> = b/T</td></tr>
+<tr><td>Stefan-Boltzmann (1879/84)</td><td>total radiation power</td><td class="sym">j* = σT⁴</td></tr>
+<tr><td>Planck (1900)</td><td>full curve shape at every wavelength</td><td class="sym">B(λ,T) — see §4</td></tr>
+</table>
+<p>All three describe the same object — <strong>a perfect black body</strong>, an ideal absorber (and therefore an ideal emitter) of any incident light. Real stars, incandescent bulbs, and glowing coals are surprisingly good approximations of this idealization.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Wien's law: color reveals temperature</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> The wavelength at which the radiation peak occurs is inversely proportional to temperature:</p>
+<div class="plate">
+<div class="eq-body">λ<sub>max</sub> = b/T</div>
+<div class="cap">b ≈ 2.898×10⁻³ m·K — Wien's displacement constant</div>
+</div>
+<div aria-hidden="true" class="spectrum-fig">
+<svg viewbox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="380" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="30" y1="20" y2="150"></line>
+<path d="M30,150 L380,150" fill="none" id="spectrumCurve" stroke="var(--brass-fill)" stroke-width="2.4"></path>
+<circle cx="30" cy="150" fill="var(--steel-fill)" id="peakDot" r="5"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>temperature</b><span data-readout="temp">2900</span> K</span>
+<span><span class="temp-swatch" id="tempSwatch"></span><span data-readout="color-label">dark red</span></span>
+</div>
+<p>Numerical example: a body is heated to T = 2900 K (typical incandescent lamp filament). Find the peak wavelength.</p>
+<div class="eq"><div class="eq-body">λ<sub>max</sub> = 0.0029/2900 = <strong>1×10⁻⁶ m</strong> (1000 nm, near infrared)</div><div class="eq-tag">(1)</div></div>
+<p>The peak for an incandescent lamp is in the infrared, NOT in the visible: the lamp heats more than it illuminates, and the visible yellowish-white light is just the 'tail' of the Planck curve (§4) extending into the visible region. That is why LED lamps (with their peak precisely in visible light) are so much more energy-efficient.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Stefan-Boltzmann law: power grows four times faster</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> The total radiated power per unit area grows as the FOURTH power of temperature:</p>
+<div class="plate">
+<div class="eq-body">j* = σT⁴</div>
+<div class="cap">σ ≈ 5.67×10⁻&amp;sup8 W/(m²·K⁴) — Stefan-Boltzmann constant</div>
+</div>
+<p>The fourth power is no small matter: heat a body to twice the absolute temperature — it radiates not twice, but 2⁴ = <strong>16 times</strong> more powerfully. This is a sharp, 'explosive' dependence compared to a linear one.</p>
+<div class="callout brass">
+<span class="tag">Why Betelgeuse is so bright despite its lower temperature</span>
+<p>The red giant Betelgeuse is cooler than the Sun (∼3500 K vs. 5800 K) — by temperature alone it should be dimmer. But total luminosity also depends on surface AREA (j*·4πR²), and Betelgeuse's radius is hundreds of times larger than the Sun's — the gigantic area more than compensates for the lower temperature, and the star shines tens of thousands of times brighter than the Sun.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Planck's formula and the birth of quanta</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>By the end of the 19th century, classical physics (Rayleigh-Jeans law) predicted that a black body should radiate INFINITE energy at short wavelengths — an absurd result dubbed the 'ultraviolet catastrophe'. Real bodies don't behave that way: they have a clear peak and drop off on both sides.</p>
+<p>Move the temperature slider higher (§2, animation) — the entire curve shape changes: the peak shifts left (Wien's law) AND the whole curve rises (Stefan-Boltzmann law, area under the curve grows as T⁴) simultaneously, according to one formula:</p>
+<div class="eq"><div class="eq-body">B(ν,T) = (2hν³/c²)·1/(e<sup>hν/k<sub>B</sub>T</sup> − 1)</div><div class="eq-tag">(2)</div></div>
+<div class="callout steel">
+<span class="tag">Energy portions, not a 'trick'</span>
+<p>Planck found this formula in 1900 almost by trial and error — it fit experimental data perfectly, bridging Wien's law (short wavelengths) and Rayleigh-Jeans law (long wavelengths) into one curve. To justify the formula theoretically, he had to assume that energy is emitted not continuously, but in portions E = hν — quanta. Planck himself long considered this a mathematical trick, not physical reality, until Einstein used the same idea to explain the photoelectric effect (part VI, Planck-Einstein equation) in 1905.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A worked example: weighing a star by its color</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Astronomers cannot fly to stars with a ruler and thermometer — all data about a star usually boils down to its spectrum. Let's combine both laws in one problem.</p>
+<p><strong>Step 1 (Wien's law).</strong> Star B is twice as hot as the Sun (T<sub>☉</sub> = 5800 K, T<sub>B</sub> = 11600 K) — so its spectral peak is shifted halfway to the ultraviolet: the star appears noticeably bluer than the Sun to the eye/on a spectrograph. This is how T is measured, knowing nothing about the star's distance.</p>
+<p><strong>Step 2 (Stefan-Boltzmann law).</strong> If star B's radius is the same as the Sun's, how many times brighter does it shine?</p>
+<div class="eq"><div class="eq-body">L<sub>B</sub>/L<sub>☉</sub> = (T<sub>B</sub>/T<sub>☉</sub>)⁴ = 2⁴ = <strong>16</strong></div><div class="eq-tag">(3)</div></div>
+<p>Combining both measurements (color yields T, brightness at a known distance yields total luminosity L), from the Stefan-Boltzmann law L = 4πR²σT⁴ we can also derive the star's radius R — the entire set of the star's physical parameters is obtained without leaving Earth, from its light alone.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where it leads: cosmic microwave background</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The most precise natural black-body spectrum ever measured is not a star, but the Universe itself. The cosmic microwave background (CMB) is cooled light that broke free about 380,000 years after the Big Bang, when the Universe cooled enough to become transparent. Today, after 13.8 billion years of expansion, it has cooled to T ≈ 2.725 K — and follows Planck's formula (§4) with an accuracy no laboratory furnace on Earth could match.</p>
+<p>The COBE, WMAP, and Planck satellites measured this radiation with fantastic precision — tiny deviations from the perfect Planck curve (on the order of one hundred-thousandth) carry the imprint of the very first moments of the Universe's existence and underpin modern cosmology, including Hubble's law and the Friedmann equations (next note in the series).</p>
+<p>On the website these are separate laws, for a deeper dive:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/plancks_law.html">Planck's radiation law</a> ·
+          <a href="/lang/en/laws/wiens_displacement_law.html">Wien's displacement law</a> ·
+          <a href="/lang/en/laws/stefanboltzmann_law.html">Stefan-Boltzmann law</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experiment at home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · electric stove changes color before your eyes</span>
+<p>Turn on an electric coil burner (spiral, not induction) to maximum and observe it from a safe distance, without touching, for a minute or two.</p>
+<p><span class="qlabel">What to notice</span> the coil goes from dark (infrared radiation, you feel heat but see no light) to dull red, then bright orange — a direct illustration of Wien's law: heating shifts the radiation peak from invisible infrared closer to the visible spectrum.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · invisible remote light in a phone camera</span>
+<p>Point a TV remote at a smartphone camera (not at your eye — the remote's infrared LED is not directly visible) and press any button while looking at the phone screen in camera mode.</p>
+<p><span class="qlabel">What to notice</span> on the phone screen you'll see a flashing bright dot at the tip of the remote — invisible to the naked eye. The remote's LED emits in the near-infrared (low 'temperature' compared to visible light), and the phone camera sensor (unlike the human eye) is sensitive to this range as well.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Check-up problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Think first, then open the solution. Every solution follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. A star's surface temperature is 5800 K (like the Sun). Find the peak wavelength of its radiation.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> T = 5800 K, b ≈ 0.0029 m·K.</p>
+<p><span class="qlabel">Law</span> Wien's law (§2): λ<sub>max</sub> = b/T.</p>
+<p><span class="qlabel">Solution</span> λ<sub>max</sub> = 0.0029/5800 ≈ 5×10⁻⁷ m = 500 nm.</p>
+<p><span class="qlabel">Answer</span> <strong>500 nm</strong> — green part of the visible spectrum (the Sun appears white because it radiates across the entire visible range, not just at the peak).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A star's temperature is tripled. By what factor does its total radiative power per unit area increase?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> T<sub>new</sub> = 3T.</p>
+<p><span class="qlabel">Law</span> Stefan-Boltzmann law (§3): j* ∝ T⁴.</p>
+<p><span class="qlabel">Solution</span> j*<sub>new</sub>/j* = 3⁴ = 81.</p>
+<p><span class="qlabel">Answer</span> <strong>81 times</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. Two stars have the same temperature, but star B's radius is three times larger than star A's. How many times brighter is star B (total luminosity)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> T<sub>A</sub> = T<sub>B</sub>, R<sub>B</sub> = 3R<sub>A</sub>.</p>
+<p><span class="qlabel">Law</span> total luminosity L = 4πR²σT⁴ (§3) — at equal T depends only on area, R².</p>
+<p><span class="qlabel">Solution</span> L<sub>B</sub>/L<sub>A</sub> = (R<sub>B</sub>/R<sub>A</sub>)² = 3² = 9.</p>
+<p><span class="qlabel">Answer</span> <strong>9 times</strong> — luminosity grows with area, not with radius directly.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. The CMB today has a temperature of ≈2.7 K. At approximately what wavelength is its peak? In what range is this (visible, IR, microwave)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> T ≈ 2.7 K, b ≈ 0.0029 m·K.</p>
+<p><span class="qlabel">Law</span> Wien's law (§2, §6).</p>
+<p><span class="qlabel">Solution</span> λ<sub>max</sub> = 0.0029/2.7 ≈ 1.07×10⁻³ m ≈ 1.1 mm.</p>
+<p><span class="qlabel">Answer</span> <strong>≈1.1 mm — microwave range</strong> (hence the name 'cosmic MICROWAVE background').</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Why did Planck have to assume that energy is emitted in portions (quanta), not continuously, to derive the correct spectrum formula?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> 'ultraviolet catastrophe' and Planck's formula (§4).</p>
+<p><span class="qlabel">Solution</span> classical physics (Rayleigh-Jeans law, continuous emission) predicted infinite energy growth at short wavelengths — an absurdity contradicting experiment. Introducing quantization (the oscillator can only emit energy in portions E=hν) cuts off the contribution of high frequencies: the higher the frequency, the 'more expensive' a single quantum, and statistically such quanta are emitted less and less — the curve drops off instead of growing infinitely.</p>
+<p><span class="qlabel">Answer</span> <strong>quantization eliminates the ultraviolet catastrophe</strong> — without it, classical theory yields a physically meaningless (infinite) result.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>A typo, wrong formula, number doesn't add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Blackbody%20radiation%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, examined, and corrected accordingly — it's not a 'black hole'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'textbook' for the layer of laws · part XII of the series, thermodynamics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2/§4: температура определяет и цвет (закон Вина), и площадь под кривой Планка (Стефан-Больцман) —
+  // считаем упрощённую (но качественно верную) планковскую кривую честно по формуле на каждый кадр.
+  var curve = document.getElementById('spectrumCurve');
+  var peakDot = document.getElementById('peakDot');
+  var tempReadout = document.querySelector('[data-readout="temp"]');
+  var colorLabel = document.querySelector('[data-readout="color-label"]');
+  var tempSwatch = document.getElementById('tempSwatch');
+  var heroStar = document.getElementById('heroStar');
+
+  var W = 400, H = 180, X0 = 30, X1 = 380, Y0 = 150, YTOP = 20;
+  var T_MIN = 2000, T_MAX = 12000, PERIOD_MS = 6000;
+
+  // Упрощённая планковская форма (качественно верна: растёт, пик, спадает — как настоящая кривая).
+  function planckShape(lambdaNm, T){
+    var b = 2.898e6; // постоянная Вина в нм·К (0.0029 м·К = 2.898e6 нм·К)
+    var peak = b / T;
+    var x = lambdaNm / peak;
+    // Похожая на распределение Планка форма: растёт как x^3, спадает как exp — качественная модель для анимации.
+    return Math.pow(x, 3) * Math.exp(-1.5 * x) * 8;
+  }
+
+  function colorForTemp(T){
+    if (T < 3500) return { hex: '#8B2E1A', label: 'тёмно-красный' };
+    if (T < 5000) return { hex: '#C0631F', label: 'оранжевый' };
+    if (T < 6500) return { hex: '#E8D48A', label: 'жёлто-белый' };
+    if (T < 9000) return { hex: '#EAF0FF', label: 'белый' };
+    return { hex: '#A9C6FF', label: 'бело-голубой' };
+  }
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD_MS) / PERIOD_MS;
+    var T = T_MIN + (T_MAX - T_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI)); // плавно туда-обратно
+
+    var pts = 'M' + X0 + ',' + Y0;
+    var peakX = X0, peakY = Y0;
+    var maxVal = 0, maxLambda = 0;
+    for (var i = 0; i <= 60; i++) {
+      var lambdaNm = 100 + (2500 - 100) * i / 60;
+      var val = planckShape(lambdaNm, T);
+      if (val > maxVal) { maxVal = val; maxLambda = lambdaNm; }
+    }
+    for (var j = 0; j <= 60; j++) {
+      var lam = 100 + (2500 - 100) * j / 60;
+      var v = planckShape(lam, T) / (maxVal || 1);
+      var px = X0 + (X1 - X0) * j / 60;
+      var py = Y0 - v * (Y0 - YTOP);
+      pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      if (lam <= maxLambda) { peakX = px; peakY = py; }
+    }
+    if (curve) curve.setAttribute('d', pts);
+    if (peakDot) { peakDot.setAttribute('cx', peakX.toFixed(1)); peakDot.setAttribute('cy', peakY.toFixed(1)); }
+
+    var c = colorForTemp(T);
+    if (tempReadout) tempReadout.textContent = Math.round(T);
+    if (colorLabel) colorLabel.textContent = c.label;
+    if (tempSwatch) tempSwatch.style.background = c.hex;
+    if (heroStar) heroStar.setAttribute('fill', c.hex);
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

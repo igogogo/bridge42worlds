@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>إشعاع الجسم الأسود: كيف يكشف اللون عن درجة حرارة النجم — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: спектр чёрного тела при разных температурах ---------- */
+.spectrum-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.spectrum-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.temp-swatch{ display:inline-block; width:26px; height:26px; border-radius:50%; vertical-align:middle; margin-right:8px; border:1.5px solid var(--rule); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتوى</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>ثلاثة قوانين لظاهرة واحدة</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون فين: اللون يكشف درجة الحرارة</a></li>
+<li><a href="#s3"><span class="n">03</span>قانون ستيفان-بولتزمان: القدرة تزداد أربع مرات أسرع</a></li>
+<li><a href="#s4"><span class="n">04</span>معادلة بلانك وولادة الكمّات</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: وزن نجم من لونه</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يؤدي هذا: الإشعاع المتبقي</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة في المنزل</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للتحقق</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عملية · الديناميكا الحرارية · الجزء الثاني عشر</p>
+<h1>إشعاع الجسم الأسود: كيف يكشف اللون عن درجة حرارة النجم</h1>
+<p class="subtitle">المدفأة المتوهجة والمصباح المتوهج والنجم البعيد كلها تتوهج وفق القانون نفسه — ومحاولة شرحه كاملاً في عام 1900 أنجبت الفيزياء الكمومية.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="170" cy="100" fill="#8B2E1A" id="heroStar" r="60"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">нагрев меняет цвет — не краска, а физика</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>كل جسم يشع إشعاعاً حرارياً، وشكل هذا الإشعاع يعتمد فقط على درجة الحرارة — وليس على المادة (بالنسبة لـ «الجسم الأسود المثالي»). قانون فين (1893) يعطي ذروة الإشعاع من حيث اللون، وقانون ستيفان-بولتزمان (1879/1884) — القدرة الكاملة، أما معادلة بلانك (1900) — الشكل الدقيق للمنحنى كاملاً، ومحاولة استخلاص هذه المعادلة «من الصفر» هي التي جعلت ماكس بلانك يفترض أن الطاقة تُشع على شكل حزم — كمّات. في هذه الملاحظة — القوانين الثلاثة بالأرقام وكيف يَزِن علماء الفلك النجوم من ألوانها.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Металл, раскалённый от чёрного до бело-горячего" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>معدن مسخن من اللون الأسود إلى البياض المتوهج</figcaption></figure>
+<figure><img alt="Свет звезды, разложенный призмой на спектр" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>ضوء نجم، مفكك بواسطة منشور إلى طيفه</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>ثلاثة قوانين لظاهرة واحدة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>ما يقدمه</th><th>الصيغة</th></tr>
+<tr><td>فين (1893)</td><td>عند أي طول موجي تقع ذروة الإشعاع</td><td class="sym">λ<sub>max</sub> = b/T</td></tr>
+<tr><td>ستيفان-بولتزمان (1879/84)</td><td>القدرة الكاملة للإشعاع</td><td class="sym">j* = σT⁴</td></tr>
+<tr><td>بلانك (1900)</td><td>الشكل الكامل للمنحنى عند كل طول موجي</td><td class="sym">B(λ,T) — انظر الفقرة 4</td></tr>
+</table>
+<p>القوانين الثلاثة تتحدث عن كيان واحد — <strong>الجسم الأسود المطلق</strong>، ممتص مثالي (وبالتالي باعث مثالي) لأي ضوء ساقط. النجوم الحقيقية والمصابيح المتوهجة والفحم المتوهج هي تقريب جيد لهذه المثالية بشكل مدهش.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون فين: اللون يكشف درجة الحرارة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> طول الموجة الذي تقع عنده ذروة الإشعاع يتناسب عكسياً مع درجة الحرارة:</p>
+<div class="plate">
+<div class="eq-body">λ<sub>max</sub> = b/T</div>
+<div class="cap">b ≈ 2.898×10⁻³ م·كلفن — ثابت فين</div>
+</div>
+<div aria-hidden="true" class="spectrum-fig">
+<svg viewbox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="380" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="30" y1="20" y2="150"></line>
+<path d="M30,150 L380,150" fill="none" id="spectrumCurve" stroke="var(--brass-fill)" stroke-width="2.4"></path>
+<circle cx="30" cy="150" fill="var(--steel-fill)" id="peakDot" r="5"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>درجة الحرارة</b><span data-readout="temp">2900</span> كلفن</span>
+<span><span class="temp-swatch" id="tempSwatch"></span><span data-readout="color-label">أحمر داكن</span></span>
+</div>
+<p>مثال عددي: جسم مسخن إلى T = 2900 كلفن (فتيل مصباح متوهج نموذجي). احسب طول الموجة عند ذروة الإشعاع.</p>
+<div class="eq"><div class="eq-body">λ<sub>max</sub> = 0.0029/2900 = <strong>1×10⁻⁶ م</strong> (1000 نانومتر، الأشعة تحت الحمراء القريبة)</div><div class="eq-tag">(1)</div></div>
+<p>ذروة المصباح المتوهج — في نطاق الأشعة تحت الحمراء، ليس في الضوء المرئي: المصباح يسخن أكثر مما يضيء، والضوء الأصفر-الأبيض المرئي ليس سوى «ذيل» منحنى بلانك (الفقرة 4)، البارز في النطاق المرئي. ولهذا السبب فإن مصابيح LED (ذات الذروة في الضوء المرئي تماماً) أكثر كفاءة في استخدام الطاقة بهذا القدر.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>قانون ستيفان-بولتزمان: القدرة تزداد أربع مرات أسرع</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> القدرة الإشعاعية الكاملة من وحدة المساحة تزداد مع القوة الرابعة لدرجة الحرارة:</p>
+<div class="plate">
+<div class="eq-body">j* = σT⁴</div>
+<div class="cap">σ ≈ 5.67×10⁻&amp;sup8 واط/(م²·كلفن⁴) — ثابت ستيفان-بولتزمان</div>
+</div>
+<p>القوة الرابعة ليست بالأمر البسيط: سخّنت جسماً إلى ضعف درجة الحرارة المطلقة — فهو يشع ليس الضعف بل 2⁴ = <strong>16 مرة</strong> أشد. إنها علاقة حادة، «انفجارية» مقارنة بالعلاقة الخطية.</p>
+<div class="callout brass">
+<span class="tag">لماذا نجم منكب الجوزاء ساطع جداً رغم درجة حرارته المنخفضة</span>
+<p>العملاق الأحمر منكب الجوزاء أبرد من الشمس (∼3500 كلفن مقابل 5800 كلفن) — استناداً إلى درجة الحرارة فقط ينبغي أن يشع بشكل أضعف. لكن الضياء الكامل يعتمد أيضاً على مساحة السطح (j*·4πR²)، ولدى منكب الجوزاء نصف قطر أكبر بمئات المرات من نصف قطر الشمس — المساحة العملاقة تعوّض بكثرة عن درجة الحرارة المنخفضة، ويشع النجم بقوة تفوق الشمس بعشرات الآلاف من المرات.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>معادلة بلانك وولادة الكمّات</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>بحلول نهاية القرن التاسع عشر، تنبأت الفيزياء الكلاسيكية (قانون رايلي-جينز) بأن الجسم الأسود ينبغي أن يشع طاقة لا نهائية عند الأطوال الموجية القصيرة — نتيجة سخيفة، أُطلق عليها «كارثة فوق البنفسجية». الأجسام الحقيقية لا تتصرف هكذا: لديها ذروة واضحة وانخفاض في كلا الاتجاهين.</p>
+<p>حرّك منزلق درجة الحرارة لأعلى (الفقرة 2، الرسوم المتحركة) — شكل المنحنى بأكمله يتغير كلياً: الذروة تنتقل إلى اليسار (قانون فين) والمنحنى بأكمله يرتفع (قانون ستيفان-بولتزمان، المساحة تحت المنحنى تزداد مع T⁴) في آن واحد، بصيغة واحدة:</p>
+<div class="eq"><div class="eq-body">B(ν,T) = (2hν³/c²)·1/(e<sup>hν/k<sub>B</sub>T</sup> − 1)</div><div class="eq-tag">(2)</div></div>
+<div class="callout steel">
+<span class="tag">حزم الطاقة، وليست «خدعة»</span>
+<p>وجد بلانك هذه المعادلة في عام 1900 تقريباً بطريقة التناسب — كانت تنطبق تماماً على البيانات التجريبية، واصلةً قانون فين (الأطوال الموجية القصيرة) وقانون رايلي-جينز (الأطوال الموجية الطويلة) في منحنى واحد. لتبرير المعادلة نظرياً، كان عليه أن يفترض أن الطاقة لا تشع بشكل مستمر، بل على شكل حزم E = hν — كمّات. لقد اعتبر بلانك نفسه هذا مجرد حيلة رياضية، وليس حقيقة فيزيائية، إلى أن استخدم أينشتاين نفس الفكرة لشرح التأثير الكهروضوئي (الجزء السادس، معادلة بلانك-أينشتاين) في عام 1905.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: وزن نجم من لونه</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لا يمكن لعلماء الفلك الطيران إلى النجوم بمسطرة ومحرار — كل مجموعة البيانات عن نجم تُختزل عادة إلى طيفه. لِنَجمع كلا القانونين في مسألة واحدة.</p>
+<p><strong>الخطوة 1 (قانون فين).</strong>النجم B أسخن مرتين من الشمس (T<sub>☉</sub> = 5800 كلفن، T<sub>B</sub> = 11600 كلفن) — يعني أن ذروة طيفها منزاحة مرتين أقرب إلى فوق البنفسجية: النجم أزرق بشكل ملحوظ أكثر من الشمس بالعين/بالمطياف. هكذا يُقاس T، دون معرفة شيء عن المسافة إلى النجم.</p>
+<p><strong>الخطوة 2 (قانون ستيفان-بولتزمان).</strong> إذا كان نصف قطر النجم B مثل نصف قطر الشمس، فكم مرة يشع بطاقة أقوى؟</p>
+<div class="eq"><div class="eq-body">L<sub>B</sub>/L<sub>☉</sub> = (T<sub>B</sub>/T<sub>☉</sub>)⁴ = 2⁴ = <strong>16</strong></div><div class="eq-tag">(3)</div></div>
+<p>بدمج كلا القياسين (اللون يعطي T، السطوع عند مسافة معروفة يعطي الضياء الكامل L)، من قانون ستيفان-بولتزمان L = 4πR²σT⁴ يُستخلص نصف قطر النجم R — المجموعة الكاملة من البارامترات الفيزيائية للنجم تُحصّل دون مغادرة الأرض، فقط من ضوئه.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يؤدي هذا: الإشعاع المتبقي</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>أدق طيف طبيعي للجسم الأسود تم قياسه على الإطلاق — ليس نجماً، بل الكون نفسه. الإشعاع المتبقي (الخلفية الميكروية) — ضوء بارد، تحرر بعد حوالي 380,000 سنة من الانفجار العظيم، عندما برد الكون بما يكفي ليصبح شفافاً. اليوم، بعد 13.8 مليار سنة من التوسع، برد إلى T ≈ 2.725 كلفن — ويتبع معادلة بلانك (الفقرة 4) بدقة لا يمكن لأي فرن مختبري على الأرض توفيرها.</p>
+<p>قامت الأقمار الاصطناعية COBE و WMAP و Planck بقياس هذا الإشعاع بدقة مذهلة — الانحرافات الصغيرة عن منحنى بلانك المثالي (بنحو واحد في المئة ألف) تحمل بصمات اللحظات الأولى لوجود الكون وشكلت أساس علم الكونيات الحديث، بما في ذلك قانون هابل ومعادلات فريدمان (الملاحظة التالية في السلسلة).</p>
+<p>هذه قوانين منفصلة في الموقع، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/plancks_law.html">قانون بلانك للإشعاع</a> ·
+          <a href="/lang/ar/laws/wiens_displacement_law.html">قانون فين للإزاحة</a> ·
+          <a href="/lang/ar/laws/stefanboltzmann_law.html">قانون ستيفان-بولتزمان</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة في المنزل</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · الموقد الكهربائي يغير لونه أمام عينيك</span>
+<p>شغّل عين الطباخ الكهربائي (حلزوني، ليس تحريضياً) على الدرجة القصوى وراقبه من مسافة آمنة، دون لمس، لمدة دقيقة أو دقيقتين.</p>
+<p><span class="qlabel">ما الذي تلاحظه</span> اللولب يمر بمسار من الداكن (الأشعة تحت الحمراء، تشعر بالحرارة ولكن لا ترى الضوء) إلى الأحمر الخافت، ثم البرتقالي الساطع — هذا توضيح مباشر لقانون فين: التسخين يزيح ذروة الإشعاع من تحت الحمراء غير المرئية أقرب فأقرب إلى الطيف المرئي.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · ضوء الريموت غير المرئي في كاميرا الهاتف</span>
+<p>وجّه ريموت التلفزيون نحو كاميرا الهاتف الذكي (ليس نحو العين — فالـ LED تحت الأحمر للريموت غير مرئي مباشرة) واضغط أي زر، ناظراً إلى شاشة الهاتف في وضع الكاميرا.</p>
+<p><span class="qlabel">ما الذي تلاحظه</span> على شاشة الهاتف تظهر نقطة مضيئة تومض عند طرف الريموت — والتي لا تراها العين المجردة على الإطلاق. إن LED الريموت يشع في نطاق تحت الأحمر القريب (درجة حرارة «منخفضة» مقارنة بالضوء المرئي)، ومستشعر كاميرا الهاتف (بخلاف العين البشرية) حساس لهذا النطاق أيضاً.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للتحقق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل في كل مكان يتبع المخطط: <strong>المعطى → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. سطح نجم درجة حرارته 5800 كلفن (مثل الشمس). احسب الطول الموجي لذروة إشعاعه.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> T = 5800 كلفن، b ≈ 0.0029 م·كلفن.</p>
+<p><span class="qlabel">القانون</span> قانون فين (الفقرة 2): λ<sub>max</sub> = b/T.</p>
+<p><span class="qlabel">الحل</span> λ<sub>max</sub> = 0.0029/5800 ≈ 5×10⁻⁷ م = 500 نانومتر.</p>
+<p><span class="qlabel">الجواب</span> <strong>500 نانومتر</strong> — المنطقة الخضراء من الطيف المرئي (الشمس مشعة باللون الأبيض لأنها تشع في كل النطاق المرئي دفعة واحدة، وليس فقط عند الذروة).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. ضوعفت درجة حرارة نجم ثلاث مرات. كم مرة ازدادت قدرته الإشعاعية الكاملة من وحدة المساحة؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> T<sub>الجديد</sub> = 3T.</p>
+<p><span class="qlabel">القانون</span> قانون ستيفان-بولتزمان (الفقرة 3): j* ∝ T⁴.</p>
+<p><span class="qlabel">الحل</span> j*<sub>الجديد</sub>/j* = 3⁴ = 81.</p>
+<p><span class="qlabel">الجواب</span> <strong>81 مرة</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. نجمان لهما نفس درجة الحرارة، لكن نصف قطر النجم B ثلاثة أضعاف نصف قطر النجم A. كم مرة يشع النجم B بقوة أكبر (من حيث الضياء الكامل)؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> T<sub>A</sub> = T<sub>B</sub>, R<sub>B</sub> = 3R<sub>A</sub>.</p>
+<p><span class="qlabel">القانون</span> الضياء الكامل L = 4πR²σT⁴ (الفقرة 3) — عند تساوي T يعتمد فقط على المساحة، R².</p>
+<p><span class="qlabel">الحل</span> L<sub>B</sub>/L<sub>A</sub> = (R<sub>B</sub>/R<sub>A</sub>)² = 3² = 9.</p>
+<p><span class="qlabel">الجواب</span> <strong>9 مرات</strong> — الضياء يزداد مع المساحة، وليس مع نصف القطر مباشرة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. الإشعاع المتبقي اليوم لديه درجة حرارة ≈2.7 كلفن. عند أي طول موجي تقريباً تقع ذروته؟ في أي نطاق (مرئي، تحت الأحمر، ميكروية)؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> T ≈ 2.7 كلفن، b ≈ 0.0029 م·كلفن.</p>
+<p><span class="qlabel">القانون</span> قانون فين (الفقرة 2، الفقرة 6).</p>
+<p><span class="qlabel">الحل</span> λ<sub>max</sub> = 0.0029/2.7 ≈ 1.07×10⁻³ م ≈ 1.1 مم.</p>
+<p><span class="qlabel">الجواب</span> <strong>≈1.1 مم — النطاق الميكروي</strong> (ومن هنا التسمية «الإشعاع المتبقي الميكروي الخلفي»).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. لماذا كان على بلانك أن يفترض أن الطاقة تشع على شكل حزم (كمّات) وليس بشكل مستمر، كي يستخلص المعادلة الصحيحة للطيف؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> «كارثة فوق البنفسجية» ومعادلة بلانك (الفقرة 4).</p>
+<p><span class="qlabel">الحل</span> تنبأت الفيزياء الكلاسيكية (قانون رايلي-جينز، الإشعاع المستمر) بزيادة لا نهائية للطاقة عند الأطوال الموجية القصيرة — سخافة تتعارض مع التجربة. إدخال التكميم (المهتز لا يمكنه أن يعطي طاقة إلا على شكل حزم E=hν) يقطع مساهمة الترددات العالية: كلما زاد التردد، كلما زاد «ثمن» الكم الواحد، وإحصائياً فإن مثل هذه الكمّات تنبعث بشكل أندر — فينحدر المنحنى بدلاً من النمو اللانهائي.</p>
+<p><span class="qlabel">الجواب</span> <strong>التكميم يزيل كارثة فوق البنفسجية</strong> — بدونه تعطي النظرية الكلاسيكية نتيجة (لا نهائية) لا معنى لها فيزيائياً.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ طباعي، معادلة خاطئة، رقم لا يتوافق، شرح مرتبك — راسلنا على:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Blackbody%20radiation%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعلياً، وتُفحص ويُجرى التصحيح بناءً عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الثاني عشر من السلسلة، الديناميكا الحرارية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2/§4: температура определяет и цвет (закон Вина), и площадь под кривой Планка (Стефан-Больцман) —
+  // считаем упрощённую (но качественно верную) планковскую кривую честно по формуле на каждый кадр.
+  var curve = document.getElementById('spectrumCurve');
+  var peakDot = document.getElementById('peakDot');
+  var tempReadout = document.querySelector('[data-readout="temp"]');
+  var colorLabel = document.querySelector('[data-readout="color-label"]');
+  var tempSwatch = document.getElementById('tempSwatch');
+  var heroStar = document.getElementById('heroStar');
+
+  var W = 400, H = 180, X0 = 30, X1 = 380, Y0 = 150, YTOP = 20;
+  var T_MIN = 2000, T_MAX = 12000, PERIOD_MS = 6000;
+
+  // Упрощённая планковская форма (качественно верна: растёт, пик, спадает — как настоящая кривая).
+  function planckShape(lambdaNm, T){
+    var b = 2.898e6; // постоянная Вина в нм·К (0.0029 м·К = 2.898e6 нм·К)
+    var peak = b / T;
+    var x = lambdaNm / peak;
+    // Похожая на распределение Планка форма: растёт как x^3, спадает как exp — качественная модель для анимации.
+    return Math.pow(x, 3) * Math.exp(-1.5 * x) * 8;
+  }
+
+  function colorForTemp(T){
+    if (T < 3500) return { hex: '#8B2E1A', label: 'тёмно-красный' };
+    if (T < 5000) return { hex: '#C0631F', label: 'оранжевый' };
+    if (T < 6500) return { hex: '#E8D48A', label: 'жёлто-белый' };
+    if (T < 9000) return { hex: '#EAF0FF', label: 'белый' };
+    return { hex: '#A9C6FF', label: 'бело-голубой' };
+  }
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD_MS) / PERIOD_MS;
+    var T = T_MIN + (T_MAX - T_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI)); // плавно туда-обратно
+
+    var pts = 'M' + X0 + ',' + Y0;
+    var peakX = X0, peakY = Y0;
+    var maxVal = 0, maxLambda = 0;
+    for (var i = 0; i <= 60; i++) {
+      var lambdaNm = 100 + (2500 - 100) * i / 60;
+      var val = planckShape(lambdaNm, T);
+      if (val > maxVal) { maxVal = val; maxLambda = lambdaNm; }
+    }
+    for (var j = 0; j <= 60; j++) {
+      var lam = 100 + (2500 - 100) * j / 60;
+      var v = planckShape(lam, T) / (maxVal || 1);
+      var px = X0 + (X1 - X0) * j / 60;
+      var py = Y0 - v * (Y0 - YTOP);
+      pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      if (lam <= maxLambda) { peakX = px; peakY = py; }
+    }
+    if (curve) curve.setAttribute('d', pts);
+    if (peakDot) { peakDot.setAttribute('cx', peakX.toFixed(1)); peakDot.setAttribute('cy', peakY.toFixed(1)); }
+
+    var c = colorForTemp(T);
+    if (tempReadout) tempReadout.textContent = Math.round(T);
+    if (colorLabel) colorLabel.textContent = c.label;
+    if (tempSwatch) tempSwatch.style.background = c.hex;
+    if (heroStar) heroStar.setAttribute('fill', c.hex);
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">النظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

@@ -48,12 +48,16 @@ def main():
     for lid, n in lg.items():
         for r in n.get("related", []):
             add(f"l:{lid}", f"l:{r}", "law-law")
-    # law ↔ tag, law ↔ sci
+    # law ↔ tag, law ↔ sci (открыли), law ↔ sci (оказали влияние — отдельный тип ребра,
+    # см. закон↔учёный полнота: Пуанкаре/Лоренц у теории относительности, Гук у законов
+    # Ньютона — не первооткрыватели, но реальный вклад не должен теряться из графа)
     for lid, n in lg.items():
         for t in n.get("tags", []):
             add(f"l:{lid}", f"t:{t}", "law-tag")
         for s in n.get("scientists", []):
             add(f"l:{lid}", f"s:{s}", "law-sci")
+        for s in n.get("influenced_by", []):
+            add(f"l:{lid}", f"s:{s}", "law-influence")
     # sci ↔ tag (объединяем из учёных и из тегов)
     for name, s in sci.items():
         for t in s.get("related_tags", []):

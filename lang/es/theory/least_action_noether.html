@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Principio de mínima acción: una idea de la que se deriva toda la física — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- сравнение путей: пучок траекторий, реальная выделена ---------- */
+.paths-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.paths-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- рефракция света: излом луча на границе сред ---------- */
+.refraction-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.refraction-fig svg{ width:100%; height:auto; display:block; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/es/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/es/index.html">main</a>
+<a href="/lang/es/tags/">tags</a>
+<a href="/lang/es/laws/">laws</a>
+<a href="/lang/es/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/es/graph/">graph</a>
+<a class="active" href="/lang/es/theory/">theory</a>
+<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contenido</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Una idea en lugar de tres leyes</a></li>
+<li><a href="#s2"><span class="n">02</span>¿Qué es la acción?</a></li>
+<li><a href="#s3"><span class="n">03</span>Del principio de vuelta a Newton</a></li>
+<li><a href="#s4"><span class="n">04</span>Teorema de Noether: las simetrías engendran leyes</a></li>
+<li><a href="#s5"><span class="n">05</span>Ejemplo transversal: por qué la luz se refracta</a></li>
+<li><a href="#s6"><span class="n">06</span>A dónde lleva esto: suma sobre todos los caminos</a></li>
+<li><a href="#s7"><span class="n">07</span>Experimento en casa</a></li>
+<li><a href="#s8"><span class="n">08</span>Ejercicios de comprobación</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Nota de trabajo · mecánica analítica · parte X (coronación de la serie)</p>
+<h1>Principio de mínima acción: una idea de la que se deriva toda la física</h1>
+<p class="subtitle">Las tres leyes de Newton, la conservación de energía y momento, la refracción de la luz, las ecuaciones de Maxwell y Schrödinger: todo esto se puede deducir de una sola línea: δS = 0.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="30" cy="170" fill="var(--ink)" r="5"></circle>
+<circle cx="310" cy="30" fill="var(--ink)" r="5"></circle>
+<path d="M30,170 Q100,130 170,100 T310,30" fill="none" stroke="var(--rule)" stroke-dasharray="4,4" stroke-width="1.5"></path>
+<path d="M30,170 Q90,100 170,100 T310,30" fill="none" stroke="var(--rule)" stroke-dasharray="4,4" stroke-width="1.5"></path>
+<path d="M30,170 Q120,120 170,100 T310,30" fill="none" id="heroPath" stroke="var(--steel-fill)" stroke-width="2.6"></path>
+<circle cx="30" cy="170" fill="var(--brass-fill)" id="heroDot" r="6"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="170" y="190">из всех путей — реальный даёт минимум S</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Resumen</span>
+<p>En las partes I y II de esta serie ya hemos encontrado dos veces el indicio de un nivel más profundo: tanto en Newton como en las leyes de conservación había un §6-teaser sobre el principio de mínima acción y el teorema de Noether. Aquí, un análisis completo: qué es la acción S, por qué la naturaleza «elige» el camino de mínima acción, cómo se deducen de esto las ecuaciones de Newton, y cómo el teorema de Noether de 1918 explica POR QUÉ existen las leyes de conservación — no como felices coincidencias aisladas, sino como consecuencia directa de las simetrías del espacio y el tiempo.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Истинная траектория ярче всех альтернативных путей" src="/lang/ru/theory/img/least_action_noether_hero.jpg"/><figcaption>La trayectoria verdadera brilla más que todos los caminos alternativos</figcaption></figure>
+<figure><img alt="Спасатель на пляже: кратчайший путь по времени — не прямая" src="/lang/ru/theory/img/least_action_noether_concept.jpg"/><figcaption>El socorrista en la playa: el camino más corto en tiempo no es una línea recta</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Una idea en lugar de tres leyes</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Hasta ahora en esta serie la física se construía «de abajo hacia arriba»: fuerzas, aceleraciones, trayectorias — calculamos paso a paso. El principio de mínima acción propone una mirada «desde arriba»: no calcular la trayectoria paso a paso, sino preguntar de inmediato — ¿cuál DE TODAS LAS TRAYECTORIAS POSIBLES entre el punto A y el punto B es la verdadera? Respuesta: aquella para la cual una magnitud especial, la acción S, es mínima (más precisamente estacionaria, pero para la mayoría de problemas cotidianos es un mínimo).</p>
+<table class="symtab">
+<tr><th>Enfoque</th><th>Qué calculamos</th></tr>
+<tr><td>Newton (partes I-IX)</td><td>fuerza en cada instante → aceleración → siguiente posición, paso a paso</td></tr>
+<tr><td>Mínima acción</td><td>un número S para CADA trayectoria completa → elegimos el mínimo</td></tr>
+</table>
+<p>Ambos enfoques dan la MISMA respuesta para la mecánica clásica (§3) — no son teorías competidoras, sino dos lenguajes para describir la misma física. Pero el lenguaje de la acción resulta más universal: funciona igual de bien donde el concepto de «fuerza» es incómodo o no existe — en óptica, electromagnetismo, mecánica cuántica, relatividad general.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>¿Qué es la acción?</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulación.</strong> La acción es un número que se calcula para una trayectoria completa de movimiento:</p>
+<div class="plate">
+<div class="eq-body">S = ∫<sub>t₁</sub><sup>t₂</sup> L dt,    L = K − U</div>
+<div class="cap">L — lagrangiana (energía cinética menos potencial), la integral se toma a lo largo de TODA la trayectoria desde el principio hasta el final</div>
+</div>
+<p>Comprobemos en el caso más simple: una partícula libre (sin fuerzas, U = 0) que debe recorrer x = 8 m en un tiempo T = 4 s. Comparemos la acción para dos «candidatos» a trayectoria:</p>
+<div aria-hidden="true" class="paths-fig">
+<svg viewbox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="360" y1="150" y2="150"></line>
+<path d="M40,150 L360,50" fill="none" stroke="var(--moss-fill)" stroke-width="2.4"></path>
+<path d="M40,150 L200,150 L360,50" fill="none" stroke="var(--brass-fill)" stroke-dasharray="5,4" stroke-width="2.4"></path>
+<circle cx="40" cy="150" fill="var(--moss-fill)" id="pathDotUniform" r="6"></circle>
+<circle cx="40" cy="150" fill="var(--brass-fill)" id="pathDotStop" r="6"></circle>
+</svg>
+</div>
+<table class="symtab">
+<tr><th>Candidato</th><th>Descripción</th><th>Acción S</th></tr>
+<tr><td>A (verde)</td><td>movimiento uniforme, v = 2 m/s todo el tiempo</td><td class="sym">16 J·s</td></tr>
+<tr><td>B (naranja, punteado)</td><td>permanece quieto 2 s, luego acelera bruscamente a 4 m/s</td><td class="sym">32 J·s</td></tr>
+</table>
+<p>Cálculo para A (m = 2 kg): L = K = ½·2·2² = 4 J constantemente, S₁ = 4·4 = <strong>16 J·s</strong>. Para B: primeros 2 s K = 0, segundos 2 s K = ½·2·4² = 16 J, S₂ = 0·2+16·2 = <strong>32 J·s</strong>. El movimiento uniforme gana — exactamente lo que predice la primera ley de Newton (parte I, §2): un cuerpo libre se mueve con velocidad constante. El principio de mínima acción no solo CONCUERDA con esto — lo genera.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Del principio de vuelta a Newton</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>La condición de acción mínima (cálculo variacional, δS = 0) da una receta universal — <strong>ecuación de Euler-Lagrange</strong>:</p>
+<div class="eq"><div class="eq-body">d/dt(∂L/∂Ṳ) − ∂L/∂q = 0</div><div class="eq-tag">(1)</div></div>
+<p>Sustituimos L = ½mṲ² − U(q) para una partícula ordinaria (q — coordenada, Ṳ — velocidad). ∂L/∂Ṳ = mṲ = p (momento), ∂L/∂q = −∂U/∂q = F (fuerza — menos el gradiente de energía potencial). La ecuación (1) se transforma en:</p>
+<div class="plate">
+<div class="eq-body">dp/dt = F,    es decir m·a = F</div>
+<div class="cap">la segunda ley de Newton (parte I, §3) — no es un postulado, sino una consecuencia de la condición de acción mínima</div>
+</div>
+<p>Esto no es una coincidencia ni un ajuste — la ecuación de Euler-Lagrange es idénticamente F = ma para CUALQUIER potencial U. Toda la mecánica clásica es un caso particular de un principio variacional.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Teorema de Noether: las simetrías engendran leyes</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>En 1918, Emmy Noether demostró uno de los teoremas más profundos de la física: <strong>a cada simetría continua de la acción S le corresponde una magnitud conservada</strong>. No hechos empíricos descubiertos por separado, sino una fuente única para todas las leyes de conservación:</p>
+<table class="symtab">
+<tr><th>Simetría de la acción</th><th>Magnitud conservada</th></tr>
+<tr><td>homogeneidad del tiempo (desplazamiento t → t+Δt no cambia nada)</td><td>energía (parte II, §3)</td></tr>
+<tr><td>homogeneidad del espacio (desplazamiento x → x+Δx no cambia nada)</td><td>momento lineal (parte II, §2)</td></tr>
+<tr><td>isotropía del espacio (rotación en cualquier ángulo no cambia nada)</td><td>momento angular (parte II, §4; parte VII, §4)</td></tr>
+</table>
+<p>Esto invierte el orden habitual de causa y efecto: no «da la casualidad de que la energía se conserva», sino «el tiempo es homogéneo, por lo tanto la energía DEBE conservarse» — una consecuencia matemática rigurosa, no una observación empírica. Simetrías más abstractas (no del espacio-tiempo, sino de grados de libertad internos «de fase» de los campos) generan igualmente la conservación de la carga eléctrica y otros números cuánticos — el teorema funciona mucho más allá de la mecánica.</p>
+<div class="callout brass">
+<span class="tag">El destino de la descubridora</span>
+<p>Emmy Noether dedujo el teorema en Gotinga, trabajando en el problema de la conservación de la energía en relatividad general a petición de Hilbert y Klein. Einstein calificó su resultado de «monumento del pensamiento matemático». No obstante, debido a la discriminación de las mujeres en la ciencia de aquella época, Noether no pudo obtener durante muchos años un puesto de profesora remunerado — impartía clases formalmente «bajo el nombre» de Hilbert.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Ejemplo transversal: por qué la luz se refracta</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Principio de Fermat (caso particular del principio de mínima acción para la óptica, ya en el siglo XVII): la luz se propaga por el camino que requiere el MENOR tiempo — no necesariamente la distancia más corta.</p>
+<div aria-hidden="true" class="refraction-fig">
+<svg viewbox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--paper)" height="100" width="300" x="0" y="0"></rect>
+<rect fill="var(--steel-fill)" height="120" opacity=".15" width="300" x="0" y="100"></rect>
+<line stroke="var(--rule)" stroke-width="1.5" x1="0" x2="300" y1="100" y2="100"></line>
+<circle cx="50" cy="20" fill="var(--ink)" r="5"></circle>
+<circle cx="230" cy="190" fill="var(--ink)" r="5"></circle>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="50" x2="150" y1="20" y2="100"></line>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="150" x2="230" y1="100" y2="190"></line>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="20" y="15">воздух (быстро)</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="200" y="210">вода (медленно)</text>
+</svg>
+</div>
+<p>Imagine un socorrista en la playa que debe llegar corriendo hasta un nadador que se está ahogando — puede correr rápido por la arena, pero nada más lento en el agua. El CAMINO más corto (en línea recta) no es el más rápido: conviene correr un poco más por la arena para acortar el tramo lento en el agua. El punto óptimo de entrada al agua no está donde la línea recta, sino un poco «de través». La luz se comporta exactamente igual en la interfaz aire/agua, y el cálculo preciso del ángulo óptimo da exactamente la ley de refracción de Snell.</p>
+<div class="callout steel">
+<span class="tag">Una matemática — tres ramas de la física</span>
+<p>El problema del «socorrista en la playa» es matemáticamente IDÉNTICO al principio de mínima acción para una partícula que pasa de una región con una energía potencial a otra con otra (refracción de la trayectoria de una partícula cargada en la frontera entre campos) — la óptica y la mecánica de partículas resultan ser dos versiones disfrazadas del mismo problema variacional. Un análisis detallado de la ley de refracción con fórmulas y números aparecerá en una nota separada de la serie, la siguiente sobre óptica.</p>
+</div>
+<p>En el sitio web esto son leyes separadas, si se desea profundizar:</p>
+<p style="max-width:680px">
+<a href="/lang/es/laws/principle_of_least_action.html">Principio de mínima acción</a> ·
+          <a href="/lang/es/laws/noethers_theorem.html">Teorema de Noether</a>
+</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>A dónde lleva esto: suma sobre todos los caminos</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>El principio de mínima acción fue formulado por primera vez por Pierre Louis Maupertuis en la década de 1740 como <em>teleológico</em> — como si la naturaleza «supiera» de antemano el mejor camino y tendiera a un fin, casi un designio. La lectura moderna, tras los trabajos de Richard Feynman (década de 1940), es completamente distinta, y no menos sorprendente: la partícula no elige el camino de antemano, sino que en sentido cuántico recorre DE UNA VEZ TODOS los caminos imaginables simultáneamente, cada uno con su propia amplitud compleja «de fase». Los caminos se suman (interfieren) de manera que para la mayoría de ellos las contribuciones se anulan mutuamente, y en el límite macroscópico sobrevive prácticamente solo el camino con acción extrema (mínima) — de ahí la mecánica clásica de Newton como caso límite.</p>
+<p>La ecuación de Schrödinger (parte VI) y las ecuaciones de Maxwell (parte IV) — ambas se deducen de una acción S adecuadamente elegida mediante exactamente la misma matemática δS = 0 que el habitual F = ma aquí. Ese es el significado de la frase «una idea de la que se deriva toda la física»: no una exageración poética, sino un hecho de trabajo de la física teórica moderna — desde la mecánica escolar hasta la teoría cuántica de campos y la teoría de cuerdas.</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experimento en casa</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · película de jabón en un armazón de alambre</span>
+<p>Doble un alambre (por ejemplo, de una percha) en cualquier forma no plana — por ejemplo, dos anillos unidos por un travesaño en cruz — y sumérjalo en una solución jabonosa (agua + jabón líquido para platos, un poco de glicerina para mayor resistencia).</p>
+<p><span class="qlabel">Qué observar</span> la película «encuentra» por sí misma la superficie de ÁREA MÍNIMA que se tensa sobre el armazón (superficie mínima) — la tensión superficial en cada punto actúa para reducir la energía total (proporcional al área), y el resultado es una solución exacta del problema variacional «minimizar un funcional» — la misma idea matemática que la minimización de la acción, solo que para otra magnitud física.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · canica en rampas diferentes</span>
+<p>Construya dos canales de igual longitud entre el mismo punto inicial y final (con la misma diferencia de altura) — uno recto (plano inclinado), otro curvo con arco cóncavo en la salida. Suelte al mismo tiempo dos canicas idénticas.</p>
+<p><span class="qlabel">Qué observar</span> la canica en la rampa cóncava suele llegar a la meta más rápido que la recta, aunque su recorrido es más largo — históricamente fue precisamente este problema (la braquistócrona, «curva del tiempo más corto») lo que en el siglo XVII impulsó a los matemáticos a crear el cálculo variacional, el mismo aparato sobre el que se sustenta el principio de mínima acción.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Ejercicios de comprobación</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Primero piense por su cuenta, luego abra la solución. La solución sigue siempre el esquema: <strong>Datos → Ley → Solución → Respuesta</strong>.</p>
+<details class="problem">
+<summary>1. Una partícula libre de masa 4 kg debe recorrer 12 m en 3 s. Calcule la acción S para un movimiento uniforme.</summary>
+<div class="answer">
+<p><span class="qlabel">Datos</span> m = 4 kg, distancia = 12 m, T = 3 s, U = 0 (partícula libre).</p>
+<p><span class="qlabel">Ley</span> §2: S = ∫L dt, L = K para partícula libre, en movimiento uniforme K es constante.</p>
+<p><span class="qlabel">Solución</span> v = 12/3 = 4 m/s; K = ½·4·4² = 32 J; S = 32·3 = 96 J·s.</p>
+<p><span class="qlabel">Respuesta</span> <strong>96 J·s</strong> — y esta es la acción MÍNIMA posible entre todas las trayectorias con el mismo inicio/fin (§2).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Según el teorema de Noether, ¿qué simetría de la acción es responsable de la conservación del momento lineal?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> teorema de Noether (§4).</p>
+<p><span class="qlabel">Solución</span> el momento lineal se conserva si la acción no cambia al desplazar el sistema en el espacio — es decir, las leyes de la física son las mismas en cualquier punto del espacio (no hay un «lugar especial» en el Universo).</p>
+<p><span class="qlabel">Respuesta</span> <strong>homogeneidad del espacio</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. ¿Por qué el principio de Fermat (la luz sigue el camino de MENOR TIEMPO) no significa que la luz siempre siga la DISTANCIA MÁS CORTA?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> §5 — problema del «socorrista en la playa».</p>
+<p><span class="qlabel">Solución</span> el tiempo es igual a la distancia dividida por la velocidad, y la velocidad de la luz es diferente en distintos medios (más lenta en agua/vidrio que en aire) — la minimización del TIEMPO a veces exige recorrer una MAYOR distancia en el medio rápido para acortar el camino en el lento, exactamente como al socorrista le conviene correr un tramo extra por la arena.</p>
+<p><span class="qlabel">Respuesta</span> <strong>porque la velocidad de la luz depende del medio</strong> — el tiempo más corto y la distancia más corta coinciden solo en un medio homogéneo.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. La ecuación de Euler-Lagrange, aplicada a L = ½m·q̇² − U(q), da F = ma. ¿Qué representa físicamente el símbolo q̇?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> notación del cálculo variacional (§3).</p>
+<p><span class="qlabel">Solución</span> el punto sobre q es la notación estándar para la derivada temporal (adoptada ya por Newton); q̇ = dq/dt.</p>
+<p><span class="qlabel">Respuesta</span> <strong>velocidad</strong> (derivada de la coordenada q respecto al tiempo).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. ¿Por qué el teorema de Noether no se aplica directamente a simetrías discretas (por ejemplo, la paridad especular — reflexión del espacio)?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> limitaciones del teorema de Noether (§4, key_problems de la ley).</p>
+<p><span class="qlabel">Solución</span> el teorema de Noether exige una simetría CONTINUA — una transformación que se pueda ejecutar en una cantidad arbitrariamente pequeña (desplazamiento de 0.0001 m, rotación de 0.0001°). La reflexión (paridad) es una operación discreta, no se puede hacer «un poco» — o se refleja o no, por lo que la formulación clásica del teorema no le es aplicable directamente (aunque en teoría cuántica de campos hay resultados separados, más sutiles, sobre simetrías discretas, como el teorema CPT).</p>
+<p><span class="qlabel">Respuesta</span> <strong>la paridad es una simetría discreta, no continua</strong> — está fuera del ámbito del teorema de Noether original.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">¿Encontró alguna imprecisión?</span>
+<p>Errata, fórmula incorrecta, número no cuadra, explicación confusa — escríbanos:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Least%20action%20Noether%20article">feedback@bridge42worlds.org</a>.
+      Cada mensaje se lee de verdad, se analiza y se corrige según él — no es «para el cajón».</p>
+</div>
+<footer>
+<p>bridge42worlds · «manual» para la capa de leyes · parte X de la serie, coronación de la mecánica clásica</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // Иллюстративная анимация: точка движется по «настоящему» (минимальному) пути из пучка кандидатов.
+  // Здесь чисто наглядно (не привязано к числам §2) — по SVG-path через getPointAtLength, честно по длине дуги.
+  function animatePath(pathEl, dotEl, periodMs){
+    if (!pathEl || !dotEl) return;
+    var len = pathEl.getTotalLength();
+    var lastTs = null;
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var t = (ts % periodMs) / periodMs;
+      var pt = pathEl.getPointAtLength(t * len);
+      dotEl.setAttribute('cx', pt.x.toFixed(1));
+      dotEl.setAttribute('cy', pt.y.toFixed(1));
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  animatePath(document.getElementById('heroPath'), document.getElementById('heroDot'), 6000);
+
+  // §2: два «кандидата» едут одновременно вдоль своих путей с СОБСТВЕННОЙ скоростью, честно
+  // отражающей их описание (A — равномерно, B — стоит, потом резко разгоняется) — не одинаковый темп.
+  var uniform = document.getElementById('pathDotUniform');
+  var stopgo = document.getElementById('pathDotStop');
+  var X0 = 40, X1 = 200, X2 = 360, Y0 = 150, Y1 = 50;
+  var PERIOD = 6000;
+  var lastTs2 = null;
+  function tick2(ts){
+    if (lastTs2 === null) lastTs2 = ts;
+    var phase = (ts % PERIOD) / PERIOD; // 0..1 по полному циклу (соответствует T=4с задачи, масштабировано под 6с темп)
+    if (uniform) {
+      uniform.setAttribute('cx', (X0 + (X2 - X0) * phase).toFixed(1));
+      uniform.setAttribute('cy', (Y0 + (Y1 - Y0) * phase).toFixed(1));
+    }
+    if (stopgo) {
+      // первая половина цикла — стоит на месте, вторая — резко проезжает весь оставшийся путь
+      var t2 = phase < 0.5 ? 0 : (phase - 0.5) * 2;
+      stopgo.setAttribute('cx', (X0 + (X2 - X0) * t2).toFixed(1));
+      stopgo.setAttribute('cy', (Y0 + (Y1 - Y0) * t2).toFixed(1));
+    }
+    requestAnimationFrame(tick2);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick2);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — ciencia con palabras sencillas · <a href="/lang/es/theory/">teoría</a> · <a href="/lang/es/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

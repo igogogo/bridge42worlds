@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ideal Gas Equation: Molecules as a Drumroll on the Walls — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: молекулы в поршневом цилиндре ---------- */
+.piston-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.piston-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+.mode-btns{ display:flex; gap:8px; margin:.8em 0 1.2em; flex-wrap:wrap; }
+.mode-btn{
+  font-family:var(--font-mono); font-size:.8rem; padding:5px 14px; border-radius:14px;
+  border:1px solid var(--rule); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+}
+.mode-btn.active{ background:var(--steel-fill); border-color:var(--steel-fill); color:var(--paper); }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Table of Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>The Equation in a Nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>Three Partial Laws Within One</a></li>
+<li><a href="#s3"><span class="n">03</span>Microscopic Picture</a></li>
+<li><a href="#s4"><span class="n">04</span>The Combined Law</a></li>
+<li><a href="#s5"><span class="n">05</span>Running Example: Balloon</a></li>
+<li><a href="#s6"><span class="n">06</span>Where It Leads: When Gas Is Not Ideal</a></li>
+<li><a href="#s7"><span class="n">07</span>Home Experiment</a></li>
+<li><a href="#s8"><span class="n">08</span>Practice Problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Thermodynamics · Part XI</p>
+<h1>Ideal Gas Equation: Molecules as a Drumroll on the Walls</h1>
+<p class="subtitle">A single four-letter formula — pV=nRT — governs both the inflation of a balloon in the sun, the operation of a car engine, and weather forecasting.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<rect fill="none" height="140" stroke="var(--ink)" stroke-width="3" width="220" x="60" y="40"></rect>
+<circle cx="120" cy="80" fill="var(--steel-fill)" id="heroM1" r="6"></circle>
+<circle cx="200" cy="130" fill="var(--brass-fill)" id="heroM2" r="6"></circle>
+<circle cx="240" cy="90" fill="var(--moss-fill)" id="heroM3" r="6"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="205">pV = nRT</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>In 1834, Émile Clapeyron combined three independent experimental laws (Boyle, Charles, Gay-Lussac) into a single equation of state for an ideal gas. Behind the simple formula pV = nRT lies an honest microscopic picture: pressure is the statistics of billions of molecules colliding with the container walls. In this note — all three partial laws, a derivation from kinetic theory, and a running numerical example with a balloon.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Хаотичные удары частиц о стенки сосуда" src="/lang/ru/theory/img/ideal_gas_hero.jpg"/><figcaption>Chaotic impacts of particles on container walls</figcaption></figure>
+<figure><img alt="Капли дождя барабанят по мембране — та же физика ударов" src="/lang/ru/theory/img/ideal_gas_concept.jpg"/><figcaption>Raindrops drumming on a membrane — the same physics of impacts</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>The equation in a nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="plate">
+<div class="eq-body">pV = nRT</div>
+<div class="cap">R ≈ 8.314 J/(mol·K) — the universal gas constant, the same for ANY ideal gas</div>
+</div>
+<table class="symtab">
+<tr><th>Quantity</th><th>Meaning</th><th>SI unit</th></tr>
+<tr><td>p</td><td>pressure</td><td class="sym">Pa</td></tr>
+<tr><td>V</td><td>volume</td><td class="sym">m³</td></tr>
+<tr><td>n</td><td>amount of substance</td><td class="sym">mol</td></tr>
+<tr><td>T</td><td>absolute temperature</td><td class="sym">K (not °C!)</td></tr>
+</table>
+<p>An "ideal" gas is a model where molecules are considered as points with no intrinsic volume, not attracting each other (interacting only through elastic collisions). Real gases (air, nitrogen, oxygen) under ordinary room conditions follow this equation with accuracy sufficient for engineering calculations — deviations become noticeable only at very high pressure or very low temperature (§6).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Three Partial Laws Within One</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>pV = nRT "contains" three earlier experimental laws as special cases — each is obtained by fixing one variable:</p>
+<table class="symtab">
+<tr><th>Law</th><th>Condition</th><th>Relation</th></tr>
+<tr><td>Boyle’s (1662)</td><td>T = const</td><td class="sym">pV = const</td></tr>
+<tr><td>Charles’s (1787)</td><td>p = const</td><td class="sym">V/T = const</td></tr>
+<tr><td>Gay-Lussac’s (1802)</td><td>V = const</td><td class="sym">p/T = const</td></tr>
+</table>
+<p>Three scientists, working at different times and independently, were actually measuring the same formula from different angles — like three blind men feeling an elephant by its different parts. Clapeyron in 1834 was the first to see the whole.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Microscopic Picture</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div aria-hidden="true" class="piston-fig">
+<svg viewbox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--steel-fill)" height="140" id="gasBox" opacity=".08" stroke="var(--ink)" stroke-width="2.5" width="150" x="40" y="20"></rect>
+<rect fill="var(--brass-fill)" height="140" id="piston" stroke="var(--ink)" stroke-width="1.5" width="10" x="190" y="20"></rect>
+<circle class="gasMol" cx="80" cy="60" fill="var(--steel-fill)" r="5"></circle>
+<circle class="gasMol" cx="130" cy="100" fill="var(--brass-fill)" r="5"></circle>
+<circle class="gasMol" cx="100" cy="130" fill="var(--moss-fill)" r="5"></circle>
+<circle class="gasMol" cx="160" cy="50" fill="var(--steel-fill)" r="5"></circle>
+</svg>
+</div>
+<div class="mode-btns">
+<button class="mode-btn active" data-mode="normal">Normal T</button>
+<button class="mode-btn" data-mode="hot">Heated (T higher)</button>
+<button class="mode-btn" data-mode="compressed">Compressed (V smaller)</button>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>relative p</b><span data-readout="pressure">1.00</span></span>
+</div>
+<p>Click on the modes above: molecules fly faster when heated (more collisions with the wall per second AND each collision is stronger — both effects raise the pressure) or collide with the walls more frequently in a smaller volume during compression. From the kinetic theory of gases, one can rigorously derive:</p>
+<div class="eq"><div class="eq-body">p = (2/3)·n<sub>V</sub>·⟨E<sub>k</sub>⟩</div><div class="eq-tag">(1)</div></div>
+<p>where n<sub>V</sub> is the number of molecules per unit volume, ⟨E<sub>k</sub>⟩ is the average kinetic energy of a single molecule. Pressure is not some separate substance, but a direct statistical consequence of the fact that trillions of molecules bombard the container walls every second.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>The Combined Law</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>For a fixed amount of gas (n does not change), from pV = nRT follows a convenient practical form — comparison of two states of the same gas without needing to know R or n at all:</p>
+<div class="plate">
+<div class="eq-body">p₁V₁/T₁ = p₂V₂/T₂</div>
+<div class="cap">works for ANY transition between states 1 and 2 — R and n cancel out</div>
+</div>
+<p>Numerical example (Boyle’s law, T = const): a gas at pressure p₁ = 100 kPa occupies volume V₁ = 2 L. It is compressed to V₂ = 0.5 L at the same temperature. Find the new pressure.</p>
+<div class="eq"><div class="eq-body">p₂ = p₁V₁/V₂ = 100·2/0.5 = <strong>400 kPa</strong></div><div class="eq-tag">(2)</div></div>
+<p>Compressed 4 times in volume — the pressure increased exactly 4 times. Simple inverse proportionality of Boyle’s law.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Running Example: Balloon</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>A balloon on the ground (p₁ = 100 kPa, V₁ = 3 L, T₁ = 300 K) is brought into a warm room by a radiator, where it is simultaneously slightly compressed by neighbors in a crowd to V₂ = 2 L and heated to T₂ = 330 K. Find the new pressure inside the balloon.</p>
+<div class="eq"><div class="eq-body">p₂ = p₁V₁T₂/(T₁V₂) = 100·3·330/(300·2) = 99000/600 = <strong>165 kPa</strong></div><div class="eq-tag">(3)</div></div>
+<p>All three effects — initial pressure, compression, and heating — are accounted for by one formula at once, without needing to compute n or R. This is exactly how engineers and meteorologists work with gases in practice: not through absolute values, but through the ratio of two states.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where It Leads: When Gas Is Not Ideal</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The ideal gas model is an approximation that works worse the denser the gas and the closer it is to the condensation point into a liquid. Two assumptions that break down in real conditions: molecules HAVE their own volume (not points), and there IS weak attraction between them (van der Waals forces) — at high pressure, molecules pack more tightly, and the attraction begins to noticeably pull the gas together, reducing the effective pressure on the walls compared to the ideal model.</p>
+<div class="callout brass">
+<span class="tag">Van der Waals Equation</span>
+<p>In 1873, Johannes van der Waals corrected the equation of state with two additional terms accounting for the intrinsic volume of molecules and their mutual attraction: (p + a/V²)(V − b) = nRT. At sufficiently low temperature, this equation predicts not only the gas phase but also the liquid phase of the same substance — a model from which the modern understanding of phase transitions and the critical point was born (for which van der Waals received the 1910 Nobel Prize).</p>
+</div>
+<p>On the site, this is a separate law if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/ideal_gas_law.html">Ideal Gas Equation of State</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Balloon in the Fridge</span>
+<p>Inflate a balloon to medium size at room temperature, mark the approximate diameter with a marker, then place it in the fridge for 15-20 minutes (not in the freezer — the rubber will stiffen there).</p>
+<p><span class="qlabel">What to notice</span> the balloon will noticeably shrink in size (with the same amount of air inside and almost the same atmospheric pressure outside) — a direct demonstration of Charles’s/Gay-Lussac’s law: lowering T at almost constant p requires a decrease in V. Take it back to warmth — the balloon will expand back to its original size.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Syringe with Trapped Air</span>
+<p>Take a medical syringe without a needle, draw in some air, tightly close the opening with your finger (so air cannot escape), and try to push the plunger.</p>
+<p><span class="qlabel">What to notice</span> the more you compress (decrease V), the more the syringe resists your finger — the increasing pressure exactly follows Boyle’s law pV = const (§4): half the volume — twice the pressure, you physically feel it with your hand.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Practice problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution everywhere follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. A gas at pressure 200 kPa and volume 4 L (constant T) expands to 8 L. Find the new pressure.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> p₁ = 200 kPa, V₁ = 4 L, V₂ = 8 L, T = const.</p>
+<p><span class="qlabel">Law</span> Boyle’s law (§2): p₁V₁ = p₂V₂.</p>
+<p><span class="qlabel">Solution</span> p₂ = p₁V₁/V₂ = 200·4/8 = 100 kPa.</p>
+<p><span class="qlabel">Answer</span> <strong>100 kPa</strong> — volume twice as large, pressure half as much.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A gas at constant pressure occupies 2 L at a temperature of 300 K. To what volume will it expand when heated to 450 K?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> V₁ = 2 L, T₁ = 300 K, T₂ = 450 K, p = const.</p>
+<p><span class="qlabel">Law</span> Charles’s law (§2): V₁/T₁ = V₂/T₂.</p>
+<p><span class="qlabel">Solution</span> V₂ = V₁·T₂/T₁ = 2·450/300 = 3 L.</p>
+<p><span class="qlabel">Answer</span> <strong>3 L</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A sealed cylinder with gas at 300 K has a pressure of 150 kPa. To what temperature must it be heated so that the pressure rises to 200 kPa (cylinder volume does not change)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> p₁ = 150 kPa, T₁ = 300 K, p₂ = 200 kPa, V = const.</p>
+<p><span class="qlabel">Law</span> Gay-Lussac’s law (§2): p₁/T₁ = p₂/T₂.</p>
+<p><span class="qlabel">Solution</span> T₂ = T₁·p₂/p₁ = 300·200/150 = 400 K.</p>
+<p><span class="qlabel">Answer</span> <strong>400 K</strong> (127 °C).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Why, according to kinetic theory (§3), does gas pressure increase when heated even if the volume and number of molecules do not change?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> formula (1), §3: p = (2/3)n<sub>V</sub>⟨E<sub>k</sub>⟩.</p>
+<p><span class="qlabel">Solution</span> temperature is essentially a measure of the average kinetic energy of molecules ⟨E<sub>k</sub>⟩. Upon heating (n<sub>V</sub> does not change, volume and number of molecules the same) the molecules on average move faster — each collision with the wall is stronger AND collisions occur more frequently (the particle makes it to the wall and back faster) — both effects raise p.</p>
+<p><span class="qlabel">Answer</span> <strong>increase in average kinetic energy of molecules</strong> — stronger and more frequent collisions with the walls.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Under what conditions (high/low pressure, high/low temperature) is a real gas worst described by the ideal gas equation? Why?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> limitations of the model (§6).</p>
+<p><span class="qlabel">Solution</span> worst — at HIGH pressure and LOW temperature: molecules come closer, their intrinsic volume ceases to be negligibly small compared to the free space, and attractive forces (van der Waals) become noticeable — both assumptions of the ideal model (point-like, non-interacting particles) are violated. Under these same conditions, the gas usually approaches the point of condensation into a liquid.</p>
+<p><span class="qlabel">Answer</span> <strong>high pressure + low temperature</strong> — conditions close to condensation.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, incorrect formula, numbers don’t add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ideal%20gas%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and corrections are made based on it — this is not "into a black hole".</p>
+</div>
+<footer>
+<p>bridge42worlds · "study guide" to the laws layer · part XI of the series, thermodynamics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §3: молекулы отскакивают от стенок сосуда (упругие столкновения) — реальное численное
+  // интегрирование положений/скоростей, не CSS-заглушка. Три режима меняют скорость и/или объём.
+  var box = document.getElementById('gasBox');
+  var piston = document.getElementById('piston');
+  var mols = Array.prototype.slice.call(document.querySelectorAll('.gasMol'));
+  var pReadout = document.querySelector('[data-readout="pressure"]');
+  var buttons = document.querySelectorAll('.mode-btn');
+
+  var BOX_X0 = 40, BOX_Y0 = 20, BOX_Y1 = 160;
+  var boxX1 = 190; // правая стенка — двигается с поршнем при сжатии
+  var speedMul = 1; // растёт в режиме "нагрели"
+
+  var state = mols.map(function(el, i){
+    return {
+      el: el,
+      x: parseFloat(el.getAttribute('cx')),
+      y: parseFloat(el.getAttribute('cy')),
+      vx: (i % 2 === 0 ? 1 : -1) * (60 + i * 10),
+      vy: (i % 3 === 0 ? -1 : 1) * (50 + i * 8)
+    };
+  });
+
+  var bounceCount = 0, lastPressureCalcTs = 0;
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.dataset.mode;
+      speedMul = mode === 'hot' ? 1.7 : 1;
+      var targetX1 = mode === 'compressed' ? 120 : 190;
+      boxX1 = targetX1;
+      box.setAttribute('width', (boxX1 - BOX_X0));
+      piston.setAttribute('x', boxX1);
+    });
+  });
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+
+    var wallsHit = 0;
+    state.forEach(function(m){
+      m.x += m.vx * speedMul * dtSec;
+      m.y += m.vy * speedMul * dtSec;
+      if (m.x < BOX_X0 + 6) { m.x = BOX_X0 + 6; m.vx *= -1; wallsHit++; }
+      if (m.x > boxX1 - 6) { m.x = boxX1 - 6; m.vx *= -1; wallsHit++; }
+      if (m.y < BOX_Y0 + 6) { m.y = BOX_Y0 + 6; m.vy *= -1; wallsHit++; }
+      if (m.y > BOX_Y1 - 6) { m.y = BOX_Y1 - 6; m.vy *= -1; wallsHit++; }
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    bounceCount += wallsHit;
+
+    // «Давление» на индикаторе — не физически точная величина, а иллюстративная прокси-оценка:
+    // среднее число ударов о стенку в секунду, нормированное на baseline (обычный режим).
+    if (ts - lastPressureCalcTs > 500) {
+      var boxArea = (boxX1 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var baseline = (190 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var relP = (baseline / boxArea) * speedMul;
+      if (pReadout) pReadout.textContent = relP.toFixed(2);
+      lastPressureCalcTs = ts;
+    }
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+
+  // Декоративные молекулы в hero — просто мягко дрейфуют, без претензии на количественность.
+  var heroMols = [document.getElementById('heroM1'), document.getElementById('heroM2'), document.getElementById('heroM3')];
+  var heroState = heroMols.map(function(el, i){
+    return { el: el, x: parseFloat(el.getAttribute('cx')), y: parseFloat(el.getAttribute('cy')),
+              vx: (i - 1) * 40 + 20, vy: (i % 2 === 0 ? -1 : 1) * 35 };
+  });
+  var lastHeroTs = null;
+  function heroTick(ts){
+    if (lastHeroTs === null) lastHeroTs = ts;
+    var dt = Math.min((ts - lastHeroTs) / 1000, 0.05);
+    lastHeroTs = ts;
+    heroState.forEach(function(m){
+      m.x += m.vx * dt; m.y += m.vy * dt;
+      if (m.x < 66 || m.x > 274) m.vx *= -1;
+      if (m.y < 46 || m.y > 174) m.vy *= -1;
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    requestAnimationFrame(heroTick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(heroTick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple terms · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

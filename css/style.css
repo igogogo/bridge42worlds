@@ -131,6 +131,19 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     text-decoration: none;
 }
 .view-audit-link:hover { color: var(--text); border-color: var(--link); }
+.theory-img-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0 28px;
+}
+.theory-img-pair figure { margin: 0; }
+.theory-img-pair img {
+    width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 10px; display: block;
+}
+.theory-img-pair figcaption {
+    margin-top: 6px; font-size: .78rem; color: var(--soft); text-align: center; line-height: 1.4;
+}
+@media (max-width: 640px) {
+    .theory-img-pair { grid-template-columns: 1fr; }
+}
 #tag-graph, #scientist-graph, #laws-graph, #kg-graph {
     position: relative; border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
     max-width: 900px; margin: 0 auto;   /* выровнено по ширине контента, не 100vw */

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Elasticidad y flotación: ley de Hooke y principio de Arquímedes — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: пружина и погружение ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* Позиции пружины/груза считаются в JS покадрово (реальная физика, не CSS-заглушка) —
+   .osc/.dip ниже только помечают элементы, сам transform/left/width/top пишет requestAnimationFrame. */
+.spring-strip{ height:120px; }
+.spring-wall{ position:absolute; left:20px; top:20px; bottom:20px; width:6px; background:var(--ink); opacity:.7; }
+.spring-coil{ position:absolute; left:26px; top:56px; height:8px; background:repeating-linear-gradient(90deg, var(--steel-fill) 0 3px, transparent 3px 8px); }
+.spring-mass{ position:absolute; top:40px; width:36px; height:40px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+.water-strip{ height:150px; }
+.water-surface{ position:absolute; left:0; right:0; top:60px; height:2px; background:var(--steel-fill); opacity:.6; }
+.water-fill{ position:absolute; left:0; right:0; top:62px; bottom:0; background:var(--steel-fill); opacity:.12; }
+.spring-top{ position:absolute; left:50%; top:8px; width:3px; background:var(--ink); margin-left:-1.5px; }
+.hang-mass{ position:absolute; left:50%; width:34px; height:34px; margin-left:-17px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/es/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/es/index.html">main</a>
+<a href="/lang/es/tags/">tags</a>
+<a href="/lang/es/laws/">laws</a>
+<a href="/lang/es/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/es/graph/">graph</a>
+<a class="active" href="/lang/es/theory/">theory</a>
+<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contenido</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Dos fuerzas de resistencia</a></li>
+<li><a href="#s2"><span class="n">02</span>Ley de Hooke: el resorte cuenta linealmente</a></li>
+<li><a href="#s3"><span class="n">03</span>Del resorte al sólido</a></li>
+<li><a href="#s4"><span class="n">04</span>Ley de Arquímedes: el peso del fluido desplazado</a></li>
+<li><a href="#s5"><span class="n">05</span>Ejemplo integral: areómetro con balanza de resorte</a></li>
+<li><a href="#s6"><span class="n">06</span>Hacia dónde lleva esto: resortes atómicos y presión</a></li>
+<li><a href="#s7"><span class="n">07</span>Experimento en casa</a></li>
+<li><a href="#s8"><span class="n">08</span>Problemas de verificación</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Nota de trabajo · mecánica de medios continuos · parte VIII</p>
+<h1>Elasticidad y flotación: ley de Hooke y principio de Arquímedes</h1>
+<p class="subtitle">Dos leyes sobre cómo la materia «se resiste» — al estiramiento de un resorte y a la inmersión en un líquido — y ambas se reducen a una matemática lineal sorprendentemente simple.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--ink)" stroke-width="4" x1="60" x2="60" y1="40" y2="180"></line>
+<path d="M60,80 L80,70 L100,90 L120,70 L140,90 L160,70 L180,80" fill="none" stroke="var(--steel-fill)" stroke-width="2.5"></path>
+<rect fill="var(--brass-fill)" height="50" rx="4" stroke="var(--ink)" stroke-width="2" width="50" x="180" y="55"></rect>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="14" text-anchor="middle" x="150" y="150">F = -kx</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Resumen</span>
+<p>Robert Hooke en la década de 1660 descubrió que los resortes (y en general los cuerpos elásticos) resisten la deformación proporcionalmente a su magnitud: una relación lineal sencilla que subyace en la teoría de la elasticidad, desde colchones hasta rascacielos. Arquímedes, dos milenios antes, descubrió otra ley también lineal: el fluido empuja un cuerpo sumergido con una fuerza igual al peso del volumen desalojado. En esta nota, ambas leyes con ejemplos numéricos y un experimento continuo que las une en una sola medición.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Пружина у предела растяжения — закон Гука" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>Resorte en su límite de estiramiento — ley de Hooke</figcaption></figure>
+<figure><img alt="Лодка на воде в точном равновесии — принцип Архимеда" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>Barco en equilibrio exacto sobre el agua — principio de Arquímedes</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Dos fuerzas de resistencia</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Ley</th><th>Fórmula</th><th>De qué trata</th></tr>
+<tr><td>Hooke</td><td class="sym">F = −kx</td><td>la fuerza elástica crece linealmente con el desplazamiento</td></tr>
+<tr><td>Arquímedes</td><td class="sym">F = ρgV</td><td>la fuerza de flotación es igual al peso del líquido desplazado</td></tr>
+</table>
+<p>A primera vista fenómenos distintos, pero ambos describen cómo un medio (resorte, líquido) «responde» al intento de cambiar su estado, y en ambos casos la respuesta es sorprendentemente simple: lineal respecto al desplazamiento o lineal respecto al volumen. La simplicidad de estas leyes no es casualidad, sino consecuencia de que ambos fenómenos se analizan en régimen de perturbaciones pequeñas y «suaves», donde la compleja física microscópica se promedia a una sola constante (k o ρ).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Ley de Hooke: el resorte cuenta linealmente</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulación.</strong>La fuerza elástica es proporcional a la deformación y se opone a ella:</p>
+<div class="plate">
+<div class="eq-body">F = −kx</div>
+<div class="cap">k — rigidez del resorte (N/m), x — desplazamiento desde la posición de equilibrio (m)</div>
+</div>
+<div aria-hidden="true" class="anim-strip spring-strip">
+<div class="spring-wall"></div>
+<div class="spring-coil"></div>
+<div class="spring-mass"></div>
+<div class="anim-readout" data-readout="spring">x = 0.00 m</div>
+<div class="anim-label left">el resorte se estira y comprime alrededor del equilibrio — la masa oscila</div>
+</div>
+<p>Ejemplo numérico: un resorte de rigidez k = 200 N/m se estira x = 0.05 m. ¿Cuál es la fuerza elástica resultante?</p>
+<div class="eq"><div class="eq-body">F = k·x = 200·0.05 = <strong>10 N</strong></div><div class="eq-tag">(1)</div></div>
+<p>El signo menos en la fórmula recuerda: la fuerza SIEMPRE tiende a devolver el cuerpo al equilibrio — si el resorte está estirado, tira hacia atrás; si está comprimido, empuja hacia adelante. Precisamente esta naturaleza «restauradora» convierte al resorte en un oscilador armónico clásico: suelte la masa y oscilará de un lado a otro (con fricción, amortiguándose gradualmente).</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Del resorte al sólido</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>La misma ley lineal funciona no solo para resortes helicoidales: cualquier sólido bajo pequeña deformación se comporta como un resorte, solo que la constante de rigidez se reemplaza por una propiedad del material: el <strong>módulo de Young</strong> E:</p>
+<div class="plate">
+<div class="eq-body">σ = E·ε</div>
+<div class="cap">σ — tensión mecánica (fuerza por unidad de área), ε — deformación unitaria ΔL/L₀</div>
+</div>
+<table class="symtab">
+<tr><th>Material</th><th>Módulo de Young E, Pa</th></tr>
+<tr><td>Caucho</td><td class="sym">∼10⁶</td></tr>
+<tr><td>Madera</td><td class="sym">∼10⁹</td></tr>
+<tr><td>Acero</td><td class="sym">∼2×10¹¹</td></tr>
+</table>
+<p>El acero es «más rígido» que el caucho aproximadamente 200 000 veces, pero ambos, dentro de pequeñas deformaciones, obedecen exactamente la misma ley lineal. Los rascacielos se balancean con el viento centímetros y vuelven a su posición original precisamente gracias a esta elasticidad: si el acero no cumpliera la ley de Hooke, los edificios altos serían o peligrosamente frágiles o simplemente no podrían existir.</p>
+<div class="callout brass">
+<span class="tag">Dónde deja de funcionar la ley</span>
+<p>La linealidad es una aproximación válida solo hasta el <strong>límite de elasticidad</strong>. Si estira demasiado un resorte, o bien no volverá a su forma original (deformación plástica) o se romperá. Los ingenieros estructurales siempre incorporan un margen de seguridad precisamente porque más allá del límite, la ley de Hooke deja de predecir el comportamiento del material.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Ley de Arquímedes: el peso del fluido desplazado</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulación.</strong>Sobre un cuerpo sumergido en un líquido (o gas) actúa una fuerza de flotación igual al peso del volumen desalojado:</p>
+<div class="plate">
+<div class="eq-body">F<sub>empuje</sub> = ρ·g·V</div>
+<div class="cap">ρ — densidad del líquido, V — volumen del líquido desalojado (¡no de todo el cuerpo si no está completamente sumergido!)</div>
+</div>
+<p>Ejemplo numérico: un cuerpo de volumen V = 0.002 m³ (2 litros) completamente sumergido en agua (ρ = 1000 kg/m³, g ≈ 10 m/s²). Calcule la fuerza de flotación.</p>
+<div class="eq"><div class="eq-body">F<sub>empuje</sub> = 1000·10·0.002 = <strong>20 N</strong></div><div class="eq-tag">(2)</div></div>
+<p>Si el cuerpo flota o se hunde lo decide la comparación con la fuerza de gravedad: si el peso del cuerpo es menor que F<sub>empuje</sub> cuando está completamente sumergido, el cuerpo flota (y se sumerge solo parcialmente hasta que los pesos se equilibran); si es mayor, se hunde.</p>
+<div class="callout steel">
+<span class="tag">Por qué un barco de acero no se hunde</span>
+<p>El acero es casi 8 veces más denso que el agua (ρ<sub>acero</sub> ≈ 7800 kg/m³ frente a 1000 del agua): un trozo de acero arrojado al agua se hunde inmediatamente. Pero el CASCO de un barco es principalmente aire rodeado de una delgada carcasa de acero: la densidad promedio de toda la estructura (acero + aire interior) es mucho menor que la densidad del agua. Lo que importa no es la densidad del material, sino la densidad promedio de TODO el volumen que desplaza.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Ejemplo integral: areómetro con balanza de resorte</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Unamos ambas leyes en un experimento clásico: una masa colgada de una balanza de resorte (ley de Hooke — por la extensión del resorte leemos la fuerza), primero en el aire, luego sumergida en agua.</p>
+<div aria-hidden="true" class="anim-strip water-strip">
+<div class="water-fill"></div>
+<div class="water-surface"></div>
+<div class="spring-top dip" style="height:40px;"></div>
+<div class="hang-mass dip" style="top:48px;"></div>
+<div class="anim-label">masa en el resorte se sumerge en agua — el resorte se acorta</div>
+</div>
+<p>En el aire, el resorte se estira x₁ = 0.05 m con rigidez k = 1000 N/m — por tanto, el peso real de la masa:</p>
+<div class="eq"><div class="eq-body">P = k·x₁ = 1000·0.05 = <strong>50 N</strong></div><div class="eq-tag">(3)</div></div>
+<p>Sumergimos la masa completamente en agua — el resorte se acorta hasta x₂ = 0.03 m (peso aparente P<sub>ap</sub> = 1000·0.03 = 30 N). La diferencia es la medida directa de la fuerza de flotación:</p>
+<div class="eq"><div class="eq-body">F<sub>empuje</sub> = P − P<sub>ap</sub> = 50 − 30 = <strong>20 N</strong></div><div class="eq-tag">(4)</div></div>
+<p>Y de F<sub>empuje</sub> = ρgV se puede calcular inmediatamente el volumen de la masa sin medir con regla:</p>
+<div class="eq"><div class="eq-body">V = F<sub>empuje</sub>/(ρg) = 20/(1000·10) = <strong>0.002 m³</strong> (2 L)</div><div class="eq-tag">(5)</div></div>
+<p>Este es exactamente el mismo método con el que (según la leyenda) Arquímedes atrapó al joyero: medir el volumen de un cuerpo de forma compleja mediante el desplazamiento, sin desmontarlo — solo que aquí la balanza de resorte lo hace incluso sin bañera que se desborde.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Hacia dónde lleva esto: resortes atómicos y presión</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>La ley de Hooke no es solo una aproximación conveniente para ingenieros, sino una consecuencia de que los enlaces químicos entre los átomos de un sólido se comportan como diminutos resortes: ante un pequeño desplazamiento del átomo de su posición de equilibrio, la energía potencial del enlace crece cuadráticamente (como en un resorte ideal), por lo tanto la fuerza restauradora es lineal, justo la ley de Hooke. El módulo de Young E es un promedio macroscópico de la rigidez de miles de millones de tales enlaces atómicos.</p>
+<p>La ley de Arquímedes, a su vez, es una consecuencia directa de que la presión en un fluido aumenta con la profundidad (una columna de líquido más alta ejerce más presión). La diferencia de presión entre las caras inferior y superior del cuerpo sumergido crea una fuerza neta hacia arriba: no es un postulado separado, sino una consecuencia de las leyes de la hidrostática. Una conexión más profunda de estas mismas ideas con el flujo de fluidos se encuentra en la próxima nota de la serie, sobre la ecuación de Bernoulli.</p>
+<p>En el sitio son leyes separadas, si quieres profundizar:</p>
+<p style="max-width:680px">
+<a href="/lang/es/laws/hookes_law.html">Ley de Hooke</a> ·
+          <a href="/lang/es/laws/archimedes_principle.html">Ley de Arquímedes</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experimento en casa</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · banda elástica en lugar de balanza de resorte</span>
+<p>Tome una banda elástica de oficina, marque su longitud original, cuélguele una masa conocida (por ejemplo, una bolsita con monedas) y mida cuánto se alarga. Añada el doble de monedas.</p>
+<p><span class="qlabel">Qué observar</span> con el doble de carga, la banda se estirará aproximadamente el doble (siempre que no se supere el límite elástico de la goma): comprobación directa de la ley de Hooke con medios caseros: F ∝ x.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · huevo que se hunde y flota</span>
+<p>Sumerja un huevo crudo en un vaso con agua del grifo: se hundirá. Luego disuelva en el agua varias cucharadas de sal (remueva hasta que no se disuelva más) y vuelva a sumergir el huevo.</p>
+<p><span class="qlabel">Qué observar</span> en agua salada el huevo flota (o queda suspendido en el agua): la sal disuelta aumenta la densidad del agua ρ, y por tanto la fuerza de flotación F<sub>empuje</sub> = ρgV para el mismo volumen del huevo, hasta que iguala al peso del huevo. El mismo efecto mantiene a los bañistas en la superficie del Mar Muerto sin esfuerzo.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Problemas de verificación</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Primero piense por su cuenta, luego abra la solución. La solución sigue en todas partes el esquema: <strong>Dado → Ley → Solución → Respuesta</strong>.</p>
+<details class="problem">
+<summary>1. Un resorte de rigidez 300 N/m se estira con una fuerza de 15 N. ¿Cuánto se alargó?</summary>
+<div class="answer">
+<p><span class="qlabel">Dado</span> k = 300 N/m, F = 15 N.</p>
+<p><span class="qlabel">Ley</span> ley de Hooke (§2): F = kx.</p>
+<p><span class="qlabel">Solución</span> x = F/k = 15/300 = 0.05 m.</p>
+<p><span class="qlabel">Respuesta</span> <strong>5 cm</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Un cubo de volumen 0.001 m³ (10×10×10 cm) está completamente sumergido en aceite de densidad 800 kg/m³. Calcule la fuerza de flotación.</summary>
+<div class="answer">
+<p><span class="qlabel">Dado</span> V = 0.001 m³, ρ = 800 kg/m³, g ≈ 10 m/s².</p>
+<p><span class="qlabel">Ley</span> ley de Arquímedes (§4): F<sub>empuje</sub> = ρgV.</p>
+<p><span class="qlabel">Solución</span> F<sub>empuje</sub> = 800·10·0.001 = 8 N.</p>
+<p><span class="qlabel">Respuesta</span> <strong>8 N</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. Un bloque de madera de masa 0.72 kg y volumen 0.001 m³ se echa al agua (densidad 1000 kg/m³). ¿Flotará o se hundirá? (g ≈ 10 m/s²)</summary>
+<div class="answer">
+<p><span class="qlabel">Dado</span> m = 0.72 kg, V = 0.001 m³, ρ<sub>agua</sub> = 1000 kg/m³.</p>
+<p><span class="qlabel">Ley</span> comparación del peso del cuerpo P = mg con la fuerza de flotación máxima F<sub>empuje</sub> = ρgV (§4) — equivalente a comparar densidades.</p>
+<p><span class="qlabel">Solución</span> ρ<sub>bloque</sub> = m/V = 0.72/0.001 = 720 kg/m³ &lt; 1000 kg/m³.</p>
+<p><span class="qlabel">Respuesta</span> <strong>flotará</strong> — la densidad del bloque es menor que la del agua (típico de la madera).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Una balanza de resorte en el aire indica un peso de 80 N, y tras sumergir la masa en agua, 60 N. Calcule el volumen de la masa (ρ agua = 1000 kg/m³, g ≈ 10 m/s²).</summary>
+<div class="answer">
+<p><span class="qlabel">Dado</span> P = 80 N, P<sub>ap</sub> = 60 N.</p>
+<p><span class="qlabel">Ley</span> método §5: F<sub>empuje</sub> = P − P<sub>ap</sub>, luego V = F<sub>empuje</sub>/(ρg).</p>
+<p><span class="qlabel">Solución</span> F<sub>empuje</sub> = 80 − 60 = 20 N; V = 20/(1000·10) = 0.002 m³.</p>
+<p><span class="qlabel">Respuesta</span> <strong>0.002 m³ (2 litros)</strong> — el volumen se midió sin una sola medición directa con regla.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. ¿Por qué al estirar demasiado un resorte la ley de Hooke deja de predecir su comportamiento? ¿Qué sucede a nivel atómico?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> límite elástico (§3, §6).</p>
+<p><span class="qlabel">Solución</span> la ley de Hooke es válida mientras el desplazamiento de los átomos respecto a la posición de equilibrio es pequeño y la energía potencial del enlace se aproxima bien por una parábola (función cuadrática). Con grandes desplazamientos, la forma real del potencial se desvía de la parábola, los enlaces comienzan a romperse o reorganizarse irreversiblemente (deformación plástica), y la dependencia lineal F de x deja de funcionar.</p>
+<p><span class="qlabel">Respuesta</span> <strong>los enlaces atómicos salen de la región donde el potencial se asemeja a una parábola</strong> — la aproximación en que se basa la ley de Hooke deja de ser precisa.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">¿Encontraste una inexactitud?</span>
+<p>Error de imprenta, fórmula incorrecta, número que no cuadra, explicación confusa — escríbenos:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Elasticity%20Archimedes%20article">feedback@bridge42worlds.org</a>.
+      Cada mensaje realmente se lee, analiza y se corrige en consecuencia; no es «en vano».</p>
+</div>
+<footer>
+<p>bridge42worlds · «guía de estudio» para la capa de leyes · parte VIII de la serie, mecánica de medios continuos</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2: пружина + груз — честная гармоническая осцилляция x(t)=A·cos(ωt), не CSS-заглушка.
+  var coil = document.querySelector('.spring-coil');
+  var mass = document.querySelector('.spring-mass');
+  var springReadout = document.querySelector('[data-readout="spring"]');
+  var WALL_X = 26, REST_LEN = 90, AMP = 40, PERIOD_MS = 6000;
+  var PX_PER_M = 800; // масштаб для читаемого числа x в метрах на этой полосе
+  function tickSpring(ts){
+    var phase = (ts % PERIOD_MS) / PERIOD_MS * 2 * Math.PI;
+    var stretchPx = AMP * Math.cos(phase); // растяжение/сжатие вокруг длины покоя, честно по cos(ωt)
+    var len = REST_LEN + stretchPx;
+    coil.style.width = len + 'px';
+    mass.style.left = (WALL_X + len) + 'px';
+    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' м';
+    requestAnimationFrame(tickSpring);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickSpring);
+
+  // §5: груз на пружине опускается в воду и виснет ниже (пружина короче под меньшим кажущимся весом).
+  var springTop = document.querySelector('.spring-top');
+  var hangMass = document.querySelector('.hang-mass');
+  var TOP_Y = 8, AIR_LEN = 55, WATER_LEN = 35, DIP_PERIOD = 6000;
+  function tickDip(ts){
+    var phase = (ts % DIP_PERIOD) / DIP_PERIOD; // 0..1 по циклу
+    // первая половина цикла — опускание в воду и подъём обратно, с паузами на концах (держим темп сайта)
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    var len = AIR_LEN + (WATER_LEN - AIR_LEN) * t;
+    springTop.style.height = len + 'px';
+    springTop.style.top = TOP_Y + 'px';
+    hangMass.style.top = (TOP_Y + len) + 'px';
+    requestAnimationFrame(tickDip);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickDip);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — ciencia en palabras sencillas · <a href="/lang/es/theory/">teoría</a> · <a href="/lang/es/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

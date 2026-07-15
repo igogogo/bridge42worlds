@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>The Doppler Effect: Why a Siren Changes Pitch and Stars Change Color — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: источник движется, волны сжимаются впереди/растягиваются позади ---------- */
+.wave-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.wave-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>The effect in a nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>Sound: ambulance siren</a></li>
+<li><a href="#s3"><span class="n">03</span>Light: redshift and blueshift</a></li>
+<li><a href="#s4"><span class="n">04</span>A running example: how a police radar works</a></li>
+<li><a href="#s5"><span class="n">05</span>Where this leads: Hubble's law</a></li>
+<li><a href="#s6"><span class="n">06</span>Home experiments</a></li>
+<li><a href="#s7"><span class="n">07</span>Practice problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · optics and acoustics · part XVI</p>
+<h1>The Doppler Effect: Why a Siren Changes Pitch and Stars Change Color</h1>
+<p class="subtitle">One and the same geometric effect — a wave source approaching or receding from you — makes the siren 'sing' and allows astronomers to weigh the entire observable Universe.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="170" cy="100" fill="var(--brass-fill)" id="heroSource" r="8"></circle>
+<g id="heroWaves"></g>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="185">волны спереди сжаты, сзади растянуты</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>In 1842, Christian Doppler predicted: the frequency of a wave you hear or see depends on how the source moves relative to you. A source flying toward you 'squeezes' the waves in front of it — you hear a higher pitch or see a bluer light. The same effect, applied not to a siren but to distant galaxies, led to the discovery of the expanding Universe. In this note — the sound and light versions of the effect with numbers, and how it turned into a tool for measuring the speed of the cosmos' expansion.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Волны сжаты спереди, растянуты сзади" src="/lang/ru/theory/img/doppler_effect_hero.jpg"/><figcaption>Waves compressed in front, stretched behind</figcaption></figure>
+<figure><img alt="Красное смещение далёкой галактики — те же волны, другой масштаб" src="/lang/ru/theory/img/doppler_effect_concept.jpg"/><figcaption>Redshift of a distant galaxy — the same waves, a different scale</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>The effect in a nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Wave</th><th>Approaching</th><th>Receding</th></tr>
+<tr><td>Sound</td><td>higher pitch (frequency increases)</td><td>lower pitch (frequency decreases)</td></tr>
+<tr><td>Light</td><td>blueshift (frequency increases)</td><td>redshift (frequency decreases)</td></tr>
+</table>
+<p>A clear analogy from Doppler's own description: if you throw a pebble into a pond every second while standing still, the circles spread out evenly. If you WALK forward while doing so, the circles ahead of you become squeezed (you almost catch up with the previous one), while those behind you are stretched. Exactly the same happens with the crests of a sound or light wave when the source moves.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Sound: ambulance siren</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formula (moving source).</strong> Frequency heard by a stationary observer when the source approaches at speed v<sub>s</sub>:</p>
+<div class="plate">
+<div class="eq-body">f' = f·c/(c − v<sub>s</sub>)</div>
+<div class="cap">c ≈ 340 m/s — speed of sound in air; the sign changes to '+' when the source is receding</div>
+</div>
+<div aria-hidden="true" class="wave-fig">
+<svg viewbox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="20" x2="380" y1="70" y2="70"></line>
+<circle cx="200" cy="70" fill="var(--brass-fill)" id="sourceDot" r="8"></circle>
+<g id="waveGroup"></g>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>frequency in front</b><span data-readout="fFront">1000</span> Hz</span>
+<span><b>frequency behind</b><span data-readout="fBack">818</span> Hz</span>
+</div>
+<p>Numerical example: an ambulance siren emits f = 900 Hz, the vehicle approaches at speed v<sub>s</sub> = 34 m/s (122 km/h). Find the frequency heard by a person in front.</p>
+<div class="eq"><div class="eq-body">f' = 900·340/(340−34) = 900·340/306 = 900·(10/9) = <strong>1000 Hz</strong></div><div class="eq-tag">(1)</div></div>
+<p>After the vehicle passes by, the frequency drops sharply (receding, '+' sign in the denominator) — that downward pitch jump just as it passes you is something everyone has heard at least once in their life.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Light: redshift and blueshift</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formula.</strong> For speeds much less than the speed of light (v ≪ c), the wavelength shift is proportional to the speed:</p>
+<div class="plate">
+<div class="eq-body">Δλ/λ = v/c</div>
+<div class="cap">v &gt; 0 when the source is RECEDING (redshift, λ increases); v &lt; 0 when approaching (blueshift)</div>
+</div>
+<p>Numerical example: a star's spectral line in the lab has a wavelength λ = 500 nm. From a distant star, the same line is observed at λ' = 505 nm. Find the star's speed relative to us.</p>
+<div class="eq"><div class="eq-body">v = c·Δλ/λ = (3×10⁸)·5/500 = <strong>3×10⁶ m/s</strong> (3000 km/s)</div><div class="eq-tag">(2)</div></div>
+<p>The line shifted towards LARGER wavelengths (redward in the spectrum) — meaning the star is RECEDING from us at 3000 km/s (1% of the speed of light). Astronomers measure the speeds of stars and galaxies exactly this way — not by chasing them with a radar, but by comparing the positions of familiar spectral lines (like hydrogen lines) with their lab values.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>A running example: how a police radar works</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The radar does not simply capture the Doppler shift once — the signal takes a DOUBLE path: the radar emits a wave towards the car (first shift, the car 'sees' a shifted frequency as a moving observer), the car reflects it back (second shift, now the car acts as a moving source for the stationary radar). Both shifts add up, and for v ≪ c the overall formula simplifies to:</p>
+<div class="eq"><div class="eq-body">Δf/f ≈ 2v/c</div><div class="eq-tag">(3)</div></div>
+<p>Numerical example: a radar at frequency f = 10 GHz measures a shift from a car approaching at speed v = 30 m/s (108 km/h). Find the Doppler frequency shift.</p>
+<div class="eq"><div class="eq-body">Δf = 2vf/c = 2·30·(10×10⁹)/(3×10⁸) = <strong>2000 Hz</strong> (2 kHz)</div><div class="eq-tag">(4)</div></div>
+<p>The radar electronics measures exactly this 2 kHz shift (a tiny fraction of the 10 GHz carrier frequency, but easily measurable by modern electronics) and instantly converts it back into speed using the same formula — the entire calculation takes a fraction of a second.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Where this leads: Hubble's law</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>In the 1920s, Edwin Hubble, measuring the Doppler redshift of distant galaxies using the same method as in §3, noticed a pattern: ALMOST ALL galaxies are receding from us, and the farther the galaxy, the FASTER it is receding. This discovery is the direct experimental foundation of the expanding Universe theory and the Big Bang.</p>
+<div class="callout brass">
+<span class="tag">An important subtlety — this is not quite the 'ordinary' Doppler effect</span>
+<p>Strictly speaking, the cosmological redshift of distant galaxies is NOT motion of galaxies THROUGH space (as with a siren or a car), but the stretching of SPACE itself between us and the galaxy as the Universe expands, which also stretches the wavelength of light traveling through that space. At small distances and low speeds, the mathematics is indistinguishable from the ordinary Doppler effect (§3), but at very high speeds (comparable to the speed of light), precise calculations require general relativity, not just the Doppler formula. A full treatment of Hubble's law — the next note in the series, on cosmology.</p>
+</div>
+<p>On the website, this is a separate law if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/doppler_effect.html">The Doppler Effect</a>
+</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Home experiments</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home experiment · buzzing toy on a string</span>
+<p>Tie a small sounding object (e.g., a phone with an alarm/continuous tone on, wrapped in a sock for softness, or a special 'Doppler' buzzer-whistle on a string, if available) to a sturdy string about a meter long and whirl it in a circle above your head at a constant speed, standing in an open space.</p>
+<p><span class="qlabel">What to observe</span> the pitch noticeably 'wavers' — higher when the source flies TOWARD you (approaching along the tangent of the circle), lower when it flies away from you on the opposite side of the circle. This is the same effect as with the siren (§2), only the source moves in a circle rather than a straight line.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home experiment · listen to passing traffic mindfully</span>
+<p>Next time a train, a car with an open window (playing music with a clear note), or a siren passes you — pay special attention to the moment when the source goes right past you.</p>
+<p><span class="qlabel">What to observe</span> a sharp downward pitch jump exactly when the source is directly opposite you (v<sub>along the line of sight</sub> changes sign from 'approaching' to 'receding') — an effect you have surely heard thousands of times without realizing it is exactly the formula from §2 in its pure form.</p>
+</div>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Practice problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution follows this scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. A train horn sounds at 500 Hz and is receding from you at 20 m/s (speed of sound 340 m/s). What frequency do you hear?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> f = 500 Hz, v<sub>s</sub> = 20 m/s (receding), c = 340 m/s.</p>
+<p><span class="qlabel">Law</span> Doppler effect for a receding source (§2): f' = f·c/(c+v<sub>s</sub>).</p>
+<p><span class="qlabel">Solution</span> f' = 500·340/360 ≈ 472.2 Hz.</p>
+<p><span class="qlabel">Answer</span> <strong>≈472 Hz</strong> — lower than the original 500 Hz, as expected for a receding source.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A galaxy's spectral line (lab wavelength 400 nm) is observed shifted to 404 nm. Find the galaxy's speed and direction (approaching/receding).</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> λ = 400 nm, λ' = 404 nm.</p>
+<p><span class="qlabel">Law</span> Doppler formula for light (§3): v = cΔλ/λ.</p>
+<p><span class="qlabel">Solution</span> Δλ = 4 nm; v = (3×10⁸)·4/400 = 3×10⁶ m/s = 3000 km/s.</p>
+<p><span class="qlabel">Answer</span> <strong>3000 km/s, receding</strong> (wavelength increased — redshift).</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A radar at 20 GHz registers a 4 kHz shift from an approaching car. Find the car's speed.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> f = 20 GHz, Δf = 4 kHz.</p>
+<p><span class="qlabel">Law</span> radar formula (§4): Δf = 2vf/c.</p>
+<p><span class="qlabel">Solution</span> v = Δf·c/(2f) = 4000·(3×10⁸)/(2·20×10⁹) = 1.2×10¹²/4×10¹⁰ = 30 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>30 m/s</strong> (108 km/h).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Why, when using a radar, is the frequency shift calculated with a factor of 2, and not with the ordinary single Doppler formula?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> §4 — radar operation mechanics.</p>
+<p><span class="qlabel">Solution</span> the signal experiences a DOUBLE Doppler shift: first when traveling from the radar to the moving car (the car as a moving receiver sees a shifted frequency), then when reflecting back from the car to the radar (the car now acts as a moving SOURCE of the reflected wave for the stationary radar receiver). Two identical shifts in sign add up, hence the factor of 2.</p>
+<p><span class="qlabel">Answer</span> <strong>double pass of the signal</strong> — to the target and back to the radar.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. How does the cosmological redshift of distant galaxies fundamentally differ from the 'ordinary' Doppler effect of a siren?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> §5, important subtlety of Hubble's law.</p>
+<p><span class="qlabel">Solution</span> for a siren, the source physically moves THROUGH stationary space/air. For distant galaxies, the shift is caused by the stretching of space itself between us and the galaxy as the Universe expands — the galaxy does not necessarily 'fly' through space in the usual sense; rather, the space between us increases, stretching the wavelength of light passing through it.</p>
+<p><span class="qlabel">Answer</span> <strong>motion through space (siren) versus stretching of space itself (cosmological shift)</strong> — at low speeds mathematically indistinguishable, at high speeds requires general relativity.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>A typo, incorrect formula, number off, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Doppler%20effect%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, reviewed, and we make corrections based on it — it's not 'for the drawer'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'study guide' to the layer of laws · part XVI of the series, optics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2: волновые фронты честно расширяются от текущей позиции источника на каждый момент излучения —
+  // впереди по движению источника кольца буквально гуще (меньше расстояние между centрами), не рисуночная иллюзия.
+  var svg = document.getElementById('waveGroup');
+  var sourceDot = document.getElementById('sourceDot');
+  var fFrontEl = document.querySelector('[data-readout="fFront"]');
+  var fBackEl = document.querySelector('[data-readout="fBack"]');
+
+  var C_SOUND = 340, V_SOURCE = 34, F0 = 900;
+  var X0 = 60, X1 = 340, Y = 70;
+  var PERIOD_MS = 6000;
+  var EMIT_INTERVAL = 500; // виртуальный «щелчок» источника каждые 500мс модельного времени
+
+  var emissions = []; // {emitTime, emitX}
+  var lastEmitTs = 0;
+  var lastTs = null;
+
+  function tick(ts){
+    if (lastTs === null) { lastTs = ts; lastEmitTs = ts; }
+    var loopedTs = ts % PERIOD_MS;
+    var sourceX = X0 + (X1 - X0) * (loopedTs / PERIOD_MS);
+    if (sourceDot) sourceDot.setAttribute('cx', sourceX.toFixed(1));
+
+    if (ts - lastEmitTs > EMIT_INTERVAL) {
+      lastEmitTs = ts;
+      emissions.push({ t: ts, x: sourceX });
+      if (emissions.length > 14) emissions.shift();
+    }
+
+    var html = '';
+    emissions.forEach(function(e){
+      var age = (ts - e.t) / 1000; // секунд с момента излучения
+      var r = age * 22; // масштаб скорости расширения фронта на экране
+      if (r > 0 && r < 200) {
+        html += '<circle cx="' + e.x.toFixed(1) + '" cy="' + Y + '" r="' + r.toFixed(1) + '" fill="none" stroke="var(--steel-fill)" stroke-width="1.5" opacity="' + Math.max(0, 1 - r / 200).toFixed(2) + '"/>';
+      }
+    });
+    if (svg) svg.innerHTML = html;
+
+    if (fFrontEl) fFrontEl.textContent = Math.round(F0 * C_SOUND / (C_SOUND - V_SOURCE));
+    if (fBackEl) fBackEl.textContent = Math.round(F0 * C_SOUND / (C_SOUND + V_SOURCE));
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+
+  // hero: упрощённая декоративная версия того же принципа — несимметричные кольца вокруг движущейся точки.
+  var heroSvg = document.getElementById('heroWaves');
+  var heroSource = document.getElementById('heroSource');
+  var hEmissions = [];
+  var hLastEmit = 0;
+  var HX0 = 60, HX1 = 280, HY = 100;
+  function heroTick(ts){
+    var loopedTs = ts % PERIOD_MS;
+    var sx = HX0 + (HX1 - HX0) * (loopedTs / PERIOD_MS);
+    if (heroSource) heroSource.setAttribute('cx', sx.toFixed(1));
+    if (ts - hLastEmit > 500) {
+      hLastEmit = ts;
+      hEmissions.push({ t: ts, x: sx });
+      if (hEmissions.length > 10) hEmissions.shift();
+    }
+    var html = '';
+    hEmissions.forEach(function(e){
+      var age = (ts - e.t) / 1000;
+      var r = age * 18;
+      if (r > 0 && r < 140) {
+        html += '<circle cx="' + e.x.toFixed(1) + '" cy="' + HY + '" r="' + r.toFixed(1) + '" fill="none" stroke="var(--steel-fill)" stroke-width="1.3" opacity="' + Math.max(0, 1 - r / 140).toFixed(2) + '"/>';
+      }
+    });
+    if (heroSvg) heroSvg.innerHTML = html;
+    requestAnimationFrame(heroTick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(heroTick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

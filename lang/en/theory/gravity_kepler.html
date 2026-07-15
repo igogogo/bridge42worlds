@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Gravity and Orbits: Why Planets Don't Fall or Fly Away — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- эллиптическая орбита: живое ускорение/замедление по 2 закону Кеплера ---------- */
+.orbit-fig{ max-width:600px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.orbit-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:600px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:90px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Four Laws, One Picture</a></li>
+<li><a href="#s2"><span class="n">02</span>Law of Gravity: Force for Two</a></li>
+<li><a href="#s3"><span class="n">03</span>Kepler's First Law: Ellipse, Not a Circle</a></li>
+<li><a href="#s4"><span class="n">04</span>Kepler's Second Law: Equal Areas</a></li>
+<li><a href="#s5"><span class="n">05</span>Kepler's Third Law: Scales for Stars</a></li>
+<li><a href="#s6"><span class="n">06</span>A Running Example: How Exoplanets Are Found</a></li>
+<li><a href="#s7"><span class="n">07</span>Where This Leads: From Kepler to Einstein</a></li>
+<li><a href="#s8"><span class="n">08</span>Experiment at Home</a></li>
+<li><a href="#s9"><span class="n">09</span>Problems to Check</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Celestial Mechanics · Part VII</p>
+<h1>Gravity and Orbits: Why Planets Don't Fall or Fly Away</h1>
+<p class="subtitle">The same force that drops an apple has kept the Moon in orbit for 4.5 billion years—it simply “misses” the Earth as it circles, never falling straight into it.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="150" cy="110" fill="none" rx="110" ry="88" stroke="var(--rule)" stroke-width="1.5"></ellipse>
+<circle cx="216" cy="110" fill="var(--brass-fill)" r="12"></circle>
+<circle cx="260" cy="110" fill="var(--steel-fill)" id="heroPlanet" r="7"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="170" y="205">эллипс, Солнце — в фокусе, не в центре</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>Johannes Kepler, analyzing Tycho Brahe's observations, derived three empirical rules of planetary motion—long before Newton explained where they come from. It turned out that all three of Kepler's laws are direct mathematical consequences of a single simple force that falls off as the square of the distance. This note covers the law of gravity, all three of Kepler's laws with numerical examples, and how they are used together to find planets around other stars.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Эллиптическая орбита планеты вокруг звезды" src="/lang/ru/theory/img/gravity_kepler_hero.jpg"/><figcaption>Elliptical orbit of a planet around a star</figcaption></figure>
+<figure><img alt="Шарик на резиновой мембране — модель гравитационной ямы" src="/lang/ru/theory/img/gravity_kepler_concept.jpg"/><figcaption>A ball on a rubber membrane — a model of a gravitational well</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Four Laws, One Picture</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Law</th><th>What it says</th></tr>
+<tr><td>Gravity (Newton)</td><td>attractive force ~ product of masses / square of distance</td></tr>
+<tr><td>Kepler I</td><td>orbit is an ellipse, star at the focus, not the center</td></tr>
+<tr><td>Kepler II</td><td>equal areas in equal times — faster near the star, slower far away</td></tr>
+<tr><td>Kepler III</td><td>square of period ~ cube of orbit size</td></tr>
+</table>
+<p>Kepler found the first two laws in 1609 and the third in 1619, purely empirically, fitting formulas to Tycho Brahe's data. Newton showed in 1687 that all three are not separate rules but mathematical consequences of ONE force (§2). This is a rare case in the history of physics where a law was discovered “backwards”—from observations to formula, rather than from theory to prediction.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Law of Gravity: Force for Two</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> Any two bodies attract each other with a force proportional to the product of their masses and inversely proportional to the square of the distance between them:</p>
+<div class="plate">
+<div class="eq-body">F = G·m<sub>1</sub>m<sub>2</sub>/r²</div>
+<div class="cap">G ≈ 6.674×10⁻¹&amp;sup9 N·m²/kg² — the gravitational constant, the same throughout the Universe</div>
+</div>
+<p>“Inverse square” is the key detail: increase the distance threefold, the force drops not threefold but ninefold. This also explains why orbits are stable at all (they don’t fly apart or collapse)—with any other exponent (other than 2), orbits would be unstable to the slightest perturbations.</p>
+<div class="callout brass">
+<span class="tag">Why Doesn't the Moon Fall to Earth</span>
+<p>A common confusion: “if there is attraction, why doesn't the Moon fall?” It DOES fall—constantly, all the time. But it also has a sideways velocity (tangential to the orbit), and the fall exactly compensates for how much the Earth's surface “curves away” beneath it due to curvature. Newton illustrated this with a thought experiment “mountain cannon”: the faster you shoot a cannonball horizontally, the farther it travels before falling—and at sufficient speed, it will “fall” around the entire Earth, never reaching the ground. That is an orbit.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Kepler's First Law: Ellipse, Not a Circle</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The orbit of a planet is an ellipse with the star at one focus (not at the center of the ellipse):</p>
+<div class="plate">
+<div class="eq-body">r = a(1 − e²)/(1 + e·cosθ)</div>
+<div class="cap">a — semi-major axis, e — eccentricity (0 = circle, near 1 = highly elongated ellipse)</div>
+</div>
+<p>For 2000 years before Kepler, everyone (including Copernicus) thought orbits were perfect circles—the “perfect” shape seemed philosophically mandatory for the heavens. Kepler struggled for eight years with the orbit of Mars, trying to fit a circle to Tycho Brahe's precise data, until he gave up and tried an ellipse—it fit perfectly on the first attempt.</p>
+<div class="callout steel">
+<span class="tag">Earth's orbit is also an ellipse, just almost circular</span>
+<p>Earth's orbital eccentricity is only e ≈ 0.017—almost a circle to the eye, but that's why in January Earth is about 5 million km closer to the Sun than in July (this has nothing to do with seasons—those are caused by axis tilt, not ellipticity).</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Kepler's Second Law: Equal Areas</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The line segment joining the star and the planet sweeps out equal areas in equal intervals of time:</p>
+<div aria-hidden="true" class="orbit-fig">
+<svg viewbox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="200" cy="120" fill="none" rx="140" ry="112" stroke="var(--rule)" stroke-width="1.5"></ellipse>
+<circle cx="284" cy="120" fill="var(--brass-fill)" r="10"></circle>
+<!-- широкий угол, короткий радиус — сектор у периапсиса (планета близко и быстро) -->
+<polygon fill="var(--steel-fill)" opacity=".4" points="284,120 340,120 336,72"></polygon>
+<!-- узкий угол, длинный радиус — сектор у апоапсиса (планета далеко и медленно), та же площадь -->
+<polygon fill="var(--moss-fill)" opacity=".4" points="284,120 62,113 62,127"></polygon>
+<circle cx="340" cy="120" fill="var(--ink)" id="orbitPlanet" r="7"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>distance to star</b><span data-readout="dist">0.40</span></span>
+<span><b>speed</b><span data-readout="speed">2.50</span></span>
+</div>
+<p>The blue and green areas in the diagram are two “sectors” swept out by the planet in EQUAL time: wide in angle but short in radius near the star (planet moves fast, sweeping a large angle) and narrow in angle but long in radius far away (planet crawls slowly, angle barely changes)—their areas are equal. The planet slows down and speeds up visibly in the live animation above: watch how quickly it passes the right edge of the orbit (close to the star) and how slowly the left edge (far away).</p>
+<p>This is not a separate postulate but a direct consequence of <strong>conservation of angular momentum</strong> (part II, §4)—the star's gravity is always directed ALONG the line to the planet (central force), so the torque about the star is zero, and L = r × p is conserved. Since L is constant, and r decreases near the star, the angular speed must increase to compensate (exactly the same math as a figure skater pulling in their arms—part II, §4).</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Kepler's Third Law: Scales for Stars</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The square of the orbital period is proportional to the cube of the semi-major axis of the orbit:</p>
+<div class="plate">
+<div class="eq-body">T² = (4π²/GM)·a³</div>
+<div class="cap">M — mass of the central body (star); the more massive it is, the shorter the period at the same distance</div>
+</div>
+<div class="units">A handy trick: in “astronomical units” (a in AU, T in years, M in solar masses) the formula simplifies to <span class="u">T² = a³/M</span> — no need to calculate G or π because for Earth (a=1 AU, T=1 year, M=1 M<sub>☉</sub>) both sides of the equation are equal to 1 by definition.</div>
+<p>Numerical example: a hypothetical planet orbits the Sun at a distance of a = 4 AU. What is its orbital period?</p>
+<div class="eq"><div class="eq-body">T² = a³ = 4³ = 64  ⇒  T = <strong>8 years</strong></div><div class="eq-tag">(1)</div></div>
+<p>This is exactly how Neptune was discovered (1846)—from the perturbations it caused in Uranus's orbit, astronomers calculated WHERE to look for the unknown planet, even before seeing it through a telescope.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>A Running Example: How Exoplanets Are Found</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's bring all the laws together in a real astronomy problem: a telescope notices a star dimming slightly on a regular basis—a planet passes in front of it (transit method), eclipse period T = 2 years.</p>
+<ol>
+<li>From the star's spectrum, astronomers independently estimate its mass: let M = 2 M<sub>☉</sub>.</li>
+<li><strong>Kepler's Third Law</strong> in the AU/years/solar masses form gives the planet's distance to the star:</li>
+</ol>
+<div class="eq"><div class="eq-body">a³ = T²·M = 2²·2 = 8  ⇒  a = <strong>2 AU</strong></div><div class="eq-tag">(2)</div></div>
+<p>No mission has ever flown to this planet—the distance was calculated purely from the star's blinking period and its mass. <strong>First law</strong> (§3) refines the orbit shape from details of the light curve (symmetry of the dip hints at eccentricity), and <strong>second law</strong> (§4) explains why transits occur at equal time intervals, not chaotically: the planet's angular speed is predictable at any point in its orbit.</p>
+<div class="callout moss">
+<span class="tag">The site name in touch</span>
+<p>This is precisely the method behind most exoplanet articles on bridge42worlds—the TESS and Kepler telescopes (named after that very Johannes Kepler) looked for such periodic eclipses, and the laws in this note are the direct math used by the authors of those articles.</p>
+</div>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Where This Leads: From Kepler to Einstein</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Kepler-Newton laws work with tremendous accuracy almost everywhere in the Universe—but not perfectly. Mercury's orbit (the closest planet to the Sun, where gravity is strongest) slowly ROTATES as a whole—the ellipse does not stay in place but precesses. Newtonian mechanics predicts most of this precession (perturbations from other planets), but 43 arcseconds per century remained unexplained for nearly 60 years.</p>
+<div class="callout brass">
+<span class="tag">The First Triumph of General Relativity</span>
+<p>In 1915, Einstein applied his freshly derived equations of general relativity to Mercury's orbit—and got exactly the missing 43 arcseconds, without a single adjustable parameter. This was the first real experimental confirmation of GR, even before the famous 1919 eclipse with the bending of starlight. Today we know: Newton's law of gravity is an excellent approximation of general relativity in weak fields and at not-too-high speeds, but it is not the final word in physics.</p>
+</div>
+<p>On the site these are individual laws, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/law_of_universal_gravitation.html">Law of Universal Gravitation</a> ·
+          <a href="/lang/en/laws/keplers_first_law.html">Kepler's First Law</a> ·
+          <a href="/lang/en/laws/keplers_second_law.html">Kepler's Second Law</a> ·
+          <a href="/lang/en/laws/keplers_third_law.html">Kepler's Third Law</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Experiment at Home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at Home · Drawing a Real Ellipse</span>
+<p>Stick two pushpins (or pencils) into cardboard 10–15 cm apart, loop a thread around them that's about three times the distance between the pins. Pull the thread taut with a pencil and trace around, keeping it taut at all times.</p>
+<p><span class="qlabel">What to notice</span> you'll get a real ellipse, and the pins are its foci (§3). Move the pins farther apart—the ellipse becomes more elongated (higher eccentricity); bring them almost together—you'll get nearly a circle. This is the same geometric fact that “the sum of distances to two foci is constant”—on it literally hinges all orbital mechanics.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at Home · Weight on a String through a Tube</span>
+<p>Thread a strong string through a short tube (an old pen shell works), tie a small weight (a washer, a key) to one end, and hold the string with your hand on the other side. Spin the weight in a circle over the tube, then smoothly pull on the free end of the string, shortening the radius of rotation.</p>
+<p><span class="qlabel">What to notice</span> the weight will suddenly speed up its rotation as the radius decreases—this is a mechanical version of Kepler's second law (§4) and conservation of angular momentum (part II): the string tension, like the star's gravity, is directed exactly toward the center, so L is conserved, and as r decreases the angular speed must increase.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>Problems to Check</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution always follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. The distance between two bodies is tripled, masses unchanged. By how many times does the gravitational force change?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> r<sub>new</sub> = 3r.</p>
+<p><span class="qlabel">Law</span> law of gravity (§2): F ∝ 1/r².</p>
+<p><span class="qlabel">Solution</span> F<sub>new</sub>/F = r²/(3r)² = 1/9.</p>
+<p><span class="qlabel">Answer</span> <strong>decreased 9 times</strong> — the “inverse square” in action.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. An exoplanet orbits a star of 4 solar masses at a distance of 2 AU. Find the orbital period in years.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> M = 4 M<sub>☉</sub>, a = 2 AU</p>
+<p><span class="qlabel">Law</span> Kepler's third law in AU/years/solar masses (§5): T² = a³/M.</p>
+<p><span class="qlabel">Solution</span> T² = 2³/4 = 8/4 = 2 ⇒ T = √2 ≈ 1.41 years.</p>
+<p><span class="qlabel">Answer</span> <strong>≈1.41 years</strong> — a massive star “speeds up” the orbit more than the Sun would at the same distance.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A planet at perihelion (closest point to the star) is twice as close to the star as at aphelion (farthest point). By how many times is its speed at perihelion greater than at aphelion?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> r<sub>aphelion</sub> = 2r<sub>perihelion</sub>.</p>
+<p><span class="qlabel">Law</span> conservation of angular momentum (§4): L = mvr = const at these two points (velocity is perpendicular to the radius at both).</p>
+<p><span class="qlabel">Solution</span> v<sub>peri</sub>·r<sub>peri</sub> = v<sub>aphe</sub>·r<sub>aphe</sub> = v<sub>aphe</sub>·2r<sub>peri</sub> ⇒ v<sub>peri</sub> = 2v<sub>aphe</sub>.</p>
+<p><span class="qlabel">Answer</span> <strong>twice as high</strong> at perihelion—exactly like a figure skater speeding up when pulling toward the axis of rotation.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. A satellite orbits Earth in 90 minutes at low orbit. Another satellite orbits twice as far from Earth's center. By how many times is its period longer?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> a<sub>2</sub> = 2a<sub>1</sub>, M is the same (Earth).</p>
+<p><span class="qlabel">Law</span> Kepler's third law (§5): T² ∝ a³.</p>
+<p><span class="qlabel">Solution</span> T<sub>2</sub>²/T<sub>1</sub>² = (2a<sub>1</sub>)³/a<sub>1</sub>³ = 8 ⇒ T<sub>2</sub>/T<sub>1</sub> = √8 ≈ 2.83.</p>
+<p><span class="qlabel">Answer</span> <strong>≈2.83 times longer</strong> — the period grows faster than the distance.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Why does Kepler's first law (“orbit is an ellipse”) not work for a system of three or more bodies of comparable mass (e.g., a triple star)? What assumption is violated?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> the derivation of Kepler's laws is strictly valid for the TWO-body problem (§1-§5—everywhere one star and one planet are implied).</p>
+<p><span class="qlabel">Solution</span> with a third massive body, the gravitational pull is no longer a central force directed strictly toward a single focus—several attractions act on the planet simultaneously, the orbit ceases to be a closed ellipse and becomes chaotic (the three-body problem, in general, cannot be solved analytically).</p>
+<p><span class="qlabel">Answer</span> <strong>the assumption “only two bodies” is violated</strong> — Kepler's laws in their pure form describe only pairwise gravitational interaction.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>A typo, wrong formula, number doesn't add up, poorly explained—write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Gravity%20Kepler%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, examined, and a correction is made—it's not just for nothing.</p>
+</div>
+<footer>
+<p>bridge42worlds · “study guide” to the layer of laws · part VII of the series, celestial mechanics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // Численное интегрирование движения по эллипсу с сохранением L = r²dθ/dt = const (2 закон Кеплера) —
+  // не читаем CSS-состояние, а честно считаем позицию по физике на каждый кадр (как и весь сайт).
+  // θ — истинная аномалия, отсчитанная от периапсиса (ближайшей к фокусу точки, θ=0).
+  // Фокус (звезда) смещён от геометрического центра эллипса на c=A·e вдоль большой оси — стандартная
+  // полярная параметризация r(θ) уже даёт координаты ОТНОСИТЕЛЬНО ФОКУСА, поэтому при переводе в
+  // экранные координаты (где рисуем эллипс через центр) добавляем это смещение c.
+  function orbitPoint(cx, cy, a, e, theta){
+    var r = a * (1 - e * e) / (1 + e * Math.cos(theta));
+    var c = a * e;
+    return { x: cx + c + r * Math.cos(theta), y: cy - r * Math.sin(theta), r: r };
+  }
+
+  // По второму закону Кеплера площадь заметается с постоянной скоростью dA/dt = k/2 (k = r²dθ/dt = const),
+  // а площадь всего эллипса = πab — значит период T = πab/(k/2) = 2πab/k. Задаём T=6с (общий темп сайта)
+  // и решаем обратную задачу — какое k этому соответствует — вместо того чтобы подбирать множитель
+  // на глаз (так и получился прошлый баг: планета зависала в афелии на ~40 минут вместо 6 секунд).
+  var PERIOD_SEC = 6;
+  function kFor(a, e){ var b = a * Math.sqrt(1 - e * e); return 2 * Math.PI * a * b / PERIOD_SEC; }
+
+  var MAIN = { cx: 200, cy: 120, a: 140, e: 0.6, theta: Math.PI * 0.85, el: document.getElementById('orbitPlanet') };
+  MAIN.k = kFor(MAIN.a, MAIN.e);
+  var HERO = { cx: 150, cy: 110, a: 110, e: 0.6, theta: Math.PI * 0.55, el: document.getElementById('heroPlanet') };
+  HERO.k = kFor(HERO.a, HERO.e);
+  var distEl = document.querySelector('[data-readout="dist"]');
+  var speedEl = document.querySelector('[data-readout="speed"]');
+
+  var lastTs = null;
+  if (!window.requestAnimationFrame) return;
+  function advance(body, dtSec){
+    var p = orbitPoint(body.cx, body.cy, body.a, body.e, body.theta);
+    body.theta += (body.k / (p.r * p.r)) * dtSec; // dθ/dt = k/r² — сохранение момента импульса (2 закон Кеплера)
+    if (body.el) { body.el.setAttribute('cx', p.x.toFixed(1)); body.el.setAttribute('cy', p.y.toFixed(1)); }
+    return p;
+  }
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05); // защита от скачка таба
+    lastTs = ts;
+
+    var mainPoint = advance(MAIN, dtSec);
+    advance(HERO, dtSec);
+
+    if (distEl) distEl.textContent = (mainPoint.r / MAIN.a).toFixed(2);
+    if (speedEl) speedEl.textContent = (L / mainPoint.r).toFixed(2);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

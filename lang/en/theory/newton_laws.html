@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Newton's Three Laws: How Dynamics is Born — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+.g   { color:var(--brass); font-style:italic; }
+.om, .kin { color:var(--steel); font-style:italic; }
+b.g  { color:var(--brass); }
+
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{
+  display:none;
+}
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{
+    display:block;
+    position:sticky; top:36px; align-self:start;
+    padding-top:64px;
+  }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{
+  text-decoration:none; color:var(--ink-soft);
+  font-size:.82rem; line-height:1.35; display:block;
+}
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{
+  padding: 56px 0 40px;
+  display:grid; gap:28px;
+}
+@media (min-width:760px){
+  .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; }
+}
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  text-wrap:balance;
+  color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+.hero-rig{ transform:translate(90px,175px); }
+@media (prefers-reduced-motion: no-preference){
+  .hero-rig{ animation: heroSlide 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. Группы для
+   сравнения (§3 три груза, §4 два шарика) — ОДНА и та же длительность на все элементы группы
+   (иначе разъедутся по фазе), а момент прибытия у каждого свой % — только так на каждом цикле
+   у них будет общий синхронный старт «с одной линии». */
+@keyframes heroSlide{ 0%{ transform:translate(90px,175px); } 55%{ transform:translate(330px,175px); } 100%{ transform:translate(330px,175px); } }
+
+/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+   как принято визуально отличать advanced-глубину от основного текста. */
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:22px 26px;
+  margin: 8px 0 8px;
+  box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{
+  display:flex; align-items:baseline; gap:.6em;
+  margin:0 0 .3em;
+  max-width:680px;
+}
+.sec-num{
+  font-family:var(--font-mono); color:var(--brass);
+  font-size:.95rem;
+}
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0;
+  text-wrap:balance;
+}
+h3{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px;
+}
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{
+  width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em;
+  font-size:.92rem;
+}
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap: 16px;
+  max-width:680px;
+  margin: 1.5em 0;
+  padding: 14px 4px;
+}
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  padding: 22px 26px;
+  margin: 1.6em 0;
+  box-shadow: var(--shadow);
+}
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin-top:.9em;
+}
+
+sup, sub{ font-size:.68em; }
+
+.callout{
+  max-width:680px;
+  border-left: 3px solid var(--rule);
+  padding: 4px 0 4px 18px;
+  margin: 1.5em 0;
+}
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em;
+  text-transform:uppercase; margin-bottom:.4em; display:block;
+}
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+.callout ol{ margin-bottom:0; }
+.callout li{ margin-bottom:.7em; }
+.callout li:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{
+  font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px;
+}
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+.fig-row{ display:grid; gap:24px; max-width:920px; }
+@media (min-width:760px){ .fig-row{ grid-template-columns:1fr 1fr; } }
+.fig-row figure{ max-width:none; }
+
+code, .code{
+  font-family:var(--font-mono); font-size:.86em; background:var(--paper-raised);
+  border:1px solid var(--rule); border-radius:3px; padding:.1em .4em;
+}
+
+footer{
+  max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule);
+  color:var(--ink-soft); font-size:.85rem;
+}
+.feedback-box{
+  max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:18px 22px;
+}
+.feedback-box .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brass); display:block; margin-bottom:.5em;
+}
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- animated strips — реальные объекты (груз/шарик/ракета), не абстрактные точки:
+   размер тела ~ масса, стрелка F видна как причина, скорость на экране ~ скорость в примере. ---------- */
+.anim-strip{
+  position:relative; max-width:680px; margin:1.5em 0 1.9em;
+  background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.anim-strip.single{ height:64px; }
+.anim-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+
+/* Груз — прямоугольник со скруглением, размер прямо кодирует массу (больше груз = больше блок). */
+.anim-block{
+  position:absolute; top:50%; border-radius:3px; border:1.5px solid var(--ink);
+  background:var(--paper); box-shadow:0 1px 2px rgba(27,34,43,.12); left:16px;
+}
+.anim-block.sz-sm{ width:14px; height:14px; margin-top:-7px; }
+.anim-block.sz-md{ width:20px; height:20px; margin-top:-10px; }
+.anim-block.sz-lg{ width:28px; height:28px; margin-top:-14px; }
+
+/* Шарик — конькобежец/тело в §4, размер круга ~ масса. */
+.anim-ball{
+  position:absolute; top:50%; border-radius:50%; background:var(--steel-fill); left:50%;
+}
+.anim-ball.b-light{ width:14px; height:14px; margin-top:-7px; margin-left:-7px; }
+.anim-ball.b-heavy{ width:22px; height:22px; margin-top:-11px; margin-left:-11px; background:var(--brass-fill); }
+
+/* Стрелка силы F — короткая, у старта, видна как причина движения груза следом. */
+.anim-force{
+  position:absolute; top:50%; height:2px; background:var(--steel-fill); left:16px; width:26px; margin-top:-1px;
+}
+.anim-force::after{
+  content:""; position:absolute; right:-1px; top:-4px; width:0; height:0;
+  border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:6px solid var(--steel-fill);
+}
+.anim-force-label{
+  position:absolute; left:16px; top:6px; font-family:var(--font-display); font-size:.68rem;
+  font-weight:700; color:var(--steel);
+}
+
+.anim-label{
+  position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft);
+  text-align:right;
+}
+.anim-label.left{ right:auto; left:14px; }
+
+/* Многорядная полоса — три груза разной массы под одной F, как в таблице/Рис.1 §3. */
+.anim-strip.multi{ padding:10px 0; }
+.anim-row{ position:relative; height:38px; }
+.anim-row .anim-track{ left:52px; }
+.anim-row .anim-block{ left:52px; }
+.anim-row .anim-row-label{
+  position:absolute; left:12px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.72rem; color:var(--ink-soft); width:36px;
+}
+/* Живой числовой счётчик — "функциональная" анимация: не просто едет груз, а рядом честно
+   пересчитывается v=at на каждый кадр (JS в конце документа, формула, не чтение CSS-состояния). */
+.anim-readout{
+  position:absolute; right:10px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; min-width:78px; text-align:right;
+}
+.graph-mini{
+  max-width:340px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:10px;
+}
+.graph-mini svg{ width:100%; height:auto; display:block; }
+
+.anim-strip.vertical{ height:150px; }
+.anim-strip.vertical .anim-track{ left:50%; top:14px; bottom:14px; right:auto; width:1px; height:auto; }
+
+/* Ракета §5 — треугольный корпус + факел, поднимается вверх. */
+.anim-rocket{
+  position:absolute; left:50%; bottom:14px; width:16px; height:26px; margin-left:-8px;
+}
+.anim-rocket .body{
+  position:absolute; left:0; top:0; width:16px; height:20px; border-radius:8px 8px 2px 2px;
+  background:var(--paper); border:1.5px solid var(--ink);
+}
+.anim-rocket .flame{
+  position:absolute; left:3px; top:19px; width:10px; height:10px;
+  background:var(--brass-fill); clip-path:polygon(50% 100%, 0 0, 100% 0); opacity:.9;
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .anim-block.const{ animation: moveConst 6s linear infinite; }
+  .anim-block.decel-stop{ animation: moveDecelStop 6s cubic-bezier(.25,.85,.45,1) infinite; }
+  .anim-block.accel-sm{ animation: moveAccelSm 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-md{ animation: moveAccelMd 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-lg{ animation: moveAccelLg 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.apart-a{ animation: moveApartFar 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-ball.apart-b{ animation: moveApartNear 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-rocket.rise{ animation: moveRise 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+@keyframes moveConst{ 0%{ left:52px; } 70%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+/* §3: одна и та же длительность (6с) на все три груза, финиш у каждого на своём % шкалы —
+   пропорционально sqrt(m) (t ~ sqrt(m/F) при равной F) — лёгкий приезжает первым, но у ВСЕХ
+   троих следующий цикл стартует одновременно (общая шкала 0-100%), это и даёт эффект «заезда». */
+@keyframes moveAccelSm{ 0%{ left:52px; } 25%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelMd{ 0%{ left:52px; } 35%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelLg{ 0%{ left:52px; } 50%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveDecelStop{ 0%{ left:16px; } 40%{ left:58%; } 100%{ left:58%; } }
+@keyframes moveApartFar{ 0%{ left:50%; } 40%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
+@keyframes moveApartNear{ 0%{ left:50%; } 40%{ left:38%; } 100%{ left:38%; } }
+@keyframes moveRise{ 0%{ bottom:14px; } 55%{ bottom:calc(100% - 40px); } 100%{ bottom:calc(100% - 40px); } }
+
+/* ---------- задачи с раскрывающимся решением ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{
+  cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem;
+}
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule);
+  color:var(--ink-soft); font-size:.86rem;
+}
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); margin-right:.5em;
+}
+
+/* ---------- сноска "величины и единицы" под формулой ---------- */
+.units{
+  font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
+}
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Three laws in a nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>First law: inertia</a></li>
+<li><a href="#s3"><span class="n">03</span>Second law: F = ma</a></li>
+<li><a href="#s4"><span class="n">04</span>Third law: action and reaction</a></li>
+<li><a href="#s5"><span class="n">05</span>All three together: rocket launch</a></li>
+<li><a href="#s6"><span class="n">06</span>Where it leads: principle of least action</a></li>
+<li><a href="#s7"><span class="n">07</span>Experiment at home</a></li>
+<li><a href="#s8"><span class="n">08</span>Practice problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · classical dynamics · part I</p>
+<h1>Newton's Three Laws: How Dynamics is Born</h1>
+<p class="subtitle">Inertia, F = ma, and "action equals reaction" — not three separate facts, but one coherent scheme: how to calculate a body's motion if you know the forces acting on it and on its neighbors.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1.5" x1="20" x2="400" y1="220" y2="220"></line>
+<!-- Груз, стрелка F и подпись m едут ВМЕСТЕ одной группой — сила приложена
+               непрерывно (толкает сзади), груз у неё на глазах ускоряется вправо. -->
+<g class="hero-rig">
+<line marker-end="url(#arrowF)" stroke="var(--steel)" stroke-width="2.4" x1="-88" x2="-6" y1="0" y2="0"></line>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" font-weight="700" x="-86" y="-13">F</text>
+<rect fill="var(--paper)" height="50" rx="4" stroke="var(--ink)" stroke-width="2" width="70" x="0" y="-25"></rect>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="13" x="85" y="5">m</text>
+</g>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="250">a = F/m — груз ускоряется, не едет с постоянной v</text>
+<defs>
+<marker id="arrowF" markerheight="8" markerwidth="8" orient="auto" refx="4" refy="4">
+<path d="M0,0 L8,4 L0,8 z" fill="var(--steel)"></path>
+</marker>
+</defs>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>Newton's three laws (1687, "Mathematical Principles of Natural Philosophy") are a minimal set of axioms from which all classical mechanics is derived: why a body with no net force moves uniformly in a straight line, how force, mass, and acceleration are related, and why every action has an equal and opposite reaction. This note covers each law individually with numerical examples and graphs, and then one overarching example (rocket launch) where all three laws work together. The material is aimed at those just starting dynamics; only arithmetic and the intuitive idea of a derivative are required.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Ускорение — то, что чувствует шарик в момент броска" src="/lang/ru/theory/img/newton_laws_hero.jpg"/><figcaption>Acceleration — what the ball feels at the moment of throw</figcaption></figure>
+<figure><img alt="Действие и противодействие: конькобежцы расходятся зеркально" src="/lang/ru/theory/img/newton_laws_concept.jpg"/><figcaption>Action and reaction: skaters mirror each other</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Three laws in a nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Newton formulated three laws, but essentially it is one idea presented from three angles: <strong>force changes motion, and the measure of that change is the body's mass</strong>.</p>
+<table class="symtab">
+<tr><th>Law</th><th>Statement</th><th>What it provides</th></tr>
+<tr><td class="sym">I</td><td>A body maintains its velocity (including zero) as long as no unbalanced force acts on it</td><td>defines what "absence of forces" means</td></tr>
+<tr><td class="sym">II</td><td><span class="vec">F</span> = m<span class="vec">a</span></td><td>quantitative relationship of force, mass, and acceleration</td></tr>
+<tr><td class="sym">III</td><td><span class="vec">F</span><sub>A→B</sub> = −<span class="vec">F</span><sub>B→A</sub></td><td>forces always arise in pairs between two bodies</td></tr>
+</table>
+<p>The first law is not a special case of the second when F = 0, but a separate statement: it <em>defines</em> the class of reference frames (inertial) in which the second law holds in this simple form. The order in this note follows the historical and pedagogical tradition: first, what "no forces" means (§2), then what forces do (§3), then where forces come from — the interaction of bodies (§4).</p>
+<table class="symtab">
+<tr><th>Quantity</th><th>Symbol</th><th>SI unit</th></tr>
+<tr><td>Force</td><td class="sym"><span class="vec">F</span></td><td class="sym">N (newton = kg·m/s²)</td></tr>
+<tr><td>Mass</td><td class="sym">m</td><td class="sym">kg</td></tr>
+<tr><td>Acceleration</td><td class="sym"><span class="vec">a</span></td><td class="sym">m/s²</td></tr>
+<tr><td>Velocity</td><td class="sym"><span class="vec">v</span></td><td class="sym">m/s</td></tr>
+<tr><td>Momentum (quantity of motion)</td><td class="sym"><span class="vec">p</span> = m<span class="vec">v</span></td><td class="sym">kg·m/s</td></tr>
+<tr><td>Time</td><td class="sym">t</td><td class="sym">s</td></tr>
+<tr><td>Acceleration due to gravity</td><td class="sym">g</td><td class="sym">9.8 m/s² (near Earth's surface)</td></tr>
+</table>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>First Law: Inertia</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> If the net force acting on a body is zero, the body moves with constant velocity — in particular, remains at rest if it was at rest. This statement is non-trivial: before Newton (and Galileo), the intuition was "motion requires a force" because on Earth everything is slowed by friction. The first law is an idealization: remove friction and air resistance, and a hockey puck sliding on ice will glide forever.</p>
+<div class="plate">
+<div class="eq-body">Σ<span class="vec">F</span> = 0  ⇒  <span class="vec">v</span> = const</div>
+<div class="cap">inertial motion — straight line, constant speed</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-block sz-md const"></div>
+<div class="anim-label">puck, ΣF = 0 — glides forever (1st law)</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-block sz-md decel-stop" style="background:var(--brass-fill);border-color:var(--brass)"></div>
+<div class="anim-label">same puck with friction — force acts, slows, and stops</div>
+</div>
+<p>Key word — <em>net force</em>. Several forces may act on the body, even substantial ones — what matters is that their vector sum is zero. A book lying on a table experiences gravity and the normal force — both are non-zero, but they balance each other.</p>
+<div class="callout steel">
+<span class="tag">Everyday example</span>
+<p>Tablecloth trick: you sharply pull the tablecloth out from under a set table, and the dishes stay in place. While the cloth is under the plate, friction between them is small and acts for a very short time — the impulse transferred to the plate is negligible. Once the cloth is pulled away, the only horizontal force on the plate disappears, and according to the first law, it simply stays where it was.</p>
+</div>
+<p>A second crucial implication of the first law is the very existence of <strong>inertial reference frames</strong>: it holds not in any coordinate system, but only in those that are not accelerating or rotating relative to the "fixed stars." In a rotating system (e.g., inside a carousel cabin), a free body, to an observer inside, appears to deviate without any apparent force — this is a signal that the system is non-inertial.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Second Law: F = ma</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The net force acting on a body equals the product of its mass and acceleration — or, more precisely and generally, the rate of change of momentum:</p>
+<div class="eq"><div class="eq-body"><span class="vec">F</span> = d<span class="vec">p</span>/dt = d(m<span class="vec">v</span>)/dt</div><div class="eq-tag">(1)</div></div>
+<p>If mass is constant (not a rocket losing fuel, but an ordinary body), the derivative simplifies to:</p>
+<div class="plate">
+<div class="eq-body"><span class="vec">F</span> = m<span class="vec">a</span></div>
+<div class="cap">for m = const — the most recognizable form of the law</div>
+</div>
+<div class="units">F [N], m [kg], <span class="u">a</span> [m/s²] — all three quantities from the table in §1.</div>
+<div aria-hidden="true" class="anim-strip multi">
+<div class="anim-row" data-accel="6" data-mass="1">
+<span class="anim-row-label">1 kg</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-sm accel-sm"></div>
+<span class="anim-readout" data-readout="">v=0.0 m/s</span>
+</div>
+<div class="anim-row" data-accel="3" data-mass="2">
+<span class="anim-row-label">2 kg</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-md accel-md"></div>
+<span class="anim-readout" data-readout="">v=0.0 m/s</span>
+</div>
+<div class="anim-row" data-accel="1.5" data-mass="4">
+<span class="anim-row-label">4 kg</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-lg accel-lg"></div>
+<span class="anim-readout" data-readout="">v=0.0 m/s</span>
+</div>
+</div>
+<p class="units" style="margin-top:-1.2em">The same force F pushes three weights of different mass — the same arrangement as in Fig. 1: the light one pulls ahead, the heavy one lags. The v counter is not decoration, but an honest live calculation by v=at (same numbers as in the table above at t=2 s).</p>
+<div aria-hidden="true" class="graph-mini">
+<svg viewbox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="40" y1="10" y2="140"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="290" y1="140" y2="140"></line>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="8" y="16">v, м/с</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="265" y="156">t, с</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="18">12</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="143">0</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="middle" x="40" y="155">0</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="middle" x="290" y="155">2</text>
+<!-- v=at для трёх масс: наклон прямой = a. 1кг: v=6t (крутая), 2кг: v=3t, 4кг: v=1.5t (пологая). -->
+<line stroke="var(--brass-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="10"></line>
+<line stroke="var(--steel-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="75"></line>
+<line stroke="var(--moss-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="107.5"></line>
+<circle cx="40" cy="140" fill="var(--brass-fill)" id="graphDotSm" r="4"></circle>
+<circle cx="40" cy="140" fill="var(--steel-fill)" id="graphDotMd" r="4"></circle>
+<circle cx="40" cy="140" fill="var(--moss-fill)" id="graphDotLg" r="4"></circle>
+</svg>
+</div>
+<p class="units" style="margin-top:-.8em">Three dots move ACCORDING TO THE v(t) GRAPH in real time — the same animation as the weights above, only as a function rather than a scene. Slope of the line = acceleration a.</p>
+<p>Here, mass acts as a <strong>measure of inertia</strong>: the greater it is, the less acceleration the same force gives. Numerical example — a cart of mass m on a smooth (frictionless) horizontal table, to which a constant force F = 6 N is applied:</p>
+<table class="symtab">
+<tr><th>Cart mass</th><th>Acceleration a = F/m</th><th>Velocity after 2 s</th></tr>
+<tr><td class="sym">1 kg</td><td class="sym">6 m/s²</td><td class="sym">12 m/s</td></tr>
+<tr><td class="sym">2 kg</td><td class="sym">3 m/s²</td><td class="sym">6 m/s</td></tr>
+<tr><td class="sym">4 kg</td><td class="sym">1.5 m/s²</td><td class="sym">3 m/s</td></tr>
+</table>
+<figure>
+<img alt="График v(t) для трёх масс при постоянной силе 6 Н — прямые с разным наклоном, наклон равен ускорению a=F/m" src="/lang/ru/theory/newton_second_law.png"/>
+<figcaption><span class="fign">Fig. 1</span>Velocity grows linearly (v = at), and the slope of the line is the acceleration. The same force accelerates the light cart four times faster than the cart that is four times heavier — a direct consequence of the inverse proportion a = F/m.</figcaption>
+</figure>
+<div class="callout brass">
+<span class="tag">Common mistake</span>
+<p>"Force is needed for a body to move" — no: force is needed to <em>change</em> motion (acceleration). A body acted upon by a constant force does not move with constant velocity — it constantly <em>accelerates</em>. Constant velocity means F = 0 (first law), not F = const.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Third Law: Action and Reaction</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> If body A exerts a force on body B <span class="vec">F</span><sub>A→B</sub>, then body B exerts a force on body A of equal magnitude and opposite direction:</p>
+<div class="plate">
+<div class="eq-body"><span class="vec">F</span><sub>A→B</sub> = −<span class="vec">F</span><sub>B→A</sub></div>
+<div class="cap">forces arise in pairs; each pair is applied to <em>different</em> bodies, hence they do not "cancel"</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-ball b-heavy apart-b"></div>
+<div class="anim-ball b-light apart-a"></div>
+<div class="anim-label left">m<sub>A</sub> = 60 kg, v<sub>A</sub> = 3 m/s — lighter, flies farther and faster</div>
+</div>
+<p class="units" style="margin-top:-1.2em">Circle size ~ skater's mass, on‑screen speed ~ actual v<sub>A</sub>/v<sub>B</sub> from the calculation — same arrangement as in Fig. 2.</p>
+<p>A common confusion is to think that since the forces are equal and opposite, they must cancel out and no motion is possible. The mistake is that <span class="vec">F</span><sub>A→B</sub> acts on body B, while <span class="vec">F</span><sub>B→A</sub> acts on body A: they cannot be added in the second law (Σ<span class="vec">F</span> for ONE body), as they act on different objects.</p>
+<p>Numerical example: two skaters of mass m<sub>A</sub> = 60 kg and m<sub>B</sub> = 90 kg stand still and push off each other with their hands. The interaction force at each moment is the same for both (third law) — therefore, the impulse transferred to each (integral of force over time) is also equal in magnitude:</p>
+<div class="eq"><div class="eq-body">m<sub>A</sub>v<sub>A</sub> = −m<sub>B</sub>v<sub>B</sub>    (impulse before push was zero)</div><div class="eq-tag">(2)</div></div>
+<p>The numbers were chosen so that the answer comes out integral (a standard technique — law first, then specific convenient numbers). With push impulse J = 180 kg·m/s: v<sub>A</sub> = J/m<sub>A</sub> = 180/60 = <strong>3 m/s</strong>, v<sub>B</sub> = −J/m<sub>B</sub> = −180/90 = <strong>−2 m/s</strong> — the lighter skater flies off faster than the heavy one, but the total momentum of the system remains zero at all times.</p>
+<figure>
+<img alt="График импульса двух конькобежцев во время толчка: p_A растёт, p_B падает симметрично, сумма остаётся нулевой" src="/lang/ru/theory/newton_third_law.png"/>
+<figcaption><span class="fign">Fig. 2</span>The magnitude of each skater's momentum grows linearly during the push (force is roughly constant), but with opposite signs — the sum (dashed line) stays at zero at any moment. This is a direct consequence of the third law, not a separate postulate.</figcaption>
+</figure>
+<div class="callout moss">
+<span class="tag">Why a rocket flies</span>
+<p>A rocket does not "push against air" (there is no air in a vacuum, and rockets work fine there) — it pushes against its <em>own fuel</em>, expelling it backward at high speed. The force with which the rocket ejects gas backward is equal in magnitude to the force with which the gas pushes the rocket forward — this is the third law in its purest form.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>All Three Together: Rocket Launch</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's bring all three laws together in one example. A rocket of mass m = 1000 kg stands on the launch pad.</p>
+<ol>
+<li><strong>The first law</strong> explains why it is motionless at first: engine thrust is zero, and gravity is balanced by the normal force — net force is zero, velocity remains zero.</li>
+<li>The engines start and eject gas backward with a reaction force F = 15000 N directed upward — this is a direct consequence of the <strong>third law</strong>: the gas pushes the rocket with the same magnitude of force as the rocket pushes the gas.</li>
+<li>As long as the rocket's mass is roughly constant (in the first seconds little fuel is burned), the <strong>second law</strong> gives its acceleration: thrust minus weight.</li>
+</ol>
+<div class="eq"><div class="eq-body">ma = F<sub>thrust</sub> − mg  ⇒  a = F<sub>thrust</sub>/m − g</div><div class="eq-tag">(3)</div></div>
+<div aria-hidden="true" class="anim-strip vertical" style="max-width:120px">
+<div class="anim-track"></div>
+<div class="anim-rocket rise"><div class="body"></div><div class="flame"></div></div>
+</div>
+<div class="units">Here and below, for simplicity we take g ≈ 10 m/s² (the actual value 9.8 — rounding changes the answer by fractions of a percent, while mental arithmetic is easier).</div>
+<div class="plate">
+<div class="eq-body">a = 15000/1000 − 10 = <strong>5</strong> m/s²</div>
+<div class="cap">the rocket lifts off the pad and accelerates upward at 5 m/s² — as long as the mass hasn't changed noticeably</div>
+</div>
+<p>As fuel burns, the mass m in the denominator decreases, and for the same thrust the acceleration increases — hence the characteristic "increasing" acceleration of real rockets at launch, which for simplicity is not considered here (this is the next level of the problem, where m cannot be assumed constant and the full form (1) is needed).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where It Leads: Principle of Least Action</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>F = ma is not the most fundamental formulation of mechanics, but its specific (though most practical) case. There is a more general statement from which all three of Newton's laws are <em>derived</em>, not postulated: a body moves so that the quantity called <strong>action</strong> S is stationary (in simple cases — minimal) on the actual trajectory compared to any other conceivable trajectory between the same two points:</p>
+<div class="eq"><div class="eq-body">S = ∫ L dt,    L = T − U  (kinetic minus potential energy)</div><div class="eq-tag">(4)</div></div>
+<p>Applying the calculus of variations (Euler–Lagrange equation) to (4) for an ordinary particle in a potential field yields exactly Newton's second law — not approximately, but identically. However, the action formulation works where "force" is an inconvenient or absent concept (general relativity, quantum mechanics via Feynman path integrals), so it, rather than F = ma, is the working language of modern theoretical physics.</p>
+<div class="callout brass">
+<span class="tag">Symmetries give rise to conservation laws</span>
+<p><strong>Noether's theorem</strong> (1918) connects this to §4 directly: each continuous symmetry of the action (4) corresponds to a conservation law. Homogeneity of time (the laws of physics do not change from moment to moment) yields conservation of energy; homogeneity of space (shift the experiment one meter to the left — the result is the same) yields conservation of momentum — that is, the law of momentum conservation from §4 is not a separate fact but a consequence of the homogeneity of space. Isotropy of space (no preferred direction) similarly yields conservation of angular momentum.</p>
+</div>
+<p>Here mechanics touches philosophy — not accidentally, but historically: the principle was first formulated in the 1740s by Pierre-Louis Maupertuis as a <em>teleological</em> one — nature is "economical" and acts with minimal expenditure, almost like a plan. The modern interpretation (after Feynman) is not teleological: the particle does not "choose" the best path in advance, but actually traverses all conceivable paths simultaneously, and they combine (interfere) such that in the classical limit the path of stationary action survives. Nevertheless, the question "why nature is arranged as an optimization problem at all" remains open and is discussed by the philosophy of physics, not only by physics itself — here the connection of theoretical physics, the mathematics of variational calculus, and the philosophy of science is inseparable.</p>
+<p>On the site these are separate laws, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/principle_of_least_action.html">Principle of least action</a> ·
+          <a href="/lang/en/laws/noethers_theorem.html">Noether's theorem</a> ·
+          <a href="/lang/en/laws/law_of_conservation_of_momentum.html">Law of momentum conservation</a> ·
+          <a href="/lang/en/laws/law_of_conservation_of_energy.html">Law of energy conservation</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experiment at Home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · tablecloth trick</span>
+<p>Take a smooth, thin piece of fabric (not fuzzy) and a light plastic cup (empty, unbreakable — start with that, not Grandma's china). Place the cup on the fabric in the middle of the table, grab the edge of the fabric, and <strong>sharply</strong> pull it horizontally toward you.</p>
+<p><span class="qlabel">What to notice</span> the cup hardly budges, even though the cloth is pulled out completely. The sharper the pull, the less time friction between the cloth and cup has to act — and the impulse of force (§3, F times time) is directly proportional to the duration of action. Short time — small transferred impulse — the cup "doesn't have time" to follow the cloth before it is no longer beneath it. This is the first law in its pure form: no force (cloth gone) — no change in velocity.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · balloon rocket</span>
+<p>Inflate a balloon, don't tie it, and let it go. It will fly chaotically around the room until it deflates.</p>
+<p><span class="qlabel">What to notice</span> this is the third law and §5 (rocket launch) in miniature: the balloon expels air in one direction, the air pushes the balloon in the opposite direction with the same force magnitude. The chaotic flight is because the thrust force in reality is not perfectly symmetric (the neck shifts slightly), unlike the tidy rocket of §5, where thrust is strictly along the axis.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Practice Problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution — a drop‑down block under the condition. Numbers in all problems are chosen so that the answer comes out integral (a standard technique for educational problems: first the law is fixed, then convenient data are fitted to it) — you can calculate in your head, without a calculator. All solutions follow the same pattern: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. A body of mass 3 kg is accelerated from rest by a force of 9 N on a smooth surface. Find the velocity after 4 s and the distance traveled.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m = 3 kg, F = 9 N, t = 4 s, v<sub>0</sub> = 0.</p>
+<p><span class="qlabel">Law</span> Newton's second law (a = F/m) + kinematics of uniformly accelerated motion (v = at, s = ½at²).</p>
+<p><span class="qlabel">Solution</span> a = 9/3 = 3 m/s²;  v = 3·4 = 12 m/s;  s = ½·3·4² = 24 m.</p>
+<p><span class="qlabel">Answer</span> <strong>v = 12 m/s, path = 24 m</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Why in weightlessness (on an orbital station) does an astronaut, after pushing off a wall, continue to fly in a straight line at constant speed until hitting the opposite wall? Which law describes this, and why is the condition for it fulfilled especially accurately there?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> Newton's first law (inertia, §2).</p>
+<p><span class="qlabel">Solution</span> the net force on the freely flying astronaut is zero — gravity is present, but the station and astronaut fall together in it (this is weightlessness, not "absence of gravity"), so according to the first law the velocity is constant. The condition is met more accurately than on Earth because there is no air resistance and no friction against a surface — the only forces that on Earth prevent observing inertia in its pure form.</p>
+<p><span class="qlabel">Answer</span> <strong>first law; the "no force" condition is closer to ideal than on Earth</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A person of mass 60 kg jumps from a stationary boat of mass 90 kg to the shore, giving themselves a horizontal velocity of 3 m/s. At what speed will the boat recoil?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m<sub>person</sub> = 60 kg, v<sub>person</sub> = 3 m/s, m<sub>boat</sub> = 90 kg, total momentum of the system before jump = 0.</p>
+<p><span class="qlabel">Law</span> conservation of total momentum (§4, same approach as for the skaters): 0 = m<sub>person</sub>v<sub>person</sub> + m<sub>boat</sub>v<sub>boat</sub>.</p>
+<p><span class="qlabel">Solution</span> v<sub>boat</sub> = −m<sub>person</sub>v<sub>person</sub>/m<sub>boat</sub> = −60·3/90 = −2 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>2 m/s, in the direction opposite to the jump</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. A tractor pulls two identical trailers of mass 2000 kg each, connected in series, with a common acceleration of 1 m/s². Find the tension force in the coupling between the first and second trailer.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m<sub>2</sub> = 2000 kg (the second, rear trailer), a = 1 m/s².</p>
+<p><span class="qlabel">Law</span> Newton's second law, applied separately to the SECOND trailer — the only force acting on it is the tension T from the first trailer.</p>
+<p><span class="qlabel">Solution</span> T = m<sub>2</sub>a = 2000·1 = 2000 N.</p>
+<p><span class="qlabel">Answer</span> <strong>2000 N</strong> (the coupling tractor↔first trailer is under greater tension — 4000 N, because it must pull both trailers at once).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. A ball is thrown vertically upward with a speed of 20 m/s. After how many seconds will it return to the starting point? (Take g ≈ 10 m/s² — with 9.8 you can't calculate in your head.)</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> v<sub>0</sub> = 20 m/s (upward), g ≈ 10 m/s² (rounded deliberately to avoid column arithmetic).</p>
+<p><span class="qlabel">Law</span> Newton's second law for free fall (the only force is gravity, a = −g) — time to reach the highest point (v = 0): t<sub>up</sub> = v<sub>0</sub>/g; the up‑and‑down flight is symmetric, total time = 2t<sub>up</sub>.</p>
+<p><span class="qlabel">Solution</span> t<sub>up</sub> = 20/10 = 2 s;  total time = 2·2 = 4 s.</p>
+<p><span class="qlabel">Answer</span> <strong>4 s</strong> (with exact g = 9.8 it would be 4.08 s — rounding changes the answer by less than 2%, and you don't need to calculate).</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, wrong formula, numbers don't add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Newton%20laws%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, examined, and a correction is made — this is not "into a black hole."</p>
+</div>
+<footer>
+<p>bridge42worlds · prototype of a "textbook" for the layer of laws · part I of the series on classical dynamics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // "Функциональная" анимация §3: не просто едет груз — рядом честно пересчитывается v=at
+  // на каждый кадр по формуле (не чтение CSS-состояния), и та же величина двигает точку
+  // по графику v(t) — визуальная сцена, число и график синхронно связаны одной физикой.
+  var rows = document.querySelectorAll('#s3 .anim-row[data-accel]');
+  if (!rows.length || !window.requestAnimationFrame) return;
+  var dotByMass = {
+    1: document.getElementById('graphDotSm'),
+    2: document.getElementById('graphDotMd'),
+    4: document.getElementById('graphDotLg')
+  };
+  var CYCLE = 6000, T_MAX = 2;              // 6с цикл (см. CSS keyframes), t на графике — до 2с, как в таблице
+  var PHASE_FRAC = {1: 0.25, 2: 0.35, 4: 0.5}; // должно совпадать с % финиша в @keyframes moveAccelSm/Md/Lg
+  var PX_PER_S = (290 - 40) / T_MAX, PX_PER_V = (140 - 10) / 12;
+  function tick(ts){
+    rows.forEach(function(row){
+      var a = parseFloat(row.dataset.accel), m = parseFloat(row.dataset.mass);
+      var phaseMs = CYCLE * (PHASE_FRAC[m] || 0.3);
+      var t = Math.min(ts % CYCLE, phaseMs) / phaseMs * T_MAX;
+      var v = a * t;
+      var ro = row.querySelector('[data-readout]');
+      if (ro) ro.textContent = 'v=' + v.toFixed(1) + ' м/с';
+      var dot = dotByMass[m];
+      if (dot) { dot.setAttribute('cx', 40 + t * PX_PER_S); dot.setAttribute('cy', 140 - v * PX_PER_V); }
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Euler's formula: how rotation became algebra — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- функциональная анимация: точка на единичной окружности ---------- */
+.circle-fig{ max-width:400px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.circle-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:400px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- AC-фазор анимация ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:110px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Three views of one formula</a></li>
+<li><a href="#s2"><span class="n">02</span>Geometry: a point on a circle</a></li>
+<li><a href="#s3"><span class="n">03</span>Where it comes from: Taylor series</a></li>
+<li><a href="#s4"><span class="n">04</span>Euler's identity</a></li>
+<li><a href="#s5"><span class="n">05</span>Running example: alternating current</a></li>
+<li><a href="#s6"><span class="n">06</span>Where it leads: quantum phase</a></li>
+<li><a href="#s7"><span class="n">07</span>Experiment at home</a></li>
+<li><a href="#s8"><span class="n">08</span>Practice problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · mathematics · part V</p>
+<h1>Euler's formula: how rotation became algebra</h1>
+<p class="subtitle">One line from 1748, linking exponential growth with circular rotation — and also presenting an equation that Feynman called "the most remarkable formula in mathematics."</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="150" cy="150" fill="none" r="100" stroke="var(--rule)" stroke-width="1.5"></circle>
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="260" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="150" x2="150" y1="40" y2="260"></line>
+<line id="heroRadius" stroke="var(--ink)" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<line id="heroDropX" stroke="var(--steel-fill)" stroke-dasharray="3,3" stroke-width="2" x1="250" x2="250" y1="150" y2="150"></line>
+<line id="heroDropY" stroke="var(--brass-fill)" stroke-dasharray="3,3" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<circle cx="250" cy="150" fill="var(--ink)" id="heroPoint" r="7"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="150" y="285">e^iθ = cosθ + i·sinθ</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>In 1748, Leonhard Euler, expanding e<sup>x</sup>cos x and sin x into infinite series and substituting an imaginary number for x, discovered that all three functions are actually different projections of the same object: rotation. The formula e<sup>iθ</sup> = cosθ + i sinθ translates the language of "growth" into the language of "turn" — and turns the analysis of oscillations and waves into simple power algebra. A special case at θ = π is an identity that unites five of mathematics' most important constants in one line.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Равномерное вращение по единичной окружности" src="/lang/ru/theory/img/eulers_formula_hero.jpg"/><figcaption>Uniform rotation on the unit circle</figcaption></figure>
+<figure><img alt="Винтовая лестница — геометрия вращения и подъёма" src="/lang/ru/theory/img/eulers_formula_concept.jpg"/><figcaption>Spiral staircase — geometry of rotation and ascent</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Three views of one formula</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>View</th><th>What is seen</th></tr>
+<tr><td>Algebraic</td><td>e<sup>iθ</sup> — a complex number equal to cosθ + i sinθ</td></tr>
+<tr><td>Geometric</td><td>a point on the unit circle of the complex plane at an angle θ from the axis</td></tr>
+<tr><td>Analytic</td><td>coincidence of the infinite series e<sup>x</sup>, cos x, sin x after substituting x = iθ (§3)</td></tr>
+</table>
+<p>None of the three views is "more important" — the power of Euler's formula lies exactly in the fact that it is simultaneously an algebraic identity, a geometric fact, and an analytic coincidence of series. Let's start with the most visual one — geometry.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Geometry: a point on a circle</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The complex number e<sup>iθ</sup> is a point on the unit circle (radius 1) of the complex plane, placed at an angle θ from the positive real axis:</p>
+<div class="plate">
+<div class="eq-body">e<sup>iθ</sup> = cosθ + i·sinθ</div>
+<div class="cap">real part — cosθ (horizontal coordinate), imaginary — sinθ (vertical)</div>
+</div>
+<div aria-hidden="true" class="circle-fig">
+<svg viewbox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="150" cy="150" fill="none" r="100" stroke="var(--rule)" stroke-width="1.5"></circle>
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="270" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="150" x2="150" y1="30" y2="270"></line>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" x="275" y="155">Re</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" x="155" y="25">Im</text>
+<line id="s2Radius" stroke="var(--ink)" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<line id="s2DropX" stroke="var(--steel-fill)" stroke-dasharray="3,3" stroke-width="2" x1="250" x2="250" y1="150" y2="150"></line>
+<line id="s2DropY" stroke="var(--brass-fill)" stroke-dasharray="3,3" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<circle cx="250" cy="150" fill="var(--ink)" id="s2Point" r="7"></circle>
+<text fill="var(--steel)" font-family="Cascadia Code, monospace" font-size="11" x="205" y="168">cosθ</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="11" x="255" y="128">sinθ</text>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>θ</b><span data-readout="theta">0.00</span> rad</span>
+<span><b>cosθ</b><span data-readout="cos" style="color:var(--steel)">1.00</span></span>
+<span><b>sinθ</b><span data-readout="sin" style="color:var(--brass)">0.00</span></span>
+</div>
+<p>As the point travels around the circle (θ increases from 0 to 2π), its horizontal coordinate faithfully traces the cosine, and the vertical one — the sine — the very same functions you've seen on trigonometry graphs, only now as projections of UNIFORM rotation, rather than as separate wavy curves. This image is precisely the content of the formula: "e to an imaginary power" is not some abstract number, but the coordinate of a point moving uniformly around a circle.</p>
+<div class="callout steel">
+<span class="tag">Why the modulus is always 1</span>
+<p>cos²θ + sin²θ = 1 — the fundamental trigonometric identity, known from school. For e<sup>iθ</sup> this means: the distance from the origin to the point is always exactly 1 for any θ — the point cannot physically leave the unit circle, only run along it. Hence the role of θ — it is literally the traversed angle, the only thing that changes.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Where it comes from: Taylor series</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The formula is not a postulate, but a consequence of the fact that e<sup>x</sup>, cos x and sin x can be written as infinite sums (Taylor series):</p>
+<div class="eq"><div class="eq-body">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + x⁴/4! + ...</div><div class="eq-tag">(1)</div></div>
+<div class="eq"><div class="eq-body">cos x = 1 − x²/2! + x⁴/4! − ...,    sin x = x − x³/3! + x⁵/5! − ...</div><div class="eq-tag">(2)</div></div>
+<p>Let's substitute into the series for e<sup>x</sup> the imaginary number iθ instead of x and recall that i² = −1, i³ = −i, i⁴ = 1 (powers of i cycle with period 4):</p>
+<div class="eq"><div class="eq-body">e<sup>iθ</sup> = 1 + iθ − θ²/2! − iθ³/3! + θ⁴/4! + iθ⁵/5! − ...</div><div class="eq-tag">(3)</div></div>
+<p>Let's group separately the terms without i (even powers of θ) and the terms with i (odd powers) — the first group will exactly coincide with the series for cosθ, the second (without the common factor i) — with the series for sinθ:</p>
+<div class="plate">
+<div class="eq-body">e<sup>iθ</sup> = (1 − θ²/2! + θ⁴/4! − ...) + i(θ − θ³/3! + ...) = cosθ + i·sinθ</div>
+<div class="cap">pure algebra — no additional geometric axiom was needed</div>
+</div>
+<p>The coincidence is not "forced" — it is inevitable, once we define e<sup>x</sup> for complex numbers via the same series as for real numbers. This explains why the formula works: three seemingly completely different objects (exponential, cosine, sine) mathematically belong to one family of functions, differing only in what argument — real or purely imaginary — is substituted into them.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Euler's identity</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's substitute the specific angle θ = π (half a turn, the point on the circle ends up exactly to the left of the center, at point −1) into Euler's formula:</p>
+<div class="eq"><div class="eq-body">e<sup>iπ</sup> = cosπ + i·sinπ = −1 + i·0 = <strong>−1</strong></div><div class="eq-tag">(4)</div></div>
+<div class="plate">
+<div class="eq-body">e<sup>iπ</sup> + 1 = 0</div>
+<div class="cap">five fundamental constants — 0, 1, e, i, π — in one line, each exactly once</div>
+</div>
+<div class="callout brass">
+<span class="tag">Why it is the "most beautiful formula"</span>
+<p>In surveys of mathematicians (for example, the poll by the journal <em>Mathematical Intelligencer</em> 1990), Euler's identity consistently takes first place. The reason is not mysticism, but extreme economy: five constants from completely different areas of mathematics (0 and 1 — arithmetic, e — analysis/growth, i — algebra/complex numbers, π — geometry/circles) are linked by three simplest operations (addition, multiplication, exponentiation) without a single extra symbol. Richard Feynman called it "our jewel" and "the most remarkable formula in mathematics."</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Running example: alternating current</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Electrical engineers rarely write cos and sin explicitly — instead, they represent AC voltage as a rotating vector (<strong>phasor</strong>) on the complex plane, using Euler's formula:</p>
+<div class="plate">
+<div class="eq-body">U(t) = U<sub>0</sub>·e<sup>iωt</sup></div>
+<div class="cap">the real voltage is the imaginary (or real, by convention) part of U(t); ω — the angular frequency of the grid</div>
+</div>
+<div aria-hidden="true" class="anim-strip">
+<svg style="width:100%;height:100%" viewbox="0 0 400 110" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="380" y1="55" y2="55"></line>
+<path d="M40,55 L380,55" fill="none" id="acWave" stroke="var(--steel-fill)" stroke-width="2.2"></path>
+<circle cx="40" cy="55" fill="none" r="35" stroke="var(--rule)" stroke-width="1"></circle>
+<line id="acRadius" stroke="var(--ink)" stroke-width="2" x1="40" x2="75" y1="55" y2="55"></line>
+<circle cx="75" cy="55" fill="var(--brass-fill)" id="acPoint" r="4"></circle>
+</svg>
+<div class="anim-label left">the phasor on the left spins — on the right it traces the same sinusoid you see in the socket</div>
+</div>
+<p>Why this is more convenient than working with cos/sin directly: adding two AC voltages of the same frequency (for example, in a grid) reduces to adding complex numbers (vectors) — simple parallelogram geometry, instead of cumbersome trigonometric angle addition formulas. Euler's formula is a dictionary/translator between "inconvenient" trigonometry and "convenient" algebra of complex exponentials.</p>
+<div class="callout moss">
+<span class="tag">The same idea — in JPEG and MP3</span>
+<p>The Fourier transform (which decomposes any signal — sound, image — into a sum of simple oscillations of different frequencies) in its practical form is almost always written using e<sup>iθ</sup>, rather than cos/sin separately — for exactly the same reason: adding and multiplying complex exponentials is computationally simpler. This is precisely what underlies audio (MP3) and image (JPEG) compression.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where it leads: quantum phase</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Euler's formula did not remain a mathematical curiosity — in the 1920s, Erwin Schrödinger discovered that the wave function of a quantum particle is naturally written via the same exponential with an imaginary exponent:</p>
+<div class="eq"><div class="eq-body">Ψ(x,t) ∼ e<sup>i(px − Et)/ℏ</sup></div><div class="eq-tag">(5)</div></div>
+<p>Here the role of "angle θ" is played by the combination of the particle's momentum p, energy E, and time t. The modulus of such a wave function (the distance of the point from the center, §2) is always 1 — this mathematically guarantees <strong>unitarity</strong> of quantum evolution: the total probability of finding the particle somewhere always remains equal to 100%, no matter how the phase changes. Without Euler's formula, one would have to separately track the cosine and sine parts of the wave function — with it, everything reduces to one rotating exponential.</p>
+<div class="callout steel">
+<span class="tag">The phase of a single particle is not observable — but the phase difference of two particles is observable</span>
+<p>An interesting quantum nuance: the angle θ of an individual wave function in isolation is not physically measurable (one can multiply the entire formula by any e<sup>iα</sup> and the predictions will not change). But if a particle can travel two different paths simultaneously (as in the double-slit experiment), the PHASE DIFFERENCE between the paths becomes measurable — it creates the interference pattern. The reality of the rotation itself on the complex plane remains a subject of philosophical debate, but its mathematical consequences are not.</p>
+</div>
+<p>On the website, this is a separate law, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/schrdinger_equation.html">Schrödinger equation</a> ·
+          <a href="/lang/en/laws/de_broglie_wavelength.html">de Broglie formula</a> ·
+          <a href="/lang/en/laws/planckeinstein_relation.html">Planck-Einstein equation</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experiment at home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · circle of string and flashlight shadow</span>
+<p>Attach a string to a nail or door handle, tie a small weight (an apple, keys) to the other end, and spin it so that it rotates uniformly in a horizontal plane (like a poi toy). Shine a flashlight on it from the side, strictly horizontally, so that the shadow falls on the wall.</p>
+<p><span class="qlabel">What to notice</span> the shadow on the wall will move not in a circle, but strictly back and forth in a straight line, sinusoidally slowing down at the edges and speeding up in the center — this is the projection of uniform rotation onto one axis (§2, cosθ or sinθ, depending on where you shine the light). Exactly the same thing Euler's formula does mathematically: it takes circular motion and honestly computes its projection.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · spirograph</span>
+<p>If you have a spirograph at home (a set of gears with holes for drawing patterns) or you can find an online simulator — draw a few patterns, changing the ratio of the gear radii.</p>
+<p><span class="qlabel">What to notice</span> the beautiful "flower" patterns of the spirograph are literally sums of several rotations with different frequencies (mathematically — the sum of several e<sup>iθ</sup> with different coefficients on θ), the same principle that underlies the Fourier decomposition of any complex signal into simple oscillations (§5).</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Practice problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution always follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. What is e^(iπ/2) in algebraic form (a + bi)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> θ = π/2 (a quarter turn).</p>
+<p><span class="qlabel">Law</span> Euler's formula (§2): e<sup>iθ</sup> = cosθ + i·sinθ.</p>
+<p><span class="qlabel">Solution</span> cos(π/2) = 0, sin(π/2) = 1 ⇒ e<sup>iπ/2</sup> = 0 + i·1.</p>
+<p><span class="qlabel">Answer</span> <strong>i</strong> — the point exactly at the top of the unit circle.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Without explicit calculation, explain why |e^(iθ)| (the modulus of the number) equals 1 for ANY value of θ.</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> geometric meaning of Euler's formula (§2) + the fundamental trigonometric identity.</p>
+<p><span class="qlabel">Solution</span> |e<sup>iθ</sup>|e^(iθ)| = √(cos²θ + sin²θ) = √1 = 1 — the identity cos²+sin²=1 holds for any angle, so the distance of the point from the center is always exactly one, regardless of θ.</p>
+<p><span class="qlabel">Answer</span> <strong>always 1</strong> — the point is obliged to stay on the unit circle.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. What is e^(i·2π) (a full turn)? What does this say about the periodicity of e^(iθ)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> θ = 2π (a full turn).</p>
+<p><span class="qlabel">Law</span> Euler's formula (§2).</p>
+<p><span class="qlabel">Solution</span> cos(2π) = 1, sin(2π) = 0 ⇒ e<sup>i·2π</sup> = 1 + i·0 = 1.</p>
+<p><span class="qlabel">Answer</span> <strong>e<sup>i·2π</sup> = 1</strong> — after a full turn the point returns to the start; e<sup>iθ</sup> is periodic with period 2π, as befits a point on a circle.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Two AC voltages of the same frequency are represented by phasors U₁ = 3 (along the real axis) and U₂ = 4i (along the imaginary axis). What is the magnitude of the total voltage?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> U<sub>1</sub> = 3, U<sub>2</sub> = 4i (perpendicular phasors, §5).</p>
+<p><span class="qlabel">Law</span> addition of complex numbers (geometrically — parallelogram) + modulus of a complex number |a+bi| = √(a²+b²).</p>
+<p><span class="qlabel">Solution</span> U<sub>1</sub>+U<sub>2</sub> = 3+4i; |3+4i| = √(9+16) = √25 = 5.</p>
+<p><span class="qlabel">Answer</span> <strong>5</strong> — the classic 3-4-5 triple, the total voltage is greater than each term individually, but less than their arithmetic sum (7), because the phasors are not aligned in direction.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Express cos θ in terms of e^(iθ) and e^(-iθ), using the fact that e^(-iθ) = cos θ − i·sin θ.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> e<sup>iθ</sup> = cosθ+i·sinθ, e<sup>−iθ</sup> = cosθ−i·sinθ.</p>
+<p><span class="qlabel">Law</span> addition of two forms of Euler's formula — the imaginary parts cancel out.</p>
+<p><span class="qlabel">Solution</span> e<sup>iθ</sup>+e<sup>−iθ</sup> = 2cosθ ⇒ cosθ = (e<sup>iθ</sup>+e<sup>−iθ</sup>)/2.</p>
+<p><span class="qlabel">Answer</span> <strong>cosθ = (e<sup>iθ</sup>+e<sup>−iθ</sup>)/2</strong> — a standard formula that physicists and engineers use almost more often than the very definition of cosine.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, incorrect formula, number doesn't match, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Euler%20formula%20article">feedback@bridge42worlds.org</a>.
+      Each message is actually read, analyzed, and a correction is made based on it — this is not "into a void."</p>
+</div>
+<footer>
+<p>bridge42worlds · "teaching aid" for the law layer · part V of the series, mathematics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  var CX = 150, CY = 150, R = 100, PERIOD = 6000; // 6с на полный оборот — держим общий темп серии
+  function wire(prefix, radiusId, dropXId, dropYId, pointId, thetaEl, cosEl, sinEl){
+    var radius = document.getElementById(radiusId), dropX = document.getElementById(dropXId),
+        dropY = document.getElementById(dropYId), point = document.getElementById(pointId);
+    return function(theta){
+      var x = CX + R * Math.cos(theta), y = CY - R * Math.sin(theta); // экранный y растёт вниз
+      if (radius) { radius.setAttribute('x2', x); radius.setAttribute('y2', y); }
+      if (dropX) { dropX.setAttribute('x1', x); dropX.setAttribute('y1', y); dropX.setAttribute('x2', x); dropX.setAttribute('y2', CY); }
+      if (dropY) { dropY.setAttribute('x1', CX); dropY.setAttribute('y1', CY); dropY.setAttribute('x2', x); dropY.setAttribute('y2', CY); }
+      if (point) { point.setAttribute('cx', x); point.setAttribute('cy', y); }
+      if (thetaEl) thetaEl.textContent = theta.toFixed(2);
+      if (cosEl) cosEl.textContent = Math.cos(theta).toFixed(2);
+      if (sinEl) sinEl.textContent = Math.sin(theta).toFixed(2);
+    };
+  }
+  var heroDraw = wire('hero', 'heroRadius', 'heroDropX', 'heroDropY', 'heroPoint');
+  var s2Draw = wire('s2', 's2Radius', 's2DropX', 's2DropY', 's2Point',
+    document.querySelector('[data-readout="theta"]'), document.querySelector('[data-readout="cos"]'), document.querySelector('[data-readout="sin"]'));
+
+  // AC-фазор §5: тот же принцип, но рисует ещё и бегущую синусоиду справа от круга.
+  var acRadius = document.getElementById('acRadius'), acPoint = document.getElementById('acPoint'), acWave = document.getElementById('acWave');
+  var acR = 35, acCx = 40, acCy = 55, acWaveStart = 75, acWaveEnd = 380, acAmp = 32;
+  function drawAC(theta){
+    var x = acCx + acR * Math.cos(theta), y = acCy - acR * Math.sin(theta);
+    if (acRadius) { acRadius.setAttribute('x2', x); acRadius.setAttribute('y2', y); }
+    if (acPoint) { acPoint.setAttribute('cx', x); acPoint.setAttribute('cy', y); }
+    if (acWave) {
+      var pts = 'M' + acWaveStart + ',' + acCy;
+      var span = acWaveEnd - acWaveStart, steps = 60;
+      for (var i = 0; i <= steps; i++) {
+        var px = acWaveStart + span * i / steps;
+        var ang = theta - (2 * Math.PI) * (i / steps) * 1.4;
+        var py = acCy - acAmp * Math.sin(ang);
+        pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      }
+      acWave.setAttribute('d', pts);
+    }
+  }
+
+  if (!window.requestAnimationFrame) return;
+  function tick(ts){
+    var theta = (ts % PERIOD) / PERIOD * 2 * Math.PI;
+    heroDraw(theta);
+    s2Draw(theta);
+    drawAC(theta);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

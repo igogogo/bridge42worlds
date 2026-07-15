@@ -500,7 +500,7 @@ def cmd_images(args):
         generate.backfill_images(force=args.force)
         generate.regenerate_all_html()
     if not args.articles_only:
-        generate.backfill_tag_law_images(force=args.force, gen_images=args.gen_images)
+        generate.backfill_tag_law_images(force=args.force, gen_images=args.gen_images, preset=args.preset)
         for lang in generate.LANGUAGES:
             generate.update_all_tags(lang)
             generate.update_all_laws(lang)
@@ -746,6 +746,8 @@ def build_parser():
     s.add_argument("--refs-only", action="store_true", help="только теги/законы (не трогать статьи)")
     s.add_argument("--gen-images", action="store_true",
                     help="теги/законы: реально потратить бюджет на FLUX (без флага — только промпт + честная пометка image_pending)")
+    s.add_argument("--preset", default="image", choices=["image", "image_cheap", "image_quality"],
+                    help="конфиг из config.agents: image (дефолт/текущий), image_cheap (FLUX-1-schnell, ~$0.002/img), image_quality (FLUX-2-pro, ~$0.015/img)")
     s.set_defaults(func=cmd_images)
 
     s = sub.add_parser("abstracts", help="«Аннотации» из авторского arXiv-abstract → data.json + HTML")

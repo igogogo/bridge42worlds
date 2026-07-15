@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>أمبير وفاراداي: التيار يولد المجال، المجال يولد التيار — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+.compass-strip{ height:110px; }
+.compass-wire{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.compass-body{ position:absolute; left:14px; top:50%; margin-top:-20px; width:40px; height:40px; border-radius:50%; border:2px solid var(--ink-soft); background:var(--paper); }
+.compass-needle{ position:absolute; left:50%; top:50%; width:26px; height:3px; margin-left:-13px; margin-top:-1.5px; background:var(--brass-fill); transform-origin:center; }
+
+.gen-strip{ height:110px; }
+.gen-coil{ position:absolute; left:50%; top:50%; width:60px; height:44px; margin-left:-30px; margin-top:-22px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.6; }
+.gen-magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.gen-magnet .n{ flex:1; background:var(--brass-fill); }
+.gen-magnet .s{ flex:1; background:var(--steel-fill); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتوى</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>قانونان، زوج واحد</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون أمبير: التيار يُنشئ المجال</a></li>
+<li><a href="#s3"><span class="n">03</span>قانون فاراداي: المجال يُنشئ التيار</a></li>
+<li><a href="#s4"><span class="n">04</span>قاعدة لينز: الطبيعة تقاوم</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: المحرك بالمقلوب — المولد</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يؤدي هذا: المحول بدون أجزاء متحركة</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة منزلية</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عملية · الكهرومغناطيسية · الجزء الرابع عشر</p>
+<h1>أمبير وفاراداي: التيار يولد المجال، المجال يولد التيار</h1>
+<p class="subtitle">قانونان متعاكسان: أحدهما يقول إن الكهرباء تستطيع إنشاء المغناطيسية، والثاني إن المغناطيسية تستطيع إنشاء الكهرباء. وهما معًا يشكلان مبدأ عمل المولد في محطة الكهرباء.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--ink)" stroke-width="3" x1="170" x2="170" y1="30" y2="170"></line>
+<circle cx="170" cy="100" fill="none" id="heroRing1" opacity="0" r="30" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<circle cx="170" cy="100" fill="none" id="heroRing2" opacity="0" r="50" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<circle cx="170" cy="100" fill="none" id="heroRing3" opacity="0" r="70" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="190">ток → кольца магнитного поля</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>في عام 1820، لاحظ هانز أورستد بالصدفة أن سلكًا يحمل تيارًا يُحرك إبرة البوصلة — وخلال أسبوع واحد، بنى أندريه-ماري أمبير قانونًا كميًا من ذلك. وبعد أحد عشر عامًا، وجد مايكل فاراداي العلاقة العكسية: مغناطيس متحرك يُولد تيارًا في سلك. هذان القانونان ليسا مصادفة، بل انعكاس مرآتي لبعضهما، ويشكلان معًا مبدأ عمل المحركات الكهربائية والمولدات والمحولات. في هذه الملاحظة — كلا القانونين بالأرقام وتحليل لماذا المحرك والمولد هما في الأساس نفس الجهاز.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Катушка вращается в магнитном поле — рождается ток" src="/lang/ru/theory/img/ampere_faraday_hero.jpg"/><figcaption>ملف يدور في مجال مغناطيسي — يُولد تيار</figcaption></figure>
+<figure><img alt="Магнит входит в катушку — импульс наведённого тока" src="/lang/ru/theory/img/ampere_faraday_concept.jpg"/><figcaption>مغناطيس يدخل في ملف — نبضة من تيار مُستحث</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>قانونان، زوج واحد</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>الصيغة</th><th>اتجاه التأثير</th></tr>
+<tr><td>أمبير (1820)</td><td class="sym">∮B·dl = μ₀I</td><td>تيار → مجال مغناطيسي</td></tr>
+<tr><td>فاراداي (1831)</td><td class="sym">ε = −dΦ/dt</td><td>مجال متغير → تيار</td></tr>
+</table>
+<p>لقد ظهر كلا القانونين سابقًا كسطرين من بين أربعة سطور من معادلات ماكسويل (الجزء الرابع) — هنا نناقشهما بتفصيل أكبر، مع تطبيقات عملية: المغناطيسات الكهربائية والمولدات والمحولات.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون أمبير: التيار يُنشئ المجال</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong>تدوير المجال المغناطيسي على طول مسار مغلق يتناسب مع التيار المحاط بهذا المسار:</p>
+<div class="plate">
+<div class="eq-body">∮B·dl = μ₀I</div>
+<div class="cap">μ₀ = 4π×10⁻⁷ نيوتن/أمبير² — الثابت المغناطيسي</div>
+</div>
+<div aria-hidden="true" class="anim-strip compass-strip">
+<div class="compass-wire"></div>
+<div class="compass-body"><div class="compass-needle" id="compassNeedle"></div></div>
+<div class="anim-label left">تيار في سلك — إبرة البوصلة بالقرب تنحرف</div>
+</div>
+<p>أحد أكثر الاستنتاجات العملية لقانون أمبير — قوة التفاعل بين موصلين متوازيين يحملان تيارًا (كانت هذه الصيغة بالذات لفترة طويلة تعريفًا لوحدة التيار — الأمبير):</p>
+<div class="eq"><div class="eq-body">F/L = (μ₀/2π)·I₁I₂/d = 2×10⁻⁷·I₁I₂/d</div><div class="eq-tag">(1)</div></div>
+<p>مثال عددي: سلكان متوازيان بتيار I₁ = I₂ = 5 A والمسافة بينهما d = 0.1 م. أوجد قوة التجاذب لكل وحدة طول.</p>
+<div class="eq"><div class="eq-body">F/L = 2×10⁻⁷·5·5/0.1 = <strong>5×10⁻⁵ نيوتن/م</strong></div><div class="eq-tag">(2)</div></div>
+<p>الأسلاك التي تحمل تيارًا في نفس الاتجاه تتجاذب (مثل التيارات الجزيئية المتوازية في مغناطيس دائم)، وفي اتجاهين متعاكسين تتنافر.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>قانون فاراداي: المجال يُنشئ التيار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong>القوة الدافعة الكهربائية المستحثة تساوي معدل تغير التدفق المغناطيسي عبر المسار، مأخوذًا بإشارة سالبة:</p>
+<div class="plate">
+<div class="eq-body">ε = −N·dΦ/dt</div>
+<div class="cap">N — عدد لفات الملف، Φ — التدفق المغناطيسي خلال لفة واحدة (ويبر)</div>
+</div>
+<div aria-hidden="true" class="anim-strip gen-strip">
+<div class="gen-coil"></div>
+<div class="gen-magnet" id="genMagnet"><span class="n"></span><span class="s"></span></div>
+<div class="anim-label left">مغناطيس يدخل في ملف — إبرة الفولتميتر ترتعش</div>
+</div>
+<p>مثال عددي: ملف ب N = 200 لفة موجود في مجال، التدفق المغناطيسي خلال لفة واحدة يزداد من 0 إلى 0.02 ويبر خلال Δt = 0.1 ثانية. أوجد القوة الدافعة الكهربائية المستحثة.</p>
+<div class="eq"><div class="eq-body">ε = 200·0.02/0.1 = <strong>40 فولت</strong></div><div class="eq-tag">(3)</div></div>
+<p>هكذا تعمل دينامو الدراجة الذي يُدار بالدواسة والمولد في محطة الكهرباء — الحركة الميكانيكية (الدوران) تغير التدفق المغناطيسي عبر الملف، وقانون فاراداي يحول هذا التغير إلى جهد كهربائي.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>قاعدة لينز: الطبيعة تقاوم</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>علامة 'الناقص' في قانون فاراداي ليست إجراءً شكليًا، بل قاعدة جوهرية مستقلة (إميليوس لينز، 1833): التيار المستحث يسري في اتجاه بحيث يعاكس مجاله المغناطيسي الخاص التغير الذي سببه.</p>
+<div class="callout brass">
+<span class="tag">لماذا لا يمكن أن يكون غير ذلك</span>
+<p>إذا كانت الإشارة معاكسة (التيار المستحث سيعزز التغير الأصلي في التدفق)، لكان النظام يزيد من نفسه إلى ما لا نهاية — محرك أبدي جاهز. قانون حفظ الطاقة (الجزء الثاني) يمنع مثل هذا السيناريو مباشرة، لذلك فإن قاعدة لينز ليست حقيقة تعسفية منفصلة، بل نتيجة ضرورية لحقيقة أنه لا يمكن الحصول على الطاقة من العدم.</p>
+</div>
+<p>النتيجة العملية: لتحريك المغناطيس عبر الملف وتحريض تيار فيه، يجب بذل شغل ضد المقاومة التي يبديها الملف نفسه لحركة المغناطيس (المجال المستحث 'يُبطئ' المغناطيس) — وهذا الشغل هو الذي يتحول إلى طاقة كهربائية. لا يوفر قانون فاراداي كهرباء مجانية.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: المحرك بالمقلوب — المولد</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>المحرك الكهربائي والمولد الكهربائي هما نفس الجهاز ميكانيكيًا (ملف في مجال مغناطيسي)، الاختلاف فقط في ما هو 'مدخل' وما هو 'مخرج':</p>
+<table class="symtab">
+<tr><th></th><th>المدخل</th><th>المخرج</th><th>القانون الفعال</th></tr>
+<tr><td>محرك</td><td>تيار كهربائي</td><td>دوران (شغل ميكانيكي)</td><td>قوة أمبير المؤثرة على تيار في مجال</td></tr>
+<tr><td>مولد</td><td>دوران (شغل ميكانيكي)</td><td>تيار كهربائي</td><td>قانون فاراداي</td></tr>
+</table>
+<p>خذ نفس الملف في مجال مغناطيسي: مرر فيه تيارًا — وفقًا لقانون أمبير ستظهر قوة، وسيدور الملف (محرك). أو، بالعكس، أدر الملف بيدك — وفقًا لقانون فاراداي، ستُستحث فيه قوة دافعة كهربائية (مولد). تستخدم السيارات الكهربائية هذا حرفيًا: عند التسارع، يعمل المحرك كمحرك (يستهلك تيارًا من البطارية)، وعند الفرملة — كمولد (استعادة الطاقة، يسري التيار إلى البطارية مرة أخرى، شاحنًا إياها من الطاقة الحركية للسيارة).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يؤدي هذا: المحول بدون أجزاء متحركة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>المحول — جهاز بدون أي جزء متحرك، لكنه يعتمد كليًا على قانون فاراداي. التيار المتردد في الملف الابتدائي (قانون أمبير — التيار ينشئ مجالًا متغيرًا) يخلق تدفقًا مغناطيسيًا متغيرًا في القلب الحديدي المشترك؛ هذا التدفق المتغير يخترق الملف الثانوي ويستحث فيه قوة دافعة كهربائية (قانون فاراداي). نسبة عدد اللفات تحدد نسبة الجهود — هكذا يتم رفع/خفض الجهد في كل محطة فرعية على الطريق من محطة الكهرباء إلى المقبس.</p>
+<div class="callout steel">
+<span class="tag">لماذا لا يعمل المحول على التيار المستمر</span>
+<p>إذا كان التيار في الملف الابتدائي مستمرًا (لا يتغير مع الزمن)، فإن التدفق المغناطيسي أيضًا مستمر — dΦ/dt = 0، ووفقًا لقانون فاراداي لا تُستحث أي قوة دافعة كهربائية في الملف الثانوي على الإطلاق. هذا هو سبب بناء نظام الطاقة بأكمله على التيار المتردد — فهو الوحيد الذي يسمح بتغيير الجهد باستمرار باستخدام المحولات دون خسائر في التحويل.</p>
+</div>
+<p>على الموقع، هذه قوانين منفصلة إذا كنت ترغب في التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/amperes_law.html">قانون أمبير</a> ·
+          <a href="/lang/ar/laws/faradays_law_of_induction.html">قانون فاراداي للحث</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · تجربة أورستد مع البوصلة</span>
+<p>ضع بوصلة عادية على الطاولة، ومدد فوقها سلكًا مستقيمًا موصولًا ببطارية (بالتوازي مع إبرة البوصلة، مكررًا تجربة عام 1820 حرفيًا)، وأغلق الدائرة لثانية.</p>
+<p><span class="qlabel">ماذا تلاحظ</span>ستنحرف إبرة البوصلة بوضوح عن اتجاه الشمال طالما يسري التيار، وتعود فور فتح الدائرة — بالضبط ما لاحظه أورستد بالصدفة في محاضرة أثناء تحضيره عرضًا للطلاب، وما حوّله أمبير إلى قانون دقيق خلال أسبوع.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · مصباح يدوي بدينامو</span>
+<p>إذا كان لديك في المنزل مصباح يدوي بتشغيل يدوي (آلية دينامو، بدون بطاريات — تدير الذراع، يضيء المصباح/الصمام الثنائي)، فأدره أولاً بدون حمل (المصباح/الصمام الثنائي مطفأ أو مزال)، ثم وصّل الحمل وأدره مرة أخرى.</p>
+<p><span class="qlabel">ماذا تلاحظ</span>إدارة الذراع تكون أصعب بشكل ملحوظ عند توصيل المصباح وإضاءته — عرض مباشر لقاعدة لينز (الفقرة 4): التيار المستحث ينشئ مجاله الخاص الذي يُبطئ الدوران، والتغلب على هذا الكبح — الشغل الميكانيكي الذي تبذله بيدك — يتحول إلى طاقة كهربائية تُضيء المصباح.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل يتبع دائمًا المخطط:<strong>المعطيات → القانون → الحل → الإجابة</strong>.</p>
+<details class="problem">
+<summary>١. سلكان متوازيان بتيار 10 أمبير لكل منهما، والمسافة بينهما 0.2 م. أوجد قوة التفاعل لكل وحدة طول.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span>I₁ = I₂ = 10 A، d = 0.2 م.</p>
+<p><span class="qlabel">القانون</span>القوة بين موصلين متوازيين (الفقرة 2): F/L = 2×10⁻⁷·I₁I₂/d.</p>
+<p><span class="qlabel">الحل</span>F/L = 2×10⁻⁷·100/0.2 = 2×10⁻⁷·500 = 10⁻⁴ نيوتن/م.</p>
+<p><span class="qlabel">الإجابة</span> <strong>10⁻⁴ نيوتن/م</strong>(0.0001 نيوتن لكل متر طول).</p>
+</div>
+</details>
+<details class="problem">
+<summary>٢. ملف من 150 لفة موجود في مجال، التدفق المغناطيسي عبر اللفة يهبط من 0.04 ويبر إلى 0.01 ويبر خلال 0.3 ثانية. أوجد القيمة المطلقة للقوة الدافعة الكهربائية المستحثة.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span>N = 150، ΔΦ = 0.03 ويبر، Δt = 0.3 ثانية.</p>
+<p><span class="qlabel">القانون</span>قانون فاراداي (الفقرة 3): ε = NΔΦ/Δt.</p>
+<p><span class="qlabel">الحل</span>ε = 150·0.03/0.3 = 15 فولت.</p>
+<p><span class="qlabel">الإجابة</span> <strong>15 فولت</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>٣. لماذا ترتعش إبرة الجلفانومتر بقوة أكبر عند سحب المغناطيس بسرعة من الملف مقارنة بسحبه ببطء (نفس المغناطيس، نفس المسافة)؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>قانون فاراداي (الفقرة 3): ε = NΔΦ/Δt — المهم هو معدل تغير التدفق، وليس فقط قيمته النهائية.</p>
+<p><span class="qlabel">الحل</span>عند الحركة السريعة، نفس التغير في التدفق ΔΦ يحدث في زمن أقل بكثير Δt، مما يعني أن ΔΦ/Δt (وبالتالي ε) أكبر.</p>
+<p><span class="qlabel">الإجابة</span> <strong>الحركة السريعة تعطي معدل تغير أكبر للتدفق</strong>، وليس تغيرًا أكبر في التدفق بحد ذاته.</p>
+</div>
+</details>
+<details class="problem">
+<summary>٤. محول يخفض الجهد من 220 فولت إلى 11 فولت. إذا كان الملف الابتدائي يحتوي على 2000 لفة، فكم لفة في الملف الثانوي؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span>U₁ = 220 فولت، U₂ = 11 فولت، N₁ = 2000.</p>
+<p><span class="qlabel">القانون</span>نسبة لفات المحول (الفقرة 6): U₁/U₂ = N₁/N₂.</p>
+<p><span class="qlabel">الحل</span> N₂ = N₁·U₂/U₁ = 2000·11/220 = 100.</p>
+<p><span class="qlabel">الإجابة</span> <strong>100 لفة</strong>— خفض بمقدار 20 مرة يتوافق مع نسبة اللفات 20:1.</p>
+</div>
+</details>
+<details class="problem">
+<summary>٥. لماذا عند فرملة السيارة الكهربائية (استعادة الطاقة)، تُشحن البطارية مع أن المحرك في تلك اللحظة لا يستهلك تيارًا من البطارية؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>الفقرة 5 — قابلية العكس للمحرك/المولد.</p>
+<p><span class="qlabel">الحل</span>عند الفرملة، تستمر العجلات في تدوير ملف المحرك الكهربائي بالقصور الذاتي — في هذا الوضع، يعمل الجهاز كمولد (قانون فاراداي: دوران الملف في مجال المغناطيس يستحث فيه قوة دافعة كهربائية)، وليس كمحرك. التيار المستحث يسري في الاتجاه المعاكس — من المحرك إلى البطارية، شاحنًا إياها من الطاقة الحركية للسيارة بدلاً من تبديدها كحرارة عبر وسادات الفرامل.</p>
+<p><span class="qlabel">الإجابة</span> <strong>يتحول المحرك إلى وضع المولد</strong>— نفس الملف، نفس المغناطيس، اتجاه معاكس للطاقة.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت أي خطأ؟</span>
+<p>خطأ مطبعي، صيغة خاطئة، رقم لا يتطابق، شرح غير واضح — اكتب إلينا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ampere%20Faraday%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ بالفعل، وتُحلل، ويُجرى تصحيح بناءً عليها — إنها ليست 'في الدرج'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'دليل تعليمي' لطبقة القوانين · الجزء الرابع عشر من السلسلة، الكهرومغناطيسية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2 hero: концентрические кольца поля вокруг провода то появляются, то гаснут — намёк на пульсацию тока.
+  var rings = [document.getElementById('heroRing1'), document.getElementById('heroRing2'), document.getElementById('heroRing3')];
+  var PERIOD = 6000;
+  var lastTs = null;
+  function tickRings(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD) / PERIOD;
+    rings.forEach(function(r, i){
+      var delay = i * 0.12;
+      var local = ((phase - delay) % 1 + 1) % 1;
+      var op = local < 0.5 ? local * 2 * 0.7 : Math.max(0, 0.7 - (local - 0.5) * 1.4);
+      r.setAttribute('opacity', op.toFixed(2));
+    });
+    requestAnimationFrame(tickRings);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickRings);
+
+  // §2 демо-полоса: стрелка компаса отклоняется, когда «идёт ток» (циклически), возвращается к северу иначе.
+  var needle = document.getElementById('compassNeedle');
+  var COMPASS_PERIOD = 6000;
+  var lastTs2 = null;
+  function tickCompass(ts){
+    if (lastTs2 === null) lastTs2 = ts;
+    var phase = (ts % COMPASS_PERIOD) / COMPASS_PERIOD;
+    // ток «включён» первую половину цикла — стрелка отклонена на 40°, иначе — 0°.
+    var target = phase < 0.5 ? 40 : 0;
+    var t = phase < 0.5 ? Math.min(1, phase / 0.15) : Math.min(1, (phase - 0.5) / 0.15);
+    var prevTarget = phase < 0.5 ? 0 : 40;
+    var angle = prevTarget + (target - prevTarget) * t;
+    if (needle) needle.style.transform = 'rotate(' + angle.toFixed(1) + 'deg)';
+    requestAnimationFrame(tickCompass);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickCompass);
+
+  // §3: магнит въезжает в катушку и выезжает обратно — та же анимация паттерна, что в части IV (Максвелл).
+  var magnet = document.getElementById('genMagnet');
+  var LEFT = 16, MID = 60, PERIOD3 = 6000;
+  var lastTs3 = null;
+  function tickGen(ts){
+    if (lastTs3 === null) lastTs3 = ts;
+    var phase = (ts % PERIOD3) / PERIOD3;
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    if (magnet) magnet.style.left = (LEFT + (MID - LEFT) * t) + 'px';
+    requestAnimationFrame(tickGen);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickGen);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">النظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>معادلات ماكسويل: كيف يولد الضوء — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-pulse{ animation: heroPulse 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroPulse{ 0%{ transform:translateX(0); } 60%{ transform:translateX(260px); } 100%{ transform:translateX(260px); } }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.single{ height:80px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 Фарадей: магнит въезжает в катушку */
+.coil-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.coil-loop{ position:absolute; top:50%; left:60%; width:60px; height:44px; margin-top:-22px; margin-left:-30px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.55; }
+.magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.magnet .n{ flex:1; background:var(--brass-fill); }
+.magnet .s{ flex:1; background:var(--steel-fill); }
+@media (prefers-reduced-motion: no-preference){
+  .magnet.slide{ animation: magnetSlide 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes magnetSlide{ 0%{ left:16px; } 45%{ left:56%; } 55%{ left:56%; } 100%{ left:calc(100% - 44px); } }
+
+/* §5 Ампер: круговое поле B вокруг провода с током */
+.wire-strip{ height:120px; }
+.wire-line{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.wire-ring{ position:absolute; left:50%; top:50%; border:2px solid var(--steel-fill); border-radius:50%; opacity:0; }
+.wire-ring.r1{ width:40px; height:40px; margin:-20px 0 0 -20px; }
+.wire-ring.r2{ width:70px; height:70px; margin:-35px 0 0 -35px; }
+.wire-ring.r3{ width:100px; height:100px; margin:-50px 0 0 -50px; }
+@media (prefers-reduced-motion: no-preference){
+  .wire-ring.pulse{ animation: ringPulse 6s cubic-bezier(.3,0,.5,1) infinite; }
+  .wire-ring.r2.pulse{ animation-delay:.15s; }
+  .wire-ring.r3.pulse{ animation-delay:.3s; }
+}
+@keyframes ringPulse{ 0%{ opacity:.9; } 45%{ opacity:.15; } 60%{ opacity:0; } 100%{ opacity:0; } }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>أربع معادلات في كلمتين</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون غاوس: الشحنة كمصدر للحقل</a></li>
+<li><a href="#s3"><span class="n">03</span>قانون غاوس للمجال B: لا وجود لأحادي القطب</a></li>
+<li><a href="#s4"><span class="n">04</span>قانون فاراداي: المغناطيسية تولّد التيار</a></li>
+<li><a href="#s5"><span class="n">05</span>قانون أمبير-ماكسويل: التيار يولّد المغناطيسية</a></li>
+<li><a href="#s6"><span class="n">06</span>مثال شامل: ولادة الضوء</a></li>
+<li><a href="#s7"><span class="n">07</span>إلى أين يقودنا هذا: نسبية الحقول</a></li>
+<li><a href="#s8"><span class="n">08</span>تجربة منزلية</a></li>
+<li><a href="#s9"><span class="n">09</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>مذكرة عمل · الكهرومغناطيسية · الجزء الرابع</p>
+<h1>معادلات ماكسويل: كيف يولد الضوء</h1>
+<p class="subtitle">أربع معادلات قصيرة شرحت المغناطيس، والمولدات، وموجات الراديو - وبشكل غير متوقع لماكسويل نفسه، تبين أنها معادلة الضوء نفسه.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="10" x2="410" y1="100" y2="100"></line>
+<path d="M10,100 C 27,72 45,72 62,100 C 79,128 97,128 114,100 C131,72 149,72 166,100 C183,128 201,128 218,100 C235,72 253,72 270,100 C287,128 305,128 322,100 C339,72 357,72 374,100 C391,128 409,128 410,100" fill="none" stroke="var(--steel-fill)" stroke-width="2.4"></path>
+<path d="M10,100 C 27,86 45,86 62,100 C 79,114 97,114 114,100 C131,86 149,86 166,100 C183,114 201,114 218,100 C235,86 253,86 270,100 C287,114 305,114 322,100 C339,86 357,86 374,100 C391,114 409,114 410,100" fill="none" opacity=".85" stroke="var(--brass-fill)" stroke-width="2.4"></path>
+<text fill="var(--steel)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="62">E</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="122">B</text>
+<circle class="hero-pulse" cx="30" cy="100" fill="var(--ink)" r="6"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="210" y="175">E и B поддерживают друг друга — волна бежит сама, без проводов</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>في ستينيات القرن التاسع عشر، جمع جيمس كليرك ماكسويل القوانين التجريبية المتفرقة لكولوم، وغاوس، وأمبير، وفاراداي في نظام من أربع معادلات - واكتشف قطعة ناقصة: فبدونها كانت المعادلات تتعارض مع حفظ الشحنة. بإضافة «تيار الإزاحة»، لم يُصلح الرياضيات فحسب - بل تنبأت المعادلات فورًا بموجات تنتقل بسرعة تطابقت تمامًا مع سرعة الضوء. اتضح أن الضوء موجة كهرومغناطيسية. في هذه المذكرة - المعادلات الأربع كل على حدة، ثم التجميع: كيف تنبثق منها موجة ذاتية الانتشار.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Электрическое и магнитное поля, сплетаясь, рождают свет" src="/lang/ru/theory/img/maxwells_equations_hero.jpg"/><figcaption>الحقلان الكهربائي والمغناطيسي، بتشابكهما، يولدان الضوء</figcaption></figure>
+<figure><img alt="Фотон — самоподдерживающаяся волна двух полей" src="/lang/ru/theory/img/maxwells_equations_concept.jpg"/><figcaption>الفوتون - موجة ذاتية الاستدامة من حقلين</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>أربع معادلات في كلمتين</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>№</th><th>الاسم</th><th>المعنى في عبارة واحدة</th></tr>
+<tr><td class="sym">I</td><td>غاوس (E)</td><td>الشحنة - مصدر الحقل الكهربائي المنطلق إلى الخارج</td></tr>
+<tr><td class="sym">II</td><td>غاوس (B)</td><td>لا يوجد مصدر-«شحنة» للحقل المغناطيسي - إنه دائمًا مغلق</td></tr>
+<tr><td class="sym">III</td><td>فاراداي</td><td>المغناطيسية المتغيرة تولد حقلاً كهربائيًا دوارًا</td></tr>
+<tr><td class="sym">IV</td><td>أمبير-ماكسويل</td><td>التيار وَ الحقل الكهربائي المتغير يولدان حقلاً مغناطيسيًا دوارًا</td></tr>
+</table>
+<p>التناظر مثالي تقريبًا: الثالث والرابع – عبارتان متطابقتان كالمرآة («B المتغير يولد E» و«E المتغير يولد B»)، أما الأول والثاني – «هناك شحنة لـ E، وليس لـ B». هذا التناظر التقريبي و«النقص» في حد واحد في قانون أمبير الأصلي هو ما أوحى لماكسويل أن شيئًا ما مفقود - وأدى إلى اكتشاف تيار الإزاحة (§5).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون غاوس: الشحنة كمصدر للحقل</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> الحقل الكهربائي «يتباعد» عن الشحنة بنسبة مقدارها:</p>
+<div class="plate">
+<div class="eq-body">∇·<span class="vec">E</span> = ρ/ε<sub>0</sub></div>
+<div class="cap">ρ — كثافة الشحنة، ε<sub>0</sub> ≈ 8.854×10⁻¹² Ф/م — الثابت الكهربائي</div>
+</div>
+<p>في الصورة التكاملية الأكثر إيضاحًا: تدفق الحقل الكهربائي عبر أي سطح مغلق يتناسب مع الشحنة داخله. تخيلوا - تصوروا الشحنة كـ«صنبور» تندفع منه نفاثات خطوط القوة في كل الاتجاهات؛ مهما رسمتم سطحًا حول الصنبور، ستمر عبره نفس كمية «الماء» التي تعتمد فقط على قوة الصنبور (مقدار الشحنة)، وليس على شكل السطح أو حجمه.</p>
+<div class="callout steel">
+<span class="tag">حالة خاصة — قانون كولوم</span>
+<p>إذا طبقنا قانون غاوس على شحنة نقطية واحدة وحسبنا الحقل على كرة نصف قطرها r حولها، نحصل تمامًا على قانون كولوم (القوة بين شحنتين تتناقص كـ 1/r²) — وهو تاريخيًا أقدم، اكتشف تجريبيًا في عام 1785، قبل 80 عامًا من ماكسويل. قانون غاوس ليس حقيقة جديدة، بل إعادة صياغة أكثر عمومية وقوة لنفس الأمر.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>قانون غاوس للمجال B: لا وجود لأحادي القطب</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> لا يوجد مصدر للحقل المغناطيسي — إنه لا «يبدأ» ولا «ينتهي» في أي مكان:</p>
+<div class="plate">
+<div class="eq-body">∇·<span class="vec">B</span> = 0</div>
+<div class="cap">على عكس الحقل الكهربائي، لا يوجد في المغناطيسي نظير لـ«الشحنة المفردة»</div>
+</div>
+<p>قسموا مغناطيسًا إلى نصفين على أمل الحصول على قطعة «شمالية» منفصلة وأخرى «جنوبية» منفصلة — لن ينجح ذلك: كل قطعة سيكون لها كلا القطبين مرة أخرى. خطوط القوة المغناطيسية دائمًا مغلقة على نفسها (تخرج من القطب الشمالي وتعود بالضرورة إلى الجنوبي)، على عكس الخطوط الكهربائية التي تبدأ على الشحنة الموجبة وتنتهي على السالبة (أو تمتد إلى ما لا نهاية).</p>
+<div class="callout brass">
+<span class="tag">سؤال مفتوح</span>
+<p>بعض النظريات خارج إطار معادلات ماكسويل (خصوصًا نظرية التوحيد الكبرى) تتنبأ بوجود أحادي القطب المغناطيسي — «شحنات» شمالية أو جنوبية منفصلة. بحثوا عنها لعقود (بما في ذلك الإشارة الخاطئة الشهيرة لكاشف بلاس كابريرا عام 1982)، لكن لم يعثروا عليها بشكل مقنع — في إطار الكهروديناميكا الكلاسيكية يبقى القانون ∇·B = 0 حقيقة تجريبية دقيقة، وليس مجرد تقريب ملائم.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>قانون فاراداي: المغناطيسية تولّد التيار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> الحقل المغناطيسي المتغير مع الزمن يولد حقلاً كهربائيًا دوارًا — وبالتالي تيارًا في ناقل مغلق:</p>
+<div class="plate">
+<div class="eq-body">ε = −dΦ<sub>B</sub>/dt</div>
+<div class="cap">ε — القوة الدافعة الكهربائية المحرّضة (فولت)، Φ<sub>B</sub> — التدفق المغناطيسي عبر الدارة (ويبر)؛ إشارة السالب — قاعدة لينز (§4-هامش)</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="coil-track"></div>
+<div class="coil-loop"></div>
+<div class="magnet slide"><span class="n"></span><span class="s"></span></div>
+<div class="anim-label left">المغناطيس يدخل الملف — يتغير التدفق، تنحرف إبرة الفولتميتر</div>
+</div>
+<p>هكذا بالضبط يعمل أي مولد كهربائي: يدور المغناطيس ميكانيكيًا بالقرب من الملف (أو الملف بالقرب من المغناطيس - المهم في القانون فقط السرعة النسبية لتغير التدفق)، فيتغير التدفق باستمرار، وتتحرض في السلك ق.د.ك. باستمرار. إشارة السالب — <strong>قاعدة لينز</strong>: التيار المحرّض يسري في اتجاه بحيث يعاكس حقله المغناطيسي الخاص التغير الذي سببه (وإلا لحصلنا على محرك أبدي — كان التأثير سيعزز نفسه بقوة متزايدة، وهو ما يحظره قانون حفظ الطاقة).</p>
+<p>مثال عددي: ملف من N = 100 لفة يوجد في حقل مغناطيسي، يتزايد التدفق خلال اللفة الواحدة بانتظام من 0.02 ويبر إلى 0.05 ويبر خلال 0.5 ثانية. احسب القوة الدافعة الكهربائية المحرّضة.</p>
+<div class="eq"><div class="eq-body">ε = −N·ΔΦ/Δt = −100·(0.05−0.02)/0.5 = <strong>−6 فولت</strong></div><div class="eq-tag">(1)</div></div>
+<p>قيمة القوة الدافعة الكهربائية — 6 فولت؛ الإشارة تدل فقط على اتجاه التيار (المعاكس لزيادة التدفق)، وليس على المقدار.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>قانون أمبير-ماكسويل: التيار يولّد المغناطيسية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> التيار الكهربائي وَ الحقل الكهربائي المتغير مع الزمن يولدان حقلاً مغناطيسيًا دوارًا:</p>
+<div class="plate">
+<div class="eq-body">∇×<span class="vec">B</span> = μ<sub>0</sub><span class="vec">J</span> + μ<sub>0</sub>ε<sub>0</sub>∂<span class="vec">E</span>/∂t</div>
+<div class="cap">μ<sub>0</sub> ≈ 1.257×10⁻&amp;sup6 هنري/م — الثابت المغناطيسي؛ J — كثافة التيار</div>
+</div>
+<div aria-hidden="true" class="anim-strip wire-strip">
+<div class="wire-line"></div>
+<div class="wire-ring r1 pulse"></div>
+<div class="wire-ring r2 pulse"></div>
+<div class="wire-ring r3 pulse"></div>
+<div class="anim-label">تيار يمر في سلك — تنشأ حوله حلقات متحدة المركز من B</div>
+</div>
+<p>الحد الأول (μ<sub>0</sub>J) — هذا هو قانون أمبير الأصلي (1826): التيار يُنشئ حوله حقلاً مغناطيسيًا دائريًا، يمكن التحقق منه بسهولة باستخدام بوصلة بجانب سلك يمر فيه تيار.<strong>الحد الثاني — مساهمة ماكسويل نفسه</strong>، «تيار الإزاحة»: حتى في الأماكن التي لا يوجد فيها تيار حقيقي (مثلًا بين صفيحتي مكثف يُشحن، في الفراغ)، الحقل الكهربائي المتغير بسرعة يُحدث نفس التأثير — يولد حقلاً مغناطيسيًا.</p>
+<div class="callout moss">
+<span class="tag">لماذا احتاج ماكسويل هذا الحد</span>
+<p>بدون تيار الإزاحة، كان قانون أمبير في صورته القديمة يتعارض رياضيًا مع حفظ الشحنة عند انقطاع الدارة (مثلًا في المكثف): فعند تطبيقه على سطحين مختلفين محددين بنفس الحلقة، كان يعطي نتائج مختلفة — وهذا سخيف. إضافة الحد μ<sub>0</sub>ε<sub>0</sub>∂E/∂t أزال التناقض — واتضح أنه جعل المعادلات متناظرة وقادرة على وصف موجة ذاتية الانتشار (§6). حالة نادرة في تاريخ الفيزياء، حيث أدى إصلاح تناقض رياضي إلى أعظم اكتشاف.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>مثال شامل: ولادة الضوء</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنجمع قانوني فاراداي (§4) وأمبير-ماكسويل (§5) معًا — وسنرى لماذا يستطيع الحقل الكهرومغناطيسي الانتشار بنفسه، بدون أسلاك أو مغناطيسات.</p>
+<ol>
+<li>لنفترض أنه في مكان ما من الفضاء يبدأ الحقل الكهربائي E بالتغير مع الزمن (بسبب تذبذب شحنة في هوائي مثلًا).</li>
+<li>وفقًا لـ <strong>قانون أمبير-ماكسويل</strong> (§5، الحد الثاني) هذا E المتغير يولد هنا مباشرة حقلاً مغناطيسيًا دوارًا B — في نقطة مجاورة من الفضاء، دون أي سلك.</li>
+<li>لكن لا يوجد سبب ليكون هذا B ثابتًا أيضًا — فهو أيضًا يتغير مع الزمن. ووفقًا لـ <strong>قانون فاراداي</strong> (§4) B المتغير يولد E دوارًا — أبعد قليلاً عن المصدر.</li>
+<li>فتحصل سلسلة تفاعلات: E يولد B، وB يولد E، كل منهما في الخطوة التالية أبعد قليلاً عن المصدر. الحقل «يهرب» من الهوائي بنفسه، دون مساعدة خارجية — هذه هي الموجة الكهرومغناطيسية.</li>
+</ol>
+<p>بالتعويض بإحدى المعادلتين في الأخرى (رياضيًا — بأخذ دوران إحداهما والتعويض في الأخرى)، نحصل على معادلة موجية اعتيادية، وتُعطى سرعة الموجة بدلالة ثابتين فقط — الثابتين الكهربائي والمغناطيسي:</p>
+<div class="eq"><div class="eq-body">c = 1/√(ε<sub>0</sub>μ<sub>0</sub>) = 1/√(8.854×10⁻¹²·1.257×10⁻&amp;sup6) ≈ <strong>3×10&amp;sup8 م/ث</strong></div><div class="eq-tag">(2)</div></div>
+<div class="callout brass">
+<span class="tag">لحظة الاكتشاف</span>
+<p>هذان الثابتان (ε<sub>0</sub> و μ<sub>0</sub>) كانتا معروفتين من تجارب مختبرية كهربائية ومغناطيسية بحتة — تم قياسهما باستخدام المكثفات والملفات، دون أي ذكر للبصريات. عندما عوّض ماكسويل عام 1862 أرقامهما في المعادلة (2) وحصل على مقدار طابق سرعة الضوء المقاسة، كتب: «لا يمكننا تجنب الاستنتاج بأن الضوء يتكون من تذبذبات عرضية لنفس الوسط الذي يسبب الظواهر الكهربائية والمغناطيسية». اتضح أن البصريات فرع من الكهرومغناطيسية — لم يتوقع أحد ذلك.</p>
+</div>
+<p>الضوء المرئي، وموجات الراديو، والأشعة السينية، والميكروويف — كلها نفس الموجة الكهرومغناطيسية، تختلف فقط في طول الموجة (تردد تذبذبات E و B). الفرق بين راديو FM وصورة الأشعة السينية ليس في فيزياء الظاهرة، بل فقط في الأرقام.</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>إلى أين يقودنا هذا: نسبية الحقول</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>تحمل معادلات ماكسويل مفاجأة أخرى، لم تُلاحظ فورًا: إنها لا تغير شكلها تحت تحويلات لورينتز (أي أنها «صحيحة نسبويًا» بالفعل)، على عكس ميكانيكا نيوتن التي تطلبت تعديلاً. علاوة على ذلك — ما يسميه أحد المراقبين «حقلًا مغناطيسيًا خالصًا» سيراه مراقب آخر يتحرك بالنسبة للأول كمزيج من حقل كهربائي وَ مغناطيسي.</p>
+<div class="callout steel">
+<span class="tag">E و B — كيان واحد، وليس حقلين مختلفين</span>
+<p>مثال كلاسيكي: شحنة ساكنة بجانب سلك يمر فيه تيار لا تتعرض لقوة كهربائية (السلك متعادل كهربائيًا)، بل لقوة مغناطيسية فقط (إذا تحركت). لكن بالنسبة لمراقب يتحرك مع الشحنة، يبدو الوضع مختلفًا: بسبب تقلص الطول اللورينتزي، تتوقف كثافات الشحنات الموجبة والسالبة في السلك عن التعويض الدقيق — فيبدو السلك مشحونًا قليلاً، وتظهر قوة كهربائية حقيقية. نفس التأثير الفيزيائي — يمكن تسميته «مغناطيسيًا» أو «كهربائيًا» حسب الإطار المرجعي. هذه العلاقة بالذات هي أحد الطرق التاريخية التي أوصلت أينشتاين إلى نظرية النسبية الخاصة (1905)، منطلقًا من لغز معادلات ماكسويل، وليس من الميكانيكا.</p>
+</div>
+<p>على الموقع هذا قانون منفصل، إذا أردتم التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/maxwells_equations.html">معادلات ماكسويل</a> ·
+          <a href="/lang/ar/laws/faradays_law_of_induction.html">قانون الحث لفاراداي</a> ·
+          <a href="/lang/ar/laws/amperes_law.html">قانون أمبير</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · مغناطيس كهربائي منزلي الصنع</span>
+<p>لفوا 30-40 لفة من سلك نحاسي معزول على مسمار حديدي كبير، وصلوا الطرفين ببطارية بقدرة 1.5 فولت (بحجم الإصبع) لبضع ثوان (لا أكثر — فالسلك والبطارية يسخنان).</p>
+<p><span class="qlabel">ما ستلاحظونه</span> سيبدأ المسمار بجذب المشابك والأشياء المعدنية الصغيرة الأخرى — عرض مباشر لقانون أمبير (§5، الحد الأول): التيار في السلك يُنشئ حقلاً مغناطيسيًا، ولفه على شكل ملف يركز ويقوي هذا الحقل داخل المسمار وحوله (الذي يصبح بدوره ممغنطًا، معززًا التأثير).</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · الكهرباء الساكنة تجذب الماء</span>
+<p>مشطوا الشعر الجاف بمشط بلاستيكي (أو افركوا بالونًا بسترة صوفية) وقرّبوه من مجرى ماء رفيع من الصنبور.</p>
+<p><span class="qlabel">ما ستلاحظونه</span> سينحرف مجرى الماء بشكل ملحوظ نحو المشط. الاحتكاك «طرد» إلكترونات من مادة إلى أخرى، مولّدًا شحنة على المشط — ووفقًا لقانون غاوس (§2) يوجد حقل كهربائي حول الشحنة، يحث شحنة معاكسة ضعيفة على جزيئات الماء المتعادلة لكن القابلة للاستقطاب فيجذبها (التأثير يسمى استقطاب العازل).</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكروا أولاً بأنفسكم، ثم افتحوا الحل. الحل في كل مكان يتبع المخطط: <strong>المعطيات → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. تبث محطة راديو FM على تردد 100 ميغاهرتز. ما طول موجة هذه الإشارة الراديوية؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> f = 100 MHz = 10&amp;sup8 هرتز، c ≈ 3×10&amp;sup8 م/ث (§6).</p>
+<p><span class="qlabel">القانون</span> العلاقة بين طول الموجة والتردد والسرعة لأي موجة: λ = c/f.</p>
+<p><span class="qlabel">الحل</span> λ = 3×10&amp;sup8 / 10&amp;sup8 = 3 م.</p>
+<p><span class="qlabel">الجواب</span> <strong>3 أمتار</strong> — تقريبًا طول هوائي صغير على برج الراديو (ربع الموجة، 0.75 م، هو الطول العملي القياسي).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. ملف من 50 لفة يوجد في حقل، يتناقص التدفق المغناطيسي خلاله من 0.03 ويبر إلى 0.01 ويبر خلال 0.4 ثانية. احسب مقدار القوة الدافعة الكهربائية المحرّضة.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> N = 50، ΔΦ = 0.01−0.03 = −0.02 ويبر، Δt = 0.4 ثانية.</p>
+<p><span class="qlabel">القانون</span> قانون فاراداي (§4): ε = −N ΔΦ/Δt.</p>
+<p><span class="qlabel">الحل</span> ε = −50·(−0.02)/0.4 = 2.5 فولت.</p>
+<p><span class="qlabel">الجواب</span> <strong>2.5 فولت</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. يبلغ طول موجة الأشعة السينية حوالي 1 نانومتر (10⁻⁹ م). هل لها نفس الطبيعة الفيزيائية للضوء المرئي، أم هي ظواهر مختلفة؟ علل، مستشهدًا باستنتاج محدد من معادلات ماكسويل.</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> استنتاج المعادلة الموجية من معادلات ماكسويل (§6) — الطبيعة الموحدة للموجات الكهرومغناطيسية.</p>
+<p><span class="qlabel">الحل</span> لا تحتوي معادلات ماكسويل على أي معامل يميز «الضوء» عن «الأشعة السينية» — بل ينتج عنها معادلة موجية واحدة ذات سرعة مميزة وحيدة c. التسميات المختلفة (راديو، ضوء، أشعة سينية) هي ببساطة نطاقات مختلفة لنفس الكمية: طول الموجة (أو التردد).</p>
+<p><span class="qlabel">الجواب</span> <strong>نفس الطبيعة</strong> — موجة كهرومغناطيسية، الاختلاف فقط في طول الموجة (بالنسبة للأشعة السينية أقصر بحوالي 500,000 مرة من الضوء الأخضر).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. لماذا عند محاولة كسر مغناطيس إلى «قطب شمالي منفصل» و«قطب جنوبي منفصل» نحصل دائمًا على مغناطيسين كاملين جديدين؟ أي معادلة من معادلات ماكسويل تمنع انتهاك هذا؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> قانون غاوس للمجال المغناطيسي (§3): ∇·B = 0.</p>
+<p><span class="qlabel">الحل</span> الصفر في الطرف الأيمن (على عكس قانون غاوس لـ E، §2، حيث يوجد كثافة الشحنة في الطرف الأيمن) يعني: لا يوجد نظير للشحنة المصدرية في الحقل المغناطيسي — خطوط الحقل يجب أن تكون مغلقة ولا يمكنها «الانقطاع» عند قطب معزول، مهما قسمنا المغناطيس.</p>
+<p><span class="qlabel">الجواب</span> <strong>قانون غاوس للمجال B</strong> — غياب أحادي القطب المغناطيسي مدمج مباشرة في شكل المعادلة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. مكثف يُشحن في الفراغ يولّد حقلاً مغناطيسيًا حوله، مع أنه لا يوجد تيار حقيقي بين صفيحتيه (الشحنة تتراكم فقط على الصفائح). كيف تفسر معادلات ماكسويل ذلك؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> قانون أمبير-ماكسويل (§5)، الحد الثاني — تيار الإزاحة.</p>
+<p><span class="qlabel">الحل</span> بين صفيحتي المكثف، يزداد الحقل الكهربائي بسرعة مع تراكم الشحنة — هذا هو ∂E/∂t، «تيار الإزاحة»، الذي وفق المعادلة (§5) يعمل تمامًا كتيار التوصيل الحقيقي، وينشئ حقلاً مغناطيسيًا دوارًا حول المنطقة بين الصفيحتين.</p>
+<p><span class="qlabel">الجواب</span> <strong>تيار الإزاحة</strong> — هذا هو بالضبط الحد الذي أضافه ماكسويل لقانون أمبير القديم لشرح حالات كهذه.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت عدم دقة؟</span>
+<p>خطأ مطبعي، معادلة خاطئة، رقم لا يتطابق، شرح غير واضح — اكتبوا لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Maxwell%20equations%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعليًا، وتُحلل، ويُجرى التصحيح بناءً عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الرابع من السلسلة، الكهرومغناطيسية</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

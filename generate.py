@@ -1023,19 +1023,24 @@ def load_laws_loc(lang):
 LAWS_LABELS = {
     "ru": {"title": "Законы и принципы", "subtitle": "Фундаментальные законы науки. Формула — лишь отображение; суть в тексте.",
            "history": "История открытия", "how": "Как работает", "problems": "Нюансы", "laws": "Законы:", "footer": "наука простыми словами",
-           "search": "Найти закон...", "tags": "Связанные понятия", "related_laws": "Связанные законы", "articles": "Статьи по теме", "scientists": "Открыли:", "practical": "На практике"},
+           "search": "Найти закон...", "tags": "Связанные понятия", "related_laws": "Связанные законы", "articles": "Статьи по теме", "scientists": "Открыли:", "practical": "На практике",
+           "influenced": "Оказали влияние:"},
     "en": {"title": "Laws & Principles", "subtitle": "Fundamental laws of science. The formula is just a representation; the idea is in the text.",
            "history": "Discovery", "how": "How it works", "problems": "Caveats", "laws": "Laws:", "footer": "science made simple",
-           "search": "Find a law...", "tags": "Related concepts", "related_laws": "Related laws", "articles": "Related articles", "scientists": "Discovered by:", "practical": "In practice"},
+           "search": "Find a law...", "tags": "Related concepts", "related_laws": "Related laws", "articles": "Related articles", "scientists": "Discovered by:", "practical": "In practice",
+           "influenced": "Key influence:"},
     "zh": {"title": "定律与原理", "subtitle": "科学的基本定律。公式只是表现形式，本质在文字中。",
            "history": "发现历史", "how": "工作原理", "problems": "注意事项", "laws": "定律：", "footer": "让科学变简单",
-           "search": "查找定律...", "tags": "相关概念", "related_laws": "相关定律", "articles": "相关文章", "scientists": "发现者：", "practical": "实际应用"},
+           "search": "查找定律...", "tags": "相关概念", "related_laws": "相关定律", "articles": "相关文章", "scientists": "发现者：", "practical": "实际应用",
+           "influenced": "重要影响："},
     "fr": {"title": "Lois et principes", "subtitle": "Lois fondamentales de la science. La formule n'est qu'une représentation.",
            "history": "Découverte", "how": "Fonctionnement", "problems": "Nuances", "laws": "Lois :", "footer": "la science simplifiée",
-           "search": "Trouver une loi...", "tags": "Concepts liés", "related_laws": "Lois liées", "articles": "Articles liés", "scientists": "Découverte par :", "practical": "En pratique"},
+           "search": "Trouver une loi...", "tags": "Concepts liés", "related_laws": "Lois liées", "articles": "Articles liés", "scientists": "Découverte par :", "practical": "En pratique",
+           "influenced": "Influence clé :"},
     "ar": {"title": "القوانين والمبادئ", "subtitle": "القوانين الأساسية للعلم. الصيغة مجرد تمثيل؛ الفكرة في النص.",
            "history": "تاريخ الاكتشاف", "how": "كيف يعمل", "problems": "ملاحظات", "laws": "القوانين:", "footer": "العلم ببساطة",
-           "search": "ابحث عن قانون...", "tags": "مفاهيم ذات صلة", "related_laws": "قوانين ذات صلة", "articles": "مقالات ذات صلة", "scientists": "اكتشفه:", "practical": "في الواقع"},
+           "search": "ابحث عن قانون...", "tags": "مفاهيم ذات صلة", "related_laws": "قوانين ذات صلة", "articles": "مقالات ذات صلة", "scientists": "اكتشفه:", "practical": "في الواقع",
+           "influenced": "تأثير رئيسي:"},
 }
 
 LAW_TYPE_COLORS = {"закон": "#C0392B", "принцип": "#8E44AD", "теорема": "#2471A3",
@@ -1215,6 +1220,8 @@ def generate_law_page(law_id, lang):
     related_tags_html = " · ".join(_law_tag_link(t) for t in law_tags if t)
     sci_links = [scientist_link_or_text(s, lang) for s in (L.get("scientists") or [])]
     scientists_section_html = related_row(loc["scientists"].rstrip(":"), sci_links)
+    influenced_links = [scientist_link_or_text(s, lang) for s in (L.get("influenced_by") or [])]
+    influenced_section_html = related_row(loc["influenced"].rstrip(":"), influenced_links)
     related_laws = [rl for rl in (L.get("related_laws") or []) if rl in laws]
     related_laws_links = [
         f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(rl)}.html" class="law-chip" data-law="{attr_safe(rl)}">{safe(laws[rl].get("name", rl))}</a>'
@@ -1282,6 +1289,7 @@ def generate_law_page(law_id, lang):
         problems_html=problems_html,
         formulas_html=formulas_html,
         scientists_section_html=scientists_section_html,
+        influenced_section_html=influenced_section_html,
         tags_label=safe(loc["tags"]), related_tags_html=related_tags_html,
         related_laws_block=related_laws_block,
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
@@ -1436,7 +1444,8 @@ def generate_scientist_page(sid, lang):
     laws_data = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {}
     related_laws_links = [
         f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(ld.get("name", lid))}</a>'
-        for lid, ld in laws_data.items() if sid in ld.get("scientists", [])
+        for lid, ld in laws_data.items()
+        if sid in ld.get("scientists", []) or sid in ld.get("influenced_by", [])
     ]
     idx_path = Path(LANG_DIR) / lang / "articles-index.json"
     index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
@@ -2692,7 +2701,7 @@ def entity_image_url(kind, entity_id):
     return f"/{LANG_DIR}/{DEFAULT_LANG}/{kind}/img/{entity_id}.jpg" if p.exists() else ""
 
 
-def backfill_tag_law_images(force=False, gen_images=False):
+def backfill_tag_law_images(force=False, gen_images=False, preset="image"):
     """AI-обложки для тегов и законов — по образцу статей: один промпт+картинка на сущность (не на язык).
     Промпт хранится в источнике (lang/{default}/data/tags.json|laws.json), картинка —
     lang/{default}/{tags|laws}/img/{id}.jpg (общая для всех языков, как ai.jpg у статей).
@@ -2701,9 +2710,11 @@ def backfill_tag_law_images(force=False, gen_images=False):
     Новые сущности без картинки помечаются entry["image_pending"]=True (честно: промпт готов,
     картинки нет — ждёт бюджета); блок .ai-cover просто не рендерится, место не теряется.
     gen_images=True — реальная трата (нужен бюджет): генерит картинку через FLUX и снимает pending
-    у тех, кому реально досталась картинка. Уже существующие картинки этот флаг не трогает."""
+    у тех, кому реально досталась картинка. Уже существующие картинки этот флаг не трогает.
+    preset — какой блок config.agents использовать ("image"/"image_cheap"/"image_quality") —
+    записывается в entry["image_model"], чтобы потом легко найти дёшево сгенеренные и апгрейднуть."""
     has_key = bool(os.environ.get("DEEPINFRA_API_KEY", "")) and gen_images
-    print(f"  🖼️ Обложки тегов/законов (картинки: {'да, трачу бюджет' if has_key else 'НЕТ — только промпты + честная пометка pending'})")
+    print(f"  🖼️ Обложки тегов/законов (картинки: {'да, трачу бюджет, preset=' + preset if has_key else 'НЕТ — только промпты + честная пометка pending'})")
 
     def one(kind, entity_id, entry):
         prompt = entry.get("image_prompt", "")
@@ -2724,9 +2735,10 @@ def backfill_tag_law_images(force=False, gen_images=False):
         img_dir.mkdir(parents=True, exist_ok=True)
         img = img_dir / f"{entity_id}.jpg"
         if has_key and prompt and (force or not img.exists() or entry.get("image_pending")):
-            got_img = generate_image(prompt, img)
+            got_img, model_used = generate_image(prompt, img, preset=preset)
             if got_img:
                 entry["image_pending"] = False
+                entry["image_model"] = model_used
         elif prompt and not img.exists():
             entry["image_pending"] = True
         return got_prompt, got_img

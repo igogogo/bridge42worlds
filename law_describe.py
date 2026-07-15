@@ -205,6 +205,7 @@ def main():
             "type": type_map.get(lid, "закон"),
             "tags": desc.get("tags") or tags_map.get(lid, []),
             "scientists": desc.get("scientists", []),
+            "influenced_by": desc.get("influenced_by", []),
             "related": desc.get("related_laws", graph["graph"].get(lid, {}).get("related", [])),
         }
 

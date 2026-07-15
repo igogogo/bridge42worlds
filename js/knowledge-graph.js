@@ -68,7 +68,9 @@
         });
         var links = [];
         kg.edges.forEach(function (e) {
-            if (idx[e.a] !== undefined && idx[e.b] !== undefined) links.push([idx[e.a], idx[e.b]]);
+            if (idx[e.a] !== undefined && idx[e.b] !== undefined) {
+                links.push([idx[e.a], idx[e.b], e.t === 'law-influence' ? 'dashed' : undefined]);
+            }
         });
         return { nodes: nodes, links: links };
     }
@@ -163,18 +165,32 @@
                 }
 
                 var kinds = checked('kg-kind'), edges = checked('kg-edge');
-                var idx = {}, nodes = [];
+                var byId = {}, candIds = [];
                 kg.nodes.forEach(function (n) {
+                    byId[n.id] = n;
                     if (!kinds[n.kind]) return;
-                    idx[n.id] = nodes.length;
-                    nodes.push({ rawid: n.id.slice(2), name: resolveName(n, tn, ln), kind: n.kind, sub: n.sub });
+                    candIds.push(n.id);
                 });
-                var links = [];
+                var candSet = {};
+                candIds.forEach(function (id) { candSet[id] = 1; });
+                var rawLinks = [], deg = {};
                 kg.edges.forEach(function (e) {
                     if (!edges[e.t]) return;
-                    if (idx[e.a] === undefined || idx[e.b] === undefined) return;
-                    links.push([idx[e.a], idx[e.b]]);
+                    if (!candSet[e.a] || !candSet[e.b]) return;
+                    rawLinks.push([e.a, e.b, e.t === 'law-influence' ? 'dashed' : undefined]);
+                    deg[e.a] = (deg[e.a] || 0) + 1;
+                    deg[e.b] = (deg[e.b] || 0) + 1;
                 });
+                // Без рёбер при текущем срезе фильтров — узел «неприкаянный», не показываем его
+                // (не удаляем сущность, просто прячем из ЭТОГО вида графа — обычная фильтрация).
+                var idx = {}, nodes = [];
+                candIds.forEach(function (id) {
+                    if (!deg[id]) return;
+                    var n = byId[id];
+                    idx[id] = nodes.length;
+                    nodes.push({ rawid: n.id.slice(2), name: resolveName(n, tn, ln), kind: n.kind, sub: n.sub });
+                });
+                var links = rawLinks.map(function (e) { return [idx[e[0]], idx[e[1]], e[2]]; });
                 return { nodes: nodes, links: links };
             });
         },
@@ -317,16 +333,19 @@
     var PRESETS = {
         // «каркас» — дефолт: законы+учёные и связи МЕЖДУ ними (не внутри типа), БЕЗ тегов
         // (не грузим весь хайрбол сразу)
-        core: ['law-sci'],
-        all: ['tag-tag', 'law-law', 'sci-sci', 'law-tag', 'sci-tag', 'law-sci'],
+        core: ['law-sci', 'law-influence'],
+        all: ['tag-tag', 'law-law', 'sci-sci', 'law-tag', 'sci-tag', 'law-sci', 'law-influence'],
         tags: ['tag-tag'], laws: ['law-law', 'law-tag'], sci: ['sci-tag', 'sci-sci'],
-        'tag-sci': ['sci-tag'], 'law-sci': ['law-sci'], 'law-tag': ['law-tag']
+        'tag-sci': ['sci-tag'], 'law-sci': ['law-sci', 'law-influence'], 'law-tag': ['law-tag']
     };
+    // "law-influence" — тот же закон↔учёный по составу типов узлов, что и "law-sci"
+    // (просто другой РОД связи: открыл vs. оказал влияние), split('-') это не различит сам.
+    var EDGE_KINDS = { 'law-influence': ['law', 'sci'] };
     window.kgPreset = function (name) {
         clearSearch();  // пресеты — это фильтр по типу, эго-режим поиска им не мешает молча
         var set = PRESETS[name] || PRESETS.all;
         var kinds = {};
-        set.forEach(function (tp) { tp.split('-').forEach(function (k) { kinds[k] = 1; }); });
+        set.forEach(function (tp) { (EDGE_KINDS[tp] || tp.split('-')).forEach(function (k) { kinds[k] = 1; }); });
         document.querySelectorAll('.kg-edge').forEach(function (c) { c.checked = set.indexOf(c.value) !== -1; });
         document.querySelectorAll('.kg-kind').forEach(function (c) { c.checked = !!kinds[c.value]; });
         if (window.__kgRebuild) window.__kgRebuild();

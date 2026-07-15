@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>المرونة والدعامة: قانون هوك ومبدأ أرخميدس — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: пружина и погружение ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* Позиции пружины/груза считаются в JS покадрово (реальная физика, не CSS-заглушка) —
+   .osc/.dip ниже только помечают элементы, сам transform/left/width/top пишет requestAnimationFrame. */
+.spring-strip{ height:120px; }
+.spring-wall{ position:absolute; left:20px; top:20px; bottom:20px; width:6px; background:var(--ink); opacity:.7; }
+.spring-coil{ position:absolute; left:26px; top:56px; height:8px; background:repeating-linear-gradient(90deg, var(--steel-fill) 0 3px, transparent 3px 8px); }
+.spring-mass{ position:absolute; top:40px; width:36px; height:40px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+.water-strip{ height:150px; }
+.water-surface{ position:absolute; left:0; right:0; top:60px; height:2px; background:var(--steel-fill); opacity:.6; }
+.water-fill{ position:absolute; left:0; right:0; top:62px; bottom:0; background:var(--steel-fill); opacity:.12; }
+.spring-top{ position:absolute; left:50%; top:8px; width:3px; background:var(--ink); margin-left:-1.5px; }
+.hang-mass{ position:absolute; left:50%; width:34px; height:34px; margin-left:-17px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>قوتا المقاومة</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون هوك: الزنبرك يحسب خطيًا</a></li>
+<li><a href="#s3"><span class="n">03</span>من الزنبرك إلى الجسم الصلب</a></li>
+<li><a href="#s4"><span class="n">04</span>قانون أرخميدس: وزن المزاح</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: مقياس كثافة السوائل من ميزان زنبركي</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يقودنا: زنبركات ذرية وضغط</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة منزلية</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · ميكانيكا الأوساط المتصلة · الجزء الثامن</p>
+<h1>المرونة والدعامة: قانون هوك ومبدأ أرخميدس</h1>
+<p class="subtitle">قانونان عن كيفية «مقاومة» المادة — لتمدد الزنبرك والغمر في سائل — وكلاهما يعودان إلى رياضيات خطية بسيطة بشكل مدهش.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--ink)" stroke-width="4" x1="60" x2="60" y1="40" y2="180"></line>
+<path d="M60,80 L80,70 L100,90 L120,70 L140,90 L160,70 L180,80" fill="none" stroke="var(--steel-fill)" stroke-width="2.5"></path>
+<rect fill="var(--brass-fill)" height="50" rx="4" stroke="var(--ink)" stroke-width="2" width="50" x="180" y="55"></rect>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="14" text-anchor="middle" x="150" y="150">F = -kx</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>اكتشف روبرت هوك في ستينيات القرن السابع عشر أن الزنبركات (والأجسام المرنة عمومًا) تقاوم التشوه بنسبة تتناسب مع مقداره — أبسط علاقة خطية، وهي أساس نظرية المرونة، من المراتب إلى ناطحات السحاب. واكتشف أرخميدس قبل ألفي عام قانونًا آخر، هو أيضًا خطي: السائل يدفع الجسم المغمور بقوة تساوي وزن حجم السائل المزاح. في هذه الملاحظة — كلا القانونين مع أمثلة عددية وتجربة شاملة تجمعهما في قياس واحد.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Пружина у предела растяжения — закон Гука" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>زنبرك عند حد التمدد — قانون هوك</figcaption></figure>
+<figure><img alt="Лодка на воде в точном равновесии — принцип Архимеда" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>قارب على الماء في توازن دقيق — مبدأ أرخميدس</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>قوتا المقاومة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>الصيغة</th><th>عن ماذا</th></tr>
+<tr><td>هوك</td><td class="sym">F = −kx</td><td>قوة المرونة تزداد خطيًا مع الإزاحة</td></tr>
+<tr><td>أرخميدس</td><td class="sym">F = ρgV</td><td>قوة الدفع تساوي وزن السائل المزاح</td></tr>
+</table>
+<p>للوهلة الأولى، ظاهرتان مختلفتان — لكن كلتاهما تصف كيف «يستجيب» الوسط (الزنبرك، السائل) لمحاولة تغيير حالته، وفي كلتا الحالتين، الاستجابة بسيطة بشكل مدهش: إما خطيًا مع الإزاحة، أو خطيًا مع الحجم. بساطة هذين القانونين ليست مصادفة، بل نتيجة لأن كلتا الظاهرتين تُدرسان في نظام الاضطرابات الصغيرة «الناعمة»، حيث تُختزل الفيزياء المجهرية المعقدة إلى ثابت واحد (k أو ρ).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون هوك: الزنبرك يحسب خطيًا</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong>قوة المرونة تتناسب مع التشوه واتجاهها عكسه:</p>
+<div class="plate">
+<div class="eq-body">F = −kx</div>
+<div class="cap">k — صلابة الزنبرك (نيوتن/م)، x — الإزاحة عن موضع الاتزان (م)</div>
+</div>
+<div aria-hidden="true" class="anim-strip spring-strip">
+<div class="spring-wall"></div>
+<div class="spring-coil"></div>
+<div class="spring-mass"></div>
+<div class="anim-readout" data-readout="spring">x = 0.00 م</div>
+<div class="anim-label left">الزنبرك يتمدد وينضغط حول الاتزان — الوزن يتذبذب</div>
+</div>
+<p>مثال عددي: زنبرك صلابته k = 200 نيوتن/م تم تمديده بمقدار x = 0.05 م. ما قوة المرونة الناشئة؟</p>
+<div class="eq"><div class="eq-body">F = k·x = 200·0.05 = <strong>10 نيوتن</strong></div><div class="eq-tag">(1)</div></div>
+<p>علامة السالب في الصيغة تُذكّر: القوة دائمًا تسعى لإعادة الجسم إلى الاتزان — إذا تمدد الزنبرك، يسحب للخلف؛ وإذا انضغط، يدفع للأمام. هذه الطبيعة «المرتجعة» هي ما يجعل الزنبرك مهتزًا توافقيًا كلاسيكيًا — أطلق الوزن وسيتذبذب ذهابًا وإيابًا (مع الاحتكاك — يتلاشى تدريجيًا).</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>من الزنبرك إلى الجسم الصلب</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>نفس القانون الخطي يعمل ليس فقط للزنبركات الحلزونية — أي جسم صلب عند تشوه صغير يتصرف كزنبرك، ولكن ثابت الصلابة يُستبدل بخاصية المادة — <strong>معامل يونغ</strong> E:</p>
+<div class="plate">
+<div class="eq-body">σ = E·ε</div>
+<div class="cap">σ — الإجهاد الميكانيكي (القوة على وحدة المساحة)، ε — الاستطالة النسبية ΔL/L₀</div>
+</div>
+<table class="symtab">
+<tr><th>المادة</th><th>معامل يونغ E، باسكال</th></tr>
+<tr><td>مطاط</td><td class="sym">∼10⁶</td></tr>
+<tr><td>خشب</td><td class="sym">∼10⁹</td></tr>
+<tr><td>فولاذ</td><td class="sym">∼2×10¹¹</td></tr>
+</table>
+<p>الفولاذ «أصلب» من المطاط بحوالي 200,000 مرة — لكن كليهما، في حدود التشوهات الصغيرة، يخضعان لنفس القانون الخطي تمامًا. ناطحات السحاب تتأرجح بفعل الرياح بضعة سنتيمترات وتعود إلى وضعها الأصلي بفضل هذه المرونة — لو لم يخضع الفولاذ لقانون هوك، لكانت المباني العالية إما هشة بشكل خطير، أو لا يمكن أن توجد أصلًا.</p>
+<div class="callout brass">
+<span class="tag">أين يتوقف القانون عن العمل</span>
+<p>الخطية — تقريب صحيح فقط حتى <strong>حد المرونة</strong>. مدّ الزنبرك بشدة — فإما ألا يعود إلى شكله الأصلي (تشوه لدن) أو ينكسر. مهندسو التصميم دائمًا يضعون هامش أمان لأن القانون بعد هذا الحد لا يعود يتنبأ بسلوك المادة.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>قانون أرخميدس: وزن المزاح</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong>على الجسم المغمور في سائل (أو غاز)، تؤثر قوة دفع تساوي وزن الحجم المزاح:</p>
+<div class="plate">
+<div class="eq-body">F<sub>الدفع</sub> = ρ·g·V</div>
+<div class="cap">ρ — كثافة السائل، V — حجم السائل المزاح (وليس الجسم كله، إذا لم يكن مغمورًا بالكامل!)</div>
+</div>
+<p>مثال عددي: جسم حجمه V = 0.002 م³ (2 لتر) مغمور بالكامل في الماء (ρ = 1000 كغ/م³، g ≈ 10 م/ث²). أوجد قوة الدفع.</p>
+<div class="eq"><div class="eq-body">F<sub>الدفع</sub> = 1000·10·0.002 = <strong>20 نيوتن</strong></div><div class="eq-tag">(2)</div></div>
+<p>يطفو الجسم أم يغوص — يحدد بالمقارنة مع قوة الجاذبية: إذا كان وزن الجسم أقل من قوة الدفع القصوى F<sub>الدفع</sub> عند الغمر الكامل، يطفو الجسم (وينغمر جزئيًا فقط حتى تتوازن القوى)؛ وإذا كان أكبر — يغوص.</p>
+<div class="callout steel">
+<span class="tag">لماذا لا تغوص السفينة الفولاذية</span>
+<p>الفولاذ أثقل من الماء بحوالي 8 مرات (ρ<sub>الفولاذ</sub> ≈ 7800 كغ/م³ مقابل 1000 للماء) — قطعة من الفولاذ عند رميها في الماء تغوص فورًا. لكن هيكل السفينة هو في الأساس هواء، محاط بقشرة فولاذية رقيقة: متوسط كثافة البناء كله (الفولاذ + الهواء بداخله) أقل بكثير من كثافة الماء. المهم ليس كثافة المادة، بل متوسط كثافة الحجم المُزاح بالكامل.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: مقياس كثافة السوائل من ميزان زنبركي</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنجمع القانونين في تجربة كلاسيكية واحدة: ثقل معلق في ميزان زنبركي (قانون هوك — نقرأ القوة من تمدد الزنبرك)، أولاً في الهواء، ثم نغمره في الماء.</p>
+<div aria-hidden="true" class="anim-strip water-strip">
+<div class="water-fill"></div>
+<div class="water-surface"></div>
+<div class="spring-top dip" style="height:40px;"></div>
+<div class="hang-mass dip" style="top:48px;"></div>
+<div class="anim-label">الثقل على الزنبرك يُنزل في الماء — الزنبرك يقصر</div>
+</div>
+<p>في الهواء، يتمدد الزنبرك بمقدار x₁ = 0.05 م وصلابته k = 1000 نيوتن/م — إذًا، الوزن الحقيقي للثقل:</p>
+<div class="eq"><div class="eq-body">P = k·x₁ = 1000·0.05 = <strong>50 نيوتن</strong></div><div class="eq-tag">(3)</div></div>
+<p>نغمر الثقل في الماء كليًا — يقصر الزنبرك إلى x₂ = 0.03 م (الوزن الظاهري P<sub>ظ</sub> = 1000·0.03 = 30 نيوتن). الفرق — هذا هو القياس المباشر لقوة الدفع:</p>
+<div class="eq"><div class="eq-body">F<sub>دفع</sub> = P − P<sub>ظ</sub> = 50 − 30 = <strong>20 نيوتن</strong></div><div class="eq-tag">(4)</div></div>
+<p>ومن F<sub>الدفع</sub> = ρgV يمكن فورًا حساب حجم الثقل، دون قياس أي شيء بالمسطرة:</p>
+<div class="eq"><div class="eq-body">V = F<sub>الدفع</sub>/(ρg) = 20/(1000·10) = <strong>0.002 م³</strong> (2 لتر)</div><div class="eq-tag">(5)</div></div>
+<p>هذه هي نفس الطريقة التي (حسب الأسطورة) استخدمها أرخميدس لكشف الصائغ: قياس حجم جسم معقد الشكل عن طريق الإزاحة، دون تفكيكه — ولكن هنا الميزان الزنبركي يفعل ذلك أيضًا بدون حوض يفيض.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يقودنا: زنبركات ذرية وضغط</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>قانون هوك ليس مجرد تقريب مريح للمهندسين، بل هو نتيجة لكون الروابط الكيميائية بين ذرات الجسم الصلب تتصرف مثل زنبركات صغيرة: عند إزاحة صغيرة للذرة عن موضع الاتزان، تزداد طاقة الوضع للرابطة تربيعيًا (كما في الزنبرك المثالي)، وبالتالي قوة الاستعادة تكون خطية، تمامًا قانون هوك. معامل يونغ E — هو متوسط مجهري لصلابة مليارات من هذه الروابط الذرية.</p>
+<p>قانون أرخميدس، بدوره، هو نتيجة مباشرة لكون الضغط في السائل يزداد مع العمق (العمود الأعلى من السائل يضغط بقوة أكبر). الفرق في الضغط بين الوجهين السفلي والعلوي للجسم المغمور يولّد قوة محصلة نحو الأعلى — هذه ليست مسلّمة منفصلة، بل نتيجة لقوانين الهدروستاتيكا. الصلة الأعمق لهذه الأفكار نفسها مع جريان السوائل — في الملاحظة التالية من السلسلة، عن معادلة برنولي.</p>
+<p>على الموقع هذه القوانين منفصلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/hookes_law.html">قانون هوك</a> ·
+          <a href="/lang/ar/laws/archimedes_principle.html">قانون أرخميدس</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · شريط مطاطي بدل الميزان الزنبركي</span>
+<p>خذ شريطًا مطاطيًا، علّم عليه الطول الأصلي، علّق ثقلاً معروف الكتلة (مثل كيس به عملات نقدية) وقس كم امتد الشريط. أضف ضعف عدد العملات.</p>
+<p><span class="qlabel">ما ستلاحظه</span> مع مضاعفة الثقل، يمتد الشريط المطاطي تقريبًا ضعف المقدار (طالما لم يتجاوز حد مرونة المطاط) — تحقق مباشر من قانون هوك بوسائل بسيطة: F ∝ x.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · بيضة تغوص وتطفو</span>
+<p>ضع بيضة نيئة في كأس به ماء الصنبور العادي — ستغوص. ثم أذب بضع ملاعق كبيرة من الملح في الماء (حرّك حتى لا يعود الملح يذوب) ثم ضع البيضة مرة أخرى.</p>
+<p><span class="qlabel">ما ستلاحظه</span> في الماء المالح تطفو البيضة (أو تعلق في وسط الماء) — الملح المذاب يزيد كثافة الماء ρ، وبالتالي قوة الدفع F<sub>الدفع</sub> = ρgV عند نفس حجم البيضة، حتى تتساوى مع وزن البيضة. نفس هذا التأثير يبقي السباحين على سطح البحر الميت دون جهد.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكّر بنفسك أولاً، ثم افتح الحل. الحل دائمًا يتبع النسق: <strong>المعطيات → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. زنبرك صلابته 300 نيوتن/م مُدّ بقوة مقدارها 15 نيوتن. كم استطال؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> k = 300 نيوتن/م، F = 15 نيوتن.</p>
+<p><span class="qlabel">القانون</span> قانون هوك (الفقرة 2): F = kx.</p>
+<p><span class="qlabel">الحل</span> x = F/k = 15/300 = 0.05 م.</p>
+<p><span class="qlabel">الجواب</span> <strong>5 سم</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. مكعب حجمه 0.001 م³ (10×10×10 سم) مغمور بالكامل في زيت كثافته 800 كغ/م³. أوجد قوة الدفع.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> V = 0.001 م³، ρ = 800 كغ/م³، g ≈ 10 م/ث².</p>
+<p><span class="qlabel">القانون</span> قانون أرخميدس (الفقرة 4): F<sub>الدفع</sub> = ρgV.</p>
+<p><span class="qlabel">الحل</span> F<sub>الدفع</sub> = 800·10·0.001 = 8 نيوتن.</p>
+<p><span class="qlabel">الجواب</span> <strong>8 نيوتن</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. قالب خشبي كتلته 0.72 كغ وحجمه 0.001 م³ طُرح في الماء (كثافته 1000 كغ/م³). هل سيطفو أم يغوص؟ (g ≈ 10 م/ث²)</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> m = 0.72 كغ، V = 0.001 م³، ρ<sub>الماء</sub> = 1000 كغ/م³.</p>
+<p><span class="qlabel">القانون</span> مقارنة وزن الجسم P = mg مع قوة الدفع القصوى F<sub>الدفع</sub> = ρgV (الفقرة 4) — وهذا مكافئ لمقارنة الكثافات.</p>
+<p><span class="qlabel">الحل</span> ρ<sub>القالب</sub> = m/V = 0.72/0.001 = 720 كغ/م³ &lt; 1000 كغ/م³.</p>
+<p><span class="qlabel">الجواب</span> <strong>يطفو</strong> — كثافة القالب أقل من كثافة الماء (وهذا شائع للخشب).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. ميزان زنبركي في الهواء يظهر وزن الثقل 80 نيوتن، وبعد غمر الثقل في الماء يظهر 60 نيوتن. أوجد حجم الثقل (كثافة الماء = 1000 كغ/م³، g ≈ 10 م/ث²).</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> P = 80 نيوتن، P<sub>ظ</sub> = 60 نيوتن.</p>
+<p><span class="qlabel">القانون</span> طريقة الفقرة 5: F<sub>الدفع</sub> = P − P<sub>ظ</sub>، ثم V = F<sub>الدفع</sub>/(ρg).</p>
+<p><span class="qlabel">الحل</span> F<sub>الدفع</sub> = 80 − 60 = 20 نيوتن؛ V = 20/(1000·10) = 0.002 م³.</p>
+<p><span class="qlabel">الجواب</span> <strong>0.002 م³ (2 لتر)</strong> — تم قياس الحجم دون أي قياس مباشر بالمسطرة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. لماذا عند التمدد الشديد يتوقف قانون هوك عن التنبؤ بسلوك الزنبرك؟ ماذا يحدث على المستوى الذري؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> حد المرونة (الفقرات 3 و6).</p>
+<p><span class="qlabel">الحل</span> قانون هوك يبقى صحيحًا طالما أن إزاحة الذرات عن موضع الاتزان صغيرة وطاقة الوضع للرابطة تُقارب جيدًا بشكل قطع مكافئ (دالة تربيعية) — عند الإزاحات الكبيرة، ينحرف الشكل الحقيقي للجهد عن القطع المكافئ، وتبدأ الروابط في التمزق أو إعادة الترتيب بشكل لا انعكاسي (تشوه لدن)، وتتوقف العلاقة الخطية بين F وx عن العمل.</p>
+<p><span class="qlabel">الجواب</span> <strong>الروابط الذرية تخرج عن المنطقة حيث الجهد يشبه القطع المكافئ</strong> — التقريب الذي يقوم عليه قانون هوك، يتوقف عن الدقة.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ مطبعي، صيغة خاطئة، رقم لا يتطابق، شرح غير واضح — راسلنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Elasticity%20Archimedes%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعليًا، وتُحلل وتُجرى التصحيحات بناءً عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الثامن من السلسلة، ميكانيكا الأوساط المتصلة</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2: пружина + груз — честная гармоническая осцилляция x(t)=A·cos(ωt), не CSS-заглушка.
+  var coil = document.querySelector('.spring-coil');
+  var mass = document.querySelector('.spring-mass');
+  var springReadout = document.querySelector('[data-readout="spring"]');
+  var WALL_X = 26, REST_LEN = 90, AMP = 40, PERIOD_MS = 6000;
+  var PX_PER_M = 800; // масштаб для читаемого числа x в метрах на этой полосе
+  function tickSpring(ts){
+    var phase = (ts % PERIOD_MS) / PERIOD_MS * 2 * Math.PI;
+    var stretchPx = AMP * Math.cos(phase); // растяжение/сжатие вокруг длины покоя, честно по cos(ωt)
+    var len = REST_LEN + stretchPx;
+    coil.style.width = len + 'px';
+    mass.style.left = (WALL_X + len) + 'px';
+    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' м';
+    requestAnimationFrame(tickSpring);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickSpring);
+
+  // §5: груз на пружине опускается в воду и виснет ниже (пружина короче под меньшим кажущимся весом).
+  var springTop = document.querySelector('.spring-top');
+  var hangMass = document.querySelector('.hang-mass');
+  var TOP_Y = 8, AIR_LEN = 55, WATER_LEN = 35, DIP_PERIOD = 6000;
+  function tickDip(ts){
+    var phase = (ts % DIP_PERIOD) / DIP_PERIOD; // 0..1 по циклу
+    // первая половина цикла — опускание в воду и подъём обратно, с паузами на концах (держим темп сайта)
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    var len = AIR_LEN + (WATER_LEN - AIR_LEN) * t;
+    springTop.style.height = len + 'px';
+    springTop.style.top = TOP_Y + 'px';
+    hangMass.style.top = (TOP_Y + len) + 'px';
+    requestAnimationFrame(tickDip);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickDip);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

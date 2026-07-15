@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Maxwell's Equations: How Light is Born — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-pulse{ animation: heroPulse 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroPulse{ 0%{ transform:translateX(0); } 60%{ transform:translateX(260px); } 100%{ transform:translateX(260px); } }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.single{ height:80px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 Фарадей: магнит въезжает в катушку */
+.coil-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.coil-loop{ position:absolute; top:50%; left:60%; width:60px; height:44px; margin-top:-22px; margin-left:-30px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.55; }
+.magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.magnet .n{ flex:1; background:var(--brass-fill); }
+.magnet .s{ flex:1; background:var(--steel-fill); }
+@media (prefers-reduced-motion: no-preference){
+  .magnet.slide{ animation: magnetSlide 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes magnetSlide{ 0%{ left:16px; } 45%{ left:56%; } 55%{ left:56%; } 100%{ left:calc(100% - 44px); } }
+
+/* §5 Ампер: круговое поле B вокруг провода с током */
+.wire-strip{ height:120px; }
+.wire-line{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.wire-ring{ position:absolute; left:50%; top:50%; border:2px solid var(--steel-fill); border-radius:50%; opacity:0; }
+.wire-ring.r1{ width:40px; height:40px; margin:-20px 0 0 -20px; }
+.wire-ring.r2{ width:70px; height:70px; margin:-35px 0 0 -35px; }
+.wire-ring.r3{ width:100px; height:100px; margin:-50px 0 0 -50px; }
+@media (prefers-reduced-motion: no-preference){
+  .wire-ring.pulse{ animation: ringPulse 6s cubic-bezier(.3,0,.5,1) infinite; }
+  .wire-ring.r2.pulse{ animation-delay:.15s; }
+  .wire-ring.r3.pulse{ animation-delay:.3s; }
+}
+@keyframes ringPulse{ 0%{ opacity:.9; } 45%{ opacity:.15; } 60%{ opacity:0; } 100%{ opacity:0; } }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Four Equations in a Nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>Gauss's Law: Charge as a Source of Field</a></li>
+<li><a href="#s3"><span class="n">03</span>Gauss's Law for B: No Monopoles</a></li>
+<li><a href="#s4"><span class="n">04</span>Faraday's Law: Magnetism Creates Current</a></li>
+<li><a href="#s5"><span class="n">05</span>Ampère-Maxwell Law: Current Creates Magnetism</a></li>
+<li><a href="#s6"><span class="n">06</span>A Walkthrough Example: The Birth of Light</a></li>
+<li><a href="#s7"><span class="n">07</span>Where This Leads: Relativity of Fields</a></li>
+<li><a href="#s8"><span class="n">08</span>Home Experiment</a></li>
+<li><a href="#s9"><span class="n">09</span>Check Your Understanding</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Electromagnetism · Part IV</p>
+<h1>Maxwell's Equations: How Light is Born</h1>
+<p class="subtitle">Four short equations that explained magnets, generators, radio waves—and, unexpectedly for Maxwell himself, turned out to be the formula for light itself.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="10" x2="410" y1="100" y2="100"></line>
+<path d="M10,100 C 27,72 45,72 62,100 C 79,128 97,128 114,100 C131,72 149,72 166,100 C183,128 201,128 218,100 C235,72 253,72 270,100 C287,128 305,128 322,100 C339,72 357,72 374,100 C391,128 409,128 410,100" fill="none" stroke="var(--steel-fill)" stroke-width="2.4"></path>
+<path d="M10,100 C 27,86 45,86 62,100 C 79,114 97,114 114,100 C131,86 149,86 166,100 C183,114 201,114 218,100 C235,86 253,86 270,100 C287,114 305,114 322,100 C339,86 357,86 374,100 C391,114 409,114 410,100" fill="none" opacity=".85" stroke="var(--brass-fill)" stroke-width="2.4"></path>
+<text fill="var(--steel)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="62">E</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="122">B</text>
+<circle class="hero-pulse" cx="30" cy="100" fill="var(--ink)" r="6"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="210" y="175">E и B поддерживают друг друга — волна бежит сама, без проводов</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>In the 1860s, James Clerk Maxwell gathered the disparate experimental laws of Coulomb, Gauss, Ampère, and Faraday into a system of four equations—and discovered a missing piece: without it, the equations violated charge conservation. By adding the “displacement current,” he not only fixed the mathematics—the equations immediately predicted waves traveling at a speed that perfectly matched the speed of light. Light turned out to be an electromagnetic wave. In this note—all four equations individually, then the assembly: how a self-propagating wave emerges from them.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Электрическое и магнитное поля, сплетаясь, рождают свет" src="/lang/ru/theory/img/maxwells_equations_hero.jpg"/><figcaption>Electric and magnetic fields, intertwining, give birth to light</figcaption></figure>
+<figure><img alt="Фотон — самоподдерживающаяся волна двух полей" src="/lang/ru/theory/img/maxwells_equations_concept.jpg"/><figcaption>The photon—a self-sustaining wave of two fields</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Four Equations in a Nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>№</th><th>Name</th><th>Meaning in One Phrase</th></tr>
+<tr><td class="sym">I</td><td>Gauss (E)</td><td>charge—the source of an electric field spreading outward</td></tr>
+<tr><td class="sym">II</td><td>Gauss (B)</td><td>magnetic field has no “charge” source—it is always closed</td></tr>
+<tr><td class="sym">III</td><td>Faraday</td><td>changing magnetism creates a vortex electric field</td></tr>
+<tr><td class="sym">IV</td><td>Ampère-Maxwell</td><td>current AND changing electric field create a vortex magnetic field</td></tr>
+</table>
+<p>The symmetry is almost perfect: III and IV are mirror statements (“changing B creates E” and “changing E creates B”), while I and II are “charge exists for E, not for B.” This near-symmetry and the “lack” of one term in the original Ampère's law led Maxwell to think that something was missing—and led to the discovery of the displacement current (§5).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Gauss's Law: Charge as a Source of Field</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> The electric field “diverges” from a charge in proportion to its magnitude:</p>
+<div class="plate">
+<div class="eq-body">∇·<span class="vec">E</span> = ρ/ε<sub>0</sub></div>
+<div class="cap">ρ—charge density, ε<sub>0</sub> ≈ 8.854×10⁻¹² F/m—the electric constant</div>
+</div>
+<p>In the integral, more visual form: the flux of the electric field through any closed surface is proportional to the charge inside it. Visually—imagine a charge as a “faucet” from which jets of field lines stream in all directions; no matter what surface you draw around the faucet, the same amount of “water” passes through it, depending only on the strength of the faucet (the magnitude of the charge), not on the shape or size of the surface.</p>
+<div class="callout steel">
+<span class="tag">A Special Case—Coulomb's Law</span>
+<p>If you apply Gauss's law to a single point charge and compute the field on a sphere of radius r around it, you get exactly Coulomb's law (the force between two charges falls off as 1/r²)—historically earlier, discovered experimentally back in 1785, 80 years before Maxwell. Gauss's law is not a new fact, but a more general and powerful reformulation of the same thing.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Gauss's Law for B: No Monopoles</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> The magnetic field has no source—it never “begins” or “ends” anywhere:</p>
+<div class="plate">
+<div class="eq-body">∇·<span class="vec">B</span> = 0</div>
+<div class="cap">unlike the electric field, the magnetic field has no analogue of an “isolated charge”</div>
+</div>
+<p>Break a magnet in half, hoping to get a separate “north” piece and a separate “south” piece—it won’t work: each fragment will again have both poles. Magnetic field lines are always closed on themselves (exiting from the north pole and inevitably returning to the south), unlike electric lines, which start on positive charge and terminate on negative charge (or go off to infinity).</p>
+<div class="callout brass">
+<span class="tag">An Open Question</span>
+<p>Some theories beyond Maxwell's equations (in particular, Grand Unified Theory) predict the existence of magnetic monopoles—isolated “north” or “south” charges. They have been sought for decades (including the famous false signal in Blas Cabrera’s detector in 1982), but convincingly not found—within classical electrodynamics, the law ∇·B = 0 remains an exact experimental fact, not merely a convenient approximation.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Faraday's Law: Magnetism Creates Current</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> A time-varying magnetic field produces a vortex electric field—and hence, a current in a closed conductor:</p>
+<div class="plate">
+<div class="eq-body">ε = −dΦ<sub>B</sub>/dt</div>
+<div class="cap">ε—induced EMF (V), Φ<sub>B</sub>—magnetic flux through the loop (Wb); the minus sign is Lenz's rule (§4 footnote)</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="coil-track"></div>
+<div class="coil-loop"></div>
+<div class="magnet slide"><span class="n"></span><span class="s"></span></div>
+<div class="anim-label left">magnet enters the coil—flux changes, voltmeter needle flicks</div>
+</div>
+<p>This is exactly how any electric generator works: mechanically rotate a magnet near a coil (or the coil near the magnet—by the law, only the relative rate of change of flux matters), the flux constantly changes, and an EMF is continuously induced in the wire. The minus sign—<strong>Lenz's rule</strong>: the induced current flows in such a direction that its own magnetic field opposes the change that produced it (otherwise you'd have a perpetual motion machine—the effect would “feed” itself ever stronger, which is forbidden by the law of conservation of energy).</p>
+<p>Numerical example: a coil with N = 100 turns is in a magnetic field, the flux through one turn grows uniformly from 0.02 Wb to 0.05 Wb in 0.5 s. Find the induced EMF.</p>
+<div class="eq"><div class="eq-body">ε = −N·ΔΦ/Δt = −100·(0.05−0.02)/0.5 = <strong>−6 V</strong></div><div class="eq-tag">(1)</div></div>
+<p>The magnitude of the EMF is 6 volts; the sign only indicates the direction of the current (opposing the increase in flux), not the magnitude.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Ampère-Maxwell Law: Current Creates Magnetism</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong> Electric current AND a time-varying electric field produce a vortex magnetic field:</p>
+<div class="plate">
+<div class="eq-body">∇×<span class="vec">B</span> = μ<sub>0</sub><span class="vec">J</span> + μ<sub>0</sub>ε<sub>0</sub>∂<span class="vec">E</span>/∂t</div>
+<div class="cap">μ<sub>0</sub> ≈ 1.257×10⁻&amp;sup6 H/m—the magnetic constant; J—current density</div>
+</div>
+<div aria-hidden="true" class="anim-strip wire-strip">
+<div class="wire-line"></div>
+<div class="wire-ring r1 pulse"></div>
+<div class="wire-ring r2 pulse"></div>
+<div class="wire-ring r3 pulse"></div>
+<div class="anim-label">current through a wire—concentric rings of B are born around it</div>
+</div>
+<p>The first term (μ<sub>0</sub>J)—this is the original Ampère's law (1826): current creates a circular magnetic field around itself, easily verified with a compass next to a current-carrying wire. <strong>The second term—Maxwell's own contribution</strong>, “displacement current”: even where there is no real current (for example, between the plates of a charging capacitor, in a vacuum), a rapidly changing electric field produces the same effect—creates a magnetic field.</p>
+<div class="callout moss">
+<span class="tag">Why Maxwell Needed This Term</span>
+<p>Without the displacement current, Ampère's law in its old form mathematically contradicted charge conservation when a circuit is broken (for example, at a capacitor): applied to two different surfaces spanning the same loop, it gave different answers—absurd. Adding the term μ<sub>0</sub>ε<sub>0</sub>∂E/∂t resolved the contradiction—and, as it turned out, also made the equations symmetric and capable of describing a self-propagating wave (§6). A rare case in the history of physics where fixing a mathematical inconsistency led to a great discovery.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Walkthrough Example: The Birth of Light</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's put together Faraday's law (§4) and the Ampère-Maxwell law (§5)—and see why the electromagnetic field can propagate on its own, without wires or magnets.</p>
+<ol>
+<li>Suppose somewhere in space the electric field E begins to change over time (e.g., due to charge oscillation in an antenna).</li>
+<li>By <strong>the Ampère-Maxwell law</strong> (§5, second term) this changing E right here produces a vortex magnetic field B—nearby, in a neighboring point in space, without any wire.</li>
+<li>But this B also has no reason to be constant—it too changes over time. And by <strong>Faraday's law</strong> (§4) the changing B produces a vortex E—now a bit further from the source.</li>
+<li>The result is a chain reaction: E creates B, B creates E, each step a bit further from the source. The field “runs away” from the antenna on its own, without external assistance—this is the electromagnetic wave.</li>
+</ol>
+<p>Substituting both equations into each other (mathematically—taking the curl of one and plugging into the other) yields the usual wave equation, and the wave speed is expressed solely through two constants—the electric and magnetic constants:</p>
+<div class="eq"><div class="eq-body">c = 1/√(ε<sub>0</sub>μ<sub>0</sub>) = 1/√(8.854×10⁻¹²·1.257×10⁻&amp;sup6) ≈ <strong>3×10&amp;sup8 m/s</strong></div><div class="eq-tag">(2)</div></div>
+<div class="callout brass">
+<span class="tag">The Moment of Discovery</span>
+<p>These two constants (ε<sub>0</sub> and μ<sub>0</sub>) were known from purely electrical and purely magnetic lab experiments—measured with capacitors and coils, with no mention of optics. When Maxwell in 1862 plugged their numbers into formula (2) and got a value that matched the already measured speed of light, he wrote: “we can scarcely avoid the inference that light consists in the transverse undulations of the same medium which is the cause of electric and magnetic phenomena.” Optics turned out to be a branch of electromagnetism—no one expected that.</p>
+</div>
+<p>Visible light, radio waves, X-rays, microwaves—all are the same electromagnetic wave, differing only in wavelength (the frequency of E and B oscillations). The difference between FM radio and an X-ray image is not in the physics of the phenomenon, but only in numbers.</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Where This Leads: Relativity of Fields</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Maxwell's equations hold another surprise, not immediately noticed: they do not change form under Lorentz transformations (that is, they are already “relativistically correct”), unlike Newtonian mechanics, which had to be modified. Moreover—what one observer calls a “pure magnetic field,” another observer moving relative to the first will see as a mixture of electric AND magnetic fields.</p>
+<div class="callout steel">
+<span class="tag">E and B—one entity, not two different fields</span>
+<p>Classic example: a stationary charge next to a current-carrying wire experiences no electric force (the wire is electrically neutral), only magnetic (if it moves). But for an observer moving along with the charge, the situation looks different: due to Lorentz length contraction, the densities of positive and negative charges in the wire no longer exactly cancel—the wire appears slightly charged, and a real electric force appears. The same physical effect—depending on the reference frame, it can be called “magnetic” or “electric.” This connection is one of the historical paths by which Einstein arrived at special relativity (1905), precisely starting from the puzzle of Maxwell's equations, not from mechanics.</p>
+</div>
+<p>On the site, this is a separate law if you want to dive deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/maxwells_equations.html">Maxwell's Equations</a> ·
+          <a href="/lang/en/laws/faradays_law_of_induction.html">Faraday's Law of Induction</a> ·
+          <a href="/lang/en/laws/amperes_law.html">Ampère's Law</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · DIY Electromagnet</span>
+<p>Wind 30–40 turns of insulated copper wire around a large iron nail, connect the ends to a AA battery (1.5 V) for a few seconds (no longer—the wire and battery heat up).</p>
+<p><span class="qlabel">What to Observe</span> the nail will start attracting paper clips and other small metal objects—a direct demonstration of Ampère's law (§5, first term): the current in the wire creates a magnetic field, and winding it into a coil concentrates and amplifies this field inside and around the nail (which itself becomes magnetized, enhancing the effect).</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Static Electricity Attracts Water</span>
+<p>Comb your dry hair with a plastic comb (or rub a balloon against a wool sweater) and bring it close to a thin stream of water from a tap.</p>
+<p><span class="qlabel">What to Observe</span> the water stream will noticeably bend toward the comb. Friction “knocked” electrons from one material to the other, creating a charge on the comb—and according to Gauss's law (§2) there is an electric field around the charge, which induces a weak opposite charge on the neutral but polarizable water molecules and attracts them (the effect is called dielectric polarization).</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>Check Your Understanding</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. Every solution follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. An FM radio station broadcasts at a frequency of 100 MHz. What is the wavelength of this radio signal?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> f = 100 MHz = 10&amp;sup8 Hz, c ≈ 3×10&amp;sup8 m/s (§6).</p>
+<p><span class="qlabel">Law</span> the relation between wavelength, frequency, and speed for any wave: λ = c/f.</p>
+<p><span class="qlabel">Solution</span> λ = 3×10&amp;sup8/10&amp;sup8 = 3 m.</p>
+<p><span class="qlabel">Answer</span> <strong>3 meters</strong>—roughly the length of a small antenna on a radio tower (a quarter-wave, 0.75 m, is a standard practical length).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A coil of 50 turns is in a field where the magnetic flux drops from 0.03 Wb to 0.01 Wb in 0.4 s. Find the magnitude of the induced EMF.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> N = 50, ΔΦ = 0.01−0.03 = −0.02 Wb, Δt = 0.4 s.</p>
+<p><span class="qlabel">Law</span> Faraday's law (§4): ε = −NΔΦ/Δt.</p>
+<p><span class="qlabel">Solution</span> ε = −50·(−0.02)/0.4 = 2.5 V.</p>
+<p><span class="qlabel">Answer</span> <strong>2.5 V</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. X-ray radiation has a wavelength of about 1 nanometer (10⁻⁹ m). Is it the same physical nature as visible light, or different phenomena? Justify, referring to a specific conclusion from Maxwell's equations.</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> the derivation of the wave equation from Maxwell's equations (§6)—the unified nature of electromagnetic waves.</p>
+<p><span class="qlabel">Solution</span> Maxwell's equations contain no parameter that distinguishes “light” from “X-rays”—from them follows a single wave equation with a single characteristic speed c. Different names (radio, light, X-rays) are just different ranges of the same quantity: wavelength (or frequency).</p>
+<p><span class="qlabel">Answer</span> <strong>same nature</strong>—electromagnetic wave, the only difference being wavelength (for X-rays it is about 500,000 times shorter than for green light).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. When you try to break a magnet into a “separate north pole” and “separate south pole,” why do you always end up with two new complete magnets? Which Maxwell equation forbids this from being violated?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> Gauss's law for magnetic field (§3): ∇·B = 0.</p>
+<p><span class="qlabel">Solution</span> the zero on the right-hand side (unlike Gauss's law for E, §2, where charge density appears on the right) means: the magnetic field has no analogue of a source charge—field lines must be closed and cannot “terminate” on an isolated pole, no matter how many times you divide the magnet.</p>
+<p><span class="qlabel">Answer</span> <strong>Gauss's law for B</strong>—the absence of magnetic monopoles is embedded directly in the form of the equation.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. A charging capacitor in a vacuum creates a magnetic field around itself, although there is no real current between its plates (charge simply accumulates on the plates). How does Maxwell's equations explain this?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> Ampère-Maxwell law (§5), second term—displacement current.</p>
+<p><span class="qlabel">Solution</span> between the capacitor plates, the electric field rapidly increases as charge accumulates—this is ∂E/∂t, the “displacement current,” which according to the equation (§5) acts exactly like a real conduction current and creates a vortex magnetic field around the region between the plates.</p>
+<p><span class="qlabel">Answer</span> <strong>displacement current</strong>—this is precisely the term Maxwell added to the old Ampère's law to explain such cases.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, wrong formula, numbers don’t add up, poorly explained—write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Maxwell%20equations%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and a correction is made based on it—this is not “into the void.”</p>
+</div>
+<footer>
+<p>bridge42worlds · “textbook” for the layer of laws · part IV of the series, electromagnetism</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds—science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

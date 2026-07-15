@@ -233,22 +233,27 @@ def generate_image_prompt(scipop):
     return ""
 
 
-def generate_image(image_prompt, out_path):
-    """Рисует картинку (DeepInfra, модель/размер из config.agents.image). Без ключа — пропуск."""
+def generate_image(image_prompt, out_path, preset="image"):
+    """Рисует картинку (DeepInfra, модель/размер из config.agents[preset]). Без ключа — пропуск.
+    preset — имя блока в config.agents: "image" (текущая/дефолт), "image_cheap" (FLUX-1-schnell,
+    дёшево и быстро для больших партий), "image_quality" (FLUX-2-pro, как на уже существующих
+    картинках). Возвращает (ok, model) — model нужен вызывающему, чтобы честно записать, чем
+    именно сгенерена картинка (потом легко найти дешёвые и точечно апгрейднуть)."""
     key = os.environ.get("DEEPINFRA_API_KEY", "")
     if not key or not image_prompt:
-        return False
-    cfg = AGENTS.get("image", {})
+        return False, None
+    cfg = AGENTS.get(preset) or AGENTS.get("image", {})
+    model = cfg.get("model", "black-forest-labs/FLUX-2-pro")
     try:
         import base64
         cli = OpenAI(base_url="https://api.deepinfra.com/v1/openai", api_key=key)
-        resp = cli.images.generate(model=cfg.get("model", "black-forest-labs/FLUX-2-pro"),
-                                   prompt=image_prompt, n=1, size=cfg.get("size", "1024x1024"))
+        resp = cli.images.generate(model=model, prompt=image_prompt, n=1,
+                                   size=cfg.get("size", "1024x1024"))
         Path(out_path).write_bytes(base64.b64decode(resp.data[0].b64_json))
-        return True
+        return True, model
     except Exception as e:
         print(f"    ⚠️ FLUX error: {e}")
-        return False
+        return False, model
 
 
 def generate_simple(scipop_advanced):

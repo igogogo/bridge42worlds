@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>معادلة برنولي: لماذا يضغط التدفق السريع بقوة أقل — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: сужающаяся труба, частицы ускоряются ---------- */
+.pipe-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.pipe-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتوى</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>المعادلة باختصار</a></li>
+<li><a href="#s2"><span class="n">02</span>من أين تأتي: طاقة التدفق</a></li>
+<li><a href="#s3"><span class="n">03</span>تضيق الأنبوب: أنبوب فنتوري</a></li>
+<li><a href="#s4"><span class="n">04</span>جناح الطائرة — ليس بهذه البساطة</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: أنبوب بيتو</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يؤدي هذا: حدود التطبيق</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة في المنزل</a></li>
+<li><a href="#s8"><span class="n">08</span>أسئلة للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · هيدروديناميكا · الجزء التاسع</p>
+<h1>معادلة برنولي: لماذا يضغط التدفق السريع بقوة أقل</h1>
+<p class="subtitle">حقيقة غير بديهية يقوم عليها نصف صناعة الطيران وكل صناعة العطور: حيثما يتسارع السائل أو الغاز، ينخفض الضغط حوله بدلاً من أن يرتفع.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,60 L140,60 L200,90 L260,90 L320,90 M20,120 L140,120 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<circle cx="60" cy="90" fill="var(--steel-fill)" id="heroDot" r="6"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="45">широко, медленно</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">узко, быстро</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>استنتج دانيال برنولي في عام 1738 معادلة حفظ الطاقة للمائع المتحرك: على طول خط التدفق، يظل مجموع الضغط و"الطاقة الحركية والكامنة لكل وحدة حجم" ثابتًا. والنتيجة المباشرة هي أنه حيثما يتسارع التدفق (في تضيق الأنبوب)، يجب أن ينخفض الضغط الساكن. يفسر هذا المبدأ نفسه أجهزة الرش والكاربوريترات و(مع تحفظات مهمة) قوة رفع الجناح. في هذه الملاحظة – اشتقاق المعادلة، أنبوب فنتوري مع الأرقام، وتحليل صريح لما يفسره برنولي في طيران الطائرة وما لا يفسره.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Ускоряющийся поток в сужении трубы" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>تدفق متسارع في تضيق الأنبوب</figcaption></figure>
+<figure><img alt="Обтекание крыла: разная скорость потока сверху и снизу" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>تدفق الهواء حول الجناح: سرعة تدفق مختلفة في الأعلى والأسفل</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>المعادلة باختصار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="plate">
+<div class="eq-body">P + ½ρv² + ρgh = const</div>
+<div class="cap">على طول خط التدفق في تدفق مستقر غير لزج وغير قابل للانضغاط</div>
+</div>
+<table class="symtab">
+<tr><th>الحد</th><th>المعنى</th></tr>
+<tr><td>P</td><td>الضغط الساكن – ما كان سيظهره مقياس الضغط المتحرك مع التدفق</td></tr>
+<tr><td>½ρv²</td><td>"الضغط الديناميكي" – طاقة الحركة منسوبة للحجم</td></tr>
+<tr><td>ρgh</td><td>"الضغط الهيدروستاتيكي" – طاقة الارتفاع (كما في قانون أرخميدس، الجزء الثامن)</td></tr>
+</table>
+<p>التحفظات الثلاثة في التعريف – ليست تفاصيل صغيرة، بل هي الشروط التي يعمل فيها القانون بدقة: تدفق مستقر (نمط التدفق لا يتغير مع الزمن)، غير لزج (بدون احتكاك داخلي)، غير قابل للانضغاط (الكثافة لا تتغير). بالنسبة للماء، هذا تقريب جيد دائمًا تقريبًا؛ وبالنسبة للهواء عند السرعات العالية تحت الصوتية – مقبول أيضًا لكن ليس مثاليًا (الفقرة 6).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>من أين تأتي: طاقة التدفق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>معادلة برنولي – ليست قانونًا جديدًا في الطبيعة، بل هي قانون حفظ الطاقة (الجزء الثاني) مطبقًا على حجم صغير من المائع يتحرك على طول خط التدفق. كل حد هو نوع من الطاقة لكل وحدة حجم:</p>
+<ul>
+<li><strong>½ρv²</strong> – نظير مباشر لطاقة الحركة ½mv²، فقط بدلاً من الكتلة m نستخدم الكثافة ρ (كتلة وحدة الحجم).</li>
+<li><strong>ρgh</strong> – نظير طاقة الوضع mgh، بنفس الطريقة (m → ρ).</li>
+<li><strong>P</strong> – "طاقة الضغط": العمل الذي تبذله طبقات المائع المجاورة لدفع الحجم إلى الأمام.</li>
+</ul>
+<p>إذا كان المائع يتدفق أفقيًا (h لا يتغير) ويتسارع، فإن حد الطاقة الحركية ½ρv² يزداد – وبما أن المجموع يجب أن يبقى ثابتًا، فإن حد الضغط P يجب أن ينخفض. هذه ليست غرابة، بل محاسبة بسيطة للطاقة: السرعة "استعارت" طاقة من الضغط.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>تضيق الأنبوب: أنبوب فنتوري</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>قبل حساب الضغط، نحتاج إلى السرعة في الجزء الضيق – ويعطيها قانون آخر أبسط: <strong>معادلة الاستمرارية</strong>(لا يمكن للمائع أن "يتراكم" داخل الأنبوب، ما يدخل منه يخرج):</p>
+<div class="eq"><div class="eq-body">A₁v₁ = A₂v₂</div><div class="eq-tag">(1)</div></div>
+<div aria-hidden="true" class="pipe-fig">
+<svg viewbox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,30 L160,30 L240,60 L380,60 M20,110 L160,110 L240,80 L380,80" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<circle cx="40" cy="70" fill="var(--steel-fill)" id="pipeDot1" r="7"></circle>
+<circle cx="40" cy="70" fill="var(--brass-fill)" id="pipeDot2" r="5"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>السرعة</b><span data-readout="v">2.0</span> م/ث</span>
+<span><b>الضغط</b><span data-readout="p">100.0</span> كيلوباسكال</span>
+</div>
+<p>مثال عددي: الجزء العريض من الأنبوب أوسع بأربع مرات من الجزء الضيق (من حيث مساحة المقطع)، يتدفق الماء (ρ = 1000 كغ/م³) في الجزء العريض بسرعة v₁ = 2 م/ث. الأنبوب أفقي (h لا يتغير).</p>
+<div class="eq"><div class="eq-body">v₂ = v₁·(A₁/A₂) = 2·4 = <strong>8 م/ث</strong></div><div class="eq-tag">(2)</div></div>
+<p>الآن انخفاض الضغط حسب برنولي (h لا يتغير، يُختزل الحد ρgh من كلا الطرفين):</p>
+<div class="eq"><div class="eq-body">ΔP = ½ρ(v₂² − v₁²) = ½·1000·(64−4) = <strong>30 000 باسكال</strong> (30 كيلوباسكال)</div><div class="eq-tag">(3)</div></div>
+<p>الضغط في الجزء الضيق أقل منه في العريض بمقدار 30 كيلوباسكال كاملة – أي ثلث الضغط الجوي تقريبًا! هذا هو بالضبط المبدأ (أنبوب فنتوري) الذي تعمل عليه الكاربوريترات، والمرشات الهوائية، وأجهزة الاستنشاق الطبية: القناة الضيقة تخلق منطقة محلية ذات ضغط منخفض تمتص السائل من الفتحة الجانبية.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>جناح الطائرة — ليس بهذه البساطة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>التفسير الشائع لقوة الرفع: "الجناح منحني من الأعلى، الهواء فوقه يجري أسرع، إذن الضغط هناك أقل، ويدفع الجناح لأعلى". هذا اتجاه صحيح نوعيًا للاستدلال (أسرع فوق – بالفعل ضغط أقل فوق – بالفعل هناك قوة رفع)، لكن التبرير المحدد والمتكرر كثيرًا "لماذا يجري الهواء أسرع فوق" – أسطورة.</p>
+<div class="callout brass">
+<span class="tag">كشف زيف "نظرية الزمن المتساوي"</span>
+<p>يُقال غالبًا: "يجب أن تلتقي جزيئات الهواء فوق وتحت الجناح عند الحافة الخلفية في نفس الوقت، وبما أن المسار فوق أطول – إذن السرعة هناك أكبر." هذا غير صحيح: تجريبيًا لا تلتقي الجزيئات في نفس الوقت – التدفق فوق الجناح يسبق النظير "التحتي" بفارق كبير. السبب الحقيقي للسرعة الأعلى فوق – شكل الجناح وزاوية الهجوم يخلقان دورانًا للتدفق حول المقطع بأكمله (نتيجة لزوجة الهواء بالقرب من السطح وشرط كوتا عند الحافة الخلفية) – وهو تأثير أدق بكثير من "المسار الأطول – سرعة أكبر".</p>
+</div>
+<p>معادلة برنولي هنا – أداة صحيحة للحساب (بما أن هناك فرق سرعات – سيكون هناك فرق ضغوط)، لكنها لا تفسر من أين يأتي فرق السرعات نفسه. التفسير الكامل لقوة الرفع يتطلب أيضًا قانون نيوتن الثالث: الجناح يحرف تدفق الهواء إلى أسفل (downwash)، وبموجب قانون الفعل ورد الفعل يدفع الهواء الجناح إلى أعلى – كلا الوصفين (الطاقي عبر برنولي والزخمي عبر نيوتن) متسقان معًا ويعطيان الصورة الكاملة.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: أنبوب بيتو</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>تقيس الطائرات السرعة بالنسبة للهواء باستخدام أنبوب بيتو – حيث يقارن الضغط في نقطتين: حيث يتوقف التدفق تمامًا (في مقدمة الأنبوب، "نقطة التوقف")، وحيث يتدفق بحرية.</p>
+<div class="eq"><div class="eq-body">P₀ = P + ½ρv²  ⇒  v = √(2(P₀−P)/ρ)</div><div class="eq-tag">(4)</div></div>
+<p>مثال عددي: يظهر المستشعر فرق ضغط ΔP = 250 باسكال، كثافة الهواء ρ ≈ 1.25 كغ/م³. ما سرعة الطائرة بالنسبة للهواء؟</p>
+<div class="eq"><div class="eq-body">v = √(2·250/1.25) = √400 = <strong>20 م/ث</strong></div><div class="eq-tag">(5)</div></div>
+<p>≈72 كم/سا – سرعة متواضعة (طائرة خفيفة عند الإقلاع)، لكن الطريقة واحدة لأي سرعة حتى القريبة من الصوت، حيث يجب تعديل المعادلة لتأثير انضغاطية الهواء (الفقرة 6).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يؤدي هذا: حدود التطبيق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>الافتراضات الثلاثة من الفقرة 1 – ليست شكلية. <strong>اللزوجة</strong>الموانع الحقيقية تبدد جزءًا من الطاقة كحرارة على طول الأنبوب (ومن هنا انخفاض الضغط في الأنابيب الطويلة حتى بدون تضيق – معادلة برنولي بشكلها النقي لا تصف ذلك، وتحتاج إلى تصحيحات للاحتكاك). <strong>الانضغاطية</strong>تصبح مهمة للغازات عند سرعات تقارن سرعة الصوت (عدد ماخ يقترب من 1) – عندها نحتاج إلى ديناميكا الغازات الكاملة. <strong>الاضطراب</strong>يجعل التدفق غير مستقر على المقاييس الصغيرة – المعادلة صالحة للقيم المتوسطة وليس اللحظية.</p>
+<div class="callout steel">
+<span class="tag">النسخة الكاملة – معادلات نافير-ستوكس</span>
+<p>معادلة برنولي – حالة خاصة ومبسطة إلى حد كبير من معادلات نافير-ستوكس الأكثر عمومية، التي تصف جريان الموانع الحقيقية اللزجة والغازات. حلها التحليلي الدقيق في الحالة العامة – إحدى "مسائل الألفية" السبع (معهد كلاي للرياضيات، جائزة مليون دولار لإثبات وجود ونعومة الحلول) – لم تُحل حتى اليوم، رغم أن المهندسين يحسبون التدفقات عدديًا بكفاءة دون انتظار الرياضيين.</p>
+</div>
+<p>على الموقع هذا قانون مستقل، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/bernoullis_principle.html">معادلة برنولي</a> ·
+          <a href="/lang/ar/laws/archimedes_principle.html">قانون أرخميدس</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة في المنزل</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · ورقتان من الورق</span>
+<p>خذ ورقتين، علقهما بشكل متوازٍ على مسافة 3-4 سم (يمكن ببساطة الإمساك بالحافتين العلويتين بكلتا اليدين) وانفخ بينهما، تمامًا في الفجوة.</p>
+<p><span class="qlabel">ما ستلاحظه</span>ستنجذب الورقتان إحداهما إلى الأخرى، بدلاً من أن تتباعدا كما قد يتوقع المرء بديهيًا. الهواء بين الورقتين يتسارع – وفق برنولي، ينخفض الضغط هناك إلى ما دون الضغط الجوي الخارجي، ويضغط الهواء الخارجي فعليًا الورقتين إلى الداخل، تجاه بعضهما.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · كرة في تيار مجفف الشعر</span>
+<p>وجه مجفف الشعر (أو المكنسة الكهربائية في وضع النفخ) عموديًا إلى أعلى، وضع كرة بينغ بونغ خفيفة برفق في تيار الهواء فوقه، واتركها.</p>
+<p><span class="qlabel">ما ستلاحظه</span>تطفو الكرة في الهواء، تتمايل قليلاً، ولا تطير بعيدًا عن التدفق إلى الجوانب – بمجرد أن تتحرك إلى حافة التيار، يتحرك الهواء المحيط هناك بشكل أبطأ (ضغط جوي عادي)، والضغط الأعلى في الخارج "يدفع" الكرة مرة أخرى إلى مركز التدفق السريع حيث الضغط أقل. نفس المبدأ الذي يبقي الورقتين معًا في التجربة السابقة.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>أسئلة للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل في كل مكان يتبع المخطط: <strong>المعطيات → القانون → الحل → الإجابة</strong>.</p>
+<details class="problem">
+<summary>1. يتدفق الماء في أنبوب أفقي يتضيق بمقدار ثلاثة أضعاف في مساحة المقطع. السرعة في الجزء العريض 3 م/ث. أوجد السرعة في الجزء الضيق.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> A₁/A₂ = 3, v₁ = 3 م/ث.</p>
+<p><span class="qlabel">القانون</span>معادلة الاستمرارية (الفقرة 3): A₁v₁ = A₂v₂.</p>
+<p><span class="qlabel">الحل</span> v₂ = v₁·(A₁/A₂) = 3·3 = 9 م/ث.</p>
+<p><span class="qlabel">الإجابة</span> <strong>9 م/ث</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. في المسألة السابقة، أوجد انخفاض الضغط بين الجزء العريض والضيق (ماء، ρ = 1000 كغ/م³).</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> v₁ = 3 م/ث, v₂ = 9 م/ث, ρ = 1000 كغ/م³.</p>
+<p><span class="qlabel">القانون</span>معادلة برنولي لأنبوب أفقي (الفقرة 3): ΔP = ½ρ(v₂²−v₁²).</p>
+<p><span class="qlabel">الحل</span> ΔP = 0.5·1000·(81−9) = 500·72 = 36 000 باسكال.</p>
+<p><span class="qlabel">الإجابة</span> <strong>36 كيلوباسكال</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. يُظهر أنبوب بيتو فرق ضغط مقداره 500 باسكال في هواء كثافته 1.25 كغ/م³. أوجد السرعة.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> ΔP = 500 باسكال, ρ = 1.25 كغ/م³.</p>
+<p><span class="qlabel">القانون</span>صيغة أنبوب بيتو (الفقرة 5): v = √(2ΔP/ρ).</p>
+<p><span class="qlabel">الحل</span> v = √(2·500/1.25) = √800 ≈ 28.3 م/ث.</p>
+<p><span class="qlabel">الإجابة</span> <strong>≈28.3 م/ث</strong> (≈102 كم/سا).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. هل صحيح أن "جزيئات الهواء فوق وتحت جناح الطائرة تلتقي عند الحافة الخلفية في نفس الوقت"؟ كيف يرتبط هذا بالآلية الحقيقية لقوة الرفع؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>الفقرة 4 – تحليل أسطورة الزمن المتساوي.</p>
+<p><span class="qlabel">الحل</span>لا، هذا اعتقاد خاطئ شائع: تجريبيًا الجزيئات لا تلتقي في نفس الوقت، التدفق من الأعلى يصل مبكرًا. السبب الحقيقي لفرق السرعات – الدوران حول مقطع الجناح (تأثير اللزوجة وشرط كوتا عند الحافة الخلفية)، وليس "المسار الأطول من الأعلى".</p>
+<p><span class="qlabel">الإجابة</span> <strong>أسطورة، غير صحيح</strong> – برنولي يحسب الضغط بشكل صحيح بناءً على فرق السرعات المعروف، لكنه لا يفسر من أين يأتي فرق السرعات نفسه.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. لماذا لا تتنبأ معادلة برنولي بشكلها الأساسي بانخفاض الضغط على طول أنبوب طويل ذي مقطع ثابت، مع أنه يُلاحظ عمليًا؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>حدود التطبيق (الفقرة 6) – افتراض "مائع غير لزج".</p>
+<p><span class="qlabel">الحل</span>المعادلة الأساسية لبرنولي مشتقة لمائع مثالي (غير لزج)، حيث لا تُفقد الطاقة على طول خط التدفق. في الأنابيب الحقيقية، يؤدي الاحتكاك اللزج بالجدران إلى تحويل جزء من طاقة التدفق تدريجيًا إلى حرارة – هذا الفقد لا يدخل في الصيغة البسيطة P+½ρv²+ρgh=const، ومن هنا يأتي انخفاض الضغط الملاحظ عمليًا حتى بدون تغير المقطع.</p>
+<p><span class="qlabel">الإجابة</span> <strong>اللزوجة</strong> – الموانع الحقيقية ليست مثالية، تتبدد الطاقة كحرارة، وهو ما لا تأخذه المعادلة الأساسية بالاعتبار.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ إملائي، معادلة خاطئة، الأرقام غير متطابقة، شرح معقد – اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Bernoulli%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعلاً، وتُفحص، ويُجرى التصحيح بناءً عليها – هذا ليس "للأرشيف".</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء التاسع من السلسلة، هيدروديناميكا</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §3: частица в трубе Вентури движется со скоростью, заданной уравнением неразрывности A·v=const —
+  // не постоянной по всей длине, а честно пересчитанной для текущего x на каждом кадре (не CSS-заглушка).
+  var RHO = 1000, V1 = 2, AREA_RATIO = 4, V2 = V1 * AREA_RATIO;
+  var P0 = 100000; // условное базовое давление в широкой части, Па (отсчётная точка, не абсолютный ноль)
+
+  // Труба главной фигуры: широкая часть x∈[20,160], конус x∈[160,240], узкая часть x∈[240,380].
+  function makePipe(xWideEnd, xNarrowStart, xEnd, yTopWide, yBotWide, yTopNarrow, yBotNarrow){
+    function laneY(x, top){
+      if (x <= xWideEnd) return top ? yTopWide : yBotWide;
+      if (x >= xNarrowStart) return top ? yTopNarrow : yBotNarrow;
+      var t = (x - xWideEnd) / (xNarrowStart - xWideEnd);
+      var wide = top ? yTopWide : yBotWide, narrow = top ? yTopNarrow : yBotNarrow;
+      return wide + (narrow - wide) * t;
+    }
+    function speedAt(x){
+      if (x <= xWideEnd) return V1;
+      if (x >= xNarrowStart) return V2;
+      return V1 + (V2 - V1) * (x - xWideEnd) / (xNarrowStart - xWideEnd);
+    }
+    return { laneY: laneY, speedAt: speedAt, xStart: 20, xEnd: xEnd };
+  }
+
+  var mainPipe = makePipe(160, 240, 380, 30, 110, 60, 80);
+  var heroPipe = makePipe(140, 200, 320, 60, 120, 90, 90);
+
+  var dot1 = document.getElementById('pipeDot1');
+  var dot2 = document.getElementById('pipeDot2');
+  var heroDot = document.getElementById('heroDot');
+  var vReadout = document.querySelector('[data-readout="v"]');
+  var pReadout = document.querySelector('[data-readout="p"]');
+
+  var PX_PER_MS = 0.02; // масштаб скорости — узкая часть проходится за разумное время в 6-секундном темпе сайта
+  var x1 = mainPipe.xStart, x2 = (mainPipe.xStart + mainPipe.xEnd) / 2; // вторая частица на полкорпуса впереди
+  var hx = heroPipe.xStart;
+  var lastTs = null;
+
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtMs = Math.min(ts - lastTs, 50);
+    lastTs = ts;
+
+    x1 += mainPipe.speedAt(x1) * PX_PER_MS * dtMs;
+    x2 += mainPipe.speedAt(x2) * PX_PER_MS * dtMs;
+    if (x1 > mainPipe.xEnd) x1 = mainPipe.xStart;
+    if (x2 > mainPipe.xEnd) x2 = mainPipe.xStart;
+    if (dot1) { dot1.setAttribute('cx', x1.toFixed(1)); dot1.setAttribute('cy', mainPipe.laneY(x1, false).toFixed(1)); }
+    if (dot2) { dot2.setAttribute('cx', x2.toFixed(1)); dot2.setAttribute('cy', mainPipe.laneY(x2, true).toFixed(1)); }
+
+    var v = mainPipe.speedAt(x1);
+    var p = P0 - 0.5 * RHO * (v * v - V1 * V1); // уравнение Бернулли для горизонтальной трубы (§3)
+    if (vReadout) vReadout.textContent = v.toFixed(1);
+    if (pReadout) pReadout.textContent = (p / 1000).toFixed(1);
+
+    hx += heroPipe.speedAt(hx) * PX_PER_MS * dtMs;
+    if (hx > heroPipe.xEnd) hx = heroPipe.xStart;
+    if (heroDot) { heroDot.setAttribute('cx', hx.toFixed(1)); heroDot.setAttribute('cy', heroPipe.laneY(hx, false).toFixed(1)); }
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">النظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

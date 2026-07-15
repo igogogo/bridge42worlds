@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>معادلة الغاز المثالي: الجزيئات كدقة طبلة على الجدران — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: молекулы в поршневом цилиндре ---------- */
+.piston-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.piston-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+.mode-btns{ display:flex; gap:8px; margin:.8em 0 1.2em; flex-wrap:wrap; }
+.mode-btn{
+  font-family:var(--font-mono); font-size:.8rem; padding:5px 14px; border-radius:14px;
+  border:1px solid var(--rule); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+}
+.mode-btn.active{ background:var(--steel-fill); border-color:var(--steel-fill); color:var(--paper); }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>المعادلة في كلمتين</a></li>
+<li><a href="#s2"><span class="n">02</span>ثلاثة قوانين جزئية داخل قانون واحد</a></li>
+<li><a href="#s3"><span class="n">03</span>الصورة المجهرية</a></li>
+<li><a href="#s4"><span class="n">04</span>القانون الموحد</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال ممتد: البالون الهوائي</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يؤدي هذا: عندما لا يكون الغاز مثالياً</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة منزلية</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للتحقق</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · الديناميكا الحرارية · الجزء الحادي عشر</p>
+<h1>معادلة الغاز المثالي: الجزيئات كدقة طبلة على الجدران</h1>
+<p class="subtitle">صيغة واحدة من أربعة أحرف — pV=nRT — تتحكم في نفخ البالون تحت الشمس، وعمل محرك السيارة، وتوقع الطقس.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+<rect fill="none" height="140" stroke="var(--ink)" stroke-width="3" width="220" x="60" y="40"></rect>
+<circle cx="120" cy="80" fill="var(--steel-fill)" id="heroM1" r="6"></circle>
+<circle cx="200" cy="130" fill="var(--brass-fill)" id="heroM2" r="6"></circle>
+<circle cx="240" cy="90" fill="var(--moss-fill)" id="heroM3" r="6"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="205">pV = nRT</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>في عام 1834، جمع إميل كلابيرون ثلاثة قوانين تجريبية مستقلة (بويل، شارل، غي-لوساك) في معادلة واحدة لحالة الغاز المثالي. خلف الصيغة البسيطة pV = nRT تكمن صورة مجهرية صادقة: الضغط هو إحصاء لارتطام مليارات الجزيئات بجدران الوعاء. في هذه الملاحظة — القوانين الجزئية الثلاثة، استنتاج من النظرية الحركية ومثال عددي ممتد على البالون الهوائي.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Хаотичные удары частиц о стенки сосуда" src="/lang/ru/theory/img/ideal_gas_hero.jpg"/><figcaption>ارتطامات فوضوية للجسيمات بجدران الوعاء</figcaption></figure>
+<figure><img alt="Капли дождя барабанят по мембране — та же физика ударов" src="/lang/ru/theory/img/ideal_gas_concept.jpg"/><figcaption>قطرات المطر تدق على غشاء — نفس فيزياء الارتطامات</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>المعادلة في كلمتين</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="plate">
+<div class="eq-body">pV = nRT</div>
+<div class="cap">R ≈ 8.314 جول/(مول·كلفن) — ثابت الغاز العام، وهو نفسه لأي غاز مثالي</div>
+</div>
+<table class="symtab">
+<tr><th>الكمية</th><th>المعنى</th><th>وحدة النظام الدولي</th></tr>
+<tr><td>p</td><td>الضغط</td><td class="sym">باسكال</td></tr>
+<tr><td>V</td><td>الحجم</td><td class="sym">م³</td></tr>
+<tr><td>n</td><td>كمية المادة</td><td class="sym">مول</td></tr>
+<tr><td>T</td><td>درجة الحرارة المطلقة</td><td class="sym">كلفن (وليس °م!)</td></tr>
+</table>
+<p>الغاز «المثالي» — نموذج حيث تُعتبر الجزيئات نقاطاً بدون حجم ذاتي، ولا تتجاذب فيما بينها (تتفاعل فقط بتصادمات مرنة). الغازات الحقيقية (الهواء، النيتروجين، الأكسجين) في الظروف الغرفية العادية تتبع هذه المعادلة بدقة كافية للحسابات الهندسية — تصبح الانحرافات ملحوظة فقط عند ضغط عالٍ جداً أو درجة حرارة منخفضة جداً (الفقرة 6).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>ثلاثة قوانين جزئية داخل قانون واحد</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>pV = nRT «تحتوي» على ثلاثة قوانين تجريبية سابقة كحالات خاصة — كل منها يُحصل عليه بتثبيت أحد المتغيرات:</p>
+<table class="symtab">
+<tr><th>القانون</th><th>الشرط</th><th>العلاقة</th></tr>
+<tr><td>بويل (1662)</td><td>T = const</td><td class="sym">pV = const</td></tr>
+<tr><td>شارل (1787)</td><td>p = const</td><td class="sym">V/T = const</td></tr>
+<tr><td>غي-لوساك (1802)</td><td>V = const</td><td class="sym">p/T = const</td></tr>
+</table>
+<p>ثلاثة علماء، عملوا في أوقات مختلفة وبشكل مستقل، كانوا في الواقع يقيسون الصيغة نفسها من زوايا مختلفة — مثل ثلاثة حكماء عميان يتحسسون فيلاً من أجزاء مختلفة. كلابيرون في عام 1834 كان أول من رأى الكل.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>الصورة المجهرية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div aria-hidden="true" class="piston-fig">
+<svg viewbox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--steel-fill)" height="140" id="gasBox" opacity=".08" stroke="var(--ink)" stroke-width="2.5" width="150" x="40" y="20"></rect>
+<rect fill="var(--brass-fill)" height="140" id="piston" stroke="var(--ink)" stroke-width="1.5" width="10" x="190" y="20"></rect>
+<circle class="gasMol" cx="80" cy="60" fill="var(--steel-fill)" r="5"></circle>
+<circle class="gasMol" cx="130" cy="100" fill="var(--brass-fill)" r="5"></circle>
+<circle class="gasMol" cx="100" cy="130" fill="var(--moss-fill)" r="5"></circle>
+<circle class="gasMol" cx="160" cy="50" fill="var(--steel-fill)" r="5"></circle>
+</svg>
+</div>
+<div class="mode-btns">
+<button class="mode-btn active" data-mode="normal">T عادية</button>
+<button class="mode-btn" data-mode="hot">سخّنا (T أعلى)</button>
+<button class="mode-btn" data-mode="compressed">ضغطنا (V أصغر)</button>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>p النسبي</b><span data-readout="pressure">1.00</span></span>
+</div>
+<p>اضغط على الأوضاع أعلاه: الجزيئات تطير أسرع عند التسخين (ضربات أكثر على الجدار في الثانية وكل ضربة أقوى — كلا التأثيرين يرفعان الضغط) أو تتصادم مع الجدران أكثر في حجم أصغر عند الضغط. من النظرية الحركية للغازات يمكن الاستنتاج بدقة:</p>
+<div class="eq"><div class="eq-body">p = (2/3)·n<sub>V</sub>·⟨E<sub>k</sub>⟩</div><div class="eq-tag">(1)</div></div>
+<p>حيث n<sub>V</sub> — عدد الجزيئات في وحدة الحجم، ⟨E<sub>k</sub>⟩ — متوسط الطاقة الحركية لجزيء واحد. الضغط ليس مادة منفصلة، بل نتيجة إحصائية مباشرة لارتطام تريليونات الجزيئات بجدران الوعاء كل ثانية.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>القانون الموحد</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لأي كمية ثابتة من الغاز (n لا تتغير) من pV = nRT تنتج صيغة عملية مريحة — مقارنة بين حالتين من نفس الغاز دون الحاجة لمعرفة R أو n إطلاقاً:</p>
+<div class="plate">
+<div class="eq-body">p₁V₁/T₁ = p₂V₂/T₂</div>
+<div class="cap">تعمل لأي انتقال بين الحالتين 1 و 2 — R و n تختصران</div>
+</div>
+<p>مثال عددي (قانون بويل، T = ثابت): غاز عند ضغط p₁ = 100 كيلوباسكال يشغل حجماً V₁ = 2 لتر. يُضغط إلى V₂ = 0.5 لتر عند نفس درجة الحرارة. جد الضغط الجديد.</p>
+<div class="eq"><div class="eq-body">p₂ = p₁V₁/V₂ = 100·2/0.5 = <strong>400 كيلوباسكال</strong></div><div class="eq-tag">(2)</div></div>
+<p>ضغطنا 4 مرات في الحجم — الضغط زاد بالضبط 4 مرات. التناسب العكسي البسيط لقانون بويل.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال ممتد: البالون الهوائي</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>بالون هوائي على الأرض (p₁ = 100 كيلوباسكال، V₁ = 3 لتر، T₁ = 300 كلفن) أُدخل إلى غرفة دافئة عند المدفأة، حيث انضغط قليلاً من قبل الجيران في الزحام إلى V₂ = 2 لتر وسخن إلى T₂ = 330 كلفن. جد الضغط الجديد داخل البالون.</p>
+<div class="eq"><div class="eq-body">p₂ = p₁V₁T₂/(T₁V₂) = 100·3·330/(300·2) = 99000/600 = <strong>165 كيلوباسكال</strong></div><div class="eq-tag">(3)</div></div>
+<p>كل التأثيرات الثلاثة — الضغط الابتدائي، الانضغاط والتسخين — حُسبت بصيغة واحدة فوراً، دون حاجة لحساب n أو R. هكذا بالضبط يعمل المهندسون وخبراء الأرصاد مع الغاز عملياً: ليس عبر الكميات المطلقة، بل عبر نسبة حالتين.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يؤدي هذا: عندما لا يكون الغاز مثالياً</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>نموذج الغاز المثالي — تقريب يعمل بشكل أسوأ كلما كان الغاز أكثر كثافة وكلما كان أقرب إلى نقطة التكثف إلى سائل. افتراضان يُخالفان في الظروف الحقيقية: الجزيئات لها حجم ذاتي (ليست نقاطاً)، وبينها تجاذب ضعيف (قوى فان دير فالس) — عند الضغط العالي تتراص الجزيئات أكثر، ويبدأ التجاذب بشد الغاز بشكل ملحوظ، مقللاً الضغط الفعّال على الجدران مقارنة بالنموذج المثالي.</p>
+<div class="callout brass">
+<span class="tag">معادلة فان دير فالس</span>
+<p>يوهانس فان دير فالس في عام 1873 عدل معادلة الحالة بحدين إضافيين يأخذان في الاعتبار الحجم الذاتي للجزيئات وتجاذبها المتبادل: (p + a/V²)(V − b) = nRT. عند درجة حرارة منخفضة بما فيه الكفاية، تتنبأ هذه المعادلة ليس فقط بالطور الغازي، بل أيضاً بالطور السائل لنفس المادة — نموذج ولّد منه الفهم الحديث للتحولات الطورية والنقطة الحرجة (والذي حصل عليه فان دير فالس على جائزة نوبل عام 1910).</p>
+</div>
+<p>على الموقع هذا قانون منفصل، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/ideal_gas_law.html">معادلة حالة الغاز المثالي</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · بالون في الثلاجة</span>
+<p>انفخ بالوناً هوائياً إلى حجم متوسط عند درجة حرارة الغرفة، علّم القطر التقريبي بقلم ماركر، ثم ضعه في الثلاجة لمدة 15-20 دقيقة (ليس في المجمد — هناك يتصلب المطاط).</p>
+<p><span class="qlabel">ما ستلاحظه</span> سينكمش البالون ملحوظياً في الحجم (بنفس كمية الهواء داخله وبنفس الضغط الجوي تقريباً خارجه) — عرض مباشر لقانون شارل/غي-لوساك: انخفاض T عند ثبات p تقريباً يتطلب انخفاض V. أخرجه مجدداً إلى الدفء — سيعود البالون للانتفاخ إلى حجمه الأصلي.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · محقن بهواء محبوس</span>
+<p>خذ محقناً طبياً بدون إبرة، اسحب قليلاً من الهواء، أغلق الفتحة بإحكام بإصبعك (بحيث لا يستطيع الهواء الخروج) وحاول دفع المكبس.</p>
+<p><span class="qlabel">ما ستلاحظه</span> كلما ضغطت أكثر (تقلل V)، كلما قاوم المحقن إصبعك أكثر — الضغط المتزايد يتبع تماماً قانون بويل pV = const (الفقرة 4): نصف الحجم — ضعف الضغط، تشعر بذلك جسدياً بيدك.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للتحقق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل دائماً يتبع المخطط: <strong>معطى → قانون → حل → جواب</strong>.</p>
+<details class="problem">
+<summary>1. غاز عند ضغط 200 كيلوباسكال وحجم 4 لتر (T ثابتة) يتمدد إلى 8 لتر. جد الضغط الجديد.</summary>
+<div class="answer">
+<p><span class="qlabel">معطى</span> p₁ = 200 كيلوباسكال، V₁ = 4 لتر، V₂ = 8 لتر، T = ثابت.</p>
+<p><span class="qlabel">قانون</span> قانون بويل (الفقرة 2): p₁V₁ = p₂V₂.</p>
+<p><span class="qlabel">حل</span> p₂ = p₁V₁/V₂ = 200·4/8 = 100 كيلوباسكال.</p>
+<p><span class="qlabel">جواب</span> <strong>100 كيلوباسكال</strong> — الحجم ضعف، الضغط نصف.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. غاز عند ضغط ثابت يشغل 2 لتر عند درجة حرارة 300 كلفن. إلى أي حجم سيتمدد عند التسخين إلى 450 كلفن؟</summary>
+<div class="answer">
+<p><span class="qlabel">معطى</span> V₁ = 2 لتر، T₁ = 300 كلفن، T₂ = 450 كلفن، p = ثابت.</p>
+<p><span class="qlabel">قانون</span> قانون شارل (الفقرة 2): V₁/T₁ = V₂/T₂.</p>
+<p><span class="qlabel">حل</span> V₂ = V₁·T₂/T₁ = 2·450/300 = 3 لتر.</p>
+<p><span class="qlabel">جواب</span> <strong>3 لتر</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. أسطوانة مغلقة بغاز عند 300 كلفن لها ضغط 150 كيلوباسكال. إلى أي درجة حرارة يجب تسخينها ليصبح الضغط 200 كيلوباسكال (حجم الأسطوانة لا يتغير)؟</summary>
+<div class="answer">
+<p><span class="qlabel">معطى</span> p₁ = 150 كيلوباسكال، T₁ = 300 كلفن، p₂ = 200 كيلوباسكال، V = ثابت.</p>
+<p><span class="qlabel">قانون</span> قانون غي-لوساك (الفقرة 2): p₁/T₁ = p₂/T₂.</p>
+<p><span class="qlabel">حل</span> T₂ = T₁·p₂/p₁ = 300·200/150 = 400 كلفن.</p>
+<p><span class="qlabel">جواب</span> <strong>400 كلفن</strong> (127 °C).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. لماذا يزداد ضغط الغاز، حسب النظرية الحركية (الفقرة 3)، عند التسخين حتى لو كان الحجم وعدد الجزيئات لا يتغيران؟</summary>
+<div class="answer">
+<p><span class="qlabel">قانون</span> الصيغة (1)، الفقرة 3: p = (2/3)n<sub>V</sub>⟨E<sub>k</sub>⟩.</p>
+<p><span class="qlabel">حل</span> درجة الحرارة هي، أساساً، مقياس لمتوسط الطاقة الحركية للجزيئات ⟨E<sub>k</sub>⟩. عند التسخين (n<sub>V</sub> لا يتغير، الحجم وعدد الجزيئات كما هما) تتحرك الجزيئات في المتوسط أسرع — كل ضربة على الجدار أقوى والضربات تحدث أكثر (الجسيم يصل إلى الجدار ويعود أسرع) — كلا التأثيرين يرفعان p.</p>
+<p><span class="qlabel">جواب</span> <strong>زيادة متوسط الطاقة الحركية للجزيئات</strong> — ضربات أقوى وأكثر تواتراً على الجدران.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. تحت أي ظروف (ضغط عالٍ/منخفض، درجة حرارة عالية/منخفضة) يكون الغاز الحقيقي أسوأ وصفاً بمعادلة الغاز المثالي؟ لماذا؟</summary>
+<div class="answer">
+<p><span class="qlabel">قانون</span> محدودية النموذج (الفقرة 6).</p>
+<p><span class="qlabel">حل</span> الأسوأ — عند ضغط عالٍ ودرجة حرارة منخفضة: تقترب الجزيئات، حجمها الذاتي لا يعود مهملاً مقارنة بالحيز الفارغ، وقوى التجاذب (فان دير فالس) تصبح ملحوظة — كلا افتراضي النموذج المثالي (جسيمات نقطية، غير متفاعلة) يُخالفان. عند هذه الظروف نفسها يقترب الغاز عادة من نقطة التكثف إلى سائل.</p>
+<p><span class="qlabel">جواب</span> <strong>ضغط عالٍ + درجة حرارة منخفضة</strong> — ظروف قريبة من التكثف.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ إملائي، صيغة خاطئة، رقم لا يتطابق، شرح أخرق — اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ideal%20gas%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ فعلاً وتُفحص ويُجرى تصحيح بناءً عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الحادي عشر من السلسلة، الديناميكا الحرارية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §3: молекулы отскакивают от стенок сосуда (упругие столкновения) — реальное численное
+  // интегрирование положений/скоростей, не CSS-заглушка. Три режима меняют скорость и/или объём.
+  var box = document.getElementById('gasBox');
+  var piston = document.getElementById('piston');
+  var mols = Array.prototype.slice.call(document.querySelectorAll('.gasMol'));
+  var pReadout = document.querySelector('[data-readout="pressure"]');
+  var buttons = document.querySelectorAll('.mode-btn');
+
+  var BOX_X0 = 40, BOX_Y0 = 20, BOX_Y1 = 160;
+  var boxX1 = 190; // правая стенка — двигается с поршнем при сжатии
+  var speedMul = 1; // растёт в режиме "нагрели"
+
+  var state = mols.map(function(el, i){
+    return {
+      el: el,
+      x: parseFloat(el.getAttribute('cx')),
+      y: parseFloat(el.getAttribute('cy')),
+      vx: (i % 2 === 0 ? 1 : -1) * (60 + i * 10),
+      vy: (i % 3 === 0 ? -1 : 1) * (50 + i * 8)
+    };
+  });
+
+  var bounceCount = 0, lastPressureCalcTs = 0;
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.dataset.mode;
+      speedMul = mode === 'hot' ? 1.7 : 1;
+      var targetX1 = mode === 'compressed' ? 120 : 190;
+      boxX1 = targetX1;
+      box.setAttribute('width', (boxX1 - BOX_X0));
+      piston.setAttribute('x', boxX1);
+    });
+  });
+
+  var lastTs = null;
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+
+    var wallsHit = 0;
+    state.forEach(function(m){
+      m.x += m.vx * speedMul * dtSec;
+      m.y += m.vy * speedMul * dtSec;
+      if (m.x < BOX_X0 + 6) { m.x = BOX_X0 + 6; m.vx *= -1; wallsHit++; }
+      if (m.x > boxX1 - 6) { m.x = boxX1 - 6; m.vx *= -1; wallsHit++; }
+      if (m.y < BOX_Y0 + 6) { m.y = BOX_Y0 + 6; m.vy *= -1; wallsHit++; }
+      if (m.y > BOX_Y1 - 6) { m.y = BOX_Y1 - 6; m.vy *= -1; wallsHit++; }
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    bounceCount += wallsHit;
+
+    // «Давление» на индикаторе — не физически точная величина, а иллюстративная прокси-оценка:
+    // среднее число ударов о стенку в секунду, нормированное на baseline (обычный режим).
+    if (ts - lastPressureCalcTs > 500) {
+      var boxArea = (boxX1 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var baseline = (190 - BOX_X0) * (BOX_Y1 - BOX_Y0);
+      var relP = (baseline / boxArea) * speedMul;
+      if (pReadout) pReadout.textContent = relP.toFixed(2);
+      lastPressureCalcTs = ts;
+    }
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+
+  // Декоративные молекулы в hero — просто мягко дрейфуют, без претензии на количественность.
+  var heroMols = [document.getElementById('heroM1'), document.getElementById('heroM2'), document.getElementById('heroM3')];
+  var heroState = heroMols.map(function(el, i){
+    return { el: el, x: parseFloat(el.getAttribute('cx')), y: parseFloat(el.getAttribute('cy')),
+              vx: (i - 1) * 40 + 20, vy: (i % 2 === 0 ? -1 : 1) * 35 };
+  });
+  var lastHeroTs = null;
+  function heroTick(ts){
+    if (lastHeroTs === null) lastHeroTs = ts;
+    var dt = Math.min((ts - lastHeroTs) / 1000, 0.05);
+    lastHeroTs = ts;
+    heroState.forEach(function(m){
+      m.x += m.vx * dt; m.y += m.vy * dt;
+      if (m.x < 66 || m.x > 274) m.vx *= -1;
+      if (m.y < 46 || m.y > 174) m.vy *= -1;
+      m.el.setAttribute('cx', m.x.toFixed(1));
+      m.el.setAttribute('cy', m.y.toFixed(1));
+    });
+    requestAnimationFrame(heroTick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(heroTick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

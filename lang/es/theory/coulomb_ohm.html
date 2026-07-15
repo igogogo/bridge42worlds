@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ley de Coulomb y ley de Ohm: de la carga estacionaria a la corriente que fluye — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s5 .measure{ font-size:.94rem; line-height:1.55; }
+#s5 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:100px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/es/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/es/index.html">main</a>
+<a href="/lang/es/tags/">tags</a>
+<a href="/lang/es/laws/">laws</a>
+<a href="/lang/es/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/es/graph/">graph</a>
+<a class="active" href="/lang/es/theory/">theory</a>
+<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contenido</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Dos leyes, una estructura</a></li>
+<li><a href="#s2"><span class="n">02</span>Ley de Coulomb: fuerza entre cargas</a></li>
+<li><a href="#s3"><span class="n">03</span>Ley de Ohm: la corriente como flujo</a></li>
+<li><a href="#s4"><span class="n">04</span>Ejemplo transversal: de la carga a la corriente</a></li>
+<li><a href="#s5"><span class="n">05</span>A dónde lleva esto: de dónde viene la resistencia</a></li>
+<li><a href="#s6"><span class="n">06</span>Experimento en casa</a></li>
+<li><a href="#s7"><span class="n">07</span>Problemas para comprobar</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Nota de trabajo · electromagnetismo · parte XIII</p>
+<h1>Ley de Coulomb y ley de Ohm: de la carga estacionaria a la corriente que fluye</h1>
+<p class="subtitle">Una ley describe cargas congeladas, que se repelen o atraen en el espacio; la otra, qué sucede cuando esas cargas se ponen en movimiento y empiezan a fluir.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<circle cx="90" cy="100" fill="none" r="22" stroke="var(--brass-fill)" stroke-width="2.5"></circle>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="20" text-anchor="middle" x="90" y="107">+</text>
+<circle cx="250" cy="100" fill="none" id="heroCharge" r="18" stroke="var(--steel-fill)" stroke-width="2.5"></circle>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="18" id="heroChargeSign" text-anchor="middle" x="250" y="107">+</text>
+<line id="heroArrow" stroke="var(--ink)" stroke-dasharray="4,3" stroke-width="1.5" x1="115" x2="225" y1="100" y2="100"></line>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Resumen</span>
+<p>Charles Coulomb en 1785 midió cómo la fuerza eléctrica disminuye con la distancia, exactamente igual que la gravedad (ley del inverso del cuadrado, parte VII). 41 años después, Georg Ohm descubrió otra regularidad no menos simple: la corriente a través de un conductor es directamente proporcional a la tensión aplicada. En esta nota, ambas leyes con números y cómo una misma magnitud —la carga eléctrica— conecta la estática de Coulomb con la dinámica de Ohm mediante la definición simple de corriente: I = q/t.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Два заряда и силовые линии поля между ними" src="/lang/ru/theory/img/coulomb_ohm_hero.jpg"/><figcaption>Dos cargas y las líneas de campo entre ellas</figcaption></figure>
+<figure><img alt="Ток течёт по проводу — заряды в направленном движении" src="/lang/ru/theory/img/coulomb_ohm_concept.jpg"/><figcaption>La corriente fluye por un cable: cargas en movimiento dirigido</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Dos leyes, una estructura</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Ley</th><th>Fórmula</th><th>Trata sobre</th></tr>
+<tr><td>Coulomb (1785)</td><td class="sym">F = kq₁q₂/r²</td><td>fuerza entre dos cargas ESTÁTICAS</td></tr>
+<tr><td>Ohm (1826)</td><td class="sym">I = U/R</td><td>corriente a través de un conductor bajo tensión</td></tr>
+</table>
+<p>Coulomb trabaja con cargas ESTÁTICAS: simplemente la fuerza de atracción/repulsión en el espacio, sin movimiento. Ohm describe la DINÁMICA: qué sucede cuando las cargas se mueven organizadamente por un conductor bajo la acción de una diferencia de potencial. El puente entre ellos es la definición simple: la intensidad de corriente I es la cantidad de carga q que atraviesa la sección del conductor en un tiempo t: I = q/t (la transición numérica detallada está en §4).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Ley de Coulomb: fuerza entre cargas</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Enunciado.</strong> La fuerza de interacción entre dos cargas puntuales es proporcional a su producto e inversamente proporcional al cuadrado de la distancia:</p>
+<div class="plate">
+<div class="eq-body">F = k·q₁q₂/r²</div>
+<div class="cap">k ≈ 9×10⁹ N·m²/C² — constante de Coulomb (redondeada para facilitar los cálculos, como g≈10 en mecánica)</div>
+</div>
+<div aria-hidden="true" class="anim-strip">
+<svg style="position:absolute;inset:0;width:100%;height:100%" viewbox="0 0 300 100">
+<circle cx="60" cy="50" fill="none" r="18" stroke="var(--brass-fill)" stroke-width="2.5"></circle>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="60" y="57">+</text>
+<circle cx="240" cy="50" fill="none" id="pairCharge" r="14" stroke="var(--steel-fill)" stroke-width="2.5"></circle>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="14" id="pairChargeSign" text-anchor="middle" x="240" y="56">−</text>
+</svg>
+<div class="anim-label left">cargas de signo opuesto se atraen; cargas del mismo signo se repelen</div>
+</div>
+<p>Ejemplo numérico: dos cargas de q₁ = q₂ = 1 μC (microculombio) están separadas una distancia r = 3 cm = 0.03 m. Halle la fuerza de interacción.</p>
+<div class="eq"><div class="eq-body">F = 9×10⁹·(10⁻⁶)²/0.03² = 9×10⁹·10⁻¹²/9×10⁻⁴ = <strong>10 N</strong></div><div class="eq-tag">(1)</div></div>
+<div class="callout brass">
+<span class="tag">La electricidad es asombrosamente más fuerte que la gravedad</span>
+<p>Compare: la atracción gravitatoria entre dos cuerpos de 1 kg separados 1 m es aproximadamente 6.674×10⁻¹¹ N, ínfimamente pequeña. La fuerza eléctrica entre dos electrones a esa misma distancia es aproximadamente 2.3×10⁻²⁸ N, pero esto es AÚN así ~10⁴⁰ (diez mil billones de billones de billones) veces más fuerte que su atracción gravitatoria mutua. La única razón por la que en la vida cotidiana la gravedad «domina» sobre la electricidad es que la materia ordinaria es casi perfectamente neutra eléctricamente (las cargas están compensadas), mientras que las masas se suman sin tal compensación.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Ley de Ohm: la corriente como flujo</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Enunciado.</strong> La intensidad de corriente es directamente proporcional a la tensión e inversamente proporcional a la resistencia:</p>
+<div class="plate">
+<div class="eq-body">I = U/R</div>
+<div class="cap">U [V], R [Ω], I [A]</div>
+</div>
+<p>La analogía clásica es la tubería de agua: la tensión U es la «presión» (diferencia de presiones en los extremos del tubo), la resistencia R es la estrechez del tubo, la corriente I es cuánta agua fluye realmente por segundo. Un tubo ancho (R pequeño) con la misma presión deja pasar más agua (corriente); un tubo estrecho (R grande) deja pasar menos.</p>
+<p>Ejemplo numérico: una batería de coche (U = 12 V) se conecta a una bombilla con resistencia R = 4 Ω. Halle la corriente que pasa por la bombilla.</p>
+<div class="eq"><div class="eq-body">I = U/R = 12/4 = <strong>3 A</strong></div><div class="eq-tag">(2)</div></div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Ejemplo transversal: de la carga a la corriente</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Conectemos ambas leyes directamente. Una carga q = 2 C fluye uniformemente a través de un conductor en un tiempo t = 4 s (esto es precisamente la definición de corriente, §1):</p>
+<div class="eq"><div class="eq-body">I = q/t = 2/4 = <strong>0.5 A</strong></div><div class="eq-tag">(3)</div></div>
+<p>Ahora apliquemos la ley de Ohm: ¿qué tensión se necesita para que a través de una resistencia R = 10 Ω circule exactamente esa corriente?</p>
+<div class="eq"><div class="eq-body">U = I·R = 0.5·10 = <strong>5 V</strong></div><div class="eq-tag">(4)</div></div>
+<p>Toda la cadena de razonamiento —desde la carga estática q (mundo de Coulomb) pasando por la definición de corriente I=q/t hasta la ley de Ohm (mundo de cargas en movimiento)— muestra que no son dos hechos aislados, sino un mismo objeto (la carga eléctrica) considerado primero en reposo y luego en movimiento.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A dónde lleva esto: de dónde viene la resistencia</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>La ley de Ohm no es una ley fundamental de la naturaleza como la ley de Coulomb, sino una regularidad empírica válida para muchos (pero no todos) los materiales. A nivel microscópico, la resistencia surge de las colisiones de los electrones en movimiento con los átomos vibrantes de la red cristalina del conductor: cuanto más «tiembla» la red (mayor temperatura), más frecuentes son las colisiones y mayor es la resistencia. Por eso la resistencia de la mayoría de los metales aumenta con el calentamiento.</p>
+<p>En las colisiones, la energía cinética del movimiento dirigido de los electrones se transforma en calor; esta misma energía está relacionada con la ley de Joule-Lenz, P = I²R (potencia disipada en forma de calor), una aplicación directa de la ley de conservación de la energía (parte II) al circuito eléctrico. En nuestro ejemplo de §3: P = 3²·4 = 36 W; exactamente esa cantidad de calor disipa la bombilla cada segundo.</p>
+<div class="callout steel">
+<span class="tag">Los superconductores violan la ley de Ohm — en el buen sentido</span>
+<p>Al enfriar ciertos materiales por debajo de una temperatura crítica (a veces solo unos grados por encima del cero absoluto, a veces —en los superconductores de «alta temperatura»— a la temperatura del nitrógeno líquido), la resistencia eléctrica cae EXACTAMENTE a cero. La corriente puede fluir por un anillo superconductor cerrado prácticamente para siempre, sin ninguna tensión, lo que contradice directamente U = IR cuando R = 0 e I ≠ 0. Ambas leyes de esta nota ya aparecieron en el cuadro unificado de las ecuaciones de Maxwell (parte IV): son casos particulares de una teoría más general del campo electromagnético.</p>
+</div>
+<p>En el sitio web estas son leyes separadas, por si se quiere profundizar:</p>
+<p style="max-width:680px">
+<a href="/lang/es/laws/coulombs_law.html">Ley de Coulomb</a> ·
+          <a href="/lang/es/laws/ohms_law.html">Ley de Ohm</a>
+</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Experimento en casa</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · un peine atrae agua y papel</span>
+<p>Peine su cabello seco con un peine de plástico varias veces (o frote un globo contra un suéter de lana), luego acérquelo a pequeños trozos de papel o a un chorro fino de agua del grifo.</p>
+<p><span class="qlabel">Qué observar</span> los trozos de papel saltan y se pegan al peine, el chorro de agua se desvía notablemente — la fricción «arrancó» electrones de una superficie a otra, cargando el peine, y la ley de Coulomb (§2) hace que atraiga cualquier objeto cercano cargado (o que se polarice, como el agua).</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experimento en casa · la mina de un lápiz como resistencia variable</span>
+<p>Si tiene en casa un circuito simple «pila-bombilla(led)-cables» (o móntelo con una pila de botón, un led y dos cables), inserte en la interrupción del circuito una mina de lápiz común (afilada por ambos extremos) en lugar de uno de los cables.</p>
+<p><span class="qlabel">Qué observar</span> el led brilla menos que con la conexión directa por cable: la mina (a diferencia del metal) tiene una resistencia apreciable. Si puede sujetar los contactos en distintos puntos a lo largo de la mina, cambiando la longitud del tramo activo, el brillo cambiará ante sus ojos: cuanto más largo sea el camino a través de la mina, mayor será R, menor será I según la ley de Ohm (§3), y más tenue será la luz.</p>
+</div>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Problemas para comprobar</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Primero piense por su cuenta, luego abra la solución. La solución sigue siempre el esquema: <strong>Datos → Ley → Solución → Respuesta</strong>.</p>
+<details class="problem">
+<summary>1. La distancia entre dos cargas se duplicó. ¿En cuántas veces cambió la fuerza de interacción?</summary>
+<div class="answer">
+<p><span class="qlabel">Datos</span> r<sub>nueva</sub> = 2r.</p>
+<p><span class="qlabel">Ley</span> ley de Coulomb (§2): F ∝ 1/r².</p>
+<p><span class="qlabel">Solución</span> F<sub>nueva</sub>/F = r²/(2r)² = 1/4.</p>
+<p><span class="qlabel">Respuesta</span> <strong>disminuyó 4 veces</strong> — la misma matemática que la gravedad (parte VII).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Dos cargas de 2 μC están separadas 6 cm. Halle la fuerza de interacción (k ≈ 9×10⁹ N·m²/C²).</summary>
+<div class="answer">
+<p><span class="qlabel">Datos</span> q₁ = q₂ = 2×10⁻⁶ C, r = 0.06 m.</p>
+<p><span class="qlabel">Ley</span> ley de Coulomb (§2): F = kq₁q₂/r².</p>
+<p><span class="qlabel">Solución</span> F = 9×10⁹·4×10⁻¹²/3.6×10⁻³ = 3.6×10⁻²/3.6×10⁻³ = 10 N.</p>
+<p><span class="qlabel">Respuesta</span> <strong>10 N</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. Por una resistencia de 5 Ω circula una corriente de 4 A. Halle la tensión en la resistencia y la potencia disipada en forma de calor.</summary>
+<div class="answer">
+<p><span class="qlabel">Datos</span> R = 5 Ω, I = 4 A.</p>
+<p><span class="qlabel">Ley</span> ley de Ohm (§3): U = IR; ley de Joule-Lenz (§5): P = I²R.</p>
+<p><span class="qlabel">Solución</span> U = 4·5 = 20 V; P = 4²·5 = 80 W.</p>
+<p><span class="qlabel">Respuesta</span> <strong>U = 20 V, P = 80 W</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Una carga de 6 C ha pasado por un conductor en 3 segundos. ¿Qué resistencia se necesita para que, con esa corriente, baste una tensión de 4 V?</summary>
+<div class="answer">
+<p><span class="qlabel">Datos</span> q = 6 C, t = 3 s, U = 4 V.</p>
+<p><span class="qlabel">Ley</span> definición de corriente (§1, §4): I = q/t; ley de Ohm: R = U/I.</p>
+<p><span class="qlabel">Solución</span> I = 6/3 = 2 A; R = 4/2 = 2 Ω.</p>
+<p><span class="qlabel">Respuesta</span> <strong>2 Ω</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. ¿Por qué la materia ordinaria que nos rodea casi no manifiesta fuerzas eléctricas a grandes distancias, si la fuerza eléctrica es ~10⁴⁰ veces más fuerte que la gravitatoria?</summary>
+<div class="answer">
+<p><span class="qlabel">Ley</span> §2 — comparación de la fuerza de Coulomb y la fuerza de gravedad.</p>
+<p><span class="qlabel">Solución</span> los cuerpos ordinarios son casi perfectamente neutros eléctricamente: las cargas positivas de los núcleos están compensadas prácticamente en su totalidad por las cargas negativas de los electrones, por lo que la fuerza eléctrica total entre dos cuerpos neutros es cercana a cero. La gravedad, por el contrario, no tiene «masa negativa» para una compensación: las masas de todas las partículas se suman sin excepción, por lo que a grandes escalas la gravedad prevalece a pesar de su debilidad fundamental.</p>
+<p><span class="qlabel">Respuesta</span> <strong>la neutralidad eléctrica de la materia ordinaria</strong> — las cargas están compensadas, las masas no.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">¿Encontró alguna inexactitud?</span>
+<p>Un error tipográfico, una fórmula incorrecta, un número que no cuadra, una explicación confusa — escríbanos:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Coulomb%20Ohm%20article">feedback@bridge42worlds.org</a>.
+      Cada mensaje se lee realmente, se analiza y se aplica la corrección — no es «en vano».</p>
+</div>
+<footer>
+<p>bridge42worlds · «guía de estudio» de la capa de leyes · parte XIII de la serie, electromagnetismo</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2/hero: два заряда — если одноимённые, отталкиваются (расходятся); если разноимённые, притягиваются.
+  // Честное численное покачивание позиции по циклу, синхронное со сменой знака заряда.
+  function wireChargePair(chargeEl, signEl, x0, x1) {
+    var PERIOD = 6000;
+    var lastTs = null;
+    var attracting = true;
+    setInterval(function(){
+      attracting = !attracting;
+      signEl.textContent = attracting ? '−' : '+';
+    }, PERIOD);
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % PERIOD) / PERIOD;
+      var t = phase < 0.5 ? phase * 2 : (1 - phase) * 2; // туда-обратно за один период
+      var target = attracting ? x0 + (x1 - x0) * 0.35 : x1; // притяжение — сближаются; отталкивание — расходятся
+      var x = x1 + (target - x1) * Math.sin(t * Math.PI / 2);
+      chargeEl.setAttribute('cx', x.toFixed(1));
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var heroCharge = document.getElementById('heroCharge');
+  var heroSign = document.getElementById('heroChargeSign');
+  if (heroCharge) wireChargePair(heroCharge, heroSign, 115, 250);
+
+  var pairCharge = document.getElementById('pairCharge');
+  var pairSign = document.getElementById('pairChargeSign');
+  if (pairCharge) wireChargePair(pairCharge, pairSign, 80, 240);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — ciencia en palabras sencillas · <a href="/lang/es/theory/">teoría</a> · <a href="/lang/es/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

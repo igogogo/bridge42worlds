@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Bernoulli's Equation: Why Faster Flow Exerts Less Pressure — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимация: сужающаяся труба, частицы ускоряются ---------- */
+.pipe-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.pipe-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>The Equation in a Nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>Where It Comes From: Flow Energy</a></li>
+<li><a href="#s3"><span class="n">03</span>Pipe Narrowing: Venturi Tube</a></li>
+<li><a href="#s4"><span class="n">04</span>Aircraft Wing — Not So Simple</a></li>
+<li><a href="#s5"><span class="n">05</span>A Running Example: Pitot Tube</a></li>
+<li><a href="#s6"><span class="n">06</span>Where It Leads: Limits of Applicability</a></li>
+<li><a href="#s7"><span class="n">07</span>Home Experiment</a></li>
+<li><a href="#s8"><span class="n">08</span>Check Your Understanding</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Fluid Dynamics · Part IX</p>
+<h1>Bernoulli's Equation: Why Faster Flow Exerts Less Pressure</h1>
+<p class="subtitle">A counterintuitive fact on which half of aviation and the entire perfume industry relies: where a fluid or gas accelerates, the surrounding pressure drops, not rises.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,60 L140,60 L200,90 L260,90 L320,90 M20,120 L140,120 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<circle cx="60" cy="90" fill="var(--steel-fill)" id="heroDot" r="6"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="45">широко, медленно</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">узко, быстро</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Annotation</span>
+<p>Daniel Bernoulli derived the energy conservation equation for flowing fluid in 1738: along a streamline, the sum of pressure, kinetic, and potential 'energy per unit volume' remains constant. A direct consequence — where the flow accelerates (pipe narrows), static pressure must drop. This same principle explains atomizers, carburetors, and (with important caveats) the lift of a wing. In this note — derivation of the equation, Venturi tube with numbers, and an honest breakdown of what Bernoulli explains in aircraft flight, and what it does not.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Ускоряющийся поток в сужении трубы" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>Accelerating flow in a pipe constriction</figcaption></figure>
+<figure><img alt="Обтекание крыла: разная скорость потока сверху и снизу" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>Flow around a wing: different flow speeds above and below</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>The Equation in a Nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="plate">
+<div class="eq-body">P + ½ρv² + ρgh = const</div>
+<div class="cap">along a STREAMLINE in a steady, inviscid, incompressible flow</div>
+</div>
+<table class="symtab">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>P</td><td>static pressure — what a pressure gauge moving with the flow would show</td></tr>
+<tr><td>½ρv²</td><td>'dynamic pressure' — energy of motion per unit volume</td></tr>
+<tr><td>ρgh</td><td>'hydrostatic pressure' — energy due to height (as in Archimedes' principle, Part VIII)</td></tr>
+</table>
+<p>Three caveats in the definition — not fine print, but precisely the conditions where the law works accurately: steady flow (flow pattern does not change with time), inviscid (no internal friction), incompressible (density does not change). For water this is almost always a good approximation; for air at high subsonic speeds — also decent, but not perfect (§6).</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Where It Comes From: Flow Energy</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Bernoulli's equation is not a new law of nature, but the law of energy conservation (Part II) applied to a small fluid volume moving along a streamline. Each term is a form of energy per unit volume:</p>
+<ul>
+<li><strong>½ρv²</strong>: a direct analog of kinetic energy ½mv², only instead of mass m — density ρ (mass per unit volume).</li>
+<li><strong>ρgh</strong>: analog of potential energy mgh, by the same substitution (m → ρ).</li>
+<li><strong>P</strong>: 'pressure energy': the work done by adjacent fluid layers to push the volume forward.</li>
+</ul>
+<p>If the fluid flows horizontally (h does not change) and accelerates, the kinetic term ½ρv² grows — and since the sum must remain constant, the pressure term P must drop. This is no exotic thing, but simple energy accounting: speed has 'borrowed' energy from pressure.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Pipe Narrowing: Venturi Tube</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Before calculating pressure, you need the velocity in the narrow part — it comes from a separate, simpler law: <strong>continuity equation</strong> (the fluid cannot 'accumulate' inside the pipe; what flows in equals what flows out):</p>
+<div class="eq"><div class="eq-body">A₁v₁ = A₂v₂</div><div class="eq-tag">(1)</div></div>
+<div aria-hidden="true" class="pipe-fig">
+<svg viewbox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,30 L160,30 L240,60 L380,60 M20,110 L160,110 L240,80 L380,80" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<circle cx="40" cy="70" fill="var(--steel-fill)" id="pipeDot1" r="7"></circle>
+<circle cx="40" cy="70" fill="var(--brass-fill)" id="pipeDot2" r="5"></circle>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>velocity</b><span data-readout="v">2.0</span> m/s</span>
+<span><b>pressure</b><span data-readout="p">100.0</span> kPa</span>
+</div>
+<p>Numerical example: the wide part of the pipe is 4 times wider than the narrow part (by cross-sectional area), water (ρ = 1000 kg/m³) flows in the wide part at velocity v₁ = 2 m/s. The pipe is horizontal (h does not change).</p>
+<div class="eq"><div class="eq-body">v₂ = v₁·(A₁/A₂) = 2·4 = <strong>8 m/s</strong></div><div class="eq-tag">(2)</div></div>
+<p>Now the pressure drop according to Bernoulli (h unchanged, ρgh term cancels on both sides):</p>
+<div class="eq"><div class="eq-body">ΔP = ½ρ(v₂² − v₁²) = ½·1000·(64−4) = <strong>30,000 Pa</strong> (30 kPa)</div><div class="eq-tag">(3)</div></div>
+<p>The pressure in the narrow part is lower than in the wide part by a full 30 kilopascals — nearly a third of atmospheric pressure! It is on this principle (Venturi tube) that carburetors, airbrushes, and medical nebulizers work: a narrow channel creates a local low-pressure zone that draws fluid in from a side opening.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Aircraft Wing — Not So Simple</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The popular explanation of lift: 'the wing is curved on top, the air above it moves faster, so the pressure there is lower, the wing is pushed upward.' This is a qualitatively correct line of reasoning (faster on top — indeed lower pressure on top — indeed there is lift), but the specific, often repeated justification of 'why the air moves faster on top' is a myth.</p>
+<div class="callout brass">
+<span class="tag">Debunking the 'Equal Transit Time Theory'</span>
+<p>It is often said: 'air particles above and below the wing must meet at the trailing edge at the same time, and the path on top is longer — so the speed there is greater.' This is incorrect: experiment shows particles do NOT meet simultaneously — the flow over the wing overtakes the 'below' pair by a large margin. The real reason for the higher speed on top is that the wing shape and angle of attack create circulation around the entire profile (a result of air viscosity at the surface and the Kutta condition at the trailing edge) — a significantly more subtle effect than 'longer path — faster.'</p>
+</div>
+<p>Bernoulli's equation here is a valid TOOL for calculation (since there is a speed difference — there will be a pressure difference), but it does not explain where the speed difference itself comes from. A complete explanation of lift also requires Newton's third law: the wing deflects the airflow downward (downwash), and by action-reaction, the air pushes the wing upward — both descriptions (energy-based via Bernoulli and momentum-based via Newton) are mutually consistent and together give the full picture.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A Running Example: Pitot Tube</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Aircraft measure airspeed with a Pitot tube — it compares the pressure at two points: where the flow is brought to rest (at the tube's tip, 'stagnation point'), and where it flows freely.</p>
+<div class="eq"><div class="eq-body">P₀ = P + ½ρv²  ⇒  v = √(2(P₀−P)/ρ)</div><div class="eq-tag">(4)</div></div>
+<p>Numerical example: the sensor shows a pressure difference ΔP = 250 Pa, air density ρ ≈ 1.25 kg/m³. What is the speed of the aircraft relative to the air?</p>
+<div class="eq"><div class="eq-body">v = √(2·250/1.25) = √400 = <strong>20 m/s</strong></div><div class="eq-tag">(5)</div></div>
+<p>≈72 km/h — a modest speed (light plane at takeoff), but the method is the same for any speeds up to near-sonic, where the formula must be corrected for air compressibility (§6).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where It Leads: Limits of Applicability</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The three assumptions from §1 are not formalities. <strong>Viscosity</strong> of real fluids dissipates some energy as heat along the pipe (hence pressure drop in long pipelines even WITHOUT narrowing — the pure Bernoulli equation does not describe this; friction corrections are needed). <strong>Compressibility</strong> becomes significant for gases at speeds comparable to the speed of sound (Mach number approaching 1) — then more complete gas dynamics is needed. <strong>Turbulence</strong> makes the flow unsteady on small scales — the equation holds for averaged, not instantaneous, quantities.</p>
+<div class="callout steel">
+<span class="tag">The Full Version — Navier-Stokes Equations</span>
+<p>Bernoulli's equation is a special, highly simplified case of the far more general Navier-Stokes equations, which describe the flow of real viscous fluids and gases. Their exact analytical solution in the general case — one of the seven 'Millennium Problems' (Clay Mathematics Institute, $1,000,000 for proving existence and smoothness of solutions) — remains unsolved to this day, though engineers happily compute flows numerically without waiting for mathematicians.</p>
+</div>
+<p>On the site this is a separate law, if you'd like to dive deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/bernoullis_principle.html">Bernoulli's Equation</a> ·
+          <a href="/lang/en/laws/archimedes_principle.html">Archimedes' Principle</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Two Sheets of Paper</span>
+<p>Take two sheets of paper, hold them parallel to each other at a distance of 3-4 cm (you can just hold the top edges with two hands) and blow between them, right into the gap.</p>
+<p><span class="qlabel">What to Notice</span> sheets attract each other, rather than flying apart as one might intuitively expect. The air between the sheets accelerates — by Bernoulli, the pressure there drops below the outside atmospheric pressure, and the external pressure literally presses the sheets inward, toward each other.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Ball in a Hairdryer Jet</span>
+<p>Point a hairdryer (or a vacuum cleaner in blower mode) straight up and gently place a lightweight ping-pong ball in the airflow above it, then release.</p>
+<p><span class="qlabel">What to Notice</span> the ball hovers in the air, swaying slightly, and does not drift out of the jet to the sides — as soon as it shifts to the edge of the stream, the surrounding air there moves slower (normal atmospheric pressure), and the higher outside pressure 'pushes' the ball back toward the center of the fast flow, where pressure is lower. The same principle that holds two sheets of paper together in the previous experiment.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Check Your Understanding</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think on your own, then open the solution. The solution follows the pattern everywhere: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. Water flows through a horizontal pipe that narrows by a factor of three in cross-sectional area. The speed in the wide part is 3 m/s. Find the speed in the narrow part.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> A₁/A₂ = 3, v₁ = 3 m/s.</p>
+<p><span class="qlabel">Law</span> continuity equation (§3): A₁v₁ = A₂v₂.</p>
+<p><span class="qlabel">Solution</span> v₂ = v₁·(A₁/A₂) = 3·3 = 9 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>9 m/s</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. In the previous problem, find the pressure drop between the wide and narrow part (water, ρ = 1000 kg/m³).</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> v₁ = 3 m/s, v₂ = 9 m/s, ρ = 1000 kg/m³.</p>
+<p><span class="qlabel">Law</span> Bernoulli's equation for a horizontal pipe (§3): ΔP = ½ρ(v₂²−v₁²).</p>
+<p><span class="qlabel">Solution</span> ΔP = 0.5·1000·(81−9) = 500·72 = 36,000 Pa.</p>
+<p><span class="qlabel">Answer</span> <strong>36 kPa</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A Pitot tube shows a pressure difference of 500 Pa in air with density 1.25 kg/m³. Find the speed.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> ΔP = 500 Pa, ρ = 1.25 kg/m³.</p>
+<p><span class="qlabel">Law</span> Pitot tube formula (§5): v = √(2ΔP/ρ).</p>
+<p><span class="qlabel">Solution</span> v = √(2·500/1.25) = √800 ≈ 28.3 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>≈28.3 m/s</strong> (≈102 km/h).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Is it true that 'air particles above and below an aircraft wing meet at the trailing edge at the same time'? How does this relate to the actual mechanism of lift?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> §4 — debunking the equal transit time myth.</p>
+<p><span class="qlabel">Solution</span> No, this is a common misconception: experimentally, the particles do NOT meet at the same time; the flow on top arrives earlier. The real reason for the speed difference is circulation around the wing profile (an effect of viscosity and the Kutta condition at the trailing edge), not 'a longer path on top.'</p>
+<p><span class="qlabel">Answer</span> <strong>myth, incorrect</strong> — Bernoulli correctly CALCULATES the pressure from an already known speed difference, but does not explain where the difference itself comes from.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Why does the basic form of Bernoulli's equation not predict a pressure drop along a LONG pipe of CONSTANT cross-section, even though it is observed in practice?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> limits of applicability (§6) — the assumption of 'inviscid fluid.'</p>
+<p><span class="qlabel">Solution</span> The basic Bernoulli equation is derived for an IDEAL (inviscid) fluid, where energy along a streamline is not lost. In real pipes, viscous friction against the walls gradually turns some of the flow's energy into heat — this loss is not included in the simple form P+½ρv²+ρgh=const, hence the pressure drop observed in practice even without a change in cross-section.</p>
+<p><span class="qlabel">Answer</span> <strong>viscosity</strong> — real fluids are not ideal; energy is dissipated as heat, which the basic equation does not account for.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an Inaccuracy?</span>
+<p>Typo, wrong formula, number doesn't add up, clumsily explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Bernoulli%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, examined, and a correction is made based on it — it's not 'into a black hole.'</p>
+</div>
+<footer>
+<p>bridge42worlds · 'A study guide' to the layer of laws · Part IX of the series, Fluid Dynamics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §3: частица в трубе Вентури движется со скоростью, заданной уравнением неразрывности A·v=const —
+  // не постоянной по всей длине, а честно пересчитанной для текущего x на каждом кадре (не CSS-заглушка).
+  var RHO = 1000, V1 = 2, AREA_RATIO = 4, V2 = V1 * AREA_RATIO;
+  var P0 = 100000; // условное базовое давление в широкой части, Па (отсчётная точка, не абсолютный ноль)
+
+  // Труба главной фигуры: широкая часть x∈[20,160], конус x∈[160,240], узкая часть x∈[240,380].
+  function makePipe(xWideEnd, xNarrowStart, xEnd, yTopWide, yBotWide, yTopNarrow, yBotNarrow){
+    function laneY(x, top){
+      if (x <= xWideEnd) return top ? yTopWide : yBotWide;
+      if (x >= xNarrowStart) return top ? yTopNarrow : yBotNarrow;
+      var t = (x - xWideEnd) / (xNarrowStart - xWideEnd);
+      var wide = top ? yTopWide : yBotWide, narrow = top ? yTopNarrow : yBotNarrow;
+      return wide + (narrow - wide) * t;
+    }
+    function speedAt(x){
+      if (x <= xWideEnd) return V1;
+      if (x >= xNarrowStart) return V2;
+      return V1 + (V2 - V1) * (x - xWideEnd) / (xNarrowStart - xWideEnd);
+    }
+    return { laneY: laneY, speedAt: speedAt, xStart: 20, xEnd: xEnd };
+  }
+
+  var mainPipe = makePipe(160, 240, 380, 30, 110, 60, 80);
+  var heroPipe = makePipe(140, 200, 320, 60, 120, 90, 90);
+
+  var dot1 = document.getElementById('pipeDot1');
+  var dot2 = document.getElementById('pipeDot2');
+  var heroDot = document.getElementById('heroDot');
+  var vReadout = document.querySelector('[data-readout="v"]');
+  var pReadout = document.querySelector('[data-readout="p"]');
+
+  var PX_PER_MS = 0.02; // масштаб скорости — узкая часть проходится за разумное время в 6-секундном темпе сайта
+  var x1 = mainPipe.xStart, x2 = (mainPipe.xStart + mainPipe.xEnd) / 2; // вторая частица на полкорпуса впереди
+  var hx = heroPipe.xStart;
+  var lastTs = null;
+
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtMs = Math.min(ts - lastTs, 50);
+    lastTs = ts;
+
+    x1 += mainPipe.speedAt(x1) * PX_PER_MS * dtMs;
+    x2 += mainPipe.speedAt(x2) * PX_PER_MS * dtMs;
+    if (x1 > mainPipe.xEnd) x1 = mainPipe.xStart;
+    if (x2 > mainPipe.xEnd) x2 = mainPipe.xStart;
+    if (dot1) { dot1.setAttribute('cx', x1.toFixed(1)); dot1.setAttribute('cy', mainPipe.laneY(x1, false).toFixed(1)); }
+    if (dot2) { dot2.setAttribute('cx', x2.toFixed(1)); dot2.setAttribute('cy', mainPipe.laneY(x2, true).toFixed(1)); }
+
+    var v = mainPipe.speedAt(x1);
+    var p = P0 - 0.5 * RHO * (v * v - V1 * V1); // уравнение Бернулли для горизонтальной трубы (§3)
+    if (vReadout) vReadout.textContent = v.toFixed(1);
+    if (pReadout) pReadout.textContent = (p / 1000).toFixed(1);
+
+    hx += heroPipe.speedAt(hx) * PX_PER_MS * dtMs;
+    if (hx > heroPipe.xEnd) hx = heroPipe.xStart;
+    if (heroDot) { heroDot.setAttribute('cx', hx.toFixed(1)); heroDot.setAttribute('cy', heroPipe.laneY(hx, false).toFixed(1)); }
+
+    requestAnimationFrame(tick);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

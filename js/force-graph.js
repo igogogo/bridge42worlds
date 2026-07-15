@@ -131,7 +131,9 @@ window.createForceGraph = function (opts) {
         links.forEach(function (l) {
             var a = nodes[l[0]], b = nodes[l[1]], hot = hover >= 0 && (l[0] === hover || l[1] === hover);
             ctx.strokeStyle = hot ? 'rgba(120,120,120,0.5)' : 'rgba(140,140,140,0.13)';
+            if (l[2] === 'dashed') ctx.setLineDash([3, 3]); // напр. закон↔учёный «оказал влияние», не «открыл»
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            if (l[2] === 'dashed') ctx.setLineDash([]);
         });
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i], dim = hover >= 0 && i !== hover && !adj[hover][i], col = opts.color(a);

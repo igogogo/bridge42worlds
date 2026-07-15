@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>What is conserved in motion: momentum, energy, angular momentum — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+.g   { color:var(--brass); font-style:italic; }
+.om, .kin { color:var(--steel); font-style:italic; }
+b.g  { color:var(--brass); }
+
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{
+  display:none;
+}
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{
+    display:block;
+    position:sticky; top:36px; align-self:start;
+    padding-top:64px;
+  }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{
+  text-decoration:none; color:var(--ink-soft);
+  font-size:.82rem; line-height:1.35; display:block;
+}
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{
+  padding: 56px 0 40px;
+  display:grid; gap:28px;
+}
+@media (min-width:760px){
+  .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; }
+}
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  text-wrap:balance;
+  color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-ballA{ animation: heroBallA 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .hero-ballB{ animation: heroBallB 6s cubic-bezier(.3,0,.6,1) infinite; }
+}
+/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. */
+@keyframes heroBallA{ 0%{ transform:translateX(0); } 38%{ transform:translateX(150px); } 40%{ transform:translateX(150px); opacity:0; } 100%{ transform:translateX(150px); opacity:0; } }
+@keyframes heroBallB{ 0%{ transform:translateX(0); opacity:0; } 39%{ transform:translateX(0); opacity:0; } 40%{ opacity:1; } 68%{ transform:translateX(150px); } 100%{ transform:translateX(150px); } }
+
+/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+   как принято визуально отличать advanced-глубину от основного текста. */
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:22px 26px;
+  margin: 8px 0 8px;
+  box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{
+  display:flex; align-items:baseline; gap:.6em;
+  margin:0 0 .3em;
+  max-width:680px;
+}
+.sec-num{
+  font-family:var(--font-mono); color:var(--brass);
+  font-size:.95rem;
+}
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0;
+  text-wrap:balance;
+}
+h3{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px;
+}
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{
+  width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em;
+  font-size:.92rem;
+}
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap: 16px;
+  max-width:680px;
+  margin: 1.5em 0;
+  padding: 14px 4px;
+}
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  padding: 22px 26px;
+  margin: 1.6em 0;
+  box-shadow: var(--shadow);
+}
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin-top:.9em;
+}
+
+sup, sub{ font-size:.68em; }
+
+.callout{
+  max-width:680px;
+  border-left: 3px solid var(--rule);
+  padding: 4px 0 4px 18px;
+  margin: 1.5em 0;
+}
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em;
+  text-transform:uppercase; margin-bottom:.4em; display:block;
+}
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+.callout ol{ margin-bottom:0; }
+.callout li{ margin-bottom:.7em; }
+.callout li:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{
+  font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px;
+}
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+.fig-row{ display:grid; gap:24px; max-width:920px; }
+@media (min-width:760px){ .fig-row{ grid-template-columns:1fr 1fr; } }
+.fig-row figure{ max-width:none; }
+
+code, .code{
+  font-family:var(--font-mono); font-size:.86em; background:var(--paper-raised);
+  border:1px solid var(--rule); border-radius:3px; padding:.1em .4em;
+}
+
+footer{
+  max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule);
+  color:var(--ink-soft); font-size:.85rem;
+}
+.feedback-box{
+  max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:18px 22px;
+}
+.feedback-box .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brass); display:block; margin-bottom:.5em;
+}
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- animated strips — реальные объекты, не абстрактные точки ---------- */
+.anim-strip{
+  position:relative; max-width:680px; margin:1.5em 0 1.9em;
+  background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.anim-strip.single{ height:64px; }
+.anim-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+
+.anim-ball{
+  position:absolute; top:50%; border-radius:50%; background:var(--steel-fill); left:16px;
+}
+.anim-ball.b-light{ width:14px; height:14px; margin-top:-7px; }
+.anim-ball.b-heavy{ width:22px; height:22px; margin-top:-11px; background:var(--brass-fill); }
+.anim-ball.b-med{ width:18px; height:18px; margin-top:-9px; background:var(--moss-fill); }
+
+.anim-label{
+  position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft);
+  text-align:right;
+}
+.anim-label.left{ right:auto; left:14px; }
+
+.anim-readout{
+  position:absolute; right:10px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; min-width:78px; text-align:right;
+}
+.graph-mini{
+  max-width:340px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:10px;
+}
+.graph-mini svg{ width:100%; height:auto; display:block; }
+
+/* §4 — фигурист, руки к телу: угловая скорость видна как скорость вращения полоски-«руки». */
+.anim-strip.spin{ height:130px; display:flex; align-items:center; justify-content:center; }
+.spin-rig{ position:relative; width:100px; height:100px; }
+.spin-arms{
+  position:absolute; left:50%; top:50%; width:90px; height:6px; margin-left:-45px; margin-top:-3px;
+  border-radius:3px; background:var(--steel-fill); transform-origin:center;
+}
+.spin-body{
+  position:absolute; left:50%; top:50%; width:16px; height:16px; margin-left:-8px; margin-top:-8px;
+  border-radius:50%; background:var(--ink); opacity:.15;
+}
+@media (prefers-reduced-motion: no-preference){
+  .spin-arms.slow{ animation: spinSlow 6s linear infinite, armsIn 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes spinSlow{ 0%{ transform:rotate(0deg); } 40%{ transform:rotate(288deg); } 100%{ transform:rotate(288deg) rotate(1152deg); } }
+@keyframes armsIn{ 0%{ width:90px; margin-left:-45px; } 40%{ width:90px; margin-left:-45px; } 100%{ width:34px; margin-left:-17px; } }
+
+@media (prefers-reduced-motion: no-preference){
+  .anim-ball.rec-light{ animation: moveRecLight 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.rec-heavy{ animation: moveRecHeavy 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.swap-in{ animation: moveSwapIn 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.swap-out{ animation: moveSwapOut 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-ball.stick-a{ animation: moveStickA 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.stick-b{ animation: moveStickB 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+/* Пушка-ядро: тяжёлая пушка чуть откатывается влево, лёгкое ядро улетает далеко и быстро вправо —
+   одна и та же длительность 6с на оба, финиш на разных % (ядро летит дальше и быстрее). */
+@keyframes moveRecLight{ 0%{ left:50%; } 45%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
+@keyframes moveRecHeavy{ 0%{ left:50%; } 45%{ left:38%; } 100%{ left:38%; } }
+/* Упругий столкновение равных масс: шар A подъезжает и «передаёт» скорость B (A останавливается). */
+@keyframes moveSwapIn{ 0%{ left:16px; } 40%{ left:50%; opacity:1; } 41%{ opacity:0; } 100%{ opacity:0; left:50%; } }
+@keyframes moveSwapOut{ 0%{ left:50%; opacity:0; } 40%{ left:50%; opacity:0; } 41%{ opacity:1; } 75%{ left:calc(100% - 22px); } 100%{ left:calc(100% - 22px); } }
+/* Неупругое столкновение: два тела слипаются и едут вместе медленнее суммарной массой. */
+@keyframes moveStickA{ 0%{ left:16px; } 40%{ left:44%; } 100%{ left:44%; } }
+@keyframes moveStickB{ 0%{ left:60%; } 40%{ left:60%; } 55%{ left:70%; } 100%{ left:70%; } }
+
+/* ---------- задачи с раскрывающимся решением ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{
+  cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem;
+}
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule);
+  color:var(--ink-soft); font-size:.86rem;
+}
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); margin-right:.5em;
+}
+
+/* ---------- сноска "величины и единицы" под формулой ---------- */
+.units{
+  font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
+}
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Three conserved quantities</a></li>
+<li><a href="#s2"><span class="n">02</span>Momentum: the sum does not change</a></li>
+<li><a href="#s3"><span class="n">03</span>Energy: changes costumes</a></li>
+<li><a href="#s4"><span class="n">04</span>Angular momentum: the skater speeds up</a></li>
+<li><a href="#s5"><span class="n">05</span>A working example: elastic and inelastic collisions</a></li>
+<li><a href="#s6"><span class="n">06</span>Where this leads: Noether's theorem</a></li>
+<li><a href="#s7"><span class="n">07</span>Experiment at home</a></li>
+<li><a href="#s8"><span class="n">08</span>Problems to check</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · classical dynamics · part II</p>
+<h1>What is conserved in motion: momentum, energy, angular momentum</h1>
+<p class="subtitle">Three quantities that physics forbids wasting: no matter how the picture inside the system changes, their sum — if the system is closed — remains the same before and after.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1.5" x1="20" x2="400" y1="150" y2="150"></line>
+<circle class="hero-ballA" cx="70" cy="150" fill="var(--brass-fill)" r="16"></circle>
+<circle class="hero-ballB" cx="220" cy="150" fill="var(--steel-fill)" r="16"></circle>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="70" y="190">A: v→0</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="220" y="190">B: 0→v</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A передаёт всё B — сумма импульсов не меняется</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>From Newton's three laws (see part I) follow three quantities that in a closed system do not change over time: momentum, energy, and angular momentum. These are not random coincidences but a direct consequence of the symmetries of space and time (Noether's theorem, §6). In this note — all three conservation laws separately with numerical examples, and then one working example (elastic and inelastic collision), where it is clear that momentum is always conserved, but energy only sometimes.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Момент покоя на вершине маятника — вся энергия потенциальна" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>Moment of rest at the pendulum's apex — all energy is potential</figcaption></figure>
+<figure><img alt="Руки к телу — вращение ускоряется: сохраняется момент импульса" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>Arms to the body — rotation speeds up: angular momentum is conserved</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Three conserved quantities</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Newtonian mechanics gives not only the equation of motion but also three 'accounts', the sums of which do not change as long as no one touches the system from the outside.</p>
+<table class="symtab">
+<tr><th>Quantity</th><th>Formula</th><th>Conserved when...</th></tr>
+<tr><td>Momentum</td><td class="sym"><span class="vec">p</span> = m<span class="vec">v</span></td><td>no external forces (Σ<span class="vec">F</span><sub>ext</sub> = 0)</td></tr>
+<tr><td>Energy</td><td class="sym">E = K + U</td><td>no friction/resistance (forces are conservative)</td></tr>
+<tr><td>Angular momentum</td><td class="sym"><span class="vec">L</span> = Iω</td><td>no external torque (Στ<sub>ext</sub> = 0)</td></tr>
+</table>
+<p>It is important to immediately distinguish two different meanings of the word 'conserved': inside the system the quantity can freely <strong>redistribute</strong> between parts (momentum — from one body to another, energy — from kinetic to potential) — only the <em>total sum over the whole system</em> is conserved, not the value for each individual body.</p>
+<p>Note: the conditions for the three laws are different. A collision of two clay balls conserves momentum always, but does not conserve mechanical energy (part goes into deformation heat) — this is analyzed in detail in §5.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Momentum: the sum does not change</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> If no external forces act on a system of bodies (or their resultant is zero), the total momentum of the system remains constant. This is a direct consequence of Newton's third law (part I, §4): interaction forces within the system are always paired and opposite, so they cancel out in the sum over the system.</p>
+<div class="plate">
+<div class="eq-body">Σ<span class="vec">p</span><sub>before</sub> = Σ<span class="vec">p</span><sub>after</sub></div>
+<div class="cap">the total momentum of a closed system is the same at any moment in time</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-ball b-heavy rec-heavy"></div>
+<div class="anim-ball b-light rec-light" style="background:var(--moss-fill)"></div>
+<div class="anim-label left">the cannon (heavy) recoils backward, the cannonball (light) flies forward much farther</div>
+</div>
+<p class="units" style="margin-top:-1.2em">A cannon of mass 500 kg stands motionless and fires a cannonball of mass 5 kg with a speed of 100 m/s. The forward momentum of the cannonball equals the recoil momentum of the cannon backward — in magnitude, not in speed (the cannon has a lower speed because its mass is larger).</p>
+<div class="eq"><div class="eq-body">0 = m<sub>cannonball</sub>v<sub>cannonball</sub> + m<sub>cannon</sub>v<sub>cannon</sub>  ⇒  v<sub>cannon</sub> = −5·100/500 = <strong>−1 m/s</strong></div><div class="eq-tag">(1)</div></div>
+<p>The same calculation as for the skaters in part I, §4 — there forces arise in pairs and momentum simply 'pours' from one body to another, remaining zero in total if the system was at rest before the interaction.</p>
+<div class="callout steel">
+<span class="tag">Collisions: elastic and inelastic</span>
+<p>Momentum is conserved in <strong>any</strong> collision — elastic (the balls fly apart, the total kinetic energy is the same) and inelastic (the bodies stick together or deform, part of the energy goes into heat/sound). The difference between them is about energy, not momentum. A detailed numerical example of both types — §5.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Energy: changes costumes</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> In a system where only conservative forces act (gravity, elasticity — but not friction), the total mechanical energy — the sum of kinetic and potential — is constant:</p>
+<div class="plate">
+<div class="eq-body">E = K + U = const,    K = ½m<span class="vec">v</span>²,    U = mgh</div>
+<div class="cap">energy does not disappear, but flows between kinetic and potential forms</div>
+</div>
+<div class="units">K [J], U [J], m [kg], v [m/s], g ≈ 10 m/s² (rounded, as in part I — for mental calculation), h [m].</div>
+<p>A classic example — a pendulum or a swing: at the extreme point the speed is zero (K = 0), all energy is potential; at the lowest point the height is minimal (U = 0), all energy is kinetic. In the middle of the path — some fraction of each, but the sum is the same at any point of the swing.</p>
+<figure>
+<img alt="График K(t), U(t) и их суммы E для одного качания маятника — кривые K и U пересекаются, сумма остаётся горизонтальной прямой" src="/lang/ru/theory/conservation_energy.png"/>
+<figcaption><span class="fign">Fig. 1</span>Kinetic (K) and potential (U) energies swap places twice per one swing, but their sum (dashed line) stays as a flat horizontal line — it never dips or jumps even for a moment.</figcaption>
+</figure>
+<p>Numerical example: a body falls from a height h = 5 m with no initial speed (air resistance neglected). What is its speed at the ground?</p>
+<div class="eq"><div class="eq-body">mgh = ½mv²  ⇒  v = √(2gh) = √(2·10·5) = <strong>10 m/s</strong></div><div class="eq-tag">(2)</div></div>
+<p>The mass canceled out — falling without air resistance does not depend on the body's mass (the same result for a feather and a weight if you remove the air — the famous feather and hammer experiment on the Moon).</p>
+<div class="callout brass">
+<span class="tag">Why a perpetual motion machine is impossible</span>
+<p>The law of conservation of energy is not an empirical observation but a direct prohibition: for a device to work forever and do useful work, it needs to take energy for that work from somewhere without an external source — that is, create it from nothing. Real mechanisms always lose some energy to friction and resistance (it converts into heat — also energy, just a less 'useful' form), so they stop if not fed.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Angular momentum: the skater speeds up</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> If no external torque acts on a body, its angular momentum is constant. For a rotating rigid body L = Iω, where I is the moment of inertia (a measure of 'how hard it is to spin', depends on how the mass is distributed relative to the axis), ω is the angular velocity:</p>
+<div class="plate">
+<div class="eq-body">L = Iω = const</div>
+<div class="cap">if I decreases (mass closer to the axis) — ω must increase so that L remains unchanged</div>
+</div>
+<div aria-hidden="true" class="anim-strip spin">
+<div class="spin-rig">
+<div class="spin-body"></div>
+<div class="spin-arms slow"></div>
+</div>
+</div>
+<p class="units" style="margin-top:-.6em">A skater spins with arms extended (large I, slowly), then pulls arms to the body (I drops by a factor of four) — the rotation sharply speeds up, exactly so that L remains the same. This is not a stretched metaphor: it is exactly how skaters physically speed up rotation, without any additional force.</p>
+<p>Numerical example: a skater spins with arms extended with a moment of inertia I<sub>1</sub> = 4 kg·m² and angular velocity ω<sub>1</sub> = 2 rad/s. By pulling in his arms, he reduces the moment of inertia to I<sub>2</sub> = 1 kg·m². Find the new angular velocity.</p>
+<div class="eq"><div class="eq-body">I<sub>1</sub>ω<sub>1</sub> = I<sub>2</sub>ω<sub>2</sub>  ⇒  ω<sub>2</sub> = 4·2/1 = <strong>8 rad/s</strong></div><div class="eq-tag">(3)</div></div>
+<p>The rotation sped up by a factor of four — exactly as many times as the moment of inertia dropped. No muscle of the skater does work 'for spinning acceleration' directly at the moment of pulling in the arms — the source of the increase in rotational kinetic energy here is different (the work of muscles against the 'centrifugal' effect when pulling the arms to the body), but the conservation of L holds exactly in any case, regardless of the mechanism.</p>
+<div class="callout moss">
+<span class="tag">Kepler saw it first — in the sky, not in sports</span>
+<p>Kepler's second law (1609): a planet sweeps out equal areas in equal times, moving along an elliptical orbit faster near the Sun and slower away from it. This is exactly the conservation of the planet's angular momentum relative to the Sun — 70 years before Newton even formulated the laws of dynamics. More details — <a href="/lang/en/laws/keplers_second_law.html">Kepler's second law</a>.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A working example: elastic and inelastic collision</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's take two balls of equal mass (m = 2 kg each): ball A flies at a speed of 6 m/s and collides with stationary ball B. Let's analyze both collision scenarios.</p>
+<h3>Elastic collision (energy is also conserved)</h3>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-ball b-med swap-in"></div>
+<div class="anim-ball b-med swap-out"></div>
+<div class="anim-label left">A approaches and completely 'transfers' its speed to B (equal masses)</div>
+</div>
+<p class="units" style="margin-top:-1.2em">With equal masses in a perfectly elastic collision, the speeds simply <em>swap places</em>: A stops (v<sub>A</sub> = 0), B flies off with the speed that A had (v<sub>B</sub> = 6 m/s). Check against both laws:</p>
+<table class="symtab">
+<tr><th></th><th>Before collision</th><th>After collision</th></tr>
+<tr><td>Momentum, kg·m/s</td><td class="sym">2·6 + 2·0 = 12</td><td class="sym">2·0 + 2·6 = 12</td></tr>
+<tr><td>Kin. energy, J</td><td class="sym">½·2·6² = 36</td><td class="sym">½·2·6² = 36</td></tr>
+</table>
+<h3>Inelastic collision (energy is NOT conserved)</h3>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-ball b-heavy stick-a" style="background:var(--brass-fill)"></div>
+<div class="anim-ball b-light stick-b" style="background:var(--steel-fill)"></div>
+<div class="anim-label left">the carts stick together and move together slower than the first one was moving</div>
+</div>
+<p class="units" style="margin-top:-1.2em">Cart m<sub>1</sub> = 3 kg moves at a speed of 4 m/s and couples with a stationary cart m<sub>2</sub> = 1 kg, then they move together:</p>
+<div class="eq"><div class="eq-body">m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>total</sub>  ⇒  v<sub>total</sub> = 3·4/4 = <strong>3 m/s</strong></div><div class="eq-tag">(4)</div></div>
+<table class="symtab">
+<tr><th></th><th>Before collision</th><th>After collision</th></tr>
+<tr><td>Momentum, kg·m/s</td><td class="sym">3·4 + 1·0 = 12</td><td class="sym">4·3 = 12</td></tr>
+<tr><td>Kin. energy, J</td><td class="sym">½·3·4² = 24</td><td class="sym">½·4·3² = 18</td></tr>
+</table>
+<figure>
+<img alt="График импульса двух тележек при неупругом столкновении: p1 падает, p2 растёт, сумма остаётся постоянной" src="/lang/ru/theory/conservation_momentum.png"/>
+<figcaption><span class="fign">Fig. 2</span>The momentum of each cart changes during the brief collision, but their sum (dashed line) remains strictly constant before, during, and after the impact — momentum is conserved, even when energy is not.</figcaption>
+</figure>
+<div class="callout brass">
+<span class="tag">Where did the 6 J go</span>
+<p>24 − 18 = 6 J of kinetic energy 'disappeared' — in fact it did not disappear, but transformed into heat and sound of the coupling deformation (the law of conservation of energy §3 is not violated, just mechanical energy turned into non-mechanical form). Momentum, however, is a vector quantity without 'non-mechanical' forms, it simply has nowhere to go except to remain in the motion of the bodies — hence the difference in the behavior of the two laws.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where this leads: Noether's theorem</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>In part I (§6) there was already an announcement: <strong>Noether's theorem</strong> (Emmy Noether, 1918) connects each of the three conservation laws with a symmetry of space-time — not a coincidence, but a rigorous mathematical consequence of the principle of least action.</p>
+<table class="symtab">
+<tr><th>Symmetry</th><th>What it means</th><th>Gives conservation of</th></tr>
+<tr><td>Homogeneity of time</td><td>laws of physics do not change from epoch to epoch — an experiment set up yesterday and today gives the same result</td><td>energy</td></tr>
+<tr><td>Homogeneity of space</td><td>laws of physics do not change from point to point — move the laboratory a kilometer away, the result is the same</td><td>momentum</td></tr>
+<tr><td>Isotropy of space</td><td>laws of physics do not depend on direction — there is no preferred axis in the Universe</td><td>angular momentum</td></tr>
+</table>
+<p>This turns the intuitive order of cause and effect upside down: it usually seems that 'first there are conservation laws, and symmetries are their consequence'. Actually the opposite — space-time symmetries are primary, and conservation laws are <em>derived</em> formally from them, via the Euler-Lagrange equation applied to the action S (see part I, §6, formula (4)).</p>
+<div class="callout steel">
+<span class="tag">Beyond classical mechanics</span>
+<p>All three laws survive the transition to quantum mechanics (momentum, energy and angular momentum become operators, but their conservation for an isolated system remains exact) and to special relativity (energy and momentum unite into a single 4-vector of energy-momentum, and rest mass is linked to it via E = mc² — a separate big topic). General relativity is an exception: there energy conservation generally ceases to be locally well-defined due to the absence of a global time symmetry in curved space-time, which is still debated at the border of physics and philosophy of science.</p>
+</div>
+<p>On the site these are separate laws, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/law_of_conservation_of_momentum.html">Law of conservation of momentum</a> ·
+          <a href="/lang/en/laws/law_of_conservation_of_energy.html">Law of conservation of energy</a> ·
+          <a href="/lang/en/laws/law_of_conservation_of_angular_momentum.html">Law of conservation of angular momentum</a> ·
+          <a href="/lang/en/laws/noethers_theorem.html">Noether's theorem</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Experiment at home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · spinning chair</span>
+<p>Sit on an office chair that spins freely, take something heavy in each hand (books, dumbbells, water bottles) and extend your arms to the sides. Ask someone to gently spin you (or push off the floor with your feet yourself). While spinning — sharply pull your hands to your chest.</p>
+<p><span class="qlabel">What to notice</span> the rotation speed will noticeably increase right before your eyes, without any additional push — exactly the same physics as the skater in §4: the moment of inertia dropped, the angular velocity increased so that L = Iω remained the same. Extend your arms back to the sides — the rotation will slow down again.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · bearing balls on threads (Newton's cradle)</span>
+<p>If you have a tabletop 'Newton's cradle' at home (5 metal balls on threads in a row) — pull back the end ball and release it. Notice: from the other end, exactly ONE ball bounces out, with the same speed, and not, say, two balls with half the speed each.</p>
+<p><span class="qlabel">What to notice</span> both options ('1 ball fast' and '2 balls twice as slow') formally conserve momentum — but only the option with one ball ALSO conserves kinetic energy (the collision between the balls is almost perfectly elastic, the metal barely deforms). Nature 'chooses' the outcome that is compatible with both laws at once.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Problems to check</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. Numbers are chosen so that the answer comes out whole. The solution everywhere follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. An astronaut of mass 80 kg in outer space is stationary relative to the station and throws a wrench of mass 0.5 kg away from himself with a speed of 8 m/s. At what speed will the astronaut himself begin to drift?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m<sub>astr</sub> = 80 kg, m<sub>wrench</sub> = 0.5 kg, v<sub>wrench</sub> = 8 m/s, total momentum before throw = 0.</p>
+<p><span class="qlabel">Law</span> conservation of momentum (§2): 0 = m<sub>astr</sub>v<sub>astr</sub> + m<sub>wrench</sub>v<sub>wrench</sub>.</p>
+<p><span class="qlabel">Solution</span> v<sub>astr</sub> = −0.5·8/80 = −0.05 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>0.05 m/s</strong>, in the direction opposite to the throw — slowly, but unstoppably without outside help.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A ball of mass 4 kg rolls down without friction from a hill of height 2 m. What is its speed at the bottom?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m = 4 kg, h = 2 m, g ≈ 10 m/s².</p>
+<p><span class="qlabel">Law</span> conservation of energy (§3): mgh = ½mv².</p>
+<p><span class="qlabel">Solution</span> v = √(2gh) = √(2·10·2) = √40 ≈ 6.3 m/s — the mass does not enter the answer.</p>
+<p><span class="qlabel">Answer</span> <strong>≈6.3 m/s</strong> (the ball's mass doesn't matter — it will match any other ball without friction).</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. A skater spins with a moment of inertia of 6 kg·m² and angular speed of 1.5 rad/s, then pulls in his arms and reduces the moment of inertia to 2 kg·m². Find the new angular speed.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> I<sub>1</sub> = 6 kg·m², ω<sub>1</sub> = 1.5 rad/s, I<sub>2</sub> = 2 kg·m².</p>
+<p><span class="qlabel">Law</span> conservation of angular momentum (§4): I<sub>1</sub>ω<sub>1</sub> = I<sub>2</sub>ω<sub>2</sub>.</p>
+<p><span class="qlabel">Solution</span> ω<sub>2</sub> = 6·1.5/2 = 4.5 rad/s.</p>
+<p><span class="qlabel">Answer</span> <strong>4.5 rad/s</strong> — three times faster (I dropped threefold).</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Two railroad cars of 5000 kg each couple at speed: the first moves at 6 m/s, the second is stationary. Find the common speed after coupling and the loss of kinetic energy.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m<sub>1</sub> = m<sub>2</sub> = 5000 kg, v<sub>1</sub> = 6 m/s, v<sub>2</sub> = 0.</p>
+<p><span class="qlabel">Law</span> conservation of momentum in inelastic collision (§5): m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>total</sub>.</p>
+<p><span class="qlabel">Solution</span> v<sub>total</sub> = 5000·6/10000 = 3 m/s. K<sub>before</sub> = ½·5000·6² = 90000 J. K<sub>after</sub> = ½·10000·3² = 45000 J.</p>
+<p><span class="qlabel">Answer</span> <strong>3 m/s, 45000 J lost</strong> (exactly half — went into the crash and deformation of the coupling).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. A boy of mass 40 kg stands on a stationary skateboard of mass 4 kg and jumps forward with a speed of 2 m/s relative to the ground. At what speed will the skateboard roll back?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> m<sub>boy</sub> = 40 kg, v<sub>boy</sub> = 2 m/s, m<sub>board</sub> = 4 kg, total momentum before jump = 0.</p>
+<p><span class="qlabel">Law</span> conservation of momentum (§2, the same trick as for the boat in part I).</p>
+<p><span class="qlabel">Solution</span> v<sub>board</sub> = −40·2/4 = −20 m/s.</p>
+<p><span class="qlabel">Answer</span> <strong>20 m/s</strong>, in the direction opposite to the jump — the small mass of the skateboard gives it a disproportionately high recoil speed.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>A typo, wrong formula, number doesn't add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Conservation%20laws%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and a correction is made based on it — it's not 'into the void'.</p>
+</div>
+<footer>
+<p>bridge42worlds · a 'study guide' to the layer of laws · part II of the series on classical dynamics</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

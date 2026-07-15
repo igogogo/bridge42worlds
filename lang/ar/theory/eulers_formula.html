@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>صيغة أويلر: كيف أصبح الدوران جبرًا — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- функциональная анимация: точка на единичной окружности ---------- */
+.circle-fig{ max-width:400px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.circle-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:400px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- AC-фазор анимация ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:110px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>ثلاث زوايا لصيغة واحدة</a></li>
+<li><a href="#s2"><span class="n">02</span>الهندسة: نقطة على الدائرة</a></li>
+<li><a href="#s3"><span class="n">03</span>من أين تأتي: متسلسلات تايلور</a></li>
+<li><a href="#s4"><span class="n">04</span>متطابقة أويلر</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: التيار المتردد</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يقودنا هذا: الطور الكمومي</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة منزلية</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للتحقق</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · الرياضيات · الجزء الخامس</p>
+<h1>صيغة أويلر: كيف أصبح الدوران جبرًا</h1>
+<p class="subtitle">سطر واحد من عام 1748، ربط النمو الأسي بالدوران حول دائرة — وفي نفس الوقت قدم المعادلة التي وصفها فاينمان بأنها "أروع صيغة في الرياضيات".</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="150" cy="150" fill="none" r="100" stroke="var(--rule)" stroke-width="1.5"></circle>
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="260" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="150" x2="150" y1="40" y2="260"></line>
+<line id="heroRadius" stroke="var(--ink)" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<line id="heroDropX" stroke="var(--steel-fill)" stroke-dasharray="3,3" stroke-width="2" x1="250" x2="250" y1="150" y2="150"></line>
+<line id="heroDropY" stroke="var(--brass-fill)" stroke-dasharray="3,3" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<circle cx="250" cy="150" fill="var(--ink)" id="heroPoint" r="7"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="150" y="285">e^iθ = cosθ + i·sinθ</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>في عام 1748، ليونارد أويلر، بتفكيك e<sup>x</sup>، و cos&amp;nbsp;x و sin&amp;nbsp;x في متسلسلات لانهائية واستبدال x بعدد تخيلي، اكتشف أن الدوال الثلاث — هي في الواقع إسقاطات مختلفة لنفس الشيء: الدوران. الصيغة e<sup>iθ</sup>&amp;nbsp;=&amp;nbsp;cosθ&amp;nbsp;+&amp;nbsp;i&amp;nbsp;sinθ تترجم لغة "النمو" إلى لغة "الدوران" — وتحول تحليل الاهتزازات والأمواج إلى جبر بسيط للقوى. الحالة الخاصة عند θ&amp;nbsp;=&amp;nbsp;π — متطابقة تجمع أهم خمسة ثوابت رياضية في سطر واحد.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Равномерное вращение по единичной окружности" src="/lang/ru/theory/img/eulers_formula_hero.jpg"/><figcaption>دوران منتظم على دائرة الوحدة</figcaption></figure>
+<figure><img alt="Винтовая лестница — геометрия вращения и подъёма" src="/lang/ru/theory/img/eulers_formula_concept.jpg"/><figcaption>الدرج الحلزوني — هندسة الدوران والارتفاع</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>ثلاث زوايا لصيغة واحدة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>المنظور</th><th>ما يُرى</th></tr>
+<tr><td>جبري</td><td>e<sup>iθ</sup> — عدد مركب يساوي cosθ&amp;nbsp;+&amp;nbsp;i&amp;nbsp;sinθ</td></tr>
+<tr><td>هندسي</td><td>نقطة على دائرة الوحدة في المستوى المركب بزاوية θ من المحور</td></tr>
+<tr><td>تحليلي</td><td>تطابق المتسلسلات اللانهائية لـ e<sup>x</sup>، و cos&amp;nbsp;x و sin&amp;nbsp;x بعد استبدال x&amp;nbsp;=&amp;nbsp;iθ (§3)</td></tr>
+</table>
+<p>ليس أي من المناظير الثلاثة "أهم" — تكمن قوة صيغة أويلر في كونها في آن واحد متطابقة جبرية، وحقيقة هندسية، وتطابقًا تحليليًا للمتسلسلات. لنبدأ بالأكثر بداهة — الهندسة.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>الهندسة: نقطة على الدائرة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> العدد المركب e<sup>iθ</sup> — هو نقطة على دائرة الوحدة (نصف القطر 1) في المستوى المركب، مرسومة بزاوية θ من المحور الحقيقي الموجب:</p>
+<div class="plate">
+<div class="eq-body">e<sup>iθ</sup> = cosθ + i·sinθ</div>
+<div class="cap">الجزء الحقيقي — cosθ (الإحداثي الأفقي)، والجزء التخيلي — sinθ (الإحداثي الرأسي)</div>
+</div>
+<div aria-hidden="true" class="circle-fig">
+<svg viewbox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="150" cy="150" fill="none" r="100" stroke="var(--rule)" stroke-width="1.5"></circle>
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="270" y1="150" y2="150"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="150" x2="150" y1="30" y2="270"></line>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" x="275" y="155">Re</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" x="155" y="25">Im</text>
+<line id="s2Radius" stroke="var(--ink)" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<line id="s2DropX" stroke="var(--steel-fill)" stroke-dasharray="3,3" stroke-width="2" x1="250" x2="250" y1="150" y2="150"></line>
+<line id="s2DropY" stroke="var(--brass-fill)" stroke-dasharray="3,3" stroke-width="2" x1="150" x2="250" y1="150" y2="150"></line>
+<circle cx="250" cy="150" fill="var(--ink)" id="s2Point" r="7"></circle>
+<text fill="var(--steel)" font-family="Cascadia Code, monospace" font-size="11" x="205" y="168">cosθ</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="11" x="255" y="128">sinθ</text>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>θ</b><span data-readout="theta">0.00</span> راد</span>
+<span><b>cosθ</b><span data-readout="cos" style="color:var(--steel)">1.00</span></span>
+<span><b>sinθ</b><span data-readout="sin" style="color:var(--brass)">0.00</span></span>
+</div>
+<p>بينما تدور النقطة حول الدائرة (θ تزداد من 0 إلى 2π)، فإن إحداثيها الأفقي يرسم جيب التمام بأمانة، والرأسي يرسم الجيب — نفس الدوال التي رأيتها في الرسوم البيانية للمثلثات، لكن الآن كإسقاطات لدوران منتظم، وليس كمنحنيات متموجة منفصلة. هذه الصورة بالضبط هي مضمون الصيغة: "e مرفوعة لأس تخيلي" — ليست عددًا مجردًا، بل إحداثي نقطة في حركة دائرية منتظمة.</p>
+<div class="callout steel">
+<span class="tag">لماذا يساوي المقياس دائمًا 1</span>
+<p>cos²θ&amp;nbsp;+&amp;nbsp;sin²θ&amp;nbsp;=&amp;nbsp;1 — المتطابقة المثلثية الأساسية المعروفة من المدرسة. بالنسبة لـ e<sup>iθ</sup>هذا يعني: المسافة من نقطة الأصل إلى النقطة دائمًا تساوي 1، لأي θ — لا يمكن للنقطة فيزيائيًا أن تخرج عن دائرة الوحدة، فقط التنقل عليها. ومن هنا يأتي دور θ — إنها حرفيًا الزاوية المقطوعة، الشيء الوحيد الذي يتغير.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>من أين تأتي: متسلسلات تايلور</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>الصيغة ليست مسلّمة، بل نتيجة لأن e<sup>x</sup>، و cos&amp;nbsp;x و sin&amp;nbsp;x يمكن كتابتها كمجاميع لانهائية (متسلسلات تايلور):</p>
+<div class="eq"><div class="eq-body">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + x⁴/4! + ...</div><div class="eq-tag">(1)</div></div>
+<div class="eq"><div class="eq-body">cos x = 1 − x²/2! + x⁴/4! − ...,    sin x = x − x³/3! + x⁵/5! − ...</div><div class="eq-tag">(2)</div></div>
+<p>نعوض في متسلسلة e<sup>x</sup> بدلاً من x العدد التخيلي iθ ونتذكر أن i²&amp;nbsp;=&amp;nbsp;−1, i³&amp;nbsp;=&amp;nbsp;−i, i⁴&amp;nbsp;=&amp;nbsp;1 (قوى i تتكرر دوريًا بدورة 4):</p>
+<div class="eq"><div class="eq-body">e<sup>iθ</sup> = 1 + iθ − θ²/2! − iθ³/3! + θ⁴/4! + iθ⁵/5! − ...</div><div class="eq-tag">(3)</div></div>
+<p>نجمع بشكل منفصل الحدود التي بدون i (قوى θ الزوجية) والحدود التي تحتوي i (القوى الفردية) — المجموعة الأولى تتطابق تمامًا مع متسلسلة cosθ، والثانية (بدون العامل المشترك i) — مع متسلسلة sinθ:</p>
+<div class="plate">
+<div class="eq-body">e<sup>iθ</sup> = (1 − θ²/2! + θ⁴/4! − ...) + i(θ − θ³/3! + ...) = cosθ + i·sinθ</div>
+<div class="cap">جبر خالص — لم نحتج أي مسلّمة هندسية إضافية</div>
+</div>
+<p>التطابق ليس "مُلفقًا" — إنه حتمي، بمجرد تعريف e<sup>x</sup> للأعداد المركبة بنفس المتسلسلة المستخدمة للأعداد الحقيقية. وهذا يفسر لماذا تعمل الصيغة: ثلاثة كائنات تبدو مختلفة تمامًا (الدالة الأسية، جيب التمام، الجيب) هي رياضيًا عائلة واحدة من الدوال، تختلف فقط بنوع الوسيط الذي يُعوض فيها — حقيقي، تخيلي صرف.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>متطابقة أويلر</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>نعوض في صيغة أويلر زاوية محددة θ&amp;nbsp;=&amp;nbsp;π (نصف دورة، النقطة على الدائرة تقع تمامًا على يسار المركز، عند النقطة −1):</p>
+<div class="eq"><div class="eq-body">e<sup>iπ</sup> = cosπ + i·sinπ = −1 + i·0 = <strong>−1</strong></div><div class="eq-tag">(4)</div></div>
+<div class="plate">
+<div class="eq-body">e<sup>iπ</sup> + 1 = 0</div>
+<div class="cap">خمسة ثوابت أساسية — 0, 1, e, i, π — في سطر واحد، كل منها مرة واحدة بالضبط</div>
+</div>
+<div class="callout brass">
+<span class="tag">لماذا هي "أجمل صيغة"</span>
+<p>في استطلاعات الرياضيين (مثلاً، استطلاع مجلة "<em>Mathematical Intelligencer</em>، 1990) متطابقة أويلر تحتل باستمرار المرتبة الأولى. السبب ليس في الغموض، بل في الاقتصاد المطلق: خمسة ثوابت من مجالات مختلفة تمامًا في الرياضيات (0 و 1 — الحساب، e — التحليل/النمو، i — الجبر/الأعداد المركبة، π — الهندسة/الدوائر) مرتبطة بثلاث عمليات بسيطة (الجمع، الضرب، الرفع إلى قوة) دون أي رمز زائد. ريتشارد فاينمان وصفها بأنها "لؤلؤتنا" و"أروع صيغة في الرياضيات".</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: التيار المتردد</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>نادرًا ما يكتب مهندسو الكهرباء cos و sin بشكل صريح — بدلاً من ذلك، يُمثلون جهد التيار المتردد كمتجه دوار (<strong>فازور</strong>) في المستوى المركب، باستخدام صيغة أويلر:</p>
+<div class="plate">
+<div class="eq-body">U(t) = U<sub>0</sub>·e<sup>iωt</sup></div>
+<div class="cap">الجهد الحقيقي — هو الجزء التخيلي (أو الحقيقي، حسب الاصطلاح) من U(t); ω — التردد الزاوي للشبكة</div>
+</div>
+<div aria-hidden="true" class="anim-strip">
+<svg style="width:100%;height:100%" viewbox="0 0 400 110" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="380" y1="55" y2="55"></line>
+<path d="M40,55 L380,55" fill="none" id="acWave" stroke="var(--steel-fill)" stroke-width="2.2"></path>
+<circle cx="40" cy="55" fill="none" r="35" stroke="var(--rule)" stroke-width="1"></circle>
+<line id="acRadius" stroke="var(--ink)" stroke-width="2" x1="40" x2="75" y1="55" y2="55"></line>
+<circle cx="75" cy="55" fill="var(--brass-fill)" id="acPoint" r="4"></circle>
+</svg>
+<div class="anim-label left">الفازور على اليسار يدور — على اليمين يرسم نفس الموجة الجيبية التي تراها في المقبس</div>
+</div>
+<p>لماذا هذا أسهل من العمل مع cos/sin مباشرة: جمع جهدين مترددين لنفس التردد (مثلاً، في الشبكة) يتحول إلى جمع أعداد مركبة (متجهات) — هندسة متوازي الأضلاع البسيطة، بدلاً من صيغ جمع الزوايا المثلثية المعقدة. صيغة أويلر هي قاموس مترجم بين المثلثات "غير المريحة" وجبر الأسس المركبة "المريح".</p>
+<div class="callout moss">
+<span class="tag">نفس الفكرة — في JPEG و MP3</span>
+<p>تحويل فورييه (الذي يفكك أي إشارة — صوت، صورة — إلى مجموع اهتزازات بسيطة بترددات مختلفة) في شكله العملي يُكتب دائمًا تقريبًا باستخدام e<sup>iθ</sup>، وليس باستخدام cos/sin بشكل منفصل — لنفس السبب بالضبط: جمع وضرب الأسس المركبة أسهل حسابيًا. وهذا بالضبط أساس ضغط الصوت (MP3) والصور (JPEG).</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يقودنا هذا: الطور الكمومي</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لم تبق صيغة أويلر مجرد فضول رياضي — في عشرينيات القرن الماضي، اكتشف إرفين شرودنغر أن الدالة الموجية لجسيم كمومي تُكتب طبيعيًا بنفس الدالة الأسية بأس تخيلي:</p>
+<div class="eq"><div class="eq-body">Ψ(x,t) ∼ e<sup>i(px − Et)/ℏ</sup></div><div class="eq-tag">(5)</div></div>
+<p>هنا دور "الزاوية θ" تلعبه تركيبة من زخم p، وطاقة E، وزمن t للجسيم. مقياس هذه الدالة الموجية (بعد النقطة عن المركز، §2) دائمًا يساوي 1 — وهذا يضمن رياضيًا <strong>الوحدوية</strong> للتطور الكمومي: الاحتمال الكلي لإيجاد الجسيم في أي مكان يبقى دائمًا مساويًا 100%، مهما تغير الطور. بدون صيغة أويلر كنا سنحتاج لتتبع أجزاء الدالة الموجية الجيبية وجيب التمام بشكل منفصل — معها يختزل كل شيء إلى دالة أسية دوارة واحدة.</p>
+<div class="callout steel">
+<span class="tag">طور الجسيم الواحد لا يمكن رصده — لكن فرق الطور بين جسيمين يمكن رصده</span>
+<p>فارق كمومي مثير للفضول: الزاوية θ للدالة الموجية المنفردة في عزلة لا يمكن قياسها فيزيائيًا (يمكننا ضرب الصيغة كلها في أي e<sup>iα</sup>، ولن تتغير التنبؤات). لكن إذا استطاع الجسيم أن يسلك مسارين مختلفين في آن واحد (كما في تجربة الشق المزدوج)، يصبح فرق الطور بين المسارين قابلًا للقياس — وهو الذي يخلق نمط التداخل. حقيقة الدوران نفسه في المستوى المركب تبقى موضع نقاش فلسفي، لكن عواقبه الرياضية — ليست كذلك.</p>
+</div>
+<p>على الموقع هذا قانون منفصل، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/schrdinger_equation.html">معادلة شرودنغر</a> ·
+          <a href="/lang/ar/laws/de_broglie_wavelength.html">صيغة دي برولي</a> ·
+          <a href="/lang/ar/laws/planckeinstein_relation.html">معادلة بلانك-أينشتاين</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · دائرة من حبل وظل من مصباح يدوي</span>
+<p>اربط الحبل بمسمار أو مقبض باب، واربط في طرفه الآخر وزنًا خفيفًا (تفاحة، مفاتيح) وأدره بحيث يدور بانتظام في دائرة في مستوى أفقي (مثل لعبة البوي). سلط عليه مصباحًا يدويًا من الجانب، بشكل أفقي تمامًا، بحيث يسقط الظل على الحائط.</p>
+<p><span class="qlabel">ما تلاحظه</span> الظل على الحائط سيتحرك ليس في دائرة، بل بشكل ترددي مستقيم، يتباطأ جيبيًا عند الأطراف ويتسارع في المركز — هذا هو إسقاط الدوران المنتظم على محور واحد (§2, cosθ أو sinθ، حسب اتجاه الضوء). هذا بالضبط ما تفعله صيغة أويلر رياضيًا: تأخذ حركة دائرية وتحسب إسقاطها بأمانة.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · السبكتروغراف</span>
+<p>إذا كان لديك في المنزل سبكتروغراف (مجموعة تروس بفتحات لرسم الأنماط) أو يمكنك إيجاد محاكي على الإنترنت — ارسم بعض الأنماط، مع تغيير نسبة أنصاف أقطار التروس.</p>
+<p><span class="qlabel">ما تلاحظه</span> الأنماط "الزهرية" الجميلة للسبكتروغراف — هي حرفيًا مجاميع عدة دورانات بترددات مختلفة (رياضيًا — مجموع عدة e<sup>iθ</sup> بمعاملات مختلفة عند θ)، نفس المبدأ الذي يقوم عليه تحليل فورييه لأي إشارة معقدة إلى اهتزازات بسيطة (§5).</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للتحقق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولاً، ثم افتح الحل. الحل دائمًا يتبع المخطط: <strong>المعطى → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. ما قيمة e^(iπ/2) بالصيغة الجبرية (a + bi)؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> θ&amp;nbsp;=&amp;nbsp;π/2 (ربع دورة).</p>
+<p><span class="qlabel">القانون</span> صيغة أويلر (§2): e<sup>iθ</sup> = cosθ + i·sinθ.</p>
+<p><span class="qlabel">الحل</span> cos(π/2) = 0, sin(π/2) = 1 ⇒ e<sup>iπ/2</sup> = 0 + i·1.</p>
+<p><span class="qlabel">الجواب</span> <strong>i</strong> — نقطة تمامًا في أعلى دائرة الوحدة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. بدون حساب صريح، اشرح لماذا |e^(iθ)| (مقياس العدد) يساوي 1 لأي قيمة θ.</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> المعنى الهندسي لصيغة أويلر (§2) + المتطابقة المثلثية الأساسية.</p>
+<p><span class="qlabel">الحل</span> |e<sup>iθ</sup>|&amp;nbsp;=&amp;nbsp;√(cos²θ&amp;nbsp;+&amp;nbsp;sin²θ)&amp;nbsp;=&amp;nbsp;√1&amp;nbsp;=&amp;nbsp;1 — المتطابقة cos²+sin²=1 صحيحة لأي زاوية، لذلك بعد النقطة عن المركز دائمًا يساوي واحدًا، بغض النظر عن θ.</p>
+<p><span class="qlabel">الجواب</span> <strong>دائمًا 1</strong> — النقطة يجب أن تبقى على دائرة الوحدة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. ما قيمة e^(i·2π) (دورة كاملة)؟ ماذا يخبرنا هذا عن دورية e^(iθ)؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> θ&amp;nbsp;=&amp;nbsp;2π (دورة كاملة).</p>
+<p><span class="qlabel">القانون</span> صيغة أويلر (§2).</p>
+<p><span class="qlabel">الحل</span> cos(2π) = 1, sin(2π) = 0 ⇒ e<sup>i·2π</sup> = 1 + i·0 = 1.</p>
+<p><span class="qlabel">الجواب</span> <strong>e<sup>i·2π</sup> = 1</strong> — بعد دورة كاملة تعود النقطة إلى البداية؛ e<sup>iθ</sup> دورية بدورة 2π، كما يليق بنقطة على دائرة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. جهدان مترددان لنفس التردد يمثلان بفازورين U₁ = 3 (على طول المحور الحقيقي) و U₂ = 4i (على طول المحور التخيلي). ما هو مقياس الجهد الكلي؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> U<sub>1</sub> = 3, U<sub>2</sub>&amp;nbsp;=&amp;nbsp;4i (فازوران متعامدان، §5).</p>
+<p><span class="qlabel">القانون</span> جمع الأعداد المركبة (هندسيًا — متوازي أضلاع) + مقياس العدد المركب |a+bi|&amp;nbsp;=&amp;nbsp;√(a²+b²).</p>
+<p><span class="qlabel">الحل</span> U<sub>1</sub>+U<sub>2</sub> = 3+4i; |3+4i| = √(9+16) = √25 = 5.</p>
+<p><span class="qlabel">الجواب</span> <strong>5</strong> — الثلاثية الكلاسيكية 3-4-5، الجهد الكلي أكبر من كل من الجهدين منفردين، لكنه أصغر من مجموعهما الحسابي (7)، لأن الفازورين ليسا في نفس الاتجاه.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. عبر عن cos θ باستخدام e^(iθ) و e^(-iθ)، مستفيدًا من أن e^(-iθ) = cos θ − i·sin θ.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطى</span> e<sup>iθ</sup> = cosθ+i·sinθ, e<sup>−iθ</sup> = cosθ−i·sinθ.</p>
+<p><span class="qlabel">القانون</span> جمع شكلين من صيغة أويلر — الأجزاء التخيلية تُختزل.</p>
+<p><span class="qlabel">الحل</span> e<sup>iθ</sup>+e<sup>−iθ</sup> = 2cosθ ⇒ cosθ = (e<sup>iθ</sup>+e<sup>−iθ</sup>)/2.</p>
+<p><span class="qlabel">الجواب</span> <strong>cosθ = (e<sup>iθ</sup>+e<sup>−iθ</sup>)/2</strong> — صيغة قياسية يستخدمها الفيزيائيون والمهندسون ربما أكثر من تعريف جيب التمام نفسه.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ مطبعي، صيغة خاطئة، رقم لا يتوافق، شرح غير واضح — راسلنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Euler%20formula%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ بالفعل، وتُحلل، ويُجرى التصحيح بناءً عليها — هذا ليس "للأدراج".</p>
+</div>
+<footer>
+<p>bridge42worlds · "دليل تعليمي" لطبقة القوانين · الجزء الخامس من السلسلة، الرياضيات</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  var CX = 150, CY = 150, R = 100, PERIOD = 6000; // 6с на полный оборот — держим общий темп серии
+  function wire(prefix, radiusId, dropXId, dropYId, pointId, thetaEl, cosEl, sinEl){
+    var radius = document.getElementById(radiusId), dropX = document.getElementById(dropXId),
+        dropY = document.getElementById(dropYId), point = document.getElementById(pointId);
+    return function(theta){
+      var x = CX + R * Math.cos(theta), y = CY - R * Math.sin(theta); // экранный y растёт вниз
+      if (radius) { radius.setAttribute('x2', x); radius.setAttribute('y2', y); }
+      if (dropX) { dropX.setAttribute('x1', x); dropX.setAttribute('y1', y); dropX.setAttribute('x2', x); dropX.setAttribute('y2', CY); }
+      if (dropY) { dropY.setAttribute('x1', CX); dropY.setAttribute('y1', CY); dropY.setAttribute('x2', x); dropY.setAttribute('y2', CY); }
+      if (point) { point.setAttribute('cx', x); point.setAttribute('cy', y); }
+      if (thetaEl) thetaEl.textContent = theta.toFixed(2);
+      if (cosEl) cosEl.textContent = Math.cos(theta).toFixed(2);
+      if (sinEl) sinEl.textContent = Math.sin(theta).toFixed(2);
+    };
+  }
+  var heroDraw = wire('hero', 'heroRadius', 'heroDropX', 'heroDropY', 'heroPoint');
+  var s2Draw = wire('s2', 's2Radius', 's2DropX', 's2DropY', 's2Point',
+    document.querySelector('[data-readout="theta"]'), document.querySelector('[data-readout="cos"]'), document.querySelector('[data-readout="sin"]'));
+
+  // AC-фазор §5: тот же принцип, но рисует ещё и бегущую синусоиду справа от круга.
+  var acRadius = document.getElementById('acRadius'), acPoint = document.getElementById('acPoint'), acWave = document.getElementById('acWave');
+  var acR = 35, acCx = 40, acCy = 55, acWaveStart = 75, acWaveEnd = 380, acAmp = 32;
+  function drawAC(theta){
+    var x = acCx + acR * Math.cos(theta), y = acCy - acR * Math.sin(theta);
+    if (acRadius) { acRadius.setAttribute('x2', x); acRadius.setAttribute('y2', y); }
+    if (acPoint) { acPoint.setAttribute('cx', x); acPoint.setAttribute('cy', y); }
+    if (acWave) {
+      var pts = 'M' + acWaveStart + ',' + acCy;
+      var span = acWaveEnd - acWaveStart, steps = 60;
+      for (var i = 0; i <= steps; i++) {
+        var px = acWaveStart + span * i / steps;
+        var ang = theta - (2 * Math.PI) * (i / steps) * 1.4;
+        var py = acCy - acAmp * Math.sin(ang);
+        pts += ' L' + px.toFixed(1) + ',' + py.toFixed(1);
+      }
+      acWave.setAttribute('d', pts);
+    }
+  }
+
+  if (!window.requestAnimationFrame) return;
+  function tick(ts){
+    var theta = (ts % PERIOD) / PERIOD * 2 * Math.PI;
+    heroDraw(theta);
+    s2Draw(theta);
+    drawAC(theta);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">النظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

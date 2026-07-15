@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ampere and Faraday: Current Creates a Field, a Field Creates Current — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+.compass-strip{ height:110px; }
+.compass-wire{ position:absolute; left:50%; top:10px; bottom:10px; width:3px; margin-left:-1.5px; background:var(--ink); }
+.compass-body{ position:absolute; left:14px; top:50%; margin-top:-20px; width:40px; height:40px; border-radius:50%; border:2px solid var(--ink-soft); background:var(--paper); }
+.compass-needle{ position:absolute; left:50%; top:50%; width:26px; height:3px; margin-left:-13px; margin-top:-1.5px; background:var(--brass-fill); transform-origin:center; }
+
+.gen-strip{ height:110px; }
+.gen-coil{ position:absolute; left:50%; top:50%; width:60px; height:44px; margin-left:-30px; margin-top:-22px; border:3px solid var(--ink-soft); border-radius:6px; opacity:.6; }
+.gen-magnet{ position:absolute; top:50%; width:28px; height:16px; margin-top:-8px; left:16px; border-radius:2px; overflow:hidden; display:flex; }
+.gen-magnet .n{ flex:1; background:var(--brass-fill); }
+.gen-magnet .s{ flex:1; background:var(--steel-fill); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Two Laws, One Pair</a></li>
+<li><a href="#s2"><span class="n">02</span>Ampere's Law: Current Creates a Field</a></li>
+<li><a href="#s3"><span class="n">03</span>Faraday's Law: A Field Creates Current</a></li>
+<li><a href="#s4"><span class="n">04</span>Lenz's Rule: Nature Resists</a></li>
+<li><a href="#s5"><span class="n">05</span>A Running Example: Motor in Reverse — Generator</a></li>
+<li><a href="#s6"><span class="n">06</span>Where This Leads: A Transformer with No Moving Parts</a></li>
+<li><a href="#s7"><span class="n">07</span>Home Experiment</a></li>
+<li><a href="#s8"><span class="n">08</span>Problems to Check Understanding</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Electromagnetism · Part XIV</p>
+<h1>Ampere and Faraday: Current Creates a Field, a Field Creates Current</h1>
+<p class="subtitle">Two mirror laws: one says that electricity can create magnetism, the other — that magnetism can create electricity. Together, they form the entire operating principle of a power plant generator.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--ink)" stroke-width="3" x1="170" x2="170" y1="30" y2="170"></line>
+<circle cx="170" cy="100" fill="none" id="heroRing1" opacity="0" r="30" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<circle cx="170" cy="100" fill="none" id="heroRing2" opacity="0" r="50" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<circle cx="170" cy="100" fill="none" id="heroRing3" opacity="0" r="70" stroke="var(--steel-fill)" stroke-width="2"></circle>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="190">ток → кольца магнитного поля</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>In 1820, Hans Ørsted accidentally noticed that a current-carrying wire deflects a compass needle — and within a week, André-Marie Ampère built a quantitative law from this. Eleven years later, Michael Faraday discovered the inverse relationship: a moving magnet induces a current in a wire. These two laws are not a coincidence, but a mirror reflection of each other, and together they form the operating principle of electric motors, generators, and transformers. In this note — both laws with numbers and an analysis of why a motor and a generator are essentially the same device.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Катушка вращается в магнитном поле — рождается ток" src="/lang/ru/theory/img/ampere_faraday_hero.jpg"/><figcaption>A coil rotates in a magnetic field — current is born</figcaption></figure>
+<figure><img alt="Магнит входит в катушку — импульс наведённого тока" src="/lang/ru/theory/img/ampere_faraday_concept.jpg"/><figcaption>A magnet enters a coil — a pulse of induced current</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Two Laws, One Pair</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Law</th><th>Formula</th><th>Direction of the effect</th></tr>
+<tr><td>Ampère (1820)</td><td class="sym">∮B·dl = μ₀I</td><td>current → magnetic field</td></tr>
+<tr><td>Faraday (1831)</td><td class="sym">ε = −dΦ/dt</td><td>changing field → current</td></tr>
+</table>
+<p>Both laws have already appeared as TWO OF THE FOUR lines of Maxwell's equations (part IV) — here we examine them in more detail, with practical applications: electromagnets, generators, and transformers.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Ampere's Law: Current Creates a Field</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The circulation of the magnetic field along a closed loop is proportional to the current enclosed by that loop:</p>
+<div class="plate">
+<div class="eq-body">∮B·dl = μ₀I</div>
+<div class="cap">μ₀ = 4π×10⁻⁷ N/A² — the magnetic constant</div>
+</div>
+<div aria-hidden="true" class="anim-strip compass-strip">
+<div class="compass-wire"></div>
+<div class="compass-body"><div class="compass-needle" id="compassNeedle"></div></div>
+<div class="anim-label left">current in a wire — a nearby compass needle deflects</div>
+</div>
+<p>One of the most practical consequences of Ampère's law — the force of interaction between two parallel current-carrying conductors (this formula long served as the DEFINITION of the unit of electric current — the ampere):</p>
+<div class="eq"><div class="eq-body">F/L = (μ₀/2π)·I₁I₂/d = 2×10⁻⁷·I₁I₂/d</div><div class="eq-tag">(1)</div></div>
+<p>Numerical example: two parallel wires with currents I₁ = I₂ = 5 A at a distance d = 0.1 m. Find the force of attraction per unit length.</p>
+<div class="eq"><div class="eq-body">F/L = 2×10⁻⁷·5·5/0.1 = <strong>5×10⁻⁵ N/m</strong></div><div class="eq-tag">(2)</div></div>
+<p>Wires with current in the same direction ATTRACT (like parallel molecular currents in a permanent magnet), in opposite directions — they repel.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Faraday's Law: A Field Creates Current</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The induced EMF equals the rate of change of magnetic flux through the loop, taken with a negative sign:</p>
+<div class="plate">
+<div class="eq-body">ε = −N·dΦ/dt</div>
+<div class="cap">N — number of turns in the coil, Φ — magnetic flux through one turn (Wb)</div>
+</div>
+<div aria-hidden="true" class="anim-strip gen-strip">
+<div class="gen-coil"></div>
+<div class="gen-magnet" id="genMagnet"><span class="n"></span><span class="s"></span></div>
+<div class="anim-label left">a magnet enters a coil — the voltmeter needle twitches</div>
+</div>
+<p>Numerical example: a coil of N = 200 turns is in a field, the magnetic flux through one turn increases from 0 to 0.02 Wb in Δt = 0.1 s. Find the induced EMF.</p>
+<div class="eq"><div class="eq-body">ε = 200·0.02/0.1 = <strong>40 V</strong></div><div class="eq-tag">(3)</div></div>
+<p>This is exactly how a pedal dynamo on a bicycle and a power plant generator work — mechanical motion (rotation) changes the magnetic flux through a coil, and Faraday's law turns this change into voltage.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Lenz's Rule: Nature Resists</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The minus sign in Faraday's law is not a formality, but a separate meaningful rule (Emil Lenz, 1833): the induced current flows in such a direction that its OWN magnetic field opposes the change that caused it.</p>
+<div class="callout brass">
+<span class="tag">Why it cannot be otherwise</span>
+<p>If the sign were opposite (the induced current would AMPLIFY the original flux change), the system would spin itself up to infinity — a ready-made perpetual motion machine. The law of conservation of energy (part II) directly forbids such a scenario, so Lenz's rule is not a separate arbitrary fact, but a necessary consequence of the fact that energy cannot be obtained from nothing.</p>
+</div>
+<p>Practical consequence: to move a magnet through a coil and induce a current in it, you must do WORK against the resistance that the coil itself exerts on the magnet's motion (the induced field 'brakes' the magnet) — it is this work that turns into electrical energy. Faraday's law does not give free electricity.</p>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A Running Example: Motor in Reverse — Generator</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>An electric motor and an electric generator are mechanically the same device (a coil in a magnetic field), the only difference is what's 'at the input' and what's 'at the output':</p>
+<table class="symtab">
+<tr><th></th><th>Input</th><th>Output</th><th>Operating law</th></tr>
+<tr><td>Motor</td><td>electric current</td><td>rotation (mechanical work)</td><td>Ampère force on a current in a field</td></tr>
+<tr><td>Generator</td><td>rotation (mechanical work)</td><td>electric current</td><td>Faraday's law</td></tr>
+</table>
+<p>Take the same coil in a magnet's field: send current through it — according to Ampère's law, a force will arise, the coil will rotate (motor). Or, conversely, turn the coil by hand — according to Faraday's law, an EMF will be induced in it (generator). Electric vehicles use this literally: during acceleration, the motor works as a motor (consumes current from the battery), and during braking — as a generator (energy recuperation, current flows back to the battery, recharging it at the expense of the car's kinetic energy).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where This Leads: A Transformer with No Moving Parts</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>A transformer is a device without a single moving part, but entirely based on Faraday's law. The alternating current in the primary coil (Ampère's law — current creates a changing field) creates a changing magnetic flux in the common iron core; this changing flux passes through the secondary coil and induces an EMF in it (Faraday's law). The turns ratio determines the voltage ratio — this is how voltage step-up/step-down works at every substation along the way from the power plant to the outlet.</p>
+<div class="callout steel">
+<span class="tag">Why a transformer does not work with direct current</span>
+<p>If the current in the primary coil is CONSTANT (does not change over time), the magnetic flux is also constant — dΦ/dt = 0, and according to Faraday's law, no EMF is induced in the secondary coil at all. That is why the entire power system is built on alternating current — only it allows continuously changing voltage with transformers without conversion losses.</p>
+</div>
+<p>On the website, these are separate laws, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/amperes_law.html">Ampère's Law</a> ·
+          <a href="/lang/en/laws/faradays_law_of_induction.html">Faraday's Law of Induction</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Ørsted's Experiment with a Compass</span>
+<p>Place an ordinary compass on a table, stretch a straight wire above it connected to a battery (PARALLEL to the compass needle, literally repeating the 1820 experiment), and close the circuit for a second.</p>
+<p><span class="qlabel">What to observe</span> the compass needle will noticeably deflect from the northward direction while current flows, and return back as soon as the circuit is opened — exactly what Ørsted accidentally noticed during a lecture while preparing a demonstration for students, and which Ampère turned into a precise law within a week.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Hand-crank Dynamo Flashlight</span>
+<p>If you have a hand-crank flashlight at home (dynamo mechanism, without batteries — you crank a lever, a bulb/LED lights up), crank it first WITHOUT a load (bulb/LED turned off or removed), then CONNECT the load and crank again.</p>
+<p><span class="qlabel">What to observe</span> cranking the lever is noticeably HARDER when the bulb is connected and lit — a direct demonstration of Lenz's rule (§4): the induced current creates its own field that brakes the rotation, and it is overcoming this braking — the mechanical work you do with your hand — that turns into electrical energy lighting the bulb.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Problems to Check Understanding</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution everywhere follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. Two parallel wires with currents of 10 A each are at a distance of 0.2 m. Find the interaction force per unit length.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> I₁ = I₂ = 10 A, d = 0.2 m.</p>
+<p><span class="qlabel">Law</span> force between parallel conductors (§2): F/L = 2×10⁻⁷·I₁I₂/d.</p>
+<p><span class="qlabel">Solution</span> F/L = 2×10⁻⁷·100/0.2 = 2×10⁻⁷·500 = 10⁻⁴ N/m.</p>
+<p><span class="qlabel">Answer</span> <strong>10⁻⁴ N/m</strong> (0.0001 N per meter of length).</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. A coil of 150 turns is in a field, the magnetic flux through a turn drops from 0.04 Wb to 0.01 Wb in 0.3 s. Find the magnitude of the induced EMF.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> N = 150, ΔΦ = 0.03 Wb, Δt = 0.3 s.</p>
+<p><span class="qlabel">Law</span> Faraday's law (§3): ε = NΔΦ/Δt.</p>
+<p><span class="qlabel">Solution</span> ε = 150·0.03/0.3 = 15 V.</p>
+<p><span class="qlabel">Answer</span> <strong>15 V</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. Why does the galvanometer needle jump more when the magnet is pulled out of the coil abruptly compared to slow withdrawal (same magnet, same distance)?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> Faraday's law (§3): ε = NΔΦ/Δt — the RATE of flux change is important, not just its final magnitude.</p>
+<p><span class="qlabel">Solution</span> with abrupt motion the same flux change ΔΦ occurs in a much shorter time Δt, so ΔΦ/Δt (and accordingly, ε) is greater.</p>
+<p><span class="qlabel">Answer</span> <strong>abrupt motion gives a greater rate of flux change</strong> , not a greater flux change as such.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. A transformer steps down voltage from 220 V to 11 V. If the primary winding has 2000 turns, how many turns does the secondary have?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> U₁ = 220 V, U₂ = 11 V, N₁ = 2000.</p>
+<p><span class="qlabel">Law</span> transformer turns ratio (§6): U₁/U₂ = N₁/N₂.</p>
+<p><span class="qlabel">Solution</span> N₂ = N₁·U₂/U₁ = 2000·11/220 = 100.</p>
+<p><span class="qlabel">Answer</span> <strong>100 turns</strong> — a step-down by 20 times corresponds to a turns ratio of 20:1.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Why does the battery of an electric vehicle charge during braking (recuperation), even though the motor is not consuming current from the battery at that moment?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> §5 — motor/generator reversibility.</p>
+<p><span class="qlabel">Solution</span> during braking, the wheels continue to spin the electric motor's winding by inertia — in this mode, the device operates as a GENERATOR (Faraday's law: rotation of the coil in a magnet's field induces an EMF in it), not as a motor. The induced current flows in the reverse direction — from the motor to the battery, charging it at the expense of the car's kinetic energy instead of simply dissipating it as heat through the brake pads.</p>
+<p><span class="qlabel">Answer</span> <strong>the motor switches to generator mode</strong> — same coil, same magnet, opposite direction of energy.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, incorrect formula, numbers don't add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Ampere%20Faraday%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and a correction is made based on it — this is not 'for the drawer'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'a textbook' to the layer of laws · part XIV of the series, electromagnetism</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2 hero: концентрические кольца поля вокруг провода то появляются, то гаснут — намёк на пульсацию тока.
+  var rings = [document.getElementById('heroRing1'), document.getElementById('heroRing2'), document.getElementById('heroRing3')];
+  var PERIOD = 6000;
+  var lastTs = null;
+  function tickRings(ts){
+    if (lastTs === null) lastTs = ts;
+    var phase = (ts % PERIOD) / PERIOD;
+    rings.forEach(function(r, i){
+      var delay = i * 0.12;
+      var local = ((phase - delay) % 1 + 1) % 1;
+      var op = local < 0.5 ? local * 2 * 0.7 : Math.max(0, 0.7 - (local - 0.5) * 1.4);
+      r.setAttribute('opacity', op.toFixed(2));
+    });
+    requestAnimationFrame(tickRings);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickRings);
+
+  // §2 демо-полоса: стрелка компаса отклоняется, когда «идёт ток» (циклически), возвращается к северу иначе.
+  var needle = document.getElementById('compassNeedle');
+  var COMPASS_PERIOD = 6000;
+  var lastTs2 = null;
+  function tickCompass(ts){
+    if (lastTs2 === null) lastTs2 = ts;
+    var phase = (ts % COMPASS_PERIOD) / COMPASS_PERIOD;
+    // ток «включён» первую половину цикла — стрелка отклонена на 40°, иначе — 0°.
+    var target = phase < 0.5 ? 40 : 0;
+    var t = phase < 0.5 ? Math.min(1, phase / 0.15) : Math.min(1, (phase - 0.5) / 0.15);
+    var prevTarget = phase < 0.5 ? 0 : 40;
+    var angle = prevTarget + (target - prevTarget) * t;
+    if (needle) needle.style.transform = 'rotate(' + angle.toFixed(1) + 'deg)';
+    requestAnimationFrame(tickCompass);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickCompass);
+
+  // §3: магнит въезжает в катушку и выезжает обратно — та же анимация паттерна, что в части IV (Максвелл).
+  var magnet = document.getElementById('genMagnet');
+  var LEFT = 16, MID = 60, PERIOD3 = 6000;
+  var lastTs3 = null;
+  function tickGen(ts){
+    if (lastTs3 === null) lastTs3 = ts;
+    var phase = (ts % PERIOD3) / PERIOD3;
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    if (magnet) magnet.style.left = (LEFT + (MID - LEFT) * t) + 'px';
+    requestAnimationFrame(tickGen);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickGen);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+
