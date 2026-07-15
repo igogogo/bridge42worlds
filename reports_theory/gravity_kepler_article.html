@@ -1,0 +1,462 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Тяготение и орбиты: почему планеты не падают и не улетают</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- эллиптическая орбита: живое ускорение/замедление по 2 закону Кеплера ---------- */
+.orbit-fig{ max-width:600px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.orbit-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:600px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+/* ---------- анимации ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; height:90px; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Четыре закона, одна картина</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон тяготения: сила на двоих</a></li>
+      <li><a href="#s3"><span class="n">03</span>Первый закон Кеплера: эллипс, не круг</a></li>
+      <li><a href="#s4"><span class="n">04</span>Второй закон Кеплера: равные площади</a></li>
+      <li><a href="#s5"><span class="n">05</span>Третий закон Кеплера: весы для звёзд</a></li>
+      <li><a href="#s6"><span class="n">06</span>Сквозной пример: как находят экзопланеты</a></li>
+      <li><a href="#s7"><span class="n">07</span>Куда это ведёт: от Кеплера к Эйнштейну</a></li>
+      <li><a href="#s8"><span class="n">08</span>Эксперимент дома</a></li>
+      <li><a href="#s9"><span class="n">09</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; небесная механика &middot; часть VII</p>
+        <h1>Тяготение и орбиты: почему планеты не падают и не улетают</h1>
+        <p class="subtitle">Одна и та же сила, что роняет яблоко, держит Луну на орбите уже 4.5 миллиарда лет — она просто «промахивается» мимо Земли по кругу, а не падает прямо в неё.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="150" cy="110" rx="110" ry="88" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+          <circle cx="216" cy="110" r="12" fill="var(--brass-fill)"/>
+          <circle id="heroPlanet" cx="260" cy="110" r="7" fill="var(--steel-fill)"/>
+          <text x="170" y="205" text-anchor="middle" font-family="Futura, sans-serif" font-size="13" fill="var(--moss)">эллипс, Солнце — в фокусе, не в центре</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Иоганн Кеплер, разбирая наблюдения Тихо Браге, вывел три эмпирических правила движения планет — задолго до того, как Ньютон объяснил, откуда они берутся. Оказалось, что все три закона Кеплера — прямое математическое следствие одной простой силы, убывающей как квадрат расстояния. В этой заметке — закон тяготения, все три закона Кеплера с числовыми примерами, и то, как их вместе используют, чтобы находить планеты у других звёзд.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Четыре закона, одна картина</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Что говорит</th></tr>
+          <tr><td>Тяготение (Ньютон)</td><td>сила притяжения ~ произведение масс / квадрат расстояния</td></tr>
+          <tr><td>Кеплер I</td><td>орбита — эллипс, звезда в фокусе, не в центре</td></tr>
+          <tr><td>Кеплер II</td><td>равные площади за равные времена — у звезды быстрее, вдали медленнее</td></tr>
+          <tr><td>Кеплер III</td><td>квадрат периода ~ куб размера орбиты</td></tr>
+        </table>
+        <p>Кеплер нашёл первые два закона в 1609 году и третий — в 1619-м, чисто эмпирически, подгоняя формулы под данные Тихо Браге. Ньютон в 1687 году показал: все три — не отдельные правила, а математические следствия ОДНОЙ силы (§2). Это редкий в истории физики случай, когда закон был открыт «задом наперёд» — от наблюдений к формуле, а не от теории к предсказанию.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон тяготения: сила на двоих</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Любые два тела притягиваются с силой, пропорциональной произведению их масс и обратно пропорциональной квадрату расстояния между ними:</p>
+        <div class="plate">
+          <div class="eq-body">F = G&middot;m<sub>1</sub>m<sub>2</sub>/r&sup2;</div>
+          <div class="cap">G &asymp; 6.674&times;10&#8315;&sup1;&sup9; Н&middot;м&sup2;/кг&sup2; — гравитационная постоянная, одна и та же во всей Вселенной</div>
+        </div>
+        <p>«Обратный квадрат» — ключевая деталь: увеличьте расстояние втрое, сила упадёт не втрое, а в девять раз. Это же и объясняет, почему орбиты вообще устойчивы (не разлетаются и не схлопываются) — при других показателях степени (не 2) орбиты оказались бы нестабильны к малейшим возмущениям.</p>
+        <div class="callout brass">
+          <span class="tag">Почему Луна не падает на Землю</span>
+          <p>Частая путаница: «раз есть притяжение, почему Луна не падает?» Она ПАДАЕТ — постоянно, всё время. Но у неё есть ещё и скорость вбок (по касательной к орбите), и падение ровно компенсирует то, насколько поверхность Земли «убегает вниз» из-за своей кривизны. Ньютон иллюстрировал это мысленным экспериментом «пушка на горе»: чем быстрее выстрелить ядро горизонтально, тем дальше оно улетит, прежде чем упадёт — а при достаточной скорости оно будет «падать» вокруг всей Земли, никогда не долетая до земли. Это и есть орбита.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Первый закон Кеплера: эллипс, не круг</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Орбита планеты — эллипс, в одном из фокусов которого находится звезда (не в центре эллипса):</p>
+        <div class="plate">
+          <div class="eq-body">r = a(1 &minus; e&sup2;)/(1 + e&middot;cos&theta;)</div>
+          <div class="cap">a — большая полуось, e — эксцентриситет (0 — окружность, ближе к 1 — сильно вытянутый эллипс)</div>
+        </div>
+        <p>2000 лет до Кеплера все (включая Коперника) считали орбиты идеальными окружностями — «совершенная» форма казалась философски обязательной для небес. Кеплер восемь лет бился над орбитой Марса, пытаясь подогнать окружность под точнейшие данные Тихо Браге, пока не сдался и не попробовал эллипс — тот подошёл идеально с первой попытки.</p>
+        <div class="callout steel">
+          <span class="tag">У Земли тоже эллипс, просто почти круглый</span>
+          <p>Эксцентриситет орбиты Земли всего e&nbsp;&asymp;&nbsp;0.017 — почти окружность на глаз, но именно поэтому в январе Земля примерно на 5 млн км ближе к Солнцу, чем в июле (никак не связано с временами года — их вызывает наклон оси, не эллиптичность).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Второй закон Кеплера: равные площади</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Отрезок, соединяющий звезду и планету, заметает равные площади за равные промежутки времени:</p>
+        <div class="orbit-fig" aria-hidden="true">
+          <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="200" cy="120" rx="140" ry="112" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+            <circle cx="284" cy="120" r="10" fill="var(--brass-fill)"/>
+            <!-- широкий угол, короткий радиус — сектор у периапсиса (планета близко и быстро) -->
+            <polygon points="284,120 340,120 336,72" fill="var(--steel-fill)" opacity=".4"/>
+            <!-- узкий угол, длинный радиус — сектор у апоапсиса (планета далеко и медленно), та же площадь -->
+            <polygon points="284,120 62,113 62,127" fill="var(--moss-fill)" opacity=".4"/>
+            <circle id="orbitPlanet" cx="340" cy="120" r="7" fill="var(--ink)"/>
+          </svg>
+        </div>
+        <div class="readout-row" aria-hidden="true">
+          <span><b>расстояние до звезды</b><span data-readout="dist">0.40</span></span>
+          <span><b>скорость</b><span data-readout="speed">2.50</span></span>
+        </div>
+        <p>Синяя и зелёная области на рисунке — два «сектора», заметённых планетой за ОДИНАКОВОЕ время: широкий по углу, но короткий по радиусу у звезды (планета летит быстро, угол пробегает крупный) и узкий по углу, но длинный по радиусу вдали (планета ползёт медленно, угол почти не меняется) — их площади равны. Планета замедляется и ускоряется на глазах в живой анимации выше: следите, как быстро она проходит правый край орбиты (близко к звезде) и как медленно — левый (далеко).</p>
+        <p>Это не отдельный постулат, а прямое следствие <strong>сохранения момента импульса</strong> (часть II, §4) — гравитация звезды всегда направлена ВДОЛЬ линии к планете (центральная сила), значит момент силы относительно звезды равен нулю, и L&nbsp;=&nbsp;r&nbsp;&times;&nbsp;p сохраняется. Раз L постоянен, а r уменьшается у звезды — угловая скорость обязана расти, чтобы компенсировать (ровно та же математика, что у фигуриста, прижимающего руки — часть II, §4).</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Третий закон Кеплера: весы для звёзд</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Квадрат периода обращения пропорционален кубу большой полуоси орбиты:</p>
+        <div class="plate">
+          <div class="eq-body">T&sup2; = (4&pi;&sup2;/GM)&middot;a&sup3;</div>
+          <div class="cap">M — масса центрального тела (звезды); чем она массивнее, тем короче период при том же расстоянии</div>
+        </div>
+        <div class="units">Удобный трюк: в «астрономических единицах» (a — в а.е., T — в годах, M — в массах Солнца) формула упрощается до <span class="u">T² = a³/M</span> — никакого G и &pi; считать не нужно, потому что для Земли (a=1 а.е., T=1 год, M=1 M<sub>&#9737;</sub>) обе части уравнения по определению равны 1.</div>
+        <p>Численный пример: гипотетическая планета обращается вокруг Солнца на расстоянии a&nbsp;=&nbsp;4&nbsp;а.е. Какой у неё период обращения?</p>
+        <div class="eq"><div class="eq-body">T&sup2; = a&sup3; = 4&sup3; = 64&nbsp;&nbsp;&rArr;&nbsp;&nbsp;T = <strong>8&nbsp;лет</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Ровно так был открыт Нептун (1846) — по возмущениям, которые он вносил в орбиту Урана, астрономы вычислили, ГДЕ искать неизвестную планету, ещё до того, как её увидели в телескоп.</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Сквозной пример: как находят экзопланеты</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Соберём все законы на реальной задаче астрономии: телескоп заметил, что звезда регулярно чуть тускнеет — планета проходит перед ней (транзитный метод), период затмений T&nbsp;=&nbsp;2&nbsp;года.</p>
+        <ol>
+          <li>Из спектра звезды астрономы независимо оценивают её массу: пусть M&nbsp;=&nbsp;2&nbsp;M<sub>&#9737;</sub>.</li>
+          <li><strong>Третий закон Кеплера</strong> в форме а.е./годы/массы Солнца даёт расстояние планеты до звезды:</li>
+        </ol>
+        <div class="eq"><div class="eq-body">a&sup3; = T&sup2;&middot;M = 2&sup2;&middot;2 = 8&nbsp;&nbsp;&rArr;&nbsp;&nbsp;a = <strong>2&nbsp;а.е.</strong></div><div class="eq-tag">(2)</div></div>
+        <p>Ни одна миссия не летала к этой планете — расстояние вычислено чисто из периода мигания звезды и её массы. <strong>Первый закон</strong> (§3) уточняет форму орбиты по деталям кривой блеска (симметрия провала подсказывает эксцентриситет), а <strong>второй закон</strong> (§4) — почему транзиты идут через равные промежутки времени, а не хаотично: угловая скорость планеты предсказуема в любой точке орбиты.</p>
+        <div class="callout moss">
+          <span class="tag">Название сайта на связи</span>
+          <p>Именно этот метод стоит за большинством статей об экзопланетах на bridge42worlds — телескопы TESS и Kepler (названный в честь того самого Иоганна Кеплера) искали именно такие периодические затмения, и законы из этой заметки — прямая математика, которой пользуются авторы этих статей.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Куда это ведёт: от Кеплера к Эйнштейну</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Законы Кеплера-Ньютона работают с огромной точностью почти везде во Вселенной — но не абсолютно точно. Орбита Меркурия (ближайшей к Солнцу планеты, где гравитация сильнее всего) медленно ПОВОРАЧИВАЕТСЯ как целое — эллипс не остаётся на месте, а прецессирует. Ньютоновская механика предсказывает бо́льшую часть этой прецессии (возмущения от других планет), но 43 угловые секунды за столетие оставались необъяснёнными почти 60 лет.</p>
+        <div class="callout brass">
+          <span class="tag">Первая победа общей теории относительности</span>
+          <p>В 1915 году Эйнштейн применил свежевыведенные уравнения общей теории относительности к орбите Меркурия — и получил ровно недостающие 43 угловые секунды, без единого подгоночного параметра. Это было первое реальное экспериментальное подтверждение ОТО, ещё до знаменитого затмения 1919 года с отклонением света звёзд. Сегодня мы знаем: закон тяготения Ньютона — превосходное приближение общей теории относительности при слабых полях и не слишком высоких скоростях, но не последнее слово физики.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/law_of_universal_gravitation.html">Закон всемирного тяготения</a> ·
+          <a href="/lang/ru/laws/keplers_first_law.html">Первый закон Кеплера</a> ·
+          <a href="/lang/ru/laws/keplers_second_law.html">Второй закон Кеплера</a> ·
+          <a href="/lang/ru/laws/keplers_third_law.html">Третий закон Кеплера</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; рисуем настоящий эллипс</span>
+          <p>Воткните две канцелярские кнопки (или карандаша) в картон на расстоянии 10-15 см друг от друга, накиньте на них петлю из нитки длиной примерно втрое больше расстояния между кнопками. Натяните нитку карандашом и обведите, всё время держа её натянутой.</p>
+          <p><span class="qlabel">Что заметить</span> получится настоящий эллипс, а кнопки — его фокусы (§3). Раздвиньте кнопки шире — эллипс станет более вытянутым (больше эксцентриситет); сведите почти вместе — получится почти окружность. Это тот же самый геометрический факт, что «сумма расстояний до двух фокусов постоянна» — на нём буквально держится вся орбитальная механика.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; груз на нитке через трубку</span>
+          <p>Проденьте прочную нитку через короткую трубку (ручка от старой шариковой ручки подойдёт), с одной стороны привяжите небольшой груз (шайбу, ключ), с другой — держите нитку рукой. Раскрутите груз по кругу над трубкой, затем плавно потяните за свободный конец нитки, укорачивая радиус вращения.</p>
+          <p><span class="qlabel">Что заметить</span> груз резко ускорит вращение, когда радиус уменьшится — это механическая версия второго закона Кеплера (§4) и сохранения момента импульса (часть II): натяжение нитки, как и гравитация звезды, направлено строго к центру, поэтому L сохраняется, и при падении r угловая скорость обязана вырасти.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s9">
+      <div class="sec-head"><span class="sec-num">§9</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Расстояние между двумя телами увеличили втрое, массы не изменились. Во сколько раз изменилась сила притяжения?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> r<sub>нов</sub>&nbsp;=&nbsp;3r.</p>
+            <p><span class="qlabel">Закон</span> закон тяготения (§2): F&nbsp;&prop;&nbsp;1/r&sup2;.</p>
+            <p><span class="qlabel">Решение</span> F<sub>нов</sub>/F&nbsp;=&nbsp;r&sup2;/(3r)&sup2;&nbsp;=&nbsp;1/9.</p>
+            <p><span class="qlabel">Ответ</span> <strong>уменьшилась в 9 раз</strong> — «обратный квадрат» в действии.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Экзопланета обращается вокруг звезды массой 4 солнечных на расстоянии 2 а.е. Найдите период обращения в годах.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> M&nbsp;=&nbsp;4&nbsp;M<sub>&#9737;</sub>, a&nbsp;=&nbsp;2&nbsp;а.е.</p>
+            <p><span class="qlabel">Закон</span> третий закон Кеплера в а.е./годах/массах Солнца (§5): T&sup2;&nbsp;=&nbsp;a&sup3;/M.</p>
+            <p><span class="qlabel">Решение</span> T&sup2;&nbsp;=&nbsp;2&sup3;/4&nbsp;=&nbsp;8/4&nbsp;=&nbsp;2&nbsp;&rArr;&nbsp;T&nbsp;=&nbsp;&radic;2&nbsp;&asymp;&nbsp;1.41&nbsp;года.</p>
+            <p><span class="qlabel">Ответ</span> <strong>&asymp;1.41 года</strong> — массивная звезда «разгоняет» орбиту сильнее, чем у Солнца на том же расстоянии.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Планета в перигелии (ближайшая точка к звезде) вдвое ближе к звезде, чем в афелии (дальняя точка). Во сколько раз её скорость в перигелии больше, чем в афелии?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> r<sub>афелий</sub>&nbsp;=&nbsp;2r<sub>перигелий</sub>.</p>
+            <p><span class="qlabel">Закон</span> сохранение момента импульса (§4): L&nbsp;=&nbsp;mvr&nbsp;=&nbsp;const в этих двух точках (скорость перпендикулярна радиусу в обеих).</p>
+            <p><span class="qlabel">Решение</span> v<sub>пери</sub>&middot;r<sub>пери</sub>&nbsp;=&nbsp;v<sub>афе</sub>&middot;r<sub>афе</sub>&nbsp;=&nbsp;v<sub>афе</sub>&middot;2r<sub>пери</sub>&nbsp;&rArr;&nbsp;v<sub>пери</sub>&nbsp;=&nbsp;2v<sub>афе</sub>.</p>
+            <p><span class="qlabel">Ответ</span> <strong>вдвое больше</strong> в перигелии — ровно как ускоряется фигурист, приближаясь к оси вращения.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Спутник обращается вокруг Земли за 90 минут на низкой орбите. Другой спутник летает вдвое дальше от центра Земли. Во сколько раз его период больше?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> a<sub>2</sub>&nbsp;=&nbsp;2a<sub>1</sub>, M одна и та же (Земля).</p>
+            <p><span class="qlabel">Закон</span> третий закон Кеплера (§5): T&sup2;&nbsp;&prop;&nbsp;a&sup3;.</p>
+            <p><span class="qlabel">Решение</span> T<sub>2</sub>&sup2;/T<sub>1</sub>&sup2;&nbsp;=&nbsp;(2a<sub>1</sub>)&sup3;/a<sub>1</sub>&sup3;&nbsp;=&nbsp;8&nbsp;&rArr;&nbsp;T<sub>2</sub>/T<sub>1</sub>&nbsp;=&nbsp;&radic;8&nbsp;&asymp;&nbsp;2.83.</p>
+            <p><span class="qlabel">Ответ</span> <strong>&asymp;2.83 раза больше</strong> — период растёт быстрее, чем расстояние.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему первый закон Кеплера («орбита — эллипс») не работает для системы из трёх и более тел сравнимой массы (например, тройная звезда)? Какое допущение при этом нарушается?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> вывод законов Кеплера справедлив строго для задачи ДВУХ тел (§1-§5 — везде подразумевается одна звезда и одна планета).</p>
+            <p><span class="qlabel">Решение</span> при третьем массивном теле гравитационное притяжение больше не является центральной силой, направленной строго к одному фокусу — на планету действуют одновременно несколько притяжений, орбита перестаёт быть замкнутым эллипсом и становится хаотичной (задача трёх тел, в общем случае не решается аналитически).</p>
+            <p><span class="qlabel">Ответ</span> <strong>нарушается допущение «только два тела»</strong> — законы Кеплера в чистом виде описывают только парное гравитационное взаимодействие.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Gravity%20Kepler%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть VII серии, небесная механика</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // Численное интегрирование движения по эллипсу с сохранением L = r²dθ/dt = const (2 закон Кеплера) —
+  // не читаем CSS-состояние, а честно считаем позицию по физике на каждый кадр (как и весь сайт).
+  // θ — истинная аномалия, отсчитанная от периапсиса (ближайшей к фокусу точки, θ=0).
+  // Фокус (звезда) смещён от геометрического центра эллипса на c=A·e вдоль большой оси — стандартная
+  // полярная параметризация r(θ) уже даёт координаты ОТНОСИТЕЛЬНО ФОКУСА, поэтому при переводе в
+  // экранные координаты (где рисуем эллипс через центр) добавляем это смещение c.
+  function orbitPoint(cx, cy, a, e, theta){
+    var r = a * (1 - e * e) / (1 + e * Math.cos(theta));
+    var c = a * e;
+    return { x: cx + c + r * Math.cos(theta), y: cy - r * Math.sin(theta), r: r };
+  }
+
+  // По второму закону Кеплера площадь заметается с постоянной скоростью dA/dt = k/2 (k = r²dθ/dt = const),
+  // а площадь всего эллипса = πab — значит период T = πab/(k/2) = 2πab/k. Задаём T=6с (общий темп сайта)
+  // и решаем обратную задачу — какое k этому соответствует — вместо того чтобы подбирать множитель
+  // на глаз (так и получился прошлый баг: планета зависала в афелии на ~40 минут вместо 6 секунд).
+  var PERIOD_SEC = 6;
+  function kFor(a, e){ var b = a * Math.sqrt(1 - e * e); return 2 * Math.PI * a * b / PERIOD_SEC; }
+
+  var MAIN = { cx: 200, cy: 120, a: 140, e: 0.6, theta: Math.PI * 0.85, el: document.getElementById('orbitPlanet') };
+  MAIN.k = kFor(MAIN.a, MAIN.e);
+  var HERO = { cx: 150, cy: 110, a: 110, e: 0.6, theta: Math.PI * 0.55, el: document.getElementById('heroPlanet') };
+  HERO.k = kFor(HERO.a, HERO.e);
+  var distEl = document.querySelector('[data-readout="dist"]');
+  var speedEl = document.querySelector('[data-readout="speed"]');
+
+  var lastTs = null;
+  if (!window.requestAnimationFrame) return;
+  function advance(body, dtSec){
+    var p = orbitPoint(body.cx, body.cy, body.a, body.e, body.theta);
+    body.theta += (body.k / (p.r * p.r)) * dtSec; // dθ/dt = k/r² — сохранение момента импульса (2 закон Кеплера)
+    if (body.el) { body.el.setAttribute('cx', p.x.toFixed(1)); body.el.setAttribute('cy', p.y.toFixed(1)); }
+    return p;
+  }
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dtSec = Math.min((ts - lastTs) / 1000, 0.05); // защита от скачка таба
+    lastTs = ts;
+
+    var mainPoint = advance(MAIN, dtSec);
+    advance(HERO, dtSec);
+
+    if (distEl) distEl.textContent = (mainPoint.r / MAIN.a).toFixed(2);
+    if (speedEl) speedEl.textContent = (L / mainPoint.r).toFixed(2);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
