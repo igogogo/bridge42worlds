@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>قوانين نيوتن الثلاثة: كيف تولد الديناميكا — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+.g   { color:var(--brass); font-style:italic; }
+.om, .kin { color:var(--steel); font-style:italic; }
+b.g  { color:var(--brass); }
+
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{
+  display:none;
+}
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{
+    display:block;
+    position:sticky; top:36px; align-self:start;
+    padding-top:64px;
+  }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{
+  text-decoration:none; color:var(--ink-soft);
+  font-size:.82rem; line-height:1.35; display:block;
+}
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{
+  padding: 56px 0 40px;
+  display:grid; gap:28px;
+}
+@media (min-width:760px){
+  .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; }
+}
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0 0 .4em;
+  text-wrap:balance;
+  color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+.hero-rig{ transform:translate(90px,175px); }
+@media (prefers-reduced-motion: no-preference){
+  .hero-rig{ animation: heroSlide 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. Группы для
+   сравнения (§3 три груза, §4 два шарика) — ОДНА и та же длительность на все элементы группы
+   (иначе разъедутся по фазе), а момент прибытия у каждого свой % — только так на каждом цикле
+   у них будет общий синхронный старт «с одной линии». */
+@keyframes heroSlide{ 0%{ transform:translate(90px,175px); } 55%{ transform:translate(330px,175px); } 100%{ transform:translate(330px,175px); } }
+
+/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+   как принято визуально отличать advanced-глубину от основного текста. */
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:22px 26px;
+  margin: 8px 0 8px;
+  box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{
+  display:flex; align-items:baseline; gap:.6em;
+  margin:0 0 .3em;
+  max-width:680px;
+}
+.sec-num{
+  font-family:var(--font-mono); color:var(--brass);
+  font-size:.95rem;
+}
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0;
+  text-wrap:balance;
+}
+h3{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px;
+}
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{
+  width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em;
+  font-size:.92rem;
+}
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap: 16px;
+  max-width:680px;
+  margin: 1.5em 0;
+  padding: 14px 4px;
+}
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{
+  max-width:680px;
+  background:var(--paper-raised);
+  border:1px solid var(--rule);
+  padding: 22px 26px;
+  margin: 1.6em 0;
+  box-shadow: var(--shadow);
+}
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); margin-top:.9em;
+}
+
+sup, sub{ font-size:.68em; }
+
+.callout{
+  max-width:680px;
+  border-left: 3px solid var(--rule);
+  padding: 4px 0 4px 18px;
+  margin: 1.5em 0;
+}
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em;
+  text-transform:uppercase; margin-bottom:.4em; display:block;
+}
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+.callout ol{ margin-bottom:0; }
+.callout li{ margin-bottom:.7em; }
+.callout li:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{
+  font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px;
+}
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+.fig-row{ display:grid; gap:24px; max-width:920px; }
+@media (min-width:760px){ .fig-row{ grid-template-columns:1fr 1fr; } }
+.fig-row figure{ max-width:none; }
+
+code, .code{
+  font-family:var(--font-mono); font-size:.86em; background:var(--paper-raised);
+  border:1px solid var(--rule); border-radius:3px; padding:.1em .4em;
+}
+
+footer{
+  max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule);
+  color:var(--ink-soft); font-size:.85rem;
+}
+.feedback-box{
+  max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:18px 22px;
+}
+.feedback-box .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brass); display:block; margin-bottom:.5em;
+}
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- animated strips — реальные объекты (груз/шарик/ракета), не абстрактные точки:
+   размер тела ~ масса, стрелка F видна как причина, скорость на экране ~ скорость в примере. ---------- */
+.anim-strip{
+  position:relative; max-width:680px; margin:1.5em 0 1.9em;
+  background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.anim-strip.single{ height:64px; }
+.anim-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+
+/* Груз — прямоугольник со скруглением, размер прямо кодирует массу (больше груз = больше блок). */
+.anim-block{
+  position:absolute; top:50%; border-radius:3px; border:1.5px solid var(--ink);
+  background:var(--paper); box-shadow:0 1px 2px rgba(27,34,43,.12); left:16px;
+}
+.anim-block.sz-sm{ width:14px; height:14px; margin-top:-7px; }
+.anim-block.sz-md{ width:20px; height:20px; margin-top:-10px; }
+.anim-block.sz-lg{ width:28px; height:28px; margin-top:-14px; }
+
+/* Шарик — конькобежец/тело в §4, размер круга ~ масса. */
+.anim-ball{
+  position:absolute; top:50%; border-radius:50%; background:var(--steel-fill); left:50%;
+}
+.anim-ball.b-light{ width:14px; height:14px; margin-top:-7px; margin-left:-7px; }
+.anim-ball.b-heavy{ width:22px; height:22px; margin-top:-11px; margin-left:-11px; background:var(--brass-fill); }
+
+/* Стрелка силы F — короткая, у старта, видна как причина движения груза следом. */
+.anim-force{
+  position:absolute; top:50%; height:2px; background:var(--steel-fill); left:16px; width:26px; margin-top:-1px;
+}
+.anim-force::after{
+  content:""; position:absolute; right:-1px; top:-4px; width:0; height:0;
+  border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:6px solid var(--steel-fill);
+}
+.anim-force-label{
+  position:absolute; left:16px; top:6px; font-family:var(--font-display); font-size:.68rem;
+  font-weight:700; color:var(--steel);
+}
+
+.anim-label{
+  position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft);
+  text-align:right;
+}
+.anim-label.left{ right:auto; left:14px; }
+
+/* Многорядная полоса — три груза разной массы под одной F, как в таблице/Рис.1 §3. */
+.anim-strip.multi{ padding:10px 0; }
+.anim-row{ position:relative; height:38px; }
+.anim-row .anim-track{ left:52px; }
+.anim-row .anim-block{ left:52px; }
+.anim-row .anim-row-label{
+  position:absolute; left:12px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.72rem; color:var(--ink-soft); width:36px;
+}
+/* Живой числовой счётчик — "функциональная" анимация: не просто едет груз, а рядом честно
+   пересчитывается v=at на каждый кадр (JS в конце документа, формула, не чтение CSS-состояния). */
+.anim-readout{
+  position:absolute; right:10px; top:50%; margin-top:-8px; font-family:var(--font-mono);
+  font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; min-width:78px; text-align:right;
+}
+.graph-mini{
+  max-width:340px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:10px;
+}
+.graph-mini svg{ width:100%; height:auto; display:block; }
+
+.anim-strip.vertical{ height:150px; }
+.anim-strip.vertical .anim-track{ left:50%; top:14px; bottom:14px; right:auto; width:1px; height:auto; }
+
+/* Ракета §5 — треугольный корпус + факел, поднимается вверх. */
+.anim-rocket{
+  position:absolute; left:50%; bottom:14px; width:16px; height:26px; margin-left:-8px;
+}
+.anim-rocket .body{
+  position:absolute; left:0; top:0; width:16px; height:20px; border-radius:8px 8px 2px 2px;
+  background:var(--paper); border:1.5px solid var(--ink);
+}
+.anim-rocket .flame{
+  position:absolute; left:3px; top:19px; width:10px; height:10px;
+  background:var(--brass-fill); clip-path:polygon(50% 100%, 0 0, 100% 0); opacity:.9;
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .anim-block.const{ animation: moveConst 6s linear infinite; }
+  .anim-block.decel-stop{ animation: moveDecelStop 6s cubic-bezier(.25,.85,.45,1) infinite; }
+  .anim-block.accel-sm{ animation: moveAccelSm 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-md{ animation: moveAccelMd 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-block.accel-lg{ animation: moveAccelLg 6s cubic-bezier(.55,0,1,.45) infinite; }
+  .anim-ball.apart-a{ animation: moveApartFar 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-ball.apart-b{ animation: moveApartNear 6s cubic-bezier(.3,0,.6,1) infinite; }
+  .anim-rocket.rise{ animation: moveRise 6s cubic-bezier(.55,0,1,.45) infinite; }
+}
+@keyframes moveConst{ 0%{ left:52px; } 70%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+/* §3: одна и та же длительность (6с) на все три груза, финиш у каждого на своём % шкалы —
+   пропорционально sqrt(m) (t ~ sqrt(m/F) при равной F) — лёгкий приезжает первым, но у ВСЕХ
+   троих следующий цикл стартует одновременно (общая шкала 0-100%), это и даёт эффект «заезда». */
+@keyframes moveAccelSm{ 0%{ left:52px; } 25%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelMd{ 0%{ left:52px; } 35%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveAccelLg{ 0%{ left:52px; } 50%{ left:calc(100% - 30px); } 100%{ left:calc(100% - 30px); } }
+@keyframes moveDecelStop{ 0%{ left:16px; } 40%{ left:58%; } 100%{ left:58%; } }
+@keyframes moveApartFar{ 0%{ left:50%; } 40%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
+@keyframes moveApartNear{ 0%{ left:50%; } 40%{ left:38%; } 100%{ left:38%; } }
+@keyframes moveRise{ 0%{ bottom:14px; } 55%{ bottom:calc(100% - 40px); } 100%{ bottom:calc(100% - 40px); } }
+
+/* ---------- задачи с раскрывающимся решением ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{
+  cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem;
+}
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{
+  margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule);
+  color:var(--ink-soft); font-size:.86rem;
+}
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); margin-right:.5em;
+}
+
+/* ---------- сноска "величины и единицы" под формулой ---------- */
+.units{
+  font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
+}
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتوى</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>القوانين الثلاثة باختصار</a></li>
+<li><a href="#s2"><span class="n">02</span>القانون الأول: القصور الذاتي</a></li>
+<li><a href="#s3"><span class="n">03</span>القانون الثاني: F = ma</a></li>
+<li><a href="#s4"><span class="n">04</span>القانون الثالث: الفعل ورد الفعل</a></li>
+<li><a href="#s5"><span class="n">05</span>الثلاثة معًا: تسارع الصاروخ</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يؤدي هذا: مبدأ الفعل الأدنى</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة منزلية</a></li>
+<li><a href="#s8"><span class="n">08</span>مسائل للتدقيق</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>مذكرة عمل · الديناميكا الكلاسيكية · الجزء الأول</p>
+<h1>قوانين نيوتن الثلاثة: كيف تولد الديناميكا</h1>
+<p class="subtitle">القصور الذاتي، F=ma و"الفعل يساوي رد الفعل" — ليست ثلاث حقائق منفصلة، بل مخطط واحد متماسك: كيف تحسب حركة جسم إذا كنت تعرف القوى المؤثرة عليه وعلى جيرانه.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1.5" x1="20" x2="400" y1="220" y2="220"></line>
+<!-- Груз, стрелка F и подпись m едут ВМЕСТЕ одной группой — сила приложена
+               непрерывно (толкает сзади), груз у неё на глазах ускоряется вправо. -->
+<g class="hero-rig">
+<line marker-end="url(#arrowF)" stroke="var(--steel)" stroke-width="2.4" x1="-88" x2="-6" y1="0" y2="0"></line>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" font-weight="700" x="-86" y="-13">F</text>
+<rect fill="var(--paper)" height="50" rx="4" stroke="var(--ink)" stroke-width="2" width="70" x="0" y="-25"></rect>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="13" x="85" y="5">m</text>
+</g>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="250">a = F/m — груз ускоряется, не едет с постоянной v</text>
+<defs>
+<marker id="arrowF" markerheight="8" markerwidth="8" orient="auto" refx="4" refy="4">
+<path d="M0,0 L8,4 L0,8 z" fill="var(--steel)"></path>
+</marker>
+</defs>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>قوانين نيوتن الثلاثة (1687، "المبادئ الرياضية للفلسفة الطبيعية") — مجموعة دنيا من البديهيات التي تُشتق منها الميكانيكا الكلاسيكية بأكملها: لماذا يتحرك الجسم الخالي من القوى بخط مستقيم وبسرعة منتظمة، وكيف ترتبط القوة والكتلة والتسارع، ولماذا لكل فعل رد فعل مساوٍ له. في هذه المذكرة — القوانين الثلاثة كل على حدة مع أمثلة عددية ورسوم بيانية، ثم مثال شامل واحد (تسارع صاروخ) تعمل فيه الثلاثة معًا. المادة موجهة لمن يبدأون الديناميكا للتو: من الرياضيات تحتاج فقط الحساب وفكرة المشتقة "على الأصابع".</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Ускорение — то, что чувствует шарик в момент броска" src="/lang/ru/theory/img/newton_laws_hero.jpg"/><figcaption>التسارع — ما يشعر به الكرة في لحظة الرمي</figcaption></figure>
+<figure><img alt="Действие и противодействие: конькобежцы расходятся зеркально" src="/lang/ru/theory/img/newton_laws_concept.jpg"/><figcaption>الفعل ورد الفعل: المتزلجون يبتعدون بشكل مرآوي</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>القوانين الثلاثة باختصار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>صاغ نيوتن ثلاثة قوانين، لكنها في جوهرها فكرة واحدة مقدمة من ثلاث جهات:<strong>القوة تغير الحركة، ومقياس هذا التغير هو كتلة الجسم</strong>.</p>
+<table class="symtab">
+<tr><th>القانون</th><th>الصياغة</th><th>ما يعطيه</th></tr>
+<tr><td class="sym">I</td><td>يحافظ الجسم على سرعته (بما فيها الصفرية) ما لم تؤثر عليه قوة غير متوازنة</td><td>يحدد ما هو "غياب القوى"</td></tr>
+<tr><td class="sym">II</td><td><span class="vec">F</span> = m<span class="vec">a</span></td><td>العلاقة الكمية بين القوة والكتلة والتسارع</td></tr>
+<tr><td class="sym">III</td><td><span class="vec">F</span><sub>A→B</sub> = −<span class="vec">F</span><sub>B→A</sub></td><td>القوى تنشأ دائمًا كأزواج بين جسمين</td></tr>
+</table>
+<p>القانون الأول — ليس حالة خاصة من الثاني عند F = 0، بل قضية مستقلة: إنه<em>يحدد</em> صنف الأنظمة المرجعية (القصورية) التي يكون فيها القانون الثاني صحيحًا بهذه الصورة البسيطة. الترتيب في المذكرة هو نفسه المتبع تاريخيًا وتربويًا: أولاً ما هو "لا توجد قوى" (§2)، ثم ماذا تفعل القوى (§3)، ثم من أين تأتي القوى أساسًا — من تفاعل الأجسام (§4).</p>
+<table class="symtab">
+<tr><th>الكمية</th><th>الرمز</th><th>الوحدة في النظام الدولي</th></tr>
+<tr><td>القوة</td><td class="sym"><span class="vec">F</span></td><td class="sym">N (نيوتن = كغم·م/ث²)</td></tr>
+<tr><td>الكتلة</td><td class="sym">m</td><td class="sym">كغم</td></tr>
+<tr><td>التسارع</td><td class="sym"><span class="vec">a</span></td><td class="sym">م/ث²</td></tr>
+<tr><td>السرعة</td><td class="sym"><span class="vec">v</span></td><td class="sym">م/ث</td></tr>
+<tr><td>الزخم (كمية الحركة)</td><td class="sym"><span class="vec">p</span> = m<span class="vec">v</span></td><td class="sym">كغم·م/ث</td></tr>
+<tr><td>الزمن</td><td class="sym">t</td><td class="sym">ث</td></tr>
+<tr><td>تسارع السقوط الحر</td><td class="sym">g</td><td class="sym">9.8 م/ث² (عند سطح الأرض)</td></tr>
+</table>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>القانون الأول: القصور الذاتي</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> إذا كانت محصلة جميع القوى المؤثرة على جسم تساوي صفرًا، يتحرك الجسم بسرعة ثابتة — وبخاصة يبقى ساكنًا إذا كان ساكنًا. هذه القضية ليست بديهية: قبل نيوتن (وغاليليو) كان الحدس يقول "الحركة تحتاج إلى قوة"، لأن كل شيء على الأرض يتباطأ بسبب الاحتكاك. القانون الأول هو مثالية: أزل الاحتكاك ومقاومة الهواء، وسيظل القرص المنزلق على الجليد يتحرك إلى الأبد.</p>
+<div class="plate">
+<div class="eq-body">Σ<span class="vec">F</span> = 0  ⇒  <span class="vec">v</span> = const</div>
+<div class="cap">الحركة القصورية — خط مستقيم، سرعة ثابتة المقدار</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-block sz-md const"></div>
+<div class="anim-label">القرص، ΣF = 0 — يتحرك إلى الأبد (القانون الأول)</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-block sz-md decel-stop" style="background:var(--brass-fill);border-color:var(--brass)"></div>
+<div class="anim-label">نفس القرص مع الاحتكاك — توجد قوة فيتباطأ ويتوقف</div>
+</div>
+<p>الكلمة المفتاحية — <em>المحصلة</em>. القوى يمكن أن تؤثر على الجسم، وقد تكون كبيرة — المهم أن يكون مجموعها المتجه صفرًا. الكتاب الموضوع على الطاولة يتعرض للجاذبية ورد فعل السطح — كلاهما ليس صفرًا، لكنهما يتوازنان.</p>
+<div class="callout steel">
+<span class="tag">مثال من الحياة اليومية</span>
+<p>خدعة المفرش: تسحب المفرش بسرعة من تحت الأطباق الموضوعة، فتبقى الأطباق في مكانها. بينما المفرش تحت الطبق، الاحتكاك بينهما صغير ويؤثر لزمن قصير جدًا — الزخم المنقول إلى الطبق ضئيل. بمجرد إزالة المفرش، تختفي القوة الأفقية الوحيدة المؤثرة على الطبق، ووفق القانون الأول يبقى ببساطة في مكانه.</p>
+</div>
+<p>النتيجة المهمة الثانية للقانون الأول — وجود<strong>الأنظمة المرجعية القصورية</strong>: إنه لا يتحقق في أي نظام إحداثي، بل فقط في تلك التي لا تتسارع ولا تدور بالنسبة إلى "النجوم الثابتة". في نظام دوار (مثل كابينة دوامة الخيل) جسم حر، بحسب رؤية مراقب في الداخل، ينحرف دون قوة ظاهرة — وهذه إشارة إلى أن النظام غير قصوري.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>القانون الثاني: F = ma</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> القوة المحصلة المؤثرة على جسم تساوي حاصل ضرب كتلته في تسارعه — أو، بدقة وعموم، معدل تغير الزخم:</p>
+<div class="eq"><div class="eq-body"><span class="vec">F</span> = d<span class="vec">p</span>/dt = d(m<span class="vec">v</span>)/dt</div><div class="eq-tag">(1)</div></div>
+<p>إذا كانت الكتلة ثابتة (ليس صاروخًا يفقد وقودًا، بل جسمًا عاديًا)، تُبسط المشتقة إلى:</p>
+<div class="plate">
+<div class="eq-body"><span class="vec">F</span> = m<span class="vec">a</span></div>
+<div class="cap">عندما m ثابتة — أكثر صيغة شهرة للقانون</div>
+</div>
+<div class="units">F [نيوتن], m [كغم], <span class="u">a</span> [م/ث²] — الكميات الثلاث من الجدول في §1.</div>
+<div aria-hidden="true" class="anim-strip multi">
+<div class="anim-row" data-accel="6" data-mass="1">
+<span class="anim-row-label">1 كغم</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-sm accel-sm"></div>
+<span class="anim-readout" data-readout="">v=0.0 م/ث</span>
+</div>
+<div class="anim-row" data-accel="3" data-mass="2">
+<span class="anim-row-label">2 كغم</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-md accel-md"></div>
+<span class="anim-readout" data-readout="">v=0.0 م/ث</span>
+</div>
+<div class="anim-row" data-accel="1.5" data-mass="4">
+<span class="anim-row-label">4 كغم</span>
+<div class="anim-track"></div>
+<div class="anim-force"></div>
+<div class="anim-block sz-lg accel-lg"></div>
+<span class="anim-readout" data-readout="">v=0.0 م/ث</span>
+</div>
+</div>
+<p class="units" style="margin-top:-1.2em">نفس القوة F تدفع ثلاث كتل مختلفة — نفس التوزيع كما في الشكل 1: الخفيفة تنطلق للأمام، والثقيلة تتخلف. عداد v ليس تزيينًا، بل حساب حي حقيقي من v=at (نفس الأرقام الواردة في الجدول أعلاه عند t=2ث).</p>
+<div aria-hidden="true" class="graph-mini">
+<svg viewbox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="40" y1="10" y2="140"></line>
+<line stroke="var(--rule)" stroke-width="1" x1="40" x2="290" y1="140" y2="140"></line>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="8" y="16">v, м/с</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="265" y="156">t, с</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="18">12</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="143">0</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="middle" x="40" y="155">0</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="middle" x="290" y="155">2</text>
+<!-- v=at для трёх масс: наклон прямой = a. 1кг: v=6t (крутая), 2кг: v=3t, 4кг: v=1.5t (пологая). -->
+<line stroke="var(--brass-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="10"></line>
+<line stroke="var(--steel-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="75"></line>
+<line stroke="var(--moss-fill)" stroke-width="2" x1="40" x2="290" y1="140" y2="107.5"></line>
+<circle cx="40" cy="140" fill="var(--brass-fill)" id="graphDotSm" r="4"></circle>
+<circle cx="40" cy="140" fill="var(--steel-fill)" id="graphDotMd" r="4"></circle>
+<circle cx="40" cy="140" fill="var(--moss-fill)" id="graphDotLg" r="4"></circle>
+</svg>
+</div>
+<p class="units" style="margin-top:-.8em">ثلاث نقاط تتحرك وفق الرسم البياني v(t) في الزمن الحقيقي — نفس الحركة التوضيحية للكتل أعلاه، لكن كدالة وليس كمشهد. ميل الخط المستقيم = التسارع a.</p>
+<p>الكتلة هنا تعمل كـ<strong>مقياس القصور الذاتي</strong>: كلما كانت أكبر، كان التسارع أقل لنفس القوة. مثال عددي — عربة كتلتها m على طاولة أفقية ملساء (بدون احتكاك)، تؤثر عليها قوة ثابتة F = 6 نيوتن:</p>
+<table class="symtab">
+<tr><th>كتلة العربة</th><th>التسارع a = F/m</th><th>السرعة بعد 2 ث</th></tr>
+<tr><td class="sym">1 كغم</td><td class="sym">6 م/ث²</td><td class="sym">12 م/ث</td></tr>
+<tr><td class="sym">2 كغم</td><td class="sym">3 م/ث²</td><td class="sym">6 م/ث</td></tr>
+<tr><td class="sym">4 كغم</td><td class="sym">1.5 م/ث²</td><td class="sym">3 م/ث</td></tr>
+</table>
+<figure>
+<img alt="График v(t) для трёх масс при постоянной силе 6 Н — прямые с разным наклоном, наклон равен ускорению a=F/m" src="/lang/ru/theory/newton_second_law.png"/>
+<figcaption><span class="fign">الشكل 1</span>السرعة تزداد خطيًا (v = at)، وميل المستقيم هو التسارع. نفس القوة تسرّع العربة الخفيفة أربع مرات أسرع من العربة الأثقل أربع مرات — نتيجة مباشرة للتناسب العكسي a = F/m.</figcaption>
+</figure>
+<div class="callout brass">
+<span class="tag">خطأ شائع</span>
+<p>"القوة ضرورية ليتحرك الجسم" — لا: القوة ضرورية لـ<em>تغيير</em> الحركة (التسارع). الجسم الذي تؤثر عليه قوة ثابتة لا يتحرك بسرعة ثابتة — إنه باستمرار<em>يتسارع</em>. السرعة الثابتة تكون عندما F = 0 (القانون الأول)، وليس عندما F = const.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>القانون الثالث: الفعل ورد الفعل</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> إذا أثّر الجسم A على الجسم B بقوة<span class="vec">F</span><sub>A→B</sub>، فإن الجسم B يؤثر على الجسم A بقوة مساوية في المقدار ومعاكسة في الاتجاه:</p>
+<div class="plate">
+<div class="eq-body"><span class="vec">F</span><sub>A→B</sub> = −<span class="vec">F</span><sub>B→A</sub></div>
+<div class="cap">القوى تنشأ كأزواج؛ كل زوج مطبق على<em>مختلفين</em> جسمين، لذا لا "تلغي"</div>
+</div>
+<div aria-hidden="true" class="anim-strip single">
+<div class="anim-track"></div>
+<div class="anim-ball b-heavy apart-b"></div>
+<div class="anim-ball b-light apart-a"></div>
+<div class="anim-label left">m<sub>A</sub> = 60 كغم، v<sub>A</sub> = 3 م/ث — صغير، يطير أبعد وأسرع</div>
+</div>
+<p class="units" style="margin-top:-1.2em">حجم الكرة ~ كتلة المتزلج، السرعة على الشاشة ~ v الحقيقية<sub>A</sub>/v<sub>B</sub> من الحساب — نفس التوزيع كما في الشكل 2.</p>
+<p>الارتباك الشائع — الاعتقاد أنه بما أن القوى متساوية ومتعاكسة، يجب أن تلغي بعضها ولا يمكن أن تحدث حركة. الخطأ هو أن<span class="vec">F</span><sub>A→B</sub> مطبقة على الجسم B، و<span class="vec">F</span><sub>B→A</sub> — على الجسم A: جمعهما في القانون الثاني (Σ<span class="vec">F</span> لجسم واحد) غير ممكن، لأنهما يؤثران على جسمين مختلفين.</p>
+<p>مثال عددي: متزلجان كتلتاهما m<sub>A</sub> = 60 كغم و m<sub>B</sub> = 90 كغم يقفان ساكنين ويدفعان بعضهما بأيديهما. قوة التفاعل في كل لحظة هي نفسها لكليهما (القانون الثالث) — إذن، الزخم المنقول لكل منهما (تكامل القوة على الزمن) متساوٍ أيضًا في المقدار:</p>
+<div class="eq"><div class="eq-body">m<sub>A</sub>v<sub>A</sub> = −m<sub>B</sub>v<sub>B</sub>    (الزخم قبل الدفع كان صفرًا)</div><div class="eq-tag">(2)</div></div>
+<p>اختيار الأرقام بحيث يكون الناتج صحيحًا (الأسلوب المعياري — القانون أولاً ثم الأرقام المحددة). عند زخم الدفع J = 180 كغم·م/ث: v<sub>A</sub> = J/m<sub>A</sub> = 180/60 = <strong>3 م/ث</strong>, v<sub>B</sub> = −J/m<sub>B</sub> = −180/90 = <strong>-2 م/ث</strong> — المتزلج الخفيف يطير أسرع من الثقيل، لكن الزخم الكلي للنظام يظل صفرًا طوال الوقت.</p>
+<figure>
+<img alt="График импульса двух конькобежцев во время толчка: p_A растёт, p_B падает симметрично, сумма остаётся нулевой" src="/lang/ru/theory/newton_third_law.png"/>
+<figcaption><span class="fign">الشكل 2</span>زخم كل متزلج يزداد خطيًا في المقدار أثناء الدفع (القوة ثابتة تقريبًا)، لكن بإشارات متعاكسة — المجموع (الخط المنقط) يظل صفرًا في أي لحظة. هذه نتيجة مباشرة للقانون الثالث، وليست فرضية مستقلة.</figcaption>
+</figure>
+<div class="callout moss">
+<span class="tag">لماذا يطير الصاروخ</span>
+<p>الصاروخ لا "يدفع عن الهواء" (في الفراغ لا يوجد هواء، والصواريخ تعمل هناك بشكل ممتاز) — إنه يدفع عن<em>وقوده الخاص</em>، قاذفًا إياه للخلف بسرعة عالية. القوة التي يقذف بها الصاروخ الغاز للخلف تساوي في المقدار القوة التي يدفع بها الغاز الصاروخ للأمام — وهذا هو القانون الثالث في أنقى صورة.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>الثلاثة معًا: تسارع الصاروخ</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنجمع القوانين الثلاثة في مثال واحد. صاروخ كتلته m = 1000 كغم يقف على منصة الإطلاق.</p>
+<ol>
+<li><strong>القانون الأول</strong> يفسر لماذا هو ثابت: قوة دفع المحركات لا تزال صفرًا، والجاذبية متوازنة مع رد فعل المنصة — المحصلة صفر، السرعة تبقى صفرًا.</li>
+<li>تعمل المحركات وتقذف الغاز للخلف بقوة رد فعل F = 15000 نيوتن، متجهة للأعلى — هذه نتيجة مباشرة لـ<strong>القانون الثالث</strong>: الغاز يدفع الصاروخ بنفس مقدار القوة التي يدفع بها الصاروخ الغاز.</li>
+<li>طالما أن كتلة الصاروخ ثابتة تقريبًا (في الثواني الأولى يُحرق القليل من الوقود)،<strong>القانون الثاني</strong> يعطي تسارعه: قوة الدفع ناقص الوزن.</li>
+</ol>
+<div class="eq"><div class="eq-body">ma = F<sub>الدفع</sub> − mg  ⇒  a = F<sub>الدفع</sub>/m − g</div><div class="eq-tag">(3)</div></div>
+<div aria-hidden="true" class="anim-strip vertical" style="max-width:120px">
+<div class="anim-track"></div>
+<div class="anim-rocket rise"><div class="body"></div><div class="flame"></div></div>
+</div>
+<div class="units">هنا وفيما بعد، لتسهيل الحساب نأخذ g ≈ 10 م/ث² (القيمة الحقيقية 9.8 — التقريب يغير النتيجة بنسبة ضئيلة، والحساب الذهني أسهل).</div>
+<div class="plate">
+<div class="eq-body">a = 15000/1000 − 10 = <strong>5</strong> م/ث²</div>
+<div class="cap">ينطلق الصاروخ من المنصة ويتسارع لأعلى بتسارع 5 م/ث² — طالما الكتلة لم تتغير بشكل ملحوظ</div>
+</div>
+<p>مع احتراق الوقود، تنخفض الكتلة m في المقام، وعند نفس الدفع يزداد التسارع — ومن هنا يأتي التسارع "المتزايد" المميز للصواريخ الحقيقية عند الإطلاق، وهو غير مأخوذ في الاعتبار هنا للتبسيط (هذا مستوى متقدم من المسألة حيث لا يمكن اعتبار m ثابتة ويلزم الصيغة الكاملة (1)).</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يؤدي هذا: مبدأ الفعل الأدنى</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>F = ma ليست الصياغة الأكثر أساسية للميكانيكا، بل هي حالة خاصة (وإن كانت الأكثر عملية). هناك قضية أعم، تُشتق منها قوانين نيوتن الثلاثة<em>تُستنتج</em>، ولا تُفترض: يتحرك الجسم بحيث تكون الكمية المسماة<strong>الفعل</strong> S مستقرة (في الحالات البسيطة — دنيا) على المسار الحقيقي مقارنة بأي مسار آخر متخيل بين نفس النقطتين:</p>
+<div class="eq"><div class="eq-body">S = ∫ L dt،    L = T - U (الطاقة الحركية ناقص الطاقة الكامنة)</div><div class="eq-tag">(4)</div></div>
+<p>تطبيق حساب المتغيرات (معادلة أويلر-لاغرانج) على (4) لجسيم عادي في حقل كموني يعطي بالضبط القانون الثاني لنيوتن — ليس تقريبًا، بل تطابقًا. لكن الصياغة عبر الفعل تعمل حتى حيث تكون "القوة" مفهومًا غير مريح أو غائبًا تمامًا (النسبية العامة، ميكانيكا الكم عبر تكامل المسارات لفاينمان)، ولذلك هي، وليس F = ma، لغة العمل في الفيزياء النظرية الحديثة.</p>
+<div class="callout brass">
+<span class="tag">التناظرات تولد قوانين الانحفاظ</span>
+<p><strong>مبرهنة نويثر</strong> (1918) تربط هذا مباشرة بـ §4: لكل تناظر مستمر للفعل (4) يوجد قانون انحفاظ مقابل. تجانس الزمن (قوانين الفيزياء لا تتغير من لحظة لأخرى) يعطي انحفاظ الطاقة؛ تجانس المكان (انقل التجربة مترًا لليسار — النتيجة نفسها) يعطي انحفاظ الزخم — أي أن قانون انحفاظ الزخم من §4 ليس حقيقة مستقلة، بل نتيجة لكون المكان متجانسًا. خواص المكان المتناظرة (لا يوجد اتجاه مميز) تعطي، بالطريقة نفسها، انحفاظ الزخم الزاوي.</p>
+</div>
+<p>هنا تتلامس الميكانيكا مع الفلسفة — ليس صدفة، بل تاريخيًا: المبدأ نفسه صيغ لأول مرة في أربعينيات القرن الثامن عشر على يد بيير-لوي موبيرتيوي باعتباره<em>غائيًا</em> — الطبيعة "اقتصادية" وتعمل بأقل تكلفة، تقريبًا كقصد. القراءة الحديثة (بعد فاينمان) — ليست غائية: الجسيم لا "يختار" الطريق الأفضل مسبقًا، بل يسلك فعليًا جميع الطرق المتخيلة في آن واحد، وتتراكب (تتداخل) بحيث في الحد الكلاسيكي يبقى بالضبط طريق الفعل المستقر. ومع ذلك، يبقى سؤال "لماذا الطبيعة أصلًا مصممة كمسألة تحسين" مفتوحًا، ويُناقش في فلسفة الفيزياء، وليس فقط في الفيزياء نفسها — اقتران الفيزياء النظرية ورياضيات حساب المتغيرات وفلسفة العلم هنا لا ينفصل.</p>
+<p>على الموقع هذه قوانين مستقلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/principle_of_least_action.html">مبدأ الفعل الأدنى</a> ·
+          <a href="/lang/ar/laws/noethers_theorem.html">مبرهنة نويثر</a> ·
+          <a href="/lang/ar/laws/law_of_conservation_of_momentum.html">قانون انحفاظ الزخم</a> ·
+          <a href="/lang/ar/laws/law_of_conservation_of_energy.html">قانون انحفاظ الطاقة</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · خدعة المفرش</span>
+<p>خذ قطعة قماش ناعمة ورقيقة (غير وبرية) وكوبًا بلاستيكيًا خفيفًا (فارغًا، غير قابل للكسر — ابدأ به، لا بطقم الجدة). ضع الكوب على القماش في وسط الطاولة، أمسك طرف القماش و<strong>بشكل حاد</strong> اسحبها بقوة نحو نفسك أفقيًا تمامًا.</p>
+<p><span class="qlabel">ما الذي ستلاحظه</span> الكوب تقريبًا لن يتحرك من مكانه، مع أن القماش قد سُحب بالكامل. كلما كانت السحبة أشد، قل الزمن الذي يستطيع فيه الاحتكاك بين القماش والكوب التأثير — وزخم القوة (§3، F مضروبًا في الزمن) يتناسب طرديًا مع زمن التأثير. زمن قصير — زخم منتقل صغير — الكوب "لا يلحق" بالقماش، إذ سرعان ما يصبح القماش غير تحته. هذا هو القانون الأول في أنقى صورة: لا قوة (زوال القماش) — لا تغير في السرعة.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · بالون-صاروخ</span>
+<p>انفخ بالونًا دون ربطه، وأطلقه. سيطير بشكل عشوائي في الغرفة حتى ينكمش.</p>
+<p><span class="qlabel">ما الذي ستلاحظه</span> هذا هو القانون الثالث و§5 (تسارع الصاروخ) بصورة مصغرة: البالون يطرد الهواء في اتجاه، والهواء يدفع البالون في الاتجاه المعاكس بنفس مقدار القوة. عشوائية الطيران — قوة الدفع في الواقع ليست متناظرة تمامًا (فوهة البالون تنحرف قليلاً)، خلافًا للصاروخ المرتب في §5، حيث الدفع موجه بدقة على طول المحور.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>مسائل للتدقيق</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر أولاً بنفسك، ثم افتح الحل — المربع المنسدل تحت الشرط. الأعداد في جميع المسائل اختيرت بحيث يكون الجواب صحيحًا (أسلوب معياري للمسائل التعليمية: يثبّت القانون أولاً، ثم تُعدّل المعطيات لتكون مناسبة) — يمكنك الحساب ذهنيًا دون آلة حاسبة. الحل في كل مكان يتبع نفس المخطط:<strong>معطيات → قانون → حل → جواب</strong>.</p>
+<details class="problem">
+<summary>1. جسم كتلته 3 كغم يتسارع من السكون بقوة 9 نيوتن على سطح أملس. جد السرعة بعد 4 ثوان والمسافة المقطوعة.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> m = 3 كغم، F = 9 نيوتن، t = 4 ث، v<sub>0</sub> = 0.</p>
+<p><span class="qlabel">القانون</span> القانون الثاني لنيوتن (a = F/m) + الكينماتيكا للحركة المتسارعة بانتظام (v = at، s = ½at²).</p>
+<p><span class="qlabel">الحل</span> a = 9/3 = 3 م/ث²؛ v = 3·4 = 12 م/ث؛ s = ½·3·4² = 24 م.</p>
+<p><span class="qlabel">الجواب</span> <strong>v = 12 م/ث، المسافة = 24 م</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. لماذا في حالة انعدام الوزن (على متن محطة مدارية) رائد الفضاء، بعد أن يدفع نفسه عن الجدار، يستمر في الطيران بخط مستقيم وبسرعة ثابتة حتى يلتقي بالجدار المقابل؟ أي قانون يصف هذا ولماذا الشرط متحقق هناك بدقة خاصة؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> القانون الأول لنيوتن (القصور الذاتي، §2).</p>
+<p><span class="qlabel">الحل</span> محصلة القوى على رائد الفضاء أثناء طيرانه الحر تساوي صفرًا — الجاذبية موجودة، لكن المحطة ورائد الفضاء يسقطان معًا فيها (هذا هو انعدام الوزن، وليس "غياب الجاذبية")، إذن وفق القانون الأول تكون السرعة ثابتة. الشرط متحقق بدقة أكبر مما على الأرض، لأنه لا توجد مقاومة هواء ولا احتكاك بالسطح — القوتان الوحيدتان اللتان تمنعان على الأرض ملاحظة القصور الذاتي في أنقى صورة.</p>
+<p><span class="qlabel">الجواب</span> <strong>القانون الأول؛ شرط "لا قوى" هناك أقرب إلى المثالية منه على الأرض</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. شخص كتلته 60 كغم يقفز من قارب ثابت كتلته 90 كغم إلى الشاطئ، مانحًا نفسه سرعة أفقية قدرها 3 م/ث. بأي سرعة سيتحرك القارب للوراء؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> m<sub>شخص</sub> = 60 كغم، v<sub>شخص</sub> = 3 م/ث، m<sub>قارب</sub> = 90 كغم، الزخم الكلي للنظام قبل القفز = 0.</p>
+<p><span class="qlabel">القانون</span> انحفاظ الزخم الكلي (§4، نفس الأسلوب المستخدم للمتزلجين): 0 = m<sub>شخص</sub>v<sub>شخص</sub> + m<sub>قارب</sub>v<sub>قارب</sub>.</p>
+<p><span class="qlabel">الحل</span> v<sub>قارب</sub> = −m<sub>شخص</sub>v<sub>شخص</sub>/m<sub>قارب</sub> = -60·3/90 = -2 م/ث.</p>
+<p><span class="qlabel">الجواب</span> <strong>2 م/ث، في اتجاه معاكس للقفز</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. جرار يسحب مقطورتين متماثلتين كتلة كل منهما 2000 كغم، متصلتين بالتسلسل، بتسارع إجمالي قدره 1 م/ث². جد قوة الشد في وصلة الربط بين المقطورة الأولى والثانية.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> m<sub>2</sub> = 2000 كغم (المقطورة الثانية، الخلفية)، a = 1 م/ث².</p>
+<p><span class="qlabel">القانون</span> القانون الثاني لنيوتن، مطبقًا بشكل منفصل على المقطورة الثانية — القوة الوحيدة المؤثرة عليها هي شد الوصلة T من قبل المقطورة الأولى.</p>
+<p><span class="qlabel">الحل</span> T = m<sub>2</sub>a = 2000·1 = 2000 نيوتن.</p>
+<p><span class="qlabel">الجواب</span> <strong>2000 نيوتن</strong> (وصلة الجرار↔المقطورة الأولى مشدودة بقوة أكبر — 4000 نيوتن، هناك حاجة لسحب المقطورتين معًا).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. كرة تقذف رأسيًا لأعلى بسرعة 20 م/ث. بعد كم ثانية تعود إلى نقطة الانطلاق؟ (خذ g ≈ 10 م/ث² — مع 9.8 لا يمكن الحساب ذهنيًا.)</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> v<sub>0</sub> = 20 م/ث (لأعلى)، g ≈ 10 م/ث² (قرّبنا عمدًا لعدم الحاجة لحساب مطول).</p>
+<p><span class="qlabel">القانون</span> القانون الثاني لنيوتن للسقوط الحر (القوة الوحيدة هي الجاذبية، a = -g) — زمن الصعود إلى أعلى نقطة (v = 0): t<sub>صعود</sub> = v<sub>0</sub>/g؛ الطيران لأعلى ولأسفل متماثل، الزمن الكلي = 2t<sub>صعود</sub>.</p>
+<p><span class="qlabel">الحل</span> t<sub>صعود</sub> = 20/10 = 2 ث؛ الزمن الكلي = 2·2 = 4 ث.</p>
+<p><span class="qlabel">الجواب</span> <strong>4 ث</strong> (مع g الدقيق 9.8 سيكون الناتج 4.08 ث — التقريب يغير الجواب بأقل من 2%، ولا داعي للحساب).</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">وجدت خطأ؟</span>
+<p>خطأ مطبعي، صيغة غير صحيحة، رقم لا يتطابق، شرح غير واضح — اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Newton%20laws%20article">feedback@bridge42worlds.org</a>.
+      تتم قراءة كل رسالة فعليًا، وتُدرس ويُجرى التصحيح بناءً عليها — هذا ليس "للأرشيف".</p>
+</div>
+<footer>
+<p>bridge42worlds · نموذج أولي لـ"دليل تعليمي" لطبقة القوانين · الجزء الأول من سلسلة في الديناميكا الكلاسيكية</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // "Функциональная" анимация §3: не просто едет груз — рядом честно пересчитывается v=at
+  // на каждый кадр по формуле (не чтение CSS-состояния), и та же величина двигает точку
+  // по графику v(t) — визуальная сцена, число и график синхронно связаны одной физикой.
+  var rows = document.querySelectorAll('#s3 .anim-row[data-accel]');
+  if (!rows.length || !window.requestAnimationFrame) return;
+  var dotByMass = {
+    1: document.getElementById('graphDotSm'),
+    2: document.getElementById('graphDotMd'),
+    4: document.getElementById('graphDotLg')
+  };
+  var CYCLE = 6000, T_MAX = 2;              // 6с цикл (см. CSS keyframes), t на графике — до 2с, как в таблице
+  var PHASE_FRAC = {1: 0.25, 2: 0.35, 4: 0.5}; // должно совпадать с % финиша в @keyframes moveAccelSm/Md/Lg
+  var PX_PER_S = (290 - 40) / T_MAX, PX_PER_V = (140 - 10) / 12;
+  function tick(ts){
+    rows.forEach(function(row){
+      var a = parseFloat(row.dataset.accel), m = parseFloat(row.dataset.mass);
+      var phaseMs = CYCLE * (PHASE_FRAC[m] || 0.3);
+      var t = Math.min(ts % CYCLE, phaseMs) / phaseMs * T_MAX;
+      var v = a * t;
+      var ro = row.querySelector('[data-readout]');
+      if (ro) ro.textContent = 'v=' + v.toFixed(1) + ' м/с';
+      var dot = dotByMass[m];
+      if (dot) { dot.setAttribute('cx', 40 + t * PX_PER_S); dot.setAttribute('cy', 140 - v * PX_PER_V); }
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بلغة بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+
