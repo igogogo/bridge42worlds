@@ -1766,6 +1766,7 @@ def generate_archive_page(lang):
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
 <a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/">authors</a><a href="/{LANG_DIR}/{lang}/graph/">graph</a>
+<a href="/{LANG_DIR}/{DEFAULT_LANG}/theory/">theory</a>
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="Избранное">★</a>
 <a href="/{LANG_DIR}/{lang}/about.html">about</a>
 </div></div></div>

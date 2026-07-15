@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Четыре начала термодинамики: энергия, беспорядок и абсолютный ноль — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css?v=eda3218e44">
+<script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display); font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em;
+  text-wrap:balance; color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroHeatFlow{
+  0%{ transform:translateX(0); opacity:1; }
+  55%{ transform:translateX(140px); opacity:1; }
+  70%{ transform:translateX(140px); opacity:0; }
+  100%{ transform:translateX(140px); opacity:0; }
+}
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance;
+}
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: реальные объекты (поршень, термометр), не абстрактные точки ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.piston{ height:110px; }
+.piston-cyl{ position:absolute; left:40px; right:40px; top:20px; bottom:20px; border:2px solid var(--ink); border-radius:0 0 6px 6px; border-top:none; }
+.piston-head{ position:absolute; left:40px; right:40px; top:24px; height:14px; background:var(--brass-fill); border:1.5px solid var(--ink); border-radius:2px; }
+@media (prefers-reduced-motion: no-preference){
+  .piston-head.push{ animation: pistonPush 6s cubic-bezier(.4,0,.6,1) infinite; }
+  .piston-gas.grow{ animation: gasGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes pistonPush{ 0%{ top:24px; } 55%{ top:6px; } 100%{ top:6px; } }
+.piston-gas{ position:absolute; left:41px; right:41px; bottom:20px; top:39px; background:var(--steel-fill); opacity:.28; }
+@keyframes gasGrow{ 0%{ top:39px; } 55%{ top:21px; } 100%{ top:21px; } }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 — стрелка энтропии, которая только растёт (одностороннее движение, без возврата) */
+.anim-strip.arrow{ height:64px; }
+.entropy-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.entropy-dot{ position:absolute; top:50%; width:16px; height:16px; margin-top:-8px; border-radius:50%; background:var(--steel-fill); left:16px; }
+@media (prefers-reduced-motion: no-preference){
+  .entropy-dot.grow{ animation: entropyGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes entropyGrow{ 0%{ left:16px; } 60%{ left:calc(100% - 32px); } 100%{ left:calc(100% - 32px); } }
+
+/* ---------- задачи ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/" class="active">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ru/about.html">about</a>
+        </div>
+    </div>
+</div>
+<div class="langs" id="langs-bar"></div>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Четыре начала в двух словах</a></li>
+      <li><a href="#s2"><span class="n">02</span>Нулевое начало: что такое температура</a></li>
+      <li><a href="#s3"><span class="n">03</span>Первое начало: энергетическая бухгалтерия</a></li>
+      <li><a href="#s4"><span class="n">04</span>Второе начало: беспорядок только растёт</a></li>
+      <li><a href="#s5"><span class="n">05</span>Третье начало: абсолютный ноль недостижим</a></li>
+      <li><a href="#s6"><span class="n">06</span>Сквозной пример: тепловой двигатель</a></li>
+      <li><a href="#s7"><span class="n">07</span>Куда это ведёт: энтропия и стрела времени</a></li>
+      <li><a href="#s8"><span class="n">08</span>Эксперимент дома</a></li>
+      <li><a href="#s9"><span class="n">09</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; термодинамика &middot; часть III</p>
+        <h1>Четыре начала термодинамики: энергия, беспорядок и абсолютный ноль</h1>
+        <p class="subtitle">Одна из немногих областей физики, где законы формулировались не «сверху вниз» от красивой теории, а «снизу вверх» — из попыток понять, почему паровая машина никогда не бывает идеальной.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+          <rect x="30" y="80" width="120" height="90" rx="4" fill="none" stroke="var(--ink)" stroke-width="2"/>
+          <text x="90" y="130" text-anchor="middle" font-family="Futura, sans-serif" font-size="16" fill="var(--brass)">T&#8321; горячо</text>
+          <rect x="270" y="80" width="120" height="90" rx="4" fill="none" stroke="var(--ink)" stroke-width="2"/>
+          <text x="330" y="130" text-anchor="middle" font-family="Futura, sans-serif" font-size="16" fill="var(--steel)">T&#8322; холодно</text>
+          <circle class="hero-heat" cx="165" cy="125" r="8" fill="var(--brass-fill)"/>
+          <text x="210" y="230" text-anchor="middle" font-family="Futura, sans-serif" font-size="14" fill="var(--moss)">тепло течёт от горячего к холодному, не наоборот</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Термодинамика — редкий раздел физики с законом «номер ноль»: базовый принцип, объясняющий саму температуру, был осознан позже первого и второго начал и получил номер задним числом. Всего начал четыре: нулевое определяет температуру, первое — сохранение энергии для тепла и работы, второе — почему процессы необратимы и энтропия растёт, третье — почему абсолютный ноль недостижим. Вместе они управляют всем — от чашки кофе до эволюции звёзд.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Четыре начала в двух словах</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Начало</th><th>Коротко</th><th>Что запрещает</th></tr>
+          <tr><td class="sym">0</td><td>тепловое равновесие транзитивно</td><td>неоднозначность температуры</td></tr>
+          <tr><td class="sym">I</td><td>&Delta;U = Q &minus; W</td><td>вечный двигатель первого рода (энергия из ничего)</td></tr>
+          <tr><td class="sym">II</td><td>&Delta;S &ge; 0 в изолированной системе</td><td>вечный двигатель второго рода (100% КПД)</td></tr>
+          <tr><td class="sym">III</td><td>S &rarr; 0 при T &rarr; 0</td><td>достижение абсолютного нуля за конечное число шагов</td></tr>
+        </table>
+        <p>Шутливая формулировка всех трёх пронумерованных начал разом, известная физикам: «Ты не можешь выиграть (I — нельзя получить больше энергии, чем вложил), ты даже не можешь остаться при своих (II — часть энергии всегда рассеивается) и ты не можешь выйти из игры (III — нельзя остыть до абсолютного нуля и остановить всякое движение)».</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Нулевое начало: что такое температура</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Если система A находится в тепловом равновесии с системой C, и система B тоже находится в тепловом равновесии с C, то A и B находятся в тепловом равновесии друг с другом:</p>
+        <div class="plate">
+          <div class="eq-body">T<sub>A</sub> = T<sub>C</sub> и T<sub>B</sub> = T<sub>C</sub>&nbsp;&nbsp;&rArr;&nbsp;&nbsp;T<sub>A</sub> = T<sub>B</sub></div>
+          <div class="cap">транзитивность теплового равновесия — то, что вообще делает температуру измеримой величиной</div>
+        </div>
+        <p>Звучит почти как «математическая банальность» (транзитивность равенства), но физического содержания здесь много: закон утверждает, что у теплового равновесия вообще есть единственный числовой параметр (температура), а не что-то более сложное. Именно на этом принципе работает любой термометр: он сам становится «системой C» — приходит в равновесие с телом, которое измеряет, и мы просто читаем его собственную температуру.</p>
+        <div class="callout steel">
+          <span class="tag">Почему нулевое, а не четвёртое</span>
+          <p>Первое и второе начала были сформулированы раньше (1850-е), а нулевое — только в 1931 году Ральфом Фаулером. К тому моменту нумерация 1-2-3 уже устоялась в учебниках, и чтобы не переписывать всё, самый фундаментальный (логически предшествующий остальным) принцип получил номер «0» — редкий случай, когда порядок открытия и порядок логической важности пошли в разные стороны.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>Первое начало: энергетическая бухгалтерия</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Изменение внутренней энергии системы равно теплоте, переданной ей, минус работе, совершённой системой над окружением:</p>
+        <div class="plate">
+          <div class="eq-body">&Delta;U = Q &minus; W</div>
+          <div class="cap">это закон сохранения энергии (часть II, §3), просто записанный на языке теплоты и работы</div>
+        </div>
+        <div class="units">&Delta;U, Q, W — все в джоулях (Дж). U — внутренняя энергия (сумма кинетической и потенциальной энергии всех молекул), Q &gt; 0 — тепло подведено к системе, W &gt; 0 — система совершает работу против внешних сил.</div>
+        <div class="anim-strip piston" aria-hidden="true">
+          <div class="piston-cyl"></div>
+          <div class="piston-gas grow"></div>
+          <div class="piston-head push"></div>
+          <span class="anim-readout">Q подведено &rarr; газ расширяется, толкает поршень</span>
+        </div>
+        <p>Численный пример: газу в цилиндре подвели Q&nbsp;=&nbsp;500&nbsp;Дж тепла. Расширяясь, газ толкает поршень и совершает работу W&nbsp;=&nbsp;200&nbsp;Дж против внешнего давления. Насколько изменилась внутренняя энергия газа?</p>
+        <div class="eq"><div class="eq-body">&Delta;U = 500 &minus; 200 = <strong>300&nbsp;Дж</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Представьте банковский счёт: Q&nbsp;=&nbsp;500&nbsp;Дж — доход, W&nbsp;=&nbsp;200&nbsp;Дж — расход, &Delta;U&nbsp;=&nbsp;300&nbsp;Дж — то, что осталось на счету (запаслось во внутренней энергии газа, то есть его молекулы в среднем стали двигаться быстрее — газ нагрелся).</p>
+        <div class="callout brass">
+          <span class="tag">Частая ошибка</span>
+          <p>«Тепло — это то же самое, что температура» — нет: теплота Q — это процесс передачи энергии (как «доход» на счету), а температура — параметр состояния системы (как «баланс счёта» в других единицах). Можно передать телу много тепла и почти не поднять температуру (например, при плавлении льда — вся энергия уходит на разрушение кристаллической решётки, не на разогрев).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Второе начало: беспорядок только растёт</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> В изолированной системе энтропия не убывает:</p>
+        <div class="plate">
+          <div class="eq-body">&Delta;S &ge; 0</div>
+          <div class="cap">эквивалентная формулировка (Клаузиус): тепло само не переходит от холодного тела к горячему</div>
+        </div>
+        <div class="anim-strip arrow" aria-hidden="true">
+          <div class="entropy-track"></div>
+          <div class="entropy-dot grow"></div>
+          <div class="anim-label">энтропия — «стрела», которая едет только вперёд, никогда назад</div>
+        </div>
+        <p>Энтропия S — мера того, сколькими способами частицы системы могут быть расставлены на микроуровне при том же макроскопическом виде системы (формула Больцмана: S&nbsp;=&nbsp;k<sub>B</sub>&nbsp;ln&nbsp;&Omega;, где &Omega; — число микросостояний). Разбросанные по комнате вещи можно расположить неупорядоченным образом гораздо большим числом способов, чем аккуратно сложенными — поэтому «само по себе» убирается редко, а разбрасывается легко.</p>
+        <table class="symtab">
+          <tr><th>Формулировка</th><th>Автор</th><th>Суть</th></tr>
+          <tr><td>Клаузиуса</td><td>Рудольф Клаузиус</td><td>тепло не течёт само от холодного к горячему</td></tr>
+          <tr><td>Кельвина</td><td>Уильям Томсон</td><td>нельзя построить машину, единственный результат которой — 100% превращение тепла в работу</td></tr>
+        </table>
+        <div class="callout moss">
+          <span class="tag">Демон Максвелла</span>
+          <p>Мысленный эксперимент Джеймса Максвелла (1867): крошечное существо у перегородки между двумя объёмами газа пропускает быстрые молекулы в одну сторону, медленные — в другую, разделяя газ на горячую и холодную половины без затрат энергии — казалось бы, нарушая второй закон. Разгадка (Лео Силард, 1929): сам процесс «измерения» скорости молекулы демоном увеличивает энтропию демона (или его памяти) не меньше, чем уменьшается энтропия газа — закон спасён, но ценой рождения целой области физики информации.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Третье начало: абсолютный ноль недостижим</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> При стремлении температуры к абсолютному нулю энтропия идеального кристалла стремится к нулю:</p>
+        <div class="plate">
+          <div class="eq-body">lim<sub>T&rarr;0</sub> S(T) = 0</div>
+          <div class="cap">при T = 0 у идеального кристалла есть только одно возможное микросостояние — Ω = 1, значит S = k<sub>B</sub>ln1 = 0</div>
+        </div>
+        <p>Следствие этого начала — практическое, а не только формальное: абсолютный ноль (&minus;273.15&nbsp;&deg;C, 0&nbsp;К) нельзя достичь за конечное число шагов охлаждения, только асимптотически приблизиться. Рекорд лаборатории — около 100 пикокельвинов (10<sup>&minus;10</sup>&nbsp;К) в конденсате Бозе-Эйнштейна — всё ещё не ноль, хоть и в десятки миллиардов раз холоднее межзвёздного пространства.</p>
+        <p>Реальные твёрдые тела не всегда доходят до S&nbsp;=&nbsp;0 даже теоретически: стёкла и другие неупорядоченные (аморфные) вещества «замерзают» со случайной структурой и сохраняют остаточную энтропию при сколь угодно низкой температуре — интересное исключение, которое до сих пор изучается.</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Сквозной пример: тепловой двигатель</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Соберём первое и второе начала на одном примере — идеализированном тепловом двигателе (цикл Карно), работающем между горячим резервуаром T<sub>h</sub>&nbsp;=&nbsp;600&nbsp;К и холодным T<sub>c</sub>&nbsp;=&nbsp;300&nbsp;К.</p>
+        <p><strong>Второй закон</strong> задаёт максимально возможный КПД такого двигателя (выше него не прыгнуть, что бы вы ни придумали):</p>
+        <div class="eq"><div class="eq-body">&eta;<sub>max</sub> = 1 &minus; T<sub>c</sub>/T<sub>h</sub> = 1 &minus; 300/600 = <strong>0.5</strong> (50%)</div><div class="eq-tag">(2)</div></div>
+        <p>Пусть от горячего резервуара подведено Q<sub>h</sub>&nbsp;=&nbsp;1000&nbsp;Дж тепла. <strong>Первый закон</strong> (энергия никуда не девается) говорит, что вся эта энергия распределится между полезной работой W и теплом Q<sub>c</sub>, сброшенным в холодный резервуар:</p>
+        <div class="eq"><div class="eq-body">W = &eta;&middot;Q<sub>h</sub> = 0.5&middot;1000 = <strong>500&nbsp;Дж</strong>,&nbsp;&nbsp;&nbsp; Q<sub>c</sub> = Q<sub>h</sub> &minus; W = <strong>500&nbsp;Дж</strong></div><div class="eq-tag">(3)</div></div>
+        <figure>
+          <img src="thermo_engine_balance.png" alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж">
+          <figcaption><span class="fign">Рис. 1</span>Первый закон: сумма W и Q<sub>c</sub> в точности равна Q<sub>h</sub> — энергия не потерялась, но и вся целиком в работу не превратилась (запрет второго закона). Даже идеальный (карно-)двигатель между этими температурами не может дать больше 500 Дж полезной работы из 1000 Дж тепла.</figcaption>
+        </figure>
+        <p>Ни один реальный двигатель между этими же двумя температурами не превзойдёт эти 500&nbsp;Дж — цикл Карно даёт теоретический потолок КПД, а трение и необратимость реальных процессов лишь снижают результат ниже этого потолка, никогда не поднимая выше.</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Куда это ведёт: энтропия и стрела времени</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Второе начало — едва ли не единственный закон фундаментальной физики, различающий прошлое и будущее. Уравнения Ньютона, Максвелла и даже Шрёдингера полностью симметричны во времени: если снять на видео столкновение бильярдных шаров и прокрутить назад, законы механики не найдут нарушения. Но видео с разбивающейся чашкой, прокрученное назад (осколки сами собираются в целую чашку), выглядит абсурдно — и единственный закон физики, который это «замечает», — второй.</p>
+        <figure>
+          <img src="thermo_entropy_zero.png" alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю">
+          <figcaption><span class="fign">Рис. 2</span>Энтропия идеального кристалла растёт с температурой и стремится к нулю при T&nbsp;&rarr;&nbsp;0 (третье начало) — сама возможность построить такой график и говорить об «увеличении» энтропии со временем и есть источник различия между прошлым и будущим в физике.</figcaption>
+        </figure>
+        <div class="callout steel">
+          <span class="tag">От пара до чёрных дыр</span>
+          <p>Энтропия оказалась на удивление универсальным понятием: Людвиг Больцман в 1870-х связал её с числом микросостояний, а спустя столетие Джейкоб Бекенштейн и Стивен Хокинг обнаружили, что у чёрных дыр тоже есть энтропия — пропорциональная не объёму, а площади горизонта событий. Этот неожиданный факт стал одной из главных подсказок к <strong>голографическому принципу</strong> в современной теоретической физике — идее, что вся информация о трёхмерной области может быть закодирована на её двумерной границе.</p>
+        </div>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/zeroth_law_of_thermodynamics.html">Нулевое начало</a> ·
+          <a href="/lang/ru/laws/first_law_of_thermodynamics.html">Первое начало</a> ·
+          <a href="/lang/ru/laws/second_law_of_thermodynamics.html">Второе начало</a> ·
+          <a href="/lang/ru/laws/third_law_of_thermodynamics.html">Третье начало</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; сжатие воздуха в шприце</span>
+          <p>Возьмите медицинский шприц без иглы, закройте выходное отверстие пальцем и резко сожмите поршень. Приложите палец другой руки к цилиндру шприца.</p>
+          <p><span class="qlabel">Что заметить</span> шприц заметно нагреется. Вы совершили работу W над газом (сжали его), а тепло Q никуда не уходило (процесс быстрый, теплообмен с воздухом не успевает) — по первому закону вся эта работа пошла на рост внутренней энергии &Delta;U, то есть газ нагрелся. Именно так работает воспламенение топлива в дизельном двигателе — только там сжатие ещё сильнее.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; тающий лёд и температура смеси</span>
+          <p>Положите пару кубиков льда в стакан с тёплой водой и следите за температурой (на ощупь или термометром) в течение нескольких минут.</p>
+          <p><span class="qlabel">Что заметить</span> тепло переходит от тёплой воды ко льду (второе начало — только в эту сторону, не наоборот), пока обе части не придут к общей температуре — это и есть тепловое равновесие из нулевого начала. Заметьте также: пока лёд ещё не растаял полностью, температура смеси почти не меняется — энергия уходит на плавление (разрушение кристаллической решётки льда), а не на разогрев, ровно как обсуждалось в §3 про разницу тепла и температуры.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s9">
+      <div class="sec-head"><span class="sec-num">§9</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Газу в закрытом жёстком сосуде (объём не меняется, работа не совершается) подвели 400 Дж тепла. Насколько изменилась его внутренняя энергия?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> Q&nbsp;=&nbsp;400&nbsp;Дж, W&nbsp;=&nbsp;0 (объём постоянен — поршень никуда не двигается).</p>
+            <p><span class="qlabel">Закон</span> первое начало (§3): &Delta;U&nbsp;=&nbsp;Q&nbsp;&minus;&nbsp;W.</p>
+            <p><span class="qlabel">Решение</span> &Delta;U&nbsp;=&nbsp;400&nbsp;&minus;&nbsp;0&nbsp;=&nbsp;400&nbsp;Дж.</p>
+            <p><span class="qlabel">Ответ</span> <strong>+400 Дж</strong> — при постоянном объёме всё подведённое тепло идёт во внутреннюю энергию.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Идеальный тепловой двигатель работает между температурами 800 К и 400 К. Какой у него максимальный КПД?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> T<sub>h</sub>&nbsp;=&nbsp;800&nbsp;К, T<sub>c</sub>&nbsp;=&nbsp;400&nbsp;К.</p>
+            <p><span class="qlabel">Закон</span> предел Карно (§6, второе начало): &eta;<sub>max</sub>&nbsp;=&nbsp;1&nbsp;&minus;&nbsp;T<sub>c</sub>/T<sub>h</sub>.</p>
+            <p><span class="qlabel">Решение</span> &eta;<sub>max</sub>&nbsp;=&nbsp;1&nbsp;&minus;&nbsp;400/800&nbsp;=&nbsp;0.5.</p>
+            <p><span class="qlabel">Ответ</span> <strong>50%</strong> — и это ПРЕДЕЛ, реальный двигатель между теми же температурами будет хуже.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Двигатель с КПД 40% получает от горячего резервуара 2000 Дж тепла за цикл. Сколько тепла сбрасывается в холодный резервуар?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> &eta;&nbsp;=&nbsp;0.4, Q<sub>h</sub>&nbsp;=&nbsp;2000&nbsp;Дж.</p>
+            <p><span class="qlabel">Закон</span> первое начало: Q<sub>h</sub>&nbsp;=&nbsp;W&nbsp;+&nbsp;Q<sub>c</sub>, где W&nbsp;=&nbsp;&eta;Q<sub>h</sub>.</p>
+            <p><span class="qlabel">Решение</span> W&nbsp;=&nbsp;0.4&middot;2000&nbsp;=&nbsp;800&nbsp;Дж; Q<sub>c</sub>&nbsp;=&nbsp;2000&nbsp;&minus;&nbsp;800&nbsp;=&nbsp;1200&nbsp;Дж.</p>
+            <p><span class="qlabel">Ответ</span> <strong>1200 Дж</strong> — больше половины подведённого тепла уходит впустую даже у не самого плохого двигателя.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Газ расширяется и совершает работу 150 Дж, а его внутренняя энергия при этом падает на 50 Дж. Сколько тепла было передано газу (или отведено от него)?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> W&nbsp;=&nbsp;150&nbsp;Дж, &Delta;U&nbsp;=&nbsp;&minus;50&nbsp;Дж.</p>
+            <p><span class="qlabel">Закон</span> первое начало: Q&nbsp;=&nbsp;&Delta;U&nbsp;+&nbsp;W.</p>
+            <p><span class="qlabel">Решение</span> Q&nbsp;=&nbsp;&minus;50&nbsp;+&nbsp;150&nbsp;=&nbsp;100&nbsp;Дж.</p>
+            <p><span class="qlabel">Ответ</span> <strong>+100 Дж подведено</strong> — газу передали тепло, но его не хватило покрыть всю совершённую работу, поэтому часть недостающей энергии газ «доплатил» из своего внутреннего запаса (он остыл).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Термос с чаем (60 °C) стоит в комнате при 20 °C. Опишите, в какую сторону и почему пойдёт теплообмен, ссылаясь на конкретное начало термодинамики.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> второе начало в формулировке Клаузиуса (§4).</p>
+            <p><span class="qlabel">Решение</span> тепло самопроизвольно переходит только от более горячего тела к более холодному — значит, чай будет остывать, отдавая тепло воздуху комнаты, пока не установится общая температура (нулевое начало, §2) — заведомо ниже 60&nbsp;°C и выше 20&nbsp;°C.</p>
+            <p><span class="qlabel">Ответ</span> <strong>тепло идёт от чая к воздуху комнаты</strong>, обратный процесс (воздух сам нагревает чай выше комнатной температуры) вторым началом запрещён.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Thermodynamics%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть III серии, термодинамика</p>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/theory/">теория</a> · <a href="/lang/ru/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+</body>
+</html>
