@@ -556,6 +556,32 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             side_laws.append((lid, ld.get("name", lid)))
         if len(side_laws) >= 6:
             break
+    # Учёные статьи — через её теги (related_tags учёного) И через уже найденные законы
+    # (их scientists/influenced_by) — тот же стандартный подход, что у законов выше.
+    # Результат идёт ПЕРВЫМ в колонке (сверху тегов) — см. side_sci_html ниже.
+    sci_ids_path = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
+    all_sci = json.loads(sci_ids_path.read_text(encoding="utf-8")) if sci_ids_path.exists() else {}
+    side_sci_ids = []
+    for lid, _name in side_laws:
+        ld = laws_loc.get(lid, {})
+        for s in (ld.get("scientists") or []) + (ld.get("influenced_by") or []):
+            if s in all_sci and s not in side_sci_ids:
+                side_sci_ids.append(s)
+    for sid, sdata in all_sci.items():
+        if len(side_sci_ids) >= 6:
+            break
+        if sid in side_sci_ids:
+            continue
+        if tagset & set(sdata.get("related_tags", [])):
+            side_sci_ids.append(sid)
+    side_sci_ids = side_sci_ids[:6]
+    side_sci_html = ""
+    if side_sci_ids:
+        sci_lbl = SIDE_SCI_LABEL.get(lang, SIDE_SCI_LABEL["en"])
+        side_sci_html = (f'<div class="side-sci-label">{safe(sci_lbl)}</div>' + "".join(
+            f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="side-sci" '
+            f'data-scientist="{attr_safe(s)}">{safe(all_sci[s].get("name", s))}</a>' for s in side_sci_ids))
+    tags_side_html = side_sci_html + tags_side_html
     if side_laws:
         lbl = SIDE_LAWS_LABEL.get(lang, SIDE_LAWS_LABEL["en"])
         tags_side_html += (f'<div class="side-laws-label">{safe(lbl)}</div>' + "".join(
@@ -1074,6 +1100,7 @@ MINI_LABEL = {"ru": "Связи в графе знаний", "en": "Links in the
 
 SIDE_LAWS_LABEL = {"ru": "Законы", "en": "Laws", "zh": "定律", "fr": "Lois", "ar": "قوانين"}
 SIDE_TAGS_LABEL = {"ru": "Теги", "en": "Tags", "zh": "标签", "fr": "Tags", "ar": "الوسوم"}
+SIDE_SCI_LABEL = {"ru": "Учёные", "en": "Scientists", "zh": "科学家", "fr": "Scientifiques", "ar": "العلماء"}
 
 ABSTRACT_LABEL = {"ru": "Аннотация", "en": "Abstract", "zh": "摘要", "fr": "Résumé", "ar": "الملخّص"}
 

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Snell and Bragg: How Light Bends and How X-rays See Atoms — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: преломление и дифракция ---------- */
+.refr-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.refr-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Two Laws of Reflection and Refraction</a></li>
+<li><a href="#s2"><span class="n">02</span>Snell's Law: Why Light 'Bends'</a></li>
+<li><a href="#s3"><span class="n">03</span>Total Internal Reflection and Optical Fiber</a></li>
+<li><a href="#s4"><span class="n">04</span>Bragg's Law: Light as a Ruler for Atoms</a></li>
+<li><a href="#s5"><span class="n">05</span>A Through Example: How the Double Helix of DNA Was Seen</a></li>
+<li><a href="#s6"><span class="n">06</span>Where This Leads: The Fermat Principle Again</a></li>
+<li><a href="#s7"><span class="n">07</span>Home Experiment</a></li>
+<li><a href="#s8"><span class="n">08</span>Problems to Check</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Optics · Part XV</p>
+<h1>Snell and Bragg: How Light Bends and How X-rays See Atoms</h1>
+<p class="subtitle">One law explains why a spoon in a glass of tea appears broken; the other — using the same mathematical trick — allowed the shape of the DNA molecule to be seen for the first time.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--paper)" height="90" width="340" x="0" y="0"></rect>
+<rect fill="var(--steel-fill)" height="110" opacity=".15" width="340" x="0" y="90"></rect>
+<line stroke="var(--rule)" stroke-width="1.5" x1="0" x2="340" y1="90" y2="90"></line>
+<line stroke="var(--rule)" stroke-dasharray="3,3" stroke-width="1" x1="170" x2="170" y1="20" y2="180"></line>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="80" x2="170" y1="20" y2="90"></line>
+<line id="heroRefracted" stroke="var(--brass-fill)" stroke-width="2.4" x1="170" x2="220" y1="90" y2="180"></line>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="195">n₁sinθ₁ = n₂sinθ₂</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Annotation</span>
+<p>In Part X we already encountered the 'lifeguard on the beach' problem — a hint at how light chooses the path of least time. Here we provide a full breakdown of two laws governing wave reflection and refraction: Snell's law (1621) for visible light at the interface between media, and Bragg's law (1913) for X-rays on a crystal lattice. Formally they look different, but both are consequences of the same wave interference, and together they cover everything from high-school lens physics to deciphering DNA's structure.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Луч света преломляется на границе воды" src="/lang/ru/theory/img/snell_bragg_hero.jpg"/><figcaption>A light ray refracts at the water's boundary</figcaption></figure>
+<figure><img alt="Рентген отражается от кристаллической решётки под точным углом" src="/lang/ru/theory/img/snell_bragg_concept.jpg"/><figcaption>X-ray reflects off the crystal lattice at a precise angle</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Two Laws of Reflection and Refraction</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Law</th><th>Formula</th><th>Works for</th></tr>
+<tr><td>Snell (1621)</td><td class="sym">n₁sinθ₁ = n₂sinθ₂</td><td>refraction of a ray at the boundary of two media</td></tr>
+<tr><td>Bragg (1913)</td><td class="sym">nλ = 2d·sinθ</td><td>wave diffraction on a periodic lattice (crystal)</td></tr>
+</table>
+<p>Snell describes ONE boundary (e.g., air-glass). Bragg describes MANY parallel planes inside a crystal—but the underlying mathematics of both laws is related: a wave interacts with a periodic or boundary structure, and the result is determined by the geometry of angles.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>Snell's Law: Why Light 'Bends'</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong>When a ray passes from one transparent medium to another:</p>
+<div class="plate">
+<div class="eq-body">n₁sinθ₁ = n₂sinθ₂</div>
+<div class="cap">n is the refractive index (n = c/v, how many times slower light travels in the medium than in a vacuum); θ is the angle FROM THE PERPENDICULAR to the boundary</div>
+</div>
+<div aria-hidden="true" class="refr-fig">
+<svg viewbox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--paper)" height="100" width="300" x="0" y="0"></rect>
+<rect fill="var(--steel-fill)" height="100" opacity=".12" width="300" x="0" y="100"></rect>
+<line stroke="var(--rule)" stroke-width="1.5" x1="0" x2="300" y1="100" y2="100"></line>
+<line stroke="var(--rule)" stroke-dasharray="3,3" stroke-width="1" x1="150" x2="150" y1="20" y2="180"></line>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="70" x2="150" y1="30" y2="100"></line>
+<line id="refractedRay" stroke="var(--brass-fill)" stroke-width="2.4" x1="150" x2="192" y1="100" y2="180"></line>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>angle of incidence</b><span data-readout="theta1">41.8</span>°</span>
+<span><b>angle of refraction</b><span data-readout="theta2">30.0</span>°</span>
+</div>
+<p>Numerical example: a light ray from air (n₁ = 1) strikes water (n₂ = 4/3 ≈ 1.33) at an angle θ₁ where sinθ₁ = 2/3 (θ₁ ≈ 41.8°). Find the angle of refraction.</p>
+<div class="eq"><div class="eq-body">sinθ₂ = n₁sinθ₁/n₂ = 1·(2/3)/(4/3) = <strong>0.5</strong>  ⇒  θ₂ = <strong>30°</strong></div><div class="eq-tag">(1)</div></div>
+<p>The ray moved closer to the perpendicular (41.8° → 30°) — this always happens when entering an optically denser medium (n increases). That is exactly why a pencil in a glass of water looks 'broken': light from the underwater part travels to your eye along a kink, and the brain extends a straight line.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Total Internal Reflection and Optical Fiber</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>When passing from a denser to a less dense medium (n₁ &gt; n₂, e.g., glass → air), the angle of refraction is ALWAYS greater than the angle of incidence. At a sufficiently large angle of incidence, the refracted ray 'hugs' the boundary itself (θ₂ = 90°) — and if the incidence angle is even steeper, refraction stops entirely: all the light reflects back into the medium. This critical angle is found from the condition sinθ<sub>crit</sub> = n₂/n₁.</p>
+<p>For glass (n₁ = 1.5) at the boundary with air (n₂ = 1): sinθ<sub>crit</sub> = 1/1.5 = 2/3, θ<sub>crit</sub> ≈ 41.8° — the same number as in §2, not a coincidence: glass and water have similar refractive indices.</p>
+<div class="callout steel">
+<span class="tag">How the Internet Flows Through a Glass Thread</span>
+<p>An optical fiber cable is a thin glass thread in which light enters at an angle greater than the critical angle and reflects from the inner wall AGAIN and AGAIN, thousands of times, without any energy loss at each reflection (unlike mirrors, which lose some light at each reflection). It is total internal reflection, not some special coating, that keeps the signal inside the fiber over tens or hundreds of kilometers.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Bragg's Law: Light as a Ruler for Atoms</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation.</strong>X-rays reflected from parallel atomic planes in a crystal reinforce each other (constructive interference) only at specific angles:</p>
+<div class="plate">
+<div class="eq-body">nλ = 2d·sinθ</div>
+<div class="cap">d is the distance between atomic planes, θ is the GLANCING ANGLE (from the plane, not from the perpendicular — a difference from Snell's law!), n is an integer (order of reflection)</div>
+</div>
+<p>Atomic layers in a crystal act like semi-transparent mirrors — part of the wave reflects from the top layer, part penetrates deeper and reflects from the next. If the path difference between these two reflected waves (geometrically equal to 2d·sinθ) is a multiple of the wavelength, the waves add up 'in phase' and produce a bright signal; if not, they cancel each other out.</p>
+<p>Numerical example: X-rays with a wavelength of λ = 0.15 nm are directed at a crystal with interplanar distance d = 0.15 nm. Find the angle of the first (n = 1) bright reflection.</p>
+<div class="eq"><div class="eq-body">sinθ = nλ/(2d) = 0.15/0.30 = <strong>0.5</strong>  ⇒  θ = <strong>30°</strong></div><div class="eq-tag">(2)</div></div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>A Through Example: How the Double Helix of DNA Was Seen</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>In 1952, Rosalind Franklin directed X-rays at crystallized DNA fibers and obtained the famous 'Photo 51' — a cross-shaped pattern of dark spots. Each spot is a bright point where, for a specific angle and specific interplanar distance, the Bragg condition (§4) was satisfied. The characteristic X-shaped pattern directly indicated a HELICAL (not straight, not random) structure of the molecule — James Watson, upon seeing this photo, built the correct double helix model within a few weeks.</p>
+<div class="callout brass">
+<span class="tag">One Law — Multiple Nobel Prizes</span>
+<p>Bragg's law (Nobel Prize in Physics 1915 — to father and son Bragg, the youngest pair of Nobel laureates in history: William Lawrence was only 25) has since directly or indirectly been behind the decoding of the structure of insulin, hemoglobin, ribosome, and thousands of other biomolecules — X-ray crystallography remains one of the main methods of structural biology even today, more than a century later.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Where This Leads: The Fermat Principle Again</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Snell's law is not a separate postulate of optics, but a direct consequence of Fermat's principle (Part X, §5): light chooses the path of least TIME, and minimizing this time at the boundary of two media with different light speeds mathematically yields exactly n₁sinθ₁ = n₂sinθ₂. The 'lifeguard on the beach' problem, solved in Part X, was not just a warm-up metaphor, but literally the same mathematics.</p>
+<p>Bragg's law, in turn, can be derived from a more general wave interference principle — the condition under which combining waves amplify rather than cancel each other. Both pictures (Snell's ray optics and Bragg's wave interference) converge into a unified electromagnetic theory of light, described by Maxwell's equations (Part IV).</p>
+<p>On the website these are separate laws, if you want to dive deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/snells_law.html">Snell's Law of Refraction</a> ·
+          <a href="/lang/en/laws/braggs_law.html">Bragg's Law</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Broken Pencil in a Glass</span>
+<p>Dip a pencil (or a straw) halfway into a transparent glass of water at an angle (not strictly vertical) and look from the side, slightly from above.</p>
+<p><span class="qlabel">What to notice</span>the pencil looks 'broken' right at the water-air boundary — light from the underwater part of the pencil refracts according to Snell's law (§2), changing direction at the boundary, and the eye, extending a straight line along the ray's last direction, 'sees' a break where there is no real break in the pencil.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Laser in a Water Stream</span>
+<p>In a dark room, make a small hole in the side of a plastic water bottle (near the bottom), let the water flow out in a thin stream into a sink, and aim a laser pointer through the bottle so that the beam enters the stream FROM INSIDE, right at the hole.</p>
+<p><span class="qlabel">What to notice</span>the laser beam 'flows' along with the curved water stream, rather than flying in a straight line — this is total internal reflection (§3) in its pure form: water from the inside acts as a flexible light guide, exactly the same principle as in an optical fiber cable, only visible to the naked eye.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Problems to Check</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think on your own, then open the solution. The solution always follows the scheme:<strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. Light passes from water (n = 4/3) into air (n = 1) at an incidence angle where sinθ₁ = 0.6. Find sinθ₂.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> n₁ = 4/3, n₂ = 1, sinθ₁ = 0.6.</p>
+<p><span class="qlabel">Law</span>Snell's law (§2): n₁sinθ₁ = n₂sinθ₂.</p>
+<p><span class="qlabel">Solution</span> sinθ₂ = (4/3)·0.6/1 = 0.8.</p>
+<p><span class="qlabel">Answer</span> <strong>sinθ₂ = 0.8</strong>(θ₂ ≈ 53.1°) — the angle increased because light exits into a LESS dense medium.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. Find the critical angle of total internal reflection for diamond (n = 2.4) at the boundary with air (n = 1).</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> n₁ = 2.4, n₂ = 1.</p>
+<p><span class="qlabel">Law</span>critical angle (§3): sinθ<sub>crit</sub> = n₂/n₁.</p>
+<p><span class="qlabel">Solution</span> sinθ<sub>crit</sub> = 1/2.4 ≈ 0.417 ⇒ θ<sub>crit</sub> ≈ 24.6°.</p>
+<p><span class="qlabel">Answer</span> <strong>≈24.6°</strong> — very small angle (diamond has a huge n), which is why a cut diamond 'plays' so brightly: light inside almost always reflects totally, rather than exiting.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. X-rays with a wavelength of 0.2 nm give the first (n=1) bright reflection from a crystal at a glancing angle of 30°. Find the interplanar distance d.</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span>λ = 0.2 nm, θ = 30°, n = 1.</p>
+<p><span class="qlabel">Law</span>Bragg's law (§4): nλ = 2d·sinθ.</p>
+<p><span class="qlabel">Solution</span>d = nλ/(2sinθ) = 0.2/(2·0.5) = 0.2 nm.</p>
+<p><span class="qlabel">Answer</span> <strong>0.2 nm</strong> — typical scale of interatomic distances in crystals.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. Why is total internal reflection possible only when going from a MORE dense medium into a LESS dense one, and not the reverse?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> §3 — derivation of the critical angle condition.</p>
+<p><span class="qlabel">Solution</span> sinθ<sub>crit</sub>= n₂/n₁ must be ≤ 1 (sine cannot be greater than 1) — this is possible only when n₂ ≤ n₁, i.e., when going into a less dense medium. When going into a MORE dense medium (n₂ &gt; n₁), the ratio n₂/n₁ is greater than 1, the equation sinθ<sub>crit</sub> has no solution — refraction occurs at ANY angle of incidence, a critical angle simply doesn't exist.</p>
+<p><span class="qlabel">Answer</span> <strong>the mathematical limitation of sine (≤1)</strong>makes the effect possible only in one direction of transition.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. What is the fundamental difference between the angle θ in Snell's law and the angle θ in Bragg's law (apart from one being for refraction and the other for diffraction)?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span>comparison of definitions (§2 and §4).</p>
+<p><span class="qlabel">Solution</span>in Snell's law, the angle θ is measured from the PERPENDICULAR (normal) to the interface — the standard convention of geometrical optics. In Bragg's law, the angle θ is measured from the PLANE itself (glancing angle) — a historical convention of crystallography. This is purely a convention of reference, not a physical difference, but a frequent source of errors when switching between the two laws.</p>
+<p><span class="qlabel">Answer</span> <strong>different angle reference points</strong> — from the normal (Snell) versus from the plane (Bragg).</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, wrong formula, number doesn't add up, awkwardly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Snell%20Bragg%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and corrections are made based on it — this is not 'into the void'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'study guide' to the layer of laws · Part XV of the series, optics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2: угол преломления живо пересчитывается по закону Снеллиуса при плавно меняющемся угле падения —
+  // честный расчёт по формуле на каждый кадр, не заранее нарисованная картинка.
+  function wireRefraction(rayEl, cx, cy, len, n1, n2, theta1Readout, theta2Readout, periodMs){
+    var lastTs = null;
+    var THETA1_MIN = 10, THETA1_MAX = 70; // диапазон угла падения в градусах для анимации
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % periodMs) / periodMs;
+      var theta1Deg = THETA1_MIN + (THETA1_MAX - THETA1_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI));
+      var theta1 = theta1Deg * Math.PI / 180;
+      var sinTheta2 = n1 * Math.sin(theta1) / n2;
+      sinTheta2 = Math.max(-1, Math.min(1, sinTheta2));
+      var theta2 = Math.asin(sinTheta2);
+      var x2 = cx + len * Math.sin(theta2);
+      var y2 = cy + len * Math.cos(theta2);
+      if (rayEl) { rayEl.setAttribute('x2', x2.toFixed(1)); rayEl.setAttribute('y2', y2.toFixed(1)); }
+      if (theta1Readout) theta1Readout.textContent = theta1Deg.toFixed(1);
+      if (theta2Readout) theta2Readout.textContent = (theta2 * 180 / Math.PI).toFixed(1);
+      requestAnimationFrame(tick);
+    }
+    if (window.requestAnimationFrame) requestAnimationFrame(tick);
+  }
+
+  wireRefraction(document.getElementById('heroRefracted'), 170, 90, 100, 1, 1.5, null, null, 6000);
+  wireRefraction(document.getElementById('refractedRay'), 150, 100, 90, 1, 1.33,
+    document.querySelector('[data-readout="theta1"]'), document.querySelector('[data-readout="theta2"]'), 6000);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

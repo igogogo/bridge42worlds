@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>أربعة مبادئ للديناميكا الحرارية: الطاقة، الفوضى، والصفر المطلق — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display); font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em;
+  text-wrap:balance; color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroHeatFlow{
+  0%{ transform:translateX(0); opacity:1; }
+  55%{ transform:translateX(140px); opacity:1; }
+  70%{ transform:translateX(140px); opacity:0; }
+  100%{ transform:translateX(140px); opacity:0; }
+}
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance;
+}
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: реальные объекты (поршень, термометр), не абстрактные точки ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.piston{ height:110px; }
+.piston-cyl{ position:absolute; left:40px; right:40px; top:20px; bottom:20px; border:2px solid var(--ink); border-radius:0 0 6px 6px; border-top:none; }
+.piston-head{ position:absolute; left:40px; right:40px; top:24px; height:14px; background:var(--brass-fill); border:1.5px solid var(--ink); border-radius:2px; }
+@media (prefers-reduced-motion: no-preference){
+  .piston-head.push{ animation: pistonPush 6s cubic-bezier(.4,0,.6,1) infinite; }
+  .piston-gas.grow{ animation: gasGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes pistonPush{ 0%{ top:24px; } 55%{ top:6px; } 100%{ top:6px; } }
+.piston-gas{ position:absolute; left:41px; right:41px; bottom:20px; top:39px; background:var(--steel-fill); opacity:.28; }
+@keyframes gasGrow{ 0%{ top:39px; } 55%{ top:21px; } 100%{ top:21px; } }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 — стрелка энтропии, которая только растёт (одностороннее движение, без возврата) */
+.anim-strip.arrow{ height:64px; }
+.entropy-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.entropy-dot{ position:absolute; top:50%; width:16px; height:16px; margin-top:-8px; border-radius:50%; background:var(--steel-fill); left:16px; }
+@media (prefers-reduced-motion: no-preference){
+  .entropy-dot.grow{ animation: entropyGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes entropyGrow{ 0%{ left:16px; } 60%{ left:calc(100% - 32px); } 100%{ left:calc(100% - 32px); } }
+
+/* ---------- задачи ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>أربعة مبادئ في كلمتين</a></li>
+<li><a href="#s2"><span class="n">02</span>المبدأ الصفري: ما هي درجة الحرارة</a></li>
+<li><a href="#s3"><span class="n">03</span>المبدأ الأول: قيود الطاقة</a></li>
+<li><a href="#s4"><span class="n">04</span>المبدأ الثاني: الفوضى تزيد فقط</a></li>
+<li><a href="#s5"><span class="n">05</span>المبدأ الثالث: الصفر المطلق لا يمكن بلوغه</a></li>
+<li><a href="#s6"><span class="n">06</span>مثال شامل: المحرك الحراري</a></li>
+<li><a href="#s7"><span class="n">07</span>إلى أين يقود هذا: الأنتروبيا وسهم الزمن</a></li>
+<li><a href="#s8"><span class="n">08</span>تجربة منزلية</a></li>
+<li><a href="#s9"><span class="n">09</span>مسائل للاختبار</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · الديناميكا الحرارية · الجزء الثالث</p>
+<h1>أربعة مبادئ للديناميكا الحرارية: الطاقة، الفوضى، والصفر المطلق</h1>
+<p class="subtitle">واحدة من المجالات القليلة في الفيزياء حيث صيغت القوانين ليس «من الأعلى إلى الأسفل» انطلاقا من نظرية جميلة، بل «من الأسفل إلى الأعلى» — من محاولات لفهم لماذا لا تكون الآلة البخارية مثالية أبدا.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+<rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="30" y="80"></rect>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ горячо</text>
+<rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="270" y="80"></rect>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ холодно</text>
+<circle class="hero-heat" cx="165" cy="125" fill="var(--brass-fill)" r="8"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">тепло течёт от горячего к холодному, не наоборот</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">ملخص</span>
+<p>الديناميكا الحرارية هي فرع نادر في الفيزياء يتضمن قانونا «رقم صفر»: المبدأ الأساسي الذي يفسر درجة الحرارة نفسها، تم إدراكه بعد المبدأين الأول والثاني وأُعطي رقما بأثر رجعي. المبادئ أربعة: المبدأ الصفري يحدد درجة الحرارة، الأول — حفظ الطاقة بالنسبة للحرارة والشغل، الثاني — لماذا العمليات غير قابلة للانعكاس والأنتروبيا تتزايد، الثالث — لماذا الصفر المطلق لا يمكن بلوغه. معا، يتحكمون في كل شيء — من فنجان القهوة إلى تطور النجوم.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Пар над кофе: энтропия рассеивает порядок" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>البخار فوق القهوة: الأنتروبيا تبدد النظام</figcaption></figure>
+<figure><img alt="Поршень парового двигателя: тепло превращается в работу" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>مكبس المحرك البخاري: الحرارة تتحول إلى شغل</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>أربعة مبادئ في كلمتين</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>المبدأ</th><th>باختصار</th><th>ما يمنعه</th></tr>
+<tr><td class="sym">0</td><td>التوازن الحراري متعدي</td><td>غموض درجة الحرارة</td></tr>
+<tr><td class="sym">I</td><td>ΔU = Q − W</td><td>المحرك الأبدي من النوع الأول (الطاقة من العدم)</td></tr>
+<tr><td class="sym">II</td><td>ΔS ≥ 0 في نظام معزول</td><td>المحرك الأبدي من النوع الثاني (كفاءة 100%)</td></tr>
+<tr><td class="sym">III</td><td>S → 0 عندما T → 0</td><td>بلوغ الصفر المطلق في عدد محدود من الخطوات</td></tr>
+</table>
+<p>صياغة فكاهية للمبادئ الثلاثة المرقمة دفعة واحدة، معروفة لدى الفيزيائيين: «لا يمكنك الفوز (I — لا يمكن الحصول على طاقة أكثر مما استثمرت)، لا يمكنك حتى الاحتفاظ بما لديك (II — جزء من الطاقة يتبدد دائما)، ولا يمكنك الانسحاب من اللعبة (III — لا يمكن التبريد حتى الصفر المطلق وإيقاف كل حركة)».</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>المبدأ الصفري: ما هي درجة الحرارة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> إذا كان النظام A في توازن حراري مع النظام C، والنظام B أيضا في توازن حراري مع C، فإن A و B في توازن حراري مع بعضهما البعض:</p>
+<div class="plate">
+<div class="eq-body">T<sub>A</sub> = T<sub>C</sub> و T<sub>B</sub> = T<sub>C</sub>  ⇒  T<sub>A</sub> = T<sub>B</sub></div>
+<div class="cap">تعدية التوازن الحراري — ما يجعل درجة الحرارة قابلة للقياس أساسا</div>
+</div>
+<p>يبدو الأمر تقريبا «بديهية رياضية» (تعدية التساوي)، لكن المضمون الفيزيائي هنا كبير: القانون يؤكد أن للتوازن الحراري وسيطا عدديا واحدا (درجة الحرارة)، وليس شيئا أكثر تعقيدا. على هذا المبدأ يعمل أي ترمومتر: هو نفسه يصبح «النظام C» — يدخل في توازن مع الجسم الذي يقيسه، ونحن ببساطة نقرأ درجة حرارته الخاصة.</p>
+<div class="callout steel">
+<span class="tag">لماذا الصفري، وليس الرابع</span>
+<p>المبدأان الأول والثاني صيغا في وقت سابق (خمسينيات القرن التاسع عشر)، أما الصفري فلم يصغ إلا في عام 1931 بواسطة رالف فاولر. بحلول ذلك الوقت كان الترقيم 1-2-3 قد استقر في الكتب المدرسية، وحتى لا يتم إعادة كتابة كل شيء، حصل المبدأ الأكثر أساسية (السابق منطقيا للمبادئ الأخرى) على الرقم «0» — حالة نادرة حيث سار ترتيب الاكتشاف وترتيب الأهمية المنطقية في اتجاهين مختلفين.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>المبدأ الأول: قيود الطاقة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> التغير في الطاقة الداخلية للنظام يساوي الحرارة المضافة إليه، مطروحا منها الشغل الذي يؤديه النظام على المحيط:</p>
+<div class="plate">
+<div class="eq-body">ΔU = Q − W</div>
+<div class="cap">هذا هو قانون حفظ الطاقة (الجزء الثاني، §3)، مكتوب بلغة الحرارة والشغل</div>
+</div>
+<div class="units">ΔU, Q, W — كلها بالجول (جول). U — الطاقة الداخلية (مجموع الطاقة الحركية والطاقة الكامنة لجميع الجزيئات)، Q &gt; 0 — حرارة مضافة إلى النظام، W &gt; 0 — النظام يؤدي شغلا ضد القوى الخارجية.</div>
+<div aria-hidden="true" class="anim-strip piston">
+<div class="piston-cyl"></div>
+<div class="piston-gas grow"></div>
+<div class="piston-head push"></div>
+<span class="anim-readout">Q مضافة → الغاز يتمدد ويدفع المكبس</span>
+</div>
+<p>مثال عددي: أضيفت إلى غاز في أسطوانة حرارة Q = 500 جول. يتمدد الغاز ويدفع المكبس مؤديا شغلا W = 200 جول ضد الضغط الخارجي. كم تغيرت الطاقة الداخلية للغاز؟</p>
+<div class="eq"><div class="eq-body">ΔU = 500 − 200 = <strong>300 جول</strong></div><div class="eq-tag">(1)</div></div>
+<p>تخيل حسابا مصرفيا: Q = 500 جول — إيراد، W = 200 جول — مصروف، ΔU = 300 جول — ما تبقى في الحساب (اختزن في الطاقة الداخلية للغاز، أي أن جزيئاته أصبحت في المتوسط تتحرك أسرع — تسخن الغاز).</p>
+<div class="callout brass">
+<span class="tag">خطأ شائع</span>
+<p>«الحرارة هي نفس درجة الحرارة» — لا: الحرارة Q هي عملية نقل الطاقة (مثل «الإيراد» في الحساب)، بينما درجة الحرارة هي وسيط حالة النظام (مثل «رصيد الحساب» بوحدات أخرى). يمكن نقل كمية كبيرة من الحرارة إلى جسم دون أن ترتفع درجة حرارته تقريبا (مثلا عند ذوبان الجليد — كل الطاقة تذهب لتحطيم الشبكة البلورية، لا للتسخين).</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>المبدأ الثاني: الفوضى تزيد فقط</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> في نظام معزول، الأنتروبيا لا تنقص:</p>
+<div class="plate">
+<div class="eq-body">ΔS ≥ 0</div>
+<div class="cap">صياغة مكافئة (كلوسيوس): الحرارة لا تنتقل تلقائيا من الجسم البارد إلى الساخن</div>
+</div>
+<div aria-hidden="true" class="anim-strip arrow">
+<div class="entropy-track"></div>
+<div class="entropy-dot grow"></div>
+<div class="anim-label">الأنتروبيا — «سهم» يسير للأمام فقط، ولا يعود للخلف أبدا</div>
+</div>
+<p>الأنتروبيا S — مقياس لعدد الطرق التي يمكن بها ترتيب جزيئات النظام على المستوى الميكروي مع الحفاظ على نفس المظهر الماكروسكوبي للنظام (صيغة بولتزمان: S = k<sub>B</sub> ln Ω, حيث Ω — عدد الحالات الميكروية). الأشياء المبعثرة في الغرفة يمكن ترتيبها بطرق غير مرتبة بعدد أكبر بكثير من الطرق المرتبة بعناية — لذلك نادرا ما «ترتب نفسها تلقائيا»، بينما يسهل بعثرتها.</p>
+<table class="symtab">
+<tr><th>الصياغة</th><th>المؤلف</th><th>المضمون</th></tr>
+<tr><td>كلوسيوس</td><td>رودولف كلوسيوس</td><td>الحرارة لا تتدفق تلقائيا من البارد إلى الساخن</td></tr>
+<tr><td>كلفن</td><td>ويليام طومسون</td><td>لا يمكن بناء آلة يكون ناتجها الوحيد تحويل الحرارة إلى شغل بنسبة 100%</td></tr>
+</table>
+<div class="callout moss">
+<span class="tag">شيطان ماكسويل</span>
+<p>تجربة فكرية لجيمس ماكسويل (1867): كائن صغير عند حاجز بين حجمين من الغاز يسمح بمرور الجزيئات السريعة في اتجاه، والبطيئة في الاتجاه الآخر، فاصلا الغاز إلى نصفين ساخن وبارد دون استهلاك طاقة — ما يبدو انتهاكا للقانون الثاني. الحل (ليو زيلارد، 1929): عملية «قياس» سرعة الجزيء من قبل الشيطان تزيد أنتروبيا الشيطان (أو ذاكرته) بما لا يقل عن نقصان أنتروبيا الغاز — القانون نجا، لكن بثمن ولادة مجال كامل لفيزياء المعلومات.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>المبدأ الثالث: الصفر المطلق لا يمكن بلوغه</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصياغة.</strong> مع اقتراب درجة الحرارة من الصفر المطلق، تؤول أنتروبيا البلورة المثالية إلى الصفر:</p>
+<div class="plate">
+<div class="eq-body">lim<sub>T→0</sub> S(T) = 0</div>
+<div class="cap">عند T = 0، للبلورة المثالية حالة ميكروية واحدة فقط ممكنة — Ω = 1، أي S = k<sub>B</sub>ln1 = 0</div>
+</div>
+<p>نتيجة هذا المبدأ — عملية، وليست شكلية فقط: الصفر المطلق (−273.15 °C، 0 K) لا يمكن بلوغه بعدد محدود من خطوات التبريد، فقط الاقتراب منه تقاربيا. الرقم القياسي المخبري — حوالي 100 بيكوكلفن (10<sup>−10</sup> K) في مكثف بوز-آينشتاين — لا يزال ليس صفرا، رغم أنه أبرد بعشرات المليارات من المرات من الفضاء بين النجمي.</p>
+<p>الأجسام الصلبة الحقيقية لا تصل دائما إلى S = 0 حتى نظريا: الزجاج والمواد غير المتبلورة (اللا متبلورة) «تتجمد» ببنية عشوائية وتحتفظ بأنتروبيا متبقية عند درجة حرارة منخفضة كيفما كانت — استثناء مثير للاهتمام، لا يزال قيد الدراسة.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>مثال شامل: المحرك الحراري</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>لنجمع المبدأين الأول والثاني في مثال واحد — محرك حراري مثالي (دورة كارنو)، يعمل بين خزان ساخن T<sub>h</sub> = 600 K وبارد T<sub>c</sub> = 300 K.</p>
+<p><strong>القانون الثاني</strong> يحدد أقصى كفاءة ممكنة لمثل هذا المحرك (لا يمكن تجاوزها، مهما حاولت):</p>
+<div class="eq"><div class="eq-body">η<sub>max</sub> = 1 − T<sub>c</sub>/T<sub>h</sub> = 1 − 300/600 = <strong>0.5</strong> (50%)</div><div class="eq-tag">(2)</div></div>
+<p>لنفرض أنه من الخزان الساخن أضيفت Q<sub>h</sub> = 1000 جول من الحرارة. <strong>القانون الأول</strong> (الطاقة لا تفنى) يقول إن كل هذه الطاقة ستتوزع بين الشغل المفيد W والحرارة Q<sub>c</sub> المطروحة في الخزان البارد:</p>
+<div class="eq"><div class="eq-body">W = η·Q<sub>h</sub> = 0.5·1000 = <strong>500 جول</strong>,    Q<sub>c</sub> = Q<sub>h</sub> − W = <strong>500 جول</strong></div><div class="eq-tag">(3)</div></div>
+<figure>
+<img alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж" src="/lang/ru/theory/thermo_engine_balance.png"/>
+<figcaption><span class="fign">الشكل 1</span>القانون الأول: مجموع W و Q<sub>c</sub> يساوي تماما Q<sub>h</sub> — الطاقة لم تضِع، لكنها لم تتحول كلها إلى شغل (حظر القانون الثاني). حتى المحرك المثالي (دورة كارنو) بين درجتي الحرارة هاتين لا يمكنه إنتاج أكثر من 500 جول من الشغل المفيد من أصل 1000 جول من الحرارة.</figcaption>
+</figure>
+<p>لا يمكن لأي محرك حقيقي بين درجتي الحرارة هاتين أن يتجاوز هذه الـ 500 جول — دورة كارنو تعطي السقف النظري للكفاءة، والاحتكاك وعدم الانعكاس في العمليات الحقيقية لا تؤدي إلا إلى خفض الناتج تحت هذا السقف، دون أن ترفعه أبدا.</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>إلى أين يقود هذا: الأنتروبيا وسهم الزمن</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>القانون الثاني هو ربما القانون الوحيد في الفيزياء الأساسية الذي يميز بين الماضي والمستقبل. معادلات نيوتن وماكسويل وحتى شرودنجر متناظرة تماما مع الزمن: إذا صورت اصطدام كرات البلياردو بالفيديو وأعدت تشغيله بالعكس، فلن تجد قوانين الميكانيكا أي انتهاك. لكن فيديو كوب ينكسر، إذا شغل بالعكس (الشظايا تتجمع من تلقاء نفسها لتعود كوبا كاملا)، يبدو سخيفا — والقانون الوحيد في الفيزياء الذي «يلاحظ» هذا هو القانون الثاني.</p>
+<figure>
+<img alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю" src="/lang/ru/theory/thermo_entropy_zero.png"/>
+<figcaption><span class="fign">الشكل 2</span>أنتروبيا البلورة المثالية تزداد مع درجة الحرارة وتؤول إلى الصفر عند T → 0 (المبدأ الثالث) — مجرد إمكانية رسم هذا المنحنى والحديث عن «ازدياد» الأنتروبيا مع الزمن هو مصدر التمييز بين الماضي والمستقبل في الفيزياء.</figcaption>
+</figure>
+<div class="callout steel">
+<span class="tag">من البخار إلى الثقوب السوداء</span>
+<p>الأنتروبيا اتضح أنها مفهوم عالمي على نحو مدهش: لودفيغ بولتزمان في سبعينيات القرن التاسع عشر ربطها بعدد الحالات الميكروية، وبعد قرن، اكتشف جاكوب بيكنشتاين وستيفن هوكنج أن للثقوب السوداء أنتروبيا أيضا — متناسبة ليس مع الحجم، بل مع مساحة أفق الحدث. هذه الحقيقة غير المتوقعة صارت أحد أهم المفاتيح لـ <strong>المبدأ الهولوغرامي</strong> في الفيزياء النظرية الحديثة — فكرة أن كل المعلومات عن منطقة ثلاثية الأبعاد يمكن ترميزها على حدها ثنائي الأبعاد.</p>
+</div>
+<p>على الموقع هذه قوانين منفصلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/zeroth_law_of_thermodynamics.html">المبدأ الصفري</a> ·
+          <a href="/lang/ar/laws/first_law_of_thermodynamics.html">المبدأ الأول</a> ·
+          <a href="/lang/ar/laws/second_law_of_thermodynamics.html">المبدأ الثاني</a> ·
+          <a href="/lang/ar/laws/third_law_of_thermodynamics.html">المبدأ الثالث</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>تجربة منزلية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · ضغط الهواء في المحقن</span>
+<p>خذ محقنا طبيا بدون إبرة، سد فتحة المخرج بإصبعك واضغط المكبس فجأة. ضع إصبع يدك الأخرى على أسطوانة المحقن.</p>
+<p><span class="qlabel">ما ستلاحظه</span> المحقن يسخن بشكل ملحوظ. لقد أديت شغلا W على الغاز (ضغطته)، بينما الحرارة Q لم تذهب إلى أي مكان (العملية سريعة، التبادل الحراري مع الهواء لا يتم بسرعة) — حسب القانون الأول، كل هذا الشغل ذهب إلى زيادة الطاقة الداخلية ΔU، أي أن الغاز سخن. هكذا تماما يعمل اشتعال الوقود في محرك الديزل — لكن هناك الضغط أقوى.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة منزلية · ذوبان الجليد ودرجة حرارة الخليط</span>
+<p>ضع مكعبين من الثلج في كوب به ماء دافئ وراقب درجة الحرارة (باللمس أو بترمومتر) لعدة دقائق.</p>
+<p><span class="qlabel">ما ستلاحظه</span> الحرارة تنتقل من الماء الدافئ إلى الثلج (القانون الثاني — فقط في هذا الاتجاه، وليس العكس)، حتى يصل الجزآن إلى نفس درجة الحرارة — هذا هو التوازن الحراري من المبدأ الصفري. لاحظ أيضا: طالما لم يذب الثلج كله بعد، لا تتغير درجة حرارة الخليط تقريبا — الطاقة تذهب للانصهار (تحطيم الشبكة البلورية للثلج)، لا للتسخين، تماما كما نوقش في §3 حول الفرق بين الحرارة ودرجة الحرارة.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>مسائل للاختبار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر بنفسك أولا، ثم افتح الحل. الحل في كل المسائل يسير وفق المخطط: <strong>المعطيات → القانون → الحل → الجواب</strong>.</p>
+<details class="problem">
+<summary>1. أضيفت 400 جول من الحرارة إلى غاز في وعاء صلب مغلق (الحجم ثابت، لا يبذل شغل). كم تغيرت طاقته الداخلية؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> Q = 400 جول، W = 0 (الحجم ثابت — المكبس لا يتحرك).</p>
+<p><span class="qlabel">القانون</span> المبدأ الأول (§3): ΔU = Q − W.</p>
+<p><span class="qlabel">الحل</span> ΔU = 400 − 0 = 400 جول.</p>
+<p><span class="qlabel">الجواب</span> <strong>+400 جول</strong> — عند حجم ثابت، كل الحرارة المضافة تذهب إلى الطاقة الداخلية.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. محرك حراري مثالي يعمل بين درجتي حرارة 800 كلفن و400 كلفن. ما أقصى كفاءة له؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> T<sub>h</sub> = 800 كلفن، T<sub>c</sub> = 400 كلفن.</p>
+<p><span class="qlabel">القانون</span> حد كارنو (§6، القانون الثاني): η<sub>max</sub> = 1 − T<sub>c</sub>/T<sub>h</sub>.</p>
+<p><span class="qlabel">الحل</span> η<sub>max</sub> = 1 − 400/800 = 0.5.</p>
+<p><span class="qlabel">الجواب</span> <strong>50%</strong> — وهذا هو الحد، المحرك الحقيقي بين نفس درجتي الحرارة سيكون أسوأ.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. محرك كفاءته 40% يستقبل 2000 جول من الحرارة من الخزان الساخن في كل دورة. كم من الحرارة تطرح في الخزان البارد؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> η = 0.4, Q<sub>h</sub> = 2000 جول.</p>
+<p><span class="qlabel">القانون</span> المبدأ الأول: Q<sub>h</sub> = W + Q<sub>c</sub>، حيث W = ηQ<sub>h</sub>.</p>
+<p><span class="qlabel">الحل</span> W = 0.4·2000 = 800 جول؛ Q<sub>c</sub> = 2000 − 800 = 1200 جول.</p>
+<p><span class="qlabel">الجواب</span> <strong>1200 جول</strong> — أكثر من نصف الحرارة المضافة تذهب هباء حتى في محرك ليس الأسوأ.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. غاز يتمدد ويؤدي شغلا قدره 150 جول، بينما تنخفض طاقته الداخلية بمقدار 50 جول. كم من الحرارة نقلت إلى الغاز (أو سحبت منه)؟</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> W = 150 جول، ΔU = −50 جول.</p>
+<p><span class="qlabel">القانون</span> المبدأ الأول: Q = ΔU + W.</p>
+<p><span class="qlabel">الحل</span> Q = −50 + 150 = 100 جول.</p>
+<p><span class="qlabel">الجواب</span> <strong>100+ جول مضافة</strong> — نقلت حرارة إلى الغاز، لكنها لم تكن كافية لتغطية كل الشغل المبذول، لذلك «دفع» الغاز الفرق من مخزونه الداخلي (فبرد).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. ترمس به شاي (60 °م) موضوع في غرفة درجة حرارتها 20 °م. صف في أي اتجاه ولماذا سيحدث التبادل الحراري، مع الإشارة إلى مبدأ محدد في الديناميكا الحرارية.</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span> القانون الثاني بصياغة كلوسيوس (§4).</p>
+<p><span class="qlabel">الحل</span> الحرارة تنتقل تلقائيا فقط من الجسم الأسخن إلى الأبرد — إذن، الشاي سيبرد معطيا حرارته لهواء الغرفة، حتى تستقر درجة حرارة مشتركة (المبدأ الصفري، §2) — ستكون حتما أقل من 60 °م وأعلى من 20 °م.</p>
+<p><span class="qlabel">الجواب</span> <strong>الحرارة تنتقل من الشاي إلى هواء الغرفة</strong>، العملية العكسية (الهواء يسخن الشاي تلقائيا فوق درجة حرارة الغرفة) ممنوعة بالقانون الثاني.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">هل وجدت خطأ؟</span>
+<p>خطأ مطبعي، صيغة خطأ، رقم لا يتطابق، شرح ركيك — راسلنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Thermodynamics%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تقرأ فعلا، وتناقش، ويتم التصحيح بناء عليها — هذا ليس «للأدراج».</p>
+</div>
+<footer>
+<p>bridge42worlds · «دليل تعليمي» لطبقة القوانين · الجزء الثالث من السلسلة، الديناميكا الحرارية</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">النظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>سنيل وبراغ: كيف ينكسر الضوء وكيف ترى الأشعة السينية الذرات - bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: преломление и дифракция ---------- */
+.refr-fig{ max-width:500px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.refr-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:500px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/ar/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/ar/index.html">main</a>
+<a href="/lang/ar/tags/">tags</a>
+<a href="/lang/ar/laws/">laws</a>
+<a href="/lang/ar/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/ar/graph/">graph</a>
+<a class="active" href="/lang/ar/theory/">theory</a>
+<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">المحتويات</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>قانونا الانعكاس-الانكسار</a></li>
+<li><a href="#s2"><span class="n">02</span>قانون سنيل: لماذا 'ينكسر' الضوء</a></li>
+<li><a href="#s3"><span class="n">03</span>الانعكاس الداخلي الكلي والألياف الضوئية</a></li>
+<li><a href="#s4"><span class="n">04</span>قانون براغ: الضوء كمسطرة للذرات</a></li>
+<li><a href="#s5"><span class="n">05</span>مثال شامل: كيف شوهد اللولب المزدوج للحمض النووي DNA</a></li>
+<li><a href="#s6"><span class="n">06</span>إلى أين يقودنا هذا: مبدأ فيرما مرة أخرى</a></li>
+<li><a href="#s7"><span class="n">07</span>تجربة في المنزل</a></li>
+<li><a href="#s8"><span class="n">08</span>أسئلة للمراجعة</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>ملاحظة عمل · البصريات · الجزء الخامس عشر</p>
+<h1>سنيل وبراغ: كيف ينكسر الضوء وكيف ترى الأشعة السينية الذرات</h1>
+<p class="subtitle">قانون واحد يشرح لماذا تبدو الملعقة في كوب الشاي مكسورة؛ والثاني - بنفس الأسلوب الرياضي - سمح برؤية شكل جزيء الحمض النووي DNA لأول مرة.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--paper)" height="90" width="340" x="0" y="0"></rect>
+<rect fill="var(--steel-fill)" height="110" opacity=".15" width="340" x="0" y="90"></rect>
+<line stroke="var(--rule)" stroke-width="1.5" x1="0" x2="340" y1="90" y2="90"></line>
+<line stroke="var(--rule)" stroke-dasharray="3,3" stroke-width="1" x1="170" x2="170" y1="20" y2="180"></line>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="80" x2="170" y1="20" y2="90"></line>
+<line id="heroRefracted" stroke="var(--brass-fill)" stroke-width="2.4" x1="170" x2="220" y1="90" y2="180"></line>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="195">n₁sinθ₁ = n₂sinθ₂</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">مقدمة</span>
+<p>في الجزء العاشر واجهنا مسألة 'المنقذ على الشاطئ' - تلميح إلى كيفية اختيار الضوء المسار الأقل زمنًا. هنا تحليل كامل للقانونين اللذين يحكمان انعكاس وانكسار الموجات: قانون سنيل (1621) للضوء المرئي عند الحد الفاصل بين وسطين، وقانون براغ (1913) للأشعة السينية على الشبكة البلورية. رسميًا يبدوان مختلفين، لكن كلاهما نتاج لنفس التداخل الموجي، ويغطيان معًا المسار الكامل من فيزياء العدسات المدرسية إلى فك شفرة تركيب الحمض النووي DNA.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Луч света преломляется на границе воды" src="/lang/ru/theory/img/snell_bragg_hero.jpg"/><figcaption>شعاع الضوء ينكسر عند حدود الماء</figcaption></figure>
+<figure><img alt="Рентген отражается от кристаллической решётки под точным углом" src="/lang/ru/theory/img/snell_bragg_concept.jpg"/><figcaption>تنعكس الأشعة السينية عن الشبكة البلورية بزاوية دقيقة</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>قانونا الانعكاس-الانكسار</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>القانون</th><th>الصيغة</th><th>ينطبق على</th></tr>
+<tr><td>سنيل (1621)</td><td class="sym">n₁sinθ₁ = n₂sinθ₂</td><td>انكسار الشعاع عند حدود وسطين</td></tr>
+<tr><td>براغ (1913)</td><td class="sym">nλ = 2d·sinθ</td><td>حيود الموجة على شبكة دورية (بلورة)</td></tr>
+</table>
+<p>يصف سنيل حدًا فاصلًا واحدًا (مثل الهواء-زجاج). يصف براغ العديد من المستويات المتوازية داخل البلورة - لكن الرياضيات الكامنة وراء القانونين متشابهة: تتفاعل الموجة مع بنية دورية أو حدودية، والنتيجة تحددها هندسة الزوايا.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>قانون سنيل: لماذا 'ينكسر' الضوء</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصيغة.</strong> عند انتقال الشعاع من وسط شفاف إلى آخر:</p>
+<div class="plate">
+<div class="eq-body">n₁sinθ₁ = n₂sinθ₂</div>
+<div class="cap">n - معامل الانكسار (n = c/v، كم مرة يكون الضوء أبطأ في الوسط مقارنة بالفراغ)؛ θ - الزاوية من العمودي على الحد</div>
+</div>
+<div aria-hidden="true" class="refr-fig">
+<svg viewbox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+<rect fill="var(--paper)" height="100" width="300" x="0" y="0"></rect>
+<rect fill="var(--steel-fill)" height="100" opacity=".12" width="300" x="0" y="100"></rect>
+<line stroke="var(--rule)" stroke-width="1.5" x1="0" x2="300" y1="100" y2="100"></line>
+<line stroke="var(--rule)" stroke-dasharray="3,3" stroke-width="1" x1="150" x2="150" y1="20" y2="180"></line>
+<line stroke="var(--brass-fill)" stroke-width="2.4" x1="70" x2="150" y1="30" y2="100"></line>
+<line id="refractedRay" stroke="var(--brass-fill)" stroke-width="2.4" x1="150" x2="192" y1="100" y2="180"></line>
+</svg>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>زاوية السقوط</b><span data-readout="theta1">41.8</span>°</span>
+<span><b>زاوية الانكسار</b><span data-readout="theta2">30.0</span>°</span>
+</div>
+<p>مثال عددي: يسقط شعاع ضوء من الهواء (n₁ = 1) على الماء (n₂ = 4/3 ≈ 1.33) بزاوية θ₁، حيث sinθ₁ = 2/3 (θ₁ ≈ 41.8°). أوجد زاوية الانكسار.</p>
+<div class="eq"><div class="eq-body">sinθ₂ = n₁sinθ₁/n₂ = 1·(2/3)/(4/3) = <strong>0.5</strong>  ⇒  θ₂ = <strong>30°</strong></div><div class="eq-tag">(1)</div></div>
+<p>اقترب الشعاع من العمودي (41.8° → 30°) - هذا ما يحدث دائمًا عند الانتقال إلى وسط أكثر كثافة ضوئية (تزداد n). لهذا السبب يبدو القلم في كوب الماء 'مكسورًا': ينتقل الضوء من الجزء المغمور إلى عينك عبر انكسار، ويكمل الدماغ خطًا مستقيمًا.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>الانعكاس الداخلي الكلي والألياف الضوئية</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>عند الانتقال من وسط كثيف إلى أقل كثافة (n₁ &gt; n₂، مثال: زجاج → هواء) تكون زاوية الانكسار دائمًا أكبر من زاوية السقوط. عند زاوية سقوط كبيرة بما يكفي، 'يلتصق' الشعاع المنكسر بالحد نفسه (θ₂ = 90°) - وإذا زادت بعد ذلك، يتوقف الانكسار تمامًا: ينعكس الضوء بالكامل داخل الوسط. تُحسب هذه الزاوية الحرجة من الشرط sinθ<sub>حرجة</sub> = n₂/n₁.</p>
+<p>بالنسبة للزجاج (n₁ = 1.5) عند الحد مع الهواء (n₂ = 1): sinθ<sub>حرجة</sub> = 1/1.5 = 2/3, θ<sub>حرجة</sub>≈ 41.8° - نفس الرقم في الفقرة 2، ليس صدفة: الزجاج والماء لهما معاملات انكسار متشابهة.</p>
+<div class="callout steel">
+<span class="tag">كيف يسبح الإنترنت عبر الخيط الزجاجي</span>
+<p>كابل الألياف الضوئية هو خيط زجاجي رفيع، يدخل الضوء داخله بزاوية أكبر من الحرجة وينعكس عن الجدار الداخلي مرارًا وتكرارًا، آلاف المرات، دون فقدان طاقة في كل انعكاس (على عكس المرايا التي تفقد جزءًا من الضوء مع كل انعكاس). الانعكاس الداخلي الكلي هو الذي يحجز الإشارة داخل الليف لعشرات ومئات الكيلومترات، وليس أي طلاء خاص.</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>قانون براغ: الضوء كمسطرة للذرات</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>الصيغة.</strong>تعزز الأشعة السينية المنعكسة عن المستويات الذرية المتوازية في البلورة بعضها البعض (تداخل بناء) فقط عند زوايا معينة:</p>
+<div class="plate">
+<div class="eq-body">nλ = 2d·sinθ</div>
+<div class="cap">d - المسافة بين المستويات الذرية، θ - زاوية الانزلاق (من المستوى، ليس من العمودي - اختلاف عن قانون سنيل!)، n - عدد صحيح (رتبة الانعكاس)</div>
+</div>
+<p>تعمل الطبقات الذرية للبلورة كمرايا شبه شفافة - جزء من الموجة ينعكس عن الطبقة العليا، والجزء الآخر ينفذ أعمق وينعكس عن الطبقة التالية. إذا كان فرق المسار بين هاتين الموجتين المنعكستين (هندسيًا يساوي 2d·sinθ) مضاعفًا صحيحًا لطول الموجة، تتراكب الموجتان 'في الطور' وتعطيان إشارة ساطعة؛ وإلا فإنهما تخمدان بعضهما.</p>
+<p>مثال عددي: أشعة سينية بطول موجي λ = 0.15 نانومتر موجهة إلى بلورة بمسافة بين المستويات d = 0.15 نانومتر. أوجد زاوية أول انعكاس ساطع (n = 1).</p>
+<div class="eq"><div class="eq-body">sinθ = nλ/(2d) = 0.15/0.30 = <strong>0.5</strong>  ⇒  θ = <strong>30°</strong></div><div class="eq-tag">(2)</div></div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: كيف شوهد اللولب المزدوج للحمض النووي DNA</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>في عام 1952، وجهت روزاليند فرانكلين أشعة سينية على ألياف بلورية من الحمض النووي DNA وحصلت على 'الصورة الشهيرة 51' - نمط صليبي من البقع الداكنة. كل بقعة هي نقطة ساطعة حيث تحقق شرط براغ (الفقرة 4) لزاوية ومسافة بين المستويات محددتين. شكل النمط الإكسي المميز أشار مباشرة إلى بنية حلزونية (غير مستقيمة، غير عشوائية) للجزيء - جيمس واتسون، بعد رؤية هذه الصورة، بنى في بضعة أسابيع النموذج الصحيح للولب المزدوج.</p>
+<div class="callout brass">
+<span class="tag">قانون واحد - العديد من جوائز نوبل</span>
+<p>قانون براغ (جائزة نوبل في الفيزياء عام 1915 - للأب والابن براغ، أصغر زوج من الحاصلين على نوبل في التاريخ: كان ويليام لورنس عمره 25 عامًا فقط) يقف منذ ذلك الحين بشكل مباشر أو غير مباشر وراء فك شفرة بنية الأنسولين، الهيموجلوبين، الريبوسوم وآلاف الجزيئات الحيوية الأخرى - يظل التحليل البلوري بالأشعة السينية أحد الأساليب الرئيسية في البيولوجيا البنيوية حتى اليوم، بعد أكثر من قرن.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>إلى أين يقودنا هذا: مبدأ فيرما مرة أخرى</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>قانون سنيل ليس مسلّمة منفصلة في البصريات، بل نتيجة مباشرة لمبدأ فيرما (الجزء العاشر، الفقرة 5): يختار الضوء المسار الأقل زمنًا، وإنقاص هذا الزمن عند الحد الفاصل بين وسطين بسرعتين مختلفتين للضوء يعطي رياضيًا بالضبط n₁sinθ₁ = n₂sinθ₂. مسألة 'المنقذ على الشاطئ'، التي تم تحليلها في الجزء العاشر، لم تكن استعارة للإحماء، بل حرفيًا نفس الرياضيات.</p>
+<p>قانون براغ، بدوره، يمكن استنتاجه من مبدأ تداخل موجي أكثر عمومية - الشرط الذي تتراكب فيه الموجات المتجمعة وتقوي بعضها، بدل أن تخمد. كلتا الصورتين (البصريات الشعاعية لسنيل والتداخل الموجي لبراغ) تتحدان في نظرية كهرومغناطيسية واحدة للضوء، تصفها معادلات ماكسويل (الجزء الرابع).</p>
+<p>على الموقع هذه قوانين منفصلة، إذا أردت التعمق أكثر:</p>
+<p style="max-width:680px">
+<a href="/lang/ar/laws/snells_law.html">قانون انكسار سنيل</a> ·
+          <a href="/lang/ar/laws/braggs_law.html">قانون براغ</a>
+</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>تجربة في المنزل</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · قلم رصاص مكسور في كوب</span>
+<p>ضع قلم رصاص (أو شلمونة) نصفه في كوب شفاف به ماء بزاوية (ليس رأسيًا تمامًا) وانظر من الجانب، قليلاً من الأعلى.</p>
+<p><span class="qlabel">ما ستلاحظه</span>يبدو القلم 'مكسورًا' تمامًا عند حدود الماء والهواء - ينكسر الضوء من الجزء المغمور من القلم وفق قانون سنيل (الفقرة 2)، مغيرًا اتجاهه عند الحد، والعين، بإكمال خط مستقيم من آخر اتجاه للشعاع، 'ترى' كسرًا حيث لا يوجد كسر حقيقي في القلم.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 تجربة في المنزل · ليزر في مجرى ماء</span>
+<p>في غرفة مظلمة، اصنع ثقبًا صغيرًا في جانب زجاجة بلاستيكية بها ماء (قرب القاع)، دع الماء يتدفق في مجرى رفيع إلى الحوض، ووجه مؤشر ليزر عبر الزجاجة بحيث يدخل الشعاع إلى المجرى من الداخل، عند الثقب نفسه.</p>
+<p><span class="qlabel">ما ستلاحظه</span>يسبح شعاع الليزر مع مجرى الماء المنحني، ولا يطير بشكل مستقيم - هذا هو الانعكاس الداخلي الكلي (الفقرة 3) بشكل نقي: يعمل الماء من الداخل كدليل ضوء مرن، نفس المبدأ بالضبط كما في كابل الألياف الضوئية، لكنه مرئي بالعين المجردة.</p>
+</div>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>أسئلة للمراجعة</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>فكر أولاً بنفسك، ثم افتح الحل. الحل دائمًا وفق المخطط:<strong>معطى → قانون → حل → إجابة</strong>.</p>
+<details class="problem">
+<summary>1. ينتقل الضوء من الماء (n = 4/3) إلى الهواء (n = 1) بزاوية سقوط حيث sinθ₁ = 0.6. أوجد sinθ₂.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> n₁ = 4/3, n₂ = 1, sinθ₁ = 0.6.</p>
+<p><span class="qlabel">القانون</span>قانون سنيل (الفقرة 2): n₁sinθ₁ = n₂sinθ₂.</p>
+<p><span class="qlabel">الحل</span> sinθ₂ = (4/3)·0.6/1 = 0.8.</p>
+<p><span class="qlabel">الإجابة</span> <strong>sinθ₂ = 0.8</strong>(θ₂ ≈ 53.1°) - زادت الزاوية لأن الضوء يخرج إلى وسط أقل كثافة.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. أوجد الزاوية الحرجة للانعكاس الداخلي الكلي للماس (n = 2.4) عند الحد مع الهواء (n = 1).</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span> n₁ = 2.4, n₂ = 1.</p>
+<p><span class="qlabel">القانون</span>الزاوية الحرجة (الفقرة 3): sinθ<sub>حرجة</sub> = n₂/n₁.</p>
+<p><span class="qlabel">الحل</span> sinθ<sub>حرجة</sub> = 1/2.4 ≈ 0.417 ⇒ θ<sub>حرجة</sub> ≈ 24.6°.</p>
+<p><span class="qlabel">الإجابة</span> <strong>≈24.6°</strong>- زاوية صغيرة جدًا (للماس معامل انكسار كبير)، لذلك يتألق الألماس المقطوع بسطوع: ينعكس الضوء داخله بالكامل تقريبًا دائمًا، ولا يخرج للخارج.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. أشعة سينية بطول موجي 0.2 نانومتر تعطي أول انعكاس ساطع (n=1) من بلورة بزاوية انزلاق 30°. أوجد المسافة بين المستويات d.</summary>
+<div class="answer">
+<p><span class="qlabel">المعطيات</span>λ = 0.2 نانومتر، θ = 30°، n = 1.</p>
+<p><span class="qlabel">القانون</span>قانون براغ (الفقرة 4): nλ = 2d·sinθ.</p>
+<p><span class="qlabel">الحل</span>d = nλ/(2sinθ) = 0.2/(2·0.5) = 0.2 نانومتر.</p>
+<p><span class="qlabel">الإجابة</span> <strong>0.2 نانومتر</strong>- مقياس نموذجي للمسافات بين الذرات في البلورات.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. لماذا يكون الانعكاس الداخلي الكلي ممكنًا فقط عند الانتقال من وسط أكثر كثافة إلى أقل كثافة، وليس العكس؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>الفقرة 3 - استنتاج شرط الزاوية الحرجة.</p>
+<p><span class="qlabel">الحل</span> sinθ<sub>حرجة</sub>= n₂/n₁ يجب أن يكون ≤ 1 (لا يمكن للجيب أن يكون أكبر من 1) - هذا ممكن فقط عندما n₂ ≤ n₁، أي عند الانتقال إلى وسط أقل كثافة. عند الانتقال إلى وسط أكثر كثافة (n₂ &gt; n₁) تكون النسبة n₂/n₁ أكبر من 1، للمعادلة sinθ<sub>حرجة</sub>لا حل لها - يحدث الانكسار عند أي زاوية سقوط، الزاوية الحرجة ببساطة غير موجودة.</p>
+<p><span class="qlabel">الإجابة</span> <strong>القيود الرياضية للجيب (≤1)</strong>تجعل التأثير ممكنًا فقط في اتجاه واحد من الانتقال.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. ما الفرق الأساسي بين الزاوية θ في قانون سنيل والزاوية θ في قانون براغ (بغض النظر عن أن أحدهما للانكسار والآخر للحيود)؟</summary>
+<div class="answer">
+<p><span class="qlabel">القانون</span>مقارنة التعريفات (الفقرة 2 والفقرة 4).</p>
+<p><span class="qlabel">الحل</span>في قانون سنيل، تقاس الزاوية θ من العمودي (الناظم) على الحد الفاصل - وهو اصطلاح قياسي في البصريات الهندسية. في قانون براغ، تقاس الزاوية θ من المستوى نفسه (زاوية الانزلاق) - وهو اصطلاح تاريخي في علم البلورات. هذا مجرد اصطلاح قياس، وليس فرقًا فيزيائيًا، لكنه سبب شائع للأخطاء عند التبديل بين هذين القانونين.</p>
+<p><span class="qlabel">الإجابة</span> <strong>نقاط قياس زاوية مختلفة</strong>- من العمودي (سنيل) مقابل من المستوى (براغ).</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">وجدت خطأ؟</span>
+<p>خطأ إملائي، صيغة خاطئة، الأرقام غير متطابقة، شرح ركيك - اكتب لنا:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Snell%20Bragg%20article">feedback@bridge42worlds.org</a>.
+      كل رسالة تُقرأ حقًا، وتُفحص، ويتم التصحيح بناءً عليها - هذا ليس 'للأدراج'.</p>
+</div>
+<footer>
+<p>bridge42worlds · 'دليل تعليمي' لطبقة القوانين · الجزء الخامس عشر من السلسلة، البصريات</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  // §2: угол преломления живо пересчитывается по закону Снеллиуса при плавно меняющемся угле падения —
+  // честный расчёт по формуле на каждый кадр, не заранее нарисованная картинка.
+  function wireRefraction(rayEl, cx, cy, len, n1, n2, theta1Readout, theta2Readout, periodMs){
+    var lastTs = null;
+    var THETA1_MIN = 10, THETA1_MAX = 70; // диапазон угла падения в градусах для анимации
+    function tick(ts){
+      if (lastTs === null) lastTs = ts;
+      var phase = (ts % periodMs) / periodMs;
+      var theta1Deg = THETA1_MIN + (THETA1_MAX - THETA1_MIN) * (0.5 - 0.5 * Math.cos(phase * 2 * Math.PI));
+      var theta1 = theta1Deg * Math.PI / 180;
+      var sinTheta2 = n1 * Math.sin(theta1) / n2;
+      sinTheta2 = Math.max(-1, Math.min(1, sinTheta2));
+      var theta2 = Math.asin(sinTheta2);
+      var x2 = cx + len * Math.sin(theta2);
+      var y2 = cy + len * Math.cos(theta2);
+      if (rayEl) { rayEl.setAttribute('x2', x2.toFixed(1)); rayEl.setAttribute('y2', y2.toFixed(1)); }
+      if (theta1Readout) theta1Readout.textContent = theta1Deg.toFixed(1);
+      if (theta2Readout) theta2Readout.textContent = (theta2 * 180 / Math.PI).toFixed(1);
+      requestAnimationFrame(tick);
+    }
+    if (window.requestAnimationFrame) requestAnimationFrame(tick);
+  }
+
+  wireRefraction(document.getElementById('heroRefracted'), 170, 90, 100, 1, 1.5, null, null, 6000);
+  wireRefraction(document.getElementById('refractedRay'), 150, 100, 90, 1, 1.33,
+    document.querySelector('[data-readout="theta1"]'), document.querySelector('[data-readout="theta2"]'), 6000);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — العلم بكلمات بسيطة · <a href="/lang/ar/theory/">نظرية</a> · <a href="/lang/ar/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

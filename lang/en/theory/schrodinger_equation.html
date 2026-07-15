@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Schrödinger equation: particle as a standing wave — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- стоячая волна: частица в ящике ---------- */
+.box-fig{ max-width:640px; margin:1.2em 0; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:10px; }
+.box-fig svg{ width:100%; height:auto; display:block; }
+.readout-row{ display:flex; gap:18px; max-width:640px; font-family:var(--font-mono); font-size:.8rem; color:var(--ink); font-variant-numeric:tabular-nums; margin:.6em 0 1.4em; flex-wrap:wrap; }
+.readout-row b{ color:var(--ink-soft); font-weight:600; margin-right:.3em; }
+.level-btns{ display:flex; gap:8px; margin:.8em 0 1.2em; flex-wrap:wrap; }
+.level-btn{
+  font-family:var(--font-mono); font-size:.82rem; padding:5px 14px; border-radius:14px;
+  border:1px solid var(--rule); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+}
+.level-btn.active{ background:var(--steel-fill); border-color:var(--steel-fill); color:var(--paper); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>Wave function in a nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>The equation itself</a></li>
+<li><a href="#s3"><span class="n">03</span>Particle in a box</a></li>
+<li><a href="#s4"><span class="n">04</span>Energy quantization</a></li>
+<li><a href="#s5"><span class="n">05</span>Tunneling effect</a></li>
+<li><a href="#s6"><span class="n">06</span>Running example: energy levels</a></li>
+<li><a href="#s7"><span class="n">07</span>Where this leads: superposition and the cat</a></li>
+<li><a href="#s8"><span class="n">08</span>Experiment at home</a></li>
+<li><a href="#s9"><span class="n">09</span>Problems for checking</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working note · quantum mechanics · part VI</p>
+<h1>Schrödinger equation: particle as a standing wave</h1>
+<p class="subtitle">An electron in an atom is not a ball on an orbit, but something much closer to a vibrating string: it has its own “notes”, and only these notes it can “play”.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1.5" x1="30" x2="310" y1="100" y2="100"></line>
+<line stroke="var(--ink)" stroke-width="3" x1="30" x2="30" y1="40" y2="160"></line>
+<line stroke="var(--ink)" stroke-width="3" x1="310" x2="310" y1="40" y2="160"></line>
+<path d="M30,100 Q170,40 310,100" fill="none" id="heroWave" stroke="var(--steel-fill)" stroke-width="2.6"></path>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="185">только целое число полуволн умещается в ящике</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Annotation</span>
+<p>In 1926, Erwin Schrödinger, developing Louis de Broglie's idea of the wave nature of matter (see Euler's formula, part V), derived an equation determining the evolution of the wave function ψ — a mathematical object whose squared modulus gives the probability of finding a particle at a given point. The equation is linear and deterministic, but it governs probabilities, not precise trajectories. In this note — the equation itself, its simplest exact solution (particle in a box) and where energy quantization comes from.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Стоячая волна, запертая в потенциальной яме" src="/lang/ru/theory/img/schrodinger_equation_hero.jpg"/><figcaption>A standing wave trapped in a potential well</figcaption></figure>
+<figure><img alt="Гитарная струна: узлы стоячей волны видны на глаз" src="/lang/ru/theory/img/schrodinger_equation_concept.jpg"/><figcaption>Guitar string: standing wave nodes visible to the eye</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>Wave function in a nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>In quantum mechanics, a particle does not have an exact coordinate and exact velocity simultaneously (Heisenberg uncertainty principle) — instead, it is fully described by the wave function ψ(x,t), a complex number at each point in space and moment in time.</p>
+<table class="symtab">
+<tr><th>Object</th><th>What it means</th></tr>
+<tr><td>ψ(x,t)</td><td>wave function — complete description of the particle's state (complex number)</td></tr>
+<tr><td>|ψ(x,t)|²</td><td>probability density of finding the particle near point x at time t (Born rule)</td></tr>
+<tr><td>∫|ψ|²dx = 1</td><td>the particle is definitely somewhere — total probability equals 100%</td></tr>
+</table>
+<p>This does not mean “the particle is smeared out in space like a cloud of dust” — it is more accurate to say: before measurement, there is no fact about where exactly the particle is, only a probability distribution for where the measurement result will land.</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>The equation itself</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Formulation (time-dependent equation).</strong> The wave function evolves in time according to the rule:</p>
+<div class="plate">
+<div class="eq-body">iℎ∂ψ/∂t = ℋψ</div>
+<div class="cap">ℎ ≈ 1.0546×10⁻³&amp;sup4 J·s — reduced Planck constant, ℋ — Hamiltonian operator (total energy)</div>
+</div>
+<p>The imaginary unit i here is not a decoration — recall Euler's formula (part V): it is precisely what ensures that the solution is a rotating phase on the complex plane, meaning |ψ|² remains constant over time if the system is left undisturbed (unitarity, the total probability does not “leak” anywhere).</p>
+<p>For states with precisely defined energy E (<strong>stationary states</strong>) the equation simplifies to an eigenvalue problem:</p>
+<div class="eq"><div class="eq-body">ℋψ = Eψ</div><div class="eq-tag">(1)</div></div>
+<p>It is this simpler, stationary form that is used in §3 — it turns the search for a solution into a purely geometric problem: “what shape of wave fits within the given conditions”.</p>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>Particle in a box</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The simplest exactly solvable system — a particle trapped in a one-dimensional “box” of width L with infinitely high walls (ψ = 0 at the boundaries, like a string fixed at both ends). The solutions of the stationary equation (1) for such a box are exactly standing waves:</p>
+<div class="plate">
+<div class="eq-body">ψ<sub>n</sub>(x) = √(2/L)·sin(nπx/L),    n = 1, 2, 3, ...</div>
+<div class="cap">n — “quantum number”, counts the number of half-waves fitting in the box</div>
+</div>
+<div aria-hidden="true" class="box-fig">
+<svg viewbox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+<line stroke="var(--rule)" stroke-width="1" x1="30" x2="370" y1="80" y2="80"></line>
+<line stroke="var(--ink)" stroke-width="3" x1="30" x2="30" y1="20" y2="140"></line>
+<line stroke="var(--ink)" stroke-width="3" x1="370" x2="370" y1="20" y2="140"></line>
+<path d="M30,80 L370,80" fill="none" id="boxWave" stroke="var(--steel-fill)" stroke-width="2.6"></path>
+</svg>
+</div>
+<div class="level-btns">
+<button class="level-btn active" data-n="1">n = 1</button>
+<button class="level-btn" data-n="2">n = 2</button>
+<button class="level-btn" data-n="3">n = 3</button>
+<button class="level-btn" data-n="4">n = 4</button>
+</div>
+<div aria-hidden="true" class="readout-row">
+<span><b>E<sub>n</sub>/E<sub>1</sub></b><span data-readout="energy">1</span></span>
+<span><b>nodes inside</b><span data-readout="nodes">0</span></span>
+<span><b>λ<sub>n</sub></b><span data-readout="wavelength">2L</span></span>
+</div>
+<p>Click on n above — the wave shape changes, and with it the number of nodes (points inside the box where ψ = 0, the particle cannot be found there at all). Just like on a guitar string: n = 1 — fundamental tone without nodes, n = 2 — first overtone with one node in the middle, and so on.</p>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>Energy quantization</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Substituting ψ<sub>n</sub> into equation (1), we get the energy of each level:</p>
+<div class="plate">
+<div class="eq-body">E<sub>n</sub> = n²π²ℎ²/(2mL²) = n²·E<sub>1</sub></div>
+<div class="cap">energy grows as n² — not any energy value is allowed, only this discrete ladder</div>
+</div>
+<p>This is exactly <strong>quantization</strong>: unlike a classical particle (a ball in a box can have any energy — push it weaker or stronger), a quantum particle in a box can only have energies from the list E<sub>1</sub>, 4E<sub>1</sub>, 9E<sub>1</sub>, 16E<sub>1</sub>, ... — no intermediate level is allowed.</p>
+<div class="callout brass">
+<span class="tag">Why you can't have energy 0 (zero-point energy)</span>
+<p>The lowest allowed energy — E<sub>1</sub>, not zero. This is a direct consequence of Heisenberg's uncertainty principle: if the particle had E = 0, it would be absolutely motionless (zero momentum) AND trapped in a box of finite size (precisely known coordinate) — both facts exactly simultaneously, which is forbidden. “Trembling” at the zero level (zero-point energy) — is not a technical detail, but a fundamental prohibition.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>Tunneling effect</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>In reality, the walls of a box are never infinitely high. If the wall has a finite height (energy barrier), the solution of the Schrödinger equation shows: the wave function does not abruptly cut off at the barrier boundary, but only rapidly decays <strong>inside</strong> it, remaining non-zero — which means there is a small but non-zero probability of finding the particle on the OTHER side of the barrier, even if classically it lacks the energy to jump over it.</p>
+<div class="callout steel">
+<span class="tag">Not a thought experiment — a working technology</span>
+<p>It is precisely on the tunneling effect that the scanning tunneling microscope works (1981, Binnig and Rohrer, Nobel Prize): an extremely fine needle is brought almost flush to the surface (without touching!), electrons tunnel through the gap, and from the strength of the tunneling current the surface relief is reconstructed with resolution down to individual atoms. The same effect explains alpha decay of nuclei and the operation of flash memory.</p>
+</div>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>Running example: energy levels</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let in some box the ground state energy E<sub>1</sub> = 2 eV (a conventional value for the purity of calculation). According to the formula §4 (E<sub>n</sub> = n²E<sub>1</sub>) we find several next levels:</p>
+<table class="symtab">
+<tr><th>n</th><th>E<sub>n</sub>/E<sub>1</sub></th><th>E<sub>n</sub>, eV</th></tr>
+<tr><td class="sym">1</td><td class="sym">1</td><td class="sym">2</td></tr>
+<tr><td class="sym">2</td><td class="sym">4</td><td class="sym">8</td></tr>
+<tr><td class="sym">3</td><td class="sym">9</td><td class="sym">18</td></tr>
+<tr><td class="sym">4</td><td class="sym">16</td><td class="sym">32</td></tr>
+</table>
+<p>The spacing between adjacent levels GROWS with n (8−2=6, then 18−8=10, then 32−18=14) — not a constant step, as might seem from the word “quantization”. A particle transitioning from level 2 to level 1 emits a light quantum with exactly energy 8−2=6 eV — no more, no less; this is the mechanism that gives rise to the line spectra of atoms (see also the Planck-Einstein equation).</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Where this leads: superposition and the cat</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The Schrödinger equation is linear — meaning if ψ<sub>1</sub> and ψ<sub>2</sub> are both solutions, their sum (<strong>superposition</strong>) c<sub>1</sub>ψ<sub>1</sub> + c<sub>2</sub>ψ<sub>2</sub> is also a solution. A particle can be simultaneously “a bit in state 1 and a bit in state 2” — not figuratively, but literally, until a measurement is performed on it.</p>
+<div class="callout moss">
+<span class="tag">Schrödinger's cat — a mockery that became famous</span>
+<p>Schrödinger himself devised the cat thought experiment in 1935 as <strong>a critique</strong>, and not as an endorsement of the Copenhagen interpretation: a cat is locked in a box with a mechanism that releases poison with 50% probability if a radioactive atom decays (a quantum event). Formal application of the equation to the WHOLE system “atom+mechanism+cat” before opening the box gives a superposition of “cat alive” and “cat dead” simultaneously — an absurd conclusion for a macroscopic object, by which Schrödinger pointed out the unresolved <strong>measurement problem</strong> (§7, key_problems): where exactly and why the superposition turns into one definite outcome, the equation itself does not say.</p>
+</div>
+<p>On the site these are separate laws, if you want to go deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/schrdinger_equation.html">Schrödinger equation</a> ·
+          <a href="/lang/en/laws/heisenberg_uncertainty_principle.html">Heisenberg uncertainty principle</a> ·
+          <a href="/lang/en/laws/superposition_principle.html">Superposition principle</a> ·
+          <a href="/lang/en/laws/de_broglie_wavelength.html">de Broglie formula</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Experiment at home</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · standing waves on a rope or slinky</span>
+<p>Stretch a clothesline rope or a slinky spring between two fixed points (or ask someone to hold one end) and shake it by hand with different frequencies, adjusting the speed until you “catch” a clear standing wave — first with one “antinode”, then (shake faster) with two.</p>
+<p><span class="qlabel">What to notice</span> the wave “stands” in a clear place only at certain shaking frequencies — at intermediate frequencies you get chaotic trembling without a clear shape. This is a VISUAL mechanical model of §3-§4: the fixed ends of the rope play the role of the box walls, and the allowed clear wave shapes are exactly the allowed quantum levels n=1,2,3, only for the rope — with sound frequency, and for an electron — with energy.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Experiment at home · laser pointer and a hair</span>
+<p>In a dark room, point a laser pointer at a thin hair (your own or from a brush), held vertically, so that the beam passes near it, onto a white wall at a distance of 2-3 meters.</p>
+<p><span class="qlabel">What to notice</span> on the wall you will see not just a shadow, but a series of alternating light and dark bands (a diffraction pattern) — direct evidence that light behaves as a wave bending around an obstacle, and not as a stream of particle-balls flying in a straight line. The same wave nature that the Schrödinger equation describes for electrons is visible here to the naked eye for light.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>Problems for checking</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then open the solution. The solution everywhere follows the scheme: <strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. The ground state energy of a particle in a box E₁ = 3 eV. What is the energy of level n = 3?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> E<sub>1</sub> = 3 eV, n = 3.</p>
+<p><span class="qlabel">Law</span> energy quantization in a box (§4): E<sub>n</sub> = n²E<sub>1</sub>.</p>
+<p><span class="qlabel">Solution</span> E<sub>3</sub> = 3²·3 = 9·3 = 27 eV.</p>
+<p><span class="qlabel">Answer</span> <strong>27 eV</strong>.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. The width of the box is doubled, with nothing else changed. How does the ground state energy E₁ change?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> L<sub>new</sub> = 2L (width doubled).</p>
+<p><span class="qlabel">Law</span> formula §4: E<sub>1</sub> ∝ 1/L².</p>
+<p><span class="qlabel">Solution</span> E<sub>1,new</sub>/E<sub>1</sub> = L²/(2L)² = 1/4.</p>
+<p><span class="qlabel">Answer</span> <strong>decreased by a factor of 4</strong> — the more spacious the box, the lower the energy of the trapped particle (intuitively: less “cramped”, less kinetic energy of localization).</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. How many nodes (internal points with ψ = 0) does the wave function of level n = 5 have?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> n = 5.</p>
+<p><span class="qlabel">Law</span> number of internal nodes ψ<sub>n</sub> equals n − 1 (§3: n=1 — 0 nodes, n=2 — 1 node, and so on).</p>
+<p><span class="qlabel">Solution</span> nodes = 5 − 1 = 4.</p>
+<p><span class="qlabel">Answer</span> <strong>4 nodes</strong> — there are also 2 “nodes” at the walls themselves, but they are usually not counted, since they are boundaries, not internal points.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. An electron transitions from level n = 2 (E = 8 eV) to level n = 1 (E = 2 eV), emitting one photon. What is the energy of this photon?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> E<sub>2</sub> = 8 eV, E<sub>1</sub> = 2 eV.</p>
+<p><span class="qlabel">Law</span> conservation of energy (part II) + quantization (§6): the photon energy equals the difference of levels.</p>
+<p><span class="qlabel">Solution</span> E<sub>photon</sub> = E<sub>2</sub> − E<sub>1</sub> = 8 − 2 = 6 eV.</p>
+<p><span class="qlabel">Answer</span> <strong>6 eV</strong> — no more, no less; this is how clear lines are born in atomic spectra.</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. Why can't a particle in a box have exactly energy 0 (be completely at rest)? What principle prohibits this?</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> Heisenberg uncertainty principle (§4-footnote).</p>
+<p><span class="qlabel">Solution</span> E = 0 would mean simultaneously exactly zero momentum AND precisely known coordinate (the particle is trapped in a box of finite size) — both facts exactly simultaneously are forbidden by the uncertainty principle Δx·Δp ≥ ℎ/2.</p>
+<p><span class="qlabel">Answer</span> <strong>Heisenberg uncertainty principle</strong> — hence the minimum, “zero” energy E<sub>1</sub>, never zero.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>A typo, an incorrect formula, a number not adding up, clumsily explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Schrodinger%20equation%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, examined, and a correction is made based on it — it's not “into a black hole”.</p>
+</div>
+<footer>
+<p>bridge42worlds · “study guide” to the layer of laws · part VI of the series, quantum mechanics</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+  var LEFT = 30, RIGHT = 370, MID = 80, AMP = 55, PERIOD = 6000;
+  var heroPath = document.getElementById('heroWave');
+  var boxPath = document.getElementById('boxWave');
+  var buttons = document.querySelectorAll('.level-btn');
+  var eReadout = document.querySelector('[data-readout="energy"]');
+  var nodesReadout = document.querySelector('[data-readout="nodes"]');
+  var waveReadout = document.querySelector('[data-readout="wavelength"]');
+  var currentN = 1;
+
+  function pathFor(n, phase){
+    var span = RIGHT - LEFT, steps = 80, d = 'M' + LEFT + ',' + MID;
+    for (var i = 1; i <= steps; i++){
+      var x = LEFT + span * i / steps;
+      var xi = (x - LEFT) / span;
+      var y = MID - AMP * Math.sin(n * Math.PI * xi) * Math.cos(phase);
+      d += ' L' + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    return d;
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentN = parseInt(btn.dataset.n, 10);
+      if (eReadout) eReadout.textContent = (currentN * currentN);
+      if (nodesReadout) nodesReadout.textContent = (currentN - 1);
+      if (waveReadout) waveReadout.textContent = currentN === 1 ? '2L' : ('2L/' + currentN);
+    });
+  });
+
+  if (!window.requestAnimationFrame) return;
+  function tick(ts){
+    var phase = (ts % PERIOD) / PERIOD * 2 * Math.PI;
+    if (heroPath) heroPath.setAttribute('d', pathFor(1, phase));
+    if (boxPath) boxPath.setAttribute('d', pathFor(currentN, phase));
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
+<footer><p>bridge42worlds — science in simple words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+

@@ -676,6 +676,7 @@ function cardHTML(item) {
         '</a>') : '') +
         '<div class="card-body">' +
             (catName ? '<a class="card-cat" href="#" title="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
             (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
@@ -891,10 +892,7 @@ function renderMoreFeed() {
     if (!c || !feed.active) return;
     var slice = feed.items.slice(feed.shown, feed.shown + feed.batch);
     var html = '';
-    slice.forEach(function(item) {
-        if (item.date !== feed.lastDay) { feed.lastDay = item.date; html += '<div class="feed-day">' + item.date + '</div>'; }
-        html += cardHTML(item);
-    });
+    slice.forEach(function(item) { html += cardHTML(item); });
     c.insertAdjacentHTML('beforeend', html);
     feed.shown += slice.length;
     initAllTooltips();

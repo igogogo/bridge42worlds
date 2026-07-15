@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>The Four Laws of Thermodynamics: Energy, Disorder, and Absolute Zero — bridge42worlds</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&amp;family=Source+Serif+4:opsz@8..60&amp;display=swap" rel="stylesheet"/>
+<link href="/css/style.css?v=eda3218e44" rel="stylesheet"/>
+<script async="" data-goatcounter="https://bridge42worlds.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D;
+    --paper-raised:#1B2128;
+    --ink:#ECE7D8;
+    --ink-soft:#9BA6A2;
+    --rule:#333B42;
+    --brass:#D6A84A;
+    --brass-fill:#D6A84A;
+    --steel:#6FC2DD;
+    --steel-fill:#5FB3CE;
+    --moss:#8FC392;
+    --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:18px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--steel-fill); outline-offset:2px;
+}
+
+.page{
+  display:grid;
+  grid-template-columns: 1fr;
+  max-width:1180px;
+  margin:0 auto;
+  padding: 0 24px 120px;
+}
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{
+  font-family:var(--font-display);
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 .9em;
+}
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.3fr .9fr; align-items:center; gap:20px; } }
+.kicker{
+  font-family:var(--font-display);
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin:0 0 1em;
+  display:flex; align-items:center; gap:.6em;
+}
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{
+  font-family:var(--font-display); font-weight:700;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+  line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em;
+  text-wrap:balance; color:var(--ink);
+}
+.subtitle{
+  font-family:var(--font-body); font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
+  max-width:46ch; margin:0;
+}
+.hero-diagram{ width:100%; max-width:320px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+@media (prefers-reduced-motion: no-preference){
+  .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes heroHeatFlow{
+  0%{ transform:translateX(0); opacity:1; }
+  55%{ transform:translateX(140px); opacity:1; }
+  70%{ transform:translateX(140px); opacity:0; }
+  100%{ transform:translateX(140px); opacity:0; }
+}
+
+#s7 .measure{ font-size:.94rem; line-height:1.55; }
+#s7 h2{ font-size:1.38rem; }
+
+.abstract{
+  max-width:680px; background:var(--paper-raised); border:1px solid var(--rule);
+  border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow);
+}
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{
+  font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em;
+}
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance;
+}
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure img{ width:100%; height:auto; display:block; border:1px solid var(--rule); background:#fff; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: реальные объекты (поршень, термометр), не абстрактные точки ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-strip.piston{ height:110px; }
+.piston-cyl{ position:absolute; left:40px; right:40px; top:20px; bottom:20px; border:2px solid var(--ink); border-radius:0 0 6px 6px; border-top:none; }
+.piston-head{ position:absolute; left:40px; right:40px; top:24px; height:14px; background:var(--brass-fill); border:1.5px solid var(--ink); border-radius:2px; }
+@media (prefers-reduced-motion: no-preference){
+  .piston-head.push{ animation: pistonPush 6s cubic-bezier(.4,0,.6,1) infinite; }
+  .piston-gas.grow{ animation: gasGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes pistonPush{ 0%{ top:24px; } 55%{ top:6px; } 100%{ top:6px; } }
+.piston-gas{ position:absolute; left:41px; right:41px; bottom:20px; top:39px; background:var(--steel-fill); opacity:.28; }
+@keyframes gasGrow{ 0%{ top:39px; } 55%{ top:21px; } 100%{ top:21px; } }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* §4 — стрелка энтропии, которая только растёт (одностороннее движение, без возврата) */
+.anim-strip.arrow{ height:64px; }
+.entropy-track{ position:absolute; left:16px; right:16px; top:50%; height:1px; background:var(--rule); }
+.entropy-dot{ position:absolute; top:50%; width:16px; height:16px; margin-top:-8px; border-radius:50%; background:var(--steel-fill); left:16px; }
+@media (prefers-reduced-motion: no-preference){
+  .entropy-dot.grow{ animation: entropyGrow 6s cubic-bezier(.4,0,.6,1) infinite; }
+}
+@keyframes entropyGrow{ 0%{ left:16px; } 60%{ left:calc(100% - 32px); } 100%{ left:calc(100% - 32px); } }
+
+/* ---------- задачи ---------- */
+.problem{
+  max-width:680px; border:1px solid var(--rule); border-radius:2px;
+  padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
+  font-size:.9rem;
+}
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="top-bar">
+<a class="logo" href="/lang/en/index.html">bridge42worlds</a>
+<div class="header-right">
+<div class="nav-links">
+<a href="/lang/en/index.html">main</a>
+<a href="/lang/en/tags/">tags</a>
+<a href="/lang/en/laws/">laws</a>
+<a href="/lang/en/scientists/">scientists</a>
+<a href="/lang/ru/authors/">authors</a>
+<a href="/lang/en/graph/">graph</a>
+<a class="active" href="/lang/en/theory/">theory</a>
+<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/about.html">about</a>
+</div>
+</div>
+</div>
+<div class="langs" id="langs-bar"></div>
+<div class="page">
+<nav aria-label="Содержание" class="toc">
+<p class="toc-title">Contents</p>
+<ol>
+<li><a href="#s1"><span class="n">01</span>The Four Laws in a Nutshell</a></li>
+<li><a href="#s2"><span class="n">02</span>The Zeroth Law: What Is Temperature</a></li>
+<li><a href="#s3"><span class="n">03</span>The First Law: Energy Bookkeeping</a></li>
+<li><a href="#s4"><span class="n">04</span>The Second Law: Disorder Only Grows</a></li>
+<li><a href="#s5"><span class="n">05</span>The Third Law: Absolute Zero Is Unattainable</a></li>
+<li><a href="#s6"><span class="n">06</span>A Running Example: The Heat Engine</a></li>
+<li><a href="#s7"><span class="n">07</span>Where This Leads: Entropy and the Arrow of Time</a></li>
+<li><a href="#s8"><span class="n">08</span>Home Experiment</a></li>
+<li><a href="#s9"><span class="n">09</span>Check-Up Problems</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<div>
+<p class="kicker"><span class="dot"></span>Working Note · Thermodynamics · Part III</p>
+<h1>The Four Laws of Thermodynamics: Energy, Disorder, and Absolute Zero</h1>
+<p class="subtitle">One of the few areas of physics where laws were formulated not "top-down" from a beautiful theory, but "bottom-up" — from attempts to understand why a steam engine is never perfect.</p>
+</div>
+<div aria-hidden="true" class="hero-diagram">
+<svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+<rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="30" y="80"></rect>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ горячо</text>
+<rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="270" y="80"></rect>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ холодно</text>
+<circle class="hero-heat" cx="165" cy="125" fill="var(--brass-fill)" r="8"></circle>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">тепло течёт от горячего к холодному, не наоборот</text>
+</svg>
+</div>
+</header>
+<div class="abstract">
+<span class="label">Abstract</span>
+<p>Thermodynamics is a rare branch of physics with a "law number zero": the basic principle explaining temperature itself was realized later than the first and second laws and was numbered retroactively. There are four laws in total: the zeroth defines temperature, the first — energy conservation for heat and work, the second — why processes are irreversible and entropy increases, the third — why absolute zero is unattainable. Together they govern everything — from a cup of coffee to the evolution of stars.</p>
+</div>
+<div class="theory-img-pair">
+<figure><img alt="Пар над кофе: энтропия рассеивает порядок" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>Steam Over Coffee: Entropy Scatters Order</figcaption></figure>
+<figure><img alt="Поршень парового двигателя: тепло превращается в работу" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>Steam Engine Piston: Heat Turns into Work</figcaption></figure>
+</div>
+<section id="s1">
+<div class="sec-head"><span class="sec-num">§1</span><h2>The Four Laws in a Nutshell</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<table class="symtab">
+<tr><th>Law</th><th>In Brief</th><th>What It Prohibits</th></tr>
+<tr><td class="sym">0</td><td>thermal equilibrium is transitive</td><td>ambiguity of temperature</td></tr>
+<tr><td class="sym">I</td><td>ΔU = Q − W</td><td>a perpetual motion machine of the first kind (energy from nothing)</td></tr>
+<tr><td class="sym">II</td><td>ΔS ≥ 0 in an isolated system</td><td>a perpetual motion machine of the second kind (100% efficiency)</td></tr>
+<tr><td class="sym">III</td><td>S → 0 as T → 0</td><td>reaching absolute zero in a finite number of steps</td></tr>
+</table>
+<p>A humorous formulation of all three numbered laws at once, well-known to physicists: "You can't win (I – you can't get more energy out than you put in), you can't even break even (II – some energy is always dissipated), and you can't get out of the game (III – you can't cool down to absolute zero and stop all motion)."</p>
+</div>
+</section>
+<section id="s2">
+<div class="sec-head"><span class="sec-num">§2</span><h2>The Zeroth Law: What Is Temperature</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> If system A is in thermal equilibrium with system C, and system B is also in thermal equilibrium with C, then A and B are in thermal equilibrium with each other:</p>
+<div class="plate">
+<div class="eq-body">T<sub>A</sub> = T<sub>C</sub> and T<sub>B</sub> = T<sub>C</sub>  ⇒  T<sub>A</sub> = T<sub>B</sub></div>
+<div class="cap">transitivity of thermal equilibrium — what makes temperature a measurable quantity at all</div>
+</div>
+<p>It sounds almost like a "mathematical triviality" (transitivity of equality), but there is a lot of physical content here: the law asserts that thermal equilibrium has a single numerical parameter (temperature), not something more complex. It is on this principle that any thermometer works: it becomes "system C" itself — it comes into equilibrium with the body it measures, and we simply read its own temperature.</p>
+<div class="callout steel">
+<span class="tag">Why Zeroth and Not Fourth</span>
+<p>The first and second laws were formulated earlier (1850s), while the zeroth was only in 1931 by Ralph Fowler. By that time, numbering 1-2-3 was already established in textbooks, and to avoid rewriting everything, the most fundamental (logically preceding the others) principle received the number "0" — a rare case where the order of discovery and the order of logical importance went in opposite directions.</p>
+</div>
+</div>
+</section>
+<section id="s3">
+<div class="sec-head"><span class="sec-num">§3</span><h2>The First Law: Energy Bookkeeping</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> The change in internal energy of a system equals the heat transferred to it minus the work done by the system on its surroundings:</p>
+<div class="plate">
+<div class="eq-body">ΔU = Q − W</div>
+<div class="cap">this is the law of conservation of energy (Part II, §3), simply written in the language of heat and work</div>
+</div>
+<div class="units">ΔU, Q, W — all in joules (J). U — internal energy (sum of kinetic and potential energy of all molecules), Q &gt; 0 — heat added to the system, W &gt; 0 — the system does work against external forces.</div>
+<div aria-hidden="true" class="anim-strip piston">
+<div class="piston-cyl"></div>
+<div class="piston-gas grow"></div>
+<div class="piston-head push"></div>
+<span class="anim-readout">Q added → gas expands, pushes the piston</span>
+</div>
+<p>Numerical example: 500 J of heat is supplied to the gas in a cylinder. Expanding, the gas pushes the piston and does W = 200 J of work against external pressure. How much did the internal energy of the gas change?</p>
+<div class="eq"><div class="eq-body">ΔU = 500 − 200 = <strong>300 J</strong></div><div class="eq-tag">(1)</div></div>
+<p>Imagine a bank account: Q = 500 J — income, W = 200 J — expense, ΔU = 300 J — what remained in the account (stored as internal energy of the gas, meaning its molecules on average started moving faster — the gas heated up).</p>
+<div class="callout brass">
+<span class="tag">A Common Mistake</span>
+<p>"Heat is the same as temperature" — no: heat Q is a process of energy transfer (like "income" in an account), while temperature is a state parameter of the system (like "account balance" in different units). You can transfer a lot of heat to a body and barely raise its temperature (for example, when melting ice — all the energy goes into breaking the crystal lattice, not into heating).</p>
+</div>
+</div>
+</section>
+<section id="s4">
+<div class="sec-head"><span class="sec-num">§4</span><h2>The Second Law: Disorder Only Grows</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> In an isolated system, entropy never decreases:</p>
+<div class="plate">
+<div class="eq-body">ΔS ≥ 0</div>
+<div class="cap">equivalent formulation (Clausius): heat does not spontaneously flow from a colder body to a hotter one</div>
+</div>
+<div aria-hidden="true" class="anim-strip arrow">
+<div class="entropy-track"></div>
+<div class="entropy-dot grow"></div>
+<div class="anim-label">entropy is an "arrow" that only points forward, never backward</div>
+</div>
+<p>Entropy S is a measure of how many ways the particles of a system can be arranged at the micro-level while having the same macroscopic appearance of the system (Boltzmann's formula: S = k<sub>B</sub> ln Ω, where Ω is the number of microstates). Things scattered around a room can be arranged in a disordered manner in vastly more ways than neatly piled — that's why "by itself" tidying up is rare, while scattering is easy.</p>
+<table class="symtab">
+<tr><th>Formulation</th><th>Author</th><th>Essence</th></tr>
+<tr><td>Clausius</td><td>Rudolf Clausius</td><td>heat does not flow by itself from cold to hot</td></tr>
+<tr><td>Kelvin</td><td>William Thomson</td><td>it is impossible to construct a machine whose sole result is 100% conversion of heat into work</td></tr>
+</table>
+<div class="callout moss">
+<span class="tag">Maxwell's Demon</span>
+<p>James Maxwell's thought experiment (1867): a tiny being at a partition between two volumes of gas lets fast molecules pass one way and slow ones the other, separating the gas into hot and cold halves without expending energy — seemingly violating the second law. The resolution (Leo Szilard, 1929): the very process of "measuring" the molecule's speed by the demon increases the entropy of the demon (or its memory) by no less than the gas's entropy decreases — the law is saved, but at the cost of giving birth to an entire field of information physics.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<div class="sec-head"><span class="sec-num">§5</span><h2>The Third Law: Absolute Zero Is Unattainable</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p><strong>Statement.</strong> As the temperature approaches absolute zero, the entropy of a perfect crystal approaches zero:</p>
+<div class="plate">
+<div class="eq-body">lim<sub>T→0</sub> S(T) = 0</div>
+<div class="cap">at T = 0, a perfect crystal has only one possible microstate — Ω = 1, so S = k<sub>B</sub>ln1 = 0</div>
+</div>
+<p>A consequence of this law is practical, not just formal: absolute zero (−273.15 °C, 0 K) cannot be reached in a finite number of cooling steps, only approached asymptotically. The laboratory record is about 100 picokelvins (10<sup>−10</sup> K) in a Bose–Einstein condensate — still not zero, though tens of billions of times colder than interstellar space.</p>
+<p>Real solids do not always reach S = 0 even theoretically: glasses and other disordered (amorphous) substances "freeze" with a random structure and retain residual entropy at arbitrarily low temperatures — an interesting exception that is still being studied.</p>
+</div>
+</section>
+<section id="s6">
+<div class="sec-head"><span class="sec-num">§6</span><h2>A Running Example: The Heat Engine</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>Let's combine the first and second laws in one example — an idealized heat engine (Carnot cycle) operating between a hot reservoir T<sub>h</sub> = 600 K and a cold T<sub>c</sub> = 300 K.</p>
+<p><strong>The Second Law</strong> sets the maximum possible efficiency of such an engine (you can't jump over it, whatever you think up):</p>
+<div class="eq"><div class="eq-body">η<sub>max</sub> = 1 − T<sub>c</sub>/T<sub>h</sub> = 1 − 300/600 = <strong>0.5</strong> (50%)</div><div class="eq-tag">(2)</div></div>
+<p>Let the heat supplied from the hot reservoir be Q<sub>h</sub> = 1000 J of heat. <strong>The First Law</strong> (energy doesn't disappear) says that all this energy will be distributed between useful work W and heat Q<sub>c</sub>, released to the cold reservoir:</p>
+<div class="eq"><div class="eq-body">W = η·Q<sub>h</sub> = 0.5·1000 = <strong>500 J</strong>,    Q<sub>c</sub> = Q<sub>h</sub> − W = <strong>500 J</strong></div><div class="eq-tag">(3)</div></div>
+<figure>
+<img alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж" src="/lang/ru/theory/thermo_engine_balance.png"/>
+<figcaption><span class="fign">Fig. 1</span>The First Law: the sum of W and Q<sub>c</sub> exactly equals Q<sub>h</sub> — energy was not lost, but neither was all of it turned into work (prohibited by the second law). Even an ideal (Carnot) engine between these temperatures cannot produce more than 500 J of useful work from 1000 J of heat.</figcaption>
+</figure>
+<p>No real engine operating between these same two temperatures can exceed these 500 J — the Carnot cycle gives the theoretical ceiling of efficiency, and friction and irreversibility of real processes only lower the result below this ceiling, never raising it above.</p>
+</div>
+</section>
+<section id="s7">
+<div class="sec-head"><span class="sec-num">§7</span><h2>Where This Leads: Entropy and the Arrow of Time</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>The second law is perhaps the only law of fundamental physics that distinguishes past from future. Newton's, Maxwell's, and even Schrödinger's equations are fully symmetric in time: if you film a collision of billiard balls and play it backwards, the laws of mechanics won't find a violation. But a video of a breaking cup played backwards (fragments gather themselves into a whole cup) looks absurd — and the only law of physics that "notices" this is the second.</p>
+<figure>
+<img alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю" src="/lang/ru/theory/thermo_entropy_zero.png"/>
+<figcaption><span class="fign">Fig. 2</span>The entropy of a perfect crystal increases with temperature and tends to zero as T → 0 (third law) — the very possibility of constructing such a graph and talking about the "increase" of entropy over time is the source of the distinction between past and future in physics.</figcaption>
+</figure>
+<div class="callout steel">
+<span class="tag">From Steam to Black Holes</span>
+<p>Entropy turned out to be a surprisingly universal concept: Ludwig Boltzmann in the 1870s connected it with the number of microstates, and a century later Jacob Bekenstein and Stephen Hawking discovered that black holes also have entropy — proportional not to volume, but to the area of the event horizon. This unexpected fact became one of the main clues to the <strong>holographic principle</strong> in modern theoretical physics — the idea that all the information about a three-dimensional region can be encoded on its two-dimensional boundary.</p>
+</div>
+<p>On the site these are separate laws, if you want to delve deeper:</p>
+<p style="max-width:680px">
+<a href="/lang/en/laws/zeroth_law_of_thermodynamics.html">The Zeroth Law</a> ·
+          <a href="/lang/en/laws/first_law_of_thermodynamics.html">The First Law</a> ·
+          <a href="/lang/en/laws/second_law_of_thermodynamics.html">The Second Law</a> ·
+          <a href="/lang/en/laws/third_law_of_thermodynamics.html">The Third Law</a>
+</p>
+</div>
+</section>
+<section id="s8">
+<div class="sec-head"><span class="sec-num">§8</span><h2>Home Experiment</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Compressing Air in a Syringe</span>
+<p>Take a syringe without a needle, close the outlet with your finger, and quickly compress the plunger. Place a finger of your other hand on the barrel of the syringe.</p>
+<p><span class="qlabel">What to notice</span> the syringe will noticeably heat up. You performed work W on the gas (compressed it), and heat Q went nowhere (the process is fast, there's no time for heat exchange with the air) — according to the first law, all this work went into an increase in internal energy ΔU, meaning the gas heated up. This is exactly how fuel ignition works in a diesel engine — only there the compression is even stronger.</p>
+</div>
+<div class="callout moss">
+<span class="tag">🧪 Home Experiment · Melting Ice and Mixture Temperature</span>
+<p>Put a couple of ice cubes in a glass of warm water and monitor the temperature (by touch or with a thermometer) for a few minutes.</p>
+<p><span class="qlabel">What to notice</span> heat flows from the warm water to the ice (second law — only in that direction, never the reverse) until both parts reach a common temperature — that's the thermal equilibrium from the zeroth law. Also note: while the ice hasn't yet melted completely, the mixture temperature hardly changes — the energy goes into melting (breaking the crystal lattice of ice), not into heating, exactly as discussed in §3 about the difference between heat and temperature.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<div class="sec-head"><span class="sec-num">§9</span><h2>Check-Up Problems</h2></div>
+<hr class="rule"/>
+<div class="measure">
+<p>First think for yourself, then check the solution. The solution everywhere follows the scheme:<strong>Given → Law → Solution → Answer</strong>.</p>
+<details class="problem">
+<summary>1. 400 J of heat is supplied to a gas in a closed rigid container (volume doesn't change, no work is done). By how much did its internal energy change?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> Q = 400 J, W = 0 (volume is constant — the piston doesn't move anywhere).</p>
+<p><span class="qlabel">Law</span> the first law (§3): ΔU = Q − W.</p>
+<p><span class="qlabel">Solution</span> ΔU = 400 − 0 = 400 J.</p>
+<p><span class="qlabel">Answer</span> <strong>+400 J</strong> — at constant volume, all the supplied heat goes into internal energy.</p>
+</div>
+</details>
+<details class="problem">
+<summary>2. An ideal heat engine operates between temperatures of 800 K and 400 K. What is its maximum efficiency?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> T<sub>h</sub> = 800 K, T<sub>c</sub> = 400 K.</p>
+<p><span class="qlabel">Law</span> the Carnot limit (§6, second law): η<sub>max</sub> = 1 − T<sub>c</sub>/T<sub>h</sub>.</p>
+<p><span class="qlabel">Solution</span> η<sub>max</sub> = 1 − 400/800 = 0.5.</p>
+<p><span class="qlabel">Answer</span> <strong>50%</strong> — and this is the LIMIT, a real engine between the same temperatures will be worse.</p>
+</div>
+</details>
+<details class="problem">
+<summary>3. An engine with an efficiency of 40% receives 2000 J of heat from a hot reservoir per cycle. How much heat is dumped into the cold reservoir?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> η = 0.4, Q<sub>h</sub> = 2000 J.</p>
+<p><span class="qlabel">Law</span> the first law: Q<sub>h</sub> = W + Q<sub>c</sub>, where W = ηQ<sub>h</sub>.</p>
+<p><span class="qlabel">Solution</span> W = 0.4·2000 = 800 J; Q<sub>c</sub> = 2000 − 800 = 1200 J.</p>
+<p><span class="qlabel">Answer</span> <strong>1200 J</strong> — more than half of the supplied heat is wasted even in a not-so-bad engine.</p>
+</div>
+</details>
+<details class="problem">
+<summary>4. A gas expands and does 150 J of work, and its internal energy drops by 50 J. How much heat was transferred to the gas (or removed from it)?</summary>
+<div class="answer">
+<p><span class="qlabel">Given</span> W = 150 J, ΔU = −50 J.</p>
+<p><span class="qlabel">Law</span> the first law: Q = ΔU + W.</p>
+<p><span class="qlabel">Solution</span> Q = −50 + 150 = 100 J.</p>
+<p><span class="qlabel">Answer</span> <strong>+100 J supplied</strong> — heat was transferred to the gas, but it wasn't enough to cover all the work done, so the gas "made up" part of the missing energy from its own internal reserve (it cooled down).</p>
+</div>
+</details>
+<details class="problem">
+<summary>5. A thermos of tea (60 °C) stands in a room at 20 °C. Describe in which direction and why heat exchange will occur, referring to a specific law of thermodynamics.</summary>
+<div class="answer">
+<p><span class="qlabel">Law</span> the second law in Clausius formulation (§4).</p>
+<p><span class="qlabel">Solution</span> heat spontaneously flows only from a hotter body to a colder one — so the tea will cool down, releasing heat to the room air, until a common temperature is established (zeroth law, §2) — certainly below 60 °C and above 20 °C.</p>
+<p><span class="qlabel">Answer</span> <strong>heat flows from the tea to the room air</strong>, the reverse process (the air itself heating the tea above room temperature) is forbidden by the second law.</p>
+</div>
+</details>
+</div>
+</section>
+<div class="feedback-box">
+<span class="label">Found an inaccuracy?</span>
+<p>Typo, incorrect formula, numbers don't add up, poorly explained — write to us:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Thermodynamics%20article">feedback@bridge42worlds.org</a>.
+      Every message is actually read, analyzed, and a correction is made based on it — this isn't a "dead letter."</p>
+</div>
+<footer>
+<p>bridge42worlds · "a study guide" to the layer of laws · part III of the series, thermodynamics</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
+<footer><p>bridge42worlds — science in plain words · <a href="/lang/en/theory/">theory</a> · <a href="/lang/en/archive/">archive</a></p></footer>
+<script src="/js/likes.js?v=eda3218e44"></script>
+<script src="/js/search.js?v=eda3218e44"></script>
+
+
