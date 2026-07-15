@@ -1,0 +1,439 @@
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Упругость и опора: закон Гука и принцип Архимеда</title>
+<style>
+:root{
+  --paper:#EFEEE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1B222B;
+  --ink-soft:#57616B;
+  --rule:#D9D5C7;
+  --brass:#8F6417;
+  --brass-fill:#C08A2A;
+  --steel:#155E74;
+  --steel-fill:#2C6E8E;
+  --moss:#4C6B4E;
+  --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+  --font-display: 'Futura', 'Century Gothic', 'Futura PT', 'Segoe UI Semibold', 'Segoe UI', sans-serif;
+  --font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, 'Times New Roman', serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+    --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+  --rule:#333B42; --brass:#D6A84A; --brass-fill:#D6A84A; --steel:#6FC2DD;
+  --steel-fill:#5FB3CE; --moss:#8FC392; --moss-fill:#7FAE82;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+  --rule:#D9D5C7; --brass:#8F6417; --brass-fill:#C08A2A; --steel:#155E74;
+  --steel-fill:#2C6E8E; --moss:#4C6B4E; --moss-fill:#5C7A5E;
+  --shadow: 0 1px 2px rgba(27,34,43,.06);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--paper);}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--steel-fill); color:var(--paper); }
+.vec{ font-family:var(--font-body); font-style:italic; font-weight:700; }
+a{ color:var(--steel); }
+a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--steel-fill); outline-offset:2px; }
+
+.page{ display:grid; grid-template-columns: 1fr; max-width:1180px; margin:0 auto; padding: 0 24px 120px; }
+.toc{ display:none; }
+@media (min-width:1020px){
+  .page{ grid-template-columns: 200px minmax(0,1fr); column-gap:48px; padding:0 40px 140px; }
+  .toc{ display:block; position:sticky; top:36px; align-self:start; padding-top:64px; }
+}
+.toc-title{ font-family:var(--font-display); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 .9em; }
+.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55em; }
+.toc a{ text-decoration:none; color:var(--ink-soft); font-size:.82rem; line-height:1.35; display:block; }
+.toc a:hover{ color:var(--ink); }
+.toc .n{ font-family:var(--font-mono); color:var(--ink-soft); margin-right:.4em; }
+
+main{ min-width:0; }
+.hero{ padding: 56px 0 40px; display:grid; gap:28px; }
+@media (min-width:760px){ .hero{ grid-template-columns: 1.15fr 1.05fr; align-items:center; gap:20px; } }
+.kicker{ font-family:var(--font-display); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 1em; display:flex; align-items:center; gap:.6em; }
+.kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
+h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
+.subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
+.hero-diagram{ width:100%; max-width:340px; justify-self:center; }
+.hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+#s6 .measure{ font-size:.94rem; line-height:1.55; }
+#s6 h2{ font-size:1.38rem; }
+
+.abstract{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:22px 26px; margin: 8px 0 8px; box-shadow:var(--shadow); }
+.abstract p{ margin:0; color:var(--ink-soft); font-size:.98rem; }
+.abstract .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); display:block; margin-bottom:.6em; }
+
+section{ padding-top:56px; scroll-margin-top:24px; }
+section:first-of-type{ padding-top:8px; }
+.sec-head{ display:flex; align-items:baseline; gap:.6em; margin:0 0 .3em; max-width:680px; }
+.sec-num{ font-family:var(--font-mono); color:var(--brass); font-size:.95rem; }
+h2{ font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.005em; margin:0; text-wrap:balance; }
+h3{ font-family:var(--font-display); font-weight:700; font-size:1.08rem; margin: 1.6em 0 .5em; max-width:680px; }
+.rule{ border:none; border-top:1px solid var(--rule); margin:0 0 1.6em; max-width:680px; }
+
+.measure{ max-width:680px; }
+.measure p, .measure ul, .measure ol{ max-width:680px; }
+p{ margin: 0 0 1.1em; }
+ul, ol{ padding-left:1.35em; margin:0 0 1.1em; }
+li{ margin-bottom:.4em; }
+strong{ color:var(--ink); }
+
+.symtab{ width:100%; max-width:680px; border-collapse:collapse; margin: 0 0 1.4em; font-size:.92rem; }
+.symtab th, .symtab td{ text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule); }
+.symtab th{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+.symtab td.sym{ font-family:var(--font-mono); white-space:nowrap; }
+
+.eq{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap: 16px; max-width:680px; margin: 1.5em 0; padding: 14px 4px; }
+.eq-body{ font-family:var(--font-body); font-style:italic; font-size:1.18rem; overflow-x:auto; }
+.eq-tag{ font-family:var(--font-mono); color:var(--ink-soft); font-size:.85rem; white-space:nowrap; }
+
+.plate{ max-width:680px; background:var(--paper-raised); border:1px solid var(--rule); padding: 22px 26px; margin: 1.6em 0; box-shadow: var(--shadow); }
+.plate .eq-body{ font-size:1.32rem; }
+.plate .cap{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:.9em; }
+
+sup, sub{ font-size:.68em; }
+
+.callout{ max-width:680px; border-left: 3px solid var(--rule); padding: 4px 0 4px 18px; margin: 1.5em 0; }
+.callout.brass{ border-left-color: var(--brass-fill); }
+.callout.steel{ border-left-color: var(--steel-fill); }
+.callout.moss{ border-left-color: var(--moss-fill); }
+.callout .tag{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; margin-bottom:.4em; display:block; }
+.callout.brass .tag{ color:var(--brass); }
+.callout.steel .tag{ color:var(--steel); }
+.callout.moss .tag{ color:var(--moss); }
+.callout p:last-child{ margin-bottom:0; }
+
+figure{ margin: 1.8em 0; max-width:920px; }
+figure svg{ width:100%; height:auto; display:block; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:.7em; max-width:680px; }
+figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.4em; }
+
+footer{ max-width:680px; margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:.85rem; }
+.feedback-box{ max-width:680px; margin-top:56px; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; padding:18px 22px; }
+.feedback-box .label{ font-family:var(--font-display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:.5em; }
+.feedback-box p{ margin:0; color:var(--ink-soft); font-size:.92rem; }
+
+/* ---------- анимации: пружина и погружение ---------- */
+.anim-strip{ position:relative; max-width:680px; margin:1.5em 0 1.9em; background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px; overflow:hidden; }
+.anim-label{ position:absolute; right:14px; top:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); text-align:right; }
+.anim-label.left{ right:auto; left:14px; }
+.anim-readout{ position:absolute; left:14px; bottom:8px; font-family:var(--font-mono); font-size:.74rem; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* Позиции пружины/груза считаются в JS покадрово (реальная физика, не CSS-заглушка) —
+   .osc/.dip ниже только помечают элементы, сам transform/left/width/top пишет requestAnimationFrame. */
+.spring-strip{ height:120px; }
+.spring-wall{ position:absolute; left:20px; top:20px; bottom:20px; width:6px; background:var(--ink); opacity:.7; }
+.spring-coil{ position:absolute; left:26px; top:56px; height:8px; background:repeating-linear-gradient(90deg, var(--steel-fill) 0 3px, transparent 3px 8px); }
+.spring-mass{ position:absolute; top:40px; width:36px; height:40px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+.water-strip{ height:150px; }
+.water-surface{ position:absolute; left:0; right:0; top:60px; height:2px; background:var(--steel-fill); opacity:.6; }
+.water-fill{ position:absolute; left:0; right:0; top:62px; bottom:0; background:var(--steel-fill); opacity:.12; }
+.spring-top{ position:absolute; left:50%; top:8px; width:3px; background:var(--ink); margin-left:-1.5px; }
+.hang-mass{ position:absolute; left:50%; width:34px; height:34px; margin-left:-17px; border-radius:4px; background:var(--brass-fill); border:1.5px solid var(--ink); }
+
+/* ---------- задачи ---------- */
+.problem{ max-width:680px; border:1px solid var(--rule); border-radius:2px; padding:14px 18px; margin:0 0 12px; background:var(--paper-raised); font-size:.9rem; }
+.problem summary{ cursor:pointer; font-weight:600; color:var(--ink); list-style:none; font-size:.9rem; }
+.problem summary::-webkit-details-marker{ display:none; }
+.problem summary::before{ content:"▸  "; color:var(--brass); font-family:var(--font-mono); }
+.problem[open] summary::before{ content:"▾  "; }
+.problem .answer{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--rule); color:var(--ink-soft); font-size:.86rem; }
+.problem .answer strong{ color:var(--ink); }
+.problem .answer p:last-child{ margin-bottom:0; }
+.problem .answer p{ margin-bottom:.6em; }
+.qlabel{ font-family:var(--font-display); font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-right:.5em; }
+
+.units{ font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px; }
+.units .u{ font-family:var(--font-mono); color:var(--ink); }
+</style>
+
+<div class="page">
+
+  <nav class="toc" aria-label="Содержание">
+    <p class="toc-title">Содержание</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span>Две силы сопротивления</a></li>
+      <li><a href="#s2"><span class="n">02</span>Закон Гука: пружина считает линейно</a></li>
+      <li><a href="#s3"><span class="n">03</span>От пружины к твёрдому телу</a></li>
+      <li><a href="#s4"><span class="n">04</span>Закон Архимеда: вес вытесненного</a></li>
+      <li><a href="#s5"><span class="n">05</span>Сквозной пример: ареометр из пружинных весов</a></li>
+      <li><a href="#s6"><span class="n">06</span>Куда это ведёт: атомные пружинки и давление</a></li>
+      <li><a href="#s7"><span class="n">07</span>Эксперимент дома</a></li>
+      <li><a href="#s8"><span class="n">08</span>Задачи для проверки</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker"><span class="dot"></span>Рабочая заметка &middot; механика сплошных сред &middot; часть VIII</p>
+        <h1>Упругость и опора: закон Гука и принцип Архимеда</h1>
+        <p class="subtitle">Два закона о том, как вещество «сопротивляется» — растяжению пружины и погружению в жидкость — и оба сводятся к на удивление простой линейной математике.</p>
+      </div>
+      <div class="hero-diagram" aria-hidden="true">
+        <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="40" x2="60" y2="180" stroke="var(--ink)" stroke-width="4"/>
+          <path d="M60,80 L80,70 L100,90 L120,70 L140,90 L160,70 L180,80" fill="none" stroke="var(--steel-fill)" stroke-width="2.5"/>
+          <rect x="180" y="55" width="50" height="50" rx="4" fill="var(--brass-fill)" stroke="var(--ink)" stroke-width="2"/>
+          <text x="150" y="150" text-anchor="middle" font-family="Cascadia Code, monospace" font-size="14" fill="var(--moss)">F = -kx</text>
+        </svg>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <span class="label">Аннотация</span>
+      <p>Роберт Гук в 1660-х открыл, что пружины (и вообще упругие тела) сопротивляются деформации пропорционально её величине — простейшая линейная связь, лежащая в основе теории упругости, от матрасов до небоскрёбов. Архимед на два тысячелетия раньше открыл другой, тоже линейный закон: жидкость выталкивает погружённое тело с силой, равной весу вытесненного объёма. В этой заметке — оба закона с числовыми примерами и сквозной эксперимент, объединяющий их в одном измерении.</p>
+    </div>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">§1</span><h2>Две силы сопротивления</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <table class="symtab">
+          <tr><th>Закон</th><th>Формула</th><th>О чём</th></tr>
+          <tr><td>Гука</td><td class="sym">F = &minus;kx</td><td>сила упругости растёт линейно со смещением</td></tr>
+          <tr><td>Архимеда</td><td class="sym">F = &rho;gV</td><td>выталкивающая сила равна весу вытесненной жидкости</td></tr>
+        </table>
+        <p>На первый взгляд разные явления — но оба описывают, как среда (пружина, жидкость) «отвечает» на попытку изменить её состояние, и в обоих случаях ответ на удивление прост: либо линейно от смещения, либо линейно от объёма. Простота этих законов — не совпадение, а следствие того, что оба явления рассматриваются в режиме малых, «мягких» возмущений, где сложная микроскопическая физика усредняется до одной константы (k или &rho;).</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">§2</span><h2>Закон Гука: пружина считает линейно</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> Сила упругости пропорциональна деформации и направлена против неё:</p>
+        <div class="plate">
+          <div class="eq-body">F = &minus;kx</div>
+          <div class="cap">k — жёсткость пружины (Н/м), x — смещение из положения равновесия (м)</div>
+        </div>
+        <div class="anim-strip spring-strip" aria-hidden="true">
+          <div class="spring-wall"></div>
+          <div class="spring-coil"></div>
+          <div class="spring-mass"></div>
+          <div class="anim-readout" data-readout="spring">x = 0.00 м</div>
+          <div class="anim-label left">пружина растягивается и сжимается вокруг равновесия — груз колеблется</div>
+        </div>
+        <p>Численный пример: пружина жёсткостью k&nbsp;=&nbsp;200&nbsp;Н/м растянута на x&nbsp;=&nbsp;0.05&nbsp;м. Какая сила упругости возникает?</p>
+        <div class="eq"><div class="eq-body">F = k&middot;x = 200&middot;0.05 = <strong>10&nbsp;Н</strong></div><div class="eq-tag">(1)</div></div>
+        <p>Знак минус в формулировке напоминает: сила ВСЕГДА стремится вернуть тело в равновесие — растянута пружина, тянет назад; сжата, толкает вперёд. Именно эта «возвращающая» природа делает пружину классическим гармоническим осциллятором — отпустите груз, и он будет колебаться взад-вперёд (с трением — постепенно затухая).</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">§3</span><h2>От пружины к твёрдому телу</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Тот же линейный закон работает не только для витых пружин — любое твёрдое тело при малой деформации ведёт себя как пружина, просто константу жёсткости заменяет свойство материала — <strong>модуль Юнга</strong> E:</p>
+        <div class="plate">
+          <div class="eq-body">&sigma; = E&middot;&epsilon;</div>
+          <div class="cap">&sigma; — механическое напряжение (сила на единицу площади), &epsilon; — относительное удлинение &Delta;L/L&#8320;</div>
+        </div>
+        <table class="symtab">
+          <tr><th>Материал</th><th>Модуль Юнга E, Па</th></tr>
+          <tr><td>Резина</td><td class="sym">&sim;10&#8310;</td></tr>
+          <tr><td>Дерево</td><td class="sym">&sim;10&#8313;</td></tr>
+          <tr><td>Сталь</td><td class="sym">&sim;2&times;10&#185;&#185;</td></tr>
+        </table>
+        <p>Сталь «жёстче» резины примерно в 200 000 раз — но обе, в пределах небольших деформаций, подчиняются ровно одному и тому же линейному закону. Небоскрёбы качаются на ветру на сантиметры и возвращаются в исходное положение именно благодаря этой упругости — если бы сталь не подчинялась закону Гука, высотные здания были бы либо опасно хрупкими, либо не могли бы вообще существовать.</p>
+        <div class="callout brass">
+          <span class="tag">Где закон перестаёт работать</span>
+          <p>Линейность — приближение, верное лишь до <strong>предела упругости</strong>. Растяните пружину слишком сильно — и она либо не вернётся в исходную форму (пластическая деформация), либо сломается. Инженеры-конструкторы всегда закладывают запас прочности именно потому, что за пределом закон Гука перестаёт предсказывать поведение материала.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">§4</span><h2>Закон Архимеда: вес вытесненного</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p><strong>Формулировка.</strong> На тело, погружённое в жидкость (или газ), действует выталкивающая сила, равная весу вытесненного объёма:</p>
+        <div class="plate">
+          <div class="eq-body">F<sub>выт</sub> = &rho;&middot;g&middot;V</div>
+          <div class="cap">&rho; — плотность жидкости, V — объём вытесненной жидкости (не всего тела, если оно погружено не целиком!)</div>
+        </div>
+        <p>Численный пример: тело объёмом V&nbsp;=&nbsp;0.002&nbsp;м&sup3; (2 литра) полностью погружено в воду (&rho;&nbsp;=&nbsp;1000&nbsp;кг/м&sup3;, g&nbsp;&asymp;&nbsp;10&nbsp;м/с&sup2;). Найдите выталкивающую силу.</p>
+        <div class="eq"><div class="eq-body">F<sub>выт</sub> = 1000&middot;10&middot;0.002 = <strong>20&nbsp;Н</strong></div><div class="eq-tag">(2)</div></div>
+        <p>Всплывёт тело или утонет — решает сравнение с силой тяжести: если вес тела меньше F<sub>выт</sub> при полном погружении, тело всплывает (и погружается лишь частично, пока веса не уравновесятся); если больше — тонет.</p>
+        <div class="callout steel">
+          <span class="tag">Почему стальной корабль не тонет</span>
+          <p>Сталь тяжелее воды почти в 8 раз (&rho;<sub>стали</sub>&nbsp;&asymp;&nbsp;7800&nbsp;кг/м&sup3; против 1000 у воды) — кусок стали, брошенный в воду, немедленно тонет. Но КОРПУС корабля — это в основном воздух, окружённый тонкой стальной оболочкой: средняя плотность всей конструкции (сталь + воздух внутри) намного ниже плотности воды. Значение имеет не плотность материала, а средняя плотность ВСЕГО вытесняющего объёма.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">§5</span><h2>Сквозной пример: ареометр из пружинных весов</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Соберём оба закона в одном классическом опыте: груз подвешен на пружинных весах (закон Гука — по растяжению пружины читаем силу), сначала в воздухе, потом — погружаем в воду.</p>
+        <div class="anim-strip water-strip" aria-hidden="true">
+          <div class="water-fill"></div>
+          <div class="water-surface"></div>
+          <div class="spring-top dip" style="height:40px;"></div>
+          <div class="hang-mass dip" style="top:48px;"></div>
+          <div class="anim-label">груз на пружине опускается в воду — пружина укорачивается</div>
+        </div>
+        <p>В воздухе пружина растянута на x&#8321;&nbsp;=&nbsp;0.05&nbsp;м при жёсткости k&nbsp;=&nbsp;1000&nbsp;Н/м — значит, истинный вес груза:</p>
+        <div class="eq"><div class="eq-body">P = k&middot;x&#8321; = 1000&middot;0.05 = <strong>50&nbsp;Н</strong></div><div class="eq-tag">(3)</div></div>
+        <p>Погружаем груз в воду целиком — пружина укорачивается до x&#8322;&nbsp;=&nbsp;0.03&nbsp;м (кажущийся вес P<sub>каж</sub>&nbsp;=&nbsp;1000&middot;0.03&nbsp;=&nbsp;30&nbsp;Н). Разница — это и есть прямое измерение выталкивающей силы:</p>
+        <div class="eq"><div class="eq-body">F<sub>выт</sub> = P &minus; P<sub>каж</sub> = 50 &minus; 30 = <strong>20&nbsp;Н</strong></div><div class="eq-tag">(4)</div></div>
+        <p>А из F<sub>выт</sub>&nbsp;=&nbsp;&rho;gV можно тут же вычислить объём груза, ничего не измеряя линейкой:</p>
+        <div class="eq"><div class="eq-body">V = F<sub>выт</sub>/(&rho;g) = 20/(1000&middot;10) = <strong>0.002&nbsp;м&sup3;</strong> (2&nbsp;л)</div><div class="eq-tag">(5)</div></div>
+        <p>Это ровно тот же метод, которым (по легенде) Архимед уличил ювелира: измерить объём тела сложной формы через вытеснение, не разбирая его на части — только здесь пружинные весы делают это ещё и без ванны, переливающейся через край.</p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">§6</span><h2>Куда это ведёт: атомные пружинки и давление</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Закон Гука — не просто удобное приближение для инженеров, а следствие того, что химические связи между атомами твёрдого тела ведут себя как крошечные пружинки: при малом смещении атома из положения равновесия потенциальная энергия связи растёт квадратично (как у идеальной пружины), значит возвращающая сила — линейно, ровно закон Гука. Модуль Юнга E — макроскопическое усреднение жёсткости миллиардов таких атомных связей.</p>
+        <p>Закон Архимеда, в свою очередь, — прямое следствие того, что давление в жидкости растёт с глубиной (более высокий столб жидкости давит сильнее). Разница давлений на нижнюю и верхнюю грани погружённого тела и создаёт результирующую силу, направленную вверх — это не отдельный постулат, а следствие законов гидростатики. Более глубокая связь этих же идей с течением жидкости — в следующей заметке серии, про уравнение Бернулли.</p>
+        <p>На сайте это отдельные законы, если хочется пройти глубже:</p>
+        <p style="max-width:680px">
+          <a href="/lang/ru/laws/hookes_law.html">Закон Гука</a> ·
+          <a href="/lang/ru/laws/archimedes_principle.html">Закон Архимеда</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">§7</span><h2>Эксперимент дома</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; резинка вместо пружинных весов</span>
+          <p>Возьмите канцелярскую резинку, отметьте на ней исходную длину, подвесьте груз известной массы (например, пакетик с монетами) и измерьте, насколько резинка растянулась. Добавьте вдвое больше монет.</p>
+          <p><span class="qlabel">Что заметить</span> при удвоенном грузе резинка растянется примерно вдвое больше (пока не вышла за предел упругости резины) — прямая проверка закона Гука подручными средствами: F&nbsp;&prop;&nbsp;x.</p>
+        </div>
+        <div class="callout moss">
+          <span class="tag">🧪 Эксперимент дома &middot; тонущее и плавающее яйцо</span>
+          <p>Опустите сырое яйцо в стакан с обычной водопроводной водой — оно утонет. Затем растворите в воде несколько столовых ложек соли (размешивайте, пока не перестанет растворяться) и снова опустите яйцо.</p>
+          <p><span class="qlabel">Что заметить</span> в солёной воде яйцо всплывает (или зависает в толще воды) — растворённая соль повышает плотность воды &rho;, а значит и выталкивающую силу F<sub>выт</sub>&nbsp;=&nbsp;&rho;gV при том же объёме яйца, пока она не сравняется с весом яйца. Тот же эффект держит купальщиков на поверхности Мёртвого моря без усилий.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">§8</span><h2>Задачи для проверки</h2></div>
+      <hr class="rule"/>
+      <div class="measure">
+        <p>Сначала подумайте сами, затем откройте решение. Решение везде идёт по схеме: <strong>Дано → Закон → Решение → Ответ</strong>.</p>
+        <details class="problem">
+          <summary>1. Пружина жёсткостью 300 Н/м растянута силой 15 Н. На сколько она удлинилась?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> k&nbsp;=&nbsp;300&nbsp;Н/м, F&nbsp;=&nbsp;15&nbsp;Н.</p>
+            <p><span class="qlabel">Закон</span> закон Гука (§2): F&nbsp;=&nbsp;kx.</p>
+            <p><span class="qlabel">Решение</span> x&nbsp;=&nbsp;F/k&nbsp;=&nbsp;15/300&nbsp;=&nbsp;0.05&nbsp;м.</p>
+            <p><span class="qlabel">Ответ</span> <strong>5 см</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>2. Кубик объёмом 0.001 м³ (10×10×10 см) полностью погружён в масло плотностью 800 кг/м³. Найдите выталкивающую силу.</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> V&nbsp;=&nbsp;0.001&nbsp;м&sup3;, &rho;&nbsp;=&nbsp;800&nbsp;кг/м&sup3;, g&nbsp;&asymp;&nbsp;10&nbsp;м/с&sup2;.</p>
+            <p><span class="qlabel">Закон</span> закон Архимеда (§4): F<sub>выт</sub>&nbsp;=&nbsp;&rho;gV.</p>
+            <p><span class="qlabel">Решение</span> F<sub>выт</sub>&nbsp;=&nbsp;800&middot;10&middot;0.001&nbsp;=&nbsp;8&nbsp;Н.</p>
+            <p><span class="qlabel">Ответ</span> <strong>8 Н</strong>.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>3. Деревянный брусок массой 0.72 кг и объёмом 0.001 м³ бросили в воду (плотность 1000 кг/м³). Всплывёт он или утонет? (g ≈ 10 м/с²)</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> m&nbsp;=&nbsp;0.72&nbsp;кг, V&nbsp;=&nbsp;0.001&nbsp;м&sup3;, &rho;<sub>воды</sub>&nbsp;=&nbsp;1000&nbsp;кг/м&sup3;.</p>
+            <p><span class="qlabel">Закон</span> сравнение веса тела P&nbsp;=&nbsp;mg с максимальной выталкивающей силой F<sub>выт</sub>&nbsp;=&nbsp;&rho;gV (§4) — эквивалентно сравнению плотностей.</p>
+            <p><span class="qlabel">Решение</span> &rho;<sub>бруска</sub>&nbsp;=&nbsp;m/V&nbsp;=&nbsp;0.72/0.001&nbsp;=&nbsp;720&nbsp;кг/м&sup3; &lt; 1000&nbsp;кг/м&sup3;.</p>
+            <p><span class="qlabel">Ответ</span> <strong>всплывёт</strong> — плотность бруска меньше плотности воды (типично для дерева).</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>4. Пружинные весы в воздухе показывают вес груза 80 Н, а после погружения груза в воду — 60 Н. Найдите объём груза (ρ воды = 1000 кг/м³, g ≈ 10 м/с²).</summary>
+          <div class="answer">
+            <p><span class="qlabel">Дано</span> P&nbsp;=&nbsp;80&nbsp;Н, P<sub>каж</sub>&nbsp;=&nbsp;60&nbsp;Н.</p>
+            <p><span class="qlabel">Закон</span> метод §5: F<sub>выт</sub>&nbsp;=&nbsp;P&nbsp;&minus;&nbsp;P<sub>каж</sub>, затем V&nbsp;=&nbsp;F<sub>выт</sub>/(&rho;g).</p>
+            <p><span class="qlabel">Решение</span> F<sub>выт</sub>&nbsp;=&nbsp;80&nbsp;&minus;&nbsp;60&nbsp;=&nbsp;20&nbsp;Н; V&nbsp;=&nbsp;20/(1000&middot;10)&nbsp;=&nbsp;0.002&nbsp;м&sup3;.</p>
+            <p><span class="qlabel">Ответ</span> <strong>0.002 м³ (2 литра)</strong> — объём измерен без единого прямого замера линейкой.</p>
+          </div>
+        </details>
+        <details class="problem">
+          <summary>5. Почему при слишком сильном растяжении закон Гука перестаёт предсказывать поведение пружины? Что происходит на атомном уровне?</summary>
+          <div class="answer">
+            <p><span class="qlabel">Закон</span> предел упругости (§3, §6).</p>
+            <p><span class="qlabel">Решение</span> закон Гука верен, пока смещение атомов из положения равновесия мало́ и потенциальная энергия связи хорошо приближается параболой (квадратичной функцией) — при больших смещениях реальная форма потенциала отклоняется от параболы, связи начинают рваться или необратимо перестраиваться (пластическая деформация), и линейная зависимость F от x перестаёт работать.</p>
+            <p><span class="qlabel">Ответ</span> <strong>атомные связи выходят за область, где потенциал похож на параболу</strong> — приближение, лежащее в основе закона Гука, перестаёт быть точным.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="feedback-box">
+      <span class="label">Нашли неточность?</span>
+      <p>Опечатка, неверная формула, число не сходится, коряво объяснено — напишите нам:
+      <a href="mailto:feedback@bridge42worlds.org?subject=Elasticity%20Archimedes%20article">feedback@bridge42worlds.org</a>.
+      Каждое сообщение реально читается, разбирается и по нему вносится правка — это не «в стол».</p>
+    </div>
+
+    <footer>
+      <p>bridge42worlds &middot; «учебное пособие» к слою законов &middot; часть VIII серии, механика сплошных сред</p>
+    </footer>
+  </main>
+
+</div>
+<script>
+(function(){
+  // §2: пружина + груз — честная гармоническая осцилляция x(t)=A·cos(ωt), не CSS-заглушка.
+  var coil = document.querySelector('.spring-coil');
+  var mass = document.querySelector('.spring-mass');
+  var springReadout = document.querySelector('[data-readout="spring"]');
+  var WALL_X = 26, REST_LEN = 90, AMP = 40, PERIOD_MS = 6000;
+  var PX_PER_M = 800; // масштаб для читаемого числа x в метрах на этой полосе
+  function tickSpring(ts){
+    var phase = (ts % PERIOD_MS) / PERIOD_MS * 2 * Math.PI;
+    var stretchPx = AMP * Math.cos(phase); // растяжение/сжатие вокруг длины покоя, честно по cos(ωt)
+    var len = REST_LEN + stretchPx;
+    coil.style.width = len + 'px';
+    mass.style.left = (WALL_X + len) + 'px';
+    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' м';
+    requestAnimationFrame(tickSpring);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickSpring);
+
+  // §5: груз на пружине опускается в воду и виснет ниже (пружина короче под меньшим кажущимся весом).
+  var springTop = document.querySelector('.spring-top');
+  var hangMass = document.querySelector('.hang-mass');
+  var TOP_Y = 8, AIR_LEN = 55, WATER_LEN = 35, DIP_PERIOD = 6000;
+  function tickDip(ts){
+    var phase = (ts % DIP_PERIOD) / DIP_PERIOD; // 0..1 по циклу
+    // первая половина цикла — опускание в воду и подъём обратно, с паузами на концах (держим темп сайта)
+    var t = phase < 0.4 ? phase / 0.4 : (phase < 0.6 ? 1 : (phase < 1 ? 1 - (phase - 0.6) / 0.4 : 0));
+    var len = AIR_LEN + (WATER_LEN - AIR_LEN) * t;
+    springTop.style.height = len + 'px';
+    springTop.style.top = TOP_Y + 'px';
+    hangMass.style.top = (TOP_Y + len) + 'px';
+    requestAnimationFrame(tickDip);
+  }
+  if (window.requestAnimationFrame) requestAnimationFrame(tickDip);
+})();
+</script>
+</body>
+</html>
