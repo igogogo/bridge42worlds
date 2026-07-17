@@ -1288,6 +1288,15 @@ footer {
     padding-top: 14px; font-size: 12px; color: var(--soft); text-align: center;
 }
 footer a { color: var(--soft); }
+/* Значок-ссылка на внутренний дашборд статистики (status.html) — юзер-фидбек 2026-07-17:
+   "пристрой ссылку... иконка с цифрой 42" (обыгрывает bridge42worlds). Публичная страница,
+   не в .gitignore — просто неприметный значок в подвале, не пункт меню. */
+.status-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border);
+    font-size: 10px; font-weight: 600; vertical-align: middle; text-decoration: none;
+}
+.status-badge:hover { border-color: var(--link); color: var(--link); }
 
 /* ── Mobile ───────────────────── */
 @media (max-width: 640px) {

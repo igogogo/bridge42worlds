@@ -1933,14 +1933,37 @@ def generate_archive_page(lang):
 
 
 def generate_status_page():
-    """status.html — дашборд состояния системы (статьи по языкам/дням, покрытие переводами, счётчики)."""
+    """status.html — дашборд состояния системы (статьи по языкам/дням/разделам, экспресс vs
+    полные, источник обложек + оценка расхода на них, очередь bulk-generate, счётчики)."""
     total = 0
     langs_have = {l: 0 for l in LANGUAGES}
     by_day = {}
+    by_cat = {}
+    express_n = full_n = 0
+    img_pdf_n = img_ai_n = img_pending_n = img_none_n = 0
+    ai_model_counts = {}
+    known_ids = set()
     incomplete = 0
     for data, folder in iter_articles():
         total += 1
+        known_ids.add(data.get("id", ""))
         by_day[data.get("date", "?")] = by_day.get(data.get("date", "?"), 0) + 1
+        cat = data.get("primary_category") or (data.get("categories") or ["?"])[0]
+        by_cat[cat] = by_cat.get(cat, 0) + 1
+        if data.get("express"):
+            express_n += 1
+        else:
+            full_n += 1
+        model = data.get("image_model")
+        if model:
+            img_ai_n += 1
+            ai_model_counts[model] = ai_model_counts.get(model, 0) + 1
+        elif (folder / "ai.jpg").exists():
+            img_pdf_n += 1
+        elif data.get("image_pending"):
+            img_pending_n += 1
+        else:
+            img_none_n += 1
         for l in LANGUAGES:
             if data.get("advanced", {}).get(l):
                 langs_have[l] += 1
@@ -1954,13 +1977,51 @@ def generate_status_page():
                     incomplete += 1
     tags_n = len(json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
         if Path("data/tags-graph.json").exists() else 0
+    laws_n = len(json.loads(Path(f"lang/{DEFAULT_LANG}/data/laws.json").read_text(encoding="utf-8"))) \
+        if Path(f"lang/{DEFAULT_LANG}/data/laws.json").exists() else 0
     sci_n = len(valid_scientist_ids())
     authors_n = len(json.loads(Path("data/authors-graph.json").read_text(encoding="utf-8"))) \
         if Path("data/authors-graph.json").exists() else 0
 
+    # Примерная цена картинок по модели (см. config.json agents.image*) — не точный биллинг,
+    # просто прикидка по счётчику картинок × известная цена за штуку у DeepInfra.
+    IMG_COST = {"black-forest-labs/FLUX-1-schnell": 0.002, "black-forest-labs/FLUX-2-pro": 0.015}
+    img_cost_est = sum(IMG_COST.get(m, 0.01) * n for m, n in ai_model_counts.items())
+
+    # Очередь bulk-generate — самый свежий data/bulk-select/*.json (кроме служебных arab-authors-*),
+    # "готово" = сколько его id уже реально сгенерены (есть в корпусе).
+    queue_html = ""
+    bulk_files = sorted(Path("data/bulk-select").glob("*.json")) if Path("data/bulk-select").exists() else []
+    bulk_files = [p for p in bulk_files if "arab-authors" not in p.name]
+    if bulk_files:
+        qdata = json.loads(bulk_files[-1].read_text(encoding="utf-8"))
+        ready = qdata.get("ready", [])
+        qdone = sum(1 for a in ready if a.get("id") in known_ids)
+        qtotal = len(ready)
+        qpct = round(100 * qdone / qtotal) if qtotal else 0
+        queue_html = (f'<h2>Очередь bulk-generate ({bulk_files[-1].name})</h2>'
+                      f'<div class="cards"><div class="card"><b>{qdone}/{qtotal}</b><span>готово · {qpct}%</span></div></div>'
+                      f'<div style="background:#eee;border-radius:6px;overflow:hidden;height:18px;margin:6px 0 14px">'
+                      f'<div style="width:{qpct}%;height:100%;background:#4a7c9b"></div></div>')
+
     def bar(v, mx, color):
         w = int(100 * v / mx) if mx else 0
         return f'<div style="background:#eee;border-radius:4px;overflow:hidden;height:14px"><div style="width:{w}%;height:100%;background:{color}"></div></div>'
+
+    def donut(parts):
+        """parts: [(label, value, color), ...] — CSS conic-gradient кольцо, без JS/библиотек."""
+        tot = sum(v for _, v, _ in parts) or 1
+        segs, acc = [], 0
+        for _, v, c in parts:
+            start, acc = acc, acc + v
+            segs.append(f'{c} {start / tot * 360:.1f}deg {acc / tot * 360:.1f}deg')
+        ring = f'<div style="width:84px;height:84px;border-radius:50%;background:conic-gradient({", ".join(segs)});flex-shrink:0"></div>'
+        legend = "".join(
+            f'<div style="display:flex;align-items:center;gap:6px;font-size:12px;margin:3px 0">'
+            f'<span style="width:10px;height:10px;border-radius:3px;background:{c};display:inline-block"></span>'
+            f'{label}: <b>{v}</b> ({round(100 * v / tot) if tot else 0}%)</div>'
+            for label, v, c in parts)
+        return f'<div style="display:flex;gap:16px;align-items:center;margin:10px 0">{ring}<div>{legend}</div></div>'
 
     cov_rows = ""
     for l in LANGUAGES:
@@ -1974,7 +2035,16 @@ def generate_status_page():
         day_rows += (f'<tr><td style="padding:3px 10px;color:#888">{d}</td>'
                      f'<td style="padding:3px 10px;width:220px">{bar(by_day[d], max_day, "#2e7d32")}</td>'
                      f'<td style="padding:3px 10px">{by_day[d]}</td></tr>')
+    top_cats = sorted(by_cat.items(), key=lambda kv: -kv[1])[:15]
+    max_cat = top_cats[0][1] if top_cats else 1
+    cat_rows = "".join(
+        f'<tr><td style="padding:3px 10px;color:#888">{ARXIV_CATEGORIES.get(c, c)}</td>'
+        f'<td style="padding:3px 10px;width:220px">{bar(n, max_cat, "#8e44ad")}</td>'
+        f'<td style="padding:3px 10px">{n}</td></tr>' for c, n in top_cats)
     warn = f'<p style="color:#b31b1b">⚠️ Недопечённых папок: {incomplete}</p>' if incomplete else '<p style="color:#2e7d32">✓ Недопечённых нет</p>'
+    tier_donut = donut([("экспресс", express_n, "#e67e22"), ("полные", full_n, "#2e7d32")])
+    img_donut = donut([("из PDF", img_pdf_n, "#2e7d32"), ("AI", img_ai_n, "#4a7c9b"),
+                        ("ждёт бюджета", img_pending_n, "#e67e22"), ("нет вообще", img_none_n, "#b31b1b")])
     html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Status — bridge42worlds</title>
 <style>body{{font-family:system-ui,Arial,sans-serif;max-width:760px;margin:0 auto;padding:30px 18px;color:#2c2c2c}}
@@ -1989,9 +2059,14 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 <div class="card"><b>{authors_n}</b><span>авторов</span></div>
 <div class="card"><b>{sci_n}</b><span>учёных</span></div>
 <div class="card"><b>{tags_n}</b><span>тегов</span></div>
+<div class="card"><b>{laws_n}</b><span>законов</span></div>
 <div class="card"><b>{len(LANGUAGES)}</b><span>языков</span></div>
 </div>
+{queue_html}
+<h2>Экспресс vs полные</h2>{tier_donut}
+<h2>Источник обложек (оценка расхода на AI: ${img_cost_est:.2f})</h2>{img_donut}
 <h2>Покрытие переводами</h2><table>{cov_rows}</table>
+<h2>По разделам arXiv (топ-15)</h2><table>{cat_rows}</table>
 <h2>Статьи по дням (последние 30)</h2><table>{day_rows}</table>
 <h2>Целостность</h2>{warn}
 </body></html>'''
