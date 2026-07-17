@@ -598,7 +598,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     nav_extra_items += [f'<li><a href="#feedback">{loc["feedback_nav"]}</a></li>',
                          f'<li><a href="#related">{loc["related_articles"]}</a></li>']
 
-    if version in SIMPLE_LIKE:
+    if version in SIMPLE_LIKE or scipop.get("express_locked"):
         if scipop.get("text"):
             paragraphs = [p.strip() for p in re.split(r'\n\s*\n', scipop["text"]) if p.strip()]
             text_html = "".join(_render_paragraph(p, lang) for p in paragraphs)
@@ -635,17 +635,18 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""))
 
     if scipop.get("express_locked"):
-        # Заглушка ("полная версия готовится") иначе не говорит, что вообще-то часть уровней
-        # уже готова — ссылка на реально существующий (не текущий) уровень строится на лету при
-        # рендере из article["express_tiers"], не при генерации (общая для всех статей заглушка).
+        # Показываем баннер сверху текста: "показана версия X, Y пока не готова" — текст уже
+        # реальный (тот же, что и у X), не generic-заглушка (см. express_locked_scipop).
         avail = [v for v in ("popular", "simple", "mini") if v in (article.get("express_tiers") or [])]
         if avail:
             target = avail[0]
-            tier_name = (MINI_VERSION_LABEL.get(lang, MINI_VERSION_LABEL["en"]) if target == "mini"
-                         else version_label(target, lang))
-            target_url = f'/{LANG_DIR}/{lang}/archive/{date_str}/{article["id"]}/{VERSION_FILES[target]}'
-            hint_tpl = EXPRESS_LOCKED_HINT.get(lang, EXPRESS_LOCKED_HINT["en"])
-            text_html += f'<p>{hint_tpl.format(tier=safe(tier_name), url=target_url)}</p>'
+            shown_name = (MINI_VERSION_LABEL.get(lang, MINI_VERSION_LABEL["en"]) if target == "mini"
+                          else version_label(target, lang))
+            locked_name = (MINI_VERSION_LABEL.get(lang, MINI_VERSION_LABEL["en"]) if version == "mini"
+                           else version_label(version, lang))
+            banner_tpl = EXPRESS_LOCKED_BANNER.get(lang, EXPRESS_LOCKED_BANNER["en"])
+            banner_html = f'<p class="express-locked-banner">{banner_tpl.format(shown=shown_name, locked=locked_name)}</p>'
+            text_html = banner_html + text_html
 
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions)
     ai_jpg = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"] / "ai.jpg"
@@ -789,14 +790,9 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
     url = f"/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/{VERSION_FILES[version]}"
     idx.append({
         "id": article["id"], "version": version,
-        # express-заглушка (express_locked_scipop) намеренно подменяет scipop["title"] на
-        # локализованный oneliner-плейсхолдер ("Полная версия готовится...") — верно для
-        # заголовка НА СТРАНИЦЕ статьи, но тот же title утекал в индекс, а mini-режим на
-        # главной читает индекс popular (js/search.js: effVersion()) — карточки express-
-        # статей в мини-виде показывали плейсхолдер вместо названия (юзер-фидбек 2026-07-16:
-        # "статьи в мини версии... полная версия готовится вместо названия"). В индексе всегда
-        # берём настоящее (исходное arXiv) название, плейсхолдер — только в теле страницы.
-        "title": article["title"] if scipop.get("express_locked") else scipop.get("title", article["title"]),
+        # express_locked_scipop больше не подменяет title заглушкой (юзер-фидбек 2026-07-17) —
+        # scipop["title"] всегда настоящий, локked-тиры отличаются только express_locked-баннером.
+        "title": scipop.get("title", article["title"]),
         "oneliner": strip_markers(scipop.get("oneliner", ""))[:300],
         "description": strip_markers(scipop.get("description", ""))[:300],
         "abstract": strip_markers(abstract)[:1500],
@@ -1198,61 +1194,38 @@ SIDE_SCI_LABEL = {"ru": "Учёные", "en": "Scientists", "zh": "科学家", "
 
 ABSTRACT_LABEL = {"ru": "Аннотация", "en": "Abstract", "zh": "摘要", "fr": "Résumé", "ar": "الملخّص"}
 
-# ── Экспресс-режим: заглушка для tier'ов, которые не входят в express.tiers ──
-# Клик на такую вкладку — сигнал интереса (см. logExpressInterest в likes.js), помогает
-# приоритизировать, какие статьи апгрейдить до полной версии (run.py regen <id>) в первую очередь.
-EXPRESS_LOCKED = {
-    "ru": {"oneliner": "Полная версия готовится",
-           "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в "
-                    "избранное — если её ждут, мы подготовим полную версию в первую очередь."},
-    "en": {"oneliner": "Full version coming soon",
-           "text": "Only a lightweight express version of this article exists right now. Add it "
-                    "to favorites — articles people are waiting for get the full treatment first."},
-    "es": {"oneliner": "Versión completa próximamente",
-           "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a "
-                    "favoritos — los artículos más esperados reciben antes el tratamiento completo."},
-    "zh": {"oneliner": "完整版本准备中",
-           "text": "目前只有这篇文章的精简速览版。收藏它——大家关注的文章会优先制作完整版本。"},
-    "fr": {"oneliner": "Version complète à venir",
-           "text": "Seule une version express allégée de cet article existe pour l'instant. "
-                    "Ajoutez-le aux favoris — les articles attendus sont complétés en priorité."},
-    "ar": {"oneliner": "النسخة الكاملة قيد الإعداد",
-           "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — "
-                    "المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا."},
-}
+# ── Экспресс-режим: locked-тиры (не входят в express.tiers) теперь показывают РЕАЛЬНЫЙ
+# контент уже готового тира (см. express_locked_scipop) + баннер сверху текста, а не заглушку
+# с generic-заголовком (юзер-фидбек 2026-07-17: "смущает, что название подменяется... лучше
+# оставить как у простой, но сверху написать это простой вариант"). Клик на locked-вкладку —
+# сигнал интереса (logExpressInterest в likes.js), помогает приоритизировать, какие статьи
+# апгрейдить (run.py regen <id>) первыми.
 
-# Подсказка со ссылкой на реально доступный уровень (mini/simple/popular — какой из них
-# express_tiers содержит), добавляется К тексту-заглушке EXPRESS_LOCKED при рендере (не при
-# генерации — заглушка одна и та же для всех статей, ссылка/URL подставляются на лету).
-EXPRESS_LOCKED_HINT = {
-    "ru": 'Сейчас доступна статья в изложении «{tier}» — <a href="{url}">открыть</a>.',
-    "en": 'Right now the article is available in "{tier}" mode — <a href="{url}">open it</a>.',
-    "zh": '目前该文章有"{tier}"版本可看 — <a href="{url}">打开</a>。',
-    "fr": 'L’article est disponible en version « {tier} » — <a href="{url}">l’ouvrir</a>.',
+# Баннер над текстом locked-тира: "показана версия X — Y пока не готова". {shown}/{locked} —
+# названия тиров подставляются на лету при рендере (article["express_tiers"] решает, какой тир
+# реально показан), сам баннер один и тот же для всех статей.
+EXPRESS_LOCKED_BANNER = {
+    "ru": '📄 Показана версия «{shown}» — «{locked}» пока не готова. Добавьте ★ в избранное, если хотите её ускорить.',
+    "en": '📄 Showing the "{shown}" version — "{locked}" is not ready yet. Add it to favorites to help prioritize it.',
+    "es": '📄 Mostrando la version "{shown}" — "{locked}" aun no esta lista. Anadelo a favoritos para ayudar a priorizarla.',
+    "zh": '📄 当前显示"{shown}"版本 — "{locked}"尚未准备好。收藏可以帮助优先制作。',
+    "fr": '📄 Version "{shown}" affichee, "{locked}" n est pas encore prete. Ajoutez-le aux favoris pour aider a la prioriser.',
+    "ar": '📄 معروضة نسخة «{shown}» — «{locked}» غير جاهزة بعد. أضفه إلى المفضّلة للمساعدة في تسريعها.',
+}
+EXPRESS_LOCKED_HINT_UNUSED_TOP = {
+    "ru": 'DEAD_START',
+    "fr": 'DEADCODE_UNUSED_IGNORE_’article est disponible en version « {tier} » — <a href="{url}">l’ouvrir</a>.',
     "ar": 'يتوفر المقال حاليًا بمستوى «{tier}» — <a href="{url}">فتحه</a>.',
 }
 
 
 def express_locked_scipop(base, lang):
-    """base — реальный express-результат (main_tag/extra_tags/scientists/mini сохраняем, иначе
-    сломается сайдбар/индекс/mini-версия); тело текста подменяем на «скоро полная версия».
-    ВАЖНО: advanced рендерится ИНАЧЕ, чем popular/simple/mini (gen_article_html: SIMPLE_LIKE
-    читает поле text, advanced — секции context/methods/... маркерами) — заполняем оба пути,
-    иначе на advanced-вкладке страница окажется пустой.
-    title ТОЖЕ переопределяем (раньше не трогали — комментарий говорил «title... сохраняем», но
-    base всегда RU-контент независимо от lang, на которую эта заглушка рендерится: на en/es
-    страницах title/<h1> молча оставался русским, хотя весь остальной текст уже был на языке
-    страницы) — берём тот же локализованный oneliner, что и в тексте, не настоящий заголовок."""
-    loc = EXPRESS_LOCKED.get(lang, EXPRESS_LOCKED["en"])
-    return {
-        **base,
-        "title": loc["oneliner"], "oneliner": loc["oneliner"], "description": "", "text": loc["text"],
-        "fun_fact": "", "scifi": "", "formulas": [], "key_numbers": {},
-        "context": loc["text"], "methods": "", "results": "", "implications": "",
-        "future_development": "", "impact_on": "", "next_steps": "", "key_problems_connection": "",
-        "threads": base.get("mini", "") or base.get("threads", ""),
-        "express_locked": True,
-    }
+    """base - realny kontent uzhe gotovogo tira (obychno express-rezultat, simple-formy).
+    Ranshe podmenyala VES kontent na generic-zaglushku - yuzer-fidbek 2026-07-17: nazvanie
+    ne dolzhno podmenyatsya, pokazyvaem realny kontent. Teper prosto pomechaet locked-flagom,
+    realny kontent ostayotsya kak est - gen_article_html renderit ego cherez SIMPLE_LIKE-vetku
+    (dazhe dlya nominalno advanced/popular) i dobavlyaet banner-uvedomlenie sverhu teksta."""
+    return {**base, "express_locked": True}
 
 
 def laws_for_tag(tag_id, lang):
