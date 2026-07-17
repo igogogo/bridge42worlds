@@ -833,6 +833,11 @@ function initCalendar() {
         var head = t.closest ? t.closest('.cal-head') : null;
         if (head) { var sub = head.nextElementSibling; if (sub) { sub.hidden = !sub.hidden; head.classList.toggle('open', !sub.hidden); } }
     };
+    document.addEventListener('click', function(e) {
+        if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+            panel.classList.remove('open');
+        }
+    });
 }
 window.initCalendar = initCalendar;
 
@@ -1073,6 +1078,26 @@ function collapseNavOverflow() {
     });
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
+
+// ── Поиск на главной — свёрнут в 🔍-кнопку рядом с 📅 (тот же паттерн выпадашки) ──────────
+// Юзер-фидбек 2026-07-17: поле+подсказка+фильтр экспресс-статей были 2 постоянно открытые
+// строки. Кнопка/панель уже отрендерены сервером (templates/index.html) — тут только клик-
+// логика, независимая от загрузки searchIndex (в отличие от initCalendar/initCategoryBar).
+function initSearchToggle() {
+    var btn = document.getElementById('search-toggle-btn');
+    var panel = document.getElementById('search-panel');
+    if (!btn || !panel) return;
+    btn.onclick = function() {
+        var open = panel.classList.toggle('open');
+        if (open) { var input = panel.querySelector('.search-box'); if (input) input.focus(); }
+    };
+    document.addEventListener('click', function(e) {
+        if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+            panel.classList.remove('open');
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', initSearchToggle);
 
 // ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
 // Всегда развёрнут целиком в шапке (без попапа). Один обработчик для ВСЕХ типов страниц.

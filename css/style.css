@@ -499,6 +499,25 @@ html[dir="rtl"] .vs-dot:nth-child(6) { left: 0%; }
 .cal-day sup { font-size: 8px; color: var(--soft); margin-left: 1px; }
 .cal-day:hover sup { color: #e0e0e0; }
 
+/* ── Search (collapsed into icon, main) ── */
+/* Юзер-фидбек 2026-07-17: поиск раньше был 2 постоянно открытые строки (поле+подсказка+фильтр
+   экспресс) — свёрнут в 🔍-кнопку рядом с 📅, тем же паттерном выпадашки. */
+.hdr-icons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.search-bar { position: relative; flex-shrink: 0; }
+.search-panel {
+    display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 20;
+    width: 320px; max-width: 80vw; text-align: left;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.search-panel.open { display: block; }
+.search-panel .search-row { max-width: none; margin-bottom: 8px; }
+.search-panel .search-hint { margin-bottom: 8px; }
+.search-panel .express-filter { max-width: none; margin: 0; }
+/* В RTL .hdr-icons едет к левому краю строки (флекс мирится сам) — правый анкер (right:0)
+   уносит 320px-панель за левый край экрана. Левый анкер держит её на видимой части страницы. */
+html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; left: 0; }
+
 /* ── Category filter chips (main) ── */
 /* Раньше — крупные плашки-пилюли (border+background каждая), занимали 2-3 строки. Теперь — плоский
    текстовый список через « · », как «Связанные X» на тегах/законах: видно, что это разделы, но
@@ -555,8 +574,8 @@ html[dir="rtl"] .vs-dot:nth-child(6) { left: 0%; }
 .section-title { margin: 28px 0 10px; font-size: 19px; font-weight: 600; }
 
 /* ── Languages ────────────────── */
-/* На главной язык-бар и календарь делят одну строку — календарь (редко нужен) едет вправо,
-   а не отдельной заметной центрированной строкой, как раньше. */
+/* На главной язык-бар делит строку с иконками поиска (🔍) и календаря (📅, .hdr-icons) —
+   обе редко нужны сами по себе, едут вправо, не занимают отдельные заметные строки. */
 .langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .langs { display: flex; flex-wrap: wrap; }
 .langs a {
