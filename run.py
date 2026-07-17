@@ -497,7 +497,7 @@ def cmd_author(args):
 def cmd_images(args):
     import generate
     if not args.refs_only:
-        generate.backfill_images(force=args.force)
+        generate.backfill_images(force=args.force, gen_images=args.gen_images, preset=args.preset)
         generate.regenerate_all_html()
     if not args.articles_only:
         generate.backfill_tag_law_images(force=args.force, gen_images=args.gen_images, preset=args.preset)

@@ -2827,35 +2827,57 @@ def backfill_abstracts(force=False):
     print(f"  ✅ Аннотаций: {n}")
 
 
-def backfill_images(force=False):
+def backfill_images(force=False, gen_images=False, preset="image_cheap"):
     """Бэкфилл обложек статей — ai.jpg = крупнейшая картинка из самого PDF (см. pick_cover_image),
-    не FLUX. Ищет уже сохранённые PDF-картинки в папке статьи (0.jpg, 1.jpg, ... — так их
-    называет save_images) и берёт самую крупную по площади."""
-    print("  🖼️ Бэкфилл обложек статей (источник — картинки из PDF, не AI-генерация)")
+    не FLUX, БЕСПЛАТНО. Ищет уже сохранённые PDF-картинки в папке статьи (0.jpg, 1.jpg, ... — так
+    их называет save_images) и берёт самую крупную по площади.
+
+    Если в PDF картинок вообще не было (~35% корпуса, юзер-фидбек 2026-07-17: "структура не
+    должна теряться в списках и на карточках") — фоллбэк на дешёвую AI-генерацию (FLUX-1-schnell
+    по умолчанию, ~$0.002/картинка), тем же паттерном, что и backfill_tag_law_images: без ключа
+    или без gen_images=True картинку не генерим, только честно метим data["image_pending"]=True
+    (карточка не ломается — .ai-cover-ph placeholder), gen_images=True реально тратит бюджет и
+    записывает data["image_model"], чтобы дешёвые можно было потом точечно апгрейднуть."""
+    has_key = bool(os.environ.get("DEEPINFRA_API_KEY", "")) and gen_images
+    print(f"  🖼️ Бэкфилл обложек статей (PDF, бесплатно; AI-фоллбэк: "
+          f"{'да, preset=' + preset if has_key else 'НЕТ — только честная пометка pending'})")
 
     def one(item):
         data, folder = item
         img = folder / "ai.jpg"
         if img.exists() and not force:
-            return False
+            return False, False
         pdf_images = sorted((p for p in folder.glob("*.jpg") if p.stem.isdigit()), key=lambda p: int(p.stem))
         cover = pick_cover_image([str(p) for p in pdf_images])
-        got_img = False
+        got_img = via_ai = False
         if cover:
             shutil.copy(cover, img)
             got_img = True
+        elif has_key:
+            scipop = (data.get("popular", {}).get(DEFAULT_LANG) or data.get("simple", {}).get(DEFAULT_LANG)
+                      or data.get("advanced", {}).get(DEFAULT_LANG) or {})
+            prompt = generate_image_prompt(scipop)
+            if prompt:
+                got_img, model_used = generate_image(prompt, img, preset=preset)
+                if got_img:
+                    data["image_pending"] = False
+                    data["image_model"] = model_used
+                    via_ai = True
+        if not got_img and not cover:
+            data["image_pending"] = True
         nthumbs = make_thumbnails(folder)  # t_ai + до 2 PDF — обновляем всегда
-        if data.get("thumbs") != nthumbs:
+        if data.get("thumbs") != nthumbs or via_ai or (not got_img and not cover):
             data["thumbs"] = nthumbs
             (folder / "data.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"    · {data['id']} (обложка={'ok' if got_img else '—'}, миниатюр PDF={nthumbs})")
-        return got_img
+        print(f"    · {data['id']} (обложка={'ok' if got_img else '—'}{' (AI)' if via_ai else ''}, миниатюр PDF={nthumbs})")
+        return got_img, via_ai
 
     items = list(iter_articles())
     with ThreadPoolExecutor(max_workers=min(10, len(items) or 1)) as ex:
         results = list(ex.map(one, items))
-    n_img = sum(1 for i in results if i)
-    print(f"  ✅ Обложек: {n_img}")
+    n_img = sum(1 for i, _ in results if i)
+    n_ai = sum(1 for _, a in results if a)
+    print(f"  ✅ Обложек: {n_img} (из них AI-фоллбэк: {n_ai})")
 
 
 def entity_image_url(kind, entity_id):
