@@ -1017,6 +1017,63 @@ function localizeStaticUI() {
 }
 document.addEventListener('DOMContentLoaded', localizeStaticUI);
 
+// ── Сворачивание меню в «…» на языках, где шапка не помещается в 680px ──────
+// Юзер-фидбек 2026-07-17: на es/ar (более длинные названия пунктов) шапка переносится на
+// 2 строки — контенту нужно ~728px, а .top-bar зажат в 680px. Решили не трогать общую
+// ширину шапки, а спрятать часть меню за кнопкой «…» — main/theory/★ остаются на виду,
+// tags/laws/scientists/authors/graph уходят в выпадашку. Сделано через JS (переносит уже
+// существующие <a> внутрь новой обёртки), а не правкой всех 13 шаблонов — тот же приём,
+// что и в localizeStaticUI выше: работает мгновенно на уже сгенерённых страницах.
+function collapseNavOverflow() {
+    var nav = document.querySelector('.nav-links');
+    if (!nav || nav.dataset.navCollapsed) return;
+    nav.dataset.navCollapsed = '1';
+    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/authors/', '/graph/'];
+    var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+    var toCollapse = links.filter(function(a) {
+        var href = a.getAttribute('href') || '';
+        return collapsiblePatterns.some(function(p) { return href.indexOf(p) !== -1; });
+    });
+    if (toCollapse.length < 2) return;  // нечего сворачивать — не создаём пустую кнопку
+
+    var wrap = document.createElement('div');
+    wrap.className = 'nav-more';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav-more-btn';
+    btn.textContent = '⋯';
+    btn.setAttribute('aria-label', 'More');
+    var panel = document.createElement('div');
+    panel.className = 'nav-more-panel';
+
+    var hasActive = false;
+    toCollapse.forEach(function(a) {
+        if (a.classList.contains('active')) hasActive = true;
+        panel.appendChild(a);  // appendChild ПЕРЕМЕЩАЕТ узел — из старого родителя убирается сам
+    });
+    if (hasActive) btn.classList.add('active');
+
+    wrap.appendChild(btn);
+    wrap.appendChild(panel);
+    // Вставляем туда, где раньше начинались схлопнутые пункты — сразу после первого
+    // оставшегося видимым пункта (main), чтобы порядок main → «…» → theory → ★ не прыгал.
+    var firstRemaining = nav.querySelector('a');
+    if (firstRemaining && firstRemaining.nextSibling) {
+        nav.insertBefore(wrap, firstRemaining.nextSibling);
+    } else {
+        nav.appendChild(wrap);
+    }
+
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        wrap.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+        if (!wrap.contains(e.target)) wrap.classList.remove('open');
+    });
+}
+document.addEventListener('DOMContentLoaded', collapseNavOverflow);
+
 // ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
 // Всегда развёрнут целиком в шапке (без попапа). Один обработчик для ВСЕХ типов страниц.
 // Точки внутри — либо <button data-version> (JS-переключение: главная/ленты/теги/законы/
@@ -1033,11 +1090,15 @@ document.addEventListener('DOMContentLoaded', function() {
     var dots = Array.prototype.slice.call(wrap.querySelectorAll('.vs-dot'));
     if (!dots.length) return;
     var isLinkMode = dots[0].tagName === 'A';
+    // RTL: .vs-dot позиции уже зеркалятся в CSS (html[dir=rtl] .vs-dot:nth-child(N)), .vs-fill растёт
+    // от right вместо left (CSS). Бегунок же двигается через inline style.left из JS — простое зеркало
+    // числа (100-pct) даёт тот же эффект без необходимости менять anchor/transform под right.
+    var isRTL = document.documentElement.getAttribute('dir') === 'rtl';
 
     function paint(idx) {
         var pct = dots.length > 1 ? (idx / (dots.length - 1) * 100) : 0;
         if (fill) fill.style.width = pct + '%';
-        if (thumb) thumb.style.left = pct + '%';
+        if (thumb) thumb.style.left = (isRTL ? 100 - pct : pct) + '%';
         dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
         if (currentLabelEl) currentLabelEl.textContent = dots[idx].dataset.label;
     }
@@ -1088,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
             return Math.max(0, Math.min(1, x / rect.width));
         }
-        function nearestIdx(pct) { return Math.round(pct * (dots.length - 1)); }
+        function nearestIdx(pct) { return Math.round((isRTL ? 1 - pct : pct) * (dots.length - 1)); }
         function onMove(e) { if (dragging) setActive(dots[nearestIdx(pctFromEvent(e))].dataset.version, true); }
         function onDown(e) { dragging = true; onMove(e); if (e.cancelable) e.preventDefault(); }
         function onUp() { dragging = false; }

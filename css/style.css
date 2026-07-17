@@ -370,6 +370,25 @@ body {
 .nav-links a:hover { color: var(--text); }
 .nav-links a.active { color: var(--text); font-weight: 600; border-bottom-color: var(--link); }
 
+/* «…» — сворачивает tags/laws/scientists/authors/graph, когда меню не помещается в 680px
+   (собирается JS'ом, см. collapseNavOverflow в search.js — main/theory/★ остаются на виду). */
+.nav-more { position: relative; }
+.nav-more-btn {
+    color: var(--soft); background: none; border: none; cursor: pointer; font-family: inherit;
+    font-size: 13px; padding: 2px 0; border-bottom: 2px solid transparent; line-height: 1;
+}
+.nav-more-btn:hover, .nav-more-btn.active { color: var(--text); }
+.nav-more-panel {
+    display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 20;
+    min-width: 140px; flex-direction: column; gap: 2px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.nav-more.open .nav-more-panel { display: flex; }
+.nav-more-panel a { padding: 6px 10px; border-radius: 6px; border-bottom: none; }
+.nav-more-panel a:hover { background: var(--card-bg); }
+html[dir="rtl"] .nav-more-panel { left: auto; right: 0; }
+
 /* ── Version slider (бегунок сложности) ───────────────
    Всегда развёрнут целиком в шапке — не попап (было — юзер попросил убрать клик-открытие).
    Точки — <button> (JS-режим, главная/ленты/теги/законы/учёные) или <a href> (режим навигации
@@ -383,6 +402,11 @@ body {
 
 .vs-track { position: relative; width: 90px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 10px; }
 .vs-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: var(--link); transition: width 0.18s ease; }
+/* RTL: заливка растёт от "начала" чтения (справа), не от физического left — иначе выглядит так,
+   будто прогресс идёт в обратную сторону. .vs-thumb зеркалится в JS (search.js), не тут, — там
+   ещё центрирующий transform, который при простой смене left→right пришлось бы тоже инвертировать;
+   проще передать в тот же left уже зеркальный процент. */
+html[dir="rtl"] .vs-fill { left: auto; right: 0; }
 .vs-thumb {
     position: absolute; top: 50%; width: 15px; height: 15px; border-radius: 50%;
     background: var(--link); border: 2px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,0.3);
@@ -398,6 +422,14 @@ body {
 .vs-dot:nth-child(4) { left: 33.33%; }
 .vs-dot:nth-child(5) { left: 66.67%; }
 .vs-dot:nth-child(6) { left: 100%; }
+/* RTL (ar): прогрессия "просто→сложно" должна визуально идти справа-налево (справа = "начало"
+   чтения), а не left:X% как в LTR — иначе точки/заливка/бегунок ползут в физически неверную
+   сторону относительно направления письма. Зеркалим статичные позиции точек; .vs-fill/.vs-thumb
+   зеркалятся отдельно (right вместо left) — .vs-fill в CSS ниже, .vs-thumb в JS (search.js). */
+html[dir="rtl"] .vs-dot:nth-child(3) { left: 100%; }
+html[dir="rtl"] .vs-dot:nth-child(4) { left: 66.67%; }
+html[dir="rtl"] .vs-dot:nth-child(5) { left: 33.33%; }
+html[dir="rtl"] .vs-dot:nth-child(6) { left: 0%; }
 .vs-dot:hover::after { opacity: 1; }
 .vs-dot::after {
     content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px;

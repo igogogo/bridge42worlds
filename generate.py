@@ -691,7 +691,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     jsonld_html = build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_for(abstract, lang, "advanced"))
 
     return tpl.substitute(
-        lang=lang, site_name=SITE_NAME, site_url=SITE_URL, goatcounter=GOATCOUNTER,
+        lang=lang, dir=dir_for(lang), site_name=SITE_NAME, site_url=SITE_URL, goatcounter=GOATCOUNTER,
         authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         clickbait=safe(scipop.get("title", article["title"])),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
@@ -901,7 +901,7 @@ def generate_index_page(lang):
     about_title = {"ru": "О проекте", "en": "About this site", "zh": "关于本站",
                    "fr": "À propos", "ar": "عن الموقع"}.get(lang, "About this site")
     html = tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         loading_text=safe(loc["loading"]), footer_text=safe(loc["footer"]),
         intro_html=loc["intro"], calendar_title=safe(calendar_title), about_title=safe(about_title),
@@ -929,7 +929,7 @@ def generate_about_page(lang):
                "footer": "العلم ببساطة"}
     }.get(lang, {"title": "About", "body": "", "footer": ""})
     (Path(LANG_DIR) / lang / "about.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         title=safe(loc["title"]), body=safe(loc["body"]), footer_text=safe(loc["footer"])
     ), encoding="utf-8")
@@ -983,7 +983,7 @@ def generate_tags_cloud(lang):
             tag_row(t, "educational" if graph.get(t, {}).get("educational") else "") for t in ids)
 
     (Path(LANG_DIR) / lang / "tags" / "index.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         tags_title=safe(loc["title"]), tags_subtitle=safe(loc["subtitle"]),
         footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html,
@@ -1085,7 +1085,7 @@ def generate_tag_page(tag_id, lang):
         f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tag_id}.html", tag_img_url and f"{SITE_URL}{tag_img_url}")
 
     (Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         og_meta_html=og_meta_html,
         tag_id=attr_safe(tag_id),
         tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
@@ -1299,7 +1299,7 @@ def generate_laws_cloud(lang):
         cloud += "".join(law_row(lid) for lid in sorted(by_type[t], key=lambda x: laws[x].get("name", x)))
     (Path(LANG_DIR) / lang / "laws").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "laws" / "index.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         laws_title=safe(loc["title"]), laws_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]),
@@ -1402,7 +1402,7 @@ def generate_law_page(law_id, lang):
         f"{SITE_URL}/{LANG_DIR}/{lang}/laws/{law_id}.html", law_img_url and f"{SITE_URL}{law_img_url}")
 
     (Path(LANG_DIR) / lang / "laws" / f"{law_id}.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         og_meta_html=og_meta_html,
         law_name=safe(L.get("name", law_id)), law_type=safe(L.get("type", "")),
         ai_cover_html=ai_cover_html,
@@ -1506,7 +1506,7 @@ def generate_knowledge_graph_page(lang):
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
     (Path(LANG_DIR) / lang / "graph").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "graph" / "index.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         graph_title=safe(loc["title"]), graph_subtitle=safe(loc["subtitle"]),
         nodes_label=safe(loc["nodes"]), edges_label=safe(loc["edges"]), presets_label=safe(loc["presets"]),
@@ -1574,7 +1574,7 @@ def generate_scientists_cloud(lang):
                "search": "ابحث عن علماء...", "footer": "العلم ببساطة"}
     }.get(lang, {"title": "Scientists", "subtitle": "", "search": "Find...", "footer": ""})
     (Path(LANG_DIR) / lang / "scientists" / "index.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         scientists_title=safe(loc["title"]), scientists_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]), scientists_cloud_html=cloud_html,
@@ -1654,7 +1654,7 @@ def generate_scientist_page(sid, lang):
         f"{SITE_URL}/{LANG_DIR}/{lang}/scientists/{author_slug(sid)}.html")
 
     (Path(LANG_DIR) / lang / "scientists" / f"{author_slug(sid)}.html").write_text(tpl.substitute(
-        lang=lang, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         og_meta_html=og_meta_html,
         scientist_id=attr_safe(sid),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -1812,7 +1812,7 @@ def update_all_authors():
     index_subtitle = loc["subtitle"] + (
         " " + loc["default_hint"].format(letter=default_letter) if default_letter else "")
     (Path(LANG_DIR) / DEFAULT_LANG / "authors" / "index.html").write_text(tpl_cloud.substitute(
-        lang=DEFAULT_LANG, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
         page_title=safe(loc["title"]), authors_title=safe(loc["title"]),
         authors_subtitle=safe(index_subtitle), alphabet_nav_html=index_nav,
@@ -1826,7 +1826,7 @@ def update_all_authors():
         section_html = gen_letter_section(letter)
         letter_nav = gen_alphabet_nav(active_letter=letter)
         (Path(LANG_DIR) / DEFAULT_LANG / "authors" / f"{letter.lower()}.html").write_text(tpl_cloud.substitute(
-            lang=DEFAULT_LANG, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
             version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
             page_title=safe(f"{loc['title']} — {letter}"), authors_title=loc["title"],
             authors_subtitle=safe(f"{letter} — {len(sections[letter])} {author_count_label}"),
@@ -1840,7 +1840,7 @@ def update_all_authors():
         section_html = gen_letter_section("#")
         other_nav = gen_alphabet_nav(active_letter="#")
         (Path(LANG_DIR) / DEFAULT_LANG / "authors" / "other.html").write_text(tpl_cloud.substitute(
-            lang=DEFAULT_LANG, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
             version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
             page_title=safe(f"{loc['title']} — #"), authors_title=loc["title"],
             authors_subtitle=safe(f"# — {len(sections['#'])} {author_count_label}"),
@@ -1889,7 +1889,7 @@ def update_all_authors():
             for lid in author_law_ids[:20]
         )
         (Path(LANG_DIR) / DEFAULT_LANG / "authors" / f"{slug}.html").write_text(tpl_page.substitute(
-            lang=DEFAULT_LANG, goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
             version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
             author_slug=attr_safe(slug),
             author_name=author_name, author_name_attr=attr_safe(author_name),
@@ -1924,7 +1924,7 @@ def generate_archive_page(lang):
            "fr": {"title": "Archives", "footer": "la science simplifiée"},
            "ar": {"title": "الأرشيف", "footer": "العلم ببساطة"}}.get(lang,
            {"title": "Archive", "footer": "science made simple"})
-    html = f'''<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">
+    html = f'''<!DOCTYPE html><html lang="{lang}" dir="{dir_for(lang)}"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{loc["title"]} — bridge42worlds</title>
 <link rel="stylesheet" href="/css/style.css?v={asset_ver()}">
 <script data-goatcounter="https://{GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></head><body>
