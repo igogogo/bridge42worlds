@@ -34,6 +34,32 @@ window.createForceGraph = function (opts) {
         tip.className = 'graph-tooltip';
         fsContainer.appendChild(tip);
     }
+
+    // Предупреждение про большие графы (>100 узлов) — с подсказкой на кнопку ⛶ (юзер-фидбек
+    // 2026-07-17: облако/эксплорер без фильтра по тегам легко перевал за 200+ узлов, тормозит и
+    // нечитаемо). Один текст-шаблон общий для всех графов сайта (мини/облако/эксплорер).
+    var SIZE_WARN = {
+        ru: '⚠ {n} объектов — построение графа может занять время. Для просмотра рекомендуем полноэкранный режим (⛶ сверху справа).',
+        en: '⚠ {n} entities — building the graph may take a moment. For viewing we recommend fullscreen mode (⛶ top right).',
+        es: '⚠ {n} entidades — construir el grafo puede tardar un momento. Para verlo mejor, recomendamos el modo pantalla completa (⛶ arriba a la derecha).',
+        zh: '⚠ {n} 个实体 — 图谱生成可能需要一点时间。建议使用全屏模式查看（右上角 ⛶）。',
+        fr: '⚠ {n} entités — la construction du graphe peut prendre un moment. Pour la consultation, nous recommandons le mode plein écran (⛶ en haut à droite).',
+        ar: '⚠ {n} كيان — قد يستغرق بناء الرسم البياني بعض الوقت. للعرض الأفضل، ننصح بوضع ملء الشاشة (⛶ أعلى اليمين).'
+    };
+    var warn = null;
+    if (fsContainer) {
+        warn = document.createElement('div');
+        warn.className = 'graph-size-warning';
+        warn.style.display = 'none';
+        fsContainer.appendChild(warn);
+    }
+    function updateSizeWarning(n) {
+        if (!warn) return;
+        if (n <= 100) { warn.style.display = 'none'; return; }
+        var tpl = SIZE_WARN[lang] || SIZE_WARN.en;
+        warn.textContent = tpl.replace('{n}', n);
+        warn.style.display = 'block';
+    }
     function showTip(node, x, y) {
         if (!tip) return;
         var text = opts.tooltip(node);
@@ -76,6 +102,7 @@ window.createForceGraph = function (opts) {
         adj = nodes.map(function () { return {}; });
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
         alpha = 1; hover = -1; drag = -1; ready = true;
+        updateSizeWarning(nodes.length);
     }
 
     function rebuild() {  // перестроить по новому фильтру (opts.build читает актуальное состояние)

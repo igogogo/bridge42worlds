@@ -370,11 +370,14 @@ def mini_graph_filters_html(lang, center_kind="tag"):
     center_kind="tag"/"law"/"sci" (страница одной сущности) — умный дефолт: центр + следующий
     по приоритету тег→закон→учёный тип, и только связь МЕЖДУ ними. Третий тип и любые
     "сам-на-себя" рёбра пользователь включает вручную — авто-переключение кросс-рёбер при
-    смене типов делает js/mini-graph.js."""
+    смене типов делает js/mini-graph.js.
+    center_kind=None дефолт — только законы+учёные (юзер-фидбек 2026-07-17: "граф оказывается
+    перегружен" — тегов у статьи/в справочнике обычно больше всего, они и захламляли вид;
+    тег-узлы никуда не делись, просто чекбокс "теги" по умолчанию снят)."""
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
     if center_kind is None:
-        default_kinds = {"tag", "law", "sci"}
-        default_cross_edges = {"tag-law", "tag-sci", "law-sci"}
+        default_kinds = {"law", "sci"}
+        default_cross_edges = {"law-sci"}
     else:
         next_kind = GRAPH_KIND_PRIORITY[(GRAPH_KIND_PRIORITY.index(center_kind) + 1) % 3]
         default_kinds = {center_kind, next_kind}
@@ -567,8 +570,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # фильтр класс будет везде фирменный подход"). Меньше 2 узлов — граф бессмысленен, не рисуем.
     # Считаем ДО nav_extra_items — пункт левого меню на граф добавляем, только если граф реально
     # будет на странице (юзер-фидбек 2026-07-15: "ссылка на отзыв тоже слева после графа").
+    # Законы/учёные — приоритет над тегами при обрезке до 8: тегов у статьи обычно больше
+    # (юзер-фидбек 2026-07-17: "учёные вообще не отображаются") — при tags-first порядке 8+ тегов
+    # съедали весь лимит ДО того, как в список попадал хоть один закон/учёный.
     article_graph_ids = (
-        [f"t:{t}" for t in tags] + [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids]
+        [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids] + [f"t:{t}" for t in tags]
     )[:8]
     article_graph_html = ""
     if len(article_graph_ids) >= 2:

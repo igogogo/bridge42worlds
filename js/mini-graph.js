@@ -85,7 +85,12 @@
                 kg.nodes.forEach(function (n) {
                     var isCenter = centers.indexOf(n.id) > -1;
                     if (centers.length && dist[n.id] === undefined) return;  // не облачный режим — держим BFS-границу
-                    if (kinds && !isCenter && !kinds[n.kind]) return;  // фильтр типов — центры не трогаем
+                    // Фильтр типов — центр страницы-сущности (один центр) не трогаем: скрывать сам
+                    // предмет страницы по чекбоксу бессмысленно. На статье центров МНОГО (её теги+
+                    // законы+учёные разом) — там чекбокс должен прятать лишнее и среди них тоже
+                    // (юзер-фидбек 2026-07-17: "граф оказывается перегружен" тегами по умолчанию).
+                    var exemptCenter = isCenter && centers.length <= 1;
+                    if (kinds && !exemptCenter && !kinds[n.kind]) return;
                     var rawid = n.id.slice(2), name, tip;
                     if (n.kind === 'tag') {
                         var t = tn[rawid] || {};

@@ -230,11 +230,20 @@ def version_label(version, lang):
 
 
 def version_scipop(data, version, lang):
-    """scipop нужной версии/языка из data.json с откатами по версии и языку."""
+    """scipop нужной версии/языка из data.json с откатами по версии и языку.
+    Просто (simple) без своих формул наследует их у Популярного, как и мини-версия (юзер-фидбек
+    2026-07-17: "в мини есть формулы а в простом нет" — промт Простого намеренно почти всегда
+    пропускает формулы ради доступности, а Популярное почти всегда их даёт; незачем просить LLM
+    о том же дважды — берём готовое, не трогая сами промты). Возвращает НОВЫЙ dict, не мутирует
+    data — safe для мест, которые потом сохраняют data.json обратно на диск."""
     for v in VERSION_FALLBACK.get(version, [version]):
         vdata = data.get(v, {})
         s = vdata.get(lang) or vdata.get(DEFAULT_LANG)
         if s:
+            if version == "simple" and not s.get("formulas"):
+                pop = version_scipop(data, "popular", lang)
+                if pop.get("formulas"):
+                    s = {**s, "formulas": pop["formulas"]}
             return s
     return {}
 

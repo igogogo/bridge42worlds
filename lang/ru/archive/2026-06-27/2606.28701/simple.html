@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=272795aaf9">
+    <link rel="stylesheet" href="/css/style.css?v=a2f8bd5f79">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Как квантовый компьютер оценивает финансовые риски", "description": "Гибрид квантовых и обычных вычислений ускоряет оценку убытков по сложным финансовым контрактам.", "inLanguage": "ru", "datePublished": "2026-06-27", "url": "https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/simple.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-27/2606.28701/ai.jpg", "author": [{"@type": "Person", "name": "Sandeep Jha"}, {"@type": "Person", "name": "Richard Oentaryo"}, {"@type": "Person", "name": "Sanjay Sekaran"}, {"@type": "Person", "name": "Vadym Kullish"}, {"@type": "Person", "name": "Rajanikanth Annam"}, {"@type": "Person", "name": "Paul Griffin"}, {"@type": "Person", "name": "Hanan Rosemarin"}, {"@type": "Person", "name": "Nadav Yoran"}, {"@type": "Person", "name": "Nati Erez"}, {"@type": "Person", "name": "Rei Sato"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.28701", "abstract": "Оценка PFE для путезависимых деривативов типа TARF осложнена вложенными симуляциями Монте-Карло. Предложена гибридная квантово-классическая схема с итеративной квантовой оценкой амплитуды (IQAE) на упрощённой модели риска. Нелинейный платёж TARF кодируется в квантовую схему двухшагово: классически рассчитывается перцентиль, задающий условие для квантовой оценки. Применены дискретизация FX-процесса и линеаризованная аддитивная аппроксимация. Реализация через Classiq и тесты на NVIDIA CUDA-Q и Amazon Braket SV1 показали относительную ошибку 1–8% при 97,5% и 99% доверия. Дискретизация и допущение о монотонности вносят смещение, но подход — жизнеспособный тестовый стенд для квантового ускорения. Оценка масштабирования: ~300 логических кубитов для полного 52-недельного анализа, снижение выборки для хвостовых рисков за счёт роста глубины схемы."}</script>
 </head>
@@ -79,7 +79,7 @@
         <div class="fun-fact"><p class="fact">🎯 Кубит — квантовая ячейка — совмещает ноль и единицу, словно монета, которая крутится и не падает. Такой трюк позволяет компьютеру обрабатывать множество сценариев одновременно и молниеносно находить ответ там, где обычному нужны годы.</p><p class="fact fact-scifi">🎬 Это похоже на психоисторию из «Основания» Азимова — математику, предсказывающую судьбы цивилизаций. Только вместо галактик — биржи.</p></div>
         
         
-        <div id="article-graph" class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="t:entropy,t:helium,t:spectroscopy,t:sun,l:second_law_of_thermodynamics,l:doppler_effect,l:bekensteinhawking_entropy,l:maxwells_equations"><canvas id="minigraph"></canvas></div>
+        <div id="article-graph" class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="l:second_law_of_thermodynamics,l:doppler_effect,l:bekensteinhawking_entropy,l:maxwells_equations,l:plancks_law,l:planckeinstein_relation,s:Ludwig Boltzmann,s:Christian Doppler"><canvas id="minigraph"></canvas></div>
         <div class="actions" data-article-id="2606.28701_ru_simple">
             <div class="reactions">
                 <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
@@ -99,12 +99,12 @@
 
 <div class="license">Оригинал: <a href="https://arxiv.org/abs/2606.28701">arXiv:2606.28701</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
 
-<script src="/js/likes.js?v=272795aaf9"></script>
-<script src="/js/search.js?v=272795aaf9"></script>
-<script src="/js/scroll.js?v=272795aaf9"></script>
-<script src="/js/lightbox.js?v=272795aaf9"></script>
-<script src="/js/force-graph.js?v=272795aaf9"></script>
-<script src="/js/mini-graph.js?v=272795aaf9"></script>
+<script src="/js/likes.js?v=a2f8bd5f79"></script>
+<script src="/js/search.js?v=a2f8bd5f79"></script>
+<script src="/js/scroll.js?v=a2f8bd5f79"></script>
+<script src="/js/lightbox.js?v=a2f8bd5f79"></script>
+<script src="/js/force-graph.js?v=a2f8bd5f79"></script>
+<script src="/js/mini-graph.js?v=a2f8bd5f79"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2606.28701', 'article', 'ru');
