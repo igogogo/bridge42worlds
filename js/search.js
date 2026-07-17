@@ -1149,11 +1149,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (isLinkMode) {
-        // Ссылки — переход нативный (работает без JS). Тут только красим начальное состояние.
+        // Ссылки — переход нативный (работает без JS). Красим начальное состояние И запоминаем
+        // тир в localStorage (юзер-фидбек 2026-07-17: "тип... должны быть прям чётко везде") —
+        // раньше страница статьи вообще не трогала b42_version, поэтому переход со статьи (в
+        // любом тире) на тег/закон/учёного откатывал тир на тот, что был выставлен последним на
+        // JS-странице (или дефолтный popular), а не на тот, что юзер только что читал.
         var activeIdx = 0;
         dots.forEach(function(d, i) { if (d.classList.contains('active')) activeIdx = i; });
         paint(activeIdx);
-        showTagVer(dots[activeIdx].dataset.version);
+        var activeVersion = dots[activeIdx].dataset.version;
+        showTagVer(activeVersion);
+        currentVersion = activeVersion;
+        try { localStorage.setItem('b42_version', currentVersion); } catch (e) {}
     } else {
         dots.forEach(function(d) {
             d.addEventListener('click', function() { setActive(d.dataset.version, true); });
