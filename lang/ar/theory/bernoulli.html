@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -177,14 +177,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتوى</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>المعادلة باختصار</a></li>
@@ -206,10 +206,10 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 </div>
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-<path d="M20,60 L140,60 L200,90 L260,90 L320,90 M20,120 L140,120 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<path d="M20,30 L140,30 L200,90 L260,90 L320,90 M20,150 L140,150 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
 <circle cx="60" cy="90" fill="var(--steel-fill)" id="heroDot" r="6"></circle>
-<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="45">широко, медленно</text>
-<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">узко, быстро</text>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="20">واسع، بطيء</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">ضيق، سريع</text>
 </svg>
 </div>
 </header>
@@ -218,8 +218,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>استنتج دانيال برنولي في عام 1738 معادلة حفظ الطاقة للمائع المتحرك: على طول خط التدفق، يظل مجموع الضغط و"الطاقة الحركية والكامنة لكل وحدة حجم" ثابتًا. والنتيجة المباشرة هي أنه حيثما يتسارع التدفق (في تضيق الأنبوب)، يجب أن ينخفض الضغط الساكن. يفسر هذا المبدأ نفسه أجهزة الرش والكاربوريترات و(مع تحفظات مهمة) قوة رفع الجناح. في هذه الملاحظة – اشتقاق المعادلة، أنبوب فنتوري مع الأرقام، وتحليل صريح لما يفسره برنولي في طيران الطائرة وما لا يفسره.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Ускоряющийся поток в сужении трубы" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>تدفق متسارع في تضيق الأنبوب</figcaption></figure>
-<figure><img alt="Обтекание крыла: разная скорость потока сверху и снизу" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>تدفق الهواء حول الجناح: سرعة تدفق مختلفة في الأعلى والأسفل</figcaption></figure>
+<figure><img alt="تدفق متسارع عند تضيّق الأنبوب" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>تدفق متسارع في تضيق الأنبوب</figcaption></figure>
+<figure><img alt="الجريان حول الجناح: سرعة تدفق مختلفة من الأعلى والأسفل" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>تدفق الهواء حول الجناح: سرعة تدفق مختلفة في الأعلى والأسفل</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>المعادلة باختصار</h2></div>
@@ -416,7 +416,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
   }
 
   var mainPipe = makePipe(160, 240, 380, 30, 110, 60, 80);
-  var heroPipe = makePipe(140, 200, 320, 60, 120, 90, 90);
+  var heroPipe = makePipe(140, 200, 320, 30, 150, 90, 90);
 
   var dot1 = document.getElementById('pipeDot1');
   var dot2 = document.getElementById('pipeDot2');

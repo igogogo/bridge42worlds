@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -181,14 +181,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/es/graph/">graph</a>
 <a class="active" href="/lang/es/theory/">theory</a>
-<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/favorites.html" title="Favoritos">★</a>
 <a href="/lang/es/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contenido" class="toc">
 <p class="toc-title">Contenido</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Una idea en lugar de tres leyes</a></li>
@@ -216,7 +216,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <path d="M30,170 Q90,100 170,100 T310,30" fill="none" stroke="var(--rule)" stroke-dasharray="4,4" stroke-width="1.5"></path>
 <path d="M30,170 Q120,120 170,100 T310,30" fill="none" id="heroPath" stroke="var(--steel-fill)" stroke-width="2.6"></path>
 <circle cx="30" cy="170" fill="var(--brass-fill)" id="heroDot" r="6"></circle>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="170" y="190">из всех путей — реальный даёт минимум S</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="170" y="190">de todos los caminos, el real da el mínimo de S</text>
 </svg>
 </div>
 </header>
@@ -225,8 +225,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>En las partes I y II de esta serie ya hemos encontrado dos veces el indicio de un nivel más profundo: tanto en Newton como en las leyes de conservación había un §6-teaser sobre el principio de mínima acción y el teorema de Noether. Aquí, un análisis completo: qué es la acción S, por qué la naturaleza «elige» el camino de mínima acción, cómo se deducen de esto las ecuaciones de Newton, y cómo el teorema de Noether de 1918 explica POR QUÉ existen las leyes de conservación — no como felices coincidencias aisladas, sino como consecuencia directa de las simetrías del espacio y el tiempo.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Истинная траектория ярче всех альтернативных путей" src="/lang/ru/theory/img/least_action_noether_hero.jpg"/><figcaption>La trayectoria verdadera brilla más que todos los caminos alternativos</figcaption></figure>
-<figure><img alt="Спасатель на пляже: кратчайший путь по времени — не прямая" src="/lang/ru/theory/img/least_action_noether_concept.jpg"/><figcaption>El socorrista en la playa: el camino más corto en tiempo no es una línea recta</figcaption></figure>
+<figure><img alt="La trayectoria real es más brillante que todos los caminos alternativos" src="/lang/ru/theory/img/least_action_noether_hero.jpg"/><figcaption>La trayectoria verdadera brilla más que todos los caminos alternativos</figcaption></figure>
+<figure><img alt="Socorrista en la playa: el camino más rápido en el tiempo no es una recta" src="/lang/ru/theory/img/least_action_noether_concept.jpg"/><figcaption>El socorrista en la playa: el camino más corto en tiempo no es una línea recta</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Una idea en lugar de tres leyes</h2></div>
@@ -314,8 +314,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <circle cx="230" cy="190" fill="var(--ink)" r="5"></circle>
 <line stroke="var(--brass-fill)" stroke-width="2.4" x1="50" x2="150" y1="20" y2="100"></line>
 <line stroke="var(--brass-fill)" stroke-width="2.4" x1="150" x2="230" y1="100" y2="190"></line>
-<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="20" y="15">воздух (быстро)</text>
-<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="200" y="210">вода (медленно)</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="20" y="15">aire (rápido)</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="200" y="210">agua (lento)</text>
 </svg>
 </div>
 <p>Imagine un socorrista en la playa que debe llegar corriendo hasta un nadador que se está ahogando — puede correr rápido por la arena, pero nada más lento en el agua. El CAMINO más corto (en línea recta) no es el más rápido: conviene correr un poco más por la arena para acortar el tramo lento en el agua. El punto óptimo de entrada al agua no está donde la línea recta, sino un poco «de través». La luz se comporta exactamente igual en la interfaz aire/agua, y el cálculo preciso del ángulo óptimo da exactamente la ley de refracción de Snell.</p>

@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -179,14 +179,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/en/graph/">graph</a>
 <a class="active" href="/lang/en/theory/">theory</a>
-<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/favorites.html" title="Favorites">★</a>
 <a href="/lang/en/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contents" class="toc">
 <p class="toc-title">Contents</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Three laws of one phenomenon</a></li>
@@ -209,7 +209,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
 <circle cx="170" cy="100" fill="#8B2E1A" id="heroStar" r="60"></circle>
-<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">нагрев меняет цвет — не краска, а физика</text>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">heating changes the color — not paint, physics</text>
 </svg>
 </div>
 </header>
@@ -218,8 +218,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>Any body emits thermal radiation, and the shape of this glow depends only on temperature — not on the material (for an ideal 'black body'). Wien's law (1893) gives the color of the radiation peak, the Stefan-Boltzmann law (1879/1884) gives the total power, and Planck's formula (1900) gives the exact shape of the entire curve; it was the attempt to derive this formula 'from scratch' that forced Max Planck to assume that energy is emitted in portions — quanta. This note covers all three laws with numbers and how astronomers weigh stars by their color.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Металл, раскалённый от чёрного до бело-горячего" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>Metal heated from black to white-hot</figcaption></figure>
-<figure><img alt="Свет звезды, разложенный призмой на спектр" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>Starlight split into a spectrum by a prism</figcaption></figure>
+<figure><img alt="Metal glowing from black to white-hot" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>Metal heated from black to white-hot</figcaption></figure>
+<figure><img alt="Starlight split into a spectrum by a prism" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>Starlight split into a spectrum by a prism</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Three laws of one phenomenon</h2></div>
@@ -416,11 +416,11 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
   }
 
   function colorForTemp(T){
-    if (T < 3500) return { hex: '#8B2E1A', label: 'тёмно-красный' };
-    if (T < 5000) return { hex: '#C0631F', label: 'оранжевый' };
-    if (T < 6500) return { hex: '#E8D48A', label: 'жёлто-белый' };
-    if (T < 9000) return { hex: '#EAF0FF', label: 'белый' };
-    return { hex: '#A9C6FF', label: 'бело-голубой' };
+    if (T < 3500) return { hex: '#8B2E1A', label: 'dark red' };
+    if (T < 5000) return { hex: '#C0631F', label: 'orange' };
+    if (T < 6500) return { hex: '#E8D48A', label: 'yellow-white' };
+    if (T < 9000) return { hex: '#EAF0FF', label: 'white' };
+    return { hex: '#A9C6FF', label: 'blue-white' };
   }
 
   var lastTs = null;

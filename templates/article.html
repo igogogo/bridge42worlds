@@ -37,9 +37,8 @@
             <a href="/lang/$lang/scientists/">scientists</a>
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
-            <a href="/lang/$authors_lang/theory/">theory</a>
+            <a href="/lang/$lang/theory/">theory</a>
             <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
-            <a href="/lang/$lang/about.html">about</a>
         </div>
         $version_toggle_html
     </div>
@@ -50,10 +49,8 @@
 <div class="next-top"><button type="button" class="next-btn next-btn-top">$next_label →</button></div>
 
 <h1 class="article-title-top">$clickbait $refine_badge $express_badge</h1>
-<div class="authors-top">$authors_full</div>
-<div class="author-verify-top">
-    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button>
-</div>
+<div class="original-title original-title-top">Original: "$original_title"</div>
+<div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button> · $authors_full</div>
 <div class="meta">
     arXiv:<a href="https://arxiv.org/abs/$id">$id</a> · $date · <a href="$license_url">$license_name</a> · $reading_html $categories_html
 </div>
@@ -70,7 +67,6 @@
 $nav_html
 <div class="article-wrapper">
     <div class="article-main">
-        <div class="original-title">Original: "$original_title"</div>
         <div class="oneliner">$oneliner</div>
         $abstract_html
         $ai_cover_html
@@ -79,26 +75,21 @@ $nav_html
         $fun_fact_html
         $formulas_html
         $key_numbers_html
-        $scientists_html
+        $article_graph_html
         <div class="actions" data-article-id="$like_id">
             <div class="reactions">
                 <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
                 <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
-                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
             </div>
             <button class="fav-btn" data-fav="$id" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
             <button onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')">$share_label</button>
         </div>
         $feedback_html
-        <div class="next-divider">
-            <button class="next-btn">$next_label →</button>
-        </div>
         <div class="related" id="related" data-label="$related_label"></div>
     </div>
-    <div class="article-side">$tags_side_html$article_graph_html</div>
+    <div class="article-side">$tags_side_html</div>
 </div>
 
-<div class="support">⭐ Free article. <a href="#">Support us</a></div>
 <div class="license">$license_label: <a href="https://arxiv.org/abs/$id">arXiv:$id</a> · <a href="$license_url">$license_name</a> · bridge42worlds</div>
 
 <script src="/js/likes.js?v=$asset_ver"></script>

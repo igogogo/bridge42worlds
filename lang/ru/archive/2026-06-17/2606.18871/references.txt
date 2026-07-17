@@ -1,0 +1,514 @@
+Signal
+ADC Input
+Demodulated
+Signal
+(e)
+Supplementary Fig. S5:Digital filter responses and signal chain for FPGA lock-in
+detection. a, Magnitude response of the first-stage CIC decimator.b, Magnitude response
+of the cascaded CIC and minimum-phase FIR filter.c, Impulse response of the cascaded filter
+chain at the decimated output rate.d, Corresponding step response.e, Schematic of the FPGA
+demodulation chain showing the signal multiplication and the CIC decimator followed by the
+minimum-phase FIR filter.
+For anN-stage CIC implementation with differential delayM, the magnitude response follows
+the sinc envelope
+|HCIC(f)| ∝
+
+sin(πfRM/f s)
+sin(πf/f s)
+
+N
+.(S5)
+The implemented decimator usesN= 5andM= 2, so the first comb null occurs atfs/(RM)≈
+15.26 kHz, which is also the modulation frequency. The CIC stage therefore suppresses compo-
+nents at the modulation frequency and harmonics before the signal reaches the second filter.
+The second stage is a minimum-phase finite-impulse-response filter at the reduced sampling rate.
+It compensates the CIC passband droop over the 2 kHz measurement bandwidth and sharpens
+the roll-off. The filter responses were designed in MATLAB and implemented on the FPGA
+using the Xilinx CIC and FIR compiler cores. The implemented FIR has 119 taps (order 118),
+and the coefficients are quantized to 18-bit signed values. The 18-bit quantization changes the
+FIR passband magnitude by less than4×10−5 dBcompared with the floating-point design. The
+31
+minimum-phase design front-loads the impulse response and reduces the low-frequency group
+delay relative to a comparable linear-phase filter. For the implemented filter chain, the low-
+frequency group delay is approximately 16 output samples, or0.53 ms, with0.16 msfrom the
+CIC stage and0.37 msfrom the FIR stage. This low latency is important because the filtered
+lock-in signal is also used as the feedback error signal for resonance tracking.
+32
+Supplementary Note 5: Sensitivity optimization and bias-field align-
+ment
+Sensitivity optimization across microwave parameters
+To find the optimal working point for the magnetometer in terms of microwave power and FM
+deviation for the[100]bias-field alignment, we measured the magnetic-field sensitivity over a
+two-dimensional sweep of those parameters (see Fig. S6). The modulation frequency was kept
+constant at 15.26 kHz, as we could not observe a significant sensitivity dependence on modulation
+frequency in earlier experiments and as this frequency sits at the first null of the CIC filter, see
+Supplementary Note 4.
+The sweep covered IF powers from−10.0to−3.5 dBmon the Red Pitaya outputs and frequency
+deviations from150to350 kHz. The sensitivity generally improved with increasing microwave
+power and frequency deviation, but the optimum was broad, with large parts of the parameter
+space giving sensitivities below100 pT/
+√
+Hz. We did not increase the microwave power beyond
+−3.5 dBmto avoid excessive heating of the microwave antenna and due to significantly stronger
+spurs in the microwave spectrum at higher powers.
+200 300
+FM deviation fdev (kHz)
+10
+8
+6
+4
+IF output power (dBm)
+100 pT/ Hz
+90
+100
+110
+120
+Sensitivity (pT/ Hz)
+Supplementary Fig. S6:Sensitivity optimization over microwave-power and frequency-
+modulation settings.Magnetic-field sensitivity for the[100]bias-field alignment measured
+as a function of frequency-modulation deviationfdev and microwave power. The white contour
+marks the region below100 pT/
+√
+Hz.
+Sensitivity measurement for[111]bias-field alignment
+In addition to the[100]alignment used for sensitivity measurement in the main text, we charac-
+terized the sensor with the bias field aligned along a single[111]NV axis. In this geometry, the
+bias field separates the ODMR spectrum into one transition pair associated with the NV orienta-
+tion parallel to the field and a triply degenerate pair associated with the other three orientations.
+We probe the resonance of the aligned NV class, so only one quarter of the NV ensemble con-
+tributes to the ODMR contrast, but the magnetic-field projection onto the addressed NV axis
+is maximized. No geometric projection correction is therefore required. For the[111]sensitivity
+measurement, the excitation polarization was also optimized to maximize the ODMR contrast
+33
+of the measured resonance. The optimized sensitivity in this configuration was169 pT/
+√
+Hz(see
+Fig. S7).
+1 10 100 1000 10000
+Frequency (Hz)
+102
+100
+10−2
+10−4
+10−6
+Sensitivity (nT/√ Hz )
+Off-resonant
+On-resonant
+Mean sensitivity
+Supplementary Fig. S7:Sensitivity for[111]bias-field alignment.The on-resonant ampli-
+tude spectral density is shown in purple. The brown dashed line indicates the mean sensitivity
+of169 pT/
+√
+Hzbetween 10 Hz and 2 kHz after excluding 50 Hz harmonics. The off-resonant
+trace is shown in yellow.
+34
+Supplementary Note 6: Fluorescence scaling with excitation power
+Thecombinationofthesmall-diameter, low-NAexcitationfiberwiththehigh-NAmicro-objective
+focuses the excitation light into a small volume in the diamond, which could potentially lead to
+optical saturation. To evaluate this, we measured the collected fluorescence power as a function
+of the laser power before the fiber coupler (Fig. S8). The laser power was first swept from
+low to high values (P↑), with the fiber coupling aligned at low power, and then from high to
+low values (P↓), with the coupling aligned at high power. TheP↓ curve remains approximately
+linear over the full measured range of0–800 mW. The divergence between the two sweeps above
+approximately500 mWis attributable to power-dependent drift in the fiber-coupling efficiency
+rather than optical saturation of the full excitation volume. While the full excitation volume does
+not show saturation under these conditions, individual NV centers near the center of the focus
+could still be locally saturated. At higher powers the variance between repeated fluorescence
+measurements also increases and the measured fluorescence fluctuates for tens of seconds after
+changing the laser power, which we attribute to thermal effects in the fiber coupling and sensor
+head. We conclude that optical saturation of the full excitation volume is not a limiting factor
+for the current sensitivity, but that thermal management and coupling stability will be important
+for further improvements at higher optical powers.
+0 200 400 600 800
+Laser Power (mW)
+0
+100
+200
+300
+Fluorescence (μW)
+ Linear fit
+P ↑
+P ↓
+Supplementary Fig. S8:Fluorescence-power scaling with excitation power.Collected
+fluorescence power as a function of laser power before the fiber coupler for two measurement
+runs.P ↑ denotes the sweep from low to high laser powers with the fiber coupling aligned at
+low power, andP↓ denotes the sweep from high to low powers with the coupling aligned at high
+power. The dashed line shows a linear fit through the origin to theP↓ data.
+35
+Supplementary Note 7: Bias magnetic field
+This note quantifies the homogeneity of the ring-magnet bias field used for the ODMR mea-
+surements. The distance between the ring magnets was optimized in simulation for high field
+homogeneity across the diamond. The optimal distance differs from the Helmholtz condition
+because the magnets have finite dimensions rather than ideal current-loop geometry.
+Forthe10cmdiameterringsusedhere, simulationswithmagpylib[8]giveameanfieldmagnitude
+of53.68 Gand a peak-to-peak variation of9.4×10−5 Gacross the3 mm×3 mm×0.6 mmdiamond
+for the chosen configuration (see Fig. S9). This corresponds to94µG, or1.7ppm relative to
+the mean bias field, and ensures that the ODMR linewidth is not dominated by macroscopic
+bias-field gradients across the sample.
+−4 −2 0 2 4
+x (mm)
+−4
+−2
+0
+2
+4
+z (mm)
+53.672
+53.675
+53.678
+53.681
+|B|  (G)
+Supplementary Fig. S9:Simulated bias magnetic field.Magnetic-field magnitude along the
+axis between the ring magnets. Dashed lines indicate the extent of the diamond.
+36
+Supplementary Note 8: Current-density reconstruction
+The battery scans reported in the main text are used to reconstruct the in-plane sheet-current
+density from the measured magnetic field. The sensor measures a magnetic stray-field map, while
+the quantity of interest is the underlying current density. The forward problem is well defined: if
+the current distribution is known, the magnetic field can be calculated from the Biot-Savart law.
+The inverse problem is ill-conditioned because each measured field value receives contributions
+from the entire current distribution and because the field is measured at finite stand-off [9–12].
+The finite stand-off also acts as a spatial low-pass filter: in Fourier space, a current-density mode
+with spatial wavenumberkis attenuated at a measurement heighthapproximately ase −kh.
+Recovering the current therefore requires inverse amplification, so high-spatial-frequency noise is
+amplified together with any true fine structure.
+The sensor was operated at a stand-off of approximatelyh= 2 mm, larger than the spacing
+between individual electrode layers. The measurement is therefore insensitive to the exact depth
+of a given current path, and we reconstruct the depth-integrated sheet current
+K(x, y) =
+Z
+J(x, y, z) dz.(S6)
+Charge conservation implies∂xKx +∂ yKy = 0because no current leaves the cell through its top
+or bottom surfaces. The measured magnetic-field projection is along
+ˆu=
+ r
+2
+3,0,
+r
+1
+3
+!
+,(S7)
+in the coordinate system of the battery.
+0 10 20 30
+−20
+0
+20
+40
+BNV (μT)
+a
+1D profiles
+y (mm)
+21 23 25 27 29
+20
+25
+30y (mm)
+b
+BNV
+RMS = 2.91 μT
+c
+Residual BNV
+0 10 20 30
+x (mm)
+−20
+0
+20
+40
+BNV (μT)
+d
+0 10 20 30
+x (mm)
+20
+25
+30y (mm)
+e
+0 10 20 30
+x (mm)
+RMS = 7.32 μT
+f
+-45.2
+-22.6
+0
+22.6
+45.2
+μT
+Supplementary Fig. S10:Measured magnetic fields and reconstruction residuals. a,d,
+One-dimensional profiles of the measuredB NV(x)field at selectedypositions for charge and
+discharge.b,e, Two-dimensional measured field maps.c,f, Residual field maps showing the
+difference between measured and reconstructed fields.
+37
+Discretized forward problem
+Following the sheet-current description used in magnetic current imaging of thin samples and
+battery cells [9, 13], the battery is modeled as an effective current sheet in the planez= 0. The
+Biot-Savart law for a surface current is
+B(r) = µ0
+4π
+Z K(r′)×(r−r ′)
+|r−r ′|3 dA′,(S8)
+wherer= (x, y, h)is the observation point andr ′ = (x′, y′,0)is a source point. For a source
+pixel of area∆Aand offsets∆x=x−x ′ and∆y=y−y ′, withr=
+p
+∆x2 + ∆y2 +h 2, the field
+contribution is
+∆Bx = µ0
+4π
+hKy∆A
+r3 ,
+∆By =− µ0
+4π
+hKx∆A
+r3 ,
+∆Bz = µ0
+4π
+(∆yKx −∆xK y)∆A
+r3 .
+(S9)
+The measured field is the projection
+BNV(x, y, h) =ˆu·B(x, y, h).(S10)
+For the contribution from one source pixel, this gives
+∆BNV = µ0∆A
+4πr3 [(−uyh+u z∆y)Kx + (uxh−u z∆x)Ky].(S11)
+Summing over all source pixels, the magnetic field contribution for pixeliin the measurement
+plane is
+B(i)
+NV =
+X
+j
+G(ˆu)
+x,ijK(j)
+x +
+X
+j
+G(ˆu)
+y,ijK(j)
+y ,(S12)
+with Green’s matrices
+G(ˆu)
+x,ij = µ0∆A
+4π
+−uyh+u z∆yij
+(∆x2
+ij + ∆y2
+ij +h 2)3/2 ,
+G(ˆu)
+y,ij = µ0∆A
+4π
+uxh−u z∆xij
+(∆x2
+ij + ∆y2
+ij +h 2)3/2 ,
+(S13)
+where∆x ij =x i −x j and∆y ij =y i −y j. For the projection axis ˆu, both in-plane current
+componentsK x andK y therefore contribute to the measured projected fieldBNV.
+Differential magnetic-field measurements
+The projected magnetic field was sampled on a100×15grid coveringx∈[0,36]mm and
+y∈[20,30]mm, with sampling intervals∆x= 0.36mm and∆y= 0.71mm. This gives 1500
+measured field values. The scan was acquired line by line alongxwhile stepping the scan position
+iny. During movement inx, the sensor continuously sampled the field at 30.5 kHz, corresponding
+to the output sampling rate after lock-in decimation; the signal was already low-pass filtered by
+the 2 kHz lock-in bandwidth at this stage. The continuous data were binned into 100 pixels along
+38
+xaccording to stage position. Relative to the cell body,x∈[3,31]mm, the scan extends slightly
+beyond the cell inxbut covers only a central strip iny. To isolate current-generated magnetic
+fields from the static field of the ferromagnetic anode tab and connectors, a no-current reference
+scan was subtracted from each charge and discharge map. Four scans were averaged for each
+operating direction. Mild Gaussian smoothing withσ= (1.5,1)pixels was applied to suppress
+scan-to-scan noise from small stage offsets. The resulting measured field maps for charge and
+discharge, together with the reconstruction residuals are shown in Fig. S10.
+Regularized real-space inversion
+The inverse problem is to find the current map underlying the measured magnetic-field data. A
+common solution is Fourier-space inversion, as often used for magnetic current imaging. For our
+measurements, however, that representation is not the most natural one. Our measured map
+is finite and strongly non-periodic: it covers the full cell width inx, but only a partial strip of
+the battery iny, so the currents extend beyond our measuredy-window and still contribute to
+the measured field inside it. We therefore solve the problem in real space on a1 mmsource grid
+restricted tox∈[3,31] mmandy∈[17,33] mm. The measured stripy∈[20,30] mmis padded
+by3 mmon either side so that currents just outside the scan window can still contribute to the
+measured field. Outside this reconstruction region, the current density is set to zero.
+The reconstructed current field( ˆkx, ˆky)is obtained by solving the following regularized least-
+squares problem on the source grid:
+(ˆkx, ˆky) = arg min
+kx,ky
+hG(ˆu)
+x kx +G (ˆu)
+y ky −b
+2
+2
++λ
+ 
+∥Lkx∥2
+2 +∥Lk y∥2
+2
+
++µ div∥Dxkx +D yky∥2
+2
++µ flux∥Pky∥2
+2
++µ amp
+ 
+∥Wkx∥2
+2 +∥Wk y∥2
+2
+i
+.
+(S14)
+Herebis the measured field vector. The first term is the data-fidelity term: it minimizes the
+squared difference between the measured field and the field predicted by the forward model
+based on the reconstructed currents. The second term is a generalized Tikhonov smoothness
+penalty that suppresses current variations below the stand-off-limited spatial resolution. On the
+discrete source grid, it is the first-order finite-difference analogue of penalizing|∇Kx|2 +|∇K y|2.
+The regularization parameterλcontrols the strength of this smoothness prior relative to the
+data-fidelity term and is selected by an L-curve method. The remaining terms encode additional
+physicalandmodelingpriors. Thethirdtermpenalizesnonzerocurrentdivergence, whereD xkx+
+Dyky discretizes∂ xKx +∂ yKy. The fourth term penalizes nonzero row-wisey-current flux. The
+operatorPacts on each source-grid row as
+(Pky)m =
+X
+n
+Ky(xn, ym),
+which is proportional to the slice-integrated fluxΦ(ym) =
+R
+Ky(x, ym) dx. For the pouch-cell
+geometry used here, both tabs are located on the same edge, so the nety-directed current across
+39
+interior horizontal slices is expected to vanish. The fifth term tapers current amplitudes in
+weakly constrained boundary regions. The weights inWare zero inside the measured strip and
+increase smoothly as a half-cosine across the 3 mm extension bands to the outer reconstruction
+boundaries aty= 17mm andy= 33mm, suppressing solutions that place unrealistically large
+currents just outside the measured window. In addition, the implementation applies a separate
+cosine edge taper over 3 mm at the left and right cell boundaries inx, suppressing boundary
+artefacts at these edges.
+Parameter selection and normalization
+The parameters in Eq. (S14) are trace-normalized. In the normal equations solved numerically,
+the corresponding effective coefficients are
+λeff =λ TG
+2TL
+, µ eff
+div =µ div
+TG
+Tdiv
+,
+µeff
+flux =µ flux
+TG
+Tflux
+, µ eff
+amp =µ amp
+TG
+Tamp
+.
+(S15)
+HereT G = tr
+h
+(G(ˆu)
+x )T G(ˆu)
+x + (G(ˆu)
+y )T G(ˆu)
+y
+i
+is the trace of the data Hessian. The remaining
+traces areT L = tr(LT L),T div = tr(DT
+x Dx +D T
+y Dy),T flux = tr(PT P), andT amp = 2 tr(WT W).
+With this convention, the quoted weights are dimensionless parameters that specify the relative
+strength of each prior with respect to the data term, rather than depending directly on units,
+grid spacing or matrix size.
+After normalization,µ div = 108 andµ flux = 106 were used. These values suppress the residual
+divergence to approximately3×10 −5%of the local current per 1 mm source-grid cell for both
+charge and discharge reconstruction, and enforce the expected row-wise current balance without
+noticeably degrading the magnetic-field fit. The amplitude taper was set toµamp = 5. If this
+parameter is too large, currents in the extension bands are forced artificially to zero; if it is too
+small, the reconstruction can place unphysically large currents in weakly constrained boundary
+regions.
+The smoothness parameterλwas selected separately for charge and discharge by sweeping 40
+logarithmically spaced values from10−6 to10 4 and selecting the maximum-curvature point of
+the L-curve [14] (Fig. S11). The resulting L-curves have a broad bend rather than a sharply
+localized corner. In the L-curve framework, this indicates that a range of nearby regularization
+parameters gives a similar trade-off for the residual-versus-smoothness optimization that the L-
+curve method performs. In our data, this behavior is consistent with the measurement geometry:
+propagation over the 2 mm stand-off strongly attenuates fine-scale current variations, while the
+physical constraints already strongly reduce the remaining solution space on larger scales. We
+therefore use the maximum-curvature value as a parameter choice and interpret the reconstructed
+current maps only on the stand-off-limited length scale.
+Interpretation and limitations
+The inferred current paths are consistent with current spreading from the cathode tab and con-
+verging toward the anode tab during charging, with the discharge case reversing sign. The
+40
+2 5
+Residual RMS (μT)
+105
+106
+107
+Smoothness normλ * = 30.8
+a
+Charge
+5 10
+Residual RMS (μT)
+λ * = 173
+b
+Discharge
+Supplementary Fig. S11:L-curves for current-density reconstruction.The selected marker
+denotes the maximum-curvature valueλ∗ used for the reported charge and discharge reconstruc-
+tions.
+reconstruction has several limitations. First, it yields only the depth-integrated sheet current, so
+individual electrode layers cannot be separated. Second, the approximately 2 mm stand-off sup-
+presses fine spatial structure and limits practical resolution to a few millimeters. Third, only the
+stripy∈[20,30]mm is directly constrained by measured data; the extension bands are included
+to capture edge contributions but should be interpreted cautiously. Additional uncertainty arises
+from imperfect knowledge of the NV-axis orientation and exact stand-off distance, both of which
+may vary slightly across the scan if the battery holder is tilted or rotated relative to the sensor
+plane. Finally, the effective-sheet model does not explicitly account for finite battery thickness.
+41
+Supplementary Note 9: Portable sensor backend
+For portable operation of the sensor, we built a modular backend containing both the optical and
+electronic components required for ODMR measurements. The optical backend includes a com-
+pact laser (Coherent Obis 520 nm LX 40 mW), photodetector (Femto HBPR-100M-60K-SI-FC)
+and an optical filter. All components are fiber-connectorized. The electronic backend includes
+the same hardware used in the main text demonstrator, however substituting the amplifier with a
+more compact alternative (Minicircuits ZVE-3W-83+). The electronic components are mounted
+on a 8 mm thick aluminum plate for mechanical stability and heat dissipation, and the whole
+system is housed in a 3D-printed compact enclosure (Fig. S12). The modular design allows the
+sensor head to be easily connected and disconnected from the backend, enabling portable oper-
+ation and flexible integration with different sensor heads or measurement setups. The compact
+form factor of the backend also facilitates transportation and deployment in various environments
+for field measurements or applications outside the laboratory setting.
+Supplementary Fig. S12:Portable sensor backend.The modular backend contains the op-
+tical and electronic components required for ODMR measurements, including a compact laser,
+photodetector, optical filter, and the FPGA-based control electronics. The optical and electronic
+components are mounted on aluminum plates respectively and housed in 3D-printed enclosures
+for mechanical stability and portability.
+42
+Supplementary References
+[1] Doherty, M. W. et al. Theory of the ground-state spin of the NV-center in diamond.Phys.
+Rev. B85, 205203 (2012).
+[2] Doherty, M. W. et al. The nitrogen-vacancy colour centre in diamond.Phys. Rep.528, 1–45
+(2013).
+[3] Ahmadi, S. et al. Pump-enhanced continuous-wave magnetometry using nitrogen-vacancy
+ensembles.Phys. Rev. Appl.8, 034001 (2017).
+[4] Barry, J. F. et al. Optical magnetic detection of single-neuron action potentials using quan-
+tum defects in diamond.Proc. Natl. Acad. Sci. U.S.A.113, 14133–14138 (2016).
+[5] Dréau, A.etal.Avoidingpowerbroadeninginopticallydetectedmagneticresonanceofsingle
+NV defects for enhanced dc magnetic field sensitivity.Phys. Rev. B84, 195204 (2011).
+[6] Yang, T.-I. et al. Light yields of diamonds with nitrogen-vacancy centers as scintillators for
+ionizing radiation from 80 to 1200 eV.J. Phys. Chem. C129, 2739–2746 (2025).
+[7] Graham, S.M. et al. Fiber-coupled diamond magnetometry with an unshielded sensitivity
+of 30 pT/
+√
+Hz.Phys. Rev. Appl.19, 044042 (2023).
+[8] Ortner, M. & Coliado Bandeira, L. G. Magpylib: a free python package for magnetic field
+computation.SoftwareX11, 100466 (2020).
+[9] Roth, B. J., Sepulveda, N. G. & Wikswo, J. P. Using a magnetometer to image a two-
+dimensional current distribution.J. Appl. Phys.65, 361–372 (1989).
+[10] Feldmann, D. M. Resolution of two-dimensional currents in superconductors from a two-
+dimensional magnetic field measurement by the method of regularization.Phys. Rev. B69,
+144515 (2004).
+[11] Broadway, D. A. et al. Improved current density and magnetization reconstruction through
+vector magnetic field measurements.Phys. Rev. Appl.14, 024076 (2020).
+[12] Midha, S. et al. Optimized current-density reconstruction from wide-field quantum diamond
+magnetic field maps.Phys. Rev. Appl.22, 014015 (2024).
+[13] Brauchle, F., Grimsmann, F., Von Kessel, O. & Birke, K. P. Defect detection in lithium ion
+cells by magnetic field imaging and current reconstruction.J. Power Sources558, 232587
+(2023).
+[14] Hansen, P. C. Analysis of discrete ill-posed problems by means of the L-curve.SIAM Rev.
+34, 561–580 (1992).
+43

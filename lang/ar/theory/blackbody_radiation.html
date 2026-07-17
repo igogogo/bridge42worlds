@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -179,14 +179,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتوى</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>ثلاثة قوانين لظاهرة واحدة</a></li>
@@ -209,7 +209,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
 <circle cx="170" cy="100" fill="#8B2E1A" id="heroStar" r="60"></circle>
-<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">нагрев меняет цвет — не краска, а физика</text>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="180">التسخين يغيّر اللون — ليس صبغًا، بل فيزياء</text>
 </svg>
 </div>
 </header>
@@ -218,8 +218,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>كل جسم يشع إشعاعاً حرارياً، وشكل هذا الإشعاع يعتمد فقط على درجة الحرارة — وليس على المادة (بالنسبة لـ «الجسم الأسود المثالي»). قانون فين (1893) يعطي ذروة الإشعاع من حيث اللون، وقانون ستيفان-بولتزمان (1879/1884) — القدرة الكاملة، أما معادلة بلانك (1900) — الشكل الدقيق للمنحنى كاملاً، ومحاولة استخلاص هذه المعادلة «من الصفر» هي التي جعلت ماكس بلانك يفترض أن الطاقة تُشع على شكل حزم — كمّات. في هذه الملاحظة — القوانين الثلاثة بالأرقام وكيف يَزِن علماء الفلك النجوم من ألوانها.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Металл, раскалённый от чёрного до бело-горячего" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>معدن مسخن من اللون الأسود إلى البياض المتوهج</figcaption></figure>
-<figure><img alt="Свет звезды, разложенный призмой на спектр" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>ضوء نجم، مفكك بواسطة منشور إلى طيفه</figcaption></figure>
+<figure><img alt="معدن متوهّج من الأسود إلى الأبيض الساخن" src="/lang/ru/theory/img/blackbody_radiation_hero.jpg"/><figcaption>معدن مسخن من اللون الأسود إلى البياض المتوهج</figcaption></figure>
+<figure><img alt="ضوء نجم يتحلّل بمنشور إلى طيف" src="/lang/ru/theory/img/blackbody_radiation_concept.jpg"/><figcaption>ضوء نجم، مفكك بواسطة منشور إلى طيفه</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>ثلاثة قوانين لظاهرة واحدة</h2></div>
@@ -416,11 +416,11 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
   }
 
   function colorForTemp(T){
-    if (T < 3500) return { hex: '#8B2E1A', label: 'тёмно-красный' };
-    if (T < 5000) return { hex: '#C0631F', label: 'оранжевый' };
-    if (T < 6500) return { hex: '#E8D48A', label: 'жёлто-белый' };
-    if (T < 9000) return { hex: '#EAF0FF', label: 'белый' };
-    return { hex: '#A9C6FF', label: 'бело-голубой' };
+    if (T < 3500) return { hex: '#8B2E1A', label: 'أحمر داكن' };
+    if (T < 5000) return { hex: '#C0631F', label: 'برتقالي' };
+    if (T < 6500) return { hex: '#E8D48A', label: 'أصفر مائل للبياض' };
+    if (T < 9000) return { hex: '#EAF0FF', label: 'أبيض' };
+    return { hex: '#A9C6FF', label: 'أبيض مائل للزرقة' };
   }
 
   var lastTs = null;

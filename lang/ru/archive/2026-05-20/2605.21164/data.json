@@ -1,0 +1,404 @@
+{
+  "id": "2605.21164",
+  "original_title": "Q-SYNTH: Hybrid Quantum-Classical Adversarial Augmentation for Imbalanced Fraud Detection",
+  "authors": [
+    "Adam Innan",
+    "Mansour El Alami",
+    "Nouhaila Innan",
+    "Muhammad Shafique",
+    "Mohamed Bennai"
+  ],
+  "date": "2026-05-20",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "entropy",
+    "neutron_star",
+    "gravitational_waves",
+    "supernova"
+  ],
+  "main_tag": "entropy",
+  "scientists": [
+    "Alexei Kitaev"
+  ],
+  "categories": [
+    "cs.LG",
+    "quant-ph"
+  ],
+  "primary_category": "cs.LG",
+  "cited_arxiv": [
+    "2512.12689",
+    "1804.08641",
+    "1811.04968"
+  ],
+  "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+  "abstract": {
+    "ru": {
+      "popular": "Обнаружение редких мошеннических транзакций осложнено дисбалансом классов. Q-SYNTH применяет квантовый генератор (параметризованную квантовую схему) для синтеза правдоподобных мошеннических примеров, а классический дискриминатор проверяет их качество. Сравнение с SMOTE и классической GAN показало: квантово-классический подход обеспечивает наилучший баланс между статистической достоверностью данных и улучшением работы детекторов мошенничества. Так гибридные вычисления открывают путь к решению задач, где данных катастрофически не хватает.",
+      "simple": "Банки ищут мошенничества среди миллионов платежей, но примеров обмана так мало, что систему сложно натренировать. Учёные придумали Q-SYNTH — гибридный метод, где квантовый компьютер, словно искусный фальшивомонетчик, создаёт правдоподобные поддельные транзакции, чтобы детектор стал внимательнее. Это помогло лучше ловить редкие атаки. Заменит ли квантовый «генератор подделок» классические методы?",
+      "advanced": "Кредитный фрод-детекшн страдает от дисбаланса классов, из-за чего модели пропускают мошеннические транзакции. Предложен Q-SYNTH — гибридная GAN с квантовым генератором и классическим дискриминатором. Метод оценивался по статистическому сходству (КС-статистика, расстояние Вассерштейна) и downstream-классификации. По сравнению с классической GAN, Q-SYNTH уменьшает расхождение маргинальных распределений, сохраняя качество детектирования. Хотя SMOTE лучше воспроизводит отдельные признаки, а классическая GAN достигает более высоких метрик в некоторых условиях, квантовый подход даёт оптимальный компромисс между достоверностью и практической пользой. Это подтверждает применимость гибридной квантовой аугментации в задачах обнаружения мошенничества."
+    },
+    "en": {
+      "popular": "Detecting rare fraudulent transactions is complicated by class imbalance. Q-SYNTH uses a quantum generator (a parameterized quantum circuit) to synthesize plausible fraud examples, while a classical discriminator checks their quality. Comparison with SMOTE and classical GAN showed that the quantum-classical approach provides the best balance between statistical data fidelity and improved fraud detector performance. This is how hybrid computing opens the way to solving problems where data is catastrophically scarce.",
+      "simple": "Banks hunt for fraud among millions of payments, but examples of cheating are so few that the system is hard to train. Scientists came up with Q-SYNTH—a hybrid method where a quantum computer, like a master counterfeiter, creates plausible fake transactions to sharpen the detector’s eye. This helped catch rare attacks better. Will a quantum 'forgery generator' replace classical methods?",
+      "advanced": "Credit fraud detection suffers from class imbalance, causing models to miss fraudulent transactions. Q-SYNTH—a hybrid GAN with a quantum generator and classical discriminator—is proposed. The method was evaluated on statistical similarity (KS statistic, Wasserstein distance) and downstream classification. Compared to classical GAN, Q-SYNTH reduces marginal distribution divergence while preserving detection quality. Although SMOTE better reproduces individual features, and classical GAN achieves higher metrics under some conditions, the quantum approach offers an optimal compromise between fidelity and practical utility. This confirms the applicability of hybrid quantum augmentation in fraud detection tasks."
+    },
+    "es": {
+      "popular": "La detección de transacciones fraudulentas poco frecuentes se complica por el desequilibrio de clases. Q-SYNTH emplea un generador cuántico (un circuito cuántico parametrizado) para sintetizar ejemplos fraudulentos plausibles, mientras que un discriminador clásico verifica su calidad. La comparación con SMOTE y GAN clásica mostró que el enfoque cuántico-clásico ofrece el mejor equilibrio entre la fidelidad estadística de los datos y la mejora en los detectores de fraude. Así, la computación híbrida abre el camino para resolver problemas donde los datos escasean catastróficamente.",
+      "simple": "Los bancos buscan fraudes entre millones de pagos, pero hay tan pocos ejemplos de engaño que entrenar el sistema es difícil. Los científicos idearon Q-SYNTH, un método híbrido en el que un ordenador cuántico, como un hábil falsificador, crea transacciones falsas verosímiles para que el detector se vuelva más atento. Esto ayudó a atrapar mejor los ataques poco frecuentes. ¿Reemplazará el \"generador de falsificaciones\" cuántico a los métodos clásicos?",
+      "advanced": "La detección de fraude crediticio sufre de desequilibrio de clases, lo que hace que los modelos pasen por alto transacciones fraudulentas. Se propuso Q-SYNTH, una GAN híbrida con generador cuántico y discriminador clásico. El método se evaluó según la similitud estadística (estadística KS, distancia de Wasserstein) y clasificación downstream. En comparación con la GAN clásica, Q-SYNTH reduce la divergencia de las distribuciones marginales, manteniendo la calidad de detección. Aunque SMOTE reproduce mejor atributos individuales y la GAN clásica alcanza métricas más altas en ciertas condiciones, el enfoque cuántico ofrece un compromiso óptimo entre verosimilitud y utilidad práctica. Esto confirma la aplicabilidad de la aumentación híbrida cuántica en tareas de detección de fraude."
+    },
+    "ar": {
+      "popular": "يُعقّد اكتشاف المعاملات الاحتيالية النادرة بسبب عدم توازن الفئات. يستخدم Q-SYNTH مولدًا كموميًا (دارة كمومية مُعلمة) لتركيب أمثلة احتيالية واقعية، بينما يتحقق مُميِّز كلاسيكي من جودتها. أظهرت المقارنة مع SMOTE وشبكات GAN الكلاسيكية أن النهج الكمومي-الكلاسيكي يوفر أفضل توازن بين المصداقية الإحصائية للبيانات وتحسين أداء كاشفات الاحتيال. وهكذا تفتح الحوسبة الهجينة الطريق لحل مشكلات تعاني من نقص حاد في البيانات.",
+      "simple": "تبحث البنوك عن حالات الاحتيال بين ملايين المعاملات، لكنّ الأمثلة على الخداع نادرة جدًا، مما يصعّب تدريب النظام. ابتكر العلماء Q-SYNTH، وهي طريقة هجينة يعمل فيها الكمبيوتر الكمومي كمُولّد بارع للبيانات الاصطناعية، يخلق معاملات مزيفة واقعية لزيادة انتباه الكاشف. وقد ساعد هذا في رصد الهجمات النادرة بشكل أفضل. هل سيحل المولد الكمومي للبيانات الاصطناعية محل الأساليب الكلاسيكية؟",
+      "advanced": "يعاني اكتشاف الاحتيال الائتماني من عدم توازن الفئات، مما يؤدي إلى تفويت النماذج للمعاملات الاحتيالية. اقتُرح Q-SYNTH، وهو شبكة GAN هجينة بمولد كمومي ومميز كلاسيكي. قُيّمت الطريقة من خلال التشابه الإحصائي (إحصاء KS، مسافة واسرشتاين) والتصنيف النهائي. بالمقارنة مع GAN الكلاسيكية، يقلل Q-SYNTH من تباين التوزيعات الهامشية مع الحفاظ على جودة الكشف. على الرغم من أن SMOTE تُنتج ميزات فردية أفضل، وأن GAN الكلاسيكية تحقق مقاييس أعلى في بعض الظروف، فإن النهج الكمومي يقدم حلًا وسطيًا أمثل بين المصداقية والفائدة العملية. وهذا يؤكد قابلية تطبيق الزيادة الكمومية الهجينة في مهام كشف الاحتيال."
+    }
+  },
+  "thumbs": 2,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "The main contributions of this work are as follows:",
+      "Overview of the proposed Q-SYNTH pipeline for fraud data generation and evaluation."
+    ],
+    "ru": [
+      "Основные вклады данной работы заключаются в следующем:",
+      "Обзор предлагаемого конвейера Q-SYNTH для генерации и оценки данных о мошенничестве."
+    ],
+    "es": [
+      "Las principales contribuciones de este trabajo son las siguientes:",
+      "Visión general del pipeline Q-SYNTH propuesto para la generación y evaluación de datos de fraude."
+    ],
+    "ar": [
+      "المساهمات الرئيسية لهذا العمل هي كالتالي:",
+      "نظرة عامة على خط أنابيب Q-SYNTH المقترح لتوليد بيانات الاحتيال وتقييمها."
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Квантовый помощник находит редкие мошенничества",
+      "oneliner": "Гибридная система с квантовым генератором учится создавать правдоподобные примеры обмана.",
+      "description": "Q-SYNTH объединяет квантовый и обычный компьютеры, чтобы синтезировать поддельные мошеннические платежи. В мире, где реальные аферы составляют лишь 0,1% всех транзакций, такая тренировка на вымышленных угрозах делает детекторы зорче. Искусственные примеры получаются настолько реалистичными, что система иногда сама путает их с настоящими. Это снижает риск пропустить афериста и сохраняет точность защиты банковских карт.",
+      "text": "В океане банковских транзакций мошенничества встречаются реже, чем [tag:neutron_star]нейтронные звёзды[/tag] в космосе — всего 0,1% от всех операций. Обычный детектор привыкает ко всему чистому потоку и теряет бдительность.\n\nНа помощь приходит гибридная система Q-SYNTH с квантовым генератором. Она сама создаёт правдоподобные поддельные транзакции, опираясь на крохи реальных данных. Квантовый механизм, вдохновлённый идеями [scientist:Alexei Kitaev]Алексея Китаева[/scientist], работает как [tag:supernova]сверхновая[/tag]: из малого числа параметров он разворачивает целый спектр новых примеров. Эти синтетические данные настолько качественны, что даже встроенный «проверяющий» иногда не может отличить их от настоящих.\n\nБлагодаря этому детектор учится видеть скрытые узоры. Искусственные примеры уменьшают [tag:entropy]энтропию[/tag] — меру хаоса в данных, — помогая улавливать сигналы, подобные [tag:gravitational_waves]гравитационным волнам[/tag] от незримых катаклизмов. В итоге Q-SYNTH находит золотую середину: он реже пропускает реальные аферы, не перегружая банк ложными тревогами.",
+      "fun_fact": "Всего 0,1% банковских операций — мошеннические. Детектор без тренировки на подделках почти всегда говорит «чисто» и пропускает редкие, но опустошительные аферы.",
+      "scifi": "Технология напоминает детектор лжи из будущего, который учится на вымышленных преступлениях, чтобы поймать реальных.",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ]
+    },
+    "en": {
+      "title": "Quantum Assistant Detects Rare Frauds",
+      "oneliner": "A hybrid system with a quantum generator learns to create plausible examples of deception.",
+      "description": "Q-SYNTH combines quantum and classical computers to synthesize fake fraudulent payments. In a world where real scams make up only 0.1% of all transactions, training on imagined threats makes detectors sharper. The artificial examples become so realistic that the system itself sometimes mistakes them for real ones. This reduces the risk of missing a fraudster and keeps credit card protection accurate.",
+      "text": "In the ocean of bank transactions, fraud is rarer than [tag:neutron_star]neutron stars[/tag] in space—just 0.1% of all operations. A conventional detector gets used to the clean flow and loses vigilance.\n\nEnter Q-SYNTH, a hybrid system with a quantum generator. It creates plausible fake transactions itself, drawing on scraps of real data. The quantum mechanism, inspired by the ideas of [scientist:Alexei Kitaev]Alexei Kitaev[/scientist], works like a [tag:supernova]supernova[/tag]: from a small number of parameters, it unfolds a whole spectrum of new examples. These synthetic data are so high-quality that even the built-in “discriminator” sometimes can’t tell them from real ones.\n\nThanks to this, the detector learns to see hidden patterns. The artificial examples reduce [tag:entropy]entropy[/tag]—a measure of chaos in the data—helping to pick up signals, akin to [tag:gravitational_waves]gravitational waves[/tag] from invisible cataclysms. As a result, Q-SYNTH finds the sweet spot: it misses fewer real scams without overloading the bank with false alarms.",
+      "fun_fact": "Only 0.1% of bank transactions are fraudulent. Without training on fakes, a detector almost always says 'clean' and misses rare but devastating scams.",
+      "scifi": "The technology resembles a lie detector from the future, learning from fictional crimes to catch real ones.",
+      "mini": "A quantum computer has learned to invent fake payments so banks can catch real fraudsters. Ingeniously: instead of searching for a needle in a haystack, it creates needles to train on.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ]
+    },
+    "es": {
+      "title": "Asistente cuántico detecta fraudes raros",
+      "oneliner": "Sistema híbrido con generador cuántico aprende a crear ejemplos creíbles de estafa.",
+      "description": "Q-SYNTH une computadoras cuánticas y clásicas para sintetizar pagos fraudulentos falsos. En un mundo donde los fraudes reales son apenas el 0.1% de todas las transacciones, este entrenamiento con amenazas ficticias agudiza los detectores. Los ejemplos artificiales resultan tan realistas que a veces el sistema mismo los confunde con verdaderos. Esto reduce el riesgo de dejar pasar a un estafador y preserva la precisión de la protección de tarjetas bancarias.",
+      "text": "En el océano de transacciones bancarias, los fraudes son más raros que las [tag:neutron_star]estrellas de neutrones[/tag] en el cosmos — apenas un 0.1% de todas las operaciones. Un detector común se acostumbra al flujo limpio y pierde vigilancia.\n\nAquí entra en juego el sistema híbrido Q-SYNTH con un generador cuántico. Él mismo crea transacciones falsas verosímiles, basándose en escasos datos reales. El mecanismo cuántico, inspirado en las ideas de [scientist:Alexei Kitaev]Alexei Kitaev[/scientist], funciona como una [tag:supernova]supernova[/tag]: a partir de pocos parámetros despliega todo un espectro de nuevos ejemplos. Estos datos sintéticos son de tal calidad que incluso el «verificador» incorporado a veces no puede distinguirlos de los reales.\n\nGracias a esto, el detector aprende a ver patrones ocultos. Los ejemplos artificiales reducen la [tag:entropy]entropía[/tag] — medida del caos en los datos —, ayudando a captar señales similares a las [tag:gravitational_waves]ondas gravitacionales[/tag] de cataclismos invisibles. Así, Q-SYNTH encuentra el punto justo: deja pasar menos fraudes reales sin sobrecargar al banco con falsas alarmas.",
+      "fun_fact": "Apenas el 0.1% de las operaciones bancarias son fraudulentas. Un detector sin entrenamiento con falsificaciones casi siempre dice «limpio» y deja pasar estafas raras pero devastadoras.",
+      "scifi": "La tecnología recuerda a un detector de mentiras del futuro, que aprende de crímenes ficticios para atrapar a los reales.",
+      "mini": "Una computadora cuántica aprendió a inventar pagos falsos para que los bancos puedan atrapar a verdaderos estafadores. Genial: en lugar de buscar una aguja en un pajar, ella misma crea las agujas con las que entrenarse.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ]
+    },
+    "ar": {
+      "title": "المساعد الكمومي يكتشف الاحتيال النادر",
+      "oneliner": "نظام هجين مع مولد كمومي يتعلم إنشاء أمثلة احتيالية واقعية.",
+      "description": "يجمع Q-SYNTH بين الحاسوب الكمومي والتقليدي لتوليف عمليات احتيال وهمية. في عالم حيث يشكل الاحتيال الحقيقي 0.1% فقط من جميع العمليات، فإن التدريب على تهديدات خيالية يجعل الكواشف أكثر يقظة. الأمثلة الاصطناعية واقعية إلى درجة أن النظام نفسه يخلط أحيانًا بينها وبين الحقيقية. هذا يقلل من خطر تفويت المحتال مع الحفاظ على دقة حماية البطاقات المصرفية.",
+      "text": "في محيط المعاملات المصرفية، يظهر الاحتيال بشكل أندر من [tag:neutron_star]النجوم النيوترونية[/tag] في الفضاء — فقط 0.1% من جميع العمليات. الكاشف التقليدي يعتاد على التدفق النظيف ويفقد يقظته.\n\nيأتي النظام الهجين Q-SYNTH مع مولد كمومي للإنقاذ. هو نفسه يُنشئ معاملات مزيفة واقعية، بالاعتماد على فتات البيانات الحقيقية. الآلية الكمومية، المستوحاة من أفكار [scientist:Alexei Kitaev]أليكسي كيتاييف[/scientist]، تعمل مثل [tag:supernova]المستعر الأعظم[/tag]: من عدد قليل من المعاملات، تبسط طيفًا كاملًا من الأمثلة الجديدة. هذه البيانات الاصطناعية على درجة عالية من الجودة حتى أن \"المُدقِّق\" المدمج أحيانًا لا يستطيع تمييزها عن الحقيقية.\n\nبفضل هذا، يتعلم الكاشف رؤية الأنماط الخفية. الأمثلة الاصطناعية تقلل من [tag:entropy]الإنتروبيا[/tag] — مقياس الفوضى في البيانات — مما يساعد على التقاط إشارات تشبه [tag:gravitational_waves]الموجات الثقالية[/tag] من كوارث خفية. في النهاية، يجد Q-SYNTH حلاً وسطًا: يفوِّت عددًا أقل من عمليات الاحتيال الحقيقية دون إثقال البنك بإنذارات كاذبة.",
+      "fun_fact": "فقط 0.1% من العمليات المصرفية احتيالية. الكاشف دون تدريب على التزوير يقول دائمًا \"نظيف\" ويفوِّت عمليات احتيال نادرة لكن مدمرة.",
+      "scifi": "التقنية تذكرنا بجهاز كشف الكذب من المستقبل، يتعلم من جرائم خيالية ليمسك بالحقيقية.",
+      "mini": "الحاسوب الكمومي تعلم كيف يخترع مدفوعات مزيفة لتتمكن البنوك من الإمساك بالمحتالين الحقيقيين. عبقري: بدلًا من البحث عن إبرة في كومة قش، هو يصنع الإبر بنفسه ليتدرب عليها.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "neutron_star",
+        "gravitational_waves",
+        "supernova"
+      ],
+      "scientists": [
+        "Alexei Kitaev"
+      ],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Квантовый компьютер научился придумывать фальшивые платежи, чтобы банки могли ловить настоящих мошенников. Гениально: вместо поиска иголки в стоге сена, он сам создаёт иголки, на которых можно тренироваться.",
+      "express_locked": true
+    }
+  }
+}

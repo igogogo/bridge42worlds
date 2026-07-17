@@ -128,7 +128,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
@@ -264,14 +264,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/es/graph/">graph</a>
 <a class="active" href="/lang/es/theory/">theory</a>
-<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/favorites.html" title="Favoritos">★</a>
 <a href="/lang/es/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contenido" class="toc">
 <p class="toc-title">Contenido</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Los cuatro principios en pocas palabras</a></li>
@@ -295,11 +295,11 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="30" y="80"></rect>
-<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ горячо</text>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ caliente</text>
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="270" y="80"></rect>
-<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ холодно</text>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ frío</text>
 <circle class="hero-heat" cx="165" cy="125" fill="var(--brass-fill)" r="8"></circle>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">тепло течёт от горячего к холодному, не наоборот</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">el calor fluye de lo caliente a lo frío, no al revés</text>
 </svg>
 </div>
 </header>
@@ -308,8 +308,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>La termodinámica es una rama rara de la física con una ley «número cero»: el principio básico que explica la temperatura misma fue comprendido después del primer y segundo principio y recibió su número a posteriori. En total son cuatro principios: el cero define la temperatura, el primero — la conservación de la energía para el calor y el trabajo, el segundo — por qué los procesos son irreversibles y la entropía aumenta, el tercero — por qué el cero absoluto es inalcanzable. Juntos gobiernan todo, desde una taza de café hasta la evolución de las estrellas.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Пар над кофе: энтропия рассеивает порядок" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>Vapor sobre el café: la entropía dispersa el orden</figcaption></figure>
-<figure><img alt="Поршень парового двигателя: тепло превращается в работу" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>Pistón del motor de vapor: el calor se convierte en trabajo</figcaption></figure>
+<figure><img alt="Vapor sobre el café: la entropía dispersa el orden" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>Vapor sobre el café: la entropía dispersa el orden</figcaption></figure>
+<figure><img alt="Pistón de una máquina de vapor: el calor se convierte en trabajo" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>Pistón del motor de vapor: el calor se convierte en trabajo</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Los cuatro principios en pocas palabras</h2></div>
@@ -415,7 +415,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>Supongamos que del foco caliente se suministra Q<sub>h</sub> = 1000 J de calor.<strong>El primer principio</strong> (la energía no desaparece) dice que toda esta energía se repartirá entre el trabajo útil W y el calor Q<sub>c</sub> cedido al foco frío:</p>
 <div class="eq"><div class="eq-body">W = η·Q<sub>h</sub> = 0.5·1000 = <strong>500 J</strong>,    Q<sub>c</sub> = Q<sub>h</sub> − W = <strong>500 J</strong></div><div class="eq-tag">(3)</div></div>
 <figure>
-<img alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж" src="/lang/ru/theory/thermo_engine_balance.png"/>
+<img alt="Diagrama de barras del balance energético de un motor térmico: aportados 1000 J, trabajo útil 500 J, disipados 500 J" src="/lang/ru/theory/thermo_engine_balance.png"/>
 <figcaption><span class="fign">Fig. 1</span>Primer principio: la suma de W y Q<sub>c</sub> es exactamente igual a Q<sub>h</sub> — la energía no se perdió, pero tampoco se convirtió completamente en trabajo (prohibición del segundo principio). Incluso un motor de Carnot ideal entre estas temperaturas no puede dar más de 500 J de trabajo útil a partir de 1000 J de calor.</figcaption>
 </figure>
 <p>Ningún motor real entre estas mismas dos temperaturas superará esos 500 J — el ciclo de Carnot proporciona el techo teórico de eficiencia, y la fricción e irreversibilidad de los procesos reales solo reducen el resultado por debajo de ese techo, nunca lo elevan.</p>
@@ -427,7 +427,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div class="measure">
 <p>El segundo principio es quizás la única ley de la física fundamental que distingue el pasado del futuro. Las ecuaciones de Newton, Maxwell e incluso Schrödinger son completamente simétricas en el tiempo: si se graba en video una colisión de bolas de billar y se reproduce hacia atrás, las leyes de la mecánica no encontrarán violación. Pero un video de una taza rompiéndose, reproducido hacia atrás (los fragmentos se ensamblan solos en una taza entera), parece absurdo — y la única ley de la física que «se da cuenta» de esto es el segundo principio.</p>
 <figure>
-<img alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю" src="/lang/ru/theory/thermo_entropy_zero.png"/>
+<img alt="Gráfica de la entropía S(T) tendiendo a cero cuando T tiende a cero" src="/lang/ru/theory/thermo_entropy_zero.png"/>
 <figcaption><span class="fign">Fig. 2</span>La entropía de un cristal ideal aumenta con la temperatura y tiende a cero cuando T → 0 (tercer principio) — la propia posibilidad de construir tal gráfico y hablar del «aumento» de la entropía con el tiempo es la fuente de la diferencia entre pasado y futuro en física.</figcaption>
 </figure>
 <div class="callout steel">

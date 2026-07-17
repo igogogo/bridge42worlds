@@ -154,6 +154,20 @@ def _default_lang_ok(scipop):
     return _script_ratio(sample, "Ѐ", "ӿ") >= 0.5
 
 
+def _log_lang_fallback(kind, article_id, category="", attempt=0):
+    """_default_lang_ok сработал False (ответ модели не на русском) — раньше был только print,
+    который в большом батче никто не читает и не считает. Теперь пишем в файл structured-строкой,
+    чтобы частоту/категории-виновники можно было посчитать скриптом/grep после прогона, а не искать
+    вручную по логу (см. случай 2026-07-16 — 29% express-статей уходили в повтор, нашли только
+    ручным grep'ом лога; промт-фикс — article-generate-express.txt, это — чтобы впредь ловилось
+    автоматически, без ручного разбора)."""
+    try:
+        with open("lang-fallback.log", "a", encoding="utf-8") as f:
+            f.write(f"{kind}\t{article_id}\t{category}\t{attempt}\n")
+    except Exception:
+        pass
+
+
 def generate_advanced(article, text, tags_input, scientists_keys):
     tags_list = ", ".join(t["en"] for t in tags_input)
     scientists_list = ", ".join(scientists_keys)
@@ -174,6 +188,7 @@ def generate_advanced(article, text, tags_input, scientists_keys):
         if _default_lang_ok(result):
             return result
         print(f"    ⚠️ RU-версия вышла не на русском — повтор с усилением языка")
+        _log_lang_fallback("advanced", article.get("id", ""), article.get("primary_category", ""), attempt)
     return result
 
 
@@ -202,6 +217,7 @@ def generate_express(article, abstract_text, tags_input, scientists_keys):
         if _default_lang_ok(result):
             return result
         print(f"    ⚠️ RU-версия вышла не на русском — повтор с усилением языка")
+        _log_lang_fallback("express", article.get("id", ""), article.get("primary_category", ""), attempt)
     return result
 
 
@@ -387,36 +403,65 @@ def refine_abstract(abstract):
             for v in ABSTRACT_LEVELS}
 
 
-def translate_scipop(scipop, target_lang):
+def _log_translation_failure(kind, target_lang, detail=""):
+    """Раньше сбой парсинга ответа модели (не сетевая ошибка — chat() её уже ретраит сама, см.
+    common.chat) молча откатывался на исходный (русский) текст — страница публиковалась как
+    "переведённая", хотя языка не меняла. На арабском это оказалось массовым: скан всего
+    корпуса 2026-07-16 показал 60-93% сломанных ar-страниц по тирам, 0% на en, ~0% на es —
+    похоже, модель заметно чаще выдаёт невалидный/недо-JSON именно на арабском. Теперь при
+    исчерпании ретраев тут же СИЛЬНО логируем в файл (не только print, который никто не видит
+    в большом батче) — чтобы сбои можно было найти и пересобрать точечно, а не только когда
+    кто-то вручную читает статьи."""
+    try:
+        with open("translation-failures.log", "a", encoding="utf-8") as f:
+            f.write(f"{kind}\t{target_lang}\t{detail}\n")
+    except Exception:
+        pass
+
+
+def translate_scipop(scipop, target_lang, retries=3):
+    """retries — сбой здесь почти всегда НЕ сетевой (chat() уже отретраила сетевые сама, см.
+    common.chat retries=3), а невалидный/недо-JSON в самом ответе модели — стохастическая штука,
+    повторный вызов часто проходит нормально. Раньше единственная попытка молча откатывалась на
+    непереведённый scipop — статья выглядела "готовой", но текст оставался на языке источника."""
     target_language = LANG_NAMES.get(target_lang, target_lang)
     prompt = load_prompt("article-translate").format(
         article_json=json.dumps(scipop, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, ""))
-    r = chat("translate", prompt)
-    try:
-        return json.loads(clean_json(r.choices[0].message.content))
-    except Exception:
-        return scipop
+    for attempt in range(1, retries + 1):
+        r = chat("translate", prompt)
+        try:
+            return json.loads(clean_json(r.choices[0].message.content))
+        except Exception as e:
+            if attempt == retries:
+                _log_translation_failure("scipop", target_lang, f"{scipop.get('title', '')[:60]!r}: {e}")
+            continue
+    return scipop
 
 
-def translate_captions(captions_en, target_lang):
+def translate_captions(captions_en, target_lang, retries=3):
     """Подписи к рисункам вытаскиваются regex'ом из англоязычного PDF (extract_captions) и
     без этого шага так и остаются на английском на ЛЮБОМ языке сайта. Один вызов на язык —
-    переводит весь список сразу (короткие строки, дёшево)."""
+    переводит весь список сразу (короткие строки, дёшево). retries — см. translate_scipop."""
     if not captions_en:
         return []
     target_language = LANG_NAMES.get(target_lang, target_lang)
     prompt = load_prompt("caption-translate").format(
         captions_json=json.dumps(captions_en, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, ""))
-    try:
-        r = chat("translate", prompt)
-        data = json.loads(clean_json(r.choices[0].message.content))
-        out = data.get("captions") if isinstance(data, dict) else data
-        if isinstance(out, list) and len(out) == len(captions_en):
-            return out
-    except Exception:
-        pass
+    for attempt in range(1, retries + 1):
+        try:
+            r = chat("translate", prompt)
+            data = json.loads(clean_json(r.choices[0].message.content))
+            out = data.get("captions") if isinstance(data, dict) else data
+            if isinstance(out, list) and len(out) == len(captions_en):
+                return out
+            if attempt == retries:
+                _log_translation_failure("captions", target_lang, f"got {type(out).__name__} len-mismatch")
+        except Exception as e:
+            if attempt == retries:
+                _log_translation_failure("captions", target_lang, str(e))
+            continue
     return captions_en
 
 

@@ -59,6 +59,11 @@
       "popular": "Un nuevo método basado en la red neuronal Mask R-CNN busca columnas de metano en imágenes del satélite MethaneSAT. Por la escasez de datos reales, la red se entrenó primero con datos de avión y ejemplos sintéticos, como entrenar un reconocedor facial con pocas fotos. El sistema final funciona en dos modos: «búsqueda amplia» captura el 94% de las fugas, y el «detector preciso» ofrece el 92% de hallazgos correctos. Este enfoque acelerará la búsqueda y reparación de fugas de metano que afectan al clima.",
       "simple": "El metano es un potente gas de efecto invernadero. Encontrar sus fugas desde el espacio es como buscar pequeñas columnas de humo invisibles sobre un campo. Los científicos entrenaron un programa para ver esas nubecillas en las imágenes. Encuentra casi todas las fugas, incluso con pocos datos de entrenamiento. Es como adiestrar a un sabueso con unos pocos olores. ¿Cuándo empezarán los satélites a vigilar la limpieza de la atmósfera las 24 horas?",
       "advanced": "Se propone un método de detección automática de columnas de metano en imágenes del satélite MethaneSAT basado en Mask R-CNN con ResNet-50. El modelo supera a U-Net en la medida F1 por píxel en 10,49 para MethaneAIR y 5,48 para MethaneSAT. Para superar la escasez de datos satelitales etiquetados, se realizó un ajuste fino con datos del avión MethaneAIR y columnas sintéticas. La precisión final a nivel de instancia fue de 0,60 con una exhaustividad de 0,98. El posprocesamiento con base física ofrece dos modos: alta sensibilidad (precisión 0,71, exhaustividad 0,94) para cribado y alta precisión (precisión 0,92, exhaustividad 0,70) para atribución de fuentes. El análisis de falsos positivos mostró que muchos corresponden a emisiones reales omitidas por el etiquetado conservador, por lo que las métricas declaradas son una estimación inferior del rendimiento."
+    },
+    "ar": {
+      "popular": "طريقة جديدة تعتمد على الشبكة العصبية Mask R-CNN تبحث عن أعمدة الميثان في صور القمر الصناعي MethaneSAT. وبسبب نقص البيانات الحقيقية، تم تدريب الشبكة أولاً على بيانات من طائرة وأمثلة اصطناعية - مثل تدريب نظام التعرف على الوجوه من خلال صور قليلة. يعمل النظام النهائي في وضعين: 'البحث الواسع' يلتقط 94٪ من التسريبات، بينما يقدم 'الكاشف الدقيق' 92٪ من الاكتشافات الصحيحة. سيسرّع هذا النهج البحث عن تسريبات الميثان وإصلاحها، والتي تؤثر على المناخ.",
+      "simple": "الميثان غاز دفيء قوي. العثور على تسريباته من الفضاء يشبه البحث عن خيوط دخان غير مرئية فوق حقل. درّب العلماء برنامجاً لرؤية هذه السحب في الصور. يعثر على معظم التسريبات، حتى لو كانت بيانات التدريب قليلة. الأمر أشبه بتدريب خبير تتبع على التعرف على الآثار من خلال بضع عينات. متى ستبدأ الأقمار الصناعية بمراقبة نقاء الغلاف الجوي على مدار الساعة؟",
+      "advanced": "طُرحت طريقة للكشف التلقائي عن أعمدة الميثان في صور القمر الصناعي MethaneSAT باستخدام Mask R-CNN مع ResNet-50. يتفوق النموذج على U-Net بمقياس F1 على مستوى البكسل بمقدار 10.49 لـ MethaneAIR و5.48 لـ MethaneSAT. للتغلب على نقص بيانات الأقمار الصناعية الموسومة، تم إجراء تدريب إضافي على بيانات من طائرة MethaneAIR وأعمدة اصطناعية. بلغت الدقة النهائية على مستوى الحالات 0.60 مع استدعاء 0.98. توفر المعالجة اللاحقة القائمة على أسس فيزيائية وضعين: عالي الحساسية (الدقة 0.71، الاستدعاء 0.94) للفحص، وعالي الدقة (الدقة 0.92، الاستدعاء 0.70) لنسب المصادر. أظهر تحليل الإيجابيات الكاذبة أن العديد منها يتوافق مع انبعاثات حقيقية فاتتها الوسم المتحفظ، مما يعني أن المقاييس المعلنة هي تقدير أدنى للفعالية."
     }
   },
   "thumbs": 6,
@@ -110,6 +115,20 @@
       "Distribución geográfica de las cuencas objetivo de MethaneAIR",
       "Rendimiento de Mask R-CNN y U-Net en el conjunto de validación de MethaneAIR en función de la tasa de aprendizaje para los cuatro",
       "Rendimiento de Mask R-CNN (ResNet-50) en el"
+    ],
+    "ar": [
+      "كسور مولية ميثان جافة متوسطة العمود ومقسمة إلى شبكات (XCH4) من حوض البيرمي (أ) مشهد من MethaneAIR",
+      "بقع عينات كشف أعمدة الميثان في",
+      "من تركيز XCH4 المدخل",
+      "معمارية Mask R-CNN المستخدمة في هذا العمل.",
+      "مقارنة نوعية لتوقعات تجزئة الأعمدة على ثلاثة مشاهد اختبار من MethaneAIR بحجم رقعة ٤٤٨×٤٤٨.",
+      "الترتيب العام",
+      "نتائج الكشف على مستوى المشهد لمشهد اختبار تمثيلي من MethaneSAT. اليسار: خريطة XCH4 المدخلة (جزء في المليار). الوسط:",
+      "فئات إيجابية كاذبة تمثيلية محددة أثناء مراجعة مجموعة الاختبار اليدوية. تظهر خرائط شذوذ XCH4 في",
+      "إعادة بناء المشهد الاحتمالية لمشهدي اختبار من MethaneSAT. يظهر كل صف المتوسط الموزون بالثقة",
+      "التوزيع الجغرافي لأحواض MethaneAIR المستهدفة",
+      "أداء Mask R-CNN و U-Net على مجموعة التحقق من MethaneAIR كدالة لمعدل التعلم لجميع الأربعة",
+      "أداء Mask R-CNN (ResNet-50) على"
     ]
   },
   "popular": {
@@ -190,6 +209,32 @@
       "key_problems_connection": "",
       "threads": "Спутник MethaneSAT смотрит на Землю и видит невидимый газ. Умная программа учится замечать облака метана даже там, где человек их пропустил. Оказывается, многие «ошибки» компьютера — это настоящие утечки, которые никто не замечал. Теперь найти и починить протечку газа можно быстрее, чем когда-либо.",
       "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "حاليًا تتوفر فقط نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، فسنعدّ النسخة الكاملة أولاً.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "يدور القمر الصناعي MethaneSAT حول الأرض ليرصد غازًا غير مرئي. يتعلم برنامج ذكي كيفية اكتشاف سحب الميثان حتى في الأماكن التي قد يغفل عنها الإنسان. واتضح أن الكثير مما اعتُبر «أخطاء» حاسوبية هو في الواقع تسربات حقيقية لم يلاحظها أحد من قبل. والآن أصبح العثور على تسرب الغاز وإصلاحه أسرع من أي وقت مضى.",
+      "formulas": [],
+      "main_tag": "carbon",
+      "extra_tags": [
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "حاليًا تتوفر فقط نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، فسنعدّ النسخة الكاملة أولاً.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "يدور القمر الصناعي MethaneSAT حول الأرض ليرصد غازًا غير مرئي. يتعلم برنامج ذكي كيفية اكتشاف سحب الميثان حتى في الأماكن التي قد يغفل عنها الإنسان. واتضح أن الكثير مما اعتُبر «أخطاء» حاسوبية هو في الواقع تسربات حقيقية لم يلاحظها أحد من قبل. والآن أصبح العثور على تسرب الغاز وإصلاحه أسرع من أي وقت مضى.",
+      "express_locked": true
     }
   },
   "simple": {
@@ -231,6 +276,21 @@
       "fun_fact": "El metano retiene 80 veces más calor que el dióxido de carbono en 20 años.",
       "scifi": "Algún día, estos sabuesos orbitales olfatearán las atmósferas de exoplanetas en busca de vida.",
       "mini": "El satélite MethaneSAT observa la Tierra y detecta el gas invisible. Un programa inteligente aprende a notar nubes de metano incluso donde los humanos las pasan por alto. Resulta que muchos «errores» de la computadora son fugas reales que nadie notaba. Ahora encontrar y reparar una fuga de gas es más rápido que nunca.",
+      "formulas": [],
+      "main_tag": "carbon",
+      "extra_tags": [
+        "spectroscopy"
+      ],
+      "scientists": []
+    },
+    "ar": {
+      "title": "كيف تتعقب الخفي من الفضاء",
+      "oneliner": "القمر الصناعي المتعقّب MethaneSAT مدرّب على استنشاق الميثان الخفي والعثور على التسريبات التي غفل عنها البشر.",
+      "description": "درّب العلماء برنامج القمر الصناعي على التعرّف على سحب الميثان، مثل كلب الصيد المدرّب. سيساعد هذا في إصلاح التسريبات بسرعة أكبر وإبطاء ارتفاع حرارة الكوكب.",
+      "text": "يراقب القمر الصناعي MethaneSAT تسريبات [tag:carbon]الميثان[/tag] – وهو غاز غير مرئي لكنّه يسخّن الكوكب بقوة. أما 'حاسة الشم' لديه فهي [tag:spectroscopy]مطياف[/tag]، وهو جهاز يلاحظ أدقّ تغيّر في لون الضوء المارّ عبر الغلاف الجوي. هذا هو الأثر الذي يتركه الميثان.\n\nلكن لا يكفي التقاط الرائحة – بل يجب تمييزها عن آلاف الروائح الأخرى. في الماضي، كان الناس يدرسون الصور، أما الآن فقد دُرّب البرنامج مثل كلب صيد: في البداية يلتقط كل ما هو مريب، مثل الكلب الذي يمسك بأي أثر، ثم يأتي 'المرشد' – وهو خوارزمية ثانية – ليؤكد الصيد. الأكثر إثارة للدهشة: عندما 'ينبح' كلب الصيد في مكان فارغ، غالبًا ما يتبين أنه تسرّب حقيقي أغفله الخبراء بسبب حذرهم الزائد.\n\nيتيح هذا الصيد إصلاح الأنابيب ومواقع الطمر بسرعة، مما يقلّل من انبعاثات الميثان، الذي يسخّن بقوة تزيد بـ 80 مرة عن [tag:carbon]ثاني أكسيد الكربون[/tag] خلال العشرين عامًا الأولى.",
+      "fun_fact": "يحبس الميثان حرارة أكثر بـ 80 مرة من ثاني أكسيد الكربون على مدى 20 عامًا.",
+      "scifi": "في يوم من الأيام، ستقوم هذه الكواشف المدارية باستنشاق أغلفة الكواكب الخارجية بحثًا عن علامات الحياة.",
+      "mini": "ينظر القمر الصناعي MethaneSAT إلى الأرض فيرى غازًا غير مرئي. ويتعلّم برنامج ذكي كيف يلاحظ سحب الميثان حتى في الأماكن التي غفل عنها الإنسان. لقد اتضح أن العديد من 'أخطاء' الحاسوب هي تسريبات حقيقية لم يلاحظها أحد. والآن أصبح العثور على تسرّب الغاز وإصلاحه أسرع من أي وقت مضى.",
       "formulas": [],
       "main_tag": "carbon",
       "extra_tags": [
@@ -316,6 +376,32 @@
       "next_steps": "",
       "key_problems_connection": "",
       "threads": "Спутник MethaneSAT смотрит на Землю и видит невидимый газ. Умная программа учится замечать облака метана даже там, где человек их пропустил. Оказывается, многие «ошибки» компьютера — это настоящие утечки, которые никто не замечал. Теперь найти и починить протечку газа можно быстрее, чем когда-либо.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "حاليًا تتوفر فقط نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، سنقوم بإعداد النسخة الكاملة في أسرع وقت.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "القمر الصناعي MethaneSAT ينظر إلى الأرض ويرى غازًا غير مرئي. برنامج ذكي يتعلم رصد سُحُب الميثان حتى في الأماكن التي فاتت الإنسان. اتضح أن العديد من \"أخطاء\" الحاسوب هي تسريبات حقيقية لم يلاحظها أحد. الآن يمكن العثور على تسرب الغاز وإصلاحه أسرع من أي وقت مضى.",
+      "formulas": [],
+      "main_tag": "carbon",
+      "extra_tags": [
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "حاليًا تتوفر فقط نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، سنقوم بإعداد النسخة الكاملة في أسرع وقت.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "القمر الصناعي MethaneSAT ينظر إلى الأرض ويرى غازًا غير مرئي. برنامج ذكي يتعلم رصد سُحُب الميثان حتى في الأماكن التي فاتت الإنسان. اتضح أن العديد من \"أخطاء\" الحاسوب هي تسريبات حقيقية لم يلاحظها أحد. الآن يمكن العثور على تسرب الغاز وإصلاحه أسرع من أي وقت مضى.",
       "express_locked": true
     }
   }

@@ -1,0 +1,377 @@
+{
+  "id": "2510.25982",
+  "original_title": "Enabling Fast and Accurate Neutral Atom Readout through Image Denoising",
+  "authors": [
+    "Chaithanya Naik Mude",
+    "Linipun Phuttitarn",
+    "Satvik Maurya",
+    "Kunal Sinha",
+    "Mark Saffman",
+    "Swamit Tannu"
+  ],
+  "date": "2025-10-29",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "photometry",
+    "entropy",
+    "speed_of_light"
+  ],
+  "main_tag": "photometry",
+  "scientists": [],
+  "categories": [
+    "quant-ph",
+    "cs.LG"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [
+    "2502.20558",
+    "2412.07670",
+    "2510.25213",
+    "2505.15917",
+    "2504.08170",
+    "2505.11218"
+  ],
+  "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+  "abstract": {
+    "ru": {
+      "popular": "Нейтральные атомы — многообещающая платформа для квантовых вычислений, но их слабое место — медленное считывание кубитов (квантовых битов). Оно занимает миллисекунды, что намного дольше самих операций, и тормозит исправление ошибок. Авторы разработали метод GANDALF, который с помощью нейросети очищает снимки с детектора, как фотошоп убирает шум с фотографий. Это позволило сократить время считывания в 1.6 раза, а в сочетании с конвейерной обработкой уменьшить логические ошибки в 35 раз и общее время цикла квантовой коррекции в 1.77 раза по сравнению с лучшими аналогами. Такой подход словно даёт квантовому компьютеру зрение орла — быстрое и чёткое.",
+      "simple": "Квантовые компьютеры на нейтральных атомах быстро считают, но медленно считывают результаты — как скоростной поезд, которому мешает долгая остановка. Учёные нашли способ ускорить считывание, очищая зашумлённые сигналы, словно улучшая размытую фотографию. Это снижает ошибки и делает квантовую коррекцию намного быстрее. Представьте: вместо минут ожидания — почти мгновенный ответ.",
+      "advanced": "В квантовых компьютерах на нейтральных атомах считывание кубитов занимает миллисекунды — значительно дольше квантовых вентилей, что замедляет работу квантовой коррекции ошибок (QEC). Ускорение считывания сокращает время цикла и декогеренцию, но снижает число регистрируемых фотонов, повышая шум. Предложенный метод GANDALF использует глубинное обучение для шумоподавления изображений, реконструируя сигналы из коротких измерений с малым числом фотонов. Это позволяет надёжно классифицировать состояния кубитов при сокращении времени считывания до 1.6 раз. В сочетании с лёгкими классификаторами и конвейерной архитектурой достигнуто снижение частоты логических ошибок до 35 раз и ускорение полного цикла QEC до 1.77 раз по сравнению с передовыми свёрточными нейросетями (CNN) на массивах цезиевых атомов."
+    },
+    "en": {
+      "popular": "Neutral atoms are a promising platform for quantum computing, but their weak spot is the slow readout of qubits (quantum bits). It takes milliseconds—way longer than the operations themselves—and bottlenecks error correction. The authors developed the GANDALF method, which uses a neural net to clean detector snapshots, like Photoshop removing noise from photos. This cut readout time by 1.6×, and combined with pipelined processing, reduced logical errors by 35× and shaved the full quantum error correction cycle time by 1.77× compared to the best alternatives. It’s like giving a quantum computer eagle eyes—fast and razor-sharp.",
+      "simple": "Quantum computers based on neutral atoms compute like lightning but read results like molasses—picture a bullet train forced into a long station stop. Scientists found a way to speed up readout by cleaning noisy signals, a bit like sharpening a blurry photo. This slashes errors and makes quantum error correction dramatically faster. Imagine getting an almost instant answer instead of waiting for minutes.",
+      "advanced": "In neutral-atom quantum computers, qubit readout takes milliseconds—far longer than quantum gates, slowing down quantum error correction (QEC). Speeding up readout reduces cycle time and decoherence, but cuts the number of detected photons, increasing noise. The proposed GANDALF method uses deep learning for image denoising, reconstructing signals from short, photon-starved measurements. This allows reliable qubit state classification while slashing readout time by up to 1.6×. Combined with lightweight classifiers and a pipelined architecture, it achieves up to a 35× reduction in logical error rate and a 1.77× speedup of the full QEC cycle compared to state-of-the-art convolutional neural networks (CNNs) on cesium atom arrays."
+    },
+    "es": {
+      "popular": "Los átomos neutros son una plataforma prometedora para la computación cuántica, pero su punto débil es la lectura lenta de los cúbits (bits cuánticos). Esto tarda milisegundos, mucho más que las propias operaciones, y frena la corrección de errores. Los autores desarrollaron el método GANDALF, que utiliza una red neuronal para limpiar las imágenes del detector, como Photoshop elimina el ruido de las fotos. Esto permitió reducir el tiempo de lectura en 1,6 veces, y, combinado con el procesamiento en cadena, reducir los errores lógicos 35 veces y el tiempo total del ciclo de corrección cuántica en 1,77 veces en comparación con los mejores análogos. Este enfoque es como darle al ordenador cuántico la visión de un águila: rápida y nítida.",
+      "simple": "Los ordenadores cuánticos de átomos neutros calculan rápido, pero leen los resultados lentamente, como un tren de alta velocidad que se ve frenado por una parada larga. Los científicos han encontrado la manera de acelerar la lectura limpiando las señales ruidosas, como quien mejora una foto borrosa. Esto reduce los errores y hace que la corrección cuántica sea mucho más rápida. Imagínate: en lugar de minutos de espera, una respuesta casi instantánea.",
+      "advanced": "En los ordenadores cuánticos de átomos neutros, la lectura de los cúbits tarda milisegundos, mucho más que las puertas cuánticas, lo que ralentiza la corrección cuántica de errores (QEC). Acelerar la lectura reduce el tiempo del ciclo y la decoherencia, pero disminuye el número de fotones detectados, aumentando el ruido. El método GANDALF propuesto utiliza el aprendizaje profundo para eliminar el ruido de las imágenes, reconstruyendo las señales a partir de mediciones cortas con pocos fotones. Esto permite clasificar de forma fiable los estados de los cúbits con una reducción del tiempo de lectura de hasta 1,6 veces. Combinado con clasificadores ligeros y una arquitectura de pipeline, se logró una reducción de la tasa de errores lógicos de hasta 35 veces y una aceleración del ciclo completo de QEC de hasta 1,77 veces en comparación con las redes neuronales convolucionales (CNN) punteras en matrices de átomos de cesio."
+    },
+    "ar": {
+      "popular": "الذرات المحايدة منصة واعدة للحوسبة الكمومية، لكن نقطة ضعفها هي القراءة البطيئة للكيوبتات (البتات الكمومية). تستغرق ميلي ثانية، وهي فترة أطول بكثير من العمليات نفسها، مما يعيق تصحيح الأخطاء. طوّر الباحثون طريقة GANDALF التي تستخدم الشبكات العصبية لتنظيف الصور الملتقطة من الكاشف، كما ينظف الفوتوشوب الضوضاء من الصور الفوتوغرافية. أدى هذا إلى تقليل زمن القراءة بمقدار 1.6 مرة، وعند دمجه مع المعالجة التسلسلية، قلل الأخطاء المنطقية بمقدار 35 مرة، وقلل الزمن الكلي لدورة التصحيح الكمومي بمقدار 1.77 مرة مقارنة بأفضل الطرق المماثلة. هذا الأسلوب يمنح الحاسوب الكمومي بصر النسر — سريعاً وواضحاً.",
+      "simple": "الحواسيب الكمومية المعتمدة على الذرات المحايدة تحسب بسرعة، لكنها تقرأ النتائج ببطء — مثل قطار فائق السرعة تعيقه محطة توقف طويلة. وجد العلماء طريقة لتسريع القراءة عبر تنظيف الإشارات المشوشة، كما لو كانوا يحسّنون صورة ضبابية. هذا يقلل الأخطاء ويجعل التصحيح الكمومي أسرع بكثير. تخيّل: بدلاً من الانتظار دقائق — تحصل على إجابة شبه فورية.",
+      "advanced": "في الحواسيب الكمومية المعتمدة على الذرات المحايدة، تستغرق قراءة الكيوبتات ميلي ثانية — وهي أطول بكثير من البوابات الكمومية، مما يبطئ عمل تصحيح الأخطاء الكمومية (QEC). يؤدي تسريع القراءة إلى تقليل زمن الدورة وزمن التماسك الكمومي، لكنه يقلل عدد الفوتونات المسجلة مما يزيد الضوضاء. تستخدم طريقة GANDALF المقترَحة التعلم العميق لإزالة الضوضاء من الصور، وإعادة بناء الإشارات من القياسات القصيرة بعدد قليل من الفوتونات. يتيح ذلك تصنيف حالات الكيوبتات بدقة مع تقليل زمن القراءة حتى 1.6 مرة. وبدمجها مع مصنفات خفيفة ومعمارية تسلسلية، تم تحقيق خفض في معدل الأخطاء المنطقية يصل إلى 35 مرة، وتسريع الدورة الكاملة لـ QEC حتى 1.77 مرة مقارنة بالشبكات العصبية الالتفافية المتقدمة (CNN) العاملة على مصفوفات ذرات السيزيوم."
+    }
+  },
+  "thumbs": 4,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "(a) Overview of training GANDALF to generate denoised images close to high-signal-to-noise ratio (SNR) long",
+      "Representative measurements of neutral atom",
+      "The experimental setup [ 31] uses optical tweezers",
+      "Comparison of pixel intensity when atom is"
+    ],
+    "ru": [
+      "(a) Обзор обучения GANDALF для генерации денойзированных изображений, близких к изображениям с высоким отношением сигнал/шум (SNR) и длинной экспозицией",
+      "Репрезентативные измерения нейтрального атома",
+      "Экспериментальная установка [31] использует оптический пинцет",
+      "Сравнение интенсивности пикселей, когда атом"
+    ],
+    "es": [
+      "(a) Visión general del entrenamiento de GANDALF para generar imágenes sin ruido cercanas a una alta relación señal-ruido (SNR) de larga exposición",
+      "Mediciones representativas de átomo neutro",
+      "La configuración experimental [31] utiliza pinzas ópticas",
+      "Comparación de la intensidad de píxeles cuando el átomo está"
+    ],
+    "ar": [
+      "(أ) نظرة عامة على تدريب GANDALF لتوليد صور خالية من الضوضاء قريبة من نسبة الإشارة إلى الضوضاء العالية (SNR) طويلة",
+      "قياسات تمثيلية لذرة متعادلة",
+      "الإعداد التجريبي [31] يستخدم الملقط البصري",
+      "مقارنة شدة البكسل عندما تكون الذرة"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Фоторедактор для квантовых компьютеров",
+      "oneliner": "Алгоритм GANDALF очищает шумные снимки атомных кубитов, ускоряя чтение и сокращая число ошибок в 35 раз.",
+      "description": "Квантовые компьютеры на нейтральных атомах спотыкаются о медленное считывание состояний. Программа GANDALF работает как фильтр в фоторедакторе: по короткой зашумлённой экспозиции восстанавливает чёткий сигнал, ускоряет исправление ошибок вдвое и уменьшает сбои в десятки раз.",
+      "text": "Атомные кубиты «щёлкают» вычисления за микросекунды, но съёмка результата с помощью [tag:photometry]светочувствительной камеры[/tag] растягивается на миллисекунды — в тысячи раз дольше. За это время квантовое состояние размывается (декогеренция), накапливая неопределённость ([tag:entropy]энтропию[/tag]), словно фотография при долгой выдержке дрожащей камерой. Укоротить выдержку нельзя: тогда в кадр попадает слишком мало фотонов — частиц света, движущихся со [tag:speed_of_light]скоростью света[/tag], и сигнал тонет в шуме.\n\nАлгоритм GANDALF действует как инструмент «магического» повышения резкости: по мутной, зашумлённой секундной съёмке он восстанавливает чёткую картину свечения атомов. Фактически это фоторедактор, понимающий физику квантовых снимков. В результате считывание ускоряется в 1,6 раза без потери точности, а полный цикл коррекции ошибок — вдвое. Неожиданный поворот: число сбоев обрушивается в 35 раз, потому что алгоритм не просто чистит шум, а угадывает истинное состояние по микроскопическим подсказкам.",
+      "fun_fact": "Каждый кубит выдаёт всего горсть фотонов — столько же света, сколько глаз улавливает от едва заметной звезды. Именно этот микроскопический сигнал и усиливает GANDALF.",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": []
+    },
+    "en": {
+      "title": "Photo Editor for Quantum Computers",
+      "oneliner": "The GANDALF algorithm cleans up noisy snapshots of atomic qubits, speeding up readout and reducing errors by a factor of 35.",
+      "description": "Quantum computers based on neutral atoms are tripped up by slow state readout. The GANDALF program acts like a filter in a photo editor: it takes a short, noisy exposure and reconstructs a clear signal, doubles the speed of error correction, and slashes failures by tens of times.",
+      "text": "Atomic qubits 'snap' computations in microseconds, but capturing the result with a [tag:photometry]light-sensitive camera[/tag] stretches out to milliseconds — thousands of times longer. During this time, the quantum state blurs (decoherence), accumulating uncertainty ([tag:entropy]entropy[/tag]), like a photo taken with a long exposure on a shaky camera. Shortening the exposure isn't an option: then too few photons — particles of light traveling at the [tag:speed_of_light]speed of light[/tag] — hit the sensor, and the signal drowns in noise.\n\nThe GANDALF algorithm acts like a 'magical' sharpening tool: from a blurry, noisy one-second exposure, it reconstructs a crisp picture of the atoms' glow. In essence, it's a photo editor that understands the physics of quantum snapshots. As a result, readout speeds up by 1.6 times without loss of accuracy, and the full error correction cycle is twice as fast. An unexpected twist: the number of failures plunges by a factor of 35, because the algorithm doesn't just clean up noise — it guesses the true state from microscopic hints.",
+      "fun_fact": "Each qubit emits just a handful of photons — as much light as the eye catches from a barely visible star. It is this microscopic signal that GANDALF amplifies.",
+      "scifi": "",
+      "mini": "Each qubit glows with just a few hundred photons. An algorithm inspired by photo editors guesses the state from noisy snapshots. Quantum computers stop waiting and start computing — with errors 35 times rarer.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": []
+    },
+    "es": {
+      "title": "Editor de fotos para computadoras cuánticas",
+      "oneliner": "El algoritmo GANDALF limpia las imágenes ruidosas de los cúbits atómicos, acelerando la lectura y reduciendo el número de errores en 35 veces.",
+      "description": "Las computadoras cuánticas basadas en átomos neutros tropiezan con la lentitud de la lectura de estados. El programa GANDALF funciona como un filtro en un editor de fotos: a partir de una exposición corta y ruidosa, reconstruye una señal nítida, acelera la corrección de errores al doble y reduce los fallos en decenas de veces.",
+      "text": "Los cúbits atómicos «chasquean» los cálculos en microsegundos, pero la captura del resultado con una [tag:photometry]cámara fotosensible[/tag] se alarga a milisegundos, miles de veces más lento. Durante ese tiempo, el estado cuántico se difumina (decoherencia), acumulando incertidumbre ([tag:entropy]entropía[/tag]), como una foto tomada con una cámara temblorosa durante una larga exposición. No se puede acortar la exposición: entonces llegan muy pocos fotones —partículas de luz que viajan a la [tag:speed_of_light]velocidad de la luz[/tag]— y la señal se ahoga en el ruido.\n\nEl algoritmo GANDALF actúa como una herramienta de aumento de nitidez «mágico»: a partir de una captura borrosa y ruidosa de un segundo, reconstruye una imagen nítida del brillo de los átomos. De hecho, es un editor de fotos que entiende la física de las imágenes cuánticas. Como resultado, la lectura se acelera 1,6 veces sin pérdida de precisión, y el ciclo completo de corrección de errores se duplica. Giro inesperado: el número de fallos se desploma 35 veces, porque el algoritmo no solo limpia el ruido, sino que adivina el estado real a partir de pistas microscópicas.",
+      "fun_fact": "Cada cúbit emite solo un puñado de fotones, la misma cantidad de luz que el ojo capta de una estrella apenas visible. Es precisamente esta señal microscópica la que GANDALF amplifica.",
+      "scifi": "",
+      "mini": "Cada cúbit brilla con apenas unos cientos de fotones. El algoritmo, inspirado en los editores de fotos, adivina el estado a partir de imágenes ruidosas. Las computadoras cuánticas dejan de esperar y empiezan a calcular, con 35 veces menos errores.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": []
+    },
+    "ar": {
+      "title": "محرر صور للحواسيب الكمومية",
+      "oneliner": "تقوم خوارزمية GANDALF بتنظيف الصور المشوشة للبتات الكمومية الذرية، مما يسرّع القراءة ويقلل عدد الأخطاء بمقدار 35 مرة.",
+      "description": "تعاني الحواسيب الكمومية القائمة على الذرات المحايدة من بطء قراءة الحالات. يعمل برنامج GANDALF كمرشح في محرر الصور: يستعيد إشارة واضحة من تعريض قصير مشوش، ويضاعف سرعة تصحيح الأخطاء، ويقلل الأعطال بعشرات المرات.",
+      "text": "تنجز البتات الكمومية الذرية الحسابات في ميكروثانية، لكن تصوير النتيجة باستخدام [tag:photometry]كاميرا حساسة للضوء[/tag] يستغرق ملي ثانية – أي أطول بآلاف المرات. خلال هذا الوقت، تتلاشى الحالة الكمومية (فك الترابط)، ويتراكم عدم اليقين (الـ[tag:entropy]إنتروبيا[/tag])، تمامًا كالصورة التي تُلتقط بتعريض طويل وكاميرا مهتزة. لا يمكن تقصير مدة التعريض: حينها يدخل عدد قليل جدًا من الفوتونات – جسيمات الضوء التي تتحرك بـ[tag:speed_of_light]سرعة الضوء[/tag] – فتُغرق الإشارة في الضوضاء.\n\nتعمل خوارزمية GANDALF كأداة لزيادة حدة الصور بشكل مذهل: من صورة مشوشة وغير واضحة مدتها ثانية واحدة، تستعيد صورة واضحة لتوهج الذرات. إنها في الواقع محرر صور يفهم فيزياء الصور الكمومية. ونتيجةً لذلك، تتسارع القراءة بمعامل 1.6 دون فقدان الدقة، وتصبح دورة تصحيح الأخطاء بأكملها أسرع مرتين. والمفاجأة: تنهار أعداد الأعطال بمعدل 35 مرة، لأن الخوارزمية لا تزيل الضوضاء فحسب، بل تخمّن الحالة الحقيقية من تلميحات مجهرية.",
+      "fun_fact": "يُنتج كل بت كمومي حفنة من الفوتونات فقط – نفس كمية الضوء التي تلتقطها العين من نجم خافت بالكاد يُرى. وهذه الإشارة المجهرية بالضبط هي ما تضخمه GANDALF.",
+      "scifi": "",
+      "mini": "يتوهج كل بت كمومي ببضع مئات من الفوتونات فقط. خوارزمية مستوحاة من محررات الصور تخمّن الحالة من الصور المشوشة. تتوقف الحواسيب الكمومية عن الانتظار وتبدأ بالحساب – بأخطاء أقل بـ 35 مرة.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": []
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "formulas": [],
+      "main_tag": "photometry",
+      "extra_tags": [
+        "entropy",
+        "speed_of_light"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Каждый кубит светится всего несколькими сотнями фотонов. Алгоритм, вдохновлённый фоторедакторами, угадывает состояние по зашумлённым снимкам. Квантовые компьютеры перестают ждать и начинают считать — с ошибками в 35 раз реже.",
+      "express_locked": true
+    }
+  }
+}

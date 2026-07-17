@@ -148,7 +148,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-ballA{ animation: heroBallA 6s cubic-bezier(.55,0,1,.45) infinite; }
@@ -403,14 +403,14 @@ code, .code{
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/es/graph/">graph</a>
 <a class="active" href="/lang/es/theory/">theory</a>
-<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/favorites.html" title="Favoritos">★</a>
 <a href="/lang/es/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contenido" class="toc">
 <p class="toc-title">Contenido</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Tres magnitudes conservadas</a></li>
@@ -437,7 +437,7 @@ code, .code{
 <circle class="hero-ballB" cx="220" cy="150" fill="var(--steel-fill)" r="16"></circle>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="70" y="190">A: v→0</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="220" y="190">B: 0→v</text>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A передаёт всё B — сумма импульсов не меняется</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A le transfiere todo a B — la suma de momentos no cambia</text>
 </svg>
 </div>
 </header>
@@ -446,8 +446,8 @@ code, .code{
 <p>De las tres leyes de Newton (véase la parte I) se derivan tres magnitudes que en un sistema aislado no cambian con el tiempo: el impulso, la energía y el momento angular. No son coincidencias casuales, sino una consecuencia directa de las simetrías del espacio y el tiempo (teorema de Noether, §6). En esta nota se presentan las tres leyes de conservación por separado con ejemplos numéricos, y luego un ejemplo continuo (choque elástico e inelástico) donde se ve que el impulso se conserva siempre, mientras que la energía solo a veces.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Момент покоя на вершине маятника — вся энергия потенциальна" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>Momento de reposo en el punto más alto del péndulo: toda la energía es potencial</figcaption></figure>
-<figure><img alt="Руки к телу — вращение ускоряется: сохраняется момент импульса" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>Manos hacia el cuerpo: la rotación se acelera: se conserva el momento angular</figcaption></figure>
+<figure><img alt="Instante de reposo en lo alto del péndulo — toda la energía es potencial" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>Momento de reposo en el punto más alto del péndulo: toda la energía es potencial</figcaption></figure>
+<figure><img alt="Brazos junto al cuerpo — la rotación se acelera: se conserva el momento angular" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>Manos hacia el cuerpo: la rotación se acelera: se conserva el momento angular</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Tres magnitudes conservadas</h2></div>
@@ -500,7 +500,7 @@ code, .code{
 <div class="units">K [J], U [J], m [kg], v [m/s], g ≈ 10 m/s² (redondeado, como en la parte I, para calcular mentalmente), h [m].</div>
 <p>El ejemplo clásico es el péndulo o el columpio: en el punto más alto la velocidad es cero (K = 0), toda la energía es potencial; en el punto más bajo la altura es mínima (U = 0), toda la energía es cinética. A medio camino hay una fracción de cada una, pero la suma es la misma en cualquier punto de la oscilación.</p>
 <figure>
-<img alt="График K(t), U(t) и их суммы E для одного качания маятника — кривые K и U пересекаются, сумма остаётся горизонтальной прямой" src="/lang/ru/theory/conservation_energy.png"/>
+<img alt="Gráfica de K(t), U(t) y su suma E durante una oscilación del péndulo — las curvas K y U se cruzan, la suma permanece como una recta horizontal" src="/lang/ru/theory/conservation_energy.png"/>
 <figcaption><span class="fign">Fig. 1</span>Las energías cinética (K) y potencial (U) intercambian posiciones dos veces por oscilación, pero su suma (línea discontinua) se mantiene como una línea horizontal constante: ni disminuye ni aumenta en ningún momento.</figcaption>
 </figure>
 <p>Ejemplo numérico: un cuerpo cae desde una altura h = 5 m sin velocidad inicial (despreciando la resistencia del aire). ¿Cuál es su velocidad al llegar al suelo?</p>
@@ -570,7 +570,7 @@ code, .code{
 <tr><td>En. cinética, J</td><td class="sym">½·3·4² = 24</td><td class="sym">½·4·3² = 18</td></tr>
 </table>
 <figure>
-<img alt="График импульса двух тележек при неупругом столкновении: p1 падает, p2 растёт, сумма остаётся постоянной" src="/lang/ru/theory/conservation_momentum.png"/>
+<img alt="Gráfica del momento de dos carritos en un choque inelástico: p1 baja, p2 sube, la suma permanece constante" src="/lang/ru/theory/conservation_momentum.png"/>
 <figcaption><span class="fign">Fig. 2</span>El impulso de cada carrito cambia durante la breve colisión, pero su suma (línea discontinua) permanece estrictamente constante antes, durante y después del choque: el impulso se conserva incluso cuando la energía no.</figcaption>
 </figure>
 <div class="callout brass">

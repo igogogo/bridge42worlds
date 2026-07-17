@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=8748673b1e">
+    <link rel="stylesheet" href="/css/style.css?v=59e99c8dfd">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Stellar Orthography: How ExoVeil Reads Missed Planets", "description": "ExoVeil's machine learning algorithm finds exoplanets from a single transit, learning the 'grammar' of stellar brightness and reacting to any anomalies.", "inLanguage": "en", "datePublished": "2026-06-01", "url": "https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg", "author": [{"@type": "Person", "name": "Pratik Priyanshu"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2606.02778v3", "abstract": "EXOVEIL is a transit-finding system that operates on raw flux time series and can detect single transits. Based on a Transformer model trained with transit masking on 16,499 Kepler light curves, it predicts the expected stellar flux; a variance-weighted matched filter extracts signals from the prediction residuals. An XGBoost classifier separates planets from false positives (AUC 0.938 on Kepler DR25). When injecting single transits with 1000 ppm depth, the system recovers 32%—a task where all classification methods show 0%. A blind search of 3737 Kepler stars revealed 179 new transit-like signals, including 46 single-transit candidates. Without retraining, the system detected all 47 confirmed TESS planets in the PLATO LOPS2 field, demonstrating cross-mission transferability. At PLATO’s 25-second cadence, transits down to 100 ppm are detectable, approaching the Earth-analog regime. Conformal prediction was applied for the first time, with an empirical coverage of 95.9%. The code, pre-trained weights, and candidate catalog are open-source (pip install exoveil)."}</script>
 </head>
@@ -41,9 +41,8 @@
             <a href="/lang/en/scientists/">scientists</a>
             <a href="/lang/ru/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
-            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/en/theory/">theory</a>
             <a href="/lang/en/favorites.html" title="Избранное">★</a>
-            <a href="/lang/en/about.html">about</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/en/archive/2026-06-01/2606.02778v3/mini.html" data-label="Mini" title="Mini — The gist in 10 seconds"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/en/archive/2026-06-01/2606.02778v3/simple.html" data-label="Simple" title="Simple — As simple as it gets — for a first look"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/en/archive/2026-06-01/2606.02778v3/index.html" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/en/archive/2026-06-01/2606.02778v3/advanced.html" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></a></div></div>
     </div>
@@ -54,10 +53,8 @@
 <div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
 
 <h1 class="article-title-top">Stellar Orthography: How ExoVeil Reads Missed Planets <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
-<div class="authors-top"><a href="/lang/ru/authors/Pratik_Priyanshu.html" class="text-author-link" data-author="Pratik Priyanshu">Pratik Priyanshu</a></div>
-<div class="author-verify-top">
-    <button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button>
-</div>
+<div class="original-title original-title-top">Original: "One Transit Is All You Need: Detecting Exoplanets Through Learned Stellar Behaviour with EXOVEIL"</div>
+<div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/ru/authors/Pratik_Priyanshu.html" class="text-author-link" data-author="Pratik Priyanshu">Pratik Priyanshu</a></div>
 <div class="meta">
     arXiv:<a href="https://arxiv.org/abs/2606.02778v3">2606.02778v3</a> · 2026-06-01 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time">⏱ 4 min</span> · <span class="cat-badge" data-cat="astro-ph.EP">Exoplanets</span> <span class="cat-badge" data-cat="astro-ph.IM">Instrumentation</span> <span class="cat-badge" data-cat="cs.LG">Machine Learning</span>
 </div>
@@ -71,10 +68,9 @@
     </div>
 </div>
 
-<nav class="article-nav" id="section-nav"><ul><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<nav class="article-nav" id="section-nav"><ul><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
 <div class="article-wrapper">
     <div class="article-main">
-        <div class="original-title">Original: "One Transit Is All You Need: Detecting Exoplanets Through Learned Stellar Behaviour with EXOVEIL"</div>
         <div class="oneliner">ExoVeil's machine learning algorithm finds exoplanets from a single transit, learning the 'grammar' of stellar brightness and reacting to any anomalies.</div>
         <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>Scientists have created EXOVEIL, a system that finds exoplanets from single dips in starlight, without needing repeated signals as before. It uses a ‘predictor’ neural network (a Transformer) trained on thousands of light curves from Kepler, to reconstruct the star’s ideal brightness; then a special filter catches the tiniest deviations. Among the finds are 179 new candidates, including 46 single transits missed by standard catalogs. The system works without retraining even on data from other telescopes, and it’s edging toward detecting Earth-like planets. It’s like teaching a clock to notice a single missing second instead of waiting for minute-long glitches.</p></div>
         <div class="ai-cover"><a href="/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg" class="mosaic-open"><img src="/lang/ru/archive/2026-06-01/2606.02778v3/ai.jpg" alt=""></a></div>
@@ -83,20 +79,16 @@
         <div class="fun-fact"><p class="fact">🎯 The first version of the detector, based on hand-crafted rules, yielded an AUC of 0.36—worse than random guessing (0.5). The residuals from eclipsing binaries turned out deeper than planetary ones, and the algorithm deemed them more reliable signals.</p></div>
         <div class="formula"><div class="formula-render">\delta = \left(\frac{R_p}{R_s}\right)^2</div><div class="formula-meaning">Transit depth—the fraction of light blocked by the planet—is set by the ratio of squared radii. Jupiter covers 1% of the Sun's disk area, Earth only 0.008%.</div></div><div class="formula"><div class="formula-render">\text{SNR} = \frac{\sum_i (r_i \cdot m_i) / \sigma_i^2}{\sqrt{\sum_i m_i^2 / \sigma_i^2}}</div><div class="formula-meaning">The matched filter weights prediction residuals r_i with the transit template m_i and inverse noise variance. Quiet sections of the light curve get more weight, boosting sensitivity.</div></div>
         
-        <div class="scientists-section"><strong>Scientists:</strong> <a href="/lang/en/scientists/Christian_Doppler.html" class="text-scientist" data-scientist="Christian Doppler">Christian Doppler</a>, <a href="/lang/en/scientists/Johannes_Rydberg.html" class="text-scientist" data-scientist="Johannes Rydberg">Johannes Rydberg</a></div>
+        <div id="article-graph" class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div><div class="mini-graph mini-graph--article" data-node="t:exoplanet,t:transit_method,t:photometry,t:spectroscopy,t:sun,t:red_dwarf,t:white_dwarf,t:galaxy"><canvas id="minigraph"></canvas></div>
         <div class="actions" data-article-id="2606.02778v3_en_popular">
             <div class="reactions">
                 <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
                 <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
-                <button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button>
             </div>
             <button class="fav-btn" data-fav="2606.02778v3" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
             <button onclick="shareArticle('Stellar Orthography: How ExoVeil Reads Missed Planets','https://bridge42worlds.org/lang/en/archive/2026-06-01/2606.02778v3/index.html')">Share</button>
         </div>
-        <div class="feedback" id="feedback" data-article-id="2606.02778v3_en_popular" data-entity-type="article"><div class="fb-title">How does it read? (helps us improve)</div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span><span class="fb-chip" data-opt="too_simple">Too simplified</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comment (optional)" style="display:none"></textarea><div class="fb-row"><button class="fb-send">send</button><span class="fb-status"></span></div></div>
-        <div class="next-divider">
-            <button class="next-btn">Next article →</button>
-        </div>
+        <div class="feedback" id="feedback" data-article-id="2606.02778v3_en_popular" data-entity-type="article"><div class="fb-title-row"><div class="fb-title">How does it read? (helps us improve)</div><button class="next-btn next-btn-top">Next article →</button></div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article" style="display:none"></textarea><div class="fb-row" hidden><button class="fb-send">send</button></div><span class="fb-status"></span></div>
         <div class="related" id="related" data-label="Related articles"></div>
     </div>
     <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/en/scientists/Isaac_Newton.html" class="side-sci" data-scientist="Isaac Newton">Isaac Newton</a><a href="/lang/en/scientists/Robert_Hooke.html" class="side-sci" data-scientist="Robert Hooke">Robert Hooke</a><a href="/lang/en/scientists/Christian_Doppler.html" class="side-sci" data-scientist="Christian Doppler">Christian Doppler</a><a href="/lang/en/scientists/Johannes_Kepler.html" class="side-sci" data-scientist="Johannes Kepler">Johannes Kepler</a><a href="/lang/en/scientists/James_Clerk_Maxwell.html" class="side-sci" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a><a href="/lang/en/scientists/Max_Planck.html" class="side-sci" data-scientist="Max Planck">Max Planck</a><div class="side-tags-label">Tags</div><a href="/lang/en/tags/exoplanet.html" class="side-tag" data-tag="exoplanet">exoplanet</a>
@@ -109,18 +101,17 @@
 <a href="/lang/en/tags/galaxy.html" class="side-tag" data-tag="galaxy">galaxy</a>
 <a href="/lang/en/tags/water.html" class="side-tag" data-tag="water">water</a>
 <a href="/lang/en/tags/methane.html" class="side-tag" data-tag="methane">methane</a>
-<a href="/lang/en/tags/carbon_dioxide.html" class="side-tag" data-tag="carbon_dioxide">carbon dioxide</a><div class="side-laws-label">Laws</div><a href="/lang/en/laws/law_of_universal_gravitation.html" class="side-law" data-law="law_of_universal_gravitation">law of universal gravitation</a><a href="/lang/en/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">Doppler effect</a><a href="/lang/en/laws/keplers_third_law.html" class="side-law" data-law="keplers_third_law">Kepler's third law</a><a href="/lang/en/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">Maxwell's equations</a><a href="/lang/en/laws/plancks_law.html" class="side-law" data-law="plancks_law">Planck's law</a><a href="/lang/en/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">Planck–Einstein relation</a><div class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#7F77DD">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph" data-node="t:exoplanet,t:transit_method,t:photometry,t:spectroscopy,t:sun,t:red_dwarf,t:white_dwarf,t:galaxy"><canvas id="minigraph"></canvas></div></div>
+<a href="/lang/en/tags/carbon_dioxide.html" class="side-tag" data-tag="carbon_dioxide">carbon dioxide</a><div class="side-laws-label">Laws</div><a href="/lang/en/laws/law_of_universal_gravitation.html" class="side-law" data-law="law_of_universal_gravitation">law of universal gravitation</a><a href="/lang/en/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">Doppler effect</a><a href="/lang/en/laws/keplers_third_law.html" class="side-law" data-law="keplers_third_law">Kepler's third law</a><a href="/lang/en/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">Maxwell's equations</a><a href="/lang/en/laws/plancks_law.html" class="side-law" data-law="plancks_law">Planck's law</a><a href="/lang/en/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">Planck–Einstein relation</a></div>
 </div>
 
-<div class="support">⭐ Free article. <a href="#">Support us</a></div>
 <div class="license">Original: <a href="https://arxiv.org/abs/2606.02778v3">arXiv:2606.02778v3</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
 
-<script src="/js/likes.js?v=8748673b1e"></script>
-<script src="/js/search.js?v=8748673b1e"></script>
-<script src="/js/scroll.js?v=8748673b1e"></script>
-<script src="/js/lightbox.js?v=8748673b1e"></script>
-<script src="/js/force-graph.js?v=8748673b1e"></script>
-<script src="/js/mini-graph.js?v=8748673b1e"></script>
+<script src="/js/likes.js?v=59e99c8dfd"></script>
+<script src="/js/search.js?v=59e99c8dfd"></script>
+<script src="/js/scroll.js?v=59e99c8dfd"></script>
+<script src="/js/lightbox.js?v=59e99c8dfd"></script>
+<script src="/js/force-graph.js?v=59e99c8dfd"></script>
+<script src="/js/mini-graph.js?v=59e99c8dfd"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2606.02778v3', 'article', 'en');

@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-pulse{ animation: heroPulse 6s cubic-bezier(.4,0,.6,1) infinite; }
@@ -207,14 +207,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتويات</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>أربع معادلات في كلمتين</a></li>
@@ -243,7 +243,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <text fill="var(--steel)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="62">E</text>
 <text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="14" y="122">B</text>
 <circle class="hero-pulse" cx="30" cy="100" fill="var(--ink)" r="6"></circle>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="210" y="175">E и B поддерживают друг друга — волна бежит сама, без проводов</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="13" text-anchor="middle" x="210" y="175">المجالان E وB يدعمان بعضهما — الموجة تنتشر ذاتيًا، بلا أسلاك</text>
 </svg>
 </div>
 </header>
@@ -252,8 +252,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>في ستينيات القرن التاسع عشر، جمع جيمس كليرك ماكسويل القوانين التجريبية المتفرقة لكولوم، وغاوس، وأمبير، وفاراداي في نظام من أربع معادلات - واكتشف قطعة ناقصة: فبدونها كانت المعادلات تتعارض مع حفظ الشحنة. بإضافة «تيار الإزاحة»، لم يُصلح الرياضيات فحسب - بل تنبأت المعادلات فورًا بموجات تنتقل بسرعة تطابقت تمامًا مع سرعة الضوء. اتضح أن الضوء موجة كهرومغناطيسية. في هذه المذكرة - المعادلات الأربع كل على حدة، ثم التجميع: كيف تنبثق منها موجة ذاتية الانتشار.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Электрическое и магнитное поля, сплетаясь, рождают свет" src="/lang/ru/theory/img/maxwells_equations_hero.jpg"/><figcaption>الحقلان الكهربائي والمغناطيسي، بتشابكهما، يولدان الضوء</figcaption></figure>
-<figure><img alt="Фотон — самоподдерживающаяся волна двух полей" src="/lang/ru/theory/img/maxwells_equations_concept.jpg"/><figcaption>الفوتون - موجة ذاتية الاستدامة من حقلين</figcaption></figure>
+<figure><img alt="المجالان الكهربائي والمغناطيسي يتشابكان لتوليد الضوء" src="/lang/ru/theory/img/maxwells_equations_hero.jpg"/><figcaption>الحقلان الكهربائي والمغناطيسي، بتشابكهما، يولدان الضوء</figcaption></figure>
+<figure><img alt="الفوتون — موجة ذاتية الاستدامة لمجالين" src="/lang/ru/theory/img/maxwells_equations_concept.jpg"/><figcaption>الفوتون - موجة ذاتية الاستدامة من حقلين</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>أربع معادلات في كلمتين</h2></div>
@@ -276,7 +276,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p><strong>الصياغة.</strong> الحقل الكهربائي «يتباعد» عن الشحنة بنسبة مقدارها:</p>
 <div class="plate">
 <div class="eq-body">∇·<span class="vec">E</span> = ρ/ε<sub>0</sub></div>
-<div class="cap">ρ — كثافة الشحنة، ε<sub>0</sub> ≈ 8.854×10⁻¹² Ф/م — الثابت الكهربائي</div>
+<div class="cap">ρ — كثافة الشحنة، ε<sub>0</sub> ≈ 8.854×10⁻¹² F/م — الثابت الكهربائي</div>
 </div>
 <p>في الصورة التكاملية الأكثر إيضاحًا: تدفق الحقل الكهربائي عبر أي سطح مغلق يتناسب مع الشحنة داخله. تخيلوا - تصوروا الشحنة كـ«صنبور» تندفع منه نفاثات خطوط القوة في كل الاتجاهات؛ مهما رسمتم سطحًا حول الصنبور، ستمر عبره نفس كمية «الماء» التي تعتمد فقط على قوة الصنبور (مقدار الشحنة)، وليس على شكل السطح أو حجمه.</p>
 <div class="callout steel">

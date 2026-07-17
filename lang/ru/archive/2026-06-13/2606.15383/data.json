@@ -46,6 +46,11 @@
       "popular": "Los dispositivos cuánticos (láseres, relojes atómicos) a menudo necesitan alcanzar órbitas periódicas estables: los ciclos límite. El método habitual de optimización de pulsos GRAPE no funciona, ya que requiere simular indefinidamente el ciclo cerrado. Se propone un enfoque directo: en lugar de calcular toda la órbita, se definen puntos clave por los que el sistema debe pasar, y el algoritmo construye los pulsos de control. La complejidad es similar a la de GRAPE, pero sin iteraciones infinitas. Una analogía: es como una animación con fotogramas clave, donde un ciclo suave se reproduce a partir de unas pocas marcas.",
       "simple": "Láseres, relojes atómicos, magnetómetros: todos dependen de que las partículas cuánticas «caminen en círculos» por rutas estables. Pero, ¿cómo logramos que el sistema entre en ese ciclo eterno? Los métodos anteriores requerían cálculos interminables. Los autores encontraron una forma de diseñar rápidamente la secuencia correcta de empujones, como un coreógrafo experimentado que monta una danza.",
       "advanced": "Los sistemas cuánticos disipativos excitados periódicamente pueden alcanzar órbitas estacionarias: bucles cerrados en el espacio de fases. Estos regímenes son la base del funcionamiento de dispositivos de enfriamiento para la inicialización de cúbits, láseres, relojes atómicos, magnetómetros y métodos de resonancia magnética (precesión libre estacionaria, polarización dinámica nuclear). Controlar estos estados mediante métodos de control óptimo cuántico es difícil: el algoritmo estándar GRAPE requiere propagación numérica en el tiempo y no puede manejar la repetición infinita del ciclo. Se propone una estrategia eficiente para sintetizar secuencias de control que llevan asintóticamente al sistema a un ciclo límite que pasa por puntos de referencia definidos por el usuario. A diferencia de los enfoques basados en el formalismo de Floquet-Lindblad y hamiltonianos efectivos, el método construye directamente los pulsos para alcanzar la órbita deseada. El costo computacional es comparable al de GRAPE; la implementación está en la biblioteca Spinach."
+    },
+    "ar": {
+      "popular": "الأجهزة الكمومية (الليزر، الساعات الذرية) غالباً ما تحتاج إلى الوصول إلى مدارات دورية مستقرة – دورات حدية. الطريقة المعتادة لتحسين النبضات GRAPE لا تفي بالغرض، لأنها تتطلب محاكاة لا نهائية للدورة المغلقة. تم اقتراح نهج مباشر: بدلاً من حساب المدار بأكمله، يتم تحديد نقاط رئيسية يجب أن يمر بها النظام، وتقوم الخوارزمية ببناء نبضات التحكم. التعقيد مشابه لـ GRAPE، ولكن بدون التكرارات اللانهائية. التشبيه هو الرسوم المتحركة بالإطارات المفتاحية: دورة سلسة يتم إنتاجها من خلال بضع علامات.",
+      "simple": "الليزر، الساعات الذرية، مقاييس المغناطيسية — جميعها تعتمد على أن الجسيمات الكمومية «تدور في دوائر» عبر مسارات مستقرة. لكن كيف نجبر النظام على الدخول في هذه الدورة الأبدية؟ الطرق السابقة تطلبت حسابات لا نهائية. وجد المؤلفون طريقة لتصميم التسلسل الصحيح من الدفعات بسرعة، كما يصمم الخطاط الماهر لوحة فنية بإتقان.",
+      "advanced": "الأنظمة الكمومية المبددة التي تُثار دورياً يمكن أن تصل إلى مدارات مستقرة — حلقات مغلقة في فضاء الطور. هذه الأنماط هي أساس عمل أجهزة التبريد لتهيئة الكيوبتات، والليزر، والساعات الذرية، ومقاييس المغناطيسية، وطرق الرنين المغناطيسي (المبادرة الحرة المستقرة، الاستقطاب الديناميكي للنوى). التحكم بهذه الحالات باستخدام طرق التحكم الأمثل الكمومي صعب: خوارزمية GRAPE القياسية تتطلب انتشاراً عددياً عبر الزمن ولا تتعامل مع التكرار اللانهائي للدورة. تم اقتراح استراتيجية فعالة لتركيب تسلسلات تحكم تقود النظام تقاربياً إلى دورة حدية تمر عبر نقاط مرجعية يحددها المستخدم. على عكس المقاربات القائمة على شكلية فلوكيه-ليندبلاد والهاميلتونيات الفعالة، فإن هذه الطريقة تبني النبضات مباشرة لتحقيق المدار المطلوب. التكلفة الحسابية مماثلة لـ GRAPE؛ والتنفيذ في مكتبة Spinach."
     }
   },
   "thumbs": 6,
@@ -79,6 +84,14 @@
       "Función de filtro del instrumento HiPER incluyendo el circuito de detección. (Panel izquierdo) Pulso X-inverso-X ideal se-",
       "Esquema general de un experimento DNP pulsado. El pulso de microondas",
       "Espectrogramas e histogramas de magnetización de 1H asintóticos (sobre el conjunto) para SO -GRAPE opti-"
+    ],
+    "ar": [
+      "رسم توضيحي تخطيطي للتحكم الأمثل في المدار الثابت. يبدأ النظام من الحالة الأولية ρ0 ويتطور",
+      "باختصار، يتم توليد نبضات ميكروويف مُشكَّلة عند تردد 1.8 جيجاهرتز بدقة تقارب -",
+      "توزيع ترددات رابي للإلكترون في جهاز HiPER",
+      "دالة المرشح لجهاز HiPER بما في ذلك دائرة الكشف. (اللوحة اليسرى) تسلسل نبضي X-inverse-X مثالي",
+      "المخطط العام لتجربة الاستقطاب النووي الديناميكي النبضي. نبضة الميكروويف",
+      "مخططات طيفية ورسوم بيانية لتوزيع مغنطة 1H التقاربية (عبر المجموعة) لتجربة SO-GRAPE المثلى"
     ]
   },
   "popular": {
@@ -162,6 +175,33 @@
       "key_problems_connection": "",
       "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
       "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "لا تتوفر حاليًا سوى نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة - إذا كان هناك طلب عليها، سنُعد النسخة الكاملة أولاً.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "اكتشف العلماء طريقة سريعة لحساب 'الدفعات' المثالية للأنظمة الكمومية، مما يجعلها تدور بلا نهاية في المدار المطلوب، تمامًا كالأرجوحة الأبدية. هذا سيُسرّع من تطوير أجهزة فائقة الدقة.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "لا تتوفر حاليًا سوى نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة - إذا كان هناك طلب عليها، سنُعد النسخة الكاملة أولاً.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "اكتشف العلماء طريقة سريعة لحساب 'الدفعات' المثالية للأنظمة الكمومية، مما يجعلها تدور بلا نهاية في المدار المطلوب، تمامًا كالأرجوحة الأبدية. هذا سيُسرّع من تطوير أجهزة فائقة الدقة.",
+      "express_locked": true
     }
   },
   "simple": {
@@ -205,6 +245,22 @@
       "fun_fact": "Los relojes atómicos pierden un segundo solo cada miles de millones de años. El nuevo algoritmo promete mejorar incluso esa fantástica estabilidad.",
       "scifi": "La idea de ciclos cuánticos controlados recuerda a los «bucles temporales» de la ciencia ficción, pero aquí ayudan a crear dispositivos ultraprecisos.",
       "mini": "Los científicos han encontrado una forma rápida de calcular «empujones» ideales para sistemas cuánticos, haciéndolos girar sin fin en la órbita deseada, como un columpio perpetuo. Esto acelerará la creación de dispositivos ultraprecisos.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": []
+    },
+    "ar": {
+      "title": "الدفعات الذكية للأرجوحة الكمومية",
+      "oneliner": "وجد العلماء طريقة سريعة لحساب الدفعات الذكية التي تجعل الأنظمة الذرية تكرر الحركات المطلوبة بلا نهاية، رغم فقدان الطاقة.",
+      "description": "الأجهزة الكمومية - من المايزرات إلى الساعات فائقة الدقة - تعتمد على حركات متكررة داخلها. فقدان الطاقة يعيق هذه الإيقاعات، لكن «الدفعات» الدقيقة يمكنها أن تدعمها. في السابق، كان حساب هذه الدفعات يستغرق ساعات من وقت الحاسوب. أما الآن، فحيلة رياضية تنجز ذلك بشكل شبه فوري، مما يفتح الطريق لأجهزة جديدة فائقة الاستقرار.",
+      "text": "في عالم الذرات والجسيمات، كل شيء يسعى إلى السكون: تفقد الجسيمات طاقتها، كما تخبو الأرجوحة بسبب [tag:entropy]فقدان الطاقة[/tag] (أي الاحتكاك). لكن العديد من الأجهزة - من [tag:hydrogen]مايزرات الهيدروجين[/tag] إلى [tag:spectroscopy]الساعات الذرية[/tag] - تعيش بفضل دورات متكررة. للحفاظ عليها، نحتاج إلى دفعات خارجية دقيقة - نبضات ليزرية قصيرة تُعطى في لحظات محسوبة بدقة.\n\nفي السابق، كان البحث عن هذه الدفعات يشبه محاولة تأرجح الأرجوحة بهزات عشوائية: كانت الحواسيب تقضي ساعات في نمذجة آلاف الخطوات حتى تصل المنظومة إلى إيقاع مستقر. الطريقة الجديدة تحسب النبضات لمواضع تحكم قليلة فقط - وكأنها تعلم أن ثلاث دفعات دقيقة في نقاط القوس المناسبة ستجعل الأرجوحة تتأرجح إلى الأبد. هذه الحيلة تُسرّع الحسابات بشكل جذري، محولةً إياها إلى مسألة تحسين عادية.\n\nالمفاجأة أن السر الرياضي مستعار من الملاحة الفضائية: حيث تُبنى المسارات أيضاً عبر نقاط ارتكاز. الخوارزمية موجودة بالفعل في مكتبة Spinach وتساعد في بناء حواسيب كمومية فائقة الاستقرار وأجهزة استشعار، حيث يجب أن تكون كل «دفعة» خالية من العيوب.",
+      "fun_fact": "الساعات الذرية تفقد ثانية واحدة فقط كل مليارات السنين. الخوارزمية الجديدة تعد بتحسين حتى هذا الاستقرار الخيالي.",
+      "scifi": "فكرة الدورات الكمومية المُتحكَّم بها تُذكّر بـ«حلقات الزمن» من الخيال العلمي، لكنها هنا تساعد في صنع أجهزة فائقة الدقة.",
+      "mini": "وجد العلماء طريقة سريعة لحساب «الدفعات» المثالية للأنظمة الكمومية، مما يجعلها تدور إلى الأبد في المدار المطلوب، كالأرجوحة الأبدية. هذا سيُسرّع صنع أجهزة فائقة الدقة.",
       "formulas": [],
       "main_tag": "entropy",
       "extra_tags": [
@@ -294,6 +350,33 @@
       "next_steps": "",
       "key_problems_connection": "",
       "threads": "Учёные нашли быстрый способ рассчитывать идеальные «толчки» для квантовых систем, заставляя их бесконечно кружить по нужной орбите, словно вечные качели. Это ускорит создание сверхточных приборов.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "تتوفر حاليًا نسخة سريعة ومبسطة من هذه المقالة فقط. أضفها إلى المفضلة - إذا لاقت اهتمامًا، سنقوم بإعداد النسخة الكاملة أولاً.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "وجد العلماء طريقة سريعة لحساب 'الدفعات' المثالية للأنظمة الكمومية، مما يجعلها تدور باستمرار على المدار المطلوب، مثل أرجوحة تتلقى دفعات متواصلة. وهذا سيسرّع من تطوير أجهزة فائقة الدقة.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen",
+        "spectroscopy"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "تتوفر حاليًا نسخة سريعة ومبسطة من هذه المقالة فقط. أضفها إلى المفضلة - إذا لاقت اهتمامًا، سنقوم بإعداد النسخة الكاملة أولاً.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "وجد العلماء طريقة سريعة لحساب 'الدفعات' المثالية للأنظمة الكمومية، مما يجعلها تدور باستمرار على المدار المطلوب، مثل أرجوحة تتلقى دفعات متواصلة. وهذا سيسرّع من تطوير أجهزة فائقة الدقة.",
       "express_locked": true
     }
   }

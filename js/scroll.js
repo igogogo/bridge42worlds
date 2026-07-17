@@ -108,8 +108,7 @@ function updateNextButton() {
         var label = btn.dataset.baseLabel;
 
         if (next) {
-            var isTop = btn.classList.contains('next-btn-top');
-            btn.textContent = label + ': ' + next.title.substring(0, isTop ? 30 : 60) + '... →';
+            btn.textContent = label + ': ' + next.title.substring(0, 30) + '... →';
             btn.onclick = function() {
                 viewedIds.add(next.id);
                 persistViewed();

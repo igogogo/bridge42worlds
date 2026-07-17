@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -188,14 +188,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتوى</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>قانونان، زوج واحد</a></li>
@@ -221,7 +221,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <circle cx="170" cy="100" fill="none" id="heroRing1" opacity="0" r="30" stroke="var(--steel-fill)" stroke-width="2"></circle>
 <circle cx="170" cy="100" fill="none" id="heroRing2" opacity="0" r="50" stroke="var(--steel-fill)" stroke-width="2"></circle>
 <circle cx="170" cy="100" fill="none" id="heroRing3" opacity="0" r="70" stroke="var(--steel-fill)" stroke-width="2"></circle>
-<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="190">ток → кольца магнитного поля</text>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="13" text-anchor="middle" x="170" y="190">التيار → حلقات المجال المغناطيسي</text>
 </svg>
 </div>
 </header>
@@ -230,8 +230,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>في عام 1820، لاحظ هانز أورستد بالصدفة أن سلكًا يحمل تيارًا يُحرك إبرة البوصلة — وخلال أسبوع واحد، بنى أندريه-ماري أمبير قانونًا كميًا من ذلك. وبعد أحد عشر عامًا، وجد مايكل فاراداي العلاقة العكسية: مغناطيس متحرك يُولد تيارًا في سلك. هذان القانونان ليسا مصادفة، بل انعكاس مرآتي لبعضهما، ويشكلان معًا مبدأ عمل المحركات الكهربائية والمولدات والمحولات. في هذه الملاحظة — كلا القانونين بالأرقام وتحليل لماذا المحرك والمولد هما في الأساس نفس الجهاز.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Катушка вращается в магнитном поле — рождается ток" src="/lang/ru/theory/img/ampere_faraday_hero.jpg"/><figcaption>ملف يدور في مجال مغناطيسي — يُولد تيار</figcaption></figure>
-<figure><img alt="Магнит входит в катушку — импульс наведённого тока" src="/lang/ru/theory/img/ampere_faraday_concept.jpg"/><figcaption>مغناطيس يدخل في ملف — نبضة من تيار مُستحث</figcaption></figure>
+<figure><img alt="الملف يدور في المجال المغناطيسي — يتولّد تيار" src="/lang/ru/theory/img/ampere_faraday_hero.jpg"/><figcaption>ملف يدور في مجال مغناطيسي — يُولد تيار</figcaption></figure>
+<figure><img alt="المغناطيس يدخل الملف — نبضة تيار محتث" src="/lang/ru/theory/img/ampere_faraday_concept.jpg"/><figcaption>مغناطيس يدخل في ملف — نبضة من تيار مُستحث</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>قانونان، زوج واحد</h2></div>
@@ -431,7 +431,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
     var phase = (ts % COMPASS_PERIOD) / COMPASS_PERIOD;
     // ток «включён» первую половину цикла — стрелка отклонена на 40°, иначе — 0°.
     var target = phase < 0.5 ? 40 : 0;
-    var t = phase < 0.5 ? Math.min(1, phase / 0.15) : Math.min(1, (phase - 0.5) / 0.15);
+    var t = phase < 0.5 ? Math.min(1, phase / 0.35) : Math.min(1, (phase - 0.5) / 0.35);
     var prevTarget = phase < 0.5 ? 0 : 40;
     var angle = prevTarget + (target - prevTarget) * t;
     if (needle) needle.style.transform = 'rotate(' + angle.toFixed(1) + 'deg)';

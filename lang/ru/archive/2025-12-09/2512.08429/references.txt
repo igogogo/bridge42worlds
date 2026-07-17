@@ -1,0 +1,1109 @@
+70%
+70/30
+70/30
+50/50
+HJ
+20-kHz LO
+1-kHz (SM=10-kHz) ramp
+Channel
+A
+25-GHz
+FBG
+VBS
+Homodyne Detection
+-
+Signal
+LO
+C43
+DEMOD
+C44
+PM
+POL
+PC
+PC
+PS
+EXP
+IN
+EXP
+IN
+INPUT
+PID
+PID
+ADC
+amplifier
+25-GHz
+BPF
+IN
+SFP
+Rx Tx
+DWDM
+FG-A1
+FG-A2
+V
+Digital
+Lock-in
+1x2
+FPGA
+SoC2
+RFoF Rx
+PowD
+PC
+Fiber
+Stretch
+PM
+DWDM
+Media
+Convert
+EDFA
+DWDM
+IN
+IN
+EXP
+DWDM
+C59
+RFoF Rx
+IN
+C53
+C
+C53
+H25
+POL
+V
+BT
+DWDM
+DWDM
+EXP
+single-mode phase stab
+EDFA
+AM
+99%
+1%
+99/1
+FG
+MBC
+Optional pulsed
+thermal-state
+delay-calibration
+input
+C59
+FIG. S3. Full experimental setup. Definitions (in alphabetical order). ADC: analog-to-digital converter. AM: amplitude
+modulator. APD: avalanche photodiode. Atten: attenuator. BPF: band-pass filter. BT: bias tee. C: comparator. CLK:
+clock. DEMUX: demultiplex. DWDM: dense-wavelength division multiplexer. EDFA: erbium-doped fiber amplifier. FBG:
+fiber Bragg grating. Fdml: fundamental. FG: function generator. Filt: filter. FPGA-SoC: field programmable gate array -
+system on chip. HJ: hybrid junction. HWP: half-wave plate. LO: local oscillator. MBC: modulator-bias controller. MUX:
+multiplex. Osc: oscilloscope. PC: polarization controller. PDH: Pound-Drever-Hall controller. PID: proportional-integral-
+derivative controller. PM: phase modulator. POL: polarizer. PowD: power detector. PS: phase shifter. RFoF: radio-frequency
+over fiber. Rx: receiver. SFP: small-form-factor pluggable transceiver. Sh: shutter. SHG: second-harmonic generation. TC:
+temperature controller. Tx: transmitter. V: voltage source. VBS: variable beamsplitter. WG: waveguide. 100-GHz channel
+center wavelength H25: 1556.96 nm. C43: 1542.95 nm. C44: 1542.14 nm. C45: 1541.35 nm. C53: 1535.04 nm. C59:
+1530.33 nm.
+C. Homodyne detection server
+The homodyne detector’s output is directed to the newly developed homodyne detection server (HDS). The HDS’s
+contains two low-noise 14-bit analog-to-digital converters (ADC, Analog Devices AD9254) that samples, at 100 MHz,
+the homodyne detector output and a complimentary voltage reference signal for the phase drive. The ADCs are co-
+located (Terasic ADCSoC) with a field-programmable gate array (FPGA) system on chip (FPGA-SoC, Intel Cyclone
+V) that has a dual-core hard processor system (HPS) integrated with the FPGA having various interconnect bridges
+for coordination and communication between the FPGA and HPS including shared access to 1-GB of random-access
+memory (SDRAM). As the FPGA receives samples from the ADC, they are collected into large groups of 8 and
+buffered. Then the two signed 14-bit samples (one from each ADC) are padded to make a single 32-bit word, they
+are time-stamped and stored into the shared SDRAM. The FPGA is given priority access to write to the RAM but
+first-in-first-out (FIFO) buffers are used to ensure no data is lost if the SDRAM is busy.
+The FPGA needs to use the physical address for storage in SDRAM whereas linux applications in the HPS normally
+operate using virtual addresses. To circumvent this disconnect, when the homodyne server linux application starts, it
+allocates enough RAM for 67500 continuous pages (4096 bytes or 1024 32-bit words). After allocation, the page frame
+numbers, corresponding to the physical address (after bit-shifting by 12 bits) of the first location of each 4096-byte
+page of memory, are gathered for the allocated memory. The buffer is initialized with test values and each page is
+checked for complete allocation. If any page is found to be incompletely allocated, the allocation is attempted again.
+This allocation is usually successful within 1-3 tries if the buffer size is not too big or too small depending on the
+total SDRAM size (1 GB in our case). The 67500 page frame numbers are stored in the FPGA’s on-chip RAM,
+filling this small RAM. This enables the FPGA to address a buffer of 69120000 32-bit words (276.48 MB) within the
+S11
+non-contiguous memory allocated by the homodyne server application that will process the buffered data to service
+client requests. Due to the known order of the allocated page frame numbers by both the FPGA and the server
+application, knowing the timetag for a certain sample, is sufficient to calculate its physical address in memory so only
+the 32-bit words, corresponding to an ADC sample from each ADC, are stored consecutively in SDRAM while the
+timtags are not. It has been rigorously tested that the FPGA and the linux application can correctly place and find a
+given sample by using a test mode where the FPGA writes a 32-bit timetag into the corresponding memory location.
+The 100-MHz ADC sample rate means that every 0.6912 s the buffer will fill up, at which point it starts writing at
+timetag 0 again. The FPGA uses a 32-bit register to count the number of times the buffer fills up (memory-overflow
+number). Through a shared 32-bit memory-mapped interface between the FPGA and the HPS, the server application
+can query the current memory-overflow number (besides other status values and it can write values to configure several
+FPGA parameters). This can be used to check for data validity since requests to the server are required to provide
+the memory-overflow number corresponding to the timetag(s) requested.
+The homodyne server application is based on a socket server with an application programming interface (API) for
+configuration and basic query (e.g., current memory-overflow number and timetag) similar to the standard commands
+for programmable instruments (SCPI). Although not currently fully SCPI-compliant, it easily could be with more
+development. For data queries, a binary array of 32-bit words is expected. The received array starts with a 32-bit
+keyword and then the associated memory-overflow number followed by the timetags corresponding to the requested
+samples. Once the keyword and memory-overflow number are received, subsequent binary queries are assumed to
+correspond to that same memory-overflow number until the keyword and memory-overflow number are appended the
+beginning of a query indicating that a new request is starting. This enables flexibility on the server side to handle
+queries where the client’s lower-level drivers may break the request up into multiple messages to the server if the
+request contains a large enough number of timetags, e.g., more than about 16000 in our case. The server application
+makes several checks to the FPGA to ensure data reliability (no FIFO overflows, no ADC samples out of range, phase-
+locked loops are locked) and checks the client-provided memory-overflow number against the local memory-overflow
+number and the local current time-stamp. It is assumed that buffer queries will be broken into two parts: a query for
+data in the first half of the buffer or the second half of the buffer. After the FPGA has filled up the first half of the
+buffer, the HDS can safely service requests for that half without concern of data overwrite since the FPGA is filling
+up the other half of the buffer at that time, and vice versa. By breaking the buffer into parts, the buffer can be read
+out safely while also using it as rolling buffer that is continuously refilled.
+When a timetag is processed by the HDS, there are multiple ways for it to be processed. The basic method is for
+a given timetag, the server will return the corresponding buffered word containing the sample from each ADC. If the
+integration-window parameter is greater than 1, the samples within the integration window are integrated together,
+separately for each ADC, to provide an integrated sample 32-bit word. In the case of real-time quadrature detection
+of photon-subtracted states, the integration-window was set to 1 since each sample corresponded to an integrated
+quadrature sample per Sec. IV B. But for general detection of squeezed light or other states, the integration window
+can be increased to measure continuous-wave quadrature samples at frequencies lower than 100 MHz.
+To facilitate homodyne tomography, there is also mode where the slope of the phase-drive ADC is checked before
+saving the sample for a given timetag. Assuming a sawtooth ramp waveform, the slope is checked to make sure the
+timetag corresponds to a sample within the long ramp and not the short reset. At 100-MHz sample rate and about
+10-kHz ramp frequency, we found this results in the rejection of about 0.1% of the random samples queried. When a
+sample is rejected, a known placeholder value is inserted in place of the homodyne sample so the client knows what
+happened. This placeholder value is chosen so the 14-bit two’s compliment ADC output (padded to 16 bits) cannot
+produce it.
+Moreover, the server also has a threshold-counting mode for calibration purposes (discussed more fully in Sec. IV H)
+that the client can enable via the configuration API. In the threshold-counting mode, a bi-polar threshold value and
+signal slope, which the client can set via the configuration API, are used as the server goes through every timetag
+in the buffer to collect all the timetags corresponding to a threshold crossing and provide those to the client. This
+is useful for cross-correlation analysis but is limited to data from a single memory-overflow number since it takes
+the server much longer than a single memory-overflow number to scan the entire buffer. In practice, we have found
+that around 10000-20000 threshold crossings provides sufficient signal-to-noise ratio (SNR) for a cross-correlation
+measurement.
+S12
+(a)
+(f)
+(e)
+(d)
+(b)
+(c)
+FIG. S4. Histogram of LO phase settings measured during representative tomography for state displayed in Fig. 3(b). LO
+phase settings on (a) side A/C43, (b) side B/C45,(a) side A/C43 with 2πmodulo centered at 0, (b) side B/C45 with 2πmodulo
+centered at 0, (c) Joint added phase with 2πmodulo centered at 0. (c) Join subtracted phase with 2πmodulo centered at 0.
+The bins are 0.1-radians wide.
+D. Phase stabilization and tomography phase drive
+To implement two-mode homodyne tomography, we use a function generator (Rigol DG2102) to drive a phase
+modulator on each LO to ramp the phase by approximately 2πusing a sawtooth wavefrom. The reference clock for
+each function generator is synchronized to a common reference clock as described in SM Sec. IV G. On side A(B), the
+ramp frequency is 1(10) kHz. This is implemented at different rates so the joint phase is also varied. In Fig. S4, we
+show a representative histogram of the marginal and joint phases measured during a two-mode tomography.
+To enable high-quality homodyne tomography, the LO phases need to be stable besides the phase drive but in reality
+the LO phase varies due to environmental changes (mainly temperature variation). To compensate for that variation,
+each homodyne detector output signal is split using a RF power divider (Mini-circuits Z99SC-62-S+) so half goes to
+the HDS and half is sampled for phase stabilization. The halves for phase stabilization are combined electrically on a
+hybrid junction (Pulsar Microwave JF-01-412) which enables direct measurement of two-mode squeezing. This signal is
+then directed towards a power detector (Linear Technology LT5537) which gives a voltage output corresponding to the
+power of the input. Using lock-in detection (Liquid Instruments Moku:Go), the combined phase drive is demodulated
+from the squeezing signal so the residual phase drift can be extracted. The lock-in’s local oscillator is a combined
+phase drive signal created by generating a 10-kHz sinewave amplitude modulated by a 1-kHz sinewave using a function
+generator (Rigol DG2102) phase locked to the phase drive signal with a shared 10-MHz reference. This residual phase
+drift error signal is used to control the phase of the mode-B optical homodyne local oscillator to match the drift of
+the mode-A homodyne local oscillator—effectively making the drift common mode. This is sufficient for two-mode
+tomography of our expected states since we expect the investigated marginal states to be phase insensitive. For
+this phase stabilization, two-stage proportional-integral-derivative control system (Liquid Instruments Moku:Go) is
+employed using a fast piezo-based>55πphase shifter (Luna Innovations/General Photonics FPS-003-35-SS-FC/APC)
+as well as a slower fiber stretcher (Luna Innovations/General Photonics FST-001-B-04-15-SM-FC/APC) with larger
+range (about 3 mm or>800π) to enable fast long-term phase stabilization with 1-kHz bandwidth. The fast phase
+shifter and slow fiber stretcher take output signals from the controller which are amplified by piezo drivers (Thorlabs
+KPZ101 and MDT694B, respectively). The control loop on the fast phase shifter attempts to zero the demodulated
+S13
+error signal from the lock-in with a control bandwidth of about 1 kHz, while the control loop on the fiber stretcher
+has a much lower bandwidth (300 mHz) and that control loop adjusts the fiber stretcher to maintain the average
+output to the fast phase shifter near the middle of its range. To keep the fiber stretcher in range for a long-term lock,
+it helped that the laboratory the experiment took place in has temperature stability of about 1 ◦C and there were
+also vinyl curtains hung around the optical table to enclose the table as one big “box.” Both of these contributed
+significantly to maintaining a long-term phase stability such that the fiber stretcher range was sufficient.
+We remark that although this method requires the homodyne detection of each mode to be co-located, even still,
+we employ a method which enables phase stabilization for two-mode tomography that adds no dark counts to the
+photon subtraction and requires no additional timing coordination or down-time, as compared to the conventional
+method of using an optical chopper and bright seed.
+To enable truly independent phase stabilization of each LO, we also developed and tested a method using a dim
+seeded sideband at 20-MHz. This method and our testing are described in SM Sec. V.
+That independent method was not used due to some unresolved technical issues with seed power instability specific
+to our system causing inter-signal interference leading to seed instability and coherent state contamination of the
+squeezing. This seemed to be mainly from reflections off the variable beamsplitter(s). We also noted seed power
+instability in the reverse-proton-exchange waveguide, compared to the ridge waveguide we have (used in Ref. [26]),
+likely due to photo-refractive damage.
+E. Photon subtraction optics and detection
+On the reflected mode of the photon-subtraction variable beamsplitter, filtering is required for the photon-
+subtraction events to correspond to mode detected by the homodyne detectors. This filtering is mainly done with
+a 9-MHz half-width-at-half-maximum (HWHM) 25-GHz free-spectral range (FSR) fiber-coupled optical cavity (Sta-
+ble Laser Systems). The cavity piezos are used to lock a cavity resonance toλ f using a Pound-Drever-Hall (PDH)
+control system (Liquid Instruments Moku:Go) on 20-MHz sidebands produced by a phase modulator (EOSpace). A
+fast/short piezo and slow/long piezo are provided in the cavity enabling 2-stage long-term locking ability at a certain
+FSR (which is adjustable by about 1 GHz). The PDH-controller fast output is amplified (Thorlabs BPA100) then
+provided to the fast/short piezo. The PDH-controller slow output is amplified (Thorlabs MDT694B) with a 110 V
+offset internally provided by the piezo amplifier to approximately adjust the free-spectral range to be close to 25 GHz.
+To ensure spectral alignment of two-mode non-degenerate photon subtraction, we obtained a cavity with a tunable
+free-spectral range. This tunable free-spectral range contributed to significant mechanical vibrational sensitivity in
+the cavity. To provide passive isolation from acoustic vibrations, we surrounded the cavity in a multi-layer acoustically
+damping enclosure we created from mass-loaded vinyl and bonded acoustical cotton (Acoustical Surfaces). To isolate
+the cavity from contact vibrations through the table from the floor, we placed the acoustic enclosure, with the cavity
+inside, on an optical breadboard (Thorlabs B2424F) which was actively isolated (Thorlabs PWA090) from the optical
+table (Newport RS4000) beneath it. The optical table was also actively isolated (Newport S-2000) from the floor.
+Moreover, we noticed a significant reduction of the environmental vibrations when we moved this experiment from
+an older crowded noisy lab on the second floor of a general research building to our new ground-floor lab space
+purpose-built for quantum-information-science research. The cavity on the actively stabilized breadboard had the
+added benefit that minor work could be done on the optical table while maintaining the cavity lock.
+In the PDH controller, for the fast loop, we found it optimal to just use the integrator to enable high-gain control
+at lower frequencies while not exciting mechanical resonances or responding to noise near the limit of our control loop
+bandwidth which helped to improve the stabilization. After the passive and active stabilization, the cavity stabilization
+is limited to about 0.4 MHz for the 9-MHz HWHM cavity due to the limited bandwidth of the faster (short) piezo for
+controlling the cavity phase (about 10 kHz). But this is not a fundamental limitation of our overall demonstration.
+A different configuration using a tunable pump laser stabilized to the cavity or using a non-FSR-tunable cavity can
+be used in future work, depending on RF adjustment of the LO alone for spectral-mode alignment.
+The targeted two-mode squeezing is at +/- 100 GHz from theλ f (which align with ITU grid channels C43 = mode
+A and C45 = mode B). The slow piezo voltage is chosen to get close to a 25 GHz FSR. To more precisely align the
+cavity resonances with the local oscillators, we temporarily redirect the LOs to go through the cavity and fine-tune
+the 25-GHz RF oscillator used in LO generation to maximize the LO transmission through the cavity. This needed
+to be re-calibrated every time the cavity was unlocked for more than a few minutes otherwise the cavity FSR may
+differ from RF frequency by about 10-100 MHz due to cavity drift.
+We found the maximum cavity transmission for each LO wavelength has a different RF frequency of about 2 MHz
+(which translates to an 8 MHz frequency difference due to the LO generation process) likely due to dispersion in the
+S14
+LO generation system. We split the difference so the maximum transmission of each mode was only reduced by a few
+percent but this will somewhat affect heralding and coherence leading to reduced entanglement. We would expect this
+mismatch to cause the state to become mixed with incoherent thermal noise. The log negativity ofE N (ρE
+0,0) = 0.34
+andE N (ρE
+1,1) = 0.55 which we compare toE N (ρM
+0,0) = 0.49±0.03 andE N (ρM
+1,1) = 0.52±0.03. We would expect
+EN (ρE
+0,0) andE N (ρE
+1,1) to be less thanE N (ρM
+0,0) andE N (ρM
+1,1) due to the effects of sample size, as discussed in the
+main text, sinceE N (ρE
+i,i) is effectively for an infinite sample size being a theoretically derived density matrix but note
+thatE N (ρM
+1,1)< EN (ρE
+1,1). From the insets in Fig. 3, we see only a modest improvement in the squeezing (about
+1.25−0.95 = 0.3 dB) but a much larger increase in the anti-squeezing (about 2.92−1.76 = 1.16 dB) compared to
+ρM
+0,0. These observed features of small increased entanglement and squeezing with larger increases in anti-squeezing
+are consistent with this description of this filtering causing the heralded state to be mixed with incoherent thermal
+noise. This frequency mismatch could be reduced by using a larger bandwidth cavity or fixed by having different
+filtering cavities for each mode and optimizing the transmission independently, by using a cavity-based squeezed-light
+source, or by matching the dispersion of the cavity and LO generation (using electro-optically generated sidebands).
+After the cavity, a 100-GHz dense-wavelength-division-multiplexing filter is used to remove most of theλ f sta-
+bilization light transmitted through the cavity. This light is detected by a photodiode (Thorlabs DET08CFC) and
+monitored by an oscilloscope channel in the cavity-lock controller. The rest of the light is transmitted through a
+25-GHz fiber Bragg gratings (O/E Land) with circulators (O/E Land and AC Photonics), which are used to select
+the two desired resonances from the cavity transmission spectrum. The C45 FBGs needed to be heated to shift the
+transmission peak about 10 GHz due to manufacturing variability. The FBGs are heated using a thermo-electric cooler
+(heater) and temperature controller (Thorlabs TEC200C). Each resonance (one at C43 and the other at C45) is then
+sent to a 3-output beamsplitter tree (AC Photonics) connected to superconducting-nanowire single-photon detectors
+(Quantum Opus) to enable limited photon-number resolution with low-jitter and fast reset time. The single-photon
+detectors are measured to have about 85-90% efficiency with measured dark counts in our system of about 50-100
+counts per second. The delays for each optical and electronic detector path were adjusted using coaxial cables so
+that they were matched up arriving at the PSO FPGA. The signals are amplified (Mini-Circuits ZX60-100VH+) then
+attenuated (Mini-circuits VAT) so the pulse amplitude are compatible with the FPGA general-purpose input/output
+(GPIO) pins. With this filtering system, we measured about 1000 (2500) background counts per second for C43 (C45)
+modes due to the room background and (mostly) C44 cavity stabilization laser (about 5µW transmitted through
+cavity) corresponding to a DWDM and FBG filtering isolation of about 104 dB. This high-rejection filtering combined
+with using high-sensitivity 20-MHz sideband detection (via amplified avalanche photodiodes [26]) enables continuous
+cavity locking with negligible added photon-subtraction noise (well below detector dark counts of about 100 counts
+per sec).
+F. Photon-subtraction system orchestrator
+The photon-subtraction detector outputs are collected by a newly developed photon-subtraction system orchestrator
+(PSO). The orchestrator is implemented on a board (Terasic DE10-Nano) containing a FPGA-SoC (Intel Cyclone V)
+very similar to the FPGA-SoC used in the HDS. Using the shared 10-MHz reference, the FPGA establishes 100-MHz
+and 300-MHz clock domains. To register a single-photon detection event, the relevant input pins are monitored for
+rising edges by flip-flops in the 300-MHz clock domain. The outputs of rising-edge detection registers for all detectors
+are then pipelined through a processing stage. First there is an addition of all events on each side (A and B) assuming
+there are two modes with a detector tree on each. Currently, the pipelined addition is setup for 3 detectors on each
+side but more detectors could easily be added by using more GPIO pins and increasing the pipelined addition stage
+at the expense of increased latency. The total counts for each side are put into a pipelined series of 9 registers to
+encompass three 10-MHz time bins using nine 300-MHz sub bins. Then these nine sub bins are pipelined through
+nine delay stages while a pipelined sub-bin weighted average is calculated using the total counts (adding both sides
+together). To avoid needing to divide in the FPGA, the weighted average numerator is calculated simultaneously with
+the denominator (sum) and create multiple copies of the sum after multiplying it by various bin numbers. Once the
+numerator and mulitplied denominator are calculated, they are compared to see where the numerator is greater than
+the multiplied denominator for some bins but less than others. If the weighted average bin ends up being 4, 5, or 6
+(in the middle of the 9 sub bins) an event-recorded flag is raised. If not, then the system passes over these events (or
+there are no events) until they shift into the 4, 5, or 6 sub bins. When the event recorded flag is raised, two things
+happen simultaneously. (1) The data is loaded into a three-bin buffer to provide buffering for clock domain crossing
+into the 100-MHz clock domain. (2) A pulse trigger output is issued to be high for two 300-MHz bins to provide
+S15
+low-jitter real-time feedforward output capability.
+To characterize the heralding trigger, we split the amplified SNSPD signal right before the orchestrator FPGA
+input. From there we used an oscilloscope (Agilent MSO-X 4104A) to measure the delay of the signal entering the
+FPGA and the heralding signal coming out of the FPGA. The measured timing latency±jitter (standard deviation
+of 2000 samples) for the generation of this heralding signal is 91±1 ns using 300 MHz clock-rate in the FPGA. The
+latency of the PSO producing the heralding signal could be further reduced if less detectors are in the beamsplitter
+tree, or higher-performance circuitry with higher clock-rate is used so this is not a hard lower limit.
+In the 100-MHz clock domain, there are several stages of synchronizer flip-flops, then the data is processed to provide
+sub-bins with total sum for each side in one 64-bit word. Due to the assumption of 6 detectors, sub bins are 3-bits
+each and the sum is 5 bins for a total of 2x(9x3-bits+5bits)= 64 bits. At this stage, the detection event is timetagged
+on the 100-MHz time-stamp clock that is synchronized with the HDS. At this point, the events are checked whether
+they should be saved or ignored. Based on a flag in the shared memory-mapped interface, the orchestrator application
+can tell the FPGA to hold any event or just a coincident event (of any photon number) in the same 100-MHz time
+bin. If a singles (one-sided event) or coincidences (two-sided event) are recorded (based on the flag), data is held in
+a buffer if it is not within the (phase-stabilization) seed rejection filter window (adjusted for seed delay), which is
+discussed more fully in SM Sec. V. The data is held for the duration of the hold time to see if another event comes
+in too quickly. If that happened, it would distort the event type and make it a partial double photon subtraction
+at large delay which is technically a different state [51]. In practice, we find our photon-subtracted rates were low
+enough that the filter is not needed; so we set the hold time to about 3 100-MHz bins, which is less than our detector
+dead time (4 bins). We also found for the thermal-state calibration that it was important to reduce this hold time to
+about 3 bins (the detector dead time) because the filter does indeed work and was filtering out all events from the
+thermal pulses thus blocking the cross-correlation analysis.
+If no other events are detected in this hold time then the data is flagged to be saved. At this point, the detection
+signature (counts per sub bin per side and total counts per side) is then prepared with the timetag, memory-overflow
+number and loaded into a FIFO buffer with the current saved-data counter value which corresponds to its address in
+the SDRAM buffer. The SDRAM buffer is set up the same way as in the HDS. As there is data in the FIFO buffer
+and the SDRAM is available to be written to, the data in the FIFO buffer is transferred to the SDRAM buffer using
+the saved-data counter to calculate the SDRAM address instead of the timetag as the HDS does.
+During the event checking stage, there is also the ability to save some zero-photon subtracted data, periodically
+taking advantage of the timetags in between photon subtraction events as if it were any other detection event. The
+reason for this data is to make a reference measurement on the two-mode squeezed vacuum using the same detection
+system at the same time as the photon-subtraction data is being gathered. By gathering the data in between photon
+subtraction events, we enable concurrent data collection but this does not completely trace over the photon-subtraction
+mode. To completely trace over the photon-subtracted mode, at least sometimes photon subtraction events should
+be included according to the transmission of the photon subtraction path relative to the total photon subtraction
+reflectivity but this transmission is such a small probability (about 0.1%) that it is negligible. For improved photon-
+subtraction efficiency, a random sampling of the homodyne samples should be measured to completely trace over the
+photon-subtracted mode. Within the FPGA, there is some zero-detection rate logic to provide a rate at which zero-
+detection rate data is attempted to be saved as long as there is no other detection event during the hold time. The
+attempted rate is set by the orchestrator application and provided to the FPGA using the shared memory-mapped
+interface.
+The PSO linux application begins similar to the HDS by allocating memory and share page addresses with the
+FPGA. Then socket connections are opened with each HDS. These connections are facilitated by the PSO’s ethernet
+connection to an ethernet switch where each HDS is connected to the same switch via media converters using 10G
+fiber transceivers that are wavelength multiplexed with other control signals. After the socket connections are opened,
+the PSO application can be controlled by a SCPI-like command-line interface. Using the commands available, various
+parameters on the PSO and each HDS can be configured, tests can be run, and various data acquisition routines
+can be initiated. By using process threading and pointers to shared memory, the command-line interface is available
+during data acquisition enabling live reconfiguration of the system during data acquisition.
+The main data acquisition routine queries the user for file info (name and data description) and some relevant data
+acquisition parameters (zero-detection rate, delays, etc.). Then the application ensures the servers and the master
+are synced up by directing the FPGA to send out the homodyne-trigger pulse and checking the synchronization of
+the memory-overflow numbers of the servers. At this point, two threads are started on the dual-core processor. A
+data-collection thread and a data-save thread.
+In the data-collection thread, the application directs the FPGA to signal the shutter (Thorlabs SHB1) to close
+for a current shot-noise calibration to be measured. Afterwards, the application directs the FPGA to signal the
+S16
+TABLE S1. Log negativity [36]E N(ρ) versus delay combination. Top section: two-mode delay combinations D(i, j) measured.
+Upper-middle section:E N(ρM
+0,0) as a function of the two-mode delay combination. Lower-middle section:E N(ρM
+1,1) as a
+function of the two-mode delay combination. Bottom section: Log negativity improvementE N(ρM
+1,1)−E N(ρM
+0,0) from photon
+subtraction. The data error bar (standard deviation) is about 0.03.
+[0,0] = 918|11676 [0,1] = 0|0 [0,2] = 0|0 [0,3] = 0|0
+[1,0] = 0|0 [1,1] = 541|9047 [1,2] = 0|3112 [1,3] = 0|2
+[2,0] = 0|0 [2,1] = 0|2240 [2,2] = 0|6 [2,3] = 0|0
+[3,0] = 0|0 [3,1] = 0|0 [3,2] = 0|0 [3,3] = 0|0
+shutter to open and the user is given an opportunity to re-enable phase stabilization before measurements proceed.
+The data-collection thread contains a while loop where periodically (10 ms), the PSO’s FPGA time-stamp counter is
+queried by the application to see when it crosses over half way at which point the local buffer of detection events is
+processed until the timetag for half way is reached (in our case, 69120000/2=34560000). FPGA-collected events are
+triaged by the application into different parts of various memory buffers based on their detection signature. All the
+time tags with appropriate delays are written to a buffer which is then transmitted to each HDS for processing. The
+received ADC samples (homodyne-detector voltage sample and phase-drive voltage) are then processed and saved
+with their corresponding photon-detection signatures assuming the order quadrature samples are received is the order
+the timetags were sent which has been verified through testing. Sample counters for each type of detection signature
+are incremented for each event added. When the counter for a certain dataset reaches a certain threshold, e.g., 10k or
+100k, then the dataset counter for that detection signature is incremented. The data buffer is large enough to store
+4 full datasets for each detector signature simultaneously.
+In another thread that is running on the other processor of the dual-core processor, a data-save function is running
+which loops through checking the dataset counters for the different detection signatures. When this function registers
+that a dataset counter has been incremented, after making sure that data has not been overwritten by data collection
+faster than data has been saved, the function will save the new full dataset(s) to a binary file(s) in non-volatile
+memory. For each entry in a data file, the detection signature (counts per sub bin per side and total counts per side)
+, memory-overflow number, time-stamp counter, and all four signed ADC values (two from each server) are saved.
+After the data collection thread is done processing the detected events from the beginning of the time-stamp counter
+to halfway, it periodically checks the time-stamp counter to see when it overflows back to 0. At which point, the
+data collection described above is done again except the stopping condition is when the memory-overflow number is
+different. It is unknown how many samples will be collected in total (and the FPGA is not set up to provide that to
+the application though it could be) so that cannot be used but we do want to only look at samples collected by the
+previous (since the recent most overflow) memory-overflow number.
+For the shot-noise data collection, the process is very similar except instead of looking in the SDRAM for new
+events to gather timetags to query the servers, a pseudo-random function is used to generate timetags to query the
+server.
+We profiled the speed of PSO/HDS combined system by increasing the zero-detection rate (ZDR) by factors of 2
+up to 2 17 = 131072 which was the highest rate (per memory-overflow time, multiply by 1/0.6912 to convert to per
+second) that worked reliably. From a linear fit (withR 2 = 0.9998) of the execution time for the first half of the buffer
+vs ZDR/2, we extrapolate that the system could reliably continuously process events up to about 250k detection
+events per second.
+This system is designed to run continuously for a very long time, limited by the 29-bit memory-overflow number
+(about 12 years) and somewhat by the finite non-volatile storage of the micro SD card though using an secure-shell
+connection, files can be offloaded to larger storage devices and deleted from the SD card to recover space over time.
+To date, the longest data acquisition completed was on the order of seven hours. The data-set and sample counters
+for each detection event type are listed in Table S1. Besides showing the system’s ability to continuously run for
+hours, this also shows the ability to capture some higher-order photon-number events using multiple detectors of the
+tree.
+G. Analog control and synchronization signals
+To ensure the tomography phase-drive, sampling and time-stamp clocks are synchronized between the orchestrator
+and each HDS, we use 2.5-GHz radio-frequency-over-fiber (RFoF) transceivers (RFoptic) for clock distribution. With
+S17
+this method, the clocks of the HDS and PSO are synchronized with a jitter of about 500 ps. Moreover, to synchronously
+start each time-stamp clock, the orchestrator issues a homodyne-trigger pulse (about 10 ns wide) which modulates
+the amplitude of the phase reference beam (atλ f ) so that it is distributed to each homodyne detector when the
+phase reference is converted into the LO. This pulse is recovered by a current monitor on a single photodiode of the
+homodyne detector ( the monitor is reduced from stock gain by about 10x) which is fed to a comparator (Analog
+Devices ADCMP600) to create a fast rise-time digital pulse to issue a start signal to the corresponding HDS. Due to
+the slow bandwidth of the current monitor (about 1 MHz), the delay between the time-stamp counters is dependent
+on the comparator threshold and the DC bias of the amplitude modulator used to make the homodyne-trigger pulse
+on the phase reference. In practice, the DC bias is fairly stable (even though it is controlled by a feedback loop to
+stabilize the phase reference power) but can result in homodyne-to-photon-subtraction event delays varying by about
+1-2 bins if not accounted for.
+The clock synchronization RFoF signal is wavelength multiplexed with the sideband reference (a 25-GHz RFoF
+signal), an optical phase reference (sampled fromλ f ), and a conventional fiber transceiver bi-directional signal using
+100-GHz dense-wavelength-division-multiplexing (DWDM) components (AC Photonics) which are all sent to each
+homodyne detection system. All of these signals and the resource state modes are contained within the optical
+C-band. As shown in Ref. [26], these multiplexed signals can also be multiplexed with the resource-state output
+modes to enable truly distributed use of this resource state with only some additional insertion loss but not any
+significant added noise even though the spacing between the bright phase reference and dim resource state modes is
+only one 100-GHz channel apart. Before preparing to take photon-subtraction data with the lowest loss our system
+could permit, we did have multiplex and demultiplex filters to having the resource-state modes coexisting with the
+multiplexed classical signals and were able to take two-mode state tomographies in that configuration. As such, we
+do have the required pedestal filtering [26] on each classical transmitter to remove noise photons at the wavelengths
+of the resource state as seen by the extra DWDM component in front of each transmitter.
+H. Photon-subtraction/quadrature-sample delay calibration
+To calibrate the delay between the time-stamped photon-subtraction detection events to the time-stamped homo-
+dyne detection samples at the servers, we inject a pulsed ( 50-ns at 100 kHz) thermal state into the unused port of the
+photon-subtraction beamsplitter (see Fig. S3). To create the pulsed thermal state, the amplified spontaneous emis-
+sion of a polarization-maintaining erbium-doped fiber optical amplifier (Pritel SCG-40) is modulated by an amplitude
+modulator (EOSpace) controlled by a bias controller (Oz Optics MBC-PDBC-3A) with 99/1 sampling (AC Photonics
+before and after the modulator, to control pulse extinction ratio, and pulsed by an arbitrary waveform generator (Tek
+AWG 710B).
+After data collection for approximately one buffer-overflow period, the systems were stopped to avoid data overwrite.
+Then time-stamped photon-subtraction detections were collected from the PSO’s data buffer. We found it important
+to reduce the PSO FPGA event hold time to 3 bins (less than the detector dead time) and use a single detector and
+do this measurement for one detection mode at a time since there is bunching in the bright thermal state leading
+to the multiple-detection filter otherwise rejecting the events of interest. For this calibration, the HDSs used in
+a threshold-crossing counter mode and every occurrence of a threshold crossing had its time-stamp recorded. All
+threshold crossings from both servers were then reported back to the orchestrator which used cross-correlation (CC)
+analysis between the detectors for a given mode and the threshold crossings from that mode’s HDS to find the time-
+stamp at the peak CC. Using this method, we captured about 10000 events for each input to the CC and found clear
+peaks between the photon-subtraction for a given mode and the homodyne detector on that mode with an SNR of
+about 40 and a width of about 6 bins full-width-at-half-maximum.
+As verification, we also conducted a delay sweep, centered on the peak-CC delay, of single-mode photon-subtraction
+tomographic measurements on mode A. The truly optimal delay maximizes the variance of the single-mode photon-
+subtracted state [34] which we find to be 1 bin off the thermal-state peak-CC delay but that can vary a bit based on
+the thermal pulse height on the homodyne detector and the DC offset on the amplitude modulator used to send the
+homodyne-trigger pulse.
+Finally, in the two-mode case, the delay space is richer because of the 2-D landscape (Table S2). Using the thermal
+state calibrated delay as a starting point, we acquired tomographic data at several different delays adaptively (for
+time efficiency), where based on the state tomography data we would not go to the next delay if it was clear from
+the initial data analysis of the variances (e.g., Fig. 3 insets) that the current delay combination was already moving
+away from the optimal delay combination (with largest two-mode squeezing and anti-squeezing). Even though this
+adaptive delay scan mostly searches just one side of the peak, given the temporal width of the state we are confident
+S18
+TABLE S2. Log negativity [36]E N(ρ) versus delay combination. Top section: two-mode delay combinations D(i, j) measured.
+Upper-middle section:E N(ρM
+0,0) as a function of the two-mode delay combination. Lower-middle section:E N(ρM
+1,1) as a
+function of the two-mode delay combination. Bottom section: Log negativity improvementE N(ρM
+1,1)−E N(ρM
+0,0) from photon
+subtraction. The data error bar (standard deviation) is about 0.03.
+D(-2,-2) D(-2,-1) D(-2,0)
+D(-1,-1) D(-1,0) D(-1,1)
+D(0,-1) D(0,0) D(0,1)
+0.47 0.48 0.48
+0.46 0.46 0.45
+0.35 0.52 0.49
+0.45 0.48 0.47
+0.51 0.51 0.46
+0.45 0.53 0.52
+-0.01 0 -0.02
+0.06 0.04 0.01
+0.1 0.01 0.03
+we have found the peak.
+I. Modified system for single-mode operation
+Additionally, with minor modifications, we also measure single-mode squeezed vacuum and single-mode photon-
+subtraction of squeezed vacuum. Due to the broadband nature of our squeezed-light source, this source simultaneously
+also emits single-mode squeezing atλ f (C44). Given the C45 DWDM demultiplexer after the squeezed-light source,
+the C44 single-mode squeezed light is directed towards the mode-A/C43 homodyne detector.
+To phase stabilize the single-mode squeezing and enable simultaneous phase drive for single-mode homodyne to-
+mography, we can reconfigure the aforementioned phase stabilization from two-mode to one-mode as follows. The
+side-A/C43 homodyne detector output is split in half as before. The half previously directed towards the hybrid
+junction for two-mode phase stabilization is then directed towards a power detector (Linear Technology LT5537)
+which gives a voltage output corresponding to the power of the input. Using lock-in detection (Liquid Instruments
+Moku:Go), the phase drive is demodulated from the squeezing signal so the residual phase drift can be extracted. The
+phase ramp frequency on side A is changed from 1 kHz to 10-kHz; the lock-in’s local oscillator is also changed to a
+phase drive signal created by generating a 20-kHz sinewave using a function generator (Rigol DG2102) phase locked
+to the phase drive signal with a shared 10-MHz reference. For single-mode squeezing, a 10-kHz 2πramp, produces a
+20-kHz sinewave of squeezing and anti-squeezing since squeezing and anti-squeezing areπ/2 offset notπ. This residual
+phase drift error signal is used to control the phase of the mode-A homodyne local oscillator which is used in the
+detection of single-mode squeezing. The rest of the phase stabilization system is the same as described above except
+the control system drives a phase shifter and fiber stretcher on side-A where the single-mode squeezing is directed to.
+To acquire data in this single-mode configuration, without changing the PSO application to be dedicated for single-
+mode use, just requires having the optical and electronic connections to the side-B/C45 homodyne detector and HDS
+connected as normal. In that case, any data collected from the side-B/C45 homodyne detector is ignored.
+Fig. S5 shows illustrative data of the effects of the number of detectors in a beamsplitter tree on the photon-
+subtracted state withR S = 10%. Due to the amount of background photons we had (about 10-20% of total singles
+counts which appears due to either the elevated waveguide temperature or photo-refractive crystal waveguide damage),
+we expect this state to be mixed with squeezed vacuum [34]. For reference, Fig. S5(a) shows the zero-photons
+subtracted measured state for which it is important to note the vacuum probability relative to the single-photon
+probability and the two-photon probability. Fig. S5(b)-(d) show the measured density matrices of single-photon
+subtraction for increasing photon-subtraction detectors using a beamsplitter tree from one to three. All three show
+significantly higher single-photon probability compared to Fig. S5(a). Fig. S5(c)-(d) show significantly more single-
+photon probability compared to Fig. S5(b) indicating that it is important to have at least one more detector in the tree
+than the number of photons being subtracted. Fig. S5(e)-(f) show a similar comparison for two-photon subtraction
+where there are two and three detectors, respectively. Fig. S5(f) having three photon-subtraction detectors in the
+S19
+(b)(a)
+(f)(e)(d)
+(c)
+FIG. S5. Measured tomographically reconstructed density matrix of (photon-subtracted) single-mode squeezed vacuum. (a)
+no photons subtracted. (b) one photon subtracted using one single-photon detector (SPDs). (c) one photon subtracted using
+beamsplitter tree of two SPDs. (d) one photon subtracted using beamsplitter tree of three SPDs. (e) two photons subtracted
+using beamsplitter tree of two SPDs. (f) two photons subtracted using beamsplitter tree of three SPDs. For these measurement
+reconstructions, the photon-number cut-off per mode is 6.
+beamsplitter tree shows reduced vacuum and increased one and two photon probabilities compared to Fig. S5(e).
+Fig. S5(f) also has the highest two-photon probability of all the states.
+V. NON-GAUSSIAN TELEPORTATION EXPERIMENTAL DESIGN
+Here we describe our proposed design to demonstrate non-Gaussian teleportation (NGT) of a coherent state using
+two-mode generalized photon subtraction which coexists with conventional laser communications and other control
+signals enabling distributed operation between disparate locations. As we have discussed, non-Gaussian teleportation
+has the ability to increase the teleportation fidelity at the cost of probabilistic operation. Generalized-photon subtrac-
+tion has been introduced to provide significantly increased success probabilities by sending squeezed vacuum into the
+otherwise unused photon-subtraction beamsplitter port [37]. The two-mode version needed here has been analyzed
+previously in Ref. [38, 39], though in a somewhat different context. Ref. [38] shows that the teleportation fidelity with
+this resource is a monotonically increasing function of the photon-subtraction beamsplitter transmissivity. Even still,
+having squeezed vacuum in the second port of the photon-subtraction beamsplitters will increase the rate compared
+to having vacuum in those ports.
+To include two-mode generalized photon subtraction, another squeezed-light source needs to be added and the
+two sources need to be phase stabilized with respect to one another. This phase stabilization can be done by using
+the single-mode squeezed light emitted by each source—that is otherwise unused. After the sources are combined,
+the single-mode squeezing atλ f is demultiplexed from the rest of the squeezing using a DWDM component and is
+directed towards a homodyne detector. This combination results in a state which is dependent on the phase between
+the squeezed-light sources and also the phase of the local oscillator. We propose to use this output to stabilize the
+phase between the squeezed-light sources by driving the LO phase to average it out and then adjusting the phase
+between the squeezed-light sources to minimize the noise variance assuming that the resultant average noise of the
+S20
+25-GHz
+FBG
+25-GHz
+FBG
+25-GHz
+FBG
+PC
+TC
+C45
+C45
+Delay 2
+POL
+PM
+25-GHz
+FBG
+SNSPDs
+Filter
+Cavity
+DWDM
+C44
+DWDM
+C44
+50/50
+V
+V
+APD
+circulator
+PDH
+C43
+C43
+99%
+1%
+99/1
+99/1
+Osc
+70%
+70/30
+70/30
+50/50
+Data storage
+25-GHz
+FBG
+PC
+Atten
+EDFA
+SHG
+Fdml
+WG
+PBS
+Filt
+Filt
+SPDC
+HWP
+Lens
+Filter
+Free space
+PMF
+SMF
+Electrical
+Optional
+DWDM
+C45
+EXP
+OUT
+OUT 20-MHz + 10-kHz LO
+OUT
+IN
+IN
+Pedestal
+Filtering
+Channel
+#2
+DWDM
+IN
+DWDM
+C43
+EXP
+OUT
+DWDM
+EXP
+EXP
+EXP
+OUT
+OUT
+C44
+99/1
+AM
+TC
+Power
+stabilization
+25-GHz
+FBG
+25-GHz
+FBG
+VBS
+Homodyne Detection
+-
+Signal
+LO
+C45
+DEMOD
+OUT
+50/50
+LO
+C44
+C44
+~
+25 GHz
+~
+25.005 GHz
+25-GHz
+BPF
+C44
+PM
+POL
+PC
+PC
+PS
+50/50
+10%
+C43
+EXP
+EXP
+EXP
+IN
+IN
+EXP
+EXP
+H25
+DWDM
+IN
+EXP
+IN
+INPUT
+EXP
+EXP
+EXP
+DWDM
+C44
+OUT
+EXP
+DWDM
+PID
+PID
+ADC
+POL
+POL
+PC
+amplifier
+25-GHz
+BPF
+OUT
+DWDM
+EXP
+C53
+EXP
+DWDM
+IN
+Rx Tx
+SFP
+DWDM
+IN
+SFP
+Rx Tx
+DWDM
+V
+Digital
+Lock-in
+FG
+1x2
+1x2
+FPGA
+SoC2
+RFoF Rx
+25 GHz + 5 MHz
+90/10
+90%
+10%
+90/10
+90%
+25-GHz
+FBG
+C43
+POL
+PC
+POL
+PC
+V
+25-GHz
+BPF
+PID
+50/50
+Delay Sq-A
+Delay Sq-B
+Delay 1B
+C43
+Delay
+EDFA
+PC
+Fiber
+Stretch
+25-GHz
+BPF
+WG
+Filter
+TC
+GL
+PM
+PM
+POL
+PM
+771
+C43
+DWDM
+EXP
+C44
+circulator
+1542.14-nm
+Laser
+DWDM
+C45
+IN
+IN
+DWDM
+RFoF Rx
+DWDM
+Media
+Convert
+IN
+SFP
+Rx Tx
+DWDM
+Media
+Convert
+Media
+Convert
+Ethernet
+Switch
+SFP
+Tx Rx
+Media
+Convert
+EDFA
+EDFA
+C43
+DWDM
+VBS
+PS
+PS
+PC
+PC
+PC
+VBS
+-
+PID
+PowD
+FPGA
+SoC0
+DWDM
+IN
+EXP
+RFoF Rx
+DWDM
+IN
+C53
+C53
+C53
+C53
+C53
+C53
+C53
+C59 H25
+H25
+1-kHz
+LPF
+coherent
+state input
+Channel
+#1
+99/1
+1%
+99%
+AM
+AWG
+VBS
+H08
+EXP
+RFoF Tx
+RFoF Tx
+IN
+H08
+H58
+C59
+IN
+VBS
+-
+Signal
+LO
+PC
+VBS
+-
+Signal
+LO
+x
+p
+PC
+Atten
+PM
+VBS
+Atten
+ADC
+ADC
+20-MHz
+BPF
+20-MHz
+BPF
+PS
+PID
+PID
+V
+Fiber
+Stretch
+ADC
+1x2
+1x2
+FPGA
+SoC1
+1x2
+1x2
+RFoF Rx
+20-MHz
+BPF
+IN
+DWDM
+C58
+RFoF Tx
+H25
+IN
+IN
+DWDM
+RFoF Tx
+C59
+AM
+Feedforward
+PM
+POL
+RFoF Rx
+Atten
+10%
+90%
+99%
+Atten
+PC
+RFoF Rx
+RFoF Rx
+H08
+EXP
+EXP
+IN
+H08
+EXP
+H08
+EXP
+IN
+Atten
+RFoF Rx
+C31
+H58
+50/50
+OUT
+Delay
+50%
+50%
+50%
+50%
+50/50
+50/50
+MBC
+MBC
+V
+AM
+MBC
+AM
+Delay 2B
+Delay 2A
+C31
+RFoF Tx
+C31
+IN
+IN
+C31
+DWDM
+BT
+V
+BT
+10MHz Square
+AWG
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+90/10
+99/1
+DWDM
+DWDM
+DWDM
+DWDM
+DWDM
+20-MHz LO
+or
+20-MHz + 1-kHz LO
+DEMOD1
+DEMOD2
+INPUT2
+INPUT1
+Digital
+Lock-in
+Shared 10-MHz Reference
+Sh
+10-MHz
+LPF
+2x
+FG
+Seed pulse
+train
+FG-B1 C
+C
+FG-B2
+10-kHz ramp
+FG-A1
+FG-A2
+FIG. S6. Proposed experimental setup for non-Gaussian teleportation of a coherent state using two-mode generalized photon
+subtraction. Definitions (in alphabetical order). ADC: analog-to-digital converter. AM: amplitude modulator. APD: avalanche
+photodiode. BPF: band-pass filter. BT: bias tee. C: comparator. CLK: clock. DEMUX: demultiplex. DWDM: dense-
+wavelength division multiplexer. EDFA: erbium-doped fiber amplifier. FBG: fiber Bragg grating. Fdml: fundamental. FG:
+function generator. Filt: filter. FPGA-SoC: field programmable gate array - system on chip. HJ: hybrid junction. HWP:
+half-wave plate. LO: local oscillator. MBC: modulator-bias controller. MUX: multiplex. Osc: oscilloscope. PC: polarization
+controller. PDH: Pound-Drever-Hall controller. PID: proportional-integral-derivative controller. PM: phase modulator. POL:
+polarizer. PowD: power detector. PS: phase shifter. RFoF: radio-frequency over fiber. Rx: receiver. SFP: small-form-factor
+pluggable transceiver. Sh: shutter. SHG: second-harmonic generation. TC: temperature controller. Tx: transmitter. V:
+voltage source. VBS: variable beamsplitter. WG: waveguide. 100-GHz channel center wavelength H08: 1570.83 nm. H25:
+1556.96 nm. H58: 1530.72 nm. C31: 1552.52 nm. C43: 1542.95 nm. C44: 1542.14 nm. C45: 1541.35 nm. C53: 1535.04 nm.
+C59: 1530.33 nm
+two sources being 90◦ out of phase is less than when they are in phase.
+Our proposed NGT setup uses the same general photon subtraction method whose detectors are input to a PSO.
+The PSO’s heralding output signal is sent via RFoF to each end node. On side-A, this signal is used to trigger the
+creation of an temporally mode-matched input coherent state. On Side-B, this signal is used to trigger the creation
+of a temporally mode-matched feedforward displacement field. Moreover, the feedforward itself in this design is also
+transmitted using RFoF from side-A to side-B. Comparing the amplified homodyne noise power to the component
+noise floors, we have determined that there is sufficient SNR to use RFoF and post-amplification to produce gain-of-1
+teleportation feedforward without introducing significant noise due to the RFoF conversion, transmission loss (at least
+on metropolitan-scale distances), and amplification.
+To provide the necessary synchronization for coherence and temporal-mode matching between the various signals
+of the system, we have determined a variety of delays are required to be added to meet the timing constraints, as
+shown in Fig. S6:
+•Delay – used to equalize the path length between the squeezed sources into the beamsplitter.
+S21
+•Delay 2 – used to equalize the path length between the quantum-light paths and the LOs.
+•Delay 2A – used to delay the photon-subtracted-squeezed temporal mode (PSSTM), phase and sideband refer-
+ences to give time for heralding trigger pulse to generate the input coherent state.
+•Delay Sq-A – used to delay the PSSTM so it arrives at the dual homodyne detector simultaneously with the
+input coherent state.
+•Delay 1B – used to delay the heralding trigger, PSSTM, phase and sideband references to give time for the
+feedforward signals to arrive.
+•Delay 2B – used to delay the PSSTM, phase and sideband references to give time for the heralding trigger pulse
+to generate the temporally mode-matched feedforward displacement light.
+•Delay Sq-B – used to delay the PSSTM so it arrives at the displacement beamsplitter simultaneously with the
+temporally-mode matched feedforward displacement light.
+To enable independent phase stabilization of each mode, which enables distributed operation, we create a seed signal
+which creates a 20-MHz sideband easily measured and isolated by each homodyne detector. Lock-in detection can be
+used on each side to extract the phase drift which can be corrected using the two-stage control method described in
+Sec. IV D. The seed is input to the unused input port of the 50/50 splitter before the SPDC waveguides to seed and
+phase reference the squeezed light. Due to the waveguide being an optical parametric amplifier, an idler is produced
+in the conjugate mode providing a signal for each mode.
+The seed signal is generated by tapping 50% of the light going to theλ f power stabilization pick-off detector. From
+there, a seed signal is generated at C43 + 5 MHz using methods similar to our LO generation (described in Sec. IV B)
+except a second RF oscillator (Berkeley Nucleonics Corp. Model 845-26-FILT-NM-1URM) is used, which is phase
+referenced to the 25-GHz main RF oscillator, to produce a 25.005-GHz signal to drive the sideband generation to
+create the seed atλ f + 100.02 GHz which is 20 MHz shifted from the LO of the homodyne detectors.
+The homodyne detector signal is split and the part for phase stabilization is bandpass filtered (Mini-circuits SBP-
+21.4+) and amplified (Mini-circuits ZFL-1000LN+). After which it goes to a lock-in detector (Liquid Instruments
+Moku:Go) for 20-MHz demodulation. To facilitate a phase-referenced 20-MHz LO for the 20-MHz demodulation, A
+20-MHz signal is produced by a function generator (Rigol DG2102) that is phase referenced to the shared 10-MHz
+reference between the 3 nodes.
+Moreover, for the dual-homodyne detector on side-A, the overall optical LO phase can be stabilized using the
+output of the detector without the phase modulator in the optical LO path. For teleportation, the phase between the
+detectors in the dual-homodyne detector needs to be stabilized. To accomplish this, the other detector’s phase error
+signal can be maximized by adjusting the phase modulator in that LO path—this ensures a 90 ◦ phase shift between
+the optical LO’s of each detector if the lock-in-detector LO phases are correct (which depends on propagation delay
+differences of each detector to the lock-in). This is the configuration used for teleportation where the output of each
+detector is also recorded by the HDS analog-to-digital converters.
+For two-mode homodyne tomography of the resource state, a few minor modifications are needed. The phase
+modulator providing the 90◦ phase difference for the dual-homodyne detector is repurposed to provide the tomography
+phase drive. The 20-MHz lock-in detection LO needs to be modified by modulating it with the tomography phase
+drive. These alterations are shown with dashed lines in Fig. S6. Also, the 50/50 beamsplitter on the signal path can
+to be removed to improve the results.
+For phase stabilization of two-mode squeezing, this CW seed is sufficient and the squeezed light bandwidth can
+be filtered (Mini-circuits SLP-10.7+) to reject the 20-MHz seed which we have tested. But for photon-subtracted
+states, this CW seed needs to be pulsed. Frequency filtering of this seed which is within the photon-subtracted-state
+bandwidth is not compatible with the real-time operation described above. Additionally, the filtering cavity does not
+provide enough attenuation of the 20-MHz sideband. An amplitude modulator (EOSpace) and bias controller (Oz
+Optics MBC-PDBC-3A), with appropriate optical pick-off(s) around the modulator, can be used to create pulses. The
+electrical pulses (about 50 ns, 100 kHz) are generated from a function generator (Rigol DG2102) phase referenced to
+shared 10-MHz clock. The pulse parameters are chosen so the duty cycle is low to avoid disruption of data acquisition
+but the repetition rate is high compared to the tomography phase drive. Moreover, an additional stage of optical
+amplification is added (Pritel FA-30-IO) after the sidebands are filtered with the 25-GHz FBG to further amplify the
+seed, where, after the amplifier, the residual amplified spontaneous emission is removed using a 100-GHz bandpass
+filter (AC Photonics). This provides sufficient power to generate sidebands with enough power for phase stabilization
+based on their average value.
+S22
+Using this pulsed method, will result in extra background to the photon subtraction detectors. The repetition rate
+is too fast for an optical chopper and the path to the detectors from the photon-subtraction beamsplitter is in fiber
+except the enclosed fiber-coupled cavity. One could include a fiber-based optical switch to switch out the seed light
+before going to the detectors but this will result in additional loss in the photon subtraction path. To avoid the extra
+loss, we developed a rejection filter in the PSO FPGA which takes a seed-clock signal (phase referenced to the shared
+10-MHz clock) and will reject detection events which are within a certain time stamp range with respect to the seed
+clock based on calibrated delay and range width parameters. The calibration can be done by adjusting the delay and
+range width to minimize background counts from the pulse seed.
+We tested this method of phase stabilization and found it to stabilize the phase on each side to<<1 ◦ depending on
+the SNR of the demodulated phase error signal. We also verified that the two-mode squeezing was phase stabilized to
+within about 0.1 dB on a swept spectrum analyzer (Agilent N9000A CXA Signal Analyzer) using the hybrid junction
+to directly see two-mode squeezing. In our testing, we directly distributed a 20-MHz reference which was amplified
+(Mini-Circuits ZKL-1R5+ and ZFL-1000LN+) and filtered (Mini-circuits SBP-21.4+) instead of deriving the 20-MHz
+lock-in LO from a function function generator synchronized to a 10-MHz reference but we expect this to be a trivial
+difference. Additionally, although we developed the seed-clock rejection in the PSO FPGA which is fairly straight
+forward and compiled synthesized without issue, it was not used or tested to date.

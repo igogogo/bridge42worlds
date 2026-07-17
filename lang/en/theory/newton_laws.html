@@ -148,7 +148,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 .hero-rig{ transform:translate(90px,175px); }
 @media (prefers-reduced-motion: no-preference){
@@ -441,14 +441,14 @@ code, .code{
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/en/graph/">graph</a>
 <a class="active" href="/lang/en/theory/">theory</a>
-<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/favorites.html" title="Favorites">★</a>
 <a href="/lang/en/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contents" class="toc">
 <p class="toc-title">Contents</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Three laws in a nutshell</a></li>
@@ -479,7 +479,7 @@ code, .code{
 <rect fill="var(--paper)" height="50" rx="4" stroke="var(--ink)" stroke-width="2" width="70" x="0" y="-25"></rect>
 <text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="13" x="85" y="5">m</text>
 </g>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="250">a = F/m — груз ускоряется, не едет с постоянной v</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="250">a = F/m — the mass accelerates, it doesn't move at constant v</text>
 <defs>
 <marker id="arrowF" markerheight="8" markerwidth="8" orient="auto" refx="4" refy="4">
 <path d="M0,0 L8,4 L0,8 z" fill="var(--steel)"></path>
@@ -493,8 +493,8 @@ code, .code{
 <p>Newton's three laws (1687, "Mathematical Principles of Natural Philosophy") are a minimal set of axioms from which all classical mechanics is derived: why a body with no net force moves uniformly in a straight line, how force, mass, and acceleration are related, and why every action has an equal and opposite reaction. This note covers each law individually with numerical examples and graphs, and then one overarching example (rocket launch) where all three laws work together. The material is aimed at those just starting dynamics; only arithmetic and the intuitive idea of a derivative are required.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Ускорение — то, что чувствует шарик в момент броска" src="/lang/ru/theory/img/newton_laws_hero.jpg"/><figcaption>Acceleration — what the ball feels at the moment of throw</figcaption></figure>
-<figure><img alt="Действие и противодействие: конькобежцы расходятся зеркально" src="/lang/ru/theory/img/newton_laws_concept.jpg"/><figcaption>Action and reaction: skaters mirror each other</figcaption></figure>
+<figure><img alt="Acceleration — what the ball feels at the instant it's thrown" src="/lang/ru/theory/img/newton_laws_hero.jpg"/><figcaption>Acceleration — what the ball feels at the moment of throw</figcaption></figure>
+<figure><img alt="Action and reaction: the skaters push apart like mirror images" src="/lang/ru/theory/img/newton_laws_concept.jpg"/><figcaption>Action and reaction: skaters mirror each other</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Three laws in a nutshell</h2></div>
@@ -587,8 +587,8 @@ code, .code{
 <svg viewbox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
 <line stroke="var(--rule)" stroke-width="1" x1="40" x2="40" y1="10" y2="140"></line>
 <line stroke="var(--rule)" stroke-width="1" x1="40" x2="290" y1="140" y2="140"></line>
-<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="8" y="16">v, м/с</text>
-<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="265" y="156">t, с</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="8" y="16">v, m/s</text>
+<text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="11" x="265" y="156">t, s</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="18">12</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="end" x="30" y="143">0</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="10" text-anchor="middle" x="40" y="155">0</text>
@@ -611,7 +611,7 @@ code, .code{
 <tr><td class="sym">4 kg</td><td class="sym">1.5 m/s²</td><td class="sym">3 m/s</td></tr>
 </table>
 <figure>
-<img alt="График v(t) для трёх масс при постоянной силе 6 Н — прямые с разным наклоном, наклон равен ускорению a=F/m" src="/lang/ru/theory/newton_second_law.png"/>
+<img alt="Graph of v(t) for three masses under a constant 6 N force — lines of different slope, the slope equals acceleration a=F/m" src="/lang/ru/theory/newton_second_law.png"/>
 <figcaption><span class="fign">Fig. 1</span>Velocity grows linearly (v = at), and the slope of the line is the acceleration. The same force accelerates the light cart four times faster than the cart that is four times heavier — a direct consequence of the inverse proportion a = F/m.</figcaption>
 </figure>
 <div class="callout brass">
@@ -641,7 +641,7 @@ code, .code{
 <div class="eq"><div class="eq-body">m<sub>A</sub>v<sub>A</sub> = −m<sub>B</sub>v<sub>B</sub>    (impulse before push was zero)</div><div class="eq-tag">(2)</div></div>
 <p>The numbers were chosen so that the answer comes out integral (a standard technique — law first, then specific convenient numbers). With push impulse J = 180 kg·m/s: v<sub>A</sub> = J/m<sub>A</sub> = 180/60 = <strong>3 m/s</strong>, v<sub>B</sub> = −J/m<sub>B</sub> = −180/90 = <strong>−2 m/s</strong> — the lighter skater flies off faster than the heavy one, but the total momentum of the system remains zero at all times.</p>
 <figure>
-<img alt="График импульса двух конькобежцев во время толчка: p_A растёт, p_B падает симметрично, сумма остаётся нулевой" src="/lang/ru/theory/newton_third_law.png"/>
+<img alt="Momentum graph of two skaters pushing off: p_A rises, p_B falls symmetrically, the sum stays zero" src="/lang/ru/theory/newton_third_law.png"/>
 <figcaption><span class="fign">Fig. 2</span>The magnitude of each skater's momentum grows linearly during the push (force is roughly constant), but with opposite signs — the sum (dashed line) stays at zero at any moment. This is a direct consequence of the third law, not a separate postulate.</figcaption>
 </figure>
 <div class="callout moss">
@@ -794,7 +794,7 @@ code, .code{
       var t = Math.min(ts % CYCLE, phaseMs) / phaseMs * T_MAX;
       var v = a * t;
       var ro = row.querySelector('[data-readout]');
-      if (ro) ro.textContent = 'v=' + v.toFixed(1) + ' м/с';
+      if (ro) ro.textContent = 'v=' + v.toFixed(1) + ' m/s';
       var dot = dotByMass[m];
       if (dot) { dot.setAttribute('cx', 40 + t * PX_PER_S); dot.setAttribute('cy', 140 - v * PX_PER_V); }
     });

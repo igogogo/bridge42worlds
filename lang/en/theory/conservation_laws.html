@@ -148,7 +148,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-ballA{ animation: heroBallA 6s cubic-bezier(.55,0,1,.45) infinite; }
@@ -403,14 +403,14 @@ code, .code{
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/en/graph/">graph</a>
 <a class="active" href="/lang/en/theory/">theory</a>
-<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/favorites.html" title="Favorites">★</a>
 <a href="/lang/en/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contents" class="toc">
 <p class="toc-title">Contents</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Three conserved quantities</a></li>
@@ -437,7 +437,7 @@ code, .code{
 <circle class="hero-ballB" cx="220" cy="150" fill="var(--steel-fill)" r="16"></circle>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="70" y="190">A: v→0</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="220" y="190">B: 0→v</text>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A передаёт всё B — сумма импульсов не меняется</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A hands everything to B — the total momentum doesn't change</text>
 </svg>
 </div>
 </header>
@@ -446,8 +446,8 @@ code, .code{
 <p>From Newton's three laws (see part I) follow three quantities that in a closed system do not change over time: momentum, energy, and angular momentum. These are not random coincidences but a direct consequence of the symmetries of space and time (Noether's theorem, §6). In this note — all three conservation laws separately with numerical examples, and then one working example (elastic and inelastic collision), where it is clear that momentum is always conserved, but energy only sometimes.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Момент покоя на вершине маятника — вся энергия потенциальна" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>Moment of rest at the pendulum's apex — all energy is potential</figcaption></figure>
-<figure><img alt="Руки к телу — вращение ускоряется: сохраняется момент импульса" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>Arms to the body — rotation speeds up: angular momentum is conserved</figcaption></figure>
+<figure><img alt="The instant of rest at the top of the swing — all energy is potential" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>Moment of rest at the pendulum's apex — all energy is potential</figcaption></figure>
+<figure><img alt="Arms drawn in — the spin speeds up: angular momentum is conserved" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>Arms to the body — rotation speeds up: angular momentum is conserved</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Three conserved quantities</h2></div>
@@ -500,7 +500,7 @@ code, .code{
 <div class="units">K [J], U [J], m [kg], v [m/s], g ≈ 10 m/s² (rounded, as in part I — for mental calculation), h [m].</div>
 <p>A classic example — a pendulum or a swing: at the extreme point the speed is zero (K = 0), all energy is potential; at the lowest point the height is minimal (U = 0), all energy is kinetic. In the middle of the path — some fraction of each, but the sum is the same at any point of the swing.</p>
 <figure>
-<img alt="График K(t), U(t) и их суммы E для одного качания маятника — кривые K и U пересекаются, сумма остаётся горизонтальной прямой" src="/lang/ru/theory/conservation_energy.png"/>
+<img alt="Graph of K(t), U(t) and their sum E over one pendulum swing — the K and U curves cross, the sum stays a flat line" src="/lang/ru/theory/conservation_energy.png"/>
 <figcaption><span class="fign">Fig. 1</span>Kinetic (K) and potential (U) energies swap places twice per one swing, but their sum (dashed line) stays as a flat horizontal line — it never dips or jumps even for a moment.</figcaption>
 </figure>
 <p>Numerical example: a body falls from a height h = 5 m with no initial speed (air resistance neglected). What is its speed at the ground?</p>
@@ -570,7 +570,7 @@ code, .code{
 <tr><td>Kin. energy, J</td><td class="sym">½·3·4² = 24</td><td class="sym">½·4·3² = 18</td></tr>
 </table>
 <figure>
-<img alt="График импульса двух тележек при неупругом столкновении: p1 падает, p2 растёт, сумма остаётся постоянной" src="/lang/ru/theory/conservation_momentum.png"/>
+<img alt="Momentum graph of two carts in an inelastic collision: p1 drops, p2 rises, the sum stays constant" src="/lang/ru/theory/conservation_momentum.png"/>
 <figcaption><span class="fign">Fig. 2</span>The momentum of each cart changes during the brief collision, but their sum (dashed line) remains strictly constant before, during, and after the impact — momentum is conserved, even when energy is not.</figcaption>
 </figure>
 <div class="callout brass">

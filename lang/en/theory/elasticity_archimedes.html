@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -190,14 +190,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/en/graph/">graph</a>
 <a class="active" href="/lang/en/theory/">theory</a>
-<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/favorites.html" title="Favorites">★</a>
 <a href="/lang/en/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contents" class="toc">
 <p class="toc-title">Contents</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>Two Forces of Resistance</a></li>
@@ -231,8 +231,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>In the 1660s, Robert Hooke discovered that springs (and elastic bodies in general) resist deformation proportionally to its magnitude — the simplest linear relation underlying elasticity theory, from mattresses to skyscrapers. Two millennia earlier, Archimedes discovered another, also linear law: a fluid pushes up an immersed body with a force equal to the weight of the displaced volume. In this note — both laws with numerical examples and a through experiment that unites them in one measurement.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Пружина у предела растяжения — закон Гука" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>Spring at the limit of extension — Hooke's law</figcaption></figure>
-<figure><img alt="Лодка на воде в точном равновесии — принцип Архимеда" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>Boat on water in exact equilibrium — Archimedes' principle</figcaption></figure>
+<figure><img alt="A spring at the limit of stretch — Hooke's law" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>Spring at the limit of extension — Hooke's law</figcaption></figure>
+<figure><img alt="A boat on water in exact balance — Archimedes' principle" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>Boat on water in exact equilibrium — Archimedes' principle</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>Two Forces of Resistance</h2></div>
@@ -433,7 +433,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
     var len = REST_LEN + stretchPx;
     coil.style.width = len + 'px';
     mass.style.left = (WALL_X + len) + 'px';
-    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' м';
+    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' m';
     requestAnimationFrame(tickSpring);
   }
   if (window.requestAnimationFrame) requestAnimationFrame(tickSpring);

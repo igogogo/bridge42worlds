@@ -70,8 +70,8 @@ body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
-/* Меню сайта поверх страницы — та же бумажная подложка и чернильный текст, что и у самой
-   заметки (не белый фон/синие ссылки сайта по умолчанию): визуально маркирует раздел
+/* Меню сайта поверх страницы — та же буمажная подложка и чернильный текст, что и у саمой
+   заمетки (не белый фон/синие ссылки сайта по уمолчанию): визуально مаркирует раздел
    "теория" как отдельную образовательную зону (юзер-фидбек 2026-07-15). */
 .top-bar{ background:var(--paper); border-bottom:none; }
 .top-bar a{ color:var(--ink); }
@@ -148,18 +148,18 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-ballA{ animation: heroBallA 6s cubic-bezier(.55,0,1,.45) infinite; }
   .hero-ballB{ animation: heroBallB 6s cubic-bezier(.3,0,.6,1) infinite; }
 }
-/* Тайминг анимаций (везде): цикл ~6с, движение занимает первые 25-70% шкалы, остальное —
-   пауза «дать подышать» на финальном положении, ПОТОМ мгновенный рестарт infinite. */
+/* Тайمинг аниمаций (везде): цикл ~6с, движение заниمает первые 25-70% шкалы, остальное —
+   пауза «дать подышать» на финальноم положении, ПОТОМ مгновенный рестарт infinite. */
 @keyframes heroBallA{ 0%{ transform:translateX(0); } 38%{ transform:translateX(150px); } 40%{ transform:translateX(150px); opacity:0; } 100%{ transform:translateX(150px); opacity:0; } }
 @keyframes heroBallB{ 0%{ transform:translateX(0); opacity:0; } 39%{ transform:translateX(0); opacity:0; } 40%{ opacity:1; } 68%{ transform:translateX(150px); } 100%{ transform:translateX(150px); } }
 
-/* §6 — самая «продвинутая», философско-математическая часть: чуть мельче и плотнее,
+/* §6 — саمая «продвинутая», философско-مатеمатическая часть: чуть مельче и плотнее,
    как принято визуально отличать advanced-глубину от основного текста. */
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
 #s6 h2{ font-size:1.38rem; }
@@ -353,14 +353,14 @@ code, .code{
    одна и та же длительность 6с на оба, финиш на разных % (ядро летит дальше и быстрее). */
 @keyframes moveRecLight{ 0%{ left:50%; } 45%{ left:calc(100% - 26px); } 100%{ left:calc(100% - 26px); } }
 @keyframes moveRecHeavy{ 0%{ left:50%; } 45%{ left:38%; } 100%{ left:38%; } }
-/* Упругий столкновение равных масс: шар A подъезжает и «передаёт» скорость B (A останавливается). */
+/* Упругий столкновение равных مасс: шар A подъезжает и «передаёт» скорость B (A останавливается). */
 @keyframes moveSwapIn{ 0%{ left:16px; } 40%{ left:50%; opacity:1; } 41%{ opacity:0; } 100%{ opacity:0; left:50%; } }
 @keyframes moveSwapOut{ 0%{ left:50%; opacity:0; } 40%{ left:50%; opacity:0; } 41%{ opacity:1; } 75%{ left:calc(100% - 22px); } 100%{ left:calc(100% - 22px); } }
-/* Неупругое столкновение: два тела слипаются и едут вместе медленнее суммарной массой. */
+/* Неупругое столкновение: два тела слипаются и едут вمесте مедленнее суممарной مассой. */
 @keyframes moveStickA{ 0%{ left:16px; } 40%{ left:44%; } 100%{ left:44%; } }
 @keyframes moveStickB{ 0%{ left:60%; } 40%{ left:60%; } 55%{ left:70%; } 100%{ left:70%; } }
 
-/* ---------- задачи с раскрывающимся решением ---------- */
+/* ---------- задачи с раскрывающиمся решениеم ---------- */
 .problem{
   max-width:680px; border:1px solid var(--rule); border-radius:2px;
   padding:14px 18px; margin:0 0 12px; background:var(--paper-raised);
@@ -384,7 +384,7 @@ code, .code{
   color:var(--brass); margin-right:.5em;
 }
 
-/* ---------- сноска "величины и единицы" под формулой ---------- */
+/* ---------- сноска "величины и единицы" под форمулой ---------- */
 .units{
   font-size:.82rem; color:var(--ink-soft); margin:-0.7em 0 1.5em; max-width:680px;
 }
@@ -403,14 +403,14 @@ code, .code{
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتوى</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>ثلاث كميات محفوظة</a></li>
@@ -437,7 +437,7 @@ code, .code{
 <circle class="hero-ballB" cx="220" cy="150" fill="var(--steel-fill)" r="16"></circle>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="70" y="190">A: v→0</text>
 <text fill="var(--ink-soft)" font-family="Cascadia Code, monospace" font-size="12" text-anchor="middle" x="220" y="190">B: 0→v</text>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A передаёт всё B — сумма импульсов не меняется</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="240">A ينقل كل شيء إلى B — مجموع الزخم لا يتغيّر</text>
 </svg>
 </div>
 </header>
@@ -446,8 +446,8 @@ code, .code{
 <p>من قوانين نيوتن الثلاثة (انظر الجزء الأول) تتبع ثلاث كميات لا تتغير مع الزمن في نظام مغلق: الزخم، الطاقة، والزخم الزاوي. هذه ليست مصادفات عشوائية، بل نتيجة مباشرة لتماثلات المكان والزمان (مبرهنة نويثر، القسم §6). في هذه الملاحظة — جميع قوانين الحفظ الثلاثة بشكل منفصل مع أمثلة عددية، ثم مثال شامل واحد (تصادم مرن وغير مرن) يظهر أن الزخم يحفظ دائمًا، بينما الطاقة — فقط أحيانًا.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Момент покоя на вершине маятника — вся энергия потенциальна" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>لحظة السكون عند قمة البندول — كل الطاقة كامنة</figcaption></figure>
-<figure><img alt="Руки к телу — вращение ускоряется: сохраняется момент импульса" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>الأيدي إلى الجسم — يتسارع الدوران: يحفظ الزخم الزاوي</figcaption></figure>
+<figure><img alt="لحظة السكون عند قمة البندول — كل الطاقة كامنة" src="/lang/ru/theory/img/conservation_laws_hero.jpg"/><figcaption>لحظة السكون عند قمة البندول — كل الطاقة كامنة</figcaption></figure>
+<figure><img alt="الذراعان قرب الجسم — الدوران يتسارع: الزخم الزاوي محفوظ" src="/lang/ru/theory/img/conservation_laws_concept.jpg"/><figcaption>الأيدي إلى الجسم — يتسارع الدوران: يحفظ الزخم الزاوي</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>ثلاث كميات محفوظة</h2></div>
@@ -479,8 +479,8 @@ code, .code{
 <div class="anim-ball b-light rec-light" style="background:var(--moss-fill)"></div>
 <div class="anim-label left">المدفع (الثقيل) يرتد للخلف، والقذيفة (الخفيفة) تطير للأمام لمسافة أبعد بكثير</div>
 </div>
-<p class="units" style="margin-top:-1.2em">مدفع كتلته 500 кг يقف بلا حركة ويطلق قذيفة كتلتها 5 кг بسرعة 100 м/с. زخم القذيفة للأمام يساوي زخم ارتداد المدفع للخلف — من حيث المقدار، لا السرعة (سرعة المدفع أقل لأن كتلته أكبر).</p>
-<div class="eq"><div class="eq-body">0 = m<sub>للقذيفة</sub>v<sub>للقذيفة</sub> + m<sub>للمدفع</sub>v<sub>للمدفع</sub>  ⇒  v<sub>للمدفع</sub> = −5·100/500 = <strong>−1 м/с</strong></div><div class="eq-tag">(1)</div></div>
+<p class="units" style="margin-top:-1.2em">مدفع كتلته 500 كجم يقف بلا حركة ويطلق قذيفة كتلتها 5 كجم بسرعة 100 م/ث. زخم القذيفة للأمام يساوي زخم ارتداد المدفع للخلف — من حيث المقدار، لا السرعة (سرعة المدفع أقل لأن كتلته أكبر).</p>
+<div class="eq"><div class="eq-body">0 = m<sub>للقذيفة</sub>v<sub>للقذيفة</sub> + m<sub>للمدفع</sub>v<sub>للمدفع</sub>  ⇒  v<sub>للمدفع</sub> = −5·100/500 = <strong>−1 م/ث</strong></div><div class="eq-tag">(1)</div></div>
 <p>نفس الحساب كما لمتزلجي الجليد في الجزء الأول، القسم §4 — هناك تنشأ القوى في أزواج والزخم ببساطة «ينتقل» من جسم إلى آخر، ويبقى المجموع صفريًا إذا كان النظام ساكنًا قبل التفاعل.</p>
 <div class="callout steel">
 <span class="tag">التصادمات: مرنة وغير مرنة</span>
@@ -497,14 +497,14 @@ code, .code{
 <div class="eq-body">E = K + U = const,    K = ½m<span class="vec">v</span>²,    U = mgh</div>
 <div class="cap">الطاقة لا تختفي، بل تتدفق بين الشكلين الحركي والكامن</div>
 </div>
-<div class="units">K [جول], U [جول], m [كجم], v [м/с], g ≈ 10 м/с² (مقرب، كما في الجزء الأول — للحساب الذهني), h [м].</div>
+<div class="units">K [جول], U [جول], m [كجم], v [م/ث], g ≈ 10 م/ث² (مقرب، كما في الجزء الأول — للحساب الذهني), h [م].</div>
 <p>المثال الكلاسيكي — البندول أو الأرجوحة: في النقطة القصوى السرعة صفرية (K = 0)، كل الطاقة كامنة؛ في النقطة الدنيا الارتفاع أدنى ما يمكن (U = 0)، كل الطاقة حركية. في منتصف المسار — جزء من كل منها، لكن المجموع نفسه في أي نقطة من الأرجحة.</p>
 <figure>
-<img alt="График K(t), U(t) и их суммы E для одного качания маятника — кривые K и U пересекаются, сумма остаётся горизонтальной прямой" src="/lang/ru/theory/conservation_energy.png"/>
+<img alt="رسم بياني لـ K(t) وU(t) ومجموعهما E خلال أرجحة واحدة للبندول — منحنيا K وU يتقاطعان، والمجموع يبقى خطًا أفقيًا" src="/lang/ru/theory/conservation_energy.png"/>
 <figcaption><span class="fign">شكل 1</span>الطاقة الحركية (K) والكامنة (U) تتبادلان الأماكن مرتين في كل أرجحة، لكن مجموعهما (الخط المتقطع) يظل خطًا أفقيًا مستقيمًا — لا ينخفض ولا يقفز للحظة.</figcaption>
 </figure>
-<p>مثال عددي: يسقط جسم من ارتفاع h = 5 м بدون سرعة ابتدائية (نهمل مقاومة الهواء). ما سرعته عند الأرض؟</p>
-<div class="eq"><div class="eq-body">mgh = ½mv²  ⇒  v = √(2gh) = √(2·10·5) = <strong>10 м/с</strong></div><div class="eq-tag">(2)</div></div>
+<p>مثال عددي: يسقط جسم من ارتفاع h = 5 م بدون سرعة ابتدائية (نهمل مقاومة الهواء). ما سرعته عند الأرض؟</p>
+<div class="eq"><div class="eq-body">mgh = ½mv²  ⇒  v = √(2gh) = √(2·10·5) = <strong>10 م/ث</strong></div><div class="eq-tag">(2)</div></div>
 <p>تلغى الكتلة — السقوط بدون مقاومة الهواء لا يعتمد على كتلة الجسم (نفس النتيجة للريشة والوزن، إذا أزلنا الهواء — تجربة الريشة والمطرقة الشهيرة على القمر).</p>
 <div class="callout brass">
 <span class="tag">لماذا المحرك الأبدي مستحيل</span>
@@ -528,8 +528,8 @@ code, .code{
 </div>
 </div>
 <p class="units" style="margin-top:-.6em">يدور المتزلج بذراعين ممدودتين (I كبير، ببطء)، ثم يضم ذراعيه إلى جسمه (يهبط I إلى الربع) — يتسارع الدوران فجأة، بالضبط ليبقى L كما هو. هذه ليست استعارة بعيدة: هكذا بالضبط يسرع المتزلجون الدوران فيزيائيًّا، بدون أي قوة إضافية.</p>
-<p>مثال عددي: متزلج يدور بذراعين ممدودتين بعزم قصور ذاتي I<sub>1</sub> = 4 كجم·м² وبسرعة زاوية ω<sub>1</sub> = 2 rad/с. بضم ذراعيه، يخفض عزم القصور الذاتي إلى I<sub>2</sub> = 1 كجم·м². أوجد السرعة الزاوية الجديدة.</p>
-<div class="eq"><div class="eq-body">I<sub>1</sub>ω<sub>1</sub> = I<sub>2</sub>ω<sub>2</sub>  ⇒  ω<sub>2</sub> = 4·2/1 = <strong>8 rad/с</strong></div><div class="eq-tag">(3)</div></div>
+<p>مثال عددي: متزلج يدور بذراعين ممدودتين بعزم قصور ذاتي I<sub>1</sub> = 4 كجم·م² وبسرعة زاوية ω<sub>1</sub> = 2 rad/ث. بضم ذراعيه، يخفض عزم القصور الذاتي إلى I<sub>2</sub> = 1 كجم·م². أوجد السرعة الزاوية الجديدة.</p>
+<div class="eq"><div class="eq-body">I<sub>1</sub>ω<sub>1</sub> = I<sub>2</sub>ω<sub>2</sub>  ⇒  ω<sub>2</sub> = 4·2/1 = <strong>8 rad/ث</strong></div><div class="eq-tag">(3)</div></div>
 <p>تسارع الدوران أربع مرات — بالضبط بنسبة انخفاض عزم القصور الذاتي. لا تقوم أي عضلة للمتزلج بعمل «لتسريع الدوران» مباشرةً في لحظة ضم الذراعين — مصدر زيادة الطاقة الحركية الدورانية هنا مختلف (عمل العضلات ضد التأثير «الطارد المركزي» عند سحب الذراعين إلى الجسم)، لكن حفظ L يبقى دقيقًا في كل الأحوال، بغض النظر عن الآلية.</p>
 <div class="callout moss">
 <span class="tag">رأى كبلر هذا أولاً — في السماء، لا في الرياضة</span>
@@ -541,7 +541,7 @@ code, .code{
 <div class="sec-head"><span class="sec-num">§5</span><h2>مثال شامل: تصادم مرن وغير مرن</h2></div>
 <hr class="rule"/>
 <div class="measure">
-<p>لنأخذ كرتين متساويتين في الكتلة (m = 2 кجم لكل منهما): الكرة A تطير بسرعة 6 м/с وتصطدم بالكرة B الساكنة. سنحلل سيناريوهي التصادم.</p>
+<p>لنأخذ كرتين متساويتين في الكتلة (m = 2 كجم لكل منهما): الكرة A تطير بسرعة 6 م/ث وتصطدم بالكرة B الساكنة. سنحلل سيناريوهي التصادم.</p>
 <h3>تصادم مرن (الطاقة تحفظ أيضًا)</h3>
 <div aria-hidden="true" class="anim-strip single">
 <div class="anim-track"></div>
@@ -549,10 +549,10 @@ code, .code{
 <div class="anim-ball b-med swap-out"></div>
 <div class="anim-label left">A تقترب وتنقل السرعة بالكامل إلى B (كتلتان متساويتان)</div>
 </div>
-<p class="units" style="margin-top:-1.2em">في التصادم المرن المثالي مع كتل متساوية، السرعات ببساطة <em>تتبادل الأماكن</em>: A تتوقف (v<sub>A</sub> = 0), B تطير بالسرعة التي كانت لدي A (v<sub>B</sub> = 6 м/с). التحقق من القانونين:</p>
+<p class="units" style="margin-top:-1.2em">في التصادم المرن المثالي مع كتل متساوية، السرعات ببساطة <em>تتبادل الأماكن</em>: A تتوقف (v<sub>A</sub> = 0), B تطير بالسرعة التي كانت لدي A (v<sub>B</sub> = 6 م/ث). التحقق من القانونين:</p>
 <table class="symtab">
 <tr><th></th><th>قبل التصادم</th><th>بعد التصادم</th></tr>
-<tr><td>الزخم، كجم·м/с</td><td class="sym">2·6 + 2·0 = 12</td><td class="sym">2·0 + 2·6 = 12</td></tr>
+<tr><td>الزخم، كجم·م/ث</td><td class="sym">2·6 + 2·0 = 12</td><td class="sym">2·0 + 2·6 = 12</td></tr>
 <tr><td>الطاقة الحركية، جول</td><td class="sym">½·2·6² = 36</td><td class="sym">½·2·6² = 36</td></tr>
 </table>
 <h3>تصادم غير مرن (الطاقة لا تحفظ)</h3>
@@ -562,15 +562,15 @@ code, .code{
 <div class="anim-ball b-light stick-b" style="background:var(--steel-fill)"></div>
 <div class="anim-label left">تلتصق العربتان وتتحركان معًا أبطأ مما كانت تتحرك الأولى</div>
 </div>
-<p class="units" style="margin-top:-1.2em">عربة m<sub>1</sub> = 3 كجم تتحرك بسرعة 4 м/с وتلتحم بعربة ساكنة m<sub>2</sub> = 1 كجم، ثم تتحركان معًا:</p>
-<div class="eq"><div class="eq-body">m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>الكلي</sub>  ⇒  v<sub>الكلي</sub> = 3·4/4 = <strong>3 м/с</strong></div><div class="eq-tag">(4)</div></div>
+<p class="units" style="margin-top:-1.2em">عربة m<sub>1</sub> = 3 كجم تتحرك بسرعة 4 م/ث وتلتحم بعربة ساكنة m<sub>2</sub> = 1 كجم، ثم تتحركان معًا:</p>
+<div class="eq"><div class="eq-body">m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>الكلي</sub>  ⇒  v<sub>الكلي</sub> = 3·4/4 = <strong>3 م/ث</strong></div><div class="eq-tag">(4)</div></div>
 <table class="symtab">
 <tr><th></th><th>قبل التصادم</th><th>بعد التصادم</th></tr>
-<tr><td>الزخم، كجم·м/с</td><td class="sym">3·4 + 1·0 = 12</td><td class="sym">4·3 = 12</td></tr>
+<tr><td>الزخم، كجم·م/ث</td><td class="sym">3·4 + 1·0 = 12</td><td class="sym">4·3 = 12</td></tr>
 <tr><td>الطاقة الحركية، جول</td><td class="sym">½·3·4² = 24</td><td class="sym">½·4·3² = 18</td></tr>
 </table>
 <figure>
-<img alt="График импульса двух тележек при неупругом столкновении: p1 падает, p2 растёт, сумма остаётся постоянной" src="/lang/ru/theory/conservation_momentum.png"/>
+<img alt="رسم بياني لزخم عربتين أثناء تصادم غير مرن: p1 ينخفض وp2 يرتفع، والمجموع يبقى ثابتًا" src="/lang/ru/theory/conservation_momentum.png"/>
 <figcaption><span class="fign">شكل 2</span>يتغير زخم كل عربة خلال التصادم القصير، لكن مجموعهما (الخط المتقطع) يظل ثابتًا بدقة قبل وأثناء وبعد التصادم — الزخم يحفظ، حتى عندما لا تحفظ الطاقة.</figcaption>
 </figure>
 <div class="callout brass">
@@ -628,46 +628,46 @@ code, .code{
 <details class="problem">
 <summary>1. رائد فضاء كتلته 80 كجم في الفضاء المفتوح ساكن بالنسبة للمحطة ويرمي مفتاح صواميل كتلته 0.5 كجم بسرعة 8 م/ث. بأي سرعة سيبدأ رائد الفضاء نفسه بالانجراف؟</summary>
 <div class="answer">
-<p><span class="qlabel">المعطيات</span> m<sub>رائد</sub> = 80 كجم, m<sub>مفتاح</sub> = 0.5 كجم, v<sub>مفتاح</sub> = 8 м/с، الزخم الكلي قبل الرمي = 0.</p>
+<p><span class="qlabel">المعطيات</span> m<sub>رائد</sub> = 80 كجم, m<sub>مفتاح</sub> = 0.5 كجم, v<sub>مفتاح</sub> = 8 م/ث، الزخم الكلي قبل الرمي = 0.</p>
 <p><span class="qlabel">القانون</span> حفظ الزخم (§2): 0 = m<sub>رائد</sub>v<sub>رائد</sub> + m<sub>مفتاح</sub>v<sub>مفتاح</sub>.</p>
-<p><span class="qlabel">الحل</span> v<sub>رائد</sub> = −0.5·8/80 = −0.05 м/с.</p>
-<p><span class="qlabel">الجواب</span> <strong>0.05 м/с</strong>، في الاتجاه المعاكس للرمي — ببطء، لكن لا يمكن إيقافه بدون مساعدة خارجية.</p>
+<p><span class="qlabel">الحل</span> v<sub>رائد</sub> = −0.5·8/80 = −0.05 م/ث.</p>
+<p><span class="qlabel">الجواب</span> <strong>0.05 م/ث</strong>، في الاتجاه المعاكس للرمي — ببطء، لكن لا يمكن إيقافه بدون مساعدة خارجية.</p>
 </div>
 </details>
 <details class="problem">
 <summary>2. كرة كتلتها 4 كجم تتدحرج بدون احتكاك من منزلق ارتفاعه 2 م. ما سرعتها في الأسفل؟</summary>
 <div class="answer">
-<p><span class="qlabel">المعطيات</span> m = 4 كجم, h = 2 м, g ≈ 10 м/с².</p>
+<p><span class="qlabel">المعطيات</span> m = 4 كجم, h = 2 م, g ≈ 10 م/ث².</p>
 <p><span class="qlabel">القانون</span> حفظ الطاقة (§3): mgh = ½mv².</p>
-<p><span class="qlabel">الحل</span> v = √(2gh) = √(2·10·2) = √40 ≈ 6.3 м/с — لا تدخل الكتلة في الجواب.</p>
-<p><span class="qlabel">الجواب</span> <strong>≈6.3 м/с</strong> (لا يهم كتلة الكرة — ستتطابق مع أي كرة أخرى بدون احتكاك).</p>
+<p><span class="qlabel">الحل</span> v = √(2gh) = √(2·10·2) = √40 ≈ 6.3 م/ث — لا تدخل الكتلة في الجواب.</p>
+<p><span class="qlabel">الجواب</span> <strong>≈6.3 م/ث</strong> (لا يهم كتلة الكرة — ستتطابق مع أي كرة أخرى بدون احتكاك).</p>
 </div>
 </details>
 <details class="problem">
-<summary>3. متزلج يدور بعزم قصور ذاتي 6 كجم·м² وسرعة زاوية 1.5 rad/с، ثم يضم ذراعيه ويخفض عزم القصور الذاتي إلى 2 كجم·м². أوجد السرعة الزاوية الجديدة.</summary>
+<summary>3. متزلج يدور بعزم قصور ذاتي 6 كجم·م² وسرعة زاوية 1.5 rad/ث، ثم يضم ذراعيه ويخفض عزم القصور الذاتي إلى 2 كجم·م². أوجد السرعة الزاوية الجديدة.</summary>
 <div class="answer">
-<p><span class="qlabel">المعطيات</span> I<sub>1</sub> = 6 كجم·м², ω<sub>1</sub> = 1.5 rad/с, I<sub>2</sub> = 2 كجم·м².</p>
+<p><span class="qlabel">المعطيات</span> I<sub>1</sub> = 6 كجم·م², ω<sub>1</sub> = 1.5 rad/ث, I<sub>2</sub> = 2 كجم·م².</p>
 <p><span class="qlabel">القانون</span> حفظ الزخم الزاوي (§4): I<sub>1</sub>ω<sub>1</sub> = I<sub>2</sub>ω<sub>2</sub>.</p>
-<p><span class="qlabel">الحل</span> ω<sub>2</sub> = 6·1.5/2 = 4.5 rad/с.</p>
-<p><span class="qlabel">الجواب</span> <strong>4.5 rad/с</strong> — أسرع ثلاث مرات (انخفض I ثلاث مرات).</p>
+<p><span class="qlabel">الحل</span> ω<sub>2</sub> = 6·1.5/2 = 4.5 rad/ث.</p>
+<p><span class="qlabel">الجواب</span> <strong>4.5 rad/ث</strong> — أسرع ثلاث مرات (انخفض I ثلاث مرات).</p>
 </div>
 </details>
 <details class="problem">
-<summary>4. عربتان كتلة كل منهما 5000 كجم تلتحمان أثناء الحركة: الأولى تتحرك بسرعة 6 м/с، الثانية ساكنة. أوجد السرعة المشتركة بعد الالتحام وفقد الطاقة الحركية.</summary>
+<summary>4. عربتان كتلة كل منهما 5000 كجم تلتحمان أثناء الحركة: الأولى تتحرك بسرعة 6 م/ث، الثانية ساكنة. أوجد السرعة المشتركة بعد الالتحام وفقد الطاقة الحركية.</summary>
 <div class="answer">
-<p><span class="qlabel">المعطيات</span> m<sub>1</sub> = m<sub>2</sub> = 5000 كجم, v<sub>1</sub> = 6 м/с, v<sub>2</sub> = 0.</p>
+<p><span class="qlabel">المعطيات</span> m<sub>1</sub> = m<sub>2</sub> = 5000 كجم, v<sub>1</sub> = 6 م/ث, v<sub>2</sub> = 0.</p>
 <p><span class="qlabel">القانون</span> حفظ الزخم في التصادم غير المرن (§5): m<sub>1</sub>v<sub>1</sub> = (m<sub>1</sub>+m<sub>2</sub>)v<sub>الكلي</sub>.</p>
-<p><span class="qlabel">الحل</span> v<sub>الكلي</sub> = 5000·6/10000 = 3 м/с. K<sub>قبل</sub> = ½·5000·6² = 90000 جول. K<sub>بعد</sub> = ½·10000·3² = 45000 جول.</p>
-<p><span class="qlabel">الجواب</span> <strong>3 м/с، فقد 45000 جول</strong> (بالضبط النصف — ذهب في الضجيج وتشوه الالتحام).</p>
+<p><span class="qlabel">الحل</span> v<sub>الكلي</sub> = 5000·6/10000 = 3 م/ث. K<sub>قبل</sub> = ½·5000·6² = 90000 جول. K<sub>بعد</sub> = ½·10000·3² = 45000 جول.</p>
+<p><span class="qlabel">الجواب</span> <strong>3 م/ث، فقد 45000 جول</strong> (بالضبط النصف — ذهب في الضجيج وتشوه الالتحام).</p>
 </div>
 </details>
 <details class="problem">
-<summary>5. ولد كتلته 40 كجم يقف على لوح تزلج ساكن كتلته 4 كجم ويقفز للأمام بسرعة 2 м/с بالنسبة للأرض. بأي سرعة سيتحرك لوح التزلج للخلف؟</summary>
+<summary>5. ولد كتلته 40 كجم يقف على لوح تزلج ساكن كتلته 4 كجم ويقفز للأمام بسرعة 2 م/ث بالنسبة للأرض. بأي سرعة سيتحرك لوح التزلج للخلف؟</summary>
 <div class="answer">
-<p><span class="qlabel">المعطيات</span> m<sub>ولد</sub> = 40 كجم, v<sub>ولد</sub> = 2 м/с, m<sub>لوح</sub> = 4 كجم، الزخم الكلي قبل القفزة = 0.</p>
+<p><span class="qlabel">المعطيات</span> m<sub>ولد</sub> = 40 كجم, v<sub>ولد</sub> = 2 م/ث, m<sub>لوح</sub> = 4 كجم، الزخم الكلي قبل القفزة = 0.</p>
 <p><span class="qlabel">القانون</span> حفظ الزخم (§2، نفس الطريقة المتبعة مع القارب في الجزء الأول).</p>
-<p><span class="qlabel">الحل</span> v<sub>لوح</sub> = −40·2/4 = −20 м/с.</p>
-<p><span class="qlabel">الجواب</span> <strong>20 м/с</strong>، في الاتجاه المعاكس للقفزة — كتلة لوح التزلج الصغيرة تعطيه سرعة ارتداد كبيرة غير متناسبة.</p>
+<p><span class="qlabel">الحل</span> v<sub>لوح</sub> = −40·2/4 = −20 م/ث.</p>
+<p><span class="qlabel">الجواب</span> <strong>20 م/ث</strong>، في الاتجاه المعاكس للقفزة — كتلة لوح التزلج الصغيرة تعطيه سرعة ارتداد كبيرة غير متناسبة.</p>
 </div>
 </details>
 </div>

@@ -72,31 +72,43 @@ var UI_STRINGS = {
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
           express: 'экспресс', expressTip: 'Экспресс-версия: по аннотации автора, без разбора полного текста статьи',
-          hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть' },
+          hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть',
+          favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
+          refineTip: 'Отшлифовано редактором' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express version: based on the author\'s abstract, not the full paper text',
-          hideExpress: 'Hide express articles', showLess: 'Collapse' },
+          hideExpress: 'Hide express articles', showLess: 'Collapse',
+          favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
+          refineTip: 'Polished by an editor' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Versión exprés: basada en el resumen del autor, no en el texto completo',
-          hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer' },
+          hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer',
+          favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
+          refineTip: 'Pulido por un editor' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
-          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起' },
+          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起',
+          favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
+          refineTip: '编辑润色' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
-          hideExpress: 'Masquer les articles express', showLess: 'Réduire' },
+          hideExpress: 'Masquer les articles express', showLess: 'Réduire',
+          favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
+          refineTip: 'Peaufiné par un éditeur' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل',
-          hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي' }
+          hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي',
+          favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
+          refineTip: 'تم صقله بواسطة محرر' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
@@ -980,6 +992,30 @@ function initAllTooltips() {
         el.addEventListener('mouseleave', scheduleHideTooltip);
     });
 }
+
+// ── Локализация статичных строк из серверного HTML ──────────────────────────
+// Заголовок/бейджи/тултипы шапки (★ Избранное, реакции 👍👎⭐, значок «экспресс», значок
+// «отшлифовано») генератор пишет захардкоженными по-русски (общий шаблон на все языки) —
+// раньше это давало русский текст даже на ar/es-страницах. UI_STRINGS уже содержит переводы
+// (использовались только для карточек ленты) — просто дописываем их и в статичную разметку.
+function localizeStaticUI() {
+    var fav = document.querySelector('a[href*="/favorites.html"]');
+    if (fav) fav.title = UI.favTitle;
+
+    var likeBtn = document.querySelector('.react-btn[data-react="like"]');
+    if (likeBtn) likeBtn.title = UI.like;
+    var dislikeBtn = document.querySelector('.react-btn[data-react="dislike"]');
+    if (dislikeBtn) dislikeBtn.title = UI.dislike;
+    var superBtn = document.querySelector('.react-btn[data-react="superlike"]');
+    if (superBtn) superBtn.title = UI.superlike;
+
+    var expressBadge = document.querySelector('.express-badge');
+    if (expressBadge) { expressBadge.title = UI.expressTip; expressBadge.textContent = '⚡ ' + UI.express; }
+
+    var refineBadge = document.querySelector('.refine-badge');
+    if (refineBadge) refineBadge.title = UI.refineTip;
+}
+document.addEventListener('DOMContentLoaded', localizeStaticUI);
 
 // ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
 // Всегда развёрнут целиком в шапке (без попапа). Один обработчик для ВСЕХ типов страниц.

@@ -128,7 +128,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
@@ -264,14 +264,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/en/graph/">graph</a>
 <a class="active" href="/lang/en/theory/">theory</a>
-<a href="/lang/en/favorites.html" title="Избранное">★</a>
+<a href="/lang/en/favorites.html" title="Favorites">★</a>
 <a href="/lang/en/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contents" class="toc">
 <p class="toc-title">Contents</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>The Four Laws in a Nutshell</a></li>
@@ -295,11 +295,11 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="30" y="80"></rect>
-<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ горячо</text>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ hot</text>
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="270" y="80"></rect>
-<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ холодно</text>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ cold</text>
 <circle class="hero-heat" cx="165" cy="125" fill="var(--brass-fill)" r="8"></circle>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">тепло течёт от горячего к холодному, не наоборот</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">heat flows from hot to cold, not the other way</text>
 </svg>
 </div>
 </header>
@@ -308,8 +308,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>Thermodynamics is a rare branch of physics with a "law number zero": the basic principle explaining temperature itself was realized later than the first and second laws and was numbered retroactively. There are four laws in total: the zeroth defines temperature, the first — energy conservation for heat and work, the second — why processes are irreversible and entropy increases, the third — why absolute zero is unattainable. Together they govern everything — from a cup of coffee to the evolution of stars.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Пар над кофе: энтропия рассеивает порядок" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>Steam Over Coffee: Entropy Scatters Order</figcaption></figure>
-<figure><img alt="Поршень парового двигателя: тепло превращается в работу" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>Steam Engine Piston: Heat Turns into Work</figcaption></figure>
+<figure><img alt="Steam rising off coffee: entropy scattering order" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>Steam Over Coffee: Entropy Scatters Order</figcaption></figure>
+<figure><img alt="The piston of a steam engine: heat turning into work" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>Steam Engine Piston: Heat Turns into Work</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>The Four Laws in a Nutshell</h2></div>
@@ -415,7 +415,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>Let the heat supplied from the hot reservoir be Q<sub>h</sub> = 1000 J of heat. <strong>The First Law</strong> (energy doesn't disappear) says that all this energy will be distributed between useful work W and heat Q<sub>c</sub>, released to the cold reservoir:</p>
 <div class="eq"><div class="eq-body">W = η·Q<sub>h</sub> = 0.5·1000 = <strong>500 J</strong>,    Q<sub>c</sub> = Q<sub>h</sub> − W = <strong>500 J</strong></div><div class="eq-tag">(3)</div></div>
 <figure>
-<img alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж" src="/lang/ru/theory/thermo_engine_balance.png"/>
+<img alt="Bar chart of a heat engine's energy balance: 1000 J supplied, 500 J useful work, 500 J dumped" src="/lang/ru/theory/thermo_engine_balance.png"/>
 <figcaption><span class="fign">Fig. 1</span>The First Law: the sum of W and Q<sub>c</sub> exactly equals Q<sub>h</sub> — energy was not lost, but neither was all of it turned into work (prohibited by the second law). Even an ideal (Carnot) engine between these temperatures cannot produce more than 500 J of useful work from 1000 J of heat.</figcaption>
 </figure>
 <p>No real engine operating between these same two temperatures can exceed these 500 J — the Carnot cycle gives the theoretical ceiling of efficiency, and friction and irreversibility of real processes only lower the result below this ceiling, never raising it above.</p>
@@ -427,7 +427,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div class="measure">
 <p>The second law is perhaps the only law of fundamental physics that distinguishes past from future. Newton's, Maxwell's, and even Schrödinger's equations are fully symmetric in time: if you film a collision of billiard balls and play it backwards, the laws of mechanics won't find a violation. But a video of a breaking cup played backwards (fragments gather themselves into a whole cup) looks absurd — and the only law of physics that "notices" this is the second.</p>
 <figure>
-<img alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю" src="/lang/ru/theory/thermo_entropy_zero.png"/>
+<img alt="Graph of entropy S(T) approaching zero as T approaches zero" src="/lang/ru/theory/thermo_entropy_zero.png"/>
 <figcaption><span class="fign">Fig. 2</span>The entropy of a perfect crystal increases with temperature and tends to zero as T → 0 (third law) — the very possibility of constructing such a graph and talking about the "increase" of entropy over time is the source of the distinction between past and future in physics.</figcaption>
 </figure>
 <div class="callout steel">

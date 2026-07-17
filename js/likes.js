@@ -1,7 +1,7 @@
 // bridge42worlds · движок вовлечения: реакции (Supabase) + избранное (localStorage) + обратная связь (Supabase)
 const SUPABASE_URL = 'https://gyfdyfbuolnciaqxgybx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZmR5ZmJ1b2xuY2lhcXhneWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTk0MzQsImV4cCI6MjA5ODM3NTQzNH0.rKsgWoj5ubRpkvElPfELOn-G9StW5RSOkxBbpvFyWc4';
-const REACTIONS = ['like', 'dislike', 'superlike'];
+const REACTIONS = ['like', 'dislike'];
 
 let _sb = null, _lock = false;
 async function getSupabase() {
@@ -185,9 +185,29 @@ document.addEventListener('click', e => {
     const fb = e.target.closest('[data-fav]');
     if (fb) { e.preventDefault(); toggleFavorite(fb.dataset.fav); return; }
     const chip = e.target.closest('.fb-chip');
-    if (chip) { chip.classList.toggle('active'); return; }
+    if (chip) {
+        // Клик по варианту отклика шлётся сразу, без отдельной кнопки "отправить" —
+        // та нужна только для комментария (юзер-фидбек 2026-07-15: "щёлкнул вариант
+        // отзыва — сразу отправляется").
+        chip.classList.toggle('active');
+        const box = chip.closest('[data-article-id]');
+        const wrap = chip.closest('.feedback');
+        if (box) submitFeedback(box.dataset.articleId, wrap, box.dataset.entityType);
+        return;
+    }
     const ct = e.target.closest('.fb-comment-toggle');
-    if (ct) { const ta = ct.closest('.feedback')?.querySelector('.fb-comment'); if (ta) { const show = ta.style.display === 'none'; ta.style.display = show ? 'block' : 'none'; if (show) ta.focus(); } return; }
+    if (ct) {
+        const wrap = ct.closest('.feedback');
+        const ta = wrap?.querySelector('.fb-comment');
+        const row = wrap?.querySelector('.fb-row');
+        if (ta) {
+            const show = ta.style.display === 'none';
+            ta.style.display = show ? 'block' : 'none';
+            if (row) row.hidden = !show;
+            if (show) ta.focus();
+        }
+        return;
+    }
     const send = e.target.closest('.fb-send');
     if (send) { const h = send.closest('[data-article-id]'); if (h) submitFeedback(h.dataset.articleId, send.closest('.feedback'), h.dataset.entityType); }
 });

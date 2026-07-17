@@ -304,27 +304,33 @@ FEEDBACK_CHIPS_LOC = [
     ("unclear", {"ru": "Непонятно", "en": "Unclear", "zh": "不易懂", "fr": "Peu clair", "ar": "غير واضح"}),
     ("great", {"ru": "Отлично", "en": "Great", "zh": "很棒", "fr": "Excellent", "ar": "ممتاز"}),
     ("dry", {"ru": "Суховато", "en": "A bit dry", "zh": "略枯燥", "fr": "Un peu sec", "ar": "جاف قليلاً"}),
-    ("too_simple", {"ru": "Слишком упрощено", "en": "Too simplified", "zh": "过于简化", "fr": "Trop simplifié", "ar": "مبسّط جدًا"}),
 ]
 FEEDBACK_UI_LOC = {
-    "ru": ("Как читается? (поможет улучшить тексты)", "+ написать комментарий", "комментарий (необязательно)", "отправить"),
-    "en": ("How does it read? (helps us improve)", "+ add a comment", "comment (optional)", "send"),
-    "zh": ("读起来怎么样？(帮助我们改进)", "+ 添加评论", "评论（可选）", "发送"),
-    "fr": ("Lecture agréable ? (nous aide à améliorer)", "+ ajouter un commentaire", "commentaire (facultatif)", "envoyer"),
-    "ar": ("كيف كانت القراءة؟ (يساعدنا على التحسين)", "+ أضف تعليقًا", "تعليق (اختياري)", "إرسال"),
+    "ru": ("Как читается? (поможет улучшить тексты)", "+ написать комментарий",
+           "ваш комментарий разберём пакетно — при необходимости поправим статью", "отправить"),
+    "en": ("How does it read? (helps us improve)", "+ add a comment",
+           "comments are reviewed in batches — we may update the article", "send"),
+    "zh": ("读起来怎么样？(帮助我们改进)", "+ 添加评论",
+           "评论将批量处理 — 如有需要我们会修改文章", "发送"),
+    "fr": ("Lecture agréable ? (nous aide à améliorer)", "+ ajouter un commentaire",
+           "les commentaires sont traités par lots — nous pourrons mettre à jour l'article", "envoyer"),
+    "ar": ("كيف كانت القراءة؟ (يساعدنا على التحسين)", "+ أضف تعليقًا",
+           "تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة", "إرسال"),
 }
 
 
-def build_feedback_html(like_id, lang, entity_type="article"):
+def build_feedback_html(like_id, lang, entity_type="article", next_button_html=""):
     fb_title, fb_comment_lbl, fb_placeholder, fb_send = FEEDBACK_UI_LOC.get(
-        lang, ("How does it read?", "+ add a comment", "comment (optional)", "send"))
+        lang, ("How does it read?", "+ add a comment",
+               "comments are reviewed in batches — we may update the article", "send"))
     fb_chips = "".join(f'<span class="fb-chip" data-opt="{k}">{safe(loc.get(lang, loc["en"]))}</span>' for k, loc in FEEDBACK_CHIPS_LOC)
     return (f'<div class="feedback" id="feedback" data-article-id="{like_id}" data-entity-type="{entity_type}">'
-            f'<div class="fb-title">{safe(fb_title)}</div>'
+            f'<div class="fb-title-row"><div class="fb-title">{safe(fb_title)}</div>{next_button_html}</div>'
             f'<div class="fb-chips">{fb_chips}</div>'
             f'<button type="button" class="fb-comment-toggle">{safe(fb_comment_lbl)}</button>'
             f'<textarea class="fb-comment" rows="2" placeholder="{attr_safe(fb_placeholder)}" style="display:none"></textarea>'
-            f'<div class="fb-row"><button class="fb-send">{safe(fb_send)}</button><span class="fb-status"></span></div>'
+            f'<div class="fb-row" hidden><button class="fb-send">{safe(fb_send)}</button></div>'
+            f'<span class="fb-status"></span>'
             f'</div>')
 
 
@@ -388,12 +394,12 @@ def mini_graph_filters_html(lang, center_kind="tag"):
         return f'<label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="{value}"{" checked" if checked else ""}> {safe(label)}</label>'
 
     edge_boxes = (
-        edge_box("tag-law", "тег↔закон", "tag-law" in default_cross_edges)
-        + edge_box("tag-sci", "тег↔учёный", "tag-sci" in default_cross_edges)
-        + edge_box("law-sci", "закон↔учёный", "law-sci" in default_cross_edges)
-        + edge_box("tag-tag", "тег↔тег", False)
-        + edge_box("law-law", "закон↔закон", False)
-        + edge_box("sci-sci", "учёный↔учёный", False)
+        edge_box("tag-law", loc["edge_tag_law"], "tag-law" in default_cross_edges)
+        + edge_box("tag-sci", loc["edge_tag_sci"], "tag-sci" in default_cross_edges)
+        + edge_box("law-sci", loc["edge_law_sci"], "law-sci" in default_cross_edges)
+        + edge_box("tag-tag", loc["edge_tag_tag"], False)
+        + edge_box("law-law", loc["edge_law_law"], False)
+        + edge_box("sci-sci", loc["edge_sci_sci"], False)
     )
     return kind_boxes + f'<div class="mg-edges">{edge_boxes}</div>'
 
@@ -437,9 +443,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         abstract_html = (f'<div class="abstract-lead"><div class="abstract-label">'
                          f'{safe(ABSTRACT_LABEL.get(lang, ABSTRACT_LABEL["en"]))}</div>'
                          f'<p>{safe(abstract_text)}</p></div>')
-
-    like_id = f"{article['id']}_{lang}_{version}"
-    feedback_html = build_feedback_html(like_id, lang, "article")
 
     loc = {
         "en": {"search": "Search articles, #tags, @authors", "hint": "# tag · @ author · ! scientist",
@@ -513,6 +516,15 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     loc["feedback_nav"] = {"ru": "Отклик", "en": "Feedback", "zh": "反馈",
                             "fr": "Retour", "ar": "التعليقات"}.get(lang, "Feedback")
 
+    # "Следующая статья" — на ту же строку, что заголовок отклика (юзер-фидбек 2026-07-15:
+    # "следующая статья поставить надо с отзывами, как раз на строку в которой было
+    # написано как читается"), поэтому строится ЗДЕСЬ и передаётся внутрь build_feedback_html,
+    # а не отдельным блоком в шаблоне.
+    like_id = f"{article['id']}_{lang}_{version}"
+    next_arrow = "←" if lang in RTL_LANGS else "→"
+    next_btn_html = f'<button class="next-btn next-btn-top">{safe(loc["next"])} {next_arrow}</button>'
+    feedback_html = build_feedback_html(like_id, lang, "article", next_button_html=next_btn_html)
+
     tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
     authors = article.get("authors", [])
     authors_html = ", ".join(
@@ -520,12 +532,65 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
          if any(c.isalpha() for c in a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
         for a in authors
     )
-    scientists = scipop.get("scientists", [])
+    # Законы статьи (через её теги, закон↔тег) — в правый сайдбар столбиком под тегами
+    laws_loc = load_laws_loc(lang)
+    tagset = set(tags)
+    side_laws = []
+    for lid, ld in laws_loc.items():
+        if tagset & set(ld.get("tags", [])):
+            side_laws.append((lid, ld.get("name", lid)))
+        if len(side_laws) >= 6:
+            break
+    # Учёные статьи — через её теги (related_tags учёного) И через уже найденные законы
+    # (их scientists/influenced_by) — тот же стандартный подход, что у законов выше.
+    # Результат идёт ПЕРВЫМ в колонке (сверху тегов) — см. side_sci_html ниже.
+    sci_ids_path = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
+    all_sci = json.loads(sci_ids_path.read_text(encoding="utf-8")) if sci_ids_path.exists() else {}
+    side_sci_ids = []
+    for lid, _name in side_laws:
+        ld = laws_loc.get(lid, {})
+        for s in (ld.get("scientists") or []) + (ld.get("influenced_by") or []):
+            if s in all_sci and s not in side_sci_ids:
+                side_sci_ids.append(s)
+    for sid, sdata in all_sci.items():
+        if len(side_sci_ids) >= 6:
+            break
+        if sid in side_sci_ids:
+            continue
+        if tagset & set(sdata.get("related_tags", [])):
+            side_sci_ids.append(sid)
+    side_sci_ids = side_sci_ids[:6]
+
+    # Мини-граф статьи — те же теги/законы/учёные, что уже в сайдбаре, но как несколько
+    # центров сразу (мульти-BFS в js/mini-graph.js), тот же фирменный компонент, что и на
+    # страницах тег/закон/учёный (юзер-фидбек 2026-07-15: "в статью добавить граф... готовый
+    # фильтр класс будет везде фирменный подход"). Меньше 2 узлов — граф бессмысленен, не рисуем.
+    # Считаем ДО nav_extra_items — пункт левого меню на граф добавляем, только если граф реально
+    # будет на странице (юзер-фидбек 2026-07-15: "ссылка на отзыв тоже слева после графа").
+    article_graph_ids = (
+        [f"t:{t}" for t in tags] + [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids]
+    )[:8]
+    article_graph_html = ""
+    if len(article_graph_ids) >= 2:
+        mini_lbl = MINI_LABEL.get(lang, MINI_LABEL["en"])
+        article_graph_html = (
+            f'<div id="article-graph" class="mini-graph-label">🕸 {safe(mini_lbl)} '
+            f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
+            f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
+            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, None)}</div>'
+            f'<div class="mini-graph mini-graph--article" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
+        )
 
     # Пункты левого меню-навигатора, актуальные на ЛЮБОМ режиме (не только advanced) —
     # разделы статьи (context/methods/...) добавляются ниже отдельно, только когда они есть.
-    nav_extra_items = [f'<li><a href="#feedback">{loc["feedback_nav"]}</a></li>',
-                        f'<li><a href="#related">{loc["related_articles"]}</a></li>']
+    # Порядок = порядок блоков на странице (граф стоит перед действиями/откликом в основном
+    # потоке — см. article.html): граф (если есть) → отклик → похожие статьи.
+    nav_extra_items = []
+    if article_graph_html:
+        graph_nav_lbl = GRAPH_NAV_LABEL.get(lang, GRAPH_NAV_LABEL["en"])
+        nav_extra_items.append(f'<li><a href="#article-graph">{safe(graph_nav_lbl)}</a></li>')
+    nav_extra_items += [f'<li><a href="#feedback">{loc["feedback_nav"]}</a></li>',
+                         f'<li><a href="#related">{loc["related_articles"]}</a></li>']
 
     if version in SIMPLE_LIKE:
         if scipop.get("text"):
@@ -576,11 +641,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             hint_tpl = EXPRESS_LOCKED_HINT.get(lang, EXPRESS_LOCKED_HINT["en"])
             text_html += f'<p>{hint_tpl.format(tier=safe(tier_name), url=target_url)}</p>'
 
-    scientists_html = ""
-    if scientists:
-        scientists_html = f'<div class="scientists-section"><strong>{safe(loc["scientists"])}</strong> ' + \
-                          ', '.join(scientist_link_or_text(s, lang) for s in scientists) + '</div>'
-
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions)
     ai_jpg = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"] / "ai.jpg"
     if ai_jpg.exists():
@@ -592,34 +652,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     if tags_side_html:
         tags_lbl = SIDE_TAGS_LABEL.get(lang, SIDE_TAGS_LABEL["en"])
         tags_side_html = f'<div class="side-tags-label">{safe(tags_lbl)}</div>' + tags_side_html
-    # Законы статьи (через её теги, закон↔тег) — в правый сайдбар столбиком под тегами
-    laws_loc = load_laws_loc(lang)
-    tagset = set(tags)
-    side_laws = []
-    for lid, ld in laws_loc.items():
-        if tagset & set(ld.get("tags", [])):
-            side_laws.append((lid, ld.get("name", lid)))
-        if len(side_laws) >= 6:
-            break
-    # Учёные статьи — через её теги (related_tags учёного) И через уже найденные законы
-    # (их scientists/influenced_by) — тот же стандартный подход, что у законов выше.
-    # Результат идёт ПЕРВЫМ в колонке (сверху тегов) — см. side_sci_html ниже.
-    sci_ids_path = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
-    all_sci = json.loads(sci_ids_path.read_text(encoding="utf-8")) if sci_ids_path.exists() else {}
-    side_sci_ids = []
-    for lid, _name in side_laws:
-        ld = laws_loc.get(lid, {})
-        for s in (ld.get("scientists") or []) + (ld.get("influenced_by") or []):
-            if s in all_sci and s not in side_sci_ids:
-                side_sci_ids.append(s)
-    for sid, sdata in all_sci.items():
-        if len(side_sci_ids) >= 6:
-            break
-        if sid in side_sci_ids:
-            continue
-        if tagset & set(sdata.get("related_tags", [])):
-            side_sci_ids.append(sid)
-    side_sci_ids = side_sci_ids[:6]
     side_sci_html = ""
     if side_sci_ids:
         sci_lbl = SIDE_SCI_LABEL.get(lang, SIDE_SCI_LABEL["en"])
@@ -632,24 +664,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         tags_side_html += (f'<div class="side-laws-label">{safe(lbl)}</div>' + "".join(
             f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" '
             f'data-law="{attr_safe(lid)}">{safe(name)}</a>' for lid, name in side_laws))
-
-    # Мини-граф статьи — те же теги/законы/учёные, что уже в сайдбаре, но как несколько
-    # центров сразу (мульти-BFS в js/mini-graph.js), тот же фирменный компонент, что и на
-    # страницах тег/закон/учёный (юзер-фидбек 2026-07-15: "в статью добавить граф... готовый
-    # фильтр класс будет везде фирменный подход"). Меньше 2 узлов — граф бессмысленен, не рисуем.
-    article_graph_ids = (
-        [f"t:{t}" for t in tags] + [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids]
-    )[:8]
-    article_graph_html = ""
-    if len(article_graph_ids) >= 2:
-        mini_lbl = MINI_LABEL.get(lang, MINI_LABEL["en"])
-        article_graph_html = (
-            f'<div class="mini-graph-label">🕸 {safe(mini_lbl)} '
-            f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
-            f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
-            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, None)}</div>'
-            f'<div class="mini-graph" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
-        )
 
     page_file = VERSION_FILES[version]
     version_toggle_html = version_toggle_links(lang, version, date_str, article["id"])
@@ -709,7 +723,6 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         feedback_html=feedback_html,
         nav_html=nav_html, text_html=text_html,
         formulas_html=formulas_html, key_numbers_html=key_numbers_html,
-        scientists_html=scientists_html,
         fun_fact_html=fun_html,
         reading_html=reading_html, jsonld_html=jsonld_html,
         related_label=safe(loc.get("related_articles", "Related articles")),
@@ -770,7 +783,14 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
     url = f"/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/{VERSION_FILES[version]}"
     idx.append({
         "id": article["id"], "version": version,
-        "title": scipop.get("title", article["title"]),
+        # express-заглушка (express_locked_scipop) намеренно подменяет scipop["title"] на
+        # локализованный oneliner-плейсхолдер ("Полная версия готовится...") — верно для
+        # заголовка НА СТРАНИЦЕ статьи, но тот же title утекал в индекс, а mini-режим на
+        # главной читает индекс popular (js/search.js: effVersion()) — карточки express-
+        # статей в мини-виде показывали плейсхолдер вместо названия (юзер-фидбек 2026-07-16:
+        # "статьи в мини версии... полная версия готовится вместо названия"). В индексе всегда
+        # берём настоящее (исходное arXiv) название, плейсхолдер — только в теле страницы.
+        "title": article["title"] if scipop.get("express_locked") else scipop.get("title", article["title"]),
         "oneliner": strip_markers(scipop.get("oneliner", ""))[:300],
         "description": strip_markers(scipop.get("description", ""))[:300],
         "abstract": strip_markers(abstract)[:1500],
@@ -1162,6 +1182,9 @@ def tag_domain_label(domain, lang):
 
 MINI_LABEL = {"ru": "Связи в графе знаний", "en": "Links in the knowledge graph",
               "zh": "知识图谱中的关联", "fr": "Liens dans le graphe des savoirs", "ar": "الروابط في شبكة المعرفة"}
+# Короткий ярлык для левого меню-навигатора статьи (пункт на граф — только когда граф есть,
+# юзер-фидбек 2026-07-15: "ссылка на отзыв тоже слева после графа").
+GRAPH_NAV_LABEL = {"ru": "Граф", "en": "Graph", "zh": "关系图", "fr": "Graphe", "ar": "الشبكة"}
 
 SIDE_LAWS_LABEL = {"ru": "Законы", "en": "Laws", "zh": "定律", "fr": "Lois", "ar": "قوانين"}
 SIDE_TAGS_LABEL = {"ru": "Теги", "en": "Tags", "zh": "标签", "fr": "Tags", "ar": "الوسوم"}
@@ -1429,31 +1452,49 @@ GRAPH_LABELS = {
            "tags": "теги", "laws": "законы", "scientists": "учёные", "footer": "наука простыми словами",
            "search_tag": "Найти тег…", "search_law": "Найти закон…", "search_sci": "Найти учёного…",
            "depth": "Глубина:", "clear": "Сбросить",
-           "warning": "⚠ Отображение оптимизировано под большой экран, формирование графа может занять некоторое время."},
+           "warning": "⚠ Отображение оптимизировано под большой экран, формирование графа может занять некоторое время.",
+           "edge_tag_law": "тег↔закон", "edge_tag_sci": "тег↔учёный", "edge_law_sci": "закон↔учёный",
+           "edge_tag_tag": "тег↔тег", "edge_law_law": "закон↔закон", "edge_sci_sci": "учёный↔учёный", "edge_law_influence": "закон↔влияние", "preset_core": "каркас", "preset_all": "всё"},
     "en": {"title": "Knowledge graph", "subtitle": "Tags, laws and scientists and all their links. Toggle what to show.",
            "nodes": "Nodes:", "edges": "Edges:", "presets": "Presets:",
            "tags": "tags", "laws": "laws", "scientists": "scientists", "footer": "science made simple",
            "search_tag": "Find a tag…", "search_law": "Find a law…", "search_sci": "Find a scientist…",
            "depth": "Depth:", "clear": "Clear",
-           "warning": "⚠ Optimized for large screens — building the graph may take a moment."},
+           "warning": "⚠ Optimized for large screens — building the graph may take a moment.",
+           "edge_tag_law": "tag↔law", "edge_tag_sci": "tag↔scientist", "edge_law_sci": "law↔scientist",
+           "edge_tag_tag": "tag↔tag", "edge_law_law": "law↔law", "edge_sci_sci": "scientist↔scientist", "edge_law_influence": "law↔influence", "preset_core": "core", "preset_all": "all"},
+    "es": {"title": "Red de conocimiento", "subtitle": "Etiquetas, leyes y científicos y todos sus vínculos. Elige qué mostrar.",
+           "nodes": "Nodos:", "edges": "Vínculos:", "presets": "Preajustes:",
+           "tags": "etiquetas", "laws": "leyes", "scientists": "científicos", "footer": "ciencia simple",
+           "search_tag": "Buscar una etiqueta…", "search_law": "Buscar una ley…", "search_sci": "Buscar un científico…",
+           "depth": "Profundidad:", "clear": "Restablecer",
+           "warning": "⚠ Optimizado para pantallas grandes — construir el grafo puede tardar un momento.",
+           "edge_tag_law": "etiqueta↔ley", "edge_tag_sci": "etiqueta↔científico", "edge_law_sci": "ley↔científico",
+           "edge_tag_tag": "etiqueta↔etiqueta", "edge_law_law": "ley↔ley", "edge_sci_sci": "científico↔científico", "edge_law_influence": "ley↔influencia", "preset_core": "núcleo", "preset_all": "todo"},
     "zh": {"title": "知识图谱", "subtitle": "标签、定律与科学家及其关联。切换显示内容。",
            "nodes": "节点：", "edges": "关联：", "presets": "预设：",
            "tags": "标签", "laws": "定律", "scientists": "科学家", "footer": "让科学变简单",
            "search_tag": "查找标签…", "search_law": "查找定律…", "search_sci": "查找科学家…",
            "depth": "深度：", "clear": "重置",
-           "warning": "⚠ 界面针对大屏幕优化，图谱生成可能需要一些时间。"},
+           "warning": "⚠ 界面针对大屏幕优化，图谱生成可能需要一些时间。",
+           "edge_tag_law": "标签↔定律", "edge_tag_sci": "标签↔科学家", "edge_law_sci": "定律↔科学家",
+           "edge_tag_tag": "标签↔标签", "edge_law_law": "定律↔定律", "edge_sci_sci": "科学家↔科学家", "edge_law_influence": "定律↔影响", "preset_core": "核心", "preset_all": "全部"},
     "fr": {"title": "Graphe des savoirs", "subtitle": "Tags, lois et scientifiques et leurs liens. Choisissez l'affichage.",
            "nodes": "Nœuds :", "edges": "Liens :", "presets": "Préréglages :",
            "tags": "tags", "laws": "lois", "scientists": "scientifiques", "footer": "la science simplifiée",
            "search_tag": "Trouver un tag…", "search_law": "Trouver une loi…", "search_sci": "Trouver un scientifique…",
            "depth": "Profondeur :", "clear": "Réinitialiser",
-           "warning": "⚠ Optimisé pour grand écran — la construction du graphe peut prendre un moment."},
+           "warning": "⚠ Optimisé pour grand écran — la construction du graphe peut prendre un moment.",
+           "edge_tag_law": "tag↔loi", "edge_tag_sci": "tag↔scientifique", "edge_law_sci": "loi↔scientifique",
+           "edge_tag_tag": "tag↔tag", "edge_law_law": "loi↔loi", "edge_sci_sci": "scientifique↔scientifique", "edge_law_influence": "loi↔influence", "preset_core": "noyau", "preset_all": "tout"},
     "ar": {"title": "شبكة المعرفة", "subtitle": "الوسوم والقوانين والعلماء وكل روابطهم. بدّل ما تريد عرضه.",
            "nodes": "العقد:", "edges": "الروابط:", "presets": "إعدادات:",
            "tags": "وسوم", "laws": "قوانين", "scientists": "علماء", "footer": "العلم ببساطة",
            "search_tag": "ابحث عن وسم…", "search_law": "ابحث عن قانون…", "search_sci": "ابحث عن عالِم…",
            "depth": "العمق:", "clear": "إعادة تعيين",
-           "warning": "⚠ الواجهة محسّنة للشاشات الكبيرة، وقد يستغرق إنشاء الرسم البياني بعض الوقت."},
+           "warning": "⚠ الواجهة محسّنة للشاشات الكبيرة، وقد يستغرق إنشاء الرسم البياني بعض الوقت.",
+           "edge_tag_law": "وسم↔قانون", "edge_tag_sci": "وسم↔عالِم", "edge_law_sci": "قانون↔عالِم",
+           "edge_tag_tag": "وسم↔وسم", "edge_law_law": "قانون↔قانون", "edge_sci_sci": "عالِم↔عالِم", "edge_law_influence": "قانون↔تأثير", "preset_core": "النواة", "preset_all": "الكل"},
 }
 
 
@@ -1472,7 +1513,10 @@ def generate_knowledge_graph_page(lang):
         tags_label=safe(loc["tags"]), laws_label=safe(loc["laws"]), scientists_label=safe(loc["scientists"]),
         search_tag_placeholder=safe(loc["search_tag"]), search_law_placeholder=safe(loc["search_law"]),
         search_sci_placeholder=safe(loc["search_sci"]), depth_label=safe(loc["depth"]), clear_label=safe(loc["clear"]),
-        footer_text=safe(loc["footer"]), graph_warning=safe(loc["warning"])
+        footer_text=safe(loc["footer"]), graph_warning=safe(loc["warning"]),
+        edge_tag_law=safe(loc["edge_tag_law"]), edge_tag_sci=safe(loc["edge_tag_sci"]), edge_law_sci=safe(loc["edge_law_sci"]),
+        edge_tag_tag=safe(loc["edge_tag_tag"]), edge_law_law=safe(loc["edge_law_law"]), edge_sci_sci=safe(loc["edge_sci_sci"]),
+        edge_law_influence=safe(loc["edge_law_influence"]), preset_core=safe(loc["preset_core"]), preset_all=safe(loc["preset_all"])
     ), encoding="utf-8")
 
 
@@ -1889,7 +1933,7 @@ def generate_archive_page(lang):
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
 <a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/">authors</a><a href="/{LANG_DIR}/{lang}/graph/">graph</a>
-<a href="/{LANG_DIR}/{DEFAULT_LANG}/theory/">theory</a>
+<a href="/{LANG_DIR}/{lang}/theory/">theory</a>
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="Избранное">★</a>
 <a href="/{LANG_DIR}/{lang}/about.html">about</a>
 </div></div></div>
@@ -2064,6 +2108,23 @@ def write_arxiv_categories_json():
         json.dumps(ARXIV_CATEGORY_DESCRIPTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def _write_text_retry(path, text, retries=3):
+    """write_text() с ретраем — Windows иногда отдаёт OSError [Errno 22] на ровном месте при
+    записи (антивирус/индексатор держит файл долю секунды) — раньше это ронуло ВЕСЬ
+    regenerate_all_html() на одной статье из 1000+, приходилось перезапускать с нуля.
+    Оба случая, что видели (2508.01648 в ar_backfill, 2601.16015 здесь) — не воспроизвелись
+    повторно, чисто транзиентно."""
+    import time
+    for attempt in range(retries):
+        try:
+            path.write_text(text, encoding="utf-8")
+            return
+        except OSError:
+            if attempt == retries - 1:
+                raise
+            time.sleep(0.3)
+
+
 def regenerate_all_html():
     """Пересобирает HTML всех статей из data.json (без API). Идёт по источнику правды,
     а не по индексам — устойчиво к их повреждению."""
@@ -2099,7 +2160,7 @@ def regenerate_all_html():
                                         captions_for_lang(captions, lang), abstract)
                 out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / VERSION_FILES[version]
                 out.parent.mkdir(parents=True, exist_ok=True)
-                out.write_text(html, encoding="utf-8")
+                _write_text_retry(out, html)
                 count += 1
         # Mini-версия — threads-текст (полный, не обрезанный). threads берём ИМЕННО из popular
         # (заглушка express_locked уже несёт туда express-поле mini — см. express_locked_scipop),
@@ -2122,7 +2183,7 @@ def regenerate_all_html():
             html = gen_article_html(mini_scipop, article_obj, date_str,
                                     [str(p) for p in images], lang, "mini",
                                     captions_for_lang(captions, lang), abstract)
-            out.write_text(html, encoding="utf-8")
+            _write_text_retry(out, html)
             count += 1
     build_knowledge_graph_data()
     for lang in LANGUAGES:
@@ -2311,7 +2372,16 @@ def build_article(a, date_str, inputs, force=False, express=False):
                     try:
                         res = fut.result()
                     except Exception as e:
+                        # translate_scipop сама ретраит недо-JSON (см. gen_llm.py); сюда долетает
+                        # только если и chat() исчерпала свои ретраи — сетевой сбой. Лог — в файл,
+                        # не только print, иначе в большом батче никто не заметит (см. коммент
+                        # там же про 60-93% сломанных ar-страниц, найденные только ручной читкой).
                         print(f"    ⚠️ {a['id']} перевод {v}/{l} не удался ({e}) — оставляю оригинал")
+                        try:
+                            with open("translation-failures.log", "a", encoding="utf-8") as lf:
+                                lf.write(f"build_article\t{l}\t{a['id']}/{v}: {e}\n")
+                        except Exception:
+                            pass
                         res = versions_ru[v]
                     translations[v][l] = res
             if express:

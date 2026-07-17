@@ -1,0 +1,386 @@
+{
+  "id": "2510.13577",
+  "original_title": "Noise-stabilized discrete time crystals on digital quantum processors",
+  "authors": [
+    "Kazuya Shinjo",
+    "Kazuhiro Seki",
+    "Seiji Yunoki"
+  ],
+  "date": "2025-10-15",
+  "license": "http://creativecommons.org/licenses/by/4.0/",
+  "license_name": "CC BY 4.0",
+  "tags": [
+    "pulsar",
+    "entropy",
+    "neutron_star"
+  ],
+  "main_tag": "pulsar",
+  "scientists": [
+    "Frank Wilczek"
+  ],
+  "categories": [
+    "quant-ph",
+    "cond-mat.stat-mech",
+    "cond-mat.str-el"
+  ],
+  "primary_category": "quant-ph",
+  "cited_arxiv": [],
+  "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+  "abstract": {
+    "ru": {
+      "popular": "С помощью сверхпроводящих процессоров IBM исследователи смоделировали поведение квантового кристалла времени на решётке кагоме, встроив сложную топологию с помощью вспомогательных кубитов. Структурированный шум, вносимый этими кубитами, неожиданно стабилизировал долгоживущие субгармонические колебания — как будто помехи заставляют маятник качаться ритмичнее. Добавление накачки заряда на границе привело к появлению особого, локализованного у края кристалла времени. Без накачки тот же шум самостоятельно порождал упорядоченный ритм, открывая практичный способ управлять неравновесными состояниями на зашумлённом квантовом «железе».",
+      "simple": "В квантовом мире упорядоченные ритмы (кристаллы времени) обычно разрушаются помехами, но инженеры нашли способ использовать шум во благо. Вообразите качели, которые раскачиваются сильнее при беспорядочных толчках. На процессоре IBM такой шум помог создать устойчивые колебания, живущие необычно долго. Природа подсказывает: в хаосе скрыта сила — где ещё мы её найдём?",
+      "advanced": "Для стабилизации дискретных временных кристаллов (DTC) на зашумлённом квантовом оборудовании была реализована флоке-динамика модели Изинга с толчками на двумерных решётках кагоме. Использованы сверхпроводящие процессоры IBM Eagle и Heron, где топология «тяжёлый гексагон» адаптирована внедрением вспомогательных кубитов. Скорректированные от ошибок измерения совместно с симуляциями матричных произведений состояний (включая шумовую модель ансилл из реальных данных) выявили долгоживущие субгармонические осцилляции намагниченности. Структурированный шум не разрушает, а стабилизирует их: ошибки ансилл функционируют как пространственно-временной беспорядок, индуцирующий стохастические инверсии знака изинговских связей и робастное удвоение периода. При накачке симметрийного заряда на границе собственные π-моды совместно с беспорядком создают гранично-ассистированный DTC с подавленным скремблированием и острой локализацией. Без накачки бесшумная динамика термализуется, но тот же шум генерирует DTC-подобный отклик."
+    },
+    "en": {
+      "popular": "With IBM's superconducting processors, researchers simulated a quantum time crystal on a kagome lattice, weaving in complex topology via ancilla qubits. The structured noise from these qubits unexpectedly stabilized long-lived subharmonic oscillations—as if interference makes a pendulum swing more rhythmically. Adding charge pumping at the edge created a special, localized time crystal at the boundary. Without the pump, that same noise spontaneously generated an orderly rhythm, revealing a handy way to control out-of-equilibrium states on noisy quantum hardware.",
+      "simple": "In the quantum world, orderly rhythms (time crystals) usually get wrecked by interference, but engineers found a way to harness noise for good. Picture a swing that gains momentum from random pushes. On an IBM processor, such noise helped build stable oscillations that last unusually long. Nature whispers: chaos holds hidden strength—where else might we uncover it?",
+      "advanced": "To stabilize discrete time crystals (DTC) on noisy quantum hardware, Floquet dynamics of a kicked Ising model were implemented on 2D kagome lattices. IBM's Eagle and Heron superconducting processors were used, with the 'heavy hexagon' topology adapted by embedding ancilla qubits. Measurement-error-mitigated data, together with matrix product state simulations (including an ancilla noise model from real data), revealed long-lived subharmonic magnetization oscillations. Structured noise doesn't destroy but stabilizes them: ancilla errors act as spatiotemporal disorder, inducing stochastic sign flips of Ising couplings and robust period doubling. With symmetry-breaking charge pumping at the boundary, intrinsic π-modes and disorder jointly create a boundary-assisted DTC with suppressed scrambling and sharp localization. Without pumping, noise-free dynamics thermalize, but the very same noise generates a DTC-like response."
+    },
+    "es": {
+      "popular": "Con la ayuda de los procesadores superconductores de IBM, los investigadores simularon el comportamiento de un cristal temporal cuántico en una red de Kagome, incorporando una topología compleja mediante cúbits auxiliares. El ruido estructurado introducido por estos cúbits estabilizó inesperadamente oscilaciones subarmónicas de larga duración, como si las interferencias hicieran que un péndulo oscile con más ritmo. La inyección de carga en el borde generó un estado especial y localizado del cristal temporal en la frontera. Sin bombeo, el mismo ruido producía espontáneamente un ritmo ordenado, abriendo una vía práctica para controlar estados fuera del equilibrio en un hardware cuántico ruidoso.",
+      "simple": "En el mundo cuántico, los ritmos ordenados (cristales temporales) suelen ser destruidos por las interferencias, pero los ingenieros encontraron una manera de usar el ruido para bien. Imagina un columpio que se balancea con más fuerza cuando recibe empujones desordenados. En un procesador de IBM, ese ruido ayudó a crear oscilaciones estables que duran un tiempo inusualmente largo. La naturaleza nos da una pista: en el caos se esconde la fuerza; ¿dónde más la encontraremos?",
+      "advanced": "Para estabilizar cristales temporales discretos (DTC) en hardware cuántico ruidoso, se implementó la dinámica de Floquet del modelo de Ising con impulsos en redes bidimensionales de Kagome. Se utilizaron los procesadores superconductores IBM Eagle y Heron, donde la topología 'hexágono pesado' se adaptó introduciendo cúbits auxiliares. Las mediciones corregidas de errores, combinadas con simulaciones de productos de matrices de estados (incluyendo un modelo de ruido de ancillas a partir de datos reales), revelaron oscilaciones subarmónicas de magnetización de larga duración. El ruido estructurado no las destruye, sino que las estabiliza: los errores de las ancillas funcionan como un desorden espacio-temporal que induce inversiones estocásticas del signo de los acoplamientos de Ising y una robusta duplicación del período. Con el bombeo de carga de simetría en el borde, los modos π propios junto con el desorden crean un DTC asistido por la frontera, con aleatorización suprimida y localización nítida. Sin bombeo, la dinámica sin ruido se termaliza, pero ese mismo ruido genera una respuesta similar a un DTC."
+    },
+    "ar": {
+      "popular": "باستخدام معالجات IBM فائقة التوصيل، قام الباحثون بمحاكاة سلوك بلورة زمن كمومية على شبكة كاغومي، عبر تضمين طوبولوجيا معقدة بمساعدة كيوبتات مساعدة. الضوضاء المهيكلة الناتجة عن هذه الكيوبتات عملت على تثبيت تذبذبات تحت توافقية طويلة الأمد بشكل مفاجئ - كما لو أن التداخلات تجعل البندول يتأرجح بانتظام أكبر. إضافة ضخ شحنة عند الحافة أدى إلى ظهور بلورة زمنية خاصة متمركزة عند حافة النظام. وبدون الضخ، تولد الضوضاء نفسها تلقائياً إيقاعاً منظماً، مما يفتح طريقاً عملياً للتحكم في الحالات غير المتوازنة على أجهزة كمومية مشوشة.",
+      "simple": "في العالم الكمومي، عادةً ما تُدمّر الضوضاء الإيقاعات المنتظمة (بلورات الزمن)، لكن المهندسين وجدوا طريقة لتسخير الضوضاء للخير. تخيل أرجوحة تتأرجح بقوة أكبر عند تلقيها دفعات عشوائية. على معالج IBM، ساعدت هذه الضوضاء في خلق تذبذبات مستقرة تعيش لفترة طويلة بشكل غير معتاد. الطبيعة توحي لنا: في الفوضى تكمن قوة - فأين سنجدها أيضاً؟",
+      "advanced": "لتثبيت بلورات الزمن المتقطعة (DTC) على أجهزة كمومية مشوشة، تم تطبيق ديناميكيات فلوكيه لنموذج إيزينغ المُثار على شبكات كاغومي ثنائية الأبعاد. استُخدمت معالجات IBM Eagle و Heron فائقة التوصيل، حيث تم تكييف طوبولوجيا \"المسدس الثقيل\" بإدخال كيوبتات مساعدة. القياسات المصححة من الأخطاء، إلى جانب محاكاة حالات حاصل ضرب المصفوفات (بما في ذلك نموذج ضوضاء الأنسيلات من بيانات حقيقية)، كشفت عن تذبذبات مغنطة تحت توافقية طويلة الأمد. الضوضاء المهيكلة لا تدمرها بل تثبتها: أخطاء الأنسيلات تعمل كاضطراب زماني-مكاني يُحدث انقلابات عشوائية لإشارة روابط إيزينغ ومضاعفة قوية للفترة. عند ضخ شحنة التناظر على الحافة، تخلق الأنماط الذاتية π مع الاضطراب بلورة زمنية بمساعدة الحدود مع كبت للتشويش وتمركز حاد. بدون الضخ، تتساوى الديناميكيات الخالية من الضوضاء حرارياً، لكن نفس الضوضاء تولد استجابة شبيهة ببلورة الزمن."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": true,
+  "express_tiers": [
+    "mini",
+    "simple"
+  ],
+  "captions": {
+    "en": [
+      "Figure 5a dis-",
+      "In the absence of charge-"
+    ],
+    "ru": [
+      "Рисунок 5а dis-",
+      "В отсутствие заряда-"
+    ],
+    "es": [
+      "Figura 5a dis-",
+      "En ausencia de carga-"
+    ],
+    "ar": [
+      "شكل 5أ dis-",
+      "في غياب الشحنة-"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Шум, который помогает: квантовый «маятник» на чипе",
+      "oneliner": "Ошибки квантового чипа IBM помогли создать устойчивый временной кристалл — ритмичные колебания, которые не затухают.",
+      "description": "Учёные смоделировали на квантовом компьютере магнитный материал с узором кагомэ. Обнаружилось, что шум от дополнительных кубитов не мешает, а продлевает жизнь периодическим колебаниям (временному кристаллу), а иногда и создаёт их. Это способ управлять квантовыми состояниями, используя неизбежные ошибки.",
+      "text": "В квантовом мире шум обычно разрушает упорядоченное поведение, словно случайные толчки гасят маятник. Но на квантовых процессорах IBM физики обнаружили обратное: структурированный шум способен продлить и даже создать ритмичные колебания. Это похоже на маятник, который от беспорядочных, но внутренне согласованных толчков раскачивается сильнее. Такой эффект проявился при моделировании магнитного материала на решётке кагомэ — узоре из переплетённых треугольников и шестиугольников, заимствованном из японского плетения корзин. Чтобы уместить сложную геометрию на чипе с фиксированной схемой связей, учёные добавили дополнительные кубиты-помощники. Их неизбежные сбои вносят управляемый [tag:entropy]беспорядок[/tag] — случайные перевороты магнитных взаимодействий, не давая системе замереть в хаосе и поддерживая чёткий ритм, подобный сигналам [tag:pulsar]пульсара[/tag], но рождённый на столе, а не в космосе. Этот временной кристалл «тикает» с частотой вдвое меньше внешней накачки, не являясь вечным двигателем. В определённых условиях ритм концентрировался на краях решётки. Принцип превращает ошибки из врагов в союзников, а облачный доступ к процессорам IBM делает эксперименты открытыми для многих.",
+      "fun_fact": "Концепцию временных кристаллов впервые предложил физик [scientist:Frank Wilczek]Фрэнк Вильчек[/scientist] в 2012 году, и поначалу многие считали её противоречащей законам физики.",
+      "scifi": "Идея временных кристаллов перекликается с научно-фантастическими сюжетами о машинах времени или вечных двигателях, но в реальности им нужна периодическая подпитка.",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ]
+    },
+    "en": {
+      "title": "Noise That Helps: A Quantum 'Pendulum' on a Chip",
+      "oneliner": "Errors on an IBM quantum chip helped create a stable time crystal — rhythmic oscillations that never fade.",
+      "description": "Scientists simulated a magnetic material with a kagome pattern on a quantum computer. They found that noise from extra qubits doesn't disrupt but actually prolongs periodic oscillations (a time crystal), and sometimes even creates them. This is a way to control quantum states using unavoidable errors.",
+      "text": "In the quantum world, noise usually destroys orderly behavior, like random jolts damping a pendulum. But on IBM quantum processors, physicists discovered the opposite: structured noise can prolong and even create rhythmic oscillations. It's like a pendulum that swings harder from seemingly chaotic yet internally synchronized pushes. This effect emerged while simulating a magnetic material on a kagome lattice — a pattern of interwoven triangles and hexagons borrowed from Japanese basket weaving. To fit this complex geometry onto a chip with fixed qubit connections, scientists added extra helper qubits. Their inevitable glitches introduce controlled [tag:entropy]disorder[/tag] — random flips of magnetic interactions — preventing the system from freezing into chaos and maintaining a clear rhythm, akin to the signals of a [tag:pulsar]pulsar[/tag], but born on a tabletop rather than in space. This time crystal 'ticks' at half the frequency of the external drive, without being a perpetual motion machine. Under certain conditions, the rhythm concentrated at the edges of the lattice. This principle turns errors from foes into allies, and cloud access to IBM processors opens up the experiments to many.",
+      "fun_fact": "The concept of time crystals was first proposed by physicist [scientist:Frank Wilczek]Frank Wilczek[/scientist] in 2012, and at first many thought it contradicted the laws of physics.",
+      "scifi": "The idea of time crystals echoes sci-fi plots about time machines or perpetual motion machines, but in reality they need periodic energy input.",
+      "mini": "Noise, which usually disrupts quantum systems, played the role of a conductor on the IBM chip: it made the 'pendulum' swing longer, creating a semblance of perpetual ticking. This trick could make quantum computers more stable by turning errors from foes into allies.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ]
+    },
+    "es": {
+      "title": "El ruido que ayuda: un «péndulo» cuántico en un chip",
+      "oneliner": "Los errores del chip cuántico de IBM ayudaron a crear un cristal temporal estable: oscilaciones rítmicas que no se desvanecen.",
+      "description": "Científicos simularon en un computador cuántico un material magnético con patrón de kagome. Descubrieron que el ruido de los cúbits adicionales no interfiere, sino que prolonga la vida de las oscilaciones periódicas (un cristal temporal), y a veces incluso las crea. Es una forma de controlar estados cuánticos usando los errores inevitables.",
+      "text": "En el mundo cuántico, el ruido suele destruir el comportamiento ordenado, como si empujones aleatorios apagaran un péndulo. Pero en los procesadores cuánticos de IBM, los físicos descubrieron lo contrario: el ruido estructurado puede prolongar e incluso crear oscilaciones rítmicas. Es como un péndulo que, con empujones desordenados pero internamente coherentes, oscila más fuerte. Este efecto surgió al simular un material magnético en una red de kagome, un patrón de triángulos y hexágonos entrelazados tomado del trenzado japonés de cestas. Para ajustar la geometría compleja en un chip con conexiones fijas, los científicos añadieron cúbits auxiliares. Sus fallos inevitables introducen un [tag:entropy]desorden[/tag] controlado (cambios aleatorios en las interacciones magnéticas), evitando que el sistema se congele en el caos y manteniendo un ritmo nítido, similar a las señales de un [tag:pulsar]púlsar[/tag], pero nacido en una mesa, no en el espacio. Este cristal temporal «tictaca» con una frecuencia mitad de la excitación externa, sin ser un móvil perpetuo. En ciertas condiciones, el ritmo se concentraba en los bordes de la red. El principio convierte los errores de enemigos en aliados, y el acceso en la nube a los procesadores de IBM abre los experimentos a muchos.",
+      "fun_fact": "El concepto de cristales temporales fue propuesto por primera vez por el físico [scientist:Frank Wilczek]Frank Wilczek[/scientist] en 2012, y al principio muchos lo consideraban contrario a las leyes de la física.",
+      "scifi": "La idea de los cristales temporales resuena con tramas de ciencia ficción sobre máquinas del tiempo o motores perpetuos, pero en realidad necesitan una alimentación periódica.",
+      "mini": "El ruido, que normalmente molesta a los sistemas cuánticos, en el chip de IBM actuó como un director: hizo que el «péndulo» oscilara durante más tiempo, creando un tictac casi eterno. Este truco podría hacer que los ordenadores cuánticos sean más estables, convirtiendo los errores de enemigos en aliados.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ]
+    },
+    "ar": {
+      "title": "الضوضاء التي تساعد: «بندول» كمومي على شريحة",
+      "oneliner": "ساعدت أخطاء شريحة IBM الكمومية في إنشاء بلورة زمنية مستقرة — تذبذبات إيقاعية لا تخمد.",
+      "description": "قام العلماء بنمذجة مادة مغناطيسية ذات نمط كاغومي على حاسوب كمومي. واتضح أن الضوضاء الصادرة عن الكيوبتات الإضافية لا تعيق، بل تطيل عمر التذبذبات الدورية (البلورة الزمنية)، بل وتخلقها أحيانًا. هذه طريقة للتحكم في الحالات الكمومية باستخدام الأخطاء الحتمية.",
+      "text": "في العالم الكمومي، عادة ما تدمر الضوضاء السلوك المنظم، كما تطفئ الدفع العشوائية البندول. لكن على معالجات IBM الكمومية، اكتشف الفيزيائيون العكس: فالضوضاء المهيكلة قادرة على إطالة وحتى إنشاء تذبذبات إيقاعية. يشبه ذلك بندولاً يتأرجح بقوة أكبر بفعل دفعات غير منتظمة ولكنها متسقة داخليًا. ظهر هذا التأثير عند نمذجة مادة مغناطيسية على شبكة كاغومي — نمط من مثلثات وسداسيات متشابكة، مقتبس من فن نسج السلال الياباني. لملاءمة هذه الهندسة المعقدة على شريحة ذات تخطيط اتصالات ثابت، أضاف العلماء كيوبتات مساعدة إضافية. تقدم أخطاؤها الحتمية [tag:entropy]اضطرابًا[/tag] مضبوطًا — انقلابات عشوائية في التفاعلات المغناطيسية، مما يمنع النظام من التجمد في الفوضى ويحافظ على إيقاع واضح، يشبه إشارات [tag:pulsar]النباض[/tag]، لكنه يولد على طاولة المختبر، لا في الفضاء. هذه البلورة الزمنية «تتكتك» بتردد نصف تردد الضخ الخارجي، وليست آلة حركة دائمة. في ظروف معينة، تركز الإيقاع عند حواف الشبكة. يحول المبدأ الأخطاء من أعداء إلى حلفاء، كما أن الوصول السحابي إلى معالجات IBM يجعل التجارب مفتوحة للكثيرين.",
+      "fun_fact": "اقترح مفهوم البلورات الزمنية لأول مرة الفيزيائي [scientist:Frank Wilczek]فرانك ويلتشيك[/scientist] في عام 2012، واعتبرها الكثيرون في البداية مخالفة لقوانين الفيزياء.",
+      "scifi": "تتشابه فكرة البلورات الزمنية مع قصص الخيال العلمي عن آلات الزمن أو آلات الحركة الدائمة، لكنها في الواقع تحتاج إلى تغذية دورية.",
+      "mini": "الضوضاء التي عادة ما تعيق الأنظمة الكمومية، لعبت على شريحة IBM دور قائد الأوركسترا: جعلت «البندول» يتأرجح لفترة أطول، محدثة ما يشبه التكتكة الأبدية. هذه الخدعة قد تجعل الحواسيب الكمومية أكثر استقرارًا، بتحويل الأخطاء من أعداء إلى حلفاء.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Полная версия готовится",
+      "oneliner": "Полная версия готовится",
+      "description": "",
+      "text": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Сейчас есть только облегчённая экспресс-версия этой статьи. Добавьте её в избранное — если её ждут, мы подготовим полную версию в первую очередь.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "en": {
+      "title": "Full version coming soon",
+      "oneliner": "Full version coming soon",
+      "description": "",
+      "text": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Only a lightweight express version of this article exists right now. Add it to favorites — articles people are waiting for get the full treatment first.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "es": {
+      "title": "Versión completa próximamente",
+      "oneliner": "Versión completa próximamente",
+      "description": "",
+      "text": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "Por ahora solo existe una versión exprés ligera de este artículo. Añádelo a favoritos — los artículos más esperados reciben antes el tratamiento completo.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "formulas": [],
+      "main_tag": "pulsar",
+      "extra_tags": [
+        "entropy",
+        "neutron_star"
+      ],
+      "scientists": [
+        "Frank Wilczek"
+      ],
+      "key_numbers": {},
+      "context": "يتوفر حاليًا فقط نسخة سريعة مبسّطة من هذا المقال. أضفه إلى المفضّلة — المقالات التي ينتظرها القراء تحصل على نسختها الكاملة أولًا.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "Шум, который обычно мешает квантовым системам, на чипе IBM сыграл роль дирижёра: он заставил «маятник» качаться дольше, создав подобие вечного тиканья. Этот трюк может сделать квантовые компьютеры стабильнее, превратив ошибки из врагов в союзников.",
+      "express_locked": true
+    }
+  }
+}

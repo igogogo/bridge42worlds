@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -190,14 +190,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتويات</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>قوتا المقاومة</a></li>
@@ -231,8 +231,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>اكتشف روبرت هوك في ستينيات القرن السابع عشر أن الزنبركات (والأجسام المرنة عمومًا) تقاوم التشوه بنسبة تتناسب مع مقداره — أبسط علاقة خطية، وهي أساس نظرية المرونة، من المراتب إلى ناطحات السحاب. واكتشف أرخميدس قبل ألفي عام قانونًا آخر، هو أيضًا خطي: السائل يدفع الجسم المغمور بقوة تساوي وزن حجم السائل المزاح. في هذه الملاحظة — كلا القانونين مع أمثلة عددية وتجربة شاملة تجمعهما في قياس واحد.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Пружина у предела растяжения — закон Гука" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>زنبرك عند حد التمدد — قانون هوك</figcaption></figure>
-<figure><img alt="Лодка на воде в точном равновесии — принцип Архимеда" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>قارب على الماء في توازن دقيق — مبدأ أرخميدس</figcaption></figure>
+<figure><img alt="نابض عند حد الاستطالة — قانون هوك" src="/lang/ru/theory/img/elasticity_archimedes_hero.jpg"/><figcaption>زنبرك عند حد التمدد — قانون هوك</figcaption></figure>
+<figure><img alt="قارب على الماء في توازن دقيق — مبدأ أرخميدس" src="/lang/ru/theory/img/elasticity_archimedes_concept.jpg"/><figcaption>قارب على الماء في توازن دقيق — مبدأ أرخميدس</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>قوتا المقاومة</h2></div>
@@ -433,7 +433,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
     var len = REST_LEN + stretchPx;
     coil.style.width = len + 'px';
     mass.style.left = (WALL_X + len) + 'px';
-    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' м';
+    if (springReadout) springReadout.textContent = 'x = ' + (stretchPx / PX_PER_M).toFixed(2) + ' م';
     requestAnimationFrame(tickSpring);
   }
   if (window.requestAnimationFrame) requestAnimationFrame(tickSpring);

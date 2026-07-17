@@ -83,7 +83,7 @@ main{ min-width:0; }
 .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-fill); display:inline-block;}
 h1{ font-family:var(--font-display); font-weight:700; font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); line-height:1.08; letter-spacing:-.01em; margin:0 0 .4em; text-wrap:balance; color:var(--ink); }
 .subtitle{ font-family:var(--font-body); font-style:italic; color:var(--ink-soft); font-size:1.15rem; line-height:1.5; max-width:46ch; margin:0; }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 
 #s6 .measure{ font-size:.94rem; line-height:1.55; }
@@ -177,14 +177,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/es/graph/">graph</a>
 <a class="active" href="/lang/es/theory/">theory</a>
-<a href="/lang/es/favorites.html" title="Избранное">★</a>
+<a href="/lang/es/favorites.html" title="Favoritos">★</a>
 <a href="/lang/es/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="Contenido" class="toc">
 <p class="toc-title">Contenido</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>La ecuación en pocas palabras</a></li>
@@ -206,10 +206,10 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 </div>
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-<path d="M20,60 L140,60 L200,90 L260,90 L320,90 M20,120 L140,120 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
+<path d="M20,30 L140,30 L200,90 L260,90 L320,90 M20,150 L140,150 L200,90 L260,90 L320,90" fill="none" stroke="var(--ink)" stroke-width="3"></path>
 <circle cx="60" cy="90" fill="var(--steel-fill)" id="heroDot" r="6"></circle>
-<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="45">широко, медленно</text>
-<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">узко, быстро</text>
+<text fill="var(--moss)" font-family="Cascadia Code, monospace" font-size="12" x="80" y="20">ancho, lento</text>
+<text fill="var(--brass)" font-family="Cascadia Code, monospace" font-size="12" x="240" y="75">estrecho, rápido</text>
 </svg>
 </div>
 </header>
@@ -218,8 +218,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>Daniel Bernoulli dedujo en 1738 la ecuación de conservación de la energía para un fluido en movimiento: a lo largo de una línea de corriente, la suma de la presión, la energía cinética y la potencial (por unidad de volumen) permanece constante. Consecuencia directa: donde el flujo se acelera (tubo que se estrecha), la presión estática debe caer. Este mismo principio explica los pulverizadores, carburadores y (con importantes reservas) la sustentación del ala. En esta nota: deducción de la ecuación, tubo de Venturi con números y un análisis honesto de lo que Bernoulli explica en el vuelo del avión y lo que no.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Ускоряющийся поток в сужении трубы" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>Flujo acelerándose en un estrechamiento del tubo</figcaption></figure>
-<figure><img alt="Обтекание крыла: разная скорость потока сверху и снизу" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>Flujo alrededor del ala: velocidad diferente arriba y abajo</figcaption></figure>
+<figure><img alt="Flujo acelerado en el estrechamiento del tubo" src="/lang/ru/theory/img/bernoulli_hero.jpg"/><figcaption>Flujo acelerándose en un estrechamiento del tubo</figcaption></figure>
+<figure><img alt="Flujo alrededor del ala: velocidad distinta arriba y abajo" src="/lang/ru/theory/img/bernoulli_concept.jpg"/><figcaption>Flujo alrededor del ala: velocidad diferente arriba y abajo</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>La ecuación en pocas palabras</h2></div>
@@ -416,7 +416,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
   }
 
   var mainPipe = makePipe(160, 240, 380, 30, 110, 60, 80);
-  var heroPipe = makePipe(140, 200, 320, 60, 120, 90, 90);
+  var heroPipe = makePipe(140, 200, 320, 30, 150, 90, 90);
 
   var dot1 = document.getElementById('pipeDot1');
   var dot2 = document.getElementById('pipeDot2');

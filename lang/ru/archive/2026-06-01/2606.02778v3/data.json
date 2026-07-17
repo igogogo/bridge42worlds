@@ -51,6 +51,11 @@
       "popular": "Científicos han creado el sistema EXOVEIL, que encuentra exoplanetas mediante tránsitos únicos frente a la estrella, sin necesitar múltiples señales como antes. Utiliza una red neuronal 'predictora' (Transformer), entrenada con miles de curvas de luz de Kepler, para recrear el brillo ideal de la estrella; luego un filtro especial resalta las más mínimas desviaciones. Entre los hallazgos hay 179 nuevos candidatos, incluidos 46 tránsitos únicos que los catálogos estándar pasaron por alto. El sistema funciona sin reentrenamiento incluso con datos de otros telescopios y se acerca a la detección de planetas de tipo terrestre. Es como enseñar a un reloj a captar la pérdida de un segundo, en lugar de esperar fallos de minutos.",
       "simple": "EXOVEIL es un sistema que enseña a los telescopios a detectar planetas, incluso si solo pasan una vez frente a la estrella. Imagina un farol cuya luz se atenúa levemente cuando una polilla pasa volando: EXOVEIL captura esos instantes sin esperar repeticiones. Así se pueden encontrar mundos lejanos parecidos a la Tierra. ¿Qué más se esconde en el parpadeo de las estrellas?",
       "advanced": "EXOVEIL es un sistema de búsqueda de tránsitos que opera con series temporales de flujo sin procesar y es capaz de detectar tránsitos únicos. Basado en un modelo Transformer entrenado con enmascaramiento de tránsitos en 16,499 curvas de luz de Kepler, se predice el flujo estelar esperado; un filtro acoplado con varianza ponderada extrae señales de los residuos de las predicciones. Un clasificador XGBoost separa planetas de falsos positivos (AUC 0.938 en Kepler DR25). Al inyectar tránsitos únicos de 1000 ppm de profundidad, el sistema recupera el 32%, una tarea en la que todos los métodos de clasificación muestran un 0%. Una búsqueda ciega en 3737 estrellas de Kepler reveló 179 nuevas señales similares a tránsitos, incluidos 46 candidatos a monotránsitos. Sin reentrenamiento, el sistema detectó los 47 planetas confirmados de TESS en el campo PLATO LOPS2, demostrando transferencia entre misiones. Con cuadros de 25 segundos de PLATO se detectan tránsitos de hasta 100 ppm, acercándose al régimen de análogos terrestres. Se aplica por primera vez predicción conforme con cobertura empírica del 95.9%. El código, los pesos preentrenados y el catálogo de candidatos son abiertos (pip install exoveil)."
+    },
+    "ar": {
+      "popular": "ابتكر العلماء نظام EXOVEIL الذي يكتشف الكواكب الخارجية من عبوراتٍ فردية أمام النجم، دون الحاجة إلى إشارات متكررة كما كان سائداً. يستخدم النظام شبكةً عصبية 'تنبؤية' (Transformer) دُرّبت على آلاف منحنيات ضوء تلسكوب 'كيبلر' لإعادة بناء السطوع المثالي للنجم؛ ثم يقوم مرشّح خاص باستخراج أدنى الانحرافات. من بين الاكتشافات 179 مرشحاً جديداً، منها 46 عبوراً فردياً فاتتها الفهارس القياسية. يعمل النظام دون إعادة تدريب حتى مع بيانات تلسكوبات أخرى، ويقترب من رصد كواكب بحجم الأرض. الأمر أشبه بتعليم الساعة التقاطَ فقدان ثانية واحدة، بدلاً من انتظار أعطال تمتد دقائق.",
+      "simple": "EXOVEIL هو نظام يعلّم التلسكوبات رصدَ الكواكب حتى لو مرّت أمام النجم مرةً واحدة فقط. تخيّل مصباحاً يخفت ضوؤه قليلاً حين تمرّ فراشة أمامه: يلتقط EXOVEIL مثل هذه اللحظات دون انتظار تكرارها. هكذا يمكن إيجاد عوالمَ بعيدة تشبه الأرض. ما الذي تخفيه نجومٌ متلألئة بعد؟",
+      "advanced": "EXOVEIL هو نظام لاكتشاف العبورات، يعمل على سلاسل زمنية خام للتدفق وقادر على رصد العبورات الفردية. يعتمد على نموذج Transformer دُرّب مع إخفاء العبورات على 16,499 منحنى ضوئي من كيبلر، للتنبؤ بالتدفق النجمي المتوقع؛ ثم يستخرج مرشّح متوافق مع التباين الموزون الإشاراتِ من بقايا التنبؤات. يفصل المصنِّف XGBoost الكواكب عن الإيجابيات الكاذبة (AUC 0.938 على Kepler DR25). عند حقن عبورات فردية بعمق 1000 جزء في المليون، يستعيد النظام 32% — وهي مهمة تظهر فيها كل طرق التصنيف 0%. كشف مسح أعمى على 3737 نجماً من كيبلر عن 179 إشارة جديدة تشبه العبور، بما فيها 46 مرشحاً للعبور الأحادي. دون إعادة تدريب، رصد النظام جميع الكواكب المؤكَّدة البالغ عددها 47 من TESS في حقل PLATO LOPS2، مظهراً قابلية النقل بين المهمات. عند إطار 25 ثانية لـ PLATO، تُرصَد عبورات حتى 100 جزء في المليون — مقتربة من نظام النظائر الأرضية. طُبّق لأول مرة تنبؤ امتثالي بتغطية تجريبية بلغت 95.9%. الشيفرة والأوزان المدرّبة مسبقاً وفهرس المرشَّحين مفتوحة المصدر (pip install exoveil)."
     }
   },
   "thumbs": 3,
@@ -70,6 +75,11 @@
       "El pipeline de ExoVeil.",
       "Detección de ejemplo de un planeta Kepler confirmado (KIC 11449844, P=38.5 d) por ExoVeil. Arriba: Curva de luz de Kepler.",
       "Tasa de recuperación de tránsito único vs. profundidad inyectada. ExoMiner y AstroNet obtienen un 0 % en cada profundidad porque requieren"
+    ],
+    "ar": [
+      "مسار إكسو فيل.",
+      "مثال على اكتشاف كوكب كيبلر مؤكد (KIC 11449844، P=38.5 يومًا) بواسطة إكسو فيل. أعلى: منحنى ضوء كيبلر",
+      "معدل استرداد العبور الفردي مقابل العمق المُضاف. تسجل ExoMiner و AstroNet نسبة 0% عند كل عمق لأنهما تتطلبان"
     ]
   },
   "popular": {
@@ -180,6 +190,42 @@
         "Christian Doppler",
         "Johannes Rydberg"
       ]
+    },
+    "ar": {
+      "title": "قواعد النجوم الإملائية: كيف يقرأ ExoVeil الكواكب المفقودة",
+      "oneliner": "تجد خوارزمية التعلم الآلي ExoVeil الكواكب الخارجية من خلال عبور واحد، متقنة \"قواعد\" وهج النجم ومتفاعلة مع أي شذوذ.",
+      "description": "تقليديًا، كان علماء الفلك يصطادون الكواكب بانتظار عبورات متعددة أمام النجوم. يكسر ExoVeil هذا النمط: تتعلم شبكة عصبية محولة التنبؤ بتلألؤ النجم الطبيعي وتلاحظ حتى الظل الوحيد. كشف تحليل أعمى لبيانات \"كيبلر\" عن 179 مرشحًا جديدًا، وعلى بيانات TESS دون إعادة تدريب، تم العثور على جميع الكواكب الـ 47 المعروفة. يفتح هذا النهج عصر البحث عن عوالم طويلة الأمد شبيهة بالأرض في مهام قادمة مثل PLATO، حيث كل عبور نادر.",
+      "text": "منحنى ضوء النجم ليس ضجيجًا فوضويًا، بل نص كتبته النبضات والبقع والتوهج المنتظم للفرن النووي الحراري. أي كوكب ينزلق عبر القرص يترك في هذا النص خطأً مطبعيًا: انخفاض صغير في السطوع يدوم لساعات. تطلبت طرق البحث التقليدية عن [tag:exoplanet]الكواكب الخارجية[/tag] تكرار الخطأ — كلمة تلو الأخرى، دورة تلو الأخرى. لكن ماذا لو عبر الكوكب مرة واحدة فقط خلال سنوات المراقبة؟ هكذا تتصرف نظيرات الأرض المحتملة في مدارات واسعة. اصطيادها بالأدوات القديمة يشبه البحث عن كلمة \"ليس\" المفقودة الوحيدة في رواية متعددة الأجزاء دون معرفة اللغة.\n\nيعمل نظام ExoVeil كمصحح عبقري تعلم قواعد الضوء النجمي. في جوهره، شبكة عصبية محولة بست طبقات وثمانية رؤوس اهتمام، تدربت على 16,499 منحنى [tag:photometry]قياس ضوئي[/tag] من تلسكوب \"كيبلر\". الحيلة الأساسية: أثناء التدريب، تم إخفاء المناطق التي تحتوي على كواكب معروفة واستبدالها باستيفاء ناعم للخلفية — لم يرَ النموذج أبدًا عبورات حقيقية. تعلم فقط التنبؤ بالعد التالي للسطوع، كما يتنبأ نموذج اللغة بالكلمة التالية بناءً على السياق الكامل. عندما يُعطى منحنى حقيقي كمدخل، يصبح الفرق بين التنبؤ والمراقبة خريطة للشذوذ. [callout]ينبض النجم بإيقاع تحدده الحمل الحراري والدوران والدورات المغناطيسية. يلتقط ExoVeil هذا اللحن، ويبدو العبور كنوتة نشاز، تبرز على الفور على خلفية السيمفونية.[/callout]\n\nعلى البقايا الناتجة، يعمل مرشح متطابق — كاشف يزن كل انحراف بعكس تباين الضجيج. الأجزاء الهادئة من المنحنى، حيث يكون النجم \"صامتًا\"، تحصل على وزن أكبر، بينما الأجزاء المضطربة تحصل على وزن أقل. توصف هذه الحيلة الرياضية بصيغة بسيطة لنسبة الإشارة إلى الضجيج:\n\n\\[ \\text{SNR} = \\frac{\\sum_i (r_i \\cdot m_i) / \\sigma_i^2}{\\sqrt{\\sum_i m_i^2 / \\sigma_i^2}} \\]\n\nحيث \\(r_i\\) بقايا التنبؤ، و\\(m_i\\) قالب العبور، و\\(\\sigma_i^2\\) التباين المحلي. بفضل هذا النهج، يستعيد النظام 32% من العبورات المفردة بعمق لا يتجاوز 1000 جزء في المليون — دون الحاجة إلى الطي الطوري الذي تتطلبه الطرق التقليدية. ثم يقوم مصنف قائم على XGBoost بغربلة الإنذارات الكاذبة، مثل الثنائيات الكسوفية مع [tag:white_dwarf]الأقزام البيضاء[/tag]، بينما يعطي التنبؤ المطابق ضمانات رسمية لترتيب المرشحين. [callout]تم تدريب ExoVeil حصريًا على بيانات \"كيبلر\"، لكنه عمل فورًا على صور TESS — تلسكوب ببصريات ونظام ضجيج مختلفين. هذا يبشر بأن كل مهمة جديدة لن تتطلب البدء من الصفر.[/callout]\n\nأسفر البحث الأعمى على 3,737 نجمًا من \"كيبلر\" عن 179 شذوذًا شبيهًا بالعبور غير مدرجة في كتالوج DR25. أكد النقل إلى بيانات TESS دون إعادة تدريب قوة الطريقة: تم اكتشاف جميع الكواكب الـ 47 المعروفة في حقل PLATO LOPS2، بما في ذلك الطويلة الأمد والصغيرة. تُظهر محاكاة إيقاع مهمة PLATO المستقبلية بتعريضات مدتها 25 ثانية أن الحساسية سترتفع إلى 100 جزء في المليون — قريبة من المقاييس الأرضية. يُحدد عمق العبور بصيغة أنيقة أخرى:\n\n\\[ \\delta = \\left(\\frac{R_p}{R_s}\\right)^2 \\]\n\nالتي تُظهر أن كوكبًا بحجم الأرض يحجب فقط 0.008% من ضوء نجم [tag:sun]شبيه بالشمس[/tag]. يتعلم ExoVeill تمييز هذه الظلال الضئيلة، مما يضاعف فعليًا وقت المراقبة المتاح للتحليل ويفتح الطريق للبحث عن نظائر الأرض في [tag:galaxy]مجرتنا[/tag]. وإذا رصد تلسكوب PLATO يومًا ما تعتيمًا واحدًا عابرًا، فسيتمكن ExoVeil ليس فقط من ملاحظته، بل من افتراض: \"هذا كوكب بحجم الأرض، وسنته تدوم 365 يومًا\".\n\nيكمن مستقبل الطريقة في الاندماج مع محاكيات PLATO. ستسمح بنى أخف مثل Mamba بمعالجة المنحنيات الكاملة دون بتر. سيجعل الفرز التلقائي للإنذارات الكاذبة البحث روتينيًا. سيتطلب تأكيد المرشحين قياس السرعات الشعاعية باستخدام تأثير [scientist:Christian Doppler]دوبلر[/scientist] و[tag:spectroscopy]التحليل الطيفي[/tag] اللاحق للأغلفة الجوية، حيث توصف خطوط الامتصاص بصيغة [scientist:Johannes Rydberg]ريدبيرغ[/scientist]. على المدى البعيد، ستصبح هذه الكواكب أهدافًا للبحث عن المؤشرات الحيوية — [tag:water]الماء[/tag]، و[tag:methane]الميثان[/tag]، و[tag:carbon_dioxide]ثاني أكسيد الكربون[/tag]. لا يبحث ExoVeil عن العوالم فحسب؛ بل يعلمنا قراءة لغة النجوم، لنعثر يومًا ما على نص تظهر فيه بين الرموز المألوفة كلمة \"حياة\".",
+      "fun_fact": "أظهرت النسخة الأولى من الكاشف، القائمة على قواعد يدوية، AUC 0.36 — نتيجة أسوأ من التخمين العشوائي (0.5). كانت بقايا الثنائيات الكسوفية أعمق من بقايا الكواكب، فاعتبرها الخوارزم إشارات أكثر موثوقية.",
+      "scifi": "",
+      "threads": "العبور الوحيد لكوكب خارجي يشبه حرفًا مفقودًا في كتاب طويل. يتعلم ExoVeil قواعد الضوء النجمي، ملاحظًا أدق \"الأخطاء المطبعية\" على منحنيات الضوء. ينبض النجم كالقلب، وحتى الاضطراب الطفيف في الإيقاع يكشف عن كوكب غير مرئي. بفضل هذا النهج، ستتمكن مهمة PLATO من إيجاد توائم الأرض، حتى لو ظهرت للحظة واحدة فقط أمام شمسها. نبدأ في قراءة لغة المجرة.",
+      "formulas": [
+        {
+          "latex": "\\delta = \\left(\\frac{R_p}{R_s}\\right)^2",
+          "meaning": "عمق العبور — جزء الضوء المحجوب بواسطة الكوكب — يعطى بنسبة مربعي نصف القطر. يحجب المشتري 1% من مساحة قرص الشمس، بينما تحجب الأرض 0.008% فقط."
+        },
+        {
+          "latex": "\\text{SNR} = \\frac{\\sum_i (r_i \\cdot m_i) / \\sigma_i^2}{\\sqrt{\\sum_i m_i^2 / \\sigma_i^2}}",
+          "meaning": "يقوم المرشح المتطابق بوزن بقايا التنبؤ r_i مع قالب العبور m_i وعكس تباين الضجيج. تحصل الأجزاء الهادئة من منحنى الضوء على وزن أكبر، مما يرفع الحساسية."
+        }
+      ],
+      "main_tag": "exoplanet",
+      "extra_tags": [
+        "transit_method",
+        "photometry",
+        "spectroscopy",
+        "sun",
+        "red_dwarf",
+        "white_dwarf",
+        "galaxy",
+        "water",
+        "methane",
+        "carbon_dioxide"
+      ],
+      "scientists": [
+        "Christian Doppler",
+        "Johannes Rydberg"
+      ]
     }
   },
   "simple": {
@@ -241,6 +287,32 @@
       "description": "Los astrónomos están acostumbrados a esperar múltiples tránsitos de un planeta por el disco estelar. ExoVeil actúa de manera diferente: como un observador que conoce el brillo de una farola, el sistema detecta cualquier atenuación fugaz. El algoritmo ya ha pescado mundos desconocidos del archivo de Kepler y ha confirmado todos los planetas en una zona de prueba de TESS. Esto abre el camino para buscar planetas lejanos similares a la Tierra que rara vez parpadean sobre el fondo estelar.",
       "text": "Una farola brilla cada noche y te acostumbras a su luminosidad. Si algo oculta la lámpara por un instante, la sombra se nota enseguida. Por el mismo principio funciona ExoVeil, un nuevo método para buscar [tag:exoplanet]planetas alrededor de otras estrellas[/tag]. Antes los astrónomos esperaban múltiples tránsitos, pero el sistema capta incluso una sola caída de luz. Estudia de antemano el comportamiento de miles de estrellas, incluidas las [tag:sun]similares al Sol[/tag] y las [tag:red_dwarf]enanas rojas frías[/tag], y luego predice su brillo habitual. Una breve caída en la [tag:photometry]medición[/tag] es candidata a un [tag:transit_method]tránsito planetario[/tag].\n\n[callout]La primera versión fallaba más que lanzar una moneda: confundía los eclipses en sistemas binarios (por ejemplo, con una [tag:white_dwarf]enana blanca[/tag]) con planetas.[/callout]\n\nEl método es especialmente valioso para buscar mundos similares a la Tierra en la [tag:galaxy]Galaxia[/tag]. El futuro telescopio PLATO podrá encontrar planetas en órbitas lejanas. Y la [tag:spectroscopy]espectroscopía[/tag] mostrará si hay [tag:water]agua[/tag], [tag:methane]metano[/tag] o [tag:carbon_dioxide]dióxido de carbono[/tag] en la atmósfera. Los hallazgos se confirman con el desplazamiento del color según el efecto [scientist:Christian Doppler]Doppler[/scientist] y las leyes de [scientist:Johannes Rydberg]Rydberg[/scientist], que revelan la composición química a través de líneas oscuras.",
       "fun_fact": "El sistema se entrenó con datos de 16 499 estrellas, el aforo de un buen estadio.",
+      "scifi": "",
+      "formulas": [],
+      "main_tag": "exoplanet",
+      "extra_tags": [
+        "transit_method",
+        "photometry",
+        "spectroscopy",
+        "sun",
+        "red_dwarf",
+        "white_dwarf",
+        "galaxy",
+        "water",
+        "methane",
+        "carbon_dioxide"
+      ],
+      "scientists": [
+        "Christian Doppler",
+        "Johannes Rydberg"
+      ]
+    },
+    "ar": {
+      "title": "كوكب ومض مرة واحدة – وتم اكتشافه",
+      "oneliner": "نظام ExoVeil يكتشف الكواكب حول النجوم الأخرى من خلال كسوف واحد فقط.",
+      "description": "اعتاد علماء الفلك انتظار عبور الكوكب لقرص النجم مرات متعددة. لكن ExoVeil يتصرف بطريقة مختلفة: مثل مراقب يعرف سطوع مصباح الشارع، يلاحظ النظام أي تعتيم عابر. وقد التقطت الخوارزمية بالفعل عوالم غير معروفة في أرشيف 'كيبلر' وأكدت جميع الكواكب في منطقة الاختبار من TESS. هذا يمهد الطريق للبحث عن كواكب بعيدة شبيهة بالأرض نادراً ما تومض أمام النجوم.",
+      "text": "مصباح الشارع يضيء كل ليلة، وقد اعتدت على سطوعه. إذا حجب شيء ما المصباح للحظة، يُلاحظ الظل فوراً. يعمل ExoVeil بالمبدأ نفسه — طريقة جديدة للبحث عن [tag:exoplanet]كواكب حول نجوم أخرى[/tag]. في السابق، كان علماء الفلك ينتظرون عبورات متعددة، لكن النظام يلتقط حتى انخفاضاً واحداً في الضوء. فهو يدرس مسبقاً سلوك آلاف النجوم، بما فيها [tag:sun]الشبيهة بالشمس[/tag] و[tag:red_dwarf]الباردة الصغيرة[/tag]، ثم يتنبأ بضيائها المعتاد. الانخفاض القصير في [tag:photometry]القياس[/tag] هو مرشح لـ[tag:transit_method]كسوف كوكبي[/tag].\n\n[callout]النسخة الأولى كانت تخطئ أكثر من رمي العملة: كانت تخلط بين الكسوف في الأنظمة الثنائية (مثلاً، مع [tag:white_dwarf]نواة نجم خامدة[/tag]) والكواكب.[/callout]\n\nالطريقة قيّمة خصوصاً للبحث عن عوالم شبيهة بالأرض في [tag:galaxy]المجرة[/tag]. وسيتمكن تلسكوب PLATO المستقبلي من إيجاد كواكب في مدارات بعيدة. أما [tag:spectroscopy]تحليل الضوء[/tag] فسيُظهر ما إذا كان هناك [tag:water]ماء[/tag] أو [tag:methane]ميثان[/tag] أو [tag:carbon_dioxide]ثاني أكسيد الكربون[/tag] في الغلاف الجوي. وتُؤكَّد الاكتشافات بواسطة إزاحة اللون وفقاً لـ[scientist:Christian Doppler]دوبلر[/scientist] وقوانين [scientist:Johannes Rydberg]ريدبرغ[/scientist] — فهي تكشف التركيب الكيميائي من خلال الخطوط المظلمة.",
+      "fun_fact": "تدرب النظام على بيانات 16,499 نجماً — وهو عدد المتفرجين الذي يتسع له ملعب جيد.",
       "scifi": "",
       "formulas": [],
       "main_tag": "exoplanet",
@@ -364,6 +436,46 @@
         "Nuevos candidatos en búsqueda ciega": "179",
         "Recuperación de planetas TESS (LOPS2)": "100% (47/47)",
         "Profundidad de detección con cadencia PLATO": "100 ppm"
+      },
+      "main_tag": "exoplanet",
+      "extra_tags": [
+        "transit_method",
+        "photometry",
+        "spectroscopy",
+        "sun",
+        "red_dwarf",
+        "white_dwarf",
+        "galaxy",
+        "water",
+        "methane",
+        "carbon_dioxide"
+      ],
+      "scientists": [
+        "Christian Doppler",
+        "Johannes Rydberg"
+      ]
+    },
+    "ar": {
+      "title": "إكسوفيل: كيف يكشف ظل عبور واحد عن الكواكب الخارجية",
+      "oneliner": "نظام إكسوفيل القائم على التعلم الآلي يكتشف الكواكب الخارجية من خلال عبور واحد فقط، عن طريق التنبؤ بالسطوع الطبيعي للنجم وتحديد الشذوذ.",
+      "description": "لاكتشاف العوالم البعيدة، ينتظر علماء الفلك عادة مرور الكوكب عدة مرات عبر قرص النجم. لكن نظام إكسوفيل، باستخدام بنية المحول (Transformer) والتعلم الذاتي الإشراف على 16,499 منحنى ضوئي من مهمة كبلر، تعلم التعرف حتى على العبورات الفردية. أسفر البحث الأعمى عن 179 مرشحًا جديدًا في بيانات كبلر، بينما وجد النظام جميع الكواكب المؤكدة البالغ عددها 47 في بيانات TESS دون إعادة تدريب. يمهد هذا الأسلوب الطريق لاكتشاف كواكب مشابهة للأرض في المهام القادمة مثل PLATO، حيث سيكون العبور العميق نادرًا.",
+      "context": "تتطلب الخوارزميات الكلاسيكية للبحث عن [tag:transit_method]العبور[/tag] للكواكب [tag:exoplanet]الخارجية[/tag] معرفة الفترة الزمنية وإشارة الطور المتراكمة. إذا عبر الكوكب القرص مرة واحدة فقط خلال فترة المراقبة — وهو أمر شائع بالنسبة للكواكب الشبيهة بالأرض ذات الفترات الطويلة — فإن هذه الأساليب تكون عاجزة. تتركز اهتمامات مهمة PLATO والأبحاث المستقبلية autour القابلية للسكن على مثل هذه الأجسام تحديدًا. يغير إكسوفيل النموذج: فبدلاً من تصنيف الإشارات المعروفة، يتعلم النظام التنبؤ بسطوع النجم ويتفاعل مع أي انحرافات منتظمة، تمامًا مثل كاشف الشذوذ.",
+      "methods": "يعتمد إكسوفيل على شبكة عصبية محولة (6 طبقات، 8 رؤوس انتباه)، مدربة على التنبؤ بالقياس التالي لسطوع النجم بناءً على التاريخ السابق بأكمله. لجعل العبورات شاذة إلى أقصى حد، تم إخفاء المناطق التي تحتوي على كواكب معروفة أثناء التدريب واستبدالها بخلفية مقحمة — لم تشاهد النموذج أبدًا عبورات حقيقية. بعد التدريب على منحنيات [tag:photometry]القياس الضوئي[/tag] لـ 16,499 نجمًا، بما في ذلك النجوم [tag:sun]الشبيهة بالشمس[/tag] والنجوم [tag:red_dwarf]الأقزام الحمراء[/tag]، يحسب النموذج البقايا، ثم يُطبق مرشح متوافق مع أوزان عكسية لتباين التنبؤ، مما يزيد الحساسية في المناطق الهادئة ويقلل الضوضاء. يتم استبعاد الإنذارات الكاذبة، مثل النجوم الثنائية الكسوفية مع [tag:white_dwarf]الأقزام البيضاء[/tag]، بواسطة مصنف XGBoost باستخدام 21 ميزة، بينما يوفر التنبؤ المطابق ضمانات تغطية رسمية لترتيب المرشحين.",
+      "results": "أسفر البحث الأعمى بين 3,737 نجمًا من كبلر عن 179 شذوذًا يشبه العبور، غير مدرجة في كتالوج DR25؛ غير أن التحليل البصري أظهر أن بعضها ناتج عن تبريد ما بعد التوهج، وأخطاء تتبع الدوران، وتأثيرات الحواف. في اختبار مع إدراج عبورات فردية، استعاد إكسوفيل 32% من الأحداث عند عمق 1000 جزء في المليون — بينما لا تستطيع المصنفات التقليدية العمل على الإطلاق دون طي الطور. عند النقل إلى بيانات TESS دون إعادة تدريب، اكتشف النظام جميع الكواكب المؤكدة البالغ عددها 47 في حقل PLATO LOPS2، بما في ذلك الكواكب الطويلة الفترة والصغيرة. أظهرت محاكاة إيقاع PLATO (تعريضات مدتها 25 ثانية) أن الحساسية تصل إلى 100 جزء في المليون، مقتربة من نظام نظائر الأرض. ومع ذلك، تتطلب كل هذه النتائج التحقق من خلال [tag:spectroscopy]التحليل الطيفي[/tag] اللاحق.",
+      "implications": "يكسر النهج الجديد الحاجز بين الكشف والتصنيف. وهو ذو قيمة خاصة للبحث عن الكواكب الطويلة الفترة التي لا يمكن العثور عليها بالطرق التقليدية، ويضاعف فعليًا نافذة المراقبة المتاحة للتحليل. يدخل البحث عن الكواكب في [tag:galaxy]مجرتنا[/tag] عصرًا جديدًا. علاوة على ذلك، تتيح الضمانات الرسمية للتنبؤ المطابق توزيع وقت التلسكوب الباهظ الثمن بشكل أكثر كفاءة للتأكيد. في المستقبل، مع تطور التحليل الطيفي للغلاف الجوي، استنادًا إلى قوانين [scientist:Johannes Rydberg]ريدبرج[/scientist]، يمكن أن يصبح هؤلاء المرشحون أهدافًا للبحث عن المؤشرات الحيوية — مثل [tag:water]الماء[/tag] و[tag:methane]الميثان[/tag] و[tag:carbon_dioxide]ثاني أكسيد الكربون[/tag] — في أغلفتهم الجوية.",
+      "future_development": "سيتطور الأسلوب في عدة اتجاهات: تحسين الحساسية من خلال بنيات أخف (مثل Mamba بدلاً من المحول) لمعالجة منحنيات الضوء الكاملة؛ التكامل مع محاكاة PLATO لتقييم دقيق للفعالية في نظام نظائر الأرض؛ وإنشاء أنظمة هجينة تجمع بين التنبؤ والتصنيف. وستكون خطوة مهمة هي التعرف التلقائي على فئات الإنذارات الكاذبة المحددة واستبعادها.",
+      "impact_on": "سيؤثر الأسلوب مباشرة على تصميم خطوط معالجة البيانات للمهام المستقبلية (PLATO، ARIEL)، واستراتيجية المتابعة الأرضية، وتوزيع وقت المراقبة.",
+      "next_steps": "تشمل الخطوات التالية التحقق من صحة البيانات المحاكية لـ PLATO (PlatoSim)، وإضافة مرشحات للرفض التلقائي للإنذارات الكاذبة، وتأكيد المرشحين من خلال السرعات الشعاعية باستخدام مبدأ [scientist:Christian Doppler]دوبلر[/scientist].",
+      "key_problems_connection": "ترتبط النتائج مباشرة بالمشكلة المركزية في الفيزياء الفلكية الحديثة — البحث عن عوالم قابلة للسكن وفهم تواتر نشوء الحياة في الكون.",
+      "fun_fact": "حقيقة ممتعة: النسخة الأولى من الكاشف، المبنية على قواعد يدوية، أعطت AUC يساوي 0.36 — أسوأ من التخمين العشوائي (0.5). اتضح أن بقايا النجوم الثنائية الكسوفية أعمق من بقايا الكواكب، وقد اعتبرها النظام إشارات 'أكثر موثوقية'.",
+      "scifi": "",
+      "formulas": [],
+      "key_numbers": {
+        "عدد النجوم المستخدمة في التدريب من كبلر": "16,499",
+        "استعادة العبورات الفردية (1000 جزء في المليون)": "32%",
+        "المرشحون الجدد في البحث الأعمى": "179",
+        "استعادة كواكب TESS (LOPS2)": "100% (47/47)",
+        "عمق الكشف عند إيقاع PLATO": "100 جزء في المليون"
       },
       "main_tag": "exoplanet",
       "extra_tags": [

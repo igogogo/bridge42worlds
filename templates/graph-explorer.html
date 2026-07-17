@@ -22,9 +22,8 @@
             <a href="/lang/$lang/scientists/">scientists</a>
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/" class="active">graph</a>
-            <a href="/lang/$authors_lang/theory/">theory</a>
+            <a href="/lang/$lang/theory/">theory</a>
             <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
-            <a href="/lang/$lang/about.html">about</a>
         </div>
         $version_toggle_html
     </div>
@@ -63,23 +62,23 @@
         <label><input type="checkbox" class="kg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> $scientists_label</label>
         <span class="kg-sep"></span>
         <strong>$edges_label</strong>
-        <label><input type="checkbox" class="kg-edge" value="tag-tag"> тег↔тег</label>
-        <label><input type="checkbox" class="kg-edge" value="law-law"> закон↔закон</label>
-        <label><input type="checkbox" class="kg-edge" value="sci-sci"> учёный↔учёный</label>
-        <label><input type="checkbox" class="kg-edge" value="law-tag" checked> закон↔тег</label>
-        <label><input type="checkbox" class="kg-edge" value="sci-tag" checked> учёный↔тег</label>
-        <label><input type="checkbox" class="kg-edge" value="law-sci" checked> закон↔учёный</label>
-        <label><input type="checkbox" class="kg-edge" value="law-influence" checked> закон↔влияние</label>
+        <label><input type="checkbox" class="kg-edge" value="tag-tag"> $edge_tag_tag</label>
+        <label><input type="checkbox" class="kg-edge" value="law-law"> $edge_law_law</label>
+        <label><input type="checkbox" class="kg-edge" value="sci-sci"> $edge_sci_sci</label>
+        <label><input type="checkbox" class="kg-edge" value="law-tag" checked> $edge_tag_law</label>
+        <label><input type="checkbox" class="kg-edge" value="sci-tag" checked> $edge_tag_sci</label>
+        <label><input type="checkbox" class="kg-edge" value="law-sci" checked> $edge_law_sci</label>
+        <label><input type="checkbox" class="kg-edge" value="law-influence" checked> $edge_law_influence</label>
     </div>
     <div class="kg-row"><strong>$presets_label</strong>
-        <button type="button" onclick="kgPreset('core')">каркас</button>
-        <button type="button" onclick="kgPreset('all')">всё</button>
-        <button type="button" onclick="kgPreset('tag-sci')">тег↔учёный</button>
-        <button type="button" onclick="kgPreset('law-sci')">закон↔учёный</button>
-        <button type="button" onclick="kgPreset('law-tag')">закон↔тег</button>
-        <button type="button" onclick="kgPreset('tags')">теги</button>
-        <button type="button" onclick="kgPreset('laws')">законы</button>
-        <button type="button" onclick="kgPreset('sci')">учёные</button>
+        <button type="button" onclick="kgPreset('core')">$preset_core</button>
+        <button type="button" onclick="kgPreset('all')">$preset_all</button>
+        <button type="button" onclick="kgPreset('tag-sci')">$edge_tag_sci</button>
+        <button type="button" onclick="kgPreset('law-sci')">$edge_law_sci</button>
+        <button type="button" onclick="kgPreset('law-tag')">$edge_tag_law</button>
+        <button type="button" onclick="kgPreset('tags')">$tags_label</button>
+        <button type="button" onclick="kgPreset('laws')">$laws_label</button>
+        <button type="button" onclick="kgPreset('sci')">$scientists_label</button>
     </div>
 </div>
 

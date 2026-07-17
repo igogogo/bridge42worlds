@@ -128,7 +128,7 @@ h1{
   color:var(--ink-soft); font-size:1.15rem; line-height:1.5;
   max-width:46ch; margin:0;
 }
-.hero-diagram{ width:100%; margin-top:8px; }
+.hero-diagram{ width:100%; max-width:680px; margin-top:8px; }
 .hero-diagram svg{ width:100%; height:auto; display:block; overflow:visible; }
 @media (prefers-reduced-motion: no-preference){
   .hero-heat{ animation: heroHeatFlow 6s cubic-bezier(.4,0,.6,1) infinite; }
@@ -264,14 +264,14 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <a href="/lang/ru/authors/">authors</a>
 <a href="/lang/ar/graph/">graph</a>
 <a class="active" href="/lang/ar/theory/">theory</a>
-<a href="/lang/ar/favorites.html" title="Избранное">★</a>
+<a href="/lang/ar/favorites.html" title="المفضلة">★</a>
 <a href="/lang/ar/about.html">about</a>
 </div>
 </div>
 </div>
 <div class="langs" id="langs-bar"></div>
 <div class="page">
-<nav aria-label="Содержание" class="toc">
+<nav aria-label="المحتويات" class="toc">
 <p class="toc-title">المحتويات</p>
 <ol>
 <li><a href="#s1"><span class="n">01</span>أربعة مبادئ في كلمتين</a></li>
@@ -295,11 +295,11 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div aria-hidden="true" class="hero-diagram">
 <svg viewbox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="30" y="80"></rect>
-<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ горячо</text>
+<text fill="var(--brass)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="90" y="130">T₁ ساخن</text>
 <rect fill="none" height="90" rx="4" stroke="var(--ink)" stroke-width="2" width="120" x="270" y="80"></rect>
-<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ холодно</text>
+<text fill="var(--steel)" font-family="Futura, sans-serif" font-size="16" text-anchor="middle" x="330" y="130">T₂ بارد</text>
 <circle class="hero-heat" cx="165" cy="125" fill="var(--brass-fill)" r="8"></circle>
-<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">тепло течёт от горячего к холодному, не наоборот</text>
+<text fill="var(--moss)" font-family="Futura, sans-serif" font-size="14" text-anchor="middle" x="210" y="230">الحرارة تسري من الساخن إلى البارد، لا العكس</text>
 </svg>
 </div>
 </header>
@@ -308,8 +308,8 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>الديناميكا الحرارية هي فرع نادر في الفيزياء يتضمن قانونا «رقم صفر»: المبدأ الأساسي الذي يفسر درجة الحرارة نفسها، تم إدراكه بعد المبدأين الأول والثاني وأُعطي رقما بأثر رجعي. المبادئ أربعة: المبدأ الصفري يحدد درجة الحرارة، الأول — حفظ الطاقة بالنسبة للحرارة والشغل، الثاني — لماذا العمليات غير قابلة للانعكاس والأنتروبيا تتزايد، الثالث — لماذا الصفر المطلق لا يمكن بلوغه. معا، يتحكمون في كل شيء — من فنجان القهوة إلى تطور النجوم.</p>
 </div>
 <div class="theory-img-pair">
-<figure><img alt="Пар над кофе: энтропия рассеивает порядок" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>البخار فوق القهوة: الأنتروبيا تبدد النظام</figcaption></figure>
-<figure><img alt="Поршень парового двигателя: тепло превращается в работу" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>مكبس المحرك البخاري: الحرارة تتحول إلى شغل</figcaption></figure>
+<figure><img alt="البخار فوق القهوة: الإنتروبيا تبدد النظام" src="/lang/ru/theory/img/thermodynamics_hero.jpg"/><figcaption>البخار فوق القهوة: الأنتروبيا تبدد النظام</figcaption></figure>
+<figure><img alt="مكبس محرك بخاري: الحرارة تتحول إلى شغل" src="/lang/ru/theory/img/thermodynamics_concept.jpg"/><figcaption>مكبس المحرك البخاري: الحرارة تتحول إلى شغل</figcaption></figure>
 </div>
 <section id="s1">
 <div class="sec-head"><span class="sec-num">§1</span><h2>أربعة مبادئ في كلمتين</h2></div>
@@ -415,7 +415,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <p>لنفرض أنه من الخزان الساخن أضيفت Q<sub>h</sub> = 1000 جول من الحرارة. <strong>القانون الأول</strong> (الطاقة لا تفنى) يقول إن كل هذه الطاقة ستتوزع بين الشغل المفيد W والحرارة Q<sub>c</sub> المطروحة في الخزان البارد:</p>
 <div class="eq"><div class="eq-body">W = η·Q<sub>h</sub> = 0.5·1000 = <strong>500 جول</strong>,    Q<sub>c</sub> = Q<sub>h</sub> − W = <strong>500 جول</strong></div><div class="eq-tag">(3)</div></div>
 <figure>
-<img alt="Столбчатая диаграмма энергетического баланса теплового двигателя: подведено 1000 Дж, полезная работа 500 Дж, сброшено 500 Дж" src="/lang/ru/theory/thermo_engine_balance.png"/>
+<img alt="رسم بياني شريطي لتوازن طاقة محرك حراري: المدخل 1000 جول، الشغل المفيد 500 جول، المطروح 500 جول" src="/lang/ru/theory/thermo_engine_balance.png"/>
 <figcaption><span class="fign">الشكل 1</span>القانون الأول: مجموع W و Q<sub>c</sub> يساوي تماما Q<sub>h</sub> — الطاقة لم تضِع، لكنها لم تتحول كلها إلى شغل (حظر القانون الثاني). حتى المحرك المثالي (دورة كارنو) بين درجتي الحرارة هاتين لا يمكنه إنتاج أكثر من 500 جول من الشغل المفيد من أصل 1000 جول من الحرارة.</figcaption>
 </figure>
 <p>لا يمكن لأي محرك حقيقي بين درجتي الحرارة هاتين أن يتجاوز هذه الـ 500 جول — دورة كارنو تعطي السقف النظري للكفاءة، والاحتكاك وعدم الانعكاس في العمليات الحقيقية لا تؤدي إلا إلى خفض الناتج تحت هذا السقف، دون أن ترفعه أبدا.</p>
@@ -427,7 +427,7 @@ figcaption .fign{ font-family:var(--font-mono); color:var(--ink); margin-right:.
 <div class="measure">
 <p>القانون الثاني هو ربما القانون الوحيد في الفيزياء الأساسية الذي يميز بين الماضي والمستقبل. معادلات نيوتن وماكسويل وحتى شرودنجر متناظرة تماما مع الزمن: إذا صورت اصطدام كرات البلياردو بالفيديو وأعدت تشغيله بالعكس، فلن تجد قوانين الميكانيكا أي انتهاك. لكن فيديو كوب ينكسر، إذا شغل بالعكس (الشظايا تتجمع من تلقاء نفسها لتعود كوبا كاملا)، يبدو سخيفا — والقانون الوحيد في الفيزياء الذي «يلاحظ» هذا هو القانون الثاني.</p>
 <figure>
-<img alt="График энтропии S(T), стремящейся к нулю при T, стремящемся к нулю" src="/lang/ru/theory/thermo_entropy_zero.png"/>
+<img alt="رسم بياني للإنتروبيا S(T) تؤول إلى صفر عندما تؤول T إلى صفر" src="/lang/ru/theory/thermo_entropy_zero.png"/>
 <figcaption><span class="fign">الشكل 2</span>أنتروبيا البلورة المثالية تزداد مع درجة الحرارة وتؤول إلى الصفر عند T → 0 (المبدأ الثالث) — مجرد إمكانية رسم هذا المنحنى والحديث عن «ازدياد» الأنتروبيا مع الزمن هو مصدر التمييز بين الماضي والمستقبل في الفيزياء.</figcaption>
 </figure>
 <div class="callout steel">

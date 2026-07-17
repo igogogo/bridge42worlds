@@ -38,6 +38,11 @@
       "popular": "Los científicos aplicaron un autoencoder cuántico para buscar tumores en resonancias magnéticas cerebrales. Primero, el circuito cuántico aprende a comprimir las áreas sanas de las imágenes y luego marca como anomalía todo lo que se resiste a la compresión. El método alcanzó una alta precisión (alrededor de 0,95 ROC-AUC a nivel de cortes), superando a sus análogos clásicos. Lo más curioso: el papel clave no lo desempeña el decodificador, sino la compresión estructurada en el codificador, casi como un archivista experimentado que separa sin error los documentos comunes de los inusuales.",
       "simple": "Imagina que el cerebro es una esponja y un tumor es un bulto duro. El autoencoder cuántico aprende a comprimir las áreas sanas, como el agua de la esponja, pero el bulto no se comprime y llama la atención de inmediato. En las pruebas, este método encontró tumores sin errores y los resaltó visualmente.",
       "advanced": "Se investigó un autoencoder cuántico (QAE) para la detección de anomalías en resonancias magnéticas cerebrales basado en compresión. Los parches de imágenes se convierten en estados cuánticos mediante codificación angular, tras lo cual la arquitectura variacional 'codificador-decodificador' se entrena para descartar información utilizando cúbits auxiliares 'basura'. El grado de resistencia a la compresión sirve como medida de anomalía: cuanto peor es la compresión, mayor es la probabilidad de patología. En datos públicos, el método mostró un AUC ROC de alrededor de 0,95 a nivel de imágenes completas y de alrededor de 0,813 a nivel de parches, superando al autoencoder clásico y al PCA. El análisis de parámetros reveló una asimetría entre el codificador y el decodificador: la detección efectiva surge gracias a la compresión estructurada en el codificador, y no por la complejidad del decodificador. Esto proporciona un equilibrio controlable entre compresión y reconstrucción, con un régimen de trabajo claro que simplifica la elección del umbral. Cualitativamente, los mapas de calor de anomalías localizan las regiones tumorales. Los resultados muestran que este enfoque ofrece una herramienta interpretable y manejable para la búsqueda de anomalías, prometedora para el diagnóstico médico."
+    },
+    "ar": {
+      "popular": "استخدم العلماء المشفر التلقائي الكمومي للكشف عن الأورام في صور الرنين المغناطيسي للدماغ. في البداية، تتعلم الدائرة الكمومية ضغط الأجزاء السليمة من الصور، ثم تصنف أي شيء يقاوم الضغط على أنه شذوذ. حققت الطريقة دقة عالية (حوالي 0.95 لمؤشر ROC-AUC على مستوى الشرائح)، متجاوزةً النظائر الكلاسيكية. الأكثر إثارة للاهتمام: أن الدور الرئيسي لا يلعبه مفكك التشفير، بل الضغط المنظم في المشفر — تقريبًا مثل أمين أرشيف خبير يفصل بدقة الوثائق النمطية عن غير العادية.",
+      "simple": "تخيل أن الدماغ مثل الإسفنجة، والورم كتلة صلبة. يتعلم المشفر التلقائي الكمومي ضغط الأجزاء السليمة، مثل عصر الماء من الإسفنجة، بينما الكتلة الصلبة لا تنضغط وتلفت الانتباه فورًا. في الاختبارات، كانت هذه الطريقة تكتشف الأورام بدقة وتسلط الضوء عليها بوضوح.",
+      "advanced": "تم دراسة المشفر التلقائي الكمومي (QAE) للكشف عن الشذوذ في صور الرنين المغناطيسي للدماغ بناءً على الضغط. يتم تحويل بقع الصور إلى حالات كمومية عبر الترميز الزاوي، ثم تتعلم البنية المتغيرة \"المشفر-مفكك التشفير\" التخلص من المعلومات باستخدام كيوبتات \"قمامة\" مساعدة. درجة مقاومة الضغط تُستخدم كمقياس للشذوذ: كلما كان الضغط أسوأ، زاد احتمال وجود مرض. على البيانات المتاحة للعامة، حققت الطريقة AUC ROC حوالي 0.95 على مستوى الصور الكاملة، وحوالي 0.813 على مستوى البقع، متفوقةً على المشفر التلقائي الكلاسيكي وتحليل المكونات الرئيسية (PCA). كشف تحليل المعاملات عن عدم تناظر بين المشفر ومفكك التشفير: أن الكشف الفعّال ينشأ بفضل الضغط المنظم في المشفر، وليس بسبب تعقيد مفكك التشفير. يضمن ذلك توازنًا محكومًا بين الضغط وإعادة البناء، مع وضع تشغيل واضح، مما يسهل اختيار الحد الفاصل. من الناحية النوعية، تحدد خرائط الحرارة للشذوذ مناطق الورم. تُظهر النتائج أن هذا النهج يوفر أداة قابلة للتفسير والتحكم للكشف عن الشذوذ، واعدة للتشخيص الطبي."
     }
   },
   "thumbs": 5,
@@ -68,6 +73,13 @@
       "Fig. 3. Circuito QAE utilizado en este estudio. Producido con PennyLane [57] como salida de la ejecución del código.",
       "Se representa la pérdida de descarte (objetivo de compresión) frente a la pérdida de reconstrucción (infidelidad) a lo largo de",
       "Pérdida de entrenamiento (descarte) y pérdida de reconstrucción frente a la infidelidad para el QAE."
+    ],
+    "ar": [
+      "الهيكل العام لـ (أ) مرمّز تلقائي كلاسيكي و(ب) مرمّز تلقائي كمومي",
+      "عينة صورة DICOM لدماغ ورمي",
+      "شكل 3. دارة المُرمِّز التلقائي الكمومي المستخدمة في هذه الدراسة. أُنشِئت باستخدام PennyLane [57] كمُخرَج لتشغيل الكود.",
+      "يُخطط خسارة المهملات (هدف الضغط) مقابل خسارة إعادة البناء (عدم الإخلاص) عبر",
+      "خسارة التدريب (المهملات) وخسارة إعادة البناء مقابل عدم الإخلاص لـلمُرمِّز التلقائي الكمومي."
     ]
   },
   "popular": {
@@ -148,6 +160,32 @@
       "key_problems_connection": "",
       "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
       "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "حاليًا، لا تتوفر إلا نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك طلب عليها، سنعد النسخة الكاملة أولاً.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "طباخ لا يعد سوى الأطباق المألوفة: إذا تعذر ضغط الوصفة إلى جوهرها المعتاد، فهناك خطب ما. المُشَفِّر التلقائي الكمومي يفعل الأمر نفسه مع صور الدماغ. فالورم لا يسمح بضغطه — فيُطلق البرنامج إنذارًا، ويرسم خريطة دقيقة للمشكلة.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "حاليًا، لا تتوفر إلا نسخة سريعة ومبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك طلب عليها، سنعد النسخة الكاملة أولاً.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "طباخ لا يعد سوى الأطباق المألوفة: إذا تعذر ضغط الوصفة إلى جوهرها المعتاد، فهناك خطب ما. المُشَفِّر التلقائي الكمومي يفعل الأمر نفسه مع صور الدماغ. فالورم لا يسمح بضغطه — فيُطلق البرنامج إنذارًا، ويرسم خريطة دقيقة للمشكلة.",
+      "express_locked": true
     }
   },
   "simple": {
@@ -189,6 +227,21 @@
       "fun_fact": "Para funcionar, el programa solo necesitó 4 cúbits: es como preparar una cena de gala en una cocina de juguete.",
       "scifi": "Los escáneres médicos de «Star Trek» detectaban enfermedades al instante: los primeros pasos hacia ese futuro nacen en los laboratorios cuánticos.",
       "mini": "Un cocinero que solo prepara platos conocidos: si la receta no se comprime a su esencia habitual, algo va mal. El autoencoder cuántico hace lo mismo con las imágenes cerebrales. El tumor no se deja comprimir y el programa da la alarma, dibujando un mapa preciso del problema.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": []
+    },
+    "ar": {
+      "title": "الضاغط الكمومي: طريقة جديدة لاكتشاف أورام الدماغ",
+      "oneliner": "الضاغط الكمومي يتعلم ضغط صور الرنين المغناطيسي ويكتشف التشوهات حيث يفشل الضغط.",
+      "description": "ابتكر العلماء خوارزمية كمومية تضغط صور الدماغ السليم دون فقدان تقريبًا. لكن الورم يُفشل الضغط، فلا يكتشف البرنامج الداء فحسب، بل يُسلط الضوء على المنطقة المصابة أيضًا. دقة أعلى من الطرق التقليدية — خطوة أخرى نحو مساعدين موثوقين للأطباء.",
+      "text": "يمضي الطباخ سنوات في صقل مهارة اختزال الوصفة إلى ثلاثة أو أربعة عناصر جوهرية، ثم يعيد إعداد الطبق منها. إذا كان المزيج مألوفًا، يحصل على الوجبة المتوقعة. أما المكون الغريب فيُعطل الانضغاط، وتكون النتيجة شيئًا غير مفهوم. الضاغط الكمومي يفعل الشيء نفسه مع الصور الطبية. فهو يُجزئ الصورة إلى قصاصات صغيرة، ويُحولها إلى شيفرة مجردة، ويتدرب على عينات سليمة، خافضًا [tag:entropy]الإنتروبيا[/tag] — أي المخلفات المعلوماتية. تعتمد الصور على إشارات ضعيفة من ذرات [tag:hydrogen]الهيدروجين[/tag].\n\nبعد التدريب، تحزم الخوارزمية الأنسجة الطبيعية وتفك حزمها بسهولة. يتصرف الورم مثل مكون غير مدعو: يُصدر الضغط خطأً كبيرًا يمكن قياسه. على شرائح كاملة، بلغت الدقة 95% — أفضل من الضواغط التقليدية والتحليل الإحصائي البسيط.\n\n[callout]الأكثر إدهاشًا: الطريقة لا تكتفي بالتشخيص، بل ترسم خريطة للمناطق المريبة — فلا يحتاج الطبيب أن يخمن أين ينظر.[/callout]",
+      "fun_fact": "لعمل البرنامج، استغرق الأمر 4 كيوبتات فقط — وهذا يشبه إعداد وليمة عشاء على موقد لعبة.",
+      "scifi": "الماسحات الطبية من «ستار تريك» كانت تجد الأمراض فورًا — الخطوات الأولى نحو هذا المستقبل تولد في المختبرات الكمومية.",
+      "mini": "طباخ لا يُعد إلا الأطباق المألوفة: إذا لم تنضغط الوصفة إلى جوهرها المعتاد — فهناك خطب ما. الضاغط الكمومي يفعل الشيء نفسه مع صور الدماغ. الورم لا يسمح بضغطه — فيُطلق البرنامج إنذارًا، ويرسم خريطة دقيقة للمشكلة.",
       "formulas": [],
       "main_tag": "entropy",
       "extra_tags": [
@@ -274,6 +327,32 @@
       "next_steps": "",
       "key_problems_connection": "",
       "threads": "Повар, который готовит только знакомые блюда: если рецепт не сжимается до привычной сути — в нём что-то не так. Квантовый автоэнкодер делает то же самое со снимками мозга. Опухоль не даёт себя сжать — и программа бьёт тревогу, рисуя точную карту проблемы.",
+      "express_locked": true
+    },
+    "ar": {
+      "title": "النسخة الكاملة قيد الإعداد",
+      "oneliner": "النسخة الكاملة قيد الإعداد",
+      "description": "",
+      "text": "حاليًا تتوفر فقط نسخة سريعة مبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، سنعدّ النسخة الكاملة في أقرب وقت.",
+      "fun_fact": "",
+      "scifi": "",
+      "mini": "طاهٍ لا يعدّ إلا الأطباق المألوفة: إن لم تَنْضَغِط الوصفة إلى جوهرها المألوف، فهذا يعني أن فيها شيئًا غير طبيعي. المُشَفِّر التلقائي الكمّي يفعل الشيء نفسه مع صور الدماغ. الورم يرفض الانضغاط — فيُطلق البرنامج إنذارًا، ويرسم خريطة دقيقة للمشكلة.",
+      "formulas": [],
+      "main_tag": "entropy",
+      "extra_tags": [
+        "hydrogen"
+      ],
+      "scientists": [],
+      "key_numbers": {},
+      "context": "حاليًا تتوفر فقط نسخة سريعة مبسطة من هذه المقالة. أضفها إلى المفضلة — إذا كان هناك اهتمام بها، سنعدّ النسخة الكاملة في أقرب وقت.",
+      "methods": "",
+      "results": "",
+      "implications": "",
+      "future_development": "",
+      "impact_on": "",
+      "next_steps": "",
+      "key_problems_connection": "",
+      "threads": "طاهٍ لا يعدّ إلا الأطباق المألوفة: إن لم تَنْضَغِط الوصفة إلى جوهرها المألوف، فهذا يعني أن فيها شيئًا غير طبيعي. المُشَفِّر التلقائي الكمّي يفعل الشيء نفسه مع صور الدماغ. الورم يرفض الانضغاط — فيُطلق البرنامج إنذارًا، ويرسم خريطة دقيقة للمشكلة.",
       "express_locked": true
     }
   }
