@@ -1971,6 +1971,63 @@ def generate_archive_page(lang):
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
 
 
+def build_connectivity_report_html():
+    """Каждая сущность (тег/закон/учёный) должна иметь ≥1 связь с КАЖДЫМ из двух других типов —
+    иначе она "висит" на графе знаний относительно этого типа, даже если формально не изолирована
+    целиком (юзер-фидбек 2026-07-18: "проверка все теги имеют по крайней мере один закон и одного
+    учёного и так далее для каждой сущности"). Источники истины — те же три файла, что питают
+    build_knowledge_graph.py: data/tags-graph.json, data/laws-graph.json, scientists.json.
+    Тег↔учёный и учёный↔тег проверяются В ОБЕ СТОРОНЫ (tag.scientists ИЛИ scientist.related_tags) —
+    как и в build_knowledge_graph.py — иначе часть связей ложно считается отсутствующей
+    (см. находку 2026-07-18: граф-файлы двух направлений могут расходиться).
+    """
+    tg = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")).get("graph", {}) \
+        if Path("data/tags-graph.json").exists() else {}
+    lg = json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {}) \
+        if Path("data/laws-graph.json").exists() else {}
+    sci_all = json.loads(Path(f"lang/{DEFAULT_LANG}/data/scientists.json").read_text(encoding="utf-8")) \
+        if Path(f"lang/{DEFAULT_LANG}/data/scientists.json").exists() else {}
+
+    tags_with_law = set()
+    for n in lg.values():
+        tags_with_law.update(n.get("tags", []))
+    tags_sci_direct = {t for t, n in tg.items() if n.get("scientists")}
+    tags_sci_reverse = set()
+    for s in sci_all.values():
+        tags_sci_reverse.update(s.get("related_tags", []))
+    tags_no_law = sorted(t for t in tg if t not in tags_with_law)
+    tags_no_sci = sorted(t for t in tg if t not in tags_sci_direct and t not in tags_sci_reverse)
+
+    laws_no_tag = sorted(lid for lid, n in lg.items() if not n.get("tags"))
+    laws_no_sci = sorted(lid for lid, n in lg.items() if not n.get("scientists") and not n.get("influenced_by"))
+
+    sci_tags_direct = {s for s, v in sci_all.items() if v.get("related_tags")}
+    sci_tags_reverse = set()
+    for n in tg.values():
+        sci_tags_reverse.update(n.get("scientists", []))
+    sci_no_tag = sorted(s for s in sci_all if s not in sci_tags_direct and s not in sci_tags_reverse)
+    sci_with_law = set()
+    for n in lg.values():
+        sci_with_law.update(n.get("scientists", []))
+        sci_with_law.update(n.get("influenced_by", []))
+    sci_no_law = sorted(s for s in sci_all if s not in sci_with_law)
+
+    def row(label, missing, total_n):
+        if not missing:
+            return f'<p style="color:#2e7d32">✓ {label}: все {total_n} связаны</p>'
+        shown = ", ".join(missing[:15]) + (f' … +{len(missing) - 15} ещё' if len(missing) > 15 else '')
+        return f'<p style="color:#b31b1b">⚠️ {label}: {len(missing)}/{total_n} без связи — {shown}</p>'
+
+    return (
+        row("Теги без закона", tags_no_law, len(tg))
+        + row("Теги без учёного", tags_no_sci, len(tg))
+        + row("Законы без тега", laws_no_tag, len(lg))
+        + row("Законы без учёного", laws_no_sci, len(lg))
+        + row("Учёные без тега", sci_no_tag, len(sci_all))
+        + row("Учёные без закона", sci_no_law, len(sci_all))
+    )
+
+
 def generate_status_page():
     """status.html — дашборд состояния системы (статьи по языкам/дням/разделам, экспресс vs
     полные, источник обложек + оценка расхода на них, очередь bulk-generate, счётчики)."""
@@ -2084,6 +2141,7 @@ def generate_status_page():
     tier_donut = donut([("экспресс", express_n, "#e67e22"), ("полные", full_n, "#2e7d32")])
     img_donut = donut([("из PDF", img_pdf_n, "#2e7d32"), ("AI", img_ai_n, "#4a7c9b"),
                         ("ждёт бюджета", img_pending_n, "#e67e22"), ("нет вообще", img_none_n, "#b31b1b")])
+    connectivity_html = build_connectivity_report_html()
     html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Status — bridge42worlds</title>
 <style>body{{font-family:system-ui,Arial,sans-serif;max-width:760px;margin:0 auto;padding:30px 18px;color:#2c2c2c}}
@@ -2108,6 +2166,7 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 <h2>По разделам arXiv (топ-15)</h2><table>{cat_rows}</table>
 <h2>Статьи по дням (последние 30)</h2><table>{day_rows}</table>
 <h2>Целостность</h2>{warn}
+<h2>Связность сущностей (тег↔закон↔учёный)</h2>{connectivity_html}
 </body></html>'''
     Path("status.html").write_text(html, encoding="utf-8")
     print(f"  📊 status.html ({total} статей, {authors_n} авторов)")
