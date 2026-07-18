@@ -220,6 +220,9 @@ def main():
     Path("lang/ru/data").mkdir(parents=True, exist_ok=True)
 
     # Граф: узел на КАЖДЫЙ тег из списков (даже не описанный), article_count сохраняем.
+    # "related"/"scientists" ОБЪЕДИНЯЕМ с уже накопленным в графе (union), не перезаписываем —
+    # иначе повторный прогон этого скрипта (даже обычный top-up) тихо стирает связи, наращенные
+    # отдельно через run.py evolve/connectivity-repair (баг найден 2026-07-18, см. TODO.md).
     for t in (active + edu):
         tid = t["en"]
         prev = graph["graph"].get(tid, {})
@@ -227,9 +230,9 @@ def main():
         graph["graph"][tid] = {
             "level": type_map.get(tid, "concept"),
             "domain": domain_map.get(tid, "") or prev.get("domain", ""),
-            "related": desc.get("related_tags", prev.get("related", [])),
+            "related": sorted(set(desc.get("related_tags", [])) | set(prev.get("related", []))),
             "article_count": prev.get("article_count", 0),
-            "scientists": desc.get("scientists", prev.get("scientists", [])),
+            "scientists": sorted(set(desc.get("scientists", [])) | set(prev.get("scientists", []))),
             "educational": tid in edu_ids,
         }
 

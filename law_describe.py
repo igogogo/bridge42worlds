@@ -207,16 +207,21 @@ def main():
     Path("data").mkdir(exist_ok=True)
     Path("lang/ru/data").mkdir(parents=True, exist_ok=True)
 
-    # Граф: узел на КАЖДЫЙ закон из реестра (даже не описанный).
+    # Граф: узел на КАЖДЫЙ закон из реестра (даже не описанный). Списковые поля ОБЪЕДИНЯЕМ
+    # с уже накопленным в графе (union), а не перезаписываем — иначе каждый повторный прогон
+    # этого скрипта (даже обычный top-up без --force/--only) тихо стирает связи, наращенные
+    # отдельно через run.py evolve/connectivity-repair скрипты (баг найден 2026-07-18: один
+    # --only-прогон обрушил tag↔scientist связи в графе с 1533 до 259, см. TODO.md).
     for x in laws_in:
         lid = x["en"]
         desc = ru.get(lid, {})
+        prev = graph["graph"].get(lid, {})
         graph["graph"][lid] = {
             "type": type_map.get(lid, "закон"),
-            "tags": desc.get("tags") or tags_map.get(lid, []),
-            "scientists": desc.get("scientists", []),
-            "influenced_by": desc.get("influenced_by", []),
-            "related": desc.get("related_laws", graph["graph"].get(lid, {}).get("related", [])),
+            "tags": sorted(set(desc.get("tags") or tags_map.get(lid, [])) | set(prev.get("tags", []))),
+            "scientists": sorted(set(desc.get("scientists", [])) | set(prev.get("scientists", []))),
+            "influenced_by": sorted(set(desc.get("influenced_by", [])) | set(prev.get("influenced_by", []))),
+            "related": sorted(set(desc.get("related_laws", [])) | set(prev.get("related", []))),
         }
 
     symmetrize(graph)
