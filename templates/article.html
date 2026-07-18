@@ -48,13 +48,6 @@
 
 <div class="next-top"><button type="button" class="next-btn next-btn-top">$next_label $next_arrow</button></div>
 
-<h1 class="article-title-top">$clickbait $refine_badge $express_badge</h1>
-<div class="original-title original-title-top">Original: "$original_title"</div>
-<div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button> · $authors_full</div>
-<div class="meta">
-    arXiv:<a href="https://arxiv.org/abs/$id">$id</a> · $date · <a href="$license_url">$license_name</a> · $reading_html $categories_html
-</div>
-
 <div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
     <div class="modal-box">
         <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
@@ -67,6 +60,12 @@
 $nav_html
 <div class="article-wrapper">
     <div class="article-main">
+        <h1 class="article-title-top">$clickbait $refine_badge $express_badge</h1>
+        <div class="original-title original-title-top">Original: "$original_title"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button> · $authors_full</div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/$id">$id</a> · $date · <a href="$license_url">$license_name</a> · $reading_html $categories_html
+        </div>
         <div class="oneliner">$oneliner</div>
         $abstract_html
         $ai_cover_html

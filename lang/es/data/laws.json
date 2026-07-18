@@ -206,45 +206,6 @@
     "raw": {},
     "image_prompt": "Un delicado aro de alambre sostiene una película traslúcida y brillante, iluminada bajo la luz de la hora dorada, vista desde un ángulo holandés inclinado. Suaves remolinos de fluidos en tonos pastel se arremolinan suavemente dentro de la película, haciendo eco del silencio"
   },
-  "law_of_universal_gravitation": {
-    "name": "ley de la gravitación universal",
-    "type": "ley",
-    "description_popular": "Imagina que todos los cuerpos se atraen entre sí, como imanes, pero mucho más débilmente. Cuanto más masivos son los objetos y más cerca están, más fuerte es la atracción. Esta fuerza es la que nos mantiene sobre la Tierra y hace que los planetas giren alrededor del Sol.",
-    "fun_fact_popular": "Si la gravedad desapareciera, saldríamos volando al espacio y la Tierra dejaría de moverse en su órbita.",
-    "description_simple": "Isaac Newton formuló la ley en 1687, unificando la mecánica terrestre y celeste. Se basó en los trabajos de Galileo y Kepler, así como en discusiones con Hooke. La ley establece: dos cuerpos cualesquiera se atraen con una fuerza proporcional al producto de sus masas e inversamente proporcional al cuadrado de la distancia entre ellos. Esta fuerza la sentimos como peso; también gobierna el movimiento de los planetas y las mareas. Imagina un trampolín: una bola pesada hunde la superficie y una bolita ligera rueda hacia ella; así funciona la gravedad según Einstein, pero la ley de Newton da una fórmula sencilla y precisa para campos débiles.",
-    "how_it_works_simple": "La ley se manifiesta en todas las escalas: desde una manzana cayendo hasta las órbitas de las galaxias. Se usa para calcular trayectorias de satélites, predecir mareas e incluso descubrir nuevos planetas (por ejemplo, Neptuno). En ingeniería y construcción ayuda a calcular cargas. Sin embargo, en condiciones de gravedad muy intensa (como en los agujeros negros) o a velocidades enormes, es reemplazada por la relatividad general.",
-    "fun_fact": "La ley de la gravitación universal fue tan precisa que permitió predecir la existencia de Neptuno a partir de las desviaciones de la órbita de Urano.",
-    "description": "Ley de la gravitación universal: cada partícula en el universo atrae a todas las demás con una fuerza directamente proporcional al producto de sus masas e inversamente proporcional al cuadrado de la distancia entre sus centros. Forma vectorial: F = -G m1 m2 r / |r|^3. La constante de gravitación G ≈ 6.67430×10⁻¹¹ N·m²/kg². Es una interacción fundamental que domina a distancias macroscópicas.",
-    "history": "Isaac Newton formuló la ley en 1687 en 'Philosophiæ Naturalis Principia Mathematica', generalizando observaciones terrestres y celestes. Galileo estudió la caída de los cuerpos, Kepler los movimientos planetarios, y Robert Hooke había insinuado una fuerza inversamente proporcional al cuadrado de la distancia, pero Newton dio una forma matemática rigurosa.",
-    "how_it_works": "Se aplica para calcular la mecánica orbital, las maniobras gravitacionales de naves espaciales y la determinación de masas de cuerpos celestes. Límites de aplicabilidad: no funciona en campos gravitatorios intensos (se sustituye por las ecuaciones de Einstein) ni a nivel microscópico, donde se requieren efectos cuánticos.",
-    "key_problems": [
-      "No explica la naturaleza de la gravedad",
-      "No funciona cerca de agujeros negros",
-      "Incompatible con la mecánica cuántica"
-    ],
-    "formulas": [
-      {
-        "description": "Fuerza de atracción gravitatoria",
-        "latex": "F = G\\frac{m_1 m_2}{r^2}",
-        "meaning": "F — fuerza de atracción, G — constante de gravitación, m1 y m2 — masas de los cuerpos, r — distancia entre sus centros"
-      }
-    ],
-    "scientists": [
-      "Isaac Newton",
-      "Robert Hooke"
-    ],
-    "tags": [
-      "angular_momentum",
-      "exoplanet"
-    ],
-    "related_laws": [
-      "keplers_third_law",
-      "einstein_field_equations"
-    ],
-    "refined": false,
-    "raw": {},
-    "image_prompt": "Una escena cósmica luminosa de dos enormes esferas celestes conectadas por un sutil y escultórico campo de fuerza de ondas curvas de luz dorada, sobre un fondo nebuloso brillante de tonos ámbar y crema. Luz difusa de estudio, compresión de teleobjetivo, ilustración editorial nítida, atmósfera fría y precisa."
-  },
   "second_law_of_thermodynamics": {
     "name": "segunda ley de la termodinámica",
     "type": "ley",
@@ -3904,6 +3865,620 @@
       "noethers_theorem",
       "keplers_second_law",
       "law_of_conservation_of_momentum"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "ohms_law": {
+    "name": "ley de Ohm",
+    "type": "ley",
+    "mini": "La corriente eléctrica es como el agua en una manguera: a mayor voltaje, mayor presión; a mayor resistencia, menor flujo.",
+    "practical_application": "En cualquier aparato eléctrico, el cálculo de la resistencia de la espiral o del fusible utiliza la ley de Ohm. Sin ella, no se podría ajustar el volumen de un altavoz ni elegir la sección del cable para la instalación.",
+    "description_popular": "En 1826, Georg Ohm investigó experimentalmente cómo los metales conducen la electricidad. En aquella época se creía que la corriente era un flujo de un fluido misterioso. Ohm estableció una relación matemática clara: corriente I = U / R, donde R es una característica del conductor. Publicó sus resultados en el libro «El circuito galvánico investigado matemáticamente», pero sus colegas recibieron el trabajo con frialdad. El reconocimiento llegó solo unos años después. Hoy, la ley de Ohm es el abecé de la electrotecnia: está presente en cualquier microchip, transformador o tira de LED.",
+    "fun_fact_popular": "El cuerpo humano es un conductor. La resistencia de la piel seca es de aproximadamente 100 kΩ, y la de la piel mojada cae hasta 1 kΩ. El peligro de descarga eléctrica aumenta drásticamente después de la ducha.",
+    "description_simple": "La ley dice: la intensidad de la corriente (cuántas cargas pasan por segundo) es directamente proporcional a la tensión (la 'presión' eléctrica) e inversamente proporcional a la resistencia (el obstáculo al flujo). Cuanto mayor es la tensión, más cargas fluyen; cuanto mayor es la resistencia, menos. En un enchufe hay 220 voltios, la resistencia de una tetera es de 20 ohmios y la corriente es de 11 amperios.",
+    "how_it_works_simple": "En un secador de pelo, la espiral tiene una alta resistencia: la corriente la calienta, cediendo potencia. El diámetro de los cables de las líneas de alta tensión es enorme para reducir la resistencia y las pérdidas de energía por calor. En tiempo húmedo, el aislamiento se deteriora, la resistencia baja, la corriente sube y por eso salta el interruptor diferencial.",
+    "fun_fact": "La letra R para la resistencia no se convirtió en estándar de inmediato. Ohm usó el símbolo r en honor a «Reduktion» (en alemán, «reducción»). En las primeras traducciones se sustituyó por S, de la palabra «Strom», pero luego se volvió a la R.",
+    "description": "La ley de Ohm en forma integral: la intensidad de la corriente I en un tramo del circuito es directamente proporcional a la tensión U e inversamente proporcional a la resistencia eléctrica R: I = U / R. A menudo se escribe como U = I R. En forma diferencial para medios continuos, la densidad de corriente j es proporcional a la intensidad del campo eléctrico E: j = σ E, donde σ es la conductividad. Esta es una ley empírica que se cumple para muchos materiales en condiciones constantes, pero no es fundamental: se deriva de las aproximaciones de la teoría microscópica de la conducción.",
+    "history": "Georg Simon Ohm, físico alemán, entre 1825 y 1826 realizó una serie de experimentos meticulosos con pilas galvánicas e hilos metálicos de distintas longitudes y secciones. Utilizando una balanza de torsión de Coulomb modificada para medir la corriente, descubrió una dependencia lineal. En 1827 publicó su libro «Die galvanische Kette, mathematisch bearbeitet», donde introdujo los conceptos de fuerza electromotriz, intensidad de corriente y resistencia. Sus contemporáneos, incluido Georg Hegel, se burlaron de sus «fantasías inútiles», pero hacia la década de 1840 la ley fue universalmente reconocida. Más tarde, James Maxwell la integró en la teoría unificada del electromagnetismo.",
+    "how_it_works": "La ley de Ohm es la base del análisis de circuitos eléctricos, desde electrodomésticos hasta imanes superconductores. Sus límites: las sustancias con característica tensión-corriente no lineal (semiconductores, diodos, descargas en gases) no obedecen una proporcionalidad simple. Además, a altas frecuencias o a temperaturas próximas al cero absoluto, aparecen efectos que requieren correcciones cuánticas.",
+    "key_problems": [
+      "En conductores nanométricos y circuitos moleculares, la resistencia está cuantizada y la ley de Ohm en su forma clásica no se cumple.",
+      "En los superconductores, por debajo de la temperatura crítica la resistencia desaparece: la corriente fluye sin tensión, lo que contradice la fórmula U = I R.",
+      "En medios con memoria de forma (memristores), la relación entre corriente y tensión depende del historial, convirtiendo el circuito en un ordenador analógico."
+    ],
+    "formulas": [
+      {
+        "description": "Ley de Ohm para un tramo del circuito",
+        "latex": "I = \\frac{U}{R}",
+        "meaning": "I — intensidad de la corriente (amperios, A), cantidad de carga eléctrica que atraviesa la sección transversal de un conductor por unidad de tiempo; U — tensión (voltios, V), diferencia de potencial eléctrico entre los extremos del conductor; R — resistencia eléctrica (ohmios, Ω), medida de la oposición del conductor al paso de la corriente."
+      },
+      {
+        "description": "Forma diferencial de la ley de Ohm",
+        "latex": "\\mathbf{j} = \\sigma \\mathbf{E}",
+        "meaning": "j — vector densidad de corriente (A/m²), corriente por unidad de área de la sección transversal; σ — conductividad eléctrica (S/m), magnitud inversa de la resistividad ρ (σ = 1/ρ); E — vector intensidad del campo eléctrico (V/m)."
+      }
+    ],
+    "scientists": [
+      "Georg Ohm"
+    ],
+    "tags": [
+      "electromagnetism",
+      "electric_field"
+    ],
+    "related_laws": [
+      "maxwells_equations",
+      "faradays_law_of_induction",
+      "amperes_law"
+    ],
+    "refined": false,
+    "raw": {},
+    "image_prompt": "In a backlit haze, glowing emerald and mint electron streams weave through a semi-transparent metallic lattice, tilted dutch angle, abstract minimalism, hopeful and luminous mood, the",
+    "image_pending": false,
+    "image_model": "black-forest-labs/FLUX-1-schnell"
+  },
+  "landauers_principle": {
+    "name": "principio de Landauer",
+    "type": "principio",
+    "mini": "Borrar un bit de información es como borrar lo escrito con tiza en una pizarra: en cualquier caso se libera un poco de calor, incluso si se hace con el máximo cuidado.",
+    "practical_application": "Define la energía mínima necesaria para computar, estableciendo el límite físico de la eficiencia energética de procesadores y memorias.",
+    "description_popular": "En 1961, Rolf Landauer, trabajando en IBM, se preguntó: ¿es realmente necesario que los cálculos consuman energía? Demostró que las operaciones lógicamente irreversibles —especialmente el borrado de información— convierten inevitablemente parte de la energía en calor. Esto conectó la teoría de la información con la termodinámica. El principio afirma que borrar un bit incrementa la entropía (medida del desorden) del sistema al menos en k ln 2, lo que corresponde a una liberación de energía de k_B T ln 2. La historia da vida a la fórmula: no podemos «olvidar» información gratis.",
+    "fun_fact_popular": "Si un ordenador borrara 10 mil millones de bits por segundo siguiendo el principio de Landauer, calentaría la habitación con una potencia de apenas 0.3 microvatios, miles de veces menos que los chips reales, los cuales aún están lejos del límite fundamental.",
+    "description_simple": "Cualquier procesamiento de información en un ordenador produce calor. El principio de Landauer explica que el borrado más económico de un bit de memoria (cambiar de «1» a «0» sin guardar el valor anterior en ningún sitio) calienta irreversiblemente el entorno en una cantidad minúscula pero bien definida. La energía de este calentamiento depende solo de la temperatura: a temperatura ambiente, equivale aproximadamente a 2.9×10⁻²¹ julios por bit.",
+    "how_it_works_simple": "Se manifiesta en la electrónica: los portátiles no se calientan solo por imperfecciones de los materiales, sino también por una razón fundamental: el borrado de información en los microchips libera calor de forma irreversible. En el futuro, los ordenadores cuánticos recurrirán a la computación reversible para aproximarse a este límite mínimo, aunque no podrán superarlo.",
+    "fun_fact": "En 2012, un grupo de científicos franceses confirmó experimentalmente el principio de Landauer atrapando un solo átomo en una trampa y midiendo la ínfima liberación de calor al borrar información: alrededor de 0.5 k_B T, cercano al mínimo teórico.",
+    "description": "En 1961, Rolf Landauer, especialista en física de la información en IBM, formuló un principio que relaciona el borrado de información con la generación de calor. La formulación estricta: cualquier operación lógicamente irreversible que destruye un bit de información debe ir acompañada de un aumento de la entropía del entorno de al menos k_B ln 2, lo que corresponde a una disipación de energía de al menos k_B T ln 2. El significado físico es que la información no es un concepto abstracto, sino una magnitud física que obedece la segunda ley de la termodinámica (la entropía de un sistema aislado nunca decrece). El borrado reduce la entropía informacional del sistema, y por la ley de conservación, la entropía del entorno debe aumentar, de ahí el calor.",
+    "history": "En 1961, Rolf Landauer publicó «Irreversibility and Heat Generation in the Computing Process», dando inicio a la física de la información. La idea encontró resistencia, pues muchos pensaban que en principio se podía computar sin gasto energético. Más tarde, en los años 70, Charles Bennett demostró que los cálculos lógicamente reversibles podrían en teoría eludir este límite si no se borra información. Los trabajos de Landauer y Bennett sentaron las bases de la moderna teoría de la computación reversible y de la información cuántica.",
+    "how_it_works": "El principio de Landauer se utiliza para calcular el límite inferior absoluto del consumo energético de dispositivos computacionales. En los procesadores actuales, se gasta un millón de veces más energía por bit debido a limitaciones prácticas, pero a medida que avanza la miniaturización esta diferencia se reduce. La limitación del principio es que solo es válido para el borrado irreversible en el límite clásico; en sistemas cuánticos se requiere una generalización que tenga en cuenta los efectos cuánticos.",
+    "key_problems": [
+      "¿Es válido el principio a temperaturas muy bajas, donde los efectos cuánticos son relevantes?",
+      "¿Cómo medir con precisión cantidades de calor tan pequeñas?",
+      "¿Se puede construir un dispositivo computacional que opere en el límite de Landauer?"
+    ],
+    "formulas": [
+      {
+        "description": "Energía mínima para borrar un bit",
+        "latex": "\\Delta E = k_B T \\ln 2",
+        "meaning": "ΔE — energía mínima disipada al borrar un bit de información; k_B — constante de Boltzmann, k_B ≈ 1.38×10⁻²³ J/K; T — temperatura absoluta en kelvin (K); ln 2 — logaritmo natural de 2, aproximadamente 0.693"
+      }
+    ],
+    "scientists": [
+      "Rolf Landauer",
+      "Charles Bennett"
+    ],
+    "tags": [
+      "entropy",
+      "quantum_computer"
+    ],
+    "related_laws": [
+      "second_law_of_thermodynamics",
+      "holographic_principle"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "berry_phase": {
+    "name": "fase de Berry",
+    "type": "efecto",
+    "mini": "Recorra un contorno cerrado sobre una superficie: su sombra puede cambiar de orientación aunque vuelva al punto de partida. De manera similar, una partícula cuántica adquiere un desplazamiento de fase oculto.",
+    "practical_application": "Explica el comportamiento de los electrones en cristales y se utiliza para crear ordenadores cuánticos topológicos, resistentes a interferencias.",
+    "description_popular": "En 1984, el físico británico Michael Berry generalizó una vieja idea sobre la fase que se acumula durante cambios adiabáticos (lentos) de parámetros. Resultó que esta fase es geométrica: su valor no depende del tiempo ni de la velocidad, sino de la curvatura del espacio de parámetros. Antes de Berry ya se habían observado manifestaciones parciales, pero fue él quien demostró su universalidad y su relación con los campos de gauge.",
+    "fun_fact_popular": "El famoso péndulo de Foucault, cuyo plano de oscilación gira debido a la rotación de la Tierra, es un análogo clásico de la fase de Berry: el péndulo «siente» la geometría, no solo las fuerzas.",
+    "description_simple": "Si se modifican lentamente las condiciones en las que se encuentra una partícula cuántica (por ejemplo, girando un campo magnético) y se vuelve al punto de partida, su función de onda puede acumular una fase adicional (un desplazamiento). Esta fase de Berry depende solo del camino recorrido en el espacio de parámetros, no del tiempo empleado. Es importante porque afecta a la interferencia de las partículas, como si estas «recordaran» la forma del camino incluso cuando las condiciones externas regresan al estado inicial.",
+    "how_it_works_simple": "La fase de Berry se manifiesta en el efecto Aharonov-Bohm, en la espectroscopia molecular y en la física de la materia condensada. Por ejemplo, explica por qué algunos cristales solo conducen la electricidad en su superficie mientras que en el interior son aislantes.",
+    "fun_fact": "La fase de Berry explica el giro del plano de polarización de la luz en fibras ópticas curvadas en el espacio: el fotón acumula una fase geométrica, no debida a la interacción con la materia.",
+    "description": "La fase de Berry es un factor de fase adicional que adquiere la función de onda de un sistema cuántico al recorrer adiabáticamente (es decir, lentamente, sin transiciones entre niveles de energía) un contorno cerrado en el espacio de parámetros. Formulación rigurosa: para un estado no degenerado |n(𝐑)⟩, la fase es γ_n = i ∮ ⟨n|∇_𝐑 n⟩·d𝐑. Su naturaleza geométrica se manifiesta en que es igual a la integral de superficie de la curvatura de Berry (análoga a un campo magnético en el espacio de parámetros) a través de la superficie que se apoya en el contorno. Esta fase es invariante gauge (no depende de la elección arbitraria de la fase de los estados base), lo que la convierte en una magnitud físicamente observable.",
+    "history": "Precursores: en 1956, S. Pancharatnam estudió la fase de la luz bajo cambios cíclicos de polarización. En 1984, Michael Berry dio una formulación rigurosa dentro de la mecánica cuántica para procesos adiabáticos generales. Más tarde, Frank Wilczek y otros generalizaron la fase de Berry a procesos no adiabáticos y estados degenerados, vinculándola con invariantes topológicos.",
+    "how_it_works": "La fase de Berry se aplica ampliamente en la descripción del transporte cuántico, los aislantes topológicos (materiales que solo conducen en la superficie), la dinámica molecular (por ejemplo, predicción de transiciones prohibidas) y la computación cuántica (cúbits topológicos). Límite de aplicabilidad: la aproximación adiabática exige que la velocidad de cambio de los parámetros sea pequeña comparada con la diferencia de energía entre niveles.",
+    "key_problems": [
+      "¿Cómo tener en cuenta la fase de Berry en procesos rápidos (no adiabáticos)?",
+      "¿Se puede utilizar para transmitir información sin disipación?",
+      "La relación de la fase de Berry con el entrelazamiento en sistemas de muchas partículas sigue siendo un campo abierto."
+    ],
+    "formulas": [
+      {
+        "description": "Fase de Berry",
+        "latex": "\\gamma = i \\oint_C \\langle n(\\mathbf{R}) | \\nabla_{\\mathbf{R}} n(\\mathbf{R}) \\rangle \\cdot d\\mathbf{R}",
+        "meaning": "γ — fase geométrica de Berry; i — unidad imaginaria; ∮_C — integral sobre el contorno cerrado C en el espacio de parámetros; ⟨n(R)| — vector bra del estado propio del hamiltoniano que depende de los parámetros R; ∇_R — gradiente respecto a los parámetros; |n(R)⟩ — vector ket del mismo estado; dR — elemento del contorno. La cantidad A = i⟨n|∇_R n⟩ se llama conexión de Berry."
+      }
+    ],
+    "scientists": [
+      "Michael Berry",
+      "Frank Wilczek"
+    ],
+    "tags": [
+      "wave_function",
+      "quantum_entanglement"
+    ],
+    "related_laws": [
+      "aharonovbohm_effect",
+      "quantum_hall_effect"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "balmer_formula": {
+    "name": "fórmula de Balmer",
+    "type": "ecuación",
+    "mini": "Como notas en un pentagrama, las cuatro líneas visibles del hidrógeno siguen un ritmo matemático simple.",
+    "practical_application": "Gracias a esta fórmula, a partir del espectro de una estrella se puede saber cuánto hidrógeno contiene y a qué velocidad se mueve.",
+    "description_popular": "En 1885, Johann Jakob Balmer (matemático y profesor suizo, de 60 años) reparó en una armonía numérica en las longitudes de onda del espectro del hidrógeno. Dedujo empíricamente una fórmula que más tarde fue generalizada por Johannes Rydberg para todas las series (Lyman, Paschen, etc.). El descubrimiento de Balmer sirvió de base empírica para las futuras teorías cuánticas de la estructura atómica: Niels Bohr explicó la fórmula de Balmer en 1913 al postular la cuantización del momento angular.",
+    "fun_fact_popular": "Balmer estaba tan fascinado por las regularidades numéricas que intentó explicar la disposición de las pirámides egipcias e incluso las proporciones del cuerpo humano mediante fracciones simples.",
+    "description_simple": "El profesor de matemáticas suizo Johann Balmer encontró en 1885 una fórmula sorprendentemente simple que predecía con precisión las longitudes de onda de las líneas coloreadas visibles del espectro del hidrógeno. Hasta entonces se habían medido esas cuatro líneas, pero nadie conocía la regularidad. La fórmula es 1/λ = R (1/4 - 1/n²), con n = 3, 4, 5, 6. Coincidía perfectamente con las mediciones y posteriormente ayudó a Niels Bohr a construir el primer modelo cuántico del átomo.",
+    "how_it_works_simple": "Los astrónomos utilizan esta fórmula (generalizada como fórmula de Rydberg) para identificar hidrógeno en estrellas y galaxias. En el laboratorio, ayuda a calibrar espectrómetros y a estudiar la estructura atómica.",
+    "fun_fact": "La fórmula original de Balmer era λ = (3645.6 × 10⁻¹⁰) × n²/(n² - 4), con n = 3, 4, 5, 6. Acertó la constante sin conocer la constante de Rydberg.",
+    "description": "La fórmula empírica de Balmer describe las líneas espectrales del hidrógeno en la región visible: 1/λ = R (1/2² - 1/n²), donde n = 3, 4, 5, ... (números enteros mayores que 2). λ es la longitud de onda en el vacío, R es la constante de Rydberg (≈ 1.09678×10⁷ m⁻¹ para el hidrógeno, con una pequeña corrección por la masa finita del núcleo). La interpretación física rigurosa llegó más tarde: transiciones electrónicas entre niveles con números cuánticos principales n₁=2 (segundo nivel) y n₂=n superiores. La fórmula refleja la cuantización de la energía atómica predicha por el modelo de Bohr.",
+    "history": "Johann Balmer publicó en 1885 «Notiz über die Spektrallinien des Wasserstoffs» (Nota sobre las líneas espectrales del hidrógeno). Su fórmula impresionó a los contemporáneos por su precisión predictiva. En 1888, Johannes Rydberg la generalizó para otras series. Niels Bohr dedujo la fórmula a partir de sus postulados en 1913, dándole sentido físico. Más tarde, Arnold Sommerfeld refinó el modelo introduciendo órbitas elípticas y la constante de estructura fina.",
+    "how_it_works": "Se aplica en astrofísica para determinar el corrimiento al rojo de objetos lejanos y analizar la composición química de las estrellas. Limitaciones: no tiene en cuenta la estructura fina e hiperfina del espectro; para elementos pesados con muchos electrones la fórmula no es válida, se necesita la electrodinámica cuántica.",
+    "key_problems": [
+      "No explica las intensidades de las líneas (se requiere la mecánica cuántica).",
+      "En iones ligeros parecidos al hidrógeno (He⁺, Li²⁺) la fórmula funciona sustituyendo R, pero requiere correcciones relativistas para mediciones precisas."
+    ],
+    "formulas": [
+      {
+        "description": "Fórmula de Balmer",
+        "latex": "\\frac{1}{\\lambda} = R \\left( \\frac{1}{2^2} - \\frac{1}{n^2} \\right)",
+        "meaning": "λ — longitud de onda de la línea espectral en el vacío; R — constante de Rydberg, R ≈ 1.09678×10⁷ m⁻¹; n — número entero mayor que 2 (3, 4, 5, ...), determina la línea concreta de la serie de Balmer: n=3 da la línea roja Hα (656.3 nm), n=4 la azul Hβ (486.1 nm), etc."
+      }
+    ],
+    "scientists": [
+      "Johann Jakob Balmer",
+      "Johannes Rydberg",
+      "Niels Bohr",
+      "Arnold Sommerfeld"
+    ],
+    "tags": [
+      "hydrogen",
+      "spectroscopy"
+    ],
+    "related_laws": [
+      "rydberg_formula"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "aharonovbohm_effect": {
+    "name": "efecto Aharonov-Bohm",
+    "type": "efecto",
+    "mini": "El electrón «siente» el campo magnético incluso sin entrar en la región donde este existe, como si una brújula señalara al norte a través de una pared.",
+    "practical_application": "Se emplea en sensores de campo magnético ultrasensibles y para investigar fases topológicas en materiales.",
+    "description_popular": "En 1959, Yakir Aharonov y David Bohm predijeron teóricamente que en mecánica cuántica los potenciales electromagnéticos desempeñan un papel más fundamental que los campos. Propusieron un experimento mental: la interferencia de electrones cambia incluso cuando estos se mueven por una región con campos eléctrico y magnético nulos, siempre que exista un potencial vectorial A distinto de cero. Esto desafiaba la visión clásica, según la cual solo los campos son físicamente significativos. La confirmación experimental en 1960 demostró que tenían razón.",
+    "fun_fact_popular": "El propio David Bohm, uno de los autores del efecto, consideraba que este confirmaba su teoría filosófica de los «parámetros ocultos» sobre el orden interno del universo, pero la mayoría de los físicos lo interpretan de manera estándar.",
+    "description_simple": "Imagine un tubo alrededor del cual se enrolla un cable con corriente; el campo magnético solo existe dentro del tubo. Los electrones que vuelan por fuera, en principio, no deberían sentir el campo, pues en la zona por la que pasan el campo es nulo. Pero la mecánica cuántica muestra otra cosa: las ondas de los electrones que rodean el tubo por lados opuestos sufren un desplazamiento de fase, y la diferencia de fase depende del flujo magnético dentro del tubo. Este cambio se observa en la modificación del patrón de interferencia (alternancia de franjas claras y oscuras).",
+    "how_it_works_simple": "El efecto es la base de los SQUID (dispositivos superconductores de interferencia cuántica), que miden campos magnéticos mil millones de veces más débiles que el terrestre. También se manifiesta en nanotubos de carbono y aislantes topológicos.",
+    "fun_fact": "Aharonov y Bohm propusieron dos variantes: la magnética (relacionada con A) y la eléctrica (con φ). El efecto eléctrico es experimentalmente más difícil, pero también se ha confirmado: el electrón siente el cambio de voltaje aunque no atraviese el campo.",
+    "description": "El efecto Aharonov-Bohm es un fenómeno cuántico en el que el patrón de interferencia de partículas cargadas se desplaza en presencia de un potencial electromagnético (vectorial A o escalar φ), incluso si las partículas atraviesan regiones con campos E y B nulos. Formalmente, la fase de la función de onda Ψ adquiere un término adicional: exp(ie/ħ ∫ A·dl), de donde la diferencia de fase es Δφ = eΦ/ħ, siendo Φ el flujo magnético dentro del contorno cerrado. Este efecto demuestra la no localidad de la mecánica cuántica: el campo en un punto afecta a partículas que nunca han estado allí.",
+    "history": "Propuesto por Yakir Aharonov y David Bohm en 1959 como consecuencia del formalismo de la mecánica cuántica. Fue confirmado experimentalmente en 1960 por Roberts Chambers, quien utilizó un pequeño imán y un interferómetro electrónico. Más tarde, con el desarrollo de la física mesoscópica, el efecto se redescubrió en semiconductores y nanotubos de carbono. En 1985, Michael Berry relacionó la fase geométrica con el efecto Aharonov-Bohm.",
+    "how_it_works": "Se aplica en la medición de flujo magnético (SQUID), en el estudio del transporte balístico en nanoestructuras y como herramienta para crear cúbits topológicos. Limitaciones: requiere una alta coherencia de las ondas electrónicas (bajas temperaturas y tamaños reducidos), de lo contrario la interferencia se difumina.",
+    "key_problems": [
+      "¿Existe un efecto Aharonov-Bohm para el potencial gravitatorio?",
+      "¿Cómo se relaciona el efecto con la ruptura de la simetría de inversión temporal en materiales topológicos?",
+      "¿Se puede utilizar para transmitir información cuántica en ausencia de campos?"
+    ],
+    "formulas": [
+      {
+        "description": "Desplazamiento de fase en el efecto Aharonov-Bohm",
+        "latex": "\\Delta \\varphi = \\frac{e}{\\hbar} \\Phi",
+        "meaning": "Δφ — diferencia de fase entre las dos trayectorias de los electrones; e — carga elemental, e ≈ 1.602×10⁻¹⁹ C; ħ — constante de Planck reducida, ħ ≈ 1.0546×10⁻³⁴ J·s; Φ — flujo magnético encerrado entre las dos trayectorias alternativas (en webers, Wb). Para un solenoide aislado, Φ = B·S, donde B es la inducción en el interior y S el área de la sección."
+      }
+    ],
+    "scientists": [
+      "Yakir Aharonov",
+      "David Bohm",
+      "Michael Berry"
+    ],
+    "tags": [
+      "wave_function",
+      "quantum_entanglement"
+    ],
+    "related_laws": [
+      "berry_phase",
+      "bells_theorem",
+      "josephson_effect"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "law_of_universal_gravitation": {
+    "name": "ley de la gravitación universal",
+    "type": "ley",
+    "mini": "La manzana que cae y la Luna que flota: ambas estÃ¡n atadas a la Tierra por un mismo hilo invisible. Se extiende entre cualquier masa en el Universo: cuanto mÃ¡s masivos los cuerpos, mÃ¡s tenso el hilo; cuanto mÃ¡s lejos, mÃ¡s flojo.",
+    "practical_application": "CÃ¡lculo de Ã³rbitas de satÃ©lites, planetas y trayectorias interplanetarias; funcionamiento del sistema GPS, predicciÃ³n de mareas, determinaciÃ³n de masas de cuerpos celestes.",
+    "description_popular": "Isaac Newton fue el primero en comprender que la fuerza que hace caer una manzana es la misma que mantiene a la Luna en Ã³rbita. Fue un gran avance que unificÃ³ la fÃsica del cielo y la tierra. FormulÃ³ una ley simple y universal: dos partÃculas cualesquiera se atraen mutuamente con una fuerza directamente proporcional al producto de sus masas e inversamente proporcional al cuadrado de la distancia entre ellas.",
+    "fun_fact_popular": "Newton pospuso la publicaciÃ³n de la ley casi 20 aÃ±os: necesitaba datos precisos del radio de la Tierra para que los cÃ¡lculos coincidieran con el movimiento observado de la Luna.",
+    "description_simple": "Todos los cuerpos con masa se atraen entre sÃ. La atracciÃ³n es mÃ¡s fuerte cuanto mayor es la masa y se debilita bruscamente al aumentar la distancia. Duplicar la masa duplica la fuerza, pero duplicar la distancia la reduce a la cuarta parte. Esta regla es vÃ¡lida para todo, desde una taza que cae hasta galaxias distantes.",
+    "how_it_works_simple": "La ley explica por quÃ© no salimos volando de la Tierra, por quÃ© la Luna gira a nuestro alrededor sin caer y la Tierra alrededor del Sol. TambiÃ©n permite calcular la masa de un planeta a partir de la Ã³rbita de sus satÃ©lites y explica las mareas oceÃ¡nicas.",
+    "fun_fact": "La constante gravitacional G fue medida por primera vez por Henry Cavendish en 1798, 71 aÃ±os despuÃ©s de la muerte de Newton. Su experimento con una balanza de torsiÃ³n permitiÃ³ literalmente pesar la Tierra.",
+    "description": "En 1687, en su obra PhilosophiÃ¦ Naturalis Principia Mathematica, Isaac Newton dio a conocer la ley que se convirtiÃ³ en fundamento de la mecÃ¡nica clÃ¡sica. Establece: cada masa puntual atrae a otra con una fuerza dirigida a lo largo de la recta que las une. La magnitud de la fuerza es proporcional al producto de las masas e inversamente proporcional al cuadrado de la distancia, y el coeficiente de proporcionalidad es la constante gravitacional G.",
+    "history": "Newton se apoyÃ³ en sus predecesores: Galileo estudiÃ³ la caÃda libre, Kepler dedujo las leyes del movimiento planetario a partir de las observaciones de Tycho Brahe, y Robert Hooke sospechaba una dependencia inversa al cuadrado. Sin embargo, solo Newton demostrÃ³ matemÃ¡ticamente que de tal ley se derivan las tres leyes de Kepler y al mismo tiempo explicÃ³ las mareas y la precesiÃ³n de los equinoccios. Sus Principia se convirtieron en modelo de descripciÃ³n matemÃ¡tica de la naturaleza.",
+    "how_it_works": "La ley es aplicable a cualquier objeto con masa, desde partÃculas elementales hasta cÃºmulos de galaxias, siempre que las velocidades sean muy inferiores a la de la luz y los campos gravitacionales no sean demasiado intensos. En las cercanÃas de estrellas de neutrones y agujeros negros es reemplazada por la teorÃa de la relatividad general de Einstein. En la prÃ¡ctica, la ley es la base de la mecÃ¡nica celeste, el cÃ¡lculo de Ã³rbitas y las maniobras espaciales.",
+    "key_problems": [
+      "La ley describe cÃ³mo se atraen las masas, pero no explica la causa de la gravedad: por quÃ© la masa genera atracciÃ³n y no repulsiÃ³n.",
+      "La fÃ³rmula deja de funcionar a velocidades cercanas a la de la luz y en campos gravitacionales intensos, donde es necesario aplicar la relatividad general.",
+      "La paradoja gravitacional de Seeliger: si el Universo fuera infinito y uniformemente lleno de materia, la fuerza gravitacional total en cualquier punto serÃa indefinida."
+    ],
+    "formulas": [
+      {
+        "description": "Fuerza de gravitación",
+        "latex": "F = G\\frac{m_1 m_2}{r^2}",
+        "meaning": "F: fuerza de atracciÃ³n gravitacional (N), G: constante gravitacional, G â‰ˆ 6.67430Ã—10â»Â¹Â¹ NÂ·mÂ²/kgÂ², mâ‚ y mâ‚‚: masas de los cuerpos que interactÃºan (kg), r: distancia entre los centros de masa (m)."
+      }
+    ],
+    "scientists": [
+      "Isaac Newton",
+      "Robert Hooke"
+    ],
+    "tags": [
+      "angular_momentum",
+      "exoplanet"
+    ],
+    "related_laws": [
+      "newtons_second_law",
+      "keplers_third_law",
+      "equivalence_principle"
+    ],
+    "refined": true,
+    "raw": {
+      "mini": "La manzana cae a la tierra porque una fuerza diminuta la une al planeta, como un hilo invisible tendido entre todas las masas del Universo.",
+      "practical_application": "CÃ¡lculo de Ã³rbitas de satÃ©lites, planetas y trayectorias interplanetarias.",
+      "description_popular": "La idea de que los cuerpos celestes obedecen a las mismas fuerzas que los objetos terrestres tomÃ³ forma gracias a Isaac Newton. SegÃºn la leyenda, una manzana que cayÃ³ lo llevÃ³ a pensar que la fuerza que atrae la fruta al suelo es la misma que mantiene a la Luna en Ã³rbita. Newton formulÃ³ la ley: cada par de partÃculas se atrae con una fuerza directamente proporcional al producto de sus masas e inversamente proporcional al cuadrado de la distancia entre ellas.",
+      "fun_fact_popular": "Newton retrasÃ³ la publicaciÃ³n 20 aÃ±os, hasta que obtuvo datos mÃ¡s precisos del radio terrestre; solo entonces los cÃ¡lculos coincidieron con el movimiento lunar observado.",
+      "description_simple": "Dos cuerpos cualesquiera que tengan masa (cantidad de materia) se atraen mutuamente. La fuerza de atracciÃ³n es mayor cuanto mÃ¡s masivos son los cuerpos, y menor cuanto mÃ¡s separados estÃ¡n. Si un cuerpo es el doble de pesado, la fuerza se duplica; si la distancia es el doble, la fuerza disminuye a la cuarta parte. Esta regla funciona en todas partes, desde un vaso que cae al suelo hasta galaxias lejanas.",
+      "how_it_works_simple": "La ley explica por quÃ© nos mantenemos de pie en la Tierra y no salimos volando, por quÃ© la Luna gira a nuestro alrededor y la Tierra alrededor del Sol, y cÃ³mo es posible calcular la masa de un planeta a partir de la Ã³rbita de un satÃ©lite artificial.",
+      "fun_fact": "La constante gravitacional G fue medida por primera vez en laboratorio por Henry Cavendish en 1798, 71 aÃ±os despuÃ©s de la muerte de Newton, usando una balanza de torsiÃ³n.",
+      "description": "En 1687, en los PhilosophiÃ¦ Naturalis Principia Mathematica, Isaac Newton publicÃ³ la ley que se convirtiÃ³ en piedra angular de la mecÃ¡nica clÃ¡sica. Afirma que toda masa puntual atrae a cualquier otra masa puntual con una fuerza dirigida a lo largo de la lÃnea que une los puntos. El mÃ³dulo de la fuerza es proporcional a ambas masas e inversamente proporcional al cuadrado de la distancia.",
+      "history": "Newton se apoyÃ³ en trabajos previos: Galileo estudiÃ³ la aceleraciÃ³n de caÃda libre, Kepler dedujo las leyes del movimiento planetario a partir de las observaciones de Tycho Brahe, y Robert Hooke habÃa conjeturado una dependencia inversa al cuadrado. Sin embargo, fue Newton quien demostrÃ³ matemÃ¡ticamente que de tal fuerza se siguen las tres leyes de Kepler, y ademÃ¡s explicÃ³ las mareas y la precesiÃ³n de los equinoccios.",
+      "how_it_works": "La ley se aplica a todos los objetos con masa, desde partÃculas subatÃ³micas hasta cÃºmulos de galaxias, siempre que las velocidades sean mucho menores que la de la luz y los campos gravitacionales sean dÃ©biles. En campos intensos (cerca de estrellas de neutrones, agujeros negros) cede su lugar a la teorÃa de la relatividad general de Einstein. En la prÃ¡ctica, sobre ella se construye la mecÃ¡nica celeste, el cÃ¡lculo de Ã³rbitas y el lanzamiento de naves espaciales.",
+      "key_problems": [
+        "La ley no explica la naturaleza de la gravedad: por quÃ© la masa produce atracciÃ³n y no repulsiÃ³n.",
+        "La fÃ³rmula deja de funcionar a velocidades cercanas a la de la luz y en campos gravitacionales intensos, donde interviene la relatividad general.",
+        "Paradoja de la interacciÃ³n gravitacional en el infinito: si el Universo fuera infinito y uniformemente lleno, la fuerza gravitacional resultarÃa indefinida (problema de Seeliger)."
+      ]
+    }
+  },
+  "newtons_first_law": {
+    "name": "primera ley de Newton",
+    "type": "ley",
+    "mini": "El disco se desliza uniformemente sobre el hielo hasta chocar con la porterÃa: un cuerpo conserva su movimiento si nada lo perturba.",
+    "practical_application": "En los automÃ³viles, los reposacabezas protegen el cuello en un impacto trasero: la cabeza tiende a irse hacia atrÃ¡s por inercia y el apoyo evita el movimiento brusco.",
+    "description_popular": "El filÃ³sofo griego AristÃ³teles pensaba que el movimiento requiere una fuerza constante. Solo en el siglo XVII Galileo Galilei, mediante experimentos mentales con planos inclinados, demostrÃ³ que un cuerpo mantiene su velocidad sin ningÃºn esfuerzo si no hay rozamiento. Isaac Newton generalizÃ³ esta idea como la primera ley de la mecÃ¡nica en su obra PhilosophiÃ¦ Naturalis Principia Mathematica (1687). La ley afirma que existen sistemas de referencia (inerciales, es decir, que se mueven sin aceleraciÃ³n) en los cuales un cuerpo libre conserva su estado de reposo o de movimiento rectilÃneo uniforme mientras una fuerza no lo obligue a cambiarlo.",
+    "fun_fact_popular": "En el espacio interestelar, sondas como las Voyager casi no encuentran resistencia y literalmente cumplen la primera ley: una vez lanzadas, pueden viajar miles de millones de aÃ±os con velocidad casi constante.",
+    "description_simple": "Si sobre un cuerpo no actÃºan otros objetos (no hay fuerzas), o bien permanece quieto, o bien se mueve en lÃnea recta y con rapidez constante (movimiento rectilÃneo uniforme). Se necesita una fuerza (empujÃ³n o atracciÃ³n) para cambiar la velocidad: para que empiece, se detenga o gire. Esta capacidad del cuerpo de conservar el movimiento se llama inercia (del latÃn inertis, inactivo).",
+    "how_it_works_simple": "Un pasajero de autobÃºs se inclina involuntariamente hacia adelante al frenar: el autobÃºs se desacelera, pero la persona sigue moviÃ©ndose por inercia. Una bolita en el tubo de una aspiradora vuela recta si no toca las paredes: tambiÃ©n es inercia.",
+    "fun_fact": "Los girÃ³scopos en los sistemas de navegaciÃ³n de las naves espaciales aprovechan la propiedad de la inercia de mantener la orientaciÃ³n del eje de rotaciÃ³n; bajo este principio funcionan los indicadores de rumbo en los aviones, que no necesitan GPS.",
+    "description": "La primera ley de Newton, tambiÃ©n llamada ley de la inercia, postula la existencia de sistemas de referencia inerciales, es decir, sistemas en los que un cuerpo no sometido a fuerzas conserva su estado de reposo o de movimiento rectilÃneo uniforme. Esta es una propiedad fundamental del espacio-tiempo de la mecÃ¡nica clÃ¡sica, equivalente a afirmar la homogeneidad e isotropÃa del espacio. HistÃ³ricamente, la ley fue producto de la superaciÃ³n de las ideas aristotÃ©licas gracias a los trabajos de Galileo, Descartes y el propio Newton. En los Principia estÃ¡ formulada con cuidado para evitar un cÃ­rculo lÃ³gico con la definiciÃ³n de fuerza.",
+    "history": "La idea de inercia madurÃ³ gradualmente: NicolÃ¡s CopÃ©rnico supuso que la Tierra se mueve sin esfuerzo visible; Galileo Galilei en sus DiÃ¡logos (1632) demostrÃ³ que una bola que rueda sobre un plano horizontal perfectamente liso rodarÃa eternamente. RenÃ© Descartes formulÃ³ en 1644 el principio de conservaciÃ³n de la cantidad de movimiento en lÃnea recta. Isaac Newton, en 1687, presentÃ³ la ley en su forma definitiva como axioma de la mecÃ¡nica, fundamento de toda la dinÃ¡mica clÃ¡sica.",
+    "how_it_works": "La ley se aplica en todos los sistemas de referencia inerciales, con la sola condiciÃ³n de que la fuerza resultante sea nula. Cuando hay fuerzas, la inercia se manifiesta como resistencia al cambio de velocidad, lo que se aprovecha en el diseÃ±o de medios de transporte (cinturones de seguridad, airbags), en astronÃ¡utica (cÃ¡lculo de trayectorias de vuelo libre) y en tecnologÃa (centrifugadoras, girÃ³scopos). El lÃmite de aplicabilidad es la aproximaciÃ³n clÃ¡sica: a velocidades cercanas a la de la luz, la inercia deja de ser lineal y requiere la relatividad especial.",
+    "key_problems": [
+      "La ley se apoya en el concepto de sistema de referencia inercial, que se define precisamente como aquel donde se cumple la primera ley, lo que crea un cÃrculo lÃ³gico que se elimina formalmente en la relatividad general mediante sistemas inerciales locales.",
+      "En el micromundo, la inercia es inseparable de los efectos cuÃ¡nticos, y el concepto de trayectoria debe revisarse."
+    ],
+    "formulas": [
+      {
+        "description": "Condición para el movimiento inercial",
+        "latex": "\\sum \\vec{F} = 0 \\implies \\vec{v} = \\text{const}",
+        "meaning": "âˆ‘F: suma vectorial de todas las fuerzas que actÃºan sobre el cuerpo; v: velocidad del cuerpo; const: magnitud constante (en mÃ³dulo y direcciÃ³n)."
+      }
+    ],
+    "scientists": [
+      "Isaac Newton",
+      "Galileo Galilei"
+    ],
+    "tags": [
+      "gravity"
+    ],
+    "related_laws": [
+      "newtons_second_law",
+      "law_of_conservation_of_momentum"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "newtons_second_law": {
+    "name": "segunda ley de Newton",
+    "type": "ley",
+    "mini": "Cuanto mÃ¡s fuerte empujas un carrito, mÃ¡s rÃ¡pido acelera; pero una losa pesada de concreto acelera menos con el mismo esfuerzo.",
+    "practical_application": "Al diseÃ±ar ascensores se calcula obligatoriamente la fuerza de tracciÃ³n del cable capaz de acelerar la cabina con la aceleraciÃ³n requerida, conociendo su masa y la de los pasajeros.",
+    "description_popular": "La segunda ley de Newton relaciona cuantitativamente fuerza, masa y aceleraciÃ³n. TambiÃ©n fue publicada en los PhilosophiÃ¦ Naturalis Principia Mathematica (1687) y se convirtiÃ³ en el corazÃ³n de la dinÃ¡mica clÃ¡sica. HistÃ³ricamente, Newton se apoyÃ³ en los trabajos de Galileo y Kepler. En la formulaciÃ³n moderna, la ley suele escribirse mediante la variaciÃ³n del momento: la fuerza es igual a la derivada del momento respecto al tiempo. El momento (producto de masa por velocidad) es la medida de la cantidad de movimiento. Si la masa es constante, F = mÂ·a, pero en el caso general (por ejemplo, un cohete que pierde combustible) es vÃ¡lida la forma impulsiva.",
+    "fun_fact_popular": "En el lanzamiento de un cohete Soyuz, la fuerza de empuje de los motores genera una aceleraciÃ³n de hasta 4 g, y los cosmonautas se sienten cuatro veces mÃ¡s pesados.",
+    "description_simple": "La aceleraciÃ³n (quÃ© tan rÃ¡pido cambia la velocidad) es directamente proporcional a la fuerza e inversamente proporcional a la masa del cuerpo. La fuerza (por ejemplo, un empujÃ³n) es la causa del cambio de movimiento; la masa (el peso del cuerpo) indica quÃ© tan difÃcil es lograrlo. Si se aplica la misma fuerza a un balÃ³n ligero y a una pesa, el balÃ³n acelerarÃ¡ mucho mÃ¡s.",
+    "how_it_works_simple": "Un ciclista, al pedalear, aplica una fuerza y la bicicleta acelera. Un camiÃ³n con mayor masa cobra velocidad mucho mÃ¡s lentamente que un automÃ³vil ligero con el mismo motor.",
+    "fun_fact": "En las atracciones modernas de tipo catapulta, complejos sistemas hidrÃ¡ulicos generan fuerzas que aceleran la cÃ¡psula hasta 100 km/h en 2 segundos; los ingenieros calculan las sobrecargas para no daÃ±ar la columna vertebral del pasajero.",
+    "description": "La segunda ley de Newton establece: en un sistema de referencia inercial, la rapidez de cambio del momento de un punto material es igual a la fuerza que actÃºa sobre Ã©l. MatemÃ¡ticamente: F = dp/dt, donde p = mv. Si la masa es constante, equivale a F = m dv/dt = ma. La ley es vÃ¡lida para la mecÃ¡nica newtoniana a velocidades mucho menores que la de la luz; en relatividad especial se requiere el momento relativista. La contribuciÃ³n clave de Newton fue la separaciÃ³n explÃcita entre la cinemÃ¡tica (descripciÃ³n del movimiento) y la dinÃ¡mica (causas del movimiento).",
+    "history": "El concepto de fuerza ya lo discutÃa ArquÃ­medes, pero la forma matemÃ¡tica de la relaciÃ³n entre fuerza y movimiento tardÃ³ en encontrarse. Galileo Galilei estableciÃ³ que la velocidad es proporcional al tiempo de caÃda. Johannes Kepler supuso que los planetas se mueven por una fuerza proveniente del Sol. Isaac Newton, en sus famosos Principia (1687), dio una formulaciÃ³n clara, llamando fuerza a la acciÃ³n ejercida sobre un cuerpo para cambiar su estado de reposo o movimiento rectilÃneo uniforme.",
+    "how_it_works": "Se usa en toda la ingenierÃa para calcular cargas, movimiento de mecanismos y resistencia de materiales. En mecÃ¡nica celeste permite calcular Ã³rbitas teniendo en cuenta la gravitaciÃ³n. En biomecÃ¡nica explica por quÃ© un golpe es mÃ¡s fuerte si se reduce el tiempo de frenado (impulso de la fuerza). Limitaciones: no funciona a velocidades cercanas a la de la luz ni en campos gravitacionales intensos, donde se requiere la relatividad general; en el micromundo, el anÃ¡logo es la ecuaciÃ³n de SchrÃ¶dinger o la mecÃ¡nica cuÃ¡ntica.",
+    "key_problems": [
+      "A velocidades relativistas, la masa depende de la velocidad y la ecuaciÃ³n F = ma no es correcta; debe usarse F = dp/dt con momento relativista p = Î³mv.",
+      "En la mecÃ¡nica cuÃ¡ntica, el concepto de trayectoria es difuso y la fuerza no es una magnitud cÃ³moda; lo fundamental es la energÃa y el operador hamiltoniano."
+    ],
+    "formulas": [
+      {
+        "description": "Fuerza igual a la variación del momento",
+        "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt}",
+        "meaning": "F: vector fuerza; dp/dt: derivada del momento p respecto al tiempo t; momento p = mv (m: masa, v: velocidad)."
+      },
+      {
+        "description": "Para masa constante, relación entre fuerza y aceleración",
+        "latex": "\\vec{F} = m \\vec{a}",
+        "meaning": "F: fuerza; m: masa del cuerpo; a: aceleraciÃ³n (cambio de velocidad por unidad de tiempo)."
+      }
+    ],
+    "scientists": [
+      "Isaac Newton",
+      "Galileo Galilei",
+      "Johannes Kepler"
+    ],
+    "tags": [
+      "gravity"
+    ],
+    "related_laws": [
+      "newtons_first_law",
+      "newtons_third_law",
+      "law_of_conservation_of_momentum"
+    ],
+    "refined": false,
+    "raw": {},
+    "image_prompt": "A top-down view of a vast, airy, mint-green kinetic sculpture platform, where a tiny polished steel sphere is pulled by an almost invisible thread, its acceleration frozen in a crisp, cold",
+    "image_pending": false,
+    "image_model": "black-forest-labs/FLUX-1-schnell"
+  },
+  "newtons_third_law": {
+    "name": "tercera ley de Newton",
+    "type": "ley",
+    "mini": "Con la pala empujas la tierra y al mismo tiempo la tierra empuja la pala con la misma fuerza, pero hacia arriba.",
+    "practical_application": "El chorro de gases de un motor de cohete sale hacia abajo y el cohete sube; sin esta ley serÃa imposible el vuelo espacial.",
+    "description_popular": "La tercera ley de Newton, tambiÃ©n llamada ley de acciÃ³n y reacciÃ³n, afirma que las fuerzas de interacciÃ³n entre dos cuerpos son iguales en magnitud y opuestas en direcciÃ³n. Es importante entender que se aplican a cuerpos distintos, por lo que no se anulan entre sÃ. Isaac Newton, en los Principia (1687), dio a este principio una forma matemÃ¡tica rigurosa, pero empÃricamente la humanidad siempre experimentÃ³ la reacciÃ³n: al remar, el remo empuja el agua hacia atrÃ¡s y el agua empuja la barca hacia adelante.",
+    "fun_fact_popular": "Si de repente se desactivara la tercera ley, no podrÃas caminar: tu pie empuja el suelo y el suelo te empuja hacia adelante.",
+    "description_simple": "Cuando un cuerpo empuja a otro, el segundo cuerpo responde empujando con la misma fuerza en sentido contrario. Estas dos fuerzas tienen direcciones opuestas a lo largo de una misma recta. Las fuerzas siempre aparecen en pares: la mano empuja la pared y la pared empuja la mano.",
+    "how_it_works_simple": "Un globo, si se infla y se suelta, vuela por la habitaciÃ³n: el aire sale disparado en una direcciÃ³n y el globo sale impulsado en la contraria; eso es propulsiÃ³n a reacciÃ³n.",
+    "fun_fact": "Algunos animales marinos, como los calamares, usan la tercera ley de Newton para nadar a reacciÃ³n: expulsan bruscamente un chorro de agua y reciben un impulso hacia adelante, alcanzando velocidades de hasta 40 km/h.",
+    "description": "La tercera ley de Newton establece que a toda fuerza de acciÃ³n corresponde una fuerza de reacciÃ³n igual en magnitud y opuesta en direcciÃ³n. Formalmente: si un cuerpo A actÃºa sobre un cuerpo B con una fuerza F_AB, entonces el cuerpo B actÃºa simultÃ¡neamente sobre A con una fuerza F_BA = -F_AB. Esta ley es la base de las leyes de conservaciÃ³n del momento y la energÃa. En la fÃsica moderna se deduce de simetrÃas mÃ¡s profundas: la homogeneidad del espacio (teorema de Noether).",
+    "history": "El principio de reacciÃ³n ya era discutido por los mecÃ¡nicos de la AntigÃ¼edad, pero fue estudiado sistemÃ¡ticamente por Isaac Newton a partir de experimentos y observaciones. VerificÃ³ la ley en colisiones de pÃ©ndulos (junto con Christiaan Huygens) y en el movimiento de los planetas. Newton comprendiÃ³ que el Sol y los planetas se atraen mutuamente: si el Sol atrae a la Tierra, la Tierra tambiÃ©n atrae al Sol con la misma fuerza, aunque debido a la enorme masa solar la reacciÃ³n es imperceptible. Posteriormente, la ley se confirmÃ³ en todas las interacciones imaginables.",
+    "how_it_works": "Se aplica en motores a reacciÃ³n, al caminar, nadar y en el cÃ¡lculo de impactos y tensiones de contacto. En coheterÃa, la tercera ley explica la generaciÃ³n de empuje: la eyecciÃ³n de masa a gran velocidad produce un impulso igual en sentido contrario que impulsa el cohete. Los lÃmites de aplicabilidad son clÃ¡sicos: en electrodinÃ¡mica con potenciales retardados, la tercera ley en su forma simple para fuerzas instantÃ¡neas no se cumple y debe tenerse en cuenta el momento del campo.",
+    "key_problems": [
+      "En las interacciones electromagnÃ©ticas con radiaciÃ³n, la fuerza de acciÃ³n no siempre es instantÃ¡neamente equilibrada por la reacciÃ³n sobre la partÃcula; el momento es transportado por el campo electromagnÃ©tico.",
+      "A velocidades relativistas, las fuerzas dependen del sistema de referencia, pero el balance global de momento se conserva."
+    ],
+    "formulas": [
+      {
+        "description": "Igualdad y oposición de las fuerzas de interacción",
+        "latex": "\\vec{F}_{12} = -\\vec{F}_{21}",
+        "meaning": "F12: fuerza con que el cuerpo 1 actÃºa sobre el cuerpo 2; F21: fuerza del cuerpo 2 sobre el cuerpo 1; el signo negativo indica direcciÃ³n opuesta."
+      }
+    ],
+    "scientists": [
+      "Isaac Newton",
+      "Christiaan Huygens"
+    ],
+    "tags": [
+      "gravity"
+    ],
+    "related_laws": [
+      "newtons_second_law",
+      "law_of_conservation_of_momentum"
+    ],
+    "refined": false,
+    "raw": {},
+    "image_prompt": "Top-down view, painterly digital art, soft monochrome teal, bioluminescent glow. A fragmented composition of several close-ups: a water droplet impacting a surface with equal and opposite reaction ripples, a feather and a coin falling in vacuum with invisible force lines, and a pair of celestial bodies exchanging glowing trails. Mysterious atmosphere, light airy background.",
+    "image_pending": false,
+    "image_model": "black-forest-labs/FLUX-1-schnell"
+  },
+  "law_of_conservation_of_energy": {
+    "name": "ley de conservación de la energía",
+    "type": "ley",
+    "mini": "La energÃa no desaparece ni surge de la nada: simplemente cambia de disfraz, transformÃ¡ndose de una forma en otra.",
+    "practical_application": "Sin esta ley no funcionarÃan las centrales elÃ©ctricas: la energÃa quÃmica del carbÃ³n se convierte en calor y luego en electricidad. ActÃºa en cada pila y panel solar.",
+    "description_popular": "A mediados del siglo XIX, varios cientÃficos llegaron de forma independiente a la conclusiÃ³n de que el calor no es un fluido misterioso, sino una forma de movimiento de las partÃculas. Julius Mayer, al observar el color de la sangre de los marineros, notÃ³ la relaciÃ³n entre el trabajo del organismo y el calor. James Joule, mediante experimentos precisos, midiÃ³ cuÃ¡nto calor produce el trabajo mecÃ¡nico. Hermann Helmholtz dio forma a una teorÃa coherente. La ley de conservaciÃ³n de la energÃa afirma que en un sistema aislado, la energÃa total (la suma de la cinÃ©tica, potencial, tÃ©rmica y otras formas) es constante. Es como un presupuesto familiar: los ingresos y gastos pueden cambiar de forma, pero el saldo total de la cuenta se mantiene si no interviene una fuente externa.",
+    "fun_fact_popular": "Gracias a esta ley sabemos con certeza que el aleteo de una mariposa no desaparece sin dejar rastro, sino que se disipa en el caos del movimiento tÃ©rmico del aire.",
+    "description_simple": "La ley dice: en un sistema cerrado (donde nada entra ni sale) la cantidad total de energÃa es siempre la misma. La energÃa puede pasar de una forma a otra, como el agua trasvasada de una jarra a un vaso sigue siendo agua. En un columpio: en el punto mÃ¡s alto estÃ¡ inmÃ³vil y lleno de energÃa potencial (energÃa de posiciÃ³n); abajo se mueve rÃ¡pido, con energÃa cinÃ©tica (energÃa de movimiento) mÃ¡xima, y la suma de ambas es constante si se ignora el rozamiento.",
+    "how_it_works_simple": "Esta ley explica por quÃ© es imposible crear un mÃ³vil perpetuo: parte de la energÃa siempre se convierte en calor. Una bombilla se calienta porque no toda la energÃa elÃ©ctrica se transforma en luz. Al caer una piedra, la energÃa potencial de la altura se vuelve cinÃ©tica y, al golpear, sonora y tÃ©rmica.",
+    "fun_fact": "SegÃºn una hipÃ³tesis, la energÃa total del Universo es cero: la energÃa positiva de la materia se compensa exactamente con la energÃa gravitacional negativa. Esta elegante suposiciÃ³n aÃºn no estÃ¡ demostrada.",
+    "description": "La ley de conservaciÃ³n de la energÃa es un principio fundamental de la fÃsica que establece que la energÃa total de un sistema cerrado permanece constante en el tiempo. La energÃa no se crea ni se destruye, solo se transforma de una forma a otra. En mecÃ¡nica clÃ¡sica se expresa como la constancia de la suma de energÃa cinÃ©tica y potencial: E = K + U = const. En termodinÃ¡mica, mediante el primer principio: Î”U = Q - W, donde la variaciÃ³n de energÃa interna del sistema es igual al calor recibido menos el trabajo realizado por el sistema. El teorema de Noether relaciona esta ley con una simetrÃa: la invariancia de las leyes fÃsicas respecto a traslaciones en el tiempo conduce a la conservaciÃ³n de la energÃa.",
+    "history": "La idea de la indestructibilidad de la Â«fuerza vivaÂ» (mvÂ²) se remonta a Leibniz en el siglo XVII. Sin embargo, hasta mediados del siglo XIX se consideraba que el calor era una sustancia especial, el calÃ³rico. El mÃ©dico Julius Mayer, en 1842, fue el primero en formular el equivalente mecÃ¡nico del calor al observar a personas en el trÃ³pico. James Joule, entre 1843 y 1847, demostrÃ³ experimentalmente la transformaciÃ³n del trabajo mecÃ¡nico en calor. Hermann Helmholtz, en 1847, dio la formulaciÃ³n matemÃ¡tica de la ley para todos los tipos de energÃa. Emmy Noether, en 1918, revelÃ³ la profunda conexiÃ³n entre simetrÃas y leyes de conservaciÃ³n. Albert Einstein extendiÃ³ la ley al Ã¡mbito relativista, incluyendo la equivalencia entre masa y energÃa (E=mcÂ²).",
+    "how_it_works": "La ley se aplica en todas las ramas de la fÃsica y la tÃ©cnica: desde el cÃ¡lculo de trayectorias planetarias hasta el diseÃ±o de motores tÃ©rmicos y reactores nucleares. Sus lÃmites los seÃ±alan la relatividad general, donde la energÃa del campo gravitacional no es local, y la mecÃ¡nica cuÃ¡ntica, donde son posibles fluctuaciones de energÃa en intervalos cortos (principio de indeterminaciÃ³n). Sin embargo, en el mundo macroscÃ³pico y en sistemas aislados es absoluta.",
+    "key_problems": [
+      "El problema de la energÃa oscura: la expansiÃ³n acelerada del Universo exige una fuente de energÃa con presiÃ³n negativa, cuya naturaleza se desconoce.",
+      "En la relatividad general, la ley de conservaciÃ³n de la energÃa no tiene carÃ¡cter local, lo que suscita debates sobre su universalidad.",
+      "Las fluctuaciones cuÃ¡nticas de energÃa a escala de la longitud de Planck plantean la cuestiÃ³n de la conservaciÃ³n global de la energÃa en el Universo primitivo."
+    ],
+    "formulas": [
+      {
+        "description": "Ley de conservación de la energía mecánica",
+        "latex": "E = K + U = \\text{const}",
+        "meaning": "E: energÃa mecÃ¡nica total; K: energÃa cinÃ©tica (energÃa de movimiento), para una masa puntual K = mvÂ²/2, donde m: masa, v: velocidad; U: energÃa potencial (energÃa de posiciÃ³n, que depende de la configuraciÃ³n del sistema; por ejemplo, en el campo gravitatorio U = mgh, donde g â‰ˆ 9.8 m/sÂ² es la aceleraciÃ³n de la gravedad y h la altura)."
+      },
+      {
+        "description": "Primer principio de la termodinámica (una de las formas de la ley de conservación de la energía)",
+        "latex": "\\Delta U = Q - W",
+        "meaning": "Î”U: variaciÃ³n de la energÃa interna del sistema; Q: cantidad de calor recibida por el sistema; W: trabajo realizado por el sistema contra las fuerzas externas (en algunas convenciones el signo puede cambiar). Para un sistema aislado Q = 0, W = 0, por lo tanto Î”U = 0, es decir, la energÃa interna es constante."
+      }
+    ],
+    "scientists": [
+      "James Prescott Joule",
+      "Julius von Mayer",
+      "Hermann von Helmholtz",
+      "Emmy Noether",
+      "Albert Einstein"
+    ],
+    "tags": [
+      "electromagnetism",
+      "enthalpy",
+      "entropy",
+      "internal_energy",
+      "nuclear_fusion"
+    ],
+    "related_laws": [
+      "first_law_of_thermodynamics",
+      "massenergy_equivalence",
+      "noethers_theorem"
+    ],
+    "refined": false,
+    "raw": {},
+    "image_prompt": "Soft volumetric light illuminates an ethereal, airy scene of flowing energy particles and waveforms, symbolizing the conversion of kinetic motion into heat, captured with long lens compression and rendered in a crisp editorial illustration with a soft monochrome teal palette, evoking a tense and dramatic sense of constant equilibrium.",
+    "image_pending": false,
+    "image_model": "black-forest-labs/FLUX-1-schnell"
+  },
+  "holevo_bound": {
+    "name": "cota de Holevo",
+    "type": "teorema",
+    "mini": "De la taza cuántica no se puede extraer más información clásica de lo que permite el tamaño de su boca.",
+    "practical_application": "Establece el límite de capacidad de transmisión de la internet cuántica y de la seguridad de la criptografía cuántica.",
+    "description_popular": "En 1973, el matemático soviético Alexander Holevo (A. S. Jolevo) del Instituto Matemático Steklov demostró su famoso teorema. Este afirma que la cantidad de información clásica accesible a un observador sobre un estado cuántico no supera la entropía de von Neumann de ese estado (una medida de su incertidumbre) menos la entropía promedio de los estados que componen el conjunto. Este trabajo se convirtió en la piedra angular de la teoría de la información cuántica.",
+    "fun_fact_popular": "La cota de Holevo explica por qué los ordenadores cuánticos no pueden simplemente 'descargar' todas las respuestas de universos paralelos: de un estado cuántico solo se puede extraer una cantidad limitada de datos ordinarios.",
+    "description_simple": "Si se transmiten mensajes mediante partículas cuánticas (por ejemplo, fotones), la cantidad de información clásica (bits ordinarios) que el receptor puede extraer de las mediciones está limitada. La cota de Holevo dice: n bits cuánticos (cúbits) no pueden transportar más de n bits clásicos de información. Es como una memoria USB que físicamente no puede contener más datos que su capacidad, incluso si se intenta codificar de manera ingeniosa.",
+    "how_it_works_simple": "Este límite determina la velocidad real de transmisión segura de datos en comunicaciones cuánticas. Por ejemplo, en la distribución cuántica de claves (QKD), para que un intruso no pueda escuchar sin ser detectado, la tasa de generación de claves no puede superar la cota de Holevo.",
+    "fun_fact": "En la ciencia mundial, el apellido Holevo se ha convertido en uno de los pocos términos rusos que se usan sin traducción: 'Holevo bound'. En conferencias sobre información cuántica, a menudo se la llama simplemente 'cota de Holevo'.",
+    "description": "El teorema de Holevo (o cota de Holevo) es una desigualdad fundamental en la teoría de la información cuántica que limita la información mutua I(X;Y) entre una variable aleatoria clásica X y el resultado de una medición Y sobre un estado cuántico. Si el emisor envía estados con probabilidades p_i y matrices de densidad ρ_i, entonces el receptor, al realizar cualquier medición, puede extraer como máximo χ = S(∑ p_i ρ_i) — ∑ p_i S(ρ_i) bits de información. Aquí S(ρ) = —Tr(ρ log₂ ρ) es la entropía de von Neumann (el análogo cuántico de la entropía de Shannon, que cuantifica la incertidumbre de un estado). Una consecuencia importante: un solo cúbit no puede transmitir más de un bit clásico.",
+    "history": "Fue formulada y demostrada por Alexander Holevo en 1973. La idea se discutió de forma independiente en la literatura occidental más tarde, pero la prioridad pertenece a Holevo. El teorema fue el punto de partida para el desarrollo de la teoría cuántica de la capacidad del canal: Benjamin Schumacher y Richard Jozsa introdujeron más tarde el término 'cúbit' e investigaron la compresión de información cuántica. También son importantes los trabajos de Charles Bennett y Stephen Wiesner.",
+    "how_it_works": "La cota de Holevo se utiliza en el diseño de protocolos de comunicación cuántica y en la evaluación de su eficiencia. También es importante en criptografía cuántica, ya que determina el límite superior de la fuga de información hacia un interceptador. Limitaciones: supone que el emisor y el receptor no utilizan entrelazamiento (transmiten estados preparados). Para canales cuánticos con entrelazamiento existen límites más generales, como la capacidad de Holevo-Schumacher-Westmoreland, que van más allá de este teorema.",
+    "key_problems": [
+      "¿Es alcanzable la cota de Holevo bajo limitaciones reales de ruido y decoherencia?",
+      "¿Cómo generalizar la cota para la transmisión no solo de información clásica, sino también cuántica?",
+      "¿Existen códigos cuánticos que alcancen asintóticamente el límite?"
+    ],
+    "formulas": [
+      {
+        "description": "Cota de Holevo",
+        "latex": "\\chi = S\\left(\\sum_i p_i \\rho_i\\right) - \\sum_i p_i S(\\rho_i)",
+        "meaning": "χ es la cantidad máxima de información clásica (en bits) que se puede extraer del conjunto de estados cuánticos; S es la entropía de von Neumann, S(ρ) = -Tr(ρ log₂ ρ), donde Tr es la traza de la matriz, log₂ es el logaritmo en base 2, y ρ es la matriz de densidad (describe el estado cuántico); p_i es la probabilidad con la que el emisor prepara el estado ρ_i; ∑_i p_i ρ_i es el estado promedio que recibe el receptor."
+      }
+    ],
+    "scientists": [
+      "Alexander Holevo",
+      "Benjamin Schumacher",
+      "Charles Bennett"
+    ],
+    "tags": [
+      "quantum_computer",
+      "uncertainty_principle"
+    ],
+    "related_laws": [
+      "nocloning_theorem",
+      "superposition_principle"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "laser_invention": {
+    "name": "invención del láser",
+    "type": "invento",
+    "mini": "Luz concentrada en un rayo fino como una aguja, pero capaz de cortar acero y transmitir mensajes de internet.",
+    "practical_application": "Láseres en cada escáner de código de barras, en cirugías, en líneas de comunicación por fibra óptica y en reproductores Blu-ray.",
+    "description_popular": "La idea del máser (precursor de microondas) pertenece a Charles Townes, quien junto con Arthur Schawlow propuso en 1958 extender el principio a la luz. El primer láser funcional, de rubí, fue creado por Theodore Maiman en 1960. Desde entonces, los láseres se han vuelto omnipresentes: desde simples punteros hasta el corte industrial y la espectroscopía científica.",
+    "fun_fact_popular": "El láser es tan preciso que se utilizó para medir la distancia de la Tierra a la Luna con una precisión de milímetros, reflejando el rayo en un espejo dejado por los astronautas de la misión Apolo.",
+    "description_simple": "Un láser es un dispositivo que amplifica la luz mediante emisión estimulada (los fotones 'empujan' a los átomos para que emitan fotones idénticos, creando una avalancha de partículas de luz idénticas). Para obtener un rayo potente y dirigido, la sustancia activa se coloca entre dos espejos que hacen pasar la luz repetidamente de un lado a otro hasta que la amplificación supera las pérdidas. Como resultado, se obtiene radiación coherente de una sola frecuencia y fase.",
+    "how_it_works_simple": "El rayo láser transmite energía a largas distancias casi sin dispersión. Gracias a esto, tenemos Internet rápido a través de fibra óptica, telémetros precisos (lidars) e incluso la corrección láser de la vista.",
+    "fun_fact": "El primer láser de Maiman emitía pulsos de luz roja con una energía de aproximadamente un julio y una duración de alrededor de un milisegundo. Sin embargo, el rayo era tan potente para la época que, según cuenta la leyenda, uno de los primeros experimentos quemó accidentalmente un agujero en una bata de laboratorio.",
+    "description": "La invención del láser (Light Amplification by Stimulated Emission of Radiation) se basa en el fenómeno de la emisión estimulada, predicho por Albert Einstein en 1917. Principio físico: al crear una inversión de población (estado en el que hay más átomos en el nivel de energía superior que en el inferior), un fotón que pase con energía igual a la diferencia de niveles desencadena una avalancha de fotones secundarios con la misma fase, frecuencia y dirección. Para generar luz, se necesita una retroalimentación: un resonador formado por dos espejos, uno de ellos semitransparente. Condición de umbral: la amplificación por paso debe compensar las pérdidas en los espejos y en el medio.",
+    "history": "Las raíces de la idea se remontan a Einstein en 1917 (emisión estimulada). En 1954, Charles Townes y sus estudiantes crearon el máser de amoníaco. En 1958, Townes y Arthur Schawlow publicaron un trabajo teórico sobre la posibilidad del láser. Theodore Maiman, el 16 de mayo de 1960, en los Hughes Research Laboratories, puso en funcionamiento el primer láser de estado sólido de rubí. Más tarde surgieron los láseres de gas, los semiconductores, y en los años 1990, los láseres de cascada cuántica.",
+    "how_it_works": "Los láseres modernos se clasifican por longitud de onda (desde infrarrojo hasta rayos X), régimen (continuo, pulsado) y potencia. Se aplican en medicina (bisturí láser), transporte (comunicación láser), industria (soldadura, corte) y ciencia (enfriamiento láser de átomos). La principal limitación es la distorsión térmica del medio activo a altas potencias y la necesidad de bombeo.",
+    "key_problems": [
+      "Creación de láseres con pulsos extremadamente cortos (de attosegundos).",
+      "Mejora de la eficiencia de los láseres semiconductores de infrarrojo lejano.",
+      "Desarrollo de fuentes potentes y compactas de rayos X coherentes."
+    ],
+    "formulas": [
+      {
+        "description": "Condición de umbral para la generación láser",
+        "latex": "g_{th} = \\alpha - \\frac{1}{2L} \\ln(R_1 R_2)",
+        "meaning": "g_th es el coeficiente de ganancia umbral del medio activo (la ganancia mínima por unidad de longitud a la que comienza la generación); α es el coeficiente de pérdidas internas (absorción, dispersión) en el resonador; L es la longitud del resonador; R₁, R₂ son los coeficientes de reflexión de los espejos (en intensidad), 0 < R ≤ 1."
+      },
+      {
+        "description": "Energía del fotón y longitud de onda",
+        "latex": "E = h\\nu = h\\frac{c}{\\lambda}",
+        "meaning": "E es la energía de un fotón; h es la constante de Planck, h ≈ 6.626×10⁻³⁴ J·s; ν es la frecuencia de la radiación; c es la velocidad de la luz en el vacío, c ≈ 2.998×10⁸ m/s; λ es la longitud de onda de la radiación. En los láseres, la frecuencia está determinada por la diferencia de energía entre los niveles de trabajo del medio activo."
+      }
+    ],
+    "scientists": [
+      "Charles Townes",
+      "Albert Einstein"
+    ],
+    "tags": [
+      "electromagnetic_radiation",
+      "spectroscopy"
+    ],
+    "related_laws": [
+      "planckeinstein_relation",
+      "einsteins_photoelectric_equation"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "transistor_invention": {
+    "name": "invención del transistor",
+    "type": "invento",
+    "mini": "Un minúsculo interruptor electrónico sin partes móviles, que cabe por miles de millones en la punta de un dedo.",
+    "practical_application": "Base de todos los microprocesadores, memorias y amplificadores, desde teléfonos inteligentes hasta satélites.",
+    "description_popular": "A finales de 1947, en Bell Labs, el equipo dirigido por William Shockley, junto con John Bardeen y Walter Brattain, creó el primer transistor de punta de contacto funcional. Por este descubrimiento recibieron el Premio Nobel en 1956. El principio de funcionamiento se basa en las propiedades de las uniones p-n de los semiconductores: la corriente a través de la unión puede controlarse mediante la inyección de portadores de carga minoritarios.",
+    "fun_fact_popular": "El primer transistor se montó sobre una pequeña pieza de germanio con contactos de oro presionados por un resorte, y parecía un amasijo de placas metálicas y clips. Era del tamaño de una moneda grande, mientras que hoy los transistores en los procesadores son más pequeños que un virus.",
+    "description_simple": "El transistor funciona como un grifo para la corriente eléctrica: una señal débil en la entrada controla un flujo fuerte en la salida. En un transistor bipolar, una pequeña corriente de base abre el paso a una gran corriente entre el colector y el emisor. Esto permite amplificar señales y cambiar estados lógicos ('0' y '1'). La invención del transistor en 1947 reemplazó a las voluminosas, frágiles y calientes válvulas electrónicas.",
+    "how_it_works_simple": "Los transistores se utilizan en amplificadores de audio, en interruptores de potencia y, sobre todo, como celdas elementales de la lógica digital. Su miniaturización hasta tamaños nanométricos ha dado lugar a la microelectrónica moderna: el procesador de tu teléfono contiene más de 10 mil millones de transistores.",
+    "fun_fact": "Walter Brattain, uno de los creadores del transistor de punta de contacto, según la leyenda, se enfadó tanto cuando no le permitían patentar la construcción que exclamó: '¡Entonces puedo inventar cualquier cosa en la cocina!', y de hecho, el primer transistor se parecía mucho a un trabajo artesanal.",
+    "description": "El transistor es un dispositivo semiconductor capaz de amplificar, generar y conmutar señales eléctricas. Se basa en las propiedades de las uniones p-n y en el control de la concentración de portadores de carga (electrones y huecos). El transistor bipolar (BJT) es una estructura de tres capas (npn o pnp), donde la corriente de colector I_C depende exponencialmente de la tensión base-emisor y es aproximadamente proporcional a la corriente de base: I_C ≈ β I_B. El transistor de efecto de campo (FET) se controla mediante la tensión en la compuerta, que crea un canal conductor.",
+    "history": "El primer transistor de punta de contacto fue inventado por John Bardeen y Walter Brattain el 23 de diciembre de 1947 en Bell Labs bajo la dirección de William Shockley. En 1948, Shockley desarrolló la teoría de la unión p-n y propuso el transistor bipolar de unión. En 1954 apareció el transistor de silicio (Texas Instruments). En 1959, Robert Noyce y Jack Kilby crearon de forma independiente el circuito integrado, que reunía muchos transistores en un solo chip, dando inicio a la era de la microelectrónica.",
+    "how_it_works": "Los transistores modernos son principalmente MOSFET (metal-óxido-semiconductor), donde la corriente del canal se controla mediante la tensión de compuerta. La miniaturización (ley de Moore) ha alcanzado tecnologías de 3 nm, pero se enfrenta a efectos cuánticos (tunelamiento a través del dieléctrico de compuerta) y al problema de la disipación de calor. Límites de aplicabilidad: a nanoescala, empiezan a influir la discretización de la carga y el entrelazamiento cuántico.",
+    "key_problems": [
+      "Superación del límite de miniaturización de los MOSFET: ¿hacia dónde vamos?",
+      "Transición a transistores basados en nuevos principios (túnel, espintrónicos).",
+      "Reducción del consumo de energía estática en chips nanométricos."
+    ],
+    "formulas": [
+      {
+        "description": "Modelo simplificado del transistor bipolar",
+        "latex": "I_C = \\beta I_B",
+        "meaning": "I_C es la corriente de colector (corriente de salida); I_B es la corriente de base (corriente de control); β es la ganancia de corriente (valores típicos de 20 a 1000). La relación muestra cómo una pequeña corriente de base controla una gran corriente de colector."
+      }
+    ],
+    "scientists": [
+      "John Bardeen"
+    ],
+    "tags": [
+      "semiconductor",
+      "band_structure"
+    ],
+    "related_laws": [
+      "ohms_law",
+      "tunnel_effect",
+      "fermidirac_statistics"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "blue_led_invention": {
+    "name": "invención del LED azul",
+    "type": "invento",
+    "mini": "Un cristal azul que se abre paso por los oscuros rincones de la física de semiconductores para regalarnos luz blanca.",
+    "practical_application": "Gracias al LED azul, tenemos iluminación LED económica, pantallas de teléfonos y televisores con gama completa de colores, y proyectores láser.",
+    "description_popular": "El camino hacia el LED azul llevó varias décadas. La principal dificultad: obtener un semiconductor con una banda prohibida de aproximadamente 3.4 eV (que corresponde a la luz azul) y doparlo de tipo p (añadir impurezas para crear conducción por huecos). Shuji Nakamura, en la empresa japonesa Nichia, fue el primero en crear películas de GaN de alta calidad sobre sustrato de zafiro y desarrolló un método de recocido térmico para activar los aceptores de magnesio, obteniendo p-GaN. En 1993 demostró un LED azul brillante, y más tarde, el primer láser azul.",
+    "fun_fact_popular": "Shuji Nakamura recibió el Premio Nobel en 2014, pero su empresa Nichia inicialmente le pagó una bonificación de solo 200 dólares por el invento, tras lo cual estalló un largo proceso judicial.",
+    "description_simple": "Durante mucho tiempo, los científicos sabían fabricar LED rojos y verdes, pero el azul seguía siendo inalcanzable: se necesitaba un material con una banda prohibida ancha, capaz de emitir luz azul de manera eficiente y a la vez durar mucho tiempo. En los años 1990, Shuji Nakamura, utilizando nitruro de galio (GaN), logró hacer crecer un cristal de la calidad necesaria y crear con él un LED azul brillante. Esto completó la tríada RGB (rojo, verde, azul), permitiendo mezclar colores para obtener luz blanca.",
+    "how_it_works_simple": "Los LEDs azules, junto con un fósforo (un recubrimiento especial que convierte parte de la luz azul en amarilla), producen luz blanca que ilumina nuestros hogares y calles. Consumen muchas veces menos energía que las bombillas incandescentes y duran decenas de miles de horas.",
+    "fun_fact": "Para hacer crecer cristales de GaN de alta calidad, Nakamura modificó por su cuenta un reactor MOCVD estándar, cambiando la geometría de suministro de gases; sin esto, sus intentos fracasaban una y otra vez. Ese 'reactor de Nakamura' se encuentra ahora en un museo.",
+    "description": "La invención del LED azul se basa en la física de los semiconductores de banda ancha del grupo de los nitruros III (GaN, InGaN). Al polarizar directamente la unión p-n, los electrones se recombinan con los huecos, emitiendo fotones con una energía cercana a la banda prohibida E_g. Para la luz azul con λ ~ 450 nm se necesita E_g ≈ 2.76 eV, pero debido a los efectos de confinamiento cuántico en pozos cuánticos de InGaN, se utilizan capas con diferentes concentraciones de indio que permiten sintonizar la longitud de onda. Dificultades clave: obtener GaN monocristalino sin defectos, dopaje de tipo p (que no se conseguía desde hacía mucho tiempo) y creación de contactos eléctricos de calidad.",
+    "history": "En la década de 1970, Jacques Pankove (RCA) obtuvo la primera luminiscencia azul en GaN, pero sin dopaje p. En 1986, Isamu Akasaki y Hiroshi Amano crearon por primera vez p-GaN mediante irradiación con haz de electrones. Shuji Nakamura, trabajando de forma independiente en Nichia, en 1993 aplicó un recocido térmico y desarrolló una estructura con doble heterounión InGaN/GaN, lo que condujo al LED azul comercialmente exitoso. En 2014, Akasaki, Amano y Nakamura recibieron el Premio Nobel 'por la invención de LEDs azules eficientes que han permitido fuentes de luz blanca brillantes y de ahorro energético'.",
+    "how_it_works": "Los LEDs azules son la base de la iluminación de estado sólido (lámparas LED) y pantallas (OLED, microLED). También se utilizan en diodos láser para unidades Blu-ray (λ=405 nm) y sistemas Li-Fi (transmisión de datos por luz visible). Limitaciones: la eficiencia sigue disminuyendo a altas densidades de corriente ('droop'), y existen problemas de degradación durante el funcionamiento prolongado.",
+    "key_problems": [
+      "La causa de la caída de eficiencia a altas corrientes (efficiency droop) aún no está del todo clara.",
+      "Creación de láseres verdes basados en GaN (caída de eficiencia en la región verde del espectro).",
+      "Transición al nitruro de aluminio para el ultravioleta profundo."
+    ],
+    "formulas": [
+      {
+        "description": "Relación entre la longitud de onda y la banda prohibida",
+        "latex": "\\lambda = \\frac{hc}{E_g}",
+        "meaning": "λ es la longitud de onda de la luz emitida (para GaN, aproximadamente 365 nm, pero con pozos cuánticos de InGaN ~ 450 nm para el azul); h es la constante de Planck, h ≈ 6.626×10⁻³⁴ J·s; c es la velocidad de la luz, c ≈ 2.998×10⁸ m/s; E_g es la banda prohibida del semiconductor; para GaN, E_g ≈ 3.4 eV, para InN ~ 0.7 eV, lo que permite el ajuste mediante la composición InₓGa₁₋ₓN."
+      }
+    ],
+    "scientists": [
+      "Shuji Nakamura"
+    ],
+    "tags": [
+      "semiconductor",
+      "photon"
+    ],
+    "related_laws": [
+      "planckeinstein_relation",
+      "fermidirac_statistics"
     ],
     "refined": false,
     "raw": {}

@@ -1019,25 +1019,25 @@ def generate_tag_page(tag_id, lang):
     loc = {
         "en": {"related": "Related tags", "history": "History", "how": "How it works", "problems": "Open problems & fun facts",
                "search": "Search...", "hint": "# tag · @ author · ! scientist", "footer": "science made simple",
-               "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice"},
+               "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice", "articles": "Related articles"},
         "ar": {"related": "وسوم ذات صلة", "history": "التاريخ", "how": "كيف يعمل",
                "problems": "مسائل مفتوحة وحقائق طريفة", "search": "بحث...",
                "hint": "# وسم · @ مؤلف · ! عالم", "footer": "العلم ببساطة",
-               "scientists": "العلماء:", "no_articles": "لا مقالات بعد", "practical": "في الواقع"},
+               "scientists": "العلماء:", "no_articles": "لا مقالات بعد", "practical": "في الواقع", "articles": "مقالات ذات صلة"},
         "ru": {"related": "Связанные теги", "history": "История", "how": "Как работает",
                "problems": "Открытые проблемы и интересные факты", "search": "Поиск...",
                "hint": "# тег · @ автор · ! учёный", "footer": "наука простыми словами",
-               "scientists": "Учёные:", "no_articles": "Пока нет статей", "practical": "На практике"},
+               "scientists": "Учёные:", "no_articles": "Пока нет статей", "practical": "На практике", "articles": "Статьи по теме"},
         "zh": {"related": "相关标签", "history": "历史", "how": "工作原理", "problems": "未解决的问题与趣味知识",
                "search": "搜索...", "hint": "# 标签 · @ 作者 · ! 科学家", "footer": "让科学变简单",
-               "scientists": "科学家：", "no_articles": "暂无文章", "practical": "实际应用"},
+               "scientists": "科学家：", "no_articles": "暂无文章", "practical": "实际应用", "articles": "相关文章"},
         "fr": {"related": "Tags associés", "history": "Histoire", "how": "Fonctionnement",
                "problems": "Problèmes ouverts et anecdotes", "search": "Rechercher...",
                "hint": "# tag · @ auteur · ! scientifique", "footer": "la science simplifiée",
-               "scientists": "Scientifiques :", "no_articles": "Pas encore d'articles", "practical": "En pratique"}
+               "scientists": "Scientifiques :", "no_articles": "Pas encore d'articles", "practical": "En pratique", "articles": "Articles liés"}
     }.get(lang, {"related": "Related", "history": "History", "how": "How it works", "problems": "Open problems & fun facts",
                  "search": "Search...", "hint": "# tag · @ author · ! scientist", "footer": "",
-                 "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice"})
+                 "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice", "articles": "Related articles"})
 
     problems_and_fact_html = ""
     if tag_data.get("key_problems") or tag_data.get("fun_fact"):
@@ -1086,9 +1086,30 @@ def generate_tag_page(tag_id, lang):
         f'#{tag_data.get("name", tag_id)} — bridge42worlds', desc_pop,
         f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tag_id}.html", tag_img_url and f"{SITE_URL}{tag_img_url}")
 
+    # Правый сайдбар (как на статье/законе): связанные теги + законы + учёные плашками-колонкой,
+    # вместо разбросанных по телу related-блоков (юзер-фидбек 2026-07-17: "по тому же образу
+    # справа, а не в подвале"). Тот же side_chip_group/.side-* стиль, что на law-странице.
+    _laws_loc = load_laws_loc(lang)
+    side_tag_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(rt)}.html" class="side-tag" data-tag="{attr_safe(rt)}">'
+        f'{safe(tags_loc.get(rt, {}).get("name", rt))}</a>' for rt in tag_graph.get("related", [])[:8]]
+    side_law_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" data-law="{attr_safe(lid)}">'
+        f'{safe(L.get("name", lid))}</a>'
+        for lid, L in _laws_loc.items() if tag_id in (L.get("tags") or [])][:6]
+    side_sci_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="side-sci" '
+        f'data-scientist="{attr_safe(s)}">{safe(s)}</a>'
+        for s in tag_data.get("scientists", []) if s in valid_scientist_ids()]
+    entity_side_html = (
+        side_chip_group(loc["scientists"].rstrip(":"), side_sci_chips)
+        + side_chip_group(loc["related"], side_tag_chips)
+        + side_chip_group(SIDE_LAWS_LABEL.get(lang, SIDE_LAWS_LABEL["en"]), side_law_chips)
+    )
+
     (Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html").write_text(tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-        og_meta_html=og_meta_html,
+        og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         tag_id=attr_safe(tag_id),
         tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
         ai_cover_html=ai_cover_html,
@@ -1111,7 +1132,7 @@ def generate_tag_page(tag_id, lang):
         formulas_html=formulas_html, scientists_section_html=scientists_section_html,
         laws_section_html=laws_for_tag(tag_id, lang),
         history_label=safe(loc["history"]), how_label=safe(loc["how"]),
-        related_label=safe(loc["related"]),
+        related_label=safe(loc["related"]), articles_label=safe(loc["articles"]),
         related_tags_html=related_html, search_placeholder=safe(loc["search"]),
         search_hint=safe(loc["hint"]), graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
         mini_graph_filters_html=mini_graph_filters_html(lang, "tag"),
@@ -1595,22 +1616,22 @@ def generate_scientist_page(sid, lang):
     loc = {
         "en": {"related": "Related tags", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Key discoveries", "bio": "Biography", "quote": "Quote",
                "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "science made simple",
-               "no_articles": "No articles yet"},
+               "no_articles": "No articles yet", "articles": "Related articles"},
         "ar": {"related": "وسوم ذات صلة", "related_laws": "قوانين ذات صلة", "related_scientists": "علماء ذوو صلة", "discoveries": "اكتشافات رئيسية", "bio": "سيرة", "quote": "اقتباس",
                "search": "بحث...", "hint": "! عالم · # وسم · @ مؤلف", "footer": "العلم ببساطة",
-               "no_articles": "لا مقالات بعد"},
+               "no_articles": "لا مقالات بعد", "articles": "مقالات ذات صلة"},
         "ru": {"related": "Связанные теги", "related_laws": "Связанные законы", "related_scientists": "Связанные учёные", "discoveries": "Ключевые открытия", "bio": "Биография", "quote": "Цитата",
                "search": "Поиск...", "hint": "! учёный · # тег · @ автор", "footer": "наука простыми словами",
-               "no_articles": "Пока нет статей"},
+               "no_articles": "Пока нет статей", "articles": "Статьи с его участием"},
         "zh": {"related": "相关标签", "related_laws": "相关定律", "related_scientists": "相关科学家", "discoveries": "重要发现", "bio": "生平", "quote": "名言",
                "search": "搜索...", "hint": "! 科学家 · # 标签 · @ 作者", "footer": "让科学变简单",
-               "no_articles": "暂无文章"},
+               "no_articles": "暂无文章", "articles": "相关文章"},
         "fr": {"related": "Tags associés", "related_laws": "Lois associées", "related_scientists": "Scientifiques associés", "discoveries": "Découvertes clés", "bio": "Biographie", "quote": "Citation",
                "search": "Rechercher...", "hint": "! scientifique · # tag · @ auteur", "footer": "la science simplifiée",
-               "no_articles": "Pas encore d'articles"}
+               "no_articles": "Pas encore d'articles", "articles": "Articles liés"}
     }.get(lang, {"related": "Related", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Discoveries", "bio": "Biography", "quote": "Quote",
                  "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "",
-                 "no_articles": "No articles yet"})
+                 "no_articles": "No articles yet", "articles": "Related articles"})
 
     my_tags = set(data.get("related_tags", []))
     related_scientists = [
@@ -1625,6 +1646,23 @@ def generate_scientist_page(sid, lang):
     related_tags_block = related_row(loc["related"], related_tags_links)
     related_laws_block = related_row(loc.get("related_laws", "Related laws"), related_laws_links)
 
+    # Правый сайдбар (как на статье/законе/теге): связанные теги + законы + учёные плашками-колонкой.
+    side_tag_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html" class="side-tag" data-tag="{attr_safe(t)}">'
+        f'{safe(tags_loc.get(t, {}).get("name", t))}</a>' for t in data.get("related_tags", [])[:8]]
+    side_law_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" data-law="{attr_safe(lid)}">'
+        f'{safe(ld.get("name", lid))}</a>'
+        for lid, ld in laws_data.items() if sid in ld.get("scientists", []) or sid in ld.get("influenced_by", [])][:6]
+    side_sci_chips = [
+        f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="side-sci" '
+        f'data-scientist="{attr_safe(s)}">{safe(s)}</a>' for s in related_scientists[:8]]
+    entity_side_html = (
+        side_chip_group(loc["related"], side_tag_chips)
+        + side_chip_group(loc.get("related_laws", "Related laws"), side_law_chips)
+        + side_chip_group(loc["related_scientists"], side_sci_chips)
+    )
+
     sci_like_id = f"{author_slug(sid)}_{lang}_page"
     actions_html = build_actions_html(sci_like_id, sid, lang, "scientist")
     feedback_html = build_feedback_html(sci_like_id, lang, "scientist")
@@ -1634,7 +1672,8 @@ def generate_scientist_page(sid, lang):
 
     (Path(LANG_DIR) / lang / "scientists" / f"{author_slug(sid)}.html").write_text(tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-        og_meta_html=og_meta_html,
+        og_meta_html=og_meta_html, entity_side_html=entity_side_html,
+        articles_label=safe(loc.get("articles", loc.get("related", "Articles"))),
         scientist_id=attr_safe(sid),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         actions_html=actions_html, feedback_html=feedback_html,
@@ -2440,9 +2479,15 @@ def build_article(a, date_str, inputs, force=False, express=False):
                     translations[v][l] = res
             if express:
                 for l in targets:
+                    # locked-тир берёт контент из УЖЕ ПЕРЕВЕДЁННОГО реального тира ЭТОГО языка
+                    # (simple/mini в express_tiers), а не из русского express_result — иначе
+                    # express_locked_scipop (просто копирует base) оставлял бы русский текст
+                    # в слотах en/es/ar (баг 2026-07-17: locked-тиры на нерусских языках были RU).
+                    base_l = (translations.get("simple", {}).get(l)
+                              or translations.get("mini", {}).get(l) or express_result)
                     for v in VERSIONS:
                         if v not in express_tiers:
-                            translations[v][l] = express_locked_scipop(express_result, l)
+                            translations[v][l] = express_locked_scipop(base_l, l)
 
         a["refined"] = REFINE and not express  # бейдж ✦/тумблер ⇄ — экспресс не шлифован
         a["express"] = express

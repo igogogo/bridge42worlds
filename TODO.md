@@ -1,5 +1,75 @@
 # TODO — bridge42worlds (мастер-список)
 
+## 🔴 2026-07-18 — ПРОДОЛЖИТЬ В НОВОМ ОКНЕ (актуально прямо сейчас, читать первым)
+
+**⛔ КРИТИЧЕСКИЙ БАГ, НАЙДЕН И ОБОЙДЁН (но НЕ ПОЧИНЕН в коде) — НЕ ЗАПУСКАТЬ `law_describe.py`/
+`tag_describe.py` НИ В КАКОМ РЕЖИМЕ (даже `--only`, даже обычный top-up без флагов) ПОКА НЕ
+ПОЧИНЕНО:**
+Финальный цикл в `main()` обоих скриптов перестраивает `graph["graph"][id]["scientists"]`
+БЕЗУСЛОВНО для КАЖДОГО тега/закона из реестра (не только для описываемых в этом запуске!) —
+берёт значение из `ru.get(id,{}).get("scientists")` (узкий список из `tags.json`/`laws.json`,
+обычно 1-3 «настоящих первооткрывателя»), полностью игнорируя то, что реально накопилось в
+графе через `run.py evolve` (там теги обрастают ДЕСЯТКАМИ учёных, напр. у `black_hole` было 59).
+`tag_describe.py` использует `desc.get("scientists", prev.get(...))` — выглядит как safe-fallback,
+но НЕ работает: `.get()` берёт default ТОЛЬКО если ключа нет, а ключ `"scientists"` есть у каждого
+уже описанного тега (даже пустой `[]`) — значит prev/evolve-обогащение теряется всегда, когда
+запускается любой прогон этих скриптов, не только `--only`.
+**Симптом, который это уже вызвало сегодня**: мой тестовый `tag_describe.py --only higgs_boson
+--refine` (и `law_describe.py --only law_of_universal_gravitation --refine`) обрушили
+`data/tags-graph.json` с 1533 связей тег↔учёный до 259 (закон-граф пострадал меньше). **Данные
+восстановлены** командой `git checkout HEAD -- data/tags-graph.json data/laws-graph.json
+data/knowledge-graph.json` (в HEAD была последняя добрая версия) — если открываешь новое окно и
+видишь diff на этих 3 файлах, СНАЧАЛА проверь `git diff --stat` на предмет обвала числа
+`scientists`-ссылок (см. метод проверки в чате/памяти), не коммить не глядя.
+**Правильный фикс (не сделан)**: цикл перестройки графа должен либо (а) трогать ТОЛЬКО те id, что
+реально в `to_describe` в этом запуске, оставляя остальные узлы графа как есть (`prev` целиком,
+не мержить поля по одному), либо (б) объединять множества (`set(prev_scientists) | set(desc_scientists)`)
+вместо перезаписи. См. `law_describe.py` (~строка 210-220 в `main()`) и `tag_describe.py` (~строка
+222-234) — сейчас это простой словарь-присвоение `graph["graph"][lid] = {...}` внутри `for x in
+laws_in:`/`for t in (active+edu):`, без учёта `to_describe`/`args.only`.
+
+**В процессе / сделано сегодня:**
+- [x] Сайдбар статьи (`.article-side`) поднят вровень с заголовком — `<h1>`+meta перенесены
+  ВНУТРЬ `.article-main` (было снаружи `.article-wrapper`, из-за чего колонка стартовала ниже).
+  `templates/article.html`.
+- [x] Страницы тега/учёного (`templates/tag.html`, `templates/scientist.html`) переведены на тот
+  же паттерн `.entity-wrapper` + `.article-side` (справа), что уже был у закона (`law.html`) —
+  related-теги/законы/учёные вынесены из "подвала" в правую колонку через новый
+  `entity_side_html` (`generate.py`: `generate_tag_page`/`generate_scientist_page`, переиспользует
+  существующий `side_chip_group()`). Добавлен `articles_label`/loc-ключ `"articles"` для нового
+  заголовка секции со списком статей (заменяет старый неверный `related_label` над списком).
+  Протестировано точечной генерацией (`generate_tag_page('higgs_boson','en')`,
+  `generate_scientist_page(...)`, `generate_law_page(...)`) — без ошибок substitute.
+  Визуально проверено в браузере на higgs_boson: колонка сайдбара `position:fixed;top:245px`
+  (тот же CSS-паттерн, что у article/law) — выравнивание с заголовком тега неидеальное
+  (мешает AI-обложка перед `<h1>`, сдвигающая заголовок вниз), но это ТОТ ЖЕ механизм, что уже
+  был принят для law.html — не регрессия, а известное ограничение паттерна.
+  **Полный `run.py html` запущен в фоне** (`html-regen-sidebar-layout.log`) — проверить, что
+  завершился (`grep EXIT: html-regen-sidebar-layout.log`), и закоммитить:
+  `generate.py`, `templates/article.html`, `templates/tag.html`, `templates/scientist.html`
+  + весь диффнутый `lang/**/*.html` от регена.
+  Также несвязанные, но ранее не закоммиченные правки в этом же рабочем дереве: `--only` флаг
+  в `law_describe.py`/`tag_describe.py` (точечная переописание одного закона/тега без `--force`).
+
+**НАЙДЕНО, НЕ СДЕЛАНО — теги отстают от законов по бэкфиллу mini/practical_application:**
+- Юзер верно заметил: теги переделывались НЕ так системно, как законы. Текущие цифры
+  (`lang/ru/data/{tags,laws}.json`, проверено 2026-07-18):
+  **tags.json: 20/196 без `mini`/`practical_application`. laws.json: всего 3/102.**
+  Законы почти все забэкфиллены (частью через целевой `--only`-тест, частью — побочным эффектом
+  прогона `reference_translate.py`, который заодно доливал недостающие поля другим законам).
+  Тегам такого широкого прохода не было — сделан только один точечный тест (`higgs_boson`).
+  **Список из 20 непочиненных тегов (id из lang/ru/data/tags.json)**:
+  `hubble_space_telescope, gravitational_waves, large_hadron_collider, wave_particle_duality,
+  quantum_computer, nuclear_fusion, standard_model, time_dilation, wormhole, spacetime_curvature,
+  quantum_superposition, quantum_teleportation, cosmic_dust, fast_radio_burst, kilonova, magnetar,
+  active_galactic_nuclei, tidal_disruption_event, globular_cluster, axion`
+  **План на новое окно**: догенерировать эти 20 через `tag_describe.py` (без `--only`, т.к. их
+  много — обычный insufficient-mini fallback путь, или добавить `--only-missing-mini` флаг),
+  затем `reference_translate.py` для en/es/ar, затем точечный `generate_tag_page(...)` на все 4
+  языка для каждого, БЕЗ полного дорогого `run.py html` пока не накопится больше правок.
+  Также стоит перепроверить `higgs_boson.scientists: []` (пусто, хотя Peter Higgs есть в реестре
+  148 учёных) — не выяснено, баг промта или реальное отсутствие связи в данных.
+
 ## 🌅 2026-07-16 → ЗАВТРА (2026-07-17) — план финиша, ничего ниже пока НЕ делать без явного добра
 
 **Что сделано сегодня (2026-07-16), для контекста:**

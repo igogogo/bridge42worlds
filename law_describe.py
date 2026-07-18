@@ -107,6 +107,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true",
                     help="переописать ВСЕ (по умолчанию — только законы без описания, догенерация)")
+    ap.add_argument("--only", default="",
+                    help="переописать ТОЛЬКО один закон по id (english id из laws-list.json), "
+                         "остальные не трогать — для точечной починки/проверки без --force на всё")
     ap.add_argument("--refine", action="store_true",
                     help="рефлексивная шлифовка описаний после генерации")
     ap.add_argument("--reflight", action="store_true",
@@ -144,9 +147,16 @@ def main():
     # Существующие граф/описания — для ИНКРЕМЕНТАЛЬНОЙ догенерации.
     graph = json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")) if Path("data/laws-graph.json").exists() else {"graph": {}}
 
-    to_describe = laws_in if args.force else [x for x in laws_in if not (ru.get(x["en"]) or {}).get("description")]
+    if args.only:
+        to_describe = [x for x in laws_in if x["en"] == args.only]
+        if not to_describe:
+            print(f"❌ --only {args.only}: такого id нет в laws-list.json")
+            return
+    else:
+        to_describe = laws_in if args.force else [x for x in laws_in if not (ru.get(x["en"]) or {}).get("description")]
     print(f"⚖️  Описания законов: описываю {len(to_describe)}/{len(laws_in)} "
-          f"({'--force: все' if args.force else 'догенерация недостающих'}), пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
+          f"({'--only ' + args.only if args.only else '--force: все' if args.force else 'догенерация недостающих'}), "
+          f"пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
 
     if to_describe:
         batches = [to_describe[i:i + DESCRIBE_BATCH] for i in range(0, len(to_describe), DESCRIBE_BATCH)]

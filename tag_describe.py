@@ -115,6 +115,9 @@ def main():
                     help="описать только образовательные (активные оставить как есть)")
     ap.add_argument("--force", action="store_true",
                     help="переописать ВСЕ (по умолчанию — только теги без описания, догенерация)")
+    ap.add_argument("--only", default="",
+                    help="переописать ТОЛЬКО один тег по english id, остальные не трогать — "
+                         "для точечной починки/проверки без --force на всё")
     ap.add_argument("--refine", action="store_true",
                     help="рефлексивная шлифовка описаний после генерации")
     ap.add_argument("--reflight", action="store_true",
@@ -157,9 +160,16 @@ def main():
     # Существующие граф/описания — для ИНКРЕМЕНТАЛЬНОЙ догенерации (не трогаем уже описанное).
     graph = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")) if Path("data/tags-graph.json").exists() else {"graph": {}}
 
-    to_describe = tags_input if args.force else [t for t in tags_input if not (ru.get(t["en"]) or {}).get("description")]
+    if args.only:
+        to_describe = [t for t in tags_input if t["en"] == args.only]
+        if not to_describe:
+            print(f"❌ --only {args.only}: такого id нет в списках тегов")
+            return
+    else:
+        to_describe = tags_input if args.force else [t for t in tags_input if not (ru.get(t["en"]) or {}).get("description")]
     print(f"🏷️  Описания тегов: описываю {len(to_describe)}/{len(tags_input)} "
-          f"({'--force: все' if args.force else 'догенерация недостающих'}), пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
+          f"({'--only ' + args.only if args.only else '--force: все' if args.force else 'догенерация недостающих'}), "
+          f"пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
 
     if to_describe:
         batches = [to_describe[i:i + DESCRIBE_BATCH] for i in range(0, len(to_describe), DESCRIBE_BATCH)]
