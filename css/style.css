@@ -1300,7 +1300,8 @@ footer a { color: var(--soft); }
 
 /* ── Mobile ───────────────────── */
 @media (max-width: 640px) {
-    .article-wrapper { flex-direction: column; }
+    .article-wrapper, .entity-wrapper { flex-direction: column; }
+    .article-main, .entity-wrapper .entity-body { width: 100%; max-width: 100%; }
     .article-side {
         width: 100%; position: static;
         display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px;
