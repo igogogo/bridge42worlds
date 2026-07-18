@@ -1971,15 +1971,16 @@ def generate_archive_page(lang):
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
 
 
-def build_connectivity_report_html():
-    """Каждая сущность (тег/закон/учёный) должна иметь ≥1 связь с КАЖДЫМ из двух других типов —
-    иначе она "висит" на графе знаний относительно этого типа, даже если формально не изолирована
-    целиком (юзер-фидбек 2026-07-18: "проверка все теги имеют по крайней мере один закон и одного
-    учёного и так далее для каждой сущности"). Источники истины — те же три файла, что питают
+def compute_connectivity_gaps():
+    """Считает сущности (тег/закон/учёный), которым не хватает связи с КАЖДЫМ из двух других типов
+    (юзер-фидбек 2026-07-18: "проверка все теги имеют по крайней мере один закон и одного учёного
+    и так далее для каждой сущности"). Источники истины — те же три файла, что питают
     build_knowledge_graph.py: data/tags-graph.json, data/laws-graph.json, scientists.json.
     Тег↔учёный и учёный↔тег проверяются В ОБЕ СТОРОНЫ (tag.scientists ИЛИ scientist.related_tags) —
     как и в build_knowledge_graph.py — иначе часть связей ложно считается отсутствующей
     (см. находку 2026-07-18: граф-файлы двух направлений могут расходиться).
+    Возвращает dict с 6 отсортированными списками id — переиспользуется дашбордом (status.html) и
+    connectivity_repair.py (точечный автопочин через LLM).
     """
     tg = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")).get("graph", {}) \
         if Path("data/tags-graph.json").exists() else {}
@@ -2012,6 +2013,17 @@ def build_connectivity_report_html():
         sci_with_law.update(n.get("influenced_by", []))
     sci_no_law = sorted(s for s in sci_all if s not in sci_with_law)
 
+    return {
+        "tags_no_law": tags_no_law, "tags_no_sci": tags_no_sci,
+        "laws_no_tag": laws_no_tag, "laws_no_sci": laws_no_sci,
+        "sci_no_tag": sci_no_tag, "sci_no_law": sci_no_law,
+        "n_tags": len(tg), "n_laws": len(lg), "n_sci": len(sci_all),
+    }
+
+
+def build_connectivity_report_html():
+    g = compute_connectivity_gaps()
+
     def row(label, missing, total_n):
         if not missing:
             return f'<p style="color:#2e7d32">✓ {label}: все {total_n} связаны</p>'
@@ -2019,12 +2031,12 @@ def build_connectivity_report_html():
         return f'<p style="color:#b31b1b">⚠️ {label}: {len(missing)}/{total_n} без связи — {shown}</p>'
 
     return (
-        row("Теги без закона", tags_no_law, len(tg))
-        + row("Теги без учёного", tags_no_sci, len(tg))
-        + row("Законы без тега", laws_no_tag, len(lg))
-        + row("Законы без учёного", laws_no_sci, len(lg))
-        + row("Учёные без тега", sci_no_tag, len(sci_all))
-        + row("Учёные без закона", sci_no_law, len(sci_all))
+        row("Теги без закона", g["tags_no_law"], g["n_tags"])
+        + row("Теги без учёного", g["tags_no_sci"], g["n_tags"])
+        + row("Законы без тега", g["laws_no_tag"], g["n_laws"])
+        + row("Законы без учёного", g["laws_no_sci"], g["n_laws"])
+        + row("Учёные без тега", g["sci_no_tag"], g["n_sci"])
+        + row("Учёные без закона", g["sci_no_law"], g["n_sci"])
     )
 
 
