@@ -179,6 +179,13 @@
         'law,sci': 'law-sci', 'sci,law': 'law-sci',
         'tag,cat': 'tag-cat', 'cat,tag': 'tag-cat'
     };
+    // Сам-на-себя рёбра — обычно юзер крутит их вручную (см. mg-edges), НО если включён РОВНО
+    // один тип узлов, у категории (cat) вообще нет своего "сам-на-себя" ребра, а у tag/law/sci
+    // кросс-рёбра не рисуются (не с кем — другие типы выключены). Без этого узлы единственного
+    // включённого типа остаются без единой видимой связи — облачный режим прячет узлы без связей
+    // как шум, и получается пустой холст (юзер-фидбек 2026-07-19: "если я выбираю только теги,
+    // они не отображаются"). Раз тип — единственный, включаем его собственное ребро автоматически.
+    var SELF_EDGE_OF = { tag: 'tag-tag', law: 'law-law', sci: 'sci-sci' };
     function edgeCheckbox(value) { return document.querySelector('.mg-edge[value="' + value + '"]'); }
     document.querySelectorAll('.mg-kind').forEach(function (kindBox) {
         kindBox.addEventListener('change', function () {
@@ -191,6 +198,11 @@
                 // Оба конца теперь отмечены — включаем связь; конец пропал — гасим.
                 box.checked = !!(kinds[kindBox.value] && kinds[other]);
             });
+            var activeKinds = Object.keys(kinds).filter(function (k) { return kinds[k]; });
+            if (activeKinds.length === 1) {
+                var selfBox = edgeCheckbox(SELF_EDGE_OF[activeKinds[0]]);
+                if (selfBox) selfBox.checked = true;
+            }
             if (window.__miniRebuild) window.__miniRebuild();
         });
     });
