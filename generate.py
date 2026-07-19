@@ -404,6 +404,13 @@ def mini_graph_filters_html(lang, center_kind="tag"):
         + edge_box("law-law", loc["edge_law_law"], False)
         + edge_box("sci-sci", loc["edge_sci_sci"], False)
     )
+    # Раздел arXiv — 4-й тип узла, ТОЛЬКО на облачных страницах (center_kind=None), выключен по
+    # умолчанию (юзер 2026-07-18: "опционально включаемый... это будет круто"). Своей страницы у
+    # раздела нет (описания уже есть в data/arxiv-category-descriptions.json для .cat-chip в
+    # поиске) — только узел в графе + связь с тегами статей этого раздела.
+    if center_kind is None:
+        kind_boxes += kind_box("cat", "#B8860B", loc.get("categories", "categories"))
+        edge_boxes += edge_box("tag-cat", loc.get("edge_tag_cat", "tag↔category"), False)
     return kind_boxes + f'<div class="mg-edges">{edge_boxes}</div>'
 
 
@@ -1454,7 +1461,7 @@ GRAPH_LABELS = {
            "depth": "Глубина:", "clear": "Сбросить",
            "warning": "⚠ Отображение оптимизировано под большой экран, формирование графа может занять некоторое время.",
            "edge_tag_law": "тег↔закон", "edge_tag_sci": "тег↔учёный", "edge_law_sci": "закон↔учёный",
-           "edge_tag_tag": "тег↔тег", "edge_law_law": "закон↔закон", "edge_sci_sci": "учёный↔учёный", "edge_law_influence": "закон↔влияние", "preset_core": "каркас", "preset_all": "всё"},
+           "edge_tag_tag": "тег↔тег", "edge_law_law": "закон↔закон", "edge_sci_sci": "учёный↔учёный", "edge_law_influence": "закон↔влияние", "categories": "разделы", "edge_tag_cat": "тег↔раздел", "preset_core": "каркас", "preset_all": "всё"},
     "en": {"title": "Knowledge graph", "subtitle": "Tags, laws and scientists and all their links. Toggle what to show.",
            "nodes": "Nodes:", "edges": "Edges:", "presets": "Presets:",
            "tags": "tags", "laws": "laws", "scientists": "scientists", "footer": "science made simple",
@@ -1462,7 +1469,7 @@ GRAPH_LABELS = {
            "depth": "Depth:", "clear": "Clear",
            "warning": "⚠ Optimized for large screens — building the graph may take a moment.",
            "edge_tag_law": "tag↔law", "edge_tag_sci": "tag↔scientist", "edge_law_sci": "law↔scientist",
-           "edge_tag_tag": "tag↔tag", "edge_law_law": "law↔law", "edge_sci_sci": "scientist↔scientist", "edge_law_influence": "law↔influence", "preset_core": "core", "preset_all": "all"},
+           "edge_tag_tag": "tag↔tag", "edge_law_law": "law↔law", "edge_sci_sci": "scientist↔scientist", "edge_law_influence": "law↔influence", "categories": "categories", "edge_tag_cat": "tag↔category", "preset_core": "core", "preset_all": "all"},
     "es": {"title": "Red de conocimiento", "subtitle": "Etiquetas, leyes y científicos y todos sus vínculos. Elige qué mostrar.",
            "nodes": "Nodos:", "edges": "Vínculos:", "presets": "Preajustes:",
            "tags": "etiquetas", "laws": "leyes", "scientists": "científicos", "footer": "ciencia simple",
@@ -1470,7 +1477,7 @@ GRAPH_LABELS = {
            "depth": "Profundidad:", "clear": "Restablecer",
            "warning": "⚠ Optimizado para pantallas grandes — construir el grafo puede tardar un momento.",
            "edge_tag_law": "etiqueta↔ley", "edge_tag_sci": "etiqueta↔científico", "edge_law_sci": "ley↔científico",
-           "edge_tag_tag": "etiqueta↔etiqueta", "edge_law_law": "ley↔ley", "edge_sci_sci": "científico↔científico", "edge_law_influence": "ley↔influencia", "preset_core": "núcleo", "preset_all": "todo"},
+           "edge_tag_tag": "etiqueta↔etiqueta", "edge_law_law": "ley↔ley", "edge_sci_sci": "científico↔científico", "edge_law_influence": "ley↔influencia", "categories": "categorías", "edge_tag_cat": "etiqueta↔categoría", "preset_core": "núcleo", "preset_all": "todo"},
     "zh": {"title": "知识图谱", "subtitle": "标签、定律与科学家及其关联。切换显示内容。",
            "nodes": "节点：", "edges": "关联：", "presets": "预设：",
            "tags": "标签", "laws": "定律", "scientists": "科学家", "footer": "让科学变简单",
@@ -1478,7 +1485,7 @@ GRAPH_LABELS = {
            "depth": "深度：", "clear": "重置",
            "warning": "⚠ 界面针对大屏幕优化，图谱生成可能需要一些时间。",
            "edge_tag_law": "标签↔定律", "edge_tag_sci": "标签↔科学家", "edge_law_sci": "定律↔科学家",
-           "edge_tag_tag": "标签↔标签", "edge_law_law": "定律↔定律", "edge_sci_sci": "科学家↔科学家", "edge_law_influence": "定律↔影响", "preset_core": "核心", "preset_all": "全部"},
+           "edge_tag_tag": "标签↔标签", "edge_law_law": "定律↔定律", "edge_sci_sci": "科学家↔科学家", "edge_law_influence": "定律↔影响", "categories": "分类", "edge_tag_cat": "标签↔分类", "preset_core": "核心", "preset_all": "全部"},
     "fr": {"title": "Graphe des savoirs", "subtitle": "Tags, lois et scientifiques et leurs liens. Choisissez l'affichage.",
            "nodes": "Nœuds :", "edges": "Liens :", "presets": "Préréglages :",
            "tags": "tags", "laws": "lois", "scientists": "scientifiques", "footer": "la science simplifiée",
@@ -1486,7 +1493,7 @@ GRAPH_LABELS = {
            "depth": "Profondeur :", "clear": "Réinitialiser",
            "warning": "⚠ Optimisé pour grand écran — la construction du graphe peut prendre un moment.",
            "edge_tag_law": "tag↔loi", "edge_tag_sci": "tag↔scientifique", "edge_law_sci": "loi↔scientifique",
-           "edge_tag_tag": "tag↔tag", "edge_law_law": "loi↔loi", "edge_sci_sci": "scientifique↔scientifique", "edge_law_influence": "loi↔influence", "preset_core": "noyau", "preset_all": "tout"},
+           "edge_tag_tag": "tag↔tag", "edge_law_law": "loi↔loi", "edge_sci_sci": "scientifique↔scientifique", "edge_law_influence": "loi↔influence", "categories": "catégories", "edge_tag_cat": "tag↔catégorie", "preset_core": "noyau", "preset_all": "tout"},
     "ar": {"title": "شبكة المعرفة", "subtitle": "الوسوم والقوانين والعلماء وكل روابطهم. بدّل ما تريد عرضه.",
            "nodes": "العقد:", "edges": "الروابط:", "presets": "إعدادات:",
            "tags": "وسوم", "laws": "قوانين", "scientists": "علماء", "footer": "العلم ببساطة",
@@ -1494,7 +1501,7 @@ GRAPH_LABELS = {
            "depth": "العمق:", "clear": "إعادة تعيين",
            "warning": "⚠ الواجهة محسّنة للشاشات الكبيرة، وقد يستغرق إنشاء الرسم البياني بعض الوقت.",
            "edge_tag_law": "وسم↔قانون", "edge_tag_sci": "وسم↔عالِم", "edge_law_sci": "قانون↔عالِم",
-           "edge_tag_tag": "وسم↔وسم", "edge_law_law": "قانون↔قانون", "edge_sci_sci": "عالِم↔عالِم", "edge_law_influence": "قانون↔تأثير", "preset_core": "النواة", "preset_all": "الكل"},
+           "edge_tag_tag": "وسم↔وسم", "edge_law_law": "قانون↔قانون", "edge_sci_sci": "عالِم↔عالِم", "edge_law_influence": "قانون↔تأثير", "categories": "الأقسام", "edge_tag_cat": "وسم↔قسم", "preset_core": "النواة", "preset_all": "الكل"},
 }
 
 

@@ -15,6 +15,7 @@
     var TAG_COLORS = { concept: '#7F77DD', object: '#D85A30', substance: '#1D9E75', method: '#378ADD', instrument: '#BA7517' };
     var LAW_COLORS = { 'закон': '#C0392B', 'принцип': '#8E44AD', 'теорема': '#2471A3', 'эффект': '#B9770E', 'уравнение': '#148F77', 'теория': '#5D6D7E' };
     var SCI_COLOR = '#2e7d32';
+    var CAT_COLOR = '#B8860B';
     function slug(n) { return n.replace(/ /g, '_').replace(/\./g, ''); }
 
     window.__miniDepth = window.__miniDepth || 1;
@@ -33,7 +34,7 @@
     // (мини-граф не различает "открыл" от "оказал влияние" — упрощение для компактного вида).
     var EDGE_KG_TYPES = {
         'tag-law': ['law-tag'], 'tag-sci': ['sci-tag'], 'law-sci': ['law-sci', 'law-influence'],
-        'tag-tag': ['tag-tag'], 'law-law': ['law-law'], 'sci-sci': ['sci-sci']
+        'tag-tag': ['tag-tag'], 'law-law': ['law-law'], 'sci-sci': ['sci-sci'], 'tag-cat': ['cat-tag']
     };
     function checkedEdgeKgTypes() {
         var boxes = document.querySelectorAll('.mg-edge');
@@ -53,9 +54,11 @@
                 fetch('/data/knowledge-graph.json' + BUST).then(function (r) { return r.json(); }),
                 fetch('/lang/' + lang + '/data/tags.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
                 fetch('/lang/' + lang + '/data/laws.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/lang/' + lang + '/data/scientists.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
+                fetch('/lang/' + lang + '/data/scientists.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+                fetch('/data/arxiv-categories.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+                fetch('/data/arxiv-category-descriptions.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
             ]).then(function (res) {
-                var kg = res[0], tn = res[1], ln = res[2], sn = res[3];
+                var kg = res[0], tn = res[1], ln = res[2], sn = res[3], cn = res[4], cd = res[5];
                 var edgeTypes = checkedEdgeKgTypes();
                 var visibleEdges = kg.edges.filter(function (e) { return !edgeTypes || edgeTypes[e.t]; });
                 var kinds = checkedKinds();
@@ -100,6 +103,9 @@
                         var l = ln[rawid] || {};
                         name = l.name || rawid;
                         tip = l.mini || l.description_popular || l.description_simple || l.description || '';
+                    } else if (n.kind === 'cat') {
+                        name = cn[rawid] || rawid;
+                        tip = cd[rawid] || '';
                     } else {
                         name = rawid;
                         tip = (sn[rawid] || {}).description || '';
@@ -132,7 +138,8 @@
         radius: function (n) { return n.center ? 9 : (3 + Math.min(n.deg, 16) * 0.7); },
         color: function (n) {
             return n.kind === 'tag' ? (TAG_COLORS[n.sub] || '#888')
-                : n.kind === 'law' ? (LAW_COLORS[n.sub] || '#C0392B') : SCI_COLOR;
+                : n.kind === 'law' ? (LAW_COLORS[n.sub] || '#C0392B')
+                : n.kind === 'cat' ? CAT_COLOR : SCI_COLOR;
         },
         hollow: function (n) { return n.kind === 'tag' && !n.center; },
         // Один центр (страница тега/закона/учёного) — узлов мало, подписываем все, как раньше.
@@ -144,6 +151,7 @@
         href: function (n, lang) {
             if (n.kind === 'tag') return '/lang/' + lang + '/tags/' + encodeURIComponent(n.rawid) + '.html';
             if (n.kind === 'law') return '/lang/' + lang + '/laws/' + encodeURIComponent(n.rawid) + '.html';
+            if (n.kind === 'cat') return null;  // раздел arXiv не имеет своей страницы
             return '/lang/' + lang + '/scientists/' + encodeURIComponent(slug(n.rawid)) + '.html';
         }
     });
@@ -168,13 +176,14 @@
     var CROSS_EDGE_OF = {
         'tag,law': 'tag-law', 'law,tag': 'tag-law',
         'tag,sci': 'tag-sci', 'sci,tag': 'tag-sci',
-        'law,sci': 'law-sci', 'sci,law': 'law-sci'
+        'law,sci': 'law-sci', 'sci,law': 'law-sci',
+        'tag,cat': 'tag-cat', 'cat,tag': 'tag-cat'
     };
     function edgeCheckbox(value) { return document.querySelector('.mg-edge[value="' + value + '"]'); }
     document.querySelectorAll('.mg-kind').forEach(function (kindBox) {
         kindBox.addEventListener('change', function () {
             var kinds = checkedKinds() || {};
-            ['tag', 'law', 'sci'].forEach(function (other) {
+            ['tag', 'law', 'sci', 'cat'].forEach(function (other) {
                 if (other === kindBox.value) return;
                 var edgeVal = CROSS_EDGE_OF[kindBox.value + ',' + other];
                 var box = edgeCheckbox(edgeVal);

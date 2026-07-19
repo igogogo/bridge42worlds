@@ -118,6 +118,9 @@ def main():
     ap.add_argument("--only", default="",
                     help="переописать ТОЛЬКО один тег по english id, остальные не трогать — "
                          "для точечной починки/проверки без --force на всё")
+    ap.add_argument("--ids", default="",
+                    help="переописать СПИСОК тегов через запятую (english id) — как --only, но "
+                         "пакетно, для точечного бэкфилла N конкретных тегов без --force на всё")
     ap.add_argument("--refine", action="store_true",
                     help="рефлексивная шлифовка описаний после генерации")
     ap.add_argument("--reflight", action="store_true",
@@ -165,10 +168,18 @@ def main():
         if not to_describe:
             print(f"❌ --only {args.only}: такого id нет в списках тегов")
             return
+    elif args.ids:
+        wanted = {x.strip() for x in args.ids.split(",") if x.strip()}
+        to_describe = [t for t in tags_input if t["en"] in wanted]
+        missing = wanted - {t["en"] for t in to_describe}
+        if missing:
+            print(f"❌ --ids: не найдены в списках тегов: {sorted(missing)}")
+            return
     else:
         to_describe = tags_input if args.force else [t for t in tags_input if not (ru.get(t["en"]) or {}).get("description")]
-    print(f"🏷️  Описания тегов: описываю {len(to_describe)}/{len(tags_input)} "
-          f"({'--only ' + args.only if args.only else '--force: все' if args.force else 'догенерация недостающих'}), "
+    label = ('--only ' + args.only if args.only else '--ids: ' + str(len(to_describe)) + ' тегов' if args.ids
+             else '--force: все' if args.force else 'догенерация недостающих')
+    print(f"🏷️  Описания тегов: описываю {len(to_describe)}/{len(tags_input)} ({label}), "
           f"пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
 
     if to_describe:

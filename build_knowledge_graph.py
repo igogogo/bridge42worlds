@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-"""Единый граф знаний из трёх сущностей (теги ⇄ законы ⇄ учёные) → data/knowledge-graph.json.
+"""Единый граф знаний из четырёх сущностей (теги ⇄ законы ⇄ учёные ⇄ разделы arXiv) →
+data/knowledge-graph.json.
 
-Собирает ВСЕ попарные связи в одну типизированную структуру (many-to-many между 3 сущностями),
+Собирает ВСЕ попарные связи в одну типизированную структуру (many-to-many между сущностями),
 чтобы на любом графе можно было переключать, какие типы рёбер/узлов показывать.
 
-Узел: {"id": "t:tagid|l:lawid|s:Name", "kind": "tag|law|sci", "sub": level/type}.
-Ребро: {"a", "b", "t"} где t ∈ {tag-tag, law-law, sci-sci, law-tag, sci-tag, law-sci} (неориентир., дедуп).
-Имена НЕ храним — резолвятся на клиенте из tags.json/laws.json/scientists.json (язык-агностично).
-Офлайн, без API. Источники: data/tags-graph.json, data/laws-graph.json, lang/{default}/data/scientists.json.
+Узел: {"id": "t:tagid|l:lawid|s:Name|c:catid", "kind": "tag|law|sci|cat", "sub": level/type}.
+Ребро: {"a", "b", "t"} где t ∈ {tag-tag, law-law, sci-sci, law-tag, sci-tag, law-sci, cat-tag}
+(неориентир., дедуп). Имена НЕ храним — резолвятся на клиенте (тег/закон/учёный — из
+tags.json/laws.json/scientists.json; раздел — из /data/arxiv-categories.json, уже используется
+поиском для .cat-chip). Раздел↔тег выводится из articles-index.json (какие теги встречаются в
+статьях каждого раздела) — прямой связи раздел↔тег нигде не хранится, это агрегат по корпусу.
+Офлайн, без API. Источники: data/tags-graph.json, data/laws-graph.json,
+lang/{default}/data/scientists.json, data/arxiv-categories.json, lang/{default}/articles-index.json.
 """
 
 import json
@@ -25,6 +30,7 @@ def main():
     tg = _jl("data/tags-graph.json").get("graph", {})
     lg = _jl("data/laws-graph.json").get("graph", {})
     sci = _jl(f"lang/{DEFAULT_LANG}/data/scientists.json")
+    cats = _jl("data/arxiv-categories.json")
 
     nodes = {}
     for tid, n in tg.items():
@@ -33,6 +39,8 @@ def main():
         nodes[f"l:{lid}"] = {"id": f"l:{lid}", "kind": "law", "sub": n.get("type", "закон")}
     for name in sci:
         nodes[f"s:{name}"] = {"id": f"s:{name}", "kind": "sci", "sub": "sci"}
+    for cid in cats:
+        nodes[f"c:{cid}"] = {"id": f"c:{cid}", "kind": "cat", "sub": "cat"}
 
     edges = set()  # (min,max,type) — неориентированные, дедуп
 
@@ -72,6 +80,17 @@ def main():
         for i in range(len(ss)):
             for j in range(i + 1, len(ss)):
                 add(f"s:{ss[i]}", f"s:{ss[j]}", "sci-sci")
+    # cat ↔ tag — агрегат по корпусу: раздел статьи связан со всеми тегами этой статьи
+    idx = _jl(f"lang/{DEFAULT_LANG}/articles-index.json")
+    if isinstance(idx, list):
+        for a in idx:
+            if a.get("version") != "popular":
+                continue
+            cat = a.get("primary_category")
+            if not cat:
+                continue
+            for t in a.get("tags", []):
+                add(f"c:{cat}", f"t:{t}", "cat-tag")
 
     edge_list = [{"a": a, "b": b, "t": t} for (a, b, t) in sorted(edges)]
     out = {"nodes": list(nodes.values()), "edges": edge_list}
@@ -81,10 +100,11 @@ def main():
     by_type = {}
     for e in edge_list:
         by_type[e["t"]] = by_type.get(e["t"], 0) + 1
-    kinds = {"tag": 0, "law": 0, "sci": 0}
+    kinds = {"tag": 0, "law": 0, "sci": 0, "cat": 0}
     for n in nodes.values():
         kinds[n["kind"]] += 1
-    print(f"✅ knowledge-graph.json: узлов {len(nodes)} (тег {kinds['tag']}, закон {kinds['law']}, учёный {kinds['sci']}), рёбер {len(edge_list)}")
+    print(f"✅ knowledge-graph.json: узлов {len(nodes)} (тег {kinds['tag']}, закон {kinds['law']}, учёный {kinds['sci']}, "
+          f"раздел {kinds['cat']}), рёбер {len(edge_list)}")
     print("   по типам: " + " · ".join(f"{k}={v}" for k, v in sorted(by_type.items())))
 
 
