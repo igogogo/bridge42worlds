@@ -584,7 +584,11 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
 /* ── Languages ────────────────── */
 /* На главной язык-бар делит строку с иконками поиска (🔍) и календаря (📅, .hdr-icons) —
    обе редко нужны сами по себе, едут вправо, не занимают отдельные заметные строки. */
-.langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+/* max-width СОВПАДАЕТ с .category-bar/.search-row ниже — без него space-between растягивал
+   .hdr-icons (🔍/📅) на всю ширину body (900px), а не в рамках читаемой колонки (680px), из-за
+   чего иконки визуально "улетали" далеко вправо от остального контента главной (юзер-фидбек
+   2026-07-19: "иконки поиска и календаря улетели вправо"). */
+.langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; max-width: 680px; }
 .langs { display: flex; flex-wrap: wrap; }
 .langs a {
     font-size: 10px; color: var(--soft); text-decoration: none;
