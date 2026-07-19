@@ -51,11 +51,22 @@ async function initScroll() {
         persistViewed();
     }
 
-    updateNextButton();
-    renderRelated(currentId, lang);
+    updateNextButton(version);
+    renderRelated(currentId, lang, version);
 }
 
-function renderRelated(currentId, lang) {
+// mini переиспользует индекс popular (у него нет своего) — url в записях индекса
+// всегда указывает на index.html/simple.html/advanced.html СВОЕГО индекса, а не на
+// mini.html. Раз мы читаем чужой индекс, URL надо перезаписать на текущий тир вручную,
+// иначе ссылки "похожие статьи"/"следующая" из mini уводят на popular (баг из фидбека).
+var TIER_FILE = { popular: 'index.html', simple: 'simple.html', advanced: 'advanced.html', mini: 'mini.html' };
+function urlForVersion(url, version) {
+    var file = TIER_FILE[version];
+    if (!file) return url;
+    return url.replace(/\/[^\/]+$/, '/' + file);
+}
+
+function renderRelated(currentId, lang, version) {
     var box = document.getElementById('related');
     if (!box) return;
     var curTags = Array.from(document.querySelectorAll('.side-tag')).map(function(e){ return e.dataset.tag || ''; });
@@ -69,7 +80,7 @@ function renderRelated(currentId, lang) {
     box.innerHTML = '<h3 class="related-h">' + (box.dataset.label || 'Related') + '</h3>' +
         scored.map(function(x){
             var ol = x.a.oneliner ? '<span class="related-oneliner">' + x.a.oneliner + '</span>' : '';
-            return '<a href="' + x.a.url + '" class="related-item">' + x.a.title + ol + '</a>';
+            return '<a href="' + urlForVersion(x.a.url, version) + '" class="related-item">' + x.a.title + ol + '</a>';
         }).join('');
 }
 
@@ -92,7 +103,7 @@ function findNextArticle(currentTags, mainTag) {
     return candidates[0] || articlesIndex.find(function(a) { return !viewedIds.has(a.id); });
 }
 
-function updateNextButton() {
+function updateNextButton(version) {
     var currentTags = Array.from(document.querySelectorAll('.side-tag')).map(function(el) { return el.dataset.tag || el.textContent.trim().toLowerCase(); });
     var mainTag = currentTags[0] || '';
     var next = findNextArticle(currentTags, mainTag);
@@ -112,7 +123,7 @@ function updateNextButton() {
             btn.onclick = function() {
                 viewedIds.add(next.id);
                 persistViewed();
-                window.location.href = next.url;
+                window.location.href = urlForVersion(next.url, version);
             };
             btn.disabled = false;
         } else {

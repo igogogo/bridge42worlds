@@ -365,17 +365,24 @@ GRAPH_CROSS_EDGES = {frozenset(("tag", "law")): "tag-law", frozenset(("tag", "sc
 def mini_graph_filters_html(lang, center_kind="tag"):
     """Чекбоксы типов узлов + типов связей для мини-графа — та же логика фильтра, что и на
     большом графе-эксплорере. center_kind=None (страницы-облака тегов/законов/учёных без
-    привязки к одному узлу, мультицентровой граф статьи) — единый дефолт "все 3 типа + все
-    кросс-рёбра, без сам-на-себя" (юзер-фидбек 2026-07-15: "цинфицировать везде один подход").
+    привязки к одному узлу) — единый дефолт "все 3 типа + все кросс-рёбра, без сам-на-себя"
+    (юзер-фидбек 2026-07-15: "цинфицировать везде один подход").
     center_kind="tag"/"law"/"sci" (страница одной сущности) — умный дефолт: центр + следующий
     по приоритету тег→закон→учёный тип, и только связь МЕЖДУ ними. Третий тип и любые
     "сам-на-себя" рёбра пользователь включает вручную — авто-переключение кросс-рёбер при
     смене типов делает js/mini-graph.js.
     center_kind=None дефолт — только законы+учёные (юзер-фидбек 2026-07-17: "граф оказывается
     перегружен" — тегов у статьи/в справочнике обычно больше всего, они и захламляли вид;
-    тег-узлы никуда не делись, просто чекбокс "теги" по умолчанию снят)."""
+    тег-узлы никуда не делись, просто чекбокс "теги" по умолчанию снят).
+    center_kind="article" (мультицентровой граф НА КАРТОЧКЕ СТАТЬИ конкретно, не облачные
+    страницы) — тег снова включён по умолчанию (юзер-фидбек 2026-07-19: "по умолчанию включенный
+    тег и его связи с учёными и законами") — теги статьи это её собственные центры, прятать их
+    там не нужно (в отличие от облачных страниц, где тегов МНОГИЕ СОТНИ и они реально захламляют)."""
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
-    if center_kind is None:
+    if center_kind == "article":
+        default_kinds = {"tag", "law", "sci"}
+        default_cross_edges = {"tag-law", "tag-sci", "law-sci"}
+    elif center_kind is None:
         default_kinds = {"law", "sci"}
         default_cross_edges = {"law-sci"}
     else:
@@ -590,7 +597,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             f'<div id="article-graph" class="mini-graph-label">🕸 {safe(mini_lbl)} '
             f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
             f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
-            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, None)}</div>'
+            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, "article")}</div>'
             f'<div class="mini-graph mini-graph--article" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
         )
 
