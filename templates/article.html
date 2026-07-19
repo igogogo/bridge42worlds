@@ -132,6 +132,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
 });
 </script>
 </body>
