@@ -2363,6 +2363,12 @@ def regenerate_all_html():
         update_all_laws(lang)
         generate_knowledge_graph_page(lang)
         generate_archive_page(lang)
+    # rebuild_author_graph() ПЕРЕД update_all_authors() — иначе authors-graph.json остаётся
+    # застывшим на моменте последней явной пересборки, и авторы статей, добавленных с тех пор
+    # (обычным bulk-генератором, не через add-one-article путь, который сам зовёт rebuild),
+    # молча не получают страниц — битые ссылки вида /authors/Имя_Фамилия.html (юзер-фидбек
+    # 2026-07-19: обнаружен на реальном примере, Tucker Manton — автор статьи, но не в графе).
+    rebuild_author_graph()
     update_all_authors()
     generate_sitemaps()
     generate_feeds()
