@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=b5f0e6c7df">
+    <link rel="stylesheet" href="/css/style.css?v=45af36e28e">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Нейросеть на слух: как поймать энергию частицы", "description": "Нейросеть, встроенная в детектор, вслушивается в шум коллайдера и с рекордной точностью измеряет энергию частиц.", "inLanguage": "ru", "datePublished": "2025-10-13", "url": "https://bridge42worlds.org/lang/ru/archive/2025-10-13/2510.11469/mini.html", "image": "https://bridge42worlds.org/lang/ru/archive/2025-10-13/2510.11469/ai.jpg", "author": [{"@type": "Person", "name": "Georges Aad"}, {"@type": "Person", "name": "Raphael Bertrand"}, {"@type": "Person", "name": "Lauri Laatu"}, {"@type": "Person", "name": "Emmanuel Monnier"}, {"@type": "Person", "name": "Arno Straessner"}, {"@type": "Person", "name": "Nairit Sur"}, {"@type": "Person", "name": "Johann C. Voigt"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2510.11469", "abstract": "Представлены нейросетевые архитектуры для восстановления энергии, выделившейся в ячейках жидко-аргоновых калориметров ATLAS при ожидаемых на HL-LHC высоких уровнях наложения событий (pile-up). Сети предназначены для выполнения на считывающей электронике на основе ПЛИС (FPGA) с жёсткими ограничениями по размеру и задержке. Полносвязные (Dense), рекуррентные (RNN) и свёрточные (CNN) сети оптимизированы байесовской процедурой, балансирующей энергетическое разрешение и число параметров. Оптимизированные Dense, CNN и комбинированная Dense+RNN архитектуры достигают поперечного энергетического разрешения около 80 МэВ, превосходя как используемый в настоящее время метод оптимальной фильтрации (OF), так и RNN сравнимой сложности. Детальное сравнение во всём динамическом диапазоне показывает, что Dense, CNN и Dense+RNN точно воспроизводят энергетическую шкалу, тогда как OF и RNN занижают энергию. Для получения надёжных неопределённостей для каждого события в Dense-архитектуру внедрена глубокая очевидностная регрессия (Deep Evidential Regression); этот подход даёт оценки предсказательной неопределённости с минимальным увеличением размера сети."}</script>
 </head>
@@ -78,7 +78,7 @@
         <div class="fun-fact"><p class="fact">🎯 Детектор ATLAS размером с восьмиэтажный дом, а нейросеть, обрабатывающая его сигналы, умещается на чипе меньше спичечного коробка.</p></div>
         
         
-        <div id="article-graph" class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="l:second_law_of_thermodynamics,l:doppler_effect,l:noethers_theorem,l:bekensteinhawking_entropy,l:coulombs_law,l:gravitational_lensing,s:Ludwig Boltzmann,s:Christian Doppler"><canvas id="minigraph"></canvas></div>
+        <div id="article-graph" class="mini-graph-label">🕸 Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#7F77DD">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> учёные</label><label><input type="checkbox" class="mg-kind" value="cat"> <span style="color:#B8860B">●</span> разделы</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-cat"> тег↔раздел</label></div></div><div class="mini-graph mini-graph--article" data-node="l:second_law_of_thermodynamics,l:doppler_effect,l:noethers_theorem,l:bekensteinhawking_entropy,l:coulombs_law,l:gravitational_lensing,s:Ludwig Boltzmann,s:Christian Doppler"><canvas id="minigraph"></canvas></div>
         <div class="actions" data-article-id="2510.11469_ru_mini">
             <div class="reactions">
                 <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
@@ -99,12 +99,12 @@
 
 <div class="license">Оригинал: <a href="https://arxiv.org/abs/2510.11469">arXiv:2510.11469</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
 
-<script src="/js/likes.js?v=b5f0e6c7df"></script>
-<script src="/js/search.js?v=b5f0e6c7df"></script>
-<script src="/js/scroll.js?v=b5f0e6c7df"></script>
-<script src="/js/lightbox.js?v=b5f0e6c7df"></script>
-<script src="/js/force-graph.js?v=b5f0e6c7df"></script>
-<script src="/js/mini-graph.js?v=b5f0e6c7df"></script>
+<script src="/js/likes.js?v=45af36e28e"></script>
+<script src="/js/search.js?v=45af36e28e"></script>
+<script src="/js/scroll.js?v=45af36e28e"></script>
+<script src="/js/lightbox.js?v=45af36e28e"></script>
+<script src="/js/force-graph.js?v=45af36e28e"></script>
+<script src="/js/mini-graph.js?v=45af36e28e"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2510.11469', 'article', 'ru');
@@ -140,6 +140,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
 });
 </script>
 </body>

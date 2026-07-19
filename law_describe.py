@@ -110,6 +110,9 @@ def main():
     ap.add_argument("--only", default="",
                     help="переописать ТОЛЬКО один закон по id (english id из laws-list.json), "
                          "остальные не трогать — для точечной починки/проверки без --force на всё")
+    ap.add_argument("--ids", default="",
+                    help="переописать СПИСОК законов через запятую (english id) — как --only, но "
+                         "пакетно, для точечного бэкфилла N конкретных законов без --force на всё")
     ap.add_argument("--refine", action="store_true",
                     help="рефлексивная шлифовка описаний после генерации")
     ap.add_argument("--reflight", action="store_true",
@@ -152,10 +155,18 @@ def main():
         if not to_describe:
             print(f"❌ --only {args.only}: такого id нет в laws-list.json")
             return
+    elif args.ids:
+        wanted = {x.strip() for x in args.ids.split(",") if x.strip()}
+        to_describe = [x for x in laws_in if x["en"] in wanted]
+        missing = wanted - {x["en"] for x in to_describe}
+        if missing:
+            print(f"❌ --ids: не найдены в laws-list.json: {sorted(missing)}")
+            return
     else:
         to_describe = laws_in if args.force else [x for x in laws_in if not (ru.get(x["en"]) or {}).get("description")]
-    print(f"⚖️  Описания законов: описываю {len(to_describe)}/{len(laws_in)} "
-          f"({'--only ' + args.only if args.only else '--force: все' if args.force else 'догенерация недостающих'}), "
+    label = ('--only ' + args.only if args.only else '--ids: ' + str(len(to_describe)) + ' законов' if args.ids
+             else '--force: все' if args.force else 'догенерация недостающих')
+    print(f"⚖️  Описания законов: описываю {len(to_describe)}/{len(laws_in)} ({label}), "
           f"пачки по {DESCRIBE_BATCH}, потоков {WORKERS}")
 
     if to_describe:

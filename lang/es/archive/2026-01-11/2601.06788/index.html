@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=b5f0e6c7df">
+    <link rel="stylesheet" href="/css/style.css?v=45af36e28e">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Por qué las redes neuronales se parecen a los agujeros negros: lección de los modelos 'calvos'", "description": "Al medir el 'entrelazamiento' dentro de las redes neuronales, los científicos comprendieron: se comportan como agujeros negros — exteriormente iguales ante cualquier cambio interno.", "inLanguage": "es", "datePublished": "2026-01-11", "url": "https://bridge42worlds.org/lang/es/archive/2026-01-11/2601.06788/index.html", "image": "https://bridge42worlds.org/lang/ru/archive/2026-01-11/2601.06788/ai.jpg", "author": [{"@type": "Person", "name": "Min Chen"}, {"@type": "Person", "name": "Zihan Wang"}, {"@type": "Person", "name": "Canyu Chen"}, {"@type": "Person", "name": "Zeguan Wu"}, {"@type": "Person", "name": "Manling Li"}, {"@type": "Person", "name": "Junyu Liu"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2601.06788", "abstract": "El trabajo investiga la eficacia del reentrenamiento paramétricamente eficiente (PEFT) de grandes modelos de lenguaje, como LoRA, desde la perspectiva de la teoría de la información cuántica. Las parametrizaciones de bajo rango corresponden a representaciones de baja dimensión en forma de productos de matrices de estados (MPS), lo que permite introducir el concepto de «entrelazamiento artificial»: la entropía de entrelazamiento de los parámetros de la red neuronal. Se comparan LoRA y el reentrenamiento completo (FFT) en modelos LLaMA (1B y 8B) entrenados con los conjuntos de datos Tulu3 y OpenThoughts3. El entrelazamiento artificial interno en las actualizaciones de las matrices de consulta y valor para LoRA sigue una ley de volumen con una supresión en el centro — un «valle de entrelazamiento», sensible a los hiperparámetros, y difiere del FFT. El entrelazamiento externo en las matrices de atención, correspondiente a las correlaciones entre tokens en el espacio de representaciones, sigue una ley de área con correcciones logarítmicas y es robusto frente a hiperparámetros y pasos de entrenamiento. Se establece un paralelismo con el teorema de la ausencia de pelo de los agujeros negros: a pesar de las diferencias en el entrelazamiento interno, los datos de salida de la atención permanecen similares, lo que explica la eficacia de las actualizaciones de bajo rango."}</script>
 </head>
@@ -78,7 +78,7 @@
         <div class="fun-fact"><p class="fact">🎯 El teorema 'de la calvicie': un agujero negro se describe solo por su masa, carga y rotación. Toda la demás información sobre la materia absorbida se borra.</p></div>
         
         
-        <div id="article-graph" class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#7F77DD">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div><div class="mini-graph mini-graph--article" data-node="l:boltzmann_distribution,l:second_law_of_thermodynamics,l:hawking_radiation,l:gravitational_lensing,l:bekensteinhawking_entropy,l:einstein_field_equations,s:Ludwig Boltzmann,s:Stephen Hawking"><canvas id="minigraph"></canvas></div>
+        <div id="article-graph" class="mini-graph-label">🕸 Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#7F77DD">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#C0392B">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2e7d32">●</span> científicos</label><label><input type="checkbox" class="mg-kind" value="cat"> <span style="color:#B8860B">●</span> categorías</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-cat"> etiqueta↔categoría</label></div></div><div class="mini-graph mini-graph--article" data-node="l:boltzmann_distribution,l:second_law_of_thermodynamics,l:hawking_radiation,l:gravitational_lensing,l:bekensteinhawking_entropy,l:einstein_field_equations,s:Ludwig Boltzmann,s:Stephen Hawking"><canvas id="minigraph"></canvas></div>
         <div class="actions" data-article-id="2601.06788_es_popular">
             <div class="reactions">
                 <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
@@ -96,12 +96,12 @@
 
 <div class="license">Original: <a href="https://arxiv.org/abs/2601.06788">arXiv:2601.06788</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
 
-<script src="/js/likes.js?v=b5f0e6c7df"></script>
-<script src="/js/search.js?v=b5f0e6c7df"></script>
-<script src="/js/scroll.js?v=b5f0e6c7df"></script>
-<script src="/js/lightbox.js?v=b5f0e6c7df"></script>
-<script src="/js/force-graph.js?v=b5f0e6c7df"></script>
-<script src="/js/mini-graph.js?v=b5f0e6c7df"></script>
+<script src="/js/likes.js?v=45af36e28e"></script>
+<script src="/js/search.js?v=45af36e28e"></script>
+<script src="/js/scroll.js?v=45af36e28e"></script>
+<script src="/js/lightbox.js?v=45af36e28e"></script>
+<script src="/js/force-graph.js?v=45af36e28e"></script>
+<script src="/js/mini-graph.js?v=45af36e28e"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2601.06788', 'article', 'es');
@@ -137,6 +137,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
 });
 </script>
 </body>
