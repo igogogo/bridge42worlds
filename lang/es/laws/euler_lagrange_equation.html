@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ecuación de Euler-Lagrange — bridge42worlds</title>
+    <meta name="description" content="A mediados del siglo XVIII, Leonhard Euler y Joseph-Louis Lagrange, de forma independiente, derivaron una ecuación que se convirtió en el corazón de la mecánica analítica. Demostraron que toda la mecánica newtoniana puede reescribirse en el lenguaje de las energías. La idea clave: la trayectoria de un sistema es la solución para la cual la integral (el valor acumulado) del lagrangiano en el tiempo es extremal (generalmente mínima). Esto se conoce como el principio de mínima acción. Una analogía: la naturaleza elige el camino más económico, del mismo modo que el agua fluye por un cauce sinuoso minimizando las pérdidas de energía.">
+    <meta property="og:title" content="ecuación de Euler-Lagrange — bridge42worlds">
+    <meta property="og:description" content="A mediados del siglo XVIII, Leonhard Euler y Joseph-Louis Lagrange, de forma independiente, derivaron una ecuación que se convirtió en el corazón de la mecánica analítica. Demostraron que toda la mecánica newtoniana puede reescribirse en el lenguaje de las energías. La idea clave: la trayectoria de un sistema es la solución para la cual la integral (el valor acumulado) del lagrangiano en el tiempo es extremal (generalmente mínima). Esto se conoce como el principio de mínima acción. Una analogía: la naturaleza elige el camino más económico, del mismo modo que el agua fluye por un cauce sinuoso minimizando las pérdidas de energía.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/laws/euler_lagrange_equation.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=351479bb91">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/" class="active">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>ecuación de Euler-Lagrange<span class="law-type">ecuación</span></h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0 Related articles</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Una gota de agua rueda por el camino más corto, y la luz elige el más rápido. La ecuación de Euler-Lagrange es una receta universal para encontrar esa trayectoria ideal.</p><div class="practical-app"><strong>In practice:</strong> Se aplica en robótica para el cálculo de los movimientos de manipuladores y en animación para la simulación realista de tejidos y cabellos.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">A mediados del siglo XVIII, Leonhard Euler y Joseph-Louis Lagrange, de forma independiente, derivaron una ecuación que se convirtió en el corazón de la mecánica analítica. Demostraron que toda la mecánica newtoniana puede reescribirse en el lenguaje de las energías. La idea clave: la trayectoria de un sistema es la solución para la cual la integral (el valor acumulado) del lagrangiano en el tiempo es extremal (generalmente mínima). Esto se conoce como el principio de mínima acción. Una analogía: la naturaleza elige el camino más económico, del mismo modo que el agua fluye por un cauce sinuoso minimizando las pérdidas de energía.</div>
+        <div class="section"><h2>How it works</h2><p>En la vida cotidiana: un columpio pasa de la posición más alta a la más baja no de forma caótica, sino siguiendo la única curva determinada por esta ecuación. En tecnología: los robots manipuladores calculan sus trayectorias para no gastar energía extra.</p></div>
+        <div class="fun-fact">💡 La ecuación de Euler-Lagrange funciona no solo en mecánica, sino también en electrodinámica, teoría de campos e incluso en economía, en todo lugar donde exista la noción de camino óptimo.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">La ecuación de Euler-Lagrange ayuda a saber exactamente cómo se moverá cualquier sistema, ya sea un péndulo oscilante o un planeta en su órbita. Funciona mediante el concepto de "lagrangiano" (la diferencia entre la energía de movimiento y la energía de posición). Resulta que el sistema siempre se mueve de manera que el trabajo útil total, calculado a lo largo del camino, sea mínimo. Es similar a cómo el agua desciende por la ladera de una colina siguiendo la ruta más natural y energéticamente favorable.</div>
+        <div class="section"><h2>How it works</h2><p>En la vida cotidiana: un columpio pasa de la posición más alta a la más baja no de forma caótica, sino siguiendo la única curva determinada por esta ecuación. En tecnología: los robots manipuladores calculan sus trayectorias para no gastar energía extra.</p></div>
+        <div class="fun-fact">💡 La ecuación de Euler-Lagrange es tan universal que con ella se pueden deducir no solo las leyes de la mecánica, sino también las ecuaciones de Maxwell para el campo electromagnético, utilizando un lagrangiano de la forma L = -1/4 F_{μν}F^{μν}.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">La ecuación de Euler-Lagrange es una ecuación diferencial que se deduce a partir del principio de mínima acción. Para un sistema con coordenadas generalizadas q y lagrangiano L(q, q̇, t), la ecuación toma la forma d/dt (∂L/∂q̇) − ∂L/∂q = 0. Generaliza las leyes de Newton, permitiendo describir la dinámica en cualquier sistema de coordenadas y en presencia de ligaduras. Fue obtenida por primera vez por Euler en 1744 para el caso unidimensional, y luego generalizada por Lagrange en 1788 en su "Mecánica Analítica".</div>
+        <div class="section"><h2>Discovery</h2><p>Leonhard Euler, en 1744, estudiando el problema de la braquistócrona (la curva de descenso más rápido), llegó a una ecuación que minimiza la integral de un funcional. Casi medio siglo después, Joseph-Louis Lagrange, en su "Mecánica Analítica" (1788), utilizó el cálculo de variaciones para replantear toda la mecánica clásica, formulando las ecuaciones de movimiento mediante el lagrangiano. Esto permitió prescindir de fuerzas y aceleraciones, sustituyéndolas por energía y coordenadas generalizadas. Posteriormente, William Rowan Hamilton desarrolló esta idea en el principio de mínima acción, y Carl Gustav Jacobi la relacionó con la óptica.</p></div>
+        <div class="section"><h2>How it works</h2><p>La ecuación se emplea para deducir las ecuaciones de movimiento en sistemas complejos: mecanismos multicuerpo, campos, partículas relativistas. Sus límites de aplicabilidad: es válida para sistemas donde las fuerzas se derivan de un potencial (fuerzas conservativas con un potencial generalizado) y donde no hay ligaduras no holónomas. Queda fuera de su alcance cuando hay disipación (fricción) o cuando se consideran efectos cuánticos, en cuyo caso se utiliza una modificación en forma de integrales de camino de Feynman.</p></div>
+        <div class="section"><h2>Caveats</h2><p>No es directamente aplicable a sistemas con fuerzas no conservativas sin modificar el lagrangiano.; En mecánica cuántica, requiere pasar a lagrangianos de campo e integración funcional.; Para sistemas relativistas, el lagrangiano debe ser invariante de Lorentz, lo que impone condiciones adicionales.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}}\right) - \frac{\partial L}{\partial q} = 0</div><div class="formula-meaning">d/dt es la derivada temporal, ∂L/∂q̇ es la derivada parcial del lagrangiano L respecto a la velocidad generalizada q̇, ∂L/∂q es la derivada parcial de L respecto a la coordenada generalizada q. L es el lagrangiano del sistema, igual a T - V, donde T es la energía cinética y V la energía potencial. q es la coordenada generalizada, q̇ es su derivada temporal (velocidad generalizada).</div></div></div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="actions" data-article-id="euler_lagrange_equation_es_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="euler_lagrange_equation" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="feedback" id="feedback" data-article-id="euler_lagrange_equation_es_page" data-entity-type="law"><div class="fb-title-row"><div class="fb-title">How does it read?</div></div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><button type="button" class="fb-comment-toggle">+ add a comment</button><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article" style="display:none"></textarea><div class="fb-row" hidden><button class="fb-send">send</button></div><span class="fb-status"></span></div>
+
+<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
+<div class="mini-graph" data-node="l:euler_lagrange_equation"><canvas id="minigraph"></canvas></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Discovered by</div><a href="/lang/es/scientists/Leonhard_Euler.html" class="side-sci" data-scientist="Leonhard Euler">Leonhard Euler</a><div class="side-tags-label">Related concepts</div><a href="/lang/es/tags/lagrangian.html" class="side-tag" data-tag="lagrangian">lagrangiano</a><a href="/lang/es/tags/differential_equation.html" class="side-tag" data-tag="differential_equation">ecuación diferencial</a><a href="/lang/es/tags/tensor.html" class="side-tag" data-tag="tensor">tensor</a><a href="/lang/es/tags/manifold.html" class="side-tag" data-tag="manifold">variedad</a><div class="side-tags-label">Related laws</div><a href="/lang/es/laws/newtons_second_law.html" class="side-law" data-law="newtons_second_law">segunda ley de Newton</a><a href="/lang/es/laws/principle_of_least_action.html" class="side-law" data-law="principle_of_least_action">principio de mínima acción</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="lagrangian,differential_equation,tensor,manifold"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
+<script src="/js/likes.js?v=351479bb91"></script>
+<script src="/js/search.js?v=351479bb91"></script>
+<script src="/js/force-graph.js?v=351479bb91"></script>
+<script src="/js/mini-graph.js?v=351479bb91"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('euler_lagrange_equation', 'law', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

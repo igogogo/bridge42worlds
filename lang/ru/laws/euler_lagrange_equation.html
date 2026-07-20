@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>уравнение Эйлера — Лагранжа — bridge42worlds</title>
+    <meta name="description" content="В середине XVIII века Леонард Эйлер и Жозеф-Луи Лагранж независимо друг от друга вывели уравнение, которое стало сердцем аналитической механики. Они показали, что вся ньютонова механика может быть переписана на языке энергий. Ключевая идея: траектория системы — это решение, при котором интеграл (суммарное значение) лагранжиана по времени экстремален (обычно минимален). Это называют принципом наименьшего действия. Аналогия: природа выбирает самый экономичный путь, подобно тому как вода течёт по извилистому руслу, минимизируя потери энергии.">
+    <meta property="og:title" content="уравнение Эйлера — Лагранжа — bridge42worlds">
+    <meta property="og:description" content="В середине XVIII века Леонард Эйлер и Жозеф-Луи Лагранж независимо друг от друга вывели уравнение, которое стало сердцем аналитической механики. Они показали, что вся ньютонова механика может быть переписана на языке энергий. Ключевая идея: траектория системы — это решение, при котором интеграл (суммарное значение) лагранжиана по времени экстремален (обычно минимален). Это называют принципом наименьшего действия. Аналогия: природа выбирает самый экономичный путь, подобно тому как вода течёт по извилистому руслу, минимизируя потери энергии.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ru/laws/euler_lagrange_equation.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=351479bb91">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/" class="active">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное">★</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>уравнение Эйлера — Лагранжа<span class="law-type">уравнение</span></h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0 Статьи по теме</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Капля воды скатывается по кратчайшему пути, а свет выбирает самый быстрый. Уравнение Эйлера — Лагранжа — универсальный рецепт для нахождения такой идеальной траектории.</p><div class="practical-app"><strong>На практике:</strong> Применяется в робототехнике для расчёта движений манипуляторов и в анимации для реалистичной симуляции тканей и волос.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">В середине XVIII века Леонард Эйлер и Жозеф-Луи Лагранж независимо друг от друга вывели уравнение, которое стало сердцем аналитической механики. Они показали, что вся ньютонова механика может быть переписана на языке энергий. Ключевая идея: траектория системы — это решение, при котором интеграл (суммарное значение) лагранжиана по времени экстремален (обычно минимален). Это называют принципом наименьшего действия. Аналогия: природа выбирает самый экономичный путь, подобно тому как вода течёт по извилистому руслу, минимизируя потери энергии.</div>
+        <div class="section"><h2>Как работает</h2><p>В быту: качели переходят из верхней точки в нижнюю не хаотично, а по единственной кривой, заданной этим уравнением. В технике: роботы-манипуляторы рассчитывают свои траектории так, чтобы не тратить лишнюю энергию.</p></div>
+        <div class="fun-fact">💡 Уравнение Эйлера — Лагранжа работает не только в механике, но и в электродинамике, теории поля и даже экономике — везде, где есть понятие оптимального пути.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Уравнение Эйлера — Лагранжа помогает узнать, как именно будет двигаться любая система — будь то качающийся маятник или планета на орбите. Оно работает через понятие «лагранжиан» (разница между энергией движения и энергией положения). Оказывается, система всегда движется так, чтобы суммарная полезная работа, вычисляемая вдоль пути, была наименьшей. Это похоже на то, как вода стекает по склону холма самым естественным, энергетически выгодным маршрутом.</div>
+        <div class="section"><h2>Как работает</h2><p>В быту: качели переходят из верхней точки в нижнюю не хаотично, а по единственной кривой, заданной этим уравнением. В технике: роботы-манипуляторы рассчитывают свои траектории так, чтобы не тратить лишнюю энергию.</p></div>
+        <div class="fun-fact">💡 Уравнение Эйлера — Лагранжа является настолько универсальным, что с его помощью можно вывести не только законы механики, но и уравнения Максвелла для электромагнитного поля, используя лагранжиан вида L = -1/4 F_{μν}F^{μν}.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Уравнение Эйлера — Лагранжа является дифференциальным уравнением, которое выводится из принципа наименьшего действия. Для системы с обобщёнными координатами q и лагранжианом L(q, q̇, t) уравнение имеет вид d/dt (∂L/∂q̇) − ∂L/∂q = 0. Оно обобщает законы Ньютона, позволяя описывать динамику в любых координатах и при наличии связей. Впервые получено Эйлером в 1744 году для одномерного случая, а затем обобщено Лагранжем в 1788 году в его «Аналитической механике».</div>
+        <div class="section"><h2>История открытия</h2><p>Леонард Эйлер в 1744 году, изучая задачу о брахистохроне (кривой быстрейшего спуска), пришёл к уравнению, которое минимизирует интеграл функционала. Почти полвека спустя Жозеф-Луи Лагранж в своей «Аналитической механике» (1788) использовал вариационное исчисление для переосмысления всей классической механики, сформулировав уравнения движения через лагранжиан. Это позволило избавиться от сил и ускорений, заменив их энергией и обобщёнными координатами. Позднее Уильям Роуэн Гамильтон развил эту идею в принцип наименьшего действия, а Карл Густав Якоби связал её с оптикой.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Уравнение используется для вывода уравнений движения в сложных системах: многотельные механизмы, поля, релятивистские частицы. Границы применимости: справедливо для систем, где силы могут быть получены из потенциала (консервативные силы с обобщённым потенциалом), и где нет неголономных связей. Выходит за рамки при диссипации (трение) или при учёте квантовых эффектов, где применяется его модификация в форме интегралов по траекториям Фейнмана.</p></div>
+        <div class="section"><h2>Нюансы</h2><p>Неприменимо напрямую к системам с неконсервативными силами без модификации лагранжиана.; В квантовой механике требует перехода к лагранжианам поля и функциональному интегрированию.; Для релятивистских систем лагранжиан должен быть лоренц-инвариантным, что накладывает дополнительные условия.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}}\right) - \frac{\partial L}{\partial q} = 0</div><div class="formula-meaning">d/dt — производная по времени, ∂L/∂q̇ — частная производная лагранжиана L по обобщённой скорости q̇, ∂L/∂q — частная производная L по обобщённой координате q. L — лагранжиан системы, равный T - V, где T — кинетическая энергия, V — потенциальная энергия. q — обобщённая координата, q̇ — её производная по времени (обобщённая скорость).</div></div></div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="actions" data-article-id="euler_lagrange_equation_ru_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="euler_lagrange_equation" title="избранное"><span class="fav-ic">☆</span> избранное</button></div>
+<div class="feedback" id="feedback" data-article-id="euler_lagrange_equation_ru_page" data-entity-type="law"><div class="fb-title-row"><div class="fb-title">Как читается? (поможет улучшить тексты)</div></div><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью" style="display:none"></textarea><div class="fb-row" hidden><button class="fb-send">отправить</button></div><span class="fb-status"></span></div>
+
+<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div>
+<div class="mini-graph" data-node="l:euler_lagrange_equation"><canvas id="minigraph"></canvas></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Открыли</div><a href="/lang/ru/scientists/Leonhard_Euler.html" class="side-sci" data-scientist="Leonhard Euler">Leonhard Euler</a><div class="side-tags-label">Связанные понятия</div><a href="/lang/ru/tags/lagrangian.html" class="side-tag" data-tag="lagrangian">лагранжиан</a><a href="/lang/ru/tags/differential_equation.html" class="side-tag" data-tag="differential_equation">дифференциальное уравнение</a><a href="/lang/ru/tags/tensor.html" class="side-tag" data-tag="tensor">тензор</a><a href="/lang/ru/tags/manifold.html" class="side-tag" data-tag="manifold">многообразие</a><div class="side-tags-label">Связанные законы</div><a href="/lang/ru/laws/newtons_second_law.html" class="side-law" data-law="newtons_second_law">второй закон Ньютона</a><a href="/lang/ru/laws/principle_of_least_action.html" class="side-law" data-law="principle_of_least_action">принцип наименьшего действия</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="lagrangian,differential_equation,tensor,manifold"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
+<script src="/js/likes.js?v=351479bb91"></script>
+<script src="/js/search.js?v=351479bb91"></script>
+<script src="/js/force-graph.js?v=351479bb91"></script>
+<script src="/js/mini-graph.js?v=351479bb91"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('euler_lagrange_equation', 'law', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>
