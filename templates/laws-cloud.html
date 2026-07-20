@@ -40,12 +40,14 @@
 </div>
 
 <div class="view-toggle" id="view-toggle">
-    <button type="button" id="view-treemap" class="active" aria-label="Map">▦</button>
+    <button type="button" id="view-structured" class="active" aria-label="Sections">▤</button>
+    <button type="button" id="view-treemap" aria-label="Map">▦</button>
     <button type="button" id="view-list" aria-label="List">☰</button>
     <button type="button" id="view-graph" aria-label="Graph">◉</button>
 </div>
 
-<div id="treemap"></div>
+<div id="treeview"></div>
+<div id="treemap" style="display:none"></div>
 <div class="tag-cloud" id="law-cloud" style="display:none">$laws_cloud_html</div>
 <div id="laws-graph" style="display:none">
     <div class="mini-graph-filters">$mini_graph_filters_html</div>
@@ -60,6 +62,7 @@
 <script src="/js/force-graph.js?v=$asset_ver"></script>
 <script src="/js/mini-graph.js?v=$asset_ver"></script>
 <script>window.__TREEMAP = $treemap_data;</script>
+<script src="/js/treeview.js?v=$asset_ver"></script>
 <script src="/js/treemap.js?v=$asset_ver"></script>
 <script>
 function filterLaws(q) {
@@ -80,8 +83,8 @@ function filterLaws(q) {
     if (group) group.style.display = groupHasVisible ? '' : 'none';
 }
 (function(){
-  var V={treemap:'treemap',list:'law-cloud',graph:'laws-graph'};
-  var B={treemap:'view-treemap',list:'view-list',graph:'view-graph'};
+  var V={structured:'treeview',treemap:'treemap',list:'law-cloud',graph:'laws-graph'};
+  var B={structured:'view-structured',treemap:'view-treemap',list:'view-list',graph:'view-graph'};
   function set(name){
     for(var k in V){var el=document.getElementById(V[k]);if(el)el.style.display=(k===name)?'':'none';
       var b=document.getElementById(B[k]);if(b)b.classList.toggle('active',k===name);}
@@ -90,8 +93,8 @@ function filterLaws(q) {
     try{localStorage.setItem('b42_lawview',name);}catch(e){}
   }
   Object.keys(B).forEach(function(k){document.getElementById(B[k]).onclick=function(){set(k);};});
-  var saved='treemap';try{saved=localStorage.getItem('b42_lawview')||'treemap';}catch(e){}
-  if(!V[saved])saved='treemap';
+  var saved='structured';try{saved=localStorage.getItem('b42_lawview')||'structured';}catch(e){}
+  if(!V[saved])saved='structured';
   set(saved);
 })();
 </script>

@@ -720,6 +720,24 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 .tm-tile:hover { filter: brightness(1.09); }
 .tm-label { font-weight: 500; line-height: 1.15; word-break: break-word; }
 .tm-n { font-weight: 400; opacity: .82; }
+/* ── Структурный аккордеон (js/treeview.js) — ДЕФОЛТНЫЙ вид облака тегов/законов ── */
+#treeview { max-width: 680px; margin: 0 auto 24px; }
+.tv-group { border-bottom: 1px solid var(--border); }
+.tv-head { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none;
+    cursor: pointer; padding: 12px 4px; font-size: 15px; color: var(--text); text-align: start; font-family: inherit; }
+.tv-head:hover { color: var(--link); }
+.tv-dot { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+.tv-label { font-weight: 500; flex: 1; }
+.tv-count { font-size: 12px; color: var(--soft); }
+.tv-chev { font-size: 11px; color: var(--soft); transition: transform .15s; }
+.tv-group.open .tv-chev { transform: rotate(90deg); }
+.tv-body { display: none; padding: 0 0 10px 22px; column-width: 220px; column-gap: 18px; }
+.tv-group.open .tv-body { display: block; }
+.tv-item { display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 5px 8px; text-decoration: none; color: var(--text); border-radius: 6px; font-size: 14px;
+    break-inside: avoid; }
+.tv-item:hover { background: var(--tag-bg); color: var(--link); }
+.tv-n { font-weight: 400; color: var(--soft); font-size: 12px; }
 .original-title { font-size: 13px; color: var(--soft); margin-bottom: 16px; font-style: italic; }
 /* "Original" переехал под заголовок, до авторов (юзер-фидбек 2026-07-15: "строку original
    перенести под название статьи до авторов") — тот же .original-title текст-стиль (курсив,
