@@ -130,7 +130,8 @@
     "tags": [
       "entropy",
       "phase_transition",
-      "thermal_conductivity"
+      "thermal_conductivity",
+      "viscosity"
     ],
     "related_laws": [
       "bekensteinhawking_entropy"
@@ -220,7 +221,11 @@
       }
     ],
     "scientists": [
-      "Christian Doppler"
+      "Christian Doppler",
+      "D. B. McLaughlin",
+      "Didier Queloz",
+      "Michel Mayor",
+      "R. A. Rossiter"
     ],
     "tags": [
       "spectroscopy",
@@ -457,6 +462,7 @@
       "black_hole",
       "dark_matter",
       "gravitational_lensing",
+      "jwst",
       "spacetime"
     ],
     "related_laws": [
@@ -549,6 +555,7 @@
     ],
     "tags": [
       "angular_momentum",
+      "color_charge",
       "gauge_invariance",
       "group",
       "higgs_boson",
@@ -1258,7 +1265,8 @@
     ],
     "scientists": [
       "David Hilbert",
-      "John von Neumann"
+      "John von Neumann",
+      "Joseph Fourier"
     ],
     "tags": [
       "banach_space",
@@ -2118,6 +2126,7 @@
     ],
     "tags": [
       "gravitational_potential",
+      "iron",
       "neutron_star",
       "stellar_evolution",
       "supernova",
@@ -2206,6 +2215,7 @@
     "tags": [
       "cosmic_rays",
       "electromagnetism",
+      "jet",
       "solar_wind",
       "supernova",
       "supernova_remnant"
@@ -2345,6 +2355,7 @@
       "galactic_evolution",
       "gravity",
       "largescale_structure_of_the_universe",
+      "metallicity",
       "molecular_cloud",
       "nebula",
       "star_formation"
@@ -2511,6 +2522,7 @@
     ],
     "tags": [
       "electromagnetism",
+      "exciton",
       "magnetar",
       "spectroscopy"
     ],
@@ -2867,6 +2879,7 @@
     ],
     "scientists": [
       "Emmy Noether",
+      "Gottfried Wilhelm Leibniz",
       "Henri Poincaré",
       "Joseph-Louis Lagrange",
       "Leonhard Euler",
@@ -4836,6 +4849,7 @@
     ],
     "tags": [
       "carbon",
+      "helium",
       "nucleosynthesis"
     ],
     "related_laws": [
@@ -4860,5 +4874,129 @@
         "The anthropic argument around the fine-tuning of the resonance generates philosophical debates about the randomness or lawfulness of our existence."
       ]
     }
+  },
+  "meissner_effect": {
+    "name": "Meissner effect",
+    "type": "effect",
+    "mini": "A superconductor expels a magnetic field, just as a float is pushed out of water — remaining perfectly empty inside.",
+    "practical_application": "Magnetic levitation of trains using superconducting magnets and precise magnetic field measurements without interference.",
+    "description_popular": "Discovered in 1933 by Walther Meissner and Robert Ochsenfeld. Before this, it was thought that a superconductor is simply an ideal conductor with zero resistance, but the experiment revealed a deeper property: regardless of whether the magnetic field was applied before or after cooling, the magnetic induction inside the superconductor is always zero. This is like an elastic ball in carbon dioxide: the gas is displaced, and the ball maintains the field shape around it.",
+    "fun_fact_popular": "Based on the Meissner effect, ultra-sensitive magnetometers (SQUIDs) have been created, capable of detecting the magnetic field of a human heart from several centimeters away.",
+    "description_simple": "When a material becomes superconducting (conducts current without resistance) at a very low temperature, it completely expels the magnetic field (flux of magnetic lines) from its volume. This is similar to how water does not penetrate a sealed float: there is external pressure, but it does not get inside.",
+    "how_it_works_simple": "Thanks to this effect, magnetic levitation becomes possible: a superconductor hovers above a magnet without requiring energy input, which is used in high-speed train suspension and frictionless bearings.",
+    "fun_fact": "Tin, used in the first experiment, becomes superconducting at 3.72 K — just slightly warmer than the temperature of the cosmic microwave background radiation (2.73 K).",
+    "description": "Upon transitioning to the superconducting state, the material becomes an ideal diamagnet: the magnetic induction B inside the volume decays exponentially from the surface with a characteristic length λ (London penetration depth) and becomes zero in the bulk. This means the superconductor not only completely shields the external field but also expels any pre-existing field upon cooling — a property absent in an ideal conductor.",
+    "history": "The effect was discovered in 1933 by German physicists Walther Meissner and Robert Ochsenfeld. They cooled tin and lead in a magnetic field and measured the field distribution, finding that the field is completely expelled upon transition to the superconducting state. This demonstrated that superconductivity is not merely the disappearance of resistance but a thermodynamic phase. Later, the London brothers (Fritz and Heinz) developed a phenomenological theory, and the microscopic explanation was provided by the BCS theory (Bardeen, Cooper, Schrieffer) in 1957.",
+    "how_it_works": "The effect is used to create powerful magnets for MRI, particle accelerators, and levitating transport systems. Limits of applicability: the superconducting state is typically destroyed upon exceeding critical temperature, current density, or magnetic field. In type-II superconductors, the field partially penetrates in the form of vortices (mixed state), limiting ideal screening.",
+    "key_problems": [
+      "The nature of high-temperature superconductivity remains not fully explained",
+      "Some materials exhibit unusual magnetic states that do not fit the standard model",
+      "The need for extreme cooling limits practical application"
+    ],
+    "formulas": [
+      {
+        "description": "London equation for the magnetic field in a superconductor",
+        "latex": "\\nabla^2 \\mathbf{B} = \\frac{\\mathbf{B}}{\\lambda^2}",
+        "meaning": "B is the magnetic induction vector, λ is the London penetration depth (the characteristic distance over which the field decays by a factor of e), ∇² is the Laplace operator (second derivative with respect to coordinates)."
+      }
+    ],
+    "scientists": [
+      "Walther Meissner",
+      "Robert Ochsenfeld"
+    ],
+    "tags": [
+      "superconductivity",
+      "electromagnetism",
+      "temperature"
+    ],
+    "related_laws": [
+      "maxwells_equations",
+      "josephson_effect"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "sagnac_effect": {
+    "name": "Sagnac effect",
+    "type": "effect",
+    "mini": "Rotation of a ring interferometer causes light to 'chase' the moving mirror, so two counter-propagating beams travel different distances. It's like runners on a carousel: the one running in the direction of rotation covers more distance.",
+    "practical_application": "Fiber-optic gyroscopes in airplanes, rockets, and smartphones, measuring rotation without mechanical parts.",
+    "description_popular": "In 1913, French physicist Georges Sagnac conducted an experiment proving that rotation affects light propagation in a closed loop, contrary to doubts about the applicability of classical physics. He assembled a ring interferometer on a rotating table and recorded a fringe shift — direct evidence that light 'feels' rotation. This can be compared to two floats on a circular whirlpool: one drifts with the current faster.",
+    "fun_fact_popular": "Sagnac's first experiments took only a few minutes, but the accuracy was such that he could detect the Earth's rotation — though this required significantly increasing the loop area.",
+    "description_simple": "If a platform with a closed loop rotates, a light beam traveling with the rotation takes slightly more time to traverse the ring than a beam traveling against the rotation. When they meet, they create an interference pattern (alternating light and dark fringes), the shift of which depends on the rotation speed. Similar to a race of two snails on the rim of a rotating wheel.",
+    "how_it_works_simple": "The effect underlies optical gyroscopes — devices that determine rotation from the shift of interference fringes. Such gyroscopes have no moving parts and are used in navigation systems.",
+    "fun_fact": "Modern fiber-optic gyroscopes achieve a sensitivity of 10⁻⁵ degrees per hour — enough to detect a turn of one millionth of a full revolution over a day.",
+    "description": "In a rotating reference frame, the time taken by light to travel a closed path depends on direction: the time difference Δt = (4AΩ)/(c²), where A is the area, Ω is the angular velocity. This leads to a phase shift Δφ = (8πAΩ)/(λc), observed as fringe shift. The effect occurs not only for light but for any waves (including quantum particles) and is an expression of general relativity — rotation creates an effective gravitomagnetic field.",
+    "history": "Predicted and experimentally confirmed by Georges Sagnac in 1913. He used an interferometer with an area of 0.86 m² and measured rotation with an accuracy of a few degrees per minute. Later, in 1925, Albert A. Michelson and Henry Gale built a giant open-air interferometer measuring 0.6 × 0.3 miles to measure Earth's rotation. With the advent of lasers and fiber optics, the effect became the basis of modern navigation instruments.",
+    "how_it_works": "Applied in ring laser and fiber-optic gyroscopes, measuring angular velocity with high precision. Limits: the effect occurs in any metric theory of gravity, but its interpretation may vary depending on the reference frame. In strong gravitational fields, general relativistic corrections must be considered; at extremely low rotation rates, accuracy is limited by noise.",
+    "key_problems": [
+      "Interaction with quantized light and possible sensitivity limits due to shot noise",
+      "Paradoxical aspects in non-inertial reference frames related to the nature of inertia",
+      "Miniaturization leads to a decrease in the signal-to-noise ratio"
+    ],
+    "formulas": [
+      {
+        "description": "Sagnac phase shift",
+        "latex": "\\Delta \\phi = \\frac{8 \\pi A \\Omega}{c \\lambda}",
+        "meaning": "Δφ is the phase difference between two counter-propagating beams, A is the area enclosed by the loop, Ω is the angular velocity of rotation, c is the speed of light in vacuum (c ≈ 3·10⁸ m/s), λ is the wavelength of the light used."
+      }
+    ],
+    "scientists": [
+      "Georges Sagnac",
+      "Albert A. Michelson"
+    ],
+    "tags": [
+      "interferometer",
+      "angular_momentum",
+      "speed_of_light"
+    ],
+    "related_laws": [
+      "doppler_effect",
+      "lense_thirring_effect",
+      "principle_of_constancy_of_speed_of_light"
+    ],
+    "refined": false,
+    "raw": {}
+  },
+  "kam_theorem": {
+    "name": "Kolmogorov–Arnold–Moser theorem",
+    "type": "theorem",
+    "mini": "A system like a pendulum does not completely fall into chaos if the jolts are small: some ordered motions persist, like islands of stability among waves.",
+    "practical_application": "Prediction of the stability of planetary orbits in the Solar System over billions of years and design of particle accelerators.",
+    "description_popular": "In 1954, Andrey Kolmogorov proposed the idea, and Vladimir Arnold and Jürgen Moser rigorously proved in the 1960s that in Hamiltonian systems (where energy is conserved), under small perturbations, so-called invariant tori — multidimensional surfaces on which motion remains regular — are preserved. This is like a layer cake: some layers (tori) can withstand a light shaking, while others crumble into chaos. The theorem established a boundary between order and chaos.",
+    "fun_fact_popular": "It is precisely the KAM theorem that explains why Saturn's rings have sharply defined gaps — resonant perturbations from moons destroy the regular orbits of particles in these zones.",
+    "description_simple": "Imagine a swinging pendulum: if you add a small perturbation, its motion remains almost regular. The theorem says that in complex systems (e.g., planets around the Sun), most closed orbits do not break down but only slightly deform under the weak influence of other bodies. This explains why the Solar System is stable even though the planets attract each other.",
+    "how_it_works_simple": "Thanks to this theorem, engineers can be confident that particles in ring accelerators will not crash into the walls due to minor magnetic field errors, and astronomers understand that exoplanet orbits can exist for long periods.",
+    "fun_fact": "To prove it, Arnold had to introduce a special fast convergence method, reminiscent of Newton's iterations, which allowed him to show that the Solar System is likely stable on cosmological time scales.",
+    "description": "The theorem states that for an integrable Hamiltonian system described by action-angle variables (I, θ), under a sufficiently small and smooth perturbation H(I, θ) = H₀(I) + ε H₁(I, θ), invariant tori with frequencies ω = ∂H₀/∂I are preserved if the frequencies satisfy the Diophantine condition |k·ω| ≥ γ/|k|^τ for all integer vectors k ≠ 0. Thus, the measure of destroyed tori tends to zero with ε, and regular dynamics coexist with chaotic.",
+    "history": "In 1954, Soviet mathematician Andrey Kolmogorov formulated the theorem on the preservation of conditionally periodic motions under small perturbations. His student Vladimir Arnold gave a rigorous proof for analytic systems (1963), and Jürgen Moser simultaneously and independently extended it to smooth mappings (1962), using smoothing techniques. These works laid the foundation of the modern theory of dynamical systems and chaos.",
+    "how_it_works": "The theorem is widely applied in celestial mechanics, plasma physics, and accelerator technology for long-term stability analysis. Limits: requires a sufficiently small perturbation and smoothness, as well as frequencies satisfying Diophantine conditions. Under strong perturbations, tori break down, opening the way to global chaos (Arnold diffusion).",
+    "key_problems": [
+      "Exact estimation of the critical value ε at which torus destruction occurs",
+      "Generalization to infinite-dimensional systems (e.g., in hydrodynamics)",
+      "Behavior near resonances and the emergence of 'sticky' regions in phase space"
+    ],
+    "formulas": [
+      {
+        "description": "Diophantine non-resonance condition for frequencies",
+        "latex": "|\\mathbf{k} \\cdot \\boldsymbol{\\omega}| \\ge \\frac{\\gamma}{|\\mathbf{k}|^\\tau}",
+        "meaning": "k is an integer vector with components k₁,...,kₙ, ω is the frequency vector, γ > 0 is a small constant depending on the perturbation, τ > n−1 is a parameter defining the Diophantine property; the symbol |k| denotes the sum of absolute values |k₁|+...+|kₙ|."
+      }
+    ],
+    "scientists": [
+      "Andrey Kolmogorov",
+      "Vladimir Arnold",
+      "Jürgen Moser"
+    ],
+    "tags": [
+      "phase_space",
+      "topology"
+    ],
+    "related_laws": [
+      "virial_theorem",
+      "noethers_theorem"
+    ],
+    "refined": false,
+    "raw": {}
   }
 }
