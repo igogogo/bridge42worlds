@@ -138,26 +138,54 @@ def captions_for_lang(captions_field, lang):
     return captions_field or []
 
 
-def gen_mosaic(images, aid, date_str, captions=None):
+def gen_mosaic(images, aid, date_str, captions=None, cover_url=None):
     # Галерея: одно ГЛАВНОЕ изображение (клик → полноэкранный лайтбокс) + лента превью снизу.
     # Клик по превью меняет главное «в окне», ‹ › листают (js/gallery.js). Подписи — figcaption
     # + alt. Одиночная картинка — без ленты/стрелок, только главное. (Юзер-фидбек 2026-07-19.)
-    if not images: return ""
+    # cover_url (ai.jpg) — AI-обложка ПЕРВЫМ кадром (2026-07-20). Если обложка-fallback это копия
+    # одной из PDF-фигур (совпадает по размеру+md5), не показываем её в галерее дважды.
     captions = captions or []
     base = f"/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{aid}"
-    n = len(images)
+    folder = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / aid
 
     def cap_of(i):
         return captions[i] if i < len(captions) and captions[i] else ""
 
+    dup_idx = None
+    if cover_url:
+        ai_p = folder / "ai.jpg"
+        if ai_p.exists():
+            ai_sz, ai_hash = ai_p.stat().st_size, None
+            for i in range(len(images)):
+                fp = folder / f"{i}.jpg"
+                if fp.exists() and fp.stat().st_size == ai_sz:
+                    if ai_hash is None:
+                        ai_hash = hashlib.md5(ai_p.read_bytes()).hexdigest()
+                    if hashlib.md5(fp.read_bytes()).hexdigest() == ai_hash:
+                        dup_idx = i
+                        break
+
+    items = []  # (full_url, thumb_url, caption)
+    if cover_url:
+        cover_thumb = f"{base}/t_ai.jpg" if (folder / "t_ai.jpg").exists() else cover_url
+        items.append((cover_url, cover_thumb, ""))
+    for i in range(len(images)):
+        if i == dup_idx:
+            continue
+        u = f"{base}/{i}.jpg"
+        items.append((u, u, cap_of(i)))
+
+    if not items:
+        return ""
+    n = len(items)
     thumbs = "".join(
-        f'<button type="button" class="gallery-thumb{" is-active" if i == 0 else ""}" '
-        f'data-i="{i}" data-src="{base}/{i}.jpg" data-cap="{attr_safe(cap_of(i))}" '
-        f'aria-label="{attr_safe(cap_of(i)) or f"Image {i + 1}"}">'
-        f'<img src="{base}/{i}.jpg" alt="" loading="lazy"></button>'
-        for i in range(n)
+        f'<button type="button" class="gallery-thumb{" is-active" if k == 0 else ""}" '
+        f'data-i="{k}" data-src="{full}" data-cap="{attr_safe(cap)}" '
+        f'aria-label="{attr_safe(cap) or f"Image {k + 1}"}">'
+        f'<img src="{thumb}" alt="" loading="lazy"></button>'
+        for k, (full, thumb, cap) in enumerate(items)
     )
-    cap0 = cap_of(0)
+    full0, _t0, cap0 = items[0]
     cap_style = "" if cap0 else ' style="display:none"'
     nav = (
         '<button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button>'
@@ -167,8 +195,8 @@ def gen_mosaic(images, aid, date_str, captions=None):
     return (
         f'<div class="gallery" data-count="{n}">'
         f'<div class="gallery-stage">{nav}'
-        f'<a class="gallery-main" href="{base}/0.jpg" aria-label="Open image">'
-        f'<img class="gallery-main-img" src="{base}/0.jpg" alt="{attr_safe(cap0)}"></a>'
+        f'<a class="gallery-main" href="{full0}" aria-label="Open image">'
+        f'<img class="gallery-main-img" src="{full0}" alt="{attr_safe(cap0)}"></a>'
         f'<figcaption class="gallery-caption"{cap_style}>{safe(cap0)}</figcaption>'
         f'</div>{thumbs_html}</div>'
     )
@@ -682,13 +710,12 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             banner_html = f'<p class="express-locked-banner">{banner_tpl.format(shown=shown_name, locked=locked_name)}</p>'
             text_html = banner_html + text_html
 
-    mosaic_html = gen_mosaic(images, article["id"], date_str, captions)
+    # AI-обложка (ai.jpg) идёт ПЕРВЫМ кадром галереи, а не отдельным блоком сверху (юзер-фидбек
+    # 2026-07-20: "AI картинки первые, отдельную первую убрать"). Отдельного .ai-cover больше нет.
     ai_jpg = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"] / "ai.jpg"
-    if ai_jpg.exists():
-        ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.jpg'
-        ai_cover_html = f'<div class="ai-cover"><a href="{ai_url}" class="mosaic-open"><img src="{ai_url}" alt=""></a></div>'
-    else:
-        ai_cover_html = ""
+    ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.jpg' if ai_jpg.exists() else None
+    mosaic_html = gen_mosaic(images, article["id"], date_str, captions, cover_url=ai_url)
+    ai_cover_html = ""
     tags_side_html = gen_tags_side(tags, lang)
     if tags_side_html:
         tags_lbl = SIDE_TAGS_LABEL.get(lang, SIDE_TAGS_LABEL["en"])
