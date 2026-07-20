@@ -11,6 +11,11 @@ html[lang="ar"] .article-nav { left: auto; right: max(12px, calc((100vw - 900px)
 html[lang="ar"] .mosaic-arrow { right: auto; left: 6px; transform: translateY(-50%) scaleX(-1); }
 /* латиница/цифры/URL внутри RTL держим как есть */
 html[lang="ar"] .meta, html[lang="ar"] .license, html[lang="ar"] .original-title { unicode-bidi: plaintext; }
+/* Строки авторов/соавторов — латинские имена внутри RTL: без plaintext bidi перемешивает
+   порядок и может распирать строку (юзер-фидбек 2026-07-20: «список авторов даёт прокрутку»).
+   plaintext раскладывает каждое имя по его направлению, перенос по словам вместо горизонт. скролла. */
+html[lang="ar"] .authors-top, html[lang="ar"] .card-authors,
+html[lang="ar"] .related-tags { unicode-bidi: plaintext; overflow-wrap: anywhere; }
 /* картинка карточки статьи — обтекание с другой стороны */
 html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 8px 16px; }
 /* разделитель чипов категорий — тоже зеркалим */
@@ -446,7 +451,10 @@ html[dir="rtl"] .nav-more-panel { left: auto; right: 0; }
     padding: 4px 12px; border-radius: 20px;
     border: 1px solid var(--border); background: var(--card-bg);
 }
-.vs-current { font-size: 11px; font-weight: 700; color: var(--text); white-space: nowrap; }
+/* Фиксированная ширина подписи текущего тира — иначе при смене «Популярно»↔«Мини» ширина
+   гуляет и вся шапка (space-between) дёргается (юзер-фидбег 2026-07-20). 66px покрывают самую
+   длинную подпись во всех языках; текст центрируем. */
+.vs-current { font-size: 11px; font-weight: 700; color: var(--text); white-space: nowrap; min-width: 66px; text-align: center; }
 
 .vs-track { position: relative; width: 90px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 10px; }
 .vs-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: var(--link); transition: width 0.18s ease; }

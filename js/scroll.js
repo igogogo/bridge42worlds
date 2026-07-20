@@ -111,15 +111,19 @@ function updateNextButton(version) {
     // оба обновляем одинаково, чтобы не долистывать при желании перейти дальше.
     var btns = document.querySelectorAll('.next-btn');
     if (!btns.length) return;
+    // Стрелка по направлению письма: в RTL «дальше» визуально влево (←), в LTR — вправо (→).
+    // Раньше сюда хардкодился «→», а из базовой подписи срезался только «→» (не «←») — на арабском
+    // получалось «المقال التالي ← … →» (двойная разнонаправленная стрелка).
+    var arr = document.documentElement.getAttribute('dir') === 'rtl' ? '←' : '→';
 
     btns.forEach(function(btn) {
         // Захватываем локализованный текст кнопки, отрендеренный сервером
         // ($next_label в article.html), до первой перезаписи — иначе он теряется.
-        if (!btn.dataset.baseLabel) btn.dataset.baseLabel = btn.textContent.replace(/→\s*$/, '').trim();
+        if (!btn.dataset.baseLabel) btn.dataset.baseLabel = btn.textContent.replace(/[→←]\s*$/, '').trim();
         var label = btn.dataset.baseLabel;
 
         if (next) {
-            btn.textContent = label + ': ' + next.title.substring(0, 30) + '... →';
+            btn.textContent = label + ': ' + next.title.substring(0, 30) + '... ' + arr;
             btn.onclick = function() {
                 viewedIds.add(next.id);
                 persistViewed();
