@@ -36,6 +36,15 @@ print(f"   Languages: {LANGUAGES}")
 
 _ASSET_VER = None
 
+# Иконка «граф знаний» — инлайновый SVG-глиф (3 узла + рёбра, currentColor → любая тема)
+# вместо эмодзи-паутины 🕸. Один источник для всех мест (label графа на статье + заголовки).
+GRAPH_ICO = ('<svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true">'
+             '<g fill="none" stroke="currentColor" stroke-width="1.7">'
+             '<line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/>'
+             '<line x1="20" y1="7" x2="13.5" y2="20"/></g>'
+             '<g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/>'
+             '<circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg>')
+
 
 def asset_ver():
     """Хэш от содержимого всех css/js — заменяет ручной ?v=N (забывали бампать, у части
@@ -130,30 +139,39 @@ def captions_for_lang(captions_field, lang):
 
 
 def gen_mosaic(images, aid, date_str, captions=None):
-    # Горизонтальная лента: блок 5:1 (ширина:высота), видно 5 картинок,
-    # остальные — скроллом; стрелка появляется при >5. Подписи (если есть) — figcaption + alt/title.
+    # Галерея: одно ГЛАВНОЕ изображение (клик → полноэкранный лайтбокс) + лента превью снизу.
+    # Клик по превью меняет главное «в окне», ‹ › листают (js/gallery.js). Подписи — figcaption
+    # + alt. Одиночная картинка — без ленты/стрелок, только главное. (Юзер-фидбек 2026-07-19.)
     if not images: return ""
     captions = captions or []
     base = f"/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{aid}"
-    parts = []
-    for i in range(len(images)):
-        cap = captions[i] if i < len(captions) and captions[i] else ""
-        alt = attr_safe(cap)
-        capfig = f'<figcaption>{safe(cap)}</figcaption>' if cap else ''
-        title = f' title="{alt}"' if cap else ''
-        parts.append(
-            f'<figure class="mosaic-item"><a href="{base}/{i}.jpg" class="mosaic-open">'
-            f'<img src="{base}/{i}.jpg" alt="{alt}"{title} loading="lazy"></a>{capfig}</figure>'
-        )
-    items = "".join(parts)
-    arrows = ""
-    if len(images) > 5:
-        arrows = (
-            '<button type="button" class="mosaic-arrow mosaic-prev" aria-label="Prev" '
-            "onclick=\"this.parentElement.querySelector('.mosaic-track').scrollBy({left:-this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})\">‹</button>"
-            '<button type="button" class="mosaic-arrow mosaic-next" aria-label="More images" '
-            "onclick=\"this.parentElement.querySelector('.mosaic-track').scrollBy({left:this.parentElement.querySelector('.mosaic-track').clientWidth*0.6,behavior:'smooth'})\">›</button>")
-    return f'<div class="mosaic-track">{items}</div>{arrows}'
+    n = len(images)
+
+    def cap_of(i):
+        return captions[i] if i < len(captions) and captions[i] else ""
+
+    thumbs = "".join(
+        f'<button type="button" class="gallery-thumb{" is-active" if i == 0 else ""}" '
+        f'data-i="{i}" data-src="{base}/{i}.jpg" data-cap="{attr_safe(cap_of(i))}" '
+        f'aria-label="{attr_safe(cap_of(i)) or f"Image {i + 1}"}">'
+        f'<img src="{base}/{i}.jpg" alt="" loading="lazy"></button>'
+        for i in range(n)
+    )
+    cap0 = cap_of(0)
+    cap_style = "" if cap0 else ' style="display:none"'
+    nav = (
+        '<button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button>'
+        '<button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button>'
+    ) if n > 1 else ""
+    thumbs_html = f'<div class="gallery-thumbs">{thumbs}</div>' if n > 1 else ""
+    return (
+        f'<div class="gallery" data-count="{n}">'
+        f'<div class="gallery-stage">{nav}'
+        f'<a class="gallery-main" href="{base}/0.jpg" aria-label="Open image">'
+        f'<img class="gallery-main-img" src="{base}/0.jpg" alt="{attr_safe(cap0)}"></a>'
+        f'<figcaption class="gallery-caption"{cap_style}>{safe(cap0)}</figcaption>'
+        f'</div>{thumbs_html}</div>'
+    )
 
 
 from gen_llm import *  # LLM-слой вынесен в gen_llm.py
@@ -394,10 +412,12 @@ def mini_graph_filters_html(lang, center_kind="tag"):
         checked = " checked" if value in default_kinds else ""
         return f'<label><input type="checkbox" class="mg-kind" value="{value}"{checked}> <span style="color:{color}">●</span> {safe(label)}</label>'
 
+    # Цвета-легенды точек ● синхронны с KIND_COLORS в js/mini-graph.js / js/knowledge-graph.js:
+    # один цвет на ТИП узла (тег/закон/учёный/раздел), чтобы тип читался с одного взгляда.
     kind_boxes = (
-        kind_box("tag", "#7F77DD", loc["tags"])
-        + kind_box("law", "#C0392B", loc["laws"])
-        + kind_box("sci", "#2e7d32", loc["scientists"])
+        kind_box("tag", "#6C5CE7", loc["tags"])
+        + kind_box("law", "#D64545", loc["laws"])
+        + kind_box("sci", "#2FA84F", loc["scientists"])
     )
 
     def edge_box(value, label, checked):
@@ -416,7 +436,7 @@ def mini_graph_filters_html(lang, center_kind="tag"):
     # раздела нет (описания уже есть в data/arxiv-category-descriptions.json для .cat-chip в
     # поиске) — только узел в графе + связь с тегами статей этого раздела.
     if center_kind is None:
-        kind_boxes += kind_box("cat", "#B8860B", loc.get("categories", "categories"))
+        kind_boxes += kind_box("cat", "#C9A227", loc.get("categories", "categories"))
         edge_boxes += edge_box("tag-cat", loc.get("edge_tag_cat", "tag↔category"), False)
     return kind_boxes + f'<div class="mg-edges">{edge_boxes}</div>'
 
@@ -594,7 +614,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     if len(article_graph_ids) >= 2:
         mini_lbl = MINI_LABEL.get(lang, MINI_LABEL["en"])
         article_graph_html = (
-            f'<div id="article-graph" class="mini-graph-label">🕸 {safe(mini_lbl)} '
+            f'<div id="article-graph" class="mini-graph-label">{GRAPH_ICO} {safe(mini_lbl)} '
             f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
             f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
             f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, "article")}</div>'
@@ -1900,7 +1920,7 @@ def update_all_authors():
                         <h3><a href="{a['url']}">{a['title']}</a></h3>
                         <div class="oneliner">{a.get('description', a.get('oneliner', ''))}</div>
                         <div class="meta">arXiv:{a['id']} · {a['date']}</div></div></div>"""
-        coauthors_html = "".join(
+        coauthors_html = " · ".join(
             f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/{author_slug(ca)}.html" data-author="{attr_safe(ca)}">{ca}</a>'
             for ca in data.get("coauthors", [])[:15]
         )
@@ -1910,13 +1930,13 @@ def update_all_authors():
             for t in id_tags.get(aid, []):
                 if t not in author_tags: author_tags.append(t)
         author_tags_set = set(author_tags)
-        author_tags_html = " ".join(
+        author_tags_html = " · ".join(
             f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
             for t in author_tags[:20]
         )
         # законы автора — через пересечение тегов (закон↔тег), как секция «Законы» на странице тега
         author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
-        author_laws_html = " ".join(
+        author_laws_html = " · ".join(
             f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
             for lid in author_law_ids[:20]
         )

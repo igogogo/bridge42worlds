@@ -2,9 +2,9 @@
 // Фильтр по типам УЗЛОВ (.kg-kind: tag/law/sci) и РЁБЕР (.kg-edge: 6 типов) — чекбоксы + пресеты.
 (function () {
     if (!window.createForceGraph) return;
-    var TAG_COLORS = { concept: '#7F77DD', object: '#D85A30', substance: '#1D9E75', method: '#378ADD', instrument: '#BA7517' };
-    var LAW_COLORS = { 'закон': '#C0392B', 'принцип': '#8E44AD', 'теорема': '#2471A3', 'эффект': '#B9770E', 'уравнение': '#148F77', 'теория': '#5D6D7E' };
-    var SCI_COLOR = '#2e7d32';
+    // Цвет = ТИП узла (тег/закон/учёный), один разнесённый оттенок на тип — чтобы тип читался
+    // сразу (юзер-фидбек 2026-07-19). Синхронно с js/mini-graph.js KIND_COLORS.
+    var KIND_COLORS = { tag: '#6C5CE7', law: '#D64545', sci: '#2FA84F', cat: '#C9A227' };
 
     var BUST = '?_=' + Date.now();  // данные меняются при регенерации — не даём браузеру отдать старое
     function slug(name) { return name.replace(/ /g, '_').replace(/\./g, ''); }
@@ -196,8 +196,9 @@
         },
         radius: function (n) { return (n.kind === 'tag') ? (3 + Math.min(n.deg, 14) * 0.6) : (5 + Math.min(n.deg, 12) * 0.7); },
         color: function (n) {
-            return n.kind === 'tag' ? (TAG_COLORS[n.sub] || '#888')
-                : n.kind === 'law' ? (LAW_COLORS[n.sub] || '#C0392B') : SCI_COLOR;
+            return n.kind === 'tag' ? KIND_COLORS.tag
+                : n.kind === 'law' ? KIND_COLORS.law
+                : n.kind === 'cat' ? KIND_COLORS.cat : KIND_COLORS.sci;
         },
         hollow: function (n) { return n.kind === 'tag'; },
         labelAlways: function () { return true; },  // подписываем и теги (по умолчанию их немного — пресет «каркас»)
@@ -205,7 +206,10 @@
             if (n.kind === 'tag') return '/lang/' + lang + '/tags/' + encodeURIComponent(n.rawid) + '.html';
             if (n.kind === 'law') return '/lang/' + lang + '/laws/' + encodeURIComponent(n.rawid) + '.html';
             return '/lang/' + lang + '/scientists/' + encodeURIComponent(slug(n.rawid)) + '.html';
-        }
+        },
+        // В FS всю панель контролов эксплорера прячем под ☰ (много рядов — поиск/чекбоксы/пресеты),
+        // чтобы не заслоняла граф; переезжает в FS-оверлей и возвращается на выходе (force-graph.js).
+        fsCollapsible: [document.querySelector('.kg-controls')]
     });
 
     // Чекбоксы → перестроить граф.

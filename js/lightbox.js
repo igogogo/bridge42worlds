@@ -42,6 +42,9 @@
         document.body.style.overflow = 'hidden';
         show(startIdx);
     }
+    // Публичный вход для js/gallery.js: галерея статьи открывает лайтбокс со ВСЕМИ картинками
+    // с текущего индекса (клик по главному изображению), минуя делегирование по .mosaic-open.
+    window.openLightbox = open;
 
     function close() {
         if (!box) return;

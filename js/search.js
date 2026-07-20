@@ -681,15 +681,23 @@ function cardHTML(item) {
     // item.image === false — решено уже при генерации (нет ai.jpg), не пытаемся грузить и не
     // резервируем место под картинку. undefined (старый индекс до пересборки) — считаем как есть.
     var hasImg = item.image !== false;
+    // Мета-строка (раздел·дата·бейдж) — полноширинный «eyebrow» НАД картинкой: тогда плавающая
+    // мини-картинка стартует под ним, вровень с заголовком (юзер-фидбек 2026-07-19: "мини картинку
+    // выровнять по названию"). Раньше мета была первой строкой card-body — картинка обтекалась от
+    // самого верха и её край торчал выше заголовка на высоту меты.
+    var eyebrow = (catName || item.date || item.express) ?
+        '<div class="card-eyebrow">' +
+            (catName ? '<a class="card-cat" href="#" title="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
+            (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
+        '</div>' : '';
     return '<article class="article-card">' +
+        eyebrow +
         (hasImg ? (
         '<a class="card-img-wrap" href="' + url + '">' +
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
         '</a>') : '') +
         '<div class="card-body">' +
-            (catName ? '<a class="card-cat" href="#" title="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
-            (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
-            (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +

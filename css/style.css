@@ -196,13 +196,48 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     position: fixed !important; inset: 0 !important; z-index: 1000;
     max-width: none !important; width: 100vw !important; height: 100vh !important;
     margin: 0 !important; border-radius: 0 !important;
+    background: var(--bg) !important;  /* сплошной фон по умолчанию; тумблер ◑ делает прозрачным */
 }
+.graph-fs-active.graph-fs-transparent { background: transparent !important; }  /* сквозь граф видна страница */
 .graph-fs-active canvas { height: 100% !important; }
 body.graph-fs-open { overflow: hidden; }
+/* В FS предупреждение «>100 узлов, откройте на весь экран» уже неактуально — прячем. */
+.graph-fs-active .graph-size-warning { display: none !important; }
+/* Тумблер фона — рядом с ✕, только в полноэкранном. */
+.graph-fs-bgbtn {
+    position: absolute; top: 8px; right: 40px; z-index: 5; width: 26px; height: 26px;
+    border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+    display: none; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 13px; line-height: 1; opacity: 0.7;
+}
+.graph-fs-bgbtn:hover { opacity: 1; border-color: var(--link); color: var(--link); }
+.graph-fs-active .graph-fs-bgbtn { display: flex; }
+/* Оверлей контролов внутри FS — реальные контролы графа переезжают сюда (force-graph.js). */
+.graph-fs-controls { display: none; }
+.graph-fs-active .graph-fs-controls {
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+    position: absolute; top: 12px; left: 12px; z-index: 6; max-width: min(92vw, 660px);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+    opacity: 0.97;
+}
+/* Внутри оверлея переехавшие label/фильтры не должны тянуть свои страничные отступы. */
+.graph-fs-active .graph-fs-controls .mini-graph-label,
+.graph-fs-active .graph-fs-controls .mini-graph-filters,
+.graph-fs-active .graph-fs-controls .kg-controls { margin: 0; max-width: none; width: 100%; }
+.graph-fs-collapse-btn {
+    align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 2px 9px; font-size: 13px; line-height: 1.4; cursor: pointer;
+}
+.graph-fs-collapse-btn:hover { border-color: var(--link); color: var(--link); }
+.graph-fs-collapse { display: none; }
+.graph-fs-collapse.open { display: block; margin-top: 2px; }
 .mini-graph-label {
     max-width: 620px; margin: 14px 0 2px; font-size: 13px; color: var(--soft);
     display: flex; align-items: center; justify-content: space-between;
 }
+/* Иконка «граф знаний» — глиф из 3 узлов+рёбер (currentColor, работает в любой теме) вместо
+   эмодзи-паутины 🕸, которая читалась как web/сеть, а не как граф (юзер-фидбек 2026-07-19). */
+.ico-graph { width: 1.05em; height: 1.05em; vertical-align: -0.15em; flex: none; }
 /* Фильтр типов узлов мини-графа (тег/закон/учёный) — те же чекбоксы, что на большом графе.
    flex-wrap — на широкой колонке (620px, страница тега/закона/учёного) в 1 строку и так
    помещается, ничего не меняет; в узком сайдбаре статьи (160px) не даёт строке чекбоксов
@@ -292,9 +327,9 @@ body.graph-fs-open { overflow: hidden; }
     padding: 3px 6px 3px 9px; border-radius: 4px; white-space: nowrap;
     background: #1c1c1e; color: #fff; border-left: 3px solid #666;
 }
-.kg-chip[data-kind="tag"] { border-left-color: #7F77DD; }
-.kg-chip[data-kind="law"] { border-left-color: #C0392B; }
-.kg-chip[data-kind="sci"] { border-left-color: #2e7d32; }
+.kg-chip[data-kind="tag"] { border-left-color: #6C5CE7; }
+.kg-chip[data-kind="law"] { border-left-color: #D64545; }
+.kg-chip[data-kind="sci"] { border-left-color: #2FA84F; }
 .kg-chip-x {
     font-size: 12px; line-height: 1; padding: 0 2px; border: none; background: none;
     color: #fff; opacity: 0.65; cursor: pointer;
@@ -349,7 +384,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    max-width: 680px; margin-bottom: 8px;
+    /* 620px, а не 680: правый край шапки (и, значит, последнего элемента — переключателя
+       темы) должен совпадать с правым краем ВИДИМОГО контента. Текст статьи и карточки
+       ленты ограничены 620px (.article-main > *, .article-card), тогда как контейнерная
+       ширина 680px (.article-main, .langs-row) — служебная, невидимая. Меню при этом не
+       страдает: collapseNavOverflow() и так безусловно сворачивает его в «⋯». */
+    max-width: 620px; margin-bottom: 8px;
     flex-wrap: wrap;
     gap: 8px;
     position: sticky; top: 0; z-index: 50;
@@ -793,42 +833,43 @@ section h2 { font-size: 15px; font-weight: 600; color: var(--text); margin-botto
 
 /* ── Mosaic ───────────────────── */
 .mosaic { position: relative; margin-bottom: 20px; }
-.mosaic-track {
-    display: flex; gap: 4px;
-    aspect-ratio: 5 / 1; /* весь блок: ширина к высоте 5:1 */
-    overflow-x: auto; scroll-behavior: smooth;
-    scrollbar-width: none;
+/* ── Галерея статьи (js/gallery.js): главное изображение + лента превью снизу ── */
+.gallery { max-width: 620px; margin: 0; }
+.gallery-stage {
+    position: relative; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden;
+    background: var(--tag-bg);
 }
-.mosaic-track::-webkit-scrollbar { display: none; }
-.mosaic-item {
-    flex: 0 0 auto; width: calc(20% - 3.2px); height: 100%;
-    position: relative; margin: 0; border-radius: 4px; overflow: hidden;
-}
-.mosaic-item a { display: block; width: 100%; height: 100%; line-height: 0; }
-.mosaic-track img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.85; display: block; transition: opacity 0.15s;
-}
-.mosaic-item:hover img { opacity: 1; }
-.mosaic-item figcaption {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: 6px 8px; font-size: 10px; line-height: 1.3; color: #fff;
-    background: linear-gradient(transparent, rgba(0,0,0,0.82));
-    opacity: 0; transition: opacity 0.15s; pointer-events: none;
+.gallery-main { display: block; width: 100%; height: 100%; cursor: zoom-in; }
+/* contain, а не cover — научные рисунки нельзя обрезать; поля заполняет фон .gallery-stage. */
+.gallery-main-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.gallery-caption {
+    position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+    padding: 8px 12px; font-size: 12px; line-height: 1.4; color: #fff;
+    background: linear-gradient(transparent, rgba(0,0,0,0.82)); pointer-events: none;
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
-.mosaic-item:hover figcaption { opacity: 1; }
-.mosaic-arrow {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 32px; height: 32px; border-radius: 50%;
-    border: 1px solid var(--border); background: rgba(255,255,255,0.92);
+.gallery-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--border); background: rgba(255,255,255,0.92); color: #222;
     cursor: pointer; font-size: 18px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
-.mosaic-next { right: 6px; }
-.mosaic-prev { left: 6px; }
-.mosaic-arrow:hover { background: #fff; }
-html[data-theme="dark"] .mosaic-arrow { background: rgba(30,32,34,0.92); }
+.gallery-nav:hover { background: #fff; }
+.gallery-prev { left: 8px; }
+.gallery-next { right: 8px; }
+html[data-theme="dark"] .gallery-nav { background: rgba(30,32,34,0.92); color: #eee; }
+.gallery-thumbs { display: flex; gap: 6px; margin-top: 6px; overflow-x: auto; scrollbar-width: none; }
+.gallery-thumbs::-webkit-scrollbar { display: none; }
+.gallery-thumb {
+    flex: 0 0 auto; width: 66px; height: 44px; padding: 0; border-radius: 6px; overflow: hidden;
+    border: 2px solid transparent; background: none; cursor: pointer; line-height: 0;
+}
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.7; transition: opacity .15s; }
+.gallery-thumb:hover img { opacity: 1; }
+.gallery-thumb.is-active { border-color: var(--link); }
+.gallery-thumb.is-active img { opacity: 1; }
 
 /* ── Lightbox (картинки статьи открываются на месте, не в новой вкладке) ── */
 /* [hidden] должен реально прятать — иначе .lightbox{display:flex} ниже (тот же вес
@@ -940,8 +981,11 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
 .article-card:hover .card-img-wrap img { transform: scale(1.03); }
 .card-body { display: block; }
-.card-cat { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--link); text-decoration: none; margin-bottom: 6px; }
-.card-date { display: inline-block; font-size: 11px; margin: 0 0 6px 8px; }
+/* Мета-строка «eyebrow» над картинкой (js/search.js) — полная ширина, чтобы плавающая
+   мини-картинка встала под ней вровень с заголовком. */
+.card-eyebrow { margin-bottom: 5px; line-height: 1.3; }
+.card-cat { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--link); text-decoration: none; }
+.card-date { display: inline-block; font-size: 11px; margin-left: 8px; }
 .card-title { display: block; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; font-weight: 600; line-height: 1.3; color: var(--text); text-decoration: none; margin-bottom: 7px; }
 .article-card:hover .card-title { color: var(--link); }
 /* Обрезка длины — ТЕКСТОМ в JS (cardHTML), не CSS line-clamp/max-height: и -webkit-box,

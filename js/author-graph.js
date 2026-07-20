@@ -8,7 +8,7 @@
     var tags = (box.getAttribute('data-tags') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     if (!tags.length) return;
     var BUST = '?_=' + Date.now();
-    var TAG_COLORS = { concept: '#7F77DD', object: '#D85A30', substance: '#1D9E75', method: '#378ADD', instrument: '#BA7517' };
+    var TAG_COLOR = '#6C5CE7';  // тег — единый цвет типа (синхронно с mini-graph.js KIND_COLORS)
 
     createForceGraph({
         canvas: 'minigraph', resizeKey: '__authorGraphResize',
@@ -41,7 +41,7 @@
             });
         },
         radius: function (n) { return n.center ? 9 : 5; },
-        color: function (n) { return n.kind === 'author' ? '#444' : (TAG_COLORS[n.sub] || '#888'); },
+        color: function (n) { return n.kind === 'author' ? '#444' : TAG_COLOR; },
         hollow: function (n) { return n.kind === 'tag'; },
         labelAlways: function () { return true; },
         href: function (n, lang) {

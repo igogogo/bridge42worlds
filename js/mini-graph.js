@@ -11,11 +11,19 @@
     if (!box || !window.createForceGraph || !document.getElementById('minigraph')) return;
     var centersAttr = box.getAttribute('data-node') || '';
     var centers = centersAttr ? centersAttr.split(',').filter(Boolean) : [];
+    // Тип единственного центра (страница тега/закона/учёного). Для рёбер он всегда «активен»:
+    // иначе, сняв свой тип и включив другой (напр. «только законы» на странице тега), юзер терял
+    // связь центр→другой-тип — кросс-ребро требует оба конца включёнными (юзер-фидбек 2026-07-20:
+    // "нажимаю законы — ничего", хотя у тега закон есть). На мультицентре (статья) и облаке — null.
+    var CENTER_KIND = (centers.length === 1) ? { t: 'tag', l: 'law', s: 'sci', c: 'cat' }[centers[0].charAt(0)] : null;
     var BUST = '?_=' + Date.now();
-    var TAG_COLORS = { concept: '#7F77DD', object: '#D85A30', substance: '#1D9E75', method: '#378ADD', instrument: '#BA7517' };
-    var LAW_COLORS = { 'закон': '#C0392B', 'принцип': '#8E44AD', 'теорема': '#2471A3', 'эффект': '#B9770E', 'уравнение': '#148F77', 'теория': '#5D6D7E' };
-    var SCI_COLOR = '#2e7d32';
-    var CAT_COLOR = '#B8860B';
+    // Цвет кодирует ТИП узла (не под-домен): один чёткий, максимально разнесённый по hue
+    // оттенок на тег/закон/учёный/раздел — чтобы тип читался с одного взгляда (юзер-фидбек
+    // 2026-07-19: "непонятно от чего зависит цвет; тег/закон/учёный должны быть визуально
+    // разными"). Раньше теги/законы красились по .sub (домен/тип-закона), из-за чего hue-
+    // диапазоны пересекались (тег-object ≈ закон-«закон», тег-substance ≈ учёный) и тип был
+    // неотличим. Теги вдобавок ещё и полые кольца (см. hollow) — двойное отличие.
+    var KIND_COLORS = { tag: '#6C5CE7', law: '#D64545', sci: '#2FA84F', cat: '#C9A227' };
     function slug(n) { return n.replace(/ /g, '_').replace(/\./g, ''); }
 
     window.__miniDepth = window.__miniDepth || 1;
@@ -137,9 +145,9 @@
         },
         radius: function (n) { return n.center ? 9 : (3 + Math.min(n.deg, 16) * 0.7); },
         color: function (n) {
-            return n.kind === 'tag' ? (TAG_COLORS[n.sub] || '#888')
-                : n.kind === 'law' ? (LAW_COLORS[n.sub] || '#C0392B')
-                : n.kind === 'cat' ? CAT_COLOR : SCI_COLOR;
+            return n.kind === 'tag' ? KIND_COLORS.tag
+                : n.kind === 'law' ? KIND_COLORS.law
+                : n.kind === 'cat' ? KIND_COLORS.cat : KIND_COLORS.sci;
         },
         hollow: function (n) { return n.kind === 'tag' && !n.center; },
         // Один центр (страница тега/закона/учёного) — узлов мало, подписываем все, как раньше.
@@ -153,7 +161,11 @@
             if (n.kind === 'law') return '/lang/' + lang + '/laws/' + encodeURIComponent(n.rawid) + '.html';
             if (n.kind === 'cat') return null;  // раздел arXiv не имеет своей страницы
             return '/lang/' + lang + '/scientists/' + encodeURIComponent(slug(n.rawid)) + '.html';
-        }
+        },
+        // В полноэкранном режиме держим подпись+глубину (±) видимыми, а чекбоксы-фильтры прячем
+        // под ☰ (см. force-graph.js): контролы переезжают в FS-оверлей и возвращаются на выходе.
+        fsKeep: [document.querySelector('.mini-graph-label')],
+        fsCollapsible: [document.querySelector('.mini-graph-filters')]
     });
 
     // Кнопки +/- глубины (если есть в разметке — не на всех страницах обязательны; в облачном
@@ -190,13 +202,19 @@
     document.querySelectorAll('.mg-kind').forEach(function (kindBox) {
         kindBox.addEventListener('change', function () {
             var kinds = checkedKinds() || {};
+            // eff — «эффективные» типы: то, что реально отмечено, ПЛЮС тип центра (он всегда
+            // активен для рёбер на странице сущности). Узловой фильтр по-прежнему использует
+            // сырой kinds — центр и так exempt в build, а ДРУГИЕ узлы своего типа не всплывают.
+            var eff = {};
+            for (var kk in kinds) eff[kk] = kinds[kk];
+            if (CENTER_KIND) eff[CENTER_KIND] = 1;
             ['tag', 'law', 'sci', 'cat'].forEach(function (other) {
                 if (other === kindBox.value) return;
                 var edgeVal = CROSS_EDGE_OF[kindBox.value + ',' + other];
                 var box = edgeCheckbox(edgeVal);
                 if (!box) return;
-                // Оба конца теперь отмечены — включаем связь; конец пропал — гасим.
-                box.checked = !!(kinds[kindBox.value] && kinds[other]);
+                // Оба конца эффективно отмечены — включаем связь; конец пропал — гасим.
+                box.checked = !!(eff[kindBox.value] && eff[other]);
             });
             var activeKinds = Object.keys(kinds).filter(function (k) { return kinds[k]; });
             if (activeKinds.length === 1) {

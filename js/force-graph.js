@@ -70,19 +70,77 @@ window.createForceGraph = function (opts) {
     }
     function hideTip() { if (tip) tip.style.display = 'none'; }
 
+    // Контролы графа (глубина +/-, чекбоксы-фильтры) живут ВНЕ бордер-бокса графа (соседями),
+    // поэтому в полноэкранном режиме они пропадали (юзер-фидбек 2026-07-19: "держать +/- зум,
+    // чекбокс-меню свернуть, тумблер фона"). При входе в FS переносим реальные DOM-узлы контролов
+    // в оверлей внутри fsContainer (перенос сохраняет их обработчики), при выходе — возвращаем на
+    // место. fsKeep — всегда видимы (глубина +/-), fsCollapsible — под кнопкой ☰ (свёрнуты).
+    var fsBtn, bgBtn, fsPanel, fsCollapseBtn, fsCollapseWrap, ctrlHomes = [];
+    var fsKeep = (opts.fsKeep || []).filter(Boolean);
+    var fsCollapsible = (opts.fsCollapsible || []).filter(Boolean);
     if (fsContainer) {
-        var fsBtn = document.createElement('button');
+        fsBtn = document.createElement('button');
         fsBtn.type = 'button'; fsBtn.className = 'graph-fs-btn'; fsBtn.setAttribute('aria-label', 'fullscreen');
         fsBtn.textContent = '⛶';
         fsBtn.addEventListener('click', function (e) { e.stopPropagation(); setFs(!isFs); });
         fsContainer.appendChild(fsBtn);
+
+        // Тумблер фона (виден только в FS, см. CSS): прозрачный ⇄ сплошной. Прозрачный = сквозь
+        // граф видна страница позади (юзер: "смотрится круто").
+        bgBtn = document.createElement('button');
+        bgBtn.type = 'button'; bgBtn.className = 'graph-fs-bgbtn'; bgBtn.setAttribute('aria-label', 'toggle background');
+        bgBtn.textContent = '◑';
+        bgBtn.addEventListener('click', function (e) { e.stopPropagation(); fsContainer.classList.toggle('graph-fs-transparent'); });
+        fsContainer.appendChild(bgBtn);
+
+        if (fsKeep.length || fsCollapsible.length) {
+            fsPanel = document.createElement('div');
+            fsPanel.className = 'graph-fs-controls';
+            if (fsCollapsible.length) {
+                fsCollapseBtn = document.createElement('button');
+                fsCollapseBtn.type = 'button'; fsCollapseBtn.className = 'graph-fs-collapse-btn';
+                fsCollapseBtn.textContent = '☰';
+                fsCollapseBtn.setAttribute('aria-label', 'filters');
+                fsCollapseWrap = document.createElement('div');
+                fsCollapseWrap.className = 'graph-fs-collapse';
+                fsCollapseBtn.addEventListener('click', function (e) { e.stopPropagation(); fsCollapseWrap.classList.toggle('open'); });
+            }
+            fsContainer.appendChild(fsPanel);
+        }
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isFs) setFs(false); });
+    }
+    // Возврат через плейсхолдер, а НЕ insertBefore(el, savedNext): saved-next-сосед может сам
+    // оказаться перенесённым (например filters стоял next для label, но тоже уезжает) — тогда
+    // insertBefore падает. Заглушка-комментарий держит исходную позицию независимо от соседей.
+    function relocateControls(into) {
+        if (!fsPanel) return;
+        if (into) {
+            ctrlHomes = [];
+            var take = function (el, dest) {
+                var ph = document.createComment('fs-ctrl');
+                el.parentNode.insertBefore(ph, el);
+                ctrlHomes.push({ el: el, ph: ph });
+                dest.appendChild(el);
+            };
+            fsKeep.forEach(function (el) { take(el, fsPanel); });
+            if (fsCollapsible.length) {
+                fsCollapseWrap.classList.remove('open');  // фильтры свёрнуты по умолчанию в FS
+                fsPanel.appendChild(fsCollapseBtn);
+                fsCollapsible.forEach(function (el) { take(el, fsCollapseWrap); });
+                fsPanel.appendChild(fsCollapseWrap);
+            }
+        } else {
+            ctrlHomes.forEach(function (h) { if (h.ph.parentNode) h.ph.parentNode.replaceChild(h.el, h.ph); });
+            ctrlHomes = [];
+        }
     }
     function setFs(v) {
         isFs = v;
+        if (v) relocateControls(true);
         fsContainer.classList.toggle('graph-fs-active', v);
         document.body.classList.toggle('graph-fs-open', v);
         fsBtn.textContent = v ? '✕' : '⛶';
+        if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
         // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
         // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.
         // restart() пересоздаёт позиции узлов уже в новых границах — граф сразу расправляется.
