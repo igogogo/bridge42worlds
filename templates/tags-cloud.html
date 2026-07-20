@@ -38,11 +38,13 @@
 <div class="selected-bar" id="selected-bar">$selected_tags_html</div>
 
 <div class="view-toggle" id="view-toggle">
-    <button type="button" id="view-list" class="active" aria-label="List">☰</button>
+    <button type="button" id="view-treemap" class="active" aria-label="Map">▦</button>
+    <button type="button" id="view-list" aria-label="List">☰</button>
     <button type="button" id="view-graph" aria-label="Graph">◉</button>
 </div>
 
-<div class="tag-cloud" id="tag-cloud">$tags_cloud_html</div>
+<div id="treemap"></div>
+<div class="tag-cloud" id="tag-cloud" style="display:none">$tags_cloud_html</div>
 <div id="tag-graph" style="display:none">
     <div class="mini-graph-filters">$mini_graph_filters_html</div>
     <div class="mini-graph mini-graph--full" data-node="">
@@ -55,16 +57,23 @@
 <script src="/js/search.js?v=$asset_ver"></script>
 <script src="/js/force-graph.js?v=$asset_ver"></script>
 <script src="/js/mini-graph.js?v=$asset_ver"></script>
+<script>window.__TREEMAP = $treemap_data;</script>
+<script src="/js/treemap.js?v=$asset_ver"></script>
 <script>
 (function(){
-  var lb=document.getElementById('view-list'),gb=document.getElementById('view-graph');
-  var cloud=document.getElementById('tag-cloud'),graph=document.getElementById('tag-graph');
-  function set(g){cloud.style.display=g?'none':'';graph.style.display=g?'block':'none';
-    gb.classList.toggle('active',g);lb.classList.toggle('active',!g);
-    if(g&&window.__miniResize)window.__miniResize();
-    try{localStorage.setItem('b42_tagview',g?'graph':'list');}catch(e){}}
-  lb.onclick=function(){set(false);};gb.onclick=function(){set(true);};
-  try{if(localStorage.getItem('b42_tagview')==='graph')set(true);}catch(e){}
+  var V={treemap:'treemap',list:'tag-cloud',graph:'tag-graph'};
+  var B={treemap:'view-treemap',list:'view-list',graph:'view-graph'};
+  function set(name){
+    for(var k in V){var el=document.getElementById(V[k]);if(el)el.style.display=(k===name)?'':'none';
+      var b=document.getElementById(B[k]);if(b)b.classList.toggle('active',k===name);}
+    if(name==='graph'&&window.__miniResize)window.__miniResize();
+    if(name==='treemap'&&window.__treemapRender)window.__treemapRender();
+    try{localStorage.setItem('b42_tagview',name);}catch(e){}
+  }
+  Object.keys(B).forEach(function(k){document.getElementById(B[k]).onclick=function(){set(k);};});
+  var saved='treemap';try{saved=localStorage.getItem('b42_tagview')||'treemap';}catch(e){}
+  if(!V[saved])saved='treemap';
+  set(saved);
 })();
 </script>
 </body>

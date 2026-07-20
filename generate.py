@@ -1002,6 +1002,15 @@ def generate_about_page(lang):
     ), encoding="utf-8")
 
 
+# Цвет области науки для treemap-мозаики (дефолтный вид облака тегов). 10 областей + фоллбэк.
+DOMAIN_COLORS = {
+    "astrophysics": "#3E6DA6", "cosmology": "#6C5CE7", "relativity_gravity": "#B5651D",
+    "quantum": "#2E9E8F", "particles_nuclear": "#C0392B", "chemistry_materials": "#2E9E4F",
+    "thermo_stat": "#E67E22", "instruments_methods": "#5A7D8C", "mathematics": "#8E44AD",
+    "electromagnetism_optics": "#159E86",
+}
+
+
 def generate_tags_cloud(lang):
     tpl = load_template("tags-cloud")
     if not tpl.template: return
@@ -1049,11 +1058,28 @@ def generate_tags_cloud(lang):
         cloud_html += "".join(
             tag_row(t, "educational" if graph.get(t, {}).get("educational") else "") for t in ids)
 
+    # Данные для treemap-мозаики (дефолтный вид): область = плитка (размер = сумма статей области),
+    # внутри — теги (размер = статьи тега). Клик по области → зум к её тегам (js/treemap.js).
+    all_lbl = {"ru": "все области", "en": "all fields", "es": "todos los campos",
+               "ar": "كل المجالات"}.get(lang, "all fields")
+    tm_groups = []
+    for domain in by_domain:
+        children = sorted(
+            ({"name": tags_loc.get(t, {}).get("name", t), "count": tag_counts.get(t, 0),
+              "url": f"/{LANG_DIR}/{lang}/tags/{t}.html"} for t in by_domain[domain]),
+            key=lambda c: -c["count"])
+        tm_groups.append({"key": domain or "other", "label": tag_domain_label(domain, lang),
+                          "count": sum(c["count"] for c in children) or len(children),
+                          "color": DOMAIN_COLORS.get(domain, "#6b7280"), "children": children})
+    tm_groups.sort(key=lambda g: -g["count"])
+    treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
+
     (Path(LANG_DIR) / lang / "tags" / "index.html").write_text(tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         tags_title=safe(loc["title"]), tags_subtitle=safe(loc["subtitle"]),
         footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html,
+        treemap_data=treemap_data,
         mini_graph_filters_html=mini_graph_filters_html(lang, None)
     ), encoding="utf-8")
 
@@ -1243,7 +1269,8 @@ LAWS_LABELS = {
 }
 
 LAW_TYPE_COLORS = {"закон": "#C0392B", "принцип": "#8E44AD", "теорема": "#2471A3",
-                   "эффект": "#B9770E", "уравнение": "#148F77", "теория": "#5D6D7E"}
+                   "эффект": "#B9770E", "уравнение": "#148F77", "теория": "#5D6D7E",
+                   "изобретение": "#2E7D32"}
 
 # Раздел науки тега (для группировки облака списком) — фиксированный английский slug (НЕ переводится
 # через LLM, чтобы группировка/цвета не разъезжались по языкам); подписи — тут, локализуются вручную.
@@ -1331,6 +1358,11 @@ def generate_laws_cloud(lang):
     if not tpl.template: return
     laws = load_laws_loc(lang)
     loc = LAWS_LABELS.get(lang, LAWS_LABELS["en"])
+    # Цвет типа берём по КАНОНИЧЕСКОМУ (ru) типу, т.к. type в laws.json локализован — на en/es/ar
+    # ключи LAW_TYPE_COLORS (русские) иначе не совпадают и всё падало в серый (баг и у точек-типа).
+    ru_laws = laws if lang == "ru" else load_laws_loc("ru")
+    def law_color(lid):
+        return LAW_TYPE_COLORS.get(ru_laws.get(lid, {}).get("type", ""), "#7f8c8d")
 
     # Счётчики статей по законам (через пересечение тегов)
     idx_path = Path(LANG_DIR) / lang / "articles-index.json"
@@ -1350,7 +1382,7 @@ def generate_laws_cloud(lang):
 
     def law_row(lid):
         L = laws[lid]
-        color = LAW_TYPE_COLORS.get(L.get("type", ""), "#888")
+        color = law_color(lid)
         cnt = law_counts.get(lid, 0)
         count_html = f'<span class="cat-chip-n">{cnt}</span>' if cnt else ""
         return (
@@ -1362,6 +1394,22 @@ def generate_laws_cloud(lang):
     for t in sorted(by_type.keys()):
         cloud += f'<div class="cloud-group-label">{safe(t)}</div>\n'
         cloud += "".join(law_row(lid) for lid in sorted(by_type[t], key=lambda x: laws[x].get("name", x)))
+
+    # Данные для treemap-мозаики (дефолтный вид): тип закона = плитка, внутри — законы.
+    all_lbl = {"ru": "все типы", "en": "all types", "es": "todos los tipos",
+               "ar": "كل الأنواع"}.get(lang, "all types")
+    tm_groups = []
+    for t, lids in by_type.items():
+        children = sorted(
+            ({"name": laws[lid].get("name", lid), "count": law_counts.get(lid, 0),
+              "url": f"/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html"} for lid in lids),
+            key=lambda c: -c["count"])
+        color = law_color(lids[0])
+        tm_groups.append({"key": t, "label": t, "count": sum(c["count"] for c in children) or len(children),
+                          "color": color, "children": children})
+    tm_groups.sort(key=lambda g: -g["count"])
+    treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
+
     (Path(LANG_DIR) / lang / "laws").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "laws" / "index.html").write_text(tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
@@ -1369,6 +1417,7 @@ def generate_laws_cloud(lang):
         laws_title=safe(loc["title"]), laws_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]),
         laws_cloud_html=cloud or f'<p>{safe(loc["subtitle"])}</p>',
+        treemap_data=treemap_data,
         footer_text=safe(loc["footer"]),
         mini_graph_filters_html=mini_graph_filters_html(lang, None)
     ), encoding="utf-8")

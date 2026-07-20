@@ -701,6 +701,17 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 .section-chip:hover { border-color: var(--link); color: var(--link); }
 .section-chip .cat-chip-n { font-size: 11px; color: var(--soft); }
 .section-desc { max-width: 620px; margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+/* ── Treemap (карта-мозаика) — дефолтный вид облака тегов/законов (js/treemap.js) ── */
+#treemap { position: relative; max-width: 900px; margin: 0 auto 24px; }
+.tm-bar { min-height: 24px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.tm-back { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 6px; padding: 2px 10px; cursor: pointer; font-size: 13px; color: var(--text); }
+.tm-back:hover { border-color: var(--link); color: var(--link); }
+.tm-crumb { font-size: 14px; font-weight: 600; color: var(--text); }
+.tm-stage { position: relative; width: 100%; }
+.tm-tile { position: absolute; border: none; border-radius: 6px; overflow: hidden; cursor: pointer; text-align: left; display: flex; align-items: flex-start; text-decoration: none; transition: filter .12s; }
+.tm-tile:hover { filter: brightness(1.09); }
+.tm-label { font-weight: 500; line-height: 1.15; word-break: break-word; }
+.tm-n { font-weight: 400; opacity: .82; }
 .original-title { font-size: 13px; color: var(--soft); margin-bottom: 16px; font-style: italic; }
 /* "Original" переехал под заголовок, до авторов (юзер-фидбек 2026-07-15: "строку original
    перенести под название статьи до авторов") — тот же .original-title текст-стиль (курсив,
