@@ -620,6 +620,12 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
 }
 .law-chip:hover { color: var(--link); text-decoration: underline; }
 .section-title { margin: 28px 0 10px; font-size: 19px; font-weight: 600; }
+/* Плавный скролл по якорям + отступ под sticky-шапку, чтобы цель не пряталась под ней. */
+html { scroll-behavior: smooth; }
+.section-title { scroll-margin-top: 56px; }
+/* «N статей» на карточке тега/закона/автора — кликабельно, скроллит к списку статей. */
+.stat-jump { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--soft); cursor: pointer; }
+.stat-jump:hover { color: var(--link); border-bottom-color: var(--link); }
 
 /* ── Languages ────────────────── */
 /* На главной язык-бар делит строку с иконками поиска (🔍) и календаря (📅, .hdr-icons) —
@@ -686,7 +692,15 @@ h1 {
 .meta a { color: var(--link); text-decoration: none; }
 .cat-badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 2px;
   background: var(--card-bg, #f0f0f0); border: 1px solid var(--border, #ddd); color: var(--soft);
-  margin-left: 2px; cursor: default; white-space: nowrap; }
+  margin-left: 2px; cursor: pointer; white-space: nowrap; text-decoration: none; }
+a.cat-badge:hover { color: var(--link); border-color: var(--link); }
+/* ── Разделы arXiv: облако чипов + описание на странице раздела ── */
+.sections-cloud { display: flex; flex-wrap: wrap; gap: 8px; max-width: 680px; margin: 8px 0 30px; }
+.section-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 16px;
+  font-size: 13px; background: var(--tag-bg); color: var(--text); text-decoration: none; border: 1px solid var(--border); }
+.section-chip:hover { border-color: var(--link); color: var(--link); }
+.section-chip .cat-chip-n { font-size: 11px; color: var(--soft); }
+.section-desc { max-width: 620px; margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
 .original-title { font-size: 13px; color: var(--soft); margin-bottom: 16px; font-style: italic; }
 /* "Original" переехал под заголовок, до авторов (юзер-фидбек 2026-07-15: "строку original
    перенести под название статьи до авторов") — тот же .original-title текст-стиль (курсив,

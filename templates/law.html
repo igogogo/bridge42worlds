@@ -23,6 +23,7 @@
             <a href="/lang/$lang/tags/">tags</a>
             <a href="/lang/$lang/laws/" class="active">laws</a>
             <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$lang/sections/">sections</a>
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
@@ -37,6 +38,7 @@
 <div class="tag-header">
     $ai_cover_html
     <h1>$law_name<span class="law-type">$law_type</span></h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">$article_count $articles_label</a></div>
     <div class="tag-ver" data-ver="mini" style="display:none">
         $law_mini_html
     </div>
@@ -71,7 +73,7 @@ $feedback_html
 <div class="article-side">$entity_side_html</div>
 </div>
 
-<h2 class="section-title">$articles_label</h2>
+<h2 class="section-title" id="article-list">$articles_label</h2>
 <div id="search-results" class="entity-list" data-context-tag="$primary_tag">$articles_list_html</div>
 
 <footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>

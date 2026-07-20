@@ -129,7 +129,8 @@ var resultsEl = document.getElementById('search-results');
 var pageContext = {
     tags: resultsEl && resultsEl.dataset.contextTag ? resultsEl.dataset.contextTag.split(',').filter(Boolean) : [],
     scientist: resultsEl ? (resultsEl.dataset.contextScientist || '') : '',
-    author: resultsEl ? (resultsEl.dataset.contextAuthor || '') : ''
+    author: resultsEl ? (resultsEl.dataset.contextAuthor || '') : '',
+    category: resultsEl ? (resultsEl.dataset.contextCategory || '') : ''  // страница раздела arXiv
 };
 pageContext.tag = pageContext.tags[0] || ''; // назад-совместимость: код, читающий одиночный tag (напр. filters.tags UI), видит первый
 
@@ -146,6 +147,9 @@ function applyPageContext(results) {
         results = results.filter(function(item) {
             return (item.authors || []).some(function(a) { return authorSlug(a) === pageContext.author; });
         });
+    }
+    if (pageContext.category) {
+        results = results.filter(function(item) { return (item.categories || []).indexOf(pageContext.category) !== -1; });
     }
     if (hideExpress) {
         results = results.filter(function(item) { return !item.express; });
@@ -726,7 +730,7 @@ var feed = { items: [], shown: 0, batch: 12, lastDay: null, active: false };
 
 // На странице тега/закона/учёного/автора строка поиска не нужна, если у сущности вообще нет
 // статей — искать в пустом списке незачем. На главной (нет page-контекста) не трогаем.
-var isEntityPage = !!(pageContext.tag || pageContext.scientist || pageContext.author);
+var isEntityPage = !!(pageContext.tag || pageContext.scientist || pageContext.author || pageContext.category);
 function updateSearchRowVisibility() {
     if (!isEntityPage) return;
     var row = document.querySelector('.search-row'), hint = document.querySelector('.search-hint');
@@ -1041,7 +1045,7 @@ function collapseNavOverflow() {
     var nav = document.querySelector('.nav-links');
     if (!nav || nav.dataset.navCollapsed) return;
     nav.dataset.navCollapsed = '1';
-    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/authors/', '/graph/'];
+    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/'];
     var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
     var toCollapse = links.filter(function(a) {
         var href = a.getAttribute('href') || '';

@@ -741,8 +741,12 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     cats = article.get("categories", [])
     categories_html = ""
     if cats:
+        # Каждый раздел — ссылка на свою страницу /sections/<slug>.html (юзер-фидбек 2026-07-20:
+        # "со статьи должна вести ссылка в раздел"; показываем ВСЕ разделы статьи, не только один).
         badges = " ".join(
-            f'<span class="cat-badge" data-cat="{c}">{ARXIV_CATEGORIES.get(c, c)}</span>' for c in cats[:5])
+            f'<a class="cat-badge" href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
+            f'data-cat="{c}" title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">'
+            f'{safe(ARXIV_CATEGORIES.get(c, c))}</a>' for c in cats[:5])
         categories_html = f'· {badges}'
 
     lic = article.get("license_url", "")
@@ -1438,11 +1442,13 @@ def generate_law_page(law_id, lang):
     index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
     seen = set()
     articles_html = ""
+    law_article_count = 0
     for a in index:
         if a.get("version") != "popular": continue
         if not (set(a.get("tags", [])) & set(law_tags)): continue
         if a["id"] in seen: continue
         seen.add(a["id"])
+        law_article_count += 1
         articles_html += (
             f'<div class="article-card"><div class="card-content">'
             f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
@@ -1490,7 +1496,7 @@ def generate_law_page(law_id, lang):
         related_laws_block=related_laws_block,
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
         mini_graph_filters_html=mini_graph_filters_html(lang, "law"),
-        articles_label=safe(loc["articles"]),
+        articles_label=safe(loc["articles"]), article_count=law_article_count,
         primary_tag=attr_safe(",".join(law_tags)),
         articles_list_html=articles_html or f'<p style="color:var(--soft)">—</p>',
         footer_text=safe(loc["footer"])
@@ -1762,6 +1768,107 @@ def update_all_scientists(lang):
     if not sp.exists(): sp = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
     for sid in json.loads(sp.read_text(encoding="utf-8")): generate_scientist_page(sid, lang)
     print(f"  👨‍🔬 Scientists updated for {lang}")
+
+
+# ── Разделы arXiv (отдельные страницы, как теги/законы/учёные) ──────────────────────────────
+# Категории arXiv — стандартная англоязычная таксономия (ARXIV_CATEGORIES/DESCRIPTIONS в gen_base),
+# поэтому имена разделов на всех языках английские (как и в фильтре ленты). id вида "astro-ph.HE"
+# → слаг с "_" вместо ".". (Юзер-фидбек 2026-07-20: "полноценная навигация по разделам, отдельная
+# страница разделов; со статьи должна вести ссылка в раздел".)
+def section_slug(cat):
+    return cat.replace(".", "_").replace("/", "_")
+
+
+SECTION_LOC = {
+    "en": {"search": "Search articles...", "hint": "# tag · @ author · ! scientist", "articles": "articles",
+           "no_articles": "No articles yet", "title": "Sections",
+           "subtitle": "arXiv subject categories — browse articles by field.", "footer": "science made simple"},
+    "ru": {"search": "Поиск статей...", "hint": "# тег · @ автор · ! учёный", "articles": "статей",
+           "no_articles": "Пока нет статей", "title": "Разделы",
+           "subtitle": "Разделы arXiv — статьи по областям науки.", "footer": "наука простыми словами"},
+    "es": {"search": "Buscar artículos...", "hint": "# etiqueta · @ autor · ! científico", "articles": "artículos",
+           "no_articles": "Aún no hay artículos", "title": "Secciones",
+           "subtitle": "Categorías de arXiv — artículos por campo.", "footer": "la ciencia simplificada"},
+    "ar": {"search": "ابحث عن مقالات...", "hint": "# وسم · @ مؤلف · ! عالم", "articles": "مقالات",
+           "no_articles": "لا مقالات بعد", "title": "الأقسام",
+           "subtitle": "تصنيفات arXiv — تصفح المقالات حسب المجال.", "footer": "العلم ببساطة"},
+}
+
+
+def _section_loc(lang):
+    return SECTION_LOC.get(lang, SECTION_LOC["en"])
+
+
+def generate_section_page(cat, lang, index=None):
+    tpl = load_template("section")
+    if not tpl.template: return
+    if index is None:
+        ip = Path(LANG_DIR) / lang / "articles-index.json"
+        index = json.loads(ip.read_text(encoding="utf-8")) if ip.exists() else []
+    loc = _section_loc(lang)
+    seen, articles_html, count = set(), "", 0
+    for a in index:
+        if a.get("version") != "popular": continue
+        if cat not in (a.get("categories") or []): continue
+        if a["id"] in seen: continue
+        seen.add(a["id"]); count += 1
+        articles_html += (
+            f'<div class="article-card"><div class="card-content">'
+            f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
+            f'<div class="oneliner">{safe(a.get("description", a.get("oneliner", "")))}</div>'
+            f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
+        )
+    (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
+    (Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html").write_text(tpl.substitute(
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        section_name=safe(ARXIV_CATEGORIES.get(cat, cat)), section_id=safe(cat),
+        section_desc=safe(ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")),
+        article_count=count, articles_label=safe(loc["articles"]),
+        search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
+        articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
+        footer_text=safe(loc["footer"]),
+    ), encoding="utf-8")
+
+
+def generate_sections_cloud(lang):
+    tpl = load_template("sections-cloud")
+    if not tpl.template: return
+    ip = Path(LANG_DIR) / lang / "articles-index.json"
+    index = json.loads(ip.read_text(encoding="utf-8")) if ip.exists() else []
+    counts = {}
+    for a in index:
+        if a.get("version") != "popular": continue
+        for c in (a.get("categories") or []):
+            counts[c] = counts.get(c, 0) + 1
+    loc = _section_loc(lang)
+    chips = "".join(
+        f'<a class="section-chip" href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
+        f'title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">'
+        f'{safe(ARXIV_CATEGORIES.get(c, c))} <span class="cat-chip-n">{n}</span></a>'
+        for c, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    )
+    (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
+    (Path(LANG_DIR) / lang / "sections" / "index.html").write_text(tpl.substitute(
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        sections_title=safe(loc["title"]), sections_subtitle=safe(loc["subtitle"]),
+        sections_cloud_html=chips or "—", footer_text=safe(loc["footer"]),
+    ), encoding="utf-8")
+
+
+def update_all_sections(lang):
+    generate_sections_cloud(lang)
+    ip = Path(LANG_DIR) / lang / "articles-index.json"
+    index = json.loads(ip.read_text(encoding="utf-8")) if ip.exists() else []
+    cats = set()
+    for a in index:
+        if a.get("version") != "popular": continue
+        for c in (a.get("categories") or []):
+            cats.add(c)
+    for c in cats:
+        generate_section_page(c, lang, index)
+    print(f"  🗂️ Sections updated for {lang} ({len(cats)} pages)")
 
 
 def update_all_authors():
@@ -2265,6 +2372,10 @@ def generate_sitemaps():
         if authors_dir.exists():
             for p in sorted(authors_dir.glob("[a-z].html")):
                 urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/authors/{p.name}")
+        sections_dir = Path(LANG_DIR) / lang / "sections"
+        if sections_dir.exists():
+            for p in sorted(sections_dir.glob("*.html")):
+                urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/sections/{p.name}")
         idx = Path(LANG_DIR) / lang / "articles-index.json"
         ids_seen = set()
         if idx.exists():
@@ -2415,6 +2526,7 @@ def regenerate_all_html():
         update_all_tags(lang)
         update_all_scientists(lang)
         update_all_laws(lang)
+        update_all_sections(lang)
         generate_knowledge_graph_page(lang)
         generate_archive_page(lang)
     # rebuild_author_graph() ПЕРЕД update_all_authors() — иначе authors-graph.json остаётся
@@ -2715,6 +2827,7 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
         for lang in LANGUAGES:
             update_all_tags(lang)
             update_all_scientists(lang)
+            update_all_sections(lang)
             generate_archive_page(lang)
         update_all_authors()
         generate_sitemaps()
@@ -2844,6 +2957,7 @@ def delete_article(aid, rebuild=True):
         for lang in LANGUAGES:
             update_all_tags(lang)
             update_all_scientists(lang)
+            update_all_sections(lang)
         update_all_authors()
     if not removed:
         print(f"  ⚠️ статья {aid} не найдена")
@@ -2901,6 +3015,7 @@ def regenerate_article(aid, force=True):
     for lang in LANGUAGES:
         update_all_tags(lang)
         update_all_scientists(lang)
+        update_all_sections(lang)
     update_all_authors()
     print(f"  ✅ {aid} пересоздана ({date_str})")
     return True
@@ -2910,6 +3025,7 @@ def _refresh_all_aggregates():
     for lang in LANGUAGES:
         update_all_tags(lang)
         update_all_scientists(lang)
+        update_all_sections(lang)
     update_all_authors()
 
 
@@ -3000,6 +3116,7 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
         for lang in LANGUAGES:
             update_all_tags(lang)
             update_all_scientists(lang)
+            update_all_sections(lang)
             generate_archive_page(lang)
         update_all_authors()
         generate_sitemaps()
