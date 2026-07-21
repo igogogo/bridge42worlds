@@ -1496,3 +1496,14 @@ h1, h2, h3, .card-title, .card-content h3, .tag-header h1, .scientist-header h1,
 .logo { font-family: var(--serif); font-weight: 600; }
 /* mono-подписи/меты/эйбрау в брендовом ключе */
 .card-meta, .tag-stats, .card-eyebrow, .cal-btn, .search-hint, .reading-time { font-family: var(--mono); }
+
+/* ═══ Брендовый слой — Проход 1b: карточка ленты + навигация ═══ */
+.article-card { background: var(--card-bg); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 15px 17px; box-shadow: none;
+  transition: transform .22s cubic-bezier(.2,.7,.2,1), box-shadow .24s, border-color .3s, background-color .4s ease; }
+.article-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--hair-soft); }
+.card-img-wrap { border-radius: var(--radius-sm); }
+.top-bar { border-bottom: 1px solid var(--hair); }
+.nav-links a { font-family: var(--mono); font-size: 13px; color: var(--faint); transition: color .18s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--ink); }
