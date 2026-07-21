@@ -114,6 +114,46 @@ def translate_scientists(targets):
         print(f"   +{sum(merged_counts)} {lang}/scientists.json ({len(done)}/{len(source)})")
 
 
+def translate_about(targets):
+    """Страница-гид About: переводимые строки lang/{DEFAULT}/data/about.json → на целевые языки.
+    Плоский словарь {ключ: строка-с-инлайн-HTML}; отдельный промт (reference-translate-about)
+    бережёт теги и фиксированные токены (бренд, #black_hole, arXiv, латинские метки, эмодзи).
+    Резюмируемо: уже полный about.json пропускаем — так add-lang авто-переводит гид новому языку,
+    не трогая существующие. about.json мал (≈70 строк) → один вызов на язык, без батчинга."""
+    src_path = Path(f"lang/{DEFAULT_LANG}/data/about.json")
+    if not src_path.exists():
+        print("⏭️ about.json (источник) не найден — пропускаю гид")
+        return
+    source = json.loads(src_path.read_text(encoding="utf-8"))
+    for lang in targets:
+        out_path = Path(f"lang/{lang}/data/about.json")
+        done = {}
+        if out_path.exists():
+            try:
+                done = json.loads(out_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                done = {}
+        missing = {k: v for k, v in source.items() if k not in done}
+        if not missing:
+            print(f"✅ {lang}/about.json: уже полный ({len(done)})")
+            continue
+        lang_name = LANG_NAMES.get(lang, lang)
+        prompt = Template(load_prompt("reference-translate-about")).safe_substitute(
+            lang_name=lang_name, payload=json.dumps(missing, ensure_ascii=False))
+        try:
+            r = chat("translate_ref", prompt)
+            items = parse_json_salvage(r.choices[0].message.content) or {}
+        except Exception as e:
+            print(f"   ❌ {lang}/about.json: {e}")
+            continue
+        for k, v in items.items():
+            if k in source:
+                done[k] = v
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(done, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"   +{len(items)} {lang}/about.json ({len(done)}/{len(source)})")
+
+
 def main():
     targets = [sys.argv[1]] if len(sys.argv) > 1 else [l for l in LANGUAGES if l != DEFAULT_LANG]
     print(f"🌐 Перевод справочников: {DEFAULT_LANG} → {', '.join(targets) or '(нет целей)'}")
@@ -178,6 +218,7 @@ def main():
                 print(f"   +{merged} {lang}/{fname} ({len(st['done'])}/{len(st['source'])})")
 
     translate_scientists(targets)
+    translate_about(targets)
     print("🎉 Готово!")
 
 

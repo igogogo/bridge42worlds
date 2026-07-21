@@ -1008,25 +1008,25 @@ def generate_index_page(lang):
 
 
 def generate_about_page(lang):
+    """Страница-гид «About» (дизайн 2026-07-21). Контент — переводимые строки в
+    lang/{lang}/data/about.json (шаблон templates/about.html держит только структуру + $lang/$dir).
+    Строки могут содержать доверенную инлайн-разметку (<a>/<b>/<strong>/<code>) — НЕ экранируем.
+    Фолбэк по КЛЮЧАМ на язык-источник: недостающие в переводе ключи берутся из ru, поэтому даже
+    частичный/отсутствующий about.json не роняет страницу (напр. до прогона add-lang)."""
     tpl = load_template("about")
     if not tpl.template: return
-    loc = {
-        "en": {"title": "About", "body": "We translate scientific papers from arXiv into clear articles.",
-               "footer": "science made simple"},
-        "ru": {"title": "О проекте", "body": "Мы переводим научные статьи с arXiv на понятный язык.",
-               "footer": "наука простыми словами"},
-        "zh": {"title": "关于我们", "body": "我们将 arXiv 上的科学论文翻译成通俗易懂的文章。",
-               "footer": "让科学变简单"},
-        "fr": {"title": "À propos", "body": "Nous traduisons des articles scientifiques d'arXiv en textes clairs.",
-               "footer": "la science simplifiée"},
-        "ar": {"title": "عن المشروع", "body": "نترجم الأبحاث العلمية من arXiv إلى مقالات واضحة ومبسّطة.",
-               "footer": "العلم ببساطة"}
-    }.get(lang, {"title": "About", "body": "", "footer": ""})
-    (Path(LANG_DIR) / lang / "about.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
-        title=safe(loc["title"]), body=safe(loc["body"]), footer_text=safe(loc["footer"])
-    ), encoding="utf-8")
+
+    def load_about(l):
+        p = Path(LANG_DIR) / l / "data" / "about.json"
+        try:
+            return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+        except Exception:
+            return {}
+    strings = {**load_about(DEFAULT_LANG), **load_about(lang)}
+    if not strings:
+        return  # нет даже исходного about.json — нечего рендерить
+    (Path(LANG_DIR) / lang / "about.html").write_text(
+        tpl.substitute(lang=lang, dir=dir_for(lang), **strings), encoding="utf-8")
 
 
 # Цвет области науки для treemap-мозаики (дефолтный вид облака тегов). 10 областей + фоллбэк.
