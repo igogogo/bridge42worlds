@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+    <responseDate>2026-07-21T08:10:28Z</responseDate>
+                <request verb="GetRecord" identifier="oai:arXiv.org:2607.07382" metadataPrefix="arXiv">http://oaipmh.arxiv.org/oai</request>
+
+
+    <GetRecord>
+                <record>
+                <header>
+        <identifier>oai:arXiv.org:2607.07382</identifier>
+        <datestamp>2026-07-09</datestamp>
+            <setSpec>cs:cs:LG</setSpec>
+            <setSpec>physics:astro-ph:HE</setSpec>
+            <setSpec>physics:astro-ph:IM</setSpec>
+    </header>
+
+            <metadata>
+                        <arXiv xmlns="http://arxiv.org/OAI/arXiv/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://arxiv.org/OAI/arXiv/ https://oaipmh.arxiv.org/OAI/arXiv.xsd">
+        <id>2607.07382</id>
+        <created>2026-07-08</created>
+            <updated>2026-07-09</updated>
+        <authors>
+                <author>
+                    <keyname>Santos</keyname>
+                        <forenames>Raiff H.</forenames>
+                </author>
+                <author>
+                    <keyname>Queiroz</keyname>
+                        <forenames>Amilcar R.</forenames>
+                </author>
+                <author>
+                    <keyname>Duarte</keyname>
+                        <forenames>Tharcisyo S. S.</forenames>
+                </author>
+                <author>
+                    <keyname>de Farias</keyname>
+                        <forenames>K. E. L.</forenames>
+                </author>
+                <author>
+                    <keyname>Batista</keyname>
+                        <forenames>Rafael A.</forenames>
+                </author>
+        </authors>
+        <title>Generalist Vision-Language Models for Fast Radio Burst detection: a zero-shot benchmark against a specialized detector</title>
+            <categories>cs.LG astro-ph.HE astro-ph.IM</categories>
+            <comments>24 pages, 4 figures</comments>
+            <license>http://creativecommons.org/licenses/by/4.0/</license>
+            <abstract>Fast Radio Bursts (FRBs) are millisecond-duration radio transients whose automated detection increasingly relies on highly specialized deep learning models. These detectors achieve exceptional performance, but they require large task-specific training datasets and cannot be redefined without retraining. In this work, we evaluate whether small, open-weight, locally run generalist Vision-Language Models (VLMs) can detect FRBs in dynamic spectra under a zero-shot, prompt-only regime, with no fine-tuning and no labeled examples, returning structured decisions with a natural-language justification. From a controlled set of 3000 simulated L-band dynamic spectra containing FRBs, structured Radio Frequency Interference (RFI), and noise, we draw a balanced binary benchmark of 2000 samples and compare two such VLMs (Gemma 4 2B and 4B), sample by sample, against the state-of-the-art specialized detector SwinYNet. At the default threshold, Gemma 4 2B reaches an accuracy of 93.65%, with no statistically significant difference from SwinYNet (92.90%), while showing a significantly lower false-positive rate on structured RFI (6.4% vs. 25.0%) and no false positives on pure noise. SwinYNet retains a perfect probabilistic ranking on this benchmark (ROC-AUC of 1.0000 vs. 0.9482), a ceiling that the zero-shot VLM approaches from general-purpose pretraining alone. Rewriting the prompt alone reconfigures the same models for three-class FRB/RFI/noise classification on the full set of 3000 spectra, where they reach up to 86% accuracy without a single false FRB.</abstract>
+    </arXiv>
+
+            </metadata>
+        </record>
+
+    </GetRecord>
+</OAI-PMH>

@@ -1,0 +1,625 @@
+{
+  "id": "2607.06959",
+  "original_title": "KAN-LSTM-Transformer Neural Networks, MFV and Cosmological Parameters",
+  "authors": [
+    "Jiang Zhang",
+    "Yan-dong Chen"
+  ],
+  "date": "2026-07-08",
+  "license": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  "license_name": "CC BY",
+  "tags": [
+    "supernova",
+    "expansion_of_the_universe",
+    "redshift",
+    "dark_energy",
+    "dark_matter",
+    "cosmic_microwave_background",
+    "standard_model",
+    "numerical_simulation",
+    "big_bang",
+    "spectroscopy",
+    "photometry"
+  ],
+  "main_tag": "supernova",
+  "scientists": [
+    "Edwin Hubble",
+    "Georges Lemaître",
+    "Adam Riess"
+  ],
+  "categories": [
+    "astro-ph.CO"
+  ],
+  "primary_category": "astro-ph.CO",
+  "cited_arxiv": [
+    "1506.00019",
+    "2305.17473",
+    "1308.0850",
+    "2001.04451",
+    "1511.07289",
+    "2407.16674"
+  ],
+  "threads": "Космологический кризис: локальные измерения разбегания галактик дают скорость 73 км/с, глобальные — 67. Расхождение в 5σ не укладывается ни в одну модель. KLT-Net — это дирижёр, который настраивает космический оркестр сверхновых, используя сплайны вместо нот. Результат — чистая нота H₀≈69.6 км/с/Мпк. Сглаживая диссонанс, сеть открывает путь к автоматическому открытию законов физики из данных. Мы на пороге научной «психоистории».",
+  "abstract": {
+    "ru": {
+      "popular": "Гибридная нейросеть KLT-Net, объединяющая три архитектуры (KAN, LSTM, Transformer), позволила напрямую, без жёстких допущений, восстановить лестницу космических расстояний по данным о сверхновых (каталог Pantheon). Такой подход выявил скрытые нелинейные связи, недоступные стандартным методам. Далее, в рамках плоской ΛCDM-модели, оценили постоянную Хаббла (H₀) и плотность материи, используя робастную калибровку светимости. Результат: нейросеть работает как слаженная команда, где каждый тип сети — свой специалист по разным аспектам данных, что даёт точные космологические параметры.",
+      "simple": "Как далеко галактики? Учёные «вырастили» искусственный интеллект, который по блеску сверхновых (звёздных взрывов) точнее строит космическую линейку расстояний. Это помогло уточнить, с какой скоростью расширяется Вселенная и сколько в ней тёмной материи. Представьте, что ИИ становится астрономом: насколько ему можно верить?",
+      "advanced": "Прямое восстановление лестницы космических расстояний по наблюдениям — ключевая задача космологии. Предложена гибридная нейросеть KLT-Net (KAN, LSTM, Transformer) для моделирования этой лестницы и оценки космологических параметров на основе видимых звёздных величин сверхновых Ia из каталога Pantheon. Сеть непараметрически восстанавливает модуль расстояния μ(z), эффективно улавливая нелинейности в распределении данных. Сравнение с альтернативными моделями и абляционные тесты подтверждают её преимущество. В рамках плоской ΛCDM-модели выполнена статистическая оценка H₀ и Ωm. Для определения абсолютной звёздной величины MB используется метод наиболее частого значения (MFV) на основе литературных данных. Байесовский анализ валидирован с помощью матрицы Гессе; показано, что предсказания KLT-Net позволяют точно ограничить постоянную Хаббла в плоской ΛCDM. Сочетание KLT-Net, MFV и байесовской статистики образует надёжный инструмент для космологических исследований, особенно при анализе сложных и многомерных данных."
+    },
+    "en": {
+      "popular": "The KLT-Net hybrid neural network, blending three architectures (KAN, LSTM, Transformer), directly reconstructed the cosmic distance ladder from supernova data (the Pantheon catalog) without rigid assumptions. This approach unveiled hidden nonlinear links inaccessible to standard methods. Then, within a flat ΛCDM model, the Hubble constant (H₀) and matter density were estimated using robust luminosity calibration. Think of it as a well-oiled team where each network type is a specialist tackling different data facets, delivering spot-on cosmological parameters.",
+      "simple": "How far away are the galaxies? Researchers have 'raised' an artificial intelligence that uses the brightness of supernovae—exploding stars—to build a sharper cosmic yardstick. This helped pin down the universe's expansion rate and its dark matter content. Picture an AI as an astronomer: just how reliable can it be?",
+      "advanced": "Directly reconstructing the cosmic distance ladder from observations is a core task in cosmology. A hybrid neural network, KLT-Net (combining KAN, LSTM, and Transformer), was introduced to model this ladder and estimate cosmological parameters from the apparent magnitudes of Type Ia supernovae in the Pantheon catalog. The network nonparametrically recovers the distance modulus μ(z), effectively capturing nonlinearities in the data. Comparisons with alternative models and ablation tests confirm its edge. Within a flat ΛCDM framework, H₀ and Ωm were statistically estimated. The absolute magnitude MB is determined via the most frequent value (MFV) method based on literature data. Bayesian analysis was validated with the Hessian matrix, showing that KLT-Net's predictions tightly constrain the Hubble constant in flat ΛCDM. Paired with MFV and Bayesian statistics, this forms a robust toolkit for cosmological studies—especially when dealing with complex, high-dimensional data."
+    },
+    "es": {
+      "popular": "La red neuronal híbrida KLT-Net, que combina tres arquitecturas (KAN, LSTM, Transformer), ha permitido reconstruir directamente, sin suposiciones rígidas, la escalera de distancias cósmicas a partir de datos de supernovas (catálogo Pantheon). Este enfoque reveló conexiones no lineales ocultas, inaccesibles para los métodos estándar. Luego, dentro del modelo plano ΛCDM, se estimaron la constante de Hubble (H₀) y la densidad de materia, utilizando una calibración robusta de la luminosidad. El resultado: la red funciona como un equipo bien coordinado, donde cada tipo de red es un especialista en diferentes aspectos de los datos, lo que permite obtener parámetros cosmológicos precisos.",
+      "simple": "¿A qué distancia están las galaxias? Los científicos 'cultivaron' una inteligencia artificial que, a partir del brillo de las supernovas (explosiones estelares), construye con mayor precisión una regla cósmica de distancias. Esto ayudó a precisar a qué velocidad se expande el universo y cuánta materia oscura contiene. Imagina que la IA se convierte en astrónoma: ¿hasta qué punto podemos confiar en ella?",
+      "advanced": "La reconstrucción directa de la escalera de distancias cósmicas a partir de observaciones es una tarea clave en cosmología. Se propone la red neuronal híbrida KLT-Net (KAN, LSTM, Transformer) para modelar dicha escalera y estimar parámetros cosmológicos basándose en las magnitudes aparentes de supernovas Ia del catálogo Pantheon. La red reconstruye de forma no paramétrica el módulo de distancia μ(z), capturando eficazmente no linealidades en la distribución de datos. Comparaciones con modelos alternativos y pruebas de ablación confirman su ventaja. Dentro del modelo plano ΛCDM, se realizó una estimación estadística de H₀ y Ωm. Para determinar la magnitud absoluta MB se emplea el método del valor más frecuente (MFV) basado en datos de la literatura. El análisis bayesiano se validó mediante la matriz hessiana; se demuestra que las predicciones de KLT-Net permiten acotar con precisión la constante de Hubble en el modelo ΛCDM plano. La combinación de KLT-Net, MFV y estadística bayesiana constituye una herramienta robusta para investigaciones cosmológicas, especialmente en el análisis de datos complejos y multidimensionales."
+    },
+    "ar": {
+      "popular": "الشبكة العصبية الهجينة KLT-Net، التي تجمع ثلاث معماريات (KAN، LSTM، Transformer)، مكّنت من إعادة بناء سلم المسافات الكونية مباشرة، دون افتراضات صارمة، اعتمادًا على بيانات المستعرات العظمى (كتالوج Pantheon). وقد كشف هذا النهج عن روابط غير خطية خفية، كانت بعيدة المنال عن الطرق القياسية. بعد ذلك، وفي إطار نموذج ΛCDM المسطح، قُدّر ثابت هابل (H₀) وكثافة المادة، باستخدام معايرة متينة للإضاءة. والنتيجة: الشبكة العصبية تعمل كفريق منسجم، حيث يكون كل نوع من الشبكات متخصصًا في جانب معين من البيانات، مما يوفّر معاملات كونية دقيقة.",
+      "simple": "ما مدى بُعد المجرات؟ درّب العلماء ذكاءً اصطناعيًا يقيس بدقة أكبر المسافات الكونية اعتماداً على لمعان المستعرات العظمى (انفجارات نجمية). وقد ساعد ذلك في تحديد سرعة توسّع الكون وكمية المادة المظلمة فيه بدقة أكبر. تخيّل أن الذكاء الاصطناعي أصبح عالِم فلك: إلى أي مدى يمكن الوثوق به؟",
+      "advanced": "إعادة بناء سلم المسافات الكونية مباشرة من الرصد هي إحدى المهام الأساسية في علم الكون. طُرحت الشبكة العصبية الهجينة KLT-Net (KAN، LSTM، Transformer) لنمذجة هذا السلم وتقدير المعاملات الكونية استنادًا إلى الأقدار الظاهرية للمستعرات العظمى من النوع Ia من كتالوج Pantheon. تستعيد الشبكة معامل المسافة μ(z) بطريقة لامعلمية، وتلتقط بفعالية اللاخطية في توزيع البيانات. وتؤكد المقارنات مع النماذج البديلة واختبارات الاجتثاث تفوقها. وفي إطار نموذج ΛCDM المسطح، أُجري تقدير إحصائي لثابت هابل H₀ و Ωm. ولتحديد القدر المطلق MB، استُخدمت طريقة القيمة الأكثر تكرارًا (MFV) بالاعتماد على بيانات منشورة. وقد تم التحقق من صحة التحليل البايزي باستخدام مصفوفة هيسه؛ حيث تبيّن أن تنبؤات KLT-Net تسمح بتقييد ثابت هابل بدقة في ΛCDM المسطح. يشكّل الجمع بين KLT-Net و MFV والإحصاء البايزي أداة موثوقة للبحوث الكونية، خاصة عند تحليل البيانات المعقدة ومتعددة الأبعاد."
+    }
+  },
+  "thumbs": 6,
+  "refined": false,
+  "express": false,
+  "express_tiers": [],
+  "captions": {
+    "en": [
+      "The model operates in three key stages: First, the LSTM layer captures local",
+      "Springer Nature 2021 LATEX template",
+      "Compared to traditional RNNs and CNNs, the Transformer model excels",
+      "This module integrates the benefits of KAN, LSTM,"
+    ],
+    "ru": [
+      "Модель работает в три ключевых этапа: сначала слой LSTM захватывает локальные",
+      "Шаблон LaTeX Springer Nature 2021",
+      "По сравнению с традиционными RNN и CNN, модель Transformer превосходит",
+      "Этот модуль объединяет преимущества KAN, LSTM,"
+    ],
+    "es": [
+      "El modelo opera en tres etapas clave: primero, la capa LSTM captura local",
+      "Plantilla LATEX de Springer Nature 2021",
+      "En comparación con las RNN y CNN tradicionales, el modelo Transformer destaca",
+      "Este módulo integra los beneficios de KAN, LSTM,"
+    ],
+    "ar": [
+      "يعمل النموذج في ثلاث مراحل رئيسية: أولاً، تلتقط طبقة LSTM المحلية",
+      "قالب Springer Nature 2021 LaTeX",
+      "بالمقارنة مع شبكات RNN و CNN التقليدية، يتفوق نموذج المحول (Transformer)",
+      "يدمج هذا المكون فوائد KAN و LSTM"
+    ]
+  },
+  "popular": {
+    "ru": {
+      "title": "Космический камертон: нейросеть KLT-Net переписывает лестницу расстояний",
+      "oneliner": "Гибридный ИИ, объединяющий теорему Колмогорова-Арнольда, долгую память и внимание, беспристрастно измеряет расширение Вселенной и ставит под сомнение загадку напряжённости Хаббла.",
+      "description": "Используя 1701 сверхновую типа Ia, нейросеть KLT-Net впервые восстанавливает модуль расстояния без привязки к космологическим моделям. Гармония трёх архитектур — KAN, LSTM и Transformer — позволяет улавливать и локальные нюансы, и глобальный ритм расширения. Результат: постоянная Хаббла H₀ = 69.58 км/с/Мпк, что смягчает загадочное расхождение между локальными и глобальными измерениями. Этот подход открывает дверь к беспрецедентно точной обработке будущих массивных обзоров неба.",
+      "text": "Современная космология попала в диссонанс. Локальные измерения [law:hubbles_law]постоянной Хаббла[/law] по [tag:supernova]сверхновым[/tag] и цефеидам дают около 73 км/с/Мпк, тогда как глобальные ограничения из [tag:cosmic_microwave_background]реликтового излучения[/tag] в рамках [tag:standard_model]стандартной ΛCDM-модели[/tag] указывают на 67 км/с/Мпк. Это расхождение в ~5σ, известное как «напряжённость Хаббла», звучит резким аккордом, требующим либо новой физики, либо перестройки всей лестницы расстояний. Именно эту лестницу, где каждая ступень опирается на предыдущую, можно уподобить оркестру: [tag:supernova]сверхновые типа Ia[/tag] — камертоны, задающие тон, но систематические ошибки и модельные допущения вносят фальшь. Традиционный подход — вручную подбирать калибровки — сродни настройке инструментов на слух в шумном зале. Но теперь появился дирижёр нового типа — KLT-Net.\n\nЭтот дирижёр не человек: это гибридная нейросеть, вдохновлённая теоремой Колмогорова–Арнольда. Она объединяет три начала в единую партитуру. [scientist:Edwin Hubble]LSTM-слои[/scientist] ловят локальные обертоны — временные зависимости в кривых блеска, словно музыкант, чутко следующий за нюансами звука. [tag:numerical_simulation]KAN-слои[/tag] с обучаемыми B-сплайнами выстраивают сложные нелинейные мелодии из простых элементов — как композитор, конструирующий симфонию из гамм. А [tag:numerical_simulation]Transformer-кодировщик[/tag] с механизмом самовнимания охватывает всю гармоническую структуру, чувствуя глобальный ритм расширения. Обучение прошло на 1701 [tag:supernova]сверхновой[/tag] из каталога Pantheon+, и, подобно тому как музыкант доверяет абсолютному слуху, KLT-Net доверяет данным, а не космологическим догмам.\n\n[callout]Сеть использует B-сплайны — те же математические конструкции, что и аниматоры Pixar для плавных движений персонажей. Это позволяет KLT-Net гибко подстраиваться под нелинейности космического расширения.[/callout]\n\nЧто же показал этот дирижёр? Абляционные тесты — когда солисты-компоненты по очереди выбывали из оркестра — подтвердили: полный ансамбль KLT звучит стабильнее всех, снижая дисперсию ошибки до 0.0005. Сквозь шум данных проступила чистая нота: постоянная Хаббла H₀ = 69.58 км/с/Мпк. Она оказалась чуть ниже локальных измерений [scientist:Edwin Hubble]Эдвина Хаббла[/scientist] и его последователей, но выше реликтового фона, сглаживая мучительный разрыв. Плотность материи Ωₘ=0.301 перекликается с другими зондами, намекая на универсальный мотив. Интересно, что абсолютная [tag:photometry]звёздная величина[/tag] сверхновых M_B = –19.38 mag получена робастным методом наиболее частого значения — словно дирижёр прислушивается к «хору» большинства, игнорируя экстремальные выбросы.\n\n[callout]Неожиданностью стало то, что сеть иногда «слышит» меньшую плотность материи, чем прямые данные (0.301 против 0.349). Это не ошибка, а осознанное сглаживание высокочастотных особенностей — как дирижёр, смягчающий резкие акценты ради целостности симфонии.[/callout]\n\nЭта работа — лишь увертюра. Физико-информированные нейросети (PINN) уже вплетают [law:friedmann_equations]уравнения Фридмана[/law] прямо в партитуру, а символьная регрессия обещает автоматически выводить законы [tag:dark_energy]тёмной энергии[/tag] и [tag:dark_matter]тёмной материи[/tag]. Представьте сеть, которая не просто настраивает инструменты, а сочиняет музыку Вселенной, опираясь на свет миллиардов звёзд. Грядущие обзоры LSST и Euclid породят миллионы «ног», и KLT-подобные алгоритмы станут главными аранжировщиками. Так, шаг за шагом, мы приближаемся к тому, чтобы расслышать истинную гармонию космоса.",
+      "fun_fact": "Метод наиболее частого значения (MFV), применённый для оценки абсолютной светимости сверхновых, работает как поиск самого популярного мнения среди экспертов: он отбрасывает экстремальные значения, полагаясь на «хор» большинства данных.",
+      "scifi": "Это напоминает «психоисторию» из «Основания» Азимова, где анализ массивов данных без знания детальных механизмов позволял предсказывать будущее галактической империи. Здесь же нейросеть предсказывает историю расширения по свету далёких звёзд.",
+      "threads": "Космологический кризис: локальные измерения разбегания галактик дают скорость 73 км/с, глобальные — 67. Расхождение в 5σ не укладывается ни в одну модель. KLT-Net — это дирижёр, который настраивает космический оркестр сверхновых, используя сплайны вместо нот. Результат — чистая нота H₀≈69.6 км/с/Мпк. Сглаживая диссонанс, сеть открывает путь к автоматическому открытию законов физики из данных. Мы на пороге научной «психоистории».",
+      "formulas": [
+        {
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "Модуль расстояния μ — это логарифмическая мера яркости, связывающая видимый блеск m сверхновой, её истинную светимость M и фотометрическое расстояние D_L. Как громкость звука убывает с расстоянием, так и свет тускнеет, и эта формула — акустика космоса."
+        },
+        {
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "Параметр Хаббла в плоской ΛCDM-модели описывает, как скорость расширения меняется с [tag:redshift]красным смещением[/tag] z. Это ритмический рисунок Вселенной, задаваемый плотностью материи Ωₘ и энергией вакуума."
+        }
+      ],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "en": {
+      "title": "Cosmic Tuning Fork: KLT-Net Neural Network Rewrites the Distance Ladder",
+      "oneliner": "A hybrid AI combining the Kolmogorov-Arnold theorem, long memory, and attention impartially measures the universe's expansion and challenges the mystery of the Hubble tension.",
+      "description": "Using 1701 Type Ia supernovae, the KLT-Net neural network reconstructs distance modulus for the first time without relying on cosmological models. The harmony of three architectures—KAN, LSTM, and Transformer—captures both local nuances and the global rhythm of expansion. The result: Hubble constant H₀ = 69.58 km/s/Mpc, easing the puzzling discrepancy between local and global measurements. This approach opens the door to unprecedentedly precise analysis of future massive sky surveys.",
+      "text": "Modern cosmology has hit a dissonant chord. Local measurements of the [law:hubbles_law]Hubble constant[/law] from [tag:supernova]supernovae[/tag] and Cepheids give around 73 km/s/Mpc, while global constraints from the [tag:cosmic_microwave_background]cosmic microwave background[/tag] within the [tag:standard_model]standard ΛCDM model[/tag] point to 67 km/s/Mpc. This ~5σ discrepancy, known as the 'Hubble tension,' sounds like a jarring note that demands either new physics or a rewrite of the entire distance ladder. This ladder, where each rung rests on the previous one, can be likened to an orchestra: [tag:supernova]Type Ia supernovae[/tag] are tuning forks that set the tone, but systematic errors and model assumptions introduce discord. The traditional approach—manually adjusting calibrations—is akin to tuning instruments by ear in a noisy hall. But now a new kind of conductor has arrived: KLT-Net.\n\nThis conductor is not human: it's a hybrid neural network inspired by the Kolmogorov–Arnold theorem. It weaves three elements into a single score. [scientist:Edwin Hubble]LSTM layers[/scientist] capture local overtones—temporal dependencies in light curves—like a musician keenly following sound nuances. [tag:numerical_simulation]KAN layers[/tag] with learnable B-splines construct complex nonlinear melodies from simple elements—like a composer building a symphony from scales. And the [tag:numerical_simulation]Transformer encoder[/tag] with self-attention grasps the entire harmonic structure, sensing the global rhythm of expansion. Training was on 1701 [tag:supernova]supernovae[/tag] from the Pantheon+ catalog, and just as a musician relies on perfect pitch, KLT-Net trusts the data, not cosmological dogma.\n\n[callout]The network uses B-splines—the same mathematical constructs used by Pixar animators for smooth character movements. This lets KLT-Net flexibly adapt to the nonlinearities of cosmic expansion.[/callout]\n\nSo what did this conductor reveal? Ablation tests—when solo components left the orchestra one by one—confirmed: the full KLT ensemble sounds the most stable, reducing error variance to 0.0005. Through the data noise a pure note emerged: Hubble constant H₀ = 69.58 km/s/Mpc. It turned out slightly lower than local measurements by [scientist:Edwin Hubble]Edwin Hubble[/scientist] and his followers, but higher than the CMB value, smoothing out the agonizing gap. Matter density Ωₘ=0.301 echoes other probes, hinting at a universal motif. Interestingly, the absolute [tag:photometry]magnitude[/tag] of supernovae M_B = –19.38 mag was obtained using a robust method of most frequent value—as if the conductor listens to the 'chorus' of the majority, ignoring extreme outliers.\n\n[callout]A surprise was that the network sometimes 'hears' a lower matter density than direct data (0.301 vs. 0.349). This is not an error but a conscious smoothing of high-frequency features—like a conductor softening sharp accents for the symphony's integrity.[/callout]\n\nThis work is just an overture. Physics-informed neural networks (PINNs) are already weaving [law:friedmann_equations]Friedmann equations[/law] directly into the score, and symbolic regression promises to automatically derive laws for [tag:dark_energy]dark energy[/tag] and [tag:dark_matter]dark matter[/tag]. Imagine a network that doesn't just tune instruments but composes the music of the universe, drawing on light from billions of stars. Upcoming LSST and Euclid surveys will generate millions of \"notes,\" and KLT-like algorithms will become the chief arrangers. Step by step, we are getting closer to hearing the true harmony of the cosmos.",
+      "fun_fact": "The most frequent value (MFV) method, used to estimate the absolute luminosity of supernovae, works like finding the most popular opinion among experts: it discards extreme values, relying on the 'chorus' of the majority of data.",
+      "scifi": "This is reminiscent of 'psychohistory' from Asimov's Foundation, where analysis of massive datasets without knowledge of detailed mechanisms allowed prediction of the galactic empire's future. Here the neural network predicts the expansion history from the light of distant stars.",
+      "threads": "Cosmological crisis: local measurements of galaxy recession give a speed of 73 km/s, global ones 67. The 5σ discrepancy doesn't fit any model. KLT-Net is a conductor tuning the cosmic orchestra of supernovae, using splines instead of notes. The result is a clean note H₀≈69.6 km/s/Mpc. Smoothing the dissonance, the network opens the way to automatic discovery of physical laws from data. We are on the threshold of scientific 'psychohistory'.",
+      "formulas": [
+        {
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Mpc}}\\right) + 25",
+          "meaning": "The distance modulus μ is a logarithmic measure of brightness, linking the apparent magnitude m of a supernova, its absolute luminosity M, and the luminosity distance D_L. Just as the loudness of a sound decreases with distance, so does light dim, and this formula is the acoustics of the cosmos."
+        },
+        {
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "The Hubble parameter in a flat ΛCDM model describes how the expansion rate changes with [tag:redshift]redshift[/tag] z. It is the rhythmic pattern of the universe, set by matter density Ωₘ and vacuum energy."
+        }
+      ],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "es": {
+      "title": "El diapasón cósmico: la red neuronal KLT-Net reescribe la escalera de distancias",
+      "oneliner": "Un híbrido de IA que combina el teorema de Kolmogórov-Arnold, memoria a largo plazo y atención, mide imparcialmente la expansión del universo y cuestiona el enigma de la tensión de Hubble.",
+      "description": "Usando 1701 supernovas tipo Ia, la red neuronal KLT-Net recupera por primera vez el módulo de distancia sin depender de modelos cosmológicos. La armonía de tres arquitecturas — KAN, LSTM y Transformer — permite capturar tanto matices locales como el ritmo global de la expansión. Resultado: constante de Hubble H₀ = 69.58 km/s/Mpc, lo que atenúa la misteriosa discrepancia entre mediciones locales y globales. Este enfoque abre la puerta a un procesamiento sin precedentes de futuros grandes relevamientos del cielo.",
+      "text": "La cosmología moderna ha caído en una disonancia. Las mediciones locales de la [law:hubbles_law]constante de Hubble[/law] basadas en [tag:supernova]supernovas[/tag] y cefeidas arrojan alrededor de 73 km/s/Mpc, mientras que las restricciones globales del [tag:cosmic_microwave_background]fondo cósmico de microondas[/tag] dentro del [tag:standard_model]modelo estándar ΛCDM[/tag] indican 67 km/s/Mpc. Esta discrepancia de ~5σ, conocida como la \"tensión de Hubble\", suena como un acorde estridente que exige o nueva física o una reconstrucción completa de la escalera de distancias. Precisamente esta escalera, donde cada peldaño se apoya en el anterior, puede asemejarse a una orquesta: las [tag:supernova]supernovas tipo Ia[/tag] son diapasones que marcan el tono, pero los errores sistemáticos y las suposiciones del modelo introducen desafinación. El enfoque tradicional —ajustar calibraciones manualmente— es como afinar instrumentos de oído en una sala ruidosa. Pero ahora ha surgido un director de orquesta de nuevo tipo: KLT-Net.\n\nEste director no es humano: es una red neuronal híbrida inspirada en el teorema de Kolmogórov-Arnold. Combina tres principios en una sola partitura. Las [scientist:Edwin Hubble]capas LSTM[/scientist] captan los sobretonos locales —dependencias temporales en las curvas de luz— como un músico que sigue con sensibilidad los matices del sonido. Las [tag:numerical_simulation]capas KAN[/tag] con B-splines entrenables construyen melodías complejas no lineales a partir de elementos simples, como un compositor que crea una sinfonía a partir de escalas. Y el [tag:numerical_simulation]codificador Transformer[/tag] con mecanismo de auto-atención abarca toda la estructura armónica, sintiendo el ritmo global de la expansión. El entrenamiento se realizó con 1701 [tag:supernova]supernovas[/tag] del catálogo Pantheon+, y así como un músico confía en el oído absoluto, KLT-Net confía en los datos, no en dogmas cosmológicos.\n\n[callout]La red utiliza B-splines, las mismas construcciones matemáticas que los animadores de Pixar para movimientos suaves de personajes. Esto permite a KLT-Net adaptarse con flexibilidad a las no linealidades de la expansión cósmica.[/callout]\n\n¿Qué mostró este director? Las pruebas de ablación —cuando los solistas-componentes abandonaban la orquesta uno por uno— confirmaron que el conjunto completo de KLT suena más estable, reduciendo la varianza del error a 0.0005. A través del ruido de los datos emergió una nota pura: constante de Hubble H₀ = 69.58 km/s/Mpc. Resultó ser ligeramente inferior a las mediciones locales de [scientist:Edwin Hubble]Edwin Hubble[/scientist] y sus seguidores, pero superior al fondo cósmico, suavizando la dolorosa brecha. La densidad de materia Ωₘ=0.301 resuena con otras sondas, insinuando un motivo universal. Es interesante que la [tag:photometry]magnitud estelar[/tag] absoluta de las supernovas M_B = –19.38 mag se obtuvo mediante el robusto método del valor más frecuente, como si el director escuchara al \"coro\" de la mayoría, ignorando valores atípicos extremos.\n\n[callout]Lo sorprendente fue que la red a veces \"escucha\" una densidad de materia menor que los datos directos (0.301 frente a 0.349). No es un error, sino un suavizado consciente de las características de alta frecuencia, como un director que atenúa los acentos bruscos en aras de la integridad de la sinfonía.[/callout]\n\nEste trabajo es solo una obertura. Las redes neuronales informadas por la física (PINN) ya están tejiendo las [law:friedmann_equations]ecuaciones de Friedman[/law] directamente en la partitura, y la regresión simbólica promete deducir automáticamente las leyes de la [tag:dark_energy]energía oscura[/tag] y la [tag:dark_matter]materia oscura[/tag]. Imagine una red que no solo afina instrumentos, sino que compone la música del Universo a partir de la luz de miles de millones de estrellas. Los próximos relevos LSST y Euclid generarán millones de \"notas\", y los algoritmos como KLT se convertirán en los principales arreglistas. Así, paso a paso, nos acercamos a escuchar la verdadera armonía del cosmos.",
+      "fun_fact": "El método del valor más frecuente (MFV), aplicado para estimar la luminosidad absoluta de las supernovas, funciona como buscar la opinión más popular entre expertos: descarta los valores extremos y se apoya en el \"coro\" de la mayoría de los datos.",
+      "scifi": "Recuerda a la \"psicohistoria\" de la saga de la Fundación de Asimov, donde el análisis de grandes conjuntos de datos, sin conocer los mecanismos detallados, permitía predecir el futuro de un imperio galáctico. Aquí, la red neuronal predice la historia de la expansión a partir de la luz de estrellas lejanas.",
+      "threads": "Crisis cosmológica: las mediciones locales de la expansión de las galaxias dan 73 km/s, las globales, 67. La discrepancia de 5σ no encaja en ningún modelo. KLT-Net es un director que afina la orquesta cósmica de supernovas usando splines en lugar de notas. El resultado es una nota pura: H₀≈69.6 km/s/Mpc. Al suavizar la disonancia, la red abre el camino al descubrimiento automático de leyes físicas a partir de los datos. Estamos en el umbral de una \"psicohistoria\" científica.",
+      "formulas": [
+        {
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "El módulo de distancia μ es una medida logarítmica del brillo que relaciona el brillo aparente m de una supernova, su luminosidad intrínseca M y la distancia fotométrica D_L. Así como el volumen del sonido disminuye con la distancia, la luz se atenúa, y esta fórmula es la acústica del cosmos."
+        },
+        {
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "El parámetro de Hubble en el modelo ΛCDM plano describe cómo cambia la velocidad de expansión con el [tag:redshift]corrimiento al rojo[/tag] z. Es el patrón rítmico del Universo, determinado por la densidad de materia Ωₘ y la energía de vacío."
+        }
+      ],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "ar": {
+      "title": "الشوكة الرنانة الكونية: شبكة KLT-Net العصبية تعيد كتابة سلم المسافات",
+      "oneliner": "ذكاء اصطناعي هجين يجمع بين نظرية كولموغوروف-أرنولد والذاكرة الطويلة والانتباه، يقيس توسع الكون بموضوعية ويشكك في لغز توتر هابل.",
+      "description": "باستخدام 1701 مستعر أعظم من النوع Ia، تستعيد شبكة KLT-Net العصبية لأول مرة معامل المسافة دون الارتباط بنماذج كونية. يتيح تناغم ثلاثة معماريات — KAN و LSTM و Transformer — التقاط الفروق الدقيقة المحلية والإيقاع العالمي للتوسع. النتيجة: ثابت هابل H₀ = 69.58 كم/ث/ميغافرسخ، مما يخفف التناقض الغامض بين القياسات المحلية والعالمية. يفتح هذا النهج الباب أمام معالجة غير مسبوقة الدقة لمسوحات السماء الواسعة المستقبلية.",
+      "text": "واجه علم الكونيات الحديث نشازاً. فالقياسات المحلية لـ [law:hubbles_law]ثابت هابل[/law] باستخدام [tag:supernova]المستعرات العظمى[/tag] والمتغيرات القيفاوية تعطي نحو 73 كم/ث/ميغافرسخ، بينما تشير القيود العالمية من [tag:cosmic_microwave_background]إشعاع الخلفية الكونية الميكروي[/tag] ضمن [tag:standard_model]نموذج ΛCDM القياسي[/tag] إلى 67 كم/ث/ميغافرسخ. هذا التناقض الذي يبلغ حوالي 5σ، والمعروف باسم «توتر هابل»، يبدو كنغمة حادة تتطلب إما فيزياء جديدة أو إعادة بناء سلم المسافات بأكمله. وهذا السلم، حيث تعتمد كل درجة على سابقتها، يمكن تشبيهه بأوركسترا: فـ [tag:supernova]المستعرات العظمى من النوع Ia[/tag] هي الشوكات الرنانة التي تحدد النغمة، لكن الأخطاء المنهجية والافتراضات النموذجية تُدخل نشازاً. النهج التقليدي المتمثل في المعايرة اليدوية يشبه ضبط الآلات الموسيقية عن طريق الأذن في قاعة صاخبة. لكن ظهر الآن قائد أوركسترا من نوع جديد — KLT-Net.\n\nقائد الأوركسترا هذا ليس بشراً: إنها شبكة عصبية هجينة مستوحاة من نظرية كولموغوروف-أرنولد. وهي توحد ثلاث مبادئ في نوتة موسيقية واحدة. تلتقط [scientist:Edwin Hubble]طبقات LSTM[/scientist] النغمات التوافقية المحلية — أي الارتباطات الزمنية في منحنيات السطوع، مثل عازف يتابع بحساسية تفاصيل الصوت. وتبني [tag:numerical_simulation]طبقات KAN[/tag] ذات الشرائح B القابلة للتعلم ألحاناً غير خطية معقدة من عناصر بسيطة — مثل ملحن يبني سمفونية من السلالم الموسيقية. أما [tag:numerical_simulation]مشفر Transformer[/tag] بآلية الانتباه الذاتي فيغطي البنية التوافقية بأكملها، مستشعراً الإيقاع العالمي للتوسع. تم التدريب على 1701 [tag:supernova]مستعر أعظم[/tag] من كتالوج Pantheon+، وكما يثق الموسيقي بأذنه المطلقة، تثق KLT-Net بالبيانات لا بالعقائد الكونية.\n\n[callout]تستخدم الشبكة الشرائح B — وهي نفس البنى الرياضية التي يستخدمها رسامو الرسوم المتحركة في بيكسار للحصول على حركات سلسة للشخصيات. وهذا يتيح لـ KLT-Net التكيف بمرونة مع اللاخطية في التوسع الكوني.[/callout]\n\nفماذا أظهر قائد الأوركسترا هذا؟ لقد أكدت اختبارات الاجتثاث — التي تنسحب فيها المكونات المنفردة من الأوركسترا الواحدة تلو الأخرى — أن الفرقة الكاملة KLT تعزف بشكل أكثر استقراراً، مما يقلل تباين الخطأ إلى 0.0005. ومن خلال ضجيج البيانات برزت نغمة نقية: ثابت هابل H₀ = 69.58 كم/ث/ميغافرسخ. لقد جاء أقل قليلاً من القياسات المحلية لـ [scientist:Edwin Hubble]إدوين هابل[/scientist] وأتباعه، لكنه أعلى من إشعاع الخلفية الكونية، مما يخفف الفجوة المؤلمة. وتتوافق كثافة المادة Ωₘ=0.301 مع مجسات أخرى، ملمحة إلى نغمة كونية عالمية. ومن المثير للاهتمام أن [tag:photometry]القدر المطلق[/tag] للمستعرات العظمى M_B = –19.38 mag تم الحصول عليه بطريقة قوية هي القيمة الأكثر تكراراً — كما لو أن قائد الأوركسترا يستمع إلى «جوقة» الأغلبية متجاهلاً القيم المتطرفة.\n\n[callout]الأمر غير المتوقع هو أن الشبكة «تسمع» أحياناً كثافة مادة أقل مما تشير إليه البيانات المباشرة (0.301 مقابل 0.349). وهذا ليس خطأً، بل تنعيم واعٍ للسمات عالية التردد — مثل قائد أوركسترا يخفف النبرات الحادة من أجل وحدة السمفونية.[/callout]\n\nهذا العمل ليس إلا افتتاحية. فالشبكات العصبية المستنيرة بالفيزياء (PINN) تدمج بالفعل [law:friedmann_equations]معادلات فريدمان[/law] مباشرة في النوتة الموسيقية، ويعد الانحدار الرمزي باستنتاج قوانين [tag:dark_energy]الطاقة المظلمة[/tag] و [tag:dark_matter]المادة المظلمة[/tag] تلقائياً. تخيل شبكة لا تضبط الآلات فحسب، بل تؤلف موسيقى الكون، اعتماداً على ضوء مليارات النجوم. ستنتج المسوحات القادمة مثل LSST و Euclid ملايين «النغمات»، وستصبح الخوارزميات المشابهة لـ KLT الموزعين الرئيسيين. وهكذا، خطوة بخطوة، نقترب من سماع التناغم الحقيقي للكون.",
+      "fun_fact": "طريقة القيمة الأكثر تكراراً (MFV) المستخدمة لتقدير السطوع المطلق للمستعرات العظمى، تعمل مثل البحث عن الرأي الأكثر شيوعاً بين الخبراء: فهي تتجاهل القيم المتطرفة، معتمدة على «جوقة» غالبية البيانات.",
+      "scifi": "وهذا يذكرنا بـ«التاريخ النفسي» من سلسلة «المؤسسة» لأسيموف، حيث سمح تحليل كميات هائلة من البيانات دون معرفة الآليات التفصيلية بالتنبؤ بمستقبل الإمبراطورية المجرية. وهنا تتنبأ الشبكة العصبية بتاريخ التوسع من ضوء النجوم البعيدة.",
+      "threads": "الأزمة الكونية: القياسات المحلية لتباعد المجرات تعطي سرعة 73 كم/ث، والقياسات العالمية 67. التناقض بمقدار 5σ لا ينطبق على أي نموذج. KLT-Net هو قائد الأوركسترا الذي يضبط الأوركسترا الكونية للمستعرات العظمى، مستخدماً الشرائح بدلاً من النوتات. النتيجة — نغمة نقية H₀≈69.6 كم/ث/ميغافرسخ. بتخفيف النشاز، تفتح الشبكة الطريق نحو اكتشاف قوانين الفيزياء تلقائياً من البيانات. نحن على أعتاب «تاريخ نفسي» علمي.",
+      "formulas": [
+        {
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "معامل المسافة μ هو مقياس لوغاريتمي للسطوع يربط اللمعان الظاهري m للمستعر الأعظم وسطوعه الحقيقي M ومسافة القياس الضوئي D_L. مثلما يخفت الصوت مع المسافة، يخفت الضوء أيضاً، وهذه الصيغة هي صوتيات الكون."
+        },
+        {
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "يصف معامل هابل في نموذج ΛCDM المسطح كيفية تغير سرعة التوسع مع [tag:redshift]الانزياح الأحمر[/tag] z. هذا هو النمط الإيقاعي للكون، الذي تحدده كثافة المادة Ωₘ وطاقة الفراغ."
+        }
+      ],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    }
+  },
+  "simple": {
+    "ru": {
+      "title": "Вселенная на весах: нейросеть уточнила расширение космоса",
+      "oneliner": "Программа сама учится определять расстояния по свету далёких звёздных взрывов.",
+      "description": "Яркость [tag:supernova]сверхновой[/tag] говорит о том, как далеко она находится. Но разные способы измерения дают разный ответ — и учёные спорят, насколько быстро растёт Вселенная. Новая нейросеть KLT-Net учится прямо на данных о 1701 вспышке и помогает сгладить противоречия, не опираясь на готовые теории.",
+      "text": "Представьте тёмную комнату и лампочку. Вы знаете, что её настоящая мощность — 100 ватт, но она кажется тусклой: значит, она далеко. Чем тусклее, тем дальше. Похожий приём используют астрономы: они наблюдают особые взрывы — [tag:supernova]сверхновые[/tag], чья истинная яркость почти одинакова. Это как если бы космос сам расставил лампочки-маяки. Именно так в 1990-х годах [scientist:Adam Riess]Адам Райсс[/scientist] с коллегами обнаружил, что Вселенная расширяется всё быстрее.\n\nДолгое время казалось, что [tag:expansion_of_the_universe]расширение[/tag] идёт с постоянной скоростью — её называют [law:hubbles_law]постоянной Хаббла[/law] в честь [scientist:Edwin Hubble]Эдвина Хаббла[/scientist] (хотя первым эту идею высказал [scientist:Georges Lemaître]Жорж Леметр[/scientist]). Однако измерения по [tag:supernova]сверхновым[/tag] дают одно число, а по древнему [tag:cosmic_microwave_background]реликтовому излучению[/tag] — другое. Это расхождение может указывать на новые свойства [tag:dark_energy]тёмной энергии[/tag] или на пробелы в теории. Чтобы обойти спор, учёные создали нейросеть KLT-Net: она смотрит на [tag:redshift]красное смещение[/tag] света (его покраснение из-за растяжения пространства) и сама выводит, какому расстоянию оно соответствует. Три «мозга» сети — один запоминает последовательности, другой находит главные закономерности, третий охватывает общую картину — учатся без готовых формул.\n\n[callout]В основе сети лежат B-сплайны — те же плавные кривые, что отвечают за изгибы в компьютерных мультфильмах.[/callout]\n\nРезультат: [law:hubbles_law]постоянная Хаббла[/law] получилась около 69.6 км/с на мегапарсек — примерно такую скорость набирают два дома, разнесённые на миллион световых лет, убегая друг от друга каждую секунду. Это значение чуть ближе к данным [tag:cosmic_microwave_background]реликтового излучения[/tag], что смягчает противоречие. Такой подход ценен тем, что не подгоняет цифры под догмы, а честно ищет связь напрямую. Когда новые телескопы зальют нас точными снимками, подобные сети помогут выловить из них намёки на загадочную [tag:dark_energy]тёмную энергию[/tag] — причину всё ускоряющегося бега галактик.",
+      "fun_fact": "Сеть использует B-сплайны — те же математические кривые, что рисуют плавные линии в компьютерной анимации. А когда-то [scientist:Edwin Hubble]Эдвин Хаббл[/scientist] выводил расширение Вселенной на глаз по фотопластинкам!",
+      "scifi": "Идея программы, которая сама восстанавливает историю космоса, напоминает «Энциклопедию Галактика» из романов Айзека Азимова «Основание»: там математики предсказывали будущее, анализируя горы данных без знания всех механизмов.",
+      "formulas": [],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "en": {
+      "title": "The Universe in the Balance: Neural Network Refines Cosmic Expansion",
+      "oneliner": "The program itself learns to determine distances from the light of distant stellar explosions.",
+      "description": "The brightness of a [tag:supernova]supernova[/tag] indicates how far away it is. But different measurement methods give different answers — and scientists debate how fast the Universe is growing. The new neural network KLT-Net learns directly from data on 1701 flares and helps smooth out the contradictions without relying on ready-made theories.",
+      "text": "Imagine a dark room and a light bulb. You know its true power is 100 watts, but it looks dim: that means it's far away. The dimmer it is, the farther. Astronomers use a similar trick: they observe special explosions — [tag:supernova]supernovae[/tag] whose true brightness is almost the same. It's as if the cosmos itself placed beacon lights. That's exactly how in the 1990s [scientist:Adam Riess]Adam Riess[/scientist] and colleagues discovered that the Universe is expanding faster and faster.\n\nFor a long time it seemed that [tag:expansion_of_the_universe]expansion[/tag] proceeds at a constant rate — called the [law:hubbles_law]Hubble constant[/law] after [scientist:Edwin Hubble]Edwin Hubble[/scientist] (though the idea was first voiced by [scientist:Georges Lemaître]Georges Lemaître[/scientist]). Yet measurements from [tag:supernova]supernovae[/tag] give one number, while those from the ancient [tag:cosmic_microwave_background]cosmic microwave background[/tag] give another. This discrepancy could point to new properties of [tag:dark_energy]dark energy[/tag] or gaps in theory. To bypass the debate, scientists created the neural network KLT-Net: it looks at the [tag:redshift]redshift[/tag] of light (its reddening due to space stretching) and itself derives what distance it corresponds to. The network's three 'brains' — one memorizes sequences, another finds main patterns, the third captures the big picture — learn without ready-made formulas.\n\n[callout]The network is based on B-splines — the same smooth curves that create bends in computer cartoons.[/callout]\n\nThe result: the [law:hubbles_law]Hubble constant[/law] came out at about 69.6 km/s per megaparsec — roughly the speed two houses, separated by a million light-years, gain as they race away from each other every second. This value is slightly closer to the [tag:cosmic_microwave_background]cosmic microwave background[/tag] data, easing the contradiction. The value of this approach is that it doesn't tailor numbers to dogma but honestly seeks the connection directly. When new telescopes flood us with precise images, similar networks will help fish out hints of the mysterious [tag:dark_energy]dark energy[/tag] — the cause of the galaxies' ever-accelerating rush.",
+      "fun_fact": "The network uses B-splines — the same mathematical curves that draw smooth lines in computer animation. And once upon a time [scientist:Edwin Hubble]Edwin Hubble[/scientist] deduced the expansion of the Universe by eye from photographic plates!",
+      "scifi": "The idea of a program that itself reconstructs the history of the cosmos is reminiscent of the 'Encyclopedia Galactica' from Isaac Asimov's Foundation novels: mathematicians there predicted the future by analyzing mountains of data without knowing all the mechanisms.",
+      "formulas": [],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "es": {
+      "title": "El universo en la balanza: una red neuronal precisa la expansión del cosmos",
+      "oneliner": "El programa aprende por sí mismo a determinar distancias a partir de la luz de explosiones estelares lejanas.",
+      "description": "El brillo de una [tag:supernova]supernova[/tag] indica cuán lejos está. Pero diferentes métodos de medición dan respuestas distintas, y los científicos debaten sobre la rapidez con que crece el universo. La nueva red neuronal KLT-Net aprende directamente de los datos de 1701 destellos y ayuda a suavizar las contradicciones sin apoyarse en teorías preestablecidas.",
+      "text": "Imagina una habitación oscura con una bombilla. Sabes que su potencia real es de 100 vatios, pero se ve tenue: eso significa que está lejos. Cuanto más tenue, más lejos. Los astrónomos usan un truco similar: observan explosiones especiales, las [tag:supernova]supernovas[/tag], cuyo brillo real es casi siempre el mismo. Es como si el cosmos hubiera colocado faros por todo el espacio. Fue así como en los años 90 [scientist:Adam Riess]Adam Riess[/scientist] y sus colegas descubrieron que el universo se expande cada vez más rápido.\n\nDurante mucho tiempo se pensó que la [tag:expansion_of_the_universe]expansión[/tag] ocurría a un ritmo constante, la llamada [law:hubbles_law]constante de Hubble[/law] en honor a [scientist:Edwin Hubble]Edwin Hubble[/scientist] (aunque la idea la propuso antes [scientist:Georges Lemaître]Georges Lemaître[/scientist]). Sin embargo, las mediciones con [tag:supernova]supernovas[/tag] dan un valor, y las del antiguo [tag:cosmic_microwave_background]fondo cósmico de microondas[/tag] dan otro. Esta discrepancia podría indicar nuevas propiedades de la [tag:dark_energy]energía oscura[/tag] o lagunas en la teoría. Para sortear el debate, los científicos crearon la red neuronal KLT-Net: observa el [tag:redshift]corrimiento al rojo[/tag] de la luz (su enrojecimiento por el estiramiento del espacio) y deduce por sí sola a qué distancia corresponde. Los tres «cerebros» de la red —uno memoriza secuencias, otro encuentra patrones clave y el tercero capta la imagen global— aprenden sin fórmulas predefinidas.\n\n[callout]La red se basa en B-splines, las mismas curvas suaves que dan forma a los dobleces en las películas de animación por computadora.[/callout]\n\nResultado: la [law:hubbles_law]constante de Hubble[/law] resultó ser de unos 69.6 km/s por megapársec, más o menos la velocidad que alcanzarían dos casas separadas por un millón de años luz alejándose una de otra cada segundo. Este valor se acerca un poco más a los datos del [tag:cosmic_microwave_background]fondo cósmico de microondas[/tag], lo que suaviza la contradicción. Lo valioso de este enfoque es que no fuerza los números según dogmas, sino que busca honestamente la relación de manera directa. Cuando los nuevos telescopios nos inunden con imágenes precisas, redes como esta ayudarán a extraer pistas sobre la misteriosa [tag:dark_energy]energía oscura[/tag], la causa de la carrera cada vez más acelerada de las galaxias.",
+      "fun_fact": "La red usa B-splines, las mismas curvas matemáticas que trazan líneas suaves en la animación por computadora. ¡Y en su día, [scientist:Edwin Hubble]Edwin Hubble[/scientist] dedujo la expansión del universo a ojo, analizando placas fotográficas!",
+      "scifi": "La idea de un programa que reconstruye por sí solo la historia del cosmos recuerda a la «Enciclopedia Galáctica» de las novelas de «La Fundación» de Isaac Asimov: allí los matemáticos predecían el futuro analizando montañas de datos sin conocer todos los mecanismos.",
+      "formulas": [],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "ar": {
+      "title": "الكون في الميزان: شبكة عصبية تُحسّن دقة قياس توسّع الفضاء",
+      "oneliner": "البرنامج يتعلم بنفسه تحديد المسافات من ضوء الانفجارات النجمية البعيدة.",
+      "description": "يشير سطوع [tag:supernova]المستعر الأعظم[/tag] إلى بُعده. لكن طرق القياس المختلفة تعطي إجابات متباينة، مما يثير جدلاً بين العلماء حول سرعة تمدد الكون. تتعلم الشبكة العصبية الجديدة KLT-Net مباشرة من بيانات 1701 توهج، وتساعد في تسوية التناقضات دون الاعتماد على نظريات جاهزة.",
+      "text": "تخيل غرفة مظلمة ومصباحاً. أنت تعلم أن قدرته الحقيقية 100 واط، لكنه يبدو خافتاً: إذن هو بعيد. كلما كان خافتاً أكثر، كان أبعد. يستخدم علماء الفلك حيلة مماثلة: يراقبون انفجارات خاصة — [tag:supernova]مستعرات عظمى[/tag] — تكون شدة سطوعها الحقيقية متساوية تقريباً. وكأن الكون نفسه قد وزع مصابيح منارات. بهذه الطريقة اكتشف [scientist:Adam Riess]آدم ريس[/scientist] وزملاؤه في تسعينيات القرن الماضي أن الكون يتوسع بسرعة متزايدة.\n\nلوقت طويل، ساد الاعتقاد بأن [tag:expansion_of_the_universe]التوسع[/tag] يسير بسرعة ثابتة — تُسمى [law:hubbles_law]ثابت هابل[/law] تكريماً لـ [scientist:Edwin Hubble]إدوين هابل[/scientist] (رغم أن أول من طرح الفكرة هو [scientist:Georges Lemaître]جورج لوميتر[/scientist]). لكن القياسات من [tag:supernova]المستعرات العظمى[/tag] تعطي رقماً، بينما تعطي [tag:cosmic_microwave_background]الخلفية الكونية الميكروية[/tag] القديمة رقماً آخر. قد يشير هذا الاختلاف إلى خصائص جديدة لـ [tag:dark_energy]الطاقة المظلمة[/tag] أو إلى ثغرات في النظرية. لتجاوز الجدل، أنشأ العلماء شبكة عصبية KLT-Net: تنظر إلى [tag:redshift]الانزياح الأحمر[/tag] للضوء (احمراره بسبب تمدد الفضاء) وتستنتج بنفسها المسافة الموافقة. ثلاثة «أدمغة» للشبكة — واحد يحفظ التسلسلات، وآخر يجد الأنماط الرئيسية، وثالث يلم بالصورة العامة — تتعلم دون صيغ جاهزة.\n\n[callout]في أساس هذه الشبكة تكمن منحنيات B-spline — وهي نفس المنحنيات الانسيابية المسؤولة عن الانحناءات في أفلام الرسوم المتحركة الحاسوبية.[/callout]\n\nالنتيجة: [law:hubbles_law]ثابت هابل[/law] أصبح حوالي 69.6 كم/ث لكل ميغا فرسخ — وهي تقريباً السرعة التي يبتعد بها منزلان تفصل بينهما مليون سنة ضوئية عن بعضهما كل ثانية. هذه القيمة أقرب قليلاً إلى بيانات [tag:cosmic_microwave_background]الخلفية الكونية الميكروية[/tag]، مما يخفف التناقض. أهمية هذا النهج أنه لا يُلائم الأرقام مع افتراضات جامدة، بل يبحث بصدق عن العلاقة مباشرة. عندما تمطرنا التلسكوبات الجديدة بصور دقيقة، ستساعد شبكات كهذه في اصطياد إشارات غامضة لـ [tag:dark_energy]الطاقة المظلمة[/tag] — سبب التسارع المستمر في هروب المجرات.",
+      "fun_fact": "تستخدم الشبكة منحنيات B-spline — وهي نفس المنحنيات الرياضية التي ترسم الخطوط الانسيابية في الرسوم المتحركة الحاسوبية. وفي الماضي، كان [scientist:Edwin Hubble]إدوين هابل[/scientist] يستنتج توسع الكون بالنظر إلى الصفائح الفوتوغرافية!",
+      "scifi": "فكرة برنامج يعيد بناء تاريخ الكون بنفسه تذكرنا بـ «موسوعة المجرة» من روايات إسحاق عظيموف «المؤسسة»: حيث كان الرياضيون يتنبؤون بالمستقبل بتحليل أكوام من البيانات دون معرفة كل الآليات.",
+      "formulas": [],
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    }
+  },
+  "advanced": {
+    "ru": {
+      "title": "Нейросетевой скачок: KLT-Net переосмысливает космическую лестницу расстояний",
+      "oneliner": "Гибридная нейросеть на основе KAN, LSTM и Transformer непараметрически восстанавливает шкалу расстояний по сверхновым типа Ia, уточняя постоянную Хаббла и ставя под вопрос напряжение в космологии.",
+      "description": "Используя данные Pantheon+ о 1701 сверхновой типа Ia, новая архитектура KLT-Net объединяет сети Колмогорова–Арнольда, долгую краткосрочную память и механизмы внимания для модельно-независимого восстановления модуля расстояния. Метод наиболее частого значения (MFV) оценивает абсолютную звёздную величину сверхновых, а байесовский вывод в рамках плоской ΛCDM-модели даёт постоянную Хаббла H₀ = 69.58⁺⁰.⁴⁸₋₀.₄₈ км/с/Мпк и плотность материи Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀₃₆. Результаты демонстрируют высокую стабильность обучения и снижают систематические смещения, открывая путь к анализу будущих массивных обзоров неба.",
+      "context": "Современная космология столкнулась с кризисом: локальные измерения [law:hubbles_law]постоянной Хаббла[/law] по [tag:supernova]сверхновым[/tag] и цефеидам дают около 73 км/с/Мпк, тогда как глобальные ограничения из [tag:cosmic_microwave_background]реликтового излучения[/tag] в рамках [tag:standard_model]стандартной ΛCDM-модели[/tag] указывают на 67 км/с/Мпк. Это расхождение в ~5σ, известное как «напряжённость Хаббла», может указывать на новую физику, систематические ошибки или неучтённые эффекты в построении [tag:expansion_of_the_universe]космической лестницы расстояний[/tag]. Чтобы исключить зависимость от моделей, исследователи всё чаще обращаются к методам [tag:numerical_simulation]глубокого обучения[/tag], способным улавливать сложные нелинейные распределения в данных [tag:photometry]фотометрии[/tag] и [tag:spectroscopy]спектроскопии[/tag] [tag:supernova]сверхновых типа Ia[/tag] — стандартных свечей, видимых на огромных [tag:redshift]красных смещениях[/tag].",
+      "methods": "Исследователи построили гибридную нейросеть KLT-Net, вдохновлённую теоремой Колмогорова–Арнольда, и обучили её на данных Pantheon+ (1701 кривая блеска) без привязки к конкретной космологической модели. Архитектура объединяет три компонента: [scientist:Edwin Hubble]LSTM-слои[/scientist] для захвата локальных временных зависимостей в рядах наблюдаемых величин; [tag:numerical_simulation]KAN-слои[/tag] с обучаемыми B-сплайнами, которые эффективно аппроксимируют многомерные нелинейности при малом числе параметров; и [tag:numerical_simulation]Transformer-кодировщик[/tag] с механизмом самовнимания для глобального контекстного моделирования всей истории расширения. На выходе сеть предсказывает модуль расстояния µ(z) по входному [tag:redshift]красному смещению[/tag]. Для оценки абсолютной звёздной величины [tag:supernova]сверхновых[/tag] M_B применили робастный метод наиболее частого значения (MFV) с бутстреп-ошибками. Космологические параметры [law:hubbles_law]H₀[/law] и Ωₘ выводили байесовским МСМС-сэмплированием в предположении плоской ΛCDM-модели с использованием [law:friedmann_equations]уравнений Фридмана[/law]. Устойчивость результатов проверяли через матрицу Гессе и абляционные эксперименты с отключением отдельных компонент.",
+      "results": "Абляционное тестирование на десяти случайных инициализациях показало, что полная KLT-Net достигает наименьшей дисперсии среднеквадратичной ошибки (σ_MSE = 0.559×10⁻³), что критически важно для подавления случайных флуктуаций восстановленного µ(z) и, как следствие, для стабильности оценок [law:hubbles_law]постоянной Хаббла[/law]. Хотя вариант без LSTM (KT) дал чуть лучшее среднее MSE (0.016089), KLT-Net продемонстрировал наивысшую робастность к случайному начальному весу. Итоговые метрики полной модели: MSE = 0.015727, RMSE = 0.125409, MAE = 0.098847. С помощью MFV получено M_B = –19.3772⁺⁰.⁰²⁴⁷₋₀.₀₁₂₂ (1σ). Байесовский анализ дал H₀ = 69.576⁺⁰.⁴⁸³₋₀.₄₈₂ км/с/Мпк и Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀₃₆, что согласуется с оценками через минимизацию χ² и матрицу Гессе (68.718±0.352 км/с/Мпк для исходных данных Pantheon). Расхождение в Ωₘ между прямыми данными и предсказаниями сети (0.349 против 0.301) объясняется сглаживанием высокоширотных особенностей нейросетью.",
+      "implications": "Работа демонстрирует, что интеграция [tag:numerical_simulation]KAN-блоков[/tag] с адаптивными сплайнами повышает интерпретируемость и эффективность нейросетей в задачах [tag:expansion_of_the_universe]космологического вывода[/tag]. В отличие от чисто LSTM-архитектур, KLT-Net значительно гасит нестабильность тренировки, снижая риск артефактов при байесовском сэмплировании параметров [tag:dark_energy]тёмной энергии[/tag] и [tag:dark_matter]тёмной материи[/tag]. Такой подход открывает возможность независимой перекрёстной проверки [tag:standard_model]стандартной космологической модели[/tag] и смягчения напряжённости [law:hubbles_law]постоянной Хаббла[/law] за счёт более надёжного учёта систематик.",
+      "future_development": "Направление естественным образом эволюционирует в сторону «физико-информированных» нейросетей (Physics-Informed Neural Networks), где в архитектуру вшиваются [law:friedmann_equations]динамические уравнения Фридмана[/law] или принципы эволюции светимости. Уже предложены гибридные схемы, объединяющие символьную регрессию с соблюдением размерностей и большими языковыми моделями для автоматического вывода уравнений состояния [tag:dark_energy]тёмной энергии[/tag] или модифицированной гравитации. Это позволит минимизировать априорные предположения и приблизиться к полному извлечению физических законов из данных.",
+      "impact_on": "Метод непосредственно повлияет на обработку грядущих массивных фотометрических и спектроскопических обзоров (LSST, Euclid, [tag:cosmic_microwave_background]Roman[/tag]), где требуются устойчивые к шумам и пропускам методы восстановления расстояний. Кроме того, он найдёт применение в астрофизике звёзд и галактик для предсказания параметров по кривым блеска и спектрам.",
+      "next_steps": "Валидация KLT-Net на симулированных данных с реалистичными систематиками и объединение с методами переноса обучения для адаптации к новым инструментам. Особый интерес представляет расширение архитектуры на анизотропные космологии и совместный анализ [tag:supernova]сверхновых[/tag], [tag:standard_model]барионных акустических осцилляций[/tag] и [tag:big_bang]первичного нуклеосинтеза[/tag].",
+      "key_problems_connection": "Статья напрямую адресует «напряжённость Хаббла» — одну из острейших проблем современной физики, предлагая модельно-независимый путь восстановления лестницы расстояний и оценки [law:hubbles_law]H₀[/law]. Кроме того, она затрагивает вопрос природы [tag:dark_energy]тёмной энергии[/tag] и возможной неполноты [law:friedmann_equations]стандартной космологической модели[/law].",
+      "fun_fact": "Сеть использует B-сплайны — те же математические конструкции, что применяются в компьютерной графике и анимации для плавных кривых. А ведь когда-то [scientist:Edwin Hubble]Эдвин Хаббл[/scientist] выводил расширение Вселенной на глаз по фотопластинкам!",
+      "scifi": "Идея нейросети, самостоятельно восстанавливающей космическую историю, перекликается с «Энциклопедией Галактика» из цикла Айзека Азимова «Основание»: там математики предсказывали будущее цивилизаций, анализируя массивы данных без знания детальных механизмов.",
+      "formulas": [
+        {
+          "description": "Модуль расстояния в астрономии",
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "Связь наблюдаемой звёздной величины m, абсолютной M и фотометрического расстояния D_L (расстояние по светимости)."
+        },
+        {
+          "description": "Параметр Хаббла в плоской ΛCDM",
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "Эволюция темпа расширения с красным смещением z для вселенной, заполненной материей и космологической постоянной."
+        }
+      ],
+      "key_numbers": {
+        "постоянная Хаббла H₀": "69.576 км/с/Мпк",
+        "плотность материи Ωₘ": "0.301",
+        "абсолютная величина сверхновых M_B": "–19.38 mag",
+        "среднеквадратичная ошибка KLT-Net (MSE)": "0.0157",
+        "количество сверхновых в выборке": "1701"
+      },
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "en": {
+      "title": "Neural Network Leap: KLT-Net Rethinks the Cosmic Distance Ladder",
+      "oneliner": "A hybrid neural network combining KAN, LSTM, and Transformer non-parametrically reconstructs the distance scale from Type Ia supernovae, refining the Hubble constant and challenging cosmological tension.",
+      "description": "Using Pantheon+ data on 1701 Type Ia supernovae, the novel KLT-Net architecture merges Kolmogorov-Arnold networks, Long Short-Term Memory, and attention mechanisms for model-independent reconstruction of the distance modulus. The Most Frequent Value (MFV) method estimates the absolute magnitude of supernovae, while Bayesian inference within a flat ΛCDM framework yields a Hubble constant H₀ = 69.58⁺⁰.⁴⁸₋₀.₄₈ km/s/Mpc and matter density Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀³₆. Results show high training stability and reduce systematic biases, paving the way for analysis of future massive sky surveys.",
+      "context": "Modern cosmology faces a crisis: local measurements of [law:hubbles_law]the Hubble constant[/law] using [tag:supernova]supernovae[/tag] and Cepheids give about 73 km/s/Mpc, while global constraints from the [tag:cosmic_microwave_background]cosmic microwave background[/tag] within the [tag:standard_model]standard ΛCDM model[/tag] point to 67 km/s/Mpc. This ~5σ discrepancy, known as the 'Hubble tension,' may hint at new physics, systematic errors, or unaccounted effects in constructing the [tag:expansion_of_the_universe]cosmic distance ladder[/tag]. To bypass model dependence, researchers increasingly turn to [tag:numerical_simulation]deep learning[/tag] methods capable of capturing complex nonlinear distributions in [tag:photometry]photometric[/tag] and [tag:spectroscopy]spectroscopic[/tag] data of [tag:supernova]Type Ia supernovae[/tag] — standard candles visible at enormous [tag:redshift]redshifts[/tag].",
+      "methods": "The researchers built a hybrid neural network, KLT-Net, inspired by the Kolmogorov-Arnold theorem, and trained it on Pantheon+ data (1701 light curves) without tying it to a specific cosmological model. The architecture combines three components: [scientist:Edwin Hubble]LSTM layers[/scientist] to capture local temporal dependencies in the sequences of observed magnitudes; [tag:numerical_simulation]KAN layers[/tag] with learnable B-splines that efficiently approximate multidimensional nonlinearities with few parameters; and a [tag:numerical_simulation]Transformer encoder[/tag] with self-attention for global context modeling of the entire expansion history. The network outputs the distance modulus µ(z) given an input [tag:redshift]redshift[/tag]. To estimate the absolute magnitude [tag:supernova]M_B[/tag] of supernovae, they used the robust Most Frequent Value (MFV) method with bootstrap errors. Cosmological parameters [law:hubbles_law]H₀[/law] and Ωₘ were derived via Bayesian MCMC sampling assuming a flat ΛCDM model with the [law:friedmann_equations]Friedmann equations[/law]. Robustness was checked through the Hessian matrix and ablation experiments with individual components turned off.",
+      "results": "Ablation testing over ten random initializations showed that the full KLT-Net achieves the lowest variance in mean squared error (σ_MSE = 0.559×10⁻³), which is critical for suppressing random fluctuations in the reconstructed µ(z) and, consequently, for the stability of [law:hubbles_law]Hubble constant[/law] estimates. Although the variant without LSTM (KT) gave a slightly better average MSE (0.016089), KLT-Net demonstrated the highest robustness to random initial weights. Final metrics of the full model: MSE = 0.015727, RMSE = 0.125409, MAE = 0.098847. Using MFV, M_B = –19.3772⁺⁰.⁰²⁴⁷₋₀.₀₁₂₂ (1σ). Bayesian analysis yielded H₀ = 69.576⁺⁰.⁴⁸³₋₀.₄₈₂ km/s/Mpc and Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀³₆, consistent with estimates via χ² minimization and Hessian matrix (68.718±0.352 km/s/Mpc for the original Pantheon data). The discrepancy in Ωₘ between direct data and network predictions (0.349 vs. 0.301) is explained by the smoothing of high-redshift features by the neural network.",
+      "implications": "The work demonstrates that integrating [tag:numerical_simulation]KAN blocks[/tag] with adaptive splines enhances the interpretability and efficiency of neural networks in [tag:expansion_of_the_universe]cosmological inference[/tag] tasks. Unlike purely LSTM architectures, KLT-Net significantly dampens training instability, reducing the risk of artifacts when Bayesian sampling parameters of [tag:dark_energy]dark energy[/tag] and [tag:dark_matter]dark matter[/tag]. This approach enables independent cross-checking of the [tag:standard_model]standard cosmological model[/tag] and mitigating the [law:hubbles_law]Hubble constant[/law] tension through more reliable treatment of systematics.",
+      "future_development": "The direction naturally evolves toward 'physics-informed' neural networks, where [law:friedmann_equations]dynamic Friedmann equations[/law] or luminosity evolution principles are embedded into the architecture. Hybrid schemes are already proposed, combining symbolic regression with dimensional consistency and large language models to automatically derive equations of state for [tag:dark_energy]dark energy[/tag] or modified gravity. This will minimize prior assumptions and move closer to fully extracting physical laws from data.",
+      "impact_on": "The method will directly impact the processing of upcoming massive photometric and spectroscopic surveys (LSST, Euclid, [tag:cosmic_microwave_background]Roman[/tag]), where noise- and gap-resistant distance recovery methods are needed. Moreover, it will find use in stellar and galactic astrophysics for predicting parameters from light curves and spectra.",
+      "next_steps": "Validating KLT-Net on simulated data with realistic systematics and combining it with transfer learning methods to adapt to new instruments. Of particular interest is extending the architecture to anisotropic cosmologies and joint analysis of [tag:supernova]supernovae[/tag], [tag:standard_model]baryon acoustic oscillations[/tag], and [tag:big_bang]Big Bang nucleosynthesis[/tag].",
+      "key_problems_connection": "The paper directly addresses the 'Hubble tension' — one of the most acute problems in modern physics — by offering a model-independent way to reconstruct the distance ladder and estimate [law:hubbles_law]H₀[/law]. It also touches on the nature of [tag:dark_energy]dark energy[/tag] and the possible incompleteness of the [law:friedmann_equations]standard cosmological model[/law].",
+      "fun_fact": "The network uses B-splines — the same mathematical constructs employed in computer graphics and animation for smooth curves. And once [scientist:Edwin Hubble]Edwin Hubble[/scientist] deduced the expansion of the Universe by eye from photographic plates!",
+      "scifi": "The idea of a neural network autonomously reconstructing cosmic history echoes the 'Encyclopedia Galactica' from Isaac Asimov's Foundation series: there, mathematicians predicted the future of civilizations by analyzing massive data sets without knowing detailed mechanisms.",
+      "formulas": [
+        {
+          "description": "Distance modulus in astronomy",
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "Relationship between apparent magnitude m, absolute M, and luminosity distance D_L."
+        },
+        {
+          "description": "Hubble parameter in flat ΛCDM",
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "Evolution of the expansion rate with redshift z for a universe filled with matter and a cosmological constant."
+        }
+      ],
+      "key_numbers": {
+        "Hubble constant H₀": "69.576 km/s/Mpc",
+        "matter density Ωₘ": "0.301",
+        "absolute magnitude of supernovae M_B": "–19.38 mag",
+        "mean squared error of KLT-Net (MSE)": "0.0157",
+        "number of supernovae in sample": "1701"
+      },
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "es": {
+      "title": "Salto neuronal: KLT-Net replantea la escalera de distancias cósmicas",
+      "oneliner": "Una red neuronal híbrida basada en KAN, LSTM y Transformer reconstruye de forma no paramétrica la escala de distancias a partir de supernovas tipo Ia, refinando la constante de Hubble y cuestionando la tensión en cosmología.",
+      "description": "Utilizando los datos de Pantheon+ de 1701 supernovas tipo Ia, la nueva arquitectura KLT-Net combina redes de Kolmogorov-Arnold, memoria a largo corto plazo y mecanismos de atención para una reconstrucción independiente del modelo del módulo de distancia. El método del valor más frecuente (MFV) estima la magnitud absoluta de las supernovas, y la inferencia bayesiana bajo un modelo ΛCDM plano arroja una constante de Hubble H₀ = 69.58⁺⁰.⁴⁸₋₀.₄₈ km/s/Mpc y una densidad de materia Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀₃₆. Los resultados muestran una alta estabilidad en el entrenamiento y reducen los sesgos sistemáticos, abriendo camino al análisis de futuros grandes sondeos del cielo.",
+      "context": "La cosmología moderna enfrenta una crisis: las mediciones locales de la [law:hubbles_law]constante de Hubble[/law] a partir de [tag:supernova]supernovas[/tag] y cefeidas dan alrededor de 73 km/s/Mpc, mientras que las restricciones globales del [tag:cosmic_microwave_background]fondo cósmico de microondas[/tag] en el marco del [tag:standard_model]modelo estándar ΛCDM[/tag] apuntan a 67 km/s/Mpc. Esta discrepancia de ~5σ, conocida como la «tensión de Hubble», podría indicar nueva física, errores sistemáticos o efectos no considerados en la construcción de la [tag:expansion_of_the_universe]escalera de distancias cósmicas[/tag]. Para eliminar la dependencia de modelos, los investigadores recurren cada vez más a métodos de [tag:numerical_simulation]aprendizaje profundo[/tag], capaces de capturar distribuciones no lineales complejas en los datos de [tag:photometry]fotometría[/tag] y [tag:spectroscopy]espectroscopía[/tag] de [tag:supernova]supernovas tipo Ia[/tag] —velas estándar visibles a enormes [tag:redshift]corrimientos al rojo[/tag].",
+      "methods": "Los investigadores construyeron una red neuronal híbrida KLT-Net, inspirada en el teorema de Kolmogorov-Arnold, y la entrenaron con los datos de Pantheon+ (1701 curvas de luz) sin atarla a un modelo cosmológico específico. La arquitectura combina tres componentes: [scientist:Edwin Hubble]capas LSTM[/scientist] para capturar dependencias temporales locales en las series de magnitudes observadas; [tag:numerical_simulation]capas KAN[/tag] con B-splines entrenables que aproximan eficientemente no linealidades multidimensionales con pocos parámetros; y un [tag:numerical_simulation]codificador Transformer[/tag] con mecanismo de autoatención para modelar el contexto global de toda la historia de expansión. A la salida, la red predice el módulo de distancia µ(z) a partir del [tag:redshift]corrimiento al rojo[/tag] de entrada. Para estimar la magnitud absoluta de las [tag:supernova]supernovas[/tag] M_B se empleó el robusto método del valor más frecuente (MFV) con errores bootstrap. Los parámetros cosmológicos [law:hubbles_law]H₀[/law] y Ωₘ se derivaron mediante muestreo MCMC bayesiano bajo la suposición de un modelo ΛCDM plano, utilizando las [law:friedmann_equations]ecuaciones de Friedmann[/law]. La robustez de los resultados se verificó mediante la matriz hessiana y experimentos de ablación con desconexión de componentes individuales.",
+      "results": "Las pruebas de ablación en diez inicializaciones aleatorias mostraron que la KLT-Net completa alcanza la menor varianza del error cuadrático medio (σ_MSE = 0.559×10⁻³), lo cual es crítico para suprimir las fluctuaciones aleatorias del µ(z) reconstruido y, en consecuencia, para la estabilidad de las estimaciones de la [law:hubbles_law]constante de Hubble[/law]. Aunque la variante sin LSTM (KT) dio un MSE promedio ligeramente mejor (0.016089), KLT-Net demostró la mayor robustez frente a pesos iniciales aleatorios. Las métricas finales del modelo completo: MSE = 0.015727, RMSE = 0.125409, MAE = 0.098847. Con MFV se obtuvo M_B = –19.3772⁺⁰.⁰²⁴⁷₋₀.₀₁₂₂ (1σ). El análisis bayesiano arrojó H₀ = 69.576⁺⁰.⁴⁸³₋₀.₄₈₂ km/s/Mpc y Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.₀₃₆, en concordancia con las estimaciones por minimización de χ² y matriz hessiana (68.718±0.352 km/s/Mpc para los datos originales de Pantheon). La discrepancia en Ωₘ entre los datos directos y las predicciones de la red (0.349 frente a 0.301) se explica por el suavizado de las características de alto corrimiento al rojo por parte de la red neuronal.",
+      "implications": "El trabajo demuestra que la integración de [tag:numerical_simulation]bloques KAN[/tag] con splines adaptativos mejora la interpretabilidad y eficiencia de las redes neuronales en tareas de [tag:expansion_of_the_universe]inferencia cosmológica[/tag]. A diferencia de las arquitecturas puramente LSTM, KLT-Net reduce significativamente la inestabilidad del entrenamiento, disminuyendo el riesgo de artefactos en el muestreo bayesiano de los parámetros de [tag:dark_energy]energía oscura[/tag] y [tag:dark_matter]materia oscura[/tag]. Este enfoque abre la posibilidad de una verificación cruzada independiente del [tag:standard_model]modelo cosmológico estándar[/tag] y de mitigar la tensión en la [law:hubbles_law]constante de Hubble[/law] mediante una contabilización más fiable de los sistemáticos.",
+      "future_development": "La línea de investigación evoluciona de manera natural hacia redes neuronales «informadas por la física» (Physics-Informed Neural Networks), donde se incorporan en la arquitectura las [law:friedmann_equations]ecuaciones dinámicas de Friedmann[/law] o principios de evolución de la luminosidad. Ya se han propuesto esquemas híbridos que combinan regresión simbólica con consistencia dimensional y grandes modelos de lenguaje para derivar automáticamente ecuaciones de estado de la [tag:dark_energy]energía oscura[/tag] o de gravedad modificada. Esto permitirá minimizar las suposiciones a priori y acercarse a la extracción completa de leyes físicas a partir de los datos.",
+      "impact_on": "El método impactará directamente en el procesamiento de los próximos grandes sondeos fotométricos y espectroscópicos (LSST, Euclid, [tag:cosmic_microwave_background]Roman[/tag]), donde se requieren técnicas de reconstrucción de distancias robustas frente al ruido y los datos faltantes. Además, encontrará aplicación en la astrofísica estelar y galáctica para predecir parámetros a partir de curvas de luz y espectros.",
+      "next_steps": "Validación de KLT-Net en datos simulados con sistemáticos realistas y combinación con métodos de transferencia de aprendizaje para adaptarse a nuevos instrumentos. Resulta de especial interés la extensión de la arquitectura a cosmologías anisótropas y el análisis conjunto de [tag:supernova]supernovas[/tag], [tag:standard_model]oscilaciones acústicas de bariones[/tag] y [tag:big_bang]nucleosíntesis primordial[/tag].",
+      "key_problems_connection": "El artículo aborda directamente la «tensión de Hubble» —uno de los problemas más acuciantes de la física moderna— proponiendo una vía independiente del modelo para reconstruir la escalera de distancias y estimar [law:hubbles_law]H₀[/law]. Además, toca la cuestión de la naturaleza de la [tag:dark_energy]energía oscura[/tag] y la posible incompletitud del [law:friedmann_equations]modelo cosmológico estándar[/law].",
+      "fun_fact": "La red utiliza B-splines, las mismas construcciones matemáticas que se emplean en gráficos por computadora y animación para curvas suaves. ¡Y pensar que [scientist:Edwin Hubble]Edwin Hubble[/scientist] dedujo la expansión del universo a ojo a partir de placas fotográficas!",
+      "scifi": "La idea de una red neuronal que reconstruye autónomamente la historia cósmica resuena con la 'Enciclopedia Galáctica' del ciclo de la Fundación de Isaac Asimov: allí, los matemáticos predecían el futuro de las civilizaciones analizando ingentes cantidades de datos sin conocer los mecanismos detallados.",
+      "formulas": [
+        {
+          "description": "Módulo de distancia en astronomía",
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "Relación entre la magnitud aparente m, la magnitud absoluta M y la distancia fotométrica D_L (distancia de luminosidad)."
+        },
+        {
+          "description": "Parámetro de Hubble en ΛCDM plano",
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "Evolución de la tasa de expansión con el corrimiento al rojo z para un universo compuesto de materia y constante cosmológica."
+        }
+      ],
+      "key_numbers": {
+        "constante de Hubble H₀": "69.576 km/s/Mpc",
+        "densidad de materia Ωₘ": "0.301",
+        "magnitud absoluta de supernovas M_B": "–19.38 mag",
+        "error cuadrático medio de KLT-Net (MSE)": "0.0157",
+        "número de supernovas en la muestra": "1701"
+      },
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    },
+    "ar": {
+      "title": "قفزة الشبكات العصبية: KLT-Net تعيد تعريف سلم المسافات الكوني",
+      "oneliner": "شبكة عصبية هجينة تعتمد على KAN و LSTM و Transformer تعيد بناء سلم المسافات من المستعرات العظمى من النوع Ia بطريقة غير معلمية، مما يُحسِّن دقة ثابت هابل ويثير تساؤلات حول التوتر في علم الكونيات.",
+      "description": "باستخدام بيانات Pantheon+ التي تضم 1701 مستعر أعظم من النوع Ia، تجمع بنية KLT-Net الجديدة بين شبكات كولموغوروف-أرنولد والذاكرة الطويلة قصيرة المدى وآليات الانتباه لإعادة بناء معامل المسافة بشكل مستقل عن النموذج. تُقدِّر طريقة القيمة الأكثر تكرارًا (MFV) القدر المطلق للمستعرات العظمى، بينما يُعطي الاستدلال بايزي في إطار نموذج ΛCDM المسطح ثابت هابل H₀ = 69.58⁺⁰.⁴⁸₋₀.₄₈ كم/ث/ميغا فرسخ وكثافة المادة Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.⁰³⁶. تُظهر النتائج استقرارًا عاليًا في التدريب وتُقلل من الانحيازات المنهجية، مما يفتح الطريق لتحليل المسوحات السماوية الضخمة المستقبلية.",
+      "context": "تواجه الكوسمولوجيا الحديثة أزمة: القياسات المحلية لـ [law:hubbles_law]ثابت هابل[/law] باستخدام [tag:supernova]المستعرات العظمى[/tag] والمتغيرات القيفاوية تعطي حوالي 73 كم/ث/ميغا فرسخ، بينما تشير القيود الكونية من [tag:cosmic_microwave_background]إشعاع الخلفية الكونية الميكروي[/tag] في إطار [tag:standard_model]نموذج ΛCDM القياسي[/tag] إلى 67 كم/ث/ميغا فرسخ. هذا الفارق الذي يبلغ حوالي 5σ، والمعروف بـ «توتر هابل»، قد يشير إلى فيزياء جديدة، أو أخطاء منهجية، أو تأثيرات غير محسوبة في بناء [tag:expansion_of_the_universe]سلم المسافات الكوني[/tag]. لتجنب الاعتماد على النماذج، يتجه الباحثون بشكل متزايد إلى أساليب [tag:numerical_simulation]التعلم العميق[/tag]، القادرة على التقاط التوزيعات اللاخطية المعقدة في بيانات [tag:photometry]القياس الضوئي[/tag] و[tag:spectroscopy]التحليل الطيفي[/tag] لـ [tag:supernova]المستعرات العظمى من النوع Ia[/tag] — الشموع القياسية التي تُرى عند [tag:redshift]انزياحات حمراء[/tag] هائلة.",
+      "methods": "قام الباحثون ببناء شبكة عصبية هجينة KLT-Net مستوحاة من مبرهنة كولموغوروف-أرنولد، ودربوها على بيانات Pantheon+ (1701 منحنى ضوئي) دون التقيد بنموذج كوني محدد. تجمع البنية ثلاثة مكونات: [scientist:Edwin Hubble]طبقات LSTM[/scientist] لالتقاط التبعيات الزمنية المحلية في سلاسل القيم المرصودة؛ [tag:numerical_simulation]طبقات KAN[/tag] ذات شرائح B قابلة للتعلم، والتي تقارب بفعالية اللاخطيات متعددة الأبعاد بعدد قليل من الوسائط؛ و[tag:numerical_simulation]مُشفِّر Transformer[/tag] بآلية انتباه ذاتي للنمذجة السياقية الشاملة لتاريخ التوسع بأكمله. عند المخرج، تتنبأ الشبكة بمعامل المسافة µ(z) من [tag:redshift]الانزياح الأحمر[/tag] المُدخل. لتقدير القدر المطلق لـ [tag:supernova]المستعرات العظمى[/tag] M_B، استُخدمت طريقة القيمة الأكثر تكرارًا (MFV) القوية مع أخطاء بوتستراب. تم استنتاج المعلمتين الكونيتين [law:hubbles_law]H₀[/law] و Ωₘ عبر معاينة بايزية بطريقة مونت كارلو بسلسلة ماركوف (MCMC) بافتراض نموذج ΛCDM المسطح وباستخدام [law:friedmann_equations]معادلات فريدمان[/law]. تم التحقق من استقرار النتائج من خلال مصفوفة هيس وتجارب الاجتثاث بتعطيل المكونات الفردية.",
+      "results": "أظهر اختبار الاجتثاث على عشر تهيئات عشوائية أن شبكة KLT-Net الكاملة تحقق أقل تباين لمتوسط مربع الخطأ (σ_MSE = 0.559×10⁻³)، وهو أمر بالغ الأهمية لقمع التقلبات العشوائية في µ(z) المُعاد بناؤه، وبالتالي لاستقرار تقديرات [law:hubbles_law]ثابت هابل[/law]. على الرغم من أن النسخة بدون LSTM (KT) أعطت متوسط MSE أفضل قليلاً (0.016089)، إلا أن KLT-Net أظهرت أعلى متانة تجاه الأوزان الابتدائية العشوائية. المقاييس النهائية للنموذج الكامل: MSE = 0.015727، RMSE = 0.125409، MAE = 0.098847. باستخدام MFV، تم الحصول على M_B = –19.3772⁺⁰.⁰²⁴⁷₋₀.₀₁₂₂ (1σ). أعطى التحليل بايزي H₀ = 69.576⁺⁰.⁴⁸³₋₀.₄₈₂ كم/ث/ميغا فرسخ و Ωₘ = 0.301⁺⁰.⁰³⁹₋₀.⁰³₆، وهو ما يتوافق مع التقديرات عبر تصغير χ² ومصفوفة هيس (68.718±0.352 كم/ث/ميغا فرسخ لبيانات Pantheon الأصلية). يُعزى الفرق في Ωₘ بين البيانات المباشرة وتنبؤات الشبكة (0.349 مقابل 0.301) إلى تجانس السمات عالية التردد بواسطة الشبكة العصبية.",
+      "implications": "يُظهر العمل أن دمج [tag:numerical_simulation]كتل KAN[/tag] مع الشرائح التكيفية يزيد من قابلية تفسير وكفاءة الشبكات العصبية في مهام [tag:expansion_of_the_universe]الاستدلال الكوني[/tag]. على عكس البنى المعتمدة فقط على LSTM، تخمد KLT-Net بشكل كبير عدم استقرار التدريب، مما يقلل من خطر التشوهات أثناء المعاينة بايزية لوسائط [tag:dark_energy]الطاقة المظلمة[/tag] و[tag:dark_matter]المادة المظلمة[/tag]. يفتح هذا النهج إمكانية التحقق المتبادل المستقل عن [tag:standard_model]النموذج الكوني القياسي[/tag] وتخفيف توتر [law:hubbles_law]ثابت هابل[/law] من خلال مراعاة أكثر موثوقية للتأثيرات المنهجية.",
+      "future_development": "يتطور هذا الاتجاه بشكل طبيعي نحو «الشبكات العصبية المُستنيرة بالفيزياء» (Physics-Informed Neural Networks)، حيث تُدمج في البنية [law:friedmann_equations]معادلات فريدمان الديناميكية[/law] أو مبادئ تطور الإضاءة. طُرحت بالفعل مخططات هجينة تجمع بين الانحدار الرمزي مع مراعاة الأبعاد ونماذج اللغة الكبيرة لاستنتاج معادلات حالة [tag:dark_energy]الطاقة المظلمة[/tag] أو الجاذبية المعدلة تلقائيًا. سيسمح ذلك بتقليل الافتراضات الأولية والاقتراب من استخلاص القوانين الفيزيائية الكاملة من البيانات.",
+      "impact_on": "سيؤثر هذا الأسلوب مباشرة على معالجة المسوحات الضوئية والطيفية الضخمة القادمة (LSST، Euclid، [tag:cosmic_microwave_background]Roman[/tag])، حيث تكون هناك حاجة إلى طرق لاستعادة المسافات مقاومة للضوضاء والفجوات. علاوة على ذلك، سيجد تطبيقًا في الفيزياء الفلكية للنجوم والمجرات للتنبؤ بالوسائط من المنحنيات الضوئية والأطياف.",
+      "next_steps": "التحقق من صحة KLT-Net على بيانات محاكاة ذات تأثيرات منهجية واقعية، ودمجها مع أساليب نقل التعلم للتكيف مع أدوات جديدة. من المثير للاهتمام بشكل خاص توسيع البنية لتشمل الكوسمولوجيات غير المتناظرة والتحليل المشترك لـ [tag:supernova]المستعرات العظمى[/tag]، و[tag:standard_model]التذبذبات الصوتية للباريونات[/tag]، و[tag:big_bang]التخليق النووي الابتدائي[/tag].",
+      "key_problems_connection": "تتناول المقالة مباشرة «توتر هابل» — أحد أكثر المشكلات إلحاحًا في الفيزياء الحديثة، وتقدم طريقًا مستقلاً عن النماذج لإعادة بناء سلم المسافات وتقدير [law:hubbles_law]H₀[/law]. بالإضافة إلى ذلك، تمس مسألة طبيعة [tag:dark_energy]الطاقة المظلمة[/tag] والنقص المحتمل في [law:friedmann_equations]النموذج الكوني القياسي[/law].",
+      "fun_fact": "تستخدم الشبكة شرائح B — وهي نفس التركيبات الرياضية المستخدمة في الرسوميات الحاسوبية والتحريك للحصول على منحنيات سلسة. وفي وقت ما، كان [scientist:Edwin Hubble]إدوين هابل[/scientist] يستنتج توسع الكون بالعين من اللوحات الفوتوغرافية!",
+      "scifi": "تتناغم فكرة الشبكة العصبية التي تعيد بناء التاريخ الكوني بشكل مستقل مع «موسوعة المجرة» من سلسلة «المؤسسة» لإسحاق عظيموف: حيث تنبأ الرياضيون بمستقبل الحضارات بتحليل كميات هائلة من البيانات دون معرفة الآليات التفصيلية.",
+      "formulas": [
+        {
+          "description": "معامل المسافة في علم الفلك",
+          "latex": "\\mu = m - M = 5 \\log_{10}\\left(\\frac{D_L}{\\text{Мпк}}\\right) + 25",
+          "meaning": "العلاقة بين القدر الظاهري المرصود m والقدر المطلق M ومسافة الضياء D_L (المسافة المُقاسة بالضياء)."
+        },
+        {
+          "description": "وسيط هابل في نموذج ΛCDM المسطح",
+          "latex": "H(z) = H_0 \\sqrt{\\Omega_{m0}(1+z)^3 + (1-\\Omega_{m0})}",
+          "meaning": "تطور معدل التوسع مع الانزياح الأحمر z لكون مملوء بالمادة والثابت الكوني."
+        }
+      ],
+      "key_numbers": {
+        "ثابت هابل H₀": "69.576 كم/ث/ميغا فرسخ",
+        "كثافة المادة Ωₘ": "0.301",
+        "القدر المطلق للمستعرات العظمى M_B": "–19.38 قدر",
+        "متوسط مربع الخطأ لشبكة KLT-Net (MSE)": "0.0157",
+        "عدد المستعرات العظمى في العينة": "1701"
+      },
+      "main_tag": "supernova",
+      "extra_tags": [
+        "expansion_of_the_universe",
+        "redshift",
+        "dark_energy",
+        "dark_matter",
+        "cosmic_microwave_background",
+        "standard_model",
+        "numerical_simulation",
+        "big_bang",
+        "spectroscopy",
+        "photometry"
+      ],
+      "scientists": [
+        "Edwin Hubble",
+        "Georges Lemaître",
+        "Adam Riess"
+      ],
+      "laws": [
+        "hubbles_law",
+        "friedmann_equations",
+        "einstein_field_equations"
+      ]
+    }
+  }
+}
