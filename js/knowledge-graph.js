@@ -4,7 +4,7 @@
     if (!window.createForceGraph) return;
     // Цвет = ТИП узла (тег/закон/учёный), один разнесённый оттенок на тип — чтобы тип читался
     // сразу (юзер-фидбек 2026-07-19). Синхронно с js/mini-graph.js KIND_COLORS.
-    var KIND_COLORS = { tag: '#6C5CE7', law: '#D64545', sci: '#2FA84F', cat: '#C9A227' };
+    var KIND_COLORS = { tag: '#2E8AA0', law: '#C77F3A', sci: '#3E8E5A', cat: '#7C5BD6' };
 
     var BUST = '?_=' + Date.now();  // данные меняются при регенерации — не даём браузеру отдать старое
     function slug(name) { return name.replace(/ /g, '_').replace(/\./g, ''); }

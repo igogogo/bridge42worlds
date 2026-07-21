@@ -23,7 +23,7 @@
     // разными"). Раньше теги/законы красились по .sub (домен/тип-закона), из-за чего hue-
     // диапазоны пересекались (тег-object ≈ закон-«закон», тег-substance ≈ учёный) и тип был
     // неотличим. Теги вдобавок ещё и полые кольца (см. hollow) — двойное отличие.
-    var KIND_COLORS = { tag: '#6C5CE7', law: '#D64545', sci: '#2FA84F', cat: '#C9A227' };
+    var KIND_COLORS = { tag: '#2E8AA0', law: '#C77F3A', sci: '#3E8E5A', cat: '#7C5BD6' };
     function slug(n) { return n.replace(/ /g, '_').replace(/\./g, ''); }
 
     window.__miniDepth = window.__miniDepth || 1;

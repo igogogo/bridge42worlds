@@ -8,7 +8,7 @@
     var tags = (box.getAttribute('data-tags') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     if (!tags.length) return;
     var BUST = '?_=' + Date.now();
-    var TAG_COLOR = '#6C5CE7';  // тег — единый цвет типа (синхронно с mini-graph.js KIND_COLORS)
+    var TAG_COLOR = '#2E8AA0';  // тег — единый цвет типа (синхронно с mini-graph.js KIND_COLORS)
 
     createForceGraph({
         canvas: 'minigraph', resizeKey: '__authorGraphResize',
