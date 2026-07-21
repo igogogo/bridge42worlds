@@ -2699,6 +2699,18 @@ def build_article(a, date_str, inputs, force=False, express=False):
             (article_folder / "api" / "advanced-ru.json").write_text(
                 json.dumps(scipop_adv, ensure_ascii=False, indent=2), encoding="utf-8")
             scipop_adv = validate_tags(scipop_adv, inputs["valid_tags"])
+            # Gap-suggestions: чего модели не хватило в справочниках (missing tags/laws/scientists +
+            # instruments + open_problems) — копим в отдельный файл для ревью/пополнения, из публичного
+            # scipop вырезаем (в data.json это не идёт). Юзер-фидбек 2026-07-21.
+            _sug = scipop_adv.pop("suggested", None)
+            if isinstance(_sug, dict) and any(_sug.values()):
+                try:
+                    rec = {"id": a.get("id", ""), "date": date_str,
+                           "category": a.get("primary_category", ""), "suggested": _sug}
+                    with open("data/gap-suggestions.jsonl", "a", encoding="utf-8") as _gf:
+                        _gf.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                except Exception as _e:
+                    print(f"    ⚠️ gap-suggestions write: {_e}")
             # Simple и Popular зависят ТОЛЬКО от Advanced (не друг от друга) → генерим параллельно.
             with ThreadPoolExecutor(max_workers=2) as ex:
                 fs, fp = ex.submit(generate_simple, scipop_adv), ex.submit(generate_popular, scipop_adv)
