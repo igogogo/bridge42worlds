@@ -1202,134 +1202,6 @@
     "refined": false,
     "raw": {}
   },
-  "boseeinstein_statistics": {
-    "name": "Bose–Einstein statistics",
-    "type": "principle",
-    "description_popular": "If fermions are guests who absolutely refuse to share a seat, then bosons are the life of the party: they happily crowd into the same state. Bose–Einstein statistics describes such sociable particles (photons, helium-4 atoms). At very low temperatures, they can all 'freeze' at once into the lowest energy state — this is called a Bose–Einstein condensate, where many particles behave as one giant wave.",
-    "fun_fact_popular": "The Bose–Einstein condensate was predicted by Einstein in 1925, but it was produced in the laboratory only 70 years later — in 1995, scientists cooled clouds of rubidium atoms to millionths of a degree above absolute zero, and thousands of atoms merged into a single quantum state.",
-    "description_simple": "In 1924, the Indian physicist Satyendra Nath Bose sent Einstein his paper, where he re-derived the blackbody radiation law by treating photons as indistinguishable 'wave-particles'. Einstein translated the article, published it, and developed the idea: any particles with integer spin must obey a similar distribution, and at low temperatures they 'condense' into the zero state. The average number of bosons in a state with energy ε is given by a formula very similar to the fermionic one, but with a minus sign in the denominator, which means bosons do not avoid, but rather 'attract' each other quantum-statistically.",
-    "how_it_works_simple": "Photons in a box: the spectrum of the cosmic microwave background is beautifully described by the Bose distribution. Superfluid helium: at temperatures around 2 K, liquid helium-4 flows without friction due to Bose condensation. Modern experiments with ultracold atoms allow creating 'atom lasers' and studying quantum turbulence. Even in particle physics, bosonic statistics account for lasers and superconductivity (via Cooper pairs, which behave as bosons).",
-    "fun_fact": "Satyendra Nath Bose got the idea during a lecture: he noticed that the derivation of Planck's law was based on semi-classical assumptions and decided to derive it by treating photons as fully quantum objects. Einstein was so impressed that he not only translated the paper from English to German but immediately sent it to press, and then wrote two more papers predicting condensation.",
-    "description": "Bose–Einstein statistics describes the equilibrium distribution of identical bosons (particles with integer spin) over energy levels. The average number of particles in state i: ⟨n_i⟩ = 1 / (e^{(ε_i-μ)/(kT)} - 1), where ε_i is the energy of the state, μ is the chemical potential (for photons and phonons μ = 0), k is Boltzmann's constant, T is temperature. When (ε_i-μ) → 0, the distribution diverges, leading to macroscopic occupation of the ground state — Bose–Einstein condensation.",
-    "history": "In 1924, Satyendra Nath Bose derived Planck's law by assuming photons are identical and indistinguishable, and introduced a new way of counting microstates. Albert Einstein generalized the approach to particles with mass and integer spin, predicting Bose condensation (1925). The condensate was first obtained experimentally in 1995 by Eric Cornell, Carl Wieman (rubidium atoms) and Wolfgang Ketterle (sodium atoms).",
-    "how_it_works": "It is used to describe thermal radiation (blackbody spectrum is a special case), superfluidity of helium-4, Bose–Einstein condensates of dilute gases. Limits: ideal Bose gas without interactions; accounting for interactions requires mean field (Gross–Pitaevskii equation) or more complex methods. At high temperatures, it transitions to the classical Boltzmann distribution, but with a 'bunching' effect.",
-    "key_problems": [
-      "Interactions between bosons in a condensate (e.g., in helium) greatly complicate the theory and require going beyond the ideal gas.",
-      "For systems with long-range interactions or strong coupling, no exact analytical solution exists.",
-      "The statistics do not apply to fermions – one must construct a theory of Bose condensation of Cooper pairs, as in superconductivity."
-    ],
-    "formulas": [
-      {
-        "description": "Bose–Einstein distribution for level occupancy",
-        "latex": "\\langle n_i \\rangle = \\frac{1}{e^{(\\varepsilon_i - \\mu)/(k T)} - 1}",
-        "meaning": "⟨n_i⟩ is the average number of bosons in a state with energy ε_i; μ is the chemical potential (for systems with variable particle number, for photons and phonons μ = 0); k is Boltzmann's constant, k ≈ 1.380649×10⁻²³ J/K; T is absolute temperature."
-      }
-    ],
-    "scientists": [
-      "Satyendra Nath Bose",
-      "Albert Einstein"
-    ],
-    "tags": [
-      "bose_einstein_condensate",
-      "cooper_pair",
-      "higgs_boson",
-      "spin",
-      "standard_model",
-      "superconductivity",
-      "superfluidity"
-    ],
-    "related_laws": [
-      "plancks_law",
-      "boltzmann_distribution"
-    ],
-    "refined": false,
-    "raw": {}
-  },
-  "spectral_theorem": {
-    "name": "Spectral theorem",
-    "type": "theorem",
-    "description_popular": "The spectral theorem is a mathematical way of 'breaking down' a complex object into simple, independent parts. Imagine you have an incomprehensible noise, and you decompose it into a sum of pure sounds of different volumes and frequencies. Similarly, any operator (a special kind of mathematical function) can be represented as a set of its eigenvalues and directions. In quantum mechanics, it is the eigenvalues of an operator that give the possible measurement results of a physical quantity — for example, the energy levels of an electron in an atom.",
-    "fun_fact_popular": "The theorem got its 'spectral' name because its ideas first arose in the study of absorption and emission spectra of light: each color corresponds to its own frequency, and atoms as operators 'output' a discrete set of frequencies — exactly like the eigenvalues of a matrix.",
-    "description_simple": "In the early 20th century, mathematicians (Hilbert, Riesz, von Neumann) generalized a well-known fact from linear algebra: a symmetric matrix can be diagonalized, i.e., represented as a sum of projectors onto its eigenvectors multiplied by eigenvalues. The spectral theorem asserts that the same is true for a much broader class of operators in infinite-dimensional spaces — self-adjoint operators on a Hilbert space. It's as if you could tune a piano so that each key corresponds to a strictly defined note, and when you press any combination, you hear exactly the sum of those notes, without dissonance.",
-    "how_it_works_simple": "Quantum mechanics: the energy operator (Hamiltonian) via the spectral theorem gives the stationary states of an electron in an atom — Balmer series, Lyman series, etc. Any signal can be decomposed into a frequency spectrum (Fourier transform) — this is a special case of the spectral theorem for the shift operator. In data analysis, principal component analysis diagonalizes the covariance matrix, revealing the most important directions of variability.",
-    "fun_fact": "John von Neumann, at just 26 years old, gave a rigorous formulation of the spectral theorem for unbounded operators in 1929, forever changing the face of quantum physics. It is said that he did it almost playfully, between developing game theory and participating in the Manhattan Project. And the spectral theorem itself hides in every computer JPEG compression, since the Fourier transform is its direct consequence!",
-    "description": "The spectral theorem states that every self-adjoint (Hermitian) operator A, acting on a separable Hilbert space H, admits a spectral decomposition: A = ∫_{σ(A)} λ dE(λ), where σ(A) is the spectrum (the set of eigenvalues and the continuous spectrum), and E(λ) is the spectral measure (a projection-valued function). In the finite-dimensional case: A = ∑_i λ_i P_i, where λ_i are eigenvalues, P_i are orthogonal projectors onto the corresponding eigenspaces.",
-    "history": "The origins of the theorem lie in the works of David Hilbert on integral equations (1904–1910). Ernst Schmidt introduced the notion of eigenfunctions. John von Neumann in 1929 gave the modern axiomatic formulation for unbounded operators, grounding the mathematical apparatus of quantum mechanics. In parallel, Stone proved the theorem on unitary representations of groups (1932), closely related to spectral theory.",
-    "how_it_works": "A fundamental tool of quantum mechanics: each observable (energy, momentum, spin) is represented by a self-adjoint operator, and its spectral decomposition gives the possible measurement results and probabilities. In analytic mathematics, it is used to solve partial differential equations (separation of variables), in dynamical systems theory — for stability analysis. Limits: applicable only to normal or self-adjoint operators; for non-normal operators (e.g., in hydrodynamics), one uses the Jordan form or pseudospectra.",
-    "key_problems": [
-      "For non-self-adjoint operators, the spectrum can be extremely unstable to perturbations, leading to phenomena not described by the spectral theorem.",
-      "In quantum field theory, operators are often not properly defined self-adjoint operators, requiring workarounds (renormalization group).",
-      "Computing the spectral measure for specific complex systems (e.g., in chaotic billiards) is an actively developing field."
-    ],
-    "formulas": [
-      {
-        "description": "Spectral decomposition of a finite-dimensional self-adjoint operator",
-        "latex": "A = \\sum_{i=1}^{n} \\lambda_i P_i",
-        "meaning": "A is the self-adjoint operator (matrix); λ_i are real eigenvalues; P_i are orthogonal projectors onto eigenspaces, satisfying P_i P_j = δ_{ij} P_i and ∑_i P_i = I (identity operator)."
-      }
-    ],
-    "scientists": [
-      "David Hilbert",
-      "John von Neumann",
-      "Joseph Fourier"
-    ],
-    "tags": [
-      "banach_space",
-      "eigenvalue",
-      "fourier_series",
-      "functional_analysis",
-      "hilbert_space",
-      "quantum_measurement",
-      "superposition"
-    ],
-    "related_laws": [
-      "schrdinger_equation",
-      "heisenberg_uncertainty_principle"
-    ],
-    "refined": false,
-    "raw": {}
-  },
-  "stokes_theorem": {
-    "name": "Stokes' theorem",
-    "type": "theorem",
-    "description_popular": "Imagine a piece of film stretched over a wire frame. Stokes' theorem says that the fluid motion along this frame equals the sum of all the tiny swirls passing through the film. It's like stirring tea in a cup: the rotation of the spoon inside (curl) is transferred to the liquid, and around the rim of the cup you feel the same motion. This is the connection between what happens on the surface and what's going on at its boundary.",
-    "fun_fact_popular": "If you've ever stirred tea and seen how the tea leaves run in a circle, you've observed Stokes' theorem in action! The harder you stir inside, the faster the motion at the cup walls.",
-    "description_simple": "Stokes' theorem is a bridge between surface integrals and contour integrals. In its classical vector form, it states that the circulation of a vector field along a closed contour equals the flux of its curl through any surface bounded by that contour. It is an elegant generalization of Green's and Gauss's theorems, underlying all modern field physics. Analogy: if you walk along a fence around a garden and measure the wind, the total wind force along the fence equals how many wind eddies flew over the garden.",
-    "how_it_works_simple": "The theorem is actively used in electrodynamics: Ampère's law and Faraday's law are written through it. In hydrodynamics, it helps calculate fluid circulation. In topology, it is used to prove important statements about vector fields (e.g., the fixed point theorem). Even a simple calculation of work done by a force along a closed path is often simplified by reducing it to an integral over the 'bottom' of the path.",
-    "fun_fact": "The history of the name is a real curiosity. Lord Kelvin (William Thomson) communicated this theorem to George Stokes in 1850, who was then the chief examiner at Cambridge. Stokes liked it so much that he immediately included it in the notoriously difficult Smith's Prize. Since then, the theorem bears his name, while Kelvin's role is almost forgotten.",
-    "description": "In its most general form (differential geometry), Stokes' theorem states: for an oriented smooth manifold M with boundary ∂M and a differential form ω, ∫_{∂M} ω = ∫_{M} dω. In vector analysis this means: ∮_{∂S} F·dr = ∬_{S} (∇×F)·dS, i.e., the circulation of the field along a closed contour equals the flux of the curl through the surface bounded by this contour. The theorem unifies special cases of Green's, Gauss-Ostrogradsky, and the Newton-Leibniz formula, showing the deep unity of differentiation and integration.",
-    "history": "William Thomson (Lord Kelvin) formulated the key idea in a letter to George Stokes around 1850. Stokes made the theorem widely known by including it in the Smith's Prize exam in 1854. However, special cases were known earlier: George Green (1828) proved Green's formula, and Mikhail Ostrogradsky (1820s) — the divergence theorem. In the 20th century, Élie Cartan and Henri Poincaré developed the language of differential forms, where Stokes' theorem became the foundation of de Rham cohomology theory and modern topology.",
-    "how_it_works": "Stokes' theorem connects the local behavior of a field (curl, divergence) with its global characteristics (circulation, flux). In practice, it allows converting volume integrals into surface integrals and vice versa, which is critically important in Maxwell's equations, hydrodynamics, thermodynamics of irreversible processes. Limits of applicability: the manifold must be orientable, and the forms sufficiently smooth; for non-smooth boundaries or spaces with singularities, generalizations within distribution theory are required.",
-    "key_problems": [
-      "The need for consistent orientation: the formulation strictly depends on the choice of orientation of the surface and boundary, creating difficulties in non-orientable spaces.",
-      "Generalization to fractal boundaries: the classical theorem requires piecewise smoothness, whereas for fractal objects (e.g., Koch snowflake) integrals may diverge or require new definitions.",
-      "Quantum analogies: in quantum physics on discrete spaces or in non-Archimedean geometry, an analogue of Stokes' theorem still awaits full development."
-    ],
-    "formulas": [
-      {
-        "description": "Classical vector form",
-        "latex": "\\oint_{\\partial S} \\mathbf{F} \\cdot d\\mathbf{r} = \\iint_S (\\nabla \\times \\mathbf{F}) \\cdot d\\mathbf{S}",
-        "meaning": "F is the vector field; ∂S is the oriented boundary of surface S; dr is an infinitesimal curve element; ∇×F is the curl of the field; dS is the directed surface area element (normal vector times element area)."
-      },
-      {
-        "description": "Generalized form in differential forms",
-        "latex": "\\int_{\\partial M} \\omega = \\int_M d\\omega",
-        "meaning": "M is an oriented smooth manifold with boundary ∂M; ω is a differential form of degree k; dω is its exterior differential (form of degree k+1)."
-      }
-    ],
-    "scientists": [],
-    "tags": [
-      "electromagnetism",
-      "integral",
-      "manifold",
-      "topology"
-    ],
-    "related_laws": [
-      "maxwells_equations"
-    ],
-    "refined": false,
-    "raw": {}
-  },
   "compton_effect": {
     "name": "Compton effect",
     "type": "effect",
@@ -5497,5 +5369,192 @@
     ],
     "refined": false,
     "raw": {}
+  },
+  "boseeinstein_statistics": {
+    "name": "Bose–Einstein statistics",
+    "type": "principle",
+    "mini": "Photons are extroverts: they do not avoid each other, but crowd into the same quantum state, like spectators at a concert. Bose–Einstein statistics mathematically describes this 'tendency to company' for particles with integer spin.",
+    "practical_application": "It underlies superconductivity, lasers, and frictionless liquid helium; without it, there would be no MRI and ultra-precise atomic clocks.",
+    "description_popular": "In 1924, the young Indian physicist Satyendra Nath Bose sent Albert Einstein his derivation of Planck's radiation law, treating photons as indistinguishable particles. Einstein immediately saw the universality of the approach and in 1925 generalized it to any massive particles with integer spin. Thus Bose–Einstein statistics was born. Unlike classical physics, where particles can be labeled, in the quantum world identical bosons are fundamentally indistinguishable, and their energy distribution is described by a formula: the average number of particles in a state with a given energy depends on the ratio of the energy difference and chemical potential to the thermal energy kT. Due to the minus sign in the denominator, at low energies an avalanche effect can occur—Bose–Einstein condensation: a macroscopic number of particles accumulates on the lowest energy level.",
+    "fun_fact_popular": "The boson is named after Bose himself, and the term was coined by Paul Dirac. The most famous boson is the photon, but a whole atom, such as rubidium-87, can also be a boson. It was on it that in 1995 the Bose–Einstein condensate—the 'fifth state of matter'—was first obtained.",
+    "description_simple": "The world consists of two types of particles: fermions (with half-integer spin—internal angular momentum) and bosons (with integer spin). Fermions are individualists: only two can fit into the same quantum 'house'. Bosons are collectivists: they like to be in the same state (combination of energy, momentum, and spin). Bose–Einstein statistics is an exact formula that predicts how many bosons will be in each energy state at a given temperature. The more particles are already in that state, the higher the probability that another one will join them.",
+    "how_it_works_simple": "In a laser, photons synchronously copy the same quantum state, creating a powerful narrow beam. In an MRI superconducting magnet, current flows without resistance because electrons bind into Cooper pairs, which behave as bosons, and this 'collective' does not scatter on lattice defects. In superfluid helium, boson atoms upon cooling fill the lowest energy state and move without friction.",
+    "fun_fact": "In a Bose–Einstein condensate, the speed of sound can be just a few millimeters per second, and the condensate behaves as a single giant quantum wave, exhibiting interference—an 'atom laser'.",
+    "description": "Bose–Einstein statistics is a quantum description of an ideal gas of identical particles with integer spin (bosons) in thermodynamic equilibrium. Unlike the Maxwell–Boltzmann distribution (classical limit of high temperatures), it takes into account the indistinguishability of particles and the absence of a prohibition on occupying one quantum state by several bosons. When temperature is lowered or density increased, a phase transition occurs—Bose–Einstein condensation, in which a macroscopic fraction of particles occupies the same lowest energy state, forming a coherent quantum liquid. This transition has no analog in classical physics and is not related to interaction: it is purely statistical. Formally, the average number of particles n_i in state i with energy ε_i is given by n_i = 1/[e^{(ε_i – μ)/k_B T} – 1], where μ is the chemical potential, which for bosons is always less than the minimum energy of the system.",
+    "history": "In 1924, Satyendra Nath Bose derived Planck's formula for thermal radiation by considering photons as indistinguishable quanta and using a new way of counting states (without the assumption of particle independence). The paper was rejected by European journals, and Bose turned to Albert Einstein. Einstein translated it into German and published it, and in 1924–1925 developed a general theory of an ideal Bose gas, predicting condensation at low temperatures. Experimental confirmation came 70 years later: in 1995, Eric Cornell and Carl Wieman cooled rubidium atoms to 170 nanokelvin and observed BEC, and Wolfgang Ketterle soon achieved a sodium condensate. All three received the Nobel Prize in 2001.",
+    "how_it_works": "Bose–Einstein statistics underlies the superfluidity of helium-4, where boson atoms condense and flow without viscosity through microscopic capillaries. In superconductors, electrons, being fermions, bind into Cooper pairs—composite bosons—and obey Bose statistics, which leads to zero electrical resistance below a critical temperature. Lasers generate coherent light thanks to stimulated emission, the probability of which directly follows from the bosonic factor (n_i + 1). Limits of applicability: the gas must be sufficiently dilute and cold so that interactions do not distort the statistics; with strong interactions or in the non-ideal case, perturbation theory breaks down.",
+    "key_problems": [
+      "With strong interatomic interaction, BEC can no longer be described by simple ideal gas statistics; numerical methods (e.g., Monte Carlo) are required.",
+      "Accurate accounting for finite particle number effects in small systems and non-equilibrium condensate dynamics is an open area.",
+      "The nature of high-temperature superconductivity is not yet fully understood; the pairing mechanism may differ from the phonon one, but the Bose statistics of Cooper pairs remains a key element."
+    ],
+    "formulas": [
+      {
+        "description": "Bose–Einstein distribution",
+        "latex": "n_i = \\frac{1}{e^{(\\varepsilon_i - \\mu)/(k_B T)} - 1}",
+        "meaning": "n_i — average number of particles in state i, ε_i — energy of the state, μ — chemical potential (energy of adding one particle), k_B — Boltzmann constant (k_B ≈ 1.380649×10⁻²³ J/K), T — absolute temperature)"
+      }
+    ],
+    "scientists": [
+      "Satyendra Nath Bose",
+      "Albert Einstein"
+    ],
+    "tags": [
+      "bose_einstein_condensate",
+      "cooper_pair",
+      "higgs_boson",
+      "spin",
+      "standard_model",
+      "superconductivity",
+      "superfluidity"
+    ],
+    "related_laws": [
+      "fermidirac_statistics",
+      "spinstatistics_theorem",
+      "de_broglie_wavelength"
+    ],
+    "refined": true,
+    "raw": {
+      "mini": "Photons are the main extroverts of the microcosm: they do not avoid each other but crowd into the same state in droves, like onlookers at a free show. Bose–Einstein statistics describes this 'love of company' of particles with integer spin.",
+      "practical_application": "It underpins superconductivity, lasers, and liquid helium that flows without friction; without it there would be no MRI and ultra-precise atomic clocks.",
+      "description_popular": "In 1924, the young Indian physicist Satyendra Nath Bose sent Albert Einstein his derivation of the Planck radiation law, treating photons as indistinguishable particles. Einstein immediately recognized the universality of the approach and in 1925 generalized it to any massive particles with integer spin. Thus Bose–Einstein statistics was born. Unlike classical physics, where particles can be labeled, in the quantum world identical bosons are fundamentally indistinguishable, and their energy distribution is described by a formula: the average number of particles in a state of a given energy depends on the ratio (of the energy difference and chemical potential) to the thermal energy k_B T. Because of the minus in the denominator, at low energies an 'avalanche' can occur—Bose condensation: a macroscopic number of particles pile up at the bottom of the energy ladder.",
+      "fun_fact_popular": "The boson is named after Bose himself, and the word was established by Paul Dirac. The most famous boson is the photon, but a whole atom, such as rubidium-87, can also be a boson. It was on this that in 1995 they first obtained a Bose–Einstein condensate—the 'fifth state of matter'.",
+      "description_simple": "The world consists of two types of particles: fermions (with half-integer spin, this is their internal rotational moment) and bosons (with integer spin). Fermions are individualists: only two can be in one 'room'. Bosons are collectivists: they like to be together in the same quantum state (a set of properties like energy and momentum). Bose–Einstein statistics is an exact formula that predicts how many bosons will gather in each 'energy nest' at a given temperature (a measure of the average energy of chaotic motion). The more particles already in a given state, the higher the chance that another one will come.",
+      "how_it_works_simple": "In a laser, all photons coherently copy the same template, creating a powerful narrow beam. In an MRI superconducting magnet, current flows without loss because electrons pair up, behaving as bosons, and this 'collective personality' does not scatter on defects. In helium at ultra-low temperatures, bosonic atoms fill the lowest energy state and flow without any resistance.",
+      "fun_fact": "In pure BEC, the speed of sound can be only a few millimeters per second, and the condensate behaves as a single giant quantum wave, showing interference—an 'atom laser'.",
+      "description": "Bose–Einstein statistics is a quantum description of an ideal gas of identical particles with integer spin (bosons) in thermodynamic equilibrium. Unlike the Maxwell–Boltzmann distribution (classical high-temperature limit), it takes into account the indistinguishability of particles and the absence of a prohibition on multiple bosons occupying one quantum state. Formally, it is derived from the grand canonical ensemble as an occupancy distribution: the average number of particles n_i in state i with energy ε_i equals n_i = 1/[e^{(ε_i – μ)/k_B T} – 1], where μ is the chemical potential, which for bosons is always less than the minimum energy of the system. When temperature is lowered or density increased, a phase transition occurs—Bose–Einstein condensation—where a macroscopic fraction of particles occupies the same lowest energy state, forming a coherent quantum liquid. This transition has no analog in classical physics and is not related to interaction: it is purely statistical.",
+      "history": "In 1924, Satyendra Nath Bose derived Planck's formula for thermal radiation by considering photons as indistinguishable quanta and using a new method of counting states (without assuming particle independence). The paper was rejected by European journals, and Bose turned to Albert Einstein. Einstein translated it into German and published it, and in 1924–1925 developed a general theory of the ideal Bose gas, predicting condensation at low temperatures. Experimental confirmation came 70 years later: in 1995, Eric Cornell and Carl Wieman cooled rubidium atoms to 170 nanokelvins and observed BEC, and Wolfgang Ketterle soon achieved a sodium condensate. All three received the Nobel Prize in 2001.",
+      "how_it_works": "Bose–Einstein statistics underlies the superfluidity of helium-4, where bosonic atoms condense and flow without viscosity through microscopic capillaries. In superconductors, electrons, being fermions, form Cooper pairs—composite bosons—and obey Bose statistics, leading to zero electrical resistance below a critical temperature. Lasers generate coherent light thanks to stimulated emission, whose probability directly follows from the bosonic factor (n_i + 1). Limits of applicability: the gas must be sufficiently dilute and cold so that interactions do not distort the statistics; with strong interactions or in the non-ideal case, perturbation theory fails.",
+      "key_problems": [
+        "With strong interatomic interaction, BEC can no longer be described by simple ideal gas statistics; numerical methods (e.g., Monte Carlo) are required.",
+        "The exact accounting of finite particle number effects in small systems and non-equilibrium condensate dynamics is an open area.",
+        "The nature of high-temperature superconductivity is not completely understood; the pairing mechanism may differ from the phonon one, but the Bose statistics of Cooper pairs remains a key element."
+      ]
+    }
+  },
+  "spectral_theorem": {
+    "name": "spectral theorem",
+    "type": "theorem",
+    "mini": "Any correctly posed question about a quantum system breaks down into a set of unambiguous answers, like a chord into pure notes. The spectral theorem allows you to decompose measurement to the ground.",
+    "practical_application": "It is precisely what allows predicting quantum measurement results, building stable search engine algorithms, and compressing images into JPEG.",
+    "description_popular": "Born in the depths of functional analysis through the efforts of David Hilbert and John von Neumann in the 1920s-30s, the spectral theorem became a bridge between algebra and quantum mechanics. It states that any Hermitian operator (named after Charles Hermite), describing an observable quantity, can be diagonalized: represented as a sum (or integral) over its spectral projections, each corresponding to a specific instrument value. If you have a set of color filters, then any beam can be decomposed into pure colors and then reconstructed by mixing them. The spectral theorem does the same in infinite-dimensional spaces, guaranteeing that for any observable there is a 'set of filters'—spectral projectors—allowing the decomposition of a quantum state into components with definite values.",
+    "fun_fact_popular": "Without the spectral theorem, the Schrödinger equation would have remained a mathematical abstraction—it is precisely this that links the electron's wave function to the real spectrum lines we see in a rainbow or in the light of distant stars.",
+    "description_simple": "In quantum mechanics, any property—energy, coordinate, momentum—is described by a mathematical object called an operator (a rule that transforms one function into another). The spectral theorem says: if the operator is 'honest' (self-adjoint, i.e., its action is symmetric), it can be represented as a set of allowed values—the spectrum—and directions—eigenvectors—along which these values are measured. It's like breaking a chord into individual notes: a complex vibration is represented as a sum of simple harmonics. In the quantum world, such a procedure gives the possible instrument readings and the probabilities of obtaining them.",
+    "how_it_works_simple": "MRI works because the energy levels of hydrogen nuclei are eigenvalues of a spin operator, and the spectral theorem guarantees precise separation of signals from different tissues. In JPEG and MP3 compression, the signal is decomposed into a basis; without the mathematical guarantee of completeness and orthogonality provided by the theorem, the decomposition would be unreliable.",
+    "fun_fact": "Von Neumann's original proof uses the concept of a 'direct integral of Hilbert spaces'—a construction that even a century later remains one of the most technically complex tools of mathematical physics.",
+    "description": "The spectral theorem is a central result of functional analysis, generalizing matrix diagonalization. For a bounded self-adjoint operator A on a Hilbert space H, it asserts the existence of a spectral family E(λ)—a projection-valued measure on the real axis—such that A = ∫ λ dE(λ). In quantum mechanics, this means that any observable corresponds to a self-adjoint operator, and its measurement yields one of the spectrum's eigenvalues; immediately after measurement, the system transitions to the corresponding eigenstate (projection postulate). Physical meaning: the wave function, expanded in the operator's eigenfunctions, determines the probability amplitudes of possible measurement outcomes.",
+    "history": "In 1906, David Hilbert introduced the concept of spectrum for integral equations and proved the first versions of the theorem for bounded operators. In the 1920s, John von Neumann generalized it to unbounded self-adjoint operators, creating a rigorous mathematical foundation for quantum mechanics (1932, 'Mathematische Grundlagen der Quantenmechanik'). In parallel, Marshall Stone in 1932 gave a proof for unitary operators. The ideas of spectral decomposition date back to the work of Joseph Fourier (1822) and Henri Poincaré, but the modern form owes to von Neumann and André Weil.",
+    "how_it_works": "Applications span quantum physics, where the eigenvalues of the Hamiltonian determine the energy levels of atoms and molecules; control theory and signal processing (singular value decomposition); quantum chemistry (molecular orbital method). Limitations: the theorem guarantees the existence of spectral decomposition, but finding eigenvectors for complex systems can be computationally infeasible (exponential growth of dimensionality). In quantum field theory, operators are often unbounded, and self-adjointness issues are nontrivial.",
+    "key_problems": [
+      "For operators in state spaces with continuous spectrum, the projection-valued measure becomes more complex: the eigenfunctions are generalized (do not belong to the Hilbert space), requiring rigged spaces.",
+      "Defining eigenstates for non-self-adjoint operators (e.g., describing dissipative systems) goes beyond the standard theorem.",
+      "In quantum gravity, the problem of time: the role of the spectral theorem in the absence of an external classical time remains a subject of discussion."
+    ],
+    "formulas": [
+      {
+        "description": "Spectral decomposition of an observable",
+        "latex": "\\hat{A} = \\sum_n a_n |n\\rangle\\langle n|",
+        "meaning": "Â — operator of the observable, a_n — possible values (eigenvalues), |n⟩ — eigenvectors, ⟨n| — conjugate vector; the sum is taken over all states n (continuous spectrum is replaced by an integral)"
+      }
+    ],
+    "scientists": [
+      "David Hilbert",
+      "John von Neumann"
+    ],
+    "tags": [
+      "banach_space",
+      "eigenvalue",
+      "fourier_series",
+      "functional_analysis",
+      "hilbert_space",
+      "quantum_measurement",
+      "superposition"
+    ],
+    "related_laws": [
+      "born_rule",
+      "superposition_principle",
+      "schrdinger_equation"
+    ],
+    "refined": true,
+    "raw": {
+      "mini": "Any 'proper' quantum question decomposes into a set of unambiguous answers, like a chord into notes. The spectral theorem guarantees that any measurement can be taken apart piece by piece.",
+      "practical_application": "It is precisely this that allows predicting the results of quantum measurements, building stable search engine algorithms, and compressing images into JPEG.",
+      "description_popular": "Born in the depths of functional analysis through the efforts of David Hilbert and John von Neumann in the 1920s–30s, the spectral theorem became a bridge between algebra and quantum mechanics. It states that any Hermitian operator (named after Charles Hermite), describing an observable quantity, can be diagonalized: represented as a sum (or integral) over its spectral projections, each corresponding to a specific value of the measuring device. In lay terms: if you have a box of filters that only let through light of certain colors, you can decompose any beam into colors and then reconstruct it by mixing them back together. The spectral theorem does the same in infinite-dimensional worlds, guaranteeing that a 'filter box' for the energy of an electron in an atom always exists.",
+      "fun_fact_popular": "Without the spectral theorem, the Schrödinger equation would remain a mathematical abstraction—it is precisely this that links the electron's wave function with the real spectral lines we see in a rainbow or in the light of distant stars.",
+      "description_simple": "In quantum mechanics, any property—energy, coordinate, momentum—is described by a mathematical object called an operator (a rule that transforms one function into another). The spectral theorem says: if the operator is 'honest' (self-adjoint, meaning its action is symmetric), it can be represented as a simple 'recipe'—a set of numbers (spectrum) and 'axes' (eigenvectors) along which these numbers are measured. It's like decomposing a musical chord into pure tones: any complex vibration is a sum of sinusoidal waves of different frequencies. In the quantum world, this procedure yields the possible values of a measuring device and the probabilities of obtaining them.",
+      "how_it_works_simple": "When you undergo an MRI, the machine measures signals from hydrogen nuclei. Their energy levels are eigenvalues of some operator, and the spectral theorem guarantees that you can cleanly separate signals from different tissues and build an image. In smartphones, audio and image compression algorithms (like JPEG or MP3) decompose the signal into a basis, where only a few 'notes' remain important—without the spectral theorem, such decomposition would be unreliable.",
+      "fun_fact": "Von Neumann's original proof uses the concept of a 'direct integral of Hilbert spaces'—a construction that, even a century later, remains one of the most technically complex tools of mathematical physics.",
+      "description": "The spectral theorem is a central result of functional analysis, generalizing matrix diagonalization. For a bounded self-adjoint operator A on a Hilbert space H, it asserts the existence of a spectral family E(λ)—a projection-valued measure on the real axis—such that A = ∫ λ dE(λ). In quantum mechanics, this means that any observable corresponds to a self-adjoint operator, and its measurement yields one of the eigenvalues of the spectrum; immediately after measurement, the system transitions into the corresponding eigenstate (projection postulate). Physical meaning: the wave function, expanded in the eigenfunctions of the operator, determines the probability amplitudes of the possible outcomes of an observation.",
+      "history": "In 1906, David Hilbert introduced the concept of the spectrum for integral equations and proved the first versions of the theorem for bounded operators. In the 1920s, John von Neumann generalized it to unbounded self-adjoint operators, creating a rigorous mathematical foundation for quantum mechanics (1932, 'Mathematische Grundlagen der Quantenmechanik'). In parallel, Marshall Stone in 1932 gave a proof for unitary operators. The ideas of spectral decomposition go back to the work of Joseph Fourier (1822) and Henri Poincaré, but the modern form owes to von Neumann and André Weil.",
+      "how_it_works": "Applications include quantum physics, where the eigenvalues of the Hamiltonian determine the energy levels of atoms and molecules; control theory and signal processing (singular value decomposition); quantum chemistry (molecular orbital method). Limitations: the theorem guarantees the existence of spectral decomposition, but finding eigenvectors for complex systems can be computationally infeasible (exponential growth of dimensionality). In quantum field theory, operators are often unbounded, and issues of self-adjointness are nontrivial.",
+      "key_problems": [
+        "For operators in state spaces with a continuous spectrum, the projection-valued measure becomes more complicated: the eigenfunctions are generalized (they do not belong to the Hilbert space), requiring rigged spaces.",
+        "Defining eigenstates for non-self-adjoint operators (e.g., those describing dissipative systems) goes beyond the standard theorem.",
+        "In quantum gravity, the problem of time: the role of the spectral theorem in the absence of an external classical time remains a subject of discussion."
+      ]
+    }
+  },
+  "stokes_theorem": {
+    "name": "Stokes' theorem",
+    "type": "theorem",
+    "mini": "Circulation around the edge always equals the sum of all tiny vortices inside—just as a gust of wind around a circle predicts a vortex at the center. Stokes' theorem turns this intuition into an exact mathematical equality.",
+    "practical_application": "With its help, engineers calculate the lift of a wing and the thrust of a propeller, and physicists derive the law of electromagnetic induction: a change in magnetic flux creates a voltage in a loop.",
+    "description_popular": "Formulated in the mid-19th century by George Stokes for hydrodynamics, the famous formula quickly became a universal tool of physics. The classical form: the circulation of a vector around a closed loop equals the flux of its curl through any surface spanning the loop: ∮_C F·dr = ∬_S (∇×F)·dS. The generalized version—the grand Stokes' theorem—states: the integral of a differential form over the boundary of a manifold equals the integral of its exterior derivative over the whole manifold. This formula elegantly unifies special cases: Green's theorem in the plane, Gauss–Ostrogradsky theorem in space, and the Kelvin–Stokes theorem itself.",
+    "fun_fact_popular": "The most concise expression of the fundamental theorem of calculus, ∫_a^b f'(x)dx = f(b)–f(a), is also a special case of the general Stokes' theorem, just for a one-dimensional interval.",
+    "description_simple": "Imagine you are walking around a lake and feel the wind blowing at your back exactly along the loop. That means there is a circular vortex above the lake. Stokes' theorem says: the circulation along the boundary equals the sum of all vortices (curls) inside. Or in electrodynamics: a variable magnetic field inside a coil creates an electric voltage in its wire—the same theorem describes this connection.",
+    "how_it_works_simple": "The lift of a wing is a direct consequence of air circulation around the airfoil; Stokes' theorem relates it to the vortices shedding from the trailing edge. In an induction stove, an alternating magnetic field generates a vortex electric field in metal cookware, and currents heat it up—this is Faraday's law in integral form, equivalent to Stokes' theorem.",
+    "fun_fact": "The proof of the theorem was first given in an appendix to a letter from William Thomson (Lord Kelvin) to Stokes; later it was popularized by James Clerk Maxwell in his 'Treatise on Electricity and Magnetism', cementing the name.",
+    "description": "Stokes' theorem (in the modern sense) is a cornerstone result of differential topology, establishing that integration and exterior differentiation are mutually adjoint operations. For an oriented smooth manifold M with boundary ∂M and a compactly supported differential form ω of degree k, we have: ∫_M dω = ∫_∂M ω, where d is the exterior derivative operator. The classical vector form: the flux of the curl of a field through an oriented surface equals the circulation of the field along its boundary. In physics, this guarantees conservation of quantities (e.g., magnetic flux) and underlies integral formulations of electrodynamics, hydrodynamics, and general relativity.",
+    "history": "The theorem owes its name to George Stokes, but its first formulation appeared in correspondence with William Thomson (1850). Stokes used it as an examination question for the prestigious Smith's Prize at Cambridge. The vector form was given by Oliver Heaviside and Josiah Gibbs in the 1880s. The most general form was provided by Élie Cartan in the early 20th century via differential forms; it was further generalized by Georges de Rham in cohomology theory.",
+    "how_it_works": "Applied in electrodynamics (Faraday's law in integral form, Ampère's circulation law), aerodynamics (Zhukovsky's lift theorem), gravitation theory (conservation laws in GR). Limits: the manifold must be smooth and orientable; when singularities are present (e.g., line vortices), additional boundary conditions are needed. In quantum mechanics, the path integral of Feynman is an analogue, where topological effects (Berry phase) are closely related to the geometric interpretation of the theorem.",
+    "key_problems": [
+      "Breaking of the manifold's smoothness (e.g., discontinuities in a medium) requires the introduction of generalized functions.",
+      "Accounting for gauge fields with singularities (Dirac monopoles) leads to topological charge quantization, which goes beyond the naive theorem.",
+      "In quantum gravity, the generalization to discrete spacetimes remains open: how to define a boundary without continuous geometry?"
+    ],
+    "formulas": [
+      {
+        "description": "Classical Kelvin–Stokes theorem",
+        "latex": "\\oint_{\\partial S} \\mathbf{F} \\cdot d\\mathbf{r} = \\iint_{S} (\\nabla \\times \\mathbf{F}) \\cdot d\\mathbf{S}",
+        "meaning": "∮_∂S — integral over the closed contour ∂S; F — vector field; dr — path element; ∬_S — integral over surface S; ∇×F — curl of F; dS — area element directed along the normal"
+      },
+      {
+        "description": "Generalized Stokes' theorem for differential forms",
+        "latex": "\\int_{M} d\\omega = \\int_{\\partial M} \\omega",
+        "meaning": "∫_M — integral over manifold M; dω — exterior derivative of the k-form ω; ∫_∂M — integral over the boundary ∂M. The right side is interpreted as ‘flux through the boundary’"
+      }
+    ],
+    "scientists": [
+      "George Gabriel Stokes"
+    ],
+    "tags": [
+      "electromagnetism",
+      "integral",
+      "manifold",
+      "topology"
+    ],
+    "related_laws": [
+      "maxwells_equations",
+      "gausss_divergence_theorem",
+      "faradays_law_of_induction"
+    ],
+    "refined": true,
+    "raw": {
+      "mini": "A circular gust of wind along a closed boundary gives rise to a vortex inside. Stokes' theorem translates the intuition about vortices into rigorous language: circulation along the edge equals the sum of all micro-vortices inside.",
+      "practical_application": "Engineers calculate the lift of a wing or the thrust of a propeller using Stokes' theorem; and physicists explain why magnetic flux through a surface creates an electric voltage in a wire.",
+      "description_popular": "Formulated in the mid-19th century by George Stokes for hydrodynamics, the famous formula quickly became a universal tool of physics. In strict notation, the classical Kelvin–Stokes theorem relates the line integral of a vector field along a closed contour C to the flux of the curl of that field through any surface S bounded by C: ∮_C F·dr = ∬_S (∇×F)·dS. Later it was generalized to the great Stokes' theorem in differential geometry: the integral of a differential form ω over the boundary of a manifold M equals the integral of its exterior derivative dω over the entire manifold. This version unifies dozens of special theorems—Green's, Gauss–Ostrogradsky's, and the Stokes theorem itself—in one elegant equality.",
+      "fun_fact_popular": "The most concise notation of the fundamental theorem of calculus, ∫_a^b f'(x)dx = f(b)–f(a), is also a special case of the general Stokes' theorem—just for a one-dimensional interval.",
+      "description_simple": "Imagine you are walking around a lake with a fishing rod and fish are splashing near the shore. If all along your path the fish bite in one direction, then inside the lake there is a circular current (a whirlpool) that is pushing them. Stokes' theorem states: the sum of all pushes along a closed path (circulation) exactly equals the sum of the forces of all the tiny whirlpools inside (vortices or curls). In textbooks, this is written as the equality of an integral over the boundary of a region to an integral over the region itself. In electrodynamics, this connection explains why a changing magnetic field inside a loop creates an electric force along a wire—that's how generators work.",
+      "how_it_works_simple": "An airplane flies because the wing forces the air to swirl: the difference in speeds above and below the wing creates circulation, and by Stokes' theorem this corresponds to lift. In an induction cooktop, a changing magnetic field gives rise to a vortex electric field in the bottom of a pan, which drives electrons and heats the metal. Both effects are a direct consequence of the theorem.",
+      "fun_fact": "Stokes himself did not publish a proof; it first appeared in an appendix to Thomson's letter, and then in Maxwell's famous 'Treatise on Electricity and Magnetism', which cemented the name.",
+      "description": "Stokes' theorem (in the modern understanding) is a cornerstone result of differential topology, establishing that integration and exterior differentiation are mutually adjoint operations. For an oriented smooth manifold M with boundary ∂M and a compactly supported differential form ω of degree k, we have: ∫_M dω = ∫_∂M ω, where d is the exterior differentiation operator. The classical vector form: the flux of the curl of a field through an oriented surface equals the circulation of the field along its boundary. In physics, this guarantees the conservation of quantities (e.g., magnetic flux) and underlies the integral formulations of electrodynamics, hydrodynamics, and general relativity.",
+      "history": "The original version appeared in a letter from William Thomson (Lord Kelvin) to George Stokes around 1850 as a problem in hydrodynamics. Stokes included it in an exam paper for Cambridge (the famous Smith's Prize), and since then it has been called Stokes' theorem. In the 1880s, Oliver Heaviside and Josiah Gibbs rewrote it in the language of vectors. The most general form was given by Élie Cartan in the early 20th century, expressed through differential forms; it was further generalized by Georges de Rham in cohomology theory.",
+      "how_it_works": "It is applied in electrodynamics (Faraday's law in integral form, the circulation theorem for the magnetic field), aerodynamics (Zhukovsky's lift theorem), and gravitation theory (conservation laws in GR). Limits: the manifold must be smooth and orientable; when singularities are present (e.g., line vortices), additional boundary conditions are required. In quantum mechanics, the Feynman path integral is an analogue, where topological effects (Berry phase) are closely linked to the geometric interpretation of the theorem.",
+      "key_problems": [
+        "A breakdown of the manifold's smoothness (e.g., discontinuities in a medium) requires the introduction of generalized functions.",
+        "Taking into account gauge fields with singularities (Dirac monopoles) leads to topological charge quantization, which goes beyond the naive theorem.",
+        "In quantum gravity, the generalization to discrete spacetime remains open: how to define a boundary without continuous geometry?"
+      ]
+    }
   }
 }
