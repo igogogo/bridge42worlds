@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorable — прототип «Чайник / фазовый переход» — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .lab-langs{display:flex;gap:6px;margin:6px 0 18px}
+  .lab-langs button{font-size:12px;padding:3px 12px;border-radius:14px;cursor:pointer;
+    background:var(--card-bg);border:1px solid var(--border);color:var(--soft)}
+  .lab-langs button.active{border-color:var(--link);color:var(--link);font-weight:600}
+  .lab-related{max-width:620px;margin:14px 0;font-size:12px;color:var(--soft)}
+  .lab-related b{font-weight:600;color:var(--soft);margin-right:4px}
+  .lab-chip{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:12px;
+    background:var(--tag-bg);color:var(--muted);border:0.5px solid var(--border)}
+  .lab-note{font-size:12px;color:var(--soft);max-width:620px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<h1 style="max-width:620px" id="lab-title">…</h1>
+<p style="max-width:620px" id="lab-intro">…</p>
+
+<div class="lab-langs" id="lab-langs">
+  <button data-l="ru" class="active">RU</button>
+  <button data-l="en">EN</button>
+</div>
+
+<div id="kettle"></div>
+<div class="lab-related" id="lab-related"></div>
+
+<p class="lab-note" id="lab-foot">Мини-курс «Термодинамика», стенд 2/3. Физика честная: точка кипения по Клаузиусу–Клапейрону,
+плато на кривой нагрева = скрытая теплота (её в ~6.8× больше, чем на нагрев до 100°). Числа реальны,
+время сжато. Стенд 3 («процессы + двигатель») — в работе (спека для Sonnet).</p>
+
+<script src="/js/explorable.js?v=3"></script>
+<script>
+(function () {
+  var C, DATA, LANG = 'ru';
+  var sim = { Q: 0, last: 0, mol: [], bub: [], steam: [], bubAcc: 0, stAcc: 0 };
+
+  function TboilC(P) { return 1 / (1 / 373.15 - (C.R / C.Lmol) * Math.log(P)) - 273.15; }
+  function phaseOf(st, Q) {
+    var Tb = TboilC(st.pressure), Q1 = C.m * C.c * (Tb - C.Tstart), Qv = C.m * C.Lvap, T, vf, ph;
+    if (Q < Q1) { T = C.Tstart + Q / (C.m * C.c); vf = 0; ph = 'heat'; }
+    else if (Q < Q1 + Qv) { T = Tb; vf = (Q - Q1) / Qv; ph = 'boil'; }
+    else { T = Tb; vf = 1; ph = 'dry'; }
+    return { T: T, vf: vf, phase: ph, Tb: Tb, Q1: Q1, Qv: Qv, Q: Q };
+  }
+  function rndMol() { var a = Math.random() * 6.2832; return { x: 0.1 + Math.random() * 0.8, y: 0.1 + Math.random() * 0.8, vx: Math.cos(a), vy: Math.sin(a) }; }
+
+  function buildCfg(data) {
+    return {
+      lang: LANG, i18n: data.i18n,
+      params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+      animate: function (t, st) {
+        if (!sim.mol.length) for (var k = 0; k < 22; k++) sim.mol.push(rndMol());
+        var dt = Math.max(0, Math.min(0.05, t - sim.last)); sim.last = t;
+        sim.Q += st.power * dt * C.timescale;
+        var ph = phaseOf(st, sim.Q);
+        if (sim.Q > ph.Q1 + ph.Qv + C.m * C.c * 8) sim.Q = 0;   // выкипел → доливаем
+        var sf = 0.26 * Math.sqrt(Math.max(0.2, ph.T / 293));
+        for (var i = 0; i < sim.mol.length; i++) {
+          var p = sim.mol[i]; p.x += p.vx * sf * dt; p.y += p.vy * sf * dt;
+          if (p.x < 0) { p.x = 0; p.vx = -p.vx; } else if (p.x > 1) { p.x = 1; p.vx = -p.vx; }
+          if (p.y < 0) { p.y = 0; p.vy = -p.vy; } else if (p.y > 1) { p.y = 1; p.vy = -p.vy; }
+        }
+        if (ph.phase === 'boil') {
+          sim.bubAcc += dt * (st.power / 1500);
+          while (sim.bubAcc > 0.11) { sim.bubAcc -= 0.11; sim.bub.push({ x: 0.1 + Math.random() * 0.8, y: 1, r: 1.4 + Math.random() * 2 }); }
+          sim.stAcc += dt;
+          while (sim.stAcc > 0.16) { sim.stAcc -= 0.16; sim.steam.push({ dx: (Math.random() - 0.5) * 12, y: 0, r: 3 + Math.random() * 3, life: 1 }); }
+        }
+        for (var b = sim.bub.length - 1; b >= 0; b--) { sim.bub[b].y -= 0.7 * dt; if (sim.bub[b].y < 0.03) sim.bub.splice(b, 1); }
+        for (var s = sim.steam.length - 1; s >= 0; s--) { sim.steam[s].y += 24 * dt; sim.steam[s].life -= dt * 0.7; if (sim.steam[s].life <= 0) sim.steam.splice(s, 1); }
+        return { Q: sim.Q, mol: sim.mol, bub: sim.bub, steam: sim.steam };
+      },
+      derive: function (st, a) { return phaseOf(st, a.Q); },
+      stage: {
+        height: 260,
+        draw: function (g, ctx) {
+          var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, a = ctx.anim, d = ctx.derived, Tmax = 130;
+          function rr(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+          // ── термометр ──
+          var tx = 26, ttop = 24, tbot = H - 40, tlen = tbot - ttop;
+          g.strokeStyle = col.border; g.lineWidth = 2; g.beginPath(); g.moveTo(tx, ttop); g.lineTo(tx, tbot); g.stroke();
+          g.fillStyle = col.warn; g.beginPath(); g.arc(tx, tbot + 6, 6, 0, 6.2832); g.fill();
+          var my = tbot - tlen * Math.max(0, Math.min(1, d.T / Tmax));
+          g.strokeStyle = col.warn; g.lineWidth = 4; g.beginPath(); g.moveTo(tx, tbot); g.lineTo(tx, my); g.stroke();
+          var byk = tbot - tlen * Math.max(0, Math.min(1, d.Tb / Tmax));
+          g.strokeStyle = col.soft; g.lineWidth = 1; g.setLineDash([3, 2]); g.beginPath(); g.moveTo(tx - 6, byk); g.lineTo(tx + 10, byk); g.stroke(); g.setLineDash([]);
+          g.fillStyle = col.text; g.font = '600 10px Inter'; g.textAlign = 'left'; g.fillText(Math.round(d.T) + '°', tx + 7, my - 3);
+          // ── чайник ──
+          var bx = 92, bw = Math.min(W - bx - 40, 230), by = 40, bh = H - 108;
+          g.strokeStyle = col.soft; g.lineWidth = 2;
+          rr(bx, by, bw, bh, 16); g.stroke();
+          g.beginPath(); g.moveTo(bx + bw - 6, by + 14); g.lineTo(bx + bw + 24, by - 8); g.lineTo(bx + bw + 32, by + 3); g.lineTo(bx + bw - 4, by + 28); g.closePath(); g.stroke();
+          g.beginPath(); g.arc(bx + bw * 0.42, by, bw * 0.26, Math.PI * 1.16, Math.PI * 1.84); g.stroke();
+          g.fillStyle = col.soft; g.beginPath(); g.arc(bx + bw * 0.42, by - 2, 4, 0, 6.2832); g.fill();
+          // вода
+          var pad = 9, wx = bx + pad, wxw = bw - 2 * pad, wyBot = by + bh - pad, fullH = bh - 2 * pad - 4;
+          var fill = Math.max(0.12, 1 - d.vf), wTop = wyBot - fullH * fill;
+          g.fillStyle = 'rgba(74,124,170,0.30)'; g.fillRect(wx, wTop, wxw, wyBot - wTop);
+          g.strokeStyle = 'rgba(74,124,170,0.65)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(wx, wTop); g.lineTo(wx + wxw, wTop); g.stroke();
+          // молекулы (краснеют на жаре)
+          var tt = Math.max(0, Math.min(1, (d.T - 20) / 110)), mc = 'hsl(' + Math.round(210 * (1 - tt)) + ',72%,55%)';
+          g.fillStyle = mc;
+          for (var i = 0; i < a.mol.length; i++) { var p = a.mol[i]; g.beginPath(); g.arc(wx + p.x * wxw, wTop + p.y * (wyBot - wTop), 2.4, 0, 6.2832); g.fill(); }
+          // пузырьки
+          g.strokeStyle = 'rgba(255,255,255,0.75)'; g.lineWidth = 1.2;
+          for (var b2 = 0; b2 < a.bub.length; b2++) { var bb = a.bub[b2]; g.beginPath(); g.arc(wx + bb.x * wxw, wTop + bb.y * (wyBot - wTop), bb.r, 0, 6.2832); g.stroke(); }
+          // пар из носика
+          var spx = bx + bw + 16, spy = by - 6;
+          for (var s2 = 0; s2 < a.steam.length; s2++) { var ss = a.steam[s2]; g.globalAlpha = Math.max(0, ss.life) * 0.45; g.fillStyle = col.soft; g.beginPath(); g.arc(spx + ss.dx, spy - ss.y, ss.r, 0, 6.2832); g.fill(); }
+          g.globalAlpha = 1;
+          // пламя под чайником (∝ мощности)
+          var fy = by + bh, pw = (st.power - 500) / 2500, nfl = 7, fh = 9 + pw * 26;
+          for (var f = 0; f < nfl; f++) {
+            var fx = bx + bw * (0.16 + 0.68 * f / (nfl - 1));
+            g.fillStyle = 'rgba(230,120,30,0.85)'; g.beginPath(); g.moveTo(fx - 5, fy + fh); g.quadraticCurveTo(fx - 6, fy + fh * 0.35, fx, fy + 2); g.quadraticCurveTo(fx + 6, fy + fh * 0.35, fx + 5, fy + fh); g.closePath(); g.fill();
+            g.fillStyle = 'rgba(250,210,70,0.9)'; g.beginPath(); g.moveTo(fx - 2.5, fy + fh * 0.75); g.quadraticCurveTo(fx - 3, fy + fh * 0.4, fx, fy + fh * 0.15); g.quadraticCurveTo(fx + 3, fy + fh * 0.4, fx + 2.5, fy + fh * 0.75); g.closePath(); g.fill();
+          }
+        }
+      },
+      formula: function (st, d, T) {
+        var K = (d.T + 273.15).toFixed(0), Ff = (d.T * 9 / 5 + 32).toFixed(0), ratio = (d.Qv / d.Q1).toFixed(1);
+        return '<span class="xf-op">T = </span><span class="xf-res">' + d.T.toFixed(0) + ' °C</span>' +
+          '<span class="xf-op"> (' + K + ' K · ' + Ff + ' °F) — </span><i>' + T('phase_' + d.phase) + '</i>' +
+          '<br><span class="xf-op">' + T('boilpoint') + ' </span><span class="xf-var">' + d.Tb.toFixed(0) + '</span><span class="xf-op"> °C · ' + T('vapor') + ' </span><span class="xf-var">' + Math.round(d.vf * 100) + '%</span>' +
+          '<span class="xf-op"> · ' + T('energyx') + ' ×' + ratio + '</span>';
+      },
+      plot: {
+        height: 175,
+        x: { label: 'xHeat', min: 0, max: function (s) { var ph = phaseOf(s, 1e12); return Math.round((ph.Q1 + ph.Qv) / 1000); } },
+        y: { label: 'yTemp', min: 0, max: 130 },
+        samples: 130,
+        curve: function (xkJ, s) { return phaseOf(s, xkJ * 1000).T; },
+        marker: function (s, a, d) { return { x: d.Q / 1000, y: d.T }; }
+      }
+    };
+  }
+
+  function renderMeta() {
+    var L = DATA.i18n[LANG];
+    document.getElementById('lab-title').textContent = L.title;
+    document.getElementById('lab-intro').textContent = L.intro;
+    var e = DATA.entities, chips = [];
+    ['laws', 'tags', 'scientists'].forEach(function (k) { (e[k] || []).forEach(function (name) { chips.push('<span class="lab-chip">' + name.replace(/_/g, ' ') + '</span>'); }); });
+    document.getElementById('lab-related').innerHTML = '<b>' + L.related + ':</b> ' + chips.join(' ');
+  }
+
+  fetch('/data/theory/phase_transition.json').then(function (r) { return r.json(); }).then(function (data) {
+    DATA = data; C = data.constants;
+    renderMeta();
+    var api = window.__lab = Explorable(document.getElementById('kettle'), buildCfg(data));
+    document.getElementById('lab-langs').addEventListener('click', function (ev) {
+      var b = ev.target.closest('button'); if (!b) return;
+      LANG = b.dataset.l;
+      document.querySelectorAll('#lab-langs button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      document.documentElement.setAttribute('lang', LANG);
+      renderMeta(); api.setLang(LANG);
+    });
+  });
+})();
+</script>
+</body>
+</html>

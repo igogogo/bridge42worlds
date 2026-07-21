@@ -1,0 +1,48 @@
+{
+  "id": "ideal_gas",
+  "model": "ideal_gas",
+  "schema": "b42.theory/1",
+  "entities": {
+    "laws": ["ideal_gas_law"],
+    "tags": ["thermodynamics", "pressure", "temperature"],
+    "scientists": ["Émile Clapeyron", "Dmitri Mendeleev", "Ludwig Boltzmann"]
+  },
+  "constants": { "R": 8.314 },
+  "params": [
+    { "key": "T", "min": 100, "max": 1000, "step": 10, "value": 300, "unit": "unit_K" },
+    { "key": "V", "min": 1, "max": 10, "step": 0.5, "value": 5, "unit": "unit_L" },
+    { "key": "N", "min": 10, "max": 70, "step": 5, "value": 40, "unit": "unit_n" }
+  ],
+  "i18n": {
+    "ru": {
+      "title": "Идеальный газ — виртуальный стол",
+      "intro": "Молекулы газа — это летающие шарики, которые лупят по стенкам. Горячее — летят быстрее и краснеют от злости; теснее — бьют чаще. Из этих ударов и рождается давление. Крути температуру и двигай поршень: манометр реагирует, а число тут же встаёт в уравнение Клапейрона–Менделеева. И да — в крышке дырочка, самые шустрые сбегают.",
+      "T": "температура", "V": "объём", "N": "число молекул",
+      "unit_K": "К", "unit_L": "л", "unit_n": "шт", "unit_kPa": "кПа",
+      "unit_atm": "атм", "unit_bar": "бар", "unit_mmHg": "мм рт.ст.", "unit_m3": "м³",
+      "reset": "сброс",
+      "xV": "объём", "yP": "давление",
+      "hot": "жарко и тесно — молекулы в ярости, давление скачет 🔥",
+      "cold": "холодно и просторно — газ разленился, давление падает 🥶",
+      "hole_note": "Дырочка в крышке — это фича: самые быстрые молекулы удирают на волю. Физики зовут это эффузией — так гелий утекает из воздушного шарика за пару дней.",
+      "escaped": "сбежало на волю",
+      "gauge": "давление",
+      "related": "связано"
+    },
+    "en": {
+      "title": "Ideal gas — virtual bench",
+      "intro": "Gas molecules are flying balls smacking the walls. Hotter — they fly faster and blush red with rage; tighter — they hit more often. Those hits are what pressure is. Turn the temperature and push the piston: the gauge responds, and the number drops straight into the Clapeyron–Mendeleev equation. Oh, and there's a hole in the lid — the fastest ones make a run for it.",
+      "T": "temperature", "V": "volume", "N": "molecule count",
+      "unit_K": "K", "unit_L": "L", "unit_n": "pcs", "unit_kPa": "kPa",
+      "unit_atm": "atm", "unit_bar": "bar", "unit_mmHg": "mmHg", "unit_m3": "m³",
+      "reset": "reset",
+      "xV": "volume", "yP": "pressure",
+      "hot": "hot and cramped — molecules furious, pressure spikes 🔥",
+      "cold": "cold and roomy — the gas got lazy, pressure drops 🥶",
+      "hole_note": "The hole in the lid is a feature: the fastest molecules make a break for freedom. Physicists call it effusion — that's how helium leaks out of a balloon in a couple of days.",
+      "escaped": "escaped to freedom",
+      "gauge": "pressure",
+      "related": "related"
+    }
+  }
+}

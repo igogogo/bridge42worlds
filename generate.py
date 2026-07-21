@@ -593,7 +593,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
     authors = article.get("authors", [])
     authors_html = ", ".join(
-        (f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
+        (f'<a href="/{LANG_DIR}/{lang}/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
          if any(c.isalpha() for c in a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
         for a in authors
     )
@@ -764,7 +764,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
 
     return tpl.substitute(
         lang=lang, dir=dir_for(lang), site_name=SITE_NAME, site_url=SITE_URL, goatcounter=GOATCOUNTER,
-        authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        authors_lang=lang, asset_ver=asset_ver(),
         clickbait=safe(scipop.get("title", article["title"])),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
         refine_badge='<span class="refine-badge" title="Отшлифовано редактором">✦</span>' if article.get("refined") else "",
@@ -968,7 +968,7 @@ def generate_index_page(lang):
     about_title = {"ru": "О проекте", "en": "About this site", "zh": "关于本站",
                    "fr": "À propos", "ar": "عن الموقع"}.get(lang, "About this site")
     html = tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         loading_text=safe(loc["loading"]), footer_text=safe(loc["footer"]),
         intro_html=loc["intro"], calendar_title=safe(calendar_title), about_title=safe(about_title),
@@ -996,7 +996,7 @@ def generate_about_page(lang):
                "footer": "العلم ببساطة"}
     }.get(lang, {"title": "About", "body": "", "footer": ""})
     (Path(LANG_DIR) / lang / "about.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         title=safe(loc["title"]), body=safe(loc["body"]), footer_text=safe(loc["footer"])
     ), encoding="utf-8")
@@ -1075,7 +1075,7 @@ def generate_tags_cloud(lang):
     treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
 
     (Path(LANG_DIR) / lang / "tags" / "index.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         tags_title=safe(loc["title"]), tags_subtitle=safe(loc["subtitle"]),
         footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html,
@@ -1199,7 +1199,7 @@ def generate_tag_page(tag_id, lang):
     )
 
     (Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         tag_id=attr_safe(tag_id),
         tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
@@ -1412,7 +1412,7 @@ def generate_laws_cloud(lang):
 
     (Path(LANG_DIR) / lang / "laws").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "laws" / "index.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         laws_title=safe(loc["title"]), laws_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]),
@@ -1518,7 +1518,7 @@ def generate_law_page(law_id, lang):
         f"{SITE_URL}/{LANG_DIR}/{lang}/laws/{law_id}.html", law_img_url and f"{SITE_URL}{law_img_url}")
 
     (Path(LANG_DIR) / lang / "laws" / f"{law_id}.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         og_meta_html=og_meta_html,
         law_name=safe(L.get("name", law_id)), law_type=safe(L.get("type", "")),
         ai_cover_html=ai_cover_html,
@@ -1622,7 +1622,7 @@ def generate_knowledge_graph_page(lang):
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
     (Path(LANG_DIR) / lang / "graph").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "graph" / "index.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         graph_title=safe(loc["title"]), graph_subtitle=safe(loc["subtitle"]),
         nodes_label=safe(loc["nodes"]), edges_label=safe(loc["edges"]), presets_label=safe(loc["presets"]),
@@ -1690,7 +1690,7 @@ def generate_scientists_cloud(lang):
                "search": "ابحث عن علماء...", "footer": "العلم ببساطة"}
     }.get(lang, {"title": "Scientists", "subtitle": "", "search": "Find...", "footer": ""})
     (Path(LANG_DIR) / lang / "scientists" / "index.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         scientists_title=safe(loc["title"]), scientists_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]), scientists_cloud_html=cloud_html,
@@ -1787,7 +1787,7 @@ def generate_scientist_page(sid, lang):
         f"{SITE_URL}/{LANG_DIR}/{lang}/scientists/{author_slug(sid)}.html")
 
     (Path(LANG_DIR) / lang / "scientists" / f"{author_slug(sid)}.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         articles_label=safe(loc.get("articles", loc.get("related", "Articles"))),
         scientist_id=attr_safe(sid),
@@ -1869,7 +1869,7 @@ def generate_section_page(cat, lang, index=None):
         )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         section_name=safe(ARXIV_CATEGORIES.get(cat, cat)), section_id=safe(cat),
         section_desc=safe(ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")),
@@ -1899,7 +1899,7 @@ def generate_sections_cloud(lang):
     )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "sections" / "index.html").write_text(tpl.substitute(
-        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
+        lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         sections_title=safe(loc["title"]), sections_subtitle=safe(loc["subtitle"]),
         sections_cloud_html=chips or "—", footer_text=safe(loc["footer"]),
@@ -1921,10 +1921,14 @@ def update_all_sections(lang):
 
 
 def update_all_authors():
-    (Path(LANG_DIR) / DEFAULT_LANG / "authors").mkdir(parents=True, exist_ok=True)
+    # Страницы авторов теперь генерятся НА КАЖДОМ ЯЗЫКЕ (юзер-фидбек 2026-07-20: клик по автору
+    # с ar/es статьи не должен переключать на русский и не должен 404-ить). Хром/подписи/чипы —
+    # локализованы, ссылки и список статей — в языке страницы. Тег-ID языко-независимы, имена —
+    # из tags_loc[lang]. Граф авторов (authors-graph.json) собирается ОДИН раз, до цикла языков.
     tpl_cloud, tpl_page = load_template("authors-cloud"), load_template("author")
-    if not tpl_cloud.template or not tpl_page.template: return
-    loc = {
+    if not tpl_cloud.template or not tpl_page.template:
+        return
+    LOC = {
         "en": {"title": "Authors", "subtitle": "Researchers publishing on arXiv.", "find": "Find authors...",
                "search": "Search articles...", "hint": "@ author · # tag · ! scientist",
                "coauthors": "Co-authors", "no_articles": "No articles yet", "footer": "science made simple",
@@ -1935,6 +1939,16 @@ def update_all_authors():
                "coauthors": "Соавторы", "no_articles": "Пока нет статей", "footer": "наука простыми словами",
                "articles": "статей", "coauthors_word": "соавторов", "tags": "Теги", "laws": "Законы",
                "default_hint": 'Показаны авторы на «{letter}» — поиск выше ищет среди всех.'},
+        "es": {"title": "Autores", "subtitle": "Investigadores que publican en arXiv.", "find": "Buscar autores...",
+               "search": "Buscar artículos...", "hint": "@ autor · # etiqueta · ! científico",
+               "coauthors": "Coautores", "no_articles": "Aún no hay artículos", "footer": "la ciencia simplificada",
+               "articles": "artículos", "coauthors_word": "coautores", "tags": "Etiquetas", "laws": "Leyes",
+               "default_hint": 'Autores que empiezan por «{letter}» — la búsqueda de arriba cubre a todos.'},
+        "ar": {"title": "المؤلفون", "subtitle": "باحثون ينشرون على arXiv.", "find": "ابحث عن مؤلفين...",
+               "search": "ابحث عن مقالات...", "hint": "@ مؤلف · # وسم · ! عالم",
+               "coauthors": "مؤلفون مشاركون", "no_articles": "لا مقالات بعد", "footer": "العلم ببساطة",
+               "articles": "مقالات", "coauthors_word": "مؤلفين مشاركين", "tags": "الوسوم", "laws": "القوانين",
+               "default_hint": 'عرض المؤلفين الذين تبدأ أسماؤهم بـ «{letter}» — البحث أعلاه يغطي الجميع.'},
         "zh": {"title": "作者", "subtitle": "在 arXiv 上发表论文的研究人员。", "find": "查找作者...",
                "search": "搜索文章...", "hint": "@ 作者 · # 标签 · ! 科学家",
                "coauthors": "合著者", "no_articles": "暂无文章", "footer": "让科学变简单",
@@ -1944,204 +1958,175 @@ def update_all_authors():
                "search": "Rechercher des articles...", "hint": "@ auteur · # tag · ! scientifique",
                "coauthors": "Co-auteurs", "no_articles": "Pas encore d'articles", "footer": "la science simplifiée",
                "articles": "articles", "coauthors_word": "co-auteurs", "tags": "Tags", "laws": "Lois",
-               "default_hint": 'Auteurs commençant par « {letter} » — la recherche ci-dessus couvre tout le monde.'}
-    }.get(DEFAULT_LANG, {"title": "Authors", "subtitle": "Researchers publishing on arXiv.", "find": "Find authors...",
-                          "search": "Search articles...", "hint": "@ author · # tag · ! scientist",
-                          "coauthors": "Co-authors", "no_articles": "No articles yet", "footer": "science made simple",
-                          "articles": "articles", "coauthors_word": "co-authors", "tags": "Tags", "laws": "Laws",
-                          "default_hint": 'Showing authors starting with "{letter}" — search above covers everyone.'})
+               "default_hint": 'Auteurs commençant par « {letter} » — la recherche ci-dessus couvre tout le monde.'},
+    }
+    LAST = {"ru": "последняя", "en": "latest", "es": "último", "ar": "الأحدث", "zh": "最新", "fr": "dernière"}
+    COUNT_LBL = {"ru": "авторов", "en": "authors", "es": "autores", "ar": "مؤلفين", "zh": "位作者", "fr": "auteurs"}
+
     ap = Path("data/authors-graph.json")
     graph = json.loads(ap.read_text(encoding="utf-8")) if ap.exists() else {}
-    tags_loc = load_tags_loc(DEFAULT_LANG)
-    laws_loc = load_laws_loc(DEFAULT_LANG)
 
-    # id -> дата и id -> теги (из индекса языка по умолчанию) для «свежести» и графа тегов автора
-    id_date = {}
-    id_tags = {}
+    # id -> дата и id -> теги — из индекса ЯЗЫКА ПО УМОЛЧАНИЮ (тег-ID и даты языко-независимы).
+    id_date, id_tags = {}, {}
     di = Path(LANG_DIR) / DEFAULT_LANG / "articles-index.json"
     if di.exists():
         for a in json.loads(di.read_text(encoding="utf-8")):
             id_date[a["id"]] = a["date"]
             id_tags[a["id"]] = [t for t in a.get("tags", []) if t]
-    newest = max(id_date.values()) if id_date else ""
 
     def last_date_of(d):
         ds = [id_date.get(i, "") for i in d.get("articles", [])]
         ds = [x for x in ds if x]
         return max(ds) if ds else ""
 
-    def is_recent(ld):
-        if not ld or not newest: return False
-        try:
-            return (datetime.strptime(newest, "%Y-%m-%d") - datetime.strptime(ld, "%Y-%m-%d")).days <= 30
-        except ValueError:
-            return False
-
-    last_label = {"ru": "последняя", "en": "latest", "zh": "最新", "fr": "dernière",
-                  "ar": "الأحدث"}.get(DEFAULT_LANG, "latest")
-    tags_loc = load_tags_loc(DEFAULT_LANG)
     authors = sorted([{"name": n, "count": d.get("article_count", 0), "last": last_date_of(d),
                        "tags": list(dict.fromkeys(t for aid in d.get("articles", [])
                                                   for t in id_tags.get(aid, [])))}
                       for n, d in graph.items()], key=lambda x: x["name"].lower())
 
-    # Group by first letter (A-Z)
     sections = {}
     for a in authors:
         letter = a["name"][0].upper() if a["name"] else "#"
         if letter < "A" or letter > "Z":
             letter = "#"
         sections.setdefault(letter, []).append(a)
-
     ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     letters_with_content = [l for l in ALPHABET if sections.get(l)]
+    # Детерминированный дефолтный ярус (наименьшая непустая буква по числу авторов) — раньше был
+    # random.choice, из-за чего страница authors/index.html менялась КАЖДЫЙ регенер (git-шум × языки).
+    default_letter = min(letters_with_content, key=lambda l: len(sections[l])) if letters_with_content else None
 
-    def gen_alphabet_nav(active_letter=None):
-        parts = []
-        for l in ALPHABET:
-            count = len(sections.get(l, []))
-            cls = " active" if active_letter == l else ""
-            href = f"/{LANG_DIR}/{DEFAULT_LANG}/authors/{l.lower()}.html"
-            if count:
-                parts.append(f'<a href="{href}" class="alpha-link{cls}" data-letter="{l}">{l}</a>')
-            else:
-                parts.append(f'<span class="alpha-link alpha-empty">{l}</span>')
-        if sections.get("#"):
-            cls = " active" if active_letter == "#" else ""
-            parts.append(f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/other.html" class="alpha-link{cls}" data-letter="#">#</a>')
-        return "".join(parts)
-
-    def gen_letter_section(letter, is_link=True):
-        items = sections.get(letter, [])
-        if not items:
-            return ""
-        def author_tags_html(a):
-            tags = a.get("tags", [])[:6]
-            base = LANG_DIR + "/" + DEFAULT_LANG
-            return " ".join(
-                '<span onclick="event.stopPropagation();window.location=`/{}/tags/{}.html`" class="text-tag" data-tag="{}">{}</span>'.format(
-                    base, t, t,
-                    safe(tags_loc.get(t, {}).get("name", t)))
-                for t in tags
-            )
-        rows = "".join(
-            '<a href="/{}/authors/{}.html" class="author-row" data-author="{}">'
-            '<span class="author-name">{}</span>'
-            '<span class="author-tags">{}</span>'
-            '<span class="author-count">{} {}</span></a>'.format(
-                LANG_DIR + "/" + DEFAULT_LANG, author_slug(a["name"]), attr_safe(a["name"]),
-                safe(a["name"]), author_tags_html(a),
-                a["count"], safe(loc["articles"]))
-            for a in items
-        )
-        return f'<div class="letter-section" id="letter-{letter}"><h2 class="letter-heading">{letter}</h2><div class="author-list">{rows}</div></div>'
-
-    # Index page — БЕЗ выбранной буквы список из тысяч авторов слишком длинный, поэтому
-    # рендерим только один ярус-по-умолчанию как ориентир; поиск на странице (js/search.js)
-    # всё равно ищет по ВСЕМ авторам через authors-graph.json, независимо от того, какая
-    # буква отрендерена в HTML. Буква — случайная (не всегда "S", который у западных имён
-    # непропорционально большой сам по себе) — так дефолтный список обычно меньше и легче.
-    default_letter = random.choice(letters_with_content) if letters_with_content else None
-    index_sections = gen_letter_section(default_letter) if default_letter else ""
-    index_nav = gen_alphabet_nav()
-    index_subtitle = loc["subtitle"] + (
-        " " + loc["default_hint"].format(letter=default_letter) if default_letter else "")
-    (Path(LANG_DIR) / DEFAULT_LANG / "authors" / "index.html").write_text(tpl_cloud.substitute(
-        lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-        version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
-        page_title=safe(loc["title"]), authors_title=safe(loc["title"]),
-        authors_subtitle=safe(index_subtitle), alphabet_nav_html=index_nav,
-        search_placeholder=safe(loc["find"]), author_sections_html=index_sections,
-        footer_text=safe(loc["footer"])
-    ), encoding="utf-8")
-
-    author_count_label = {"ru": "авторов", "en": "authors", "zh": "位作者", "fr": "auteurs"}.get(DEFAULT_LANG, "authors")
-    # Per-letter pages
-    for letter in letters_with_content:
-        section_html = gen_letter_section(letter)
-        letter_nav = gen_alphabet_nav(active_letter=letter)
-        (Path(LANG_DIR) / DEFAULT_LANG / "authors" / f"{letter.lower()}.html").write_text(tpl_cloud.substitute(
-            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-            version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
-            page_title=safe(f"{loc['title']} — {letter}"), authors_title=loc["title"],
-            authors_subtitle=safe(f"{letter} — {len(sections[letter])} {author_count_label}"),
-            alphabet_nav_html=letter_nav, search_placeholder=safe(loc["find"]),
-            author_sections_html=section_html, footer_text=safe(loc["footer"])
-        ), encoding="utf-8")
-    # "#" (имена не A-Z) — gen_alphabet_nav безусловно ссылается на other.html, если в
-    # sections["#"] что-то есть, но саму страницу раньше нигде не писали (цикл выше — только
-    # A-Z) — отсюда битая ссылка на every letter page.
-    if sections.get("#"):
-        section_html = gen_letter_section("#")
-        other_nav = gen_alphabet_nav(active_letter="#")
-        (Path(LANG_DIR) / DEFAULT_LANG / "authors" / "other.html").write_text(tpl_cloud.substitute(
-            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-            version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
-            page_title=safe(f"{loc['title']} — #"), authors_title=loc["title"],
-            authors_subtitle=safe(f"# — {len(sections['#'])} {author_count_label}"),
-            alphabet_nav_html=other_nav, search_placeholder=safe(loc["find"]),
-            author_sections_html=section_html, footer_text=safe(loc["footer"])
-        ), encoding="utf-8")
-    # Индекс по id ЗАРАНЕЕ, один раз на язык — раньше здесь на КАЖДОГО из тысяч авторов ×
-    # каждый язык заново читался и парсился весь articles-index.json с диска (O(авторы×языки×
-    # статьи)) — на 10000+ авторов и растущем архиве это тянулось по 15+ минут на пустом месте.
+    # Индекс статей по языкам — один раз (список статей автора рендерим в языке страницы).
     articles_by_lang = {}
     for lc in LANGUAGES:
         ip = Path(LANG_DIR) / lc / "articles-index.json"
         if ip.exists():
             articles_by_lang[lc] = {a["id"]: a for a in json.loads(ip.read_text(encoding="utf-8"))}
 
-    for author_name, data in graph.items():
-        slug = author_slug(author_name)
-        articles_html = ""
-        author_article_ids = data.get("articles", [])
-        for lc in LANGUAGES:
-            for aid in author_article_ids:
-                a = articles_by_lang.get(lc, {}).get(aid)
-                if a:
-                    articles_html += f"""<div class="article-card"><div class="card-content">
-                        <h3><a href="{a['url']}">{a['title']}</a></h3>
-                        <div class="oneliner">{a.get('description', a.get('oneliner', ''))}</div>
-                        <div class="meta">arXiv:{a['id']} · {a['date']}</div></div></div>"""
-        coauthors_html = " · ".join(
-            f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/{author_slug(ca)}.html" data-author="{attr_safe(ca)}">{ca}</a>'
-            for ca in data.get("coauthors", [])[:15]
-        )
-        # теги статей автора (по объединению), для мини-графа тем автора + видимого списка
-        author_tags = []
-        for aid in data.get("articles", []):
-            for t in id_tags.get(aid, []):
-                if t not in author_tags: author_tags.append(t)
-        author_tags_set = set(author_tags)
-        author_tags_html = " · ".join(
-            f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
-            for t in author_tags[:20]
-        )
-        # законы автора — через пересечение тегов (закон↔тег), как секция «Законы» на странице тега
-        author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
-        author_laws_html = " · ".join(
-            f'<a href="/{LANG_DIR}/{DEFAULT_LANG}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
-            for lid in author_law_ids[:20]
-        )
-        (Path(LANG_DIR) / DEFAULT_LANG / "authors" / f"{slug}.html").write_text(tpl_page.substitute(
-            lang=DEFAULT_LANG, dir=dir_for(DEFAULT_LANG), goatcounter=GOATCOUNTER, authors_lang=DEFAULT_LANG, asset_ver=asset_ver(),
-            version_toggle_html=version_toggle_spans(DEFAULT_LANG, "popular", include_mini=True),
-            author_slug=attr_safe(slug),
-            author_name=author_name, author_name_attr=attr_safe(author_name),
-            author_tags_attr=attr_safe(",".join(author_tags)),
-            graph_mini_label=safe(MINI_LABEL.get(DEFAULT_LANG, MINI_LABEL["en"])),
-            article_count=len(data.get("articles", [])),
-            articles_label=safe(loc["articles"]), coauthors_word=safe(loc["coauthors_word"]),
-            last_seen=f'{last_label}: {last_date_of(data)}' if last_date_of(data) else '',
-            coauthor_count=len(data.get("coauthors", [])), coauthors_label=safe(loc["coauthors"]),
-            coauthors_html=coauthors_html, search_placeholder=safe(loc["search"]),
-            search_hint=safe(loc["hint"]),
-            tags_label=safe(loc["tags"]), author_tags_html=author_tags_html or "—",
-            laws_label=safe(loc["laws"]), author_laws_html=author_laws_html or "—",
-            articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
+    for lang in LANGUAGES:
+        (Path(LANG_DIR) / lang / "authors").mkdir(parents=True, exist_ok=True)
+        loc = LOC.get(lang, LOC["en"])
+        tags_loc = load_tags_loc(lang)
+        laws_loc = load_laws_loc(lang)
+        last_label = LAST.get(lang, "latest")
+        author_count_label = COUNT_LBL.get(lang, "authors")
+        lbase = LANG_DIR + "/" + lang
+
+        def gen_alphabet_nav(active_letter=None):
+            parts = []
+            for l in ALPHABET:
+                count = len(sections.get(l, []))
+                cls = " active" if active_letter == l else ""
+                href = f"/{lbase}/authors/{l.lower()}.html"
+                if count:
+                    parts.append(f'<a href="{href}" class="alpha-link{cls}" data-letter="{l}">{l}</a>')
+                else:
+                    parts.append(f'<span class="alpha-link alpha-empty">{l}</span>')
+            if sections.get("#"):
+                cls = " active" if active_letter == "#" else ""
+                parts.append(f'<a href="/{lbase}/authors/other.html" class="alpha-link{cls}" data-letter="#">#</a>')
+            return "".join(parts)
+
+        def gen_letter_section(letter):
+            items = sections.get(letter, [])
+            if not items:
+                return ""
+            def author_tags_html(a):
+                return " ".join(
+                    '<span onclick="event.stopPropagation();window.location=`/{}/tags/{}.html`" class="text-tag" data-tag="{}">{}</span>'.format(
+                        lbase, t, t, safe(tags_loc.get(t, {}).get("name", t)))
+                    for t in a.get("tags", [])[:6])
+            rows = "".join(
+                '<a href="/{}/authors/{}.html" class="author-row" data-author="{}">'
+                '<span class="author-name">{}</span><span class="author-tags">{}</span>'
+                '<span class="author-count">{} {}</span></a>'.format(
+                    lbase, author_slug(a["name"]), attr_safe(a["name"]),
+                    safe(a["name"]), author_tags_html(a), a["count"], safe(loc["articles"]))
+                for a in items)
+            return f'<div class="letter-section" id="letter-{letter}"><h2 class="letter-heading">{letter}</h2><div class="author-list">{rows}</div></div>'
+
+        # Облако авторов (index) — один дефолтный ярус (поиск на странице ищет по всем через граф).
+        index_subtitle = loc["subtitle"] + (
+            " " + loc["default_hint"].format(letter=default_letter) if default_letter else "")
+        (Path(LANG_DIR) / lang / "authors" / "index.html").write_text(tpl_cloud.substitute(
+            lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
+            version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+            page_title=safe(loc["title"]), authors_title=safe(loc["title"]),
+            authors_subtitle=safe(index_subtitle), alphabet_nav_html=gen_alphabet_nav(),
+            search_placeholder=safe(loc["find"]),
+            author_sections_html=gen_letter_section(default_letter) if default_letter else "",
             footer_text=safe(loc["footer"])
         ), encoding="utf-8")
-    print(f"  👥 Authors updated ({len(graph)} authors)")
+
+        for letter in letters_with_content:
+            (Path(LANG_DIR) / lang / "authors" / f"{letter.lower()}.html").write_text(tpl_cloud.substitute(
+                lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
+                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                page_title=safe(f"{loc['title']} — {letter}"), authors_title=loc["title"],
+                authors_subtitle=safe(f"{letter} — {len(sections[letter])} {author_count_label}"),
+                alphabet_nav_html=gen_alphabet_nav(active_letter=letter), search_placeholder=safe(loc["find"]),
+                author_sections_html=gen_letter_section(letter), footer_text=safe(loc["footer"])
+            ), encoding="utf-8")
+        if sections.get("#"):
+            (Path(LANG_DIR) / lang / "authors" / "other.html").write_text(tpl_cloud.substitute(
+                lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
+                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                page_title=safe(f"{loc['title']} — #"), authors_title=loc["title"],
+                authors_subtitle=safe(f"# — {len(sections['#'])} {author_count_label}"),
+                alphabet_nav_html=gen_alphabet_nav(active_letter="#"), search_placeholder=safe(loc["find"]),
+                author_sections_html=gen_letter_section("#"), footer_text=safe(loc["footer"])
+            ), encoding="utf-8")
+
+        # Индивидуальные страницы авторов — тонкие: список статей ЭТОГО языка (search.js всё равно
+        # перерисует в языке страницы по data-context-author), чипы соавторов/тегов/законов локализованы.
+        by_id = articles_by_lang.get(lang, {})
+        for author_name, data in graph.items():
+            slug = author_slug(author_name)
+            articles_html = "".join(
+                f'<div class="article-card"><div class="card-content">'
+                f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
+                f'<div class="oneliner">{safe(a.get("description", a.get("oneliner", "")))}</div>'
+                f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
+                for a in (by_id.get(aid) for aid in data.get("articles", [])) if a
+            )
+            coauthors_html = " · ".join(
+                f'<a href="/{lbase}/authors/{author_slug(ca)}.html" data-author="{attr_safe(ca)}">{ca}</a>'
+                for ca in data.get("coauthors", [])[:15]
+            )
+            author_tags = []
+            for aid in data.get("articles", []):
+                for t in id_tags.get(aid, []):
+                    if t not in author_tags:
+                        author_tags.append(t)
+            author_tags_set = set(author_tags)
+            author_tags_html = " · ".join(
+                f'<a href="/{lbase}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
+                for t in author_tags[:20]
+            )
+            author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
+            author_laws_html = " · ".join(
+                f'<a href="/{lbase}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
+                for lid in author_law_ids[:20]
+            )
+            (Path(LANG_DIR) / lang / "authors" / f"{slug}.html").write_text(tpl_page.substitute(
+                lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
+                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                author_slug=attr_safe(slug),
+                author_name=author_name, author_name_attr=attr_safe(author_name),
+                author_tags_attr=attr_safe(",".join(author_tags)),
+                graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
+                article_count=len(data.get("articles", [])),
+                articles_label=safe(loc["articles"]), coauthors_word=safe(loc["coauthors_word"]),
+                last_seen=f'{last_label}: {last_date_of(data)}' if last_date_of(data) else '',
+                coauthor_count=len(data.get("coauthors", [])), coauthors_label=safe(loc["coauthors"]),
+                coauthors_html=coauthors_html, search_placeholder=safe(loc["search"]),
+                search_hint=safe(loc["hint"]),
+                tags_label=safe(loc["tags"]), author_tags_html=author_tags_html or "—",
+                laws_label=safe(loc["laws"]), author_laws_html=author_laws_html or "—",
+                articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
+                footer_text=safe(loc["footer"])
+            ), encoding="utf-8")
+        print(f"  👥 Authors updated for {lang} ({len(graph)} authors)")
 
 
 # ── Main ──
@@ -2167,7 +2152,7 @@ def generate_archive_page(lang):
 <div class="header-right"><div class="nav-links">
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
-<a href="/{LANG_DIR}/{DEFAULT_LANG}/authors/">authors</a><a href="/{LANG_DIR}/{lang}/graph/">graph</a>
+<a href="/{LANG_DIR}/{lang}/authors/">authors</a><a href="/{LANG_DIR}/{lang}/graph/">graph</a>
 <a href="/{LANG_DIR}/{lang}/theory/">theory</a>
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="Избранное">★</a>
 <a href="/{LANG_DIR}/{lang}/about.html">about</a>

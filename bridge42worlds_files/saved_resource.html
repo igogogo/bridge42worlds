@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)https://88592609-fc9a-47c2-941a-a2aeeee73a01.frame.claudeusercontent.com/_f/1784562392-cb60/?__frame_t=F-pQ5s7O13JrB385mhOrmTaC.c9289188-525e-4ec4-9484-d7827033ad6a.322e7f5d-deeb-422c-a91a-a81eed2a0d3d.1784566073&__frame_v=manifest.4921db71cf961d06.json -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- frame-runtime --><!--<base href="/_f/1784562392-cb60/">--><base href="."><script>window.__FRAME_PREAMBLE={"capabilities":{"downloads":"downloads.BABDwU1K.js","mcp":"mcp.hoz5jxDa.js","permissions":"permissions.ByA9Fd8x.js","self":"self.D3u1zjZe.js","user":"user.Cp1-RnjB.js"},"transforms":"_transforms.DYk1Ltlh.js","comments":"_comments.Dp6RDy7J.js","translate":"_translate.C9eLA9Mu.js"}</script><script>(function(){"use strict";const Ee="modulepreload",we=function(e){return"/"+e},Se={},ee=function(t,n,c){let i=Promise.resolve();function s(u){const a=new Event("vite:preloadError",{cancelable:!0});if(a.payload=u,window.dispatchEvent(a),!a.defaultPrevented)throw u}return i.then(u=>{for(const a of u||[])a.status==="rejected"&&s(a.reason);return t().catch(s)})},te=["light","dark","system"];function ne(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function H(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function re(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&te.includes(n)}function se(e){try{typeof reportError=="function"?reportError(e):setTimeout(()=>{throw e},0)}catch{}}const oe=Object.freeze(Object.assign(Object.create(null),{user:Object.freeze(Object.assign(Object.create(null),{id:null,isOwner:!1,canEdit:!1,name:null,avatarUrl:null,email:null}))}));function W(e){if(window===top||e.type==="auxclick"&&e.button!==1)return;const t=e.composedPath?e.composedPath():[e.target];let n=null;for(let u=0;u<t.length;u++){const a=t[u];if(a&&a.matches&&a.matches("a[href],area[href]")){n=a;break}}if(!n&&e.target&&e.target.closest&&(n=e.target.closest("a[href],area[href]")),!n)return;const c=n.getAttribute("href");if(!c)return;let i,s;try{i=new URL(c,document.baseURI),s=new URL(document.baseURI).origin}catch{return}(i.protocol==="http:"||i.protocol==="https:")&&i.origin!==s&&(e.preventDefault(),parent.postMessage({__frame_nav:!0,url:i.href},"*"))}const Y={};function C(e){if(window===top)return;const t=Date.now();t-(Y[e]||0)<500||(Y[e]=t,parent.postMessage({__frame_engaged:!0,kind:e},"*"))}const ie=2e3,K=["wheel","touchstart","touchmove","keydown","pointerdown"];let x=0;function ae(e){e.isTrusted&&(x=Date.now())}function ce(){addEventListener("click",W,!0),addEventListener("auxclick",W,!0)}function le(){for(let e=0;e<K.length;e++)addEventListener(K[e],ae,{capture:!0,passive:!0});addEventListener("scroll",e=>{e.isTrusted&&Date.now()-x<ie&&C("scroll")},{capture:!0,passive:!0}),addEventListener("pointermove",e=>{e.isTrusted&&C("pointer")},{capture:!0,passive:!0}),addEventListener("click",e=>{e.isTrusted&&C("click")},{capture:!0,passive:!0})}const D="__frame_scroll",ue=150,fe=310,de=160,me=3e4;function pe(){let e=0,t=!1,n=!1,c=!1,i=0;const s=d=>{try{sessionStorage.setItem(D,JSON.stringify({y:d}))}catch{}},u=()=>{if(t){t=!1;return}n=!0,clearTimeout(e),e=setTimeout(()=>s(scrollY),ue)};try{addEventListener("scroll",u,{passive:!0}),addEventListener("pagehide",()=>{clearTimeout(e),s(scrollY)})}catch{}const a=()=>{let d;try{d=sessionStorage.getItem(D)}catch{return null}if(d===null)return null;let h;try{h=JSON.parse(d)}catch{h=null}const g=h?.y;if(!(typeof g=="number"&&Number.isFinite(g)&&g>=0)){try{sessionStorage.removeItem(D)}catch{}return null}return g};let y=!1;const _=d=>{try{const h=scrollY;scrollTo({top:d,left:0,behavior:"instant"}),i=d,c=!0,s(d);const g=scrollY;g!==h&&(t=!0),g!==d&&!y&&(y=!0,addEventListener("load",()=>{try{if(scrollY===g){const b=a();_(b!==null?b:i)}}catch{}},{once:!0}))}catch{}},o=()=>{try{return!!location.hash}catch{return!0}};let l=!1;const p=()=>{try{if(l||innerWidth>fe||innerHeight>de)return;l=!0;const d=Date.now(),h=()=>{try{removeEventListener("resize",h)}catch{}if(Date.now()-d>me||n||o())return;const g=a();_(g!==null?g:i)};addEventListener("resize",h)}catch{}};let m=!1,f=!1;return{restore(){if(m||(m=!0,o()))return;const d=a();d!==null&&(_(d),p())},promoted(){if(f||(f=!0,o()))return;const d=a();d!==null?(_(d),p()):c&&_(i)}}}function he(e,t,n){const c=[...t.values()].filter(i=>i.targets.some(s=>s.startsWith(e+".")));return{wrap(i,s){const u=`${e}.${i}`,a=c.filter(y=>y.targets.includes(u));return a.length===0?(...y)=>{try{return s(...y)}catch(_){return Promise.reject(_)}}:(...y)=>{let _=y;for(const l of a){const p=l.module.parameters;if(p)try{_=p(_)}catch{return Promise.reject({code:"transform_error",id:l.id,scope:e,message:"parameters transform failed"})}}let o;try{o=s(..._)}catch(l){o=Promise.reject(l)}return o.then(l=>{for(let p=a.length-1;p>=0;p--){const m=a[p],f=m.module.returns;if(f)try{l=f(l)}catch{return n({id:m.id,scope:e,leg:"returns"}),l}}return l},l=>{for(let p=a.length-1;p>=0;p--){const m=a[p],f=m.module.throws;if(f)try{l=f(l)}catch{return n({id:m.id,scope:e,leg:"throws"}),Promise.reject(l)}}return Promise.reject(l)})}}}}function ge(e,t,n,c=()=>{}){const i=new Set(e.changes??[]),s=new Map;for(const u of i){const a=t[u];a&&s.set(u,a)}return{contract:e.contract,changes:i,flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:s,shellOrigin:n.shellOrigin,mount:n.mount,pipe:u=>he(u,s,c)}}(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let c=0;for(let i=0;i<n.length;i++){const s=n[i];try{e(t,s,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[s]}catch{}try{e(t,s,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[s]=="function"&&c++}if(c&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:c},"*")}catch{}})();const _e=1e4,ye=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function J(e){for(const t of ye)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}const R=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),I=window.__FRAME_PREAMBLE?.transforms,U=window.__FRAME_PREAMBLE?.comments,z=window.__FRAME_PREAMBLE?.translate,T=/^[\w.-]+\.js$/,be=/^[a-z][a-z0-9_-]{0,63}$/;let G=null,j=null;function $(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}let q=!1;function V(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,q=!0):q&&(delete t.dataset.theme,t.style.colorScheme="",q=!1)}const A=Object.assign(Object.create(null),{mcp:Object.assign(Object.create(null),{watchTool:{handlerArg:3}})}),M=new Map;function X(e,t){const n=M.get(e);if(!n)return;const c=Object.assign(Object.create(null),t);Object.assign(n.impl,c),n.impl.__settled=()=>Promise.reject({code:"capability_removed",message:`${e}: method not in this runtime`});const i=n.queue;n.queue=[];for(const s of i){const u=c[s.method];if(u)if(A[e]?.[s.method])try{s.resolve(u(...s.args))}catch{k(s,A[e][s.method].handlerArg,{code:"transform_error",message:`${e}.${s.method} rejected its arguments`})}else u(...s.args).then(s.resolve,s.reject);else{const a={code:"capability_removed",message:`${e}.${s.method} is not in this runtime`},y=A[e]?.[s.method];if(y){k(s,y.handlerArg,a);continue}s.reject(a)}}}function ve(e,t){const n=M.get(e);if(!n)return;n.impl.__settled=()=>Promise.reject(t);const c=n.queue;n.queue=[];for(const i of c){const s=A[e]?.[i.method];if(s){k(i,s.handlerArg,t);continue}i.reject(t)}}function N(e,t){const n=oe[e];if(!n){ve(e,t);return}X(e,Object.fromEntries(Object.entries(n).map(([c,i])=>[c,()=>Promise.resolve(i)])))}function k(e,t,n){if(e.syncState?.dead)return;const c=e.args[t];typeof c=="function"&&queueMicrotask(()=>{if(!e.syncState?.dead)try{c({type:"error",error:n})}catch(i){se(i)}})}const B=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(B&&B.writable===!1)){ce(),le();let e=null;try{e=pe()}catch{}const t=B?.value??{};$(window,"claude",t);const n=o=>{const l={impl:Object.create(null),queue:[]};M.set(o,l);const p=new Proxy(l.impl,{get:(m,f)=>{if(typeof f!="string"||f==="then"||f==="toJSON"||f==="valueOf")return;if(f==="toString")return Object.prototype.toString;const d=A[o]?.[f];return d?(...h)=>{if(typeof h[d.handlerArg]!="function")throw new TypeError(`${o}.${f} requires a handler function`);const g=m[f];if(g)return g(...h);if(m.__settled){const w={dead:!1},S={args:[...h],syncState:w};return m.__settled().catch(P=>k(S,d.handlerArg,P)),()=>{w.dead=!0}}let b=null;const v={dead:!1};return l.queue.push({method:f,args:h,resolve:w=>{b=typeof w=="function"?w:null,v.dead&&b?.()},reject:()=>{},syncState:v}),()=>{v.dead=!0,b?.()}}:(...h)=>{const g=m[f]??m.__settled;return g?g(...h):new Promise((b,v)=>{l.queue.push({method:f,args:h,resolve:b,reject:v})})}},set:()=>!1});$(t,o,p)};for(const o of Object.keys(R)){if(t[o]!==void 0){$(t,o,t[o]);continue}n(o)}let c=null,i=null,s=0;const u=o=>{o.source!==parent||!J(o.origin)||ne(o.data)&&(c=o.data.__frame_init,j=o.origin,removeEventListener("message",u),clearTimeout(s),i?.())};addEventListener("message",u),parent.postMessage({__frame_connect:!0},"*");const a=new Promise(o=>{i=o,s=setTimeout(()=>{removeEventListener("message",u),o()},_e)}),y=document.readyState==="loading"?new Promise(o=>document.addEventListener("DOMContentLoaded",()=>o(),{once:!0})):Promise.resolve();y.then(()=>{try{e?.restore()}catch{}});const _=o=>{if(!(o.source!==parent||!J(o.origin))&&H(o.data)){removeEventListener("message",_);try{e?.promoted()}catch{}}};addEventListener("message",_),a.then(async()=>{if(!c||!j){for(const r of M.keys())N(r,{code:"not_granted",message:"frame initialization did not arrive - capability unavailable"});return}V(c.theme);const o=j;let l=!1,p=!1;addEventListener("message",r=>{if(r.source!==parent||r.origin!==o)return;re(r.data)&&V(r.data.__frame_theme.theme);const E=r.data?.__fc_mode;E&&typeof E=="object"&&!l&&U&&T.test(U)&&(l=!0,m(U).then(F=>F.install?.(o,E.on===!0)).catch(()=>{}));const O=r.data?.__ft_cmd;O&&typeof O=="object"&&!p&&z&&T.test(z)&&(p=!0,m(z).then(F=>F.install?.(o,O)).catch(()=>{}))});const m=r=>ee(()=>import("/_runtime/"+r),void 0),f=Object.keys(c.capabilities??{});for(const r of f)Object.hasOwn(R,r)||be.test(r)&&t[r]===void 0&&(n(r),N(r,{code:"capability_disabled",message:"capability not in this runtime generation"}));const d=f.filter(r=>Object.hasOwn(R,r)).map(r=>[r,R[r]]).filter(r=>typeof r[1]=="string"&&T.test(r[1])),[h,...g]=await Promise.allSettled([I&&T.test(I)?m(I):Promise.resolve({}),...d.map(([,r])=>m(r))]),b=j;G=ge(c,h.status==="fulfilled"&&h.value?.TRANSFORMS||{},{shellOrigin:b,mount:X},r=>parent.postMessage({__frame_cap_telemetry:r},b));const v=r=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:r}},b),w=G;g.forEach((r,E)=>{const O=d[E][0];if(r.status!=="fulfilled"){v(O);return}try{r.value?.install?.(w)}catch{v(O)}});for(const[r,E]of M)if(!(E.queue.length===0&&Object.keys(E.impl).length>0)){if(f.includes(r)){N(r,{code:"capability_disabled",message:"capability not available in this session"});continue}N(r,{code:"not_granted",message:"capability not available in this session"})}await y,parent.postMessage({__frame_ready:!0},j);let S=-1,P=0;const Q=()=>{P=0;const r=Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0);r!==S&&(S=r,parent.postMessage({__frame_size:!0,h:r},b))},L=()=>{P||(P=setTimeout(Q,200))},Z=new ResizeObserver(L);Z.observe(document.documentElement),document.body&&Z.observe(document.body),document.addEventListener("load",L,!0),document.fonts?.ready.then(L,()=>{}),addEventListener("beforeprint",()=>{S=-1,Q()}),L(),addEventListener("message",r=>{if(!(r.source!==parent||r.origin!==b)&&H(r.data)){try{e?.promoted()}catch{}S=-1,L()}})})}})();</script><!-- /frame-runtime --><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>bridge42worlds</title>
+<style>
+  :root {
+    --ink: #0F1626;
+    --paper: #ECE9E1;
+    --amber: #D69A54;
+    --cyan: #4FA6BD;
+    --page-bg: #E7E5DE; --page-fg: #1A2033; --page-fg-soft: #5A6274;
+    --card-shell: #F6F4EE; --hair: rgba(15,22,38,.14);
+    --font-sans: "Helvetica Neue", Helvetica, "Segoe UI", Arial, system-ui, sans-serif;
+    --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page-bg: #0B1120; --page-fg: #E7E6E0; --page-fg-soft: #9AA2B4; --card-shell: #141C2E; --hair: rgba(255,255,255,.12); }
+  }
+  :root[data-theme="light"] { --page-bg: #E7E5DE; --page-fg: #1A2033; --page-fg-soft: #5A6274; --card-shell: #F6F4EE; --hair: rgba(15,22,38,.14); }
+  :root[data-theme="dark"] { --page-bg: #0B1120; --page-fg: #E7E6E0; --page-fg-soft: #9AA2B4; --card-shell: #141C2E; --hair: rgba(255,255,255,.12); }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap { background: var(--page-bg); color: var(--page-fg); font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased; padding: clamp(28px, 6vw, 72px) clamp(20px, 5vw, 56px); min-height: 100vh; }
+  .inner { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(24px, 4vw, 36px); }
+
+  /* ---- FRONT: TAG-CLOUD CARD ---- */
+  .card { position: relative; width: 100%; aspect-ratio: 85 / 55; background: var(--ink); border-radius: 16px;
+    overflow: hidden; color: var(--paper); box-shadow: 0 20px 46px -22px rgba(0,0,0,.62); }
+
+  .mark-top { position: absolute; z-index: 3; top: 6%; left: 50%; transform: translateX(-50%); width: 150px; height: auto; }
+
+  .ghost { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .ghost .gw { font-family: var(--font-sans); font-weight: 300; font-size: clamp(24px, 7vw, 54px);
+    letter-spacing: -.02em; color: rgba(236,233,225,.13); white-space: nowrap; line-height: 1; }
+  .ghost .gw .n { font-family: var(--font-mono); font-weight: 500; color: rgba(236,233,225,.22); }
+
+  .addr { position: absolute; z-index: 3; top: 60%; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 15px; font-weight: 500; letter-spacing: .04em; color: rgba(236,233,225,.92);
+    text-shadow: 0 1px 12px rgba(15,22,38,.95); white-space: nowrap; }
+
+  .ai { position: absolute; z-index: 3; top: 71%; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+    background: #F4F2EC; color: #0F1626; border-radius: 999px; padding: 6px 17px; white-space: nowrap;
+    box-shadow: 0 3px 12px rgba(0,0,0,.35); }
+
+  .t { position: absolute; z-index: 2; font-family: var(--font-sans); font-weight: 300; white-space: nowrap;
+    pointer-events: none; color: rgba(236,233,225,.48); }
+  .t.amber { color: rgba(228,171,104,.72); } .t.cyan { color: rgba(106,187,206,.72); }
+  .t.formula { font-family: var(--font-mono); color: rgba(236,233,225,.09); }
+  .t.hl { font-weight: 500; letter-spacing: .01em;
+    background: linear-gradient(90deg, #E9B876, #7CCBDD);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+
+  /* ---- BACK: NAME + CONTACTS ---- */
+  .back { width: 100%; aspect-ratio: 85 / 55; background: var(--paper); border-radius: 16px; padding: 30px 34px;
+    display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 20px 46px -22px rgba(0,0,0,.5); }
+  .back .top { display: flex; align-items: center; gap: 12px; }
+  .back .top .mk { width: 54px; height: auto; }
+  .back .top .wm { font-family: var(--font-sans); font-weight: 300; font-size: 15px; color: var(--ink); letter-spacing: -.01em; }
+  .back .top .wm .n { font-family: var(--font-mono); font-weight: 500;
+    background: linear-gradient(90deg, var(--amber), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .back .name { font-family: var(--font-serif); font-weight: 400; font-size: 27px; line-height: 1.1; color: var(--ink); margin: 0; }
+  .back .role { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #A06A2E; margin: 9px 0 0; }
+  .back .foot { display: flex; flex-direction: column; align-items: stretch; width: fit-content; gap: 5px;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .03em; }
+  .back .foot .ph { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: #3F4653; }
+  .back .foot .em { color: var(--ink); font-weight: 500; }
+
+  .fade { opacity: 0; transform: translateY(8px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .fade { animation: up .7s ease forwards; } .d1 { animation-delay: .05s; } .d2 { animation-delay: .18s; } .d3 { animation-delay: .3s; }
+    @keyframes up { to { opacity: 1; transform: none; } }
+  }
+  @media (prefers-reduced-motion: reduce) { .fade { opacity: 1; transform: none; } }
+</style>
+
+<div class="wrap">
+  <div class="inner">
+
+    <!-- FRONT -->
+    <div class="card fade d1">
+
+      <svg class="mark-top" viewBox="0 0 240 150" role="img" aria-label="знак bridge42worlds">
+        <defs><lineargradient id="g5" x1="0" x2="1"><stop offset="0" stop-color="#E4A860"></stop><stop offset="1" stop-color="#5EBCD2"></stop></lineargradient></defs>
+        <line x1="44" y1="110" x2="196" y2="110" stroke="rgba(236,233,225,.55)" stroke-width="3.5" stroke-linecap="round"></line>
+        <line x1="72" y1="110" x2="72" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"></line>
+        <line x1="96" y1="110" x2="96" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"></line>
+        <line x1="120" y1="110" x2="120" y2="46" stroke="rgba(236,233,225,.42)" stroke-width="2"></line>
+        <line x1="144" y1="110" x2="144" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"></line>
+        <line x1="168" y1="110" x2="168" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"></line>
+        <path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#g5)" stroke-width="7.5" stroke-linecap="round"></path>
+        <circle cx="44" cy="110" r="10" fill="#E4A860"></circle>
+        <circle cx="196" cy="110" r="10" fill="#5EBCD2"></circle>
+      </svg>
+
+      <div class="ghost"><span class="gw">sdlrow<span class="n">42</span>egdirb</span></div>
+      <div class="addr">www.bridge42worlds.academy</div>
+      <div class="ai">AI powered</div>
+
+      <span class="t formula" style="top:58%;left:3%;font-size:12px">e^iπ+1=0</span>
+      <span class="t formula" style="top:58%;right:3%;font-size:12px">a²+b²=c²</span>
+
+      <span class="t" style="top:15%;left:4%;font-size:20px;color:rgba(236,233,225,.95);font-weight:500">научпоп</span>
+      <span class="t" style="top:38%;left:4%;font-size:14px">khoa học đại chúng</span>
+      <span class="t cyan" style="top:48%;left:4%;font-size:22px">科普</span>
+      <span class="t amber" style="top:28%;left:4%;font-size:16px">scienza popolare</span>
+      <span class="t cyan" style="top:63%;left:4%;font-size:16px">sayansi maarufu</span>
+      <span class="t" style="top:72%;left:4%;font-size:14px">populärwissenschaft</span>
+
+      <span class="t amber" style="top:7%;left:74%;font-size:19px">科学普及</span>
+      <span class="t" style="top:18%;left:73%;font-size:15px">populaaritiede</span>
+      <span class="t amber" style="top:28%;left:84%;font-size:15px">шанче</span>
+      <span class="t amber" style="top:63%;left:71%;font-size:17px">popüler bilim</span>
+      <span class="t cyan" style="top:72%;left:71%;font-size:16px">sains populer</span>
+
+      <span class="t hl" style="top:31%;left:50%;transform:translateX(-50%);font-size:38px">تبسيط العلوم</span>
+
+      <span class="t cyan" style="top:80%;left:5%;font-size:16px">ciencia popular</span>
+      <span class="t cyan" style="top:48%;left:84%;font-size:18px">대중과학</span>
+      <span class="t" style="top:81%;left:44%;font-size:20px">popular science</span>
+      <span class="t" style="top:90%;left:7%;font-size:15px">λαϊκή επιστήμη</span>
+      <span class="t amber" style="top:7%;left:6%;font-size:20px">ғылым</span>
+      <span class="t" style="top:90%;left:38%;font-size:18px">लोकप्रिय विज्ञान</span>
+      <span class="t" style="top:90%;left:68%;font-size:15px">populärvetenskap</span>
+
+    </div>
+
+    <!-- BACK: Aknazar -->
+    <div class="back fade d2">
+      <div class="top">
+        <svg class="mk" viewBox="0 0 240 150" role="img" aria-label="знак"><defs><lineargradient id="g6" x1="0" x2="1"><stop offset="0" stop-color="#D69A54"></stop><stop offset="1" stop-color="#4FA6BD"></stop></lineargradient></defs><line x1="44" y1="110" x2="196" y2="110" stroke="rgba(15,22,38,.32)" stroke-width="3.5" stroke-linecap="round"></line><line x1="96" y1="110" x2="96" y2="54" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><line x1="120" y1="110" x2="120" y2="46" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><line x1="144" y1="110" x2="144" y2="54" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#g6)" stroke-width="8" stroke-linecap="round"></path><circle cx="44" cy="110" r="12" fill="#D69A54"></circle><circle cx="196" cy="110" r="12" fill="#4FA6BD"></circle></svg>
+        <span class="wm">bridge<span class="n">42</span>worlds</span>
+      </div>
+      <div>
+        <p class="name">Aknazar Kazymbetov</p>
+        <p class="role">co-founder</p>
+      </div>
+      <div class="foot">
+        <div class="ph"><span>+965 9853 4221</span><span>+7 708 333 8033</span></div>
+        <div class="em">aknazar@bridge42worlds.academy</div>
+      </div>
+    </div>
+
+    <!-- BACK: Igor -->
+    <div class="back fade d3">
+      <div class="top">
+        <svg class="mk" viewBox="0 0 240 150" role="img" aria-label="знак"><defs><lineargradient id="g7" x1="0" x2="1"><stop offset="0" stop-color="#D69A54"></stop><stop offset="1" stop-color="#4FA6BD"></stop></lineargradient></defs><line x1="44" y1="110" x2="196" y2="110" stroke="rgba(15,22,38,.32)" stroke-width="3.5" stroke-linecap="round"></line><line x1="96" y1="110" x2="96" y2="54" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><line x1="120" y1="110" x2="120" y2="46" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><line x1="144" y1="110" x2="144" y2="54" stroke="rgba(15,22,38,.22)" stroke-width="2"></line><path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#g7)" stroke-width="8" stroke-linecap="round"></path><circle cx="44" cy="110" r="12" fill="#D69A54"></circle><circle cx="196" cy="110" r="12" fill="#4FA6BD"></circle></svg>
+        <span class="wm">bridge<span class="n">42</span>worlds</span>
+      </div>
+      <div>
+        <p class="name">Igor Goldobin</p>
+        <p class="role">co-founder</p>
+      </div>
+      <div class="foot">
+        <div class="ph"><span>+965 9853 3654</span><span>+7 991 304 0136</span></div>
+        <div class="em">igor@bridge42worlds.academy</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body></html>

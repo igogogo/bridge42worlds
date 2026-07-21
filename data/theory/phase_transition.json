@@ -1,0 +1,39 @@
+{
+  "id": "phase_transition",
+  "model": "phase_transition",
+  "schema": "b42.theory/1",
+  "entities": {
+    "laws": ["clausius_clapeyron_relation", "latent_heat"],
+    "tags": ["thermodynamics", "phase_transition", "boiling", "latent_heat"],
+    "scientists": ["Rudolf Clausius", "Benoît Clapeyron", "James Prescott Joule"]
+  },
+  "constants": { "R": 8.314, "m": 0.2, "c": 4186, "Lvap": 2260000, "Lmol": 40660, "Tstart": 20, "timescale": 30 },
+  "params": [
+    { "key": "power", "min": 500, "max": 3000, "step": 100, "value": 1500, "unit": "unit_W" },
+    { "key": "pressure", "min": 0.5, "max": 2, "step": 0.1, "value": 1, "unit": "unit_atm" }
+  ],
+  "i18n": {
+    "ru": {
+      "title": "Закипающий чайник — фазовый переход",
+      "intro": "Ставим чайник на огонь. Пока вода греется — градусник ползёт вверх. Но у точки кипения он упирается в стену: сколько ни грей, температура стоит на месте — вся энергия идёт не на нагрев, а на разрыв связей между молекулами, превращая воду в пар. Это скрытая теплота, и это и есть фазовый переход. Крути мощность и давление: на «горе» (давление ниже) вода закипает холоднее, в «скороварке» — горячее.",
+      "power": "мощность плитки", "pressure": "давление (высота)",
+      "unit_W": "Вт", "unit_atm": "атм", "unit_kJ": "кДж",
+      "reset": "сброс",
+      "phase_heat": "нагрев воды", "phase_boil": "кипение", "phase_dry": "выкипел — доливаем 💧",
+      "boilpoint": "кипит при", "vapor": "в пар ушло", "energyx": "на кипение энергии больше в",
+      "xHeat": "подведённая теплота, кДж", "yTemp": "температура, °C",
+      "related": "связано"
+    },
+    "en": {
+      "title": "Boiling kettle — phase transition",
+      "intro": "Put the kettle on. While the water heats, the thermometer climbs. But at the boiling point it hits a wall: no matter how hard you heat, the temperature stalls — all the energy goes not into heating but into breaking the bonds between molecules, turning water into vapour. That is latent heat, and that is a phase transition. Turn the power and pressure: on a mountain (lower pressure) water boils cooler, in a pressure cooker — hotter.",
+      "power": "burner power", "pressure": "pressure (altitude)",
+      "unit_W": "W", "unit_atm": "atm", "unit_kJ": "kJ",
+      "reset": "reset",
+      "phase_heat": "heating water", "phase_boil": "boiling", "phase_dry": "boiled dry — refilling 💧",
+      "boilpoint": "boils at", "vapor": "vaporized", "energyx": "boiling needs more energy by",
+      "xHeat": "heat added, kJ", "yTemp": "temperature, °C",
+      "related": "related"
+    }
+  }
+}

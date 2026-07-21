@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorable — прототип «Идеальный газ» — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .lab-langs{display:flex;gap:6px;margin:6px 0 18px}
+  .lab-langs button{font-size:12px;padding:3px 12px;border-radius:14px;cursor:pointer;
+    background:var(--card-bg);border:1px solid var(--border);color:var(--soft)}
+  .lab-langs button.active{border-color:var(--link);color:var(--link);font-weight:600}
+  .lab-units{max-width:620px;margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7;
+    font-variant-numeric:tabular-nums}
+  .lab-units b{color:var(--text);font-weight:600}
+  .lab-hole{max-width:620px;margin:12px 0;font-size:12.5px;color:var(--soft);line-height:1.5;
+    padding:8px 12px;border-radius:10px;background:rgba(184,134,11,.09)}
+  .lab-related{max-width:620px;margin:14px 0;font-size:12px;color:var(--soft)}
+  .lab-related b{font-weight:600;color:var(--soft);margin-right:4px}
+  .lab-chip{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:12px;
+    background:var(--tag-bg);color:var(--muted);border:0.5px solid var(--border)}
+  .lab-note{font-size:12px;color:var(--soft);max-width:620px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<h1 style="max-width:620px" id="lab-title">…</h1>
+<p style="max-width:620px" id="lab-intro">…</p>
+
+<div class="lab-langs" id="lab-langs">
+  <button data-l="ru" class="active">RU</button>
+  <button data-l="en">EN</button>
+</div>
+
+<div id="gas"></div>
+<div class="lab-units" id="lab-units"></div>
+<div class="lab-hole" id="lab-hole"></div>
+<div class="lab-related" id="lab-related"></div>
+
+<p class="lab-note" id="lab-foot">Прототип «новой архитектуры»: текст и подписи — в <code>/data/theory/ideal_gas.json</code>,
+физика — на движке <code>explorable.js</code>. Числа честные (P = nRT ∕ V, R = 8.314); пересчёт единиц — вживую.
+Скорость шариков схематична. Дальше сюда встанут процессы (изотерма/адиабата/…) и рабочий цикл двигателя.</p>
+
+<script src="/js/explorable.js?v=3"></script>
+<script>
+(function () {
+  var R, DATA, LANG = 'ru';
+  var HOLE = [0.42, 0.58];   // окно эффузии в крышке (норм. x)
+
+  // ── ФИЗИКА (код; контент — в JSON) ──
+  var sim = { parts: [], T: null, V: null, N: null, last: 0, escaped: 0 };
+  function speedFor(T) { return 0.5 * Math.sqrt(T / 300); }
+  function respawn(p, T) {
+    var s = speedFor(T), a = Math.random() * 6.2832;
+    p.x = 0.05 + Math.random() * 0.9; p.y = 0.1 + Math.random() * 0.85;
+    p.vx = Math.cos(a) * s; p.vy = Math.sin(a) * s; p.out = false; p.life = 0;
+    return p;
+  }
+  function ensure(st) {
+    while (sim.parts.length < st.N) sim.parts.push(respawn({}, st.T));
+    if (sim.parts.length > st.N) sim.parts.length = st.N;
+    if (sim.T != null && st.T !== sim.T) {
+      var k = Math.sqrt(st.T / sim.T);
+      for (var i = 0; i < sim.parts.length; i++) { sim.parts[i].vx *= k; sim.parts[i].vy *= k; }
+    }
+    sim.T = st.T; sim.V = st.V; sim.N = st.N;
+  }
+  function nMol(st) { return st.N / 100; }
+  function pressure(st) { return nMol(st) * R * st.T / st.V; }   // кПа
+
+  // пересчёты единиц (универсально)
+  function conv(P, T, V) {
+    return {
+      C: T - 273.15, F: T * 9 / 5 - 459.67,
+      atm: P / 101.325, bar: P / 100, mmHg: P * 7.50062,
+      m3: V / 1000
+    };
+  }
+
+  function buildCfg(data) {
+    return {
+      lang: LANG, i18n: data.i18n,
+      params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+      animate: function (t, st) {
+        ensure(st);
+        var dt = Math.max(0, Math.min(0.05, t - sim.last)); sim.last = t;
+        for (var i = 0; i < sim.parts.length; i++) {
+          var p = sim.parts[i];
+          if (p.out) { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; if (p.life <= 0) respawn(p, st.T); continue; }
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          if (p.x < 0) { p.x = 0; p.vx = -p.vx; } else if (p.x > 1) { p.x = 1; p.vx = -p.vx; }
+          if (p.y > 1) { p.y = 1; p.vy = -p.vy; }
+          else if (p.y < 0) {
+            if (p.x >= HOLE[0] && p.x <= HOLE[1]) { p.out = true; p.life = 1.1; sim.escaped++; }  // сбежал в дырку
+            else { p.y = 0; p.vy = -p.vy; }
+          }
+        }
+        return { parts: sim.parts };
+      },
+      derive: function (st) { return { P: pressure(st), n: nMol(st) }; },
+      stage: {
+        height: 250,
+        draw: function (g, ctx) {
+          var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, a = ctx.anim;
+          var hbox = H * 0.72, vy0 = (H - hbox) / 2 + 6, vx0 = 22;
+          var maxW = W - 150;                                  // место справа под шток поршня + манометр
+          var frac = 0.32 + 0.68 * (st.V - 1) / 9;
+          var wbox = maxW * frac, xP = vx0 + wbox;              // поршень = правая стенка
+          function SX(nx) { return vx0 + nx * wbox; }
+          function SY(ny) { return vy0 + ny * hbox; }
+
+          // стенки сосуда (кроме правой — там поршень), с разрывом-дыркой в крышке
+          g.strokeStyle = col.soft; g.lineWidth = 2; g.lineCap = 'round';
+          g.beginPath();
+          g.moveTo(vx0, vy0); g.lineTo(vx0, vy0 + hbox); g.lineTo(xP, vy0 + hbox);   // лево + низ
+          // крышка с дыркой
+          g.moveTo(vx0, vy0); g.lineTo(SX(HOLE[0]), vy0);
+          g.moveTo(SX(HOLE[1]), vy0); g.lineTo(xP, vy0);
+          g.stroke();
+          // «губы» дырки
+          g.strokeStyle = col.accent; g.lineWidth = 3;
+          g.beginPath(); g.moveTo(SX(HOLE[0]), vy0); g.lineTo(SX(HOLE[0]) - 5, vy0 - 6);
+          g.moveTo(SX(HOLE[1]), vy0); g.lineTo(SX(HOLE[1]) + 5, vy0 - 6); g.stroke();
+
+          // поршень + шток
+          g.fillStyle = col.link;
+          g.fillRect(xP, vy0 - 2, 8, hbox + 4);
+          g.strokeStyle = col.link; g.lineWidth = 4;
+          g.beginPath(); g.moveTo(xP + 8, vy0 + hbox / 2); g.lineTo(xP + 40, vy0 + hbox / 2); g.stroke();
+          g.beginPath(); g.arc(xP + 46, vy0 + hbox / 2, 6, 0, 6.2832); g.stroke();
+
+          // шарики (цвет по скорости → «краснеют» на жаре)
+          for (var i = 0; i < a.parts.length; i++) {
+            var p = a.parts[i], spd = Math.hypot(p.vx, p.vy);
+            var tt = Math.max(0, Math.min(1, (spd - 0.29) / 0.62));
+            var alpha = p.out ? Math.max(0, p.life) : 1;
+            g.globalAlpha = alpha;
+            g.fillStyle = 'hsl(' + Math.round(210 * (1 - tt)) + ',72%,55%)';
+            g.beginPath(); g.arc(SX(p.x), SY(p.y), 3.3, 0, 6.2832); g.fill();
+          }
+          g.globalAlpha = 1;
+
+          // ── МАНОМЕТР (полукруглый циферблат, стрелка ∝ P) ──
+          var gx = W - 52, gy = 40, gr = 30, Pmax = 3000, P = ctx.derived.P;
+          g.strokeStyle = col.border; g.lineWidth = 6;
+          g.beginPath(); g.arc(gx, gy, gr, Math.PI, 0); g.stroke();
+          // цветная зона «высокого» давления
+          g.strokeStyle = col.warn; g.lineWidth = 6;
+          g.beginPath(); g.arc(gx, gy, gr, Math.PI * 0.25, 0); g.stroke();
+          var fr = Math.max(0, Math.min(1, P / Pmax)), ang = Math.PI * (1 - fr);
+          g.strokeStyle = col.text; g.lineWidth = 2;
+          g.beginPath(); g.moveTo(gx, gy); g.lineTo(gx + Math.cos(ang) * (gr - 4), gy - Math.sin(ang) * (gr - 4)); g.stroke();
+          g.fillStyle = col.text; g.beginPath(); g.arc(gx, gy, 3, 0, 6.2832); g.fill();
+          g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'center';
+          g.fillText(ctx.T('gauge'), gx, gy + 14);
+        }
+      },
+      formula: function (st, d, T) {
+        var P0 = 0.40 * R * 300 / 5;
+        var note = d.P > P0 * 1.05 ? T('hot') : (d.P < P0 * 0.95 ? T('cold') : '');
+        return '<span class="xf-op">P = nRT ∕ V = </span>' +
+          '<span class="xf-var">' + d.n.toFixed(2) + '</span><span class="xf-op">·8.314·</span>' +
+          '<span class="xf-var">' + st.T + '</span><span class="xf-op"> ∕ </span>' +
+          '<span class="xf-var">' + st.V + '</span><span class="xf-op"> = </span>' +
+          '<span class="xf-res">' + d.P.toFixed(0) + ' ' + T('unit_kPa') + '</span>' +
+          (note ? '<br><i>' + note + '</i>' : '');
+      },
+      plot: {
+        height: 170,
+        x: { label: 'xV', min: 1, max: 10 },
+        y: { label: 'yP', unit: 'unit_kPa', min: 0, max: function (s) { return Math.round(nMol(s) * R * s.T / 1 * 1.05); } },
+        samples: 120,
+        curve: function (V, s) { return nMol(s) * R * s.T / V; },
+        marker: function (s, a, d) { return { x: s.V, y: d.P }; }
+      }
+    };
+  }
+
+  // ── живые строки под стендом (единицы + счётчик сбежавших) ──
+  function tick(api) {
+    var st = api.state, L = DATA.i18n[LANG];
+    var P = st.T / 100 * 0 + (st.N / 100) * R * st.T / st.V;   // = pressure(st)
+    var c = conv(P, st.T, st.V);
+    document.getElementById('lab-units').innerHTML =
+      '<b>T</b> ' + st.T + ' ' + L.unit_K + ' = ' + c.C.toFixed(0) + ' °C = ' + c.F.toFixed(0) + ' °F' +
+      ' &nbsp;·&nbsp; <b>V</b> ' + st.V + ' ' + L.unit_L + ' = ' + c.m3.toFixed(3) + ' ' + L.unit_m3 +
+      ' &nbsp;·&nbsp; <b>P</b> ' + P.toFixed(0) + ' ' + L.unit_kPa + ' = ' + c.atm.toFixed(2) + ' ' + L.unit_atm +
+      ' = ' + c.bar.toFixed(2) + ' ' + L.unit_bar + ' = ' + c.mmHg.toFixed(0) + ' ' + L.unit_mmHg;
+    document.getElementById('lab-hole').textContent = L.hole_note + '  (' + L.escaped + ': ' + sim.escaped + ')';
+  }
+
+  function renderMeta() {
+    var L = DATA.i18n[LANG];
+    document.getElementById('lab-title').textContent = L.title;
+    document.getElementById('lab-intro').textContent = L.intro;
+    var e = DATA.entities, chips = [];
+    ['laws', 'tags', 'scientists'].forEach(function (k) {
+      (e[k] || []).forEach(function (name) { chips.push('<span class="lab-chip">' + name.replace(/_/g, ' ') + '</span>'); });
+    });
+    document.getElementById('lab-related').innerHTML = '<b>' + L.related + ':</b> ' + chips.join(' ');
+  }
+
+  fetch('/data/theory/ideal_gas.json').then(function (r) { return r.json(); }).then(function (data) {
+    DATA = data; R = data.constants.R;
+    renderMeta();
+    var api = window.__lab = Explorable(document.getElementById('gas'), buildCfg(data));
+    setInterval(function () { tick(api); }, 250);   // живые строки единиц/счётчика
+    tick(api);
+    document.getElementById('lab-langs').addEventListener('click', function (ev) {
+      var b = ev.target.closest('button'); if (!b) return;
+      LANG = b.dataset.l;
+      document.querySelectorAll('#lab-langs button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      document.documentElement.setAttribute('lang', LANG);
+      renderMeta(); api.setLang(LANG); tick(api);
+    });
+  });
+})();
+</script>
+</body>
+</html>

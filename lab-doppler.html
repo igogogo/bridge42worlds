@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorable — прототип «Доплер» — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .lab-langs{display:flex;gap:6px;margin:6px 0 18px}
+  .lab-langs button{font-size:12px;padding:3px 12px;border-radius:14px;cursor:pointer;
+    background:var(--card-bg);border:1px solid var(--border);color:var(--soft)}
+  .lab-langs button.active{border-color:var(--link);color:var(--link);font-weight:600}
+  .lab-note{font-size:12px;color:var(--soft);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<h1 style="max-width:620px" id="lab-title">Эффект Доплера — виртуальный стол</h1>
+<p style="max-width:620px" id="lab-lead">Двигай ползунки: источник звука движется мимо наблюдателя, фронты волн спереди
+сжимаются (синие — тон выше), сзади растягиваются (красные — тон ниже). Число подставляется
+в формулу вживую, а график показывает наблюдаемую частоту в зависимости от положения источника.</p>
+
+<div class="lab-langs" id="lab-langs">
+  <button data-l="ru" class="active">RU</button>
+  <button data-l="en">EN</button>
+  <button data-l="es">ES</button>
+  <button data-l="ar">AR</button>
+</div>
+
+<div id="doppler"></div>
+
+<p class="lab-note" style="max-width:620px" id="lab-foot">Прототип на общем движке <code>explorable.js</code> — ноль внешних зависимостей,
+подписи из словаря по языку, тема и RTL из коробки. Сцена схематична (скорость источника
+визуально усилена ×2.5), числа в формуле и на графике — физически честные (c = 343 м/с).</p>
+
+<script src="/js/explorable.js?v=3"></script>
+<script>
+(function () {
+  var C = 343;                 // скорость звука, м/с
+  var OBSX = 0, OBSY = 0.55;   // наблюдатель (мир. координаты); линия источника y=0
+  var K_VIS = 2.5;             // визуальное усиление скорости источника (числа не трогает)
+  var CW = 1.4;                // скорость фронта в мировых ед./с
+
+  var sim = { fronts: [], x: -1.4, last: 0, acc: 0 };
+
+  function vrAt(x, vs) {        // радиальная скорость к наблюдателю при движении вправо
+    var dist = Math.hypot(OBSX - x, OBSY);
+    return vs * (OBSX - x) / dist;
+  }
+
+  var cfg = {
+    lang: 'ru',
+    i18n: {
+      f0:   {ru:'частота источника', en:'source frequency', es:'frecuencia de la fuente', ar:'تردد المصدر'},
+      vs:   {ru:'скорость источника', en:'source speed', es:'velocidad de la fuente', ar:'سرعة المصدر'},
+      hz:   {ru:'Гц', en:'Hz', es:'Hz', ar:'هرتز'},
+      ms:   {ru:'м/с', en:'m/s', es:'m/s', ar:'م/ث'},
+      reset:{ru:'сброс', en:'reset', es:'reiniciar', ar:'إعادة'},
+      xpos: {ru:'положение источника', en:'source position', es:'posición de la fuente', ar:'موضع المصدر'},
+      freq: {ru:'наблюдаемая частота', en:'observed frequency', es:'frecuencia observada', ar:'التردد المرصود'},
+      appr: {ru:'приближается — тон выше', en:'approaching — higher pitch', es:'se acerca — tono más alto', ar:'يقترب — نبرة أعلى'},
+      rec:  {ru:'удаляется — тон ниже', en:'receding — lower pitch', es:'se aleja — tono más bajo', ar:'يبتعد — نبرة أخفض'},
+      steady:{ru:'у точки наибольшего сближения', en:'near closest approach', es:'cerca del punto más cercano', ar:'قرب أقرب نقطة'}
+    },
+    params: [
+      {key:'f0', label:'f0', min:200, max:800, step:10, value:440, unit:'hz'},
+      {key:'vs', label:'vs', min:0, max:120, step:5, value:40, unit:'ms'}
+    ],
+    animate: function (t, s) {
+      var dt = Math.max(0, Math.min(0.05, t - sim.last)); sim.last = t;  // dt≥0: защита от «времени назад» (фон→экран, сброс)
+      var sW = CW * (s.vs / C) * K_VIS;
+      sim.x += sW * dt;
+      if (sim.x > 1.4) { sim.x = -1.4; sim.fronts.length = 0; }   // новый проход — чистим фронты
+      // эмиссия фронтов по времени
+      sim.acc += dt;
+      var interval = 0.16;
+      while (sim.acc >= interval) {
+        sim.acc -= interval;
+        sim.fronts.push({ x: sim.x, r: 0, appr: sim.x < OBSX });
+      }
+      for (var i = 0; i < sim.fronts.length; i++) sim.fronts[i].r += CW * dt;
+      sim.fronts = sim.fronts.filter(function (f) { return f.r < 3.2; });
+      return { x: sim.x, vr: vrAt(sim.x, s.vs), fronts: sim.fronts };
+    },
+    derive: function (s, a) {
+      return { vr: a.vr, fObs: s.f0 * C / (C - a.vr) };
+    },
+    stage: {
+      height: 240,
+      draw: function (g, ctx) {
+        var W = ctx.W, H = ctx.H, col = ctx.c, a = ctx.anim;
+        var S = (W - 32) / 3.0;               // px на мировую единицу
+        var cx = W / 2, Ys = 66;              // экран: центр по x, линия источника
+        function px(wx) { return cx + wx * S; }
+        var obsPx = px(OBSX), obsPy = Ys + OBSY * S;
+        // линия движения
+        g.strokeStyle = col.border; g.lineWidth = 1; g.setLineDash([4, 4]);
+        g.beginPath(); g.moveTo(16, Ys); g.lineTo(W - 16, Ys); g.stroke(); g.setLineDash([]);
+        // фронты волн
+        for (var i = 0; i < a.fronts.length; i++) {
+          var f = a.fronts[i];
+          var alpha = Math.max(0, 0.7 * (1 - f.r / 3.2));
+          g.strokeStyle = f.appr
+            ? 'rgba(74,124,155,' + alpha + ')'      // синий — приближение
+            : 'rgba(179,60,60,' + alpha.toFixed(3) + ')'; // красный — удаление
+          g.lineWidth = 1.5;
+          g.beginPath(); g.arc(px(f.x), Ys, f.r * S, 0, 6.2832); g.stroke();
+        }
+        // наблюдатель
+        g.font = '20px serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillText('👂', obsPx, obsPy);
+        // источник
+        g.fillStyle = col.text;
+        g.beginPath(); g.arc(px(a.x), Ys, 6, 0, 6.2832); g.fill();
+        g.font = '16px serif'; g.fillText('🔊', px(a.x), Ys - 16);
+        g.textBaseline = 'alphabetic';
+      }
+    },
+    formula: function (s, d, T) {
+      var vr = d.vr;
+      var op = vr >= 0 ? '−' : '+';               // c − v_r, а при v_r<0 → c + |v_r| (без «− −»)
+      var av = Math.abs(vr).toFixed(1);
+      var note = vr > 1 ? T('appr') : (vr < -1 ? T('rec') : T('steady'));
+      return '<span class="xf-op">f′ = f₀·c ∕ (c − v<sub>r</sub>) = </span>' +
+        '<span class="xf-var">' + s.f0.toFixed(0) + '</span><span class="xf-op">·343 ∕ (343 ' + op + ' </span>' +
+        '<span class="xf-var">' + av + '</span><span class="xf-op">) = </span>' +
+        '<span class="xf-res">' + d.fObs.toFixed(0) + ' ' + T('hz') + '</span>' +
+        '<br><i>' + note + '  ·  v<sub>r</sub> = ' + vr.toFixed(1) + ' ' + T('ms') + '</i>';
+    },
+    plot: {
+      height: 175,
+      x: { label: 'xpos', min: -1.4, max: 1.4 },
+      y: { label: 'freq', unit: 'hz',
+           min: function (s) { return Math.round(s.f0 * 0.55); },
+           max: function (s) { return Math.round(s.f0 * 1.7); } },
+      samples: 140,
+      curve: function (x, s) { return s.f0 * C / (C - vrAt(x, s.vs)); },
+      marker: function (s, a, d) { return { x: a.x, y: d.fObs }; }
+    }
+  };
+
+  var api = Explorable(document.getElementById('doppler'), cfg);
+  window.__lab = api;   // прототип: доступ для ручной проверки анимации в headless-панели
+
+  // Переключатель языка — заодно демонстрирует локализацию подписей и RTL
+  var UI = {
+    ru: {t:'Эффект Доплера — виртуальный стол', lead:'Двигай ползунки: источник звука движется мимо наблюдателя, фронты волн спереди сжимаются (синие — тон выше), сзади растягиваются (красные — тон ниже). Число подставляется в формулу вживую, график показывает наблюдаемую частоту от положения источника.'},
+    en: {t:'Doppler effect — virtual bench', lead:'Drag the sliders: the sound source moves past the observer, wavefronts bunch up in front (blue — higher pitch) and stretch behind (red — lower pitch). The number is substituted into the formula live; the graph shows observed frequency vs source position.'},
+    es: {t:'Efecto Doppler — banco virtual', lead:'Mueve los controles: la fuente de sonido pasa junto al observador, los frentes de onda se comprimen delante (azul — tono más alto) y se estiran detrás (rojo — tono más bajo). El número se sustituye en la fórmula en vivo; la gráfica muestra la frecuencia observada según la posición de la fuente.'},
+    ar: {t:'تأثير دوبلر — طاولة افتراضية', lead:'حرّك المنزلقات: يمر مصدر الصوت بجانب المراقب، تتضاغط جبهات الموجة في الأمام (أزرق — نبرة أعلى) وتتمدد في الخلف (أحمر — نبرة أخفض). يُعوَّض الرقم في الصيغة مباشرة، ويظهر الرسم البياني التردد المرصود حسب موضع المصدر.'}
+  };
+  document.getElementById('lab-langs').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var l = b.dataset.l;
+    document.querySelectorAll('#lab-langs button').forEach(function (x) { x.classList.toggle('active', x === b); });
+    var html = document.documentElement;
+    html.setAttribute('lang', l);
+    html.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+    document.getElementById('lab-title').textContent = UI[l].t;
+    document.getElementById('lab-lead').textContent = UI[l].lead;
+    api.setLang(l);
+  });
+})();
+</script>
+</body>
+</html>

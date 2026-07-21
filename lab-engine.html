@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorable — прототип «Процессы и двигатель» — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .lab-langs{display:flex;gap:6px;margin:6px 0 14px}
+  .lab-langs button{font-size:12px;padding:3px 12px;border-radius:14px;cursor:pointer;
+    background:var(--card-bg);border:1px solid var(--border);color:var(--soft)}
+  .lab-langs button.active{border-color:var(--link);color:var(--link);font-weight:600}
+  .lab-modes{display:flex;flex-wrap:wrap;gap:6px;max-width:620px;margin:0 0 12px}
+  .lab-modes button{font-size:12.5px;padding:5px 12px;border-radius:16px;cursor:pointer;
+    background:none;border:1px solid var(--border);color:var(--soft)}
+  .lab-modes button.active{border-color:var(--link);color:var(--link);font-weight:600;background:rgba(74,106,146,.08)}
+  .lab-hint{max-width:620px;margin:10px 0;font-size:13px;color:var(--muted);line-height:1.55;
+    padding:8px 12px;border-radius:10px;background:var(--tag-bg)}
+  .lab-units{max-width:620px;margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7;
+    font-variant-numeric:tabular-nums}
+  .lab-units b{color:var(--text);font-weight:600}
+  .lab-related{max-width:620px;margin:14px 0;font-size:12px;color:var(--soft)}
+  .lab-related b{font-weight:600;color:var(--soft);margin-right:4px}
+  .lab-chip{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:12px;
+    background:var(--tag-bg);color:var(--muted);border:0.5px solid var(--border)}
+  .lab-note{font-size:12px;color:var(--soft);max-width:620px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<h1 style="max-width:620px" id="lab-title">…</h1>
+<p style="max-width:620px" id="lab-intro">…</p>
+
+<div class="lab-langs" id="lab-langs">
+  <button data-l="ru" class="active">RU</button>
+  <button data-l="en">EN</button>
+</div>
+
+<div class="lab-modes" id="lab-modes"></div>
+<div class="lab-hint" id="lab-hint"></div>
+
+<div id="engine"></div>
+<div class="lab-units" id="lab-units"></div>
+<div class="lab-related" id="lab-related"></div>
+
+<p class="lab-note" id="lab-foot">Мини-курс «Термодинамика», стенд 3/3. Каждый процесс — точная формула через опорное
+состояние (V₀=5 л, T₀=300 K); цикл двигателя (Отто) считается аналитически: КПД зависит только от
+степени сжатия r, η = 1 − 1/r^(γ−1) — числа настоящие. Кривая на P–V для двигателя показывает
+ближайшую адиабатную ветвь текущего такта (упрощение для холста — полная петля не является функцией одного V).</p>
+
+<script src="/js/explorable.js?v=3"></script>
+<script>
+(function () {
+  var DATA, LANG = 'ru', MODE = 'isothermal';
+  var CONST = { R: 8.314, n: 0.4, gamma: 1.4, V0: 5, T0: 300 };
+  var P0 = CONST.n * CONST.R * CONST.T0 / CONST.V0;   // опорное давление при (V0,T0)
+  var MODES = ['isothermal', 'adiabatic', 'isobaric', 'isochoric', 'engine'];
+  // ведущий параметр каждого режима (индекс слайдера: 0=V, 1=T) — двигается САМ по времени,
+  // чтобы характерная кривая процесса рисовалась на графике без ручного перетаскивания;
+  // engine сам себя анимирует через ottoAnimate() и в этой развёртке не нуждается.
+  var AUTO_DRIVER = { isothermal: 0, adiabatic: 0, isobaric: 0, isochoric: 1 };
+  var sliderEls = null;
+  function getSliders() { if (!sliderEls) sliderEls = document.querySelectorAll('#engine .xpl-ctrl input'); return sliderEls; }
+  function autoSweep(t) {
+    if (MODE === 'engine') return;                        // цикл уже анимирует себя сам
+    var idx = AUTO_DRIVER[MODE], p = DATA.params[idx];
+    var period = idx === 0 ? 6 : 8;                        // V гуляет быстрее (уже диапазон), T — медленнее
+    var mid = (p.min + p.max) / 2, amp = (p.max - p.min) / 2;
+    var val = mid + amp * Math.sin(2 * Math.PI * t / period);
+    var input = getSliders()[idx];
+    if (input) { input.value = val; input.dispatchEvent(new Event('input')); }
+  }
+
+  // ── реальные летающие частицы (не декоративный узор!) — отскок от стенок, скорость ∝ √T ──
+  var sim = { parts: [], T: null, last: 0 };
+  function partSpeed(T) { return 0.34 * Math.sqrt(Math.max(50, T) / 300); }
+  function spawnPart() {
+    var a = Math.random() * 6.2832, s = partSpeed(300);
+    return { x: 0.08 + Math.random() * 0.84, y: 0.08 + Math.random() * 0.84, vx: Math.cos(a) * s, vy: Math.sin(a) * s };
+  }
+  function stepParticles(t, T) {
+    if (!sim.parts.length) for (var k = 0; k < 24; k++) sim.parts.push(spawnPart());
+    var dt = Math.max(0, Math.min(0.05, t - sim.last)); sim.last = t;
+    if (sim.T != null && T !== sim.T) {
+      var kf = Math.sqrt(Math.max(50, T) / Math.max(50, sim.T));
+      for (var j = 0; j < sim.parts.length; j++) { sim.parts[j].vx *= kf; sim.parts[j].vy *= kf; }
+    }
+    sim.T = T;
+    for (var i = 0; i < sim.parts.length; i++) {
+      var pp = sim.parts[i]; pp.x += pp.vx * dt; pp.y += pp.vy * dt;
+      if (pp.x < 0) { pp.x = 0; pp.vx = -pp.vx; } else if (pp.x > 1) { pp.x = 1; pp.vx = -pp.vx; }
+      if (pp.y < 0) { pp.y = 0; pp.vy = -pp.vy; } else if (pp.y > 1) { pp.y = 1; pp.vy = -pp.vy; }
+    }
+    return sim.parts;
+  }
+
+  function KtoC(K) { return K - 273.15; }
+  function KtoF(K) { return K * 9 / 5 - 459.67; }
+  function kPaToAtm(P) { return P / 101.325; }
+  function kPaToBar(P) { return P / 100; }
+
+  // ── точное состояние (V,T,P) для каждого процесса, через опорную точку (V0,T0,P0) ──
+  function pointFor(mode, st) {
+    var V = st.V, T = st.T, P;
+    if (mode === 'isothermal') { P = CONST.n * CONST.R * T / V; }
+    else if (mode === 'adiabatic') { P = P0 * Math.pow(CONST.V0 / V, CONST.gamma); T = P * V / (CONST.n * CONST.R); }
+    else if (mode === 'isobaric') { P = P0; T = P0 * V / (CONST.n * CONST.R); }
+    else if (mode === 'isochoric') { V = CONST.V0; P = CONST.n * CONST.R * T / V; }
+    return { V: V, T: T, P: P };
+  }
+
+  // ── цикл Отто: 4 угловые точки аналитически, компрессия r фиксирована = 6 ──
+  function ottoCorners(st) {
+    var r = 6, Vmax = Math.max(4, st.V), Vmin = Vmax / r;
+    var T1 = 300, P1 = CONST.n * CONST.R * T1 / Vmax;
+    var T2 = T1 * Math.pow(r, CONST.gamma - 1), P2 = P1 * Math.pow(r, CONST.gamma);
+    var T3 = Math.max(st.T, T2 * 1.08), P3 = P2 * (T3 / T2);
+    var T4 = T3 / Math.pow(r, CONST.gamma - 1), P4 = P3 / Math.pow(r, CONST.gamma);
+    var Cv = CONST.n * CONST.R / (CONST.gamma - 1);
+    var Qin = Cv * (T3 - T2), Qout = Cv * (T4 - T1), W = Qin - Qout, eta = 1 - 1 / Math.pow(r, CONST.gamma - 1);
+    return { r: r, Vmax: Vmax, Vmin: Vmin, T1: T1, T2: T2, T3: T3, T4: T4, P1: P1, P2: P2, P3: P3, P4: P4, W: W, eta: eta };
+  }
+  function smooth(f) { return f * f * (3 - 2 * f); }
+  function ottoAnimate(t, st) {
+    var c = ottoCorners(st), period = 4.8, phase = ((t % period) / period) * 4;
+    var leg = Math.min(3, Math.floor(phase)), frac = smooth(phase - leg), V, P, T;
+    if (leg === 0) { V = c.Vmax + (c.Vmin - c.Vmax) * frac; P = c.P1 * Math.pow(c.Vmax / V, CONST.gamma); T = P * V / (CONST.n * CONST.R); }
+    else if (leg === 1) { V = c.Vmin; T = c.T2 + (c.T3 - c.T2) * frac; P = CONST.n * CONST.R * T / V; }
+    else if (leg === 2) { V = c.Vmin + (c.Vmax - c.Vmin) * frac; P = c.P3 * Math.pow(c.Vmin / V, CONST.gamma); T = P * V / (CONST.n * CONST.R); }
+    else { V = c.Vmax; T = c.T4 + (c.T1 - c.T4) * frac; P = CONST.n * CONST.R * T / V; }
+    return { V: V, P: P, T: T, leg: leg, corners: c };
+  }
+
+  function buildCfg(data) {
+    return {
+      lang: LANG, i18n: data.i18n,
+      params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+      animate: function (t, st) {
+        autoSweep(t);   // двигаем ведущий слайдер режима сам — кривая рисуется без ручного перетаскивания
+        var pt = MODE === 'engine' ? ottoAnimate(t, st) : pointFor(MODE, st);
+        pt.parts = stepParticles(t, pt.T);
+        return pt;
+      },
+      derive: function (st, a) {
+        if (MODE === 'engine') return { V: a.V, P: a.P, T: a.T, leg: a.leg, corners: a.corners };
+        return { V: a.V, P: a.P, T: a.T };
+      },
+      stage: {
+        height: 240,
+        draw: function (g, ctx) {
+          var W = ctx.W, H = ctx.H, col = ctx.c, a = ctx.anim, d = ctx.derived;
+          var Vmax = MODE === 'engine' ? d.corners.Vmax : 10, Vmin = MODE === 'engine' ? d.corners.Vmin : 1;
+          var hbox = H * 0.7, y0 = (H - hbox) / 2, x0 = 26, maxW = W - 96;
+          var frac = Math.max(0, Math.min(1, (a.V - Vmin) / (Vmax - Vmin)));
+          var wbox = maxW * (0.24 + 0.72 * frac), xP = x0 + wbox;
+          g.strokeStyle = col.soft; g.lineWidth = 2; g.lineCap = 'round';
+          g.strokeRect(x0, y0, wbox, hbox);
+          g.fillStyle = col.link; g.fillRect(xP, y0 - 2, 8, hbox + 4);
+          g.strokeStyle = col.link; g.lineWidth = 4;
+          g.beginPath(); g.moveTo(xP + 8, y0 + hbox / 2); g.lineTo(xP + 34, y0 + hbox / 2); g.stroke();
+          // цвет заливки по температуре (краснеет при нагреве — в адиабате БЕЗ подвода тепла)
+          var tt = Math.max(0, Math.min(1, (a.T - 250) / 900));
+          g.fillStyle = 'hsla(' + Math.round(210 * (1 - tt)) + ',70%,55%,0.30)';
+          g.fillRect(x0 + 2, y0 + 2, wbox - 4, hbox - 4);
+          // настоящие летающие частицы (отскок от стенок, скорость ∝ √T) — не статичный узор
+          g.fillStyle = 'hsl(' + Math.round(210 * (1 - tt)) + ',72%,50%)';
+          for (var i = 0; i < a.parts.length; i++) {
+            var pp = a.parts[i];
+            g.beginPath(); g.arc(x0 + 6 + pp.x * (wbox - 12), y0 + 6 + pp.y * (hbox - 12), 2.6, 0, 6.2832); g.fill();
+          }
+          g.fillStyle = col.soft; g.font = '11px Inter'; g.textAlign = 'center';
+          g.fillText(Math.round(a.T) + ' K', x0 + wbox / 2, y0 + hbox + 16);
+        }
+      },
+      formula: function (st, d, T) {
+        var P0s = P0.toFixed(0);
+        if (MODE === 'isothermal') {
+          return '<span class="xf-op">P·V = nRT = </span><span class="xf-var">' + (CONST.n * CONST.R * d.T).toFixed(0) + '</span>' +
+            '<span class="xf-op"> → P = </span><span class="xf-res">' + d.P.toFixed(0) + ' ' + T('unit_kPa') + '</span>';
+        }
+        if (MODE === 'adiabatic') {
+          var note = d.V < CONST.V0 ? '🔥' : (d.V > CONST.V0 ? '❄️' : '');
+          return '<span class="xf-op">P·V^1.4 = const = ' + P0s + '·5^1.4 → P = </span>' +
+            '<span class="xf-res">' + d.P.toFixed(0) + ' ' + T('unit_kPa') + '</span>' +
+            '<span class="xf-op">, T = </span><span class="xf-var">' + d.T.toFixed(0) + ' K</span> ' + note;
+        }
+        if (MODE === 'isobaric') {
+          return '<span class="xf-op">P = ' + P0s + ' ' + T('unit_kPa') + ' (const) → T = P·V∕(nR) = </span>' +
+            '<span class="xf-res">' + d.T.toFixed(0) + ' K</span>';
+        }
+        if (MODE === 'isochoric') {
+          return '<span class="xf-op">V = 5 ' + T('unit_L') + ' (const) → P = nRT∕V = </span>' +
+            '<span class="xf-res">' + d.P.toFixed(0) + ' ' + T('unit_kPa') + '</span>';
+        }
+        // engine
+        var c = d.corners, etaPct = (c.eta * 100).toFixed(0);
+        return '<span class="xf-op">η = 1 − 1∕r^0.4 = 1 − 1∕6^0.4 = </span><span class="xf-res">' + etaPct + '%</span>' +
+          '<span class="xf-op"> · W = </span><span class="xf-var">' + c.W.toFixed(0) + ' ' + T('unit_kJ_alt') + '</span>' +
+          '<span class="xf-op"> ∕' + T('cycle') + ' · r=' + c.r + '</span>';
+      },
+      plot: {
+        height: 170,
+        x: { label: 'xV', min: 1, max: 10 },
+        y: { label: 'yP', unit: 'unit_kPa', min: 0,
+             max: function (s) { return MODE === 'engine' ? Math.round(ottoCorners(s).P3 * 1.1) : Math.round(P0 * 3.2); } },
+        samples: 110,
+        curve: function (V, st, d) {
+          if (MODE === 'isothermal') return CONST.n * CONST.R * st.T / V;
+          if (MODE === 'isobaric') return P0;
+          if (MODE === 'isochoric') return null;   // вертикаль — точка-функция не рисует; маркер это компенсирует
+          if (MODE === 'adiabatic') return P0 * Math.pow(CONST.V0 / V, CONST.gamma);
+          // engine: ближайшая адиабатная ветвь такта (упрощение — полная петля не функция одного V)
+          var c = d.corners || ottoCorners(st);
+          if (!d.leg && d.leg !== 0) return null;
+          if (d.leg === 0 || d.leg === 1) return c.P1 * Math.pow(c.Vmax / V, CONST.gamma);
+          return c.P3 * Math.pow(c.Vmin / V, CONST.gamma);
+        },
+        marker: function (st, a, d) { return { x: d.V, y: d.P }; }
+      }
+    };
+  }
+
+  function renderMeta() {
+    var L = DATA.i18n[LANG];
+    document.getElementById('lab-title').textContent = L.title;
+    document.getElementById('lab-intro').textContent = L.intro;
+    document.getElementById('lab-hint').textContent = L['hint_' + MODE];
+    var wrap = document.getElementById('lab-modes'); wrap.innerHTML = '';
+    MODES.forEach(function (m) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = L['mode_' + m];
+      b.className = m === MODE ? 'active' : ''; b.dataset.m = m;
+      wrap.appendChild(b);
+    });
+    var e = DATA.entities, chips = [];
+    ['laws', 'tags', 'scientists'].forEach(function (k) { (e[k] || []).forEach(function (name) { chips.push('<span class="lab-chip">' + name.replace(/_/g, ' ') + '</span>'); }); });
+    document.getElementById('lab-related').innerHTML = '<b>' + L.related + ':</b> ' + chips.join(' ');
+  }
+
+  function tick(api) {
+    var L = DATA.i18n[LANG], st = api.state;
+    if (MODE === 'engine') {
+      var c = ottoCorners(st);
+      document.getElementById('lab-units').innerHTML =
+        '<b>T₁</b> ' + c.T1.toFixed(0) + ' K · <b>T₂</b> ' + c.T2.toFixed(0) + ' K · <b>T₃</b> ' + c.T3.toFixed(0) +
+        ' K · <b>T₄</b> ' + c.T4.toFixed(0) + ' K &nbsp;·&nbsp; <b>' + L.efficiency + '</b> ' + (c.eta * 100).toFixed(0) +
+        '% &nbsp;·&nbsp; <b>' + L.work + '</b> ' + c.W.toFixed(0) + ' ' + L.unit_kJ_alt + '/' + L.cycle;
+      return;
+    }
+    var pt = pointFor(MODE, st);
+    document.getElementById('lab-units').innerHTML =
+      '<b>T</b> ' + pt.T.toFixed(0) + ' ' + L.unit_K + ' = ' + KtoC(pt.T).toFixed(0) + ' ' + L.unit_C + ' = ' + KtoF(pt.T).toFixed(0) + ' ' + L.unit_F +
+      ' &nbsp;·&nbsp; <b>V</b> ' + pt.V.toFixed(2) + ' ' + L.unit_L +
+      ' &nbsp;·&nbsp; <b>P</b> ' + pt.P.toFixed(0) + ' ' + L.unit_kPa + ' = ' + kPaToAtm(pt.P).toFixed(2) + ' ' + L.unit_atm + ' = ' + kPaToBar(pt.P).toFixed(2) + ' ' + L.unit_bar;
+  }
+
+  fetch('/data/theory/processes_engine.json').then(function (r) { return r.json(); }).then(function (data) {
+    DATA = data;
+    renderMeta();
+    var api = window.__lab = Explorable(document.getElementById('engine'), buildCfg(data));
+    setInterval(function () { tick(api); }, 250); tick(api);
+
+    document.getElementById('lab-langs').addEventListener('click', function (ev) {
+      var b = ev.target.closest('button'); if (!b) return;
+      LANG = b.dataset.l;
+      document.querySelectorAll('#lab-langs button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      document.documentElement.setAttribute('lang', LANG);
+      renderMeta(); api.setLang(LANG); tick(api);
+    });
+    document.getElementById('lab-modes').addEventListener('click', function (ev) {
+      var b = ev.target.closest('button'); if (!b) return;
+      MODE = b.dataset.m;
+      renderMeta(); api.render();
+    });
+  });
+})();
+</script>
+</body>
+</html>

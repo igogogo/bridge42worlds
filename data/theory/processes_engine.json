@@ -1,0 +1,53 @@
+{
+  "id": "processes_engine",
+  "model": "processes_engine",
+  "schema": "b42.theory/1",
+  "entities": {
+    "laws": ["first_law_of_thermodynamics", "adiabatic_process", "carnot_cycle"],
+    "tags": ["thermodynamics", "heat_engine", "entropy", "adiabatic"],
+    "scientists": ["Sadi Carnot", "Rudolf Clausius", "James Prescott Joule"]
+  },
+  "constants": { "R": 8.314, "n": 0.4, "gamma": 1.4, "V0": 5, "T0": 300 },
+  "params": [
+    { "key": "V", "min": 1, "max": 10, "step": 0.25, "value": 5, "unit": "unit_L" },
+    { "key": "T", "min": 200, "max": 1200, "step": 10, "value": 300, "unit": "unit_K" }
+  ],
+  "i18n": {
+    "ru": {
+      "title": "Процессы и тепловой двигатель — вся термодинамика одним взглядом",
+      "intro": "Четыре способа менять состояние газа — и всё, что нужно, чтобы понять, как работает двигатель. Изотерма, адиабата, изобара, изохора — каждая рисует свою кривую на P–V диаграмме. А потом собираем их в замкнутый цикл — и получаем настоящий поршневой двигатель: температура растёт БЕЗ плитки, просто от сжатия, а площадь внутри петли — это работа, которую машина отдаёт наружу за один такт.",
+      "V": "объём", "T": "температура",
+      "unit_L": "л", "unit_K": "К", "unit_kPa": "кПа", "unit_atm": "атм", "unit_bar": "бар", "unit_C": "°C", "unit_F": "°F",
+      "unit_kJ_alt": "Дж", "cycle": "цикл",
+      "reset": "сброс",
+      "xV": "объём, л", "yP": "давление, кПа",
+      "work": "работа", "efficiency": "КПД",
+      "mode_isothermal": "изотерма", "mode_adiabatic": "адиабата", "mode_isobaric": "изобара",
+      "mode_isochoric": "изохора", "mode_engine": "двигатель (цикл Отто)",
+      "hint_isothermal": "T = const. Двигай объём — давление гуляет по гиперболе P·V = const. Классика: медленное сжатие с теплообменом.",
+      "hint_adiabatic": "Q = 0, теплообмена нет. Сжимаешь — газ греется САМ, без всякой плитки: вся работа сжатия идёт в температуру. Так разогревается воздух в велосипедном насосе.",
+      "hint_isobaric": "P = const. Двигай объём — температура меняется линейно вместе с ним. Так ведёт себя воздушный шарик на солнце.",
+      "hint_isochoric": "V = const, поршень заблокирован. Двигай температуру — растёт только давление. Не пытайтесь повторить с настоящим баллоном.",
+      "hint_engine": "Замкнутый цикл: сжали адиабатически → нагрели при постоянном объёме (вспышка топлива) → расширили адиабатически (рабочий ход) → остыли при постоянном объёме. Площадь внутри петли — работа за один цикл, отданная наружу.",
+      "related": "связано"
+    },
+    "en": {
+      "title": "Processes and heat engine — all of thermodynamics at a glance",
+      "intro": "Four ways to change the state of a gas — and everything you need to understand how an engine works. Isotherm, adiabat, isobar, isochore — each traces its own curve on the P–V diagram. Then we stitch them into a closed loop — and get a real piston engine: temperature rises WITHOUT a burner, purely from compression, and the area inside the loop is the work the machine delivers per stroke.",
+      "V": "volume", "T": "temperature",
+      "unit_L": "L", "unit_K": "K", "unit_kPa": "kPa", "unit_atm": "atm", "unit_bar": "bar", "unit_C": "°C", "unit_F": "°F",
+      "unit_kJ_alt": "J", "cycle": "cycle",
+      "reset": "reset",
+      "xV": "volume, L", "yP": "pressure, kPa",
+      "work": "work", "efficiency": "efficiency",
+      "mode_isothermal": "isotherm", "mode_adiabatic": "adiabat", "mode_isobaric": "isobar",
+      "mode_isochoric": "isochore", "mode_engine": "engine (Otto cycle)",
+      "hint_isothermal": "T = const. Drag the volume — pressure runs along the hyperbola P·V = const. The classic slow compression with heat exchange.",
+      "hint_adiabatic": "Q = 0, no heat exchange. Compress it — the gas heats up on its OWN, no burner needed: all the compression work turns into temperature. That's why a bicycle pump gets hot.",
+      "hint_isobaric": "P = const. Drag the volume — temperature changes linearly with it. That's how a balloon behaves in the sun.",
+      "hint_isochoric": "V = const, piston locked. Drag the temperature — only pressure climbs. Do not try this with a real gas cylinder.",
+      "hint_engine": "Closed loop: compress adiabatically → heat at constant volume (fuel flash) → expand adiabatically (power stroke) → cool at constant volume. The area inside the loop is the work delivered per cycle.",
+      "related": "related"
+    }
+  }
+}
