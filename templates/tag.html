@@ -36,19 +36,21 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
-    <div class="search-bar">
-        <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
-        <div class="search-panel" id="search-panel">
-            <div class="search-row">
-                <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+    $ai_cover_html
+    <div class="tag-title-row">
+        <h1>$tag_name</h1>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint">$search_hint</div>
             </div>
-            <div class="search-hint">$search_hint</div>
         </div>
     </div>
-    $ai_cover_html
-    <h1>$tag_name</h1>
-    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">$article_count</a></div>
+    $tag_stats_html
     <div class="tag-ver" data-ver="mini" style="display:none">
         $tag_mini_html
     </div>

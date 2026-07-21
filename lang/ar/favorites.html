@@ -7,17 +7,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
+    <link rel="stylesheet" href="/css/style.css?v=a9402a1ac6">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="top-bar">
-    <span class="logo-wrap">
-        <a href="/lang/ar/index.html" class="logo">bridge42worlds</a><button type="button" id="intro-toggle" class="logo-info" title="عن الموقع">i</button>
-        <div class="intro-popup" id="intro-popup">
-            <p class="home-intro" id="home-intro">يحوّل bridge42worlds أحدث الأبحاث العلمية من arXiv إلى مقالات يفهمها الجميع - كل يوم، دون الحاجة لشهادة في الفيزياء. اختر مستواك: <b>مبسّط</b> لأول نظرة، <b>شائع</b> إذا كان العلم يثير شغفك، <b>متقدّم</b> للمعادلات والقصة كاملة، <b>مختصر</b> للخلاصة في 10 ثوانٍ. بالإضافة إلى خريطة حية للعلم: الوسوم والقوانين والعلماء وراء كل اكتشاف.</p>
+    <div class="brand-row">
+        <span class="logo-wrap">
+            <a href="/lang/ar/index.html" class="logo">bridge42worlds</a><button type="button" id="intro-toggle" class="logo-info" title="عن الموقع">i</button>
+            <div class="intro-popup" id="intro-popup">
+                <p class="home-intro" id="home-intro">يحوّل bridge42worlds أحدث الأبحاث العلمية من arXiv إلى مقالات يفهمها الجميع - كل يوم، دون الحاجة لشهادة في الفيزياء. اختر مستواك: <b>مبسّط</b> لأول نظرة، <b>شائع</b> إذا كان العلم يثير شغفك، <b>متقدّم</b> للمعادلات والقصة كاملة، <b>مختصر</b> للخلاصة في 10 ثوانٍ. بالإضافة إلى خريطة حية للعلم: الوسوم والقوانين والعلماء وراء كل اكتشاف.</p>
+            </div>
+        </span>
+        <div class="hdr-icons">
+            <div class="search-bar">
+                <button type="button" id="search-toggle-btn" class="cal-btn" title="ابحث عن مقالات، #وسوم، @مؤلفين">🔍</button>
+                <div class="search-panel" id="search-panel">
+                    <div class="search-row">
+                        <input type="text" class="search-box" placeholder="ابحث عن مقالات، #وسوم، @مؤلفين" oninput="doSearch(this.value)">
+                        <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                    </div>
+                    <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+                    <label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
+                </div>
+            </div>
+            <div class="cal-bar">
+                <button type="button" id="calendar-btn" class="cal-btn" title="تصفح حسب التاريخ">📅</button>
+                <div class="calendar-panel" id="calendar-panel"></div>
+            </div>
         </div>
-    </span>
+    </div>
     <div class="header-right">
         <div class="nav-links">
             <a href="/lang/ar/index.html" class="active">main</a>
@@ -35,23 +54,6 @@
 </div>
 <div class="langs-row">
     <div class="langs" id="langs-bar"></div>
-    <div class="hdr-icons">
-        <div class="search-bar">
-            <button type="button" id="search-toggle-btn" class="cal-btn" title="ابحث عن مقالات، #وسوم، @مؤلفين">🔍</button>
-            <div class="search-panel" id="search-panel">
-                <div class="search-row">
-                    <input type="text" class="search-box" placeholder="ابحث عن مقالات، #وسوم، @مؤلفين" oninput="doSearch(this.value)">
-                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-                </div>
-                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
-                <label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
-            </div>
-        </div>
-        <div class="cal-bar">
-            <button type="button" id="calendar-btn" class="cal-btn" title="تصفح حسب التاريخ">📅</button>
-            <div class="calendar-panel" id="calendar-panel"></div>
-        </div>
-    </div>
 </div>
 <script>
 (function () {
@@ -74,7 +76,7 @@
 <div class="filters" id="active-filters"></div>
 <div id="search-results"><p style="color:var(--soft);text-align:center;padding:40px">جارٍ التحميل...</p></div>
 <footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a> · <a href="/feed-ar.xml">RSS</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=b79d08c19d"></script>
-<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/likes.js?v=a9402a1ac6"></script>
+<script src="/js/search.js?v=a9402a1ac6"></script>
 </body>
 </html>

@@ -1,0 +1,317 @@
+<title>bridge42worlds — Kuwait University</title>
+<style>
+  :root{
+    --midnight:#0F1626; --deep:#0A0F1B; --ivory:#ECE9E1;
+    --ochre:#E4A860; --cyan:#5EBCD2;
+    --grad:linear-gradient(92deg,#E4A860,#5EBCD2);
+    --muted:rgba(236,233,225,.62); --faint:rgba(236,233,225,.30); --hair:rgba(236,233,225,.12);
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{background:var(--deep);}
+  .stage{
+    position:fixed; inset:0; overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 0%,#141E31 0%,var(--midnight) 45%,var(--deep) 100%);
+    color:var(--ivory); font-family:var(--sans);
+    display:grid; place-items:center;
+  }
+
+  /* faint formula ambiance */
+  .amb{position:absolute; font-family:var(--mono); color:rgba(236,233,225,.05); pointer-events:none; user-select:none; white-space:nowrap;}
+
+  .slide{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(28px,7vw,110px); max-width:1180px; margin:0 auto;
+    opacity:0; visibility:hidden; transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease, visibility .5s;
+  }
+  .slide.on{opacity:1; visibility:visible; transform:none;}
+  @media (prefers-reduced-motion:reduce){ .slide{transition:opacity .2s;} .slide,.slide.on{transform:none;} }
+
+  .eyebrow{font-family:var(--mono); font-size:clamp(11px,1.3vw,14px); letter-spacing:.24em; text-transform:uppercase; color:var(--ochre); margin:0 0 22px;}
+  .eyebrow.dim{color:var(--faint);}
+  h1{font-family:var(--serif); font-weight:500; letter-spacing:-.015em; line-height:1.06; text-wrap:balance;
+     font-size:clamp(34px,6.6vw,76px); margin:0 0 26px;}
+  .sub{font-size:clamp(17px,2.4vw,28px); color:var(--muted); line-height:1.45; max-width:24ch; margin:0;}
+  .sub.wide{max-width:34ch;}
+  .accent{
+    font-family:var(--serif); font-style:italic; font-size:clamp(20px,3vw,34px);
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+    margin:34px 0 0; display:inline-block; letter-spacing:-.01em;
+  }
+  .n{font-family:var(--mono); font-weight:600; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;}
+
+  /* slide 2 & 10 bridge mark */
+  .mark{width:clamp(120px,17vw,200px); height:auto; margin-bottom:8px;}
+  .wordmark{font-family:var(--serif); font-weight:500; font-size:clamp(40px,7vw,80px); letter-spacing:-.01em; margin:10px 0 22px;}
+
+  /* slide 3 pipeline */
+  .pipe{display:flex; align-items:center; gap:clamp(10px,2vw,22px); flex-wrap:wrap; margin:30px 0 8px;}
+  .pnode{font-family:var(--mono); font-size:clamp(13px,1.7vw,19px); padding:12px 20px; border:1px solid var(--hair); border-radius:12px; background:rgba(236,233,225,.03);}
+  .pnode.hl{border-color:transparent; background:var(--grad); color:var(--midnight); font-weight:600;}
+  .parrow{color:var(--faint); font-size:clamp(16px,2vw,22px);}
+  .chips{display:flex; flex-wrap:wrap; gap:12px; margin-top:30px;}
+  .chip{font-family:var(--mono); font-size:clamp(12px,1.5vw,15px); padding:9px 16px; border:1px solid var(--hair); border-radius:999px; color:var(--ivory);}
+  .chip b{color:var(--ochre); font-weight:600;}
+
+  /* demo bumper */
+  .live{display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:clamp(11px,1.3vw,14px); letter-spacing:.16em; text-transform:uppercase; color:var(--cyan); margin:0 0 22px;}
+  .live .pulse{width:9px; height:9px; border-radius:50%; background:var(--cyan); box-shadow:0 0 0 0 rgba(94,188,210,.6); animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(94,188,210,.55);}70%{box-shadow:0 0 0 12px rgba(94,188,210,0);}100%{box-shadow:0 0 0 0 rgba(94,188,210,0);}}
+  @media (prefers-reduced-motion:reduce){ .live .pulse{animation:none;} }
+  .openbtn{display:inline-flex; align-items:center; gap:10px; margin-top:34px; font-family:var(--mono); font-size:clamp(13px,1.6vw,16px);
+     color:var(--midnight); background:var(--ivory); border:none; border-radius:999px; padding:13px 24px; text-decoration:none; font-weight:600; transition:transform .15s ease, box-shadow .15s;}
+  .openbtn:hover{transform:translateY(-2px); box-shadow:0 14px 30px -14px rgba(0,0,0,.6);}
+  .arabic{font-size:clamp(44px,9vw,104px); font-weight:600; line-height:1; direction:rtl;
+     background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; margin:0 0 24px;}
+
+  /* slide 7 personas + numbers */
+  .rows{display:grid; gap:16px; margin:8px 0 6px;}
+  .prow{display:grid; grid-template-columns:auto 1fr; gap:20px; align-items:baseline;}
+  .prow .who{font-family:var(--serif); font-size:clamp(20px,2.8vw,30px); font-weight:600; color:var(--ivory); min-width:clamp(150px,20vw,220px);}
+  .prow .did{font-size:clamp(15px,1.9vw,20px); color:var(--muted); margin:0;}
+  .numbers{display:flex; flex-wrap:wrap; gap:clamp(22px,5vw,64px); margin-top:44px; padding-top:26px; border-top:1px solid var(--hair);}
+  .num{font-variant-numeric:tabular-nums;}
+  .num b{display:block; font-family:var(--mono); font-weight:600; font-size:clamp(26px,4vw,46px); background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; line-height:1;}
+  .num span{font-size:clamp(12px,1.4vw,15px); color:var(--faint); font-family:var(--mono); letter-spacing:.1em; text-transform:uppercase;}
+
+  /* slide 8 capability list */
+  .caps{display:grid; gap:14px; margin:8px 0 0; max-width:30ch;}
+  .cap{display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:baseline; font-size:clamp(17px,2.2vw,25px); color:var(--ivory);}
+  .cap .b{width:9px; height:9px; border-radius:50%; background:var(--grad); transform:translateY(-3px);}
+
+  .question{font-family:var(--serif); font-weight:500; line-height:1.12; text-wrap:balance; font-size:clamp(32px,6vw,64px); margin:0 0 30px; letter-spacing:-.01em;}
+
+  /* chrome */
+  .brand{position:fixed; top:22px; left:26px; font-family:var(--serif); font-size:15px; color:var(--faint); z-index:5;}
+  .brand .n{font-size:15px;}
+  .counter{position:fixed; bottom:20px; right:26px; font-family:var(--mono); font-size:12px; color:var(--faint); letter-spacing:.12em; z-index:5; font-variant-numeric:tabular-nums;}
+  .hint{position:fixed; bottom:20px; left:26px; font-family:var(--mono); font-size:11px; color:var(--faint); letter-spacing:.06em; z-index:5;}
+  .hint kbd{border:1px solid var(--hair); border-radius:4px; padding:1px 6px; margin:0 2px; color:var(--muted);}
+  .progress{position:fixed; top:0; left:0; height:2px; background:var(--grad); z-index:6; transition:width .4s ease;}
+
+  /* notes panel */
+  .notes{position:fixed; left:0; right:0; bottom:0; z-index:8; background:rgba(8,12,22,.92); backdrop-filter:blur(8px); border-top:1px solid var(--hair);
+     transform:translateY(102%); transition:transform .32s ease; max-height:52vh; overflow:auto;}
+  .notes.open{transform:none;}
+  .notes .inner{max-width:960px; margin:0 auto; padding:22px 26px 26px;}
+  .notes .lab{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--ochre); margin:0 0 8px;}
+  .notes .en{font-size:clamp(16px,2vw,20px); line-height:1.5; color:var(--ivory); margin:0 0 16px;}
+  .notes .en em{color:var(--cyan); font-style:normal;}
+  .notes .ru{font-size:14.5px; line-height:1.55; color:var(--muted); margin:0; border-top:1px solid var(--hair); padding-top:12px;}
+  .notes .stage-dir{font-family:var(--mono); font-size:12.5px; color:var(--cyan); margin:0 0 14px; letter-spacing:.02em;}
+</style>
+
+<div class="progress" id="progress"></div>
+<div class="brand">bridge<span class="n">42</span>worlds</div>
+
+<div class="stage" id="stage">
+  <span class="amb" style="top:8%;left:5%;font-size:14px">e^iπ+1=0</span>
+  <span class="amb" style="bottom:12%;right:6%;font-size:14px">a²+b²=c²</span>
+  <span class="amb" style="top:22%;right:9%;font-size:13px">E=mc²</span>
+  <span class="amb" style="bottom:26%;left:8%;font-size:13px">∇·E=ρ/ε₀</span>
+
+  <!-- 1 -->
+  <section class="slide on">
+    <p class="eyebrow dim">The problem</p>
+    <h1>Hundreds of discoveries appear every day.</h1>
+    <p class="sub wide">Almost no one will read them — locked behind jargon, mathematics, and English.</p>
+    <span class="accent">Alive on Monday. Invisible by Friday.</span>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <svg class="mark" viewBox="0 0 240 150" role="img" aria-label="bridge42worlds mark">
+      <defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#E4A860"/><stop offset="1" stop-color="#5EBCD2"/></linearGradient></defs>
+      <line x1="44" y1="110" x2="196" y2="110" stroke="rgba(236,233,225,.55)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="72" y1="110" x2="72" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="96" y1="110" x2="96" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="120" y1="110" x2="120" y2="46" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="144" y1="110" x2="144" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="168" y1="110" x2="168" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#g2)" stroke-width="7.5" stroke-linecap="round"/>
+      <circle cx="44" cy="110" r="10" fill="#E4A860"/><circle cx="196" cy="110" r="10" fill="#5EBCD2"/>
+    </svg>
+    <div class="wordmark">bridge<span class="n">42</span>worlds</div>
+    <p class="sub wide">A bridge between two worlds — real, serious science, and a curious mind.</p>
+    <span class="accent">42 — simply “for two.”</span>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <p class="eyebrow">What it is</p>
+    <h1>We turn fresh arXiv papers into articles anyone can read.</h1>
+    <div class="pipe">
+      <span class="pnode">arXiv</span><span class="parrow">→</span>
+      <span class="pnode">AI</span><span class="parrow">→</span>
+      <span class="pnode hl">a clear article</span>
+    </div>
+    <div class="chips">
+      <span class="chip"><b>4</b> depths + Mini</span>
+      <span class="chip"><b>4</b> languages</span>
+      <span class="chip"><b>free</b> forever</span>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <p class="live"><span class="pulse"></span> Live · the feed</p>
+    <h1>One paper. Four ways in.</h1>
+    <p class="sub wide">Popular · Simple · Advanced · Mini — the reader chooses, not us.</p>
+    <a class="openbtn" href="https://bridge42worlds.academy/lang/en/index.html" target="_blank" rel="noopener">▶ Open the site</a>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <p class="live"><span class="pulse"></span> Live · in Arabic</p>
+    <p class="arabic">العربية</p>
+    <p class="sub wide">The same frontier science. The same simple words. Right to left, as it should be.</p>
+    <a class="openbtn" href="https://bridge42worlds.academy/lang/ar/index.html" target="_blank" rel="noopener">▶ Open in Arabic</a>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <p class="live"><span class="pulse"></span> Live · the map</p>
+    <h1>The feed is the news.<br>This is the memory.</h1>
+    <p class="sub wide">Tags, laws, scientists — and every connection between them. Walk through knowledge, don’t just read it.</p>
+    <a class="openbtn" href="https://bridge42worlds.academy/lang/en/graph/" target="_blank" rel="noopener">▶ Open the graph</a>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <p class="eyebrow">Why a university</p>
+    <div class="rows">
+      <div class="prow"><span class="who">A student</span><p class="did">stands at the edge of science in minutes — in their own language.</p></div>
+      <div class="prow"><span class="who">A researcher</span><p class="did">looks into a neighbouring field quickly, without getting lost.</p></div>
+      <div class="prow"><span class="who">A scientist</span><p class="did">is finally read beyond their narrow circle.</p></div>
+    </div>
+    <div class="numbers">
+      <span class="num"><b>1,307</b><span>articles</span></span>
+      <span class="num"><b>335</b><span>days</span></span>
+      <span class="num"><b>4</b><span>languages</span></span>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <p class="eyebrow">What we can shape for you</p>
+    <h1>It can be shaped — for you.</h1>
+    <div class="caps">
+      <div class="cap"><span class="b"></span>A feed for your field, department, or course</div>
+      <div class="cap"><span class="b"></span>Set up here, at your university</div>
+      <div class="cap"><span class="b"></span>Filled with the content that matters to you</div>
+      <div class="cap"><span class="b"></span>An intelligent search that understands intent</div>
+    </div>
+    <span class="accent">The technology is ready.</span>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <p class="eyebrow dim">A question, not a pitch</p>
+    <p class="question">What would make this genuinely useful to&nbsp;you?</p>
+    <p class="sub wide">We are guests here. We’ll build it for you — as a gift. Just point us toward what you need.</p>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <svg class="mark" viewBox="0 0 240 150" role="img" aria-label="bridge42worlds mark">
+      <defs><linearGradient id="g10" x1="0" x2="1"><stop offset="0" stop-color="#E4A860"/><stop offset="1" stop-color="#5EBCD2"/></linearGradient></defs>
+      <line x1="44" y1="110" x2="196" y2="110" stroke="rgba(236,233,225,.55)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="72" y1="110" x2="72" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="96" y1="110" x2="96" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="120" y1="110" x2="120" y2="46" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="144" y1="110" x2="144" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="168" y1="110" x2="168" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#g10)" stroke-width="7.5" stroke-linecap="round"/>
+      <circle cx="44" cy="110" r="10" fill="#E4A860"/><circle cx="196" cy="110" r="10" fill="#5EBCD2"/>
+    </svg>
+    <h1>New science, every day.<br>We just make it easy to reach.</h1>
+    <span class="accent">Thank you.</span>
+  </section>
+</div>
+
+<div class="hint"><kbd>→</kbd> next &nbsp; <kbd>N</kbd> notes</div>
+<div class="counter" id="counter">01 / 10</div>
+
+<div class="notes" id="notes"><div class="inner">
+  <p class="lab">Speaker · <span id="n-step"></span></p>
+  <p class="stage-dir" id="n-dir"></p>
+  <p class="en" id="n-en"></p>
+  <p class="ru" id="n-ru"></p>
+</div></div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, i = 0;
+  var counter = document.getElementById('counter'), progress = document.getElementById('progress');
+  var notes = document.getElementById('notes');
+  var nStep=document.getElementById('n-step'), nDir=document.getElementById('n-dir'), nEn=document.getElementById('n-en'), nRu=document.getElementById('n-ru');
+  var pad = function(x){ return (x<10?'0':'')+x; };
+
+  var NOTES = [
+    { step:'1 · The problem', dir:'',
+      en:'Every day, science moves forward. Hundreds of new papers appear — new ideas, new discoveries. But almost no one will read them. Not because people are not curious — people are <em>deeply</em> curious. They cannot read them, because these papers speak only three languages: the language of experts, the language of mathematics, and, very often, only English. So a discovery can be alive on Monday — and still invisible to the world on Friday.',
+      ru:'Каждый день наука движется вперёд. Сотни новых статей — новые идеи, открытия. Но почти никто их не прочтёт. Не потому что неинтересно — людям очень интересно. Эти статьи говорят на трёх языках: специалистов, математики и часто только английском. Открытие живо в понедельник — и невидимо миру в пятницу.' },
+    { step:'2 · The name', dir:'',
+      en:'We called this project bridge42worlds. A bridge — because there are two worlds here. On one side, real, serious science. On the other, a curious human being: a student, a teacher, anyone who wants to understand. For a long time there was no bridge between them. And “42” is a small joke, and a small promise: in our name, forty-two simply means <em>“for two”</em> — for these two worlds.',
+      ru:'Мы назвали проект bridge42worlds. Мост — потому что здесь два мира: настоящая наука и любопытный человек. Долго между ними не было моста. «42» — маленькая шутка и обещание: в имени сорок два значит «for two» — для этих двух миров.' },
+    { step:'3 · What it is', dir:'',
+      en:'What do we actually do? It is simple. Every day we take fresh papers from arXiv — the largest open library of new science in the world. We give each paper to an AI and ask it to do one honest thing: explain this <em>clearly</em>. Not shorter, not louder — just clearly. At three depths — Popular, Simple, Advanced — plus a Mini you read in ten seconds. In several languages. Free, forever. We adapt a paper only when its license allows. We did not come to sell you a path — we built something, and we came to find where it can truly matter.',
+      ru:'Что мы делаем? Всё просто. Берём свежие статьи с arXiv и просим ИИ объяснить ясно. Три глубины — Популярно, Просто, Подробно — плюс Мини за 10 секунд. На нескольких языках. Бесплатно. Мы пришли не продать путь — а найти, где это по-настоящему нужно.' },
+    { step:'4 · Demo · the feed', dir:'→ Switch to the live site. Open the feed, scroll, open one article, click through the four levels.',
+      en:'Let me show you the real thing. This is today — every card is a paper from arXiv, turned into something you can read, grouped by day like a newsfeed for science. Let’s open one. A clear title, a real image from the paper. And here at the top is the important part: the same paper at four depths. <em>Popular</em>… <em>Simple</em>… <em>Advanced</em>, with the formulas… <em>Mini</em>, the whole idea in ten seconds. One paper. Four ways in. The reader chooses — not us.',
+      ru:'Покажу вживую. Вот сегодня — каждая карточка статья с arXiv, по дням, как лента науки. Откроем одну: ясный заголовок, реальная картинка. Наверху главное — та же статья на четырёх глубинах: Популярно, Просто, Подробно с формулами, Мини за 10 секунд. Одна статья, четыре входа. Выбирает читатель.' },
+    { step:'5 · Demo · Arabic — the peak', dir:'→ On the same article, switch language to العربية. Pause. Let the page rebuild right-to-left.',
+      en:'Now — one more thing. This same paper… in Arabic. <em>[pause]</em> The same frontier science. The same simple words. Right to left, as it should be. This is not a rough machine translation buried in jargon — it reads like someone who understands it, explaining it to a friend. A student in Kuwait can meet a discovery from this week, in their own language, on the same day the world sees it. That is the whole idea of the bridge.',
+      ru:'И ещё одно. Эта же статья… на арабском. [пауза] Та же передовая наука, те же простые слова, справа налево. Не грубый машинный перевод — читается, будто понимающий человек объясняет другу. Студент в Кувейте встречает открытие этой недели на родном языке, в тот же день, что и весь мир. В этом вся идея моста.' },
+    { step:'6 · Demo · the graph', dir:'→ Click a tag inside the article, then open the graph page. Then return to the slides.',
+      en:'One last thing on the site. A paper is never alone — every article is tied to concepts, concepts to laws, laws to the scientists behind them. So you don’t just read one article; you can walk. This is our map of science: tags, laws, scientists, and every connection between them. You come for one paper on neutron stars — and you leave understanding how it connects to relativity, and to the people who discovered it. The feed is the news. This is the memory.',
+      ru:'Последнее на сайте. Статья не одна — связана с понятиями, понятия с законами, законы с учёными. Можно гулять по знанию. Вот карта науки: теги, законы, учёные и все связи. Пришёл за статьёй о нейтронных звёздах — ушёл, поняв связь с относительностью и с людьми, что её открыли. Лента — новости. Это — память.' },
+    { step:'7 · Why a university', dir:'→ Back on the slides.',
+      en:'So why might this matter for a university? We see three people. A <em>student</em> — at the edge of science in minutes, in their own language, instead of years. A <em>researcher</em> — looking into a neighbouring field quickly, without getting lost. And a <em>scientist</em> — whose own work is finally read beyond their narrow circle. And this is not a prototype with three articles. Today: more than thirteen hundred articles, over three hundred days, in four languages. It already runs, every day, on its own.',
+      ru:'Зачем это университету? Три человека. Студент — на переднем крае за минуты, на родном языке. Исследователь — быстро заглянет в соседнюю область. Учёный — прочитан за пределами узкого круга. И это не прототип: больше 1300 статей, 300+ дней, 4 языка. Работает каждый день само.' },
+    { step:'8 · What we can shape', dir:'',
+      en:'And here is the important part: this is not fixed. It can be shaped. We can build a feed for one specific goal — your field, your department, your course. We can set it up here, at your university, and fill it with the content that matters to you. We can add more papers, and a smarter search that understands what you are really looking for. The technology is ready. Almost anything you need here — we can build.',
+      ru:'И вот что важно: это не застывшая вещь. Можно настроить под вас: фид под область, кафедру, курс; развернуть у вас; наполнить нужным контентом; догрузить статьи и умный поиск. Технологии готовы. Почти всё, что вам нужно, — построим.' },
+    { step:'9 · The invitation', dir:'→ Speak to the room, calmly. Pause after the question — don’t fill it.',
+      en:'So why are we here? We are not selling anything — there is nothing to buy. We are guests here, and we have real respect for your country and your work. We would be glad to build this for you, as a gift. We ask for only one thing: point us toward what you need. You know your students and your researchers. Tell us where this could help — and we will build it.',
+      ru:'Зачем мы здесь? Мы ничего не продаём — покупать нечего. Мы в гостях и искренне уважаем вашу страну и работу. Будем рады построить это для вас — в подарок. Просим одного: укажите, что вам нужно. Скажите, где это поможет, — и мы построим.' },
+    { step:'10 · Close', dir:'',
+      en:'That’s it. New science comes out every day — we just want to make it easy to reach. Thank you for having us.',
+      ru:'Вот и всё. Новая наука выходит каждый день — мы просто хотим сделать её лёгкой в доступе. Спасибо, что приняли нас.' }
+  ];
+
+  function fill(){
+    var d = NOTES[i];
+    nStep.textContent = d.step;
+    nDir.textContent = d.dir; nDir.style.display = d.dir ? '' : 'none';
+    nEn.innerHTML = d.en; nRu.textContent = d.ru;
+  }
+  function show(n){
+    i = Math.max(0, Math.min(total-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+    counter.textContent = pad(i+1)+' / '+pad(total);
+    progress.style.width = ((i+1)/total*100)+'%';
+    fill();
+  }
+  function next(){ show(i+1); } function prev(){ show(i-1); }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(total-1); }
+    else if(e.key==='n'||e.key==='N'){ notes.classList.toggle('open'); }
+    else if(e.key==='Escape'){ notes.classList.remove('open'); }
+  });
+  document.getElementById('stage').addEventListener('click', function(e){
+    if(e.target.closest('a')) return;
+    var x = e.clientX / window.innerWidth;
+    if(x < 0.28) prev(); else next();
+  });
+  show(0);
+})();
+</script>

@@ -12,12 +12,31 @@
 </head>
 <body>
 <div class="top-bar">
-    <span class="logo-wrap">
-        <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a><button type="button" id="intro-toggle" class="logo-info" title="$about_title">i</button>
-        <div class="intro-popup" id="intro-popup">
-            <p class="home-intro" id="home-intro">$intro_html</p>
+    <div class="brand-row">
+        <span class="logo-wrap">
+            <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a><button type="button" id="intro-toggle" class="logo-info" title="$about_title">i</button>
+            <div class="intro-popup" id="intro-popup">
+                <p class="home-intro" id="home-intro">$intro_html</p>
+            </div>
+        </span>
+        <div class="hdr-icons">
+            <div class="search-bar">
+                <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+                <div class="search-panel" id="search-panel">
+                    <div class="search-row">
+                        <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                        <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                    </div>
+                    <div class="search-hint">$search_hint</div>
+                    <label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
+                </div>
+            </div>
+            <div class="cal-bar">
+                <button type="button" id="calendar-btn" class="cal-btn" title="$calendar_title">📅</button>
+                <div class="calendar-panel" id="calendar-panel"></div>
+            </div>
         </div>
-    </span>
+    </div>
     <div class="header-right">
         <div class="nav-links">
             <a href="/lang/$lang/index.html" class="active">main</a>
@@ -35,23 +54,6 @@
 </div>
 <div class="langs-row">
     <div class="langs" id="langs-bar"></div>
-    <div class="hdr-icons">
-        <div class="search-bar">
-            <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
-            <div class="search-panel" id="search-panel">
-                <div class="search-row">
-                    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-                </div>
-                <div class="search-hint">$search_hint</div>
-                <label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
-            </div>
-        </div>
-        <div class="cal-bar">
-            <button type="button" id="calendar-btn" class="cal-btn" title="$calendar_title">📅</button>
-            <div class="calendar-panel" id="calendar-panel"></div>
-        </div>
-    </div>
 </div>
 <script>
 (function () {

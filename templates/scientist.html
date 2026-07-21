@@ -34,17 +34,19 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header scientist-header">
-    <div class="search-bar">
-        <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
-        <div class="search-panel" id="search-panel">
-            <div class="search-row">
-                <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+    <div class="tag-title-row">
+        <h1>👨‍🔬 $scientist_name</h1>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint">$search_hint</div>
             </div>
-            <div class="search-hint">$search_hint</div>
         </div>
     </div>
-    <h1>👨‍🔬 $scientist_name</h1>
     <div class="tag-stats">$lifespan · $fields</div>
     <div class="desc">$scientist_description</div>
     <div class="section"><h2>$bio_label</h2><p>$scientist_biography</p></div>

@@ -1275,6 +1275,8 @@ def generate_tag_page(tag_id, lang):
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         tag_id=attr_safe(tag_id),
         tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
+        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{tag_graph.get("article_count", 0)}</a></div>'
+                         if tag_graph.get("article_count", 0) else ""),
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html,
         tag_version_toggle=tag_version_toggle,
@@ -1622,6 +1624,8 @@ def generate_law_page(law_id, lang):
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
         mini_graph_filters_html=mini_graph_filters_html(lang, "law"),
         articles_label=safe(loc["articles"]), article_count=law_article_count,
+        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{law_article_count} {safe(loc["articles"])}</a></div>'
+                         if law_article_count else ""),
         search_placeholder=safe(loc["article_search"]), search_hint=safe(loc["article_hint"]),
         primary_tag=attr_safe(",".join(law_tags)),
         articles_list_html=articles_html or f'<p style="color:var(--soft)">—</p>',
@@ -1959,6 +1963,8 @@ def generate_section_page(cat, lang, index=None):
         section_name=safe(ARXIV_CATEGORIES.get(cat, cat)), section_id=safe(cat),
         section_desc=safe(ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")),
         article_count=count, articles_label=safe(loc["articles"]),
+        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{count} {safe(loc["articles"])}</a></div>'
+                         if count else ""),
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
         footer_text=safe(loc["footer"]),

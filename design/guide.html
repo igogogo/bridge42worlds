@@ -1,0 +1,356 @@
+<title>Гид · bridge42worlds</title>
+<style>
+  :root {
+    --bg: #F4F2EC;
+    --surface: #FBFAF6;
+    --card: #ECE9E1;
+    --ink: #0F1626;
+    --muted: #5A6273;
+    --faint: rgba(15,22,38,.10);
+    --hair: rgba(15,22,38,.12);
+    --ochre: #C77F3A;
+    --cyan: #2E8AA0;
+    --grad: linear-gradient(90deg, #C77F3A, #2E8AA0);
+    --midnight: #0F1626;
+    --ivory: #ECE9E1;
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0B111E;
+      --surface: #111A29;
+      --card: #131C2D;
+      --ink: #ECE9E1;
+      --muted: #8A94A6;
+      --faint: rgba(236,233,225,.08);
+      --hair: rgba(236,233,225,.13);
+      --ochre: #E4A860;
+      --cyan: #5EBCD2;
+      --grad: linear-gradient(90deg, #E4A860, #5EBCD2);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F2EC; --surface: #FBFAF6; --card: #ECE9E1; --ink: #0F1626;
+    --muted: #5A6273; --faint: rgba(15,22,38,.10); --hair: rgba(15,22,38,.12);
+    --ochre: #C77F3A; --cyan: #2E8AA0; --grad: linear-gradient(90deg, #C77F3A, #2E8AA0);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B111E; --surface: #111A29; --card: #131C2D; --ink: #ECE9E1;
+    --muted: #8A94A6; --faint: rgba(236,233,225,.08); --hair: rgba(236,233,225,.13);
+    --ochre: #E4A860; --cyan: #5EBCD2; --grad: linear-gradient(90deg, #E4A860, #5EBCD2);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .page {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 64px) 20px 72px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    background: var(--midnight);
+    color: var(--ivory);
+    border-radius: 18px;
+    padding: 40px 34px 34px;
+    overflow: hidden;
+    box-shadow: 0 24px 54px -26px rgba(0,0,0,.55);
+  }
+  .hero .mark { width: 116px; height: auto; display: block; margin-bottom: 18px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(236,233,225,.60);
+    margin: 0 0 14px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(28px, 6vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .hero h1 .n {
+    font-family: var(--mono); font-weight: 600;
+    background: linear-gradient(90deg, #E4A860, #5EBCD2);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .hero .dek {
+    font-size: 17px; color: rgba(236,233,225,.80);
+    max-width: 48ch; margin: 0;
+  }
+  .hero .formula {
+    position: absolute; font-family: var(--mono);
+    color: rgba(236,233,225,.07); font-size: 13px; pointer-events: none;
+  }
+
+  /* ── Sections ── */
+  section { margin-top: 52px; }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ochre); margin: 0 0 8px;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(21px, 4vw, 27px); line-height: 1.2;
+    margin: 0 0 14px; letter-spacing: -.01em; text-wrap: balance;
+  }
+  p { margin: 0 0 14px; }
+  p.lead { font-size: 17.5px; }
+  .muted { color: var(--muted); }
+  strong { font-weight: 650; }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid var(--faint); }
+
+  /* ── Depth ladder ── */
+  .ladder { display: grid; gap: 12px; margin-top: 8px; }
+  .rung {
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .rung .dot {
+    width: 12px; height: 12px; border-radius: 50%; margin-top: 8px;
+    background: var(--grad);
+  }
+  .rung .name {
+    font-family: var(--serif); font-size: 19px; font-weight: 600;
+    margin: 0 0 2px;
+  }
+  .rung .name .lat { font-family: var(--mono); font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+  .rung .desc { margin: 0; color: var(--muted); font-size: 15px; }
+  .rung .when { margin: 6px 0 0; font-size: 14px; }
+  .rung .when b { color: var(--ink); font-weight: 650; }
+  .depth-scale {
+    display: flex; align-items: center; gap: 10px; margin: 22px 2px 0;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .depth-scale .bar { flex: 1; height: 3px; border-radius: 2px; background: var(--grad); opacity: .8; }
+
+  /* ── Menu map ── */
+  .map { display: grid; gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+  .row {
+    display: grid; grid-template-columns: 132px 1fr; gap: 16px;
+    background: var(--surface); padding: 15px 20px; align-items: baseline;
+  }
+  .row .lbl { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 600; }
+  .row .lbl .ic { color: var(--ochre); }
+  .row .txt { font-size: 15px; color: var(--muted); margin: 0; }
+  .row .txt b { color: var(--ink); font-weight: 600; }
+
+  /* ── Toolbar chips ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 18px; }
+  .chip {
+    font-family: var(--mono); font-size: 13px;
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--hair); border-radius: 999px; padding: 7px 14px;
+  }
+  .chip .k { color: var(--ochre); }
+  code {
+    font-family: var(--mono); font-size: .9em;
+    background: var(--card); border: 1px solid var(--hair);
+    border-radius: 6px; padding: 1px 6px;
+  }
+
+  /* ── Langs ── */
+  .langs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .lang {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 12px 16px; min-width: 150px;
+  }
+  .lang .code {
+    font-family: var(--mono); font-weight: 700; font-size: 13px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--midnight); color: var(--ivory);
+  }
+  .lang .meta { font-size: 14px; }
+  .lang .meta b { display: block; }
+  .lang .meta span { color: var(--muted); font-size: 12.5px; }
+  .lang.rtl .native { font-size: 18px; }
+
+  /* ── Callout ── */
+  .note {
+    border-left: 3px solid var(--ochre);
+    background: var(--surface);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px; margin-top: 18px;
+    font-size: 15px; color: var(--muted);
+  }
+  .note b { color: var(--ink); }
+
+  /* ── Little things grid ── */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 8px; }
+  .tile { background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 15px 17px; }
+  .tile b { display: block; font-size: 15px; margin-bottom: 3px; }
+  .tile span { font-size: 14px; color: var(--muted); }
+
+  /* ── Footer ── */
+  .foot {
+    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--hair);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .foot .brand { font-family: var(--serif); font-size: 16px; }
+  .foot .brand .n { font-family: var(--mono); background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .foot .tag { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; gap: 4px; }
+    .rung { grid-template-columns: 1fr; }
+    .rung .dot { display: none; }
+  }
+</style>
+
+<div class="page"><div class="wrap">
+
+  <div class="hero">
+    <span class="formula" style="top:16px;right:20px">e^iπ+1=0</span>
+    <span class="formula" style="bottom:18px;right:26px">a²+b²=c²</span>
+    <svg class="mark" viewBox="0 0 240 150" role="img" aria-label="bridge42worlds">
+      <defs><linearGradient id="b42g" x1="0" x2="1"><stop offset="0" stop-color="#E4A860"/><stop offset="1" stop-color="#5EBCD2"/></linearGradient></defs>
+      <line x1="44" y1="110" x2="196" y2="110" stroke="rgba(236,233,225,.55)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="72" y1="110" x2="72" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="96" y1="110" x2="96" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="120" y1="110" x2="120" y2="46" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="144" y1="110" x2="144" y2="54" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <line x1="168" y1="110" x2="168" y2="71" stroke="rgba(236,233,225,.42)" stroke-width="2"/>
+      <path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#b42g)" stroke-width="7.5" stroke-linecap="round"/>
+      <circle cx="44" cy="110" r="10" fill="#E4A860"/>
+      <circle cx="196" cy="110" r="10" fill="#5EBCD2"/>
+    </svg>
+    <p class="eyebrow">Гид · как читать</p>
+    <h1>bridge<span class="n">42</span>worlds за пять минут</h1>
+    <p class="dek">Каждый день свежая наука с arXiv становится текстом, который может прочесть кто угодно. Вот как здесь всё устроено — прежде чем нырять.</p>
+  </div>
+
+  <section>
+    <p class="kicker">Что это</p>
+    <h2>Наука сегодняшнего дня — простыми словами</h2>
+    <p class="lead">Каждый день на <a href="https://arxiv.org">arXiv</a> — крупнейшей открытой библиотеке новой науки — выходят сотни статей. Мы берём их полный текст, отдаём ИИ и просим сделать одну честную вещь: <strong>объяснить ясно</strong>. Не короче, не громче — просто ясно.</p>
+    <p class="muted">Каждая статья выходит на нескольких языках и на четырёх уровнях глубины. Всё бесплатно, некоммерчески, навсегда. Мы адаптируем статью только когда это позволяет её лицензия.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Главное</p>
+    <h2>Одна статья — четыре глубины</h2>
+    <p class="muted">Не «краткая» и «полная», а лестница. Начните там, где вам удобно, и спускайтесь глубже, если увлекло. Переключатель уровней — вверху каждой статьи.</p>
+    <div class="ladder">
+      <div class="rung">
+        <span class="dot"></span>
+        <div>
+          <p class="name">Просто <span class="lat">simple</span></p>
+          <p class="desc">Для первого знакомства.</p>
+          <p class="when">Если тема новая и хочется <b>понять суть без терминов</b>. Жаргон здесь всегда расшифрован.</p>
+        </div>
+      </div>
+      <div class="rung">
+        <span class="dot"></span>
+        <div>
+          <p class="name">Популярно <span class="lat">popular</span></p>
+          <p class="desc">Если наука уже увлекает.</p>
+          <p class="when">Живой рассказ с интуицией и образами. <b>Уровень по умолчанию</b> — с него открывается статья.</p>
+        </div>
+      </div>
+      <div class="rung">
+        <span class="dot"></span>
+        <div>
+          <p class="name">Подробно <span class="lat">advanced</span></p>
+          <p class="desc">С формулами и историей открытия.</p>
+          <p class="when">Ближе всего к оригиналу. Для тех, кто <b>хочет глубину</b> и не боится математики.</p>
+        </div>
+      </div>
+      <div class="rung">
+        <span class="dot"></span>
+        <div>
+          <p class="name">Мини <span class="lat">mini</span></p>
+          <p class="desc">Только суть за 10 секунд.</p>
+          <p class="when">Одна мысль, как пост в ленте. Чтобы <b>понять, стоит ли читать дальше</b>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="depth-scale"><span>проще</span><span class="bar"></span><span>глубже</span></div>
+  </section>
+
+  <section>
+    <p class="kicker">Карта сайта</p>
+    <h2>Меню наверху</h2>
+    <p class="muted">Слева направо — от ленты к живой карте знаний. Логотип всегда возвращает на главную.</p>
+    <div class="map">
+      <div class="row"><span class="lbl">main</span><p class="txt"><b>Лента статей по дням.</b> Бесконечная лента, сгруппированная по датам — как новостная лента науки.</p></div>
+      <div class="row"><span class="lbl">tags</span><p class="txt"><b>Понятия.</b> Темы физики (чёрные дыры, тёмная материя…). Клик — все статьи по теме плюс её объяснение.</p></div>
+      <div class="row"><span class="lbl">laws</span><p class="txt"><b>Законы и принципы.</b> «Дом формул» — законы, теоремы, эффекты. Формула лишь отображение; суть в тексте.</p></div>
+      <div class="row"><span class="lbl">scientists</span><p class="txt"><b>Учёные.</b> Великие умы за открытиями — с биографией и связанными темами.</p></div>
+      <div class="row"><span class="lbl">sections</span><p class="txt"><b>Разделы arXiv.</b> Космология, экзопланеты, физика высоких энергий… — фильтр по областям.</p></div>
+      <div class="row"><span class="lbl">authors</span><p class="txt"><b>Авторы.</b> Исследователи, публикующиеся в arXiv. Указатель A–Z, теги-чипсы у каждого имени.</p></div>
+      <div class="row"><span class="lbl">graph</span><p class="txt"><b>Граф знаний.</b> Теги ⇄ законы ⇄ учёные и все их связи. По знанию можно гулять, а не только читать.</p></div>
+      <div class="row"><span class="lbl">theory</span><p class="txt"><b>Лаборатории.</b> Интерактивные «столы»: эффект Доплера, тепловой двигатель, газ, чайник — крути параметры руками.</p></div>
+      <div class="row"><span class="lbl"><span class="ic">★</span></span><p class="txt"><b>Избранное.</b> Статьи, которые вы отметили сердечком, — собраны в одном месте.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Языки</p>
+    <h2>Наука на вашем языке</h2>
+    <p class="muted">Переключатель языков — в строке под меню. Русский — язык-источник; остальные готовит ИИ.</p>
+    <div class="langs">
+      <div class="lang"><span class="code">RU</span><span class="meta"><b>Русский</b><span>язык-источник</span></span></div>
+      <div class="lang"><span class="code">EN</span><span class="meta"><b>English</b><span>перевод</span></span></div>
+      <div class="lang"><span class="code">ES</span><span class="meta"><b>Español</b><span>перевод</span></span></div>
+      <div class="lang rtl"><span class="code">AR</span><span class="meta"><b class="native">العربية</b><span>перевод · справа налево</span></span></div>
+    </div>
+    <div class="note">Арабская версия — полноценная, с версткой <b>справа налево</b> (RTL): та же передовая наука, теми же простыми словами. Архитектура не ограничивает число языков — новый добавляется без переписывания сайта.</div>
+  </section>
+
+  <section>
+    <p class="kicker">Как искать</p>
+    <h2>Три способа найти нужное</h2>
+    <p class="muted">Кнопка <b>🔍</b> в шапке. Обычный текст ищет по статьям, а три префикса — точечно:</p>
+    <div class="chips">
+      <span class="chip"><span class="k">#</span> тег</span>
+      <span class="chip"><span class="k">@</span> автор</span>
+      <span class="chip"><span class="k">!</span> учёный</span>
+    </div>
+    <p class="muted">Например, <code>#black_hole</code> — статьи по теме, <code>@Hawking</code> — по автору, <code>!Einstein</code> — связанные с учёным. Рядом кнопка <b>📅 Календарь</b>: год → месяц → день — можно вернуться к любой дате. А фильтр разделов сузит ленту до нужных областей arXiv.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Изюминка</p>
+    <h2>Гулять по знанию, а не только читать</h2>
+    <p>Каждая статья связана с темами; темы — с законами и учёными; учёные — снова с темами. Это единый <strong>граф знаний</strong>. На странице любого тега, закона или учёного есть мини-карта его окружения — с регулятором глубины <code>+ / −</code>. А на странице <code>graph</code> — вся карта целиком, с фильтрами и поиском по трём типам сразу.</p>
+    <div class="note">Практический смысл: пришли за одной статьёй о нейтронных звёздах — а ушли, поняв, как они связаны с общей теорией относительности, с эффектом, который её описывает, и с людьми, которые его открыли.</div>
+  </section>
+
+  <section>
+    <p class="kicker">Мелочи, которые приятно знать</p>
+    <h2>По дороге</h2>
+    <div class="tiles">
+      <div class="tile"><b>Тёмная / светлая тема</b><span>Переключается и запоминается — читайте так, как удобно глазам.</span></div>
+      <div class="tile"><b>Значок «i» у логотипа</b><span>Короткое интро о сайте — открывается по клику.</span></div>
+      <div class="tile"><b>Время чтения</b><span>У каждой статьи — честная оценка, сколько займёт.</span></div>
+      <div class="tile"><b>Картинки из статьи</b><span>Реальные рисунки и графики из PDF, с подписями, плюс AI-обложка.</span></div>
+      <div class="tile"><b>Сердечко и отклик</b><span>Отметьте статью или оставьте короткий отзыв — без регистрации.</span></div>
+      <div class="tile"><b>«Следующая статья»</b><span>Кнопка внизу ведёт дальше, не возвращая в ленту.</span></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span class="brand">bridge<span class="n">42</span>worlds</span>
+    <span class="tag">наука простыми словами · для всех · бесплатно</span>
+  </div>
+
+</div></div>

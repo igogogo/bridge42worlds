@@ -500,6 +500,10 @@ html[dir="rtl"] .vs-dot:nth-child(6) { left: 0%; }
 /* Раньше — отдельная центрированная строка под шапкой (кружок ℹ️ + разворачивающийся текст),
    болталась по центру и занимала место сама по себе. Теперь — маленький значок-«степень»
    (как ™) сразу у названия сайта, текст — во всплывающем поповере по клику, а не в потоке. */
+/* Иконки поиска/календаря — рядом с логотипом, а не в отдельной строке с языками, где они
+   "уезжали" далеко вправо и визуально отрывались от заголовка (юзер-фидбек 2026-07-21).
+   Общий .top-bar остаётся space-between между этой группой (логотип+иконки) и меню/темой. */
+.brand-row { display: flex; align-items: center; gap: 10px; }
 .logo-wrap { position: relative; }
 .logo-info {
     display: inline-block; vertical-align: super; margin-left: 2px;
@@ -1050,6 +1054,10 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .card-eyebrow { margin-bottom: 5px; line-height: 1.3; }
 .card-cat { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--link); text-decoration: none; }
 .card-date { display: inline-block; font-size: 11px; margin-left: 8px; }
+/* RTL: .card-cat/.card-date идут без пробела в разметке (js/search.js), зазор — только через
+   margin-left, который в RTL не переворачивается сам собой — дата и раздел визуально слипались
+   (юзер-фидбек 2026-07-21). */
+html[dir="rtl"] .card-date { margin-left: 0; margin-right: 8px; }
 /* Заголовок карточки — одна строка на любой ширине, обрезка многоточием, а не перенос
    (юзер-фидбек 2026-07-21). НЕ трогаем .card-desc тем же способом — overflow:hidden там
    уже один раз ломал обтекание плавающей картинки (.card-img-wrap { float:left }), см.
@@ -1297,9 +1305,11 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 /* Поиск на карточке тега/закона/учёного/раздела — свёрнут в 🔍 у заголовка (юзер-фидбек
    2026-07-21: "список и так есть, поле поиска лишнее"), тот же паттерн выпадашки, что на
    главной (.search-bar/.search-panel уже стилизованы, initSearchToggle() в search.js
-   универсален по id). */
-.tag-header .search-bar { position: absolute; top: 0; right: 0; }
-html[dir="rtl"] .tag-header .search-bar { right: auto; left: 0; }
+   универсален по id). Иконка — ВПЛОТНУЮ к тексту заголовка (.tag-title-row, тот же приём,
+   что .brand-row на главной), а не в углу всего .tag-header — иначе на короткий заголовок
+   иконка "уезжала" далеко вправо и выглядела оторванной (юзер-фидбек 2026-07-21). */
+.tag-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tag-title-row h1 { margin-bottom: 0; }
 .tag-header h1 { font-size: 30px; margin-bottom: 10px; }
 .scientist-header h1 { font-size: 24px; }
 .tag-header .desc { font-size: 15.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.65; }
