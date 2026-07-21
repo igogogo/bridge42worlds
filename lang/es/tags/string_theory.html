@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/es/authors/">authors</a>
             <a href="/lang/es/graph/">graph</a>
             <a href="/lang/es/theory/">theory</a>
-            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/favorites.html" title="Favoritos">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/string_theory.jpg" alt=""></div>
     <h1>teoría de cuerdas</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">9</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="La teoría de cuerdas es un enfoque de la gravedad cuántica basado en la sustitución de las partículas fundamentales puntuales por objetos unidimensionales extendidos (cuerdas) con una longitud característica del orden de la longitud de Planck. Las excitaciones vibratorias de la cuerda generan una torre infinita de partículas con masa creciente, lo que permite incluir en la teoría el gravitón, portador de la interacción gravitatoria. Para la consistencia de la cuantización de las excitaciones fermiónicas, la teoría requiere supersimetría, y para eliminar anomalías, una dimensionalidad crítica de 10 (para supercuerdas) o 26 (para la cuerda bosónica). En el límite de baja energía, la teoría de cuerdas reproduce la relatividad general y los campos de gauge. Las dimensiones adicionales se compactifican en variedades de Calabi-Yau, determinando las propiedades de la teoría efectiva en cuatro dimensiones.">La teoría de cuerdas es un enfoque de la gravedad cuántica basado en la sustitución de partículas puntuales por objetos unidimensionales extendidos (cuerdas) con una longitud característica del orden de la longitud de Planck. Las excitaciones vibratorias de la cuerda generan un espectro de estados con masas crecientes, incluyendo el gravitón, el portador de la gravedad. Para la consistencia de la cuantización de fermiones se requiere supersimetría, y para eliminar anomalías se necesita una dimensionalidad crítica de 10 (supercuerdas) o 26 (cuerda bosónica). En el límite de baja energía, la teoría reproduce la relatividad general y los campos de gauge. Las dimensiones adicionales se compactifican en variedades de Calabi-Yau de seis dimensiones, determinando la física de nuestro mundo tetradimensional.</div>
         <div class="section"><h2>History</h2><p>En 1968, Gabriele Veneziano descubrió que la función beta de Euler describe la amplitud de dispersión de mesones. Esto llevó al modelo de resonancias duales, que Yoichiro Nambu, Holger Nielsen y Leonard Susskind interpretaron como una teoría cuántica de la cuerda relativista. En los años 1970, la cuerda bosónica sufría de taquiones, pero la adición de supersimetría y fermiones condujo a la teoría de supercuerdas (John Schwarz, Michael Green). En 1984-86, la 'primera revolución de las supercuerdas' mostró que las supercuerdas de 10 dimensiones están libres de anomalías y pueden incluir el Modelo Estándar. A mediados de los 1990, la 'segunda revolución de las supercuerdas' reveló dualidades y la teoría M unificadora (Edward Witten).</p></div>
         <div class="section"><h2>How it works</h2><p>La acción de la cuerda generaliza la acción de una partícula puntual relativista: en lugar de una línea de mundo, se tiene una hoja de mundo (superficie bidimensional) en el espacio-tiempo. El comportamiento cuántico de la cuerda exige una teoría conforme de campos en la superficie de mundo. El espectro de masas es discreto, y para una cuerda cerrada la excitación sin masa de espín 2 corresponde al gravitón, incorporando automáticamente la gravedad. Las interacciones se describen mediante diagramas con topología de hojas de mundo sin divergencias ultravioletas, lo que proporciona una teoría cuántica finita de la gravedad. Al compactificar, las dimensiones adicionales determinan el conjunto de campos sin masa y los grupos de simetría de la teoría efectiva. El principio de superposición se aplica a los estados de la cuerda.</p></div>
-        <div class="formula"><div class="formula-render">T = \frac{1}{2\pi\alpha'}</div><div class="formula-meaning">T es la tensión de la cuerda (energía por unidad de longitud), α' es el parámetro de pendiente de las trayectorias de Regge, relacionado con la longitud característica de la cuerda ℓ_s como ℓ_s = √(α') en unidades de Planck (donde ℓ_s ≈ longitud de Planck ≈ 1,6×10⁻³⁵ m).</div></div>
+        <div class="formula"><div class="formula-render">T = \frac{1}{2\pi\alpha&#x27;}</div><div class="formula-meaning">T es la tensión de la cuerda (energía por unidad de longitud), α&#x27; es el parámetro de pendiente de las trayectorias de Regge, relacionado con la longitud característica de la cuerda ℓ_s como ℓ_s = √(α&#x27;) en unidades de Planck (donde ℓ_s ≈ longitud de Planck ≈ 1,6×10⁻³⁵ m).</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Falta de confirmación experimental: la escala de Planck requiere energías inalcanzables en aceleradores.; Problema del paisaje: el enorme número de estados de vacío posibles (~10^500) dificulta identificar nuestro Universo.; Comprensión de las soluciones no supersimétricas y la constante cosmológica.; Independencia del fondo: la formulación completa de la teoría sin recurrir a un espacio-tiempo fijo no está terminada.</p><p class="fact">💡 En algunos modelos de teoría de cuerdas existen 'cuerdas cósmicas', defectos topológicos macroscópicos que podrían detectarse mediante lentes gravitacionales; esta es una de las pocas señales potencialmente verificables.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="string_theory_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="string_theory" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="string_theory_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="¡Genial!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="string_theory" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
 <div class="mini-graph" data-node="t:string_theory"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="string_theory_es_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -118,10 +122,10 @@
                 <div class="meta">arXiv:2605.15045v1 · 2026-05-14</div></div></div></div>
 
 <footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('string_theory', 'tag', 'es');

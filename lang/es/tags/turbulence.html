@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/es/authors/">authors</a>
             <a href="/lang/es/graph/">graph</a>
             <a href="/lang/es/theory/">theory</a>
-            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/favorites.html" title="Favoritos">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/turbulence.jpg" alt=""></div>
     <h1>turbulencia</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="">La turbulencia es un fenómeno no lineal complejo, descrito por las ecuaciones de Navier-Stokes para el movimiento de fluidos viscosos. Para números de Reynolds superiores al crítico, la solución laminar pierde estabilidad y pequeñas perturbaciones crecen, generando movimiento caótico. La energía turbulenta se produce a grandes escalas (escala integral L) debido a los esfuerzos cortantes y se transfiere en cascada hacia abajo en el espectro hasta la escala disipativa (escala de Kolmogórov η), donde la viscosidad convierte la energía cinética en calor. En el intervalo inercial (η ≪ r ≪ L), el único parámetro determinante es la tasa de disipación de energía ε; por análisis dimensional se obtiene la famosa ley «–5/3». La simulación numérica directa (DNS) requiere resolver todas las escalas, lo que a altos Re hace los cálculos extremadamente costosos; por ello se emplean modelos de grandes remolinos (LES) y métodos promediados (RANS). En astrofísica, la turbulencia juega un papel clave en los discos de acreción, la formación estelar y el medio interestelar.</div>
         <div class="section"><h2>History</h2><p>Osborne Reynolds, en 1883, realizó el famoso experimento del hilo de tinta e introdujo un parámetro adimensional (número de Reynolds) que determina la transición a la turbulencia. En 1941, Andréi Kolmogórov creó una teoría estadística de la turbulencia localmente isótropa, postulando la universalidad del intervalo inercial. Las confirmaciones experimentales del espectro k^{-5/3} se obtuvieron en las décadas de 1950 y 1960.</p></div>
         <div class="section"><h2>How it works</h2><p>El mecanismo de la cascada turbulenta: la energía se introduce en el flujo a grandes escalas (por ejemplo, al rodear un obstáculo) y, mediante una secuencia de rupturas de vórtices, se transfiere a escalas cada vez menores. En el intervalo inercial, lejos tanto de la fuente como de la disipación, la estadística es homogénea e isótropa, y el espectro de energía depende solo del número de onda k y la tasa de disipación ε: E(k) = C ε^{2/3} k^{-5/3}, donde la constante C ≈ 1.5. La disipación ocurre a escalas del orden de la longitud de Kolmogórov η = (ν^3/ε)^{1/4}, donde ν es la viscosidad cinemática. La transición a la turbulencia está relacionada con la inestabilidad del perfil laminar: cuando Re > Re_cr, pequeñas perturbaciones crecen exponencialmente, formando flujos secundarios y, finalmente, caos. Las dificultades matemáticas se deben a que las ecuaciones de Navier-Stokes son no lineales y no tienen una solución analítica general; el problema del cierre de la turbulencia sigue siendo uno de los desafíos no resueltos más importantes de la física clásica.</p></div>
-        <div class="formula"><div class="formula-render">Re = \frac{\rho u L}{\mu}</div><div class="formula-meaning">Re es el número de Reynolds, ρ es la densidad del fluido, u es la velocidad característica del flujo, L es la dimensión lineal característica, μ es la viscosidad dinámica del fluido. La transición a turbulencia suele ocurrir para Re > 2300 en tuberías.</div></div><div class="formula"><div class="formula-render">E(k) = C \varepsilon^{2/3} k^{-5/3}</div><div class="formula-meaning">E(k) es la densidad espectral de energía cinética por unidad de masa en función del número de onda k (k = 2π/λ, donde λ es el tamaño del vórtice), ε es la tasa de disipación de energía por unidad de masa, C es la constante de Kolmogórov (normalmente alrededor de 1.5).</div></div>
+        <div class="formula"><div class="formula-render">Re = \frac{\rho u L}{\mu}</div><div class="formula-meaning">Re es el número de Reynolds, ρ es la densidad del fluido, u es la velocidad característica del flujo, L es la dimensión lineal característica, μ es la viscosidad dinámica del fluido. La transición a turbulencia suele ocurrir para Re &gt; 2300 en tuberías.</div></div><div class="formula"><div class="formula-render">E(k) = C \varepsilon^{2/3} k^{-5/3}</div><div class="formula-meaning">E(k) es la densidad espectral de energía cinética por unidad de masa en función del número de onda k (k = 2π/λ, donde λ es el tamaño del vórtice), ε es la tasa de disipación de energía por unidad de masa, C es la constante de Kolmogórov (normalmente alrededor de 1.5).</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>La solución analítica general de las ecuaciones de Navier-Stokes para flujos turbulentos sigue siendo desconocida (problema del milenio); Problema de cierre: en los modelos promediados surgen correlaciones que requieren hipótesis semiempíricas; La enorme diferencia entre la escala de Kolmogórov y la escala integral hace que la DNS sea impracticable a altos Re</p><p class="fact">💡 Incluso en un flujo turbulento completamente desarrollado, existen regiones delgadas con fluctuaciones muy intensas de vorticidad — filamentos vorticiales, que pueden ser la causa de una disipación anómala.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="turbulence_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="turbulence" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="turbulence_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="¡Genial!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="turbulence" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
 <div class="mini-graph" data-node="t:turbulence"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="turbulence_es_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="turbulence"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('turbulence', 'tag', 'es');

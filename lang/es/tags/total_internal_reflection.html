@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/es/authors/">authors</a>
             <a href="/lang/es/graph/">graph</a>
             <a href="/lang/es/theory/">theory</a>
-            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/favorites.html" title="Favoritos">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/total_internal_reflection.jpg" alt=""></div>
     <h1>reflexión interna total</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="La reflexión interna total es un efecto óptico que surge en la frontera entre dos dieléctricos cuando el ángulo de incidencia supera el crítico. Según la ley de Snell, n₁ sin θ₁ = n₂ sin θ₂, cuando sin θ₂ rebasa formalmente la unidad, no hay rayo refractado. El campo electromagnético en el segundo medio existe en forma de onda evanescente, cuya amplitud decae exponencialmente con la distancia a la frontera (profundidad de penetración del orden de la longitud de onda). El flujo de energía hacia el segundo medio es nulo; no obstante, el campo evanescente puede interactuar con objetos cercanos, fenómeno conocido como reflexión interna total frustrada (RITF). El coeficiente de reflexión se calcula mediante las fórmulas de Fresnel y, para ángulos superiores al crítico, tiene módulo unidad, pero la luz reflejada sufre un salto de fase que depende de la polarización.">La reflexión interna total es un efecto óptico en la frontera entre dos dieléctricos cuando el ángulo de incidencia supera el crítico. De la ley de Snell n₁ sin θ₁ = n₂ sin θ₂, cuando sin θ₂ > 1 el rayo refractado desaparece. En su lugar, en el segundo medio surge una onda evanescente que decae exponencialmente con la profundidad: la profundidad de penetración es del orden de una longitud de onda. El flujo de energía a través de la frontera es nulo, pero objetos cercanos pueden interactuar con este campo (reflexión interna total frustrada). Según las fórmulas de Fresnel, el coeficiente de reflexión en módulo es 1, pero la fase se desplaza; el desplazamiento depende de la polarización.</div>
         <div class="section"><h2>History</h2><p>La primera descripción de la reflexión interna total la dio Kepler en su «Dioptrice» (1611). En 1621, Snell descubrió la ley de refracción, de la cual se deduce directamente el ángulo crítico. En la década de 1820, Fresnel desarrolló la teoría, incluyendo las ondas evanescentes. En 1854, Tyndall demostró una guía de luz con un chorro de agua, un precursor de la fibra óptica. En los años 1960 comenzó la aplicación práctica de la fibra óptica.</p></div>
         <div class="section"><h2>How it works</h2><p>Condición para la RIT: n₁ > n₂ y ángulo de incidencia θ₁ > θ_c. La conservación de la componente tangencial del vector de onda da k_x = (n₁ ω/c) sin θ₁. Cuando θ₁ > θ_c, k_x excede n₂ ω/c, por lo que la componente normal k_z₂ se vuelve imaginaria: k_z₂ = iκ. El campo decae exponencialmente: exp(−κ z), con profundidad de penetración δ = 1/κ = λ₀/(2π n₁ √(sin²θ₁ − (n₂/n₁)²)). La onda evanescente transporta energía a lo largo de la frontera, pero no hacia el volumen. El desplazamiento de fase en la reflexión es diferente para las polarizaciones s y p. La RIT frustrada es análoga al efecto túnel cuántico: al acercar dos prismas a una distancia del orden de δ, la luz penetra parcialmente en el segundo.</p></div>
-        <div class="formula"><div class="formula-render">n_1 \sin \theta_1 = n_2 \sin \theta_2</div><div class="formula-meaning">n₁ — índice de refracción del primer medio, θ₁ — ángulo de incidencia, n₂ — índice de refracción del segundo medio, θ₂ — ángulo de refracción</div></div><div class="formula"><div class="formula-render">\theta_c = \arcsin\left(\frac{n_2}{n_1}\right)</div><div class="formula-meaning">θ_c — ángulo crítico, n₁ > n₂ — índices de refracción</div></div>
+        <div class="formula"><div class="formula-render">n_1 \sin \theta_1 = n_2 \sin \theta_2</div><div class="formula-meaning">n₁ — índice de refracción del primer medio, θ₁ — ángulo de incidencia, n₂ — índice de refracción del segundo medio, θ₂ — ángulo de refracción</div></div><div class="formula"><div class="formula-render">\theta_c = \arcsin\left(\frac{n_2}{n_1}\right)</div><div class="formula-meaning">θ_c — ángulo crítico, n₁ &gt; n₂ — índices de refracción</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Reducción de pérdidas en fibra óptica para comunicaciones a muy larga distancia; Desarrollo de guías de onda para fotónica integrada; Aumento de la eficiencia de sensores basados en RITF (RIT frustrada); Efectos cuánticos en el acoplamiento evanescente con emisores individuales; Materiales con absorción récord baja para el infrarrojo medio</p><p class="fact">💡 En la reflexión interna total frustrada, los fotones tunelan a través de un estrecho hueco, lo que es un análogo óptico directo del efecto túnel cuántico. Este experimento puede realizarse con dos prismas y un puntero láser.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="total_internal_reflection_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="total_internal_reflection" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="total_internal_reflection_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="¡Genial!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="total_internal_reflection" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
 <div class="mini-graph" data-node="t:total_internal_reflection"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="total_internal_reflection_es_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="total_internal_reflection"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('total_internal_reflection', 'tag', 'es');

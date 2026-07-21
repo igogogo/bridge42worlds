@@ -27,7 +27,7 @@
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
-            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/favorites.html" title="$fav_title">★</a>
         </div>
         $tag_version_toggle
     </div>
@@ -36,6 +36,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">$search_hint</div>
+        </div>
+    </div>
     $ai_cover_html
     <h1>$tag_name</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">$article_count</a></div>
@@ -44,20 +54,20 @@
     </div>
     <div class="tag-ver" data-ver="popular">
         <div class="desc" data-raw="$tag_desc_popular_raw">$tag_description_popular</div>
-        <div class="section"><h2>$history_label</h2><p>$tag_history_simple</p></div>
-        <div class="section"><h2>$how_label</h2><p>$tag_how_it_works_simple</p></div>
+        $history_simple_section_html
+        $how_simple_section_html
         $fun_fact_popular_html
     </div>
     <div class="tag-ver" data-ver="simple" style="display:none">
         <div class="desc" data-raw="$tag_desc_simple_raw">$tag_description_simple</div>
-        <div class="section"><h2>$history_label</h2><p>$tag_history_simple</p></div>
-        <div class="section"><h2>$how_label</h2><p>$tag_how_it_works_simple</p></div>
+        $history_simple_section_html
+        $how_simple_section_html
         $fun_fact_html
     </div>
     <div class="tag-ver" data-ver="advanced" style="display:none">
         <div class="desc" data-raw="$tag_desc_adv_raw">$tag_description</div>
-        <div class="section"><h2>$history_label</h2><p>$tag_history</p></div>
-        <div class="section"><h2>$how_label</h2><p>$tag_how_it_works</p></div>
+        $history_section_html
+        $how_section_html
         $formulas_html
         $problems_and_fact_html
     </div>
@@ -72,12 +82,6 @@ $actions_html
 <div class="mini-graph" data-node="t:$tag_id"><canvas id="minigraph"></canvas></div>
 
 $feedback_html
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">$search_hint</div>
 
 <div class="filters" id="active-filters"></div>
 </div>

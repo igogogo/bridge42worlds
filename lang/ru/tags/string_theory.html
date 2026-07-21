@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/string_theory.jpg" alt=""></div>
     <h1>теория струн</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">9</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Теория струн — подход к квантовой гравитации, основанный на замене фундаментальных точечных частиц одномерными протяжёнными объектами (струнами) с характерной длиной порядка планковской длины. Колебательные возбуждения струны порождают бесконечную башню частиц с возрастающей массой, что позволяет включить в теорию гравитон — переносчик гравитационного взаимодействия. Для консистентности квантования фермионных возбуждений теория требует суперсимметрии, а для устранения аномалий — критической размерности 10 (для суперструн) или 26 (для бозонной струны). В низкоэнергетическом пределе теория струн воспроизводит общую теорию относительности и калибровочные поля. Дополнительные измерения компактифицируются на многообразия Калаби-Яу, задавая свойства эффективной четырёхмерной теории.">Теория струн — подход к квантовой гравитации, основанный на замене точечных частиц одномерными протяжёнными объектами (струнами) с характерной длиной порядка планковской длины. Колебательные возбуждения струны порождают спектр состояний с возрастающими массами, включая гравитон — переносчик гравитации. Для консистентности квантования фермионов требуется суперсимметрия, а для устранения аномалий — критическая размерность 10 (суперструны) или 26 (бозонная струна). В низкоэнергетическом пределе теория воспроизводит общую теорию относительности и калибровочные поля. Дополнительные измерения компактифицируются на шестимерные многообразия Калаби-Яу, задавая физику нашего четырёхмерного мира.</div>
         <div class="section"><h2>История</h2><p>В 1968 году Габриэле Венециано открыл, что бета-функция Эйлера описывает амплитуду рассеяния мезонов. Это привело к модели дуальных резонансов, которую Яитиро Намбу, Хольгер Нильсен и Леонард Сасскинд интерпретировали как квантовую теорию релятивистской струны. В 1970-х бозонная струна страдала от тахионов, но добавление суперсимметрии и фермионов привело к теории суперструн (Джон Шварц, Майкл Грин). В 1984–86 гг. «первая суперструнная революция» показала свободу 10-мерных суперструн от аномалий и возможность включить Стандартную модель. Середина 1990-х — «вторая суперструнная революция» — выявила дуальности и объединяющую М-теорию (Эдвард Виттен).</p></div>
         <div class="section"><h2>Как работает</h2><p>Действие струны обобщает действие точечной релятивистской частицы: вместо мировой линии — мировой лист (двумерная поверхность) в пространстве-времени. Квантовое поведение струны приводит к требованию конформной теории поля на мировой поверхности. Спектр масс дискретен, и для замкнутой струны безмассовое спинорное возбуждение отвечает гравитону, автоматически включая гравитацию. Взаимодействия описываются диаграммами с топологией мировых листов без ультрафиолетовых расходимостей, что даёт конечную квантовую теорию гравитации. При компактификации дополнительные измерения определяют набор безмассовых полей и группы симметрий эффективной теории. Принцип суперпозиции применяется к струнным состояниям.</p></div>
-        <div class="formula"><div class="formula-render">T = \frac{1}{2\pi\alpha'}</div><div class="formula-meaning">T — натяжение струны (энергия на единицу длины), α' — параметр наклона реджевских траекторий, связанный с характерной длиной струны ℓ_s как ℓ_s = √(α') в планковских единицах (где ℓ_s ≈ планковской длине ≈ 1,6×10⁻³⁵ м).</div></div>
+        <div class="formula"><div class="formula-render">T = \frac{1}{2\pi\alpha&#x27;}</div><div class="formula-meaning">T — натяжение струны (энергия на единицу длины), α&#x27; — параметр наклона реджевских траекторий, связанный с характерной длиной струны ℓ_s как ℓ_s = √(α&#x27;) в планковских единицах (где ℓ_s ≈ планковской длине ≈ 1,6×10⁻³⁵ м).</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Отсутствие экспериментальных подтверждений: планковский масштаб требует энергий, недостижимых на ускорителях.; Проблема ландшафта: огромное число возможных вакуумных состояний (~10^500) затрудняет выделение нашей Вселенной.; Понимание несуперсимметричных решений и космологической постоянной.; Фоновая независимость: полная формулировка теории без опоры на фиксированное пространство-время не завершена.</p><p class="fact">💡 В некоторых моделях теории струн существуют «космические струны» — макроскопические топологические дефекты, которые можно было бы обнаружить по гравитационному линзированию; это один из немногих потенциально проверяемых сигналов.</p></div>
     </div>
 </div>
@@ -78,12 +88,6 @@
 <div class="mini-graph" data-node="t:string_theory"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="string_theory_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -118,10 +122,10 @@
                 <div class="meta">arXiv:2605.15045v1 · 2026-05-14</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('string_theory', 'tag', 'ru');

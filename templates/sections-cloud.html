@@ -24,7 +24,7 @@
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
-            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/favorites.html" title="$fav_title">★</a>
         </div>
         $version_toggle_html
     </div>
@@ -35,7 +35,10 @@
 <h1>🗂️ $sections_title</h1>
 <div class="subtitle">$sections_subtitle</div>
 
-<div class="sections-cloud">$sections_cloud_html</div>
+<table class="sections-table">
+    <thead><tr><th>$name_col</th><th>$code_col</th><th>$count_col</th></tr></thead>
+    <tbody>$sections_cloud_html</tbody>
+</table>
 
 <footer><p>bridge42worlds — $footer_text · <a href="/lang/$lang/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
 <script src="/js/likes.js?v=$asset_ver"></script>

@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/en/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
             <a href="/lang/en/theory/">theory</a>
-            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/favorites.html" title="Favorites">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/polarimetry.jpg" alt=""></div>
     <h1>polarimetry</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">5</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="">Polarimetry is a set of methods for measuring the polarization of light. The polarization state is described by the Stokes vector (I, Q, U, V), where I is the total intensity, Q and U are linear polarization, V is circular. The measurement consists in determining these parameters by passing radiation through polarizers (analyzers) and phase plates (quarter-wave, half-wave) with subsequent intensity recording. In physical problems, polarimetry provides information about the asymmetry of the emitting or scattering medium: synchrotron radiation in magnetic fields is linearly polarized, Mie scattering by interstellar dust polarizes starlight, the Zeeman effect creates circular polarization in spectral lines in magnetic fields. Accuracy reaches fractions of a percent. It is used in remote sensing, astrophysics (protoplanetary disks, polars, jets), and atmospheric physics.</div>
         <div class="section"><h2>History</h2><p>Étienne Malus in 1808 described the phenomenon he called polarization, observing reflected light through a calcite crystal. David Brewster discovered the law of the angle of complete polarization upon reflection (1815). Augustin Fresnel and Dominique Arago investigated the interference of polarized light. James Clerk Maxwell in 1865, while formulating Maxwell's equations, theoretically described electromagnetic waves and included polarization as a vector property. William Lawrence Bragg developed X-ray polarimetry. In astronomy, pioneers were Bernard Lyot (inventor of the polarizing filter for the coronagraph) and William Hiltner, who detected interstellar polarization in 1949.</p></div>
         <div class="section"><h2>How it works</h2><p>Light passes through an optical path with polarization elements: first, phase-sensitive modulators (e.g., Pockels cell or rotating half-wave plate) change the polarization state, then an analyzer (polarizer) transmits the component along its axis, and a photodetector records the signal. Modulation allows separating the Stokes parameters by phase. In radio astronomy, polarization is measured by correlating orthogonally polarized channels. The degree of polarization p = sqrt(Q^2+U^2+V^2)/I. Key effects: electron scattering (linear polarization), synchrotron radiation (polarization direction perpendicular to the magnetic field), Zeeman effect (circular polarization in spectral lines), reflection from a surface (Brewster's angle). The principle of superposition and statistical signal processing are at the core.</p></div>
-        <div class="formula"><div class="formula-render">\tan \theta_B = \frac{n_2}{n_1}</div><div class="formula-meaning">θ_B — Brewster's angle (angle of incidence), n_1 — refractive index of the medium from which light falls, n_2 — refractive index of the medium into which light enters</div></div><div class="formula"><div class="formula-render">I = I_0 \cos^2 \phi</div><div class="formula-meaning">I — intensity of light after the polarizer, I_0 — initial intensity of polarized light entering the polarizer, φ — angle between the polarization direction of the incoming light and the transmission axis of the polarizer</div></div>
+        <div class="formula"><div class="formula-render">\tan \theta_B = \frac{n_2}{n_1}</div><div class="formula-meaning">θ_B — Brewster&#x27;s angle (angle of incidence), n_1 — refractive index of the medium from which light falls, n_2 — refractive index of the medium into which light enters</div></div><div class="formula"><div class="formula-render">I = I_0 \cos^2 \phi</div><div class="formula-meaning">I — intensity of light after the polarizer, I_0 — initial intensity of polarized light entering the polarizer, φ — angle between the polarization direction of the incoming light and the transmission axis of the polarizer</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Ultimate accuracy in measuring very low polarization (instrumental depolarization).; Difficulty in separating the contributions of different polarization mechanisms along the line of sight.; Calibration of polarization measurements on space telescopes.; Interpretation of temporal variability of polarization in active nuclei.; Detection of B-mode polarization of the cosmic microwave background for primordial gravitational waves.</p><p class="fact">💡 Iceland spar (calcite) crystals split the image due to double refraction — it was historically the first polarization analyzer, used by Malus.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="polarimetry_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="polarimetry" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="polarimetry_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Awesome!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="polarimetry" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
 <div class="mini-graph" data-node="t:polarimetry"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="polarimetry_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -109,10 +113,10 @@
                 <div class="meta">arXiv:2605.16413v2 · 2026-05-13</div></div></div></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('polarimetry', 'tag', 'en');

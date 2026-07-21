@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/quantum_teleportation.jpg" alt=""></div>
     <h1>квантовая телепортация</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Квантовая телепортация — это процедура перемещения квантового состояния между двумя точками без физического переноса носителя состояния. Обязательные ресурсы: максимально запутанная пара (состояние Белла), стандартный канал связи и возможность локальных квантовых операций. Формально, пусть состояние для телепортации: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. Запутанная пара (кубиты 2 и 3): |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. Общее состояние: |ψ⟩₁ ⊗ |Φ⁺⟩₂₃. Измерение Белла над кубитами 1 и 2 в базисе { |Φ⁺⟩, |Φ⁻⟩, |Ψ⁺⟩, |Ψ⁻⟩ } даёт классический исход (два бита), после которого кубит 3 проецируется в одно из состояний: α|0⟩ + β|1⟩, α|0⟩ - β|1⟩, α|1⟩ + β|0⟩, α|1⟩ - β|0⟩. Соответствующая операция Паули (I, Z, X, ZX) восстанавливает |ψ⟩ на кубите 3. Измерение не даёт информации о α и β, сохраняя неизвестные амплитуды. Протокол работает для любых состояний — чистых и смешанных, но требует высокой точности запутанности и минимизации декогеренции.">Квантовая телепортация — процедура перемещения квантового состояния без физического переноса носителя. Необходимы: максимально запутанная пара (состояние Белла), классический канал и локальные операции. Исходное состояние: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. Запутанная пара: |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. Измерение Белла над кубитами 1 и 2 проецирует кубит 3 в одно из четырёх состояний, которые корректируются операторами Паули (I, X, Z, XZ) соответственно двум классическим битам, восстанавливая |ψ⟩₁. При измерении амплитуды α и β не раскрываются. Протокол применим к любым состояниям, но требует точной запутанности и защиты от декогеренции.</div>
         <div class="section"><h2>История</h2><p>Концепция предложена в 1993 году Чарльзом Беннеттом, Жилем Брассаром и соавторами. Первые эксперименты с фотонами провели в 1997 году группы Антона Цайлингера и Франческо Де Мартини. В 2012 году осуществлена телепортация на расстояние 143 км. В 2016 году китайский спутник «Мо-Цзы» (Миций) телепортировал состояния между спутником и Землёй.</p></div>
         <div class="section"><h2>Как работает</h2><p>Телепортация использует запутанность и линейность. Измерение Белла проецирует одну пару в запутанное состояние, а удалённая частица корректируется унитарной операцией. Необходимость классического сигнала обеспечивает причинность. Невозможность прямого измерения исходного состояния связана с принципом неопределённости. Протокол является формой квантовой коррекции ошибок. Экспериментально применяются фотоны с запутанной поляризацией, временными интервалами или орбитальным угловым моментом. Источники запутанных пар — спонтанное параметрическое рассеяние; измерение Белла проводится интерферометрами, а условные операции — быстрыми модуляторами.</p></div>
-        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ — состояние максимальной запутанности двух кубитов; |00⟩ — первый кубит в состоянии |0⟩, второй в |0⟩; |11⟩ — оба в |1⟩; 1/√2 — нормировочный коэффициент. Это состояние используется как ресурс в протоколе телепортации.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">Четыре ортонормированных запутанных состояния двух кубитов; знаки ± различают симметричные и антисимметричные комбинации. Измерение над двумя кубитами проецирует их в одно из этих состояний, выдавая 2 бита информации.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}</div><div class="formula-meaning">I — тождественная операция (ничего не делать); X — квантовый вентиль НЕ (переворачивает 0↔1); Z — фазовый вентиль (меняет знак амплитуды у |1⟩); XZ — последовательное применение X и Z. Применяются к кубиту Боба для восстановления исходного состояния после получения классических битов.</div></div>
+        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ — состояние максимальной запутанности двух кубитов; |00⟩ — первый кубит в состоянии |0⟩, второй в |0⟩; |11⟩ — оба в |1⟩; 1/√2 — нормировочный коэффициент. Это состояние используется как ресурс в протоколе телепортации.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">Четыре ортонормированных запутанных состояния двух кубитов; знаки ± различают симметричные и антисимметричные комбинации. Измерение над двумя кубитами проецирует их в одно из этих состояний, выдавая 2 бита информации.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}, X = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}, Z = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}</div><div class="formula-meaning">I — тождественная операция (ничего не делать); X — квантовый вентиль НЕ (переворачивает 0↔1); Z — фазовый вентиль (меняет знак амплитуды у |1⟩); XZ — последовательное применение X и Z. Применяются к кубиту Боба для восстановления исходного состояния после получения классических битов.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Увеличение дальности телепортации с сохранением точности (проблема декогеренции и потерь в оптоволокне или свободном пространстве); Телепортация сложных многочастичных состояний или состояний макроскопических объектов (например, ансамблей атомов); Создание квантовых повторителей для построения глобального квантового интернета; Совместимость с различными физическими платформами (гибридная телепортация между атомами и фотонами)</p><p class="fact">💡 Термин «телепортация» ввёл писатель Чарльз Форт в 1931 году. Идея квантовой телепортации была популяризована после статьи в Nature (1997) с фотографией «луча Star Trek», хотя протокол переносит только квантовую информацию, а не материю.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="quantum_teleportation_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Учёные</div><a href="/lang/ru/scientists/Alain_Aspect.html" class="side-sci" data-scientist="Alain Aspect">Alain Aspect</a><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/bose_einstein_condensate.html" class="side-tag" data-tag="bose_einstein_condensate">конденсат Бозе — Эйнштейна</a><a href="/lang/ru/tags/decoherence.html" class="side-tag" data-tag="decoherence">декогеренция</a><a href="/lang/ru/tags/interference.html" class="side-tag" data-tag="interference">интерференция</a><a href="/lang/ru/tags/photon.html" class="side-tag" data-tag="photon">фотон</a><a href="/lang/ru/tags/quantum_computer.html" class="side-tag" data-tag="quantum_computer">квантовый компьютер</a><a href="/lang/ru/tags/quantum_entanglement.html" class="side-tag" data-tag="quantum_entanglement">квантовая запутанность</a><a href="/lang/ru/tags/quantum_information.html" class="side-tag" data-tag="quantum_information">квантовая информация</a><a href="/lang/ru/tags/quantum_key_distribution.html" class="side-tag" data-tag="quantum_key_distribution">квантовое распределение ключей</a><div class="side-tags-label">Законы</div><a href="/lang/ru/laws/nocloning_theorem.html" class="side-law" data-law="nocloning_theorem">теорема о запрете клонирования</a></div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="quantum_teleportation"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('quantum_teleportation', 'tag', 'ru');

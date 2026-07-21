@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/ar/authors/">authors</a>
             <a href="/lang/ar/graph/">graph</a>
             <a href="/lang/ar/theory/">theory</a>
-            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/quantum_teleportation.jpg" alt=""></div>
     <h1>النقل الآني الكمومي</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="النقل الآني الكمومي هو إجراء لنقل الحالة الكمومية بين نقطتين دون انتقال فيزيائي للحامل. الموارد الضرورية: زوج متشابك أقصى (حالة بيل)، وقناة اتصال تقليدية، وإمكانية عمليات كمومية محلية. لنفترض حالة للنقل: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. الزوج المتشابك (الكيوبتان 2 و3): |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. الحالة الكلية: |ψ⟩₁ ⊗ |Φ⁺⟩₂₃. قياس بيل على الكيوبتين 1 و2 بالأساس { |Φ⁺⟩, |Φ⁻⟩, |Ψ⁺⟩, |Ψ⁻⟩ } يعطي نتيجة تقليدية (بتين)، وبعدها يُسقط الكيوبت 3 في إحدى الحالات: α|0⟩ + β|1⟩, α|0⟩ - β|1⟩, α|1⟩ + β|0⟩, α|1⟩ - β|0⟩. وتطبق عملية باولي المناسبة (I, Z, X, ZX) لتستعيد |ψ⟩ على الكيوبت 3. لا يعطي القياس معلومات عن α وβ، محافظاً على المطالين المجهولين. يصلح البروتوكول لأي حالة — نقية أو مخلوطة، لكنه يتطلب دقة عالية في التشابك وتقليل فك الترابط.">النقل الآني الكمومي هو إجراء لنقل الحالة الكمومية دون انتقال فيزيائي للحامل. ويتطلب: زوجاً متشابكاً أقصى (حالة بيل)، وقناة اتصال تقليدية، وعمليات محلية. الحالة الأصلية: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. الزوج المتشابك: |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. ويسقط قياس بيل على الكيوبتات 1 و2 الكيوبت 3 في إحدى أربع حالات، تُصحح بعوامل باولي (I, X, Z, XZ) وفقاً للبتين التقليديين، مما يستعيد |ψ⟩₁. ولا يُكشف عن المطالين α وβ أثناء القياس. يصلح البروتوكول لأي حالة، لكنه يتطلب تشابكاً دقيقاً وحماية من فك الترابط.</div>
         <div class="section"><h2>التاريخ</h2><p>طُرحت الفكرة عام 1993 من قبل تشارلز بينيت وجيل براسار ومساهمين آخرين. وأُجريت التجارب الأولى مع الفوتونات عام 1997 من قبل مجموعتي أنطون تسايلينغر وفرانشيسكو دو مارتيني. وفي عام 2012، نُفذ النقل الآني على مسافة 143 كم. وفي عام 2016، قام القمر الصناعي الصيني «موزي» (ميسيوس) بنقل الحالات بين القمر والأرض.</p></div>
         <div class="section"><h2>كيف يعمل</h2><p>يستخدم النقل الآني التشابك والخطية. ويسقط قياس بيل زوجاً واحداً في حالة متشابكة، ويُصحح الجسيم البعيد بعملية وحدوية. وتضمن ضرورة الإشارة التقليدية السببية. ويرتبط استحالة القياس المباشر للحالة الأصلية بمبدأ اللايقين. ويُعد البروتوكول شكلاً من تصحيح الخطأ الكمومي. وتُستخدم تجريبياً الفوتونات باستقطاب متشابك أو فواصل زمنية أو زخم زاوي مداري. مصادر الأزواج المتشابكة: التشتت البارامتري العفوي؛ قياس بيل: بمقاييس التداخل؛ والعمليات الشرطية: بمعدلات سريعة.</p></div>
-        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ هي حالة تشابك أقصى لكيوبتين؛ |00⟩ الكيوبت الأول في الحالة |0⟩ والثاني في |0⟩؛ |11⟩ كلاهما في |1⟩؛ 1/√2 هو معامل التطبيع. وتُستخدم هذه الحالة كمورد في بروتوكول النقل الآني.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">أربع حالات متشابكة متعامدة وسوية لكيوبتين؛ إشارات ± تفرق التوافيق المتناظرة والمتضادة للتناظر. ويُسقط القياس على كيوبتين في إحدى هذه الحالات، معطياً 2 بت من المعلومات.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}</div><div class="formula-meaning">I — العملية المحايدة (لا تفعل شيئاً)؛ X — بوابة الكم NOT (تقلب 0↔1)؛ Z — بوابة الطور (تغير إشارة المطال لـ |1⟩)؛ XZ — تطبيق X ثم Z. تُطبق على كيوبت بوب لاستعادة الحالة الأصلية بعد استلام البتات التقليدية.</div></div>
+        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ هي حالة تشابك أقصى لكيوبتين؛ |00⟩ الكيوبت الأول في الحالة |0⟩ والثاني في |0⟩؛ |11⟩ كلاهما في |1⟩؛ 1/√2 هو معامل التطبيع. وتُستخدم هذه الحالة كمورد في بروتوكول النقل الآني.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">أربع حالات متشابكة متعامدة وسوية لكيوبتين؛ إشارات ± تفرق التوافيق المتناظرة والمتضادة للتناظر. ويُسقط القياس على كيوبتين في إحدى هذه الحالات، معطياً 2 بت من المعلومات.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}, X = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}, Z = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}</div><div class="formula-meaning">I — العملية المحايدة (لا تفعل شيئاً)؛ X — بوابة الكم NOT (تقلب 0↔1)؛ Z — بوابة الطور (تغير إشارة المطال لـ |1⟩)؛ XZ — تطبيق X ثم Z. تُطبق على كيوبت بوب لاستعادة الحالة الأصلية بعد استلام البتات التقليدية.</div></div>
         <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>زيادة مدى النقل الآني مع الحفاظ على الدقة (مشكلة فك الترابط والفقود في الألياف البصرية أو الفضاء الحر); نقل حالات معقدة متعددة الجسيمات أو حالات أجسام ماكروسكوبية (كتجميعات الذرات); إنشاء مكررات كمومية لبناء إنترنت كمومي عالمي; التوافق مع منصات فيزيائية مختلفة (النقل الآني الهجين بين الذرات والفوتونات)</p><p class="fact">💡 أدخل مصطلح «النقل الآني» الكاتب تشارلز فورت عام 1931. وانتشرت فكرة النقل الآني الكمومي بعد مقال في مجلة Nature (1997) مع صورة «شعاع ستار تريك»، رغم أن البروتوكول لا ينقل سوى المعلومات الكمومية، وليس المادة.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="quantum_teleportation_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_teleportation" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="actions" data-article-id="quantum_teleportation_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="رائع!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_teleportation" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div>
 <div class="mini-graph" data-node="t:quantum_teleportation"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="quantum_teleportation_ar_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="quantum_teleportation"><p>لا مقالات بعد</p></div>
 
 <footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('quantum_teleportation', 'tag', 'ar');

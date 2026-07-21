@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/ar/authors/">authors</a>
             <a href="/lang/ar/graph/">graph</a>
             <a href="/lang/ar/theory/">theory</a>
-            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/cosmic_rays.jpg" alt=""></div>
     <h1>الأشعة الكونية</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">3</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="الأشعة الكونية هي تيار من الجسيمات المشحونة المستقرة، تسارعت في مصادر فيزيائية فلكية فائقة الطاقة. يمتد طيف طاقة الأشعة الكونية من 10⁸ إلكترون فولت إلى أكثر من 10²⁰ إلكترون فولت، وله شكل أسي مع انكسار في منطقتي «الركبة» (عند حوالي 3×10¹⁵ إلكترون فولت) و«الكاحل» (عند حوالي 5×10¹⁸ إلكترون فولت). الجسيمات ذات الطاقة أقل من حوالي 10¹⁸ إلكترون فولت من المرجح أن أصلها مجري (بقايا مستعرات عظمى، نجوم نابضة)، أما الأعلى فأصلها خارج مجري (أنوية مجرات نشطة، انفجارات أشعة غاما). عند طاقات حوالي 5×10¹⁹ إلكترون فولت، يُرصد انخفاض في التدفق (ما يسمى بحد GZK)، الذي تم التنبؤ به بسبب تفاعل البروتونات مع إشعاع الخلفية الكونية الميكروي.">الأشعة الكونية هي جسيمات مشحونة مستقرة، تسارعت في أجرام فيزيائية فلكية إلى طاقات فائقة الارتفاع. يمتد طيف طاقتها من حوالي 10⁸ إلى أكثر من 10²⁰ إلكترون فولت، ويوصف بقانون أسي مع انكسارات: «الركبة» (حوالي 3×10¹⁵ إلكترون فولت) و«الكاحل» (حوالي 5×10¹⁸ إلكترون فولت). حتى حوالي 10¹⁸ إلكترون فولت، تسود الجسيمات ذات الأصل المجري (بقايا المستعرات العظمى، النجوم النابضة)، وفوقها الجسيمات ذات الأصل خارج المجري (أنوية المجرات النشطة، انفجارات أشعة غاما). عند طاقات أكبر من 5×10¹⁹ إلكترون فولت، ينقطع التدفق فجأة بسبب حد GZK: تفقد البروتونات طاقتها عند تفاعلها مع إشعاع الخلفية الكونية الميكروي.</div>
         <div class="section"><h2>التاريخ</h2><p>في بداية القرن العشرين، لوحظ أن المكشافات الكهربائية تفقد شحنتها تلقائيًا حتى في الأوعية محكمة الإغلاق. في عام 1912، خلال رحلاته بالمنطاد، أثبت فيكتور هيس أن التأين يزداد مع الارتفاع – وبهذا اكتُشف الإشعاع الكوني. في ثلاثينيات القرن العشرين، نظم آرثر كومبتون شبكة من محطات الرصد، ومن خلال اعتماد الشدة على خط العرض، أثبت أن الإشعاع يتكون من جسيمات مشحونة. في الستينيات، اكتُشفت أولى المصادر الفيزيائية الفلكية (مثل سديم السرطان). وتبحث المراصد الحديثة، مثل مرصد بيير أوجيه، عن مصادر الجسيمات فائقة الطاقة.</p></div>
         <div class="section"><h2>كيف يعمل</h2><p>آلية التسارع الرئيسية هي التسارع الانتشاري (العشوائي) على جبهات موجات الصدمة، كما في بقايا المستعرات العظمى. تولد القشرة المتوسعة عدم تجانسات مغناطيسية تنعكس عنها الجسيمات عدة مرات (آلية فيرمي من الدرجة الثانية). تؤدي هذه العملية إلى طيف طاقة أسي. أثناء انتشارها في الوسط بين النجمي، تتشتت الأشعة الكونية بفعل المجالات المغناطيسية، وتشارك في تفاعلات نووية (مكونة بيونات → ميونات ونيوترينوات)، وتخضع للانتشار. في الغلاف الجوي للأرض، تنشأ زخات هوائية واسعة – سلاسل متتالية من الهادرونات واللبتونات والفوتونات، تسجلها الكواشف.</p></div>
-        <div class="formula"><div class="formula-render">N(>E) \propto E^{-\gamma}</div><div class="formula-meaning">N(>E) — عدد الجسيمات ذات الطاقة الأكبر من E; γ ≈ 1.7 للأشعة المجرية وحوالي 2.6 للأشعة خارج المجرية. تقاس الطاقة E بوحدة الإلكترون فولت.</div></div>
+        <div class="formula"><div class="formula-render">N(&gt;E) \propto E^{-\gamma}</div><div class="formula-meaning">N(&gt;E) — عدد الجسيمات ذات الطاقة الأكبر من E; γ ≈ 1.7 للأشعة المجرية وحوالي 2.6 للأشعة خارج المجرية. تقاس الطاقة E بوحدة الإلكترون فولت.</div></div>
         <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>تحديد مصادر الأشعة الكونية فائقة الطاقة (>10²⁰ إلكترون فولت).; حدود آليات التسارع التقليدية: هل يمكن للعمليات المعروفة تسريع الجسيمات إلى الطاقات القياسية المرصودة؟; البحث عن جسيمات غريبة ضمن الأشعة الكونية (مثل الهايبرونات، بوزونات هيغز، الثقوب السوداء الصغيرة).; طبيعة الانخفاض المرصود في التدفق عند حد GZK: هل هو صارم، ولماذا يبدو أن بعض الأحداث تخالفه؟</p><p class="fact">💡 في الإطار المرجعي المخبري، يمتلك تصادم بروتون «يا إلهي» مع بروتون ساكن طاقة في نظام مركز الكتلة تبلغ حوالي 10²⁴ إلكترون فولت، وهو ما يفوق قدرات مصادم الهدرونات الكبير بملايين المرات.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="cosmic_rays_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="cosmic_rays" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+<div class="actions" data-article-id="cosmic_rays_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="رائع!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="cosmic_rays" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div>
 <div class="mini-graph" data-node="t:cosmic_rays"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="cosmic_rays_ar_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -100,10 +104,10 @@
                 <div class="meta">arXiv:2607.07413 · 2026-07-08</div></div></div></div>
 
 <footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('cosmic_rays', 'tag', 'ar');

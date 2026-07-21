@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/en/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
             <a href="/lang/en/theory/">theory</a>
-            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/favorites.html" title="Favorites">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/integral.jpg" alt=""></div>
     <h1>integral</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="">Let f: [a,b] → ℝ be bounded. A partition: a = x₀ < x₁ < ... < xₙ = b. Riemann sum: Σ_{i=1,...,n} f(ξᵢ)(xᵢ−xᵢ₋₁), where ξᵢ ∈ [xᵢ₋₁, xᵢ]. The Riemann integral is the limit of such sums as maxᵢ (xᵢ−xᵢ₋₁) → 0, if the limit exists and does not depend on the choice of ξᵢ. Functions with a finite number of discontinuities are Riemann integrable. The Lebesgue integral generalizes to a broader class of functions via measure. Properties: linearity, additivity over intervals. Applied in physics to compute work, mass, flux; in probability theory to find probabilities via densities.</div>
         <div class="section"><h2>History</h2><p>Eudoxus (c. 370 BC) and Archimedes (287–212 BC) used the method of exhaustion, the ancient analog of integration. In the 17th century, independent works of Newton and Leibniz formalized the integral as the inverse of the differential. Riemann in 1854 gave the first formal definition, and in the early 20th century, Henri Lebesgue constructed an integral based on measure, solving fundamental problems of interchange of limits and integral.</p></div>
         <div class="section"><h2>How it works</h2><p>The fundamental theorem of calculus: if f is continuous on [a,b] and F is any antiderivative, then ∫ₐᵇ f(x)dx = F(b)−F(a). Computation reduces to finding an antiderivative. Techniques: substitution, integration by parts (derivative of a product), partial fractions. For complex integrands, numerical methods (trapezoidal, Simpson's) or Fourier/Laplace transforms are used.</p></div>
-        <div class="formula"><div class="formula-render">\int_{a}^{b} f(x) dx = F(b) - F(a)</div><div class="formula-meaning">∫ₐᵇ f(x) dx — definite integral of f over [a,b]; F — any antiderivative of f (F' = f); a, b — limits of integration.</div></div><div class="formula"><div class="formula-render">\int_{a}^{b} f(x) dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*) \Delta x</div><div class="formula-meaning">n — number of subdivision intervals tending to infinity; Δx = (b−a)/n — length of each subinterval; xᵢ* — arbitrary point in the i-th subinterval; Σ — sum over i from 1 to n.</div></div>
+        <div class="formula"><div class="formula-render">\int_{a}^{b} f(x) dx = F(b) - F(a)</div><div class="formula-meaning">∫ₐᵇ f(x) dx — definite integral of f over [a,b]; F — any antiderivative of f (F&#x27; = f); a, b — limits of integration.</div></div><div class="formula"><div class="formula-render">\int_{a}^{b} f(x) dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*) \Delta x</div><div class="formula-meaning">n — number of subdivision intervals tending to infinity; Δx = (b−a)/n — length of each subinterval; xᵢ* — arbitrary point in the i-th subinterval; Σ — sum over i from 1 to n.</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Creation of a universal algorithm for symbolic integration of all elementary functions (Risch problem); Exact computation of high-dimensional multiple integrals in quantum physics and financial mathematics problems</p><p class="fact">💡 The Poisson integral ∫_{-∞}^{∞} e^{-x²} dx = √π, or Gaussian integral, appears unexpectedly in probability theory and statistics, and its square is easily computed by switching to polar coordinates.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="integral_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="integral" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="integral_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Awesome!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="integral" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
 <div class="mini-graph" data-node="t:integral"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="integral_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="integral"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('integral', 'tag', 'en');

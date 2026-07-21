@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/en/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
             <a href="/lang/en/theory/">theory</a>
-            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/favorites.html" title="Favorites">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/laser.jpg" alt=""></div>
     <h1>laser</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="A laser is a device that realizes the quantum effect of stimulated emission to generate coherent monochromatic radiation in a wide wavelength range—from infrared to X-ray. Steady-state generation is possible when population inversion is created (a state where the number of excited atoms exceeds the number of atoms in the ground state) in the active medium. Then a photon with energy equal to the difference of energy levels (E = hν, where h is Planck's constant, ν is frequency) can trigger a cascade of identical photons. The optical resonator provides positive feedback: mirrors select radiation of a strictly defined direction and frequency, thereby narrowing the spectral linewidth to a level limited by the resonator's quality factor and the gain linewidth of the medium.">A laser generates coherent monochromatic radiation through stimulated emission of photons. For stable generation, it is necessary to create population inversion—a state where there are more excited atoms in the working medium than in the ground state. Then a passing photon with energy hν equal to the energy level difference can induce an avalanche of identical photons. The optical resonator (a pair of mirrors) provides positive feedback: it selects photons of a certain frequency and direction, narrowing the emission spectrum to values determined by the resonator's quality factor and the gain linewidth of the active medium.</div>
         <div class="section"><h2>History</h2><p>In 1917, Einstein theoretically predicted stimulated emission. In 1954, Charles Townes, James Gordon, and Herbert Zeiger created the first maser, operating on ammonia. Six years later, Theodore Maiman demonstrated the first optical laser using ruby. Soon Ali Javan designed a helium-neon laser (1961), and Robert Hall the first semiconductor laser (1962). These discoveries transformed science, telecommunications, medicine, and manufacturing.</p></div>
         <div class="section"><h2>How it works</h2><p>The active medium (for example, neodymium in a YAG crystal or a helium-neon mixture) is excited by external pumping, transferring atoms to a metastable energy level. When the upper-level population exceeds the lower-level population (population inversion), a spontaneously emitted photon stimulates emission from neighboring excited atoms, generating a cascade of coherent photons. Inside the optical resonator (e.g., a Fabry–Pérot etalon), light is repeatedly reflected by mirrors and amplified on each pass. Part of the radiation exits through a semi-transparent mirror. Photons, being bosons, accumulate in a single quantum state, ensuring identical parameters of the laser beam. In semiconductor lasers, feedback is achieved through Bragg diffraction on periodic structures (distributed feedback) with the condition mλ = 2nΛ.</p></div>
-        <div class="formula"><div class="formula-render">E = h \nu = \frac{hc}{\lambda}</div><div class="formula-meaning">E is the photon energy, h is Planck's constant (h ≈ 6.626×10⁻³⁴ J·s), ν is the radiation frequency, c is the speed of light (c ≈ 3×10⁸ m/s), λ is the wavelength</div></div>
+        <div class="formula"><div class="formula-render">E = h \nu = \frac{hc}{\lambda}</div><div class="formula-meaning">E is the photon energy, h is Planck&#x27;s constant (h ≈ 6.626×10⁻³⁴ J·s), ν is the radiation frequency, c is the speed of light (c ≈ 3×10⁸ m/s), λ is the wavelength</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Development of compact and cheap X-ray lasers pumped by incoherent sources.; Increasing the efficiency and power of semiconductor lasers while reducing size.; Generation of ultrashort pulses (attosecond range) with controlled phase and envelope shape.; Achieving conditions for laser-driven thermonuclear fusion with uniform target compression.</p><p class="fact">💡 Red-beam laser pointers use a miniature diode laser based on gallium-aluminum arsenide, which efficiently emits light with a current of just a few milliamps.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="laser_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="laser" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="laser_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Awesome!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="laser" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
 <div class="mini-graph" data-node="t:laser"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="laser_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="laser"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('laser', 'tag', 'en');

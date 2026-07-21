@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/en/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
             <a href="/lang/en/theory/">theory</a>
-            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/favorites.html" title="Favorites">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/quantum_number.jpg" alt=""></div>
     <h1>quantum number</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="">In quantum mechanics, the state of a particle is fully described by a wave function, and quantum numbers arise as eigenvalues of operators of observable quantities. For an electron in a hydrogen atom, from the Schrödinger equation, we get the principal n (energy), orbital l (angular momentum), and magnetic mₗ (projection). The fourth — spin s and its projection mₛ — follows from the Dirac equation and describes the intrinsic angular momentum. The Pauli principle forbids two fermions from having the same set of these numbers, determining the structure of atoms and the periodic law.</div>
         <div class="section"><h2>History</h2><p>The idea of quantum numbers originated in Bohr's atomic model (1913) with the introduction of the principal number n. Arnold Sommerfeld generalized the model in 1916, adding orbital and magnetic numbers to explain fine structure. A decisive contribution was made by Wolfgang Pauli, who proposed spin and the exclusion principle in 1925. Erwin Schrödinger created wave mechanics in 1926, where the numbers n, l, mₗ received a rigorous interpretation as eigenvalues of operators, and the Dirac equation (1928) gave spin a relativistic foundation.</p></div>
         <div class="section"><h2>How it works</h2><p>The wave function of an electron is determined from the Schrödinger equation. When separating variables in a central potential, quantum conditions arise: the radial equation gives n = 1, 2, 3…, the angular one gives l = 0, …, n−1 and mₗ = −l, …, l. Spin is introduced via the Dirac equation and for the electron takes values s=1/2, mₛ = ±1/2. The Pauli principle forbids two electrons from occupying the same quantum state, which explains the sequential filling of shells and the periodicity of chemical properties. Thus, quantum numbers are a direct consequence of the Schrödinger equation and the Pauli principle.</p></div>
-        <div class="formula"><div class="formula-render">E_n = -\frac{m_e e^4}{8\epsilon_0^2 h^2}\frac{1}{n^2}</div><div class="formula-meaning">E_n is the energy of level n, m_e is the electron mass (≈9.11×10⁻³¹ kg), e is the electron charge (≈1.602×10⁻¹⁹ C), ε₀ is the electric constant (≈8.854×10⁻¹² F/m), h is Planck's constant (≈6.626×10⁻³⁴ J·s), n is the principal quantum number (n=1,2,3...)</div></div><div class="formula"><div class="formula-render">L = \hbar \sqrt{l(l+1)}</div><div class="formula-meaning">L is the magnitude of the orbital angular momentum, l is the orbital quantum number (l=0,1,...,n-1), ℏ is the reduced Planck constant (h/2π ≈ 1.0546×10⁻³⁴ J·s)</div></div>
+        <div class="formula"><div class="formula-render">E_n = -\frac{m_e e^4}{8\epsilon_0^2 h^2}\frac{1}{n^2}</div><div class="formula-meaning">E_n is the energy of level n, m_e is the electron mass (≈9.11×10⁻³¹ kg), e is the electron charge (≈1.602×10⁻¹⁹ C), ε₀ is the electric constant (≈8.854×10⁻¹² F/m), h is Planck&#x27;s constant (≈6.626×10⁻³⁴ J·s), n is the principal quantum number (n=1,2,3...)</div></div><div class="formula"><div class="formula-render">L = \hbar \sqrt{l(l+1)}</div><div class="formula-meaning">L is the magnitude of the orbital angular momentum, l is the orbital quantum number (l=0,1,...,n-1), ℏ is the reduced Planck constant (h/2π ≈ 1.0546×10⁻³⁴ J·s)</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Why do such specific quantum numbers and symmetries exist?; Measurement problem: Are quantum numbers real before the act of observation?; How will quantum numbers change in the regime of quantum gravity, at Planck scales?</p><p class="fact">💡 The electron's spin has no classical analogue: it's not the rotation of a tiny ball, but an intrinsic property manifested in magnetic moments. Sometimes spin is compared to rotation, but it's actually a quantum 'left-right' that cannot be seen directly.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="quantum_number_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_number" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="quantum_number_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Awesome!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_number" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
 <div class="mini-graph" data-node="t:quantum_number"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="quantum_number_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="quantum_number"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('quantum_number', 'tag', 'en');

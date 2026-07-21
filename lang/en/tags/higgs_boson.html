@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/en/authors/">authors</a>
             <a href="/lang/en/graph/">graph</a>
             <a href="/lang/en/theory/">theory</a>
-            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+            <a href="/lang/en/favorites.html" title="Favorites">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/higgs_boson.jpg" alt=""></div>
     <h1>Higgs boson</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">2</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="The Higgs boson is a quantum of the Higgs field, a doublet scalar field in the Standard Model that spontaneously breaks the electroweak gauge symmetry SU(2)×U(1) down to electromagnetic U(1). Symmetry breaking gives masses to W and Z bosons (carriers of the weak interaction) via the Higgs mechanism, and fermions acquire masses through Yukawa couplings. The boson was discovered in 2012 at the LHC by the ATLAS and CMS collaborations with a mass of about 125 GeV/c², which was a triumph of particle physics and confirmed the last missing element of the Standard Model.">The Higgs boson is a quantum of a doublet scalar field that spontaneously breaks the electroweak gauge symmetry SU(2)×U(1) down to electromagnetic U(1), giving masses to W and Z bosons via the Higgs mechanism. Fermions acquire masses through Yukawa interactions with the field. It was experimentally discovered in 2012 at the LHC by the ATLAS and CMS collaborations with a mass of about 125 GeV/c², becoming the last confirmed element of the Standard Model.</div>
         <div class="section"><h2>History</h2><p>The Higgs mechanism was independently proposed in 1964 by Peter Higgs, Robert Brout, and François Englert; similar ideas were expressed by Philip Anderson in the context of superconductivity. Years of searching required the construction of the most powerful accelerator — the Large Hadron Collider at CERN. In 2012, the ATLAS and CMS collaborations reported a particle with the expected properties; in 2013, Englert and Higgs were awarded the Nobel Prize.</p></div>
         <div class="section"><h2>How it works</h2><p>The Higgs field has a non-zero vacuum expectation value (v ≈ 246 GeV). Its potential takes the shape of a 'Mexican hat' due to a negative mass term, leading to spontaneous symmetry breaking. The strength of a particle's interaction with the field (coupling constant) determines its inertial mass. Gauge bosons absorb components of the Higgs field as longitudinal degrees of freedom, becoming massive. Quantum fluctuations around the vacuum state manifest as the Higgs boson. The masses of W and Z bosons are expressed in terms of gauge couplings and v, while fermion masses are expressed through Yukawa couplings and v.</p></div>
-        <div class="formula"><div class="formula-render">V(\phi) = -\mu^2 \phi^2 + \lambda \phi^4</div><div class="formula-meaning">V(φ) is the potential energy of the Higgs field, φ is the field strength, μ is the mass parameter (μ² > 0), λ is the self-coupling constant (λ > 0). The minimum of the potential is at a non-zero φ, which gives the vacuum expectation value.</div></div><div class="formula"><div class="formula-render">M_W = \frac{g v}{2}</div><div class="formula-meaning">M_W is the W boson mass, g is the weak coupling constant, v is the vacuum expectation value of the Higgs field (v ≈ 246 GeV). Similarly for the Z boson: M_Z = √(g²+g'²) v / 2, where g' is the hypercharge constant.</div></div>
+        <div class="formula"><div class="formula-render">V(\phi) = -\mu^2 \phi^2 + \lambda \phi^4</div><div class="formula-meaning">V(φ) is the potential energy of the Higgs field, φ is the field strength, μ is the mass parameter (μ² &gt; 0), λ is the self-coupling constant (λ &gt; 0). The minimum of the potential is at a non-zero φ, which gives the vacuum expectation value.</div></div><div class="formula"><div class="formula-render">M_W = \frac{g v}{2}</div><div class="formula-meaning">M_W is the W boson mass, g is the weak coupling constant, v is the vacuum expectation value of the Higgs field (v ≈ 246 GeV). Similarly for the Z boson: M_Z = √(g²+g&#x27;²) v / 2, where g&#x27; is the hypercharge constant.</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>What is the true shape of the Higgs potential and is the vacuum stable?; Do additional Higgs bosons exist in extended models (supersymmetry, two-doublet models)?; Why is the Higgs boson mass so small compared to the Planck scale (hierarchy problem)?; Is the Higgs field connected to dark matter or inflation?</p><p class="fact">💡 The measured mass of the Higgs boson (about 125 GeV) falls in the region where the Standard Model vacuum is metastable: in the distant future, the decay of the false vacuum is possible, but its probability in the next billions of years is negligible.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="higgs_boson_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="higgs_boson" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="higgs_boson_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Awesome!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="higgs_boson" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
 <div class="mini-graph" data-node="t:higgs_boson"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="higgs_boson_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -100,10 +104,10 @@
                 <div class="meta">arXiv:2605.13777v2 · 2026-05-13</div></div></div></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('higgs_boson', 'tag', 'en');

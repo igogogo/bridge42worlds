@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/gravitational_waves.jpg" alt=""></div>
     <h1>гравитационные волны</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">303</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Гравитационные волны — решения уравнений Эйнштейна в вакууме, представляющие собой бесконечно малые возмущения фоновой метрики g_μν = η_μν + h_μν, где |h_μν| ≪ 1. В поперечной бесследовой калибровке они описываются волнами тензора h_ij^TT, обладающими двумя степенями свободы. Плотность потока энергии даётся тензором энергии-импульса гравитационного поля. Космологические модели предсказывают стохастический фон первичных гравитационных волн, рождённых при инфляции.">Гравитационные волны — решения уравнений Эйнштейна в вакууме, представляющие собой бесконечно малые возмущения фоновой метрики g_μν = η_μν + h_μν, где |h_μν| ≪ 1. В поперечной бесследовой калибровке они описываются волнами тензора h_ij^TT, обладающими двумя степенями свободы. Плотность потока энергии даётся тензором энергии-импульса гравитационного поля. Космологические модели предсказывают стохастический фон первичных гравитационных волн, рождённых при инфляции.</div>
         <div class="section"><h2>История</h2><p>Идея гравитационных волн впервые высказана Анри Пуанкаре (1905), но строгое предсказание сделал Альберт Эйнштейн (1916, 1918) на основе линеаризованных уравнений ОТО. Долгое время существование волн оспаривалось, в том числе самим Эйнштейном. Экспериментальные поиски начались с пионер-детекторов Джозефа Вебера в 1960-х. Лишь в 2015 году коллаборация LIGO (основатели Райнер Вайсс, Кип Торн) зарегистрировала прямое слияние чёрных дыр.</p></div>
         <div class="section"><h2>Как работает</h2><p>Из уравнений Эйнштейна G_μν = (8πG/c⁴) T_μν линеаризацией получают волновое уравнение для возмущений □h_μν = 0 в пустоте. Интерферометрический детектор (LIGO, Virgo) измеряет разность хода лучей в плечах, вызванную изменением расстояния под действием волны: при h ~ 10⁻²¹ смещение составляет 10⁻¹⁸ м для плеча в 4 км.</p></div>
-        <div class="formula"><div class="formula-render">\Box h_{\mu\nu} = 0</div><div class="formula-meaning">□ — оператор Д'Аламбера (волновой оператор), h_μν — возмущение метрики пространства-времени</div></div><div class="formula"><div class="formula-render">F = \frac{c^3}{16\pi G} \langle \dot{h}_{+}^2 + \dot{h}_{\times}^2 \rangle</div><div class="formula-meaning">F — поток энергии, c — скорость света, G — гравитационная постоянная, h₊, h× — амплитуды двух поляризаций гравитационной волны, точка обозначает производную по времени, угловые скобки — усреднение</div></div>
+        <div class="formula"><div class="formula-render">\Box h_{\mu\nu} = 0</div><div class="formula-meaning">□ — оператор Д&#x27;Аламбера (волновой оператор), h_μν — возмущение метрики пространства-времени</div></div><div class="formula"><div class="formula-render">F = \frac{c^3}{16\pi G} \langle \dot{h}_{+}^2 + \dot{h}_{\times}^2 \rangle</div><div class="formula-meaning">F — поток энергии, c — скорость света, G — гравитационная постоянная, h₊, h× — амплитуды двух поляризаций гравитационной волны, точка обозначает производную по времени, угловые скобки — усреднение</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Природа квантовых гравитационных волн — гравитонов — и их детектирование.; Точное описание слияний с учётом сильных полей и турбулентности вещества.; Обнаружение космологического фона гравитационных волн, дающего информацию о Большом взрыве.; Различие между чёрными дырами и экзотическими компактными объектами (например, бозонными звёздами) по сигналу.</p><p class="fact">💡 Сигнал GW170817 от слияния нейтронных звёзд пришёл за 1,7 секунды до гамма-всплеска, подтвердив равенство скорости гравитации и света с точностью до 10⁻¹⁵.</p></div>
     </div>
 </div>
@@ -78,12 +88,6 @@
 <div class="mini-graph" data-node="t:gravitational_waves"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="gravitational_waves_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -799,10 +803,10 @@
                 <div class="meta">arXiv:2607.08248 · 2026-07-09</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('gravitational_waves', 'tag', 'ru');

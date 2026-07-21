@@ -665,7 +665,7 @@ function cardHTML(item) {
     var au = item.authors || [];
     var authorsHtml = au.slice(0, 20).map(function(a) {
         return '<a href="/lang/' + lang + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
-    }).join(', ') + (au.length > 20 ? ' <span class="au-more-lite">+' + (au.length - 20) + '</span>' : '');
+    }).join('<span class="sep">·</span>') + (au.length > 20 ? ' <span class="au-more-lite">+' + (au.length - 20) + '</span>' : '');
     var tagsHtml = (item.tags || []).slice(0, 6).map(function(t) {
         return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
     }).join('<span class="sep">·</span>');

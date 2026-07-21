@@ -629,7 +629,9 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
     font-size: 12px; color: var(--muted); text-decoration: none;
 }
 .law-chip:hover { color: var(--link); text-decoration: underline; }
-.section-title { margin: 28px 0 10px; font-size: 19px; font-weight: 600; }
+/* Тихий счётчик (юзер-фидбек 2026-07-21): "Статей" дублирует счётчик в .tag-stats выше —
+   мельче/тише, без визуального веса заголовка, остаётся якорем #article-list. */
+.section-title { margin: 20px 0 8px; font-size: 13px; font-weight: 600; color: var(--soft); }
 /* Плавный скролл по якорям + отступ под sticky-шапку, чтобы цель не пряталась под ней. */
 html { scroll-behavior: smooth; }
 .section-title { scroll-margin-top: 56px; }
@@ -705,11 +707,20 @@ h1 {
   margin-left: 2px; cursor: pointer; white-space: nowrap; text-decoration: none; }
 a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 /* ── Разделы arXiv: облако чипов + описание на странице раздела ── */
-.sections-cloud { display: flex; flex-wrap: wrap; gap: 8px; max-width: 680px; margin: 8px 0 30px; }
-.section-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 16px;
-  font-size: 13px; background: var(--tag-bg); color: var(--text); text-decoration: none; border: 1px solid var(--border); }
-.section-chip:hover { border-color: var(--link); color: var(--link); }
-.section-chip .cat-chip-n { font-size: 11px; color: var(--soft); }
+/* Табличный вид разделов (юзер-фидбек 2026-07-21): имя · код arXiv · число статей,
+   сортировка по числу статей ↓ (уже в generate_sections_cloud). Код-колонка отличает
+   math.MP от math-ph визуально, хотя оба показывают одно каноничное имя "Math Physics". */
+.sections-table { width: 100%; max-width: 680px; margin: 8px 0 30px; border-collapse: collapse; font-size: 14px; }
+.sections-table th {
+    text-align: left; font-size: 12px; font-weight: 600; color: var(--soft);
+    padding: 6px 10px; border-bottom: 1px solid var(--border);
+}
+.sections-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.sections-table tr:hover td { background: var(--tag-bg); }
+.sections-table a { color: var(--text); text-decoration: none; }
+.sections-table a:hover { color: var(--link); }
+.section-code { font-size: 12px; color: var(--soft); font-family: monospace; }
+.section-count { font-size: 13px; color: var(--soft); text-align: right; }
 .section-desc { max-width: 620px; margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
 /* ── Treemap (карта-мозаика) — дефолтный вид облака тегов/законов (js/treemap.js) ── */
 #treemap { position: relative; max-width: 900px; margin: 0 auto 24px; }
@@ -1039,7 +1050,16 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .card-eyebrow { margin-bottom: 5px; line-height: 1.3; }
 .card-cat { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--link); text-decoration: none; }
 .card-date { display: inline-block; font-size: 11px; margin-left: 8px; }
-.card-title { display: block; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; font-weight: 600; line-height: 1.3; color: var(--text); text-decoration: none; margin-bottom: 7px; }
+/* Заголовок карточки — одна строка на любой ширине, обрезка многоточием, а не перенос
+   (юзер-фидбек 2026-07-21). НЕ трогаем .card-desc тем же способом — overflow:hidden там
+   уже один раз ломал обтекание плавающей картинки (.card-img-wrap { float:left }), см.
+   комментарий у .card-desc; заголовок короче и начинается у верхнего края картинки, риск
+   ниже, но проверь живьём на десктопной ширине при следующей правке этого блока. */
+.card-title {
+    display: block; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; font-weight: 600;
+    line-height: 1.3; color: var(--text); text-decoration: none; margin-bottom: 7px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .article-card:hover .card-title { color: var(--link); }
 /* Обрезка длины — ТЕКСТОМ в JS (cardHTML), не CSS line-clamp/max-height: и -webkit-box,
    и overflow:hidden создают новый Block Formatting Context — такой блок обтекает float
@@ -1125,6 +1145,7 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .card-scientists a { font-size: 11px; }
 /* Авторы карточки — отдельным блоком, переносится на несколько строк */
 .card-authors { margin-top: 3px; font-size: 12px; color: var(--soft); line-height: 1.55; }
+.card-authors .sep { margin: 0 5px; opacity: .45; }
 .card-authors a { color: var(--soft); text-decoration: none; }
 .card-authors a:hover { color: var(--link); }
 .card-authors .au-more-lite { color: var(--muted); }
@@ -1233,6 +1254,11 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
     border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     font-size: 14px; color: var(--muted);
 }
+/* Пустые блоки не должны рисовать рамку/просвет (юзер-фидбек 2026-07-21, Блок 4: "две линии
+   подряд без текста между ними"). Большинство мест уже строят эти блоки условно в Python
+   (пусто → "" совсем без элемента) — здесь просто подстраховка на случай, если где-то
+   элемент всё же дойдёт до рендера с пустым содержимым. */
+.fun-fact:empty, .section:empty, .related-tags:empty, .desc:empty { display: none; }
 .fun-fact .fact { margin: 0; }
 .fun-fact .fact + .fact { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 .fun-fact .fact-scifi { font-style: italic; }
@@ -1267,7 +1293,13 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 #search-results:not(.entity-list) { max-width: 620px; }
 
 /* ── Tag header ───────────────── */
-.tag-header { margin-bottom: 30px; max-width: 620px; }
+.tag-header { position: relative; margin-bottom: 30px; max-width: 620px; }
+/* Поиск на карточке тега/закона/учёного/раздела — свёрнут в 🔍 у заголовка (юзер-фидбек
+   2026-07-21: "список и так есть, поле поиска лишнее"), тот же паттерн выпадашки, что на
+   главной (.search-bar/.search-panel уже стилизованы, initSearchToggle() в search.js
+   универсален по id). */
+.tag-header .search-bar { position: absolute; top: 0; right: 0; }
+html[dir="rtl"] .tag-header .search-bar { right: auto; left: 0; }
 .tag-header h1 { font-size: 30px; margin-bottom: 10px; }
 .scientist-header h1 { font-size: 24px; }
 .tag-header .desc { font-size: 15.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.65; }

@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/tensor.jpg" alt=""></div>
     <h1>тензор</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Тензоры — мультилинейные отображения из векторных пространств и их сопряжённых в скаляры. Формально тензор типа (p,q) на векторном пространстве V — элемент тензорного произведения V⊗...⊗V ⊗ V*⊗...⊗V* (p раз V, q раз V*). Число индексов равно p+q. В физике тензоры преобразуются через матрицу Якоби. Примеры: метрический тензор (0,2) для скалярных произведений; тензор электромагнитного поля F_μν — антисимметричный (0,2); тензор Римана (1,3) измеряет некоммутативность ковариантных производных. Тензорное исчисление с ковариантным дифференцированием необходимо для ковариантной формулировки законов. В механике сплошных сред тензор напряжений Коши — симметричный (2,0) тензор. В машинном обучении тензоры — многомерные массивы данных, а тензорные операции лежат в основе глубоких нейросетей.">Тензоры — мультилинейные отображения из векторных пространств и их сопряжённых в скаляры. Формально тензор типа (p,q) на векторном пространстве V — элемент тензорного произведения V⊗...⊗V ⊗ V*⊗...⊗V* (p раз V, q раз V*). Число индексов равно p+q. В физике тензоры преобразуются через матрицу Якоби. Примеры: метрический тензор (0,2) для скалярных произведений; антисимметричный тензор электромагнитного поля F_μν; тензор Римана (1,3), измеряющий некоммутативность ковариантных производных. Тензорное исчисление с ковариантным дифференцированием необходимо для формулировки законов в виде, не зависящем от координат. В механике сплошных сред тензор напряжений Коши — симметричный (2,0). В машинном обучении тензоры — многомерные массивы данных, лежащие в основе глубоких нейросетей.</div>
         <div class="section"><h2>История</h2><p>Понятие тензора выросло из работ Гаусса, Римана и Кристоффеля по дифференциальной геометрии. Риччи-Курбастро и Леви-Чивита разработали тензорное исчисление в 1890-х годах (опубликовав «Méthodes de calcul différentiel absolu» в 1900). Эйнштейн с помощью Марселя Гроссмана применил его в общей теории относительности (1915), где тензор Эйнштейна G_μν = R_μν - ½ R g_μν описывает кривизну пространства-времени. Позднее тензоры распространились в механике, электромагнетизме и, с появлением компьютеров, в обработке данных и машинном обучении.</p></div>
         <div class="section"><h2>Как работает</h2><p>Тензоры определяются законом преобразования: ковариантный тензор A_μ преобразуется как A'_μ = (∂x^ν/∂x'^μ) A_ν, контравариантный B^μ — с обратным якобианом. Смешанные тензоры преобразуются соответственно. Операции: свёртка (суммирование по верхнему и нижнему индексам, уменьшающая ранг на 2), тензорное произведение и ковариантное дифференцирование (через символы Кристоффеля). Внешняя производная порождает антисимметричные тензоры. В физике действия записываются свёртками тензоров. Уравнения Эйнштейна G_μν = (8πG/c^4) T_μν связывают тензор кривизны Эйнштейна с тензором энергии-импульса. Вычисления с тензорами оптимизированы в библиотеках NumPy и TensorFlow.</p></div>
-        <div class="formula"><div class="formula-render">V'^{\mu} = \frac{\partial x'^{\mu}}{\partial x^{\nu}} V^{\nu}</div><div class="formula-meaning">V^ν — компоненты вектора в исходных координатах x, V'^μ — компоненты в новых координатах x', \frac{∂x'^μ}{∂x^ν} — матрица Якоби, производная новых координат по старым.</div></div><div class="formula"><div class="formula-render">G_{\mu\nu} = R_{\mu\nu} - \frac{1}{2} R g_{\mu\nu}</div><div class="formula-meaning">G_μν — тензор Эйнштейна (характеризует кривизну пространства-времени), R_μν — тензор Риччи (свёртка тензора Римана), R — скалярная кривизна (след тензора Риччи), g_μν — метрический тензор (определяет расстояния).</div></div>
+        <div class="formula"><div class="formula-render">V&#x27;^{\mu} = \frac{\partial x&#x27;^{\mu}}{\partial x^{\nu}} V^{\nu}</div><div class="formula-meaning">V^ν — компоненты вектора в исходных координатах x, V&#x27;^μ — компоненты в новых координатах x&#x27;, \frac{∂x&#x27;^μ}{∂x^ν} — матрица Якоби, производная новых координат по старым.</div></div><div class="formula"><div class="formula-render">G_{\mu\nu} = R_{\mu\nu} - \frac{1}{2} R g_{\mu\nu}</div><div class="formula-meaning">G_μν — тензор Эйнштейна (характеризует кривизну пространства-времени), R_μν — тензор Риччи (свёртка тензора Римана), R — скалярная кривизна (след тензора Риччи), g_μν — метрический тензор (определяет расстояния).</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Разработка полной квантовой теории гравитации, требующей квантования метрического тензора.; Эффективное сокращение тензорных сетей для многочастичных квантовых систем.; Классификация тензоров высших рангов и тензорные разложения в анализе данных.; Устранение сингулярностей в общей теории относительности, где тензоры кривизны обращаются в бесконечность.; Понимание голографического принципа, связывающего тензорные сети в объёмном пространстве с конформными теориями поля на границе.</p><p class="fact">💡 В четырёхмерном пространстве-времени тензор кривизны Римана мог бы иметь 4^4 = 256 компонент, но благодаря симметриям их независимых всего 20 — именно столько чисел нужно для описания всех приливных гравитационных эффектов.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="tensor_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/category.html" class="side-tag" data-tag="category">категория</a><a href="/lang/ru/tags/derivative.html" class="side-tag" data-tag="derivative">производная</a><a href="/lang/ru/tags/electric_field.html" class="side-tag" data-tag="electric_field">электрическое поле</a><a href="/lang/ru/tags/gauge_invariance.html" class="side-tag" data-tag="gauge_invariance">калибровочная инвариантность</a><a href="/lang/ru/tags/gravity.html" class="side-tag" data-tag="gravity">гравитация</a><a href="/lang/ru/tags/group.html" class="side-tag" data-tag="group">группа</a><a href="/lang/ru/tags/lie_group.html" class="side-tag" data-tag="lie_group">группа ли</a><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a><div class="side-tags-label">Законы</div><a href="/lang/ru/laws/pythagorean_theorem.html" class="side-law" data-law="pythagorean_theorem">теорема Пифагора</a><a href="/lang/ru/laws/euler_lagrange_equation.html" class="side-law" data-law="euler_lagrange_equation">уравнение Эйлера — Лагранжа</a></div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="tensor"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('tensor', 'tag', 'ru');

@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -39,6 +39,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header scientist-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">! учёный · # тег · @ автор</div>
+        </div>
+    </div>
     <h1>👨‍🔬 Yuri Manin</h1>
     <div class="tag-stats">1937-2023 · математика, квантовые вычисления, математическая физика</div>
     <div class="desc">Советский и российский математик, один из первых, кто предложил концепцию квантовых вычислений. В 1980 году опубликовал работу «Вычислимое и невычислимое», где ввёл идею квантового автомата. Внёс фундаментальный вклад в алгебраическую геометрию, теорию чисел и математическую физику.</div>
@@ -58,12 +68,6 @@
 
 <div class="feedback" id="feedback" data-article-id="Yuri_Manin_ru_page" data-entity-type="scientist"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">! учёный · # тег · @ автор</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/quantum_computer.html" class="side-tag" data-tag="quantum_computer">квантовый компьютер</a><a href="/lang/ru/tags/quantum_algorithm.html" class="side-tag" data-tag="quantum_algorithm">квантовый алгоритм</a><div class="side-tags-label">Связанные законы</div><a href="/lang/ru/laws/superposition_principle.html" class="side-law" data-law="superposition_principle">принцип суперпозиции</a><div class="side-tags-label">Связанные учёные</div><a href="/lang/ru/scientists/David_Deutsch.html" class="side-sci" data-scientist="David Deutsch">David Deutsch</a><a href="/lang/ru/scientists/Richard_Feynman.html" class="side-sci" data-scientist="Richard Feynman">Richard Feynman</a><a href="/lang/ru/scientists/David_Wineland.html" class="side-sci" data-scientist="David Wineland">David Wineland</a><a href="/lang/ru/scientists/Paul_Benioff.html" class="side-sci" data-scientist="Paul Benioff">Paul Benioff</a><a href="/lang/ru/scientists/Rolf_Landauer.html" class="side-sci" data-scientist="Rolf Landauer">Rolf Landauer</a><a href="/lang/ru/scientists/Asher_Peres.html" class="side-sci" data-scientist="Asher Peres">Asher Peres</a><a href="/lang/ru/scientists/Benjamin_Schumacher.html" class="side-sci" data-scientist="Benjamin Schumacher">Benjamin Schumacher</a><a href="/lang/ru/scientists/William_Wootters.html" class="side-sci" data-scientist="William Wootters">William Wootters</a></div>
@@ -73,10 +77,10 @@
 <div id="search-results" class="entity-list" data-context-scientist="Yuri Manin"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('Yuri Manin', 'scientist', 'ru');

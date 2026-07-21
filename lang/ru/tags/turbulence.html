@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/turbulence.jpg" alt=""></div>
     <h1>турбулентность</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="">Турбулентность — сложное нелинейное явление, описываемое уравнениями Навье–Стокса для движения вязкой жидкости. При числах Рейнольдса выше критического ламинарное решение теряет устойчивость, и малые возмущения нарастают, порождая хаотическое движение. Энергия турбулентности порождается на крупных масштабах (интегральный масштаб L) за счёт сдвиговых напряжений и каскадом передаётся вниз по спектру до диссипативного масштаба (колмогоровского масштаба η), где вязкость превращает кинетическую энергию в тепло. В инерционном интервале (η ≪ r ≪ L) единственным определяющим параметром является скорость диссипации энергии ε, из соображений размерности следует знаменитый закон «–5/3». Прямое численное моделирование (DNS) требует разрешения всех масштабов, что при больших Re делает расчёты чрезвычайно дорогими; поэтому применяют модели крупных вихрей (LES) и осреднённые методы (RANS). В астрофизике турбулентность играет ключевую роль в аккреционных дисках, звездообразовании и межзвёздной среде.</div>
         <div class="section"><h2>История</h2><p>Осборн Рейнольдс в 1883 году провёл знаменитый эксперимент с подкрашенной струйкой и ввёл безразмерный параметр (число Рейнольдса), определяющий переход к турбулентности. В 1941 году Андрей Колмогоров создал статистическую теорию локально изотропной турбулентности, постулировав универсальность инерционного интервала. Экспериментальные подтверждения спектра k^{-5/3} были получены в 1950–60-х годах.</p></div>
         <div class="section"><h2>Как работает</h2><p>Механизм турбулентного каскада: энергия вводится в поток на крупных масштабах (например, за счёт обтекания препятствия) и через последовательность распадов вихрей передаётся на всё меньшие масштабы. В инерционном интервале, далёком как от источника, так и от диссипации, статистика однородна и изотропна, а спектр энергии зависит только от волнового числа k и скорости диссипации ε: E(k) = C ε^{2/3} k^{-5/3}, где константа C ≈ 1.5. Диссипация происходит на масштабах порядка колмогоровской длины η = (ν^3/ε)^{1/4}, где ν — кинематическая вязкость. Переход к турбулентности связан с неустойчивостью ламинарного профиля: при Re > Re_cr малые возмущения экспоненциально нарастают, формируя вторичные течения и, в конечном итоге, хаос. Математические трудности связаны с тем, что уравнения Навье–Стокса нелинейны и не допускают общего аналитического решения; проблема замыкания турбулентности остаётся одной из важнейших нерешённых задач классической физики.</p></div>
-        <div class="formula"><div class="formula-render">Re = \frac{\rho u L}{\mu}</div><div class="formula-meaning">Re — число Рейнольдса, ρ — плотность жидкости, u — характерная скорость потока, L — характерный линейный размер, μ — динамическая вязкость жидкости. Переход к турбулентности обычно происходит при Re > 2300 в трубах.</div></div><div class="formula"><div class="formula-render">E(k) = C \varepsilon^{2/3} k^{-5/3}</div><div class="formula-meaning">E(k) — спектральная плотность кинетической энергии на единицу массы как функция волнового числа k (k = 2π/λ, где λ — размер вихря), ε — скорость диссипации энергии на единицу массы, C — константа Колмогорова (обычно около 1.5).</div></div>
+        <div class="formula"><div class="formula-render">Re = \frac{\rho u L}{\mu}</div><div class="formula-meaning">Re — число Рейнольдса, ρ — плотность жидкости, u — характерная скорость потока, L — характерный линейный размер, μ — динамическая вязкость жидкости. Переход к турбулентности обычно происходит при Re &gt; 2300 в трубах.</div></div><div class="formula"><div class="formula-render">E(k) = C \varepsilon^{2/3} k^{-5/3}</div><div class="formula-meaning">E(k) — спектральная плотность кинетической энергии на единицу массы как функция волнового числа k (k = 2π/λ, где λ — размер вихря), ε — скорость диссипации энергии на единицу массы, C — константа Колмогорова (обычно около 1.5).</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Общее аналитическое решение уравнений Навье–Стокса для турбулентных течений остаётся неизвестным (проблема тысячелетия); Проблема замыкания: в моделях с осреднением возникают корреляции, требующие полуэмпирических гипотез; Огромный разрыв между длиной колмогоровского масштаба и интегрального масштаба делает DNS непрактичным при высоких Re</p><p class="fact">💡 Даже в полностью развитом турбулентном потоке существуют тонкие области с очень сильными флуктуациями завихрённости — вихревые нити, которые могут быть причиной аномальной диссипации.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="turbulence_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/critical_point.html" class="side-tag" data-tag="critical_point">критическая точка</a><a href="/lang/ru/tags/entropy.html" class="side-tag" data-tag="entropy">энтропия</a><a href="/lang/ru/tags/markov_chain.html" class="side-tag" data-tag="markov_chain">марковская цепь</a><a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a><a href="/lang/ru/tags/phase_transition.html" class="side-tag" data-tag="phase_transition">фазовый переход</a><a href="/lang/ru/tags/viscosity.html" class="side-tag" data-tag="viscosity">вязкость</a><div class="side-tags-label">Законы</div><a href="/lang/ru/laws/bernoullis_principle.html" class="side-law" data-law="bernoullis_principle">закон Бернулли</a><a href="/lang/ru/laws/navier_stokes_equations.html" class="side-law" data-law="navier_stokes_equations">уравнения Навье — Стокса</a></div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="turbulence"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('turbulence', 'tag', 'ru');

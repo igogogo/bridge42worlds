@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/modular_form.jpg" alt=""></div>
     <h1>модулярная форма</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="">Модулярная форма веса k для группы Γ (обычно Γ = SL(2,ℤ)) — это голоморфная функция f: ℍ → ℂ, такая что: f(γ(z)) = (cz+d)^k f(z) для всех γ = (a b; c d) ∈ Γ, где γ(z) = (az+b)/(cz+d); и f голоморфна на бесконечности (f ограничена при y→∞). Модулярная группа порождена сдвигом T(z)=z+1 и инверсией S(z)=-1/z. Условие инвариантности относительно T даёт периодичность с периодом 1, откуда разложение в ряд Фурье: f(z) = Σ a_n e^{2πi n z}, где a_n — коэффициенты Фурье. Ключевой пример: ε-ряд Эйзенштейна. Пространство модулярных форм конечномерно, а его базис состоит из cusp-форм (обращающихся в нуль на границе) и рядов Эйзенштейна. Глубокие связи с эллиптическими кривыми через гипотезу Таниямы–Шимуры (доказанную Уайлсом) сыграли роль в доказательстве Великой теоремы Ферма. Модулярные формы также связаны с представлениями, теорией чисел, алгебраической геометрией и физикой.</div>
         <div class="section"><h2>История</h2><p>Истоки теории модулярных форм восходят к работам Гаусса и Эйзенштейна, но систематическое изучение началось в конце XIX века с Пуанкаре, который ввёл общее понятие автоморфных форм. Феликс Клейн исследовал модулярные функции в связи с икосаэдром. В XX веке Хекке развил теорию операторов, Рамануджан открыл глубокие свойства τ-функции, а позже гипотеза Таниямы–Шимуры о модулярности эллиптических кривых привела к доказательству Эндрю Уайлсом Великой теоремы Ферма. Современное развитие включает программу Ленглендса и модулярность всех эллиптических кривых над ℚ.</p></div>
         <div class="section"><h2>Как работает</h2><p>Модулярная форма — это сечение некоторого линейного расслоения над модулярной кривой. Функциональное уравнение гарантирует, что функция хорошо преобразуется под действием модулярной группы, а голоморфность и условие роста означают гладкость и конечность в каспсах. Ряды Фурье позволяют выразить форму через коэффициенты a_n, которые часто несут арифметический смысл (например, количество точек на эллиптической кривой над конечным полем). Связь с эллиптическими кривыми осуществляется через модулярность: каждой эллиптической кривой соответствует модулярная форма, чьё L-ряды совпадают. Это используется в доказательстве теоремы Ферма. Модулярные формы также порождают представления группы GL(2) над аделями.</p></div>
-        <div class="formula"><div class="formula-render">f\left(\frac{az+b}{cz+d}\right) = (cz+d)^k f(z)</div><div class="formula-meaning">f — модулярная форма веса k, z — точка верхней полуплоскости (Im(z) > 0), a,b,c,d — целые числа, ad−bc = 1.</div></div>
+        <div class="formula"><div class="formula-render">f\left(\frac{az+b}{cz+d}\right) = (cz+d)^k f(z)</div><div class="formula-meaning">f — модулярная форма веса k, z — точка верхней полуплоскости (Im(z) &gt; 0), a,b,c,d — целые числа, ad−bc = 1.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Гипотезы Ленглендса о взаимосвязи мотивных L-функций и автоморфных форм (модулярность для многообразий высшей размерности).; Загадка τ-функции Рамануджана: известные конгруэнтности и гипотезы о распределении её значений.; Построение модулярных форм для общих групп и их связь с физикой струн (например, moonshine).</p><p class="fact">💡 Пьер Делинь, доказавший гипотезу Рамануджана о росте τ-функции, использовал глубокие методы алгебраической геометрии и получил Филдсовскую премию. Сама τ-функция определяется через разложение модулярной дискриминантной функции Δ(z) = q Σ (1-q^n)^{24}.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="modular_form_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Учёные</div><a href="/lang/ru/scientists/Henri_Poincaré.html" class="side-sci" data-scientist="Henri Poincaré">Henri Poincaré</a><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/group.html" class="side-tag" data-tag="group">группа</a><a href="/lang/ru/tags/lie_group.html" class="side-tag" data-tag="lie_group">группа ли</a><a href="/lang/ru/tags/manifold.html" class="side-tag" data-tag="manifold">многообразие</a><a href="/lang/ru/tags/tensor.html" class="side-tag" data-tag="tensor">тензор</a><a href="/lang/ru/tags/topology.html" class="side-tag" data-tag="topology">топология</a></div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="modular_form"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('modular_form', 'tag', 'ru');

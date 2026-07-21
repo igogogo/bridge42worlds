@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/limit.jpg" alt=""></div>
     <h1>предел</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="">Фундаментальное понятие математического анализа, лежащее в основе непрерывности, производных, интегралов. Говорят, что предел функции f при x, стремящемся к c, равен L ( lim_{x→c} f(x)=L ), если для любого ε>0 существует δ>0 такое, что из 0<|x−c|<δ следует |f(x)−L|<ε. Это определение исключает точку c из рассмотрения, подчёркивая локальный характер предела. Предел может быть односторонним (слева или справа), бесконечным (x→∞ или значение стремится к бесконечности) или не существовать вовсе. Обобщается на метрические и топологические пространства через понятие направления и фильтра.</div>
         <div class="section"><h2>История</h2><p>Интуитивное понятие предела появилось в античности в работах Евдокса и Архимеда (метод исчерпывания). В XVII веке Ньютон и Лейбниц использовали бесконечно малые («флюксии» и «дифференциалы») для создания анализа, но критиковались за нестрогость. Огюстен Луи Коши в 1821 году предложил определение на языке ε-δ, позднее уточнённое Вейерштрассом. Это положило конец эпохе инфинитезималей и дало фундамент современному анализу.</p></div>
         <div class="section"><h2>Как работает</h2><p>Классическое ε-δ определение формализует интуицию «приближения без достижения». На практике для вычисления пределов используют алгебраические преобразования, теорему о сжатии (двух милиционеров), правило Лопиталя (для неопределённостей) или асимптотические оценки. Пределы незаменимы при определении непрерывности (f непрерывна в c, если lim_{x→c} f(x)=f(c)), производной ( lim_{h→0} (f(x+h)−f(x))/h ) и интеграла Римана ( lim_{n→∞} Σ f(x_i^*)Δx ). В функциональном анализе предел обобщается на нормированные пространства.</p></div>
-        <div class="formula"><div class="formula-render">\lim_{x \to c} f(x) = L \iff \forall \varepsilon > 0, \exists \delta > 0 : 0 < |x - c| < \delta \implies |f(x) - L| < \varepsilon</div><div class="formula-meaning">ε — сколь угодно малое положительное число, требуемая точность приближения значений функции к L; δ — положительное число, определяющее окрестность точки c, в которой значения функции обязаны быть ε-близкими к L (не включая саму точку c); f — функция; c — точка, к которой стремится аргумент; L — значение предела; символы ∀ и ∃ — кванторы всеобщности и существования соответственно.</div></div><div class="formula"><div class="formula-render">e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n</div><div class="formula-meaning">e — число Эйлера, иррациональное; n — натуральное число, неограниченно возрастающее; предел последовательности, заданной выражением (1+1/n)^n.</div></div>
+        <div class="formula"><div class="formula-render">\lim_{x \to c} f(x) = L \iff \forall \varepsilon &gt; 0, \exists \delta &gt; 0 : 0 &lt; |x - c| &lt; \delta \implies |f(x) - L| &lt; \varepsilon</div><div class="formula-meaning">ε — сколь угодно малое положительное число, требуемая точность приближения значений функции к L; δ — положительное число, определяющее окрестность точки c, в которой значения функции обязаны быть ε-близкими к L (не включая саму точку c); f — функция; c — точка, к которой стремится аргумент; L — значение предела; символы ∀ и ∃ — кванторы всеобщности и существования соответственно.</div></div><div class="formula"><div class="formula-render">e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n</div><div class="formula-meaning">e — число Эйлера, иррациональное; n — натуральное число, неограниченно возрастающее; предел последовательности, заданной выражением (1+1/n)^n.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Построение строгой теории бесконечно малых, лишённой противоречий (нестандартный анализ Абрахама Робинсона); Вычисление пределов сложных последовательностей и функций без явного аналитического задания</p><p class="fact">💡 Предел последовательности (1 + 1/n)^n при n→∞ равен числу e ≈ 2.71828 — основанию натуральных логарифмов. Это же число — единственное, для которого производная показательной функции a^x равна a^x.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="limit_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/differential_equation.html" class="side-tag" data-tag="differential_equation">дифференциальное уравнение</a><a href="/lang/ru/tags/manifold.html" class="side-tag" data-tag="manifold">многообразие</a><a href="/lang/ru/tags/topology.html" class="side-tag" data-tag="topology">топология</a></div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="limit"><p>Пока нет статей</p></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('limit', 'tag', 'ru');

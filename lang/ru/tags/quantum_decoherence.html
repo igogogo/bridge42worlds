@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/quantum_decoherence.jpg" alt=""></div>
     <h1>квантовая декогеренция</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">20</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="">Квантовая декогеренция — необратимый процесс формирования классических свойств из квантовых за счёт запутывания системы с окружением. Она описывается уменьшением недиагональных элементов матрицы плотности в базисе измеряемой величины. Скорость декогеренции зависит от расстояния между суперпозиционными состояниями и силы связи с окружением. В макроскопических масштабах декогеренция фактически мгновенна, что и запрещает наблюдение суперпозиций крупных тел.</div>
         <div class="section"><h2>История</h2><p>Парадокс квантового измерения был проиллюстрирован Эрвином Шрёдингером в 1935 году (кот Шрёдингера). Джон Арчибальд Уилер внёс вклад в понимание роли наблюдателя и информационного аспекта квантовых явлений. Формальная теория декогеренции разработана в 1970–80-х годах, в основном Хансом-Дитером Цехом и Войцехом Журеком, которые показали, что неизбежное взаимодействие с макроскопическим окружением разрушает квантовые интерференции за чрезвычайно короткое время.</p></div>
         <div class="section"><h2>Как работает</h2><p>Окружающая среда непрерывно «измеряет» положение или другое свойство системы, запутываясь с ней. В матрице плотности это отражается экспоненциальным затуханием недиагональных элементов: |ρ_ij| ~ exp(-γ t (x_i - x_j)^2). Интерференционные члены исчезают, и возникает эффективное классическое поведение. Этот процесс соответствует второму закону термодинамики: информация о когерентности рассеивается в окружении, увеличивая энтропию.</p></div>
-        <div class="formula"><div class="formula-render">\rho(x,x',t) = \rho(x,x',0) \exp(-\gamma (x - x')^2 t)</div><div class="formula-meaning">ρ(x,x',0) — начальный матричный элемент, γ — скорость декогеренции (зависит от температуры и связи с окружением), t — время, x и x' — положения.</div></div>
+        <div class="formula"><div class="formula-render">\rho(x,x&#x27;,t) = \rho(x,x&#x27;,0) \exp(-\gamma (x - x&#x27;)^2 t)</div><div class="formula-meaning">ρ(x,x&#x27;,0) — начальный матричный элемент, γ — скорость декогеренции (зависит от температуры и связи с окружением), t — время, x и x&#x27; — положения.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Точное измерение скорости декогеренции в сложных системах и её зависимость от типа окружения.; Создание квантовой коррекции ошибок для сохранения когерентности в квантовых компьютерах.; Проблема объективной реальности: почему мы видим классический мир, если исходно всё квантовое?</p><p class="fact">💡 Для пылинки массой 1 микрограмм, суперпозиция двух положений на расстоянии 1 микрометра разрушается примерно за 10⁻²¹ секунды под действием космического микроволнового фона — остаточного излучения Большого взрыва.</p></div>
     </div>
 </div>
@@ -78,12 +88,6 @@
 <div class="mini-graph" data-node="t:quantum_decoherence"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="quantum_decoherence_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -154,10 +158,10 @@
                 <div class="meta">arXiv:2605.12172v1 · 2026-05-12</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('quantum_decoherence', 'tag', 'ru');

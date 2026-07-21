@@ -25,7 +25,7 @@
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
-            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/favorites.html" title="$fav_title">★</a>
         </div>
         $version_toggle_html
     </div>
@@ -34,6 +34,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header scientist-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">$search_hint</div>
+        </div>
+    </div>
     <h1>👨‍🔬 $scientist_name</h1>
     <div class="tag-stats">$lifespan · $fields</div>
     <div class="desc">$scientist_description</div>
@@ -52,12 +62,6 @@ $actions_html
 <div class="mini-graph" data-node="s:$scientist_id"><canvas id="minigraph"></canvas></div>
 
 $feedback_html
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">$search_hint</div>
 
 <div class="filters" id="active-filters"></div>
 </div>

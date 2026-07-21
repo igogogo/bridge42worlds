@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/higgs_boson.jpg" alt=""></div>
     <h1>бозон Хиггса</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">2</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Бозон Хиггса — квант поля Хиггса, дублетное скалярное поле в Стандартной модели, спонтанно нарушающее электрослабую калибровочную симметрию SU(2)×U(1) до электромагнитной U(1). Нарушение симметрии придаёт массы W- и Z-бозонам (переносчикам слабого взаимодействия) через механизм Хиггса, а фермионы получают массы через юкавские связи. Бозон обнаружен в 2012 году на БАК коллаборациями ATLAS и CMS с массой около 125 ГэВ/c², что стало триумфом физики частиц и подтвердило последний недостающий элемент Стандартной модели.">Бозон Хиггса — квант дублетного скалярного поля, которое спонтанно нарушает электрослабую калибровочную симметрию SU(2)×U(1) до электромагнитной U(1), придавая массы W- и Z-бозонам через механизм Хиггса. Фермионы получают массы посредством юкавских взаимодействий с полем. Экспериментально обнаружен в 2012 году на БАК коллаборациями ATLAS и CMS с массой около 125 ГэВ/c², став последним подтверждённым элементом Стандартной модели.</div>
         <div class="section"><h2>История</h2><p>Механизм Хиггса был независимо предложен в 1964 году Питером Хиггсом, Робертом Браутом и Франсуа Энглером; сходные идеи высказывал Филип Андерсон в контексте сверхпроводимости. Многолетние поиски потребовали постройки самого мощного ускорителя — Большого адронного коллайдера в ЦЕРНе. В 2012 году коллаборации ATLAS и CMS сообщили о частице с ожидаемыми свойствами; в 2013 году Энглер и Хиггс были удостоены Нобелевской премии.</p></div>
         <div class="section"><h2>Как работает</h2><p>Поле Хиггса обладает ненулевым вакуумным средним (v ≈ 246 ГэВ). Его потенциал имеет вид «мексиканской шляпы» из-за отрицательного массового члена, что приводит к спонтанному нарушению симметрии. Интенсивность взаимодействия частиц с полем (константа связи) определяет их инертную массу. Калибровочные бозоны поглощают компоненты поля Хиггса как продольные степени свободы, становясь массивными. Квантовые флуктуации вокруг вакуумного состояния проявляются как бозон Хиггса. Массы W- и Z-бозонов выражаются через калибровочные константы и v, а массы фермионов — через юкавские константы и v.</p></div>
-        <div class="formula"><div class="formula-render">V(\phi) = -\mu^2 \phi^2 + \lambda \phi^4</div><div class="formula-meaning">V(φ) — потенциальная энергия поля Хиггса, φ — напряжённость поля, μ — массовый параметр (μ² > 0), λ — константа самодействия (λ > 0). Минимум потенциала находится при ненулевом значении φ, что и даёт вакуумное среднее.</div></div><div class="formula"><div class="formula-render">M_W = \frac{g v}{2}</div><div class="formula-meaning">M_W — масса W-бозона, g — константа слабой связи, v — вакуумное среднее поля Хиггса (v ≈ 246 ГэВ). Аналогично для Z-бозона: M_Z = √(g²+g'²) v / 2, где g' — константа гиперзаряда.</div></div>
+        <div class="formula"><div class="formula-render">V(\phi) = -\mu^2 \phi^2 + \lambda \phi^4</div><div class="formula-meaning">V(φ) — потенциальная энергия поля Хиггса, φ — напряжённость поля, μ — массовый параметр (μ² &gt; 0), λ — константа самодействия (λ &gt; 0). Минимум потенциала находится при ненулевом значении φ, что и даёт вакуумное среднее.</div></div><div class="formula"><div class="formula-render">M_W = \frac{g v}{2}</div><div class="formula-meaning">M_W — масса W-бозона, g — константа слабой связи, v — вакуумное среднее поля Хиггса (v ≈ 246 ГэВ). Аналогично для Z-бозона: M_Z = √(g²+g&#x27;²) v / 2, где g&#x27; — константа гиперзаряда.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Какова истинная форма потенциала Хиггса и стабилен ли вакуум?; Существуют ли дополнительные хиггсовские бозоны в расширенных моделях (суперсимметрия, двухдублетные модели)?; Почему масса бозона Хиггса столь мала по сравнению с планковским масштабом (проблема иерархии)?; Связано ли поле Хиггса с тёмной материей или инфляцией?</p><p class="fact">💡 Измеренная масса бозона Хиггса (около 125 ГэВ) соответствует области, где вакуум Стандартной модели метастабилен: в отдалённом будущем возможен распад ложного вакуума, однако его вероятность в ближайшие миллиарды лет ничтожно мала.</p></div>
     </div>
 </div>
@@ -78,12 +88,6 @@
 <div class="mini-graph" data-node="t:higgs_boson"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="higgs_boson_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -100,10 +104,10 @@
                 <div class="meta">arXiv:2605.13777v2 · 2026-05-13</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('higgs_boson', 'tag', 'ru');

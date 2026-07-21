@@ -27,7 +27,7 @@
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
-            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/favorites.html" title="$fav_title">★</a>
         </div>
         $law_version_toggle
     </div>
@@ -36,6 +36,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="$search_placeholder" oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">$search_hint</div>
+        </div>
+    </div>
     $ai_cover_html
     <h1>$law_name<span class="law-type">$law_type</span></h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">$article_count $articles_label</a></div>

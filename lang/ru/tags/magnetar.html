@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/magnetar.jpg" alt=""></div>
     <h1>магнетар</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">1</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Магнетар — это нейтронная звезда с магнитным полем, превышающим критическое квантово-электродинамическое поле Bₖ = mₑ²c³/(eℏ) ≈ 4.4×10⁹ Тл, при котором становятся существенны нелинейные эффекты вакуумной поляризации. Внутреннее поле может быть на порядок сильнее, достигая 10¹² Тл. Динамо-механизм, основанный на дифференциальном вращении и конвекции в протонейтронной звезде в первые секунды после коллапса, порождает такое поле. Спектр излучения часто тепловой (чёрнотельный) с температурой поверхности ~0.1–1 кэВ, но вспышки демонстрируют нетепловую природу с синхротронным излучением. Магнито-гидродинамическая эволюция приводит к пластическим деформациям коры, накоплению напряжений и внезапным разрывам — звёздотрясениям, излучающим жёсткую гамма-компоненту.">Магнетар — нейтронная звезда, чьё поле превышает квантово-электродинамический предел Bₖ ≈ 4.4×10⁹ Тл, где поляризация вакуума становится нелинейной. Внутреннее поле может достигать 10¹² Тл; оно генерируется динамо-механизмом за счёт дифференциального вращения и конвекции в первые секунды после коллапса. Поверхность излучает в рентгене как чёрное тело с температурой 0.1–1 кэВ, а вспышки имеют синхротронную природу. Магнитогидродинамические процессы в коре вызывают деформации и разрывы (звёздотрясения) с выбросом жёсткого гамма-излучения.</div>
         <div class="section"><h2>История</h2><p>5 марта 1979 года спутники зарегистрировали всплеск от объекта SGR 0526-66 — впоследствии первого идентифицированного магнетара. Понятие магнетара ввели Роберт Дункан и Кристофер Томпсон в 1992 году для объяснения повторяющихся гамма-всплесков с мягким спектром. В 1998 году обнаружение пульсаций аномального рентгеновского пульсара 1E 2259+586 подтвердило модель: поле около 6×10⁹ Тл. Сегодня известно более 30 магнетаров, в том числе SGR 1806-20, чья вспышка 2004 года стала ярчайшим внесолнечным гамма-событием.</p></div>
         <div class="section"><h2>Как работает</h2><p>Сильное магнитное поле генерируется альфа-омега динамо: дифференциальное вращение (омега-эффект) и конвективное закручивание (альфа-эффект) в быстро вращающейся (миллисекунды) протонейтронной звезде. При остывании поле вмораживается в сверхпроводящую протонную жидкость. Омическая диссипация и амбиполярная диффузия ведут к распаду поля, нагреву и деформациям коры. Магнитогидродинамические неустойчивости и пересоединение линий вызывают гамма-вспышки. Магнитосфера заполнена плазмой; вращение индуцирует электрическое поле, разгоняющее частицы до релятивистских энергий и порождающее нетепловое излучение. Уравнения Максвелла описывают структуру поля.</p></div>
-        <div class="formula"><div class="formula-render">B_{\text{cr}} = \frac{m_e^2 c^3}{e \hbar}</div><div class="formula-meaning">Bcr — критическая магнитная индукция, при которой энергия циклотронного вращения сравнивается с энергией покоя электрона; me — масса электрона, me ≈ 9.10938356×10⁻³¹ кг; c — скорость света, c ≈ 2.99792458×10⁸ м/с; e — элементарный заряд, e ≈ 1.602176634×10⁻¹⁹ Кл; ℏ — приведённая постоянная Планка, ℏ ≈ 1.054571817×10⁻³⁴ Дж·с. Для магнетаров B > Bcr, что ведёт к рождению пар из вакуума.</div></div><div class="formula"><div class="formula-render">u = \frac{B^2}{2\mu_0}</div><div class="formula-meaning">u — объёмная плотность энергии магнитного поля; B — магнитная индукция; μ0 — магнитная постоянная, μ0 = 4π×10⁻⁷ Гн/м (точно в СИ). При B = 10¹¹ Тл получается u ~ 4×10²⁷ Дж/м³, что сравнимо с плотностью энергии ядерного вещества.</div></div>
+        <div class="formula"><div class="formula-render">B_{\text{cr}} = \frac{m_e^2 c^3}{e \hbar}</div><div class="formula-meaning">Bcr — критическая магнитная индукция, при которой энергия циклотронного вращения сравнивается с энергией покоя электрона; me — масса электрона, me ≈ 9.10938356×10⁻³¹ кг; c — скорость света, c ≈ 2.99792458×10⁸ м/с; e — элементарный заряд, e ≈ 1.602176634×10⁻¹⁹ Кл; ℏ — приведённая постоянная Планка, ℏ ≈ 1.054571817×10⁻³⁴ Дж·с. Для магнетаров B &gt; Bcr, что ведёт к рождению пар из вакуума.</div></div><div class="formula"><div class="formula-render">u = \frac{B^2}{2\mu_0}</div><div class="formula-meaning">u — объёмная плотность энергии магнитного поля; B — магнитная индукция; μ0 — магнитная постоянная, μ0 = 4π×10⁻⁷ Гн/м (точно в СИ). При B = 10¹¹ Тл получается u ~ 4×10²⁷ Дж/м³, что сравнимо с плотностью энергии ядерного вещества.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Механизм генерации столь сильного магнитного поля: требует ли он экстремального периода новорождённой звезды (миллисекунды) или особых условий коллапса?; Связь магнетаров с быстрыми радиовсплесками: являются ли они единственным источником или только одним из вариантов?; Наличие внутреннего сверхсильного поля и его влияние на уравнение состояния ядерной материи.; Эволюция поля: почему некоторые магнетары живут активно тысячи лет, а другие быстро затухают?</p><p class="fact">💡 В поле магнетара одиночный фотон может превратиться в электрон-позитронную пару благодаря квантово-электродинамическому эффекту, который невозможно воспроизвести в лаборатории.</p></div>
     </div>
 </div>
@@ -79,12 +89,6 @@
 
 <div class="feedback" id="feedback" data-article-id="magnetar_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 <div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/accretion_disk.html" class="side-tag" data-tag="accretion_disk">аккреционный диск</a><a href="/lang/ru/tags/fast_radio_burst.html" class="side-tag" data-tag="fast_radio_burst">быстрый радиовсплеск</a><a href="/lang/ru/tags/gravitational_waves.html" class="side-tag" data-tag="gravitational_waves">гравитационные волны</a><a href="/lang/ru/tags/neutron_star.html" class="side-tag" data-tag="neutron_star">нейтронная звезда</a><a href="/lang/ru/tags/polarization.html" class="side-tag" data-tag="polarization">поляризация</a><a href="/lang/ru/tags/pulsar.html" class="side-tag" data-tag="pulsar">пульсар</a><a href="/lang/ru/tags/redshift.html" class="side-tag" data-tag="redshift">красное смещение</a><a href="/lang/ru/tags/stellar_evolution.html" class="side-tag" data-tag="stellar_evolution">звёздная эволюция</a><div class="side-tags-label">Законы</div><a href="/lang/ru/laws/zeeman_effect.html" class="side-law" data-law="zeeman_effect">эффект Зеемана</a></div>
@@ -97,10 +101,10 @@
                 <div class="meta">arXiv:2605.14050v1 · 2026-05-13</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('magnetar', 'tag', 'ru');

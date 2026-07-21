@@ -39,7 +39,7 @@
             <a href="/lang/$authors_lang/authors/">authors</a>
             <a href="/lang/$lang/graph/">graph</a>
             <a href="/lang/$lang/theory/">theory</a>
-            <a href="/lang/$lang/favorites.html" title="Избранное">★</a>
+            <a href="/lang/$lang/favorites.html" title="$fav_title">★</a>
         </div>
         $version_toggle_html
     </div>
@@ -77,10 +77,10 @@ $nav_html
         $key_numbers_html
         <div class="actions" data-article-id="$like_id">
             <div class="reactions">
-                <button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button>
-                <button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="like" title="$like_title">👍 <span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="$dislike_title">👎 <span class="rc">…</span></button>
             </div>
-            <button class="fav-btn" data-fav="$id" title="В избранное"><span class="fav-ic">☆</span> избранное</button>
+            <button class="fav-btn" data-fav="$id" title="$fav_title"><span class="fav-ic">☆</span> $fav_label</button>
             <button onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')">$share_label</button>
         </div>
         $feedback_html

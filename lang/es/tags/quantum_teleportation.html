@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
             <a href="/lang/es/authors/">authors</a>
             <a href="/lang/es/graph/">graph</a>
             <a href="/lang/es/theory/">theory</a>
-            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+            <a href="/lang/es/favorites.html" title="Favoritos">★</a>
         </div>
         <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
     </div>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># tag · @ author · ! scientist</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/quantum_teleportation.jpg" alt=""></div>
     <h1>teleportación cuántica</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
@@ -64,26 +74,20 @@
         <div class="desc" data-raw="La teleportación cuántica es un procedimiento para trasladar un estado cuántico entre dos puntos sin transferir físicamente el portador del estado. Recursos obligatorios: un par máximamente entrelazado (estado de Bell), un canal de comunicación estándar y la capacidad de realizar operaciones cuánticas locales. Formalmente, sea el estado a teleportar: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. El par entrelazado (cúbits 2 y 3): |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. Estado total: |ψ⟩₁ ⊗ |Φ⁺⟩₂₃. La medición de Bell sobre los cúbits 1 y 2 en la base {|Φ⁺⟩, |Φ⁻⟩, |Ψ⁺⟩, |Ψ⁻⟩} da un resultado clásico (dos bits), tras lo cual el cúbit 3 se proyecta a uno de estos estados: α|0⟩ + β|1⟩, α|0⟩ - β|1⟩, α|1⟩ + β|0⟩, α|1⟩ - β|0⟩. La operación de Pauli correspondiente (I, Z, X, ZX) restaura |ψ⟩ en el cúbit 3. La medición no revela α ni β, preservando las amplitudes desconocidas. El protocolo funciona para cualquier estado, puro o mezcla, pero requiere alta fidelidad en el entrelazamiento y mínima decoherencia.">La teleportación cuántica es un procedimiento para trasladar un estado cuántico sin transferir físicamente el portador. Se requiere: un par máximamente entrelazado (estado de Bell), un canal clásico y operaciones locales. Estado original: |ψ⟩₁ = α|0⟩₁ + β|1⟩₁. Par entrelazado: |Φ⁺⟩₂₃ = (|00⟩₂₃ + |11⟩₂₃)/√2. La medición de Bell sobre los cúbits 1 y 2 proyecta el cúbit 3 a uno de cuatro estados, que se corrigen con operadores de Pauli (I, X, Z, XZ) según los dos bits clásicos, recuperando |ψ⟩₁. En la medición no se revelan las amplitudes α y β. El protocolo es aplicable a cualquier estado, pero requiere alto entrelazamiento y protección contra la decoherencia.</div>
         <div class="section"><h2>History</h2><p>El concepto fue propuesto en 1993 por Charles Bennett, Gilles Brassard y coautores. Los primeros experimentos con fotones fueron realizados en 1997 por los grupos de Anton Zeilinger y Francesco De Martini. En 2012 se logró teleportación a 143 km. En 2016, el satélite chino 'Mozi' (Micius) teleportó estados entre el satélite y la Tierra.</p></div>
         <div class="section"><h2>How it works</h2><p>La teleportación utiliza el entrelazamiento y la linealidad. La medición de Bell proyecta un par en un estado entrelazado, y la partícula remota se corrige con una operación unitaria. La necesidad de la señal clásica asegura la causalidad. La imposibilidad de medir directamente el estado original se relaciona con el principio de incertidumbre. El protocolo es una forma de corrección cuántica de errores. Experimentalmente se emplean fotones con polarización entrelazada, intervalos temporales o momento angular orbital. Las fuentes de pares entrelazados son la conversión paramétrica descendente espontánea; la medición de Bell se realiza con interferómetros, y las operaciones condicionales con moduladores rápidos.</p></div>
-        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ es el estado de máximo entrelazamiento de dos cúbits; |00⟩ significa primer cúbit en |0⟩, segundo en |0⟩; |11⟩ ambos en |1⟩; 1/√2 es el factor de normalización. Este estado se usa como recurso en el protocolo de teleportación.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">Cuatro estados entrelazados ortonormales de dos cúbits; los signos ± distinguen combinaciones simétricas y antisimétricas. La medición sobre dos cúbits los proyecta a uno de estos estados, proporcionando 2 bits de información.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}</div><div class="formula-meaning">I es la operación identidad (no hacer nada); X es la puerta cuántica NOT (intercambia 0↔1); Z es la puerta de fase (cambia el signo de la amplitud de |1⟩); XZ es la aplicación secuencial de X y Z. Se aplican al cúbit de Bob para restaurar el estado original tras recibir los bits clásicos.</div></div>
+        <div class="formula"><div class="formula-render">|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)</div><div class="formula-meaning">|Φ⁺⟩ es el estado de máximo entrelazamiento de dos cúbits; |00⟩ significa primer cúbit en |0⟩, segundo en |0⟩; |11⟩ ambos en |1⟩; 1/√2 es el factor de normalización. Este estado se usa como recurso en el protocolo de teleportación.</div></div><div class="formula"><div class="formula-render">|\Phi^\pm\rangle = \frac{1}{\sqrt{2}}(|00\rangle \pm |11\rangle), |\Psi^\pm\rangle = \frac{1}{\sqrt{2}}(|01\rangle \pm |10\rangle)</div><div class="formula-meaning">Cuatro estados entrelazados ortonormales de dos cúbits; los signos ± distinguen combinaciones simétricas y antisimétricas. La medición sobre dos cúbits los proyecta a uno de estos estados, proporcionando 2 bits de información.</div></div><div class="formula"><div class="formula-render">I = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}, X = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}, Z = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}, XZ = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix}</div><div class="formula-meaning">I es la operación identidad (no hacer nada); X es la puerta cuántica NOT (intercambia 0↔1); Z es la puerta de fase (cambia el signo de la amplitud de |1⟩); XZ es la aplicación secuencial de X y Z. Se aplican al cúbit de Bob para restaurar el estado original tras recibir los bits clásicos.</div></div>
         <div class="section"><h2>Open problems & fun facts</h2><p>Aumentar la distancia de teleportación manteniendo la fidelidad (problema de decoherencia y pérdidas en fibra óptica o espacio libre); Teleportación de estados complejos de múltiples partículas o de objetos macroscópicos (por ejemplo, conjuntos de átomos); Creación de repetidores cuánticos para construir un internet cuántico global; Compatibilidad con diferentes plataformas físicas (teleportación híbrida entre átomos y fotones)</p><p class="fact">💡 El término 'teleportación' fue acuñado por el escritor Charles Fort en 1931. La idea de teleportación cuántica se popularizó tras un artículo en Nature (1997) con una foto del 'rayo de Star Trek', aunque el protocolo solo transfiere información cuántica, no materia.</p></div>
     </div>
 </div>
 
 <div class="entity-wrapper">
 <div class="entity-body">
-<div class="actions" data-article-id="quantum_teleportation_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_teleportation" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+<div class="actions" data-article-id="quantum_teleportation_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="¡Genial!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="quantum_teleportation" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
 
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
 <div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
 <div class="mini-graph" data-node="t:quantum_teleportation"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="quantum_teleportation_es_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># tag · @ author · ! scientist</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -94,10 +98,10 @@
 <div id="search-results" class="entity-list" data-context-tag="quantum_teleportation"><p>No articles yet</p></div>
 
 <footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('quantum_teleportation', 'tag', 'es');

@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <link rel="stylesheet" href="/css/style.css?v=b79d08c19d">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -42,6 +42,16 @@
 <div class="langs" id="langs-bar"></div>
 
 <div class="tag-header">
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск...">🔍</button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint"># тег · @ автор · ! учёный</div>
+        </div>
+    </div>
     <div class="ai-cover"><img src="/lang/ru/tags/img/dark_energy.jpg" alt=""></div>
     <h1>тёмная энергия</h1>
     <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">157</a></div>
@@ -64,7 +74,7 @@
         <div class="desc" data-raw="Тёмная энергия — это форма энергии, которая пронизывает всё пространство и имеет уравнение состояния с параметром w, близким к -1, что соответствует космологической постоянной Λ в уравнениях Эйнштейна. Она вызывает ускоренное расширение Вселенной, преодолевая гравитационное притяжение материи на больших масштабах. Наблюдения далёких сверхновых типа Ia, анизотропии реликтового излучения и крупномасштабной структуры подтверждают её существование. Основные модели включают квинтэссенцию (динамическое поле) и модифицированные теории гравитации.">Тёмная энергия — это гипотетическая форма энергии, равномерно заполняющая Вселенную и характеризующаяся уравнением состояния p = wρ с параметром w, очень близким к -1. Простейший вариант с w = -1 соответствует космологической постоянной Λ из уравнений Эйнштейна. Именно тёмная энергия ответственна за ускоренное расширение Вселенной на масштабах, где её отрицательное давление превосходит гравитационное притяжение материи. Существование тёмной энергии подтверждено несколькими независимыми наблюдательными фактами: кривыми блеска далёких сверхновых типа Ia, спектром анизотропии реликтового излучения и данными по крупномасштабному распределению галактик. Теоретические модели включают квинтэссенцию — скалярное поле с меняющимся во времени w, и модифицированные теории гравитации.</div>
         <div class="section"><h2>История</h2><p>В 1917 году Альберт Эйнштейн ввел космологическую постоянную Λ в свои уравнения, чтобы получить статическую модель Вселенной. После открытия Эдвина Хаббла в 1929 году, показавшего, что Вселенная расширяется, Эйнштейн отказался от Λ, назвав её «величайшей ошибкой». Однако в 1998 году две независимые группы, Supernova Cosmology Project и High-Z Supernova Search Team, анализируя яркость далёких сверхновых типа Ia, пришли к выводу, что расширение Вселенной не замедляется, а ускоряется. Это означало, что Λ или нечто подобное всё же существует, и привело к современному пониманию тёмной энергии.</p></div>
         <div class="section"><h2>Как работает</h2><p>В общей теории относительности действие тёмной энергии часто моделируется космологической постоянной Λ, входящей в уравнение Эйнштейна Gμν + Λgμν = (8πG/c⁴)Tμν. Эффективно Λ эквивалентна идеальной жидкости с давлением p = -ρc², где ρ — плотность энергии. Такое отрицательное давление приводит к гравитационному отталкиванию. Согласно второму уравнению Фридмана, ускорение масштабного фактора a даётся выражением ä/a = -4πG/3 (ρ + 3p/c²). Для тёмной энергии с p = -ρc² это выражение положительно, что и соответствует ускоренному расширению.</p></div>
-        <div class="formula"><div class="formula-render">G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}</div><div class="formula-meaning">G_{\mu\nu} — тензор Эйнштейна, описывающий кривизну пространства-времени; \Lambda — космологическая постоянная, связанная с тёмной энергией; g_{\mu\nu} — метрический тензор; G — гравитационная постоянная, G ≈ 6.674×10⁻¹¹ м³/(кг·с²); c — скорость света, c ≈ 3×10⁸ м/с; T_{\mu\nu} — тензор энергии-импульса материи.</div></div><div class="formula"><div class="formula-render">\frac{\ddot{a}}{a} = -\frac{4\pi G}{3} \left( \rho + \frac{3p}{c^2} \right)</div><div class="formula-meaning">a — масштабный фактор Вселенной; \ddot{a} — его вторая производная по времени (ускорение расширения); G — гравитационная постоянная; \rho — плотность энергии всех компонент; p — давление; c — скорость света. При p = -\rho c² (тёмная энергия), \ddot{a} > 0.</div></div>
+        <div class="formula"><div class="formula-render">G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}</div><div class="formula-meaning">G_{\mu\nu} — тензор Эйнштейна, описывающий кривизну пространства-времени; \Lambda — космологическая постоянная, связанная с тёмной энергией; g_{\mu\nu} — метрический тензор; G — гравитационная постоянная, G ≈ 6.674×10⁻¹¹ м³/(кг·с²); c — скорость света, c ≈ 3×10⁸ м/с; T_{\mu\nu} — тензор энергии-импульса материи.</div></div><div class="formula"><div class="formula-render">\frac{\ddot{a}}{a} = -\frac{4\pi G}{3} \left( \rho + \frac{3p}{c^2} \right)</div><div class="formula-meaning">a — масштабный фактор Вселенной; \ddot{a} — его вторая производная по времени (ускорение расширения); G — гравитационная постоянная; \rho — плотность энергии всех компонент; p — давление; c — скорость света. При p = -\rho c² (тёмная энергия), \ddot{a} &gt; 0.</div></div>
         <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Природа тёмной энергии: является ли она космологической постоянной или динамическим полем?; Проблема совпадения: почему плотность тёмной энергии близка к критической сегодня?; Почему плотность тёмной энергии столь мала по сравнению с предсказаниями квантовой теории поля?; Возможная связь с модифицированной гравитацией.</p><p class="fact">💡 Плотность тёмной энергии невероятно мала — примерно 7×10⁻³⁰ грамма на кубический сантиметр. Это значит, что в объёме Земли её масса сравнима с массой всего лишь нескольких протонов.</p></div>
     </div>
 </div>
@@ -78,12 +88,6 @@
 <div class="mini-graph" data-node="t:dark_energy"><canvas id="minigraph"></canvas></div>
 
 <div class="feedback" id="feedback" data-article-id="dark_energy_ru_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
-
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint"># тег · @ автор · ! учёный</div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -430,10 +434,10 @@
                 <div class="meta">arXiv:2607.08120 · 2026-07-09</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=d5d075c87a"></script>
-<script src="/js/search.js?v=d5d075c87a"></script>
-<script src="/js/force-graph.js?v=d5d075c87a"></script>
-<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script src="/js/likes.js?v=b79d08c19d"></script>
+<script src="/js/search.js?v=b79d08c19d"></script>
+<script src="/js/force-graph.js?v=b79d08c19d"></script>
+<script src="/js/mini-graph.js?v=b79d08c19d"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('dark_energy', 'tag', 'ru');
