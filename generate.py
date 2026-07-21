@@ -227,6 +227,15 @@ def valid_scientist_ids():
     return _VALID_SCI
 
 
+_VALID_LAWS = None
+def valid_law_ids():
+    global _VALID_LAWS
+    if _VALID_LAWS is None:
+        p = Path(f"lang/{DEFAULT_LANG}/data/laws.json")
+        _VALID_LAWS = set(json.loads(p.read_text(encoding="utf-8")).keys()) if p.exists() else set()
+    return _VALID_LAWS
+
+
 def scientist_link_or_text(s, lang, label=None):
     """Ссылка на страницу учёного — только если он реально есть в курируемом реестре
     (valid_scientist_ids(), ключи одинаковы для всех языков). Законы/теги/статьи нередко
@@ -307,8 +316,19 @@ def parse_markers(text, lang):
         return (f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(name))}.html" '
                 f'class="text-scientist" data-scientist="{attr_safe(name)}">{label}</a>')
 
+    def law_link(m):
+        # Модель иногда метит закон вне нашего реестра — тогда оставляем обычный текст, без битой ссылки.
+        lid, label = m.group(1).strip(), m.group(2)
+        if lid not in valid_law_ids():
+            alt = re.sub(r"[\s-]+", "_", lid.lower())
+            lid = alt if alt in valid_law_ids() else None
+        if not lid:
+            return label
+        return f'<a href="/{LANG_DIR}/{lang}/laws/{lid}.html" class="text-law" data-law="{lid}">{label}</a>'
+
     text = re.sub(r'\[tag:([^\]]+)\](.*?)\[/tag\]', tag_link, text)
     text = re.sub(r'\[scientist:([^\]]+)\](.*?)\[/scientist\]', scientist_link, text)
+    text = re.sub(r'\[law:([^\]]+)\](.*?)\[/law\]', law_link, text)
     return text
 
 
@@ -844,7 +864,7 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
 
 
 # ── Indexes ──
-_MARKER_RE = re.compile(r'\[(?:tag:[^\]]+|/tag|scientist:[^\]]+|/scientist|callout|/callout)\]')
+_MARKER_RE = re.compile(r'\[(?:tag:[^\]]+|/tag|scientist:[^\]]+|/scientist|law:[^\]]+|/law|callout|/callout)\]')
 
 
 def strip_markers(s):
@@ -2605,6 +2625,8 @@ def load_generation_inputs():
         "existing_base_ids": existing_base_ids,
         "express_tags_input": express_tags_input,
         "express_valid_tags": set(t["en"] for t in express_tags_input),
+        "law_ids": list(json.loads(
+            Path(f"lang/{DEFAULT_LANG}/data/laws.json").read_text(encoding="utf-8")).keys()),
     }
 
 
@@ -2671,7 +2693,7 @@ def build_article(a, date_str, inputs, force=False, express=False):
             scipop_pop = express_result if "popular" in express_tiers else express_locked_scipop(express_result, DEFAULT_LANG)
             scipop_adv = express_result if "advanced" in express_tiers else express_locked_scipop(express_result, DEFAULT_LANG)
         else:
-            scipop_adv = generate_advanced(a, text, inputs["tags_input"], inputs["scientists_keys"])
+            scipop_adv = generate_advanced(a, text, inputs["tags_input"], inputs["scientists_keys"], inputs.get("law_ids"))
             if not scipop_adv: return None
             (article_folder / "api").mkdir(exist_ok=True)
             (article_folder / "api" / "advanced-ru.json").write_text(

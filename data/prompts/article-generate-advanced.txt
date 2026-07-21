@@ -7,9 +7,10 @@
 
 - Теги: [tag:english_id]текст[/tag] — english_id пиши ТОЧНО как в списке (нижний регистр, слова через подчёркивание).
 - Учёные: [scientist:English Name]текст[/scientist]
+- Законы: [law:english_id]текст[/law] — english_id пиши ТОЧНО как в списке (нижний регистр, слова через подчёркивание).
 
-ПРАВИЛО: каждый тег, который ты указал в main_tag и extra_tags, должен быть размечен маркером [tag:...]. Не оставляй выбранные теги без разметки.
-Пример: "Когда [tag:supernova]сверхновая[/tag] взрывается, может образоваться [tag:neutron_star]нейтронная звезда[/tag]. Это предсказал [scientist:Fritz Zwicky]Фриц Цвикки[/scientist]."
+ПРАВИЛО: каждый тег из main_tag/extra_tags и каждый закон из поля laws должен быть размечен соответствующим маркером ([tag:...] / [law:...]) в тексте. Не оставляй выбранные теги/законы без разметки.
+Пример: "Когда [tag:supernova]сверхновая[/tag] взрывается, может образоваться [tag:neutron_star]нейтронная звезда[/tag] — это следствие [law:law_of_universal_gravitation]закона всемирного тяготения[/law], а предсказал явление [scientist:Fritz Zwicky]Фриц Цвикки[/scientist]."
 
 Поля:
 - title: Заголовок (до 12 слов)
@@ -29,12 +30,14 @@
 - key_numbers: 3-5 ключевых чисел — объект {{"скорость": "0.016% в год"}}
 - main_tag + extra_tags (7-11): ТОЛЬКО из списка ниже
 - scientists: 0-3 имени ТОЛЬКО из списка ниже (кто внёс вклад)
+- laws: 0-3 закона ТОЛЬКО из списка ниже — физические законы/принципы, которые статья реально использует, проверяет или на которые опирается (пустой список, если явной связи нет — не притягивай)
 
 Доступные теги (используй только их ID): {tags_list}
 Доступные учёные (используй только их): {scientists_list}
+Доступные законы (используй только их ID): {laws_list}
 
 Ответь JSON:
-{{"title":"...","oneliner":"...","description":"...","context":"...","methods":"...","results":"...","implications":"...","future_development":"...","impact_on":"...","next_steps":"...","key_problems_connection":"...","fun_fact":"...","scifi":"...","formulas":[...],"key_numbers":{{...}},"main_tag":"...","extra_tags":["..."],"scientists":["..."]}}
+{{"title":"...","oneliner":"...","description":"...","context":"...","methods":"...","results":"...","implications":"...","future_development":"...","impact_on":"...","next_steps":"...","key_problems_connection":"...","fun_fact":"...","scifi":"...","formulas":[...],"key_numbers":{{...}},"main_tag":"...","extra_tags":["..."],"scientists":["..."],"laws":["..."]}}
 
 Текст статьи:
 {article_text}

@@ -168,11 +168,12 @@ def _log_lang_fallback(kind, article_id, category="", attempt=0):
         pass
 
 
-def generate_advanced(article, text, tags_input, scientists_keys):
+def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None):
     tags_list = ", ".join(t["en"] for t in tags_input)
     scientists_list = ", ".join(scientists_keys)
+    laws_list = ", ".join(law_ids or [])
     prompt = load_prompt("article-generate-advanced").format(
-        tags_list=tags_list, scientists_list=scientists_list, article_text=text)
+        tags_list=tags_list, scientists_list=scientists_list, laws_list=laws_list, article_text=text)
     reinforce = "\n\nВНИМАНИЕ: все текстовые поля пиши СТРОГО на русском языке. Не отвечай на английском."
     result = None
     for attempt in range(2):
@@ -288,6 +289,7 @@ def generate_simple(scipop_advanced):
     data["main_tag"] = scipop_advanced.get("main_tag", "")
     data["extra_tags"] = scipop_advanced.get("extra_tags", [])
     data["scientists"] = scipop_advanced.get("scientists", [])
+    data["laws"] = scipop_advanced.get("laws", [])
     return data
 
 
@@ -308,6 +310,7 @@ def generate_popular(scipop_adv):
     data["main_tag"] = scipop_adv.get("main_tag", "")
     data["extra_tags"] = scipop_adv.get("extra_tags", [])
     data["scientists"] = scipop_adv.get("scientists", [])
+    data["laws"] = scipop_adv.get("laws", [])
     return data
 
 
@@ -323,6 +326,7 @@ def refine_simple(scipop):
         data["main_tag"] = scipop.get("main_tag", "")
         data["extra_tags"] = scipop.get("extra_tags", [])
         data["scientists"] = scipop.get("scientists", [])
+        data["laws"] = scipop.get("laws", [])
         if "mini" in scipop:
             data["mini"] = scipop.get("mini", "")
         return data
@@ -340,6 +344,7 @@ def refine_popular(scipop):
         data["main_tag"] = scipop.get("main_tag", "")
         data["extra_tags"] = scipop.get("extra_tags", [])
         data["scientists"] = scipop.get("scientists", [])
+        data["laws"] = scipop.get("laws", [])
         return data
     except Exception:
         return scipop
