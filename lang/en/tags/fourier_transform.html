@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Fourier transform — bridge42worlds</title>
+    <meta name="description" content="The Fourier transform is an integral transform that maps a function of a real variable (often time) to a function of a complex variable (frequency). It decomposes the signal into an orthogonal basis of harmonic oscillations. The result (spectrum) shows the amplitude and phase of each frequency component. The inverse transform allows reconstructing the original signal. Thanks to the Fast Fourier Transform (FFT), the algorithm works very quickly and is used everywhere in signal processing.">
+    <meta property="og:title" content="#Fourier transform — bridge42worlds">
+    <meta property="og:description" content="The Fourier transform is an integral transform that maps a function of a real variable (often time) to a function of a complex variable (frequency). It decomposes the signal into an orthogonal basis of harmonic oscillations. The result (spectrum) shows the amplitude and phase of each frequency component. The inverse transform allows reconstructing the original signal. Thanks to the Fast Fourier Transform (FFT), the algorithm works very quickly and is used everywhere in signal processing.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/en/tags/fourier_transform.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Избранное">★</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>Fourier transform</h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">A mathematical 'translator' from the language of time to the language of frequency: it decomposes a complex signal into simple sine waves, like breaking down a musical chord into individual notes. Any intricate dance becomes the sum of smooth swayings.</p><div class="practical-app"><strong>In practice:</strong> Image compression (JPEG), noise filtering in audio, signal analysis in MRI and radar, digitization of music — everywhere where it is necessary to isolate frequencies or remove interference.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">The Fourier transform is an integral transform that maps a function of a real variable (often time) to a function of a complex variable (frequency). It decomposes the signal into an orthogonal basis of harmonic oscillations. The result (spectrum) shows the amplitude and phase of each frequency component. The inverse transform allows reconstructing the original signal. Thanks to the Fast Fourier Transform (FFT), the algorithm works very quickly and is used everywhere in signal processing.</div>
+        <div class="section"><h2>History</h2><p>French mathematician Joseph Fourier proposed this idea in 1807 while studying how heat propagates in solids. He realized that any temperature distribution could be represented as a sum of simple waves. Later, the method began to be applied everywhere — from music to quantum physics.</p></div>
+        <div class="section"><h2>How it works</h2><p>Imagine that from a footprint in the sand you need to guess which waves left it. The Fourier transform acts like a detective: it alternately tries on waves of different lengths and strengths to the footprint. Where the match is good, a big 'clue' appears. In a computer, this is done by multiplying the signal by test sinusoids and summing the results. The result is a spectrum — a graph showing which frequencies are present.</p></div>
+        <div class="fun-fact">💡 In quantum mechanics, the momentum representation of the wave function is the Fourier transform of its coordinate representation. The Heisenberg uncertainty principle arises from the properties of the Fourier transform: the narrower the signal in time, the wider its spectrum.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">The Fourier transform decomposes a complex wave into simple components. Imagine that your voice is a soup of different sounds: a low hum and a high whistle. The Fourier transform takes this 'soup' and tells how much hum, how much whistle, and how much hiss there is. It does this by comparing the original signal with pure sine waves (smooth waves) of all possible frequencies (frequency — number of oscillations per second). Thus, from an audio recording, you can find out the notes, and from a photograph — smooth transitions and sharp contours.</div>
+        <div class="section"><h2>History</h2><p>French mathematician Joseph Fourier proposed this idea in 1807 while studying how heat propagates in solids. He realized that any temperature distribution could be represented as a sum of simple waves. Later, the method began to be applied everywhere — from music to quantum physics.</p></div>
+        <div class="section"><h2>How it works</h2><p>Imagine that from a footprint in the sand you need to guess which waves left it. The Fourier transform acts like a detective: it alternately tries on waves of different lengths and strengths to the footprint. Where the match is good, a big 'clue' appears. In a computer, this is done by multiplying the signal by test sinusoids and summing the results. The result is a spectrum — a graph showing which frequencies are present.</p></div>
+        <div class="fun-fact">💡 The Fourier transform of a finite function (equal to zero outside a finite interval) is an analytic function on the entire complex plane — this is the Paley–Wiener theorem.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">For an absolutely integrable function f(t), the direct Fourier transform is defined as f̂(ω) = ∫₋∞∞ f(t) e^{-iωt} dt, where t is time, ω is angular frequency. Inverse: f(t) = (1/2π) ∫₋∞∞ f̂(ω) e^{iωt} dω. There are variants for periodic functions (Fourier series) and discrete sequences (Discrete Fourier Transform, DFT). The Fast Fourier Transform algorithm (Cooley–Tukey, 1965) allows computing the DFT in O(n log n) operations. Properties: linearity, shift gives a phase factor, differentiation ↔ multiplication by iω, convolution ↔ product. Generalizations: multidimensional FT, windowed FT, wavelets, Fourier analysis on groups. In physics, the FT connects coordinate and momentum spaces, ensuring the uncertainty principle.</div>
+        <div class="section"><h2>History</h2><p>Jean-Baptiste Joseph Fourier in 1807 (published in 1822) in a memoir on heat propagation showed that an arbitrary function can be expanded into a trigonometric series. The idea met resistance from Lagrange and Laplace, who doubted the convergence of the series. Later, Dirichlet (1829) clarified the conditions. In the 20th century, Laurent Schwartz extended the transform to generalized functions (Dirac delta function). Today it is the basis of harmonic analysis.</p></div>
+        <div class="section"><h2>How it works</h2><p>Mathematically, the kernel e^{-iωt} acts as a 'probe': for each frequency ω, we compute the correlation of the signal with a harmonic oscillation of that frequency. The integral measures the 'similarity'. Thanks to the orthogonality of sinusoids, the decomposition is invertible without loss. The Fast Fourier Transform uses the symmetry of complex roots of unity, reducing the computation of a large matrix to a series of small ones. In quantum mechanics, the wave function in momentum representation is the Fourier transform of the coordinate wave function, and the relation Δx Δp ≥ ħ/2 follows directly from the properties of the FT.</p></div>
+        <div class="formula"><div class="formula-render">\hat{f}(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt</div><div class="formula-meaning">f(t) — original function (usually time), ω — angular frequency, i — imaginary unit, e — base of the natural logarithm.</div></div><div class="formula"><div class="formula-render">f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \hat{f}(\omega) e^{i\omega t} d\omega</div><div class="formula-meaning">From the spectrum f̂(ω), the original function f(t) is reconstructed. The factor 1/(2π) normalizes the transform.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Not all functions have a Fourier transform in the classical sense — a generalization to distributions is required.; Gibbs phenomenon: at points of discontinuity, the Fourier series produces overshoots whose amplitude does not decrease with increasing number of terms (about 9% of the jump).; Interpretation of negative frequencies in physical applications is not always intuitive.; Non-stationary signals require windowed FT or wavelets for adequate analysis.</p><p class="fact">💡 The Fourier transform of a finite function (equal to zero outside a finite interval) is an analytic function on the entire complex plane — this is the Paley–Wiener theorem.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="actions" data-article-id="fourier_transform_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fourier_transform" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+
+<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div>
+<div class="mini-graph" data-node="t:fourier_transform"><canvas id="minigraph"></canvas></div>
+
+<div class="feedback" id="feedback" data-article-id="fourier_transform_en_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/fourier_series.html" class="side-tag" data-tag="fourier_series">Fourier series</a><a href="/lang/en/tags/interferometry.html" class="side-tag" data-tag="interferometry">interferometry</a><a href="/lang/en/tags/quantum_fourier_transform.html" class="side-tag" data-tag="quantum_fourier_transform">Quantum Fourier transform</a><a href="/lang/en/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">spectroscopy</a><a href="/lang/en/tags/wave_function.html" class="side-tag" data-tag="wave_function">wave function</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="fourier_transform"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
+<script src="/js/likes.js?v=d5d075c87a"></script>
+<script src="/js/search.js?v=d5d075c87a"></script>
+<script src="/js/force-graph.js?v=d5d075c87a"></script>
+<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fourier_transform', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

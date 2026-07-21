@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#تحويل فورييه — bridge42worlds</title>
+    <meta name="description" content="تحويل فورييه هو تحويل تكاملي يربط بين دالة ذات متغير حقيقي (غالباً الزمن) ودالة ذات متغير مركب (التردد). يقوم بتحليل الإشارة إلى قاعدة متعامدة من التذبذبات التوافقية. الناتج (الطيف) يُظهر سعة وطور كل مركبة ترددية. التحويل العكسي يسمح باستعادة الإشارة الأصلية. بفضل تحويل فورييه السريع (FFT) تعمل الخوارزمية بسرعة كبيرة وتُستخدم في معالجة الإشارات على نطاق واسع.">
+    <meta property="og:title" content="#تحويل فورييه — bridge42worlds">
+    <meta property="og:description" content="تحويل فورييه هو تحويل تكاملي يربط بين دالة ذات متغير حقيقي (غالباً الزمن) ودالة ذات متغير مركب (التردد). يقوم بتحليل الإشارة إلى قاعدة متعامدة من التذبذبات التوافقية. الناتج (الطيف) يُظهر سعة وطور كل مركبة ترددية. التحويل العكسي يسمح باستعادة الإشارة الأصلية. بفضل تحويل فورييه السريع (FFT) تعمل الخوارزمية بسرعة كبيرة وتُستخدم في معالجة الإشارات على نطاق واسع.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/ar/tags/fourier_transform.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/ar/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="Избранное">★</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>تحويل فورييه</h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">مُترجم رياضي من لغة الزمن إلى لغة الترددات: يحلل الإشارة المعقدة إلى جيوب بسيطة، مثل تحليل الوتر الموسيقي إلى نغمات منفردة. أي رقصة معقدة تصبح مجموع تمايلات سلسة.</p><div class="practical-app"><strong>في الواقع:</strong> ضغط الصور (JPEG)، وتصفية التشويش في الصوت، وتحليل الإشارات في التصوير بالرنين المغناطيسي والرادار، ورقمنة الموسيقى – في كل مكان نحتاج فيه إلى استخراج الترددات أو إزالة التداخلات.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">تحويل فورييه هو تحويل تكاملي يربط بين دالة ذات متغير حقيقي (غالباً الزمن) ودالة ذات متغير مركب (التردد). يقوم بتحليل الإشارة إلى قاعدة متعامدة من التذبذبات التوافقية. الناتج (الطيف) يُظهر سعة وطور كل مركبة ترددية. التحويل العكسي يسمح باستعادة الإشارة الأصلية. بفضل تحويل فورييه السريع (FFT) تعمل الخوارزمية بسرعة كبيرة وتُستخدم في معالجة الإشارات على نطاق واسع.</div>
+        <div class="section"><h2>التاريخ</h2><p>اقترح عالم الرياضيات الفرنسي جوزيف فورييه هذه الفكرة عام 1807، أثناء دراسته لكيفية انتشار الحرارة في الأجسام الصلبة. فقد أدرك أن أي توزيع لدرجة الحرارة يمكن تمثيله كمجموع موجات بسيطة. لاحقاً، أصبحت هذه الطريقة تُستخدم في كل مكان - بدءاً من الموسيقى وصولاً إلى فيزياء الكم.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تخيل أنك بحاجة إلى معرفة أي الموجات تركت أثراً على الرمال. تحويل فورييه يعمل كمحقق: فهو يقارن الأثر بالتناوب بموجات مختلفة الطول والقوة. وحيثما يكون التطابق جيداً، تظهر «دليل» كبير. في الحاسوب، يتم ذلك بضرب الإشارة بجيوب اختبارية وجمع النتائج. نحصل على الطيف - رسم بياني يوضح الترددات الموجودة.</p></div>
+        <div class="fun-fact">💡 في ميكانيكا الكم، تمثيل كمية الحركة للدالة الموجية هو صورة فورييه لتمثيلها الإحداثي. ينشأ مبدأ عدم اليقين لهايزنبرغ من خصائص تحويل فورييه: كلما كانت الإشارة أضيق في الزمن، كان طيفها أوسع.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">يقوم تحويل فورييه بتحليل موجة معقدة إلى مكوناتها البسيطة. تَخيل أن صوتك يشبه حساءً من أصوات مختلفة: أزيز منخفض وصفير عالٍ. يأخذ تحويل فورييه هذا «الحساء» ويخبرك بكمية الأزيز وكمية الصفير وكمية الهسهسة فيه. يفعل ذلك من خلال مقارنة الإشارة الأصلية بجيوب نقية (موجات سلسة) لجميع الترددات الممكنة (التردد هو عدد الاهتزازات في الثانية). هكذا يمكننا من التسجيل الصوتي استخلاص النغمات، ومن الصورة استخلاص التحولات السلسة والخطوط الحادة.</div>
+        <div class="section"><h2>التاريخ</h2><p>اقترح عالم الرياضيات الفرنسي جوزيف فورييه هذه الفكرة عام 1807، أثناء دراسته لكيفية انتشار الحرارة في الأجسام الصلبة. فقد أدرك أن أي توزيع لدرجة الحرارة يمكن تمثيله كمجموع موجات بسيطة. لاحقاً، أصبحت هذه الطريقة تُستخدم في كل مكان - بدءاً من الموسيقى وصولاً إلى فيزياء الكم.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تخيل أنك بحاجة إلى معرفة أي الموجات تركت أثراً على الرمال. تحويل فورييه يعمل كمحقق: فهو يقارن الأثر بالتناوب بموجات مختلفة الطول والقوة. وحيثما يكون التطابق جيداً، تظهر «دليل» كبير. في الحاسوب، يتم ذلك بضرب الإشارة بجيوب اختبارية وجمع النتائج. نحصل على الطيف - رسم بياني يوضح الترددات الموجودة.</p></div>
+        <div class="fun-fact">💡 تحويل فورييه لدالة منتهية (تساوي الصفر خارج فترة محدودة) هو دالة تحليلية على كامل المستوى المركب - هذه هي مبرهنة بالي-فينر.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">بالنسبة لدالة قابلة للتكامل المطلق f(t)، يُعرَّف تحويل فورييه المباشر بالصيغة f̂(ω) = ∫₋∞∞ f(t) e^{-iωt} dt، حيث t هو الزمن، وω هو التردد الزاوي. التحويل العكسي: f(t) = (1/2π) ∫₋∞∞ f̂(ω) e^{iωt} dω. هناك صيغ للدوال الدورية (متسلسلات فورييه) والمتتاليات المتقطعة (تحويل فورييه المتقطع، DFT). خوارزمية تحويل فورييه السريع (Cooley–Tukey، 1965) تسمح بحساب DFT في O(n log n) عملية. الخصائص: الخطية، الإزاحة تعطي عاملاً طورياً، الاشتقاق ↔ الضرب في iω، الالتفاف ↔ الجداء. التعميمات: تحويل فورييه متعدد الأبعاد، تحويل فورييه بالنوافذ، المويجات، تحليل فورييه على الزمر. في الفيزياء، يربط تحويل فورييه بين الفضاء الإحداثي وفضاء كمية الحركة، مما يؤدي إلى مبدأ عدم اليقين.</div>
+        <div class="section"><h2>التاريخ</h2><p>أظهر جان بابتيست جوزيف فورييه عام 1807 (نُشر عام 1822) في مذكرته حول انتشار الحرارة أن أي دالة يمكن تفكيكها إلى متسلسلة مثلثية. واجهت الفكرة معارضة من لاغرانج ولابلاس، اللذين شككا في تقارب المتسلسلات. لاحقاً، أوضح ديريشليه (1829) الشروط. وفي القرن العشرين، وسّع لوران شفارتس التحويل ليشمل الدوال المعممة (دالة ديراك دلتا). اليوم يُعد هذا أساس التحليل التوافقي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>رياضياً، تعمل النواة e^{-iωt} كـ «مجس»: لكل تردد ω نحسب ارتباط الإشارة مع اهتزاز توافقي لهذا التردد. التكامل يقيس «التشابه». بفضل تعامد الجيوب، يكون التحليل قابلاً للعكس دون ضياع. يستخدم تحويل فورييه السريع تماثل الجذور المركبة للوحدة، مما يقلص حساب مصفوفة كبيرة إلى سلسلة من الحسابات الصغيرة. في ميكانيكا الكم، الدالة الموجية في تمثيل كمية الحركة هي صورة فورييه للدالة الموجية الإحداثية، والعلاقة Δx Δp ≥ ħ/2 تنبع مباشرة من خصائص تحويل فورييه.</p></div>
+        <div class="formula"><div class="formula-render">\hat{f}(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt</div><div class="formula-meaning">f(t) - الدالة الأصلية (عادة الزمن)، ω - التردد الزاوي، i - الوحدة التخيلية، e - أساس اللوغاريتم الطبيعي.</div></div><div class="formula"><div class="formula-render">f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \hat{f}(\omega) e^{i\omega t} d\omega</div><div class="formula-meaning">من الطيف f̂(ω) يتم استعادة الدالة الأصلية f(t). العامل 1/(2π) يُطبِّع التحويل.</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>ليس لجميع الدوال صورة فورييه بالمعنى الكلاسيكي - يلزم التعميم على التوزيعات.; ظاهرة جيبس: عند نقاط الانقطاع، تُظهر متسلسلة فورييه نتوءات لا تتضاءل سعتها مع زيادة عدد الحدود (حوالي 9٪ من القفزة).; تفسير الترددات السالبة في التطبيقات الفيزيائية ليس بديهياً دائماً.; تتطلب الإشارات غير الثابتة تحويل فورييه بالنوافذ أو المويجات لتحليل مناسب.</p><p class="fact">💡 تحويل فورييه لدالة منتهية (تساوي الصفر خارج فترة محدودة) هو دالة تحليلية على كامل المستوى المركب - هذه هي مبرهنة بالي-فينر.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="actions" data-article-id="fourier_transform_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fourier_transform" title="مفضلة"><span class="fav-ic">☆</span> مفضلة</button></div>
+
+<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> الروابط في شبكة المعرفة <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div>
+<div class="mini-graph" data-node="t:fourier_transform"><canvas id="minigraph"></canvas></div>
+
+<div class="feedback" id="feedback" data-article-id="fourier_transform_ar_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ أضف تعليقًا</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/fourier_series.html" class="side-tag" data-tag="fourier_series">متسلسلة فورييه</a><a href="/lang/ar/tags/interferometry.html" class="side-tag" data-tag="interferometry">قياس التداخل</a><a href="/lang/ar/tags/quantum_fourier_transform.html" class="side-tag" data-tag="quantum_fourier_transform">تحويل فورييه الكمومي</a><a href="/lang/ar/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">التحليل الطيفي</a><a href="/lang/ar/tags/wave_function.html" class="side-tag" data-tag="wave_function">الدالة الموجية</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="fourier_transform"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds — العلم ببساطة · <a href="/lang/ar/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
+<script src="/js/likes.js?v=d5d075c87a"></script>
+<script src="/js/search.js?v=d5d075c87a"></script>
+<script src="/js/force-graph.js?v=d5d075c87a"></script>
+<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fourier_transform', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

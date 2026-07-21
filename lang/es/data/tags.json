@@ -8935,5 +8935,885 @@
       ],
       "fun_fact": "Gracias a la superposición, una partícula puede atravesar una barrera de energía que clásicamente no podría superar: este es el efecto túnel. Explica cómo funcionan los microscopios de efecto túnel, capaces de 'ver' átomos individuales."
     }
+  },
+  "black_hole_merger": {
+    "name": "fusión de agujeros negros",
+    "mini": "Dos agujeros negros giran en una danza cada vez más rápida hasta que chocan en una grandiosa explosión de ondas gravitacionales, sacudiendo el espacio.",
+    "practical_application": "Las fusiones de agujeros negros se detectan como ondas gravitacionales, permitiendo estudiar los objetos más densos del universo y poner a prueba la teoría de la gravedad.",
+    "description_popular": "La fusión de agujeros negros es la etapa final de la evolución de un sistema binario de dos objetos compactos. La pérdida de energía orbital por la emisión de ondas gravitacionales hace que la órbita se reduzca, y en las últimas fracciones de segundo los objetos chocan, formando un único agujero negro, emitiendo hasta varios por ciento de su masa-energía total en forma de radiación gravitacional.",
+    "fun_fact_popular": "La primera fusión registrada, GW150914, convirtió aproximadamente tres masas solares en energía de ondas gravitacionales en una fracción de segundo; esto es más de lo que todo el universo emitió en forma de luz durante el mismo tiempo.",
+    "description_simple": "Dos bolas superpesadas giran en espiral y chocan estrepitosamente. Solo que en lugar de sonido, generan ondas en el propio tejido del espacio: ondas gravitacionales, que captamos con detectores especiales.",
+    "history_simple": "La existencia de los agujeros negros ya fue predicha por Einstein, pero la primera fusión se detectó recién en 2015 con los detectores LIGO; es como escuchar el golpe de dos martillos invisibles gigantes desde mil millones de años luz.",
+    "how_it_works_simple": "Se asemeja a los remolinos que se fusionan en una bañera: pequeños vórtices se acercan y se unen. Solo que en el espacio, estos «remolinos» de gravedad pura se mueven casi a la velocidad de la luz bajo las leyes de gravedad de Newton, y luego, bajo las distorsiones del espacio-tiempo de Einstein.",
+    "description": "La fusión de agujeros negros es un proceso en el que una pareja cercana de agujeros negros de masa estelar (o supermasivos) pierde energía y momento angular debido a la emisión de ondas gravitacionales. El inspiral (acercamiento lento) se describe mediante la aproximación post-newtoniana de la relatividad general, luego sigue una fusión dinámica con la formación de una región común cuasiestacionaria con horizonte de sucesos, y una fase final de oscilación (ringdown), en la que el agujero negro perturbado se tranquiliza hasta alcanzar el estado de Kerr. La señal observada abarca las tres etapas y permite extraer las masas, espines y distancia al sistema.",
+    "history": "La posibilidad teórica de las fusiones se consideró desde los años 1960, pero recién en 2015 la colaboración LIGO (con Rainer Weiss, Kip Thorne y otros) registró por primera vez de forma directa ondas gravitacionales provenientes de la fusión de un par de agujeros negros con masas de ~36 y 29 soles. Este descubrimiento confirmó las predicciones de la relatividad general y dio inicio a la astronomía de ondas gravitacionales.",
+    "how_it_works": "La dinámica orbital es gobernada por la emisión de ondas gravitacionales, que se llevan energía y momento. La velocidad de acercamiento aumenta a medida que disminuye la distancia, y la frecuencia de las ondas emitidas se incrementa (chirrido). En el momento en que los horizontes de sucesos entran en contacto ocurre la fusión, y el agujero negro resultante emite una señal amortiguada característica: los modos cuasinormales. Todo el proceso se modela numéricamente a partir de las ecuaciones de Einstein.",
+    "key_problems": [
+      "naturaleza del agujero negro final y sus modos cuasinormales",
+      "formación de agujeros negros supermasivos mediante fusiones",
+      "origen del espín de los componentes y su papel en la dinámica",
+      "correspondencia de los modelos numéricos con las fórmulas analíticas para parámetros extremos"
+    ],
+    "fun_fact": "Antes de la fusión, la velocidad orbital de los agujeros negros puede alcanzar 0.6 veces la velocidad de la luz, y la frecuencia de las ondas gravitacionales, cientos de hercios, volviéndose audible en el rango del sonido después de la conversión.",
+    "formulas": [
+      {
+        "description": "Masa de chirrido, que determina la evolución de la frecuencia de las ondas gravitacionales durante el inspiral",
+        "latex": "\\mathcal{M} = \\frac{(m_1 m_2)^{3/5}}{(m_1+m_2)^{1/5}}",
+        "meaning": "m1 y m2 son las masas de los agujeros negros esféricos en unidades de masa solar; \\(\\mathcal{M}\\) es la masa de chirrido, una combinación que se mide por la tasa de aumento de la frecuencia de la señal."
+      }
+    ],
+    "scientists": [
+      "Rainer Weiss",
+      "Kip Thorne",
+      "John Archibald Wheeler"
+    ],
+    "related_tags": [
+      "black_hole",
+      "gravitational_waves",
+      "ligo",
+      "spacetime_curvature",
+      "numerical_simulation"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "interferometry": {
+    "name": "interferometría",
+    "mini": "La interferometría es un método de mezcla de ondas que convierte diferencias invisibles en un patrón brillante de franjas. Es como si dos canciones sonaran juntas y, por el aumento o disminución del sonido, se calculara la diferencia en su grabación.",
+    "practical_application": "Se aplica en fibra óptica para transmitir datos sin interferencias y en detectores de ondas gravitacionales como LIGO, que captan el temblor del espacio-tiempo por colisiones de agujeros negros.",
+    "description_popular": "La interferometría es una técnica que utiliza la interferencia de ondas coherentes para mediciones de precisión. Comparando las fases de las ondas superpuestas, se pueden detectar cambios del orden de la longitud de onda: en el rango óptico, fracciones de micra. Está ampliamente extendida en metrología, astronomía (VLBI, interferómetro astrométrico) y física fundamental.",
+    "fun_fact_popular": "El interferómetro LIGO detecta desplazamientos de los espejos de 10⁻¹⁸ metros, mil veces menores que el tamaño de un protón, lo que equivale a medir la distancia a la estrella más cercana con una precisión del grosor de un cabello.",
+    "description_simple": "La interferometría funciona según el principio: la luz (u otras ondas) se divide en dos haces, uno se envía por un camino de referencia y el otro a través del objeto estudiado, y luego se recombinan. Si los caminos difieren en una fracción de la longitud de onda, surge un patrón de interferencia de franjas claras y oscuras (refuerzo y cancelación de ondas).",
+    "history_simple": "Inventado y aplicado por Albert Michelson a finales del siglo XIX. Con su interferómetro, demostró que la luz no necesita una sustancia especial (éter) para propagarse y midió con precisión la velocidad de la luz.",
+    "how_it_works_simple": "En un interferómetro, un rayo láser se divide en dos. Uno se refleja en un espejo móvil y el otro en uno fijo. Juntos crean franjas. El desplazamiento de las franjas indica un movimiento microscópico del espejo, lo que permite medir longitud, vibraciones e incluso la gravedad.",
+    "description": "La interferometría es un conjunto de métodos en los que ondas (luz, radioondas, átomos) se superponen, creando un patrón de interferencia sensible a la diferencia de fase. Permite medir distancias, índice de refracción, velocidad, deformaciones y ondas gravitacionales con una precisión inalcanzable por métodos directos. En astronomía óptica, mediante síntesis de apertura (por ejemplo, VLTI) se logra una resolución angular equivalente a un telescopio de cientos de metros de diámetro.",
+    "history": "Albert Michelson en 1881 aplicó por primera vez el interferómetro en un experimento para detectar el éter, y más tarde (1887) con Edward Morley realizó el famoso experimento que demostró la constancia de la velocidad de la luz. En 1920, Michelson y Francis Pease midieron el diámetro de la estrella Betelgeuse usando un interferómetro estelar. El desarrollo de los láseres en los años 60 hizo que la interferometría fuera omnipresente, y en 2015 LIGO detectó ondas gravitacionales, lo que valió el Premio Nobel.",
+    "how_it_works": "Dos o más haces coherentes se dividen, recorren diferentes caminos ópticos y se recombinan. La intensidad resultante depende de la diferencia de fase: I = I₁ + I₂ + 2√(I₁I₂) cos Δφ. El cambio de este patrón bajo un desplazamiento controlado permite calcular la magnitud a medir. En la interferometría heterodina, la frecuencia de un haz se desplaza ligeramente y la señal se lee en las pulsaciones. La sensibilidad está limitada por el ruido de disparo de los fotones, y en las antenas de ondas gravitacionales, adicionalmente por el ruido cuántico de la luz y ruidos térmicos. Se basa en el principio de superposición de ondas y la constancia de la velocidad de la luz en el vacío.",
+    "key_problems": [
+      "Supresión de ruidos térmicos y sísmicos en detectores de ondas gravitacionales",
+      "Aumento de la sensibilidad sin incrementar el tamaño",
+      "Creación de interferómetros de banda ancha para astrofísica"
+    ],
+    "fun_fact": "El interferómetro LIGO es tan sensible que puede detectar un cambio en la longitud de su brazo de 4 kilómetros causado por una onda gravitacional, equivalente al paso de una hormiga sobre toda la Tierra reducido al tamaño de un núcleo atómico.",
+    "formulas": [
+      {
+        "description": "Ecuación de interferencia de dos haces",
+        "latex": "I = I_1 + I_2 + 2\\sqrt{I_1 I_2} \\cos(\\Delta\\phi)",
+        "meaning": "I es la intensidad resultante, I₁ e I₂ son las intensidades de los dos haces que interfieren, Δφ es la diferencia de fase entre ellos"
+      },
+      {
+        "description": "Resolución angular del interferómetro",
+        "latex": "\\theta = \\frac{\\lambda}{B}",
+        "meaning": "θ es el ángulo mínimo resoluble, λ es la longitud de onda, B es la base (distancia entre aperturas)"
+      }
+    ],
+    "scientists": [
+      "Albert A. Michelson"
+    ],
+    "related_tags": [
+      "interferometer",
+      "speed_of_light",
+      "gravitational_waves",
+      "vlbi",
+      "electromagnetic_radiation"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "neutrino_oscillations": {
+    "name": "oscilaciones de neutrinos",
+    "mini": "El neutrino es una partícula fantasma que, en su camino del Sol a la Tierra, cambia su disfraz, transformándose de un tipo a otro, como un espía que cambia constantemente de identidad.",
+    "practical_application": "Comprender las oscilaciones de neutrinos demuestra que los neutrinos tienen masa, lo que significa que pueden desempeñar un papel en la materia oscura e influir en la evolución del universo.",
+    "description_popular": "Las oscilaciones de neutrinos son un fenómeno de la mecánica cuántica en el que un neutrino, que originalmente tiene un sabor leptónico definido (electrónico, muónico o tau), puede ser detectado después como un neutrino de otro sabor. Esto se explica porque los estados de sabor son una superposición de estados de masa, que difieren en masa. La interferencia de estas ondas de masa al propagarse provoca un cambio periódico en la probabilidad de detectar diferentes sabores.",
+    "fun_fact_popular": "Los neutrinos solares atraviesan la Tierra de lado a lado, y solo uno de cada cien mil millones interactúa en el camino, por lo que los detectores se construyen a gran profundidad bajo tierra o bajo el agua, para filtrar el ruido cósmico.",
+    "description_simple": "Existen tres tipos de neutrinos (partículas ligeras e invisibles). Volando por el espacio, un neutrino puede transformarse de un tipo a otro: esto es lo que se llama oscilación. Es como si en marcha cambiara la marca del coche: viaja como un \"Lada\" y llega como un \"Ferrari\", pero de forma silenciosa e imperceptible.",
+    "history_simple": "Los científicos durante mucho tiempo no pudieron entender por qué del Sol llegan menos neutrinos de los que predice la teoría. Resultó que simplemente se transforman en el camino en otro tipo, que los detectores antiguos no veían. Este descubrimiento se confirmó a finales del siglo XX.",
+    "how_it_works_simple": "El neutrino nace con un \"sabor\" (tipo) determinado, pero su naturaleza física es una mezcla de tres \"estados de masa\" diferentes. Al moverse, estos estados se retrasan entre sí de manera diferente debido a efectos cuánticos (como si tres corredores tuvieran velocidades distintas), y al final cambia la probabilidad de registrar tal o cual sabor. Es como un semáforo que desde lejos parece a veces rojo y a veces verde debido al parpadeo.",
+    "description": "Las oscilaciones de neutrinos son la transformación periódica de neutrinos de una generación (νe, νμ, ντ) en neutrinos de otra generación durante la propagación libre. El mecanismo se basa en el desajuste entre los estados con un sabor determinado (estados propios débiles) y los estados con una masa determinada. La evolución se describe mediante la ecuación de Schrödinger en la base de los tres neutrinos, lo que da lugar a la matriz de mezcla de Pontecorvo–Maki–Nakagawa–Sakata (PMNS). La probabilidad de oscilación depende de las diferencias de los cuadrados de masas Δm²ij, los ángulos de mezcla θ12, θ23, θ13, la distancia recorrida L y la energía E.",
+    "history": "La idea de las oscilaciones fue propuesta por Bruno Pontecorvo en 1957, por analogía con las oscilaciones de los kaones. El efecto fue detectado experimentalmente por primera vez en 1998 en la instalación Super-Kamiokande (Japón) a partir del déficit de neutrinos muónicos de las lluvias atmosféricas. Las anomalías de los neutrinos solares, registradas previamente por el experimento de cloro-argón de Ray Davis, se explicaron como oscilaciones. Los datos modernos de KamLAND, Daya Bay y otros han confirmado los tres ángulos de mezcla.",
+    "how_it_works": "La propagación de los neutrinos se describe mediante una superposición de estados de masa |ν_i> con una masa definida mi. Los estados de sabor |ν_α> están relacionados con los de masa a través de una matriz unitaria de mezcla U_αi. El hamiltoniano en el vacío es diagonal en la base de masa, por lo que cada estado de masa evoluciona con una fase exp(-i m_i² L/(2E)). La interferencia de fases genera una probabilidad oscilante P(να → νβ). En la materia, se añade un potencial efectivo de interacción con los electrones (efecto Mikheyev–Smirnov–Wolfenstein), que amplifica las oscilaciones (por ejemplo, en el Sol).",
+    "key_problems": [
+      "escala absoluta de masas de los neutrinos",
+      "jerarquía de masas (normal o invertida)",
+      "si los neutrinos son partículas de Dirac o de Majorana",
+      "existencia de neutrinos estériles",
+      "violación CP en el sector leptónico"
+    ],
+    "fun_fact": "Los neutrinos interactúan tan débilmente que la longitud de oscilación puede superar cientos de kilómetros para neutrinos muónicos de energías moderadas, por lo que los experimentos con aceleradores envían haces de neutrinos a distancias de hasta 1300 km, como del CERN al Gran Sasso.",
+    "formulas": [
+      {
+        "description": "Probabilidad de transición de un neutrino de sabor α a sabor β en la aproximación de dos neutrinos",
+        "latex": "P_{\\nu_\\alpha \\rightarrow \\nu_\\beta} = \\sin^2(2\\theta) \\, \\sin^2\\left(\\frac{\\Delta m^2 L}{4 E}\\right)",
+        "meaning": "θ es el ángulo de mezcla; Δm² = m_1² - m_2² es la diferencia de los cuadrados de las masas de los neutrinos (en eV²); L es la distancia desde la fuente al detector (en metros); E es la energía del neutrino (en eV). Para unidades prácticas: P = sin²(2θ) sin²(1.27 Δm²(eV²) L(km) / E(GeV))."
+      }
+    ],
+    "scientists": [
+      "Wolfgang Pauli"
+    ],
+    "related_tags": [
+      "neutrino",
+      "standard_model",
+      "cosmic_rays",
+      "supernova",
+      "nuclear_fusion"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "machine_learning": {
+    "name": "aprendizaje automático",
+    "mini": "Es como enseñar a una computadora a reconocer un gato en una foto, mostrándole miles de imágenes con gatos y sin ellos. La computadora encuentra patrones por sí misma.",
+    "practical_application": "Se utiliza para recomendar películas, reconocer el habla e incluso diagnosticar enfermedades a partir de imágenes.",
+    "description_popular": "El aprendizaje automático es una rama de la inteligencia artificial donde los algoritmos construyen modelos a partir de datos, identificando patrones ocultos sin programar reglas explícitamente. La técnica incluye aprendizaje supervisado (con ejemplos etiquetados), no supervisado (clustering) y por refuerzo (basado en ensayo y error).",
+    "fun_fact_popular": "El primer algoritmo neuronal, el perceptrón, se creó en 1958, pero entonces no cumplió las expectativas, y solo décadas después las redes neuronales experimentaron un renacimiento.",
+    "description_simple": "El aprendizaje automático es una forma de dar a la computadora la capacidad de aprender a partir de ejemplos, sin programar cada paso. Como un niño que aprende a distinguir animales viendo muchas imágenes.",
+    "history_simple": "La idea surgió a mediados del siglo XX, cuando los científicos quisieron crear inteligencia artificial. Los primeros algoritmos podían jugar juegos y demostrar teoremas.",
+    "how_it_works_simple": "La computadora recibe muchos datos (por ejemplo, fotos) y respuestas correctas (etiquetas de lo que hay en la foto). Ajusta sus parámetros internos hasta que aprende a adivinar correctamente. Es como afinar una guitarra: giras las clavijas hasta que el sonido es limpio.",
+    "description": "El aprendizaje automático es un campo amplio en la intersección de la informática, la estadística y la optimización, donde los algoritmos construyen modelos predictivos o descriptivos a partir de conjuntos de datos de entrenamiento. Paradigmas clave: aprendizaje supervisado (regresión, clasificación), no supervisado (clustering, reducción de dimensionalidad), y por refuerzo. Los métodos modernos más potentes (aprendizaje profundo) utilizan redes neuronales multicapa con miles de millones de parámetros ajustables, optimizadas mediante descenso de gradiente estocástico. Son críticas la regularización, las funciones de pérdida y las innovaciones arquitectónicas (convolucionales, recurrentes, transformers).",
+    "history": "El término «aprendizaje automático» fue acuñado por Arthur Samuel en 1959, quien creó un programa para jugar a las damas. En 1957, Frank Rosenblatt construyó el perceptrón, el primer modelo de neurona artificial. Tras el período del «invierno de la IA», el desarrollo se reanudó en los años 80 con el descubrimiento del algoritmo de retropropagación del error. En la década de 2010, se produjo un crecimiento explosivo gracias al big data, las GPU y las arquitecturas profundas.",
+    "how_it_works": "Se elige un modelo parametrizado (por ejemplo, una red neuronal o regresión lineal). Durante el entrenamiento, la pérdida entre las predicciones y los valores reales se minimiza mediante optimización numérica. El más común es el descenso de gradiente estocástico: en cada paso, los parámetros se actualizan en la dirección opuesta al gradiente de la función de pérdida, usando un subconjunto aleatorio de datos. Para redes multicapa, los gradientes se calculan con el algoritmo de retropropagación, basado en la regla de la cadena. Problemas clave: sobreajuste, desvanecimiento del gradiente, selección de hiperparámetros.",
+    "key_problems": [
+      "interpretabilidad de los modelos (por qué el modelo tomó una decisión)",
+      "resistencia a ataques adversariales",
+      "aprendizaje con pocos datos etiquetados (few-shot learning)",
+      "combinación del aprendizaje con el razonamiento lógico",
+      "olvido catastrófico en el aprendizaje secuencial"
+    ],
+    "fun_fact": "En 2012, la red neuronal AlexNet ganó el concurso ImageNet con un error del 15,3%, la mitad que los métodos anteriores, dando inicio a la era del aprendizaje profundo.",
+    "formulas": [
+      {
+        "description": "Actualización de los parámetros del modelo mediante descenso de gradiente",
+        "latex": "\\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta L(\\theta_t)",
+        "meaning": "θ_t es el vector de parámetros en el paso t; η es la tasa de aprendizaje (learning rate), típicamente 0,001–0,1; ∇_θ L(θ_t) es el gradiente de la función de pérdida con respecto a los parámetros."
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "numerical_simulation",
+      "tensor",
+      "manifold",
+      "entropy",
+      "quantum_algorithm"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "quantum_sensing": {
+    "name": "sensado cuántico",
+    "mini": "El sensado cuántico es como un microscopio supersensible que utiliza la fragilidad de los estados cuánticos para detectar los más mínimos cambios en el entorno.",
+    "practical_application": "Ayuda a crear relojes atómicos de ultra precisión y sensores de gravedad capaces de encontrar cavidades subterráneas sin excavar.",
+    "description_popular": "El sensado cuántico es una tecnología de mediciones de alta precisión, basada en el control de estados cuánticos (superposición, entrelazamiento) para registrar campos físicos con una sensibilidad récord. Supera a los métodos clásicos porque aprovecha la discretitud y la no localidad del mundo cuántico.",
+    "fun_fact_popular": "Un magnetómetro cuántico en tu teléfono podría detectar el campo magnético del corazón desde el otro extremo de la habitación, si no fuera por el ruido que interfiere.",
+    "description_simple": "El sensado cuántico utiliza partículas cuánticas (como fotones o electrones) para medir magnitudes físicas con una precisión increíble. Imagina que lanzas una moneda: en el mundo clásico cae cara o cruz, pero en el cuántico puede estar en superposición (ser cara y cruz a la vez). Es esta capacidad inusual la que permite registrar los cambios más pequeños de temperatura, campo magnético o gravedad.",
+    "history_simple": "La idea surgió a finales del siglo XX, cuando los científicos comprendieron que el entrelazamiento cuántico (la conexión entre partículas a distancia) podía utilizarse para mediciones. John Bell y Alain Aspect hicieron contribuciones importantes al demostrar la realidad de las maravillas cuánticas.",
+    "how_it_works_simple": "En un sensor cuántico, una partícula, por ejemplo un átomo, se coloca en un estado cuántico y se envía a 'explorar' el entorno. La más mínima influencia cambia ese estado, y observando cómo ha cambiado la partícula se determina qué ocurrió exactamente.",
+    "description": "El sensado cuántico es un conjunto de métodos que utilizan correlaciones e interferencia cuánticas para medir magnitudes físicas con una precisión limitada por los límites fundamentales. Se basa en la creación y control de estados cuánticos (por ejemplo, estados NOON para interferometría óptica, estados comprimidos de espín en conjuntos atómicos) que permiten superar el límite cuántico estándar. Se aplica en gravimetría, magnetometría, termometría y relojes ópticos, donde alcanza sensibilidades cercanas al límite de Heisenberg.",
+    "history": "El concepto surgió en los años 80 con el desarrollo de la óptica cuántica y las teorías de la información cuántica. John Bell formuló en 1964 el teorema de Bell, que demostró la indispensabilidad de la no localidad cuántica. A principios de los 80, Alain Aspect confirmó experimentalmente la violación de las desigualdades de Bell, abriendo el camino a tecnologías basadas en el entrelazamiento. Desde los años 2000, los sensores cuánticos basados en átomos fríos y centros NV en diamante están entrando en aplicaciones prácticas.",
+    "how_it_works": "El sensado cuántico funciona mediante la creación de estados cuánticos sensibles, como los comprimidos o entrelazados, y la posterior medición de su respuesta a campos externos. Utiliza efectos como la superposición y el entrelazamiento cuánticos para amplificar la señal de medición. En los interferómetros atómicos, el cálculo de la fase se realiza mediante la fórmula de De Broglie (λ = h/p), que relaciona la longitud de onda del átomo con su momento. Para estimar el límite de precisión se emplean el límite cuántico estándar y el límite de Heisenberg. El teorema de Bell proporciona la base para protocolos donde el entrelazamiento aumenta la sensibilidad.",
+    "key_problems": [
+      "Mantener la coherencia cuántica en entornos ruidosos",
+      "Escalar los sistemas para condiciones de campo",
+      "Suprimir la decoherencia sin perder sensibilidad"
+    ],
+    "fun_fact": "Un interferómetro atómico es capaz de notar el cambio de gravedad que se produce si un mosquito pasa cerca, y los relojes cuánticos de iones de iterbio medirían el tiempo con un error menor a un segundo durante la edad del Universo.",
+    "formulas": [
+      {
+        "description": "Fórmula de De Broglie para interferometría atómica",
+        "latex": "\\lambda = \\frac{h}{p}",
+        "meaning": "λ es la longitud de onda de la materia (átomo), h es la constante de Planck, h ≈ 6.626×10⁻³⁴ J·s, p es el momento de la partícula"
+      },
+      {
+        "description": "Límite cuántico estándar para la precisión de la medición de fase",
+        "latex": "\\Delta\\phi \\geq \\frac{1}{\\sqrt{N}}",
+        "meaning": "Δφ es el error de fase, N es el número promedio de fotones (o átomos) en el estado no clásico"
+      }
+    ],
+    "scientists": [
+      "John Stewart Bell",
+      "Alain Aspect"
+    ],
+    "related_tags": [
+      "quantum_entanglement",
+      "quantum_measurement",
+      "quantum_decoherence",
+      "quantum_optics",
+      "interferometer"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "dwarf_galaxy": {
+    "name": "galaxia enana",
+    "mini": "La galaxia enana es una burbuja cósmica en la que hay cientos de veces menos estrellas que en nuestra Vía Láctea, pero hay tanta materia oscura que impide que reviente.",
+    "practical_application": "El estudio de las galaxias enanas ayuda a comprender de qué está compuesta la materia oscura y cómo nacen todas las galaxias.",
+    "description_popular": "Una galaxia enana es un tipo de galaxia con una masa inferior a 10⁹ masas solares y tamaños de hasta varios miles de años luz. Dominan el Universo local en número, pero son difíciles de observar debido a su bajo brillo superficial. Contienen una proporción anormalmente alta de materia oscura, lo que las convierte en laboratorios ideales para la cosmología.",
+    "fun_fact_popular": "La galaxia enana en la constelación de Fornax está tan llena de materia oscura que la proporción de materia oscura a materia ordinaria puede alcanzar 100 a 1.",
+    "description_simple": "Una galaxia enana es un pequeño sistema estelar en el que generalmente no hay más de unos pocos miles de millones de estrellas (la Vía Láctea tiene cientos de miles de millones). A menudo orbitan alrededor de galaxias grandes como satélites.",
+    "history_simple": "Las primeras galaxias enanas se descubrieron a mediados del siglo XX, pero su ubicuidad se hizo evidente gracias a telescopios como el Hubble. La astrónoma Vera Rubin, al estudiar su rotación, encontró evidencia de materia oscura.",
+    "how_it_works_simple": "Las estrellas en una galaxia enana se mueven más rápido de lo que deberían si solo se considera la masa visible. Esto significa que en su interior hay materia 'oscura' invisible que crea una atracción adicional.",
+    "description": "Las galaxias enanas son sistemas estelares poco formados o evolucionados con masas de 10⁶–10⁹ M☉ y radios efectivos de 0.1–10 kpc. Se subdividen en enanas elípticas, esferoidales, irregulares y ultracompactas. Predominantemente oscuras: la relación masa-luminosidad alcanza 1000 M☉/L☉, indicando el predominio de materia oscura no bariónica. Su población es una prueba clave para el modelo ΛCDM, que predice un exceso de estos objetos en comparación con lo observado (problema de los satélites ausentes).",
+    "history": "Los satélites enanos de la Vía Láctea comenzaron a descubrirse en las décadas de 1930 y 1940 (la galaxia enana de Sculptor, 1937). En la década de 1970, Vera Rubin, a partir de las curvas de rotación, confirmó la alta proporción de materia oscura en las galaxias enanas irregulares. Fritz Zwicky ya en la década de 1930 supuso la existencia de masa oculta en los cúmulos, pero fue en las enanas donde la conexión se hizo evidente. Desde la década de 1990, el Sloan Digital Sky Survey ha revelado numerosos satélites enanos ultrafaint.",
+    "how_it_works": "Las galaxias enanas se forman en minihalos de materia oscura, donde el gas primordial se enfría y forma estrellas. Su evolución está determinada por la formación estelar, que es suprimida por explosiones de supernovas y por la interacción de marea con vecinos masivos. La rotación de las estrellas y el gas se describe mediante la dinámica newtoniana teniendo en cuenta la masa oculta: se utiliza la ley de gravitación universal para estimar el potencial gravitatorio. La materia oscura domina y las curvas de rotación permanecen planas mucho más allá del disco estelar. El teorema del virial permite estimar la masa total a partir de la dispersión de velocidades: M ≈ 5Rσ²/G.",
+    "key_problems": [
+      "Problema de los satélites ausentes (discrepancia entre el número de galaxias enanas predichas y observadas)",
+      "Naturaleza de la materia oscura (WIMP, axiones o gravedad modificada)",
+      "Cómo las galaxias enanas pierden gas y cesan la formación estelar"
+    ],
+    "fun_fact": "La galaxia enana ultrafaint Segue 1 contiene solo unos cientos de estrellas, pero en masa de materia oscura es comparable a un pequeño cúmulo globular, y su densidad de materia oscura es una de las más altas entre los objetos conocidos.",
+    "formulas": [
+      {
+        "description": "Teorema del virial para estimar la masa de la galaxia",
+        "latex": "M \\approx \\frac{5 R \\sigma^2}{G}",
+        "meaning": "M — masa de la galaxia, R — radio, σ — dispersión de velocidades estelares, G — constante gravitacional, G ≈ 6.674×10⁻¹¹ m³kg⁻¹s⁻²"
+      }
+    ],
+    "scientists": [
+      "Vera Rubin"
+    ],
+    "related_tags": [
+      "dark_matter",
+      "galaxy",
+      "galaxy_merger",
+      "stellar_evolution",
+      "galaxy_cluster"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "singularity": {
+    "name": "singularidad",
+    "mini": "Singularidad: punto donde las leyes físicas habituales se rompen, como una fisura en el tejido del espacio-tiempo, de la que emergen densidad y temperatura infinitas.",
+    "practical_application": "Comprender las singularidades conducirá a una teoría de gravedad cuántica que describa el nacimiento del Universo y el interior de los agujeros negros.",
+    "description_popular": "Una singularidad es una región del espacio-tiempo donde la curvatura y la densidad se vuelven infinitas, y las teorías físicas conocidas (relatividad general y mecánica cuántica) dejan de tener significado. Estas singularidades se predicen en los centros de los agujeros negros y en el punto inicial del Big Bang. En ellas, las ecuaciones de Einstein dejan de funcionar y se requiere una teoría de gravedad cuántica.",
+    "fun_fact_popular": "Al caer en un agujero negro, un astronauta alcanzará la singularidad en un tiempo propio finito, pero para un observador externo nunca cruzará el horizonte; esta contradicción ilustra el conflicto entre teorías.",
+    "description_simple": "En el centro de un agujero negro (región de la que no sale la luz) toda su masa está comprimida en un punto de volumen cero: eso es una singularidad. Aquí la fuerza de gravedad se vuelve infinita y el tiempo se detiene. Es como un embudo con paredes infinitamente empinadas donde todo cae y no puede salir.",
+    "history_simple": "La primera descripción matemática de una singularidad apareció en la solución de Karl Schwarzschild en 1916. Más tarde, Roger Penrose y Stephen Hawking demostraron que las singularidades surgen inevitablemente en el colapso de estrellas masivas.",
+    "how_it_works_simple": "Una lámina de goma se curva bajo el peso de una bola: así funciona la gravedad; si la bola se comprime hasta un punto, la lámina se rasga formando un embudo infinitamente puntiagudo. De igual manera, el espacio-tiempo se 'desgarra' en una singularidad, creando curvatura infinita.",
+    "description": "Una singularidad en relatividad general es un lugar donde el tensor de curvatura diverge y las geodésicas se cortan, haciendo que el espacio-tiempo sea incompleto. En la singularidad cosmológica del Big Bang, el factor de escala se anula con densidad y temperatura infinitamente grandes. En los agujeros negros, la singularidad está oculta por el horizonte de sucesos según la hipótesis de la censura cósmica, aunque son posibles las singularidades desnudas. Matemáticamente, las singularidades indican el límite de aplicabilidad de la RG clásica y motivan la búsqueda de una teoría cuántica de la gravedad, donde podrían ser reemplazadas por estructuras de Planck.",
+    "history": "En 1916, Karl Schwarzschild encontró la primera solución exacta de las ecuaciones de Einstein para un cuerpo esféricamente simétrico, que contenía una singularidad en el centro. Durante mucho tiempo, la singularidad se consideró un artefacto matemático. En la década de 1960, Roger Penrose y Stephen Hawking demostraron los teoremas de singularidad, mostrando la inevitabilidad de las singularidades en el colapso gravitacional y en cosmología dentro de la RG clásica. John Archibald Wheeler popularizó el término 'agujero negro' y, junto con sus estudiantes, desarrolló enfoques para cuantizar la gravedad y eliminar las singularidades; este problema sigue sin resolverse.",
+    "how_it_works": "La singularidad surge cuando la curvatura del espacio-tiempo y el tensor de energía-impulso en las ecuaciones de Einstein tienden a infinito. En el colapso de una estrella con masa por encima del límite de Oppenheimer-Volkoff, la gravedad supera la presión del gas degenerado, y la materia se comprime sin límite hasta la escala de Planck (10^-35 m), donde deberían entrar en juego las correcciones cuánticas. En cosmología cuántica, la singularidad del Big Bang podría ser reemplazada por un túnel cuántico desde la 'nada' o un rebote cíclico. Teorías modernas como la gravedad cuántica de bucles y la teoría de cuerdas proponen mecanismos para resolver las singularidades mediante la discretización del espacio-tiempo.",
+    "key_problems": [
+      "¿Existe la singularidad física o se suaviza con la gravedad cuántica?",
+      "¿Cómo resolver el problema de la censura cósmica: están siempre ocultas las singularidades por horizontes de sucesos?",
+      "¿Fue el Big Bang una singularidad, y qué hubo 'antes'?"
+    ],
+    "fun_fact": "En la solución de Kerr para un agujero negro rotatorio, la singularidad tiene forma de anillo, lo que teóricamente permite la posibilidad de atravesarlo hacia otros universos, aunque cualquier intento resultaría en destrucción.",
+    "formulas": [
+      {
+        "description": "Radio de Schwarzschild para un agujero negro sin rotación",
+        "latex": "R_s = \\frac{2GM}{c^2}",
+        "meaning": "R_s — radio del horizonte de sucesos, G — constante gravitacional, 6.67430×10^{-11} m^3·kg^{-1}·s^{-2}, M — masa del objeto, c — velocidad de la luz, 3×10^8 m/s"
+      }
+    ],
+    "scientists": [
+      "Karl Schwarzschild",
+      "Stephen Hawking",
+      "John Archibald Wheeler"
+    ],
+    "related_tags": [
+      "singularity",
+      "gravitational_singularity",
+      "black_hole",
+      "event_horizon",
+      "spacetime"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "primordial_black_hole": {
+    "name": "agujero negro primordial",
+    "mini": "Los agujeros negros primordiales son diminutos objetos hipotéticos que surgieron en los primeros instantes del Universo, cuando la compresión de materia superdensa pudo crear 'semillas' de oscuridad del tamaño de un átomo.",
+    "practical_application": "Pueden explicar la naturaleza de la materia oscura y servir como fuentes de ondas gravitacionales, abriendo una ventana a la física del nacimiento del cosmos.",
+    "description_popular": "Los agujeros negros primordiales son hipotéticos agujeros negros formados no por el colapso de estrellas, sino por la compresión gravitacional de regiones extremadamente densas en los primeros instantes tras el Big Bang. Sus masas pueden variar desde microgramos hasta miles de masas solares. Debido a su pequeño tamaño, son casi invisibles, pero pueden delatarse mediante lentes gravitacionales o destellos de radiación al evaporarse.",
+    "fun_fact_popular": "Si un agujero negro primordial con la masa de un asteroide atravesara la Tierra, dejaría un túnel microscópico y provocaría débiles ondas sísmicas; los científicos buscan esta señal en los datos de los sismógrafos.",
+    "description_simple": "En el Universo temprano (justo después del Big Bang, el inicio de la expansión desde un punto supercaliente), acumulaciones aleatorias de energía superdensa pudieron colapsar en agujeros negros (regiones del espacio con una gravedad tan intensa que ni siquiera la luz puede escapar). Estos agujeros negros primordiales son mucho más pequeños que los normales: con la masa de un asteroide o una montaña, pero increíblemente densos.",
+    "history_simple": "La idea fue propuesta por los físicos soviéticos Yakov Zeldovich e Igor Novikov en 1966. Más tarde, Stephen Hawking demostró que deben emitir radiación y evaporarse.",
+    "how_it_works_simple": "En la infancia del Universo, la densidad y la temperatura eran enormes. Si en alguna región la densidad resultaba ligeramente superior a la media, podía comprimirse bajo su propia gravedad y formar un agujero negro. Los agujeros negros convencionales nacen de estrellas moribundas, mientras que los agujeros negros primordiales surgieron de la propia 'masa' del Universo.",
+    "description": "Los agujeros negros primordiales (PBH, por sus siglas en inglés) son una población de agujeros negros que se cree surgieron en la era preestelar del Universo, antes de la formación de las primeras estrellas. Su formación requiere la presencia de regiones superdensas en la materia primordial, que colapsan bajo su propia gravedad cuando la escala de Hubble es suficientemente pequeña. El espectro de masas de los PBH depende del mecanismo de generación de las perturbaciones primordiales de densidad, por ejemplo, durante la inflación o las transiciones de fase. Los PBH podrían constituir una parte de la materia oscura si sus masas se encuentran en ciertos rangos que evaden las restricciones observacionales de microlentes, el fondo cósmico de rayos gamma y los eventos de ondas gravitacionales.",
+    "history": "El concepto de agujeros negros primordiales fue propuesto por primera vez por Yakov Zeldovich e Igor Novikov en 1966. En 1974, Stephen Hawking demostró que los efectos cuánticos hacen que los agujeros negros emitan radiación (radiación de Hawking) y se evaporen; esto significaba que los PBH de masas pequeñas deberían haber desaparecido para la época actual, mientras que los más masivos habrían sobrevivido hasta nuestros días. En las décadas siguientes, los PBH se investigaron activamente como candidatos a materia oscura, y con el inicio de las observaciones de ondas gravitacionales (LIGO/Virgo) se consideran una posible fuente de fusiones compactas.",
+    "how_it_works": "La formación de PBH requiere fluctuaciones extremas de densidad en el Universo temprano. Según las ecuaciones de la relatividad general de Einstein, si la densidad en una región supera el valor crítico en el horizonte de partículas, dicha región colapsa en un agujero negro. Dependiendo del momento del colapso, la masa del PBH es aproximadamente igual a la masa contenida dentro del horizonte en ese instante. La radiación de Hawking provoca la evaporación de los PBH con un tiempo de vida menor que la edad del Universo: los PBH con masa inferior a ~5×10^14 gramos ya se han evaporado. Los más masivos han sobrevivido y pueden manifestarse mediante microlentes gravitacionales en estrellas, influencia dinámica en cúmulos estelares o fusiones detectadas por observatorios de ondas gravitacionales.",
+    "key_problems": [
+      "¿Son los PBH una parte significativa de la materia oscura?",
+      "¿Cómo predecir con precisión la distribución de las perturbaciones primordiales de densidad en la cosmología inflacionaria?",
+      "¿Existen PBH supermasivos en los centros de galaxias antes de la formación de las primeras estrellas?"
+    ],
+    "fun_fact": "En teoría, si un agujero negro primordial de aproximadamente una tonelada se evapora, en sus últimos segundos emite una cantidad de energía equivalente a millones de megatones de TNT, aunque nunca se ha observado tal evento.",
+    "formulas": [
+      {
+        "description": "Temperatura de un agujero negro (radiación de Hawking)",
+        "latex": "T_{\\text{BH}} = \\frac{\\hbar c^3}{8 \\pi G M k_B}",
+        "meaning": "T_{\\text{BH}} — temperatura del agujero negro, \\hbar — constante de Planck reducida, 1.054571817×10^{-34} J·s, c — velocidad de la luz, 3×10^8 m/s, G — constante de gravitación universal, 6.67430×10^{-11} m^3·kg^{-1}·s^{-2}, M — masa del agujero negro, k_B — constante de Boltzmann, 1.380649×10^{-23} J/K"
+      }
+    ],
+    "scientists": [
+      "Stephen Hawking"
+    ],
+    "related_tags": [
+      "primordial_black_hole",
+      "black_hole",
+      "dark_matter",
+      "inflation",
+      "event_horizon"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "natural_satellite": {
+    "name": "Satélite natural",
+    "mini": "La Luna no es el único satélite de la Tierra, sino simplemente el más cercano de la multitud de mundos que giran alrededor de los planetas, como polillas alrededor de un farol.",
+    "practical_application": "Los satélites estabilizan la inclinación del eje del planeta, influyendo en el clima, y sirven como bases para futuras misiones interplanetarias.",
+    "description_popular": "Los satélites naturales son cuerpos celestes que orbitan alrededor de los planetas. Sus órbitas se forman bajo la acción de la atracción gravitatoria del planeta y la fuerza centrífuga de inercia. Las lunas pueden tener diferentes orígenes: asteroides capturados, formadas junto con el planeta o expulsadas en una colisión gigante (como la Luna de la Tierra).",
+    "fun_fact_popular": "Algunas lunas, por ejemplo Titán, satélite de Saturno, tienen una atmósfera densa y lagos de metano: son los únicos cuerpos del sistema solar, además de la Tierra, con cuencas líquidas en la superficie.",
+    "description_simple": "El satélite de un planeta es un cuerpo que gira alrededor del planeta en una órbita (curva cerrada) debido a la fuerza de atracción (gravedad). El planeta y su satélite son como bailarines de vals: la fuerza de atracción los mantiene unidos y el movimiento evita que choquen.",
+    "history_simple": "El primero en describir detalladamente las órbitas de los satélites fue Johannes Kepler a principios del siglo XVII. Galileo Galilei descubrió los cuatro satélites más grandes de Júpiter en 1610.",
+    "how_it_works_simple": "El satélite es retenido por la gravedad del planeta y se mueve por inercia (la tendencia a conservar la velocidad). El equilibrio de estas dos fuerzas crea una órbita estable, como una piedra lanzada horizontalmente desde una montaña que cae pero siempre pasa rozando la Tierra.",
+    "description": "Los satélites planetarios son cuerpos naturales en órbita alrededor de planetas, planetas enanos y asteroides. Varían desde diminutos satélites asteroidales hasta lunas de tipo planetario con atmósferas y océanos subterráneos. Su movimiento se describe mediante las leyes de la mecánica celeste, y su estructura interna suele incluir un núcleo rocoso, un manto de hielo y una corteza. Las fuerzas de marea provocan la sincronización de la rotación y el calentamiento interno, lo que puede mantener la actividad geológica.",
+    "history": "Las primeras observaciones de satélites planetarios fueron hechas por Galileo Galilei en 1610, cuando descubrió los cuatro satélites más grandes de Júpiter: Ío, Europa, Ganímedes y Calisto. Johannes Kepler al mismo tiempo formuló leyes que describen el movimiento de los planetas y sus satélites. La investigación moderna incluye la búsqueda de exolunas alrededor de estrellas lejanas y el estudio de los océanos subterráneos en Europa y Encélado con misiones como Europa Clipper.",
+    "how_it_works": "El satélite se mantiene en órbita por la atracción gravitacional del planeta según la ley de gravitación universal de Newton. La fuerza centrífuga de inercia equilibra la atracción, creando una órbita elíptica de acuerdo con las leyes de Kepler. Las fuerzas de marea, causadas por el gradiente gravitatorio, frenan la rotación, llevando al acoplamiento de marea (una cara siempre mira al planeta). Este mismo mecanismo provoca el calentamiento de marea del interior, que alimenta la actividad en Ío y Encélado.",
+    "key_problems": [
+      "El origen de la Luna terrestre todavía se discute: el modelo del gran impacto presenta discrepancias con la composición isotópica.",
+      "¿Cómo se forman los sistemas de satélites en los planetas gigantes?",
+      "¿Existen océanos subterráneos habitables en las lunas heladas?"
+    ],
+    "fun_fact": "En el sistema Plutón-Caronte, el centro de masa está fuera de Plutón, lo que los convierte en un sistema de planeta doble.",
+    "formulas": [
+      {
+        "description": "Tercera ley de Kepler para satélites",
+        "latex": "T^2 = \\frac{4 \\pi^2}{G M} a^3",
+        "meaning": "T es el período orbital, G es la constante gravitacional, 6.67430×10^{-11} m^3·kg^{-1}·s^{-2}, M es la masa del planeta, a es el semieje mayor de la órbita"
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "natural_satellite",
+      "gravity",
+      "angular_momentum",
+      "exomoon"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "quantum_thermodynamics": {
+    "name": "termodinámica cuántica",
+    "mini": "Si la termodinámica clásica son las reglas de tráfico para los coches, la termodinámica cuántica intenta adivinar la trayectoria de una bicicleta en la niebla: no hay trayectorias claras, pero son posibles desvíos extraños. Describe cómo se comportan el calor y el trabajo en un mundo donde las partículas pueden estar en varios estados a la vez.",
+    "practical_application": "Se utiliza en el diseño de motores cuánticos y nanorrefrigeradores, así como para comprender el intercambio de energía en las computadoras cuánticas.",
+    "description_popular": "La termodinámica cuántica extiende la termodinámica clásica a sistemas donde dominan los efectos cuánticos: discreción de los niveles de energía, coherencia (concordancia de las funciones de onda) y entrelazamiento. Los sistemas cuánticos individuales (electrón, fotón, molécula) pueden mostrar fluctuaciones de trabajo y calor comparables a los valores medios, y violar temporalmente la segunda ley de la termodinámica (la ley del aumento de la entropía). Sin embargo, para grandes conjuntos o largos intervalos de tiempo, los patrones estadísticos se restauran. Los conceptos centrales incluyen los teoremas de fluctuación cuántica, que vinculan los procesos directo e inverso, y la generalización de la entropía a través de la matriz de densidad (descripción del estado cuántico).",
+    "fun_fact_popular": "En la termodinámica cuántica se puede crear un «demonio de Maxwell cuántico»: un dispositivo que utiliza información cuántica para extraer trabajo del sistema, aparentemente violando la segunda ley. Pero, como demostraron los teoremas, el costo de adquirir y borrar información compensa la ganancia, conservando la entropía en general.",
+    "description_simple": "En la termodinámica ordinaria (ciencia del calor y la energía) las partículas se mueven a lo largo de trayectorias definidas, como bolas de billar. La termodinámica cuántica mira al mundo donde las partículas se comportan como ondas (mecánica cuántica) y pueden estar en superposición (en varios estados a la vez, como una moneda mientras está en el aire), y sus propiedades se difuminan por el principio de incertidumbre (cuanto más exactamente conoces la posición, menos conoces la velocidad). Estudia cómo en ese mundo se transfiere el calor, se realiza trabajo y crece la entropía (medida del desorden). Sistemas cuánticos diminutos, como un átomo, pueden violar temporalmente las leyes habituales de la termodinámica, pero en promedio aún las obedecen.",
+    "history_simple": "Las bases de la termodinámica ordinaria fueron establecidas por Ludwig Boltzmann en el siglo XIX. La termodinámica cuántica comenzó a desarrollarse a mediados del siglo XX, cuando los científicos empezaron a unir la mecánica cuántica (descubierta por Erwin Schrödinger y otros) con las ideas sobre el calor.",
+    "how_it_works_simple": "Dos recipientes comunicados con un átomo de gas cada uno: así se puede ver el intercambio de calor cuántico. El átomo tunela (atraviesa una barrera invisible, como filtrándose) de un recipiente a otro, transfiriendo energía a saltos en lugar de suavemente. La termodinámica cuántica describe tales saltos con matemáticas, donde las probabilidades y los estados especiales juegan un papel clave.",
+    "description": "La termodinámica cuántica es un campo interdisciplinario en la intersección de la mecánica cuántica, la física estadística y la teoría de la información. Estudia las leyes de transformación de energía y entropía en sistemas descritos por estados cuánticos (puros o mixtos). Las magnitudes termodinámicas — trabajo, calor y energía libre — se definen mediante la evolución de la matriz de densidad ρ bajo la acción de parámetros externos y la interacción con reservorios. Un resultado clave son los teoremas de fluctuación, por ejemplo, la igualdad de Jarzynski: ⟨e^{-βW}⟩ = e^{-βΔF}, donde el promedio se toma sobre múltiples realizaciones de un proceso fuera del equilibrio. Esto permite obtener propiedades de equilibrio a partir de mediciones fuera del equilibrio. También se investiga activamente el papel de la coherencia cuántica y el entrelazamiento como recursos para realizar tareas termodinámicas, por ejemplo, en máquinas térmicas cuánticas o refrigeradores basados en iones individuales.",
+    "history": "La termodinámica como ciencia fenomenológica surgió en el siglo XIX gracias a los trabajos de Sadi Carnot, Rudolf Clausius y Lord Kelvin. La justificación estadística la proporcionó Ludwig Boltzmann, vinculando la entropía con el número de microestados (fórmula S = k log W). La era cuántica requirió una revisión de estas ideas, comenzando con los trabajos de von Neumann, quien introdujo la entropía S(ρ) = −Tr(ρ ln ρ) y mostró su papel en la medición. En la década de 1950, el desarrollo de la teoría de sistemas cuánticos abiertos y los láseres estimuló el interés por la termodinámica de sistemas pequeños. La forma moderna del campo se estableció en las décadas de 1990 a 2000 después de la demostración de los teoremas de fluctuación (Jarzynski, Crooks) y sus generalizaciones cuánticas. Hoy en día, la termodinámica cuántica se desarrolla activamente en el contexto de la computación cuántica y la nanotecnología.",
+    "how_it_works": "La termodinámica cuántica se basa en la descripción del sistema mediante la matriz de densidad ρ, que generaliza la distribución de probabilidad clásica. El estado de equilibrio se define por la distribución de Gibbs: ρ_eq = e^{-βH} / Z, donde Z = Tr(e^{-βH}) es la función de partición, β = 1/(k_B T). La entropía se define por la entropía de von Neumann S_vN = −k_B Tr(ρ ln ρ). El trabajo y el calor se determinan como cambios en la energía interna U = Tr(ρH), separando las contribuciones del cambio en el hamiltoniano H (trabajo) y del cambio en la matriz de densidad (calor). En procesos fuera del equilibrio se aplica el teorema cuántico de fluctuaciones: la probabilidad de obtener trabajo W en el proceso directo y −W en el inverso están relacionadas por P_f(W)/P_r(−W) = e^{β(W−ΔF)}. Esto expresa la universalidad de las fluctuaciones y permite verificar las leyes de la termodinámica a nivel de transiciones cuánticas individuales. Además, las correlaciones cuánticas (entrelazamiento) pueden aumentar la eficiencia de las máquinas térmicas mediante el uso de estados no clásicos del fluido de trabajo.",
+    "key_problems": [
+      "Desarrollo de una termodinámica completa para sistemas con fuerte entrelazamiento y coherencia.",
+      "Comprensión de los límites de extracción de trabajo de la información cuántica (principio de Landauer en el régimen cuántico).",
+      "Creación de máquinas térmicas cuánticas experimentales con superioridad sobre sus análogos clásicos.",
+      "Dilucidación del papel de la gravedad en la termodinámica cuántica y la paradoja de la información de los agujeros negros.",
+      "Baterías cuánticas y el problema de la carga rápida sin degradación."
+    ],
+    "fun_fact": "Según el teorema de igualdad para sistemas cuánticos, se puede medir la diferencia de energías libres de dos estados repitiendo muchas veces una rápida transición fuera del equilibrio y promediando la exponencial del trabajo, incluso si el proceso está lejos del equilibrio. Es como averiguar el envejecimiento promedio de un vino abriendo una muestra en un momento aleatorio de la fermentación.",
+    "formulas": [
+      {
+        "description": "Distribución de Gibbs cuántica para un sistema en equilibrio con hamiltoniano H a temperatura T",
+        "latex": "\\rho = \\frac{e^{-\\beta H}}{Z}, \\quad Z = \\operatorname{Tr}(e^{-\\beta H})",
+        "meaning": "ρ — matriz de densidad del sistema, e — número de Euler (≈2.718), β = 1/(k_B T) — temperatura inversa, k_B — constante de Boltzmann (≈1.38×10⁻²³ J/K), T — temperatura absoluta en kelvin, H — operador hamiltoniano (energía del sistema), Z — función de partición (factor de normalización), Tr — traza de la matriz (suma de los elementos diagonales)."
+      },
+      {
+        "description": "Entropía de von Neumann: medida de la incertidumbre cuántica o mezcla del estado",
+        "latex": "S_{vN} = -k_B \\operatorname{Tr}(\\rho \\ln \\rho)",
+        "meaning": "S_vN — entropía de von Neumann, k_B — constante de Boltzmann (≈1.38×10⁻²³ J/K), ρ — matriz de densidad, ln ρ — logaritmo natural de la matriz ρ (definido a través de los valores propios), Tr — traza de la matriz. Para estados puros S_vN = 0, para estados máximamente mezclados S_vN = k_B ln N, donde N es la dimensión del espacio de Hilbert."
+      }
+    ],
+    "scientists": [
+      "Ludwig Boltzmann",
+      "Erwin Schrödinger",
+      "John Stewart Bell"
+    ],
+    "related_tags": [
+      "entropy",
+      "density_matrix",
+      "quantum_state",
+      "quantum_decoherence",
+      "partition_function"
+    ],
+    "educational": false,
+    "refined": false,
+    "raw": {}
+  },
+  "axiom_of_choice": {
+    "name": "axioma de elección",
+    "mini": "El axioma de elección permite, de un número infinito de cajas, cada una con al menos una bola, elegir simultáneamente una bola de cada una, incluso si no hay una regla explícita de selección. Un mago con una mano invisible: puede sacar un conejo de cada sombrero, aunque haya infinitos sombreros y todos los conejos sean idénticos.",
+    "practical_application": "Base de muchos teoremas en matemáticas: sin él no se puede demostrar que todo espacio vectorial tiene base, o que el producto de Tíjonov de espacios compactos es compacto. Se utiliza en análisis, topología, lógica.",
+    "description_popular": "El axioma de elección es uno de los enunciados de la teoría de conjuntos que postula la existencia de una función de elección sobre cualquier familia de conjuntos no vacíos. Es decir, para cualquier colección (posiblemente infinita) de conjuntos no vacíos disjuntos dos a dos, existe un conjunto que contiene exactamente un elemento de cada conjunto de esa colección. Para un número finito de conjuntos parece trivial, pero para infinitos da un resultado no constructivo: sabemos que la elección es posible, pero no podemos describirla. Es equivalente al principio de buena ordenación de Zermelo y al lema de Zorn.",
+    "fun_fact_popular": "Con el axioma de elección se puede matemáticamente «duplicar» una esfera: cortarla en un número finito de partes, moverlas y obtener dos esferas del mismo radio. Esta paradoja de Banach–Tarski muestra cuán poderoso y contraintuitivo es el axioma.",
+    "description_simple": "El axioma de elección es una regla que se acepta sin demostración. Imagina una colección infinita de pares de calcetines, y hay que tomar uno de cada par. Si los calcetines son izquierdo y derecho, la elección es obvia: toma el izquierdo. ¿Pero si son completamente idénticos y no hay ninguna regla? El axioma de elección afirma que se puede hacer esa elección, incluso si no podemos describirla. Es como un ayudante invisible que elige los elementos por nosotros. Muchas construcciones matemáticas convenientes, por ejemplo la existencia de una base en cualquier espacio vectorial, son posibles solo gracias a este axioma.",
+    "history_simple": "Fue formulada explícitamente por primera vez por el matemático alemán Ernst Zermelo en 1904 para demostrar el teorema de buena ordenación. Esto provocó acalorados debates, porque el axioma parecía antinatural. Con el tiempo, la mayoría de los matemáticos la aceptaron, aunque algunas ramas de las matemáticas se construyen sin ella.",
+    "how_it_works_simple": "Supongamos que tenemos un conjunto de conjuntos no vacíos (un saco de sacos). El axioma de elección garantiza la existencia de un nuevo conjunto —una «mezcla variada»— en el que ponemos exactamente un objeto de cada saco. Los matemáticos pueden decir tranquilamente: «Consideremos una función de elección...» y seguir construyendo, sin preocuparse por reglas concretas.",
+    "description": "El axioma de elección (AC) en notación formal: para cualquier familia X de conjuntos no vacíos existe una función f: X → ⋃X tal que para cada A ∈ X se cumple f(A) ∈ A. En otras palabras: toda familia de conjuntos no vacíos tiene una función de elección. En el marco de la axiomática de Zermelo–Fraenkel (ZF), AC es independiente de los demás axiomas: se puede añadir tanto él como su negación sin obtener contradicciones (resultados de Gödel y Cohen). AC es equivalente al principio de buena ordenación, al lema de Zorn, al teorema del ideal maximal y a muchos otros enunciados. En la práctica matemática, AC se usa en todas partes, pero da lugar a existencias no constructivas y paradojas, como la existencia de conjuntos no medibles (Vitali) y la paradoja de Banach–Tarski.",
+    "history": "Fue formulada explícitamente por primera vez por Ernst Zermelo en 1904 para demostrar que cualquier conjunto puede ser completamente ordenado. Esta afirmación fue inmediatamente cuestionada por Émile Borel, Henri Lebesgue y otros analistas destacados. En 1938, Kurt Gödel demostró que AC no contradice ZF, y en 1963, Paul Cohen probó que la negación de AC también es compatible con ZF. Por lo tanto, el axioma de elección es independiente. Hoy en día, la gran mayoría de los matemáticos usan AC, aunque existen enfoques alternativos (constructivismo, categoría de topos) donde se evita.",
+    "how_it_works": "Funcionalmente, AC permite realizar construcciones no constructivas. En las demostraciones de teoremas se suele decir: «Para cada i, elijamos un elemento x_i del conjunto A_i» sin especificar una regla de elección. Esto es correcto si se acepta el axioma de elección. Sin él, tales razonamientos no son admisibles. Un ejemplo típico: la demostración de la existencia de una base de Hamel en un espacio vectorial arbitrario — elegimos secuencialmente vectores linealmente independientes, y en los pasos infinitos se requiere AC. Técnicamente, el axioma no indica cómo encontrar la elección, simplemente postula su existencia.",
+    "key_problems": [
+      "Independencia de ZF: AC no es demostrable ni refutable en ZF.",
+      "Las consecuencias paradójicas (Banach–Tarski) plantean cuestiones filosóficas sobre la naturaleza de la existencia matemática.",
+      "En matemáticas constructivistas se rechaza AC, lo que requiere reestructurar muchas áreas."
+    ],
+    "fun_fact": "La afirmación «el producto de Tíjonov de espacios compactos es compacto» es equivalente al axioma de elección, aunque la conexión no es nada obvia. De manera similar, «todo anillo con unitario contiene un ideal maximal» también es equivalente a AC.",
+    "formulas": [
+      {
+        "description": "Notación formal del axioma de elección",
+        "latex": "\\forall X (\\emptyset \\notin X \\implies \\exists f: X \\to \\bigcup X \\text{ такое что } \\forall A \\in X, f(A) \\in A)",
+        "meaning": "X es una familia de conjuntos no vacíos, ⋃X es la unión de todos los elementos de X, f es la función de elección que asigna a cada A ∈ X un elemento de A."
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "manifold",
+      "hilbert_space",
+      "banach_space",
+      "category",
+      "group"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "differential_form": {
+    "name": "forma diferencial",
+    "mini": "Una herramienta matemática para calcular con precisión flujos y circulaciones a través de pequeñas «piezas» de espacio, como un rompecabezas que ensambla una imagen global a partir de detalles locales. Mide cuánto aire atraviesa una red en cada punto de un huracán.",
+    "practical_application": "La formulación del electromagnetismo de Maxwell en una forma compacta y elegante; sin ellas es imposible describir los campos de gauge en física de partículas elementales y el espacio-tiempo curvado en la relatividad general.",
+    "description_popular": "Una forma diferencial es una aplicación multilineal alternante sobre vectores tangentes en cada punto de una variedad suave. Una forma de grado k (k-forma) está destinada a la integración sobre subvariedades k-dimensionales. El diferencial exterior d eleva el grado en 1 y tiene la propiedad clave d² = 0, que generaliza el hecho de que «la frontera de una frontera es vacía». El famoso teorema de Stokes toma la forma compacta: ∫_M dω = ∫_∂M ω. En física, el potencial electromagnético es una 1-forma, la intensidad del campo es una 2-forma, y las ecuaciones de Maxwell se escriben como dF = 0, d⋆F = J.",
+    "fun_fact_popular": "Las ecuaciones de Maxwell, que describen todo el electromagnetismo clásico, en el lenguaje de las formas diferenciales caben en dos líneas cortas: dF = 0 y d⋆F = J. La notación habitual en los libros de texto ocupa cuatro engorrosas ecuaciones en derivadas parciales.",
+    "description_simple": "Una forma diferencial es un diminuto instrumento de medición. Imagina que quieres saber cuánta agua fluye a través de un río. El enfoque habitual: multiplicar la velocidad por el área de la sección transversal. Pero si el cauce es curvo y la velocidad varía en todas partes, la forma hace lo mismo, pero para cada fragmento infinitesimal de la superficie por separado, y luego suma los resultados. No solo puede medir flujos, sino también trabajar en espacios multidimensionales donde nuestros vectores habituales son impotentes. (Aclaraciones: integral — suma de partes infinitesimales; flujo — cantidad de líquido que atraviesa una superficie por unidad de tiempo.)",
+    "history_simple": "Desarrollada por el matemático francés Élie Cartan a principios del siglo XX. Generalizó las ideas del análisis vectorial y los teoremas integrales, comprendiendo que muchas leyes físicas se ven mucho más elegantes en el lenguaje de las formas diferenciales. Hoy es el lenguaje principal de la geometría y la física moderna.",
+    "how_it_works_simple": "Imagina una lámina de hojalata curvada en el espacio. Sobre ella se puede dibujar una cuadrícula de coordenadas. La forma diferencial de primer orden mide cuán fuertemente está dirigido un vector a lo largo de un eje; la de segundo orden, el área tendida sobre dos vectores, y así sucesivamente. «Palpa» el espacio, aplicándose a cada punto. La integración de formas sobre arcos, superficies o volúmenes da las magnitudes físicas familiares: trabajo, flujo, carga.",
+    "description": "Sea M una variedad suave de dimensión n. Una k-forma diferencial ω es una sección suave de la potencia exterior del fibrado cotangente: ω ∈ Ω^k(M) = Γ(⋀^k T^*M). Localmente ω = Σ ω_{i₁…i_k} dx^{i₁} ∧ … ∧ dx^{i_k}, donde ∧ es el producto exterior, que anticonmuta según la regla dxⁱ ∧ dxʲ = – dxʲ ∧ dxⁱ. El diferencial exterior d: Ω^k → Ω^{k+1} actúa como dω = Σ (∂ω_{i₁…i_k}/∂xʲ) dxʲ ∧ dx^{i₁} ∧ … ∧ dx^{i_k} y satisface d² = 0. La integral de una k-forma sobre una superficie orientada k-dimensional se define de manera invariante. Teorema de Stokes: ∫_M dω = ∫_∂M ω. La conexión en un fibrado vectorial da formas con valores en el álgebra de Lie; la curvatura es una 2-forma. En electrodinámica, el 4-potencial A = A_μ dx^μ, la intensidad de campo F = dA = (1/2) F_μν dx^μ ∧ dx^ν; ecuaciones de Maxwell: dF = 0 (identidad de Bianchi), d⋆F = J (aquí ⋆ es la dualidad de Hodge, J es la 3-forma de densidad de corriente). La cohomología de De Rham H^k(M) = ker d / im d describe la topología mediante formas.",
+    "history": "El concepto se desarrolló gradualmente. En el siglo XIX, Green, Stokes y Gauss dieron teoremas integrales dispersos. El paso decisivo lo dio Élie Cartan en los años 1920, introduciendo el diferencial exterior y el teorema de Stokes generalizado. En 1931, Georges de Rham demostró el isomorfismo entre las cohomologías construidas a partir de formas y las cohomologías singulares, vinculando análisis y topología. Posteriormente, las formas diferenciales se convirtieron en el lenguaje principal de la geometría y la física, desde las teorías de gauge hasta las cuerdas.",
+    "how_it_works": "Una forma de grado k es un funcional que toma k vectores tangentes y devuelve un número, antisimétrico en los argumentos. Esto permite medir volúmenes orientados de paralelepípedos k-dimensionales en el espacio tangente. La integral de una forma sobre una subvariedad se obtiene mediante la subdivisión en pequeñas celdas y la suma de valores sobre ellas. El diferencial exterior generaliza el rotacional, la divergencia y el gradiente. La propiedad d² = 0 conduce a leyes de conservación: por ejemplo, en electrodinámica, de dF = 0 se sigue la ausencia de cargas magnéticas, y de d⋆F = J, la conservación de la carga. El operador de Hodge ⋆, definido por la métrica, transforma k-formas en (n–k)-formas, lo que, por ejemplo, intercambia los campos eléctrico y magnético en el vacío.",
+    "key_problems": [
+      "La integración de formas en espacios singulares o estratificados requiere nociones generalizadas (corrientes, distribuciones).",
+      "En teoría cuántica de campos, la construcción de una teoría matemáticamente rigurosa de integración sobre espacios de campos (integral funcional).",
+      "Relación con la geometría no conmutativa: búsqueda de análogos cuánticos de formas y cohomologías."
+    ],
+    "fun_fact": "En las teorías supersimétricas, las formas diferenciales se generalizan a superformas en supervariedades, donde las coordenadas pueden ser anticonmutantes (variables de Grassmann), y el operador d se convierte en una supercarga nilpotente que actúa como generador de simetría.",
+    "formulas": [
+      {
+        "description": "Expresión local de una k-forma",
+        "latex": "\\omega = \\sum \\omega_{i_1 \\dots i_k} dx^{i_1} \\wedge \\dots \\wedge dx^{i_k}",
+        "meaning": "ω_{i₁…i_k} son las componentes de la forma (funciones en la variedad), dx^{i} son 1-formas básicas, ∧ es el producto exterior: dxⁱ ∧ dxʲ = –dxʲ ∧ dxⁱ."
+      },
+      {
+        "description": "Ecuaciones de Maxwell en formas",
+        "latex": "dF = 0, \\quad d\\star F = J",
+        "meaning": "F es la 2-forma de intensidad del campo electromagnético, d es el diferencial exterior, ⋆ es el operador de dualidad de Hodge, J es la 3-forma de densidad de corriente eléctrica y carga."
+      },
+      {
+        "description": "Teorema de Stokes generalizado",
+        "latex": "\\int_{M} d\\omega = \\int_{\\partial M} \\omega",
+        "meaning": "M es una variedad orientada, ∂M su frontera; ω es una forma diferencial, dω su diferencial exterior. Unifica las fórmulas de Green, Gauss–Ostrogradski y el teorema de Stokes clásico."
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "manifold",
+      "lie_group",
+      "gauge_invariance",
+      "electromagnetism",
+      "tensor"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "fourier_transform": {
+    "name": "transformada de Fourier",
+    "mini": "Un 'traductor' matemático del lenguaje del tiempo al de la frecuencia: descompone una señal compleja en simples sinusoides, como descomponer un acorde musical en notas individuales. Cualquier danza intrincada se convierte en la suma de suaves movimientos.",
+    "practical_application": "Compresión de imágenes (JPEG), filtrado de ruido en audio, análisis de señales en resonancia magnética y radar, digitalización de música — en cualquier lugar donde sea necesario aislar frecuencias o eliminar interferencias.",
+    "description_popular": "La transformada de Fourier es una transformación integral que asocia a una función de variable real (a menudo el tiempo) una función de variable compleja (frecuencia). Descompone la señal en una base ortogonal de oscilaciones armónicas. El resultado (espectro) muestra la amplitud y fase de cada componente frecuencial. La transformada inversa permite recuperar la señal original. Gracias a la transformada rápida de Fourier (FFT), el algoritmo es muy veloz y se aplica universalmente en el procesamiento de señales.",
+    "fun_fact_popular": "En mecánica cuántica, la representación en momento de la función de onda es la imagen de Fourier de su representación en coordenadas. El principio de incertidumbre de Heisenberg surge de las propiedades de la transformada de Fourier: cuanto más estrecha es la señal en el tiempo, más amplio es su espectro.",
+    "description_simple": "La transformada de Fourier descompone una onda compleja en componentes simples. Imagina que tu voz es una sopa de diferentes sonidos: un zumbido grave y un silbido agudo. La transformada de Fourier toma esa 'sopa' y dice cuánto zumbido, cuánto silbido y cuánto siseo hay. Lo hace comparando la señal original con sinusoides puras (ondas suaves) de todas las frecuencias posibles (frecuencia es el número de oscilaciones por segundo). Así, de una grabación de audio se pueden extraer las notas, y de una fotografía, las transiciones suaves y los contornos nítidos.",
+    "history_simple": "El matemático francés Joseph Fourier propuso esta idea en 1807, mientras investigaba cómo se propaga el calor en los sólidos. Comprendió que cualquier distribución de temperatura se puede representar como la suma de ondas simples. Más tarde, el método se aplicó en todas partes, desde la música hasta la física cuántica.",
+    "how_it_works_simple": "Imagina que a partir de una huella en la arena debes adivinar qué olas la dejaron. La transformada de Fourier actúa como un detective: prueba ondas de diferente longitud y fuerza contra la huella. Donde la coincidencia es buena, surge una gran 'pista'. En la computadora, esto se hace multiplicando la señal por sinusoides de prueba y sumando los resultados. Se obtiene un espectro, un gráfico que muestra qué frecuencias están presentes.",
+    "description": "Para una función absolutamente integrable f(t), la transformada directa de Fourier se define como f̂(ω) = ∫₋∞∞ f(t) e^{-iωt} dt, donde t es el tiempo, ω es la frecuencia angular. La inversa: f(t) = (1/2π) ∫₋∞∞ f̂(ω) e^{iωt} dω. Existen variantes para funciones periódicas (series de Fourier) y secuencias discretas (transformada discreta de Fourier, DFT). El algoritmo de la transformada rápida de Fourier (Cooley–Tukey, 1965) permite calcular la DFT en O(n log n) operaciones. Propiedades: linealidad, el desplazamiento produce un factor de fase, la diferenciación ↔ multiplicación por iω, la convolución ↔ producto. Generalizaciones: TF multidimensional, TF con ventana, wavelets, análisis de Fourier en grupos. En física, la TF conecta los espacios de coordenadas y momento, dando lugar al principio de incertidumbre.",
+    "history": "Jean-Baptiste Joseph Fourier en 1807 (publicado en 1822), en su memoria sobre la propagación del calor, mostró que una función arbitraria puede descomponerse en una serie trigonométrica. La idea encontró resistencia de Lagrange y Laplace, quienes dudaban de la convergencia de las series. Posteriormente, Dirichlet (1829) precisó las condiciones. En el siglo XX, Laurent Schwartz extendió la transformada a las funciones generalizadas (la función delta de Dirac). Hoy es la base del análisis armónico.",
+    "how_it_works": "Matemáticamente, el núcleo e^{-iωt} actúa como una 'sonda': para cada frecuencia ω calculamos la correlación de la señal con la oscilación armónica de esa frecuencia. La integral mide la 'similitud'. Gracias a la ortogonalidad de las sinusoides, la descomposición es reversible sin pérdidas. La transformada rápida de Fourier aprovecha la simetría de las raíces complejas de la unidad, reduciendo el cálculo de una matriz grande a una serie de cálculos pequeños. En mecánica cuántica, la función de onda en la representación de momento es la imagen de Fourier de la función de onda en coordenadas, y la relación Δx Δp ≥ ħ/2 se deriva directamente de las propiedades de la TF.",
+    "key_problems": [
+      "No todas las funciones tienen una imagen de Fourier en el sentido clásico; se requiere una generalización a distribuciones.",
+      "Efecto Gibbs: en los puntos de discontinuidad, la serie de Fourier presenta sobreimpulsos cuya amplitud no disminuye al aumentar el número de términos (aproximadamente el 9% del salto).",
+      "La interpretación de frecuencias negativas en aplicaciones físicas no siempre es intuitiva.",
+      "Las señales no estacionarias requieren una TF con ventana o wavelets para un análisis adecuado."
+    ],
+    "fun_fact": "La transformada de Fourier de una función de soporte compacto (nula fuera de un intervalo finito) es una función analítica en todo el plano complejo; esto es el teorema de Paley-Wiener.",
+    "formulas": [
+      {
+        "description": "Transformada directa de Fourier",
+        "latex": "\\hat{f}(\\omega) = \\int_{-\\infty}^{\\infty} f(t) e^{-i\\omega t} dt",
+        "meaning": "f(t) es la función original (usualmente el tiempo), ω es la frecuencia angular, i es la unidad imaginaria, e es la base del logaritmo natural."
+      },
+      {
+        "description": "Transformada inversa de Fourier",
+        "latex": "f(t) = \\frac{1}{2\\pi} \\int_{-\\infty}^{\\infty} \\hat{f}(\\omega) e^{i\\omega t} d\\omega",
+        "meaning": "A partir del espectro f̂(ω) se recupera la función original f(t). El factor 1/(2π) normaliza la transformada."
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "fourier_series",
+      "spectroscopy",
+      "interferometry",
+      "quantum_fourier_transform",
+      "wave_function"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "fluctuation": {
+    "name": "fluctuación",
+    "mini": "La fluctuación es una desviación aleatoria de un sistema del equilibrio: como una ondulación en el agua sin viento o un estallido de risa en un auditorio silencioso, un recordatorio de que la quietud es solo una ilusión estadística.",
+    "practical_application": "Sin fluctuaciones cuánticas no se habrían formado galaxias, y los circuitos electrónicos sufren constantemente de ruido térmico: fluctuaciones de voltaje debido al movimiento aleatorio de los electrones.",
+    "description_popular": "La fluctuación es una desviación espontánea de un parámetro macroscópico (temperatura, densidad, energía) respecto a su valor de equilibrio. En sistemas cerrados, es menor cuantas más partículas haya, pero en el micromundo las fluctuaciones cuánticas son fundamentales: incluso el cero absoluto no congela las oscilaciones de punto cero de los campos.",
+    "fun_fact_popular": "La radiación cósmica de fondo es la «huella» de las fluctuaciones cuánticas del universo temprano, amplificadas por la inflación hasta escalas que dieron origen a las galaxias.",
+    "description_simple": "En cualquier gran conjunto de objetos (moléculas, personas, dinero) siempre hay inconstancia: de vez en cuando aparecen acumulaciones o dispersiones. Esto es una fluctuación: un alejamiento temporal del promedio. En física, las fluctuaciones pueden ser térmicas (relacionadas con la temperatura) y cuánticas (ineliminables, según las leyes del micromundo).",
+    "history_simple": "Su estudio sistemático comenzó en el siglo XIX: Robert Brown descubrió el movimiento browniano (1827), y Ludwig Boltzmann y Josiah Gibbs crearon la mecánica estadística que explicó esas oscilaciones.",
+    "how_it_works_simple": "Imagina una playa con gente: en promedio todos están tumbados uniformemente, pero a veces se forman grupos alrededor del vendedor de helados. Así son las moléculas en el aire: en una habitación la presión es constante, pero en un volumen microscópico la densidad fluctúa; esas son las fluctuaciones.",
+    "description": "La fluctuación es una desviación aleatoria temporal de una magnitud física respecto a su valor medio, descrita mediante distribuciones estadísticas. En la mecánica estadística del equilibrio, las fluctuaciones están relacionadas con la susceptibilidad del sistema (teorema de fluctuación-disipación). En la teoría cuántica de campos, las fluctuaciones del vacío son inevitables debido al principio de incertidumbre y se manifiestan como partículas virtuales.",
+    "history": "El concepto se consolidó en el siglo XIX: después de que Robert Brown observara en 1827 el movimiento caótico del polen en el agua, Albert Einstein describió cuantitativamente el movimiento browniano en 1905, demostrando la existencia de moléculas. Previamente, Ludwig Boltzmann había sentado las bases de la interpretación estadística de la termodinámica, relacionando la entropía con la probabilidad y, por tanto, con las fluctuaciones. En el ámbito cuántico, el formalismo se desarrolló a mediados del siglo XX.",
+    "how_it_works": "En sistemas termodinámicos, la probabilidad de una fluctuación está exponencialmente suprimida, como indica la distribución de Boltzmann (P ~ e^{-ΔE/kT}). En mecánica cuántica, incluso el estado fundamental del oscilador armónico tiene energía distinta de cero, lo que provoca fluctuaciones de punto cero en la coordenada y el momento, como se deduce del principio de incertidumbre de Heisenberg. En cosmología, las fluctuaciones cuánticas del campo del inflatón en el vacío, estiradas hasta escalas macroscópicas, se convirtieron en las semillas de la estructura a gran escala del universo, observable a través de las anisotropías de la radiación cósmica de fondo.",
+    "key_problems": [
+      "¿Cómo explicar el valor exacto de la amplitud de las fluctuaciones primordiales que condujo a nuestro universo observable?",
+      "¿Cómo relacionar las fluctuaciones cuánticas con la energía oscura: es esta una consecuencia de las fluctuaciones del vacío o algo diferente?",
+      "¿Se pueden controlar experimentalmente las fluctuaciones cuánticas para realizar mediciones ultraprecisas, por ejemplo, en detectores de ondas gravitacionales?"
+    ],
+    "fun_fact": "En el efecto Hall cuántico, las fluctuaciones se manifiestan como carga fraccionaria: los electrones, junto con las fluctuaciones, crean cuasipartículas colectivas con cargas e/3, e/5, etc.",
+    "formulas": [
+      {
+        "description": "Distribución de Boltzmann para fluctuaciones de energía",
+        "latex": "P(\\Delta E) \\sim e^{-\\frac{\\Delta E}{k_B T}}",
+        "meaning": "P es la probabilidad de una fluctuación con exceso de energía ΔE; k_B ≈ 1.380649×10⁻²³ J/K es la constante de Boltzmann; T es la temperatura absoluta en kelvin."
+      },
+      {
+        "description": "Energía de punto cero del oscilador armónico cuántico",
+        "latex": "E_0 = \\frac{1}{2}\\hbar\\omega",
+        "meaning": "E₀ es la energía mínima de oscilación; ħ = h/(2π) ≈ 1.054571817×10⁻³⁴ J·s es la constante reducida de Planck; ω es la frecuencia angular del oscilador."
+      }
+    ],
+    "scientists": [
+      "Ludwig Boltzmann"
+    ],
+    "related_tags": [
+      "quantum_field",
+      "cosmic_microwave_background",
+      "entropy",
+      "temperature",
+      "critical_point"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "hadron": {
+    "name": "hadrón",
+    "mini": "Los hadrones son partículas compuestas de quarks, como un mosaico de piezas. Los protones y neutrones en el núcleo atómico son los hadrones más conocidos.",
+    "practical_application": "Comprender los hadrones explica la estructura de la materia y permite estudiar las fuerzas dentro de los núcleos atómicos, lo que se aplica en la energía nuclear y en la imagen médica (escaneo PET).",
+    "description_popular": "Los hadrones son una clase de partículas subatómicas que participan en la interacción fuerte. No son fundamentales, sino que están compuestos por quarks, mantenidos unidos por gluones (portadores de la interacción fuerte). El nombre proviene del griego «hadros» que significa masivo, lo que refleja su masa relativamente grande en comparación con los leptones (por ejemplo, electrones). Los hadrones incluyen protones y neutrones (bariones, fermiones con espín semientero), así como mesones (bosones con espín entero). Dentro de un hadrón, los quarks están tan fuertemente unidos que no se observan quarks libres, esto es la propiedad del confinamiento.",
+    "fun_fact_popular": "Aunque el protón parece estable, algunas teorías predicen que podría desintegrarse en un tiempo inimaginablemente largo, más de 10³⁴ años. Hasta ahora no se ha registrado tal desintegración.",
+    "description_simple": "Los hadrones son partículas diminutas que componen casi todo lo que nos rodea: forman los núcleos de los átomos. Su particularidad es que no son elementales, sino que están compuestos por piezas aún más pequeñas: quarks, unidos por un «pegamento», la interacción fuerte (la interacción más poderosa de la naturaleza, que mantiene unidos a los quarks). Imagina que los quarks son cuentas brillantes y la interacción fuerte es un hilo que no los deja separarse. Hay dos tipos de hadrones: bariones, de tres quarks (como el protón y el neutrón), y mesones, de un quark y un antiquark (partículas inestables).",
+    "history_simple": "La idea de que los hadrones están compuestos por partículas más fundamentales surgió en la década de 1960. Los físicos Murray Gell-Mann y George Zweig propusieron de forma independiente la existencia de los quarks. Más tarde, los experimentos en aceleradores confirmaron su realidad.",
+    "how_it_works_simple": "Los quarks dentro de un hadrón nunca están solos, siempre están confinados en su interior. Intentar romper un hadrón requiere una enorme cantidad de energía y conduce al nacimiento de nuevos quarks, que inmediatamente forman nuevos hadrones. Es como intentar romper un imán: en lugar de dos mitades, obtienes dos imanes completos.",
+    "description": "Un hadrón es una partícula compuesta, formada por quarks y gluones unidos por la interacción fuerte, descrita por la cromodinámica cuántica (QCD). Los quarks poseen una carga de color, análoga a la carga eléctrica para la interacción fuerte, y los gluones son los portadores de esta interacción y también llevan carga de color, lo que provoca autointeracción y confinamiento. Los hadrones se dividen en bariones (tres quarks, fermiones) y mesones (quark-antiquark, bosones). También existen hadrones exóticos: tetraquarks, pentaquarks y glueballs. La masa de un hadrón supera significativamente la suma de las masas de los quarks que lo componen debido a la energía de los campos gluónicos (el mecanismo de Higgs contribuye solo en una pequeña parte). La estructura interna de los hadrones se investiga en experimentos de dispersión profundamente inelástica. A altas energías, la QCD exhibe libertad asintótica: los quarks se comportan como partículas casi libres.",
+    "history": "El concepto de hadrones se consolidó a mediados del siglo XX, cuando el número de partículas descubiertas crecía de manera vertiginosa. En 1961, Murray Gell-Mann y Yuval Ne'eman propusieron una clasificación de hadrones basada en el grupo SU(3), que condujo a la predicción del barión Ω⁻. En 1964, Gell-Mann e, independientemente, George Zweig introdujeron la hipótesis de los quarks. La confirmación experimental de los quarks se obtuvo a finales de la década de 1960 en experimentos de dispersión de electrones sobre protones en SLAC. El desarrollo de la QCD en la década de 1970 (Gross, Wilczek, Politzer) explicó la dinámica de la interacción fuerte.",
+    "how_it_works": "Los hadrones surgen debido al confinamiento: las cargas de color de los quarks son atraídas por los gluones con tal fuerza que la energía potencial crece linealmente con la distancia. Al intentar separar los quarks, la cuerda del campo gluónico se rompe, generando un par quark-antiquark del vacío, lo que conduce a la hadronización: la formación de chorros de hadrones. Esto se describe mediante las leyes de la QCD, en las que son importantes la libertad asintótica y la esclavitud infrarroja. Las masas de los hadrones se calculan mediante QCD en la red. El principio de Pauli explica por qué los bariones tienen una función de onda de color antisimétrica: los tres quarks deben ser de diferentes colores.",
+    "key_problems": [
+      "La naturaleza del confinamiento: una prueba matemática rigurosa de la retención del color",
+      "Cálculo preciso de las masas de los hadrones a partir de los primeros principios de la QCD",
+      "Búsqueda de hadrones exóticos y glueballs",
+      "El problema del espín del protón: cómo los quarks y gluones forman su espín 1/2"
+    ],
+    "fun_fact": "En el protón, la masa de los quarks constituye solo aproximadamente el 1% de su masa total. El 99% restante es energía del campo gluónico, según la equivalencia masa-energía (E = mc²).",
+    "formulas": [],
+    "scientists": [],
+    "related_tags": [
+      "quark",
+      "gluon",
+      "color_charge",
+      "strong_interaction",
+      "standard_model"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "quintessence": {
+    "name": "quintaesencia",
+    "mini": "La quintaesencia es una forma hipotética de energía oscura que puede cambiar con el tiempo. Si la energía oscura es un mar, la quintaesencia es una ola que a veces es más fuerte y a veces más débil.",
+    "practical_application": "Ayuda a comprender por qué el universo se expande aceleradamente y a predecir su destino final: si ocurrirá un Gran Desgarro o un enfriamiento eterno.",
+    "description_popular": "La quintaesencia es una forma hipotética de energía oscura con densidad variable, descrita por un campo escalar. A diferencia de la constante cosmológica (Λ) de Einstein, que es invariable, la quintaesencia puede evolucionar en el tiempo y el espacio. La ecuación de estado de dicha energía se caracteriza por el parámetro w = p/ρ (razón entre presión y densidad), que para la quintaesencia oscila en el rango -1 < w < -1/3. Cuando w = -1 es indistinguible de Λ, y valores cercanos a -1/3 conducen a una desaceleración de la expansión acelerada. Las observaciones aún no confirman desviaciones de w = -1, pero permiten una dinámica débil.",
+    "fun_fact_popular": "El nombre «energía del quinto elemento» hace referencia a la antigua creencia griega de que los cielos están hechos de una sustancia especial: el éter o quintaesencia. La física moderna tal vez devuelve esta idea al ámbito científico.",
+    "description_simple": "La quintaesencia es una energía especial que llena el espacio y hace que el universo se expanda cada vez más rápido. A diferencia de la energía oscura común, que se considera constante (como un zumbido uniforme), la quintaesencia puede debilitarse o fortalecerse en diferentes lugares y momentos. Es como si el aire de una habitación se volviera a veces más denso y otras más enrarecido, afectando el movimiento de los objetos. La idea proviene de la física de partículas elementales: existe un campo (una sustancia invisible, similar a un campo magnético) que cambia lentamente y genera una gravedad repulsiva.",
+    "history_simple": "La palabra «quintaesencia» se remonta a la filosofía antigua: el quinto elemento después de la tierra, el agua, el aire y el fuego. En cosmología, resurgió en 1998, cuando los astrónomos descubrieron que la expansión del universo se acelera. Los científicos supusieron que era causada no por una constante cosmológica fija, sino por un campo dinámico, al que llamaron quintaesencia.",
+    "how_it_works_simple": "La quintaesencia es como un resorte que se estira lentamente. Mientras el campo «rueda» cuesta abajo por una pendiente de energía, su presión es negativa y actúa como antigravedad, separando las galaxias. Si el campo se detuviera, la aceleración cesaría; si sigue cambiando, el universo podría enfrentar un desgarro de la materia.",
+    "description": "La quintaesencia en cosmología es un modelo de energía oscura basado en un campo escalar ϕ con un término cinético canónico y un potencial V(ϕ). La acción para dicho campo en un espacio-tiempo curvo da un tensor de energía-momento que, cuando el campo varía lentamente, proporciona una presión negativa que provoca la expansión acelerada del universo. La ecuación de Friedmann para el factor de escala a(t) con quintaesencia se modifica, y la dinámica del campo determina la evolución de la energía oscura. Los posibles potenciales incluyen el exponencial V(ϕ) ∝ exp(-λϕ) o el potencial de ley de potencias inversa V(ϕ) ∝ ϕ^(-α). La diferencia con los modelos de constante cosmológica es la ausencia del problema de las «coincidencias» (por qué las densidades de materia y energía oscura son comparables ahora) gracias a mecanismos de rastreo. Las restricciones observacionales de los datos de supernovas, radiación de fondo cósmico y oscilaciones acústicas bariónicas son consistentes con w ≈ -1, pero futuras misiones podrían detectar pequeñas desviaciones.",
+    "history": "Tras el descubrimiento de la expansión acelerada del universo en 1998 por los grupos liderados por Saul Perlmutter, Adam Riess y Brian Schmidt, surgió la pregunta sobre la naturaleza de la energía oscura. Aunque la constante cosmológica era la explicación más sencilla, teóricos como Paul Steinhardt y Robert Caldwell propusieron modelos de campo escalar dinámico: la quintaesencia. El término se consolidó en la literatura como contrapartida a la estática Λ. La idea se apoya en intentos de conectar la energía oscura con el campo inflacionario del universo temprano.",
+    "how_it_works": "La dinámica de la quintaesencia obedece a la ecuación de Klein-Gordon en un universo en expansión: ϕ̈ + 3Hϕ̇ + dV/dϕ = 0, donde H es el parámetro de Hubble. El frenado debido a la expansión hace que el campo ruede lentamente, conservando la energía potencial, que domina y crea presión negativa. Densidad y presión del campo: ρ_ϕ = ϕ̇²/2 + V(ϕ), p_ϕ = ϕ̇²/2 - V(ϕ). Cuando V(ϕ) ≫ ϕ̇², se obtiene p_ϕ ≈ -ρ_ϕ, lo que conduce a la aceleración. Los modelos de quintaesencia deben resolver el problema de la quinta fuerza, ya que las variaciones del campo podrían manifestarse en experimentos de laboratorio; por ello, se suele suponer que el campo interactúa muy débilmente con la materia.",
+    "key_problems": [
+      "Naturaleza del campo escalar: ¿partícula elemental o modificación de la gravedad?",
+      "Medición de la dependencia temporal del parámetro w con alta precisión",
+      "Prevención de interacciones no deseadas con la materia (quinta fuerza)",
+      "Explicación de las condiciones iniciales y la coincidencia con la densidad de materia actual"
+    ],
+    "fun_fact": "Algunos modelos de quintaesencia predicen que, a medida que el universo se expanda, el campo podría dejar de acelerarse e incluso cambiar de signo, provocando un colapso. Esto se denomina «quintaesencia congelada».",
+    "formulas": [
+      {
+        "description": "Ecuación de estado para la quintaesencia",
+        "latex": "w = \\frac{p}{\\rho}",
+        "meaning": "w — parámetro de la ecuación de estado, p — presión, ρ — densidad de energía; para la quintaesencia -1 < w < -1/3"
+      }
+    ],
+    "scientists": [
+      "Saul Perlmutter",
+      "Adam Riess"
+    ],
+    "related_tags": [
+      "dark_energy",
+      "cosmological_constant",
+      "expansion_of_the_universe",
+      "cosmic_microwave_background",
+      "inflation"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "spin_foam": {
+    "name": "espuma de espín",
+    "mini": "La espuma de espín es la «espuma cuántica» del espacio-tiempo, donde la geometría, como los bordes de una red cristalina, se entrelaza a partir de cuantos discretos de área, dando lugar a un mundo sin suavidad inicial.",
+    "practical_application": "La teoría aspira a describir la naturaleza cuántica de la gravedad, reemplazando el espacio-tiempo continuo por «ladrillos» microscópicos de los que puede estar hecho un agujero negro o el propio Universo.",
+    "description_popular": "La espuma de espín es un formalismo de la gravedad cuántica de bucles, donde el espacio-tiempo se representa no como un fondo continuo, sino como una red evolutiva de superficies límite (símplex), cada una de cuyas caras está etiquetada con números cuánticos: espines. Estos espines determinan el área de la cara en unidades de Planck.",
+    "fun_fact_popular": "Si existiera un «microscopio cuántico», a nivel de 10⁻³⁵ metros (longitud de Planck) el espacio se vería como una espuma burbujeante con topología cambiante.",
+    "description_simple": "En escalas diminutas, ultra-pequeñas, el espacio deja de ser liso como el papel y se asemeja a una espuma de pompas de jabón. Cada «burbujita» o cara de esta espuma tiene un tamaño cuantizado: el espín (una propiedad parecida a la rotación, pero sin analogía clásica).",
+    "history_simple": "La idea surgió del modelo de espuma de John Wheeler en los años 1950, y la encarnación moderna — las espumas de espín — fue desarrollada en los años 1990 por Carlo Rovelli, Lee Smolin y otros.",
+    "how_it_works_simple": "Así como las moléculas en un cristal forman una red, los «cubitos» de espín se conectan para formar la geometría cuántica. A energías muy altas, este patrón se manifiesta, posiblemente, dentro de los agujeros negros o en el inicio del Big Bang.",
+    "description": "La espuma de espín es una formulación covariante de la geometría cuántica en el marco de la gravedad cuántica de bucles. Describe el estado cuántico del campo gravitatorio como una superposición de historias representadas por un complejo bidimensional (espuma) de vértices, aristas y caras, donde cada cara porta una representación del grupo SU(2): el espín. La amplitud de transición entre estados se da como suma sobre todas las espumas, lo que es el análogo cuántico de la integral de caminos.",
+    "history": "Las raíces de la idea se remontan a John Wheeler, quien en 1955 sugirió que a escalas de Planck el espacio-tiempo se convierte en una 'espuma cuántica' debido a las fluctuaciones. En los años 1990, Carlo Rovelli y Lee Smolin, al desarrollar la gravedad cuántica de bucles, transformaron esto en una estructura matemática precisa de espumas de espín, donde las amplitudes se calculan mediante la teoría de representaciones. Una contribución significativa también la hizo John Baez, relacionando las espumas con la teoría cuántica de campos topológica.",
+    "how_it_works": "La espuma de espín se construye a partir de 4-símplex (análogos tetradimensionales de los tetraedros), cuyas caras están coloreadas por espines. El espacio-tiempo emerge como la historia de fusión y división de estas celdas cuánticas. La amplitud de transición se calcula según reglas análogas a las de Feynman, pero con cuantos espaciales discretos. Esto recuerda a una red cristalina, donde los defectos y oscilaciones se interpretan como partículas. El formalismo conduce a un espectro discreto de áreas y volúmenes y elimina singularidades, por ejemplo, en los agujeros negros y el Big Bang.",
+    "key_problems": [
+      "¿Cómo incluir los campos materiales en las espumas de espín y obtener el modelo estándar?",
+      "¿Cómo demostrar que el límite macroscópico de la espuma de espín da un espacio-tiempo suave con la relatividad general?",
+      "¿Cómo vincular la espuma de espín con efectos observables, por ejemplo, en la radiación cósmica de fondo?"
+    ],
+    "fun_fact": "En algunos modelos, la espuma de espín resulta ser dual a las redes tensoriales, lo que ha dado lugar a la hipótesis de la naturaleza holográfica de la gravedad: nuestras sensaciones tridimensionales podrían ser una proyección de una espuma cuántica bidimensional en el borde.",
+    "formulas": [
+      {
+        "description": "Área de la cara en la espuma de espín",
+        "latex": "A = 8\\pi \\gamma l_p^2 \\sqrt{j(j+1)}",
+        "meaning": "A es el área de la cara; γ es el parámetro de Immirzi (constante adimensional de orden 1); l_p = √(ħ G/c³) ≈ 1.616×10⁻³⁵ m es la longitud de Planck; j es el espín de la cara (número semientero, j = 0, 1/2, 1, …)."
+      }
+    ],
+    "scientists": [
+      "John Archibald Wheeler"
+    ],
+    "related_tags": [
+      "spacetime",
+      "singularity",
+      "wormhole",
+      "quantum_field",
+      "topology"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "catalysis": {
+    "name": "catálisis",
+    "mini": "Acelerador de reacciones que no se consume — como una casamentera que une moléculas para crear nuevos enlaces.",
+    "practical_application": "Los convertidores catalíticos en los automóviles transforman los gases de escape tóxicos en nitrógeno y agua seguros.",
+    "description_popular": "La catálisis es el aumento de la velocidad de una reacción química por acción de una sustancia que no forma parte de los productos finales. El catalizador reduce la energía de activación (barrera energética) abriendo una vía alternativa de reacción. Puede ser homogéneo (en la misma fase que los reactivos) o heterogéneo (generalmente un sólido en medio líquido o gaseoso).",
+    "fun_fact_popular": "El mismo catalizador puede acelerar tanto la reacción directa como la inversa: no desplaza el equilibrio, solo ayuda a alcanzarlo más rápido.",
+    "description_simple": "La catálisis es cuando una sustancia especial (catalizador) ayuda a que una reacción química sea más rápida o ocurra a menor temperatura, pero sin consumirse ella misma. Como un puente que conecta dos orillas, ofrece un camino con menos esfuerzo.",
+    "history_simple": "La palabra «catálisis» fue propuesta por Jöns Berzelius en 1836, al observar la aceleración de reacciones en presencia de ciertas sustancias.",
+    "how_it_works_simple": "El catalizador ofrece a las moléculas una nueva ruta donde se necesita menos energía de activación para iniciar la reacción. Las moléculas se acoplan en su superficie, debilitan sus enlaces y se transforman más rápidamente en productos.",
+    "description": "La catálisis es un proceso fundamental en la mayoría de las tecnologías químicas industriales y en los sistemas biológicos. El mecanismo de la catálisis heterogénea incluye la adsorción de los reactivos en los centros activos de la superficie del catalizador, su activación química (debilitamiento de enlaces intramoleculares), migración, reacción y desorción de los productos. La catálisis homogénea a menudo se realiza mediante la formación de un complejo intermedio del catalizador con el sustrato, que luego se descompone liberando el producto y regenerando el catalizador. La catálisis enzimática en los organismos vivos se caracteriza por una selectividad y regulación excepcionales. La velocidad de una reacción catalítica generalmente sigue la ecuación de Arrhenius con una energía de activación efectiva reducida. Los indicadores más importantes de un catalizador son la actividad (TON, frecuencia de recambio), selectividad y estabilidad (vida útil). Tendencias modernas: nanocatálisis, fotocatálisis, electrocatálisis para la división del agua.",
+    "history": "El término «catálisis» fue acuñado por el químico sueco Jöns Jacob Berzelius en 1836 para describir las reacciones aceleradas por sustancias que no se modifican. En 1895, Wilhelm Ostwald dio la definición cuantitativa de un catalizador como una sustancia que acelera la reacción pero no desplaza el equilibrio. A principios del siglo XX, Paul Sabatier descubrió la hidrogenación sobre níquel metálico, por lo que recibió el Premio Nobel. Fritz Haber y Carl Bosch desarrollaron la síntesis catalítica de amoníaco, revolucionando la agricultura. El desarrollo posterior de la catálisis enzimática se asocia con los nombres de Michaelis, Menten, Briggs y Haldane. Hoy en día, la catálisis impregna la petroquímica, la energía y la protección del medio ambiente.",
+    "how_it_works": "El catalizador proporciona una vía de reacción alternativa con una energía de activación más baja. En la catálisis heterogénea, la quimisorción desempeña un papel decisivo: la formación de enlaces químicos entre los reactivos y los centros activos en la superficie. Esto debilita ciertos enlaces interatómicos en las moléculas de los reactivos, facilitando su ruptura. Luego, las partículas adsorbidas interactúan, formando productos que se desorben, liberando los centros. Por ejemplo, en la síntesis de amoníaco sobre un catalizador de hierro, las moléculas de N₂ y H₂ se disocian en átomos, lo que requiere mucha energía sin catalizador. La velocidad de reacción a menudo se describe con la ecuación de Arrhenius: k = A exp(-Ea/RT), donde Ea es la energía de activación. El catalizador reduce Ea. En las enzimas, la complementariedad del centro activo al sustrato (modelo llave-cerradura) y la estabilización del estado de transición juegan un papel adicional.",
+    "key_problems": [
+      "Diseño de catalizadores con actividad y selectividad predecibles sin selección empírica.",
+      "Creación de catalizadores estables y baratos basados en elementos abundantes en lugar de platino para pilas de combustible.",
+      "Comprensión de los mecanismos de desactivación de catalizadores y desarrollo de métodos de regeneración."
+    ],
+    "fun_fact": "Un catalizador de zeolita (aluminosilicato) en el craqueo del petróleo tiene un área superficial específica de hasta 1000 m²/g: en una cucharadita, el área desplegada es comparable a un campo de fútbol.",
+    "formulas": [
+      {
+        "description": "Ecuación de Arrhenius para la constante de velocidad de reacción",
+        "latex": "k = A e^{-\\frac{E_a}{RT}}",
+        "meaning": "k: constante de velocidad de reacción, A: factor preexponencial (frecuencia de colisiones), Ea: energía de activación (energía mínima necesaria para que los reactivos inicien la reacción), R: constante universal de los gases (R ≈ 8,314 J/(mol·K)), T: temperatura absoluta (en kelvin)"
+      }
+    ],
+    "scientists": [],
+    "related_tags": [
+      "catalysis",
+      "enthalpy",
+      "entropy",
+      "internal_energy",
+      "temperature"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "solar_corona": {
+    "name": "corona solar",
+    "mini": "La corona solar es la atmósfera exterior del Sol, visible durante los eclipses como un halo perlado. Es cientos de veces más caliente que la superficie de la estrella, lo que sigue sorprendiendo a los científicos.",
+    "practical_application": "El estudio de la corona ayuda a predecir las erupciones solares y las eyecciones que afectan a los satélites, las comunicaciones y los sistemas eléctricos en la Tierra.",
+    "description_popular": "La corona solar es la capa exterior de la atmósfera solar, que se extiende por millones de kilómetros. Consiste en plasma enrarecido (aproximadamente 10¹⁵ partículas/m³) con una temperatura de 1 a 3 millones de kelvin, mucho más caliente que la fotosfera subyacente (alrededor de 5800 K). La corona emite principalmente en los rangos ultravioleta y de rayos X debido al alto grado de ionización de los átomos (por ejemplo, iones de hierro Fe IX–Fe XIV). El brillo de la corona es un millón de veces menor que el disco solar, por lo que se observa con coronógrafos o durante los eclipses. El problema del calentamiento de la corona sigue siendo central en la física solar: probablemente actúan mecanismos de reconexión magnética y calentamiento por ondas de Alfvén.",
+    "fun_fact_popular": "Durante los eclipses solares, la corona parece tener un tamaño de varios diámetros solares, pero en realidad se extiende mucho más allá de la órbita de la Tierra, convirtiéndose gradualmente en el viento solar.",
+    "description_simple": "La corona solar es un gas enrarecido pero increíblemente caliente que envuelve al Sol. Aunque la superficie del Sol (fotosfera) tiene una temperatura de aproximadamente 5500°C, la corona está calentada a millones de grados. Es como si la llama estuviera más fría que el aire a su alrededor. La corona está compuesta de plasma, un gas eléctricamente cargado que brilla en rayos X. Solo la vemos durante los eclipses solares totales o con telescopios especiales que bloquean el brillante disco solar.",
+    "history_simple": "Ya en la antigüedad, la gente notaba un brillo alrededor del Sol durante los eclipses, pero no entendían su naturaleza hasta la invención del espectroscopio. En el siglo XIX, mediante el análisis espectral, se descubrieron misteriosas líneas verdes en la corona, que se atribuyeron a un nuevo elemento llamado 'coronio'. Resultó ser radiación de hierro altamente ionizado, lo que indicaba una temperatura de millones de grados.",
+    "how_it_works_simple": "El calentamiento de la corona es un enigma. La hipótesis principal: los campos magnéticos solares que emergen de las profundidades se enredan y reconectan, liberando una enorme energía, como un cortocircuito. Esto calienta el plasma y también genera el viento solar, un flujo de partículas que salen del Sol.",
+    "description": "La corona solar es un plasma completamente ionizado con un campo magnético de topología compleja. La temperatura de la corona alcanza ~10⁶ K en regiones tranquilas y ~10⁷ K en regiones activas. La transferencia de energía desde la zona convectiva del Sol a la corona se realiza mediante campos magnéticos. Los mecanismos de calentamiento incluyen nanoerupciones (reconexión a pequeña escala) y disipación de ondas de Alfvén. El espectro de la corona contiene líneas de emisión de elementos altamente ionizados, así como un continuo debido a la dispersión Thomson de la radiación fotosférica por electrones libres (corona K). Los bucles coronales, arcadas y serpentinas se observan en rayos X y ultravioleta extremo (EUV). El viento solar fluye desde los agujeros coronales, regiones con campo magnético abierto. La dinámica de la corona es responsable del clima espacial.",
+    "history": "Las primeras menciones de la corona aparecen en crónicas de civilizaciones antiguas que describían eclipses solares. Las observaciones sistemáticas comenzaron con la invención del telescopio. En 1868, Pierre Janssen y Norman Lockyer descubrieron de forma independiente el helio en el espectro de la cromosfera. La misteriosa línea verde de 530.3 nm, detectada en 1869, fue identificada en 1939-1942 como emisión de Fe XIV, hierro al que le faltan 13 electrones, lo que indicó una alta temperatura. Las misiones espaciales como Skylab (década de 1970), SOHO, TRACE y el Solar Dynamics Observatory revolucionaron la comprensión de la corona, mostrando su dinámica y su relación con los campos magnéticos.",
+    "how_it_works": "El calentamiento de la corona se explica mediante dos clases de modelos: calentamiento directo por disipación de corrientes (modelos de corriente alterna) y calentamiento por ondas (corriente continua). La reconexión magnética, descrita por las ecuaciones de la magnetohidrodinámica, convierte la energía magnética en térmica y cinética. La ley de conservación de la energía (primer principio de la termodinámica) en el plasma tiene en cuenta el calentamiento, la radiación y la conducción térmica. La corona pierde energía por radiación, conducción térmica hacia la cromosfera y aceleración del viento solar. Las ecuaciones de Maxwell junto con las ecuaciones hidrodinámicas forman la base de la descripción MHD de la corona. El análisis espectral permite diagnosticar la temperatura y la densidad.",
+    "key_problems": [
+      "Mecanismo físico del calentamiento coronal: separación precisa de la contribución de las ondas y la reconexión",
+      "Aceleración del viento solar y formación de su composición química",
+      "Predicción de erupciones solares y eyecciones de masa coronal",
+      "Naturaleza de los bucles coronales y su estabilidad"
+    ],
+    "fun_fact": "La línea verde del coronio (530.3 nm) es tan intensa que se puede utilizar para observar la corona en bicicleta: existen telescopios solares para aficionados con un filtro específico para esa longitud de onda.",
+    "formulas": [],
+    "scientists": [
+      "James Clerk Maxwell",
+      "Hendrik Lorentz"
+    ],
+    "related_tags": [
+      "sun",
+      "plasma",
+      "solar_wind",
+      "magnetic_reconnection",
+      "spectroscopy"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "diffraction": {
+    "name": "difracción",
+    "mini": "El rodeo de las olas alrededor de obstáculos, como la marejada que pasa entre los pilares de un muelle.",
+    "practical_application": "Gracias a la difracción funcionan las rejillas de los espectrómetros, que separan la luz en colores para analizar la composición química de las estrellas.",
+    "description_popular": "La difracción es la desviación de las ondas (luz, sonido, agua) de su propagación rectilínea al encontrarse con un obstáculo o una abertura. Se manifiesta claramente cuando el tamaño de la rendija es comparable a la longitud de onda. En el caso de la luz, esto produce un patrón de interferencia: un conjunto de franjas de diferente brillo.",
+    "fun_fact_popular": "Si se mira a través de una tela fina hacia una farola, se pueden ver manchas iridiscentes; esto también es difracción en los hilos.",
+    "description_simple": "Si arrojas una piedra a un estanque, las ondas en el agua rodean las hierbas. Con la luz ocurre lo mismo: al pasar por una rendija estrecha, se extiende hacia los lados y crea una alternancia de franjas claras y oscuras.",
+    "history_simple": "El fenómeno fue descrito por primera vez por Francesco Grimaldi en 1665, y explicado como una propiedad ondulatoria de la luz por Thomas Young en 1801.",
+    "how_it_works_simple": "Cuando una onda encuentra el borde de un objeto o una rendija, se desvía e interfiere consigo misma. Donde las crestas coinciden, la luz se refuerza (franja brillante); donde no coinciden, se cancela (franja oscura).",
+    "description": "La difracción es un fenómeno ondulatorio fundamental, presente en todos los tipos de ondas: electromagnéticas, sonoras y en el agua. Ocurre cuando una onda interactúa con una inhomogeneidad del medio, como el borde de una pantalla opaca, una rendija, un orificio o una estructura periódica. Según el principio de Huygens-Fresnel, cada punto del frente de onda se convierte en una fuente de ondas esféricas secundarias, y el campo resultante en el punto de observación es la superposición de estas ondas secundarias. La interferencia de las ondas secundarias produce una redistribución espacial de la intensidad. Se distingue la difracción de Fresnel (en el campo cercano) y la difracción de Fraunhofer (en el campo lejano, donde llegan rayos paralelos). Matemáticamente, la difracción se describe mediante la integral de Fresnel-Kirchhoff. El fenómeno se utiliza ampliamente para estudiar la estructura de la materia: difracción de rayos X en cristales (análisis estructural por rayos X), difracción de electrones y de neutrones. El límite de resolución de los instrumentos ópticos también está determinado por la difracción.",
+    "history": "La primera descripción sistemática de la difracción de la luz fue dada por el físico italiano Francesco Grimaldi en su obra póstuma de 1665, introduciendo el término. La naturaleza ondulatoria de la luz, capaz de explicar la difracción, fue defendida por Christiaan Huygens (1690). En 1801, Thomas Young demostró la interferencia de dos rendijas, confirmando la teoría ondulatoria. Augustin Fresnel presentó en 1818 una teoría matemática rigurosa, resolviendo el problema de la difracción en el borde de una pantalla. Más tarde, en 1912, Max von Laue y colaboradores descubrieron la difracción de rayos X en cristales, lo que le valió el Premio Nobel. William Lawrence Bragg y su padre William Henry Bragg desarrollaron un método para descifrar estructuras cristalinas a partir de patrones de difracción. Joseph von Fraunhofer inventó la rejilla de difracción y la utilizó para espectroscopía.",
+    "how_it_works": "La difracción es consecuencia de la superposición de ondas. Cuando una parte del frente de onda es bloqueada por un obstáculo, las ondas secundarias de las regiones abiertas interfieren, creando un patrón complejo. Para estructuras periódicas, como una rejilla de difracción o una red cristalina, la condición de refuerzo se describe mediante la ley de Bragg: nλ = 2d sen θ, donde n es el orden de difracción, λ es la longitud de onda, d es la distancia interplanar, y θ es el ángulo de incidencia rasante. Esta ley es la base del análisis estructural por rayos X. Para rejillas con muchas líneas, la intensidad se concentra en picos estrechos, lo que permite usar la difracción en espectrómetros para medir longitudes de onda con alta precisión.",
+    "key_problems": [
+      "El cálculo exacto de campos de difracción para objetos tridimensionales complejos sin simplificaciones sigue siendo computacionalmente costoso.",
+      "Desarrollo de métodos de difracción de rayos X para estudiar estructuras desordenadas (líquidos, cuerpos amorfos) con resolución temporal."
+    ],
+    "fun_fact": "La rejilla de difracción formada por las plumas del colibrí crea una coloración iridiscente que cambia según el ángulo de visión; en tecnología, estructuras similares (cristales fotónicos) se utilizan en la fibra óptica.",
+    "formulas": [
+      {
+        "description": "Ley de Bragg para la difracción en un cristal",
+        "latex": "n\\lambda = 2d \\sin\\theta",
+        "meaning": "n — orden de difracción (número entero), λ — longitud de onda de la radiación incidente, d — distancia interplanar en la red cristalina, θ — ángulo de incidencia rasante (entre el rayo incidente y el plano del cristal)"
+      }
+    ],
+    "scientists": [
+      "William Lawrence Bragg",
+      "Joseph von Fraunhofer"
+    ],
+    "related_tags": [
+      "diffraction",
+      "interference",
+      "wave_particle_duality",
+      "spectroscopy",
+      "crystal_lattice"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "virtual_particle": {
+    "name": "partícula virtual",
+    "mini": "La partícula virtual es como un grano de energía prestado y fugaz en el océano hirviente del vacío cuántico, que desaparece más rápido que un parpadeo, pero logra transmitir fuerza.",
+    "practical_application": "Explica cómo interactúan las cargas eléctricas (fotones mediadores) y por qué el espacio vacío en realidad bulle de energía.",
+    "description_popular": "Las partículas virtuales son fluctuaciones cuánticas de los campos (los campos cuánticos son entidades fundamentales que describen las partículas como excitaciones), que aparecen brevemente en el vacío debido a la incertidumbre de la energía. No existen como partículas libres reales, pero median interacciones y cambian las propiedades del vacío.",
+    "fun_fact_popular": "La energía de las partículas virtuales influye en el espectro del átomo de hidrógeno; esto se llama desplazamiento de Lamb, medido con enorme precisión.",
+    "description_simple": "En el mundo cuántico (el mundo de los objetos muy pequeños) incluso el vacío no está vacío. En él, constantemente, durante breves instantes, aparecen y desaparecen partículas, como burbujas en agua hirviendo. Estas partículas son virtuales: viven tan poco que no se pueden ver directamente, pero su influencia es perceptible.",
+    "history_simple": "La idea surgió en las décadas de 1920-30 con el desarrollo de la electrodinámica cuántica, y fue descrita formalmente en los años 1940 por Richard Feynman y otros.",
+    "how_it_works_simple": "Dos barcos intercambian veloces remeros que saltan del agua y regresan. Los remeros pasan desapercibidos, pero empujan los barcos. Así, las partículas virtuales transmiten fuerzas entre partículas ordinarias: por ejemplo, los fotones virtuales hacen que un imán sea atrayente.",
+    "description": "Dentro de la teoría cuántica de campos, las partículas virtuales son líneas internas en los diagramas de Feynman, correspondientes a términos matemáticos en la expansión perturbativa. Son fluctuaciones cuánticas de los campos subyacentes, que obedecen al principio de incertidumbre de Heisenberg (ΔE·Δt ≥ ħ/2 — es imposible conocer con precisión la energía y el tiempo simultáneamente), lo que permite tomar prestada energía del vacío por un breve tiempo para crear pares partícula-antipartícula.",
+    "history": "El concepto se desarrolló a partir de los trabajos en electrodinámica cuántica (QED). Paul Dirac introdujo en 1927 la teoría de emisión y absorción, y la idea de las partículas virtuales fue formalizada a finales de la década de 1940 por Richard Feynman, Julian Schwinger y Sin-Itiro Tomonaga, quienes recibieron el Premio Nobel por ello. Probablemente el término fue acuñado por Wheeler. John Wheeler también investigó la espuma cuántica, donde las partículas virtuales subyacen a la geometría rugosa a escalas de Planck.",
+    "how_it_works": "De acuerdo con el principio de incertidumbre, las fluctuaciones del vacío de los campos crean pares virtuales. En QED, los fotones virtuales transmiten la interacción electromagnética entre partículas cargadas: cada vértice en un diagrama de Feynman corresponde al acto de emisión o absorción de una partícula virtual. Pueden estar 'fuera de la capa de masa' (su energía-momento no cumple E² = p²c² + m²c⁴), a diferencia de las partículas reales. Los efectos de las partículas virtuales se manifiestan en la polarización del vacío, el desplazamiento de Lamb, el momento magnético anómalo del electrón y, macroscópicamente, en el efecto Casimir, donde aparece una fuerza atractiva entre dos placas conductoras cercanas debido a la diferencia en la densidad de fotones virtuales fuera y dentro.",
+    "key_problems": [
+      "¿Cómo explicar la constante cosmológica si la energía del vacío de las partículas virtuales se predice 120 órdenes de magnitud mayor de lo observado?",
+      "¿Cuál es el papel de las partículas virtuales en la gravedad cuántica, especialmente cerca de los agujeros negros, donde pueden contribuir a la radiación de Hawking?",
+      "¿Es posible distinguir experimentalmente entre partículas virtuales y reales en escalas de tiempo ultracortas?"
+    ],
+    "fun_fact": "En campos electromagnéticos intensos (por ejemplo, cerca de núcleos de gran carga), los pares virtuales electrón-positrón pueden convertirse en reales: es el 'mecanismo de Schwinger' de producción de partículas, predicho en 1951.",
+    "formulas": [
+      {
+        "description": "Principio de incertidumbre energía-tiempo",
+        "latex": "\\Delta E \\Delta t \\geq \\frac{\\hbar}{2}",
+        "meaning": "ΔE — incertidumbre en la energía; Δt — incertidumbre en el tiempo; ħ = h/(2π) ≈ 1.054571817×10⁻³⁴ J·s — constante reducida de Planck."
+      }
+    ],
+    "scientists": [
+      "Paul Dirac",
+      "John Archibald Wheeler"
+    ],
+    "related_tags": [
+      "quantum_field",
+      "antimatter",
+      "fluctuation",
+      "photon"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
+  },
+  "spectrometer": {
+    "name": "espectrómetro",
+    "mini": "Medidor de arcoíris: descompone la luz en franjas de colores y a partir de ellas averigua la composición de estrellas lejanas.",
+    "practical_application": "En medicina, los espectrómetros de masas determinan rastros de drogas en la sangre, y los espectrómetros ópticos comprueban la calidad del agua detectando contaminantes.",
+    "description_popular": "El espectrómetro es un instrumento para medir la distribución de la radiación electromagnética por longitudes de onda o frecuencias. Componentes principales: rendija de entrada, elemento dispersor (prisma o red de difracción), óptica de enfoque y detector (matriz CCD, fotomultiplicador). Los espectrómetros se diferencian por rango: ultravioleta, visible, infrarrojo, rayos X, etc. El espectrógrafo es un instrumento que registra todo el espectro simultáneamente. Las características clave son la resolución espectral y la luminosidad.",
+    "fun_fact_popular": "Cada elemento químico deja una «huella dactilar» única en el espectro: un conjunto de líneas brillantes. Así fue como los astrónomos determinaron que el Sol y otras estrellas están compuestos principalmente de hidrógeno y helio.",
+    "description_simple": "El espectrómetro es un instrumento que, como un prisma, divide la luz en colores. Pero no solo muestra el arcoíris: mide con precisión cuánto de cada color hay en la luz. Así se puede saber de qué está hecha la fuente de luz: el sodio da amarillo, el hidrógeno, rojo y azul-violeta.",
+    "history_simple": "El primer prototipo de espectrómetro fue un prisma de vidrio que utilizó Isaac Newton en 1666 para descomponer la luz solar. Más tarde, Joseph von Fraunhofer añadió una red de difracción y vio líneas oscuras en el espectro del Sol.",
+    "how_it_works_simple": "La luz pasa por una rendija estrecha y llega a un elemento que la separa por longitudes de onda: puede ser un prisma (refracta más el violeta) o una red de difracción (refleja diferentes colores en diferentes ángulos). El detector registra cuánta luz llegó a cada zona microscópica. Así se construye el espectro: un gráfico de brillo en función de la longitud de onda.",
+    "description": "El espectrómetro es un instrumento de medición que permite analizar cuantitativamente la composición espectral de la radiación electromagnética. En general, incluye una fuente de radiación (externa o integrada), un sistema dispersor, un esquema óptico para formar un haz paralelo y enfocar, un detector y un sistema de procesamiento de datos. El principio de funcionamiento se basa en transformar la dependencia de la intensidad respecto a la longitud de onda en una distribución espacial, que es registrada por un fotodetector multielemento. La dispersión puede lograrse por refracción en un prisma (refractiva) o por difracción en una estructura periódica. Los espectrómetros modernos utilizan redes holográficas cóncavas que permiten combinar la dispersión y el enfoque en un detector plano. La calibración absoluta de la longitud de onda se realiza mediante fuentes patrón (lámparas de descarga de gas con líneas conocidas). Los espectrómetros se clasifican por el principio de detección (de barrido, con detector estacionario; de haz simple, de doble haz), por el tipo de modulación (dispersivos, interferenciales — espectrómetros de Fourier), por la región del espectro. Los espectrómetros de masas no miden longitudes de onda sino masas de partículas cargadas, pero también son instrumentos analíticos. Los espectrómetros astronómicos a menudo están acoplados a telescopios y tienen alta resolución (R = λ/Δλ hasta 100 000 y más) para estudiar atmósferas estelares, el medio interestelar y el corrimiento al rojo de las galaxias.",
+    "history": "La historia del espectrómetro comenzó con los experimentos de Isaac Newton en 1666, quien descompuso la luz solar con un prisma. El término «espectro» fue introducido por Newton, que llamó a la franja de colores «fantasma» (spectrum). En 1814, Joseph von Fraunhofer, sustituyendo el prisma por una red de difracción de fabricación propia, descubrió líneas oscuras en el espectro solar (líneas de Fraunhofer) y midió sus longitudes de onda. Esto marcó el inicio de la astroespectroscopía. En 1859, Gustav Kirchhoff y Robert Bunsen crearon el primer espectroscopio con un mechero de gas y un prisma, relacionando las líneas espectrales con los elementos químicos. En el siglo XX, el desarrollo de la electrónica condujo al registro fotoeléctrico. Hoy en día, los observatorios espaciales están equipados con espectrómetros que funcionan desde el rango de rayos X hasta el infrarrojo (por ejemplo, el instrumento STIS en el telescopio Hubble).",
+    "how_it_works": "Principio del espectrómetro óptico: la radiación a estudiar pasa a través de una rendija de entrada hacia un colimador, que forma un haz paralelo. Luego, el haz incide sobre un elemento dispersor, por ejemplo, una red de difracción reflectante con surcos grabados. Según la condición de difracción d(sen α ± sen β) = mλ, donde d es el período de la red, α y β son los ángulos de incidencia y difracción, m es el orden, la luz de diferentes longitudes de onda se desvía en ángulos distintos. A continuación, un espejo de enfoque forma imágenes de la rendija en luz monocromática sobre el detector (arreglo lineal o matriz CCD). La intensidad de la señal de cada píxel es proporcional al flujo de fotones de la longitud de onda correspondiente. La calibración convierte el número de píxel en longitud de onda. Un tipo alternativo es el espectrómetro de Fourier: se utiliza un interferómetro de Michelson, donde se mide un interferograma (dependencia de la intensidad respecto a la diferencia de camino), y el espectro se reconstruye mediante la transformada de Fourier. La ventaja es la alta resolución y luminosidad.",
+    "key_problems": [
+      "Reducción del tamaño de los espectrómetros a formato chip (microespectrómetros) manteniendo una alta resolución para dispositivos portátiles.",
+      "Supresión de ruido y aumento del rango dinámico para la detección de atmósferas exoplanetarias mediante espectroscopía de tránsito.",
+      "Desarrollo de espectrómetros para el ultravioleta lejano y rayos X con una resolución angular suficiente para la espectroscopía de fuentes individuales en cúmulos."
+    ],
+    "fun_fact": "El espectrómetro a bordo de la sonda Cassini descubrió géiseres de agua en Encélado analizando la luz dispersada; su resolución permitió distinguir las líneas de vapor de agua de las impurezas de amoníaco y metano.",
+    "formulas": [],
+    "scientists": [
+      "Joseph von Fraunhofer"
+    ],
+    "related_tags": [
+      "spectroscopy",
+      "interferometer",
+      "diffraction",
+      "photometry",
+      "polarimetry"
+    ],
+    "educational": true,
+    "refined": false,
+    "raw": {}
   }
 }

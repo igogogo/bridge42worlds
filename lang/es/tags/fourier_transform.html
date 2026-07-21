@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#transformada de Fourier — bridge42worlds</title>
+    <meta name="description" content="La transformada de Fourier es una transformación integral que asocia a una función de variable real (a menudo el tiempo) una función de variable compleja (frecuencia). Descompone la señal en una base ortogonal de oscilaciones armónicas. El resultado (espectro) muestra la amplitud y fase de cada componente frecuencial. La transformada inversa permite recuperar la señal original. Gracias a la transformada rápida de Fourier (FFT), el algoritmo es muy veloz y se aplica universalmente en el procesamiento de señales.">
+    <meta property="og:title" content="#transformada de Fourier — bridge42worlds">
+    <meta property="og:description" content="La transformada de Fourier es una transformación integral que asocia a una función de variable real (a menudo el tiempo) una función de variable compleja (frecuencia). Descompone la señal en una base ortogonal de oscilaciones armónicas. El resultado (espectro) muestra la amplitud y fase de cada componente frecuencial. La transformada inversa permite recuperar la señal original. Gracias a la transformada rápida de Fourier (FFT), el algoritmo es muy veloz y se aplica universalmente en el procesamiento de señales.">
+    <meta property="og:url" content="https://bridge42worlds.org/lang/es/tags/fourier_transform.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=d5d075c87a">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/es/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Избранное">★</a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <h1>transformada de Fourier</h1>
+    <div class="tag-stats">📊 <a class="stat-jump" href="#article-list">0</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Un 'traductor' matemático del lenguaje del tiempo al de la frecuencia: descompone una señal compleja en simples sinusoides, como descomponer un acorde musical en notas individuales. Cualquier danza intrincada se convierte en la suma de suaves movimientos.</p><div class="practical-app"><strong>In practice:</strong> Compresión de imágenes (JPEG), filtrado de ruido en audio, análisis de señales en resonancia magnética y radar, digitalización de música — en cualquier lugar donde sea necesario aislar frecuencias o eliminar interferencias.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">La transformada de Fourier es una transformación integral que asocia a una función de variable real (a menudo el tiempo) una función de variable compleja (frecuencia). Descompone la señal en una base ortogonal de oscilaciones armónicas. El resultado (espectro) muestra la amplitud y fase de cada componente frecuencial. La transformada inversa permite recuperar la señal original. Gracias a la transformada rápida de Fourier (FFT), el algoritmo es muy veloz y se aplica universalmente en el procesamiento de señales.</div>
+        <div class="section"><h2>History</h2><p>El matemático francés Joseph Fourier propuso esta idea en 1807, mientras investigaba cómo se propaga el calor en los sólidos. Comprendió que cualquier distribución de temperatura se puede representar como la suma de ondas simples. Más tarde, el método se aplicó en todas partes, desde la música hasta la física cuántica.</p></div>
+        <div class="section"><h2>How it works</h2><p>Imagina que a partir de una huella en la arena debes adivinar qué olas la dejaron. La transformada de Fourier actúa como un detective: prueba ondas de diferente longitud y fuerza contra la huella. Donde la coincidencia es buena, surge una gran 'pista'. En la computadora, esto se hace multiplicando la señal por sinusoides de prueba y sumando los resultados. Se obtiene un espectro, un gráfico que muestra qué frecuencias están presentes.</p></div>
+        <div class="fun-fact">💡 En mecánica cuántica, la representación en momento de la función de onda es la imagen de Fourier de su representación en coordenadas. El principio de incertidumbre de Heisenberg surge de las propiedades de la transformada de Fourier: cuanto más estrecha es la señal en el tiempo, más amplio es su espectro.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">La transformada de Fourier descompone una onda compleja en componentes simples. Imagina que tu voz es una sopa de diferentes sonidos: un zumbido grave y un silbido agudo. La transformada de Fourier toma esa 'sopa' y dice cuánto zumbido, cuánto silbido y cuánto siseo hay. Lo hace comparando la señal original con sinusoides puras (ondas suaves) de todas las frecuencias posibles (frecuencia es el número de oscilaciones por segundo). Así, de una grabación de audio se pueden extraer las notas, y de una fotografía, las transiciones suaves y los contornos nítidos.</div>
+        <div class="section"><h2>History</h2><p>El matemático francés Joseph Fourier propuso esta idea en 1807, mientras investigaba cómo se propaga el calor en los sólidos. Comprendió que cualquier distribución de temperatura se puede representar como la suma de ondas simples. Más tarde, el método se aplicó en todas partes, desde la música hasta la física cuántica.</p></div>
+        <div class="section"><h2>How it works</h2><p>Imagina que a partir de una huella en la arena debes adivinar qué olas la dejaron. La transformada de Fourier actúa como un detective: prueba ondas de diferente longitud y fuerza contra la huella. Donde la coincidencia es buena, surge una gran 'pista'. En la computadora, esto se hace multiplicando la señal por sinusoides de prueba y sumando los resultados. Se obtiene un espectro, un gráfico que muestra qué frecuencias están presentes.</p></div>
+        <div class="fun-fact">💡 La transformada de Fourier de una función de soporte compacto (nula fuera de un intervalo finito) es una función analítica en todo el plano complejo; esto es el teorema de Paley-Wiener.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Para una función absolutamente integrable f(t), la transformada directa de Fourier se define como f̂(ω) = ∫₋∞∞ f(t) e^{-iωt} dt, donde t es el tiempo, ω es la frecuencia angular. La inversa: f(t) = (1/2π) ∫₋∞∞ f̂(ω) e^{iωt} dω. Existen variantes para funciones periódicas (series de Fourier) y secuencias discretas (transformada discreta de Fourier, DFT). El algoritmo de la transformada rápida de Fourier (Cooley–Tukey, 1965) permite calcular la DFT en O(n log n) operaciones. Propiedades: linealidad, el desplazamiento produce un factor de fase, la diferenciación ↔ multiplicación por iω, la convolución ↔ producto. Generalizaciones: TF multidimensional, TF con ventana, wavelets, análisis de Fourier en grupos. En física, la TF conecta los espacios de coordenadas y momento, dando lugar al principio de incertidumbre.</div>
+        <div class="section"><h2>History</h2><p>Jean-Baptiste Joseph Fourier en 1807 (publicado en 1822), en su memoria sobre la propagación del calor, mostró que una función arbitraria puede descomponerse en una serie trigonométrica. La idea encontró resistencia de Lagrange y Laplace, quienes dudaban de la convergencia de las series. Posteriormente, Dirichlet (1829) precisó las condiciones. En el siglo XX, Laurent Schwartz extendió la transformada a las funciones generalizadas (la función delta de Dirac). Hoy es la base del análisis armónico.</p></div>
+        <div class="section"><h2>How it works</h2><p>Matemáticamente, el núcleo e^{-iωt} actúa como una 'sonda': para cada frecuencia ω calculamos la correlación de la señal con la oscilación armónica de esa frecuencia. La integral mide la 'similitud'. Gracias a la ortogonalidad de las sinusoides, la descomposición es reversible sin pérdidas. La transformada rápida de Fourier aprovecha la simetría de las raíces complejas de la unidad, reduciendo el cálculo de una matriz grande a una serie de cálculos pequeños. En mecánica cuántica, la función de onda en la representación de momento es la imagen de Fourier de la función de onda en coordenadas, y la relación Δx Δp ≥ ħ/2 se deriva directamente de las propiedades de la TF.</p></div>
+        <div class="formula"><div class="formula-render">\hat{f}(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt</div><div class="formula-meaning">f(t) es la función original (usualmente el tiempo), ω es la frecuencia angular, i es la unidad imaginaria, e es la base del logaritmo natural.</div></div><div class="formula"><div class="formula-render">f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \hat{f}(\omega) e^{i\omega t} d\omega</div><div class="formula-meaning">A partir del espectro f̂(ω) se recupera la función original f(t). El factor 1/(2π) normaliza la transformada.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>No todas las funciones tienen una imagen de Fourier en el sentido clásico; se requiere una generalización a distribuciones.; Efecto Gibbs: en los puntos de discontinuidad, la serie de Fourier presenta sobreimpulsos cuya amplitud no disminuye al aumentar el número de términos (aproximadamente el 9% del salto).; La interpretación de frecuencias negativas en aplicaciones físicas no siempre es intuitiva.; Las señales no estacionarias requieren una TF con ventana o wavelets para un análisis adecuado.</p><p class="fact">💡 La transformada de Fourier de una función de soporte compacto (nula fuera de un intervalo finito) es una función analítica en todo el plano complejo; esto es el teorema de Paley-Wiener.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="actions" data-article-id="fourier_transform_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится">👍 <span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится">👎 <span class="rc">…</span></button><button class="react-btn" data-react="superlike" title="Супер!">⭐ <span class="rc">…</span></button></div><button class="fav-btn" data-fav="fourier_transform" title="favorite"><span class="fav-ic">☆</span> favorite</button></div>
+
+<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
+<div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div>
+<div class="mini-graph" data-node="t:fourier_transform"><canvas id="minigraph"></canvas></div>
+
+<div class="feedback" id="feedback" data-article-id="fourier_transform_es_page" data-entity-type="tag"><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+<div class="search-row">
+    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+</div>
+<div class="search-hint"># tag · @ author · ! scientist</div>
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related</div><a href="/lang/es/tags/fourier_series.html" class="side-tag" data-tag="fourier_series">serie de Fourier</a><a href="/lang/es/tags/interferometry.html" class="side-tag" data-tag="interferometry">interferometría</a><a href="/lang/es/tags/quantum_fourier_transform.html" class="side-tag" data-tag="quantum_fourier_transform">transformada cuántica de Fourier</a><a href="/lang/es/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">espectroscopía</a><a href="/lang/es/tags/wave_function.html" class="side-tag" data-tag="wave_function">función de onda</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="fourier_transform"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds —  · <a href="/lang/es/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
+<script src="/js/likes.js?v=d5d075c87a"></script>
+<script src="/js/search.js?v=d5d075c87a"></script>
+<script src="/js/force-graph.js?v=d5d075c87a"></script>
+<script src="/js/mini-graph.js?v=d5d075c87a"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('fourier_transform', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>
