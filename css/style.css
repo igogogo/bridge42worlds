@@ -1524,3 +1524,15 @@ h1, h2, h3, .card-title, .card-content h3, .tag-header h1, .scientist-header h1,
 /* Алиасы для унаследованных var(--accent/--fg/--card) фолбэков → брендовые.
    Чинит синий #4a90d9 у активных реакций, кнопки «отправить», fb-chip.active и пр. */
 :root { --accent: var(--cyan); --fg: var(--text); --card: var(--card-bg); }
+
+/* ═══ Брендовый слой — Проход 1d: заголовки-лейблы, футер, мелочи ═══ */
+.section-title { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--faint); border: none !important; padding: 0; margin: 32px 0 14px; }
+footer { border-top: 1px solid var(--hair); color: var(--faint); font-family: var(--mono); font-size: 12px; }
+footer a { color: var(--muted); }
+.mini-graph-label { color: var(--faint); font-family: var(--mono); }
+.subtitle { color: var(--muted); }
+.tag-stats, .stat-jump { color: var(--faint); }
+.stat-jump { color: var(--link); }
+/* серебристая мягкая рамка у мини-графа + галереи */
+.mini-graph, .gallery-main, .archive-calendar { border-radius: var(--radius-sm); }
