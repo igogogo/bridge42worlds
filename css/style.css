@@ -1507,3 +1507,20 @@ h1, h2, h3, .card-title, .card-content h3, .tag-header h1, .scientist-header h1,
 .nav-links a { font-family: var(--mono); font-size: 13px; color: var(--faint); transition: color .18s; }
 .nav-links a:hover { color: var(--ink); }
 .nav-links a.active { color: var(--ink); }
+
+/* ═══ Брендовый слой — Проход 1c: кнопки/пилюли ═══ */
+.react-btn, .fav-btn, .cal-btn, #search-toggle-btn, .search-clear, .author-verify-btn, .refine-toggle {
+  border: 1px solid var(--hair); background: var(--surface); color: var(--muted); border-radius: 999px;
+  transition: color .16s, border-color .16s, background-color .3s, transform .16s; }
+.react-btn:hover, .fav-btn:hover, .cal-btn:hover, #search-toggle-btn:hover, .author-verify-btn:hover, .refine-toggle:hover {
+  color: var(--ink); border-color: var(--faint); transform: translateY(-1px); }
+.react-btn.active, .fav-btn.active { color: var(--link); border-color: var(--link); }
+.law-chip, .fb-chip, .kg-chip, .related-tags a {
+  border: 1px solid var(--hair); background: var(--tag-bg); border-radius: 999px; padding: 4px 11px;
+  color: var(--muted); text-decoration: none; transition: color .16s, border-color .16s; display: inline-block; }
+.law-chip:hover, .fb-chip:hover, .kg-chip:hover, .related-tags a:hover { color: var(--link); border-color: var(--link); }
+.fb-chip.active { background: var(--link); color: #fff; border-color: var(--link); }
+
+/* Алиасы для унаследованных var(--accent/--fg/--card) фолбэков → брендовые.
+   Чинит синий #4a90d9 у активных реакций, кнопки «отправить», fb-chip.active и пр. */
+:root { --accent: var(--cyan); --fg: var(--text); --card: var(--card-bg); }
