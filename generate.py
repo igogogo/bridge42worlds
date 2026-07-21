@@ -3343,13 +3343,12 @@ def backfill_tag_law_images(force=False, gen_images=False, preset="image"):
         prompt = entry.get("image_prompt", "")
         got_prompt = got_img = False
         if not prompt or force:
-            fake = {
-                "title": entry.get("name", entity_id),
-                "oneliner": entry.get("description_popular", "") or entry.get("description", ""),
-                "description": entry.get("description", ""),
-                "main_tag": entity_id, "extra_tags": [],
-            }
-            new_prompt = generate_image_prompt(fake)
+            # Ref-промт (полу-схема с верной геометрией принципа), НЕ статейный кинематографичный —
+            # юзер-фидбек 2026-07-21: «визуализировать закон, среднее между схемой и принципом,
+            # главное не ошибиться в пространстве».
+            new_prompt = generate_ref_image_prompt(
+                entry.get("name", entity_id),
+                entry.get("description_popular", "") or entry.get("description", "") or entry.get("mini", ""))
             if new_prompt:
                 prompt = new_prompt
                 entry["image_prompt"] = prompt

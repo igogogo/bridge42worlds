@@ -250,6 +250,45 @@ def generate_image_prompt(scipop):
     return ""
 
 
+# Единый визуальный язык набора (юзер-фидбек 2026-07-21: «понравилась визуализация Казимира —
+# серебряный стиль, контраст везде, продолжай в этом стиле»): серебро/графит, высокий контраст,
+# богатая линейная фактура на светлом фоне + ОДИН выразительный цветной акцент.
+REF_PALETTES = ["silver and graphite linework on soft white, high tonal contrast",
+                "brushed-silver greys on a pale light background, crisp strong contrast",
+                "cool silver and slate on off-white, deep tonal contrast",
+                "metallic silver-grey filaments on bright white, sharp contrast",
+                "graphite and pewter on light grey, luminous high contrast",
+                "fine silver linework on airy white, bold light-and-dark contrast"]
+REF_ACCENTS = ["a single teal accent", "one warm gold accent", "a vivid coral accent",
+               "a luminous cyan accent", "a warm amber accent", "one deep magenta accent"]
+
+
+def generate_ref_image_prompt(name, description):
+    """FLUX-промпт для картинки ЗАКОНА/ПОНЯТИЯ — полу-схема с ВЕРНОЙ геометрией принципа
+    (data/prompts/image-generate-ref.txt). Отдельно от статейного image-generate: у обложки статьи
+    другая задача (кинематографичная сцена), а тут — узнаваемая корректная визуализация принципа.
+    До 3 попыток — агент иногда возвращает пусто."""
+    for _ in range(3):
+        prompt = load_prompt("image-generate-ref").format(
+            name=name or "", description=(description or "")[:600],
+            palette=random.choice(REF_PALETTES), accent=random.choice(REF_ACCENTS))
+        raw = ""
+        try:
+            r = chat("image_prompt", prompt)
+            raw = r.choices[0].message.content or ""
+        except Exception as e:
+            print(f"    ⚠️ ref image_prompt error: {e}")
+        out = ""
+        try:
+            out = json.loads(clean_json(raw)).get("prompt", "")
+        except Exception:
+            m = re.search(r'"prompt"\s*:\s*"(.+?)"\s*[,}]', raw, re.S) or re.search(r'"prompt"\s*:\s*"(.+)', raw, re.S)
+            out = (m.group(1).replace('\\"', '"').replace('\\n', ' ').strip()[:900] if m else "")
+        if out:
+            return out
+    return ""
+
+
 def generate_image(image_prompt, out_path, preset="image"):
     """Рисует картинку (DeepInfra, модель/размер из config.agents[preset]). Без ключа — пропуск.
     preset — имя блока в config.agents: "image" (текущая/дефолт), "image_cheap" (FLUX-1-schnell,
