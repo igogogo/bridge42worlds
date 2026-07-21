@@ -2880,7 +2880,17 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     print(f"\n{'=' * 60}\n📅 {date_str}{' [экспресс]' if express else ''}{f' [{category}]' if category else ''}\n{'=' * 60}")
     for lang in LANGUAGES: ensure_lang_structure(lang)
 
-    articles = fetch_arxiv(date_str, category=category or "astro-ph.*")
+    # category может быть НЕСКОЛЬКО категорий через запятую (мульти-периметр) — фетчим каждую,
+    # объединяем+дедупим по id, и select_best ранжирует ЕДИНЫМ пулом → настоящий топ-N/день по всем
+    # разделам, а не по одной категории (юзер-фидбер 2026-07-21: «20 лучших за день по всем разделам»).
+    cats = [c.strip() for c in (category or "astro-ph.*").split(",") if c.strip()]
+    articles, _seen = [], set()
+    for cat in cats:
+        for a in fetch_arxiv(date_str, category=cat):
+            if a["id"] not in _seen:
+                _seen.add(a["id"]); articles.append(a)
+    if len(cats) > 1:
+        print(f"  🔭 периметр {cats}: {len(articles)} уникальных кандидатов")
     if not articles: return 0
     best = select_best(articles, date_str)
     if limit is not None:

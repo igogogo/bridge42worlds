@@ -91,7 +91,7 @@ def cmd_daily(args):
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
-    generate.process_day(args.date or _yesterday(), force=args.force, express=args.express, category=args.category)
+    generate.process_day(args.date or _yesterday(), force=args.force, express=args.express, category=args.category, limit=args.limit)
 
 
 def cmd_range(args):
@@ -631,7 +631,8 @@ def build_parser():
     s.add_argument("--force", action="store_true", help="пересоздать уже существующие статьи")
     s.add_argument("--refine", action="store_true", help="рефлексивная шлифовка Simple и Popular")
     s.add_argument("--express", action="store_true", help="дешёвый режим: по аннотации, не по полному тексту PDF; только config.express.tiers полноценно (см. TODO.md)")
-    s.add_argument("--category", metavar="CAT", help="arXiv-категория для поиска (напр. quant-ph, cond-mat.*) — по умолчанию astro-ph.*")
+    s.add_argument("--category", metavar="CAT", help="arXiv-категория(и) для поиска — ОДНА или НЕСКОЛЬКО через запятую (напр. 'astro-ph.*,gr-qc,hep-th,quant-ph'); по умолчанию astro-ph.*")
+    s.add_argument("--limit", type=int, metavar="N", help="взять топ-N лучших за день (после ранжирования единым пулом по всем категориям)")
     s.set_defaults(func=cmd_daily, refine=False)
 
     s = sub.add_parser("range", help="диапазон дней для наполнения историей")
