@@ -197,14 +197,15 @@ document.addEventListener('click', e => {
     }
     const ct = e.target.closest('.fb-comment-toggle');
     if (ct) {
+        // Раскрывает .fb-expand (чипы + поле комментария + отправка) — в покое всё это скрыто,
+        // видна только кнопка «+ комментарий» (юзер-фидбек 2026-07-21: убрать перегруз с карточки).
         const wrap = ct.closest('.feedback');
-        const ta = wrap?.querySelector('.fb-comment');
-        const row = wrap?.querySelector('.fb-row');
-        if (ta) {
-            const show = ta.style.display === 'none';
-            ta.style.display = show ? 'block' : 'none';
-            if (row) row.hidden = !show;
-            if (show) ta.focus();
+        const exp = wrap?.querySelector('.fb-expand');
+        if (exp) {
+            const show = exp.hidden;
+            exp.hidden = !show;
+            ct.classList.toggle('open', show);
+            if (show) wrap.querySelector('.fb-comment')?.focus();
         }
         return;
     }

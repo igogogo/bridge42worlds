@@ -1087,6 +1087,11 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .feedback .fb-chip { flex: 0 0 auto; white-space: nowrap; cursor: pointer; font-size: 12px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 14px; user-select: none; }
 .feedback .fb-chip.active { background: var(--accent, #4a90d9); color: #fff; border-color: var(--accent, #4a90d9); }
 .feedback .fb-comment-toggle { background: none; border: none; color: var(--accent, #4a90d9); cursor: pointer; font-size: 12px; padding: 0 0 8px; }
+/* Всё содержимое отзыва (чипы + коммент + отправка) свёрнуто в .fb-expand,
+   раскрывается кнопкой «+ комментарий» (юзер-фидбек 2026-07-21). */
+.feedback .fb-expand[hidden] { display: none; }
+.feedback .fb-expand { margin-top: 2px; }
+.feedback .fb-comment-toggle.open { color: var(--muted, #888); }
 .feedback .fb-comment { width: 100%; box-sizing: border-box; resize: vertical; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font: inherit; font-size: 13px; background: var(--bg, transparent); color: var(--fg, inherit); }
 /* Скрыт по умолчанию — нужен только для комментария, чипы шлются сами по клику
    (юзер-фидбек 2026-07-15: "кнопка отправить только для комментария, появляется после +").

@@ -370,12 +370,19 @@ def build_feedback_html(like_id, lang, entity_type="article", next_button_html="
         lang, ("How does it read?", "+ add a comment",
                "comments are reviewed in batches — we may update the article", "send"))
     fb_chips = "".join(f'<span class="fb-chip" data-opt="{k}">{safe(loc.get(lang, loc["en"]))}</span>' for k, loc in FEEDBACK_CHIPS_LOC)
+    # Разгружено (юзер-фидбек 2026-07-21: «How does it read? — лишний текст; выбор ответов убрать
+    # внутрь открывающегося add comment, а то перегруз»). В покое видна только кнопка «+ комментарий»
+    # (и, на статье, кнопка «след. статья»); по клику раскрывается .fb-expand с чипами + полем + отправкой.
+    # fb_title больше не рендерится. Строка-заголовок остаётся только чтобы держать кнопку «след. статья».
+    title_row = f'<div class="fb-title-row">{next_button_html}</div>' if next_button_html else ''
     return (f'<div class="feedback" id="feedback" data-article-id="{like_id}" data-entity-type="{entity_type}">'
-            f'<div class="fb-title-row"><div class="fb-title">{safe(fb_title)}</div>{next_button_html}</div>'
-            f'<div class="fb-chips">{fb_chips}</div>'
+            f'{title_row}'
             f'<button type="button" class="fb-comment-toggle">{safe(fb_comment_lbl)}</button>'
-            f'<textarea class="fb-comment" rows="2" placeholder="{attr_safe(fb_placeholder)}" style="display:none"></textarea>'
-            f'<div class="fb-row" hidden><button class="fb-send">{safe(fb_send)}</button></div>'
+            f'<div class="fb-expand" hidden>'
+            f'<div class="fb-chips">{fb_chips}</div>'
+            f'<textarea class="fb-comment" rows="2" placeholder="{attr_safe(fb_placeholder)}"></textarea>'
+            f'<div class="fb-row"><button class="fb-send">{safe(fb_send)}</button></div>'
+            f'</div>'
             f'<span class="fb-status"></span>'
             f'</div>')
 
