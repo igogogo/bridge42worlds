@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=fe2a130960">
+    <link rel="stylesheet" href="/css/style.css?v=7425138f38">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -32,7 +32,19 @@
 
 <div class="langs" id="langs-bar"></div>
 
-<h1>👤 Karl Glazebrook</h1>
+<div class="tag-title-row">
+    <h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.6 19.2a6.4 6 0 0 1 12.8 0"/></svg> Karl Glazebrook</h1>
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск статей..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Поиск статей..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">@ автор · # тег · ! учёный</div>
+        </div>
+    </div>
+</div>
 <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> 5 статей · 30 соавторов · последняя: 2026-07-01</div>
 
 <div class="entity-body">
@@ -57,20 +69,14 @@
 <div class="mini-graph" data-author="Karl Glazebrook" data-tags="big_bang,galaxy,jwst,expansion_of_the_universe,spectroscopy,water,black_hole,photometry,cosmic_dust,dark_matter,hubble,dark_energy,hydrogen"><canvas id="minigraph"></canvas></div>
 -->
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Поиск статей..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">@ автор · # тег · ! учёный</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 
 <div id="search-results" class="entity-list" data-context-author="Karl_Glazebrook"><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-08-03/2508.01648/index.html">Радиопослание из эпохи молодости Вселенной</a></h3><div class="oneliner">Короткая радиовспышка пришла из галактики, существовавшей вскоре после Большого взрыва. Телескоп «Джеймс Уэбб» помог найти её — небольшое, клочковатое скопление звёзд, где бурно шло их рождение. Это первая вспышка, которую удалось привязать к объекту на таком расстоянии, и теперь по ней можно изучат</div><div class="meta">arXiv:2508.01648 · 2025-08-03</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2025-12-18/2512.16989/index.html">Как галактики «варили» металлы в эпоху космического полудня</a></h3><div class="oneliner">Астрономы изучили 34 древние галактики с помощью телескопа Джеймса Уэбба. Они точно измерили содержание кислорода и увидели, что более массивные галактики богаче тяжёлыми элементами. Эта зависимость оказалась похожей на современную, но компьютерные модели не смогли её воспроизвести. Похоже, основные</div><div class="meta">arXiv:2512.16989 · 2025-12-18</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-02-05/2602.06024/index.html">Холодный водяной след в красных точках космоса</a></h3><div class="oneliner">Телескоп Джеймса Уэбба обнаружил, что загадочные красные точки — это не горячие диски вокруг чёрных дыр, а плотные облака водяного пара с температурой около 2000–4000 °C. Это снизило оценки массы чёрных дыр на порядок.</div><div class="meta">arXiv:2602.06024 · 2026-02-05</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-06-01/2606.02698v1/index.html">Загадка «невозможных» галактик: цветная летопись окраин спасает космологию</a></h3><div class="oneliner">С помощью NIRCam на JWST астрономы изучили четыре сверхмассивные спящие галактики, чей свет шёл к нам более 11 миллиардов лет. Оказалось, что у трёх из них цвет плавно меняется от центра к окраинам: красные старые ядра окружены более голубыми молодыми областями. Эта цветовая карта снимает противореч</div><div class="meta">arXiv:2606.02698v1 · 2026-06-01</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/ru/archive/2026-07-01/2607.00982v1/index.html">Песочные часы древней галактики: JWST увидел зрелость, наступившую слишком рано</a></h3><div class="oneliner">Анализ изображений JWST и «Хаббла» с применением спектроскопии NIRSpec раскрыл детали далёкой дисковой галактики на z=0.92. Многокомпонентное моделирование показало, что X-образный балдж длиной 4.5 кпк и бар около 12 кпк уже присутствовали, когда возраст Вселенной составлял всего 6.2 млрд лет. Сумма</div><div class="meta">arXiv:2607.00982v1 · 2026-07-01</div></div></div></div>
 
 <footer><p>bridge42worlds — наука простыми словами · <a href="/lang/ru/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=fe2a130960"></script>
-<script src="/js/search.js?v=fe2a130960"></script>
+<script src="/js/likes.js?v=7425138f38"></script>
+<script src="/js/search.js?v=7425138f38"></script>
 <!-- force-graph.js/author-graph.js — мини-граф автора, см. комментарий выше в разметке -->
 
 </body>

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=fe2a130960">
+    <link rel="stylesheet" href="/css/style.css?v=7425138f38">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -32,7 +32,19 @@
 
 <div class="langs" id="langs-bar"></div>
 
-<h1>👤 Kevin B. Stevenson</h1>
+<div class="tag-title-row">
+    <h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.6 19.2a6.4 6 0 0 1 12.8 0"/></svg> Kevin B. Stevenson</h1>
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search articles..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search articles..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">@ author · # tag · ! scientist</div>
+        </div>
+    </div>
+</div>
 <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> 4 articles · 30 co-authors · latest: 2025-12-08</div>
 
 <div class="entity-body">
@@ -57,20 +69,14 @@
 <div class="mini-graph" data-author="Kevin B. Stevenson" data-tags="exoplanet,transit_method,jwst,hubble,numerical_simulation,exoplanet_atmosphere,planetary_migration,photometry,spectroscopy,water,carbon,standard_model"><canvas id="minigraph"></canvas></div>
 -->
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search articles..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">@ author · # tag · ! scientist</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 
 <div id="search-results" class="entity-list" data-context-author="Kevin_B_Stevenson"><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2024-10-02/2410.01625/index.html">The Invisible Conductor of the Super-Puff Planet System</a></h3><div class="oneliner">Meticulous 14-year observations of three 'cotton-candy' exoplanets in Kepler-51 yielded an unexpected surprise. The James Webb Space Telescope recorded the outermost known planet crossing the star's disk two hours ahead of schedule. The anomaly was only explained by adding an invisible fourth planet</div><div class="meta">arXiv:2410.01625 · 2024-10-02</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2025-09-19/2509.16082/index.html">Sulfur in the Clouds: Webb Spies a Super-Neptune's Atmosphere</a></h3><div class="oneliner">Webb studied the planet HAT-P-26 b and found water, carbon dioxide, and sulfur dioxide in its air. Previously, SO₂ had only been spotted on scorching hot giants or chilly sub-Neptunes; now it's clear that photochemistry works across a wide temperature range. A trend emerged: the higher the atmospher</div><div class="meta">arXiv:2509.16082 · 2025-09-19</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2025-10-06/2510.04863/index.html">The Invisible Planet in a Carbon Cocoon: How a Hot Neptune Cheated Death</a></h3><div class="oneliner">LTT-9779 b is a planet from the 'hot Neptune desert', a region where worlds usually perish. But it survived thanks to a carbon cocoon: an atmosphere of carbon monoxide and carbon dioxide turned out to be so thick that it doesn't evaporate even at 2000°C. On top of that, this exoplanet reflects 80% o</div><div class="meta">arXiv:2510.04863 · 2025-10-06</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2025-12-08/2512.07695/index.html">Wiretapping a Star: How a Naked Planet Helps Find Air</a></h3><div class="oneliner">The James Webb telescope is hunting for an atmosphere on TRAPPIST-1 e, but the star's flares get in the way. Scientists found a fix: record the noise using the neighboring airless planet TRAPPIST-1 b, then subtract it from the main signal. Early tests show the method works on quiet days, but a power</div><div class="meta">arXiv:2512.07695 · 2025-12-08</div></div></div></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=fe2a130960"></script>
-<script src="/js/search.js?v=fe2a130960"></script>
+<script src="/js/likes.js?v=7425138f38"></script>
+<script src="/js/search.js?v=7425138f38"></script>
 <!-- force-graph.js/author-graph.js — мини-граф автора, см. комментарий выше в разметке -->
 
 </body>

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css?v=fe2a130960">
+    <link rel="stylesheet" href="/css/style.css?v=7425138f38">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -32,7 +32,19 @@
 
 <div class="langs" id="langs-bar"></div>
 
-<h1>👤 Casey Papovich</h1>
+<div class="tag-title-row">
+    <h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.6 19.2a6.4 6 0 0 1 12.8 0"/></svg> Casey Papovich</h1>
+    <div class="search-bar">
+        <button type="button" id="search-toggle-btn" class="cal-btn" title="Search articles..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+        <div class="search-panel" id="search-panel">
+            <div class="search-row">
+                <input type="text" class="search-box" placeholder="Search articles..." oninput="doSearch(this.value)">
+                <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+            </div>
+            <div class="search-hint">@ author · # tag · ! scientist</div>
+        </div>
+    </div>
+</div>
 <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> 5 articles · 30 co-authors · latest: 2026-07-02</div>
 
 <div class="entity-body">
@@ -57,20 +69,14 @@
 <div class="mini-graph" data-author="Casey Papovich" data-tags="galaxy,jwst,big_bang,spectroscopy,hydrogen,black_hole,spacetime_curvature,water,quasar,cosmic_dust,expansion_of_the_universe,carbon,hubble"><canvas id="minigraph"></canvas></div>
 -->
 
-<div class="search-row">
-    <input type="text" class="search-box" placeholder="Search articles..." oninput="doSearch(this.value)">
-    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
-</div>
-<div class="search-hint">@ author · # tag · ! scientist</div>
-
 <div class="filters" id="active-filters"></div>
 </div>
 
 <div id="search-results" class="entity-list" data-context-author="Casey_Papovich"><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2025-12-02/2512.03154/index.html">A Galaxy That Slept for Half a Billion Years</a></h3><div class="oneliner">The 'Sleepy' galaxy in the early universe furiously gave birth to stars, but after 300 million years it fell asleep. A record-breaking hydrogen dip in its glow showed that not all bright early galaxies become giants—some doze off and turn into dwarfs.</div><div class="meta">arXiv:2512.03154 · 2025-12-02</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2026-01-09/2601.06015v1/index.html">Red Eyes: Cosmic Lens Reveals a Pair of Black Holes</a></h3><div class="oneliner">Using a gravitational lens — a massive cluster of galaxies bending light — the James Webb Space Telescope detected two red dots in a distant galaxy. These are intermediate-mass black holes, located not in the center but on the outskirts. The discovery suggests such invisible objects might be widespr</div><div class="meta">arXiv:2601.06015v1 · 2026-01-09</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2026-02-05/2602.06024/index.html">Cold Water Trail in the Red Dots of Space</a></h3><div class="oneliner">The James Webb Telescope discovered that the mysterious red dots are not hot disks around black holes, but dense clouds of water vapor with temperatures around 2000–4000 °C. This reduced the mass estimates of black holes by an order of magnitude.</div><div class="meta">arXiv:2602.06024 · 2026-02-05</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2026-06-04/2606.06575v1/index.html">Quasi-stars: The Furnaces Where Supermassive Black Holes Are Born</a></h3><div class="oneliner">The James Webb Space Telescope has spotted mysterious "Little Red Dots" in the early universe—compact objects that don't fit standard models. A new study suggests they may be quasi-stars: black holes shrouded in a dense gas cocoon that thermalizes radiation like a giant furnace. Calculations using t</div><div class="meta">arXiv:2606.06575v1 · 2026-06-04</div></div></div><div class="article-card"><div class="card-content"><h3><a href="/lang/en/archive/2026-07-02/2607.02666v1/index.html">Cosmic Cocoons: MEOW's Infrared Hunt Reveals the Secret Growth of Black Holes</a></h3><div class="oneliner">In a new study presented in the MEOW survey, astronomers used the MIRI infrared camera on the James Webb Space Telescope to search for dust-obscured active galactic nuclei from an era when the Universe was less than a billion years old. Analyzing the emission from hot dust allowed them to identify 1</div><div class="meta">arXiv:2607.02666v1 · 2026-07-02</div></div></div></div>
 
 <footer><p>bridge42worlds — science made simple · <a href="/lang/en/archive/">archive</a> · <a href="/status.html" class="status-badge" title="Status">42</a></p></footer>
-<script src="/js/likes.js?v=fe2a130960"></script>
-<script src="/js/search.js?v=fe2a130960"></script>
+<script src="/js/likes.js?v=7425138f38"></script>
+<script src="/js/search.js?v=7425138f38"></script>
 <!-- force-graph.js/author-graph.js — мини-граф автора, см. комментарий выше в разметке -->
 
 </body>
