@@ -42,6 +42,18 @@
   .hero h1 .n { font-family: var(--mono); font-weight: 600; background: linear-gradient(90deg, #E4A860, #5EBCD2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
   .hero .dek { font-size: 17px; color: rgba(236,233,225,.80); max-width: 48ch; margin: 0; }
   .hero .formula { position: absolute; font-family: var(--mono); color: rgba(236,233,225,.07); font-size: 13px; pointer-events: none; }
+  /* Переключатель языков гида */
+  .hero-langs { display: flex; gap: 6px; margin: 0 0 16px; }
+  .hero-langs a { font-family: var(--mono); font-size: 12px; color: rgba(236,233,225,.55);
+    border: 1px solid rgba(236,233,225,.18); border-radius: 999px; padding: 3px 11px;
+    text-decoration: none; transition: color .16s, border-color .16s, background .16s; }
+  .hero-langs a:hover { color: var(--ivory); border-color: rgba(236,233,225,.5); }
+  html[lang="ru"] .hero-langs a[href="/lang/ru/about.html"],
+  html[lang="en"] .hero-langs a[href="/lang/en/about.html"],
+  html[lang="es"] .hero-langs a[href="/lang/es/about.html"],
+  html[lang="ar"] .hero-langs a[href="/lang/ar/about.html"] {
+    color: var(--ivory); border-color: rgba(236,233,225,.5); background: rgba(236,233,225,.09); }
+  html[dir="rtl"] .hero-langs { flex-direction: row-reverse; justify-content: flex-end; }
   section { margin-top: 52px; }
   .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ochre); margin: 0 0 8px; }
   h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(21px, 4vw, 27px); line-height: 1.2; margin: 0 0 14px; letter-spacing: -.01em; text-wrap: balance; }
@@ -120,6 +132,9 @@
       <circle cx="196" cy="110" r="10" fill="#5EBCD2"/>
     </svg>
     </a>
+    <div class="hero-langs">
+      <a href="/lang/ru/about.html">RU</a><a href="/lang/en/about.html">EN</a><a href="/lang/es/about.html">ES</a><a href="/lang/ar/about.html">AR</a>
+    </div>
     <p class="eyebrow">$hero_eyebrow</p>
     <h1>$hero_h1</h1>
     <p class="dek">$hero_dek</p>
