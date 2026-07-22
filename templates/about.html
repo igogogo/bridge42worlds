@@ -110,10 +110,41 @@
     .rung { grid-template-columns: 1fr; }
     .rung .dot { display: none; }
   }
+  /* Топ-навигация сайта (самодостаточная, в токенах гида; паттерн как на сайте: main + ⋯) */
+  .topnav { display: flex; align-items: center; gap: 15px; margin: 0 0 22px; font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
+  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; margin-inline-end: auto; }
+  .topnav > a { color: var(--muted); text-decoration: none; transition: color .16s; }
+  .topnav > a:hover { color: var(--cyan); }
+  .topnav-more { position: relative; }
+  .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 9px; border-radius: 8px; transition: color .16s, background .16s; }
+  .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--cyan); background: var(--card); }
+  .topnav-panel { position: absolute; inset-inline-end: 0; top: 132%; display: none; flex-direction: column; gap: 2px; min-width: 158px;
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 8px; box-shadow: 0 18px 40px -20px rgba(0,0,0,.4); z-index: 30; }
+  .topnav-more.open .topnav-panel { display: flex; }
+  .topnav-panel a { padding: 6px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; transition: color .16s, background .16s; }
+  .topnav-panel a:hover { background: var(--card); color: var(--cyan); }
+  html[dir="rtl"] .topnav-panel { text-align: right; }
 </style>
 </head>
 <body>
 <div class="page"><div class="wrap">
+
+  <div class="topnav">
+    <a class="topnav-logo" href="/lang/$lang/index.html">bridge42worlds</a>
+    <a href="/lang/$lang/index.html">main</a>
+    <span class="topnav-more">
+      <button type="button" class="topnav-burger" aria-label="Menu" aria-expanded="false">⋯</button>
+      <span class="topnav-panel">
+        <a href="/lang/$lang/tags/">tags</a>
+        <a href="/lang/$lang/laws/">laws</a>
+        <a href="/lang/$lang/scientists/">scientists</a>
+        <a href="/lang/$lang/sections/">sections</a>
+        <a href="/lang/$lang/authors/">authors</a>
+        <a href="/lang/$lang/graph/">graph</a>
+        <a href="/lang/$lang/theory/">theory</a>
+      </span>
+    </span>
+  </div>
 
   <div class="hero">
     <span class="formula" style="top:16px;right:20px">e^iπ+1=0</span>
@@ -244,5 +275,14 @@
   </div>
 
 </div></div>
+<script>
+(function(){
+  var m = document.querySelector('.topnav-more');
+  var b = m && m.querySelector('.topnav-burger');
+  if (!b) return;
+  b.addEventListener('click', function(e){ e.stopPropagation(); var o = m.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  document.addEventListener('click', function(e){ if (!m.contains(e.target)) m.classList.remove('open'); });
+})();
+</script>
 </body>
 </html>
