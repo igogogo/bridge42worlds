@@ -22,6 +22,10 @@ data/bulk-select
 .claude
 **/api/
 
+# Внутренние продукт-материалы (презентации, гайды, дизайн) — НЕ часть сайта,
+# не публикуются в git. Geo Mind — конфиденциально (см. product/geomind/).
+product/
+
 
 # Secrets
 .env
@@ -33,3 +37,6 @@ data/bulk-select
 */arxiv-oai.xml
 **/arxiv-atom.xml
 **/arxiv-oai.xml
+
+# Источник контента для регенера (не грузится клиентом; держим локально)
+lang/*/archive/*/*/data.json
