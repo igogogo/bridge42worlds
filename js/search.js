@@ -1045,7 +1045,7 @@ function collapseNavOverflow() {
     var nav = document.querySelector('.nav-links');
     if (!nav || nav.dataset.navCollapsed) return;
     nav.dataset.navCollapsed = '1';
-    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/'];
+    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/', '/theory/'];
     var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
     var toCollapse = links.filter(function(a) {
         var href = a.getAttribute('href') || '';

@@ -15,7 +15,7 @@ from string import Template
 from common import CONFIG as config, LANGUAGES, DEFAULT_LANG, LANG_DIR, DEEPSEEK_API_KEY, load_prompt  # noqa: F401
 
 SITE_NAME = config.get("site_name", "bridge42worlds")
-SITE_URL = config.get("site_url", "https://bridge42worlds.org")
+SITE_URL = config.get("site_url", "https://bridge42worlds.academy")
 GOATCOUNTER = config.get("goatcounter", "bridge42worlds")
 MAX_ARTICLES = config.get("max_articles", 10)
 SELECTION_PERCENT = config.get("selection_percent", 10)
