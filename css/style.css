@@ -625,12 +625,24 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
 }
 .express-filter input { cursor: pointer; }
 .cat-chip {
-    cursor: pointer; color: var(--muted); padding: 0 8px; user-select: none; transition: color 0.15s;
+    cursor: pointer; color: var(--muted); padding: 0 9px; user-select: none;
+    border-radius: 999px; transition: color 0.15s, background 0.15s, box-shadow 0.15s;
     border-right: 1px solid var(--border);
 }
 .cat-chip:last-child { border-right: none; }
-.cat-chip:hover { color: var(--link); }
-.cat-chip.active { color: var(--link); font-weight: 600; }
+/* hover — тихий нейтральный фон + текст темнее (НЕ акцент-цвет), чтобы «наведён» не путался с «выбран» */
+.cat-chip:hover { color: var(--text); background: var(--tag-bg); border-right-color: transparent; }
+/* active — залитая пилюля циановым тинтом + циан-текст + жирность + тонкое кольцо; читается и без наведения */
+.cat-chip.active {
+    color: var(--link); font-weight: 600; border-right-color: transparent;
+    background: rgba(46,138,160,0.14);
+    background: color-mix(in srgb, var(--cyan) 16%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(46,138,160,0.32);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 34%, transparent);
+}
+.cat-chip.active:hover { background: color-mix(in srgb, var(--cyan) 22%, transparent); }
+/* RTL: разделитель у арабской раскладки слева — гасим его же на подсвеченном чипе */
+html[lang="ar"] .cat-chip:hover, html[lang="ar"] .cat-chip.active { border-left-color: transparent; }
 .cat-chip-n { font-size: 9.5px; color: var(--soft); margin-left: 2px; }
 .cat-chip.active .cat-chip-n { color: var(--link); opacity: 0.75; }
 
