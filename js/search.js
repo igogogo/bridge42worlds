@@ -705,7 +705,7 @@ function cardHTML(item) {
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
-            '<div class="card-meta">' + (item.reading ? '⏱ ' + item.reading + ' ' + UI.min + '<span class="sep">·</span>' : '') + 'arXiv:' + item.id + '</div>' +
+            '<div class="card-meta">' + (item.reading ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> ' + item.reading + ' ' + UI.min + '<span class="sep">·</span>' : '') + 'arXiv:' + item.id + '</div>' +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
             cardActions +
         '</div>' +

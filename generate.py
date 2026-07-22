@@ -1275,7 +1275,7 @@ def generate_tag_page(tag_id, lang):
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         tag_id=attr_safe(tag_id),
         tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
-        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{tag_graph.get("article_count", 0)}</a></div>'
+        tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{tag_graph.get("article_count", 0)}</a></div>'
                          if tag_graph.get("article_count", 0) else ""),
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html,
@@ -1624,7 +1624,7 @@ def generate_law_page(law_id, lang):
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
         mini_graph_filters_html=mini_graph_filters_html(lang, "law"),
         articles_label=safe(loc["articles"]), article_count=law_article_count,
-        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{law_article_count} {safe(loc["articles"])}</a></div>'
+        tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{law_article_count} {safe(loc["articles"])}</a></div>'
                          if law_article_count else ""),
         search_placeholder=safe(loc["article_search"]), search_hint=safe(loc["article_hint"]),
         primary_tag=attr_safe(",".join(law_tags)),
@@ -1963,7 +1963,7 @@ def generate_section_page(cat, lang, index=None):
         section_name=safe(ARXIV_CATEGORIES.get(cat, cat)), section_id=safe(cat),
         section_desc=safe(ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")),
         article_count=count, articles_label=safe(loc["articles"]),
-        tag_stats_html=(f'<div class="tag-stats">📊 <a class="stat-jump" href="#article-list">{count} {safe(loc["articles"])}</a></div>'
+        tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{count} {safe(loc["articles"])}</a></div>'
                          if count else ""),
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
@@ -2465,7 +2465,7 @@ h1{{font-size:22px}}h2{{font-size:15px;margin:24px 0 8px;color:#555}}
 .card{{flex:1;min-width:120px;background:#f6f6f6;border-radius:10px;padding:12px 14px}}
 .card b{{font-size:24px;display:block}}.card span{{color:#888;font-size:13px}}
 table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
-<h1>📊 Состояние системы</h1>
+<h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> Состояние системы</h1>
 <div class="cards">
 <div class="card"><b>{total}</b><span>статей</span></div>
 <div class="card"><b>{authors_n}</b><span>авторов</span></div>
