@@ -6,25 +6,32 @@
     <title>bridge42worlds — Science Made Simple</title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
+        body { background: var(--bg); }
         .landing { text-align: center; padding: 80px 20px; max-width: 500px; margin: 0 auto; }
-        .landing h1 { font-size: 1.8em; color: #2c2c2c; margin-bottom: 8px; font-family: 'Source Serif 4', serif; }
-        .landing p { color: #8a8a8a; margin-bottom: 40px; }
+        .landing h1 { font-size: 2em; color: var(--ink); margin-bottom: 8px;
+            font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; letter-spacing: -.01em; }
+        .landing h1 .n { font-family: ui-monospace, Menlo, monospace; font-weight: 600;
+            background: linear-gradient(92deg,#C77F3A,#2E8AA0); -webkit-background-clip: text;
+            background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .landing p { color: var(--muted); margin-bottom: 40px; }
         .flags { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .flags a { text-decoration: none; padding: 16px; border-radius: 12px; transition: background 0.2s; }
-        .flags a:hover { background: #f5f5f5; }
+        .flags a { text-decoration: none; padding: 16px; border-radius: 14px; transition: background 0.2s, transform 0.18s;
+            border: 1px solid var(--hair); }
+        .flags a:hover { background: var(--surface); transform: translateY(-2px); }
         .flag-code {
             display: flex; align-items: center; justify-content: center;
             width: 48px; height: 48px; margin: 0 auto; border-radius: 50%;
-            background: #2c2c2c; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
+            background: linear-gradient(135deg,#C77F3A,#2E8AA0); color: #fff;
+            font-family: ui-monospace, monospace; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
         }
-        .flag-label { font-size: 14px; color: #8a8a8a; display: block; margin-top: 8px; }
+        .flag-label { font-size: 14px; color: var(--muted); display: block; margin-top: 8px; }
     </style>
 </head>
 <body>
 <script>window.location.replace('/lang/en/index.html');</script>
 <div class="landing">
-    <h1>bridge42worlds</h1>
-    <p>A bridge between science and the world. Astrophysics — simple and clear.</p>
+    <h1>bridge<span class="n">42</span>worlds</h1>
+    <p>A bridge between science and the world — new discoveries, in plain words.</p>
     <div class="flags" id="flags">
         <a href="/lang/ru/index.html"><span class="flag-code">RU</span><span class="flag-label">Русский</span></a>
         <a href="/lang/en/index.html"><span class="flag-code">EN</span><span class="flag-label">English</span></a>
