@@ -297,9 +297,39 @@ def _render_paragraph(p, lang):
     return "".join(html_parts)
 
 
+_SCI_LOC_CACHE = {}
+
+
+def load_scientists_loc(lang):
+    """Локализованный справочник учёных (по образцу load_tags_loc), с откатом на язык по умолчанию."""
+    if lang not in _SCI_LOC_CACHE:
+        p = Path(f"lang/{lang}/data/scientists.json")
+        if not p.exists():
+            p = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
+        try:
+            _SCI_LOC_CACHE[lang] = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+        except json.JSONDecodeError:
+            _SCI_LOC_CACHE[lang] = {}
+    return _SCI_LOC_CACHE[lang]
+
+
+def _looks_russian_word(v):
+    """Для КОРОТКИХ подписей ссылок: одной кириллической буквы достаточно, порог по доле
+    (как в _looks_russian) тут не работает — подпись бывает в одно слово."""
+    return isinstance(v, str) and bool(_CYRILLIC.search(v))
+
+
 def parse_markers(text, lang):
     # Ссылку делаем ТОЛЬКО если тег/учёный реально существует. Модель иногда метит
     # понятия вне нашего списка — для них оставляем обычный текст, без битой ссылки.
+
+    # Подпись ссылки живёт прямо в маркере ([[tag:id|подпись]]) и приходит из перевода. Модель
+    # переводит прозу, но подпись местами оставляет русской — в английском тексте всплывало
+    # «пульсары», в арабском «чёрные дыры» (юзер 2026-07-23). Русскую подпись заменяем
+    # локализованным названием из справочника: детерминированно и без повторного перевода.
+    def fix_label(label, localized):
+        return localized if (lang != DEFAULT_LANG and _looks_russian_word(label) and localized) else label
+
     def tag_link(m):
         tid, label = m.group(1).strip(), m.group(2)
         if tid not in valid_tag_ids():
@@ -307,12 +337,14 @@ def parse_markers(text, lang):
             tid = alt if alt in valid_tag_ids() else None
         if not tid:
             return label
+        label = fix_label(label, load_tags_loc(lang).get(tid, {}).get("name"))
         return f'<a href="/{LANG_DIR}/{lang}/tags/{tid}.html" class="text-tag" data-tag="{tid}">{label}</a>'
 
     def scientist_link(m):
         name, label = m.group(1).strip(), m.group(2)
         if name not in valid_scientist_ids():
             return label
+        label = fix_label(label, load_scientists_loc(lang).get(name, {}).get("name"))
         return (f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(name))}.html" '
                 f'class="text-scientist" data-scientist="{attr_safe(name)}">{label}</a>')
 
@@ -324,6 +356,7 @@ def parse_markers(text, lang):
             lid = alt if alt in valid_law_ids() else None
         if not lid:
             return label
+        label = fix_label(label, load_laws_loc(lang).get(lid, {}).get("name"))
         return f'<a href="/{LANG_DIR}/{lang}/laws/{lid}.html" class="text-law" data-law="{lid}">{label}</a>'
 
     text = re.sub(r'\[tag:([^\]]+)\](.*?)\[/tag\]', tag_link, text)
@@ -360,14 +393,25 @@ def trivia_html(fun_fact, scifi=""):
 def abstract_for(abstract, lang, version):
     """Текст «Аннотации» нужного языка+версии с откатами. Обратно совместимо со старым
     плоским форматом (abstract{lang} = строка → одна на все версии). mini берёт popular."""
-    a = (abstract or {}).get(lang) or (abstract or {}).get(DEFAULT_LANG) or {}
+    a = (abstract or {}).get(lang)
+    # Откат на русскую аннотацию допустим ТОЛЬКО для русской страницы: иначе под арабской
+    # обвязкой висел русский абзац (юзер 2026-07-23 — нашёл русский текст на ar). Нет своей
+    # аннотации — не показываем никакой.
+    if not a and lang == DEFAULT_LANG:
+        a = (abstract or {}).get(DEFAULT_LANG)
+    a = a or {}
     if isinstance(a, str):
-        return a
+        return "" if lang != DEFAULT_LANG and _looks_russian(a) else a
     if isinstance(a, dict):
         if version == "mini":
             return ""  # у «мини» аннотация не нужна
-        return a.get(version) or a.get("popular") or next((t for t in a.values() if t), "")
+        t = a.get(version) or a.get("popular") or next((t for t in a.values() if t), "")
+        return "" if lang != DEFAULT_LANG and _looks_russian(t) else t
     return ""
+
+
+def _looks_russian(v):
+    return isinstance(v, str) and len(v) > 20 and len(_CYRILLIC.findall(v)) / len(v) > 0.30
 
 
 # Виджет обратной связи (реакции 👍👎⭐ + чипы + коммент) — общий для статей/тегов/законов/учёных.
@@ -825,8 +869,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         # "со статьи должна вести ссылка в раздел"; показываем ВСЕ разделы статьи, не только один).
         badges = " ".join(
             f'<a class="cat-badge" href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
-            f'data-cat="{c}" title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">'
-            f'{safe(ARXIV_CATEGORIES.get(c, c))}</a>' for c in cats[:5])
+            f'data-cat="{c}" title="{attr_safe(cat_desc(c, lang))}">'
+            f'{safe(cat_name(c, lang))}</a>' for c in cats[:5])
         categories_html = f'· {badges}'
 
     lic = article.get("license_url", "")
@@ -1160,7 +1204,7 @@ def generate_tags_cloud(lang):
     tm_groups.sort(key=lambda g: -g["count"])
     treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
 
-    (Path(LANG_DIR) / lang / "tags" / "index.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "tags" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -1285,7 +1329,7 @@ def generate_tag_page(tag_id, lang):
         + side_chip_group(SIDE_LAWS_LABEL.get(lang, SIDE_LAWS_LABEL["en"]), side_law_chips)
     )
 
-    (Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
@@ -1520,7 +1564,7 @@ def generate_laws_cloud(lang):
     treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
 
     (Path(LANG_DIR) / lang / "laws").mkdir(parents=True, exist_ok=True)
-    (Path(LANG_DIR) / lang / "laws" / "index.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "laws" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -1625,7 +1669,7 @@ def generate_law_page(law_id, lang):
         f'{L.get("name", law_id)} — bridge42worlds', desc_pop_for_og,
         f"{SITE_URL}/{LANG_DIR}/{lang}/laws/{law_id}.html", law_img_url and f"{SITE_URL}{law_img_url}")
 
-    (Path(LANG_DIR) / lang / "laws" / f"{law_id}.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "laws" / f"{law_id}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         og_meta_html=og_meta_html,
@@ -1733,7 +1777,7 @@ def generate_knowledge_graph_page(lang):
         return
     loc = GRAPH_LABELS.get(lang, GRAPH_LABELS["en"])
     (Path(LANG_DIR) / lang / "graph").mkdir(parents=True, exist_ok=True)
-    (Path(LANG_DIR) / lang / "graph" / "index.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "graph" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -1802,7 +1846,7 @@ def generate_scientists_cloud(lang):
         "ar": {"title": "العلماء", "subtitle": "العقول العظيمة وراء الاكتشافات.",
                "search": "ابحث عن علماء...", "footer": "العلم ببساطة"}
     }.get(lang, {"title": "Scientists", "subtitle": "", "search": "Find...", "footer": ""})
-    (Path(LANG_DIR) / lang / "scientists" / "index.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "scientists" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -1909,7 +1953,7 @@ def generate_scientist_page(sid, lang):
         f'{sid} — bridge42worlds', data.get("description", ""),
         f"{SITE_URL}/{LANG_DIR}/{lang}/scientists/{author_slug(sid)}.html")
 
-    (Path(LANG_DIR) / lang / "scientists" / f"{author_slug(sid)}.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "scientists" / f"{author_slug(sid)}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
@@ -1944,10 +1988,38 @@ def update_all_scientists(lang):
 
 
 # ── Разделы arXiv (отдельные страницы, как теги/законы/учёные) ──────────────────────────────
-# Категории arXiv — стандартная англоязычная таксономия (ARXIV_CATEGORIES/DESCRIPTIONS в gen_base),
-# поэтому имена разделов на всех языках английские (как и в фильтре ленты). id вида "astro-ph.HE"
-# → слаг с "_" вместо ".". (Юзер-фидбек 2026-07-20: "полноценная навигация по разделам, отдельная
-# страница разделов; со статьи должна вести ссылка в раздел".)
+# Категории arXiv — стандартная англоязычная таксономия (ARXIV_CATEGORIES/DESCRIPTIONS в gen_base).
+# Раньше из-за этого имена и описания разделов оставались английскими на ВСЕХ языках: русская
+# страница раздела открывалась заголовком "Superconductivity" (юзер-фидбек 2026-07-23: "почему
+# тут нет текста"). Переводы лежат отдельными файлами data/arxiv-categories-{lang}.json и
+# data/arxiv-category-descriptions-{lang}.json; английский набор из gen_base остаётся базой и
+# фоллбэком на любой недостающий ключ, так что новая категория никогда не выпадет в пустоту.
+# id вида "astro-ph.HE" → слаг с "_" вместо ".".
+_CAT_LOC_CACHE = {}
+
+
+def cat_loc(lang):
+    if lang not in _CAT_LOC_CACHE:
+        def load(p):
+            f = Path(p)
+            try:
+                return json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+            except json.JSONDecodeError:
+                print(f"  ⚠️ битый {p} — раздел останется по-английски")
+                return {}
+        _CAT_LOC_CACHE[lang] = (load(f"data/arxiv-categories-{lang}.json"),
+                                load(f"data/arxiv-category-descriptions-{lang}.json"))
+    return _CAT_LOC_CACHE[lang]
+
+
+def cat_name(cat, lang):
+    return cat_loc(lang)[0].get(cat) or ARXIV_CATEGORIES.get(cat, cat)
+
+
+def cat_desc(cat, lang):
+    return cat_loc(lang)[1].get(cat) or ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")
+
+
 def section_slug(cat):
     return cat.replace(".", "_").replace("/", "_")
 
@@ -1996,12 +2068,12 @@ def generate_section_page(cat, lang, index=None):
             f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
         )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
-    (Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
-        section_name=safe(ARXIV_CATEGORIES.get(cat, cat)), section_id=safe(cat),
-        section_desc=safe(ARXIV_CATEGORY_DESCRIPTIONS.get(cat, "")),
+        section_name=safe(cat_name(cat, lang)), section_id=safe(cat),
+        section_desc=safe(cat_desc(cat, lang)),
         article_count=count, articles_label=safe(loc["articles"]),
         tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{count} {safe(loc["articles"])}</a></div>'
                          if count else ""),
@@ -2034,7 +2106,7 @@ def generate_sections_cloud(lang):
     for prefix in sorted(groups.keys()):
         members = sorted(groups[prefix])
         gtotal = sum(counts[c] for c in members)
-        gname = ARXIV_CATEGORIES.get(prefix, "")
+        gname = cat_loc(lang)[0].get(prefix) or ARXIV_CATEGORIES.get(prefix, "")
         rows += (
             f'<tr class="section-group"><td colspan="2">'
             f'<span class="section-group-code">{safe(prefix)}</span>'
@@ -2044,12 +2116,12 @@ def generate_sections_cloud(lang):
         for c in members:
             rows += (
                 f'<tr><td><a href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
-                f'title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">{safe(ARXIV_CATEGORIES.get(c, c))}</a></td>'
+                f'title="{attr_safe(cat_desc(c, lang))}">{safe(cat_name(c, lang))}</a></td>'
                 f'<td class="section-code">{safe(c)}</td>'
                 f'<td class="section-count">{counts[c]}</td></tr>'
             )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
-    (Path(LANG_DIR) / lang / "sections" / "index.html").write_text(tpl.substitute(
+    _write_text_retry(Path(LANG_DIR) / lang / "sections" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -2201,7 +2273,7 @@ def update_all_authors():
         # Облако авторов (index) — один дефолтный ярус (поиск на странице ищет по всем через граф).
         index_subtitle = loc["subtitle"] + (
             " " + loc["default_hint"].format(letter=default_letter) if default_letter else "")
-        (Path(LANG_DIR) / lang / "authors" / "index.html").write_text(tpl_cloud.substitute(
+        _write_text_retry(Path(LANG_DIR) / lang / "authors" / "index.html", tpl_cloud.substitute(
             lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
             fav_title=safe(nav_fav_title(lang)),
             version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -2213,7 +2285,7 @@ def update_all_authors():
         ), encoding="utf-8")
 
         for letter in letters_with_content:
-            (Path(LANG_DIR) / lang / "authors" / f"{letter.lower()}.html").write_text(tpl_cloud.substitute(
+            _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{letter.lower()}.html", tpl_cloud.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
                 version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -2223,7 +2295,7 @@ def update_all_authors():
                 author_sections_html=gen_letter_section(letter), footer_text=safe(loc["footer"])
             ), encoding="utf-8")
         if sections.get("#"):
-            (Path(LANG_DIR) / lang / "authors" / "other.html").write_text(tpl_cloud.substitute(
+            _write_text_retry(Path(LANG_DIR) / lang / "authors" / "other.html", tpl_cloud.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
                 version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -2264,7 +2336,7 @@ def update_all_authors():
                 f'<a href="/{lbase}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
                 for lid in author_law_ids[:20]
             )
-            (Path(LANG_DIR) / lang / "authors" / f"{slug}.html").write_text(tpl_page.substitute(
+            _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
                 version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
@@ -2635,7 +2707,9 @@ def write_arxiv_categories_json():
         json.dumps(ARXIV_CATEGORY_DESCRIPTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def _write_text_retry(path, text, retries=3):
+def _write_text_retry(path, text, retries=3, encoding="utf-8"):
+    # encoding принимается только ради совместимости с вызовами вида write_text(..., encoding="utf-8"),
+    # переведёнными на этот хелпер: пишем всегда в utf-8.
     """write_text() с ретраем — Windows иногда отдаёт OSError [Errno 22] на ровном месте при
     записи (антивирус/индексатор держит файл долю секунды) — раньше это ронуло ВЕСЬ
     regenerate_all_html() на одной статье из 1000+, приходилось перезапускать с нуля.
@@ -2682,6 +2756,10 @@ def regenerate_all_html():
             for lang in LANGUAGES:
                 scipop = version_scipop(data, version, lang)
                 if not scipop: continue
+                # version_scipop молча откатывается на DEFAULT_LANG — из-за этого арабские
+                # страницы выходили с русским текстом. Нет перевода → честная заглушка.
+                if lang != DEFAULT_LANG and payload_in_source_lang(scipop):
+                    scipop = untranslated_stub(scipop, lang, {"en": version_scipop(data, version, "en") or {}})
                 html = gen_article_html(scipop, article_obj, date_str,
                                         [str(p) for p in images], lang, version,
                                         captions_for_lang(captions, lang), abstract)
@@ -2699,6 +2777,10 @@ def regenerate_all_html():
             base_scipop = version_scipop(data, "popular", lang) or version_scipop(data, "simple", lang) or {}
             if base_scipop.get("express_locked"):
                 base_scipop = version_scipop(data, "simple", lang) or base_scipop
+            if lang != DEFAULT_LANG and payload_in_source_lang(base_scipop):
+                base_scipop = untranslated_stub(base_scipop, lang,
+                                                {"en": version_scipop(data, "popular", "en") or {}})
+                base_scipop["threads"] = base_scipop["text"]   # иначе mini просто не запишется
             # express: реальный тир хранит короткий текст в "mini", не "threads" (см. write_article_pages)
             threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
             if not threads_text:
@@ -2958,6 +3040,61 @@ def build_article(a, date_str, inputs, force=False, express=False):
         return None
 
 
+_CYRILLIC = re.compile(r"[Ѐ-ӿ]")
+
+# «Ещё не переведено» — честная заглушка вместо русского текста под арабской обвязкой
+# (юзер 2026-07-23: «если нет перевода, лучше говорить что статья ещё не переведена,
+# а не показывать русскую версию»). Такую статью НЕ кладём в индекс языка: в ленте её
+# не будет вовсе, страница остаётся доступной по прямой ссылке.
+NOT_TRANSLATED = {
+    "ru": ("Перевод готовится", "Эта статья ещё не переведена на этот язык. Она уже доступна на других языках — переключите язык в шапке."),
+    "en": ("Translation in progress", "This article has not been translated into this language yet. It is already available in other languages — switch the language in the header."),
+    "es": ("Traducción en curso", "Este artículo aún no está traducido a este idioma. Ya está disponible en otros idiomas: cambie el idioma en la cabecera."),
+    "ar": ("الترجمة قيد الإعداد", "لم تُترجم هذه المقالة إلى هذه اللغة بعد. وهي متاحة بالفعل بلغات أخرى، فبدّل اللغة من الشريط العلوي."),
+    "fr": ("Traduction en cours", "Cet article n'est pas encore traduit dans cette langue. Il est déjà disponible dans d'autres langues : changez de langue dans l'en-tête."),
+    "zh": ("翻译准备中", "本文尚未翻译成该语言，但已有其他语言版本，可在页首切换语言。"),
+}
+
+
+def payload_in_source_lang(payload):
+    """True, если в поле перевода лежит русский оригинал. translate_scipop() при неудаче
+    молча возвращает исходный scipop, поэтому «переведённая» статья бывает целиком русской."""
+    if not isinstance(payload, dict):
+        return False
+    for key in ("title", "oneliner", "description", "text"):
+        v = payload.get(key)
+        if isinstance(v, str) and len(v) > 20 and len(_CYRILLIC.findall(v)) / len(v) > 0.30:
+            return True
+    return False
+
+
+def untranslated_stub(scipop_ru, lang, per_lang=None):
+    """Скелет той же формы, что настоящий scipop (чтобы шаблон не развалился), но без текста.
+    Заголовок берём из английской версии, если она есть — она читаема шире русской."""
+    head, body = NOT_TRANSLATED.get(lang, NOT_TRANSLATED["en"])
+    en = (per_lang or {}).get("en") or {}
+    stub = {}
+    for k, v in (scipop_ru or {}).items():
+        stub[k] = "" if isinstance(v, str) else ([] if isinstance(v, list) else v)
+    stub["title"] = en.get("title") or head
+    stub["oneliner"] = body
+    stub["text"] = body
+    stub["untranslated"] = True
+    return stub
+
+
+def pick_scipop(versions_ru, translations, v, lang):
+    """Единая точка выбора текста статьи под язык. Раньше здесь был молчаливый откат на
+    versions_ru[v] — из-за него арабская страница показывала русский текст."""
+    if lang == DEFAULT_LANG:
+        return versions_ru[v], True
+    per_lang = translations.get(v, {})
+    tr = per_lang.get(lang)
+    if tr and not payload_in_source_lang(tr):
+        return tr, True
+    return untranslated_stub(versions_ru.get(v) or {}, lang, per_lang), False
+
+
 def write_article_pages(item, date_str):
     """Фаза B (последовательно): HTML по языкам×версиям + индексы/графы (read-modify-write)."""
     a, images = item["article"], item["images"]
@@ -2969,10 +3106,11 @@ def write_article_pages(item, date_str):
         lang_folder = Path(LANG_DIR) / lang / "archive" / date_str / a["id"]
         lang_folder.mkdir(parents=True, exist_ok=True)
         for v in VERSIONS:
-            scipop = versions_ru[v] if lang == DEFAULT_LANG else translations.get(v, {}).get(lang, versions_ru[v])
+            scipop, translated = pick_scipop(versions_ru, translations, v, lang)
             (lang_folder / VERSION_FILES[v]).write_text(
                 gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract), encoding="utf-8")
-            update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
+            if translated:
+                update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
     # Mini-версия — threads-текст (полный, до обрезки). Источник title/oneliner для мини —
     # popular, ЕСЛИ он настоящий контент; если popular — экспресс-заглушка (express_locked),
     # берём simple (реально сгенерированный тир) — иначе на mini-странице повиснет
@@ -2987,9 +3125,10 @@ def write_article_pages(item, date_str):
                 if mini_source.get("express_locked"):
                     mini_source = versions_ru.get("simple") or mini_source
             else:
-                mini_source = translations.get("popular", {}).get(l) or versions_ru["popular"]
+                # тот же выбор, что и для обычных тиров: без перевода — заглушка, не русский текст
+                mini_source, _ok = pick_scipop(versions_ru, translations, "popular", l)
                 if mini_source.get("express_locked"):
-                    mini_source = translations.get("simple", {}).get(l) or versions_ru.get("simple") or mini_source
+                    mini_source, _ok = pick_scipop(versions_ru, translations, "simple", l)
             # express: реальный тир (simple) хранит короткий текст в поле "mini", не "threads"
             # ("threads" — только у попап-заглушки, express_locked_scipop бэкфиллит его из RU).
             threads_text = (mini_source.get("threads") or mini_source.get("mini")
@@ -3096,7 +3235,9 @@ def rebuild_indexes():
         for version in VERSIONS:
             for lang in LANGUAGES:
                 scipop = version_scipop(data, version, lang)
-                if scipop:
+                # Непереведённую статью в ленту языка не пускаем: version_scipop откатывается
+                # на русский оригинал, и карточки в арабской ленте выходили русскими.
+                if scipop and not (lang != DEFAULT_LANG and payload_in_source_lang(scipop)):
                     buckets[lang][version].append(_index_entry(scipop, data, date_str, lang, version))
     for lang in LANGUAGES:
         base = Path(LANG_DIR) / lang

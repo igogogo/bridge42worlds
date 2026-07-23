@@ -260,8 +260,18 @@ Promise.all(
             return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
         }),
         fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-        fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
-        fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
+        // Локализованный набор названий/описаний разделов, с откатом на английскую базу —
+        // она же остаётся источником для lang=en и для категорий, перевода которых ещё нет.
+        fetch('/data/arxiv-categories-' + lang + '.json').then(function(r) {
+            if (!r.ok) throw 0; return r.json();
+        }).catch(function() {
+            return fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; });
+        }),
+        fetch('/data/arxiv-category-descriptions-' + lang + '.json').then(function(r) {
+            if (!r.ok) throw 0; return r.json();
+        }).catch(function() {
+            return fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; });
+        })
     ])
 ).then(function(results) {
     var otherIndexes = results.slice(0, OTHER_VERSIONS.length);
