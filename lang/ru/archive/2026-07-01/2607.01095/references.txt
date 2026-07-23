@@ -1,0 +1,410 @@
+Arregui, I., Oliver, R., & Ballester, J. L. 2018, Living Rev. Sol. Phys., 15, 3,
+publisher: Springer International Publishing
+Atoum, I. & Ali, M. 2013, Int. J. Astron. Astrophys., 2, p56
+Beckwith-Chandler, W., Foullon, C., & Verwichte, E. 2024, ApJ, 977, 253
+Bernasconi, P. N., Rust, D. M., & Hakim, D. 2005, Sol. Phys., 228, 97
+Castelló, G., Luna, M., & Terradas, J. 2025, A&A, 694, A237
+Diercke, A., Jarolim, R., Kuckein, C., et al. 2024, A&A, 686, A213
+Diquigiovanni, J., Fontana, M., & Vantini, S. 2022, J. Multivar. Anal., 189,
+104879
+Efremov, V . I., Parfinenko, L. D., & Solov’ev, A. A. 2016, Sol. Phys., 291, 3357,
+publisher: Springer Netherlands
+Foullon, C., Verwichte, E., & Nakariakov, V . M. 2004, A&A, 427, L5, publisher:
+EDP Sciences
+Foullon, C., Verwichte, E., & Nakariakov, V . M. 2009, ApJ, 700, 1658, publisher:
+IOP Publishing
+Fuller, N. & Aboudarham, J. 2004, in Knowledge-Based Intelligent Information
+and Engineering Systems, ed. M. G. Negoita, R. J. Howlett, & L. C. Jain
+(Berlin, Heidelberg: Springer Berlin Heidelberg), 467–475
+Gao, J., Wang, H., & Zhou, M. 2002, Sol. Phys., 205, 93
+Gao, M., Ning, Z., Yang, Y ., et al. 2025, Universe, 11, 401
+Gibson, S. E. 2018, Living Rev. Sol. Phys., 15, 7
+Guo, X., Yang, Y ., Feng, S., et al. 2022, Sol. Phys., 297, 104
+Hao, Q., Fang, C., & Chen, P. F. 2013, Sol. Phys., 286, 385
+Hill, F., Fischer, G., Forgach, S., et al. 1994, Sol. Phys., 152, 351, publisher:
+Springer Netherlands
+Jing, J., Lee, J., Spirock, T. J., & Wang, H. 2006, Sol. Phys., 236, 97
+Lei, J., G’Sell, M., Rinaldo, A., Tibshirani, R. J., & Wasserman, L. 2018, JASA,
+113, 1094
+Lemen, J. R., Title, A. M., Akin, D. J., et al. 2011, Sol. Phys., 275, 17, publisher:
+Springer Netherlands
+Liu, D., Song, W., Lin, G., & Wang, H. 2021, Sol. Phys., 296, 176
+Luna, M., Joshi, R., Schmieder, B., et al. 2024, A&A, 691, A354
+Luna, M. & Karpen, J. 2012, ApJ, 750, L1
+Luna, M., Karpen, J., Ballester, J. L., et al. 2018, ApJS, 236, 35, publisher: IOP
+Publishing
+Luna, M., Mérou Mestre, J. R., & Auchère, F. 2022, A&A, 666, A195
+Mackay, D. H., Karpen, J. T., Ballester, J. L., Schmieder, B., & Aulanier, G.
+2010, Space Sci. Rev., 151, 333
+Okamoto, T. J., Nakai, H., Keiyama, A., et al. 2004, ApJ, 608, 1124
+Oliver, R. & Ballester, J. L. 2002, Sol. Phys., 206, 45
+Qu, M., Shih, F. Y ., Jing, J., & Wang, H. 2005, Sol. Phys., 228, 119
+Reche, A. & Cid, C. 2024, in Proceedings of SPAICE2024: The First Joint Eu-
+ropean Space Agency/IAA Conference on AI in and for Space, ed. D. Dold,
+A. Hadjiivanov, & D. Izzo, 69–74
+Romano, Y ., Patterson, E., & Candès, E. J. 2019, arXiv e-prints,
+arXiv:1905.03222
+Shen, Y ., Liu, Y . D., Chen, P. F., & Ichimoto, K. 2014, ApJ, 795, 130
+Shih, F. Y . & Kowalski, A. J. 2003, Sol. Phys., 218, 99
+Tripathi, D., Isobe, H., & Jain, R. 2009, Space Sci. Rev., 149, 283
+V ovk, V ., Gammerman, A., & Shafer, G. 2005, Algorithmic Learning in a Ran-
+dom World (New York: Springer)
+Vršnak, B., Veronig, A. M., Thalmann, J. K., & Žic, T. 2007, A&A, 471, 295
+Zhang, Q. M., Chen, P. F., Xia, C., & Keppens, R. 2012, A&A, 542, A52
+Zhang, Q. M., Li, T., Zheng, R. S., Su, Y . N., & Ji, H. S. 2017, ApJ, 842, 27
+Zharkova, V . & Schetinin, V . 2005, Sol. Phys., 228, 137
+Zhu, G., Lin, G., Wang, D., Liu, S., & Yang, X. 2019, Sol. Phys., 294, 117
+Article number, page 10
+G. Castelló et al.: Automatic detection of solar filament oscillations I: Multi-scale spectral pipeline
+Appendix A: Preprocessing visualization
+To illustrate the data preprocessing pipeline described in Section
+2.3, Figure A.1 provides a qualitative visualization of the proce-
+dure applied to four representative GONG Hαframes.
+The rows are organized by initial image quality, ranging from
+very low (top) to good quality (bottom). Each column repre-
+sents a successive stage of the pipeline: the raw GONG obser-
+vations (left), the intermediate results after initial selection and
+limb-darkening/spatial background corrections (middle), and the
+final output following outlier detection, temporal alignment to
+12:00:00 UT, and solar disk masking (right). Frames that fail to
+meet the quality thresholds at any stage are marked with a red
+crossed-circle icon.
+The very low-quality frame Fig. A.1(a) is discarded at
+the initial filtering stage Fig. A.1(e,i). The low-quality frame
+Fig. A.1(b) passes the first selection but is ultimately rejected
+during the outlier-detection step Fig. A.1(j) due to persistent
+cloud contamination. In contrast, the medium- and good-quality
+examples Fig. A.1(c,d) pass all stages and are retained for anal-
+ysis. Specifically, the transition from the raw frames to the cor-
+rected versions Fig. A.1(g,h) highlights the effectiveness of the
+limb-darkening and background corrections in mitigating large-
+scale intensity gradients, such as the darkening on the eastern
+limb. This process ensures the spatial homogeneity and temporal
+consistency required for the subsequent segmentation and spec-
+tral analysis, as seen in the final processed frames Fig. A.1(k,l).
+Appendix B: Conformal calibration of the spectral
+detection threshold
+A pixel-level intensity time series observed by a solar telescope
+can be written schematically as
+I(t)=I signal(t)+ϵ(t),(B.1)
+whereI signal(t) denotes the component of scientific interest, in
+our case a possible periodic signal, andϵ(t) represents the re-
+maining stochastic and instrumental contributions to the obser-
+vation.
+For each time series, we compute a Lomb–Scargle or gen-
+eralized periodogram, denoted byP(f). We interpret this peri-
+odogram as a noisy estimator of an underlying power spectral
+density (PSD),
+P(f)=S(f)ϵ aleatoric =
+h
+Ssignal(f)+S noise(f)
+i
+ϵaleatoric,(B.2)
+whereS(f) is the true PSD,S signal(f) is the contribution asso-
+ciated with the physical signal of interest,S noise(f) is the back-
+ground noise PSD, andϵaleatoric represents the intrinsic stochastic
+variability of the periodogram estimator. In the absence of a co-
+herent signal,I signal(t)=0, the time series is purely noise and the
+observed periodogram fluctuates around the noise background,
+P(f)=S noise(f)ϵ aleatoric.(B.3)
+In solar observations such as those analyzed here, back-
+ground power spectra are commonly described by a smooth
+power-law component, sometimes with an additive white-noise
+floor at high frequencies. In this work, the adopted background
+model is the parametric form given in Eq. (4). The role of
+the CNN introduced in Castelló et al. (2025) is to estimate the
+parameters of this background model from an observed peri-
+odogram,
+CNN(P(f) ) →ˆΘ ={ˆa,ˆα,ˆb}→ ˆS(f; ˆΘ),(B.4)
+where ˆS(f; ˆΘ) denotes the CNN-estimated background PSD.
+This estimate is not assumed to be exact. It contains both the
+uncertainty intrinsic to the periodogram and the approximation
+error of the learned model.
+We therefore calibrate the detection threshold using a
+conformal-prediction strategy. Conformal prediction provides a
+distribution-free framework for converting calibration residu-
+als into finite-sample uncertainty sets under exchangeability as-
+sumptions (V ovk et al. 2005). In the present setting, we use this
+idea not to construct prediction intervals for a scalar response,
+but to calibrate a frequency-dependent upper threshold for peri-
+odogram power.
+The calibration set is constructed from pixels sampled out-
+side the filament regions. Over the period range considered in
+this work, from 3 hours down to 16.66 minutes, these pixels are
+assumed not to contain the filament oscillations targeted by the
+pipeline. For a calibration pixel, the observed time series is there-
+fore modeled as
+Ical(t)=ϵ(t),(B.5)
+and its periodogram can be written as
+Pcal(f)=S cal(f)ϵ aleatoric.(B.6)
+Passing this calibration periodogram through the CNN gives
+CNN(Pcal(f) ) →ˆΘcal ={ˆa,ˆα,ˆb}→ ˆScal(f; ˆΘcal).(B.7)
+We compute calibration residuals in logarithmic space. This
+is convenient because the dominant periodogram variability is
+multiplicative in linear power, whereas the logarithmic transform
+makes it additive:
+logPcal(f)=logS cal(f)+logϵ aleatoric.(B.8)
+The residual score for a calibration pixel is then defined as
+Rcal(f)=logP cal(f)−log ˆScal(f; ˆΘcal)
+=
+h
+logScal(f)−log ˆScal(f; ˆΘcal)
+i
++logϵ aleatoric.(B.9)
+The first term represents the error of the CNN background esti-
+mate, while the second term represents the irreducible variabil-
+ity of the periodogram estimator. Thus, the residual distribution
+estimated from quiet-Sun pixels captures both sources of uncer-
+tainty under the null hypothesis of no target oscillatory signal.
+Repeating this procedure for allN cal calibration pixels gives
+a set of residual curves
+{Ri(f) }Ncal
+i=1 .(B.10)
+In the implementation used in this work, these residuals are ro-
+bustly standardized at each frequency using the median and me-
+dian absolute deviation. This step removes frequency-dependent
+bias and scale variations, so that the conformal scores are cali-
+brated on a comparable scale across the spectrum. Similar score-
+normalization ideas are commonly used in locally adaptive con-
+formal methods, where residuals are rescaled to account for non-
+constant uncertainty (Lei et al. 2018; Romano et al. 2019). For
+clarity of exposition, the equations below are written for the un-
+standardized residualsR i(f), but the same construction is ap-
+plied to the standardized scoresZi(f) in the pipeline. For a target
+miscoverage levelδ, we compute a frequency-dependent empir-
+ical conformal quantile. Let
+k= ⌈(Ncal +1)(1−δ) ⌉.(B.11)
+Article number, page 11
+A&A proofs:manuscript no. aanda
+-1000
+-500
+0
+500
+1000
+Y (arcsec)
+(a)
+ (e)
+ (i)
+-1000
+-500
+0
+500
+1000
+Y (arcsec)
+(b)
+ (f)
+ (j)
+-1000
+-500
+0
+500
+1000
+Y (arcsec)
+(c)
+ (g)
+ (k)
+-1000 -500 0 500 1000
+X (arcsec)
+-1000
+-500
+0
+500
+1000
+Y (arcsec)
+(d)
+-1000 -500 0 500 1000
+X (arcsec)
+(h)
+-1000 -500 0 500 1000
+X (arcsec)
+(l)
+Fig. A.1: Preprocessing pipeline stages for representative GONG Hαframes. Rows display examples with different initial quality
+levels, ranging from very low (top) to good (bottom). Left column: Raw input frames from the GONG network. Middle column:
+Intermediate results after initial selection, limb-darkening correction, and spatial background correction. Right column: Final pre-
+processed frames following outlier detection, temporal alignment to 12:00:00 UT, and solar disk masking. A red crossed-circle icon
+denotes frames discarded by the pipeline at the corresponding stage.
+Then, for each frequencyf, we define
+q1−δ(f)=R (k)(f),(B.12)
+whereR(k)(f) is thek-th order statistic of the calibration resid-
+uals at frequencyf. This is the standard split-conformal finite-
+sample correction, using (N cal +1)(1−δ) rather than the naive
+empirical (1−δ)-quantile (Lei et al. 2018). In practice, this re-
+quiresk≤N cal; otherwise, the requested confidence level is more
+extreme than what can be resolved by the finite calibration sam-
+ple. The quantityq1−δ(f) is local in frequency. It estimates, under
+the quiet-Sun calibration distribution, how far above the CNN-
+predicted background a periodogram value can fluctuate at fre-
+quencyfdue only to background-model error and the intrinsic
+variability of the periodogram estimator. Therefore, if the CNN
+has frequency-dependent errors, or if some frequency ranges are
+intrinsically more variable than others, this behavior is incorpo-
+rated into the calibrated threshold. For a test pixel, which may or
+Article number, page 12
+G. Castelló et al.: Automatic detection of solar filament oscillations I: Multi-scale spectral pipeline
+may not contain an oscillatory signal, we first estimate its back-
+ground PSD using the CNN:
+CNN(Ptest(f) ) → ˆStest(f).(B.13)
+The calibrated upper threshold in linear power is then
+τ(f)= ˆStest(f) exp (q1−δ(f) ) .(B.14)
+A periodogram peak satisfying
+Ptest(f)>τ(f) (B.15)
+is therefore interpreted as exceeding the level expected from the
+calibrated quiet-Sun background at frequencyf. This construc-
+tion should be understood as a pointwise, frequency-dependent
+conformal threshold. It calibrates the exceedance probability in-
+dependently at each frequency, rather than providing a simulta-
+neous guarantee over the full spectral curve. Conformal meth-
+ods for functional or curve-valued outputs provide the appropri-
+ate framework when simultaneous bands over an entire function
+domain are required (Diquigiovanni et al. 2022). In the present
+work, the pointwise formulation is sufficient because candidate
+oscillatory events are subsequently consolidated through spec-
+tral, spatial, and multi-scale consistency criteria.
+B.1. Validation of significance levels using MCMC
+The CP framework is validated by comparing its results against
+a standard Markov Chain Monte Carlo (MCMC) analysis of the
+power spectral density (PSD). Figure B.1 illustrates the PSD of a
+representative on-disk pixel, showcasing the background best-fit
+and 5σconfidence thresholds derived from both methodologies.
+10 4
+ 10 3
+Frequency (Hz)
+10 6
+10 5
+10 4
+10 3
+10 2
+10 1
+100
+101
+PSD
+Fig. B.1: PSD of a representative on-disk pixel from Novem-
+ber 22, 2014. Best-fit and 5σconfidence lines obtained with the
+MCMC analysis are shown in red, while those obtained with the
+CNN+CP framework are shown in blue.
+The best-fit curves are, as expected from the results reported
+in Castelló et al. (2025), very similar. This confirms that the
+CNN provides an accurate approximation to the MCMC-derived
+best-fit background model. Similarly, the confidence thresholds
+show a high degree of overlap across the frequency range.
+The small observed deviations reflect the different nature of
+the two approaches. MCMC thresholds depend on explicit para-
+metric assumptions and prior distributions, where poorly spec-
+ified priors can bias the posterior distribution or hinder conver-
+gence, which may directly affect the inferred confidence thresh-
+olds. In contrast, the CP-based thresholds are derived empirically
+from day-wise calibration residuals. This empirical approach al-
+lows the CP framework to naturally incorporate daily systematic
+effects or instrumental noise that might not be captured by a fixed
+parametric model.
+The primary advantage of the CNN+CP pipeline is its com-
+putational efficiency. While MCMC analysis requires several
+minutes per pixel, the CNN+CP framework processes the entire
+solar disk in milliseconds per pixel after a brief (∼10 min) daily
+calibration step. As demonstrated, this gain in speed is achieved
+with negligible loss in statistical accuracy, providing a robust and
+scalable solution for large-scale GONG observations.
+Article number, page 13
+A&A proofs:manuscript no. aanda
+Table 2: Detected oscillation events from our pipeline. The bounding box is reported asx min–xmax,y min–ymax in full-frame pixel
+coordinates. Bold entries highlight cases reported in both catalogs. The entry in red is the example event not reported in Table 1, to
+validate our pipeline in cases where no direct comparison was possible.
+EN Datex(arcsec)y(arcsec) Bounding Box (pix) Period (min)
+1 2014-01-01 -378.7 -481.4 616–668, 523–570 75.9
+2 2014-01-01 182.3 -458.9 1197–1216, 557–575 58.2
+3 2014-01-01 121.0 -522.2 1138–1152, 496–509 58.2
+4 2014-01-01 -54.1 -32.8 911–1003, 892–1013 68.1
+52014-01-01 -44.2 -41.3 957–1012, 954–1005 75.9
+6 2014-01-02 213.5 114.6 1226–1246, 1130–1152 63.8
+7 2014-01-02 -494.1 -551.1 521–537, 465–480 56.6
+8 2014-01-02 129.8 -107.6 1146–1164, 906–927 59.1
+9 2014-01-02 218.6 -16.6 1236–1250, 1001–1014 59.1
+10 2014-01-02 166.8 -36.5 1179–1205, 974–1002 59.1
+11 2014-01-02 213.1 -8.5 1228–1245, 1007–1024 50.2
+12 2014-01-03 386.8 154.4 1404–1418, 1168–1186 69.3
+13 2014-01-03 417.4 99.7 1434–1448, 1118–1131 69.3
+14 2014-01-03 447.1 78.1 1458–1487, 1088–1119 78.8
+15 2014-01-03 -377.7 -389.7 638–656, 626–644 64.8
+16 2014-01-03 367.9 -17.3 1386–1399, 1000–1015 62.8
+17 2014-01-03 -586.0 -398.6 431–447, 616–632 70.5
+18 2014-01-04 526.6 -80.5 1531–1569, 925–962 65.9
+19 2014-01-04 -612.8 -13.5 405–417, 1004–1017 20.2
+20 2014-01-05 -306.3 -376.3 710–727, 637–654 68.1
+21 2014-01-05 -276.0 -69.2 733–763, 945–969 37.1
+222014-01-05 -259.5 -75.4 748–784, 929–970 56.6
+23 2014-01-05 -739.2 -281.3 277–293, 732–752 46.7
+24 2014-01-05 -306.4 279.0 707–731, 1292–1316 45.6
+25 2014-01-05 -301.1 274.3 707–734, 1286–1310 67.0
+262014-01-05 720.7 -38.4 1734–1754, 978–994 44.1
+27 2014-01-06 -485.3 -3.6 524–557, 998–1049 64.8
+28 2014-01-06 -482.1 -4.6 530–556, 1010–1029 52.8
+29 2014-01-06 -30.6 483.0 985–1002, 1498–1516 60.9
+30 2014-01-06 -182.5 -129.1 831–856, 886–913 44.1
+31 2014-01-06 -58.9 -67.6 955–973, 950–967 60.9
+32 2014-01-06 -48.5 -88.3 963–988, 926–949 53.5
+33 2014-01-06 44.0 -314.9 1061–1076, 703–715 50.8
+34 2014-01-06 -139.1 -370.1 877–895, 646–666 41.4
+35 2014-01-06 -137.5 -369.2 881–893, 649–661 35.5
+362014-01-07 -258.5 97.9 747–816, 1102–1160 67.0
+37 2014-01-07 -307.6 57.1 705–728, 1070–1093 75.9
+382014-01-07 121.2 -360.4 1123–1178, 645–686 50.8
+39 2014-01-07 83.6 -346.9 1098–1118, 670–688 62.8
+40 2014-01-08 -91.7 -333.2 920–944, 677–706 40.9
+41 2014-01-08 -162.7 -186.5 850–874, 829–849 40.9
+42 2014-01-08 -73.4 -287.3 928–969, 719–757 64.8
+43 2014-01-08 -44.6 77.3 972–987, 1094–1108 49.6
+44 2014-01-08 56.8 -453.9 1065–1103, 555–584 41.8
+45 2014-01-08 65.2 -445.7 1081–1100, 567–586 60.0
+46 2014-01-08 20.9 -490.1 1039–1052, 528–541 60.0
+47 2014-01-08 30.3 -483.0 1047–1062, 534–548 67.0
+48 2014-01-08 316.4 404.5 1334–1348, 1421–1436 70.5
+49 2014-01-08 -503.3 374.6 499–532, 1387–1418 52.1
+50 2014-01-08 -492.5 376.3 513–560, 1387–1413 64.8
+51 2014-01-08 -44.4 76.9 972–990, 1093–1108 50.2
+52 2014-01-09 -321.7 370.7 696–709, 1387–1401 43.6
+53 2014-01-09 135.5 46.8 1140–1189, 1054–1095 63.8
+54 2014-01-10 -494.3 -426.1 511–548, 578–614 82.1
+55 2014-01-10 309.8 -241.5 1320–1346, 771–799 62.8
+56 2014-01-10 308.6 -268.1 1326–1339, 748–762 51.5
+57 2014-01-10 79.1 467.9 1097–1110, 1486–1499 43.6
+58 2014-01-10 -110.6 -502.9 893–932, 503–539 100.6
+Article number, page 14
+G. Castelló et al.: Automatic detection of solar filament oscillations I: Multi-scale spectral pipeline
+Table 2: Detected oscillation events from our pipeline. The bounding box is reported asx min–xmax,y min–ymax in full-frame pixel
+coordinates. Bold entries highlight cases reported in both catalogs. The entry in red is the example event not reported in Table 1, to
+validate our pipeline in cases where no direct comparison was plausible.
+EN Datex yBounding Box (pix) Period (min)
+59 2014-01-10 538.3 -369.1 1545–1577, 639–677 61.8
+60 2014-01-10 507.7 -352.4 1524–1541, 663–681 43.6
+61 2014-01-10 334.3 73.6 1350–1367, 1089–1107 70.5
+62 2014-01-10 -159.0 388.5 857–872, 1406–1420 32.3
+63 2014-01-10 -617.3 70.5 401–413, 1088–1101 59.1
+64 2014-01-11 87.7 382.4 1105–1118, 1400–1413 67.0
+65 2014-01-11 534.4 81.9 1550–1567, 1098–1115 37.8
+66 2014-01-11 -565.4 -383.3 450–470, 633–654 55.0
+67 2014-01-11 -532.7 -331.1 485–498, 685–699 49.6
+68 2014-01-11 472.7 -508.4 1473–1546, 486–557 65.9
+69 2014-01-11 -674.0 226.7 336–364, 1238–1266 41.8
+70 2014-01-11 -161.1 -244.3 854–871, 772–787 56.6
+71 2014-01-11 6.6 -519.8 1019–1043, 489–519 34.6
+72 2014-01-11 -474.2 -542.6 541–557, 473–489 48.4
+73 2014-01-12 -62.2 -328.4 949–975, 684–708 60.0
+74 2014-01-12 -179.7 -411.4 834–855, 602–622 82.1
+75 2014-01-12 -10.2 -271.6 1008–1020, 746–759 126.0
+76 2014-01-12 608.3 -356.0 1625–1640, 662–675 55.0
+77 2014-01-12 608.9 -382.4 1627–1639, 635–648 55.0
+78 2014-01-12 622.5 -271.9 1625–1668, 731–775 67.0
+79 2014-01-12 196.2 -508.0 1202–1237, 501–531 73.1
+80 2014-01-12 -639.8 -465.0 377–392, 552–565 91.4
+81 2014-01-12 -477.8 -434.5 539–553, 582–596 82.1
+82 2014-01-13 67.2 -381.7 1074–1113, 622–661 85.6
+83 2014-01-13 108.3 -356.7 1126–1140, 661–675 85.6
+84 2014-01-13 184.8 -272.3 1193–1225, 737–768 80.4
+85 2014-01-13 109.3 -357.0 1125–1143, 659–676 80.4
+86 2014-01-13 714.5 -357.5 1732–1745, 661–673 45.6
+87 2014-01-14 366.6 -259.9 1383–1398, 757–773 51.5
+88 2014-01-14 -699.7 -102.7 308–340, 904–934 60.0
+89 2014-01-14 -187.0 117.4 824–855, 1125–1161 43.6
+90 2014-01-14 -132.6 117.9 884–900, 1134–1151 54.3
+91 2014-01-14 583.0 385.8 1589–1640, 1399–1423 63.8
+Article number, page 15

@@ -375,7 +375,7 @@ body.graph-fs-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 .article-main p { font-size: 16.5px; line-height: 1.8; margin-bottom: 18px; max-width: 620px; }
 .reading-time { color: var(--soft); white-space: nowrap; }
-.site-stats { text-align: center; font-size: 13px; color: var(--soft); margin: 2px 0 14px; }
+.site-stats { text-align: left; max-width: 620px; font-size: 13px; color: var(--soft); margin: 2px 0 14px; font-family: var(--mono); }
 .site-stats b { color: var(--text); font-weight: 600; }
 .related { margin-top: 26px; }
 .related-h { font-size: 14px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }
@@ -610,7 +610,7 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
    после сужения шапки стал визуально шире и левее её. Единое левое выравнивание на всю
    колонку страницы. */
 .category-bar {
-    max-width: 680px; margin: 8px 0 0; display: flex; flex-wrap: wrap;
+    max-width: 620px; margin: 8px 0 0; display: flex; flex-wrap: wrap;
     justify-content: flex-start; font-size: 11.5px; line-height: 1.9;
 }
 .category-bar.collapsed { max-height: 3.9em; overflow: hidden; }
@@ -1055,10 +1055,10 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
    до низа (та же .next-btn, JS обновляет оба разом); компактная пилюля справа. */
 .next-top { display: flex; justify-content: flex-end; max-width: 620px; margin: 0 0 10px; }
 .next-btn-top {
-    display: block; width: auto; max-width: 100%; padding: 4px 10px; font-size: 11px;
-    font-family: inherit; background: none;
-    border: 1px solid var(--border); border-radius: 0;
-    color: var(--soft); cursor: pointer; text-align: center; transition: all 0.15s;
+    display: block; width: auto; max-width: 100%; padding: 4px 14px; font-size: 11px;
+    font-family: var(--mono); background: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    color: var(--soft); cursor: pointer; text-align: center; transition: color .15s, background .15s, border-color .15s;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .next-btn-top:hover { background: var(--tag-bg); border-color: var(--link); color: var(--link); }
@@ -1553,3 +1553,80 @@ footer a { color: var(--muted); }
 
 /* ═══ Брендовый слой — Проход 1e: инлайн SVG-иконки (замена эмодзи) ═══ */
 .ico-svg { width: 1.05em; height: 1.05em; vertical-align: -.16em; display: inline-block; }
+
+/* ═══ Теги в карточках ленты → чип-язык бренда (были plain-текст через «·») ═══ */
+/* Приводим к тому же чип-словарю, что .side-tag: тонкий hairline-контур, скруглённая
+   пилюля, hover → циан. Легче сайдбарных (не uppercase, тоньше) — лента должна дышать. */
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; line-height: 1.5; }
+.card-tags .sep { display: none; }              /* пилюли не нужны точки-разделители */
+.card-tags a {
+    display: inline-block; color: var(--muted); text-decoration: none;
+    font-size: 11px; padding: 1.5px 9px; border-radius: 999px;
+    border: 1px solid var(--hair); background: transparent;
+    transition: color .15s, border-color .15s, background .15s;
+}
+.card-tags a:hover { color: var(--link); border-color: var(--link); background: transparent; }
+
+/* RTL: у express-бейджа карточки margin-left не переворачивается — дата и «экспресс» слипались (ar) */
+html[dir="rtl"] .card-express-badge { margin-left: 0; margin-right: 6px; }
+
+/* Левое меню статьи: первый пункт = заголовок статьи (клик возвращает к началу) */
+.article-nav-home a { font-weight: 600; color: var(--text); }
+.article-nav-home a:hover { color: var(--link); }
+
+/* Поиск на entity-страницах (тег/закон/учёный/раздел): иконка слева в .tag-title-row,
+   поэтому правый анкер right:0 уносил панель за левый край экрана (LTR) — открываем вправо. */
+.tag-title-row .search-panel { right: auto; left: 0; }
+
+/* «+» на чипе раздела: обычный клик = заменить фильтр, «+» = добавить к фильтру (мультивыбор) */
+.cat-chip-add { margin-left: 5px; font-weight: 600; color: var(--soft); opacity: .5; padding: 0 1px; }
+.cat-chip:hover .cat-chip-add { opacity: .75; }
+.cat-chip-add:hover { color: var(--cyan); opacity: 1; }
+.cat-chip.active .cat-chip-add { color: var(--link); opacity: .85; }
+html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
+
+/* Компактные действия: реакции 👍/👎 + ⭐ избранное + share = иконки-пилюли в один ряд, без текста */
+.actions-compact { gap: 6px; align-items: center; }
+.actions-compact .reactions { gap: 6px; }
+.actions-compact .react-btn, .actions-compact .fav-btn, .actions-compact .share-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); cursor: pointer; font-size: 13px;
+    transition: color .15s, border-color .15s, background .15s;
+}
+.actions-compact .react-btn .ico-svg, .actions-compact .fav-btn .ico-svg, .actions-compact .share-btn .ico-svg { width: 1.15em; height: 1.15em; }
+.actions-compact .rc { font-size: 11px; opacity: .7; }
+.actions-compact .react-btn:hover, .actions-compact .fav-btn:hover, .actions-compact .share-btn:hover { color: var(--link); border-color: var(--link); }
+.actions-compact .react-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(46,138,160,.12); }
+.actions-compact .fav-btn.active { color: var(--ochre); border-color: var(--ochre); background: rgba(199,127,58,.12); }
+.actions-compact .fav-btn.active .ico-svg { fill: var(--ochre); }
+
+/* Меню-гамбургер: пункты без подчёркивания (юзер 2026-07-22) */
+.nav-more-panel a { text-decoration: none; }
+.nav-more-panel a:hover { text-decoration: none; }
+
+/* Граф: контрол глубины «−/+» → круглые иконки-кнопки (было «грустно») */
+.mini-depth-ctrl { display: inline-flex; align-items: center; gap: 6px; }
+.mini-depth-ctrl button {
+    width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: color .15s, border-color .15s, background .15s;
+}
+.mini-depth-ctrl button:hover { color: var(--link); border-color: var(--link); background: var(--tag-bg); }
+#mini-depth-val { font-family: var(--mono); font-size: 12px; min-width: 12px; text-align: center; color: var(--muted); }
+
+/* Граф: чекбоксы фильтров (типы узлов/рёбер) — фирменный accent + пилюли-лейблы вместо «грустных» */
+.mg-kind, .mg-edge, .kg-kind, .kg-edge { accent-color: var(--cyan); cursor: pointer; width: 14px; height: 14px; }
+.mini-graph-filters label, .mg-edge-label, .kg-legend label {
+    display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
+    font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid transparent;
+    transition: background .15s, border-color .15s;
+}
+.mini-graph-filters label:hover, .mg-edge-label:hover, .kg-legend label:hover { background: var(--tag-bg); border-color: var(--hair); }
+
+/* Sections: заголовок группы (префикс кода arXiv до точки) */
+.section-group td { padding-top: 15px; border-top: 1px solid var(--hair); }
+.section-group:first-child td { border-top: none; padding-top: 4px; }
+.section-group-code { font-family: var(--mono); font-weight: 700; color: var(--ink); }
+.section-group-name { color: var(--muted); font-size: .92em; margin-left: 6px; }

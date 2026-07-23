@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каноническое квантование нейронов: как применить законы квантовой механики к машинному обучению — bridge42worlds</title>
+    <meta name="description" content="Исследователи из Корнеллского и Шанхайского университетов предложили метод канонического квантования классических нейронов — замену энергетической функции квантовым гамильтонианом и применение нелинейной активации через матричное исчисление. Это позволяет создавать квантовые нейроны, способные превз">
+    <meta property="og:title" content="Каноническое квантование нейронов: как применить законы квантовой механики к машинному обучению">
+    <meta property="og:description" content="Учёные превратили классические нейроны в квантовые наблюдаемые, открыв путь к новым алгоритмам машинного обучения на квантовых данных.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=c1b3f97509">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Каноническое квантование нейронов: как применить законы квантовой механики к машинному обучению", "description": "Учёные превратили классические нейроны в квантовые наблюдаемые, открыв путь к новым алгоритмам машинного обучения на квантовых данных.", "inLanguage": "ru", "datePublished": "2026-07-06", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/ai.jpg", "author": [{"@type": "Person", "name": "Alexander He"}, {"@type": "Person", "name": "Nana Liu"}, {"@type": "Person", "name": "Mark M. Wilde"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.05000", "abstract": "Каноническое квантование применено к искусственному нейрону: энергетическая функция заменена квантовым гамильтонианом, а активация реализована через матричное функциональное исчисление, что приводит к активационной наблюдаемой, измеряемой на входном состоянии. Квантованные нейроны исследованы для аппроксимации функций с целью восстановления неизвестной наблюдаемой по размеченным квантовым данным. Разработаны гибридные алгоритмы: для измерения активационной наблюдаемой используются квантовые алгоритмы «степень одного кумода» и «шредингеризация», а для оценки градиентов квадратичной ошибки — классическая случайная выборка, тест Адамара и симуляция гамильтониана. Эксперименты показывают повышенную выразительность квантованных нейронов по сравнению с классическими на репрезентативных задачах. Такой подход систематизирует построение примитивов квантового машинного обучения и создаёт основу для нейросетей, оптимизированных под квантовые данные."}</script>
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Подробно</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-07-06/2607.05000/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-07-06/2607.05000/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-07-06/2607.05000/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-07-06/2607.05000/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Следующая статья →</button></div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.05000">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#context">Контекст</a></li><li><a href="#methods">Методы</a></li><li><a href="#results">Результаты</a></li><li><a href="#implications">Значение</a></li><li><a href="#future_development">Развитие</a></li><li><a href="#impact_on">Влияние</a></li><li><a href="#next_steps">Следующие шаги</a></li><li><a href="#key_problems_connection">Ключевые проблемы</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1 class="article-title-top" id="article-top">Каноническое квантование нейронов: как применить законы квантовой механики к машинному обучению <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+        <div class="original-title original-title-top">Original: "Canonical quantization of neurons"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/ru/authors/Alexander_He.html" class="text-author-link" data-author="Alexander He">Alexander He</a>, <a href="/lang/ru/authors/Nana_Liu.html" class="text-author-link" data-author="Nana Liu">Nana Liu</a>, <a href="/lang/ru/authors/Mark_M_Wilde.html" class="text-author-link" data-author="Mark M. Wilde">Mark M. Wilde</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.05000">2607.05000</a> · 2026-07-06 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 мин</span> · <a class="cat-badge" href="/lang/ru/sections/quant-ph.html" data-cat="quant-ph" title="Foundations of quantum mechanics, quantum information and computation, quantum optics, entanglement, and related experiments.">Quantum Physics</a> <a class="cat-badge" href="/lang/ru/sections/cond-mat_stat-mech.html" data-cat="cond-mat.stat-mech" title="Phase transitions, thermodynamics, field theory, non-equilibrium phenomena, renormalization group and scaling, integrable models, turbulence.">Statistical Mech</a> <a class="cat-badge" href="/lang/ru/sections/cs_LG.html" data-cat="cs.LG" title="Machine learning research: supervised, unsupervised, reinforcement learning, bandit problems, and related topics.">Machine Learning</a>
+        </div>
+        <div class="oneliner">Учёные превратили классические нейроны в квантовые наблюдаемые, открыв путь к новым алгоритмам машинного обучения на квантовых данных.</div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>Каноническое квантование применено к искусственному нейрону: энергетическая функция заменена квантовым гамильтонианом, а активация реализована через матричное функциональное исчисление, что приводит к активационной наблюдаемой, измеряемой на входном состоянии. Квантованные нейроны исследованы для аппроксимации функций с целью восстановления неизвестной наблюдаемой по размеченным квантовым данным. Разработаны гибридные алгоритмы: для измерения активационной наблюдаемой используются квантовые алгоритмы «степень одного кумода» и «шредингеризация», а для оценки градиентов квадратичной ошибки — классическая случайная выборка, тест Адамара и симуляция гамильтониана. Эксперименты показывают повышенную выразительность квантованных нейронов по сравнению с классическими на репрезентативных задачах. Такой подход систематизирует построение примитивов квантового машинного обучения и создаёт основу для нейросетей, оптимизированных под квантовые данные.</p></div>
+        <div class="mosaic"></div>
+        <div id="article-graph" class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="l:schrdinger_equation,l:heisenberg_uncertainty_principle,l:hawking_radiation,l:spectral_theorem,l:superposition_principle,l:bells_theorem,s:Erwin Schrödinger,s:Hugh Everett III"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>Контекст</h2><p>Современное <a href="/lang/ru/tags/quantum_information.html" class="text-tag" data-tag="quantum_information">квантовое информационное</a> сообщество активно ищет способы использовать внутренние квантовые эффекты для ускорения <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">машинного обучения</a>. Квантовые состояния, благодаря <a href="/lang/ru/tags/superposition.html" class="text-tag" data-tag="superposition">суперпозиции</a>, способны нести больше информации, чем классические биты. Однако до сих пор архитектуры квантовых нейронов строились ad hoc, без опоры на фундаментальный принцип канонического квантования, успешно работающий в физике. Новая работа восполняет этот пробел, применяя проверенную временем процедуру возведения классических переменных в ранг операторов, подчиняющихся <a href="/lang/ru/laws/heisenberg_uncertainty_principle.html" class="text-law" data-law="heisenberg_uncertainty_principle">соотношению неопределённостей</a>, к базовому элементу искусственного интеллекта — нейрону.</p></section><section id="methods"><h2>Методы</h2><p>В основе подхода лежит замена классической энергетической функции нейрона w^T z + b параметризованным квантовым гамильтонианом H(θ) = Σ_j θ_j H_j, где H_j — локальные операторы, действующие на кубиты. Каноническое квантование, восходящее к работам <a href="/lang/ru/scientists/Paul_Dirac.html" class="text-scientist" data-scientist="Paul Dirac">Поля Дирака</a>, предписывает заменить вещественные переменные эрмитовыми операторами, подчиняющимися коммутационным соотношениям. Затем нелинейная активация φ применяется к этому гамильтониану через функциональное исчисление, что даёт активационную наблюдаемую φ(H(θ)). Для гиперболического тангенса с температурным параметром T, определяющим <a href="/lang/ru/tags/quantum_thermodynamics.html" class="text-tag" data-tag="quantum_thermodynamics">квантово-статистический режим</a> нейрона, авторы выводят интегральное представление, позволяющее оценивать градиенты функции потерь с помощью <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">гибридных квантово-классических алгоритмов</a>: комбинации классической случайной выборки, <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">теста Адамара</a> и <a href="/lang/ru/tags/quantum_measurement.html" class="text-tag" data-tag="quantum_measurement">квантовой симуляции временной эволюции</a>, описываемой <a href="/lang/ru/laws/schrdinger_equation.html" class="text-law" data-law="schrdinger_equation">уравнением Шрёдингера</a> (открытым <a href="/lang/ru/scientists/Erwin_Schrödinger.html" class="text-scientist" data-scientist="Erwin Schrödinger">Эрвином Шрёдингером</a>), идею которой предложил <a href="/lang/ru/scientists/Seth_Lloyd.html" class="text-scientist" data-scientist="Seth Lloyd">Сет Ллойд</a>. Альтернативный метод измерения активационной наблюдаемой использует континуальную переменную — кумод — и технику <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">шрёдингеризации</a>, сводя задачу к эволюции под действием e^{i x̂ ⊗ H(θ)/T₂}. Эти алгоритмы опираются на <a href="/lang/ru/tags/superposition.html" class="text-tag" data-tag="superposition">суперпозицию</a> и <a href="/lang/ru/tags/quantum_entanglement.html" class="text-tag" data-tag="quantum_entanglement">запутанность</a>, недоступные в классических вычислениях, а также на <a href="/lang/ru/laws/superposition_principle.html" class="text-law" data-law="superposition_principle">принцип суперпозиции</a>, лежащий в основе квантовой механики.</p></section><section id="results"><h2>Результаты</h2><p><a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">Численные эксперименты</a> на системе из семи кубитов сравнили квантовый нейрон с гамильтонианом поперечного поля Изинга (некоммутирующим) и классическую модель с коммутирующим гамильтонианом. Задача заключалась в аппроксимации неизвестной наблюдаемой, порождённой активацией от другого поперечного поля Изинга. После 2000 эпох обучения <a href="/lang/ru/tags/quantum_computer.html" class="text-tag" data-tag="quantum_computer">квантовая модель</a> достигла среднеквадратичной ошибки около 0.01, значительно превзойдя классическую, которая застряла на уровне выше 0.1. Причина в том, что некоммутирующие члены (σ_X) порождают новые направления в операторном пространстве, включая члены типа σ_Y, возникающие из-за умножения некоммутирующих Паули, что расширяет выразительную способность. Даже при одинаковом числе параметров (14) квантовый нейрон эффективнее улавливал сложные корреляции в обучающих состояниях, включавших <a href="/lang/ru/tags/quantum_entanglement.html" class="text-tag" data-tag="quantum_entanglement">запутанные состояния Белла</a> и смешанные состояния.</p></section><section id="implications"><h2>Значение</h2><p>Работа демонстрирует, что каноническое квантование — не просто физический формализм, но и мощный инструмент построения квантовых примитивов для <a href="/lang/ru/tags/quantum_information.html" class="text-tag" data-tag="quantum_information">машинного обучения</a>. Она задаёт строгий рецепт: взять классическую модель, заменить её энергию на гамильтониан, а активацию — на матричную функцию. Это открывает путь к систематическому конструированию квантовых нейросетей, которые естественным образом обрабатывают квантовые данные, минуя неэффективное посредничество классических представлений. По аналогии с квантовыми машинами Больцмана, квантованные нейроны могут стать стандартным блоком для обучения на квантовых состояниях.</p></section><section id="future_development"><h2>Развитие</h2><p>В перспективе исследование может развиваться в нескольких направлениях. Во-первых, критически важен анализ проблемы <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">бесплодных плато</a> — исчезновения градиентов в процессе обучения, что требует адаптации существующих методов для нового класса параметризованных моделей. Во-вторых, масштабирование до большего числа кубитов и использование реальных квантовых наборов данных (например, из квантовой химии или физики твёрдого тела) позволит оценить практическую пользу. Наконец, гибридные архитектуры, где первый слой состоит из квантованных нейронов, а последующие — классические, могут объединить преимущества квантовой обработки с мощью глубокого обучения.</p></section><section id="impact_on"><h2>Влияние</h2><p>Метод окажет влияние на <a href="/lang/ru/tags/quantum_computer.html" class="text-tag" data-tag="quantum_computer">квантовые вычисления</a>, предоставляя новый способ создания обучаемых моделей для квантовых данных, а также на <a href="/lang/ru/tags/quantum_information.html" class="text-tag" data-tag="quantum_information">квантовое машинное обучение</a>, где до сих пор не хватало теоретически обоснованных строительных блоков.</p></section><section id="next_steps"><h2>Следующие шаги</h2><p>Ближайшие шаги включают исследование поведения градиентов в квантованных нейронах для исключения <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">бесплодных плато</a> и расширение библиотеки активационных функций, как уже сделано в сопроводительной статье для ReLU, сигмоидного линейного блока и других.</p></section><section id="key_problems_connection"><h2>Ключевые проблемы</h2><p>Работа напрямую затрагивает нерешённую проблему выразительной способности квантовых моделей и их обучаемости. Возникновение <a href="/lang/ru/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">бесплодных плато</a> в вариационных квантовых схемах — один из главных вызовов современного квантового машинного обучения, и квантованные нейроны предлагают новую площадку для его изучения. Кроме того, связь с <a href="/lang/ru/tags/quantum_thermodynamics.html" class="text-tag" data-tag="quantum_thermodynamics">квантовой термодинамикой</a> через температурный параметр T намекает на возможные аналогии с тепловыми состояниями и фазовыми переходами в обучении.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 Математический трюк, позволивший оценивать градиенты, опирается на интегральное представление гиперболического тангенса через гиперболический секанс — распределение, известное в статистике как логистическое, а в физике — как производная функции Ферми-Дирака.</p></div>
+        <div class="formula"><div class="formula-render">\operatorname{Tr}[\varphi(H(\theta))\rho]</div><div class="formula-meaning">Ожидаемое значение активационной функции, применённой к квантовому гамильтониану, на входном состоянии ρ</div></div><div class="formula"><div class="formula-render">\partial_j \operatorname{Tr}[g_T(H(\theta))\rho] = \frac{1}{T} \mathbb{E}_{t\sim\mu, s\sim\upsilon} \operatorname{Tr}[H_j e^{itH(\theta)/T} \mathcal{U}_{st/T}(\rho)]</div><div class="formula-meaning">Градиент выражается как среднее по случайным параметрам t и s, что позволяет использовать тест Адамара для его оценки</div></div><div class="formula"><div class="formula-render">\ell_{T_1}(p) = \frac{1}{4T_1} \operatorname{sech}^2\left(\frac{p}{2T_1}\right)</div><div class="formula-meaning">Плотность распределения, используемая при измерении активационной наблюдаемой с помощью непрерывной квантовой переменной</div></div>
+        <div class="key-numbers"><h3>Ключевые числа</h3><ul><li><strong>количество кубитов в эксперименте:</strong> 7</li><li><strong>число параметров модели:</strong> 14</li><li><strong>температурный параметр T:</strong> настраиваемый</li><li><strong>достигнутая ошибка квантовой модели:</strong> ≈0.01</li><li><strong>число эпох обучения:</strong> 2000</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.05000_ru_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.05000" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button class="share-btn" title="Поделиться" onclick="shareArticle('Каноническое квантование нейронов: как применить законы квантовой механики к машинному обучению','https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.05000/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="M8.1 10.9l6.8-3.8M8.1 13.1l6.8 3.8"/></svg></button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.05000_ru_advanced" data-entity-type="article"><div class="fb-title-row"><button class="next-btn next-btn-top">Следующая статья →</button></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Erwin_Schrödinger.html" class="side-sci" data-scientist="Erwin Schrödinger">Erwin Schrödinger</a><a href="/lang/ru/scientists/Hugh_Everett_III.html" class="side-sci" data-scientist="Hugh Everett III">Hugh Everett III</a><a href="/lang/ru/scientists/Niels_Bohr.html" class="side-sci" data-scientist="Niels Bohr">Niels Bohr</a><a href="/lang/ru/scientists/Pascual_Jordan.html" class="side-sci" data-scientist="Pascual Jordan">Pascual Jordan</a><a href="/lang/ru/scientists/Werner_Heisenberg.html" class="side-sci" data-scientist="Werner Heisenberg">Werner Heisenberg</a><a href="/lang/ru/scientists/Stephen_Hawking.html" class="side-sci" data-scientist="Stephen Hawking">Stephen Hawking</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/quantum_computer.html" class="side-tag" data-tag="quantum_computer">квантовый компьютер</a>
+<a href="/lang/ru/tags/quantum_algorithm.html" class="side-tag" data-tag="quantum_algorithm">квантовый алгоритм</a>
+<a href="/lang/ru/tags/quantum_information.html" class="side-tag" data-tag="quantum_information">квантовая информация</a>
+<a href="/lang/ru/tags/quantum_measurement.html" class="side-tag" data-tag="quantum_measurement">квантовое измерение</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/superposition.html" class="side-tag" data-tag="superposition">суперпозиция</a>
+<a href="/lang/ru/tags/quantum_entanglement.html" class="side-tag" data-tag="quantum_entanglement">квантовая запутанность</a>
+<a href="/lang/ru/tags/quantum_thermodynamics.html" class="side-tag" data-tag="quantum_thermodynamics">квантовая термодинамика</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/schrdinger_equation.html" class="side-law" data-law="schrdinger_equation">уравнение Шрёдингера</a><a href="/lang/ru/laws/heisenberg_uncertainty_principle.html" class="side-law" data-law="heisenberg_uncertainty_principle">принцип неопределённости Гейзенберга</a><a href="/lang/ru/laws/hawking_radiation.html" class="side-law" data-law="hawking_radiation">излучение хокинга</a><a href="/lang/ru/laws/spectral_theorem.html" class="side-law" data-law="spectral_theorem">спектральная теорема</a><a href="/lang/ru/laws/superposition_principle.html" class="side-law" data-law="superposition_principle">принцип суперпозиции</a><a href="/lang/ru/laws/bells_theorem.html" class="side-law" data-law="bells_theorem">теорема Белла</a></div>
+</div>
+
+<div class="license">Оригинал: <a href="https://arxiv.org/abs/2607.05000">arXiv:2607.05000</a> · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/">CC BY</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=c1b3f97509"></script>
+<script src="/js/search.js?v=c1b3f97509"></script>
+<script src="/js/scroll.js?v=c1b3f97509"></script>
+<script src="/js/lightbox.js?v=c1b3f97509"></script>
+<script src="/js/gallery.js?v=c1b3f97509"></script>
+<script src="/js/force-graph.js?v=c1b3f97509"></script>
+<script src="/js/mini-graph.js?v=c1b3f97509"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.05000', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2607.05000', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

@@ -737,6 +737,12 @@ function updateSearchRowVisibility() {
     var show = feed.items.length > 0;
     if (row) row.style.display = show ? '' : 'none';
     if (hint) hint.style.display = show ? '' : 'none';
+    // Нет статей у сущности → не показываем ни заголовок «Похожие статьи», ни «ничего не найдено»
+    // (юзер-фидбек 2026-07-22: пустой блок Related/Nada encontrado убрать).
+    var results = document.getElementById('search-results');
+    var title = results && results.previousElementSibling;
+    if (title && title.classList && title.classList.contains('section-title')) title.style.display = show ? '' : 'none';
+    if (!show && results) results.innerHTML = '';
 }
 
 function showLatest() {
@@ -867,14 +873,29 @@ function initCategoryBar() {
     bar.innerHTML = cats.map(function(c) {
         var desc = (ARXIV_CAT_DESC[c] || '').replace(/"/g, '&quot;');
         return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '" title="' + desc + '">' +
-            (ARXIV_CAT_NAMES[c] || c) + '<span class="cat-chip-n">' + counts[c] + '</span></span>';
+            (ARXIV_CAT_NAMES[c] || c) + '<span class="cat-chip-n">' + counts[c] + '</span>' +
+            '<span class="cat-chip-add" title="' + (UI.addToFilter || '+') + '">+</span></span>';
     }).join('');
+    function syncChipActive() {
+        bar.querySelectorAll('.cat-chip').forEach(function(ch) {
+            ch.classList.toggle('active', !!selectedCats[ch.getAttribute('data-cat')]);
+        });
+    }
     bar.onclick = function(e) {
+        var addBtn = e.target.closest ? e.target.closest('.cat-chip-add') : null;
         var chip = e.target.closest ? e.target.closest('.cat-chip') : null;
         if (!chip) return;
         var c = chip.getAttribute('data-cat');
-        if (selectedCats[c]) { delete selectedCats[c]; chip.classList.remove('active'); }
-        else { selectedCats[c] = 1; chip.classList.add('active'); }
+        if (addBtn) {
+            // «+» справа — ДОБАВИТЬ/убрать раздел в текущем наборе (мультивыбор)
+            if (selectedCats[c]) delete selectedCats[c]; else selectedCats[c] = 1;
+        } else {
+            // Обычный клик по разделу — ПЕРЕКЛЮЧИТЬ фильтр на него (замена набора).
+            // Повторный клик по единственному активному — снять фильтр целиком.
+            if (selectedCats[c] && Object.keys(selectedCats).length === 1) selectedCats = {};
+            else { selectedCats = {}; selectedCats[c] = 1; }
+        }
+        syncChipActive();
         applyCategoryFilter();
     };
     // Сворачиваем в ~2 строки, показываем "ещё", если реально не влезло — не показываем
@@ -1058,8 +1079,8 @@ function collapseNavOverflow() {
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'nav-more-btn';
-    btn.textContent = '⋯';
-    btn.setAttribute('aria-label', 'More');
+    btn.textContent = '☰';
+    btn.setAttribute('aria-label', 'Menu');
     var panel = document.createElement('div');
     panel.className = 'nav-more-panel';
 
@@ -1070,16 +1091,23 @@ function collapseNavOverflow() {
     });
     if (hasActive) btn.classList.add('active');
 
+    // About и Архив живут в футере, но в шапочном меню их не было — добавляем (юзер 2026-07-22).
+    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'archive']].forEach(function(e) {
+        if (panel.querySelector('a[href="' + e[0] + '"]')) return;
+        var a = document.createElement('a');
+        a.href = e[0]; a.textContent = e[1];
+        panel.appendChild(a);
+    });
+
     wrap.appendChild(btn);
     wrap.appendChild(panel);
-    // Вставляем туда, где раньше начинались схлопнутые пункты — сразу после первого
-    // оставшегося видимым пункта (main), чтобы порядок main → «…» → theory → ★ не прыгал.
-    var firstRemaining = nav.querySelector('a');
-    if (firstRemaining && firstRemaining.nextSibling) {
-        nav.insertBefore(wrap, firstRemaining.nextSibling);
-    } else {
-        nav.appendChild(wrap);
-    }
+    // Логотип = main: текстовый пункт «main» убираем. Гамбургер ☰ — в НАЧАЛО .nav-links.
+    // ВАЖНО: раньше вставляли через logo.parentNode, но на главной логотип вложен в .logo-wrap
+    // (богатая шапка .brand-row/.hdr-icons) — ☰ попадал внутрь .logo-wrap и ломал раскладку
+    // на 3 ряда (баг 2026-07-22). .nav-links есть на всех типах шапок и лежит в контрол-кластере.
+    var mainLink = nav.querySelector('a[href$="/index.html"]');
+    if (mainLink) mainLink.remove();
+    nav.insertBefore(wrap, nav.firstChild);
 
     btn.addEventListener('click', function(e) {
         e.stopPropagation();

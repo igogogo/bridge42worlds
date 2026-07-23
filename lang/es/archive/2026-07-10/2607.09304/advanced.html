@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo el aprendizaje automático acelera el autoconsistencia en la estructura electrónica: un comienzo cálido para DFTB — bridge42worlds</title>
+    <meta name="description" content="Los cálculos autoconsistentes de cargas en métodos semiempíricos como DFTB a menudo sufren de convergencia lenta, especialmente para sistemas complejos. Un grupo de científicos del Instituto Fritz Haber aplicó aprendizaje automático para predecir con precisión las cargas atómicas iniciales, utilizan">
+    <meta property="og:title" content="Cómo el aprendizaje automático acelera el autoconsistencia en la estructura electrónica: un comienzo cálido para DFTB">
+    <meta property="og:description" content="Usando modelos específicos por elemento, los investigadores redujeron el número de iteraciones de autoconsistencia en el método DFTB hasta en un 84%.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-10/2607.09304/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=c1b3f97509">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Cómo el aprendizaje automático acelera el autoconsistencia en la estructura electrónica: un comienzo cálido pa", "description": "Usando modelos específicos por elemento, los investigadores redujeron el número de iteraciones de autoconsistencia en el método DFTB hasta en un 84%.", "inLanguage": "es", "datePublished": "2026-07-10", "url": "https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-10/2607.09304/ai.jpg", "author": [{"@type": "Person", "name": "Maximilian L. Ach"}, {"@type": "Person", "name": "Karsten Reuter"}, {"@type": "Person", "name": "Chiara Panosetti"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.09304", "abstract": "El método semiempírico DFTB (Density-Functional Tight-Binding) es eficaz para modelar moléculas y materiales, conservando el acceso a las propiedades electrónicas, pero la autoconsistencia de cargas (SCC) puede requerir muchas iteraciones, especialmente en sistemas complejos. Se ha propuesto un método de aprendizaje automático que predice las cargas atómicas iniciales para acelerar la convergencia del SCC. Para cada elemento se entrenaron modelos individuales basados en el descriptor SOAP (superposición suavizada de posiciones atómicas) y regresión ridge con kernels, utilizando cálculos de referencia. Las pruebas en moléculas orgánicas, biomoléculas, cúmulos de agua, óxidos de metales de transición y electrolitos sólidos demostraron que las cargas iniciales predichas por ML reducen de manera estable y significativa el número de iteraciones. El enfoque reduce la barrera computacional para el cribado a gran escala y las simulaciones dinámicas, haciendo que DFTB sea más práctico para tareas de alto rendimiento."}</script>
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/es/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Avanzado</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-07-10/2607.09304/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-07-10/2607.09304/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/es/archive/2026-07-10/2607.09304/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-07-10/2607.09304/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Next article →</button></div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.09304">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ arriba</a></li><li class="article-nav-sep"></li><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1 class="article-title-top" id="article-top">Cómo el aprendizaje automático acelera el autoconsistencia en la estructura electrónica: un comienzo cálido para DFTB <span class="refine-badge" title="Pulido por un editor">✦</span> </h1>
+        <div class="original-title original-title-top">Original: "Learning to Converge: Warm-Starting DFTB Self-Consistent Charges with Machine Learning"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/es/authors/Maximilian_L_Ach.html" class="text-author-link" data-author="Maximilian L. Ach">Maximilian L. Ach</a>, <a href="/lang/es/authors/Karsten_Reuter.html" class="text-author-link" data-author="Karsten Reuter">Karsten Reuter</a>, <a href="/lang/es/authors/Chiara_Panosetti.html" class="text-author-link" data-author="Chiara Panosetti">Chiara Panosetti</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.09304">2607.09304</a> · 2026-07-10 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 4 min</span> · <a class="cat-badge" href="/lang/es/sections/cond-mat_mtrl-sci.html" data-cat="cond-mat.mtrl-sci" title="Techniques, synthesis, characterization, structure. Structural phase transitions, mechanical properties, phonons. Defects, adsorbates, interfaces.">Materials</a>
+        </div>
+        <div class="oneliner">Usando modelos específicos por elemento, los investigadores redujeron el número de iteraciones de autoconsistencia en el método DFTB hasta en un 84%.</div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>El método semiempírico DFTB (Density-Functional Tight-Binding) es eficaz para modelar moléculas y materiales, conservando el acceso a las propiedades electrónicas, pero la autoconsistencia de cargas (SCC) puede requerir muchas iteraciones, especialmente en sistemas complejos. Se ha propuesto un método de aprendizaje automático que predice las cargas atómicas iniciales para acelerar la convergencia del SCC. Para cada elemento se entrenaron modelos individuales basados en el descriptor SOAP (superposición suavizada de posiciones atómicas) y regresión ridge con kernels, utilizando cálculos de referencia. Las pruebas en moléculas orgánicas, biomoléculas, cúmulos de agua, óxidos de metales de transición y electrolitos sólidos demostraron que las cargas iniciales predichas por ML reducen de manera estable y significativa el número de iteraciones. El enfoque reduce la barrera computacional para el cribado a gran escala y las simulaciones dinámicas, haciendo que DFTB sea más práctico para tareas de alto rendimiento.</p></div>
+        <div class="mosaic"><div class="gallery" data-count="2"><div class="gallery-stage"><button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button><button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button><a class="gallery-main" href="/lang/ru/archive/2026-07-10/2607.09304/ai.jpg" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-07-10/2607.09304/ai.jpg" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div><div class="gallery-thumbs"><button type="button" class="gallery-thumb is-active" data-i="0" data-src="/lang/ru/archive/2026-07-10/2607.09304/ai.jpg" data-cap="" aria-label="Image 1"><img src="/lang/ru/archive/2026-07-10/2607.09304/t_ai.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="1" data-src="/lang/ru/archive/2026-07-10/2607.09304/0.jpg" data-cap="RMSE de predicción de carga DFTB (en unidades de 10^{-3}e) para todos los elementos a través de los conjuntos de datos." aria-label="RMSE de predicción de carga DFTB (en unidades de 10^{-3}e) para todos los elementos a través de los conjuntos de datos."><img src="/lang/ru/archive/2026-07-10/2607.09304/0.jpg" alt="" loading="lazy"></button></div></div></div>
+        <div id="article-graph" class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Links in the knowledge graph <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div><div class="mini-graph mini-graph--article" data-node="l:coulombs_law,l:planckeinstein_relation,l:superposition_principle,l:rydberg_formula,l:poyntings_theorem,l:fermi_acceleration,s:Charles-Augustin de Coulomb,s:James Clerk Maxwell"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>Context</h2><p>En el mundo de la ciencia de materiales computacional, los métodos <a href="/lang/es/tags/quantum_algorithm.html" class="text-tag" data-tag="quantum_algorithm">de cálculo mecánico-cuántico</a> a menudo equilibran precisión y velocidad. El método semiempírico DFTB (Density-Functional Tight-Binding) ocupa un punto medio: es cientos de veces más rápido que la teoría del funcional de la densidad completa, manteniendo la descripción de la estructura electrónica. Sin embargo, su corazón — el procedimiento iterativo de autoconsistencia de cargas (SCC) — puede atascarse como un motor sin el encendido correcto. Cuando las cargas atómicas iniciales se establecen en cero, el sistema tarda mucho en "encontrar" la distribución correcta, especialmente en enlaces polares o interfaces donde la redistribución de carga es grande. Aquí entra en escena el <a href="/lang/es/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">aprendizaje automático</a>, capaz de proporcionar un "inicio cálido" preciso.</p></section><section id="methods"><h2>Methods</h2><p>Los investigadores propusieron utilizar el método de regresión de núcleo ridge (KRR) con descriptores SOAP (Smooth Overlap of Atomic Positions) para predecir cargas atómicas directamente de la estructura. El descriptor SOAP describe matemáticamente el entorno local de cada átomo, considerando tipos de vecinos y distancias, y permanece invariante a rotaciones y permutaciones — un verdadero "pasaporte químico" del átomo. Los modelos se entrenaron por separado para cada elemento, lo que les permitió especializarse en la "huella" única de las <a href="/lang/es/tags/electromagnetism.html" class="text-tag" data-tag="electromagnetism">interacciones electrostáticas</a> en diferentes entornos químicos. El objetivo no era reemplazar el cálculo SCC completo, sino proporcionar cargas iniciales ya "precalentadas", tras lo cual el algoritmo iterativo estándar, basado en la resolución de la <a href="/lang/es/laws/schrdinger_equation.html" class="text-law" data-law="schrdinger_equation">ecuación de Schrödinger</a> para el subsistema electrónico, alcanzaba rápidamente una <a href="/lang/es/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">solución autoconsistente</a>. Además, considerando que la <a href="/lang/es/laws/coulombs_law.html" class="text-law" data-law="coulombs_law">ley de Coulomb</a> determina la energía de las partículas cargadas, una aproximación inicial precisa de las cargas reduce las oscilaciones y acelera la convergencia.</p></section><section id="results"><h2>Results</h2><p>La eficacia de la inicialización por ML se probó en seis conjuntos de datos heterogéneos: desde moléculas orgánicas de QM9 (conteniendo <a href="/lang/es/tags/hydrogen.html" class="text-tag" data-tag="hydrogen">hidrógeno</a>, <a href="/lang/es/tags/carbon.html" class="text-tag" data-tag="carbon">carbono</a>, <a href="/lang/es/tags/oxygen.html" class="text-tag" data-tag="oxygen">oxígeno</a>) hasta cúmulos de <a href="/lang/es/tags/water.html" class="text-tag" data-tag="water">agua</a>, biomoléculas, óxidos de níquel y el electrolito sólido LLZO para baterías de iones de litio. Las cargas predichas resultaron cercanas a las completamente convergidas: el error cuadrático medio no superó 0.01 de carga elemental. Esto condujo a una impresionante reducción del número de iteraciones: para los óxidos de níquel, un 84% (de 62.5 a 10.0 ciclos en promedio), para LLZO un 58%, para los cúmulos de agua un 34%. Además, de 1118 estructuras de óxidos de níquel que antes no convergían en 2000 iteraciones con cargas nulas, 891 alcanzaron el mínimo exitosamente usando las predicciones de ML. Incluso al transferir modelos entrenados con un conjunto de parámetros DFTB a otro, la aceleración se mantuvo, aunque en menor grado. Curiosamente, incluso las cargas predichas a partir de cálculos DFT más precisos resultaron mejores que la inicialización nula: una mejora modesta pero constante.</p></section><section id="implications"><h2>Implications</h2><p>Este enfoque cambia las reglas del juego en <a href="/lang/es/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">aprendizaje automático para la química cuántica</a>: en lugar de reemplazar los modelos físicos con redes neuronales profundas, integra las predicciones de ML dentro de una tubería computacional probada, preservando la autoconsistencia completa. Para la computación de alto rendimiento, donde millones de estructuras se procesan mediante scripts, la inicialización automática por ML elimina el ajuste manual, una verdadera maldición para los investigadores. Ahora, los cálculos complejos que antes requerían horas por molécula pueden realizarse varias veces más rápido, abriendo el camino al cribado masivo de materiales.</p></section><section id="future_development"><h2>Future development</h2><p>El futuro está en modelos que predigan no solo la carga total del átomo, sino también las poblaciones de capas individuales (s, p, d); esto es especialmente importante para los metales de transición, donde el enfoque actual a veces "tropieza" debido a una distribución no física de electrones en los orbitales. También resulta prometedor crear modelos universales entrenados con enormes bases de datos químicas, que podrían servir como un "inicio cálido eterno" para cualquier conjunto de parámetros. Las redes neuronales, a diferencia de la regresión de núcleo, posiblemente capturen mejor los efectos de largo alcance y amplíen el ámbito de aplicabilidad.</p></section><section id="impact_on"><h2>Impact</h2><p>La tecnología impacta directamente en el desarrollo de nuevos catalizadores, materiales para baterías y fármacos, donde la contabilidad precisa de la transferencia de carga es crítica. También acelerará la creación de campos de fuerza de aprendizaje automático y la parametrización de métodos semiempíricos.</p></section><section id="next_steps"><h2>Next steps</h2><p>Los investigadores planean extender el método a la familia xTB (extended Tight Binding) e integrarlo en paquetes de modelado automatizado. El siguiente paso es crear una biblioteca pública de modelos de carga para todos los elementos.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>El problema de la convergencia lenta en la autoconsistencia es parte de un desafío más amplio: cómo combinar la precisión cuántica y la velocidad clásica. Este trabajo muestra que los esquemas híbridos "ML + física" pueden ser más efectivos que los potenciales ML puros, especialmente cuando se necesita describir interacciones electrostáticas de largo alcance, que siguen siendo un escollo para los campos basados en redes neuronales.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 ¿Sabías que el método DFTB se inspiró en la tomografía médica? Sus creadores utilizaron los mismos trucos matemáticos para "comprimir" la información de las funciones de onda, como un tomógrafo comprime los datos de las proyecciones de rayos X. Y ahora, el aprendizaje automático también lo ayuda a no desviarse.</p><p class="fact fact-scifi">🎬 En la novela de Greg Egan "Angustia", los científicos usan simulaciones cuánticas para crear universos virtuales completos. Las predicciones rápidas y precisas de cargas son un pequeño paso para que esas simulaciones funcionen no en supercomputadoras de un futuro lejano, sino en clústeres comunes.</p></div>
+        <div class="formula"><div class="formula-render">E_{\mathrm{SCC}} = \sum_i^{\mathrm{occ}} f_i \langle \psi_i | \hat{H}_0 | \psi_i \rangle + \frac{1}{2} \sum_{I,J} \gamma_{IJ} \Delta q_I \Delta q_J + \sum_{I&lt;J} V^{\mathrm{rep}}_{IJ}</div><div class="formula-meaning">La energía se compone de la parte electrónica (suma sobre orbitales ocupados), la contribución coulombiana de las fluctuaciones de carga y la energía repulsiva por pares.</div></div><div class="formula"><div class="formula-render">\sum_\nu (H_{\mu\nu} - \varepsilon_a S_{\mu\nu}) c_{\nu a} = 0</div><div class="formula-meaning">Problema de valores propios generalizado, donde $H$ es el Hamiltoniano, $S$ la matriz de solapamiento de las funciones base, $\varepsilon$ las energías orbitales, y $c$ los coeficientes de expansión.</div></div><div class="formula"><div class="formula-render">H_{\mu\nu} = H^0_{\mu\nu} + \frac{1}{2} S_{\mu\nu} \sum_K (\gamma_{IK} + \gamma_{JK}) \Delta q_K</div><div class="formula-meaning">A los elementos de matriz de orden cero se les añade una corrección proporcional a la matriz de solapamiento y a las interacciones coulombianas con las fluctuaciones de carga en todos los átomos.</div></div>
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>reducción de iteraciones para óxidos de níquel:</strong> 84%</li><li><strong>reducción para LLZO:</strong> 58%</li><li><strong>iteraciones promedio por defecto para QM9:</strong> 10.2</li><li><strong>iteraciones promedio con inicialización ML para QM9:</strong> 7.3</li><li><strong>RMSE de las predicciones de carga, e:</strong> 0.001–0.01</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.09304_es_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.09304" title="Favoritos"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button class="share-btn" title="Share" onclick="shareArticle('Cómo el aprendizaje automático acelera el autoconsistencia en la estructura electrónica: un comienzo cálido para DFTB','https://bridge42worlds.academy/lang/es/archive/2026-07-10/2607.09304/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="M8.1 10.9l6.8-3.8M8.1 13.1l6.8 3.8"/></svg></button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.09304_es_advanced" data-entity-type="article"><div class="fb-title-row"><button class="next-btn next-btn-top">Next article →</button></div><button type="button" class="fb-comment-toggle">+ add a comment</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/es/scientists/Charles-Augustin_de_Coulomb.html" class="side-sci" data-scientist="Charles-Augustin de Coulomb">Charles-Augustin de Coulomb</a><a href="/lang/es/scientists/James_Clerk_Maxwell.html" class="side-sci" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a><a href="/lang/es/scientists/David_Deutsch.html" class="side-sci" data-scientist="David Deutsch">David Deutsch</a><a href="/lang/es/scientists/Erwin_Schrödinger.html" class="side-sci" data-scientist="Erwin Schrödinger">Erwin Schrödinger</a><a href="/lang/es/scientists/John_Stewart_Bell.html" class="side-sci" data-scientist="John Stewart Bell">John Stewart Bell</a><a href="/lang/es/scientists/Louis_de_Broglie.html" class="side-sci" data-scientist="Louis de Broglie">Louis de Broglie</a><div class="side-tags-label">Tags</div><a href="/lang/es/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">aprendizaje automático</a>
+<a href="/lang/es/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">simulación numérica</a>
+<a href="/lang/es/tags/quantum_algorithm.html" class="side-tag" data-tag="quantum_algorithm">algoritmo cuántico</a>
+<a href="/lang/es/tags/electromagnetism.html" class="side-tag" data-tag="electromagnetism">electromagnetismo</a>
+<a href="/lang/es/tags/hydrogen.html" class="side-tag" data-tag="hydrogen">hidrógeno</a>
+<a href="/lang/es/tags/carbon.html" class="side-tag" data-tag="carbon">carbono</a>
+<a href="/lang/es/tags/oxygen.html" class="side-tag" data-tag="oxygen">oxígeno</a>
+<a href="/lang/es/tags/water.html" class="side-tag" data-tag="water">agua</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/coulombs_law.html" class="side-law" data-law="coulombs_law">Ley de Coulomb</a><a href="/lang/es/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">Ecuación de Planck-Einstein</a><a href="/lang/es/laws/superposition_principle.html" class="side-law" data-law="superposition_principle">principio de superposición</a><a href="/lang/es/laws/rydberg_formula.html" class="side-law" data-law="rydberg_formula">fórmula de Rydberg</a><a href="/lang/es/laws/poyntings_theorem.html" class="side-law" data-law="poyntings_theorem">teorema de Poynting</a><a href="/lang/es/laws/fermi_acceleration.html" class="side-law" data-law="fermi_acceleration">aceleración de Fermi</a></div>
+</div>
+
+<div class="license">Original: <a href="https://arxiv.org/abs/2607.09304">arXiv:2607.09304</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=c1b3f97509"></script>
+<script src="/js/search.js?v=c1b3f97509"></script>
+<script src="/js/scroll.js?v=c1b3f97509"></script>
+<script src="/js/lightbox.js?v=c1b3f97509"></script>
+<script src="/js/gallery.js?v=c1b3f97509"></script>
+<script src="/js/force-graph.js?v=c1b3f97509"></script>
+<script src="/js/mini-graph.js?v=c1b3f97509"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.09304', 'article', 'es');
+    if (false && window.logExpressInterest) logExpressInterest('2607.09304', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

@@ -547,19 +547,30 @@ def build_og_meta(title, description, url, image_url=""):
             f'{img_html}')
 
 
+ICON_THUMB_UP = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                 'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                 '<path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/>'
+                 '<path d="M7 10H4v11h3"/></svg>')
+ICON_THUMB_DN = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                 'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                 '<path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/>'
+                 '<path d="M7 14H4V3h3"/></svg>')
+ICON_STAR = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+             'stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">'
+             '<path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg>')
+
 def build_actions_html(like_id, fav_id, lang, entity_type="article"):
     """Реакции 👍👎⭐ + избранное — общий блок для статей/тегов/законов/учёных (без «поделиться»,
     оно у статей особое из-за clickbait-заголовка и своей ссылки)."""
     fav_label = ACTIONS_LOC.get(lang, ACTIONS_LOC["en"])
     rt = reaction_titles(lang)
-    return (f'<div class="actions" data-article-id="{like_id}" data-entity-type="{entity_type}">'
+    return (f'<div class="actions actions-compact" data-article-id="{like_id}" data-entity-type="{entity_type}">'
             f'<div class="reactions">'
-            f'<button class="react-btn" data-react="like" title="{attr_safe(rt["like"])}">👍 <span class="rc">…</span></button>'
-            f'<button class="react-btn" data-react="dislike" title="{attr_safe(rt["dislike"])}">👎 <span class="rc">…</span></button>'
-            f'<button class="react-btn" data-react="superlike" title="{attr_safe(rt["superlike"])}">⭐ <span class="rc">…</span></button>'
+            f'<button class="react-btn" data-react="like" title="{attr_safe(rt["like"])}">{ICON_THUMB_UP}<span class="rc">…</span></button>'
+            f'<button class="react-btn" data-react="dislike" title="{attr_safe(rt["dislike"])}">{ICON_THUMB_DN}<span class="rc">…</span></button>'
             f'</div>'
             f'<button class="fav-btn" data-fav="{attr_safe(fav_id)}" title="{attr_safe(fav_label)}">'
-            f'<span class="fav-ic">☆</span> {safe(fav_label)}</button>'
+            f'<span class="fav-ic">{ICON_STAR}</span></button>'
             f'</div>')
 
 
@@ -718,6 +729,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # Порядок = порядок блоков на странице (граф стоит перед действиями/откликом в основном
     # потоке — см. article.html): граф (если есть) → отклик → похожие статьи.
     nav_extra_items = []
+    # Первый пункт левого меню — короткое слово «наверх» со ссылкой к началу статьи
+    # (юзер-фидбек 2026-07-22: не вставлять сам заголовок, просто слово + ссылка наверх).
+    _top_lbl = {"ru": "↑ наверх", "en": "↑ top", "es": "↑ arriba", "ar": "↑ للأعلى",
+                "fr": "↑ haut", "zh": "↑ 顶部"}.get(lang, "↑ top")
+    nav_top_item = f'<li class="article-nav-home"><a href="#article-top">{safe(_top_lbl)}</a></li>'
     if article_graph_html:
         graph_nav_lbl = GRAPH_NAV_LABEL.get(lang, GRAPH_NAV_LABEL["en"])
         nav_extra_items.append(f'<li><a href="#article-graph">{safe(graph_nav_lbl)}</a></li>')
@@ -732,7 +748,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             parts = [scipop.get(k, "") for k in ("context", "metaphor", "future")]
             text_html = "".join(f"<p>{parse_markers(p, lang)}</p>" for p in parts if p)
         key_numbers_html = ""
-        nav_html = '<nav class="article-nav" id="section-nav"><ul>' + "".join(nav_extra_items) + '</ul></nav>'
+        nav_html = '<nav class="article-nav" id="section-nav"><ul>' + nav_top_item + '<li class="article-nav-sep"></li>' + "".join(nav_extra_items) + '</ul></nav>'
         formulas_html = render_formulas(scipop.get("formulas", []))
         fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""))
     else:
@@ -742,7 +758,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             ("impact_on", loc["impact_on"]), ("next_steps", loc["next_steps"]),
             ("key_problems_connection", loc["key_problems_connection"])
         ]
-        nav_html = '<nav class="article-nav" id="section-nav"><ul>'
+        nav_html = '<nav class="article-nav" id="section-nav"><ul>' + nav_top_item + '<li class="article-nav-sep"></li>'
         text_html = ""
         for sid, slabel in sections:
             content = scipop.get(sid, "")
@@ -823,7 +839,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     ) + f'\n    <link rel="alternate" hreflang="x-default" href="{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/{page_file}">'
 
     rmin = reading_minutes(scipop)
-    reading_html = f'<span class="reading-time">⏱ {rmin} {safe(loc.get("min", "min"))}</span>'
+    reading_html = f'<span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> {rmin} {safe(loc.get("min", "min"))}</span>'
     jsonld_html = build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_for(abstract, lang, "advanced"))
 
     return tpl.substitute(
@@ -831,8 +847,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         authors_lang=lang, asset_ver=asset_ver(),
         clickbait=safe(scipop.get("title", article["title"])),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
-        refine_badge='<span class="refine-badge" title="Отшлифовано редактором">✦</span>' if article.get("refined") else "",
-        express_badge='<span class="express-badge" title="Экспресс-версия: по аннотации автора, без разбора полного текста статьи">⚡ экспресс</span>' if article.get("express") else "",
+        refine_badge=(f'<span class="refine-badge" title="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
+        express_badge=(f'<span class="express-badge" title="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),
         original_title=safe(article["title"]),
         oneliner=safe(scipop.get("oneliner", "")),
         oneliner_short=safe(scipop.get("oneliner", "")[:160]),
@@ -1349,6 +1365,21 @@ LAWS_LABELS = {
 LAW_TYPE_COLORS = {"закон": "#C0392B", "принцип": "#8E44AD", "теорема": "#2471A3",
                    "эффект": "#B9770E", "уравнение": "#148F77", "теория": "#5D6D7E",
                    "изобретение": "#2E7D32"}
+# Тип закона хранится в data по-русски и служит заголовком группы на странице /laws/.
+# Локализуем его под язык страницы (юзер-фидбек 2026-07-22: на es группы были по-русски).
+LAW_TYPE_LABEL = {
+    "закон":       {"en": "law", "es": "ley", "ar": "قانون", "fr": "loi", "zh": "定律"},
+    "принцип":     {"en": "principle", "es": "principio", "ar": "مبدأ", "fr": "principe", "zh": "原理"},
+    "теорема":     {"en": "theorem", "es": "teorema", "ar": "مبرهنة", "fr": "théorème", "zh": "定理"},
+    "эффект":      {"en": "effect", "es": "efecto", "ar": "تأثير", "fr": "effet", "zh": "效应"},
+    "уравнение":   {"en": "equation", "es": "ecuación", "ar": "معادلة", "fr": "équation", "zh": "方程"},
+    "теория":      {"en": "theory", "es": "teoría", "ar": "نظرية", "fr": "théorie", "zh": "理论"},
+    "изобретение": {"en": "invention", "es": "invención", "ar": "اختراع", "fr": "invention", "zh": "发明"},
+}
+def law_type_label(t, lang):
+    if not t or lang == "ru":
+        return t
+    return LAW_TYPE_LABEL.get(t, {}).get(lang, t)
 
 # Раздел науки тега (для группировки облака списком) — фиксированный английский slug (НЕ переводится
 # через LLM, чтобы группировка/цвета не разъезжались по языкам); подписи — тут, локализуются вручную.
@@ -1470,7 +1501,7 @@ def generate_laws_cloud(lang):
 
     cloud = ""
     for t in sorted(by_type.keys()):
-        cloud += f'<div class="cloud-group-label">{safe(t)}</div>\n'
+        cloud += f'<div class="cloud-group-label">{safe(law_type_label(t, lang))}</div>\n'
         cloud += "".join(law_row(lid) for lid in sorted(by_type[t], key=lambda x: laws[x].get("name", x)))
 
     # Данные для treemap-мозаики (дефолтный вид): тип закона = плитка, внутри — законы.
@@ -1483,7 +1514,7 @@ def generate_laws_cloud(lang):
               "url": f"/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html"} for lid in lids),
             key=lambda c: -c["count"])
         color = law_color(lids[0])
-        tm_groups.append({"key": t, "label": t, "count": sum(c["count"] for c in children) or len(children),
+        tm_groups.append({"key": t, "label": law_type_label(t, lang), "count": sum(c["count"] for c in children) or len(children),
                           "color": color, "children": children})
     tm_groups.sort(key=lambda g: -g["count"])
     treemap_data = json.dumps({"allLabel": all_lbl, "groups": tm_groups}, ensure_ascii=False)
@@ -1782,6 +1813,15 @@ def generate_scientists_cloud(lang):
     ), encoding="utf-8")
 
 
+_PRESENT_LABEL = {"ru": "настоящее время", "en": "present", "es": "presente",
+                  "ar": "الحاضر", "fr": "présent", "zh": "至今"}
+def localize_present(lifespan, lang):
+    """Годы жизни хранятся одной строкой (не переводятся) — у живущих учёных там русское
+    «настоящее время». Локализуем этот токен под язык страницы (юзер-фидбек 2026-07-22)."""
+    if not lifespan or lang == "ru":
+        return lifespan
+    return lifespan.replace("настоящее время", _PRESENT_LABEL.get(lang, "present"))
+
 def generate_scientist_page(sid, lang):
     tpl = load_template("scientist")
     if not tpl.template: return
@@ -1877,7 +1917,7 @@ def generate_scientist_page(sid, lang):
         scientist_id=attr_safe(sid),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         actions_html=actions_html, feedback_html=feedback_html,
-        scientist_name=safe(sid), lifespan=data.get("lifespan", ""),
+        scientist_name=safe(sid), lifespan=safe(localize_present(data.get("lifespan", ""), lang)),
         fields=", ".join(as_list(data.get("fields", []))),
         scientist_description=safe(data.get("description", "")),
         scientist_biography=safe(data.get("biography", "")),
@@ -1985,13 +2025,29 @@ def generate_sections_cloud(lang):
     # Табличный вид (юзер-фидбек 2026-07-21): облако плашек не различало math.MP и math-ph
     # визуально (оба показывают имя "Math Physics") — колонка с сырым arXiv-кодом устраняет
     # дубль наглядно, коды у них разные, хотя канонические англ. имена совпадают намеренно.
-    rows = "".join(
-        f'<tr><td><a href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
-        f'title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">{safe(ARXIV_CATEGORIES.get(c, c))}</a></td>'
-        f'<td class="section-code">{safe(c)}</td>'
-        f'<td class="section-count">{n}</td></tr>'
-        for c, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
-    )
+    # Группировка по префиксу кода до точки (astro-ph.HE → группа «astro-ph»), внутри — по коду.
+    # Заголовок группы = префикс + человекочитаемое имя (юзер-фидбек 2026-07-22).
+    groups = {}
+    for c in counts:
+        groups.setdefault(c.split(".")[0], []).append(c)
+    rows = ""
+    for prefix in sorted(groups.keys()):
+        members = sorted(groups[prefix])
+        gtotal = sum(counts[c] for c in members)
+        gname = ARXIV_CATEGORIES.get(prefix, "")
+        rows += (
+            f'<tr class="section-group"><td colspan="2">'
+            f'<span class="section-group-code">{safe(prefix)}</span>'
+            + (f' <span class="section-group-name">{safe(gname)}</span>' if gname and gname != prefix else "")
+            + f'</td><td class="section-count">{gtotal}</td></tr>'
+        )
+        for c in members:
+            rows += (
+                f'<tr><td><a href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
+                f'title="{attr_safe(ARXIV_CATEGORY_DESCRIPTIONS.get(c, ""))}">{safe(ARXIV_CATEGORIES.get(c, c))}</a></td>'
+                f'<td class="section-code">{safe(c)}</td>'
+                f'<td class="section-count">{counts[c]}</td></tr>'
+            )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
     (Path(LANG_DIR) / lang / "sections" / "index.html").write_text(tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang=lang, asset_ver=asset_ver(),

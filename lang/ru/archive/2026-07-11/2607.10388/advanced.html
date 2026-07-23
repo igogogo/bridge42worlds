@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эволюция ИИ в микроскопии наночастиц: от интерпретации к научному выводу — bridge42worlds</title>
+    <meta name="description" content="Обзор современных методов искусственного интеллекта для электронной микроскопии наночастиц. Рассмотрены задачи детекции, сегментации, восстановления атомарного разрешения и трёхмерной структурной реконструкции. Показано, как глубокое обучение переходит от анализа изображений к извлечению физически з">
+    <meta property="og:title" content="Эволюция ИИ в микроскопии наночастиц: от интерпретации к научному выводу">
+    <meta property="og:description" content="Машинное обучение превращает электронную микроскопию в инструмент предсказательного материаловедения.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=c1b3f97509">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Эволюция ИИ в микроскопии наночастиц: от интерпретации к научному выводу", "description": "Машинное обучение превращает электронную микроскопию в инструмент предсказательного материаловедения.", "inLanguage": "ru", "datePublished": "2026-07-11", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/ai.jpg", "author": [{"@type": "Person", "name": "Evropi Toulkeridou"}, {"@type": "Person", "name": "Jiafei Li"}, {"@type": "Person", "name": "Leonardo Lari"}, {"@type": "Person", "name": "Panagiotis Grammatikopoulos"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.10388", "abstract": "В обзоре рассматриваются методы искусственного интеллекта для характеризации наночастиц методами электронной микроскопии: ПЭМ, ВРЭМ, СПЭМ и in situ ТЭМ. Анализируются ключевые задачи: детектирование, сегментация, количественная оценка морфологии, восстановление атомного разрешения, идентификация дефектов, переход от двумерных изображений к трёхмерной структуре и анализ динамических процессов. Охвачены вычислительные подходы от классического машинного обучения и свёрточных нейросетей до трансформеров, самообучения, фундаментальных моделей, мультимодального ИИ и физически информированного обучения. Рассмотрена интеграция микроскопических данных с симуляциями, метаданными и автономными экспериментами для связи структуры, динамики, условий синтеза и функциональных свойств. Критически оценены преимущества, ограничения и требования к данным существующих методов. Обсуждаются перспективы фундаментальных моделей, ИИ-управляемой микроскопии и замкнутых циклов экспериментов для автономного открытия материалов."}</script>
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Подробно</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-07-11/2607.10388/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-07-11/2607.10388/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-07-11/2607.10388/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-07-11/2607.10388/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Следующая статья →</button></div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.10388">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#context">Контекст</a></li><li><a href="#methods">Методы</a></li><li><a href="#results">Результаты</a></li><li><a href="#implications">Значение</a></li><li><a href="#future_development">Развитие</a></li><li><a href="#impact_on">Влияние</a></li><li><a href="#next_steps">Следующие шаги</a></li><li><a href="#key_problems_connection">Ключевые проблемы</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1 class="article-title-top" id="article-top">Эволюция ИИ в микроскопии наночастиц: от интерпретации к научному выводу <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+        <div class="original-title original-title-top">Original: "The evolution of AI from image interpretation toward scientific inference in nanoparticle electron microscopy"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/ru/authors/Evropi_Toulkeridou.html" class="text-author-link" data-author="Evropi Toulkeridou">Evropi Toulkeridou</a>, <a href="/lang/ru/authors/Jiafei_Li.html" class="text-author-link" data-author="Jiafei Li">Jiafei Li</a>, <a href="/lang/ru/authors/Leonardo_Lari.html" class="text-author-link" data-author="Leonardo Lari">Leonardo Lari</a>, <a href="/lang/ru/authors/Panagiotis_Grammatikopoulos.html" class="text-author-link" data-author="Panagiotis Grammatikopoulos">Panagiotis Grammatikopoulos</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.10388">2607.10388</a> · 2026-07-11 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 2 мин</span> · <a class="cat-badge" href="/lang/ru/sections/cond-mat_mtrl-sci.html" data-cat="cond-mat.mtrl-sci" title="Techniques, synthesis, characterization, structure. Structural phase transitions, mechanical properties, phonons. Defects, adsorbates, interfaces.">Materials</a> <a class="cat-badge" href="/lang/ru/sections/cs_AI.html" data-cat="cs.AI" title="Artificial intelligence, excluding vision, robotics, machine learning, multiagent systems and NLP: expert systems, theorem proving, knowledge representation, planning, uncertainty in AI.">Artificial Intelligence</a>
+        </div>
+        <div class="oneliner">Машинное обучение превращает электронную микроскопию в инструмент предсказательного материаловедения.</div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>В обзоре рассматриваются методы искусственного интеллекта для характеризации наночастиц методами электронной микроскопии: ПЭМ, ВРЭМ, СПЭМ и in situ ТЭМ. Анализируются ключевые задачи: детектирование, сегментация, количественная оценка морфологии, восстановление атомного разрешения, идентификация дефектов, переход от двумерных изображений к трёхмерной структуре и анализ динамических процессов. Охвачены вычислительные подходы от классического машинного обучения и свёрточных нейросетей до трансформеров, самообучения, фундаментальных моделей, мультимодального ИИ и физически информированного обучения. Рассмотрена интеграция микроскопических данных с симуляциями, метаданными и автономными экспериментами для связи структуры, динамики, условий синтеза и функциональных свойств. Критически оценены преимущества, ограничения и требования к данным существующих методов. Обсуждаются перспективы фундаментальных моделей, ИИ-управляемой микроскопии и замкнутых циклов экспериментов для автономного открытия материалов.</p></div>
+        <div class="mosaic"><div class="gallery" data-count="9"><div class="gallery-stage"><button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button><button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button><a class="gallery-main" href="/lang/ru/archive/2026-07-11/2607.10388/ai.jpg" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-07-11/2607.10388/ai.jpg" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div><div class="gallery-thumbs"><button type="button" class="gallery-thumb is-active" data-i="0" data-src="/lang/ru/archive/2026-07-11/2607.10388/ai.jpg" data-cap="" aria-label="Image 1"><img src="/lang/ru/archive/2026-07-11/2607.10388/t_ai.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="1" data-src="/lang/ru/archive/2026-07-11/2607.10388/0.jpg" data-cap="Годовое количество публикаций по искусственному интеллекту и электронной микроскопии наночастиц, индексированных в Scopus" aria-label="Годовое количество публикаций по искусственному интеллекту и электронной микроскопии наночастиц, индексированных в Scopus"><img src="/lang/ru/archive/2026-07-11/2607.10388/0.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="2" data-src="/lang/ru/archive/2026-07-11/2607.10388/1.jpg" data-cap="Иерархическая структура задач глубокого обучения в микроскопии наночастиц, от обнаружения к пространственно-временному анализу" aria-label="Иерархическая структура задач глубокого обучения в микроскопии наночастиц, от обнаружения к пространственно-временному анализу"><img src="/lang/ru/archive/2026-07-11/2607.10388/1.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="3" data-src="/lang/ru/archive/2026-07-11/2607.10388/3.jpg" data-cap="Необработанные микроскопические данные" aria-label="Необработанные микроскопические данные"><img src="/lang/ru/archive/2026-07-11/2607.10388/3.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="4" data-src="/lang/ru/archive/2026-07-11/2607.10388/4.jpg" data-cap="Восстановление изображений наночастиц с атомным разрешением с помощью глубокого обучения. (а) Характерное изображение ПЭМВР при низкой дозе" aria-label="Восстановление изображений наночастиц с атомным разрешением с помощью глубокого обучения. (а) Характерное изображение ПЭМВР при низкой дозе"><img src="/lang/ru/archive/2026-07-11/2607.10388/4.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="5" data-src="/lang/ru/archive/2026-07-11/2607.10388/5.jpg" data-cap="Вместо обнаружения наблюдаемых признаков изображения, глубокое" aria-label="Вместо обнаружения наблюдаемых признаков изображения, глубокое"><img src="/lang/ru/archive/2026-07-11/2607.10388/5.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="6" data-src="/lang/ru/archive/2026-07-11/2607.10388/6.jpg" data-cap="Схематическая иллюстрация пространственно-временного анализа динамики наночастиц с помощью ИИ в in situ ПЭМ. (а) Начальный кадр" aria-label="Схематическая иллюстрация пространственно-временного анализа динамики наночастиц с помощью ИИ в in situ ПЭМ. (а) Начальный кадр"><img src="/lang/ru/archive/2026-07-11/2607.10388/6.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="7" data-src="/lang/ru/archive/2026-07-11/2607.10388/7.jpg" data-cap="" aria-label="Image 8"><img src="/lang/ru/archive/2026-07-11/2607.10388/7.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="8" data-src="/lang/ru/archive/2026-07-11/2607.10388/8.jpg" data-cap="" aria-label="Image 9"><img src="/lang/ru/archive/2026-07-11/2607.10388/8.jpg" alt="" loading="lazy"></button></div></div></div>
+        <div id="article-graph" class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="l:doppler_effect,l:heisenberg_uncertainty_principle,l:maxwells_equations,l:plancks_law,l:planckeinstein_relation,l:de_broglie_wavelength,s:Christian Doppler,s:D. B. McLaughlin"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>Контекст</h2><p>Наночастицы — ключевые объекты в катализе, энергетике и биомедицине, но их свойства критически зависят от размера, формы, дефектов и поверхности. Электронная микроскопия даёт прямое изображение, однако ручной анализ громоздок и субъективен. Рост объёмов данных и сложности экспериментов требует автоматизации, и здесь на помощь приходит <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">машинное обучение</a>. Благодаря свёрточным сетям и трансформерам, микроскопия становится количественной и высокопроизводительной.</p></section><section id="methods"><h2>Методы</h2><p>Современные подходы опираются на <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">глубокое обучение</a> с учителем и без, используя архитектуры вроде U-Net, YOLO, Vision Transformers. Для тренировки часто задействуют <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">численное моделирование</a> рассеяния электронов, генерируя синтетические изображения с известной структурой. В задачах атомарного разрешения применяют <a href="/lang/ru/tags/waveparticle_duality.html" class="text-tag" data-tag="waveparticle_duality">волновую природу электронов</a> и <a href="/lang/ru/tags/interferometry.html" class="text-tag" data-tag="interferometry">интерферометрию</a> для восстановления фазы, а <a href="/lang/ru/tags/uncertainty_principle.html" class="text-tag" data-tag="uncertainty_principle">принцип неопределённости</a> диктует пределы достижимого разрешения. <a href="/lang/ru/tags/electromagnetism.html" class="text-tag" data-tag="electromagnetism">Электромагнитные линзы</a> формируют пучок, а <a href="/lang/ru/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">спектроскопия</a> и <a href="/lang/ru/tags/photometry.html" class="text-tag" data-tag="photometry">фотометрия</a> дополняют структурные данные химической информацией.</p></section><section id="results"><h2>Результаты</h2><p>Алгоритмы детекции (YOLOv8) достигают средней точности (mAP) выше 0.90, а сегментационные сети (U-Net, nnU-Net) дают коэффициент Дайса 0.85–0.95. К 2025 году пик публикаций по теме превысил 730 статей в год. <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">Самоконтролируемое обучение</a> позволило восстанавливать атомную структуру из зашумлённых кадров in situ TEM, вскрывая миграцию атомов и перестройку поверхности на миллисекундных масштабах. Генеративные модели и <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">симуляции</a> открыли путь к трёхмерной реконструкции из двумерных проекций, хотя неоднозначность обратной задачи остаётся вызовом.</p></section><section id="implications"><h2>Значение</h2><p>Переход от детекции к структурному выводу знаменует превращение микроскопии из описательного инструмента в платформу для открытий. <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">ИИ</a> больше не просто улучшает картинку — он извлекает скрытые параметры: коэффициенты диффузии, энергии активации, связь структуры со свойствами. Это сокращает цикл разработки материалов и делает возможным предсказательное моделирование на основе эксперимента.</p></section><section id="future_development"><h2>Развитие</h2><p>Ожидается слияние мультимодальных данных (изображения, спектры, метаданные) в единых <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">фундаментальных моделях</a>, способных к обобщению без переобучения. Автономные микроскопы с <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">активным обучением</a> будут сами выбирать области сканирования, а замкнутые петли «эксперимент-анализ-решение» ускорят скрининг материалов. Особые надежды возлагают на <a href="/lang/ru/tags/quantum_measurement.html" class="text-tag" data-tag="quantum_measurement">квантово-информационные подходы</a> для повышения чувствительности.</p></section><section id="impact_on"><h2>Влияние</h2><p>Прогресс затронет все области, где используются наноматериалы: катализ, энергопреобразование, плазмонику, магнитные устройства, биомедицину и сенсорику.</p></section><section id="next_steps"><h2>Следующие шаги</h2><p>Необходимы стандартизированные бенчмарки и открытые наборы данных для строгого сравнения методов. Развитие неопределённостно-осведомлённых и физически информированных архитектур станет приоритетом.</p></section><section id="key_problems_connection"><h2>Ключевые проблемы</h2><p>Фундаментальная проблема обратных задач в физике — неединственность восстановления трёхмерной структуры по двумерным проекциям — остаётся вызовом, несмотря на успехи <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">глубокого обучения</a>. Необходимость сочетать точность с интерпретируемостью связывает эту область с общей проблемой объяснимого ИИ.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 Современные детекторы на основе YOLO способны за секунду найти сотни наночастиц на снимке — задача, на которую у эксперта ушли бы часы.</p></div>
+        
+        <div class="key-numbers"><h3>Ключевые числа</h3><ul><li><strong>средняя точность детекции (mAP):</strong> >0.90</li><li><strong>коэффициент Дайса сегментации:</strong> 0.85–0.95</li><li><strong>пик публикаций в год (2025):</strong> 735</li><li><strong>типичное количество кадров в in situ эксперименте:</strong> тысячи</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.10388_ru_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.10388" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button class="share-btn" title="Поделиться" onclick="shareArticle('Эволюция ИИ в микроскопии наночастиц: от интерпретации к научному выводу','https://bridge42worlds.academy/lang/ru/archive/2026-07-11/2607.10388/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="M8.1 10.9l6.8-3.8M8.1 13.1l6.8 3.8"/></svg></button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.10388_ru_advanced" data-entity-type="article"><div class="fb-title-row"><button class="next-btn next-btn-top">Следующая статья →</button></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Christian_Doppler.html" class="side-sci" data-scientist="Christian Doppler">Christian Doppler</a><a href="/lang/ru/scientists/D_B_McLaughlin.html" class="side-sci" data-scientist="D. B. McLaughlin">D. B. McLaughlin</a><a href="/lang/ru/scientists/Didier_Queloz.html" class="side-sci" data-scientist="Didier Queloz">Didier Queloz</a><a href="/lang/ru/scientists/Michel_Mayor.html" class="side-sci" data-scientist="Michel Mayor">Michel Mayor</a><a href="/lang/ru/scientists/R_A_Rossiter.html" class="side-sci" data-scientist="R. A. Rossiter">R. A. Rossiter</a><a href="/lang/ru/scientists/Niels_Bohr.html" class="side-sci" data-scientist="Niels Bohr">Niels Bohr</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">спектроскопия</a>
+<a href="/lang/ru/tags/photometry.html" class="side-tag" data-tag="photometry">фотометрия</a>
+<a href="/lang/ru/tags/interferometry.html" class="side-tag" data-tag="interferometry">интерферометрия</a>
+<a href="/lang/ru/tags/electromagnetism.html" class="side-tag" data-tag="electromagnetism">электромагнетизм</a>
+<a href="/lang/ru/tags/waveparticle_duality.html" class="side-tag" data-tag="waveparticle_duality">корпускулярно-волновой дуализм</a>
+<a href="/lang/ru/tags/uncertainty_principle.html" class="side-tag" data-tag="uncertainty_principle">принцип неопределённости</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">эффект Доплера</a><a href="/lang/ru/laws/heisenberg_uncertainty_principle.html" class="side-law" data-law="heisenberg_uncertainty_principle">принцип неопределённости Гейзенберга</a><a href="/lang/ru/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">уравнения Максвелла</a><a href="/lang/ru/laws/plancks_law.html" class="side-law" data-law="plancks_law">закон излучения Планка</a><a href="/lang/ru/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">уравнение Планка — Эйнштейна</a><a href="/lang/ru/laws/de_broglie_wavelength.html" class="side-law" data-law="de_broglie_wavelength">формула де Бройля</a></div>
+</div>
+
+<div class="license">Оригинал: <a href="https://arxiv.org/abs/2607.10388">arXiv:2607.10388</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=c1b3f97509"></script>
+<script src="/js/search.js?v=c1b3f97509"></script>
+<script src="/js/scroll.js?v=c1b3f97509"></script>
+<script src="/js/lightbox.js?v=c1b3f97509"></script>
+<script src="/js/gallery.js?v=c1b3f97509"></script>
+<script src="/js/force-graph.js?v=c1b3f97509"></script>
+<script src="/js/mini-graph.js?v=c1b3f97509"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.10388', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2607.10388', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

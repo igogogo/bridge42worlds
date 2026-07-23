@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гамма-небо как оркестр: слабый контроль ловит аномалии — bridge42worlds</title>
+    <meta name="description" content="Как найти странный сигнал на гамма-небе, если не знаешь, как он выглядит? Учёные применили слабо контролируемое [tag:machine_learning]машинное обучение[/tag] — метод, которому не нужны размеченные примеры аномалий. Классификатор учится на контрасте: сравнивает «фоновые» спектры обычных объектов со с">
+    <meta property="og:title" content="Гамма-небо как оркестр: слабый контроль ловит аномалии">
+    <meta property="og:description" content="Сравнивая чистый оркестр с записью, где спрятан незваный солист, слабо контролируемое обучение выуживает аномальные гамма-спектры без знания того, как этот солист звучит.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-08/2607.07158/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-08/2607.07158/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-08/2607.07158/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=c1b3f97509">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Гамма-небо как оркестр: слабый контроль ловит аномалии", "description": "Сравнивая чистый оркестр с записью, где спрятан незваный солист, слабо контролируемое обучение выуживает аномальные гамма-спектры без знания того, как этот солист звучит.", "inLanguage": "ru", "datePublished": "2026-07-08", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/ai.jpg", "author": [{"@type": "Person", "name": "Michael Krämer"}, {"@type": "Person", "name": "Silvia Manconi"}, {"@type": "Person", "name": "Kathrin Nippel"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.07158", "abstract": "Исследование посвящено классификации гамма-источников, зарегистрированных телескопом Fermi LAT, среди которых много неотождествлённых объектов. Предложен метод слабо контролируемого обучения (weakly supervised classification), не требующий полностью размеченных данных: классификатор тренируется на выборках с разной примесью сигнала (background-versus-mixture). Рассмотрены три сценария: разделение пульсаров и активных ядер галактик (как калибровочный тест), поиск субгало тёмной материи и обнаружение спектральных особенностей от осцилляций аксионов в фотоны. Изучено влияние доли сигнала и состава обучающей смеси на качество классификации. Показано, что слабый контроль способен выделять аномальные или сигналоподобные подмножества данных без опоры на детальные шаблоны, а в благоприятных случаях его эффективность приближается к полностью контролируемым алгоритмам. Метод особенно ценен, когда точная модель сигнала неизвестна или задана лишь частично, и служит дополнительным инструментом для отбора кандидатов и ранжирования аномалий в гамма-астрономии."}</script>
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-07-08/2607.07158/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-07-08/2607.07158/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-07-08/2607.07158/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-07-08/2607.07158/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="next-top"><button type="button" class="next-btn next-btn-top">Следующая статья →</button></div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.07158">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <h1 class="article-title-top" id="article-top">Гамма-небо как оркестр: слабый контроль ловит аномалии <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+        <div class="original-title original-title-top">Original: "Weakly supervised machine learning for model-agnostic searches of new phenomena in the $$\gamma$$-ray sky"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/ru/authors/Michael_Krämer.html" class="text-author-link" data-author="Michael Krämer">Michael Krämer</a>, <a href="/lang/ru/authors/Silvia_Manconi.html" class="text-author-link" data-author="Silvia Manconi">Silvia Manconi</a>, <a href="/lang/ru/authors/Kathrin_Nippel.html" class="text-author-link" data-author="Kathrin Nippel">Kathrin Nippel</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.07158">2607.07158</a> · 2026-07-08 · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 мин</span> · <a class="cat-badge" href="/lang/ru/sections/astro-ph_HE.html" data-cat="astro-ph.HE" title="Cosmic ray production, acceleration, propagation, detection. Gamma ray astronomy and bursts, X-rays, charged particles, supernovae and other explosive phenomena, stellar remnants and accretion systems.">High Energy</a> <a class="cat-badge" href="/lang/ru/sections/astro-ph_IM.html" data-cat="astro-ph.IM" title="Detector and telescope design, experiment proposals. Laboratory astrophysics. Methods for data analysis, statistical methods. Software, database design.">Instrumentation</a> <a class="cat-badge" href="/lang/ru/sections/hep-ph.html" data-cat="hep-ph" title="Theoretical particle physics and its interrelation with experiment: prediction of particle physics observables, effective field theories, calculation techniques, analysis of theory through experimental results.">HEP Phenomenology</a>
+        </div>
+        <div class="oneliner">Сравнивая чистый оркестр с записью, где спрятан незваный солист, слабо контролируемое обучение выуживает аномальные гамма-спектры без знания того, как этот солист звучит.</div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>Гамма-телескоп Fermi регистрирует много неопознанных источников. Обычно для классификации требуется точное описание сигналов, но в данной работе применён слабо контролируемый подход: классификатор обучается на смесях фона и сигнала без явных меток. Метод проверили на трёх сценариях: разделение пульсаров и активных ядер, поиск тёмной материи, эффекты аксионов. Такой подход выявляет аномалии без детальных шаблонов и в лучших случаях почти не уступает полностью контролируемым алгоритмам. Это напоминает дегустатора, который учится распознавать редкий ингредиент, пробуя смеси.</p></div>
+        <div class="mosaic"></div>
+        <div id="article-graph" class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> Связи в графе знаний <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mini-graph-filters"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div><div class="mini-graph mini-graph--article" data-node="l:doppler_effect,l:gravitational_lensing,l:einstein_field_equations,l:maxwells_equations,l:plancks_law,l:planckeinstein_relation,s:Christian Doppler,s:D. B. McLaughlin"><canvas id="minigraph"></canvas></div>
+        <p>Гамма-небо, запечатлённое телескопом Fermi, — это грандиозная симфония из тысяч источников. Здесь ритмичные пульсации <a href="/lang/ru/tags/pulsar.html" class="text-tag" data-tag="pulsar">пульсаров</a>, мощные аккорды <a href="/lang/ru/tags/active_galactic_nucleus.html" class="text-tag" data-tag="active_galactic_nucleus">активных ядер галактик</a>, но больше всего — неотождествлённых объектов, чья партия остаётся загадкой. Традиционные методы поиска новой физики требуют точной партитуры: нужно знать, как звучит сигнал от аннигиляции <a href="/lang/ru/tags/dark_matter.html" class="text-tag" data-tag="dark_matter">тёмной материи</a> или осцилляций аксион-фотон. Но природа может сыграть не ту мелодию, которую мы ждём. Поэтому учёные обратились к слабо контролируемому обучению — технике, улавливающей диссонанс, даже не зная нот.</p><p>Идея изящна, как настройка слуха. Представьте две аудиозаписи: на первой — безупречный оркестр (чистый фон), на второй — тот же оркестр, но в зале мог быть незваный солист, чей голос вплетается в звучание (смешанная выборка). Слабо контролируемый классификатор учится отличать эти записи, выявляя признаки, нехарактерные для фона. Как опытный слушатель безошибочно чует фальшь, так алгоритм обостряет чувствительность к малейшим отклонениям. В работе использовались реальные и синтезированные <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">нормализующими потоками</a> спектры (методы <a href="/lang/ru/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">спектроскопии</a> и <a href="/lang/ru/tags/photometry.html" class="text-tag" data-tag="photometry">фотометрии</a>), а классификатором служил ансамбль решающих деревьев с градиентным бустингом.</p><div class="callout">Каталог Fermi-LAT содержит 2430 неотождествлённых источников — больше, чем любой известный класс. Это как если бы в оркестре каждый третий музыкант играл на неизвестном инструменте.</div><p>Авторы проверили метод в трёх сценариях. В первом — отделение <a href="/lang/ru/tags/pulsar.html" class="text-tag" data-tag="pulsar">пульсаров</a> от <a href="/lang/ru/tags/active_galactic_nucleus.html" class="text-tag" data-tag="active_galactic_nucleus">активных ядер галактик</a>: при доле аномального класса 10% слабый контроль достиг доли истинных находок около 0.7, почти не уступая контролируемому аналогу. Во втором — поиск субгало <a href="/lang/ru/tags/dark_matter.html" class="text-tag" data-tag="dark_matter">тёмной материи</a> массой 80 ГэВ, аннигилирующих в b-кварки. Здесь скромный результат (доля обнаружений ~0.4 при низком уровне ложных тревог) подчеркнул главное: метод не требует точного знания спектра сигнала, а значит, способен увидеть то, что не вписывается ни в одну модель. Третий сценарий — ещё тоньше: поиск спектральных искажений от аксион-фотонных осцилляций (идея Роберто Печчеи) в <a href="/lang/ru/tags/galaxy.html" class="text-tag" data-tag="galaxy">галактике</a>. Даже при доле сигнала 3% алгоритм улавливал аномалии, хотя доля ложных срабатываний росла — неизбежная плата за свободу от шаблонов. Чтобы услышать тихий голос солиста, приходится усиливать все звуки, рискуя принять шипение за новую партию.</p><div class="callout">Для усиления «фонового хора» учёные генерировали синтетические спектры нормализующими потоками — продвинутой генеративной моделью. Словно композитор, сочиняющий вариации на тему реальных данных, чтобы ухо классификатора привыкло к любым оттенкам нормы.</div><p>Такая стратегия не отменяет целенаправленные поиски, но даёт астрофизикам автоматический детектор необычности. Он ранжирует сотни и тысячи источников, выделяя самых подозрительных кандидатов. В перспективе метод применят ко всему массиву Fermi и к данным новых обсерваторий. Глубокие нейросети, байесовский анализ — всё это превратит слепую охоту за аномалиями в конвейер открытий. Примечательно, что схожие подходы уже используют на Большом адронном коллайдере для поиска новых частиц — аномалии не признают границ между небом и ускорителем.</p><p>Когда <a href="/lang/ru/scientists/Vera_Rubin.html" class="text-scientist" data-scientist="Vera Rubin">Вера Рубин</a> заметила странности во вращении <a href="/lang/ru/tags/galaxy.html" class="text-tag" data-tag="galaxy">галактик</a>, она не искала <a href="/lang/ru/tags/dark_matter.html" class="text-tag" data-tag="dark_matter">тёмную материю</a> — увидела аномалию. Когда <a href="/lang/ru/scientists/Jocelyn_Bell_Burnell.html" class="text-scientist" data-scientist="Jocelyn Bell Burnell">Джоселин Белл Бернелл</a> обнаружила радиоимпульсы, она не моделировала нейтронную звезду — заметила дисгармонию. Слабо контролируемые алгоритмы продолжают эту традицию: слушать небо, не зная, что ищешь, — и удивляться.</p>
+        <div class="fun-fact"><p class="fact">🎯 Почти треть источников в каталоге Fermi остаются неотождествлёнными — словно в оркестре каждый третий инструмент неизвестен и играет загадочную мелодию.</p><p class="fact fact-scifi">🎬 Это напоминает роман Блейка Крауча «Тёмная материя»: поиск невидимой субстанции по её гамма-отпечаткам ведёт к дверям в параллельные реальности — и каждый аномальный спектр может оказаться такой дверью.</p></div>
+        <div class="formula"><div class="formula-render">E_c \simeq 2.5\,\text{ГэВ}\,\left(\frac{|m_a^2 - \omega_{\rm pl}^2|}{1\,{\rm нэВ}}\right)\left(\frac{B_\perp}{\mu\text{Г}}\right)^{-1}\left(\frac{g_{a\gamma}}{10^{-11}\,\text{ГэВ}^{-1}}\right)^{-1}</div><div class="formula-meaning">Выше этой энергии осцилляции становятся энергонезависимыми, а вблизи неё возникают характерные «извивы» в спектре.</div></div><div class="formula"><div class="formula-render">l_{\rm osc} = 32\,{\rm кпк}\,\sqrt{1+(E_c/E_\gamma)^2}\left(\frac{B_\perp}{\mu\text{Г}}\right)^{-1}\left(\frac{g_{a\gamma}}{10^{-11}\,\text{ГэВ}^{-1}}\right)^{-1}</div><div class="formula-meaning">Характерный масштаб, на котором вероятность конверсии периодически меняется, приводя к модуляции наблюдаемого потока.</div></div>
+        
+        <div class="actions actions-compact" data-article-id="2607.07158_ru_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.07158" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button class="share-btn" title="Поделиться" onclick="shareArticle('Гамма-небо как оркестр: слабый контроль ловит аномалии','https://bridge42worlds.academy/lang/ru/archive/2026-07-08/2607.07158/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="M8.1 10.9l6.8-3.8M8.1 13.1l6.8 3.8"/></svg></button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.07158_ru_popular" data-entity-type="article"><div class="fb-title-row"><button class="next-btn next-btn-top">Следующая статья →</button></div><button type="button" class="fb-comment-toggle">+ написать комментарий</button><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Christian_Doppler.html" class="side-sci" data-scientist="Christian Doppler">Christian Doppler</a><a href="/lang/ru/scientists/D_B_McLaughlin.html" class="side-sci" data-scientist="D. B. McLaughlin">D. B. McLaughlin</a><a href="/lang/ru/scientists/Didier_Queloz.html" class="side-sci" data-scientist="Didier Queloz">Didier Queloz</a><a href="/lang/ru/scientists/Michel_Mayor.html" class="side-sci" data-scientist="Michel Mayor">Michel Mayor</a><a href="/lang/ru/scientists/R_A_Rossiter.html" class="side-sci" data-scientist="R. A. Rossiter">R. A. Rossiter</a><a href="/lang/ru/scientists/Fritz_Zwicky.html" class="side-sci" data-scientist="Fritz Zwicky">Fritz Zwicky</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a>
+<a href="/lang/ru/tags/pulsar.html" class="side-tag" data-tag="pulsar">пульсар</a>
+<a href="/lang/ru/tags/active_galactic_nucleus.html" class="side-tag" data-tag="active_galactic_nucleus">активное ядро галактики</a>
+<a href="/lang/ru/tags/dark_matter.html" class="side-tag" data-tag="dark_matter">тёмная материя</a>
+<a href="/lang/ru/tags/photometry.html" class="side-tag" data-tag="photometry">фотометрия</a>
+<a href="/lang/ru/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">спектроскопия</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/galaxy.html" class="side-tag" data-tag="galaxy">галактика</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">эффект Доплера</a><a href="/lang/ru/laws/gravitational_lensing.html" class="side-law" data-law="gravitational_lensing">гравитационное линзирование</a><a href="/lang/ru/laws/einstein_field_equations.html" class="side-law" data-law="einstein_field_equations">уравнения Эйнштейна</a><a href="/lang/ru/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">уравнения Максвелла</a><a href="/lang/ru/laws/plancks_law.html" class="side-law" data-law="plancks_law">закон излучения Планка</a><a href="/lang/ru/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">уравнение Планка — Эйнштейна</a></div>
+</div>
+
+<div class="license">Оригинал: <a href="https://arxiv.org/abs/2607.07158">arXiv:2607.07158</a> · <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · bridge42worlds</div>
+
+<script src="/js/likes.js?v=c1b3f97509"></script>
+<script src="/js/search.js?v=c1b3f97509"></script>
+<script src="/js/scroll.js?v=c1b3f97509"></script>
+<script src="/js/lightbox.js?v=c1b3f97509"></script>
+<script src="/js/gallery.js?v=c1b3f97509"></script>
+<script src="/js/force-graph.js?v=c1b3f97509"></script>
+<script src="/js/mini-graph.js?v=c1b3f97509"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.07158', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2607.07158', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>
