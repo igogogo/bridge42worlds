@@ -76,6 +76,9 @@
   .row { display: grid; grid-template-columns: 132px 1fr; gap: 16px; background: var(--surface); padding: 15px 20px; align-items: baseline; }
   .row .lbl { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 600; }
   .row .lbl .ic { color: var(--ochre); }
+  /* Иконка в колонке ярлыка: без явного размера SVG растягивался на всю 132px-колонку —
+     звезда «Избранного» выглядела гигантской (юзер 2026-07-23). */
+  .row .lbl .ic .ico-svg { width: 17px; height: 17px; display: inline-block; vertical-align: -3px; }
   .row .txt { font-size: 15px; color: var(--muted); margin: 0; }
   .row .txt b { color: var(--ink); font-weight: 600; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 18px; }
@@ -267,6 +270,14 @@
       <div class="tile"><b>$tile5_b</b><span>$tile5_s</span></div>
       <div class="tile"><b>$tile6_b</b><span>$tile6_s</span></div>
     </div>
+  </section>
+
+  <section>
+    <p class="kicker">$contact_kicker</p>
+    <h2>$contact_h2</h2>
+    <p class="muted">$contact_cadence</p>
+    <div class="note">$contact_authors</div>
+    <p>$contact_write <a href="mailto:author@bridge42worlds.academy">author@bridge42worlds.academy</a></p>
   </section>
 
   <div class="foot">

@@ -76,6 +76,9 @@
   .row { display: grid; grid-template-columns: 132px 1fr; gap: 16px; background: var(--surface); padding: 15px 20px; align-items: baseline; }
   .row .lbl { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 600; }
   .row .lbl .ic { color: var(--ochre); }
+  /* Иконка в колонке ярлыка: без явного размера SVG растягивался на всю 132px-колонку —
+     звезда «Избранного» выглядела гигантской (юзер 2026-07-23). */
+  .row .lbl .ic .ico-svg { width: 17px; height: 17px; display: inline-block; vertical-align: -3px; }
   .row .txt { font-size: 15px; color: var(--muted); margin: 0; }
   .row .txt b { color: var(--ink); font-weight: 600; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 18px; }
@@ -267,6 +270,14 @@
       <div class="tile"><b>قلب وتعليق</b><span>ضع علامة على مقال أو اترك ملاحظة قصيرة — دون تسجيل.</span></div>
       <div class="tile"><b>"المقال التالي"</b><span>الزر في الأسفل يمضي بك قُدُمًا، لا يعيدك إلى الخلاصة.</span></div>
     </div>
+  </section>
+
+  <section>
+    <p class="kicker">الوتيرة والملاحظات</p>
+    <h2>ما التالي</h2>
+    <p class="muted">نغطي حاليًا أفضل ١٠ أوراق بحثية يوميًا، مع التركيز على الفيزياء. لاحقًا سنغطي التدفق الكامل دون انتقاء.</p>
+    <div class="note">هل أنت مؤلف الورقة؟ راسلنا من العنوان المذكور في منشورك وسنصحّح الملخّص.</div>
+    <p>أعجبك الأمر أم لا — راسلنا: <a href="mailto:author@bridge42worlds.academy">author@bridge42worlds.academy</a></p>
   </section>
 
   <div class="foot">

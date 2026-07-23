@@ -76,6 +76,9 @@
   .row { display: grid; grid-template-columns: 132px 1fr; gap: 16px; background: var(--surface); padding: 15px 20px; align-items: baseline; }
   .row .lbl { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 600; }
   .row .lbl .ic { color: var(--ochre); }
+  /* Иконка в колонке ярлыка: без явного размера SVG растягивался на всю 132px-колонку —
+     звезда «Избранного» выглядела гигантской (юзер 2026-07-23). */
+  .row .lbl .ic .ico-svg { width: 17px; height: 17px; display: inline-block; vertical-align: -3px; }
   .row .txt { font-size: 15px; color: var(--muted); margin: 0; }
   .row .txt b { color: var(--ink); font-weight: 600; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 18px; }
@@ -267,6 +270,14 @@
       <div class="tile"><b>Heart and feedback</b><span>Mark an article or leave a short note — no sign-up.</span></div>
       <div class="tile"><b>"Next article"</b><span>The button at the bottom takes you onward, not back to the feed.</span></div>
     </div>
+  </section>
+
+  <section>
+    <p class="kicker">cadence and feedback</p>
+    <h2>What's next</h2>
+    <p class="muted">For now we cover the top 10 papers a day, with a focus on physics. Next comes the full stream, unfiltered.</p>
+    <div class="note">Are you an author? Write to us from the address listed in your paper and we'll correct the summary.</div>
+    <p>Liked it, or didn't — tell us: <a href="mailto:author@bridge42worlds.academy">author@bridge42worlds.academy</a></p>
   </section>
 
   <div class="foot">
