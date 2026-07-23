@@ -1617,6 +1617,11 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 html[dir="rtl"] .fb-title-row { justify-content: flex-start; }
 /* Пустые контент-секции не рисуют разделители/отступы */
 .section:empty, .tag-ver .section:empty { display: none; }
+/* Поиск — просто поле, без подсказки «как искать по тегам/авторам» (юзер 2026-07-23) */
+.search-hint { display: none; }
+/* Чипы разделов: первый — вровень с левой границей колонки (без лишнего паддинга) */
+.category-bar .cat-chip:first-child { padding-left: 0; }
+html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding-right: 0; }
 
 /* Граф: контрол глубины «−/+» → круглые иконки-кнопки (было «грустно») */
 .mini-depth-ctrl { display: inline-flex; align-items: center; gap: 6px; }

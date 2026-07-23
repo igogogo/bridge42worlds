@@ -253,7 +253,6 @@ fetchIndex(effVersion()).then(function(primary) {
 var OTHER_VERSIONS = ['popular', 'simple', 'advanced'].filter(function(v) { return v !== effVersion(); });
 Promise.all(
     OTHER_VERSIONS.map(fetchIndex).concat([
-        fetch('/data/authors-graph.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
         fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
             return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
         }),
@@ -274,22 +273,25 @@ Promise.all(
     searchIndex = (byVersion.popular || []).concat(byVersion.simple || []).concat(byVersion.advanced || []);
     window.searchIndex = searchIndex;
 
-    authorsGraph = rest[0];
-    tagsLoc = rest[1];
-    scientistsData = rest[2];
-    lawsData = rest[3] || {};
+    tagsLoc = rest[0];
+    scientistsData = rest[1];
+    lawsData = rest[2] || {};
     // Единый источник правды для названий разделов arXiv — Python-словарь ARXIV_CATEGORIES
     // (gen_base.py), экспортируемый в data/arxiv-categories.json. Раньше тут была отдельная
     // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
-    Object.assign(ARXIV_CAT_NAMES, rest[4] || {});
-    Object.assign(ARXIV_CAT_DESC, rest[5] || {});
+    Object.assign(ARXIV_CAT_NAMES, rest[3] || {});
+    Object.assign(ARXIV_CAT_DESC, rest[4] || {});
 
     window.tagsLoc = tagsLoc;
     window.scientistsData = scientistsData;
     window.lawsData = lawsData;
-    window.authorsGraph = authorsGraph;
 
     renderSiteStats();
+    // Граф авторов — 8.9МБ, самый тяжёлый файл сайта, а нужен он лишь для @-подсказок, тултипа
+    // автора и счётчика в статистике. Раньше он качался в одном Promise.all со справочниками и
+    // индексами и отъедал канал у самого индекса поиска — из-за чего поиск «долго думал» перед
+    // первой выдачей. Теперь стартует только после лёгкой волны (и подтягивается по требованию).
+    ensureAuthorsGraph();
     // Первая лента уже отрисована с тегами как raw id (tagsLoc ещё не пришёл) — теперь, когда
     // справочники подгрузились, перерисовываем дефолтный фид начисто, чтобы подтянуть красивые
     // названия тегов. Если пользователь уже начал искать — его результаты не трогаем.
@@ -300,6 +302,23 @@ Promise.all(
 }).catch(function(e) {
     console.error('Background data load error:', e);
 });
+
+// Ленивая загрузка графа авторов: один общий промис, сколько бы раз ни позвали.
+var _authorsGraphPromise = null;
+function ensureAuthorsGraph() {
+    if (_authorsGraphPromise) return _authorsGraphPromise;
+    _authorsGraphPromise = fetch('/data/authors-graph.json')
+        .then(function(r) { return r.json(); })
+        .catch(function() { return {}; })
+        .then(function(g) {
+            authorsGraph = g || {};
+            window.authorsGraph = authorsGraph;
+            renderSiteStats();   // счётчик авторов появляется, как только граф доехал
+            return authorsGraph;
+        });
+    return _authorsGraphPromise;
+}
+window.ensureAuthorsGraph = ensureAuthorsGraph;
 
 var STATS_LABELS = {
     ru: ['статей', 'авторов', 'учёных'], en: ['articles', 'authors', 'scientists'],
@@ -353,13 +372,23 @@ function doSearch(query) {
     doFullSearch(query);
 }
 
+// searchIndex после догрузки — конкатенация трёх тиров (~60k записей), а отбор нужного тира
+// шёл заново на КАЖДЫЙ символ ввода. Кэшируем срез по (ссылка на индекс, версия) — обе меняются
+// редко (догрузка тиров, переключалка сложности), так что инвалидация тривиальна.
+var _verSliceCache = { src: null, ver: null, out: null };
+function versionSlice() {
+    var v = effVersion();
+    if (_verSliceCache.src === searchIndex && _verSliceCache.ver === v) return _verSliceCache.out;
+    var out = searchIndex.filter(function(item) { return item.version === v; });
+    _verSliceCache = { src: searchIndex, ver: v, out: out };
+    return out;
+}
+
 function doFullSearch(query) {
     var container = document.getElementById('search-results');
     renderActiveFilters(query);
     var filters = parseSearchQuery(query);
-    var results = searchIndex.filter(function(item) {
-        return item.version === effVersion();
-    });
+    var results = versionSlice().slice();
     results = applyPageContext(results);
 
     if (filters.tags.length) {
@@ -451,6 +480,13 @@ function showScientistSuggestions(query) {
 
 function showAuthorSuggestions(query) {
     var container = document.getElementById('search-results');
+    // Граф авторов теперь грузится лениво — если @ нажали раньше, чем он доехал,
+    // показываем «загрузка» и перерисовываем подсказки, как только данные придут.
+    if (!Object.keys(authorsGraph).length) {
+        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">…</p>';
+        ensureAuthorsGraph().then(function() { showAuthorSuggestions(query); });
+        return;
+    }
     var names = Object.keys(authorsGraph)
         .filter(function(name) { return !query || name.toLowerCase().includes(query); })
         .slice(0, 15);
@@ -604,6 +640,10 @@ function filterAuthors(query) {
     if (isAuthorsIndexPage()) {
         if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
         if (!q) { container.innerHTML = _authorsDefaultHTML; return; }
+        if (!Object.keys(authorsGraph).length) {   // граф ленивый — дождаться и повторить
+            ensureAuthorsGraph().then(function() { filterAuthors(query); });
+            return;
+        }
         var names = Object.keys(authorsGraph)
             .filter(function(name) { return name.toLowerCase().includes(q); })
             .sort(function(a, b) { return a.localeCompare(b); });
@@ -1233,3 +1273,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('touchend', onUp);
     }
 });
+
+// Дебаунс ввода в поиске. В шаблонах стоит oninput="doSearch(this.value)", то есть полный скан
+// индекса запускался на каждое нажатие клавиши — при ~60k записей ввод заметно залипал
+// (юзер 2026-07-23: «поиск когда нажимаю очень долго ждёт»). Оборачиваем только глобальный
+// биндинг: внутренние вызовы doSearch(...) остаются мгновенными.
+(function() {
+    var real = window.doSearch;
+    if (typeof real !== 'function') return;
+    var timer = null;
+    window.doSearch = function(q) {
+        clearTimeout(timer);
+        timer = setTimeout(function() { real(q); }, 160);
+    };
+})();
