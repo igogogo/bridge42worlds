@@ -1139,15 +1139,51 @@ function collapseNavOverflow() {
         panel.appendChild(a);
     });
 
+    // Переключатель экспресс-статей раньше жил чекбоксом внутри панели поиска и только на
+    // главной. Юзер 2026-07-23: «экспресс надо уметь отключить как через меню» — кладём пунктом
+    // в ☰, он есть на всех типах страниц. Текст берём из готовой локали UI.hideExpress,
+    // состояние показываем чекбоксом-глифом, чтобы не заводить новых переводов.
+    var exBtn = document.createElement('a');
+    exBtn.href = '#';
+    exBtn.className = 'nav-express-toggle';
+    function paintExpress() {
+        exBtn.textContent = (hideExpress ? '☑ ' : '☐ ') + (UI.hideExpress || 'Hide express');
+        exBtn.classList.toggle('on', hideExpress);
+    }
+    paintExpress();
+    exBtn.onclick = function(e) {
+        e.preventDefault();
+        hideExpress = !hideExpress;
+        try { localStorage.setItem('b42_hide_express', hideExpress ? '1' : '0'); } catch (err) {}
+        paintExpress();
+        var cb = document.getElementById('express-filter-toggle');   // держим старый чекбокс в синхроне
+        if (cb) cb.checked = hideExpress;
+        var input = document.querySelector('.search-box');
+        if (window.searchIndex && document.getElementById('search-results')) {
+            if (input && input.value.trim()) doSearch(input.value); else _defaultFeed();
+        }
+    };
+    panel.appendChild(exBtn);
+
     wrap.appendChild(btn);
     wrap.appendChild(panel);
-    // Логотип = main: текстовый пункт «main» убираем. Гамбургер ☰ — в НАЧАЛО .nav-links.
-    // ВАЖНО: раньше вставляли через logo.parentNode, но на главной логотип вложен в .logo-wrap
-    // (богатая шапка .brand-row/.hdr-icons) — ☰ попадал внутрь .logo-wrap и ломал раскладку
-    // на 3 ряда (баг 2026-07-22). .nav-links есть на всех типах шапок и лежит в контрол-кластере.
+    // Логотип = main: текстовый пункт «main» убираем. Гамбургер ☰ — вплотную к названию сайта
+    // (юзер 2026-07-23: «сначала гамбургер, а поиск и календарь вправо»), то есть сразу за
+    // логотипом в шапке, а не в начало .nav-links.
+    // ВАЖНО: на главной логотип вложен в .logo-wrap внутри .brand-row — вставлять по
+    // logo.parentNode нельзя, ☰ попадал внутрь .logo-wrap и ломал шапку на 3 ряда (баг
+    // 2026-07-22). Поэтому поднимаемся от логотипа до прямого ребёнка шапки и встаём ПОСЛЕ него.
     var mainLink = nav.querySelector('a[href$="/index.html"]');
     if (mainLink) mainLink.remove();
-    nav.insertBefore(wrap, nav.firstChild);
+    var host = document.querySelector('.brand-row') || document.querySelector('.top-bar');
+    var logoEl = document.querySelector('.logo');
+    var placed = false;
+    if (host && logoEl) {
+        var anchor = logoEl;
+        while (anchor && anchor.parentNode !== host) anchor = anchor.parentNode;
+        if (anchor) { host.insertBefore(wrap, anchor.nextSibling); placed = true; }
+    }
+    if (!placed) nav.insertBefore(wrap, nav.firstChild);
 
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -1178,6 +1214,18 @@ function initSearchToggle() {
     });
 }
 document.addEventListener('DOMContentLoaded', initSearchToggle);
+
+// Кнопка календаря рендерится сервером, но обработчик ей вешал только initCalendar(), который
+// ждёт загрузки и разбора индекса (несколько МБ). До этого момента клик по кнопке не делал
+// ровно ничего — юзер 2026-07-23: «календарь не отвечает или долго». Вешаем раскрытие сразу
+// на DOMContentLoaded: панель открывается мгновенно и показывает «…», а initCalendar потом
+// подменяет содержимое и обработчик, сохраняя уже открытое состояние.
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('calendar-btn'), panel = document.getElementById('calendar-panel');
+    if (!btn || !panel || btn.onclick) return;
+    panel.innerHTML = '<div class="cal-all" style="text-align:center;color:var(--soft)">…</div>';
+    btn.onclick = function() { panel.classList.toggle('open'); };
+});
 
 // ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
 // Всегда развёрнут целиком в шапке (без попапа). Один обработчик для ВСЕХ типов страниц.
