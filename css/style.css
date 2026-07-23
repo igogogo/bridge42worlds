@@ -1605,6 +1605,19 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 .nav-more-panel a { text-decoration: none; }
 .nav-more-panel a:hover { text-decoration: none; }
 
+/* ── Точечные фиксы 2026-07-23 ── */
+/* Строка языков — закрепляется при прокрутке */
+.langs { position: sticky; top: 0; z-index: 40; background: var(--bg); padding: 6px 0; margin-top: 6px; }
+/* Карточка ленты: дата ↔ express-бейдж — единый зазор через flex-gap (чинит слипание в RTL/ar) */
+.card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.card-eyebrow .card-date { margin: 0 !important; }
+.card-eyebrow .card-express-badge { margin: 0 !important; }
+/* Нижняя «next article» (в блоке отклика) — по правому краю, как верхняя */
+.fb-title-row { display: flex; justify-content: flex-end; }
+html[dir="rtl"] .fb-title-row { justify-content: flex-start; }
+/* Пустые контент-секции не рисуют разделители/отступы */
+.section:empty, .tag-ver .section:empty { display: none; }
+
 /* Граф: контрол глубины «−/+» → круглые иконки-кнопки (было «грустно») */
 .mini-depth-ctrl { display: inline-flex; align-items: center; gap: 6px; }
 .mini-depth-ctrl button {
