@@ -428,6 +428,16 @@ def cmd_graph(args):
     _run_chain([["build_knowledge_graph.py"]])
 
 
+def cmd_analytics(args):
+    """Пересчитать карту аналитики (статьи/авторы/со-встречаемость) → data/analytics/*.json.
+    С --interpret ИИ даёт кластерам человеческие имена+описания (тратит DeepSeek) — «изюминка»
+    (юзер 2026-07-24). Часть обновления дня: залили день → analytics --interpret → html."""
+    cmd = ["analytics_build.py"]
+    if getattr(args, "interpret", False):
+        cmd.append("--interpret")
+    _run_chain([cmd])
+
+
 def cmd_delete(args):
     import generate
     n = generate.delete_article(args.id)
@@ -681,6 +691,10 @@ def build_parser():
 
     s = sub.add_parser("graph", help="единый граф знаний теги⇄законы⇄учёные → data/knowledge-graph.json")
     s.set_defaults(func=cmd_graph)
+
+    s = sub.add_parser("analytics", help="карта аналитики (статьи/авторы/со-встречаемость) → data/analytics/*.json; --interpret = ИИ-трактовка кластеров")
+    s.add_argument("--interpret", action="store_true", help="ИИ даёт кластерам человеческие имена+описания (тратит DeepSeek)")
+    s.set_defaults(func=cmd_analytics)
 
     s = sub.add_parser("tags", help="теги: догенерация недостающего (top-up); --force/--rebuild/--gaps")
     s.add_argument("--educational-only", action="store_true", help="только образовательный ярус")

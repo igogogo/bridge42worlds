@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#уменьшение размерности — bridge42worlds</title>
+    <meta name="description" content="Процесс преобразования данных из высокоразмерного пространства признаков в низкоразмерное с минимальной потерей значимой информации. Применяется как для визуализации (проецирование на 2D или 3D), так и в качестве предобработки перед машинным обучением, чтобы снизить вычислительную сложность и избежать «проклятия размерности» (ухудшение работы алгоритмов при росте числа признаков).">
+    <meta property="og:title" content="#уменьшение размерности — bridge42worlds">
+    <meta property="og:description" content="Процесс преобразования данных из высокоразмерного пространства признаков в низкоразмерное с минимальной потерей значимой информации. Применяется как для визуализации (проецирование на 2D или 3D), так и в качестве предобработки перед машинным обучением, чтобы снизить вычислительную сложность и избежать «проклятия размерности» (ухудшение работы алгоритмов при росте числа признаков).">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/tags/dimensionality_reduction.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># тег · @ автор · ! учёный</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>уменьшение размерности</h1><button class="share-inline" title="Поделиться" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">1</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Сжать объёмные данные в простую карту, как географический атлас превращает трёхмерный мир в двухмерные страницы, сохраняя главное.</p><div class="practical-app"><strong>На практике:</strong> Ускорение поиска по изображениям, сжатие медицинских снимков, визуализация сложных взаимосвязей, например, в генетике.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Процесс преобразования данных из высокоразмерного пространства признаков в низкоразмерное с минимальной потерей значимой информации. Применяется как для визуализации (проецирование на 2D или 3D), так и в качестве предобработки перед машинным обучением, чтобы снизить вычислительную сложность и избежать «проклятия размерности» (ухудшение работы алгоритмов при росте числа признаков).</div>
+        <div class="section"><h2>История</h2><p>В начале XX века Карл Пирсон придумал метод главных компонент — первый инструмент для такого сжатия. Позже появилось множество других способов.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Метод ищет новые, более простые координаты для данных, так чтобы важные отличия между объектами не потерялись. Это похоже на рассмотрение тени предмета: тень плоская (меньше размерность), но по ней часто понятно, что за предмет.</p></div>
+        <div class="fun-fact">💡 Метод главных компонент (PCA) часто используют для сжатия изображений лиц: 10000-пиксельный снимок можно передать всего сотней чисел, и лицо останется узнаваемым.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">У данных бывает много признаков — например, у фотографии миллионы пикселей. Уменьшение размерности — способ сохранить самую важную информацию, убрав лишнее. Как если бы художник нарисовал портрет всего несколькими линиями, но человека всё равно можно узнать.</div>
+        <div class="section"><h2>История</h2><p>В начале XX века Карл Пирсон придумал метод главных компонент — первый инструмент для такого сжатия. Позже появилось множество других способов.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Метод ищет новые, более простые координаты для данных, так чтобы важные отличия между объектами не потерялись. Это похоже на рассмотрение тени предмета: тень плоская (меньше размерность), но по ней часто понятно, что за предмет.</p></div>
+        <div class="fun-fact">💡 В конкурсе Netflix Prize 2009 года команда-победитель BellKor’s Pragmatic Chaos использовала SVD (сингулярное разложение) для уменьшения размерности матрицы рейтингов, что и принесло им успех.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Совокупность математических методов, отображающих точки из n-мерного векторного пространства в m-мерное, где m < n, с сохранением определённых структурных свойств. Линейные методы (PCA, SVD, факторный анализ) строят проекцию, максимизирующую дисперсию или минимизирующую ошибку восстановления. Нелинейные (t-SNE, UMAP, автоэнкодеры) лучше сохраняют локальные соседства и кластерную структуру, что важно для визуализации. В машинном обучении уменьшение размерности решает задачи выбора признаков (feature selection) и извлечения признаков (feature extraction), борясь с мультиколлинеарностью, переобучением и вычислительными затратами.</div>
+        <div class="section"><h2>История</h2><p>Метод главных компонент (PCA) был предложен Карлом Пирсоном в 1901 году; позже независимо разработан Гарольдом Хотеллингом в 1930-х. В 1960-70-е появились методы многомерного шкалирования. Алгоритм t-распределенного стохастического вложения соседей (t-SNE) представили Лоренс ван дер Маатен и Джеффри Хинтон в 2008 году, произведя революцию в визуализации. UMAP (2018) улучшил сохранение глобальной структуры и скорость.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Линейный метод PCA: вычисляется ковариационная матрица данных, её собственные векторы, соответствующие наибольшим собственным значениям, образуют новый ортонормированный базис; проецирование на первые m векторов даёт сокращённое представление. Нелинейный автоэнкодер: нейронная сеть с узким горлом (bottleneck) обучается восстанавливать входные данные; скрытое представление в горле служит низкоразмерным кодом. t-SNE моделирует вероятности того, что точка является соседом другой, в исходном и целевом пространствах, минимизируя расхождение Кульбака–Лейблера между ними.</p></div>
+        <div class="formula"><div class="formula-render">Z = X W_m</div><div class="formula-meaning">Z — матрица данных в сниженной размерности (N×m), X — исходная центрированная матрица данных (N×n), W_m — матрица из m собственных векторов ковариационной матрицы X^T X, соответствующих m наибольшим собственным значениям</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Выбор оптимальной размерности m часто эвристический; Сложность интерпретации латентных переменных нелинейных методов; Сохранение глобальной структуры при сильном сжатии; Масштабируемость на сверхбольшие данные (миллионы точек)</p><p class="fact">💡 В конкурсе Netflix Prize 2009 года команда-победитель BellKor’s Pragmatic Chaos использовала SVD (сингулярное разложение) для уменьшения размерности матрицы рейтингов, что и принесло им успех.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div>
+<div class="mini-graph" data-node="t:dimensionality_reduction"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="dimensionality_reduction_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="dimensionality_reduction" title="избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ написать комментарий</button></div>
+<div class="feedback" id="feedback" data-article-id="dimensionality_reduction_ru_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/contrastive_learning.html" class="side-tag" data-tag="contrastive_learning">контрастивное обучение</a><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a><a href="/lang/ru/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">спектроскопия</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="dimensionality_reduction"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('dimensionality_reduction', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

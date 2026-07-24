@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#معامل الانتشار الظاهري — bridge42worlds</title>
+    <meta name="description" content="معامل الانتشار الظاهري (ADC) هو معامل كمي يتم الحصول عليه من التصوير بالرنين المغناطيسي الموزون بالانتشار (DWI). عند إجراء DWI بعوامل b مختلفة (قيم نبضة التدرج)، يتم بناء علاقة أسية لانحلال الإشارة. ADC يساوي عدديًا ميل هذه العلاقة على مقياس شبه لوغاريتمي ويعكس متوسط الانتشار في الفوكسل (بكسل ثلاثي الأبعاد). في خرائط ADC، تظهر المناطق ذات الانتشار المحدود ناقصة الشدة (داكنة)، مما يرتبط بارتفاع كثافة الخلايا في الأورام الخبيثة.">
+    <meta property="og:title" content="#معامل الانتشار الظاهري — bridge42worlds">
+    <meta property="og:description" content="معامل الانتشار الظاهري (ADC) هو معامل كمي يتم الحصول عليه من التصوير بالرنين المغناطيسي الموزون بالانتشار (DWI). عند إجراء DWI بعوامل b مختلفة (قيم نبضة التدرج)، يتم بناء علاقة أسية لانحلال الإشارة. ADC يساوي عدديًا ميل هذه العلاقة على مقياس شبه لوغاريتمي ويعكس متوسط الانتشار في الفوكسل (بكسل ثلاثي الأبعاد). في خرائط ADC، تظهر المناطق ذات الانتشار المحدود ناقصة الشدة (داكنة)، مما يرتبط بارتفاع كثافة الخلايا في الأورام الخبيثة.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/tags/apparent_diffusion_coefficient.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/ar/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>معامل الانتشار الظاهري</h1><button class="share-inline" title="مشاركة" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">1</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">معامل الانتشار الظاهري (ADC) هو مقياس لمدى سهولة حركة جزيئات الماء في الأنسجة. يشبه الأمر محاولة السير عبر حشد: كلما كان الحشد أكثر كثافة، كانت حركتك أقل – وهكذا جزيئات الماء المحاصرة بالخلايا تتحرك بصعوبة أكبر.</p><div class="practical-app"><strong>في الواقع:</strong> في التصوير بالرنين المغناطيسي، تساعد خرائط ADC على التمييز بين السرطان (بنية خلوية كثيفة، انتشار منخفض) والأنسجة السليمة أو الوذمة، مما يحسن دقة التشخيص دون الحاجة إلى خزعة.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">معامل الانتشار الظاهري (ADC) هو معامل كمي يتم الحصول عليه من التصوير بالرنين المغناطيسي الموزون بالانتشار (DWI). عند إجراء DWI بعوامل b مختلفة (قيم نبضة التدرج)، يتم بناء علاقة أسية لانحلال الإشارة. ADC يساوي عدديًا ميل هذه العلاقة على مقياس شبه لوغاريتمي ويعكس متوسط الانتشار في الفوكسل (بكسل ثلاثي الأبعاد). في خرائط ADC، تظهر المناطق ذات الانتشار المحدود ناقصة الشدة (داكنة)، مما يرتبط بارتفاع كثافة الخلايا في الأورام الخبيثة.</div>
+        <div class="section"><h2>التاريخ</h2><p>اخترع طريقة التصوير بالرنين المغناطيسي الموزون بالانتشار في ستينيات القرن العشرين كل من إدوارد ستيسكال وجون تانر، لكنها دخلت الطب على نطاق واسع في تسعينيات القرن نفسه بفضل أعمال دينيس لو بيهان وآخرين. وأصبح ADC معيارًا معتمدًا للتقييم.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يلتقط ماسح الرنين المغناطيسي صورتين: واحدة دون تدرج إضافي، والأخرى بتدرج قوي 'يخمد' الإشارة من الجزيئات المتحركة. وبمقارنة مقدار انخفاض الإشارة، يتم حساب ADC. إذا تحركت الجزيئات بحرية (كما في المثانة)، كان ADC مرتفعًا. وإذا كانت محاصرة (كما في الورم)، تبقى الإشارة محفوظة، ويكون ADC منخفضًا.</p></div>
+        <div class="fun-fact">💡 لا تساعد قيم ADC في اكتشاف السرطان فحسب، بل أيضًا في التنبؤ بعدوانيته: فكلما انخفض ADC، ارتفع مؤشر غليسون في الخزعة.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">يحتوي الجسم على ماء، وجزيئاته تتحرك باستمرار بشكل عشوائي (وهذا ما يسمى الحركة البراونية أو الانتشار). في الأنسجة المختلفة، تعترض هذه الحركة عوائق مختلفة مثل الأغشية الخلوية والبروتينات، وتعمل جميعها كشبكة تعيق الجزيئات. حيثما تكثر الخلايا وتكون متراصة بكثافة (كما في الأورام)، تتحرك الجزيئات ببطء أكبر. يُظهر ADC هذه السرعة 'الظاهرية' لأننا لا نقيس الحركة الحقيقية لجزيء واحد، بل متوسط التأثير خلال زمن المراقبة. كلما انخفض ADC، زادت القيود، وزاد الشك في النسيج.</div>
+        <div class="section"><h2>التاريخ</h2><p>اخترع طريقة التصوير بالرنين المغناطيسي الموزون بالانتشار في ستينيات القرن العشرين كل من إدوارد ستيسكال وجون تانر، لكنها دخلت الطب على نطاق واسع في تسعينيات القرن نفسه بفضل أعمال دينيس لو بيهان وآخرين. وأصبح ADC معيارًا معتمدًا للتقييم.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يلتقط ماسح الرنين المغناطيسي صورتين: واحدة دون تدرج إضافي، والأخرى بتدرج قوي 'يخمد' الإشارة من الجزيئات المتحركة. وبمقارنة مقدار انخفاض الإشارة، يتم حساب ADC. إذا تحركت الجزيئات بحرية (كما في المثانة)، كان ADC مرتفعًا. وإذا كانت محاصرة (كما في الورم)، تبقى الإشارة محفوظة، ويكون ADC منخفضًا.</p></div>
+        <div class="fun-fact">💡 يمكن توليد خرائط ADC بدقة عالية، ولكن حتى عند الدقة القياسية فإنها حساسة لدرجة أنها تستجيب لتغير درجة حرارة النسيج بمقدار 1 درجة مئوية – ويُحاول استخدام ذلك لمراقبة الاستئصال الحراري.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">ADC - معامل الانتشار الظاهري، يُحسب بالعلاقة ADC = -ln(S/S0)/b، حيث S وS0 هما شدة الإشارة مع وبدون تدرج الانتشار، وb عامل الترجيح المتناسب مع مربع سعة التدرج ومدته. في الأنسجة الحية، لا يكون الانتشار متماثل الاتجاهات ويُحد بالأغشية، لذلك لا يعكس ADC معامل الانتشار الذاتي الحقيقي (D0)، بل التأثير الكلي لجميع القيود على المقياس الزمني لتجربة الرنين المغناطيسي (حوالي 50 ميلي ثانية). ينخفض ADC عند زيادة الكثافة الخلوية (الأورام)، ونقص التروية (الوذمة الخلوية في السكتة الدماغية)، والخراجات (القيح اللزج). ويرتفع في حالات النخر، والأكياس، والوذمة. في البروستاتا، يُعتبر ADC أقل من 0.6-0.8×10⁻³ مم²/ث مشبوهاً للسرطان. تُستخدم نماذج تراعي عدم أسية الانحلال: الانتشار غير المتماسك داخل الفوكسل (IVIM) يفصل بين الانتشار الحقيقي والتروية، كما يصف التصوير الانتشاري بالكيرتوسيس والموتر تباين الخواص.</div>
+        <div class="section"><h2>التاريخ</h2><p>اقترح كل من ستيسكال وتانر التصوير بالرنين المغناطيسي الانتشاري في عام 1965، باستخدام نبضات تدرج لقياس الانتشار الذاتي. وفي عام 1984، أظهر دينيس لو بيهان إمكانية تطبيقه في الطب، وحصل لأول مرة على صور موزونة بالانتشار للدماغ. وقد أكد مصطلح 'معامل الانتشار الظاهري' على الاختلاف عن الانتشار الحر بسبب حواجز الأنسجة. وبحلول التسعينيات، أصبح ADC مؤشراً حيوياً كمياً روتينياً في التصوير بالرنين المغناطيسي. وفي العقد الأول من القرن الحادي والعشرين، سمح مفهوم IVIM (لو بيهان وآخرون) بفصل مساهمة الدوران الدقيق. واليوم، يعد ADC مكوناً رئيسياً في التصوير بالرنين المغناطيسي متعدد المعاملات للبروستاتا والتشخيص القحفي الدماغي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يتضمن تسلسل DWI نبضتي تدرج قويتين متساويتين في السعة G والمدة δ، تفصل بينهما فترة Δ. النبضة الأولى ترمّز طور اللفات المغزلية حسب موضعها، والثانية تعيد تركيزها. إذا تحركت اللفة المغزلية، لا يتم تعويض الإزاحة الطورية، وتضعف الإشارة. وبقياس الإشارة عند قيمتين على الأقل لـ b (حيث b = γ²G²δ²(Δ-δ/3)، وγ هي النسبة المغناطيسية الدورانية)، يتم رسم العلاقة بين ln(S) وb. وميل هذا الرسم هو ADC (أو قيمته المطلقة بدقة). وعملياً، يُستخدم نموذج أحادي الأس، ولكن بسبب البنية المجهرية المعقدة قد يكون هناك انحراف. تُحسب خريطة ADC لكل بكسل بعد مطابقة النموذج.</p></div>
+        <div class="formula"><div class="formula-render">ADC = \frac{-\ln(S/S_0)}{b}</div><div class="formula-meaning">S هي شدة إشارة الرنين المغناطيسي مع تدرج الانتشار، S0 هي شدة الإشارة بدون تدرج الانتشار، b هو عامل الترجيح الانتشاري الذي يميز الحساسية للانتشار، ويعتمد على معلمات نبضة التدرج؛ وحدة قياس ADC هي مم²/ث (غالباً ما تستخدم 10⁻³ مم²/ث).</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>توحيد قيم b وطرق الحساب بين المصنعين والمراكز; تباين قيم ADC بسبب المتغيرات الفسيولوجية (الحرارة، الترطيب)، وعيوب الحركة والتيارات الدوامية من التدرجات; قصور نموذج الانحلال أحادي الأس; صعوبة التمييز بين التغيرات الحميدة ناقصة الشدة (مثل فرط تنسج البروستاتا اللحمي) والسرطان; الحاجة إلى تسلسلات سريعة تقلل التشوهات</p><p class="fact">💡 يمكن توليد خرائط ADC بدقة عالية، ولكن حتى عند الدقة القياسية فإنها حساسة لدرجة أنها تستجيب لتغير درجة حرارة النسيج بمقدار 1 درجة مئوية – ويُحاول استخدام ذلك لمراقبة الاستئصال الحراري.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div>
+<div class="mini-graph" data-node="t:apparent_diffusion_coefficient"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="apparent_diffusion_coefficient_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="apparent_diffusion_coefficient" title="مفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ أضف تعليقًا</button></div>
+<div class="feedback" id="feedback" data-article-id="apparent_diffusion_coefficient_ar_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/cell.html" class="side-tag" data-tag="cell">خلية</a><a href="/lang/ar/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">التعلم الآلي</a><a href="/lang/ar/tags/medical_image_segmentation.html" class="side-tag" data-tag="medical_image_segmentation">تقسيم الصور الطبية</a><a href="/lang/ar/tags/stochastic_modeling.html" class="side-tag" data-tag="stochastic_modeling">النمذجة العشوائية</a><a href="/lang/ar/tags/water.html" class="side-tag" data-tag="water">الماء</a><a href="/lang/ar/tags/brain_cancer_detection.html" class="side-tag" data-tag="brain_cancer_detection">كشف سرطان الدماغ</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="apparent_diffusion_coefficient"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('apparent_diffusion_coefficient', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

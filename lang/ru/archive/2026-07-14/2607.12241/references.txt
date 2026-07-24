@@ -1,0 +1,679 @@
+[1] A. J. Wood, B. F. Wollenberg, and G. B. Sheble,Power Generation,
+Operation, and Control, 3rd ed. John Wiley & Sons, 2013.
+[2] C.-L. Su, “Probabilistic load-flow computation using point estimate
+method,”IEEE Transactions on Power Systems, vol. 20, no. 4, pp. 1843–
+1851, 2005.
+[3] Y . Li, Y . Xu, W. Gu, S. Lu, and L. Mili, “Global sensitivity analysis for
+rare events in probabilistic power flow using subset simulation,”IEEE
+Transactions on Power Systems, vol. 40, no. 2, pp. 1969–1972, 2025.
+[4] A. Yaniv, P. Kumar, and Y . Beck, “Towards adoption of graph neural
+networks for power flow applications in distribution systems,”Electric
+Power Systems Research, vol. 216, p. 109005, 2023.
+[5] M. Fikri, B. Cheddadi, O. Sabri, T. Haidi, B. Abdelaziz, and M. Ma-
+jdoub, “Power flow analysis by numerical techniques and artificial
+neural networks,” inProc. Renewable Energies, Power Systems & Green
+Inclusive Economy (REPS-GIE), 2018, pp. 1–5.
+[6] B. Donon, R. Cl ´ement, B. Donnot, A. Marot, I. Guyon, and M. Schoe-
+nauer, “Neural networks for power flow: Graph neural solver,”Electric
+Power Systems Research, vol. 189, p. 106547, 2020.
+[7] N. Lin, S. Orfanoudakis, N. O. Cardenas, J. S. Giraldo, and P. P.
+Vergara, “PowerFlowNet: Power flow approximation using message
+passing graph neural networks,”International Journal of Electrical
+Power & Energy Systems, vol. 160, p. 110112, 2024.
+[8] X. Hu, H. Hu, S. Verma, and Z.-L. Zhang, “Physics-guided deep neural
+networks for power flow analysis,” vol. 36, no. 3, 2021, pp. 2082–2092.
+[9] Y . Liu, N. Zhang, Y . Wang, J. Yang, and C. Kang, “Data-driven power
+flow linearization: A regression approach,”IEEE Transactions on Smart
+Grid, vol. 10, no. 3, pp. 2569–2580, 2019.
+[10] P. Pareek and H. D. Nguyen, “A framework for analytical power
+flow solution using Gaussian process learning,”IEEE Transactions on
+Sustainable Energy, vol. 13, no. 1, pp. 452–463, 2022.
+[11] “Machine learning for power flow equations (community resource),”
+https://energy.hosting.acm.org/wiki/index.php/ML OPF wiki#Related:
+Machine Learning for Power Flow Equations, accessed: 2026-06-
+21.
+[12] D. Nazari, P. Srikantha, M. Zaman, and D. Upadhyay, “Unsupervised
+physics-informed transfer learning for power flow,” in2025 IEEE
+International Conference on Communications, Control, and Computing
+Technologies for Smart Grids (SmartGridComm), 2025, pp. 1–6.
+[13] S. Ly, K. Chauhan, A. Singh, and H. D. Nguyen, “Meta-model neural
+process for probabilistic power flow under varying N-1 system topolo-
+gies,”arXiv preprint arXiv:2509.12281, 2025, to appear, IEEE PES
+General Meeting 2025.
+[14] Y . Chen, S. Lakshminarayana, C. Maple, and H. V . Poor, “A meta-
+learning approach to the optimal power flow problem under topology
+reconfigurations,”IEEE Open Access Journal of Power and Energy,
+vol. 9, pp. 109–120, 2022, arXiv:2012.11524.
+[15] Y . Jia, X. Wu, Z. Yang, and Y . Wang, “A two-stage approach for topology
+change-aware data-driven OPF,”IEEE Transactions on Power Systems,
+vol. 40, no. 2, pp. 1854–1867, 2024.
+[16] M. Zhou, M. Chen, and S. H. Low, “DeepOPF-FT: One deep neural
+network for multiple AC-OPF problems with flexible topology,”IEEE
+Transactions on Power Systems, 2022.
+[17] H. O. Caetano, C. D. Maciel, and R. K. Gupta, “Admittance sensitivity-
+informed modular GP for scalable topology-adaptive power-flow learn-
+ing,”arXiv preprint arXiv:2606.03717, 2026.
+[18] S. Ben-David, J. Blitzer, K. Crammer, A. Kulesza, F. Pereira, and
+J. W. Vaughan, “A theory of learning from different domains,”Machine
+Learning, vol. 79, no. 1, pp. 151–175, 2010.
+[19] B. Sun and K. Saenko, “Deep CORAL: Correlation alignment for
+deep domain adaptation,” inEuropean Conference on Computer Vision
+Workshops. Springer, 2016, pp. 443–450.
+[20] Y . Li, N. Wang, J. Shi, X. Hou, and J. Liu, “Adaptive batch normalization
+for practical domain adaptation,”Pattern Recognition, vol. 80, pp. 109–
+117, 2018.
+[21] A. Kessy, A. Lewin, and K. Strimmer, “Optimal whitening and decor-
+relation,”The American Statistician, vol. 72, no. 4, pp. 309–314, 2018.
+[22] A. Gretton, K. M. Borgwardt, M. J. Rasch, B. Sch ¨olkopf, and A. Smola,
+“A kernel two-sample test,”Journal of Machine Learning Research,
+vol. 13, pp. 723–773, 2012.
+[23] K. V . Mardia, “Measures of multivariate skewness and kurtosis with
+applications,”Biometrika, vol. 57, no. 3, pp. 519–530, 1970.
+APPENDIXA
+EMPIRICALVALIDATION: TWOMOMENTSSUFFICE
+This appendix provides the empirical evidence supporting
+the claim that matching the first two moments is both neces-
+sary and sufficient for ICW’s accuracy gains, complementing
+the theoretical argument of Section III.
+MMD reduction.Figure 9 tracks the MMD betweenD base
+andD N-2 as moments are matched in sequence on the N-
+2 Most contingency of 30-Bus under20%load perturbation.
+The MMD falls from0.923(no matching) to0.045(mean
+only) to0.029(mean and covariance, i.e. ICW). This last value
+already lies at the sampling noise floor1/
+√
+N≈0.032with
+1000 evaluation samples, so the residual cross-topology gap
+after two-moment matching is statistically indistinguishable
+from finite-sample noise. By the bound in (10), no further
+reduction inMMD k is achievable with the available samples,
+and no additional accuracy gain is expected from matching
+higher moments.
+MAE saturation.Figure 10 confirms this: prediction error
+drops steeply through level 2 and does not improve at level 3.
+To rule out the possibility that this saturation is an artifact
+of an information-losing transform, we apply a lossless sinh–
+arcsinh (SAS) correction that is a strict bijection verified
+invertible to machine precision (Appendix B). Even with this
+lossless correction, MAE rises by12.7%(MLP) and33.0%
+(Transformer) relative to ICW. A capacity sweep confirms the
+cause: the third-moment target carries identical information to
+the whitened target, so the fit gap shrinks34×as model width
+grows from128to1024units, confirming that the penalty
+is approximation difficulty introduced by a mild functional
+nonlinearity in thex→zmap, not a recoverable distribu-
+tional gap. Two moments therefore, suffice: for the N-2 Most
+contingency, they remove all of the topology-induced shift that
+any linear, closed-form correction can recover.
+0
+(none)
+1
+(mean)
+2
+(mean+cov)
+= ICW
+3
+(3rd moment
+lossless SAS)
+Number of matched moments
+10 2
+10 1
+100
+MMD (log scale)
+0.923
+0.045
+0.029
+~0
+noise floor 1/ N
+MMD vs. matched moments (SAS)
+Fig. 9. MMD betweenD base andD N-2 as moments are matched in sequence
+(30-Bus, 20% load, N = 1000 samples). The level 2 value of0.029already
+lies at the sampling noise floor1/
+√
+N≈0.032, confirming that two moments
+saturate the recoverable cross-topology gap.
+APPENDIXB
+SINH–ARCSINHTHIRD-MOMENTCORRECTION
+The standard Cornish–Fisher (CF3) third-moment correc-
+tion applies the per-dimension mapf(z) =z− γ
+6 (z2−1). Since
+fis a parabola, it folds atz ∗ = 3/γand is two-to-one beyond
+0
+(none)
+1
+(mean)
+2
+(mean+cov)
+= ICW
+3
+(3rd moment
+lossless SAS)
+Number of matched moments
+10 3
+10 2
+MAE  (p.u., log)
+ MAE vs. matched moments (SAS)
+MLP
+Transformer
+Fig. 10. MAE versus number of matched moments (30-Bus, 20% load,
+Nctx = 400, MLP and Transformer). Error drops steeply through level 2
+and rises at level 3 even with a lossless sinh–arcsinh transform, confirming
+that the saturation is not an artifact of information loss.
+that point. Withγ= 1for example, bothz= 2andz= 4
+map tof= 1.5, so the inverse cannot recover which preimage
+was intended. The sinh–arcsinh (SAS) transform avoids this
+structural problem by replacing the parabola with a strictly
+monotone bijection,
+zs = sinh(arcsinh(z)−ε), z= sinh(arcsinh(z s) +ε),
+(11)
+whereεis a per-dimension skewness parameter fitted by
+bisection.
+The derivativedz s/dz= coshε−sinhε·z/
+√
+z2 + 1is
+strictly positive for allzandε, so the map is a global bijection
+with no fold and no clipping. Table V verifies this on real
+data: the roundtrip error is at machine precision, confirming
+that no information is lost. Given that the transform is lossless,
+any remaining fit gap between level 2 and level 3 must come
+from approximation difficulty rather than missing information.
+Table VI confirms this: theR 2(Z)gap between level 2 and
+level 3 shrinks34×as model width grows from 128 to 1024
+units, the signature of a harder function to approximate, not
+a harder target to recover. Finally, Figure 11 shows that the
+saturation at level 2 holds per output quantity: voltage MAE
+at level 3 is within2%of level 2 on both the base and N-
+2 topologies, confirming that the third-moment correction is
+neutral across all physical quantities and not just in aggregate.
+TABLE V
+ROUND-TRIP INVERTIBILITY OF THESASTRANSFORM ON REAL DATA
+(30-BUS, 20%LOAD,n= 4000TRAINING SAMPLES).
+Check Value
+Train roundtrip|SAS −1(SAS(Z))−Z|1.88×10 −9
+Inference context roundtrip MAE1.97×10 −9
+Max|SAS −1(true SAS)−Z|(val)2.4×10 −7
+APPENDIXC
+ARCHITECTURE ANDTRAININGHYPERPARAMETERS
+All models are trained with the AdamW optimiser,
+CosineAnnealingLR scheduler withη min = 10−6, batch size
+32, gradient clipping at norm 1.0, and weight decay10 −5.
+Inputxis always z-score normalised using training statistics,
+TABLE VI
+VALIDATIONR 2 ANDMAEVERSUS MODEL WIDTH FOR LEVEL2 (ZCA)
+AND LEVEL3 (SAS)TARGETS(30-BUS, 20%LOAD). THER 2(Z)GAP
+SHRINKS34×FROM WIDTH128TO1024,CONFIRMING THE
+THIRD-MOMENT TARGET CARRIES IDENTICAL INFORMATION BUT IS
+HARDER TO APPROXIMATE.
+Width L2R 2(Z)L3R 2(Z)L2 MAE L3 MAER 2 gap
+128 0.99190 0.98743 0.000293 0.000477 0.00447
+256 0.99732 0.99611 0.000179 0.000274 0.00121
+512 0.99913 0.99874 0.000103 0.000158 0.00039
+1024 0.99972 0.99960 0.000059 0.000088 0.00013
+1 (mean) 2 (ZCA=ICW) 3 (SAS)
+Number of matched moments
+10 4
+10 3
+Voltage MAE  (p.u., log)
+1.28e-04
+5.75e-05 5.48e-05
+6.16e-04
+3.13e-04 3.06e-04
+L3 vs L2 (voltage)
+base 0.95×  ·  N-2 0.98×
+3rd moment  no change
+Base vs. N-2 voltage error per moment level (case30)
+Base case (in-distribution)
+N-2 (adoption)
+Fig. 11. V oltage MAE on the base topology and on the N-2 contingency per
+moment level (30-Bus, 20% load). Level 3 tracks level 2 on both domains
+(0.95×on base,0.98×on N-2), confirming that the third-moment correction
+is neutral for voltage in and out of distribution.
+independent of which output preprocessing variant from Ta-
+ble I is being evaluated. Table VII summarises the architecture-
+specific hyperparameters.
+APPENDIXD
+PER-METRICIMPROVEMENTUNDERN-2 CONTINGENCIES
+Figure 4 in the main text reports the per-metric frozen-
+vs-ICW improvement under N-1 Most. Figure 12 gives the
+N-2 Most companion across the same three systems. The
+improvement factors are uniformly larger than in the N-1
+setting, consistent with the more severe operator shift a double
+outage induces: Overall MAE improves by28×,18×, and
+8×on 30-, 118-, and 300-Bus, with the largest per-quantity
+gains on reactive power (Q g up to54×on 30-Bus) and
+voltage magnitude (|V|up to47×). The whitening correction
+therefore recovers proportionally more accuracy exactly where
+the frozen surrogate degrades most.
+APPENDIXE
+N-2 ROBUSTNESS AT THE50% LOADSETTING
+The robustness results in Section IV-D check every N-1
+contingency at the20%load setting. Here we ask a harder
+question: does ICW’s improvement still hold when both the
+contingency and the load perturbation are pushed further, to
+every N-2 double-line-outage pair on 30-Bus at the more
+severe50%load setting?
+We evaluate the frozen baseline and ICW on all677N-2
+contingency pairs that remain connected and Newton–Raphson
+convergent on 30-Bus at50%load, the same selection criterion
+TABLE VII
+ARCHITECTURE SPECIFICATIONS AND TRAINING HYPERPARAMETERS FOR
+ALL THREE BACKBONE MODELS. ADASH(–)INDICATES A PARAMETER
+THAT IS STRUCTURALLY NOT APPLICABLE TO THAT ARCHITECTURE(FOR
+EXAMPLE,PATCH SIZE APPLIES ONLY TO THETRANSFORMER’S PATCH
+EMBEDDING,AND NODE/EDGE FEATURE DIMENSIONS APPLY ONLY TO
+PFGNN’S GRAPH STRUCTURE),NOT A MISSING VALUE.
+Parameter MLP Transf. PFGNN[7]
+Model / hidden dim. 256 128 129
+Layers 2 2 4
+Activation GELU GELU ReLU
+Dropout 0.15 0.15 0.2
+Parameters≈100k≈292k≈355k
+Attention heads – 4 –
+Feedforward dim. – 256 –
+Patch size – 12 –
+Shared training settings
+Optimiser AdamW
+Scheduler CosineAnnealingLR (η min = 10−6)
+Learning rate6.29×10 −4
+Batch size 32
+Training steps 40,000 (MLP/Transformer/GNN)
+Gradient clip 1.0 (norm)
+Weight decay10 −5
+used throughout this paper. To see whether ICW’s improve-
+ment depends on how hard a given contingency already is for
+the frozen baseline, we group these677pairs into terciles
+by frozen-model MAE (low, mid, high severity), the same
+grouping used for the physical-validity check in Figure 16.
+Figure 13 shows the result. ICW reduces MAE in every
+severity group without exception, with a median improvement
+factor of7.6×and a worst-case (bottom1%) factor of2.3×.
+The improvement is therefore not limited to the easier, lower-
+severity contingencies, nor to the20%load setting used
+elsewhere: it holds even on the hardest N-2 pairs at the more
+severe50%perturbation level.
+APPENDIXF
+DISTRIBUTIONALSHIFT ANDPER-CONTINGENCYERROR
+This appendix complements the full-contingency-set robust-
+ness results in Section IV-D. To understand what drives the
+residual variation in ICW’s own accuracy across contingencies,
+Figures 14 and 15 plot, for each contingency, the portion of
+the operator shift ICW closes,∆MMD = MMD Y −MMD Z,
+whereMMD Y is the bound’sMMD k term measured in the
+raw output space andMMD Z is the residual MMD after ZCA
+whitening, against ICW’s own relative error increase over its
+base-case accuracy,(e k−ebase)/ebase, for 30-Bus and case118
+respectively. A small number of the hardest contingencies are
+excluded from each scatter plot only (three for 30-Bus, one
+for case118), since their relative error increase is computed
+against a very small base-case ICW MAE denominator, which
+makes their ratio disproportionately large and would distort
+the plot’s scale; this exclusion affects only these two scatter
+plots and not the line counts reported elsewhere. Within each
+Fig. 12. Per-metric MAE (p.u.) for Frozen vs. ICW under simultaneous N-2 Most-Severe contingencies for IEEE case 30, 118, and 300 networks. ICW
+delivers uniformly larger improvements than in the N-1 setting.
+Fig. 13. MAE distribution of the frozen ZCA baseline and ICW across all
+677N-2 double-line-outage contingencies on 30-Bus (50%load perturbation),
+grouped into terciles by frozen-model MAE (low, mid, high severity).
+system, contingencies where ICW closes less ofMMD k show
+a larger relative increase in error and those where it closes
+more show a smaller increase, exactly the relationship the
+bound in (10) predicts: the more of the distributional shift the
+transform removes, the closer the contingency-domain error
+stays to the base-domain error.
+APPENDIXG
+PHYSICALVALIDITY OFPREDICTIONS
+Section IV-D establishes that ICW holds its accuracy
+across the full contingency set in MAE. Here we check
+physical validity: the worst-bus AC power-balance mismatch
+∥f(x, by)∥= max i
+p
+∆P2
+i + ∆Q2
+i (excluding the slack bus)
+for ZCA Frozen and ICW predictions, with contingencies
+grouped into terciles by frozen-model MAE. As Figure 16
+shows, ICW reduces this mismatch by14×,18×, and30×
+for the low-, mid-, and high-severity tiers respectively, with
+the NR solver baseline itself at approximately2×10 −6 p.u.,
+several orders of magnitude below either method. ICW’s gains
+therefore translate into predictions that are closer to satisfying
+the underlying power-flow equations, not just closer in MAE.
+0.00 0.25 0.50 0.75 1.00
+ΔMMD = MMDY − MMDZ
+0.25
+0.50
+0.75
+1.00
+ICW generalization gap
+(ek − ebase) / ebase
+Case30 20%
+0.00
+0.02
+0.04
+0.06
+MMDZ (residual gap)
+Fig. 14. Scatter plot of the distributional shift∆MMDvs. ICW generalization
+gap(e k −ebase)/ebase across all 38 N-1 contingencies, 30-Bus (20% load).
+Three contingencies were excluded as noted in the text.
+0.2 0.4 0.6 0.8
+ΔMMD = MMDY − MMDZ
+0.25
+0.30
+0.35
+0.40
+ICW generalization gap
+(ek − ebase) / ebase
+Case118 20%
+0.00
+0.01
+0.02
+0.03
+MMDZ (residual gap)
+Fig. 15. Same as Fig. 14 for case118 (20% load, 166 N-1 contingencies).
+One contingency excluded as noted in the text.
+APPENDIXH
+CONTEXTSIZE ANDCOVARIANCECONVERGENCE
+This appendix provides the context-size and eigenvalue-
+level detail supporting the covariance half-convergence argu-
+ment in Section IV-E (How Much Context Is Enough).
+Fig. 16. Physical validity of predictions. Box plots of the worst-bus AC
+power-balance mismatch|f(x,ˆy)|= max i
+q
+∆P2
+i + ∆Q2
+i (p.u.) for ZCA
+Frozen and ICW predictions, grouped by contingency severity. ICW reduces
+mismatch by14×,18×, and30×for low-, mid-, and high-severity groups
+respectively. The NR solver baseline (≈2×10 −6 p.u.) lies off scale below.
+TABLE VIII
+ICWABSOLUTEMAE (P.U.)AND IMPROVEMENT FACTOR OVER FROZEN
+BASELINE(FROZEN÷ICW,↑BETTER), N-1 MOST LOADED LINE OUT
+CONTINGENCY. BOLD:LARGEST TESTED CONTEXT.
+Absolute MAE (p.u.) Improvement (×,↑)
+Nctx OverallQ gen |V|OverallQ gen |V|
+118-Bus (dout = 236)
+400 0.00433 0.00621 0.0002218.3 8.2 6.7
+600 0.00415 0.00596 0.000215 8.6 8.6 6.9
+800 0.00413 0.00587 0.000212 8.7 8.7 7.0
+1200 0.00269 0.00386 0.000195 13.3 13.2 7.6
+1600 0.00208 0.00299 0.000186 17.2 17.1 8.0
+300-Bus (dout = 600)
+800 0.01995 0.02023 0.0009111.4 7.4 2.8
+1200 0.02042 0.02003 0.000898 1.3 7.5 2.9
+2000 0.01925 0.01928 0.000841 1.4 7.8 3.0
+3000 0.00819 0.01035 0.000512 3.3 14.5 5.0
+4000 0.00451 0.00886 0.000446 6.0 17.0 5.7
+Table VIII reports how ICW’s improvement over the frozen
+baseline scales with context sizeN ctx on the 118- and 300-
+bus systems. On 118-bus, increasingN ctx from400to1600
+raises the Overall improvement factor from8.3×to17.2×;
+on 300-bus, increasingN ctx from800to4000raises it from
+1.4×to6.0×. Since a larger context means more NR solves
+and higher collection cost,N ctx acts as a tunable accuracy-
+compute tradeoff: a small context already recovers most of
+ICW’s gain, while a larger context yields further improvement
+at proportionally higher cost. The operator can therefore select
+Nctx according to the desired accuracy-compute tradeoff.
+Figure 17 gives the 30-Bus accuracy-cost tradeoff, the
+companion to the case118 panel in the main text (Fig. 6). The
+MAE curve flattens and the Log-Euclidean covariance distance
+halves byN ctx = 400, at which point89%of the achievable
+improvement is captured on 30-Bus, against66%on case118;
+10−4
+10−3
+MAE (p.u., log) ↓
+Nctx = 400
+Case30
+Base (NR)
+N-2 Most
+100 200 400 900 2000
+Nctx
+0.0
+0.3
+0.6
+0.9
+‖logΣ(N)−logΣ(Nmax)‖F
+Nctx = 400
+0
+5
+10
+15
+20
+Context cost (s)
+Fig. 17.30-Bus: accuracy-cost tradeoff with increasing context.Top:
+Overall MAE vs.N ctx (log scale) on Base (NR) and N-2 Most contingency,
+averaged over 5 independently drawn context sets perN ctx (shaded band:±1
+std), with context-collection wall time on the right axis (8.69ms/NR-solve).
+Bottom:Log-Euclidean covariance distance∥logΣ(N)−logΣ(N max)∥F
+from the converged reference atN max = 2000.
+the gap is explained by the eigenvalue analysis below.
+Figure 18 shows the ordered eigenvalue spectrum of
+Σ(Nctx)for 30-Bus and case118. The spectrum decays by
+three to five orders of magnitude across the first10–20indices,
+giving an effective rank of roughly12–15for 30-Bus and15–
+20for case118, far below their ambient output dimensions
+of60and236. The leading eigenvalues are visually indistin-
+guishable across all testedN ctx, while the tail eigenvalues fan
+out at smallN ctx and converge inward asNgrows. Since the
+ZCA whitening matrixW=UΛ −1/2U⊤ is dominated by
+the leading eigenpairs, the whitening transform stabilises well
+before the full spectrum converges, consistent with the large
+MAE improvement already achieved at moderateN ctx in the
+main text.
+Figure 19 quantifies this at the level of individ-
+ual eigenvalues, plotting the relative deviation(λ i(N)−
+λi(2000))/λi(2000)×100%per indexiand context sizeN ctx.
+Leading indices converge within±5%of the reference even at
+N= 100, confirming that the dominant geometric structure of
+Σis captured with minimal context; tail indices show larger
+deviation and settle progressively. The deviation ofΣ(1500)
+is near zero across all indices for both systems, confirming
+Nmax = 2000is itself a valid converged reference rather than
+a moving target. The wider oscillations visible for case118
+at smallN ctx, particularly in the mid-to-tail indices, reflect
+its higher output dimension and explain why only66%of
+the achievable MAE improvement is captured atN ctx = 400,
+compared to89%for 30-Bus.
+APPENDIXI
+COSTDETAIL: FINE-TUNING ANDSCRATCHTRAINING
+Section IV-F compares ICW against gradient-based adapta-
+tion at deployment scale. This appendix reports the per-single-
+1 10 20 30 40 50 60
+Eigenvalue index
+10−5
+10−4
+10−3
+Eigenvalue of Σ
+Case30
+1 50 100 150 200 236
+Eigenvalue index
+10−5
+10−4
+10−3
+10−2
+10−1
+Case118
+N=100
+N=200
+N=300
+N=400
+N=500
+N=600
+N=700
+N=800
+N=900
+N=1k
+N=1.5k
+N=2k
+Fig. 18.Eigenvalue spectra of the context covarianceΣ(N ctx).Ordered
+spectra for eachN ctx (see legend), 30-Bus and case118. Dominant eigenval-
+ues stabilise byN ctx = 200; tail eigenvalues continue to shift, with case118
+exhibiting a richer tail due to its higher dimensionality (d= 236).
+1 10 20 30 40 50 60
+Eigenvalue index
+−10
+−5
+0
+5
+10
+R el. deviation fr om  Nm a x  (% ) Case30
+1 50 100 150 200 236
+Eigenvalue index
+−60
+−40
+−20
+0
+20
+Case118
+N=100
+N=200
+N=300
+N=400
+N=500
+N=600
+N=700
+N=800
+N=900
+N=1k
+N=1.5k
+Fig. 19.Per-index eigenvalue deviation fromN max = 2000.Relative
+deviation(λ i(N)−λ i(2000))/λi(2000)×100%per eigenvalue indexi
+and context sizeN ctx, 30-Bus and case118. Leading indices converge within
+±5%of the reference even atN= 100; tail indices settle progressively, with
+case118 showing broader oscillations at smallN ctx.
+contingency cost curves behind that comparison on the 30-
+Bus N-2 Most contingency, for fine-tuning from base-trained
+weights and for training from scratch. We measure total cost
+asT data +T grad +T inf. For ICW,T grad = 0always: at
+Nctx = 400(T data = 4.968s) its total is5.059s (MLP) and
+5.257s (PFGNN), and atN ctx = 1000(T data = 8.686s) it
+is8.772s and8.994s. Fine-tuning and scratch training add a
+Tgrad that grows with the number of gradient steps.
+Fine-tuning.We take the base-trained MLP and PFGNN
+used by ICW and fine-tune them (no-norm) on the same
+context set of solved NR samples ICW uses for its inference-
+time statistics, atN ctx = 400andN ctx = 1k, tracking V oltage
+MAE against total wall-clock cost as the number of steps
+grows. Figure 20 shows the ICW star of both context sizes at
+the bottom-left of each panel, the lowest MAE at the lowest
+cost. Fine-tuning’s curve approaches but does not cross below
+ICW’s accuracy within the tested step range, even as its cost
+grows past30×ICW’s. Fine-tuning starts from the same base-
+trained weights ICW uses, so it begins closer to a usable
+5 8 12
+10−3
+10−2
+Voltage MAE (p.u.)
+(a) MLP
+(Fine-tune, no-norm)
+5 8 12 20 32
+10−3
+10−2
+Voltage MAE (p.u.)
+(b) PFGNN
+(Fine-tune, no-norm)
+T d a ta + T tr a in + T in f e r  (s, log sc ale)
+I CW , Nc tx =400 F ine-tune, Nc tx =400 I CW , Nc tx =1k F ine-tune, Nc tx =1k
+Fig. 20.ICW vs. fine-tuning: cost and accuracy.V oltage MAE (p.u.) vs.
+total costT data +Tgrad +Tinf (log scale) for (a) MLP and (b) PFGNN, fine-
+tuned (no-norm) on the N-2 Most contingency’s context set atN ctx = 400
+andN ctx = 1k. Stars mark ICW at the same context sizes; circles/squares
+trace fine-tuning progress through increasing gradient steps.
+solution than a randomly initialized model, but it still pays
+a per-contingency gradient-based cost that ICW does not.
+Scratch training.We next train MLP and PFGNN entirely
+from scratch on the same N-2 Most contingency and the
+same two context sizes, rather than fine-tuning from base-
+trained weights. The scratch-trained model starts from random
+initialization, so it must learn the entire input-output mapping
+from the context set alone rather than adjust an already-trained
+mapping; this isolates how much of fine-tuning’s head start
+comes from starting near a good solution rather than from the
+gradient steps themselves. We run this under both no-norm and
+z-score preprocessing, since the two start from different places:
+no-norm leaves the full mean, variance, and covariance shift
+for gradient descent to learn unaided, while z-score removes
+the mean and per-dimension variance before training begins,
+leaving only the covariance structure to recover.
+Table IX shows what this costs under no-norm. At100
+gradient steps, MLP’s V oltage MAE is0.1935p.u., roughly
+645×worse than ICW’s0.0003p.u., despite already costing
+more wall-clock time than ICW’s full context-collection cost
+of5.059s. Scratch training only approaches ICW’s accuracy
+after2000–4000steps, by which point its total cost (6.8–8.6s
+for MLP,17.2–29.2s for PFGNN) exceeds ICW’s and its MAE
+is still14–35×worse. Without the head start fine-tuning gets
+from pretrained weights, the model spends most of its gradient
+budget just recovering the mean and variance structure ICW
+gets for free from its closed-form statistics.
+Table X shows the same experiment under z-score. Here
+the story changes: at just100steps MLP’s V oltage MAE is
+already0.0007p.u., close to ICW almost immediately, since
+z-score has already removed most of the shift that no-norm
+left for gradient descent to learn. PFGNN closes its gap more
+slowly, sitting at0.0011p.u. at100steps and only matching or
+beating ICW’s0.0007p.u. once it reaches roughly2000–4000
+steps. What remains for gradient descent under z-score is the
+covariance structure, the part ZCA whitening captures directly
+and z-score does not; ICW closes this gap with zero gradient
+steps, while scratch training still needs thousands to close it
+on this one contingency alone.
+Critically, every cost above, for fine-tuning and scratch
+training under both no-norm and z-score, is paid for this one
+contingency only. ICW’s surrogate is trained once on the base
+TABLE IX
+SCRATCH TRAINING VS. ICW:COMPUTATION TIME ANDVOLTAGEMAE
+(NO-NORM;N−2MOST; IEEE 30-BUS;T grad =0FORICW).
+Grad. Steps Time (s) Volt. MAE
+(A)N ctx = 400context samples
+ICW (ours) 5.059 5.257 0.0003 0.0007
+MLP PFGNN MLP PFGNN
+100 5.143 5.857 0.1935 0.0834
+200 5.230 6.454 0.0782 0.0807
+400 5.405 7.649 0.0367 0.0472
+800 5.755 10.039 0.0224 0.0207
+1000 5.930 11.234 0.0192 0.0202
+2000 6.805 17.209 0.0106 0.0157
+4000 8.555 29.159 0.0042 0.0112
+(B)N ctx = 1000context samples
+ICW (ours) 8.772 8.994 0.0003 0.0007
+MLP PFGNN MLP PFGNN
+100 8.861 9.575 0.1547 0.0808
+200 8.948 10.172 0.0665 0.0657
+400 9.123 11.367 0.0292 0.0498
+800 9.473 13.757 0.0191 0.0271
+1000 9.648 14.952 0.0149 0.0226
+2000 10.523 20.927 0.0079 0.0130
+4000 12.273 32.877 0.0036 0.0073
+TABLE X
+SCRATCH TRAINING VS. ICW:COMPUTATION TIME ANDVOLTAGEMAE
+(Z-SCORE;N−2MOST; IEEE 30-BUS;T grad =0FORICW).
+Grad. Steps Time (s) Volt. MAE
+(A)N ctx = 400context samples
+ICW (ours) 5.059 5.257 0.0003 0.0007
+MLP PFGNN MLP PFGNN
+100 5.143 5.857 0.0007 0.0011
+200 5.230 6.454 0.0004 0.0011
+400 5.405 7.649 0.0003 0.0011
+800 5.755 10.039 0.0002 0.0009
+1000 5.930 11.234 0.0002 0.0009
+2000 6.805 17.209 0.0001 0.0007
+4000 8.555 29.159 0.0001 0.0004
+(B)N ctx = 1000context samples
+ICW (ours) 8.772 8.994 0.0003 0.0007
+MLP PFGNN MLP PFGNN
+100 8.861 9.575 0.0008 0.0011
+200 8.948 10.172 0.0004 0.0011
+400 9.123 11.367 0.0002 0.0011
+800 9.473 13.757 0.0001 0.0010
+1000 9.648 14.952 0.0001 0.0009
+2000 10.523 20.927 0.0001 0.0005
+4000 12.273 32.877 0.0001 0.0004
+topology and adapts to each new contingency from context
+alone; fine-tuning or retraining from a single contingency’s
+context set yields a model adapted to that contingency, with no
+benefit carried to the next. Repeating either procedure across
+30-Bus’s 38 N-1 contingencies (Section IV-D) would multiply
+its cost by38×, and across case118’s N-1 set by the cor-
+responding factor, while ICW pays its context-collection cost
+once per contingency regardless of how many are encountered.

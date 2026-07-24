@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlador flotador: estabilidad mediante una ecuación instantánea — bridge42worlds</title>
+    <meta name="description" content="Los ingenieros crearon una red neuronal flotador: en lugar de cálculos de varios pasos, resuelve una sola ecuación de equilibrio y emite inmediatamente la señal de control. Esto permitió demostrar rigurosamente la estabilidad por primera vez: el análisis se asemeja a comprobar si las ondas se amorti">
+    <meta property="og:title" content="Controlador flotador: estabilidad mediante una ecuación instantánea">
+    <meta property="og:description" content="Un controlador neuronal con forma de «flotador» resuelve una sola ecuación y garantiza estabilidad, superando a los reguladores tradicionales bajo restricciones físicas.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-13/2607.11122/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Controlador flotador: estabilidad mediante una ecuación instantánea", "description": "Un controlador neuronal con forma de «flotador» resuelve una sola ecuación y garantiza estabilidad, superando a los reguladores tradicionales bajo restricciones físicas.", "inLanguage": "es", "datePublished": "2026-07-13", "url": "https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-13/2607.11122/ai.jpg", "author": [{"@type": "Person", "name": "Giuseppe C. Calafiore"}, {"@type": "Person", "name": "Laurent El Ghaoui"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.11122", "abstract": "Los reguladores neuronales implícitos (INC) son realimentaciones estáticas dadas por el punto fijo de una ecuación algebraica. Se propone una representación implícita de la red neuronal como una conexión lineal entrenable con una no linealidad estática conocida, lo que simplifica el análisis de estabilidad mediante métodos de Lyapunov/IQC. Para sistemas lineales estacionarios se obtienen condiciones de corrección (Perron-Frobenius y normas), certificados LMI/IQC de estabilidad exponencial y LMI para el costo cuadrático descontado de horizonte infinito. La síntesis se realiza como una búsqueda heurística certificable con restricciones explícitas de corrección y diferenciación implícita para gradientes; el controlador se acepta solo tras LMI post-entrenamiento o verificaciones de admisibilidad regional. Se demuestra un resultado de separación: en un objeto escalar inestable con duras restricciones, INC supera en costo descontado a cualquier controlador dinámico lineal admisible de orden finito. También se consideran costos cuadráticos, comparación con la realimentación estática lineal y cotas computables."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/es/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Avanzado</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-07-13/2607.11122/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-07-13/2607.11122/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/es/archive/2026-07-13/2607.11122/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-07-13/2607.11122/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Next article →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.11122">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ arriba</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Controlador flotador: estabilidad mediante una ecuación instantánea  <span class="express-badge" title="Versión exprés: basada en el resumen del autor, no en el texto completo">exprés</span></h1>
+            <button class="share-btn share-inline" title="Share" onclick="shareArticle('Controlador flotador: estabilidad mediante una ecuación instantánea','https://bridge42worlds.academy/lang/es/archive/2026-07-13/2607.11122/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Implicit Neural Networks as Static Controllers: Certificates and Performance Separation"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/es/authors/Giuseppe_C_Calafiore.html" class="text-author-link" data-author="Giuseppe C. Calafiore">Giuseppe C. Calafiore</a>, <a href="/lang/es/authors/Laurent_El_Ghaoui.html" class="text-author-link" data-author="Laurent El Ghaoui">Laurent El Ghaoui</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.11122" target="_blank" rel="noopener">2607.11122</a> · 2026-07-13 · <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 1 min</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/es/sections/eess_SY.html" data-cat="eess.SY" title="">eess.SY</a> <a class="cat-badge" href="/lang/es/sections/cs_LG.html" data-cat="cs.LG" title="Investigación en aprendizaje automático: supervisado, no supervisado, aprendizaje por refuerzo, problemas de bandidos, y temas relacionados.">Aprendizaje automático</a> <a class="cat-badge" href="/lang/es/sections/cs_SY.html" data-cat="cs.SY" title="">cs.SY</a></div>
+        <div class="oneliner">Un controlador neuronal con forma de «flotador» resuelve una sola ecuación y garantiza estabilidad, superando a los reguladores tradicionales bajo restricciones físicas.</div>
+        <div class="mosaic"></div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>Los reguladores neuronales implícitos (INC) son realimentaciones estáticas dadas por el punto fijo de una ecuación algebraica. Se propone una representación implícita de la red neuronal como una conexión lineal entrenable con una no linealidad estática conocida, lo que simplifica el análisis de estabilidad mediante métodos de Lyapunov/IQC. Para sistemas lineales estacionarios se obtienen condiciones de corrección (Perron-Frobenius y normas), certificados LMI/IQC de estabilidad exponencial y LMI para el costo cuadrático descontado de horizonte infinito. La síntesis se realiza como una búsqueda heurística certificable con restricciones explícitas de corrección y diferenciación implícita para gradientes; el controlador se acepta solo tras LMI post-entrenamiento o verificaciones de admisibilidad regional. Se demuestra un resultado de separación: en un objeto escalar inestable con duras restricciones, INC supera en costo descontado a cualquier controlador dinámico lineal admisible de orden finito. También se consideran costos cuadráticos, comparación con la realimentación estática lineal y cotas computables.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:boltzmann_distribution,l:second_law_of_thermodynamics,l:noethers_theorem,l:bekensteinhawking_entropy,l:first_law_of_thermodynamics,l:spinstatistics_theorem,s:Ludwig Boltzmann,s:Emmy Noether"><canvas id="minigraph"></canvas></div>
+        <p class="express-locked-banner">📄 Mostrando la version "Simple" — "Avanzado" aun no esta lista. Anadelo a favoritos para ayudar a priorizarla.</p><p>El flotador en el tanque del inodoro es un controlador ideal: al detectar el nivel de <a href="/lang/es/tags/water.html" class="text-tag" data-tag="water">agua</a>, lleva instantáneamente el sistema al equilibrio sin mirar al pasado. Los ingenieros aplicaron este principio a las redes neuronales. Reescribieron la arquitectura <a href="/lang/es/tags/standard_model.html" class="text-tag" data-tag="standard_model">estándar</a> de modo que, en lugar de una cascada de cálculos, resuelve una única ecuación de equilibrio. La señal de control surge de inmediato, como la posición del flotador. Las redes neuronales convencionales pasan la señal a través de muchas capas, acumulando error, mientras que aquí la solución se encuentra al instante. Esto proporciona una garantía matemática de estabilidad: el análisis recuerda a comprobar si las ondas se amortiguan en gelatina. La energía del error se disipa, el <a href="/lang/es/tags/entropy.html" class="text-tag" data-tag="entropy">desorden</a> no crece. Un astuto algoritmo de entrenamiento mantiene la red dentro de límites seguros y luego la prueba por separado: una inspección técnica para el cerebro artificial. Durante el entrenamiento se respetan condiciones estrictas, y la verificación final no deja margen para fallos. La sorpresa aguarda en el mundo de la física: para una estructura inestable con un motor apenas vivo, este flotador «descerebrado» superó a todos los esquemas con memoria. La razón es simple: las limitaciones de potencia no permiten que los algoritmos inteligentes muestren su capacidad, y la reacción instantánea sin pensarlo resulta la única correcta. Resultado: drones y robots seguros, incapaces de cometer un error fatal.</p>
+        <div class="fun-fact"><p class="fact">🎯 La falta de memoria en el controlador no es un error, sino una característica. Bajo estrictas limitaciones de potencia, el regulador «descerebrado» sin historial supera a los esquemas dinámicos complejos, como un novato que reacciona instantáneamente a lo inesperado, mientras el experto duda, revisando su experiencia.</p></div>
+        
+        
+        <div class="actions actions-compact" data-article-id="2607.11122_es_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.11122" title="Favoritos"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment">+ add a comment</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2607.11122_es_advanced" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/es/scientists/Ludwig_Boltzmann.html" class="side-sci" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a><a href="/lang/es/scientists/Emmy_Noether.html" class="side-sci" data-scientist="Emmy Noether">Emmy Noether</a><a href="/lang/es/scientists/Jacob_Bekenstein.html" class="side-sci" data-scientist="Jacob Bekenstein">Jacob Bekenstein</a><a href="/lang/es/scientists/Stephen_Hawking.html" class="side-sci" data-scientist="Stephen Hawking">Stephen Hawking</a><a href="/lang/es/scientists/Wolfgang_Pauli.html" class="side-sci" data-scientist="Wolfgang Pauli">Wolfgang Pauli</a><a href="/lang/es/scientists/Wilhelm_Wien.html" class="side-sci" data-scientist="Wilhelm Wien">Wilhelm Wien</a><div class="side-tags-label">Tags</div><a href="/lang/es/tags/water.html" class="side-tag" data-tag="water">agua</a>
+<a href="/lang/es/tags/standard_model.html" class="side-tag" data-tag="standard_model">modelo estándar</a>
+<a href="/lang/es/tags/entropy.html" class="side-tag" data-tag="entropy">entropía</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/boltzmann_distribution.html" class="side-law" data-law="boltzmann_distribution">distribución de Boltzmann</a><a href="/lang/es/laws/second_law_of_thermodynamics.html" class="side-law" data-law="second_law_of_thermodynamics">segunda ley de la termodinámica</a><a href="/lang/es/laws/noethers_theorem.html" class="side-law" data-law="noethers_theorem">Teorema de Noether</a><a href="/lang/es/laws/bekensteinhawking_entropy.html" class="side-law" data-law="bekensteinhawking_entropy">Entropía de Bekenstein-Hawking</a><a href="/lang/es/laws/first_law_of_thermodynamics.html" class="side-law" data-law="first_law_of_thermodynamics">primera ley de la termodinámica</a><a href="/lang/es/laws/spinstatistics_theorem.html" class="side-law" data-law="spinstatistics_theorem">teorema de la relación entre el espín y la estadística</a></div>
+</div>
+
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/scroll.js?v=79ba156b9d"></script>
+<script src="/js/lightbox.js?v=79ba156b9d"></script>
+<script src="/js/gallery.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.11122', 'article', 'es');
+    if (true && window.logExpressInterest) logExpressInterest('2607.11122', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

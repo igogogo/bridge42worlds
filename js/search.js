@@ -1203,7 +1203,7 @@ function collapseNavOverflow() {
     if (hasActive) btn.classList.add('active');
 
     // About и Архив живут в футере, но в шапочном меню их не было — добавляем (юзер 2026-07-22).
-    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'dashboard']].forEach(function(e) {
+    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'map']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#осцилляции нейронных сетей — bridge42worlds</title>
+    <meta name="description" content="Осцилляции нейронных сетей — это периодические всплески суммарной электрической активности больших популяций нейронов. Они возникают из-за взаимного возбуждения и торможения между клетками. Различают ритмы по частоте: дельта (0,5–4 Гц) — глубокий сон, тета (4–8 Гц) — дремотное состояние, альфа (8–13 Гц) — спокойное бодрствование с закрытыми глазами, бета (13–30 Гц) — активное внимание, гамма (30–100 Гц) — обработка информации. Эти колебания не просто шум, а функциональный инструмент: они синхронизируют удалённые области для обмена данными (binding problem), как если бы два компьютера настраивались на общую несущую частоту.">
+    <meta property="og:title" content="#осцилляции нейронных сетей — bridge42worlds">
+    <meta property="og:description" content="Осцилляции нейронных сетей — это периодические всплески суммарной электрической активности больших популяций нейронов. Они возникают из-за взаимного возбуждения и торможения между клетками. Различают ритмы по частоте: дельта (0,5–4 Гц) — глубокий сон, тета (4–8 Гц) — дремотное состояние, альфа (8–13 Гц) — спокойное бодрствование с закрытыми глазами, бета (13–30 Гц) — активное внимание, гамма (30–100 Гц) — обработка информации. Эти колебания не просто шум, а функциональный инструмент: они синхронизируют удалённые области для обмена данными (binding problem), как если бы два компьютера настраивались на общую несущую частоту.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/tags/neural_network_oscillations.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># тег · @ автор · ! учёный</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>осцилляции нейронных сетей</h1><button class="share-inline" title="Поделиться" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">2</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Мозг — это не тишина, а пульсирующий ритм. Осцилляции нейронных сетей — это волны электрической активности, которые бегут по мозгу, словно круги на воде, и без них невозможны сон, память или внимание.</p><div class="practical-app"><strong>На практике:</strong> Чтение ритмов мозга (ЭЭГ) помогает диагностировать эпилепсию, управлять протезами через интерфейсы мозг-компьютер и разрабатывать терапию расстройств внимания.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Осцилляции нейронных сетей — это периодические всплески суммарной электрической активности больших популяций нейронов. Они возникают из-за взаимного возбуждения и торможения между клетками. Различают ритмы по частоте: дельта (0,5–4 Гц) — глубокий сон, тета (4–8 Гц) — дремотное состояние, альфа (8–13 Гц) — спокойное бодрствование с закрытыми глазами, бета (13–30 Гц) — активное внимание, гамма (30–100 Гц) — обработка информации. Эти колебания не просто шум, а функциональный инструмент: они синхронизируют удалённые области для обмена данными (binding problem), как если бы два компьютера настраивались на общую несущую частоту.</div>
+        <div class="section"><h2>История</h2><p>В 1924 году психиатр Ганс Бергер впервые записал электрическую активность человеческого мозга, прикрепив электроды к коже головы. Он увидел волны, которые назвал альфа-ритмом. С тех пор учёные нашли много разных ритмов (дельта, тета, гамма и другие) и поняли, что они связаны с нашими мыслями, эмоциями и памятью.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Нейроны общаются через электрические импульсы. Когда большая группа нейронов посылает импульсы примерно в одно время, возникает волна, которую можно уловить снаружи. Сильные связи между нейронами помогают ритму удерживаться, как маятник часов, который толкают в такт.</p></div>
+        <div class="fun-fact">💡 У новорождённых альфа-ритм почти отсутствует и формируется только к трём годам, а медленные волны глубокого сна помогают «вымывать» накопившиеся за день токсичные белки из мозга.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Осцилляции (колебания) в нейронных сетях — это когда множество нервных клеток (нейронов) в мозгу начинают включаться и выключаться синхронно, создавая ритмические волны. Это похоже на оркестр, где каждый инструмент играет свою ноту, но вместе получается музыка. Такие ритмы бывают медленными во сне и быстрыми при решении задач. Они помогают разным отделам мозга общаться между собой.</div>
+        <div class="section"><h2>История</h2><p>В 1924 году психиатр Ганс Бергер впервые записал электрическую активность человеческого мозга, прикрепив электроды к коже головы. Он увидел волны, которые назвал альфа-ритмом. С тех пор учёные нашли много разных ритмов (дельта, тета, гамма и другие) и поняли, что они связаны с нашими мыслями, эмоциями и памятью.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Нейроны общаются через электрические импульсы. Когда большая группа нейронов посылает импульсы примерно в одно время, возникает волна, которую можно уловить снаружи. Сильные связи между нейронами помогают ритму удерживаться, как маятник часов, который толкают в такт.</p></div>
+        <div class="fun-fact">💡 Нейронные осцилляции существуют даже у беспозвоночных: у пчелы гамма-ритм (20–50 Гц) регистрируется при обонятельном обучении и, вероятно, помогает ей запоминать запах нектара.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Осцилляции в нейросетях — это макроскопический феномен, порождаемый коллективной динамикой возбуждающих и тормозных нейронов. Математически они моделируются системами дифференциальных уравнений, такими как модель Вилсона-Кована (возбуждение-торможение) или модель Курамото для связанных осцилляторов. На микроуровне осцилляции возникают из-за реверберации активности в замкнутых цепях, пейсмейкерных нейронов и резонансных свойств мембран. Эти ритмы модулируют синаптическую пластичность, тем самым управляя обучением и памятью. Например, тета-ритм в гиппокампе организует последовательности активации нейронов места, а гамма-ритм способствует точной спайковой синхронизации при обработке сенсорной информации. Нарушения осцилляций являются биомаркерами неврологических заболеваний (эпилепсия, болезнь Паркинсона, шизофрения).</div>
+        <div class="section"><h2>История</h2><p>История началась с изобретения электроэнцефалографии. Ганс Бергер в 1924 году выполнил первую запись ЭЭГ человека, но признание пришло лишь после 1934 года, когда Эдгар Эдриан повторил опыты. Бергер описал альфа- и бета-ритмы. В 1930–50-е годы Уильям Грей Уолтер и другие исследовали дельта-ритм при опухолях мозга. В 1960-х компьютерный анализ ЭЭГ позволил выделить вызванные потенциалы. Прорывом стало открытие локальных полевых потенциалов (LFP) и связи осцилляций с когнитивными процессами: в 1980-х Вольф Зингер предложил гипотезу синхронизации для связывания признаков. Сегодня оптогенетика и современные методы визуализации позволяют целенаправленно управлять осцилляциями.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Осцилляции поддерживаются балансом возбуждения (через глутаматергические нейроны) и торможения (через ГАМК-ергические интернейроны). Ключевой механизм — реверберирующие цепи: возбуждение от одной группы нейронов активирует тормозные клетки, которые спустя короткую задержку подавляют первую группу, после чего цикл повторяется. Частота осцилляций определяется временными константами синапсов и длиной цепочек. Для возникновения глобального ритма необходима синхронизация через щелевые контакты (электрические синапсы) и общую синхронизирующую проекцию из стволовых структур, например, таламуса. Гамма-ритм (30–80 Гц) локально генерируется пирамидными нейронами и быстрыми шипиковыми интернейронами, которые создают временное окно для точной спайковой синхронизации. Тета-ритм координирует взаимодействие гиппокампа и коры, организуя временную компрессию последовательностей. С точки зрения нелинейной динамики, переход к синхронизированному состоянию — это фазовый переход, описываемый параметрами порядка.</p></div>
+        <div class="formula"><div class="formula-render">\tau_e \frac{dE}{dt} = -E + (k_e - r_e E) f_e(w_{ee} E - w_{ie} I + P_e) \\ \tau_i \frac{dI}{dt} = -I + (k_i - r_i I) f_i(w_{ei} E - w_{ii} I + P_i)</div><div class="formula-meaning">E, I — средние активности возбуждающей и тормозной популяций (безразмерные, обычно 0–1); τ_e, τ_i — временные константы затухания (мс); k_e, k_i — максимальные активности; r_e, r_i — параметры рефрактерности; w_ee, w_ie, w_ei, w_ii — силы связей; P_e, P_i — внешние входы; f_e, f_i — сигмоидные функции отклика (обычно логистические)</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Однозначно ли осцилляции являются причиной когнитивных процессов или эпифеноменом?; Как измерить информационный поток, передаваемый фазовой синхронизацией, не путая корреляцию с причинностью?; Можно ли создать нейропротезы, которые восстанавливают нарушенные ритмы при болезни Альцгеймера, не нарушая нормальную динамику?; Как масштабировать модели отдельных нейронных ансамблей до полномасштабной корковой активности без потери бифизической точности?</p><p class="fact">💡 Нейронные осцилляции существуют даже у беспозвоночных: у пчелы гамма-ритм (20–50 Гц) регистрируется при обонятельном обучении и, вероятно, помогает ей запоминать запах нектара.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div>
+<div class="mini-graph" data-node="t:neural_network_oscillations"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="neural_network_oscillations_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="neural_network_oscillations" title="избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ написать комментарий</button></div>
+<div class="feedback" id="feedback" data-article-id="neural_network_oscillations_ru_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/brain.html" class="side-tag" data-tag="brain">мозг</a><a href="/lang/ru/tags/critical_point.html" class="side-tag" data-tag="critical_point">критическая точка</a><a href="/lang/ru/tags/neuron.html" class="side-tag" data-tag="neuron">нейрон</a><a href="/lang/ru/tags/phase_transition.html" class="side-tag" data-tag="phase_transition">фазовый переход</a><a href="/lang/ru/tags/synapse.html" class="side-tag" data-tag="synapse">синапс</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="neural_network_oscillations"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('neural_network_oscillations', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

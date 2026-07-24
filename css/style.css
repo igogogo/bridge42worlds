@@ -1827,3 +1827,26 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .pie-lg { font-size: 11px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
 .pie-lg i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
 .pie-lg b { color: var(--ink); }
+
+/* Аналитика — 3D карта облака (canvas) */
+#analytics { max-width: 900px; }
+.an-tabs { display: flex; gap: 8px; margin: 6px 0 12px; }
+.an-intro { max-width: 640px; margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.an-intro b { color: var(--ink); font-weight: 600; }
+.an-tab { font-family: var(--mono); font-size: 12px; padding: 5px 14px; border: 1px solid var(--hair);
+  border-radius: 999px; background: none; color: var(--soft); cursor: pointer; transition: color .15s, border-color .15s; }
+.an-tab:hover { color: var(--link); }
+.an-tab.active { color: var(--link); border-color: var(--link); background: color-mix(in srgb, var(--cyan) 12%, transparent); }
+.an-stage { position: relative; border: 1px solid var(--hair); border-radius: 14px; overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--cyan) 6%, transparent), transparent 70%); }
+#an-canvas { width: 100%; display: block; cursor: grab; }
+#an-canvas:active { cursor: grabbing; }
+.an-hint { position: absolute; left: 12px; bottom: 10px; font-family: var(--mono); font-size: 10.5px;
+  color: var(--soft); pointer-events: none; opacity: .8; }
+.an-tip { position: absolute; background: var(--ink); color: var(--bg); font-size: 11px; padding: 4px 8px;
+  border-radius: 6px; pointer-events: none; max-width: 260px; z-index: 5; }
+.an-legend { margin-top: 14px; }
+.an-lg-h { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ochre); margin-bottom: 8px; }
+.an-lg { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); margin: 0 12px 6px 0; }
+.an-lg i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.an-axis { margin-top: 8px; font-size: 11px; color: var(--soft); font-family: var(--mono); }

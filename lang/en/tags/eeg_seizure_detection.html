@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#EEG seizure detection — bridge42worlds</title>
+    <meta name="description" content="Electroencephalogram (EEG) records the total electrical activity of brain neurons using electrodes on the scalp. An epileptic seizure manifests as abnormal synchronous discharges, which on EEG look like sharp bursts (spikes) and slow waves. Detection algorithms analyze the multichannel signal, extracting characteristic patterns whose frequency and shape differ from background activity.">
+    <meta property="og:title" content="#EEG seizure detection — bridge42worlds">
+    <meta property="og:description" content="Electroencephalogram (EEG) records the total electrical activity of brain neurons using electrodes on the scalp. An epileptic seizure manifests as abnormal synchronous discharges, which on EEG look like sharp bursts (spikes) and slow waves. Detection algorithms analyze the multichannel signal, extracting characteristic patterns whose frequency and shape differ from background activity.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/tags/eeg_seizure_detection.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>EEG seizure detection</h1><button class="share-inline" title="Share" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Just as a lightning detector catches flashes in the sky, algorithms search for epileptic bursts in the brain's electrical signals.</p><div class="practical-app"><strong>In practice:</strong> Helps doctors detect epilepsy faster by analyzing long EEG recordings; used in wearable devices for seizure prediction.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Electroencephalogram (EEG) records the total electrical activity of brain neurons using electrodes on the scalp. An epileptic seizure manifests as abnormal synchronous discharges, which on EEG look like sharp bursts (spikes) and slow waves. Detection algorithms analyze the multichannel signal, extracting characteristic patterns whose frequency and shape differ from background activity.</div>
+        <div class="section"><h2>History</h2><p>The first automatic detectors appeared in the 1970s; over time they became smarter thanks to machine learning (the computer learns from examples).</p></div>
+        <div class="section"><h2>How it works</h2><p>The program looks at the EEG recording, measures wave height and frequency. If it sees sharp jumps, it marks them as a possible seizure. Modern methods also consider hidden patterns that a human might miss.</p></div>
+        <div class="fun-fact">💡 Some algorithms can predict a seizure minutes before it starts by analyzing gradual changes in EEG that are invisible to the naked eye.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">EEG (electroencephalogram) is a recording of brain electrical activity, looking like many wavy lines. During an epileptic seizure, these lines change sharply, becoming 'sharp' like mountain peaks. Seizure detection is a computer program that, like a trained eye, finds such peaks among ordinary waves.</div>
+        <div class="section"><h2>History</h2><p>The first automatic detectors appeared in the 1970s; over time they became smarter thanks to machine learning (the computer learns from examples).</p></div>
+        <div class="section"><h2>How it works</h2><p>The program looks at the EEG recording, measures wave height and frequency. If it sees sharp jumps, it marks them as a possible seizure. Modern methods also consider hidden patterns that a human might miss.</p></div>
+        <div class="fun-fact">💡 Modern detectors on public datasets achieve sensitivity above 90% and less than one false positive per hour, but in clinical practice performance often drops by half due to non-ideal recording conditions.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">EEG seizure detection is automated recognition in a multichannel time series of electrographic patterns characteristic of epileptic activity: spikes, sharp waves, spike-wave complexes. Modern approaches include classical machine learning methods based on extracted features (power in frequency bands, entropy, wavelet coefficients), as well as deep neural networks (convolutional, recurrent) trained directly on raw data. The task is complicated by high signal variability between patients and artifacts (movements, muscle activity).</div>
+        <div class="section"><h2>History</h2><p>The first automatic seizure detectors appeared in the 1970s and were based on simple threshold rules for amplitude and duration. In the 1990s, frequency analysis methods and neural networks began to be used. With the growth of computing power and the availability of large labeled databases (e.g., the Temple University Hospital project) in the 2010s, there was a leap to deep learning, allowing performance on par with expert clinicians.</p></div>
+        <div class="section"><h2>How it works</h2><p>The system receives a multichannel EEG signal (usually 16-64 leads), digitized at 200-500 Hz. Preprocessing algorithms remove artifacts (filtering, independent component analysis). Then either predefined features are extracted (e.g., power spectral density in delta, theta, alpha, beta, gamma bands, fractal dimension, synchronization), or the signal is directly fed into a neural network. The classifier outputs the probability of a seizure for a sliding window (typically 2-10 seconds). At the postprocessing stage, smoothing and thresholding are applied to eliminate false positives. Some systems use transfer learning to adapt to a specific patient.</p></div>
+        <div class="formula"><div class="formula-render">E = \sum_{i=1}^{N} x_i^2</div><div class="formula-meaning">E is the signal energy in the time window, N is the number of samples in the window, x_i is the amplitude value of the signal at the i-th moment</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>High inter-patient variability of seizure patterns; Lack of labeled data due to the labor-intensive expert annotation; Variety of artifacts masking true activity; Need for real-time operation for warning devices</p><p class="fact">💡 Modern detectors on public datasets achieve sensitivity above 90% and less than one false positive per hour, but in clinical practice performance often drops by half due to non-ideal recording conditions.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div>
+<div class="mini-graph" data-node="t:eeg_seizure_detection"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="eeg_seizure_detection_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="eeg_seizure_detection" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="eeg_seizure_detection_en_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/brain.html" class="side-tag" data-tag="brain">brain</a><a href="/lang/en/tags/deep_learning_in_medical_imaging.html" class="side-tag" data-tag="deep_learning_in_medical_imaging">deep learning in medical imaging</a><a href="/lang/en/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">Machine Learning</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="eeg_seizure_detection"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('eeg_seizure_detection', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

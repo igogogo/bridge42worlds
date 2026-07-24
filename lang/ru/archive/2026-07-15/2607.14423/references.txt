@@ -1,0 +1,56 @@
+[1] Amir, S., Gandelsman, Y ., Bagon, S., & Dekel, T. (2022). Deep ViT features as dense visual descriptors.
+ECCV Workshops.
+[2] Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). RetinaFace: Single-stage dense face
+localisation in the wild.CVPR, 5203–5212.
+[3] Doersch, C., et al. (2022). TAP-Vid: A benchmark for tracking any point in a video.NeurIPS.
+[4] Jabri, A., Owens, A., & Efros, A.A. (2020). Space-time correspondence as a contrastive random walk.
+NeurIPS.
+[5] Kim, I.H., Cho, S., Huang, J., Yi, J., Lee, J.-Y ., & Kim, S. (2025). Exploring temporally-aware features for
+point tracking.CVPR.
+[6] Li, Y ., Yang, X., Sun, P., Qi, H., & Lyu, S. (2020). Celeb-DF: A large-scale challenging dataset for
+DeepFake forensics.CVPR, 3207–3216.
+[7] Liu, Y ., et al. (2020). A new dataset and boundary-attention semantic segmentation for face parsing.AAAI.
+[8] Oquab, M., et al. (2023). DINOv2: Learning robust visual features without supervision.TMLR.
+[9] Siméoni, O., et al. (2025). DINOv3.arXiv preprint arXiv:2508.10104.
+[10] Tang, S., et al. (2023). Emergent correspondence from image diffusion.NeurIPS.
+[11] Wang, X., Jabri, A., & Efros, A.A. (2019). Learning correspondence from the cycle-consistency of time.
+CVPR.
+[12] Xie, E., Wang, W., Yu, Z., Anandkumar, A., Alvarez, J.M., & Luo, P. (2021). SegFormer: Simple and
+efficient design for semantic segmentation with transformers.NeurIPS.
+[13] Zhang, C., et al. (2023). A tale of two features: Stable diffusion complements DINO for zero-shot semantic
+correspondence.NeurIPS.
+[14] Zhang, K., Li, X., Lu, J., & Han, K. (2025). Semantic correspondence: Unified benchmarking and a strong
+baseline.arXiv preprint arXiv:2505.18060.
+[15] Zheng, Y ., et al. (2022). General facial representation learning in a visual-linguistic manner.CVPR.
+[16] Radford, A., Kim, J.W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry, G., Askell, A., Mishkin, P.,
+Clark, J., Krueger, G., & Sutskever, I. (2021). Learning transferable visual models from natural language
+supervision.ICML.
+10
+A Qualitative Examples
+This appendix illustrates the protocols of §2 on individual samples from the evaluation set (two
+identities from the CelebDF-v2 YouTube-real split). All panels are rendered from the same cached
+features and FaRL patch labels used in the quantitative experiments; per-panel numbers are single-pair
+(or single-video) values, shown next to the corresponding evaluation-set statistics from the main text.
+Figure 4 shows unconstrained cross-identity best-buddy matching (the C2 protocol); Figure 5 the
+resulting dense region-label transfer; Figure 6 temporal label propagation together with its no-FaRL
+collapse (the C3 protocol); and Figure 7 the unsupervisedk-means validation of §5.3.
+Figure 4: Unconstrained best-buddy matching between two identities (block 18, per-channel L2).
+Each sampled patch of face A (two per structural region) is connected to its nearest neighbor among
+all 784 patches of face B; the search is never told the target region. Solid lines: same-region matches;
+dotted red: wrong-region matches. Matches land on the correct anatomy despite the pose difference.
+Figure 5: Dense label transfer for the same pair: every foreground patch of face A is recolored by
+the FaRL region of its best buddy in face B. Left: FaRL ground truth; middle: transferred regions;
+right: agreement map (green correct, red wrong). Accuracy on this pair is 87.5%; the 200-pair mean
+is0.830against the0.230weighted random baseline (Table 2).
+11
+Figure 6: Temporal label propagation (block 24, official propagate() protocol). Top row: FaRL
+labels the anchor frame only; propagated labels track the face through frame 29 (this video: 0.951;
+200-video mean: 0.955, Table 4). Bottom row: the no-FaRL ablation replaces the anchor with
+a uniform distribution, and the same features and protocol collapse to a single class (this video:
+0.008; mean: 0.009). FaRL is load-bearing for semantics; DINOv3 is load-bearing for spatial
+correspondence.
+Figure 7: Unsupervised validation (§5.3): k-means (k= 8) on frozen block-18 patch features, fit
+without FaRL supervision, painted on the two demo identities next to the FaRL regions. Cluster
+identities are arbitrary (unsupervised palette); their spatial support recovers the facial regions (NMI
+= 0.459on this fit;0.450in Table 7).
+12

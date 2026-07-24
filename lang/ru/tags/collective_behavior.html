@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#коллективное поведение — bridge42worlds</title>
+    <meta name="description" content="Коллективное поведение возникает в системах множества взаимодействующих агентов — от стай животных до роящихся частиц. Ключ в локальных взаимодействиях: каждый агент реагирует на окружение по простому алгоритму, без глобального плана. Это порождает эмерджентные свойства — такие, которых нет у отдельных элементов. Например, косяк рыб уплотняется при опасности, создавая иллюзию крупного организма; колония муравьёв прокладывает кратчайший путь к пище через феромонные метки. Переход от хаотичного движения к упорядоченному — аналог фазового перехода в физике, где коллективное состояние меняется скачком при достижении критической плотности или силы связи.">
+    <meta property="og:title" content="#коллективное поведение — bridge42worlds">
+    <meta property="og:description" content="Коллективное поведение возникает в системах множества взаимодействующих агентов — от стай животных до роящихся частиц. Ключ в локальных взаимодействиях: каждый агент реагирует на окружение по простому алгоритму, без глобального плана. Это порождает эмерджентные свойства — такие, которых нет у отдельных элементов. Например, косяк рыб уплотняется при опасности, создавая иллюзию крупного организма; колония муравьёв прокладывает кратчайший путь к пище через феромонные метки. Переход от хаотичного движения к упорядоченному — аналог фазового перехода в физике, где коллективное состояние меняется скачком при достижении критической плотности или силы связи.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/tags/collective_behavior.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># тег · @ автор · ! учёный</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>коллективное поведение</h1><button class="share-inline" title="Поделиться" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">7</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Стая птиц разворачивается мгновенно без вожака, молекулы воды замерзают в лёд одновременно — это коллективное поведение: простые правила порождают сложные узоры.</p><div class="practical-app"><strong>На практике:</strong> Управление роем дронов, прогнозирование пробок и паники в толпе, создание самоорганизующихся материалов.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Коллективное поведение возникает в системах множества взаимодействующих агентов — от стай животных до роящихся частиц. Ключ в локальных взаимодействиях: каждый агент реагирует на окружение по простому алгоритму, без глобального плана. Это порождает эмерджентные свойства — такие, которых нет у отдельных элементов. Например, косяк рыб уплотняется при опасности, создавая иллюзию крупного организма; колония муравьёв прокладывает кратчайший путь к пище через феромонные метки. Переход от хаотичного движения к упорядоченному — аналог фазового перехода в физике, где коллективное состояние меняется скачком при достижении критической плотности или силы связи.</div>
+        <div class="section"><h2>История</h2><p>Учёные давно замечали, что большие группы живого ведут себя как одно целое. Но по-настоящему понять это удалось в середине XX века, когда появились компьютеры. Например, в 1987 году Крэйг Рейнольдс создал программу с виртуальными птицами (бойдами), которые, следуя трём простым правилам, летали как настоящая стая. Это показало, что сложное коллективное поведение не нуждается в лидере.</p></div>
+        <div class="section"><h2>Как работает</h2><p>В основе лежат правила, которые каждый участник выполняет, опираясь на ближайших соседей. Обычно это: держись на расстоянии (не сталкивайся), выравнивай скорость с соседями и притягивайся к центру группы. Когда таких участников много, возникают волны согласованного движения, как на стадионе, где зрители по очереди встают и садятся, создавая «волну».</p></div>
+        <div class="fun-fact">💡 Светлячки некоторых видов синхронизируют вспышки без всякого дирижёра: каждый жучёк подстраивается под ритм соседей, и через несколько циклов вся популяция светится в унисон, превращая ночной лес в живое мигающее облако.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Коллективное поведение — это когда много отдельных объектов (птиц, рыб, клеток, частиц) действуют по простым правилам, и вместе у них получается сложное движение или структура. Как будто у группы есть общий разум, но на самом деле каждый следует лишь тому, что рядом. Например, если каждая птица в стае держит дистанцию от соседей и летит туда же, куда и они, вся стая становится похожей на текучую жидкость.</div>
+        <div class="section"><h2>История</h2><p>Учёные давно замечали, что большие группы живого ведут себя как одно целое. Но по-настоящему понять это удалось в середине XX века, когда появились компьютеры. Например, в 1987 году Крэйг Рейнольдс создал программу с виртуальными птицами (бойдами), которые, следуя трём простым правилам, летали как настоящая стая. Это показало, что сложное коллективное поведение не нуждается в лидере.</p></div>
+        <div class="section"><h2>Как работает</h2><p>В основе лежат правила, которые каждый участник выполняет, опираясь на ближайших соседей. Обычно это: держись на расстоянии (не сталкивайся), выравнивай скорость с соседями и притягивайся к центру группы. Когда таких участников много, возникают волны согласованного движения, как на стадионе, где зрители по очереди встают и садятся, создавая «волну».</p></div>
+        <div class="fun-fact">💡 Слизевик Physarum polycephalum, одноклеточный организм без нервной системы, образует сеть трубочек, которая способна находить кратчайший путь в лабиринте и даже имитировать железнодорожную карту токийского метро — всё благодаря коллективному поведению протоплазмы.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Коллективное поведение изучает, как из простых локальных правил взаимодействия множества элементов (агентов) возникают сложные пространственно-временные структуры и когерентная динамика. Это междисциплинарное явление, объединяющее физику конденсированного состояния, статистическую механику, биологию, социологию и робототехнику. Типичные примеры: образование кристаллических решёток при охлаждении, конвективные ячейки в жидкости, синхронизация химических осцилляторов, стаи птиц, толпы людей, нейронные ансамбли. Математически описывается моделями, основанными на системах связанных дифференциальных уравнений (например, модель Курамото для фазовых осцилляторов), решёточных газах, или агентных симуляциях. Ключевые понятия: эмерджентность, самоорганизация, параметр порядка, фазовый переход. Часто коллективное поведение демонстрирует критическое состояние, в котором система наиболее чувствительна к малым возмущениям (self-organized criticality).</div>
+        <div class="section"><h2>История</h2><p>Первые научные описания коллективного поведения животных появляются в начале XX века, но теоретическая база заложена в физике многими учёными. Людвиг Больцман в XIX веке разработал статистическую механику, показав, как микроскопические правила для молекул порождают макроскопические свойства газа. Эта идея перенята для других систем. В 1930-х — 40-х годах в биологии (Джулиан Хаксли, Уильям Х. Торп) изучали синхронизацию у птиц и рыб. Перелом наступил с развитием вычислительных машин: в 1970-х появились первые симуляции (например, модель Вичека для коллективного движения частиц), а в 1986 году Крейг Рейнольдс публикует знаменитую модель «Boids», показавшую, что три правила порождают реалистичное поведение стаи. Параллельно физики (Стэнли Милгрэм, Серж Галам) исследовали толпы, а химики — реакцию Белоусова-Жаботинского. Сегодня коллективное поведение — активно развивающаяся область, применимая к нейробиологии, робототехнике и социальным сетям.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Механизм основан на положительной обратной связи и нелинейных взаимодействиях. Каждый агент подчиняется простым локальным правилам, часто включающим отталкивание на малых расстояниях (чтобы избежать столкновений), выравнивание вектора скорости со средним по соседям (согласование направления) и притяжение к центру локальной группы (сохранение котезии). При низкой плотности или слабом взаимодействии система хаотична. При превышении порога связи (силы притяжения или числа соседей) происходит фазовый переход, подобный намагничиванию: возникает дальний порядок, и все агенты движутся когерентно. Это описывается параметром порядка, например, средний вектор ориентации. В более сложных случаях формируются волны возбуждения, вихри, кластеры. В нейронных системах коллективная динамика порождает осцилляции и синхронизацию вспышек. Универсальность этих явлений объясняется методами ренормализационной группы, показывающей, что множество разнородных систем принадлежат к одному универсальному классу вблизи критической точки.</p></div>
+        <div class="formula"><div class="formula-render">\frac{d\theta_i}{dt} = \omega_i + \frac{K}{N} \sum_{j=1}^{N} \sin(\theta_j - \theta_i)</div><div class="formula-meaning">θ_i — фаза i-го осциллятора (безразмерная, рад), t — время (с), ω_i — собственная частота i-го осциллятора (рад/с, индивидуальная для каждого), K — сила связи (рад/с, положительная константа), N — общее число осцилляторов</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Как коллективное поведение кодируется в геноме, если отдельные особи не несут «план» всей группы?; Можно ли предсказать внезапные переключения режимов (например, панику в толпе) по локальным данным?; Как масштабировать агентные модели на системы с миллиардами элементов (например, социальные сети) без потери реалистичности?; Возможны ли коллективные квантовые эффекты при комнатной температуре, подобные сверхпроводимости, в искусственных системах?</p><p class="fact">💡 Слизевик Physarum polycephalum, одноклеточный организм без нервной системы, образует сеть трубочек, которая способна находить кратчайший путь в лабиринте и даже имитировать железнодорожную карту токийского метро — всё благодаря коллективному поведению протоплазмы.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div>
+<div class="mini-graph" data-node="t:collective_behavior"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="collective_behavior_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="collective_behavior" title="избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ написать комментарий</button></div>
+<div class="feedback" id="feedback" data-article-id="collective_behavior_ru_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Учёные</div><a href="/lang/ru/scientists/Ludwig_Boltzmann.html" class="side-sci" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/bose_einstein_condensate.html" class="side-tag" data-tag="bose_einstein_condensate">конденсат Бозе — Эйнштейна</a><a href="/lang/ru/tags/critical_point.html" class="side-tag" data-tag="critical_point">критическая точка</a><a href="/lang/ru/tags/fluctuation.html" class="side-tag" data-tag="fluctuation">флуктуация</a><a href="/lang/ru/tags/phase_transition.html" class="side-tag" data-tag="phase_transition">фазовый переход</a><a href="/lang/ru/tags/superfluidity.html" class="side-tag" data-tag="superfluidity">сверхтекучесть</a><a href="/lang/ru/tags/braess_paradox_in_biology.html" class="side-tag" data-tag="braess_paradox_in_biology">парадокс Браесса в биологии</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="collective_behavior"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('collective_behavior', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

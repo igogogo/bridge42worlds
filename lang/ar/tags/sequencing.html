@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#التسلسل — bridge42worlds</title>
+    <meta name="description" content="التسلسل هو تحديد ترتيب النوكليوتيدات في حمض نووي (DNA أو RNA). تشمل الطرق الحديثة تسلسل سانغر (باستخدام ديديوكسي نوكليوتيدات و الرحلان الكهربائي الشعري) وتقنيات عالية الإنتاجية (NGS) مثل Illumina (تخليق مع ناهيات عكسية) والتسلسل البيروفوسفاتي وتسلسل المسام النانوية. يعتمد المبدأ على تكامل القواعد وتسجيل الإشارة من إضافة كل نوكليوتيد إلى السلسلة المتنامية.">
+    <meta property="og:title" content="#التسلسل — bridge42worlds">
+    <meta property="og:description" content="التسلسل هو تحديد ترتيب النوكليوتيدات في حمض نووي (DNA أو RNA). تشمل الطرق الحديثة تسلسل سانغر (باستخدام ديديوكسي نوكليوتيدات و الرحلان الكهربائي الشعري) وتقنيات عالية الإنتاجية (NGS) مثل Illumina (تخليق مع ناهيات عكسية) والتسلسل البيروفوسفاتي وتسلسل المسام النانوية. يعتمد المبدأ على تكامل القواعد وتسجيل الإشارة من إضافة كل نوكليوتيد إلى السلسلة المتنامية.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/tags/sequencing.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/ar/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>التسلسل</h1><button class="share-inline" title="مشاركة" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">1</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">قراءة الشيفرة الوراثية حرفًا بحرف، مثل فكّ شيفرة مكتوبة بجزيئات الحمض النووي.</p><div class="practical-app"><strong>في الواقع:</strong> التشخيص الطبي للأمراض الوراثية، وتطوير الطب الشخصي، وتتبع تطور الفيروسات، وعلم الأدلة الجنائية.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">التسلسل هو تحديد ترتيب النوكليوتيدات في حمض نووي (DNA أو RNA). تشمل الطرق الحديثة تسلسل سانغر (باستخدام ديديوكسي نوكليوتيدات و الرحلان الكهربائي الشعري) وتقنيات عالية الإنتاجية (NGS) مثل Illumina (تخليق مع ناهيات عكسية) والتسلسل البيروفوسفاتي وتسلسل المسام النانوية. يعتمد المبدأ على تكامل القواعد وتسجيل الإشارة من إضافة كل نوكليوتيد إلى السلسلة المتنامية.</div>
+        <div class="section"><h2>التاريخ</h2><p>بدأ تطوير طرق التسلسل في سبعينيات القرن العشرين. ابتكر فريدريك سانغر طريقة حصل بها على جائزة نوبل — استخدم قطع تخليق DNA في أماكن عشوائية ليعيد بناء التسلسل لاحقًا من أطوال القطع. ثم ظهرت تقنيات أسرع — ما يسمى بتسلسل الجيل التالي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>الحمض النووي مثل كتاب مكتوب بحبر غير مرئي. جهاز التسلسل «يُظهر» النص: فهو ينسخ قطعة عدة مرات، ثم يقرأ حرفًا حرفًا أي إشارة تعطيها كل حرف مضاف — ومضة لون معين مثلًا.</p></div>
+        <div class="fun-fact">💡 أول تسلسل كامل للجينوم البشري استغرق 13 عامًا وكلّف ما يقرب من 3 مليارات دولار؛ أما الآن فيمكن إنجازه في يوم واحد بأقل من 1000 دولار.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">التسلسل هو طريقة لمعرفة ترتيب «الحروف» في جزيء DNA أو RNA. الحروف أربعة فقط: A و T و G و C (أدينين، ثايمين، غوانين، سايتوسين). تخيّل خيطًا طويلًا جدًا من خرز بأربعة ألوان — التسلسل يسمح بتسجيل ترتيب الألوان. الآن تقوم به أجهزة خاصة يمكنها قراءة جينوم بشري كامل في يوم واحد.</div>
+        <div class="section"><h2>التاريخ</h2><p>بدأ تطوير طرق التسلسل في سبعينيات القرن العشرين. ابتكر فريدريك سانغر طريقة حصل بها على جائزة نوبل — استخدم قطع تخليق DNA في أماكن عشوائية ليعيد بناء التسلسل لاحقًا من أطوال القطع. ثم ظهرت تقنيات أسرع — ما يسمى بتسلسل الجيل التالي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>الحمض النووي مثل كتاب مكتوب بحبر غير مرئي. جهاز التسلسل «يُظهر» النص: فهو ينسخ قطعة عدة مرات، ثم يقرأ حرفًا حرفًا أي إشارة تعطيها كل حرف مضاف — ومضة لون معين مثلًا.</p></div>
+        <div class="fun-fact">💡 تسلسل DNA الماموث المحفوظ في الجليد الدائم يسمح بدراسة وراثته وحتى مناقشة إمكانية إحياء النوع.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">التسلسل هو مجموعة من الطرق لتحديد الترتيب الخطي للنوكليوتيدات في جزيء بوليمر حمض نووي. يتضمن مكتبة قطع وتضخيم (PCR أو استنساخي على طور صلب) وتخليق سلسلة مكملة مع كشف كل خطوة. في طريقة سانغر تُستخدم ديديوكسي نوكليوتيدات تراي فوسفات قاطعة للتخليق؛ ويعطي فصل القطع حسب الطول التسلسل. تختلف منصات NGS (Illumina و Ion Torrent و Pacific Biosciences و Oxford Nanopore) في الكيمياء ونوع الإشارة المكشوفة — فلورية أو pH أو تيار كهربائي. تجمع المعالجة المعلوماتية الحيوية القراءات القصيرة في كونتغات وترصفها على الجينوم المرجعي.</div>
+        <div class="section"><h2>التاريخ</h2><p>في عام 1977 اقترح سانغر طريقة إنزيمية لتسلسل DNA باستخدام نظائر ديديوكسي، وبالتوازي طور ماكسام وجيلبرت طريقة كيميائية. في تسعينيات القرن العشرين سرّعت الأتمتة مع الرحلان الكهربائي الشعري العملية. كان الإنجاز الأكبر ظهور NGS في الألفية الثانية (454 و Solexa/Illumina) مما أتاح تسلسلًا متوازيًا لملايين القطع. تقرأ أحدث التقنيات (PacBio و Nanopore) جزيئات مفردة في الزمن الحقيقي.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>المخطط العام: يُجزّأ DNA وتُضاف مُحَوّرات إلى النهايات. في تقنية Illumina تهجّن القطع على خلية جريان وتتضاعف بـ PCR جسري لتشكّل عناقيد. ثم يجري التسلسل-أثناء-التخليق: تُضاف ناهيات عكسية مع فلوروفورات، وبعد كل دورة تُلتقط صورة، وتُزال الناهية وتتكرر الدورة. يحوّل تحليل الصور شدة الإشارة إلى تسلسل نوكليوتيدي. في التسلسل بالمسام النانوية (Oxford Nanopore) يُمرّر خيط DNA عبر مسام بروتيني ويُقاس تغير التيار الأيوني المميز لكل نوكليوتيد.</p></div>
+        
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>كيف يمكن خفض تكلفة التسلسل وتسريعه ليصبح استخدامًا روتينيًا في نقطة تقديم الرعاية؟; كيف يمكن زيادة دقة القراءة في المناطق ذات التكرارات والتعديلات؟; كيف يمكن تسلسل RNA والبروتينات مباشرة بدقة جزيئية؟</p><p class="fact">💡 تسلسل DNA الماموث المحفوظ في الجليد الدائم يسمح بدراسة وراثته وحتى مناقشة إمكانية إحياء النوع.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div>
+<div class="mini-graph" data-node="t:sequencing"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="sequencing_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="sequencing" title="مفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ أضف تعليقًا</button></div>
+<div class="feedback" id="feedback" data-article-id="sequencing_ar_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/bioinformatics.html" class="side-tag" data-tag="bioinformatics">المعلوماتية الحيوية</a><a href="/lang/ar/tags/dna.html" class="side-tag" data-tag="dna">دنا</a><a href="/lang/ar/tags/gene.html" class="side-tag" data-tag="gene">جين</a><a href="/lang/ar/tags/genomics.html" class="side-tag" data-tag="genomics">علم الجينوم</a><a href="/lang/ar/tags/mutation.html" class="side-tag" data-tag="mutation">طفرة</a><a href="/lang/ar/tags/pcr.html" class="side-tag" data-tag="pcr">بي سي آر</a><a href="/lang/ar/tags/rna.html" class="side-tag" data-tag="rna">الرنا</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="sequencing"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('sequencing', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

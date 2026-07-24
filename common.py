@@ -78,6 +78,36 @@ def deepseek_peak_status(now=None):
     return False, min(deltas)
 
 
+class PeakHourError(RuntimeError):
+    """Попытка жечь DeepSeek в пиковые (×2 цена) часы без явного разрешения."""
+
+
+# Юзер 2026-07-24: «вставь в код, чтобы не проверять руками — в часы пик давай ошибку или подтверждение».
+# Подтверждение в неинтерактивном прогоне = переменная окружения ALLOW_PEAK=1 (осознанно разрешаю пик).
+_PEAK_WARNED = False
+
+
+def guard_peak(context=""):
+    """Страж пиковых часов перед вызовами API. В пик — стоп с понятной ошибкой (PeakHourError),
+    если не выставлен ALLOW_PEAK=1. Вне пика — тихо пропускает (один раз пишет, сколько часов дешёвого
+    окна осталось, чтобы было видно приближение пика). Вызывается из chat() — единой точки всех вызовов."""
+    global _PEAK_WARNED
+    is_peak, h = deepseek_peak_status()
+    if is_peak:
+        if os.environ.get("ALLOW_PEAK") == "1":
+            if not _PEAK_WARNED:
+                print("⚠️ ПИКОВЫЕ часы DeepSeek (×2 цена), но ALLOW_PEAK=1 — продолжаю осознанно.")
+                _PEAK_WARNED = True
+            return
+        raise PeakHourError(
+            f"Сейчас ПИКОВЫЕ часы DeepSeek (цена ×2){' — ' + context if context else ''}. "
+            f"Остановлено, чтобы не переплатить. Дождись дешёвого окна (пик Пекин 9-12 и 14-18, "
+            f"т.е. локально 04-07 и 09-13) ИЛИ запусти с ALLOW_PEAK=1, если реально надо сейчас.")
+    if not _PEAK_WARNED:
+        print(f"💰 DeepSeek: дешёвое окно, до следующего пика ~{h:.1f} ч.")
+        _PEAK_WARNED = True
+
+
 def sample_corpus(n=50):
     """Случайная выборка N реальных статей (title/tags/categories/scientists) из архива —
     контекст для «пробел-осведомлённой» генерации тегов/законов/учёных (Итерация 2 ко-эволюции
@@ -173,6 +203,7 @@ def chat(agent, user_prompt, retries=3, **overrides):
     Ретраи — сетевой сбой не должен терять статью."""
     if client is None:
         raise RuntimeError("DEEPSEEK_API_KEY не задан — операция с API невозможна")
+    guard_peak(f"агент {agent}")  # стоп в пиковые часы, если не ALLOW_PEAK=1 (защита от переплаты ×2)
     p = agent_cfg(agent)
     p.update({k: v for k, v in overrides.items() if v is not None})
     for attempt in range(1, retries + 1):

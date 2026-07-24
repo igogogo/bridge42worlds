@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#aprendizaje contrastivo — bridge42worlds</title>
+    <meta name="description" content="El aprendizaje contrastivo es un enfoque en el aprendizaje automático que permite construir representaciones de datos de alta calidad sin etiquetas (auto-supervisado). Se basa en el concepto de pérdida contrastiva: el modelo atrae las representaciones (embeddings) de objetos semánticamente cercanos (pares positivos) y repele las representaciones de los no relacionados (pares negativos). Por ejemplo, para imágenes, los pares positivos son diferentes vistas (aumentos) de la misma foto, y los negativos son cualquier otra imagen en el mini-lote. Así, la red neuronal aprende a extraer características invariantes, ignorando variaciones irrelevantes de iluminación, rotación o escala. Este método es la base de muchos sistemas modernos de reconocimiento, donde a menudo supera al aprendizaje supervisado cuando hay pocas etiquetas.">
+    <meta property="og:title" content="#aprendizaje contrastivo — bridge42worlds">
+    <meta property="og:description" content="El aprendizaje contrastivo es un enfoque en el aprendizaje automático que permite construir representaciones de datos de alta calidad sin etiquetas (auto-supervisado). Se basa en el concepto de pérdida contrastiva: el modelo atrae las representaciones (embeddings) de objetos semánticamente cercanos (pares positivos) y repele las representaciones de los no relacionados (pares negativos). Por ejemplo, para imágenes, los pares positivos son diferentes vistas (aumentos) de la misma foto, y los negativos son cualquier otra imagen en el mini-lote. Así, la red neuronal aprende a extraer características invariantes, ignorando variaciones irrelevantes de iluminación, rotación o escala. Este método es la base de muchos sistemas modernos de reconocimiento, donde a menudo supera al aprendizaje supervisado cuando hay pocas etiquetas.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/tags/contrastive_learning.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/es/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <h1>aprendizaje contrastivo</h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Enseñar comparando lo similar y lo no similar: así funciona el aprendizaje contrastivo. En lugar de memorizar nombres, la red neuronal aprende a captar la esencia, distinguiendo un gato de un perro incluso sin que se los hayan nombrado.</p><div class="practical-app"><strong>In practice:</strong> Reconocimiento facial sin etiquetas, búsqueda de imágenes similares en grandes archivos, mejora de diagnósticos a partir de imágenes médicas cuando hay pocos datos etiquetados.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">El aprendizaje contrastivo es un enfoque en el aprendizaje automático que permite construir representaciones de datos de alta calidad sin etiquetas (auto-supervisado). Se basa en el concepto de pérdida contrastiva: el modelo atrae las representaciones (embeddings) de objetos semánticamente cercanos (pares positivos) y repele las representaciones de los no relacionados (pares negativos). Por ejemplo, para imágenes, los pares positivos son diferentes vistas (aumentos) de la misma foto, y los negativos son cualquier otra imagen en el mini-lote. Así, la red neuronal aprende a extraer características invariantes, ignorando variaciones irrelevantes de iluminación, rotación o escala. Este método es la base de muchos sistemas modernos de reconocimiento, donde a menudo supera al aprendizaje supervisado cuando hay pocas etiquetas.</div>
+        <div class="section"><h2>History</h2><p>La idea de aprender comparando es antigua: ya en 2006 se usaban redes siamesas para verificar firmas. Pero el auge moderno empezó en 2018–2020, cuando científicos de Google (SimCLR) y Facebook (MoCo) propusieron métodos para entrenar grandes redes neuronales sin intervención humana, creando pares a partir de una misma imagen con diferentes distorsiones.</p></div>
+        <div class="section"><h2>How it works</h2><p>Tomamos una imagen y creamos dos nuevas a partir de ella; por ejemplo, la giramos y cambiamos su color. Estas dos variantes forman un par positivo. Las demás imágenes del conjunto son los negativos. La red neuronal convierte cada imagen en un vector numérico. Su tarea consiste en reducir la distancia entre los vectores del par positivo y aumentarla respecto a los negativos. Con el tiempo, los vectores comienzan a almacenar el significado de la imagen, no detalles aleatorios.</p></div>
+        <div class="fun-fact">💡 El sistema CLIP de OpenAI, entrenado de forma contrastiva con pares imagen-texto, es capaz de dibujar cuadros a partir de descripciones, aunque nunca se le enseñó estilo artístico directamente: simplemente captó las interrelaciones.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">El aprendizaje contrastivo es un método en el que se entrena a un programa de computadora (red neuronal) para encontrar semejanzas y diferencias entre objetos. Se le muestran pares de ejemplos: algunos pares son similares entre sí (por ejemplo, dos fotos de la misma persona), otros son disímiles (fotos de personas diferentes). El programa intenta que en su 'memoria' (vector de características) los objetos similares queden cerca y los disímiles, lejos. Es como el juego de 'encontrar la pareja', pero para millones de imágenes.</div>
+        <div class="section"><h2>History</h2><p>La idea de aprender comparando es antigua: ya en 2006 se usaban redes siamesas para verificar firmas. Pero el auge moderno empezó en 2018–2020, cuando científicos de Google (SimCLR) y Facebook (MoCo) propusieron métodos para entrenar grandes redes neuronales sin intervención humana, creando pares a partir de una misma imagen con diferentes distorsiones.</p></div>
+        <div class="section"><h2>How it works</h2><p>Tomamos una imagen y creamos dos nuevas a partir de ella; por ejemplo, la giramos y cambiamos su color. Estas dos variantes forman un par positivo. Las demás imágenes del conjunto son los negativos. La red neuronal convierte cada imagen en un vector numérico. Su tarea consiste en reducir la distancia entre los vectores del par positivo y aumentarla respecto a los negativos. Con el tiempo, los vectores comienzan a almacenar el significado de la imagen, no detalles aleatorios.</p></div>
+        <div class="fun-fact">💡 En los experimentos de SimCLR, se descubrió que los mejores aumentos para fotos son el recorte aleatorio y la distorsión de color, mientras que el desenfoque o la rotación empeoraban el resultado; la combinación óptima resultó no ser obvia ni siquiera para los creadores.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">El aprendizaje contrastivo (contrastive learning) es una familia de métodos para aprender representaciones en los que el modelo optimiza un espacio métrico de modo que objetos semánticamente similares se mapeen a puntos cercanos, y los distintos, a puntos lejanos. Formalmente, para cada ejemplo ancla x se genera un ejemplo positivo x⁺, normalmente mediante aumentos o contexto, y un conjunto de ejemplos negativos {x⁻_i}. Se minimiza una pérdida basada en una comparación softmax: el modelo fomenta una alta similitud entre x y x⁺ con respecto a los demás pares. La innovación clave de los últimos años es el uso de mini-lotes grandes y mecanismos de memoria para almacenar ejemplos negativos (MoCo), o prescindir de pares negativos mediante arquitecturas asimétricas (BYOL, SimSiam). El análisis teórico relaciona el aprendizaje contrastivo con la maximización de la información mutua y el aprendizaje sobre núcleos definidos positivos.</div>
+        <div class="section"><h2>History</h2><p>Sus raíces se remontan al aprendizaje métrico: las redes siamesas (Bromley et al., 1993) para comparar firmas. En 2006, Hadsell y LeCun propusieron la pérdida contrastiva para aprender representaciones invariantes. El resurgimiento del interés está ligado al progreso en el aprendizaje auto-supervisado para imágenes: en 2018, el modelo InstDisc (Wu et al.) utilizó un banco de memoria; los avances decisivos llegaron con MoCo (He et al., 2020), que emplea una cola de ejemplos negativos, y SimCLR (Chen et al., 2020), con un gran tamaño de lote y fuertes aumentos. Estos trabajos demostraron que el preentrenamiento contrastivo alcanza una precisión cercana a la supervisada, y a veces la supera al reentrenar con pocos datos. Posteriormente, el enfoque se adaptó a vídeo, audio, grafos y datos multimodales (CLIP, 2021).</p></div>
+        <div class="section"><h2>How it works</h2><p>El algoritmo consta de tres etapas: (1) el aumento estocástico de datos crea dos representaciones independientes de una misma entrada (por ejemplo, recorte aleatorio, distorsión de color); (2) el codificador (ResNet, ViT) las mapea a vectores en un espacio latente; (3) una cabeza de proyección (MLP) los transforma a un espacio de menor dimensión donde se calcula la pérdida contrastiva InfoNCE: L = -log[ exp(sim(z_i, z_j)/τ) / ∑_{k=1}^{2N} 1_{k≠i} exp(sim(z_i, z_k)/τ) ], donde sim es la similitud coseno y τ el parámetro de temperatura. La optimización reduce la entropía cruzada entre la distribución de pares positivos y negativos. Para evitar el colapso representacional (que todos los vectores degeneren en un solo punto), se emplean mecanismos como: pares negativos de una cola (MoCo), parada de gradiente y predictor (BYOL), o agrupamiento (SwAV). Al final, el espacio latente adquiere una estructura semántica invariante a las transformaciones aplicadas.</p></div>
+        <div class="formula"><div class="formula-render">L_{i,j} = -\log \frac{\exp(\text{sim}(z_i, z_j) / \tau)}{\sum_{k=1}^{2N} \mathbf{1}_{k \neq i} \exp(\text{sim}(z_i, z_k) / \tau)}</div><div class="formula-meaning">L_{i,j} es el valor de pérdida para el par (i, j); z_i, z_j, z_k son vectores de representaciones (embeddings) en el espacio latente (adimensionales, normalizados); sim es la función de similitud, normalmente la similitud coseno: sim(z_i, z_j) = z_i^T z_j / (||z_i|| ||z_j||) (adimensional, de -1 a 1); τ es el parámetro de temperatura (número positivo, habitualmente 0.1–0.5), que regula la nitidez de la distribución; N es el tamaño del mini-lote (número de imágenes originales; tras el aumento, se obtienen 2N vectores); 1_{k ≠ i} es la función indicadora que excluye el par i=j del denominador</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>¿Cómo elegir aumentos que garanticen la preservación semántica para tipos de datos arbitrarios (audio, grafos, vídeo)?; ¿Por qué algunos métodos (BYOL, SimSiam) funcionan sin pares negativos y evitan el colapso sin una comprensión teórica completa?; ¿Se puede extender el aprendizaje contrastivo a tareas con salida continua (regresión) o a series temporales sin pérdida de calidad?; ¿Existe un preentrenamiento contrastivo universal que sea transferible a cualquier tarea posterior sin ajuste fino?</p><p class="fact">💡 En los experimentos de SimCLR, se descubrió que los mejores aumentos para fotos son el recorte aleatorio y la distorsión de color, mientras que el desenfoque o la rotación empeoraban el resultado; la combinación óptima resultó no ser obvia ni siquiera para los creadores.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="t:contrastive_learning"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="contrastive_learning_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="contrastive_learning" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment">+ add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="contrastive_learning_es_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related</div><a href="/lang/es/tags/entropy.html" class="side-tag" data-tag="entropy">entropía</a><a href="/lang/es/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">aprendizaje automático</a><a href="/lang/es/tags/manifold.html" class="side-tag" data-tag="manifold">variedad</a><a href="/lang/es/tags/deep_learning_in_medical_imaging.html" class="side-tag" data-tag="deep_learning_in_medical_imaging">aprendizaje profundo en imagenología médica</a><a href="/lang/es/tags/medical_image_segmentation.html" class="side-tag" data-tag="medical_image_segmentation">segmentación de imágenes médicas</a><a href="/lang/es/tags/dimensionality_reduction.html" class="side-tag" data-tag="dimensionality_reduction">reducción de dimensionalidad</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="contrastive_learning"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/likes.js?v=79ba156b9d"></script>
+<script src="/js/search.js?v=79ba156b9d"></script>
+<script src="/js/force-graph.js?v=79ba156b9d"></script>
+<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('contrastive_learning', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

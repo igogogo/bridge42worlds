@@ -2439,6 +2439,40 @@ def generate_archive_page(lang):
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
 
 
+ANALYTICS_TITLE = {"ru": "Карта проекта", "en": "Project map", "es": "Mapa del proyecto",
+                   "ar": "خريطة المشروع", "fr": "Carte du projet", "zh": "项目地图"}
+
+
+def generate_analytics_page(lang):
+    """Страница /analytics — 3D-карта облака статей/авторов, которую можно покрутить (юзер 2026-07-24:
+    показать группировки/кластеры, вау-эффект). Клиентская: оболочка + унифицированная шапка; всё
+    считает офлайн analytics_build.py (БЕЗ DeepSeek) в data/analytics/*.json, рисует js/analytics.js."""
+    title = ANALYTICS_TITLE.get(lang, ANALYTICS_TITLE["en"])
+    fav_links = ('<link rel="icon" href="/favicon.ico" sizes="any">'
+                 '<link rel="icon" type="image/png" href="/favicon.png">'
+                 '<link rel="apple-touch-icon" href="/favicon.png">')
+    html = f'''<!DOCTYPE html><html lang="{lang}" dir="{dir_for(lang)}"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{title} — bridge42worlds</title>
+{fav_links}
+<link rel="stylesheet" href="/css/style.css?v={asset_ver()}">
+<script data-goatcounter="https://{GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></head><body>
+<div class="top-bar"><a href="/{LANG_DIR}/{lang}/index.html" class="logo">bridge42worlds</a>
+<div class="header-right"><div class="nav-links">
+<a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
+<a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
+<a href="/{LANG_DIR}/{lang}/sections/">sections</a><a href="/{LANG_DIR}/{lang}/authors/">authors</a>
+<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/{LANG_DIR}/{lang}/theory/">theory</a>
+<a href="/{LANG_DIR}/{lang}/favorites.html" title="{safe(nav_fav_title(lang))}"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+</div></div></div>
+<div class="langs" id="langs-bar"></div>
+<div id="analytics"></div>
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/search.js?v={asset_ver()}"></script>
+<script src="/js/analytics.js?v={asset_ver()}"></script></body></html>'''
+    (Path(LANG_DIR) / lang / "analytics").mkdir(parents=True, exist_ok=True)
+    (Path(LANG_DIR) / lang / "analytics" / "index.html").write_text(html, encoding="utf-8")
+
+
 def compute_connectivity_gaps():
     """Считает сущности (тег/закон/учёный), которым не хватает связи с КАЖДЫМ из двух других типов
     (юзер-фидбек 2026-07-18: "проверка все теги имеют по крайней мере один закон и одного учёного
@@ -2839,6 +2873,7 @@ def regenerate_all_html():
         update_all_sections(lang)
         generate_knowledge_graph_page(lang)
         generate_archive_page(lang)
+        generate_analytics_page(lang)
     # rebuild_author_graph() ПЕРЕД update_all_authors() — иначе authors-graph.json остаётся
     # застывшим на моменте последней явной пересборки, и авторы статей, добавленных с тех пор
     # (обычным bulk-генератором, не через add-one-article путь, который сам зовёт rebuild),
@@ -2879,7 +2914,7 @@ def load_generation_inputs():
     }
 
 
-def build_article(a, date_str, inputs, force=False, express=False):
+def build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской
@@ -2898,28 +2933,44 @@ def build_article(a, date_str, inputs, force=False, express=False):
         print(f"  ⏭️ {a['id']} — новая версия уже обработанной статьи ({base_id}), пропускаю (--force чтобы пересоздать)")
         return None
     try:
-        oai_xml = get_license(a["id"])
-        allowed, lic_url = is_allowed_license(oai_xml)
+        # known_license — лицензия уже известна (из локального Kaggle-дампа arXiv, поле license):
+        # НЕ ходим в arXiv за OAI-лицензией. Вызывающий обязан передавать только разрешённые CC-BY/CC0
+        # (bio/med-прогон так и фильтрует локально). no_fetch — express-режим без обращения к arXiv
+        # вообще: не тянем atom и PDF (текст берём из авторской аннотации a["summary"], обложка —
+        # заглушка-мультиязычная карточка). Оба флага дефолт-выключены → обычный путь без изменений.
+        if known_license is not None:
+            oai_xml, lic_url, allowed = "", known_license, True
+        else:
+            oai_xml = get_license(a["id"])
+            allowed, lic_url = is_allowed_license(oai_xml)
         if not allowed:
             print(f"  ⏭️ {a['id']} — license: {lic_url or 'none'}")
             return None
-        atom_xml = _get_with_retry(f"http://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
         a["license_url"], a["license_name"] = lic_url, ("CC BY 4.0" if "by/4.0" in lic_url else "CC BY")
-        pdf = download_pdf(a["id"])
-        text, imgs = parse_pdf(pdf)
-        captions = extract_captions(text)  # подписи ищем в полном тексте (в списке литературы их нет)
-        body, refs = split_references(text)
-        a["cited_arxiv"] = extract_ref_arxiv_ids(refs)  # на будущее: связь с релевантными работами
-        text = re.sub(r'https?://\S+', '', body)  # тело без литературы и URL → экономия ~20% токенов в промте
-        print(f"  → {a['id']} …")
+        # atom.xml только сохраняется для истории, в контенте не участвует — при известной лицензии
+        # не тратим на него отдельный запрос к arXiv (юзер 2026-07-24: брать из базы, меньше arXiv).
+        atom_xml = "" if known_license is not None else _get_with_retry(
+            f"http://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
+        if no_fetch:
+            text, imgs, captions, refs = a.get("summary", ""), [], [], ""
+            a["cited_arxiv"] = []
+        else:
+            # PDF качаем ВСЕГДА (кроме no_fetch) — обложки/картинки настоящие (юзер: «картинки из PDF»).
+            pdf = download_pdf(a["id"])
+            text, imgs = parse_pdf(pdf)
+            captions = extract_captions(text)  # подписи ищем в полном тексте (в списке литературы их нет)
+            body, refs = split_references(text)
+            a["cited_arxiv"] = extract_ref_arxiv_ids(refs)  # на будущее: связь с релевантными работами
+            text = re.sub(r'https?://\S+', '', body)  # тело без литературы и URL → экономия ~20% токенов в промте
+        print(f"  → {a['id']} …{' [no-fetch]' if no_fetch else ''}")
         article_folder.mkdir(parents=True, exist_ok=True)
         if refs:
             (article_folder / "references.txt").write_text(refs, encoding="utf-8")
         (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8")
         (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8")
-        if config.get("keep_pdf", True):  # мёртвый вес на масштабе — можно не хранить
+        if not no_fetch and config.get("keep_pdf", True):  # мёртвый вес на масштабе — можно не хранить
             (article_folder / "original.pdf").write_bytes(pdf.read_bytes())
-        images = save_images(imgs, a["id"], article_folder)
+        images = save_images(imgs, a["id"], article_folder) if imgs else []
         captions = captions[:len(images)]  # выравниваем по числу сохранённых картинок
         if not text: text = a["summary"]
         express_tiers = set(CONFIG.get("express", {}).get("tiers", ["mini", "simple"])) if express else None
@@ -3220,6 +3271,8 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
             update_all_scientists(lang)
             update_all_sections(lang)
             generate_archive_page(lang)
+            generate_analytics_page(lang)
+        generate_analytics_page(lang)
         update_all_authors()
         generate_sitemaps()
         generate_feeds()
@@ -3523,6 +3576,8 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
             update_all_scientists(lang)
             update_all_sections(lang)
             generate_archive_page(lang)
+            generate_analytics_page(lang)
+        generate_analytics_page(lang)
         update_all_authors()
         generate_sitemaps()
         generate_feeds()
