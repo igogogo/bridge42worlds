@@ -13,7 +13,11 @@
               nodes:'узлов графа', edges:'рёбер', activity:'Активность по дням', dynamics:'Динамика по месяцам',
               bySection:'Охват по разделам', kitchen:'Кухня: обложки и покрытие', covers:'Обложки',
               withCover:'с обложкой', noCover:'без обложки', topTags:'Частые теги', topSci:'Частые учёные',
-              perDay:'статей за день', updated:'обновлено', loading:'Собираем данные…', none:'—' },
+              perDay:'статей за день', updated:'обновлено', loading:'Собираем данные…', none:'—',
+              topLaws:'Ключевые законы', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
+              likes:'лайков', dislikes:'дизлайков', comments:'откликов', viewsByType:'Просмотры по типу',
+              viewsByDevice:'Просмотры по устройству', reactions:'Реакции', lawTypes:'Типы законов',
+              eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы' },
         en: { title:'Project dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
               tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
               nodes:'graph nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
@@ -33,12 +37,19 @@
               withCover:'بغلاف', noCover:'بدون غلاف', topTags:'وسوم متكررة', topSci:'علماء متكررون',
               perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—' }
     })[window.lang] || null;
-    var T = L || ({ title:'Dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
+    // Английская карта — база-фолбэк: любой ключ, которого нет в языковой карте (напр. v2-подписи
+    // добавлены только в ru/en), берётся отсюда, чтобы не было "undefined".
+    var DEFAULT = { title:'Dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
         tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
         nodes:'nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
         bySection:'Coverage by area', kitchen:'Covers & coverage', covers:'Covers', withCover:'with cover',
         noCover:'no cover', topTags:'Top tags', topSci:'Top scientists', perDay:'articles that day',
-        updated:'updated', loading:'…', none:'—' });
+        updated:'updated', loading:'…', none:'—',
+        engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
+        comments:'feedback', viewsByType:'Views by type', viewsByDevice:'Views by device',
+        reactions:'Reactions', lawTypes:'Law types', eArticle:'articles', eTag:'tags', eLaw:'laws',
+        eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws' };
+    var T = Object.assign({}, DEFAULT, L || {});
 
     var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
         return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); };
@@ -167,7 +178,91 @@
         html += topBlock(tagCount, T.topTags, 'tag');
         html += topBlock(sciCount, T.topSci, 'sci');
 
+        // ── Топ-законы (по числу связанных тегов из справочника законов) ──
+        var ld = window.lawsData || {};
+        var lawArr = Object.keys(ld).map(function (k) {
+            return [k, ((ld[k] && ld[k].tags) || []).length, (ld[k] && ld[k].name) || k, (ld[k] && ld[k].type) || ''];
+        }).filter(function (r) { return r[1] > 0; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 12);
+        if (lawArr.length) {
+            html += '<div class="dash-block"><h2>' + esc(T.topLaws) + '</h2><div class="dash-chips">' +
+                lawArr.map(function (r) {
+                    return '<a class="dash-chip" href="/lang/' + window.lang + '/laws/' + encodeURIComponent(r[0]) + '.html">' +
+                        esc(r[2]) + ' <b>' + r[1] + '</b></a>';
+                }).join('') + '</div></div>';
+        }
+        // Типы законов — пай-чарт
+        var typeCount = {};
+        Object.keys(ld).forEach(function (k) { var t = (ld[k] && ld[k].type) || '?'; typeCount[t] = (typeCount[t] || 0) + 1; });
+
         root.innerHTML = html;
+
+        // Пай-чарт из сегментов [{label,value,color}] → SVG-«пончик»
+        function pie(segments, title) {
+            var total = segments.reduce(function (s, x) { return s + x.value; }, 0) || 1;
+            var R = 52, C = 60, sw = 22, circ = 2 * Math.PI * R, off = 0;
+            var rings = segments.map(function (s) {
+                var frac = s.value / total, len = frac * circ;
+                var el = '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="none" stroke="' + s.color +
+                    '" stroke-width="' + sw + '" stroke-dasharray="' + len + ' ' + (circ - len) +
+                    '" stroke-dashoffset="' + (-off) + '" transform="rotate(-90 ' + C + ' ' + C + ')"><title>' +
+                    esc(s.label) + ': ' + s.value + '</title></circle>';
+                off += len; return el;
+            }).join('');
+            var legend = segments.filter(function (s) { return s.value; }).map(function (s) {
+                return '<span class="pie-lg"><i style="background:' + s.color + '"></i>' + esc(s.label) + ' <b>' + s.value + '</b></span>';
+            }).join('');
+            return '<div class="pie-wrap"><div class="pie-title">' + esc(title) + '</div>' +
+                '<svg viewBox="0 0 120 120" class="pie">' + rings + '</svg>' +
+                '<div class="pie-legend">' + legend + '</div></div>';
+        }
+        var PAL = ['var(--cyan)', 'var(--ochre)', '#6C5CE7', '#2FA84F', '#D64545', '#C9A227', '#5AA9C9'];
+        // Типы законов — пай сразу (данные локальные)
+        var typeSegs = Object.keys(typeCount).map(function (t, i) { return { label: t, value: typeCount[t], color: PAL[i % PAL.length] }; });
+
+        // ── Движок вовлечённости из Supabase (реальные просмотры/лайки/отклики) ──
+        var SB = 'https://gyfdyfbuolnciaqxgybx.supabase.co/rest/v1/';
+        var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZmR5ZmJ1b2xuY2lhcXhneWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTk0MzQsImV4cCI6MjA5ODM3NTQzNH0.rKsgWoj5ubRpkvElPfELOn-G9StW5RSOkxBbpvFyWc4';
+        function cnt(table, filter) {
+            return fetch(SB + table + '?select=id' + (filter ? '&' + filter : ''),
+                { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, Prefer: 'count=exact', Range: '0-0' } })
+                .then(function (r) { var cr = r.headers.get('content-range') || '0-0/0'; return parseInt(cr.split('/')[1], 10) || 0; })
+                .catch(function () { return 0; });
+        }
+        Promise.all([
+            cnt('views'), cnt('likes', 'reaction=eq.like'), cnt('likes', 'reaction=eq.dislike'), cnt('feedback'),
+            cnt('views', 'entity_type=eq.article'), cnt('views', 'entity_type=eq.tag'),
+            cnt('views', 'entity_type=eq.law'), cnt('views', 'entity_type=eq.scientist'), cnt('views', 'entity_type=eq.author'),
+            cnt('views', 'device=eq.desktop'), cnt('views', 'device=eq.mobile'), cnt('views', 'device=eq.tablet')
+        ]).then(function (v) {
+            var totalViews = v[0], likes = v[1], dislikes = v[2], fb = v[3];
+            var eng = document.createElement('div');
+            eng.innerHTML =
+                '<div class="dash-block"><h2>' + esc(T.engagement) + '</h2>' +
+                '<div class="kpi-grid">' +
+                    '<div class="kpi"><div class="kpi-n">' + totalViews.toLocaleString() + '</div><div class="kpi-l">' + esc(T.views) + '</div></div>' +
+                    '<div class="kpi"><div class="kpi-n">' + likes.toLocaleString() + '</div><div class="kpi-l">' + esc(T.likes) + '</div></div>' +
+                    '<div class="kpi"><div class="kpi-n">' + fb.toLocaleString() + '</div><div class="kpi-l">' + esc(T.comments) + '</div></div>' +
+                '</div>' +
+                '<div class="pies">' +
+                    pie([
+                        { label: T.eArticle, value: v[4], color: PAL[0] }, { label: T.eTag, value: v[5], color: PAL[1] },
+                        { label: T.eLaw, value: v[6], color: PAL[2] }, { label: T.eScientist, value: v[7], color: PAL[3] },
+                        { label: T.eAuthor, value: v[8], color: PAL[4] }
+                    ], T.viewsByType) +
+                    pie([
+                        { label: 'desktop', value: v[9], color: PAL[0] }, { label: 'mobile', value: v[10], color: PAL[1] },
+                        { label: 'tablet', value: v[11], color: PAL[2] }
+                    ], T.viewsByDevice) +
+                    pie([
+                        { label: T.likes, value: likes, color: PAL[3] }, { label: T.dislikes, value: dislikes, color: PAL[4] }
+                    ], T.reactions) +
+                    pie(typeSegs, T.lawTypes) +
+                '</div></div>';
+            // Вставляем движок вовлечённости сразу после KPI-шапки (первый .kpi-grid)
+            var firstKpi = root.querySelector('.kpi-grid');
+            if (firstKpi && firstKpi.parentNode === root) root.insertBefore(eng, firstKpi.nextSibling);
+            else root.appendChild(eng);
+        });
 
         // Дата сборки
         fetch('/data/build-info.json').then(function (r) { return r.json(); }).then(function (b) {

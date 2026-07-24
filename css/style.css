@@ -382,7 +382,10 @@ body.graph-fs-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 .article-main p { font-size: 16.5px; line-height: 1.8; margin-bottom: 18px; max-width: 620px; }
 .reading-time { color: var(--soft); white-space: nowrap; }
-.site-stats { text-align: left; max-width: 620px; font-size: 13px; color: var(--soft); margin: 2px 0 14px; font-family: var(--mono); }
+/* Мельче + перенос внутри колонки, чтобы длинная строка (с 7 счётчиками) не вылезала за 620px
+   (юзер 2026-07-24). white-space:normal + overflow-wrap — переносится по « / », а не режется. */
+.site-stats { text-align: left; max-width: 620px; font-size: 11px; line-height: 1.7; color: var(--soft);
+    margin: 2px 0 14px; font-family: var(--mono); white-space: normal; overflow-wrap: anywhere; }
 .site-stats b { color: var(--text); font-weight: 600; }
 .related { margin-top: 26px; }
 .related-h { font-size: 14px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }
@@ -1808,3 +1811,19 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
 .dash-chip b { color: var(--ink); font-weight: 700; }
 .dash-built { font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 20px; }
 html[dir="rtl"] .bar-x { transform: rotate(45deg); }
+
+/* Раскрываемые группы разделов (юзер 2026-07-24) */
+.section-group { cursor: pointer; user-select: none; }
+.section-group:hover .section-group-code { color: var(--link); }
+.sg-caret { display: inline-block; width: 12px; font-size: 10px; color: var(--soft); }
+.section-member[hidden] { display: none; }
+
+/* Дашборд v2: пай-чарты + движок вовлечённости */
+.pies { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+.pie-wrap { text-align: center; }
+.pie-title { font-family: var(--mono); font-size: 11px; color: var(--soft); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
+.pie { width: 120px; height: 120px; }
+.pie-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px 10px; margin-top: 8px; }
+.pie-lg { font-size: 11px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+.pie-lg i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.pie-lg b { color: var(--ink); }

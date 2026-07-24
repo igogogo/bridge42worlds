@@ -1266,6 +1266,18 @@ function collapseNavOverflow() {
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
 
+// Список разделов: группы раскрываемые — клик по строке-группе разворачивает её разделы
+// (юзер 2026-07-24: «разделы нажимаем — они раскрываются»). По умолчанию всё свёрнуто.
+document.addEventListener('click', function (e) {
+    var g = e.target.closest ? e.target.closest('.section-group') : null;
+    if (!g || !g.dataset || !g.dataset.group) return;
+    var open = g.classList.toggle('open');
+    var caret = g.querySelector('.sg-caret'); if (caret) caret.textContent = open ? '▾' : '▸';
+    document.querySelectorAll('.sm-' + (window.CSS && CSS.escape ? CSS.escape(g.dataset.group) : g.dataset.group)).forEach(function (r) {
+        r.hidden = !open;
+    });
+});
+
 // Настройки мини-графа (типы узлов/связей/глубина) свёрнуты в подменю за кнопкой-шестерёнкой
 // (юзер 2026-07-24: «убрать в подменю, места много занимает»). Клик раскрывает .mini-graph-filters.
 document.addEventListener('click', function (e) {

@@ -2151,15 +2151,19 @@ def generate_sections_cloud(lang):
         members = sorted(groups[prefix])
         gtotal = sum(counts[c] for c in members)
         gname = cat_loc(lang)[0].get(prefix) or ARXIV_CATEGORIES.get(prefix, "")
+        # Группы РАСКРЫВАЕМЫЕ (юзер 2026-07-24): клик по строке-группе разворачивает её разделы.
+        # По умолчанию свёрнуто — видно только группы (компактно), члены hidden с классом sm-<prefix>.
         rows += (
-            f'<tr class="section-group"><td colspan="2">'
+            f'<tr class="section-group" data-group="{attr_safe(prefix)}">'
+            f'<td colspan="2"><span class="sg-caret">▸</span> '
             f'<span class="section-group-code">{safe(prefix)}</span>'
             + (f' <span class="section-group-name">{safe(gname)}</span>' if gname and gname != prefix else "")
             + f'</td><td class="section-count">{gtotal}</td></tr>'
         )
         for c in members:
             rows += (
-                f'<tr><td><a href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
+                f'<tr class="section-member sm-{attr_safe(prefix)}" hidden>'
+                f'<td><a href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
                 f'title="{attr_safe(cat_desc(c, lang))}">{safe(cat_name(c, lang))}</a></td>'
                 f'<td class="section-code">{safe(c)}</td>'
                 f'<td class="section-count">{counts[c]}</td></tr>'

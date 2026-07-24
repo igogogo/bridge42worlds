@@ -11,6 +11,12 @@ async function getSupabase() {
     return _sb;
 }
 
+// Таблицы likes/feedback: колонок user_key/device в них НЕТ (есть только у views), а version/lang/
+// base_id — GENERATED (БД вычисляет их из article_id сама, вставлять нельзя). Раньше react()/
+// submitFeedback вставляли user_key/device → insert падал, лайки и комменты молча не сохранялись
+// (баг найден 2026-07-24). Пишем ТОЛЬКО базовые колонки {article_id, reaction/options/comment,
+// entity_type}; остальное БД проставит сама.
+
 // ── Реакции: like / dislike / superlike ─────────────────────────────────────
 function myReaction(id) { try { return localStorage.getItem('react_' + id) || ''; } catch { return ''; } }
 function setMyReaction(id, v) { try { v ? localStorage.setItem('react_' + id, v) : localStorage.removeItem('react_' + id); } catch {} }
@@ -42,9 +48,9 @@ async function react(id, type, entityType) {
         } else {
             const { error } = await sb.from('likes').insert({
                 article_id: id, reaction: type, entity_type: entityType || 'article',
-                user_key: getUserKey(), device: deviceType(),
             });
-            if (!error) setMyReaction(id, type);
+            if (error) { console.error('like insert failed:', error.message); }
+            else setMyReaction(id, type);
         }
         highlightReactions(id);
         await loadReactions(id);
@@ -79,8 +85,8 @@ async function submitFeedback(id, wrap, entityType) {
     const sb = await getSupabase();
     const { error } = await sb.from('feedback').insert({
         article_id: id, options: opts, comment: comment || null, entity_type: entityType || 'article',
-        user_key: getUserKey(), device: deviceType(),
     });
+    if (error) console.error('feedback insert failed:', error.message);
     const status = box.querySelector('.fb-status');
     if (status) status.textContent = error ? '⚠️ не отправлено' : '✓ спасибо!';
     if (!error) box.querySelectorAll('.fb-chip.active').forEach(c => c.classList.remove('active'));
