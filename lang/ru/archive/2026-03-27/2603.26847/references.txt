@@ -1,0 +1,642 @@
+[1] E. W. Prohofsky,Statistical Mechanics and Stability of Macromolecules
+(Cambridge University Press, 1995).
+[2] J. Pokorný, “Biophysical aspects of coherence in biological systems,”
+Electromagn. Biol. Med.33, 63–68 (2014).
+[3] J. C. Genereux and J. K. Barton, “Mechanisms for DNA charge trans-
+port,”Chem. Rev.110, 1642–1662 (2011).
+[4] M. Pietruszka, “Temperature-dependent bistable electrical switching in
+hydrated barley genomic DNA,”BioSystems263, 105777 (2026).
+26
+[5] M. Pietruszka, “Ohmic–polarization transition in hydrated DNA,”
+BioSystems238, 105708 (2026).
+[6] H. Fröhlich, “Long-Range Coherence and Energy Storage in Biological
+Systems,”Int. J. Quantum Chem.2, 641–649 (1968).
+[7] H. Fröhlich, “The biological effects of microwaves and related questions,”
+Adv. Electron. Electron Phys.53, 85–152 (1980).
+[8] P. W. Anderson,Basic Notions of Condensed Matter Physics(Westview
+Press, 1995).
+[9] G. Vitiello,My Double Unveiled: The Dissipative Quantum Model of
+Brain(John Benjamins, Amsterdam, 2001).
+[10] J. M. Kosterlitz and D. J. Thouless, “Ordering, metastability and
+phase transitions in two-dimensional systems,”J. Phys. C6, 1181–1203
+(1973).
+[11] M. Tegmark, “Importance of quantum decoherence in brain processes,”
+Phys. Rev. E61, 4194–4206 (2000).
+[12] J. McFadden and J. Al-Khalili, “Life on the edge: The coming of age of
+quantum biology,”Proc. R. Soc. A474, 20180674 (2018).
+[13] R. Fazio and H. van der Zant, “Quantum phase transitions and vor-
+tex dynamics in superconducting networks,”Phys. Rep.355, 235–334
+(2001).
+[14] A. Pikovsky, M. Rosenblum, and J. Kurths,Synchronization: A Univer-
+sal Concept in Nonlinear Sciences(Cambridge University Press, 2003).
+[15] M. C. Cross and P. C. Hohenberg, “Pattern formation outside of equi-
+librium,”Rev. Mod. Phys.65, 851–1112 (1993).
+[16] P. Dutta and P. M. Horn, “Low-frequency fluctuations in solids: 1/f
+noise,”Rev. Mod. Phys.53, 497–516 (1981).
+[17] H. Fröhlich, “Evidence for Bose Condensation-Like Excitation of Coher-
+ent Modes in Biological Systems,”Phys. Lett. A51, 21–22 (1975).
+[18] X. Wang and J. Wang, “Full Quantum Theory of Nonequilibrium
+Phonon Condensation and Phase Transition,”Phys. Rev. B106,
+L220103 (2022).
+27
+[19] G. Villa et al., “Topological Classification of Driven-Dissipative Nonlin-
+ear Systems,”Sci. Adv.(2025).
+[20] M. Pietruszka, “A Polarization Hall Effect in Hydrated DNA,”
+arXiv:2601.06089v2 (2026).
+[21] D. R. Nelson and J. M. Kosterlitz, “Universal Jump in the Superfluid
+Density of Two-Dimensional Superfluids,”Phys. Rev. Lett.39, 1201–
+1205 (1977).
+[22] L. M. Sieberer, M. Buchhold, and S. Diehl, “Keldysh field theory for
+driven open quantum systems,”Rep. Prog. Phys.79, 096001 (2016).
+[23] H. Fröhlich, “Long-range coherence and the action of enzymes,”Nature
+228, 1093–1094 (1970).
+[24] M. Pietruszka, “Field-induced coherence and Fröhlich condensation in
+hydrated DNA,”BioSystems256, 105564 (2025).
+[25] G. Vitiello,Quantum Field Theory and Its Macroscopic Manifestations
+(Imperial College Press, London, 2004).
+[26] H. Umezawa,Advanced Field Theory: Micro, Macro, and Thermal
+Physics(AIP, New York, 1993).
+28
+Supplementary Information
+This Supplementary Information provides theoretical derivations, statistical
+analyses, and additional experimental datasets supporting the observation
+of discrete macroscopic attractor states in hydrated DNA reported in the
+main text. The material expands the stochastic phase-field description and
+provides independent experimental evidence for metastable transverse states
+and telegraph switching dynamics under magnetic excitation.
+Organization of Supplementary Material
+Part I presents the stochastic phase framework. Part II introduces sup-
+porting experiments and Auxiliary Data I–III. Auxiliary Data I–III provide
+independent datasets acquired at distinct temperatures, demonstrating the
+reproducibility of the metastable transverse response.
+Part I: Stochastic phase dynamics and statistical ori-
+gin of unimodal and bimodal voltage distributions
+This section summarizes the theoretical connection between overdamped
+phase dynamics, telegraph-like switching, and the statistical structure of the
+measured voltage distributions. The aim is not to construct a microscopic
+model of the underlying medium, but to establish a minimal and general
+framework linking the collective phase dynamics to the experimentally ob-
+served dwell-density maps, voltage histograms, and time-domain switching
+behavior.
+Experimentally, stable voltage plateaus appear as narrow ridges in the
+dwell-density representation and give rise to unimodal, approximately Gaus-
+sian voltage distributions. Near plateau boundaries, enhanced fluctuations
+and intermittent switching between discrete voltage levels lead to a bimodal
+statistical structure. These features are robust across repeated measure-
+ments and largely independent of microscopic material details, indicating a
+generic dynamical origin.
+We show that such statistical signatures arise naturally from overdamped
+stochastic dynamics of a compact phase variable subject to noise. In this
+description, the collective polarization state is represented by a global phase
+coordinateθ, while the measured transverse voltage is treated as a mono-
+tonic observable of the underlying phase configuration. Phase locking within
+29
+Figure S1: Schematic illustration of noise-induced switching between neigh-
+boring metastable phase attractors in a compact polarization phase land-
+scape. Two coexisting attractors, labeled by indicesnandn+ 1, are sep-
+arated by an effective barrier in the phase potentialU(θ;B). Thermal and
+environmental fluctuations enable stochastic hopping between these attrac-
+tors, resulting in random telegraph switching between two discrete transverse
+voltage levels. In the overdamped regime relevant here, the dynamics are
+governed by Eqs. (S2)–(S5), with phase slips corresponding to2πchanges
+of the global phase winding. This schematic illustrates the physical origin
+of bimodal voltage distributions and intermittent switching observed exper-
+imentally near plateau boundaries, where neighboring attractors coexist.
+a single attractor produces stable plateaus, whereas the coexistence of neigh-
+boring attractors leads to telegraph switching and bimodal voltage distribu-
+tions. The following sections derive these results using the Langevin and
+Fokker–Planck formalisms.
+The dynamical picture underlying the stochastic phase description is il-
+lustrated schematically in Fig. S1 (shown below), which depicts two neigh-
+boring metastable phase attractors separated by an effective barrier and the
+noise-assisted switching between them.
+Stochastic phase dynamics: full equation of motion and over-
+damped limit
+We consider a collective polarization mode described by a complex order
+parameter
+ψ(t) =ρ(t)e iθ(t),(S1)
+whereρ(t)denotes the mode amplitude andθ(t)is a global phase variable
+defined modulo2π. The compactness ofθimplies that all physically mean-
+ingful observables are periodic functions of the phase.
+Allowing for both inertial and dissipative contributions, the most general
+30
+effective equation of motion for the collective phase may be written as
+I ¨θ(t) +γ ˙θ(t) =− ∂U(θ;B)
+∂θ +ξ(t),(S2)
+whereIis an effective phase inertia,γis a damping coefficient,U(θ;B)is
+an effective magnetic-field-dependent phase potential, andξ(t)represents
+thermal and environmental noise.
+Equation (S2) describes stochastic motion on a compact phase manifold.
+Depending on the relative magnitude ofIandγ, the dynamics may be un-
+derdamped or overdamped. In the strongly dissipative regime relevant to
+hydrated DNA under ambient conditions, inertial effects are subdominant
+on experimental time scales. The dynamics, therefore, reduce to the over-
+damped Langevin equation
+γ ˙θ(t) =− ∂U(θ;B)
+∂θ +ξ(t),(S3)
+which is the form employed in the main text.
+The noise term is taken to be Gaussian and delta-correlated,
+⟨ξ(t)⟩= 0,⟨ξ(t)ξ(t ′)⟩= 2γD δ(t−t ′),(S4)
+withDan effective noise strength. Equation (S3) constitutes the minimal
+stochastic description of a driven, dissipative phase degree of freedom.
+Becauseθis compact, the effective potentialU(θ;B)must be2π-periodic
+in the absence of external bias. In the presence of a field-controlled drive, a
+convenient, minimal form is
+U(θ;B) =−u(B) cos(mθ)−f(B)θ,(S5)
+which corresponds to a tilted periodic (“washboard”) landscape. The integer
+mreflects the symmetry of the phase locking, while the bias termf(B)con-
+trols the relative stability of neighboring phase sectors. In two dimensions,
+a phase slip may be viewed as the passage of a vortex-like defect across the
+system, producing a2πchange in the global phase winding.
+Fokker–Planck equation
+The Langevin equation (S3) is equivalent to a Fokker–Planck equation for
+the probability densityP(θ, t)of the phase,
+∂tP(θ, t) =∂θ
+1
+γ (∂θU)P
+
++ D
+γ ∂2
+θ P.(S6)
+31
+This equation may be written in continuity form,
+∂tP=−∂ θJ,(S7)
+with probability current
+J(θ, t) =−1
+γ (∂θU)P− D
+γ ∂θP.(S8)
+In the stationary regime, the long-time behavior is governed by solutions
+of Eq. (S6) with time-independent probability density.
+Single-attractor regime: Gaussian statistics
+When the effective potential supports a single stable minimumθ0 within the
+relevantphaseinterval, andphase-slipeventsarerare, theprobabilitycurrent
+is negligible (J≃0). In this limit the stationary distribution assumes the
+form
+Pst(θ)∝exp
+
+−U(θ;B)
+D
+
+.(S9)
+Expanding the potential near the minimum,
+U(θ)≃U(θ 0) + κ
+2 (θ−θ 0)2, κ=U ′′(θ0)>0,(S10)
+yields a Gaussian distribution,
+Pst(θ) = 1q
+2πσ2
+θ
+exp
+
+−(θ−θ 0)2
+2σ2
+θ
+
+, σ 2
+θ = D
+κ .(S11)
+If the experimentally measured transverse voltage is locally related to
+the phase by a smooth monotonic mapping,
+Vxy ≈V 0 +α(θ−θ 0),(S12)
+then the voltage distribution is likewise Gaussian,
+P(Vxy) = 1q
+2πσ2
+V
+exp
+
+−(Vxy −V 0)2
+2σ2
+V
+
+, σ 2
+V =α 2 D
+κ .(S13)
+This regime corresponds experimentally to stable plateaus characterized
+by a single dominant metastable attractor.
+32
+To illustrate how the stochastic phase-field picture manifests in real ex-
+perimental data, Fig. S2 presents the original transient reconfiguration event
+used for the Hilbert-phase analysis discussed in the main text. The raw volt-
+age signal first develops a bifurcation into two metastable branches, followed
+by a delayed phase reorganization visible in the reconstructed Hilbert phase.
+This temporal separation between branch formation and phase reconfigura-
+tion provides an experimentally accessible example of attractor competition
+and subsequent phase-slip-mediated reorganization of the collective polar-
+ization field.
+Figure S2:Transient reconfiguration event used for the Hilbert-
+phase analysis.(a) Raw transverse-voltage signalVxy(t)showing bifurca-
+tion into two metastable branches neart≈70s. (b) Unwrapped Hilbert
+phase reconstructed from the same signal. A delayed phase reconfigura-
+tion occurs neart≈85s, approximately 15 s after branch formation. En-
+hanced fluctuations preceding the transition are consistent with critical slow-
+ing down, while reduced fluctuations afterward indicate relaxation into a
+new metastable phase sector. The observed phase jump is consistent with a
+phase-slip event of order∆ϕ≈2π, linking the transient dynamics to tran-
+sitions between neighboring topological phase sectors. The vertical dashed
+line marks the phase-transition time.
+33
+Bistable regime: bimodal distributions and telegraph switch-
+ing
+Near a transition between neighboring phase sectors, the effective potential
+may support two coexisting local minima,θ1 andθ 2, separated by a finite
+barrier. In this bistable regime, noise induces stochastic hopping between
+the two basins of attraction (as illustrated schematically in Fig. S1).
+When the switching time is short compared to the total acquisition time
+but long compared to the sampling interval, the stationary probability dis-
+tribution is well approximated by a weighted mixture,
+P(θ)≃w 1 N(θ 1, σ2
+1) +w 2 N(θ 2, σ2
+2), w 1 +w 2 = 1,(S14)
+whereN(θ i, σ2
+i )denotes Gaussian distributions centered at each minimum.
+Under the same local phase–voltage mapping, the voltage distribution
+becomes
+P(Vxy)≃w 1 N(V 1, σ2
+V1 ) +w 2 N(V 2, σ2
+V2 ),(S15)
+correspondingtoabimodalhistogramwithpeaksatthetwoplateauvoltages.
+The weightsw i are determined by the noise-activated transition rates
+between neighboring attractors. In the overdamped limit, these rates follow
+Kramers-type expressions,
+ki→j ∝exp
+
+−∆Ui→j
+D
+
+,(S16)
+where∆U i→j denotes the barrier height separating the two minima.
+In the time domain, such stochastic hopping manifests as random tele-
+graph switching between two discrete voltage levels. In the statistical do-
+main, it produces bimodal probability distributions whose emergence signals
+attractor coexistence and phase-slip-mediated transitions between neighbor-
+ing phase sectors.
+Physical interpretation
+Within this framework, voltage plateaus correspond to long-lived residence
+near individual phase attractors, while step regions arise from competition
+between neighboring attractors whose relative stability is tuned by the ex-
+ternal control parameter. The discreteness of the response is therefore not
+associated with a quantized energy spectrum, but instead with the topo-
+logical structure of the compact phase coordinate governing the collective
+polarization dynamics.
+34
+Part II: Telegraph Switching and Metastable Trans-
+verse States
+PartIIpresentsthreeadditionalexperimentsperformedundersimilarsample
+conditions but using continuous linear magnetic-field sweeps and slightly
+different ambient temperatures, providing independent confirmation of the
+metastable switching dynamics.
+This Supplementary Information section provides additional experimen-
+tal and analytical results supporting the central observation reported in
+the main text: the emergence of discrete transverse voltage states exhibit-
+ing stochastic telegraph switching under a magnetic-field sweep in hydrated
+DNA. The results presented here focus on time-domain dynamics, spectral
+characteristics, and statistical evidence for metastable states, and are in-
+tended to substantiate the interpretation of field-induced collective behavior
+at ambient conditions.
+All data shown correspond to the same sample composition and contact
+geometry as in the main text, but were acquired in independent experimental
+runs using a continuous linear magnetic-field sweep and slightly different
+ambient temperatures.
+Bayesian analysis of voltage bistability
+To quantitatively assess the presence of competing macroscopic states under-
+lyingtheobservedtelegraphswitching, weperformedaBayesianinformation–
+criterion (BIC) analysis of transverse voltage histograms acquired during a
+linear magnetic–field sweep.
+The transverse polarization voltageVxy(B)was measured in a hydrated
+DNA–water sample (500 ngµL−1, 5µL volume,0.7×0.7cm 2 contact ge-
+ometry) atT= 21.4 ◦C under ambient laboratory conditions. The magnetic
+field was swept continuously from 100 to 550 mT. For each magnetic–field in-
+terval of width 15 mT, a voltage histogram was constructed and fitted using
+both a single–Gaussian (1G) model and a two–Gaussian mixture (2G) model.
+Model selection was performed using the Bayesian information criterion,
+∆BIC = BIC1G −BIC 2G,(S17)
+where positive values favor the bimodal model. Following standard criteria,
+∆BIC>10provides strong statistical evidence for bimodality.
+Figure S3 displays the raw transverse voltageVxy(B)together with the
+corresponding∆BIC(B). Pronouncedmaximain∆BIC, reachingvalueswell
+35
+Figure S3: Overlay of the transverse voltageV xy(B)(left axis) and the
+bimodality strength∆BIC(B)(right axis) obtained from Bayesian model
+selection. The transverse voltage is shown as a continuous curve, while cir-
+cular markers indicate∆BICcomputed from Gaussian mixture fits within
+15 mT field windows. Positive values∆BIC>10provide strong statistical
+evidence for bimodality; pronounced maxima occur at quasi–plateau bound-
+aries, indicating enhanced attractor competition and intermittent switching
+in the mixed ohmic–polarization regime.
+above 100 at specific magnetic fields, occur systematically at the boundaries
+between quasi–plateau regions ofVxy. These peaks indicate coexistence of
+two distinct transverse-polarization states and quantitatively demonstrate
+competition between metastable attractors in the mixed ohmic–polarization
+regime.
+Independent time–domain analysis ofVxy near these field values reveals
+telegraph–like switching between two discrete voltage levels, with charac-
+teristic dwell times of several seconds. Notably, the locations of enhanced
+∆BICcoincide with intervals exhibiting telegraph switching, confirming that
+histogram bimodality arises from real–time alternation between competing
+macroscopic polarization states rather than measurement noise. The ob-
+serveddynamicsareconsistentwithnoise–assistedtransitionsbetweenneigh-
+boring metastable attractors, reflecting intermittent basin competition prior
+to stabilization of a single polarization state.
+The large voltage separation between the two telegraph states (∼20mV),
+combined with much smaller intra-plateau fluctuations, yields decisively bi-
+modal voltage distributions (∆BIC≫100). Such behavior is characteristic
+of switching between metastable attractors in driven dissipative systems.
+Within the phase-field framework adopted here, this phenomenology is con-
+36
+sistent with discrete, integer-labeled polarization states. It may be viewed
+as suggestive of phase attractors associated with distinct topological sectors
+of the collective polarization field.
+To make the statistical evidence more transparent, we compare represen-
+tative voltage histograms from two field intervals: a stable plateau window
+and a quasi–plateau boundary window. In the plateau window the voltage
+distribution is unimodal and well described by a single Gaussian, consistent
+with residence in a single attractor basin. In contrast, the boundary window
+exhibits a clearly bimodal distribution captured by a two–Gaussian mixture
+model with large positive∆BIC. The appearance of bimodality only within
+the switching interval confirms that the observed voltage statistics arise from
+stochastic transitions between competing metastable attractors rather than
+from broadened single-state fluctuations.
+Auxiliary Data I: Telegraph switching under linear
+field sweep at 20.3◦C
+Experimental conditions:Hydrated genomic DNA (500 ngµL−1, 5µL),
+0.7×0.7 cm2 substrate,T= 20.3 ◦C, RH≈26%, dark, continuous linear
+magnetic-field sweep.
+Time-Domain Signatures of Telegraph Switching
+The transverse voltageVxy(t)exhibits pronounced non-Gaussian fluctuations
+characterized by abrupt transitions between discrete voltage levels. These
+transitions occur irregularly in time, with dwell periods ranging from several
+seconds to over one minute. Such behavior is characteristic of telegraph
+switching between metastable states.
+Importantly, no comparable switching is observed in the longitudinal
+voltage or in the current-monitoring shunt channel, confirming that the effect
+is intrinsic to the transverse response rather than arising from instrumental
+or current instabilities.
+Spectral Analysis of Transverse and Photovoltaic Signals
+Tocharacterizethetemporalstructureoftheswitchingdynamics, FastFourier
+Transform (FFT) analysis was applied to both the transverse voltageVxy(t)
+and the simultaneously recorded photovoltaic (PV) signal.
+37
+Figure S4: Auxiliary Data I. Frequency-domain analysis of transverse volt-
+age and photovoltaic signals atT= 20.3 ◦C. (a) FFT amplitude spectrum
+ofV xy after detrending and windowing, dominated by low-frequency com-
+ponents associated with slow collective dynamics. (b) FFT spectrum of the
+photovoltaic (PV) signal, showing a narrow peak nearf≈0.13Hz. Inset:
+raw PV time trace acquired simultaneously during the magnetic-field sweep.
+The discrete Fourier transform is defined as
+˜V(f) =
+N−1X
+n=0
+V(t n)e −2πiftn,(S18)
+wheret n denotes uniformly sampled time points andfis the frequency.
+As shown in Fig. S4, theVxy spectrum is dominated by low-frequency
+components below approximately 0.1–0.2 Hz, consistent with slow stochastic
+switching between metastable states rather than harmonic oscillations. In
+contrast, the PV signal displays a well-defined spectral peak nearf≈0.13
+Hz, corresponding to a periodic modulation with a characteristic timescale of
+∼8 s. The absence of strict phase locking between the two signals indicates
+that the transverse switching dynamics are not trivially driven by the PV
+oscillation.
+Statistical Evidence for Discrete Transverse States
+To quantify the apparent discreteness of the transverse response, probability
+distributions ofVxy were constructed over the full magnetic-field sweep. The
+resulting histogram deviates strongly from a single Gaussian distribution and
+38
+is instead well described by a two-component Gaussian mixture model,
+P(Vxy) =
+2X
+i=1
+wi N(µ i, σ2
+i ),(S19)
+wherew i are statistical weights andµi the mean voltages of the two states.
+A two-Gaussian mixture fit yields state meansµ 1 ≈ −1.37 mVand
+µ2 ≈+28.73 mV(separation∆µ≈30 mV), with unequal statistical weights
+w1 ≈0.21andw 2 ≈0.79, consistent with different dwell times in the two
+states. These values remain essentially independent of magnetic field, while
+theoccupationprobabilityofeachstatevariesstronglywithB. Theresulting
+bimodal histogram and Gaussian-mixture fit are shown in Fig. S5.
+Figure S5: Auxiliary Data I. Histogram of the transverse voltageVxy over
+the full magnetic-field sweep. The bimodal distribution demonstrates the
+existence of two discrete transverse voltage states. Dashed curves show the
+Gaussian components of a two-state mixture fit; the solid curve shows their
+sum.
+Time-Resolved Attractor Dynamics
+To examine the temporal evolution of the two states, the data were analyzed
+using sliding time windows. Within each window, a two-state Gaussian
+39
+mixture model was fitted, allowing the instantaneous positions of the low-
+and high-voltage states to be tracked.
+The sliding-window tracking of the two metastable branches is shown in
+Fig. S6.
+This analysis reveals that the voltage values of the two states remain ap-
+proximately constant throughout the sweep, while transitions between them
+occur intermittently. The switching probability increases in intermediate
+magnetic-field regions and is suppressed at higher fields, where one state
+becomes dominant.
+Figure S6: Auxiliary Data I. Sliding-window tracking of metastable trans-
+verse voltage states. The two branches correspond to coexisting attractors;
+intermittent crossings indicate stochastic telegraph switching events.
+Transition Rates and Telegraph Statistics
+The telegraph process may be modeled as a two-state Markov system char-
+acterized by transition ratesk01 andk 10 between the low (0) and high (1)
+states. From the classified time series, transition rates were extracted ac-
+cording to
+kij = Ni→j
+Ni ∆t,(S20)
+whereN i→j is the number of observed transitions,Ni the number of samples
+in statei, and∆tthe sampling interval.
+The resulting rates are strongly asymmetric, with the high-voltage state
+exhibiting significantly longer dwell times. Typical lifetimes range from∼20
+s for the low state to∼70 s for the high state. The corresponding field
+dependence of the extracted transition rates is shown in Fig. S7.
+40
+Figure S7: Auxiliary Data I. Magnetic-field dependence of transition rates
+extracted from time-domain classification. The field primarily modulates the
+occupation probabilities of the transverse states rather than their voltage
+values.
+Figure S8 provides an independent view of the photovoltaic response.
+The PV channel exhibits a coherent oscillatory mode with a well-defined
+characteristic frequency, in contrast to the broadband, switching-dominated
+dynamics observed in the transverse voltage.
+Auxiliary Data II: 19.4◦C Vxy–PV correlation and
+field-resolved metastable states
+Experimental conditions:Hydrated genomic DNA (500 ngµL−1, 5µL),
+0.7×0.7 cm2 substrate,T= 19.4 ◦C, RH∼24%, dark, continuous linear
+magnetic-field sweep.
+In this section, we present additional analysis of the transverse voltage
+response focusing on the emergence of long-lived metastable states and their
+statistical signatures.
+FigureS9showsthecompleterawdatarecordedduringalinearmagnetic-
+41
+Figure S8: Auxiliary Data I. (a) Photovoltaic (PV) signal measured simul-
+taneously withV xy during a linear magnetic-field sweep atT= 19.9◦C. (b)
+FFT amplitude spectrum of the PV signal, revealing a dominant narrow-
+band component nearf≈0.13Hz. The absence of corresponding narrow-
+band structure inVxy indicates distinct dynamical responses of the PV and
+transverse channels.
+field sweep from approximately 100 to 500 mT atT= 19.4 ◦C and rela-
+tive humidity∼24%, performed in darkness using hydrated genomic DNA
+(500 ngµL−1, 5µL volume) deposited on a0.7×0.7cm 2 glass substrate.
+Several robust experimental features are immediately apparent:
+1. The transverse voltage exhibits an abrupt, large-amplitude transition
+(∆Vxy ∼80–90 mV) at a well-defined magnetic field.
+2. Beyond this threshold,Vxy does not vary continuously with field but
+instead forms extended plateaus with weak magnetic-field dependence.
+3. Thelongitudinaltransportchannelremainssmoothandohmicthrough-
+out the sweep, excluding current instabilities or contact artifacts as the
+origin of the observed steps.
+To characterize the nature of the plateau states, the time series was an-
+alyzed using a dwell-density representation and voltage histogram statistics,
+as summarized in Fig. S10.
+While the bimodal distributions demonstrate coexistence of metastable
+transversestates, thestochastictelegraphswitchingbetweenthemisresolved
+only in the time domain and is analyzed separately in the main text.
+The dwell-density map demonstrates that the transverse voltage accumu-
+lates at discrete values over extended magnetic-field intervals. These resi-
+42
+FigureS9: AuxiliaryDataII.Rawtransportsignalsasafunctionofmagnetic
+field atT= 19.4 ◦C. Upper panel: longitudinal currentIxx (via shunt) and
+longitudinal sample voltageV xx. Lower panel: transverse voltageV xy and
+simultaneously recorded photovoltaic (PV) signal. A sharp collapse ofVxy
+nearB≈120mT is followed by extended voltage plateaus, whileI xx and
+Vxx remain smooth and ohmic.
+dence bands correspond to long-lived metastable states rather than transient
+fluctuations.
+Quantitative statistical analysis yields the following sequence of regimes:
+•Single-attractor regime (Plateau I): The voltage distribution is uni-
+modal and well described by a single Gaussian, indicating stable phase
+locking within one attractor.
+•Attractor-competition regime (Plateau II): The distribution becomes
+bimodal, requiring a two-Gaussian mixture model. This behavior re-
+flects stochastic switching between two coexisting metastable states,
+manifesting experimentally as telegraph-like voltage fluctuations.
+•Recondensed regime (Plateau III): At a higher magnetic field, the dis-
+tribution returns to a unimodal form, signaling condensation into a
+new stable attractor.
+43
+Figure S10: Auxiliary Data II. Statistical evidence for metastable transverse
+attractors. (a) Dwell-density map ofVxy versus magnetic field (logarithmic
+counts), revealing discrete residence bands. (b) Voltage histogram within
+Plateau II (275–359 mT), showing a bimodal distribution described by a two-
+Gaussian mixture, indicating attractor coexistence. (c) Voltage histogram
+within Plateau III (350–430 mT), exhibiting a unimodal Gaussian distribu-
+tion corresponding to a re-stabilized single attractor.
+The observed sequence
+single attractor→attractor coexistence→single attractor
+is the characteristic fingerprint of a driven, dissipative phase system possess-
+ing a compact order-parameter manifold.
+Importantly, the discreteness of the transverse voltage response is not
+associated with energy quantization or conventional Landau-level physics.
+Instead, the plateaus arise from phase locking of a collective polarization
+mode, while the step regions correspond to noise-assisted transitions between
+neighboring topological sectors of the phase variable.
+These results provide additional experimental support for the interpre-
+tation advanced in the main text: the transverse response of hydrated DNA
+under magnetic-field excitation is governed by collective phase dynamics fea-
+turing metastable attractors and topologically constrained phase quantiza-
+tion at ambient conditions.
+44
+AuxiliaryDataIII:Correlatedtransversevoltageand
+photovoltage response at 19.8–19.6◦C
+Experimental conditions:Hydrated genomic DNA (500 ngµL−1, 5µL),
+0.7×0.7 cm2 substrate,T≈19.8–19.6 ◦C, RH∼23%, dark, simultaneous
+transverse-voltage and photovoltaic acquisition during linear magnetic-field
+sweep.
+Simultaneous measurements of the transverse voltageVxy and an inde-
+pendentphotovoltage(PV)channelwereperformedduringalinearmagnetic-
+field sweep (mapped from acquisition time toB≈100–450 mT) on a freshly
+prepared hydrated DNA sample (5µL, 500 ngµL−1) under ambient labo-
+ratory conditions (T≈19.8–19.6 ◦C, relative humidity∼23%, dark). The
+PV signal was acquired on a physically separate detection channel, without
+electrical connection to the transport circuitry, providing an independent
+probe of the sample response. Figure S11 shows the resultingVxy (red) and
+PV (green) signals as functions of magnetic field. Both observables exhibit
+a pronounced change in behavior within the same magnetic-field interval
+(B≈250–300 mT):V xy undergoes a sharp transition into a negative basin
+(minimum∼ −60mV), while the PV channel simultaneously reorganizes
+from a strongly oscillatory regime into a quieter biased state. A sliding-
+window cross-correlation analysis indicates that the PV signal becomes an-
+ticorrelated withV xy across this transition. Importantly, the longitudinal
+voltageV xx and the corresponding currentIxx remain smooth and approxi-
+mately ohmic throughout the sweep (not shown), excluding a trivial current
+instability. The coincident threshold observed in two independently mea-
+sured channels supports the interpretation that this feature reflects a col-
+lective response of the hydrated DNA system to magnetic-field excitation,
+rather than a single-channel electrical artifact.
+A photograph of the planar four-contact detector and coverslip configu-
+ration used to enforce a quasi-2D hydrated layer is provided in Fig. S12.
+Summary
+The supplementary analyses presented here establish the following experi-
+mentally robust features:
+•The transverse voltage response develops discrete, long-lived plateaus
+under a magnetic-field sweep, while the longitudinal channel remains
+smooth and ohmic.
+45
+Figure S11: Auxiliary Data III. Simultaneous transverse voltageVxy (red,
+left axis) and photovoltaic signal PV (green, right axis) measured during
+a linear magnetic-field sweep atT≈19.8–19.6 ◦C. Both channels exhibit
+a pronounced reorganization in the rangeB≈250–300 mT, whereV xy col-
+lapses into a deep negative basin while the PV oscillatory regime reorganizes.
+Sliding-window analysis (not shown) indicates anticorrelation between PV
+andV xy across the transition, consistent with a coupled collective response.
+•Dwell-density analysis reveals that the transverse voltage accumulates
+at well-defined values over extended magnetic-field intervals, indicating
+the presence of metastable transverse states.
+•Statistical analysis of voltage distributions demonstrates both uni-
+modal and bimodal structures, corresponding respectively to single-
+attractor regimes and regimes of attractor coexistence.
+•In intermediate magnetic-field windows, bimodal voltage histograms
+provide clear evidence for competition between neighboring metastable
+attractors.
+•Time-domain measurements performed in selected field intervals reveal
+stochastic telegraph-like switching between coexisting states, confirm-
+ing their metastable character.
+•FFT analysis indicates slow collective dynamics of the transverse re-
+46
+Figure S12: Photograph of the custom planar detectorMP (here: in Greek-
+cross configuration) used for electrical measurements. The device consists of
+a Cu-coated planar substrate with a four-contact geometry mounted on an
+insulating support. A microscope glass coverslip placed overthe active region
+mechanically flattens the liquid sample, enforcing a quasi-2D hydrated DNA
+layer. Electrical connections are made via shielded leads to minimize pickup
+and inter-channel cross-talk. A series shunt resistor visible in the supply line
+allows simultaneous determination of the longitudinal currentIxx from the
+measured voltage drop across the resistor.
+sponse, distinct from the narrow-band oscillatory photovoltaic mode
+shown in Fig. S8.
+•Simultaneous measurements of the transverse voltage and an indepen-
+dently acquired photovoltage (PV) channel (Fig. S11) reveal a coinci-
+dent threshold in the rangeB≈250–300 mT, where both observables
+undergo a marked reorganization. The PV signal, recorded on a phys-
+ically separate detection channel without electrical connection to the
+transport circuitry, becomes anticorrelated withVxy across this tran-
+sition, while the longitudinal voltage and current remain smooth and
+approximately ohmic (not shown).
+•The primary role of the magnetic field is to reshape the effective stabil-
+itylandscapeofthetransversestates, modulatingtheirrelativeoccupa-
+tion probabilities rather than inducing continuous transport behavior.
+Taken together, these results support the interpretation advanced in the
+47
+main text: the transverse response of hydrated DNA under magnetic-field
+excitation is governed by collective polarization dynamics featuring multi-
+ple metastable states. Discrete transverse voltage plateaus correspond to
+phase-locked attractors, while plateau-boundary regions reflect competition
+between neighboring attractors whose relative stability is tuned by the ex-
+ternal field. Telegraph switching arises only within those magnetic-field in-
+tervals where two attractors coexist and is therefore not a universal feature
+of the entire sweep. Over extended field ranges, a single attractor dominates,
+producing stable plateaus without observable switching. The coexistence of
+stationary plateau regions and localized switching windows reflects the in-
+trinsically multistable nature of the underlying polarization phase landscape.
+Thecombineduseofdwell-densitymaps, voltagehistograms, time-domain
+traces, and spectral analysis provides a coherent and self-consistent de-
+scription of the transverse dynamics across the full magnetic-field range.
+While analysis over the entire sweep highlights the robustness and recurrence
+of discrete transverse states, restriction to selected field intervals isolates
+the regime of strongest attractor competition and noise-activated switch-
+ing. These complementary approaches together reveal the magnetic-field-
+controlled evolution of a dissipative, multistable polarization field operat-
+ing under ambient experimental conditions. Notably, the observation of a
+synchronized transition in an electrically independent PV channel further
+supports the collective character of the transverse response and disfavors
+interpretations based on single-channel electrical artifacts or trivial current
+instabilities.
+48

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo enseñar a una computadora a distinguir galaxias en radioimágenes — bridge42worlds</title>
+    <meta name="description" content="Astrónomos crearon el algoritmo STRADAViT, que aprende a diferenciar galaxias viéndolas desde distintos ángulos, como un niño aprende a reconocer un gato. Esto acelerará el procesamiento de millones de imágenes y ayudará a comprender la evolución del universo.">
+    <meta property="og:title" content="Cómo enseñar a una computadora a distinguir galaxias en radioimágenes">
+    <meta property="og:description" content="El algoritmo aprende a reconocer formas de galaxias, como un niño aprende a reconocer animales, viéndolos desde diferentes ángulos.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/ai.jpg">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-03-31/2603.29660/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-03-31/2603.29660/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-03-31/2603.29660/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-03-31/2603.29660/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=31cc96c33f">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Cómo enseñar a una computadora a distinguir galaxias en radioimágenes", "description": "El algoritmo aprende a reconocer formas de galaxias, como un niño aprende a reconocer animales, viéndolos desde diferentes ángulos.", "inLanguage": "es", "datePublished": "2026-03-31", "url": "https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-03-31/2603.29660/ai.jpg", "author": [{"@type": "Person", "name": "Andrea DeMarco"}, {"@type": "Person", "name": "Ian Fenech Conti"}, {"@type": "Person", "name": "Hayley Camilleri"}, {"@type": "Person", "name": "Ardiana Bushi"}, {"@type": "Person", "name": "Simone Riggi"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2603.29660", "abstract": "STRADAViT es un framework de entrenamiento adicional de Vision Transformer en imágenes radioastronómicas para obtener un codificador transferible. Combina datos de cuatro levantamientos, aumentación específica de radio e inicialización ViT-MAE con tokens de registro; se admiten ramas reconstructiva, contrastiva y de dos etapas. La transferencia se evaluó mediante sondaje lineal y ajuste fino en los benchmarks RGZ DR1, LoTSS DR2 y MiraBest. Los modelos de dos etapas superan a ViT-MAE en Macro-F1 en todos los modos de sondaje lineal y en dos de tres durante el ajuste fino, con la mayor mejora en RGZ DR1. En comparación con DINOv2, la mejora es selectiva: la Macro-F1 promedio es mayor en LoTSS DR2 y RGZ DR1 (sondaje lineal), así como en MiraBest y RGZ DR1 (ajuste fino). La ablación con inicialización DINOv2 muestra la generalidad de la receta, pero se elige la versión ViT-MAE para el lanzamiento debido a un menor número de tokens y costos computacionales. Conclusión: la generación de vistas consciente de radio y el entrenamiento adicional por etapas proporcionan una adaptación de dominio más fuerte que los checkpoints ViT preentrenados."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/es/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-03-31/2603.29660/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-03-31/2603.29660/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/es/archive/2026-03-31/2603.29660/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-03-31/2603.29660/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Next article →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202603.29660">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ arriba</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Cómo enseñar a una computadora a distinguir galaxias en radioimágenes  <span class="express-badge" title="Versión exprés: basada en el resumen del autor, no en el texto completo">exprés</span></h1>
+            <button class="share-btn share-inline" title="Share" onclick="shareArticle('Cómo enseñar a una computadora a distinguir galaxias en radioimágenes','https://bridge42worlds.academy/lang/es/archive/2026-03-31/2603.29660/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "STRADAViT: Towards a Foundational Model for Radio Astronomy through Self-Supervised Transfer"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/es/authors/Andrea_DeMarco.html" class="text-author-link" data-author="Andrea DeMarco">Andrea DeMarco</a>, <a href="/lang/es/authors/Ian_Fenech_Conti.html" class="text-author-link" data-author="Ian Fenech Conti">Ian Fenech Conti</a>, <a href="/lang/es/authors/Hayley_Camilleri.html" class="text-author-link" data-author="Hayley Camilleri">Hayley Camilleri</a>, <a href="/lang/es/authors/Ardiana_Bushi.html" class="text-author-link" data-author="Ardiana Bushi">Ardiana Bushi</a>, <a href="/lang/es/authors/Simone_Riggi.html" class="text-author-link" data-author="Simone Riggi">Simone Riggi</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2603.29660" target="_blank" rel="noopener">2603.29660</a> · 2026-03-31 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/" target="_blank" rel="noopener">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 1 min</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/es/sections/astro-ph_IM.html" data-cat="astro-ph.IM" title="Diseño de detectores y telescopios, propuestas de experimentos. Astrofísica de laboratorio. Métodos para el análisis de datos, métodos estadísticos. Software, diseño de bases de datos.">Instrumentación</a> <a class="cat-badge" href="/lang/es/sections/cs_CV.html" data-cat="cs.CV" title="Procesamiento de imágenes, visión por computador, reconocimiento de patrones, y comprensión de escenas.">Visión por computador</a></div>
+        <div class="oneliner">El algoritmo aprende a reconocer formas de galaxias, como un niño aprende a reconocer animales, viéndolos desde diferentes ángulos.</div>
+        <div class="mosaic"><div class="gallery" data-count="4"><div class="gallery-stage"><button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button><button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button><a class="gallery-main" href="/lang/ru/archive/2026-03-31/2603.29660/ai.jpg" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-03-31/2603.29660/ai.jpg" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div><div class="gallery-thumbs"><button type="button" class="gallery-thumb is-active" data-i="0" data-src="/lang/ru/archive/2026-03-31/2603.29660/ai.jpg" data-cap="" aria-label="Image 1"><img src="/lang/ru/archive/2026-03-31/2603.29660/t_ai.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="1" data-src="/lang/ru/archive/2026-03-31/2603.29660/0.jpg" data-cap="Vistas de reconstrucción enmascarada de la rama de reconstrucción. La primera columna muestra el recorte original estandarizado (después de la" aria-label="Vistas de reconstrucción enmascarada de la rama de reconstrucción. La primera columna muestra el recorte original estandarizado (después de la"><img src="/lang/ru/archive/2026-03-31/2603.29660/0.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="2" data-src="/lang/ru/archive/2026-03-31/2603.29660/1.jpg" data-cap="Ejemplos multivista de la rama contrastiva producidos por nuestro aumentador en tiempo real. La primera columna muestra el estandarizado" aria-label="Ejemplos multivista de la rama contrastiva producidos por nuestro aumentador en tiempo real. La primera columna muestra el estandarizado"><img src="/lang/ru/archive/2026-03-31/2603.29660/1.jpg" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="3" data-src="/lang/ru/archive/2026-03-31/2603.29660/3.jpg" data-cap="A. DeMarco et al.: Preprint enviado a Elsevier, página 16 de 19" aria-label="A. DeMarco et al.: Preprint enviado a Elsevier, página 16 de 19"><img src="/lang/ru/archive/2026-03-31/2603.29660/3.jpg" alt="" loading="lazy"></button></div></div></div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>La radioastronomía está experimentando una avalancha de datos: millones de imágenes requieren clasificación automática. STRADAViT es una red neuronal basada en Vision Transformer, entrenada sin etiquetas (auto-supervisión) en una mezcla de imágenes de cuatro telescopios. Ha aprendido a determinar la forma de las fuentes de radio con más precisión que los modelos preentrenados ViT-MAE y DINOv2, especialmente en el proyecto RGZ. Además, necesita menos recursos computacionales. Analogía: así como un ornitólogo experimentado distingue aves por sus siluetas en la niebla, STRADAViT revela la estructura de las galaxias en datos de radio ruidosos.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:stefanboltzmann_law,l:virial_theorem,l:jeans_instability,s:Ludwig Boltzmann,s:Fritz Zwicky,s:James Jeans,s:William Borucki,s:Subrahmanyan Chandrasekhar"><canvas id="minigraph"></canvas></div>
+        <p class="express-locked-banner">📄 Mostrando la version "Simple" — "Popular" aun no esta lista. Anadelo a favoritos para ayudar a priorizarla.</p><p>Cada noche, los radiotelescopios traen millones de imágenes de <a href="/lang/es/tags/galaxy.html" class="text-tag" data-tag="galaxy">galaxias</a> lejanas. Manualmente, es imposible manejar tal flujo. Ya <a href="/lang/es/scientists/Edwin_Hubble.html" class="text-scientist" data-scientist="Edwin Hubble">Edwin Hubble</a> clasificaba galaxias por su forma, pero hoy los algoritmos inteligentes las reconocen más rápido. El problema es que los algoritmos necesitan muchos ejemplos etiquetados por humanos.</p><p>El método STRADAViT lo resuelve de otra manera, como si a un niño le enseñaran a reconocer un gato mostrándoselo desde diferentes ángulos. A la computadora también se le muestran las mismas galaxias, rotadas y con ruido. En lugar de memorizar la <a href="/lang/es/tags/photometry.html" class="text-tag" data-tag="photometry">luminosidad</a>, capta el patrón: curvas, chorros, nubes de <a href="/lang/es/tags/cosmic_dust.html" class="text-tag" data-tag="cosmic_dust">polvo</a>.</p><p>STRADAViT resultó ser más preciso que muchos otros métodos y requiere menos recursos. Se puede aplicar a diferentes telescopios. Esto ayudará a monitorear automáticamente cómo miles de millones de galaxias han cambiado con el tiempo. Y el objeto más impresionante encontrado de esta manera es la radiogalaxia gigante J1420-0545: su tamaño es de 16 millones de años luz. Si fuera visible a simple vista, ocuparía en el cielo un área equivalente a cinco lunas. Este enfoque continúa la labor iniciada accidentalmente por <a href="/lang/es/scientists/Karl_Jansky.html" class="text-scientist" data-scientist="Karl Jansky">Karl Jansky</a> en 1931.</p>
+        <div class="fun-fact"><p class="fact">🎯 STRADAViT no solo compara imágenes: aprende imaginando cómo se ve la misma galaxia desde diferentes lados, como si visualizara su forma tridimensional.</p></div>
+        
+        
+        <div class="actions actions-compact" data-article-id="2603.29660_es_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2603.29660" title="Favoritos"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment">+ add a comment</button>
+        </div>
+        <div class="feedback" id="feedback" data-article-id="2603.29660_es_popular" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/es/scientists/Ludwig_Boltzmann.html" class="side-sci" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a><a href="/lang/es/scientists/Fritz_Zwicky.html" class="side-sci" data-scientist="Fritz Zwicky">Fritz Zwicky</a><a href="/lang/es/scientists/James_Jeans.html" class="side-sci" data-scientist="James Jeans">James Jeans</a><a href="/lang/es/scientists/William_Borucki.html" class="side-sci" data-scientist="William Borucki">William Borucki</a><a href="/lang/es/scientists/Subrahmanyan_Chandrasekhar.html" class="side-sci" data-scientist="Subrahmanyan Chandrasekhar">Subrahmanyan Chandrasekhar</a><a href="/lang/es/scientists/Adam_Riess.html" class="side-sci" data-scientist="Adam Riess">Adam Riess</a><div class="side-tags-label">Tags</div><a href="/lang/es/tags/galaxy.html" class="side-tag" data-tag="galaxy">galaxia</a>
+<a href="/lang/es/tags/cosmic_dust.html" class="side-tag" data-tag="cosmic_dust">polvo cósmico</a>
+<a href="/lang/es/tags/photometry.html" class="side-tag" data-tag="photometry">fotometría</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/stefanboltzmann_law.html" class="side-law" data-law="stefanboltzmann_law">Ley de Stefan-Boltzmann</a><a href="/lang/es/laws/virial_theorem.html" class="side-law" data-law="virial_theorem">teorema del virial</a><a href="/lang/es/laws/jeans_instability.html" class="side-law" data-law="jeans_instability">inestabilidad de Jeans</a></div>
+</div>
+
+<script src="/js/likes.js?v=31cc96c33f"></script>
+<script src="/js/search.js?v=31cc96c33f"></script>
+<script src="/js/scroll.js?v=31cc96c33f"></script>
+<script src="/js/lightbox.js?v=31cc96c33f"></script>
+<script src="/js/gallery.js?v=31cc96c33f"></script>
+<script src="/js/force-graph.js?v=31cc96c33f"></script>
+<script src="/js/mini-graph.js?v=31cc96c33f"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2603.29660', 'article', 'es');
+    if (true && window.logExpressInterest) logExpressInterest('2603.29660', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>
