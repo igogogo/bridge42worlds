@@ -6,6 +6,10 @@ let authorsGraph = {};
 // Уровни сложности: popular (по умолчанию) → simple → advanced.
 var VERSION_INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
                             advanced: 'articles-index-advanced.json' };
+// Маленький индекс последних статей (~60 записей) — для мгновенной первой ленты, пока
+// полный тир (~3.6МБ) едет в фоне.
+var VERSION_INDEX_LATEST_FILES = { popular: 'articles-latest.json', simple: 'articles-latest-simple.json',
+                                   advanced: 'articles-latest-advanced.json' };
 let currentVersion = (function() {
     try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; }
 })();
@@ -71,21 +75,21 @@ var UI_STRINGS = {
     ru: { tagNotFound: 'Тег не найден', selectTag: 'Выберите тег:', scientistNotFound: 'Учёный не найден',
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
-          express: 'экспресс', expressTip: 'Экспресс-версия: по аннотации автора, без разбора полного текста статьи',
+          express: 'экспресс', expressTip: 'Экспресс: быстрый пересказ по авторской аннотации. Полные статьи мы пишем по всему тексту работы — глубже и подробнее.',
           hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
-          express: 'express', expressTip: 'Express version: based on the author\'s abstract, not the full paper text',
+          express: 'express', expressTip: 'Express: a quick take from the author\'s abstract only. Full articles are written from the whole paper — deeper and more detailed.',
           hideExpress: 'Hide express articles', showLess: 'Collapse',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
-          express: 'exprés', expressTip: 'Versión exprés: basada en el resumen del autor, no en el texto completo',
+          express: 'exprés', expressTip: 'Exprés: un resumen rápido solo del abstract del autor. Los artículos completos se escriben a partir de todo el texto.',
           hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor' },
@@ -105,7 +109,7 @@ var UI_STRINGS = {
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
-          express: 'سريع', expressTip: 'نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل',
+          express: 'سريع', expressTip: 'سريع: ملخّص سريع من خلاصة المؤلف فقط. أما المقالات الكاملة فتُكتب من النص الكامل — أعمق وأكثر تفصيلاً.',
           hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر' }
@@ -229,8 +233,30 @@ function fetchIndex(version) {
 // текущего тира (нужен для видимой ленты прямо сейчас) — отрисовываем немедленно; всё
 // остальное (два других тира для переключалки сложности, теги/учёные/законы для тултипов,
 // граф авторов) грузится ПАРАЛЛЕЛЬНО, но не блокирует первую отрисовку.
-fetchIndex(effVersion()).then(function(primary) {
-    searchIndex = primary;
+// Двухступенчатая загрузка ленты. Шаг 1: крошечный latest-индекс (~60 свежих записей, ~150КБ)
+// рисует ленту почти мгновенно, не дожидаясь полного тира (~3.6МБ) — юзер 2026-07-23: «долго
+// грузится первый раз». Фильтры/календарь/статистика/поиск требуют полного набора, поэтому
+// висят до шага 2, но пользователь уже видит ленту. На избранном latest не нужен — там свой
+// источник (localStorage), сразу грузим полный.
+function fetchLatest(version) {
+    return fetch('/lang/' + lang + '/' + VERSION_INDEX_LATEST_FILES[version])
+        .then(function(r) { if (!r.ok) throw 0; return r.json(); });
+}
+
+var _fullIndexPromise = fetchIndex(effVersion());  // стартуем полный индекс сразу, параллельно latest
+
+if (!window.__favoritesPage) {
+    fetchLatest(effVersion()).then(function(latest) {
+        if (searchIndex.length) return;   // полный уже успел прийти — latest не нужен
+        searchIndex = latest;
+        window.searchIndex = searchIndex;
+        var container = document.getElementById('search-results');
+        if (container && !document.querySelector('.search-box')?.value) _defaultFeed();
+    }).catch(function() {});
+}
+
+_fullIndexPromise.then(function(primary) {
+    searchIndex = primary;   // полный индекс заменяет latest — лента, поиск, фильтры на полном наборе
     window.searchIndex = searchIndex;
 
     var container = document.getElementById('search-results');
@@ -330,19 +356,41 @@ function ensureAuthorsGraph() {
 }
 window.ensureAuthorsGraph = ensureAuthorsGraph;
 
-var STATS_LABELS = {
-    ru: ['статей', 'авторов', 'учёных'], en: ['articles', 'authors', 'scientists'],
-    zh: ['篇文章', '位作者', '位科学家'], fr: ['articles', 'auteurs', 'scientifiques'],
-    ar: ['مقالات', 'مؤلفين', 'علماء']
+// Служебная строка-статистика: всё в ОДНУ строку через « / » (юзер 2026-07-24) — статьи (полные +
+// express), законы, теги, разделы, учёные, авторы, языки. Ключи-подписи локализованы.
+var STATS_LABELS2 = {
+    ru: {articles:'статей', full:'полных', express:'экспресс', laws:'законов', tags:'тегов', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
+    en: {articles:'articles', full:'full', express:'express', laws:'laws', tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
+    es: {articles:'artículos', full:'completos', express:'exprés', laws:'leyes', tags:'etiquetas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
+    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين', tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'}
 };
 function renderSiteStats() {
     var el = document.getElementById('site-stats');
     if (!el) return;
-    var L = STATS_LABELS[lang] || STATS_LABELS.en;
-    var uniq = {};
-    searchIndex.forEach(function(a){ uniq[a.id] = 1; });
-    var nA = Object.keys(uniq).length, nAu = Object.keys(authorsGraph || {}).length, nS = Object.keys(scientistsData || {}).length;
-    el.innerHTML = '<b>' + nA + '</b> ' + L[0] + ' · <b>' + nAu + '</b> ' + L[1] + ' · <b>' + nS + '</b> ' + L[2];
+    var L = STATS_LABELS2[lang] || STATS_LABELS2.en;
+    var uniq = {}, express = 0;
+    searchIndex.forEach(function(a){ if (!uniq[a.id]) { uniq[a.id] = 1; if (a.express) express++; } });
+    var nA = Object.keys(uniq).length, full = nA - express;
+    var nL = Object.keys(window.lawsData || {}).length;
+    var nT = Object.keys(window.tagsLoc || {}).length;
+    var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
+    var nS = Object.keys(window.scientistsData || {}).length;
+    var nAu = Object.keys(window.authorsGraph || {}).length;
+    var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
+    function part(n, w){ return '<b>' + n + '</b> ' + w; }
+    var bits = [
+        part(nA, L.articles) + ' (' + full + ' ' + L.full + ' · ' + express + ' ' + L.express + ')',
+        part(nL, L.laws), part(nT, L.tags), part(nSec, L.sections),
+        part(nS, L.scientists), part(nAu, L.authors), part(nLang, L.langs)
+    ];
+    el.innerHTML = bits.join(' / ');
+    if (!el.dataset.builtLoaded) {
+        el.dataset.builtLoaded = '1';
+        var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث'}[lang] || 'updated';
+        fetch('/data/build-info.json').then(function(r){ return r.json(); }).then(function(b){
+            if (b && b.built) el.innerHTML += ' <span class="stats-built">/ ' + upd + ' ' + b.built + '</span>';
+        }).catch(function(){});
+    }
 }
 
 function parseSearchQuery(query) {
@@ -796,8 +844,21 @@ function updateSearchRowVisibility() {
 }
 
 function showLatest() {
-    feed.items = applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); }))
-        .sort(function(a, b) { return b.date.localeCompare(a.date); });
+    // Порядок ленты (юзер 2026-07-24): сначала ПОЛНЫЕ статьи, потом express; внутри — новые сверху.
+    // Плюс верхние ~10 перемешиваем при каждой загрузке, чтобы лента не была одинаковой и скучной
+    // («первые случайные, потом по дате»). Math.random здесь — обычный клиентский код, ок.
+    var arr = applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); }))
+        .sort(function(a, b) {
+            var ae = a.express ? 1 : 0, be = b.express ? 1 : 0;
+            if (ae !== be) return ae - be;
+            return b.date.localeCompare(a.date);
+        });
+    var topN = Math.min(10, arr.length);
+    for (var i = topN - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    feed.items = arr;
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
     if (c) c.innerHTML = feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
@@ -1142,7 +1203,7 @@ function collapseNavOverflow() {
     if (hasActive) btn.classList.add('active');
 
     // About и Архив живут в футере, но в шапочном меню их не было — добавляем (юзер 2026-07-22).
-    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'archive']].forEach(function(e) {
+    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'dashboard']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];
@@ -1204,6 +1265,37 @@ function collapseNavOverflow() {
     });
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
+
+// Настройки мини-графа (типы узлов/связей/глубина) свёрнуты в подменю за кнопкой-шестерёнкой
+// (юзер 2026-07-24: «убрать в подменю, места много занимает»). Клик раскрывает .mini-graph-filters.
+document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('.mg-config-toggle') : null;
+    if (!t) return;
+    var panel = t.nextElementSibling;
+    if (panel && panel.classList.contains('mini-graph-filters')) {
+        panel.hidden = !panel.hidden;
+        t.classList.toggle('open', !panel.hidden);
+    }
+});
+
+// Шапка .top-bar сама sticky (top:0). Закреплённая строка языков должна вставать ПОД ней, а не
+// налезать (юзер 2026-07-23: «языки должны встать под верхнее меню, оно тоже морозится»). Высота
+// шапки плавает (десктоп — одна строка, мобилка переносит), поэтому меряем вживую и кладём в
+// --stick-top, к которому привязан top у .langs / .langs-row. Пересчитываем на ресайз.
+(function () {
+    function syncStickTop() {
+        var tb = document.querySelector('.top-bar');
+        var h = tb ? Math.round(tb.getBoundingClientRect().height) : 0;
+        document.documentElement.style.setProperty('--stick-top', h + 'px');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        syncStickTop();
+        // ☰-сворачивание меняет высоту шапки — пересчитать после него и после подхвата шрифтов
+        setTimeout(syncStickTop, 60);
+    });
+    window.addEventListener('resize', syncStickTop);
+    window.addEventListener('load', syncStickTop);
+})();
 
 // ── Поиск на главной — свёрнут в 🔍-кнопку рядом с 📅 (тот же паттерн выпадашки) ──────────
 // Юзер-фидбек 2026-07-17: поле+подсказка+фильтр экспресс-статей были 2 постоянно открытые

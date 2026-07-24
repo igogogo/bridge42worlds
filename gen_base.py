@@ -60,6 +60,10 @@ VERSION_DISPLAY_ORDER = ["advanced", "popular", "simple"]
 VERSION_FILES = {"popular": "index.html", "simple": "simple.html", "advanced": "advanced.html", "mini": "mini.html"}
 VERSION_INDEX = {"popular": "articles-index.json", "simple": "articles-index-simple.json",
                  "advanced": "articles-index-advanced.json"}
+# Маленький индекс последних статей — для мгновенной первой отрисовки ленты (полный тир ~3.6МБ).
+VERSION_INDEX_LATEST = {"popular": "articles-latest.json", "simple": "articles-latest-simple.json",
+                        "advanced": "articles-latest-advanced.json"}
+LATEST_INDEX_N = 60
 # Откат контента, если версии нет (старые статьи без popular): popular→simple→advanced.
 VERSION_FALLBACK = {"popular": ["popular", "simple", "advanced"],
                     "simple": ["simple", "advanced"], "advanced": ["advanced"],

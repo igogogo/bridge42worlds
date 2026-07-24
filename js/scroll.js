@@ -77,10 +77,22 @@ function renderRelated(currentId, lang, version) {
         .sort(function(p,q){ return q.s - p.s || q.a.date.localeCompare(p.a.date); })
         .slice(0, 3);
     if (!scored.length) return;
+    // Похожие статьи — те же карточки-подложки с миниатюрой, что на страницах тега/закона/учёного
+    // (юзер 2026-07-24: «related как в карточках тегов, на плашках с картинкой»).
     box.innerHTML = '<h3 class="related-h">' + (box.dataset.label || 'Related') + '</h3>' +
         scored.map(function(x){
-            var ol = x.a.oneliner ? '<span class="related-oneliner">' + x.a.oneliner + '</span>' : '';
-            return '<a href="' + urlForVersion(x.a.url, version) + '" class="related-item">' + x.a.title + ol + '</a>';
+            var a = x.a;
+            var base = '/lang/' + (typeof defaultLang !== 'undefined' ? defaultLang : lang) + '/archive/' + a.date + '/' + a.id + '/';
+            var hasImg = a.image !== false;
+            var thumb = hasImg ? ('<a class="card-img-wrap" href="' + urlForVersion(a.url, version) + '">' +
+                '<img src="' + base + 't_ai.jpg" data-fb="' + base + 'ai.jpg" loading="lazy" ' +
+                'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt=""></a>') : '';
+            var ol = a.oneliner ? '<div class="oneliner">' + a.oneliner + '</div>' : '';
+            return '<article class="article-card">' +
+                '<div class="card-eyebrow"><span class="card-date">' + a.date + '</span></div>' +
+                thumb +
+                '<div class="card-body"><h3><a href="' + urlForVersion(a.url, version) + '" title="' + (a.title || '').replace(/"/g, '&quot;') + '">' + a.title + '</a></h3>' +
+                ol + '</div></article>';
         }).join('');
 }
 

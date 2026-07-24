@@ -33,15 +33,6 @@
             <a href="/lang/$lang/favorites.html" title="$fav_title"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
         </div>
         $tag_version_toggle
-    </div>
-</div>
-
-<div class="langs" id="langs-bar"></div>
-
-<div class="tag-header">
-    $ai_cover_html
-    <div class="tag-title-row">
-        <h1>$tag_name</h1>
         <div class="search-bar">
             <button type="button" id="search-toggle-btn" class="cal-btn" title="$search_placeholder"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
             <div class="search-panel" id="search-panel">
@@ -52,6 +43,16 @@
                 <div class="search-hint">$search_hint</div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    $ai_cover_html
+    <div class="tag-title-row">
+        <h1>$tag_name</h1><button class="share-inline" title="$share_label" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
     </div>
     $tag_stats_html
     <div class="tag-ver" data-ver="mini" style="display:none">
@@ -80,12 +81,12 @@
 
 <div class="entity-wrapper">
 <div class="entity-body">
+<div class="mini-graph-config">$mini_graph_filters_html</div>
+<div class="mini-graph" data-node="t:$tag_id"><canvas id="minigraph"></canvas></div>
+
 $actions_html
 $feedback_html
 
-<div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> $graph_mini_label <span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>
-<div class="mini-graph-filters">$mini_graph_filters_html</div>
-<div class="mini-graph" data-node="t:$tag_id"><canvas id="minigraph"></canvas></div>
 
 <div class="filters" id="active-filters"></div>
 </div>

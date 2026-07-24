@@ -271,8 +271,15 @@ body.graph-fs-open { overflow: hidden; }
    вылезти за край рамки (юзер-фидбек 2026-07-15: "рамка шире... двигает правый край"). */
 .mini-graph-filters {
     max-width: 620px; margin: 4px 0 0; font-size: 11px; color: var(--soft);
-    display: flex; flex-wrap: wrap; gap: 6px 12px;
+    display: flex; flex-wrap: wrap; gap: 6px 10px;
 }
+/* Типы связей (mg-edges) на узкой колонке карточки учёного/закона разъезжались на 3 строки и
+   выглядели рвано (юзер 2026-07-23). Своя строка с равномерной сеткой: сколько влезет в ряд —
+   влезет, а не хаотичный перенос; подписи компактнее. */
+.mini-graph-filters .mg-edges {
+    flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 5px;
+}
+.mini-graph-filters .mg-edge-label { white-space: nowrap; }
 .mini-graph-filters:empty { display: none; }
 .mini-graph-filters label { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }
 .mini-graph-filters input[type="checkbox"] { width: 12px; height: 12px; }
@@ -1137,8 +1144,9 @@ html[dir="rtl"] .card-date { margin-left: 0; margin-right: 8px; }
    "следующая статья поставить надо с отзывами, как раз на строку в которой было написано
    как читается") — .next-btn-top тут уже компактная однострочная пилюля, влезает без переноса. */
 .feedback .fb-title-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 8px;
 }
+html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
 .feedback .fb-title-row .next-btn-top { flex-shrink: 0; }
 .feedback .fb-title { font-size: 13px; color: var(--muted, #888); }
 .feedback .fb-chips {
@@ -1600,14 +1608,26 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 .actions-compact .react-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(46,138,160,.12); }
 .actions-compact .fav-btn.active { color: var(--ochre); border-color: var(--ochre); background: rgba(199,127,58,.12); }
 .actions-compact .fav-btn.active .ico-svg { fill: var(--ochre); }
+/* «+ комментарий» вплотную к лайкам (юзер 2026-07-23: «прижать к лайкам»), не к правому краю. */
+.actions-compact .actions-comment { padding: 0 4px; white-space: nowrap; }
 
 /* Меню-гамбургер: пункты без подчёркивания (юзер 2026-07-22) */
 .nav-more-panel a { text-decoration: none; }
 .nav-more-panel a:hover { text-decoration: none; }
 
 /* ── Точечные фиксы 2026-07-23 ── */
-/* Строка языков — закрепляется при прокрутке */
-.langs { position: sticky; top: 0; z-index: 40; background: var(--bg); padding: 6px 0; margin-top: 6px; }
+/* Строка языков — закрепляется при прокрутке. На статье в неё же вынесена кнопка «следующая
+   статья» (юзер 2026-07-23: «next в ту же строку с языками и заморозить»). */
+.langs { position: sticky; top: var(--stick-top, 0px); z-index: 40; background: var(--bg); padding: 6px 0; margin-top: 6px; }
+/* Та же коробка, что и .article-main (max-width 680px, правый паддинг), чтобы правый конец
+   кнопки next совпадал с правым краем текста статьи, а не с краем окна (юзер 2026-07-23). */
+.langs-row { position: sticky; top: var(--stick-top, 0px); z-index: 40; background: var(--bg);
+    max-width: 620px; padding: 4px 0; margin: 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.langs-row .langs { position: static; padding: 0; margin: 0; z-index: auto; flex: 1 1 auto; }
+.langs-row .next-btn-top { flex: none; }
+/* Контент ближе к шапке: убираем лишний верхний воздух над названием (юзер 2026-07-23). */
+.article-main { padding-top: 8px; }
 /* Карточка ленты: дата ↔ express-бейдж — единый зазор через flex-gap (чинит слипание в RTL/ar) */
 .card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .card-eyebrow .card-date { margin: 0 !important; }
@@ -1619,6 +1639,24 @@ html[dir="rtl"] .fb-title-row { justify-content: flex-start; }
 .section:empty, .tag-ver .section:empty { display: none; }
 /* Поиск — просто поле, без подсказки «как искать по тегам/авторам» (юзер 2026-07-23) */
 .search-hint { display: none; }
+/* Лоадер: пока данные едут, вместо пустого места — крутящийся брендовый мостик-кольцо и подпись.
+   Юзер 2026-07-23: «пока грузится пустое место, чтоб понятно было — каунтер». */
+@keyframes b42-spin { to { transform: rotate(360deg); } }
+.b42-loader { display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 48px 20px; color: var(--soft); font-family: var(--mono); font-size: 12px;
+    letter-spacing: .1em; text-transform: uppercase; }
+.b42-loader::before { content: ''; width: 34px; height: 34px; border-radius: 50%;
+    border: 2.5px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+    border-top-color: var(--cyan); animation: b42-spin .8s linear infinite; }
+#kg-graph { position: relative; }
+.kg-loader { position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px; color: var(--soft);
+    font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    pointer-events: none; z-index: 5; transition: opacity .3s; }
+.kg-loader::before { content: ''; width: 40px; height: 40px; border-radius: 50%;
+    border: 2.5px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+    border-top-color: var(--cyan); animation: b42-spin .8s linear infinite; }
+.kg-loader.done { opacity: 0; }
 /* Шапка: ☰ вплотную к названию сайта, поиск/календарь и остальной кластер — вправо
    (юзер 2026-07-23). ☰ теперь прямой ребёнок .brand-row/.top-bar, см. collapseNavOverflow(). */
 .brand-row > .nav-more, .top-bar > .nav-more { margin-inline-start: 2px; flex-shrink: 0; }
@@ -1634,7 +1672,13 @@ html[dir="rtl"] .fb-title-row { justify-content: flex-start; }
 html[dir="rtl"] .cal-head.cal-y::before { left: auto; right: 4px; }
 html[dir="rtl"] .cal-head.cal-y .cal-cnt { right: auto; left: 6px; }
 /* Чипы разделов: первый — вровень с левой границей колонки (без лишнего паддинга) */
-.category-bar .cat-chip:first-child { padding-left: 0; }
+/* Строгое выравнивание разделов по левому краю языков/статистики: чипы имеют padding-left:9px,
+   поэтому текст стартует на 9px правее края. Раньше обнуляли только :first-child — но это лишь
+   ПЕРВЫЙ чип во всём списке, а первый чип каждой перенесённой строки оставался с отступом, из-за
+   чего первая строка «выходила влево» относительно нижних (юзер 2026-07-24). Правильно — сдвинуть
+   ВЕСЬ бар на величину паддинга: тогда текст первого чипа КАЖДОЙ строки встаёт ровно на край. */
+.category-bar { margin-left: -9px; }
+html[dir="rtl"] .category-bar { margin-left: 0; margin-right: -9px; }
 html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding-right: 0; }
 
 /* Граф: контрол глубины «−/+» → круглые иконки-кнопки (было «грустно») */
@@ -1662,3 +1706,105 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
 .section-group:first-child td { border-top: none; padding-top: 4px; }
 .section-group-code { font-family: var(--mono); font-weight: 700; color: var(--ink); }
 .section-group-name { color: var(--muted); font-size: .92em; margin-left: 6px; }
+
+/* ── Никаких горизонтальных линий-разделителей в контенте (юзер 2026-07-23: «в нашем дизайне
+   больше нет горизонтальных линий»). Разделявшие блоки border-top/bottom заменены на воздух —
+   отступы уже заданы. НЕ трогаем: дробь-формулы (.frac-line), рамки-карточки (.mini-graph,
+   .law-type — это скруглённые боксы, не линии), хайрлайн хедера/футера. ── */
+.formula, .formula + .formula,
+.key-numbers, .impact, .fun-fact, .fun-fact .fact + .fact,
+.quote, .practical-app, .feed-day, .tag-stats {
+    border-top: none; border-bottom: none;
+}
+.formula + .formula { margin-top: 8px; }
+
+/* ── Унификация карточек (юзер 2026-07-23): статья/тег/закон/учёный к одному виду ── */
+/* Заголовок + иконка «поделиться» (типовая стрелка-выгрузка) в одной строке, иконка после названия */
+.title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.title-row h1 { margin: 0; flex: 1 1 auto; }
+.share-inline { flex: none; background: none; border: 1px solid var(--hair); border-radius: 999px;
+    padding: 6px; cursor: pointer; color: var(--soft); line-height: 0; margin-top: 4px;
+    transition: color .16s, border-color .16s; }
+.share-inline:hover { color: var(--link); border-color: var(--link); }
+.share-inline .ico-svg { width: 1.15em; height: 1.15em; }
+/* Разделы arXiv — своя строка под метой */
+.meta-cats { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+/* Мини-граф: две плотные строки — галки типов (+ глубина −1+ справа) и список связей.
+   Колоночная раскладка с маленьким gap убирает большой зазор между строками; рёбра мельче,
+   чтобы влезали в одну строку на широкой колонке (юзер 2026-07-23). */
+.mini-graph-filters { display: flex; flex-direction: column; gap: 3px; }
+.mg-kinds { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 12px; }
+.mg-kinds .mini-depth-ctrl { margin-inline-start: auto; }
+.mini-graph-filters .mg-edges { display: flex; flex-wrap: wrap; gap: 2px 7px; margin-top: 0; font-size: 10px; }
+/* Похожие статьи в статье — те же подложки .article-card, что и на карточках-справочниках */
+.related .article-card { margin: 8px 0; }
+.related-h { margin-top: 20px; }
+
+/* Настройки мини-графа — свёрнуты за кнопкой-шестерёнкой (юзер 2026-07-24), экономит место */
+.mg-config-toggle { background: none; border: 1px solid var(--hair); border-radius: 999px;
+    padding: 3px 12px; font-family: var(--mono); font-size: 11px; color: var(--soft); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; margin: 10px 0 2px;
+    transition: color .16s, border-color .16s; }
+.mg-config-toggle:hover, .mg-config-toggle.open { color: var(--link); border-color: var(--link); }
+.mg-config-toggle .ico-graph { width: 1em; height: 1em; }
+.mini-graph-filters[hidden] { display: none; }
+/* Боковые колонки поднимаем к строке меню и морозим там (юзер 2026-07-24). На десктопе они уже
+   position:fixed (заморожены), просто опускались на уровень заголовка — поднимаем top к высоте
+   шапки (--stick-top). Правит и .article-nav (левая), и .article-side (правая), и на entity. */
+@media (min-width: 1280px) {
+    .article-side, .entity-wrapper .article-side, .article-nav {
+        /* +44px: ниже и шапки, и закреплённой строки языков — иначе верх правого меню
+           заслонялся ими (юзер 2026-07-24: «чуть вниз опустить»). */
+        top: calc(var(--stick-top, 47px) + 44px) !important;
+        max-height: calc(100vh - var(--stick-top, 47px) - 56px) !important;
+    }
+}
+
+/* Заголовки в списках статей чуть компактнее; полное название — в title при наведении (юзер 2026-07-24) */
+.article-card .card-body h3, .article-card .card-content h3 { font-size: 15.5px; line-height: 1.35; }
+.stats-built { color: var(--faint); }
+
+/* ── Дашборд-витрина (/archive) ── */
+#dashboard { max-width: 900px; }
+.dash-h1 { font-family: var(--serif, Georgia, serif); font-size: clamp(24px, 5vw, 34px); margin: 12px 0 18px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 26px; }
+.kpi { background: var(--surface); border: 1px solid var(--hair); border-radius: 14px; padding: 14px 16px; }
+.kpi-n { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.kpi-l { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.kpi-s { font-size: 11px; color: var(--soft); margin-top: 4px; }
+.dash-block { margin: 0 0 30px; }
+.dash-block h2 { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ochre); margin: 0 0 12px; }
+/* Тепловая карта */
+.heatmap { display: flex; flex-direction: column; gap: 3px; overflow-x: auto; }
+.heat-row { display: flex; align-items: center; gap: 8px; }
+.heat-m { font-family: var(--mono); font-size: 10.5px; color: var(--soft); width: 52px; flex: none; }
+.heat-days { display: flex; gap: 2px; }
+.heat-cell { width: 12px; height: 12px; border-radius: 2px; border: 1px solid var(--hair); flex: none; transition: transform .1s; }
+.heat-cell:hover { transform: scale(1.35); border-color: var(--cyan); }
+/* Бары динамики */
+.bars { display: flex; align-items: flex-end; gap: 3px; height: 130px; overflow-x: auto; padding-top: 6px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1 1 0; min-width: 16px; height: 100%; }
+.bar-stack { width: 70%; min-height: 2px; display: flex; flex-direction: column; border-radius: 3px 3px 0 0; overflow: hidden; }
+.bar-f { background: var(--cyan); } .bar-e { background: color-mix(in srgb, var(--ochre) 70%, transparent); }
+.bar-x { font-family: var(--mono); font-size: 8.5px; color: var(--soft); margin-top: 3px; transform: rotate(-45deg); white-space: nowrap; }
+.bar-legend { font-size: 11px; color: var(--soft); margin-top: 14px; }
+.lg { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin: 0 3px 0 8px; }
+.lg-f { background: var(--cyan); } .lg-e { background: color-mix(in srgb, var(--ochre) 70%, transparent); }
+/* Горизонтальные бары разделов */
+.hbars { display: flex; flex-direction: column; gap: 6px; }
+.hbar { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.hbar-l { font-family: var(--mono); width: 90px; flex: none; color: var(--muted); }
+.hbar-t { flex: 1; height: 10px; background: var(--card); border-radius: 999px; overflow: hidden; }
+.hbar-fill { display: block; height: 100%; background: var(--grad, var(--cyan)); }
+.hbar-n { font-family: var(--mono); font-size: 11px; color: var(--soft); width: 40px; text-align: right; flex: none; }
+/* Кухня: обложки */
+.cover-bar { height: 12px; background: var(--card); border-radius: 999px; overflow: hidden; }
+.cover-fill { display: block; height: 100%; background: var(--grad, var(--cyan)); }
+.cover-legend { font-size: 12px; color: var(--muted); margin-top: 8px; }
+/* Топ-чипы */
+.dash-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.dash-chip { font-size: 12px; padding: 4px 10px; border: 1px solid var(--hair); border-radius: 999px; color: var(--muted); text-decoration: none; transition: color .15s, border-color .15s; }
+.dash-chip:hover { color: var(--link); border-color: var(--link); }
+.dash-chip b { color: var(--ink); font-weight: 700; }
+.dash-built { font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 20px; }
+html[dir="rtl"] .bar-x { transform: rotate(45deg); }

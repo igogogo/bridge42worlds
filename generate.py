@@ -437,7 +437,12 @@ FEEDBACK_UI_LOC = {
 }
 
 
-def build_feedback_html(like_id, lang, entity_type="article", next_button_html=""):
+def feedback_comment_label(lang):
+    """Подпись кнопки «+ комментарий» — нужна и снаружи (когда кнопка живёт в строке лайков статьи)."""
+    return FEEDBACK_UI_LOC.get(lang, ("", "+ add a comment", "", ""))[1]
+
+
+def build_feedback_html(like_id, lang, entity_type="article", next_button_html="", inline_toggle=False):
     fb_title, fb_comment_lbl, fb_placeholder, fb_send = FEEDBACK_UI_LOC.get(
         lang, ("How does it read?", "+ add a comment",
                "comments are reviewed in batches — we may update the article", "send"))
@@ -445,11 +450,13 @@ def build_feedback_html(like_id, lang, entity_type="article", next_button_html="
     # Разгружено (юзер-фидбек 2026-07-21: «How does it read? — лишний текст; выбор ответов убрать
     # внутрь открывающегося add comment, а то перегруз»). В покое видна только кнопка «+ комментарий»
     # (и, на статье, кнопка «след. статья»); по клику раскрывается .fb-expand с чипами + полем + отправкой.
-    # fb_title больше не рендерится. Строка-заголовок остаётся только чтобы держать кнопку «след. статья».
+    # inline_toggle=True: кнопку «+ комментарий» рисует не тут, а строка лайков статьи (юзер
+    # 2026-07-23: «+ add a comment справа от лайков, а не под next article»); здесь только раскрытие.
     title_row = f'<div class="fb-title-row">{next_button_html}</div>' if next_button_html else ''
+    toggle = '' if inline_toggle else f'<button type="button" class="fb-comment-toggle">{safe(fb_comment_lbl)}</button>'
     return (f'<div class="feedback" id="feedback" data-article-id="{like_id}" data-entity-type="{entity_type}">'
             f'{title_row}'
-            f'<button type="button" class="fb-comment-toggle">{safe(fb_comment_lbl)}</button>'
+            f'{toggle}'
             f'<div class="fb-expand" hidden>'
             f'<div class="fb-chips">{fb_chips}</div>'
             f'<textarea class="fb-comment" rows="2" placeholder="{attr_safe(fb_placeholder)}"></textarea>'
@@ -462,6 +469,10 @@ def build_feedback_html(like_id, lang, entity_type="article", next_button_html="
 ACTIONS_LOC = {
     "ru": "избранное", "en": "favorite", "zh": "收藏", "fr": "favori", "ar": "مفضلة",
 }
+SHARE_LABEL = {"ru": "Поделиться", "en": "Share", "es": "Compartir", "ar": "مشاركة",
+               "fr": "Partager", "zh": "分享"}
+def share_label_for(lang):
+    return SHARE_LABEL.get(lang, SHARE_LABEL["en"])
 NAV_FAV_LOC = {
     "ru": "Избранное", "en": "Favorites", "zh": "收藏夹", "fr": "Favoris", "es": "Favoritos", "ar": "المفضلة",
 }
@@ -573,7 +584,19 @@ def mini_graph_filters_html(lang, center_kind="tag"):
     if center_kind is None:
         kind_boxes += kind_box("cat", "#C9A227", loc.get("categories", "categories"))
         edge_boxes += edge_box("tag-cat", loc.get("edge_tag_cat", "tag↔category"), False)
-    return kind_boxes + f'<div class="mg-edges">{edge_boxes}</div>'
+    # Контрол глубины (−1+) — в правом крае строки галок типов.
+    depth = ('<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
+             '<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span>')
+    # Настройки представления графа свёрнуты в подменю (юзер 2026-07-24: «убрать в подменю, а то
+    # места много занимает»). По умолчанию скрыто; раскрывается кнопкой-шестерёнкой. Это же снимает
+    # проблему «связи не влезают в строку» — их просто не видно, пока не открыл. Единый вид на ВСЕХ
+    # карточках (статья/тег/закон/учёный) — функция общая.
+    cfg_lbl = MINI_CONFIG_LABEL.get(lang, MINI_CONFIG_LABEL["en"])
+    return (f'<button type="button" class="mg-config-toggle">{GRAPH_ICO} {safe(cfg_lbl)}</button>'
+            f'<div class="mini-graph-filters" hidden>'
+            f'<div class="mg-kinds">{kind_boxes}{depth}</div>'
+            f'<div class="mg-edges">{edge_boxes}</div>'
+            f'</div>')
 
 
 def build_og_meta(title, description, url, image_url=""):
@@ -603,11 +626,34 @@ ICON_STAR = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="curre
              'stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">'
              '<path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg>')
 
-def build_actions_html(like_id, fav_id, lang, entity_type="article"):
+def entity_article_card(a, lang):
+    """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
+    лентой: миниатюра-обложка + название + короткий текст (юзер 2026-07-24: «список с картинками
+    как в тегах, единообразно»). Раньше тут была голая .card-content без картинки."""
+    base = f"/{LANG_DIR}/{DEFAULT_LANG}/archive/{a['date']}/{a['id']}/"
+    has_img = a.get("image") is not False
+    thumb = (f'<a class="card-img-wrap" href="{a["url"]}"><img src="{base}t_ai.jpg" '
+             f'data-fb="{base}ai.jpg" loading="lazy" '
+             f"onerror=\"if(this.dataset.fb){{this.src=this.dataset.fb;this.removeAttribute('data-fb');}}"
+             f"else{{this.closest('.card-img-wrap').style.display='none';}}\" alt=\"\"></a>") if has_img else ''
+    desc = safe(a.get("description", a.get("oneliner", "")))
+    title = safe(a["title"])
+    return (f'<article class="article-card">'
+            f'<div class="card-eyebrow"><span class="card-date">{a["date"]}</span></div>'
+            f'{thumb}'
+            f'<div class="card-body"><h3><a href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a></h3>'
+            f'<div class="oneliner">{desc}</div></div></article>')
+
+
+def build_actions_html(like_id, fav_id, lang, entity_type="article", inline_comment=False):
     """Реакции 👍👎⭐ + избранное — общий блок для статей/тегов/законов/учёных (без «поделиться»,
-    оно у статей особое из-за clickbait-заголовка и своей ссылки)."""
+    оно у статей особое из-за clickbait-заголовка и своей ссылки).
+    inline_comment=True — добавляет кнопку «+ комментарий» вплотную к лайкам (единый вид со
+    статьёй, юзер 2026-07-24); раскрытие ловит соседний .feedback (см. likes.js)."""
     fav_label = ACTIONS_LOC.get(lang, ACTIONS_LOC["en"])
     rt = reaction_titles(lang)
+    comment = (f'<button type="button" class="fb-comment-toggle actions-comment">'
+               f'{safe(feedback_comment_label(lang))}</button>') if inline_comment else ''
     return (f'<div class="actions actions-compact" data-article-id="{like_id}" data-entity-type="{entity_type}">'
             f'<div class="reactions">'
             f'<button class="react-btn" data-react="like" title="{attr_safe(rt["like"])}">{ICON_THUMB_UP}<span class="rc">…</span></button>'
@@ -615,6 +661,7 @@ def build_actions_html(like_id, fav_id, lang, entity_type="article"):
             f'</div>'
             f'<button class="fav-btn" data-fav="{attr_safe(fav_id)}" title="{attr_safe(fav_label)}">'
             f'<span class="fav-ic">{ICON_STAR}</span></button>'
+            f'{comment}'
             f'</div>')
 
 
@@ -706,8 +753,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # а не отдельным блоком в шаблоне.
     like_id = f"{article['id']}_{lang}_{version}"
     next_arrow = "←" if lang in RTL_LANGS else "→"
-    next_btn_html = f'<button class="next-btn next-btn-top">{safe(loc["next"])} {next_arrow}</button>'
-    feedback_html = build_feedback_html(like_id, lang, "article", next_button_html=next_btn_html)
+    # Нижняя кнопка «следующая статья» убрана совсем (юзер 2026-07-23) — верхняя переехала в
+    # закреплённую строку с языками. Фидбэк больше не несёт next_button.
+    feedback_html = build_feedback_html(like_id, lang, "article", inline_toggle=True)
+    # Кнопка «+ комментарий» едет в строку лайков (.actions-compact), справа от реакций/шэра.
+    comment_toggle_html = f'<button type="button" class="fb-comment-toggle actions-comment">{safe(feedback_comment_label(lang))}</button>'
 
     tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
     authors = article.get("authors", [])
@@ -759,12 +809,10 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     )[:8]
     article_graph_html = ""
     if len(article_graph_ids) >= 2:
-        mini_lbl = MINI_LABEL.get(lang, MINI_LABEL["en"])
+        # Метка «Связи в графе знаний» убрана (юзер 2026-07-23: «и так понятно»), контрол глубины
+        # теперь внутри фильтров справа. id-якорь для левого меню переехал на блок фильтров.
         article_graph_html = (
-            f'<div id="article-graph" class="mini-graph-label">{GRAPH_ICO} {safe(mini_lbl)} '
-            f'<span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button>'
-            f'<span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div>'
-            f'<div class="mini-graph-filters">{mini_graph_filters_html(lang, "article")}</div>'
+            f'<div id="article-graph" class="mini-graph-config">{mini_graph_filters_html(lang, "article")}</div>'
             f'<div class="mini-graph mini-graph--article" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
         )
 
@@ -871,7 +919,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             f'<a class="cat-badge" href="/{LANG_DIR}/{lang}/sections/{section_slug(c)}.html" '
             f'data-cat="{c}" title="{attr_safe(cat_desc(c, lang))}">'
             f'{safe(cat_name(c, lang))}</a>' for c in cats[:5])
-        categories_html = f'· {badges}'
+        # Разделы — на своей строке (юзер 2026-07-23), поэтому без ведущей «·».
+        categories_html = badges
 
     lic = article.get("license_url", "")
     lic_name = "CC BY 4.0" if "by/4.0" in lic else (
@@ -907,6 +956,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         author_verify_label=safe(loc.get("author_verify_label", "I am the author — verify & edit")),
         author_verify_body=safe(loc.get("author_verify_body", "")),
         share_label=safe(loc.get("share", "Share")),
+        comment_toggle_html=comment_toggle_html,
         next_label=safe(loc.get("next", "Next article")),
         next_arrow="←" if lang in RTL_LANGS else "→",
         express_locked_js="true" if scipop.get("express_locked") else "false",
@@ -1228,10 +1278,7 @@ def generate_tag_page(tag_id, lang):
     articles_html = ""
     for a in index:
         if tag_id in a.get("tags", []) and a.get("version") == "popular":
-            articles_html += f"""<div class="article-card"><div class="card-content">
-                <h3><a href="{a['url']}">{a['title']}</a></h3>
-                <div class="oneliner">{a.get('description', a.get('oneliner', ''))}</div>
-                <div class="meta">arXiv:{a['id']} · {a['date']}</div></div></div>"""
+            articles_html += entity_article_card(a, lang)
 
     related_html = " · ".join(
         f'<a href="/{LANG_DIR}/{lang}/tags/{rt}.html" data-tag="{attr_safe(rt)}">{tags_loc.get(rt, {}).get("name", rt)}</a>'
@@ -1302,8 +1349,8 @@ def generate_tag_page(tag_id, lang):
     raw_simple = raw.get("description_simple") or raw.get("description", "")
     raw_adv = raw.get("description", "")
     tag_like_id = f"{tag_id}_{lang}_page"
-    actions_html = build_actions_html(tag_like_id, tag_id, lang, "tag")
-    feedback_html = build_feedback_html(tag_like_id, lang, "tag")
+    actions_html = build_actions_html(tag_like_id, tag_id, lang, "tag", inline_comment=True)
+    feedback_html = build_feedback_html(tag_like_id, lang, "tag", inline_toggle=True)
     og_meta_html = build_og_meta(
         f'#{tag_data.get("name", tag_id)} — bridge42worlds', desc_pop,
         f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tag_id}.html", tag_img_url and f"{SITE_URL}{tag_img_url}")
@@ -1338,7 +1385,7 @@ def generate_tag_page(tag_id, lang):
         tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{tag_graph.get("article_count", 0)}</a></div>'
                          if tag_graph.get("article_count", 0) else ""),
         ai_cover_html=ai_cover_html,
-        actions_html=actions_html, feedback_html=feedback_html,
+        actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
         tag_version_toggle=tag_version_toggle,
         tag_mini_html=mini_html,
         tag_desc_popular_raw=attr_safe(raw_pop),
@@ -1448,6 +1495,8 @@ def tag_domain_label(domain, lang):
         return TAG_DOMAIN_FALLBACK.get(lang, TAG_DOMAIN_FALLBACK["en"])
     return entry.get(lang, entry["en"])
 
+MINI_CONFIG_LABEL = {"ru": "настроить представление", "en": "configure view", "es": "configurar vista",
+                     "ar": "ضبط العرض", "fr": "configurer la vue", "zh": "显示设置"}
 MINI_LABEL = {"ru": "Связи в графе знаний", "en": "Links in the knowledge graph",
               "zh": "知识图谱中的关联", "fr": "Liens dans le graphe des savoirs", "ar": "الروابط في شبكة المعرفة"}
 # Короткий ярлык для левого меню-навигатора статьи (пункт на граф — только когда граф есть,
@@ -1651,10 +1700,7 @@ def generate_law_page(law_id, lang):
         seen.add(a["id"])
         law_article_count += 1
         articles_html += (
-            f'<div class="article-card"><div class="card-content">'
-            f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
-            f'<div class="oneliner">{safe(a.get("description", a.get("oneliner", "")))}</div>'
-            f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
+            entity_article_card(a, lang)
         )
 
     lraw = L.get("raw") or {}
@@ -1662,8 +1708,8 @@ def generate_law_page(law_id, lang):
     raw_simple = lraw.get("description_simple") or lraw.get("description", "")
     raw_adv = lraw.get("description", "")
     law_like_id = f"{law_id}_{lang}_page"
-    actions_html = build_actions_html(law_like_id, law_id, lang, "law")
-    feedback_html = build_feedback_html(law_like_id, lang, "law")
+    actions_html = build_actions_html(law_like_id, law_id, lang, "law", inline_comment=True)
+    feedback_html = build_feedback_html(law_like_id, lang, "law", inline_toggle=True)
     desc_pop_for_og = L.get("description_popular") or L.get("description_simple") or L.get("description", "")
     og_meta_html = build_og_meta(
         f'{L.get("name", law_id)} — bridge42worlds', desc_pop_for_og,
@@ -1675,7 +1721,7 @@ def generate_law_page(law_id, lang):
         og_meta_html=og_meta_html,
         law_name=safe(L.get("name", law_id)), law_type=safe(L.get("type", "")),
         ai_cover_html=ai_cover_html,
-        actions_html=actions_html, feedback_html=feedback_html,
+        actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
         entity_side_html=entity_side_html,
         law_version_toggle=toggle,
         law_mini_html=mini_html,
@@ -1717,6 +1763,9 @@ def update_all_laws(lang):
         generate_law_page(law_id, lang)
     print(f"  ⚖️ Laws updated for {lang} ({len(laws)} pages)")
 
+
+LOADING_LABEL = {"ru": "Загрузка…", "en": "Loading…", "es": "Cargando…", "ar": "جارٍ التحميل…",
+                 "fr": "Chargement…", "zh": "加载中…"}
 
 GRAPH_LABELS = {
     "ru": {"title": "Граф знаний", "subtitle": "Теги, законы и учёные и все их связи. Переключай, что показывать.",
@@ -1789,7 +1838,8 @@ def generate_knowledge_graph_page(lang):
         footer_text=safe(loc["footer"]), graph_warning=safe(loc["warning"]),
         edge_tag_law=safe(loc["edge_tag_law"]), edge_tag_sci=safe(loc["edge_tag_sci"]), edge_law_sci=safe(loc["edge_law_sci"]),
         edge_tag_tag=safe(loc["edge_tag_tag"]), edge_law_law=safe(loc["edge_law_law"]), edge_sci_sci=safe(loc["edge_sci_sci"]),
-        edge_law_influence=safe(loc["edge_law_influence"]), preset_core=safe(loc["preset_core"]), preset_all=safe(loc["preset_all"])
+        edge_law_influence=safe(loc["edge_law_influence"]), preset_core=safe(loc["preset_core"]), preset_all=safe(loc["preset_all"]),
+        loading_text=safe(LOADING_LABEL.get(lang, LOADING_LABEL["en"]))
     ), encoding="utf-8")
 
 
@@ -1892,10 +1942,7 @@ def generate_scientist_page(sid, lang):
     articles_html = ""
     for a in index:
         if sid in a.get("scientists", []) and a.get("version") == "popular":
-            articles_html += f"""<div class="article-card"><div class="card-content">
-                <h3><a href="{a['url']}">{a['title']}</a></h3>
-                <div class="oneliner">{a.get('description', a.get('oneliner', ''))}</div>
-                <div class="meta">arXiv:{a['id']} · {a['date']}</div></div></div>"""
+            articles_html += entity_article_card(a, lang)
     loc = {
         "en": {"related": "Related tags", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Key discoveries", "bio": "Biography", "quote": "Quote",
                "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "science made simple",
@@ -1947,8 +1994,8 @@ def generate_scientist_page(sid, lang):
     )
 
     sci_like_id = f"{author_slug(sid)}_{lang}_page"
-    actions_html = build_actions_html(sci_like_id, sid, lang, "scientist")
-    feedback_html = build_feedback_html(sci_like_id, lang, "scientist")
+    actions_html = build_actions_html(sci_like_id, sid, lang, "scientist", inline_comment=True)
+    feedback_html = build_feedback_html(sci_like_id, lang, "scientist", inline_toggle=True)
     og_meta_html = build_og_meta(
         f'{sid} — bridge42worlds', data.get("description", ""),
         f"{SITE_URL}/{LANG_DIR}/{lang}/scientists/{author_slug(sid)}.html")
@@ -1960,7 +2007,7 @@ def generate_scientist_page(sid, lang):
         articles_label=safe(loc.get("articles", loc.get("related", "Articles"))),
         scientist_id=attr_safe(sid),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
-        actions_html=actions_html, feedback_html=feedback_html,
+        actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
         scientist_name=safe(sid), lifespan=safe(localize_present(data.get("lifespan", ""), lang)),
         fields=", ".join(as_list(data.get("fields", []))),
         scientist_description=safe(data.get("description", "")),
@@ -2062,10 +2109,7 @@ def generate_section_page(cat, lang, index=None):
         if a["id"] in seen: continue
         seen.add(a["id"]); count += 1
         articles_html += (
-            f'<div class="article-card"><div class="card-content">'
-            f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
-            f'<div class="oneliner">{safe(a.get("description", a.get("oneliner", "")))}</div>'
-            f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
+            entity_article_card(a, lang)
         )
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
     _write_text_retry(Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html", tpl.substitute(
@@ -2311,10 +2355,7 @@ def update_all_authors():
         for author_name, data in graph.items():
             slug = author_slug(author_name)
             articles_html = "".join(
-                f'<div class="article-card"><div class="card-content">'
-                f'<h3><a href="{a["url"]}">{safe(a["title"])}</a></h3>'
-                f'<div class="oneliner">{safe(a.get("description", a.get("oneliner", "")))}</div>'
-                f'<div class="meta">arXiv:{a["id"]} · {a["date"]}</div></div></div>'
+                entity_article_card(a, lang)
                 for a in (by_id.get(aid) for aid in data.get("articles", [])) if a
             )
             coauthors_html = " · ".join(
@@ -2361,44 +2402,36 @@ def update_all_authors():
 # ── Main ──
 
 
+DASH_TITLE = {"ru": "Сводка", "en": "Dashboard", "es": "Panel", "ar": "لوحة", "fr": "Tableau de bord", "zh": "面板"}
+
+
 def generate_archive_page(lang):
-    """Страница /archive: та же лента+календарь-фильтр, что на главной (js/search.js
-    showLatest()/initCalendar()) — новые статьи сверху, подгрузка по скроллу батчами.
-    Раньше рендерили ВСЕ статьи по всем дням разом одной гигантской HTML-страницей (якорные
-    ссылки календаря вели на #{date} внутри неё) — при росте архива до тысяч статей это
-    и тяжёлая страница, и всё видно сразу без фильтрации. Теперь — тот же ленивый JS-фид."""
-    loc = {"ru": {"title": "Архив", "footer": "наука простыми словами"},
-           "en": {"title": "Archive", "footer": "science made simple"},
-           "zh": {"title": "存档", "footer": "让科学变简单"},
-           "fr": {"title": "Archives", "footer": "la science simplifiée"},
-           "ar": {"title": "الأرشيف", "footer": "العلم ببساطة"}}.get(lang,
-           {"title": "Archive", "footer": "science made simple"})
+    """Страница /archive — теперь ДАШБОРД-витрина проекта (юзер 2026-07-24: старый архив был
+    тупиком — голый список + старое меню + без русского; делаем аналитический дашборд). Клиентский:
+    оболочка + унифицированная шапка; всю статистику считает и рисует js/dashboard.js из индексов,
+    которые грузит js/search.js. Живёт на рефреше — числа пересчитываются из свежих данных."""
+    title = DASH_TITLE.get(lang, DASH_TITLE["en"])
+    fav_links = ('<link rel="icon" href="/favicon.ico" sizes="any">'
+                 '<link rel="icon" type="image/png" href="/favicon.png">'
+                 '<link rel="apple-touch-icon" href="/favicon.png">')
     html = f'''<!DOCTYPE html><html lang="{lang}" dir="{dir_for(lang)}"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{loc["title"]} — bridge42worlds</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{title} — bridge42worlds</title>
+{fav_links}
 <link rel="stylesheet" href="/css/style.css?v={asset_ver()}">
 <script data-goatcounter="https://{GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></head><body>
 <div class="top-bar"><a href="/{LANG_DIR}/{lang}/index.html" class="logo">bridge42worlds</a>
 <div class="header-right"><div class="nav-links">
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
-<a href="/{LANG_DIR}/{lang}/authors/">authors</a><a href="/{LANG_DIR}/{lang}/graph/">graph</a>
-<a href="/{LANG_DIR}/{lang}/theory/">theory</a>
-<a href="/{LANG_DIR}/{lang}/favorites.html" title="Избранное">★</a>
-<a href="/{LANG_DIR}/{lang}/about.html">about</a>
+<a href="/{LANG_DIR}/{lang}/sections/">sections</a><a href="/{LANG_DIR}/{lang}/authors/">authors</a>
+<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/{LANG_DIR}/{lang}/theory/">theory</a>
+<a href="/{LANG_DIR}/{lang}/favorites.html" title="{safe(nav_fav_title(lang))}"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
 </div></div></div>
-<div class="langs-row">
-    <div class="langs" id="langs-bar"></div>
-    <div class="cal-bar">
-        <button type="button" id="calendar-btn" class="cal-btn" title="{loc["title"]}"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2.6"/><line x1="4" y1="9.5" x2="20" y2="9.5"/><line x1="8" y1="3.4" x2="8" y2="6.6"/><line x1="16" y1="3.4" x2="16" y2="6.6"/></svg></button>
-        <div class="calendar-panel" id="calendar-panel"></div>
-    </div>
-</div>
-<h1>🗓️ {loc["title"]}</h1>
-<div class="category-bar" id="category-bar"></div>
-<label class="express-filter"><input type="checkbox" id="express-filter-toggle"><span id="express-filter-label"></span></label>
-<div id="search-results"></div>
-<footer><p>bridge42worlds — {loc["footer"]}</p></footer>
-<script src="/js/search.js?v={asset_ver()}"></script></body></html>'''
+<div class="langs" id="langs-bar"></div>
+<div id="dashboard"></div>
+<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<script src="/js/search.js?v={asset_ver()}"></script>
+<script src="/js/dashboard.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
 
 
@@ -3245,8 +3278,20 @@ def rebuild_indexes():
         for version in VERSIONS:
             (base / VERSION_INDEX[version]).write_text(
                 json.dumps(buckets[lang][version], ensure_ascii=False, indent=2), encoding="utf-8")
+            # Маленький индекс последних статей для мгновенной первой отрисовки ленты: полный
+            # индекс тира ~3.6МБ, и лента ждала его целиком (юзер 2026-07-23: «долго грузится
+            # первый раз»). Тут — только N свежих записей (~150КБ), лента рисуется сразу, полный
+            # индекс догружается в фоне для поиска/фильтров/«показать ещё».
+            latest = sorted(buckets[lang][version], key=lambda e: e.get("date", ""), reverse=True)[:LATEST_INDEX_N]
+            (base / VERSION_INDEX_LATEST[version]).write_text(
+                json.dumps(latest, ensure_ascii=False, indent=2), encoding="utf-8")
     total = sum(len(b["popular"]) for b in buckets.values())
-    print(f"  ✅ Индексы пересобраны ({total} записей popular по всем языкам)")
+    # Дата последней сборки — витрина «обновлено …» на дашборде/в статистике (юзер 2026-07-24).
+    import datetime
+    Path("data").mkdir(exist_ok=True)
+    Path("data/build-info.json").write_text(
+        json.dumps({"built": datetime.date.today().isoformat()}, ensure_ascii=False), encoding="utf-8")
+    print(f"  ✅ Индексы пересобраны ({total} записей popular по всем языкам) + latest-{LATEST_INDEX_N}")
 
 
 def rebuild_author_graph():

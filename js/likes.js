@@ -199,7 +199,9 @@ document.addEventListener('click', e => {
     if (ct) {
         // Раскрывает .fb-expand (чипы + поле комментария + отправка) — в покое всё это скрыто,
         // видна только кнопка «+ комментарий» (юзер-фидбек 2026-07-21: убрать перегруз с карточки).
-        const wrap = ct.closest('.feedback');
+        // Кнопка «+ комментарий» на статье переехала в строку лайков (вне .feedback) — closest
+        // там вернёт null, поэтому откатываемся на единственный .feedback страницы.
+        const wrap = ct.closest('.feedback') || document.querySelector('.feedback');
         const exp = wrap?.querySelector('.fb-expand');
         if (exp) {
             const show = exp.hidden;

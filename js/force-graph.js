@@ -161,6 +161,10 @@ window.createForceGraph = function (opts) {
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
         alpha = 1; hover = -1; drag = -1; ready = true;
         updateSizeWarning(nodes.length);
+        // Данные пришли, граф начинает рисоваться — убираем лоадер-оверлей (юзер 2026-07-23:
+        // «граф долго, но пока грузится пустое место — каунтер»).
+        var kgl = document.getElementById('kg-loader');
+        if (kgl) { kgl.classList.add('done'); setTimeout(function () { kgl.remove(); }, 320); }
     }
 
     function rebuild() {  // перестроить по новому фильтру (opts.build читает актуальное состояние)
