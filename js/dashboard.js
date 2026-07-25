@@ -100,7 +100,7 @@
                 '<div class="kpi-l">' + esc(label) + '</div>' + (sub ? '<div class="kpi-s">' + sub + '</div>' : '') + '</div>';
         }
         html += '<div class="kpi-grid">' +
-            kpi(nA, T.articles, '<b>' + full + '</b> ' + T.full + ' · <b>' + express + '</b> ' + T.express) +
+            kpi(nA, T.articles, '<b>' + full + '</b> ' + T.full + ' · <b>' + express + '</b> ' + T.express) + kpi(full, T.full) + kpi(express, T.express) +
             kpi(nL, T.laws) + kpi(nT, T.tags) + kpi(nSec, T.sections) +
             kpi(nS, T.scientists) + kpi(nAu, T.authors) + kpi(nLang, T.langs) +
             '</div>';
@@ -212,7 +212,7 @@
                 return '<span class="pie-lg"><i style="background:' + s.color + '"></i>' + esc(s.label) + ' <b>' + s.value + '</b></span>';
             }).join('');
             return '<div class="pie-wrap"><div class="pie-title">' + esc(title) + '</div>' +
-                '<svg viewBox="0 0 120 120" class="pie">' + rings + '</svg>' +
+                '<svg viewBox="-6 -6 132 132" class="pie">' + rings + '</svg>' +
                 '<div class="pie-legend">' + legend + '</div></div>';
         }
         var PAL = ['var(--cyan)', 'var(--ochre)', '#6C5CE7', '#2FA84F', '#D64545', '#C9A227', '#5AA9C9'];

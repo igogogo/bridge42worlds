@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bridge42worlds</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/css/style.css">
+<script>
+// Авторы теперь только на английском (одна версия, показывается на всех языках). Любой заход на
+// /lang/{ru,es,ar,zh,fr}/authors/... тихо ведём на /lang/en/authors/... — исключаем en, чтобы
+// реально отсутствующая en-страница не зациклила редирект.
+(function () {
+  var p = window.location.pathname;
+  var m = p.match(/^\/lang\/(?!en\/)[a-z]{2}\/authors\/(.*)$/);
+  if (m) { window.location.replace('/lang/en/authors/' + m[1] + window.location.search); }
+})();
+</script>
+</head>
+<body>
+<div class="top-bar"><a href="/lang/en/index.html" class="logo">bridge42worlds</a></div>
+<main style="max-width:620px;margin:12vh auto;padding:0 20px;text-align:center;">
+  <h1 style="font-size:56px;margin:0;color:var(--ochre,#C77F3A);">404</h1>
+  <p style="font-size:16px;color:var(--muted,#666);line-height:1.6;">
+    Страница не найдена · Page not found · Página no encontrada · الصفحة غير موجودة
+  </p>
+  <p style="margin-top:24px;">
+    <a href="/lang/en/index.html" style="color:var(--link,#2E8AA0);">→ home</a>
+  </p>
+</main>
+</body>
+</html>

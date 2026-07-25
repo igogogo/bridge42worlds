@@ -199,6 +199,9 @@ window.createForceGraph = function (opts) {
         adj = nodes.map(function () { return {}; });
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
         alpha = 1; hover = -1; drag = -1; ready = true;
+        // Пред-прогрев без отрисовки: прокручиваем физику, чтобы граф появился уже почти собранным,
+        // а не «слетался» из углов секундами (юзер 2026-07-25). Дёшево — это только числа, без paint.
+        if (W > 0 && H > 0) { var warm = nodes.length > 250 ? 70 : 140; for (var _w = 0; _w < warm; _w++) step(); }
         updateSizeWarning(nodes.length, capped.from);
         // Данные пришли, граф начинает рисоваться — убираем лоадер-оверлей (юзер 2026-07-23:
         // «граф долго, но пока грузится пустое место — каунтер»).
@@ -288,7 +291,16 @@ window.createForceGraph = function (opts) {
         ctx.globalAlpha = 1;
     }
 
-    function loop() { if (ready) { step(); draw(); } requestAnimationFrame(loop); }
+    // Пока граф ещё «горячий» (alpha высок) — гоним несколько тиков физики на кадр: собирается
+    // в разы быстрее по времени, без потери плавности у уже осевшего графа (юзер 2026-07-25).
+    function loop() {
+        if (ready) {
+            var reps = alpha > 0.2 ? 4 : (alpha > 0.08 ? 2 : 1);
+            for (var s = 0; s < reps; s++) step();
+            draw();
+        }
+        requestAnimationFrame(loop);
+    }
     function pos(e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
     function pick(x, y) { var bi = -1, bd = 1e9; for (var i = 0; i < nodes.length; i++) { var a = nodes[i], d = Math.hypot(a.x - x, a.y - y); if (d < a.r + 6 && d < bd) { bd = d; bi = i; } } return bi; }
     cv.addEventListener('pointerdown', function (e) { var p = pos(e), i = pick(p[0], p[1]); downXY = p; if (i >= 0) { drag = i; px = p[0]; py = p[1]; alpha = Math.max(alpha, 0.5); cv.setPointerCapture(e.pointerId); } });

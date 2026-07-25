@@ -1475,18 +1475,44 @@ def law_type_label(t, lang):
 # Раздел науки тега (для группировки облака списком) — фиксированный английский slug (НЕ переводится
 # через LLM, чтобы группировка/цвета не разъезжались по языкам); подписи — тут, локализуются вручную.
 TAG_DOMAIN_LABELS = {
-    "cosmology":              {"ru": "Космология", "en": "Cosmology"},
-    "astrophysics":           {"ru": "Астрофизика", "en": "Astrophysics"},
-    "particles_nuclear":      {"ru": "Физика частиц и ядерная физика", "en": "Particle & Nuclear Physics"},
-    "quantum":                {"ru": "Квантовая механика", "en": "Quantum Mechanics"},
-    "relativity_gravity":     {"ru": "Относительность и гравитация", "en": "Relativity & Gravity"},
-    "thermo_stat":            {"ru": "Термодинамика и статфизика", "en": "Thermodynamics & Stat. Physics"},
-    "electromagnetism_optics": {"ru": "Электромагнетизм и оптика", "en": "Electromagnetism & Optics"},
-    "chemistry_materials":    {"ru": "Химия и материалы", "en": "Chemistry & Materials"},
-    "mathematics":            {"ru": "Математика", "en": "Mathematics"},
-    "instruments_methods":    {"ru": "Инструменты и методы", "en": "Instruments & Methods"},
+    "cosmology":              {"ru": "Космология", "en": "Cosmology", "es": "Cosmología", "ar": "علم الكونيات"},
+    "astrophysics":           {"ru": "Астрофизика", "en": "Astrophysics", "es": "Astrofísica", "ar": "الفيزياء الفلكية"},
+    "particles_nuclear":      {"ru": "Физика частиц и ядерная физика", "en": "Particle & Nuclear Physics", "es": "Física de partículas y nuclear", "ar": "فيزياء الجسيمات والنووية"},
+    "quantum":                {"ru": "Квантовая механика", "en": "Quantum Mechanics", "es": "Mecánica cuántica", "ar": "الميكانيكا الكمّية"},
+    "relativity_gravity":     {"ru": "Относительность и гравитация", "en": "Relativity & Gravity", "es": "Relatividad y gravedad", "ar": "النسبية والجاذبية"},
+    "thermo_stat":            {"ru": "Термодинамика и статфизика", "en": "Thermodynamics & Stat. Physics", "es": "Termodinámica y física estadística", "ar": "الديناميكا الحرارية والإحصائية"},
+    "electromagnetism_optics": {"ru": "Электромагнетизм и оптика", "en": "Electromagnetism & Optics", "es": "Electromagnetismo y óptica", "ar": "الكهرومغناطيسية والبصريات"},
+    "chemistry_materials":    {"ru": "Химия и материалы", "en": "Chemistry & Materials", "es": "Química y materiales", "ar": "الكيمياء والمواد"},
+    "mathematics":            {"ru": "Математика", "en": "Mathematics", "es": "Matemáticas", "ar": "الرياضيات"},
+    "instruments_methods":    {"ru": "Инструменты и методы", "en": "Instruments & Methods", "es": "Instrumentos y métodos", "ar": "الأدوات والطرق"},
+    "biology":                {"ru": "Биология", "en": "Biology", "es": "Biología", "ar": "الأحياء"},
+    "medicine":               {"ru": "Медицина", "en": "Medicine", "es": "Medicina", "ar": "الطب"},
+    "neuroscience":           {"ru": "Нейронаука", "en": "Neuroscience", "es": "Neurociencia", "ar": "علم الأعصاب"},
+    "genomics":               {"ru": "Геномика", "en": "Genomics", "es": "Genómica", "ar": "علم الجينوم"},
+    "bioengineering":         {"ru": "Биоинженерия", "en": "Bioengineering", "es": "Bioingeniería", "ar": "الهندسة الحيوية"},
 }
-TAG_DOMAIN_FALLBACK = {"ru": "Другое", "en": "Other"}
+TAG_DOMAIN_FALLBACK = {"ru": "Другое", "en": "Other", "es": "Otros", "ar": "أخرى"}
+
+# Имена ГРУПП разделов верхнего уровня (юзер 2026-07-25: на /sections/ у cs/math/… не было имени —
+# в справочнике только подкатегории). Фолбэк для gname. Умбреллы вроде cond-mat/hep-th/gr-qc/quant-ph
+# резолвятся из arxiv-categories, а эти — нет.
+SECTION_GROUP_NAMES = {
+    "cs":       {"ru": "Информатика", "en": "Computer Science", "es": "Informática", "ar": "علوم الحاسوب"},
+    "math":     {"ru": "Математика", "en": "Mathematics", "es": "Matemáticas", "ar": "الرياضيات"},
+    "physics":  {"ru": "Физика", "en": "Physics", "es": "Física", "ar": "الفيزياء"},
+    "astro-ph": {"ru": "Астрофизика", "en": "Astrophysics", "es": "Astrofísica", "ar": "الفيزياء الفلكية"},
+    "q-bio":    {"ru": "Количественная биология", "en": "Quantitative Biology", "es": "Biología cuantitativa", "ar": "الأحياء الكمّية"},
+    "eess":     {"ru": "Электротехника и системы", "en": "Electrical Eng. & Systems Science", "es": "Ingeniería eléctrica y sistemas", "ar": "الهندسة الكهربائية والأنظمة"},
+    "stat":     {"ru": "Статистика", "en": "Statistics", "es": "Estadística", "ar": "الإحصاء"},
+    "econ":     {"ru": "Экономика", "en": "Economics", "es": "Economía", "ar": "الاقتصاد"},
+    "q-fin":    {"ru": "Количественные финансы", "en": "Quantitative Finance", "es": "Finanzas cuantitativas", "ar": "التمويل الكمّي"},
+    "nlin":     {"ru": "Нелинейные науки", "en": "Nonlinear Sciences", "es": "Ciencias no lineales", "ar": "العلوم اللاخطية"},
+}
+
+
+def section_group_name(prefix, lang):
+    e = SECTION_GROUP_NAMES.get(prefix)
+    return e.get(lang, e["en"]) if e else ""
 
 
 def tag_domain_label(domain, lang):
@@ -2150,7 +2176,7 @@ def generate_sections_cloud(lang):
     for prefix in sorted(groups.keys()):
         members = sorted(groups[prefix])
         gtotal = sum(counts[c] for c in members)
-        gname = cat_loc(lang)[0].get(prefix) or ARXIV_CATEGORIES.get(prefix, "")
+        gname = cat_loc(lang)[0].get(prefix) or ARXIV_CATEGORIES.get(prefix, "") or section_group_name(prefix, lang)
         # Группы РАСКРЫВАЕМЫЕ (юзер 2026-07-24): клик по строке-группе разворачивает её разделы.
         # По умолчанию свёрнуто — видно только группы (компактно), члены hidden с классом sm-<prefix>.
         rows += (
@@ -2433,7 +2459,7 @@ def generate_archive_page(lang):
 </div></div></div>
 <div class="langs" id="langs-bar"></div>
 <div id="dashboard"></div>
-<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<footer><p>bridge42worlds </p></footer>
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/dashboard.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
@@ -2466,7 +2492,7 @@ def generate_analytics_page(lang):
 </div></div></div>
 <div class="langs" id="langs-bar"></div>
 <div id="analytics"></div>
-<footer><p>bridge42worlds · <span class="status-badge" title="42">42</span></p></footer>
+<footer><p>bridge42worlds </p></footer>
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/analytics.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "analytics").mkdir(parents=True, exist_ok=True)
