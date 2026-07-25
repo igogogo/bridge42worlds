@@ -38,23 +38,41 @@ async function loadReactions(id) {
     }
 }
 
+// Мгновенно двигаем видимый счётчик (оптимистично, до ответа сервера).
+function bumpCount(id, type, delta) {
+    document.querySelectorAll(`[data-article-id="${id}"] [data-react="${type}"] .rc`).forEach(el => {
+        el.textContent = Math.max(0, (parseInt(el.textContent, 10) || 0) + delta);
+    });
+}
+
 async function react(id, type, entityType) {
     if (_lock) return;
     _lock = true;
+    // ОПТИМИСТИЧНО: отклик СРАЗУ, до сети (юзер 2026-07-25: «нажал — получил», а загрузка supabase
+    // с CDN + insert + повторный запрос счётчика раньше давали заметную задержку). Сеть — в фоне.
+    const wasActive = myReaction(id) === type;
+    const prev = myReaction(id);
+    if (wasActive) {
+        setMyReaction(id, '');
+        bumpCount(id, type, -1);
+    } else {
+        if (prev) bumpCount(id, prev, -1);       // визуально снимаем прошлую реакцию
+        setMyReaction(id, type);
+        bumpCount(id, type, +1);
+    }
+    highlightReactions(id);
+    setTimeout(() => { _lock = false; }, 350);
+    // фоновая запись + тихая ресинхронизация счётчиков с сервером (не блокирует UI)
     try {
         const sb = await getSupabase();
-        if (myReaction(id) === type) {
-            setMyReaction(id, '');                       // снять выбор (строку в БД не удаляем — anon без RLS)
-        } else {
+        if (!wasActive) {
             const { error } = await sb.from('likes').insert({
                 article_id: id, reaction: type, entity_type: entityType || 'article',
             });
-            if (error) { console.error('like insert failed:', error.message); }
-            else setMyReaction(id, type);
+            if (error) console.error('like insert failed:', error.message);
         }
-        highlightReactions(id);
-        await loadReactions(id);
-    } finally { setTimeout(() => { _lock = false; }, 700); }
+        loadReactions(id);   // подтянуть настоящий глобальный счётчик (без await — не тормозим клик)
+    } catch (e) { console.error('react bg:', e); }
 }
 
 // ── Избранное: только localStorage, без сервера ─────────────────────────────

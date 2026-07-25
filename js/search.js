@@ -737,11 +737,40 @@ var _revealObs = ('IntersectionObserver' in window) ? new IntersectionObserver(f
 }, { rootMargin: '0px 0px -8% 0px' }) : null;
 function initReveal() {
     if (!_revealObs) return;
+    var vh = window.innerHeight || 800;
     document.querySelectorAll('.article-card, .article-main section, .ai-cover, .formula, .key-numbers').forEach(function (el) {
         if (el.dataset.rev) return; el.dataset.rev = '1'; el.classList.add('reveal');
+        // Мобильные браузеры (особенно после нативного перехода между тирами сложности) часто НЕ
+        // присылают начальный колбэк IntersectionObserver для элементов, уже находящихся во вьюпорте —
+        // контент застревал на opacity:0 и «пропадал» до ручного обновления (баг только на мобиле,
+        // десктоп ок). Раскрываем уже видимые элементы синхронно, а observer оставляем для остальных.
+        var r = el.getBoundingClientRect();
+        if (r.top < vh && r.bottom > 0) { el.classList.add('in'); return; }
         _revealObs.observe(el);
     });
+    // Финальная сеть безопасности: если observer вообще не сработал (сломан на этом заходе),
+    // раскрываем всё нераскрытое через 1.6с — контент важнее анимации.
+    clearTimeout(initReveal._t);
+    initReveal._t = setTimeout(function () {
+        document.querySelectorAll('.reveal:not(.in)').forEach(function (el) { el.classList.add('in'); });
+    }, 1600);
+    initImgSpinners();
 }
+
+// D (юзер 2026-07-25): пока картинка грузится — шиммер-плейсхолдер (CSS ::before на обёртке),
+// снимаем его классом .img-ready по onload/onerror. Идемпотентно (dataset-флаг).
+function initImgSpinners(root) {
+    (root || document).querySelectorAll('.card-img-wrap img, .ai-cover img').forEach(function (img) {
+        var wrap = img.closest('.card-img-wrap, .ai-cover');
+        if (!wrap || wrap.dataset.imgw) return;
+        wrap.dataset.imgw = '1';
+        var done = function () { wrap.classList.add('img-ready'); };
+        if (img.complete && img.naturalWidth > 0) { done(); return; }
+        img.addEventListener('load', done);
+        img.addEventListener('error', done);   // ошибка → тоже снимаем шиммер (onerror сам подставит фолбэк/скроет)
+    });
+}
+window.initImgSpinners = initImgSpinners;
 window.initReveal = initReveal;
 document.addEventListener('DOMContentLoaded', initReveal);
 
@@ -1202,8 +1231,9 @@ function collapseNavOverflow() {
     });
     if (hasActive) btn.classList.add('active');
 
-    // About и Архив живут в футере, но в шапочном меню их не было — добавляем (юзер 2026-07-22).
-    [['/lang/' + lang + '/about.html', 'about'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'map']].forEach(function(e) {
+    // Extras в ☰ по смыслу (юзер 2026-07-25: «map→analytics, пересортируй, about не в центре»):
+    // сначала исследование (dashboard, analytics), «о проекте» — последним.
+    [['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];

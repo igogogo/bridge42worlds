@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=79ba156b9d">
+    <link rel="stylesheet" href="/css/style.css?v=4e45bcfdee">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Как параллельные вычисления ускоряют фильтры: урок от галактик", "description": "Ученые разработали способ одновременной обработки сигналов, сократив время вычислений в десятки раз.", "inLanguage": "ru", "datePublished": "2026-07-15", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14054/simple.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14054/ai.jpg", "author": [{"@type": "Person", "name": "Haotian Zhai"}, {"@type": "Person", "name": "Bernd-Peter Paris"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.14054", "abstract": "Цифровые рекурсивные фильтры, реализованные в виде каскада биквадратных секций (biquads), сочетают гибкость проектирования и устойчивость к квантованию коэффициентов, но обратная связь от отсчёта к отсчёту препятствует параллельной обработке. В работе разностное уравнение биквада переформулируется как ленточная блочно-тёплицева система, а введение шаговой перестановки stride-N преобразует группу из NL отсчётов в блочно-трёхдиагональную структуру с блоками, кратными единичной матрице и матрице сдвига. На этой основе построены два параллельных алгоритма: частичная LU-факторизация с сохранением разреженности и циклическая редукция, впервые применённая к рекурсивной фильтрации и уменьшающая глубину последовательной зависимости с O(N) до O(log₂ N). При каскадировании K биквадов промежуточные перестановки между секциями сокращаются, так что для всего каскада требуется лишь одна пара прямой и обратной перестановок, исключая 2(K−1) избыточных этапов. Получены точные формулы вычислительной стоимости для каждой стадии, подтверждённые покадровыми измерениями на трёх микроархитектурах Intel с поддержкой SIMD-инструкций AVX2."}</script>
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -104,13 +104,13 @@
 <a href="/lang/ru/tags/speed_of_light.html" class="side-tag" data-tag="speed_of_light">скорость света</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">эффект Доплера</a><a href="/lang/ru/laws/massenergy_equivalence.html" class="side-law" data-law="massenergy_equivalence">эквивалентность массы и энергии</a><a href="/lang/ru/laws/principle_of_constancy_of_speed_of_light.html" class="side-law" data-law="principle_of_constancy_of_speed_of_light">принцип постоянства скорости света</a><a href="/lang/ru/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">уравнения Максвелла</a><a href="/lang/ru/laws/plancks_law.html" class="side-law" data-law="plancks_law">закон излучения Планка</a><a href="/lang/ru/laws/lorentz_transformations.html" class="side-law" data-law="lorentz_transformations">преобразования лоренца</a></div>
 </div>
 
-<script src="/js/likes.js?v=79ba156b9d"></script>
-<script src="/js/search.js?v=79ba156b9d"></script>
-<script src="/js/scroll.js?v=79ba156b9d"></script>
-<script src="/js/lightbox.js?v=79ba156b9d"></script>
-<script src="/js/gallery.js?v=79ba156b9d"></script>
-<script src="/js/force-graph.js?v=79ba156b9d"></script>
-<script src="/js/mini-graph.js?v=79ba156b9d"></script>
+<script src="/js/likes.js?v=4e45bcfdee"></script>
+<script src="/js/search.js?v=4e45bcfdee"></script>
+<script src="/js/scroll.js?v=4e45bcfdee"></script>
+<script src="/js/lightbox.js?v=4e45bcfdee"></script>
+<script src="/js/gallery.js?v=4e45bcfdee"></script>
+<script src="/js/force-graph.js?v=4e45bcfdee"></script>
+<script src="/js/mini-graph.js?v=4e45bcfdee"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2607.14054', 'article', 'ru');

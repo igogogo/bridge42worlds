@@ -1850,3 +1850,78 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .an-lg { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); margin: 0 12px 6px 0; }
 .an-lg i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
 .an-axis { margin-top: 8px; font-size: 11px; color: var(--soft); font-family: var(--mono); }
+/* Панель-объяснение под картой (документация для пользователя, юзер 2026-07-25) */
+.an-about { max-width: 660px; margin: 26px 0 8px; }
+.an-about h3 { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ochre); margin: 20px 0 8px; }
+.an-about h3:first-child { margin-top: 0; }
+.an-about p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0 0 8px; }
+.an-about ul { margin: 0 0 8px; padding-inline-start: 18px; }
+.an-about li { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-bottom: 4px; }
+.an-about b { color: var(--ink); font-weight: 600; }
+/* Кластеры карточками (юзер 2026-07-25): заголовок крупнее + описание под ним */
+.an-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-top: 6px; }
+.an-card { border: 1px solid var(--hair); border-left: 3px solid var(--cc, var(--cyan));
+  border-radius: var(--radius-sm); background: var(--surface); padding: 10px 13px;
+  transition: border-color .2s, transform .16s, box-shadow .2s; }
+.an-card:hover { transform: translateY(-2px); border-color: var(--hair-soft); box-shadow: var(--shadow); }
+.an-card-t { font-family: var(--serif); font-weight: 600; font-size: 15.5px; line-height: 1.25; color: var(--ink); }
+.an-card-d { font-size: 12.5px; line-height: 1.5; color: var(--muted); margin-top: 4px; }
+/* Сцена карты — по ширине колонки (не шире), как остальной контент */
+.an-stage { max-width: 680px; }
+/* Кнопка «на весь экран» + контрол скорости полёта */
+.an-stage-ctl { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 6; }
+.an-btn { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--hair); background: color-mix(in srgb, var(--bg) 78%, transparent); color: var(--muted);
+  border-radius: 8px; cursor: pointer; font-size: 14px; backdrop-filter: blur(4px); transition: color .15s, border-color .15s; }
+.an-btn:hover { color: var(--link); border-color: var(--link); }
+html[dir="rtl"] .an-stage-ctl { right: auto; left: 8px; }
+.an-speed { position: absolute; bottom: 34px; left: 12px; display: none; align-items: center; gap: 8px; z-index: 6;
+  background: color-mix(in srgb, var(--bg) 78%, transparent); border: 1px solid var(--hair); border-radius: 999px;
+  padding: 4px 10px; font-family: var(--mono); font-size: 11px; color: var(--soft); backdrop-filter: blur(4px); }
+.an-speed input { width: 92px; accent-color: var(--cyan); }
+.an-stage.an-fs { position: fixed; inset: 0; max-width: none; z-index: 3000; border-radius: 0; }
+.an-stage.an-fs #an-canvas { height: 100% !important; }
+
+/* ═══ Мобильный аудит 2026-07-25 (батч правок с телефона юзера) ═══ */
+/* D: пока картинка грузится — мягкий шиммер вместо пустоты (юзер: «пусть крутится/переливается»).
+   JS (initImgSpinners в search.js) снимает шиммер по onload/ошибке, ставя .img-ready на обёртку. */
+@keyframes b42-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.card-img-wrap:not(.img-ready), .ai-cover:not(.img-ready) { position: relative; background: var(--tag-bg); }
+.card-img-wrap:not(.img-ready)::before, .ai-cover:not(.img-ready)::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(100deg, transparent 20%,
+        color-mix(in srgb, var(--soft) 20%, transparent) 45%, transparent 70%);
+    background-size: 200% 100%; animation: b42-shimmer 1.15s linear infinite;
+}
+.card-img-wrap img, .ai-cover img { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+    /* H: гамбургер прижат к правому краю — панель с min-width:140px при left:0 уходила за экран;
+       раскрываем её ВЛЕВО (правый край панели = правый край кнопки). */
+    .nav-more-panel { left: auto; right: 0; }
+    /* B: когда меню/иконки шапки переносятся на 2 строки — ровняем по правому краю с одинаковым
+       вертикальным зазором, а не вразнобой. */
+    .header-right { justify-content: flex-end; row-gap: 4px; }
+    .nav-links { flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; }
+    /* F: языки на карточке/статье не должны вставать столбиком — держим в один ряд.
+       G: кнопка «следующая статья» обрезается по ширине (ellipsis), а не толкает языки и не вылезает. */
+    .langs { flex-wrap: nowrap; }
+    .langs-row { gap: 8px; }
+    .langs-row .next-btn-top, .next-top .next-btn-top { max-width: 46vw; }
+}
+
+/* ═══ Дашборд: блок «Покрытие архива» (corpus-stats.json, юзер 2026-07-25) ═══ */
+.kpi-sub { font-size: 10.5px; color: var(--soft); font-family: var(--mono); }
+.cov-note { max-width: 620px; font-size: 13px; line-height: 1.5; color: var(--muted); margin: 4px 0 14px; }
+.cov-h3 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ochre); margin: 18px 0 10px; }
+.cov-list { display: flex; flex-direction: column; gap: 7px; max-width: 660px; }
+.cov-row { display: grid; grid-template-columns: 185px 1fr auto; align-items: center; gap: 10px; font-size: 12px; }
+.cov-name { color: var(--muted); line-height: 1.25; }
+.cov-bar { position: relative; height: 12px; border-radius: 999px; background: var(--tag-bg); overflow: hidden; }
+.cov-bar-tot { position: absolute; left: 0; top: 0; height: 100%; background: color-mix(in srgb, var(--soft) 30%, transparent); }
+.cov-bar-take { position: absolute; left: 0; top: 0; height: 100%; background: var(--cyan); border-radius: 999px; }
+.cov-num { font-family: var(--mono); font-size: 10.5px; color: var(--soft); white-space: nowrap; }
+html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right: 0; }
+@media (max-width: 640px) { .cov-row { grid-template-columns: 92px 1fr; } .cov-num { display: none; } }

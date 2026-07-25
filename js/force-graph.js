@@ -53,8 +53,46 @@ window.createForceGraph = function (opts) {
         warn.style.display = 'none';
         fsContainer.appendChild(warn);
     }
-    function updateSizeWarning(n) {
+    // Мобильный лимит узлов (юзер 2026-07-25): на телефоне большой граф не читается и симуляция
+    // не доходит до конца — точки виснут по углам. Режем до CAP по степени (оставляем самые связные),
+    // с пометкой и ссылкой «показать все» — оверрайд для планшетов и т.п. Касается всех графов (движок общий).
+    var MOBILE = window.matchMedia('(max-width: 640px)').matches;
+    var CAP = 50;
+    function graphFull() { try { return localStorage.getItem('b42_graph_full') === '1'; } catch (e) { return false; } }
+    function capNodes(nn, ll) {
+        if (!MOBILE || graphFull() || nn.length <= CAP) return { nodes: nn, links: ll, from: 0 };
+        var deg = nn.map(function () { return 0; });
+        ll.forEach(function (l) { deg[l[0]]++; deg[l[1]]++; });
+        var order = nn.map(function (_, i) { return i; }).sort(function (a, b) { return deg[b] - deg[a]; }).slice(0, CAP);
+        var remap = {}; var out = [];
+        order.forEach(function (i) { remap[i] = out.length; out.push(nn[i]); });
+        var outL = ll.filter(function (l) { return remap[l[0]] != null && remap[l[1]] != null; })
+                     .map(function (l) { return [remap[l[0]], remap[l[1]]]; });
+        return { nodes: out, links: outL, from: nn.length };
+    }
+    var CAP_NOTE = {
+        ru: 'Показаны {n} из {tot} (лёгкая мобильная версия — крупный граф на телефоне тормозит). ',
+        en: 'Showing {n} of {tot} (light mobile version — a large graph lags on phones). ',
+        es: 'Mostrando {n} de {tot} (versión móvil ligera — un grafo grande va lento en el teléfono). ',
+        ar: 'عرض {n} من {tot} (نسخة هاتف مبسّطة — الرسم الكبير يتباطأ على الهاتف). '
+    };
+    var SHOW_ALL = { ru: 'показать все', en: 'show all', es: 'mostrar todo', ar: 'عرض الكل' };
+    function updateSizeWarning(n, cappedFrom) {
         if (!warn) return;
+        if (cappedFrom) {
+            var t = (CAP_NOTE[lang] || CAP_NOTE.en).replace('{n}', n).replace('{tot}', cappedFrom);
+            warn.innerHTML = '⚠ ' + t;
+            var a = document.createElement('a');
+            a.href = '#'; a.className = 'graph-show-all'; a.textContent = SHOW_ALL[lang] || SHOW_ALL.en;
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                try { localStorage.setItem('b42_graph_full', '1'); } catch (_) {}
+                rebuild();
+            });
+            warn.appendChild(a);
+            warn.style.display = 'block';
+            return;
+        }
         if (n <= 100) { warn.style.display = 'none'; return; }
         var tpl = SIZE_WARN[lang] || SIZE_WARN.en;
         warn.textContent = tpl.replace('{n}', n);
@@ -153,14 +191,15 @@ window.createForceGraph = function (opts) {
     }
 
     function _ingest(g) {
-        nodes = g.nodes || []; links = g.links || [];
+        var capped = capNodes(g.nodes || [], g.links || []);
+        nodes = capped.nodes; links = capped.links;
         nodes.forEach(function (n) { n.x = Math.random() * (W - 60) + 30; n.y = Math.random() * (H - 60) + 30; n.vx = 0; n.vy = 0; n.deg = 0; });
         links.forEach(function (l) { nodes[l[0]].deg++; nodes[l[1]].deg++; });
         nodes.forEach(function (n) { n.r = opts.radius(n); });
         adj = nodes.map(function () { return {}; });
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
         alpha = 1; hover = -1; drag = -1; ready = true;
-        updateSizeWarning(nodes.length);
+        updateSizeWarning(nodes.length, capped.from);
         // Данные пришли, граф начинает рисоваться — убираем лоадер-оверлей (юзер 2026-07-23:
         // «граф долго, но пока грузится пустое место — каунтер»).
         var kgl = document.getElementById('kg-loader');

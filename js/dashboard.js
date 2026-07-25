@@ -264,6 +264,63 @@
             else root.appendChild(eng);
         });
 
+        // ── Покрытие архива (corpus-stats.json из скана Kaggle-дампа, юзер 2026-07-25): сколько ВСЕГО
+        //    в arXiv за 2025-2026 vs сколько мы обработали, разбивка по лицензиям и разделам. ──
+        Promise.all([
+            fetch('/data/corpus-stats.json').then(function (r) { return r.json(); }).catch(function () { return null; }),
+            fetch('/data/arxiv-taxonomy-en.json').then(function (r) { return r.json(); }).catch(function () { return {}; })
+        ]).then(function (arr) {
+            var cs = arr[0], TAX = arr[1] || {};
+            if (!cs || !cs.months) return;
+            var CL = ({
+                ru: { h: 'Покрытие архива · 2025–2026', dump: 'всего в arXiv', take: 'можем взять (откр. лиц.)',
+                      done: 'обработали', sub: '{e} express · {f} полных', lic: 'Лицензии в arXiv',
+                      sec: 'Топ разделов: взято / всего', note: 'Из открытых лицензий освоена лишь малая часть — материала на годы вперёд.' },
+                en: { h: 'Archive coverage · 2025–2026', dump: 'total on arXiv', take: 'we can take (open lic.)',
+                      done: 'processed', sub: '{e} express · {f} full', lic: 'Licenses on arXiv',
+                      sec: 'Top sections: taken / total', note: 'Only a fraction of the open-licensed pool is covered — years of material ahead.' },
+                es: { h: 'Cobertura del archivo · 2025–2026', dump: 'total en arXiv', take: 'podemos tomar (lic. abierta)',
+                      done: 'procesados', sub: '{e} express · {f} completos', lic: 'Licencias en arXiv',
+                      sec: 'Secciones: tomadas / total', note: 'Solo cubrimos una fracción del material con licencia abierta.' },
+                ar: { h: 'تغطية الأرشيف · 2025–2026', dump: 'المجموع في arXiv', take: 'يمكننا أخذها (رخصة مفتوحة)',
+                      done: 'عالجنا', sub: '{e} سريع · {f} كامل', lic: 'الرخص في arXiv',
+                      sec: 'أهم الأقسام: مأخوذ / الكل', note: 'لم نغطِّ سوى جزء يسير من المتاح برخصة مفتوحة.' }
+            })[window.lang] || null;
+            CL = CL || { h: 'Archive coverage · 2025–2026', dump: 'total on arXiv', take: 'we can take', done: 'processed',
+                         sub: '{e} express · {f} full', lic: 'Licenses', sec: 'Top sections', note: '' };
+            var g = cs.generated_total || { gen: 0, express: 0, full: 0 };
+            var licSegs = (cs.licenses || []).slice(0, 6).map(function (l, i) { return { label: l[0], value: l[1], color: PAL[i % PAL.length] }; });
+            // Полное ЛОКАЛИЗОВАННОЕ имя раздела из НАШЕГО справочника (юзер 2026-07-25: «используй наши
+            // названия, все языки»). Коды arXiv: подкатегория после точки бывает ЗАГЛАВНОЙ (astro-ph.CO).
+            function catName(code) {
+                var m = window.ARXIV_CAT_NAMES || {};
+                var up = code.replace(/\.([a-z-]+)$/, function (_, s) { return '.' + s.toUpperCase(); });
+                return m[code] || m[up] || TAX[code] || TAX[up] || code;   // наш локал. справочник → офиц. таксономия arXiv → код
+            }
+            var maxSec = (cs.sections && cs.sections[0] && cs.sections[0][1]) || 1;
+            var secBars = (cs.sections || []).slice(0, 10).map(function (s) {
+                var name = catName(s[0]);
+                var pct = Math.round(s[2] / maxSec * 100), pctTot = Math.round(s[1] / maxSec * 100);
+                return '<div class="cov-row"><span class="cov-name">' + esc(name) + '</span>' +
+                    '<span class="cov-bar"><i class="cov-bar-tot" style="width:' + pctTot + '%"></i>' +
+                    '<i class="cov-bar-take" style="width:' + pct + '%"></i></span>' +
+                    '<span class="cov-num">' + s[2].toLocaleString() + ' / ' + s[1].toLocaleString() + '</span></div>';
+            }).join('');
+            var cov = document.createElement('div');
+            cov.innerHTML = '<div class="dash-block"><h2>' + esc(CL.h) + '</h2>' +
+                '<div class="kpi-grid">' +
+                    '<div class="kpi"><div class="kpi-n">' + (cs.dump_total || 0).toLocaleString() + '</div><div class="kpi-l">' + esc(CL.dump) + '</div></div>' +
+                    '<div class="kpi"><div class="kpi-n">' + (cs.allowed_total || 0).toLocaleString() + '</div><div class="kpi-l">' + esc(CL.take) + '</div></div>' +
+                    '<div class="kpi"><div class="kpi-n">' + (g.gen || 0).toLocaleString() + '</div><div class="kpi-l">' + esc(CL.done) +
+                        '<br><span class="kpi-sub">' + esc(CL.sub.replace('{e}', g.express).replace('{f}', g.full)) + '</span></div></div>' +
+                '</div>' +
+                '<p class="cov-note">' + esc(CL.note) + '</p>' +
+                '<div class="pies">' + pie(licSegs, CL.lic) + '</div>' +
+                '<h3 class="cov-h3">' + esc(CL.sec) + '</h3><div class="cov-list">' + secBars + '</div>' +
+                '</div>';
+            root.appendChild(cov);
+        }).catch(function () {});
+
         // Дата сборки
         fetch('/data/build-info.json').then(function (r) { return r.json(); }).then(function (b) {
             if (b && b.built) { var e = document.createElement('div'); e.className = 'dash-built';
