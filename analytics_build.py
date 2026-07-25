@@ -55,11 +55,21 @@ def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
             f'  "desc": ONE plain-language sentence telling a curious non-expert what unites this group and why it matters.\n'
             f"Write BOTH fields in {LANG_NAME[lang]}. Do not transliterate the tag ids — interpret their meaning. "
             f'Return STRICT JSON: {{"<id>": {{"title": "...", "desc": "..."}}, ...}} covering every id below.\n\n{body}')
-        try:
-            resp = chat("cluster_interpret", prompt)
-            data = json.loads(resp.choices[0].message.content)
-        except Exception as e:
-            print(f"  ⚠️ трактовка ({kind}/{lang}) не удалась: {e}")
+        # reasoning-модель изредка возвращает пустой/битый ответ (весь бюджет ушёл в рассуждение) —
+        # ретраим, иначе целый язык выпадает из трактовки.
+        data = None
+        for attempt in range(3):
+            try:
+                resp = chat("cluster_interpret", prompt)
+                raw = resp.choices[0].message.content or ""
+                if raw.strip():
+                    data = json.loads(raw)
+                    break
+            except Exception as e:
+                if attempt == 2:
+                    print(f"  ⚠️ трактовка ({kind}/{lang}) не удалась после 3 попыток: {e}")
+        if data is None:
+            print(f"  ⚠️ трактовка ({kind}/{lang}) пуста — пропуск языка")
             continue
         for c in ids:
             v = data.get(str(c)) or data.get(int(c)) or {}
