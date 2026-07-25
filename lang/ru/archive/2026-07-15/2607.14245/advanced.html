@@ -7,7 +7,7 @@
     <meta name="description" content="Робот пробует сотни возможных путей, постепенно сужая поиск. Раньше это делали по жёсткому графику, часто упираясь в слабые решения. Новый подход в реальном времени оценивает энтропию — разнообразие попыток — и гибко меняет скорость отбора. Результат: маршрут находится быстрее и надёжнее.">
     <meta property="og:title" content="Как энтропия помогает роботам быстрее находить путь">
     <meta property="og:description" content="Замеряя разброс вариантов, алгоритмы роботов учатся быстрее искать маршруты, не застревая в тупиках.">
-    <meta property="og:image" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14245/ai.jpg">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-15/2607.14245/ai.jpg">
     <meta property="og:image:width" content="1440">
     <meta property="og:image:height" content="960">
     <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14245/advanced.html">
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css?v=4e45bcfdee">
+    <link rel="stylesheet" href="/css/style.css?v=ef513490a2">
     <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Как энтропия помогает роботам быстрее находить путь", "description": "Замеряя разброс вариантов, алгоритмы роботов учатся быстрее искать маршруты, не застревая в тупиках.", "inLanguage": "ru", "datePublished": "2026-07-15", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14245/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14245/ai.jpg", "author": [{"@type": "Person", "name": "Shuqi Wang"}, {"@type": "Person", "name": "Wenrong Sun"}, {"@type": "Person", "name": "Tao Han"}, {"@type": "Person", "name": "Yue Gao"}, {"@type": "Person", "name": "Xiang Yin"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.14245", "abstract": "В работе исследуется детерминированное оптимальное управление на основе метода MPPI (Model Predictive Path Integral) — безградиентной схемы, использующей выборку траекторий. Для получения точного оптимума необходимо снижение температуры до нуля, что делает критическим выбор стратегии охлаждения. Традиционные подходы опираются на предопределённые расписания, снижая эффективность и адаптивность. Предлагается ITAC (Information-Theoretic Adaptive Cooling) — механизм, где энтропия Шеннона распределения весов важности в реальном времени управляет темпом охлаждения: быстрое снижение при высокой дисперсии весов и осторожное при их концентрации. Теоретически доказывается асимптотическая сходимость к детерминированному оптимуму, а также выводится критический порог энтропии, создающий гладкий барьер против преждевременного коллапса весов. Эксперименты на задачах планирования с негладкой темпоральной логикой показывают ускорение сходимости по сравнению с аналогами, сохраняя безградиентность MPPI."}</script>
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -43,7 +43,7 @@
             <a href="/lang/ru/laws/">laws</a>
             <a href="/lang/ru/scientists/">scientists</a>
             <a href="/lang/ru/sections/">sections</a>
-            <a href="/lang/ru/authors/">authors</a>
+            <a href="/lang/en/authors/">authors</a>
             <a href="/lang/ru/graph/">graph</a>
             <a href="/lang/ru/theory/">theory</a>
             <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
@@ -74,7 +74,7 @@
             <button class="share-btn share-inline" title="Поделиться" onclick="shareArticle('Как энтропия помогает роботам быстрее находить путь','https://bridge42worlds.academy/lang/ru/archive/2026-07-15/2607.14245/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
         </div>
         <div class="original-title original-title-top">Original: "Information-Theoretic Adaptive Cooling for Deterministic MPPI via Entropy Feedback"</div>
-        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/ru/authors/Shuqi_Wang.html" class="text-author-link" data-author="Shuqi Wang">Shuqi Wang</a>, <a href="/lang/ru/authors/Wenrong_Sun.html" class="text-author-link" data-author="Wenrong Sun">Wenrong Sun</a>, <a href="/lang/ru/authors/Tao_Han.html" class="text-author-link" data-author="Tao Han">Tao Han</a>, <a href="/lang/ru/authors/Yue_Gao.html" class="text-author-link" data-author="Yue Gao">Yue Gao</a>, <a href="/lang/ru/authors/Xiang_Yin.html" class="text-author-link" data-author="Xiang Yin">Xiang Yin</a></div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/en/authors/Shuqi_Wang.html" class="text-author-link" data-author="Shuqi Wang">Shuqi Wang</a>, <a href="/lang/en/authors/Wenrong_Sun.html" class="text-author-link" data-author="Wenrong Sun">Wenrong Sun</a>, <a href="/lang/en/authors/Tao_Han.html" class="text-author-link" data-author="Tao Han">Tao Han</a>, <a href="/lang/en/authors/Yue_Gao.html" class="text-author-link" data-author="Yue Gao">Yue Gao</a>, <a href="/lang/en/authors/Xiang_Yin.html" class="text-author-link" data-author="Xiang Yin">Xiang Yin</a></div>
         <div class="meta">
             arXiv:<a href="https://arxiv.org/abs/2607.14245" target="_blank" rel="noopener">2607.14245</a> · 2026-07-15 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/" target="_blank" rel="noopener">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 1 мин</span>
         </div>
@@ -103,13 +103,13 @@
 <a href="/lang/ru/tags/dark_matter.html" class="side-tag" data-tag="dark_matter">тёмная материя</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/second_law_of_thermodynamics.html" class="side-law" data-law="second_law_of_thermodynamics">второй закон термодинамики</a><a href="/lang/ru/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">эффект Доплера</a><a href="/lang/ru/laws/bekensteinhawking_entropy.html" class="side-law" data-law="bekensteinhawking_entropy">энтропия Бекенштейна–Хокинга</a><a href="/lang/ru/laws/gravitational_lensing.html" class="side-law" data-law="gravitational_lensing">гравитационное линзирование</a><a href="/lang/ru/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">уравнения Максвелла</a><a href="/lang/ru/laws/plancks_law.html" class="side-law" data-law="plancks_law">закон излучения Планка</a></div>
 </div>
 
-<script src="/js/likes.js?v=4e45bcfdee"></script>
-<script src="/js/search.js?v=4e45bcfdee"></script>
-<script src="/js/scroll.js?v=4e45bcfdee"></script>
-<script src="/js/lightbox.js?v=4e45bcfdee"></script>
-<script src="/js/gallery.js?v=4e45bcfdee"></script>
-<script src="/js/force-graph.js?v=4e45bcfdee"></script>
-<script src="/js/mini-graph.js?v=4e45bcfdee"></script>
+<script src="/js/likes.js?v=ef513490a2"></script>
+<script src="/js/search.js?v=ef513490a2"></script>
+<script src="/js/scroll.js?v=ef513490a2"></script>
+<script src="/js/lightbox.js?v=ef513490a2"></script>
+<script src="/js/gallery.js?v=ef513490a2"></script>
+<script src="/js/force-graph.js?v=ef513490a2"></script>
+<script src="/js/mini-graph.js?v=ef513490a2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('2607.14245', 'article', 'ru');

@@ -684,7 +684,7 @@ function authorRowHTML(name, data) {
         return '<span onclick="event.stopPropagation();window.location=\'/lang/' + lang + '/tags/' + t + '.html\'" class="text-tag" data-tag="' + t + '">' +
             ((tagsLoc[t] && tagsLoc[t].name) || t) + '</span>';
     }).join(' ');
-    return '<a href="/lang/' + lang + '/authors/' + slug + '.html" class="author-row" data-author="' + name + '">' +
+    return '<a href="/lang/' + 'en' + '/authors/' + slug + '.html" class="author-row" data-author="' + name + '">' +
         '<span class="author-name">' + name + '</span>' +
         '<span class="author-tags">' + tagsHtml + '</span>' +
         '<span class="author-count">' + count + ' ' + UI.articlesWord + '</span></a>';
@@ -791,7 +791,7 @@ function cardHTML(item) {
     // Авторы: своя строка (переносится на 1-2 строки по ширине карточки), до 20 — с "+N" на остаток
     var au = item.authors || [];
     var authorsHtml = au.slice(0, 20).map(function(a) {
-        return '<a href="/lang/' + lang + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
+        return '<a href="/lang/' + 'en' + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
     }).join('<span class="sep">·</span>') + (au.length > 20 ? ' <span class="au-more-lite">+' + (au.length - 20) + '</span>' : '');
     var tagsHtml = (item.tags || []).slice(0, 6).map(function(t) {
         return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
@@ -1155,7 +1155,7 @@ function initAllTooltips() {
             } else if (el.dataset.author) {
                 var a = authorsGraph[el.dataset.author];
                 var count = a ? (a.article_count || (a.articles || []).length || 0) : 0;
-                content = '<strong>' + el.dataset.author + '</strong> &mdash; <span class="tip-desc">' + count + ' ' + UI.articlesWord + '</span> <a href="/lang/' + lang + '/authors/' + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
+                content = '<strong>' + el.dataset.author + '</strong> &mdash; <span class="tip-desc">' + count + ' ' + UI.articlesWord + '</span> <a href="/lang/' + 'en' + '/authors/' + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
             }
 
             if (content) {
