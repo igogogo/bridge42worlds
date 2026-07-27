@@ -115,13 +115,16 @@
   }
   /* Топ-навигация сайта (самодостаточная, в токенах гида; паттерн как на сайте: main + ☰) */
   .topnav { display: flex; align-items: center; gap: 15px; margin: 0 0 22px; font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
-  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; margin-inline-end: auto; }
+  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; }
+  /* как в общей шапке сайта: логотип, сразу за ним ☰, остальное — вправо (юзер 2026-07-25) */
+  .topnav-more { margin-inline-start: 2px; }
+  .topnav > .langs, .topnav > .topnav-right { margin-inline-start: auto; }
   .topnav > a { color: var(--muted); text-decoration: none; transition: color .16s; }
   .topnav > a:hover { color: var(--cyan); }
   .topnav-more { position: relative; }
   .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 9px; border-radius: 8px; transition: color .16s, background .16s; }
   .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--cyan); background: var(--card); }
-  .topnav-panel { position: absolute; inset-inline-end: 0; top: 132%; display: none; flex-direction: column; gap: 2px; min-width: 158px;
+  .topnav-panel { position: absolute; inset-inline-start: 0; top: 132%;  /* ☰ теперь слева — раскрываем панель вправо, чтобы не уходила за экран */ display: none; flex-direction: column; gap: 2px; min-width: 158px;
     background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 8px; box-shadow: 0 18px 40px -20px rgba(0,0,0,.4); z-index: 30; }
   .topnav-more.open .topnav-panel { display: flex; }
   .topnav-panel a { padding: 6px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; transition: color .16s, background .16s; }
@@ -137,10 +140,10 @@
 
   <div class="topnav">
     <a class="topnav-logo" href="/lang/es/index.html">bridge42worlds</a>
-    <a href="/lang/es/index.html">main</a>
     <span class="topnav-more">
       <button type="button" class="topnav-burger" aria-label="Menu" aria-expanded="false">☰</button>
       <span class="topnav-panel">
+        <a href="/lang/es/index.html">main</a>
         <a href="/lang/es/tags/">tags</a>
         <a href="/lang/es/laws/">laws</a>
         <a href="/lang/es/scientists/">scientists</a>
@@ -263,6 +266,15 @@
   </section>
 
   <section>
+    <p class="kicker">Mapa y analítica</p>
+    <h2>Ver el proyecto completo</h2>
+    <p>Además de los artículos hay una vista general: el <strong>mapa del proyecto</strong>, una nube 3D de todo lo que hemos cubierto. Cada punto es un artículo, los cercanos comparten temas y el color marca un grupo temático que el algoritmo encontró solo. Los nombres y descripciones los escribe la IA.</p>
+    <p>El mapa tiene cuatro vistas: <strong>Artículos</strong> — la nube; <strong>Autores</strong> — todos los investigadores procesados, con el eje «experimental ↔ teórico»; <strong>Vuelo</strong> — vuela por la nube y abre artículos; <strong>Calor</strong> — paisaje 3D de «tema × mes».</p>
+    <p>En el <strong>Resumen</strong> están las cifras: artículos por día y mes, campos cubiertos, qué se lee, y cuántos artículos hay en el archivo abierto arXiv frente a lo que ya hemos cubierto.</p>
+    <div class="note">Todo se calcula con nuestros propios datos, sin servicios externos.</div>
+  </section>
+
+  <section>
     <p class="kicker">Detalles que da gusto conocer</p>
     <h2>Por el camino</h2>
     <div class="tiles">
@@ -313,7 +325,11 @@
   var b = m && m.querySelector('.topnav-burger');
   if (!b) return;
   b.addEventListener('click', function(e){ e.stopPropagation(); var o = m.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
-  document.addEventListener('click', function(e){ if (!m.contains(e.target)) m.classList.remove('open'); });
+  document.addEventListener('click', function(e){
+    if (!m.contains(e.target)) { m.classList.remove('open'); return; }
+    if (e.target === m) m.classList.remove('open');   // тап по затемнению шторки (::before самого m)
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') m.classList.remove('open'); });
 })();
 </script>
 </body>
