@@ -44,9 +44,26 @@ client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL, timeout=18
 SYSTEM_PROMPT = Path("data/prompts/system.txt").read_text(encoding="utf-8")
 
 
+_STYLE_CORE = None
+
+
+def style_core():
+    """Общий блок правил стиля — ЕДИНСТВЕННЫЙ экземпляр (ТЗ контент-менеджера 2026-07-27, §2).
+    Промпты уровней содержат только отличия уровня, а тон/запреты/приёмы живут здесь."""
+    global _STYLE_CORE
+    if _STYLE_CORE is None:
+        p = Path("data/prompts/_style-core.txt")
+        _STYLE_CORE = p.read_text(encoding="utf-8").strip() if p.exists() else ""
+    return _STYLE_CORE
+
+
 def load_prompt(name):
-    """Читает промт из data/prompts/{name}.txt (без .txt в имени)."""
-    return Path(f"data/prompts/{name}.txt").read_text(encoding="utf-8")
+    """Читает промт из data/prompts/{name}.txt (без .txt в имени).
+    Плейсхолдер {style_core} заменяется общим блоком правил — так редакции не расходятся."""
+    text = Path(f"data/prompts/{name}.txt").read_text(encoding="utf-8")
+    if "{style_core}" in text:
+        text = text.replace("{style_core}", style_core())
+    return text
 
 
 def focus_line(focus):

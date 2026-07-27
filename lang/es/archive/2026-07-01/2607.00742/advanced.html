@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voto impar: cómo la diferencia simétrica acelera los autómatas — bridge42worlds</title>
+    <meta name="description" content="En un autómata con diferencia simétrica (XNFA), una palabra es aceptada si el número de caminos exitosos es impar, como en un tribunal donde el veredicto requiere un número impar de votos a favor. Para un autómata no determinista común (NFA) basta con al menos un voto. Esta modificación cambia la ba">
+    <meta property="og:title" content="Voto impar: cómo la diferencia simétrica acelera los autómatas">
+    <meta property="og:description" content="Una nueva mirada a la complejidad fina: ¿se reduce el problema de aceptación de palabras en autómatas no deterministas a una variante con paridad, y es posible acelerar los algoritmos?">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00742/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00742/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00742/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Voto impar: cómo la diferencia simétrica acelera los autómatas", "description": "Una nueva mirada a la complejidad fina: ¿se reduce el problema de aceptación de palabras en autómatas no deterministas a una variante con paridad, y es posible acelerar los algoritmos?", "inLanguage": "es", "datePublished": "2026-07-01", "url": "https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00742/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00742/ai.webp", "author": [{"@type": "Person", "name": "Dmitry Chistikov"}, {"@type": "Person", "name": "Radosław Piórkowski"}, {"@type": "Person", "name": "Neha Rino"}, {"@type": "Person", "name": "Brink van der Merwe"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.00742", "abstract": "Los autómatas de diferencia simétrica (XNFA) son una variante de los autómatas finitos que aceptan una palabra si y solo si el número de recorridos aceptadores es impar; equivalentemente, son autómatas ponderados sobre el cuerpo de dos elementos. Se investiga la complejidad fina de los problemas principales: verificación de pertenencia (pertenencia de la palabra), vacuidad y equivalencia de los XNFA con el objetivo de optimizar el grado polinomial en las cotas de tiempo. Asumiendo ambigüedad polinomial, se proporciona una reducción aleatorizada del problema de pertenencia de los AFN a los XNFA. Para autómatas de ambigüedad acotada (por ejemplo, no ambiguos) se muestra que la pertenencia se resuelve más rápido que en el caso general. Sin suposiciones sobre la ambigüedad, se desarrollan algoritmos acelerados de verificación de certificados adecuados para (no) vacuidad y (no) equivalencia. Varios resultados se generalizan a autómatas ponderados sobre otros semianillos y cuerpos."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Avanzado</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/es/archive/2026-07-01/2607.00742/mini.html" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/es/archive/2026-07-01/2607.00742/simple.html" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/es/archive/2026-07-01/2607.00742/index.html" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/es/archive/2026-07-01/2607.00742/advanced.html" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Next article →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.00742">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ arriba</a></li><li class="article-nav-sep"></li><li><a href="#context">Context</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li><li><a href="#implications">Implications</a></li><li><a href="#future_development">Future development</a></li><li><a href="#impact_on">Impact</a></li><li><a href="#next_steps">Next steps</a></li><li><a href="#key_problems_connection">Key open problems</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/es/archive/2026-07-01/2607.00742/simple.html" title="Simple — Lo más simple — para una primera mirada"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">Simple</span></a><a class="lv-btn" data-version="popular" href="/lang/es/archive/2026-07-01/2607.00742/index.html" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">Popular</span></a><a class="lv-btn active" data-version="advanced" href="/lang/es/archive/2026-07-01/2607.00742/advanced.html" title="Avanzado — Con fórmulas e historia completa"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">Avanzado</span></a></div>
+        
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Voto impar: cómo la diferencia simétrica acelera los autómatas  </h1>
+            <button class="share-btn share-inline" title="Share" onclick="shareArticle('Voto impar: cómo la diferencia simétrica acelera los autómatas','https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00742/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Algorithms and fine-grained complexity for nondeterministic and symmetric difference automata"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/en/authors/Dmitry_Chistikov.html" class="text-author-link" data-author="Dmitry Chistikov">Dmitry Chistikov</a>, <a href="/lang/en/authors/Radosław_Piórkowski.html" class="text-author-link" data-author="Radosław Piórkowski">Radosław Piórkowski</a>, <a href="/lang/en/authors/Neha_Rino.html" class="text-author-link" data-author="Neha Rino">Neha Rino</a>, <a href="/lang/en/authors/Brink_van_der_Merwe.html" class="text-author-link" data-author="Brink van der Merwe">Brink van der Merwe</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.00742" target="_blank" rel="noopener">2607.00742</a> · 2026-07-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/" target="_blank" rel="noopener">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 min</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/es/sections/cs_FL.html" data-cat="cs.FL" title="">Lenguajes Formales y Autómatas</a></div>
+        <div class="oneliner">Una nueva mirada a la complejidad fina: ¿se reduce el problema de aceptación de palabras en autómatas no deterministas a una variante con paridad, y es posible acelerar los algoritmos?</div>
+        <div class="mosaic"></div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>Los autómatas de diferencia simétrica (XNFA) son una variante de los autómatas finitos que aceptan una palabra si y solo si el número de recorridos aceptadores es impar; equivalentemente, son autómatas ponderados sobre el cuerpo de dos elementos. Se investiga la complejidad fina de los problemas principales: verificación de pertenencia (pertenencia de la palabra), vacuidad y equivalencia de los XNFA con el objetivo de optimizar el grado polinomial en las cotas de tiempo. Asumiendo ambigüedad polinomial, se proporciona una reducción aleatorizada del problema de pertenencia de los AFN a los XNFA. Para autómatas de ambigüedad acotada (por ejemplo, no ambiguos) se muestra que la pertenencia se resuelve más rápido que en el caso general. Sin suposiciones sobre la ambigüedad, se desarrollan algoritmos acelerados de verificación de certificados adecuados para (no) vacuidad y (no) equivalencia. Varios resultados se generalizan a autómatas ponderados sobre otros semianillos y cuerpos.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:quantum_hall_effect,l:kam_theorem,l:stokes_theorem,l:fokker_planck_equation,l:maximum_entropy_principle,l:boltzmann_equation,s:Klaus von Klitzing,s:Lev Landau"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>Context</h2><p>Desde los años 70 se sabe que el problema de aceptación de palabras para NFA es completo para la clase NL, y para XNFA lo es para ⊕L. La cuestión de la inclusión NL ⊆ ⊕L permanece abierta: en esencia, se trata de si se puede «revotar» un tribunal de un tipo para transformarlo en el otro. Este trabajo traslada el problema al ámbito de la complejidad de grafos y el análisis fino del tiempo, donde no solo importan las cotas polinomiales, sino los exponentes concretos.</p></section><section id="methods"><h2>Methods</h2><p>Para autómatas k-ambiguos, donde cada camino-jurado aparece como máximo k veces, un algoritmo dinámico rastrea los estados, realizando solo k|Q| operaciones por símbolo. Al reducir un NFA a un XNFA se construye un conjunto de k «audiencias» paralelas sobre el campo extendido GF(2^k); la elección aleatoria de pesos garantiza que el veredicto del NFA original se refleje en la imparidad de al menos un XNFA con probabilidad de error ≤ 1/2. Este truco se basa en la aleatorización y el álgebra lineal, y el error se controla mediante el lema de Schwartz–Zippel. Adicionalmente, un análisis estocástico de la ambigüedad permite acelerar la programación dinámica estándar.</p></section><section id="results"><h2>Results</h2><p>Primer resultado: para autómatas unívocos el tiempo de aceptación es O(|w||Q| + |δ|), lo que resuelve un problema abierto de multiplicación de matrices 0-1. Segundo: si existiera un algoritmo para XNFA con tiempo O((|δ||w|)^{1-ε}), entonces los NFA polinomialmente ambiguos se resolverían casi con la misma rapidez; esto es un contrajuego a la hipótesis de dificultad de los NFA (Bringmann et al.). Tercero: los certificados de vaciedad y equivalencia para XNFA se verifican en O(|Σ|n^ω), donde ω < 2.38 es el exponente de la multiplicación de matrices. En esencia, el protocolo de la audiencia permite a un juez-verificador en O(n^ω) pasos constatar que un veredicto acusatorio es imposible. Intentar demostrar la optimalidad del tiempo cúbico (n^3) mediante SETH requeriría refutar NSETH.</p></section><section id="implications"><h2>Implications</h2><p>Se difumina la frontera entre los anillos «fáciles» y los semianillos «difíciles»: con una polifonía razonable, los XNFA no son más difíciles que los NFA. La técnica de certificados, apoyada en la estructura del autómata, abre el camino hacia cotas inferiores, vinculando la teoría de autómatas con las hipótesis de dificultad de la multiplicación de matrices.</p></section><section id="future_development"><h2>Future development</h2><p>El principal desafío es eliminar el requisito de ambigüedad polinomial. Si se logra, el objetivo principal será el propio exponente ω: cada avance de 3 hacia 2 acerca el momento en que la verificación del veredicto de un XNFA requiera un tiempo casi cuadrático.</p></section><section id="impact_on"><h2>Impact</h2><p>Teoría de autómatas, verificación de software, procesamiento de consultas regulares en bases de datos: dondequiera que los autómatas actúen como «tribunales» sobre cadenas.</p></section><section id="next_steps"><h2>Next steps</h2><p>Construir una reducción determinista sin audiencias paralelas e investigar la complejidad exacta de los XNFA sin suposiciones sobre la ambigüedad.</p></section><section id="key_problems_connection"><h2>Key open problems</h2><p>Directamente relacionado con el problema NL vs ⊕L y la hipótesis de aceptación de NFA (Bringmann et al., 2024).</p></section>
+        <div class="fun-fact"><p class="fact">🎯 Con la palabra vacía, un XNFA acepta si y solo si la suma de los estados iniciales y finales es impar: un «tribunal de longitud cero» emite veredicto según la composición del jurado.</p><p class="fact fact-scifi">🎬 La idea de la paridad del número de caminos recuerda a la interferencia cuántica en los mundos everettianos: la partícula recorre todos los caminos a la vez, y el detector se activa solo si sus amplitudes se suman constructivamente.</p></div>
+        <div class="formula"><div class="formula-render">O(k|w||Q| + |\delta|)</div><div class="formula-meaning">Cota del tiempo de ejecución del algoritmo de programación dinámica</div></div><div class="formula"><div class="formula-render">\Pr[ \text{XNFA rejects} \mid \text{NFA accepts} ] \le \frac{|w|}{2^k}</div><div class="formula-meaning">Probabilidad de omitir una palabra aceptada cuando k &gt; log|w|</div></div><div class="formula"><div class="formula-render">O(|\Sigma| n^{\omega})</div><div class="formula-meaning">Complejidad de la verificación usando multiplicación de matrices (ω ≈ 2.38)</div></div>
+        <div class="key-numbers"><h3>Key numbers</h3><ul><li><strong>ω (exponente de la multiplicación de matrices):</strong> 2.38</li><li><strong>Probabilidad de éxito de la reducción:</strong> ≥ 1/2</li><li><strong>Grado del polinomio para la vaciedad de XNFA:</strong> ω ≈ 2.38</li><li><strong>Longitud del certificado para la no vaciedad:</strong> ≤ n</li><li><strong>Número de XNFA creados en la reducción:</strong> log|w| + 1</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.00742_es_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.00742" title="Favoritos"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/es/archive/2026-07-01/2607.00742/simple.html" title="Simple — Lo más simple — para una primera mirada"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn lv-compact" data-version="popular" href="/lang/es/archive/2026-07-01/2607.00742/index.html" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn active lv-compact" data-version="advanced" href="/lang/es/archive/2026-07-01/2607.00742/advanced.html" title="Avanzado — Con fórmulas e historia completa"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.00742_es_advanced" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/es/scientists/Klaus_von_Klitzing.html" class="side-sci" data-scientist="Klaus von Klitzing">Klaus von Klitzing</a><a href="/lang/es/scientists/Lev_Landau.html" class="side-sci" data-scientist="Lev Landau">Lev Landau</a><a href="/lang/es/scientists/George_Gabriel_Stokes.html" class="side-sci" data-scientist="George Gabriel Stokes">George Gabriel Stokes</a><a href="/lang/es/scientists/Max_Planck.html" class="side-sci" data-scientist="Max Planck">Max Planck</a><a href="/lang/es/scientists/Claude_Shannon.html" class="side-sci" data-scientist="Claude Shannon">Claude Shannon</a><a href="/lang/es/scientists/Ludwig_Boltzmann.html" class="side-sci" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a><div class="side-tags-label">Tags</div><a href="/lang/es/tags/graphs.html" class="side-tag" data-tag="graphs">grafos</a>
+<a href="/lang/es/tags/optimization.html" class="side-tag" data-tag="optimization">optimización</a>
+<a href="/lang/es/tags/probability_theory.html" class="side-tag" data-tag="probability_theory">teoría de la probabilidad</a>
+<a href="/lang/es/tags/information_theory.html" class="side-tag" data-tag="information_theory">teoría de la información</a>
+<a href="/lang/es/tags/game_theory.html" class="side-tag" data-tag="game_theory">teoría de juegos</a>
+<a href="/lang/es/tags/topology.html" class="side-tag" data-tag="topology">topología</a>
+<a href="/lang/es/tags/dynamical_systems.html" class="side-tag" data-tag="dynamical_systems">sistemas dinámicos</a>
+<a href="/lang/es/tags/stochastic_processes.html" class="side-tag" data-tag="stochastic_processes">procesos estocásticos</a><div class="side-laws-label">Laws</div><a href="/lang/es/laws/quantum_hall_effect.html" class="side-law" data-law="quantum_hall_effect">efecto Hall cuántico</a><a href="/lang/es/laws/kam_theorem.html" class="side-law" data-law="kam_theorem">Teorema de Kolmogórov-Arnold-Moser</a><a href="/lang/es/laws/stokes_theorem.html" class="side-law" data-law="stokes_theorem">teorema de Stokes</a><a href="/lang/es/laws/fokker_planck_equation.html" class="side-law" data-law="fokker_planck_equation">Ecuación de Fokker-Planck</a><a href="/lang/es/laws/maximum_entropy_principle.html" class="side-law" data-law="maximum_entropy_principle">principio de máxima entropía</a><a href="/lang/es/laws/boltzmann_equation.html" class="side-law" data-law="boltzmann_equation">ecuación de Boltzmann</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.00742', 'article', 'es');
+    if (false && window.logExpressInterest) logExpressInterest('2607.00742', 'es');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

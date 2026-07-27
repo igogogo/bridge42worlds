@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-o3: цифровая лупа для охоты за редкими звёздами — bridge42worlds</title>
+    <meta name="description" content="Современные спектроскопические обзоры генерируют миллионы спектров, и поиск редких звёзд — белых карликов, катаклизмических переменных, углеродных гигантов — требует титанической ручной работы. Spec-o3 — агент на основе визуально-языковой модели — подходит к задаче как опытный астроном: наводит цифр">
+    <meta property="og:title" content="Spec-o3: цифровая лупа для охоты за редкими звёздами">
+    <meta property="og:description" content="Spec-o3 — ИИ-агент с цифровой лупой, который выискивает в спектрах редкие звёзды и прозрачно объясняет каждый шаг.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-01-10/2601.06498/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-01-10/2601.06498/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-01-10/2601.06498/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-01-10/2601.06498/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Spec-o3: цифровая лупа для охоты за редкими звёздами", "description": "Spec-o3 — ИИ-агент с цифровой лупой, который выискивает в спектрах редкие звёзды и прозрачно объясняет каждый шаг.", "inLanguage": "ru", "datePublished": "2026-01-10", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/ai.webp", "author": [{"@type": "Person", "name": "Minghui Jia"}, {"@type": "Person", "name": "Qichao Zhang"}, {"@type": "Person", "name": "Ali Luo"}, {"@type": "Person", "name": "Linjing Li"}, {"@type": "Person", "name": "Shuo Ye"}, {"@type": "Person", "name": "Hailing Lu"}, {"@type": "Person", "name": "Wen Hou"}, {"@type": "Person", "name": "Dongbin Zhao"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2601.06498", "abstract": "Spec-o3 — мультимодальный агент с инструментальным доступом, выполняющий спектральную инспекцию на основе чередующихся цепочек рассуждений. Обучен в два этапа: тонкая настройка на траекториях экспертных проверок и дообучение с подкреплением по результатам идентификации редких объектов. На пяти задачах поиска редких объектов в данных LAMOST модель с 7 миллиардами параметров повысила макро-F1 с 28.3 до 76.5, превзойдя как коммерческие визуально-языковые модели, так и специализированные глубокие сети. Продемонстрирована обобщающая способность: агент успешно переносит навыки на данные обзоров SDSS и DESI. Экспертиза подтвердила физическую непротиворечивость и прозрачность цепочек рассуждений."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-01-10/2601.06498/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-01-10/2601.06498/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-01-10/2601.06498/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-01-10/2601.06498/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Следующая статья →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202601.06498">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/ru/archive/2026-01-10/2601.06498/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">Просто</span></a><a class="lv-btn active" data-version="popular" href="/lang/ru/archive/2026-01-10/2601.06498/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">Популярно</span></a><a class="lv-btn" data-version="advanced" href="/lang/ru/archive/2026-01-10/2601.06498/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">Подробно</span></a></div>
+        <div class="mini-head"><div class="mini-head-l">коротко · 20 секунд</div><p>Астрономы создали цифровую лупу по имени Spec-o3. Она вглядывается в радужные полоски света от звёзд, выхватывает мельчайшие детали и за доли секунды ставит диагноз. Узнаёт и сверхплотные остатки, и двойные системы с перетекающим газом, и гигантов с необычным составом. Сначала лупу учили на примерах экспертов, потом она тренировалась сама и стала в 50 раз быстрее человека. Каждый вывод она объясняет, так что астроном может проверить. Теперь редкие объекты находят быстрее, а мы лучше понимаем жизнь и смерть звёзд.</p></div>
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Spec-o3: цифровая лупа для охоты за редкими звёздами <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+            <button class="share-btn share-inline" title="Поделиться" onclick="shareArticle('Spec-o3: цифровая лупа для охоты за редкими звёздами','https://bridge42worlds.academy/lang/ru/archive/2026-01-10/2601.06498/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Spec-o3: A Tool-Augmented Vision-Language Agent for Rare Celestial Object Candidate Vetting via Automated Spectral Inspection"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/en/authors/Minghui_Jia.html" class="text-author-link" data-author="Minghui Jia">Minghui Jia</a>, <a href="/lang/en/authors/Qichao_Zhang.html" class="text-author-link" data-author="Qichao Zhang">Qichao Zhang</a>, <a href="/lang/en/authors/Ali_Luo.html" class="text-author-link" data-author="Ali Luo">Ali Luo</a>, <a href="/lang/en/authors/Linjing_Li.html" class="text-author-link" data-author="Linjing Li">Linjing Li</a>, <a href="/lang/en/authors/Shuo_Ye.html" class="text-author-link" data-author="Shuo Ye">Shuo Ye</a>, <a href="/lang/en/authors/Hailing_Lu.html" class="text-author-link" data-author="Hailing Lu">Hailing Lu</a>, <a href="/lang/en/authors/Wen_Hou.html" class="text-author-link" data-author="Wen Hou">Wen Hou</a>, <a href="/lang/en/authors/Dongbin_Zhao.html" class="text-author-link" data-author="Dongbin Zhao">Dongbin Zhao</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2601.06498" target="_blank" rel="noopener">2601.06498</a> · 2026-01-10 · <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 мин</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/ru/sections/cs_CL.html" data-cat="cs.CL" title="Обработка естественного языка: компьютерная лингвистика и смежные исследования человеческого языка.">Компьютерная лингвистика</a> <a class="cat-badge" href="/lang/ru/sections/astro-ph_IM.html" data-cat="astro-ph.IM" title="Разработка детекторов и телескопов, предложения экспериментов. Лабораторная астрофизика. Методы анализа данных, статистические методы. Программное обеспечение, проектирование баз данных.">Астрономическое приборостроение</a></div>
+        <div class="oneliner">Spec-o3 — ИИ-агент с цифровой лупой, который выискивает в спектрах редкие звёзды и прозрачно объясняет каждый шаг.</div>
+        <div class="mosaic"><div class="gallery" data-count="5"><div class="gallery-stage"><button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button><button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button><a class="gallery-main" href="/lang/ru/archive/2026-01-10/2601.06498/ai.webp" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-01-10/2601.06498/ai.webp" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div><div class="gallery-thumbs"><button type="button" class="gallery-thumb is-active" data-i="0" data-src="/lang/ru/archive/2026-01-10/2601.06498/ai.webp" data-cap="" aria-label="Image 1"><img src="/lang/ru/archive/2026-01-10/2601.06498/t_ai.webp" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="1" data-src="/lang/ru/archive/2026-01-10/2601.06498/0.webp" data-cap="(a) Работа астрономов по визуальному осмотру —" aria-label="(a) Работа астрономов по визуальному осмотру —"><img src="/lang/ru/archive/2026-01-10/2601.06498/0.webp" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="2" data-src="/lang/ru/archive/2026-01-10/2601.06498/1.webp" data-cap="Иллюстрация чередующегося мульти- Spec-o3" aria-label="Иллюстрация чередующегося мульти- Spec-o3"><img src="/lang/ru/archive/2026-01-10/2601.06498/1.webp" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="3" data-src="/lang/ru/archive/2026-01-10/2601.06498/2.webp" data-cap="Обзор фреймворка Spec-o3. Получив запрос T0 и начальное изображение I0, VLM генерирует —" aria-label="Обзор фреймворка Spec-o3. Получив запрос T0 и начальное изображение I0, VLM генерирует —"><img src="/lang/ru/archive/2026-01-10/2601.06498/2.webp" alt="" loading="lazy"></button><button type="button" class="gallery-thumb" data-i="4" data-src="/lang/ru/archive/2026-01-10/2601.06498/3.webp" data-cap="(a) Распределение качества. Сравниваются распределения баллов и кумулятивные функции распределения." aria-label="(a) Распределение качества. Сравниваются распределения баллов и кумулятивные функции распределения."><img src="/lang/ru/archive/2026-01-10/2601.06498/3.webp" alt="" loading="lazy"></button></div></div></div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>Спектр звезды — её след в ночи. Телескоп LAMOST собрал миллионы таких следов, и лишь немногие необычны. Астрономы, как следопыты, высматривают в них приметы редких объектов. Программа Spec-o3 обучена этому искусству в два шага. Сначала она повторяла цепочки рассуждений экспертов, затем улучшала себя сама через пробы и награды. На спектрах LAMOST её точность выросла с 28 до 77 верных ответов из ста — выше, чем у других моделей, даже коммерческих. Перенос навыков на телескопы SDSS и DESI подтвердил логичность и физическую достоверность её решений.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:doppler_effect,l:einstein_field_equations,l:maxwells_equations,l:plancks_law,l:planckeinstein_relation,l:wiens_displacement_law,s:Christian Doppler,s:D. B. McLaughlin"><canvas id="minigraph"></canvas></div>
+        <p>Свет звезды растянут в радужную полосу. Тёмные линии — шрамы от поглощённых элементов, яркие пики — следы горячего газа. Так выглядит спектр, главная улика в руках астронома. <a href="/lang/ru/scientists/Cecilia_Payne-Gaposchkin.html" class="text-scientist" data-scientist="Cecilia Payne-Gaposchkin">Сесилия Пейн-Гапошкина</a> первой прочла, что из водорода состоят почти все звёзды. <a href="/lang/ru/scientists/Subrahmanyan_Chandrasekhar.html" class="text-scientist" data-scientist="Subrahmanyan Chandrasekhar">Субраманьян Чандрасекар</a> разглядел предел: <a href="/lang/ru/tags/white_dwarf.html" class="text-tag" data-tag="white_dwarf">белый карлик</a> тяжелее 1,4 солнечных масс неминуемо схлопнется. Сегодня телескопы выдают миллионы спектров. Искать в них редкие объекты — всё равно что выискивать иголку в стоге сена.</p><p>Spec-o3 подходит к стогу с цифровой лупой. Это <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">ИИ-агент</a> на основе модели Qwen2.5-VL, который увеличивает любой участок <a href="/lang/ru/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">спектра</a> через <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">интерактивную визуализацию</a>. Он не просто классифицирует — он рассуждает вслух. Направляет лупу на подозрительные длины волн, анализирует увиденное и записывает каждый шаг. Так рождается траектория инспекции — полный логический путь от вопроса к диагнозу.</p><p>Обучение шло в два этапа. Холодный старт: тысяча экспертных траекторий, где модель училась вовремя вызывать лупу и толковать детали. Затем — <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">обучение с подкреплением</a>. Верный ответ — награда, ошибка — штраф. Агент нащупал стратегии, которых не было у учителей. Он научился хитрить.</p><p>Боевое крещение — тест SpecVI-Bench. <a href="/lang/ru/tags/spectroscopy.html" class="text-tag" data-tag="spectroscopy">Spec-o3-7B</a> взял макро-F1 76,5%, обойдя специализированную GaiaNet (64,9%) и коммерческую o3 (52,3%). Важнее другое. Агент объясняет решения. Не прячется за вероятностями, а выкладывает цепочку причин.</p><p>Как он мыслит? Для <a href="/lang/ru/tags/white_dwarf.html" class="text-tag" data-tag="white_dwarf">белого карлика</a> главная улика — уширенные линии. Чудовищная гравитация сжимает атомы, квантовые уровни размываются. Вещество уплотнено так, что чайная ложка весила бы пять тонн. Spec-o3 ищет именно эту сигнатуру. <a href="/lang/ru/tags/accretion_disk.html" class="text-tag" data-tag="accretion_disk">Катаклизмические переменные</a> выдают себя иначе. Широкие эмиссионные линии бальмеровской серии. Горячий газ крутится в аккреционном диске. Эффект Доплера размазывает вращение в крылья линии. Для <a href="/lang/ru/tags/metallicity.html" class="text-tag" data-tag="metallicity">звёзд с аномальным составом</a> — углеродных гигантов — агент целит в молекулярные полосы C₂ и ZrO.</p><p>А однажды в спектрах <a href="/lang/ru/tags/quasar.html" class="text-tag" data-tag="quasar">квазаров</a> — с которыми не учили работать — он показал F1 около 72%. Это нуль-shot обобщение. Модель применяет логику к незнакомым объектам.</p><div class="callout">Для масштаба: ручная проверка одного спектра занимает у эксперта ~10 секунд. Миллион кандидатов — три года непрерывной работы. Сервер с восемью GPU H100 под управлением Spec-o3 справляется за 2,3 дня. Каждый спектр обрабатывается за 0,2 секунды.</div><p>Прозрачность меняет работу. Астроном получает не чёрный ящик, а проверяемую цепочку шагов. Каталоги редких объектов пополняются быстрее. Значит, быстрее движутся теории <a href="/lang/ru/tags/stellar_evolution.html" class="text-tag" data-tag="stellar_evolution">звёздной эволюции</a> и физики аккреции.</p><div class="callout">Охота на катаклизмические переменные — это поиск иголок в стоге сена: из 170 000 кандидатов, отсмотренных вручную, настоящими оказались всего 323 — менее 0,2%. Spec-o3 обучен работать в условиях такого экстремального дисбаланса, не переставая видеть редкое за частым.</div><p>Впереди — расширение. Архитектура открыта: скоро Spec-o3 сможет смотреть не только спектры, но и кривые блеска, изображения, собственные движения. Механизм уверенности передаст сомнительные случаи человеку. Данные LAMOST, DESI, 4MOST потекут через агента как через умный фильтр. Рутина отбраковки станет фоновой задачей.</p><p>Цифровая лупа перестаёт быть просто инструментом. Она становится напарником, с которым астроном разглядывает самые тусклые и редкие огоньки в безбрежном море данных. И кто знает, какие ещё закономерности, ускользавшие от человеческого глаза, она поможет открыть — возможно, за гранью известного лежат ключи к пониманию самых загадочных взрывов во Вселенной.</p>
+        <div class="fun-fact"><p class="fact">🎯 Эксперт тратит на один спектр 10 секунд. Миллион кандидатов — три года непрерывной работы. Spec-o3 на сервере с 8 GPU H100 обрабатывает их за 2,3 дня.</p><p class="fact fact-scifi">🎬 В «Свидании с Рамой» Артура Кларка астрономы вручную перебирали фотопластинки в поисках астероидов. Spec-o3 проделывает то же для спектров, оставляя человеку только необычные находки.</p></div>
+        <div class="formula"><div class="formula-render">$s_t = \{ (I_k, T_k) \}_{k=0}^t$</div><div class="formula-meaning">Накопленная история визуальных и текстовых данных к моменту t</div></div><div class="formula"><div class="formula-render">$r(\tau) = \begin{cases} 1, &amp; \text{если } o_{pred} = o_{gold} \land f_{fmt}(y), \\ 1-\alpha, &amp; \text{если } o_{pred} = o_{gold} \land \neg f_{fmt}(y), \\ 0, &amp; \text{если } o_{pred} \neq o_{gold} \land f_{fmt}(y), \\ -\alpha, &amp; \text{если } o_{pred} \neq o_{gold} \land \neg f_{fmt}(y) \end{cases}$</div><div class="formula-meaning">Поощрение за правильный ответ; штраф за неверный или нарушение формата</div></div>
+        
+        <div class="actions actions-compact" data-article-id="2601.06498_ru_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2601.06498" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> написать комментарий</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/ru/archive/2026-01-10/2601.06498/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn active lv-compact" data-version="popular" href="/lang/ru/archive/2026-01-10/2601.06498/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn lv-compact" data-version="advanced" href="/lang/ru/archive/2026-01-10/2601.06498/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2601.06498_ru_popular" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Christian_Doppler.html" class="side-sci" data-scientist="Christian Doppler">Christian Doppler</a><a href="/lang/ru/scientists/D_B_McLaughlin.html" class="side-sci" data-scientist="D. B. McLaughlin">D. B. McLaughlin</a><a href="/lang/ru/scientists/Didier_Queloz.html" class="side-sci" data-scientist="Didier Queloz">Didier Queloz</a><a href="/lang/ru/scientists/Michel_Mayor.html" class="side-sci" data-scientist="Michel Mayor">Michel Mayor</a><a href="/lang/ru/scientists/R_A_Rossiter.html" class="side-sci" data-scientist="R. A. Rossiter">R. A. Rossiter</a><a href="/lang/ru/scientists/Bernhard_Riemann.html" class="side-sci" data-scientist="Bernhard Riemann">Bernhard Riemann</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/spectroscopy.html" class="side-tag" data-tag="spectroscopy">спектроскопия</a>
+<a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a>
+<a href="/lang/ru/tags/white_dwarf.html" class="side-tag" data-tag="white_dwarf">белый карлик</a>
+<a href="/lang/ru/tags/accretion_disk.html" class="side-tag" data-tag="accretion_disk">аккреционный диск</a>
+<a href="/lang/ru/tags/stellar_evolution.html" class="side-tag" data-tag="stellar_evolution">звёздная эволюция</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/quasar.html" class="side-tag" data-tag="quasar">квазар</a>
+<a href="/lang/ru/tags/metallicity.html" class="side-tag" data-tag="metallicity">металличность</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/doppler_effect.html" class="side-law" data-law="doppler_effect">эффект Доплера</a><a href="/lang/ru/laws/einstein_field_equations.html" class="side-law" data-law="einstein_field_equations">уравнения Эйнштейна</a><a href="/lang/ru/laws/maxwells_equations.html" class="side-law" data-law="maxwells_equations">уравнения Максвелла</a><a href="/lang/ru/laws/plancks_law.html" class="side-law" data-law="plancks_law">закон излучения Планка</a><a href="/lang/ru/laws/planckeinstein_relation.html" class="side-law" data-law="planckeinstein_relation">уравнение Планка — Эйнштейна</a><a href="/lang/ru/laws/wiens_displacement_law.html" class="side-law" data-law="wiens_displacement_law">закон смещения Вина</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2601.06498', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2601.06498', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

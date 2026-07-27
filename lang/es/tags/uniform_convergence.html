@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#convergencia uniforme — bridge42worlds</title>
+    <meta name="description" content="La sucesión de funciones fn converge uniformemente a f en un conjunto E si para todo ε>0 existe N tal que para todo n≥N y todo x∈E se cumple |fn(x) - f(x)| < ε. Esto es más fuerte que la convergencia puntual, donde N puede depender de x. De la convergencia uniforme se sigue la continuidad del límite si las fn son continuas, y la posibilidad de integración término a término en un intervalo finito.">
+    <meta property="og:title" content="#convergencia uniforme — bridge42worlds">
+    <meta property="og:description" content="La sucesión de funciones fn converge uniformemente a f en un conjunto E si para todo ε>0 existe N tal que para todo n≥N y todo x∈E se cumple |fn(x) - f(x)| < ε. Esto es más fuerte que la convergencia puntual, donde N puede depender de x. De la convergencia uniforme se sigue la continuidad del límite si las fn son continuas, y la posibilidad de integración término a término en un intervalo finito.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/tags/uniform_convergence.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Etiqueta</div><h1>convergencia uniforme</h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Cuando una sucesión de funciones se aproxima a la función límite tan uniformemente que el máximo de la diferencia en todos los puntos tiende a cero, eso es convergencia uniforme. No admite puntos «rezagados».</p><div class="practical-app"><strong>In practice:</strong> Al diseñar el ala de un avión, los ingenieros desarrollan los flujos en series de Fourier; la convergencia uniforme garantiza que la aproximación sea igualmente buena en todos los puntos del perfil.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">La sucesión de funciones fn converge uniformemente a f en un conjunto E si para todo ε>0 existe N tal que para todo n≥N y todo x∈E se cumple |fn(x) - f(x)| < ε. Esto es más fuerte que la convergencia puntual, donde N puede depender de x. De la convergencia uniforme se sigue la continuidad del límite si las fn son continuas, y la posibilidad de integración término a término en un intervalo finito.</div>
+        <div class="section"><h2>History</h2><p>Karl Weierstrass comprendió a mediados del siglo XIX que sin la uniformidad, la suma de una serie infinita de funciones continuas puede resultar discontinua. Este descubrimiento puso orden en el análisis.</p></div>
+        <div class="section"><h2>How it works</h2><p>La convergencia uniforme conserva buenas propiedades: si cada aproximación era continua, entonces la solución exacta también será continua. Sin uniformidad, el límite puede «saltar». Por eso todos los cálculos físicos en los que se aproximan soluciones mediante series exigen comprobar la uniformidad.</p></div>
+        <div class="fun-fact">💡 La serie de Fourier de una función continua puede no converger uniformemente, y antes de los trabajos de Weierstrass muchos creían que eso era imposible. El error costó varias demostraciones falsas.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Imagina que estás allanando una carretera: colocas capa tras capa de asfalto. Si después de cada capa la profundidad de los baches disminuye por igual en todas partes, la nivelación es uniforme. Pero si en algunos lugares quedan hoyos y en otros ya está liso, la convergencia no es uniforme. En matemáticas es igual: una sucesión de funciones tiene convergencia uniforme cuando para cualquier error ε dado, todos los valores de las funciones a partir de cierto número difieren del límite en menos de ε de una vez en todo el tramo considerado.</div>
+        <div class="section"><h2>History</h2><p>Karl Weierstrass comprendió a mediados del siglo XIX que sin la uniformidad, la suma de una serie infinita de funciones continuas puede resultar discontinua. Este descubrimiento puso orden en el análisis.</p></div>
+        <div class="section"><h2>How it works</h2><p>La convergencia uniforme conserva buenas propiedades: si cada aproximación era continua, entonces la solución exacta también será continua. Sin uniformidad, el límite puede «saltar». Por eso todos los cálculos físicos en los que se aproximan soluciones mediante series exigen comprobar la uniformidad.</p></div>
+        <div class="fun-fact">💡 Existen sucesiones que convergen uniformemente en cualquier compacto pero no en toda la recta real, por ejemplo, fn(x)=x/n. Esta convergencia se llama «uniforme en compactos» y es típica de las series de potencias.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">La convergencia uniforme es un tipo de convergencia de una sucesión funcional definida mediante la norma del supremo: ‖fn - f‖∞ → 0, donde ‖g‖∞ = supx∈E |g(x)|. Es más fuerte que la convergencia puntual y más débil que la convergencia en normas Lp en espacios infinitos. Criterio de Cauchy para convergencia uniforme: la sucesión {fn} es fundamental en la norma uniforme. Teoremas: el límite uniforme de funciones continuas es continuo; si fn converge uniformemente a f en un intervalo y cada fn es integrable (Riemann), entonces f es integrable y ∫f = lim∫fn; bajo la condición adicional de convergencia de las derivadas se pueden intercambiar límite y derivada.</div>
+        <div class="section"><h2>History</h2><p>La definición rigurosa apareció en 1870 en los trabajos de Eduard Heine, basados en las lecciones de Weierstrass. Weierstrass mostró que la serie ∑bk cos(akπx) para ciertos ak, bk converge uniformemente, pero su suma no es diferenciable en ningún punto, lo que destruyó la intuición sobre la relación entre suavidad y convergencia. Henri Poincaré en la década de 1880 usó la convergencia uniforme en la teoría de funciones automorfas y ecuaciones diferenciales, y más tarde el concepto entró en la base del análisis funcional a través de los espacios C(X) con la norma uniforme.</p></div>
+        <div class="section"><h2>How it works</h2><p>La herramienta clave es la estimación del supremo. Criterio de Weierstrass: si |fn(x)| ≤ Mn y ∑Mn converge, entonces ∑fn converge uniformemente (y absolutamente). La convergencia uniforme está estrechamente relacionada con la compacidad: en un conjunto compacto, una sucesión que converge puntualmente puede no ser uniformemente convergente, pero de cualquier sucesión uniformemente acotada y equicontinua se puede extraer una subsucesión uniformemente convergente (teorema de Arzelà-Ascoli). En métodos numéricos, la convergencia uniforme garantiza la estabilidad de la aproximación bajo variación de parámetros.</p></div>
+        <div class="formula"><div class="formula-render">\lim_{n \to \infty} \sup_{x \in E} |f_n(x) - f(x)| = 0</div><div class="formula-meaning">f_n, f son funciones en el conjunto E; sup denota el supremo; el límite es cero, lo que significa que la desviación máxima tiende a cero</div></div><div class="formula"><div class="formula-render">\sum_{n=1}^{\infty} M_n &lt; \infty \quad \land \quad |f_n(x)| \le M_n \quad \forall x \in E \implies \sum_{n=1}^{\infty} f_n \text{ сходится равномерно на } E</div><div class="formula-meaning">M_n son números (mayorantes), f_n son funciones; si la serie de M_n converge y las funciones en valor absoluto no superan M_n, entonces la serie de f_n converge uniformemente</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Estimaciones efectivas de la velocidad de convergencia uniforme para aproximaciones con redes neuronales de funciones multidimensionales; Convergencia uniforme de desarrollos espectrales de sistemas físicos no equilibrados (por ejemplo, para operadores no normales); Criterios de convergencia uniforme para dominios no suaves en problemas de homogeneización</p><p class="fact">💡 Existen sucesiones que convergen uniformemente en cualquier compacto pero no en toda la recta real, por ejemplo, fn(x)=x/n. Esta convergencia se llama «uniforme en compactos» y es típica de las series de potencias.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="t:uniform_convergence"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="uniform_convergence_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="uniform_convergence" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="uniform_convergence_es_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Scientists</div><a href="/lang/es/scientists/Henri_Poincaré.html" class="side-sci" data-scientist="Henri Poincaré">Henri Poincaré</a><div class="side-tags-label">Related</div><a href="/lang/es/tags/differential_equation.html" class="side-tag" data-tag="differential_equation">ecuación diferencial</a><a href="/lang/es/tags/fourier_series.html" class="side-tag" data-tag="fourier_series">serie de Fourier</a><a href="/lang/es/tags/integral.html" class="side-tag" data-tag="integral">integral</a><a href="/lang/es/tags/limit.html" class="side-tag" data-tag="limit">límite</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="uniform_convergence"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('uniform_convergence', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efecto Hall — bridge42worlds</title>
+    <meta name="description" content="En 1879, Edwin Hall, estudiante de la Universidad Johns Hopkins, experimentaba con una fina lámina de oro. Notó que el campo magnético no solo curva la corriente, sino que crea una diferencia de potencial transversal. Resultó que el signo del voltaje depende del signo de los portadores de carga: en los metales es uno y en los semiconductores es el opuesto. Así nació el método para determinar el tipo de conductividad.">
+    <meta property="og:title" content="Efecto Hall — bridge42worlds">
+    <meta property="og:description" content="En 1879, Edwin Hall, estudiante de la Universidad Johns Hopkins, experimentaba con una fina lámina de oro. Notó que el campo magnético no solo curva la corriente, sino que crea una diferencia de potencial transversal. Resultó que el signo del voltaje depende del signo de los portadores de carga: en los metales es uno y en los semiconductores es el opuesto. Así nació el método para determinar el tipo de conductividad.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/laws/hall_effect.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/" class="active">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search articles..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search articles..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Ley</div><h1>Efecto Hall<span class="law-type">efecto</span></h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Una corriente eléctrica en un conductor bajo un campo magnético directo provoca un voltaje transversal al conductor, como el viento que empuja los coches hacia el arcén creando un atasco allí. Esto es el efecto Hall.</p><div class="practical-app"><strong>In practice:</strong> Los sensores Hall se encuentran en automóviles (encendido), teléfonos (apertura de la funda con imán) y miden campos magnéticos sin contacto.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">En 1879, Edwin Hall, estudiante de la Universidad Johns Hopkins, experimentaba con una fina lámina de oro. Notó que el campo magnético no solo curva la corriente, sino que crea una diferencia de potencial transversal. Resultó que el signo del voltaje depende del signo de los portadores de carga: en los metales es uno y en los semiconductores es el opuesto. Así nació el método para determinar el tipo de conductividad.</div>
+        <div class="section"><h2>How it works</h2><p>El efecto se utiliza en sensores simples: al acercar un imán al sensor, cambia la resistencia o aparece una señal. En las básculas de cocina con imán y sensor Hall se mide la fuerza de presión sin contacto mecánico.</p></div>
+        <div class="fun-fact">💡 El efecto Hall permitió descubrir que en algunos semiconductores la corriente es transportada por «huecos» positivos, no por electrones, lo cual fue una sorpresa en el siglo XX. Y el efecto Hall cuántico, descubierto un siglo después, proporcionó un patrón de resistencia eléctrica.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Cuando los electrones libres (portadores de carga) en un conductor se mueven a lo largo y se aplica un campo magnético desde un lado, la fuerza de Lorentz (influencia del campo magnético sobre una carga en movimiento) los desplaza hacia un borde. En ese borde se acumula carga, y en el opuesto falta, por lo que entre ellos surge un voltaje Hall (diferencia de potencial transversal al conductor). Cuanto más fuertes sean la corriente y el campo, mayor será el voltaje.</div>
+        <div class="section"><h2>How it works</h2><p>El efecto se utiliza en sensores simples: al acercar un imán al sensor, cambia la resistencia o aparece una señal. En las básculas de cocina con imán y sensor Hall se mide la fuerza de presión sin contacto mecánico.</p></div>
+        <div class="fun-fact">💡 Hall intentó medir el efecto en hierro, pero sin éxito: la señal era demasiado pequeña debido a la enorme cantidad de portadores. Solo en películas delgadas de oro y luego en semiconductores el efecto se hizo notable.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Efecto Hall clásico: en un conductor con corriente I, colocado en un campo magnético B perpendicular a la corriente, surge un voltaje Hall U_H = (R_H * I * B) / d, donde d es el espesor de la muestra, R_H es la constante de Hall. Para portadores simples de un tipo, R_H = 1/(n e) o -1/(p e), donde n, p son las concentraciones de electrones o huecos, e es la carga elemental. El signo de R_H indica el tipo de portadores.</div>
+        <div class="section"><h2>Discovery</h2><p>Edwin Hall descubrió el efecto en 1879, inspirado por la idea de Maxwell de que el campo magnético debía actuar sobre el conductor, no directamente sobre la corriente. Usó una lámina de oro y un imán potente, midiendo el diminuto voltaje con un galvanómetro. Investigaciones posteriores llevaron al descubrimiento del efecto Hall cuántico por Klaus von Klitzing en 1980.</p></div>
+        <div class="section"><h2>How it works</h2><p>Se aplica para medir campos magnéticos, detección de corriente sin contacto, en sensores magnetorresistivos. En semiconductores se usa para caracterizar materiales: midiendo R_H y la conductividad, se obtienen la movilidad y la concentración de portadores. Límites: condición de campo débil, cuando las trayectorias son casi rectas; en campos fuertes aparecen efectos cuánticos.</p></div>
+        <div class="section"><h2>Caveats</h2><p>En campos magnéticos fuertes y a bajas temperaturas se manifiesta el efecto Hall cuántico, donde la resistencia se cuantiza.; Para conductores multibanda, la interpretación de la constante de Hall se complica.; La medición precisa requiere tener en cuenta la geometría y las inhomogeneidades de la muestra.</p></div>
+    </div>
+    <div class="law-formulas"><div class="formula"><div class="formula-render">U_H = \frac{R_H I B}{d}</div><div class="formula-meaning">U_H: voltaje Hall (diferencia de potencial transversal), R_H: constante de Hall, I: intensidad de corriente a través de la muestra, B: inducción del campo magnético, d: espesor de la muestra en la dirección del campo</div></div><div class="formula"><div class="formula-render">R_H = \pm \frac{1}{n e}</div><div class="formula-meaning">R_H: constante de Hall, signo + para huecos y – para electrones, n: concentración de portadores de carga, e: carga elemental (e ≈ 1.602×10⁻¹⁹ C)</div></div></div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag"> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law"> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="l:hall_effect"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="hall_effect_es_page" data-entity-type="law"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="hall_effect" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="hall_effect_es_page" data-entity-type="law"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+</div>
+<div class="article-side"><div class="side-tags-label">Related concepts</div><a href="/lang/es/tags/semiconductor.html" class="side-tag" data-tag="semiconductor">semiconductor</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="electromagnetismo,semiconductor,campo_eléctrico"><p style="color:var(--soft)">—</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('hall_effect', 'law', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false, displayMode: true }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

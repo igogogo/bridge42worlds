@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Как нейросеть, читая погоду назад, предупреждает о засухе за месяцы — bridge42worlds</title>
+    <meta name="description" content="Новый подход к мониторингу засух использует рекуррентную нейросеть, обученную предсказывать осадки. За счёт штрафа за «обратную несогласованность» (reverse-martingale) её скрытое состояние становится индикатором устойчивости погодного режима. Когда режим начинает меняться — например, при приближении">
+    <meta property="og:title" content="Как нейросеть, читая погоду назад, предупреждает о засухе за месяцы">
+    <meta property="og:description" content="Регуляризация скрытого состояния рекуррентной сети обратной связностью превращает её в детектор приближающейся засухи, не снижая точность прогнозов.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00331/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Как нейросеть, читая погоду назад, предупреждает о засухе за месяцы", "description": "Регуляризация скрытого состояния рекуррентной сети обратной связностью превращает её в детектор приближающейся засухи, не снижая точность прогнозов.", "inLanguage": "ru", "datePublished": "2026-07-01", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/ai.webp", "author": [{"@type": "Person", "name": "Hui-Mean Foo"}, {"@type": "Person", "name": "Yuan-chin Ivan Chang"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.00331", "abstract": "A recurrent neural network is trained with an extra backward-coherence (reverse-martingale) penalty, forcing its hidden state to be smooth when read backward. The reconstruction defect is monitored by a sequential change-point detector, yielding an online warning signal. Tested on daily station data from monsoonal Taiwan, semi-arid Texas, temperate Germany, and Mediterranean Anatolia, the model matches standard forecast skill while producing a steadier hidden state. The warning often precedes the operational SPI-3 index, with lead time varying notably across regions—strong in one, partial in two, absent in one. The variability likely stems from whether drought onset leads or merely coincides with rainfall deficit; a controlled synthetic study supports this. The method thus offers conservative early-warning information without sacrificing forecast accuracy."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Подробно</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-07-01/2607.00331/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-07-01/2607.00331/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-07-01/2607.00331/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-07-01/2607.00331/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Следующая статья →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.00331">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#context">Контекст</a></li><li><a href="#methods">Методы</a></li><li><a href="#results">Результаты</a></li><li><a href="#implications">Значение</a></li><li><a href="#future_development">Развитие</a></li><li><a href="#impact_on">Влияние</a></li><li><a href="#next_steps">Следующие шаги</a></li><li><a href="#key_problems_connection">Ключевые проблемы</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/ru/archive/2026-07-01/2607.00331/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">Просто</span></a><a class="lv-btn" data-version="popular" href="/lang/ru/archive/2026-07-01/2607.00331/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">Популярно</span></a><a class="lv-btn active" data-version="advanced" href="/lang/ru/archive/2026-07-01/2607.00331/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">Подробно</span></a></div>
+        
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Как нейросеть, читая погоду назад, предупреждает о засухе за месяцы <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+            <button class="share-btn share-inline" title="Поделиться" onclick="shareArticle('Как нейросеть, читая погоду назад, предупреждает о засухе за месяцы','https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00331/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Coupling Precipitation Forecasting and Early Warning with Reverse-Martingale Recurrent Neural Networks"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/en/authors/Hui-Mean_Foo.html" class="text-author-link" data-author="Hui-Mean Foo">Hui-Mean Foo</a>, <a href="/lang/en/authors/Yuan-chin_Ivan_Chang.html" class="text-author-link" data-author="Yuan-chin Ivan Chang">Yuan-chin Ivan Chang</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.00331" target="_blank" rel="noopener">2607.00331</a> · 2026-07-01 · <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 мин</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/ru/sections/stat_AP.html" data-cat="stat.AP" title="Прикладная статистика: статистические приложения в биологии, образовании, эпидемиологии, инженерии, науках об окружающей среде, медицине, физических науках, контроле качества, социальных науках.">Прикладная статистика</a></div>
+        <div class="oneliner">Регуляризация скрытого состояния рекуррентной сети обратной связностью превращает её в детектор приближающейся засухи, не снижая точность прогнозов.</div>
+        <div class="mosaic"><div class="gallery" data-count="1"><div class="gallery-stage"><a class="gallery-main" href="/lang/ru/archive/2026-07-01/2607.00331/ai.webp" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-07-01/2607.00331/ai.webp" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div></div></div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>A recurrent neural network is trained with an extra backward-coherence (reverse-martingale) penalty, forcing its hidden state to be smooth when read backward. The reconstruction defect is monitored by a sequential change-point detector, yielding an online warning signal. Tested on daily station data from monsoonal Taiwan, semi-arid Texas, temperate Germany, and Mediterranean Anatolia, the model matches standard forecast skill while producing a steadier hidden state. The warning often precedes the operational SPI-3 index, with lead time varying notably across regions—strong in one, partial in two, absent in one. The variability likely stems from whether drought onset leads or merely coincides with rainfall deficit; a controlled synthetic study supports this. The method thus offers conservative early-warning information without sacrificing forecast accuracy.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:vlasov_equation,s:Andrey Markov,s:Claude Shannon,t:machine_learning,t:numerical_simulation,t:stochastic_modeling,t:collective_behavior,t:neural_network_oscillations"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>Контекст</h2><p>Современные гидрометеорологические системы должны не только предсказывать осадки, но и вовремя предупреждать об опасных режимах — засухах, наводнениях. Однако хороший прогноз осадков не гарантирует своевременного предупреждения: стандартный индекс SPI-3 накапливает дефицит осадков месяцами и часто срабатывает слишком поздно. Проблема особенно остра на локальном уровне, где осадки сильно зависят от рельефа и микроклимата. В то же время <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">рекуррентные нейросети</a> (LSTM, GRU) улавливают эволюцию погоды во времени, но их скрытое состояние обычно используют лишь для прогноза. Авторы статьи задались вопросом: можно ли заставить ту же самую сеть одновременно выдавать и прогноз, и сигнал раннего предупреждения, не жертвуя точностью?</p></section><section id="methods"><h2>Методы</h2><p>В основе лежит идея обратной связности (reverse-martingale). Обычная цель рекуррентной сети — точный прогноз следующего значения. Здесь же добавляется штраф, требующий, чтобы каждое скрытое состояние h_t можно было приблизительно восстановить по последующему состоянию h_{t+1} с помощью обучаемого обратного отображения g. При плавной эволюции погоды дефект обратного восстановления d_t = ||h_{t-1} - g(h_t)|| мал. При резких сменах режима — например, начале засухи — он резко меняется. Для детектирования такого изменения используется односторонний кумулятивный сумматор (CUSUM), откалиброванный на климатологических данных без событий. Сеть обучается с совместной функцией потерь: обычная ошибка прогноза плюс взвешенный штраф за несогласованность, вводимый после разогрева и затухающий к концу обучения. Такая архитектура названа RMRNN.</p></section><section id="results"><h2>Результаты</h2><p>Испытания провели на данных ежедневных осадков с метеостанций в четырёх контрастных регионах: муссонный Тайвань, полузасушливый Техас, умеренная Германия и средиземноморская Турция. Во всех регионах RMRNN сохранила точность прогнозов на уровне обычной GRU (разница в среднеквадратичной ошибке менее 0,5%), но при этом сильно стабилизировала траекторию скрытого состояния: показатель нестабильности Q_path снизился на 43–55%. Главный результат — новый сигнал раннего предупреждения. На реальных засухах <a href="/lang/ru/tags/stochastic_modeling.html" class="text-tag" data-tag="stochastic_modeling">детектор на основе дефекта обратного восстановления</a> сработал раньше индекса SPI-3: в Техасе медианный выигрыш составил около 140 дней, в Германии — около 50 дней, в Турции — лишь 13 дней (и только на половине станций), а на Тайване эффект проявился только в центральных горных водосборах, но не на влажном побережье. Контролируемые <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">синтетические эксперименты</a> с известным моментом начала засухи подтвердили механизм: дефект чувствует наступление многомодового режима (осадки + влажность почвы + ветер) до того, как накопится значительный дефицит осадков. Однако для начала сильных ливней метод не даёт выигрыша — там сам ряд осадков меняется мгновенно.</p></section><section id="implications"><h2>Значение</h2><p>Результаты показывают, что от рекуррентной сети можно получить нечто большее, чем прогноз одной величины. Внутреннее состояние сети, если его правильно регуляризовать, несёт информацию о стабильности режима. Это открывает путь к созданию прогнозных систем, которые одновременно предсказывают и предупреждают, не требуя отдельных моделей. Принципиально важно, что выигрыш в предупреждении не требует платы качеством прогноза — метод консервативен по замыслу.</p></section><section id="future_development"><h2>Развитие</h2><p>Главный нерешённый вопрос — в каких гидроклиматических условиях метод даёт наибольший выигрыш. Для этого необходимо систематическое исследование на десятках речных бассейнов с разными типами засух. Также предстоит проверить, работает ли подход на более коротких временных масштабах (часы) для предупреждения о внезапных паводках. Технически возможно расширение метода на пространственно-распределённые данные со спутников и метеолокаторов, а также гибридизация с индексами крупномасштабной циркуляции вроде Эль-Ниньо.</p></section><section id="impact_on"><h2>Влияние</h2><p>Метод адресован гидрометеорологическим службам и водохозяйственным организациям. Он может повысить заблаговременность предупреждений о засухе без замены существующих прогнозных моделей.</p></section><section id="next_steps"><h2>Следующие шаги</h2><p>Ближайшие шаги включают валидацию на архивных данных по засухам в разных частях мира, а также разработку потоковой версии алгоритма, способной обучаться на лету.</p></section><section id="key_problems_connection"><h2>Ключевые проблемы</h2><p>Статья затрагивает фундаментальную проблему извлечения информации о состоянии сложной системы из внутренних представлений нейросети — проблему, общую для многих областей, от климатологии до медицинской диагностики.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 Когда в 2020–2021 годах Тайвань пережил сильнейшую за полвека засуху, новый детектор забил тревогу на горных станциях водосбора за четыре месяца до того, как это сделал стандартный индекс.</p><p class="fact fact-scifi">🎬 Можно вспомнить роман Кима Стэнли Робинсона «Министерство будущего», где климатические предсказания становятся основой для глобальных политических решений. Хотя там речь о другом, идея опережающего сигнала от сложной системы близка.</p></div>
+        <div class="formula"><div class="formula-render">d_t = \|h_{t-1} - g_{\phi}(h_t)\|</div><div class="formula-meaning">Насколько отличается реальное предыдущее скрытое состояние от предсказанного обратным отображением</div></div><div class="formula"><div class="formula-render">S_t = \max(0, S_{t-1} + z_t - k)</div><div class="formula-meaning">Накопленное свидетельство в пользу наступления изменения режима, где z_t — стандартизированный дефект, k — опорное значение</div></div>
+        <div class="key-numbers"><h3>Ключевые числа</h3><ul><li><strong>Медианный выигрыш по времени предупреждения в Техасе:</strong> 140 дней</li><li><strong>Снижение нестабильности скрытого состояния (Q_path):</strong> 43–55%</li><li><strong>Количество регионов с подтверждённым сохранением точности прогноза:</strong> 4</li><li><strong>Целевая средняя наработка на ложное срабатывание (ARL0):</strong> 1 год</li><li><strong>Количество метеостанций в техасском эксперименте:</strong> 39</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.00331_ru_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.00331" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> написать комментарий</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/ru/archive/2026-07-01/2607.00331/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn lv-compact" data-version="popular" href="/lang/ru/archive/2026-07-01/2607.00331/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn active lv-compact" data-version="advanced" href="/lang/ru/archive/2026-07-01/2607.00331/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.00331_ru_advanced" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Andrey_Markov.html" class="side-sci" data-scientist="Andrey Markov">Andrey Markov</a><a href="/lang/ru/scientists/Claude_Shannon.html" class="side-sci" data-scientist="Claude Shannon">Claude Shannon</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/stochastic_modeling.html" class="side-tag" data-tag="stochastic_modeling">стохастическое моделирование</a>
+<a href="/lang/ru/tags/collective_behavior.html" class="side-tag" data-tag="collective_behavior">коллективное поведение</a>
+<a href="/lang/ru/tags/neural_network_oscillations.html" class="side-tag" data-tag="neural_network_oscillations">осцилляции нейронных сетей</a>
+<a href="/lang/ru/tags/dimensionality_reduction.html" class="side-tag" data-tag="dimensionality_reduction">уменьшение размерности</a>
+<a href="/lang/ru/tags/contrastive_learning.html" class="side-tag" data-tag="contrastive_learning">контрастивное обучение</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/vlasov_equation.html" class="side-law" data-law="vlasov_equation">уравнение Власова</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.00331', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2607.00331', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

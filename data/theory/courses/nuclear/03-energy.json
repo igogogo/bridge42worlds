@@ -1,0 +1,1563 @@
+{
+  "id": "03-energy",
+  "topic": "nuclear",
+  "schema": "b42.lesson/1",
+  "model": "nucleus",
+  "entities": {
+    "laws": [
+      "mass_energy_equivalence",
+      "conservation_of_energy"
+    ],
+    "tags": [
+      "nuclear",
+      "energy"
+    ],
+    "scientists": []
+  },
+  "ru": {
+    "title": "Деление и синтез",
+    "subtitle": "Параграф 3 · Почему выгодно делить тяжёлое и сливать лёгкое",
+    "intro": [
+      "Вся ядерная энергетика — и мирная, и военная, и звёздная — умещается в одну кривую. Ту самую, что нарисована под стендом: удельная энергия связи против массового числа. Она растёт от водорода, достигает максимума около железа и медленно спадает к урану.",
+      "Отсюда сразу два способа получить энергию. Слева от максимума выгодно сливать лёгкие ядра — так светит Солнце. Справа выгодно делить тяжёлые — так работает реактор. И то и другое движет вещество к железу, а само железо не даёт ничего: это дно ямы, из которого энергию извлечь нельзя.",
+      "Из этой же кривой следует конец жизни массивных звёзд. Накопив железное ядро, звезда лишается источника тепла, теряет опору против собственного тяготения и коллапсирует за секунды. Взрыв сверхновой рассеивает по Галактике всё, что она наварила, — включая атомы, из которых вы состоите."
+    ],
+    "standNote": "Ведите массовое число по всему диапазону и следите за кривой внизу. Слева она круто идёт вверх — там слияние даёт много энергии, потому и горит водород. У железа максимум и плоская вершина: делать с ним нечего. Справа пологий спад — деление даёт заметно меньше на нуклон, но тяжёлых ядер много и делить их технически проще. Обратите внимание на подпись под ядром: она сообщает, на какой стороне кривой вы находитесь и что выгодно делать с этим ядром.",
+    "formula": {
+      "name": "Энергетический выход ядерной реакции",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "alsoKnown": "Кривая энергии связи · условие выделения энергии",
+      "authors": [
+        {
+          "who": "Артур Эддингтон",
+          "year": "1920",
+          "what": "предположил, что звёзды светят за счёт превращения водорода в гелий. Возражавшим, что температуры Солнца недостаточно, ответил: поищите местечко погорячее. Оказался прав — недостающее объяснило туннелирование"
+        },
+        {
+          "who": "Отто Ган и Фриц Штрассман",
+          "year": "1938",
+          "what": "обнаружили барий после облучения урана нейтронами — то есть ядро развалилось пополам. Химики по образованию, они не решились истолковать результат физически и обратились к бывшей сотруднице"
+        },
+        {
+          "who": "Лиза Мейтнер и Отто Фриш",
+          "year": "1939",
+          "what": "объяснили деление и посчитали энергию по формуле Эйнштейна, получив 200 МэВ на ядро. Обсуждали это на прогулке в снежном лесу во время рождественских каникул; Мейтнер была в эмиграции после бегства из Германии"
+        },
+        {
+          "who": "Ханс Бете",
+          "year": "1939",
+          "what": "рассчитал цепочки реакций, которыми светят звёзды, и объяснил, почему Солнце горит миллиарды лет, а не тысячи. Нобелевская премия через тридцать восемь лет"
+        },
+        {
+          "who": "Игорь Курчатов",
+          "year": "1946",
+          "what": "запустил первый советский реактор Ф-1, работающий и сегодня как экспонат. В том же 1939 году, что и на Западе, советские физики Флёров и Петржак открыли спонтанное деление урана"
+        }
+      ],
+      "story": "Лиза Мейтнер узнала о результате Гана письмом, находясь в вынужденной эмиграции в Швеции: как еврейке ей пришлось бежать из Германии, оставив лабораторию, где она проработала тридцать лет. Ган писал, что уран после облучения нейтронами даёт барий, и просил объяснить, как такое возможно. На рождественской прогулке с племянником Фришем она села на поваленное дерево и посчитала: если ядро урана делится пополам, дефект массы даёт около 200 мегаэлектронвольт. Числа сошлись. Статью они отправили из Швеции, но Нобелевскую премию 1944 года получил один Ган. Мейтнер в проекте создания бомбы участвовать отказалась, сказав, что не будет иметь ничего общего с этим оружием. Элемент 109 назвали мейтнерием.",
+      "symbols": [
+        {
+          "sym": "Q2",
+          "latex": "Q",
+          "what": "энергетический выход реакции",
+          "unit": "МэВ",
+          "note": "положителен, если продукты связаны прочнее исходных"
+        },
+        {
+          "sym": "k_eff",
+          "latex": "k",
+          "what": "коэффициент размножения",
+          "unit": "—",
+          "note": "сколько новых делений вызывает одно; при $k=1$ реактор устойчив, при $k>1$ идёт разгон"
+        },
+        {
+          "sym": "sigma",
+          "latex": "\\sigma",
+          "what": "сечение реакции",
+          "unit": "барн",
+          "note": "мера вероятности; барн равен $10^{-28}$ м² — примерно площадь сечения ядра"
+        },
+        {
+          "sym": "Tign",
+          "latex": "T_{\\text{заж}}",
+          "what": "температура зажигания синтеза",
+          "unit": "К",
+          "note": "около $10^{8}$ К для дейтерия с тритием — вдесятеро выше, чем в центре Солнца"
+        },
+        {
+          "sym": "Lawson",
+          "latex": "n\\tau",
+          "what": "критерий Лоусона",
+          "unit": "с/м³",
+          "note": "произведение плотности плазмы на время удержания; ниже порога реактор не окупается"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: откуда берётся энергия и почему именно так",
+      "lead": "Всё выводится из одной кривой. Посчитаем оба процесса и увидим, что они движутся навстречу друг другу.",
+      "steps": [
+        {
+          "text": "Условие выделения энергии: продукты должны быть связаны прочнее исходных ядер. Разница удельных энергий связи, помноженная на число нуклонов, и есть выход реакции.",
+          "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A > 0",
+          "figure": "curves",
+          "figCaption": "Вверх по кривой — энергия выделяется, вниз — поглощается. Направление задаёт наклон в данной точке."
+        },
+        {
+          "text": "Деление урана. Ядро с $B/A \\approx 7{,}6$ МэВ распадается на два осколка средней массы, у которых $B/A \\approx 8{,}5$. Выигрыш почти мегаэлектронвольт на нуклон, умноженный на 235 нуклонов.",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "figure": "elastic",
+          "figCaption": "Двести мегаэлектронвольт с одного ядра — в пятьдесят миллионов раз больше, чем даёт горение атома углерода."
+        },
+        {
+          "text": "Цепная реакция. При делении вылетают два-три нейтрона, каждый способен вызвать новое деление. Устойчивость определяется тем, сколько из них в среднем доводят дело до конца.",
+          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "figure": "microcontact",
+          "figCaption": "Реактор работает ровно при единице. Управление возможно благодаря запаздывающим нейтронам."
+        },
+        {
+          "text": "Теперь синтез. Четыре протона превращаются в ядро гелия, у которого $B/A = 7{,}1$ МэВ против нуля у свободных протонов. Выигрыш на нуклон почти в восемь раз больше, чем при делении.",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "figure": "action",
+          "figCaption": "Синтез эффективнее деления по массе топлива — но требует несравнимо более трудных условий."
+        },
+        {
+          "text": "Почему синтез так труден. Ядрам надо сблизиться вплотную, преодолев кулоновский барьер высотой в сотни килоэлектронвольт. Тепловой энергии даже при миллионах градусов не хватает — спасает туннелирование.",
+          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "figure": "anywell",
+          "figCaption": "Разница в тысячу раз. Реакция идёт только благодаря просачиванию сквозь барьер."
+        },
+        {
+          "text": "Отсюда медленность солнечного горения. Вероятность туннелирования мала, а первая ступень цепочки требует ещё и слабого взаимодействия — превращения протона в нейтрон. Среднее время ожидания для отдельного протона составляет миллиарды лет.",
+          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "figure": "heating",
+          "figCaption": "Меньше, чем выделяет компостная куча. Солнце светит ярко не из-за бурности реакции, а из-за размеров."
+        },
+        {
+          "text": "И конец пути. Дойдя до железа, звезда упирается в максимум кривой: дальнейший синтез энергии не даёт, а требует. Опора против гравитации исчезает, и ядро коллапсирует за секунды.",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "figure": "result",
+          "figCaption": "Железо — зола звёздного огня. Всё тяжелее его создано во взрывах, где энергию тратят, а не получают."
+        }
+      ],
+      "plate": "Энергия выделяется при движении вверх по кривой энергии связи: слияние лёгких ядер и деление тяжёлых. Железо на вершине не даёт ничего, и достижение его означает конец звезды.",
+      "note": "Границы применимости и честное сравнение. Синтез эффективнее по массе топлива, но требует температур в сотни миллионов градусов и удержания плазмы, чего на Земле пока достичь в самоокупаемом режиме не удалось за семьдесят лет. Деление технически проще, но даёт долгоживущие радиоактивные отходы и требует редкого изотопа урана-235, которого в природном уране лишь 0,7 %. Ни один из способов не является чистым решением, и понимание их ограничений — часть образованного взгляда на энергетику."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Как читать кривую и предсказывать по ней. Правило одно: реакция выгодна, если продукты лежат выше исходных на кривой. Водород в самом низу — сливать его выгодно чрезвычайно. Уран на пологом спуске — делить выгодно умеренно. Железо на вершине — нельзя ни то, ни другое. Отсюда следствие, которое стоит осознать: любая реакция, идущая с выделением энергии, приближает вещество к железу, и Вселенная медленно движется в эту сторону.",
+        "Почему деление даёт меньше на нуклон, но больше на реакцию. Выигрыш при делении около 0,9 МэВ на нуклон, при синтезе водорода — почти 7 МэВ. Синтез выгоднее в семь раз по массе топлива. Но одно ядро урана содержит 235 нуклонов, и с него разом снимается 200 МэВ, тогда как акт слияния даёт 26,7. Плюс уран делится при комнатной температуре от одного нейтрона, а для синтеза нужны сотни миллионов градусов. Отсюда и разница в сроках освоения: реактор построили за четыре года, термоядерный не построили за семьдесят.",
+        "Что означает критерий Лоусона. Чтобы реактор синтеза окупался, произведение плотности плазмы на время её удержания и на температуру должно превысить порог. Можно идти двумя путями: держать разреженную плазму долго магнитным полем (токамак) или сжать плотную на мгновение лазерами (инерциальный синтез). Оба подхода развиваются, и в 2022 году лазерная установка впервые получила больше энергии из мишени, чем в неё вложили лазеры, — правда, без учёта затрат на сами лазеры.",
+        "Как оценить запас топлива. В килограмме урана-235 около $2{,}6\\cdot 10^{24}$ ядер, каждое даёт 200 МэВ, то есть $3{,}2\\cdot 10^{-11}$ джоуля. Перемножьте — получите $8\\cdot 10^{13}$ джоулей, эквивалент трёх тысяч тонн угля. Для дейтерия из морской воды цифры ещё внушительнее: его запасов хватило бы на десятки миллионов лет при нынешнем потреблении. Вопрос всегда не в запасах, а в том, как до них добраться."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: килограмм урана против вагона угля",
+      "lead": "Считаем, сколько энергии даёт ядерное топливо, и сравниваем с привычным.",
+      "given": "При делении одного ядра урана-235 выделяется 200 МэВ. Найти энергию, выделяющуюся при делении одного килограмма, и сравнить с теплотой сгорания угля (29 МДж/кг).",
+      "law": "$E = N \\cdot Q$, где $N = \\dfrac{m}{M}N_A$",
+      "solution": [
+        {
+          "text": "Число ядер в килограмме урана-235.",
+          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+        },
+        {
+          "text": "Энергия одного деления в джоулях.",
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+        },
+        {
+          "text": "Полная энергия.",
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Сколько это угля.",
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+        }
+      ],
+      "answer": "Килограмм урана-235 даёт столько же энергии, сколько почти три тысячи тонн угля — состав из полусотни вагонов.",
+      "check": "Проверим через дефект массы, чтобы связать с предыдущей темой. Восемьдесят два триллиона джоулей соответствуют массе $E/c^{2} \\approx 0{,}9$ грамма. То есть из килограмма урана в энергию перешёл всего один грамм — одна тысячная часть. Для сравнения, при горении угля в энергию переходит одна десятимиллиардная доля массы. Разница в миллион раз и есть разница между химией и ядерной физикой, и она полностью объясняется тем, что электромагнитная связь даёт электронвольты, а сильная — мегаэлектронвольты."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Числа энергетики — от реактора до звезды.",
+      "items": [
+        {
+          "sym": "Qfis",
+          "latex": "Q_{\\text{дел}}",
+          "name": "Энергия деления ядра урана-235",
+          "value": "≈ 200",
+          "unit": "МэВ",
+          "why": "Из них около 165 уносят осколки как кинетическую энергию, остальное — нейтроны, гамма-кванты и последующие распады. Именно кинетическая энергия осколков и нагревает топливо в реакторе.",
+          "mnemo": "Одно деление даёт в пятьдесят миллионов раз больше, чем сгорание одного атома углерода. Килограмм урана эквивалентен трём тысячам тонн угля."
+        },
+        {
+          "sym": "Qfus",
+          "latex": "Q_{\\text{синт}}",
+          "name": "Энергия слияния дейтерия с тритием",
+          "value": "17,6",
+          "unit": "МэВ",
+          "why": "Самая доступная реакция синтеза: у неё наименьший кулоновский барьер и наибольшее сечение. Основная реакция для будущих термоядерных реакторов.",
+          "mnemo": "На нуклон это 3,5 МэВ против 0,9 у деления — вчетверо эффективнее по массе топлива. Дейтерия в литре морской воды хватило бы на энергию трёхсот литров бензина."
+        },
+        {
+          "sym": "P_sun",
+          "latex": "P_{\\odot}",
+          "name": "Удельная мощность в центре Солнца",
+          "value": "≈ 275",
+          "unit": "Вт / м³",
+          "why": "Меньше, чем выделяет компостная куча того же объёма. Солнце светит ярко исключительно благодаря размерам, а не бурности реакции.",
+          "mnemo": "Именно эта медленность и позволяет Солнцу гореть миллиарды лет. Будь реакция быстрее, оно выгорело бы задолго до появления жизни."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Куда ведёт кривая энергии связи",
+      "lead": "Одна кривая объясняет и энергетику, и жизнь звёзд, и происхождение элементов.",
+      "items": [
+        {
+          "h": "Атомная энергетика",
+          "text": "Деление урана даёт около 10 % мировой электроэнергии. Топливо меняют раз в несколько лет, а не возят составами — прямое следствие того, что дефект массы в миллион раз больше химического."
+        },
+        {
+          "h": "Термоядерный синтез",
+          "text": "Семьдесят лет исследований и пока ни одной самоокупаемой установки. Проблема не в физике, а в удержании плазмы при ста миллионах градусов. Строящийся ИТЭР должен впервые получить десятикратный выигрыш."
+        },
+        {
+          "h": "Жизнь звезды",
+          "text": "Звезда последовательно жжёт водород, затем гелий, углерод, кислород, кремний — поднимаясь по кривой. Каждый этап короче предыдущего: водород горит миллионы лет, кремний сутки."
+        },
+        {
+          "h": "Сверхновая",
+          "text": "Накопив железное ядро, массивная звезда теряет источник энергии и коллапсирует за секунды. Выделившейся энергии хватает, чтобы на недели засветить целую галактику."
+        },
+        {
+          "h": "Происхождение тяжёлых элементов",
+          "text": "Всё тяжелее железа не могло образоваться в обычном горении — там энергию надо тратить. Золото и уран рождаются при взрывах сверхновых и слияниях нейтронных звёзд."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Ядерную энергию не потрогать, но её масштабы можно прикинуть, а следы найти в собственном доме.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Найдите ядерную физику в квартире",
+          "text": "Осмотрите дымовой извещатель на потолке, поищите на нём маркировку. Затем вспомните, что светится в темноте у старых часов и приборов.",
+          "answer": "В большинстве дымовых извещателей стоит крупица америция-241 массой около 0,3 микрограмма — альфа-источник, ионизующий воздух в камере. Дым нарушает ионный ток, и срабатывает сирена. Америция в природе нет вовсе: он создан человеком в реакторе. А светящиеся стрелки старых часов покрывались краской с радием, и мастерицы, обслюнявливая кисточки для тонкости линии, получали смертельные дозы — история «радиевых девушек» 1920-х стала поводом для первых норм радиационной безопасности."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Солнце холоднее компостной кучи",
+          "text": "В центре Солнца пятнадцать миллионов градусов, и там идёт термоядерный синтез. При этом удельное энерговыделение составляет 275 ватт на кубометр — меньше, чем в куче перепревающего компоста. Как такое возможно?",
+          "answer": "Реакция чудовищно медленная. Первая её ступень требует превращения протона в нейтрон через слабое взаимодействие, и среднее время ожидания для отдельного протона — миллиарды лет. Солнце светит ярко не потому, что реакция бурная, а потому что его объём составляет $10^{27}$ кубометров. Умножьте 275 ватт на это число — получите мощность Солнца. Медленность и есть причина долголетия: будь реакция быстрее, звезда выгорела бы задолго до появления жизни на планетах."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Природный реактор в Габоне",
+          "text": "В 1972 году на руднике Окло обнаружили урановую руду с необычно малым содержанием урана-235 — будто его уже использовали. Оказалось, что около двух миллиардов лет назад там сама собой шла цепная реакция: тогда доля урана-235 в природном уране была около 3 %, как в современном топливе, а грунтовые воды работали замедлителем. Реактор проработал несколько сотен тысяч лет с мощностью около ста киловатт, включаясь и выключаясь по мере испарения воды. Природа построила ядерный реактор за два миллиарда лет до человека."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Всё стремится к железу",
+          "text": "Лёгкие ядра выгодно сливать, тяжёлые делить, и оба процесса ведут к железу — вершине кривой энергии связи. Любая реакция с выделением энергии приближает вещество к этой точке. Железо есть зола звёздного огня, дальше извлекать нечего."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Сколько урана нужно городу",
+          "text": "Реактор мощностью 1 ГВт при КПД около 33 % расходует примерно тонну урана-235 в год, то есть около 3 килограммов в сутки. Угольная станция той же мощности сжигает три миллиона тонн угля в год — состав длиной в сотни километров. Разница в миллион раз, и она вся в кривой энергии связи."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Чего кривая не говорит",
+          "text": "Она сообщает, выгодна ли реакция энергетически, но ничего — о том, пойдёт ли она и как быстро. Кулоновский барьер, сечения реакций, необходимость замедлителя, отвод тепла и радиоактивные отходы лежат за её пределами. Энергетическая выгодность необходима, но совершенно недостаточна: синтез выгоднее деления, а освоить его не удаётся семьдесят лет."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: ответственность физика",
+      "lead": "Не входит в проверку. О самом тяжёлом эпизоде в истории науки — и о том, что из него следует.",
+      "blocks": [
+        {
+          "h": "Как это произошло",
+          "text": "От открытия деления в декабре 1938 года до взрыва над Хиросимой в августе 1945-го прошло шесть с половиной лет. Физики, работавшие над чистым любопытством — что будет, если облучить уран нейтронами, — оказались авторами оружия, изменившего мировую политику. Многие из них не предполагали такого исхода: Резерфорд ещё в 1933 году называл разговоры об извлечении ядерной энергии вздором."
+        },
+        {
+          "h": "Что делали дальше",
+          "text": "Силард, первым осознавший возможность цепной реакции и подтолкнувший письмо Эйнштейна Рузвельту, затем составил петицию против применения бомбы без предупреждения. Её подписали семьдесят участников проекта; до президента она не дошла. Эйнштейн позже называл подписание письма главной ошибкой своей жизни. Оппенгеймер после испытания вспомнил строку из «Бхагавадгиты», а через несколько лет лишился допуска за возражения против водородной бомбы."
+        },
+        {
+          "h": "Что из этого вышло",
+          "text": "Учёные создали первые в истории международные объединения, ставящие целью ограничение того, что сами открыли: Пагуошское движение, обращение Рассела и Эйнштейна 1955 года. Из этих усилий выросли договоры о нераспространении и о запрете испытаний. Мейтнер, отказавшаяся участвовать в проекте, до конца жизни настаивала, что открытие деления не должно было привести к бомбе — и что выбор всегда есть."
+        },
+        {
+          "h": "Что здесь важно для учащегося",
+          "text": "Знание нейтрально, применение — нет. Между «мы поняли, как устроено ядро» и «мы построили оружие» лежит цепочка решений, каждое из которых принимали люди. Физика не освобождает от выбора и не делает его за вас; наоборот, чем глубже понимание, тем больше ответственность. Это, пожалуй, главное, что стоит унести из последней темы курса, — и это тоже часть образования, а не приложение к нему."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Энергия выделяется при движении вверх по кривой энергии связи: слияние лёгких ядер и деление тяжёлых; железо на вершине не даёт ничего.",
+      "keyIdeas": [
+        {
+          "icon": "history",
+          "title": "Деление урана",
+          "text": "около 200 МэВ на ядро, килограмм эквивалентен 3000 тонн угля"
+        },
+        {
+          "icon": "scale",
+          "title": "Синтез водорода",
+          "text": "26,7 МэВ на акт, вчетверо эффективнее по массе топлива"
+        },
+        {
+          "icon": "lamp",
+          "title": "Синтез требует туннелирования",
+          "text": "тепловой энергии на барьер не хватает в тысячу раз"
+        },
+        {
+          "icon": "lamp",
+          "title": "Удельная мощность Солнца всего 275 Вт/м³",
+          "text": "светит оно за счёт размеров"
+        },
+        {
+          "icon": "scale",
+          "title": "Накопление железа лишает звезду",
+          "text": "Накопление железа лишает звезду опоры и ведёт к коллапсу и сверхновой"
+        }
+      ],
+      "where": "Атомная энергетика, термоядерные исследования, эволюция звёзд, происхождение элементов тяжелее железа.",
+      "watchOut": "Энергетическая выгодность не означает осуществимости. Синтез выгоднее деления, но не освоен за семьдесят лет из-за трудностей удержания плазмы."
+    },
+    "quiz": [
+      {
+        "id": "f1",
+        "type": "mcq",
+        "q": "Почему энергия выделяется и при делении урана, и при слиянии водорода?",
+        "options": [
+          "Это разные явления, и объяснения у них разные",
+          "Оба процесса ведут к ядрам с большей удельной энергией связи, то есть вверх по кривой к железу",
+          "Оба процесса уменьшают массу ядер",
+          "Оба сопровождаются вылетом нейтронов"
+        ],
+        "answer": 1,
+        "why": "Кривая энергии связи имеет максимум около железа. Всё, что левее, выигрывает при слиянии, всё, что правее, — при делении. Оба процесса движут вещество к вершине, и именно разность удельных энергий связи, умноженная на число нуклонов, даёт выход реакции.",
+        "hint": "Посмотрите, где на кривой лежат уран и водород относительно её максимума. В какую сторону им выгодно двигаться?"
+      },
+      {
+        "id": "f2",
+        "type": "mcq",
+        "q": "Почему термоядерный синтез до сих пор не освоен, хотя он выгоднее деления?",
+        "options": [
+          "Не хватает топлива — дейтерий редок",
+          "Нужно преодолеть кулоновский барьер, а это требует температур в сотни миллионов градусов и удержания плазмы",
+          "Синтез даёт слишком много радиоактивных отходов",
+          "Реакция идёт слишком быстро и неуправляема"
+        ],
+        "answer": 1,
+        "why": "Дейтерия в морской воде хватило бы на миллионы лет, а отходов синтез даёт несравнимо меньше деления. Трудность чисто техническая и очень серьёзная: плазму с температурой в сотни миллионов градусов не удержать никакой стенкой, а магнитное удержание оказалось задачей на семьдесят лет.",
+        "hint": "Что мешает двум ядрам сблизиться настолько, чтобы заработало сильное взаимодействие? Какая температура для этого нужна?"
+      },
+      {
+        "id": "f3",
+        "type": "free",
+        "q": "Своими словами: почему массивная звезда, накопив железное ядро, взрывается?",
+        "keywords": [
+          "железо",
+          "максимум",
+          "не даёт энерг",
+          "не дает энерг",
+          "нет опор",
+          "коллапс",
+          "гравитац",
+          "давлен",
+          "сжима"
+        ],
+        "needed": 2,
+        "why": "Всё время жизни звезда удерживается от сжатия давлением, которое создаёт выделяющаяся при синтезе энергия. Дойдя до железа — вершины кривой энергии связи, — она лишается источника: дальнейший синтез энергию не даёт, а требует. Опора исчезает, ядро коллапсирует за секунды, и высвободившаяся гравитационная энергия разносит оболочку.",
+        "hint": "Что удерживает звезду от сжатия под собственным тяготением? Что происходит с этим источником, когда ядро становится железным?"
+      },
+      {
+        "id": "f4",
+        "type": "estimate",
+        "q": "Сколько тонн угля эквивалентно по энергии одному килограмму урана-235? Дайте порядок в тысячах тонн.",
+        "answer": 3,
+        "unit": "тыс. тонн",
+        "tolerance": 1,
+        "why": "2,56·10²⁴ ядер по 200 МэВ дают 8,2·10¹³ Дж. Разделив на теплоту сгорания угля 2,9·10⁷ Дж/кг, получаем 2,8·10⁶ кг, то есть около трёх тысяч тонн — состав из полусотни вагонов. Разница в миллион раз есть прямое следствие того, что ядерные связи измеряются мегаэлектронвольтами, а химические — электронвольтами.",
+        "hint": "Посчитайте число ядер в килограмме через число Авогадро, умножьте на 200 МэВ в джоулях и разделите на теплоту сгорания угля."
+      }
+    ]
+  },
+  "en": {
+    "title": "Fission and Fusion",
+    "subtitle": "Section 3 · Why It Pays to Split Heavy and Fuse Light",
+    "intro": [
+      "All nuclear power — peaceful, military, and stellar — fits into a single curve. The one drawn below the stand: specific binding energy versus mass number. It rises from hydrogen, reaches a maximum near iron, and slowly falls toward uranium.",
+      "Hence two ways to obtain energy. Left of the maximum, it is beneficial to fuse light nuclei — that is how the Sun shines. Right of it, it is beneficial to split heavy nuclei — that is how a reactor works. Both drive matter toward iron, but iron itself gives nothing: it is the bottom of the pit, from which no energy can be extracted.",
+      "This same curve also dictates the end of massive stars. Having built an iron core, the star loses its heat source, loses support against its own gravity, and collapses in seconds. The supernova explosion scatters everything it has cooked across the Galaxy — including the atoms that make up you."
+    ],
+    "standNote": "Move the mass number across the full range and watch the curve below. On the left, it rises steeply — fusion there yields a lot of energy, which is why hydrogen burns. At iron, it has a maximum and a flat top: nothing to do with it. On the right, a gentle decline — fission gives significantly less per nucleon, but there are many heavy nuclei and they are technically easier to split. Notice the label under the nucleus: it tells you which side of the curve you are on and what is beneficial to do with that nucleus.",
+    "formula": {
+      "name": "Energy Yield of a Nuclear Reaction",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "alsoKnown": "Binding Energy Curve · Condition for Energy Release",
+      "authors": [
+        {
+          "who": "Arthur Eddington",
+          "year": "1920",
+          "what": "hypothesized that stars shine by converting hydrogen into helium. To those who objected that the Sun's temperature was insufficient, he replied: look for a hotter place. He turned out to be right — the missing piece was explained by tunneling."
+        },
+        {
+          "who": "Otto Hahn and Fritz Strassmann",
+          "year": "1938",
+          "what": "detected barium after irradiating uranium with neutrons — meaning the nucleus had split in two. Trained as chemists, they hesitated to interpret the result physically and turned to a former colleague."
+        },
+        {
+          "who": "Lise Meitner and Otto Frisch",
+          "year": "1939",
+          "what": "explained fission and calculated the energy using Einstein's formula, obtaining 200 MeV per nucleus. They discussed this during a walk in a snowy forest during Christmas vacation; Meitner was in exile after fleeing Germany."
+        },
+        {
+          "who": "Hans Bethe",
+          "year": "1939",
+          "what": "calculated the reaction chains by which stars shine and explained why the Sun burns for billions of years, not thousands. Nobel Prize thirty-eight years later."
+        },
+        {
+          "who": "Igor Kurchatov",
+          "year": "1946",
+          "what": "launched the first Soviet reactor F-1, still operating today as an exhibit. In the same 1939 as in the West, Soviet physicists Flerov and Petrzhak discovered spontaneous fission of uranium."
+        }
+      ],
+      "story": "Lise Meitner learned of Hahn's result by letter while in forced exile in Sweden: as a Jew, she had to flee Germany, leaving behind the laboratory where she had worked for thirty years. Hahn wrote that uranium after neutron irradiation yields barium and asked for an explanation of how that could happen. During a Christmas walk with her nephew Frisch, she sat on a fallen tree and calculated: if the uranium nucleus splits in half, the mass defect gives about 200 megaelectronvolts. The numbers matched. They sent the paper from Sweden, but the 1944 Nobel Prize was awarded to Hahn alone. Meitner refused to participate in the bomb project, saying she wanted nothing to do with that weapon. Element 109 was named meitnerium."
+    },
+    "symbols": [
+      {
+        "sym": "Q2",
+        "latex": "Q",
+        "what": "energy yield of the reaction",
+        "unit": "MeV",
+        "note": "positive if products are more tightly bound than reactants"
+      },
+      {
+        "sym": "k_eff",
+        "latex": "k",
+        "what": "multiplication factor",
+        "unit": "—",
+        "note": "how many new fissions one induces; at $k=1$ the reactor is steady, at $k>1$ it runs away"
+      },
+      {
+        "sym": "sigma",
+        "latex": "\\sigma",
+        "what": "reaction cross section",
+        "unit": "barn",
+        "note": "measure of probability; a barn equals $10^{-28}$ m² — roughly the cross-sectional area of a nucleus"
+      },
+      {
+        "sym": "Tign",
+        "latex": "T_{\\text{заж}}",
+        "what": "fusion ignition temperature",
+        "unit": "K",
+        "note": "about $10^{8}$ K for deuterium with tritium — ten times higher than in the Sun's core"
+      },
+      {
+        "sym": "Lawson",
+        "latex": "n\\tau",
+        "what": "Lawson criterion",
+        "unit": "s/m³",
+        "note": "product of plasma density and confinement time; below threshold the reactor does not pay off"
+      }
+    ],
+    "derivation": {
+      "title": "Strict derivation: where does energy come from and why exactly this way",
+      "lead": "Everything follows from one curve. Let's calculate both processes and see that they are moving towards each other.",
+      "steps": [
+        {
+          "text": "Condition for energy release: the products must be more tightly bound than the original nuclei. The difference in specific binding energies multiplied by the number of nucleons is the reaction yield.",
+          "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A > 0",
+          "figure": "curves",
+          "figCaption": "Up the curve — energy is released, down — absorbed. The direction is set by the slope at that point."
+        },
+        {
+          "text": "Uranium fission. A nucleus with $B/A \\approx 7{,}6$ MeV decays into two medium-mass fragments, which have $B/A \\approx 8{,}5$. The gain is almost a mega-electronvolt per nucleon, multiplied by 235 nucleons.",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "figure": "elastic",
+          "figCaption": "Two hundred mega-electronvolts per nucleus — fifty million times more than the burning of a carbon atom."
+        },
+        {
+          "text": "Chain reaction. During fission, two to three neutrons are emitted, each capable of causing a new fission. Stability is determined by how many of them, on average, complete the job.",
+          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "figure": "microcontact",
+          "figCaption": "The reactor operates exactly at one. Control is possible thanks to delayed neutrons."
+        },
+        {
+          "text": "Now fusion. Four protons turn into a helium nucleus, which has $B/A = 7{,}1$ MeV versus zero for free protons. The gain per nucleon is almost eight times greater than in fission.",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "figure": "action",
+          "figCaption": "Fusion is more efficient than fission per mass of fuel — but requires incomparably more difficult conditions."
+        },
+        {
+          "text": "Why fusion is so difficult. Nuclei must come very close, overcoming a Coulomb barrier hundreds of kilo-electronvolts high. Thermal energy is insufficient even at millions of degrees — tunneling comes to the rescue.",
+          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "figure": "anywell",
+          "figCaption": "A thousand-fold difference. The reaction proceeds only due to quantum tunneling through the barrier."
+        },
+        {
+          "text": "Hence the slowness of solar burning. The tunneling probability is small, and the first step of the chain also requires weak interaction — conversion of a proton into a neutron. The average waiting time for an individual proton is billions of years.",
+          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "figure": "heating",
+          "figCaption": "Less than what a compost heap produces. The Sun shines brightly not because of the intensity of the reaction, but because of its size."
+        },
+        {
+          "text": "And the end of the journey. Reaching iron, a star hits the maximum of the curve: further fusion does not release energy but consumes it. The support against gravity disappears, and the core collapses in seconds.",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "figure": "result",
+          "figCaption": "Iron — the ash of stellar fire. Everything heavier than iron was created in explosions, where energy is spent, not gained."
+        }
+      ],
+      "plate": "Energy is released when moving up the binding energy curve: fusion of light nuclei and fission of heavy ones. Iron at the peak yields nothing, and reaching it marks the end of a star.",
+      "note": "Limitations and fair comparison. Fusion is more efficient per mass of fuel, but requires temperatures of hundreds of millions of degrees and plasma confinement, which has not yet been achieved on Earth in a self-sustaining mode in seventy years. Fission is technically simpler, but produces long-lived radioactive waste and requires the rare isotope uranium-235, which makes up only 0.7% of natural uranium. Neither method is a clean solution, and understanding their limitations is part of an educated perspective on energy."
+    },
+    "math": {
+      "title": "The math that was needed here",
+      "text": [
+        "How to read the curve and make predictions. There is one rule: a reaction is favorable if the products lie higher than the reactants on the curve. Hydrogen is at the very bottom — fusing it is extremely favorable. Uranium on the gentle slope — fission is moderately favorable. Iron at the peak — neither is possible. Hence a consequence worth realizing: any reaction that releases energy brings matter closer to iron, and the Universe is slowly moving in that direction.",
+        "Why fission gives less per nucleon but more per reaction. The gain in fission is about 0.9 MeV per nucleon, in hydrogen fusion almost 7 MeV. Fusion is seven times more favorable per mass of fuel. But one uranium nucleus contains 235 nucleons, and it yields 200 MeV at once, whereas a fusion event yields 26.7. Plus, uranium fissions at room temperature from a single neutron, while fusion requires hundreds of millions of degrees. Hence the difference in development timelines: a fission reactor was built in four years, a fusion one has not been built in seventy.",
+        "What the Lawson criterion means. For a fusion reactor to be self-sustaining, the product of plasma density, confinement time, and temperature must exceed a threshold. Two paths are possible: holding a low-density plasma for a long time with a magnetic field (tokamak) or compressing a dense plasma for an instant with lasers (inertial confinement fusion). Both approaches are being developed, and in 2022, a laser facility for the first time obtained more energy from the target than the lasers put into it — though without accounting for the energy cost of the lasers themselves.",
+        "How to estimate the fuel reserve. In one kilogram of uranium-235, there are about $2{,}6\\cdot 10^{24}$ nuclei, each gives 200 MeV, i.e., $3{,}2\\cdot 10^{-11}$ joules. Multiply them — you get $8\\cdot 10^{13}$ joules, equivalent to three thousand tons of coal. For deuterium from seawater, the numbers are even more impressive: its reserves would last tens of millions of years at current consumption. The question is never about reserves, but about how to access them."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: kilogram of uranium versus wagon of coal",
+      "lead": "Let's calculate how much energy nuclear fuel provides and compare it with familiar sources.",
+      "given": "When one uranium-235 nucleus fissions, 200 MeV is released. Find the energy released from the fission of one kilogram, and compare it with the heat of combustion of coal (29 MJ/kg).",
+      "law": "$E = N \\cdot Q$, where $N = \\dfrac{m}{M}N_A$",
+      "solution": [
+        {
+          "text": "Number of nuclei in a kilogram of uranium-235.",
+          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+        },
+        {
+          "text": "Energy of one fission in joules.",
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+        },
+        {
+          "text": "Total energy.",
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Equivalent amount of coal.",
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+        }
+      ],
+      "answer": "A kilogram of uranium-235 provides as much energy as almost three thousand tons of coal — a train of fifty cars.",
+      "check": "Let's check using mass defect to connect with the previous topic. Eighty-two trillion joules correspond to a mass of $E/c^{2} \\approx 0{,}9$ grams. So from a kilogram of uranium, only one gram — one thousandth — is converted into energy. For comparison, when coal burns, one ten-billionth of its mass is converted into energy. The million-fold difference is the difference between chemistry and nuclear physics, and it is entirely explained by the fact that electromagnetic bonds give electronvolts, while the strong force gives megaelectronvolts."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Numbers of power engineering — from reactor to star.",
+      "items": [
+        {
+          "sym": "Qfis",
+          "latex": "Q_{\\text{дел}}",
+          "name": "Energy of fission of a uranium-235 nucleus",
+          "value": "≈ 200",
+          "unit": "МэВ",
+          "why": "Of this, about 165 MeV is carried away by the fragments as kinetic energy; the rest goes to neutrons, gamma rays, and subsequent decays. It is the kinetic energy of the fragments that heats the fuel in the reactor.",
+          "mnemo": "One fission gives fifty million times more energy than the combustion of a single carbon atom. A kilogram of uranium is equivalent to three thousand tons of coal."
+        },
+        {
+          "sym": "Qfus",
+          "latex": "Q_{\\text{синт}}",
+          "name": "Energy of fusion of deuterium with tritium",
+          "value": "17,6",
+          "unit": "МэВ",
+          "why": "The most accessible fusion reaction: it has the smallest Coulomb barrier and the largest cross section. The primary reaction for future thermonuclear reactors.",
+          "mnemo": "Per nucleon, this is 3.5 MeV versus 0.9 for fission — four times more efficient per fuel mass. The deuterium in one liter of seawater would provide the energy of three hundred liters of gasoline."
+        },
+        {
+          "sym": "P_sun",
+          "latex": "P_{\\odot}",
+          "name": "Specific power in the center of the Sun",
+          "value": "≈ 275",
+          "unit": "Вт / м³",
+          "why": "Less than a compost heap of the same volume releases. The Sun shines brightly solely because of its size, not the intensity of the reaction.",
+          "mnemo": "It is this slowness that allows the Sun to burn for billions of years. If the reaction were faster, it would have burned out long before life appeared."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where the binding energy curve leads",
+      "lead": "One curve explains both energy, and the life of stars, and the origin of elements.",
+      "items": [
+        {
+          "h": "Nuclear power",
+          "text": "Uranium fission provides about 10% of the world's electricity. Fuel is replaced once every few years, not hauled in trains — a direct consequence of the mass defect being a million times larger than chemical mass defect."
+        },
+        {
+          "h": "Thermonuclear fusion",
+          "text": "Seventy years of research and still no self-sufficient facility. The problem is not physics, but confining plasma at a hundred million degrees. The under-construction ITER is expected to achieve a tenfold gain for the first time."
+        },
+        {
+          "h": "Life of a star",
+          "text": "A star successively burns hydrogen, then helium, carbon, oxygen, silicon — climbing the curve. Each stage is shorter than the previous: hydrogen burns for millions of years, silicon for a day."
+        },
+        {
+          "h": "Supernova",
+          "text": "Having accumulated an iron core, a massive star loses its energy source and collapses in seconds. The released energy is enough to light up an entire galaxy for weeks."
+        },
+        {
+          "h": "Origin of heavy elements",
+          "text": "Everything heavier than iron could not have formed in ordinary burning — energy must be expended. Gold and uranium are born in supernova explosions and neutron star mergers."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curious: Try It Yourself",
+      "lead": "You can't touch nuclear energy, but you can estimate its scale and find its traces in your own home.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Find Nuclear Physics in Your Apartment",
+          "text": "Look at the smoke detector on the ceiling, search for its label. Then recall what glows in the dark on old clocks and instruments.",
+          "answer": "Most smoke detectors contain a speck of americium-241 weighing about 0.3 micrograms — an alpha source that ionizes the air in the chamber. Smoke disrupts the ion current, and the alarm sounds. Americium does not occur in nature at all; it is man-made in reactors. The glowing hands of old clocks were painted with radium paint, and female workers, licking brushes for fine lines, received lethal doses — the story of the 'Radium Girls' of the 1920s led to the first radiation safety standards."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "The Sun Is Colder Than a Compost Heap",
+          "text": "At the Sun's core, it's 15 million degrees, and thermonuclear fusion occurs there. Yet the specific power output is 275 watts per cubic meter — less than in a rotting compost heap. How is that possible?",
+          "answer": "The reaction is enormously slow. Its first step requires converting a proton into a neutron via the weak interaction, and the average waiting time for a single proton is billions of years. The Sun shines brightly not because the reaction is violent, but because its volume is $10^{27}$ cubic meters. Multiply 275 watts by that number — you get the Sun's power. Slowness is the reason for its longevity: if the reaction were faster, the star would have burned out long before life appeared on planets."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "Natural Reactor in Gabon",
+          "text": "In 1972, at the Oklo mine, uranium ore with unusually low content of uranium-235 was discovered — as if it had already been used. It turned out that about two billion years ago, a chain reaction started spontaneously: at that time, the fraction of uranium-235 in natural uranium was about 3%, like in modern fuel, and groundwater acted as a moderator. The reactor operated for several hundred thousand years with a power of about a hundred kilowatts, turning on and off as water evaporated. Nature built a nuclear reactor two billion years before humans."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Everything Tends to Iron",
+          "text": "It is favorable to fuse light nuclei and split heavy ones, and both processes lead to iron — the peak of the binding energy curve. Any reaction that releases energy brings matter closer to that point. Iron is the ash of stellar fire; there is nothing left to extract."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimation",
+          "h": "How Much Uranium Does a City Need",
+          "text": "A 1 GW reactor with about 33% efficiency consumes roughly one ton of uranium-235 per year, about 3 kilograms per day. A coal plant of the same power burns three million tons of coal per year — a train hundreds of kilometers long. The difference is a factor of a million, and it all comes from the binding energy curve."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "What the Curve Doesn't Tell",
+          "text": "It tells whether a reaction is energetically favorable, but nothing about whether it will occur and how fast. Coulomb barrier, reaction cross sections, need for a moderator, heat removal, and radioactive waste lie beyond its scope. Energetic favorability is necessary but utterly insufficient: fusion is more favorable than fission, yet we haven't mastered it in seventy years."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: The Physicist's Responsibility",
+      "lead": "Not part of the test. About the heaviest episode in the history of science — and what follows from it.",
+      "blocks": [
+        {
+          "h": "How It Happened",
+          "text": "From the discovery of fission in December 1938 to the explosion over Hiroshima in August 1945, six and a half years passed. Physicists working out of pure curiosity — what would happen if uranium were irradiated with neutrons — became the creators of a weapon that changed world politics. Many of them did not foresee this outcome: Rutherford in 1933 called talk of extracting nuclear energy nonsense."
+        },
+        {
+          "h": "What They Did Next",
+          "text": "Szilard, who first realized the possibility of a chain reaction and prompted Einstein's letter to Roosevelt, later drafted a petition against using the bomb without warning. It was signed by seventy project participants; it did not reach the president. Einstein later called signing the letter the biggest mistake of his life. Oppenheimer after the test recalled a line from the Bhagavad Gita, and a few years later lost his security clearance for opposing the hydrogen bomb."
+        },
+        {
+          "h": "What Came of It",
+          "text": "Scientists created the first international organizations aimed at limiting what they themselves had discovered: the Pugwash Movement, the Russell–Einstein Manifesto of 1955. From these efforts grew the non-proliferation and test ban treaties. Meitner, who refused to participate in the project, insisted until the end of her life that the discovery of fission should not have led to the bomb — and that choice always exists."
+        },
+        {
+          "h": "What Matters for the Student",
+          "text": "Knowledge is neutral, application is not. Between 'we understood how the nucleus works' and 'we built a weapon' lies a chain of decisions, each made by people. Physics does not free you from choice nor make it for you; on the contrary, the deeper the understanding, the greater the responsibility. This is, perhaps, the main thing to take away from the last topic of the course — and it is also part of education, not an appendix to it."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Energy is released when moving up the binding energy curve: fusion of light nuclei and fission of heavy nuclei; iron at the peak yields nothing.",
+      "keyIdeas": [
+        {
+          "icon": "history",
+          "title": "Uranium fission",
+          "text": "about 200 MeV per nucleus, one kilogram equivalent to 3000 tons of coal"
+        },
+        {
+          "icon": "formula",
+          "title": "Hydrogen fusion",
+          "text": "26.7 MeV per reaction, four times more efficient per fuel mass"
+        },
+        {
+          "icon": "sigma",
+          "title": "Fusion requires tunneling",
+          "text": "thermal energy is a thousand times insufficient for the barrier"
+        },
+        {
+          "icon": "ruler",
+          "title": "The Sun's specific power is only 275 W/m³",
+          "text": "it shines due to its size"
+        },
+        {
+          "icon": "scale",
+          "title": "Iron accumulation deprives the",
+          "text": "Iron accumulation deprives the star of support and leads to collapse and supernova"
+        }
+      ],
+      "where": "Nuclear power, fusion research, stellar evolution, origin of elements heavier than iron.",
+      "watchOut": "Energy profitability does not imply feasibility. Fusion is more advantageous than fission, but has not been mastered in seventy years due to plasma confinement difficulties."
+    },
+    "quiz": [
+      {
+        "id": "f1",
+        "type": "mcq",
+        "q": "Why is energy released both in uranium fission and hydrogen fusion?",
+        "options": [
+          "These are different phenomena with different explanations",
+          "Both processes lead to nuclei with higher specific binding energy, i.e., up the curve towards iron",
+          "Both processes decrease the mass of nuclei",
+          "Both are accompanied by neutron emission"
+        ],
+        "answer": 1,
+        "why": "The binding energy curve has a maximum near iron. Everything to the left gains from fusion, everything to the right from fission. Both processes move matter toward the peak, and it is the difference in specific binding energy multiplied by the number of nucleons that gives the reaction yield.",
+        "hint": "Look at where uranium and hydrogen lie on the curve relative to its maximum. In which direction is it advantageous for them to move?"
+      },
+      {
+        "id": "f2",
+        "type": "mcq",
+        "q": "Why has thermonuclear fusion not been mastered yet, although it is more advantageous than fission?",
+        "options": [
+          "There is not enough fuel — deuterium is rare",
+          "The Coulomb barrier must be overcome, requiring temperatures of hundreds of millions of degrees and plasma confinement",
+          "Fusion produces too much radioactive waste",
+          "The reaction is too fast and uncontrollable"
+        ],
+        "answer": 1,
+        "why": "Deuterium in seawater would last millions of years, and fusion produces incomparably less waste than fission. The difficulty is purely technical and very serious: plasma at hundreds of millions of degrees cannot be confined by any wall, and magnetic confinement has proven to be a seventy-year challenge.",
+        "hint": "What prevents two nuclei from getting close enough for the strong interaction to work? What temperature is needed for that?"
+      },
+      {
+        "id": "f3",
+        "type": "free",
+        "q": "In your own words: why does a massive star, having accumulated an iron core, explode?",
+        "keywords": [
+          "iron",
+          "maximum",
+          "gives no energy",
+          "gives no energy",
+          "no support",
+          "collapse",
+          "gravitational",
+          "pressure",
+          "compression"
+        ],
+        "needed": 2,
+        "why": "Throughout its life, a star is supported against collapse by pressure generated by the energy released in fusion. When it reaches iron - the peak of the binding energy curve - it loses its source: further fusion does not release energy but requires it. The support disappears, the core collapses in seconds, and the released gravitational energy blows off the envelope.",
+        "hint": "What holds the star against collapse under its own gravity? What happens to this source when the core becomes iron?"
+      },
+      {
+        "id": "f4",
+        "type": "estimate",
+        "q": "How many tons of coal are energetically equivalent to one kilogram of uranium-235? Give the order in thousands of tons.",
+        "answer": 3,
+        "unit": "thousand tons",
+        "tolerance": 1,
+        "why": "2.56·10²⁴ nuclei at 200 MeV give 8.2·10¹³ J. Dividing by the heat of combustion of coal 2.9·10⁷ J/kg, we get 2.8·10⁶ kg, i.e., about three thousand tons – a train of fifty cars. The million-fold difference is a direct consequence of nuclear bonds being measured in megaelectronvolts and chemical bonds in electronvolts.",
+        "hint": "Calculate the number of nuclei in a kilogram via Avogadro's number, multiply by 200 MeV in joules, and divide by the heat of combustion of coal."
+      }
+    ]
+  },
+  "es": {
+    "title": "Fisión y fusión",
+    "subtitle": "Párrafo 3 · Por qué conviene dividir lo pesado y fusionar lo ligero",
+    "intro": [
+      "Toda la energía nuclear — tanto la pacífica como la militar y la estelar — se resume en una curva. La misma que está dibujada bajo el panel: energía de enlace por nucleón frente a número másico. Crece desde el hidrógeno, alcanza un máximo cerca del hierro y desciende lentamente hacia el uranio.",
+      "De aquí se derivan dos formas de obtener energía. A la izquierda del máximo conviene fusionar núcleos ligeros — así brilla el Sol. A la derecha conviene dividir núcleos pesados — así funciona un reactor. Ambos procesos llevan la materia hacia el hierro, pero el hierro en sí no aporta nada: es el fondo del pozo, del cual no se puede extraer energía.",
+      "De esta misma curva se deduce el final de la vida de las estrellas masivas. Al acumular un núcleo de hierro, la estrella pierde su fuente de calor, pierde el soporte contra su propia gravedad y colapsa en segundos. La explosión de supernova esparce por la Galaxia todo lo que había cocinado, incluidos los átomos de los que usted está hecho."
+    ],
+    "standNote": "Desplace el número másico a lo largo de todo el rango y observe la curva inferior. A la izquierda asciende abruptamente: allí la fusión produce mucha energía, por eso arde el hidrógeno. En el hierro hay un máximo y una cima plana: no se puede hacer nada con él. A la derecha hay una pendiente suave: la fisión produce notablemente menos energía por nucleón, pero hay muchos núcleos pesados y dividirlos es técnicamente más sencillo. Preste atención al texto bajo el núcleo: indica en qué lado de la curva se encuentra y qué conviene hacer con ese núcleo.",
+    "formula": {
+      "name": "Salida energética de una reacción nuclear",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "alsoKnown": "Curva de energía de enlace · condición de liberación de energía",
+      "authors": [
+        {
+          "who": "Arthur Eddington",
+          "year": "1920",
+          "what": "supuso que las estrellas brillan mediante la conversión de hidrógeno en helio. A quienes objetaban que la temperatura del Sol era insuficiente, respondió: busquen un lugar más caliente. Resultó tener razón — el efecto túnel explicó lo que faltaba."
+        },
+        {
+          "who": "Otto Hahn y Fritz Strassmann",
+          "year": "1938",
+          "what": "descubrieron bario tras irradiar uranio con neutrones — es decir, el núcleo se partió en dos. Químicos de formación, no se atrevieron a interpretar físicamente el resultado y recurrieron a una excolega."
+        },
+        {
+          "who": "Lise Meitner y Otto Frisch",
+          "year": "1939",
+          "what": "explicaron la fisión y calcularon la energía mediante la fórmula de Einstein, obteniendo 200 MeV por núcleo. Lo discutieron durante un paseo por un bosque nevado en las vacaciones de Navidad; Meitner estaba en el exilio tras huir de Alemania."
+        },
+        {
+          "who": "Hans Bethe",
+          "year": "1939",
+          "what": "calculó las cadenas de reacciones con las que brillan las estrellas y explicó por qué el Sol arde durante miles de millones de años en lugar de miles. Premio Nobel treinta y ocho años después."
+        },
+        {
+          "who": "Ígor Kurchátov",
+          "year": "1946",
+          "what": "puso en marcha el primer reactor soviético F-1, que sigue funcionando hoy como pieza de museo. Ese mismo 1939, los físicos soviéticos Fliórov y Petrzhak descubrieron la fisión espontánea del uranio."
+        }
+      ],
+      "story": "Lise Meitner se enteró del resultado de Hahn por carta, mientras se encontraba en el exilio forzado en Suecia: como judía, tuvo que huir de Alemania, dejando el laboratorio donde había trabajado durante treinta años. Hahn escribió que el uranio tras irradiarse con neutrones producía bario, y le pidió que explicara cómo era posible. Durante un paseo navideño con su sobrino Frisch, se sentó en un árbol caído y calculó: si el núcleo de uranio se divide en dos, el defecto de masa da unos 200 megaelectrónvoltios. Los números coincidieron. Enviaron el artículo desde Suecia, pero el Premio Nobel de 1944 lo recibió solo Hahn. Meitner se negó a participar en el proyecto de la bomba, diciendo que no tendría nada que ver con ese armamento. El elemento 109 fue nombrado meitnerio.",
+      "symbols": [
+        {
+          "sym": "Q2",
+          "latex": "Q",
+          "what": "salida energética de la reacción",
+          "unit": "MeV",
+          "note": "positiva si los productos están más fuertemente unidos que los reactivos"
+        },
+        {
+          "sym": "k_eff",
+          "latex": "k",
+          "what": "factor de multiplicación",
+          "unit": "—",
+          "note": "cuántas nuevas fisiones provoca una; con $k=1$ el reactor es estable, con $k>1$ se acelera"
+        },
+        {
+          "sym": "sigma",
+          "latex": "\\sigma",
+          "what": "sección eficaz de reacción",
+          "unit": "barn",
+          "note": "medida de probabilidad; un barn equivale a $10^{-28}$ m² — aproximadamente el área de sección transversal de un núcleo"
+        },
+        {
+          "sym": "Tign",
+          "latex": "T_{\\text{заж}}",
+          "what": "temperatura de ignición de fusión",
+          "unit": "K",
+          "note": "alrededor de $10^{8}$ K para deuterio con tritio — diez veces más que en el centro del Sol"
+        },
+        {
+          "sym": "Lawson",
+          "latex": "n\\tau",
+          "what": "criterio de Lawson",
+          "unit": "s/m³",
+          "note": "producto de la densidad del plasma por el tiempo de confinamiento; por debajo del umbral el reactor no es rentable"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: de dónde viene la energía y por qué exactamente así",
+      "lead": "Todo se deriva de una sola curva. Calculemos ambos procesos y veremos que se mueven uno hacia el otro.",
+      "steps": [
+        {
+          "text": "Condición para liberar energía: los productos deben estar más fuertemente ligados que los núcleos iniciales. La diferencia de energías de enlace por nucleón, multiplicada por el número de nucleones, es la ganancia de la reacción.",
+          "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A > 0",
+          "figure": "curves",
+          "figCaption": "Hacia arriba en la curva se libera energía, hacia abajo se absorbe. La dirección la da la pendiente en ese punto."
+        },
+        {
+          "text": "Fisión del uranio. Un núcleo con $B/A \\approx 7{,}6$ MeV se divide en dos fragmentos de masa media, con $B/A \\approx 8{,}5$. La ganancia es de casi un megaelectronvoltio por nucleón, multiplicado por 235 nucleones.",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "figure": "elastic",
+          "figCaption": "Doscientos megaelectronvoltios por núcleo: cincuenta millones de veces más que la combustión de un átomo de carbono."
+        },
+        {
+          "text": "Reacción en cadena. En la fisión se emiten dos o tres neutrones, cada uno capaz de provocar una nueva fisión. La estabilidad se determina por cuántos de ellos, en promedio, logran completar el proceso.",
+          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "figure": "microcontact",
+          "figCaption": "El reactor funciona exactamente en uno. El control es posible gracias a los neutrones retardados."
+        },
+        {
+          "text": "Ahora la fusión. Cuatro protones se transforman en un núcleo de helio, con $B/A = 7{,}1$ MeV frente a cero de los protones libres. La ganancia por nucleón es casi ocho veces mayor que en la fisión.",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "figure": "action",
+          "figCaption": "La fusión es más eficiente que la fisión en masa de combustible, pero requiere condiciones incomparablemente más difíciles."
+        },
+        {
+          "text": "Por qué la fusión es tan difícil. Los núcleos deben acercarse hasta rozarse, superando una barrera coulombiana de cientos de kiloelectronvoltios. La energía térmica, incluso a millones de grados, no es suficiente; el efecto túnel es el que salva.",
+          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "figure": "anywell",
+          "figCaption": "Diferencia de mil veces. La reacción solo ocurre gracias a la penetración de la barrera."
+        },
+        {
+          "text": "De ahí la lentitud del horno solar. La probabilidad de efecto túnel es pequeña, y la primera etapa de la cadena requiere además la interacción débil: la conversión de protón en neutrón. El tiempo medio de espera para un protón individual es de miles de millones de años.",
+          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "figure": "heating",
+          "figCaption": "Menos que la de un montón de compost. El Sol brilla intensamente no por la violencia de la reacción, sino por su tamaño."
+        },
+        {
+          "text": "Y el final del camino. Al llegar al hierro, la estrella choca con el máximo de la curva: la fusión posterior no da energía, sino que la consume. El soporte contra la gravedad desaparece y el núcleo colapsa en segundos.",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "figure": "result",
+          "figCaption": "El hierro es la ceniza del fuego estelar. Todo lo más pesado se crea en explosiones, donde se gasta energía, no se obtiene."
+        }
+      ],
+      "plate": "La energía se libera al ascender por la curva de energía de enlace: fusión de núcleos ligeros y fisión de núcleos pesados. El hierro en la cima no da nada, y alcanzarlo significa el fin de la estrella.",
+      "note": "Límites de aplicabilidad y comparación honesta. La fusión es más eficiente en masa de combustible, pero requiere temperaturas de cientos de millones de grados y confinamiento del plasma, algo que en la Tierra aún no se ha logrado en modo autosostenible en setenta años. La fisión es técnicamente más sencilla, pero produce residuos radiactivos de larga duración y requiere el isótopo escaso uranio-235, que constituye solo el 0,7 % del uranio natural. Ninguno de los dos métodos es una solución limpia, y comprender sus limitaciones forma parte de una visión informada sobre la energía."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Cómo leer la curva y predecir a partir de ella. La regla es una: la reacción es favorable si los productos están por encima de los reactivos en la curva. El hidrógeno está en el fondo: fusionarlo es extremadamente favorable. El uranio está en una pendiente suave: partirlo es moderadamente favorable. El hierro está en la cima: no se puede ni lo uno ni lo otro. De aquí se sigue una consecuencia que vale la pena comprender: toda reacción que libera energía acerca la materia al hierro, y el Universo se mueve lentamente en esa dirección.",
+        "Por qué la fisión da menos por nucleón, pero más por reacción. La ganancia en la fisión es de unos 0,9 MeV por nucleón; en la fusión del hidrógeno, de casi 7 MeV. La fusión es siete veces más ventajosa en masa de combustible. Pero un solo núcleo de uranio tiene 235 nucleones y libera 200 MeV de una vez, mientras que un acto de fusión da 26,7. Además, el uranio se fisiona a temperatura ambiente con un solo neutrón, mientras que la fusión requiere cientos de millones de grados. De ahí la diferencia en los plazos de desarrollo: el reactor se construyó en cuatro años, el termonuclear no se ha construido en setenta.",
+        "Qué significa el criterio de Lawson. Para que un reactor de fusión sea rentable, el producto de la densidad del plasma, el tiempo de confinamiento y la temperatura debe superar un umbral. Se puede seguir dos caminos: mantener el plasma poco denso durante mucho tiempo con campo magnético (tokamak) o comprimir el denso en un instante con láseres (fusión inercial). Ambos enfoques se desarrollan, y en 2022 una instalación láser obtuvo por primera vez más energía del blanco de la que los láseres invirtieron, aunque sin contar el gasto de los propios láseres.",
+        "Cómo estimar las reservas de combustible. En un kilogramo de uranio-235 hay unos $2{,}6\\cdot 10^{24}$ núcleos; cada uno da 200 MeV, es decir, $3{,}2\\cdot 10^{-11}$ julios. Multiplique y obtendrá $8\\cdot 10^{13}$ julios, equivalente a tres mil toneladas de carbón. Para el deuterio del agua de mar las cifras son aún más impresionantes: sus reservas durarían decenas de millones de años al consumo actual. La cuestión nunca está en las reservas, sino en cómo acceder a ellas."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo numérico: un kilogramo de uranio contra un vagón de carbón",
+      "lead": "Calculamos cuánta energía produce el combustible nuclear y lo comparamos con lo familiar.",
+      "given": "En la fisión de un núcleo de uranio-235 se liberan 200 MeV. Hallar la energía liberada al fisionar un kilogramo y compararla con el calor de combustión del carbón (29 MJ/kg).",
+      "law": "$E = N \\cdot Q$, где $N = \\dfrac{m}{M}N_A$",
+      "solution": [
+        {
+          "text": "Número de núcleos en un kilogramo de uranio-235.",
+          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+        },
+        {
+          "text": "Energía de una fisión en julios.",
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+        },
+        {
+          "text": "Energía total.",
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Cuánto carbón equivale.",
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+        }
+      ],
+      "answer": "Un kilogramo de uranio-235 produce tanta energía como casi tres mil toneladas de carbón: un tren de unos cincuenta vagones.",
+      "check": "Verifiquemos mediante el defecto de masa para conectar con el tema anterior. Ochenta y dos billones de julios corresponden a una masa de $E/c^{2} \\approx 0{,}9$ gramos. Es decir, de un kilogramo de uranio solo un gramo —una milésima parte— se ha convertido en energía. En comparación, al quemar carbón, solo una diez mil millonésima parte de la masa se convierte en energía. La diferencia de un millón de veces es la diferencia entre la química y la física nuclear, y se explica completamente porque el enlace electromagnético da electronvoltios, mientras que el fuerte da megaelectronvoltios."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Números de la energía — del reactor a la estrella.",
+      "items": [
+        {
+          "sym": "Qfis",
+          "latex": "$Q_{\\text{дел}}$",
+          "name": "Energía de fisión del núcleo de uranio-235",
+          "value": "≈ 200",
+          "unit": "MeV",
+          "why": "De ella, unos 165 MeV los llevan los fragmentos como energía cinética, el resto lo llevan neutrones, rayos gamma y desintegraciones posteriores. Es la energía cinética de los fragmentos la que calienta el combustible en el reactor.",
+          "mnemo": "Una fisión produce cincuenta millones de veces más energía que la combustión de un átomo de carbono. Un kilogramo de uranio equivale a tres mil toneladas de carbón."
+        },
+        {
+          "sym": "Qfus",
+          "latex": "$Q_{\\text{синт}}$",
+          "name": "Energía de fusión de deuterio con tritio",
+          "value": "17,6",
+          "unit": "MeV",
+          "why": "La reacción de fusión más accesible: tiene la barrera coulombiana más baja y la mayor sección eficaz. Es la reacción principal para futuros reactores de fusión.",
+          "mnemo": "Por nucleón son 3,5 MeV frente a 0,9 MeV de la fisión: cuatro veces más eficiente en masa de combustible. El deuterio de un litro de agua de mar bastaría para la energía de trescientos litros de gasolina."
+        },
+        {
+          "sym": "P_sun",
+          "latex": "$P_{\\odot}$",
+          "name": "Potencia específica en el centro del Sol",
+          "value": "≈ 275",
+          "unit": "W/m³",
+          "why": "Menos de lo que produce un montón de compost del mismo volumen. El Sol brilla intensamente solo gracias a su tamaño, no a la violencia de la reacción.",
+          "mnemo": "Precisamente esta lentitud permite que el Sol brille durante miles de millones de años. Si la reacción fuera más rápida, se habría apagado mucho antes de que apareciera la vida."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Hacia dónde lleva la curva de energía de enlace",
+      "lead": "Una sola curva explica tanto la energía como la vida de las estrellas y el origen de los elementos.",
+      "items": [
+        {
+          "h": "Energía nuclear",
+          "text": "La fisión del uranio produce alrededor del 10 % de la electricidad mundial. El combustible se cambia cada varios años, no se transporta en trenes: consecuencia directa de que el defecto de masa es un millón de veces mayor que el químico."
+        },
+        {
+          "h": "Fusión termonuclear",
+          "text": "Setenta años de investigación y aún ninguna instalación rentable. El problema no es la física, sino el confinamiento del plasma a cien millones de grados. El ITER, en construcción, debería obtener por primera vez una ganancia de diez veces."
+        },
+        {
+          "h": "Vida de una estrella",
+          "text": "Una estrella quema sucesivamente hidrógeno, luego helio, carbono, oxígeno, silicio — ascendiendo por la curva. Cada etapa es más corta que la anterior: el hidrógeno arde millones de años, el silicio un día."
+        },
+        {
+          "h": "Supernova",
+          "text": "Al acumular un núcleo de hierro, una estrella masiva pierde su fuente de energía y colapsa en segundos. La energía liberada es suficiente para iluminar una galaxia entera durante semanas."
+        },
+        {
+          "h": "Origen de los elementos pesados",
+          "text": "Todo lo más pesado que el hierro no pudo formarse en la combustión ordinaria — allí hay que gastar energía. El oro y el uranio nacen en explosiones de supernovas y fusiones de estrellas de neutrones."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curioso: compruébalo con tus manos",
+      "lead": "La energía nuclear no se puede tocar, pero sus escalas se pueden estimar, y sus huellas encontrar en tu propia casa.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Encuentra la física nuclear en tu apartamento",
+          "text": "Examina el detector de humo en el techo, busca una marca en él. Luego recuerda lo que brilla en la oscuridad en los relojes y dispositivos antiguos.",
+          "answer": "La mayoría de los detectores de humo contienen una partícula de americio-241 de aproximadamente 0,3 microgramos, una fuente alfa que ioniza el aire en la cámara. El humo interrumpe la corriente iónica y se activa la sirena. El americio no existe en la naturaleza: fue creado por el hombre en un reactor. Y las manecillas luminosas de los relojes antiguos se pintaban con pintura de radio; las trabajadoras, al humedecer los pinceles con la boca para obtener líneas finas, recibían dosis letales. La historia de las 'chicas del radio' de la década de 1920 motivó las primeras normas de seguridad radiológica."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "El Sol es más frío que un montón de compost",
+          "text": "En el centro del Sol hay quince millones de grados y allí ocurre la fusión termonuclear. Sin embargo, la producción de energía específica es de 275 vatios por metro cúbico, menor que en un montón de compost en descomposición. ¿Cómo es posible?",
+          "answer": "La reacción es increíblemente lenta. Su primer paso requiere la conversión de un protón en un neutrón a través de la interacción débil, y el tiempo de espera promedio para un protón individual es de miles de millones de años. El Sol brilla intensamente no porque la reacción sea violenta, sino porque su volumen es de $10^{27}$ metros cúbicos. Multiplica 275 vatios por ese número y obtendrás la potencia del Sol. La lentitud es la razón de su longevidad: si la reacción fuera más rápida, la estrella se habría consumido mucho antes de que apareciera la vida en los planetas."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Reactor natural en Gabón",
+          "text": "En 1972, en la mina de Oklo se descubrió mineral de uranio con un contenido inusualmente bajo de uranio-235, como si ya hubiera sido utilizado. Resultó que hace unos dos mil millones de años, allí se produjo una reacción en cadena de forma natural: entonces la proporción de uranio-235 en el uranio natural era de alrededor del 3 %, similar al combustible moderno, y las aguas subterráneas actuaban como moderador. El reactor funcionó durante varios cientos de miles de años con una potencia de aproximadamente cien kilovatios, encendiéndose y apagándose a medida que el agua se evaporaba. La naturaleza construyó un reactor nuclear dos mil millones de años antes que el ser humano."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Todo tiende al hierro",
+          "text": "Es favorable fusionar núcleos ligeros y fisionar los pesados, y ambos procesos conducen al hierro, la cima de la curva de energía de enlace. Cualquier reacción que libere energía acerca la materia a ese punto. El hierro es la ceniza del fuego estelar, no hay nada más que extraer."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "¿Cuánto uranio necesita una ciudad?",
+          "text": "Un reactor de 1 GW de potencia con una eficiencia de aproximadamente el 33 % consume alrededor de una tonelada de uranio-235 al año, es decir, unos 3 kilogramos por día. Una central de carbón de la misma potencia quema tres millones de toneladas de carbón al año, un tren de cientos de kilómetros de largo. La diferencia es de un millón de veces, y toda reside en la curva de energía de enlace."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Lo que la curva no dice",
+          "text": "Informa si la reacción es energéticamente favorable, pero nada sobre si ocurrirá y qué tan rápido. La barrera de Coulomb, las secciones eficaces de las reacciones, la necesidad de un moderador, la eliminación del calor y los residuos radiactivos quedan fuera de ella. La viabilidad energética es necesaria, pero completamente insuficiente: la fusión es más favorable que la fisión, y dominarla no se ha logrado en setenta años."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: la responsabilidad del físico",
+      "lead": "No entra en la evaluación. Sobre el episodio más grave en la historia de la ciencia y lo que se sigue de él.",
+      "blocks": [
+        {
+          "h": "Cómo sucedió",
+          "text": "Desde el descubrimiento de la fisión en diciembre de 1938 hasta la explosión sobre Hiroshima en agosto de 1945 pasaron seis años y medio. Los físicos que trabajaban por pura curiosidad — qué sucedería si se irradiaba uranio con neutrones — resultaron ser los autores de un arma que cambió la política mundial. Muchos de ellos no anticiparon ese resultado: Rutherford todavía en 1933 llamaba tonterías a las conversaciones sobre la extracción de energía nuclear."
+        },
+        {
+          "h": "Qué hicieron después",
+          "text": "Szilard, quien primero se dio cuenta de la posibilidad de una reacción en cadena e impulsó la carta de Einstein a Roosevelt, luego redactó una petición contra el uso de la bomba sin advertencia. Fue firmada por setenta participantes del proyecto; no llegó al presidente. Einstein más tarde llamó a la firma de la carta el mayor error de su vida. Oppenheimer después de la prueba recordó una línea del Bhagavad Gita, y unos años más tarde perdió su autorización de seguridad por oponerse a la bomba de hidrógeno."
+        },
+        {
+          "h": "Qué resultó de esto",
+          "text": "Los científicos crearon las primeras asociaciones internacionales en la historia con el objetivo de limitar lo que ellos mismos descubrieron: el Movimiento Pugwash, el manifiesto Russell-Einstein de 1955. De estos esfuerzos surgieron los tratados de no proliferación y de prohibición de pruebas. Meitner, que se negó a participar en el proyecto, insistió hasta el final de su vida en que el descubrimiento de la fisión no debería haber llevado a la bomba, y que siempre hay elección."
+        },
+        {
+          "h": "Qué es importante aquí para el estudiante",
+          "text": "El conocimiento es neutral, su aplicación no lo es. Entre 'entendimos cómo está constituido el núcleo' y 'construimos un arma' hay una cadena de decisiones, cada una tomada por personas. La física no libera de la elección ni la hace por ti; al contrario, cuanto más profundo es el entendimiento, mayor es la responsabilidad. Esto es, quizás, lo principal que vale la pena llevarse del último tema del curso, y también es parte de la educación, no un anexo a ella."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La energía se libera al moverse hacia arriba en la curva de energía de enlace: fusión de núcleos ligeros y fisión de núcleos pesados; el hierro en la cima no aporta nada.",
+      "keyIdeas": [
+        {
+          "icon": "history",
+          "title": "Fisión del uranio",
+          "text": "alrededor de 200 MeV por núcleo, un kilogramo equivale a 3000 toneladas de carbón"
+        },
+        {
+          "icon": "formula",
+          "title": "Fusión del hidrógeno",
+          "text": "26,7 MeV por acto, cuatro veces más eficiente en masa de combustible"
+        },
+        {
+          "icon": "sigma",
+          "title": "La fusión requiere tunelización",
+          "text": "la energía térmica no alcanza la barrera en un factor de mil"
+        },
+        {
+          "icon": "ruler",
+          "title": "La potencia específica del Sol es solo 275 W/m³",
+          "text": "brilla gracias a su tamaño"
+        },
+        {
+          "icon": "scale",
+          "title": "La acumulación de hierro",
+          "text": "La acumulación de hierro priva a la estrella de soporte y lleva al colapso y a la supernova"
+        }
+      ],
+      "where": "Energía nuclear, investigación en fusión termonuclear, evolución estelar, origen de elementos más pesados que el hierro.",
+      "watchOut": "La viabilidad energética no implica factibilidad. La fusión es más ventajosa que la fisión, pero no se ha dominado en setenta años debido a las dificultades de confinamiento del plasma."
+    },
+    "quiz": [
+      {
+        "id": "f1",
+        "type": "mcq",
+        "q": "¿Por qué se libera energía tanto en la fisión del uranio como en la fusión del hidrógeno?",
+        "options": [
+          "Son fenómenos diferentes y tienen explicaciones diferentes",
+          "Ambos procesos conducen a núcleos con mayor energía de enlace por nucleón, es decir, hacia arriba en la curva hacia el hierro",
+          "Ambos procesos disminuyen la masa de los núcleos",
+          "Ambos van acompañados de la emisión de neutrones"
+        ],
+        "answer": 1,
+        "why": "La curva de energía de enlace tiene un máximo cerca del hierro. Todo lo que está a la izquierda gana con la fusión, todo lo que está a la derecha, con la fisión. Ambos procesos mueven la materia hacia la cima, y es la diferencia en las energías de enlace por nucleón, multiplicada por el número de nucleones, lo que da el rendimiento de la reacción.",
+        "hint": "Observa dónde se encuentran el uranio y el hidrógeno en la curva con respecto a su máximo. ¿En qué dirección les conviene moverse?"
+      },
+      {
+        "id": "f2",
+        "type": "mcq",
+        "q": "¿Por qué la fusión termonuclear aún no se ha dominado, aunque es más ventajosa que la fisión?",
+        "options": [
+          "Falta combustible: el deuterio es escaso",
+          "Es necesario superar la barrera coulombiana, lo que requiere temperaturas de cientos de millones de grados y confinamiento del plasma",
+          "La fusión produce demasiados residuos radiactivos",
+          "La reacción es demasiado rápida e incontrolable"
+        ],
+        "answer": 1,
+        "why": "El deuterio en el agua de mar duraría millones de años, y la fusión produce incomparablemente menos residuos que la fisión. La dificultad es puramente técnica y muy seria: el plasma a cientos de millones de grados no puede ser contenido por ninguna pared, y el confinamiento magnético ha resultado ser una tarea de setenta años.",
+        "hint": "¿Qué impide que dos núcleos se acerquen lo suficiente para que actúe la interacción fuerte? ¿Qué temperatura se necesita para ello?"
+      },
+      {
+        "id": "f3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué una estrella masiva, después de acumular un núcleo de hierro, explota?",
+        "keywords": [
+          "hierro",
+          "máximo",
+          "no da energía",
+          "no produce energía",
+          "sin soporte",
+          "colapso",
+          "gravitacional",
+          "presión",
+          "compresión"
+        ],
+        "needed": 2,
+        "why": "Durante toda su vida, la estrella se mantiene contra la compresión por la presión generada por la energía liberada en la fusión. Al llegar al hierro, la cima de la curva de energía de enlace, pierde la fuente: la fusión posterior no produce energía, sino que la consume. El soporte desaparece, el núcleo colapsa en segundos, y la energía gravitacional liberada expulsa la envoltura.",
+        "hint": "¿Qué mantiene a la estrella contra la compresión bajo su propia gravedad? ¿Qué sucede con esa fuente cuando el núcleo se vuelve de hierro?"
+      },
+      {
+        "id": "f4",
+        "type": "estimate",
+        "q": "¿A cuántas toneladas de carbón equivale energéticamente un kilogramo de uranio-235? Da el orden en miles de toneladas.",
+        "answer": 3,
+        "unit": "mil toneladas",
+        "tolerance": 1,
+        "why": "2,56·10²⁴ núcleos a 200 MeV dan 8,2·10¹³ J. Dividiendo por el calor de combustión del carbón 2,9·10⁷ J/kg, obtenemos 2,8·10⁶ kg, es decir, unas tres mil toneladas, un convoy de medio centenar de vagones. La diferencia de un millón de veces es consecuencia directa de que los enlaces nucleares se miden en megaelectronvoltios y los químicos en electronvoltios.",
+        "hint": "Calcula el número de núcleos en un kilogramo usando el número de Avogadro, multiplica por 200 MeV en julios y divide por el calor de combustión del carbón."
+      }
+    ]
+  },
+  "ar": {
+    "title": "الانشطار والاندماج",
+    "subtitle": "الفقرة 3 · لماذا من المفيد تفتيت الثقيل ودمج الخفيف",
+    "intro": [
+      "جميع الطاقة النووية — السلمية والعسكرية والنجمية — تتلخص في منحنى واحد. ذلك المرسوم أسفل اللوحة: طاقة الارتباط النوعية مقابل العدد الكتلي. يرتفع من الهيدروجين، يبلغ ذروته عند الحديد، ثم يهبط ببطء نحو اليورانيوم.",
+      "من هنا، طريقتان للحصول على الطاقة. إلى يسار الذروة، من المفيد دمج الأنوية الخفيفة — هكذا تضيء الشمس. إلى اليمين، من المفيد تفتيت الأنوية الثقيلة — هكذا يعمل المفاعل. كلاهما يدفع المادة نحو الحديد، والحديد نفسه لا يعطي شيئاً: إنه قاع الحفرة، لا يمكن استخراج الطاقة منه.",
+      "من نفس هذا المنحنى تأتي نهاية حياة النجوم الضخمة. بعد تكوين نواة حديدية، يفقد النجم مصدر حرارته، ويفقد دعمه ضد جاذبيته الذاتية، وينهار في ثوانٍ. يوزع انفجار المستعر الأعظم كل ما أنتجه النجم عبر المجرة — بما في ذلك الذرات التي تتكونون منها."
+    ],
+    "standNote": "حرّك العدد الكتلي عبر النطاق كله وراقب المنحنى في الأسفل. على اليسار، يرتفع بحدة — الاندماج هناك ينتج طاقة كبيرة، ولهذا يحترق الهيدروجين. عند الحديد، ذروة وقمة مسطحة: لا شيء يمكن فعله به. على اليمين، انخفاض تدريجي — الانشطار يعطي طاقة أقل بكثير لكل نوكليون، لكن الأنوية الثقيلة كثيرة وانشطارها أسهل تقنياً. لاحظ التسمية تحت النواة: فهي تخبرك في أي جانب من المنحنى أنت وماذا يفيد فعله بهذه النواة.",
+    "formula": {
+      "name": "الناتج الطاقي للتفاعل النووي",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "alsoKnown": "منحنى طاقة الارتباط · شرط إطلاق الطاقة",
+      "authors": [
+        {
+          "who": "آرثر إدينغتون",
+          "year": "1920",
+          "what": "افترض أن النجوم تضيء عبر تحويل الهيدروجين إلى هيليوم. لمن عارضوا بأن حرارة الشمس غير كافية، أجاب: ابحثوا عن مكان أكثر حرارة. تبين أنه محق — النقص فسره النفق الكمومي"
+        },
+        {
+          "who": "أوتو هان وفريتز شتراسمان",
+          "year": "1938",
+          "what": "اكتشفا الباريوم بعد تشعيع اليورانيوم بالنيوترونات — أي أن النواة انشطرت إلى نصفين. كيميائيان بالتكوين، لم يجرؤا على تفسير النتيجة فيزيائياً ولجآ إلى زميلة سابقة"
+        },
+        {
+          "who": "ليزا مايتنر وأوتو فريش",
+          "year": "1939",
+          "what": "شرحا الانشطار وحسبا الطاقة باستخدام معادلة أينشتاين، وحصلا على 200 MeV لكل نواة. ناقشا ذلك أثناء نزهة في غابة ثلجية خلال عطلة عيد الميلاد؛ كانت مايتنر في المنفى بعد هروبها من ألمانيا"
+        },
+        {
+          "who": "هانز بيته",
+          "year": "1939",
+          "what": "حسب سلاسل التفاعلات التي تضيء بها النجوم وأوضح لماذا تحترق الشمس مليارات السنين وليس آلافاً. جائزة نوبل بعد ثمانية وثلاثين عاماً"
+        },
+        {
+          "who": "إيغور كورتشاتوف",
+          "year": "1946",
+          "what": "أطلق أول مفاعل سوفيتي F-1، والذي يعمل حتى اليوم كمعروض. في نفس العام 1939، كما في الغرب، اكتشف الفيزيائيان السوفيتيان فليروف وبيترجاك الانشطار التلقائي لليورانيوم"
+        }
+      ],
+      "story": "عرفت ليزا مايتنر بنتيجة هان عبر رسالة، وهي في المنفى القسري في السويد: كيهودية، اضطرت للفرار من ألمانيا تاركة مختبرها الذي عملت فيه ثلاثين عاماً. كتب هان أن اليورانيوم بعد تشعيعه بالنيوترونات يعطي الباريوم، وطلب تفسيراً لكيفية حدوث ذلك. في نزهة عيد الميلاد مع ابن أختها فريش، جلست على شجرة مقطوعة وحسبت: إذا انشطرت نواة اليورانيوم إلى نصفين، فإن عيب الكتلة يعطي حوالي 200 ميغا إلكترون فولت. تطابقت الأرقام. أرسلا المقال من السويد، لكن جائزة نوبل لعام 1944 حصل عليها هان وحده. رفضت مايتنر المشاركة في مشروع صنع القنبلة، قائلة إنها لن يكون لها أي علاقة بهذا السلاح. العنصر 109 سمي مايتنريوم."
+    },
+    "symbols": [
+      {
+        "sym": "Q2",
+        "latex": "Q",
+        "what": "الناتج الطاقي للتفاعل",
+        "unit": "MeV",
+        "note": "موجب إذا كانت النواتج مرتبطة بقوة أكبر من المواد الداخلة"
+      },
+      {
+        "sym": "k_eff",
+        "latex": "k",
+        "what": "معامل التضاعف",
+        "unit": "—",
+        "note": "كم عدد الانشطارات الجديدة التي يسببها انشطار واحد؛ عند $k=1$ المفاعل مستقر، وعند $k>1$ يحدث تسارع"
+      },
+      {
+        "sym": "sigma",
+        "latex": "\\sigma",
+        "what": "المقطع العرضي للتفاعل",
+        "unit": "barn",
+        "note": "مقياس للاحتمال؛ البارن يساوي $10^{-28}$ م² — تقريباً مساحة مقطع النواة"
+      },
+      {
+        "sym": "Tign",
+        "latex": "T_{\\text{заж}}",
+        "what": "درجة حرارة اشتعال الاندماج",
+        "unit": "K",
+        "note": "حوالي $10^{8}$ K للديوتيريوم مع التريتيوم — أعلى بعشر مرات من مركز الشمس"
+      },
+      {
+        "sym": "Lawson",
+        "latex": "n\\tau",
+        "what": "معيار لوسون",
+        "unit": "s/m³",
+        "note": "حاصل ضرب كثافة البلازما في زمن الحصر؛ دون العتبة لا يغطي المفاعل تكاليفه"
+      }
+    ],
+    "derivation": {
+      "title": "اشتقاق دقيق: من أين تأتي الطاقة ولماذا بهذه الطريقة",
+      "lead": "يُشتق كل شيء من منحنى واحد. لنحسب كلا العمليتين ونرى أنهما تتحركان تجاه بعضهما البعض.",
+      "steps": [
+        {
+          "text": "شرط إطلاق الطاقة: يجب أن تكون النواتج أكثر ارتباطًا من الأنوية الأولية. الفرق في طاقات الربط النوعية مضروبًا في عدد النويات هو ناتج التفاعل.",
+          "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A > 0",
+          "figure": "curves",
+          "figCaption": "لأعلى على المنحنى - تُطلق الطاقة، ولأسفل - تمتص. يحدد الميل عند تلك النقطة الاتجاه."
+        },
+        {
+          "text": "انشطار اليورانيوم. نواة طاقتها الربطية النوعية حوالي $B/A \\approx 7{,}6$ MeV تنقسم إلى شظيتين متوسطتي الكتلة طاقتهما الربطية النوعية حوالي $B/A \\approx 8{,}5$ MeV. الربح هو ما يقرب من مليون إلكترون فولت لكل نوية مضروبًا في 235 نوية.",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "figure": "elastic",
+          "figCaption": "مئتان مليون إلكترون فولت من نواة واحدة - أكبر بخمسين مليون مرة من احتراق ذرة كربون."
+        },
+        {
+          "text": "التفاعل المتسلسل. عند الانشطار ينبعث نيوترونان أو ثلاثة، كل منها قادر على التسبب في انشطار جديد. الاستقرار يحدده عدد تلك النيوترونات التي تؤدي في المتوسط إلى انشطار.",
+          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "figure": "microcontact",
+          "figCaption": "يعمل المفاعل تمامًا عند الواحد. التحكم ممكن بفضل النيوترونات المتأخرة."
+        },
+        {
+          "text": "الآن الاندماج. أربعة بروتونات تتحول إلى نواة هيليوم طاقتها الربطية النوعية $B/A = 7{,}1$ MeV مقارنة بصفر للبروتونات الحرة. الربح لكل نوية أكبر بحوالي ثماني مرات من الانشطار.",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "figure": "action",
+          "figCaption": "الاندماج أكثر كفاءة من الانشطار من حيث كتلة الوقود - لكنه يتطلب ظروفًا أصعب بكثير."
+        },
+        {
+          "text": "لماذا الاندماج صعب للغاية. تحتاج الأنوية إلى الاقتراب عن كثب، متغلبة على حاجز كولوم بارتفاع مئات الكيلو إلكترون فولت. الطاقة الحرارية حتى عند ملايين الدرجات غير كافية - الأنفاق الكمومي هو المنقذ.",
+          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "figure": "anywell",
+          "figCaption": "الفرق ألف ضعف. يحدث التفاعل فقط بسبب النفاذ عبر الحاجز."
+        },
+        {
+          "text": "من هنا بطء الاحتراق الشمسي. احتمال الأنفاق الكمومي صغير، والخطوة الأولى في السلسلة تتطلب أيضًا تفاعلًا ضعيفًا - تحول بروتون إلى نيوترون. متوسط زمن الانتظار لبروتون فردي هو مليارات السنين.",
+          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "figure": "heating",
+          "figCaption": "أقل مما تطلقه كومة سماد. الشمس تشرق ساطعة ليس بسبب شدة التفاعل، بل بسبب حجمها."
+        },
+        {
+          "text": "ونهاية الطريق. عند الوصول إلى الحديد، يصل النجم إلى قمة المنحنى: المزيد من الاندماج لا يطلق طاقة بل يحتاجها. ينعدم الدعم ضد الجاذبية، وينهار القلب في ثوانٍ.",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "figure": "result",
+          "figCaption": "الحديد هو رماد النار النجمية. كل ما هو أثقل منه خُلق في انفجارات، حيث تُستهلك الطاقة ولا تُنتج."
+        }
+      ],
+      "plate": "تُطلق الطاقة عند التحرك لأعلى على منحنى طاقة الربط: اندماج الأنوية الخفيفة وانشطار الثقيلة. الحديد على القمة لا يعطي شيئًا، وبلوغه يعني نهاية النجم.",
+      "note": "حدود التطبيق ومقارنة عادلة. الاندماج أكثر كفاءة من حيث كتلة الوقود، لكنه يتطلب درجات حرارة تصل إلى مئات الملايين من الدرجات واحتجاز البلازما، وهو ما لم يتم تحقيقه بعد على الأرض في وضع مكتفٍ ذاتيًا على مدى سبعين عامًا. الانشطار أبسط تقنيًا، لكنه ينتج نفايات مشعة طويلة العمر ويتطلب نظير اليورانيوم-235 النادر، الذي يشكل 0.7% فقط من اليورانيوم الطبيعي. لا تعد أي من الطريقتين حلاً نظيفًا، وفهم حدودهما جزء من النظرة المتعلمة للطاقة."
+    },
+    "math": {
+      "title": "الرياضيات التي كنا بحاجة إليها هنا",
+      "text": [
+        "كيفية قراءة المنحنى والتنبؤ منه. القاعدة واحدة: التفاعل مفيد إذا كانت النواتج أعلى من المواد المبدئية على المنحنى. الهيدروجين في القاع - دمجه مفيد للغاية. اليورانيوم على المنحدر اللطيف - انشطاره مفيد بشكل معتدل. الحديد على القمة - لا يمكن فعل أي منهما. ومن هنا نتيجة تستحق الإدراك: أي تفاعل يطلق الطاقة يقرب المادة إلى الحديد، والكون يتحرك ببطء في هذا الاتجاه.",
+        "لماذا يعطي الانشطار أقل لكل نوية ولكن أكثر لكل تفاعل. الربح في الانشطار حوالي 0,9 MeV لكل نوية، وفي اندماج الهيدروجين حوالي 7 MeV. الاندماج يفيد سبع مرات من حيث كتلة الوقود. لكن نواة يورانيوم واحدة تحتوي على 235 نوية، وتطلق 200 MeV دفعة واحدة، بينما فعل الاندماج يعطي 26,7 MeV. بالإضافة إلى أن اليورانيوم ينشطر في درجة حرارة الغرفة بنيوترون واحد، بينما يحتاج الاندماج إلى مئات الملايين من الدرجات. ومن هنا الفرق في أمد التطوير: المفاعل بني في أربع سنوات، والمفاعل النووي الحراري لم يُبنَ في سبعين عامًا.",
+        "ما هو معيار لوسون. لكي يكون مفاعل الاندماج مجديًا، يجب أن يتجاوز ناتج كثافة البلازما في زمن احتجازها ودرجة حرارتها العتبة. يمكن اتباع مسارين: الاحتفاظ ببلازما منخفضة الكثافة لفترة طويلة بحقل مغناطيسي (توكاماك) أو ضغط بلازما كثيفة للحظة بالليزر (الاندماج بالقصور الذاتي). كلا النهجين قيد التطوير، وفي عام 2022 حصلت منشأة ليزر لأول مرة على طاقة من الهدف أكبر مما وضعته الليزرات فيه - لكن دون حساب تكاليف الليزرات نفسها.",
+        "كيفية تقدير مخزون الوقود. في كيلوغرام من اليورانيوم-235 حوالي $2{,}6\\cdot 10^{24}$ نواة، كل منها يعطي 200 MeV، أي $3{,}2\\cdot 10^{-11}$ جول. اضربهم تحصل على $8\\cdot 10^{13}$ جول، وهو ما يعادل ثلاثة آلاف طن من الفحم. بالنسبة للديوتيريوم من ماء البحر، الأرقام أكثر إثارة للإعجاب: مخزونه سيكفي لعشرات الملايين من السنين عند الاستهلاك الحالي. السؤال دائمًا ليس في المخزون، بل في كيفية الوصول إليه."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: كيلوغرام من اليورانيوم مقابل عربة من الفحم",
+      "lead": "نحسب مقدار الطاقة التي يعطيها الوقود النووي، ونقارنها بالطاقة المألوفة.",
+      "given": "عند انشطار نواة واحدة من يورانيوم-235، تتحرر 200 MeV. أوجد الطاقة المتحررة عند انشطار كيلوغرام واحد، وقارنها بحرارة احتراق الفحم (29 MJ/kg).",
+      "law": "$E = N \\cdot Q$, حيث $N = \\dfrac{m}{M}N_A$",
+      "solution": [
+        {
+          "text": "عدد النوى في كيلوغرام من يورانيوم-235.",
+          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+        },
+        {
+          "text": "طاقة انشطار واحد بالجول.",
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+        },
+        {
+          "text": "الطاقة الكلية.",
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "كم يعادل ذلك من الفحم.",
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+        }
+      ],
+      "answer": "كيلوغرام من يورانيوم-235 يعطي طاقة تعادل طاقة ما يقرب من ثلاثة آلاف طن من الفحم - قطار من خمسين عربة.",
+      "check": "دعنا نتحقق من خلال عيب الكتلة للربط بالموضوع السابق. اثنان وثمانون تريليون جول تقابل كتلة $E/c^{2} \\approx 0{,}9$ غرام. أي أنه من كيلوغرام من اليورانيوم تحول غرام واحد فقط - جزء من ألف - إلى طاقة. للمقارنة، عند احتراق الفحم يتحول جزء من عشرة مليارات من الكتلة إلى طاقة. الفرق بمقدار مليون مرة هو الفرق بين الكيمياء والفيزياء النووية، ويفسر تماماً بأن الربط الكهرومغناطيسي يعطي إلكترون فولت، بينما الربط القوي يعطي ميغا إلكترون فولت."
+    },
+    "constants": {
+      "title": "مقادير هذا القسم",
+      "lead": "أرقام الطاقة - من المفاعل إلى النجم.",
+      "items": [
+        {
+          "sym": "Qfis",
+          "latex": "Q_{\\text{дел}}",
+          "name": "طاقة انشطار نواة يورانيوم-235",
+          "value": "≈ 200",
+          "unit": "МэВ",
+          "why": "منها حوالي 165 تحملها الشظايا كطاقة حركية، والباقي نيوترونات وأشعة غاما وتحللات لاحقة. والطاقة الحركية للشظايا هي التي تسخن الوقود في المفاعل.",
+          "mnemo": "انشطار واحد يعطي خمسين مليون مرة أكثر من احتراق ذرة كربون واحدة. كيلوغرام من اليورانيوم يعادل ثلاثة آلاف طن من الفحم."
+        },
+        {
+          "sym": "Qfus",
+          "latex": "Q_{\\text{синт}}",
+          "name": "طاقة اندماج الديوتيريوم مع التريتيوم",
+          "value": "17,6",
+          "unit": "МэВ",
+          "why": "أسهل تفاعل اندماجي: له أقل حاجز كولوم وأكبر مقطع عرضي. التفاعل الرئيسي لمفاعلات الاندماج المستقبلية.",
+          "mnemo": "لكل نيكلون هذا 3.5 MeV مقابل 0.9 للانشطار - أكثر كفاءة بأربع مرات من حيث كتلة الوقود. الديوتيريوم في لتر من ماء البحر يكفي لطاقة ثلاثمئة لتر من البنزين."
+        },
+        {
+          "sym": "P_sun",
+          "latex": "P_{\\odot}",
+          "name": "القدرة النوعية في مركز الشمس",
+          "value": "≈ 275",
+          "unit": "Вт / м³",
+          "why": "أقل مما تطلقه كومة سماد من نفس الحجم. الشمس تشرق ساطعة فقط بسبب حجمها، لا بسبب شدة التفاعل.",
+          "mnemo": "هذا البطء هو ما يسمح للشمس بالاحتراق مليارات السنين. لو كان التفاعل أسرع، لاحترقت قبل ظهور الحياة بوقت طويل."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين تقود منحنى طاقة الربط",
+      "lead": "منحنى واحد يشرح الطاقة وحياة النجوم وأصل العناصر.",
+      "items": [
+        {
+          "h": "الطاقة النووية",
+          "text": "انشطار اليورانيوم يوفر حوالي 10% من الكهرباء في العالم. يُغير الوقود كل بضع سنوات بدلاً من نقله بقطارات - نتيجة مباشرة لأن عيب الكتلة أكبر بمليون مرة من الكيميائي."
+        },
+        {
+          "h": "الاندماج النووي الحراري",
+          "text": "سبعون عاماً من البحث ولا توجد منشأة واحدة قادرة على تغطية تكاليفها. المشكلة ليست في الفيزياء بل في حصر البلازما عند مئة مليون درجة. المفاعل قيد الإنشاء ITER يجب أن يحقق لأول مرة ربحاً بعشرة أضعاف."
+        },
+        {
+          "h": "حياة النجم",
+          "text": "النجم يحرق تباعاً الهيدروجين، ثم الهيليوم، الكربون، الأكسجين، السيليكون - صاعداً على المنحنى. كل مرحلة أقصر من سابقتها: الهيدروجين يحترق ملايين السنين، السيليكون يوماً."
+        },
+        {
+          "h": "مستعر أعظم",
+          "text": "بعد تكوين نواة حديدية، يفقد النجم الضخم مصدر طاقته وينهار في ثوان. الطاقة المنطلقة تكفي لإضاءة مجرة بأكملها لأسابيع."
+        },
+        {
+          "h": "أصل العناصر الثقيلة",
+          "text": "كل ما هو أثقل من الحديد لم يمكن أن يتشكل في الاحتراق العادي - حيث يجب إنفاق الطاقة. الذهب واليورانيوم يولدان في انفجارات المستعرات العظمى واندماجات النجوم النيوترونية."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مسلية: تحقق بأيديك",
+      "lead": "لا يمكن لمس الطاقة النووية، لكن يمكن تقدير نطاقها والعثور على آثارها في منزلك.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "ابحث عن الفيزياء النووية في شقتك",
+          "text": "افحص كاشف الدخان في السقف، وابحث عن علامة عليه. ثم تذكر ما الذي يتوهج في الظلام في الساعات والأجهزة القديمة.",
+          "answer": "في معظم كاشفات الدخان توجد حبة صغيرة من الأميريسيوم-241 كتلتها حوالي 0.3 ميكروغرام - مصدر ألفا يؤين الهواء في الغرفة. الدخان يعطل التيار الأيوني، وينطلق الإنذار. الأميريسيوم غير موجود في الطبيعة إطلاقًا: إنه من صنع الإنسان في المفاعل. أما العقارب المتوهجة للساعات القديمة فكانت تُطلى بطلاء يحتوي على الراديوم، والعاملات اللواتي كن يبللن الفرش بأفواههن للحصول على خط رفيع، تلقين جرعات مميتة - قصة \"فتيات الراديوم\" في عشرينيات القرن الماضي أصبحت سببًا لأول معايير السلامة الإشعاعية."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "الشمس أبرد من كومة السماد",
+          "text": "في مركز الشمس تبلغ درجة الحرارة خمسة عشر مليون درجة، ويحدث الاندماج النووي الحراري. ومع ذلك، فإن معدل إنتاج الطاقة النوعي هو 275 واط لكل متر مكعب - أقل من كومة السماد المتعفن. كيف يكون ذلك ممكنًا؟",
+          "answer": "التفاعل بطيء بشكل هائل. خطوته الأولى تتطلب تحويل بروتون إلى نيوترون عبر التفاعل الضعيف، ومتوسط وقت الانتظار لبروتون واحد هو مليارات السنين. الشمس تشرق ساطعة ليس لأن التفاعل عنيف، بل لأن حجمها يبلغ $10^{27}$ متر مكعب. اضرب 275 واط في هذا العدد لتحصل على قدرة الشمس. البطء هو سبب طول العمر: لو كان التفاعل أسرع، لاحترق النجم قبل ظهور الحياة على الكواكب."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة مسلية",
+          "h": "مفاعل طبيعي في الغابون",
+          "text": "في عام 1972، تم اكتشاف خام يورانيوم في منجم أوكلو يحتوي على نسبة منخفضة بشكل غير عادي من اليورانيوم-235، كما لو كان قد استُخدم بالفعل. اتضح أنه قبل حوالي ملياري سنة، كان هناك تفاعل متسلسل يحدث هناك بشكل طبيعي: في ذلك الوقت، كانت نسبة اليورانيوم-235 في اليورانيوم الطبيعي حوالي 3%، كما هو الحال في الوقود الحديث، وكانت المياه الجوفية تعمل كمهدئ. عمل المفاعل لعدة مئات الآلاف من السنين بقوة حوالي مائة كيلووات، يشغل ويطفئ مع تبخر الماء. بنت الطبيعة مفاعلًا نوويًا قبل ملياري سنة من الإنسان."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "كل شيء يتجه نحو الحديد",
+          "text": "من المفيد دمج النوى الخفيفة وتقسيم النوى الثقيلة، وكلتا العمليتين تؤديان إلى الحديد - قمة منحنى طاقة الارتباط. أي تفاعل يطلق طاقة يقرب المادة من هذه النقطة. الحديد هو رماد النار النجمية، لا شيء يمكن استخراجه بعده."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير",
+          "h": "كم يحتاج المدينة من اليورانيوم",
+          "text": "مفاعل بقدرة 1 جيجاواط بكفاءة حوالي 33% يستهلك حوالي طن من اليورانيوم-235 سنويًا، أي حوالي 3 كيلوغرامات يوميًا. محطة فحم بنفس القدرة تحرق ثلاثة ملايين طن من الفحم سنويًا - قطار طوله مئات الكيلومترات. الفرق مليون مرة، وكلها في منحنى طاقة الارتباط."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "ما لا يقوله المنحنى",
+          "text": "يخبرنا ما إذا كان التفاعل مفيدًا طاقيًا، لكن لا شيء عن ما إذا كان سيحدث ومدى سرعته. حاجز كولوم، مقاطع التفاعل، الحاجة إلى وسيط، إزالة الحرارة، والنفايات المشعة تقع خارج نطاقه. الفائدة الطاقية ضرورية لكنها غير كافية تمامًا: الاندماج أفضل من الانشطار، لكن إتقانه لم يتحقق منذ سبعين عامًا."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمستوعين: مسؤولية الفيزيائي",
+      "lead": "ليس ضمن الاختبار. حول أثقل حلقة في تاريخ العلم - وما ينتج عنها.",
+      "blocks": [
+        {
+          "h": "كيف حدث ذلك",
+          "text": "من اكتشاف الانشطار في ديسمبر 1938 إلى الانفجار فوق هيروشيما في أغسطس 1945، مرت ست سنوات ونصف. الفيزيائيون الذين عملوا بدافع الفضول الخالص - ماذا سيحدث إذا تم قصف اليورانيوم بالنيوترونات - أصبحوا مؤلفي سلاح غير السياسة العالمية. كثير منهم لم يتوقعوا هذه النتيجة: رذرفورد في عام 1933 وصف الحديث عن استخلاص الطاقة النووية بالهراء."
+        },
+        {
+          "h": "ماذا فعلوا بعد ذلك",
+          "text": "سيلارد، الذي أدرك أولاً إمكانية التفاعل المتسلسل ودفع إلى رسالة أينشتاين إلى روزفلت، ثم كتب عريضة ضد استخدام القنبلة دون تحذير. وقعها سبعون مشاركًا في المشروع؛ لكنها لم تصل إلى الرئيس. أينشتاين لاحقًا وصف توقيع الرسالة بأنه أكبر خطأ في حياته. أوبنهايمر بعد الاختبار تذكر سطرًا من \"بهاجافاد غيتا\"، وبعد بضع سنوات فقد تصريحه بسبب اعتراضاته على القنبلة الهيدروجينية."
+        },
+        {
+          "h": "ماذا نتج عن ذلك",
+          "text": "أنشأ العلماء أولى المنظمات الدولية في التاريخ التي تهدف إلى الحد مما اكتشفوه بأنفسهم: حركة باجواش، إعلان راسل وأينشتاين عام 1955. من هذه الجهود نشأت معاهدات عدم الانتشار وحظر التجارب. مايتنر، التي رفضت المشاركة في المشروع، أصرت حتى نهاية حياتها على أن اكتشاف الانشطار لم يكن يجب أن يؤدي إلى القنبلة - وأن الاختيار موجود دائمًا."
+        },
+        {
+          "h": "ما هو المهم هنا للمتعلم",
+          "text": "المعرفة محايدة، التطبيق ليس كذلك. بين \"فهمنا كيف تعمل النواة\" و\"بنينا سلاحًا\" توجد سلسلة من القرارات، كل منها اتخذها بشر. الفيزياء لا تعفي من الاختيار ولا تتخذه نيابة عنك؛ بل على العكس، كلما كان الفهم أعمق، كانت المسؤولية أكبر. ربما هذا هو أهم ما ينبغي أخذه من آخر موضوع في الدورة - وهو أيضًا جزء من التعليم، ليس مجرد ملحق به."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "الطاقة تُطلق عند التحرك لأعلى على منحنى طاقة الربط: اندماج النوى الخفيفة وانشطار النوى الثقيلة; الحديد عند القمة لا يُنتج شيئًا.",
+      "keyIdeas": [
+        {
+          "icon": "history",
+          "title": "انشطار اليورانيوم",
+          "text": "حوالي 200 MeV لكل نواة, الكيلوغرام يعادل 3000 طن من الفحم"
+        },
+        {
+          "icon": "formula",
+          "title": "اندماج الهيدروجين",
+          "text": "26.7 MeV لكل تفاعل, أكثر كفاءة بأربع مرات من حيث كتلة الوقود"
+        },
+        {
+          "icon": "sigma",
+          "title": "الاندماج يتطلب النفق",
+          "text": "الطاقة الحرارية لا تكفي للحاجز بألف مرة"
+        },
+        {
+          "icon": "ruler",
+          "title": "القدرة النوعية للشمس هي فقط 275 W/m³",
+          "text": "إنها تضيء بفضل حجمها"
+        },
+        {
+          "icon": "scale",
+          "title": "تراكم الحديد يحرم النجم",
+          "text": "تراكم الحديد يحرم النجم من الدعم ويؤدي إلى الانهيار والمستعر الأعظم"
+        }
+      ],
+      "where": "الطاقة النووية، أبحاث الاندماج النووي، تطور النجوم، أصل العناصر الأثقل من الحديد.",
+      "watchOut": "المردود الطاقي لا يعني إمكانية التنفيذ. الاندماج أكثر فائدة من الانشطار، لكن لم يُتقن بعد سبعين عامًا بسبب صعوبات حصر البلازما."
+    },
+    "quiz": [
+      {
+        "id": "f1",
+        "type": "mcq",
+        "q": "لماذا تُطلق الطاقة في كل من انشطار اليورانيوم واندماج الهيدروجين؟",
+        "options": [
+          "هما ظاهرتان مختلفتان وتفسيراتهما مختلفة",
+          "كلتا العمليتين تؤديان إلى نوى ذات طاقة ربط نوعية أعلى، أي لأعلى المنحنى نحو الحديد",
+          "كلتا العمليتين تقللان كتلة النوى",
+          "كلتا العمليتين يصاحبهما انبعاث نيوترونات"
+        ],
+        "answer": 1,
+        "why": "منحنى طاقة الربط له قيمة عظمى بالقرب من الحديد. كل ما هو إلى اليسار يكسب بالاندماج، وكل ما هو إلى اليمين يكسب بالانشطار. كلتا العمليتين تحركان المادة نحو القمة، والفرق في طاقات الربط النوعية مضروبًا في عدد النوكليونات هو ما يعطي ناتج التفاعل.",
+        "hint": "انظر أين يقع اليورانيوم والهيدروجين على المنحنى بالنسبة لقيمته العظمى. في أي اتجاه من المفيد لهما التحرك؟"
+      },
+      {
+        "id": "f2",
+        "type": "mcq",
+        "q": "لماذا لم يُتقن الاندماج النووي الحراري حتى الآن رغم أنه أكثر فائدة من الانشطار؟",
+        "options": [
+          "الوقود غير كافٍ - الديوتيريوم نادر",
+          "يجب تجاوز حاجز كولوم، وهذا يتطلب درجات حرارة تصل إلى مئات الملايين من الدرجات وحصر البلازما",
+          "الاندماج ينتج الكثير من النفايات المشعة",
+          "التفاعل سريع جدًا ولا يمكن السيطرة عليه"
+        ],
+        "answer": 1,
+        "why": "الديوتيريوم في مياه البحر يكفي لملايين السنين، والاندماج ينتج نفايات أقل بكثير من الانشطار. الصعوبة تقنية بحتة وجدية للغاية: البلازما بدرجة حرارة مئات الملايين من الدرجات لا يمكن حصرها بأي جدار، والحصر المغناطيسي أثبت أنه مهمة استمرت سبعين عامًا.",
+        "hint": "ما الذي يمنع نواتين من الاقتراب بما يكفي لتفعيل التفاعل القوي؟ ما درجة الحرارة اللازمة لذلك؟"
+      },
+      {
+        "id": "f3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا ينفجر نجم ضخم بعد أن يتراكم لديه نواة حديدية؟",
+        "keywords": [
+          "حديد",
+          "ذروة",
+          "لا يعطي طاقة",
+          "لا يعطي طاقة",
+          "لا دعم",
+          "انهيار",
+          "جاذبية",
+          "ضغط",
+          "انضغاط"
+        ],
+        "needed": 2,
+        "why": "طوال عمر النجم، يمنعه الضغط الناتج عن الطاقة المنبعثة من الاندماج من الانهيار. عند وصوله إلى الحديد - قمة منحنى طاقة الربط - يفقد مصدر الطاقة: فالمزيد من الاندماج لا يعطي طاقة بل يستهلكها. يختفي الدعم، وتنهار النواة في ثوانٍ، وتقذف الطاقة الجاذبية المنبعثة الغلاف.",
+        "hint": "ما الذي يمنع النجم من الانهيار تحت جاذبيته؟ ماذا يحدث لهذا المصدر عندما تصبح النواة حديدية؟"
+      },
+      {
+        "id": "f4",
+        "type": "estimate",
+        "q": "كم طنًا من الفحم يعادل طاقة كيلوغرام واحد من يورانيوم-235؟ أعطِ الرتبة بالألف طن.",
+        "answer": 3,
+        "unit": "ألف طن",
+        "tolerance": 1,
+        "why": "2.56×10²⁴ نواة بطاقة 200 MeV تعطي 8.2×10¹³ J. بقسمتها على حرارة احتراق الفحم 2.9×10⁷ J/kg، نحصل على 2.8×10⁶ kg، أي حوالي ثلاثة آلاف طن - تكوين من خمسين عربة. الفرق بمليون مرة هو نتيجة مباشرة لقياس الروابط النووية بالميغاإلكترون فولت والروابط الكيميائية بالإلكترون فولت.",
+        "hint": "احسب عدد النوى في كيلوغرام باستخدام عدد أفوجادرو، واضرب في 200 MeV بالجول، واقسم على حرارة احتراق الفحم."
+      }
+    ]
+  },
+  "tags": [
+    "hydrogen",
+    "iron",
+    "sun",
+    "supernova",
+    "gravity",
+    "nuclear_fusion"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.01699v1",
+      "why": "совпадение по теме: hydrogen, sun, supernova"
+    },
+    {
+      "id": "2606.06577v1",
+      "why": "совпадение по теме: hydrogen, sun, supernova"
+    },
+    {
+      "id": "2601.07983v2",
+      "why": "совпадение по теме: hydrogen, sun, supernova"
+    }
+  ]
+}

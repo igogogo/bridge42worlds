@@ -1,0 +1,1557 @@
+{
+  "id": "02-decay",
+  "topic": "nuclear",
+  "schema": "b42.lesson/1",
+  "model": "nucleus",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "nuclear"
+    ],
+    "scientists": [
+      "Marie Curie"
+    ]
+  },
+  "ru": {
+    "title": "Радиоактивность",
+    "subtitle": "Параграф 2 · Случайность, из которой получаются точные часы",
+    "intro": [
+      "Отдельное ядро урана может распасться через секунду, а может через миллиард лет. Предсказать, когда именно, невозможно в принципе — не потому, что мы чего-то не знаем о нём, а потому что момент распада не определён до самого распада. Это чистая, неустранимая случайность.",
+      "И вот удивительное: из этой случайности получаются самые надёжные часы в природе. Возьмите не одно ядро, а миллиарды — и доля распавшихся за данное время окажется строго определённой. Половина урана-238 распадается за четыре с половиной миллиарда лет, и это число не зависит ни от температуры, ни от давления, ни от того, в каком веществе находится уран.",
+      "Отсюда способ измерять время в прошлом. По остаткам углерода-14 определяют возраст находки, по соотношению урана и свинца — возраст горных пород и самой Земли. Ядерный распад оказался единственными часами, которые шли всё время, пока не было никого, кто мог бы их завести."
+    ],
+    "standNote": "На стенде выберите тяжёлое ядро — скажем, A около 240 — и посмотрите на подпись под ним. При многих сочетаниях протонов и нейтронов появится пометка о неустойчивости и указание выгодного числа протонов. Это и есть причина бета-распада: ядро перестраивается в сторону выгодного сочетания. Обратите внимание, что при большом A область устойчивости смещена в сторону избытка нейтронов — та же закономерность, что разбиралась в прошлом параграфе.",
+    "formula": {
+      "name": "Закон радиоактивного распада",
+      "latex": "N(t) = N_0 e^{-\\lambda t} = N_0\\,2^{-t/T_{1/2}}, \\qquad T_{1/2} = \\frac{\\ln 2}{\\lambda}",
+      "alsoKnown": "Экспоненциальный закон · период полураспада",
+      "authors": [
+        {
+          "who": "Анри Беккерель",
+          "year": "1896",
+          "what": "обнаружил, что урановая соль засвечивает фотопластинку в темноте. Готовился к опытам с солнечным светом, дождя не дождался, проявил пластинки на всякий случай — и увидел изображение"
+        },
+        {
+          "who": "Мария Склодовская-Кюри",
+          "year": "1898",
+          "what": "ввела термин «радиоактивность» и открыла полоний и радий, переработав вручную тонны урановой руды. Установила, что излучение — свойство самих атомов, а не химических соединений"
+        },
+        {
+          "who": "Эрнест Резерфорд и Фредерик Содди",
+          "year": "1902",
+          "what": "установили экспоненциальный закон распада и высказали крамольную мысль: при распаде один элемент превращается в другой. Содди позже вспоминал, что Резерфорд просил не называть это трансмутацией, чтобы их не приняли за алхимиков"
+        },
+        {
+          "who": "Георгий Гамов",
+          "year": "1928",
+          "what": "объяснил альфа-распад туннелированием сквозь кулоновский барьер. Это было первое применение квантовой механики к ядру и объяснило, почему периоды полураспада различаются в $10^{24}$ раз"
+        },
+        {
+          "who": "Уиллард Либби",
+          "year": "1949",
+          "what": "разработал радиоуглеродное датирование. Проверил метод на образцах древнеегипетских гробниц известного возраста; совпадение оказалось превосходным. Нобелевская премия по химии 1960 года"
+        }
+      ],
+      "story": "Мария Кюри работала с радием, не подозревая об опасности: тогда излучение считали скорее целебным, радиевые кремы и тоники продавались в аптеках. Она носила пробирки в кармане халата и любовалась их свечением в темноте лаборатории. Умерла в 1934 году от апластической анемии — почти наверняка следствия многолетнего облучения. Её лабораторные тетради и даже поваренная книга до сих пор радиоактивны настолько, что хранятся в свинцовых футлярах: желающему их посмотреть выдают защитную одежду и просят подписать отказ от претензий. Радий-226 имеет период полураспада 1600 лет, так что тетради останутся опасными ещё полторы тысячи лет.",
+      "symbols": [
+        {
+          "sym": "N",
+          "latex": "N",
+          "what": "число нераспавшихся ядер",
+          "unit": "—",
+          "note": "убывает экспоненциально; для отдельного ядра предсказать ничего нельзя"
+        },
+        {
+          "sym": "lambda2",
+          "latex": "\\lambda",
+          "what": "постоянная распада",
+          "unit": "1/с",
+          "note": "вероятность распада одного ядра в единицу времени; не зависит ни от чего внешнего"
+        },
+        {
+          "sym": "T12",
+          "latex": "T_{1/2}",
+          "what": "период полураспада",
+          "unit": "с, годы",
+          "note": "время, за которое распадается половина; от урана-238 4,5 млрд лет до долей секунды"
+        },
+        {
+          "sym": "A_act",
+          "latex": "A",
+          "what": "активность",
+          "unit": "Бк",
+          "note": "число распадов в секунду; беккерель — один распад в секунду, крайне малая величина"
+        },
+        {
+          "sym": "alpha_b",
+          "latex": "\\alpha,\\beta,\\gamma",
+          "what": "виды излучения",
+          "unit": "—",
+          "note": "ядро гелия, электрон и жёсткий фотон; различаются проникающей способностью в тысячи раз"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: от случайности к экспоненте",
+      "lead": "Покажем, как из полной непредсказуемости для одного ядра получается строгий закон для многих. Это лучший пример того, как статистика рождает точность.",
+      "steps": [
+        {
+          "text": "Единственное предположение: вероятность распада ядра за малое время постоянна и не зависит от его прошлого. Ядро не стареет — тысячелетнее ничем не отличается от только что образовавшегося.",
+          "latex": "P(\\text{распад за } dt) = \\lambda\\,dt",
+          "figure": "microcontact",
+          "figCaption": "Отсутствие памяти — ключевое свойство. Ядро не накапливает усталости и не приближается к распаду."
+        },
+        {
+          "text": "Тогда за время $dt$ распадётся доля $\\lambda\\,dt$ от имеющихся ядер. Чем их больше, тем больше распадов — и это даёт дифференциальное уравнение.",
+          "latex": "dN = -\\lambda N\\,dt",
+          "figure": "secant",
+          "figCaption": "Скорость убывания пропорциональна текущему количеству — классическое условие экспоненты."
+        },
+        {
+          "text": "Решаем разделением переменных и получаем экспоненциальный закон.",
+          "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; N(t) = N_0 e^{-\\lambda t}",
+          "figure": "curves",
+          "figCaption": "Экспонента появляется всегда, когда скорость убывания пропорциональна оставшемуся количеству."
+        },
+        {
+          "text": "Удобнее пользоваться периодом полураспада — временем, за которое остаётся половина. Он связан с постоянной распада через логарифм двойки.",
+          "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda} \\approx \\frac{0{,}693}{\\lambda}",
+          "figure": "isochron",
+          "figCaption": "За каждый период остаётся половина от предыдущего: 1/2, 1/4, 1/8. Полное исчезновение не наступает никогда."
+        },
+        {
+          "text": "Теперь виды распада. Альфа: тяжёлое ядро выбрасывает связку из двух протонов и двух нейтронов — самую устойчивую из лёгких. Заряд уменьшается на два, масса на четыре.",
+          "latex": "^{A}_{Z}X \\to\\; ^{A-4}_{Z-2}Y + \\alpha",
+          "figure": "action",
+          "figCaption": "Альфа-частица вылетает целиком: связка настолько устойчива, что выгодно выбросить именно её."
+        },
+        {
+          "text": "Бета: ядро с неудачным соотношением протонов и нейтронов перестраивается. Нейтрон превращается в протон с вылетом электрона и антинейтрино — заряд растёт на единицу, масса не меняется.",
+          "latex": "n \\to p + e^{-} + \\bar{\\nu}",
+          "figure": "equilibrium",
+          "figCaption": "Ядро сдвигается к выгодному сочетанию — тому самому, что показывает стенд."
+        },
+        {
+          "text": "И объяснение чудовищного разброса периодов. Альфа-частица не перелетает кулоновский барьер, а просачивается сквозь него — туннелирует. Вероятность зависит от энергии экспоненциально, поэтому разница в несколько мегаэлектронвольт даёт разницу периодов в $10^{24}$ раз.",
+          "latex": "P_{\\text{тунн}} \\sim e^{-2\\gamma}, \\qquad T_{1/2}: \\;10^{-7}\\ \\text{с} \\ldots 10^{17}\\ \\text{лет}",
+          "figure": "anywell",
+          "figCaption": "Полоний-212 живёт треть микросекунды, торий-232 — четырнадцать миллиардов лет. Разница только в энергии."
+        }
+      ],
+      "plate": "Для одного ядра момент распада непредсказуем принципиально; для многих доля распавшихся подчиняется строгому экспоненциальному закону, не зависящему ни от каких внешних условий.",
+      "note": "Границы применимости и важное уточнение. Независимость от внешних условий почти абсолютна, но не совсем: для распадов, идущих через захват электрона с ближайшей оболочки, скорость слегка зависит от химического состояния — эффект составляет доли процента и измерен. Кроме того, при экстремальных условиях в звёздах, где атомы полностью ионизованы, некоторые периоды меняются в разы. Для всех земных применений закон можно считать абсолютным."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Почему получается именно экспонента. Всякий раз, когда скорость изменения пропорциональна текущему количеству, ответ экспоненциальный — это самое частое дифференциальное уравнение в природе. Так растёт капитал с процентами, так остывает чай, так гаснет звук в зале. Здесь количество убывает, поэтому показатель отрицательный. Практическое следствие: у экспоненты нет конца. Радиоактивное вещество не исчезает полностью никогда — за каждый период остаётся половина от предыдущего.",
+        "Что означает отсутствие памяти. Ядро, просуществовавшее миллиард лет, имеет ровно те же шансы распасться в ближайшую секунду, что и только что образовавшееся. Это резко отличается от привычной жизни: человек, лампочка и подшипник изнашиваются, и вероятность отказа со временем растёт. У ядра износа нет. Полезная проверка понимания: если из ста ядер за час распалось пятьдесят, то за следующий час распадётся не пятьдесят, а двадцать пять — от оставшихся.",
+        "Как считать в уме через периоды. Гораздо удобнее пользоваться не экспонентой, а степенями двойки. Прошёл один период — осталась половина, два — четверть, три — восьмая, десять — примерно одна тысячная. Отсюда практическое правило: за десять периодов полураспада активность падает в тысячу раз, за двадцать — в миллион. Именно поэтому отработавшее ядерное топливо выдерживают в бассейнах: самые активные изотопы с периодами в дни и месяцы за несколько лет уходят почти полностью.",
+        "Почему туннелирование даёт такой разброс. Вероятность просачивания сквозь барьер зависит от его высоты и ширины экспоненциально. Значит небольшое изменение энергии альфа-частицы — скажем, с 4 до 9 МэВ — меняет показатель экспоненты на десятки, а саму вероятность в $10^{20}$ раз и более. Отсюда закон Гейгера–Нэттола: логарифм периода полураспада линейно зависит от обратного корня из энергии. Экспонента всегда даёт огромные разбросы от малых изменений."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: радиоуглеродное датирование",
+      "lead": "Считаем возраст археологической находки — задача, которую решают в лабораториях по всему миру.",
+      "given": "В живом организме отношение углерода-14 к обычному поддерживается постоянным за счёт обмена с атмосферой. В найденном куске древесины содержание углерода-14 составляет 25 % от нормы. Период полураспада углерода-14 — 5730 лет. Определить возраст находки.",
+      "law": "$N = N_0 \\cdot 2^{-t/T_{1/2}}$",
+      "solution": [
+        {
+          "text": "Записываем условие: осталась четверть.",
+          "latex": "\\frac{N}{N_0} = 0{,}25 = \\frac{1}{4} = 2^{-2}"
+        },
+        {
+          "text": "Значит прошло ровно два периода полураспада — считать логарифмы не понадобилось.",
+          "latex": "\\frac{t}{T_{1/2}} = 2"
+        },
+        {
+          "text": "Умножаем на период.",
+          "latex": "t = 2 \\cdot 5730 = 11\\,460\\ \\text{лет}"
+        },
+        {
+          "text": "Для произвольной доли пришлось бы взять логарифм.",
+          "latex": "t = T_{1/2}\\,\\frac{\\ln(N_0/N)}{\\ln 2}"
+        }
+      ],
+      "answer": "Около одиннадцати с половиной тысяч лет — конец последнего ледникового периода.",
+      "check": "Проверим границы метода, потому что они существенны. За десять периодов, то есть за 57 тысяч лет, углерода-14 остаётся одна тысячная — измерить это ещё можно, но с большой погрешностью. Поэтому радиоуглеродный метод работает примерно до пятидесяти тысяч лет и не годится для динозавров: там пользуются калий-аргоновым и урановыми методами с периодами в миллиарды лет. И ещё тонкость: содержание углерода-14 в атмосфере менялось со временем, поэтому даты калибруют по годичным кольцам деревьев известного возраста — дендрохронологическая шкала построена непрерывно на двенадцать тысяч лет назад."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Периоды полураспада — от долей микросекунды до возраста Вселенной.",
+      "items": [
+        {
+          "sym": "C14",
+          "latex": "T_{1/2}(^{14}\\text{C})",
+          "name": "Период полураспада углерода-14",
+          "value": "5730",
+          "unit": "лет",
+          "why": "Удобен для археологии: сравним с историческими временами. Углерод-14 непрерывно образуется в атмосфере из азота под действием космических лучей, поэтому его содержание в живом организме постоянно.",
+          "mnemo": "После смерти обмен прекращается, и часы включаются. Метод работает до 50 тысяч лет — дальше остаётся меньше тысячной доли."
+        },
+        {
+          "sym": "U238",
+          "latex": "T_{1/2}(^{238}\\text{U})",
+          "name": "Период полураспада урана-238",
+          "value": "4,5 · 10⁹",
+          "unit": "лет",
+          "why": "Почти точно равен возрасту Земли — за всё её существование распалась примерно половина. Именно по соотношению урана и свинца возраст планеты и определили: 4,54 миллиарда лет.",
+          "mnemo": "Уран-235, из которого делают топливо, живёт всего 700 миллионов лет — потому его в природе осталось 0,7 %, и приходится обогащать."
+        },
+        {
+          "sym": "K40",
+          "latex": "T_{1/2}(^{40}\\text{K})",
+          "name": "Период полураспада калия-40",
+          "value": "1,25 · 10⁹",
+          "unit": "лет",
+          "why": "Содержится в обычном калии в доле 0,012 % и потому есть в каждом организме. Внутри человека происходит около 4000 распадов калия-40 в секунду — основной источник естественного внутреннего облучения.",
+          "mnemo": "Банан заметно радиоактивен из-за калия. Существует шуточная единица «банановый эквивалент дозы» — примерно 0,1 микрозиверта."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где применяют распад",
+      "lead": "Явление, открытое случайно по засвеченной пластинке, стало рабочим инструментом множества наук.",
+      "items": [
+        {
+          "h": "Датирование",
+          "text": "Углерод-14 для археологии до 50 тысяч лет, калий-аргон для вулканических пород, уран-свинец для древнейших минералов. Возраст Земли в 4,54 миллиарда лет определён именно так — по метеоритам и древнейшим кристаллам циркона."
+        },
+        {
+          "h": "Медицина",
+          "text": "Технеций-99m с периодом шесть часов вводят для визуализации органов: достаточно долго, чтобы обследовать, и достаточно коротко, чтобы быстро вывестись. Лучевая терапия использует гамма-излучение для уничтожения опухолей."
+        },
+        {
+          "h": "Дымовые извещатели",
+          "text": "В большинстве из них стоит крупица америция-241. Альфа-частицы ионизуют воздух, дым нарушает ионный ток, срабатывает тревога. Количество вещества ничтожно и безопасно."
+        },
+        {
+          "h": "Геотермальное тепло",
+          "text": "Земля до сих пор горячая внутри в основном за счёт распада урана, тория и калия-40. Без этого источника планета остыла бы, тектоника прекратилась бы, а с ней и вулканизм с магнитным полем."
+        },
+        {
+          "h": "Космические аппараты",
+          "text": "«Вояджеры» летят пятьдесят лет на радиоизотопных генераторах с плутонием-238. Солнечные батареи за орбитой Юпитера бесполезны, а распад идёт независимо от того, где вы находитесь."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Радиоактивность окружает нас постоянно, и часть её можно обнаружить бытовыми средствами.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Смоделируйте распад монетами",
+          "text": "Возьмите сто монет, разложите орлом вверх и бросьте все разом. Уберите те, что упали решкой, — они «распались». Запишите остаток и повторите с оставшимися. Продолжайте, пока монет не останется.",
+          "answer": "Остатки пойдут примерно так: 100, 50, 25, 12, 6, 3, 2, 1. Вы получили экспоненциальный закон, а один бросок сыграл роль периода полураспада. Обратите внимание на два обстоятельства. Первое: предсказать судьбу конкретной монеты невозможно, а поведение сотни предсказуемо. Второе: под конец, когда монет мало, разброс становится заметным — то же происходит с малым числом ядер, и потому активность слабых источников измеряют долго."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Ядро, которое не стареет",
+          "text": "Ядро урана существует четыре миллиарда лет. Казалось бы, оно «износилось» и вот-вот распадётся. На самом деле его шансы распасться в ближайшую секунду точно такие же, как у ядра, образовавшегося минуту назад в реакторе. Как это возможно?",
+          "answer": "У ядра нет внутреннего счётчика и нет износа. Распад — не результат накопления повреждений, а квантовое событие с постоянной вероятностью в единицу времени. Такое свойство называют отсутствием памяти, и оно резко отличает ядро от всего, к чему мы привыкли: люди, лампочки и подшипники стареют, ядра нет. Отсюда парадоксальное следствие: среди урана, лежащего в земле миллиарды лет, нет «старых» и «молодых» ядер — все они статистически одинаковы."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Тетради Марии Кюри выдают под расписку",
+          "text": "Её лабораторные записи и даже поваренная книга загрязнены радием-226 с периодом полураспада 1600 лет. Они хранятся в Национальной библиотеке Франции в свинцовых футлярах; желающему их изучить выдают защитную одежду и просят подписать отказ от претензий. Опасными они останутся ещё полторы тысячи лет. Сама Кюри носила пробирки в кармане халата и любовалась их свечением — об опасности тогда не знали, а радиевые кремы продавались в аптеках как оздоровительные."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Десять периодов — тысяча раз",
+          "text": "За каждый период остаётся половина, значит за десять — примерно одна тысячная (2¹⁰ = 1024). За двадцать периодов — миллионная доля. Отсюда практическое правило обращения с радиоактивными отходами: изотопы с периодом в месяцы безопасны через несколько лет, а с периодом в тысячи лет требуют захоронения."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Радиоактивность внутри вас",
+          "text": "В теле человека около 140 граммов калия, из них 0,012 % — калий-40. Это даёт примерно 4000 распадов в секунду. Плюс углерод-14 — ещё около 3000. Итого порядка 7000 распадов в секунду внутри каждого из нас, постоянно. Естественный фон, к которому жизнь приспособилась за миллиарды лет."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Пределы датирования",
+          "text": "Каждый метод работает в окрестности своего периода полураспада. Углерод-14 годится до 50 тысяч лет, дальше остаётся меньше тысячной доли и точность теряется. Для миллионов и миллиардов лет берут калий-аргон и уран-свинец. И всегда нужна калибровка: содержание углерода-14 в атмосфере менялось, поэтому даты сверяют с годичными кольцами деревьев."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: как нейтрино спасли закон сохранения энергии",
+      "lead": "Не входит в проверку. О частице, придуманной от отчаяния и найденной через двадцать шесть лет.",
+      "blocks": [
+        {
+          "h": "Проблема",
+          "text": "При альфа-распаде вылетающие частицы имеют строго определённую энергию — как и положено, если ядро распадается на две части. А при бета-распаде энергия электронов оказалась размазанной от нуля до некоторого предела. Похоже было, что часть энергии исчезает бесследно."
+        },
+        {
+          "h": "Отчаянное предложение",
+          "text": "Бор всерьёз допускал, что закон сохранения энергии в микромире может не выполняться. Паули в 1930 году предложил другой выход: пусть вместе с электроном вылетает ещё одна частица, нейтральная и почти неуловимая, уносящая недостающее. В письме коллегам он назвал это отчаянным средством и добавил, что физик-теоретик не должен предлагать того, что нельзя проверить, — а он именно это и сделал."
+        },
+        {
+          "h": "Поиски",
+          "text": "Нейтрино взаимодействует с веществом настолько слабо, что свободно проходит сквозь Землю. Поймать его удалось только в 1956 году, поставив детектор у ядерного реактора — источника с колоссальным потоком. Райнес и Коуэн послали Паули телеграмму; он ответил, что умеет ждать."
+        },
+        {
+          "h": "Что это дало",
+          "text": "Сегодня нейтрино — рабочий инструмент. Ими наблюдают процессы в центре Солнца, куда свет не проникает: фотону нужны тысячи лет, чтобы выбраться наружу, а нейтрино вылетает мгновенно. В 1987 году поймали нейтрино от вспышки сверхновой — за три часа до того, как её увидели в телескопы. Частица, придуманная, чтобы спасти закон сохранения, стала способом заглядывать туда, куда не проникает свет."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Момент распада отдельного ядра непредсказуем принципиально, но доля распавшихся за данное время строго определена — отсюда экспоненциальный закон и надёжные часы.",
+      "keyIdeas": [
+        {
+          "icon": "clock",
+          "title": "$N = N_0 2^{-t/T_{1/2}}$",
+          "text": "за каждый период остаётся половина"
+        },
+        {
+          "icon": "clock",
+          "title": "Ядро не стареет",
+          "text": "вероятность распада не зависит от прожитого времени"
+        },
+        {
+          "icon": "clock",
+          "title": "Период не зависит от",
+          "text": "Период не зависит от температуры, давления и химического состояния"
+        },
+        {
+          "icon": "ruler",
+          "title": "Альфа",
+          "text": "вылет ядра гелия, бета — превращение нейтрона в протон"
+        },
+        {
+          "icon": "clock",
+          "title": "Разброс периодов в $10^{24}$",
+          "text": "Разброс периодов в $10^{24}$ раз объясняется экспоненциальной зависимостью туннелирования от энергии"
+        }
+      ],
+      "where": "Радиоуглеродное датирование, определение возраста Земли, медицинская диагностика, дымовые извещатели, генераторы космических аппаратов.",
+      "watchOut": "За десять периодов активность падает в тысячу раз, но никогда не обращается в ноль — экспонента не имеет конца."
+    },
+    "quiz": [
+      {
+        "id": "d1",
+        "type": "mcq",
+        "q": "Ядро урана существует четыре миллиарда лет. Каковы его шансы распасться в ближайшую секунду по сравнению с только что образовавшимся ядром?",
+        "options": [
+          "Значительно выше — оно «изношено»",
+          "Ниже — устойчивые ядра выживают, неустойчивые уже распались",
+          "Точно такие же: ядро не стареет, вероятность распада не зависит от прожитого времени",
+          "Зависит от того, в каком веществе оно находится"
+        ],
+        "answer": 2,
+        "why": "Распад — квантовое событие с постоянной вероятностью в единицу времени, а не результат накопления повреждений. Это свойство называют отсутствием памяти, и оно резко отличает ядра от изнашивающихся вещей. Среди урана в земной коре нет «старых» и «молодых» ядер.",
+        "hint": "Есть ли у ядра внутренний счётчик или механизм износа? Что именно вызывает распад?"
+      },
+      {
+        "id": "d2",
+        "type": "mcq",
+        "q": "Через сколько периодов полураспада активность образца упадёт примерно в тысячу раз?",
+        "options": [
+          "Через 100",
+          "Через 500",
+          "Через 10, потому что 2¹⁰ = 1024",
+          "Через 1000"
+        ],
+        "answer": 2,
+        "why": "За каждый период остаётся половина, значит за десять периодов — одна тысяча двадцать четвёртая. Отсюда практическое правило обращения с отходами: изотопы с периодом в месяцы становятся безопасными за несколько лет, а с периодом в тысячи лет требуют долговременного захоронения.",
+        "hint": "Каждый период уменьшает количество вдвое. Какая степень двойки близка к тысяче?"
+      },
+      {
+        "id": "d3",
+        "type": "free",
+        "q": "Своими словами: как из совершенно случайного поведения отдельных ядер получается строгий закон для образца?",
+        "keywords": [
+          "много",
+          "статистик",
+          "средн",
+          "доля",
+          "больш числ",
+          "вероятност",
+          "предсказуем",
+          "миллиард"
+        ],
+        "needed": 2,
+        "why": "Для одного ядра момент распада непредсказуем, но вероятность распада за единицу времени одинакова для всех. В образце ядер порядка $10^{20}$, и по закону больших чисел доля распавшихся оказывается строго определённой с относительным разбросом порядка единицы делённой на корень из числа. Именно это мы разбирали в теме об энтропии: статистика больших чисел превращает случайность в закон.",
+        "hint": "Вспомните опыт с монетами. Можно ли предсказать одну? А долю решек из ста бросков?"
+      },
+      {
+        "id": "d4",
+        "type": "estimate",
+        "q": "В образце древесины осталось 12,5 % от исходного содержания углерода-14. Период полураспада 5730 лет. Каков возраст образца, в тысячах лет?",
+        "answer": 17.2,
+        "unit": "тыс. лет",
+        "tolerance": 2,
+        "why": "12,5 % — это одна восьмая, то есть 2⁻³, значит прошло три периода: 3 · 5730 ≈ 17 200 лет. Такой возраст соответствует разгару последнего ледникового максимума. Логарифмы здесь не нужны: доли, кратные степеням двойки, считаются устно.",
+        "hint": "Какой степени двойки соответствует одна восьмая? Столько периодов и прошло."
+      }
+    ]
+  },
+  "en": {
+    "title": "Radioactivity",
+    "subtitle": "Paragraph 2 · The randomness that makes precise clocks",
+    "intro": [
+      "A single uranium nucleus can decay in a second, or it can take a billion years. It is fundamentally impossible to predict when — not because we lack knowledge about it, but because the moment of decay is not determined until it happens. This is pure, irreducible randomness.",
+      "And here’s the surprising part: from this randomness come the most reliable clocks in nature. Take not one nucleus, but billions — and the fraction that decay in a given time is strictly fixed. Half of uranium-238 decays in four and a half billion years, and this number does not depend on temperature, pressure, or the chemical compound containing the uranium.",
+      "Hence a way to measure time in the past. Carbon-14 remnants determine the age of an artifact; the uranium-lead ratio gives the age of rocks and the Earth itself. Nuclear decay turned out to be the only clock that has been running all the time when there was no one to wind it."
+    ],
+    "standNote": "At the exhibit, choose a heavy nucleus — say, A around 240 — and look at the caption below it. For many proton-neutron combinations, you'll see a note about instability and an indication of a favorable number of protons. This is the reason for beta decay: the nucleus rearranges itself toward a favorable combination. Note that for large A, the region of stability shifts toward an excess of neutrons — the same pattern discussed in the previous paragraph.",
+    "formula": {
+      "name": "Law of Radioactive Decay",
+      "latex": "N(t) = N_0 e^{-\\lambda t} = N_0\\,2^{-t/T_{1/2}}, \\qquad T_{1/2} = \\frac{\\ln 2}{\\lambda}",
+      "alsoKnown": "Exponential law · half-life",
+      "authors": [
+        {
+          "who": "Henri Becquerel",
+          "year": "1896",
+          "what": "discovered that uranium salt darkens a photographic plate in the dark. He was preparing experiments with sunlight, gave up waiting for the rain, developed the plates just in case — and saw the image."
+        },
+        {
+          "who": "Marie Skłodowska-Curie",
+          "year": "1898",
+          "what": "introduced the term 'radioactivity' and discovered polonium and radium, manually processing tons of uranium ore. She established that radiation is a property of atoms themselves, not of chemical compounds."
+        },
+        {
+          "who": "Ernest Rutherford and Frederick Soddy",
+          "year": "1902",
+          "what": "established the exponential decay law and expressed the subversive idea: during decay, one element transforms into another. Soddy later recalled that Rutherford asked not to call it transmutation, to avoid being taken for alchemists."
+        },
+        {
+          "who": "George Gamow",
+          "year": "1928",
+          "what": "explained alpha decay by tunneling through the Coulomb barrier. This was the first application of quantum mechanics to the nucleus and explained why half-lives vary by a factor of $10^{24}$."
+        },
+        {
+          "who": "Willard Libby",
+          "year": "1949",
+          "what": "developed radiocarbon dating. He tested the method on samples from ancient Egyptian tombs of known age; the agreement was excellent. Nobel Prize in Chemistry 1960."
+        }
+      ],
+      "story": "Marie Curie worked with radium without suspecting the danger: at the time, radiation was considered rather curative, and radium creams and tonics were sold in pharmacies. She carried test tubes in her lab coat pocket and admired their glow in the dark laboratory. She died in 1934 from aplastic anemia — almost certainly a consequence of years of exposure. Her lab notebooks and even her cookbook are still so radioactive that they are stored in lead-lined cases: anyone wanting to see them is given protective clothing and asked to sign a waiver. Radium-226 has a half-life of 1600 years, so the notebooks will remain dangerous for another fifteen hundred years.",
+      "symbols": [
+        {
+          "sym": "N",
+          "latex": "N",
+          "what": "number of undecayed nuclei",
+          "unit": "—",
+          "note": "decreases exponentially; nothing can be predicted for a single nucleus"
+        },
+        {
+          "sym": "lambda2",
+          "latex": "\\lambda",
+          "what": "decay constant",
+          "unit": "1/s",
+          "note": "probability of decay of one nucleus per unit time; does not depend on any external factors"
+        },
+        {
+          "sym": "T12",
+          "latex": "T_{1/2}",
+          "what": "half-life",
+          "unit": "s, years",
+          "note": "time for half to decay; from uranium-238 4.5 billion years to fractions of a second"
+        },
+        {
+          "sym": "A_act",
+          "latex": "A",
+          "what": "activity",
+          "unit": "Bq",
+          "note": "number of decays per second; becquerel — one decay per second, an extremely small quantity"
+        },
+        {
+          "sym": "alpha_b",
+          "latex": "\\alpha,\\beta,\\gamma",
+          "what": "types of radiation",
+          "unit": "—",
+          "note": "helium nucleus, electron, and hard photon; penetrating power differs by thousands of times"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous derivation: from randomness to exponential",
+      "lead": "We show how the complete unpredictability for a single nucleus yields a strict law for many. It is the best example of how statistics gives rise to precision.",
+      "steps": [
+        {
+          "text": "The only assumption: the probability of nuclear decay in a small time interval is constant and independent of its past. The nucleus does not age — a thousand-year-old one is no different from one just formed.",
+          "latex": "P(\\text{decay in } dt) = \\lambda\\,dt",
+          "figure": "microcontact",
+          "figCaption": "Memorylessness is a key property. The nucleus does not accumulate fatigue or approach decay."
+        },
+        {
+          "text": "Then in time $dt$ a fraction $\\lambda\\,dt$ of the existing nuclei decays. The more nuclei there are, the more decays — and this yields a differential equation.",
+          "latex": "dN = -\\lambda N\\,dt",
+          "figure": "secant",
+          "figCaption": "The rate of decrease is proportional to the current quantity — the classic condition for an exponential."
+        },
+        {
+          "text": "We solve by separation of variables and obtain the exponential law.",
+          "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; N(t) = N_0 e^{-\\lambda t}",
+          "figure": "curves",
+          "figCaption": "The exponential always appears when the rate of decrease is proportional to the remaining quantity."
+        },
+        {
+          "text": "It is more convenient to use the half-life — the time after which half remains. It is related to the decay constant via the logarithm of two.",
+          "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda} \\approx \\frac{0{,}693}{\\lambda}",
+          "figure": "isochron",
+          "figCaption": "After each period, half of the previous amount remains: 1/2, 1/4, 1/8. Complete disappearance never occurs."
+        },
+        {
+          "text": "Now types of decay. Alpha: a heavy nucleus ejects a cluster of two protons and two neutrons — the most stable of the light ones. The charge decreases by two, the mass by four.",
+          "latex": "^{A}_{Z}X \\to\\; ^{A-4}_{Z-2}Y + \\alpha",
+          "figure": "action",
+          "figCaption": "The alpha particle is ejected as a whole: the cluster is so stable that it is advantageous to throw it out."
+        },
+        {
+          "text": "Beta: a nucleus with an unfavorable ratio of protons and neutrons rearranges itself. A neutron turns into a proton with the emission of an electron and an antineutrino — the charge increases by one, the mass does not change.",
+          "latex": "n \\to p + e^{-} + \\bar{\\nu}",
+          "figure": "equilibrium",
+          "figCaption": "The nucleus shifts to a favorable combination — the same one that the stand shows."
+        },
+        {
+          "text": "And an explanation for the enormous spread in half-lives. The alpha particle does not fly over the Coulomb barrier but leaks through it — it tunnels. The probability depends exponentially on energy, so a difference of a few megaelectronvolts yields a difference in half-lives of $10^{24}$ times.",
+          "latex": "P_{\\text{tunn}} \\sim e^{-2\\gamma}, \\qquad T_{1/2}: \\;10^{-7}\\ \\text{s} \\ldots 10^{17}\\ \\text{years}",
+          "figure": "anywell",
+          "figCaption": "Polonium-212 lives a third of a microsecond, thorium-232 — fourteen billion years. The difference is only in energy."
+        }
+      ],
+      "plate": "For a single nucleus, the moment of decay is fundamentally unpredictable; for many, the fraction decayed obeys a strict exponential law, independent of any external conditions.",
+      "note": "Limits of applicability and an important clarification. The independence from external conditions is almost absolute, but not entirely: for decays that proceed via electron capture from the nearest shell, the rate depends slightly on the chemical state — the effect amounts to fractions of a percent and has been measured. Moreover, under extreme conditions in stars, where atoms are completely ionized, some half-lives change by factors. For all terrestrial applications, the law can be considered absolute."
+    },
+    "math": {
+      "title": "The mathematics needed here",
+      "text": [
+        "Why exactly an exponential emerges. Whenever the rate of change is proportional to the current quantity, the answer is exponential — this is the most common differential equation in nature. This is how capital grows with interest, how tea cools, how sound fades in a hall. Here the quantity decreases, so the exponent is negative. A practical consequence: the exponential has no end. A radioactive substance never disappears completely — after each period, half of the previous amount remains.",
+        "What memorylessness means. A nucleus that has existed for a billion years has exactly the same chance of decaying in the next second as one just formed. This is sharply different from everyday life: a person, a light bulb, and a bearing wear out, and the probability of failure increases with time. A nucleus has no wear. A useful check of understanding: if fifty out of one hundred nuclei decay in an hour, then in the next hour not fifty but twenty-five will decay — from the remaining ones.",
+        "How to calculate in your head using half-lives. It is much more convenient to use powers of two rather than the exponential. After one period, half remains; after two, a quarter; after three, an eighth; after ten, roughly one thousandth. Hence a practical rule: after ten half-lives, activity drops by a factor of a thousand; after twenty, by a factor of a million. That is why spent nuclear fuel is stored in pools: the most active isotopes with half-lives of days and months decay almost completely in a few years.",
+        "Why tunneling gives such a spread. The probability of penetrating a barrier depends exponentially on its height and width. Thus a small change in the alpha particle energy — say, from 4 to 9 MeV — changes the exponent by tens and the probability by $10^{20}$ times or more. Hence the Geiger–Nuttall law: the logarithm of the half-life depends linearly on the inverse square root of the energy. The exponential always yields huge spreads from small changes."
+      ]
+    },
+    "example": {
+      "title": "Example with Numbers: Radiocarbon Dating",
+      "lead": "Calculating the age of an archaeological find is a task solved in laboratories worldwide.",
+      "given": "In a living organism, the ratio of carbon-14 to ordinary carbon is maintained constant through exchange with the atmosphere. In a found piece of wood, the carbon-14 content is 25% of the normal level. The half-life of carbon-14 is 5730 years. Determine the age of the find.",
+      "law": "$N = N_0 \\cdot 2^{-t/T_{1/2}}$",
+      "solution": [
+        {
+          "text": "Write the condition: a quarter remains.",
+          "latex": "\\frac{N}{N_0} = 0{,}25 = \\frac{1}{4} = 2^{-2}"
+        },
+        {
+          "text": "That means exactly two half-lives have passed — no need for logarithms.",
+          "latex": "\\frac{t}{T_{1/2}} = 2"
+        },
+        {
+          "text": "Multiply by the half-life.",
+          "latex": "t = 2 \\cdot 5730 = 11\\,460\\ \\text{лет}"
+        },
+        {
+          "text": "For an arbitrary fraction, one would need to take a logarithm.",
+          "latex": "t = T_{1/2}\\,\\frac{\\ln(N_0/N)}{\\ln 2}"
+        }
+      ],
+      "answer": "About eleven and a half thousand years — the end of the last Ice Age.",
+      "check": "Let's check the method's limits, because they are significant. After ten half-lives, i.e., 57 thousand years, the carbon-14 remaining is one thousandth — this can still be measured, but with large error. Therefore, radiocarbon dating works up to about fifty thousand years and is not suitable for dinosaurs: there, potassium-argon and uranium methods with half-lives in billions of years are used. And another subtlety: the atmospheric carbon-14 level has changed over time, so dates are calibrated using tree rings of known age — the dendrochronological scale has been continuously constructed back twelve thousand years."
+    },
+    "constants": {
+      "title": "Constants in This Section",
+      "lead": "Half-lives range from fractions of a microsecond to the age of the Universe.",
+      "items": [
+        {
+          "sym": "C14",
+          "latex": "$T_{1/2}(^{14}\\text{C})$",
+          "name": "Half-life of carbon-14",
+          "value": "5730",
+          "unit": "years",
+          "why": "Convenient for archaeology: comparable to historical timescales. Carbon-14 is continuously formed in the atmosphere from nitrogen by cosmic rays, so its content in a living organism is constant.",
+          "mnemo": "After death, exchange stops, and the clock starts. The method works up to 50 thousand years — beyond that, less than a thousandth remains."
+        },
+        {
+          "sym": "U238",
+          "latex": "$T_{1/2}(^{238}\\text{U})$",
+          "name": "Half-life of uranium-238",
+          "value": "4,5 · 10⁹",
+          "unit": "years",
+          "why": "Almost exactly equal to Earth's age — about half has decayed over its entire history. It is from the uranium-lead ratio that the planet's age was determined: 4.54 billion years.",
+          "mnemo": "Uranium-235, used for fuel, has a half-life of only 700 million years — that's why only 0.7% remains in nature, and enrichment is necessary."
+        },
+        {
+          "sym": "K40",
+          "latex": "$T_{1/2}(^{40}\\text{K})$",
+          "name": "Half-life of potassium-40",
+          "value": "1,25 · 10⁹",
+          "unit": "years",
+          "why": "Present in ordinary potassium at 0.012% and thus found in every organism. Inside the human body, about 4000 decays of potassium-40 occur per second — the main source of natural internal radiation.",
+          "mnemo": "A banana is noticeably radioactive due to potassium. There is a humorous unit 'banana equivalent dose' — about 0.1 microsieverts."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where Decay Is Applied",
+      "lead": "A phenomenon accidentally discovered by a fogged photographic plate has become a working tool for many sciences.",
+      "items": [
+        {
+          "h": "Dating",
+          "text": "Carbon-14 for archaeology up to 50 thousand years, potassium-argon for volcanic rocks, uranium-lead for the oldest minerals. The Earth's age of 4.54 billion years was determined this way — from meteorites and ancient zircon crystals."
+        },
+        {
+          "h": "Medicine",
+          "text": "Technetium-99m with a half-life of six hours is injected for organ imaging: long enough for examination, short enough to be quickly eliminated. Radiation therapy uses gamma rays to destroy tumors."
+        },
+        {
+          "h": "Smoke Detectors",
+          "text": "Most contain a speck of americium-241. Alpha particles ionize the air; smoke disrupts the ion current, triggering the alarm. The amount is negligible and safe."
+        },
+        {
+          "h": "Geothermal Heat",
+          "text": "Earth's interior remains hot mainly due to the decay of uranium, thorium, and potassium-40. Without this source, the planet would cool, tectonics would cease, and with it volcanism and the magnetic field."
+        },
+        {
+          "h": "Spacecraft",
+          "text": "The Voyagers have been flying for fifty years on radioisotope thermoelectric generators with plutonium-238. Solar panels are useless beyond Jupiter's orbit, but decay proceeds regardless of location."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosities: hands-on",
+      "lead": "Radioactivity surrounds us constantly, and some of it can be detected with household items.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Model decay with coins",
+          "text": "Take one hundred coins, arrange them heads up, and toss them all at once. Remove those that land tails — they have 'decayed'. Record the remainder and repeat with the remaining coins. Continue until no coins remain.",
+          "answer": "The remainders will go roughly like this: 100, 50, 25, 12, 6, 3, 2, 1. You have obtained the exponential law, with one toss acting as the half-life. Note two things. First: it is impossible to predict the fate of a single coin, but the behavior of a hundred is predictable. Second: as the number of coins gets small, the scatter becomes noticeable — the same happens with a small number of nuclei, and therefore the activity of weak sources is measured over long periods."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "The nucleus that doesn't age",
+          "text": "A uranium nucleus has existed for four billion years. It would seem it is 'worn out' and about to decay. In fact, its chance of decaying in the next second is exactly the same as that of a nucleus formed a minute ago in a reactor. How is this possible?",
+          "answer": "The nucleus has no internal clock and no wear. Decay is not the result of accumulated damage, but a quantum event with a constant probability per unit time. This property is called memorylessness, and it sharply distinguishes the nucleus from everything we are used to: people, light bulbs, and bearings age — nuclei do not. Hence a paradoxical consequence: among uranium that has lain in the earth for billions of years, there are no 'old' or 'young' nuclei — they are all statistically identical."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "Marie Curie's notebooks are signed out under receipt",
+          "text": "Her lab notes and even her cookbook are contaminated with radium-226, which has a half-life of 1600 years. They are stored at the National Library of France in lead-lined boxes; anyone wishing to study them is given protective clothing and asked to sign a waiver. They will remain hazardous for another fifteen hundred years. Curie herself carried test tubes in her coat pocket and admired their glow — at the time, the danger was unknown, and radium creams were sold in pharmacies as health products."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Ten half-lives — a thousand times",
+          "text": "After each half-life, half remains, so after ten — roughly one thousandth (2¹⁰ = 1024). After twenty half-lives — a millionth. Hence a practical rule for handling radioactive waste: isotopes with a half-life of months are safe after a few years, while those with a half-life of thousands of years require disposal."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimate",
+          "h": "Radioactivity inside you",
+          "text": "The human body contains about 140 grams of potassium, of which 0.012% is potassium-40. This yields roughly 4000 decays per second. Plus carbon-14 — another 3000. That totals about 7000 decays per second inside each of us, constantly. Natural background radiation to which life has adapted over billions of years."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Limits of dating",
+          "text": "Each method works around its own half-life. Carbon-14 is good up to 50,000 years; beyond that, less than a thousandth remains and accuracy is lost. For millions and billions of years, potassium-argon and uranium-lead are used. And calibration is always needed: the concentration of carbon-14 in the atmosphere has varied, so dates are checked against tree rings."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the curious: how neutrinos saved the law of conservation of energy",
+      "lead": "Not included in the test. About a particle invented out of despair and found twenty-six years later.",
+      "blocks": [
+        {
+          "h": "The problem",
+          "text": "In alpha decay, the emitted particles have a strictly defined energy — as expected if the nucleus decays into two parts. But in beta decay, the energy of the electrons turned out to be smeared from zero up to a certain limit. It seemed that some energy was disappearing without a trace."
+        },
+        {
+          "h": "Desperate proposal",
+          "text": "Bohr seriously considered that the law of conservation of energy might not hold in the microworld. Pauli in 1930 proposed another way out: suppose that together with the electron, another particle is emitted — neutral and almost undetectable — carrying away the missing energy. In a letter to colleagues, he called it a desperate remedy and added that a theoretical physicist should not propose something that cannot be tested — and that was exactly what he had done."
+        },
+        {
+          "h": "The search",
+          "text": "The neutrino interacts with matter so weakly that it freely passes through the Earth. It was only caught in 1956, by placing a detector at a nuclear reactor — a source with a colossal flux. Reines and Cowan sent a telegram to Pauli; he replied that he knows how to wait."
+        },
+        {
+          "h": "What it gave us",
+          "text": "Today, neutrinos are a working tool. They allow us to observe processes in the center of the Sun, where light cannot penetrate: a photon takes thousands of years to escape, while a neutrino emerges instantly. In 1987, neutrinos from a supernova explosion were detected — three hours before it was seen in telescopes. The particle invented to save the conservation law became a way to look where light cannot reach."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The decay moment of an individual nucleus is fundamentally unpredictable, but the fraction decayed in a given time is strictly determined — hence the exponential law and reliable clocks.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$N = N_0 2^{-t/T_{1/2}}$",
+          "text": "after each half-life, half remains"
+        },
+        {
+          "icon": "formula",
+          "title": "The nucleus does not age",
+          "text": "the probability of decay does not depend on elapsed time"
+        },
+        {
+          "icon": "sigma",
+          "title": "Half-life does not depend",
+          "text": "Half-life does not depend on temperature, pressure, or chemical state"
+        },
+        {
+          "icon": "ruler",
+          "title": "Alpha",
+          "text": "emission of a helium nucleus, beta: conversion of a neutron into a proton"
+        },
+        {
+          "icon": "scale",
+          "title": "The spread of half-lives",
+          "text": "The spread of half-lives over a factor of $10^{24}$ is explained by the exponential dependence of tunneling on energy"
+        }
+      ],
+      "where": "Radiocarbon dating, determining the age of the Earth, medical diagnostics, smoke detectors, power sources for spacecraft.",
+      "watchOut": "After ten half-lives, activity drops by a factor of a thousand, but never reaches zero — the exponential has no end."
+    },
+    "quiz": [
+      {
+        "id": "d1",
+        "type": "mcq",
+        "q": "A uranium nucleus has existed for four billion years. What are its chances of decaying in the next second compared to a newly formed nucleus?",
+        "options": [
+          "Significantly higher — it's 'worn out'",
+          "Lower — stable nuclei survive, unstable ones have already decayed",
+          "Exactly the same: the nucleus does not age, the decay probability does not depend on elapsed time",
+          "Depends on what substance it is in"
+        ],
+        "answer": 2,
+        "why": "Decay is a quantum event with a constant probability per unit time, not a result of accumulated damage. This property is called memorylessness, and it sharply distinguishes nuclei from wearing-out objects. Among uranium in the Earth's crust, there are no 'old' and 'young' nuclei.",
+        "hint": "Does the nucleus have an internal counter or wear-and-tear mechanism? What exactly causes decay?"
+      },
+      {
+        "id": "d2",
+        "type": "mcq",
+        "q": "After how many half-lives will the activity of a sample drop by roughly a factor of a thousand?",
+        "options": [
+          "After 100",
+          "After 500",
+          "After 10, because 2¹⁰ = 1024",
+          "After 1000"
+        ],
+        "answer": 2,
+        "why": "Each half-life halves the amount, so after ten half-lives it is one-thousand-and-twenty-fourth. Hence a practical rule for waste management: isotopes with half-lives of months become safe in a few years, while those with half-lives of thousands of years require long-term storage.",
+        "hint": "Each half-life halves the quantity. Which power of two is close to a thousand?"
+      },
+      {
+        "id": "d3",
+        "type": "free",
+        "q": "In your own words: how does the completely random behavior of individual nuclei lead to a strict law for the sample?",
+        "keywords": [
+          "many",
+          "statistics",
+          "average",
+          "fraction",
+          "large number",
+          "probability",
+          "predictable",
+          "billion"
+        ],
+        "needed": 2,
+        "why": "For a single nucleus, the decay moment is unpredictable, but the probability of decay per unit time is the same for all. In a sample of about $10^{20}$ nuclei, by the law of large numbers, the fraction that decay is strictly determined with a relative scatter of order one divided by the square root of the number. This is exactly what we discussed in the topic of entropy: large-number statistics turns randomness into law.",
+        "hint": "Recall the coin experiment. Can you predict a single toss? What about the fraction of heads from a hundred tosses?"
+      },
+      {
+        "id": "d4",
+        "type": "estimate",
+        "q": "A wood sample has 12.5% of the original carbon-14 content. The half-life is 5730 years. What is the age of the sample, in thousands of years?",
+        "answer": 17.2,
+        "unit": "thousand years",
+        "tolerance": 2,
+        "why": "12.5% is one-eighth, i.e., 2⁻³, so three half-lives have passed: 3 × 5730 ≈ 17,200 years. Such an age corresponds to the peak of the last glacial maximum. Logarithms are not needed here: fractions that are powers of two can be calculated mentally.",
+        "hint": "Which power of two corresponds to one-eighth? That many half-lives have passed."
+      }
+    ]
+  },
+  "es": {
+    "title": "Radiactividad",
+    "subtitle": "Párrafo 2 · La aleatoriedad de la que se obtienen relojes precisos",
+    "intro": [
+      "Un núcleo individual de uranio puede desintegrarse en un segundo, o puede tardar mil millones de años. Predecir exactamente cuándo es imposible en principio, no porque no sepamos algo sobre él, sino porque el momento de la desintegración no está determinado hasta que ocurre. Es una pura e inevitable aleatoriedad.",
+      "Y he aquí lo sorprendente: a partir de esta aleatoriedad se obtienen los relojes más fiables de la naturaleza. Tome no un núcleo, sino miles de millones, y la fracción desintegrada en un tiempo dado resultará estrictamente definida. La mitad del uranio-238 se desintegra en cuatro mil quinientos millones de años, y este número no depende ni de la temperatura, ni de la presión, ni de la sustancia en la que se encuentre el uranio.",
+      "De ahí una forma de medir el tiempo en el pasado. Por los restos de carbono-14 se determina la edad de un hallazgo, por la proporción de uranio y plomo la edad de las rocas y de la propia Tierra. La desintegración nuclear resultó ser el único reloj que funcionó todo el tiempo mientras no había nadie que pudiera darle cuerda."
+    ],
+    "standNote": "En el panel, seleccione un núcleo pesado —digamos, A alrededor de 240— y mire la etiqueta debajo de él. En muchas combinaciones de protones y neutrones aparecerá una indicación de inestabilidad y la cantidad favorable de protones. Esta es la causa de la desintegración beta: el núcleo se reconfigura hacia la combinación favorable. Observe que para A grande, la región de estabilidad se desplaza hacia el exceso de neutrones —la misma regularidad que se analizó en el párrafo anterior.",
+    "formula": {
+      "name": "Ley de desintegración radiactiva",
+      "latex": "N(t) = N_0 e^{-\\lambda t} = N_0\\,2^{-t/T_{1/2}}, \\qquad T_{1/2} = \\frac{\\ln 2}{\\lambda}",
+      "alsoKnown": "Ley exponencial · período de semidesintegración",
+      "authors": [
+        {
+          "who": "Henri Becquerel",
+          "year": 1896,
+          "what": "descubrió que una sal de uranio velaba una placa fotográfica en la oscuridad. Se preparaba para experimentos con luz solar, no esperó la lluvia, reveló las placas por si acaso y vio la imagen."
+        },
+        {
+          "who": "Marie Curie",
+          "year": 1898,
+          "what": "introdujo el término «radiactividad» y descubrió el polonio y el radio, procesando manualmente toneladas de mineral de uranio. Estableció que la radiación es una propiedad de los propios átomos, no de los compuestos químicos."
+        },
+        {
+          "who": "Ernest Rutherford y Frederick Soddy",
+          "year": 1902,
+          "what": "establecieron la ley exponencial de desintegración y expresaron la idea herética: durante la desintegración, un elemento se transforma en otro. Soddy recordó más tarde que Rutherford pidió que no lo llamaran transmutación para que no los tomaran por alquimistas."
+        },
+        {
+          "who": "George Gamow",
+          "year": 1928,
+          "what": "explicó la desintegración alfa mediante el efecto túnel a través de la barrera de Coulomb. Fue la primera aplicación de la mecánica cuántica al núcleo y explicó por qué los períodos de semidesintegración difieren en un factor de $10^{24}$."
+        },
+        {
+          "who": "Willard Libby",
+          "year": 1949,
+          "what": "desarrolló la datación por radiocarbono. Probó el método en muestras de tumbas del antiguo Egipto de edad conocida; la concordancia resultó excelente. Premio Nobel de Química en 1960."
+        }
+      ],
+      "story": "Marie Curie trabajaba con radio sin sospechar el peligro: en aquel entonces la radiación se consideraba más bien curativa, y se vendían cremas y tónicos de radio en las farmacias. Llevaba tubos de ensayo en el bolsillo de su bata y admiraba su resplandor en la oscuridad del laboratorio. Murió en 1934 de anemia aplásica, casi con toda seguridad consecuencia de años de exposición. Sus cuadernos de laboratorio e incluso su libro de cocina siguen siendo tan radiactivos que se guardan en estuches de plomo: a quien quiera verlos se le proporciona ropa protectora y se le pide que firme una exención de responsabilidad. El radio-226 tiene un período de semidesintegración de 1600 años, por lo que los cuadernos seguirán siendo peligrosos durante otros mil quinientos años.",
+      "symbols": [
+        {
+          "sym": "N",
+          "latex": "N",
+          "what": "número de núcleos no desintegrados",
+          "unit": "—",
+          "note": "disminuye exponencialmente; para un núcleo individual no se puede predecir nada"
+        },
+        {
+          "sym": "lambda2",
+          "latex": "\\lambda",
+          "what": "constante de desintegración",
+          "unit": "1/s",
+          "note": "probabilidad de desintegración de un núcleo por unidad de tiempo; no depende de nada externo"
+        },
+        {
+          "sym": "T12",
+          "latex": "T_{1/2}",
+          "what": "período de semidesintegración",
+          "unit": "s, años",
+          "note": "tiempo en que se desintegra la mitad; desde 4,5 mil millones de años para el uranio-238 hasta fracciones de segundo"
+        },
+        {
+          "sym": "A_act",
+          "latex": "A",
+          "what": "actividad",
+          "unit": "Bq",
+          "note": "número de desintegraciones por segundo; un becquerel es una desintegración por segundo, una cantidad extremadamente pequeña"
+        },
+        {
+          "sym": "alpha_b",
+          "latex": "\\alpha,\\beta,\\gamma",
+          "what": "tipos de radiación",
+          "unit": "—",
+          "note": "núcleo de helio, electrón y fotón duro; difieren en poder de penetración en miles de veces"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: del azar a la exponencial",
+      "lead": "Mostremos cómo de la impredecibilidad total para un solo núcleo se obtiene una ley rigurosa para muchos. Es el mejor ejemplo de cómo la estadística genera precisión.",
+      "steps": [
+        {
+          "text": "La única suposición: la probabilidad de desintegración de un núcleo en un tiempo pequeño es constante y no depende de su pasado. El núcleo no envejece: uno milenario no se diferencia de uno recién formado.",
+          "latex": "P(\\text{распад за } dt) = \\lambda\\,dt",
+          "figure": "microcontact",
+          "figCaption": "La ausencia de memoria es una propiedad clave. El núcleo no acumula fatiga ni se acerca a la desintegración."
+        },
+        {
+          "text": "Entonces, en el tiempo $dt$ se desintegrará una fracción $\\lambda\\,dt$ de los núcleos presentes. Cuantos más haya, más desintegraciones ocurren, y esto da una ecuación diferencial.",
+          "latex": "dN = -\\lambda N\\,dt",
+          "figure": "secant",
+          "figCaption": "La velocidad de disminución es proporcional a la cantidad actual, la condición clásica para una exponencial."
+        },
+        {
+          "text": "Resolvemos por separación de variables y obtenemos la ley exponencial.",
+          "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; N(t) = N_0 e^{-\\lambda t}",
+          "figure": "curves",
+          "figCaption": "La exponencial aparece siempre que la velocidad de disminución es proporcional a la cantidad restante."
+        },
+        {
+          "text": "Es más conveniente usar el período de semidesintegración: el tiempo en el que queda la mitad. Se relaciona con la constante de desintegración mediante el logaritmo de dos.",
+          "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda} \\approx \\frac{0{,}693}{\\lambda}",
+          "figure": "isochron",
+          "figCaption": "En cada período queda la mitad del anterior: 1/2, 1/4, 1/8. La desaparición completa nunca ocurre."
+        },
+        {
+          "text": "Ahora los tipos de desintegración. Alfa: un núcleo pesado expulsa un conjunto de dos protones y dos neutrones, el más estable de los ligeros. La carga disminuye en dos, la masa en cuatro.",
+          "latex": "^{A}_{Z}X \\to\\; ^{A-4}_{Z-2}Y + \\alpha",
+          "figure": "action",
+          "figCaption": "La partícula alfa sale completa: el conjunto es tan estable que es ventajoso expulsarlo precisamente a él."
+        },
+        {
+          "text": "Beta: un núcleo con una relación desfavorable de protones y neutrones se reestructura. Un neutrón se convierte en protón con emisión de un electrón y un antineutrino; la carga aumenta en uno, la masa no cambia.",
+          "latex": "n \\to p + e^{-} + \\bar{\\nu}",
+          "figure": "equilibrium",
+          "figCaption": "El núcleo se desplaza hacia una combinación favorable, la misma que muestra el diagrama."
+        },
+        {
+          "text": "Y la explicación de la enorme dispersión de los períodos. La partícula alfa no salta la barrera coulombiana, sino que se filtra a través de ella: hace tunelamiento. La probabilidad depende exponencialmente de la energía, por lo que una diferencia de unos pocos megaelectronvoltios produce una diferencia de períodos de $10^{24}$ veces.",
+          "latex": "P_{\\text{тунн}} \\sim e^{-2\\gamma}, \\qquad T_{1/2}: \\;10^{-7}\\ \\text{с} \\ldots 10^{17}\\ \\text{лет}",
+          "figure": "anywell",
+          "figCaption": "El polonio-212 vive un tercio de microsegundo, el torio-232 catorce mil millones de años. La diferencia está solo en la energía."
+        }
+      ],
+      "plate": "Para un solo núcleo, el momento de la desintegración es fundamentalmente impredecible; para muchos, la fracción desintegrada obedece una ley exponencial rigurosa que no depende de ninguna condición externa.",
+      "note": "Límites de aplicabilidad y una aclaración importante. La independencia de las condiciones externas es casi absoluta, pero no del todo: para las desintegraciones que ocurren mediante captura de electrones de la capa más cercana, la velocidad depende ligeramente del estado químico; el efecto es de fracciones de porcentaje y ha sido medido. Además, en condiciones extremas en estrellas, donde los átomos están completamente ionizados, algunos períodos cambian en factores. Para todas las aplicaciones terrestres, la ley puede considerarse absoluta."
+    },
+    "math": {
+      "title": "Matemáticas necesarias aquí",
+      "text": [
+        "Por qué se obtiene precisamente una exponencial. Siempre que la velocidad de cambio es proporcional a la cantidad actual, la respuesta es exponencial: es la ecuación diferencial más común en la naturaleza. Así crece el capital con intereses, así se enfría el té, así se apaga el sonido en una sala. Aquí la cantidad disminuye, por lo que el exponente es negativo. Consecuencia práctica: la exponencial no tiene fin. Una sustancia radiactiva nunca desaparece por completo; en cada período queda la mitad del anterior.",
+        "Qué significa la ausencia de memoria. Un núcleo que ha existido durante mil millones de años tiene exactamente las mismas probabilidades de desintegrarse en el próximo segundo que uno recién formado. Esto contrasta fuertemente con la vida cotidiana: una persona, una bombilla y un rodamiento se desgastan, y la probabilidad de fallo aumenta con el tiempo. El núcleo no se desgasta. Una comprobación útil de comprensión: si de cien núcleos se desintegran cincuenta en una hora, en la siguiente hora se desintegrarán no cincuenta, sino veinticinco, de los que quedan.",
+        "Cómo calcular mentalmente usando períodos. Es mucho más conveniente usar no la exponencial, sino potencias de dos. Pasado un período, queda la mitad; dos, un cuarto; tres, un octavo; diez, aproximadamente una milésima. De ahí una regla práctica: en diez períodos de semidesintegración la actividad cae mil veces, en veinte, un millón. Por eso el combustible nuclear gastado se almacena en piscinas: los isótopos más activos con períodos de días y meses desaparecen casi por completo en unos pocos años.",
+        "Por qué el tunelamiento produce tal dispersión. La probabilidad de filtrarse a través de la barrera depende exponencialmente de su altura y anchura. Así, un pequeño cambio en la energía de la partícula alfa, por ejemplo de 4 a 9 MeV, cambia el exponente en decenas y la probabilidad misma en $10^{20}$ veces o más. De ahí la ley de Geiger-Nuttall: el logaritmo del período de semidesintegración depende linealmente de la raíz inversa de la energía. La exponencial siempre produce enormes dispersiones a partir de pequeños cambios."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: datación por radiocarbono",
+      "lead": "Calcular la edad de un hallazgo arqueológico es una tarea que se resuelve en laboratorios de todo el mundo.",
+      "given": "En un organismo vivo, la proporción de carbono-14 respecto al carbono común se mantiene constante gracias al intercambio con la atmósfera. En un trozo de madera encontrado, el contenido de carbono-14 es el 25 % del normal. El período de semidesintegración del carbono-14 es de 5730 años. Determinar la edad del hallazgo.",
+      "law": "$N = N_0 \\cdot 2^{-t/T_{1/2}}$",
+      "solution": [
+        {
+          "text": "Escribimos la condición: queda una cuarta parte.",
+          "latex": "\\frac{N}{N_0} = 0{,}25 = \\frac{1}{4} = 2^{-2}"
+        },
+        {
+          "text": "Por lo tanto, han transcurrido exactamente dos períodos de semidesintegración; no fue necesario calcular logaritmos.",
+          "latex": "\\frac{t}{T_{1/2}} = 2"
+        },
+        {
+          "text": "Multiplicamos por el período.",
+          "latex": "t = 2 \\cdot 5730 = 11\\,460\\ \\text{лет}"
+        },
+        {
+          "text": "Para una fracción arbitraria habría que tomar el logaritmo.",
+          "latex": "t = T_{1/2}\\,\\frac{\\ln(N_0/N)}{\\ln 2}"
+        }
+      ],
+      "answer": "Alrededor de once mil quinientos años — el final del último período glacial.",
+      "check": "Revisaremos los límites del método, porque son importantes. Después de diez períodos, es decir, 57 000 años, queda una milésima parte del carbono-14; esto aún se puede medir, pero con un gran error. Por lo tanto, el método del radiocarbono funciona aproximadamente hasta 50 000 años y no sirve para los dinosaurios: allí se usan los métodos del potasio-argón y del uranio, con períodos de miles de millones de años. Y otro detalle: el contenido de carbono-14 en la atmósfera ha cambiado con el tiempo, por lo que las fechas se calibran mediante los anillos de crecimiento de árboles de edad conocida; la escala dendrocronológica se ha construido de forma continua hasta 12 000 años atrás."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Los períodos de semidesintegración van desde fracciones de microsegundo hasta la edad del Universo.",
+      "items": [
+        {
+          "sym": "C14",
+          "latex": "T_{1/2}(^{14}\\text{C})",
+          "name": "Período de semidesintegración del carbono-14",
+          "value": "5730",
+          "unit": "años",
+          "why": "Es útil para la arqueología: comparable con los tiempos históricos. El carbono-14 se forma continuamente en la atmósfera a partir del nitrógeno por acción de los rayos cósmicos, por lo que su contenido en un organismo vivo es constante.",
+          "mnemo": "Después de la muerte, el intercambio cesa y el reloj se pone en marcha. El método funciona hasta 50 000 años; más allá queda menos de una milésima parte."
+        },
+        {
+          "sym": "U238",
+          "latex": "T_{1/2}(^{238}\\text{U})",
+          "name": "Período de semidesintegración del uranio-238",
+          "value": "4,5 · 10⁹",
+          "unit": "años",
+          "why": "Es casi exactamente igual a la edad de la Tierra; durante toda su existencia se ha desintegrado aproximadamente la mitad. Fue precisamente mediante la proporción de uranio y plomo que se determinó la edad del planeta: 4,54 mil millones de años.",
+          "mnemo": "El uranio-235, del que se fabrica el combustible, tiene una vida de solo 700 millones de años; por eso en la naturaleza queda el 0,7 % y es necesario enriquecerlo."
+        },
+        {
+          "sym": "K40",
+          "latex": "T_{1/2}(^{40}\\text{K})",
+          "name": "Período de semidesintegración del potasio-40",
+          "value": "1,25 · 10⁹",
+          "unit": "años",
+          "why": "Está presente en el potasio común en una proporción del 0,012 % y, por lo tanto, está en todo organismo. Dentro del ser humano ocurren alrededor de 4000 desintegraciones de potasio-40 por segundo, la principal fuente de radiación interna natural.",
+          "mnemo": "Un plátano es notablemente radiactivo debido al potasio. Existe una unidad humorística, el 'equivalente de dosis de plátano', de aproximadamente 0,1 microsievert."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde se aplica la desintegración",
+      "lead": "Un fenómeno descubierto accidentalmente por una placa velada se ha convertido en una herramienta de trabajo para muchas ciencias.",
+      "items": [
+        {
+          "h": "Datación",
+          "text": "El carbono-14 para arqueología hasta 50 000 años, el potasio-argón para rocas volcánicas, el uranio-plomo para minerales antiguos. La edad de la Tierra, 4,54 mil millones de años, se determinó precisamente así: mediante meteoritos y los cristales de circón más antiguos."
+        },
+        {
+          "h": "Medicina",
+          "text": "El tecnecio-99m, con un período de seis horas, se inyecta para obtener imágenes de órganos: es lo suficientemente largo para realizar el examen y lo suficientemente corto para eliminarse rápidamente. La radioterapia utiliza radiación gamma para destruir tumores."
+        },
+        {
+          "h": "Detectores de humo",
+          "text": "La mayoría de ellos contienen una pequeña cantidad de americio-241. Las partículas alfa ionizan el aire; el humo interrumpe la corriente iónica y se activa la alarma. La cantidad de material es ínfima y segura."
+        },
+        {
+          "h": "Calor geotérmico",
+          "text": "La Tierra todavía está caliente en su interior principalmente debido a la desintegración de uranio, torio y potasio-40. Sin esta fuente, el planeta se habría enfriado, la tectónica se habría detenido y con ella el vulcanismo y el campo magnético."
+        },
+        {
+          "h": "Naves espaciales",
+          "text": "Las sondas Voyager llevan cincuenta años volando con generadores radioisotópicos de plutonio-238. Los paneles solares más allá de la órbita de Júpiter son inútiles, y la desintegración ocurre independientemente de dónde te encuentres."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: pruébalo tú mismo",
+      "lead": "La radiactividad nos rodea constantemente, y parte de ella se puede detectar con medios domésticos.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "Simula la desintegración con monedas",
+          "text": "Toma cien monedas, colócalas con la cara hacia arriba y tíralas todas a la vez. Retira las que caen en cruz (se «desintegraron»). Anota el resto y repite con las que quedan. Continúa hasta que no queden monedas.",
+          "answer": "Los restos serán aproximadamente: 100, 50, 25, 12, 6, 3, 2, 1. Obtuviste la ley exponencial, y un lanzamiento jugó el papel del período de semidesintegración. Observa dos cosas: primero, es imposible predecir el destino de una moneda concreta, pero el comportamiento de cien es predecible. Segundo, al final, cuando quedan pocas monedas, la dispersión es notable; lo mismo ocurre con un número pequeño de núcleos, por eso la actividad de fuentes débiles se mide durante mucho tiempo."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "El núcleo que no envejece",
+          "text": "Un núcleo de uranio existe desde hace cuatro mil millones de años. Parecería que se ha «desgastado» y está a punto de desintegrarse. En realidad, sus posibilidades de desintegrarse en el próximo segundo son exactamente las mismas que las de un núcleo formado hace un minuto en un reactor. ¿Cómo es posible?",
+          "answer": "El núcleo no tiene un contador interno ni se desgasta. La desintegración no es resultado de la acumulación de daños, sino un evento cuántico con una probabilidad constante por unidad de tiempo. Esta propiedad se llama falta de memoria, y diferencia claramente al núcleo de todo lo que conocemos: las personas, las bombillas y los rodamientos envejecen, los núcleos no. De ahí una consecuencia paradójica: entre el uranio que ha estado en la tierra durante miles de millones de años, no hay núcleos «viejos» ni «jóvenes»; todos son estadísticamente iguales."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Los cuadernos de Marie Curie se entregan bajo recibo",
+          "text": "Sus apuntes de laboratorio e incluso su libro de cocina están contaminados con radio-226, cuyo período de semidesintegración es de 1600 años. Se guardan en la Biblioteca Nacional de Francia en estuches de plomo; quien desee estudiarlos debe usar ropa protectora y firmar una exención de responsabilidad. Seguirán siendo peligrosos durante otros mil quinientos años. La propia Curie llevaba tubos de ensayo en el bolsillo de su bata y admiraba su brillo; en aquella época no se conocía el peligro, y las cremas de radio se vendían en las farmacias como saludables."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Diez períodos: mil veces",
+          "text": "Cada período deja la mitad, por lo tanto, después de diez períodos queda aproximadamente una milésima parte (2¹⁰ = 1024). Después de veinte períodos, una millonésima. De ahí la regla práctica para el manejo de residuos radiactivos: los isótopos con períodos de meses son seguros después de unos años, mientras que los de miles de años requieren almacenamiento geológico profundo."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Radiactividad dentro de ti",
+          "text": "El cuerpo humano contiene unos 140 gramos de potasio, de los cuales el 0,012 % es potasio-40. Esto produce aproximadamente 4000 desintegraciones por segundo. Además, el carbono-14 añade otras 3000. En total, unas 7000 desintegraciones por segundo dentro de cada uno de nosotros, constantemente. Es el fondo natural al que la vida se ha adaptado durante miles de millones de años."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Límites de la datación",
+          "text": "Cada método funciona en el entorno de su período de semidesintegración. El carbono-14 sirve hasta unos 50 000 años; más allá queda menos de una milésima parte y la precisión se pierde. Para millones y miles de millones de años se usan el potasio-argón y el uranio-plomo. Siempre se necesita calibración: el contenido de carbono-14 en la atmósfera ha variado, por lo que las fechas se contrastan con los anillos de los árboles."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: cómo los neutrinos salvaron la ley de conservación de la energía",
+      "lead": "No entra en la verificación. Sobre una partícula inventada por desesperación y encontrada veintiséis años después.",
+      "blocks": [
+        {
+          "h": "El problema",
+          "text": "En la desintegración alfa, las partículas emitidas tienen una energía estrictamente definida, como corresponde si el núcleo se divide en dos partes. Pero en la desintegración beta, la energía de los electrones resultó estar distribuida desde cero hasta un cierto límite. Parecía que parte de la energía desaparecía sin dejar rastro."
+        },
+        {
+          "h": "Propuesta desesperada",
+          "text": "Bohr consideró seriamente que la ley de conservación de la energía podría no cumplirse en el microcosmos. Pauli en 1930 propuso otra salida: que junto con el electrón escapa otra partícula, neutra y casi indetectable, que se lleva la energía faltante. En una carta a sus colegas lo llamó un «recurso desesperado» y añadió que un físico teórico no debería proponer algo que no se pueda comprobar — y eso era exactamente lo que hacía."
+        },
+        {
+          "h": "La búsqueda",
+          "text": "El neutrino interactúa tan débilmente con la materia que atraviesa la Tierra sin dificultad. Solo se logró detectar en 1956, colocando un detector junto a un reactor nuclear — una fuente de flujo colosal. Reines y Cowan enviaron un telegrama a Pauli; él respondió que sabía esperar."
+        },
+        {
+          "h": "Lo que aportó",
+          "text": "Hoy el neutrino es una herramienta de trabajo. Con él se observan procesos en el centro del Sol, a donde la luz no llega: un fotón tarda miles de años en salir, mientras que un neutrino escapa al instante. En 1987 se detectaron neutrinos de una explosión de supernova, tres horas antes de que fuera vista con telescopios. La partícula inventada para salvar la ley de conservación se ha convertido en una forma de mirar donde la luz no penetra."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "El momento de desintegración de un núcleo individual es fundamentalmente impredecible, pero la fracción desintegrada en un tiempo dado está estrictamente determinada; de ahí la ley exponencial y un reloj confiable.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$N = N_0 2^{-t/T_{1/2}}$",
+          "text": "después de cada período queda la mitad"
+        },
+        {
+          "icon": "formula",
+          "title": "El núcleo no envejece",
+          "text": "la probabilidad de desintegración no depende del tiempo transcurrido"
+        },
+        {
+          "icon": "sigma",
+          "title": "El período no depende",
+          "text": "El período no depende de la temperatura, presión o estado químico"
+        },
+        {
+          "icon": "ruler",
+          "title": "Alfa",
+          "text": "emisión de un núcleo de helio; beta: transformación de un neutrón en protón"
+        },
+        {
+          "icon": "scale",
+          "title": "La variación de períodos",
+          "text": "La variación de períodos en un factor de $10^{24}$ se explica por la dependencia exponencial del efecto túnel con la energía"
+        }
+      ],
+      "where": "Datación por radiocarbono, determinación de la edad de la Tierra, diagnóstico médico, detectores de humo, generadores de naves espaciales.",
+      "watchOut": "Después de diez períodos, la actividad cae mil veces, pero nunca llega a cero: la exponencial no tiene fin."
+    },
+    "quiz": [
+      {
+        "id": "d1",
+        "type": "mcq",
+        "q": "Un núcleo de uranio ha existido durante cuatro mil millones de años. ¿Cuáles son sus probabilidades de desintegrarse en el próximo segundo en comparación con un núcleo recién formado?",
+        "options": [
+          "Significativamente más altas — está 'desgastado'",
+          "Más bajas — los núcleos estables sobreviven, los inestables ya se desintegraron",
+          "Exactamente las mismas: el núcleo no envejece, la probabilidad de desintegración no depende del tiempo transcurrido",
+          "Depende de la sustancia en la que se encuentre"
+        ],
+        "answer": 2,
+        "why": "La desintegración es un evento cuántico con una probabilidad constante por unidad de tiempo, no el resultado de daños acumulados. Esta propiedad se llama falta de memoria y diferencia claramente a los núcleos de los objetos que se desgastan. Entre el uranio en la corteza terrestre no hay núcleos 'viejos' ni 'jóvenes'.",
+        "hint": "¿Tiene el núcleo un contador interno o un mecanismo de desgaste? ¿Qué es exactamente lo que causa la desintegración?"
+      },
+      {
+        "id": "d2",
+        "type": "mcq",
+        "q": "¿Después de cuántos periodos de semidesintegración la actividad de una muestra disminuirá aproximadamente mil veces?",
+        "options": [
+          "Después de 100",
+          "Después de 500",
+          "Después de 10, porque 2¹⁰ = 1024",
+          "Después de 1000"
+        ],
+        "answer": 2,
+        "why": "Cada periodo deja la mitad, así que después de diez periodos queda una milésima veinticuatroava parte. De ahí la regla práctica para la gestión de residuos: los isótopos con un periodo de meses se vuelven seguros en unos pocos años, mientras que aquellos con un periodo de miles de años requieren almacenamiento a largo plazo.",
+        "hint": "Cada periodo reduce la cantidad a la mitad. ¿Qué potencia de dos está cerca de mil?"
+      },
+      {
+        "id": "d3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿cómo es que del comportamiento completamente aleatorio de núcleos individuales se obtiene una ley estricta para la muestra?",
+        "keywords": [
+          "muchos",
+          "estadística",
+          "promedio",
+          "fracción",
+          "gran número",
+          "probabilidad",
+          "predecible",
+          "mil millones"
+        ],
+        "needed": 2,
+        "why": "Para un solo núcleo, el momento de la desintegración es impredecible, pero la probabilidad de desintegración por unidad de tiempo es la misma para todos. En una muestra de núcleos del orden de $10^{20}$, según la ley de los grandes números, la fracción desintegrada resulta estrictamente definida con una dispersión relativa del orden de uno dividido por la raíz cuadrada del número. Esto es exactamente lo que discutimos en el tema de la entropía: la estadística de grandes números convierte la aleatoriedad en ley.",
+        "hint": "Recuerda el experimento con monedas. ¿Se puede predecir una sola? ¿Y la fracción de caras en cien lanzamientos?"
+      },
+      {
+        "id": "d4",
+        "type": "estimate",
+        "q": "En una muestra de madera queda el 12,5 % del contenido original de carbono-14. El periodo de semidesintegración es de 5730 años. ¿Cuál es la edad de la muestra, en miles de años?",
+        "answer": 17.2,
+        "unit": "miles de años",
+        "tolerance": 2,
+        "why": "12,5 % es un octavo, es decir, 2⁻³, por lo que han pasado tres periodos: 3 · 5730 ≈ 17 200 años. Esta edad corresponde al apogeo del último máximo glacial. Aquí no se necesitan logaritmos: las fracciones que son potencias de dos se calculan mentalmente.",
+        "hint": "¿A qué potencia de dos corresponde un octavo? Ese es el número de periodos transcurridos."
+      }
+    ]
+  },
+  "ar": {
+    "title": "النشاط الإشعاعي",
+    "subtitle": "الفقرة 2 · العشوائية التي تنتج ساعات دقيقة",
+    "intro": [
+      "نواة يورانيوم منفردة قد تتحلل بعد ثانية، وقد تتحلل بعد مليار سنة. من المستحيل التنبؤ بالموعد تحديدًا — ليس لأننا نجهل شيئًا عنها، بل لأن لحظة التحلل غير محددة حتى حدوثها. إنها عشوائية خالصة لا يمكن إزالتها.",
+      "وإليك الأمر المدهش: من هذه العشوائية تنبثق أدق الساعات في الطبيعة. خذ بدلاً من نواة واحدة مليارات النوى — وستكون نسبة المنحل منها في زمن معين محددة بدقة. نصف اليورانيوم-238 يتحلل في أربعة مليارات ونصف مليار سنة، وهذا الرقم لا يعتمد على درجة الحرارة ولا الضغط ولا المادة التي يوجد فيها اليورانيوم.",
+      "من هنا تأتي طريقة قياس الزمن في الماضي. ببقايا الكربون-14 نحدد عمر الاكتشافات، وبنسبة اليورانيوم والرصاص نحدد عمر الصخور والأرض نفسها. لقد أصبح التحلل النووي الساعة الوحيدة التي ظلت تعمل طوال الوقت دون أن يكون هناك من يضبطها."
+    ],
+    "standNote": "على اللوحة، اختر نواة ثقيلة — مثلًا A حوالي 240 — وانظر إلى التسمية أسفلها. عند العديد من تركيبات البروتونات والنيوترونات ستظهر علامة عدم الاستقرار وإشارة إلى العدد المفضل من البروتونات. وهذا هو سبب اضمحلال بيتا: تعيد النواة ترتيب نفسها نحو التركيبة المفضلة. لاحظ أنه عند A الكبير تتحول منطقة الاستقرار نحو فائض النيوترونات — نفس النمط الذي نوقش في الفقرة السابقة.",
+    "formula": {
+      "name": "قانون التحلل الإشعاعي",
+      "latex": "N(t) = N_0 e^{-\\lambda t} = N_0\\,2^{-t/T_{1/2}}, \\qquad T_{1/2} = \\frac{\\ln 2}{\\lambda}",
+      "alsoKnown": "القانون الأسي · عمر النصف",
+      "authors": [
+        {
+          "who": "هنري بيكريل",
+          "year": "1896",
+          "what": "اكتشف أن ملح اليورانيوم يعرض لوح التصوير في الظلام. كان يستعد لتجارب مع ضوء الشمس، ولكن بسبب المطر لم ينتظر، وطور الألواح تحسبًا — فرأى الصورة."
+        },
+        {
+          "who": "ماريا سكوودوفسكا-كوري",
+          "year": "1898",
+          "what": "صاغت مصطلح «النشاط الإشعاعي» واكتشفت البولونيوم والراديوم، بعد أن عالجت يدويًا أطنانًا من خام اليورانيوم. أثبتت أن الإشعاع خاصية للذرات نفسها، وليس للمركبات الكيميائية."
+        },
+        {
+          "who": "إرنست رذرفورد وفريدريك سودي",
+          "year": "1902",
+          "what": "أثبتا قانون التحلل الأسي وطرحا فكرة جريئة: عند التحلل يتحول عنصر إلى آخر. لاحقًا تذكر سودي أن رذرفورد طلب عدم تسمية ذلك تحولاً (transmutation) لئلا يظن الناس أنهما خيميائيان."
+        },
+        {
+          "who": "جورج جاموف",
+          "year": "1928",
+          "what": "فسر اضمحلال ألفا بالنفق عبر حاجز كولوم. كان هذا أول تطبيق لميكانيكا الكم على النواة، وشرح لماذا تختلف أعمار النصف بمقدار $10^{24}$ مرة."
+        },
+        {
+          "who": "ويلارد ليبي",
+          "year": "1949",
+          "what": "طور التأريخ بالكربون المشع. اختبر الطريقة على عينات من مقابر مصرية قديمة ذات عمر معروف؛ وكان التطابق ممتازًا. جائزة نوبل في الكيمياء عام 1960."
+        }
+      ],
+      "story": "كانت ماري كوري تعمل مع الراديوم دون أن تدرك خطورته: إذ كان الإشعاع يُعتبر في ذلك الوقت علاجيًا، وكانت كريمات ومقويات الراديوم تباع في الصيدليات. كانت تحمل أنابيب الاختبار في جيب معطفها وتستمتع بتوهجها في ظلام المختبر. توفيت عام 1934 بفقر الدم اللاتنسجي — والذي كان شبه المؤكد نتيجة التعرض الطويل للإشعاع. لا تزال دفاتر مختبرها وحتى كتاب الطبخ الخاص بها مشعة لدرجة أنها تُحفظ في صناديق من الرصاص: فمن يرغب في رؤيتها يُعطى ملابس واقية ويُطلب منه التوقيع على إخلاء مسؤولية. الراديوم-226 له عمر نصف يبلغ 1600 سنة، لذا ستبقى الدفاتر خطيرة لمدة ألف وخمسمائة سنة أخرى."
+    },
+    "symbols": [
+      {
+        "sym": "N",
+        "latex": "N",
+        "what": "عدد النوى غير المنحلة",
+        "unit": "—",
+        "note": "يتناقص أسيًا؛ بالنسبة لنواة واحدة لا يمكن التنبؤ بشيء."
+      },
+      {
+        "sym": "lambda2",
+        "latex": "\\lambda",
+        "what": "ثابت التحلل",
+        "unit": "1/ث",
+        "note": "احتمال تحلل نواة واحدة في وحدة الزمن؛ لا يعتمد على أي عامل خارجي."
+      },
+      {
+        "sym": "T12",
+        "latex": "T_{1/2}",
+        "what": "عمر النصف",
+        "unit": "ث، سنوات",
+        "note": "الزمن الذي يتحلل فيه النصف؛ من 4.5 مليار سنة لليورانيوم-238 إلى أجزاء من الثانية."
+      },
+      {
+        "sym": "A_act",
+        "latex": "A",
+        "what": "النشاط الإشعاعي",
+        "unit": "بيكريل",
+        "note": "عدد التحللات في الثانية؛ البيكريل هو تحلّل واحد في الثانية، وهي كمية صغيرة جدًا."
+      },
+      {
+        "sym": "alpha_b",
+        "latex": "\\alpha,\\beta,\\gamma",
+        "what": "أنواع الإشعاع",
+        "unit": "—",
+        "note": "نواة الهيليوم، إلكترون، وفوتون عالي الطاقة؛ تختلف في القدرة على الاختراق آلاف المرات."
+      }
+    ],
+    "derivation": {
+      "title": "استنتاج صارم: من العشوائية إلى الدالة الأسية",
+      "lead": "سنظهر كيف ينتج من عدم القدرة على التنبؤ بنواة واحدة قانون صارم للعديد. هذا أفضل مثال على كيف تلد الإحصاء الدقة.",
+      "steps": [
+        {
+          "text": "الافتراض الوحيد: احتمال اضمحلال النواة في زمن صغير ثابت ولا يعتمد على ماضيها. النواة لا تشيخ – النواة التي عمرها ألف عام لا تختلف عن النواة المشكلة حديثًا.",
+          "latex": "P(\\text{распад за } dt) = \\lambda\\,dt",
+          "figure": "microcontact",
+          "figCaption": "غياب الذاكرة خاصية أساسية. النواة لا تتراكم لديها تعب ولا تقترب من الاضمحلال."
+        },
+        {
+          "text": "إذاً، في الزمن $dt$ سينحل جزء $\\lambda\\,dt$ من النوى الموجودة. كلما زاد عددها، زادت الاضمحلالات – وهذا يعطي معادلة تفاضلية.",
+          "latex": "dN = -\\lambda N\\,dt",
+          "figure": "secant",
+          "figCaption": "سرعة التناقص تتناسب مع الكمية الحالية – الشرط الكلاسيكي للدالة الأسية."
+        },
+        {
+          "text": "نحل بفصل المتغيرات ونحصل على القانون الأسي.",
+          "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; N(t) = N_0 e^{-\\lambda t}",
+          "figure": "curves",
+          "figCaption": "تظهر الدالة الأسية دائمًا عندما تكون سرعة التناقص متناسبة مع الكمية المتبقية."
+        },
+        {
+          "text": "من الأسهل استخدام عمر النصف – الزمن الذي يبقى فيه النصف. يرتبط بثابت الاضمحلال عبر اللوغاريتم الطبيعي للعدد 2.",
+          "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda} \\approx \\frac{0{,}693}{\\lambda}",
+          "figure": "isochron",
+          "figCaption": "في كل فترة يبقى نصف السابق: 1/2، 1/4، 1/8. لا يحدث اختفاء كامل أبدًا."
+        },
+        {
+          "text": "الآن أنواع الاضمحلال. ألفا: نواة ثقيلة تقذف حزمة من بروتونين ونيوترونين – الأكثر استقرارًا بين الخفيفة. تنخفض الشحنة بمقدار اثنين والكتلة بأربعة.",
+          "latex": "^{A}_{Z}X \\to\\; ^{A-4}_{Z-2}Y + \\alpha",
+          "figure": "action",
+          "figCaption": "جسيم ألفا ينطلق كاملاً: الحزمة مستقرة جدًا بحيث أنه من المفيد قذفها تحديدًا."
+        },
+        {
+          "text": "بيتا: نواة ذات نسبة غير مناسبة من البروتونات والنيوترونات تعيد ترتيب نفسها. يتحول النيوترون إلى بروتون مع انبعاث إلكترون ونيوترينو مضاد – تزداد الشحنة بمقدار واحد، والكتلة لا تتغير.",
+          "latex": "n \\to p + e^{-} + \\bar{\\nu}",
+          "figure": "equilibrium",
+          "figCaption": "تنتقل النواة إلى تركيبة مفيدة – نفس ما يظهره الحامل."
+        },
+        {
+          "text": "وتفسير التشتت الهائل للأعمار. جسيم ألفا لا يقفز فوق حاجز كولوم، بل يتسرب من خلاله – نفق كمي. الاحتمالية تعتمد على الطاقة بشكل أسي، لذلك فرق بضعة ميغا إلكترون فولت يعطي فرقًا في الأعمار بمقدار $10^{24}$ مرة.",
+          "latex": "P_{\\text{тунн}} \\sim e^{-2\\gamma}, \\qquad T_{1/2}: \\;10^{-7}\\ \\text{с} \\ldots 10^{17}\\ \\text{лет}",
+          "figure": "anywell",
+          "figCaption": "البولونيوم-212 يعيش ثلث ميكروثانية، الثوريوم-232 – أربعة عشر مليار سنة. الفرق فقط في الطاقة."
+        }
+      ],
+      "plate": "بالنسبة لنواة واحدة، لحظة الاضمحلال غير قابلة للتنبؤ من حيث المبدأ؛ بالنسبة للعديد، يتبع الجزء المنحل قانونًا أسيًا صارمًا لا يعتمد على أي ظروف خارجية.",
+      "note": "حدود التطبيق وتوضيح مهم. الاستقلال عن الظروف الخارجية شبه مطلق، ولكن ليس تمامًا: بالنسبة للاضمحلالات التي تتم عن طريق التقاط إلكترون من الغلاف الأقرب، تعتمد السرعة قليلاً على الحالة الكيميائية – التأثير أجزاء من المئة وقد تم قياسه. بالإضافة إلى ذلك، في الظروف القاسية في النجوم حيث تكون الذرات متأينة بالكامل، تتغير بعض الأعمار بعوامل. لجميع التطبيقات الأرضية، يمكن اعتبار القانون مطلقًا."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "لماذا تكون النتيجة دائمًا دالة أسية. كلما كانت سرعة التغير متناسبة مع الكمية الحالية، تكون الإجابة أسية – هذه هي المعادلة التفاضلية الأكثر شيوعًا في الطبيعة. هكذا ينمو رأس المال بالفائدة، هكذا يبرد الشاي، هكذا يخفت الصوت في القاعة. هنا الكمية تتناقص، لذلك الأس سالب. النتيجة العملية: الدالة الأسية لا نهاية لها. المادة المشعة لا تختفي تمامًا أبدًا – في كل فترة يبقى نصف السابق.",
+        "ماذا يعني غياب الذاكرة. النواة التي بقيت مليار سنة لديها نفس فرص الاضمحلال في الثانية التالية مثل النواة المشكلة حديثًا. هذا يختلف بشدة عن الحياة العادية: الإنسان، المصباح، والمحمل يبلى، واحتمال الفشل يزداد مع الزمن. النواة لا تبلى. اختبار مفيد للفهم: إذا انحلت خمسون نواة من مئة في ساعة، ففي الساعة التالية ستنحل خمسة وعشرون – من المتبقي.",
+        "كيف تحسب ذهنيًا باستخدام الأعمار. من الأسهل بكثير استخدام قوى العدد 2 بدلاً من الدالة الأسية. تمر فترة واحدة – يبقى النصف، فترتان – الربع، ثلاث – الثمن، عشر – حوالي واحد من الألف. من هنا قاعدة عملية: بعد عشرة أعمار نصف، ينخفض النشاط ألف مرة، وبعد عشرين – مليون مرة. لهذا السبب يتم تخزين الوقود النووي المستنفذ في أحواض: أكثر النظائر نشاطًا بأعمار أيام وأشهر تختفي بالكامل تقريبًا بعد بضع سنوات.",
+        "لماذا يعطي النفق الكمي هذا التشتت. احتمال التسرب عبر الحاجز يعتمد على ارتفاعه وعرضه بشكل أسي. لذلك تغيير صغير في طاقة جسيم ألفا – على سبيل المثال، من 4 إلى 9 مليون إلكترون فولت – يغير الأس بعشرات، والاحتمال نفسه بعامل $10^{20}$ مرة أو أكثر. من هنا قانون جيجر-ناتول: لوغاريتم عمر النصف يعتمد خطيًا على الجذر التربيعي العكسي للطاقة. الدالة الأسية تعطي دائمًا تشتتًا كبيرًا من تغييرات صغيرة."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: التأريخ بالكربون المشع",
+      "lead": "حساب عمر اكتشاف أثري — مهمة تحل في مختبرات حول العالم.",
+      "given": "في الكائن الحي، تظل نسبة الكربون-14 إلى الكربون العادي ثابتة بفضل التبادل مع الغلاف الجوي. في قطعة خشب مكتشفة، محتوى الكربون-14 يساوي 25% من المستوى الطبيعي. عمر النصف للكربون-14 هو 5730 سنة. حدد عمر الاكتشاف.",
+      "law": "$N = N_0 \\cdot 2^{-t/T_{1/2}}$",
+      "solution": [
+        {
+          "text": "نكتب الشرط: بقي الربع.",
+          "latex": "\\frac{N}{N_0} = 0{,}25 = \\frac{1}{4} = 2^{-2}"
+        },
+        {
+          "text": "إذن قد مضى دورتا عمر نصف بالضبط — لم نكن بحاجة لحساب اللوغاريتمات.",
+          "latex": "\\frac{t}{T_{1/2}} = 2"
+        },
+        {
+          "text": "نضرب في العمر النصفي.",
+          "latex": "t = 2 \\cdot 5730 = 11\\,460\\ \\text{лет}"
+        },
+        {
+          "text": "لنسبة اعتباطية كان علينا استخدام اللوغاريتم.",
+          "latex": "t = T_{1/2}\\,\\frac{\\ln(N_0/N)}{\\ln 2}"
+        }
+      ],
+      "answer": "حوالي أحد عشر ألفًا ونصف ألف سنة — نهاية العصر الجليدي الأخير.",
+      "check": "دعنا نتحقق من حدود الطريقة لأنها مهمة. بعد عشر فترات نصف، أي 57 ألف سنة، يتبقى جزء من ألف من الكربون-14 — لا يزال من الممكن قياسه لكن بهامش خطأ كبير. لذلك تعمل طريقة الكربون المشع حتى حوالي خمسين ألف سنة ولا تناسب الديناصورات: هناك تُستخدم طرق البوتاسيوم-أرغون واليورانيوم بفترات نصف تبلغ مليارات السنين. وهناك دقة: محتوى الكربون-14 في الغلاف الجوي تغير بمرور الوقت، لذلك تُعاير التواريخ باستخدام حلقات الأشجار السنوية المعروفة العمر — تم بناء مقياس علم dendrochronology بشكل مستمر لاثني عشر ألف سنة للخلف."
+    },
+    "constants": {
+      "title": "مقادير هذا القسم",
+      "lead": "فترات نصف العمر — من أجزاء الميكروثانية إلى عمر الكون.",
+      "items": [
+        {
+          "sym": "C14",
+          "latex": "T_{1/2}(^{14}\\text{C})",
+          "name": "فترة نصف العمر للكربون-14",
+          "value": "5730",
+          "unit": "سنة",
+          "why": "مفيد لعلم الآثار: يمكن مقارنته بالأزمنة التاريخية. يتكون الكربون-14 باستمرار في الغلاف الجوي من النيتروجين بفعل الأشعة الكونية، لذلك يظل محتواه في الكائن الحي ثابتًا.",
+          "mnemo": "بعد الموت يتوقف التبادل، وتبدأ الساعة. تعمل الطريقة حتى 50 ألف سنة — بعد ذلك يتبقى أقل من جزء من ألف."
+        },
+        {
+          "sym": "U238",
+          "latex": "T_{1/2}(^{238}\\text{U})",
+          "name": "فترة نصف العمر لليورانيوم-238",
+          "value": "4,5 · 10⁹",
+          "unit": "سنة",
+          "why": "يكاد أن يساوي عمر الأرض تمامًا — على مدار عمرها تحلل حوالي النصف. وبفعل نسبة اليورانيوم والرصاص تم تحديد عمر الكوكب: 4.54 مليار سنة.",
+          "mnemo": "اليورانيوم-235 الذي يُصنع منه الوقود يعيش فقط 700 مليون سنة — لذلك بقي في الطبيعة 0.7%، ويجب تخصيبه."
+        },
+        {
+          "sym": "K40",
+          "latex": "T_{1/2}(^{40}\\text{K})",
+          "name": "فترة نصف العمر للبوتاسيوم-40",
+          "value": "1,25 · 10⁹",
+          "unit": "سنة",
+          "why": "يوجد في البوتاسيوم العادي بنسبة 0.012% ولذلك موجود في كل كائن حي. داخل الإنسان يحدث حوالي 4000 تحلل للبوتاسيوم-40 في الثانية — المصدر الرئيسي للإشعاع الداخلي الطبيعي.",
+          "mnemo": "الموز مشع بشكل ملحوظ بسبب البوتاسيوم. توجد وحدة فكاهية 'المكافئ الموزي للجرعة' — حوالي 0.1 ميكروسيفرت."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين يُستخدم التحلل",
+      "lead": "الظاهرة التي اكتُشفت بالصدفة بفيلم معرض صارت أداة عمل للعديد من العلوم.",
+      "items": [
+        {
+          "h": "التأريخ",
+          "text": "الكربون-14 للأركيولوجيا حتى 50 ألف سنة، البوتاسيوم-أرغون للصخور البركانية، اليورانيوم-رصاص لأقدم المعادن. عمر الأرض البالغ 4.54 مليار سنة حُدد بهذه الطريقة — من النيازك وأقدم بلورات الزركون."
+        },
+        {
+          "h": "الطب",
+          "text": "يُحقن التكنيتيوم-99m بعمر نصف ست ساعات لتصوير الأعضاء: طويل بما يكفي للفحص وقصير بما يكفي للإخراج السريع. يستخدم العلاج الإشعاعي أشعة جاما لتدمير الأورام."
+        },
+        {
+          "h": "كاشفات الدخان",
+          "text": "في معظمها توجد حبة صغيرة من الأمريسيوم-241. جسيمات ألفا تؤين الهواء، الدخان يخل بالتيار الأيوني، فينطلق الإنذار. كمية المادة ضئيلة وآمنة."
+        },
+        {
+          "h": "الحرارة الجوفية",
+          "text": "الأرض لا تزال ساخنة داخليًا بشكل رئيسي بسبب تحلل اليورانيوم والثوريوم والبوتاسيوم-40. بدون هذا المصدر، لبرد الكوكب، وتوقفت الصفائح التكتونية، ومعهما البراكين والمجال المغناطيسي."
+        },
+        {
+          "h": "المركبات الفضائية",
+          "text": "تحلق مركبتا فوياجر لمدة خمسين عامًا على مولدات النظائر المشعة بالبلوتونيوم-238. الألواح الشمسية خلف مدار المشتري غير مجدية، والتحلل يحدث بغض النظر عن مكان وجودك."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "شيء ممتع: جرب بيديك",
+      "lead": "النشاط الإشعاعي يحوطنا باستمرار، ويمكن كشف جزء منه بوسائل منزلية.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "حاكِ الاضمحلال بالعملات المعدنية",
+          "text": "خذ مئة عملة معدنية، رتبها بحيث تكون الصورة لأعلى، وارمها جميعًا مرة واحدة. أزل تلك التي سقطت على الكتابة — فقد \"اضمحلت\". سجل الباقي وكرر مع القطع المتبقية. استمر حتى لا تبقى عملات.",
+          "answer": "الباقي سيكون تقريبًا: 100، 50، 25، 12، 6، 3، 2، 1. لقد حصلت على القانون الأسي، ولعبت الرمية الواحدة دور عمر النصف. لاحظ ظرفين: أولاً، من المستحيل التنبؤ بمصير عملة معينة، لكن سلوك المئة يمكن التنبؤ به. ثانيًا، في النهاية عندما تقل العملات، يصبح التشتت ملحوظًا — نفس الشيء يحدث مع عدد قليل من النوى، ولذلك يُقاس نشاط المصادر الضعيفة لفترة طويلة."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "نواة لا تشيخ",
+          "text": "نواة اليورانيوم موجودة منذ أربعة مليارات سنة. يبدو أنها \"بليت\" وستضمحل قريبًا. لكن في الحقيقة، فرصتها في الاضمحلال في الثانية التالية هي نفسها لنواة تكونت قبل دقيقة في مفاعل. كيف ذلك؟",
+          "answer": "النواة ليس بها عداد داخلي ولا تآكل. الاضمحلال ليس نتيجة تراكم الضرر، بل حدث كمي باحتمال ثابت لكل وحدة زمن. هذه الخاصية تسمى انعدام الذاكرة، وهي تميز النواة جذريًا عن كل ما اعتدنا عليه: البشر والمصابيح والمحامل تشيخ، أما النوى فلا. ومن هنا نتيجة مفارقة: بين اليورانيوم الموجود في الأرض لمليارات السنين، لا توجد نوى \"قديمة\" أو \"شابة\" — جميعها متساوية إحصائيًا."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "دفاتر ماري كوري تُستعار بإيصال",
+          "text": "تسجيلات مختبرها وحتى كتاب الطبخ ملوثة بالراديوم-226 الذي عمر نصفه 1600 سنة. وهي محفوظة في المكتبة الوطنية الفرنسية في أغلفة رصاصية؛ من يرغب في دراستها يُعطى ملابس واقية ويُطلب منه التوقيع على إخلاء مسؤولية. ستبقى خطرة لنحو ألف وخمسمائة سنة أخرى. كوري نفسها كانت تحمل أنابيب الاختبار في جيب معطفها وتستمتع بتوهجها — لم يكونوا يعرفون الخطر آنذاك، وكانت كريمات الراديوم تُباع في الصيدليات كمنشطات."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "عشرة أنصاف عمر — ألف مرة",
+          "text": "في كل عمر نصف يبقى النصف، إذن بعد عشرة — حوالي واحد على ألف (2¹⁰ = 1024). بعد عشرين عمر نصف — جزء من مليون. من هنا قاعدة عملية للتعامل مع النفايات المشعة: النظائر ذات عمر نصف أشهر تصبح آمنة بعد بضع سنوات، والتي عمرها آلاف السنين تتطلب دفنًا."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "النشاط الإشعاعي داخل جسمك",
+          "text": "في جسم الإنسان حوالي 140 غرامًا من البوتاسيوم، 0.012% منها بوتاسيوم-40. وهذا يعطي حوالي 4000 اضمحلال في الثانية. بالإضافة إلى الكربون-14 — حوالي 3000 أخرى. المجموع نحو 7000 اضمحلال في الثانية داخل كل منا، باستمرار. خلفية طبيعية تكيفت معها الحياة لمليارات السنين."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "حدود التأريخ",
+          "text": "كل طريقة تعمل في محيط عمر النصف الخاص بها. الكربون-14 يصلح حتى 50 ألف سنة، بعد ذلك يبقى أقل من جزء من الألف وتفقد الدقة. للملايين والمليارات من السنين يُستخدم البوتاسيوم-أرجون واليورانيوم-رصاص. ودائمًا نحتاج معايرة: محتوى الكربون-14 في الغلاف الجوي تغير، لذلك تُقارن التواريخ بحلقات الأشجار السنوية."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمتطلعين: كيف أنقذ النيوترينو قانون حفظ الطاقة",
+      "lead": "ليس ضمن الاختبار. عن جسيم ابتُكر من اليأس ووُجد بعد ستة وعشرين عامًا.",
+      "blocks": [
+        {
+          "h": "المشكلة",
+          "text": "في اضمحلال ألفا، للجسيمات المنبعثة طاقة محددة بدقة — كما ينبغي إذا انشطرت النواة إلى جزئين. أما في اضمحلال بيتا، فطاقة الإلكترونات كانت موزعة من الصفر إلى حد معين. بدا أن جزءًا من الطاقة يختفي دون أثر."
+        },
+        {
+          "h": "اقتراح يائس",
+          "text": "بور اعتبر جدياً أن قانون حفظ الطاقة قد لا ينطبق في العالم الصغري. باولي في 1930 اقترح مخرجًا آخر: ليخرج مع الإلكترون جسيم آخر، متعادل ولا يمكن كشفه تقريبًا، يحمل الطاقة المفقودة. في رسالة لزملائه وصف هذا بأنه وسيلة يائسة، وأضاف أن فيزيائيًا نظريًا لا ينبغي أن يقترح ما لا يمكن اختباره — وقد فعل ذلك."
+        },
+        {
+          "h": "البحث",
+          "text": "النيوترينو يتفاعل مع المادة بضعف شديد لدرجة أنه يخترق الأرض بحرية. أمكن كشفه فقط في 1956، بوضع كاشف عند مفاعل نووي — مصدر ذو تيار هائل. أرسل رينس وكوان برقية لباولي؛ فرد بأنه يعرف كيف ينتظر."
+        },
+        {
+          "h": "ما أتى به",
+          "text": "اليوم النيوترينو أداة عمل. به نراقب العمليات في مركز الشمس، حيث لا يخترق الضوء: يحتاج الفوتون آلاف السنين ليخرج، بينما النيوترينو يغادر فورًا. في 1987، التقطت نيوترينوات من انفجار مستعر أعظم — قبل ثلاث ساعات من رؤيته بالتلسكوبات. جسيم ابتُكر لإنقاذ قانون الحفظ أصبح وسيلة للنظر إلى حيث لا يصل الضوء."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "لحظة اضمحلال نواة فردية غير قابلة للتنبؤ جوهريًا، لكن نسبة المنحل في زمن معين محددة بدقة — ومن هنا القانون الأسي والساعات الموثوقة.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$N = N_0 2^{-t/T_{1/2}}$",
+          "text": "بعد كل عمر نصف يبقى النصف"
+        },
+        {
+          "icon": "formula",
+          "title": "النواة لا تشيخ",
+          "text": "احتمال الاضمحلال لا يعتمد على الزمن المنقضي"
+        },
+        {
+          "icon": "sigma",
+          "title": "عمر النصف لا يعتمد",
+          "text": "عمر النصف لا يعتمد على درجة الحرارة أو الضغط أو الحالة الكيميائية"
+        },
+        {
+          "icon": "ruler",
+          "title": "ألفا",
+          "text": "انبعاث نواة هيليوم، بيتا — تحول نيوترون إلى بروتون"
+        },
+        {
+          "icon": "scale",
+          "title": "تشتت أعمار النصف بمقدار",
+          "text": "تشتت أعمار النصف بمقدار $10^{24}$ مرة يفسر بالاعتماد الأسي للنفق على الطاقة"
+        }
+      ],
+      "where": "التأريخ بالكربون المشع، تحديد عمر الأرض، التشخيص الطبي، كاشفات الدخان، مولدات الطاقة للمركبات الفضائية.",
+      "watchOut": "بعد عشرة أعمار نصف ينخفض النشاط ألف مرة، لكنه لا يصل أبدًا إلى الصفر — الأس ليس له نهاية."
+    },
+    "quiz": [
+      {
+        "id": "d1",
+        "type": "mcq",
+        "q": "نواة اليورانيوم موجودة منذ أربعة مليارات سنة. ما هي احتمالات اضمحلالها في الثانية القادمة مقارنة بنواة تشكلت حديثًا؟",
+        "options": [
+          "أعلى بكثير — إنها \"بالية\"",
+          "أقل — النوى المستقرة تبقى، غير المستقرة اضمحلت بالفعل",
+          "نفس الاحتمال تمامًا: النواة لا تشيخ، احتمال الاضمحلال لا يعتمد على الزمن المنقضي",
+          "يعتمد على المادة التي توجد فيها"
+        ],
+        "answer": 2,
+        "why": "الاضمحلال حدث كمومي باحتمال ثابت لكل وحدة زمنية، وليس نتيجة تراكم الضرر. هذه الخاصية تُسمى غياب الذاكرة، وتميز النوى عن الأشياء البالية. بين اليورانيوم في القشرة الأرضية لا توجد نوى \"قديمة\" و\"شابة\".",
+        "hint": "هل للنواة عداد داخلي أو آلية تآكل؟ ما الذي يسبب الاضمحلال بالضبط؟"
+      },
+      {
+        "id": "d2",
+        "type": "mcq",
+        "q": "بعد كم عمر نصف ينخفض نشاط العينة بحوالي ألف مرة؟",
+        "options": [
+          "بعد 100",
+          "بعد 500",
+          "بعد 10، لأن 2¹⁰ = 1024",
+          "بعد 1000"
+        ],
+        "answer": 2,
+        "why": "كل عمر نصف يبقى النصف، لذا بعد عشرة أعمار نصف يبقى جزء من 1024. من هنا القاعدة العملية للتعامل مع النفايات: النظائر ذات أعمار نصف شهرية تصبح آمنة بعد بضع سنوات، بينما تلك ذات أعمار نصف آلاف السنين تتطلب دفنًا طويل الأمد.",
+        "hint": "كل عمر نصف يقلل الكمية إلى النصف. أي قوة للعدد 2 قريبة من الألف؟"
+      },
+      {
+        "id": "d3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: كيف ينتج قانون دقيق للعينة من سلوك عشوائي تمامًا للنوى الفردية؟",
+        "keywords": [
+          "كثير",
+          "إحصاء",
+          "متوسط",
+          "نسبة",
+          "عدد كبير",
+          "احتمال",
+          "قابل للتنبؤ",
+          "مليار"
+        ],
+        "needed": 2,
+        "why": "بالنسبة لنواة واحدة، لحظة الاضمحلال غير قابلة للتنبؤ، لكن احتمال الاضمحلال لكل وحدة زمنية هو نفسه للجميع. في عينة تحتوي على حوالي $10^{20}$ نواة، وبموجب قانون الأعداد الكبيرة، تكون نسبة النوى المضمحلة محددة بدقة مع تباين نسبي في حدود واحد على الجذر التربيعي للعدد. هذا بالضبط ما ناقشناه في موضوع الإنتروبيا: إحصاء الأعداد الكبيرة يحول العشوائية إلى قانون.",
+        "hint": "تذكر تجربة العملات المعدنية. هل يمكنك توقع وجه عملة واحدة؟ وماذا عن نسبة الصور من مئة رمية؟"
+      },
+      {
+        "id": "d4",
+        "type": "estimate",
+        "q": "في عينة خشب، بقي 12.5% من محتوى الكربون-14 الأصلي. عمر النصف = 5730 سنة. كم عمر العينة بآلاف السنين؟",
+        "answer": 17.2,
+        "unit": "ألف سنة",
+        "tolerance": 2,
+        "why": "12.5% هي ثمن، أي 2⁻³، إذن مضى ثلاثة أعمار نصف: 3 × 5730 ≈ 17200 سنة. هذا العمر يتوافق مع ذروة العصر الجليدي الأخير. لا حاجة للوغاريتمات: النسب التي هي قوى للعدد اثنين تحسب ذهنيًا.",
+        "hint": "أي قوة للعدد 2 تساوي الثمن؟ هذا العدد من الأعمار نصف قد مضى."
+      }
+    ]
+  },
+  "tags": [
+    "carbon",
+    "neutrino",
+    "gamma_radiation"
+  ],
+  "laws": [
+    "law_of_conservation_of_energy"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.15020",
+      "why": "совпадение по теме: neutrino"
+    },
+    {
+      "id": "2607.14853",
+      "why": "совпадение по теме: carbon"
+    },
+    {
+      "id": "2607.14404",
+      "why": "совпадение по теме: carbon"
+    }
+  ]
+}

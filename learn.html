@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дерево знаний — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<style>
+  /* Та же палитра, что в курсе: тёплая бумага, Charter/Futura, тонкие линии */
+  :root{
+    --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C;
+    --font-display:'Futura','Century Gothic','Futura PT','Segoe UI Semibold','Segoe UI',sans-serif;
+    --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+    --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  }
+  :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{max-width:1000px;margin:0 auto;padding:24px 16px 70px;background:var(--paper);color:var(--ink);
+    font-family:var(--font-body);font-size:18px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--ink-soft);text-decoration:none}
+  .logo:hover{color:var(--steel)}
+  .theme-toggle{background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+  h1{font-family:var(--font-display);font-weight:700;font-size:2.3rem;line-height:1.12;margin-bottom:.2em}
+  .t-sub{font-family:var(--font-display);font-size:14px;color:var(--ink-soft);margin-bottom:14px}
+  .t-lead{max-width:680px;font-size:1.04rem;line-height:1.7;color:var(--ink-soft);margin-bottom:26px}
+
+  /* сводка прогресса */
+  .t-total{display:flex;flex-wrap:wrap;gap:22px;align-items:baseline;padding:14px 0;margin-bottom:8px;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-family:var(--font-display);font-size:13px}
+  .t-total b{font-size:1.5rem;color:var(--ink);margin-right:5px}
+  .t-total .lbl{color:var(--ink-soft)}
+  .t-total .stars{color:var(--brass)}
+
+  /* блок = ярус дерева */
+  .t-block{margin:34px 0 0;position:relative}
+  .t-block-h{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin-bottom:16px;
+    border-bottom:1px solid var(--rule)}
+  .t-block-n{font-family:var(--font-mono);font-size:.8rem;color:var(--brass);letter-spacing:.1em}
+  .t-block-t{font-family:var(--font-display);font-size:1.25rem;font-weight:700}
+  .t-block-s{font-size:.88rem;color:var(--ink-soft);margin-left:auto}
+
+  .t-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px}
+
+  /* тема-узел */
+  .t-node{display:block;padding:14px 15px;text-decoration:none;color:inherit;position:relative;
+    border:1px solid var(--rule);background:var(--paper-raised);transition:all .16s}
+  .t-node:hover{border-color:var(--steel);transform:translateY(-2px)}
+  .t-node.locked{opacity:.5;background:none;cursor:default}
+  .t-node.locked:hover{border-color:var(--rule);transform:none}
+  .t-node.ready{border-left:3px solid var(--moss)}
+  .t-node.partial{border-left:3px solid var(--brass)}
+  .t-n{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-soft)}
+  .t-t{font-family:var(--font-display);font-size:1.02rem;font-weight:700;margin:4px 0 3px;line-height:1.25}
+  .t-s{font-size:.82rem;color:var(--ink-soft);line-height:1.45}
+  .t-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;
+    padding-top:8px;border-top:1px solid var(--rule);font-family:var(--font-display);font-size:.72rem}
+  .t-stars{letter-spacing:1px}
+  .t-star{color:var(--rule);font-size:11px}
+  .t-star.on{color:var(--brass)}
+  .t-state{color:var(--ink-soft);text-transform:uppercase;letter-spacing:.07em}
+  .t-state.ready{color:var(--moss)}
+  .t-state.partial{color:var(--brass)}
+  .t-needs{font-size:.72rem;color:var(--ink-soft);margin-top:6px;font-family:var(--font-display)}
+  .t-key{display:inline-block;font-family:var(--font-display);font-size:.58rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--paper);background:var(--brass);padding:1px 5px;
+    vertical-align:middle;margin-left:7px;border-radius:2px}
+  /* край известного — то, что в теме до сих пор не решено */
+  .t-open{font-size:.75rem;line-height:1.45;color:var(--ink-soft);margin-top:8px;padding-top:7px;
+    border-top:1px dashed var(--rule);font-family:var(--font-display)}
+  .t-open-l{color:var(--brass);text-transform:uppercase;letter-spacing:.07em;font-size:.62rem}
+
+  /* сквозные нити */
+  .t-threads{margin:44px 0 0;padding-top:20px;border-top:2px solid var(--ink)}
+  .t-threads h2{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:6px}
+  .t-threads-lead{font-size:.94rem;color:var(--ink-soft);margin-bottom:16px;max-width:680px}
+  .t-thread{padding:12px 0;border-top:1px solid var(--rule)}
+  .t-thread-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .t-thread-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
+  .t-thread-path{font-family:var(--font-mono);font-size:.76rem;color:var(--steel)}
+  .t-thread-note{font-size:.88rem;color:var(--ink-soft);line-height:1.6;margin-top:3px}
+  /* открытые вопросы — сквозной слой поверх всего курса */
+  .t-frontier{display:block;margin:34px 0 0;padding:18px 20px;text-decoration:none;color:inherit;
+    background:var(--paper-raised);border:1px solid var(--rule);border-left:3px solid var(--brass);
+    transition:all .16s}
+  .t-frontier:hover{border-color:var(--steel);border-left-color:var(--brass);transform:translateY(-2px)}
+  .t-frontier-h{font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:5px;
+    display:flex;align-items:center;gap:8px}
+  .t-frontier-s{font-size:.9rem;color:var(--ink-soft);line-height:1.55;max-width:700px}
+  /* обзорные лекции */
+  .t-lect{margin:40px 0 0;padding-top:20px;border-top:2px solid var(--ink)}
+  .t-lect h2{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:6px;
+    display:flex;align-items:center;gap:8px}
+  .t-lect-lead{font-size:.94rem;color:var(--ink-soft);margin-bottom:16px;max-width:680px}
+  .t-lect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+  .t-lect-item{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;text-decoration:none;
+    color:inherit;border:1px solid var(--rule);background:var(--paper-raised);transition:all .16s}
+  .t-lect-item:hover{border-color:var(--steel);transform:translateY(-2px)}
+  .t-lect-item .n{font-family:var(--font-mono);font-size:.8rem;color:var(--brass);padding-top:2px}
+  .t-lect-item .b{display:block;min-width:0}
+  .t-lect-item b{display:block;font-family:var(--font-display);font-size:.95rem;line-height:1.25}
+  .t-lect-item i{display:block;font-style:normal;font-size:.8rem;color:var(--ink-soft);
+    line-height:1.4;margin-top:2px}
+  .t-note{max-width:680px;font-size:.8rem;color:var(--ink-soft);margin-top:34px;line-height:1.6;
+    padding-top:14px;border-top:1px solid var(--rule)}
+</style>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<div id="root"></div>
+
+<script src="/js/icons.js?v=2"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru', root = document.getElementById('root');
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function ic(n, s) { return (window.B42Icons && B42Icons[n]) ? B42Icons[n](s || 14) : ''; }
+
+  // Прогресс каждой темы берётся из того же хранилища, что пишет курс
+  function progressOf(topicId) {
+    try {
+      var p = JSON.parse(localStorage.getItem('b42_progress_' + topicId) || '{}');
+      var ids = Object.keys(p);
+      if (!ids.length) return null;
+      var stars = 0;
+      ids.forEach(function (k) {
+        var s = p[k], pc = 100 * s.right / s.total;
+        stars += pc >= 90 ? 3 : (pc >= 65 ? 2 : 1);
+      });
+      return { done: ids.length, stars: stars };
+    } catch (e) { return null; }
+  }
+
+  fetch('/data/theory/courses/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
+    var C = d[LANG] || d.ru, byId = {};
+    // темы на языке читателя: заголовки и открытые вопросы лежат в языковых ветках
+    if (C.topics) d.topics = C.topics;
+    d.topics.forEach(function (t) { byId[t.id] = t; });
+
+    document.title = C.title + ' — bridge42worlds';
+    root.appendChild(el('h1', null, C.title));
+    root.appendChild(el('div', 't-sub', C.subtitle));
+    root.appendChild(el('p', 't-lead', C.lead));
+
+    // сводка: сколько тем открыто, сколько звёзд собрано
+    var totalStars = 0, startedTopics = 0, readyTopics = 0;
+    d.topics.forEach(function (t) {
+      if (t.status === 'ready') readyTopics++;
+      var pr = progressOf(t.id);
+      if (pr) { startedTopics++; totalStars += pr.stars; }
+    });
+    var tot = el('div', 't-total');
+    tot.innerHTML =
+      '<span><b>' + readyTopics + '</b><span class="lbl">тем открыто из ' + d.topics.length + '</span></span>' +
+      '<span><b>' + startedTopics + '</b><span class="lbl">начато вами</span></span>' +
+      '<span class="stars"><b>★ ' + totalStars + '</b><span class="lbl">звёзд собрано</span></span>';
+    root.appendChild(tot);
+
+    // ярусы дерева
+    C.blocks.forEach(function (b) {
+      var sec = el('div', 't-block');
+      var h = el('div', 't-block-h');
+      h.innerHTML = '<span class="t-block-n">' + b.id + '</span>' +
+        '<span class="t-block-t">' + b.title + '</span>' +
+        '<span class="t-block-s">' + b.sub + '</span>';
+      sec.appendChild(h);
+
+      var grid = el('div', 't-grid');
+      d.topics.filter(function (t) { return t.block === b.id; }).forEach(function (t) {
+        var open = t.status === 'ready' || t.status === 'partial';
+        var node = el(open ? 'a' : 'div', 't-node ' + t.status + (open ? '' : ' locked'));
+        if (open) node.href = '/course.html?t=' + t.id;
+
+        var pr = progressOf(t.id);
+        var starStr = '';
+        if (pr) for (var i = 0; i < 9; i += 3) starStr += '';   // компактно: показываем сумму ниже
+        node.appendChild(el('div', 't-n', t.n ? 'Тема ' + t.n : 'Введение'));
+        node.appendChild(el('div', 't-t', t.title + (t.key ? '<span class="t-key">ключевая</span>' : '')));
+        node.appendChild(el('div', 't-s', t.sub));
+
+        // край известного: что в этой теме до сих пор не решено
+        if (t.open) {
+          node.appendChild(el('div', 't-open',
+            '<span class="t-open-l">' + (C.openLabel || 'не решено') + '</span> ' + t.open));
+        }
+
+        // что нужно пройти раньше
+        if (t.needs && t.needs.length) {
+          var names = t.needs.map(function (n) { return byId[n] ? byId[n].title : n; }).join(' · ');
+          node.appendChild(el('div', 't-needs', ic('scale', 11) + ' опирается на: ' + names));
+        }
+
+        var foot = el('div', 't-foot');
+        var stateTxt = t.status === 'ready' ? 'готова' : (t.status === 'partial' ? 'в работе' : 'скоро');
+        foot.innerHTML = '<span class="t-state ' + t.status + '">' + stateTxt + '</span>' +
+          (pr ? '<span class="t-stars"><span class="t-star on">★</span> ' + pr.stars + '</span>'
+              : '<span class="t-stars"><span class="t-star">★</span></span>');
+        node.appendChild(foot);
+        grid.appendChild(node);
+      });
+      sec.appendChild(grid);
+      root.appendChild(sec);
+    });
+
+    // сквозные нити — то, ради чего это курс, а не набор тем
+    var th = el('div', 't-threads');
+    th.appendChild(el('h2', null, ic('lamp') + ' Сквозные нити'));
+    th.appendChild(el('div', 't-threads-lead',
+      'Четыре идеи проходят через весь курс. Встретив каждую заново, вы увидите её с другой стороны — и в этом смысл порядка тем.'));
+    C.threads.forEach(function (t) {
+      var row = el('div', 't-thread');
+      var path = t.path.map(function (id) { return byId[id] ? byId[id].title : id; }).join(' → ');
+      row.innerHTML = '<div class="t-thread-h"><span class="t-thread-n">' + t.name + '</span>' +
+        '<span class="t-thread-path">' + path + '</span></div>' +
+        '<div class="t-thread-note">' + t.note + '</div>';
+      th.appendChild(row);
+    });
+    root.appendChild(th);
+
+    // пятая нить, идущая поверх всех тем: то, чего физика не знает
+    var fr = el('a', 't-frontier');
+    fr.href = '/frontier.html';
+    fr.innerHTML = '<div class="t-frontier-h">' + ic('lamp', 15) + ' Открытые вопросы</div>' +
+      '<div class="t-frontier-s">Физика не закончена. Что такое время, почему растёт энтропия, ' +
+      'как соединить гравитацию с квантами — и почему фазовое пространство оказывается языком ' +
+      'для всего этого сразу. Читать можно в любой момент курса.</div>';
+    root.appendChild(fr);
+
+    // цикл обзорных лекций — то, что не укладывается в формат параграфа со стендом
+    fetch('/data/theory/lectures/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (lx) {
+      var sec = el('div', 't-lect');
+      var LX = lx[LANG] || lx.ru;
+      sec.appendChild(el('h2', null, ic('book', 15) + ' ' + LX.title));
+      sec.appendChild(el('div', 't-lect-lead', LX.lead));
+      var grid = el('div', 't-lect-grid');
+      (LX.lectures || lx.lectures).forEach(function (l, i) {
+        var a = el('a', 't-lect-item');
+        a.href = '/lecture.html?l=' + l.id;
+        a.innerHTML = '<span class="n">' + (i + 1) + '</span>' +
+          '<span class="b"><b>' + l.title + '</b><i>' + l.sub + '</i></span>';
+        grid.appendChild(a);
+      });
+      sec.appendChild(grid);
+      // вставляем перед примечанием внизу страницы
+      root.insertBefore(sec, root.querySelector('.t-note'));
+    }).catch(function () { /* лекции необязательны — дерево работает и без них */ });
+
+    // Справочные материалы: их читают не по порядку, а когда понадобилось, поэтому они стоят
+    // отдельным блоком, а не внутри дерева тем.
+    var REF = {
+      ru: { h: 'Справочные материалы', s: 'Читаются в любом порядке и в любой момент курса',
+            d: ['Ретроспектива открытий', 'Кто и как узнал — и во что это превратилось в быту'],
+            r: ['Справочник', 'Формулы курса, константы с единицами и сквозные принципы'],
+            m: ['Математика на пальцах', 'Производные, поля, тензоры — с физическим смыслом'],
+            y: ['Смелые гипотезы', 'Тридцать «а что если» — с разбором, чем каждое можно опровергнуть'] },
+      en: { h: 'Reference materials', s: 'Read them in any order, at any point in the course',
+            d: ['Retrospective of discoveries', 'Who found out what — and what it became at home'],
+            r: ['Reference', 'Course formulas, constants with units, cross-cutting principles'],
+            m: ['Maths made plain', 'Derivatives, fields, tensors — with their physical meaning'],
+            y: ['Bold hypotheses', 'Thirty «what if» ideas — and what would refute each'] },
+      es: { h: 'Materiales de referencia', s: 'Se leen en cualquier orden y momento del curso',
+            d: ['Retrospectiva de descubrimientos', 'Quién descubrió qué y en qué se convirtió en casa'],
+            r: ['Referencia', 'Fórmulas del curso, constantes con unidades y principios transversales'],
+            m: ['Matemáticas sencillas', 'Derivadas, campos, tensores: con su sentido físico'],
+            y: ['Hipótesis audaces', 'Treinta «qué pasaría si» y qué refutaría cada una'] },
+      ar: { h: 'مواد مرجعية', s: 'تُقرأ بأي ترتيب وفي أي وقت من المقرر',
+            d: ['استعراض الاكتشافات', 'من اكتشف ماذا — وفيمَ تحوّل ذلك في بيوتنا'],
+            r: ['المرجع', 'صيغ المقرر والثوابت بوحداتها والمبادئ الجامعة'],
+            m: ['الرياضيات ببساطة', 'المشتقات والمجالات والموتّرات — بمعناها الفيزيائي'],
+            y: ['فرضيات جريئة', 'ثلاثون «ماذا لو» — وما الذي يدحض كلاً منها'] }
+    }[LANG] || {};
+    var rf = el('div', 't-lect');
+    rf.appendChild(el('h2', null, ic('book', 15) + ' ' + REF.h));
+    rf.appendChild(el('div', 't-lect-lead', REF.s));
+    var rg = el('div', 't-lect-grid');
+    [['/discoveries.html', REF.d], ['/reference.html', REF.r], ['/mathkit.html', REF.m],
+     ['/hypotheses.html', REF.y]]
+      .forEach(function (pair, i) {
+        var a = el('a', 't-lect-item');
+        a.href = pair[0] + '?lang=' + LANG;
+        a.innerHTML = '<span class="n">' + (i + 1) + '</span>' +
+          '<span class="b"><b>' + pair[1][0] + '</b><i>' + pair[1][1] + '</i></span>';
+        rg.appendChild(a);
+      });
+    rf.appendChild(rg);
+    root.appendChild(rf);
+
+    root.appendChild(el('div', 't-note',
+      'Темы открываются по мере готовности материала. Звёзды начисляются за качество прохождения ' +
+      'проверок внутри параграфов: три — если ответили почти без ошибок, одна — за зачёт. ' +
+      'Прогресс хранится в вашем браузере.'));
+  }).catch(function (e) {
+    root.appendChild(el('h1', null, 'Не удалось загрузить дерево'));
+    root.appendChild(el('p', null, String(e)));
+  });
+})();
+</script>
+
+<script>
+// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.querySelector('.top-bar, .topnav');
+  if (!bar || document.getElementById('course-langs')) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'langs'; wrap.id = 'course-langs';
+  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+    var a = document.createElement('a');
+    a.href = '?lang=' + l;
+    a.textContent = l.toUpperCase();
+    if (l === window.B42_LANG) a.className = 'active';
+    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
+    wrap.appendChild(a);
+  });
+  bar.appendChild(wrap);
+});
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+</body>
+</html>

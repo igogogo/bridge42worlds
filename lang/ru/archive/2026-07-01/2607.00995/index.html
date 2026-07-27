@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гены говорят на разных языках — нейросеть нашла общий — bridge42worlds</title>
+    <meta name="description" content="У одного пациента измеряют воспалительный маркер, ставят диагноз, определяют подтип опухоли. Обычные методы машинного обучения пасуют перед такой разнотипностью: ошибки в числах и в диагнозе не складываются. Исследователи из Китая и США нашли элегантное решение — перевести все данные на общий язык п">
+    <meta property="og:title" content="Гены говорят на разных языках — нейросеть нашла общий">
+    <meta property="og:description" content="Ранговый критерий превращает разнотипные биомедицинские данные в универсальный язык порядка, избавляя от ручной настройки весов.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00995/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00995/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00995/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00995/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Гены говорят на разных языках — нейросеть нашла общий", "description": "Ранговый критерий превращает разнотипные биомедицинские данные в универсальный язык порядка, избавляя от ручной настройки весов.", "inLanguage": "ru", "datePublished": "2026-07-01", "url": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/ai.webp", "author": [{"@type": "Person", "name": "Huichao Li"}, {"@type": "Person", "name": "Tong Wang"}, {"@type": "Person", "name": "Sanguo Zhang"}, {"@type": "Person", "name": "Shuangge Ma"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.00995", "abstract": "В разных лабораториях уровни экспрессии генов измеряют по-своему: цифры разнятся, но порядок здоровых и больных сохраняется. Традиционные многозадачные подходы требуют точного совпадения шкал откликов, что редко достижимо. Предложен метод, работающий с неизвестными монотонными искажениями: для каждой задачи допускается своё неубывающее преобразование. В высокомерной постановке (признаков много больше, чем наблюдений) предполагается, что лишь малая доля генов важна для всех задач. Оптимизация сглаженного рангового критерия с групповым Lasso (обнуляет целые группы коэффициентов) выполняется общей нейросетью с одним первым слоем. Теоретически получены неасимптотические оценки избыточного риска и доказана состоятельность отбора. Эксперименты на модельных и реальных данных (экспрессия генов, непрерывные и бинарные исходы) подтвердили конкурентоспособное качество прогнозов и биологическую значимость общих предикторов. Так, не калибруя приборы, метод находит общие закономерности."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ru/archive/2026-07-01/2607.00995/mini.html" data-label="Мини" title="Мини — Суть за 10 секунд"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ru/archive/2026-07-01/2607.00995/simple.html" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/ru/archive/2026-07-01/2607.00995/index.html" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ru/archive/2026-07-01/2607.00995/advanced.html" data-label="Подробно" title="Подробно — С формулами и историей открытия"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Следующая статья →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>Я автор</h3>
+        <p>Вы один из авторов этой статьи? Напишите нам с рабочей или университетской почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к редактированию этой страницы.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.00995">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ наверх</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Граф</a></li><li><a href="#feedback">Отклик</a></li><li><a href="#related">Похожие статьи</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/ru/archive/2026-07-01/2607.00995/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">Просто</span></a><a class="lv-btn active" data-version="popular" href="/lang/ru/archive/2026-07-01/2607.00995/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">Популярно</span></a><a class="lv-btn" data-version="advanced" href="/lang/ru/archive/2026-07-01/2607.00995/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">Подробно</span></a></div>
+        <div class="mini-head"><div class="mini-head-l">коротко · 20 секунд</div><p>Медицинские карты содержат разнородные данные: уровень белка (число), диагноз (да/нет), подтип опухоли (категория). Обычным программам сложно их объединить, потому что ошибки несопоставимы. Новая программа учится не на точных значениях, а на их порядке — у кого показатель выше или ниже. Сначала она просеивает сотни генов, оставляя только важные общие, а затем предсказывает результат в баллах, сравнивая пациентов между собой. Это избавляет от ручной настройки весов и резко повышает точность. На данных 234 больных раком лёгкого метод улучшил диагностику с 95 до 97%. В пересчёте на тысячу — спасено 17 жизней. Отобранные гены (Scd1, E2F1, RPLP2) подтверждают: порядок вскрывает истинные биологические механизмы, связывающие иммунитет и рак.</p></div>
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Гены говорят на разных языках — нейросеть нашла общий <span class="refine-badge" title="Отшлифовано редактором">✦</span> </h1>
+            <button class="share-btn share-inline" title="Поделиться" onclick="shareArticle('Гены говорят на разных языках — нейросеть нашла общий','https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00995/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Deep Multitask Learning for Mixed-Type Outcomes with Shared Sparsity"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">Я автор</button> · <a href="/lang/en/authors/Huichao_Li.html" class="text-author-link" data-author="Huichao Li">Huichao Li</a>, <a href="/lang/en/authors/Tong_Wang.html" class="text-author-link" data-author="Tong Wang">Tong Wang</a>, <a href="/lang/en/authors/Sanguo_Zhang.html" class="text-author-link" data-author="Sanguo Zhang">Sanguo Zhang</a>, <a href="/lang/en/authors/Shuangge_Ma.html" class="text-author-link" data-author="Shuangge Ma">Shuangge Ma</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.00995" target="_blank" rel="noopener">2607.00995</a> · 2026-07-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/" target="_blank" rel="noopener">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 2 мин</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/ru/sections/stat_ML.html" data-cat="stat.ML" title="Машинное обучение со статистической или теоретической основой: обучение с учителем, без учителя, частичное обучение, графические модели, обучение с подкреплением, бандиты, вывод в высоких размерностях.">Статистическое машинное обучение</a> <a class="cat-badge" href="/lang/ru/sections/cs_LG.html" data-cat="cs.LG" title="Исследования по машинному обучению: обучение с учителем, без учителя, обучение с подкреплением, задачи о бандитах и смежные темы.">Машинное обучение</a></div>
+        <div class="oneliner">Ранговый критерий превращает разнотипные биомедицинские данные в универсальный язык порядка, избавляя от ручной настройки весов.</div>
+        <div class="mosaic"><div class="gallery" data-count="1"><div class="gallery-stage"><a class="gallery-main" href="/lang/ru/archive/2026-07-01/2607.00995/ai.webp" aria-label="Open image"><img class="gallery-main-img" src="/lang/ru/archive/2026-07-01/2607.00995/ai.webp" alt=""></a><figcaption class="gallery-caption" style="display:none"></figcaption></div></div></div>
+        <div class="abstract-lead"><div class="abstract-label">Аннотация</div><p>Два врача записывают температуру: один в Цельсиях, другой в Фаренгейтах. Числа разные, но порядок пациентов от лёгких до тяжёлых одинаков. Так и метод: он сравнивает не сами значения, а ранги. Общая нейросеть с групповым штрафом (group-Lasso) выделяет гены, важные для всех задач, отсеивая шум. Теория подтверждает надёжность такого отбора. Тесты на реальных генетических данных с разнотипными исходами (время до события, диагноз) показали более точные предсказания и гены, понятные биологам. Как порядок в разных градусниках, метод выявляет общие важные гены.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:first_law_of_thermodynamics,l:vlasov_equation,l:price_equation,s:Rudolf Clausius,s:James Clerk Maxwell,s:Ludwig Boltzmann,s:Andrey Markov,t:machine_learning"><canvas id="minigraph"></canvas></div>
+        <p>60 мышей, 1980 образцов, 234 пациента с раком лёгкого. За каждым числом — тысячи генов. Их активность измеряют, чтобы понять болезнь. Но данные не однородны: у одного больного оценивают уровень белка (непрерывное число), ставят диагноз (да/нет) и определяют подтип опухоли (категория). Смешать их в одной модели — как сложить градусы Цельсия и километры. Специалисты по <a href="/lang/ru/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">машинному обучению</a> вручную подбирают веса ошибок для каждой задачи. Без общего языка договориться о важности невозможно — результат зависит от случая.</p><p>Авторы работы предложили отказаться от абсолютных шкал и перейти на общий язык порядка. Вот как это работает. Модель, словно переводчик, не вглядывается в точные цифры. Она улавливает иерархию — кто выше, кто ниже. Она учится ранжировать пациентов: у кого маркер больше, какая опухоль агрессивнее. Такой подход инвариантен к монотонным преобразованиям. Это операции, меняющие числа, но не порядок — например, логарифмирование. На практике жёсткое правило «больше/меньше» заменяют гладкой сигмоидой. Так оптимизация идёт плавно.</p><div class="callout">Корни метода уходят к работе Хана 1987 года о максимальной ранговой корреляции. А трюк со сглаженной сигмоидой позаимствован из статьи Сонга 2007 года — тогда для простой регрессии, а теперь для многозадачных нейросетей.</div><p>Нейросеть устроена просто. Общий первый слой просеивает сотни <a href="/lang/ru/tags/gene.html" class="text-tag" data-tag="gene">генов</a> и оставляет только универсальных игроков. Групповой штраф (метод отбора признаков, обнуляющий все параметры для неинформативного признака) убирает шум. Затем для каждой задачи — свои слои, выдающие предсказания в условных баллах порядка. Эксперименты в <a href="/lang/ru/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">численном моделировании</a> и на реальных <a href="/lang/ru/tags/bioinformatics.html" class="text-tag" data-tag="bioinformatics">биоинформатических</a> данных показали: метод обходит динамическое взвешивание, GradNorm и одиночные сети.</p><div class="callout">На выборке рака лёгких из 234 пациентов точность диагноза выросла с 0.951 до 0.968. Казалось бы, всего 1.7%, но в пересчёте на тысячу больных это около 17 спасённых от ошибочного диагноза.</div><p>Отобранные гены оказались не случайными. Scd1 управляет липидным <a href="/lang/ru/tags/metabolism.html" class="text-tag" data-tag="metabolism">метаболизмом</a>. E2F1 — фактор транскрипции при раке груди. RPLP2 — маркер аденокарциномы лёгкого. Общий язык порядка не просто повышает точность. Он переводит разрозненные показатели в единый биологический нарратив, связывающий <a href="/lang/ru/tags/immunity.html" class="text-tag" data-tag="immunity">иммунитет</a> и онкогенез. Каждый тип данных перестаёт быть изолированным наречием. Те 60 мышей, 1980 образцов и 234 пациента теперь не просто статистика — их <a href="/lang/ru/tags/genomics.html" class="text-tag" data-tag="genomics">геномы</a>, профили <a href="/lang/ru/tags/rna.html" class="text-tag" data-tag="rna">РНК</a> и диагнозы заговорили на одном языке, который понимает нейросеть.</p>
+        <div class="fun-fact"><p class="fact">🎯 Ранговая идея в статистике известна с 1987 года (критерий Хана), но лишь теперь её объединили с глубокими нейросетями для многозадачного обучения. А сглаживающий сигмоидный трюк пришёл из работы 2007 года об одноответной регрессии.</p><p class="fact fact-scifi">🎬 Концепция общего языка для несоизмеримых данных перекликается с образом универсального переводчика из научной фантастики — устройства, позволяющего общаться существам с разными системами восприятия.</p></div>
+        <div class="formula"><div class="formula-render">Y_{t} = D_{t}(f_{t}(X) + \epsilon_{t})</div><div class="formula-meaning">Измеренный отклик Y_t получается из скрытой гладкой функции f_t(X) с шумом, пропущенной через неизвестное монотонное преобразование D_t (например, логарифмирование, не искажающее порядок).</div></div><div class="formula"><div class="formula-render">s(\zeta; a_n) = \frac{1}{1+\exp(-\zeta/a_n)}</div><div class="formula-meaning">Гладкая сигмоида — замена жёсткого индикатора &#x27;больше-меньше&#x27;, где параметр a_n определяет крутизну перехода.</div></div>
+        
+        <div class="actions actions-compact" data-article-id="2607.00995_ru_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.00995" title="Избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> написать комментарий</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/ru/archive/2026-07-01/2607.00995/simple.html" title="Просто — Максимально просто — для первого знакомства"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn active lv-compact" data-version="popular" href="/lang/ru/archive/2026-07-01/2607.00995/index.html" title="Популярно — Богаче простого — если наука уже увлекает"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn lv-compact" data-version="advanced" href="/lang/ru/archive/2026-07-01/2607.00995/advanced.html" title="Подробно — С формулами и историей открытия"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.00995_ru_popular" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Похожие статьи"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Учёные</div><a href="/lang/ru/scientists/Rudolf_Clausius.html" class="side-sci" data-scientist="Rudolf Clausius">Rudolf Clausius</a><a href="/lang/ru/scientists/James_Clerk_Maxwell.html" class="side-sci" data-scientist="James Clerk Maxwell">James Clerk Maxwell</a><a href="/lang/ru/scientists/Ludwig_Boltzmann.html" class="side-sci" data-scientist="Ludwig Boltzmann">Ludwig Boltzmann</a><a href="/lang/ru/scientists/Andrey_Markov.html" class="side-sci" data-scientist="Andrey Markov">Andrey Markov</a><div class="side-tags-label">Теги</div><a href="/lang/ru/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">машинное обучение</a>
+<a href="/lang/ru/tags/genomics.html" class="side-tag" data-tag="genomics">геномика</a>
+<a href="/lang/ru/tags/bioinformatics.html" class="side-tag" data-tag="bioinformatics">биоинформатика</a>
+<a href="/lang/ru/tags/gene.html" class="side-tag" data-tag="gene">ген</a>
+<a href="/lang/ru/tags/rna.html" class="side-tag" data-tag="rna">рНК</a>
+<a href="/lang/ru/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">численное моделирование</a>
+<a href="/lang/ru/tags/metabolism.html" class="side-tag" data-tag="metabolism">метаболизм</a>
+<a href="/lang/ru/tags/immunity.html" class="side-tag" data-tag="immunity">иммунитет</a><div class="side-laws-label">Законы</div><a href="/lang/ru/laws/first_law_of_thermodynamics.html" class="side-law" data-law="first_law_of_thermodynamics">первый закон термодинамики</a><a href="/lang/ru/laws/vlasov_equation.html" class="side-law" data-law="vlasov_equation">уравнение Власова</a><a href="/lang/ru/laws/price_equation.html" class="side-law" data-law="price_equation">уравнение прайса</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.00995', 'article', 'ru');
+    if (false && window.logExpressInterest) logExpressInterest('2607.00995', 'ru');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

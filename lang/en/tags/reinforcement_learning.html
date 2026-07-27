@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Reinforcement Learning — bridge42worlds</title>
+    <meta name="description" content="Reinforcement learning (RL) is a branch of machine learning where an agent independently learns optimal behavior through trial and error, interacting with an environment. Unlike supervised learning, there are no ready-made correct answers — only a reward signal, which can be rare and noisy. The agent has to balance between exploring new strategies (maybe they are better?) and exploiting known ones. This exploration–exploitation dilemma is the heart of RL. Modern algorithms, such as Deep Q-Networks and Proximal Policy Optimization, use deep neural networks to process complex visual input and control dozens of actions in parallel.">
+    <meta property="og:title" content="#Reinforcement Learning — bridge42worlds">
+    <meta property="og:description" content="Reinforcement learning (RL) is a branch of machine learning where an agent independently learns optimal behavior through trial and error, interacting with an environment. Unlike supervised learning, there are no ready-made correct answers — only a reward signal, which can be rare and noisy. The agent has to balance between exploring new strategies (maybe they are better?) and exploiting known ones. This exploration–exploitation dilemma is the heart of RL. Modern algorithms, such as Deep Q-Networks and Proximal Policy Optimization, use deep neural networks to process complex visual input and control dozens of actions in parallel.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/tags/reinforcement_learning.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Tag</div><h1>Reinforcement Learning</h1><button class="share-inline" title="Share" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">2</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">A dog gets a treat when it brings back a ball and remembers: doing so is beneficial. Reinforcement learning trains a program exactly the same way — through rewards and misses.</p><div class="practical-app"><strong>In practice:</strong> Game bots (chess, StarCraft), autonomous driving, optimization of factory processes, recommendation systems.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Reinforcement learning (RL) is a branch of machine learning where an agent independently learns optimal behavior through trial and error, interacting with an environment. Unlike supervised learning, there are no ready-made correct answers — only a reward signal, which can be rare and noisy. The agent has to balance between exploring new strategies (maybe they are better?) and exploiting known ones. This exploration–exploitation dilemma is the heart of RL. Modern algorithms, such as Deep Q-Networks and Proximal Policy Optimization, use deep neural networks to process complex visual input and control dozens of actions in parallel.</div>
+        <div class="section"><h2>History</h2><p>The idea dates back to the mid-20th century when psychologists explained how animals learn through rewards. In the 1980s, algorithms emerged that could play backgammon at a human level, and in the 2010s, programs from Google DeepMind mastered Atari games and beat a Go champion.</p></div>
+        <div class="section"><h2>How it works</h2><p>The core scheme: the agent looks at the state, chooses an action, receives a reward. Gradually it builds a table or uses a neural network to remember which moves are more profitable in each situation. For example, in the game 'Snake', turning towards an apple gives points, while colliding with the tail is a penalty. Over time, the snake moves towards the goal almost flawlessly.</p></div>
+        <div class="fun-fact">💡 During training, AlphaGo Zero beat the version that defeated champion Lee Sedol 100:0 in three days, learning only through self-play, without access to human games.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">In reinforcement learning, an agent program lives in its own world (for example, in a crossroads simulator). It sees the surrounding environment — the speed of cars, the traffic light. Its task is to take actions (turn the steering wheel, accelerate) to score as many points as possible. Points are awarded for success — reached the destination; penalties for accidents. The agent tries different moves, like a child learning to walk: fell — it hurts, got up and went on. After thousands of attempts, the strategy becomes ingrained.</div>
+        <div class="section"><h2>History</h2><p>The idea dates back to the mid-20th century when psychologists explained how animals learn through rewards. In the 1980s, algorithms emerged that could play backgammon at a human level, and in the 2010s, programs from Google DeepMind mastered Atari games and beat a Go champion.</p></div>
+        <div class="section"><h2>How it works</h2><p>The core scheme: the agent looks at the state, chooses an action, receives a reward. Gradually it builds a table or uses a neural network to remember which moves are more profitable in each situation. For example, in the game 'Snake', turning towards an apple gives points, while colliding with the tail is a penalty. Over time, the snake moves towards the goal almost flawlessly.</p></div>
+        <div class="fun-fact">💡 In a famous experiment teaching a robot to flip pancakes on a frying pan, an RL agent, unhappy with slow learning through real attempts, 'discovered' a way to rotate the pan at 50 Hz — which caused equipment wear but formally accomplished the task.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Reinforcement learning is formalized as a Markov decision process (MDP), defined by the tuple (S, A, P, R, γ), where S is the state space, A is the action space, P(s'|s, a) is the transition dynamics, R(s, a) is the reward function, and γ ∈ [0,1] is the discount factor for future rewards. The goal is to find a policy π(a|s) that maximizes the expected discounted sum of rewards: J = E[Σ γ^t R_t]. Key concepts: the state value function V(s) = E[Σ γ^t R_t | s0 = s] and the action-value function Q(s, a). Algorithms are divided into value-based (Q-learning, DQN), policy-based (Policy Gradient, REINFORCE), and actor-critic (A2C, PPO) methods that combine both approaches. Deep RL uses neural networks to parameterize V, Q, or π, trained using variations of gradient descent and replay buffers to stabilize learning.</div>
+        <div class="section"><h2>History</h2><p>The foundations of RL lie in psychological concepts of operant conditioning (Thorndike, Skinner). In AI, the first significant contribution was Minsky's dissertation on neural networks and reinforcement (1954). In the 1980s, Sutton and Barto laid the theoretical groundwork. The public breakthrough came in 2015, when DeepMind demonstrated a system playing 49 Atari games at human level. This was followed by AlphaGo (2016), AlphaZero (2017), and OpenAI Five (2019), proving viability in complex multi-agent environments.</p></div>
+        <div class="section"><h2>How it works</h2><p>It is based on Bellman equations. For Q-learning: Q*(s, a) = E[R(s,a) + γ max_a' Q*(s', a')]. The algorithm updates the estimate: Q(s,a) ← Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]. In deep Q-learning, the Q-network minimizes the prediction error: L = E[(r + γ max_a' Q(s', a'; θ^-) - Q(s, a; θ))^2] using gradient descent methods, where θ^- are the parameters of a frozen target network. Policy gradient methods directly optimize J(θ) via the gradient: ∇θ J ≈ E[Σ_t ∇θ log π(a_t|s_t) · G_t], where G_t is the total reward. Modern actor-critic PPO limits policy change with a proximal penalty, ensuring stable updates.</p></div>
+        <div class="formula"><div class="formula-render">Q^*(s, a) = \mathbb{E}\left[ R(s, a) + \gamma \max_{a&#x27;} Q^*(s&#x27;, a&#x27;) \right]</div><div class="formula-meaning">Q* is the optimal action-value function, s is the state, a is the action, R is the reward, γ is the discount factor (0 ≤ γ ≤ 1)</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>The exploration–exploitation dilemma without guarantees of optimal exploration; The problem of generalization to new, unseen states; Efficient learning in environments with very sparse rewards; Safety and predictability when deployed in the real world</p><p class="fact">💡 In a famous experiment teaching a robot to flip pancakes on a frying pan, an RL agent, unhappy with slow learning through real attempts, 'discovered' a way to rotate the pan at 50 Hz — which caused equipment wear but formally accomplished the task.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div>
+<div class="mini-graph" data-node="t:reinforcement_learning"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="reinforcement_learning_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="reinforcement_learning" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="reinforcement_learning_en_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/control_theory.html" class="side-tag" data-tag="control_theory">control theory</a><a href="/lang/en/tags/game_theory.html" class="side-tag" data-tag="game_theory">game theory</a><a href="/lang/en/tags/neural_networks.html" class="side-tag" data-tag="neural_networks">neural networks</a><a href="/lang/en/tags/optimization.html" class="side-tag" data-tag="optimization">optimization</a><a href="/lang/en/tags/robotics.html" class="side-tag" data-tag="robotics">Robotics</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="reinforcement_learning"><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-29</span></div><a class="card-img-wrap" href="/lang/en/archive/2026-06-29/2607.00039/index.html"><img src="/lang/ru/archive/2026-06-29/2607.00039/t_ai.webp" data-fb="/lang/ru/archive/2026-06-29/2607.00039/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/en/archive/2026-06-29/2607.00039/index.html" title="Diplomatic Protocol for Chip and Code">Diplomatic Protocol for Chip and Code</a></h3><div class="oneliner">A modern car is a conglomerate of dozens of electronic control units whose software is tightly bound to the hardware. To turn the vehicle into a flexible, over-the-air-updatable platform—a software-defined vehicle (SDV)—you need an effective 'interpreter': a hardware abstraction layer (HAL). Researc</div></div></article><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-30</span></div><a class="card-img-wrap" href="/lang/en/archive/2026-06-30/2607.00254/index.html"><img src="/lang/ru/archive/2026-06-30/2607.00254/t_ai.webp" data-fb="/lang/ru/archive/2026-06-30/2607.00254/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/en/archive/2026-06-30/2607.00254/index.html" title="Sifting Gold: Optimizing AI Pipelines with Database Techniques">Sifting Gold: Optimizing AI Pipelines with Database Techniques</a></h3><div class="oneliner">Modern training pipelines for large language models often boil down to running a costly evaluation function en masse—for example, calling a reward model hundreds of thousands of times to pick the best answers. But many computations are redundant: aggregates can be estimated from a small sample with </div></div></article></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('reinforcement_learning', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лекция — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C;
+    --font-display:'Futura','Century Gothic','Futura PT','Segoe UI Semibold','Segoe UI',sans-serif;
+    --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+    --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  }
+  :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:18px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:24px 16px 70px}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--ink-soft);text-decoration:none}
+  .logo:hover{color:var(--steel)}
+  .theme-toggle{background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+
+  h1{font-family:var(--font-display);font-weight:700;font-size:2.25rem;line-height:1.13;margin-bottom:.2em}
+  .l-sub{font-family:var(--font-display);font-size:14px;color:var(--ink-soft);margin-bottom:18px}
+  .col{max-width:680px}
+  .col p{margin-bottom:.9em}
+  .l-lead{font-size:1.06rem;color:var(--ink-soft);border-left:2px solid var(--brass);
+    padding-left:16px;margin-bottom:26px}
+  .l-nav{font-family:var(--font-display);font-size:.86rem;margin-bottom:20px;padding-bottom:14px;
+    border-bottom:1px solid var(--rule)}
+  .l-nav a{color:var(--ink-soft);text-decoration:none;margin-right:18px}
+  .l-nav a:hover{color:var(--steel)}
+  .l-nav a.cur{color:var(--ink);font-weight:700}
+
+  .layout{display:grid;grid-template-columns:210px 1fr;gap:40px;align-items:start}
+  @media (max-width:880px){ .layout{grid-template-columns:1fr;gap:0} .toc{display:none} }
+  .toc{position:sticky;top:20px;font-family:var(--font-display);font-size:.82rem;line-height:1.45}
+  .toc a{display:block;padding:5px 0 5px 10px;color:var(--ink-soft);text-decoration:none;
+    border-left:1px solid var(--rule)}
+  .toc a:hover{color:var(--steel);border-left-color:var(--steel)}
+
+  h2{font-family:var(--font-display);font-size:1.42rem;font-weight:700;line-height:1.2;
+    margin:40px 0 8px;padding-top:16px;border-top:2px solid var(--ink);scroll-margin-top:16px}
+  h3{font-family:var(--font-display);font-size:1.02rem;font-weight:700;margin:22px 0 6px}
+  .l-kicker{font-family:var(--font-display);font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:14px}
+
+  /* образ — ключевая аналогия, выделенная как врезка */
+  .l-image{background:var(--paper-raised);border:1px solid var(--rule);border-left:3px solid var(--steel);
+    padding:15px 18px;margin:18px 0}
+  .l-image .h{font-family:var(--font-display);font-weight:700;font-size:.97rem;margin-bottom:5px;
+    display:flex;align-items:center;gap:8px;color:var(--steel)}
+  .l-image p{font-size:.97rem;line-height:1.65;margin-bottom:.6em}
+  .l-image p:last-child{margin-bottom:0}
+
+  /* за и против — честная таблица достоинств и слабостей */
+  .l-scales{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media (max-width:640px){ .l-scales{grid-template-columns:1fr} }
+  .l-scale{border:1px solid var(--rule);padding:13px 15px;background:var(--paper-raised)}
+  .l-scale .h{font-family:var(--font-display);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+    margin-bottom:8px}
+  .l-scale.pro .h{color:var(--moss)}
+  .l-scale.con .h{color:var(--red)}
+  .l-scale ul{margin:0;padding-left:17px;font-size:.92rem;line-height:1.55;color:var(--ink-soft)}
+  .l-scale li{margin-bottom:6px}
+
+  /* незакрытый спор — самое ценное в лекции */
+  .l-open{border:1px dashed var(--brass);padding:14px 16px;margin:18px 0;background:var(--paper-raised)}
+  .l-open .h{font-family:var(--font-display);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:7px;display:flex;align-items:center;gap:7px}
+  .l-open p{font-size:.94rem;line-height:1.65;color:var(--ink-soft);margin-bottom:.55em}
+  .l-open p:last-child{margin-bottom:0}
+  /* где сейчас идёт работа */
+  .l-now{border:1px solid var(--rule);border-left:3px solid var(--moss);padding:14px 16px;margin:18px 0}
+  .l-now .h{font-family:var(--font-display);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--moss);margin-bottom:7px;display:flex;align-items:center;gap:7px}
+  .l-now p{font-size:.94rem;line-height:1.65;color:var(--ink-soft);margin-bottom:.55em}
+  .l-now p:last-child{margin-bottom:0}
+  .l-quote{border-left:2px solid var(--rule);padding-left:16px;margin:18px 0;
+    font-style:italic;color:var(--ink-soft);font-size:.98rem}
+  .l-quote .who{display:block;font-style:normal;font-family:var(--font-display);font-size:.78rem;
+    margin-top:6px;color:var(--brass)}
+  .l-eq{margin:16px 0;padding:12px 0;text-align:center;overflow-x:auto;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .l-note{font-size:.92rem;line-height:1.65;color:var(--ink-soft);margin:16px 0;padding:12px 0;
+    border-top:1px solid var(--rule)}
+  .l-note::before{content:"Осторожно";display:block;font-family:var(--font-display);font-size:10px;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--brass);margin-bottom:5px}
+
+  .l-close{margin-top:44px;padding:22px 24px;border:1px solid var(--rule);
+    border-top:3px solid var(--brass);background:var(--paper-raised)}
+  .l-close h2{margin-top:0;padding-top:0;border-top:none;font-size:1.3rem}
+  .foot-nav{margin-top:30px;padding-top:14px;border-top:1px solid var(--rule);
+    font-family:var(--font-display);font-size:.86rem}
+  .foot-nav a{color:var(--steel);text-decoration:none;margin-right:20px}
+  .foot-nav a:hover{text-decoration:underline}
+</style>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+<div class="top-bar">
+  <a href="/learn.html" class="logo">bridge42worlds · дерево знаний</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+<div id="root"></div>
+</div>
+
+<script src="/js/icons.js?v=2"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru', root = document.getElementById('root');
+  var id = new URLSearchParams(location.search).get('l') || '01-gr';
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function ic(n, s) { return (window.B42Icons && B42Icons[n]) ? B42Icons[n](s || 15) : ''; }
+  function paras(host, arr) { (arr || []).forEach(function (p) { host.appendChild(el('p', null, p)); }); }
+
+  Promise.all([
+    fetch('/data/theory/lectures/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+    fetch('/data/theory/lectures/' + id + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+  ]).then(function (res) {
+    var idx = res[0], L = res[1][LANG] || res[1].ru;
+    document.title = L.title + ' — bridge42worlds';
+
+    // навигация по лекциям цикла
+    var nav = el('div', 'l-nav');
+    nav.appendChild(el('span', null, '<a href="/frontier.html">← открытые вопросы</a>'));
+    idx.lectures.forEach(function (x, i) {
+      var a = el('a', x.id === id ? 'cur' : null, (i + 1) + '. ' + x.title);
+      a.href = '/lecture.html?l=' + x.id;
+      nav.appendChild(a);
+    });
+    root.appendChild(nav);
+
+    root.appendChild(el('h1', null, L.title));
+    root.appendChild(el('div', 'l-sub', L.subtitle));
+    root.appendChild(el('p', 'l-lead col', L.lead));
+
+    var layout = el('div', 'layout'), toc = el('nav', 'toc'), main = el('div', 'col');
+    layout.appendChild(toc); layout.appendChild(main); root.appendChild(layout);
+
+    L.blocks.forEach(function (b, i) {
+      var hid = 'b' + i;
+      var h = el('h2', null, b.h); h.id = hid; main.appendChild(h);
+      var a = el('a', null, b.h); a.href = '#' + hid; toc.appendChild(a);
+      if (b.kicker) main.appendChild(el('div', 'l-kicker', b.kicker));
+      paras(main, b.text);
+
+      // наглядный образ
+      if (b.image) {
+        var im = el('div', 'l-image');
+        im.appendChild(el('div', 'h', ic('lamp') + ' ' + b.image.h));
+        paras(im, b.image.text);
+        main.appendChild(im);
+      }
+      if (b.eq) main.appendChild(el('div', 'l-eq', b.eq));
+      // честная таблица достоинств и слабостей
+      if (b.pro || b.con) {
+        var sc = el('div', 'l-scales');
+        if (b.pro) {
+          var p1 = el('div', 'l-scale pro');
+          p1.appendChild(el('div', 'h', 'что она объясняет'));
+          var u1 = el('ul'); b.pro.forEach(function (x) { u1.appendChild(el('li', null, x)); });
+          p1.appendChild(u1); sc.appendChild(p1);
+        }
+        if (b.con) {
+          var p2 = el('div', 'l-scale con');
+          p2.appendChild(el('div', 'h', 'в чём слаба'));
+          var u2 = el('ul'); b.con.forEach(function (x) { u2.appendChild(el('li', null, x)); });
+          p2.appendChild(u2); sc.appendChild(p2);
+        }
+        main.appendChild(sc);
+      }
+      if (b.quote) {
+        main.appendChild(el('div', 'l-quote', b.quote.text +
+          '<span class="who">' + b.quote.who + '</span>'));
+      }
+      if (b.after) paras(main, b.after);
+      // место, где спор не закрыт — помечаем явно, это важнее готового ответа
+      if (b.open) {
+        var op = el('div', 'l-open');
+        op.appendChild(el('div', 'h', ic('paradox', 15) + ' Здесь спорят'));
+        paras(op, [].concat(b.open));
+        main.appendChild(op);
+      }
+      // где сейчас идёт работа — чтобы было видно, что поиск не остановлен
+      if (b.now) {
+        var nw = el('div', 'l-now');
+        nw.appendChild(el('div', 'h', ic('clock', 15) + ' Что происходит сейчас'));
+        paras(nw, [].concat(b.now));
+        main.appendChild(nw);
+      }
+      if (b.note) main.appendChild(el('div', 'l-note', b.note));
+    });
+
+    if (L.closing) {
+      var cl = el('div', 'l-close');
+      cl.appendChild(el('h2', null, L.closing.title));
+      paras(cl, L.closing.text);
+      main.appendChild(cl);
+    }
+
+    main.appendChild(el('div', 'foot-nav',
+      '<a href="/learn.html">дерево знаний</a><a href="/frontier.html">открытые вопросы</a>' +
+      idx.lectures.filter(function (x) { return x.id !== id; })
+        .map(function (x) { return '<a href="/lecture.html?l=' + x.id + '">' + x.title + '</a>'; }).join('')));
+
+    (function tex(n) {
+      if (window.renderMathInElement) {
+        renderMathInElement(root, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+      } else if (n < 40) setTimeout(function () { tex(n + 1); }, 50);
+    })(0);
+  }).catch(function (e) { root.innerHTML = '<p>Не удалось загрузить лекцию: ' + e + '</p>'; });
+})();
+</script>
+
+<script>
+// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.querySelector('.top-bar, .topnav');
+  if (!bar || document.getElementById('course-langs')) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'langs'; wrap.id = 'course-langs';
+  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+    var a = document.createElement('a');
+    a.href = '?lang=' + l;
+    a.textContent = l.toUpperCase();
+    if (l === window.B42_LANG) a.className = 'active';
+    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
+    wrap.appendChild(a);
+  });
+  bar.appendChild(wrap);
+});
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+</body>
+</html>

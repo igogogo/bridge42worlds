@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#эффект Ааронова — Бома — bridge42worlds</title>
+    <meta name="description" content="Электронный луч, расщеплённый надвое, обходит микроскопическую катушку и, встретившись, порождает полосы — как рябь на воде. Сдвиг этих полос доказывает: магнитная сила здесь равна нулю, но катушка всё равно влияет на электроны. Квантовая механика описывает частицы волнами, и при движении в электромагнитных потенциалах их волновая фаза меняется. Даже если само поле (B) равно нулю, но отличен от нуля векторный потенциал (A), фаза всё равно набегает. Эксперимент с соленоидом, чьё поле заперто внутри, а снаружи B=0, показывает интерференционные полосы, смещённые пропорционально магнитному потоку через соленоид. Это подтверждает, что потенциалы — не просто математическая абстракция, а физическая реальность.">
+    <meta property="og:title" content="#эффект Ааронова — Бома — bridge42worlds">
+    <meta property="og:description" content="Электронный луч, расщеплённый надвое, обходит микроскопическую катушку и, встретившись, порождает полосы — как рябь на воде. Сдвиг этих полос доказывает: магнитная сила здесь равна нулю, но катушка всё равно влияет на электроны. Квантовая механика описывает частицы волнами, и при движении в электромагнитных потенциалах их волновая фаза меняется. Даже если само поле (B) равно нулю, но отличен от нуля векторный потенциал (A), фаза всё равно набегает. Эксперимент с соленоидом, чьё поле заперто внутри, а снаружи B=0, показывает интерференционные полосы, смещённые пропорционально магнитному потоку через соленоид. Это подтверждает, что потенциалы — не просто математическая абстракция, а физическая реальность.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/tags/aharonov_bohm_effect.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># тег · @ автор · ! учёный</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Тег</div><h1>эффект Ааронова — Бома</h1><button class="share-inline" title="Поделиться" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Электроны огибают невидимую преграду, и даже пустое пространство заставляет их идти в обход.</p><div class="practical-app"><strong>На практике:</strong> На основе эффекта создают сверхточные датчики магнитного поля и новые виды транзисторов.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Электронный луч, расщеплённый надвое, обходит микроскопическую катушку и, встретившись, порождает полосы — как рябь на воде. Сдвиг этих полос доказывает: магнитная сила здесь равна нулю, но катушка всё равно влияет на электроны. Квантовая механика описывает частицы волнами, и при движении в электромагнитных потенциалах их волновая фаза меняется. Даже если само поле (B) равно нулю, но отличен от нуля векторный потенциал (A), фаза всё равно набегает. Эксперимент с соленоидом, чьё поле заперто внутри, а снаружи B=0, показывает интерференционные полосы, смещённые пропорционально магнитному потоку через соленоид. Это подтверждает, что потенциалы — не просто математическая абстракция, а физическая реальность.</div>
+        <div class="section"><h2>История</h2><p>В 1959 году Якир Ааронов и Дэвид Бом теоретически показали: в квантовом мире не сами поля, а их невидимые задатчики (электромагнитные потенциалы) определяют движение. Через год Р. Дж. Чемберс в Англии подтвердил это, наблюдая интерференцию электронов вокруг крошечного магнита.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Электрон летит по двум разным путям вокруг замаскированного магнита и при встрече с самим собой складывается то в такт, то вразнобой — сдвиг фаз зависит от силы спрятанного поля. Так невидимый задатчик оставляет след на волне частицы.</p></div>
+        <div class="fun-fact">💡 Колебания электрического сопротивления тонких металлических колец в магнитном поле — прямое проявление эффекта Ааронова–Бома, используемое в магнетометрах.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Мачта корабля, скрытая туманом. Вы не видите её, но путь вокруг всё равно искривляется. Так и электрон чувствует магнитное поле, даже когда оно полностью изолировано и не касается его. Невидимая 'тень' поля (электромагнитный потенциал — величина, задающая будущее движение заряда) направляет частицу, хотя в этой точке нет ни электрических, ни магнитных сил.</div>
+        <div class="section"><h2>История</h2><p>В 1959 году Якир Ааронов и Дэвид Бом теоретически показали: в квантовом мире не сами поля, а их невидимые задатчики (электромагнитные потенциалы) определяют движение. Через год Р. Дж. Чемберс в Англии подтвердил это, наблюдая интерференцию электронов вокруг крошечного магнита.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Электрон летит по двум разным путям вокруг замаскированного магнита и при встрече с самим собой складывается то в такт, то вразнобой — сдвиг фаз зависит от силы спрятанного поля. Так невидимый задатчик оставляет след на волне частицы.</p></div>
+        <div class="fun-fact">💡 В сверхпроводящих кольцах регистрируют осцилляции критического тока с периодом h/2e — эффект Ааронова–Бома для куперовских пар.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">Дифракционная картина электронов, обходящих магнитный соленоид, смещается на доли микрона, хотя сами электроны никогда не заходят в область поля. Эффект Ааронова–Бома — квантовомеханическое явление, при котором заряженная частица испытывает влияние электромагнитных потенциалов (φ, A) в областях, где поля (E, B) равны нулю. В классической физике потенциалы служат лишь удобным инструментом, а сила определяется полями. В квантовой же механике волновая функция приобретает разность фаз Δφ = (e/ħ) ∮ A·dl при обходе замкнутого контура, даже если частица не проходит через поле. Эта разность равна магнитному потоку Φ через площадь контура, и приводит к сдвигу интерференционных полос. Эффект демонстрирует нелокальность квантовой механики и фундаментальность калибровочных полей.</div>
+        <div class="section"><h2>История</h2><p>Идея восходит к дискуссиям о роли потенциалов в квантовой механике. В 1959 году Якир Ааронов и Дэвид Бом опубликовали статью, где описали гипотетический эксперимент. Первое экспериментальное подтверждение выполнил Р. Дж. Чемберс в 1960 году, используя интерферометр с магнитным усом. Позднее Акира Тономура с коллегами провёл наглядные опыты с электронной голографией, не оставляющие сомнений. Эффект тесно связан с фазой Берри и привёл к разработке интерферометрических приборов.</p></div>
+        <div class="section"><h2>Как работает</h2><p>В уравнении Шрёдингера для заряженной частицы присутствует векторный потенциал A. При обходе замкнутого контура C волновая функция приобретает дополнительную фазу Δφ = (e/ħ) ∮_C A·dl. По теореме Стокса этот интеграл равен потоку магнитного поля B через любую поверхность, натянутую на C: Φ = ∫ B·dS. Если поле B сосредоточено внутри соленоида и не проникает в область движения, поток Φ всё равно отличен от нуля, что приводит к сдвигу интерференционных полос. Калибровочная инвариантность гарантирует, что наблюдаемым является лишь поток по модулю 2π.</p></div>
+        <div class="formula"><div class="formula-render">\Delta\varphi = \frac{e}{\hbar} \oint_C \mathbf{A} \cdot d\mathbf{l}</div><div class="formula-meaning">Δφ — сдвиг фазы, e — элементарный заряд (≈ 1,602176634×10^{-19} Кл), ℏ — редуцированная постоянная Планка (≈ 1,0545718×10^{-34} Дж·с), ∮_C A·dl — циркуляция векторного потенциала A по замкнутому контуру C, равная магнитному потоку Φ</div></div>
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Поиск проявлений эффекта в гравитационном поле (гравитационный аналог); Экспериментальная проверка неабелева расширения; Использование в топологических квантовых вычислениях</p><p class="fact">💡 В сверхпроводящих кольцах регистрируют осцилляции критического тока с периодом h/2e — эффект Ааронова–Бома для куперовских пар.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div>
+<div class="mini-graph" data-node="t:aharonov_bohm_effect"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="aharonov_bohm_effect_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="aharonov_bohm_effect" title="избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> написать комментарий</button></div>
+<div class="feedback" id="feedback" data-article-id="aharonov_bohm_effect_ru_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/gauge_invariance.html" class="side-tag" data-tag="gauge_invariance">калибровочная инвариантность</a><a href="/lang/ru/tags/interference.html" class="side-tag" data-tag="interference">интерференция</a><a href="/lang/ru/tags/quantum_state.html" class="side-tag" data-tag="quantum_state">квантовое состояние</a><a href="/lang/ru/tags/topology.html" class="side-tag" data-tag="topology">топология</a><a href="/lang/ru/tags/wave_function.html" class="side-tag" data-tag="wave_function">волновая функция</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="aharonov_bohm_effect"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('aharonov_bohm_effect', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

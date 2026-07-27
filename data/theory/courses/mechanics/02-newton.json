@@ -1,0 +1,1248 @@
+{
+  "id": "02-newton",
+  "topic": "mechanics",
+  "schema": "b42.lesson/1",
+  "model": "newton",
+  "entities": {
+    "laws": [
+      "newtons_laws_of_motion"
+    ],
+    "tags": [
+      "mechanics"
+    ],
+    "scientists": [
+      "Isaac Newton",
+      "Galileo Galilei"
+    ]
+  },
+  "ru": {
+    "title": "Законы Ньютона",
+    "subtitle": "Параграф 2 · Сила как причина изменения движения",
+    "intro": [
+      "В прошлом параграфе мы научились описывать движение: где тело, как быстро, с каким ускорением. Но не спрашивали, почему оно движется именно так. Теперь спросим.",
+      "Ответ, который кажется очевидным, неверен. «Чтобы тело двигалось, нужна сила» — так думали от Аристотеля до Галилея, почти две тысячи лет. И опыт это подтверждал: перестань толкать телегу, и она остановится.",
+      "Ошибка в том, что трение всегда рядом и его не видно. Галилей первым догадался мысленно убрать его — и понял: движение не требует причины, причина нужна лишь для его ИЗМЕНЕНИЯ. Ньютон возвёл эту мысль в закон и добавил к ней ещё два."
+    ],
+    "standNote": "На стенде — тележка на поверхности. Задайте массу и приложенную силу, включите трение и смотрите, что происходит с ускорением. Ключевое наблюдение: пока действующая сила не превышает трения покоя, тележка стоит; как только превысила — начинается разгон, и он тем медленнее, чем больше масса.",
+    "formula": {
+      "name": "Второй закон Ньютона",
+      "latex": "\\vec{F} = m\\vec{a} \\qquad \\text{или} \\qquad \\vec{F} = \\frac{d\\vec{p}}{dt}",
+      "alsoKnown": "Основное уравнение динамики",
+      "authors": [
+        {
+          "who": "Галилео Галилей",
+          "year": "1638",
+          "what": "сформулировал принцип инерции: тело сохраняет движение, пока на него не подействуют — это будущий первый закон"
+        },
+        {
+          "who": "Роберт Гук",
+          "year": "1679",
+          "what": "в переписке с Ньютоном высказал догадку об обратно-квадратичном законе притяжения и настаивал, что движение планет складывается из инерции и постоянного притяжения к Солнцу — идея, ставшая ключом к «Началам»"
+        },
+        {
+          "who": "Исаак Ньютон",
+          "year": "1687",
+          "what": "в «Математических началах» свёл динамику к трём законам и записал второй в форме «изменение количества движения пропорционально приложенной силе»"
+        }
+      ],
+      "story": "Сам Ньютон не писал $F = ma$. В оригинале второй закон звучит иначе: изменение количества движения пропорционально приложенной силе и происходит в направлении её действия. То есть в исходной формулировке стоит производная импульса, а не произведение массы на ускорение. Привычную форму придал Эйлер полвека спустя. Разница кажется косметической, но именно исходная запись переживёт релятивистскую революцию: при скоростях, близких к световой, $F = ma$ ломается, а $F = dp/dt$ остаётся верной.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "\\vec{F}",
+          "what": "равнодействующая всех сил",
+          "unit": "Н (ньютон)",
+          "note": "именно сумма ВСЕХ сил, а не одна из них — самая частая ошибка в задачах"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "масса тела",
+          "unit": "кг",
+          "note": "мера инертности: насколько трудно изменить скорость этого тела"
+        },
+        {
+          "sym": "a",
+          "latex": "\\vec{a}",
+          "what": "ускорение",
+          "unit": "м/с²",
+          "note": "направлено туда же, куда равнодействующая — всегда, без исключений"
+        },
+        {
+          "sym": "p",
+          "latex": "\\vec{p}",
+          "what": "импульс, p = mv",
+          "unit": "кг·м/с",
+          "note": "количество движения; через него закон записан в исходной форме Ньютона"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод",
+      "lead": "Три закона — не три независимых утверждения. Первый определяет, где вообще применимы остальные; второй связывает силу с движением; третий говорит, что силы всегда парны. Разберём по порядку.",
+      "steps": [
+        {
+          "text": "Первый закон: тело сохраняет покой или равномерное прямолинейное движение, пока на него не действует равнодействующая сила. Это не следствие второго закона, а утверждение о существовании особых систем отсчёта — инерциальных, — в которых остальные законы вообще работают.",
+          "latex": "\\sum \\vec{F} = 0 \\;\\Longrightarrow\\; \\vec{v} = \\text{const}",
+          "figure": "inertia",
+          "figCaption": "Без сил скорость не меняется. Движение не нуждается в причине — в причине нуждается его изменение."
+        },
+        {
+          "text": "Проверим на опыте, от чего зависит ускорение. Прикладываем к одному телу разные силы: ускорение растёт пропорционально силе. Значит $a \\propto F$.",
+          "latex": "a \\propto F \\quad (\\text{при } m = \\text{const})",
+          "figure": "forceprop",
+          "figCaption": "Вдвое большая сила даёт вдвое большее ускорение."
+        },
+        {
+          "text": "Теперь прикладываем одну и ту же силу к телам разной массы. Ускорение падает обратно пропорционально массе. Тяжёлое тело сопротивляется изменению скорости сильнее — это свойство и называется инертностью.",
+          "latex": "a \\propto \\frac{1}{m} \\quad (\\text{при } F = \\text{const})",
+          "figure": "massprop",
+          "figCaption": "Одна и та же сила: лёгкое тело разгоняется быстро, тяжёлое — медленно."
+        },
+        {
+          "text": "Объединяя обе зависимости и выбирая единицу силы так, чтобы коэффициент пропорциональности стал единицей, получаем второй закон. Именно так и определён ньютон: сила, сообщающая массе в один килограмм ускорение метр на секунду в квадрате.",
+          "latex": "\\vec{a} = \\frac{\\vec{F}}{m} \\;\\Longleftrightarrow\\; \\vec{F} = m\\vec{a}",
+          "figure": "secondlaw",
+          "figCaption": "Ускорение прямо пропорционально силе и обратно — массе."
+        },
+        {
+          "text": "Отдельно о трении — силе, которая две тысячи лет вводила физику в заблуждение. Она не постоянна: пока вы толкаете слабо, трение покоя ровно уравновешивает вашу силу и растёт вместе с ней. Но лишь до предела. Превысили порог — тело срывается, и дальше действует трение скольжения, обычно чуть меньшее.",
+          "latex": "F_{\\text{тр.покоя}} \\le \\mu_0 N, \\qquad F_{\\text{тр.скольж}} = \\mu N",
+          "figure": "friction",
+          "figCaption": "Трение покоя подстраивается под приложенную силу — до порога срыва."
+        },
+        {
+          "text": "Поразительно, но сила трения почти не зависит от площади соприкосновения — только от прижимающей силы. Причина в том, что поверхности касаются не всей плоскостью, а редкими микровыступами: увеличили площадь — выступы распределили ту же нагрузку, суммарный контакт остался тем же.",
+          "latex": "F_{\\text{тр}} = \\mu N \\quad (\\text{площадь не входит})",
+          "figure": "microcontact",
+          "figCaption": "Реальный контакт — редкие микровыступы, а не вся видимая площадь."
+        },
+        {
+          "text": "Запишем то же самое через импульс. Если масса постоянна, производная импульса даёт $m\\,dv/dt = ma$ — знакомый вид. Но исходная форма шире: она верна и когда масса меняется, например у взлетающей ракеты, сжигающей топливо.",
+          "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt} = \\frac{d(m\\vec{v})}{dt}",
+          "figure": "impulse",
+          "figCaption": "Сила есть скорость изменения импульса — формулировка, пережившая и ракеты, и теорию относительности."
+        },
+        {
+          "text": "Третий закон: силы всегда рождаются парами. Если тело A действует на B, то B действует на A с той же величиной и противоположным направлением. Важнейшая деталь: эти силы приложены к РАЗНЫМ телам, поэтому они не уравновешивают друг друга и не мешают движению.",
+          "latex": "\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}",
+          "figure": "action",
+          "figCaption": "Пара сил равна по величине и противоположна по направлению — но приложена к разным телам."
+        },
+        {
+          "text": "Из третьего закона немедленно следует великий результат: в замкнутой системе суммарный импульс не меняется. Внутренние силы попарно гасятся, менять общий импульс им нечем. Этим мы займёмся в следующем параграфе.",
+          "latex": "\\frac{d}{dt}\\left(\\vec{p}_A + \\vec{p}_B\\right) = \\vec{F}_{B\\to A} + \\vec{F}_{A\\to B} = 0",
+          "figure": "momentum",
+          "figCaption": "Внутренние силы взаимно уничтожаются — суммарный импульс системы сохраняется."
+        }
+      ],
+      "plate": "\\vec{F} = m\\vec{a}",
+      "plateCap": "Сила не поддерживает движение — она его меняет. Всё различие между Аристотелем и Ньютоном умещается в этой фразе.",
+      "note": "Законы Ньютона верны не всегда. Они перестают работать при скоростях, сравнимых со световой (нужна теория относительности), в масштабах атома (нужна квантовая механика) и в неинерциальных системах отсчёта — во вращающейся карусели или в тормозящем автобусе появляются силы, у которых нет источника-тела. Это не ошибка Ньютона, а границы применимости, и знать их так же важно, как сами законы.\n\nОтдельно стоит сказать о **Роберте Гуке**. Именно он в письмах 1679 года подсказал Ньютону решающую мысль: движение планеты можно разложить на инерционное движение по касательной и постоянное притяжение к центру, а само притяжение убывает как квадрат расстояния. Математически доказать это Гук не смог — не хватило аппарата. Ньютон смог и опубликовал, но признать подсказку отказался, а после смерти Гука возглавил Королевское общество, и упоминания о сопернике стали исчезать. Знаменитая фраза Ньютона «если я видел дальше других, то потому, что стоял на плечах гигантов» была написана в письме именно Гуку — и многие историки читают её не как скромность, а как колкость в адрес человека невысокого роста и с искривлённой спиной. Закон упругости, который мы разберём в теме о колебаниях, носит имя Гука по праву: это первый в истории количественный закон о деформации тел."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "items": [
+        {
+          "what": "Векторное сложение сил",
+          "why": "Силы складываются как векторы, а не как числа. Две силы по 3 Н дают равнодействующую от 0 до 6 Н — смотря под каким углом. Если они перпендикулярны, работает теорема Пифагора. Именно поэтому в задачах силы раскладывают по осям: вдоль каждой оси уже можно складывать обычные числа со знаками.",
+          "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+        },
+        {
+          "what": "Пропорциональность и как её проверять",
+          "why": "Запись $a \\propto F$ означает, что отношение $a/F$ постоянно. Проверять это надо не на одной паре чисел, а на нескольких: если при удвоении силы ускорение удвоилось, а при утроении — утроилось, зависимость линейна. Такой ход рассуждений — от серии измерений к формуле — и есть экспериментальный метод в его чистом виде.",
+          "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Пример с числами",
+      "lead": "Задача, в которой почти все ошибаются, забыв про трение.",
+      "given": "На ящик массой $20$ кг действует горизонтальная сила $60$ Н. Коэффициент трения о пол $\\mu = 0{,}2$. Найти ускорение. Принять $g = 10$ м/с².",
+      "law": "$\\vec{F}_{\\text{равнод}} = m\\vec{a}$, где равнодействующая — сумма приложенной силы и силы трения",
+      "solution": [
+        {
+          "text": "Сначала находим силу трения. Она равна произведению коэффициента на силу нормального давления, а та здесь равна весу.",
+          "latex": "F_{\\text{тр}} = \\mu m g = 0{,}2 \\cdot 20 \\cdot 10 = 40\\ \\text{Н}"
+        },
+        {
+          "text": "Равнодействующая — разность приложенной силы и трения: они направлены противоположно.",
+          "latex": "F_{\\text{равнод}} = 60 - 40 = 20\\ \\text{Н}"
+        },
+        {
+          "text": "Теперь второй закон.",
+          "latex": "a = \\frac{F_{\\text{равнод}}}{m} = \\frac{20}{20} = 1\\ \\text{м/с}^2"
+        }
+      ],
+      "answer": "Ускорение $1$ м/с²",
+      "check": "Если бы мы забыли про трение, получили бы 3 м/с² — втрое больше. Проверка на здравый смысл: ящик в 20 кг под силой 60 Н разгоняется вяло, метр в секунду за секунду. Похоже на правду: толкая тяжёлый ящик по полу, мы и правда не разгоняем его мгновенно."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Здесь появляется первая настоящая единица, названная в честь человека, — и коэффициент, который не является константой природы.",
+      "items": [
+        {
+          "sym": "Н",
+          "latex": "\\text{Н}",
+          "name": "Ньютон — единица силы",
+          "value": "1 Н = 1 кг·м/с²",
+          "unit": "кг · м / с²",
+          "why": "Не фундаментальная константа, а производная единица: сила, сообщающая массе в килограмм ускорение метр на секунду в квадрате. Разложите ньютон на составляющие — и получите второй закон в чистом виде. Для ощущения масштаба: вес яблока — примерно 1 Н.",
+          "mnemo": "Единица содержит в себе формулу: кг·м/с² — это буквально m·a."
+        },
+        {
+          "sym": "μ",
+          "latex": "\\mu",
+          "name": "Коэффициент трения",
+          "value": "0,02 (лёд) · 0,2 (дерево) · 0,8 (резина)",
+          "unit": "безразмерный",
+          "why": "Не константа природы, а характеристика ПАРЫ поверхностей: сталь по льду, резина по асфальту. Безразмерен, потому что это отношение двух сил. Удивительный факт: в первом приближении не зависит от площади соприкосновения — это установил ещё Кулон.",
+          "mnemo": "Резина по сухому асфальту около 0,8 — отсюда и предельное торможение автомобиля примерно 8 м/с²."
+        },
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Ускорение свободного падения",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "Здесь оно нужно, чтобы связать массу с весом: $P = mg$. Важно не путать массу (килограммы, мера инертности) и вес (ньютоны, сила притяжения). На Луне ваша масса та же, а вес вшестеро меньше."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Сила не поддерживает движение, а изменяет его. Ускорение прямо пропорционально равнодействующей силе и обратно пропорционально массе, а силы всегда рождаются парами, приложенными к разным телам.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Первый закон",
+          "text": "Без равнодействующей силы скорость не меняется. Движение не требует причины."
+        },
+        {
+          "icon": "clock",
+          "title": "Второй закон",
+          "text": "a = F/m. Сила задаёт не скорость, а её изменение."
+        },
+        {
+          "icon": "sigma",
+          "title": "Третий закон",
+          "text": "Силы парны и приложены к разным телам — поэтому не уравновешивают друг друга."
+        },
+        {
+          "icon": "formula",
+          "title": "Границы",
+          "text": "Не работают при околосветовых скоростях, в масштабах атома и в неинерциальных системах."
+        }
+      ],
+      "where": [
+        "Ремень безопасности: при ударе тело по инерции продолжает движение, ремень создаёт силу торможения",
+        "Отдача ружья — третий закон в чистом виде: пуля вперёд, приклад назад",
+        "Ракета летит не отталкиваясь от воздуха, а выбрасывая массу назад — в вакууме работает так же",
+        "Гружёный грузовик тормозит дольше пустого: та же сила, большая масса, меньшее ускорение"
+      ],
+      "watchOut": "Силы действия и противодействия НИКОГДА не уравновешивают друг друга, потому что приложены к разным телам. Лошадь везёт телегу не вопреки третьему закону: на телегу действует сила от лошади, на лошадь — от телеги, и движение определяется силами, приложенными к каждому телу по отдельности."
+    },
+    "quiz": [
+      {
+        "id": "n1",
+        "type": "mcq",
+        "q": "Лошадь тянет телегу. По третьему закону телега тянет лошадь с той же силой. Почему же система движется?",
+        "options": [
+          "Сила лошади всё-таки немного больше",
+          "Эти силы приложены к разным телам и потому не уравновешиваются; движение телеги определяют силы, действующие на телегу",
+          "Третий закон не работает для живых существ",
+          "Трение нарушает равенство сил"
+        ],
+        "answer": 1,
+        "why": "Уравновешиваться могут только силы, приложенные к ОДНОМУ телу. Здесь одна сила приложена к телеге, другая — к лошади. Телега едет, потому что сила от лошади превышает её трение о дорогу.",
+        "hint": "Задайте вопрос точнее: какие силы действуют именно на телегу? А какие — именно на лошадь? Можно ли складывать силы, приложенные к разным телам?"
+      },
+      {
+        "id": "n2",
+        "type": "mcq",
+        "q": "Космонавт в открытом космосе бросает гаечный ключ. Что произойдёт с ним самим?",
+        "options": [
+          "Ничего — в невесомости нет сил",
+          "Он получит скорость в противоположную сторону, тем меньшую, чем больше его масса",
+          "Он начнёт вращаться, но останется на месте",
+          "Он полетит в ту же сторону, что и ключ"
+        ],
+        "answer": 1,
+        "why": "Третий закон: отталкивая ключ, космонавт получает равную по величине силу в обратном направлении. По второму закону его ускорение во столько раз меньше, во сколько его масса больше массы ключа. Это принцип реактивного движения.",
+        "hint": "Если на ключ подействовала сила, что говорит третий закон о силе, подействовавшей на космонавта? А второй закон — о его ускорении при большой массе?"
+      },
+      {
+        "id": "n3",
+        "type": "free",
+        "q": "Своими словами: почему две тысячи лет считалось, что для движения нужна постоянная сила? В чём была ошибка?",
+        "keywords": [
+          "трен",
+          "сопротивл",
+          "не видн",
+          "маскир",
+          "останавлива",
+          "мешает"
+        ],
+        "needed": 1,
+        "why": "Потому что в повседневном опыте всегда есть трение, и оно невидимо. Перестань толкать телегу — она остановится, но не потому, что «движение требует силы», а потому, что трение её тормозит. Галилей мысленно убрал трение и увидел истину.",
+        "hint": "Что происходит с санками на льду по сравнению с санками на асфальте? Какая невидимая помеха присутствует во всех земных опытах и как она искажает вывод?"
+      },
+      {
+        "id": "n4",
+        "type": "estimate",
+        "q": "Автомобиль массой 1200 кг разгоняется с ускорением 3 м/с². Какая сила действует со стороны двигателя, если трением и сопротивлением пренебречь? Ответ в килоньютонах.",
+        "answer": 3.6,
+        "unit": "кН",
+        "tolerance": 1.3,
+        "why": "F = ma = 1200 · 3 = 3600 Н = 3,6 кН. В уме: 1200 умножить на 3 — это 3600. Для сравнения: вес самого автомобиля примерно 12 кН, то есть тяга составляет около трети веса.",
+        "hint": "Формула прямая, без подвохов. Умножьте массу на ускорение и переведите ньютоны в килоньютоны, разделив на тысячу."
+      }
+    ],
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Три закона проверяются стопкой монет, воздушным шариком и собственным весом в лифте.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Монета из-под стопки",
+          "text": "Сложите столбик из пяти-шести одинаковых монет. Возьмите линейку или нож и резким горизонтальным ударом выбейте самую нижнюю монету. Затем повторите то же, но двигая линейку медленно.",
+          "answer": "При резком ударе нижняя монета вылетает, а столбик оседает на место почти без наклона. При медленном — уезжает весь столбик. Разница во времени действия силы: чтобы сдвинуть верхние монеты, трение должно успеть передать им импульс, а на это нужно время. Быстрый удар такого времени не даёт, и верхние монеты остаются на месте просто потому, что их никто не заставил двигаться — это и есть первый закон в чистом виде."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Лошадь и телега",
+          "text": "Если телега тянет лошадь назад ровно с той же силой, с какой лошадь тянет телегу вперёд, силы равны и противоположны. Тогда сумма равна нулю, и повозка не должна трогаться с места. Однако повозки ездят.",
+          "answer": "Ошибка в том, что складываются силы, приложенные к разным телам. На телегу действует тяга лошади и трение о землю — их сумма и разгоняет телегу. На лошадь действует натяжение упряжи назад и отталкивание копыт от земли вперёд. Складывать можно только силы, приложенные к одному телу. Третий закон вообще ничего не говорит о движении отдельного тела: он про пару, и в этом его сила — из него следует сохранение импульса."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Книгу, изменившую физику, издали за чужой счёт",
+          "text": "«Математические начала натуральной философии» вышли в 1687 году потому, что Эдмонд Галлей — тот самый, чьим именем названа комета, — оплатил печать из собственных средств. Королевское общество к тому моменту потратило бюджет на роскошно иллюстрированную «Историю рыб», которая продавалась плохо. Галлей же был обязан Ньютону ответом на свой вопрос: по какой кривой движется планета, если сила убывает как квадрат расстояния. Ньютон ответил сразу — «по эллипсу, я это считал» — но черновик потерял и восстанавливал заново."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Сила — причина не движения, а изменения движения",
+          "text": "Обыденный опыт подсказывает: перестал толкать — остановилось, значит для движения нужна сила. Это верно только потому, что рядом всегда есть трение. В пустоте тело летит вечно, и сила требуется, лишь чтобы изменить скорость: разогнать, затормозить, повернуть. Держите в голове формулировку через импульс, $\\vec{F}=d\\vec{p}/dt$: сила есть скорость изменения импульса. В таком виде закон работает и там, где масса не постоянна, — например, для ракеты."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Сколько вы весите в лифте",
+          "text": "Ускорение обычного пассажирского лифта около одного метра в секунду за секунду — примерно одна десятая от $g$. Значит, при разгоне вверх весы под ногами покажут на десятую часть больше: человек массой 70 килограммов «потяжелеет» на семь. При торможении — настолько же легче. Ощущение проваливания в животе появляется именно на этой десятой доле; в самолёте при турбулентности бывает вдвое-втрое больше."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Где законы Ньютона неверны",
+          "text": "Первое ограничение — система отсчёта: во вращающейся или ускоренной системе тела разгоняются без всякой силы, и приходится вводить силы инерции. Второе — скорость: при приближении к скорости света $\\vec{F}=m\\vec{a}$ перестаёт работать, нужна релятивистская механика. Третье — масштаб: для электрона в атоме понятие траектории теряет смысл, там правит уравнение Шрёдингера. Ньютон остаётся точным в промежутке, но именно в этом промежутке живёт вся техника."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Что держится на законах Ньютона",
+      "lead": "Почти вся инженерия — это второй закон, применённый к конкретной конструкции.",
+      "items": [
+        {
+          "h": "Ремни и подушки безопасности",
+          "text": "При ударе важна не скорость сама по себе, а темп её изменения: сила равна изменению импульса, делённому на время. Подушка растягивает остановку с сотых долей секунды до десятых — и во столько же раз снижает силу, действующую на человека."
+        },
+        {
+          "h": "Реактивное движение",
+          "text": "Ракета не отталкивается от воздуха: она выбрасывает массу назад, и третий закон толкает её вперёд. Поэтому двигатель работает в пустоте, а тяга считается через расход топлива и скорость истечения."
+        },
+        {
+          "h": "Строительные конструкции",
+          "text": "Здание неподвижно, а значит сумма сил в каждом узле равна нулю — это первый закон, превращённый в расчётную схему. Отсюда толщина балок, сечение колонн и запас прочности."
+        },
+        {
+          "h": "Взвешивание в невесомости",
+          "text": "На орбите весы бесполезны, но массу измерять надо. Космонавта сажают на пружинное устройство, раскачивают и по периоду колебаний находят массу — через второй закон, а не через вес."
+        },
+        {
+          "h": "Манёвры аппаратов",
+          "text": "Разворот спутника делают маховиками: раскручивая колесо в одну сторону, корпус поворачивают в другую. Топливо при этом не тратится вовсе — работает только обмен импульсом внутри аппарата."
+        }
+      ]
+    }
+  },
+  "en": {
+    "title": "Newton's Laws",
+    "subtitle": "Section 2 · Force as the Cause of Change in Motion",
+    "intro": [
+      "In the previous section, we learned how to describe motion: where a body is, how fast it's going, what its acceleration is. But we did not ask why it moves the way it does. Now we will ask.",
+      "The answer that seems obvious is wrong. 'A force is needed for a body to move' — that's what people thought from Aristotle to Galileo, for almost two thousand years. And experience confirmed it: stop pushing a cart, and it will stop.",
+      "The mistake is that friction is always present and invisible. Galileo was the first to mentally remove it — and realized: motion does not require a cause; a cause is only needed for its CHANGE. Newton elevated this idea into a law and added two more to it."
+    ],
+    "standNote": "On the stand — a cart on a surface. Set the mass and applied force, enable friction, and watch what happens to the acceleration. Key observation: as long as the applied force does not exceed static friction, the cart stays still; once it does, it starts accelerating, and the acceleration is slower the larger the mass.",
+    "formula": {
+      "name": "Newton's Second Law",
+      "latex": "\\vec{F} = m\\vec{a} \\qquad \\text{или} \\qquad \\vec{F} = \\frac{d\\vec{p}}{dt}",
+      "alsoKnown": "Fundamental equation of dynamics",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1638",
+          "what": "formulated the principle of inertia: a body maintains its motion until acted upon — this would become the first law"
+        },
+        {
+          "who": "Robert Hooke",
+          "year": "1679",
+          "what": "in correspondence with Newton, conjectured about the inverse-square law of attraction and insisted that planetary motion is a combination of inertia and constant attraction to the Sun — an idea that became the key to the 'Principia'"
+        },
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "in the 'Mathematical Principles of Natural Philosophy' reduced dynamics to three laws and wrote the second in the form 'change in momentum is proportional to the applied force'"
+        }
+      ],
+      "story": "Newton himself did not write $F = ma$. In the original, the second law reads differently: the change in momentum is proportional to the applied force and occurs in the direction of that force. That is, the original formulation uses the derivative of momentum, not the product of mass and acceleration. The familiar form was given by Euler half a century later. The difference seems cosmetic, but it is the original expression that survives the relativistic revolution: at speeds close to light, $F = ma$ breaks down, while $F = dp/dt$ remains valid.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "\\vec{F}",
+          "what": "net force",
+          "unit": "N (newton)",
+          "note": "specifically the sum of ALL forces, not just one of them — the most common mistake in problems"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "mass of the body",
+          "unit": "kg",
+          "note": "measure of inertia: how difficult it is to change the velocity of this body"
+        },
+        {
+          "sym": "a",
+          "latex": "\\vec{a}",
+          "what": "acceleration",
+          "unit": "m/s²",
+          "note": "directed in the same direction as the net force — always, without exception"
+        },
+        {
+          "sym": "p",
+          "latex": "\\vec{p}",
+          "what": "momentum, p = mv",
+          "unit": "kg·m/s",
+          "note": "quantity of motion; through it the law is written in Newton's original form"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation",
+      "lead": "The three laws are not three independent statements. The first defines where the others apply; the second links force to motion; the third says forces always come in pairs. Let's go through them in order.",
+      "steps": [
+        {
+          "text": "First law: a body remains at rest or in uniform straight-line motion unless acted upon by a net force. This is not a consequence of the second law, but a statement about the existence of special reference frames—inertial frames—in which the other laws hold.",
+          "latex": "\\sum \\vec{F} = 0 \\;\\Longrightarrow\\; \\vec{v} = \\text{const}",
+          "figure": "inertia",
+          "figCaption": "Without forces, velocity does not change. Motion does not need a cause—change in motion does."
+        },
+        {
+          "text": "Let's test by experiment what acceleration depends on. Apply different forces to the same body: acceleration grows proportionally to the force. Thus $a \\propto F$.",
+          "latex": "a \\propto F \\quad (\\text{at } m = \\text{const})",
+          "figure": "forceprop",
+          "figCaption": "Twice the force gives twice the acceleration."
+        },
+        {
+          "text": "Now apply the same force to bodies of different masses. Acceleration falls inversely with mass. A heavy object resists changes in velocity more strongly—this property is called inertia.",
+          "latex": "a \\propto \\frac{1}{m} \\quad (\\text{at } F = \\text{const})",
+          "figure": "massprop",
+          "figCaption": "Same force: light body accelerates quickly, heavy one slowly."
+        },
+        {
+          "text": "Combining both proportionalities and choosing the unit of force so that the constant of proportionality becomes one, we obtain the second law. This is exactly how the newton is defined: the force that gives a mass of one kilogram an acceleration of one meter per second squared.",
+          "latex": "\\vec{a} = \\frac{\\vec{F}}{m} \\;\\Longleftrightarrow\\; \\vec{F} = m\\vec{a}",
+          "figure": "secondlaw",
+          "figCaption": "Acceleration is directly proportional to force and inversely proportional to mass."
+        },
+        {
+          "text": "A separate word about friction—the force that misled physics for two thousand years. It is not constant: while you push gently, static friction exactly balances your force and grows with it. But only up to a limit. Exceed the threshold—the body breaks loose, and then kinetic friction takes over, usually a bit smaller.",
+          "latex": "F_{\\text{st}} \\le \\mu_0 N, \\qquad F_{\\text{kin}} = \\mu N",
+          "figure": "friction",
+          "figCaption": "Static friction adjusts to the applied force—up to the threshold of motion."
+        },
+        {
+          "text": "Remarkably, friction force hardly depends on the contact area—only on the normal force. The reason is that surfaces touch not over the entire area but through sparse micro‑asperities: increasing area spreads the same load over more bumps, so the total real contact stays the same.",
+          "latex": "F_{\\text{fric}} = \\mu N \\quad (\\text{area does not appear})",
+          "figure": "microcontact",
+          "figCaption": "Real contact is sparse micro‑asperities, not the whole visible area."
+        },
+        {
+          "text": "Let's write the same in terms of momentum. If mass is constant, the derivative of momentum gives $m\\,dv/dt = ma$—the familiar form. But the original form is broader: it also works when mass changes, for example a rocket burning fuel as it takes off.",
+          "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt} = \\frac{d(m\\vec{v})}{dt}",
+          "figure": "impulse",
+          "figCaption": "Force is the rate of change of momentum—a formulation that survived both rockets and relativity."
+        },
+        {
+          "text": "Third law: forces always come in pairs. If body A acts on B, then B acts on A with the same magnitude and opposite direction. A crucial detail: these forces act on DIFFERENT bodies, so they do not cancel each other and do not hinder motion.",
+          "latex": "\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}",
+          "figure": "action",
+          "figCaption": "The pair of forces are equal in magnitude and opposite in direction—but applied to different bodies."
+        },
+        {
+          "text": "From the third law immediately follows a great result: in a closed system, total momentum does not change. Internal forces cancel pairwise; there is nothing to change the total momentum. We'll take this up in the next section.",
+          "latex": "\\frac{d}{dt}\\left(\\vec{p}_A + \\vec{p}_B\\right) = \\vec{F}_{B\\to A} + \\vec{F}_{A\\to B} = 0",
+          "figure": "momentum",
+          "figCaption": "Internal forces cancel each other—total momentum of the system is conserved."
+        }
+      ],
+      "plate": "\\vec{F} = m\\vec{a}",
+      "plateCap": "Force does not maintain motion—it changes it. The entire difference between Aristotle and Newton fits in this phrase.",
+      "note": "Newton's laws are not always valid. They break down at speeds comparable to light (need relativity), on atomic scales (need quantum mechanics), and in non‑inertial frames—on a rotating carousel or in a braking bus, forces appear that have no source body. This is not Newton's mistake, but limits of applicability, and knowing them is as important as the laws themselves.\n\nA separate remark about **Robert Hooke**. It was he who, in letters of 1679, suggested the crucial idea to Newton: planetary motion can be decomposed into inertial motion along the tangent and constant attraction to the center, and the attraction itself falls off as the square of the distance. Hooke could not prove it mathematically—he lacked the apparatus. Newton could and published, but refused to acknowledge the hint, and after Hooke's death he became president of the Royal Society, and mentions of his rival began to disappear. Newton's famous phrase \"if I have seen further it is by standing on the shoulders of giants\" was written in a letter to Hooke himself—and many historians read it not as modesty but as a jab at a man of short stature with a crooked back. The law of elasticity, which we'll cover in the topic on oscillations, bears Hooke's name by right: it is the first quantitative law of deformation in history."
+    },
+    "math": {
+      "title": "Math You'll Need Here",
+      "items": [
+        {
+          "what": "Vector Addition of Forces",
+          "why": "Forces add as vectors, not as numbers. Two 3 N forces can yield a resultant from 0 to 6 N — depending on the angle. If they are perpendicular, the Pythagorean theorem applies. That's why in problems we decompose forces along axes: along each axis, we can simply add signed numbers.",
+          "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+        },
+        {
+          "what": "Proportionality and How to Check It",
+          "why": "The notation $a \\propto F$ means that the ratio $a/F$ is constant. This must be checked not with a single pair of numbers but with several: if doubling the force doubles the acceleration, and tripling it triples it, the dependence is linear. This line of reasoning — from a series of measurements to a formula — is the experimental method in its pure form.",
+          "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Example with Numbers",
+      "lead": "A problem almost everyone gets wrong by forgetting friction.",
+      "given": "A box of mass $20$ kg is acted upon by a horizontal force of $60$ N. The coefficient of friction with the floor is $\\mu = 0{,}2$. Find the acceleration. Take $g = 10$ m/s².",
+      "law": "$\\vec{F}_{\\text{равнод}} = m\\vec{a}$, where the net force is the sum of the applied force and friction.",
+      "solution": [
+        {
+          "text": "First, find the friction force. It equals the product of the coefficient and the normal force, which here equals the weight.",
+          "latex": "F_{\\text{тр}} = \\mu m g = 0{,}2 \\cdot 20 \\cdot 10 = 40\\ \\text{Н}"
+        },
+        {
+          "text": "The net force is the difference between the applied force and friction: they act in opposite directions.",
+          "latex": "F_{\\text{равнод}} = 60 - 40 = 20\\ \\text{Н}"
+        },
+        {
+          "text": "Now apply Newton's second law.",
+          "latex": "a = \\frac{F_{\\text{равнод}}}{m} = \\frac{20}{20} = 1\\ \\text{м/с}^2"
+        }
+      ],
+      "answer": "Acceleration $1$ m/s²",
+      "check": "If we had forgotten friction, we would have gotten 3 m/s² — three times larger. A sanity check: a 20 kg box under a 60 N force accelerates sluggishly, one meter per second per second. It seems plausible: pushing a heavy box on the floor, we indeed do not accelerate it instantly."
+    },
+    "constants": {
+      "title": "Quantities in This Section",
+      "lead": "Here we meet the first real unit named after a person — and a coefficient that is not a constant of nature.",
+      "items": [
+        {
+          "sym": "Н",
+          "latex": "\\text{Н}",
+          "name": "Newton — unit of force",
+          "value": "1 N = 1 kg·m/s²",
+          "unit": "kg · m / s²",
+          "why": "Not a fundamental constant but a derived unit: the force that gives a mass of one kilogram an acceleration of one meter per second squared. Break down the newton into its components and you get Newton's second law in pure form. For a sense of scale: an apple weighs about 1 N.",
+          "mnemo": "The unit contains the formula: kg·m/s² is literally m·a."
+        },
+        {
+          "sym": "μ",
+          "latex": "\\mu",
+          "name": "Coefficient of friction",
+          "value": "0.02 (ice) · 0.2 (wood) · 0.8 (rubber)",
+          "unit": "dimensionless",
+          "why": "Not a constant of nature, but a characteristic of a PAIR of surfaces: steel on ice, rubber on asphalt. It is dimensionless because it is the ratio of two forces. Surprising fact: to a first approximation, it does not depend on the contact area — this was established by Coulomb.",
+          "mnemo": "Rubber on dry asphalt is about 0.8 — hence the maximum deceleration of a car is roughly 8 m/s²."
+        },
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Acceleration due to gravity",
+          "value": "9.81",
+          "unit": "m / s²",
+          "why": "It is needed here to relate mass to weight: $P = mg$. It is important not to confuse mass (kilograms, measure of inertia) and weight (newtons, force of gravity). On the Moon, your mass is the same, but your weight is six times smaller.",
+          "mnemo": ""
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Force does not sustain motion but changes it. Acceleration is directly proportional to the net force and inversely proportional to mass, and forces always come in pairs applied to different bodies.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "First Law",
+          "text": "Without a net force, velocity does not change. Motion does not require a cause."
+        },
+        {
+          "icon": "clock",
+          "title": "Second Law",
+          "text": "a = F/m. Force determines not speed but its change."
+        },
+        {
+          "icon": "sigma",
+          "title": "Third Law",
+          "text": "Forces are paired and applied to different bodies — therefore they do not balance each other."
+        },
+        {
+          "icon": "formula",
+          "title": "Limits",
+          "text": "They do not work at near-light speeds, on the atomic scale, and in non-inertial frames."
+        }
+      ],
+      "where": [
+        "Seat belt: upon impact, the body continues moving due to inertia, the belt creates a braking force",
+        "Gun recoil — pure third law: bullet forward, stock backward",
+        "A rocket flies not by pushing against air but by ejecting mass backward — works the same in vacuum",
+        "A loaded truck takes longer to stop than an empty one: same force, larger mass, smaller acceleration"
+      ],
+      "watchOut": "Action and reaction forces NEVER cancel each other because they act on different bodies. A horse pulls a cart not in defiance of the third law: the cart experiences a force from the horse, the horse experiences a force from the cart, and the motion is determined by the forces acting on each body individually."
+    },
+    "quiz": [
+      {
+        "id": "n1",
+        "type": "mcq",
+        "q": "A horse pulls a cart. According to the third law, the cart pulls the horse with the same force. Why does the system move?",
+        "options": [
+          "The horse's force is still slightly greater",
+          "These forces are applied to different bodies and therefore do not balance; the cart's motion is determined by the forces acting on the cart.",
+          "The third law does not work for living beings",
+          "Friction violates the equality of forces"
+        ],
+        "answer": 1,
+        "why": "Only forces applied to ONE body can balance. Here, one force is applied to the cart, the other to the horse. The cart moves because the force from the horse exceeds its friction with the road.",
+        "hint": "Ask the question more precisely: what forces act specifically on the cart? And which ones act on the horse? Can forces applied to different bodies be added?"
+      },
+      {
+        "id": "n2",
+        "type": "mcq",
+        "q": "An astronaut in open space throws a wrench. What happens to the astronaut?",
+        "options": [
+          "Nothing — in weightlessness there are no forces",
+          "He will acquire speed in the opposite direction, smaller the greater his mass",
+          "He will start spinning but stay in place",
+          "He will fly in the same direction as the wrench"
+        ],
+        "answer": 1,
+        "why": "Third law: pushing the wrench away, the astronaut receives a force of equal magnitude in the opposite direction. According to the second law, his acceleration is as many times smaller as his mass is greater than the wrench's mass. This is the principle of reactive motion.",
+        "hint": "If a force acted on the wrench, what does the third law say about the force acting on the astronaut? And the second law — about his acceleration given his large mass?"
+      },
+      {
+        "id": "n3",
+        "type": "free",
+        "q": "In your own words: why was it believed for two thousand years that constant force is needed for motion? What was the mistake?",
+        "keywords": [
+          "friction",
+          "resistance",
+          "unseen",
+          "mask",
+          "stops",
+          "hinders"
+        ],
+        "needed": 1,
+        "why": "Because in everyday experience there is always friction, and it is invisible. Stop pushing a cart — it will stop, not because 'motion requires force', but because friction slows it down. Galileo mentally removed friction and saw the truth.",
+        "hint": "What happens to a sled on ice compared to a sled on asphalt? What invisible hindrance is present in all terrestrial experiments and how does it distort the conclusion?"
+      },
+      {
+        "id": "n4",
+        "type": "estimate",
+        "q": "A car of mass 1200 kg accelerates at 3 m/s². What force does the engine exert, if friction and drag are neglected? Answer in kilonewtons.",
+        "answer": 3.6,
+        "unit": "кН",
+        "tolerance": 1.3,
+        "why": "F = ma = 1200 · 3 = 3600 Н = 3,6 кН. In your head: 1200 times 3 is 3600. For comparison, the weight of the car is about 12 кН, so the traction is about one third of the weight.",
+        "hint": "The formula is straightforward, no tricks. Multiply mass by acceleration and convert newtons to kilonewtons by dividing by a thousand."
+      }
+    ]
+  },
+  "es": {
+    "title": "Leyes de Newton",
+    "subtitle": "Párrafo 2 · La fuerza como causa del cambio de movimiento",
+    "intro": [
+      "En el párrafo anterior aprendimos a describir el movimiento: dónde está el cuerpo, qué tan rápido, con qué aceleración. Pero no preguntamos por qué se mueve de esa manera. Ahora preguntemos.",
+      "La respuesta que parece obvia es incorrecta. «Para que un cuerpo se mueva, se necesita una fuerza» — así pensaron desde Aristóteles hasta Galileo, durante casi dos mil años. Y la experiencia lo confirmaba: deja de empujar un carro y se detendrá.",
+      "El error es que la fricción siempre está presente y no se ve. Galileo fue el primero en imaginársela eliminada mentalmente — y comprendió: el movimiento no requiere una causa, la causa solo es necesaria para su CAMBIO. Newton elevó esta idea a ley y le agregó otras dos."
+    ],
+    "standNote": "En el stand — un carro sobre una superficie. Establezca la masa y la fuerza aplicada, active la fricción y observe qué sucede con la aceleración. Observación clave: mientras la fuerza actuante no supere la fricción estática, el carro permanece quieto; tan pronto la supera, comienza la aceleración, y esta es más lenta cuanto mayor es la masa.",
+    "formula": {
+      "name": "Segunda ley de Newton",
+      "latex": "\\vec{F} = m\\vec{a} \\qquad \\text{или} \\qquad \\vec{F} = \\frac{d\\vec{p}}{dt}",
+      "alsoKnown": "Ecuación fundamental de la dinámica",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1638",
+          "what": "formuló el principio de inercia: un cuerpo mantiene su movimiento mientras no actúe sobre él una fuerza — esto sería la futura primera ley"
+        },
+        {
+          "who": "Robert Hooke",
+          "year": "1679",
+          "what": "en correspondencia con Newton sugirió la ley de atracción inversa al cuadrado e insistió en que el movimiento de los planetas se compone de inercia y atracción constante hacia el Sol — idea que se convirtió en la clave de los 'Principia'"
+        },
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "en los 'Principios Matemáticos' redujo la dinámica a tres leyes y escribió la segunda en la forma 'el cambio de la cantidad de movimiento es proporcional a la fuerza aplicada'"
+        }
+      ],
+      "story": "El propio Newton no escribió $F = ma$. En el original, la segunda ley suena diferente: el cambio de la cantidad de movimiento es proporcional a la fuerza aplicada y ocurre en la dirección de su acción. Es decir, en la formulación original aparece la derivada del momento lineal, no el producto de la masa por la aceleración. La forma familiar fue proporcionada por Euler medio siglo después. La diferencia parece cosmética, pero precisamente la notación original sobrevivirá la revolución relativista: a velocidades cercanas a la luz, $F = ma$ falla, mientras que $F = dp/dt$ sigue siendo válida.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "\\vec{F}",
+          "what": "resultante de todas las fuerzas",
+          "unit": "N (newton)",
+          "note": "es la suma de TODAS las fuerzas, no una de ellas — el error más común en los problemas"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "masa del cuerpo",
+          "unit": "kg",
+          "note": "medida de la inercia: qué tan difícil es cambiar la velocidad de este cuerpo"
+        },
+        {
+          "sym": "a",
+          "latex": "\\vec{a}",
+          "what": "aceleración",
+          "unit": "m/s²",
+          "note": "dirigida hacia donde va la resultante — siempre, sin excepción"
+        },
+        {
+          "sym": "p",
+          "latex": "\\vec{p}",
+          "what": "momento lineal, p = mv",
+          "unit": "kg·m/s",
+          "note": "cantidad de movimiento; a través de él la ley se escribió en la forma original de Newton"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa",
+      "lead": "Las tres leyes no son tres afirmaciones independientes. La primera define dónde son aplicables las demás; la segunda relaciona la fuerza con el movimiento; la tercera dice que las fuerzas siempre vienen en pares. Analicémoslas en orden.",
+      "steps": [
+        {
+          "text": "Primera ley: un cuerpo mantiene su estado de reposo o movimiento rectilíneo uniforme a menos que actúe sobre él una fuerza resultante. No es una consecuencia de la segunda ley, sino una afirmación sobre la existencia de sistemas de referencia especiales —los inerciales— en los que las demás leyes son válidas.",
+          "latex": "\\sum \\vec{F} = 0 \\;\\Longrightarrow\\; \\vec{v} = \\text{const}",
+          "figure": "inertia",
+          "figCaption": "Sin fuerzas, la velocidad no cambia. El movimiento no necesita una causa; lo que necesita una causa es su cambio."
+        },
+        {
+          "text": "Verifiquemos experimentalmente de qué depende la aceleración. Aplicamos diferentes fuerzas a un mismo cuerpo: la aceleración crece proporcionalmente a la fuerza. Por lo tanto $a \\propto F$.",
+          "latex": "a \\propto F \\quad (\\text{при } m = \\text{const})",
+          "figure": "forceprop",
+          "figCaption": "Una fuerza dos veces mayor produce una aceleración dos veces mayor."
+        },
+        {
+          "text": "Ahora aplicamos la misma fuerza a cuerpos de diferente masa. La aceleración disminuye inversamente proporcional a la masa. Un cuerpo pesado se resiste más al cambio de velocidad — esta propiedad se llama inercia.",
+          "latex": "a \\propto \\frac{1}{m} \\quad (\\text{при } F = \\text{const})",
+          "figure": "massprop",
+          "figCaption": "La misma fuerza: un cuerpo ligero acelera rápidamente, uno pesado lentamente."
+        },
+        {
+          "text": "Combinando ambas dependencias y eligiendo la unidad de fuerza de modo que el coeficiente de proporcionalidad sea uno, obtenemos la segunda ley. Así se define el newton: la fuerza que comunica a una masa de un kilogramo una aceleración de un metro por segundo al cuadrado.",
+          "latex": "\\vec{a} = \\frac{\\vec{F}}{m} \\;\\Longleftrightarrow\\; \\vec{F} = m\\vec{a}",
+          "figure": "secondlaw",
+          "figCaption": "La aceleración es directamente proporcional a la fuerza e inversamente proporcional a la masa."
+        },
+        {
+          "text": "Un apartado sobre el rozamiento —una fuerza que mantuvo confundida a la física durante dos mil años. No es constante: mientras empujas suavemente, el rozamiento estático equilibra exactamente tu fuerza y crece con ella. Pero solo hasta un límite. Superado el umbral, el cuerpo se desliza y entonces actúa el rozamiento cinético, normalmente un poco menor.",
+          "latex": "F_{\\text{тр.покоя}} \\le \\mu_0 N, \\qquad F_{\\text{тр.скольж}} = \\mu N",
+          "figure": "friction",
+          "figCaption": "El rozamiento estático se adapta a la fuerza aplicada — hasta el umbral de deslizamiento."
+        },
+        {
+          "text": "Sorprendentemente, la fuerza de rozamiento casi no depende del área de contacto, solo de la fuerza normal. La razón es que las superficies no tocan en todo el plano, sino en microprotuberancias dispersas: al aumentar el área, las protuberancias distribuyen la misma carga, el contacto total sigue siendo el mismo.",
+          "latex": "F_{\\text{тр}} = \\mu N \\quad (\\text{площадь не входит})",
+          "figure": "microcontact",
+          "figCaption": "El contacto real son microprotuberancias dispersas, no toda el área visible."
+        },
+        {
+          "text": "Escribamos lo mismo en términos de momento lineal. Si la masa es constante, la derivada del momento da $m\\,dv/dt = ma$ — la forma familiar. Pero la forma original es más general: es válida incluso cuando la masa cambia, como en un cohete que despega quemando combustible.",
+          "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt} = \\frac{d(m\\vec{v})}{dt}",
+          "figure": "impulse",
+          "figCaption": "La fuerza es la tasa de cambio del momento lineal — una formulación que ha sobrevivido tanto a los cohetes como a la relatividad."
+        },
+        {
+          "text": "Tercera ley: las fuerzas siempre se presentan en pares. Si el cuerpo A actúa sobre B, entonces B actúa sobre A con la misma magnitud y dirección opuesta. Detalle crucial: estas fuerzas se aplican a CUERPOS DIFERENTES, por lo que no se equilibran entre sí y no impiden el movimiento.",
+          "latex": "\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}",
+          "figure": "action",
+          "figCaption": "El par de fuerzas tiene la misma magnitud y dirección opuesta — pero se aplica a cuerpos diferentes."
+        },
+        {
+          "text": "De la tercera ley se sigue inmediatamente un gran resultado: en un sistema aislado, el momento lineal total no cambia. Las fuerzas internas se cancelan por pares, no tienen con qué cambiar el momento total. Esto lo abordaremos en la siguiente sección.",
+          "latex": "\\frac{d}{dt}\\left(\\vec{p}_A + \\vec{p}_B\\right) = \\vec{F}_{B\\to A} + \\vec{F}_{A\\to B} = 0",
+          "figure": "momentum",
+          "figCaption": "Las fuerzas internas se cancelan mutuamente — el momento lineal total del sistema se conserva."
+        }
+      ],
+      "plate": "\\vec{F} = m\\vec{a}",
+      "plateCap": "La fuerza no mantiene el movimiento, lo cambia. Toda la diferencia entre Aristóteles y Newton se resume en esta frase.",
+      "note": "Las leyes de Newton no siempre son válidas. Dejan de funcionar a velocidades cercanas a la de la luz (se necesita la relatividad), a escalas atómicas (se necesita la mecánica cuántica) y en sistemas de referencia no inerciales —en un carrusel giratorio o en un autobús que frena aparecen fuerzas que no tienen un cuerpo fuente. Esto no es un error de Newton, sino límites de aplicabilidad, y conocerlos es tan importante como las propias leyes.\n\nPor separado, vale la pena mencionar a **Robert Hooke**. Fue él quien, en cartas de 1679, sugirió a Newton la idea clave: el movimiento de un planeta se puede descomponer en un movimiento inercial tangencial y una atracción constante hacia el centro, y que la atracción disminuye con el cuadrado de la distancia. Hooke no pudo demostrarlo matemáticamente —le faltaban herramientas. Newton sí pudo y lo publicó, pero se negó a reconocer la sugerencia, y tras la muerte de Hooke asumió la presidencia de la Royal Society, y las menciones al rival comenzaron a desaparecer. La famosa frase de Newton «si he visto más lejos que otros, es porque me he subido a hombros de gigantes» fue escrita en una carta precisamente a Hooke —y muchos historiadores la interpretan no como modestia, sino como una pulla hacia un hombre de baja estatura y con la espalda torcida. La ley de elasticidad, que veremos en el tema de oscilaciones, lleva con justicia el nombre de Hooke: es la primera ley cuantitativa de la historia sobre la deformación de los cuerpos."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitan aquí",
+      "items": [
+        {
+          "what": "Adición vectorial de fuerzas",
+          "why": "Las fuerzas se suman como vectores, no como números. Dos fuerzas de 3 N dan una resultante de 0 a 6 N — según el ángulo. Si son perpendiculares, funciona el teorema de Pitágoras. Por eso en los problemas las fuerzas se descomponen en ejes: a lo largo de cada eje ya se pueden sumar números ordinarios con signo.",
+          "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+        },
+        {
+          "what": "Proporcionalidad y cómo comprobarla",
+          "why": "La notación $a \\propto F$ significa que la relación $a/F$ es constante. Para comprobarlo no basta con un par de números, sino con varios: si al duplicar la fuerza la aceleración se duplica y al triplicarla se triplica, la dependencia es lineal. Este razonamiento — de una serie de mediciones a una fórmula — es el método experimental en su forma más pura.",
+          "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números",
+      "lead": "Un problema en el que casi todos se equivocan, olvidando el rozamiento.",
+      "given": "Sobre una caja de masa $20$ kg actúa una fuerza horizontal de $60$ N. El coeficiente de rozamiento con el suelo es $\\mu = 0{,}2$. Encontrar la aceleración. Tomar $g = 10$ m/s².",
+      "law": "$\\vec{F}_{\\text{resultante}} = m\\vec{a}$, donde la resultante es la suma de la fuerza aplicada y la fuerza de rozamiento",
+      "solution": [
+        {
+          "text": "Primero encontramos la fuerza de rozamiento. Es igual al producto del coeficiente por la fuerza normal, y aquí esta es igual al peso.",
+          "latex": "F_{\\text{roz}} = \\mu m g = 0{,}2 \\cdot 20 \\cdot 10 = 40\\ \\text{N}"
+        },
+        {
+          "text": "La resultante es la diferencia entre la fuerza aplicada y el rozamiento: están dirigidas opuestamente.",
+          "latex": "F_{\\text{resultante}} = 60 - 40 = 20\\ \\text{N}"
+        },
+        {
+          "text": "Ahora la segunda ley.",
+          "latex": "a = \\frac{F_{\\text{resultante}}}{m} = \\frac{20}{20} = 1\\ \\text{m/s}^2"
+        }
+      ],
+      "answer": "Aceleración $1$ m/s²",
+      "check": "Si hubiéramos olvidado el rozamiento, obtendríamos 3 m/s² — el triple. Comprobación con sentido común: una caja de 20 kg bajo una fuerza de 60 N acelera lentamente, un metro por segundo en cada segundo. Parece razonable: empujando una caja pesada por el suelo, realmente no la aceleramos instantáneamente."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Aquí aparece la primera unidad real nombrada en honor a una persona, y un coeficiente que no es constante de la naturaleza.",
+      "items": [
+        {
+          "sym": "Н",
+          "latex": "\\text{Н}",
+          "name": "Newton — unidad de fuerza",
+          "value": "1 Н = 1 кг·м/с²",
+          "unit": "кг · м / с²",
+          "why": "No es una constante fundamental, sino una unidad derivada: fuerza que comunica a una masa de un kilogramo una aceleración de un metro por segundo al cuadrado. Descomponga el newton en sus componentes y obtendrá la segunda ley en su forma pura. Para tener una idea de escala: el peso de una manzana es aproximadamente 1 N.",
+          "mnemo": "La unidad contiene la fórmula: кг·м/с² — es literalmente m·a."
+        },
+        {
+          "sym": "μ",
+          "latex": "\\mu",
+          "name": "Coeficiente de rozamiento",
+          "value": "0,02 (hielo) · 0,2 (madera) · 0,8 (caucho)",
+          "unit": "adimensional",
+          "why": "No es una constante de la naturaleza, sino una característica de un PAR de superficies: acero sobre hielo, caucho sobre asfalto. Es adimensional porque es el cociente de dos fuerzas. Dato curioso: en primera aproximación no depende del área de contacto — esto lo estableció Coulomb.",
+          "mnemo": "El caucho sobre asfalto seco es aproximadamente 0,8 — de ahí la frenada máxima de un automóvil de unos 8 m/s²."
+        },
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Aceleración de la gravedad",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "Aquí se necesita para relacionar la masa con el peso: $P = mg$. Es importante no confundir masa (kilogramos, medida de inercia) y peso (newtons, fuerza de atracción). En la Luna su masa es la misma, pero su peso es seis veces menor.",
+          "mnemo": ""
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La fuerza no mantiene el movimiento, sino que lo cambia. La aceleración es directamente proporcional a la fuerza resultante e inversamente proporcional a la masa, y las fuerzas siempre aparecen en pares, aplicadas a cuerpos diferentes.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Primera ley",
+          "text": "Sin fuerza resultante, la velocidad no cambia. El movimiento no requiere causa."
+        },
+        {
+          "icon": "clock",
+          "title": "Segunda ley",
+          "text": "a = F/m. La fuerza no determina la velocidad, sino su cambio."
+        },
+        {
+          "icon": "sigma",
+          "title": "Tercera ley",
+          "text": "Las fuerzas son pares y se aplican a cuerpos diferentes — por eso no se anulan entre sí."
+        },
+        {
+          "icon": "formula",
+          "title": "Límites",
+          "text": "No funcionan a velocidades cercanas a la luz, en escalas atómicas y en sistemas no inerciales."
+        }
+      ],
+      "where": [
+        "Cinturón de seguridad: en un choque, el cuerpo continúa moviéndose por inercia, el cinturón crea una fuerza de frenado",
+        "Retroceso del fusil — tercera ley en estado puro: la bala hacia adelante, la culata hacia atrás",
+        "Un cohete vuela sin empujar contra el aire, expulsando masa hacia atrás — funciona igual en el vacío",
+        "Un camión cargado frena más lentamente que uno vacío: misma fuerza, mayor masa, menor aceleración"
+      ],
+      "watchOut": "Las fuerzas de acción y reacción NUNCA se anulan entre sí, porque están aplicadas a cuerpos diferentes. El caballo tira del carro no a pesar de la tercera ley: sobre el carro actúa la fuerza del caballo, sobre el caballo la del carro, y el movimiento se determina por las fuerzas aplicadas a cada cuerpo por separado."
+    },
+    "quiz": [
+      {
+        "id": "n1",
+        "type": "mcq",
+        "q": "Un caballo tira de una carreta. Según la tercera ley, la carreta tira del caballo con la misma fuerza. ¿Por qué entonces el sistema se mueve?",
+        "options": [
+          "La fuerza del caballo es un poco mayor",
+          "Estas fuerzas se aplican a cuerpos diferentes y por eso no se equilibran; el movimiento de la carreta lo determinan las fuerzas que actúan sobre la carreta",
+          "La tercera ley no funciona para seres vivos",
+          "La fricción rompe la igualdad de las fuerzas"
+        ],
+        "answer": 1,
+        "why": "Solo pueden equilibrarse fuerzas aplicadas a UN MISMO cuerpo. Aquí una fuerza se aplica a la carreta, la otra al caballo. La carreta avanza porque la fuerza del caballo supera la fricción de la carreta con el camino.",
+        "hint": "Formule la pregunta con más precisión: ¿qué fuerzas actúan exactamente sobre la carreta? ¿Y cuáles exactamente sobre el caballo? ¿Se pueden sumar fuerzas aplicadas a cuerpos diferentes?"
+      },
+      {
+        "id": "n2",
+        "type": "mcq",
+        "q": "Un astronauta en el espacio exterior lanza una llave inglesa. ¿Qué le sucederá a él mismo?",
+        "options": [
+          "Nada — en la ingravidez no hay fuerzas",
+          "Él adquirirá una velocidad en la dirección opuesta, tanto menor cuanto mayor sea su masa",
+          "Comenzará a girar, pero permanecerá en el mismo lugar",
+          "Volará en la misma dirección que la llave"
+        ],
+        "answer": 1,
+        "why": "Tercera ley: al empujar la llave, el astronauta recibe una fuerza de igual magnitud en dirección opuesta. Según la segunda ley, su aceleración es tantas veces menor como su masa es mayor que la masa de la llave. Este es el principio del movimiento reactivo.",
+        "hint": "Si sobre la llave actuó una fuerza, ¿qué dice la tercera ley sobre la fuerza que actuó sobre el astronauta? ¿Y la segunda ley sobre su aceleración con una masa grande?"
+      },
+      {
+        "id": "n3",
+        "type": "free",
+        "q": "Con tus propias palabras: ¿por qué durante dos mil años se creyó que para el movimiento se necesitaba una fuerza constante? ¿Cuál fue el error?",
+        "keywords": [
+          "fricción",
+          "resistencia",
+          "invisible",
+          "enmascara",
+          "detiene",
+          "impide"
+        ],
+        "needed": 1,
+        "why": "Porque en la experiencia cotidiana siempre hay fricción, y es invisible. Deja de empujar la carreta — se detendrá, pero no porque 'el movimiento requiera fuerza', sino porque la fricción la frena. Galileo eliminó mentalmente la fricción y vio la verdad.",
+        "hint": "¿Qué sucede con un trineo sobre hielo comparado con un trineo sobre asfalto? ¿Qué obstáculo invisible está presente en todos los experimentos terrestres y cómo distorsiona la conclusión?"
+      },
+      {
+        "id": "n4",
+        "type": "estimate",
+        "q": "Un automóvil de 1200 kg acelera a 3 m/s². ¿Qué fuerza ejerce el motor, si se desprecian la fricción y la resistencia? Respuesta en kilonewtons.",
+        "answer": 3.6,
+        "unit": "kN",
+        "tolerance": 1.3,
+        "why": "F = ma = 1200 · 3 = 3600 N = 3,6 kN. Mentalmente: 1200 por 3 es 3600. Para comparar: el peso del automóvil es aproximadamente 12 kN, por lo que la tracción es aproximadamente un tercio del peso.",
+        "hint": "La fórmula es directa, sin trucos. Multiplica la masa por la aceleración y convierte newtons a kilonewtons dividiendo entre mil."
+      }
+    ]
+  },
+  "ar": {
+    "title": "قوانين نيوتن",
+    "subtitle": "فقرة 2 · القوة كسبب لتغير الحركة",
+    "intro": [
+      "في الفقرة السابقة، تعلمنا وصف الحركة: أين الجسم، ما سرعته، وما تسارعه. لكننا لم نسأل لماذا يتحرك بهذه الطريقة. الآن سنسأل.",
+      "الإجابة التي تبدو بديهية خاطئة. 'لكي يتحرك الجسم، نحتاج إلى قوة' — هكذا اعتقدوا من أرسطو إلى جاليليو، لما يقرب من ألفي عام. والتجربة أكدت ذلك: توقف عن دفع العربة، فتتوقف.",
+      "الخطأ هو أن الاحتكاك موجود دائمًا ولا يُرى. جاليليو كان أول من خمن إزالته ذهنيًا — وأدرك: الحركة لا تتطلب سببًا، السبب مطلوب فقط لتغيرها. نيوتن رفع هذه الفكرة إلى قانون وأضاف إليها اثنين آخرين."
+    ],
+    "standNote": "في المنصة — عربة على سطح. حدد الكتلة والقوة المطبقة، شغّل الاحتكاك وشاهد ما يحدث للتسارع. الملاحظة الأساسية: طالما أن القوة المؤثرة لا تتجاوز احتكاك السكون، تظل العربة ساكنة؛ بمجرد أن تتجاوزه — يبدأ التسارع، وكلما كانت الكتلة أكبر، كان التسارع أبطأ.",
+    "formula": {
+      "name": "قانون نيوتن الثاني",
+      "latex": "\\vec{F} = m\\vec{a} \\qquad \\text{أو} \\qquad \\vec{F} = \\frac{d\\vec{p}}{dt}",
+      "alsoKnown": "المعادلة الأساسية للديناميكا",
+      "authors": [
+        {
+          "who": "جاليليو جاليلي",
+          "year": "1638",
+          "what": "صاغ مبدأ القصور الذاتي: يحافظ الجسم على حركته ما لم تؤثر عليه قوة — هذا هو القانون الأول فيما بعد"
+        },
+        {
+          "who": "روبرت هوك",
+          "year": "1679",
+          "what": "في مراسلاته مع نيوتن، طرح فكرة قانون التربيع العكسي للجاذبية وأصر على أن حركة الكواكب تتكون من القصور الذاتي والجاذبية المستمرة نحو الشمس — فكرة أصبحت مفتاح 'المبادئ'"
+        },
+        {
+          "who": "إسحاق نيوتن",
+          "year": "1687",
+          "what": "في 'المبادئ الرياضية للفلسفة الطبيعية'، اختزل الديناميكا إلى ثلاثة قوانين وسجل الثاني بصيغة 'التغير في كمية الحركة يتناسب مع القوة المطبقة'"
+        }
+      ],
+      "story": "نيوتن نفسه لم يكتب $F = ma$. في الأصل، القانون الثاني ينص على خلاف ذلك: التغير في كمية الحركة يتناسب مع القوة المطبقة ويحدث في اتجاه فعلها. أي في الصياغة الأصلية، يوجد مشتقة الدفع (الزخم) وليس حاصل ضرب الكتلة في التسارع. الصيغة المألوفة أعطاها أويلر بعد نصف قرن. الفرق يبدو تجميليًا، لكن الصيغة الأصلية تحديدًا هي التي ستنجو من الثورة النسبية: عند السرعات القريبة من الضوء، $F = ma$ تنهار، بينما $F = dp/dt$ تظل صحيحة.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "\\vec{F}",
+          "what": "محصلة القوى",
+          "unit": "نيوتن (N)",
+          "note": "مجموع كل القوى وليس واحدة منها — الخطأ الأكثر شيوعًا في المسائل"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "كتلة الجسم",
+          "unit": "كجم",
+          "note": "مقياس القصور الذاتي: مدى صعوبة تغيير سرعة هذا الجسم"
+        },
+        {
+          "sym": "a",
+          "latex": "\\vec{a}",
+          "what": "التسارع",
+          "unit": "م/ث²",
+          "note": "يتجه في نفس اتجاه المحصلة — دائمًا، دون استثناء"
+        },
+        {
+          "sym": "p",
+          "latex": "\\vec{p}",
+          "what": "الزخم (كمية الحركة)، p = mv",
+          "unit": "كجم·م/ث",
+          "note": "كمية الحركة؛ من خلالها كتب القانون في صيغته الأصلية من نيوتن"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "الاشتقاق الصارم",
+      "lead": "القوانين الثلاثة ليست ثلاث عبارات مستقلة. الأول يحدد أين يمكن تطبيق البقية؛ الثاني يربط القوة بالحركة؛ الثالث يقول أن القوى دائماً زوجية. سنناقشها بالترتيب.",
+      "steps": [
+        {
+          "text": "القانون الأول: يحافظ الجسم على سكونه أو حركته المنتظمة في خط مستقيم ما لم تؤثر عليه قوة محصلة. هذه ليست نتيجة للقانون الثاني، بل هي تأكيد على وجود أطر مرجعية خاصة - الأطر القصورية - حيث تعمل القوانين الأخرى.",
+          "latex": "\\sum \\vec{F} = 0 \\;\\Longrightarrow\\; \\vec{v} = \\text{const}",
+          "figure": "inertia",
+          "figCaption": "بدون قوى، لا تتغير السرعة. الحركة لا تحتاج إلى سبب - التغيير هو الذي يحتاج إلى سبب."
+        },
+        {
+          "text": "دعنا نختبر عملياً ما يعتمد عليه التسارع. نطبق قوى مختلفة على نفس الجسم: يتناسب التسارع طردياً مع القوة. إذن $a \\propto F$.",
+          "latex": "a \\propto F \\quad (\\text{при } m = \\text{const})",
+          "figure": "forceprop",
+          "figCaption": "قوة مضاعفة تعطي تسارعاً مضاعفاً."
+        },
+        {
+          "text": "الآن نطبق نفس القوة على أجسام ذات كتل مختلفة. يتناقص التسارع عكسياً مع الكتلة. الجسم الثقيل يقاوم تغير السرعة بقوة أكبر - هذه الخاصية تسمى القصور الذاتي.",
+          "latex": "a \\propto \\frac{1}{m} \\quad (\\text{при } F = \\text{const})",
+          "figure": "massprop",
+          "figCaption": "نفس القوة: الجسم الخفيف يتسارع بسرعة، والثقيل ببطء."
+        },
+        {
+          "text": "بجمع الاعتمادين واختيار وحدة القوة بحيث يصبح معامل التناسب واحداً، نحصل على القانون الثاني. وهكذا تم تعريف النيوتن: القوة التي تعطي كتلة مقدارها كيلوغرام واحد تسارعاً مقداره متر لكل ثانية مربعة.",
+          "latex": "\\vec{a} = \\frac{\\vec{F}}{m} \\;\\Longleftrightarrow\\; \\vec{F} = m\\vec{a}",
+          "figure": "secondlaw",
+          "figCaption": "التسارع يتناسب طردياً مع القوة وعكسياً مع الكتلة."
+        },
+        {
+          "text": "بشكل منفصل عن الاحتكاك - القوة التي ضللت الفيزياء لمدة ألفي عام. إنها ليست ثابتة: طالما أنك تدفع بلطف، فإن احتكاك السكون يوازن قوتك تماماً ويزداد معها. ولكن فقط حتى حد معين. إذا تجاوزت العتبة، ينزلق الجسم، ثم يعمل احتكاك الانزلاق، وعادة ما يكون أقل بقليل.",
+          "latex": "F_{\\text{тр.покоя}} \\le \\mu_0 N, \\qquad F_{\\text{тр.скольж}} = \\mu N",
+          "figure": "friction",
+          "figCaption": "يتكيف احتكاك السكون مع القوة المطبقة - حتى عتبة الانزلاق."
+        },
+        {
+          "text": "المدهش أن قوة الاحتكاك لا تعتمد تقريباً على مساحة التلامس - فقط على القوة العمودية. السبب هو أن الأسطح لا تتلامس على كامل المسطح، بل من خلال نتوءات مجهرية نادرة: إذا زدت المساحة، توزع النتوءات نفس الحمل، ويبقى إجمالي التلامس كما هو.",
+          "latex": "F_{\\text{тр}} = \\mu N \\quad (\\text{площадь не входит})",
+          "figure": "microcontact",
+          "figCaption": "التلامس الحقيقي هو نتوءات مجهرية نادرة، وليس كل المساحة المرئية."
+        },
+        {
+          "text": "دعنا نكتب نفس الشيء باستخدام الزخم. إذا كانت الكتلة ثابتة، فإن مشتق الزخم يعطي $m\\,dv/dt = ma$ - الصيغة المألوفة. لكن الصيغة الأصلية أوسع: إنها صحيحة حتى عندما تتغير الكتلة، مثلاً في صاروخ ينطلق ويحرق الوقود.",
+          "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt} = \\frac{d(m\\vec{v})}{dt}",
+          "figure": "impulse",
+          "figCaption": "القوة هي معدل تغير الزخم - صياغة بقيت صالحة حتى مع الصواريخ ونظرية النسبية."
+        },
+        {
+          "text": "القانون الثالث: القوى دائماً تولد في أزواج. إذا أثر الجسم A على B، فإن B يؤثر على A بنفس المقدار وفي الاتجاه المعاكس. تفصيل مهم: هذه القوى تؤثر على أجسام مختلفة، لذلك لا تلغي بعضها البعض ولا تعيق الحركة.",
+          "latex": "\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}",
+          "figure": "action",
+          "figCaption": "زوج القوى متساوٍ في المقدار ومتعاكس في الاتجاه - لكنه يؤثر على جسمين مختلفين."
+        },
+        {
+          "text": "من القانون الثالث ينتج فوراً نتيجة عظيمة: في النظام المغلق، الزخم الكلي لا يتغير. القوى الداخلية تلغي بعضها البعض في أزواج، فلا شيء يغير الزخم الكلي. سنتناول هذا في الفقرة التالية.",
+          "latex": "\\frac{d}{dt}\\left(\\vec{p}_A + \\vec{p}_B\\right) = \\vec{F}_{B\\to A} + \\vec{F}_{A\\to B} = 0",
+          "figure": "momentum",
+          "figCaption": "القوى الداخلية تلغي بعضها البعض - الزخم الكلي للنظام محفوظ."
+        }
+      ],
+      "plate": "\\vec{F} = m\\vec{a}",
+      "plateCap": "القوة لا تحافظ على الحركة - إنها تغيرها. كل الفرق بين أرسطو ونيوتن يتلخص في هذه العبارة.",
+      "note": "قوانين نيوتن ليست صحيحة دائماً. إنها تتوقف عن العمل عند السرعات المقاربة لسرعة الضوء (نحتاج إلى نظرية النسبية)، وفي نطاق الذرة (نحتاج إلى ميكانيكا الكم)، وفي الأطر المرجعية غير القصورية - في دوّارة تدور أو حافلة تفرمل تظهر قوى ليس لها مصدر جسمي. هذا ليس خطأ نيوتن، بل حدود للتطبيق، ومعرفتها لا تقل أهمية عن معرفة القوانين نفسها.\n\nبشكل منفصل، يجدر ذكر **روبرت هوك**. هو في رسائله عام 1679 اقترح على نيوتن الفكرة الحاسمة: حركة الكوكب يمكن تحليلها إلى حركة قصورية على طول المماس وجذب مستمر نحو المركز، وأن الجذب يتناقص كمربع المسافة. لم يستطع هوك إثبات ذلك رياضياً - لم تكن الأدوات كافية. استطاع نيوتن ذلك ونشر، لكنه رفض الاعتراف بالتلميح، وبعد وفاة هوك ترأس الجمعية الملكية، وبدأت الإشارات إلى منافسه تختفي. العبارة الشهيرة لنيوتن \"إذا رأيت أبعد من الآخرين، فذلك لأنني وقفت على أكتاف عمالقة\" كتبت في رسالة إلى هوك نفسه - ويفسرها العديد من المؤرخين ليس كتواضع، بل كتهكم على رجل قصير القامة وذو عمود فقري ملتوي. قانون المرونة الذي سنناقشه في موضوع الاهتزازات يحمل اسم هوك بحق: إنه أول قانون كمي في التاريخ عن تشوه الأجسام."
+    },
+    "math": {
+      "title": "الرياضيات التي سنحتاجها هنا",
+      "items": [
+        {
+          "what": "جمع القوى المتجهي",
+          "why": "تتجمع القوى كمتجهات وليست كأعداد. قوتان مقدار كل منهما 3 Н تعطيان محصلة تتراوح من 0 إلى 6 Н حسب الزاوية بينهما. إذا كانتا متعامدتين، تنطبق نظرية فيثاغورس. ولهذا السبب تُحلل القوى إلى مركبات على المحاور: على طول كل محور يمكن جمع الأعداد العادية مع الإشارات.",
+          "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+        },
+        {
+          "what": "التناسب وكيفية التحقق منه",
+          "why": "التعبير $a \\propto F$ يعني أن النسبة $a/F$ ثابتة. يجب التحقق من ذلك ليس على زوج واحد من الأرقام بل على عدة أزواج: إذا تضاعفت القوة فتضاعف التسارع، وإذا تضاعفت ثلاث مرات فتضاعف ثلاث مرات، فالعلاقة خطية. هذا الأسلوب في التفكير — من سلسلة قياسات إلى معادلة — هو المنهج التجريبي بشكله الخالص.",
+          "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+        }
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام",
+      "lead": "مسألة يخطئ فيها الجميع تقريبًا نسيان الاحتكاك.",
+      "given": "على صندوق كتلته $20$ كجم تؤثر قوة أفقية مقدارها $60$ Н. معامل الاحتكاك مع الأرض $\\mu = 0{,}2$. أوجد التسارع. اعتبر $g = 10$ م/ث².",
+      "law": "$\\vec{F}_{\\text{равнод}} = m\\vec{a}$، حيث المحصلة هي مجموع القوة المطبقة وقوة الاحتكاك",
+      "solution": [
+        {
+          "text": "أولاً نجد قوة الاحتكاك. تساوي حاصل ضرب المعامل في قوة الضغط العمودي، وهذه هنا تساوي الوزن.",
+          "latex": "F_{\\text{тр}} = \\mu m g = 0{,}2 \\cdot 20 \\cdot 10 = 40\\ \\text{Н}"
+        },
+        {
+          "text": "المحصلة هي فرق القوة المطبقة وقوة الاحتكاك: اتجاههما متعاكس.",
+          "latex": "F_{\\text{равнод}} = 60 - 40 = 20\\ \\text{Н}"
+        },
+        {
+          "text": "الآن القانون الثاني.",
+          "latex": "a = \\frac{F_{\\text{равнод}}}{m} = \\frac{20}{20} = 1\\ \\text{м/с}^2"
+        }
+      ],
+      "answer": "التسارع $1$ м/с²",
+      "check": "لو نسينا الاحتكاك، لكان التسارع 3 м/ث² — ثلاثة أضعاف. التحقق بالمنطق السليم: صندوق وزنه 20 كجم تحت قوة 60 Н يتسارع ببطء، متر في الثانية لكل ثانية. يبدو معقولًا: عند دفع صندوق ثقيل على الأرض، لا نسرعه لحظيًا."
+    },
+    "constants": {
+      "title": "الكميات في هذا القسم",
+      "lead": "هنا تظهر أول وحدة حقيقية سُميت باسم شخص، ومعامل ليس ثابتًا طبيعيًا.",
+      "items": [
+        {
+          "sym": "Н",
+          "latex": "\\text{Н}",
+          "name": "نيوتن — وحدة القوة",
+          "value": "1 Н = 1 кг·м/с²",
+          "unit": "кг · м / с²",
+          "why": "ليست ثابتًا أساسيًا، بل وحدة مشتقة: القوة التي تعطي كتلة كيلوجرام واحد تسارعًا قدره متر لكل ثانية مربعة. حلل النيوتن إلى مكوناته — تحصل على القانون الثاني بشكله الخالص. للإحساس بالمقياس: وزن تفاحة حوالي 1 Н.",
+          "mnemo": "الوحدة تحتوي على الصيغة: кг·м/с² — هي حرفيًا m·a."
+        },
+        {
+          "sym": "μ",
+          "latex": "\\mu",
+          "name": "معامل الاحتكاك",
+          "value": "0,02 (جليد) · 0,2 (خشب) · 0,8 (مطاط)",
+          "unit": "بدون أبعاد",
+          "why": "ليس ثابتًا طبيعيًا، بل خاصية لزوج من الأسطح: فولاذ على جليد، مطاط على أسفلت. بدون أبعاد لأنه نسبة قوتين. حقيقة مدهشة: في التقريب الأول لا يعتمد على مساحة التلامس — وقد أثبت ذلك كولوم.",
+          "mnemo": "المطاط على الأسفلت الجاف حوالي 0,8 — ومن هنا يكون أقصى تباطؤ للسيارة حوالي 8 م/ث²."
+        },
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "تسارع الجاذبية",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "هنا نحتاجه لربط الكتلة بالوزن: $P = mg$. من المهم عدم الخلط بين الكتلة (كيلوجرام، مقياس القصور الذاتي) والوزن (نيوتن، قوة الجاذبية). على القمر كتلتك هي نفسها، بينما الوزن أقل بست مرات.",
+          "mnemo": ""
+        }
+      ]
+    },
+    "memo": {
+      "essence": "القوة لا تحافظ على الحركة بل تغيرها. التسارع يتناسب طرديًا مع المحصلة وعكسيًا مع الكتلة، والقوى دائمًا تتولد في أزواج تؤثر على أجسام مختلفة.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "القانون الأول",
+          "text": "بدون محصلة قوى لا تتغير السرعة. الحركة لا تحتاج إلى سبب."
+        },
+        {
+          "icon": "clock",
+          "title": "القانون الثاني",
+          "text": "a = F/m. القوة تحدد التغير في السرعة وليس السرعة نفسها."
+        },
+        {
+          "icon": "sigma",
+          "title": "القانون الثالث",
+          "text": "القوى زوجية وتؤثر على أجسام مختلفة — لذلك لا توازن بعضها البعض."
+        },
+        {
+          "icon": "formula",
+          "title": "الحدود",
+          "text": "لا تنطبق عند السرعات القريبة من الضوء، وعلى المستوى الذري، وفي الأنظمة غير القصورية."
+        }
+      ],
+      "where": [
+        "حزام الأمان: عند الاصطدام، يستمر الجسم في الحركة بالقصور الذاتي، ويخلق الحزام قوة الكبح",
+        "ارتداد البندقية — القانون الثالث بشكل صريح: الرصاصة إلى الأمام، المؤخرة إلى الخلف",
+        "الصاروخ لا يطير بدفع الهواء، بل بقذف الكتلة إلى الخلف — ويعمل بنفس الطريقة في الفراغ",
+        "الشاحنة المحملة تتوقف لفترة أطول من الفارغة: نفس القوة، كتلة أكبر، تسارع أقل"
+      ],
+      "watchOut": "قوى الفعل ورد الفعل لا توازن بعضها البعض أبدًا، لأنها تؤثر على أجسام مختلفة. الحصان يجر العربة ليس خلافًا للقانون الثالث: على العربة تؤثر قوة من الحصان، وعلى الحصان من العربة، وتحدد الحركة بالقوى المؤثرة على كل جسم على حدة."
+    },
+    "quiz": [
+      {
+        "id": "n1",
+        "type": "mcq",
+        "q": "يسحب الحصان عربة. وفقًا للقانون الثالث، تسحب العربة الحصان بنفس القوة. لماذا إذن يتحرك النظام؟",
+        "options": [
+          "قوة الحصان أكبر قليلاً في النهاية",
+          "هذه القوى تؤثر على أجسام مختلفة وبالتالي لا تتوازن؛ حركة العربة تحددها القوى المؤثرة على العربة",
+          "القانون الثالث لا ينطبق على الكائنات الحية",
+          "الاحتكاك يخل بتساوي القوى"
+        ],
+        "answer": 1,
+        "why": "يمكن أن تتوازن فقط القوى المؤثرة على جسم واحد. هنا، قوة واحدة تؤثر على العربة، والأخرى على الحصان. تتحرك العربة لأن قوة الحصان تتجاوز احتكاكها بالطريق.",
+        "hint": "حدد السؤال بدقة: ما القوى المؤثرة على العربة بالضبط؟ وما القوى المؤثرة على الحصان؟ هل يمكن جمع القوى المؤثرة على أجسام مختلفة؟"
+      },
+      {
+        "id": "n2",
+        "type": "mcq",
+        "q": "رائد فضاء في الفضاء المفتوح يرمي مفتاح ربط. ماذا يحدث له؟",
+        "options": [
+          "لا شيء - في انعدام الوزن لا توجد قوى",
+          "يكتسب سرعة في الاتجاه المعاكس، أصغر كلما زادت كتلته",
+          "سيبدأ بالدوران لكنه يبقى في مكانه",
+          "سيطير في نفس اتجاه المفتاح"
+        ],
+        "answer": 1,
+        "why": "القانون الثالث: بدفع المفتاح، يتلقى رائد الفضاء قوة مساوية في المقدار في الاتجاه المعاكس. وفقًا للقانون الثاني، تسارعه أصغر بعدد المرات التي تكون فيها كتلته أكبر من كتلة المفتاح. هذا مبدأ الدفع التفاعلي.",
+        "hint": "إذا أثرت قوة على المفتاح، ماذا يقول القانون الثالث عن القوة التي أثرت على رائد الفضاء؟ والقانون الثاني عن تسارعه عند الكتلة الكبيرة؟"
+      },
+      {
+        "id": "n3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا كان يُعتقد لمئتي عام أن الحركة تحتاج إلى قوة مستمرة؟ ما الخطأ؟",
+        "keywords": [
+          "احتكاك",
+          "مقاومة",
+          "غير مرئي",
+          "يخفي",
+          "توقف",
+          "يعيق"
+        ],
+        "needed": 1,
+        "why": "لأنه في التجربة اليومية يوجد دائمًا احتكاك، وهو غير مرئي. توقف عن دفع العربة - ستتوقف، ولكن ليس لأن 'الحركة تتطلب قوة'، بل لأن الاحتكاك يبطئها. أزال غاليليو الاحتكاك عقليًا ورأى الحقيقة.",
+        "hint": "ماذا يحدث للزلاجة على الجليد مقارنة بالزلاجة على الأسفلت؟ ما العائق غير المرئي الموجود في كل التجارب الأرضية وكيف يشوه الاستنتاج؟"
+      },
+      {
+        "id": "n4",
+        "type": "estimate",
+        "q": "سيارة كتلتها 1200 كجم تتسارع بعجلة 3 م/ث². ما القوة المؤثرة من المحرك إذا أهملنا الاحتكاك والمقاومة؟ الإجابة بالكيلونيوتن.",
+        "answer": 3.6,
+        "unit": "кН",
+        "tolerance": 1.3,
+        "why": "F = ma = 1200 · 3 = 3600 Н = 3,6 кН. ذهنيًا: 1200 ضرب 3 = 3600. للمقارنة: وزن السيارة نفسها حوالي 12 кН، أي أن قوة الجر تساوي حوالي ثلث الوزن.",
+        "hint": "الصيغة مباشرة، لا خداع. اضرب الكتلة في العجلة وحول النيوتن إلى كيلونيوتن بالقسمة على ألف."
+      }
+    ]
+  },
+  "tags": [
+    "pulsar"
+  ],
+  "laws": [
+    "pythagorean_theorem",
+    "newtons_second_law"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.15129",
+      "why": "совпадение по теме: pulsar"
+    },
+    {
+      "id": "2607.14054",
+      "why": "совпадение по теме: pulsar"
+    },
+    {
+      "id": "2607.13930",
+      "why": "совпадение по теме: pulsar"
+    }
+  ]
+}

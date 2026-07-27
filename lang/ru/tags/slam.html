@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#slam — bridge42worlds</title>
+    <meta name="description" content="SLAM — это математический фреймворк, позволяющий движущейся платформе (роботу, дрону, автомобилю) одновременно уточнять собственное положение в пространстве и строить карту окружения. В основе лежит вероятностный подход: робот хранит не одну точную позицию, а целый веер возможных положений с разной степенью уверенности. Каждое новое измерение с датчиков — лазерного дальномера (лидара), инерциальных сенсоров, камер — обновляет это распределение. Ключевая идея — замкнуть петлю: когда робот возвращается в уже посещённое место, он узнаёт его и резко уменьшает накопившуюся ошибку.">
+    <meta property="og:title" content="#slam — bridge42worlds">
+    <meta property="og:description" content="SLAM — это математический фреймворк, позволяющий движущейся платформе (роботу, дрону, автомобилю) одновременно уточнять собственное положение в пространстве и строить карту окружения. В основе лежит вероятностный подход: робот хранит не одну точную позицию, а целый веер возможных положений с разной степенью уверенности. Каждое новое измерение с датчиков — лазерного дальномера (лидара), инерциальных сенсоров, камер — обновляет это распределение. Ключевая идея — замкнуть петлю: когда робот возвращается в уже посещённое место, он узнаёт его и резко уменьшает накопившуюся ошибку.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ru/tags/slam.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ru/index.html">main</a>
+            <a href="/lang/ru/tags/">tags</a>
+            <a href="/lang/ru/laws/">laws</a>
+            <a href="/lang/ru/scientists/">scientists</a>
+            <a href="/lang/ru/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ru/graph/">graph</a>
+            <a href="/lang/ru/theory/">theory</a>
+            <a href="/lang/ru/favorites.html" title="Избранное"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Уровень"><span class="vs-current">Популярно</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Мини" title="Мини — Суть за 10 секунд"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Просто" title="Просто — Максимально просто — для первого знакомства"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Популярно" title="Популярно — Богаче простого — если наука уже увлекает"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Подробно" title="Подробно — С формулами и историей открытия"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Поиск..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Поиск..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># тег · @ автор · ! учёный</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Тег</div><h1>slam</h1><button class="share-inline" title="Поделиться" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Робот входит в неизвестный лабиринт и чертит план на ходу, запоминая, где он уже был. Так работает SLAM: одновременное построение карты и определение своего места на ней.</p><div class="practical-app"><strong>На практике:</strong> Беспилотный автомобиль не едет вслепую — он строит трёхмерную модель улицы и понимает, где находится. Роботы-пылесосы запоминают план квартиры, чтобы не пропускать углы.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">SLAM — это математический фреймворк, позволяющий движущейся платформе (роботу, дрону, автомобилю) одновременно уточнять собственное положение в пространстве и строить карту окружения. В основе лежит вероятностный подход: робот хранит не одну точную позицию, а целый веер возможных положений с разной степенью уверенности. Каждое новое измерение с датчиков — лазерного дальномера (лидара), инерциальных сенсоров, камер — обновляет это распределение. Ключевая идея — замкнуть петлю: когда робот возвращается в уже посещённое место, он узнаёт его и резко уменьшает накопившуюся ошибку.</div>
+        <div class="section"><h2>История</h2><p>Первые алгоритмы появились в 1980-х для навигации подводных лодок и военных роботов. Массовое применение началось в 2000-х, когда стали доступны быстрые процессоры и точные датчики.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Робот сравнивает ожидаемые показания датчиков с реальными. Если стена оказалась дальше, чем он думал, алгоритм сдвигает его положение на карте. Попутно новые детали добавляются к карте. Это похоже на игру «горячо-холодно»: робот постоянно ошибается и корректирует себя.</p></div>
+        <div class="fun-fact">💡 Некоторые системы SLAM используют сразу несколько камер и инерциальные датчики, подобно тому как человек ориентируется, глядя глазами и чувствуя наклон тела.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Когда вы бродите в темноте по незнакомой комнате, вы выставляете руки и запоминаете расположение мебели. SLAM (метод одновременной локализации и построения карты) позволяет роботу делать то же самое. Он использует камеры или лазеры (лидары), чтобы измерять расстояния до предметов, и по этим данным рисует карту. При этом он непрерывно уточняет собственное положение, чтобы линии карты не расходились.</div>
+        <div class="section"><h2>История</h2><p>Первые алгоритмы появились в 1980-х для навигации подводных лодок и военных роботов. Массовое применение началось в 2000-х, когда стали доступны быстрые процессоры и точные датчики.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Робот сравнивает ожидаемые показания датчиков с реальными. Если стена оказалась дальше, чем он думал, алгоритм сдвигает его положение на карте. Попутно новые детали добавляются к карте. Это похоже на игру «горячо-холодно»: робот постоянно ошибается и корректирует себя.</p></div>
+        <div class="fun-fact">💡 Алгоритм FastSLAM 2.0 использует ровно одну копию карты для каждой частицы, что делает его вычислительно эффективным — число операций логарифмически зависит от количества ориентиров.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">SLAM (одновременная локализация и картографирование) — вычислительная задача из области мобильной робототехники, в которой агент (робот, беспилотник) должен построить модель неизвестной среды и одновременно оценить свою траекторию внутри неё. С точки зрения фильтрации, это задача оценки состояния с частично наблюдаемой динамикой: состояние включает позу робота и параметры карты (часто представленной как множество ориентиров или занятость ячеек). Наблюдения поступают от сенсоров — лидаров, камер, датчиков одометрии, инерциальных измерительных блоков. Математически проблема сводится к максимизации апостериорной вероятности траектории и карты при условии данных. Распространены два семейства решений: на основе фильтров частиц (FastSLAM) и на основе разреженного нелинейного МНК (Graph SLAM). Проблема замыкания цикла (loop closure) — ключевая: когда робот возвращается в известное место, система должна распознать его и перераспределить накопленную ошибку по всей траектории, иначе карта будет деформирована.</div>
+        <div class="section"><h2>История</h2><p>Понятие SLAM было формализовано Хью Дюррант-Уайтом и Джоном Дж. Леонардом в 1991 году, хотя предшествующие работы (например, Чейн, 1986) уже решали похожие задачи. Ранние реализации опирались на расширенный фильтр Калмана (EKF) и работали с радарными или сонарными данными. Переломным стал 2002 год, когда Монтемерло и Трун представили FastSLAM — алгоритм на основе фильтра частиц, способный обрабатывать тысячи ориентиров в реальном времени. Современные подходы, такие как ORB-SLAM, используют мультисенсорное слияние и архитектуру графов, достигая высокой точности на больших масштабах.</p></div>
+        <div class="section"><h2>Как работает</h2><p>Вероятностный SLAM моделирует совместное распределение P(x_{1:t}, m | z_{1:t}, u_{1:t}), где x — траектория, m — карта, z — наблюдения, u — управляющие сигналы. Обычно применяется рекурсивная байесовская фильтрация: предсказание на основе модели движения, коррекция по данным сенсоров. В Graph SLAM задача трансформируется в разреженный граф, где узлы — позы робота и ориентиры, а рёбра — ограничения от одометрии и наблюдений. Оптимизация графа методами Ньютона-Гаусса или Левенберга-Марквардта даёт наилучшую оценку всей истории. Для замыкания петли используются методы распознавания мест (place recognition) — часто на основе визуальных мешков слов (BoW) для камерных систем. Фильтры частиц, в свою очередь, представляют распределение множеством гипотез (частиц), каждая из которых имеет свою карту; этот подход эффективен для нелинейных моделей и ненормальных шумов.</p></div>
+        
+        <div class="section"><h2>Открытые проблемы и интересные факты</h2><p>Надёжное замыкание петли в больших пространствах при изменении освещения или погоды; Долговременное хранение и обновление карты при повторных посещениях; Совместная работа нескольких роботов с децентрализованным SLAM; Обработка динамических объектов и структурных изменений среды</p><p class="fact">💡 Алгоритм FastSLAM 2.0 использует ровно одну копию карты для каждой частицы, что делает его вычислительно эффективным — число операций логарифмически зависит от количества ориентиров.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> настроить представление</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> теги</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> законы</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> учёные</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> тег↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> тег↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> закон↔учёный</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> тег↔тег</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> закон↔закон</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> учёный↔учёный</label></div></div></div>
+<div class="mini-graph" data-node="t:slam"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="slam_ru_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Не нравится"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="slam" title="избранное"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> написать комментарий</button></div>
+<div class="feedback" id="feedback" data-article-id="slam_ru_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Хорошо читается</span><span class="fb-chip" data-opt="too_long">Многовато текста</span><span class="fb-chip" data-opt="unclear">Непонятно</span><span class="fb-chip" data-opt="great">Отлично</span><span class="fb-chip" data-opt="dry">Суховато</span></div><textarea class="fb-comment" rows="2" placeholder="ваш комментарий разберём пакетно — при необходимости поправим статью"></textarea><div class="fb-row"><button class="fb-send">отправить</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Связанные теги</div><a href="/lang/ru/tags/bayesian_inference.html" class="side-tag" data-tag="bayesian_inference">байесовский вывод</a><a href="/lang/ru/tags/computer_vision.html" class="side-tag" data-tag="computer_vision">компьютерное зрение</a><a href="/lang/ru/tags/control_theory.html" class="side-tag" data-tag="control_theory">теория управления</a><a href="/lang/ru/tags/robotics.html" class="side-tag" data-tag="robotics">робототехника</a><a href="/lang/ru/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">обработка сигналов</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Статьи по теме</h2>
+<div id="search-results" class="entity-list" data-context-tag="slam"><p>Пока нет статей</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('slam', 'tag', 'ru');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

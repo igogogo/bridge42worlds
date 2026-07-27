@@ -1,0 +1,1290 @@
+{
+  "id": "01-models",
+  "topic": "language",
+  "schema": "b42.lesson/1",
+  "model": "motion",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "mechanics"
+    ],
+    "scientists": [
+      "Isaac Newton"
+    ]
+  },
+  "ru": {
+    "title": "Модель и её границы",
+    "subtitle": "Параграф 1 · Почему материальная точка — не упрощение, а инструмент",
+    "intro": [
+      "Представьте, что вас просят рассчитать, за сколько секунд камень долетит до земли с высоты десяти метров. Вы почти наверняка знаете, что делать. А теперь заметьте, чего вы при этом не спросили: из чего камень, какой он формы, вращается ли он, какая сегодня влажность, где именно на Земле происходит дело.",
+      "Всё это вы отбросили не по небрежности, а совершенно правильно. Вы построили модель: тело без размеров, без формы и без внутреннего устройства, на которое действует одна постоянная сила. В природе такого объекта нет. Но ответ получится верным с точностью до нескольких процентов — и это гораздо полезнее, чем точный ответ, которого никто не может получить.",
+      "Весь этот параграф про одну мысль: физика работает не с природой напрямую, а с моделями природы. И самое ценное умение — не решать задачу внутри модели, а видеть, где модель кончается."
+    ],
+    "standNote": "На стенде — движение тела с постоянным ускорением. Обратите внимание, чего на нём нет: у тела нет размера, нет вращения, нет сопротивления воздуха. Это и есть материальная точка. Покрутите начальную скорость и ускорение и посмотрите на график: парабола получается идеально гладкой. В реальном опыте она такой не будет — и дальше мы разберём, насколько.",
+    "formula": {
+      "name": "Принцип моделирования",
+      "latex": "\\text{Явление} \\;\\longrightarrow\\; \\text{модель} \\;\\longrightarrow\\; \\text{предсказание} \\;\\longrightarrow\\; \\text{опыт}",
+      "alsoKnown": "Научный метод в его физической форме",
+      "authors": [
+        {
+          "who": "Галилео Галилей",
+          "year": "1638",
+          "what": "первым сознательно отбросил несущественное: изучая падение, исключил сопротивление воздуха, форму и состав тела. Это считали подтасовкой — ведь пёрышко падает иначе, чем камень. Он ответил, что сперва надо понять главное"
+        },
+        {
+          "who": "Исаак Ньютон",
+          "year": "1687",
+          "what": "довёл приём до предела: планеты в его расчёте — точки, хотя Земля имеет диаметр 12 700 км. Строго доказал, что шар притягивает так же, как точка в его центре, — то есть обосновал, почему упрощение здесь законно"
+        },
+        {
+          "who": "Альберт Эйнштейн",
+          "year": "1933",
+          "what": "сформулировал границу самого приёма: описание должно быть настолько простым, насколько возможно, но не проще. Модель, отбросившая существенное, не упрощает задачу, а подменяет её"
+        }
+      ],
+      "story": "У Галилея был оппонент, чьё возражение стоит помнить: в реальном мире перо и камень падают по-разному, значит закон неверен. Спор разрешился только через полвека после смерти Галилея, когда научились откачивать воздух: в вакуумной трубке перо и монета действительно падают одинаково. В 1971 году командир «Аполлона-15» повторил опыт на Луне, где вакуум даровой, — молоток и соколиное перо коснулись грунта одновременно. Модель оказалась не приближением к истине, а точным описанием той части явления, которую она бралась описывать.",
+      "symbols": [
+        {
+          "sym": "модель",
+          "latex": "M",
+          "what": "упрощённое описание явления",
+          "unit": "—",
+          "note": "задаётся списком того, чем мы пренебрегли: это и есть её паспорт"
+        },
+        {
+          "sym": "область",
+          "latex": "D",
+          "what": "условия, в которых модель верна",
+          "unit": "—",
+          "note": "без указания области модель бессмысленна: «верна всегда» не бывает"
+        },
+        {
+          "sym": "точность",
+          "latex": "\\varepsilon",
+          "what": "расхождение предсказания с опытом",
+          "unit": "%",
+          "note": "не ошибка, а мера того, насколько отброшенное было мало"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Как строится модель: разбор на конкретном случае",
+      "lead": "Возьмём падающий камень и проследим каждое решение, которое мы принимаем молча. Это не вывод формулы, а вывод самой формулы задачи — то, что обычно остаётся за кадром.",
+      "steps": [
+        {
+          "text": "Первое решение: считать тело точкой. Оно законно, когда размеры тела много меньше расстояний, о которых идёт речь. Камень размером 10 см на пути в 10 м даёт погрешность около одного процента — приемлемо. Тот же камень при описании его удара о землю точкой считать уже нельзя: там весь смысл в деформации, то есть в размере.",
+          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "figure": "frame",
+          "figCaption": "Тело заменяется точкой, когда его собственный размер несуществен для рассматриваемого масштаба."
+        },
+        {
+          "text": "Второе решение: считать силу тяжести постоянной. На самом деле она убывает с высотой. Оценим, насколько: на десяти метрах относительное изменение составляет два расстояния до центра Земли, то есть примерно три десятимиллионных доли. Это в тысячи раз меньше любой нашей погрешности измерения — пренебрегаем осознанно, а не по незнанию.",
+          "latex": "\\frac{\\Delta g}{g} \\approx \\frac{2h}{R_{\\oplus}} = \\frac{2 \\cdot 10}{6{,}4 \\cdot 10^{6}} \\approx 3 \\cdot 10^{-6}",
+          "figure": "forceprop",
+          "figCaption": "Сила тяжести убывает с высотой, но на школьных масштабах изменение теряется в шумах."
+        },
+        {
+          "text": "Третье решение: отбросить сопротивление воздуха. Вот здесь надо быть осторожным, потому что оно растёт как квадрат скорости и на некоторой скорости сравнивается с весом. Для плотного компактного тела на дистанции в десять метров поправка составляет единицы процентов. Для листа бумаги — сотни. Одно и то же пренебрежение законно в одном случае и разрушительно в другом.",
+          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "figure": "friction",
+          "figCaption": "Сопротивление среды растёт с квадратом скорости — законность пренебрежения зависит от того, как далеко успело разогнаться тело."
+        },
+        {
+          "text": "Только теперь, после трёх явных решений, мы имеем право писать привычную формулу. Она не описывает падение камня. Она точно описывает падение материальной точки в однородном поле без среды — а насколько это похоже на камень, мы только что оценили.",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "figure": "parabola",
+          "figCaption": "Формула свободного падения — точное утверждение о модели, а не приблизительное о камне."
+        },
+        {
+          "text": "Ключевой шаг, который обычно пропускают: проверка обратной связью. Мы предположили, что скорость невелика, — теперь надо убедиться, что полученное решение этому не противоречит. Скорость в конце падения около 14 м/с, сопротивление воздуха для камня при такой скорости действительно мало. Модель самосогласована. Если бы вышло 140 м/с, пришлось бы вернуться и переделать.",
+          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "figure": "result",
+          "figCaption": "Решение обязано проверять собственные допущения — иначе модель может оказаться внутренне противоречивой."
+        },
+        {
+          "text": "И последнее: у каждой модели есть преемник. Материальная точка не выдерживает вращения — появляется твёрдое тело с моментом инерции. Ньютоновская механика не выдерживает околосветовых скоростей — появляется теория относительности. Ни одна из старых моделей при этом не отменяется: она остаётся верной в своей области, и новая теория обязана в эту область переходить.",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "figure": "curves",
+          "figCaption": "Новая теория не отменяет старую, а содержит её как предельный случай. Это требование называют принципом соответствия."
+        }
+      ],
+      "plate": "Модель — это явление плюс список того, чем мы пренебрегли, плюс оценка, насколько это законно. Без третьей части модель превращается в догадку.",
+      "note": "Отсюда практическое правило на весь курс: встретив формулу, сразу спрашивайте, что в ней предполагается. Идеальный газ — что молекулы не притягиваются. Закон Гука — что деформация мала. Формула КПД Карно — что процесс бесконечно медленный. Ответ на этот вопрос обычно и есть содержание темы."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Главный приём этого параграфа — оценка малости. Это не вычисление, а сравнение: мы берём отброшенную величину, делим на оставленную и смотрим на порядок отношения.",
+        "Формально за этим стоит разложение в ряд. Точное выражение для силы тяжести на высоте $h$ есть $g(h) = g_0 R^2/(R+h)^2$. При $h \\ll R$ его раскладывают и оставляют первый поправочный член: $g(h) \\approx g_0 (1 - 2h/R)$. Именно эта двойка и появилась в нашей оценке.",
+        "Общее правило, которым дальше пользуемся постоянно: при малом $x$ верно $(1+x)^n \\approx 1 + nx$. Проверьте на пальцах: $1{,}02^{3}$ — калькулятор даёт 1,0612, приближение даёт 1,06. Расхождение в четвёртом знаке, а считать можно в уме.",
+        "Смысл этого приёма глубже, чем экономия усилий. Он показывает, какая именно величина в задаче маленькая, — а значит, где именно модель начнёт ломаться, если эта величина перестанет быть маленькой."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: когда пренебрежение перестаёт работать",
+      "lead": "Задача не на формулу, а на решение о формуле. Считать почти нечего — важен сам порядок действий.",
+      "given": "Стальной шарик диаметром $2$ см падает с высоты $10$ м. Выяснить, годится ли здесь модель свободного падения — и что изменится для листа бумаги той же массы.",
+      "law": "Критерий законности пренебрежения: $F_{\\text{сопр}} / mg \\ll 1$, где $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "solution": [
+        {
+          "text": "Оценим скорость в конце падения — именно там сопротивление максимально, и если уж проверять, то в худшей точке.",
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+        },
+        {
+          "text": "Площадь сечения шарика и параметры воздуха. Коэффициент формы для шара близок к половине.",
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+        },
+        {
+          "text": "Сила сопротивления при этой скорости.",
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+        },
+        {
+          "text": "Вес шарика: сталь плотностью $7800$ кг/м³ в объёме около $4 \\cdot 10^{-6}$ м³.",
+          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+        },
+        {
+          "text": "Сравниваем — и получаем ответ на исходный вопрос.",
+          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+        }
+      ],
+      "answer": "Для шарика модель годится: погрешность порядка нескольких процентов. Для листа бумаги той же массы площадь больше в сотни раз, отношение перевалит за единицу задолго до конца падения — там модель неприменима принципиально.",
+      "check": "Проверка на здравый смысл: лист бумаги, падая, почти сразу выходит на постоянную скорость и начинает планировать. Никакой параболы там нет. Замечательно то, что модель предупредила об этом сама, ещё до опыта, — одним делением на листке бумаги. Именно за это её и ценят."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Здесь важны не сами числа, а то, что каждое из них участвует в оценке — мы делим одно на другое и решаем, законно ли пренебрежение.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Ускорение свободного падения",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "Одинаково для всех тел, если пренебречь средой. Именно это утверждение Галилея и было первой сознательно построенной моделью в физике.",
+          "mnemo": "В оценках берут 10 — ошибка 2 %, зато делится в уме."
+        },
+        {
+          "sym": "R",
+          "latex": "R_{\\oplus}",
+          "name": "Радиус Земли",
+          "value": "6,4 · 10⁶",
+          "unit": "м",
+          "why": "Нужен не сам по себе, а чтобы оценить, насколько постоянна сила тяжести: отношение высоты подъёма к этому числу и есть мера непостоянства.",
+          "mnemo": "Окружность Земли около 40 000 км — метр когда-то и определяли как одну сорокамиллионную долю. Отсюда радиус получается делением на 2π."
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho_{\\text{возд}}",
+          "name": "Плотность воздуха",
+          "value": "1,2",
+          "unit": "кг / м³",
+          "why": "Входит в силу сопротивления. Именно эта величина решает, будет ли пренебрежение средой поправкой в проценты или ошибкой в разы.",
+          "mnemo": "Примерно в 800 раз легче воды. Воздух в комнате 5 × 4 × 3 м весит около 70 кг — как взрослый человек."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Паспорт применимости: весь курс на одной странице",
+      "lead": "Полезно сразу увидеть, что этот параграф — не вступление, а рабочий инструмент. Каждая формула, которую вы встретите дальше, имеет ровно такой же паспорт: что предполагается и когда это перестаёт быть верным.",
+      "items": [
+        {
+          "h": "Материальная точка",
+          "text": "Предполагает, что размер тела несуществен. Ломается там, где важно вращение или деформация: волчок, удар, качение. Преемник — твёрдое тело с моментом инерции."
+        },
+        {
+          "h": "Идеальный газ",
+          "text": "Предполагает, что молекулы не притягиваются и не имеют объёма. Ломается вблизи конденсации и при высоких давлениях. Преемник — уравнение Ван-дер-Ваальса."
+        },
+        {
+          "h": "Закон Гука",
+          "text": "Предполагает малую деформацию. Ломается за пределом упругости: пружина перестаёт возвращаться. Преемник — теория пластичности."
+        },
+        {
+          "h": "Цикл Карно",
+          "text": "Предполагает бесконечно медленный процесс. Ломается у любой реальной машины, работающей с конечной скоростью, — потому предельный КПД недостижим на практике."
+        },
+        {
+          "h": "Механика Ньютона",
+          "text": "Предполагает $v \\ll c$ и масштабы много больше атомных. Ломается дважды: у скорости света и на размере атома. Преемники — теория относительности и квантовая механика."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: почему модели вообще работают",
+      "lead": "Этот раздел не входит в проверку. Он о вопросе, на который у физики честно нет ответа.",
+      "blocks": [
+        {
+          "h": "Ничто не обязывало мир быть понятным",
+          "text": "Чтобы посчитать орбиту планеты, достаточно знать её массу. Не нужны ни состав, ни форма, ни история, ни то, идёт ли на ней дождь. Это поразительное обстоятельство, и оно не самоочевидно: легко вообразить вселенную, где всякая мелочь влияет на всё, и никакая модель не работает дольше секунды."
+        },
+        {
+          "h": "Разделение масштабов",
+          "text": "Отчасти дело в том, что явления разных размеров слабо влияют друг на друга. Инженеру мостов не нужна квантовая механика, а физику атома — состав земной коры. Благодаря этому знание можно строить этажами, не дожидаясь окончательной теории всего. Но почему разделение масштабов вообще существует — снова вопрос без ответа."
+        },
+        {
+          "h": "Непостижимая эффективность математики",
+          "text": "Юджин Вигнер в 1960 году написал об этом статью, которую с тех пор цитируют не переставая, и признал, что объяснения не имеет. Математические структуры, придуманные из внутренних соображений красоты, десятилетиями спустя оказываются ровно тем, что нужно физике. Так было с неевклидовой геометрией до теории относительности и с теорией групп до физики частиц."
+        },
+        {
+          "h": "Здесь физика останавливается",
+          "text": "Мы пользуемся тем, что мир поддаётся пониманию, но не знаем, почему он поддаётся. Это один из тех краёв, о которых честнее сказать прямо, чем закрыть красивой фразой. Подробнее — в разделе «Открытые вопросы»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Физика описывает не природу, а модели природы; у каждой модели есть область применимости, и она важнее самой формулы.",
+      "keyIdeas": [
+        {
+          "icon": "estimate",
+          "title": "Модель = явление +",
+          "text": "Модель = явление + список отброшенного + оценка законности отбрасывания"
+        },
+        {
+          "icon": "ruler",
+          "title": "Пренебрежение законно, когда отношение",
+          "text": "Пренебрежение законно, когда отношение отброшенного к оставленному много меньше единицы"
+        },
+        {
+          "icon": "sigma",
+          "title": "Решение обязано проверять собственные допущения",
+          "text": "Решение обязано проверять собственные допущения"
+        },
+        {
+          "icon": "edge",
+          "title": "Новая теория содержит старую",
+          "text": "Новая теория содержит старую как предельный случай — принцип соответствия"
+        }
+      ],
+      "where": "Каждая формула курса: идеальный газ, закон Гука, цикл Карно, механика Ньютона — все имеют паспорт применимости.",
+      "watchOut": "Самая частая ошибка — применить формулу за границей её области и получить уверенный неверный ответ. Формула об этом не предупредит: она посчитает всё, что подставите."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "Почему при расчёте орбиты Земли вокруг Солнца Землю позволительно считать точкой?",
+        "options": [
+          "Потому что так проще считать, а высокая точность в астрономии не нужна",
+          "Потому что её размер много меньше радиуса орбиты, и вдобавок Ньютон строго доказал: шар притягивает так же, как точка в его центре",
+          "Потому что форма тела никогда не влияет на его движение",
+          "Потому что Земля по космическим меркам очень маленькая"
+        ],
+        "answer": 1,
+        "why": "Работают два довода сразу: масштабный — 12 700 км против 150 миллионов, и строгий — теорема Ньютона о притяжении шара. Простота расчёта сама по себе никогда не является основанием: удобство не делает модель верной.",
+        "hint": "Спросите себя, чем упрощение отличается от обоснованного упрощения. Что надо доказать, чтобы заменить шар точкой имели право не только для удобства?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "Теория относительности показала, что механика Ньютона неверна при околосветовых скоростях. Что это означает для механики Ньютона?",
+        "options": [
+          "Её следует считать опровергнутой и больше не применять",
+          "Она была верна раньше, но условия во Вселенной с тех пор изменились",
+          "Она остаётся полностью верной в своей области — при скоростях много меньше световой, куда и переходит теория относительности",
+          "Значит, теория относительности тоже когда-нибудь окажется целиком неверной"
+        ],
+        "answer": 2,
+        "why": "Это принцип соответствия: новая теория обязана переходить в старую там, где старая проверена опытом. Формулы Ньютона по-прежнему выводят ракеты на орбиту и рассчитывают мосты. Расширение области — не опровержение.",
+        "hint": "Подумайте, что случилось бы с инженерией, если бы каждая новая теория отменяла предыдущую. Почему этого не происходит?"
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "Своими словами: как проверить, законно ли в конкретной задаче пренебречь сопротивлением воздуха, — не ставя опыта и не решая уравнение движения целиком?",
+        "keywords": [
+          "отношени",
+          "сравн",
+          "сопротивлен",
+          "вес",
+          "меньше",
+          "оцен",
+          "порядок",
+          "раздел"
+        ],
+        "needed": 2,
+        "why": "Надо оценить силу сопротивления при характерной для задачи скорости и разделить её на вес. Если отношение много меньше единицы — пренебрежение законно, и вы даже знаете, какую примерно погрешность вносите. Оценка занимает минуту и делается до решения, а не после.",
+        "hint": "Пренебречь чем-то — значит утверждать, что оно мало. Мало по сравнению с чем именно в этой задаче?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "На сколько процентов изменится ускорение свободного падения на вершине Эвереста (высота около 9 км) по сравнению с уровнем моря?",
+        "answer": 0.3,
+        "unit": "%",
+        "tolerance": 0.15,
+        "why": "Относительное изменение равно 2h/R = 2 · 9000 / 6,4·10⁶ ≈ 0,003, то есть примерно три десятых процента. Это меньше, чем разница между полюсом и экватором, вызванная вращением Земли, — и поясняет, почему в школьных задачах g смело считают постоянным.",
+        "hint": "Воспользуйтесь приближением из блока математики: при малом x верно (1+x)ⁿ ≈ 1 + nx. Сила тяжести убывает как квадрат расстояния до центра Земли — какой множитель даст показатель −2?"
+      }
+    ],
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Границу модели видно там, где отброшенное вдруг оказывается главным.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Лист и комок из одного листа",
+          "text": "Возьмите два одинаковых листа бумаги. Один сомните в плотный комок, второй оставьте плоским. Поднимите оба на вытянутой руке и отпустите одновременно.",
+          "answer": "Комок падает заметно быстрее, хотя массы равны до миллиграмма. Значит, дело не в массе: разной оказалась площадь, а с ней и сопротивление воздуха. Модель «тело падает как точка» отбрасывает форму — и для комка это допустимо, а для листа нет. Порвите теперь плоский лист пополам и уроните половинку: она падает так же медленно, как целый лист. Масса упала вдвое, поведение не изменилось — верный признак, что определяющий параметр вы ещё не нашли."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Земля диаметром двенадцать тысяч километров — точка",
+          "text": "Рассчитывая движение Луны, Ньютон считал Землю точкой, в которой собрана вся её масса. Земля при этом больше расстояния до собственной поверхности в бесконечное число раз, а до Луны всего тридцать своих диаметров. Почему такая наглость сработала?",
+          "answer": "Это не наглость, а теорема. Ньютон доказал: шар с симметрично распределённой плотностью притягивает внешние тела ровно так, как точка той же массы в его центре. Доказательство далось ему тяжело и, по одной из версий, задержало публикацию «Начал» на годы. Важен вывод для нас: модель «точка» здесь не приближение, а точное утверждение — но лишь снаружи шара и лишь при симметрии. Внутри Земли всё иначе: там притягивает только та часть массы, что ближе к центру."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Мощность взрыва по обрывкам бумаги",
+          "text": "16 июля 1945 года при первом испытании ядерного заряда Энрико Ферми стоял в десяти километрах от эпицентра. Когда пришла ударная волна, он выпустил из руки горсть мелких бумажек и отметил, на сколько их отнесло — около двух с половиной метров. Из этого смещения он тут же назвал мощность: около десяти килотонн. Точные измерения приборов, обработанные за недели, дали примерно двадцать. Ошибка вдвое — при том, что речь о величине, которую никто до того дня не измерял. Прикидка не заменяет расчёт, но говорит, какого масштаба ответ вы должны получить."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Модель — это список того, чем вы пренебрегли",
+          "text": "Спрашивая себя «какая у меня модель», отвечайте не «материальная точка», а перечислением: отброшены размер, вращение, деформация, сопротивление воздуха, вращение Земли. Такой список сразу показывает, где модель сломается: достаточно поставить опыт, в котором отброшенное станет главным. Физик отличается не тем, что знает больше формул, а тем, что помнит, что именно выбросил."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Проверка размерностью — за пять секунд",
+          "text": "Любую полученную формулу проверяйте единицами. Ищете время падения с высоты $h$ и получили $t=\\sqrt{2h/g}$: справа метры делить на метры на секунду в квадрате — остаются секунды в квадрате, корень даёт секунды. Сходится. Если бы вы ошиблись и написали $t=\\sqrt{2hg}$, единицы дали бы метры в секунду — скорость вместо времени, и ошибку видно без всякого расчёта. Размерность не докажет, что формула верна, но неверную поймает в большинстве случаев."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Где точка перестаёт работать",
+          "text": "Материальная точка бессильна там, где суть явления в форме и вращении. Фигурист прижимает руки и раскручивается быстрее — точка так не умеет, у неё нет момента инерции. Кошка в падении переворачивается на лапы, не имея опоры, — за счёт перераспределения частей тела. Спускаемый аппарат входит в атмосферу под строго выбранным углом, и здесь важна каждая деталь обшивки. Во всех трёх случаях нужно другое приближение: твёрдое тело, система тел, сплошная среда."
+        }
+      ]
+    }
+  },
+  "en": {
+    "title": "The Model and Its Boundaries",
+    "subtitle": "Section 1 · Why the Material Point Is Not a Simplification, but a Tool",
+    "intro": [
+      "Imagine you are asked to calculate how many seconds a stone takes to fall from a height of ten meters. You almost certainly know what to do. Now notice what you did not ask: what the stone is made of, its shape, whether it is spinning, the humidity today, or exactly where on Earth this happens.",
+      "You discarded all that not out of carelessness, but correctly. You built a model: a body without size, without shape, and without internal structure, acted upon by a single constant force. No such object exists in nature. But the answer will be correct to within a few percent—and that is far more useful than an exact answer that no one can obtain.",
+      "This entire section is about one idea: physics does not work directly with nature, but with models of nature. And the most valuable skill is not solving a problem within a model, but seeing where the model ends."
+    ],
+    "standNote": "On the stand is the motion of a body with constant acceleration. Notice what is absent: the body has no size, no rotation, no air resistance. This is exactly a material point. Vary the initial velocity and acceleration and watch the graph: the parabola is perfectly smooth. In a real experiment it would not be so—and later we will discuss how much.",
+    "formula": {
+      "name": "The Modeling Principle",
+      "latex": "\\text{Phenomenon} \\;\\longrightarrow\\; \\text{model} \\;\\longrightarrow\\; \\text{prediction} \\;\\longrightarrow\\; \\text{experiment}",
+      "alsoKnown": "The scientific method in its physical form",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1638",
+          "what": "first consciously discarded the inessential: while studying falling, he eliminated air resistance, shape, and composition of the body. This was considered a trick — after all, a feather falls differently than a stone. He replied that one must first understand the main thing"
+        },
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "pushed the technique to the limit: in his calculation, planets are points, even though Earth has a diameter of 12,700 km. He proved rigorously that a sphere attracts exactly like a point at its center — that is, he justified why the simplification is legitimate here"
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1933",
+          "what": "formulated the boundary of the technique itself: descriptions should be as simple as possible, but no simpler. A model that discards what is essential does not simplify the problem; it replaces it"
+        }
+      ],
+      "story": "Galileo had an opponent whose objection is worth remembering: in the real world, a feather and a stone fall differently, so the law is wrong. The dispute was resolved only half a century after Galileo's death, when people learned to pump out air: in a vacuum tube, a feather and a coin do indeed fall the same way. In 1971, the commander of Apollo 15 repeated the experiment on the Moon, where vacuum is free — a hammer and a falcon feather touched the ground simultaneously. The model turned out not to be an approximation to the truth, but an exact description of that part of the phenomenon it set out to describe.",
+      "symbols": [
+        {
+          "sym": "model",
+          "latex": "M",
+          "what": "a simplified description of a phenomenon",
+          "unit": "—",
+          "note": "defined by a list of what we have neglected: that is its passport"
+        },
+        {
+          "sym": "domain",
+          "latex": "D",
+          "what": "conditions under which the model is valid",
+          "unit": "—",
+          "note": "without specifying the domain, the model is meaningless: 'always valid' does not exist"
+        },
+        {
+          "sym": "accuracy",
+          "latex": "\\varepsilon",
+          "what": "discrepancy between prediction and experiment",
+          "unit": "%",
+          "note": "not an error, but a measure of how small the neglected factors were"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "How a model is built: a case study",
+      "lead": "Let's take a falling stone and trace every decision we make implicitly. This is not a derivation of a formula, but a derivation of the formula's very problem statement—what usually remains behind the scenes.",
+      "steps": [
+        {
+          "text": "First decision: treat the body as a point. This is valid when the body's dimensions are much smaller than the distances involved. A stone 10 cm in size over a path of 10 m gives an error of about one percent—acceptable. The same stone cannot be considered a point when describing its impact with the ground: the whole meaning lies in deformation, i.e., in size.",
+          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "figure": "frame",
+          "figCaption": "A body is replaced by a point when its own size is irrelevant for the scale under consideration."
+        },
+        {
+          "text": "Second decision: consider gravity constant. In reality, it decreases with height. Let's estimate by how much: over ten meters, the relative change is about two distances to the Earth's center, i.e., roughly three ten-millionths. This is thousands of times smaller than any measurement error—we neglect it consciously, not out of ignorance.",
+          "latex": "\\frac{\\Delta g}{g} \\approx \\frac{2h}{R_{\\oplus}} = \\frac{2 \\cdot 10}{6{,}4 \\cdot 10^{6}} \\approx 3 \\cdot 10^{-6}",
+          "figure": "forceprop",
+          "figCaption": "Gravity decreases with height, but at school-yard scales the change is lost in the noise."
+        },
+        {
+          "text": "Third decision: ignore air resistance. Here we must be careful, because it grows as the square of speed and at some speed becomes comparable to weight. For a dense compact body over a distance of ten meters, the correction is a few percent. For a sheet of paper, it is hundreds. The same neglect is valid in one case and destructive in another.",
+          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "figure": "friction",
+          "figCaption": "Air resistance grows with the square of speed—the validity of neglecting it depends on how far the body has accelerated."
+        },
+        {
+          "text": "Only now, after three explicit decisions, do we have the right to write the familiar formula. It does not describe a falling stone. It exactly describes the fall of a point mass in a uniform field without a medium—and how well this matches a stone, we have just estimated.",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "figure": "parabola",
+          "figCaption": "The free-fall formula is an exact statement about the model, not an approximate one about the stone."
+        },
+        {
+          "text": "A crucial step that is usually skipped: checking with feedback. We assumed the speed is low—now we must verify that the solution does not contradict this. The speed at the end of the fall is about 14 m/s, air resistance for a stone at that speed is indeed small. The model is self-consistent. If it had turned out to be 140 m/s, we would have to go back and revise.",
+          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "figure": "result",
+          "figCaption": "The solution must check its own assumptions—otherwise the model may be internally inconsistent."
+        },
+        {
+          "text": "And finally: every model has a successor. The point mass does not handle rotation—enter the rigid body with moment of inertia. Newtonian mechanics does not handle near-light speeds—enter relativity. None of the old models are thereby abolished: they remain valid in their domain, and the new theory must reduce to them in that domain.",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "figure": "curves",
+          "figCaption": "A new theory does not abolish the old one, but contains it as a limiting case. This requirement is called the correspondence principle."
+        }
+      ],
+      "plate": "A model is a phenomenon plus a list of what we have neglected, plus an estimate of how valid that is. Without the third part, a model becomes a guess.",
+      "note": "Hence a practical rule for the entire course: whenever you encounter a formula, immediately ask what it assumes. Ideal gas—that molecules do not attract. Hooke's law—that deformation is small. Carnot efficiency formula—that the process is infinitely slow. The answer to this question is usually the content of the topic."
+    },
+    "math": {
+      "title": "Mathematics that was needed here",
+      "text": [
+        "The main technique of this section is order-of-magnitude estimation. It is not computation but comparison: we take the discarded quantity, divide by the kept one, and look at the order of the ratio.",
+        "Formally, this is based on series expansion. The exact expression for gravity at height $h$ is $g(h) = g_0 R^2/(R+h)^2$. For $h \\ll R$, it is expanded and the first correction term is kept: $g(h) \\approx g_0 (1 - 2h/R)$. That very factor of 2 appeared in our estimate.",
+        "The general rule, which we will use constantly: for small $x$, $(1+x)^n \\approx 1 + nx$. Test it with your fingers: $1.02^3$—calculator gives 1.0612, the approximation gives 1.06. The discrepancy is in the fourth digit, and you can calculate it in your head.",
+        "The meaning of this technique goes deeper than saving effort. It shows exactly which quantity in the problem is small—and therefore where the model will break down if that quantity ceases to be small."
+      ]
+    },
+    "example": {
+      "title": "Example with numbers: when neglect stops working",
+      "lead": "The problem is not about a formula, but about the decision on a formula. Almost nothing to calculate — the order of steps itself matters.",
+      "given": "A steel ball of diameter $2$ cm falls from a height of $10$ m. Determine whether the free fall model is applicable here — and what changes for a sheet of paper of the same mass.",
+      "law": "Criterion for the validity of neglect: $F_{\\text{сопр}} / mg \\ll 1$, where $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "solution": [
+        {
+          "text": "Let us estimate the speed at the end of the fall — that's where drag is maximum, and if we are checking, it's at the worst point.",
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+        },
+        {
+          "text": "Cross-sectional area of the ball and air parameters. The shape factor for a sphere is close to half.",
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+        },
+        {
+          "text": "Drag force at this speed.",
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+        },
+        {
+          "text": "Weight of the ball: steel with density $7800$ kg/m³ in a volume of about $4 \\cdot 10^{-6}$ m³.",
+          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+        },
+        {
+          "text": "We compare — and get the answer to the original question.",
+          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+        }
+      ],
+      "answer": "For the ball, the model is valid: the error is on the order of a few percent. For a sheet of paper of the same mass, the area is hundreds of times larger, the ratio exceeds unity long before the end of the fall — there the model is fundamentally inapplicable.",
+      "check": "A sanity check: a sheet of paper, when falling, almost immediately reaches a constant speed and starts gliding. There is no parabola there. The remarkable thing is that the model itself warned about this, even before the experiment — with a single division on a piece of paper. That's why it is valued."
+    },
+    "constants": {
+      "title": "Quantities of this section",
+      "lead": "Here, the numbers themselves are not important, but rather that each of them participates in the estimate — we divide one by another and decide whether the neglect is legitimate.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Acceleration due to gravity",
+          "value": "9,81",
+          "unit": "m / s²",
+          "why": "It is the same for all bodies if the medium is neglected. This very statement by Galileo was the first consciously constructed model in physics.",
+          "mnemo": "In estimates, we take 10 — a 2% error, but it divides mentally."
+        },
+        {
+          "sym": "R",
+          "latex": "R_{\\oplus}",
+          "name": "Radius of the Earth",
+          "value": "6,4 · 10⁶",
+          "unit": "m",
+          "why": "It is needed not by itself, but to estimate how constant gravity is: the ratio of the lift height to this number is the measure of non-constancy.",
+          "mnemo": "The circumference of the Earth is about 40,000 km — the meter was once defined as one forty-millionth of that. Hence the radius is obtained by dividing by 2π."
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho_{\\text{возд}}",
+          "name": "Air density",
+          "value": "1,2",
+          "unit": "kg / m³",
+          "why": "It enters the drag force. This quantity decides whether neglecting the medium is a correction of a few percent or an error by orders of magnitude.",
+          "mnemo": "About 800 times lighter than water. The air in a room 5 × 4 × 3 m weighs about 70 kg — like an adult human."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Passport of applicability: the entire course on one page",
+      "lead": "It is useful to see at once that this section is not an introduction, but a working tool. Every formula you encounter later has exactly the same passport: what is assumed and when it ceases to be valid.",
+      "items": [
+        {
+          "h": "Point mass",
+          "text": "Assumes that the size of the body is insignificant. Breaks down where rotation or deformation matters: spinning top, impact, rolling. Successor — rigid body with moment of inertia."
+        },
+        {
+          "h": "Ideal gas",
+          "text": "Assumes that molecules do not attract and have no volume. Breaks down near condensation and at high pressures. Successor — van der Waals equation."
+        },
+        {
+          "h": "Hooke's law",
+          "text": "Assumes small deformation. Breaks down beyond the elastic limit: the spring stops returning. Successor — plasticity theory."
+        },
+        {
+          "h": "Carnot cycle",
+          "text": "Assumes an infinitely slow process. Breaks down for any real machine operating at finite speed — hence the limiting efficiency is unattainable in practice."
+        },
+        {
+          "h": "Newtonian mechanics",
+          "text": "Assumes $v \\ll c$ and scales much larger than atomic. Breaks down twice: near the speed of light and at the atomic size. Successors — theory of relativity and quantum mechanics."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the curious: why models work at all",
+      "lead": "This section is not part of the test. It addresses a question to which physics honestly has no answer.",
+      "blocks": [
+        {
+          "h": "Nothing obliged the world to be understandable",
+          "text": "To calculate a planet's orbit, it's enough to know its mass. No need for composition, shape, history, or whether it's raining on it. This is a remarkable fact, and it's not self-evident: one can easily imagine a universe where every little thing affects everything, and no model works for more than a second."
+        },
+        {
+          "h": "Separation of scales",
+          "text": "Partly it's that phenomena of different sizes weakly influence each other. A bridge engineer doesn't need quantum mechanics, and an atomic physicist doesn't need the composition of the Earth's crust. Thanks to this, knowledge can be built in layers without waiting for a final theory of everything. But why scale separation exists at all is again a question without an answer."
+        },
+        {
+          "h": "The unreasonable effectiveness of mathematics",
+          "text": "Eugene Wigner wrote an article about this in 1960, which has been cited ever since, and admitted he had no explanation. Mathematical structures invented out of internal aesthetic considerations turn out decades later to be exactly what physics needs. This happened with non-Euclidean geometry before relativity and with group theory before particle physics."
+        },
+        {
+          "h": "Here physics stops",
+          "text": "We use the fact that the world is comprehensible, but we don't know why it is. This is one of those edges where it's more honest to speak plainly than to cover with a beautiful phrase. More in the 'Open Questions' section."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Physics describes not nature, but models of nature; each model has a domain of applicability, and that domain is more important than the formula itself.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Model = phenomenon +",
+          "text": "Model = phenomenon + list of what is neglected + assessment of the legitimacy of neglect"
+        },
+        {
+          "icon": "formula",
+          "title": "Neglect is legitimate when",
+          "text": "Neglect is legitimate when the ratio of neglected to kept is much less than one"
+        },
+        {
+          "icon": "sigma",
+          "title": "A solution must check",
+          "text": "A solution must check its own assumptions"
+        },
+        {
+          "icon": "ruler",
+          "title": "A new theory contains",
+          "text": "A new theory contains the old one as a limiting case — the correspondence principle"
+        }
+      ],
+      "where": "Every formula in the course: ideal gas, Hooke's law, Carnot cycle, Newtonian mechanics — all have a passport of applicability.",
+      "watchOut": "The most common mistake is to apply a formula outside its domain and get a confidently wrong answer. The formula will not warn you: it will compute whatever you plug in."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "Why is it permissible to treat the Earth as a point when calculating its orbit around the Sun?",
+        "options": [
+          "Because it's easier to calculate, and high precision is not needed in astronomy",
+          "Because its size is much smaller than the orbital radius, and additionally Newton strictly proved: a sphere attracts like a point at its center",
+          "Because the shape of a body never affects its motion",
+          "Because the Earth is very small by cosmic standards"
+        ],
+        "answer": 1,
+        "why": "Two arguments work at once: the scaling one — 12,700 km vs 150 million, and the rigorous one — Newton's theorem of sphere attraction. Simplicity of calculation alone is never a justification: convenience does not make a model correct.",
+        "hint": "Ask yourself: what distinguishes simplification from justified simplification? What must be proven so that replacing a sphere with a point is permissible not just for convenience?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "Relativity showed that Newtonian mechanics is incorrect at near-light speeds. What does this mean for Newtonian mechanics?",
+        "options": [
+          "It should be considered refuted and no longer applied",
+          "It was correct earlier, but conditions in the Universe have changed since then",
+          "It remains fully valid in its domain — at speeds much less than light, where relativity reduces to it",
+          "This means relativity will also someday turn out to be entirely wrong"
+        ],
+        "answer": 2,
+        "why": "This is the correspondence principle: a new theory must reduce to the old one where the old one is experimentally verified. Newton's formulas still launch rockets into orbit and design bridges. Extending the domain is not a refutation.",
+        "hint": "Think what would happen to engineering if each new theory canceled the previous one. Why doesn't this happen?"
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "In your own words: how can you check whether it is legitimate to neglect air resistance in a specific problem, without performing an experiment or solving the full equation of motion?",
+        "keywords": [
+          "ratio",
+          "compar",
+          "resist",
+          "weight",
+          "less",
+          "estim",
+          "order",
+          "scale"
+        ],
+        "needed": 2,
+        "why": "You need to estimate the drag force at the characteristic speed for the problem and divide it by the weight. If the ratio is much less than one, the neglect is legitimate, and you even know roughly what error you introduce. The estimate takes a minute and is done before solving, not after.",
+        "hint": "To neglect something means to assert that it is small. Small compared to what exactly in this problem?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "By what percentage does the acceleration of gravity at the top of Everest (height about 9 km) change compared to sea level?",
+        "answer": 0.3,
+        "unit": "%",
+        "tolerance": 0.15,
+        "why": "The relative change is 2h/R = 2 · 9000 / 6.4·10⁶ ≈ 0.003, i.e., about three tenths of a percent. This is smaller than the difference between the pole and equator caused by Earth's rotation — and explains why in school problems g is safely considered constant.",
+        "hint": "Use the approximation from the math section: for small x, (1+x)ⁿ ≈ 1 + nx. Gravity decreases as the square of the distance to Earth's center — what factor does the exponent −2 give?"
+      }
+    ]
+  },
+  "es": {
+    "title": "El modelo y sus límites",
+    "subtitle": "Párrafo 1 · Por qué el punto material no es una simplificación, sino una herramienta",
+    "intro": [
+      "Imagina que te piden calcular en cuántos segundos una piedra llegará al suelo desde una altura de diez metros. Casi seguro sabes qué hacer. Ahora nota qué no preguntaste: de qué está hecha la piedra, qué forma tiene, si gira, qué humedad hay hoy, dónde exactamente en la Tierra ocurre.",
+      "Todo eso lo descartaste no por descuido, sino correctamente. Construiste un modelo: un cuerpo sin dimensiones, sin forma y sin estructura interna, sobre el que actúa una única fuerza constante. En la naturaleza no existe tal objeto. Pero la respuesta será correcta con una precisión de unos pocos por ciento — y eso es mucho más útil que una respuesta exacta que nadie puede obtener.",
+      "Todo este párrafo trata sobre una idea: la física no trabaja directamente con la naturaleza, sino con modelos de la naturaleza. Y la habilidad más valiosa no es resolver un problema dentro del modelo, sino ver dónde termina el modelo."
+    ],
+    "standNote": "En el stand — movimiento de un cuerpo con aceleración constante. Observa qué no tiene: el cuerpo no tiene tamaño, no tiene rotación, no tiene resistencia del aire. Eso es el punto material. Gira la velocidad inicial y la aceleración y mira la gráfica: la parábola resulta perfectamente suave. En un experimento real no lo será — y más adelante veremos cuánto.",
+    "formula": {
+      "name": "Principio de modelado",
+      "latex": "\\text{Явление} \\;\\longrightarrow\\; \\text{модель} \\;\\longrightarrow\\; \\text{предсказание} \\;\\longrightarrow\\; \\text{опыт}",
+      "alsoKnown": "Método científico en su forma física",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1638",
+          "what": "fue el primero en descartar conscientemente lo no esencial: al estudiar la caída, excluyó la resistencia del aire, la forma y la composición del cuerpo. Esto se consideró una manipulación — porque una pluma cae de manera diferente a una piedra. Él respondió que primero hay que entender lo principal."
+        },
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "llevó el método al extremo: los planetas en su cálculo son puntos, aunque la Tierra tiene un diámetro de 12 700 km. Demostró rigurosamente que una esfera atrae igual que un punto en su centro — es decir, justificó por qué la simplificación es legítima aquí."
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1933",
+          "what": "formuló el límite del propio método: la descripción debe ser tan simple como sea posible, pero no más simple. Un modelo que descarta lo esencial no simplifica el problema, sino que lo sustituye."
+        }
+      ],
+      "story": "Galileo tuvo un oponente cuya objeción vale la pena recordar: en el mundo real, una pluma y una piedra caen de manera diferente, por lo que la ley es incorrecta. La disputa se resolvió solo medio siglo después de la muerte de Galileo, cuando se aprendió a extraer el aire: en un tubo de vacío, una pluma y una moneda realmente caen igual. En 1971, el comandante del Apolo 15 repitió el experimento en la Luna, donde el vacío es gratuito: un martillo y una pluma de halcón tocaron el suelo al mismo tiempo. El modelo no resultó ser una aproximación a la verdad, sino una descripción precisa de la parte del fenómeno que pretendía describir.",
+      "symbols": [
+        {
+          "sym": "modelo",
+          "latex": "M",
+          "what": "descripción simplificada de un fenómeno",
+          "unit": "—",
+          "note": "se define por la lista de lo que hemos despreciado: ese es su pasaporte"
+        },
+        {
+          "sym": "dominio",
+          "latex": "D",
+          "what": "condiciones en las que el modelo es válido",
+          "unit": "—",
+          "note": "sin indicar el dominio, el modelo carece de sentido: 'siempre válido' no existe"
+        },
+        {
+          "sym": "precisión",
+          "latex": "\\varepsilon",
+          "what": "discrepancia entre la predicción y el experimento",
+          "unit": "%",
+          "note": "no es un error, sino una medida de cuán pequeño fue lo descartado"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Cómo se construye el modelo: análisis de un caso concreto",
+      "lead": "Tomemos una piedra que cae y sigamos cada decisión que tomamos en silencio. Esto no es una deducción de la fórmula, sino la deducción de la propia fórmula del problema, lo que normalmente queda fuera de escena.",
+      "steps": [
+        {
+          "text": "Primera decisión: considerar el cuerpo como un punto. Es válido cuando las dimensiones del cuerpo son mucho menores que las distancias involucradas. Una piedra de 10 cm en un recorrido de 10 m da un error de alrededor del uno por ciento, aceptable. La misma piedra al describir su impacto contra el suelo ya no puede considerarse un punto: allí todo el sentido está en la deformación, es decir, en el tamaño.",
+          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "figure": "frame",
+          "figCaption": "El cuerpo se reemplaza por un punto cuando su propio tamaño es irrelevante para la escala considerada."
+        },
+        {
+          "text": "Segunda decisión: considerar la fuerza de gravedad constante. En realidad, disminuye con la altura. Evaluemos cuánto: en diez metros, el cambio relativo es dos distancias al centro de la Tierra, es decir, aproximadamente tres diezmillonésimas partes. Esto es miles de veces menor que cualquier error de medición nuestro; despreciamos conscientemente, no por ignorancia.",
+          "latex": "\\frac{\\Delta g}{g} \\approx \\frac{2h}{R_{\\oplus}} = \\frac{2 \\cdot 10}{6{,}4 \\cdot 10^{6}} \\approx 3 \\cdot 10^{-6}",
+          "figure": "forceprop",
+          "figCaption": "La fuerza de gravedad disminuye con la altura, pero en escalas escolares el cambio se pierde en el ruido."
+        },
+        {
+          "text": "Tercera decisión: despreciar la resistencia del aire. Aquí hay que tener cuidado, porque crece como el cuadrado de la velocidad y a cierta velocidad se iguala al peso. Para un cuerpo denso y compacto en una distancia de diez metros, la corrección es de unos pocos por ciento. Para una hoja de papel, cientos. La misma despreciación es válida en un caso y destructiva en otro.",
+          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "figure": "friction",
+          "figCaption": "La resistencia del medio crece con el cuadrado de la velocidad; la validez de la despreciación depende de qué tan lejos ha logrado acelerarse el cuerpo."
+        },
+        {
+          "text": "Solo ahora, después de tres decisiones explícitas, tenemos derecho a escribir la fórmula habitual. No describe la caída de una piedra. Describe exactamente la caída de un punto material en un campo uniforme sin medio; y qué tanto se parece a una piedra, lo acabamos de evaluar.",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "figure": "parabola",
+          "figCaption": "La fórmula de caída libre es una afirmación exacta sobre el modelo, no aproximada sobre la piedra."
+        },
+        {
+          "text": "El paso clave que normalmente se omite: la verificación por retroalimentación. Supusimos que la velocidad es pequeña; ahora debemos asegurarnos de que la solución obtenida no lo contradiga. La velocidad al final de la caída es de unos 14 m/s, la resistencia del aire para una piedra a esa velocidad es realmente pequeña. El modelo es autoconsistente. Si hubiera sido 140 m/s, habríamos tenido que volver atrás y rehacerlo.",
+          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "figure": "result",
+          "figCaption": "La solución debe verificar sus propias suposiciones; de lo contrario, el modelo podría resultar internamente contradictorio."
+        },
+        {
+          "text": "Y por último: cada modelo tiene un sucesor. El punto material no resiste la rotación; aparece el cuerpo rígido con momento de inercia. La mecánica newtoniana no resiste velocidades cercanas a la luz; aparece la teoría de la relatividad. Ninguno de los modelos antiguos se cancela por ello: sigue siendo válido en su dominio, y la nueva teoría debe transicionar a ese dominio.",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "figure": "curves",
+          "figCaption": "La nueva teoría no anula la antigua, sino que la contiene como caso límite. Este requisito se llama principio de correspondencia."
+        }
+      ],
+      "plate": "Un modelo es el fenómeno más una lista de lo que hemos despreciado, más una evaluación de qué tan válido es. Sin la tercera parte, el modelo se convierte en una conjetura.",
+      "note": "De aquí se deriva una regla práctica para todo el curso: al encontrar una fórmula, pregúntense inmediatamente qué se supone en ella. Gas ideal: que las moléculas no se atraen. Ley de Hooke: que la deformación es pequeña. Fórmula de eficiencia de Carnot: que el proceso es infinitamente lento. La respuesta a esta pregunta suele ser el contenido del tema."
+    },
+    "math": {
+      "title": "Matemáticas que fueron necesarias aquí",
+      "text": [
+        "La técnica principal de este párrafo es la estimación de pequeñez. No es un cálculo, sino una comparación: tomamos la cantidad despreciada, la dividimos entre la conservada y observamos el orden de magnitud de la razón.",
+        "Formalmente, detrás de esto hay una expansión en serie. La expresión exacta para la fuerza de gravedad a una altura $h$ es $g(h) = g_0 R^2/(R+h)^2$. Cuando $h \\ll R$ se expande y se deja el primer término correctivo: $g(h) \\approx g_0 (1 - 2h/R)$. Ese dos es el que apareció en nuestra estimación.",
+        "La regla general que usamos constantemente de ahora en adelante: para $x$ pequeño se cumple $(1+x)^n \\approx 1 + nx$. Compruébenlo con los dedos: $1{,}02^{3}$: la calculadora da 1,0612, la aproximación da 1,06. La discrepancia está en el cuarto dígito, y se puede calcular mentalmente.",
+        "El significado de esta técnica es más profundo que ahorrar esfuerzo. Muestra qué cantidad exactamente es pequeña en el problema y, por lo tanto, dónde comenzará a fallar el modelo si esa cantidad deja de ser pequeña."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: cuándo la aproximación deja de ser válida",
+      "lead": "El problema no es sobre la fórmula, sino sobre la decisión respecto a la fórmula. Apenas hay que calcular — lo importante es el orden de las acciones.",
+      "given": "Una esfera de acero de $2$ cm de diámetro cae desde una altura de $10$ m. Determinar si el modelo de caída libre es aplicable aquí — y qué cambiaría para una hoja de papel de la misma masa.",
+      "law": "Criterio de validez de la aproximación: $F_{\\text{сопр}} / mg \\ll 1$, donde $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "solution": [
+        {
+          "text": "Estimemos la velocidad al final de la caída — es allí donde la resistencia es máxima, y si hay que verificar, es en el peor punto.",
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+        },
+        {
+          "text": "Área de sección transversal de la esfera y parámetros del aire. El coeficiente de forma para una esfera es cercano a 0,5.",
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+        },
+        {
+          "text": "Fuerza de resistencia a esta velocidad.",
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+        },
+        {
+          "text": "Peso de la esfera: acero con densidad $7800$ kg/m³ en un volumen de aproximadamente $4 \\cdot 10^{-6}$ m³.",
+          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+        },
+        {
+          "text": "Comparamos — y obtenemos la respuesta a la pregunta original.",
+          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+        }
+      ],
+      "answer": "Para la esfera, el modelo es adecuado: el error es del orden de unos pocos por ciento. Para una hoja de papel de la misma masa, el área es cientos de veces mayor, la relación supera la unidad mucho antes del final de la caída — allí el modelo es inaplicable en principio.",
+      "check": "Verificación de sentido común: una hoja de papel, al caer, casi de inmediato alcanza una velocidad constante y comienza a planear. No hay ninguna parábola allí. Lo notable es que el modelo mismo advirtió esto, incluso antes del experimento, con una simple división en un papel. Por eso se aprecia."
+    },
+    "constants": {
+      "title": "Magnitudes de esta sección",
+      "lead": "Aquí no importan tanto los números en sí, sino que cada uno participa en la estimación — dividimos uno entre otro y decidimos si la aproximación es válida.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Aceleración de la gravedad",
+          "value": "9,81",
+          "unit": "m/s²",
+          "why": "Igual para todos los cuerpos si se desprecia el medio. Precisamente esta afirmación de Galileo fue el primer modelo conscientemente construido en física.",
+          "mnemo": "En estimaciones se usa 10 — error del 2%, pero se divide mentalmente."
+        },
+        {
+          "sym": "R",
+          "latex": "R_{\\oplus}",
+          "dictKey": "R_earth",
+          "name": "Radio de la Tierra",
+          "value": "6,4 · 10⁶",
+          "unit": "m",
+          "why": "No se necesita por sí mismo, sino para estimar qué tan constante es la fuerza de gravedad: la relación entre la altura de elevación y este número es la medida de la variabilidad.",
+          "mnemo": "La circunferencia de la Tierra es de unos 40 000 km — el metro se definió originalmente como una cuarentamillonésima parte. De ahí, el radio se obtiene dividiendo por 2π."
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho_{\\text{возд}}",
+          "dictKey": "rho_air",
+          "name": "Densidad del aire",
+          "value": "1,2",
+          "unit": "kg/m³",
+          "why": "Interviene en la fuerza de resistencia. Esta magnitud decide si la despreciación del medio será una corrección de unos pocos por ciento o un error de órdenes de magnitud.",
+          "mnemo": "Aproximadamente 800 veces más ligero que el agua. El aire en una habitación de 5 × 4 × 3 m pesa unos 70 kg — como un adulto."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Pasaporte de aplicabilidad: todo el curso en una página",
+      "lead": "Es útil ver de inmediato que esta sección no es una introducción, sino una herramienta de trabajo. Cada fórmula que encuentre más adelante tiene exactamente el mismo pasaporte: qué se supone y cuándo deja de ser válida.",
+      "items": [
+        {
+          "h": "Punto material",
+          "text": "Supone que el tamaño del cuerpo es irrelevante. Se rompe donde la rotación o la deformación son importantes: trompo, impacto, rodadura. Su sucesor es el cuerpo rígido con momento de inercia."
+        },
+        {
+          "h": "Gas ideal",
+          "text": "Supone que las moléculas no se atraen y no tienen volumen. Se rompe cerca de la condensación y a altas presiones. Su sucesor es la ecuación de Van der Waals."
+        },
+        {
+          "h": "Ley de Hooke",
+          "text": "Supone deformación pequeña. Se rompe más allá del límite elástico: el resorte deja de recuperar su forma. Su sucesor es la teoría de la plasticidad."
+        },
+        {
+          "h": "Ciclo de Carnot",
+          "text": "Supone un proceso infinitamente lento. Se rompe en cualquier máquina real que opera a velocidad finita — por lo tanto, la eficiencia límite es inalcanzable en la práctica."
+        },
+        {
+          "h": "Mecánica newtoniana",
+          "text": "Supone $v \\ll c$ y escalas mucho mayores que las atómicas. Se rompe dos veces: a la velocidad de la luz y a escala atómica. Sus sucesores son la teoría de la relatividad y la mecánica cuántica."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: por qué los modelos funcionan",
+      "lead": "Esta sección no está incluida en la prueba. Trata sobre una pregunta para la que la física honestamente no tiene respuesta.",
+      "blocks": [
+        {
+          "h": "Nada obligaba al mundo a ser comprensible",
+          "text": "Para calcular la órbita de un planeta, basta con conocer su masa. No se necesita ni la composición, ni la forma, ni la historia, ni si llueve en él. Esta es una circunstancia sorprendente y no es evidente por sí misma: es fácil imaginar un universo donde cada pequeño detalle afecta todo, y ningún modelo funciona más de un segundo."
+        },
+        {
+          "h": "Separación de escalas",
+          "text": "En parte se debe a que fenómenos de diferentes tamaños se influyen débilmente entre sí. Un ingeniero de puentes no necesita mecánica cuántica, y un físico atómico no necesita la composición de la corteza terrestre. Gracias a esto, el conocimiento se puede construir por capas, sin esperar una teoría final del todo. Pero por qué existe la separación de escalas es nuevamente una pregunta sin respuesta."
+        },
+        {
+          "h": "La incomprensible eficacia de las matemáticas",
+          "text": "Eugene Wigner en 1960 escribió un artículo sobre esto, que desde entonces se cita sin cesar, y admitió que no tiene explicación. Las estructuras matemáticas, inventadas por razones internas de belleza, décadas después resultan ser exactamente lo que la física necesita. Así fue con la geometría no euclidiana antes de la teoría de la relatividad y con la teoría de grupos antes de la física de partículas."
+        },
+        {
+          "h": "Aquí la física se detiene",
+          "text": "Nos beneficiamos de que el mundo es comprensible, pero no sabemos por qué lo es. Es uno de esos límites sobre los cuales es más honesto hablar directamente que ocultarlo con una frase bonita. Más detalles en la sección «Preguntas abiertas»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La física no describe la naturaleza, sino modelos de la naturaleza; cada modelo tiene un dominio de validez, y este es más importante que la fórmula misma.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Modelo = fenómeno +",
+          "text": "Modelo = fenómeno + lista de lo omitido + evaluación de la legitimidad de la omisión"
+        },
+        {
+          "icon": "formula",
+          "title": "La omisión es legítima",
+          "text": "La omisión es legítima cuando la relación de lo omitido a lo retenido es mucho menor que uno"
+        },
+        {
+          "icon": "sigma",
+          "title": "La solución debe verificar",
+          "text": "La solución debe verificar sus propias suposiciones"
+        },
+        {
+          "icon": "ruler",
+          "title": "Una nueva teoría contiene",
+          "text": "Una nueva teoría contiene a la antigua como caso límite — principio de correspondencia"
+        }
+      ],
+      "where": "Cada fórmula del curso: gas ideal, ley de Hooke, ciclo de Carnot, mecánica newtoniana — todas tienen un pasaporte de aplicabilidad.",
+      "watchOut": "El error más común es aplicar una fórmula fuera de su dominio y obtener una respuesta segura pero incorrecta. La fórmula no advertirá sobre esto: calculará todo lo que le ingreses."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "¿Por qué al calcular la órbita de la Tierra alrededor del Sol es permisible considerar la Tierra como un punto?",
+        "options": [
+          "Porque es más fácil de calcular, y la alta precisión en astronomía no es necesaria",
+          "Porque su tamaño es mucho menor que el radio orbital, y además Newton demostró rigurosamente que una esfera atrae igual que una masa puntual en su centro",
+          "Porque la forma de un cuerpo nunca afecta su movimiento",
+          "Porque la Tierra es muy pequeña en términos cósmicos"
+        ],
+        "answer": 1,
+        "why": "Funcionan dos argumentos a la vez: el de escala — 12 700 km contra 150 millones, y el riguroso — el teorema de Newton sobre la atracción de una esfera. La simplicidad del cálculo por sí sola nunca es una base: la conveniencia no hace que un modelo sea correcto.",
+        "hint": "Pregúntate en qué se diferencia una simplificación de una simplificación justificada. ¿Qué hay que demostrar para tener derecho a reemplazar una esfera por un punto, no solo por conveniencia?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "La teoría de la relatividad mostró que la mecánica newtoniana es incorrecta a velocidades cercanas a la luz. ¿Qué significa esto para la mecánica newtoniana?",
+        "options": [
+          "Debe considerarse refutada y no aplicarse más",
+          "Era correcta antes, pero las condiciones en el Universo han cambiado desde entonces",
+          "Sigue siendo completamente válida en su dominio — a velocidades mucho menores que la de la luz, donde la teoría de la relatividad se reduce a ella",
+          "Significa que la teoría de la relatividad también resultará completamente incorrecta algún día"
+        ],
+        "answer": 2,
+        "why": "Es el principio de correspondencia: una nueva teoría debe reducirse a la antigua donde la antigua ha sido verificada experimentalmente. Las fórmulas de Newton todavía colocan cohetes en órbita y calculan puentes. La ampliación del dominio no es una refutación.",
+        "hint": "Piensa qué pasaría con la ingeniería si cada nueva teoría anulara la anterior. ¿Por qué no ocurre esto?"
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿cómo verificar si es legítimo despreciar la resistencia del aire en un problema concreto, sin realizar un experimento ni resolver la ecuación de movimiento por completo?",
+        "keywords": [
+          "relación",
+          "comparación",
+          "resistencia",
+          "peso",
+          "menor",
+          "estimación",
+          "orden",
+          "división"
+        ],
+        "needed": 2,
+        "why": "Hay que estimar la fuerza de resistencia a la velocidad característica del problema y dividirla por el peso. Si la relación es mucho menor que uno, la omisión es legítima, y además sabes aproximadamente qué error introduces. La estimación toma un minuto y se hace antes de resolver, no después.",
+        "hint": "Despreciar algo significa afirmar que es pequeño. ¿Pequeño en comparación con qué precisamente en este problema?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "¿En qué porcentaje cambiará la aceleración de la gravedad en la cima del Everest (altitud de unos 9 km) en comparación con el nivel del mar?",
+        "answer": 0.3,
+        "unit": "%",
+        "tolerance": 0.15,
+        "why": "El cambio relativo es 2h/R = 2 · 9000 / 6,4·10⁶ ≈ 0,003, es decir, aproximadamente tres décimas de porcentaje. Esto es menor que la diferencia entre el polo y el ecuador causada por la rotación terrestre, y explica por qué en los problemas escolares se considera g constante sin problemas.",
+        "hint": "Usa la aproximación del bloque de matemáticas: para x pequeño, (1+x)ⁿ ≈ 1 + nx. La fuerza gravitatoria disminuye como el cuadrado de la distancia al centro de la Tierra — ¿qué factor da el exponente −2?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "النموذج وحدوده",
+    "subtitle": "الفقرة 1 · لماذا النقطة المادية ليست تبسيطاً، بل أداة",
+    "intro": [
+      "تخيل أن يُطلب منك حساب عدد الثواني التي يستغرقها حجر للوصول إلى الأرض من ارتفاع عشرة أمتار. أنت تعرف بالتأكيد ما يجب فعله. والآن لاحظ ما لم تسأل عنه: مما يتكون الحجر، وما شكله، هل يدور، ما هي الرطوبة اليوم، وأين بالضبط على الأرض يحدث ذلك.",
+      "لقد تجاهلت كل هذا ليس عن إهمال، بل بشكل صحيح تمامًا. لقد بنيت نموذجًا: جسم بلا أبعاد، بلا شكل، وبلا بنية داخلية، تؤثر عليه قوة ثابتة واحدة. لا يوجد مثل هذا الجسم في الطبيعة. لكن الإجابة ستكون صحيحة بدقة تصل إلى بضع في المئة - وهذا أكثر فائدة بكثير من إجابة دقيقة لا يمكن لأحد الحصول عليها.",
+      "هذه الفقرة بأكملها تدور حول فكرة واحدة: الفيزياء لا تتعامل مع الطبيعة مباشرة، بل مع نماذج الطبيعة. والمهارة الأكثر قيمة ليست حل المشكلة داخل النموذج، بل رؤية أين ينتهي النموذج."
+    ],
+    "standNote": "على المنصة — حركة جسم بتسارع ثابت. لاحظ ما ليس فيه: الجسم ليس له حجم، ولا دوران، ولا مقاومة هواء. هذه هي النقطة المادية. قم بتغيير السرعة الابتدائية والتسارع وانظر إلى الرسم البياني: القطع المكافئ سيكون سلسًا تمامًا. في التجربة الواقعية لن يكون كذلك - وسنناقش لاحقًا إلى أي مدى.",
+    "formula": {
+      "name": "مبدأ النمذجة",
+      "latex": "\\text{Явление} \\;\\longrightarrow\\; \\text{модель} \\;\\longrightarrow\\; \\text{предсказание} \\;\\longrightarrow\\; \\text{опыт}",
+      "alsoKnown": "المنهج العلمي في صورته الفيزيائية",
+      "authors": [
+        {
+          "who": "جاليليو جاليلي",
+          "year": 1638,
+          "what": "أول من تجاهل عمدًا ما هو غير جوهري: أثناء دراسة السقوط، استبعد مقاومة الهواء وشكل الجسم وتكوينه. اعتُبر هذا تلاعبًا - لأن الريشة تسقط بشكل مختلف عن الحجر. أجاب أنه يجب أولاً فهم الأساسيات."
+        },
+        {
+          "who": "إسحاق نيوتن",
+          "year": 1687,
+          "what": "أخذ التقنية إلى أقصى حد: الكواكب في حسابه هي نقاط، على الرغم من أن قطر الأرض يبلغ 12,700 كم. أثبت بدقة أن الكرة تجذب مثل نقطة في مركزها - أي برر لماذا كان التبسيط مشروعًا هنا."
+        },
+        {
+          "who": "ألبرت أينشتاين",
+          "year": 1933,
+          "what": "صاغ حد التقنية نفسها: يجب أن يكون الوصف بسيطًا قدر الإمكان، ولكن ليس أبسط من ذلك. النموذج الذي يستبعد الجوهري لا يبسط المشكلة، بل يستبدلها."
+        }
+      ],
+      "story": "كان لجاليليو معارض، اعتراضه يستحق التذكر: في العالم الحقيقي، تسقط الريشة والحجر بشكل مختلف، لذا القانون خاطئ. لم يحل الجدل إلا بعد نصف قرن من وفاة جاليليو، عندما تعلموا إخراج الهواء: في أنبوب مفرغ، تسقط الريشة والعملة معًا بالفعل. في عام 1971، كرر قائد أبولو-15 التجربة على القمر، حيث الفراغ مجاني - لمس المطرقة وريشة الصقر الأرض في وقت واحد. تبين أن النموذج ليس تقريبًا للحقيقة، بل وصفًا دقيقًا لذلك الجزء من الظاهرة الذي كان يهدف إلى وصفه.",
+      "symbols": [
+        {
+          "sym": "نموذج",
+          "latex": "M",
+          "what": "وصف مبسط لظاهرة",
+          "unit": "—",
+          "note": "يُعرف بقائمة ما أهملناه: هذا هو جواز سفرها."
+        },
+        {
+          "sym": "مجال",
+          "latex": "D",
+          "what": "الظروف التي يكون فيها النموذج صحيحًا",
+          "unit": "—",
+          "note": "بدون تحديد المجال، النموذج لا معنى له: 'صحيح دائمًا' غير موجود."
+        },
+        {
+          "sym": "دقة",
+          "latex": "\\varepsilon",
+          "what": "الانحراف بين التوقع والتجربة",
+          "unit": "%",
+          "note": "ليس خطأً، بل مقياس لمدى صغر ما تم تجاهله."
+        }
+      ]
+    },
+    "derivation": {
+      "title": "كيف تُبنى النموذج: تحليل حالة محددة",
+      "lead": "لنأخذ حجراً يسقط ونتتبع كل قرار نتخذه بصمت. هذا ليس اشتقاق صيغة، بل بناء صيغة المسألة نفسها - ما يبقى عادةً خلف الكواليس.",
+      "steps": [
+        {
+          "text": "القرار الأول: اعتبار الجسم نقطة. هذا جائز عندما تكون أبعاد الجسم أصغر بكثير من المسافات المعنية. حجر بحجم 10 سم على مسار 10 م يعطي خطأ حوالي واحد بالمائة - مقبول. نفس الحجر عند وصف اصطدامه بالأرض لا يمكن اعتباره نقطة: فالمعنى كله في التشوه، أي في الحجم.",
+          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "figure": "frame",
+          "figCaption": "يُستبدل الجسم بنقطة عندما لا يكون حجمه مهماً للمقياس المدروس."
+        },
+        {
+          "text": "القرار الثاني: اعتبار قوة الجاذبية ثابتة. في الواقع، تتناقص مع الارتفاع. دعنا نقدر: على عشرة أمتار، التغير النسبي يساوي ضعفي المسافة إلى مركز الأرض، أي حوالي ثلاثة أجزاء من عشرة ملايين. هذا أصغر بآلاف المرات من أي خطأ قياس لدينا - نهملها عن وعي لا جهلاً.",
+          "latex": "\\frac{\\Delta g}{g} \\approx \\frac{2h}{R_{\\oplus}} = \\frac{2 \\cdot 10}{6{,}4 \\cdot 10^{6}} \\approx 3 \\cdot 10^{-6}",
+          "figure": "forceprop",
+          "figCaption": "تتناقص قوة الجاذبية مع الارتفاع، لكن على المقاييس المدرسية، يضيع التغير في الضوضاء."
+        },
+        {
+          "text": "القرار الثالث: تجاهل مقاومة الهواء. هنا يجب توخي الحذر، لأنها تزداد كتربيع السرعة وعند سرعة معينة تصبح مساوية للوزن. لجسم كثيف ومضغوط على مسافة عشرة أمتار، التصحيح يكون بضع نسب مئوية. لورقة - مئات. نفس الإهمال جائز في حالة ومدمر في أخرى.",
+          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "figure": "friction",
+          "figCaption": "مقاومة الوسط تزداد بتربيع السرعة - مشروعية الإهمال تعتمد على مدى تسارع الجسم."
+        },
+        {
+          "text": "الآن فقط، بعد ثلاثة قرارات صريحة، يحق لنا كتابة الصيغة المألوفة. إنها لا تصف سقوط حجر. إنها تصف بدقة سقوط نقطة مادية في مجال منتظم بدون وسط - ومدى تشابه ذلك مع الحجر قدرناه للتو.",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "figure": "parabola",
+          "figCaption": "صيغة السقوط الحر - عبارة دقيقة عن النموذج، وليس تقديرية عن الحجر."
+        },
+        {
+          "text": "الخطوة الرئيسية التي تُغفل عادةً: التحقق بالتغذية الراجعة. افترضنا أن السرعة صغيرة - الآن يجب التأكد من أن الحل لا يناقض ذلك. السرعة في نهاية السقوط حوالي 14 م/ث، مقاومة الهواء للحجر عند هذه السرعة صغيرة بالفعل. النموذج متسق ذاتياً. لو كانت النتيجة 140 م/ث، لكنا عدنا وأعدنا.",
+          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "figure": "result",
+          "figCaption": "يجب على الحل التحقق من افتراضاته الخاصة - وإلا قد يكون النموذج متناقضاً داخلياً."
+        },
+        {
+          "text": "وأخيراً: لكل نموذج خلف. النقطة المادية لا تتحمل الدوران - يظهر الجسم الصلب بعزم القصور الذاتي. الميكانيكا النيوتونية لا تتحمل السرعات القريبة من الضوء - تظهر النظرية النسبية. لا تُلغى أي من النماذج القديمة: تظل صحيحة في مجالها، والنظرية الجديدة يجب أن تتحول إلى هذا المجال.",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "figure": "curves",
+          "figCaption": "النظرية الجديدة لا تلغي القديمة، بل تحتويها كحالة حدية. يُسمى هذا المطلب مبدأ المطابقة."
+        }
+      ],
+      "plate": "النموذج هو ظاهرة بالإضافة إلى قائمة بما أهملناه، بالإضافة إلى تقدير لمدى مشروعية ذلك. بدون الجزء الثالث، يتحول النموذج إلى تخمين.",
+      "note": "من هنا قاعدة عملية للدورة بأكملها: عند مواجهة صيغة، اسأل فوراً ما المفترض فيها. الغاز المثالي - أن الجزيئات لا تتجاذب. قانون هوك - أن التشوه صغير. صيغة كفاءة كارنو - أن العملية بطيئة بلا حدود. الإجابة على هذا السؤال عادة ما تكون محتوى الموضوع."
+    },
+    "math": {
+      "title": "الرياضيات التي تطلبها هنا",
+      "text": [
+        "التقنية الرئيسية في هذا القسم هي تقدير الصغر. هذا ليس حساباً بل مقارنة: نأخذ الكمية المهملة، نقسمها على الكمية المتبقية، وننظر إلى رتبة النسبة.",
+        "رياضياً، وراء هذا توسع إلى متسلسلة. التعبير الدقيق لقوة الجاذبية على ارتفاع $h$ هو $g(h) = g_0 R^2/(R+h)^2$. عندما $h \\ll R$، يُوسع ويُترك الحد التصحيحي الأول: $g(h) \\approx g_0 (1 - 2h/R)$. هذا الرقم 2 هو الذي ظهر في تقديرنا.",
+        "القاعدة العامة التي نستخدمها باستمرار: لـ $x$ صغير، $(1+x)^n \\approx 1 + nx$. تحقق باليد: $1{,}02^{3}$ - الآلة الحاسبة تعطي 1.0612، التقريب يعطي 1.06. الفرق في الرقم الرابع، ويمكن الحساب ذهنياً.",
+        "معنى هذه التقنية أعمق من توفير الجهد. إنها تُظهر أي كمية بالضبط صغيرة في المسألة - وبالتالي أين سيبدأ النموذج في الانهيار إذا توقفت هذه الكمية عن كونها صغيرة."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: عندما يتوقف الإهمال عن العمل",
+      "lead": "المهمة ليست حول الصيغة، بل حول قرار بشأن الصيغة. لا يوجد شيء تقريبًا لحسابه - المهم هو تسلسل الإجراءات نفسه.",
+      "given": "كرة فولاذية قطرها $2$ سم تسقط من ارتفاع $10$ م. تحديد ما إذا كان نموذج السقوط الحر مناسبًا هنا - وما الذي سيتغير بالنسبة لورقة من نفس الكتلة.",
+      "law": "معيار شرعية الإهمال: $F_{\\text{сопр}} / mg \\ll 1$، حيث $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "solution": [
+        {
+          "text": "سنقدر السرعة في نهاية السقوط - فهناك تكون المقاومة قصوى، وإذا كنا سنفحص، ففي أسوأ نقطة.",
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+        },
+        {
+          "text": "مساحة مقطع الكرة ومعاملات الهواء. معامل الشكل للكرة قريب من النصف.",
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+        },
+        {
+          "text": "قوة المقاومة عند هذه السرعة.",
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+        },
+        {
+          "text": "وزن الكرة: فولاذ كثافته $7800$ كجم/م³ في حجم حوالي $4 \\cdot 10^{-6}$ م³.",
+          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+        },
+        {
+          "text": "نقارن - ونحصل على إجابة السؤال الأصلي.",
+          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+        }
+      ],
+      "answer": "بالنسبة للكرة، النموذج مناسب: الخطأ في حدود بضع نسبة مئوية. بالنسبة لورقة من نفس الكتلة، تكون المساحة أكبر بمئات المرات، وستتجاوز النسبة الوحدة قبل وقت طويل من نهاية السقوط - هناك النموذج غير قابل للتطبيق من حيث المبدأ.",
+      "check": "التحقق من الفطرة السليمة: ورقة عند سقوطها، تصل على الفور تقريبًا إلى سرعة ثابتة وتبدأ في الانزلاق. لا يوجد قطع مكافئ هناك. الرائع هو أن النموذج حذر من ذلك بنفسه، حتى قبل التجربة، - بقسمة واحدة على ورقة. لهذا يتم تقديره."
+    },
+    "constants": {
+      "title": "كميات هذا القسم",
+      "lead": "ما يهم هنا ليس الأرقام نفسها، بل أن كل منها يشارك في التقييم - نقسم واحدًا على الآخر ونقرر ما إذا كان الإهمال مشروعًا.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "تسارع السقوط الحر",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "ثابت لجميع الأجسام إذا أهملنا الوسط. هذا هو تأكيد جاليليو وكان أول نموذج مبني بوعي في الفيزياء.",
+          "mnemo": "في التقديرات نأخذ 10 - الخطأ 2%، لكنها تقبل القسمة ذهنيًا."
+        },
+        {
+          "sym": "R",
+          "latex": "R_{\\oplus}",
+          "dictKey": "R",
+          "name": "نصف قطر الأرض",
+          "value": "6,4 · 10⁶",
+          "unit": "м",
+          "why": "ليس مطلوبًا بذاته، بل لتقدير مدى ثبات قوة الجاذبية: نسبة ارتفاع الرفع إلى هذا الرقم هي مقياس عدم الثبات.",
+          "mnemo": "محيط الأرض حوالي 40,000 كم - المتر كان يُعرّف يومًا بأنه جزء من أربعين مليونًا. من هنا يتم الحصول على نصف القطر بالقسمة على 2π."
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho_{\\text{возд}}",
+          "dictKey": "rho",
+          "name": "كثافة الهواء",
+          "value": "1,2",
+          "unit": "кг / م³",
+          "why": "تدخل في قوة المقاومة. هذه الكمية هي التي تقرر ما إذا كان إهمال الوسط سيكون تصحيحًا بنسبة مئوية أم خطأ بمضاعفات.",
+          "mnemo": "أخف من الماء بحوالي 800 مرة. الهواء في غرفة 5 × 4 × 3 م يزن حوالي 70 كجم - مثل شخص بالغ."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "جواز صلاحية التطبيق: الدورة بأكملها في صفحة واحدة",
+      "lead": "من المفيد أن نرى فورًا أن هذا القسم ليس مقدمة، بل أداة عمل. كل صيغة ستصادفها لاحقًا لها نفس جواز السفر: ما يفترض ومتى يتوقف عن الصحة.",
+      "items": [
+        {
+          "h": "نقطة مادية",
+          "text": "يفترض أن حجم الجسم غير مهم. ينهار حيث يكون الدوران أو التشوه مهمًا: القمة، الصدمة، التدحرج. الخلف - جسم صلب بعزم قصور ذاتي."
+        },
+        {
+          "h": "غاز مثالي",
+          "text": "يفترض أن الجزيئات لا تتجاذب وليس لها حجم. ينهار بالقرب من التكثيف وعند الضغوط العالية. الخلف - معادلة فان دير فالس."
+        },
+        {
+          "h": "قانون هوك",
+          "text": "يفترض تشوهًا صغيرًا. ينهار بعد حد المرونة: الزنبرك يتوقف عن العودة. الخلف - نظرية اللدونة."
+        },
+        {
+          "h": "دورة كارنو",
+          "text": "يفترض عملية بطيئة بلا حدود. ينهار في أي آلة حقيقية تعمل بسرعة محدودة - لذلك الكفاءة الحدية غير قابلة للتحقيق عمليًا."
+        },
+        {
+          "h": "ميكانيكا نيوتن",
+          "text": "يفترض $v \\ll c$ ومقاييس أكبر بكثير من الذرية. ينهار مرتين: عند سرعة الضوء وعند حجم الذرة. الخلفان - نظرية النسبية وميكانيكا الكم."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: لماذا تعمل النماذج أصلاً",
+      "lead": "هذا القسم ليس ضمن الاختبار. إنه يتعلق بسؤال ليس لدى الفيزياء إجابة صادقة عليه.",
+      "blocks": [
+        {
+          "h": "لم يكن هناك ما يُلزم العالم بأن يكون مفهومًا",
+          "text": "لحساب مدار كوكب، يكفي معرفة كتلته. لا حاجة للتكوين، أو الشكل، أو التاريخ، أو ما إذا كان يمطر عليه. هذه حالة مذهلة، وليست بديهية: من السهل تخيل كون حيث كل تفصيل صغير يؤثر على كل شيء، ولا يعمل أي نموذج لأكثر من ثانية."
+        },
+        {
+          "h": "فصل المقاييس",
+          "text": "الأمر جزئياً أن الظواهر ذات الأحجام المختلفة تؤثر بشكل ضعيف على بعضها البعض. مهندس الجسور لا يحتاج إلى ميكانيكا الكم، وفيزيائي الذرة لا يحتاج إلى تركيب القشرة الأرضية. بفضل هذا يمكن بناء المعرفة طبقات دون انتظار نظرية نهائية لكل شيء. لكن لماذا يوجد فصل المقاييس أصلاً – سؤال آخر بلا إجابة."
+        },
+        {
+          "h": "الفعالية غير المفهومة للرياضيات",
+          "text": "كتب يوجين ويغنر في عام 1960 مقالاً عن هذا الأمر، والذي لا يزال يُستشهد به باستمرار، واعترف بأنه ليس لديه تفسير. الهياكل الرياضية التي تم اختراعها لأسباب جمالية داخلية، تظهر بعد عقود أنها بالضبط ما تحتاجه الفيزياء. هكذا كان الحال مع الهندسة اللاإقليدية قبل النظرية النسبية، ومع نظرية المجموعات قبل فيزياء الجسيمات."
+        },
+        {
+          "h": "هنا تتوقف الفيزياء",
+          "text": "نحن نستفيد من حقيقة أن العالم قابل للفهم، لكننا لا نعرف لماذا هو قابل للفهم. هذه إحدى تلك الحواف التي من الأصدق التحدث عنها مباشرة بدلاً من تغطيتها بعبارة جميلة. المزيد في قسم «الأسئلة المفتوحة»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "الفيزياء لا تصف الطبيعة، بل تصف نماذج الطبيعة؛ لكل نموذج مجال تطبيق، وهو أكثر أهمية من الصيغة نفسها.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "النموذج = ظاهرة +",
+          "text": "النموذج = ظاهرة + قائمة ما تم تجاهله + تقييم شرعية التجاهل"
+        },
+        {
+          "icon": "formula",
+          "title": "التجاهل مشروع عندما تكون",
+          "text": "التجاهل مشروع عندما تكون نسبة ما تم تجاهله إلى ما تم الاحتفاظ به أقل بكثير من الواحد"
+        },
+        {
+          "icon": "sigma",
+          "title": "الحل ملزم بفحص افتراضاته الخاصة",
+          "text": "الحل ملزم بفحص افتراضاته الخاصة"
+        },
+        {
+          "icon": "ruler",
+          "title": "النظرية الجديدة تحتوي على",
+          "text": "النظرية الجديدة تحتوي على القديمة كحالة حدية – مبدأ التطابق"
+        }
+      ],
+      "where": "كل صيغة في الدورة: الغاز المثالي، قانون هوك، دورة كارنو، ميكانيكا نيوتن – جميعها لها جواز تطبيق.",
+      "watchOut": "الخطأ الأكثر شيوعاً هو تطبيق صيغة خارج مجالها والحصول على إجابة خاطئة بثقة. الصيغة لن تحذرك من هذا: ستحسب كل ما تضعه فيها."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "لماذا عند حساب مدار الأرض حول الشمس يجوز اعتبار الأرض نقطة؟",
+        "options": [
+          "لأنه بهذه الطريقة أسهل في الحساب، والدقة العالية غير ضرورية في علم الفلك",
+          "لأن حجمها أصغر بكثير من نصف قطر المدار، بالإضافة إلى أن نيوتن أثبت بدقة: الكرة تجذب مثل نقطة في مركزها",
+          "لأن شكل الجسم لا يؤثر أبداً على حركته",
+          "لأن الأرض صغيرة جداً بمقاييس الفضاء"
+        ],
+        "answer": 1,
+        "why": "تعمل حجتان معاً: الحجة المقياسية – 12,700 كم مقابل 150 مليون، والحجة الصارمة – نظرية نيوتن لجاذبية الكرة. بساطة الحساب بحد ذاتها ليست أبداً مبرراً: الراحة لا تجعل النموذج صحيحاً.",
+        "hint": "اسأل نفسك: كيف يختلف التبسيط عن التبسيط المبرر؟ ما الذي يجب إثباته ليكون استبدال الكرة بنقطة مسموحاً به ليس فقط من أجل الراحة؟"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "أظهرت النظرية النسبية أن ميكانيكا نيوتن غير صحيحة عند السرعات القريبة من الضوء. ماذا يعني هذا لميكانيكا نيوتن؟",
+        "options": [
+          "يجب اعتبارها مرفوضة وعدم استخدامها بعد الآن",
+          "كانت صحيحة سابقاً، لكن الظروف في الكون تغيرت منذ ذلك الحين",
+          "تظل صحيحة تماماً في مجالها – عند سرعات أقل بكثير من سرعة الضوء، حيث تتحول النظرية النسبية إليها",
+          "هذا يعني أن النظرية النسبية ستثبت أيضاً أنها خاطئة تماماً في يوم ما"
+        ],
+        "answer": 2,
+        "why": "هذا هو مبدأ التطابق: النظرية الجديدة ملزمة بالتحول إلى القديمة حيث تم اختبار القديمة بالتجربة. لا تزال صيغ نيوتن تضع الصواريخ في المدار وتحسب الجسور. توسيع المجال ليس رفضاً.",
+        "hint": "فكر فيما سيحدث للهندسة إذا كانت كل نظرية جديدة تلغي سابقتها. لماذا لا يحدث هذا؟"
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: كيف تتحقق مما إذا كان إهمال مقاومة الهواء مشروعاً في مسألة معينة، دون إجراء تجربة أو حل معادلة الحركة بالكامل؟",
+        "keywords": [
+          "نسبة",
+          "مقارنة",
+          "مقاومة",
+          "وزن",
+          "أقل",
+          "تقدير",
+          "ترتيب",
+          "قسم"
+        ],
+        "needed": 2,
+        "why": "يجب تقدير قوة المقاومة عند السرعة المميزة للمسألة وتقسيمها على الوزن. إذا كانت النسبة أقل بكثير من الواحد – فإن الإهمال مشروع، وأنت حتى تعرف مقدار الخطأ التقريبي الذي ترتكبه. التقدير يستغرق دقيقة ويتم قبل الحل، وليس بعده.",
+        "hint": "إهمال شيء يعني الادعاء بأنه صغير. صغير مقارنة بماذا بالضبط في هذه المسألة؟"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "ما هي النسبة المئوية للتغير في تسارع الجاذبية الأرضية على قمة إيفرست (ارتفاع حوالي 9 كم) مقارنة بمستوى سطح البحر؟",
+        "answer": 0.3,
+        "unit": "%",
+        "tolerance": 0.15,
+        "why": "التغير النسبي يساوي 2h/R = 2 · 9000 / 6,4·10⁶ ≈ 0.003، أي حوالي ثلاثة أعشار المئة. هذا أقل من الفرق بين القطب وخط الاستواء الناتج عن دوران الأرض – ويشرح لماذا في مسائل المدرسة يعتبر g ثابتاً بثقة.",
+        "hint": "استخدم التقريب من قسم الرياضيات: عند x صغير، (1+x)ⁿ ≈ 1 + nx. تتناقص قوة الجاذبية كمربع المسافة إلى مركز الأرض – أي عامل يعطي الأس −2؟"
+      }
+    ]
+  },
+  "laws": [
+    "hookes_law"
+  ]
+}

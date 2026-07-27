@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Математика на пальцах — bridge42worlds</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<style>
+  /* Материал длинный, поэтому слева оглавление по уровням, а карточки идут одной колонкой:
+     формулу и объяснение читают подряд, а не выбирают глазами из сетки. */
+  .top-bar{display:flex;justify-content:space-between;align-items:center;
+    max-width:var(--col-wide, 1100px);margin:0 auto 18px;padding:16px 16px 0}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--soft);text-decoration:none}
+  .logo:hover{color:var(--accent)}
+  .theme-toggle{background:none;border:1px solid var(--line);color:var(--soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+
+  .m-wrap{max-width:var(--col-wide, 1100px);margin:0 auto;padding:0 16px 60px}
+  .m-head h1{font-family:var(--font-display);font-size:clamp(26px,4.4vw,38px);line-height:1.15;margin-bottom:8px}
+  .m-sub{color:var(--soft);font-size:15px;margin-bottom:14px}
+  .m-lead{max-width:70ch;font-size:15px;line-height:1.72;margin-bottom:8px}
+
+  .m-body{display:grid;grid-template-columns:190px minmax(0,1fr);gap:34px;margin-top:26px;align-items:start}
+  .m-toc{position:sticky;top:20px;font-size:13px}
+  .m-toc-t{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
+    font-weight:700;margin-bottom:10px}
+  .m-toc a{display:block;padding:5px 0;color:var(--soft);text-decoration:none;line-height:1.4;
+    border-inline-start:2px solid transparent;padding-inline-start:10px}
+  .m-toc a:hover{color:var(--accent)}
+  .m-toc a.lvl{font-weight:700;color:var(--ink);margin-top:12px;border-color:var(--accent)}
+
+  .m-lvl{margin:34px 0 14px;display:flex;align-items:center;gap:10px}
+  .m-lvl-n{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--muted);white-space:nowrap}
+  .m-lvl::after{content:"";flex:1;height:2px;background:var(--line)}
+
+  .m-card{border:1px solid var(--line);border-radius:13px;background:var(--surface);
+    padding:17px 19px;margin-bottom:14px;scroll-margin-top:20px}
+  .m-name{font-family:var(--font-display);font-size:17px;font-weight:600;display:flex;
+    align-items:center;gap:9px;margin-bottom:11px}
+  .m-name svg{color:var(--accent);flex:none}
+  .m-eq{text-align:center;font-size:18px;margin:6px 0 14px;padding:11px 8px;overflow-x:auto;
+    background:var(--bg);border-radius:9px}
+  .m-row{font-size:14px;line-height:1.72;margin-top:11px}
+  .m-row b{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+    display:block;margin-bottom:4px;font-weight:700}
+  .m-where{color:var(--soft);font-size:13px}
+  .m-catch{border-inline-start:3px solid #b8860b;padding-inline-start:12px;
+    background:rgba(184,134,11,.06);border-radius:0 8px 8px 0;padding-top:8px;padding-bottom:8px}
+  .m-empty{padding:30px;text-align:center;color:var(--muted)}
+
+  @media (max-width:900px){
+    .m-body{grid-template-columns:1fr;gap:0}
+    .m-toc{position:static;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+    .m-toc-t{width:100%}
+    .m-toc a{border:1px solid var(--line);border-radius:14px;padding:5px 12px;font-size:12px}
+    .m-toc a.lvl{margin-top:0}
+  }
+</style>
+<script>
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="/learn.html" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<div class="m-wrap">
+  <div class="m-head">
+    <h1 id="h"></h1>
+    <div class="m-sub" id="sub"></div>
+    <p class="m-lead" id="lead"></p>
+  </div>
+  <div class="m-body">
+    <nav class="m-toc" id="toc"></nav>
+    <div id="root"></div>
+  </div>
+</div>
+
+<script src="/js/icons.js?v=2"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru';
+  var root = document.getElementById('root'), toc = document.getElementById('toc');
+
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function ic(n, s) { return (window.B42Icons && B42Icons[n]) ? B42Icons[n](s || 17) : ''; }
+  function tex(node, latex) {
+    if (!window.katex) { node.textContent = latex; return; }
+    try { katex.render(latex, node, { throwOnError: false, displayMode: true }); }
+    catch (e) { node.textContent = latex; }
+  }
+
+  fetch('/data/theory/mathkit.json', { cache: 'no-cache' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var T = d[LANG] || d.ru;
+      document.title = T.title + ' — bridge42worlds';
+      document.getElementById('h').textContent = T.title;
+      document.getElementById('sub').textContent = T.subtitle;
+      document.getElementById('lead').textContent = T.lead;
+
+      toc.appendChild(el('div', 'm-toc-t', T.title));
+      var lvl = null;
+      d.items.forEach(function (it) {
+        var loc = (T.items && T.items[it.id]) || it;
+        if (it.level !== lvl) {
+          lvl = it.level;
+          var name = (T.levels && T.levels[lvl]) || lvl;
+          var head = el('div', 'm-lvl');
+          head.id = 'lvl-' + lvl;
+          head.appendChild(el('span', 'm-lvl-n', name));
+          root.appendChild(head);
+          var la = el('a', 'lvl', name); la.href = '#lvl-' + lvl; toc.appendChild(la);
+        }
+        var card = el('div', 'm-card');
+        card.id = 'm-' + it.id;
+        card.appendChild(el('div', 'm-name', ic(it.icon) + '<span>' + (loc.name || it.name) + '</span>'));
+        if (it.latex) { var eq = el('div', 'm-eq'); tex(eq, it.latex); card.appendChild(eq); }
+
+        var means = el('div', 'm-row');
+        means.innerHTML = '<b>' + T.meansLabel + '</b>' + (loc.means || it.means);
+        card.appendChild(means);
+
+        if (loc.where || it.where) {
+          var w = el('div', 'm-row m-where');
+          w.innerHTML = '<b>' + T.whereLabel + '</b>' + (loc.where || it.where);
+          card.appendChild(w);
+        }
+        if (loc.catch || it.catch) {
+          var c = el('div', 'm-row m-catch');
+          c.innerHTML = '<b>' + T.catchLabel + '</b>' + (loc.catch || it.catch);
+          card.appendChild(c);
+        }
+        root.appendChild(card);
+
+        var a = el('a', null, loc.name || it.name);
+        a.href = '#m-' + it.id;
+        toc.appendChild(a);
+      });
+    })
+    .catch(function (e) { root.appendChild(el('div', 'm-empty', String(e))); });
+})();
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+</body>
+</html>

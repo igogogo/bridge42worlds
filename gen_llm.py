@@ -14,7 +14,7 @@ import random
 from pathlib import Path
 from openai import OpenAI
 
-from common import CONFIG, AGENTS, DEFAULT_LANG, chat, clean_json, load_prompt
+from common import CONFIG, AGENTS, DEFAULT_LANG, LANG_DIR, chat, clean_json, load_prompt
 
 SELECTION_PERCENT = CONFIG.get("selection_percent", 10)
 MAX_ARTICLES = CONFIG.get("max_articles", 10)
@@ -27,7 +27,9 @@ LANG_NAMES = {
 }
 
 CULTURE_NOTES = {
-    "ar": ("ВАЖНО — КУЛЬТУРНАЯ АДАПТАЦИЯ ДЛЯ АРАБСКОЙ И МУСУЛЬМАНСКОЙ АУДИТОРИИ (в т.ч. читатели "
+    "ar": ("ПРАВИЛО АНАЛОГИЙ (для всех языков): аналогию заменяй ТОЛЬКО если она непереводима или незнакома целевой аудитории; во всех остальных случаях переводи как есть. Молча «адаптировать» без причины нельзя. Алкогольные аналогии не используются ни в каком языке. В key_numbers переводятся И значения, И КЛЮЧИ словаря. "
+           "ТЕРМИНОЛОГИЯ: используй принятые арабские научные термины; при ПЕРВОМ появлении термина дай латинский термин в скобках — это норма чтения для университетской аудитории Залива. "
+           "ВАЖНО — КУЛЬТУРНАЯ АДАПТАЦИЯ ДЛЯ АРАБСКОЙ И МУСУЛЬМАНСКОЙ АУДИТОРИИ (в т.ч. читатели "
            "из университетов стран Персидского залива, включая Кувейт — материал рассчитан на "
            "академическую, а не только массовую аудиторию): переводи с уважением к исламским "
            "ценностям и обычаям. Избегай аналогий и примеров, связанных с алкоголем, свининой, "
@@ -44,6 +46,8 @@ CULTURE_NOTES = {
            "за уши — не в каждом тексте, только где это действительно уместно. При сомнении в "
            "уместности конкретной аналогии или примера — выбирай более нейтральный и безопасный "
            "вариант, а не самый выразительный."),
+    "en": ("Аудитория — международная, английский как lingua franca науки. Термины — общепринятые англоязычные; единицы СИ. Тон: ясный научпоп уровня хорошего научного журнала. ПРАВИЛО АНАЛОГИЙ (для всех языков): аналогию заменяй ТОЛЬКО если она непереводима или незнакома целевой аудитории; во всех остальных случаях переводи как есть. Молча «адаптировать» без причины нельзя. Алкогольные аналогии не используются ни в каком языке. В key_numbers переводятся И значения, И КЛЮЧИ словаря."),
+    "es": ("Аудитория — испаноязычные читатели Испании и Латинской Америки. Используй нейтральный международный испанский без региональных идиом; термины — принятые в испаноязычных учебниках. ПРАВИЛО АНАЛОГИЙ (для всех языков): аналогию заменяй ТОЛЬКО если она непереводима или незнакома целевой аудитории; во всех остальных случаях переводи как есть. Молча «адаптировать» без причины нельзя. Алкогольные аналогии не используются ни в каком языке. В key_numbers переводятся И значения, И КЛЮЧИ словаря."),
 }
 
 IMG_VARIATIONS = {
@@ -312,6 +316,23 @@ def generate_image(image_prompt, out_path, preset="image"):
         return False, model
 
 
+
+# Наследование фактуры КОДОМ, а не пересказом модели (ТЗ 2026-07-27, §4): нижний уровень получает
+# теги/учёных/законы/числа/метафору/глоссарий готовыми и не вправе их менять — так версии не
+# расходятся между уровнями.
+_INHERITED = ("main_tag", "extra_tags", "scientists", "laws", "key_numbers", "metaphor", "glossary")
+
+
+def inherit_facts(child, parent):
+    """Переносит фактуру из родительского уровня в дочерний. Возвращает child."""
+    if not isinstance(child, dict) or not isinstance(parent, dict):
+        return child
+    for k in _INHERITED:
+        if k in parent and parent[k] not in (None, "", [], {}):
+            child[k] = parent[k]
+    return child
+
+
 def generate_simple(scipop_advanced):
     prompt = load_prompt("article-generate-simple").format(
         advanced_json=json.dumps(scipop_advanced, ensure_ascii=False))
@@ -325,11 +346,7 @@ def generate_simple(scipop_advanced):
             return scipop_advanced
         if _default_lang_ok(data):
             break
-    data["main_tag"] = scipop_advanced.get("main_tag", "")
-    data["extra_tags"] = scipop_advanced.get("extra_tags", [])
-    data["scientists"] = scipop_advanced.get("scientists", [])
-    data["laws"] = scipop_advanced.get("laws", [])
-    return data
+    return inherit_facts(data, scipop_advanced)
 
 
 def generate_popular(scipop_adv):
@@ -346,11 +363,7 @@ def generate_popular(scipop_adv):
             return scipop_adv
         if _default_lang_ok(data):
             break
-    data["main_tag"] = scipop_adv.get("main_tag", "")
-    data["extra_tags"] = scipop_adv.get("extra_tags", [])
-    data["scientists"] = scipop_adv.get("scientists", [])
-    data["laws"] = scipop_adv.get("laws", [])
-    return data
+    return inherit_facts(data, scipop_adv)
 
 
 def refine_simple(scipop):
@@ -368,7 +381,7 @@ def refine_simple(scipop):
         data["laws"] = scipop.get("laws", [])
         if "mini" in scipop:
             data["mini"] = scipop.get("mini", "")
-        return data
+        return inherit_facts(data, scipop)
     except Exception:
         return scipop
 
@@ -384,7 +397,7 @@ def refine_popular(scipop):
         data["extra_tags"] = scipop.get("extra_tags", [])
         data["scientists"] = scipop.get("scientists", [])
         data["laws"] = scipop.get("laws", [])
-        return data
+        return inherit_facts(data, scipop)
     except Exception:
         return scipop
 
@@ -463,6 +476,148 @@ def _log_translation_failure(kind, target_lang, detail=""):
         pass
 
 
+
+# ── Автопроверки перевода (ТЗ контент-менеджера 2026-07-27, §6.4) ─────────────────────────────
+# Проверяем ПЕРЕД записью: брак → повтор вызова, при исчерпании — лог, но НЕ молчаливый откат
+# на непереведённый текст. Самая опасная ошибка — потерянное число (результат исследования).
+_MARKER_RE = re.compile(r"\[(tag|law|scientist|callout):[^\]]*\]")
+_NUM_RE = re.compile(r"\d+(?:[.,]\d+)?(?:\s*[×x]\s*10\^?-?\d+)?")
+_CYR_RE = re.compile(r"[а-яА-ЯёЁ]")
+
+
+def _flat_text(obj):
+    """Весь человекочитаемый текст структуры одной строкой (для подсчётов)."""
+    if isinstance(obj, str):
+        return obj
+    if isinstance(obj, dict):
+        return " ".join(_flat_text(v) for v in obj.values())
+    if isinstance(obj, list):
+        return " ".join(_flat_text(v) for v in obj)
+    return ""
+
+
+def _latex_bits(obj):
+    """Все latex-поля — они переводом меняться не должны."""
+    out = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == "latex" and isinstance(v, str):
+                out.append(v)
+            else:
+                out.extend(_latex_bits(v))
+    elif isinstance(obj, list):
+        for v in obj:
+            out.extend(_latex_bits(v))
+    return out
+
+
+def validate_translation(src, dst, target_lang):
+    """Возвращает (ok, [проблемы]). Порядок проверок — по §6.4 ТЗ."""
+    problems = []
+    src_t, dst_t = _flat_text(src), _flat_text(dst)
+    if not dst_t.strip():
+        return False, ["пустой перевод"]
+
+    # 1) кириллица в не-русской версии
+    if target_lang != "ru":
+        cyr = len(_CYR_RE.findall(dst_t))
+        if cyr > max(20, len(dst_t) * 0.02):
+            problems.append(f"кириллица в {target_lang}: {cyr} символов")
+
+    # 2) маркеры сущностей должны совпадать по составу
+    src_m, dst_m = sorted(_MARKER_RE.findall(src_t)), sorted(_MARKER_RE.findall(dst_t))
+    if len(src_m) != len(dst_m):
+        problems.append(f"маркеры: было {len(src_m)}, стало {len(dst_m)}")
+
+    # 3) числа оригинала обязаны сохраниться (потерянный результат — худшая ошибка)
+    src_n = set(_NUM_RE.findall(src_t))
+    dst_n = set(_NUM_RE.findall(dst_t))
+    lost = [n for n in src_n if n not in dst_n]
+    # мало чисел — терять нельзя ни одного (это и есть результат исследования);
+    # много — допускаем 15% на переформулировки вроде «десятки тысяч».
+    tolerance = 0 if len(src_n) <= 6 else len(src_n) * 0.15
+    if len(lost) > tolerance:
+        problems.append(f"потеряны числа ({len(lost)} из {len(src_n)}): {lost[:5]}")
+
+    # 4) latex не должен меняться
+    if _latex_bits(src) != _latex_bits(dst):
+        problems.append("изменены latex-формулы")
+
+    # 5) длина — предупреждение, не брак
+    if src_t and not (0.7 <= len(dst_t) / len(src_t) <= 1.45):
+        print(f"    ⚠️ перевод {target_lang}: длина {len(dst_t)/len(src_t):.0%} от оригинала")
+
+    return (not problems), problems
+
+
+# ── Термбаза для перевода (ТЗ 2026-07-27, §6.1) ──────────────────────────────────────────────
+# Внутри маркеров [tag:...] / [law:...] / [scientist:...] переводчик обязан использовать ИМЕННО
+# те формулировки, что уже стоят на карточках этих сущностей — иначе термин в статье и на его
+# собственной странице расходятся. Источник — уже переведённые справочники, новых вызовов LLM нет.
+_TERMBASE_CACHE = {}
+
+
+def _ref_names(lang, fname):
+    """{id: локализованное имя} из переведённого справочника; пусто, если файла нет."""
+    key = (lang, fname)
+    if key in _TERMBASE_CACHE:
+        return _TERMBASE_CACHE[key]
+    p = Path(LANG_DIR) / lang / "data" / fname
+    out = {}
+    if p.exists():
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                for k, v in data.items():
+                    if isinstance(v, dict) and v.get("name"):
+                        out[k] = v["name"]
+                    elif isinstance(v, str):
+                        out[k] = v
+        except Exception:
+            pass
+    _TERMBASE_CACHE[key] = out
+    return out
+
+
+def build_termbase(scipop, target_lang):
+    """Готовые переводы сущностей ЭТОЙ статьи + глоссарий. Пустые секции опускаем."""
+    tag_ids = [x for x in [scipop.get("main_tag")] + (scipop.get("extra_tags") or []) if x]
+    law_ids = scipop.get("laws") or []
+    sci_ids = scipop.get("scientists") or []
+
+    tags_all = _ref_names(target_lang, "tags.json")
+    laws_all = _ref_names(target_lang, "laws.json")
+    sci_all = _ref_names(target_lang, "scientists.json")
+
+    tb = {}
+    got = {k: v for k, v in ((i, tags_all.get(i)) for i in tag_ids) if v}
+    if got:
+        tb["tags"] = got
+    got = {k: v for k, v in ((i, laws_all.get(i)) for i in law_ids) if v}
+    if got:
+        tb["laws"] = got
+    got = {k: v for k, v in ((i, sci_all.get(i)) for i in sci_ids) if v}
+    if got:
+        tb["scientists"] = got
+    gl = scipop.get("glossary") or []
+    if gl:
+        tb["glossary"] = {g.get("term", ""): g.get("plain", "") for g in gl if isinstance(g, dict) and g.get("term")}
+    return tb
+
+
+def _termbase_block(scipop, target_lang):
+    """Кусок промпта с термбазой (или пустая строка, если сущностей нет)."""
+    tb = build_termbase(scipop, target_lang)
+    if not tb:
+        return ""
+    head = (
+        "\n\nТЕРМБАЗА — готовые переводы сущностей этой статьи. Внутри маркеров "
+        "[tag:...], [law:...], [scientist:...] используй ТОЛЬКО эти формулировки, "
+        "ничего не придумывай:\n"
+    )
+    return head + json.dumps(tb, ensure_ascii=False, indent=1)
+
+
 def translate_scipop(scipop, target_lang, retries=3):
     """retries — сбой здесь почти всегда НЕ сетевой (chat() уже отретраила сетевые сама, см.
     common.chat retries=3), а невалидный/недо-JSON в самом ответе модели — стохастическая штука,
@@ -471,15 +626,30 @@ def translate_scipop(scipop, target_lang, retries=3):
     target_language = LANG_NAMES.get(target_lang, target_lang)
     prompt = load_prompt("article-translate").format(
         article_json=json.dumps(scipop, ensure_ascii=False), target_language=target_language,
-        culture_note=CULTURE_NOTES.get(target_lang, ""))
+        culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(scipop, target_lang)
     for attempt in range(1, retries + 1):
         r = chat("translate", prompt)
         try:
-            return json.loads(clean_json(r.choices[0].message.content))
+            out = json.loads(clean_json(r.choices[0].message.content))
         except Exception as e:
             if attempt == retries:
                 _log_translation_failure("scipop", target_lang, f"{scipop.get('title', '')[:60]!r}: {e}")
             continue
+        # Идентификаторы НЕ переводятся: id тега/закона/учёного — это ключ, по которому строится
+        # ссылка. После смены роли переводчика на «редактуру носителем» модель стала переводить и их,
+        # отчего ссылки вида /tags/markov_chain.html превращались в /tags/سلاسل ماركوف.html (битые).
+        # Возвращаем ключи из оригинала кодом — промпту такое доверять нельзя.
+        for _k in ("main_tag", "extra_tags", "tags", "scientists", "laws", "glossary", "metaphor"):
+            if _k in scipop:
+                out[_k] = scipop[_k]
+        ok, problems = validate_translation(scipop, out, target_lang)
+        if ok:
+            return out
+        if attempt == retries:
+            _log_translation_failure("scipop", target_lang,
+                                     f"{scipop.get('title', '')[:60]!r}: брак перевода — {'; '.join(problems)}")
+        else:
+            print(f"    ↻ перевод {target_lang}: {problems[0]} — повтор {attempt}/{retries}")
     return scipop
 
 
@@ -533,3 +703,23 @@ def validate_tags(scipop, valid_tags_set):
         scipop["main_tag"] = fixed_unique[0]
         scipop["extra_tags"] = fixed_unique[1:11] if len(fixed_unique) > 1 else []
     return scipop
+
+
+def generate_simple_mini(scipop_popular):
+    """simple + mini ОДНИМ вызовом из popular (ТЗ 2026-07-27, §4): mini — выжимка из simple,
+    а не из advanced; фактура наследуется кодом. Возвращает (simple_dict, mini_text)."""
+    prompt = load_prompt("article-generate-simple").format(
+        popular_json=json.dumps(scipop_popular, ensure_ascii=False),
+        advanced_json=json.dumps(scipop_popular, ensure_ascii=False))
+    reinforce = "\n\nВНИМАНИЕ: пиши СТРОГО на русском языке."
+    data = None
+    for attempt in range(2):
+        r = chat("article_simple", prompt if attempt == 0 else prompt + reinforce)
+        try:
+            data = json.loads(clean_json(r.choices[0].message.content))
+        except Exception:
+            return scipop_popular, ""
+        if _default_lang_ok(data):
+            break
+    mini = (data.pop("mini", "") or "").strip()
+    return inherit_facts(data, scipop_popular), mini

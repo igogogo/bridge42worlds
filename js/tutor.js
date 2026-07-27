@@ -1,0 +1,367 @@
+/* tutor.js — учебный слой поверх движка explorable.js:
+   (1) проверочные вопросы КАЧЕСТВЕННОГО типа (объяснить, а не посчитать) — выбор варианта
+       или свой ответ словами; всё решается в уме, без калькулятора;
+   (2) итоговая оценка знаний + рекомендация, куда копать дальше;
+   (3) бот-тьютор: спросить в контексте раздела/вопроса. При неверном ответе бот НЕ выдаёт
+       правильный, а ведёт к идее (см. system prompt в cloudflare/worker.js, режим hint).
+
+   Без ключа DeepSeek (локально) бот честно уходит в демо-режим и показывает заготовленную
+   подсказку из JSON статьи — UX виден целиком, но подменять живой ответ мы не притворяемся. */
+(function (global) {
+    'use strict';
+
+    var STYLE_ID = 'b42-tutor-style';
+    var CSS = [
+        '.tq{max-width:620px;margin:18px 0;padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg)}',
+        '.tq-q{font-size:15px;line-height:1.6;color:var(--text);margin-bottom:10px}',
+        '.tq-q b{font-weight:600}',
+        '.tq-opts{display:flex;flex-direction:column;gap:6px}',
+        '.tq-opt{text-align:left;font:inherit;font-size:14px;line-height:1.5;padding:8px 12px;border-radius:9px;cursor:pointer;',
+        'background:none;border:1px solid var(--border);color:var(--text);transition:all .15s}',
+        '.tq-opt:hover:not(:disabled){border-color:var(--link);color:var(--link)}',
+        '.tq-opt:disabled{cursor:default}',
+        '.tq-opt.right{border-color:#2e7d32;background:rgba(46,125,50,.10);color:var(--text)}',
+        '.tq-opt.wrong{border-color:var(--red);background:rgba(179,27,27,.08);color:var(--text)}',
+        '.tq-free{display:flex;gap:6px;margin-top:4px}',
+        '.tq-free textarea{flex:1;min-height:56px;resize:vertical;font:inherit;font-size:14px;padding:8px 10px;',
+        'border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text)}',
+        '.tq-send{align-self:flex-end;font-size:13px;padding:7px 14px;border-radius:9px;cursor:pointer;',
+        'background:var(--link);color:#fff;border:none}',
+        '.tq-fb{margin-top:10px;font-size:13.5px;line-height:1.6;padding:10px 12px;border-radius:9px}',
+        '.tq-fb.ok{background:rgba(46,125,50,.10);color:var(--text)}',
+        '.tq-fb.no{background:rgba(179,27,27,.07);color:var(--text)}',
+        '.tq-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}',
+        '.tq-ask{font-size:12.5px;padding:5px 12px;border-radius:14px;cursor:pointer;background:none;',
+        'border:1px solid var(--border);color:var(--soft)}',
+        '.tq-ask:hover{border-color:var(--link);color:var(--link)}',
+        '.tq-score{max-width:620px;margin:22px 0;padding:18px 20px;border-radius:14px;background:var(--tag-bg);border:1px solid var(--border)}',
+        '.tq-score h3{font-size:18px;margin-bottom:8px;font-family:"Source Serif 4",Georgia,serif}',
+        '.tq-score-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin:10px 0}',
+        '.tq-score-fill{height:100%;background:var(--link);transition:width .6s ease}',
+        '.tq-score p{font-size:14px;line-height:1.65;color:var(--muted);margin:8px 0 0}',
+        /* ── чат-бот ── */
+        '.tb-fab{position:fixed;right:20px;bottom:20px;z-index:900;width:52px;height:52px;border-radius:50%;',
+        'background:var(--link);color:#fff;border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 16px rgba(0,0,0,.22)}',
+        '.tb-panel{position:fixed;right:20px;bottom:20px;z-index:901;width:min(380px,calc(100vw - 32px));',
+        'max-height:min(560px,calc(100vh - 40px));display:none;flex-direction:column;border-radius:16px;',
+        'background:var(--bg);border:1px solid var(--border);box-shadow:0 8px 34px rgba(0,0,0,.24);overflow:hidden}',
+        '.tb-panel.open{display:flex}',
+        '.tb-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border)}',
+        '.tb-title{font-size:13.5px;font-weight:600;color:var(--text)}',
+        '.tb-ctx{font-size:11px;color:var(--soft);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:250px}',
+        '.tb-close{background:none;border:none;font-size:20px;line-height:1;cursor:pointer;color:var(--soft)}',
+        '.tb-body{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}',
+        '.tb-msg{font-size:13.5px;line-height:1.6;padding:9px 12px;border-radius:12px;max-width:88%;white-space:pre-wrap}',
+        '.tb-msg.me{align-self:flex-end;background:var(--link);color:#fff;border-bottom-right-radius:4px}',
+        '.tb-msg.bot{align-self:flex-start;background:var(--tag-bg);color:var(--text);border-bottom-left-radius:4px}',
+        '.tb-msg.sys{align-self:center;font-size:11.5px;color:var(--soft);background:none;text-align:center}',
+        '.tb-foot{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--border)}',
+        '.tb-foot textarea{flex:1;min-height:38px;max-height:110px;resize:none;font:inherit;font-size:13.5px;',
+        'padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text)}',
+        '.tb-foot button{align-self:flex-end;background:var(--link);color:#fff;border:none;border-radius:10px;',
+        'padding:9px 14px;font-size:13px;cursor:pointer}',
+        '@media(max-width:640px){.tb-panel{right:8px;left:8px;width:auto;bottom:8px}.tb-fab{right:14px;bottom:14px}}'
+    ].join('');
+
+    function injectStyle() {
+        if (document.getElementById(STYLE_ID)) return;
+        var s = document.createElement('style'); s.id = STYLE_ID; s.textContent = CSS;
+        document.head.appendChild(s);
+    }
+    function el(tag, cls, html) {
+        var e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (html != null) e.innerHTML = html;
+        return e;
+    }
+
+    // ═════════════ БОТ ═════════════
+    function Bot(opts) {
+        injectStyle();
+        var lang = opts.lang || 'ru', L = opts.strings || {};
+        var ctx = { title: '', text: '' };
+        var busy = false;
+        // Локальная разработка: wrangler dev поднимает Worker на 8787, а статику отдаёт другой
+        // сервер — тогда в странице задают window.B42_TUTOR_API = 'http://localhost:8787/api/tutor'.
+        var API = global.B42_TUTOR_API || '/api/tutor';
+        // Тьютор отвечает через серверный эндпоинт /api/tutor. На статике (GitHub Pages) его нет —
+        // кнопка бы висела и молчала. Поэтому по умолчанию модуль СКРЫТ; включим одной строкой
+        // после переезда на Cloudflare: window.B42_TUTOR_ENABLED = true (владелец 2026-07-27).
+        var ENABLED = global.B42_TUTOR_ENABLED === true
+            || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)   // локальная разработка с wrangler
+            || /workers\.dev$/.test(location.hostname);                 // тестовый Worker
+        if (!ENABLED) return { hidden: true };
+        var MAX_Q = opts.maxQuestions || 10;      // сколько вопросов/подсказок даётся за сессию
+        var MAX_LEN = opts.maxLen || 600;         // ограничение на длину вопроса
+        var asked = 0;
+
+        // Иконка из общего набора (B42Icons), эмодзи — только как запасной вариант,
+        // если набор не подключён: эмодзи выглядят по-разному в каждой системе.
+        var fabIcon = (global.B42Icons && B42Icons.chat) ? B42Icons.chat(24) : '🎓';
+        var fab = el('button', 'tb-fab', fabIcon); fab.type = 'button'; fab.title = L.botTitle || 'Спросить тьютора';
+        var panel = el('div', 'tb-panel');
+        var head = el('div', 'tb-head');
+        var titleWrap = el('div');
+        var title = el('div', 'tb-title', L.botTitle || 'Тьютор');
+        var ctxLine = el('div', 'tb-ctx', '');
+        titleWrap.appendChild(title); titleWrap.appendChild(ctxLine);
+        var close = el('button', 'tb-close', '×'); close.type = 'button';
+        head.appendChild(titleWrap); head.appendChild(close);
+        var body = el('div', 'tb-body');
+        var foot = el('div', 'tb-foot');
+        var input = el('textarea'); input.placeholder = L.botPlaceholder || 'Спросите о том, что не сходится…';
+        var send = el('button', null, L.botSend || 'Спросить'); send.type = 'button';
+        foot.appendChild(input); foot.appendChild(send);
+        panel.appendChild(head); panel.appendChild(body); panel.appendChild(foot);
+        document.body.appendChild(fab); document.body.appendChild(panel);
+
+        function msg(text, who) {
+            var m = el('div', 'tb-msg ' + who); m.textContent = text;
+            body.appendChild(m); body.scrollTop = body.scrollHeight;
+            return m;
+        }
+        function setCtx(c) {
+            ctx = c || { title: '', text: '' };
+            ctxLine.textContent = ctx.title ? ((L.botCtx || 'по разделу') + ': ' + ctx.title) : '';
+        }
+        function open(c, seed) {
+            if (c) setCtx(c);
+            panel.classList.add('open'); fab.style.display = 'none';
+            if (!body.childNodes.length) msg(L.botHello || 'Спросите что угодно по этому разделу — объясню на пальцах.', 'sys');
+            if (seed) { input.value = seed; }
+            input.focus();
+        }
+        function hide() { panel.classList.remove('open'); fab.style.display = ''; }
+
+        // ── токен доступа ──
+        // Доступ к живому тьютору по токену (выдаётся на неделю с лимитом — чтобы расход на
+        // DeepSeek был предсказуем). Токен берём из ?token=… (удобно раздавать ссылкой) либо
+        // из localStorage; в URL не оставляем — сразу чистим адресную строку.
+        var TOKEN_KEY = 'b42_tutor_token';
+        function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+        function setToken(t) { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+        (function pickTokenFromUrl() {
+            try {
+                var u = new URL(location.href), t = u.searchParams.get('token');
+                if (t) {
+                    setToken(t.trim());
+                    u.searchParams.delete('token');
+                    history.replaceState(null, '', u.toString());
+                }
+            } catch (e) {}
+        })();
+        function promptToken() {
+            var t = prompt(L.tokenPrompt || 'Введите токен доступа к тьютору (выдаётся на неделю):', getToken() || '');
+            if (t != null) { setToken(t.trim()); return t.trim(); }
+            return '';
+        }
+
+        // Вопрос уходит на наш Worker (/api/tutor), ключ DeepSeek там в секрете.
+        async function ask(question, mode, demoHint) {
+            if (busy || !question.trim()) return;
+            if (asked >= MAX_Q) {                                  // лимит на сессию: 10 вопросов/подсказок
+                msg((L.sessionLimit || '⏳ На эту сессию лимит исчерпан') + ' (' + MAX_Q + ').', 'sys');
+                return;
+            }
+            question = question.trim().slice(0, MAX_LEN);           // и на длину одного вопроса
+            asked++;
+            busy = true; msg(question, 'me');
+            input.value = '';
+            var pend = msg(L.botThinking || 'Думаю…', 'sys');
+            try {
+                var headers = { 'content-type': 'application/json' };
+                var tok = getToken();
+                if (tok) headers['x-b42-token'] = tok;
+                var r = await fetch(API, {
+                    method: 'POST', headers: headers,
+                    body: JSON.stringify({
+                        lang: lang, mode: mode || 'ask', question: question,
+                        context: (ctx.title ? ctx.title + '\n\n' : '') + (ctx.text || '')
+                    })
+                });
+                var data = await r.json().catch(function () { return {}; });
+                pend.remove();
+                if (r.ok && data.answer) {
+                    msg(data.answer, 'bot');
+                    if (typeof data.left === 'number' && data.left <= 20)
+                        msg((L.tokenLeft || 'Осталось вопросов по токену') + ': ' + data.left, 'sys');
+                } else if (data.error === 'token_required' || data.error === 'token_invalid') {
+                    msg(L.tokenNeeded || '🔑 Нужен токен доступа — он выдаётся на неделю и ограничен по числу вопросов.', 'sys');
+                    var got = promptToken();
+                    if (got) { busy = false; return ask(question, mode, demoHint); }
+                } else if (data.error === 'token_expired') {
+                    msg(L.tokenExpired || '🔑 Срок действия токена истёк — попросите новый.', 'sys');
+                } else if (data.error === 'limit_total' || data.error === 'limit_day') {
+                    msg((data.error === 'limit_day'
+                        ? (L.limitDay || '⏳ На сегодня лимит вопросов исчерпан. Возвращайтесь завтра.')
+                        : (L.limitTotal || '⏳ Лимит вопросов по этому токену исчерпан.')), 'sys');
+                } else if (demoHint) {
+                    msg(demoHint, 'bot');
+                    msg(L.botDemo || '⚠️ Демо-режим: живой тьютор подключается на сервере (ключ DeepSeek). Это заготовленная подсказка из материала урока.', 'sys');
+                } else {
+                    msg(L.botOffline || '⚠️ Тьютор сейчас недоступен (нет ключа DeepSeek на сервере). Подсказка к этому вопросу есть в материале раздела.', 'sys');
+                }
+            } catch (e) {
+                pend.remove();
+                msg(demoHint || (L.botOffline || '⚠️ Тьютор недоступен.'), demoHint ? 'bot' : 'sys');
+            }
+            busy = false;
+        }
+
+        fab.addEventListener('click', function () { open(); });
+        close.addEventListener('click', hide);
+        send.addEventListener('click', function () { ask(input.value); });
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input.value); }
+        });
+
+        return {
+            open: open, setCtx: setCtx, ask: ask,
+            left: function () { return Math.max(0, MAX_Q - asked); },
+            askWithContext: function (c, question, mode, demoHint) { setCtx(c); open(c); ask(question, mode, demoHint); },
+            setLang: function (l, strings) { lang = l; if (strings) L = strings; title.textContent = L.botTitle || 'Тьютор'; input.placeholder = L.botPlaceholder || ''; send.textContent = L.botSend || 'Спросить'; setCtx(ctx); }
+        };
+    }
+
+    // ═════════════ ВОПРОСЫ И ОЦЕНКА ═════════════
+    // q = { id, q, type:'mcq'|'free', options:[], answer:idx, keywords:[], why, hint, ctx }
+    function Quiz(root, questions, strings, bot, opts) {
+        injectStyle();
+        var L = strings || {}, results = {}, o = opts || {};
+        root.innerHTML = '';
+
+        questions.forEach(function (q) {
+            var card = el('div', 'tq');
+            card.appendChild(el('div', 'tq-q', q.q));
+            var fb = el('div', 'tq-fb'); fb.style.display = 'none';
+            var actions = el('div', 'tq-actions'); actions.style.display = 'none';
+
+            function settle(correct, userText) {
+                results[q.id] = { correct: correct, answer: userText || '' };
+                fb.className = 'tq-fb ' + (correct ? 'ok' : 'no');
+                fb.innerHTML = (correct ? '✅ ' : '🤔 ') + (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) +
+                    ' ' + (q.why || '');
+                fb.style.display = '';
+                actions.innerHTML = ''; actions.style.display = '';
+                // Кнопка «довести до идеи» — бот в режиме hint (правильный ответ не выдаёт)
+                var askBtn = el('button', 'tq-ask', correct ? ('💬 ' + (L.askMore || 'Спросить глубже')) : ('💡 ' + (L.leadMe || 'Не понимаю — подведи к идее')));
+                askBtn.type = 'button';
+                askBtn.addEventListener('click', function () {
+                    var question = correct
+                        ? (L.seedDeeper || 'Объясни глубже, почему это так: ') + q.q
+                        : (L.seedStuck || 'Я ответил так: ') + '«' + (userText || (L.noAnswer || 'не знаю')) + '». ' +
+                          (L.seedStuck2 || 'Не понимаю, где ошибка. Вопрос: ') + q.q;
+                    bot.askWithContext({ title: q.ctxTitle || (L.quizCtx || 'Проверка знаний'), text: (q.ctx || '') + '\n\n' + q.q },
+                        question, correct ? 'ask' : 'hint', q.hint);
+                });
+                actions.appendChild(askBtn);
+                if (o.onAnswer) o.onAnswer(results);
+            }
+
+            // Прикидка порядка (по-фейнмановски): важно не точное число, а верный масштаб.
+            // Засчитываем, если ответ в пределах фактора tolerance (по умолчанию ×3) от эталона.
+            if (q.type === 'estimate') {
+                var ew = el('div', 'tq-free');
+                var ei = el('input');
+                ei.type = 'text'; ei.inputMode = 'decimal';
+                ei.placeholder = L.estPlaceholder || 'Порядок величины, можно «в уме»…';
+                ei.style.cssText = 'flex:1;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text)';
+                var eu = el('span', null, q.unit || '');
+                eu.style.cssText = 'align-self:center;font-size:13px;color:var(--soft)';
+                var eb = el('button', 'tq-send', L.check || 'Проверить'); eb.type = 'button';
+                ew.appendChild(ei); ew.appendChild(eu); ew.appendChild(eb);
+                card.appendChild(ew);
+                eb.addEventListener('click', function () {
+                    var raw = ei.value.trim().replace(/\s/g, '').replace(',', '.');
+                    var val = parseFloat(raw.replace(/(\d)[eE]?[x*×]10\^?(-?\d+)/, '$1e$2'));
+                    if (!isFinite(val)) return;
+                    var tol = q.tolerance || 3;
+                    var ratio = val > 0 && q.answer > 0 ? Math.max(val / q.answer, q.answer / val) : Infinity;
+                    var ok = ratio <= tol;
+                    fb.className = 'tq-fb ' + (ok ? 'ok' : 'no');
+                    fb.innerHTML = (ok ? '✅ ' : '🤔 ') +
+                        (ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')) +
+                        ' ' + (L.estAnswer || 'Точное значение') + ': <b>' + q.answer + ' ' + (q.unit || '') + '</b>' +
+                        (ok ? '' : ' — ' + (L.estOff || 'вы промахнулись в') + ' ' + ratio.toFixed(1) + '×') +
+                        '<br>' + (q.why || '');
+                    fb.style.display = '';
+                    results[q.id] = { correct: ok, answer: raw };
+                    ei.disabled = true; eb.disabled = true; eb.style.opacity = .5;
+                    actions.innerHTML = ''; actions.style.display = '';
+                    var ab = el('button', 'tq-ask', ok ? ('💬 ' + (L.askMore || 'Спросить глубже')) : ('💡 ' + (L.leadMe || 'Как это прикинуть?')));
+                    ab.type = 'button';
+                    ab.addEventListener('click', function () {
+                        bot.askWithContext({ title: q.ctxTitle || (L.quizCtx || 'Оценка'), text: (q.ctx || '') + '\n\n' + q.q },
+                            (L.seedEstimate || 'Помоги прикинуть в уме, по шагам, не давая сразу число: ') + q.q,
+                            ok ? 'ask' : 'hint', q.hint);
+                    });
+                    actions.appendChild(ab);
+                    if (o.onAnswer) o.onAnswer(results);
+                });
+            } else if (q.type === 'free') {
+                var wrap = el('div', 'tq-free');
+                var ta = el('textarea'); ta.placeholder = L.freePlaceholder || 'Ответьте своими словами…';
+                var btn = el('button', 'tq-send', L.check || 'Проверить'); btn.type = 'button';
+                wrap.appendChild(ta); wrap.appendChild(btn);
+                card.appendChild(wrap);
+                btn.addEventListener('click', function () {
+                    var val = ta.value.trim();
+                    if (!val) return;
+                    // Свободный ответ проверяем по ключевым идеям — грубо, зато мгновенно и без сети;
+                    // спорные случаи ученик всегда может разобрать с тьютором кнопкой ниже.
+                    var lower = val.toLowerCase();
+                    var hits = (q.keywords || []).filter(function (k) { return lower.indexOf(k.toLowerCase()) >= 0; });
+                    settle(hits.length >= (q.needed || 1), val);
+                    ta.disabled = true; btn.disabled = true; btn.style.opacity = .5;
+                });
+            } else {
+                var opts = el('div', 'tq-opts');
+                q.options.forEach(function (text, i) {
+                    var b = el('button', 'tq-opt', text); b.type = 'button';
+                    b.addEventListener('click', function () {
+                        var all = opts.querySelectorAll('.tq-opt');
+                        all.forEach(function (x, xi) {
+                            x.disabled = true;
+                            if (xi === q.answer) x.classList.add('right');
+                            else if (xi === i) x.classList.add('wrong');
+                        });
+                        settle(i === q.answer, text);
+                    });
+                    opts.appendChild(b);
+                });
+                card.appendChild(opts);
+            }
+            card.appendChild(fb); card.appendChild(actions);
+            root.appendChild(card);
+        });
+
+        return {
+            results: function () { return results; },
+            score: function () {
+                var done = Object.keys(results).length;
+                var right = Object.keys(results).filter(function (k) { return results[k].correct; }).length;
+                return { done: done, right: right, total: questions.length };
+            }
+        };
+    }
+
+    // Итоговая карточка: балл, полоса, вердикт и куда копать дальше.
+    function renderScore(root, score, strings, levels) {
+        injectStyle();
+        var L = strings || {};
+        var pct = score.total ? Math.round(100 * score.right / score.total) : 0;
+        var lv = levels.slice().reverse().find(function (x) { return pct >= x.min; }) || levels[0];
+        root.innerHTML = '';
+        var card = el('div', 'tq-score');
+        card.appendChild(el('h3', null, (L.yourResult || 'Ваш результат') + ': ' + score.right + '/' + score.total + ' — ' + lv.title));
+        var bar = el('div', 'tq-score-bar');
+        var fill = el('div', 'tq-score-fill'); fill.style.width = pct + '%';
+        bar.appendChild(fill); card.appendChild(bar);
+        card.appendChild(el('p', null, lv.text));
+        if (lv.next) card.appendChild(el('p', null, '<b>' + (L.whereNext || 'Куда дальше') + ':</b> ' + lv.next));
+        root.appendChild(card);
+        return card;
+    }
+
+    global.B42Tutor = { Bot: Bot, Quiz: Quiz, renderScore: renderScore };
+})(window);

@@ -1,0 +1,1533 @@
+{
+  "id": "02-magnetism",
+  "topic": "electricity",
+  "schema": "b42.lesson/1",
+  "model": "magnet",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "electromagnetism"
+    ],
+    "scientists": []
+  },
+  "ru": {
+    "title": "Магнитное поле",
+    "subtitle": "Параграф 2 · Сила, которая не совершает работы",
+    "intro": [
+      "Магнитная сила устроена странно. Она действует только на движущийся заряд — неподвижный не чувствует ничего. Направлена она не туда, куда поле, и не туда, куда скорость, а поперёк обоих сразу. И самое неожиданное: она никогда не совершает работы, то есть не может ни разогнать частицу, ни затормозить.",
+      "Всё, что она умеет, — заворачивать. Но этого оказалось достаточно, чтобы построить электродвигатель, ускоритель частиц, магнитно-резонансный томограф и удержать плазму в термоядерной установке.",
+      "А в конце параграфа выяснится вещь, ради которой всё и затевалось. Магнитного поля не существует как отдельной сущности: то, что один наблюдатель называет магнитным полем, другой, движущийся мимо, назовёт электрическим. Магнетизм — это электричество, увиденное из движущейся системы отсчёта, и именно отсюда Эйнштейн начал строить теорию относительности."
+    ],
+    "standNote": "Кружки с точками — это магнитное поле, направленное на вас, из плоскости экрана. Зелёная стрелка показывает скорость частицы, охристая — силу Лоренца. Проследите главное: сила всегда строго перпендикулярна скорости, и потому частица идёт по окружности, не меняя своей быстроты. Теперь опыт: увеличьте скорость вдвое и посмотрите на радиус — он вырастет вдвое. А вот период обращения останется прежним, и это самое замечательное свойство во всей теме.",
+    "formula": {
+      "name": "Сила Лоренца",
+      "latex": "\\vec{F} = q\\,\\vec{v} \\times \\vec{B}, \\qquad F = qvB\\sin\\alpha",
+      "alsoKnown": "Магнитная составляющая силы Лоренца",
+      "authors": [
+        {
+          "who": "Ханс Кристиан Эрстед",
+          "year": "1820",
+          "what": "обнаружил, что ток отклоняет стрелку компаса, — первое доказательство связи электричества и магнетизма. Причём стрелка вставала не вдоль провода и не поперёк, а по кругу вокруг него, чего никто не ожидал"
+        },
+        {
+          "who": "Андре Мари Ампер",
+          "year": "1820",
+          "what": "за неделю после известия построил теорию взаимодействия токов и предположил, что весь магнетизм сводится к движению зарядов, а постоянный магнит содержит незатухающие микроскопические токи"
+        },
+        {
+          "who": "Хендрик Лоренц",
+          "year": "1892",
+          "what": "записал силу, действующую на отдельный движущийся заряд, объединив электрическую и магнитную части в одну формулу. Его преобразования координат позже стали математической основой теории относительности"
+        },
+        {
+          "who": "Эрнест Лоуренс",
+          "year": "1932",
+          "what": "построил циклотрон, воспользовавшись тем, что период обращения не зависит от скорости. Первый ускоритель помещался в ладони и разгонял протоны до энергии, недостижимой никаким напряжением"
+        }
+      ],
+      "story": "Открытие Эрстеда часто подают как чистую случайность на лекции, но это упрощение. Эрстед был последователем натурфилософии, верившей в единство сил природы, и искал связь электричества с магнетизмом много лет. Другое дело, что искал он не там: ожидал, что ток будет притягивать или отталкивать стрелку вдоль провода. А стрелка повела себя совершенно неожиданно — она встала перпендикулярно проводу, как бы обходя его по кругу. Ни одна известная тогда сила так не действовала: все они были направлены по линии, соединяющей тела. Эрстед три месяца перепроверял, прежде чем опубликовать, — и правильно делал, потому что открыл первый в физике пример силы, направленной поперёк.",
+      "symbols": [
+        {
+          "sym": "B",
+          "latex": "\\vec{B}",
+          "what": "магнитная индукция",
+          "unit": "Тл",
+          "note": "тесла — очень крупная единица: у Земли всего $5\\cdot 10^{-5}$, у томографа 3"
+        },
+        {
+          "sym": "v",
+          "latex": "\\vec{v}",
+          "what": "скорость заряда",
+          "unit": "м/с",
+          "note": "неподвижный заряд магнитное поле не чувствует вовсе"
+        },
+        {
+          "sym": "alpha",
+          "latex": "\\alpha",
+          "what": "угол между скоростью и полем",
+          "unit": "°",
+          "note": "вдоль поля сила равна нулю; максимальна поперёк"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "радиус окружности",
+          "unit": "м",
+          "note": "$R = mv/qB$ — растёт со скоростью, потому по радиусу трека измеряют импульс частиц"
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "what": "период обращения",
+          "unit": "с",
+          "note": "$T = 2\\pi m/qB$ — не зависит от скорости; на этом стоит циклотрон"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: окружность, период и относительность",
+      "lead": "Из перпендикулярности силы получим сначала форму траектории, потом главное свойство периода, а в конце — что магнетизм вообще не отдельная сила.",
+      "steps": [
+        {
+          "text": "Начнём с самого важного следствия перпендикулярности. Работа есть произведение силы на перемещение вдоль неё, а перемещение всегда идёт вдоль скорости. Сила поперёк скорости — работа строго нулевая.",
+          "latex": "dA = \\vec{F}\\cdot d\\vec{r} = qv B \\cos 90^\\circ \\, dt = 0",
+          "figure": "work",
+          "figCaption": "Магнитная сила не может изменить энергию частицы — только направление её движения."
+        },
+        {
+          "text": "Раз энергия не меняется, не меняется и модуль скорости. Постоянная по величине сила, всегда перпендикулярная постоянной по величине скорости, — это в точности условие равномерного движения по окружности.",
+          "latex": "|v| = \\text{const}, \\quad F \\perp v, \\quad |F| = \\text{const} \\;\\Longrightarrow\\; \\text{окружность}",
+          "figure": "circmotion",
+          "figCaption": "Те же условия, что у камня на верёвке, только роль натяжения играет магнитная сила."
+        },
+        {
+          "text": "Приравняем магнитную силу центростремительной и найдём радиус.",
+          "latex": "qvB = \\frac{mv^{2}}{R} \\;\\Longrightarrow\\; R = \\frac{mv}{qB} = \\frac{p}{qB}",
+          "figure": "centripetal",
+          "figCaption": "Радиус пропорционален импульсу. Отсюда способ измерять импульс частиц по кривизне их следа."
+        },
+        {
+          "text": "А теперь чудо этой темы. Найдём период — время одного оборота. Скорость сокращается, и период оказывается от неё не зависящим вовсе.",
+          "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi m}{qB}",
+          "figure": "isochron",
+          "figCaption": "Быстрая частица описывает большой круг, медленная — маленький, и обе тратят одно и то же время."
+        },
+        {
+          "text": "Именно на этом построен циклотрон. Подавая переменное напряжение постоянной частоты, можно подгонять частицу раз за разом: она разгоняется, радиус растёт, а в такт попадать не перестаёт.",
+          "latex": "f_{\\text{цикл}} = \\frac{qB}{2\\pi m}",
+          "figure": "matchfreq",
+          "figCaption": "Резонанс без подстройки частоты — редкий подарок природы, на котором выросла ускорительная физика."
+        },
+        {
+          "text": "Добавим электрическое поле поперёк магнитного. Возникает движение, при котором частица дрейфует вбок с одной и той же скоростью — независимо от знака и величины заряда.",
+          "latex": "v_{\\text{др}} = \\frac{E}{B}",
+          "figure": "vectriangle",
+          "figCaption": "Скрещённые поля сортируют частицы по скорости: только нужная проходит насквозь без отклонения."
+        },
+        {
+          "text": "И финальный шаг, объясняющий природу магнетизма. Пусть по проводу течёт ток, а рядом параллельно движется заряд. В системе отсчёта провода на заряд действует магнитная сила. Перейдём в систему самого заряда — там он покоится, и магнитная сила действовать не может. Но сила-то есть! В новой системе она оказывается электрической: из-за релятивистского сокращения расстояний плотности положительных и отрицательных зарядов в проводе перестают совпадать.",
+          "latex": "\\text{система провода: } F_{\\text{магн}} \\qquad \\longleftrightarrow \\qquad \\text{система заряда: } F_{\\text{эл}}",
+          "figure": "inertialframe",
+          "figCaption": "Одна и та же сила, два разных названия. Магнетизм есть электричество, увиденное из движущейся системы отсчёта."
+        }
+      ],
+      "plate": "Магнитная сила перпендикулярна скорости, потому не совершает работы и лишь заворачивает частицу. Радиус пропорционален импульсу, а период не зависит от скорости вовсе.",
+      "note": "Границы применимости. Постоянство периода нарушается при околосветовых скоростях: масса растёт, и частица начинает опаздывать. Именно поэтому обычный циклотрон не разгоняет протоны выше примерно двадцати мегаэлектронвольт, и для больших энергий строят синхротроны, где частоту подстраивают на ходу. Кроме того, всё сказанное относится к однородному полю; в неоднородном добавляются дрейфы, и траектории становятся куда сложнее — на этом стоит вся физика удержания плазмы."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Что такое векторное произведение на пальцах. Обычное умножение даёт число, векторное — вектор, причём перпендикулярный обоим сомножителям. Найти направление проще всего рукой: направьте четыре пальца правой руки вдоль скорости, согните их в сторону поля — большой палец покажет силу для положительного заряда. Для отрицательного — в противоположную сторону. Это не мнемонический трюк, а определение, и им пользуются все, включая тех, кто занимается этим полжизни.",
+        "Почему сила поперёк не совершает работы. Представьте, что вы толкаете тележку строго вбок, а она катится вперёд. Как бы вы ни старались, вперёд вы её не разгоните и не замедлите — только повернёте. Работа есть произведение силы на путь, пройденный вдоль неё, а вдоль магнитной силы путь не проходится вовсе. Отсюда и невозможность магнитного двигателя: постоянный магнит энергии не даёт, потому что не умеет её передавать.",
+        "Почему период не зависит от скорости. Разгоните частицу вдвое — она пойдёт вдвое быстрее, но и круг опишет вдвое больший. Длина пути выросла вдвое, скорость выросла вдвое, время осталось прежним. Это то же самое сокращение, что делает период маятника независимым от амплитуды: две величины меняются согласованно и гасят друг друга в отношении. Такие совпадения в физике всегда указывают на что-то важное — здесь на них выросла целая отрасль.",
+        "Что означает единица тесла. Она огромна: магнитное поле Земли составляет всего пять стотысячных тесла, поле обычного магнитика на холодильнике около одной сотой, а поле томографа — три. Чтобы почувствовать масштаб: в поле в один тесла электрон описывает круг радиусом в доли миллиметра, а протон — около сантиметра. Разница ровно в отношении их масс, потому что радиус пропорционален импульсу."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: масс-спектрометр",
+      "lead": "Прибор, разделяющий атомы по массе, — прямое приложение формулы радиуса.",
+      "given": "Ионы углерода-12 и углерода-14, оба однократно заряженные, разогнаны одинаковым напряжением 2000 В и влетают в поле 0,5 Тл перпендикулярно. Найти радиусы их окружностей и расстояние между следами на детекторе.",
+      "law": "$qU = \\dfrac{mv^{2}}{2} \\;\\Longrightarrow\\; v = \\sqrt{\\dfrac{2qU}{m}}$, затем $R = \\dfrac{mv}{qB}$",
+      "solution": [
+        {
+          "text": "Подставим скорость в формулу радиуса и упростим — получится удобное выражение сразу через массу.",
+          "latex": "R = \\frac{m}{qB}\\sqrt{\\frac{2qU}{m}} = \\frac{1}{B}\\sqrt{\\frac{2Um}{q}}"
+        },
+        {
+          "text": "Для углерода-12: масса $12 \\cdot 1{,}66\\cdot 10^{-27} = 1{,}99\\cdot 10^{-26}$ кг.",
+          "latex": "R_{12} = \\frac{1}{0{,}5}\\sqrt{\\frac{2 \\cdot 2000 \\cdot 1{,}99\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}}} = 2\\sqrt{4{,}98\\cdot 10^{-4}} \\approx 0{,}0446\\ \\text{м}"
+        },
+        {
+          "text": "Для углерода-14 масса больше в отношении 14/12, а радиус — в корень из этого отношения.",
+          "latex": "R_{14} = R_{12}\\sqrt{\\frac{14}{12}} \\approx 0{,}0446 \\cdot 1{,}080 \\approx 0{,}0482\\ \\text{м}"
+        },
+        {
+          "text": "Сделав полукруг, ионы вернутся к линии влёта, и следы разойдутся на удвоенную разность радиусов.",
+          "latex": "\\Delta = 2(R_{14} - R_{12}) \\approx 2 \\cdot 0{,}0036 \\approx 7\\ \\text{мм}"
+        }
+      ],
+      "answer": "Радиусы около 4,5 и 4,8 см; следы на детекторе разойдутся примерно на семь миллиметров.",
+      "check": "Проверка на здравый смысл: разница масс всего в два нуклона из двенадцати, а прибор разводит следы почти на сантиметр — измерить такое легко даже на глаз. Именно эта чувствительность и делает масс-спектрометр рабочим инструментом. На нём стоит радиоуглеродное датирование, поиск допинга, анализ состава метеоритов и проверка чистоты лекарств. Обратите внимание и на структуру ответа: радиус зависит от корня из массы, а не от массы. Поэтому тяжёлые изотопы разделять всё труднее — разница по корню растёт медленно."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Характерные магнитные поля — чтобы понимать, что слабо, а что сильно.",
+      "items": [
+        {
+          "sym": "B_earth",
+          "latex": "B_{\\oplus}",
+          "name": "Магнитное поле Земли",
+          "value": "5 · 10⁻⁵",
+          "unit": "Тл",
+          "why": "Слабое, но именно оно отклоняет заряженные частицы солнечного ветра и защищает атмосферу. Без него планета лишилась бы воздуха, как, по-видимому, Марс.",
+          "mnemo": "Полсотни микротесла. Магнитик на холодильнике сильнее в двести раз, а томограф — в шестьдесят тысяч."
+        },
+        {
+          "sym": "B_mri",
+          "latex": "B_{\\text{МРТ}}",
+          "name": "Поле магнитно-резонансного томографа",
+          "value": "1,5 — 3",
+          "unit": "Тл",
+          "why": "Создаётся сверхпроводящей катушкой, охлаждённой жидким гелием. Именно поэтому в кабинет нельзя вносить металл: поле такой величины вырывает предметы из рук.",
+          "mnemo": "Три тесла разгоняют стальной баллон до скорости автомобиля. Отсюда строгие правила и толстая дверь."
+        },
+        {
+          "sym": "B_lhc",
+          "latex": "B_{\\text{БАК}}",
+          "name": "Поле магнитов Большого адронного коллайдера",
+          "value": "8,3",
+          "unit": "Тл",
+          "why": "Удерживает протоны с энергией 6,5 ТэВ на кольце длиной 27 километров. Радиус траектории связан с импульсом всё той же формулой из этого параграфа.",
+          "mnemo": "Магниты охлаждены до 1,9 K — холоднее, чем межзвёздное пространство. Это самое большое криогенное сооружение на планете."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где заворачивают заряды",
+      "lead": "Всё, что перечислено ниже, работает на единственном свойстве: магнитная сила поворачивает, не разгоняя.",
+      "items": [
+        {
+          "h": "Электродвигатель",
+          "text": "Ток в рамке, помещённой в поле, испытывает силы, разворачивающие её. Половина всей вырабатываемой в мире электроэнергии тратится именно на электродвигатели — от насосов до вентилятора в ноутбуке."
+        },
+        {
+          "h": "Полярное сияние",
+          "text": "Заряженные частицы солнечного ветра закручиваются вокруг силовых линий поля Земли и стекают по ним к полюсам, где врезаются в атмосферу и заставляют её светиться. Форма сияния — это буквально форма магнитного поля планеты."
+        },
+        {
+          "h": "Токамак",
+          "text": "Плазму с температурой в сотни миллионов градусов нельзя удержать никакой стенкой. Её удерживают магнитным полем: заряженные частицы наматываются на силовые линии и не долетают до стенок."
+        },
+        {
+          "h": "Пузырьковая камера и детекторы частиц",
+          "text": "След заряженной частицы в магнитном поле искривляется, и по радиусу кривизны определяют импульс, а по направлению закрутки — знак заряда. Так открывали позитрон, мюон и почти все частицы середины XX века."
+        },
+        {
+          "h": "Масс-спектрометр",
+          "text": "Радиус зависит от массы, поэтому изотопы разлетаются по разным точкам детектора. На этом стоит радиоуглеродное датирование, допинг-контроль и анализ вещества метеоритов."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Магнетизм проверяется батарейкой и куском провода — самый дешёвый двигатель в мире собирается за минуту.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Простейший электродвигатель за минуту",
+          "text": "Возьмите пальчиковую батарейку, неодимовый магнитик (подойдёт от старых наушников) и кусок медной проволоки. Поставьте батарейку на магнит плюсом вверх, согните из проволоки симметричную рамку, опирающуюся вершиной на плюс батарейки, а нижними концами касающуюся магнита.",
+          "answer": "Рамка начнёт вращаться, иногда очень быстро. Ток идёт от плюса через проволоку к магниту и обратно; в магнитном поле на этот ток действует сила Лоренца, направленная поперёк — и она заворачивает рамку. Это униполярный двигатель Фарадея, самая первая конструкция 1821 года. Держите батарейку недолго: цепь замкнута накоротко и греется. И заметьте главное: сила здесь ни к магниту, ни от него, а строго вбок — та самая перпендикулярность, о которой весь параграф."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Сила, которая не может совершить работу",
+          "text": "Магнитная сила не совершает работы вовсе. Но электродвигатель на магнитном поле крутит станки и поднимает грузы. Откуда берётся энергия?",
+          "answer": "Из источника тока. Магнитное поле работает распределителем: оно поворачивает движение зарядов, а совершает работу электрическое поле источника, гонящее ток по проводам. Проверить легко: отключите батарейку, и двигатель встанет, хотя магнит на месте. Отсюда же следует невозможность вечного двигателя на постоянных магнитах — идея, которую предлагают изобретатели уже четвёртое столетие. Магнит не источник энергии, а посредник."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Первая сила, направленная не по линии",
+          "text": "До Эрстеда все известные силы действовали вдоль прямой, соединяющей тела: тяготение, упругость, кулоновское притяжение. Стрелка компаса возле провода вела себя иначе — она вставала поперёк, как бы обходя провод по кругу. Это настолько противоречило всему опыту, что Эрстед три месяца перепроверял, прежде чем публиковать. Первая в истории физики поперечная сила оказалась ключом к электродвигателю и к теории относительности."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Правило правой руки",
+          "text": "Четыре пальца вдоль скорости, согнуть в сторону поля, большой палец покажет силу для положительного заряда. Для отрицательного — наоборот. Не пытайтесь запомнить словами, пользуйтесь рукой: этим приёмом пользуются и первокурсники, и нобелевские лауреаты, и стесняться тут нечего."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Период не зависит от скорости",
+          "text": "Разгоните частицу вдвое — радиус вырастет вдвое, путь по кругу тоже вдвое, а скорость вдвое больше. Время оборота не изменилось. Держите это как проверку: если в задаче период вышел зависящим от скорости, ищите ошибку. Исключение одно — околосветовые скорости, где растёт масса."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Магнитного поля не существует отдельно",
+          "text": "То, что один наблюдатель называет магнитным полем, для другого, движущегося мимо, окажется электрическим. Это не философское замечание, а вычисляемый факт: сила выходит одинаковой, а её название зависит от системы отсчёта. Эйнштейн начал статью 1905 года именно с этого наблюдения — с несимметричности объяснения индукции у магнита и у проводника."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: магнетизм как следствие относительности",
+      "lead": "Не входит в проверку. О том, как из электростатики и сокращения длин получается вся магнитная сила.",
+      "blocks": [
+        {
+          "h": "Постановка",
+          "text": "Возьмём провод с током: положительные ионы неподвижны, электроны дрейфуют. Провод в целом нейтрален — плотности зарядов равны. Рядом параллельно проводу летит положительный заряд со скоростью, равной скорости дрейфа электронов. В системе провода на него действует магнитная сила притяжения."
+        },
+        {
+          "h": "Переходим в систему заряда",
+          "text": "Там он покоится, а покоящийся заряд магнитного поля не чувствует. Сила обязана исчезнуть — но силы не исчезают от смены точки зрения, иначе одна система отсчёта увидела бы столкновение, а другая нет. Значит в новой системе действует какая-то другая сила."
+        },
+        {
+          "h": "Что изменилось",
+          "text": "В системе заряда электроны покоятся, а ионы движутся. По теории относительности движущаяся линейка укорачивается — значит расстояния между ионами сократились, и их плотность выросла, а плотность электронов, наоборот, упала. Провод перестал быть нейтральным. Появился избыточный заряд, а с ним — обычная кулоновская сила."
+        },
+        {
+          "h": "Итог",
+          "text": "Сила оказалась одна и та же, посчитанная двумя способами. В одной системе мы называем её магнитной, в другой — электрической. Магнетизм есть релятивистский эффект электростатики, и он заметен при ничтожных скоростях дрейфа только потому, что кулоновские силы чудовищно велики: относительная поправка порядка $10^{-13}$, умноженная на $10^{42}$, даёт вполне ощутимую величину. Именно это соображение и делает магнитную стрелку косвенным доказательством теории относительности — задолго до всяких быстрых частиц."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Магнитная сила действует только на движущийся заряд, направлена поперёк скорости и поля, не совершает работы и заставляет частицу двигаться по окружности.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\vec{F} = q\\vec{v}\\times\\vec{B}$",
+          "text": "направление по правилу правой руки"
+        },
+        {
+          "icon": "formula",
+          "title": "Работа магнитной силы строго ноль",
+          "text": "она только поворачивает"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = mv/qB$",
+          "text": "радиус пропорционален импульсу"
+        },
+        {
+          "icon": "clock",
+          "title": "$T = 2\\pi m/qB$",
+          "text": "период не зависит от скорости, отсюда циклотрон"
+        },
+        {
+          "icon": "scale",
+          "title": "Магнетизм есть электричество, увиденное",
+          "text": "Магнетизм есть электричество, увиденное из движущейся системы отсчёта"
+        }
+      ],
+      "where": "Электродвигатель, масс-спектрометр, детекторы частиц, полярное сияние, удержание плазмы, томограф.",
+      "watchOut": "Магнитное поле не может быть источником энергии. Работу в двигателе совершает источник тока, поле только распределяет направление."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "Почему магнитная сила не может изменить скорость частицы по величине?",
+        "options": [
+          "Потому что она слишком слаба",
+          "Потому что она всегда перпендикулярна скорости и потому не совершает работы",
+          "Потому что она действует только на нейтральные частицы",
+          "Она может, просто эффект мал и обычно им пренебрегают"
+        ],
+        "answer": 1,
+        "why": "Работа есть произведение силы на перемещение вдоль неё. Перемещение идёт вдоль скорости, а сила ей перпендикулярна — значит работа строго ноль, а не мала. Энергия частицы сохраняется точно, меняется только направление движения.",
+        "hint": "Вспомните определение работы. Что произойдёт с ней, если угол между силой и перемещением равен 90 градусам?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "Две одинаковые частицы влетают в одно и то же магнитное поле, но одна вдвое быстрее. Что можно сказать о времени их полного оборота?",
+        "options": [
+          "У быстрой оборот вдвое короче",
+          "У быстрой оборот вдвое длиннее",
+          "Времена одинаковы: радиус вырос вдвое, но и скорость вдвое больше",
+          "Ответ зависит от знака заряда"
+        ],
+        "answer": 2,
+        "why": "Период $T = 2\\pi m/qB$ не содержит скорости вовсе. Быстрая частица описывает вдвое больший круг вдвое быстрее — время то же. Именно это свойство позволило построить циклотрон: подгонять частицу можно напряжением постоянной частоты.",
+        "hint": "Выразите период как длину окружности, делённую на скорость, и подставьте радиус."
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "Своими словами: если магнитная сила не совершает работы, откуда берётся энергия в электродвигателе?",
+        "keywords": [
+          "источник",
+          "батаре",
+          "ток",
+          "электрическ",
+          "поле источника",
+          "поворачива",
+          "распредел",
+          "не магнит"
+        ],
+        "needed": 2,
+        "why": "Энергию даёт источник тока: электрическое поле внутри цепи гонит заряды и совершает работу. Магнитное поле лишь задаёт направление силы, поворачивая рамку. Отключите батарейку — двигатель встанет, хотя магнит остался на месте. Отсюда и невозможность вечного двигателя на постоянных магнитах.",
+        "hint": "Что перестанет работать, если убрать батарейку? А если убрать магнит? Что из них поставляет энергию, а что — направление?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "В масс-спектрометре радиус траектории пропорционален корню из массы иона. Во сколько раз различаются радиусы для углерода-12 и углерода-14?",
+        "answer": 1.08,
+        "unit": "раз",
+        "tolerance": 0.04,
+        "why": "Отношение равно корню из 14/12 = корень из 1,167 ≈ 1,080, то есть радиусы различаются на восемь процентов. При радиусе десять сантиметров это восемь миллиметров — легко измеримая величина. Обратите внимание: зависимость идёт по корню, поэтому тяжёлые изотопы разделять всё труднее.",
+        "hint": "Если R пропорционален корню из m, то отношение радиусов есть корень из отношения масс. Корень из 1,17 — это чуть меньше 1,1."
+      }
+    ]
+  },
+  "en": {
+    "title": "Magnetic Field",
+    "subtitle": "Section 2 · The Force That Does No Work",
+    "intro": [
+      "The magnetic force is strange. It acts only on a moving charge—a stationary one feels nothing. Its direction is neither along the field nor along the velocity, but perpendicular to both. And most unexpectedly: it never does any work, meaning it can neither accelerate nor decelerate a particle.",
+      "All it can do is turn. But that turned out to be enough to build an electric motor, a particle accelerator, an MRI scanner, and to confine plasma in a fusion reactor.",
+      "And at the end of this section, we will discover the key insight. The magnetic field does not exist as an independent entity: what one observer calls a magnetic field, another, moving relative to the first, will call an electric field. Magnetism is electricity seen from a moving frame, and that is where Einstein began building the theory of relativity."
+    ],
+    "standNote": "The circles with dots represent a magnetic field coming toward you, out of the screen. The green arrow shows the particle's velocity, the ochre one shows the Lorentz force. Observe the key point: the force is always strictly perpendicular to the velocity, so the particle moves in a circle without changing its speed. Now try an experiment: double the speed and watch the radius—it will double as well. But the orbital period remains the same, and this is the most remarkable property in the entire topic.",
+    "formula": {
+      "name": "Lorentz Force",
+      "latex": "\\vec{F} = q\\,\\vec{v} \\times \\vec{B}, \\qquad F = qvB\\sin\\alpha",
+      "alsoKnown": "Magnetic component of the Lorentz force",
+      "authors": [
+        {
+          "who": "Hans Christian Ørsted",
+          "year": "1820",
+          "what": "discovered that an electric current deflects a compass needle—the first proof of a connection between electricity and magnetism. Remarkably, the needle did not align along or across the wire, but in a circle around it, which no one expected."
+        },
+        {
+          "who": "André-Marie Ampère",
+          "year": "1820",
+          "what": "within a week of hearing the news, developed a theory of current interactions and proposed that all magnetism arises from moving charges, and that a permanent magnet contains persistent microscopic currents."
+        },
+        {
+          "who": "Hendrik Lorentz",
+          "year": "1892",
+          "what": "wrote down the force on a single moving charge, combining the electric and magnetic parts into one formula. His coordinate transformations later became the mathematical foundation of the theory of relativity."
+        },
+        {
+          "who": "Ernest Lawrence",
+          "year": "1932",
+          "what": "built the cyclotron, exploiting the fact that the orbital period does not depend on speed. The first accelerator fit in the palm of a hand and accelerated protons to energies unattainable by any voltage."
+        }
+      ],
+      "story": "Ørsted’s discovery is often presented as pure chance during a lecture, but that is an oversimplification. Ørsted was a follower of natural philosophy, which believed in the unity of natural forces, and he had been searching for a link between electricity and magnetism for many years. The twist is that he was looking in the wrong place: he expected the current to attract or repel the needle along the wire. But the needle behaved completely unexpectedly—it aligned perpendicular to the wire, as if circling around it. No known force at the time acted that way: all forces were directed along the line connecting bodies. Ørsted spent three months double-checking before publishing—and rightly so, because he had discovered the first example in physics of a force directed transversely.",
+      "symbols": [
+        {
+          "sym": "B",
+          "latex": "\\vec{B}",
+          "what": "magnetic field (flux density)",
+          "unit": "T",
+          "note": "tesla is a very large unit: Earth’s field is only $5\\cdot 10^{-5}$ T, an MRI scanner uses 3 T"
+        },
+        {
+          "sym": "v",
+          "latex": "\\vec{v}",
+          "what": "charge velocity",
+          "unit": "m/s",
+          "note": "a stationary charge feels no magnetic field at all"
+        },
+        {
+          "sym": "alpha",
+          "latex": "\\alpha",
+          "what": "angle between velocity and field",
+          "unit": "°",
+          "note": "along the field the force is zero; maximum when perpendicular"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "radius of orbit",
+          "unit": "m",
+          "note": "$R = mv/qB$ — increases with speed, so the radius of a track measures particle momentum"
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "what": "orbital period",
+          "unit": "s",
+          "note": "$T = 2\\pi m/qB$ — independent of speed; the cyclotron relies on this"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation: Circle, Period, and Relativity",
+      "lead": "From the perpendicular nature of the force, we will first obtain the shape of the trajectory, then the main property of the period, and finally — that magnetism is not a separate force at all.",
+      "steps": [
+        {
+          "text": "Let us start with the most important consequence of perpendicularity. Work is the product of force and displacement along it, and displacement always occurs along velocity. A force perpendicular to velocity — work is strictly zero.",
+          "latex": "dA = \\vec{F}\\cdot d\\vec{r} = qv B \\cos 90^\\circ \\, dt = 0",
+          "figure": "work",
+          "figCaption": "Magnetic force cannot change a particle's energy — only the direction of its motion."
+        },
+        {
+          "text": "Since energy does not change, the magnitude of velocity does not change either. A constant-magnitude force always perpendicular to a constant-magnitude velocity is precisely the condition for uniform circular motion.",
+          "latex": "|v| = \\text{const}, \\quad F \\perp v, \\quad |F| = \\text{const} \\;\\Longrightarrow\\; \\text{окружность}",
+          "figure": "circmotion",
+          "figCaption": "The same conditions as a stone on a string, only the role of tension is played by magnetic force."
+        },
+        {
+          "text": "Equate the magnetic force to the centripetal force and find the radius.",
+          "latex": "qvB = \\frac{mv^{2}}{R} \\;\\Longrightarrow\\; R = \\frac{mv}{qB} = \\frac{p}{qB}",
+          "figure": "centripetal",
+          "figCaption": "Radius is proportional to momentum. Hence a way to measure particle momentum from the curvature of their track."
+        },
+        {
+          "text": "And now the miracle of this topic. Let us find the period — the time for one revolution. The speed cancels out, and the period turns out to be completely independent of it.",
+          "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi m}{qB}",
+          "figure": "isochron",
+          "figCaption": "A fast particle traces a large circle, a slow one a small circle, and both take the same time."
+        },
+        {
+          "text": "This is exactly what the cyclotron is based on. By applying an alternating voltage of constant frequency, one can boost the particle again and again: it accelerates, the radius increases, and it never falls out of sync.",
+          "latex": "f_{\\text{цикл}} = \\frac{qB}{2\\pi m}",
+          "figure": "matchfreq",
+          "figCaption": "Resonance without frequency tuning — a rare gift of nature on which accelerator physics was built."
+        },
+        {
+          "text": "Add an electric field perpendicular to the magnetic field. A motion arises in which the particle drifts sideways at the same speed — regardless of the sign and magnitude of the charge.",
+          "latex": "v_{\\text{др}} = \\frac{E}{B}",
+          "figure": "vectriangle",
+          "figCaption": "Crossed fields sort particles by speed: only the desired one passes through without deflection."
+        },
+        {
+          "text": "And the final step, explaining the nature of magnetism. Let a current flow through a wire, and a charge move parallel nearby. In the wire's reference frame, a magnetic force acts on the charge. Switch to the charge's own frame — there it is at rest, and magnetic force cannot act. But the force is there! In the new frame, it turns out to be electric: due to relativistic length contraction, the densities of positive and negative charges in the wire no longer match.",
+          "latex": "\\text{система провода: } F_{\\text{магн}} \\qquad \\longleftrightarrow \\qquad \\text{система заряда: } F_{\\text{эл}}",
+          "figure": "inertialframe",
+          "figCaption": "One and the same force, two different names. Magnetism is electricity seen from a moving reference frame."
+        }
+      ],
+      "plate": "Magnetic force is perpendicular to velocity, therefore it does no work and merely turns the particle. Radius is proportional to momentum, and period is completely independent of speed.",
+      "note": "Limits of applicability. The constancy of the period breaks down at near-light speeds: mass increases, and the particle starts to lag. That is why a conventional cyclotron cannot accelerate protons above about twenty megaelectronvolts, and for higher energies synchrotrons are built, where the frequency is adjusted on the fly. Moreover, everything said applies to a uniform field; in a non-uniform field, drifts are added, and trajectories become much more complex — the entire physics of plasma confinement rests on this."
+    },
+    "math": {
+      "title": "Mathematics that was needed here",
+      "text": [
+        "What is a cross product in simple terms. Ordinary multiplication gives a number, cross product gives a vector, and one perpendicular to both factors. The easiest way to find the direction is with your hand: point the four fingers of your right hand along the velocity, curl them toward the field — your thumb shows the force for a positive charge. For a negative charge, it's the opposite direction. This is not a mnemonic trick but a definition, and everyone uses it, including those who have been doing this for half their lives.",
+        "Why a perpendicular force does no work. Imagine you push a cart strictly sideways while it rolls forward. No matter how hard you try, you won't speed it up or slow it down — only turn it. Work is the product of force and the distance traveled along it, and no distance is traveled along the magnetic force. Hence the impossibility of a magnetic motor: a permanent magnet does not provide energy because it cannot transfer it.",
+        "Why the period does not depend on speed. Double the particle's speed — it goes twice as fast, but also traces a circle twice as large. The path length doubled, the speed doubled, the time remains the same. It is the same cancellation that makes the period of a pendulum independent of amplitude: two quantities change in concert and cancel each other in the ratio. Such coincidences in physics always point to something important — here, an entire industry grew out of them.",
+        "What the unit tesla means. It is huge: Earth's magnetic field is only five hundred-thousandths of a tesla, the field of an ordinary fridge magnet is about one hundredth, and an MRI scanner's field is three. To get a sense of scale: in a one-tesla field, an electron traces a circle with a radius of fractions of a millimeter, and a proton about a centimeter. The difference is exactly the ratio of their masses, because radius is proportional to momentum."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: a mass spectrometer",
+      "lead": "A device that separates atoms by mass — a direct application of the radius formula.",
+      "given": "Carbon-12 and carbon-14 ions, both singly charged, are accelerated by the same voltage of 2000 V and enter a field of 0.5 T perpendicularly. Find the radii of their circles and the distance between the traces on the detector.",
+      "law": "$qU = \\dfrac{mv^{2}}{2} \\;\\Longrightarrow\\; v = \\sqrt{\\dfrac{2qU}{m}}$, then $R = \\dfrac{mv}{qB}$",
+      "solution": [
+        {
+          "text": "Substitute the velocity into the radius formula and simplify — we get a convenient expression directly in terms of mass.",
+          "latex": "R = \\frac{m}{qB}\\sqrt{\\frac{2qU}{m}} = \\frac{1}{B}\\sqrt{\\frac{2Um}{q}}"
+        },
+        {
+          "text": "For carbon-12: mass $12 \\cdot 1{,}66\\cdot 10^{-27} = 1{,}99\\cdot 10^{-26}$ kg.",
+          "latex": "R_{12} = \\frac{1}{0{,}5}\\sqrt{\\frac{2 \\cdot 2000 \\cdot 1{,}99\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}}} = 2\\sqrt{4{,}98\\cdot 10^{-4}} \\approx 0{,}0446\\ \\text{м}"
+        },
+        {
+          "text": "For carbon-14, the mass is larger by the ratio 14/12, and the radius by the square root of that ratio.",
+          "latex": "R_{14} = R_{12}\\sqrt{\\frac{14}{12}} \\approx 0{,}0446 \\cdot 1{,}080 \\approx 0{,}0482\\ \\text{м}"
+        },
+        {
+          "text": "Having traveled a semicircle, the ions return to the entry line, and the traces separate by twice the difference in radii.",
+          "latex": "\\Delta = 2(R_{14} - R_{12}) \\approx 2 \\cdot 0{,}0036 \\approx 7\\ \\text{мм}"
+        }
+      ],
+      "answer": "Radii about 4,5 and 4,8 cm; the traces on the detector will separate by about seven millimeters.",
+      "check": "A sanity check: the mass difference is only two nucleons out of twelve, yet the device spreads the traces almost a centimeter — such a measurement is easy even by eye. It is this sensitivity that makes the mass spectrometer a working tool. It underpins radiocarbon dating, doping detection, analysis of meteorite composition, and drug purity testing. Note also the structure of the answer: the radius depends on the square root of the mass, not the mass itself. Therefore, heavy isotopes become harder to separate — the difference in the root grows slowly."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Characteristic magnetic fields — to understand what is weak and what is strong.",
+      "items": [
+        {
+          "sym": "B_earth",
+          "latex": "B_{\\oplus}",
+          "name": "Earth's magnetic field",
+          "value": "5 · 10⁻⁵",
+          "unit": "T",
+          "why": "Weak, but it is precisely this field that deflects charged particles of the solar wind and protects the atmosphere. Without it, the planet would lose its air, as, apparently, Mars did.",
+          "mnemo": "Fifty microtesla. A fridge magnet is two hundred times stronger, and an MRI scanner is sixty thousand."
+        },
+        {
+          "sym": "B_mri",
+          "latex": "B_{\\text{МРТ}}",
+          "name": "Magnetic field of an MRI scanner",
+          "value": "1,5 — 3",
+          "unit": "T",
+          "why": "Created by a superconducting coil cooled with liquid helium. That is why metal is not allowed into the room: a field of this magnitude rips objects out of your hands.",
+          "mnemo": "Three Tesla accelerate a steel cylinder to the speed of a car. Hence the strict rules and the thick door."
+        },
+        {
+          "sym": "B_lhc",
+          "latex": "B_{\\text{БАК}}",
+          "name": "Magnetic field of the Large Hadron Collider magnets",
+          "value": "8,3",
+          "unit": "T",
+          "why": "Holds protons with an energy of 6.5 TeV on a ring 27 kilometers long. The radius of the trajectory is related to the momentum by the same formula from this section.",
+          "mnemo": "The magnets are cooled to 1.9 K — colder than interstellar space. This is the largest cryogenic structure on the planet."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where charges are deflected",
+      "lead": "Everything listed below relies on a single property: magnetic force turns without accelerating.",
+      "items": [
+        {
+          "h": "Electric motor",
+          "text": "A current in a loop placed in a field experiences forces that rotate it. Half of all electricity generated in the world is consumed by electric motors — from pumps to the fan in a laptop."
+        },
+        {
+          "h": "Aurora",
+          "text": "Charged particles from the solar wind spiral around the magnetic field lines of the Earth and flow along them to the poles, where they collide with the atmosphere and make it glow. The shape of the aurora is literally the shape of the planet's magnetic field."
+        },
+        {
+          "h": "Tokamak",
+          "text": "Plasma at temperatures of hundreds of millions of degrees cannot be contained by any wall. It is held by a magnetic field: charged particles wind around the field lines and do not reach the walls."
+        },
+        {
+          "h": "Bubble chamber and particle detectors",
+          "text": "The track of a charged particle in a magnetic field curves, and from the radius of curvature the momentum is determined, and from the direction of the curl the sign of the charge. This is how the positron, muon, and almost all particles of the mid-20th century were discovered."
+        },
+        {
+          "h": "Mass spectrometer",
+          "text": "The radius depends on mass, so isotopes scatter to different points on the detector. This underpins radiocarbon dating, doping control, and analysis of meteorite material."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Fun: Try It Yourself",
+      "lead": "Magnetism can be tested with a battery and a piece of wire — the cheapest motor in the world can be assembled in a minute.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Simplest Electric Motor in a Minute",
+          "text": "Take a AA battery, a neodymium magnet (one from old headphones will do), and a piece of copper wire. Place the battery on the magnet with the positive terminal up. Bend the wire into a symmetric loop resting its apex on the battery's positive terminal, with the lower ends touching the magnet.",
+          "answer": "The loop will start spinning, sometimes very fast. Current flows from the positive terminal through the wire to the magnet and back; in the magnetic field, this current experiences a Lorentz force directed sideways — and that force rotates the loop. This is Faraday's unipolar motor, the very first design from 1821. Do not keep the battery connected for long: the circuit is shorted and heats up. And note the key point: the force here is neither toward nor away from the magnet, but strictly sideways — that same perpendicularity that the whole section is about."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "A Force That Cannot Do Work",
+          "text": "Magnetic force does no work at all. Yet an electric motor using a magnetic field spins lathes and lifts loads. Where does the energy come from?",
+          "answer": "From the current source. The magnetic field acts as a distributor: it redirects the motion of charges, while the work is done by the source's electric field driving the current through the wires. You can easily check: disconnect the battery, and the motor stops, even though the magnet remains. This also implies the impossibility of a perpetual motion machine using permanent magnets — an idea that inventors have been proposing for the fourth century. The magnet is not an energy source, but an intermediary."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "The First Force Not Directed Along a Line",
+          "text": "Before Oersted, all known forces acted along the straight line connecting the bodies: gravity, elasticity, Coulomb attraction. The compass needle near a wire behaved differently — it aligned perpendicularly, as if going around the wire in a circle. This contradicted all previous experience so much that Oersted spent three months rechecking before publishing. The first transverse force in the history of physics turned out to be the key to the electric motor and to relativity."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Right-Hand Rule",
+          "text": "Four fingers along the velocity, curl them toward the field, the thumb shows the force for a positive charge. For a negative charge, it's the opposite. Don't try to memorize it with words; use your hand: this trick is used by freshmen and Nobel laureates alike, and there's nothing to be ashamed of."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimation",
+          "h": "Period Does Not Depend on Speed",
+          "text": "Double the particle's speed — the radius doubles, the circular path also doubles, but the speed is twice as large. The orbital period remains unchanged. Keep this as a check: if in a problem the period turns out to depend on speed, look for an error. There is one exception — near-light speeds, where mass increases."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Magnetic Field Does Not Exist Independently",
+          "text": "What one observer calls a magnetic field, another moving past will see as an electric field. This is not a philosophical remark but a calculable fact: the force comes out the same, but its name depends on the reference frame. Einstein began his 1905 paper precisely with this observation — the asymmetry in the explanation of induction for a magnet and a conductor."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Magnetism as a Consequence of Relativity",
+      "lead": "Not part of the test. About how all magnetic force arises from electrostatics and length contraction.",
+      "blocks": [
+        {
+          "h": "Setup",
+          "text": "Consider a current-carrying wire: positive ions are stationary, electrons drift. The wire is overall neutral — the charge densities are equal. A positive charge flies nearby, parallel to the wire, at a speed equal to the electron drift speed. In the wire's frame, it experiences a magnetic attractive force."
+        },
+        {
+          "h": "Switching to the Charge's Frame",
+          "text": "There, the charge is at rest, and a stationary charge does not feel a magnetic field. The force must vanish — but forces do not disappear just by changing perspective; otherwise, one reference frame would see a collision, and another would not. So a different force must act in the new frame."
+        },
+        {
+          "h": "What Changed",
+          "text": "In the charge's frame, electrons are at rest, and ions are moving. According to relativity, a moving ruler contracts — so the distances between ions have shortened, their density increased, while the electron density decreased. The wire is no longer neutral. An excess charge appears, and with it, an ordinary Coulomb force."
+        },
+        {
+          "h": "Conclusion",
+          "text": "The force turns out to be the same, calculated in two ways. In one frame we call it magnetic, in the other electric. Magnetism is a relativistic effect of electrostatics, and it becomes noticeable at tiny drift speeds only because Coulomb forces are enormously large: a relative correction of order $10^{-13}$ multiplied by $10^{42}$ yields a quite tangible magnitude. It is precisely this reasoning that makes the magnetic needle an indirect proof of relativity — long before any fast particles."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Magnetic force acts only on a moving charge, is directed perpendicular to both velocity and field, does no work, and makes the particle move in a circle.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\vec{F} = q\\vec{v}\\times\\vec{B}$",
+          "text": "direction by the right-hand rule"
+        },
+        {
+          "icon": "formula",
+          "title": "Work done by magnetic force is strictly zero",
+          "text": "it only changes direction"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = mv/qB$",
+          "text": "radius proportional to momentum"
+        },
+        {
+          "icon": "ruler",
+          "title": "$T = 2\\pi m/qB$",
+          "text": "period independent of speed, hence cyclotron"
+        },
+        {
+          "icon": "scale",
+          "title": "Magnetism is electricity seen",
+          "text": "Magnetism is electricity seen from a moving frame"
+        }
+      ],
+      "where": "Electric motor, mass spectrometer, particle detectors, aurora borealis, plasma confinement, MRI scanner.",
+      "watchOut": "Magnetic field cannot be an energy source. Work in a motor is done by the current source; the field only redirects."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "Why can't the magnetic force change the magnitude of a particle's speed?",
+        "options": [
+          "Because it is too weak",
+          "Because it is always perpendicular to the velocity and therefore does no work",
+          "Because it only acts on neutral particles",
+          "It can, but the effect is small and usually neglected"
+        ],
+        "answer": 1,
+        "why": "Work is the product of force and displacement along it. Displacement occurs along the velocity, and the force is perpendicular to it — meaning the work is strictly zero, not small. The particle's energy is exactly conserved; only the direction of motion changes.",
+        "hint": "Recall the definition of work. What happens to it when the angle between force and displacement is 90 degrees?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "Two identical particles enter the same magnetic field, but one is twice as fast. What can be said about their full rotation times?",
+        "options": [
+          "The fast one's rotation is twice as short",
+          "The fast one's rotation is twice as long",
+          "The times are equal: the radius doubled, but so did the speed",
+          "It depends on the sign of the charge"
+        ],
+        "answer": 2,
+        "why": "The period $T = 2\\pi m/qB$ does not involve speed at all. The fast particle traces a twice-larger circle twice as fast — same time. This property made it possible to build the cyclotron: the particle can be driven by a voltage of constant frequency.",
+        "hint": "Express the period as circumference divided by speed, then substitute the radius."
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "In your own words: if the magnetic force does no work, where does the energy in an electric motor come from?",
+        "keywords": [
+          "source",
+          "batter",
+          "current",
+          "electri",
+          "source field",
+          "rotat",
+          "distribut",
+          "not magnet"
+        ],
+        "needed": 2,
+        "why": "The energy is supplied by the current source: the electric field inside the circuit drives charges and does work. The magnetic field only sets the direction of the force, rotating the loop. Disconnect the battery — the motor stops, even though the magnet remains. Hence the impossibility of a perpetual motion machine with permanent magnets.",
+        "hint": "What stops working if you remove the battery? And if you remove the magnet? Which one supplies energy, and which one provides direction?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "In a mass spectrometer, the trajectory radius is proportional to the square root of the ion's mass. How many times do the radii differ for carbon-12 and carbon-14?",
+        "answer": 1.08,
+        "unit": "times",
+        "tolerance": 0.04,
+        "why": "The ratio equals the square root of 14/12 = sqrt(1.167) ≈ 1.080, meaning the radii differ by eight percent. For a radius of ten centimeters, that is eight millimeters — an easily measurable value. Note: the dependence goes as the square root, so separating heavy isotopes becomes increasingly difficult.",
+        "hint": "If R is proportional to the square root of m, then the ratio of radii is the square root of the mass ratio. The square root of 1.17 is just under 1.1."
+      }
+    ]
+  },
+  "es": {
+    "title": "Campo magnético",
+    "subtitle": "Párrafo 2 · La fuerza que no realiza trabajo",
+    "intro": [
+      "La fuerza magnética está diseñada de manera extraña. Solo actúa sobre una carga en movimiento — la carga inmóvil no siente nada. No se dirige hacia donde apunta el campo, ni hacia donde va la velocidad, sino perpendicular a ambos a la vez. Y lo más inesperado: nunca realiza trabajo, es decir, no puede acelerar ni frenar una partícula.",
+      "Todo lo que puede hacer es desviar. Pero esto ha sido suficiente para construir motores eléctricos, aceleradores de partículas, tomógrafos de resonancia magnética y contener el plasma en reactores de fusión.",
+      "Y al final del párrafo descubriremos algo clave. El campo magnético no existe como entidad separada: lo que un observador llama campo magnético, otro que se mueve relativo a él lo llamará campo eléctrico. El magnetismo es electricidad vista desde un sistema de referencia en movimiento, y de aquí partió Einstein para construir la teoría de la relatividad."
+    ],
+    "standNote": "Los círculos con puntos representan el campo magnético que sale hacia usted, desde el plano de la pantalla. La flecha verde muestra la velocidad de la partícula, la ocre la fuerza de Lorentz. Observe lo principal: la fuerza siempre es estrictamente perpendicular a la velocidad, por lo que la partícula sigue una trayectoria circular sin cambiar su rapidez. Ahora experimente: duplique la velocidad y vea el radio — se duplicará. Pero el período de revolución permanece igual, y esta es la propiedad más notable de todo el tema.",
+    "formula": {
+      "name": "Fuerza de Lorentz",
+      "latex": "\\vec{F} = q\\,\\vec{v} \\times \\vec{B}, \\qquad F = qvB\\sin\\alpha",
+      "alsoKnown": "Componente magnético de la fuerza de Lorentz",
+      "authors": [
+        {
+          "who": "Hans Christian Ørsted",
+          "year": "1820",
+          "what": "descubrió que la corriente desvía la aguja de una brújula — la primera prueba de la conexión entre electricidad y magnetismo. Además, la aguja no se alineaba a lo largo del cable ni transversalmente, sino en un círculo alrededor de él, algo que nadie esperaba."
+        },
+        {
+          "who": "André-Marie Ampère",
+          "year": "1820",
+          "what": "una semana después de la noticia, construyó una teoría de interacción entre corrientes y sugirió que todo el magnetismo se reduce al movimiento de cargas, y que un imán permanente contiene corrientes microscópicas persistentes."
+        },
+        {
+          "who": "Hendrik Lorentz",
+          "year": "1892",
+          "what": "escribió la fuerza que actúa sobre una carga puntual en movimiento, uniendo las partes eléctrica y magnética en una sola fórmula. Sus transformaciones de coordenadas se convirtieron más tarde en la base matemática de la teoría de la relatividad."
+        },
+        {
+          "who": "Ernest Lawrence",
+          "year": "1932",
+          "what": "construyó el ciclotrón, aprovechando que el período de revolución no depende de la velocidad. El primer acelerador cabía en la palma de la mano y aceleraba protones a energías inalcanzables con cualquier voltaje."
+        }
+      ],
+      "story": "El descubrimiento de Ørsted a menudo se presenta como una casualidad en una conferencia, pero es una simplificación. Ørsted era seguidor de la filosofía natural, que creía en la unidad de las fuerzas de la naturaleza, y buscó la conexión entre electricidad y magnetismo durante muchos años. Otra cosa es que no buscaba en el lugar correcto: esperaba que la corriente atrajera o repelierala aguja a lo largo del cable. Pero la aguja se comportó de manera completamente inesperada: se colocó perpendicular al cable, como rodeándolo en círculo. Ninguna fuerza conocida hasta entonces actuaba así: todas se dirigían a lo largo de la línea que conecta los cuerpos. Ørsted verificó durante tres meses antes de publicar — y hizo bien, porque descubrió el primer ejemplo en física de una fuerza dirigida transversalmente.",
+      "symbols": [
+        {
+          "sym": "B",
+          "latex": "\\vec{B}",
+          "what": "inducción magnética",
+          "unit": "T",
+          "note": "el tesla es una unidad muy grande: la Tierra tiene solo $5\\cdot 10^{-5}$ T, un tomógrafo 3 T"
+        },
+        {
+          "sym": "v",
+          "latex": "\\vec{v}",
+          "what": "velocidad de la carga",
+          "unit": "m/s",
+          "note": "una carga inmóvil no siente en absoluto el campo magnético"
+        },
+        {
+          "sym": "alpha",
+          "latex": "\\alpha",
+          "what": "ángulo entre velocidad y campo",
+          "unit": "°",
+          "note": "a lo largo del campo la fuerza es cero; máxima en perpendicular"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "radio de la circunferencia",
+          "unit": "m",
+          "note": "$R = mv/qB$ — crece con la velocidad, por eso el radio de la trayectoria se usa para medir el momento de las partículas"
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "what": "período de revolución",
+          "unit": "s",
+          "note": "$T = 2\\pi m/qB$ — no depende de la velocidad; en esto se basa el ciclotrón"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: circunferencia, período y relatividad",
+      "lead": "De la perpendicularidad de la fuerza obtendremos primero la forma de la trayectoria, luego la propiedad principal del período, y al final, que el magnetismo no es una fuerza separada en absoluto.",
+      "steps": [
+        {
+          "text": "Comencemos con la consecuencia más importante de la perpendicularidad. El trabajo es el producto de la fuerza por el desplazamiento a lo largo de ella, y el desplazamiento siempre va a lo largo de la velocidad. Fuerza perpendicular a la velocidad — trabajo estrictamente nulo.",
+          "latex": "dA = \\vec{F}\\cdot d\\vec{r} = qv B \\cos 90^\\circ \\, dt = 0",
+          "figure": "work",
+          "figCaption": "La fuerza magnética no puede cambiar la energía de la partícula — solo la dirección de su movimiento."
+        },
+        {
+          "text": "Puesto que la energía no cambia, el módulo de la velocidad tampoco cambia. Una fuerza constante en magnitud, siempre perpendicular a una velocidad constante en magnitud, es exactamente la condición para un movimiento circular uniforme.",
+          "latex": "|v| = \\text{const}, \\quad F \\perp v, \\quad |F| = \\text{const} \\;\\Longrightarrow\\; \\text{окружность}",
+          "figure": "circmotion",
+          "figCaption": "Las mismas condiciones que las de una piedra en una cuerda, solo que el papel de la tensión lo juega la fuerza magnética."
+        },
+        {
+          "text": "Igualamos la fuerza magnética con la centrípeta y encontramos el radio.",
+          "latex": "qvB = \\frac{mv^{2}}{R} \\;\\Longrightarrow\\; R = \\frac{mv}{qB} = \\frac{p}{qB}",
+          "figure": "centripetal",
+          "figCaption": "El radio es proporcional al momento. De ahí la manera de medir el momento de las partículas por la curvatura de su huella."
+        },
+        {
+          "text": "Y ahora el milagro de este tema. Encontremos el período — el tiempo de una vuelta. La velocidad se cancela y el período resulta no depender de ella en absoluto.",
+          "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi m}{qB}",
+          "figure": "isochron",
+          "figCaption": "Una partícula rápida describe un círculo grande, una lenta uno pequeño, y ambas emplean el mismo tiempo."
+        },
+        {
+          "text": "Precisamente en esto se basa el ciclotrón. Aplicando un voltaje alterno de frecuencia constante, se puede impulsar la partícula una y otra vez: acelera, el radio crece, y no deja de estar en fase.",
+          "latex": "f_{\\text{цикл}} = \\frac{qB}{2\\pi m}",
+          "figure": "matchfreq",
+          "figCaption": "Resonancia sin ajuste de frecuencia — un raro regalo de la naturaleza sobre el cual creció la física de aceleradores."
+        },
+        {
+          "text": "Añadamos un campo eléctrico perpendicular al magnético. Surge un movimiento en el que la partícula deriva lateralmente con la misma velocidad — independientemente del signo y la magnitud de la carga.",
+          "latex": "v_{\\text{др}} = \\frac{E}{B}",
+          "figure": "vectriangle",
+          "figCaption": "Los campos cruzados clasifican las partículas por velocidad: solo la adecuada pasa a través sin desviación."
+        },
+        {
+          "text": "Y el paso final, que explica la naturaleza del magnetismo. Supongamos que por un cable circula corriente y cerca se mueve paralelamente una carga. En el sistema de referencia del cable, sobre la carga actúa una fuerza magnética. Pasemos al sistema de la propia carga — allí está en reposo, y la fuerza magnética no puede actuar. ¡Pero la fuerza existe! En el nuevo sistema resulta ser eléctrica: debido a la contracción relativista de las distancias, las densidades de cargas positivas y negativas en el cable dejan de coincidir.",
+          "latex": "\\text{система провода: } F_{\\text{магн}} \\qquad \\longleftrightarrow \\qquad \\text{система заряда: } F_{\\text{эл}}",
+          "figure": "inertialframe",
+          "figCaption": "La misma fuerza, dos nombres diferentes. El magnetismo es electricidad vista desde un sistema de referencia en movimiento."
+        }
+      ],
+      "plate": "La fuerza magnética es perpendicular a la velocidad, por lo tanto no realiza trabajo y solo desvía la partícula. El radio es proporcional al momento, y el período no depende de la velocidad en absoluto.",
+      "note": "Límites de aplicabilidad. La constancia del período se rompe a velocidades cercanas a la luz: la masa aumenta y la partícula empieza a retrasarse. Es por esto que el ciclotrón ordinario no acelera protones más allá de unos veinte megaelectronvoltios, y para energías mayores se construyen sincrotrones, donde la frecuencia se ajusta sobre la marcha. Además, todo lo dicho se refiere a un campo uniforme; en un campo no uniforme se añaden derivas y las trayectorias se vuelven mucho más complejas — en esto se basa toda la física del confinamiento de plasma."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Qué es el producto vectorial explicado con las manos. La multiplicación ordinaria da un número, la vectorial da un vector, además perpendicular a ambos factores. Encontrar la dirección es más fácil con la mano: dirija los cuatro dedos de la mano derecha a lo largo de la velocidad, dóblelos hacia el campo — el pulgar mostrará la fuerza para una carga positiva. Para una negativa — en dirección opuesta. Esto no es un truco mnemotécnico, sino una definición, y la usan todos, incluidos aquellos que se dedican a esto media vida.",
+        "Por qué la fuerza perpendicular no realiza trabajo. Imagine que empuja un carro estrictamente hacia un lado, y él rueda hacia adelante. Por más que se esfuerce, no lo acelerará ni lo frenará hacia adelante — solo lo girará. El trabajo es el producto de la fuerza por el camino recorrido a lo largo de ella, y a lo largo de la fuerza magnética no se recorre camino alguno. De ahí la imposibilidad de un motor magnético: un imán permanente no da energía, porque no sabe transferirla.",
+        "Por qué el período no depende de la velocidad. Acelere la partícula al doble — irá el doble de rápido, pero también describirá un círculo el doble de grande. La longitud del camino se duplicó, la velocidad se duplicó, el tiempo sigue siendo el mismo. Es la misma cancelación que hace que el período del péndulo sea independiente de la amplitud: dos cantidades cambian de manera coordinada y se anulan mutuamente en la relación. Tales coincidencias en física siempre señalan algo importante — aquí sobre ellas creció toda una rama.",
+        "Qué significa la unidad tesla. Es enorme: el campo magnético de la Tierra es de solo cinco cienmilésimas de tesla, el campo de un imán común de refrigerador es de alrededor de una centésima, y el campo de un tomógrafo es de tres. Para sentir la escala: en un campo de un tesla, un electrón describe un círculo de radio de fracciones de milímetro, y un protón de alrededor de un centímetro. La diferencia es exactamente en la relación de sus masas, porque el radio es proporcional al momento."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: espectrómetro de masas",
+      "lead": "Un dispositivo que separa átomos por masa es una aplicación directa de la fórmula del radio.",
+      "given": "Iones de carbono-12 y carbono-14, ambos con carga simple, son acelerados con el mismo voltaje de 2000 V y entran perpendicularmente en un campo de 0,5 T. Encuentra los radios de sus circunferencias y la distancia entre las huellas en el detector.",
+      "law": "$qU = \\dfrac{mv^{2}}{2} \\;\\Longrightarrow\\; v = \\sqrt{\\dfrac{2qU}{m}}$, luego $R = \\dfrac{mv}{qB}$",
+      "solution": [
+        {
+          "text": "Sustituimos la velocidad en la fórmula del radio y simplificamos — se obtiene una expresión conveniente directamente en función de la masa.",
+          "latex": "R = \\frac{m}{qB}\\sqrt{\\frac{2qU}{m}} = \\frac{1}{B}\\sqrt{\\frac{2Um}{q}}"
+        },
+        {
+          "text": "Para carbono-12: masa $12 \\cdot 1{,}66\\cdot 10^{-27} = 1{,}99\\cdot 10^{-26}$ kg.",
+          "latex": "R_{12} = \\frac{1}{0{,}5}\\sqrt{\\frac{2 \\cdot 2000 \\cdot 1{,}99\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}}} = 2\\sqrt{4{,}98\\cdot 10^{-4}} \\approx 0{,}0446\\ \\text{м}"
+        },
+        {
+          "text": "Para carbono-14, la masa es mayor en la relación 14/12, y el radio, en la raíz de esa relación.",
+          "latex": "R_{14} = R_{12}\\sqrt{\\frac{14}{12}} \\approx 0{,}0446 \\cdot 1{,}080 \\approx 0{,}0482\\ \\text{м}"
+        },
+        {
+          "text": "Al hacer un semicírculo, los iones regresan a la línea de entrada, y las huellas se separan en el doble de la diferencia de radios.",
+          "latex": "\\Delta = 2(R_{14} - R_{12}) \\approx 2 \\cdot 0{,}0036 \\approx 7\\ \\text{мм}"
+        }
+      ],
+      "answer": "Los radios son aproximadamente 4,5 y 4,8 cm; las huellas en el detector se separan unos siete milímetros.",
+      "check": "Prueba de sentido común: la diferencia de masa es solo dos nucleones de doce, y el dispositivo separa las huellas casi un centímetro — medir eso es fácil incluso a simple vista. Esta sensibilidad es lo que hace del espectrómetro de masas una herramienta de trabajo. En él se basa la datación por radiocarbono, la detección de dopaje, el análisis de la composición de meteoritos y el control de pureza de medicamentos. Observa también la estructura de la respuesta: el radio depende de la raíz de la masa, no de la masa. Por eso, los isótopos pesados son cada vez más difíciles de separar — la diferencia en la raíz crece lentamente."
+    },
+    "constants": {
+      "title": "Cantidades de este párrafo",
+      "lead": "Campos magnéticos característicos — para entender qué es débil y qué es fuerte.",
+      "items": [
+        {
+          "sym": "B_earth",
+          "latex": "B_{\\oplus}",
+          "name": "Campo magnético terrestre",
+          "value": "5 · 10⁻⁵",
+          "unit": "Тл",
+          "why": "Débil, pero es el que desvía las partículas cargadas del viento solar y protege la atmósfera. Sin él, el planeta perdería su aire, como aparentemente ocurrió en Marte.",
+          "mnemo": "Cincuenta microteslas. Un imán de nevera es doscientas veces más fuerte, y un tomógrafo, sesenta mil veces."
+        },
+        {
+          "sym": "B_mri",
+          "latex": "B_{\\text{МРТ}}",
+          "name": "Campo de un tomógrafo de resonancia magnética",
+          "value": "1,5 — 3",
+          "unit": "Тл",
+          "why": "Se genera mediante una bobina superconductora enfriada con helio líquido. Por eso no se puede introducir metal en la sala: un campo de esta magnitud arranca objetos de las manos.",
+          "mnemo": "Tres teslas aceleran un cilindro de acero hasta la velocidad de un automóvil. De ahí las estrictas normas y la puerta gruesa."
+        },
+        {
+          "sym": "B_lhc",
+          "latex": "B_{\\text{БАК}}",
+          "name": "Campo de los imanes del Gran Colisionador de Hadrones",
+          "value": "8,3",
+          "unit": "Тл",
+          "why": "Mantiene protones con energía de 6,5 TeV en un anillo de 27 kilómetros de longitud. El radio de la trayectoria está relacionado con el momento mediante la misma fórmula de este párrafo.",
+          "mnemo": "Los imanes se enfrían a 1,9 K — más frío que el espacio interestelar. Es la instalación criogénica más grande del planeta."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Donde se desvían las cargas",
+      "lead": "Todo lo que se enumera a continuación funciona con una única propiedad: la fuerza magnética desvía sin acelerar.",
+      "items": [
+        {
+          "h": "Motor eléctrico",
+          "text": "La corriente en una espira colocada en un campo experimenta fuerzas que la hacen girar. La mitad de toda la electricidad generada en el mundo se consume en motores eléctricos, desde bombas hasta ventiladores de portátiles."
+        },
+        {
+          "h": "Aurora polar",
+          "text": "Las partículas cargadas del viento solar giran alrededor de las líneas de campo terrestre y fluyen hacia los polos, donde chocan con la atmósfera y la hacen brillar. La forma de la aurora es literalmente la forma del campo magnético del planeta."
+        },
+        {
+          "h": "Tokamak",
+          "text": "El plasma a temperaturas de cientos de millones de grados no puede ser contenido por ninguna pared. Se confina mediante un campo magnético: las partículas cargadas se enroscan alrededor de las líneas de campo y no llegan a las paredes."
+        },
+        {
+          "h": "Cámara de burbujas y detectores de partículas",
+          "text": "La traza de una partícula cargada en un campo magnético se curva, y por el radio de curvatura se determina el momento, y por la dirección de la curvatura, el signo de la carga. Así se descubrieron el positrón, el muón y casi todas las partículas de mediados del siglo XX."
+        },
+        {
+          "h": "Espectrómetro de masas",
+          "text": "El radio depende de la masa, por lo que los isótopos se dispersan en diferentes puntos del detector. En esto se basan la datación por radiocarbono, el control de dopaje y el análisis de material de meteoritos."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: pruébelo con las manos",
+      "lead": "El magnetismo se prueba con una pila y un trozo de cable — el motor más barato del mundo se monta en un minuto.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "El motor eléctrico más simple en un minuto",
+          "text": "Tome una pila AA, un imán de neodimio (sirve el de auriculares viejos) y un trozo de alambre de cobre. Coloque la pila sobre el imán con el polo positivo hacia arriba, doble el alambre formando un marco simétrico que se apoye con su vértice en el positivo de la pila y cuyos extremos inferiores toquen el imán.",
+          "answer": "El marco comenzará a girar, a veces muy rápido. La corriente va desde el positivo a través del alambre hasta el imán y de vuelta; en el campo magnético, sobre esta corriente actúa la fuerza de Lorentz, dirigida transversalmente — y hace girar el marco. Es el motor unipolar de Faraday, el primer diseño de 1821. No mantenga la pila mucho tiempo: el circuito está en cortocircuito y se calienta. Y note lo principal: la fuerza aquí no va hacia el imán ni desde él, sino estrictamente hacia un lado — esa misma perpendicularidad de la que trata todo el párrafo."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "La fuerza que no puede realizar trabajo",
+          "text": "La fuerza magnética no realiza trabajo en absoluto. Pero un motor eléctrico basado en el campo magnético hace girar máquinas y levanta cargas. ¿De dónde proviene la energía?",
+          "answer": "De la fuente de corriente. El campo magnético actúa como redistribuidor: desvía el movimiento de las cargas, pero el trabajo lo realiza el campo eléctrico de la fuente que impulsa la corriente por los cables. Es fácil comprobarlo: desconecte la pila y el motor se detendrá, aunque el imán permanezca. De aquí se deriva la imposibilidad de una máquina de movimiento perpetuo con imanes permanentes — una idea que los inventores proponen desde hace cuatro siglos. El imán no es una fuente de energía, sino un intermediario."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "La primera fuerza no dirigida a lo largo de una línea",
+          "text": "Antes de Ørsted, todas las fuerzas conocidas actuaban a lo largo de la línea recta que conecta los cuerpos: gravedad, elasticidad, atracción coulombiana. La aguja de una brújula cerca de un cable se comportaba de otro modo: se colocaba transversalmente, como rodeando el cable en círculo. Esto contradecía tanto toda la experiencia que Ørsted verificó durante tres meses antes de publicar. La primera fuerza transversal en la historia de la física resultó ser la clave del motor eléctrico y de la teoría de la relatividad."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Regla de la mano derecha",
+          "text": "Cuatro dedos a lo largo de la velocidad, dóblelos hacia el campo, el pulgar indicará la fuerza para una carga positiva. Para una carga negativa, al revés. No intente memorizarlo con palabras, use la mano: este truco lo usan tanto estudiantes de primer año como premios Nobel, y no hay nada de qué avergonzarse."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "El período no depende de la velocidad",
+          "text": "Acelere la partícula al doble — el radio se duplica, la trayectoria circular también se duplica, y la velocidad es el doble. El tiempo de una vuelta no cambia. Téngalo como comprobación: si en un problema el período resulta depender de la velocidad, busque el error. Hay una única excepción: velocidades cercanas a la luz, donde la masa aumenta."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "El campo magnético no existe por separado",
+          "text": "Lo que un observador llama campo magnético, para otro que se mueve relativamente resultará ser un campo eléctrico. Esto no es un comentario filosófico, sino un hecho calculable: la fuerza resulta ser la misma, pero su nombre depende del sistema de referencia. Einstein comenzó su artículo de 1905 precisamente con esta observación — la asimetría en la explicación de la inducción entre un imán y un conductor."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: el magnetismo como consecuencia de la relatividad",
+      "lead": "No entra en la evaluación. Sobre cómo, a partir de la electrostática y la contracción de longitudes, se obtiene toda la fuerza magnética.",
+      "blocks": [
+        {
+          "h": "Planteamiento",
+          "text": "Tomemos un cable con corriente: los iones positivos están inmóviles, los electrones se desplazan. El cable es en general neutro — las densidades de carga son iguales. Cerca, paralelamente al cable, vuela una carga positiva con una velocidad igual a la velocidad de deriva de los electrones. En el sistema del cable, sobre ella actúa una fuerza magnética de atracción."
+        },
+        {
+          "h": "Pasamos al sistema de la carga",
+          "text": "Allí, la carga está en reposo, y una carga en reposo no siente el campo magnético. La fuerza debería desaparecer — pero las fuerzas no desaparecen al cambiar el punto de vista, de lo contrario un sistema de referencia vería una colisión y otro no. Por lo tanto, en el nuevo sistema actúa alguna otra fuerza."
+        },
+        {
+          "h": "Qué ha cambiado",
+          "text": "En el sistema de la carga, los electrones están en reposo y los iones se mueven. Según la teoría de la relatividad, una regla en movimiento se acorta — por lo tanto, las distancias entre los iones se han reducido, su densidad ha aumentado, mientras que la densidad de electrones, por el contrario, ha disminuido. El cable ha dejado de ser neutro. Aparece una carga excesiva y, con ella, la fuerza coulombiana habitual."
+        },
+        {
+          "h": "Conclusión",
+          "text": "La fuerza resulta ser la misma, calculada de dos maneras. En un sistema la llamamos magnética, en el otro, eléctrica. El magnetismo es un efecto relativista de la electrostática, y es perceptible a velocidades de deriva insignificantes solo porque las fuerzas coulombianas son enormes: la corrección relativa del orden de $10^{-13}$, multiplicada por $10^{42}$, da una magnitud perfectamente apreciable. Precisamente esta consideración hace de la aguja magnética una prueba indirecta de la teoría de la relatividad — mucho antes de cualquier partícula rápida."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La fuerza magnética actúa solo sobre una carga en movimiento, está dirigida transversalmente a la velocidad y al campo, no realiza trabajo y hace que la partícula se mueva en una trayectoria circular.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\vec{F} = q\\vec{v}\\times\\vec{B}$",
+          "text": "dirección según la regla de la mano derecha"
+        },
+        {
+          "icon": "formula",
+          "title": "El trabajo de la",
+          "text": "El trabajo de la fuerza magnética es estrictamente cero: solo cambia la dirección"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = mv/qB$",
+          "text": "el radio es proporcional al impulso"
+        },
+        {
+          "icon": "ruler",
+          "title": "$T = 2\\pi m/qB$",
+          "text": "el período no depende de la velocidad, de ahí el ciclotrón"
+        },
+        {
+          "icon": "scale",
+          "title": "El magnetismo es electricidad",
+          "text": "El magnetismo es electricidad vista desde un sistema de referencia en movimiento"
+        }
+      ],
+      "where": "Motor eléctrico, espectrómetro de masas, detectores de partículas, aurora boreal, confinamiento de plasma, tomógrafo.",
+      "watchOut": "El campo magnético no puede ser una fuente de energía. El trabajo en el motor lo realiza la fuente de corriente, el campo solo redistribuye la dirección."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "¿Por qué la fuerza magnética no puede cambiar la magnitud de la velocidad de una partícula?",
+        "options": [
+          "Porque es demasiado débil",
+          "Porque siempre es perpendicular a la velocidad y por lo tanto no realiza trabajo",
+          "Porque solo actúa sobre partículas neutras",
+          "Puede, pero el efecto es pequeño y generalmente se desprecia"
+        ],
+        "answer": 1,
+        "why": "El trabajo es el producto de la fuerza por el desplazamiento en la dirección de la fuerza. El desplazamiento ocurre a lo largo de la velocidad, y la fuerza es perpendicular a ella, por lo que el trabajo es estrictamente cero, no pequeño. La energía de la partícula se conserva exactamente, solo cambia la dirección del movimiento.",
+        "hint": "Recuerde la definición de trabajo. ¿Qué sucede con él si el ángulo entre la fuerza y el desplazamiento es de 90 grados?"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "Dos partículas idénticas entran en el mismo campo magnético, pero una va al doble de velocidad. ¿Qué se puede decir sobre el tiempo de una vuelta completa?",
+        "options": [
+          "El período de la rápida es la mitad",
+          "El período de la rápida es el doble",
+          "Los tiempos son iguales: el radio se duplica, pero también la velocidad es el doble",
+          "La respuesta depende del signo de la carga"
+        ],
+        "answer": 2,
+        "why": "El período $T = 2\\pi m/qB$ no contiene la velocidad en absoluto. La partícula rápida describe un círculo del doble de tamaño al doble de velocidad: el tiempo es el mismo. Esta propiedad es la que permitió construir el ciclotrón: se puede acelerar la partícula con un voltaje de frecuencia constante.",
+        "hint": "Exprese el período como la circunferencia dividida por la velocidad, y sustituya el radio."
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "En sus propias palabras: si la fuerza magnética no realiza trabajo, ¿de dónde proviene la energía en un motor eléctrico?",
+        "keywords": [
+          "fuente",
+          "baterí",
+          "corrient",
+          "eléctric",
+          "campo de la fuente",
+          "gir",
+          "distribu",
+          "no magnét"
+        ],
+        "needed": 2,
+        "why": "La energía la proporciona la fuente de corriente: el campo eléctrico dentro del circuito impulsa las cargas y realiza trabajo. El campo magnético solo da la dirección de la fuerza, girando la espira. Desconecte la batería: el motor se para, aunque el imán permanece en su lugar. De ahí la imposibilidad de una máquina de movimiento perpetuo con imanes permanentes.",
+        "hint": "¿Qué dejaría de funcionar si se quita la batería? ¿Y si se quita el imán? ¿Cuál de ellos proporciona energía y cuál proporciona dirección?"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "En un espectrómetro de masas, el radio de la trayectoria es proporcional a la raíz cuadrada de la masa del ion. ¿En qué factor difieren los radios para carbono-12 y carbono-14?",
+        "answer": 1.08,
+        "unit": "veces",
+        "tolerance": 0.04,
+        "why": "La relación es la raíz cuadrada de 14/12 = raíz de 1,167 ≈ 1,080, es decir, los radios difieren en un ocho por ciento. Con un radio de diez centímetros, esto son ocho milímetros, una cantidad fácilmente medible. Observe que la dependencia es por la raíz, por lo que los isótopos pesados son cada vez más difíciles de separar.",
+        "hint": "Si R es proporcional a la raíz de m, entonces la relación de radios es la raíz de la relación de masas. La raíz de 1,17 es un poco menos de 1,1."
+      }
+    ]
+  },
+  "ar": {
+    "title": "الحقل المغناطيسي",
+    "subtitle": "الفقرة 2 · القوة التي لا تبذل شغلًا",
+    "intro": [
+      "القوة المغناطيسية غريبة التركيب. إنها تؤثر فقط على الشحنة المتحركة، أما الساكنة فلا تشعر بشيء. وهي موجهة ليس في اتجاه المجال، وليس في اتجاه السرعة، بل بشكل عمودي على كليهما معًا. والأكثر إثارة للدهشة: أنها لا تبذل شغلًا أبدًا، أي لا يمكنها تسريع الجسيم أو إبطائه.",
+      "كل ما تستطيع فعله هو تحويل المسار. ولكن هذا كان كافيًا لبناء محرك كهربائي، ومسرع جسيمات، وجهاز تصوير بالرنين المغناطيسي، واحتجاز البلازما في مفاعل الاندماج النووي.",
+      "وفي نهاية الفقرة سيتضح الأمر الذي من أجله بدأ كل شيء. الحقل المغناطيسي ليس وجودًا منفصلًا: ما يسميه مراقب حقلًا مغناطيسيًا، سيدعوه مراقب آخر يتحرك بجانبه حقلًا كهربائيًا. المغناطيسية هي الكهرباء من منظور نظام إسناد متحرك، ومن هنا بدأ أينشتاين بناء نظرية النسبية."
+    ],
+    "standNote": "الدوائر ذات النقاط تمثل الحقل المغناطيسي الموجه نحوك، خارج مستوى الشاشة. السهم الأخضر يبين سرعة الجسيم، والسهم البرتقالي يبين قوة لورنتز. لاحظ الشيء الرئيسي: القوة دائمًا عمودية تمامًا على السرعة، لذلك يتحرك الجسيم في مسار دائري دون تغيير سرعته. الآن التجربة: ضاعف السرعة ولاحظ نصف القطر — سيتضاعف. أما زمن الدورة فسيبقى كما هو، وهذه هي الخاصية الأكثر روعة في هذا الموضوع.",
+    "formula": {
+      "name": "قوة لورنتز",
+      "latex": "\\vec{F} = q\\,\\vec{v} \\times \\vec{B}, \\qquad F = qvB\\sin\\alpha",
+      "alsoKnown": "المركبة المغناطيسية لقوة لورنتز",
+      "authors": [
+        {
+          "who": "هانز كريستيان أورستد",
+          "year": "1820",
+          "what": "اكتشف أن التيار ينحرف إبرة البوصلة — أول دليل على ربط الكهرباء والمغناطيسية. والأكثر من ذلك، أن الإبرة لم تقف على طول السلك ولا بشكل عرضي، بل في دائرة حوله، وهو ما لم يتوقعه أحد"
+        },
+        {
+          "who": "أندريه ماري أمبير",
+          "year": "1820",
+          "what": "في غضون أسبوع من الخبر، بنى نظرية تفاعل التيارات وافترض أن المغناطيسية كلها ترجع إلى حركة الشحنات، وأن المغناطيس الدائم يحتوي على تيارات مجهرية غير متلاشية"
+        },
+        {
+          "who": "هندريك لورنتز",
+          "year": "1892",
+          "what": "كتب القوة المؤثرة على شحنة متحركة مفردة، وجمع الجزء الكهربائي والمغناطيسي في صيغة واحدة. أصبحت تحويلاته للإحداثيات لاحقًا الأساس الرياضي لنظرية النسبية"
+        },
+        {
+          "who": "إرنست لورنس",
+          "year": "1932",
+          "what": "بنى السيكلوترون، مستغلًا حقيقة أن زمن الدورة لا يعتمد على السرعة. أول مسرع كان بحجم كف اليد، وعجل البروتونات إلى طاقة لا يمكن تحقيقها بأي جهد كهربائي"
+        }
+      ],
+      "story": "غالبًا ما يُقدم اكتشاف أورستد على أنه مصادفة محضة في محاضرة، لكن هذا تبسيط. كان أورستد من أتباع فلسفة الطبيعة التي تؤمن بوحدة القوى الطبيعية، وكان يبحث عن صلة بين الكهرباء والمغناطيسية لسنوات عديدة. المسألة الأخرى أنه كان يبحث في المكان الخطأ: توقع أن التيار سيجذب أو يدفع الإبرة على طول السلك. لكن الإبرة تصرفت بشكل غير متوقع تمامًا — إذ وقفت عمودية على السلك، وكأنها تدور حوله في دائرة. لم تتصرف أي قوة معروفة آنذاك بهذه الطريقة: كانت جميعها موجهة على طول الخط الذي يربط الأجسام. قضى أورستد ثلاثة أشهر في التحقق قبل النشر، وكان يفعل ذلك بشكل صحيح، لأنه اكتشف أول مثال في الفيزياء لقوة موجهة عرضيًا.",
+      "symbols": [
+        {
+          "sym": "B",
+          "latex": "\\vec{B}",
+          "what": "الحث المغناطيسي",
+          "unit": "Тл",
+          "note": "التسلا وحدة كبيرة جدًا: حقل الأرض حوالي $5\\cdot 10^{-5}$، وحقل جهاز التصوير بالرنين 3 تسلا"
+        },
+        {
+          "sym": "v",
+          "latex": "\\vec{v}",
+          "what": "سرعة الشحنة",
+          "unit": "м/с",
+          "note": "الشحنة الساكنة لا تشعر بالحقل المغناطيسي إطلاقًا"
+        },
+        {
+          "sym": "alpha",
+          "latex": "\\alpha",
+          "what": "الزاوية بين السرعة والحقل",
+          "unit": "°",
+          "note": "على طول الحقل القوة صفر؛ أقصاها بشكل عرضي"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "نصف قطر الدائرة",
+          "unit": "м",
+          "note": "$R = mv/qB$ — يزداد مع السرعة، لذلك من نصف قطر المسار يُقاس زخم الجسيمات"
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "what": "زمن الدورة",
+          "unit": "с",
+          "note": "$T = 2\\pi m/qB$ — لا يعتمد على السرعة؛ عليه يقوم السيكلوترون"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "الاستنتاج الدقيق: الدائرة، الدورة والنسبية",
+      "lead": "من تعامد القوة سنحصل أولاً على شكل المسار، ثم الخاصية الرئيسية للدورة، وأخيراً — أن المغناطيسية ليست قوة منفصلة أبداً.",
+      "steps": [
+        {
+          "text": "لنبدأ بأهم نتيجة للتعامد. الشغل هو حاصل ضرب القوة في الإزاحة على طولها، والإزاحة تكون دائماً على طول السرعة. القوة العمودية على السرعة — الشغل يساوي صفرًا تمامًا.",
+          "latex": "dA = \\vec{F}\\cdot d\\vec{r} = qv B \\cos 90^\\circ \\, dt = 0",
+          "figure": "work",
+          "figCaption": "لا تستطيع القوة المغناطيسية تغيير طاقة الجسيم — فقط اتجاه حركته."
+        },
+        {
+          "text": "بما أن الطاقة لا تتغير، فإن مقدار السرعة لا يتغير أيضًا. قوة ثابتة المقدار، عمودية دائمًا على سرعة ثابتة المقدار — هذا هو بالضبط شرط الحركة المنتظمة على دائرة.",
+          "latex": "|v| = \\text{const}, \\quad F \\perp v, \\quad |F| = \\text{const} \\;\\Longrightarrow\\; \\text{окружность}",
+          "figure": "circmotion",
+          "figCaption": "نفس شروط حجر مربوط بحبل، لكن دور الشد تلعبه القوة المغناطيسية."
+        },
+        {
+          "text": "نساوي القوة المغناطيسية بقوة الجذب المركزي ونحصل على نصف القطر.",
+          "latex": "qvB = \\frac{mv^{2}}{R} \\;\\Longrightarrow\\; R = \\frac{mv}{qB} = \\frac{p}{qB}",
+          "figure": "centripetal",
+          "figCaption": "نصف القطر يتناسب مع كمية الحركة. ومن هنا طريقة قياس كمية حركة الجسيمات بانحناء أثرها."
+        },
+        {
+          "text": "والآن معجزة هذا الموضوع. نحسب الدورة — زمن دورة واحدة. تلغى السرعة، وتكون الدورة مستقلة عنها تمامًا.",
+          "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi m}{qB}",
+          "figure": "isochron",
+          "figCaption": "الجسيم السريع يرسم دائرة كبيرة، والبطيء دائرة صغيرة، وكلاهما يستغرقان نفس الوقت."
+        },
+        {
+          "text": "على هذا بالذات بُني السيكلوترون. بتطبيق جهد متغير بتردد ثابت، يمكن دفع الجسيم مرارًا: يتسارع، ويزيد نصف القطر، ويظل متزامنًا.",
+          "latex": "f_{\\text{цикл}} = \\frac{qB}{2\\pi m}",
+          "figure": "matchfreq",
+          "figCaption": "الرنين دون ضبط التردد — هبة نادرة من الطبيعة، قامت عليها فيزياء المسرعات."
+        },
+        {
+          "text": "نضيف مجالًا كهربائيًا عموديًا على المجال المغناطيسي. تنشأ حركة ينزاح فيها الجسيم جانبًا بسرعة ثابتة — بغض النظر عن إشارة ومقدار الشحنة.",
+          "latex": "v_{\\text{др}} = \\frac{E}{B}",
+          "figure": "vectriangle",
+          "figCaption": "الحقول المتقاطعة تفرز الجسيمات حسب السرعة: فقط الجسيم المطلوب يمر دون انحراف."
+        },
+        {
+          "text": "والخطوة الأخيرة التي تفسر طبيعة المغناطيسية. ليكن تيار يمر في سلك، وتتحرك شحنة موازية له بجانبه. في إطار السلك، تؤثر قوة مغناطيسية على الشحنة. ننتقل إلى إطار الشحنة نفسها — حيث تكون ساكنة، ولا يمكن أن تؤثر قوة مغناطيسية. لكن القوة موجودة! في الإطار الجديد، تصبح كهربائية: بسبب تقلص الأطوال النسبي، تختلف كثافات الشحنات الموجبة والسالبة في السلك.",
+          "latex": "\\text{система провода: } F_{\\text{магн}} \\qquad \\longleftrightarrow \\qquad \\text{система заряда: } F_{\\text{эл}}",
+          "figure": "inertialframe",
+          "figCaption": "نفس القوة، اسمان مختلفان. المغناطيسية هي كهرباء تُرى من إطار مرجعي متحرك."
+        }
+      ],
+      "plate": "القوة المغناطيسية عمودية على السرعة، لذلك لا تبذل شغلًا وتقوم فقط بتحريف الجسيم. نصف القطر يتناسب مع كمية الحركة، والدورة مستقلة تمامًا عن السرعة.",
+      "note": "حدود التطبيق. ثبات الدورة يختل عند السرعات قريبة من الضوء: تزداد الكتلة، ويبدأ الجسيم في التأخر. لهذا السبب لا يسرع السيكلوترون العادي البروتونات فوق حوالي عشرين ميغا إلكترون فولت، وللطاقات العالية تُبنى السنكروترونات حيث يُضبط التردد أثناء التشغيل. بالإضافة إلى ذلك، كل ما قيل ينطبق على المجال المنتظم؛ في المجال غير المنتظم تظهر انحرافات إضافية، وتصبح المسارات أكثر تعقيدًا — على هذا تقوم فيزياء حصر البلازما."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "ما هو الضرب الاتجاهي بطريقة الأصابع. الضرب العادي يعطي عددًا، والضرب الاتجاهي يعطي متجهًا، عموديًا على كلا العامليْن. أسهل طريقة لإيجاد الاتجاه هي باليد: وجه أربعة أصابع من يدك اليمنى على طول السرعة، ثم اثنها باتجاه المجال — سيشير الإبهام إلى القوة للشحنة الموجبة. للشحنة السالبة، الاتجاه معاكس. هذه ليست حيلة ذاكرة، بل تعريف، ويستخدمها الجميع، حتى من يعملون في هذا المجال نصف حياتهم.",
+        "لماذا القوة العمودية لا تبذل شغلًا. تخيل أنك تدفع عربة جانبًا تمامًا، وهي تتدحرج للأمام. مهما حاولت، لن تسرعها أو تبطئها للأمام — فقط ستديرها. الشغل هو حاصل ضرب القوة في المسافة المقطوعة على طولها، وعلى طول القوة المغناطيسية لا تقطع المسافة أبدًا. ومن هنا استحالة المحرك المغناطيسي: المغناطيس الدائم لا يعطي طاقة، لأنه لا يعرف كيف ينقلها.",
+        "لماذا الدورة لا تعتمد على السرعة. ضاعف سرعة الجسيم — سيسير أسرع بمرتين، لكنه سيرسم دائرة أكبر بمرتين أيضًا. زاد طول المسار مرتين، وزادت السرعة مرتين، فبقي الزمن كما هو. هذا هو نفس الإلغاء الذي يجعل دورة البندول مستقلة عن السعة: كميتان تتغيران بشكل متناغم وتلغي إحداهما الأخرى في النسبة. هذه التوافقات في الفيزياء تشير دائمًا إلى شيء مهم — هنا قام عليها فرع كامل.",
+        "ماذا تعني وحدة تسلا. إنها ضخمة: المجال المغناطيسي للأرض يبلغ فقط خمسة على مائة ألف من تسلا، مجال مغناطيس الثلاجة العادي حوالي واحد على مائة، ومجال التصوير بالرنين المغناطيسي ثلاثة. لتشعر بالمقياس: في مجال مقداره واحد تسلا، يرسم الإلكترون دائرة نصف قطرها أجزاء من المليمتر، والبروتون حوالي سنتيمتر. الفرق يساوي تمامًا نسبة كتلتيهما، لأن نصف القطر يتناسب مع كمية الحركة."
+      ]
+    },
+    "example": {
+      "title": "مثال بأرقام: مطياف الكتلة",
+      "lead": "جهاز يفصل الذرات حسب الكتلة – تطبيق مباشر لصيغة نصف القطر.",
+      "given": "أيونات الكربون-12 والكربون-14، كلاهما مشحون بشكل فردي، تم تسريعها بنفس الجهد 2000 فولت وتدخل مجالًا قدره 0.5 تسلا عموديًا. أوجد نصف قطر دائرتيهما والمسافة بين الأثرين على الكاشف.",
+      "law": "$qU = \\dfrac{mv^{2}}{2} \\;\\Longrightarrow\\; v = \\sqrt{\\dfrac{2qU}{m}}$، ثم $R = \\dfrac{mv}{qB}$",
+      "solution": [
+        {
+          "text": "نعوض السرعة في صيغة نصف القطر ونبسط — نحصل على تعبير مناسب مباشرة بدلالة الكتلة.",
+          "latex": "R = \\frac{m}{qB}\\sqrt{\\frac{2qU}{m}} = \\frac{1}{B}\\sqrt{\\frac{2Um}{q}}"
+        },
+        {
+          "text": "للكربون-12: الكتلة $12 \\cdot 1{,}66\\cdot 10^{-27} = 1{,}99\\cdot 10^{-26}$ كجم.",
+          "latex": "R_{12} = \\frac{1}{0{,}5}\\sqrt{\\frac{2 \\cdot 2000 \\cdot 1{,}99\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}}} = 2\\sqrt{4{,}98\\cdot 10^{-4}} \\approx 0{,}0446\\ \\text{м}"
+        },
+        {
+          "text": "للكربون-14 الكتلة أكبر بنسبة 14/12، ونصف القطر أكبر بالجذر التربيعي لهذه النسبة.",
+          "latex": "R_{14} = R_{12}\\sqrt{\\frac{14}{12}} \\approx 0{,}0446 \\cdot 1{,}080 \\approx 0{,}0482\\ \\text{м}"
+        },
+        {
+          "text": "بعد قطع نصف دائرة، تعود الأيونات إلى خط الدخول، وتتباعد الآثار بمقدار ضعف الفرق في أنصاف الأقطار.",
+          "latex": "\\Delta = 2(R_{14} - R_{12}) \\approx 2 \\cdot 0{,}0036 \\approx 7\\ \\text{мм}"
+        }
+      ],
+      "answer": "أنصاف الأقطار حوالي 4,5 و 4,8 سم؛ تتباعد الآثار على الكاشف بحوالي سبعة ملليمترات.",
+      "check": "التحقق بالمنطق السليم: فرق الكتلة هو فقط نوكليونان من اثني عشر، والجهاز يباعد الآثار بمقدار سنتيمتر تقريبًا — من السهل قياس ذلك حتى بالعين المجردة. هذه الحساسية هي ما تجعل مطياف الكتلة أداة عمل. يعتمد عليه التأريخ بالكربون المشع، والكشف عن المنشطات، وتحليل تركيب النيازك، والتحقق من نقاء الأدوية. لاحظ أيضًا بنية الإجابة: نصف القطر يعتمد على الجذر التربيعي للكتلة، وليس على الكتلة نفسها. لذلك، كلما كان فصل النظائر الثقيلة أصعب — فالفرق في الجذر ينمو ببطء."
+    },
+    "constants": {
+      "title": "قيم هذا القسم",
+      "lead": "مجالات مغناطيسية نموذجية – لفهم ما هو ضعيف وما هو قوي.",
+      "items": [
+        {
+          "sym": "B_earth",
+          "latex": "B_{\\oplus}",
+          "name": "المجال المغناطيسي للأرض",
+          "value": "5 · 10⁻⁵",
+          "unit": "Тл",
+          "why": "ضعيف، لكنه هو الذي ينحرف الجسيمات المشحونة للرياح الشمسية ويحمي الغلاف الجوي. بدونه لكان الكوكب قد فقد هواءه، كما يبدو أنه حدث للمريخ.",
+          "mnemo": "خمسون ميكروتسلا. مغناطيس الثلاجة أقوى بمئتي مرة، والتصوير بالرنين المغناطيسي أقوى بستين ألف مرة."
+        },
+        {
+          "sym": "B_mri",
+          "latex": "B_{\\text{МРТ}}",
+          "name": "المجال المغناطيسي لماسح التصوير بالرنين المغناطيسي",
+          "value": "1,5 — 3",
+          "unit": "Тл",
+          "why": "يُنتج بواسطة ملف فائق التوصيل مبرد بالهيليوم السائل. ولهذا السبب لا يمكن إدخال المعادن إلى الغرفة: مجال بهذا المقدار ينتزع الأشياء من اليدين.",
+          "mnemo": "ثلاثة تسلا تسرع أسطوانة فولاذية إلى سرعة سيارة. ومن هنا القواعد الصارمة والباب السميك."
+        },
+        {
+          "sym": "B_lhc",
+          "latex": "B_{\\text{БАК}}",
+          "name": "المجال المغناطيسي لمغناطيسات مصادم الهادرونات الكبير",
+          "value": "8,3",
+          "unit": "Тл",
+          "why": "يحافظ على بروتونات بطاقة 6.5 تيرا إلكترون فولت في حلقة طولها 27 كيلومترًا. يرتبط نصف قطر المسار بكمية الحركة بنفس الصيغة من هذا القسم.",
+          "mnemo": "تُبرد المغناطيسات إلى 1.9 كلفن — أبرد من الفضاء بين النجمي. هذا أكبر منشأة تبريد فائق على الكوكب."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين تنحرف الشحنات",
+      "lead": "كل ما هو مذكور أدناه يعمل على خاصية واحدة: القوة المغناطيسية تدير ولا تسرع.",
+      "items": [
+        {
+          "h": "المحرك الكهربائي",
+          "text": "يتعرض التيار في إطار موضوع في مجال لقوى تديره. نصف الطاقة الكهربائية المنتجة في العالم تستهلكها المحركات الكهربائية — من المضخات إلى مروحة الحاسوب المحمول."
+        },
+        {
+          "h": "الشفق القطبي",
+          "text": "تتلوى الجسيمات المشحونة للرياح الشمسية حول خطوط المجال المغناطيسي للأرض وتتدفق على طولها نحو القطبين، حيث تصطدم بالغلاف الجوي وتجعلها تتوهج. شكل الشفق هو حرفيًا شكل المجال المغناطيسي للكوكب."
+        },
+        {
+          "h": "توكاماك",
+          "text": "لا يمكن احتجاز بلازما بدرجة حرارة مئات الملايين من الدرجات بأي جدار. يتم احتجازها بواسطة مجال مغناطيسي: تتلف الجسيمات المشحونة حول خطوط المجال ولا تصل إلى الجدران."
+        },
+        {
+          "h": "غرفة الفقاعات وكاشفات الجسيمات",
+          "text": "ينحني أثر الجسيم المشحون في مجال مغناطيسي، ويتم تحديد كمية الحركة من نصف قطر الانحناء، وإشارة الشحنة من اتجاه الالتواء. هكذا تم اكتشاف البوزيترون والميون وتقريبًا جميع جسيمات منتصف القرن العشرين."
+        },
+        {
+          "h": "مطياف الكتلة",
+          "text": "يعتمد نصف القطر على الكتلة، لذلك تصل النظائر إلى نقاط مختلفة على الكاشف. على هذا يعتمد التأريخ بالكربون المشع، والكشف عن المنشطات، وتحليل مادة النيازك."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: جرب بنفسك",
+      "lead": "يمكن اختبار المغناطيسية باستخدام بطارية وقطعة سلك - أرخص محرك في العالم يُجمّع في دقيقة.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "أبسط محرك كهربائي في دقيقة",
+          "text": "خذ بطارية إصبعية (AA)، ومغناطيس نيوديميوم صغير (يمكن من سماعات قديمة)، وقطعة من سلك نحاسي. ضع البطارية على المغناطيس بحيث يكون القطب الموجب لأعلى، واثنِ السلك ليشكل إطارًا متماثلاً يرتكز قمته على القطب الموجب للبطارية، بينما تلمس نهاياته السفلية المغناطيس.",
+          "answer": "سيبدأ الإطار في الدوران، وأحيانًا بسرعة كبيرة. يسري التيار من القطب الموجب عبر السلك إلى المغناطيس ويعود؛ في المجال المغناطيسي، تؤثر قوة لورنتز على هذا التيار بشكل عمودي - مما يجعل الإطار يدور. هذا هو محرك فاراداي أحادي القطب، أول تصميم من عام 1821. لا تترك البطارية موصولة لفترة طويلة: الدائرة قصيرة وتسخن. ولاحظ الشيء الرئيسي: القوة هنا ليست باتجاه المغناطيس ولا بعيدًا عنه، بل إلى الجانب تمامًا - هذا هو التعامد الذي يتحدث عنه الفصل بأكمله."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "قوة لا تستطيع بذل شغل",
+          "text": "القوة المغناطيسية لا تبذل أي شغل على الإطلاق. لكن المحرك الكهربائي يعمل بالمجال المغناطيسي ليدير الآلات ويرفع الأحمال. من أين تأتي الطاقة؟",
+          "answer": "من مصدر التيار. المجال المغناطيسي يعمل كموزع: فهو يوجه حركة الشحنات، بينما يقوم المجال الكهربائي للمصدر ببذل الشغل عن طريق دفع التيار عبر الأسلاك. من السهل التحقق: افصل البطارية، وسيتوقف المحرك على الرغم من بقاء المغناطيس في مكانه. ومن هنا أيضًا استحالة وجود آلة حركة أبدية تعمل بالمغناطيسات الدائمة - فكرة يقترحها المخترعون منذ أربعة قرون. المغناطيس ليس مصدرًا للطاقة، بل وسيط."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "أول قوة لا تعمل على طول خط مستقيم",
+          "text": "قبل أورستد، كانت جميع القوى المعروفة تعمل على طول الخط المستقيم الواصل بين الأجسام: الجاذبية، المرونة، التجاذب الكولومي. إبرة البوصلة بالقرب من سلك تتصرف بشكل مختلف - إذ تقف بشكل عمودي، وكأنها تدور حول السلك. هذا يتناقض بشدة مع كل الخبرات السابقة لدرجة أن أورستد أمضى ثلاثة أشهر في إعادة التحقق قبل النشر. أول قوة عرضية في تاريخ الفيزياء كانت المفتاح للمحرك الكهربائي ونظرية النسبية."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "أداة ذاكرة",
+          "h": "قاعدة اليد اليمنى",
+          "text": "الأصابع الأربعة على طول السرعة، ثم ثنيها نحو المجال، والإبهام يشير إلى اتجاه القوة للشحنة الموجبة. للشحنة السالبة، العكس. لا تحاول الحفظ بالكلمات، استخدم يدك: هذه الطريقة يستخدمها طلاب السنة الأولى وحائزو جائزة نوبل، ولا داعي للخجل."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "الدورة لا تعتمد على السرعة",
+          "text": "ضاعف سرعة الجسيم - سيتضاعف نصف القطر، وسيتضاعف المسار الدائري أيضًا، والسرعة مضاعفة. زمن الدورة لم يتغير. احتفظ بهذا كاختبار: إذا كان في مسألة ما الزمن الدوري يعتمد على السرعة، فابحث عن خطأ. استثناء واحد - سرعات قريبة من الضوء، حيث تزداد الكتلة."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "المجال المغناطيسي غير موجود بشكل منفصل",
+          "text": "ما يسميه مراقب ما مجالًا مغناطيسيًا، سيكون بالنسبة لمراقب آخر يتحرك بجانبه مجالًا كهربائيًا. هذه ليست ملاحظة فلسفية، بل حقيقة قابلة للحساب: القوة الناتجة هي نفسها، لكن اسمها يعتمد على الإطار المرجعي. بدأ أينشتاين مقالته عام 1905 بهذه الملاحظة - حول عدم التناظر في تفسير الحث بين المغناطيس والموصل."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: المغناطيسية كنتيجة للنسبية",
+      "lead": "غير مدرج في الاختبار. حول كيفية الحصول على كل القوة المغناطيسية من الكهرباء الساكنة وتقلص الأطوال.",
+      "blocks": [
+        {
+          "h": "الوضع",
+          "text": "لنأخذ سلكًا يمر به تيار: الأيونات الموجبة ثابتة، والإلكترونات تنجرف. السلك متعادل كهربائيًا بشكل عام - كثافات الشحنات متساوية. بجانبه، وبموازاة السلك، تطير شحنة موجبة بسرعة مساوية لسرعة انجراف الإلكترونات. في إطار السلك، تؤثر عليها قوة مغناطيسية جاذبة."
+        },
+        {
+          "h": "الانتقال إلى إطار الشحنة",
+          "text": "هناك، الشحنة ساكنة، والشحنة الساكنة لا تشعر بالمجال المغناطيسي. يجب أن تختفي القوة - لكن القوى لا تختفي بتغير وجهة النظر، وإلا لرأى إطار مرجعي تصادمًا بينما الآخر لا يراه. إذن، في الإطار الجديد، تؤثر قوة أخرى."
+        },
+        {
+          "h": "ما الذي تغير",
+          "text": "في إطار الشحنة، الإلكترونات ساكنة والأيونات تتحرك. وفقًا لنظرية النسبية، المسطرة المتحركة تقصر - مما يعني أن المسافات بين الأيونات تقلصت، وكثافتها زادت، بينما كثافة الإلكترونات انخفضت. توقف السلك عن كونه متعادلًا. ظهرت شحنة زائدة، ومعها قوة كولوم عادية."
+        },
+        {
+          "h": "الخلاصة",
+          "text": "القوة هي نفسها، محسوبة بطريقتين. في إطار واحد نسميها مغناطيسية، وفي الآخر كهربائية. المغناطيسية هي تأثير نسبوي للكهرباء الساكنة، وهي ملحوظة حتى عند سرعات الانجراف الضئيلة فقط لأن القوى الكولومية هائلة جدًا: التصحيح النسبي من رتبة $10^{-13}$، مضروبًا في $10^{42}$، يعطي قيمة محسوسة تمامًا. هذه الفكرة تحديدًا تجعل إبرة المغناطيس دليلاً غير مباشر على نظرية النسبية - قبل وقت طويل من أي جسيمات سريعة."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "القوة المغناطيسية تؤثر فقط على الشحنة المتحركة، واتجاهها عمودي على السرعة والمجال، ولا تبذل شغلًا، وتجعل الجسيم يتحرك في مسار دائري.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\vec{F} = q\\vec{v}\\times\\vec{B}$",
+          "text": "الاتجاه حسب قاعدة اليد اليمنى"
+        },
+        {
+          "icon": "formula",
+          "title": "شغل القوة المغناطيسية يساوي صفرًا تمامًا",
+          "text": "إنها فقط تغير الاتجاه"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = mv/qB$",
+          "text": "نصف القطر يتناسب مع كمية الحركة"
+        },
+        {
+          "icon": "ruler",
+          "title": "$T = 2\\pi m/qB$",
+          "text": "الزمن الدوري لا يعتمد على السرعة، ومن هنا يأتي السيكلوترون"
+        },
+        {
+          "icon": "scale",
+          "title": "المغناطيسية هي كهرباء تُرى",
+          "text": "المغناطيسية هي كهرباء تُرى من إطار مرجعي متحرك"
+        }
+      ],
+      "where": "المحرك الكهربائي، مطياف الكتلة، كواشف الجسيمات، الشفق القطبي، حبس البلازما، جهاز التصوير بالرنين المغناطيسي.",
+      "watchOut": "المجال المغناطيسي لا يمكن أن يكون مصدرًا للطاقة. الشغل في المحرك يبذله مصدر التيار، والمجال فقط يوجه الاتجاه."
+    },
+    "quiz": [
+      {
+        "id": "m1",
+        "type": "mcq",
+        "q": "لماذا لا تستطيع القوة المغناطيسية تغيير مقدار سرعة الجسيم؟",
+        "options": [
+          "لأنها ضعيفة جدًا",
+          "لأنها دائمًا عمودية على السرعة وبالتالي لا تبذل شغلًا",
+          "لأنها تؤثر فقط على الجسيمات المتعادلة",
+          "يمكنها، لكن التأثير صغير وعادة ما يُهمل"
+        ],
+        "answer": 1,
+        "why": "الشغل هو حاصل ضرب القوة في الإزاحة على طولها. الإزاحة تكون على طول السرعة، والقوة عمودية عليها - وبالتالي الشغل يساوي صفرًا تمامًا، وليس صغيرًا. طاقة الجسيم محفوظة بدقة، ويتغير اتجاه الحركة فقط.",
+        "hint": "تذكر تعريف الشغل. ماذا يحدث له إذا كانت الزاوية بين القوة والإزاحة تساوي 90 درجة؟"
+      },
+      {
+        "id": "m2",
+        "type": "mcq",
+        "q": "يدخل جسيمان متطابقان نفس المجال المغناطيسي، لكن أحدهما أسرع بمرتين. ماذا يمكن أن يقال عن زمن دورانهما الكامل؟",
+        "options": [
+          "دورة الأسرع أقصر بمرتين",
+          "دورة الأسرع أطول بمرتين",
+          "الأزمنة متساوية: نصف القطر تضاعف، لكن السرعة تضاعفت أيضًا",
+          "الإجابة تعتمد على إشارة الشحنة"
+        ],
+        "answer": 2,
+        "why": "الدورة $T = 2\\pi m/qB$ لا تحتوي على السرعة مطلقًا. الجسيم الأسرع يصف دائرة أكبر بمرتين بسرعة مضاعفة - الزمن نفسه. هذه الخاصية هي التي سمحت ببناء السيكلوترون: يمكن تسريع الجسيم بجهد ذي تردد ثابت.",
+        "hint": "عبر عن الدورة كطول محيط مقسومًا على السرعة، ثم عوّض بنصف القطر."
+      },
+      {
+        "id": "m3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: إذا كانت القوة المغناطيسية لا تبذل شغلًا، فمن أين تأتي الطاقة في المحرك الكهربائي؟",
+        "keywords": [
+          "مصدر",
+          "بطارية",
+          "تيار",
+          "كهربائي",
+          "مجال المصدر",
+          "يدور",
+          "توزيع",
+          "ليس مغناطيسي"
+        ],
+        "needed": 2,
+        "why": "الطاقة تأتي من مصدر التيار: المجال الكهربائي داخل الدائرة يدفع الشحنات ويبذل شغلًا. المجال المغناطيسي يحدد فقط اتجاه القوة، ويدير الإطار. افصل البطارية - سيتوقف المحرك، مع بقاء المغناطيس في مكانه. من هنا تأتي استحالة وجود آلة دائمة الحركة تعمل بالمغناطيسات الدائمة.",
+        "hint": "ما الذي سيتوقف عن العمل إذا أزلت البطارية؟ وماذا إذا أزلت المغناطيس؟ أي منهما يزود الطاقة، وأيهما يزود الاتجاه؟"
+      },
+      {
+        "id": "m4",
+        "type": "estimate",
+        "q": "في مطياف الكتلة، نصف قطر المسار يتناسب مع الجذر التربيعي لكتلة الأيون. بكم مرة يختلف نصف القطر للكربون-12 والكربون-14؟",
+        "answer": 1.08,
+        "unit": "مرة",
+        "tolerance": 0.04,
+        "why": "النسبة تساوي الجذر التربيعي لـ 14/12 = جذر 1.167 ≈ 1.080، أي أن نصف القطر يختلف بنسبة ثمانية بالمائة. عند نصف قطر عشرة سنتيمترات، هذا يعادل ثمانية ملليمترات - قيمة سهلة القياس. لاحظ أن الاعتماد هو على الجذر التربيعي، لذلك يصعب فصل النظائر الثقيلة.",
+        "hint": "إذا كان R يتناسب مع جذر m، فإن نسبة أنصاف الأقطار هي جذر نسبة الكتل. جذر 1.17 هو أقل بقليل من 1.1."
+      }
+    ]
+  },
+  "tags": [
+    "magnetar",
+    "pulsar",
+    "carbon",
+    "meteorite"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.09468",
+      "why": "совпадение по теме: magnetar, pulsar"
+    },
+    {
+      "id": "2607.04359",
+      "why": "совпадение по теме: magnetar, pulsar"
+    },
+    {
+      "id": "2606.29653",
+      "why": "совпадение по теме: magnetar, pulsar"
+    }
+  ]
+}

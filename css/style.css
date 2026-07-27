@@ -384,8 +384,11 @@ body.graph-fs-open { overflow: hidden; }
 .reading-time { color: var(--soft); white-space: nowrap; }
 /* Мельче + перенос внутри колонки, чтобы длинная строка (с 7 счётчиками) не вылезала за 620px
    (юзер 2026-07-24). white-space:normal + overflow-wrap — переносится по « / », а не режется. */
-.site-stats { text-align: left; max-width: 620px; font-size: 11px; line-height: 1.7; color: var(--soft);
-    margin: 2px 0 14px; font-family: var(--mono); white-space: normal; overflow-wrap: anywhere; }
+.site-stats { text-align: left; max-width: 620px; font-size: 10.5px; line-height: 1.5;
+    color: var(--soft); margin: 2px 0 14px; font-family: var(--mono);
+    /* строго ОДНА строка: не переносим, лишнее — горизонтальным свайпом (юзер 2026-07-25) */
+    white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.site-stats::-webkit-scrollbar { display: none; }
 .site-stats b { color: var(--text); font-weight: 600; }
 .related { margin-top: 26px; }
 .related-h { font-size: 14px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }
@@ -1925,3 +1928,226 @@ html[dir="rtl"] .an-stage-ctl { right: auto; left: 8px; }
 .cov-num { font-family: var(--mono); font-size: 10.5px; color: var(--soft); white-space: nowrap; }
 html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right: 0; }
 @media (max-width: 640px) { .cov-row { grid-template-columns: 92px 1fr; } .cov-num { display: none; } }
+
+
+/* ═══ Единый стандарт шапки и ширины контента (юзер 2026-07-25: «иконки гуляют как хотят»,
+   «ширина текста/контента и меню — стандарт везде, а то в карточках едет») ═══ */
+:root { --w-text: 620px; --w-wide: 680px; }
+/* Иконки правого кластера: один размер, одна высота, по центру, ровная строка */
+.header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 4px; }
+.header-right .ico-svg { width: 17px; height: 17px; vertical-align: middle; }
+.header-right > a, .header-right > button, .header-right .fav-btn,
+.header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 28px; min-width: 28px; padding: 0 7px; line-height: 1; box-sizing: border-box;
+}
+/* Единая ширина колонки контента — чтобы карточки/списки не «ехали» относительно текста */
+.article-main > *, .entity-body, #search-results, #search-results.entity-list,
+.tag-header, .site-stats, .feedback, .section-desc, .cov-note { max-width: var(--w-text); }
+.langs-row, .sections-table, .an-stage, .cov-list { max-width: var(--w-wide); }
+/* Ровная одна высота всего правого кластера шапки (search-bar был 30 против 28 у остальных) */
+.header-right > .search-bar, .header-right > .version-slider, .header-right > .nav-links,
+.header-right > .theme-toggle { height: 28px; display: inline-flex; align-items: center; }
+.header-right > .search-bar > * { height: 28px; display: inline-flex; align-items: center; }
+/* Языки — по ширине контента, иначе строка уезжала шире колонки (юзер 2026-07-25: «съехало») */
+.langs, .langs-row { max-width: var(--w-text); }
+
+/* Правая колонка (теги/законы/учёные у статьи): каждое название — ОДНА строка
+   (юзер 2026-07-25). Колонка чуть шире, шрифт компактнее, длинное — многоточием.
+   ТОЛЬКО на десктопе: на мобиле колонка раскладывается на всю ширину под текстом. */
+@media (min-width: 641px) { .article-side { width: 190px; } }
+.article-side .side-tag, .article-side .side-law, .article-side .side-sci {
+  font-size: 8.5px; letter-spacing: .2px; padding: 3px 7px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Кнопка «поделиться» — по центру строки заголовка, а не по базовой линии */
+.title-row, .tag-title-row { display: flex; align-items: center; gap: 8px; }
+.share-inline { display: inline-flex; align-items: center; justify-content: center;
+  vertical-align: middle; align-self: center; flex: none; }
+/* Крестик у всплывающей подсказки (на мобиле её иначе не закрыть) */
+.tag-tooltip { position: relative; padding-right: 22px; }
+.tip-close { position: absolute; top: 2px; right: 4px; width: 18px; height: 18px; line-height: 1;
+  border: none; background: none; color: var(--soft); font-size: 15px; cursor: pointer; padding: 0; }
+.tip-close:hover { color: var(--link); }
+html[dir="rtl"] .tag-tooltip { padding-right: 10px; padding-left: 22px; }
+html[dir="rtl"] .tip-close { right: auto; left: 4px; }
+
+/* Список разделов на карточке — ровно по левому краю колонки (padding чипа компенсируем) */
+.meta-cats, .card-cats { margin-left: -9px; }
+html[dir="rtl"] .meta-cats, html[dir="rtl"] .card-cats { margin-left: 0; margin-right: -9px; }
+
+/* Плавающая кнопка «наверх» — появляется после прокрутки (юзер 2026-07-25) */
+#to-top { position: fixed; right: 18px; bottom: 18px; z-index: 90;
+  width: 40px; height: 40px; border-radius: 50%; display: none;
+  align-items: center; justify-content: center; cursor: pointer;
+  border: 1px solid var(--hair); background: color-mix(in srgb, var(--bg) 86%, transparent);
+  color: var(--muted); font-size: 17px; line-height: 1; backdrop-filter: blur(6px);
+  box-shadow: var(--shadow); transition: color .15s, border-color .15s, transform .15s, opacity .25s; }
+#to-top:hover { color: var(--link); border-color: var(--link); transform: translateY(-2px); }
+#to-top.show { display: flex; }
+html[dir="rtl"] #to-top { right: auto; left: 18px; }
+@media (max-width: 640px) { #to-top { right: 12px; bottom: 12px; width: 36px; height: 36px; } }
+/* Дашборд — ровно по ширине меню/контента, а не шире (юзер 2026-07-25: «следи за красотой») */
+#dashboard { max-width: var(--w-text); }  /* ровно по ширине меню (.top-bar 620) */
+
+/* Тултипы — КАРТОЧКОЙ, а не одной строкой, и закрываемые (юзер 2026-07-25) */
+.tag-tooltip, .graph-tooltip {
+  max-width: 280px; white-space: normal; line-height: 1.45; font-size: 12.5px;
+  padding: 10px 26px 10px 12px; border-radius: var(--radius-sm);
+  background: var(--card-bg); color: var(--text);
+  border: 1px solid var(--hair); box-shadow: var(--shadow);
+}
+.tag-tooltip .tip-desc, .graph-tooltip .tip-desc { display: block; margin-top: 3px; color: var(--muted); }
+.tag-tooltip a { display: inline-block; margin-top: 6px; color: var(--link); }
+/* Теги в списках (в т.ч. на страницах авторов): текст строго по центру плашки — раньше сидел выше
+   из-за несимметричного line-height/padding (юзер 2026-07-25) */
+.side-tag, .card-tags a, .au-tag, .author-tags a, .related-tags a, .law-chip, .kg-chip, .fb-chip {
+  display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+}
+
+/* НИКАКИХ линий слева на плашках (юзер 2026-07-25) — цвет кластера уносим в точку-маркер */
+.an-card { border-left: 1px solid var(--hair) !important; position: relative; padding-left: 13px; }
+.an-card .an-card-t::before { content: ""; display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--cc, var(--cyan)); margin-inline-end: 7px; vertical-align: middle; }
+
+/* Подписи на рисунках — ярче и контрастнее, читаемая плашка вместо блёклых кругляшков */
+figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
+  font-size: 12.5px; line-height: 1.45; color: var(--ink);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--hair); border-radius: var(--radius-sm);
+  padding: 7px 10px; margin-top: 6px; backdrop-filter: blur(3px);
+}
+.lightbox-caption { color: #fff; background: rgba(0,0,0,.62); border-color: rgba(255,255,255,.18); }
+/* Маркеры-номера на картинках: контрастный кружок, а не бледное пятно */
+.fig-marker, .img-marker, .mosaic-num {
+  background: var(--ink); color: var(--bg); font-weight: 600; font-size: 11px;
+  border: 1.5px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+/* Правая колонка: текст строго по центру плашки (был сдвиг вверх — inline-flex конфликтовал с
+   ellipsis; возвращаем block и симметричный вертикальный padding с ровным line-height) */
+.article-side .side-tag, .article-side .side-law, .article-side .side-sci {
+  display: block; line-height: 1.35; padding: 4px 7px; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Мобильный дашборд: тепловая карта дней шире экрана — даём горизонтальный свайп вместо обрезки */
+@media (max-width: 640px) {
+  .heatmap { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .heatmap::-webkit-scrollbar { display: none; }
+  .heat-row { display: flex; align-items: center; gap: 6px; }
+  .heat-days { flex: none; }
+  .bars, .hbars { overflow-x: hidden; }
+  .bar-x { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+/* ═══ МОБИЛЬНОЕ МЕНЮ: шторка снизу вместо выпадашки (юзер 2026-07-25: «открывалось за пределом
+   экрана, кнопочки очень маленькие»). На телефоне панель во всю ширину, пункты крупные (48px),
+   палец попадает без промаха; уехать за край физически не может. ═══ */
+@media (max-width: 640px) {
+  .nav-more-panel, .topnav-panel {
+    position: fixed !important; inset: auto 0 0 0 !important; top: auto !important;
+    width: 100% !important; max-width: none; min-width: 0;
+    border-radius: 18px 18px 0 0; border: none; border-top: 1px solid var(--hair);
+    padding: 10px 12px calc(14px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -18px 44px -18px rgba(0,0,0,.45);
+    max-height: 70vh; overflow-y: auto; z-index: 1200;
+    display: none; flex-direction: column; gap: 2px;
+  }
+  .nav-more.open .nav-more-panel, .topnav-more.open .topnav-panel { display: flex !important; }
+  /* крупные пункты — палец, а не пиксель */
+  .nav-more-panel a, .topnav-panel a, .nav-more-panel .nav-express-toggle {
+    min-height: 48px; display: flex; align-items: center; font-size: 15px;
+    padding: 0 14px; border-radius: 10px;
+  }
+  .nav-more-panel a:active, .topnav-panel a:active { background: var(--tag-bg); }
+  /* затемнение под шторкой — и как «закрыть по тапу мимо» */
+  .nav-more.open::before, .topnav-more.open::before {
+    content: ""; position: fixed; inset: 0; background: rgba(0,0,0,.38);
+    z-index: 1100; backdrop-filter: blur(1.5px);
+  }
+  /* тач-таргеты в шапке: было 28px — мелко для пальца */
+  .header-right > a, .header-right > button, .header-right .fav-btn,
+  .header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn,
+  .nav-more-btn, .topnav-burger {
+    min-height: 40px; min-width: 40px; padding: 0 9px;
+  }
+  .header-right .ico-svg { width: 19px; height: 19px; }
+}
+/* Подпись типа сущности над заголовком (Тег / Закон / Учёный) — чтобы понимать, где находишься */
+.entity-kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ochre); margin-bottom: 4px; }
+/* Модалка «большой граф» — предупреждение + переход в полноэкранный (юзер 2026-07-25) */
+.graph-big-modal { position: absolute; inset: 0; z-index: 60; display: flex; align-items: center;
+  justify-content: center; background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(3px); }
+.gbm-box { max-width: 330px; margin: 12px; padding: 16px 18px; border-radius: var(--radius);
+  background: var(--card-bg); border: 1px solid var(--hair); box-shadow: var(--shadow); text-align: center; }
+.gbm-t { font-family: var(--serif); font-weight: 600; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+.gbm-d { font-size: 13px; line-height: 1.5; color: var(--muted); margin-bottom: 14px; }
+.gbm-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.gbm-actions button { min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font-family: var(--mono); font-size: 12.5px; border: 1px solid var(--hair); background: var(--surface); color: var(--muted); }
+.gbm-fs { border-color: var(--link) !important; color: var(--link) !important; }
+.gbm-actions button:hover { border-color: var(--link); color: var(--link); }
+
+/* ═══ Унификация представлений тег / закон / учёный (юзер 2026-07-25: «граф + список по 4,
+   чтобы у всех было одинаково») ═══ */
+.entity-body .related-tags { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px; align-items: stretch; margin: 6px 0 16px; font-size: 12px; line-height: 1.3; }
+.entity-body .related-tags strong { grid-column: 1 / -1; margin: 0 0 2px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ochre); }
+.entity-body .related-tags a { display: flex; align-items: center; justify-content: center; text-align: center;
+  min-height: 38px; padding: 5px 8px; border: 1px solid var(--hair); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--muted); text-decoration: none;
+  transition: color .15s, border-color .15s, transform .15s; overflow: hidden; }
+.entity-body .related-tags a:hover { color: var(--link); border-color: var(--link); transform: translateY(-1px); }
+@media (max-width: 640px) { .entity-body .related-tags { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ═══ Фаза 4: уровень изложения иконками + карточка «коротко» шапкой (2026-07-27) ═══ */
+.lv-switch { display: flex; gap: 6px; max-width: var(--w-text); margin: 0 0 12px; }
+.lv-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 42px; padding: 0 10px; border: 1px solid var(--hair); background: none;
+  border-radius: 999px; font-family: var(--mono); font-size: 12.5px; color: var(--soft);
+  text-decoration: none; cursor: pointer; transition: color .15s, border-color .15s, background .15s; }
+.lv-btn:hover { color: var(--link); border-color: var(--link); }
+.lv-btn.active { color: var(--link); border-color: var(--link);
+  background: color-mix(in srgb, var(--cyan) 12%, transparent); }
+.vs-ic { width: 17px; height: 17px; flex: none; }
+.lv-switch-compact { max-width: none; }
+.lv-btn.lv-compact { flex: none; min-height: 36px; min-width: 40px; padding: 0 10px; }
+.lv-btn.lv-compact .lv-t { display: none; }
+/* Дубль внизу статьи — чтобы не возвращаться мышью наверх */
+.lv-bottom { display: flex; align-items: center; gap: 10px; max-width: var(--w-text);
+  margin: 22px 0 6px; padding-top: 12px; border-top: 1px dashed var(--hair); }
+.lv-bottom::before { content: attr(data-label); }
+/* Карточка «коротко» — первый экран любой страницы */
+.mini-head { max-width: var(--w-text); margin: 0 0 16px; padding: 13px 15px;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--cyan) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--cyan) 26%, var(--hair)); }
+.mini-head-l { font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--cyan); margin-bottom: 5px; }
+.mini-head p { margin: 0; font-size: 15px; line-height: 1.62; color: var(--ink); }
+@media (max-width: 640px) {
+  .lv-btn { font-size: 12px; gap: 5px; padding: 0 8px; }
+  .mini-head p { font-size: 14.5px; }
+}
+/* Вкладка «Напряжение»: мосты между областями и разрывы (2026-07-27) */
+.tn-wrap { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; max-width: 680px; }
+.tn-h { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ochre); margin-bottom: 10px; }
+.tn-row { display: flex; align-items: center; gap: 7px; font-size: 12.5px; margin-bottom: 7px; }
+.tn-bar { height: 4px; border-radius: 2px; flex: none; opacity: .75; }
+.tn-n { color: var(--ink); }
+.tn-x { color: var(--soft); font-size: 11px; }
+.tn-w { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--soft); }
+.tn-gap { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 9px;
+  padding: 8px 10px; border: 1px dashed var(--hair); border-radius: var(--radius-sm); color: var(--muted); }
+.tn-gap b { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .tn-wrap { grid-template-columns: 1fr; gap: 18px; } }
+/* Трактовка под каждым видом аналитики + вкладки в два ряда по ширине колонки (2026-07-27) */
+.an-tabs { flex-wrap: wrap; max-width: var(--w-text); row-gap: 6px; }
+.an-read { max-width: var(--w-text); margin: 14px 0 4px; padding: 12px 14px;
+  border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--hair); }
+.an-read-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ochre); margin-bottom: 5px; }
+.an-read p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.an-read b { color: var(--ink); font-weight: 600; }

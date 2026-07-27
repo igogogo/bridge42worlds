@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#slam — bridge42worlds</title>
+    <meta name="description" content="SLAM es un marco matemático que permite a una plataforma móvil (robot, dron, coche) refinar simultáneamente su propia posición en el espacio y construir un mapa del entorno. Se basa en un enfoque probabilístico: el robot no almacena una única posición exacta, sino un abanico de posibles posiciones con distintos grados de certeza. Cada nueva medida de los sensores —telémetro láser (lidar), sensores inerciales, cámaras— actualiza esta distribución. La idea clave es cerrar el bucle: cuando el robot vuelve a un lugar ya visitado, lo reconoce y reduce drásticamente el error acumulado.">
+    <meta property="og:title" content="#slam — bridge42worlds">
+    <meta property="og:description" content="SLAM es un marco matemático que permite a una plataforma móvil (robot, dron, coche) refinar simultáneamente su propia posición en el espacio y construir un mapa del entorno. Se basa en un enfoque probabilístico: el robot no almacena una única posición exacta, sino un abanico de posibles posiciones con distintos grados de certeza. Cada nueva medida de los sensores —telémetro láser (lidar), sensores inerciales, cámaras— actualiza esta distribución. La idea clave es cerrar el bucle: cuando el robot vuelve a un lugar ya visitado, lo reconoce y reduce drásticamente el error acumulado.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/tags/slam.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Etiqueta</div><h1>slam</h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Un robot entra en un laberinto desconocido y traza un plano sobre la marcha, recordando dónde ha estado. Así funciona SLAM: construir un mapa y localizarse en él simultáneamente.</p><div class="practical-app"><strong>In practice:</strong> Un coche autónomo no circula a ciegas: construye un modelo tridimensional de la calle y sabe dónde está. Los robots aspiradores memorizan el plano de la vivienda para no dejar rincones sin limpiar.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">SLAM es un marco matemático que permite a una plataforma móvil (robot, dron, coche) refinar simultáneamente su propia posición en el espacio y construir un mapa del entorno. Se basa en un enfoque probabilístico: el robot no almacena una única posición exacta, sino un abanico de posibles posiciones con distintos grados de certeza. Cada nueva medida de los sensores —telémetro láser (lidar), sensores inerciales, cámaras— actualiza esta distribución. La idea clave es cerrar el bucle: cuando el robot vuelve a un lugar ya visitado, lo reconoce y reduce drásticamente el error acumulado.</div>
+        <div class="section"><h2>History</h2><p>Los primeros algoritmos surgieron en los años 1980 para la navegación de submarinos y robots militares. La adopción masiva comenzó en los años 2000, con la disponibilidad de procesadores rápidos y sensores precisos.</p></div>
+        <div class="section"><h2>How it works</h2><p>El robot compara las lecturas esperadas de los sensores con las reales. Si una pared está más lejos de lo que pensaba, el algoritmo desplaza su posición en el mapa. Al mismo tiempo, se añaden nuevos detalles al mapa. Se parece al juego de 'frío o caliente': el robot se equivoca constantemente y se corrige a sí mismo.</p></div>
+        <div class="fun-fact">💡 Algunos sistemas SLAM utilizan varias cámaras y sensores inerciales a la vez, de forma similar a como una persona se orienta mirando con los ojos y sintiendo la inclinación del cuerpo.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Cuando deambulas en la oscuridad por una habitación desconocida, extiendes las manos y memorizas la ubicación de los muebles. SLAM (método de localización y mapeado simultáneos) permite al robot hacer lo mismo. Utiliza cámaras o láseres (lidars) para medir distancias a los objetos, y con esos datos dibuja un mapa. Mientras tanto, refina continuamente su propia posición para que las líneas del mapa no diverjan.</div>
+        <div class="section"><h2>History</h2><p>Los primeros algoritmos surgieron en los años 1980 para la navegación de submarinos y robots militares. La adopción masiva comenzó en los años 2000, con la disponibilidad de procesadores rápidos y sensores precisos.</p></div>
+        <div class="section"><h2>How it works</h2><p>El robot compara las lecturas esperadas de los sensores con las reales. Si una pared está más lejos de lo que pensaba, el algoritmo desplaza su posición en el mapa. Al mismo tiempo, se añaden nuevos detalles al mapa. Se parece al juego de 'frío o caliente': el robot se equivoca constantemente y se corrige a sí mismo.</p></div>
+        <div class="fun-fact">💡 El algoritmo FastSLAM 2.0 utiliza exactamente una copia del mapa por cada partícula, lo que lo hace computacionalmente eficiente: el número de operaciones depende logarítmicamente del número de landmarks.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">SLAM (localización y mapeado simultáneos) es un problema computacional de la robótica móvil en el que un agente (robot, dron) debe construir un modelo de un entorno desconocido y, al mismo tiempo, estimar su propia trayectoria dentro de él. Desde el punto de vista del filtrado, se trata de un problema de estimación de estado con dinámica parcialmente observable: el estado incluye la pose del robot y los parámetros del mapa (a menudo representado como un conjunto de landmarks o una cuadrícula de ocupación). Las observaciones provienen de sensores: lidars, cámaras, sensores odométricos y unidades de medición inercial. Matemáticamente, el problema se reduce a maximizar la probabilidad a posteriori de la trayectoria y del mapa condicionada a los datos. Se utilizan dos familias principales de soluciones: basadas en filtros de partículas (FastSLAM) y basadas en mínimos cuadrados no lineales dispersos (Graph SLAM). El cierre de bucle (loop closure) es crucial: cuando el robot regresa a un lugar conocido, el sistema debe reconocerlo y redistribuir el error acumulado a lo largo de toda la trayectoria; de lo contrario, el mapa quedará deformado.</div>
+        <div class="section"><h2>History</h2><p>El concepto de SLAM fue formalizado por Hugh Durrant-Whyte y John J. Leonard en 1991, aunque trabajos anteriores (por ejemplo, Cheyne, 1986) ya abordaban problemas similares. Las primeras implementaciones se basaban en el filtro extendido de Kalman (EKF) y trabajaban con datos de radar o sonar. El punto de inflexión llegó en 2002, cuando Montemerlo y Thrun presentaron FastSLAM, un algoritmo basado en filtros de partículas capaz de procesar miles de landmarks en tiempo real. Los enfoques modernos, como ORB-SLAM, utilizan fusión multisensorial y una arquitectura de grafos, alcanzando alta precisión a gran escala.</p></div>
+        <div class="section"><h2>How it works</h2><p>El SLAM probabilístico modela la distribución conjunta P(x_{1:t}, m | z_{1:t}, u_{1:t}), donde x es la trayectoria, m el mapa, z las observaciones y u las señales de control. Normalmente se aplica un filtro bayesiano recursivo: predicción según el modelo de movimiento, corrección con los datos de los sensores. En Graph SLAM, el problema se transforma en un grafo disperso, donde los nodos son las poses del robot y los landmarks, y las aristas son restricciones provenientes de la odometría y las observaciones. La optimización del grafo mediante los métodos de Gauss-Newton o Levenberg-Marquardt proporciona la mejor estimación de toda la historia. Para el cierre de bucle se emplean técnicas de reconocimiento de lugares (place recognition), a menudo basadas en bolsas de palabras visuales (BoW) para sistemas de cámara. Por su parte, los filtros de partículas representan la distribución con un conjunto de hipótesis (partículas), cada una con su propio mapa; este enfoque es eficaz para modelos no lineales y ruidos no normales.</p></div>
+        
+        <div class="section"><h2>Open problems & fun facts</h2><p>Cierre de bucle fiable en grandes espacios con cambios de iluminación o de clima; Almacenamiento y actualización a largo plazo del mapa en visitas repetidas; Trabajo colaborativo de varios robots con SLAM descentralizado; Gestión de objetos dinámicos y cambios estructurales del entorno</p><p class="fact">💡 El algoritmo FastSLAM 2.0 utiliza exactamente una copia del mapa por cada partícula, lo que lo hace computacionalmente eficiente: el número de operaciones depende logarítmicamente del número de landmarks.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="t:slam"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="slam_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="slam" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="slam_es_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related</div><a href="/lang/es/tags/bayesian_inference.html" class="side-tag" data-tag="bayesian_inference">inferencia bayesiana</a><a href="/lang/es/tags/computer_vision.html" class="side-tag" data-tag="computer_vision">visión artificial</a><a href="/lang/es/tags/control_theory.html" class="side-tag" data-tag="control_theory">teoría del control</a><a href="/lang/es/tags/robotics.html" class="side-tag" data-tag="robotics">robótica</a><a href="/lang/es/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">procesamiento de señales</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="slam"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('slam', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

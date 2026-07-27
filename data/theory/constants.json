@@ -1,0 +1,198 @@
+{
+  "schema": "b42.constants/1",
+  "note": "Единый словарь физических констант и переменных для всех тем курса. Урок ссылается на запись по ключу (constants: [\"k_B\", \"N_A\"]), а не переписывает описание заново. Значения — CODATA 2018; те, что зафиксированы точно с 2019 года, помечены exact.",
+  "items": {
+    "k_B": {
+      "latex": "k_B", "exact": true,
+      "value": "1,380 649 · 10⁻²³", "unit": "Дж / К", "unitLatex": "\\text{Дж}/\\text{К}",
+      "ru": {
+        "name": "Постоянная Больцмана",
+        "why": "Курс обмена между температурой и энергией: столько джоулей приходится на каждый кельвин на одну степень свободы. Единицы читаются буквально — джоули на кельвин.",
+        "mnemo": "Порядок 10⁻²³ — тот же, что у числа Авогадро, но с обратным знаком: одно считает частицы в моле, другое делит энергию на одну частицу.",
+        "note": "С 2019 года значение зафиксировано точно, и через него определяется сам кельвин."
+      },
+      "en": {
+        "name": "Boltzmann constant",
+        "why": "The exchange rate between temperature and energy: this many joules per kelvin per degree of freedom. The units read literally — joules per kelvin.",
+        "mnemo": "The 10⁻²³ order matches Avogadro's number with the opposite sign: one counts particles per mole, the other divides energy per particle.",
+        "note": "Fixed exactly since 2019; the kelvin is now defined through it."
+      }
+    },
+    "N_A": {
+      "latex": "N_A", "exact": true,
+      "value": "6,022 140 76 · 10²³", "unit": "1 / моль", "unitLatex": "\\text{моль}^{-1}",
+      "ru": {
+        "name": "Постоянная Авогадро",
+        "why": "Сколько структурных единиц содержится в одном моле вещества. Единица измерения — обратный моль, потому что это число частиц на моль.",
+        "mnemo": "День моля отмечают 23 октября (10/23 — показатель степени) в 6:02 утра (первые цифры мантиссы).",
+        "note": "С 2019 года зафиксирована точно, и моль определяется именно через неё."
+      },
+      "en": {
+        "name": "Avogadro constant",
+        "why": "How many structural units are in one mole. The unit is inverse mole, because it counts particles per mole.",
+        "mnemo": "Mole Day is celebrated on October 23 (10/23 — the exponent) at 6:02 in the morning (the mantissa).",
+        "note": "Fixed exactly since 2019; the mole is defined through it."
+      }
+    },
+    "R": {
+      "latex": "R", "derivedFrom": ["N_A", "k_B"],
+      "value": "8,314 462", "unit": "Дж / (моль · К)", "unitLatex": "\\text{Дж}/(\\text{моль}\\cdot\\text{К})",
+      "ru": {
+        "name": "Универсальная газовая постоянная",
+        "why": "Не самостоятельная константа, а произведение двух предыдущих: R = N_A · k_B. Тот же курс обмена, но в пересчёте на моль, что видно прямо из единиц. Универсальна потому, что одинакова для любого газа, пока он ведёт себя как идеальный.",
+        "mnemo": "После восьмёрки прячется число π: 8,314. Проверьте связь: 6,022 · 1,381 ≈ 8,31."
+      },
+      "en": {
+        "name": "Universal gas constant",
+        "why": "Not an independent constant but the product of the previous two: R = N_A · k_B. The same exchange rate, per mole — visible straight from the units.",
+        "mnemo": "The digits of π hide after the eight: 8.314. Check it: 6.022 · 1.381 ≈ 8.31."
+      }
+    },
+    "c": {
+      "latex": "c", "exact": true,
+      "value": "299 792 458", "unit": "м / с", "unitLatex": "\\text{м}/\\text{с}",
+      "ru": {
+        "name": "Скорость света в вакууме",
+        "why": "Предельная скорость передачи взаимодействия во Вселенной. Не просто скорость света — это скорость причинности как таковой.",
+        "mnemo": "Почти ровно 300 000 км/с — для оценок этого хватает всегда.",
+        "note": "Зафиксирована точно: с 1983 года через неё определяется метр."
+      },
+      "en": {
+        "name": "Speed of light in vacuum",
+        "why": "The ultimate speed of interaction in the universe. Not merely the speed of light — the speed of causality itself.",
+        "mnemo": "Almost exactly 300 000 km/s — enough for any estimate.",
+        "note": "Fixed exactly; the metre has been defined through it since 1983."
+      }
+    },
+    "h": {
+      "latex": "h", "exact": true,
+      "value": "6,626 070 15 · 10⁻³⁴", "unit": "Дж · с", "unitLatex": "\\text{Дж}\\cdot\\text{с}",
+      "ru": {
+        "name": "Постоянная Планка",
+        "why": "Квант действия — наименьшая «порция» произведения энергии на время. Именно её малость объясняет, почему в обычной жизни мы не замечаем квантовых эффектов.",
+        "mnemo": "Размерность Дж·с — это действие. Там, где действие сравнимо с h, классическая физика перестаёт работать.",
+        "note": "Зафиксирована точно с 2019 года; через неё определяется килограмм."
+      },
+      "en": {
+        "name": "Planck constant",
+        "why": "The quantum of action — the smallest portion of energy times time. Its tininess is exactly why quantum effects stay invisible in daily life.",
+        "mnemo": "The unit J·s is action. Where action becomes comparable to h, classical physics stops working.",
+        "note": "Fixed exactly since 2019; the kilogram is defined through it."
+      }
+    },
+    "G": {
+      "latex": "G",
+      "value": "6,674 30 · 10⁻¹¹", "unit": "м³ / (кг · с²)", "unitLatex": "\\text{м}^3/(\\text{кг}\\cdot\\text{с}^2)",
+      "ru": {
+        "name": "Гравитационная постоянная",
+        "why": "Мера силы тяготения. Самая плохо измеренная из фундаментальных констант — гравитация чудовищно слаба, и её трудно отделить от помех.",
+        "mnemo": "Порядок 10⁻¹¹ и объясняет, почему два человека рядом не притягиваются заметно, а целая планета — притягивает."
+      },
+      "en": {
+        "name": "Gravitational constant",
+        "why": "The strength of gravity. The least precisely measured fundamental constant — gravity is extraordinarily weak and hard to isolate from noise.",
+        "mnemo": "The 10⁻¹¹ order explains why two people standing together feel no pull, while a planet does."
+      }
+    },
+    "e": {
+      "latex": "e", "exact": true,
+      "value": "1,602 176 634 · 10⁻¹⁹", "unit": "Кл", "unitLatex": "\\text{Кл}",
+      "ru": {
+        "name": "Элементарный заряд",
+        "why": "Заряд протона (и по модулю — электрона). Любой наблюдаемый заряд кратен ему: заряд квантуется, и это глубокий факт, а не совпадение.",
+        "mnemo": "Электронвольт — это как раз энергия, которую получает заряд e, пройдя разность потенциалов в 1 вольт.",
+        "note": "Зафиксирован точно с 2019 года; через него определяется ампер."
+      },
+      "en": {
+        "name": "Elementary charge",
+        "why": "The proton's charge (and the electron's in magnitude). Every observed charge is a multiple of it: charge is quantised, and that is a deep fact.",
+        "mnemo": "An electronvolt is precisely the energy a charge e gains crossing one volt.",
+        "note": "Fixed exactly since 2019; the ampere is defined through it."
+      }
+    },
+    "m_e": {
+      "latex": "m_e",
+      "value": "9,109 383 7 · 10⁻³¹", "unit": "кг", "unitLatex": "\\text{кг}",
+      "ru": {
+        "name": "Масса электрона",
+        "why": "Примерно в 1836 раз меньше массы протона. Эта лёгкость и делает электрон подвижным носителем тока и участником химии.",
+        "mnemo": "1836 — отношение массы протона к массе электрона, полезно помнить как «почти две тысячи»."
+      },
+      "en": {
+        "name": "Electron mass",
+        "why": "About 1836 times lighter than the proton. That lightness makes the electron the mobile carrier of current and the actor in chemistry.",
+        "mnemo": "1836 — the proton-to-electron mass ratio, worth remembering as «nearly two thousand»."
+      }
+    },
+    "sigma_SB": {
+      "latex": "\\sigma", "derivedFrom": ["k_B", "h", "c"],
+      "value": "5,670 374 · 10⁻⁸", "unit": "Вт / (м² · К⁴)", "unitLatex": "\\text{Вт}/(\\text{м}^2\\cdot\\text{К}^4)",
+      "ru": {
+        "name": "Постоянная Стефана–Больцмана",
+        "why": "Связывает температуру тела с мощностью его излучения. Не фундаментальна: выводится из k_B, h и c — красивый пример того, как константы связаны между собой.",
+        "mnemo": "Четвёртая степень температуры в единицах — вот почему нагрев вдвое даёт рост излучения в шестнадцать раз."
+      },
+      "en": {
+        "name": "Stefan–Boltzmann constant",
+        "why": "Links a body's temperature to its radiated power. Not fundamental: it follows from k_B, h and c — a neat example of constants being interconnected.",
+        "mnemo": "The fourth power of temperature sits right in the units — doubling the temperature multiplies radiation by sixteen."
+      }
+    },
+    "g": {
+      "latex": "g",
+      "value": "9,806 65", "unit": "м / с²", "unitLatex": "\\text{м}/\\text{с}^2",
+      "ru": {
+        "name": "Ускорение свободного падения",
+        "why": "Не мировая константа, а свойство Земли: зависит от широты и высоты. Стандартное значение принято для единообразия расчётов.",
+        "mnemo": "В задачах почти всегда берут 10 м/с² — ошибка около 2%, зато считается в уме. Приём законный, если оговорить."
+      },
+      "en": {
+        "name": "Standard gravity",
+        "why": "Not a universal constant but a property of Earth: it varies with latitude and altitude. The standard value is agreed for consistency.",
+        "mnemo": "Problems almost always use 10 m/s² — a 2% error, but it computes in your head. A legitimate move if stated."
+      }
+    },
+    "c_water": {
+      "latex": "c",
+      "value": "4200", "unit": "Дж / (кг · К)", "unitLatex": "\\text{Дж}/(\\text{кг}\\cdot\\text{К})",
+      "ru": {
+        "name": "Удельная теплоёмкость воды",
+        "why": "Сколько энергии нужно, чтобы нагреть килограмм воды на градус. Аномально велика — у большинства веществ в четыре-пять раз меньше. Поэтому вода и служит теплоносителем.",
+        "mnemo": "Число 4200 легко удержать: почти наше 42 с двумя нулями. Исторически через воду определяли калорию: 1 кал = 4,184 Дж."
+      },
+      "en": {
+        "name": "Specific heat of water",
+        "why": "Energy to heat one kilogram of water by one degree. Anomalously large — four to five times most substances. Hence water as a coolant.",
+        "mnemo": "4200 is easy to hold: almost our 42 with two zeros. Historically the calorie was defined through water: 1 cal = 4.184 J."
+      }
+    },
+    "L_vap": {
+      "latex": "L",
+      "value": "2 260 000", "unit": "Дж / кг", "unitLatex": "\\text{Дж}/\\text{кг}",
+      "ru": {
+        "name": "Удельная теплота парообразования воды",
+        "why": "Энергия на превращение килограмма жидкости в пар без всякого нагрева. Температуры в единицах нет вовсе — при фазовом переходе она не меняется. Рекорд среди обычных жидкостей.",
+        "mnemo": "Держите не число, а отношение: выкипятить примерно в семь раз дороже, чем довести до кипения."
+      },
+      "en": {
+        "name": "Latent heat of vaporisation of water",
+        "why": "Energy to turn a kilogram of liquid into vapour with no heating at all. No temperature appears in the units — it does not change during the transition.",
+        "mnemo": "Hold the ratio, not the number: boiling away costs about seven times more than bringing to a boil."
+      }
+    },
+    "gamma": {
+      "latex": "\\gamma",
+      "value": "1,4 (воздух) · 1,67 (гелий)", "unit": "безразмерная", "unitLatex": "1",
+      "ru": {
+        "name": "Показатель адиабаты",
+        "why": "Отношение теплоёмкостей C_P/C_V. Безразмерна, поскольку это отношение однородных величин. Определяется числом степеней свободы молекулы: γ = (i+2)/i.",
+        "mnemo": "Для воздуха 1,4 — почти корень из двух. Для одноатомных ровно пять третей."
+      },
+      "en": {
+        "name": "Adiabatic index",
+        "why": "The ratio C_P/C_V. Dimensionless, being a ratio of like quantities. Set by the molecule's degrees of freedom: γ = (i+2)/i.",
+        "mnemo": "For air 1.4 — nearly the square root of two. For monatomic gases exactly five thirds."
+      }
+    }
+  }
+}

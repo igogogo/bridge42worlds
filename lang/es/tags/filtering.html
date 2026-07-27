@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#filtración — bridge42worlds</title>
+    <meta name="description" content="Imagine un chorro de agua golpeando una malla filtrante. Solo las gotas de cierto tamaño se deslizan hacia abajo; las demás se rompen y son rechazadas. De manera similar, un filtro digital deja pasar las vibraciones (frecuencias) de un rango seleccionado, atenuando las demás. El algoritmo actúa como un tamiz matemático: multiplica cada frecuencia por un coeficiente de transmisión, que va desde la aprobación total hasta el rechazo absoluto.">
+    <meta property="og:title" content="#filtración — bridge42worlds">
+    <meta property="og:description" content="Imagine un chorro de agua golpeando una malla filtrante. Solo las gotas de cierto tamaño se deslizan hacia abajo; las demás se rompen y son rechazadas. De manera similar, un filtro digital deja pasar las vibraciones (frecuencias) de un rango seleccionado, atenuando las demás. El algoritmo actúa como un tamiz matemático: multiplica cada frecuencia por un coeficiente de transmisión, que va desde la aprobación total hasta el rechazo absoluto.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/tags/filtering.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Etiqueta</div><h1>filtración</h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">La filtración separa lo importante del fondo, como la malla del filtro en una cafetera que deja pasar el líquido y retiene los posos.</p><div class="practical-app"><strong>In practice:</strong> Cancelación de ruido en auriculares, eliminación de artefactos en imágenes de TC, extracción de voz de una grabación.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">Imagine un chorro de agua golpeando una malla filtrante. Solo las gotas de cierto tamaño se deslizan hacia abajo; las demás se rompen y son rechazadas. De manera similar, un filtro digital deja pasar las vibraciones (frecuencias) de un rango seleccionado, atenuando las demás. El algoritmo actúa como un tamiz matemático: multiplica cada frecuencia por un coeficiente de transmisión, que va desde la aprobación total hasta el rechazo absoluto.</div>
+        <div class="section"><h2>History</h2><p>Los filtros simples se conocen desde hace miles de años: la gente filtraba agua a través de una tela. Los métodos matemáticos de procesamiento de señales comenzaron a desarrollarse en el siglo XIX con los trabajos de Jean Fourier.</p></div>
+        <div class="section"><h2>How it works</h2><p>El filtro funciona como un tamiz con agujeros de un tamaño determinado. Los cambios rápidos de la señal (por ejemplo, un crujido) pasan por las frecuencias altas; los cambios suaves, por las bajas. Ajustando el tamaño de los agujeros, se puede dejar pasar solo lo necesario.</p></div>
+        <div class="fun-fact">💡 Los filtros están por todas partes: en los auriculares Bluetooth, la cancelación activa de ruido genera un sonido inverso para atenuar el zumbido del avión. No es un filtro directo, sino uno ingenioso.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">La filtración se asemeja a preparar café. Se vierte agua hirviendo sobre el café molido, pero la bebida final debe ser limpia. La malla retiene las partículas grandes y deja pasar solo el líquido aromático. De igual forma, un filtro de datos descarta el ruido innecesario y conserva la señal útil: la voz del interlocutor, una melodía, una imagen nítida.</div>
+        <div class="section"><h2>History</h2><p>Los filtros simples se conocen desde hace miles de años: la gente filtraba agua a través de una tela. Los métodos matemáticos de procesamiento de señales comenzaron a desarrollarse en el siglo XIX con los trabajos de Jean Fourier.</p></div>
+        <div class="section"><h2>How it works</h2><p>El filtro funciona como un tamiz con agujeros de un tamaño determinado. Los cambios rápidos de la señal (por ejemplo, un crujido) pasan por las frecuencias altas; los cambios suaves, por las bajas. Ajustando el tamaño de los agujeros, se puede dejar pasar solo lo necesario.</p></div>
+        <div class="fun-fact">💡 La cancelación activa de ruido en auriculares utiliza un filtro adaptativo que, a partir del micrófono interior de la copa, genera un «antirruido» con la misma amplitud pero desfasado 180°. El sistema se ajusta constantemente para atenuar el zumbido del motor incluso al cambiar la altitud de vuelo.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">La filtración, en sentido amplio, es el proceso de transformación selectiva de una señal. En el procesamiento de señales, un filtro es un dispositivo o algoritmo que modifica el espectro de la señal de entrada. Un filtro lineal estacionario se describe mediante la convolución de la señal de entrada con la respuesta al impulso, lo que en el dominio de la frecuencia corresponde a la multiplicación de las transformadas de Fourier. Esto permite eliminar bandas interferentes, suavizar el ruido y extraer tendencias. En la práctica se emplean filtros de respuesta finita al impulso (FIR) e infinita (IIR), cada uno con sus compromisos en cuanto a distorsión de fase y complejidad computacional.</div>
+        <div class="section"><h2>History</h2><p>Los fundamentos matemáticos fueron establecidos por Jean-Baptist Joseph Fourier, quien demostró en 1807 que cualquier señal periódica puede descomponerse en una suma de sinusoides. La idea de la descomposición espectral se convirtió en una piedra angular. En la década de 1930, con el advenimiento de la radiotecnia, ingenieros como Harry Nyquist y Claude Shannon formalizaron los criterios de muestreo y reconstrucción de señales. Con el auge de las computadoras digitales en la segunda mitad del siglo XX, los métodos de filtración se volvieron puramente computacionales, dando lugar a potentes algoritmos como la transformada rápida de Fourier (Cooley y Tukey, 1965).</p></div>
+        <div class="section"><h2>How it works</h2><p>Principio de convolución: la señal de salida y(t) se obtiene como la suma ponderada de los valores pasados de la entrada x(τ), donde los pesos vienen dados por la respuesta al impulso h(t). En el dominio de la frecuencia, esto equivale al producto de los espectros complejos Y(f)=X(f)·H(f), siendo H(f) la respuesta en frecuencia del filtro. Al ajustar la forma de H(f), se atenúan o amplifican las frecuencias deseadas. Por ejemplo, un filtro pasabajos tiene H(f)≈1 para f<f_c y H(f)≈0 para f>f_c. Físicamente, en electrónica analógica esto se implementa con circuitos RC; en digital, mediante ecuaciones en diferencias.</p></div>
+        <div class="formula"><div class="formula-render">y(t) = \int_{-\infty}^{\infty} h(\tau) x(t - \tau) d\tau</div><div class="formula-meaning">y(t) es la señal de salida; x(t) es la señal de entrada; h(t) es la respuesta al impulso del filtro; τ es la variable de integración, tiempo de retardo.</div></div><div class="formula"><div class="formula-render">Y(f) = H(f) \cdot X(f)</div><div class="formula-meaning">Y(f) es el espectro complejo de salida; H(f) es la respuesta en frecuencia del filtro; X(f) es el espectro complejo de entrada; f es la frecuencia.</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Filtración adaptativa de señales no estacionarias con estadística desconocida; Deconvolución ciega: recuperación de la señal original sin conocer la respuesta al impulso del medio; Filtración no lineal para combatir interferencias impulsivas y ruido no gaussiano; Filtración de señales de muy alta resolución en tiempo real con baja latencia</p><p class="fact">💡 La cancelación activa de ruido en auriculares utiliza un filtro adaptativo que, a partir del micrófono interior de la copa, genera un «antirruido» con la misma amplitud pero desfasado 180°. El sistema se ajusta constantemente para atenuar el zumbido del motor incluso al cambiar la altitud de vuelo.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="t:filtering"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="filtering_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="filtering" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="filtering_es_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related</div><a href="/lang/es/tags/digital_image_processing.html" class="side-tag" data-tag="digital_image_processing">procesamiento digital de imágenes</a><a href="/lang/es/tags/electromagnetic_compatibility.html" class="side-tag" data-tag="electromagnetic_compatibility">compatibilidad electromagnética</a><a href="/lang/es/tags/fourier_analysis.html" class="side-tag" data-tag="fourier_analysis">análisis de Fourier</a><a href="/lang/es/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">procesamiento de señales</a><a href="/lang/es/tags/spectral_analysis.html" class="side-tag" data-tag="spectral_analysis">análisis espectral</a><a href="/lang/es/tags/wavelet_transform.html" class="side-tag" data-tag="wavelet_transform">transformada wavelet</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="filtering"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('filtering', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

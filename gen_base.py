@@ -68,6 +68,23 @@ LATEST_INDEX_N = 60
 VERSION_FALLBACK = {"popular": ["popular", "simple", "advanced"],
                     "simple": ["simple", "advanced"], "advanced": ["advanced"],
                     "mini": ["mini"]}
+
+# Иконки уровня изложения (решение владельца 2026-07-27: «кнопки в виде иконок, а не ползунок»).
+# Росток — самое начало объяснения; раскрытая книга — связный рассказ; лупа — разбор деталей.
+_SVG = ('<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{}</svg>')
+VERSION_ICONS = {
+    "simple": _SVG.format('<path d="M12 20v-7"/>'
+                          '<path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/>'
+                          '<path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/>'),
+    "popular": _SVG.format('<path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/>'
+                           '<path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/>'
+                           '<path d="M12 6.5v12"/>'),
+    "advanced": _SVG.format('<circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/>'
+                            '<path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/>'),
+    "mini": _SVG.format('<circle cx="12" cy="12" r="7.5"/><path d="M12 8.5v4"/><path d="M12 15.5h.01"/>'),
+}
+
 VERSION_LABELS = {
     "popular":  {"ru": "Популярно", "en": "Popular", "es": "Popular", "zh": "科普", "fr": "Populaire", "ar": "مبسّط"},
     "simple":   {"ru": "Просто", "en": "Simple", "es": "Simple", "zh": "简明", "fr": "Simple", "ar": "بسيط"},
@@ -337,3 +354,43 @@ def gen_tags_side(tags, lang):
 def load_scientists_list():
     p = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
     return "\n".join(json.loads(p.read_text()).keys()) if p.exists() else ""
+
+
+# ── Переключатель уровня ИКОНКАМИ (Фаза 4) ───────────────────────────────────
+# Порядок слева направо: от простого к подробному — так читатель видит «лестницу».
+LEVEL_ORDER = ["simple", "popular", "advanced"]
+
+
+def _level_btn(v, lang, active, href=None, compact=False):
+    label = attr_safe(_slider_label(v, lang))
+    hint = attr_safe(_slider_hint(v, lang))
+    cls = "lv-btn" + (" active" if active else "") + (" lv-compact" if compact else "")
+    inner = VERSION_ICONS.get(v, "") + ("" if compact else f'<span class="lv-t">{label}</span>')
+    if href:
+        return f'<a class="{cls}" data-version="{v}" href="{href}" title="{label} — {hint}">{inner}</a>'
+    return (f'<button type="button" class="{cls}" data-version="{v}" '
+            f'title="{label} — {hint}">{inner}</button>')
+
+
+def level_switch_links(lang, current, date_str, aid, compact=False):
+    """Для страницы статьи: ссылки на файлы уровней (работает и без JS)."""
+    btns = "".join(_level_btn(v, lang, v == current,
+                              href=f"/{LANG_DIR}/{lang}/archive/{date_str}/{aid}/{VERSION_FILES[v]}",
+                              compact=compact) for v in LEVEL_ORDER)
+    return f'<div class="lv-switch{" lv-switch-compact" if compact else ""}">{btns}</div>'
+
+
+def level_switch_spans(lang, current="popular", compact=False):
+    """Для лент и справочников: кнопки, уровень переключает JS и запоминает его."""
+    btns = "".join(_level_btn(v, lang, v == current, compact=compact) for v in LEVEL_ORDER)
+    return f'<div class="lv-switch{" lv-switch-compact" if compact else ""}">{btns}</div>'
+
+
+def mini_header_html(mini_text, lang):
+    """Карточка «коротко» — шапка страницы (Фаза 4). Пусто, если текста нет."""
+    if not mini_text:
+        return ""
+    label = {"ru": "коротко · 20 секунд", "en": "in short · 20 seconds",
+             "es": "en breve · 20 segundos", "ar": "باختصار · 20 ثانية"}.get(lang, "in short")
+    return (f'<div class="mini-head"><div class="mini-head-l">{safe(label)}</div>'
+            f'<p>{safe(mini_text)}</p></div>')

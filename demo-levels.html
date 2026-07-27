@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Демо 2: иконки уровней, дубль внизу, справочники — bridge42worlds</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+ .d-wrap { max-width: 620px; margin: 0 auto; padding: 16px 16px 70px; }
+ .d-note { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+   padding: 12px 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-bottom: 24px; }
+ .d-card { border-top: 1px solid var(--hair); padding-top: 20px; margin-top: 28px; }
+ .d-kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ochre); }
+ .d-h { font-family: var(--serif); font-size: 21px; line-height: 1.25; margin: 6px 0 12px; }
+ .d-img-wrap { position: relative; border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+ .d-img-wrap img { width: 100%; display: block; }
+ .d-img-wrap .d-sw { position: absolute; left: 8px; bottom: 8px; margin: 0;
+   background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(4px);
+   border-radius: 999px; padding: 3px; }
+ .d-mini { background: color-mix(in srgb, var(--cyan) 7%, var(--surface));
+   border: 1px solid color-mix(in srgb, var(--cyan) 26%, var(--hair)); border-radius: var(--radius);
+   padding: 13px 15px; margin-bottom: 14px; }
+ .d-mini-l { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+   color: var(--cyan); margin-bottom: 5px; }
+ .d-mini p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink); }
+ .d-sw { display: flex; gap: 6px; margin: 0 0 14px; }
+ .d-sw-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+   min-height: 42px; padding: 0 10px; border: 1px solid var(--hair); background: none; border-radius: 999px;
+   font-family: var(--mono); font-size: 12.5px; color: var(--soft); cursor: pointer;
+   transition: color .15s, border-color .15s, background .15s; }
+ .d-sw-btn:hover { color: var(--link); border-color: var(--link); }
+ .d-sw-btn.active { color: var(--link); border-color: var(--link); background: color-mix(in srgb, var(--cyan) 12%, transparent); }
+ .d-sw-ic svg { width: 17px; height: 17px; display: block; }
+ .d-sw-compact .d-sw-btn { min-height: 34px; flex: none; padding: 0 9px; }
+ .d-sw-compact .d-sw-t { display: none; }
+ .d-body p { font-size: 15.5px; line-height: 1.75; }
+ .d-bottom { display: flex; align-items: center; gap: 10px; margin-top: 16px;
+   padding-top: 12px; border-top: 1px dashed var(--hair); }
+ .d-bottom-l { font-family: var(--mono); font-size: 11.5px; color: var(--soft); white-space: nowrap; }
+ .d-bottom .d-sw { margin: 0; }
+ .d-meta { font-family: var(--mono); font-size: 11.5px; color: var(--soft); margin-top: 10px; }
+ .d-feed { display: flex; gap: 12px; align-items: center; text-decoration: none;
+   border: 1px solid var(--hair); border-radius: var(--radius); padding: 10px; margin-bottom: 10px; }
+ .d-feed img { width: 84px; height: 60px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
+ .d-feed-t { font-family: var(--serif); font-size: 15px; color: var(--ink); line-height: 1.3; }
+ .d-feed-m { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+</style></head>
+<body>
+<div class="top-bar"><a href="/lang/ru/index.html" class="logo">bridge42worlds</a></div>
+<div class="d-wrap">
+ <h1 style="font-family:var(--serif);font-size:24px;margin:10px 0 12px">Уровни: иконки, дубль внизу, справочники</h1>
+ <div class="d-note">
+  <b>Иконки вместо слайдера.</b> Росток — <b>Просто</b>, книга — <b>История</b>, лупа — <b>Разбор</b>.
+  Наведи курсор: подсказка объясняет, чем уровни отличаются.<br><br>
+  <b>Три места переключения:</b> на обложке (компактно), под карточкой «коротко» и
+  <b>внизу текста</b> — чтобы не возвращаться мышью наверх.<br><br>
+  <b>Единая логика для всего сайта:</b> ниже те же три уровня на теге и законе. Уровень
+  запоминается и работает везде одинаково, а карточка «коротко» всегда сверху.<br><br>
+  <b>Лента:</b> в самом низу — карточки статей; они ведут сразу на выбранный уровень.
+ </div>
+ 
+<article class="d-card">
+  <div class="d-img-wrap">
+    <img src="/lang/ru/archive/2026-01-10/2601.06577/ai.webp" alt="" loading="lazy">
+    <!-- место сверху картинки: переключатель прямо на обложке -->
+    <div class="d-sw d-sw-compact" data-g="a0"><button class="d-sw-btn" data-lv="simple" data-g="a0" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a0" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a0" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  </div>
+  <h2 class="d-h">A binary merger product as the direct progenitor of a Type II-P supernova</h2>
+  <div class="d-mini"><div class="d-mini-l">коротко · 20 секунд</div><p>Астрономы изучили взрыв звезды SN 2018gj. Оказалось, что огромная холодная звезда на последнем этапе жизни, которая взорвалась, имела необычно короткое свечение после взрыва — всего 70 дней вместо обычных 100. Она находилась в окружении очень старых звёзд. Раньше считалось, что такие взрывы происходят только от одиночных звёзд. Но компьютерное моделирование показало: эта звезда родилась после слияния двух тесных звёзд. Её аномально тонкий внешний слой, богатый водородом, и возраст окружения выдали двойное происхождение. Вероятность такого сценария превышает 99%. Теперь по длительности свечения можно находить и другие звёзды с двойным прошлым. Это открытие меняет представления о том, как умирают массивные звёзды.</p></div>
+  <div class="d-sw" data-g="a0"><button class="d-sw-btn" data-lv="simple" data-g="a0" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a0" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a0" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  <div class="d-body"><div class="d-lv" data-g="a0" data-lv="simple" hidden><p>70 дней — столько длилось прощальное сияние звезды SN 2018gj после её гибели. Обычно такие взрывы светят около ста дней. Эта звезда явно что-то скрывала.
+
+Снимки с телескопа «Хаббл» показали: перед вспышкой это был красный сверхгигант — огромная холодная звезда на излёте жизни. Анализ света ([tag:spectroscopy]спектроскопия[/tag] — разложение на цвета) и точное измерение яркости ([tag:photometry]фотометрия[/tag]) выявили две странности. Водородная оболочка оказалась тонкой. А её [tag:galaxy]галактика[/tag]-хозяйка была старой: [tag:star_formation]новые звёзды[/tag] не рождались 40 миллионов лет, и [tag:metallicity]тяжёлых элементов[/tag] накопилось мало.
+
+[callout]Одиночная звезда живёт 30 миллионов лет. А эта ждала втрое дольше — словно вела двойную жизнь.[/callout]
+
+Разгадку дало [tag:numerical_simulation]численное моделирование[/tag] — компьютерные симуляции на основе законов [scientist:Fritz Zwicky]Фрица Цвикки[/scientist], [scientist:Cecilia Payne-Gaposchkin]Сесилии Пейн-Гапошкиной[/scientist] и [scientist:Hans Bethe]Ханса Бете[/scientist]. Сотни сценариев показали: звезда родила…</p></div><div class="d-lv" data-g="a0" data-lv="popular"><p>70 дней. Именно столько продлилось плато — ровное свечение после взрыва — у сверхновой [tag:supernova]SN 2018gj[/tag]. Обычно такие длятся сотню дней и больше. Короткое плато стало первой трещиной в маске звезды.
+
+Снимки телескопа [tag:hubble]«Хаббл»[/tag] нашли прародителя: красный сверхгигант. Огромный. Холодный. На последнем дыхании. [tag:spectroscopy]Спектроскопия[/tag] измерила температуру — 3470 К. [tag:photometry]Фотометрия[/tag] — светимость в 100 тысяч солнц. Гелиевое ядро (там, где водород давно выгорел) доросло до 4,6 массы Солнца. Но странности копились. Водородная оболочка — три с половиной солнечных массы. У обычных II-P вдвое толще. И возраст окружения: более 40 миллионов лет. Одиночная звезда такой массы живет 30 миллионов — значит, эта задержалась.
+
+[callout]Маска одиночки треснула: тонкая оболочка и древний фон выдавали ненормально долгую жизнь. Звезда словно задержалась на сцене, чтобы шепнуть свою тайну.[/callout]
+
+Численное моделирование кодом POSYDON перебрало тысячи сценариев. Байесовский анализ отбросил одиночную эволюцию — вероятность почти ноль. А для двойно…</p></div><div class="d-lv" data-g="a0" data-lv="advanced" hidden><p>Астрономы нашли красный сверхгигант-предшественник сверхновой SN 2018gj, который на первый взгляд ничем не отличался от других. Но необычно старая звёздная среда и аномально короткое плато выдали его тайну — звезда возникла в результате слияния двух светил. Моделирование эволюции двойных систем подтвердило, что только такая «звезда с секретом» объясняет все наблюдения. Это первое прямое доказательство, что распространённые сверхновые II-P могут иметь двойное происхождение, и открывает новый способ поиска скрытой популяции подобных объектов.…</p></div></div>
+  <div class="d-bottom">
+    <span class="d-bottom-l">читать иначе:</span>
+    <div class="d-sw d-sw-compact" data-g="a0"><button class="d-sw-btn" data-lv="simple" data-g="a0" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a0" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a0" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  </div>
+  <div class="d-meta">метафора: <b>звезда с секретом</b> · <a href="/lang/ru/archive/2026-01-10/2601.06577/index.html">настоящая страница</a></div>
+</article>
+<article class="d-card">
+  <div class="d-img-wrap">
+    <img src="/lang/ru/archive/2026-01-10/2601.06498/ai.webp" alt="" loading="lazy">
+    <!-- место сверху картинки: переключатель прямо на обложке -->
+    <div class="d-sw d-sw-compact" data-g="a1"><button class="d-sw-btn" data-lv="simple" data-g="a1" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a1" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a1" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  </div>
+  <h2 class="d-h">Spec-o3: A Tool-Augmented Vision-Language Agent for Rare Celestial Object Candidate Vetting via Automated Spec</h2>
+  <div class="d-mini"><div class="d-mini-l">коротко · 20 секунд</div><p>Астрономы создали цифровую лупу по имени Spec-o3. Она вглядывается в радужные полоски света от звёзд, выхватывает мельчайшие детали и за доли секунды ставит диагноз. Узнаёт и сверхплотные остатки, и двойные системы с перетекающим газом, и гигантов с необычным составом. Сначала лупу учили на примерах экспертов, потом она тренировалась сама и стала в 50 раз быстрее человека. Каждый вывод она объясняет, так что астроном может проверить. Теперь редкие объекты находят быстрее, а мы лучше понимаем жизнь и смерть звёзд.</p></div>
+  <div class="d-sw" data-g="a1"><button class="d-sw-btn" data-lv="simple" data-g="a1" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a1" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a1" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  <div class="d-body"><div class="d-lv" data-g="a1" data-lv="simple" hidden><p>Миллион радужных полосок в месяц — столько отпечатков света присылают современные телескопы. Каждая полоска — [tag:spectroscopy]штрихкод звезды[/tag]: тёмные линии показывают, из каких веществ она состоит. Когда-то по таким узорам [scientist:Cecilia Payne-Gaposchkin]Сесилия Пейн-Гапошкина[/scientist] раскрыла водородную природу звёзд, а [scientist:Subrahmanyan Chandrasekhar]Субраманьян Чандрасекар[/scientist] вывел предел массы для [tag:white_dwarf]сверхплотных остатков[/tag]. Сегодня искать редкие штрихкоды вручную — всё равно что перебирать песчинки на пляже.
+
+Spec-o3 — [tag:machine_learning]обученная программа[/tag] с цифровой лупой, заточенная замечать аномалии. Она рассматривает [tag:numerical_simulation]оцифрованный спектр[/tag] целиком, а затем пристально вглядывается в подозрительные области — как астроном, который переводит взгляд от общей картины к деталям. Размытость линий выдаёт [tag:white_dwarf]белый карлик[/tag], широкие крылья — [tag:accretion_disk]диск вокруг двойной звезды[/tag], особый узор полос — [tag:metallicity]звезду с редким составом[/tag]. Но самое неожиданно…</p></div><div class="d-lv" data-g="a1" data-lv="popular"><p>Свет звезды растянут в радужную полосу. Тёмные линии — шрамы от поглощённых элементов, яркие пики — следы горячего газа. Так выглядит спектр, главная улика в руках астронома. [scientist:Cecilia Payne-Gaposchkin]Сесилия Пейн-Гапошкина[/scientist] первой прочла, что из водорода состоят почти все звёзды. [scientist:Subrahmanyan Chandrasekhar]Субраманьян Чандрасекар[/scientist] разглядел предел: [tag:white_dwarf]белый карлик[/tag] тяжелее 1,4 солнечных масс неминуемо схлопнется. Сегодня телескопы выдают миллионы спектров. Искать в них редкие объекты — всё равно что выискивать иголку в стоге сена.
+
+Spec-o3 подходит к стогу с цифровой лупой. Это [tag:machine_learning]ИИ-агент[/tag] на основе модели Qwen2.5-VL, который увеличивает любой участок [tag:spectroscopy]спектра[/tag] через [tag:numerical_simulation]интерактивную визуализацию[/tag]. Он не просто классифицирует — он рассуждает вслух. Направляет лупу на подозрительные длины волн, анализирует увиденное и записывает каждый шаг. Так рождается траектория инспекции — полный логический путь от вопроса к диагнозу.
+
+Обучение шло в два этапа. …</p></div><div class="d-lv" data-g="a1" data-lv="advanced" hidden><p>При масштабных спектроскопических обзорах (LAMOST, SDSS, DESI) поиск редких объектов — катаклизмических переменных, углеродных звёзд, белых карликов — упирается в трудоёмкую ручную проверку тысяч кандидатов. Spec-o3 — это агент на базе визуально-языковой модели, обученный имитировать работу эксперта: он строит цепочку рассуждений, чередуя анализ текста и увеличенных фрагментов спектра. Двухстадийное обучение (холодный старт на экспертных траекториях и последующее обучение с подкреплением) позволило достичь рекордной точности: макро-F1 вырос с 28% до 76,5% на тестах. Агент обобщается на новые обзоры и типы объектов без дообучения, а скорость анализа в 50 раз выше, чем у человека, что делает его готовым решением для потоковой обработки данных будущих обзоров.…</p></div></div>
+  <div class="d-bottom">
+    <span class="d-bottom-l">читать иначе:</span>
+    <div class="d-sw d-sw-compact" data-g="a1"><button class="d-sw-btn" data-lv="simple" data-g="a1" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="a1" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="a1" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  </div>
+  <div class="d-meta">метафора: <b>цифровой эксперт с лупой</b> · <a href="/lang/ru/archive/2026-01-10/2601.06498/index.html">настоящая страница</a></div>
+</article>
+ <h2 style="font-family:var(--serif);font-size:20px;margin:38px 0 0">Те же уровни в справочниках</h2>
+ 
+<article class="d-card">
+  <div class="d-kind">Тег</div>
+  <h2 class="d-h">чёрная дыра</h2>
+  <div class="d-mini"><div class="d-mini-l">коротко · что это и зачем</div><p>Чёрная дыра — это объект, где гигантская масса втиснута в крошечный объём. Притяжение там настолько мощное, что свет, попавший внутрь, навсегда остаётся в ловушке. Воображаемая граница — горизонт событий — действует как край водопада: стоит пересечь её, и возврата нет.</p></div>
+  <div class="d-sw" data-g="t1"><button class="d-sw-btn" data-lv="simple" data-g="t1" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="t1" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="t1" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  <div class="d-body"><div class="d-lv" data-g="t1" data-lv="simple" hidden><p>Чёрная дыра — это объект, где гигантская масса втиснута в крошечный объём. Притяжение там настолько мощное, что свет, попавший внутрь, навсегда остаётся в ловушке. Воображаемая граница — горизонт событий — действует как край водопада: стоит пересечь её, и возврата нет.…</p></div><div class="d-lv" data-g="t1" data-lv="popular"><p>Чёрная дыра — объект, предсказанный общей теорией относительности. В её центре находится сингулярность — область с бесконечной плотностью, скрытая горизонтом событий. Пересечь горизонт можно лишь в одном направлении — внутрь. Гравитация столь сильна, что время для стороннего наблюдателя у горизонта практически останавливается.…</p></div><div class="d-lv" data-g="t1" data-lv="advanced" hidden><p>Когда массивная звезда исчерпывает ядерное топливо, её ядро сжимается под действием собственной гравитации. Если масса остатка превышает пару солнечных, коллапс не остановить — рождается чёрная дыра. Внутри всё вещество устремляется в точку бесконечной плотности — сингулярность.…</p></div></div>
+</article>
+ 
+<article class="d-card">
+  <div class="d-kind">Закон</div>
+  <h2 class="d-h">закон всемирного тяготения</h2>
+  <div class="d-mini"><div class="d-mini-l">коротко · что это и зачем</div><p>Все тела, обладающие массой, притягиваются друг к другу. Притяжение сильнее, если тела массивнее, и резко ослабевает при увеличении расстояния. Удвоение массы удваивает силу, а удвоение расстояния уменьшает её вчетверо. Это правило едино для всего — от падающей чашки до далёких галактик.</p></div>
+  <div class="d-sw" data-g="l1"><button class="d-sw-btn" data-lv="simple" data-g="l1" title="как это работает"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></span><span class="d-sw-t">Просто</span></button><button class="d-sw-btn active" data-lv="popular" data-g="l1" title="почему важно и куда ведёт"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></span><span class="d-sw-t">История</span></button><button class="d-sw-btn" data-lv="advanced" data-g="l1" title="как сделали и насколько надёжно"><span class="d-sw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></span><span class="d-sw-t">Разбор</span></button></div>
+  <div class="d-body"><div class="d-lv" data-g="l1" data-lv="simple" hidden><p>Все тела, обладающие массой, притягиваются друг к другу. Притяжение сильнее, если тела массивнее, и резко ослабевает при увеличении расстояния. Удвоение массы удваивает силу, а удвоение расстояния уменьшает её вчетверо. Это правило едино для всего — от падающей чашки до далёких галактик.…</p></div><div class="d-lv" data-g="l1" data-lv="popular"><p>Исаак Ньютон первым понял: сила, заставляющая яблоко падать, — та же, что удерживает Луну на орбите. Это был прорыв, объединивший физику неба и земли. Он сформулировал простой и всеобщий закон: любые две частицы притягиваются друг к другу с силой, прямо пропорциональной произведению их масс и обратно пропорциональной квадрату расстояния между ними.…</p></div><div class="d-lv" data-g="l1" data-lv="advanced" hidden><p>нет текста…</p></div></div>
+</article>
+ <h2 style="font-family:var(--serif);font-size:20px;margin:38px 0 12px">Лента: карточка ведёт на выбранный уровень</h2>
+ 
+<a class="d-feed" href="/lang/ru/archive/2026-01-10/2601.06577/index.html" data-base="/lang/ru/archive/2026-01-10/2601.06577/">
+  <img src="/lang/ru/archive/2026-01-10/2601.06577/ai.webp" alt="" loading="lazy">
+  <div><div class="d-feed-t">A binary merger product as the direct progenitor of a Type II-P supern</div>
+  <div class="d-feed-m">Астрономы изучили взрыв звезды SN 2018gj. Оказалось, что огромная холодная звезда на последнем этапе жизни, ко…</div></div>
+</a>
+<a class="d-feed" href="/lang/ru/archive/2026-01-10/2601.06498/index.html" data-base="/lang/ru/archive/2026-01-10/2601.06498/">
+  <img src="/lang/ru/archive/2026-01-10/2601.06498/ai.webp" alt="" loading="lazy">
+  <div><div class="d-feed-t">Spec-o3: A Tool-Augmented Vision-Language Agent for Rare Celestial Obj</div>
+  <div class="d-feed-m">Астрономы создали цифровую лупу по имени Spec-o3. Она вглядывается в радужные полоски света от звёзд, выхватыв…</div></div>
+</a>
+</div>
+<script>
+var FILE = {simple: 'simple.html', popular: 'index.html', advanced: 'advanced.html'};
+var current = 'popular';
+function apply(lv) {
+  current = lv;
+  document.querySelectorAll('.d-sw-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.lv === lv); });
+  document.querySelectorAll('.d-lv').forEach(function (l) { l.hidden = l.dataset.lv !== lv; });
+  // карточки ленты ведут на выбранный уровень
+  document.querySelectorAll('.d-feed').forEach(function (a) { a.href = a.dataset.base + FILE[lv]; });
+}
+document.querySelectorAll('.d-sw-btn').forEach(function (b) {
+  b.addEventListener('click', function () { apply(b.dataset.lv); });
+});
+</script>
+</body></html>

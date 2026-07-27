@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#elliptic curve — bridge42worlds</title>
+    <meta name="description" content="An elliptic curve is defined by the equation y² = x³ + ax + b. Its graph is a smooth, symmetric curve without self-intersections. On the set of its points (including the point at infinity) one can define an addition operation, turning the curve into a commutative group. This means addition follows the same laws as ordinary numbers: there is a 'zero', an inverse element, and associativity. But the geometry of addition is unusual: to add two points, we draw a secant line through them, find the third intersection with the curve, and reflect it across the x-axis. In cryptography (e.g., the Diffie–Hellman protocol on elliptic curves), security relies on the difficulty of the discrete logarithm problem: given an initial point P and an endpoint Q = n·P, computing the number n is virtually impossible.">
+    <meta property="og:title" content="#elliptic curve — bridge42worlds">
+    <meta property="og:description" content="An elliptic curve is defined by the equation y² = x³ + ax + b. Its graph is a smooth, symmetric curve without self-intersections. On the set of its points (including the point at infinity) one can define an addition operation, turning the curve into a commutative group. This means addition follows the same laws as ordinary numbers: there is a 'zero', an inverse element, and associativity. But the geometry of addition is unusual: to add two points, we draw a secant line through them, find the third intersection with the curve, and reflect it across the x-axis. In cryptography (e.g., the Diffie–Hellman protocol on elliptic curves), security relies on the difficulty of the discrete logarithm problem: given an initial point P and an endpoint Q = n·P, computing the number n is virtually impossible.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/tags/elliptic_curve.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Tag</div><h1>elliptic curve</h1><button class="share-inline" title="Share" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">An elliptic curve is like a smooth, curved lock whose latch points combine to form a secret combination. It’s what keeps your online banking safe.</p><div class="practical-app"><strong>In practice:</strong> HTTPS protocols, cryptocurrency wallets, digital signatures—anywhere a fast and secure digital lock is needed.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">An elliptic curve is defined by the equation y² = x³ + ax + b. Its graph is a smooth, symmetric curve without self-intersections. On the set of its points (including the point at infinity) one can define an addition operation, turning the curve into a commutative group. This means addition follows the same laws as ordinary numbers: there is a 'zero', an inverse element, and associativity. But the geometry of addition is unusual: to add two points, we draw a secant line through them, find the third intersection with the curve, and reflect it across the x-axis. In cryptography (e.g., the Diffie–Hellman protocol on elliptic curves), security relies on the difficulty of the discrete logarithm problem: given an initial point P and an endpoint Q = n·P, computing the number n is virtually impossible.</div>
+        <div class="section"><h2>History</h2><p>First noticed by 19th-century mathematicians, these 'locks' only saw their true potential for secrecy in 1985, when digital signatures on them were invented.</p></div>
+        <div class="section"><h2>How it works</h2><p>To lock a message, you take a public generator point (like a well-known lock base) and a secret multiplier. By repeatedly 'turning' the point, you derive a key. An attacker would need to guess the multiplier—like trying an astronomical number of combinations by feel.</p></div>
+        <div class="fun-fact">💡 Perhaps the most famous elliptic curve is the one connected to Fermat's equation. Andrew Wiles proved Fermat's Last Theorem by establishing a link between elliptic curves and modular forms.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Imagine a lock with many positions, but shaped as a smooth curve. An elliptic curve is defined by a mysterious equation, but the key is that its points can be 'added': draw a line through two points and you get a third. It's like trying combinations in a multi-digit code, only instead of numbers you have geometric steps.</div>
+        <div class="section"><h2>History</h2><p>First noticed by 19th-century mathematicians, these 'locks' only saw their true potential for secrecy in 1985, when digital signatures on them were invented.</p></div>
+        <div class="section"><h2>How it works</h2><p>To lock a message, you take a public generator point (like a well-known lock base) and a secret multiplier. By repeatedly 'turning' the point, you derive a key. An attacker would need to guess the multiplier—like trying an astronomical number of combinations by feel.</p></div>
+        <div class="fun-fact">💡 The largest known group of rational points on an elliptic curve has rank at least 28, found by N. Elkies in 2006.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">An elliptic curve over a field K is a smooth projective curve of genus 1 with a distinguished point (usually O, the point at infinity). Such a curve is given by a Weierstrass equation: y² = x³ + ax + b, with 4a³ + 27b² ≠ 0. Over the real numbers, the graph consists of one or two components. The key property is the ability to define a group operation on the set of curve points with O as the identity. Geometrically, addition P + Q is formed by drawing a line through P and Q (tangent if P=Q), finding its third intersection R with the curve, and reflecting that point across the x-axis to obtain R' = -R. This group is finite over a finite field and infinite over the rationals, and its rank is a deep arithmetic invariant. Elliptic curves have become central to the proof of Fermat's Last Theorem, modern algebraic geometry, and cryptography.</div>
+        <div class="section"><h2>History</h2><p>The study of elliptic curves began with elliptic integrals in the works of Abel and Jacobi in the first half of the 19th century. The term 'elliptic' arose from their connection to computing the arc length of an ellipse. Henri Poincaré contributed to the study of algebraic curves and their groups. In 1985, Neal Koblitz and Victor Miller independently proposed using elliptic curves in cryptography, leading to the widespread ECC systems used today. The link to modular forms, established by Wiles and Taylor, resolved Fermat's Last Theorem.</p></div>
+        <div class="section"><h2>How it works</h2><p>The group law on an elliptic curve forms an abelian group. For a curve over a finite field F_p, this group has order about p+1, and the difficulty of the discrete logarithm problem in this group underpins cryptographic security. In protocols like ECDSA, a message is signed using a secret key—a multiplier n—and verified with the public key Q = n·P. Computing n from Q and P is the ECDLP, for which no subexponential algorithms are known in general. Additionally, elliptic curves over the rationals carry a rich structure: by the Mordell–Weil theorem the group of rational points is finitely generated, and its rank and regulator are linked to the L-function of the curve via the Birch and Swinnerton-Dyer conjecture. Thus, the mathematical lock of a smooth curve guards our digital borders.</p></div>
+        <div class="formula"><div class="formula-render">y^2 = x^3 + a x + b</div><div class="formula-meaning">y and x are coordinates of a point on the curve, a and b are coefficients determining the curve&#x27;s shape</div></div><div class="formula"><div class="formula-render">\Delta = -16(4a^3 + 27b^2) \neq 0</div><div class="formula-meaning">Δ is the discriminant; if Δ ≠ 0, the curve has no singularities (is smooth)</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Birch and Swinnerton-Dyer conjecture on the link between the rank of an elliptic curve and the behavior of its L-function; Constructing elliptic curves with a prescribed rank; Quantum attacks on ECDLP (Shor's algorithm)—the need to transition to post-quantum cryptography</p><p class="fact">💡 The largest known group of rational points on an elliptic curve has rank at least 28, found by N. Elkies in 2006.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div>
+<div class="mini-graph" data-node="t:elliptic_curve"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="elliptic_curve_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="elliptic_curve" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="elliptic_curve_en_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Scientists</div><a href="/lang/en/scientists/Henri_Poincaré.html" class="side-sci" data-scientist="Henri Poincaré">Henri Poincaré</a><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/group.html" class="side-tag" data-tag="group">group</a><a href="/lang/en/tags/manifold.html" class="side-tag" data-tag="manifold">manifold</a><a href="/lang/en/tags/modular_form.html" class="side-tag" data-tag="modular_form">modular form</a><a href="/lang/en/tags/topology.html" class="side-tag" data-tag="topology">topology</a><a href="/lang/en/tags/zeta_function.html" class="side-tag" data-tag="zeta_function">zeta function</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="elliptic_curve"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('elliptic_curve', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

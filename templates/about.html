@@ -115,13 +115,16 @@
   }
   /* Топ-навигация сайта (самодостаточная, в токенах гида; паттерн как на сайте: main + ☰) */
   .topnav { display: flex; align-items: center; gap: 15px; margin: 0 0 22px; font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
-  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; margin-inline-end: auto; }
+  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; }
+  /* как в общей шапке сайта: логотип, сразу за ним ☰, остальное — вправо (юзер 2026-07-25) */
+  .topnav-more { margin-inline-start: 2px; }
+  .topnav > .langs, .topnav > .topnav-right { margin-inline-start: auto; }
   .topnav > a { color: var(--muted); text-decoration: none; transition: color .16s; }
   .topnav > a:hover { color: var(--cyan); }
   .topnav-more { position: relative; }
   .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 9px; border-radius: 8px; transition: color .16s, background .16s; }
   .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--cyan); background: var(--card); }
-  .topnav-panel { position: absolute; inset-inline-end: 0; top: 132%; display: none; flex-direction: column; gap: 2px; min-width: 158px;
+  .topnav-panel { position: absolute; inset-inline-start: 0; top: 132%;  /* ☰ теперь слева — раскрываем панель вправо, чтобы не уходила за экран */ display: none; flex-direction: column; gap: 2px; min-width: 158px;
     background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 8px; box-shadow: 0 18px 40px -20px rgba(0,0,0,.4); z-index: 30; }
   .topnav-more.open .topnav-panel { display: flex; }
   .topnav-panel a { padding: 6px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; transition: color .16s, background .16s; }
@@ -137,10 +140,10 @@
 
   <div class="topnav">
     <a class="topnav-logo" href="/lang/$lang/index.html">bridge42worlds</a>
-    <a href="/lang/$lang/index.html">main</a>
     <span class="topnav-more">
       <button type="button" class="topnav-burger" aria-label="Menu" aria-expanded="false">☰</button>
       <span class="topnav-panel">
+        <a href="/lang/$lang/index.html">main</a>
         <a href="/lang/$lang/tags/">tags</a>
         <a href="/lang/$lang/laws/">laws</a>
         <a href="/lang/$lang/scientists/">scientists</a>
@@ -226,6 +229,7 @@
       <div class="row"><span class="lbl">authors</span><p class="txt">$map_authors</p></div>
       <div class="row"><span class="lbl">graph</span><p class="txt">$map_graph</p></div>
       <div class="row"><span class="lbl">theory</span><p class="txt">$map_theory</p></div>
+      <div class="row"><span class="lbl">learn</span><p class="txt">$map_learn</p></div>
       <div class="row"><span class="lbl"><span class="ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></span></span><p class="txt">$map_fav</p></div>
     </div>
   </section>
@@ -260,6 +264,15 @@
     <h2>$graph_h2</h2>
     <p>$graph_p</p>
     <div class="note">$graph_note</div>
+  </section>
+
+  <section>
+    <p class="kicker">$an_kicker</p>
+    <h2>$an_h2</h2>
+    <p>$an_p</p>
+    <p>$an_tabs</p>
+    <p>$an_dash</p>
+    <div class="note">$an_note</div>
   </section>
 
   <section>
@@ -313,7 +326,11 @@
   var b = m && m.querySelector('.topnav-burger');
   if (!b) return;
   b.addEventListener('click', function(e){ e.stopPropagation(); var o = m.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
-  document.addEventListener('click', function(e){ if (!m.contains(e.target)) m.classList.remove('open'); });
+  document.addEventListener('click', function(e){
+    if (!m.contains(e.target)) { m.classList.remove('open'); return; }
+    if (e.target === m) m.classList.remove('open');   // тап по затемнению шторки (::before самого m)
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') m.classList.remove('open'); });
 })();
 </script>
 </body>

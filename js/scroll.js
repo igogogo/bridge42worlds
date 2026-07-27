@@ -16,7 +16,7 @@ function getLang() {
 }
 
 var NO_MORE_ARTICLES = {
-    ru: 'Больше нет статей', en: 'No more articles', zh: '没有更多文章了', fr: 'Plus d\'articles',
+    ru: 'Больше нет статей', en: 'No more articles', es: 'No hay más artículos', zh: '没有更多文章了', fr: 'Plus d\'articles',
     ar: 'لا مزيد من المقالات'
 };
 
@@ -85,7 +85,7 @@ function renderRelated(currentId, lang, version) {
             var base = '/lang/' + (typeof defaultLang !== 'undefined' ? defaultLang : lang) + '/archive/' + a.date + '/' + a.id + '/';
             var hasImg = a.image !== false;
             var thumb = hasImg ? ('<a class="card-img-wrap" href="' + urlForVersion(a.url, version) + '">' +
-                '<img src="' + base + 't_ai.jpg" data-fb="' + base + 'ai.jpg" loading="lazy" ' +
+                '<img src="' + base + 't_ai.webp" data-fb="' + base + 'ai.webp" loading="lazy" ' +
                 'onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt=""></a>') : '';
             var ol = a.oneliner ? '<div class="oneliner">' + a.oneliner + '</div>' : '';
             return '<article class="article-card">' +

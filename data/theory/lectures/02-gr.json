@@ -1,0 +1,590 @@
+{
+ "id": "02-gr",
+ "schema": "b42.lecture/1",
+ "ru": {
+  "title": "Общая теория относительности",
+  "subtitle": "Лекция 2 · Тяготение как геометрия: образно и почти без формул",
+  "lead": "Самая красивая из физических теорий и самая пугающая на вид. Пугает она математикой — тензорами, кривизной, ковариантными производными. Но сама мысль, лежащая в основе, проста настолько, что её можно объяснить за пять минут. С неё и начнём.",
+  "blocks": [
+   {
+    "h": "Мысль, с которой всё началось",
+    "kicker": "счастливейшая мысль в жизни",
+    "text": [
+     "Эйнштейн вспоминал, что сидел в патентном бюро в Берне, когда его посетила простая мысль: человек в свободном падении не чувствует своего веса. Он назвал её счастливейшей в своей жизни, и следующие восемь лет ушли на то, чтобы превратить её в теорию.",
+     "Разверните её. Заприте наблюдателя в лифт без окон. Если лифт свободно падает, всё внутри плавает: отпущенный предмет висит в воздухе, весов нет. Наблюдатель не может отличить это от нахождения в пустом космосе вдали от всех масс. Теперь наоборот: пусть лифт стоит на Земле. Предметы падают с ускорением 9,8. Ровно то же произошло бы, если бы лифт разгоняла ракета в пустоте.",
+     "Отсюда вывод: тяготение и ускорение неотличимы никаким местным опытом. А раз явления неотличимы, значит это одно явление. Тяготение — не сила, действующая на тела, а свойство системы отсчёта, в которой мы находимся."
+    ],
+    "image": {
+     "h": "Образ: лифт и ракета",
+     "text": [
+      "Два запертых лифта. В одном вы стоите на полу и чувствуете вес — лифт покоится на Земле. В другом вы тоже стоите на полу и чувствуете вес — лифт разгоняется в пустоте с ускорением 9,8.",
+      "Никакой опыт внутри не позволит вам определить, в каком вы находитесь. Бросьте мяч — упадёт одинаково. Взвесьте себя — покажет одно и то же. Пустите луч света поперёк — искривится в обоих случаях, потому что во втором пол успевает подняться навстречу.",
+      "Последнее и есть первое настоящее предсказание теории: раз в разгоняющемся лифте свет искривляется, то и в поле тяготения он обязан искривляться. У света нет массы, и ньютоновская теория такого не обещала."
+     ]
+    }
+   },
+   {
+    "h": "Почему пришлось привлечь геометрию",
+    "kicker": "от силы к форме пространства",
+    "text": [
+     "Если тяготение убирается выбором системы отсчёта, значит оно не совсем сила. Но убрать его целиком нельзя: в большом лифте предметы у противоположных стенок будут медленно сближаться, потому что оба падают к центру Земли, а центр один. Это остаточная, неустранимая часть — та самая приливная сила из темы о гравитации.",
+     "И вот ключевой шаг. Сближение падающих траекторий — в точности то, чем математики описывают кривизну. На плоскости две параллельные прямые не сближаются никогда. На сфере два меридиана, вышедшие параллельно от экватора, неизбежно сойдутся на полюсе — не потому, что между ними действует сила, а потому что поверхность искривлена.",
+     "Эйнштейн предположил, что то же самое происходит с пространством-временем. Тела не притягиваются, они движутся по прямейшим доступным линиям в искривлённом пространстве-времени. А искривляет его масса и энергия."
+    ],
+    "image": {
+     "h": "Образ: два путника на глобусе",
+     "text": [
+      "Двое выходят от экватора строго на север, идут по прямой и никуда не сворачивают. Через некоторое время они с удивлением замечают, что расстояние между ними сокращается, а у полюса они и вовсе встречаются.",
+      "Кто их сближал? Никто. Каждый шёл прямо. Их свело устройство поверхности, по которой они шли.",
+      "Ровно это, по Эйнштейну, происходит с падающими телами. Яблоко не притягивается Землёй — оно движется прямо в пространстве-времени, которое искривлено массой Земли. Только искривлено не пространство, а пространство-время, и главную роль играет искривление по времени."
+     ]
+    },
+    "note": "Знаменитая картинка с шаром на растянутой резине объясняет ход мысли, но вводит в заблуждение. Во-первых, она показывает искривление одного пространства, тогда как для тяготения важнее искривление времени. Во-вторых, шар на резине прогибает её, потому что его тянет вниз настоящая земная тяжесть, — то есть тяготение объясняется через тяготение. Пользуйтесь этой картинкой как намёком, а не как объяснением."
+   },
+   {
+    "h": "Главное искривление — по времени",
+    "kicker": "то, что почти всегда упускают",
+    "text": [
+     "Вот утверждение, которое обычно теряется в популярных изложениях: для обычных, медленных тел вроде яблока или планеты почти всё тяготение обеспечивается искривлением времени, а не пространства. Кривизна пространства даёт поправку, заметную только на околосветовых скоростях, — потому Ньютон и не заметил её за двести лет.",
+     "Что означает искривление времени? Только одно: часы на разной высоте идут по-разному. Внизу, глубже в поле тяготения, время течёт медленнее. Разница крошечная — на поверхности Земли около одной миллиардной, — но она есть и измерена.",
+     "И теперь самое красивое. Тело в пространстве-времени движется по линии, которая максимизирует прошедшее собственное время: из всех возможных путей между двумя событиями свободно падающее тело выбирает тот, вдоль которого его собственные часы натикают больше всего. Подброшенный камень летит вверх и возвращается не потому, что его что-то тянет, а потому что этот путь — через области, где время идёт быстрее, — даёт больше собственного времени, чем прямая линия."
+    ],
+    "image": {
+     "h": "Образ: почему камень летит по дуге",
+     "text": [
+      "Подбросьте камень, и он опишет дугу высотой пару метров за пару секунд. Кажется, что дуга сильно изогнута.",
+      "Но посмотрите на неё в пространстве-времени, где по одной оси идёт расстояние, а по другой — время, умноженное на скорость света. Две секунды полёта — это шестьсот тысяч километров по временной оси. И на этой шестисоттысячекилометровой дуге всего два метра прогиба.",
+      "Дуга оказывается почти идеально прямой линией в слегка искривлённом пространстве-времени. Ощущение сильного изгиба возникает только потому, что мы смотрим на проекцию, сжав временную ось в тысячи миллиардов раз."
+     ]
+    },
+    "after": [
+     "Отсюда, между прочим, и объяснение, почему все тела падают одинаково. Они не падают — они движутся по прямейшим линиям одной и той же геометрии. Геометрия не спрашивает, из чего тело сделано и сколько весит, поэтому перо и молот на Луне касаются грунта одновременно. Загадочное совпадение инертной и гравитационной масс исчезает: масса просто не входит в описание."
+    ]
+   },
+   {
+    "h": "Что такое тензор, если объяснять на пальцах",
+    "kicker": "главное математическое пугало теории",
+    "text": [
+     "Начнём с того, что вы уже знаете. Скаляр — это одно число, не зависящее от направления: температура, масса, плотность. Вектор — это стрелка: у него есть величина и направление, и описывается он тремя числами. Тензор — следующий шаг: величина, которой мало одного направления.",
+     "Зачем такое нужно? Представьте, что вы давите на кусок дерева. Если давить вдоль волокон, оно почти не сжимается; поперёк — сжимается заметно. Отклик зависит не только от того, насколько сильно вы давите, но и от того, в каком направлении, и результат может быть направлен не туда, куда вы давили. Одним числом это не описать, стрелкой тоже. Нужна таблица чисел, говорящая: приложили вдоль такого направления — получили отклик вдоль такого.",
+     "Вот это и есть тензор: правило, которое каждому направлению сопоставляет другое направление. Записывается таблицей, но суть не в таблице. Суть в том, что это правило существует само по себе, независимо от того, как вы повернули оси координат: при повороте числа в таблице меняются, а правило остаётся тем же."
+    ],
+    "image": {
+     "h": "Образ: три этажа описания",
+     "text": [
+      "Скаляр — вопрос «сколько?». Ответ: одно число. Температура в комнате.",
+      "Вектор — вопрос «сколько и куда?». Ответ: три числа. Ветер в комнате.",
+      "Тензор — вопрос «сколько и куда, если толкнуть отсюда?». Ответ: таблица. Например, как деформируется матрас, если нажать на него в разных местах и под разными углами.",
+      "Именно поэтому тензорами описывают напряжения в материалах, поляризацию кристаллов, момент инерции твёрдого тела — везде, где отклик зависит от направления воздействия."
+     ]
+    },
+    "after": [
+     "В общей теории относительности главных тензоров два. Первый — метрический: он говорит, как в данной точке измерять расстояния и промежутки времени, то есть задаёт саму геометрию. Второй — тензор кривизны: он говорит, насколько эта геометрия отличается от плоской. Плюс тензор энергии-импульса, описывающий, что и как в этой точке распределено.",
+     "Уравнение Эйнштейна связывает их между собой и в словесном виде звучит так: кривизна пространства-времени в данной точке определяется тем, сколько там энергии и импульса. Джон Уилер сформулировал это ещё короче: вещество говорит пространству, как искривляться, а пространство говорит веществу, как двигаться."
+    ],
+    "eq": "$G_{\\mu\\nu} = \\frac{8\\pi G}{c^{4}}\\,T_{\\mu\\nu}$",
+    "quote": {
+     "text": "Вещество указывает пространству-времени, как искривляться; пространство-время указывает веществу, как двигаться.",
+     "who": "Джон Арчибальд Уилер"
+    }
+   },
+   {
+    "h": "Почему уравнение такое трудное",
+    "kicker": "и почему это не мелочь",
+    "text": [
+     "На вид уравнение Эйнштейна короткое. На деле это десять связанных дифференциальных уравнений в частных производных, причём нелинейных. Нелинейность здесь принципиальна и означает вот что: гравитационное поле само обладает энергией, а энергия искривляет пространство — то есть поле является источником самого себя.",
+     "Сравните с электродинамикой. Электрическое поле не заряжено, поэтому не создаёт нового поля, и уравнения Максвелла линейны: два решения можно просто сложить. В гравитации так нельзя. Сумма двух решений уравнения Эйнштейна решением не является, и потому задача двух чёрных дыр не решается на бумаге вовсе — только на суперкомпьютерах.",
+     "Точных решений известно немного, и каждое имеет имя. Решение Шварцшильда для сферически симметричной массы, найденное в 1916 году на фронте Первой мировой за несколько месяцев до смерти автора от болезни. Решение Керра для вращающейся чёрной дыры, найденное только в 1963-м. Решение Фридмана для расширяющейся Вселенной — работа петербургского математика, которую сам Эйнштейн сначала объявил ошибочной, а через год публично признал свою неправоту."
+    ],
+    "pro": [
+     "объясняет смещение перигелия Меркурия точно: 43 угловые секунды за век",
+     "предсказала искривление света массой — проверено в 1919 году",
+     "предсказала замедление времени в поле тяготения — работает в навигации ежедневно",
+     "предсказала гравитационные волны за сто лет до их обнаружения",
+     "предсказала расширение Вселенной раньше, чем его увидели"
+    ],
+    "con": [
+     "уравнения нелинейны, точных решений единицы",
+     "предсказывает бесконечности внутри чёрных дыр и в начале Вселенной",
+     "не совмещается с квантовой механикой",
+     "требует тёмной материи и тёмной энергии, природа которых неизвестна"
+    ]
+   },
+   {
+    "h": "Что она предсказала и что подтвердилось",
+    "kicker": "сто лет проверок",
+    "text": [
+     "1915 — смещение перигелия Меркурия. Астрономы полвека не могли объяснить лишние 43 угловые секунды за столетие; Леверье даже предположил новую планету Вулкан, которой не оказалось. Эйнштейн получил ровно 43 и, по воспоминаниям, несколько дней не мог работать от волнения.",
+     "1919 — искривление света. Эддингтон снял звёзды вблизи Солнца во время затмения и обнаружил смещение их видимых положений вдвое большее, чем давала наивная ньютоновская оценка, — как и предсказывала теория. Газеты вышли с заголовками о перевороте, и Эйнштейн за неделю стал мировой знаменитостью.",
+     "1959 — замедление времени. Паунд и Ребка измерили изменение частоты гамма-квантов на башне высотой всего 22 метра. Относительный эффект — две десятитриллионных, и его поймали.",
+     "1974 — гравитационные волны косвенно. Двойной пульсар Халса и Тейлора теряет энергию и сближается ровно с той скоростью, какую даёт расчёт излучения гравитационных волн. Совпадение до долей процента на протяжении сорока лет наблюдений.",
+     "2015 — гравитационные волны напрямую. LIGO поймал сигнал от слияния двух чёрных дыр, изменивший длину четырёхкилометровых плеч интерферометра на тысячную долю размера протона.",
+     "2019 — изображение тени чёрной дыры в галактике M87, полученное сетью радиотелескопов по всей планете. Форма и размер совпали с расчётом."
+    ]
+   },
+   {
+    "h": "И вклад наших",
+    "kicker": "имена, которые стоит знать",
+    "text": [
+     "Александр Фридман, петербургский математик и метеоролог, в 1922 году нашёл решения уравнений Эйнштейна, описывающие расширяющуюся Вселенную. Эйнштейн опубликовал заметку, что решение ошибочно; Фридман написал ему подробное письмо, и Эйнштейн публично признал, что ошибался сам. Фридман умер от тифа в 1925 году, за четыре года до того, как Хаббл обнаружил расширение наблюдательно.",
+     "Андрей Сахаров в 1967 году предложил идею индуцированной гравитации: возможно, кривизна пространства — не фундаментальное свойство, а следствие квантовых флуктуаций вакуума, нечто вроде упругости, возникающей из статистики. Идея не доказана, но обсуждается до сих пор как один из подходов к квантовой гравитации.",
+     "Он же в 1967 году сформулировал три условия, при которых во Вселенной могло возникнуть преобладание вещества над антивеществом. Эти условия Сахарова — до сих пор основа всех попыток объяснить, почему мы вообще существуем.",
+     "Виталий Гинзбург вместе с Ландау построил теорию сверхпроводимости, а в космологии занимался происхождением космических лучей и переносом излучения. Он же составил знаменитый список важнейших нерешённых проблем физики, который пересматривал десятилетиями — и до конца жизни включал в него природу тёмной материи и энергии."
+    ],
+    "now": [
+     "С 2015 года открылась гравитационно-волновая астрономия: детекторы LIGO и Virgo зарегистрировали уже более двухсот слияний чёрных дыр и нейтронных звёзд. Это принципиально новый канал наблюдения — Вселенную впервые слушают, а не смотрят.",
+     "Строится японский KAGRA, планируется космический интерферометр LISA с плечами в миллионы километров, который будет слышать слияния сверхмассивных дыр. Одновременно системы пульсарного тайминга уже поймали фоновый гул гравитационных волн от всей популяции таких пар."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Что унести из этой лекции",
+   "text": [
+    "Тяготение — не сила, а геометрия. Тела движутся по прямейшим линиям в искривлённом пространстве-времени, и потому все падают одинаково: геометрия не спрашивает, из чего вы сделаны.",
+    "Для обычных скоростей главную роль играет искривление времени, а не пространства. Часы внизу идут медленнее, и подброшенный камень летит по дуге, которая в пространстве-времени почти прямая.",
+    "Тензор — не страшная таблица, а способ описать отклик, зависящий от направления. Уравнение Эйнштейна в словах короче формулы: вещество говорит пространству, как искривляться, пространство говорит веществу, как двигаться.",
+    "И главное ограничение: теория предсказывает собственный провал. Внутри чёрных дыр и в начале Вселенной она даёт бесконечности, а значит там нужна другая физика. Об этом следующая лекция."
+   ]
+  }
+ },
+ "en": {
+  "title": "General Theory of Relativity",
+  "subtitle": "Lecture 2 · Gravity as Geometry: Figuratively and Almost Without Formulas",
+  "lead": "The most beautiful of physical theories and the most frightening in appearance. It frightens with mathematics — tensors, curvature, covariant derivatives. But the underlying idea is so simple that it can be explained in five minutes. Let's start with that.",
+  "blocks": [
+   {
+    "h": "The thought that started it all",
+    "kicker": "the happiest thought of my life",
+    "text": [
+     "Einstein recalled sitting in the patent office in Bern when a simple thought struck him: a person in free fall does not feel their weight. He called it the happiest thought of his life, and the next eight years were spent turning it into a theory.",
+     "Unpack it. Lock an observer in an elevator without windows. If the elevator is in free fall, everything inside floats: a released object hangs in the air, there is no weight. The observer cannot distinguish this from being in empty space far from all masses. Now the opposite: let the elevator stand on Earth. Objects fall with acceleration 9.8. Exactly the same would happen if the elevator were accelerated by a rocket in empty space.",
+     "Hence the conclusion: gravitation and acceleration are indistinguishable by any local experiment. And since the phenomena are indistinguishable, they are the same phenomenon. Gravitation is not a force acting on bodies, but a property of the reference frame in which we find ourselves."
+    ],
+    "image": {
+     "h": "Image: elevator and rocket",
+     "text": [
+      "Two sealed elevators. In one you stand on the floor and feel weight—the elevator rests on Earth. In the other you also stand on the floor and feel weight—the elevator accelerates in empty space at 9.8.",
+      "No experiment inside will allow you to tell which one you are in. Drop a ball—it will fall the same. Weigh yourself—it will show the same. Shine a beam of light sideways—it will curve in both cases, because in the second case the floor rises to meet it.",
+      "The latter is the first real prediction of the theory: since light curves in an accelerating elevator, it must also curve in a gravitational field. Light has no mass, and Newtonian theory did not promise this."
+     ]
+    }
+   },
+   {
+    "h": "Why geometry had to be brought in",
+    "kicker": "from force to shape of space",
+    "text": [
+     "If gravitation is removed by choosing a reference frame, then it is not quite a force. But it cannot be removed entirely: in a large elevator, objects at opposite walls will slowly approach each other because both fall toward the center of the Earth, and there is only one center. This residual, unavoidable part is the tidal force from the topic of gravitation.",
+     "And here is the key step. The approach of falling trajectories is exactly how mathematicians describe curvature. On a plane, two parallel lines never converge. On a sphere, two meridians starting parallel at the equator inevitably meet at the pole—not because there is a force between them, but because the surface is curved.",
+     "Einstein proposed that the same happens with spacetime. Bodies are not attracted; they move along the straightest available lines in curved spacetime. And mass and energy curve it."
+    ],
+    "image": {
+     "h": "Image: two travelers on a globe",
+     "text": [
+      "Two people start from the equator heading due north, walking straight and never turning. After a while they notice with surprise that the distance between them is shrinking, and at the pole they meet.",
+      "Who pulled them together? No one. Each walked straight. The shape of the surface they walked on brought them together.",
+      "This is exactly what, according to Einstein, happens with falling bodies. An apple is not attracted to the Earth—it moves straight in spacetime, which is curved by the Earth's mass. Only it is not space that is curved, but spacetime, and the curvature along the time direction plays the main role."
+     ]
+    },
+    "note": "The famous picture of a ball on a stretched rubber sheet explains the train of thought but is misleading. First, it shows curvature of space alone, whereas for gravitation the curvature of time is more important. Second, the ball on the rubber sheet depresses it because it is pulled down by real terrestrial gravity—that is, gravitation is explained by gravitation. Use this picture as a hint, not as an explanation."
+   },
+   {
+    "h": "The main curvature is in time",
+    "kicker": "what is almost always missed",
+    "text": [
+     "Here is the statement that is usually lost in popular accounts: for ordinary, slow bodies like an apple or a planet, almost all gravitation comes from the curvature of time, not space. The curvature of space gives a correction noticeable only at near-light speeds—that is why Newton did not notice it in two hundred years.",
+     "What does curvature of time mean? Only one thing: clocks at different heights run at different rates. Lower down, deeper in the gravitational field, time flows slower. The difference is tiny—on Earth's surface about one billionth—but it exists and has been measured.",
+     "And now the most beautiful part. A body in spacetime moves along a path that maximizes its proper time: among all possible paths between two events, a freely falling body chooses the one along which its own clock ticks the most. A thrown stone goes up and returns not because something pulls it, but because this path—through regions where time goes faster—gives more proper time than a straight line."
+    ],
+    "image": {
+     "h": "Image: why the stone flies in an arc",
+     "text": [
+      "Throw a stone, and it describes an arc a couple of meters high in a couple of seconds. The arc seems strongly curved.",
+      "But look at it in spacetime, where one axis is distance and the other is time multiplied by the speed of light. Two seconds of flight is six hundred thousand kilometers along the time axis. And on that six-hundred-thousand-kilometer arc, there is only a two-meter dip.",
+      "The arc turns out to be an almost perfectly straight line in slightly curved spacetime. The feeling of strong bending arises only because we look at a projection, having compressed the time axis by trillions of times."
+     ]
+    },
+    "after": [
+     "From this, incidentally, comes the explanation why all bodies fall the same. They do not fall—they move along the straightest lines of the same geometry. Geometry does not ask what a body is made of or how much it weighs, so a feather and a hammer on the Moon touch the ground simultaneously. The mysterious coincidence of inertial and gravitational mass disappears: mass simply does not enter the description."
+    ]
+   },
+   {
+    "h": "What is a tensor, explained simply",
+    "kicker": "the main mathematical scare of the theory",
+    "text": [
+     "Let's start with what you already know. A scalar is a single number independent of direction: temperature, mass, density. A vector is an arrow: it has magnitude and direction, and is described by three numbers. A tensor is the next step: a quantity for which one direction is not enough.",
+     "Why is that needed? Imagine you push on a piece of wood. If you push along the grain, it hardly compresses; across, it compresses noticeably. The response depends not only on how hard you push, but also in which direction, and the result may not be in the direction you pushed. One number cannot describe this, nor can an arrow. You need a table of numbers that says: applied along such a direction, you get a response along such a direction.",
+     "That is a tensor: a rule that associates a direction to each direction. It is written as a table, but the point is not the table. The point is that this rule exists independently of how you rotate the coordinate axes: when you rotate, the numbers in the table change, but the rule remains the same."
+    ],
+    "image": {
+     "h": "Image: three levels of description",
+     "text": [
+      "Scalar: the question 'how much?' Answer: one number. Temperature in a room.",
+      "Vector: the question 'how much and where?' Answer: three numbers. Wind in a room.",
+      "Tensor: the question 'how much and where, if pushed from here?' Answer: a table. For example, how a mattress deforms if you press on it in different places and at different angles.",
+      "That is why tensors describe stresses in materials, polarization of crystals, moment of inertia of a solid body—everywhere the response depends on the direction of the action."
+     ]
+    },
+    "after": [
+     "In general relativity, there are two main tensors. The first is the metric tensor: it tells how to measure distances and time intervals at a given point, that is, it defines the geometry itself. The second is the curvature tensor: it tells how much this geometry differs from flat. Plus the energy-momentum tensor, describing what and how is distributed at that point.",
+     "Einstein's equation connects them and in words sounds like: the curvature of spacetime at a given point is determined by how much energy and momentum is there. John Wheeler put it even shorter: matter tells space how to curve, and space tells matter how to move."
+    ],
+    "eq": "$G_{\\mu\\nu} = \\frac{8\\pi G}{c^{4}}\\,T_{\\mu\\nu}$",
+    "quote": {
+     "text": "Matter tells spacetime how to curve; spacetime tells matter how to move.",
+     "who": "John Archibald Wheeler"
+    }
+   },
+   {
+    "h": "Why the equation is so difficult",
+    "kicker": "and why it's not a trifle",
+    "text": [
+     "At first glance, Einstein's equation is short. In reality, it is ten coupled nonlinear partial differential equations. The nonlinearity is fundamental and means the following: the gravitational field itself has energy, and energy curves space—so the field is its own source.",
+     "Compare with electrodynamics. The electric field is not charged, so it does not create a new field, and Maxwell's equations are linear: two solutions can simply be added. In gravity, you cannot. The sum of two solutions of Einstein's equation is not a solution, and that is why the two-black-hole problem cannot be solved on paper at all—only on supercomputers.",
+     "Few exact solutions are known, and each has a name. The Schwarzschild solution for a spherically symmetric mass, found in 1916 on the front of World War I a few months before the author's death from illness. The Kerr solution for a rotating black hole, found only in 1963. The Friedmann solution for an expanding Universe—the work of a mathematician from St. Petersburg, which Einstein first declared erroneous, and a year later publicly admitted his mistake."
+    ],
+    "pro": [
+     "explains Mercury's perihelion shift precisely: 43 arcseconds per century",
+     "predicted light bending by mass—verified in 1919",
+     "predicted time dilation in gravitational field—used in navigation daily",
+     "predicted gravitational waves a hundred years before their detection",
+     "predicted the expansion of the Universe before it was observed"
+    ],
+    "con": [
+     "equations are nonlinear, exact solutions are few",
+     "predicts infinities inside black holes and at the beginning of the Universe",
+     "does not combine with quantum mechanics",
+     "requires dark matter and dark energy, whose nature is unknown"
+    ]
+   },
+   {
+    "h": "What it predicted and what was confirmed",
+    "kicker": "a hundred years of tests",
+    "text": [
+     "1915 — Mercury's perihelion shift. Astronomers could not explain the extra 43 arcseconds per century for half a century; Leverrier even hypothesized a new planet Vulcan, which did not exist. Einstein got exactly 43 and, according to recollections, could not work for several days from excitement.",
+     "1919 — light bending. Eddington photographed stars near the Sun during an eclipse and found a displacement of their apparent positions twice as large as the naive Newtonian estimate—exactly as the theory predicted. Newspapers ran headlines about a revolution, and Einstein became a world celebrity in a week.",
+     "1959 — time dilation. Pound and Rebka measured the change in frequency of gamma rays on a tower only 22 meters high. The relative effect—two parts in ten trillion—and they caught it.",
+     "1974 — gravitational waves indirectly. The Hulse-Taylor binary pulsar loses energy and approaches at exactly the rate calculated from gravitational wave emission. Agreement to fractions of a percent over forty years of observations.",
+     "2015 — gravitational waves directly. LIGO caught the signal from two black holes merging, changing the length of four-kilometer interferometer arms by a thousandth of a proton's size.",
+     "2019 — image of the shadow of a black hole in galaxy M87, obtained by a network of radio telescopes across the planet. The shape and size matched the calculation."
+    ]
+   },
+   {
+    "h": "And contributions of our compatriots",
+    "kicker": "names worth knowing",
+    "text": [
+     "Alexander Friedmann, a mathematician and meteorologist from St. Petersburg, found solutions to Einstein's equations in 1922 describing an expanding Universe. Einstein published a note that the solution was erroneous; Friedmann wrote him a detailed letter, and Einstein publicly admitted that he had been wrong. Friedmann died of typhus in 1925, four years before Hubble observed the expansion.",
+     "Andrei Sakharov in 1967 proposed the idea of induced gravity: perhaps the curvature of space is not a fundamental property but a consequence of quantum fluctuations of the vacuum, something like elasticity arising from statistics. The idea is not proven but is still discussed as one of the approaches to quantum gravity.",
+     "In 1967 he also formulated three conditions under which a predominance of matter over antimatter could arise in the Universe. These Sakharov conditions are still the basis of all attempts to explain why we exist at all.",
+     "Vitaly Ginzburg, together with Landau, developed the theory of superconductivity, and in cosmology worked on the origin of cosmic rays and radiative transfer. He also compiled a famous list of the most important unsolved problems in physics, which he revised for decades—and until the end of his life included the nature of dark matter and dark energy."
+    ],
+    "now": [
+     "Since 2015, gravitational-wave astronomy has opened: LIGO and Virgo detectors have registered more than two hundred black hole and neutron star mergers. This is a fundamentally new observation channel—for the first time, the Universe is being listened to, not looked at.",
+     "The Japanese KAGRA is under construction, and the space interferometer LISA with arms of millions of kilometers is planned, which will hear mergers of supermassive holes. At the same time, pulsar timing arrays have already caught the background hum of gravitational waves from the entire population of such pairs."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "What to Take Away from This Lecture",
+   "text": [
+    "Gravity is not a force, but geometry. Bodies move along the straightest lines in curved spacetime, and therefore all fall the same: geometry does not ask what you are made of.",
+    "For ordinary speeds, the curvature of time plays the main role, not space. Clocks at the bottom run slower, and a thrown stone flies along an arc that is almost straight in spacetime.",
+    "A tensor is not a scary table, but a way to describe a response that depends on direction. Einstein's equation in words is shorter than the formula: matter tells space how to curve, space tells matter how to move.",
+    "And the main limitation: the theory predicts its own failure. Inside black holes and at the beginning of the Universe, it gives infinities, which means another physics is needed there. That will be the next lecture."
+   ]
+  }
+ },
+ "es": {
+  "title": "Teoría general de la relatividad",
+  "subtitle": "Lección 2 · La gravedad como geometría: de forma gráfica y casi sin fórmulas",
+  "lead": "La más hermosa de las teorías físicas y la más aterradora en apariencia. Asusta por su matemática — tensores, curvatura, derivadas covariantes. Pero la idea que subyace es tan simple que se puede explicar en cinco minutos. Con ella empezaremos.",
+  "blocks": [
+   {
+    "h": "El pensamiento con el que todo empezó",
+    "kicker": "el pensamiento más feliz de la vida",
+    "text": [
+     "Einstein recordaba que estaba sentado en la oficina de patentes en Berna cuando le vino un pensamiento simple: una persona en caída libre no siente su peso. Lo llamó el más feliz de su vida, y los siguientes ocho años los dedicó a convertirlo en teoría.",
+     "Desarróllelo. Encierre a un observador en un ascensor sin ventanas. Si el ascensor cae libremente, todo flota: un objeto soltado queda suspendido en el aire, no hay peso. El observador no puede distinguir esto de estar en el espacio vacío lejos de toda masa. Ahora al revés: suponga que el ascensor está en la Tierra. Los objetos caen con aceleración 9,8. Ocurriría exactamente lo mismo si el ascensor fuera acelerado por un cohete en el vacío.",
+     "De ahí la conclusión: la gravedad y la aceleración son indistinguibles mediante ningún experimento local. Y puesto que los fenómenos son indistinguibles, entonces son un mismo fenómeno. La gravedad no es una fuerza que actúa sobre los cuerpos, sino una propiedad del sistema de referencia en el que nos encontramos."
+    ],
+    "image": {
+     "h": "Imagen: ascensor y cohete",
+     "text": [
+      "Dos ascensores cerrados. En uno estás de pie en el suelo y sientes peso: el ascensor está en reposo en la Tierra. En el otro también estás de pie y sientes peso: el ascensor acelera en el vacío con aceleración 9,8.",
+      "Ningún experimento en el interior te permitirá determinar en cuál te encuentras. Lanza una pelota: caerá igual. Pésate: marcará lo mismo. Haz pasar un rayo de luz transversalmente: se curvará en ambos casos, porque en el segundo el suelo alcanza a elevarse al encuentro.",
+      "La última es la primera predicción real de la teoría: ya que en un ascensor acelerado la luz se curva, también debe curvarse en un campo gravitatorio. La luz no tiene masa, y la teoría newtoniana no prometía tal cosa."
+     ]
+    }
+   },
+   {
+    "h": "Por qué fue necesario recurrir a la geometría",
+    "kicker": "de la fuerza a la forma del espacio",
+    "text": [
+     "Si la gravedad se elimina eligiendo un sistema de referencia, entonces no es del todo una fuerza. Pero no se puede eliminar por completo: en un ascensor grande, los objetos en paredes opuestas se acercarán lentamente, porque ambos caen hacia el centro de la Tierra, y el centro es uno solo. Esa parte residual e irreductible es la fuerza de marea del tema de la gravedad.",
+     "Y he aquí el paso clave. El acercamiento de trayectorias que caen es exactamente lo que los matemáticos describen como curvatura. En un plano, dos líneas paralelas nunca se acercan. En una esfera, dos meridianos que salen paralelos desde el ecuador inevitablemente se encuentran en el polo, no porque actúe una fuerza entre ellos, sino porque la superficie está curva.",
+     "Einstein supuso que lo mismo ocurre con el espacio-tiempo. Los cuerpos no se atraen, sino que se mueven a lo largo de las líneas más rectas posibles en un espacio-tiempo curvo. Y lo que lo curva es la masa y la energía."
+    ],
+    "image": {
+     "h": "Imagen: dos viajeros en un globo terráqueo",
+     "text": [
+      "Dos personas parten del ecuador rumbo al norte estrictamente, caminan en línea recta sin desviarse. Al cabo de un tiempo, notan con sorpresa que la distancia entre ellas se reduce, y en el polo incluso se encuentran.",
+      "¿Quién los acercó? Nadie. Cada uno caminó recto. Los unió la estructura de la superficie por la que caminaban.",
+      "Exactamente esto, según Einstein, ocurre con los cuerpos que caen. La manzana no es atraída por la Tierra: se mueve en línea recta en el espacio-tiempo, que está curvado por la masa de la Tierra. Solo que no está curvado el espacio, sino el espacio-tiempo, y el papel principal lo desempeña la curvatura en el tiempo."
+     ]
+    },
+    "note": "La famosa imagen de una bola sobre una goma elástica estirada explica la línea de pensamiento, pero es engañosa. En primer lugar, muestra la curvatura del espacio únicamente, mientras que para la gravedad es más importante la curvatura del tiempo. En segundo lugar, la bola hunde la goma porque la tira hacia abajo la gravedad terrestre real, es decir, se explica la gravedad mediante la gravedad. Use esta imagen como una sugerencia, no como una explicación."
+   },
+   {
+    "h": "La curvatura principal es en el tiempo",
+    "kicker": "lo que casi siempre se pasa por alto",
+    "text": [
+     "He aquí una afirmación que suele perderse en las divulgaciones populares: para cuerpos ordinarios y lentos como una manzana o un planeta, casi toda la gravedad se debe a la curvatura del tiempo, no a la del espacio. La curvatura del espacio da una corrección apreciable solo a velocidades cercanas a la de la luz, por eso Newton no la notó en doscientos años.",
+     "¿Qué significa la curvatura del tiempo? Solo una cosa: los relojes a diferentes alturas funcionan de manera diferente. Abajo, más profundo en el campo gravitatorio, el tiempo transcurre más lentamente. La diferencia es minúscula: en la superficie de la Tierra es de aproximadamente una milmillonésima, pero existe y se ha medido.",
+     "Y ahora lo más hermoso. Un cuerpo en el espacio-tiempo se mueve a lo largo de una línea que maximiza el tiempo propio transcurrido: de todos los caminos posibles entre dos eventos, un cuerpo en caída libre elige aquel a lo largo del cual su propio reloj marca más. Una piedra lanzada hacia arriba y que regresa no lo hace porque algo la tire, sino porque ese camino —a través de regiones donde el tiempo pasa más rápido— da más tiempo propio que una línea recta."
+    ],
+    "image": {
+     "h": "Imagen: por qué la piedra vuela en arco",
+     "text": [
+      "Lanza una piedra hacia arriba y describirá un arco de un par de metros de altura en un par de segundos. Parece que el arco está muy curvado.",
+      "Pero mírala en el espacio-tiempo, donde un eje es la distancia y el otro es el tiempo multiplicado por la velocidad de la luz. Dos segundos de vuelo son seiscientos mil kilómetros en el eje temporal. Y en ese arco de seiscientos mil kilómetros solo hay dos metros de curvatura.",
+      "El arco resulta ser una línea casi perfectamente recta en un espacio-tiempo ligeramente curvo. La sensación de un fuerte curvatura surge solo porque miramos una proyección, comprimiendo el eje temporal miles de millones de veces."
+     ]
+    },
+    "after": [
+     "De aquí, por cierto, proviene la explicación de por qué todos los cuerpos caen igual. No caen: se mueven a lo largo de las líneas más rectas de una misma geometría. La geometría no pregunta de qué está hecho el cuerpo ni cuánto pesa, por lo que una pluma y un martillo en la Luna tocan el suelo simultáneamente. La misteriosa coincidencia entre la masa inercial y la gravitatoria desaparece: la masa simplemente no entra en la descripción."
+    ]
+   },
+   {
+    "h": "Qué es un tensor, explicado en términos sencillos",
+    "kicker": "el principal espantajo matemático de la teoría",
+    "text": [
+     "Empecemos con lo que ya sabes. Un escalar es un solo número que no depende de la dirección: temperatura, masa, densidad. Un vector es una flecha: tiene magnitud y dirección, y se describe con tres números. Un tensor es el siguiente paso: una magnitud que no se conforma con una sola dirección.",
+     "¿Para qué sirve? Imagina que presionas un trozo de madera. Si presionas a lo largo de las fibras, apenas se comprime; transversalmente, se comprime notablemente. La respuesta no depende solo de cuánto presionas, sino también de en qué dirección, y el resultado puede no estar en la dirección en que presionaste. No se puede describir con un solo número ni con una flecha. Se necesita una tabla de números que diga: aplicaste en tal dirección, obtuviste respuesta en tal otra.",
+     "Eso es un tensor: una regla que a cada dirección le asigna otra dirección. Se escribe como una tabla, pero la esencia no está en la tabla. La esencia es que esta regla existe por sí misma, independientemente de cómo gires los ejes de coordenadas: al girar, los números de la tabla cambian, pero la regla sigue siendo la misma."
+    ],
+    "image": {
+     "h": "Imagen: tres niveles de descripción",
+     "text": [
+      "Escalar: pregunta '¿cuánto?' Respuesta: un número. Temperatura en la habitación.",
+      "Vector: pregunta '¿cuánto y hacia dónde?' Respuesta: tres números. Viento en la habitación.",
+      "Tensor: pregunta '¿cuánto y hacia dónde si empujo desde aquí?' Respuesta: una tabla. Por ejemplo, cómo se deforma un colchón si se presiona en diferentes lugares y con diferentes ángulos."
+     ]
+    },
+    "after": [
+     "Precisamente por eso los tensores describen tensiones en materiales, polarización de cristales, momento de inercia de un cuerpo sólido, en todos los casos donde la respuesta depende de la dirección de la acción.",
+     "En la relatividad general los tensores principales son dos. El primero es el métrico: dice cómo medir distancias e intervalos de tiempo en un punto dado, es decir, define la geometría misma. El segundo es el tensor de curvatura: dice cuánto difiere esta geometría de la plana. Además, el tensor de energía-impulso, que describe qué y cómo está distribuido en ese punto.",
+     "La ecuación de Einstein las relaciona entre sí y en palabras suena así: la curvatura del espacio-tiempo en un punto dado está determinada por cuánta energía y momento hay allí. John Wheeler lo formuló aún más breve: la materia le dice al espacio cómo curvarse, y el espacio le dice a la materia cómo moverse."
+    ],
+    "eq": "$G_{\\mu\\nu} = \\frac{8\\pi G}{c^{4}}\\,T_{\\mu\\nu}$",
+    "quote": {
+     "text": "La materia le indica al espacio-tiempo cómo curvarse; el espacio-tiempo le indica a la materia cómo moverse.",
+     "who": "John Archibald Wheeler"
+    }
+   },
+   {
+    "h": "Por qué la ecuación es tan difícil",
+    "kicker": "y por qué no es un detalle menor",
+    "text": [
+     "A primera vista, la ecuación de Einstein es corta. En realidad, son diez ecuaciones diferenciales parciales acopladas, y además no lineales. La no linealidad es fundamental y significa lo siguiente: el campo gravitatorio posee energía por sí mismo, y la energía curva el espacio, es decir, el campo es fuente de sí mismo.",
+     "Compárese con la electrodinámica. El campo eléctrico no está cargado, por lo que no crea un nuevo campo, y las ecuaciones de Maxwell son lineales: dos soluciones simplemente se pueden sumar. En la gravedad no se puede. La suma de dos soluciones de la ecuación de Einstein no es una solución, por lo que el problema de dos agujeros negros no se resuelve en papel en absoluto, solo en supercomputadoras.",
+     "Se conocen pocas soluciones exactas, y cada una tiene nombre. La solución de Schwarzschild para una masa con simetría esférica, encontrada en 1916 en el frente de la Primera Guerra Mundial, pocos meses antes de la muerte del autor por enfermedad. La solución de Kerr para un agujero negro en rotación, encontrada solo en 1963. La solución de Friedmann para un universo en expansión, trabajo de un matemático de San Petersburgo que el propio Einstein primero declaró errónea, y un año después admitió públicamente su error."
+    ],
+    "pro": [
+     "explica el desplazamiento del perihelio de Mercurio con precisión: 43 segundos de arco por siglo",
+     "predijo la curvatura de la luz por la masa, comprobada en 1919",
+     "predijo la dilatación temporal en un campo gravitatorio, funciona en navegación a diario",
+     "predijo las ondas gravitacionales cien años antes de su detección",
+     "predijo la expansión del Universo antes de que se observara"
+    ],
+    "con": [
+     "las ecuaciones son no lineales, hay pocas soluciones exactas",
+     "predice infinitos dentro de los agujeros negros y al inicio del Universo",
+     "no es compatible con la mecánica cuántica",
+     "requiere materia oscura y energía oscura, cuya naturaleza se desconoce"
+    ]
+   },
+   {
+    "h": "Qué predijo y qué se confirmó",
+    "kicker": "cien años de verificaciones",
+    "text": [
+     "1915: desplazamiento del perihelio de Mercurio. Los astrónomos no pudieron explicar durante medio siglo los 43 segundos de arco adicionales por siglo; Le Verrier incluso postuló un nuevo planeta, Vulcano, que no existía. Einstein obtuvo exactamente 43 y, según recuerdos, no pudo trabajar durante varios días por la emoción.",
+     "1919: curvatura de la luz. Eddington fotografió estrellas cerca del Sol durante un eclipse y encontró un desplazamiento de sus posiciones aparentes el doble de lo que daba la estimación newtoniana ingenua, tal como predecía la teoría. Los periódicos titularon sobre una revolución, y Einstein se convirtió en celebridad mundial en una semana.",
+     "1959: dilatación temporal. Pound y Rebka midieron el cambio de frecuencia de rayos gamma en una torre de solo 22 metros de altura. El efecto relativo: dos diez billonésimas, y lo captaron.",
+     "1974: ondas gravitacionales indirectamente. El púlsar binario de Hulse y Taylor pierde energía y se acerca exactamente a la velocidad que da el cálculo de la emisión de ondas gravitacionales. Coincidencia de fracciones de porcentaje a lo largo de cuarenta años de observaciones.",
+     "2015: ondas gravitacionales directamente. LIGO captó una señal de la fusión de dos agujeros negros, que cambió la longitud de los brazos de cuatro kilómetros del interferómetro en una milésima del tamaño de un protón.",
+     "2019: imagen de la sombra de un agujero negro en la galaxia M87, obtenida por una red de radiotelescopios en todo el planeta. La forma y el tamaño coincidieron con el cálculo."
+    ]
+   },
+   {
+    "h": "Y la contribución de los nuestros",
+    "kicker": "nombres que vale la pena conocer",
+    "text": [
+     "Alexander Friedmann, matemático y meteorólogo de San Petersburgo, en 1922 encontró soluciones de las ecuaciones de Einstein que describen un universo en expansión. Einstein publicó una nota diciendo que la solución era errónea; Friedmann le escribió una carta detallada, y Einstein admitió públicamente que se había equivocado. Friedmann murió de tifus en 1925, cuatro años antes de que Hubble observara la expansión.",
+     "Andréi Sájarov en 1967 propuso la idea de la gravedad inducida: quizás la curvatura del espacio no es una propiedad fundamental, sino una consecuencia de las fluctuaciones cuánticas del vacío, algo así como una elasticidad que surge de la estadística. La idea no está demostrada, pero aún se discute como uno de los enfoques para la gravedad cuántica.",
+     "El mismo en 1967 formuló tres condiciones bajo las cuales podría haber surgido en el Universo el predominio de la materia sobre la antimateria. Estas condiciones de Sájarov siguen siendo la base de todos los intentos de explicar por qué existimos.",
+     "Vitali Ginzburg junto con Landau construyó la teoría de la superconductividad, y en cosmología se ocupó del origen de los rayos cósmicos y la transferencia de radiación. También compiló la famosa lista de los problemas no resueltos más importantes de la física, que revisó durante décadas, y hasta el final de su vida incluyó en ella la naturaleza de la materia oscura y la energía oscura."
+    ],
+    "now": [
+     "Desde 2015 se abrió la astronomía de ondas gravitacionales: los detectores LIGO y Virgo han registrado ya más de doscientas fusiones de agujeros negros y estrellas de neutrones. Es un canal de observación fundamentalmente nuevo: por primera vez se escucha el Universo, no se mira.",
+     "Se está construyendo el KAGRA japonés, y se planea el interferómetro espacial LISA con brazos de millones de kilómetros, que escuchará fusiones de agujeros supermasivos. Al mismo tiempo, los sistemas de sincronización de púlsares ya han captado el rumor de fondo de ondas gravitacionales de toda la población de pares similares."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Qué llevarse de esta conferencia",
+   "text": [
+    "La gravedad no es una fuerza, sino geometría. Los cuerpos se mueven por las líneas más rectas en el espacio-tiempo curvo, y por eso todos caen igual: la geometría no pregunta de qué estás hecho.",
+    "Para velocidades ordinarias, el papel principal lo juega la curvatura del tiempo, no del espacio. Los relojes abajo van más lentos, y una piedra lanzada vuela por un arco que en el espacio-tiempo es casi recto.",
+    "Un tensor no es una tabla aterradora, sino una manera de describir una respuesta que depende de la dirección. La ecuación de Einstein en palabras es más corta que la fórmula: la materia le dice al espacio cómo curvarse, el espacio le dice a la materia cómo moverse.",
+    "Y la principal limitación: la teoría predice su propio fracaso. Dentro de los agujeros negros y al principio del universo, da infinitos, lo que significa que allí se necesita otra física. De eso trata la siguiente conferencia."
+   ]
+  }
+ },
+ "ar": {
+  "title": "النظرية النسبية العامة",
+  "subtitle": "المحاضرة 2 · الجاذبية كهندسة: بشكل تصويري ودون معادلات تقريبًا",
+  "lead": "أجمل النظريات الفيزيائية وأكثرها إخافة في المظهر. تخيفك رياضياتها - الموترات، الانحناء، المشتقات المتغيرة. لكن الفكرة الأساسية نفسها بسيطة لدرجة يمكن شرحها في خمس دقائق. سنبدأ بها.",
+  "blocks": [
+   {
+    "h": "الفكرة التي بدأ بها كل شيء",
+    "kicker": "أسعد فكرة في حياته",
+    "text": [
+     "تذكر أينشتاين أنه كان جالسًا في مكتب البراءات في برن عندما خطرت له فكرة بسيطة: الشخص الذي يسقط سقوطًا حرًا لا يشعر بوزنه. وصفها بأنها أسعد فكرة في حياته، واستغرق الأمر ثماني سنوات لتحويلها إلى نظرية.",
+     "افتحها. احبس الراصد في مصعد بلا نوافذ. إذا كان المصعد يسقط سقوطًا حرًا، فكل شيء في داخله يطفو: جسم تم إطلاقه يعلق في الهواء، لا يوجد وزن. لا يستطيع الراصد تمييز هذا عن التواجد في الفضاء الفارغ بعيدًا عن أي كتل. الآن بالعكس: دع المصعد يقف على الأرض. تسقط الأجسام بتسارع 9.8. سيحدث نفس الشيء تمامًا إذا كان المصعد يتسارع بصاروخ في الفراغ.",
+     "من هنا الاستنتاج: الجاذبية والتسارع لا يمكن تمييزهما بأي تجربة محلية. وبما أن الظواهر لا يمكن تمييزها، فهي إذن ظاهرة واحدة. الجاذبية ليست قوة تؤثر على الأجسام، بل خاصية للنظام الإحداثي الذي نتواجد فيه."
+    ],
+    "image": {
+     "h": "صورة: المصعد والصاروخ",
+     "text": [
+      "مصعدان مغلقان. في الأول تقف على الأرض وتشعر بالوزن - المصعد ساكن على الأرض. في الثاني تقف أيضًا على الأرض وتشعر بالوزن - المصعد يتسارع في الفراغ بتسارع 9.8.",
+      "لا توجد تجربة داخلية تسمح لك بتحديد أيهما أنت فيه. ارمِ كرة - ستسقط بنفس الطريقة. زِن نفسك - سيظهر نفس الشيء. أطلق شعاع ضوء عرضيًا - سينحني في كلتا الحالتين، لأن الأرضية في الثانية ترتفع لمقابلته.",
+      "وهذا هو أول تنبؤ حقيقي للنظرية: بما أن الضوء ينحني في المصعد المتسارع، فإنه يجب أن ينحني أيضًا في مجال الجاذبية. الضوء ليس له كتلة، ونظرية نيوتن لم تكن لتعد بذلك."
+     ]
+    }
+   },
+   {
+    "h": "لماذا كان لا بد من استدعاء الهندسة",
+    "kicker": "من القوة إلى شكل الفضاء",
+    "text": [
+     "إذا كان من الممكن إزالة الجاذبية باختيار نظام إحداثي، فهي إذن ليست قوة تمامًا. لكن لا يمكن إزالتها بالكامل: في مصعد كبير، ستتقارب الأجسام على الجدران المقابلة ببطء، لأن كلاهما يسقط نحو مركز الأرض، والمركز واحد. هذا الجزء المتبقي الذي لا يمكن إزالته هو نفس قوة المد والجزر من موضوع الجاذبية.",
+     "وهذه هي الخطوة الأساسية. تقارب المسارات الساقطة هو بالضبط ما يصفه علماء الرياضيات بالانحناء. على مستوى، لا يتقارب خطان مستقيمان متوازيان أبدًا. على كرة، خطا طول خرجا متوازيين من خط الاستواء سيلتقيان حتمًا عند القطب - ليس بسبب قوة بينهما، بل لأن السطح منحني.",
+     "افترض أينشتاين أن نفس الشيء يحدث مع الزمكان. الأجسام لا تتجاذب، بل تتحرك على طول الخطوط الأكثر استقامة المتاحة في زمكان منحني. والكتلة والطاقة هما ما يسببان الانحناء."
+    ],
+    "image": {
+     "h": "صورة: مسافران على الكرة الأرضية",
+     "text": [
+      "شخصان يخرجان من خط الاستواء متجهين شمالًا بدقة، يسيران في خط مستقيم ولا ينعطفان. بعد فترة، يلاحظان بدهشة أن المسافة بينهما تقل، وعند القطب يلتقيان تمامًا.",
+      "من جعلهما يتقاربان؟ لا أحد. كلاهما سار مستقيمًا. لقد جمعهما شكل السطح الذي كانا يسيران عليه.",
+      "هذا بالضبط ما يحدث، بحسب أينشتاين، للأجسام الساقطة. التفاحة لا تنجذب إلى الأرض - إنها تتحرك بشكل مستقيم في الزمكان الذي انحنى بكتلة الأرض. لكن ليس الفضاء هو المنحني، بل الزمكان، والدور الرئيسي يلعبه الانحناء في الزمن."
+     ]
+    },
+    "note": "الصورة الشهيرة للكرة على المطاط المشدود تشرح مسار الفكر، لكنها مضللة. أولاً، تظهر انحناء الفضاء فقط، بينما بالنسبة للجاذبية، انحناء الزمن أكثر أهمية. ثانيًا، الكرة على المطاط تجعله ينحني لأنها تُسحب إلى الأسفل بفعل جاذبية الأرض الحقيقية - أي تفسير الجاذبية بالجاذبية. استخدم هذه الصورة كتلميح وليس كشرح."
+   },
+   {
+    "h": "الانحناء الرئيسي هو في الزمن",
+    "kicker": "ما يتم تجاهله غالبًا",
+    "text": [
+     "هذا هو البيان الذي عادة ما يضيع في الشروحات الشعبية: بالنسبة للأجسام البطيئة العادية مثل التفاحة أو الكوكب، كل الجاذبية تقريبًا تأتي من انحناء الزمن، وليس الفضاء. انحناء الفضاء يعطي تصحيحًا ملحوظًا فقط عند السرعات القريبة من سرعة الضوء - ولهذا لم يلاحظه نيوتن لمئتي عام.",
+     "ماذا يعني انحناء الزمن؟ شيئًا واحدًا: الساعات على ارتفاعات مختلفة تدور بشكل مختلف. في الأسفل، أعمق في مجال الجاذبية، الزمن يمر أبطأ. الفرق صغير جدًا - على سطح الأرض حوالي جزء من مليار - لكنه موجود وقد تم قياسه.",
+     "والآن الأجمل. الجسم في الزمكان يتحرك على طول الخط الذي يعظم الزمن الذاتي المار: من بين جميع المسارات الممكنة بين حدثين، يختار الجسم الساقط سقوطًا حرًا ذلك المسار الذي تسجل على طوله ساعته الذاتية أكبر عدد من الدقات. الحجر المقذوف إلى الأعلى يعود ليس لأن شيئًا ما يجذبه، بل لأن هذا المسار - عبر المناطق التي يمر فيها الزمن أسرع - يعطي زمنًا ذاتيًا أكثر من الخط المستقيم."
+    ],
+    "image": {
+     "h": "صورة: لماذا يطير الحجر في قوس",
+     "text": [
+      "اقذف حجرًا إلى الأعلى، وسيصف قوسًا بارتفاع بضعة أمتار في بضع ثوانٍ. يبدو أن القوس منحنٍ بشدة.",
+      "لكن انظر إليه في الزمكان، حيث على أحد المحاور المسافة، وعلى الآخر الزمن مضروبًا في سرعة الضوء. ثانيتان من الطيران تعادل ستمائة ألف كيلومتر على المحور الزمني. وعلى هذا القوس الذي يبلغ طوله ستمائة ألف كيلومتر، هناك انحناء بمقدار مترين فقط.",
+      "يبدو القوس تقريبًا خطًا مستقيمًا تمامًا في زمكان منحني قليلاً. الشعور بالانحناء الشديد ينشأ فقط لأننا ننظر إلى إسقاط، بعد أن ضغطنا المحور الزمني بآلاف المليارات من المرات."
+     ]
+    },
+    "after": [
+     "من هنا، بالمناسبة، يأتي تفسير سبب سقوط جميع الأجسام بنفس الطريقة. إنها لا تسقط - إنها تتحرك على طول الخطوط الأكثر استقامة لنفس الهندسة. الهندسة لا تسأل مما يتكون الجسم أو كم وزنه، لذلك يلمس الريشة والمطرقة على القمر الأرض في نفس الوقت. يختفي التوافق الغريب بين الكتلة العطالية والكتلة الجاذبية: الكتلة ببساطة لا تدخل في الوصف."
+    ]
+   },
+   {
+    "h": "ما هو الموتر، إذا شرح بالأصابع",
+    "kicker": "أكبر مخيف رياضي في النظرية",
+    "text": [
+     "لنبدأ بما تعرفه بالفعل. العدد القياسي (سكالار) هو رقم واحد لا يعتمد على الاتجاه: درجة الحرارة، الكتلة، الكثافة. المتجه هو سهم: له مقدار واتجاه، ويوصف بثلاثة أرقام. الموتر هو الخطوة التالية: كمية لا يكفيها اتجاه واحد.",
+     "لماذا نحتاج شيئًا كهذا؟ تخيل أنك تضغط على قطعة خشب. إذا ضغطت على طول الألياف، فإنها تكاد لا تنضغط؛ وعرضيًا، تنضغط بشكل ملحوظ. الاستجابة لا تعتمد فقط على مدى قوة ضغطك، بل أيضًا على الاتجاه الذي تضغط فيه، والنتيجة قد لا تكون في الاتجاه الذي ضغطت فيه. لا يمكن وصف هذا برقم واحد ولا بسهم. نحتاج إلى جدول أرقام يقول: ضغطت على طول هذا الاتجاه - حصلت على استجابة على طول هذا الاتجاه.",
+     "هذا هو الموتر: قاعدة تربط كل اتجاه باتجاه آخر. يُكتب على شكل جدول، لكن الجوهر ليس في الجدول. الجوهر هو أن هذه القاعدة موجودة بذاتها، بغض النظر عن كيفية تدوير محاور الإحداثيات: عند التدوير، تتغير الأرقام في الجدول، لكن القاعدة تبقى كما هي."
+    ],
+    "image": {
+     "h": "صورة: ثلاثة مستويات من الوصف",
+     "text": [
+      "العدد القياسي: سؤال 'كم؟'. الجواب: رقم واحد. درجة حرارة الغرفة.",
+      "المتجه: سؤال 'كم وإلى أين؟'. الجواب: ثلاثة أرقام. الريح في الغرفة.",
+      "الموتر: سؤال 'كم وإلى أين، إذا دفعت من هنا؟'. الجواب: جدول. مثال: كيف يتشوه الفراش إذا ضغطت عليه في أماكن مختلفة وبزوايا مختلفة.",
+      "ولهذا السبب توصف بها الإجهادات في المواد، واستقطاب البلورات، وعزم القصور الذاتي للأجسام الصلبة - في كل مكان تعتمد فيه الاستجابة على اتجاه التأثير."
+     ]
+    },
+    "after": [
+     "في النظرية النسبية العامة، هناك موتران رئيسيان. الأول هو الموتر المتري: يخبرنا كيف نقيس المسافات والفترات الزمنية في نقطة معينة، أي أنه يحدد الهندسة نفسها. الثاني هو موتر الانحناء: يخبرنا بمدى اختلاف هذه الهندسة عن الهندسة المسطحة. بالإضافة إلى موتر الطاقة-الزخم، الذي يصف ما هو موزع في تلك النقطة وكيف.",
+     "تربط معادلة أينشتاين بينها، وفي الصيغة اللفظية تبدو كالتالي: انحناء الزمكان في نقطة معينة يحدده مقدار الطاقة والزخم هناك. صاغ جون ويلر هذا بشكل أقصر: المادة تقول للفضاء كيف ينحني، والفضاء يقول للمادة كيف تتحرك."
+    ],
+    "eq": "$G_{\\mu\\nu} = \\frac{8\\pi G}{c^{4}}\\,T_{\\mu\\nu}$",
+    "quote": {
+     "text": "المادة تخبر الزمكان كيف ينحني؛ الزمكان يخبر المادة كيف تتحرك.",
+     "who": "جون أرشيبالد ويلر"
+    }
+   },
+   {
+    "h": "لماذا المعادلة صعبة جدًا",
+    "kicker": "وهذا ليس تفصيلًا صغيرًا",
+    "text": [
+     "في المظهر، معادلة أينشتاين قصيرة. في الواقع، هي عشر معادلات تفاضلية جزئية مترابطة، غير خطية. اللاخطية هنا أساسية وتعني ما يلي: المجال الجاذبي نفسه يمتلك طاقة، والطاقة تحني الفضاء - أي أن المجال هو مصدر لنفسه.",
+     "قارن مع الديناميكا الكهربائية. الحقل الكهربائي ليس مشحونًا، لذلك لا يخلق حقلًا جديدًا، ومعادلات ماكسويل خطية: يمكن ببساطة جمع حلين. في الجاذبية، لا يمكن ذلك. مجموع حلين لمعادلة أينشتاين ليس حلاً، ولذلك لا يمكن حل مسألة ثقبين أسودين على الورق إطلاقًا - فقط على الحواسيب العملاقة.",
+     "عدد الحلول الدقيقة المعروفة قليل، ولكل منها اسم. حل شفارتسشيلد لكتلة متناظرة كرويًا، وُجد في عام 1916 على الجبهة الأولى للحرب العالمية قبل بضعة أشهر من وفاة المؤلف بسبب المرض. حل كير للثقب الأسود الدوار، وُجد فقط في عام 1963. حل فريدمان للكون المتوسع - عمل عالم رياضيات من بطرسبرغ، والذي أعلن أينشتاين نفسه في البداية أنه خاطئ، ثم اعترف علنًا بخطئه بعد عام."
+    ],
+    "pro": [
+     "يشرح انحراف حضيض عطارد بدقة: 43 ثانية قوسية لكل قرن",
+     "تنبأ بانحناء الضوء بالكتلة - تم التحقق منه عام 1919",
+     "تنبأ بتباطؤ الزمن في مجال الجاذبية - يعمل في الملاحة يوميًا",
+     "تنبأ بموجات الجاذبية قبل مائة عام من اكتشافها",
+     "تنبأ بتوسع الكون قبل أن يُرى"
+    ],
+    "con": [
+     "المعادلات غير خطية، عدد الحلول الدقيقة قليل",
+     "يتنبأ بلا نهائيات داخل الثقوب السوداء وفي بداية الكون",
+     "لا يتوافق مع ميكانيكا الكم",
+     "يتطلب مادة مظلمة وطاقة مظلمة، طبيعتهما غير معروفة"
+    ]
+   },
+   {
+    "h": "ماذا تنبأت وما تم تأكيده",
+    "kicker": "مئة عام من التحقق",
+    "text": [
+     "1915 - انحراف حضيض عطارد. لم يتمكن علماء الفلك لمدة نصف قرن من تفسير الـ 43 ثانية قوسية الإضافية لكل قرن؛ حتى أن لوفيرييه افترض كوكبًا جديدًا اسمه فولكان، والذي لم يكن موجودًا. حصل أينشتاين على 43 بالضبط، وبحسب ذكرياته، لم يستطع العمل لعدة أيام من الإثارة.",
+     "1919 - انحناء الضوء. صور إدينغتون النجوم بالقرب من الشمس أثناء الكسوف واكتشف إزاحة مواقعها المرئية بمقدار ضعف ما يعطيه تقدير نيوتن الساذج - كما تنبأت النظرية. خرجت الصحف بعناوين عن الثورة، وأصبح أينشتاين مشهورًا عالميًا في غضون أسبوع.",
+     "1959 - تباطؤ الزمن. قاس باوند وريبكا التغير في تردد أشعة جاما على برج ارتفاعه 22 مترًا فقط. التأثير النسبي - جزءان من عشرة تريليونات - وتم التقاطه.",
+     "1974 - موجات الجاذبية بشكل غير مباشر. النباض المزدوج لهولس وتايلور يفقد الطاقة ويقترب بنفس السرعة التي يعطيها حساب إشعاع موجات الجاذبية. التطابق إلى كسور بالمائة على مدى أربعين عامًا من الرصد.",
+     "2015 - موجات الجاذبية بشكل مباشر. التقط LIGO إشارة من اندماج ثقبين أسودين، غيرت طول ذراعي مقياس التداخل البالغ طولهما أربعة كيلومترات بمقدار جزء من ألف من حجم البروتون.",
+     "2019 - صورة ظل الثقب الأسود في المجرة M87، تم الحصول عليها بشبكة من التلسكوبات الراديوية حول الكوكب. الشكل والحجم تزامنا مع الحسابات."
+    ]
+   },
+   {
+    "h": "وإسهام علمائنا",
+    "kicker": "أسماء تستحق المعرفة",
+    "text": [
+     "ألكسندر فريدمان، عالم رياضيات وأرصاد جوية من بطرسبرغ، في عام 1922 وجد حلولًا لمعادلات أينشتاين تصف كونًا متوسعًا. نشر أينشتاين ملاحظة أن الحل خاطئ؛ كتب له فريدمان رسالة مفصلة، واعترف أينشتاين علنًا بأنه كان مخطئًا. توفي فريدمان بالتيفوئيد في عام 1925، قبل أربع سنوات من اكتشاف هابل للتوسع رصديًا.",
+     "أندريه ساخاروف في عام 1967 اقترح فكرة الجاذبية المستحثة: ربما انحناء الفضاء ليس خاصية أساسية، بل نتيجة لتقلبات كمومية للفراغ، شيء مثل المرونة الناشئة عن الإحصاء. الفكرة لم تثبت، لكنها ما زالت قيد النقاش كأحد المناهج للجاذبية الكمومية.",
+     "هو نفسه في عام 1967 صاغ ثلاثة شروط يمكن في ظلها أن ينشأ غلبة المادة على المادة المضادة في الكون. هذه الشروط الثلاثة لساخاروف ما زالت أساس جميع المحاولات لشرح لماذا نحن موجودون أساسًا.",
+     "فيتالي غينزبورغ مع لانداو بنى نظرية الموصلية الفائقة، وفي علم الكونيات اهتم بأصل الأشعة الكونية وانتقال الإشعاع. هو أيضًا وضع القائمة الشهيرة لأهم المشاكل غير المحلولة في الفيزياء، والتي كان يراجعها لعقود - وحتى نهاية حياته كان يدرج فيها طبيعة المادة المظلمة والطاقة المظلمة."
+    ]
+   },
+   {
+    "now": [
+     "منذ عام 2015، انفتح علم الفلك الموجي الثقالي: كاشفات LIGO وVirgo سجلت بالفعل أكثر من مئتي اندماج للثقوب السوداء والنجوم النيوترونية. هذه قناة رصد جديدة تمامًا - يتم الاستماع إلى الكون لأول مرة، وليس النظر إليه.",
+     "يتم بناء KAGRA الياباني، ويتم التخطيط لمقياس تداخل فضائي LISA بأذرع تبلغ ملايين الكيلومترات، والذي سيسمع اندماجات الثقوب السوداء فائقة الكتلة. في الوقت نفسه، أنظمة توقيت النباضات قد التقطت بالفعل الهمهمة الخلفية لموجات الجاذبية من جميع أزواج هذه الثقوب."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "ما ستأخذه من هذه المحاضرة",
+   "text": [
+    "الجاذبية ليست قوة، بل هندسة. تتحرك الأجسام على طول الخطوط المستقيمة في الزمكان المنحني، ولذلك تسقط جميعها بنفس الطريقة: الهندسة لا تسأل مما تتكون.",
+    "بالنسبة للسرعات العادية، يلعب انحناء الزمن دورًا رئيسيًا وليس الفضاء. الساعات في الأسفل تسير أبطأ، والحجر المرمي يطير في قوس يمثل في الزمكان خطًا مستقيمًا تقريبًا.",
+    "الموتر ليس جدولًا مخيفًا، بل وسيلة لوصف استجابة تعتمد على الاتجاه. معادلة أينشتاين بالكلمات أقصر من الصيغة: المادة تقول للفضاء كيف ينحني، والفضاء يقول للمادة كيف تتحرك.",
+    "وأهم قيد: النظرية تتنبأ بفشلها الذاتي. داخل الثقوب السوداء وفي بداية الكون، تعطي ما لا نهاية، وبالتالي هناك حاجة إلى فيزياء أخرى. عن ذلك في المحاضرة القادمة."
+   ]
+  }
+ }
+}

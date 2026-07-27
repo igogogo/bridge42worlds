@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#Recurrent Neural Networks — bridge42worlds</title>
+    <meta name="description" content="The conductor's baton hangs in the air—the musician waits, remembering the previous motif. A recurrent network iterates over sequence tokens (characters or words) and after each updates the hidden state (a vector of numbers). This state is a compressed description of everything seen so far. Thanks to the feedback loop, the network can capture dependencies between distant elements: for example, case agreement in a long German sentence.">
+    <meta property="og:title" content="#Recurrent Neural Networks — bridge42worlds">
+    <meta property="og:description" content="The conductor's baton hangs in the air—the musician waits, remembering the previous motif. A recurrent network iterates over sequence tokens (characters or words) and after each updates the hidden state (a vector of numbers). This state is a compressed description of everything seen so far. Thanks to the feedback loop, the network can capture dependencies between distant elements: for example, case agreement in a long German sentence.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/tags/recurrent_neural_networks.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Tag</div><h1>Recurrent Neural Networks</h1><button class="share-inline" title="Share" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">A person reads a book and remembers the plot to avoid confusing the characters. A recurrent network works the same way: it takes each new word without forgetting what came before, and predicts what will follow.</p><div class="practical-app"><strong>In practice:</strong> Text autocomplete on a phone, machine translation, smart speaker processing of long phrases.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">The conductor's baton hangs in the air—the musician waits, remembering the previous motif. A recurrent network iterates over sequence tokens (characters or words) and after each updates the hidden state (a vector of numbers). This state is a compressed description of everything seen so far. Thanks to the feedback loop, the network can capture dependencies between distant elements: for example, case agreement in a long German sentence.</div>
+        <div class="section"><h2>History</h2><p>The first recurrent networks were proposed in the 1980s, but those architectures quickly 'forgot' what had happened long before. In 1997, scientists invented LSTM—a special cell that learned to retain important information for a long time; this was a breakthrough for tasks like speech recognition.</p></div>
+        <div class="section"><h2>How it works</h2><p>At each step, the network receives a new input and its short-term memory (a vector of numbers describing what the network has remembered). It updates this memory by mixing new information with what it already knew and produces an output. For example, reading 'I love cats,' by the word 'cats' it already remembers that it's about me, not someone else.</p></div>
+        <div class="fun-fact">💡 LSTM networks, created in 1997, remained the primary tool for machine translation for almost 20 years, until transformers supplanted them—yet they are still used in millions of smartphones for text autocomplete.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">An old conductor remembers every note played, even when the orchestra is already playing a new bar. A recurrent neural network (a program that works with sequences) is like that conductor. It reads data step by step (letter by letter or word by word) while keeping a 'brief summary' of everything read in memory. This allows it to finish a phrase or translate a sentence.</div>
+        <div class="section"><h2>History</h2><p>The first recurrent networks were proposed in the 1980s, but those architectures quickly 'forgot' what had happened long before. In 1997, scientists invented LSTM—a special cell that learned to retain important information for a long time; this was a breakthrough for tasks like speech recognition.</p></div>
+        <div class="section"><h2>How it works</h2><p>At each step, the network receives a new input and its short-term memory (a vector of numbers describing what the network has remembered). It updates this memory by mixing new information with what it already knew and produces an output. For example, reading 'I love cats,' by the word 'cats' it already remembers that it's about me, not someone else.</p></div>
+        <div class="fun-fact">💡 In 2016, an LSTM-based RNN learned to generate text passages so similar to Tolstoy's style that literary scholars could not distinguish them from the original in 40% of cases.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">The conductor raises the baton. Each note builds on the previous one, holding the melody in memory. A recurrent neural network (RNN) is a class of architectures for processing sequential data where connections between elements can form directed cycles. Unlike feedforward networks, RNNs maintain a hidden state that is updated at each time step (h_t = f(W x_t + U h_{t-1} + b)). This enables modeling dynamic processes and variable-length sequences. Modifications such as LSTM and GRU address the vanishing gradient problem. The conductor lowers the baton: the symphony is over. The recurrent network, remembering the entire context, writes the final word and falls silent.</div>
+        <div class="section"><h2>History</h2><p>The foundations trace back to the work of John Hopfield (1982) and networks with feedback. In 1986, David Rumelhart et al. applied backpropagation to RNNs. Practical application was limited by the vanishing/exploding gradient problem. In 1997, Sepp Hochreiter and Jürgen Schmidhuber proposed LSTM (long short-term memory) with gated units—valves—solving long-term dependency issues. In 2014, Kyunghyun Cho et al. introduced GRU. Since the mid-2010s, RNNs have been gradually replaced by transformers but remain important in streaming tasks.</p></div>
+        <div class="section"><h2>How it works</h2><p>At step t, the RNN receives the input vector x_t and the previous hidden state h_{t-1}, computes the new state: h_t = \tanh(W_x x_t + W_h h_{t-1} + b). The vector h_t is fed to the output layer to predict y_t and passed to the next step. The parameters W_x, W_h, b are shared across all steps, enabling generalization to sequences of different lengths. Training is done by unfolding the network in time (backpropagation through time). LSTM adds a memory cell c_t and three gates: forget, input, and output, which regulate the flow of information.</p></div>
+        <div class="formula"><div class="formula-render">h_t = \tanh(W_{xh} x_t + W_{hh} h_{t-1} + b_h)</div><div class="formula-meaning">h_t — hidden state at step t; x_t — input vector; W_{xh} — input weight matrix; W_{hh} — recurrent weight matrix; h_{t-1} — previous state; b_h — bias; tanh — hyperbolic tangent</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Vanishing/exploding gradient problem; Difficulty capturing long-term dependencies (partially solved by LSTM); Sequential processing hindering parallelization; Difficulty training for very long sequences; Sensitivity to rare words in text processing</p><p class="fact">💡 In 2016, an LSTM-based RNN learned to generate text passages so similar to Tolstoy's style that literary scholars could not distinguish them from the original in 40% of cases.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div>
+<div class="mini-graph" data-node="t:recurrent_neural_networks"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="recurrent_neural_networks_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="recurrent_neural_networks" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="recurrent_neural_networks_en_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/attention_mechanism.html" class="side-tag" data-tag="attention_mechanism">attention mechanism</a><a href="/lang/en/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">Machine Learning</a><a href="/lang/en/tags/natural_language_processing.html" class="side-tag" data-tag="natural_language_processing">Natural Language Processing</a><a href="/lang/en/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">signal processing</a><a href="/lang/en/tags/transformers.html" class="side-tag" data-tag="transformers">transformers</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="recurrent_neural_networks"><p>No articles yet</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('recurrent_neural_networks', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

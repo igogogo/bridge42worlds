@@ -1,0 +1,720 @@
+{
+ "id": "08-frontier",
+ "schema": "b42.lecture/1",
+ "ru": {
+  "title": "Гипотезы переднего края",
+  "subtitle": "Лекция 8 · Струны, два времени, голография, тонкая настройка — с честной критикой",
+  "lead": "Здесь мы выходим за пределы проверенного. Всё дальнейшее — предположения разной степени обоснованности, и главное умение при чтении такого материала — различать, что подтверждено опытом, что вытекает из математики, а что является надеждой. Разбирать будем именно с этой мерой.",
+  "blocks": [
+   {
+    "h": "Зачем вообще понадобились новые теории",
+    "kicker": "три дыры, которые надо закрыть",
+    "text": [
+     "Стандартная модель и общая теория относительности вместе описывают все известные явления. Проблем у этой пары три, и они серьёзны.",
+     "Первая: теории несовместимы. Попытка проквантовать гравитацию даёт бесконечности, которые не удаётся убрать. Там, где обе теории обязаны работать одновременно — внутри чёрных дыр и в начале Вселенной, — физика молчит.",
+     "Вторая: слишком много подгоночных чисел. Стандартная модель содержит около двух десятков параметров, взятых из опыта. Настоящая теория должна их выводить, а не заимствовать.",
+     "Третья: девяносто пять процентов содержимого Вселенной не описывается ни одной из них. Тёмная материя и тёмная энергия остаются названиями без содержания.",
+     "Все дальнейшие построения — попытки закрыть хотя бы что-то из этого списка."
+    ]
+   },
+   {
+    "h": "Теория струн: что обещали и что вышло",
+    "kicker": "сорок лет главной надежды",
+    "text": [
+     "Идея проста и красива. Пусть элементарные частицы — не точки, а крошечные колеблющиеся струны. Разные способы колебания дают разные частицы, как разные обертоны одной струны дают разные ноты. Электрон и фотон оказываются одним объектом в разных состояниях.",
+     "Точечность — источник бесконечностей: при нулевом размере энергия взаимодействия расходится. Протяжённый объект эту трудность снимает естественно, и теория струн оказалась первой, где гравитация квантуется без расходимостей. Более того, гравитон — переносчик тяготения — появляется в спектре колебаний сам, его не приходится вводить руками. Это произвело сильнейшее впечатление.",
+     "Дальше начались сложности. Математическая согласованность требует, чтобы измерений было десять, а не четыре. Лишние шесть предполагают свёрнутыми в микроскопические многообразия — как шланг издали выглядит линией, хотя имеет окружность. Способов свернуть оказалось порядка $10^{500}$, и каждый даёт свою физику с своими константами.",
+     "Отсюда главная беда: теория не предсказывает наш мир. Она допускает почти любой, и выбрать среди вариантов нечем. За сорок лет не получено ни одного проверяемого предсказания, отличающего её от Стандартной модели."
+    ],
+    "pro": [
+     "первая математически согласованная квантовая теория гравитации",
+     "гравитон возникает автоматически, а не вводится руками",
+     "объединяет все взаимодействия в одну конструкцию",
+     "породила мощную математику и голографический принцип, полезные сами по себе"
+    ],
+    "con": [
+     "требует десяти измерений, шесть из которых ненаблюдаемы",
+     "около $10^{500}$ вариантов свёртки — предсказательная сила теряется",
+     "за сорок лет ни одного проверяемого предсказания",
+     "предсказывает суперсимметричные частицы, которых на коллайдере не нашли"
+    ],
+    "open": [
+     "Спор о статусе теории струн идёт открыто и порой резко. Критики — Смолин, Войт и другие — утверждают, что теория, не делающая проверяемых предсказаний, перестаёт быть физикой и что она заняла непропорционально много позиций и финансирования.",
+     "Сторонники возражают, что альтернатив с сопоставимой математической полнотой нет, что теория дала голографический принцип и решила ряд задач в других областях, и что требовать проверяемости на планковских масштабах несправедливо — туда нечем заглянуть в принципе.",
+     "Обе позиции содержат правду. Полезно знать, что этот спор существует, и не принимать ни одну сторону за общепринятую."
+    ],
+    "now": [
+     "Сегодня центр тяжести сместился: струны всё чаще используют как математический инструмент для других задач. Соответствие между теорией гравитации в объёме и теорией поля на границе позволяет считать свойства кварк-глюонной плазмы и некоторых материалов в физике твёрдого тела — там, где обычные методы бессильны.",
+     "То есть теория приносит пользу не как теория всего, а как вычислительный аппарат. Для физики это довольно обычный поворот: аппарат переживает породившую его идею."
+    ]
+   },
+   {
+    "h": "Голографический принцип",
+    "kicker": "самое неожиданное следствие",
+    "text": [
+     "Началось с подсчёта энтропии чёрной дыры: она пропорциональна площади горизонта, а не объёму. Для всего остального во Вселенной энтропия растёт с объёмом, и это исключение потребовало объяснения.",
+     "'т Хоофт и Сасскинд предложили радикальное: возможно, вся физика внутри некоторой области полностью кодируется на её границе, имеющей на одно измерение меньше. Объём оказывается не более чем удобным описанием, а настоящие степени свободы живут на поверхности.",
+     "В 1997 году Малдасена предъявил конкретный пример: теория гравитации в определённом пятимерном пространстве в точности эквивалентна теории поля без гравитации на его четырёхмерной границе. Две совершенно разные теории описывают одно и то же. Это самая цитируемая работа в теоретической физике за последние тридцать лет.",
+     "Практическая польза уже есть: трудные задачи с сильным взаимодействием переводятся в задачи о гравитации, которые решаются легче. Так считают вязкость кварк-глюонной плазмы и получают согласие с опытом."
+    ],
+    "image": {
+     "h": "Образ: голограмма",
+     "text": [
+      "На голографической пластинке записана плоская картина интерференционных полос. При освещении она восстанавливает объёмное изображение — вся информация об объёме хранится на поверхности.",
+      "Отсюда и название принципа. Утверждение не о том, что мир — иллюзия, а о бухгалтерии: число независимых степеней свободы в области ограничено площадью её границы, а не объёмом.",
+      "Практическое следствие вполне земное: количество информации, которое можно упрятать в комнату, ограничено площадью её стен в планковских единицах. Попытка запихнуть больше приведёт к образованию чёрной дыры."
+     ]
+    },
+    "open": [
+     "Строго доказано соответствие лишь для пространства особого вида — с отрицательной кривизной, — а наша Вселенная имеет положительную. Перенос на реальный мир пока не сделан, и неизвестно, возможен ли.",
+     "Отсюда важное предостережение при чтении популярных текстов. Фраза «доказано, что мы живём в голограмме» неверна дважды: доказано не про нашу Вселенную, и речь не о том, что мир нереален, а о способе счёта степеней свободы."
+    ]
+   },
+   {
+    "h": "Два времени: физика Ицхака Барса",
+    "kicker": "осторожно и по существу",
+    "text": [
+     "Обычно предполагается, что времени одно измерение, а пространства три. Ицхак Барс с 1990-х развивает подход, где к четырёхмерию добавляется ещё одно пространственное и ещё одно временное измерение — так называемая двухвременная физика.",
+     "Замысел не в том, чтобы объявить существование второго времени. Замысел технический: в шестимерном пространстве с двумя временами есть дополнительная симметрия, и наш обычный четырёхмерный мир получается как одна из её проекций. Причём разные способы проецирования дают разные, на вид не связанные четырёхмерные теории, которые оказываются описаниями одного и того же объекта.",
+     "Это привлекательно тем, что объясняет некоторые загадочные совпадения между разными теориями — они оказываются тенями одной конструкции. Барс показал, что стандартная модель может быть получена таким проецированием.",
+     "Ключевая трудность известна давно: два времени обычно означают либо нарушение причинности, либо появление состояний с отрицательной вероятностью. Барс обходит это наложением специальных ограничений, убирающих лишние степени свободы. Насколько такое обхождение состоятельно, обсуждается."
+    ],
+    "open": [
+     "Проверяемых предсказаний у двухвременной физики пока нет, и большинство физиков относится к ней как к любопытному, но маргинальному направлению. Это не приговор: многие важные идеи начинались там же.",
+     "Второе время не следует понимать бытово — как возможность двигаться по времени в разные стороны или иметь два независимых течения событий. В подходе Барса дополнительное измерение сразу же ограничивается связями и не порождает наблюдаемой второй временной оси. Популярные пересказы, обещающие путешествия и параллельные потоки времени, содержания теории не передают.",
+     "Общее правило для таких тем: если построение обещает поразительные следствия и при этом не предъявляет ни одного числа, которое можно измерить, к нему стоит относиться как к интересной математике, а не как к сообщению о мире."
+    ]
+   },
+   {
+    "h": "Почему у пространства три измерения, а у времени одно",
+    "kicker": "вопрос, который стоит задать",
+    "text": [
+     "Вопрос выглядит наивно, но имеет содержательные ответы, ограничивающие возможные варианты.",
+     "При числе пространственных измерений больше трёх устойчивых планетных орбит не существует: закон тяготения стал бы обратно пропорционален кубу расстояния, и любое возмущение уводило бы планету либо на звезду, либо в бесконечность. То же с электронными орбитами в атоме — устойчивых связанных состояний не было бы, а значит не было бы ни химии, ни вещества.",
+     "При двух пространственных измерениях возникают другие трудности: волны распространяются с искажением, а сложные структуры вроде нервной системы затруднительны — любой замкнутый контур делит плоскость и не даёт пересечений.",
+     "Со временем строже. При двух временных измерениях уравнения теряют свойство, называемое гиперболичностью, а с ним и однозначную предсказуемость: по состоянию в данный момент будущее не определяется. Физика в привычном смысле там невозможна.",
+     "Получается, что 3+1 — единственное сочетание, допускающее одновременно устойчивые структуры и предсказуемость. Этот довод известен как антропный: мы наблюдаем такой мир, потому что в других не могли бы существовать наблюдатели."
+    ],
+    "open": [
+     "Антропные доводы вызывают откровенное раздражение у части физиков, и не без оснований. Они объясняют факт постфактум и ничего не предсказывают. Кроме того, они содержательны, только если существует множество вариантов, из которых наш выбран, — а это отдельное сильное допущение.",
+     "Другая часть считает, что в некоторых случаях антропное объяснение единственно возможное, и приводит в пример величину тёмной энергии: она подозрительно близка к границе, за которой галактики не успевали бы образоваться.",
+     "Спор между этими лагерями идёт три десятилетия и является не техническим, а мировоззренческим: речь о том, что вообще считать объяснением."
+    ]
+   },
+   {
+    "h": "Инфляция: успех с неприятным следствием",
+    "kicker": "лучшая космологическая идея и её цена",
+    "text": [
+     "Наблюдаемая Вселенная поразительно однородна: реликтовое излучение имеет одинаковую температуру во всех направлениях с точностью до стотысячной. Между тем противоположные её края никогда не были в причинной связи — свет не успел бы пройти между ними. Как они договорились об одинаковой температуре?",
+     "Гут в 1980 году предложил ответ: в первые $10^{-35}$ секунды Вселенная расширилась в невообразимое число раз. Тогда всё наблюдаемое пространство выросло из крошечной области, успевшей выровняться. Заодно объясняется плоскость геометрии и отсутствие некоторых экзотических объектов, которые должны были бы наблюдаться.",
+     "Более того, инфляция предсказала спектр неоднородностей реликтового излучения, и предсказание блестяще подтвердилось измерениями. Квантовые флуктуации, растянутые расширением до космических масштабов, стали зародышами галактик. Это одно из самых красивых утверждений во всей науке: структура Вселенной есть увеличенный отпечаток квантовой дрожи."
+    ],
+    "pro": [
+     "объясняет однородность и плоскость Вселенной",
+     "предсказала спектр неоднородностей реликта — подтверждено с высокой точностью",
+     "объясняет происхождение галактик из квантовых флуктуаций"
+    ],
+    "con": [
+     "механизм инфляции неизвестен: поле, её вызывающее, не обнаружено",
+     "моделей инфляции сотни, и они подгоняются под данные, а не выводятся",
+     "почти во всех вариантах инфляция не прекращается нигде, кроме отдельных пузырей, — отсюда мультивселенная, которую невозможно проверить"
+    ],
+    "open": [
+     "Последний пункт вызывает наиболее острый спор. Если инфляция вечна и порождает бесконечно много областей со случайными свойствами, то теория перестаёт что-либо предсказывать: в бесконечном множестве вариантов встречается всё.",
+     "Стейнхардт, один из авторов инфляционной теории, стал её резким критиком именно по этой причине и предлагает альтернативы с циклической Вселенной. Гут и другие возражают, что трудности технические и разрешимы.",
+     "Ситуация показательна: физика впервые столкнулась с теорией, чей успех порождает непроверяемое следствие. Как быть с этим методологически, единого мнения нет."
+    ]
+   },
+   {
+    "h": "Бом, Пенроуз, Тегмарк: три разных взгляда",
+    "kicker": "и чем они различаются по статусу",
+    "text": [
+     "Дэвид Бом предложил в 1952 году трактовку квантовой механики, где частицы имеют определённые положения всегда, а ведёт их особое волновое поле. Все предсказания совпадают с обычными, никакой случайности в основании нет — она возникает от незнания начальных положений. Теория логически безупречна и имеет цену: она откровенно нелокальна, то есть требует мгновенной связи между удалёнными частями. Большинство физиков считает эту цену неприемлемой, меньшинство — приемлемой платой за ясность.",
+     "Роджер Пенроуз развивает мысль, что коллапс волновой функции происходит не при наблюдении, а сам по себе, когда различие гравитационных полей двух наложенных состояний становится существенным. У этой идеи есть большое достоинство: она проверяема. Предсказывается конкретное время жизни наложения в зависимости от массы, и опыты по проверке идут прямо сейчас. Пока подтверждений нет, а часть вариантов теории уже отсеяна опытом — что само по себе хороший знак: гипотеза работает как научная.",
+     "Макс Тегмарк идёт дальше всех и утверждает, что физическая реальность есть математическая структура — не описывается математикой, а является ею. Тогда все математически возможные структуры существуют одинаково реально. Красиво, но проверить нечем: гипотеза не запрещает ни одного наблюдения. Тегмарк это признаёт и настаивает, что она всё же осмысленна; критики отвечают, что утверждение, совместимое с любым результатом, не является физическим."
+    ],
+    "open": [
+     "Отдельно о частом утверждении, будто сознание наблюдателя создаёт реальность. В стандартном изложении квантовой механики говорится о том, что происходит при измерении, а что считать измерением, не уточняется. Отсюда и появились трактовки, привлекающие сознание, — их выдвигали в своё время фон Нейман и Вигнер.",
+     "Сегодня большинство считает, что сознание здесь ни при чём: достаточно взаимодействия с любым макроскопическим окружением, и это описывается теорией декогеренции количественно. Приборы работают одинаково, когда на них смотрят и когда данные пишутся на диск.",
+     "Но полностью вопрос не закрыт: декогеренция объясняет исчезновение наложений и не объясняет, почему реализуется именно один исход. Это остаётся открытым, и честная позиция состоит в том, чтобы говорить об этом прямо, не подменяя незнание красивыми утверждениями о роли наблюдателя."
+    ],
+    "note": "При чтении популярных материалов на эти темы полезен один вопрос: какое наблюдение опровергло бы утверждение? Если ответа нет, перед вами не физическая гипотеза, а способ говорить. Это не значит, что он бесполезен — но статус у него другой, и смешивать их не стоит."
+   },
+   {
+    "h": "Тонкая настройка",
+    "kicker": "самое трудное место всей лекции",
+    "text": [
+     "Ряд величин в природе выглядит подозрительно подогнанным. Будь сильное взаимодействие слабее на несколько процентов, не образовывался бы дейтерий и звёзды не горели бы. Будь оно сильнее — водород выгорел бы в первые минуты. Углерод синтезируется в звёздах благодаря совпадению уровня энергии в ядре углерода с суммарной энергией трёх ядер гелия; сдвиньте его на процент — и углерода, а с ним органической химии, не будет.",
+     "Особенно неприятна тёмная энергия: наблюдаемая величина на 120 порядков меньше естественной оценки, и при этом близка к границе, за которой галактики не успели бы сформироваться.",
+     "Объяснений предлагается три, и все неудовлетворительны по-своему. Первое: существует пока неизвестная теория, из которой эти значения следуют однозначно, — надежда без подтверждений. Второе: вариантов вселенных много, свойства случайны, а мы наблюдаем подходящий, потому что в других некому наблюдать, — работает, но непроверяемо. Третье: совпадения кажущиеся, и жизнь возможна в более широком диапазоне, чем считается, — отчасти справедливо, расчёты уточняются.",
+     "Стоит сказать прямо: физика здесь не имеет ответа. Всякий, кто утверждает обратное — с любой стороны, — выходит за пределы того, что установлено."
+    ]
+   },
+   {
+    "h": "Чего не хватает",
+    "kicker": "и почему это вдохновляет, а не расстраивает",
+    "text": [
+     "Оглянитесь на пройденное. У нас есть теория, описывающая всё вещество с точностью до двенадцатого знака. Есть теория тяготения, предсказавшая гравитационные волны за сто лет до их обнаружения. Есть измеренный с точностью до процентов состав Вселенной. Есть понимание того, как из кварков получаются ядра, из ядер атомы, из атомов химия, из химии жизнь.",
+     "Картина почти собрана. Не хватает немногого — но это немногое лежит ровно посередине: способа соединить квантовую механику с гравитацией. И есть ощущение, разделяемое многими работающими физиками, что недостающее не огромно. Что нужен один поворот мысли, а не тысяча новых фактов.",
+     "Так уже бывало. Максвеллу не хватало одного слагаемого, чтобы уравнения замкнулись и в них появился свет. Планку не хватало одного предположения, чтобы исчезла ультрафиолетовая катастрофа. Эйнштейну — одной мысли о падающем лифте. Каждый раз недостающее оказывалось простым задним числом и неочевидным заранее.",
+     "Сейчас противоречия столь же остры, как в 1900 году. Тогда их считали мелкими неувязками в почти достроенном здании — и из двух таких неувязок выросла вся физика двадцатого века. Не исключено, что мы находимся в том же положении и не догадываемся об этом."
+    ],
+    "quote": {
+     "text": "Самое непостижимое в мире то, что он постижим.",
+     "who": "Альберт Эйнштейн"
+    },
+    "after": [
+     "И последнее, ради чего написана эта лекция. Всё перечисленное — не музейный список чужих достижений. Это открытые задачи, над которыми люди работают прямо сейчас, и большинство из них не будет решено ни через год, ни через десять.",
+     "Значит, они достанутся тем, кто сейчас учится. Не гениям из другого теста — людям, которые оказались достаточно внимательны, чтобы заметить неувязку, и достаточно упрямы, чтобы не отступить. Именно так и выглядела каждая предыдущая революция в физике, если посмотреть на неё вблизи."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Что унести из этой лекции",
+   "text": [
+    "Различайте три уровня: подтверждено опытом, следует из математики, является надеждой. Всё в этой лекции относится ко второму и третьему, и смешивать их с первым — самая частая ошибка популярных изложений.",
+    "Теория струн дала мощную математику и голографический принцип, но за сорок лет не предъявила ни одного проверяемого предсказания. Это признают и её сторонники; спор идёт о том, что из этого следует.",
+    "Инфляция объяснила однородность Вселенной и предсказала спектр неоднородностей — и породила мультивселенную, проверить которую невозможно. Успех и трудность здесь неразделимы.",
+    "На вопросы о числе измерений времени, о тонкой настройке констант и о том, что происходит при измерении, честного ответа сегодня нет. Признавать это — часть научной позиции, а не её слабость.",
+    "И главное: картина почти собрана, а недостающий ключ, судя по всему, невелик. Такие ключи всегда казались очевидными задним числом и никому не давались заранее. Следующий может найти тот, кто читает это сейчас."
+   ]
+  }
+ },
+ "en": {
+  "title": "Frontier Hypotheses",
+  "subtitle": "Lecture 8 · Strings, Two Times, Holography, Fine-Tuning — with Honest Criticism",
+  "lead": "Here we go beyond what is verified. Everything that follows are conjectures of varying degrees of justification, and the main skill when reading such material is to distinguish what is confirmed by experiment, what follows from mathematics, and what is hope. We will analyze exactly with this measure.",
+  "blocks": [
+   {
+    "h": "Why new theories were needed at all",
+    "kicker": "three holes to plug",
+    "text": [
+     "Standard Model and general theory of relativity together describe all known phenomena. These two have three problems, and they are serious.",
+     "First: the theories are incompatible. Trying to quantize gravity yields infinities that cannot be removed. Where both theories must work simultaneously - inside black holes and at the beginning of the Universe - physics is silent.",
+     "Second: too many adjustable numbers. Standard Model contains about two dozen parameters taken from experiment. A real theory should derive them, not borrow them.",
+     "Third: ninety-five percent of the Universe's content is not described by either. Dark matter and dark energy remain names without content.",
+     "All further constructions are attempts to plug at least something from this list."
+    ]
+   },
+   {
+    "h": "String theory: what was promised and what happened",
+    "kicker": "forty years of the main hope",
+    "text": [
+     "The idea is simple and beautiful. Let elementary particles not be points, but tiny vibrating strings. Different vibration modes yield different particles, like different overtones of a string produce different notes. Electron and photon turn out to be the same object in different states.",
+     "Point-likeness is a source of infinities: at zero size, the interaction energy diverges. An extended object removes this difficulty naturally, and string theory became the first where gravity quantizes without divergences. Moreover, the graviton - the carrier of gravity - appears in the vibration spectrum by itself, it does not have to be introduced by hand. This made a strong impression.",
+     "Then complications began. Mathematical consistency requires ten dimensions, not four. The extra six are assumed to be curled up into microscopic manifolds - like a hose seen from afar looks like a line, though it has a circumference. The number of ways to curl them turned out to be about $10^{500}$, and each gives its own physics with its own constants.",
+     "Hence the main trouble: the theory does not predict our world. It allows almost any world, and there is no way to choose among the options. In forty years, not a single testable prediction has been obtained that distinguishes it from the Standard Model."
+    ],
+    "pro": [
+     "first mathematically consistent quantum theory of gravity",
+     "graviton arises automatically, not introduced by hand",
+     "unifies all interactions into one framework",
+     "spawned powerful mathematics and the holographic principle, useful in their own right"
+    ],
+    "con": [
+     "requires ten dimensions, six of which are unobservable",
+     "about $10^{500}$ compactification variants - predictive power is lost",
+     "no testable predictions in forty years",
+     "predicts supersymmetric particles not found at colliders"
+    ],
+    "open": [
+     "The debate over the status of string theory is open and sometimes sharp. Critics - Smolin, Woit, and others - argue that a theory making no testable predictions ceases to be physics and that it has occupied disproportionately many positions and funding.",
+     "Supporters counter that there are no alternatives with comparable mathematical completeness, that the theory gave the holographic principle and solved a number of problems in other fields, and that demanding testability at Planck scales is unfair - there is no way to look there in principle.",
+     "Both positions contain truth. It is useful to know that this debate exists, and not to take either side as universally accepted."
+    ],
+    "now": [
+     "Today the center of gravity has shifted: strings are increasingly used as a mathematical tool for other tasks. The correspondence between a gravity theory in the bulk and a field theory on the boundary allows computing properties of quark-gluon plasma and some materials in solid-state physics where ordinary methods are powerless.",
+     "That is, the theory is useful not as a theory of everything but as a computational apparatus. For physics, this is a fairly usual turn: the apparatus outlives the idea that gave birth to it."
+    ]
+   },
+   {
+    "h": "Holographic principle",
+    "kicker": "the most unexpected consequence",
+    "text": [
+     "It started with counting the entropy of a black hole: it is proportional to the horizon area, not to the volume. For everything else in the Universe, entropy grows with volume, and this exception required explanation.",
+     "'t Hooft and Susskind proposed something radical: perhaps all physics inside a region is completely encoded on its boundary, which has one dimension fewer. The volume turns out to be no more than a convenient description, while the true degrees of freedom live on the surface.",
+     "In 1997, Maldacena presented a concrete example: a theory of gravity in a certain five-dimensional space is exactly equivalent to a field theory without gravity on its four-dimensional boundary. Two completely different theories describe the same thing. This is the most cited work in theoretical physics in the last thirty years.",
+     "Practical benefit already exists: difficult problems with strong interaction are translated into gravity problems that are easier to solve. For example, the viscosity of quark-gluon plasma is calculated that way and agrees with experiment."
+    ],
+    "image": {
+     "h": "Image: hologram",
+     "text": [
+      "On a holographic plate, a flat pattern of interference fringes is recorded. When illuminated, it reconstructs a three-dimensional image - all information about the volume is stored on the surface.",
+      "Hence the name of the principle. The claim is not that the world is an illusion, but about bookkeeping: the number of independent degrees of freedom in a region is limited by the area of its boundary, not by the volume.",
+      "A practical consequence is quite mundane: the amount of information that can be stuffed into a room is limited by the area of its walls in Planck units. Trying to squeeze in more would lead to the formation of a black hole."
+     ]
+    },
+    "open": [
+     "The correspondence has been rigorously proved only for a special type of space - with negative curvature - whereas our Universe has positive curvature. Transfer to the real world has not yet been done, and it is unknown whether it is possible.",
+     "Hence an important caution when reading popular texts. The phrase 'it was proved that we live in a hologram' is wrong twice: proved not for our Universe, and the point is not that the world is unreal but about the way of counting degrees of freedom."
+    ]
+   },
+   {
+    "h": "Two times: the physics of Itzhak Bars",
+    "kicker": "carefully and to the point",
+    "text": [
+     "It is usually assumed that time has one dimension and space three. Since the 1990s, Itzhak Bars has been developing an approach where an extra spatial and an extra temporal dimension are added to four-dimensionality - so-called two-time physics.",
+     "The intention is not to declare the existence of a second time. The intention is technical: in six-dimensional space with two times, there is an additional symmetry, and our ordinary four-dimensional world appears as one of its projections. Moreover, different projection methods yield different, seemingly unrelated four-dimensional theories that turn out to be descriptions of the same object.",
+     "This is attractive because it explains some mysterious coincidences between different theories - they turn out to be shadows of the same structure. Bars has shown that the Standard Model can be obtained by such projection.",
+     "The key difficulty has been known for a long time: two times usually mean either violation of causality or appearance of states with negative probability. Bars bypasses this by imposing special constraints that remove extra degrees of freedom. How tenable this bypass is, is debated."
+    ],
+    "open": [
+     "Two-time physics has no testable predictions yet, and most physicists regard it as an interesting but marginal direction. That is not a death sentence: many important ideas started there.",
+     "The second time should not be understood in everyday terms - as the ability to move through time in different directions or have two independent flows of events. In Bars' approach, the extra dimension is immediately constrained and does not produce an observable second time axis. Popular accounts that promise travel and parallel timelines do not convey the content of the theory.",
+     "A general rule for such topics: if a construction promises astonishing consequences and at the same time does not present a single number that can be measured, it should be treated as interesting mathematics, not as a statement about the world."
+    ]
+   },
+   {
+    "h": "Why space has three dimensions and time one",
+    "kicker": "a question worth asking",
+    "text": [
+     "The question looks naive but has meaningful answers that restrict possible options.",
+     "For the number of spatial dimensions greater than three, stable planetary orbits do not exist: the law of gravity would become inversely proportional to the cube of the distance, and any perturbation would send the planet either into the star or to infinity. The same with electron orbits in atoms - there would be no stable bound states, hence no chemistry or matter exists.",
+     "With two spatial dimensions, other difficulties arise: waves propagate with distortion, and complex structures like the nervous system are problematic - any closed loop divides the plane and prevents crossings.",
+     "With time, it is stricter. With two temporal dimensions, equations lose a property called hyperbolicity, and with it, unambiguous predictability: the future is not determined by the state at a given moment. Physics in the usual sense would be impossible.",
+     "It turns out that 3+1 is the only combination that allows both stable structures and predictability. This argument is known as anthropic: we observe such a world because observers could not exist in others."
+    ],
+    "open": [
+     "Anthropic arguments cause frank irritation among some physicists, and not without reason. They explain the fact post factum and predict nothing. Moreover, they are meaningful only if there are many variants from which ours is selected - that is a separate strong assumption.",
+     "Another part believes that in some cases the anthropic explanation is the only possible one, and cites as an example the magnitude of dark energy: it is suspiciously close to the boundary beyond which galaxies would not have had time to form.",
+     "The debate between these camps has been going on for three decades and is not technical but worldview: it is about what is generally considered an explanation."
+    ]
+   },
+   {
+    "h": "Inflation: success with an unpleasant consequence",
+    "kicker": "the best cosmological idea and its price",
+    "text": [
+     "The observed Universe is strikingly homogeneous: the cosmic microwave background has the same temperature in all directions to within one part in a hundred thousand. Yet opposite edges have never been in causal contact - light would not have had time to travel between them. How did they agree on the same temperature?",
+     "Guth in 1980 proposed an answer: in the first $10^{-35}$ seconds, the Universe expanded by an unimaginable factor. Then all observable space grew from a tiny region that had time to equilibrate. This also explains the flatness of geometry and the absence of some exotic objects that should have been observed.",
+     "Moreover, inflation predicted the spectrum of inhomogeneities in the cosmic microwave background, and the prediction was brilliantly confirmed by measurements. Quantum fluctuations, stretched by expansion to cosmic scales, became the seeds of galaxies. This is one of the most beautiful statements in all of science: the structure of the Universe is a magnified imprint of quantum jitter."
+    ],
+    "pro": [
+     "explains homogeneity and flatness of the Universe",
+     "predicted the spectrum of CMB inhomogeneities - confirmed with high precision",
+     "explains the origin of galaxies from quantum fluctuations"
+    ],
+    "con": [
+     "the inflation mechanism is unknown: the field causing it has not been detected",
+     "there are hundreds of inflation models, and they are fitted to data, not derived",
+     "in almost all versions, inflation does not stop anywhere except in separate bubbles - hence a multiverse that cannot be tested"
+    ],
+    "open": [
+     "The last point causes the sharpest debate. If inflation is eternal and generates infinitely many regions with random properties, then the theory ceases to predict anything: in an infinite set of options, everything occurs.",
+     "Steinhardt, one of the authors of inflation theory, has become its harsh critic for precisely this reason and proposes alternatives with a cyclic Universe. Guth and others argue that the difficulties are technical and solvable.",
+     "The situation is revealing: physics has for the first time encountered a theory whose success generates an untestable consequence. How to deal with this methodologically, there is no consensus."
+    ]
+   },
+   {
+    "h": "Bohm, Penrose, Tegmark: three different views",
+    "kicker": "and how they differ in status",
+    "text": [
+     "David Bohm proposed in 1952 an interpretation of quantum mechanics where particles always have definite positions, and they are guided by a special wave field. All predictions coincide with the usual ones; no randomness at the foundation arises from ignorance of initial positions. The theory is logically impeccable and has a price: it is frankly nonlocal, requiring instantaneous connection between distant parts. Most physicists consider this price unacceptable; a minority considers it an acceptable price for clarity.",
+     "Roger Penrose develops the idea that the collapse of the wave function occurs not upon observation but by itself, when the difference in gravitational fields of two superimposed states becomes significant. This idea has a great advantage: it is testable. It predicts a specific lifetime of superposition depending on mass, and experiments are underway right now. No confirmation yet, and some versions of the theory have already been ruled out by experiment - which itself is a good sign: the hypothesis works as a scientific one.",
+     "Max Tegmark goes the farthest and claims that physical reality is a mathematical structure - not described by mathematics, but is mathematics itself. Then all mathematically possible structures exist equally really. Beautiful, but nothing to test: the hypothesis does not forbid any observation. Tegmark acknowledges this and insists it is still meaningful; critics reply that a statement compatible with any result is not a physical one."
+    ],
+    "open": [
+     "Separately about the frequent claim that the observer's consciousness creates reality. In the standard presentation of quantum mechanics, it is said about what happens during measurement, but what counts as a measurement is not specified. Hence interpretations invoking consciousness emerged - they were proposed by von Neumann and Wigner in their time.",
+     "Today most believe that consciousness is irrelevant here: interaction with any macroscopic environment suffices, and this is described quantitatively by decoherence theory. Instruments work the same whether watched or when data is written to disk.",
+     "But the question is not fully closed: decoherence explains the disappearance of superpositions but does not explain why exactly one outcome is realized. This remains open, and an honest position is to state this directly, not substituting ignorance with beautiful statements about the role of the observer."
+    ],
+    "note": "When reading popular materials on these topics, one useful question is: what observation would refute the claim? If there is no answer, you have a way of speaking, not a physical hypothesis. That does not mean it is useless - but its status is different, and they should not be mixed."
+   },
+   {
+    "h": "Fine-tuning",
+    "kicker": "the hardest place in the whole lecture",
+    "text": [
+     "A number of quantities in nature look suspiciously tuned. If the strong interaction were a few percent weaker, deuterium would not form and stars would not burn. If it were stronger, hydrogen would have burned out in the first minutes. Carbon is synthesized in stars thanks to a coincidence of an energy level in the carbon nucleus with the total energy of three helium nuclei; shift it by a percent - and carbon, along with organic chemistry, would not exist.",
+     "Especially unpleasant is dark energy: the observed value is 120 orders of magnitude smaller than the natural estimate, and yet it is close to the boundary beyond which galaxies would not have had time to form.",
+     "Three explanations are proposed, all unsatisfactory in their own way. First: a yet unknown theory from which these values follow uniquely - hope without confirmation. Second: there are many universes with random properties, and we observe the suitable one because there is no one to observe in others - works but untestable. Third: the coincidences are apparent, and life is possible in a wider range than thought - partly true, calculations are being refined.",
+     "It should be said directly: physics has no answer here. Anyone who claims otherwise - on any side - goes beyond what is established."
+    ]
+   },
+   {
+    "h": "What is missing",
+    "kicker": "and why it inspires, not frustrates",
+    "text": [
+     "Look back at what we have covered. We have a theory describing all matter to the twelfth decimal place. We have a theory of gravity that predicted gravitational waves a hundred years before their detection. We have the composition of the Universe measured to a percent. We have an understanding of how quarks form nuclei, nuclei form atoms, atoms form chemistry, chemistry forms life.",
+     "The picture is almost complete. Not much is missing - but this little lies exactly in the middle: a way to connect quantum mechanics with gravity. And there is a feeling, shared by many working physicists, that what is missing is not huge. That one turn of thought is needed, not a thousand new facts.",
+     "This has happened before. Maxwell lacked one term to close the equations and produce light. Planck lacked one assumption to resolve the ultraviolet catastrophe. Einstein lacked one thought about a falling elevator. Each time, the missing piece turned out simple in hindsight and unobvious in advance.",
+     "Currently, the contradictions are as acute as in 1900. Then they were considered minor glitches in an almost completed building - and from two such glitches grew all of twentieth-century physics. It is not excluded that we are in the same position and do not realize it."
+    ],
+    "quote": {
+     "text": "The most incomprehensible thing about the world is that it is comprehensible.",
+     "who": "Albert Einstein"
+    },
+    "after": [
+     "And last, the reason this lecture was written. Everything listed is not a museum list of others' achievements. These are open problems that people are working on right now, and most of them will not be solved in a year or a decade.",
+     "So they will go to those who are currently studying. Not geniuses from a different mold - but people who were attentive enough to notice an inconsistency and stubborn enough not to give up. That is exactly what every previous revolution in physics looked like when viewed up close."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "What to Take Away from This Lecture",
+   "text": [
+    "Distinguish three levels: confirmed by experiment, follows from mathematics, is a hope. Everything in this lecture belongs to the second and third, and mixing them with the first is the most common mistake of popular expositions.",
+    "String theory gave powerful mathematics and the holographic principle, but in forty years has not produced a single testable prediction. Its proponents acknowledge this; the debate is about what follows from it.",
+    "Inflation explained the homogeneity of the Universe and predicted the spectrum of inhomogeneities—and gave rise to a multiverse that cannot be tested. Success and difficulty are inseparable here.",
+    "To questions about the number of time dimensions, the fine-tuning of constants, and what happens during measurement, there is no honest answer today. Acknowledging this is part of a scientific stance, not its weakness.",
+    "And most importantly: the picture is almost complete, and the missing key, it seems, is small. Such keys have always seemed obvious in hindsight and have never been given in advance. The next one may be found by whoever is reading this now."
+   ]
+  }
+ },
+ "es": {
+  "title": "Hipótesis de vanguardia",
+  "subtitle": "Clase 8 · Cuerdas, dos tiempos, holografía, ajuste fino — con crítica honesta",
+  "lead": "Aquí salimos más allá de lo comprobado. Todo lo que sigue son hipótesis de diverso grado de fundamentación, y la habilidad principal al leer este material es distinguir lo que está confirmado por la experiencia, lo que se deriva de las matemáticas, y lo que es una esperanza. Analizaremos precisamente con esta medida.",
+  "blocks": [
+   {
+    "h": "Por qué se necesitaron nuevas teorías",
+    "kicker": "tres agujeros que hay que cerrar",
+    "text": [
+     "El modelo estándar y la relatividad general juntos describen todos los fenómenos conocidos. Esta pareja tiene tres problemas, y son graves.",
+     "Primero: las teorías son incompatibles. Intentar cuantizar la gravedad produce infinitos que no se pueden eliminar. Donde ambas teorías deben funcionar simultáneamente — dentro de los agujeros negros y al inicio del Universo — la física calla.",
+     "Segundo: demasiados números ajustables. El modelo estándar contiene alrededor de dos docenas de parámetros tomados de la experiencia. Una verdadera teoría debería deducirlos, no tomarlos prestados.",
+     "Tercero: el noventa y cinco por ciento del contenido del Universo no es descrito por ninguna de ellas. La materia oscura y la energía oscura siguen siendo nombres sin contenido.",
+     "Todas las construcciones posteriores son intentos de cerrar al menos algo de esta lista."
+    ]
+   },
+   {
+    "h": "Teoría de cuerdas: qué prometió y qué resultó",
+    "kicker": "cuarenta años de la principal esperanza",
+    "text": [
+     "La idea es simple y hermosa. Supongamos que las partículas elementales no son puntos, sino pequeñas cuerdas vibrantes. Diferentes modos de vibración dan diferentes partículas, como diferentes armónicos de una cuerda dan diferentes notas. El electrón y el fotón resultan ser un mismo objeto en diferentes estados.",
+     "La puntualidad es la fuente de los infinitos: con tamaño cero, la energía de interacción diverge. Un objeto extendido elimina esta dificultad de forma natural, y la teoría de cuerdas resultó ser la primera donde la gravedad se cuantiza sin divergencias. Además, el gravitón — el portador de la gravedad — aparece por sí mismo en el espectro de vibraciones, no hay que introducirlo a mano. Esto causó una impresión muy fuerte.",
+     "Luego comenzaron las dificultades. La consistencia matemática requiere que haya diez dimensiones, no cuatro. Las seis adicionales se supone que están enrolladas en variedades microscópicas — como una manguera que desde lejos parece una línea, aunque tiene una circunferencia. Resultó que hay alrededor de $10^{500}$ formas de enrollarlas, y cada una da su propia física con sus constantes.",
+     "De ahí el principal problema: la teoría no predice nuestro mundo. Permite casi cualquier mundo, y no hay manera de elegir entre las opciones. En cuarenta años no se ha obtenido ninguna predicción verificable que la distinga del modelo estándar."
+    ],
+    "pro": [
+     "primera teoría cuántica de la gravedad matemáticamente consistente",
+     "el gravitón surge automáticamente, no se introduce a mano",
+     "unifica todas las interacciones en una sola estructura",
+     "generó matemáticas poderosas y el principio holográfico, útiles por sí mismos"
+    ],
+    "con": [
+     "requiere diez dimensiones, seis de las cuales son inobservables",
+     "alrededor de $10^{500}$ opciones de enrollamiento — se pierde poder predictivo",
+     "en cuarenta años, ninguna predicción verificable",
+     "predice partículas supersimétricas que no se encontraron en el colisionador"
+    ],
+    "open": [
+     "El debate sobre el estatus de la teoría de cuerdas es abierto y a veces agudo. Críticos como Smolin, Woit y otros afirman que una teoría que no hace predicciones verificables deja de ser física y que ha ocupado desproporcionadamente muchos puestos y financiamiento.",
+     "Los partidarios responden que no hay alternativas con una completitud matemática comparable, que la teoría ha dado el principio holográfico y resuelto varios problemas en otras áreas, y que exigir verificabilidad en escalas de Planck es injusto — no hay manera de mirar allí en principio.",
+     "Ambas posiciones contienen verdad. Es útil saber que este debate existe y no tomar ningún lado como el aceptado universalmente."
+    ],
+    "now": [
+     "Hoy el centro de gravedad se ha desplazado: las cuerdas se usan cada vez más como herramienta matemática para otras tareas. La correspondencia entre la teoría de la gravedad en el volumen y la teoría de campos en el borde permite calcular propiedades del plasma de quarks y gluones y de algunos materiales en física del estado sólido — allí donde los métodos convencionales son impotentes.",
+     "Es decir, la teoría es útil no como teoría del todo, sino como aparato computacional. Para la física, este es un giro bastante común: el aparato sobrevive a la idea que lo originó."
+    ]
+   },
+   {
+    "h": "Principio holográfico",
+    "kicker": "la consecuencia más inesperada",
+    "text": [
+     "Comenzó con el cálculo de la entropía de un agujero negro: es proporcional al área del horizonte, no al volumen. Para todo lo demás en el Universo, la entropía crece con el volumen, y esta excepción requirió una explicación.",
+     "'t Hooft y Susskind propusieron algo radical: quizás toda la física dentro de una región está completamente codificada en su frontera, que tiene una dimensión menos. El volumen resulta ser solo una descripción conveniente, y los verdaderos grados de libertad viven en la superficie.",
+     "En 1997, Maldacena presentó un ejemplo concreto: la teoría de la gravedad en un cierto espacio pentadimensional es exactamente equivalente a una teoría de campos sin gravedad en su frontera tetradimensional. Dos teorías completamente diferentes describen lo mismo. Este es el trabajo más citado en física teórica de los últimos treinta años.",
+     "Ya hay utilidad práctica: los problemas difíciles de interacción fuerte se traducen en problemas de gravedad que se resuelven más fácilmente. Así se calcula la viscosidad del plasma de quarks y gluones y se obtiene concordancia con el experimento."
+    ],
+    "image": {
+     "h": "Imagen: holograma",
+     "text": [
+      "En una placa holográfica se registra una imagen plana de franjas de interferencia. Al iluminarla, reconstruye una imagen volumétrica — toda la información del volumen se almacena en la superficie.",
+      "De ahí el nombre del principio. La afirmación no es que el mundo sea una ilusión, sino sobre la contabilidad: el número de grados de libertad independientes en una región está limitado por el área de su frontera, no por el volumen.",
+      "La consecuencia práctica es bastante terrenal: la cantidad de información que se puede meter en una habitación está limitada por el área de sus paredes en unidades de Planck. Intentar meter más llevaría a la formación de un agujero negro."
+     ]
+    },
+    "open": [
+     "La correspondencia está estrictamente probada solo para un tipo especial de espacio — con curvatura negativa — mientras que nuestro Universo tiene curvatura positiva. La transferencia al mundo real aún no se ha realizado y se desconoce si es posible.",
+     "De ahí una advertencia importante al leer textos de divulgación. La frase 'está demostrado que vivimos en un holograma' es incorrecta dos veces: no está demostrado para nuestro Universo, y no se trata de que el mundo sea irreal, sino de una forma de contar grados de libertad."
+    ]
+   },
+   {
+    "h": "Dos tiempos: la física de Itzhak Bars",
+    "kicker": "con cuidado y al grano",
+    "text": [
+     "Normalmente se supone que el tiempo tiene una dimensión y el espacio tres. Itzhak Bars desde los años 1990 desarrolla un enfoque donde a las cuatro dimensiones se añade una dimensión espacial y otra temporal adicional — la llamada física de dos tiempos.",
+     "La idea no es declarar la existencia de un segundo tiempo. La idea es técnica: en un espacio hexadimensional con dos tiempos hay una simetría adicional, y nuestro mundo tetradimensional habitual surge como una de sus proyecciones. Además, diferentes formas de proyección dan diferentes teorías tetradimensionales, aparentemente no relacionadas, que resultan ser descripciones del mismo objeto.",
+     "Esto es atractivo porque explica algunas coincidencias misteriosas entre diferentes teorías — resultan ser sombras de una misma construcción. Bars mostró que el modelo estándar puede obtenerse mediante dicha proyección.",
+     "La dificultad clave se conoce desde hace tiempo: dos tiempos generalmente implican violación de la causalidad o aparición de estados con probabilidad negativa. Bars evita esto imponiendo restricciones especiales que eliminan los grados de libertad sobrantes. Se discute hasta qué punto esta evasión es consistente."
+    ],
+    "open": [
+     "La física de dos tiempos aún no tiene predicciones verificables, y la mayoría de los físicos la consideran una dirección curiosa pero marginal. Esto no es una sentencia: muchas ideas importantes comenzaron allí.",
+     "El segundo tiempo no debe entenderse de manera mundana — como la posibilidad de moverse en el tiempo en diferentes direcciones o tener dos flujos independientes de eventos. En el enfoque de Bars, la dimensión adicional está inmediatamente restringida por vínculos y no genera un segundo eje temporal observable. Los relatos populares que prometen viajes y flujos de tiempo paralelos no transmiten el contenido de la teoría.",
+     "Una regla general para estos temas: si una construcción promete consecuencias sorprendentes y no presenta ningún número que se pueda medir, debe tratarse como matemática interesante, no como un informe sobre el mundo."
+    ]
+   },
+   {
+    "h": "Por qué el espacio tiene tres dimensiones y el tiempo una",
+    "kicker": "una pregunta que vale la pena hacerse",
+    "text": [
+     "La pregunta parece ingenua, pero tiene respuestas sustanciales que limitan las posibilidades.",
+     "Con más de tres dimensiones espaciales no existen órbitas planetarias estables: la ley de gravitación sería inversamente proporcional al cubo de la distancia, y cualquier perturbación llevaría al planeta hacia la estrella o al infinito. Lo mismo con las órbitas electrónicas en el átomo — no habría estados ligados estables, y por lo tanto no habría química ni materia.",
+     "Con dos dimensiones espaciales surgen otras dificultades: las ondas se propagan con distorsión, y estructuras complejas como el sistema nervioso son problemáticas — cualquier circuito cerrado divide el plano e impide cruces.",
+     "Con el tiempo es más estricto. Con dos dimensiones temporales, las ecuaciones pierden la propiedad llamada hiperbolicidad, y con ella la predictibilidad única: el futuro no se determina a partir del estado en un momento dado. La física en el sentido habitual no es posible allí.",
+     "Resulta que 3+1 es la única combinación que permite simultáneamente estructuras estables y predictibilidad. Este argumento se conoce como antrópico: observamos este mundo porque en otros no podrían existir observadores."
+    ],
+    "open": [
+     "Los argumentos antrópicos causan franca irritación en algunos físicos, y no sin razón. Explican el hecho post factum y no predicen nada. Además, son sustanciales solo si existe una multitud de opciones de las cuales se selecciona la nuestra — y esa es una suposición fuerte por separado.",
+     "Otra parte considera que en algunos casos la explicación antrópica es la única posible, y pone como ejemplo la magnitud de la energía oscura: está sospechosamente cerca del límite más allá del cual las galaxias no habrían tenido tiempo de formarse.",
+     "El debate entre estos bandos lleva tres décadas y no es técnico sino de cosmovisión: se trata de qué se considera una explicación."
+    ]
+   },
+   {
+    "h": "Inflación: un éxito con una consecuencia desagradable",
+    "kicker": "la mejor idea cosmológica y su precio",
+    "text": [
+     "El Universo observable es sorprendentemente homogéneo: la radiación de fondo tiene la misma temperatura en todas direcciones con una precisión de una cienmilésima. Sin embargo, sus bordes opuestos nunca estuvieron en conexión causal — la luz no habría tenido tiempo de viajar entre ellos. ¿Cómo acordaron la misma temperatura?",
+     "Guth en 1980 propuso una respuesta: en los primeros $10^{-35}$ segundos, el Universo se expandió un número inimaginable de veces. Entonces todo el espacio observable creció a partir de una región diminuta que había tenido tiempo de homogeneizarse. De paso, se explica la planitud de la geometría y la ausencia de algunos objetos exóticos que deberían observarse.",
+     "Además, la inflación predijo el espectro de inhomogeneidades de la radiación de fondo, y la predicción se confirmó brillantemente con las mediciones. Las fluctuaciones cuánticas, estiradas por la expansión a escalas cósmicas, se convirtieron en las semillas de las galaxias. Esta es una de las afirmaciones más hermosas de toda la ciencia: la estructura del Universo es una huella ampliada del temblor cuántico."
+    ],
+    "pro": [
+     "explica la homogeneidad y la planitud del Universo",
+     "predijo el espectro de inhomogeneidades del fondo cósmico — confirmado con alta precisión",
+     "explica el origen de las galaxias a partir de fluctuaciones cuánticas"
+    ],
+    "con": [
+     "el mecanismo de la inflación se desconoce: el campo que la causa no se ha detectado",
+     "hay cientos de modelos de inflación, y se ajustan a los datos en lugar de deducirse",
+     "en casi todas las variantes, la inflación no termina en ningún lado excepto en burbujas individuales — de ahí el multiverso, que no se puede verificar"
+    ],
+    "open": [
+     "El último punto provoca el debate más agudo. Si la inflación es eterna y genera infinitas regiones con propiedades aleatorias, entonces la teoría deja de predecir algo: en un conjunto infinito de variantes, todo ocurre.",
+     "Steinhardt, uno de los autores de la teoría inflacionaria, se convirtió en un crítico severo precisamente por esta razón y propone alternativas con un Universo cíclico. Guth y otros objetan que las dificultades son técnicas y resolubles.",
+     "La situación es ilustrativa: la física se encontró por primera vez con una teoría cuyo éxito genera una consecuencia no verificable. No hay consenso sobre cómo manejar esto metodológicamente."
+    ]
+   },
+   {
+    "h": "Bohm, Penrose, Tegmark: tres visiones diferentes",
+    "kicker": "y en qué se diferencian en estatus",
+    "text": [
+     "David Bohm propuso en 1952 una interpretación de la mecánica cuántica donde las partículas tienen posiciones definidas siempre, y son guiadas por un campo de ondas especial. Todas las predicciones coinciden con las habituales, no hay azar en el fundamento — surge del desconocimiento de las posiciones iniciales. La teoría es lógicamente impecable y tiene un precio: es abiertamente no local, es decir, requiere comunicación instantánea entre partes distantes. La mayoría de los físicos considera este precio inaceptable, una minoría lo considera un costo aceptable por claridad.",
+     "Roger Penrose desarrolla la idea de que el colapso de la función de onda no ocurre al observar, sino por sí mismo, cuando la diferencia entre los campos gravitacionales de dos estados superpuestos se vuelve significativa. Esta idea tiene una gran ventaja: es verificable. Se predice un tiempo de vida específico de la superposición en función de la masa, y los experimentos de verificación están en marcha ahora mismo. Hasta ahora no hay confirmación, y parte de las variantes de la teoría ya han sido descartadas por el experimento — lo que en sí mismo es una buena señal: la hipótesis funciona como científica.",
+     "Max Tegmark va más allá y afirma que la realidad física es una estructura matemática — no se describe con matemáticas, sino que es matemáticas. Entonces todas las estructuras matemáticamente posibles existen igualmente reales. Es hermoso, pero no hay cómo verificarlo: la hipótesis no prohíbe ninguna observación. Tegmark lo reconoce e insiste en que sigue siendo significativa; los críticos responden que una afirmación compatible con cualquier resultado no es física."
+    ],
+    "open": [
+     "Por separado sobre la afirmación frecuente de que la conciencia del observador crea la realidad. En la exposición estándar de la mecánica cuántica se habla de lo que ocurre durante la medición, pero no se especifica qué se considera una medición. De ahí surgieron interpretaciones que involucran la conciencia — fueron propuestas en su momento por von Neumann y Wigner.",
+     "Hoy la mayoría considera que la conciencia no tiene nada que ver: basta la interacción con cualquier entorno macroscópico, y esto se describe cuantitativamente mediante la teoría de la decoherencia. Los instrumentos funcionan igual cuando se los mira y cuando los datos se escriben en un disco.",
+     "Pero la cuestión no está completamente cerrada: la decoherencia explica la desaparición de las superposiciones pero no explica por qué se realiza exactamente un resultado. Esto sigue abierto, y la posición honesta es hablar de ello directamente, sin reemplazar la ignorancia con afirmaciones bonitas sobre el papel del observador."
+    ],
+    "note": "Al leer materiales de divulgación sobre estos temas, es útil una pregunta: ¿qué observación refutaría la afirmación? Si no hay respuesta, no es una hipótesis física, sino una forma de hablar. Esto no significa que sea inútil — pero su estatus es diferente, y no conviene mezclarlos."
+   },
+   {
+    "h": "Ajuste fino",
+    "kicker": "el lugar más difícil de toda la conferencia",
+    "text": [
+     "Una serie de cantidades en la naturaleza parecen sospechosamente ajustadas. Si la interacción fuerte fuera un poco más débil, no se formaría deuterio y las estrellas no brillarían. Si fuera más fuerte, el hidrógeno se habría consumido en los primeros minutos. El carbono se sintetiza en las estrellas gracias a la coincidencia del nivel de energía en el núcleo de carbono con la energía total de tres núcleos de helio; desplácelo un uno por ciento y no habrá carbono, y con él, química orgánica.",
+     "Particularmente molesta es la energía oscura: la magnitud observada es 120 órdenes de magnitud menor que la estimación natural, y además está cerca del límite más allá del cual las galaxias no habrían tenido tiempo de formarse.",
+     "Se proponen tres explicaciones, y todas son insatisfactorias a su manera. Primera: existe una teoría aún desconocida de la que estos valores se derivan de manera única — una esperanza sin confirmación. Segunda: hay muchas variantes de universos, las propiedades son aleatorias, y observamos uno adecuado porque en otros no hay nadie que observe — funciona, pero no es verificable. Tercera: las coincidencias son aparentes, y la vida es posible en un rango más amplio de lo que se piensa — parcialmente cierto, los cálculos se refinan.",
+     "Hay que decirlo claramente: la física aquí no tiene respuesta. Quien afirme lo contrario — de cualquier lado — se sale de lo establecido."
+    ]
+   },
+   {
+    "h": "Qué falta",
+    "kicker": "y por qué inspira, no frustra",
+    "text": [
+     "Mire hacia atrás en lo recorrido. Tenemos una teoría que describe toda la materia con precisión de doce decimales. Tenemos una teoría de la gravedad que predijo las ondas gravitacionales cien años antes de su detección. Tenemos la composición del Universo medida con precisión porcentual. Tenemos la comprensión de cómo los quarks forman núcleos, los núcleos forman átomos, los átomos forman química, la química forma vida.",
+     "El panorama está casi completo. Falta poco — pero ese poco está justo en el medio: una forma de conectar la mecánica cuántica con la gravedad. Y hay una sensación, compartida por muchos físicos en activo, de que lo que falta no es enorme. Que se necesita un giro de pensamiento, no mil hechos nuevos.",
+     "Ya ha sucedido antes. A Maxwell le faltaba un término para que las ecuaciones se cerraran y apareciera la luz. A Planck le faltaba una suposición para que desapareciera la catástrofe ultravioleta. A Einstein, una idea sobre el ascensor en caída. Cada vez, lo que faltaba resultó simple en retrospectiva y no obvio de antemano.",
+     "Ahora las contradicciones son tan agudas como en 1900. Entonces se consideraban pequeñas discrepancias en un edificio casi terminado — y de dos de esas discrepancias surgió toda la física del siglo XX. No es imposible que estemos en la misma situación y no lo sepamos."
+    ],
+    "quote": {
+     "text": "Lo más incomprensible del mundo es que sea comprensible.",
+     "who": "Albert Einstein"
+    },
+    "after": [
+     "Y por último, para qué se escribió esta conferencia. Todo lo enumerado no es una lista de museo de logros ajenos. Son problemas abiertos en los que la gente trabaja ahora mismo, y la mayoría no se resolverán ni en un año ni en diez.",
+     "Entonces, les tocarán a quienes están aprendiendo ahora. No a genios de otra pasta — sino a personas que fueron lo suficientemente atentas para notar una discrepancia y lo suficientemente tercas para no retroceder. Así se veía cada revolución anterior en la física, si se mira de cerca."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Qué llevarse de esta conferencia",
+   "text": [
+    "Distinga tres niveles: confirmado por la experiencia, deducido de las matemáticas, y esperanza. Todo en esta conferencia pertenece al segundo y tercero, y mezclarlos con el primero es el error más común en las divulgaciones populares.",
+    "La teoría de cuerdas ha dado matemáticas poderosas y el principio holográfico, pero en cuarenta años no ha presentado ni una sola predicción verificable. Esto lo admiten incluso sus defensores; el debate es sobre qué se sigue de ello.",
+    "La inflación explicó la homogeneidad del universo y predijo el espectro de inhomogeneidades — y generó el multiverso, imposible de verificar. El éxito y la dificultad aquí son inseparables.",
+    "A las preguntas sobre el número de dimensiones del tiempo, el ajuste fino de las constantes y lo que ocurre durante la medición, hoy no hay una respuesta honesta. Reconocerlo es parte de la postura científica, no una debilidad.",
+    "Y lo principal: la imagen está casi completa, y la clave que falta, al parecer, es pequeña. Tales claves siempre parecieron obvias en retrospectiva y no se dieron a nadie por adelantado. La siguiente puede encontrarla quien está leyendo esto ahora."
+   ]
+  }
+ },
+ "ar": {
+  "title": "فرضيات الخط الأمامي",
+  "subtitle": "المحاضرة 8 · الأوتار، زمنان، التصوير التجسيمي، الضبط الدقيق — مع نقد صريح",
+  "lead": "هنا نخرج عن نطاق ما تم التحقق منه. كل ما يلي هو افتراضات بدرجات متفاوتة من الدقة، والمهارة الأساسية عند قراءة مثل هذه المادة هي التمييز بين ما أثبتته التجربة، وما ينبثق من الرياضيات، وما هو مجرد أمل. وسوف نقوم بالتحليل بهذا المقياس.",
+  "blocks": [
+   {
+    "h": "لماذا احتجنا إلى نظريات جديدة؟",
+    "kicker": "ثلاثة ثغرات يجب سدها",
+    "text": [
+     "تصف النموذج القياسي والنسبية العامة معًا جميع الظواهر المعروفة. هذه الثنائية تواجه ثلاث مشاكل خطيرة.",
+     "الأولى: النظريتان غير متوافقتين. محاولة تكميم الجاذبية تؤدي إلى لا نهائيات لا يمكن إزالتها. حيث يجب أن تعمل كلتا النظريتين معًا - داخل الثقوب السوداء وبداية الكون - تصمت الفيزياء.",
+     "الثانية: أعداد مفرطة من المعاملات المقحمة. يحتوي النموذج القياسي على حوالي عشرين معاملًا مستمدة من التجربة. النظرية الحقيقية يجب أن تستنتجها، لا أن تستعيرها.",
+     "الثالثة: خمسة وتسعون بالمائة من محتوى الكون لا توصفه أي منهما. المادة المظلمة والطاقة المظلمة تبقى أسماءً بلا محتوى.",
+     "كل البنى اللاحقة هي محاولات لسد شيء على الأقل من هذه القائمة."
+    ]
+   },
+   {
+    "h": "نظرية الأوتار: ما وعدت به وما حدث",
+    "kicker": "أربعون سنة من الأمل الرئيسي",
+    "text": [
+     "الفكرة بسيطة وجميلة. دع الجسيمات الأولية ليست نقاطًا، بل أوتارًا مهتزة صغيرة. طرق الاهتزاز المختلفة تعطي جسيمات مختلفة، مثلما تعطي النغمات المختلفة لنفس الوتر نوتات مختلفة. يصبح الإلكترون والفوتون جسمًا واحدًا في حالات مختلفة.",
+     "النقطة هي مصدر اللانهائيات: عند حجم صفري، تتباعد طاقة التفاعل. الجسم الممتد يزيل هذه الصعوبة طبيعيًا، وكانت نظرية الأوتار الأولى التي تكمم الجاذبية دون لا نهائيات. علاوة على ذلك، يظهر الجرافيتون - حامل الجاذبية - في طيف الاهتزازات تلقائيًا، دون الحاجة لإدخاله يدويًا. هذا أحدث انطباعًا قويًا جدًا.",
+     "ثم بدأت الصعوبات. الاتساق الرياضي يتطلب عشرة أبعاد وليس أربعة. الستة الإضافية يُفترض أنها ملتفة في تشعبات مجهرية - مثل خرطوم يبدو خطًا من بعيد رغم أن له محيط. تبين أن عدد طرق الالتفاف حوالي $10^{500}$، وكل منها يعطي فيزياء مختلفة بثوابتها الخاصة.",
+     "من هنا تأتي المشكلة الكبرى: النظرية لا تتنبأ بعالمنا. إنها تسمح بأي عالم تقريبًا، ولا توجد وسيلة للاختيار بين الخيارات. في أربعين سنة، لم يتم الحصول على أي تنبؤ قابل للاختبار يميزها عن النموذج القياسي."
+    ],
+    "pro": [
+     "أول نظرية كمية للجاذبية متسقة رياضيًا",
+     "الجرافيتون ينشأ تلقائيًا، لا يُدخل يدويًا",
+     "توحد كل التفاعلات في بنية واحدة",
+     "أنتجت رياضيات قوية ومبدأ الهولوغرافيا، مفيدين بذاتهم"
+    ],
+    "con": [
+     "تتطلب عشرة أبعاد، ستة منها غير قابلة للرصد",
+     "حوالي $10^{500}$ خيارًا للالتفاف - تفقد القوة التنبؤية",
+     "في أربعين سنة، لا تنبؤ واحد قابل للاختبار",
+     "تتنبأ بجسيمات فائقة التناظر لم تُعثر عليها في المصادم"
+    ],
+    "open": [
+     "الجدل حول وضع نظرية الأوتار مستمر علنًا وأحيانًا حاد. يزعم النقاد - سمولين، فويت وآخرون - أن النظرية التي لا تقدم تنبؤات قابلة للاختبار تتوقف عن كونها فيزياء، وأنها شغلت عددًا غير متناسب من المناصب والتمويل.",
+     "يعترض المؤيدون بأنه لا توجد بدائل ذات اكتمال رياضي مماثل، وأن النظرية أعطت مبدأ الهولوغرافيا وحلّت مسائل في مجالات أخرى، وأن طلب قابلية الاختبار على مقاييس بلانك غير منصف - فلا يمكن النظر إليها أساسًا.",
+     "كلا الموقفين يحويان بعض الحقيقة. من المفيد معرفة أن هذا الجدل قائم، وألا نأخذ أي طرف على أنه مقبول بشكل عام."
+    ],
+    "now": [
+     "اليوم تحول مركز الثقل: تُستخدم الأوتار بشكل متزايد كأداة رياضية لمهام أخرى. التطابق بين نظرية الجاذبية في الحجم ونظرية الحقل على الحدود يسمح بحساب خصائص بلازما كوارك-غلوون وبعض المواد في فيزياء المواد الصلبة - حيث تعجز الطرق التقليدية.",
+     "أي أن النظرية تفيد ليس كنظرية لكل شيء، بل كجهاز حسابي. بالنسبة للفيزياء، هذا تحول عادي إلى حد ما: الجهاز يعمر الأفكار التي أنجبته."
+    ]
+   },
+   {
+    "h": "مبدأ الهولوغرافيا",
+    "kicker": "أكثر النتائج غير المتوقعة",
+    "text": [
+     "بدأ الأمر بحساب إنتروبيا الثقب الأسود: إنها تتناسب مع مساحة الأفق، وليس الحجم. بالنسبة لكل شيء آخر في الكون، تزداد الإنتروبيا مع الحجم، وهذا الاستثناء تطلب تفسيرًا.",
+     "اقترح 'ت هوفت وسسكيند حلاً جذريًا: ربما كل الفيزياء داخل منطقة معينة مشفرة بالكامل على حدودها، التي لها بُعد واحد أقل. الحجم ليس أكثر من وصف مناسب، ودرجات الحرية الحقيقية تعيش على السطح.",
+     "في عام 1997، قدم مالداسينا مثالًا ملموسًا: نظرية الجاذبية في فضاء خماسي الأبعاد معين تعادل تمامًا نظرية حقل بدون جاذبية على حدوده رباعية الأبعاد. نظريتان مختلفتان تمامًا تصفان نفس الشيء. هذا هو العمل الأكثر استشهادًا في الفيزياء النظرية في الثلاثين عامًا الماضية.",
+     "الفائدة العملية موجودة بالفعل: المسائل الصعبة ذات التفاعل القوي تُترجم إلى مسائل في الجاذبية، والتي تحل بسهولة أكبر. هكذا يُحسب لزوجة بلازما كوارك-غلوون ويتم الحصول على اتفاق مع التجربة."
+    ],
+    "image": {
+     "h": "صورة: الهولوغرام",
+     "text": [
+      "على لوحة هولوغرافية، تُسجل صورة مستوية لأهداب التداخل. عند الإضاءة، تستعيد صورة ثلاثية الأبعاد - كل المعلومات عن الحجم تُخزن على السطح.",
+      "من هنا يأتي اسم المبدأ. الادعاء ليس أن العالم وهم، بل عن المحاسبة: عدد درجات الحرية المستقلة في منطقة محدود بمساحة حدودها، وليس بحجمها.",
+      "النتيجة العملية أرضية تمامًا: كمية المعلومات التي يمكن حشرها في غرفة محدودة بمساحة جدرانها بوحدات بلانك. محاولة حشر أكثر ستؤدي إلى تشكل ثقب أسود."
+     ]
+    },
+    "open": [
+     "التطابق مُثبت بدقة فقط لفضاء من نوع خاص - ذي انحناء سالب - بينما كوننا له انحناء موجب. النقل إلى العالم الحقيقي لم يتم بعد، وغير معروف ما إذا كان ممكنًا.",
+     "من هنا تحذير مهم عند قراءة النصوص الشعبية. عبارة \"ثبت أننا نعيش في هولوغرام\" غير صحيحة مرتين: لم يُثبت بخصوص كوننا، والحديث ليس عن أن العالم غير حقيقي، بل عن طريقة لعد درجات الحرية."
+    ]
+   },
+   {
+    "h": "زمنان: فيزياء إسحاق بارس",
+    "kicker": "بحذر وبموضوعية",
+    "text": [
+     "عادةً يُفترض أن للزمن بُعدًا واحدًا وللمكان ثلاثة. إسحاق بارس يطور منذ التسعينيات نهجًا يُضاف فيه بُعد مكاني آخر وبُعد زمني آخر إلى الأربعة - ما يسمى فيزياء الزمنين.",
+     "القصد ليس الإعلان عن وجود زمن ثان. القصد تقني: في الفضاء سداسي الأبعاد بزمنين، هناك تناظر إضافي، وعالمنا العادي رباعي الأبعاد يُحصل كإحدى إسقاطاته. علاوة على ذلك، طرق الإسقاط المختلفة تعطي نظريات رباعية الأبعاد تبدو غير مرتبطة، وهي أوصاف لنفس الجسم.",
+     "هذا جذاب لأنه يفسر بعض المصادفات الغامضة بين نظريات مختلفة - فهي ظلال لبنية واحدة. أظهر بارس أن النموذج القياسي يمكن الحصول عليه بمثل هذا الإسقاط.",
+     "الصعوبة الرئيسية معروفة منذ زمن: زمنان يعنيان عادةً إما خرق السببية أو ظهور حالات ذات احتمال سلبي. بارس يتجاوز هذا بفرض قيود خاصة تزيل درجات الحرية الزائدة. مدى صلاحية هذا التجاوز محل نقاش."
+    ],
+    "open": [
+     "لا توجد تنبؤات قابلة للاختبار لفيزياء الزمنين حتى الآن، ومعظم الفيزيائيين يتعاملون معها كاتجاه مثير للاهتمام لكن هامشي. هذا ليس حكمًا بالإعدام: العديد من الأفكار المهمة بدأت هناك.",
+     "لا ينبغي فهم الزمن الثاني بشكل يومي - كإمكانية التحرك في الزمن في اتجاهين مختلفين أو وجود تيارين مستقلين للأحداث. في نهج بارس، البعد الإضافي يُقيَّد فورًا بعلاقات ولا ينتج محورًا زمنيًا ثانيًا ملحوظًا. إعادة الصياغات الشعبية التي تعد بالسفر والتيارات الزمنية المتوازية لا تنقل محتوى النظرية.",
+     "قاعدة عامة لمثل هذه المواضيع: إذا وعد البناء بنتائج مذهلة ولم يقدم رقمًا واحدًا يمكن قياسه، فيجب التعامل معه كرياضيات مثيرة للاهتمام، وليس كرسالة عن العالم."
+    ]
+   },
+   {
+    "h": "لماذا للمكان ثلاثة أبعاد وللزمن واحد",
+    "kicker": "سؤال يستحق الطرح",
+    "text": [
+     "السؤال يبدو ساذجًا، لكن له إجابات جوهرية تحد من الخيارات الممكنة.",
+     "عند عدد أبعاد مكانية أكبر من ثلاثة، لا توجد مدارات كوكبية مستقرة: قانون الجاذبية سيصبح متناسبًا عكسيًا مع مكعب المسافة، وأي اضطراب سيؤدي بالكوكب إما إلى النجم أو إلى اللانهاية. نفس الشيء مع المدارات الإلكترونية في الذرة - لن تكون هناك حالات مرتبطة مستقرة، وبالتالي لا كيمياء ولا مادة.",
+     "عند بُعدين مكانيين، تنشأ صعوبات أخرى: الموجات تنتشر مع تشويه، والبنى المعقدة مثل الجهاز العصبي تصبح صعبة - أي حلقة مغلقة تقسم المستوى ولا تسمح بالتقاطعات.",
+     "بالنسبة للزمن، الأمر أكثر صرامة. عند بُعدين زمنيين، تفقد المعادلات خاصية تسمى الزائدية، ومعها القدرة على التنبؤ الفريد: من حالة في لحظة معينة، لا يُحدد المستقبل. الفيزياء بالمعنى المألوف مستحيلة هناك.",
+     "يتبين أن 3+1 هو المزيج الوحيد الذي يسمح بوجود بنى مستقرة وقابلية للتنبؤ في نفس الوقت. هذه الحجة تُعرف بالأنثروبية: نلاحظ هذا العالم لأنه في عوالم أخرى لم يكن بإمكان مراقبين الوجود."
+    ],
+    "open": [
+     "الحجج الأنثروبية تثير انزعاجًا صريحًا لدى بعض الفيزيائيين، وليس بدون أسباب. إنها تفسر الواقع بعد وقوعه ولا تتنبأ بشيء. بالإضافة، هي ذات معنى فقط إذا كان هناك تعدد من الخيارات التي اختير منها خيارنا - وهذا افتراض قوي بذاته.",
+     "جزء آخر يعتقد أنه في بعض الحالات، التفسير الأنثروبي هو الوحيد الممكن، ويضرب مثالاً بقيمة الطاقة المظلمة: إنها قريبة بشكل مريب من الحد الذي بعده لم تكن المجرات لتتشكل.",
+     "الجدل بين هذين المعسكرين مستمر منذ ثلاثة عقود وهو ليس تقنيًا بل أيديولوجيًا: الحديث يدور حول ما يُعتبر تفسيرًا أساسًا."
+    ]
+   },
+   {
+    "h": "التضخم: نجاح مع تبعية غير سارة",
+    "kicker": "أفضل فكرة كونية وثمنها",
+    "text": [
+     "الكون الملحوظ متجانس بشكل مذهل: الإشعاع الميكروي الخلفي له نفس درجة الحرارة في كل الاتجاهات بدقة تصل إلى جزء من مائة ألف. وفي الوقت نفسه، طرفاه المتقابلان لم يكونا أبدًا في اتصال سببي - لم يكن للضوء وقت لعبور المسافة بينهما. كيف اتفقا على نفس درجة الحرارة؟",
+     "اقترح غوث في عام 1980 إجابة: في أول $10^{-35}$ ثانية، تمدد الكون بعامل لا يمكن تصوره. كل الفضاء المرصود نشأ من منطقة صغيرة تمكنت من التوازن. في نفس الوقت، يُفسر تسطح الهندسة وغياب بعض الأجسام الغريبة التي كان يجب رصدها.",
+     "أكثر من ذلك، تنبأ التضخم بطيف عدم التجانس في الإشعاع الميكروي الخلفي، وقد تأكد هذا التنبؤ بشكل رائع بواسطة القياسات. التقلبات الكمية، التي مدها التمدد إلى مقاييس كونية، أصبحت بذور المجرات. هذا واحد من أجمل الادعاءات في كل العلوم: بنية الكون هي بصمة مكبرة للارتعاش الكمي."
+    ],
+    "pro": [
+     "يشرح تجانس الكون وتسطحه",
+     "تنبأ بطيف عدم تجانس الخلفية الميكروية - تأكد بدقة عالية",
+     "يشرح نشأة المجرات من التقلبات الكمية"
+    ],
+    "con": [
+     "آلية التضخم مجهولة: الحقل المسبب له لم يُكتشف",
+     "مئات نماذج التضخم، وهي تُقحم لتناسب البيانات، لا تُستنتج",
+     "في كل النسخ تقريبًا، لا يتوقف التضخم في أي مكان باستثناء فقاعات منفردة - ومن هنا يأتي التعدد الكوني الذي لا يمكن اختباره"
+    ],
+    "open": [
+     "النقطة الأخيرة تثير الجدل الأكثر حدة. إذا كان التضخم أبديًا ويولد عددًا لا نهائيًا من المناطق بخصائص عشوائية، فإن النظرية تتوقف عن التنبؤ بأي شيء: في مجموعة لا نهائية من الخيارات، يوجد كل شيء.",
+     "ستينهاردت، أحد مؤلفي نظرية التضخم، أصبح ناقدًا حادًا لها لهذا السبب بالتحديد ويقترح بدائل بكون دوري. غوث وآخرون يعترضون بأن الصعوبات تقنية وقابلة للحل.",
+     "الوضع دال: الفيزياء تواجه لأول مرة نظرية ينجحها ينتج تبعية غير قابلة للاختبار. كيف نتعامل مع هذا منهجيًا، لا يوجد إجماع."
+    ]
+   },
+   {
+    "h": "بوم، بنروز، تيغمارك: ثلاث وجهات نظر مختلفة",
+    "kicker": "وكيف تختلف في وضعها",
+    "text": [
+     "قدم ديفيد بوم في عام 1952 تفسيرًا لميكانيكا الكم حيث للجسيمات مواقع محددة دائمًا، ويقودها حقل موجي خاص. جميع التنبؤات تتطابق مع المعتادة، لا عشوائية في الأساس - تنشأ من الجهل بالمواقع الأولية. النظرية منطقية لا تشوبها شائبة ولها ثمن: إنها غير موضعية صراحة، أي تتطلب اتصالًا فوريًا بين أجزاء متباعدة. معظم الفيزيائيين يعتبرون هذا الثمن غير مقبول، أقلية تعتبره ثمنًا مقبولًا للوضوح.",
+     "رودجر بنروز يطور فكرة أن انهيار الدالة الموجية لا يحدث عند الرصد، بل تلقائيًا عندما يصبح الفرق بين مجالي الجاذبية لحالتين متراكبتين كبيرًا. لهذه الفكرة ميزة كبيرة: إنها قابلة للاختبار. تُتنبأ بعمر محدد للتراكب يعتمد على الكتلة، وتجارب التحقق تجري الآن. لا تأكيدات حتى الآن، وجزء من نسخ النظرية تم استبعاده بالفعل بالتجربة - وهو بحد ذاته علامة جيدة: الفرضية تعمل كفرضية علمية.",
+     "ماكس تيغمارك يذهب أبعد الجميع ويدعي أن الواقع الفيزيائي هو بنية رياضية - لا يُوصف بالرياضيات، بل هو هي. عندها، كل البنى الرياضية الممكنة موجودة بنفس القدر من الواقع. جميل، لكن لا يمكن اختباره: الفرضية لا تمنع أي رصد. تيغمارك يعترف بذلك ويصر على أنها مع ذلك ذات معنى؛ النقاد يردون بأن ادعاءً متوافقًا مع أي نتيجة ليس ادعاءً فيزيائيًا."
+    ],
+    "open": [
+     "بشكل منفصل عن الادعاء المتكرر بأن وعي الراصد يخلق الواقع. في الصياغة القياسية لميكانيكا الكم، يُتحدث عما يحدث عند القياس، دون توضيح ما يُعتبر قياسًا. من هنا جاءت التفسيرات التي تستدعي الوعي - طرحها في وقتها فون نيومان وويغنر.",
+     "اليوم الأغلبية ترى أن الوعي ليس له علاقة: يكفي التفاعل مع أي محيط عياني، وهذا يُوصف بنظرية فك الترابط كميًا. الأجهزة تعمل بنفس الطريقة سواء نظر إليها أحد أو سُجلت البيانات على قرص.",
+     "لكن السؤال لم يُغلق تمامًا: فك الترابط يشرح اختفاء التراكبات لكن لا يشرح لماذا يتحقق تحديدًا ناتج واحد. هذا يبقى مفتوحًا، والموقف الصادق هو التحدث عن هذا مباشرة، دون استبدال الجهل بادعاءات جميلة عن دور الراصد."
+    ],
+    "note": "عند قراءة المواد الشعبية حول هذه المواضيع، سؤال واحد مفيد: أي رصد من شأنه أن يدحض الادعاء؟ إذا لم يكن هناك إجابة، فليس أمامك فرضية فيزيائية، بل طريقة للكلام. هذا لا يعني أنها غير مفيدة - لكن وضعها مختلف، ولا ينبغي خلطهما."
+   },
+   {
+    "h": "الضبط الدقيق",
+    "kicker": "أصعب نقطة في كل المحاضرة",
+    "text": [
+     "عدد من الكميات في الطبيعة تبدو مشبوهة بأنها مضبوطة بدقة. لو كان التفاعل القوي أضعف بنسبة قليلة، لما تشكل الديوتيريوم ولما احترقت النجوم. لو كان أقوى، لاحترق الهيدروجين في الدقائق الأولى. يُصنع الكربون في النجوم بفضل تطابق مستوى طاقة في نواة الكربون مع طاقة ثلاث نوى هيليوم مجتمعة؛ غيره بنسبة مئوية، ولن يكون كربون - وبالتالي لا كيمياء عضوية.",
+     "غير السارة بشكل خاص الطاقة المظلمة: القيمة المرصودة أصغر بـ 120 رتبة من التقدير الطبيعي، ومع ذلك قريبة من الحد الذي بعده لم تكن المجرات لتتشكل.",
+     "تُقدم ثلاثة تفسيرات، وكلها غير مرضية بطريقتها. الأول: توجد نظرية غير معروفة حتى الآن تستنتج هذه القيم بشكل فريد - أمل بلا تأكيد. الثاني: هناك العديد من الأكوان، الخصائص عشوائية، ونحن نلاحظ المناسب لأنه في الأخرى لا يوجد من يراقب - يعمل لكنه غير قابل للاختبار. الثالث: المصادفات ظاهرية، والحياة ممكنة في نطاق أوسع مما يُعتقد - صحيح جزئيًا، الحسابات تُحسن.",
+     "يجب القول مباشرة: الفيزياء هنا ليس لديها إجابة. أي شخص يدعي العكس - من أي جانب - يتجاوز حدود ما هو مثبت."
+    ]
+   },
+   {
+    "h": "ما ينقص",
+    "kicker": "ولماذا هذا يلهم بدلاً من أن يحبط",
+    "text": [
+     "انظر إلى ما تم إنجازه. لدينا نظرية تصف كل المادة بدقة تصل إلى الرقم الثاني عشر بعد الفاصلة. لدينا نظرية جاذبية تنبأت بموجات الجاذبية قبل مئة سنة من اكتشافها. لدينا تركيب الكون مقيس بدقة نسبتها مئوية. لدينا فهم كيف من الكواركات تتكون النوى، ومن النوى الذرات، ومن الذرات الكيمياء، ومن الكيمياء الحياة.",
+     "الصورة تكاد مكتملة. لا ينقص الكثير - لكن هذا القليل يقع تمامًا في المنتصف: طريقة لربط ميكانيكا الكم بالجاذبية. وهناك شعور، يشاركه العديد من الفيزيائيين العاملين، بأن المفقود ليس هائلًا. وأنه يحتاج دورة فكر واحدة، وليس ألف حقيقة جديدة.",
+     "هذا حدث بالفعل من قبل. ماكسويل كان ينقصه حد واحد لتغلق المعادلات ويظهر فيها الضوء. بلانك كان ينقصه افتراض واحد لتختفي كارثة الأشعة فوق البنفسجية. أينشتاين - فكرة واحدة عن المصعد الساقط. كل مرة، كان المفقود بسيطًا بعد فوات الأوان وغير واضح مسبقًا.",
+     "الآن التناقضات حادة بقدر ما كانت في عام 1900. حينها اعتُبرت تناقضات صغيرة في صرح شبه مكتمل - ومن اثنتين من هذه التناقضات نشأت كل فيزياء القرن العشرين. ليس مستبعدًا أن نكون في نفس الموقف دون أن ندرك ذلك."
+    ],
+    "quote": {
+     "text": "أكثر ما لا يمكن فهمه في العالم هو أنه يمكن فهمه.",
+     "who": "ألبرت أينشتاين"
+    },
+    "after": [
+     "وآخر شيء، من أجل هذه المحاضرة كُتبت. كل ما سبق ليس قائمة متحفية لإنجازات الآخرين. إنها مسائل مفتوحة يعمل عليها الناس الآن، ومعظمها لن يُحل لا بعد عام ولا بعد عشرة.",
+     "إذن، ستؤول لمن يتعلمون الآن. ليس للعباقرة من عجينة أخرى - بل لأشخاص كانوا منتبهين بما يكفي لملاحظة تناقض، وعنيدين بما يكفي لعدم التراجع. هكذا بدت كل ثورة سابقة في الفيزياء عن قرب."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "ما الذي نخرج به من هذه المحاضرة",
+   "text": [
+    "ميّز بين ثلاثة مستويات: مؤكد بالتجربة، مستنتج من الرياضيات، وهو أمل. كل ما في هذه المحاضرة ينتمي إلى الثاني والثالث، وخلطها مع الأول هو الخطأ الأكثر شيوعًا في الشروحات الشعبية.",
+    "نظرية الأوتار قدمت رياضيات قوية ومبدأ الهولوغرافيا، لكنها لم تقدم خلال أربعين عامًا أي تنبؤ قابل للاختبار. هذا يعترف به حتى مؤيدوها؛ الجدل يدور حول ما يترتب على ذلك.",
+    "التضخم فسر تجانس الكون وتنبأ بطيف عدم التجانس — وأدى إلى الكون المتعدد الذي لا يمكن التحقق منه. النجاح والصعوبة هنا لا ينفصلان.",
+    "لا توجد إجابة صادقة اليوم على أسئلة عدد أبعاد الزمن، والضبط الدقيق للثوابت، وما يحدث أثناء القياس. الاعتراف بذلك هو جزء من الموقف العلمي، وليس ضعفًا فيه.",
+    "والأهم: الصورة شبه مكتملة، والمفتاح المفقود، على ما يبدو، صغير. هذه المفاتيح بدت دائمًا واضحة بعد فوات الأوان ولم تمنح لأحد مسبقًا. قد يجد المفتاح التالي من يقرأ هذا الآن."
+   ]
+  }
+ }
+}

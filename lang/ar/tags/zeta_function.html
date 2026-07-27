@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#دالة زيتا — bridge42worlds</title>
+    <meta name="description" content="تُعرَّف دالة زيتا لريمان (Riemann zeta function) لقيم s المركبة ذات الجزء الحقيقي الأكبر من 1 بالصيغة ζ(s) = ∑ 1/n^s، وتُمَدَّد تحليلياً (analytic continuation) إلى كامل المستوى العقدي (complex plane) باستثناء s=1. تنقسم أصفارها إلى أصفار بديهية (trivial zeros) (عند الأعداد الصحيحة الزوجية السالبة) وأصفار غير بديهية (non-trivial zeros). تنص فرضية ريمان (Riemann hypothesis) على أن جميع الأصفار غير البديهية يكون جزؤها الحقيقي مساوياً لـ 1/2. تتحلل دالة زيتا إلى جداء أويلر (Euler product) على الأعداد الأولية، مما يربطها بنظرية الأعداد. يتحكم توزيع أصفارها في انحرافات قانون توزيع الأعداد الأولية. وهناك ارتباط عميق بالمصفوفات: في سبعينيات القرن العشرين، اكتشف هيو مونتغمري أن الترابط الزوجي للأصفار يتطابق مع نظيره للقيم الذاتية لمصفوفات هيرميتية عشوائية (random Hermitian matrices)، مما أدى إلى فرضية حول الارتباط بالفوضى الكمومية (quantum chaos).">
+    <meta property="og:title" content="#دالة زيتا — bridge42worlds">
+    <meta property="og:description" content="تُعرَّف دالة زيتا لريمان (Riemann zeta function) لقيم s المركبة ذات الجزء الحقيقي الأكبر من 1 بالصيغة ζ(s) = ∑ 1/n^s، وتُمَدَّد تحليلياً (analytic continuation) إلى كامل المستوى العقدي (complex plane) باستثناء s=1. تنقسم أصفارها إلى أصفار بديهية (trivial zeros) (عند الأعداد الصحيحة الزوجية السالبة) وأصفار غير بديهية (non-trivial zeros). تنص فرضية ريمان (Riemann hypothesis) على أن جميع الأصفار غير البديهية يكون جزؤها الحقيقي مساوياً لـ 1/2. تتحلل دالة زيتا إلى جداء أويلر (Euler product) على الأعداد الأولية، مما يربطها بنظرية الأعداد. يتحكم توزيع أصفارها في انحرافات قانون توزيع الأعداد الأولية. وهناك ارتباط عميق بالمصفوفات: في سبعينيات القرن العشرين، اكتشف هيو مونتغمري أن الترابط الزوجي للأصفار يتطابق مع نظيره للقيم الذاتية لمصفوفات هيرميتية عشوائية (random Hermitian matrices)، مما أدى إلى فرضية حول الارتباط بالفوضى الكمومية (quantum chaos).">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/tags/zeta_function.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">وسم</div><h1>دالة زيتا</h1><button class="share-inline" title="مشاركة" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">دالة زيتا (zeta function) هي عدسة رياضية تحول الأعداد الأولية المبعثرة إلى صورة منظمة. من خلالها نرى مدى تواتر ظهور الأعداد الأولية التوأم.</p><div class="practical-app"><strong>في الواقع:</strong> التحقق من موثوقية مفاتيح التشفير، وتحليل العمليات العشوائية، والفوضى الكمومية (quantum chaos) — أينما تطلب الأمر النظر في أعماق الفوضى العددية.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">تُعرَّف دالة زيتا لريمان (Riemann zeta function) لقيم s المركبة ذات الجزء الحقيقي الأكبر من 1 بالصيغة ζ(s) = ∑ 1/n^s، وتُمَدَّد تحليلياً (analytic continuation) إلى كامل المستوى العقدي (complex plane) باستثناء s=1. تنقسم أصفارها إلى أصفار بديهية (trivial zeros) (عند الأعداد الصحيحة الزوجية السالبة) وأصفار غير بديهية (non-trivial zeros). تنص فرضية ريمان (Riemann hypothesis) على أن جميع الأصفار غير البديهية يكون جزؤها الحقيقي مساوياً لـ 1/2. تتحلل دالة زيتا إلى جداء أويلر (Euler product) على الأعداد الأولية، مما يربطها بنظرية الأعداد. يتحكم توزيع أصفارها في انحرافات قانون توزيع الأعداد الأولية. وهناك ارتباط عميق بالمصفوفات: في سبعينيات القرن العشرين، اكتشف هيو مونتغمري أن الترابط الزوجي للأصفار يتطابق مع نظيره للقيم الذاتية لمصفوفات هيرميتية عشوائية (random Hermitian matrices)، مما أدى إلى فرضية حول الارتباط بالفوضى الكمومية (quantum chaos).</div>
+        <div class="section"><h2>التاريخ</h2><p>لاحظ ليونهارد أويلر في القرن الثامن عشر أن مجموع مقلوبات قوى جميع الأعداد الطبيعية يساوي الجداء على الأعداد الأولية. وفي عام 1859، وسّع برنارد ريمان هذه الفكرة لتشمل الأعداد المركبة، واكتشف أن جميع الأصفار غير البديهية تقع على الأرجح على خط حرج (critical line) بجزء حقيقي يساوي ½. ولا تزال هذه الفرضية غير مُثبتة حتى الآن.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تخيّل غربالاً ينخل الأعداد المركبة. دالة زيتا أشبه بصورة أشعة سينية (X-ray) لهذا الغربال: كل شريط ساطع في الصورة (صفر للدالة) يقابل تجمعاً من الأعداد الأولية. إذا وقعت الأصفار على استقامة واحدة تماماً، فإن الأعداد الأولية تكون موزعة بأقصى درجات الفوضى — كما لو بعثرتها رياح عشوائية.</p></div>
+        <div class="fun-fact">💡 المسألة الشهيرة من مسائل الألفية — إثبات فرضية ريمان — ترتبط ارتباطاً مباشراً بأمان أنظمة التشفير الحديثة، إذ قد يُسرِّع الإثبات من كشف توزيع الأعداد الأولية.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">دالة زيتا ليست مجرد صيغة، بل أداة حساسة. إذا عوّضنا فيها بعدد مركب (عدد ذي جزء تخيلي، كالظل)، فإنها تُعطي جواباً «يستشعر» العوامل الأولية. الأكثر إثارة للاهتمام هو أصفارها، النقاط التي تنعدم عندها قيمتها. موقع هذه الأصفار يتحكم في مدى سلاسة توزيع الأعداد الأولية.</div>
+        <div class="section"><h2>التاريخ</h2><p>لاحظ ليونهارد أويلر في القرن الثامن عشر أن مجموع مقلوبات قوى جميع الأعداد الطبيعية يساوي الجداء على الأعداد الأولية. وفي عام 1859، وسّع برنارد ريمان هذه الفكرة لتشمل الأعداد المركبة، واكتشف أن جميع الأصفار غير البديهية تقع على الأرجح على خط حرج (critical line) بجزء حقيقي يساوي ½. ولا تزال هذه الفرضية غير مُثبتة حتى الآن.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تخيّل غربالاً ينخل الأعداد المركبة. دالة زيتا أشبه بصورة أشعة سينية (X-ray) لهذا الغربال: كل شريط ساطع في الصورة (صفر للدالة) يقابل تجمعاً من الأعداد الأولية. إذا وقعت الأصفار على استقامة واحدة تماماً، فإن الأعداد الأولية تكون موزعة بأقصى درجات الفوضى — كما لو بعثرتها رياح عشوائية.</p></div>
+        <div class="fun-fact">💡 تقع أولى 10^{13} صفراً غير بديهي لدالة زيتا على المستقيم الحرج، لكن هذا لا يشكل إثباتاً.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">دالة زيتا لريمان (Riemann zeta function) ζ(s) هي دالة ميرومورفية (meromorphic) على المستوى العقدي ولها قطب بسيط وحيد عند s=1. من أجل Re(s)>1 تُعطى بمتسلسلة ديريشليه (Dirichlet series) المتقاربة مطلقاً أو بجداء أويلر على الأعداد الأولية: ζ(s) = ∏_{p} (1 - p^{-s})^{-1}. يتم التمديد التحليلي عبر معادلة دالية (functional equation) تربط ζ(s) و ζ(1-s) باستخدام دالة غاما (gamma function). فرضية ريمان: جميع الأصفار غير البديهية تقع على المستقيم الحرج (critical line) Re(s)=1/2. وقد تم التحقق من ذلك لعشرات المليارات من الأصفار الأولى. يوصف توزيع الأصفار بصيغة مونتغمري-أودليجكو (Montgomery–Odlyzko formula)، ويشير ارتباطها بطيف المصفوفات العشوائية (universality) إلى تفسير محتمل عبر الفوضى الكمومية. تعميمات: دوال L لديريشليه (Dirichlet L-functions)، ودوال زيتا لديدكيند (Dedekind zeta functions)، والمنحنيات الإهليلجية (elliptic curves).</div>
+        <div class="section"><h2>التاريخ</h2><p>قام أويلر عام 1737 باشتقاق الجداء على الأعداد الأولية، مؤسساً بذلك الرابط الأساسي. وفي عام 1859، قدّم ريمان الامتداد التحليلي وصاغ الفرضية. وفي القرن العشرين، أثبت هاردي لانهائية الأصفار على المستقيم الحرج، وأثبت سيلبرغ أن نسبة موجبة من الأصفار تقع عليه. وفي عام 1972، اكتشف مونتغمري أنماطاً إحصائية للأصفار، وأكدها أودليجكو عددياً على نطاق هائل.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>المعادلة الدالية ζ(s) = 2^s π^{s-1} sin(πs/2) Γ(1-s) ζ(1-s) متناظرة بالنسبة للمستقيم الحرج. تعبّر صيغة ريمان-فون مانغولدت الصريحة (Riemann–von Mangoldt explicit formula) عن مجموع قوى الأعداد الأولية بدلالة مجموع الأصفار غير البديهية لـ ζ(s). هذا يعني أن كل عدد أولي «يساهم» في تذبذبات ζ(s)، وأن كل صفر يعدّل الانحرافات في توزيع الأعداد الأولية عن الحد الرئيسي. تزداد كثافة الأصفار عند الارتفاع T وفقاً للعلاقة (T/2π) log(T/2πe). مبرهنة الأعداد الأولية (prime number theorem) تكافئ غياب الأصفار على المستقيم Re(s)=1. عبر هذه العدسة، نرى كيف أن الأعداد الأولية، مثل المفاتيح، تتناسب مع أقفال التشفير.</p></div>
+        <div class="formula"><div class="formula-render">\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s}</div><div class="formula-meaning">s — متغير مركب بجزء حقيقي &gt; 1</div></div><div class="formula"><div class="formula-render">\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1 - p^{-s}}</div><div class="formula-meaning">p يمر على جميع الأعداد الأولية، تمثيل على شكل جداء لانهائي</div></div><div class="formula"><div class="formula-render">\zeta(s) = 2^s \pi^{s-1} \sin\left(\frac{\pi s}{2}\right) \Gamma(1-s) \zeta(1-s)</div><div class="formula-meaning">Γ — دالة غاما، تربط قيم دالة زيتا عند النقطتين s و 1-s</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>فرضية ريمان — إثبات أن جميع الأصفار غير البديهية تقع على المستقيم الحرج; توضيح الارتباط بالفوضى الكمومية والمقاربة المؤثِّرة (هل يوجد مؤثر مترافق ذاتي تكون قيمه الذاتية هي الأجزاء التخيلية للأصفار؟); فرضية ليندلوف (Lindelöf hypothesis) حول نمو ζ(s) على المستقيم الحرج</p><p class="fact">💡 تقع أولى 10^{13} صفراً غير بديهي لدالة زيتا على المستقيم الحرج، لكن هذا لا يشكل إثباتاً.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div>
+<div class="mini-graph" data-node="t:zeta_function"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="zeta_function_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="zeta_function" title="مفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> أضف تعليقًا</button></div>
+<div class="feedback" id="feedback" data-article-id="zeta_function_ar_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/elliptic_curve.html" class="side-tag" data-tag="elliptic_curve">المنحنى الإهليلجي</a><a href="/lang/ar/tags/functional_analysis.html" class="side-tag" data-tag="functional_analysis">التحليل الدالي</a><a href="/lang/ar/tags/modular_form.html" class="side-tag" data-tag="modular_form">الشكل النمطي</a><a href="/lang/ar/tags/random_matrix.html" class="side-tag" data-tag="random_matrix">مصفوفة عشوائية</a><a href="/lang/ar/tags/topology.html" class="side-tag" data-tag="topology">طوبولوجيا</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="zeta_function"><p>لا مقالات بعد</p></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('zeta_function', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

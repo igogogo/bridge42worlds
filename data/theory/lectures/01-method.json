@@ -1,0 +1,556 @@
+{
+ "id": "01-method",
+ "schema": "b42.lecture/1",
+ "ru": {
+  "title": "Метод теоретической физики",
+  "subtitle": "Лекция 1 · Модель, уравнение, решение — один рецепт на весь курс",
+  "lead": "Пройдя четырнадцать тем, легко решить, что физика — это набор разных формул для разных случаев. На самом деле всё это время мы делали одно и то же действие, только с разными объектами. Разберём само действие.",
+  "blocks": [
+   {
+    "h": "Рецепт, который повторялся четырнадцать раз",
+    "kicker": "то, что было спрятано за содержанием",
+    "text": [
+     "Ландау и Лифшиц написали десятитомный курс теоретической физики, и в нём поражает не объём, а однородность. Механика, теория поля, квантовая механика, гидродинамика, физика сплошных сред — везде один и тот же порядок действий. Меняется предмет, не меняется метод.",
+     "Порядок такой. Первое: выбрать модель — решить, что в задаче существенно, а чем можно пренебречь. Второе: записать уравнение, связывающее величину с быстротой её изменения. Третье: решить это уравнение, то есть найти, как величина зависит от времени или координаты. Четвёртое: проверить решение на предельных случаях и сверить с опытом.",
+     "Всё, что мы разбирали, укладывается в эти четыре шага. Разница только в том, какая величина стоит в уравнении и что именно управляет её изменением."
+    ],
+    "image": {
+     "h": "Образ: рецепт и продукты",
+     "text": [
+      "Представьте, что у вас есть один рецепт — скажем, тушение. Продукты каждый раз разные: мясо, овощи, рыба. Действия одни и те же: нарезать, обжарить, залить, томить.",
+      "Теоретическая физика устроена так же. Рецепт: модель → уравнение → решение → проверка. Продукты: маятник, газ, поле, электрон, ядро. Тот, кто выучил только блюда, каждый раз начинает заново. Тот, кто понял рецепт, приступает к любому новому продукту уверенно."
+     ]
+    }
+   },
+   {
+    "h": "Что такое дифференциальное уравнение",
+    "kicker": "самое важное понятие всей теоретической физики",
+    "text": [
+     "Обычное уравнение спрашивает: чему равно число? Дифференциальное спрашивает иначе: какая функция ведёт себя вот так? Это переход от поиска числа к поиску закона поведения.",
+     "Возьмите простейший пример. Утверждение «скорость роста денег на счёте пропорциональна имеющейся сумме» — это уже дифференциальное уравнение. Записывается оно как $dN/dt = kN$, где $dN/dt$ означает быстроту изменения. Решить его — значит найти, как сумма зависит от времени. Ответом будет экспонента.",
+     "Обратите внимание на устройство: слева стоит скорость изменения величины, справа — то, от чего эта скорость зависит. Уравнение не говорит, чему равна величина; оно говорит, куда она движется в каждый момент. Дальше решение как бы прокладывает путь шаг за шагом."
+    ],
+    "eq": "$\\frac{dN}{dt} = kN \\;\\Longrightarrow\\; N(t) = N_0 e^{kt}$",
+    "after": [
+     "Порядок уравнения — это наибольшая производная в нём. Первого порядка означает, что для однозначного ответа нужно одно начальное условие: где мы стартуем. Второго — два: где стартуем и с какой скоростью. Именно отсюда во вводной теме взялось пространство состояний: размерность его равна порядку уравнения."
+    ],
+    "image": {
+     "h": "Образ: карта уклонов и путь по ней",
+     "text": [
+      "Вообразите холмистую местность, где в каждой точке нарисована стрелка — куда покатится мяч. Это и есть дифференциальное уравнение: правило, задающее направление в каждой точке.",
+      "Решение — конкретная траектория мяча. Поставьте его в одном месте — покатится так, в другом — иначе. Уравнение одно, решений бесконечно много, и выбирает между ними начальное условие. Вот почему в задачах всегда спрашивают, где тело было в нулевой момент: без этого стрелки есть, а пути нет."
+     ]
+    }
+   },
+   {
+    "h": "Как их решают на самом деле",
+    "kicker": "четыре приёма, покрывающие почти всё",
+    "text": [
+     "Первый приём — разделение переменных. Если удаётся собрать всё, что зависит от искомой величины, слева, а всё, что от времени, справа, задача сводится к взятию двух интегралов. Так решаются закон радиоактивного распада, остывание тела и разрядка конденсатора — все они одного вида.",
+     "Второй — угадывание решения по виду уравнения. Если производная возвращает ту же функцию, ответ экспонента. Если вторая производная возвращает функцию со знаком минус, ответ синус: именно так решается уравнение колебаний, и потому синус встречается всюду от маятника до квантовой ямы.",
+     "Третий — разложение по простым решениям. Сложное воздействие раскладывают в сумму синусов, находят отклик на каждый по отдельности и складывают обратно. Это метод Фурье, и он работает, пока система линейна.",
+     "Четвёртый — численное решение. Разбиваем время на маленькие шаги и на каждом шаге двигаемся по стрелке. Именно так считают все стенды этого курса: орбита планеты, столкновение шаров, частица в магнитном поле. Точного решения там может не быть вовсе, а численное есть всегда."
+    ],
+    "note": "Важно понимать, что точно решаемых задач в физике исчезающе мало. Задача двух тел решается, трёх — уже нет. Атом водорода решается, гелий — нет. Практически вся современная теоретическая физика есть искусство приближений: найти малый параметр, разложить по нему, оставить первые члены. Именно поэтому во вводной теме мы столько внимания уделили оценке малости."
+   },
+   {
+    "h": "Один и тот же вид уравнения — в каждом разделе",
+    "kicker": "здесь курс собирается в единую картину",
+    "text": [
+     "А теперь главное наблюдение всей лекции. Уравнений в физике очень много, но по существу их несколько типов, и каждый повторяется из раздела в раздел.",
+     "Первый тип: скорость изменения пропорциональна самой величине. Ответ — экспонента. Так устроены радиоактивный распад, остывание чая, разряд конденсатора, затухание колебаний, поглощение света в среде, размножение нейтронов в реакторе. Шесть разных явлений и одно уравнение.",
+     "Второй тип: вторая производная пропорциональна величине со знаком минус. Ответ — синус. Так устроены маятник, груз на пружине, колебательный контур, звуковая волна, световая волна, электрон в атоме. Мы прошли их все по отдельности, а уравнение было одно.",
+     "Третий тип: скорость изменения пропорциональна кривизне распределения. Ответ — расплывание. Так устроены теплопроводность, диффузия, распространение примеси, просачивание давления в пласте. Всё, что размазывается со временем, подчиняется одному уравнению.",
+     "Четвёртый тип: вторая производная по времени пропорциональна второй по координате. Ответ — бегущая волна. Струна, звук, свет, сейсмические волны, гравитационные волны — одна запись."
+    ],
+    "image": {
+     "h": "Образ: четыре мелодии на разных инструментах",
+     "text": [
+      "Слушая оркестр, неопытное ухо слышит хаос из множества звуков. Опытное узнаёт: вот основная тема у скрипок, вот она же у виолончелей октавой ниже, вот в исполнении флейты.",
+      "С уравнениями то же самое. Экспонента, синус, расплывание, волна — четыре темы. Разделы физики — разные инструменты. Тот, кто научился узнавать тему, слышит в новой задаче знакомое и понимает, чего ждать от ответа, ещё не начав считать."
+     ]
+    },
+    "after": [
+     "Отсюда следует практический совет, которым пользуются профессионалы. Столкнувшись с незнакомой задачей, не бросайтесь искать формулу — сначала запишите, что от чего зависит, и посмотрите, на какой из знакомых типов это похоже. В девяти случаях из десяти вы узнаете один из четырёх и сразу будете знать, экспонента там, синус или расплывание."
+    ]
+   },
+   {
+    "h": "Физика развивается по спирали",
+    "kicker": "закономерность, которую видно только издалека",
+    "text": [
+     "Пройдя курс, трудно не заметить: одни и те же споры повторяются, только на новом уровне. Свет — волна или частица? Гюйгенс говорит волна, Ньютон говорит частица, Юнг доказывает волну, Эйнштейн возвращает частицу, и в итоге оказывается, что верны оба, а вопрос был поставлен неверно.",
+     "Так происходит постоянно. Сначала утверждение. Затем его отрицание, часто убедительное. Затем — не победа одной стороны, а переход на уровень, где обе оказываются частными случаями чего-то более общего. И на новом уровне спор начинается заново, уже о другом.",
+     "Механика Ньютона утверждала абсолютное время. Теория относительности его отрицала. Итог не в том, что Ньютон ошибался: его механика осталась верной как предельный случай, а абсолютное время оказалось хорошим приближением при малых скоростях. Старое не отброшено, а включено внутрь нового с указанием границ.",
+     "То же с непрерывностью и дискретностью. Вещество считали сплошным — атомисты возразили — атомы победили, и вещество стало дискретным. Затем оказалось, что дискретные частицы описываются непрерывными волновыми функциями. Затем — что и поля квантуются. Спор непрерывного с дискретным идёт третье тысячелетие и каждый раз выходит на новый виток."
+    ],
+    "image": {
+     "h": "Образ: винтовая лестница",
+     "text": [
+      "Поднимаясь по винтовой лестнице, вы регулярно оказываетесь над той же точкой пола, что и раньше. Кажется, что ходите по кругу.",
+      "Но вы выше. Вид из окна тот же самый и одновременно другой: видно дальше, и становится понятно, чего не было видно этажом ниже.",
+      "Физика движется так же. Вопрос «из чего состоит вещество» задавали Демокрит, Дальтон, Резерфорд, Гелл-Манн — один вопрос, четыре этажа. Каждый ответ был верен для своего этажа и стал приближением на следующем."
+     ]
+    },
+    "after": [
+     "Отсюда практический вывод для того, кто учится. Не стоит воспринимать очередную теорию как окончательную истину, но не стоит и считать, что раз всё меняется, то знать ничего нельзя. Верно третье: каждая теория точно описывает свой круг явлений и указывает, где кончается. Знание накапливается, а не отменяется.",
+     "И ещё. Самые продуктивные места в физике — те, где противоречие остро. Ультрафиолетовая катастрофа, несовместимость Максвелла с Галилеем, парадокс информации — все они выглядели досадными неувязками, а оказывались входами на следующий этаж. Противоречие в физике не ошибка, а указатель."
+    ],
+    "open": [
+     "Стоит быть честным: сама идея, что развитие идёт по спирали, — это способ смотреть, а не закон природы. Она хорошо описывает пройденное и ничего не предсказывает наперёд: неизвестно, разрешится ли нынешнее противоречие между квантовой механикой и гравитацией синтезом, как раньше, или потребует чего-то, чему у нас пока нет названия.",
+     "Некоторые физики считают такие обобщения бесполезными и советуют просто считать. Другие полагают, что понимание закономерностей развития науки помогает выбирать, над чем работать. Спор между ними идёт давно и вряд ли закончится."
+    ]
+   },
+   {
+    "h": "Ландау и его теорминимум",
+    "kicker": "как этому учили",
+    "text": [
+     "Лев Ландау придумал систему подготовки теоретиков, которую называли теоретическим минимумом. Это был экзамен из девяти разделов, сдать который надо было лично ему. За тридцать лет его сдали сорок три человека — при том, что попытки делали сотни.",
+     "Замечательно, что в теорминимуме почти не было фактов. Проверялось умение брать интегралы, решать уравнения и, главное, оценивать: что здесь существенно, что можно отбросить, какого порядка ожидается ответ. Ландау считал, что физику нельзя выучить, ею можно только уметь пользоваться.",
+     "Десятитомный курс, написанный им вместе с Евгением Лифшицем, устроен по тому же принципу. Про эту пару ходила шутка, что в курсе нет ни одного слова Ландау и ни одной мысли Лифшица; она несправедлива к обоим, но точно передаёт распределение ролей: замысел и метод принадлежали Ландау, изложение — Лифшицу."
+    ],
+    "quote": {
+     "text": "Метод важнее открытия, ибо правильный метод исследования приведёт к новым, ещё более ценным открытиям.",
+     "who": "Лев Ландау"
+    },
+    "after": [
+     "Стоит сказать и о судьбе. В 1938 году Ландау арестовали по обвинению в антисоветской деятельности; он провёл год в тюрьме и был освобождён благодаря личному письму Петра Капицы Сталину, где Капица брал его на поруки. Через двадцать четыре года Ландау попал в тяжелейшую автокатастрофу, после которой уже не смог работать. Нобелевскую премию 1962 года за теорию сверхтекучести ему вручали в больнице."
+    ]
+   },
+   {
+    "h": "Зачем понимать метод, а не только результаты",
+    "kicker": "практический вывод",
+    "text": [
+     "Формулы устаревают и уточняются, метод — нет. Механику Ньютона поправила теория относительности, но приём остался прежним: выбрали модель, записали уравнение, решили, проверили границы. Квантовая механика заменила траектории волновыми функциями, а порядок действий сохранила полностью.",
+     "Второе. Метод переносится за пределы физики. Уравнение экспоненциального роста одинаково описывает распад ядер, размножение бактерий, распространение эпидемии и сложные проценты. Уравнение диффузии описывает и растекание тепла, и расползание цены на рынке. Тот, кто освоил приём в физике, узнаёт его в чужой области с полуслова.",
+     "И третье, самое важное для того, кто учится. Метод даёт возможность подступиться к задаче, которую вы никогда не видели. Формулу для незнакомой задачи вспомнить неоткуда, а спросить себя «что здесь меняется и от чего зависит скорость этого изменения» можно всегда."
+    ],
+    "now": [
+     "Сегодня к четырём классическим приёмам добавился пятый — машинное обучение. Нейросети находят решения уравнений там, где численные методы упираются в размерность: в задачах многих тел, в физике плазмы, в предсказании структуры белков. Это не замена метода, а новый способ выполнять третий шаг.",
+     "Спор о том, считать ли это пониманием, идёт откровенный. Сеть даёт ответ, но не объяснение, а физика традиционно ценит именно объяснение. Как совместить одно с другим, пока никто не знает."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Что унести из этой лекции",
+   "text": [
+    "Физика не набор формул, а один повторяющийся приём: выбрать модель, записать уравнение для скорости изменения, решить его, проверить границы применимости. Всё содержание курса — это применение приёма к разным объектам.",
+    "Уравнений по существу немного. Экспонента, синус, расплывание и волна покрывают подавляющую часть задач, с которыми вы столкнётесь. Узнавать тип уравнения важнее, чем помнить конкретные решения.",
+    "И последнее. Метод не гарантирует ответа: точно решаемых задач мало, и почти всё считается приближённо. Но он гарантирует, что вы будете знать, с чего начать, — а это в незнакомой задаче и есть самое трудное."
+   ]
+  }
+ },
+ "en": {
+  "title": "Method of Theoretical Physics",
+  "subtitle": "Lecture 1 · Model, Equation, Solution — One Recipe for the Entire Course",
+  "lead": "After going through fourteen topics, it's easy to conclude that physics is a collection of different formulas for different cases. In reality, all this time we have been performing the same action, only on different objects. Let's break down that action itself.",
+  "blocks": [
+   {
+    "h": "The Recipe Repeated Fourteen Times",
+    "kicker": "Behind the Content",
+    "text": [
+     "Landau and Lifshitz wrote a ten-volume course on theoretical physics, and what strikes you is not the volume but the homogeneity. Mechanics, field theory, quantum mechanics, hydrodynamics, physics of continuous media — everywhere the same sequence of actions. The subject changes, the method does not.",
+     "The order is this. First: choose a model — decide what is essential in the problem and what can be neglected. Second: write an equation linking the quantity with its rate of change. Third: solve the equation, that is, find how the quantity depends on time or coordinate. Fourth: check the solution in limiting cases and compare with experiment.",
+     "Everything we have discussed fits into these four steps. The only difference is what quantity appears in the equation and what exactly controls its change."
+    ],
+    "image": {
+     "h": "Metaphor: recipe and ingredients",
+     "text": [
+      "Imagine you have one recipe — say, braising. The ingredients change each time: meat, vegetables, fish. The actions are the same: chop, sear, add liquid, simmer.",
+      "Theoretical physics works the same way. The recipe: model → equation → solution → verification. The ingredients: pendulum, gas, field, electron, nucleus. One who has only learned the dishes starts from scratch each time. One who has understood the recipe approaches any new ingredient with confidence."
+     ]
+    }
+   },
+   {
+    "h": "What Is a Differential Equation",
+    "kicker": "the most important concept in all of theoretical physics",
+    "text": [
+     "An ordinary equation asks: what number equals what? A differential equation asks differently: what function behaves like this? It is a transition from searching for a number to searching for a law of behavior.",
+     "Take the simplest example. The statement 'the growth rate of money in an account is proportional to the current amount' is already a differential equation. It is written as $dN/dt = kN$, where $dN/dt$ means the rate of change. Solving it means finding how the amount depends on time. The answer is an exponential.",
+     "Note the structure: on the left is the rate of change of the quantity, on the right is what that rate depends on. The equation does not tell you what the quantity equals; it tells you where it is heading at each moment. Then the solution essentially traces the path step by step."
+    ],
+    "eq": "$\\frac{dN}{dt} = kN \\;\\Longrightarrow\\; N(t) = N_0 e^{kt}$",
+    "after": [
+     "The order of an equation is the highest derivative in it. First order means that for a unique solution you need one initial condition: where we start. Second order means two: where we start and with what speed. This is exactly where the concept of state space came from in the introductory topic: its dimension equals the order of the equation."
+    ],
+    "image": {
+     "h": "Metaphor: a map of slopes and a path on it",
+     "text": [
+      "Imagine a hilly terrain where at each point an arrow is drawn — where a ball would roll. That is a differential equation: a rule that gives the direction at each point.",
+      "The solution is a specific trajectory of the ball. Place it in one spot — it rolls this way; in another — differently. The equation is the same, there are infinitely many solutions, and the initial condition selects between them. That is why problems always ask where the body was at the initial moment: without that, the arrows exist but the path does not."
+     ]
+    }
+   },
+   {
+    "h": "How They Are Actually Solved",
+    "kicker": "four techniques that cover almost everything",
+    "text": [
+     "The first technique is separation of variables. If you can gather everything that depends on the unknown quantity on the left and everything that depends on time on the right, the problem reduces to taking two integrals. This is how the law of radioactive decay, cooling of a body, and discharge of a capacitor are solved — they are all of the same type.",
+     "The second is guessing the solution from the form of the equation. If the derivative returns the same function, the answer is an exponential. If the second derivative returns the function with a minus sign, the answer is a sine: this is how the oscillation equation is solved, and that is why the sine appears everywhere from a pendulum to a quantum well.",
+     "The third is expansion in simple solutions. A complex input is decomposed into a sum of sines, the response to each is found separately, and then they are added back together. This is the Fourier method, and it works as long as the system is linear.",
+     "The fourth is numerical solution. We break time into small steps and at each step move along the arrow. This is how all the demos of this course work: planetary orbit, collision of balls, particle in a magnetic field. An exact solution may not exist at all, but a numerical one always does."
+    ],
+    "note": "It is important to understand that exactly solvable problems in physics are vanishingly few. The two-body problem is solvable, the three-body is not. The hydrogen atom is solvable, helium is not. Practically all of modern theoretical physics is the art of approximations: find a small parameter, expand in it, keep the first few terms. That is exactly why in the introductory topic we paid so much attention to estimating smallness."
+   },
+   {
+    "h": "The Same Type of Equation in Every Section",
+    "kicker": "here the course comes together into a single picture",
+    "text": [
+     "Now for the main observation of the entire lecture. There are very many equations in physics, but in essence there are only a few types, and each repeats from section to section.",
+     "First type: the rate of change is proportional to the quantity itself. The answer is an exponential. This governs radioactive decay, cooling of tea, capacitor discharge, damping of oscillations, absorption of light in a medium, neutron multiplication in a reactor. Six different phenomena and one equation.",
+     "Second type: the second derivative is proportional to the quantity with a minus sign. The answer is a sine. This governs a pendulum, a mass on a spring, an oscillatory circuit, a sound wave, a light wave, an electron in an atom. We have covered all of them separately, yet the equation was the same.",
+     "Third type: the rate of change is proportional to the curvature of the distribution. The answer is spreading. This governs heat conduction, diffusion, propagation of an impurity, seepage of pressure in a reservoir. Everything that smears out over time follows one equation.",
+     "Fourth type: the second derivative with respect to time is proportional to the second derivative with respect to coordinate. The answer is a traveling wave. String, sound, light, seismic waves, gravitational waves — one description."
+    ],
+    "image": {
+     "h": "Metaphor: four melodies on different instruments",
+     "text": [
+      "When listening to an orchestra, an untrained ear hears a chaos of many sounds. A trained ear recognizes: here is the main theme on violins, here the same theme on cellos an octave lower, here on the flute.",
+      "It is the same with equations. Exponential, sine, spreading, wave — four themes. The branches of physics are different instruments. One who has learned to recognize the theme hears something familiar in a new problem and understands what to expect from the answer before even beginning to calculate."
+     ]
+    },
+    "after": [
+     "Hence a practical tip that professionals use. When faced with an unfamiliar problem, do not rush to look for a formula — first write down what depends on what and see which of the familiar types it resembles. In nine out of ten cases you will recognize one of the four and immediately know whether it is an exponential, a sine, or a spreading."
+    ]
+   },
+   {
+    "h": "Physics Develops in a Spiral",
+    "kicker": "a pattern visible only from afar",
+    "text": [
+     "Having completed the course, it is hard not to notice: the same debates repeat, only at a new level. Light — wave or particle? Huygens says wave, Newton says particle, Young proves wave, Einstein brings back particle, and in the end it turns out both are correct and the question was wrongly posed.",
+     "This happens constantly. First a statement. Then its negation, often convincing. Then — not a victory of one side, but a shift to a level where both turn out to be special cases of something more general. And at the new level the debate starts anew, about something else.",
+     "Newtonian mechanics asserted absolute time. Relativity denied it. The outcome is not that Newton was wrong: his mechanics remained valid as a limiting case, and absolute time turned out to be a good approximation at low speeds. The old is not discarded but embedded within the new with boundaries indicated.",
+     "The same with continuity and discreteness. Matter was considered continuous — atomists objected — atoms won, and matter became discrete. Then it turned out that discrete particles are described by continuous wave functions. Then it turned out that fields are also quantized. The debate between continuous and discrete has been going on for three millennia and each time it turns a new loop."
+    ],
+    "image": {
+     "h": "Metaphor: spiral staircase",
+     "text": [
+      "Climbing a spiral staircase, you regularly find yourself above the same point on the floor as before. It seems you are going in circles.",
+      "But you are higher. The view from the window is the same and yet different: you see farther, and what was not visible on the floor below becomes clear.",
+      "Physics moves the same way. The question 'what is matter made of' was asked by Democritus, Dalton, Rutherford, Gell-Mann — one question, four floors. Each answer was correct for its floor and became an approximation on the next."
+     ]
+    },
+    "after": [
+     "Hence a practical conclusion for the learner. Do not perceive each new theory as the ultimate truth, but do not think that since everything changes, nothing can be known. The third way is correct: each theory accurately describes its own range of phenomena and indicates where it ends. Knowledge accumulates, it is not canceled.",
+     "And another thing. The most productive places in physics are those where the contradiction is sharp. The ultraviolet catastrophe, the incompatibility of Maxwell with Galileo, the information paradox — they all looked like annoying inconsistencies but turned out to be entrances to the next floor. A contradiction in physics is not a mistake but a signpost."
+    ],
+    "open": [
+     "To be honest: the idea that development proceeds in a spiral is a way of looking rather than a law of nature. It describes the past well and predicts nothing ahead: it is unknown whether the current contradiction between quantum mechanics and gravitation will be resolved by a synthesis, as before, or will require something for which we have no name yet.",
+     "Some physicists consider such generalizations useless and advise just to calculate. Others believe that understanding the patterns of the development of science helps choose what to work on. The debate between them has been going on for a long time and is unlikely to end."
+    ]
+   },
+   {
+    "h": "Landau and His Theoretical Minimum",
+    "kicker": "how this was taught",
+    "text": [
+     "Lev Landau devised a training system for theorists called the theoretical minimum. It was an exam in nine sections, to be passed personally to him. In thirty years, forty-three people passed it — despite hundreds of attempts.",
+     "Remarkably, the theoretical minimum contained almost no facts. What was tested was the ability to take integrals, solve equations, and, most importantly, to estimate: what is essential here, what can be discarded, what order of magnitude is expected for the answer. Landau believed that physics cannot be learned; one can only learn to use it.",
+     "The ten-volume course he wrote together with Evgeny Lifshitz is organized on the same principle. There was a joke about the pair: that the course contains not a single word by Landau and not a single thought by Lifshitz; it is unfair to both but accurately conveys the division of roles: the concept and method belonged to Landau, the exposition to Lifshitz."
+    ],
+    "quote": {
+     "text": "Method is more important than discovery, for the correct method of research will lead to new, even more valuable discoveries.",
+     "who": "Lev Landau"
+    },
+    "after": [
+     "A word also about his fate. In 1938, Landau was arrested on charges of anti-Soviet activity; he spent a year in prison and was freed thanks to a personal letter from Pyotr Kapitsa to Stalin, in which Kapitsa took him under his guarantee. Twenty-four years later, Landau was in a severe car accident, after which he could no longer work. The 1962 Nobel Prize for the theory of superfluidity was awarded to him in the hospital."
+    ]
+   },
+   {
+    "h": "Why Understand the Method, Not Just the Results",
+    "kicker": "practical takeaway",
+    "text": [
+     "Formulas become obsolete and are refined; methods do not. Newton's mechanics was corrected by relativity, but the procedure remained the same: choose a model, write an equation, solve it, check boundaries. Quantum mechanics replaced trajectories with wave functions, but the sequence of steps was preserved entirely.",
+     "Second. The method transfers beyond physics. The exponential growth equation describes nuclear decay, bacterial growth, epidemic spread, and compound interest identically. The diffusion equation describes both heat spreading and the spread of prices in a market. One who has mastered the technique in physics recognizes it in another field at a glance.",
+     "And third, the most important for the learner. The method gives you a way to approach a problem you have never seen before. There is no source to recall a formula for an unfamiliar problem, but you can always ask yourself 'what is changing here and what does the rate of this change depend on?'"
+    ],
+    "now": [
+     "Today, a fifth technique has been added to the four classical ones — machine learning. Neural networks find solutions to equations where numerical methods hit the dimensionality barrier: in many-body problems, in plasma physics, in predicting protein structures. This is not a replacement of the method, but a new way to perform the third step.",
+     "The debate about whether to consider this understanding is open. The network gives an answer but not an explanation, and physics traditionally values explanation. How to reconcile the two, no one knows yet."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "What to take away from this lecture",
+   "text": [
+    "Physics is not a set of formulas, but one recurring technique: choose a model, write an equation for the rate of change, solve it, check the limits of applicability. The entire content of the course is the application of this technique to different objects.",
+    "There are essentially few equations. The exponential, sine, diffusion, and wave cover the vast majority of problems you will encounter. Recognizing the type of equation is more important than remembering specific solutions.",
+    "And lastly. The method does not guarantee an answer: exactly solvable problems are few, and almost everything is computed approximately. But it guarantees that you will know where to start — and that is the hardest part in an unfamiliar problem."
+   ]
+  }
+ },
+ "es": {
+  "title": "Método de la física teórica",
+  "subtitle": "Lección 1 · Modelo, ecuación, solución: una receta para todo el curso",
+  "lead": "Después de recorrer catorce temas, es fácil pensar que la física es un conjunto de fórmulas diferentes para casos diferentes. En realidad, durante todo este tiempo hemos estado haciendo la misma acción, solo que con objetos distintos. Analicemos la acción en sí.",
+  "blocks": [
+   {
+    "h": "La receta que se repitió catorce veces",
+    "kicker": "lo que estaba oculto tras el contenido",
+    "text": [
+     "Landau y Lifshitz escribieron un curso de diez volúmenes de física teórica, y lo que impresiona no es el volumen, sino la homogeneidad. Mecánica, teoría de campos, mecánica cuántica, hidrodinámica, física del medio continuo — en todas partes el mismo orden de actuación. Cambia el objeto, no cambia el método.",
+     "El orden es el siguiente. Primero: elegir un modelo — decidir qué es esencial en el problema y qué se puede despreciar. Segundo: escribir la ecuación que relaciona la magnitud con su rapidez de cambio. Tercero: resolver esa ecuación, es decir, encontrar cómo depende la magnitud del tiempo o la coordenada. Cuarto: verificar la solución en casos límite y compararla con la experiencia.",
+     "Todo lo que hemos analizado encaja en estos cuatro pasos. La diferencia es solo qué magnitud aparece en la ecuación y qué controla exactamente su cambio."
+    ],
+    "image": {
+     "h": "Imagen: receta e ingredientes",
+     "text": [
+      "Imagina que tienes una sola receta — por ejemplo, estofar. Los ingredientes son diferentes cada vez: carne, verduras, pescado. Las acciones son las mismas: cortar, freír, añadir líquido, cocer a fuego lento.",
+      "La física teórica funciona igual. Receta: modelo → ecuación → solución → verificación. Ingredientes: péndulo, gas, campo, electrón, núcleo. Quien solo ha aprendido los platos, empieza de nuevo cada vez. Quien ha entendido la receta, aborda cualquier nuevo ingrediente con confianza."
+     ]
+    }
+   },
+   {
+    "h": "Qué es una ecuación diferencial",
+    "kicker": "el concepto más importante de toda la física teórica",
+    "text": [
+     "Una ecuación ordinaria pregunta: ¿cuánto vale el número? Una ecuación diferencial pregunta de otra manera: ¿qué función se comporta así? Es el paso de buscar un número a buscar una ley de comportamiento.",
+     "Toma el ejemplo más simple. La afirmación «la velocidad de crecimiento del dinero en una cuenta es proporcional a la cantidad existente» ya es una ecuación diferencial. Se escribe como $dN/dt = kN$, donde $dN/dt$ significa la rapidez de cambio. Resolverla significa encontrar cómo depende la cantidad del tiempo. La respuesta es una exponencial.",
+     "Observa la estructura: a la izquierda está la velocidad de cambio de la magnitud, a la derecha está aquello de lo que depende esa velocidad. La ecuación no dice cuánto vale la magnitud; dice hacia dónde se mueve en cada instante. Luego, la solución va trazando el camino paso a paso."
+    ],
+    "eq": "$\\frac{dN}{dt} = kN \\;\\Longrightarrow\\; N(t) = N_0 e^{kt}$",
+    "after": [
+     "El orden de una ecuación es la derivada de mayor orden que contiene. De primer orden significa que para una respuesta inequívoca se necesita una condición inicial: desde dónde partimos. De segundo orden — dos: desde dónde partimos y con qué velocidad. De ahí que en el tema introductorio apareciera el espacio de estados: su dimensión es igual al orden de la ecuación."
+    ],
+    "image": {
+     "h": "Imagen: mapa de pendientes y camino sobre él",
+     "text": [
+      "Imagina un terreno montañoso donde en cada punto hay una flecha dibujada — hacia dónde rodaría una pelota. Eso es una ecuación diferencial: una regla que indica la dirección en cada punto.",
+      "La solución es una trayectoria concreta de la pelota. Colócala en un lugar — rodará de una manera; en otro — de otra. La ecuación es una, las soluciones son infinitas, y entre ellas elige la condición inicial. Por eso en los problemas siempre se pregunta dónde estaba el cuerpo en el instante cero: sin eso, las flechas están, pero el camino no."
+     ]
+    }
+   },
+   {
+    "h": "Cómo se resuelven realmente",
+    "kicker": "cuatro técnicas que cubren casi todo",
+    "text": [
+     "La primera técnica es la separación de variables. Si se logra reunir todo lo que depende de la magnitud buscada a la izquierda, y todo lo que depende del tiempo a la derecha, el problema se reduce a calcular dos integrales. Así se resuelven la ley de desintegración radiactiva, el enfriamiento de un cuerpo y la descarga de un condensador — todos son del mismo tipo.",
+     "La segunda es adivinar la solución por la forma de la ecuación. Si la derivada devuelve la misma función, la respuesta es una exponencial. Si la segunda derivada devuelve la función con signo menos, la respuesta es un seno: así se resuelve la ecuación de oscilaciones, y por eso el seno aparece en todas partes, desde el péndulo hasta el pozo cuántico.",
+     "La tercera es la descomposición en soluciones simples. Una acción compleja se descompone en suma de senos, se halla la respuesta para cada uno por separado y se suman de nuevo. Este es el método de Fourier, y funciona mientras el sistema sea lineal.",
+     "La cuarta es la solución numérica. Dividimos el tiempo en pasos pequeños y en cada paso nos movemos según la flecha. Así calculan todos los módulos de este curso: la órbita de un planeta, la colisión de esferas, una partícula en un campo magnético. Puede que no exista una solución exacta, pero siempre hay una numérica."
+    ],
+    "note": "Es importante entender que los problemas de física con solución exacta son excepcionalmente escasos. El problema de dos cuerpos se resuelve, el de tres ya no. El átomo de hidrógeno se resuelve, el helio no. Prácticamente toda la física teórica moderna es el arte de las aproximaciones: encontrar un parámetro pequeño, expandir en serie, quedarse con los primeros términos. Precisamente por eso en el tema introductorio dedicamos tanto tiempo a estimar magnitudes."
+   },
+   {
+    "h": "El mismo tipo de ecuación en cada sección",
+    "kicker": "aquí el curso se une en una imagen única",
+    "text": [
+     "Y ahora la observación principal de toda la lección. Hay muchas ecuaciones en física, pero en esencia son de unos pocos tipos, y cada uno se repite de una sección a otra.",
+     "Primer tipo: la velocidad de cambio es proporcional a la magnitud misma. Respuesta: exponencial. Así son la desintegración radiactiva, el enfriamiento del té, la descarga de un condensador, la amortiguación de oscilaciones, la absorción de luz en un medio, la multiplicación de neutrones en un reactor. Seis fenómenos diferentes y una ecuación.",
+     "Segundo tipo: la segunda derivada es proporcional a la magnitud con signo menos. Respuesta: seno. Así son el péndulo, la masa en un resorte, el circuito oscilante, la onda sonora, la onda luminosa, el electrón en el átomo. Los hemos visto todos por separado, pero la ecuación era una.",
+     "Tercer tipo: la velocidad de cambio es proporcional a la curvatura de la distribución. Respuesta: difusión. Así son la conducción del calor, la difusión, la propagación de un contaminante, la filtración de presión en un yacimiento. Todo lo que se extiende con el tiempo obedece a una misma ecuación.",
+     "Cuarto tipo: la segunda derivada respecto al tiempo es proporcional a la segunda respecto a la coordenada. Respuesta: onda viajera. Cuerda, sonido, luz, ondas sísmicas, ondas gravitacionales — una misma expresión."
+    ],
+    "image": {
+     "h": "Imagen: cuatro melodías en diferentes instrumentos",
+     "text": [
+      "Al escuchar una orquesta, un oído inexperto percibe un caos de muchos sonidos. Un oído experimentado reconoce: ahí está el tema principal en los violines, ahí está el mismo en los violonchelos una octava más abajo, ahí interpretado por la flauta.",
+      "Con las ecuaciones es igual. Exponencial, seno, difusión, onda — cuatro temas. Las ramas de la física son diferentes instrumentos. Quien ha aprendido a reconocer el tema, escucha en un problema nuevo algo familiar y sabe qué esperar de la respuesta, incluso antes de empezar a calcular."
+     ]
+    },
+    "after": [
+     "De aquí se deduce un consejo práctico que usan los profesionales. Al enfrentarse a un problema desconocido, no se lancen a buscar una fórmula — primero escriban qué depende de qué y miren a cuál de los tipos familiares se parece. En nueve de cada diez casos reconocerán uno de los cuatro y sabrán de inmediato si es exponencial, seno o difusión."
+    ]
+   },
+   {
+    "h": "La física se desarrolla en espiral",
+    "kicker": "una regularidad que solo se ve desde lejos",
+    "text": [
+     "Al recorrer el curso, es difícil no notar: las mismas disputas se repiten, solo que en un nuevo nivel. ¿La luz es onda o partícula? Huygens dice onda, Newton dice partícula, Young demuestra onda, Einstein devuelve partícula, y al final resulta que ambas son ciertas y la pregunta estaba mal planteada.",
+     "Esto ocurre constantemente. Primero una afirmación. Luego su negación, a menudo convincente. Luego — no la victoria de un bando, sino un salto a un nivel donde ambos resultan ser casos particulares de algo más general. Y en el nuevo nivel la disputa comienza de nuevo, ya sobre otra cosa.",
+     "La mecánica de Newton afirmaba un tiempo absoluto. La relatividad lo negó. El resultado no es que Newton se equivocara: su mecánica sigue siendo válida como caso límite, y el tiempo absoluto resultó ser una buena aproximación a bajas velocidades. Lo viejo no se descarta, sino que se incluye dentro de lo nuevo, indicando sus límites.",
+     "Lo mismo sucede con lo continuo y lo discreto. La materia se consideraba continua — los atomistas objetaron — los átomos vencieron y la materia se volvió discreta. Luego resultó que las partículas discretas se describen mediante funciones de onda continuas. Después — que incluso los campos se cuantizan. La disputa entre lo continuo y lo discreto lleva tres milenios y cada vez alcanza una nueva vuelta."
+    ],
+    "image": {
+     "h": "Imagen: escalera de caracol",
+     "text": [
+      "Al subir por una escalera de caracol, regularmente te encuentras sobre el mismo punto del suelo que antes. Parece que das vueltas en círculo.",
+      "Pero estás más alto. La vista desde la ventana es la misma y a la vez diferente: se ve más lejos, y se hace visible lo que no se veía en el piso de abajo.",
+      "La física se mueve así. La pregunta «¿de qué está hecha la materia?» la formularon Demócrito, Dalton, Rutherford, Gell-Mann — una pregunta, cuatro pisos. Cada respuesta fue correcta para su piso y se convirtió en una aproximación en el siguiente."
+     ]
+    },
+    "after": [
+     "De aquí se desprende una conclusión práctica para quien estudia. No hay que percibir una teoría como la verdad definitiva, pero tampoco hay que pensar que, como todo cambia, no se puede saber nada. Es cierto lo tercero: cada teoría describe con precisión su círculo de fenómenos e indica dónde termina. El conocimiento se acumula, no se anula.",
+     "Y además. Los lugares más productivos en física son aquellos donde la contradicción es aguda. La catástrofe ultravioleta, la incompatibilidad de Maxwell con Galileo, la paradoja de la información — todos parecían molestas incoherencias y resultaron ser entradas al siguiente piso. La contradicción en la física no es un error, sino una señal."
+    ],
+    "open": [
+     "Hay que ser honestos: la idea misma de que el desarrollo es en espiral es una forma de mirar, no una ley de la naturaleza. Describe bien lo recorrido y no predice nada hacia adelante: no se sabe si la contradicción actual entre la mecánica cuántica y la gravedad se resolverá mediante una síntesis, como antes, o requerirá algo para lo que aún no tenemos nombre.",
+     "Algunos físicos consideran estas generalizaciones inútiles y aconsejan simplemente calcular. Otros creen que comprender las regularidades del desarrollo de la ciencia ayuda a elegir en qué trabajar. La disputa entre ellos lleva mucho tiempo y es poco probable que termine."
+    ]
+   },
+   {
+    "h": "Landau y su mínimo teórico",
+    "kicker": "cómo enseñaban esto",
+    "text": [
+     "Lev Landau concibió un sistema de formación de teóricos al que llamó mínimo teórico. Era un examen de nueve secciones que debía aprobarse personalmente con él. En treinta años lo aprobaron cuarenta y tres personas — a pesar de que cientos lo intentaron.",
+     "Es notable que en el mínimo teórico casi no había hechos. Se evaluaba la habilidad de calcular integrales, resolver ecuaciones y, sobre todo, evaluar: qué es esencial aquí, qué se puede despreciar, de qué orden se espera la respuesta. Landau consideraba que la física no se puede aprender, solo se puede saber usar.",
+     "El curso de diez volúmenes, escrito junto con Evgeni Lifshitz, está organizado según el mismo principio. Sobre esta pareja circulaba un chiste de que en el curso no hay ni una palabra de Landau ni un pensamiento de Lifshitz; es injusto para ambos, pero refleja con precisión la distribución de roles: la idea y el método pertenecían a Landau, la exposición a Lifshitz."
+    ],
+    "quote": {
+     "text": "El método es más importante que el descubrimiento, porque el método correcto de investigación conducirá a nuevos descubrimientos aún más valiosos.",
+     "who": "Lev Landau"
+    },
+    "after": [
+     "Vale la pena mencionar también su destino. En 1938, Landau fue arrestado acusado de actividades antisoviéticas; pasó un año en prisión y fue liberado gracias a una carta personal de Piotr Kapitsa a Stalin, en la que Kapitsa se lo llevaba bajo fianza. Veinticuatro años después, Landau sufrió un gravísimo accidente automovilístico tras el cual ya no pudo trabajar. El Premio Nobel de 1962 por la teoría de la superfluidez le fue entregado en el hospital."
+    ]
+   },
+   {
+    "h": "Por qué entender el método, no solo los resultados",
+    "kicker": "conclusión práctica",
+    "text": [
+     "Las fórmulas se vuelven obsoletas y se refinan, el método no. La mecánica de Newton fue corregida por la relatividad, pero el procedimiento sigue siendo el mismo: elegir un modelo, escribir la ecuación, resolverla, verificar los límites. La mecánica cuántica sustituyó las trayectorias por funciones de onda, pero el orden de actuación se mantuvo por completo.",
+     "Segundo. El método se traslada más allá de la física. La ecuación de crecimiento exponencial describe por igual la desintegración de núcleos, la multiplicación de bacterias, la propagación de una epidemia y el interés compuesto. La ecuación de difusión describe tanto la propagación del calor como la dispersión de un precio en el mercado. Quien ha dominado la técnica en la física, la reconoce en otros campos al instante.",
+     "Y tercero, lo más importante para quien aprende. El método da la posibilidad de abordar un problema que nunca has visto. La fórmula para un problema desconocido no se puede recordar de ningún sitio, pero preguntarse «¿qué cambia aquí y de qué depende la velocidad de ese cambio?» siempre se puede hacer."
+    ],
+    "now": [
+     "Hoy, a las cuatro técnicas clásicas se ha añadido una quinta: el aprendizaje automático. Las redes neuronales encuentran soluciones de ecuaciones allí donde los métodos numéricos chocan con la dimensionalidad: en problemas de muchos cuerpos, en física del plasma, en la predicción de la estructura de proteínas. No es un sustituto del método, sino una nueva forma de ejecutar el tercer paso.",
+     "El debate sobre si esto debe considerarse comprensión está abierto. La red da una respuesta, pero no una explicación, y la física tradicionalmente valora la explicación. Cómo compatibilizar ambas cosas, nadie lo sabe aún."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Qué llevarse de esta charla",
+   "text": [
+    "La física no es un conjunto de fórmulas, sino un único recurso repetible: elegir un modelo, escribir la ecuación para la tasa de cambio, resolverla, verificar los límites de aplicabilidad. Todo el contenido del curso es la aplicación de este recurso a diferentes objetos.",
+    "Las ecuaciones son, en esencia, pocas. La exponencial, el seno, la difusión y la onda cubren la gran mayoría de los problemas con los que te encontrarás. Reconocer el tipo de ecuación es más importante que recordar soluciones concretas.",
+    "Y por último. El método no garantiza una respuesta: hay pocos problemas resueltos exactamente, y casi todo se calcula de forma aproximada. Pero garantiza que sabrás por dónde empezar — y eso es lo más difícil en un problema desconocido."
+   ]
+  }
+ },
+ "ar": {
+  "title": "منهج الفيزياء النظرية",
+  "subtitle": "المحاضرة 1 · النموذج، المعادلة، الحل — وصفة واحدة للدورة بأكملها",
+  "lead": "بعد اجتياز أربعة عشر موضوعًا، قد تعتقد أن الفيزياء هي مجموعة من الصيغ المختلفة لحالات مختلفة. في الواقع، لقد كنا نقوم بنفس الإجراء طوال الوقت، فقط بأشياء مختلفة. دعنا نحلل الإجراء نفسه.",
+  "blocks": [
+   {
+    "h": "وصفة تكررت أربع عشرة مرة",
+    "kicker": "ما كان مخبأ خلف المحتوى",
+    "text": [
+     "كتب لانداو وليفشيتس دورة من عشرة مجلدات في الفيزياء النظرية، وما يثير الدهشة ليس الحجم بل التجانس. الميكانيكا، نظرية الحقل، ميكانيكا الكم، الهيدروديناميكا، فيزياء الوسائط المستمرة — نفس تسلسل الإجراءات في كل مكان. يتغير الموضوع، ولا تتغير الطريقة.",
+     "التسلسل كالتالي. أولاً: اختيار نموذج — تحديد ما هو جوهري في المسألة وما يمكن إهماله. ثانياً: كتابة معادلة تربط الكمية بمعدل تغيرها. ثالثاً: حل هذه المعادلة، أي إيجاد كيف تعتمد الكمية على الزمن أو الإحداثي. رابعاً: التحقق من الحل في الحالات الحدية ومقارنته بالتجربة.",
+     "كل ما ناقشناه يندرج تحت هذه الخطوات الأربع. الفرق فقط في أي كمية تقف في المعادلة وما الذي يتحكم في تغيرها."
+    ],
+    "image": {
+     "h": "صورة: وصفة ومكونات",
+     "text": [
+      "تخيل أن لديك وصفة واحدة — لنقل، الطهي بالبخار. المكونات مختلفة في كل مرة: لحم، خضروات، سمك. الأفعال هي نفسها: تقطيع، تحمير، إضافة سائل، طبخ بطيء.",
+      "الفيزياء النظرية منظمة بنفس الطريقة. الوصفة: نموذج → معادلة → حل → تحقق. المكونات: بندول، غاز، حقل، إلكترون، نواة. من تعلم الأطباق فقط يبدأ من جديد كل مرة. من فهم الوصفة يتعامل مع أي مكون جديد بثقة."
+     ]
+    }
+   },
+   {
+    "h": "ما هي المعادلة التفاضلية",
+    "kicker": "أهم مفهوم في الفيزياء النظرية بأكملها",
+    "text": [
+     "المعادلة العادية تسأل: ما قيمة العدد؟ المعادلة التفاضلية تسأل بشكل مختلف: ما الدالة التي تتصرف هكذا؟ هذا انتقال من البحث عن عدد إلى البحث عن قانون للسلوك.",
+     "خذ أبسط مثال. العبارة \"سرعة نمو الأموال في الحساب تتناسب مع المبلغ الموجود\" هي بالفعل معادلة تفاضلية. تُكتب بالشكل $dN/dt = kN$، حيث $dN/dt$ تعني سرعة التغير. حلها يعني إيجاد كيف يعتمد المبلغ على الزمن. الإجابة ستكون دالة أسية.",
+     "لاحظ التركيب: على اليسار سرعة تغير الكمية، على اليمين ما تعتمد عليه هذه السرعة. المعادلة لا تقل ما تساوي الكمية؛ بل تقل إلى أين تتجه في كل لحظة. ثم الحل يمهد الطريق خطوة بخطوة."
+    ],
+    "eq": "$\\frac{dN}{dt} = kN \\;\\Longrightarrow\\; N(t) = N_0 e^{kt}$",
+    "after": [
+     "رتبة المعادلة هي أعلى مشتقة فيها. من الدرجة الأولى يعني أنه للإجابة الواحدة نحتاج شرطًا ابتدائيًا واحدًا: من أين نبدأ. من الدرجة الثانية — شرطان: من أين نبدأ وبأي سرعة. من هنا جاء في الموضوع التمهيدي فضاء الحالات: بُعده يساوي رتبة المعادلة."
+    ],
+    "image": {
+     "h": "صورة: خريطة منحدرات ومسار عليها",
+     "text": [
+      "تخيل تضاريس تلالية حيث في كل نقطة رسم سهم — إلى أين ستتدحرج الكرة. هذه هي المعادلة التفاضلية: قاعدة تحدد الاتجاه في كل نقطة.",
+      "الحل هو مسار محدد للكرة. ضعها في مكان — ستتدحرج هكذا، في مكان آخر — بشكل مختلف. المعادلة واحدة، الحلول لا نهائية، والشرط الابتدائي يختار بينها. لهذا في المسائل يُسأل دائمًا أين كان الجسم في اللحظة الصفرية: بدون ذلك توجد الأسهم ولا يوجد مسار."
+     ]
+    }
+   },
+   {
+    "h": "كيف يتم حلها فعليًا",
+    "kicker": "أربع تقنيات تغطي كل شيء تقريبًا",
+    "text": [
+     "التقنية الأولى — فصل المتغيرات. إذا أمكن جمع كل ما يعتمد على الكمية المطلوبة على اليسار وكل ما يعتمد على الزمن على اليمين، تختزل المسألة إلى حساب تكاملين. هكذا تُحل قوانين الاضمحلال الإشعاعي، تبريد الجسم، وتفريغ المكثف — جميعها من نفس النوع.",
+     "الثانية — تخمين الحل بناءً على شكل المعادلة. إذا أعاد المشتق نفس الدالة، الإجابة دالة أسية. إذا أعاد المشتق الثاني الدالة مع إشارة سالبة، الإجابة جيب: هكذا تُحل معادلة التذبذبات، ولهذا نجد الجيب في كل مكان من البندول إلى البئر الكمومي.",
+     "الثالثة — تحليل الحلول إلى حلول بسيطة. يحلل التأثير المعقد إلى مجموع جيوب، يُوجد الاستجابة لكل منها على حدة ثم يُعاد التجميع. هذه طريقة فورييه، وتعمل طالما النظام خطي.",
+     "الرابعة — الحل العددي. نقسم الزمن إلى خطوات صغيرة ونتحرك في كل خطوة على طول السهم. هكذا تحسب جميع محاكيات هذه الدورة: مدار كوكب، تصادم كرات، جسيم في مجال مغناطيسي. قد لا يكون هناك حل دقيق على الإطلاق، لكن الحل العددي موجود دائمًا."
+    ],
+    "note": "من المهم أن نفهم أن المسائل القابلة للحل تمامًا في الفيزياء قليلة جدًا. مسألة جسمين تحل، ثلاثة — لا. ذرة الهيدروجين تحل، الهيليوم — لا. عمليًا كل الفيزياء النظرية الحديثة هي فن التقريبات: إيجاد معامل صغير، التوسع حوله، الاحتفاظ بالحدود الأولى. لهذا في الموضوع التمهيدي أولينا أهمية كبيرة لتقدير الصِغَر."
+   },
+   {
+    "h": "نفس شكل المعادلة — في كل فرع",
+    "kicker": "هنا تتجمع الدورة في صورة واحدة",
+    "text": [
+     "والآن الملاحظة الرئيسية للمحاضرة بأكملها. المعادلات في الفيزياء كثيرة جدًا، لكن في الجوهر هناك عدة أنواع، وكل نوع يتكرر من فرع إلى فرع.",
+     "النوع الأول: سرعة التغير تتناسب مع الكمية نفسها. الإجابة — دالة أسية. هكذا تعمل: الاضمحلال الإشعاعي، تبريد الشاي، تفريغ المكثف، التخميد في التذبذبات، امتصاص الضوء في الوسط، تكاثر النيوترونات في المفاعل. ست ظواهر مختلفة ومعادلة واحدة.",
+     "النوع الثاني: المشتق الثاني يتناسب مع الكمية بإشارة سالبة. الإجابة — جيب. هكذا تعمل: البندول، ثقل على زنبرك، دائرة تذبذبية، موجة صوتية، موجة ضوئية، إلكترون في الذرة. مررنا بها جميعًا بشكل منفرد، والمعادلة كانت واحدة.",
+     "النوع الثالث: سرعة التغير تتناسب مع انحناء التوزيع. الإجابة — انتشار. هكذا تعمل: التوصيل الحراري، الانتشار، انتشار الشوائب، تسرب الضغط في الطبقة. كل ما ينتشر مع الزمن يخضع لمعادلة واحدة.",
+     "النوع الرابع: المشتق الثاني بالنسبة للزمن يتناسب مع المشتق الثاني بالنسبة للإحداثي. الإجابة — موجة متنقلة. وتر، صوت، ضوء، موجات زلزالية، موجات ثقالية — كتابة واحدة."
+    ],
+    "image": {
+     "h": "صورة: أربعة ألحان على آلات مختلفة",
+     "text": [
+      "عند الاستماع إلى الأوركسترا، الأذن غير المدربة تسمع فوضى من الأصوات المتعددة. المدربة تميز: هذا هو اللحن الرئيسي عند الكمان، وهذا نفسه عند التشيلو بأوكتاف أقل، وهذا بأداء الناي.",
+      "نفس الشيء مع المعادلات. الدالة الأسية، الجيب، الانتشار، الموجة — أربعة ألحان. فروع الفيزياء — آلات مختلفة. من تعلم التعرف على اللحن يسمع في مسألة جديدة المألوف ويفهم ماذا يتوقع من الإجابة حتى قبل الشروع في الحساب."
+     ]
+    },
+    "after": [
+     "من هنا تأتي نصيحة عملية يستخدمها المحترفون. عند مواجهة مسألة غير مألوفة، لا تندفع للبحث عن صيغة — اكتب أولاً ما يعتمد على ماذا، وانظر أي من الأنواع المألوفة يشبه هذا. في تسع حالات من أصل عشر ستتعرف على واحد من الأربعة وستعرف فورًا أهي دالة أسية أم جيب أم انتشار."
+    ]
+   },
+   {
+    "h": "الفيزياء تتطور حلزونيًا",
+    "kicker": "نمط لا يُرى إلا من بعيد",
+    "text": [
+     "بعد اجتياز الدورة، يصعب عدم ملاحظة: نفس النقاشات تتكرر، ولكن على مستوى جديد. الضوء — موجة أم جسيم؟ هيغنس يقول موجة، نيوتن يقول جسيم، يونغ يثبت أنها موجة، أينشتاين يعيد الجسيم، وفي النهاية يتبين أن كليهما صحيح، والسؤال كان مطروحًا بشكل خاطئ.",
+     "هذا يحدث باستمرار. أولاً تأكيد. ثم نفيه، غالبًا مقنع. ثم — ليس انتصار طرف، بل انتقال إلى مستوى حيث يتبين أن كليهما حالات خاصة لشيء أكثر عمومية. وعلى المستوى الجديد يبدأ النقاش من جديد، حول شيء آخر.",
+     "ميكانيكا نيوتن أكدت الزمن المطلق. نظرية النسبية نفته. النتيجة ليست أن نيوتن كان مخطئًا: ميكانيكاه بقيت صحيحة كحالة حدية، والزمن المطلق تبين أنه تقريب جيد عند السرعات الصغيرة. القديم لم يُطرح بل أُدرج داخل الجديد مع تحديد الحدود.",
+     "نفس الشيء مع الاستمرارية والانقطاع. المادة اعتبرت مستمرة — اعترض الذريون — انتصرت الذرات، وأصبحت المادة متقطعة. ثم تبين أن الجسيمات المتقطعة توصف بدوال موجية مستمرة. ثم — أن الحقول أيضًا تكمم. النقاش بين المستمر والمتقطع مستمر منذ الألفية الثالثة ويخرج في كل مرة إلى دورة جديدة."
+    ],
+    "image": {
+     "h": "صورة: سلم حلزوني",
+     "text": [
+      "عند الصعود على سلم حلزوني، تجد نفسك بانتظام فوق نفس النقطة على الأرض كما في السابق. يبدو أنك تدور في دائرة.",
+      "لكنك أعلى. المنظر من النافذة هو نفسه ومختلف في آنٍ: ترى أبعد، ويصبح واضحًا ما لم يكن مرئيًا في الطابق الأسفل.",
+      "الفيزياء تتحرك هكذا. سؤال \"مما تتكون المادة\" طرحه ديموقريطس، دالتون، رذرفورد، جيلمان — سؤال واحد، أربعة طوابق. كل إجابة كانت صحيحة لطابقها وأصبحت تقريبًا في الطابق التالي."
+     ]
+    },
+    "after": [
+     "من هنا استنتاج عملي لمن يتعلم. لا يجب اعتبار كل نظرية جديدة كحقيقة نهائية، ولكن لا يجب أيضًا الاعتقاد أنه بما أن كل شيء يتغير فلا يمكن معرفة شيء. الصحيح ثالث: كل نظرية تصف بدقة دائرة ظواهرها وتشير إلى أين تنتهي. المعرفة تتراكم، ولا تُلغى.",
+     "وأيضًا. أكثر الأماكن إنتاجية في الفيزياء هي تلك التي يكون فيها التناقض حادًا. الكارثة فوق البنفسجية، عدم توافق ماكسويل مع غاليليو، مفارقة المعلومات — كلها بدت كمشكلات مزعجة، وتبين أنها مداخل إلى الطابق التالي. التناقض في الفيزياء ليس خطأً، بل مؤشر."
+    ],
+    "open": [
+     "يجب أن نكون صادقين: فكرة أن التطور يسير حلزونيًا هي طريقة للنظر وليس قانونًا طبيعيًا. تصف الماضي جيدًا ولا تتنبأ بشيء مسبقًا: لا نعرف ما إذا كان التناقض الحالي بين ميكانيكا الكم والجاذبية سيُحل بتركيب كما في السابق، أم سيتطلب شيئًا ليس لدينا اسم له بعد.",
+     "بعض الفيزيائيين يعتبرون هذه التعميمات غير مفيدة وينصحون فقط بالحساب. آخرون يعتقدون أن فهم أنماط تطور العلم يساعد في اختيار ما يعمل عليه. النقاش بينهما طويل ولن ينتهي على الأرجح."
+    ]
+   },
+   {
+    "h": "لانداو والحد الأدنى النظري",
+    "kicker": "كيف تم تدريس هذا",
+    "text": [
+     "اخترع ليف لانداو نظامًا لتدريب النظريين أسماه الحد الأدنى النظري. كان امتحانًا من تسعة فروع، يجب اجتيازه شخصيًا أمامه. على مدى ثلاثين عامًا، اجتازه ثلاثة وأربعون شخصًا — بينما حاول المئات.",
+     "اللافت أن الحد الأدنى النظري لم يحتوي تقريبًا على حقائق. كان يُختبر القدرة على حساب التكاملات، حل المعادلات، والأهم: التقدير — ما هو جوهري هنا، ما يمكن إهماله، ما هو ترتيب الإجابة المتوقعة. اعتقد لانداو أن الفيزياء لا يمكن تعلمها، بل يمكن فقط معرفة كيفية استخدامها.",
+     "الدورة المكونة من عشرة مجلدات التي كتبها مع يفغيني ليفشيتس منظمة بنفس المبدأ. عن هذا الثنائي كان يقال مزاحًا أنه لا توجد في الدورة كلمة واحدة من لانداو ولا فكرة واحدة من ليفشيتس؛ هذا غير منصف لكليهما لكنه ينقل بدقة توزيع الأدوار: الفكرة والطريقة كانتا للانداو، العرض لليفشيتس."
+    ],
+    "quote": {
+     "text": "الطريقة أهم من الاكتشاف، لأن الطريقة الصحيحة للبحث ستؤدي إلى اكتشافات جديدة أكثر قيمة.",
+     "who": "ليف لانداو"
+    },
+    "after": [
+     "يجدر أيضًا ذكر المصير. في عام 1938، ألقي القبض على لانداو بتهمة النشاط المناهض للسوفييت؛ أمضى عامًا في السجن وأطلق سراحه بفضل رسالة شخصية من بيوتر كابيتسا إلى ستالين، حيث أخذ فيه كفالة. بعد أربع وعشرين سنة، تعرض لانداو لحادث سيارة خطير جدًا لم يتمكن بعدها من العمل. جائزة نوبل عام 1962 لنظرية السيولة الفائقة تم تسليمه في المستشفى."
+    ]
+   },
+   {
+    "h": "لماذا فهم الطريقة وليس فقط النتائج",
+    "kicker": "استنتاج عملي",
+    "text": [
+     "الصيغ تصبح قديمة وتُحسن، الطريقة لا. ميكانيكا نيوتن صححتها نظرية النسبية، لكن الأسلوب بقي كما هو: اخترت نموذجًا، كتبت معادلة، حللت، تحققت من الحدود. ميكانيكا الكم استبدلت المسارات بدوال موجية، لكن تسلسل الإجراءات حافظ عليه بالكامل.",
+     "ثانيًا. الطريقة تُنقل خارج حدود الفيزياء. معادلة النمو الأسي تصف بنفس الطريقة اضمحلال النوى، تكاثر البكتيريا، انتشار الوباء، والفائدة المركبة. معادلة الانتشار تصف انتشار الحرارة وانتشار السعر في السوق. من أتقن الأسلوب في الفيزياء يتعرف عليه في مجال آخر من أول كلمة.",
+     "ثالثًا، والأهم لمن يتعلم. الطريقة تعطي القدرة على الاقتراب من مسألة لم ترها من قبل. الصيغة لمسألة غير مألوفة لا يمكن تذكرها من أي مكان، أما سؤال النفس \"ما الذي يتغير هنا وما الذي تعتمد عليه سرعة هذا التغير\" يمكن دائمًا طرحه."
+    ],
+    "now": [
+     "اليوم، إلى التقنيات الكلاسيكية الأربع أضيفت خامسة — التعلم الآلي. الشبكات العصبية تجد حلولًا للمعادلات حيث تصطدم الطرق العددية بالأبعاد: في مسائل الأجسام المتعددة، فيزياء البلازما، التنبؤ ببنية البروتينات. هذا ليس بديلاً عن الطريقة، بل طريقة جديدة لأداء الخطوة الثالثة.",
+     "النقاش حول ما إذا كان هذا يعتبر فهمًا جارٍ بصراحة. الشبكة تعطي إجابة لكن ليس تفسيرًا، والفيزياء تقليديًا تقدر التفسير. كيف يتم التوفيق بينهما، لا أحد يعرف بعد."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "ما سنأخذه من هذه المحاضرة",
+   "text": [
+    "الفيزياء ليست مجموعة من المعادلات، بل هي أسلوب متكرر: اختر نموذجًا، اكتب معادلة لمعدل التغير، حلّها، تحقق من حدود الصلاحية. كل محتوى الدورة هو تطبيق هذا الأسلوب على كائنات مختلفة.",
+    "المعادلات قليلة في جوهرها. الدالة الأسية، الجيب، الانتشار، والموجة تغطي الغالبية العظمى من المسائل التي قد تواجهها. معرفة نوع المعادلة أهم من تذكر الحلول المحددة.",
+    "وأخيرًا، لا تضمن الطريقة إجابة: المسائل القابلة للحل بدقة قليلة، ويُحسب كل شيء تقريبًا بشكل تقريبي. لكنها تضمن أنك ستعرف من أين تبدأ — وهذا هو أصعب جزء في مسألة غير مألوفة."
+   ]
+  }
+ }
+}

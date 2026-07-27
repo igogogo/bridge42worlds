@@ -7,7 +7,7 @@
     <meta name="description" content="$description">
     <meta property="og:title" content="$clickbait">
     <meta property="og:description" content="$oneliner_og">
-    <meta property="og:image" content="$site_url/lang/$authors_lang/archive/$date/$id/ai.jpg">
+    <meta property="og:image" content="$site_url/lang/$authors_lang/archive/$date/$id/ai.webp">
     <meta property="og:image:width" content="1440">
     <meta property="og:image:height" content="960">
     <meta property="og:url" content="$canonical_url">
@@ -65,6 +65,8 @@
 $nav_html
 <div class="article-wrapper">
     <div class="article-main">
+        $level_switch_html
+        $mini_head_html
         <div class="title-row">
             <h1 class="article-title-top" id="article-top">$clickbait $refine_badge $express_badge</h1>
             <button class="share-btn share-inline" title="$share_label" onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
@@ -91,6 +93,7 @@ $nav_html
             <button class="fav-btn" data-fav="$id" title="$fav_title"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
             $comment_toggle_html
         </div>
+        <div class="lv-bottom">$level_switch_bottom_html</div>
         $feedback_html
         <div class="related" id="related" data-label="$related_label"></div>
     </div>

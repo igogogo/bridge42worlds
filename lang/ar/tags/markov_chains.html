@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#سلاسل ماركوف — bridge42worlds</title>
+    <meta name="description" content="سلسلة ماركوف هي عملية عشوائية متقطعة (discrete random process) تمتلك خاصية ماركوف: الاحتمال الشرطي للمستقبل بشرط الحاضر لا يعتمد على الماضي. تُحدد بالكامل بواسطة شعاع الاحتمالات الأولية (initial probability vector) ومصفوفة احتمالات الانتقال (transition probability matrix) P(i,j) — وهي فرصة الانتقال من i إلى j. على سبيل المثال، في نموذج السير العشوائي، تكون كل خطوة عشوائية، لكن الاتجاه يعتمد فقط على المكان الحالي. يمكن أن تكون السلاسل إرجودية (ergodic) (حيث يمكن الوصول من أي حالة إلى أي حالة أخرى) أو ماصة (absorbing) (حيث توجد حالات فخ).">
+    <meta property="og:title" content="#سلاسل ماركوف — bridge42worlds">
+    <meta property="og:description" content="سلسلة ماركوف هي عملية عشوائية متقطعة (discrete random process) تمتلك خاصية ماركوف: الاحتمال الشرطي للمستقبل بشرط الحاضر لا يعتمد على الماضي. تُحدد بالكامل بواسطة شعاع الاحتمالات الأولية (initial probability vector) ومصفوفة احتمالات الانتقال (transition probability matrix) P(i,j) — وهي فرصة الانتقال من i إلى j. على سبيل المثال، في نموذج السير العشوائي، تكون كل خطوة عشوائية، لكن الاتجاه يعتمد فقط على المكان الحالي. يمكن أن تكون السلاسل إرجودية (ergodic) (حيث يمكن الوصول من أي حالة إلى أي حالة أخرى) أو ماصة (absorbing) (حيث توجد حالات فخ).">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/tags/markov_chains.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">وسم</div><h1>سلاسل ماركوف</h1><button class="share-inline" title="مشاركة" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">4</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">سلسلة ماركوف هي مسار عشوائي حيث تحدد الخطوة التالية فقط الموضع الحالي، دون النظر إلى الماضي. كما في لعبة لوحية حيث تحدد الخانة رمية النرد التالية.</p><div class="practical-app"><strong>في الواقع:</strong> الإكمال التلقائي للنص في الهاتف، وخوارزمية PageRank للبحث في جوجل، ونماذج انتشار الأوبئة — كلها سلاسل ماركوف.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">سلسلة ماركوف هي عملية عشوائية متقطعة (discrete random process) تمتلك خاصية ماركوف: الاحتمال الشرطي للمستقبل بشرط الحاضر لا يعتمد على الماضي. تُحدد بالكامل بواسطة شعاع الاحتمالات الأولية (initial probability vector) ومصفوفة احتمالات الانتقال (transition probability matrix) P(i,j) — وهي فرصة الانتقال من i إلى j. على سبيل المثال، في نموذج السير العشوائي، تكون كل خطوة عشوائية، لكن الاتجاه يعتمد فقط على المكان الحالي. يمكن أن تكون السلاسل إرجودية (ergodic) (حيث يمكن الوصول من أي حالة إلى أي حالة أخرى) أو ماصة (absorbing) (حيث توجد حالات فخ).</div>
+        <div class="section"><h2>التاريخ</h2><p>أندريه ماركوف، عالم رياضيات روسي، ابتكر هذه السلاسل عام 1906 أثناء دراسته لتتابع الحروف الصوتية والساكنة في قصيدة بوشكين «يوجين أونيغين». قام بحساب احتمالات الانتقال من حرف صوتي إلى ساكن وبالعكس.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تعمل سلسلة ماركوف كمولد للتتابعات وفق قواعد احتمالية. بمعرفة الحالة الأولية وجدول الانتقالات (مصفوفة الاحتمالات)، يمكنك مرارًا وتكرارًا سحب قرعة وتحديد الخطوة التالية. بعد العديد من الخطوات، غالبًا ما 'تنسى' السلسلة نقطة البداية وتصل إلى توزيع مستقر — كما لو أن النظام يتوازن من تلقاء نفسه.</p></div>
+        <div class="fun-fact">💡 خوارزمية PageRank، التي جعلت جوجل رائدة البحث، تنظر إلى الإنترنت كسلسلة ماركوف عملاقة، حيث الصفحات هي الحالات، والروابط هي احتمالات الانتقال لمستخدم وهمي.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">سلسلة ماركوف هي تتابع للحالات (نقاط على المخطط)، حيث يتم تحديد الانتقال من حالة إلى أخرى بواسطة الاحتمالات (أعداد على الأسهم). الشرط الرئيسي: إلى أين ستذهب المنظومة بعد ذلك يعتمد فقط على أين هي الآن، ولا تؤثر الخطوات السابقة. إذا كان اليوم ماطرًا، وغدًا مشمسًا باحتمال 70%، فهذا نموذج ماركوف للطقس.</div>
+        <div class="section"><h2>التاريخ</h2><p>أندريه ماركوف، عالم رياضيات روسي، ابتكر هذه السلاسل عام 1906 أثناء دراسته لتتابع الحروف الصوتية والساكنة في قصيدة بوشكين «يوجين أونيغين». قام بحساب احتمالات الانتقال من حرف صوتي إلى ساكن وبالعكس.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>تعمل سلسلة ماركوف كمولد للتتابعات وفق قواعد احتمالية. بمعرفة الحالة الأولية وجدول الانتقالات (مصفوفة الاحتمالات)، يمكنك مرارًا وتكرارًا سحب قرعة وتحديد الخطوة التالية. بعد العديد من الخطوات، غالبًا ما 'تنسى' السلسلة نقطة البداية وتصل إلى توزيع مستقر — كما لو أن النظام يتوازن من تلقاء نفسه.</p></div>
+        <div class="fun-fact">💡 تشكل نماذج ماركوف المخفية أساس أنظمة التعرف على الكلام الحديثة والمعلوماتية الحيوية (البحث عن الجينات). فيها، ينتج التتابع الملاحظ بواسطة سلسلة ماركوف مخفية — مثل نص مشوش بالضوضاء.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">سلسلة ماركوف هي تتابع من المتغيرات العشوائية {X_n} التي تأخذ قيمًا في مجموعة منفصلة من الحالات، وتمتلك خاصية ماركوف: P(X_{n+1}=j | X_n=i, X_{n-1}=i_{n-1}, ..., X_0=i_0) = P(X_{n+1}=j | X_n=i) = P_{ij}. إذا كانت احتمالات الانتقال لا تعتمد على n، تكون السلسلة متجانسة. الموضوعات الرئيسية للدراسة: التوزيع بعد n خطوة، التوزيع المستقر π الذي يحقق π = πP، زمن العودة، دورية الحالة. النظرية الأساسية: بالنسبة لسلسلة غير قابلة للاختزال (irreducible) وغير دورية (aperiodic) وموجبة العودة (positive recurrent)، يوجد توزيع مستقر وحيد تتقارب إليه التوزيعات من أي حالة بدء. هكذا فإن الضفدع على أوراق الزنبق، الذي نسي كل المسار الذي سلكه، بعد قفزات كثيرة سيجد نفسه على كل ورقة بنفس التكرار.</div>
+        <div class="section"><h2>التاريخ</h2><p>قُدمت سلاسل ماركوف من قبل أ. أ. ماركوف في 1906–1907 كتعميم لقانون الأعداد الكبيرة على التجارب غير المستقلة. دافعه نشأ من جدل نظري مع ب. أ. نيكراسوف حول قابلية تطبيق نظرية النهاية المركزية. قام ماركوف بتحليل تتابع مكون من 20000 حرف من «يوجين أونيغين» وأظهر أن الانتقالات بين الحروف الصوتية والساكنة ليست مستقلة. لاحقًا، طور النظرية كولموغوروف ودوب وآخرون.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>ديناميكية سلسلة ماركوف توصف بقوى مصفوفة الانتقال P. التوزيع بعد n خطوة هو μ_n = μ_0 P^n. في السلاسل الإرجودية (ergodic)، عندما n→∞، μ_n → π بغض النظر عن μ_0، حيث π هو حل النظام πP = π، Σ_i π_i = 1. سرعة التقارب تحددها الفجوة الطيفية (spectral gap) (الفرق بين القيمة الذاتية الوحدوية وثاني أكبر قيمة ذاتية بالمقدار). بالنسبة للزمن المستمر، تُقدم سلاسل ماركوف المستمرة الزمن (continuous-time Markov chains) مع مصفوفة الشدة (intensity matrix) Q. التطبيقات: خوارزميات مونت كارلو مع سلاسل ماركوف (MCMC)، نماذج ماركوف المخفية (hidden Markov models) (التعرف على الكلام)، نماذج تطور الحمض النووي (DNA evolution models).</p></div>
+        <div class="formula"><div class="formula-render">\pi P = \pi, \quad \sum_i \pi_i = 1</div><div class="formula-meaning">π هو شعاع صفي للاحتمالات المستقرة، P هي مصفوفة احتمالات الانتقال، π_i هو احتمال الحالة i في حالة التوازن.</div></div><div class="formula"><div class="formula-render">P^{(n)} = P^n</div><div class="formula-meaning">P^{(n)} هي مصفوفة احتمالات الانتقال بين الحالات خلال n خطوة، P هي مصفوفة الانتقال لخطوة واحدة (مرفوعة للقوة n).</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>السرعة العامة للتقارب لفئات محددة من السلاسل الكبيرة المتناثرة (sparse chains); مشكلة الخلط للزجاج المغزلي (spin glasses); الحساب الدقيق للتوزيعات المستقرة في النماذج ذات الاستبعادات (exclusion models); الارتباط بسلاسل ماركوف الكمومية (quantum Markov chains)</p><p class="fact">💡 تشكل نماذج ماركوف المخفية أساس أنظمة التعرف على الكلام الحديثة والمعلوماتية الحيوية (البحث عن الجينات). فيها، ينتج التتابع الملاحظ بواسطة سلسلة ماركوف مخفية — مثل نص مشوش بالضوضاء.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div>
+<div class="mini-graph" data-node="t:markov_chains"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="markov_chains_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="markov_chains" title="مفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> أضف تعليقًا</button></div>
+<div class="feedback" id="feedback" data-article-id="markov_chains_ar_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/bayesian_inference.html" class="side-tag" data-tag="bayesian_inference">الاستدلال البايزي</a><a href="/lang/ar/tags/dynamical_systems.html" class="side-tag" data-tag="dynamical_systems">الأنظمة الديناميكية</a><a href="/lang/ar/tags/information_theory.html" class="side-tag" data-tag="information_theory">نظرية المعلومات</a><a href="/lang/ar/tags/probability_theory.html" class="side-tag" data-tag="probability_theory">نظرية الاحتمالات</a><a href="/lang/ar/tags/stochastic_processes.html" class="side-tag" data-tag="stochastic_processes">العمليات العشوائية</a><div class="side-tags-label">قوانين</div><a href="/lang/ar/laws/fokker_planck_equation.html" class="side-law" data-law="fokker_planck_equation">معادلة فوكر-بلانك</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="markov_chains"><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-07-01</span></div><div class="card-body"><h3><a href="/lang/ar/archive/2026-07-01/2607.00536/index.html" title="ملتقى التوقعات: كيف تجمع الخوارزميات بين الأزواج بتأخير مثالي">ملتقى التوقعات: كيف تجمع الخوارزميات بين الأزواج بتأخير مثالي</a></h3><div class="oneliner">عندما تصل الطلبات الواحد تلو الآخر، تبرز معضلة: هل نجمع بين طلبين متطابقين فورًا أم ننتظر؟ الانتظار الطويل يراكم غرامةً — فيزداد الاستياء. لقد صاغ الباحثون هذه المسألة على أنها بحث عن أزواج مع تأخير في فضاء متري (metric space) (مجموعة نقاط ذات مسافات قابلة للقياس). وتبين أن نوع الغرامة يغير التعقيد </div></div></article><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-07-01</span></div><a class="card-img-wrap" href="/lang/ar/archive/2026-07-01/2607.01142/index.html"><img src="/lang/ru/archive/2026-07-01/2607.01142/t_ai.webp" data-fb="/lang/ru/archive/2026-07-01/2607.01142/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/ar/archive/2026-07-01/2607.01142/index.html" title="النقش الجليدي: عندما يكون النمو على قفزات">النقش الجليدي: عندما يكون النمو على قفزات</a></h3><div class="oneliner">تربط نظرية لوفنر الكلاسيكية تطور المجالات المستوية بدالة تحكم أحادية البعد. لكن عندما تفقد هذه الدالة استمراريتها، يصبح النمو على شكل قفزات. أثبتت بيلتولا وشرودر أن كل غلاف (hull) ينمو محلياً يقابله دالة لها نهايات يسرى ويمنى، وفي كل لحظة يُضاف إما 'فقاعة' مفتوحة أو مجموعة متراصة من نقاط الحدود. الع</div></div></article></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('markov_chains', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

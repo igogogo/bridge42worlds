@@ -57,10 +57,12 @@ window.createForceGraph = function (opts) {
     // не доходит до конца — точки виснут по углам. Режем до CAP по степени (оставляем самые связные),
     // с пометкой и ссылкой «показать все» — оверрайд для планшетов и т.п. Касается всех графов (движок общий).
     var MOBILE = window.matchMedia('(max-width: 640px)').matches;
-    var CAP = 50;
+    // Лимит узлов: телефон 50, десктоп 100 (юзер 2026-07-25 — «больше 100 нечитаемо»).
+    // В ПОЛНОЭКРАННОМ режиме лимит снимается: там места хватает, показываем всё.
+    var CAP = MOBILE ? 50 : 100;
     function graphFull() { try { return localStorage.getItem('b42_graph_full') === '1'; } catch (e) { return false; } }
     function capNodes(nn, ll) {
-        if (!MOBILE || graphFull() || nn.length <= CAP) return { nodes: nn, links: ll, from: 0 };
+        if (isFs || graphFull() || nn.length <= CAP) return { nodes: nn, links: ll, from: 0 };
         var deg = nn.map(function () { return 0; });
         ll.forEach(function (l) { deg[l[0]]++; deg[l[1]]++; });
         var order = nn.map(function (_, i) { return i; }).sort(function (a, b) { return deg[b] - deg[a]; }).slice(0, CAP);
@@ -97,6 +99,32 @@ window.createForceGraph = function (opts) {
         var tpl = SIZE_WARN[lang] || SIZE_WARN.en;
         warn.textContent = tpl.replace('{n}', n);
         warn.style.display = 'block';
+        showBigModal(n);
+    }
+
+    // Модалка при большом выборе (юзер 2026-07-25): честно предупреждаем, что будет долго,
+    // и сразу даём кнопку «открыть в полноэкранном» — там и лимит снимается, и места хватает.
+    var BIG = {
+        ru: { t: 'Большой граф', d: 'Выбрано {n} объектов — построение займёт время, а на маленьком поле это плохо читается.', fs: 'Открыть на весь экран', ok: 'Всё равно показать' },
+        en: { t: 'Large graph', d: '{n} objects selected — it will take a while and is hard to read in a small frame.', fs: 'Open fullscreen', ok: 'Show anyway' },
+        es: { t: 'Grafo grande', d: '{n} objetos seleccionados — tardará y se lee mal en un marco pequeño.', fs: 'Pantalla completa', ok: 'Mostrar igual' },
+        ar: { t: 'رسم بياني كبير', d: 'تم اختيار {n} عنصرًا — سيستغرق وقتًا ويصعب قراءته في إطار صغير.', fs: 'ملء الشاشة', ok: 'اعرض على أي حال' }
+    };
+    var bigShown = false;
+    function showBigModal(n) {
+        if (bigShown || isFs || !fsContainer) return;
+        bigShown = true;
+        var L = BIG[lang] || BIG.en;
+        var m = document.createElement('div');
+        m.className = 'graph-big-modal';
+        m.innerHTML = '<div class="gbm-box"><div class="gbm-t">' + L.t + '</div>' +
+            '<div class="gbm-d">' + L.d.replace('{n}', n) + '</div>' +
+            '<div class="gbm-actions"><button type="button" class="gbm-fs">' + L.fs + '</button>' +
+            '<button type="button" class="gbm-ok">' + L.ok + '</button></div></div>';
+        fsContainer.appendChild(m);
+        m.querySelector('.gbm-fs').addEventListener('click', function () { m.remove(); setFs(true); });
+        m.querySelector('.gbm-ok').addEventListener('click', function () { m.remove(); });
+        m.addEventListener('click', function (e) { if (e.target === m) m.remove(); });
     }
     function showTip(node, x, y) {
         if (!tip) return;
@@ -119,7 +147,7 @@ window.createForceGraph = function (opts) {
     if (fsContainer) {
         fsBtn = document.createElement('button');
         fsBtn.type = 'button'; fsBtn.className = 'graph-fs-btn'; fsBtn.setAttribute('aria-label', 'fullscreen');
-        fsBtn.textContent = '⛶';
+        fsBtn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg>';
         fsBtn.addEventListener('click', function (e) { e.stopPropagation(); setFs(!isFs); });
         fsContainer.appendChild(fsBtn);
 
@@ -173,11 +201,15 @@ window.createForceGraph = function (opts) {
         }
     }
     function setFs(v) {
+        var _prevFs = isFs;
         isFs = v;
         if (v) relocateControls(true);
         fsContainer.classList.toggle('graph-fs-active', v);
         document.body.classList.toggle('graph-fs-open', v);
-        fsBtn.textContent = v ? '✕' : '⛶';
+        fsBtn.innerHTML = v ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>' : '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg>';
+        // Прозрачный фон в полноэкранном — ПО УМОЛЧАНИЮ (юзер 2026-07-25): граф ложится поверх
+        // страницы, контекст не теряется; кнопка-тумблер по-прежнему переключает.
+        if (v) fsContainer.classList.add('graph-fs-transparent');
         if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
         // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
         // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.

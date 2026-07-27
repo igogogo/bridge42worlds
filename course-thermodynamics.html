@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Термодинамика — интерактивный учебник — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  body{max-width:900px}
+  .c-lead{max-width:620px;font-size:17px;line-height:1.65;color:var(--muted);margin-bottom:6px}
+  .c-toc{max-width:620px;display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 26px}
+  .c-toc a{font-size:12.5px;padding:5px 12px;border-radius:15px;text-decoration:none;
+    background:var(--tag-bg);color:var(--muted);border:1px solid var(--border)}
+  .c-toc a:hover{border-color:var(--link);color:var(--link)}
+  .c-sec{max-width:620px;margin:34px 0}
+  .c-sec h2{font-family:'Source Serif 4',Georgia,serif;font-size:23px;font-weight:600;margin:0 0 12px}
+  .c-sec h3{font-size:15px;font-weight:600;margin:0 0 6px}
+  .c-sec p{font-size:16.5px;line-height:1.8;margin-bottom:16px;max-width:620px}
+  .c-hook{max-width:620px;padding:16px 20px;border-radius:14px;background:var(--tag-bg);margin:20px 0}
+  .c-hook p{font-size:16px;line-height:1.75;margin-bottom:12px}
+  .c-hook p:last-child{margin-bottom:0}
+  .c-box{max-width:620px;margin:20px 0;padding:14px 18px;border-radius:12px;line-height:1.7;font-size:15px}
+  .c-exp{background:rgba(184,134,11,.10);border-left:3px solid #b8860b}
+  .c-ins{background:rgba(74,106,146,.08);border-left:3px solid var(--link)}
+  .c-box h3{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);margin-bottom:7px}
+  .c-list{max-width:620px;margin:16px 0;padding:0;list-style:none}
+  .c-list li{font-size:15px;line-height:1.7;margin-bottom:9px;padding-left:20px;position:relative}
+  .c-list li::before{content:"◆";position:absolute;left:0;color:var(--link);font-size:10px;top:5px}
+  .c-life li::before{content:"→";color:var(--soft)}
+  .c-stand{margin:22px 0}
+  .c-stand-note{max-width:620px;font-size:13.5px;line-height:1.6;color:var(--soft);margin:10px 0 0}
+  .c-extras{max-width:620px;margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7;font-variant-numeric:tabular-nums}
+  .c-extras b{color:var(--text);font-weight:600}
+  .c-modes{display:flex;flex-wrap:wrap;gap:6px;max-width:620px;margin:0 0 12px}
+  .c-modes button{font-size:12.5px;padding:5px 12px;border-radius:16px;cursor:pointer;
+    background:none;border:1px solid var(--border);color:var(--soft)}
+  .c-modes button.active{border-color:var(--link);color:var(--link);font-weight:600;background:rgba(74,106,146,.08)}
+  .c-ask{font-size:12.5px;padding:6px 14px;border-radius:15px;cursor:pointer;background:none;
+    border:1px solid var(--border);color:var(--soft);margin-top:6px}
+  .c-ask:hover{border-color:var(--link);color:var(--link)}
+  .c-links{max-width:620px;margin:16px 0;font-size:12.5px;color:var(--soft);line-height:2}
+  .c-links b{color:var(--soft);font-weight:600;margin-right:4px}
+  .c-links a{display:inline-block;margin:0 5px 0 0;padding:2px 9px;border-radius:12px;text-decoration:none;
+    background:var(--tag-bg);color:var(--muted);border:0.5px solid var(--border)}
+  .c-links a:hover{border-color:var(--link);color:var(--link)}
+  .c-final{max-width:620px;margin:40px 0 0;padding-top:24px;border-top:2px solid var(--border)}
+  .c-note{max-width:620px;font-size:12px;color:var(--soft);margin-top:30px;line-height:1.6}
+  .c-units{max-width:620px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 20px;
+    padding:10px 14px;border-radius:12px;background:var(--tag-bg);border:1px solid var(--border)}
+  .c-units-label{font-size:12px;color:var(--soft);margin-right:2px}
+  .c-units button{font-size:12px;padding:4px 11px;border-radius:14px;cursor:pointer;
+    background:var(--bg);border:1px solid var(--border);color:var(--muted)}
+  .c-units button.active{border-color:var(--link);color:var(--link);font-weight:600}
+  .c-joke{color:var(--link);font-weight:600;cursor:help}
+  /* ── Строгий блок: вывод формул и константы (стиль theory-статей: §, .eq, .plate) ── */
+  .c-rigor{max-width:620px;margin:26px 0;padding:18px 0 4px;border-top:1px solid var(--border)}
+  .c-rigor h3{font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin:0 0 4px}
+  .c-rigor .c-rigor-lead{font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 16px}
+  .c-step{margin:0 0 14px}
+  .c-step-t{font-size:14.5px;line-height:1.7;color:var(--text);margin:0 0 6px}
+  .c-eq{display:flex;align-items:center;gap:10px;margin:8px 0 0;padding:9px 14px;border-radius:8px;
+    background:var(--tag-bg);font-family:'Source Serif 4',Georgia,serif;font-size:16.5px}
+  .c-eq-num{margin-left:auto;font-size:11px;color:var(--soft);font-family:Inter,sans-serif}
+  .c-plate{margin:18px 0 6px;padding:16px 18px;border-radius:12px;text-align:center;
+    background:rgba(74,106,146,.10);border:1px solid var(--border)}
+  .c-plate-eq{font-family:'Source Serif 4',Georgia,serif;font-size:23px;font-weight:600;color:var(--text)}
+  .c-plate-cap{font-size:12.5px;line-height:1.6;color:var(--soft);margin-top:8px}
+  .c-rigor-note{font-size:13.5px;line-height:1.7;color:var(--muted);margin:14px 0 0;padding:11px 14px;
+    border-radius:9px;background:rgba(184,134,11,.09);border-left:3px solid #b8860b}
+  .c-const{width:100%;border-collapse:collapse;margin:10px 0 0;font-size:13px}
+  .c-const td{padding:9px 8px;border-top:1px solid var(--border);vertical-align:top;line-height:1.6}
+  .c-const .cc-sym{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;
+    color:var(--link);white-space:nowrap;width:1%}
+  .c-const .cc-name{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+  .c-const .cc-val{color:var(--soft);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:12.5px}
+  .c-const .cc-why{color:var(--muted);font-size:12.5px;margin-top:4px}
+</style>
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/lang/ru/theory/" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<h1 style="max-width:620px" id="c-title">…</h1>
+<p class="c-lead" id="c-lead"></p>
+<div class="c-units" id="c-units"></div>
+<nav class="c-toc" id="c-toc"></nav>
+
+<div id="c-hook"></div>
+<div id="c-history"></div>
+<div id="c-chapters"></div>
+<div class="c-final" id="c-final"></div>
+
+<p class="c-note" id="c-note">Интерактивный учебник на движке <code>explorable.js</code> + <code>models.js</code>.
+Весь текст, вопросы и подсказки — в <code>/data/theory/course-thermodynamics.json</code> (перевод на en/es/ar
+подключается без правки кода). Тьютор работает через наш Cloudflare Worker с ключом DeepSeek;
+без ключа — демо-режим с заготовленными подсказками.</p>
+
+<script>
+// Локальная разработка: статика на одном порту, Worker с ботом (wrangler dev) — на 8787.
+// В проде оба на одном origin, поэтому обращаемся к относительному /api/tutor.
+if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+  if (location.port !== '8787') window.B42_TUTOR_API = 'http://127.0.0.1:8787/api/tutor';
+}
+</script>
+<script src="/js/explorable.js?v=5"></script>
+<script src="/js/models.js?v=6"></script>
+<script src="/js/tutor.js?v=2"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru', COURSE, UI, BOT, MODELDATA = {};
+  var TAG_BASE = '/lang/' + LANG + '/tags/', LAW_BASE = '/lang/' + LANG + '/laws/', SCI_BASE = '/lang/' + LANG + '/scientists/';
+
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  // Лёгкий markdown: **жирный** → <b>, чтобы контент в JSON оставался читаемым текстом.
+  function md(s) { return String(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+
+  function sectionAskBtn(title, text) {
+    var b = el('button', 'c-ask', UI.askSection || '<i data-ic="chat"></i> Спросить тьютора');
+    b.type = 'button';
+    b.addEventListener('click', function () { BOT.open({ title: title, text: text }); });
+    return b;
+  }
+
+  // Ссылки на наши сущности — показать, где эта тема живёт на сайте
+  function entityLinks(ent) {
+    var wrap = el('div', 'c-links'), any = false;
+    function row(label, items, base, fmt) {
+      if (!items || !items.length) return;
+      any = true;
+      var line = el('div', null, '<b>' + label + ':</b> ');
+      items.forEach(function (name) {
+        var a = el('a', null, name.replace(/_/g, ' '));
+        a.href = base + fmt(name) + '.html';
+        line.appendChild(a);
+      });
+      wrap.appendChild(line);
+    }
+    row('Теги', ent.tags, TAG_BASE, function (t) { return encodeURIComponent(t); });
+    row('Законы', ent.laws, LAW_BASE, function (t) { return encodeURIComponent(t); });
+    row('Учёные', ent.scientists, SCI_BASE, function (n) { return n.replace(/\s+/g, '_'); });
+    return any ? wrap : null;
+  }
+
+  function rg_title(ch) { return (ch.rigor && ch.rigor.title) || 'Строгий вывод'; }
+
+  function renderChapter(ch, idx) {
+    var host = el('section', 'c-sec'); host.id = 'ch-' + ch.id;
+    host.appendChild(el('h2', null, ch.title));
+    var plain = ch.text.join(' ');                       // текст раздела = контекст для тьютора
+    ch.text.forEach(function (p) { host.appendChild(el('p', null, md(p))); });
+
+    // ── интерактивный стенд ──
+    if (ch.model && MODELDATA[ch.model] && window.B42Models) {
+      var standWrap = el('div', 'c-stand');
+      var modeBar = null, mdl = null;
+      var factory = { ideal_gas: 'gas', phase_transition: 'kettle', processes_engine: 'engine' }[ch.model];
+      mdl = B42Models[factory](MODELDATA[ch.model]);
+      if (mdl.modes) {                                    // многорежимная модель — кнопки-табы
+        modeBar = el('div', 'c-modes');
+        mdl.modes.forEach(function (m) {
+          var b = el('button', m === mdl.getMode() ? 'active' : '', MODELDATA[ch.model].i18n[LANG]['mode_' + m] || m);
+          b.type = 'button';
+          b.addEventListener('click', function () {
+            mdl.setMode(m);
+            modeBar.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+            if (api) api.render();
+          });
+          modeBar.appendChild(b);
+        });
+        standWrap.appendChild(modeBar);
+      }
+      var mount = el('div');
+      standWrap.appendChild(mount);
+      var extras = el('div', 'c-extras');
+      standWrap.appendChild(extras);
+      if (ch.stand) standWrap.appendChild(el('p', 'c-stand-note', md(ch.stand)));
+      host.appendChild(standWrap);
+
+      var cfg = mdl.cfg; cfg.lang = LANG;
+      var api = Explorable(mount, cfg);
+      APIS.push(api);
+      if (mdl.bindHost) mdl.bindHost(mount);
+      if (mdl.extras) {
+        setInterval(function () {
+          try {
+            var T = function (k) { var d = MODELDATA[ch.model].i18n[LANG]; return (d && d[k]) || k; };
+            extras.innerHTML = mdl.extras(api.state, null, T);
+          } catch (e) {}
+        }, 300);
+      }
+    }
+
+    // ── строгий вывод формулы + константы (шутки шутками, а вывод должен быть честный) ──
+    if (ch.rigor) {
+      var rg = el('div', 'c-rigor');
+      rg.appendChild(el('h3', null, '∑ ' + rg_title(ch)));
+      if (ch.rigor.lead) rg.appendChild(el('p', 'c-rigor-lead', md(ch.rigor.lead)));
+      (ch.rigor.steps || []).forEach(function (s) {
+        var st = el('div', 'c-step');
+        st.appendChild(el('div', 'c-step-t', md(s.text)));
+        if (s.eq) {
+          var eq = el('div', 'c-eq');
+          eq.appendChild(el('span', null, s.eq));
+          if (s.num) eq.appendChild(el('span', 'c-eq-num', '(' + s.num + ')'));
+          st.appendChild(eq);
+        }
+        rg.appendChild(st);
+      });
+      if (ch.rigor.plate) {
+        var pl = el('div', 'c-plate');
+        pl.appendChild(el('div', 'c-plate-eq', ch.rigor.plate));
+        if (ch.rigor.plateCap) pl.appendChild(el('div', 'c-plate-cap', ch.rigor.plateCap));
+        rg.appendChild(pl);
+      }
+      if (ch.rigor.note) rg.appendChild(el('div', 'c-rigor-note', md(ch.rigor.note)));
+      if (ch.rigor.mnemonic) {
+        rg.appendChild(el('h3', null, '<i data-ic="mnemo"></i> ' + ch.rigor.mnemonic.title));
+        var mt = el('table', 'c-const');
+        (ch.rigor.mnemonic.items || []).forEach(function (m) {
+          var tr = el('tr');
+          tr.appendChild(el('td', 'cc-sym', m.k));
+          tr.appendChild(el('td', null, '<div class="cc-why" style="margin-top:0">' + md(m.v) + '</div>'));
+          mt.appendChild(tr);
+        });
+        rg.appendChild(mt);
+      }
+      if (ch.rigor.constants) {
+        rg.appendChild(el('h3', null, ch.rigor.constants.title));
+        var tbl = el('table', 'c-const');
+        (ch.rigor.constants.items || []).forEach(function (c) {
+          var tr = el('tr');
+          tr.appendChild(el('td', 'cc-sym', c.sym));
+          var td = el('td');
+          td.appendChild(el('span', 'cc-name', c.name));
+          td.appendChild(el('span', 'cc-val', c.val));
+          td.appendChild(el('div', 'cc-why', md(c.why)));
+          tr.appendChild(td);
+          tbl.appendChild(tr);
+        });
+        rg.appendChild(tbl);
+      }
+      host.appendChild(rg);
+    }
+
+    // ── глубина / опыт / факты / жизнь ──
+    if (ch.insight) {
+      var ins = el('div', 'c-box c-ins');
+      ins.appendChild(el('h3', null, ch.insight.title || UI.insight));
+      ins.appendChild(el('div', null, md(ch.insight.text)));
+      host.appendChild(ins);
+    }
+    if (ch.experiment) {
+      var exp = el('div', 'c-box c-exp');
+      exp.appendChild(el('h3', null, '<i data-ic="flask"></i> ' + (ch.experiment.title || UI.experiment)));
+      exp.appendChild(el('div', null, md(ch.experiment.text)));
+      host.appendChild(exp);
+    }
+    if (ch.facts && ch.facts.length) {
+      host.appendChild(el('h3', null, '<i data-ic="lamp"></i> ' + UI.facts));
+      var ul = el('ul', 'c-list');
+      ch.facts.forEach(function (f) { ul.appendChild(el('li', null, md(f))); });
+      host.appendChild(ul);
+    }
+    if (ch.life && ch.life.length) {
+      host.appendChild(el('h3', null, '<i data-ic="home"></i> ' + UI.life));
+      var ul2 = el('ul', 'c-list c-life');
+      ch.life.forEach(function (f) { ul2.appendChild(el('li', null, md(f))); });
+      host.appendChild(ul2);
+    }
+    host.appendChild(sectionAskBtn(ch.title, plain));
+
+    // ── вопросы к разделу ──
+    if (ch.quiz && ch.quiz.length) {
+      host.appendChild(el('h3', null, '<i data-ic="pencil"></i> ' + UI.checkSection));
+      var qhost = el('div');
+      host.appendChild(qhost);
+      ch.quiz.forEach(function (q) { q.ctx = plain; q.ctxTitle = ch.title; });
+      B42Tutor.Quiz(qhost, ch.quiz, UI, BOT);
+    }
+    return host;
+  }
+
+  // Переключатель систем единиц — одно место на всю статью. Меняет и приборы на стендах,
+  // и числа под ними: одна и та же физика, разные «языки» измерения (вплоть до планковских).
+  function renderUnitSwitch() {
+    var host = document.getElementById('c-units');
+    host.innerHTML = '';
+    host.appendChild(el('span', 'c-units-label', '<i data-ic="ruler"></i> Единицы:'));
+    var list = window.B42Units ? window.B42Units.list : {};
+    Object.keys(list).forEach(function (key) {
+      var b = el('button', key === (window.B42_UNITS || 'metric') ? 'active' : '', list[key].name);
+      b.type = 'button';
+      b.title = 'T: ' + list[key].T + ' · P: ' + list[key].P + ' · V: ' + list[key].V;
+      b.addEventListener('click', function () {
+        window.B42_UNITS = key;
+        host.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+        try { localStorage.setItem('b42_units', key); } catch (e) {}
+        APIS.forEach(function (a) { try { a.render(); } catch (e) {} });   // приборы перерисовать сразу
+      });
+      host.appendChild(b);
+    });
+  }
+
+  var APIS = [];   // все запущенные стенды — чтобы разом перерисовать при смене единиц
+
+  function render() {
+    var C = COURSE;
+    try { window.B42_UNITS = localStorage.getItem('b42_units') || 'metric'; } catch (e) { window.B42_UNITS = 'metric'; }
+    renderUnitSwitch();
+    document.title = C.title + ' — bridge42worlds';
+    document.getElementById('c-title').textContent = C.title;
+    document.getElementById('c-lead').textContent = C.lead;
+
+    // оглавление
+    var toc = document.getElementById('c-toc');
+    C.chapters.forEach(function (ch) {
+      var a = el('a', null, ch.title); a.href = '#ch-' + ch.id; toc.appendChild(a);
+    });
+    var af = el('a', null, '<i data-ic="star"></i> ' + C.final.title); af.href = '#c-final-sec'; toc.appendChild(af);
+
+    // хук
+    var hookHost = document.getElementById('c-hook');
+    var hk = el('div', 'c-hook');
+    C.hook.text.forEach(function (p) { hk.appendChild(el('p', null, md(p))); });
+    hookHost.appendChild(hk);
+
+    // история
+    var hist = el('section', 'c-sec');
+    hist.appendChild(el('h2', null, '⏳ ' + C.history.title));
+    C.history.text.forEach(function (p) { hist.appendChild(el('p', null, md(p))); });
+    hist.appendChild(sectionAskBtn(C.history.title, C.history.text.join(' ')));
+    document.getElementById('c-history').appendChild(hist);
+
+    // главы
+    var chost = document.getElementById('c-chapters');
+    C.chapters.forEach(function (ch, i) { chost.appendChild(renderChapter(ch, i)); });
+
+    // итоговый тест
+    var fin = document.getElementById('c-final');
+    var fsec = el('section', 'c-sec'); fsec.id = 'c-final-sec';
+    fsec.appendChild(el('h2', null, '<i data-ic="star"></i> ' + C.final.title));
+    fsec.appendChild(el('p', null, C.final.lead));
+    var fq = el('div'); fsec.appendChild(fq);
+    var scoreHost = el('div'); fsec.appendChild(scoreHost);
+    fin.appendChild(fsec);
+
+    var allText = C.chapters.map(function (c) { return c.title + ': ' + c.text.join(' '); }).join('\n\n');
+
+    // Блок прикидок «в уме» — идёт ПЕРЕД итоговым тестом: сначала учимся оценивать порядок,
+    // потом проверяем понимание (юзер: «умение посчитать приблизительно, оценить эффект»).
+    if (C.final.estimates && C.final.estimates.length) {
+      var estHead = el('h3', null, '<i data-ic="hash"></i> ' + (C.final.estimateTitle || 'Прикидка в уме'));
+      var estLead = el('p', 'c-stand-note', C.final.estimateLead || '');
+      var estHost = el('div');
+      fq.parentNode.insertBefore(estHead, fq);
+      fq.parentNode.insertBefore(estLead, fq);
+      fq.parentNode.insertBefore(estHost, fq);
+      C.final.estimates.forEach(function (q) { q.ctx = allText; q.ctxTitle = C.final.estimateTitle; });
+      B42Tutor.Quiz(estHost, C.final.estimates, UI, BOT);
+      fq.parentNode.insertBefore(el('h3', null, '<i data-ic="pencil"></i> ' + C.final.title), fq);
+    }
+
+    C.final.questions.forEach(function (q) { q.ctx = allText; q.ctxTitle = C.final.title; });
+    var quiz = B42Tutor.Quiz(fq, C.final.questions, UI, BOT, {
+      onAnswer: function () {
+        var s = quiz.score();
+        if (s.done === s.total) B42Tutor.renderScore(scoreHost, s, UI, C.final.levels);
+      }
+    });
+
+    // ссылки на наши сущности — где эта тема работает на сайте
+    var links = entityLinks(window.__COURSE_ENTITIES || {});
+    if (links) fsec.appendChild(links);
+  }
+
+  fetch('/data/theory/course-thermodynamics.json', { cache: 'no-cache' })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      window.__COURSE_ENTITIES = data.entities;
+      UI = data.ui[LANG]; COURSE = data.course[LANG];
+      BOT = B42Tutor.Bot({ lang: LANG, strings: UI, maxQuestions: 10, maxLen: 600 });
+      // модели курса грузим параллельно — их JSON'ы уже существуют и переиспользуются со стендов
+      return Promise.all(data.models.map(function (m) {
+        return fetch('/data/theory/' + m + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+          .then(function (md) { MODELDATA[m] = md; });
+      }));
+    })
+    .then(render)
+    .catch(function (e) {
+      document.getElementById('c-title').textContent = 'Не удалось загрузить учебник';
+      document.getElementById('c-lead').textContent = String(e);
+    });
+})();
+</script>
+<script src="/js/icons.js?v=2"></script>
+
+<script>
+// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.querySelector('.top-bar, .topnav');
+  if (!bar || document.getElementById('course-langs')) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'langs'; wrap.id = 'course-langs';
+  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+    var a = document.createElement('a');
+    a.href = '?lang=' + l;
+    a.textContent = l.toUpperCase();
+    if (l === window.B42_LANG) a.className = 'active';
+    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
+    wrap.appendChild(a);
+  });
+  bar.appendChild(wrap);
+});
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+
+<script>
+// Подставляем наш штриховой набор вместо эмодзи после загрузки icons.js
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.B42Icons) return;
+  document.querySelectorAll('i[data-ic]').forEach(function (n) {
+    var f = B42Icons[n.getAttribute('data-ic')];
+    if (f) n.outerHTML = f(15);
+  });
+});
+</script>
+</body>
+</html>

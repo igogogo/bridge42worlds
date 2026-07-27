@@ -1,0 +1,1514 @@
+{
+  "id": "03-phase",
+  "topic": "language",
+  "schema": "b42.lesson/1",
+  "model": "oscillator",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "mechanics",
+      "entropy"
+    ],
+    "scientists": [
+      "Ludwig Boltzmann"
+    ]
+  },
+  "ru": {
+    "title": "Пространство состояний",
+    "subtitle": "Параграф 3 · Как память превращается в размерность",
+    "intro": [
+      "Тело находится в точке с координатой три метра. Что будет через секунду? Ответить невозможно — и не потому, что не хватает данных о силах, а потому, что вопрос поставлен неполно. Тело может стоять на месте, а может пролетать эту точку со скоростью триста метров в секунду. Настоящее выглядит одинаково, будущее совершенно разное.",
+      "Отсюда следует неприятная вещь: чтобы предсказывать движение, нужно помнить прошлое. Скорость ведь не увидишь в одном мгновении — она получается сравнением двух соседних. Уравнения с памятью решать тяжело, и физика нашла обходной путь, который оказался важнее самой задачи.",
+      "Путь такой: не спорить с реальностью, а поменять язык описания. Объявить состоянием не координату, а пару — координата и скорость. Тогда память исчезает: зная текущую пару, можно вычислить следующую, и прошлое не нужно вовсе. Мы понизили порядок, повысив размерность. Этот приём дальше встретится в термодинамике, в статистике и в квантовой механике — и каждый раз будет выглядеть новым, оставаясь тем же."
+    ],
+    "standNote": "На стенде — груз на пружине. Обратите внимание на две панели: слева тело качается во времени, справа строится график. Меняя массу и жёсткость, следите не за формой синусоиды, а за парой чисел: положение и скорость. В любой момент их достаточно, чтобы предсказать всё дальнейшее движение, — и это утверждение, а не наблюдение. Проверьте: два разных момента с одинаковым положением, но противоположной скоростью дают совершенно разное продолжение.",
+    "formula": {
+      "name": "Уравнения Гамильтона",
+      "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Канонические уравнения · описание в фазовом пространстве",
+      "authors": [
+        {
+          "who": "Жозеф Луи Лагранж",
+          "year": "1788",
+          "what": "переписал механику Ньютона так, что она перестала зависеть от выбора координат. Заявил в предисловии, что в его книге не будет ни одного чертежа, — механика стала разделом анализа"
+        },
+        {
+          "who": "Уильям Роуэн Гамильтон",
+          "year": "1834",
+          "what": "довёл идею до конца: заменил одно уравнение второго порядка на два первого и получил описание, где положение и импульс равноправны. Позднее выяснилось, что именно эта форма переходит в квантовую механику"
+        },
+        {
+          "who": "Жозеф Лиувилль",
+          "year": "1838",
+          "what": "доказал, что объём облака состояний в фазовом пространстве не меняется со временем. Облако может растянуться в тончайшую нить, но объём сохранится"
+        },
+        {
+          "who": "Уиллард Гиббс",
+          "year": "1902",
+          "what": "перенёс приём на системы из миллиардов частиц: если следить за точкой невозможно, надо следить за плотностью. Так родилась статистическая механика"
+        },
+        {
+          "who": "Анри Пуанкаре",
+          "year": "1890",
+          "what": "начал изучать не решения, а форму траекторий в фазовом пространстве — и обнаружил, что у простой системы трёх тел они могут быть невероятно запутанными. Отсюда выросла теория хаоса"
+        }
+      ],
+      "story": "Гамильтон вывел свои уравнения, занимаясь оптикой, а не механикой: он заметил, что распространение света и движение частицы описываются одинаковой математикой. Аналогия казалась изящным курьёзом почти сто лет. В 1926 году Шрёдингер взял её всерьёз: если механика есть предельный случай некоторой волновой теории, как геометрическая оптика — предельный случай волновой, то надо написать эту волновую теорию. Так появилось уравнение Шрёдингера. Курьёз оказался дорогой в квантовую механику.",
+      "symbols": [
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "обобщённая координата",
+          "unit": "м (или рад)",
+          "note": "«обобщённая» значит любая величина, задающая положение: длина, угол, объём"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "обобщённый импульс",
+          "unit": "кг·м/с",
+          "note": "для обычного движения это $mv$; именно он, а не скорость, — правильный партнёр координаты"
+        },
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "функция Гамильтона — полная энергия через $q$ и $p$",
+          "unit": "Дж",
+          "note": "для консервативной системы $H = $ кинетическая плюс потенциальная"
+        },
+        {
+          "sym": "Г",
+          "latex": "\\Gamma",
+          "what": "фазовое пространство",
+          "unit": "—",
+          "note": "у одной частицы шестимерно: три координаты и три импульса"
+        },
+        {
+          "sym": "V",
+          "latex": "V_{\\Gamma}",
+          "what": "объём в фазовом пространстве",
+          "unit": "(Дж·с)^N",
+          "note": "величина, логарифм которой есть энтропия"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: как память заменяется размерностью",
+      "lead": "Разберём медленно — здесь важна каждая ступенька. Начнём с обычного второго закона и придём к тому, что движение есть линия в пространстве состояний.",
+      "steps": [
+        {
+          "text": "Второй закон Ньютона — уравнение второго порядка по времени. Чтобы его решить, нужны два начальных условия, а не одно. Формально: зная только $x(t)$, вы не вычислите $x(t+dt)$; нужно ещё $x(t-dt)$, чтобы оценить скорость. А это память о прошлом.",
+          "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+          "figure": "secondlaw",
+          "figCaption": "Уравнение второго порядка требует знания и положения, и скорости — одного мгновения недостаточно."
+        },
+        {
+          "text": "Меняем язык описания. Объявляем состоянием не координату, а пару. Одно уравнение второго порядка распадается на два уравнения первого порядка — без памяти.",
+          "latex": "\\text{состояние} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+          "figure": "axes",
+          "figCaption": "Два уравнения первого порядка вместо одного второго: порядок понижен, размерность повышена."
+        },
+        {
+          "text": "Откуда взялась новая переменная. Скорость — не искусственная добавка, а инкапсулированная история: разность двух соседних положений, сжатая в одно число. Вместо того чтобы хранить координату за два момента, храним координату и производную за один.",
+          "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+          "figure": "secant",
+          "figCaption": "Производная упаковывает ближайшее прошлое в число, приписанное настоящему."
+        },
+        {
+          "text": "Приём обобщается. Уравнение третьего порядка потребует тройки, четвёртого — четвёрки. Каждая следующая производная упаковывает всё более глубокое прошлое — ровно как коэффициенты ряда Тейлора хранят поведение функции в окрестности одной точки.",
+          "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+          "figure": "tangent",
+          "figCaption": "Ряд Тейлора — та же идея: вся история функции закодирована набором чисел в одной точке."
+        },
+        {
+          "text": "Теперь главное следствие. Раз состояние стало точкой, движение стало линией. Для груза на пружине энергия складывается из кинетической и потенциальной и не меняется — а это уравнение эллипса в плоскости координата-импульс.",
+          "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+          "figure": "energyswap",
+          "figCaption": "Замкнутая кривая в фазовой плоскости — это и есть утверждение «энергия сохраняется, движение периодично»."
+        },
+        {
+          "text": "Добавим трение — и эллипс превратится в спираль, скручивающуюся к началу координат. Заметьте: чтобы это понять, мы не решали уравнение. Форма траектории отвечает на вопрос о судьбе системы раньше, чем появляется формула. Именно с этого наблюдения Пуанкаре начал качественную теорию динамических систем.",
+          "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{спираль внутрь}",
+          "figure": "friction",
+          "figCaption": "Трение уводит траекторию внутрь: качественный ответ виден без всякого решения."
+        },
+        {
+          "text": "И последний шаг — к статистике. У одной частицы фазовое пространство шестимерно. У моля газа измерений порядка $6 \\cdot 10^{23}$: следить за точкой невозможно ни сейчас, ни когда-либо. Тогда физика отказывается от точки и переходит к объёму. Энтропия Больцмана есть логарифм числа состояний, то есть буквально логарифм фазового объёма.",
+          "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+          "figure": "microcontact",
+          "figCaption": "Когда точку отследить нельзя, следят за плотностью. Отсюда вся статистическая физика."
+        }
+      ],
+      "plate": "Переход в фазовое пространство — это замена памяти на размерность. Прошлое не отбрасывается, оно кодируется в дополнительных координатах настоящего.",
+      "note": "Приём работает и там, где память не сводится к производной. Пример — гистерезис: намокание пористой породы и обратное высыхание идут по разным кривым, и одна и та же влажность означает разное. Лечится добавлением в состояние флага направления процесса. Флаг — та же инкапсулированная история, что и скорость для координаты. Промышленные модели пласта устроены именно так; если в них появляется необъяснимая зависимость от истории, это верный признак, что какую-то переменную забыли включить в состояние."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Первое понятие — порядок дифференциального уравнения. Это наибольшая производная, которая в нём встречается, и она равна числу начальных условий, нужных для однозначного решения. Уравнение первого порядка требует одного числа, второго — двух. Отсюда и размерность пространства состояний: она равна порядку уравнения.",
+        "Второе — параметрическая кривая. Обычный график показывает $x$ как функцию времени. Фазовая траектория показывает $p$ как функцию $x$, а время спрятано внутрь как параметр вдоль кривой. Это тот же приём, каким описывают окружность: вместо $y = \\sqrt{1-x^2}$ пишут $x = \\cos t$, $y = \\sin t$ — и разрывов больше нет.",
+        "Третье — свойство Маркова, и оно здесь центральное. Процесс называют марковским, если будущее зависит только от настоящего, а не от того, как система в это настоящее попала. В координате движение немарковское, в паре координата-импульс — марковское. Обратите внимание: изменилась не физика, изменилось описание.",
+        "Четвёртое — многомерный объём. Для $N$ частиц фазовое пространство имеет $6N$ измерений, и объём в нём считается как произведение всех интервалов. Это звучит устрашающе, но нужен обычно не сам объём, а его логарифм — а логарифм произведения есть сумма логарифмов. Именно поэтому энтропия аддитивна: сложили две системы — энтропии сложились."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: площадь эллипса и откуда в квантах взялась постоянная Планка",
+      "lead": "Считаем площадь фазовой траектории обычного груза на пружине. Ответ окажется неожиданно содержательным.",
+      "given": "Груз массой $m = 2$ кг на пружине жёсткостью $k = 30$ Н/м колеблется с амплитудой $A = 6$ см. Найти площадь, которую его траектория заметает в фазовой плоскости $(x, p)$.",
+      "law": "Траектория есть эллипс с полуосями $A$ и $p_{\\max} = m\\omega A$; площадь эллипса равна $\\pi ab$.",
+      "solution": [
+        {
+          "text": "Круговая частота колебаний.",
+          "latex": "\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{30}{2}} \\approx 3{,}87\\ \\text{с}^{-1}"
+        },
+        {
+          "text": "Максимальный импульс — в момент прохождения положения равновесия.",
+          "latex": "p_{\\max} = m\\omega A = 2 \\cdot 3{,}87 \\cdot 0{,}06 \\approx 0{,}46\\ \\text{кг}\\cdot\\text{м/с}"
+        },
+        {
+          "text": "Площадь эллипса с полуосями $A$ и $p_{\\max}$.",
+          "latex": "S = \\pi A p_{\\max} \\approx 3{,}14 \\cdot 0{,}06 \\cdot 0{,}46 \\approx 0{,}087\\ \\text{Дж}\\cdot\\text{с}"
+        },
+        {
+          "text": "Полезно заметить связь с энергией и периодом — она не случайна.",
+          "latex": "S = \\frac{2\\pi E}{\\omega} = E \\cdot T, \\qquad E = \\frac{kA^{2}}{2} = 0{,}054\\ \\text{Дж}"
+        }
+      ],
+      "answer": "Площадь около $0{,}087$ Дж·с. Размерность — энергия на время, то есть действие.",
+      "check": "А теперь то, ради чего пример. Постоянная Планка имеет ровно эту размерность и равна $6{,}6 \\cdot 10^{-34}$ Дж·с. Наш эллипс больше неё в $10^{32}$ раз — вот почему квантовые эффекты для груза на пружине не наблюдаются. Более того, старая квантовая теория прямо утверждала: разрешены только те орбиты, у которых фазовая площадь кратна постоянной Планка. Квантование родилось как условие на площадь в фазовом пространстве — том самом, которое мы построили в этом параграфе из желания избавиться от памяти."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Двух хватает — и вторая объясняет, почему приём из механики оказался нужен статистике.",
+      "items": [
+        {
+          "sym": "h",
+          "latex": "h",
+          "dictKey": "h",
+          "name": "Постоянная Планка",
+          "value": "6,63 · 10⁻³⁴",
+          "unit": "Дж · с",
+          "why": "Имеет размерность действия — той же, что площадь в фазовой плоскости. Это не совпадение: постоянная Планка задаёт наименьшую различимую ячейку фазового пространства, ниже которой говорить о точке состояния бессмысленно.",
+          "mnemo": "Порядок 10⁻³⁴ — примерно во столько же раз человек больше атомного ядра. Квант действия настолько же далёк от нашего масштаба."
+        },
+        {
+          "sym": "k_B",
+          "latex": "k_B",
+          "dictKey": "k_B",
+          "name": "Постоянная Больцмана",
+          "value": "1,38 · 10⁻²³",
+          "unit": "Дж / К",
+          "why": "Переводит логарифм фазового объёма в энтропию: $S = k_B \\ln W$. По сути это цена одного бита информации, выраженная в привычных единицах.",
+          "mnemo": "Формула $S = k \\ln W$ высечена на надгробии Больцмана в Вене — он не дожил до признания своей идеи."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Один приём — пять разных мест курса",
+      "lead": "Стоит увидеть заранее, где именно этот параграф отзовётся. Каждый раз будет казаться, что вводится новое понятие, а вводиться будет одно и то же.",
+      "items": [
+        {
+          "h": "Механика",
+          "text": "Фазовая плоскость маятника: замкнутая кривая означает периодичность, спираль — затухание, расходящаяся траектория — неустойчивость. Судьба системы читается по форме."
+        },
+        {
+          "h": "Термодинамика",
+          "text": "Диаграмма давление-объём — то же самое пространство состояний, только для газа как целого. Цикл Карно есть замкнутая кривая на ней, а площадь внутри цикла равна работе за оборот."
+        },
+        {
+          "h": "Статистическая физика",
+          "text": "Энтропия есть логарифм объёма доступной области. Второе начало превращается в почти очевидное: система идёт туда, где просторнее, потому что там больше состояний."
+        },
+        {
+          "h": "Теория информации",
+          "text": "Формула Шеннона совпадает с формулой Больцмана с точностью до постоянной и основания логарифма. Незнание о состоянии и количество информации для его указания — одна величина, посчитанная с двух сторон."
+        },
+        {
+          "h": "Квантовая физика",
+          "text": "Соотношение неопределённостей запрещает точку в фазовом пространстве: состояние занимает ячейку площадью не меньше постоянной Планка. Классическая точка оказывается предельным случаем, когда ячейка исчезающе мала."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Фазовое пространство кажется абстракцией, пока не увидишь его на кухонном столе.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Нарисуйте фазовую траекторию маятника",
+          "text": "Подвесьте на нитке ключи или гайку — получится маятник длиной около полуметра. Отклоните и отпустите. Теперь возьмите лист бумаги и отмечайте точками: по горизонтали отклонение от равновесия на глаз, по вертикали быстроту движения — в крайних точках ноль, в середине максимум. Достаточно восьми-десяти точек за один период.",
+          "answer": "Точки лягут на замкнутый овал, обходимый по часовой стрелке. Продолжайте наблюдать несколько минут — овал начнёт медленно сжиматься к центру: это трение о воздух превращает эллипс в спираль. Вы нарисовали фазовый портрет затухающего осциллятора, ничего не вычисляя."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Капля чернил и теорема Лиувилля",
+          "text": "Капните чернила в стакан воды и размешайте. Через минуту цвет равномерный — беспорядок явно вырос. Но теорема Лиувилля утверждает, что объём облака состояний в фазовом пространстве не меняется вовсе. Как это уживается?",
+          "answer": "Объём сохраняется, а форма — нет. Капля вытягивается в тончайшую нить, которая обвивает весь стакан, оставаясь той же по объёму. Мы просто не в состоянии разглядеть нить такой тонкости и видим равномерную серость. Энтропия растёт не потому, что информация исчезла, а потому, что она размазалась по масштабам, недоступным наблюдению. Это одно из самых глубоких мест во всей физике."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Почему прогноз погоды кончается на двух неделях",
+          "text": "Дело не в мощности компьютеров. У атмосферы близкие начальные состояния расходятся в фазовом пространстве экспоненциально: неточность в четвёртом знаке через две недели вырастает до величины самого прогноза. Чтобы выиграть лишнюю неделю, точность измерений надо повысить примерно вдесятеро — и так за каждую следующую. Это предел геометрии потока, а не техники."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Порядок уравнения = размерность состояния",
+          "text": "Правило в одну строку: сколько начальных условий требует уравнение, столько измерений у пространства состояний. Второй закон Ньютона требует двух — плоскость. Уравнение теплопроводности требует одного поля температур — и потому предсказывает будущее по одному снимку настоящего."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Где точка перестаёт существовать",
+          "text": "Всё построение опирается на то, что состояние есть точка. В квантовой механике этого больше нет: соотношение неопределённостей запрещает одновременно точные координату и импульс. Состояние занимает ячейку конечной площади порядка постоянной Планка. Приём выживает — но точка становится размытым пятном, и это меняет всё."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: тот же приём вне физики",
+      "lead": "Не входит в проверку. О том, что идея «заменить память размерностью» была переоткрыта в нескольких областях независимо.",
+      "blocks": [
+        {
+          "h": "Инженерия: пространство состояний в теории управления",
+          "text": "Автопилот, стабилизатор изображения и регулятор температуры описываются вектором состояния и матрицей перехода — то есть уравнениями Гамильтона в другой записи. Фильтр Калмана, без которого не работает спутниковая навигация, есть буквально оценка положения точки в пространстве состояний по зашумлённым измерениям."
+        },
+        {
+          "h": "Машинное обучение: скрытое состояние",
+          "text": "Рекуррентная сеть, обрабатывая текст, не хранит всю прочитанную историю — она держит сжатый вектор, из которого можно продолжить. Инженеры пришли к идее Гамильтона независимо и почти теми же словами: расширить состояние, чтобы избавиться от памяти."
+        },
+        {
+          "h": "Геология: моделирование пласта",
+          "text": "Состояние ячейки пласта — давление, насыщенности по фазам, температура, флаги режима. Пока вектор полон, система марковская и считается вперёд шаг за шагом. Гистерезис капиллярного давления лечится добавлением флага «пропитка или высыхание» — ровно тем же приёмом, каким скорость дополняет координату."
+        },
+        {
+          "h": "И вопрос без ответа",
+          "text": "Почему природа вообще допускает конечномерное описание состояния — неизвестно. В квантовой теории поля состояние формально бесконечномерно, и то, что при этом всё же удаётся считать, остаётся предметом отдельного удивления. Подробнее — в разделе «Открытые вопросы»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Состояние системы — точка в пространстве, размерность которого равна порядку уравнения движения; тогда движение есть линия, а память не нужна.",
+      "keyIdeas": [
+        {
+          "icon": "estimate",
+          "title": "Замена памяти на размерность",
+          "text": "одно уравнение второго порядка = два первого"
+        },
+        {
+          "icon": "history",
+          "title": "Новая переменная",
+          "text": "инкапсулированная история, сжатая производная"
+        },
+        {
+          "icon": "sigma",
+          "title": "Форма траектории отвечает на",
+          "text": "Форма траектории отвечает на вопрос о судьбе системы до всякого решения"
+        },
+        {
+          "icon": "ruler",
+          "title": "Скрытые переменные (флаг направления)",
+          "text": "Скрытые переменные (флаг направления) лечат память, не сводимую к производной"
+        },
+        {
+          "icon": "scale",
+          "title": "Для миллиардов частиц следят",
+          "text": "Для миллиардов частиц следят не за точкой, а за объёмом; его логарифм и есть энтропия"
+        }
+      ],
+      "where": "Фазовая плоскость маятника, PV-диаграмма газа, энтропия Больцмана, ячейка Планка в квантовой механике, вектор состояния в теории управления.",
+      "watchOut": "Если модель показывает необъяснимую зависимость от истории, дело почти всегда не в физике, а в неполном списке переменных состояния."
+    },
+    "quiz": [
+      {
+        "id": "p1",
+        "type": "mcq",
+        "q": "Почему координаты $x$ недостаточно, чтобы считать состояние заданным?",
+        "options": [
+          "Потому что координата измеряется неточно",
+          "Потому что уравнение движения второго порядка и требует двух начальных условий: одна и та же точка может проходиться с разной скоростью",
+          "Потому что координата зависит от выбора системы отсчёта",
+          "Потому что тело всегда имеет размер и не является точкой"
+        ],
+        "answer": 1,
+        "why": "Размерность пространства состояний равна порядку уравнения. Второй закон Ньютона — второго порядка, значит нужны два числа. Точность измерения и выбор отсчёта здесь ни при чём: даже при идеальном измерении одной координаты будущее не определено.",
+        "hint": "Представьте два тела в одной и той же точке: одно покоится, другое пролетает мимо. Отличается ли их настоящее? А будущее?"
+      },
+      {
+        "id": "p2",
+        "type": "mcq",
+        "q": "Фазовая траектория системы — спираль, скручивающаяся к началу координат. Что это означает физически?",
+        "options": [
+          "Система движется по кругу с постоянной энергией",
+          "Система неустойчива и разлетается",
+          "Система теряет энергию и приходит к покою — например, из-за трения",
+          "Система движется хаотически"
+        ],
+        "answer": 2,
+        "why": "Расстояние от начала координат в фазовой плоскости связано с энергией: чем ближе к центру, тем меньше и отклонение, и скорость. Скручивание внутрь означает убывание энергии. Замкнутая кривая соответствовала бы сохранению энергии.",
+        "hint": "Что находится в начале координат фазовой плоскости — какое положение и какая скорость?"
+      },
+      {
+        "id": "p3",
+        "type": "free",
+        "q": "Своими словами: в чём смысл фразы «переход в фазовое пространство заменяет память размерностью»?",
+        "keywords": [
+          "скорост",
+          "производн",
+          "прошл",
+          "истор",
+          "координат",
+          "два числ",
+          "пара",
+          "состояни",
+          "не нужно помнить"
+        ],
+        "needed": 2,
+        "why": "Чтобы предсказывать по одной координате, надо помнить её прежние значения. Добавив скорость — то есть сжатую в число информацию о ближайшем прошлом, — мы получаем описание, где будущее зависит только от настоящего. Прошлое не отброшено, оно закодировано в дополнительной координате.",
+        "hint": "Откуда берётся скорость, если у вас есть только последовательность положений? Что она хранит в себе?"
+      },
+      {
+        "id": "p4",
+        "type": "estimate",
+        "q": "Груз на пружине заметает в фазовой плоскости эллипс площадью около 0,09 Дж·с. Во сколько раз это больше постоянной Планка (6,6 · 10⁻³⁴ Дж·с)? Дайте показатель степени.",
+        "answer": 32,
+        "unit": "порядок (степень десяти)",
+        "tolerance": 1,
+        "why": "0,09 / 6,6·10⁻³⁴ ≈ 1,4·10³², то есть порядка 10³². Именно поэтому квантование действия для макроскопического груза незаметно: ступеньки настолько мелкие относительно самой величины, что энергия выглядит непрерывной.",
+        "hint": "Достаточно поделить показатели: 10⁻¹ разделить на 10⁻³⁴. Мантиссы можно округлить до единицы."
+      }
+    ]
+  },
+  "en": {
+    "title": "State Space",
+    "subtitle": "Section 3 · How Memory Becomes Dimension",
+    "intro": [
+      "A body is at a point with coordinate three meters. What will happen in a second? It's impossible to answer — not because there is insufficient data about forces, but because the question is incomplete. The body could be standing still, or it could be passing through that point at three hundred meters per second. The present looks the same, but the future is completely different.",
+      "This leads to an unpleasant fact: to predict motion, you need to remember the past. Speed cannot be seen in a single instant — it is obtained by comparing two neighboring instants. Equations with memory are hard to solve, and physics found a workaround that turned out to be more important than the original problem.",
+      "The approach: instead of arguing with reality, change the language of description. Declare the state to be not just the coordinate, but a pair — coordinate and velocity. Then memory disappears: knowing the current pair, you can compute the next, and the past is no longer needed. We lowered the order by raising the dimension. This technique will reappear in thermodynamics, statistics, and quantum mechanics — each time looking new, yet remaining the same."
+    ],
+    "standNote": "At the exhibit — a mass on a spring. Notice two panels: on the left, the mass oscillates in time; on the right, a graph is constructed. By changing mass and stiffness, watch not the shape of the sine wave, but the pair of numbers: position and velocity. At any moment, they are sufficient to predict all subsequent motion — and this is a statement, not an observation. Check: two different moments with the same position but opposite velocity give completely different continuations.",
+    "formula": {
+      "name": "Hamilton's Equations",
+      "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Canonical equations · description in phase space",
+      "authors": [
+        {
+          "who": "Joseph-Louis Lagrange",
+          "year": "1788",
+          "what": "rewrote Newtonian mechanics so that it no longer depended on the choice of coordinates. He declared in the preface that his book would contain not a single diagram — mechanics became a branch of analysis."
+        },
+        {
+          "who": "William Rowan Hamilton",
+          "year": "1834",
+          "what": "took the idea to its conclusion: he replaced one second-order equation with two first-order ones and obtained a description where position and momentum are on equal footing. Later it turned out that this precise form carries over into quantum mechanics."
+        },
+        {
+          "who": "Joseph Liouville",
+          "year": "1838",
+          "what": "proved that the volume of a cloud of states in phase space does not change with time. The cloud may stretch into a thin thread, but the volume remains."
+        },
+        {
+          "who": "Josiah Willard Gibbs",
+          "year": "1902",
+          "what": "transferred the technique to systems of billions of particles: if it is impossible to track a single point, one must track the density. Thus statistical mechanics was born."
+        },
+        {
+          "who": "Henri Poincaré",
+          "year": "1890",
+          "what": "began studying not solutions but the shape of trajectories in phase space — and discovered that for the simple three-body system, they can be incredibly tangled. From this grew chaos theory."
+        }
+      ],
+      "story": "Hamilton derived his equations while working on optics, not mechanics: he noticed that the propagation of light and the motion of a particle are described by the same mathematics. The analogy seemed an elegant curiosity for nearly a hundred years. In 1926, Schrödinger took it seriously: if mechanics is a limiting case of some wave theory, just as geometric optics is a limiting case of wave optics, then one must write down that wave theory. Thus the Schrödinger equation emerged. The curiosity turned out to be the road to quantum mechanics."
+    },
+    "symbols": [
+      {
+        "sym": "q",
+        "latex": "q",
+        "what": "generalized coordinate",
+        "unit": "m (or rad)",
+        "note": "\"generalized\" means any quantity specifying position: length, angle, volume"
+      },
+      {
+        "sym": "p",
+        "latex": "p",
+        "what": "generalized momentum",
+        "unit": "kg·m/s",
+        "note": "for ordinary motion this is $mv$; it is momentum, not velocity, that is the correct partner of coordinate"
+      },
+      {
+        "sym": "H",
+        "latex": "H",
+        "what": "Hamiltonian — total energy expressed via $q$ and $p$",
+        "unit": "J",
+        "note": "for a conservative system $H = $ kinetic plus potential energy"
+      },
+      {
+        "sym": "Γ",
+        "latex": "\\Gamma",
+        "what": "phase space",
+        "unit": "—",
+        "note": "for a single particle it is six-dimensional: three coordinates and three momenta"
+      },
+      {
+        "sym": "V",
+        "latex": "V_{\\Gamma}",
+        "what": "volume in phase space",
+        "unit": "(J·s)^N",
+        "note": "a quantity whose logarithm is entropy"
+      }
+    ],
+    "derivation": {
+      "title": "Rigorous derivation: how memory is replaced by dimensionality",
+      "lead": "Let's go through it slowly—every step matters. We start with the usual second law and arrive at the idea that motion is a line in state space.",
+      "steps": [
+        {
+          "text": "Newton's second law is a second-order equation in time. To solve it, you need two initial conditions, not one. Formally: knowing only $x(t)$, you cannot compute $x(t+dt)$; you also need $x(t-dt)$ to estimate the velocity. That's memory of the past.",
+          "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+          "figure": "secondlaw",
+          "figCaption": "A second-order equation requires knowledge of both position and velocity—a single instant is not enough."
+        },
+        {
+          "text": "We change the language of description. We declare the state to be not a coordinate but a pair. One second-order equation splits into two first-order equations—without memory.",
+          "latex": "\\text{состояние} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+          "figure": "axes",
+          "figCaption": "Two first-order equations instead of one second-order: order is reduced, dimensionality is increased."
+        },
+        {
+          "text": "Where the new variable comes from. Velocity is not an artificial addition but an encapsulated history: the difference between two neighboring positions squeezed into a single number. Instead of storing the coordinate at two instants, we store the coordinate and its derivative at one.",
+          "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+          "figure": "secant",
+          "figCaption": "The derivative packs the immediate past into a number attached to the present."
+        },
+        {
+          "text": "The trick generalizes. A third-order equation requires a triple, fourth-order a quadruple. Each successive derivative packs deeper and deeper past—just like the coefficients of a Taylor series store the behavior of a function in the neighborhood of a single point.",
+          "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+          "figure": "tangent",
+          "figCaption": "Taylor series is the same idea: the entire history of a function is encoded in a set of numbers at one point."
+        },
+        {
+          "text": "Now the main consequence. Since the state has become a point, motion has become a line. For a mass on a spring, energy is kinetic plus potential and is constant—and that is the equation of an ellipse in the coordinate-momentum plane.",
+          "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+          "figure": "energyswap",
+          "figCaption": "A closed curve in the phase plane is the statement 'energy is conserved, motion is periodic'."
+        },
+        {
+          "text": "Add friction—and the ellipse turns into a spiral winding toward the origin. Notice: to understand this, we didn't solve the equation. The shape of the trajectory answers the question about the fate of the system before any formula appears. It was from this observation that Poincaré began the qualitative theory of dynamical systems.",
+          "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{спираль внутрь}",
+          "figure": "friction",
+          "figCaption": "Friction drives the trajectory inward: the qualitative answer is visible without any solution."
+        },
+        {
+          "text": "And the final step—to statistics. For one particle, phase space is six-dimensional. For a mole of gas, the dimension is about $6 \\cdot 10^{23}$: keeping track of a point is impossible now and forever. So physics abandons the point and moves to volume. Boltzmann entropy is the logarithm of the number of states, that is, literally the logarithm of the phase volume.",
+          "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+          "figure": "microcontact",
+          "figCaption": "When a point cannot be tracked, one tracks density. Hence all of statistical physics."
+        }
+      ],
+      "plate": "The transition to phase space is a replacement of memory by dimensionality. The past is not discarded, it is encoded in additional coordinates of the present.",
+      "note": "The trick works even where memory does not reduce to a derivative. Example—hysteresis: wetting of a porous rock and its reverse drying follow different curves, and the same moisture content means different things. The fix is to add a flag for the direction of the process to the state. The flag is the same kind of encapsulated history as velocity is for coordinate. Industrial reservoir models are built exactly this way; if an unexplained dependence on history appears, it is a sure sign that some variable was forgotten to be included in the state."
+    },
+    "math": {
+      "title": "Mathematics needed here",
+      "text": [
+        "The first concept is the order of a differential equation. It is the highest derivative that appears in it, and it equals the number of initial conditions needed for a unique solution. A first-order equation requires one number, a second-order two. Hence the dimension of the state space: it equals the order of the equation.",
+        "The second is a parametric curve. An ordinary graph shows $x$ as a function of time. A phase trajectory shows $p$ as a function of $x$, with time hidden inside as the parameter along the curve. This is the same trick used to describe a circle: instead of $y = \\sqrt{1-x^2}$, one writes $x = \\cos t$, $y = \\sin t$—and there are no more discontinuities.",
+        "The third is the Markov property, and it is central here. A process is called Markovian if the future depends only on the present, not on how the system arrived at that present. In coordinates, the motion is non-Markovian; in the coordinate-momentum pair, it is Markovian. Note: physics did not change, only the description changed.",
+        "The fourth is multidimensional volume. For $N$ particles, phase space has $6N$ dimensions, and the volume in it is computed as the product of all intervals. This sounds frightening, but usually it's not the volume itself that is needed, but its logarithm—and the logarithm of a product is the sum of the logarithms. That is exactly why entropy is additive: put two systems together—entropies add."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: area of an ellipse and where Planck's constant came from in quantum theory",
+      "lead": "We calculate the area of the phase trajectory of an ordinary mass on a spring. The answer turns out to be unexpectedly insightful.",
+      "given": "A mass $m = 2$ kg on a spring with stiffness $k = 30$ N/m oscillates with amplitude $A = 6$ cm. Find the area swept by its trajectory in the phase plane $(x, p)$.",
+      "law": "The trajectory is an ellipse with semi-axes $A$ and $p_{\\max} = m\\omega A$; the area of an ellipse is $\\pi ab$.",
+      "solution": [
+        {
+          "text": "Angular frequency of oscillations.",
+          "latex": "\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{30}{2}} \\approx 3{,}87\\ \\text{с}^{-1}"
+        },
+        {
+          "text": "Maximum momentum — at the moment of passing through the equilibrium position.",
+          "latex": "p_{\\max} = m\\omega A = 2 \\cdot 3{,}87 \\cdot 0{,}06 \\approx 0{,}46\\ \\text{кг}\\cdot\\text{м/с}"
+        },
+        {
+          "text": "Area of the ellipse with semi-axes $A$ and $p_{\\max}$.",
+          "latex": "S = \\pi A p_{\\max} \\approx 3{,}14 \\cdot 0{,}06 \\cdot 0{,}46 \\approx 0{,}087\\ \\text{Дж}\\cdot\\text{с}"
+        },
+        {
+          "text": "It is useful to note the connection with energy and period — it is not coincidental.",
+          "latex": "S = \\frac{2\\pi E}{\\omega} = E \\cdot T, \\qquad E = \\frac{kA^{2}}{2} = 0{,}054\\ \\text{Дж}"
+        }
+      ],
+      "answer": "Area approximately $0{,}087$ J·s. The dimension is energy times time, that is, action.",
+      "check": "And now for the reason behind this example. Planck's constant has exactly this dimension and equals $6{,}6 \\cdot 10^{-34}$ J·s. Our ellipse is larger by a factor of $10^{32}$ — that is why quantum effects are not observed for a mass on a spring. Moreover, the old quantum theory directly stated: only those orbits are allowed whose phase area is a multiple of Planck's constant. Quantization was born as a condition on the area in phase space — the very same phase space we constructed in this section out of a desire to get rid of memory."
+    },
+    "constants": {
+      "title": "Constants of this section",
+      "lead": "Two suffice — and the second explains why a technique from mechanics turned out to be needed in statistics.",
+      "items": [
+        {
+          "sym": "h",
+          "latex": "h",
+          "dictKey": "h",
+          "name": "Planck's constant",
+          "value": "6,63 · 10⁻³⁴",
+          "unit": "Дж · с",
+          "why": "It has the dimension of action — the same as area in the phase plane. This is no coincidence: Planck's constant defines the smallest distinguishable cell of phase space, below which it is meaningless to speak of a state point.",
+          "mnemo": "Order of 10⁻³⁴ — roughly the same factor by which a human is larger than an atomic nucleus. The quantum of action is as far from our scale."
+        },
+        {
+          "sym": "k_B",
+          "latex": "k_B",
+          "dictKey": "k_B",
+          "name": "Boltzmann's constant",
+          "value": "1,38 · 10⁻²³",
+          "unit": "Дж / К",
+          "why": "Converts the logarithm of phase volume into entropy: $S = k_B \\ln W$. In essence, it is the cost of one bit of information expressed in familiar units.",
+          "mnemo": "The formula $S = k \\ln W$ is inscribed on Boltzmann's tombstone in Vienna — he did not live to see his idea recognized."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "One technique — five different places in the course",
+      "lead": "It is worth seeing in advance where exactly this section will resonate. Each time it will seem that a new concept is introduced, but the same thing is being introduced.",
+      "items": [
+        {
+          "h": "Mechanics",
+          "text": "Phase plane of a pendulum: a closed curve means periodicity, a spiral means damping, a diverging trajectory means instability. The fate of the system can be read from the shape."
+        },
+        {
+          "h": "Thermodynamics",
+          "text": "The pressure-volume diagram is the same state space, but for the gas as a whole. The Carnot cycle is a closed curve on it, and the area inside the cycle equals the work per cycle."
+        },
+        {
+          "h": "Statistical physics",
+          "text": "Entropy is the logarithm of the volume of the accessible region. The second law becomes almost obvious: the system goes where there is more space, because there are more states."
+        },
+        {
+          "h": "Information theory",
+          "text": "Shannon's formula coincides with Boltzmann's formula up to a constant and the base of the logarithm. Ignorance about a state and the amount of information needed to specify it are the same quantity, calculated from two sides."
+        },
+        {
+          "h": "Quantum physics",
+          "text": "The uncertainty principle forbids a point in phase space: a state occupies a cell with area no less than Planck's constant. The classical point turns out to be a limiting case when the cell is vanishingly small."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosities: Try it yourself",
+      "lead": "Phase space seems abstract until you see it on a kitchen table.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Draw a pendulum's phase trajectory",
+          "text": "Tie keys or a nut to a string — you'll get a pendulum about half a meter long. Pull it aside and release. Now take a sheet of paper and mark points: horizontally the deviation from equilibrium by eye, vertically the speed of motion — zero at the extreme points, maximum in the middle. Eight to ten points per period are enough.",
+          "answer": "The points will form a closed oval traced clockwise. Continue observing for a few minutes — the oval will slowly shrink toward the center: air friction turns the ellipse into a spiral. You have drawn the phase portrait of a damped oscillator without any calculations."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "A drop of ink and Liouville's theorem",
+          "text": "Drop ink into a glass of water and stir. After a minute the color is uniform — disorder has clearly increased. But Liouville's theorem states that the volume of the state cloud in phase space does not change at all. How do these coexist?",
+          "answer": "Volume is preserved, but shape is not. The drop stretches into an extremely thin thread that winds through the entire glass while keeping the same volume. We simply cannot see such a fine thread and perceive uniform gray. Entropy increases not because information disappears, but because it is smeared over scales inaccessible to observation. This is one of the deepest insights in all of physics."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "Why weather forecasts stop at two weeks",
+          "text": "It's not about computer power. In the atmosphere, nearby initial states diverge exponentially in phase space: an error in the fourth decimal place grows to the size of the forecast itself within two weeks. To gain an extra week, measurement accuracy must be increased roughly tenfold — and so on for each additional week. This is a limit of flow geometry, not technology."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Order of the equation = dimension of state",
+          "text": "A one-line rule: the number of initial conditions an equation requires equals the number of dimensions of the state space. Newton's second law requires two — a plane. The heat equation requires one temperature field — and therefore predicts the future from a single snapshot of the present."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Where a point ceases to exist",
+          "text": "The entire construction relies on the state being a point. In quantum mechanics this is no longer true: the uncertainty principle forbids simultaneously precise coordinate and momentum. A state occupies a cell of finite area on the order of Planck's constant. The technique survives, but the point becomes a blurred spot, and that changes everything."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the curious: the same technique outside physics",
+      "lead": "Not part of the test. About how the idea of 'replacing memory with dimension' was rediscovered independently in several fields.",
+      "blocks": [
+        {
+          "h": "Engineering: state space in control theory",
+          "text": "An autopilot, image stabilizer, and temperature controller are described by a state vector and a transition matrix — that is, Hamilton's equations in another notation. The Kalman filter, without which satellite navigation does not work, is literally an estimate of the position of a point in state space from noisy measurements."
+        },
+        {
+          "h": "Machine learning: hidden state",
+          "text": "A recurrent neural network processing text does not store the entire reading history — it holds a compressed vector from which it can continue. Engineers arrived at Hamilton's idea independently and in almost the same words: expand the state to get rid of memory."
+        },
+        {
+          "h": "Geology: reservoir modeling",
+          "text": "The state of a reservoir cell — pressure, phase saturations, temperature, mode flags. As long as the vector is complete, the system is Markovian and can be stepped forward. Capillary pressure hysteresis is cured by adding a flag 'imbibition or drainage' — exactly the same trick by which velocity complements coordinate."
+        },
+        {
+          "h": "And an unanswered question",
+          "text": "Why nature allows a finite-dimensional description of state at all is unknown. In quantum field theory, the state is formally infinite-dimensional, and the fact that calculations are still possible remains a separate matter of wonder. More details in the 'Open Questions' section."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The state of a system is a point in a space whose dimension equals the order of the equation of motion; then motion is a line, and no memory is needed.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Replacing memory with dimension",
+          "text": "one second-order equation = two first-order"
+        },
+        {
+          "icon": "formula",
+          "title": "New variable",
+          "text": "encapsulated history, a compressed derivative"
+        },
+        {
+          "icon": "sigma",
+          "title": "The shape of the",
+          "text": "The shape of the trajectory answers the question about the system's fate before any calculation"
+        },
+        {
+          "icon": "ruler",
+          "title": "Hidden variables (direction flag)",
+          "text": "Hidden variables (direction flag) cure memory not reducible to a derivative"
+        },
+        {
+          "icon": "scale",
+          "title": "For billions of particles",
+          "text": "For billions of particles, we track not a point but a volume; its logarithm is entropy"
+        }
+      ],
+      "where": "Pendulum phase plane, PV diagram of a gas, Boltzmann entropy, Planck cell in quantum mechanics, state vector in control theory.",
+      "watchOut": "If a model shows an unexplained dependence on history, the issue is almost always not physics but an incomplete list of state variables."
+    },
+    "quiz": [
+      {
+        "id": "p1",
+        "type": "mcq",
+        "q": "Why is coordinate $x$ insufficient to consider the state as specified?",
+        "options": [
+          "Because the coordinate is measured imprecisely",
+          "Because the equation of motion is second-order and requires two initial conditions: the same point can be passed with different velocities",
+          "Because the coordinate depends on the choice of reference frame",
+          "Because a body always has size and is not a point"
+        ],
+        "answer": 1,
+        "why": "The dimension of the state space equals the order of the equation. Newton's second law is second-order, so two numbers are needed. Measurement precision and reference frame choice are irrelevant here: even with perfect measurement of one coordinate, the future is not determined.",
+        "hint": "Imagine two bodies at the same point: one at rest, the other flying past. Do their presents differ? And their futures?"
+      },
+      {
+        "id": "p2",
+        "type": "mcq",
+        "q": "A system's phase trajectory is a spiral winding into the origin. What does this mean physically?",
+        "options": [
+          "The system moves in a circle with constant energy",
+          "The system is unstable and flies apart",
+          "The system loses energy and comes to rest — for example, due to friction",
+          "The system moves chaotically"
+        ],
+        "answer": 2,
+        "why": "Distance from the origin in the phase plane is related to energy: the closer to the center, the smaller both the deviation and the velocity. Winding inward means energy decreases. A closed curve would correspond to energy conservation.",
+        "hint": "What is at the origin of the phase plane — what position and what velocity?"
+      },
+      {
+        "id": "p3",
+        "type": "free",
+        "q": "In your own words: what is the meaning of the phrase 'transition to phase space replaces memory with dimension'?",
+        "keywords": [
+          "velocity",
+          "derivative",
+          "past",
+          "history",
+          "coordinate",
+          "two numbers",
+          "pair",
+          "state",
+          "no need to remember"
+        ],
+        "needed": 2,
+        "why": "To predict from a single coordinate, one must remember its past values. By adding velocity — that is, information about the immediate past compressed into a single number — we obtain a description where the future depends only on the present. The past is not discarded; it is encoded in the additional coordinate.",
+        "hint": "Where does velocity come from if you only have a sequence of positions? What does it store?"
+      },
+      {
+        "id": "p4",
+        "type": "estimate",
+        "q": "A mass on a spring sweeps an ellipse in the phase plane with area about 0.09 J·s. How many times larger is this than Planck's constant (6.6 · 10⁻³⁴ J·s)? Give the exponent.",
+        "answer": 32,
+        "unit": "order (power of ten)",
+        "tolerance": 1,
+        "why": "0.09 / 6.6·10⁻³⁴ ≈ 1.4·10³², i.e., of order 10³². That is why action quantization is imperceptible for a macroscopic mass: the steps are so tiny relative to the magnitude itself that energy appears continuous.",
+        "hint": "Simply divide the exponents: 10⁻¹ divided by 10⁻³⁴. Mantissas can be rounded to one."
+      }
+    ]
+  },
+  "es": {
+    "title": "Espacio de estados",
+    "subtitle": "Párrafo 3 · Cómo la memoria se convierte en dimensión",
+    "intro": [
+      "Un cuerpo se encuentra en un punto con coordenada tres metros. ¿Qué ocurrirá dentro de un segundo? Es imposible responder, no porque falten datos sobre las fuerzas, sino porque la pregunta está incompleta. El cuerpo puede estar quieto, o puede estar pasando por ese punto a una velocidad de trescientos metros por segundo. El presente se ve igual, el futuro es completamente diferente.",
+      "De aquí se sigue algo incómodo: para predecir el movimiento, hay que recordar el pasado. La velocidad no se ve en un solo instante, se obtiene comparando dos instantes consecutivos. Las ecuaciones con memoria son difíciles de resolver, y la física encontró un camino alternativo que resultó más importante que el problema mismo.",
+      "El camino es: no discutir con la realidad, sino cambiar el lenguaje de descripción. Declarar que el estado no es la coordenada, sino un par: coordenada y velocidad. Entonces la memoria desaparece: conociendo el par actual, se puede calcular el siguiente, y el pasado no es necesario en absoluto. Bajamos el orden aumentando la dimensión. Este truco aparecerá más adelante en termodinámica, en estadística y en mecánica cuántica, y cada vez parecerá nuevo, siendo el mismo."
+    ],
+    "standNote": "En el stand — una masa en un resorte. Observe los dos paneles: a la izquierda el cuerpo oscila en el tiempo, a la derecha se construye una gráfica. Variando la masa y la rigidez, no siga la forma de la sinusoide, sino el par de números: posición y velocidad. En cualquier momento, son suficientes para predecir todo el movimiento posterior — y esto es una afirmación, no una observación. Compruébelo: dos instantes diferentes con la misma posición pero velocidad opuesta dan una continuación completamente diferente.",
+    "formula": {
+      "name": "Ecuaciones de Hamilton",
+      "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Ecuaciones canónicas · descripción en el espacio de fases",
+      "authors": [
+        {
+          "who": "Joseph-Louis Lagrange",
+          "year": "1788",
+          "what": "reescribió la mecánica newtoniana de modo que dejó de depender de la elección de coordenadas. Declaró en el prólogo que no habría ningún dibujo en su libro — la mecánica se convirtió en una rama del análisis."
+        },
+        {
+          "who": "William Rowan Hamilton",
+          "year": "1834",
+          "what": "llevó la idea hasta el final: reemplazó una ecuación de segundo orden por dos de primer orden y obtuvo una descripción donde la posición y el momento son equivalentes. Más tarde se descubrió que esta forma es la que se traslada a la mecánica cuántica."
+        },
+        {
+          "who": "Joseph Liouville",
+          "year": "1838",
+          "what": "demostró que el volumen de una nube de estados en el espacio de fases no cambia con el tiempo. La nube puede estirarse hasta convertirse en un hilo finísimo, pero el volumen se conserva."
+        },
+        {
+          "who": "Willard Gibbs",
+          "year": "1902",
+          "what": "trasladó el truco a sistemas de miles de millones de partículas: si es imposible seguir un punto, hay que seguir la densidad. Así nació la mecánica estadística."
+        },
+        {
+          "who": "Henri Poincaré",
+          "year": "1890",
+          "what": "comenzó a estudiar no las soluciones, sino la forma de las trayectorias en el espacio de fases — y descubrió que en un sistema simple de tres cuerpos pueden ser increíblemente enredadas. De ahí surgió la teoría del caos."
+        }
+      ],
+      "story": "Hamilton dedujo sus ecuaciones mientras trabajaba en óptica, no en mecánica: notó que la propagación de la luz y el movimiento de una partícula se describen con las mismas matemáticas. La analogía pareció una elegante curiosidad durante casi cien años. En 1926, Schrödinger la tomó en serio: si la mecánica es un caso límite de alguna teoría ondulatoria, así como la óptica geométrica es un caso límite de la ondulatoria, entonces hay que escribir esa teoría ondulatoria. Así surgió la ecuación de Schrödinger. La curiosidad resultó ser el camino hacia la mecánica cuántica."
+    },
+    "symbols": [
+      {
+        "sym": "q",
+        "latex": "q",
+        "what": "coordenada generalizada",
+        "unit": "m (o rad)",
+        "note": "«generalizada» significa cualquier magnitud que define la posición: longitud, ángulo, volumen"
+      },
+      {
+        "sym": "p",
+        "latex": "p",
+        "what": "momento generalizado",
+        "unit": "kg·m/s",
+        "note": "para el movimiento ordinario es $mv$; es él, y no la velocidad, el compañero correcto de la coordenada"
+      },
+      {
+        "sym": "H",
+        "latex": "H",
+        "what": "función de Hamilton — energía total en función de $q$ y $p$",
+        "unit": "J",
+        "note": "para un sistema conservativo $H = $ cinética más potencial"
+      },
+      {
+        "sym": "Γ",
+        "latex": "\\Gamma",
+        "what": "espacio de fases",
+        "unit": "—",
+        "note": "para una partícula es hexadimensional: tres coordenadas y tres momentos"
+      },
+      {
+        "sym": "V",
+        "latex": "V_{\\Gamma}",
+        "what": "volumen en el espacio de fases",
+        "unit": "(J·s)^N",
+        "note": "magnitud cuyo logaritmo es la entropía"
+      }
+    ],
+    "derivation": {
+      "title": "Derivación rigurosa: cómo la memoria se reemplaza por la dimensionalidad",
+      "lead": "Analicemos lentamente — aquí cada paso es importante. Comencemos con la segunda ley habitual y lleguemos a que el movimiento es una línea en el espacio de estados.",
+      "steps": [
+        {
+          "text": "La segunda ley de Newton es una ecuación de segundo orden en el tiempo. Para resolverla se necesitan dos condiciones iniciales, no una. Formalmente: conociendo solo $x(t)$, no se puede calcular $x(t+dt)$; se necesita también $x(t-dt)$ para estimar la velocidad. Y eso es memoria del pasado.",
+          "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+          "figure": "secondlaw",
+          "figCaption": "Una ecuación de segundo orden requiere conocer tanto la posición como la velocidad — un solo instante no es suficiente."
+        },
+        {
+          "text": "Cambiamos el lenguaje de descripción. Declaramos como estado no una coordenada, sino un par. Una ecuación de segundo orden se descompone en dos ecuaciones de primer orden — sin memoria.",
+          "latex": "\\text{состояние} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+          "figure": "axes",
+          "figCaption": "Dos ecuaciones de primer orden en lugar de una de segundo: el orden se reduce, la dimensionalidad aumenta."
+        },
+        {
+          "text": "De dónde surgió la nueva variable. La velocidad no es un añadido artificial, sino una historia encapsulada: la diferencia de dos posiciones vecinas comprimida en un solo número. En lugar de almacenar la coordenada en dos instantes, almacenamos la coordenada y su derivada en uno.",
+          "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+          "figure": "secant",
+          "figCaption": "La derivada empaqueta el pasado más cercano en un número asignado al presente."
+        },
+        {
+          "text": "El truco se generaliza. Una ecuación de tercer orden requerirá una tripleta, una de cuarto una cuádrupla. Cada derivada sucesiva empaqueta un pasado cada vez más profundo — exactamente como los coeficientes de la serie de Taylor almacenan el comportamiento de una función en el entorno de un punto.",
+          "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+          "figure": "tangent",
+          "figCaption": "La serie de Taylor — la misma idea: toda la historia de la función está codificada en un conjunto de números en un solo punto."
+        },
+        {
+          "text": "Ahora la principal consecuencia. Como el estado se ha convertido en un punto, el movimiento se ha convertido en una línea. Para una masa en un resorte, la energía se compone de cinética y potencial y no cambia — y eso es la ecuación de una elipse en el plano coordenada-momento.",
+          "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+          "figure": "energyswap",
+          "figCaption": "Una curva cerrada en el plano de fase — eso es la afirmación «la energía se conserva, el movimiento es periódico»."
+        },
+        {
+          "text": "Agreguemos fricción — y la elipse se convertirá en una espiral que se enrolla hacia el origen. Observen: para entender esto no resolvimos la ecuación. La forma de la trayectoria responde a la pregunta sobre el destino del sistema antes de que aparezca una fórmula. Fue con esta observación que Poincaré comenzó la teoría cualitativa de los sistemas dinámicos.",
+          "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{спираль внутрь}",
+          "figure": "friction",
+          "figCaption": "La fricción lleva la trayectoria hacia adentro: la respuesta cualitativa se ve sin ninguna solución."
+        },
+        {
+          "text": "Y el último paso — hacia la estadística. Para una partícula, el espacio de fases es hexadimensional. Para un mol de gas, las dimensiones son del orden de $6 \\cdot 10^{23}$: seguir un punto es imposible ahora y siempre. Entonces la física abandona el punto y pasa al volumen. La entropía de Boltzmann es el logaritmo del número de estados, es decir, literalmente el logaritmo del volumen de fase.",
+          "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+          "figure": "microcontact",
+          "figCaption": "Cuando no se puede seguir un punto, se sigue la densidad. De ahí toda la física estadística."
+        }
+      ],
+      "plate": "La transición al espacio de fases es el reemplazo de la memoria por la dimensionalidad. El pasado no se descarta, se codifica en las coordenadas adicionales del presente.",
+      "note": "El truco también funciona donde la memoria no se reduce a una derivada. Ejemplo: histéresis: la humectación de una roca porosa y el secado inverso siguen curvas diferentes, y la misma humedad significa cosas distintas. Se corrige añadiendo al estado una bandera de la dirección del proceso. La bandera es la misma historia encapsulada que la velocidad para la coordenada. Los modelos industriales de yacimientos están diseñados así; si aparece una dependencia inexplicable de la historia, es una señal segura de que se olvidó incluir alguna variable en el estado."
+    },
+    "math": {
+      "title": "Las matemáticas que se necesitaron aquí",
+      "text": [
+        "El primer concepto es el orden de una ecuación diferencial. Es la derivada más alta que aparece en ella, y es igual al número de condiciones iniciales necesarias para una solución única. Una ecuación de primer orden requiere un número, una de segundo, dos. De ahí la dimensionalidad del espacio de estados: es igual al orden de la ecuación.",
+        "El segundo es la curva paramétrica. Una gráfica habitual muestra $x$ como función del tiempo. La trayectoria de fase muestra $p$ como función de $x$, y el tiempo está oculto como un parámetro a lo largo de la curva. Es el mismo truco con el que se describe un círculo: en lugar de $y = \\sqrt{1-x^2}$ se escribe $x = \\cos t$, $y = \\sin t$ — y ya no hay discontinuidades.",
+        "El tercero es la propiedad de Markov, y es central aquí. Un proceso se llama markoviano si el futuro depende solo del presente, no de cómo el sistema llegó a ese presente. En la coordenada, el movimiento es no markoviano; en el par coordenada-momento, es markoviano. Nótese: no cambió la física, cambió la descripción.",
+        "El cuarto es el volumen multidimensional. Para $N$ partículas, el espacio de fases tiene $6N$ dimensiones, y el volumen se calcula como el producto de todos los intervalos. Suena aterrador, pero normalmente no se necesita el volumen mismo, sino su logaritmo — y el logaritmo de un producto es la suma de logaritmos. Es por eso que la entropía es aditiva: se suman dos sistemas — las entropías se suman."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: área de la elipse y de dónde surgió la constante de Planck en la cuántica",
+      "lead": "Calculamos el área de la trayectoria en el espacio fásico de una masa común en un resorte. La respuesta resultará sorprendentemente reveladora.",
+      "given": "Una masa de $m = 2$ kg en un resorte de rigidez $k = 30$ N/m oscila con amplitud $A = 6$ cm. Hallar el área que su trayectoria barre en el plano fásico $(x, p)$.",
+      "law": "La trayectoria es una elipse con semiejes $A$ y $p_{\\max} = m\\omega A$; el área de la elipse es $\\pi ab$.",
+      "solution": [
+        {
+          "text": "Frecuencia angular de las oscilaciones.",
+          "latex": "\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{30}{2}} \\approx 3{,}87\\ \\text{с}^{-1}"
+        },
+        {
+          "text": "El momento lineal máximo — en el instante de pasar por la posición de equilibrio.",
+          "latex": "p_{\\max} = m\\omega A = 2 \\cdot 3{,}87 \\cdot 0{,}06 \\approx 0{,}46\\ \\text{кг}\\cdot\\text{м/с}"
+        },
+        {
+          "text": "Área de la elipse con semiejes $A$ y $p_{\\max}$.",
+          "latex": "S = \\pi A p_{\\max} \\approx 3{,}14 \\cdot 0{,}06 \\cdot 0{,}46 \\approx 0{,}087\\ \\text{Дж}\\cdot\\text{с}"
+        },
+        {
+          "text": "Es útil notar la relación con la energía y el período — no es casual.",
+          "latex": "S = \\frac{2\\pi E}{\\omega} = E \\cdot T, \\qquad E = \\frac{kA^{2}}{2} = 0{,}054\\ \\text{Дж}"
+        }
+      ],
+      "answer": "El área es aproximadamente $0{,}087$ J·s. La dimensión es energía por tiempo, es decir, acción.",
+      "check": "Y ahora, la razón de este ejemplo. La constante de Planck tiene exactamente esta dimensión y vale $6{,}6 \\cdot 10^{-34}$ J·s. Nuestra elipse es $10^{32}$ veces mayor — por eso no se observan efectos cuánticos para una masa en un resorte. Más aún, la antigua teoría cuántica afirmaba directamente: solo están permitidas aquellas órbitas cuya área fásica es múltiplo de la constante de Planck. La cuantización nació como una condición sobre el área en el espacio fásico — ese mismo que construimos en este párrafo a partir del deseo de deshacernos de la memoria."
+    },
+    "constants": {
+      "title": "Magnitudes de este párrafo",
+      "lead": "Basta con dos — y la segunda explica por qué el recurso de la mecánica resultó necesario para la estadística.",
+      "items": [
+        {
+          "sym": "h",
+          "latex": "h",
+          "dictKey": "h",
+          "name": "Constante de Planck",
+          "value": "6,63 · 10⁻³⁴",
+          "unit": "J·s",
+          "why": "Tiene dimensión de acción — la misma que el área en el plano fásico. No es coincidencia: la constante de Planck define la celda distinguible más pequeña del espacio fásico, por debajo de la cual hablar de un punto de estado carece de sentido.",
+          "mnemo": "El orden 10⁻³⁴ — aproximadamente la misma proporción que un ser humano respecto al núcleo atómico. El cuanto de acción está igualmente lejano de nuestra escala."
+        },
+        {
+          "sym": "k_B",
+          "latex": "k_B",
+          "dictKey": "k_B",
+          "name": "Constante de Boltzmann",
+          "value": "1,38 · 10⁻²³",
+          "unit": "J/K",
+          "why": "Convierte el logaritmo del volumen fásico en entropía: $S = k_B \\ln W$. En esencia, es el precio de un bit de información, expresado en unidades familiares.",
+          "mnemo": "La fórmula $S = k \\ln W$ está grabada en la lápida de Boltzmann en Viena — él no vivió para ver el reconocimiento de su idea."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Un mismo recurso — cinco lugares distintos del curso",
+      "lead": "Conviene ver de antemano dónde exactamente resonará este párrafo. Cada vez parecerá que se introduce un concepto nuevo, pero en realidad se estará introduciendo lo mismo.",
+      "items": [
+        {
+          "h": "Mecánica",
+          "text": "El plano fásico del péndulo: una curva cerrada indica periodicidad, una espiral indica amortiguamiento, una trayectoria divergente indica inestabilidad. El destino del sistema se lee en la forma."
+        },
+        {
+          "h": "Termodinámica",
+          "text": "El diagrama presión-volumen es el mismo espacio de estados, pero ahora para un gas como conjunto. El ciclo de Carnot es una curva cerrada en él, y el área dentro del ciclo es igual al trabajo por ciclo."
+        },
+        {
+          "h": "Física estadística",
+          "text": "La entropía es el logaritmo del volumen de la región accesible. La segunda ley se vuelve casi obvia: el sistema va hacia donde hay más espacio, porque allí hay más estados."
+        },
+        {
+          "h": "Teoría de la información",
+          "text": "La fórmula de Shannon coincide con la de Boltzmann salvo por una constante y la base del logaritmo. La ignorancia sobre un estado y la cantidad de información para especificarlo son la misma magnitud, calculada desde dos lados."
+        },
+        {
+          "h": "Física cuántica",
+          "text": "El principio de incertidumbre prohíbe un punto en el espacio fásico: el estado ocupa una celda de área no menor que la constante de Planck. El punto clásico resulta ser un caso límite cuando la celda es extremadamente pequeña."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: pruébelo con sus manos",
+      "lead": "El espacio de fase parece una abstracción hasta que lo ves en la mesa de la cocina.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "Dibuje la trayectoria de fase de un péndulo",
+          "text": "Cuelgue llaves o una tuerca de un hilo — obtendrá un péndulo de aproximadamente medio metro de largo. Desvíelo y suéltelo. Ahora tome una hoja de papel y marque puntos: horizontalmente la desviación del equilibrio a simple vista, verticalmente la rapidez del movimiento — en los puntos extremos cero, en el medio máximo. Bastan ocho o diez puntos por un período.",
+          "answer": "Los puntos formarán un óvalo cerrado recorrido en sentido horario. Siga observando durante unos minutos: el óvalo comenzará a contraerse lentamente hacia el centro: la fricción con el aire convierte la elipse en una espiral. Ha dibujado un retrato de fase de un oscilador amortiguado sin hacer ningún cálculo."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Una gota de tinta y el teorema de Liouville",
+          "text": "Deje caer una gota de tinta en un vaso de agua y revuelva. Después de un minuto, el color es uniforme — el desorden ha aumentado claramente. Pero el teorema de Liouville afirma que el volumen de la nube de estados en el espacio de fase no cambia en absoluto. ¿Cómo conviven?",
+          "answer": "El volumen se conserva, pero la forma no. La gota se estira en un hilo finísimo que envuelve todo el vaso, manteniendo el mismo volumen. Simplemente no podemos ver un hilo tan fino y vemos un gris uniforme. La entropía aumenta no porque la información haya desaparecido, sino porque se ha extendido a escalas inaccesibles a la observación. Este es uno de los puntos más profundos de toda la física."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Por qué el pronóstico del tiempo termina a las dos semanas",
+          "text": "No se trata de la potencia de las computadoras. En la atmósfera, estados iniciales cercanos divergen exponencialmente en el espacio de fase: una imprecisión en el cuarto decimal crece en dos semanas hasta el tamaño del propio pronóstico. Para ganar una semana adicional, la precisión de las mediciones debe aumentarse aproximadamente diez veces, y así sucesivamente para cada semana siguiente. Este es un límite de la geometría del flujo, no de la tecnología."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Orden de la ecuación = dimensión del estado",
+          "text": "Regla en una línea: cuántas condiciones iniciales requiere la ecuación, tantas dimensiones tiene el espacio de estados. La segunda ley de Newton requiere dos — un plano. La ecuación del calor requiere un campo de temperaturas — y por lo tanto predice el futuro a partir de una sola instantánea del presente."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Donde el punto deja de existir",
+          "text": "Toda la construcción se basa en que el estado es un punto. En mecánica cuántica esto ya no es así: la relación de incertidumbre prohíbe coordenada y momento exactos simultáneamente. El estado ocupa una celda de área finita del orden de la constante de Planck. El recurso sobrevive, pero el punto se convierte en una mancha borrosa, y eso lo cambia todo."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: el mismo recurso fuera de la física",
+      "lead": "No forma parte de la prueba. Sobre cómo la idea de 'reemplazar la memoria por dimensión' fue redescubierta en varios campos de forma independiente.",
+      "blocks": [
+        {
+          "h": "Ingeniería: espacio de estados en teoría de control",
+          "text": "El piloto automático, el estabilizador de imagen y el controlador de temperatura se describen mediante un vector de estado y una matriz de transición — es decir, las ecuaciones de Hamilton en otra notación. El filtro de Kalman, sin el cual la navegación por satélite no funciona, es literalmente una estimación de la posición de un punto en el espacio de estados a partir de mediciones ruidosas."
+        },
+        {
+          "h": "Aprendizaje automático: estado oculto",
+          "text": "Una red recurrente, al procesar texto, no almacena todo el historial leído — mantiene un vector comprimido a partir del cual puede continuar. Los ingenieros llegaron a la idea de Hamilton de forma independiente y casi con las mismas palabras: expandir el estado para deshacerse de la memoria."
+        },
+        {
+          "h": "Geología: modelado de yacimientos",
+          "text": "El estado de una celda del yacimiento — presión, saturaciones por fases, temperatura, banderas de modo. Mientras el vector esté completo, el sistema es markoviano y se calcula paso a paso hacia adelante. La histéresis de la presión capilar se trata añadiendo una bandera de 'impregnación o secado' — exactamente el mismo recurso con el que la velocidad complementa a la coordenada."
+        },
+        {
+          "h": "Y una pregunta sin respuesta",
+          "text": "Por qué la naturaleza permite una descripción de estado de dimensión finita es desconocido. En la teoría cuántica de campos, el estado es formalmente de dimensión infinita, y el hecho de que aún así se pueda calcular sigue siendo motivo de asombro. Más detalles en la sección 'Preguntas abiertas'."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "El estado de un sistema es un punto en un espacio cuya dimensión es igual al orden de la ecuación de movimiento; entonces el movimiento es una línea y la memoria no es necesaria.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Sustitución de memoria por dimensión",
+          "text": "una ecuación de segundo orden = dos de primer orden"
+        },
+        {
+          "icon": "formula",
+          "title": "Nueva variable",
+          "text": "historia encapsulada, derivada comprimida"
+        },
+        {
+          "icon": "sigma",
+          "title": "La forma de la",
+          "text": "La forma de la trayectoria responde a la pregunta sobre el destino del sistema antes de cualquier cálculo"
+        },
+        {
+          "icon": "ruler",
+          "title": "Variables ocultas (bandera de",
+          "text": "Variables ocultas (bandera de dirección) curan la memoria no reducible a la derivada"
+        },
+        {
+          "icon": "scale",
+          "title": "Para miles de millones",
+          "text": "Para miles de millones de partículas, no se sigue un punto sino un volumen; su logaritmo es la entropía"
+        }
+      ],
+      "where": "Plano de fase del péndulo, diagrama PV del gas, entropía de Boltzmann, celda de Planck en mecánica cuántica, vector de estado en teoría de control.",
+      "watchOut": "Si el modelo muestra una dependencia inexplicable de la historia, casi siempre no se trata de física sino de una lista incompleta de variables de estado."
+    },
+    "quiz": [
+      {
+        "id": "p1",
+        "type": "mcq",
+        "q": "¿Por qué la coordenada $x$ no es suficiente para considerar que el estado está definido?",
+        "options": [
+          "Porque la coordenada se mide de manera imprecisa",
+          "Porque la ecuación de movimiento es de segundo orden y requiere dos condiciones iniciales: un mismo punto puede recorrerse con diferente velocidad",
+          "Porque la coordenada depende de la elección del sistema de referencia",
+          "Porque el cuerpo siempre tiene tamaño y no es un punto"
+        ],
+        "answer": 1,
+        "why": "La dimensión del espacio de estados es igual al orden de la ecuación. La segunda ley de Newton es de segundo orden, por lo que se necesitan dos números. La precisión de la medición y la elección del sistema de referencia no son relevantes: incluso con una medición perfecta de una sola coordenada, el futuro no está definido.",
+        "hint": "Imagina dos cuerpos en el mismo punto: uno en reposo, otro pasando cerca. ¿Su presente es diferente? ¿Y el futuro?"
+      },
+      {
+        "id": "p2",
+        "type": "mcq",
+        "q": "La trayectoria de fase del sistema es una espiral que se enrolla hacia el origen. ¿Qué significa físicamente?",
+        "options": [
+          "El sistema se mueve en círculo con energía constante",
+          "El sistema es inestable y se dispersa",
+          "El sistema pierde energía y llega al reposo — por ejemplo, debido a la fricción",
+          "El sistema se mueve caóticamente"
+        ],
+        "answer": 2,
+        "why": "La distancia desde el origen en el plano de fase está relacionada con la energía: cuanto más cerca del centro, menor son la desviación y la velocidad. Enrollarse hacia adentro significa disminución de energía. Una curva cerrada correspondería a la conservación de la energía.",
+        "hint": "¿Qué se encuentra en el origen del plano de fase: qué posición y qué velocidad?"
+      },
+      {
+        "id": "p3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿cuál es el significado de la frase «la transición al espacio de fases reemplaza la memoria con dimensionalidad»?",
+        "keywords": [
+          "velocidad",
+          "derivada",
+          "pasado",
+          "historia",
+          "coordenada",
+          "dos números",
+          "par",
+          "estado",
+          "no necesita recordar"
+        ],
+        "needed": 2,
+        "why": "Para predecir con una sola coordenada, hay que recordar sus valores anteriores. Al añadir la velocidad — es decir, información comprimida en un número sobre el pasado cercano — obtenemos una descripción donde el futuro depende solo del presente. El pasado no se descarta, está codificado en la coordenada adicional.",
+        "hint": "¿De dónde viene la velocidad si solo tienes una secuencia de posiciones? ¿Qué almacena en sí misma?"
+      },
+      {
+        "id": "p4",
+        "type": "estimate",
+        "q": "Una masa en un resorte barre en el plano de fase una elipse de área aproximadamente 0,09 J·s. ¿Cuántas veces es mayor que la constante de Planck (6,6 · 10⁻³⁴ J·s)? Da el orden de magnitud.",
+        "answer": 32,
+        "unit": "orden (potencia de diez)",
+        "tolerance": 1,
+        "why": "0,09 / 6,6·10⁻³⁴ ≈ 1,4·10³², es decir, del orden de 10³². Precisamente por eso la cuantificación de la acción para una masa macroscópica es imperceptible: los escalones son tan pequeños en comparación con la magnitud misma que la energía parece continua.",
+        "hint": "Basta con dividir los exponentes: 10⁻¹ dividido entre 10⁻³⁴. Las mantisas se pueden redondear a uno."
+      }
+    ]
+  },
+  "ar": {
+    "title": "فضاء الحالات",
+    "subtitle": "الفقرة 3 · كيف تتحول الذاكرة إلى بُعد",
+    "intro": [
+      "يقع جسم عند نقطة إحداثيتها ثلاثة أمتار. ماذا سيحدث بعد ثانية؟ من المستحيل الإجابة — ليس لعدم كفاية البيانات عن القوى، بل لأن السؤال غير مكتمل. يمكن للجسم أن يكون ساكنًا، أو يمكنه عبور هذه النقطة بسرعة ثلاثمائة متر في الثانية. يبدو الحاضر متطابقًا، لكن المستقبل مختلف تمامًا.",
+      "ويترتب على ذلك أمر مزعج: للتنبؤ بالحركة، يجب تذكر الماضي. فالسرعة لا تُرى في لحظة واحدة — بل تُستنتج بمقارنة لحظتين متتاليتين. حل المعادلات التي تتطلب ذاكرة صعب، وقد وجدت الفيزياء طريقًا بديلاً، تبين أنه أكثر أهمية من المسألة نفسها.",
+      "الطريق هو: لا تجادل الواقع، بل غيّر لغة الوصف. أعلن أن الحالة ليست الإحداثي، بل زوج — الإحداثي والسرعة. عندها تختفي الذاكرة: بمعرفة الزوج الحالي، يمكن حساب الزوج التالي، ولا حاجة للماضي أبدًا. لقد خفضنا الرتبة برفع الأبعاد. هذه التقنية ستظهر لاحقًا في الديناميكا الحرارية والإحصاء وميكانيكا الكم — وستبدو جديدة في كل مرة، لكنها تبقى نفسها."
+    ],
+    "standNote": "على المنصة — ثقل على نابض. لاحظ اللوحتين: على اليسار جسم يتأرجح زمنيًا، وعلى اليمين يُرسم بياني. بتغيير الكتلة والصلابة، تابع ليس شكل الموجة الجيبية، بل الزوج العددي: الموضع والسرعة. في أي لحظة، يكفي هذان للتنبؤ بكل الحركة اللاحقة — وهذا تأكيد، لا ملاحظة. تحقق: لحظتان مختلفتان بنفس الموضع لكن بسرعة معاكسة تعطيان استمرارًا مختلفًا تمامًا.",
+    "formula": {
+      "name": "معادلات هاملتون",
+      "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "المعادلات القانونية · الوصف في فضاء الطور",
+      "authors": [
+        {
+          "who": "جوزيف لويس لاغرانج",
+          "year": "1788",
+          "what": "أعاد كتابة ميكانيكا نيوتن بحيث لم تعد تعتمد على اختيار الإحداثيات. أعلن في المقدمة أن كتابه لن يحتوي على أي رسم — أصبحت الميكانيكا فرعًا من التحليل."
+        },
+        {
+          "who": "ويليام روان هاملتون",
+          "year": "1834",
+          "what": "أكمل الفكرة: استبدل معادلة واحدة من الدرجة الثانية بمعادلتين من الدرجة الأولى وحصل على وصف حيث الموضع والزخم متساويان في الأهمية. لاحقًا اتضح أن هذه الصيغة هي التي تنتقل إلى ميكانيكا الكم."
+        },
+        {
+          "who": "جوزيف ليوفيل",
+          "year": "1838",
+          "what": "أثبت أن حجم سحابة الحالات في فضاء الطور لا يتغير مع الزمن. قد تتمدد السحابة إلى خيط رفيع جدًا، لكن الحجم يظل محفوظًا."
+        },
+        {
+          "who": "ويلارد غيبس",
+          "year": "1902",
+          "what": "نقل التقنية إلى أنظمة تحتوي على مليارات الجسيمات: إذا كان تتبع نقطة مستحيلًا، فيجب تتبع الكثافة. هكذا وُلدت الميكانيكا الإحصائية."
+        },
+        {
+          "who": "هنري بوانكاريه",
+          "year": "1890",
+          "what": "بدأ بدراسة ليس الحلول، بل شكل المسارات في فضاء الطور — واكتشف أن نظامًا بسيطًا من ثلاثة أجسام يمكن أن يكون مساره معقدًا بشكل لا يصدق. من هنا نشأت نظرية الفوضى."
+        }
+      ],
+      "story": "اشتق هاملتون معادلاته وهو يعمل في البصريات، لا الميكانيكا: لاحظ أن انتشار الضوء وحركة الجسيم يوصفان بنفس الرياضيات. بدا التشبيه فضولًا أنيقًا لنحو مئة عام. في عام 1926، أخذ شرودنغر الأمر على محمل الجد: إذا كانت الميكانيكا حالة حدية لنظرية موجية معينة، مثلما أن البصريات الهندسية حالة حدية للموجية، فلا بد من كتابة هذه النظرية الموجية. هكذا ظهرت معادلة شرودنغر. تبين أن الفضول كان طريقًا إلى ميكانيكا الكم.",
+      "symbols": [
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "إحداثي معمم",
+          "unit": "м (или рад)",
+          "note": "«معمم» يعني أي كمية تحدد الموضع: طول، زاوية، حجم"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "زخم معمم",
+          "unit": "кг·м/с",
+          "note": "في الحركة العادية هو $mv$؛ هو، وليس السرعة، الشريك الصحيح للإحداثي"
+        },
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "دالة هاملتون — الطاقة الكلية بدلالة $q$ و $p$",
+          "unit": "Дж",
+          "note": "لنظام محافظ $H = $ طاقة حركية زائد طاقة كامنة"
+        },
+        {
+          "sym": "Г",
+          "latex": "\\Gamma",
+          "what": "فضاء الطور",
+          "unit": "—",
+          "note": "جسيم واحد له ستة أبعاد: ثلاثة إحداثيات وثلاثة زخوم"
+        },
+        {
+          "sym": "V",
+          "latex": "V_{\\Gamma}",
+          "what": "حجم في فضاء الطور",
+          "unit": "(Дж·с)^N",
+          "note": "كمية لوجاريتمها هو الإنتروبيا"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "استنتاج صارم: كيف تحل البعدية محل الذاكرة",
+      "lead": "دعنا نتحلل ببطء — كل خطوة مهمة هنا. سنبدأ بقانون نيوتن الثاني العادي ونصل إلى أن الحركة هي خط في فضاء الحالات.",
+      "steps": [
+        {
+          "text": "قانون نيوتن الثاني هو معادلة من الدرجة الثانية بالنسبة للزمن. لحلها، نحتاج شرطين ابتدائيين، ليس شرطًا واحدًا. بشكل رسمي: بمعرفة $x(t)$ فقط، لا يمكنك حساب $x(t+dt)$؛ تحتاج أيضًا $x(t-dt)$ لتقدير السرعة. وهذه ذاكرة عن الماضي.",
+          "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+          "figure": "secondlaw",
+          "figCaption": "تتطلب المعادلة من الدرجة الثانية معرفة كل من الموقع والسرعة — لحظة واحدة لا تكفي."
+        },
+        {
+          "text": "نغير لغة الوصف. نعلن أن الحالة ليست الإحداثي، بل زوج. تنقسم معادلة واحدة من الدرجة الثانية إلى معادلتين من الدرجة الأولى — بدون ذاكرة.",
+          "latex": "\\text{حالة} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+          "figure": "axes",
+          "figCaption": "معادلتان من الدرجة الأولى بدلاً من معادلة واحدة من الدرجة الثانية: انخفض الترتيب وارتفعت البعدية."
+        },
+        {
+          "text": "من أين أتى المتغير الجديد. السرعة ليست إضافة مصطنعة، بل تاريخ مغلف: الفرق بين موقعين متجاورين، مضغوط في رقم واحد. بدلاً من تخزين الإحداثي في لحظتين، نخزن الإحداثي والمشتق في لحظة واحدة.",
+          "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+          "figure": "secant",
+          "figCaption": "يغلف المشتق الماضي القريب في رقم يُنسب إلى الحاضر."
+        },
+        {
+          "text": "التقنية تعمم. معادلة من الدرجة الثالثة تتطلب ثلاثية، والرابعة رباعية. كل مشتق تالٍ يغلف ماضيًا أعمق — تمامًا كما تخزن معاملات متسلسلة تايلور سلوك الدالة في جوار نقطة واحدة.",
+          "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+          "figure": "tangent",
+          "figCaption": "متسلسلة تايلور — نفس الفكرة: كل تاريخ الدالة مُشفَّر في مجموعة أرقام في نقطة واحدة."
+        },
+        {
+          "text": "الآن النتيجة الرئيسية. بمجرد أن أصبحت الحالة نقطة، أصبحت الحركة خطًا. بالنسبة لكتلة على نابض، تتكون الطاقة من الحركة والوضع ولا تتغير — وهذه معادلة قطع ناقص في مستوى الإحداثي-الزخم.",
+          "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{ثابت} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+          "figure": "energyswap",
+          "figCaption": "المنحنى المغلق في مستوى الطور هو بالضبط تأكيد أن 'الطاقة محفوظة، الحركة دورية'."
+        },
+        {
+          "text": "أضف الاحتكاك — وسيتحول القطع الناقص إلى حلزون، يلتف نحو نقطة الأصل. لاحظ: لفهم هذا، لم نحل المعادلة. شكل المسار يجيب على سؤال مصير النظام قبل ظهور الصيغة. من هذه الملاحظة بدأ بوانكاريه النظرية النوعية للأنظمة الديناميكية.",
+          "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{حلزون إلى الداخل}",
+          "figure": "friction",
+          "figCaption": "الاحتكاك يوجه المسار إلى الداخل: إجابة نوعية مرئية دون أي حل."
+        },
+        {
+          "text": "والخطوة الأخيرة — إلى الإحصاء. لجسيم واحد، فضاء الطور سداسي الأبعاد. لمول غاز، عدد الأبعاد حوالي $6 \\cdot 10^{23}$: تتبع نقطة مستحيل الآن ولن يكون ممكنًا أبدًا. حينئذ، تتخلى الفيزياء عن النقطة وتنتقل إلى الحجم. إنتروبيا بولتزمان هي لوغاريتم عدد الحالات، أي حرفيًا لوغاريتم حجم الطور.",
+          "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+          "figure": "microcontact",
+          "figCaption": "عندما لا يمكن تتبع النقطة، يتم تتبع الكثافة. من هنا تبدأ كل الفيزياء الإحصائية."
+        }
+      ],
+      "plate": "الانتقال إلى فضاء الطور هو استبدال الذاكرة بالبعدية. الماضي لا يُهمل، بل يُشفَّر في الإحداثيات الإضافية للحاضر.",
+      "note": "التقنية تعمل أيضًا حيث لا تقتصر الذاكرة على المشتق. مثال — التخلفية: تبلل الصخور المسامية والتجفيف العكسي يسيران في منحنيات مختلفة، ونفس الرطوبة تعني أشياء مختلفة. يُعالج بإضافة علامة اتجاه العملية إلى الحالة. العلامة هي نفس التاريخ المغلف مثل السرعة للإحداثي. نماذج الخزان الصناعية مصممة هكذا تمامًا؛ إذا ظهر فيها اعتماد غير مفسر على التاريخ، فهذه علامة أكيدة على أن متغيرًا ما نُسي تضمينه في الحالة."
+    },
+    "math": {
+      "title": "الرياضيات المطلوبة هنا",
+      "text": [
+        "المفهوم الأول — رتبة المعادلة التفاضلية. وهي أكبر مشتق يظهر فيها، وهي تساوي عدد الشروط الابتدائية اللازمة لحل فريد. معادلة من الرتبة الأولى تتطلب رقمًا واحدًا، والثانية تتطلب رقمين. ومن هنا بعدية فضاء الحالات: إنها تساوي رتبة المعادلة.",
+        "المفهوم الثاني — منحنى وسيطي. الرسم البياني العادي يظهر $x$ كدالة للزمن. مسار الطور يظهر $p$ كدالة $x$، والزمن مخفي داخليًا كوسيط على طول المنحنى. هذه هي نفس التقنية المستخدمة لوصف دائرة: بدلاً من $y = \\sqrt{1-x^2}$ يكتبون $x = \\cos t$, $y = \\sin t$ — ولا توجد فجوات بعد الآن.",
+        "المفهوم الثالث — خاصية ماركوف، وهي مركزية هنا. تُسمى العملية ماركوفية إذا كان المستقبل يعتمد فقط على الحاضر، وليس على كيفية وصول النظام إلى هذا الحاضر. في الإحداثي، الحركة غير ماركوفية، في الزوج إحداثي-زخم — ماركوفية. لاحظ: لم تتغير الفيزياء، تغير الوصف.",
+        "المفهوم الرابع — الحجم متعدد الأبعاد. لـ $N$ جسيم، فضاء الطور له $6N$ بعدًا، ويُحسب الحجم فيه كحاصل ضرب كل الفترات. يبدو هذا مخيفًا، لكن عادةً ما نحتاج ليس الحجم نفسه، بل لوغاريتمه — ولوغاريتم حاصل الضرب هو مجموع اللوغاريتمات. ولهذا السبب الإنتروبيا مضافة: نجمع نظامين — تُجمع الإنتروبيات."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: مساحة القطع الناقص ومن أين جاء ثابت بلانك في الكم",
+      "lead": "نحسب مساحة المسار الطوري لكتلة عادية على نابض. ستكون الإجابة غنية بشكل غير متوقع.",
+      "given": "كتلة $m = 2$ كجم على نابض صلابته $k = 30$ نيوتن/م تذبذب بسعة $A = 6$ سم. أوجد المساحة التي يمسحها مساره في المستوى الطوري $(x, p)$.",
+      "law": "المسار هو قطع ناقص بأنصاف أقطار $A$ و $p_{\\max} = m\\omega A$; مساحة القطع الناقص تساوي $\\pi ab$.",
+      "solution": [
+        {
+          "text": "التردد الزاوي للاهتزازات.",
+          "latex": "\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{30}{2}} \\approx 3{,}87\\ \\text{с}^{-1}"
+        },
+        {
+          "text": "أقصى زخم - لحظة المرور بوضع التوازن.",
+          "latex": "p_{\\max} = m\\omega A = 2 \\cdot 3{,}87 \\cdot 0{,}06 \\approx 0{,}46\\ \\text{кг}\\cdot\\text{м/с}"
+        },
+        {
+          "text": "مساحة القطع الناقص بأنصاف أقطار $A$ و $p_{\\max}$.",
+          "latex": "S = \\pi A p_{\\max} \\approx 3{,}14 \\cdot 0{,}06 \\cdot 0{,}46 \\approx 0{,}087\\ \\text{Дж}\\cdot\\text{с}"
+        },
+        {
+          "text": "من المفيد ملاحظة العلاقة مع الطاقة والدورة - فهي ليست مصادفة.",
+          "latex": "S = \\frac{2\\pi E}{\\omega} = E \\cdot T, \\qquad E = \\frac{kA^{2}}{2} = 0{,}054\\ \\text{Дж}"
+        }
+      ],
+      "answer": "المساحة حوالي $0{,}087$ جول·ثانية. البعد - طاقة على زمن، أي فعل.",
+      "check": "والآن، هذا هو سبب المثال. ثابت بلانك له نفس البعد بالضبط ويساوي $6{,}6 \\cdot 10^{-34}$ جول·ثانية. قطعنا الناقص أكبر منه بمقدار $10^{32}$ مرة - وهذا هو السبب في عدم ملاحظة التأثيرات الكمومية للكتلة على النابض. علاوة على ذلك، نصت النظرية الكمومية القديمة صراحة على أن المدارات المسموح بها فقط هي التي تكون مساحتها الطورية مضاعفًا لثابت بلانك. وُلد التكميم كشرط على المساحة في الفضاء الطوري - نفس الفضاء الذي بنيناه في هذا المثال من الرغبة في التخلص من الذاكرة."
+    },
+    "constants": {
+      "title": "ثوابت هذا القسم",
+      "lead": "اثنان يكفيان - والثاني يشرح لماذا كانت الطريقة من الميكانيكا ضرورية للإحصاء.",
+      "items": [
+        {
+          "sym": "h",
+          "latex": "h",
+          "dictKey": "h",
+          "name": "ثابت بلانك",
+          "value": "6,63 · 10⁻³⁴",
+          "unit": "Дж · с",
+          "why": "له بُعد الفعل - نفس بُعد المساحة في المستوى الطوري. هذه ليست مصادفة: ثابت بلانك يحدد أصغر خلية قابلة للتمييز في الفضاء الطوري، وتحتها لا معنى للحديث عن نقطة حالة.",
+          "mnemo": "الترتيب 10⁻³⁴ - أكبر بنفس المقدار تقريبًا من حجم الإنسان بالنسبة لنواة الذرة. كم الفعل بعيد جدًا عن مقياسنا."
+        },
+        {
+          "sym": "k_B",
+          "latex": "k_B",
+          "dictKey": "k_B",
+          "name": "ثابت بولتزمان",
+          "value": "1,38 · 10⁻²³",
+          "unit": "Дж / К",
+          "why": "يحول لوغاريتم الحجم الطوري إلى إنتروبيا: $S = k_B \\ln W$. هذا هو ثمن بت واحد من المعلومات معبرًا عنه بالوحدات المألوفة.",
+          "mnemo": "الصيغة $S = k \\ln W$ محفورة على شاهد قبر بولتزمان في فيينا - لم يعش ليرى الاعتراف بفكرته."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "طريقة واحدة - خمسة أماكن مختلفة في الدورة",
+      "lead": "يجدر رؤية مسبقة أين سينعكس هذا القسم بالضبط. في كل مرة سيبدو أن مفهومًا جديدًا يُقدم، لكنه سيكون نفس الشيء.",
+      "items": [
+        {
+          "h": "الميكانيكا",
+          "text": "المستوى الطوري للبندول: منحنى مغلق يعني دورية، لولب يعني تخميد، مسار متباعد يعني عدم استقرار. يُقرأ مصير النظام من الشكل."
+        },
+        {
+          "h": "الديناميكا الحرارية",
+          "text": "مخطط الضغط-الحجم - هو نفس فضاء الحالات، ولكن للغاز ككل. دورة كارنو هي منحنى مغلق عليه، والمساحة داخل الدورة تساوي الشغل لكل دورة."
+        },
+        {
+          "h": "الفيزياء الإحصائية",
+          "text": "الإنتروبيا هي لوغاريتم حجم المنطقة المتاحة. يتحول القانون الثاني إلى شيء بديهي تقريبًا: يذهب النظام حيث المساحة أوسع، لأن هناك حالات أكثر."
+        },
+        {
+          "h": "نظرية المعلومات",
+          "text": "صيغة شانون تتطابق مع صيغة بولتزمان حتى ثابت وأساس اللوغاريتم. الجهل بالحالة وكمية المعلومات لتحديده - قيمة واحدة محسوبة من جانبين."
+        },
+        {
+          "h": "الفيزياء الكمومية",
+          "text": "مبدأ عدم اليقين يمنع وجود نقطة في الفضاء الطوري: الحالة تشغل خلية بمساحة لا تقل عن ثابت بلانك. النقطة الكلاسيكية تصبح حالة حدية عندما تكون الخلية صغيرة جدًا."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مسلٍ: جرب بنفسك",
+      "lead": "يبدو الفضاء الطوري تجريدًا حتى تراه على طاولة المطبخ.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "ارسم مسارًا طوريًا للبندول",
+          "text": "علق مفاتيح أو صامولة على خيط - تحصل على بندول طوله نصف متر تقريبًا. أزحه واتركه. الآن خذ ورقة وسجل نقاطًا: أفقيًا الانحراف عن الاتزان بالعين، عموديًا سرعة الحركة - عند الأطراف صفر، في المنتصف أعلى قيمة. ثمان إلى عشر نقاط خلال دورة واحدة تكفي.",
+          "answer": "ستستقر النقاط على شكل بيضاوي مغلق يُدار باتجاه عقارب الساعة. استمر في المراقبة لبضع دقائق - سيبدأ البيضاوي في الانكماش ببطء نحو المركز: هذا بسبب الاحتكاك بالهواء الذي يحول الإهليلج إلى حلزوني. لقد رسمت صورة طورية لمهتز مخمد دون أي حسابات."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "قطرة حبر ونظرية ليوفيل",
+          "text": "أضف قطرة حبر إلى كوب ماء وقلّب. بعد دقيقة يصبح اللون موحدًا - من الواضح أن الفوضى زادت. لكن نظرية ليوفيل تنص على أن حجم سحابة الحالات في الفضاء الطوري لا يتغير أبدًا. كيف يتوافق هذا؟",
+          "answer": "الحجم محفوظ، والشكل ليس كذلك. تتمدد القطرة إلى خيط رفيع يلتف حول الكوب بأكمله، مع بقاء الحجم كما هو. نحن ببساطة لا نستطيع رؤية مثل هذا الخيط الرفيع ونرى رماديًا موحدًا. تزداد الإنتروبيا ليس لأن المعلومات اختفت، بل لأنها توزعت على مقاييس لا يمكن ملاحظتها. هذا من أعمق المواضع في الفيزياء كلها."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة مسلية",
+          "h": "لماذا تنتهي توقعات الطقس عند أسبوعين",
+          "text": "ليس الأمر في قوة الحواسيب. في الغلاف الجوي، تتباعد الحالات الأولية المتقاربة في الفضاء الطوري بشكل أسي: عدم الدقة في الرقم الرابع بعد أسبوعين ينمو ليصبح بحجم التوقع نفسه. لكسب أسبوع إضافي، يجب زيادة دقة القياسات عشرة أضعاف تقريبًا - وهكذا لكل أسبوع تالٍ. هذا حد لهندسة التدفق، وليس للتكنولوجيا."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "فن الإستذكار",
+          "h": "رتبة المعادلة = أبعاد الحالة",
+          "text": "قاعدة في سطر واحد: عدد الشروط الابتدائية التي تتطلبها المعادلة هو عدد أبعاد فضاء الحالات. قانون نيوتن الثاني يتطلب شرطين - مستوى. معادلة التوصيل الحراري تتطلب حقل درجة حرارة واحد - وبالتالي تتنبأ بالمستقبل من صورة واحدة للحاضر."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "أين تتوقف النقطة عن الوجود",
+          "text": "كل البناء يعتمد على أن الحالة هي نقطة. في ميكانيكا الكم، لم يعد الأمر كذلك: مبدأ اللايقين يمنع تحديد الموضع والزخم بدقة في آن واحد. تحتل الحالة خلية ذات مساحة محدودة من رتبة ثابت بلانك. تظل الطريقة صالحة - لكن النقطة تصبح بقعة ضبابية، وهذا يغير كل شيء."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمتطلعين: نفس الطريقة خارج الفيزياء",
+      "lead": "ليس ضمن الاختبار. حول إعادة اكتشاف فكرة 'استبدال الذاكرة بالأبعاد' بشكل مستقل في عدة مجالات.",
+      "blocks": [
+        {
+          "h": "الهندسة: فضاء الحالات في نظرية التحكم",
+          "text": "الطيار الآلي ومثبت الصورة ومنظم الحرارة يوصفون بمتجه حالة ومصفوفة انتقال - أي معادلات هاميلتون بصيغة مختلفة. مرشح كالمان، الذي بدونه لا يعمل الملاحة عبر الأقمار الصناعية، هو حرفيًا تقدير لموقع نقطة في فضاء الحالات من قياسات مزعجة."
+        },
+        {
+          "h": "التعلم الآلي: الحالة الكامنة",
+          "text": "الشبكة المتكررة، عند معالجة النص، لا تخزن كل التاريخ المقروء - بل تحتفظ بمتجه مضغوط يمكن الاستمرار منه. توصل المهندسون إلى فكرة هاميلتون بشكل مستقل وبكلمات متماثلة تقريبًا: توسيع الحالة للتخلص من الذاكرة."
+        },
+        {
+          "h": "الجيولوجيا: نمذجة الطبقة",
+          "text": "حالة خلية الطبقة: الضغط، التشبعات الطورية، درجة الحرارة، أعلام الوضع. طالما المتجه كامل، النظام ماركوفي ويحسب للأمام خطوة بخطوة. يُعالج التباطؤ في الضغط الشعري بإضافة علم 'التشبع أو الجفاف' - بنفس الطريقة التي تكمل بها السرعة الإحداثي."
+        },
+        {
+          "h": "وسؤال بلا إجابة",
+          "text": "لماذا تسمح الطبيعة بوصف الحالة بأبعاد محدودة - غير معروف. في نظرية الحقل الكمي، الحالة رسميًا لانهائية الأبعاد، وحقيقة أنه لا يزال من الممكن الحساب مع ذلك تبقى موضوع دهشة منفصلة. للمزيد، راجع قسم 'أسئلة مفتوحة'."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "حالة النظام هي نقطة في فضاء أبعاده تساوي رتبة معادلة الحركة؛ عندها تكون الحركة خطًا ولا حاجة للذاكرة.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "استبدال الذاكرة بالأبعاد",
+          "text": "معادلة من الدرجة الثانية = معادلتان من الدرجة الأولى"
+        },
+        {
+          "icon": "formula",
+          "title": "متغير جديد - تاريخ",
+          "text": "متغير جديد - تاريخ مغلف، مشتقة مضغوطة"
+        },
+        {
+          "icon": "sigma",
+          "title": "شكل المسار يجيب عن",
+          "text": "شكل المسار يجيب عن سؤال مصير النظام قبل أي حل"
+        },
+        {
+          "icon": "ruler",
+          "title": "المتغيرات الكامنة (علم الاتجاه)",
+          "text": "المتغيرات الكامنة (علم الاتجاه) تعالج الذاكرة غير القابلة للاختزال إلى مشتقة"
+        },
+        {
+          "icon": "scale",
+          "title": "بالنسبة لمليارات الجسيمات، لا",
+          "text": "بالنسبة لمليارات الجسيمات، لا يُتتبع النقطة بل الحجم؛ لوغاريتمه هو الإنتروبيا"
+        }
+      ],
+      "where": "مستوى طور البندول، مخطط PV للغاز، إنتروبيا بولتزمان، خلية بلانك في ميكانيكا الكم، متجه الحالة في نظرية التحكم.",
+      "watchOut": "إذا أظهر النموذج اعتمادًا غير مفسر على التاريخ، فالأمر دائمًا تقريبًا ليس في الفيزياء بل في قائمة غير كاملة لمتغيرات الحالة."
+    },
+    "quiz": [
+      {
+        "id": "p1",
+        "type": "mcq",
+        "q": "لماذا لا يكفي الإحداثي $x$ لاعتبار الحالة محددة؟",
+        "options": [
+          "لأن الإحداثي يُقاس بدقة غير كافية",
+          "لأن معادلة الحركة من الدرجة الثانية وتتطلب شرطين ابتدائيين: يمكن أن تمر نفس النقطة بسرعات مختلفة",
+          "لأن الإحداثي يعتمد على اختيار النظام المرجعي",
+          "لأن الجسد دائمًا له حجم وليس نقطة"
+        ],
+        "answer": 1,
+        "why": "أبعاد فضاء الحالات تساوي رتبة المعادلة. قانون نيوتن الثاني من الدرجة الثانية، لذا نحتاج إلى رقمين. دقة القياس واختيار المرجع لا علاقة لهما هنا: حتى مع القياس المثالي لإحداثي واحد، المستقبل غير محدد.",
+        "hint": "تخيل جسمين في نفس النقطة: أحدهما ساكن والآخر يمر بجانبه. هل يختلف حاضرهما؟ والمستقبل؟"
+      },
+      {
+        "id": "p2",
+        "type": "mcq",
+        "q": "المسار phase space للنظام هو حلزوني يلتف نحو نقطة الأصل. ماذا يعني هذا فيزيائياً؟",
+        "options": [
+          "النظام يتحرك في دائرة بطاقة ثابتة",
+          "النظام غير مستقر ويتناثر",
+          "النظام يفقد طاقته ويصل إلى السكون - مثلاً بسبب الاحتكاك",
+          "النظام يتحرك بشكل فوضوي"
+        ],
+        "answer": 2,
+        "why": "المسافة من نقطة الأصل في المستوى phase space مرتبطة بالطاقة: كلما اقتربنا من المركز، قل الانحراف والسرعة. الالتفاف إلى الداخل يعني تناقص الطاقة. المنحنى المغلق سيتوافق مع حفظ الطاقة.",
+        "hint": "ما هو موجود في نقطة الأصل لمستوى phase space - أي موضع وأي سرعة؟"
+      },
+      {
+        "id": "p3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: ما معنى عبارة 'الانتقال إلى فضاء phase يحل محل الذاكرة بالبعد'؟",
+        "keywords": [
+          "سرعة",
+          "مشتق",
+          "ماضٍ",
+          "تاريخ",
+          "إحداثي",
+          "رقمان",
+          "زوج",
+          "حالة",
+          "لا حاجة للتذكر"
+        ],
+        "needed": 2,
+        "why": "للتنبؤ بإحداثي واحد، عليك تذكر قيمه السابقة. بإضافة السرعة - أي المعلومات المضغوطة في رقم عن الماضي القريب - نحصل على وصف حيث المستقبل يعتمد فقط على الحاضر. الماضي لم يُطرح، بل تم ترميزه في الإحداثي الإضافي.",
+        "hint": "من أين تأتي السرعة إذا كان لديك فقط سلسلة من المواضع؟ ماذا تخزن في داخلها؟"
+      },
+      {
+        "id": "p4",
+        "type": "estimate",
+        "q": "حمل على نابض يمسح في المستوى phase space قطع ناقص مساحته حوالي 0,09 جول·ثانية. كم مرة أكبر من ثابت بلانك (6,6 × 10⁻³⁴ جول·ثانية)؟ أعط أس الأس.",
+        "answer": 32,
+        "unit": "الرتبة (أس العشرة)",
+        "tolerance": 1,
+        "why": "0,09 / 6,6×10⁻³⁴ ≈ 1,4×10³²، أي من رتبة 10³². لهذا السبب فإن تكميم الفعل لحمل ماكروسكوبي غير ملحوظ: الدرجات صغيرة جدًا مقارنة بالمقدار نفسه بحيث تبدو الطاقة مستمرة.",
+        "hint": "يكفي قسمة الأسس: 10⁻¹ مقسومة على 10⁻³⁴. يمكن تقريب المانتيسا إلى الواحد."
+      }
+    ]
+  },
+  "tags": [
+    "entropy",
+    "pulsar",
+    "machine_learning",
+    "information_theory",
+    "chaos_theory"
+  ],
+  "laws": [
+    "newtons_second_law",
+    "liouville_theorem",
+    "schrdinger_equation"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.02613",
+      "why": "совпадение по теме: information_theory, machine_learning"
+    },
+    {
+      "id": "2607.01046",
+      "why": "совпадение по теме: information_theory, machine_learning"
+    },
+    {
+      "id": "2607.00151",
+      "why": "совпадение по теме: information_theory, machine_learning"
+    }
+  ]
+}

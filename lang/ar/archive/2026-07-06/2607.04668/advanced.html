@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أوركسترا الأنوية المرنة: كيف يتشارك استدلال LLM المعالج مع نظام التشغيل دون نشاز — bridge42worlds</title>
+    <meta name="description" content="يتطلب تشغيل نماذج اللغة الكبيرة (LLM) على وحدات المعالجة المركزية (CPU) عملاً متزامناً لعدة أنوية مع تزامن صارم عبر حواجز (barriers). يؤدي مقاطعة هذه المجموعة إلى خلل في الإخراج أو توقف. نُفذ في نواة نظام التشغيل Anima OS "مجموعة أنوية مرنة" (elastic gang): آلية تسمح لمجموعة الاستدلال بأخذ الأنوية د">
+    <meta property="og:title" content="أوركسترا الأنوية المرنة: كيف يتشارك استدلال LLM المعالج مع نظام التشغيل دون نشاز">
+    <meta property="og:description" content="يسمح بروتوكول ACK-latch لمجموعة الأنوية التي تنفذ استدلال LLM باستعارة الأنوية وإعادتها بين الرموز دون توقف أو تشويه للنتائج.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/advanced.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/advanced.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "أوركسترا الأنوية المرنة: كيف يتشارك استدلال LLM المعالج مع نظام التشغيل دون نشاز", "description": "يسمح بروتوكول ACK-latch لمجموعة الأنوية التي تنفذ استدلال LLM باستعارة الأنوية وإعادتها بين الرموز دون توقف أو تشويه للنتائج.", "inLanguage": "ar", "datePublished": "2026-07-06", "url": "https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/advanced.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/ai.webp", "author": [{"@type": "Person", "name": "Daeyeon Son"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.04668", "abstract": "تتم عملية فك ترميز (decoding) نماذج اللغة الكبيرة على الجهاز بواسطة مجموعة حاجز (barrier group) من الأنوية مع حسابات SIMD (تعليمة واحدة، بيانات متعددة)، حيث تنشغل كل نواة لعدة ميلي ثوانٍ لكل رمز (token). يؤدي سحب النواة بواسطة المجدول (scheduler) القياسي إلى حالة جمود للحاجز (barrier deadlock) أو تلف اللوغيتات (logits). يُقدم قانق (gang) مرن في نظام Anima OS — نواة bare-metal مكتوبة بلغة Rust لمعمارية x86-64، حيث تُعتبر المجموعة كيانًا مجدولاً من الدرجة الأولى مع إمكانية تغيير تشكيلها بين أي رمزين (token). تعتمد الآلية على بروتوكول العصور المقرونة بالإقرارات (ACK-latched epoch protocol): قفل بعلامة جيل (generation tag) بأسلوب seqlock، مدمج مع اتفاقية الانضمام بأسلوب RCU/epoch. لكل رمز (token)، يكون المشاركون هم تقاطع الأنوية المطلوبة مع التي أقرّت العصر. النواة التي لم تقرّ تنضم كحد أقصى بعد رمز واحد. العمليات المسحوبة تهاجر وتُستأنف عند اكتمال الجيل. على معالج AMD Zen 5 (8 أنوية/16 خيطًا)، يكون الإخراج دقيقًا بتًا فبتًا (bit-exact) عند التحقق من تغيير التشكيل لنماذج 135M و7B. بالمقارنة مع الأقسام الثابتة، تتفوق العضوية المرنة وفقًا لمعيار باريتو (Pareto dominance): عند دورات الحمل المتوسطة، تكون إنتاجية العمليات المشتركة أعلى بمقدار 1.75 (25%)، 1.52 (50%) و1."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">متقدم</span><div class="vs-track"><div class="vs-fill" style="width:100.0%"></div><div class="vs-thumb" style="left:100.0%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ar/archive/2026-07-06/2607.04668/mini.html" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ar/archive/2026-07-06/2607.04668/simple.html" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></a><a class="vs-dot" data-version="popular" data-idx="2" href="/lang/ar/archive/2026-07-06/2607.04668/index.html" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></a><a class="vs-dot active" data-version="advanced" data-idx="3" href="/lang/ar/archive/2026-07-06/2607.04668/advanced.html" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">المقال التالي ←</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>أنا المؤلف</h3>
+        <p>هل أنت أحد مؤلفي هذا البحث؟ راسلنا من بريدك المؤسسي أو المهني مع ذكر رقم arXiv لهذا المقال، وسنتحقق منك ونمنحك صلاحية تحرير هذه الصفحة.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.04668">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ للأعلى</a></li><li class="article-nav-sep"></li><li><a href="#context">السياق</a></li><li><a href="#methods">المنهجية</a></li><li><a href="#results">النتائج</a></li><li><a href="#implications">الأهمية</a></li><li><a href="#future_development">التطور المستقبلي</a></li><li><a href="#impact_on">التأثير</a></li><li><a href="#next_steps">الخطوات التالية</a></li><li><a href="#key_problems_connection">المسائل المفتوحة الرئيسية</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">الشبكة</a></li><li><a href="#feedback">التعليقات</a></li><li><a href="#related">مقالات ذات صلة</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/ar/archive/2026-07-06/2607.04668/simple.html" title="بسيط — الأبسط - لأول نظرة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">بسيط</span></a><a class="lv-btn" data-version="popular" href="/lang/ar/archive/2026-07-06/2607.04668/index.html" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">مبسّط</span></a><a class="lv-btn active" data-version="advanced" href="/lang/ar/archive/2026-07-06/2607.04668/advanced.html" title="متقدم — بالمعادلات والقصة الكاملة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">متقدم</span></a></div>
+        
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">أوركسترا الأنوية المرنة: كيف يتشارك استدلال LLM المعالج مع نظام التشغيل دون نشاز  </h1>
+            <button class="share-btn share-inline" title="مشاركة" onclick="shareArticle('أوركسترا الأنوية المرنة: كيف يتشارك استدلال LLM المعالج مع نظام التشغيل دون نشاز','https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Elastic Gang: Per-Token Membership Change for a Hard-Barriered LLM Inference Gang Co-Scheduled with OS Processes"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">أنا المؤلف</button> · <a href="/lang/en/authors/Daeyeon_Son.html" class="text-author-link" data-author="Daeyeon Son">Daeyeon Son</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.04668" target="_blank" rel="noopener">2607.04668</a> · 2026-07-06 · <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 4 دقيقة</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/ar/sections/cs_OS.html" data-cat="cs.OS" title="">أنظمة التشغيل</a> <a class="cat-badge" href="/lang/ar/sections/cs_AI.html" data-cat="cs.AI" title="الذكاء الاصطناعي، باستثناء الرؤية، الروبوتيات، التعلم الآلي، الأنظمة متعددة الوكلاء وNLP: الأنظمة الخبيرة، إثبات المبرهنات، تمثيل المعرفة، التخطيط، معالجة عدم اليقين في الذكاء الاصطناعي.">الذكاء الاصطناعي</a> <a class="cat-badge" href="/lang/ar/sections/cs_PF.html" data-cat="cs.PF" title="">الأداء</a></div>
+        <div class="oneliner">يسمح بروتوكول ACK-latch لمجموعة الأنوية التي تنفذ استدلال LLM باستعارة الأنوية وإعادتها بين الرموز دون توقف أو تشويه للنتائج.</div>
+        <div class="mosaic"></div>
+        <div class="abstract-lead"><div class="abstract-label">الملخّص</div><p>تتم عملية فك ترميز (decoding) نماذج اللغة الكبيرة على الجهاز بواسطة مجموعة حاجز (barrier group) من الأنوية مع حسابات SIMD (تعليمة واحدة، بيانات متعددة)، حيث تنشغل كل نواة لعدة ميلي ثوانٍ لكل رمز (token). يؤدي سحب النواة بواسطة المجدول (scheduler) القياسي إلى حالة جمود للحاجز (barrier deadlock) أو تلف اللوغيتات (logits). يُقدم قانق (gang) مرن في نظام Anima OS — نواة bare-metal مكتوبة بلغة Rust لمعمارية x86-64، حيث تُعتبر المجموعة كيانًا مجدولاً من الدرجة الأولى مع إمكانية تغيير تشكيلها بين أي رمزين (token). تعتمد الآلية على بروتوكول العصور المقرونة بالإقرارات (ACK-latched epoch protocol): قفل بعلامة جيل (generation tag) بأسلوب seqlock، مدمج مع اتفاقية الانضمام بأسلوب RCU/epoch. لكل رمز (token)، يكون المشاركون هم تقاطع الأنوية المطلوبة مع التي أقرّت العصر. النواة التي لم تقرّ تنضم كحد أقصى بعد رمز واحد. العمليات المسحوبة تهاجر وتُستأنف عند اكتمال الجيل. على معالج AMD Zen 5 (8 أنوية/16 خيطًا)، يكون الإخراج دقيقًا بتًا فبتًا (bit-exact) عند التحقق من تغيير التشكيل لنماذج 135M و7B. بالمقارنة مع الأقسام الثابتة، تتفوق العضوية المرنة وفقًا لمعيار باريتو (Pareto dominance): عند دورات الحمل المتوسطة، تكون إنتاجية العمليات المشتركة أعلى بمقدار 1.75 (25%)، 1.52 (50%) و1.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div><div class="mini-graph mini-graph--article" data-node="s:Andrey Markov,t:large_language_models,t:machine_learning"><canvas id="minigraph"></canvas></div>
+        <section id="context"><h2>السياق</h2><p>توقفت سبعة أنوية عند حاجز (barrier) غير مرئي. تأخر الثامن في عملية أخرى — فتجمّد <a href="/lang/ar/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">استدلال LLM</a> بالكامل. هكذا تبدو المعضلة الكبرى في تعايش <a href="/lang/ar/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">مهام التعلم الآلي</a> مع العمليات الاعتيادية على معالج واحد. تتطلب مجموعة الاستدلال أن تعزف جميع الأنوية بتناغم في آنٍ واحد — وإلا ساد الصمت. لكن نظام التشغيل لا يستطيع تجميد نواة واحدة فجأة في منتصف رمز (token): فالحاجز لن ينتظر المتأخر أبداً، وإضافة مشارك جديد عشوائياً ستشوه النتيجة بصمت. التخصيص الثابت لأنوية "الاستدلال" يحل المشكلة جزئياً فقط: ففي فترات التوقف بين التوليدات تبقى هذه الأنوية عاطلة، بينما تختنق العمليات العامة على ما تبقى. تتفاقم المشكلة في الأجهزة الطرفية (edge devices) دون وحدات معالجة رسومية (GPU)، حيث المعالج هو الحاسوب الوحيد، وكل واط يُحسب بدقة. المطلوب آلية تسمح للأنوية بالتدفق بين التجمعات دون انتهاك الصوابية — تماماً كما يدخل العازفون إلى الأوركسترا ويخرجون منها بين المقاطع الموسيقية دون أن يخلوا بالإيقاع.</p></section><section id="methods"><h2>المنهجية</h2><p>نُفذ بروتوكول ACK-latch في نواة نظام التشغيل Anima OS — نظام تشغيل مكتوب بلغة Rust، يعمل على معالج AMD Ryzen 9 9800X3D (معمارية Zen 5). يقوم محرك الاستدلال بتحميل النماذج المُكمَّمة (quantized models) <a href="/lang/ar/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">SmolLM2-135M</a> و<a href="/lang/ar/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">Qwen2.5-7B</a> وينفذ الاستدلال، مقسماً كل رمز (token) إلى موجات من عمليات المصفوفات والمتجهات، تفصل بينها حواجز (barriers) (نحو 226 حاجزاً لكل رمز). قبل بدء التوليد، يُرفع علم النشاط ويُزاد رقم الحقبة (epoch)؛ كل نواة قابلة للإعارة تؤكد (ack) الحقبة الحالية، بعد أن تحفظ حالة عمليتها — تماماً كعازف يضع آلته في وضع الانتظار ويومئ لقائد الأوركسترا. تُثبَّت تشكيلة المشاركين للرمز التالي في كلمة ذرية واحدة (atomic word): يُشكَّل قناع البتات (bitmask) من تقاطع الأنوية التي طلبتها المجموعة والأنوية التي تطابق تأكيدها (ack) مع الحقبة لحظة التثبيت. تُنشر هذه الكلمة قبل بدء الرمز، وتقرؤها جميع نقاط انتظار الحواجز. النواة التي لم تتمكن من التأكيد لا تُضمَّن ببساطة في الرمز الحالي — لا أحد ينتظرها، وتستحوذ جاراتها في المجموعة على عملها. مع انقضاء الحقبة (بانتهاء التوليد أو بدء حقبة جديدة) تُلغى جميع التأكيدات القديمة، فلا تتمكن الأنوية المتأخرة أو التي غادرت المجموعة من التأثير على الرموز اللاحقة. يتولى المجدول (scheduler) نقل العمليات المُزاحة: تنتقل العملية من النواة المستعارة إلى أخرى وتتابع عملها، وعند عودة النواة تلتقط طوابيرها فوراً.</p></section><section id="results"><h2>النتائج</h2><p>اختُبرت المجموعة المرنة على نموذجين: الخفيف SmolLM2-135M (0.75 ميلي ثانية لكل رمز، وهو يختبر البروتوكول بقسوة) والثقيل Qwen2.5-7B (79 ميلي ثانية لكل رمز، ويعتمد على عرض النطاق الترددي للذاكرة). عند حمل استدلال بنسبة 25% (أي ربع الوقت مشغول بالتوليد) بلغ إجمالي إنتاجية العمليات العادية 574 كم خدمة في الثانية — وهو أعلى بـ 1.75 مرة من التقسيم الثابت (327). عند حمل 50% أعطت المجموعة المرنة زيادة قدرها 1.52×، وعند 75% كانت 1.28×، دون أي تراجع في سرعة الاستدلال نفسه. عند حمل 100% تساوت المؤشرات، كما تنبأت النظرية. والأهم: بقي خرج النماذج مطابقاً بتاً بتاً للتشغيل الثابت. قيمة هاش اللوغيتات (logits) النهائية 0x9a2917eca1a62bd1 لم تتغير في أي من السيناريوهات، بما في ذلك اختبار الإجهاد مع إقراض حقيقي للأنوية دون تغيير العرض المستهدف للمجموعة — أثبت الإقراض سلامته. بلغ تأخير إعادة النواة بعد انتهاء التوليد 0.22 ميكروثانية (وسيط) — شبه فوري. أما الاستحواذ على نواة مشغولة، وفق سياسة متحفظة عمداً، فيستغرق كم مجدول واحد (scheduler quantum) (نحو 16 ميلي ثانية): لا تُقاطع العملية المستعيرة في منتصف كمها، ولا تنضم النواة إلى المجموعة إلا بعد انتهائه.</p></section><section id="implications"><h2>الأهمية</h2><p>يكسر هذا العمل الفكرة الراسخة بأن الحوسبة ذات الحواجز الصارمة لا تتوافق مع إعادة التوزيع الديناميكي للأنوية. يحول بروتوكول ACK-latch مجموعة الاستدلال إلى كيان جدولة كامل، قادر على مشاركة الموارد مع بقية النظام دون فقدان الصوابية. يمهد هذا الطريق لأنظمة تشغيل لا يكون فيها الاستدلال مهمة معزولة، بل خدمة نواة عادية، تتكيف بمرونة مع الحمل الحالي.</p></section><section id="future_development"><h2>التطور المستقبلي</h2><p>يمكن نقل هذه الآلية إلى فضاء المستخدم في أنظمة Linux باستخدام المجدول SCHED_DEADLINE، كما يمكن تكييفها للتعامل مع المعماريات غير المتجانسة (big.LITTLE) وطوبولوجيات تعدد الخيوط الفائق (SMT). يمكن دمجها أيضاً مع سياسات توفير الطاقة لتحديد عدد الأنوية المستعارة بدقة.</p></section><section id="impact_on"><h2>التأثير</h2><p>سيؤثر ذلك على تصميم أنظمة التشغيل للأجهزة المدمجة والطرفية، حيث يصبح استدلال وحدة المعالجة المركزية هو الحمل الأساسي، كما سيؤثر على البنية التحتية لوكلاء نماذج اللغة الكبيرة (LLM agents)، مما يرفع كفاءة استخدام المعالجات دون التضحية بالاستجابة.</p></section><section id="next_steps"><h2>الخطوات التالية</h2><p>دراسة سلوك البروتوكول على معالجات بعدد مختلف من الأنوية الفعلية، بالإضافة إلى بحث إمكانية مقاطعة النواة المشغولة لتسريع الاستحواذ (هذا ممنوع حالياً بموجب السياسة).</p></section><section id="key_problems_connection"><h2>المسائل المفتوحة الرئيسية</h2><p>هكذا تتزامن المجموعة المرنة، مثل أوركسترا دون قائد، عبر مدوّنة موسيقية واحدة (partitura)، ولا تسمح بتغيير التشكيلة إلا بين الرموز-المقاطع. هذه خطوة نحو حل المشكلة الأساسية المتمثلة في التعايش السلمي بين الحوسبة المتزامنة وغير المتزامنة في نظام واحد، ونحو فهم الثوابت الدنيا للهجرة الآمنة لأعضاء مجموعة الحواجز.</p></section>
+        <div class="fun-fact"><p class="fact">🎯 حتى مع 301 ترحيل للعمليات خلال نافذة 10 ثوانٍ، بقي الاستدلال مطابقاً بتاً بتاً، ولم يتجاوز تشتت قياسات الإنتاجية 0.9%.</p></div>
+        
+        <div class="key-numbers"><h3>أرقام رئيسية</h3><ul><li><strong>زيادة الإنتاجية الإجمالية (عند 25% استدلال):</strong> 1.75×</li><li><strong>تأخير إعادة النواة (المئين 50):</strong> 0.22 ميكروثانية</li><li><strong>الحد الأقصى للأنوية للتسريع:</strong> 8</li><li><strong>سرعة استدلال نموذج 7B:</strong> 12.7 رمز/ثانية</li></ul></div>
+        <div class="actions actions-compact" data-article-id="2607.04668_ar_advanced">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.04668" title="المفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> أضف تعليقًا</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/ar/archive/2026-07-06/2607.04668/simple.html" title="بسيط — الأبسط - لأول نظرة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn lv-compact" data-version="popular" href="/lang/ar/archive/2026-07-06/2607.04668/index.html" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn active lv-compact" data-version="advanced" href="/lang/ar/archive/2026-07-06/2607.04668/advanced.html" title="متقدم — بالمعادلات والقصة الكاملة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.04668_ar_advanced" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="مقالات ذات صلة"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">العلماء</div><a href="/lang/ar/scientists/Andrey_Markov.html" class="side-sci" data-scientist="Andrey Markov">Andrey Markov</a><div class="side-tags-label">الوسوم</div><a href="/lang/ar/tags/large_language_models.html" class="side-tag" data-tag="large_language_models">نماذج اللغة الكبيرة</a>
+<a href="/lang/ar/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">التعلم الآلي</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.04668', 'article', 'ar');
+    if (false && window.logExpressInterest) logExpressInterest('2607.04668', 'ar');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1278 @@
+{
+  "id": "02-hooke",
+  "topic": "oscillations",
+  "schema": "b42.lesson/1",
+  "model": "oscillator",
+  "entities": {
+    "laws": [
+      "hookes_law"
+    ],
+    "tags": [
+      "mechanics",
+      "energy"
+    ],
+    "scientists": [
+      "Robert Hooke",
+      "Galileo Galilei"
+    ]
+  },
+  "ru": {
+    "title": "Закон Гука и осциллятор",
+    "subtitle": "Параграф 2 · Колебание как проекция вращения",
+    "intro": [
+      "В 1676 году Роберт Гук опубликовал странную строчку: ceiiinosssttuv. Это была анаграмма — способ застолбить открытие, не раскрывая его, пока работа не закончена. Через два года он дал расшифровку: ut tensio, sic vis — «каково растяжение, такова и сила».",
+      "За этой латынью стоит первый в истории количественный закон о деформации: растяните пружину вдвое сильнее — она ответит вдвое большей силой. Простая пропорция, но из неё выросли сопротивление материалов, сейсмология, теория молекулярных связей — и вся физика колебаний.",
+      "Потому что стоит соединить закон Гука со вторым законом Ньютона, как получается уравнение, решение которого — синус. А сам синус, как мы видели в прошлом параграфе, есть тень вращения. Здесь эти нити сойдутся."
+    ],
+    "standNote": "На стенде груз на пружине и рядом — вращающееся колесо-фантом. Подберите их так, чтобы движения совпали: тень точки на колесе идёт ровно вместе с грузом. Это и есть главное, что нужно унести из параграфа. Меняйте массу и жёсткость: период зависит от них — и не зависит от амплитуды. Качните сильнее — груз пройдёт больший путь, но за то же время.",
+    "formula": {
+      "name": "Закон Гука и уравнение гармонического осциллятора",
+      "latex": "F = -kx \\qquad \\Longrightarrow \\qquad x(t) = A\\cos(\\omega t + \\varphi_0),\\;\\; \\omega = \\sqrt{\\tfrac{k}{m}}",
+      "alsoKnown": "Ut tensio, sic vis — каково растяжение, такова и сила",
+      "authors": [
+        {
+          "who": "Роберт Гук",
+          "year": "1676",
+          "what": "открыл пропорциональность силы упругости и деформации; опубликовал анаграммой, раскрыв её в 1678 году"
+        },
+        {
+          "who": "Галилео Галилей",
+          "year": "1602",
+          "what": "заметил изохронизм маятника — независимость периода малых качаний от размаха, — засекая время по собственному пульсу"
+        },
+        {
+          "who": "Леонард Эйлер",
+          "year": "1739",
+          "what": "первым систематически решил уравнение гармонических колебаний и ввёл в него привычную нам запись через синусы и косинусы"
+        }
+      ],
+      "story": "Знак минус в законе Гука — самый важный минус в этой теме. Он говорит, что сила всегда направлена против смещения: оттянули вправо — тянет влево, сжали — толкает наружу. Сила не гонит тело, а возвращает его. Именно этот минус превращает статический закон о пружинах в двигатель вечного колебания: тело проскакивает равновесие по инерции, сила разворачивается, и всё повторяется. Уберите минус — и вместо колебания получится взрыв: сила, растущая вдоль смещения, разгоняла бы тело без остановки.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "F",
+          "what": "сила упругости",
+          "unit": "Н",
+          "note": "возвращающая: всегда к положению равновесия, отсюда знак минус"
+        },
+        {
+          "sym": "k",
+          "latex": "k",
+          "what": "жёсткость пружины",
+          "unit": "Н/м",
+          "note": "сколько ньютонов нужно на метр растяжения; свойство конкретной пружины"
+        },
+        {
+          "sym": "x",
+          "latex": "x",
+          "what": "смещение от равновесия",
+          "unit": "м",
+          "note": "отсчитывается от точки, где сила равна нулю"
+        },
+        {
+          "sym": "A",
+          "latex": "A",
+          "what": "амплитуда",
+          "unit": "м",
+          "note": "наибольшее отклонение; задаётся начальным толчком, а не свойствами системы"
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "what": "циклическая частота",
+          "unit": "рад/с",
+          "note": "та же омега, что при вращении, — и это не совпадение"
+        },
+        {
+          "sym": "φ₀",
+          "latex": "\\varphi_0",
+          "what": "начальная фаза",
+          "unit": "рад",
+          "note": "откуда на «колесе» стартует движение в момент t = 0"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод",
+      "lead": "Соединим закон Гука со вторым законом Ньютона и честно решим то, что получится. По дороге встретим первое в курсе дифференциальное уравнение — и увидим, что мы его уже решали, сами того не зная.",
+      "steps": [
+        {
+          "text": "Подставим силу упругости во второй закон Ньютона. Получается уравнение, в котором неизвестна не величина, а целая функция $x(t)$: оно связывает положение тела с его же ускорением.",
+          "latex": "ma = -kx \\;\\;\\Longrightarrow\\;\\; \\ddot{x} = -\\frac{k}{m}\\,x",
+          "figure": "springlaw",
+          "figCaption": "Ускорение пропорционально смещению и направлено против него — вот и всё уравнение."
+        },
+        {
+          "text": "Прочитаем его словами: ускорение пропорционально смещению с обратным знаком. Нужна функция, которая при двукратном дифференцировании воспроизводит саму себя со знаком минус. Таких функций ровно две — синус и косинус.",
+          "latex": "(\\cos\\omega t)'' = -\\omega^{2}\\cos\\omega t",
+          "figure": "sinederiv",
+          "figCaption": "Косинус при двойном дифференцировании возвращается к себе с минусом — он и есть решение."
+        },
+        {
+          "text": "Подставим пробное решение $x = A\\cos\\omega t$ в уравнение и посмотрим, при какой частоте оно сработает. Амплитуда сокращается — уравнению всё равно, насколько сильно качнули. Частота же обязана быть строго определённой.",
+          "latex": "-A\\omega^{2}\\cos\\omega t = -\\frac{k}{m}A\\cos\\omega t \\;\\Longrightarrow\\; \\omega = \\sqrt{\\frac{k}{m}}",
+          "figure": "matchfreq",
+          "figCaption": "Частота определяется системой, амплитуда — начальным толчком. Это разные вещи."
+        },
+        {
+          "text": "Отсюда период. Он растёт с массой (тяжёлое тело поворачивает медленнее) и падает с жёсткостью (тугая пружина возвращает резче). И — поразительно — в нём нет амплитуды: большие и малые качания занимают одно время. Это тот самый изохронизм, который Галилей заметил по пульсу.",
+          "latex": "T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{m}{k}}",
+          "figure": "isochron",
+          "figCaption": "Далёкий путь тело проходит быстрее, короткий — медленнее; время выходит одинаковым."
+        },
+        {
+          "text": "Теперь главное отождествление. Возьмём точку, равномерно бегущую по окружности радиуса $A$ с угловой скоростью $\\omega$. Её проекция на ось — в точности $A\\cos\\omega t$. Гармоническое колебание есть равномерное вращение, на которое мы смотрим сбоку. Фаза — это угол на невидимом колесе.",
+          "latex": "x_{\\text{колеб}}(t) = A\\cos\\omega t = \\text{проекция вращения радиуса } A",
+          "figure": "shadow",
+          "figCaption": "Тень точки на вращающемся колесе движется точно как груз на пружине."
+        },
+        {
+          "text": "Проверим энергию. Кинетическая и потенциальная перекачиваются друг в друга: в крайних точках вся энергия в пружине, в центре — вся в движении. Сумма постоянна, как и положено по теме о сохранении.",
+          "latex": "E = \\frac{mv^{2}}{2} + \\frac{kx^{2}}{2} = \\frac{kA^{2}}{2} = \\text{const}",
+          "figure": "energyswap",
+          "figCaption": "Энергия не теряется, а переливается между движением и деформацией дважды за период."
+        },
+        {
+          "text": "И последний шаг — почему всё это универсально. Любая потенциальная яма вблизи минимума раскладывается по Тейлору: постоянная не влияет, линейный член в минимуме нулевой, и первым работает квадратичный. А квадратичная энергия — это в точности пружина. Малые колебания любой системы гармоничны не по совпадению, а по теореме.",
+          "latex": "U(x) \\approx U_0 + \\frac{1}{2}U''(x_0)\\,x^{2} \\;\\;\\Longrightarrow\\;\\; k_{\\text{эфф}} = U''(x_0)",
+          "figure": "anywell",
+          "figCaption": "Дно любой гладкой ямы — парабола. Поэтому пружина спрятана в каждой устойчивой системе."
+        }
+      ],
+      "plate": "\\omega = \\sqrt{\\dfrac{k}{m}} \\qquad T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+      "plateCap": "Частоту диктует сама система — масса и жёсткость. Амплитуду — тот, кто качнул. Разделение этих ролей и делает осциллятор предсказуемым.",
+      "note": "Формула верна для малых колебаний. У реального маятника при больших углах период начинает зависеть от размаха — закон Гука для него лишь приближение вблизи низшей точки. Граница «малости» у каждой системы своя: пружина честно линейна процентов до десяти деформации, маятник — до углов в десяток градусов, а межатомная связь — до долей ангстрема. За границей начинается нелинейная физика, где синус перестаёт быть ответом."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "items": [
+        {
+          "what": "Что такое дифференциальное уравнение",
+          "why": "Обычное уравнение спрашивает «какое число подходит», дифференциальное — «какая функция подходит». Запись $\\ddot{x} = -\\omega^2 x$ означает: найдите такую зависимость координаты от времени, чтобы её вторая производная в каждый момент равнялась самой функции с минусом. Почти вся фундаментальная физика — от Ньютона до Шрёдингера — записана именно на этом языке: законы задают не траектории, а правила, которым траектории подчиняются.",
+          "latex": "\\ddot{x} + \\omega^{2}x = 0"
+        },
+        {
+          "what": "Производные синуса и косинуса — по кругу",
+          "why": "Дифференцирование сдвигает гармонику на четверть периода: синус переходит в косинус, косинус — в минус синус, и через четыре шага цикл замыкается. Через картину вращения это очевидно: скорость точки на окружности перпендикулярна радиусу, то есть опережает его на 90 градусов. Производная — это поворот фазы.",
+          "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+        },
+        {
+          "what": "Разложение Тейлора вблизи минимума",
+          "why": "Любую гладкую функцию около точки можно приблизить многочленом. В минимуме первая производная равна нулю, поэтому первым значимым членом оказывается квадратичный. Это одно из самых используемых приближений в физике: оно превращает произвольную сложную яму в параболу, а произвольную устойчивую систему — в осциллятор.",
+          "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Пример с числами",
+      "lead": "Проверим формулу периода на автомобильной подвеске — осцилляторе, на котором вы ездите каждый день.",
+      "given": "На одну пружину подвески приходится масса $400$ кг. Жёсткость пружины $k = 25\\,000$ Н/м. Найти период и частоту собственных колебаний кузова.",
+      "law": "$T = 2\\pi\\sqrt{m/k}$",
+      "solution": [
+        {
+          "text": "Считаем отношение под корнем.",
+          "latex": "\\frac{m}{k} = \\frac{400}{25\\,000} = 0{,}016\\ \\text{с}^2"
+        },
+        {
+          "text": "Корень из него.",
+          "latex": "\\sqrt{0{,}016} \\approx 0{,}126\\ \\text{с}"
+        },
+        {
+          "text": "Умножаем на $2\\pi$.",
+          "latex": "T = 6{,}28 \\cdot 0{,}126 \\approx 0{,}8\\ \\text{с}"
+        }
+      ],
+      "answer": "Период около $0{,}8$ с, частота примерно $1{,}25$ Гц",
+      "check": "Правдоподобно: качнувшись на кочке, машина покачивается примерно раз в секунду — это легко проверить, надавив на крыло и отпустив. Частота около одного герца выбрана не случайно: она близка к ритму шага, и тело переносит её комфортнее всего. Жёстче пружины — тряска, мягче — укачивание."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Все три величины здесь — свойства конкретной системы, а не мировые константы. Тем важнее понимать, кто из них чем управляет.",
+      "items": [
+        {
+          "sym": "k",
+          "latex": "k",
+          "name": "Жёсткость",
+          "value": "10–100 (эспандер) · 20 000–60 000 (подвеска)",
+          "unit": "Н / м",
+          "why": "Сила на единицу деформации. Размерность читается как определение: ньютоны на метр. Для последовательно соединённых пружин жёсткости складываются как сопротивления параллельных проводников — обратными величинами.",
+          "mnemo": "Тугая пружина — большое k — быстрые колебания. k стоит в числителе под корнем частоты."
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "name": "Собственная частота",
+          "value": "ω = √(k/m)",
+          "unit": "рад / с",
+          "why": "Частота, на которой система колеблется, будучи предоставлена сама себе. Определяется только устройством системы. В следующем параграфе она станет главным героем: именно на неё нужно попасть внешней силой, чтобы вызвать резонанс.",
+          "mnemo": "Та же буква, что угловая скорость вращения, — потому что это буквально она и есть, для невидимого колеса."
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "name": "Период колебаний",
+          "value": "T = 2π√(m/k)",
+          "unit": "с",
+          "why": "Время одного полного цикла. Масса под корнем в числителе: тяжёлый груз колеблется медленно. Амплитуды в формуле нет — в этом и состоит изохронизм.",
+          "mnemo": "Проверка размерности: корень из кг/(Н/м) = корень из с² = секунды. Сошлось."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Возвращающая сила, пропорциональная смещению, рождает колебание с частотой √(k/m), не зависящей от амплитуды. Само колебание — проекция равномерного вращения, а пружина спрятана в каждой устойчивой системе, потому что дно любой гладкой ямы — парабола.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Минус решает",
+          "text": "F = −kx: сила против смещения. Без минуса был бы взрыв, с минусом — вечное возвращение."
+        },
+        {
+          "icon": "clock",
+          "title": "Частота своя, амплитуда чужая",
+          "text": "ω задаёт система (k и m), амплитуду — начальный толчок. Они независимы."
+        },
+        {
+          "icon": "sigma",
+          "title": "Тень колеса",
+          "text": "Колебание = проекция вращения. Фаза — угол на невидимом колесе."
+        },
+        {
+          "icon": "formula",
+          "title": "Универсальность",
+          "text": "Вблизи минимума любая энергия квадратична, поэтому малые колебания всегда гармоничны."
+        }
+      ],
+      "where": [
+        "Подвеска автомобиля: осциллятор с частотой около герца, настроенный под ритм шага",
+        "Кварцевые часы: кристалл колеблется 32 768 раз в секунду, деля время с точностью до секунд в месяц",
+        "Молекулы — грузики на пружинках-связях; их частоты видны в инфракрасных спектрах",
+        "Динамик и микрофон: мембрана-осциллятор превращает ток в звук и обратно"
+      ],
+      "watchOut": "Частота не зависит от амплитуды, но энергия — зависит, и квадратично: E = kA²/2. Качнули вдвое сильнее — энергии вчетверо больше, а период тот же. Смешение «сильнее» и «быстрее» — типичная ошибка в этой теме."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "Груз на пружине качнули вдвое сильнее — амплитуда выросла с 2 до 4 см. Что произошло с периодом?",
+        "options": [
+          "Вырос вдвое: путь стал длиннее",
+          "Не изменился: период зависит только от массы и жёсткости",
+          "Уменьшился вдвое: сила стала больше",
+          "Вырос в корень из двух раз"
+        ],
+        "answer": 1,
+        "why": "В формуле T = 2π√(m/k) амплитуды нет. При большем размахе тело проходит больший путь, но и движется быстрее — эффекты точно компенсируются. Это изохронизм, открытый Галилеем.",
+        "hint": "Выпишите формулу периода и просто посмотрите, какие буквы в ней есть. Есть ли там амплитуда?"
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "Зачем в законе Гука знак минус?",
+        "options": [
+          "Это соглашение о направлении оси, физики он не меняет",
+          "Он показывает, что сила направлена против смещения — именно это превращает пружину в осциллятор",
+          "Потому что пружина всегда сжимается",
+          "Чтобы энергия получалась положительной"
+        ],
+        "answer": 1,
+        "why": "Минус означает возвращающий характер силы: отклонили — тянет обратно. Сила с плюсом, растущая вдоль смещения, разгоняла бы тело от равновесия без остановки — получилась бы неустойчивость, а не колебание.",
+        "hint": "Мысленно поменяйте минус на плюс и проследите судьбу тела, чуть сдвинутого из равновесия. Вернётся ли оно?"
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "Своими словами: в каком смысле колебание груза на пружине — это вращение? Что играет роль угла?",
+        "keywords": [
+          "проекци",
+          "тень",
+          "колес",
+          "окружност",
+          "фаза",
+          "угол",
+          "сбоку"
+        ],
+        "needed": 1,
+        "why": "Гармоническое колебание есть проекция равномерного вращения на прямую: тень точки, бегущей по окружности радиуса A, движется в точности как груз. Роль угла играет фаза ωt + φ₀ — положение на невидимом колесе.",
+        "hint": "Представьте точку на ободе вращающегося колеса и её тень на стене при боковом освещении. Как движется тень? А что в формуле колебания стоит под косинусом?"
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "Груз массой 1 кг висит на пружине жёсткостью 100 Н/м. Оцените период колебаний в секундах.",
+        "answer": 0.63,
+        "unit": "с",
+        "tolerance": 1.5,
+        "why": "T = 2π√(m/k) = 6,28·√(1/100) = 6,28·0,1 ≈ 0,63 с. В уме: корень из одной сотой — это одна десятая, остаётся умножить на шесть с небольшим.",
+        "hint": "Отношение m/k здесь — круглое число, корень из него берётся мгновенно. Останется умножить на 2π ≈ 6,3."
+      }
+    ],
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Пружину заменит канцелярская резинка, а изохронность проверяется на связке ключей.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Резинка как динамометр",
+          "text": "Подвесьте канцелярскую резинку и цепляйте к ней одинаковые предметы — например, пакетики чая или монеты в мешочке. После каждого добавления отмечайте длину линейкой. Постройте зависимость удлинения от числа грузов.",
+          "answer": "Сначала точки ложатся на прямую: удлинение пропорционально нагрузке, это и есть закон Гука, а наклон прямой даёт жёсткость $k$. Но с какого-то груза прямая заваливается — резинка тянется всё охотнее. Вы нашли предел применимости собственными руками. Дальше идёт область, где материал уже не возвращается к исходной длине: снимите груз и убедитесь, что резинка осталась длиннее, чем была."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Период не зависит от размаха",
+          "text": "Раскачайте связку ключей на шнурке слегка — и сильно. Засеките время двадцати колебаний в обоих случаях. Амплитуда различается в несколько раз, а период получается почти одинаковым. Разве больший путь не требует большего времени?",
+          "answer": "Требует, но при большей амплитуде и скорость пропорционально больше — возвращающая сила растёт вместе со смещением. Эти два эффекта компенсируют друг друга точно, и период оказывается независимым от амплитуды. Свойство называется изохронностью, и заметил его Галилей, наблюдая за качанием лампады в пизанском соборе. Именно на нём стоят все механические часы. Оговорка: для маятника изохронность верна лишь при малых углах — при размахе в шестьдесят градусов период уже на семь процентов больше."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Спиральная пружина решила задачу долготы",
+          "text": "Пока часы шли благодаря маятнику, они работали только на суше: качка сбивала ход, и корабль не мог определить долготу — для этого нужно точно знать время порта отправления. Замена маятника балансирным колесом со спиральной пружиной, к которой приложил руку Гук, сделала ход независимым от наклона и тряски. Задачу окончательно закрыл Джон Гаррисон, чей морской хронометр за 81 день плавания в 1761 году ушёл на пять секунд. Колебание с постоянным периодом оказалось буквально навигационным прибором."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Минус в законе Гука — это вся суть",
+          "text": "В записи $F=-kx$ главное не $k$, а знак: сила всегда направлена против смещения, то есть возвращает тело к положению равновесия. Именно из-за минуса решение получается колебательным, а не разбегающимся. Частота $\\omega=\\sqrt{k/m}$ читается так: жёстче пружина — чаще колебания, тяжелее груз — реже. Учетверение массы снижает частоту вдвое, потому что под корнем."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Период на глаз",
+          "text": "Груз в один килограмм на пружине жёсткостью 40 ньютонов на метр даёт $\\omega=\\sqrt{40/1}\\approx6{,}3$ радиана в секунду, то есть период около одной секунды. Проверить жёсткость просто: если под килограммовым грузом пружина растянулась на четверть метра, то $k=mg/x \\approx 10/0{,}25=40$. Так по одному измерению линейкой предсказывается период колебаний."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Линейность заканчивается",
+          "text": "Закон Гука — первое приближение, верное при малых деформациях. За пределом упругости материал течёт и не возвращается в исходную форму, а затем разрушается. С другой стороны, приближение неожиданно универсально: почти любая яма потенциальной энергии вблизи дна выглядит как парабола, поэтому и колебания атомов в кристалле, и молекулярные связи описываются той же формулой — до тех пор, пока амплитуда мала."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Что стоит на осцилляторе",
+      "lead": "Гармоническое колебание — самая переиспользуемая модель физики: она появляется всюду, где есть возврат к равновесию.",
+      "items": [
+        {
+          "h": "Отсчёт времени",
+          "text": "От маятниковых часов до кварцевых: кристалл кварца — тот же осциллятор, только его колебания электрические и идут с частотой 32 768 герц. Деление этой частоты пополам пятнадцать раз даёт ровно одну секунду."
+        },
+        {
+          "h": "Подвеска и виброзащита",
+          "text": "Пружина с амортизатором — осциллятор с затуханием. Задача конструктора: подобрать затухание так, чтобы колебание гасло за один период, иначе машину будет раскачивать, а слишком жёсткое гашение сделает ход тряским."
+        },
+        {
+          "h": "Сейсмографы",
+          "text": "Прибор регистрирует смещение массы на пружине относительно корпуса. Собственную частоту делают заведомо ниже частоты сейсмических волн, чтобы масса оставалась почти неподвижной, пока земля движется под ней."
+        },
+        {
+          "h": "Музыкальные инструменты",
+          "text": "Высота звука струны определяется натяжением и массой — той же формулой, что и частота груза на пружине. Настройка инструмента есть подгонка $\\sqrt{k/m}$ вручную."
+        },
+        {
+          "h": "Теплоёмкость твёрдых тел",
+          "text": "Атом в кристалле сидит в яме, дно которой параболическое, — значит, это осциллятор. Из этой картины Эйнштейн и Дебай вывели, почему теплоёмкость падает при охлаждении: колебания квантуются, и при низкой температуре их просто нечем возбудить."
+        }
+      ]
+    }
+  },
+  "en": {
+    "title": "Hooke's Law and the Oscillator",
+    "subtitle": "Paragraph 2 · Oscillation as a Projection of Rotation",
+    "intro": [
+      "In 1676, Robert Hooke published a strange string: ceiiinosssttuv. It was an anagram — a way to stake a claim to a discovery without revealing it until the work was done. Two years later he gave the solution: ut tensio, sic vis — 'as the extension, so the force.'",
+      "Behind this Latin stands the first quantitative law of deformation in history: stretch a spring twice as hard — it responds with twice the force. A simple proportion, but from it grew the strength of materials, seismology, the theory of molecular bonds — and the entire physics of oscillations.",
+      "Because once you combine Hooke's law with Newton's second law, you get an equation whose solution is a sine. And the sine itself, as we saw in the previous paragraph, is the shadow of rotation. Here these threads converge."
+    ],
+    "standNote": "On the stand, a weight on a spring and next to it — a rotating phantom wheel. Adjust them so that the motions coincide: the shadow of a point on the wheel moves exactly with the weight. That is the main takeaway from this paragraph. Change the mass and stiffness: the period depends on them — and does not depend on the amplitude. Give a stronger push — the weight travels a longer path, but in the same time.",
+    "formula": {
+      "name": "Hooke's Law and the Equation of the Harmonic Oscillator",
+      "latex": "F = -kx \\qquad \\Longrightarrow \\qquad x(t) = A\\cos(\\omega t + \\varphi_0),\\;\\; \\omega = \\sqrt{\\tfrac{k}{m}}",
+      "alsoKnown": "Ut tensio, sic vis — as the extension, so the force",
+      "authors": [
+        {
+          "who": "Robert Hooke",
+          "year": "1676",
+          "what": "discovered the proportionality of elastic force and deformation; published it as an anagram, revealing it in 1678"
+        },
+        {
+          "who": "Galileo Galilei",
+          "year": "1602",
+          "what": "noted the isochronism of the pendulum — independence of the period of small swings from the amplitude — by timing it with his own pulse"
+        },
+        {
+          "who": "Leonhard Euler",
+          "year": "1739",
+          "what": "first systematically solved the equation of harmonic oscillations and introduced the notation with sines and cosines that we use today"
+        }
+      ],
+      "story": "The minus sign in Hooke's law is the most important minus in this topic. It says that the force is always directed opposite to the displacement: pull it to the right — it pulls left, compress it — it pushes out. The force does not drive the body, but restores it. It is this minus that turns a static law about springs into the engine of perpetual oscillation: the body overshoots equilibrium by inertia, the force reverses direction, and everything repeats. Remove the minus — and instead of oscillation you get an explosion: a force growing with displacement would accelerate the body without stopping.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "F",
+          "what": "elastic force",
+          "unit": "N",
+          "note": "restoring: always toward equilibrium, hence the minus sign"
+        },
+        {
+          "sym": "k",
+          "latex": "k",
+          "what": "spring constant",
+          "unit": "N/m",
+          "note": "how many newtons per meter of extension; property of a given spring"
+        },
+        {
+          "sym": "x",
+          "latex": "x",
+          "what": "displacement from equilibrium",
+          "unit": "m",
+          "note": "measured from the point where force is zero"
+        },
+        {
+          "sym": "A",
+          "latex": "A",
+          "what": "amplitude",
+          "unit": "m",
+          "note": "maximum displacement; set by the initial push, not by the system's properties"
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "what": "angular frequency",
+          "unit": "rad/s",
+          "note": "the same omega as in rotation — and that's no coincidence"
+        },
+        {
+          "sym": "φ₀",
+          "latex": "\\varphi_0",
+          "what": "initial phase",
+          "unit": "rad",
+          "note": "where on the 'wheel' the motion starts at t = 0"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous derivation",
+      "lead": "Let's combine Hooke's law with Newton's second law and honestly solve what we get. Along the way, we'll encounter our first differential equation in this course — and we'll see that we've already solved it without knowing it.",
+      "steps": [
+        {
+          "text": "Substitute the elastic force into Newton's second law. The resulting equation has not an unknown quantity, but an entire function $x(t)$: it relates the body's position to its acceleration.",
+          "latex": "ma = -kx \\;\\;\\Longrightarrow\\;\\; \\ddot{x} = -\\frac{k}{m}\\,x",
+          "figure": "springlaw",
+          "figCaption": "Acceleration is proportional to displacement and directed opposite to it — that's the whole equation."
+        },
+        {
+          "text": "Let's read it in words: acceleration is proportional to displacement with a minus sign. We need a function that, when differentiated twice, reproduces itself with a minus sign. There are exactly two such functions — sine and cosine.",
+          "latex": "(\\cos\\omega t)'' = -\\omega^{2}\\cos\\omega t",
+          "figure": "sinederiv",
+          "figCaption": "Cosine, when differentiated twice, returns to itself with a minus — it is the solution."
+        },
+        {
+          "text": "Substitute the trial solution $x = A\\cos\\omega t$ into the equation and see at what frequency it works. The amplitude cancels out — the equation doesn't care how hard we pushed. But the frequency must be strictly determined.",
+          "latex": "-A\\omega^{2}\\cos\\omega t = -\\frac{k}{m}A\\cos\\omega t \\;\\Longrightarrow\\; \\omega = \\sqrt{\\frac{k}{m}}",
+          "figure": "matchfreq",
+          "figCaption": "The frequency is determined by the system, the amplitude by the initial push. These are different things."
+        },
+        {
+          "text": "From here we get the period. It grows with mass (a heavy body turns slower) and decreases with stiffness (a stiff spring returns more sharply). And — remarkably — it contains no amplitude: large and small oscillations take the same time. This is the isochronism that Galileo noticed by his pulse.",
+          "latex": "T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{m}{k}}",
+          "figure": "isochron",
+          "figCaption": "A distant path is covered faster, a short one slower; the time turns out the same."
+        },
+        {
+          "text": "Now the key identification. Take a point moving uniformly on a circle of radius $A$ with angular speed $\\omega$. Its projection onto an axis is exactly $A\\cos\\omega t$. Harmonic oscillation is uniform rotation seen from the side. Phase is the angle on an invisible wheel.",
+          "latex": "x_{\\text{osc}}(t) = A\\cos\\omega t = \\text{projection of rotating radius } A",
+          "figure": "shadow",
+          "figCaption": "The shadow of a point on a rotating wheel moves exactly like a mass on a spring."
+        },
+        {
+          "text": "Let's check the energy. Kinetic and potential energies transfer into each other: at the extreme points all energy is in the spring, at the center — all in motion. The sum is constant, as expected from the law of conservation.",
+          "latex": "E = \\frac{mv^{2}}{2} + \\frac{kx^{2}}{2} = \\frac{kA^{2}}{2} = \\text{const}",
+          "figure": "energyswap",
+          "figCaption": "Energy is not lost, but flows between motion and deformation twice per period."
+        },
+        {
+          "text": "And the last step — why this is universal. Any potential well near its minimum can be expanded in a Taylor series: the constant does not affect motion, the linear term is zero at the minimum, and the first non-zero term is quadratic. And quadratic energy is exactly a spring. Small oscillations of any system are harmonic not by coincidence, but by theorem.",
+          "latex": "U(x) \\approx U_0 + \\frac{1}{2}U''(x_0)\\,x^{2} \\;\\;\\Longrightarrow\\;\\; k_{\\text{eff}} = U''(x_0)",
+          "figure": "anywell",
+          "figCaption": "The bottom of any smooth well is a parabola. Therefore, a spring is hidden in every stable system."
+        }
+      ],
+      "plate": "\\omega = \\sqrt{\\dfrac{k}{m}} \\qquad T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+      "plateCap": "The frequency is dictated by the system itself — mass and stiffness. The amplitude by the one who pushed. This separation of roles makes the oscillator predictable.",
+      "note": "The formula is valid for small oscillations. For a real pendulum at large angles, the period begins to depend on amplitude — Hooke's law is only an approximation near the lowest point. The boundary of 'smallness' is different for each system: a spring is honestly linear up to about ten percent deformation, a pendulum up to about ten degrees, and an interatomic bond up to fractions of an angstrom. Beyond that, nonlinear physics begins, where sine is no longer the answer."
+    },
+    "math": {
+      "title": "The math needed here",
+      "items": [
+        {
+          "what": "What is a differential equation",
+          "why": "An ordinary equation asks 'what number fits', a differential equation asks 'what function fits'. The notation $\\ddot{x} = -\\omega^2 x$ means: find a time-dependence of the coordinate such that its second derivative at every moment equals the function itself with a minus sign. Nearly all fundamental physics — from Newton to Schrödinger — is written in this language: laws do not prescribe trajectories, but rules that trajectories obey.",
+          "latex": "\\ddot{x} + \\omega^{2}x = 0"
+        },
+        {
+          "what": "Derivatives of sine and cosine — cyclic",
+          "why": "Differentiation shifts a harmonic by a quarter period: sine becomes cosine, cosine becomes minus sine, and after four steps the cycle closes. From the rotation picture this is obvious: the velocity of a point on a circle is perpendicular to the radius, i.e., ahead by 90 degrees. The derivative is a phase shift.",
+          "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+        },
+        {
+          "what": "Taylor expansion near a minimum",
+          "why": "Any smooth function near a point can be approximated by a polynomial. At a minimum, the first derivative is zero, so the first significant term is quadratic. This is one of the most used approximations in physics: it turns an arbitrary complicated well into a parabola, and an arbitrary stable system into an oscillator.",
+          "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Example with numbers",
+      "lead": "Let's check the period formula on a car suspension — an oscillator you ride every day.",
+      "given": "A single suspension spring carries a mass of $400$ kg. Spring stiffness $k = 25\\,000$ N/m. Find the period and frequency of the body's natural oscillations.",
+      "law": "$T = 2\\pi\\sqrt{m/k}$",
+      "solution": [
+        {
+          "text": "Compute the ratio under the square root.",
+          "latex": "\\frac{m}{k} = \\frac{400}{25\\,000} = 0{,}016\\ \\text{s}^2"
+        },
+        {
+          "text": "Square root of that.",
+          "latex": "\\sqrt{0{,}016} \\approx 0{,}126\\ \\text{s}"
+        },
+        {
+          "text": "Multiply by $2\\pi$.",
+          "latex": "T = 6{,}28 \\cdot 0{,}126 \\approx 0{,}8\\ \\text{s}"
+        }
+      ],
+      "answer": "Period about $0{,}8$ s, frequency about $1{,}25$ Hz",
+      "check": "Plausible: after hitting a bump, the car bounces roughly once per second — you can easily test this by pressing down on the fender and releasing. The frequency around one hertz is no accident: it is close to the rhythm of walking, and the body withstands it most comfortably. Stiffer springs cause shaking, softer ones cause motion sickness."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "All three quantities here are properties of a particular system, not universal constants. That makes it all the more important to understand what each one controls.",
+      "items": [
+        {
+          "sym": "k",
+          "latex": "k",
+          "name": "Stiffness",
+          "value": "10–100 (exercise band) · 20 000–60 000 (suspension)",
+          "unit": "N / m",
+          "why": "Force per unit deformation. The dimension reads as its definition: newtons per meter. For springs connected in series, stiffnesses add like resistances of parallel conductors — by reciprocals.",
+          "mnemo": "A stiff spring — large k — fast oscillations. k is in the numerator under the frequency square root."
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "name": "Natural frequency",
+          "value": "ω = √(k/m)",
+          "unit": "rad / s",
+          "why": "The frequency at which the system oscillates when left to itself. Determined only by the system's structure. In the next section it becomes the main character: it is this frequency that an external force must match to cause resonance.",
+          "mnemo": "Same letter as angular velocity of rotation — because that is literally what it is, for an invisible wheel."
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "name": "Period of oscillation",
+          "value": "T = 2π√(m/k)",
+          "unit": "s",
+          "why": "Time for one complete cycle. Mass is in the numerator under the square root: a heavy load oscillates slowly. Amplitude does not appear in the formula — this is isochronism.",
+          "mnemo": "Dimensional check: square root of kg/(N/m) = square root of s² = seconds. Works."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "A restoring force proportional to displacement produces an oscillation with frequency √(k/m) independent of amplitude. The oscillation itself is the projection of uniform circular motion, and the spring is hidden in every stable system because the bottom of any smooth well is a parabola.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Minus decides",
+          "text": "F = −kx: force opposes displacement. Without the minus there would be an explosion, with it — eternal return."
+        },
+        {
+          "icon": "clock",
+          "title": "Frequency is own, amplitude is alien",
+          "text": "ω is set by the system (k and m), amplitude by the initial push. They are independent."
+        },
+        {
+          "icon": "sigma",
+          "title": "Shadow of a wheel",
+          "text": "Oscillation = projection of rotation. Phase is the angle on an invisible wheel."
+        },
+        {
+          "icon": "formula",
+          "title": "Universality",
+          "text": "Near a minimum any energy is quadratic, so small oscillations are always harmonic."
+        }
+      ],
+      "where": [
+        "Car suspension: oscillator with frequency around one hertz, tuned to the rhythm of walking",
+        "Quartz watches: crystal oscillates 32,768 times per second, dividing time with accuracy to seconds per month",
+        "Molecules — masses on spring-like bonds; their frequencies show up in infrared spectra",
+        "Loudspeaker and microphone: membrane-oscillator converts current into sound and back"
+      ],
+      "watchOut": "Frequency does not depend on amplitude, but energy does, and quadratically: E = kA²/2. Push twice as hard — four times the energy, but the same period. Confusing 'stronger' with 'faster' is a typical mistake in this topic."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "A weight on a spring was swung twice as hard — the amplitude increased from 2 to 4 cm. What happened to the period?",
+        "options": [
+          "Increased twofold: the path became longer",
+          "Did not change: the period depends only on mass and stiffness",
+          "Decreased twofold: the force became greater",
+          "Increased by a factor of root two"
+        ],
+        "answer": 1,
+        "why": "In the formula T = 2π√(m/k) there is no amplitude. With a larger swing, the body travels a longer path, but also moves faster — the effects exactly cancel out. This is isochronism, discovered by Galileo.",
+        "hint": "Write out the formula for the period and just look at what letters are in it. Is amplitude there?"
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "Why is there a minus sign in Hooke's law?",
+        "options": [
+          "It is a convention about the direction of the axis, it does not change the physics",
+          "It shows that the force is directed opposite to the displacement — this is what turns the spring into an oscillator",
+          "Because the spring always compresses",
+          "To make the energy positive"
+        ],
+        "answer": 1,
+        "why": "The minus indicates the restoring nature of the force: if you displace it, it pulls back. A force with a plus, growing along the displacement, would accelerate the body away from equilibrium without stopping — resulting in instability, not oscillation.",
+        "hint": "Mentally change the minus to a plus and trace the fate of a body slightly displaced from equilibrium. Will it return?"
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "In your own words: in what sense is the oscillation of a weight on a spring a rotation? What plays the role of the angle?",
+        "keywords": [
+          "projection",
+          "shadow",
+          "wheel",
+          "circle",
+          "phase",
+          "angle",
+          "from the side"
+        ],
+        "needed": 1,
+        "why": "A harmonic oscillation is the projection of uniform rotation onto a line: the shadow of a point moving along a circle of radius A moves exactly like the weight. The role of the angle is played by the phase ωt + φ₀ — the position on an invisible wheel.",
+        "hint": "Imagine a point on the rim of a rotating wheel and its shadow on a wall with side lighting. How does the shadow move? And what in the oscillation formula stands under the cosine?"
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "A weight of mass 1 kg hangs on a spring with stiffness 100 N/m. Estimate the period of oscillation in seconds.",
+        "answer": 0.63,
+        "unit": "s",
+        "tolerance": 1.5,
+        "why": "T = 2π√(m/k) = 6,28·√(1/100) = 6,28·0,1 ≈ 0,63 s. In your head: the square root of one hundredth is one tenth, then multiply by a little over six.",
+        "hint": "The ratio m/k here is a round number, its square root is taken instantly. Then multiply by 2π ≈ 6,3."
+      }
+    ]
+  },
+  "es": {
+    "title": "Ley de Hooke y el oscilador",
+    "subtitle": "Párrafo 2 · La oscilación como proyección de la rotación",
+    "intro": [
+      "En 1676, Robert Hooke publicó una extraña línea: ceiiinosssttuv. Era un anagrama — una forma de reclamar un descubrimiento sin revelarlo hasta que el trabajo estuviera terminado. Dos años después, dio la solución: ut tensio, sic vis — 'tal es la extensión, tal es la fuerza'.",
+      "Detrás de este latín se encuentra la primera ley cuantitativa de la deformación en la historia: estira el resorte el doble — responderá con el doble de fuerza. Una proporción simple, pero de ella surgieron la resistencia de materiales, la sismología, la teoría de los enlaces moleculares — y toda la física de las oscilaciones.",
+      "Porque al combinar la ley de Hooke con la segunda ley de Newton, se obtiene una ecuación cuya solución es un seno. Y el seno mismo, como vimos en el párrafo anterior, es la sombra de una rotación. Aquí estos hilos convergerán."
+    ],
+    "standNote": "En el stand, una masa en un resorte y junto a ella, una rueda fantasma que gira. Ajústalas de modo que los movimientos coincidan: la sombra de un punto en la rueda va exactamente junto con la masa. Esto es lo principal que debes llevarte del párrafo. Cambia la masa y la rigidez: el período depende de ellas — y no de la amplitud. Empuja más fuerte: la masa recorrerá un camino mayor, pero en el mismo tiempo.",
+    "formula": {
+      "name": "Ley de Hooke y ecuación del oscilador armónico",
+      "latex": "F = -kx \\qquad \\Longrightarrow \\qquad x(t) = A\\cos(\\omega t + \\varphi_0),\\;\\; \\omega = \\sqrt{\\tfrac{k}{m}}",
+      "alsoKnown": "Ut tensio, sic vis — tal es la extensión, tal es la fuerza",
+      "authors": [
+        {
+          "who": "Robert Hooke",
+          "year": 1676,
+          "what": "descubrió la proporcionalidad entre la fuerza elástica y la deformación; la publicó como anagrama, revelándola en 1678"
+        },
+        {
+          "who": "Galileo Galilei",
+          "year": 1602,
+          "what": "observó el isocronismo del péndulo — independencia del período de pequeñas oscilaciones respecto a la amplitud — midiendo el tiempo con su propio pulso"
+        },
+        {
+          "who": "Leonhard Euler",
+          "year": 1739,
+          "what": "resolvió sistemáticamente por primera vez la ecuación de las oscilaciones armónicas e introdujo la notación habitual con senos y cosenos"
+        }
+      ],
+      "story": "El signo menos en la ley de Hooke es el signo más importante en este tema. Nos dice que la fuerza siempre se dirige en contra del desplazamiento: si tiras hacia la derecha, tira hacia la izquierda; si comprimes, empuja hacia afuera. La fuerza no impulsa el cuerpo, sino que lo devuelve. Es este signo menos el que convierte una ley estática sobre resortes en el motor de una oscilación eterna: el cuerpo pasa por el equilibrio por inercia, la fuerza se invierte, y todo se repite. Quita el signo menos — y en lugar de una oscilación tendrás una explosión: una fuerza que crece con el desplazamiento aceleraría el cuerpo sin parar.",
+      "symbols": [
+        {
+          "sym": "F",
+          "latex": "F",
+          "what": "fuerza elástica",
+          "unit": "N",
+          "note": "restauradora: siempre hacia la posición de equilibrio, de ahí el signo menos"
+        },
+        {
+          "sym": "k",
+          "latex": "k",
+          "what": "rigidez del resorte",
+          "unit": "N/m",
+          "note": "cuántos newtons se requieren por metro de estiramiento; propiedad del resorte particular"
+        },
+        {
+          "sym": "x",
+          "latex": "x",
+          "what": "desplazamiento desde el equilibrio",
+          "unit": "m",
+          "note": "se mide desde el punto donde la fuerza es cero"
+        },
+        {
+          "sym": "A",
+          "latex": "A",
+          "what": "amplitud",
+          "unit": "m",
+          "note": "máxima desviación; está determinada por el impulso inicial, no por las propiedades del sistema"
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "what": "frecuencia angular",
+          "unit": "rad/s",
+          "note": "la misma omega que en la rotación — y no es casualidad"
+        },
+        {
+          "sym": "φ₀",
+          "latex": "\\varphi_0",
+          "what": "fase inicial",
+          "unit": "rad",
+          "note": "desde dónde en la 'rueda' comienza el movimiento en el instante t = 0"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa",
+      "lead": "Combinemos la ley de Hooke con la segunda ley de Newton y resolvamos honestamente lo que resulte. En el camino encontraremos la primera ecuación diferencial del curso — y veremos que ya la habíamos resuelto, sin saberlo.",
+      "steps": [
+        {
+          "text": "Sustituyamos la fuerza elástica en la segunda ley de Newton. Se obtiene una ecuación en la que la incógnita no es una magnitud, sino una función completa $x(t)$: relaciona la posición del cuerpo con su propia aceleración.",
+          "latex": "ma = -kx \\;\\;\\Longrightarrow\\;\\; \\ddot{x} = -\\frac{k}{m}\\,x",
+          "figure": "springlaw",
+          "figCaption": "La aceleración es proporcional al desplazamiento y opuesta a él — esa es toda la ecuación."
+        },
+        {
+          "text": "Leámoslo en palabras: la aceleración es proporcional al desplazamiento con signo opuesto. Necesitamos una función que al derivarse dos veces se reproduzca a sí misma con signo menos. Hay exactamente dos funciones así: el seno y el coseno.",
+          "latex": "(\\cos\\omega t)'' = -\\omega^{2}\\cos\\omega t",
+          "figure": "sinederiv",
+          "figCaption": "El coseno al derivarse dos veces vuelve a sí mismo con un signo menos — esa es la solución."
+        },
+        {
+          "text": "Sustituyamos la solución de prueba $x = A\\cos\\omega t$ en la ecuación y veamos con qué frecuencia funciona. La amplitud se cancela — a la ecuación le da igual cuánto se haya desplazado. La frecuencia, en cambio, debe estar estrictamente determinada.",
+          "latex": "-A\\omega^{2}\\cos\\omega t = -\\frac{k}{m}A\\cos\\omega t \\;\\Longrightarrow\\; \\omega = \\sqrt{\\frac{k}{m}}",
+          "figure": "matchfreq",
+          "figCaption": "La frecuencia la determina el sistema; la amplitud, el impulso inicial. Son cosas distintas."
+        },
+        {
+          "text": "De aquí el período. Crece con la masa (un cuerpo pesado oscila más lento) y decrece con la rigidez (un resorte duro regresa más brusco). Y —sorprendentemente— no contiene la amplitud: oscilaciones grandes y pequeñas toman el mismo tiempo. Es el mismo isocronismo que Galileo notó con su pulso.",
+          "latex": "T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{m}{k}}",
+          "figure": "isochron",
+          "figCaption": "Un camino largo se recorre más rápido, uno corto más lento; el tiempo resulta igual."
+        },
+        {
+          "text": "Ahora la identificación clave. Tomemos un punto que se mueve uniformemente sobre un círculo de radio $A$ con velocidad angular $\\omega$. Su proyección sobre un eje es exactamente $A\\cos\\omega t$. Una oscilación armónica es un movimiento circular uniforme visto de lado. La fase es el ángulo en la rueda invisible.",
+          "latex": "x_{\\text{колеб}}(t) = A\\cos\\omega t = \\text{проекция вращения радиуса } A",
+          "figure": "shadow",
+          "figCaption": "La sombra de un punto en una rueda giratoria se mueve exactamente como la masa en un resorte."
+        },
+        {
+          "text": "Verifiquemos la energía. La cinética y la potencial se intercambian: en los extremos toda la energía está en el resorte, en el centro toda está en el movimiento. La suma es constante, como debe ser según la conservación.",
+          "latex": "E = \\frac{mv^{2}}{2} + \\frac{kx^{2}}{2} = \\frac{kA^{2}}{2} = \\text{const}",
+          "figure": "energyswap",
+          "figCaption": "La energía no se pierde, sino que fluye entre movimiento y deformación dos veces por período."
+        },
+        {
+          "text": "Y el último paso — por qué todo esto es universal. Cualquier pozo de potencial cerca del mínimo se expande en serie de Taylor: la constante no afecta, el término lineal en el mínimo es nulo, y el primero que importa es el cuadrático. Y la energía cuadrática es exactamente un resorte. Las pequeñas oscilaciones de cualquier sistema son armónicas no por casualidad, sino por teorema.",
+          "latex": "U(x) \\approx U_0 + \\frac{1}{2}U''(x_0)\\,x^{2} \\;\\;\\Longrightarrow\\;\\; k_{\\text{эфф}} = U''(x_0)",
+          "figure": "anywell",
+          "figCaption": "El fondo de cualquier pozo suave es una parábola. Por eso hay un resorte oculto en todo sistema estable."
+        }
+      ],
+      "plate": "\\omega = \\sqrt{\\dfrac{k}{m}} \\qquad T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+      "plateCap": "La frecuencia la dicta el sistema — masa y rigidez. La amplitud, quien lo puso en movimiento. La separación de estos roles hace predecible al oscilador.",
+      "note": "La fórmula es válida para pequeñas oscilaciones. En un péndulo real, para ángulos grandes el período comienza a depender de la amplitud — la ley de Hooke es solo una aproximación cerca del punto más bajo. El límite de 'pequeñez' es diferente para cada sistema: un resorte es honestamente lineal hasta alrededor del diez por ciento de deformación, un péndulo hasta ángulos de una decena de grados, y un enlace interatómico hasta fracciones de angstrom. Más allá comienza la física no lineal, donde el seno deja de ser la respuesta."
+    },
+    "math": {
+      "title": "Matemáticas que fueron necesarias aquí",
+      "items": [
+        {
+          "what": "Qué es una ecuación diferencial",
+          "why": "Una ecuación ordinaria pregunta 'qué número es válido'; una ecuación diferencial pregunta 'qué función es válida'. La notación $\\ddot{x} = -\\omega^2 x$ significa: encuentre una dependencia de la coordenada con el tiempo tal que su segunda derivada en cada instante sea igual a la propia función con signo menos. Casi toda la física fundamental —desde Newton hasta Schrödinger— está escrita en este lenguaje: las leyes no especifican trayectorias, sino reglas a las que las trayectorias obedecen.",
+          "latex": "\\ddot{x} + \\omega^{2}x = 0"
+        },
+        {
+          "what": "Derivadas del seno y coseno — en círculo",
+          "why": "La derivación desplaza la armónica un cuarto de período: el seno se convierte en coseno, el coseno en menos seno, y después de cuatro pasos el ciclo se cierra. A través de la imagen de rotación es obvio: la velocidad de un punto en el círculo es perpendicular al radio, es decir, lo adelanta en 90 grados. La derivada es un giro de fase.",
+          "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+        },
+        {
+          "what": "Expansión de Taylor cerca del mínimo",
+          "why": "Cualquier función suave cerca de un punto se puede aproximar por un polinomio. En el mínimo la primera derivada es cero, por lo que el primer término significativo resulta ser el cuadrático. Esta es una de las aproximaciones más utilizadas en física: convierte un pozo complicado arbitrario en una parábola, y un sistema estable arbitrario en un oscilador.",
+          "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+        }
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números",
+      "lead": "Comprobemos la fórmula del período en la suspensión de un automóvil, un oscilador en el que viaja todos los días.",
+      "given": "A un resorte de la suspensión le corresponde una masa de $400$ kg. La rigidez del resorte es $k = 25\\,000$ N/m. Hallar el período y la frecuencia de las oscilaciones propias de la carrocería.",
+      "law": "$T = 2\\pi\\sqrt{m/k}$",
+      "solution": [
+        {
+          "text": "Calculamos la relación bajo la raíz.",
+          "latex": "\\frac{m}{k} = \\frac{400}{25\\,000} = 0{,}016\\ \\text{с}^2"
+        },
+        {
+          "text": "Raíz cuadrada de la misma.",
+          "latex": "\\sqrt{0{,}016} \\approx 0{,}126\\ \\text{с}"
+        },
+        {
+          "text": "Multiplicamos por $2\\pi$.",
+          "latex": "T = 6{,}28 \\cdot 0{,}126 \\approx 0{,}8\\ \\text{с}"
+        }
+      ],
+      "answer": "Período aproximadamente $0{,}8$ s, frecuencia aproximadamente $1{,}25$ Hz",
+      "check": "Plausible: al pasar sobre un bache, el coche se balancea aproximadamente una vez por segundo; esto se puede comprobar fácilmente presionando el guardabarros y soltándolo. La frecuencia de aproximadamente un hercio no se eligió al azar: está cerca del ritmo de la marcha y el cuerpo la tolera con mayor comodidad. Muelles más rígidos producen sacudidas, más blandos producen mareo."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Las tres magnitudes aquí son propiedades de un sistema concreto, no constantes universales. Por eso es más importante entender cuál controla qué.",
+      "items": [
+        {
+          "sym": "k",
+          "latex": "k",
+          "name": "Rigidez",
+          "value": "10–100 (elástico) · 20 000–60 000 (suspensión)",
+          "unit": "Н / м",
+          "why": "Fuerza por unidad de deformación. La dimensión se lee como la definición: newtons por metro. Para resortes conectados en serie, las rigideces se suman como resistencias en paralelo: mediante inversos.",
+          "mnemo": "Resorte tenso — k grande — oscilaciones rápidas. k está en el numerador bajo la raíz de la frecuencia."
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "name": "Frecuencia propia",
+          "value": "ω = √(k/m)",
+          "unit": "рад / с",
+          "why": "Frecuencia a la que oscila el sistema cuando se deja a su libre evolución. Está determinada únicamente por la configuración del sistema. En el siguiente apartado será la protagonista: es la frecuencia que debe igualar una fuerza externa para provocar resonancia.",
+          "mnemo": "La misma letra que la velocidad angular de rotación, porque literalmente lo es, para una rueda invisible."
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "name": "Período de oscilación",
+          "value": "T = 2π√(m/k)",
+          "unit": "с",
+          "why": "Tiempo de un ciclo completo. La masa está bajo la raíz en el numerador: una carga pesada oscila lentamente. No aparece la amplitud en la fórmula — en eso consiste el isocronismo.",
+          "mnemo": "Comprobación dimensional: raíz de kg/(N/m) = raíz de s² = segundos. Coincide."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Una fuerza restauradora proporcional al desplazamiento genera una oscilación con frecuencia √(k/m), independiente de la amplitud. La oscilación misma es una proyección de un movimiento circular uniforme, y el resorte está oculto en todo sistema estable, porque el fondo de cualquier pozo suave es una parábola.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "El menos decide",
+          "text": "F = −kx: fuerza opuesta al desplazamiento. Sin el menos habría una explosión, con el menos, retorno eterno."
+        },
+        {
+          "icon": "clock",
+          "title": "Frecuencia propia, amplitud ajena",
+          "text": "ω la define el sistema (k y m), la amplitud el impulso inicial. Son independientes."
+        },
+        {
+          "icon": "sigma",
+          "title": "Sombra de la rueda",
+          "text": "Oscilación = proyección de una rotación. La fase es el ángulo en la rueda invisible."
+        },
+        {
+          "icon": "formula",
+          "title": "Universalidad",
+          "text": "Cerca de un mínimo, cualquier energía es cuadrática, por lo que las oscilaciones pequeñas son siempre armónicas."
+        }
+      ],
+      "where": [
+        "Suspensión de automóvil: oscilador con frecuencia de aproximadamente un hercio, sintonizado al ritmo de la marcha",
+        "Reloj de cuarzo: el cristal oscila 32 768 veces por segundo, dividiendo el tiempo con precisión de segundos al mes",
+        "Moléculas: masitas en resortes (enlaces); sus frecuencias se ven en espectros infrarrojos",
+        "Altavoz y micrófono: la membrana osciladora convierte corriente en sonido y viceversa"
+      ],
+      "watchOut": "La frecuencia no depende de la amplitud, pero la energía sí, y de forma cuadrática: E = kA²/2. Si se empuja el doble de fuerte, la energía es cuatro veces mayor, pero el período es el mismo. Confundir 'más fuerte' con 'más rápido' es un error típico en este tema."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "Se balanceó la carga en un resorte con el doble de fuerza — la amplitud aumentó de 2 a 4 cm. ¿Qué ocurrió con el período?",
+        "options": [
+          "Se duplicó: el recorrido se hizo más largo",
+          "No cambió: el período depende solo de la masa y la rigidez",
+          "Se redujo a la mitad: la fuerza se hizo mayor",
+          "Aumentó en un factor de raíz de dos"
+        ],
+        "answer": 1,
+        "why": "En la fórmula T = 2π√(m/k) no aparece la amplitud. Con una mayor oscilación, el cuerpo recorre un camino más largo, pero también se mueve más rápido — los efectos se compensan exactamente. Esto es el isocronismo, descubierto por Galileo.",
+        "hint": "Escribe la fórmula del período y simplemente mira qué letras aparecen en ella. ¿Aparece la amplitud?"
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "¿Para qué sirve el signo menos en la ley de Hooke?",
+        "options": [
+          "Es una convención sobre la dirección del eje, no cambia la física",
+          "Muestra que la fuerza está dirigida en contra del desplazamiento — esto es lo que convierte al resorte en un oscilador",
+          "Porque el resorte siempre se comprime",
+          "Para que la energía sea positiva"
+        ],
+        "answer": 1,
+        "why": "El menos indica el carácter restaurador de la fuerza: se desplaza — tira hacia atrás. Una fuerza positiva, que crece a lo largo del desplazamiento, aceleraría el cuerpo desde el equilibrio sin parar — resultaría en inestabilidad, no en oscilación.",
+        "hint": "Cambia mentalmente el menos por un más y sigue el destino del cuerpo, ligeramente desplazado del equilibrio. ¿Volverá?"
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿en qué sentido la oscilación de una carga en un resorte es una rotación? ¿Qué representa el papel del ángulo?",
+        "keywords": [
+          "proyección",
+          "sombra",
+          "rueda",
+          "circunferencia",
+          "fase",
+          "ángulo",
+          "lateral"
+        ],
+        "needed": 1,
+        "why": "La oscilación armónica es la proyección de un movimiento circular uniforme sobre una línea recta: la sombra de un punto que recorre una circunferencia de radio A se mueve exactamente como la carga. El papel del ángulo lo desempeña la fase ωt + φ₀ — la posición en la rueda invisible.",
+        "hint": "Imagina un punto en el borde de una rueda que gira y su sombra en la pared con iluminación lateral. ¿Cómo se mueve la sombra? ¿Y qué hay en la fórmula de la oscilación debajo del coseno?"
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "Una carga de 1 kg cuelga de un resorte con rigidez de 100 N/m. Estima el período de oscilación en segundos.",
+        "answer": 0.63,
+        "unit": "с",
+        "tolerance": 1.5,
+        "why": "T = 2π√(m/k) = 6,28·√(1/100) = 6,28·0,1 ≈ 0,63 с. Mentalmente: la raíz de una centésima es una décima, solo queda multiplicar por seis y algo.",
+        "hint": "La razón m/k aquí es un número redondo, su raíz se calcula al instante. Solo queda multiplicar por 2π ≈ 6,3."
+      }
+    ]
+  },
+  "ar": {
+    "title": "قانون هوك والمذبذب التوافقي",
+    "subtitle": "الفقرة 2 · الاهتزاز كإسقاط لدوران",
+    "intro": [
+      "في عام 1676، نشر روبرت هوك سلسلة غريبة من الحروف: ceiiinosssttuv. كان هذا لغزًا — طريقة لتأكيد الاكتشاف دون الكشف عنه حتى انتهاء العمل. بعد عامين، فك شفرتها: ut tensio, sic vis — «كما الاستطالة، كذلك القوة».",
+      "وراء هذه اللاتينية يكمن أول قانون كمي في التاريخ عن التشوه: إذا مددت النابض بمقدار الضعف، فإنه يستجيب بقوة مضاعفة. نسبة بسيطة، لكن منها نشأت مقاومة المواد، وعلم الزلازل، ونظرية الروابط الجزيئية — وكل فيزياء الاهتزازات.",
+      "لأنه بمجرد ربط قانون هوك بقانون نيوتن الثاني، نحصل على معادلة حلها هو الجيب. والجيب نفسه، كما رأينا في الفقرة السابقة، هو ظل الدوران. هنا تتلاقى هذه الخيوط."
+    ],
+    "standNote": "على المنصة، ثقل على نابض وبجانبه عجلة دوارة وهمية. اضبطهما بحيث تتطابق الحركتان: ظل نقطة على العجلة يتحرك تمامًا مع الثقل. هذا هو الشيء الرئيسي الذي يجب أخذه من هذه الفقرة. غيّر الكتلة والصلابة: الزمن الدوري يعتمد عليهما — ولا يعتمد على السعة. ادفع بقوة أكبر، سيقطع الثقل مسافة أطول، لكن في نفس الزمن.",
+    "formula": {
+      "name": "قانون هوك ومعادلة المذبذب التوافقي",
+      "latex": "F = -kx \\qquad \\Longrightarrow \\qquad x(t) = A\\cos(\\omega t + \\varphi_0),\\;\\; \\omega = \\sqrt{\\tfrac{k}{m}}",
+      "alsoKnown": "Ut tensio, sic vis — كما الاستطالة، كذلك القوة",
+      "authors": [
+        {
+          "who": "روبرت هوك",
+          "year": "1676",
+          "what": "اكتشف تناسب القوة المرنة مع التشوه؛ نشره كلغز، وكشفه عام 1678"
+        },
+        {
+          "who": "غاليليو غاليلي",
+          "year": "1602",
+          "what": "لاحظ تزامن البندول — استقلالية الزمن الدوري للاهتزازات الصغيرة عن السعة — وقاس الوقت بنبض قلبه"
+        },
+        {
+          "who": "ليونهارت أويلر",
+          "year": "1739",
+          "what": "أول من حل معادلة الاهتزازات التوافقية بشكل منهجي وأدخل فيها الترميز المألوف لنا باستخدام الجيوب وجيوب التمام"
+        }
+      ],
+      "story": "علامة الطرح في قانون هوك هي أهم إشارة في هذا الموضوع. تخبرنا أن القوة دائمًا معاكسة للإزاحة: إذا سحبت جهة اليمين، تسحب إلى اليسار؛ إذا ضغطت، تدفع للخارج. القوة لا تدفع الجسم، بل تعيده. هذه الإشارة تحوِّل القانون الساكن للنوابض إلى محرك للاهتزاز الأبدي: يتجاوز الجسم موضع التوازن بسبب القصور الذاتي، وتنعكس القوة، ويتكرر كل شيء. أزل الإشارة السالبة، وبدلاً من الاهتزاز تحصل على انفجار: قوة تزداد مع الإزاحة ستسرع الجسم بلا توقف."
+    },
+    "symbols": [
+      {
+        "sym": "F",
+        "latex": "F",
+        "what": "القوة المرنة",
+        "unit": "ن",
+        "note": "قوة معيدة: دائمًا نحو موضع التوازن، ومن هنا علامة الطرح"
+      },
+      {
+        "sym": "k",
+        "latex": "k",
+        "what": "صلابة النابض",
+        "unit": "ن/م",
+        "note": "كم نيوتن لكل متر استطالة؛ خاصية للنابض"
+      },
+      {
+        "sym": "x",
+        "latex": "x",
+        "what": "الإزاحة عن موضع التوازن",
+        "unit": "م",
+        "note": "تقاس من النقطة التي تكون فيها القوة صفرًا"
+      },
+      {
+        "sym": "A",
+        "latex": "A",
+        "what": "السعة",
+        "unit": "م",
+        "note": "أقصى إزاحة؛ تحدد بالدفعة الابتدائية، وليس بخواص النظام"
+      },
+      {
+        "sym": "ω",
+        "latex": "\\omega",
+        "what": "التردد الزاوي",
+        "unit": "راد/ث",
+        "note": "نفس أوميغا في الدوران — وهذه ليست مصادفة"
+      },
+      {
+        "sym": "φ₀",
+        "latex": "\\varphi_0",
+        "what": "طور البداية",
+        "unit": "راد",
+        "note": "من أين تبدأ الحركة على «العجلة» عند اللحظة t = 0"
+      }
+    ],
+    "derivation": {
+      "title": "الاشتقاق الدقيق",
+      "lead": "سنجمع قانون هوك مع قانون نيوتن الثاني ونحل ما نحصل عليه بأمانة. وفي الطريق سنواجه أول معادلة تفاضلية في المقرر — وسنكتشف أننا قد حللناها من قبل دون أن ندري.",
+      "steps": [
+        {
+          "text": "نعوض بقوة المرونة في قانون نيوتن الثاني. نحصل على معادلة حيث المجهول ليس كمية بل دالة كاملة $x(t)$: فهي تربط موقع الجسم بتسارعه.",
+          "latex": "ma = -kx \\;\\;\\Longrightarrow\\;\\; \\ddot{x} = -\\frac{k}{m}\\,x",
+          "figure": "springlaw",
+          "figCaption": "التسارع يتناسب مع الإزاحة وعكسه في الاتجاه — هذا كل ما في المعادلة."
+        },
+        {
+          "text": "لنقرأها بالكلمات: التسارع يتناسب مع الإزاحة بإشارة معاكسة. نحتاج دالة تعيد إنتاج نفسها بإشارة سالبة عند التفاضل مرتين. هناك دالتان فقط من هذا القبيل — الجيب وجيب التمام.",
+          "latex": "(\\cos\\omega t)'' = -\\omega^{2}\\cos\\omega t",
+          "figure": "sinederiv",
+          "figCaption": "جيب التمام عند التفاضل مرتين يعود إلى نفسه بإشارة سالبة — وهو الحل."
+        },
+        {
+          "text": "نعوض بالحل التجريبي $x = A\\cos\\omega t$ في المعادلة ونرى عند أي تردد ينجح. السعة تُختصر — المعادلة لا تهتم بمدى قوة الدفع. أما التردد فيجب أن يكون محددًا بدقة.",
+          "latex": "-A\\omega^{2}\\cos\\omega t = -\\frac{k}{m}A\\cos\\omega t \\;\\Longrightarrow\\; \\omega = \\sqrt{\\frac{k}{m}}",
+          "figure": "matchfreq",
+          "figCaption": "التردد تحدده الجملة، والسعة تحددها الدفعة الابتدائية. هذان شيئان مختلفان."
+        },
+        {
+          "text": "من هنا نحصل على الدور. يزداد مع الكتلة (الجسم الثقيل يتحرك أبطأ) وينخفض مع الصلابة (النابض القاسي يعيد أسرع). والمذهل — أنه لا يحتوي على السعة: التذبذبات الكبيرة والصغيرة تستغرق نفس الزمن. هذا هو التزامن الزمني الذي لاحظه غاليليو بنبضه.",
+          "latex": "T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{m}{k}}",
+          "figure": "isochron",
+          "figCaption": "الجسم يقطع المسار البعيد أسرع، والقصير أبطأ؛ والزمن الناتج متساوٍ."
+        },
+        {
+          "text": "الآن التطابق الرئيسي. نأخذ نقطة تتحرك بانتظام على دائرة نصف قطرها $A$ بسرعة زاوية $\\omega$. إسقاطها على المحور هو تمامًا $A\\cos\\omega t$. التذبذب التوافقي هو دوران منتظم ننظر إليه من الجانب. الطور هو الزاوية على عجلة غير مرئية.",
+          "latex": "x_{\\text{колеб}}(t) = A\\cos\\omega t = \\text{projection of rotation of radius } A",
+          "figure": "shadow",
+          "figCaption": "ظل النقطة على عجلة دوارة يتحرك تمامًا مثل ثقل على نابض."
+        },
+        {
+          "text": "لنتحقق من الطاقة. الطاقة الحركية والكامنة تتحولان بين بعضهما: عند النقاط القصوى كل الطاقة في النابض، وعند المركز كلها في الحركة. المجموع ثابت، كما ينبغي في موضوع الانحفاظ.",
+          "latex": "E = \\frac{mv^{2}}{2} + \\frac{kx^{2}}{2} = \\frac{kA^{2}}{2} = \\text{const}",
+          "figure": "energyswap",
+          "figCaption": "الطاقة لا تفقد، بل تنتقل بين الحركة والتشوه مرتين في كل دورة."
+        },
+        {
+          "text": "والخطوة الأخيرة — لماذا كل هذا شامل. أي بئر جهد بالقرب من الصغرى يُفكك بواسطة تايلور: الثابت لا يؤثر، الحد الخطي عند الصغرى صفر، وأول حد فعال هو التربيعي. والطاقة التربيعية هي تمامًا النابض. التذبذبات الصغيرة لأي جملة توافقية ليس بالمصادفة بل بنظرية.",
+          "latex": "U(x) \\approx U_0 + \\frac{1}{2}U''(x_0)\\,x^{2} \\;\\;\\Longrightarrow\\;\\; k_{\\text{эфф}} = U''(x_0)",
+          "figure": "anywell",
+          "figCaption": "قعر أي بئر أملس هو قطع مكافئ. لذلك النابض مخبأ في كل جملة مستقرة."
+        }
+      ],
+      "plate": "\\omega = \\sqrt{\\dfrac{k}{m}} \\qquad T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+      "plateCap": "التردد تمليه الجملة نفسها — الكتلة والصلابة. أما السعة فمن يحركها. فصل هذين الدورين هو ما يجعل المذبذب قابلًا للتنبؤ.",
+      "note": "الصيغة صالحة للتذبذبات الصغيرة. في البندول الحقيقي عند الزوايا الكبيرة، يبدأ الدور يعتمد على السعة — قانون هوك بالنسبة له مجرد تقريب بالقرب من النقطة السفلى. حدود «الصغر» تختلف لكل جملة: النابض خطي بأمانة حتى حوالي عشرة بالمائة من التشوه، والبندول حتى زوايا عشر درجات، والرابطة بين الذرات حتى أجزاء من الأنجستروم. بعد الحدود تبدأ فيزياء غير خطية حيث يتوقف الجيب عن كونه الإجابة."
+    },
+    "math": {
+      "title": "الرياضيات التي احتجناها هنا",
+      "items": [
+        {
+          "what": "ما هي المعادلة التفاضلية",
+          "why": "المعادلة العادية تسأل «أي عدد مناسب»، والمعادلة التفاضلية تسأل «أي دالة مناسبة». التعبير $\\ddot{x} = -\\omega^2 x$ يعني: ابحث عن علاقة بين الموقع والزمن بحيث مشتقتها الثانية في كل لحظة تساوي الدالة نفسها بإشارة سالبة. تقريبًا كل الفيزياء الأساسية — من نيوتن إلى شرودنغر — مكتوبة بهذه اللغة: القوانين لا تحدد المسارات بل القواعد التي تتبعها المسارات.",
+          "latex": "\\ddot{x} + \\omega^{2}x = 0"
+        },
+        {
+          "what": "مشتقات الجيب وجيب التمام — في دورة",
+          "why": "التفاضل يزاح التوافقية بربع دورة: الجيب يتحول إلى جيب التمام، وجيب التمام إلى سالب الجيب، وبعد أربع خطوات تغلق الدورة. من خلال صورة الدوران هذا واضح: سرعة النقطة على الدائرة عمودية على نصف القطر، أي تسبقه بـ 90 درجة. المشتقة هي دوران في الطور.",
+          "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+        },
+        {
+          "what": "نشر تايلور بالقرب من الصغرى",
+          "why": "أي دالة ملساء بالقرب من نقطة يمكن تقريبها بمتعددة حدود. عند الصغرى، المشتقة الأولى تساوي صفرًا، لذا أول حد مهم هو التربيعي. هذا واحد من أكثر التقريبات استخدامًا في الفيزياء: يحول أي بئر معقد إلى قطع مكافئ، وأي جملة مستقرة إلى مذبذب.",
+          "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+        }
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام",
+      "lead": "دعنا نتحقق من قانون الفترة على نظام تعليق السيارة — المذبذب الذي تركب عليه كل يوم.",
+      "given": "كتلة مقدارها $400$ كجم تقع على نابض تعليق واحد. صلابة النابض $k = 25\\,000$ نيوتن/م. احسب زمن الدورة والتردد الطبيعي لاهتزاز الهيكل.",
+      "law": "$T = 2\\pi\\sqrt{m/k}$",
+      "solution": [
+        {
+          "text": "نحسب النسبة تحت الجذر.",
+          "latex": "\\frac{m}{k} = \\frac{400}{25\\,000} = 0{,}016\\ \\text{с}^2"
+        },
+        {
+          "text": "الجذر التربيعي له.",
+          "latex": "\\sqrt{0{,}016} \\approx 0{,}126\\ \\text{с}"
+        },
+        {
+          "text": "نضرب في $2\\pi$.",
+          "latex": "T = 6{,}28 \\cdot 0{,}126 \\approx 0{,}8\\ \\text{с}"
+        }
+      ],
+      "answer": "زمن الدورة حوالي $0{,}8$ ثانية، والتردد حوالي $1{,}25$ هرتز",
+      "check": "هذا معقول: عند المرور فوق مطب، تتأرجح السيارة مرة كل ثانية تقريبًا — يمكنك التحقق بسهولة بالضغط على الرفرف ثم تركه. التردد حوالي واحد هرتز ليس مصادفة: إنه قريب من إيقاع المشي، والجسم يتحمله براحة أكبر. صلابة أكبر — هزات، صلابة أقل — دوار."
+    },
+    "constants": {
+      "title": "كميات هذا القسم",
+      "lead": "الكميات الثلاث هنا هي خصائص نظام معين، وليست ثوابت كونية. لذلك من المهم فهم ما يتحكم في كل منها.",
+      "items": [
+        {
+          "sym": "k",
+          "latex": "k",
+          "name": "الصلابة",
+          "value": "10–100 (موسع الصدر) · 20,000–60,000 (التعليق)",
+          "unit": "نيوتن/م",
+          "why": "القوة لكل وحدة تشوه. يقرأ البعد كتعريف: نيوتن لكل متر. بالنسبة للنباض الموصولة على التوالي، تجمع الصلابة مثل مقاومات الموصلات المتوازية — كمقلوبات.",
+          "mnemo": "نابض قاسٍ — k كبيرة — تذبذبات سريعة. k في البسط تحت جذر التردد."
+        },
+        {
+          "sym": "ω",
+          "latex": "\\omega",
+          "name": "التردد الطبيعي",
+          "value": "ω = √(k/m)",
+          "unit": "راديان/ث",
+          "why": "التردد الذي يتذبذب به النظام عندما يُترك لنفسه. يحدده تركيب النظام فقط. في القسم التالي سيكون البطل الرئيسي: يجب أن تصيبه القوة الخارجية لإحداث الرنين.",
+          "mnemo": "نفس الحرف المستخدم للسرعة الزاوية الدورانية — لأنها هي نفسها حرفيًا، لعجلة غير مرئية."
+        },
+        {
+          "sym": "T",
+          "latex": "T",
+          "name": "زمن الدورة",
+          "value": "T = 2π√(m/k)",
+          "unit": "ثانية",
+          "why": "زمن دورة كاملة واحدة. الكتلة تحت الجذر في البسط: ثقل ثقيل يتذبذب ببطء. السعة ليست في المعادلة — هذا هو التزامن الزمني.",
+          "mnemo": "التحقق من البعد: جذر كجم/(نيوتن/م) = جذر ث² = ثوانٍ. متطابق."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "القوة المُعادة المتناسبة مع الإزاحة تولد تذبذبًا بتردد √(k/m) لا يعتمد على السعة. التذبذب نفسه هو إسقاط لدوران منتظم، والنابض مخفي في كل نظام مستقر، لأن قاع أي حفرة ملساء هو قطع مكافئ.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "الإشارة السالبة تحدد",
+          "text": "F = −kx: القوة ضد الإزاحة. بدون السالب سيكون انفجار، بالسالب عودة أبدية."
+        },
+        {
+          "icon": "clock",
+          "title": "التردد خاص، السعة غريبة",
+          "text": "ω يحدده النظام (k و m)، والسعة تحددها الدفعة الابتدائية. هما مستقلان."
+        },
+        {
+          "icon": "sigma",
+          "title": "ظل العجلة",
+          "text": "التذبذب = إسقاط دوران. الطور هو الزاوية على العجلة غير المرئية."
+        },
+        {
+          "icon": "formula",
+          "title": "العمومية",
+          "text": "بالقرب من النقطة الصغرى، أي طاقة تربيعية، لذلك التذبذبات الصغيرة دائمًا توافقية."
+        }
+      ],
+      "where": [
+        "تعليق السيارة: مذبذب بتردد حوالي هرتز، مضبوط على إيقاع المشي",
+        "الساعات الكوارتزية: بلورة تتذبذب 32,768 مرة في الثانية، تقسم الوقت بدقة ثوانٍ في الشهر",
+        "الجزيئات — أثقال على نوابض روابط؛ تردداتها تظهر في الأطياف تحت الحمراء",
+        "مكبر الصوت والميكروفون: غشاء مذبذب يحول التيار إلى صوت والعكس"
+      ],
+      "watchOut": "التردد لا يعتمد على السعة، لكن الطاقة تعتمد، وبشكل تربيعي: E = kA²/2. إذا هززت بقوة مضاعفة، الطاقة أربع مرات، لكن الزمن الدوري نفسه. الخلط بين 'أقوى' و'أسرع' هو خطأ شائع في هذا الموضوع."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "تم تحريك ثقل على نابض بقوة مضاعفة — زادت السعة من 2 إلى 4 سم. ماذا حدث للدورة؟",
+        "options": [
+          "تضاعفت: أصبح المسار أطول",
+          "لم تتغير: الدورة تعتمد فقط على الكتلة والصلابة",
+          "انخفضت إلى النصف: أصبحت القوة أكبر",
+          "زادت بمقدار الجذر التربيعي لاثنين"
+        ],
+        "answer": 1,
+        "why": "في الصيغة T = 2π√(m/k) لا توجد السعة. مع الاهتزاز الأكبر، يقطع الجسم مسافة أطول ولكنه يتحرك أسرع — يتعوض التأثيران تمامًا. هذا هو التزامن الزمني (isochronism) الذي اكتشفه غاليليو.",
+        "hint": "اكتب صيغة الدورة وانظر فقط إلى الحروف الموجودة فيها. هل السعة موجودة؟"
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "لماذا توجد علامة ناقص في قانون هوك؟",
+        "options": [
+          "هو اتفاق على اتجاه المحور، ولا يغير الفيزياء",
+          "يظهر أن القوة موجهة عكس الإزاحة — وهذا هو ما يحول النابض إلى مهتز",
+          "لأن النابض ينضغط دائمًا",
+          "لتكون الطاقة موجبة"
+        ],
+        "answer": 1,
+        "why": "الناقص يعني أن القوة استرجاعية: إذا أزحته فإنها تسحبه للخلف. القوة الموجبة المتزايدة مع الإزاحة كانت ستدفع الجسم بعيدًا عن التوازن دون توقف — مما يسبب عدم استقرار وليس اهتزازًا.",
+        "hint": "فكر في استبدال الناقص بزائد وتتبع مصير الجسم المُزاح قليلاً عن التوازن. هل سيعود؟"
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: بأي معنى يمثل اهتزاز ثقل على نابض دورانًا؟ ما الذي يلعب دور الزاوية؟",
+        "keywords": [
+          "إسقاط",
+          "ظل",
+          "عجلة",
+          "دائرة",
+          "طور",
+          "زاوية",
+          "جانبي"
+        ],
+        "needed": 1,
+        "why": "الاهتزاز التوافقي هو إسقاط لدوران منتظم على خط مستقيم: ظل نقطة تدور على دائرة نصف قطرها A يتحرك تمامًا مثل الثقل. دور الزاوية يلعبه الطور ωt + φ₀ — الموقع على العجلة غير المرئية.",
+        "hint": "تخيل نقطة على حافة عجلة دوارة وظلها على الحائط عند إضاءة جانبية. كيف يتحرك الظل؟ وماذا يوجد تحت جيب التمام في صيغة الاهتزاز؟"
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "ثقل كتلته 1 كجم معلق بنابض صلابته 100 نيوتن/م. قدر الدورة بالثواني.",
+        "answer": 0.63,
+        "unit": "с",
+        "tolerance": 1.5,
+        "why": "T = 2π√(m/k) = 6,28·√(1/100) = 6,28·0,1 ≈ 0,63 с. في العقل: الجذر التربيعي لواحد على مائة هو واحد على عشرة، ويبقى الضرب في ستة فاصلة شيء.",
+        "hint": "النسبة m/k هنا عدد صحيح، جذره التربيعي سهل. يبقى الضرب في 2π ≈ 6,3."
+      }
+    ]
+  },
+  "tags": [
+    "pulsar"
+  ],
+  "laws": [
+    "hookes_law",
+    "newtons_second_law"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.15129",
+      "why": "совпадение по теме: pulsar"
+    },
+    {
+      "id": "2607.14054",
+      "why": "совпадение по теме: pulsar"
+    },
+    {
+      "id": "2607.13930",
+      "why": "совпадение по теме: pulsar"
+    }
+  ]
+}

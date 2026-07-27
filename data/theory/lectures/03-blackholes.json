@@ -1,0 +1,524 @@
+{
+ "id": "03-blackholes",
+ "schema": "b42.lecture/1",
+ "ru": {
+  "title": "Чёрные дыры и край теории",
+  "subtitle": "Лекция 3 · Горизонты, парадокс информации и почему не выходит квантовая гравитация",
+  "lead": "Чёрные дыры интересны не тем, что они чёрные, и даже не тем, что оттуда ничего не возвращается. Они интересны тем, что это единственное место во Вселенной, где две наши лучшие теории вынуждены говорить одновременно — и начинают противоречить друг другу.",
+  "blocks": [
+   {
+    "h": "Что такое горизонт",
+    "kicker": "и почему их на самом деле несколько",
+    "text": [
+     "Горизонт событий — не поверхность и не стенка. Это граница области, из которой ни один сигнал не может уйти наружу, потому что для этого потребовалась бы скорость больше световой. Никакого вещества там нет: пролетая горизонт крупной чёрной дыры, вы не почувствуете ничего особенного.",
+     "Радиус горизонта считается поразительно просто. Приравняйте вторую космическую скорость скорости света в наивной ньютоновской формуле — и получите ровно тот же ответ, что даёт полное решение Шварцшильда. Совпадение случайное, два вывода не имеют между собой ничего общего, но пользоваться им удобно.",
+     "Для Солнца радиус вышел бы три километра, для Земли — девять миллиметров. Чтобы превратить планету в чёрную дыру, её надо сжать до размера вишни."
+    ],
+    "eq": "$r_g = \\frac{2GM}{c^{2}}$",
+    "image": {
+     "h": "Образ: река, текущая к водопаду",
+     "text": [
+      "Вообразите реку, ускоряющуюся к водопаду, и рыбу, которая плавает с максимальной скоростью — скажем, пять километров в час. Пока течение медленнее пяти, рыба может уплыть вверх. Там, где течение достигает ровно пяти, проходит невидимая граница: ниже неё рыба гребёт изо всех сил и всё равно сносится вниз.",
+      "Эта граница и есть горизонт. В воде она ничем не отмечена, рыба пересекает её, ничего не заметив. Роль предельной скорости рыбы играет скорость света, роль течения — искривление пространства-времени.",
+      "Отсюда понятно и главное свойство: горизонт — это свойство не места, а того, куда вы можете попасть в будущем. Он определяется всей дальнейшей историей, а не тем, что находится в данной точке."
+     ]
+    },
+    "after": [
+     "У вращающейся дыры горизонтов действительно два. Внешний — та самая граница невозврата. Внутренний, называемый горизонтом Коши, лежит глубже, и с ним связана отдельная неприятность: за ним уравнения перестают однозначно определять будущее по прошлому. Предсказуемость, которая в физике считается само собой разумеющейся, там ломается. Большинство физиков полагают, что реальный внутренний горизонт неустойчив и разрушается при малейшем возмущении, — но строгого доказательства нет, и это открытый вопрос."
+    ]
+   },
+   {
+    "h": "Приливные силы: где вас разорвёт, а где нет",
+    "kicker": "неожиданный поворот",
+    "text": [
+     "Общее место — что падающего в чёрную дыру растянет в спагетти. Это верно, но зависит от размера дыры, причём наоборот тому, что подсказывает интуиция.",
+     "Разрывает не притяжение, а его разность между головой и ногами — приливная сила, разобранная в теме о гравитации. Она пропорциональна массе, делённой на куб расстояния. А радиус горизонта растёт линейно с массой. Значит на горизонте приливная сила падает как единица на квадрат массы: чем крупнее дыра, тем спокойнее пересечение.",
+     "У чёрной дыры звёздной массы вас разорвёт задолго до горизонта — за тысячи километров. У сверхмассивной дыры в центре нашей Галактики, где четыре миллиона солнечных масс, горизонт можно пересечь, ничего не почувствовав. Ничего особенного при этом не произойдёт — просто с этого момента все ваши будущие пути ведут внутрь."
+    ],
+    "note": "Из этого следует неприятное свойство горизонта: локально его нельзя обнаружить. Вы не можете поставить опыт и выяснить, пересекли уже или нет, — потому что горизонт определяется не тем, что здесь, а тем, куда ведут все дороги отсюда. Понятие оказывается глобальным, а вся физика привыкла быть локальной. Это одна из технических причин, по которым чёрные дыры так тяжело согласовать с квантовой теорией."
+   },
+   {
+    "h": "Хокинг: чёрные дыры испаряются",
+    "kicker": "и вот тут началось интересное",
+    "text": [
+     "В 1974 году Хокинг обнаружил, что если применить квантовую теорию поля к пространству вблизи горизонта, чёрная дыра оказывается не совсем чёрной. Она излучает — со строго определённой температурой, обратно пропорциональной массе.",
+     "Механизм обычно объясняют так: вакуум непрерывно рождает пары виртуальных частиц, и у горизонта одна из пары может упасть внутрь, а вторая улететь наружу. Объяснение наглядное и приблизительное, настоящий вывод сложнее, но следствие бесспорно: дыра теряет массу и в конце концов испаряется.",
+     "Числа выходят странные. Дыра солнечной массы имеет температуру в десятимиллионные доли кельвина — она куда холоднее реликтового излучения и потому пока только растёт, поглощая его. А испариться она должна за $10^{67}$ лет. Зато мелкие дыры горячи и испаряются стремительно, причём под конец взрываются."
+    ],
+    "eq": "$T_H = \\frac{\\hbar c^{3}}{8\\pi G M k_B}$",
+    "after": [
+     "Самое важное последствие — не само излучение, а то, что у чёрной дыры оказалась температура. А раз есть температура, есть и энтропия. Бекенштейн ещё до Хокинга сообразил, что она должна быть пропорциональна площади горизонта, — и это оказалось верно.",
+     "Пропорциональна площади, а не объёму. Для всего остального во Вселенной энтропия растёт с объёмом: удвоили содержимое — удвоили число состояний. Здесь удвоение происходит с ростом поверхности. Именно из этого странного факта позже выросла голографическая гипотеза, о которой в последней лекции."
+    ]
+   },
+   {
+    "h": "Парадокс информации",
+    "kicker": "спор, длившийся сорок лет",
+    "text": [
+     "Теперь сложим два утверждения и получим противоречие. Первое: квантовая механика требует, чтобы информация сохранялась — эволюция состояния обратима, и по конечному состоянию всегда можно восстановить начальное. Второе: излучение Хокинга тепловое, то есть определяется только массой дыры и ничего не помнит о том, что в неё упало.",
+     "Значит, если бросить в дыру энциклопедию, а потом дождаться её полного испарения, наружу выйдет только тепловое излучение — а сведения о содержании энциклопедии исчезнут из Вселенной навсегда. Квантовая механика этого не допускает.",
+     "Хокинг тридцать лет отстаивал позицию, что информация действительно теряется и квантовую механику придётся поправить. Многие возражали, что скорее ошибка в вычислении вблизи горизонта. В 1997 году Хокинг с Торном заключили пари с Прескиллом; в 2004-м Хокинг публично признал поражение и вручил Прескиллу бейсбольную энциклопедию, пошутив, что её стоило бы сжечь и отдать пепел."
+    ],
+    "pro": [
+     "излучение Хокинга следует из хорошо проверенной квантовой теории поля",
+     "энтропия по площади подтверждается несколькими независимыми расчётами",
+     "в модельных пространствах показано, что информация всё же сохраняется"
+    ],
+    "con": [
+     "механизм её сохранения для реальной чёрной дыры неизвестен",
+     "само излучение Хокинга ни разу не наблюдалось и вряд ли будет наблюдено",
+     "предложенные решения требуют либо отказа от привычной физики у горизонта, либо экзотических связей между далёкими областями"
+    ],
+    "after": [
+     "Сегодня большинство считает, что информация сохраняется, но как именно она выбирается наружу, не понимает никто. Предлагались решения одно другого радикальнее: файервол — раскалённая стенка на горизонте, испепеляющая падающего вопреки принципу эквивалентности; связь внутренности дыры с излучением через квантовую запутанность; и предположение, что внутренность и не является отдельным местом вовсе. Спор не закрыт."
+    ]
+   },
+   {
+    "h": "Почему не выходит квантовая гравитация",
+    "kicker": "главная нерешённая задача физики",
+    "text": [
+     "Причина не в том, что задача сложная технически. Она в том, что две теории требуют от пространства-времени взаимно исключающего.",
+     "Квантовая теория поля работает так: есть фиксированная сцена — пространство-время, — на которой разыгрываются события. Поля флуктуируют, частицы рождаются и исчезают, но сцена неизменна и задана заранее. Все вычисления опираются на возможность разложить поле по колебаниям на этом фоне.",
+     "Общая теория относительности говорит, что сцены нет. Пространство-время само является участником: оно искривляется, колеблется, реагирует на всё происходящее. Нельзя разложить его по колебаниям на фоне — фон и есть то, что мы ищем.",
+     "Технически это проявляется как неперенормируемость. В электродинамике при расчёте возникают бесконечности, но их удаётся спрятать в конечное число измеряемых величин — заряд и массу. В гравитации таких величин требуется бесконечно много: каждый порядок точности порождает новую, и предсказательная сила теряется полностью."
+    ],
+    "image": {
+     "h": "Образ: рисовать карту местности, которая от рисования меняется",
+     "text": [
+      "Обычная физика похожа на нанесение объектов на готовую карту: рельеф известен, вы отмечаете на нём дома и дороги.",
+      "Квантовая гравитация — это попытка нанести на карту саму карту. Каждый штрих меняет рельеф, а изменившийся рельеф меняет то, где следовало ставить штрих. Замкнутый круг, из которого пока нет математического выхода.",
+      "Отсюда и смысл фразы, что мы не понимаем, что такое пространство и время на малых масштабах. Не «не измерили», а «не имеем непротиворечивого способа описать»."
+     ]
+    },
+    "after": [
+     "Масштаб, где проблема становится неизбежной, называют планковским: около $10^{-35}$ метра. Это на двадцать порядков меньше протона, и никакого способа туда заглянуть у нас нет и в обозримом будущем не появится. Чтобы разглядеть такие расстояния, потребовался бы ускоритель размером с галактику.",
+     "Отсюда и особенность этой области физики: теории строятся без всякой возможности проверить их опытом. Для науки, привыкшей отсекать лишнее измерением, это состояние крайне непривычное — и о его последствиях говорится в последней лекции."
+    ]
+   },
+   {
+    "h": "Откуда чёрные дыры берутся и что тут неясно",
+    "kicker": "вопросы, которые сейчас обсуждают",
+    "text": [
+     "Обычные дыры звёздных масс рождаются понятно: массивная звезда исчерпывает топливо, ядро коллапсирует, и если масса остатка превышает примерно три солнечных, ничто не может остановить сжатие. Это хорошо согласуется с наблюдениями.",
+     "А вот со сверхмассивными неясно. В центрах галактик сидят дыры в миллионы и миллиарды солнечных масс, и они существовали уже через несколько сотен миллионов лет после Большого взрыва — телескоп Уэбба нашёл такие. Времени на постепенный рост от звёздной дыры катастрофически не хватает: аккреция ограничена сверху, потому что излучение сдувает падающее вещество.",
+     "Предположений несколько, и все с трудностями. Прямой коллапс огромных газовых облаков без стадии звезды — требует особых условий. Первичные чёрные дыры, родившиеся из флуктуаций плотности в первые доли секунды, — красивая идея, дающая заодно кандидата на тёмную материю, но наблюдательных подтверждений нет. Быстрое слияние множества мелких — не решает проблему сроков.",
+     "Есть и обратный вопрос: почему дыр с массами от сотни до сотни тысяч солнечных наблюдается так мало? Этот промежуток называют пустыней средних масс, и объяснения ему пока нет."
+    ],
+    "note": "Отдельно стоит сказать о том, чего в чёрных дырах точно нет. Сингулярность в центре — не физический объект, а признак того, что теория сломалась. Уравнения дают бесконечную плотность, а бесконечности в физике всегда означают выход за пределы применимости, а не свойство природы. Что там на самом деле, неизвестно, и узнать это можно только имея квантовую гравитацию."
+   },
+   {
+    "h": "Что наблюдают на самом деле",
+    "kicker": "от косвенного к прямому",
+    "text": [
+     "Долгое время чёрные дыры считались математическим курьёзом. Даже Эйнштейн в 1939 году опубликовал статью, доказывающую, что образоваться они не могут; статья содержала ошибку в предположениях.",
+     "Сегодня свидетельств три рода. Первое — орбиты звёзд вокруг невидимого объекта в центре Галактики: одна из них обходит его за шестнадцать лет, и из третьего закона Кеплера следует масса в четыре миллиона солнечных при размере меньше орбиты Меркурия. Ничего, кроме чёрной дыры, такого дать не может. Нобелевская премия 2020 года.",
+     "Второе — гравитационные волны от слияний, которые LIGO ловит с 2015 года. Форма сигнала точно отвечает расчёту для двух сливающихся горизонтов, включая характерное затухание после слияния.",
+     "Третье — изображение тени: сеть радиотелескопов по всей планете в 2019 году получила снимок области вокруг дыры в галактике M87, а затем и в центре нашей. Размер и форма тени совпали с предсказанными."
+    ],
+    "now": [
+     "Телескоп горизонта событий работает над получением не снимка, а видео: вещество вокруг дыры движется, и удаётся проследить его течение. Первые фильмы ожидаются в ближайшие годы.",
+     "Параллельно теоретики активно продвинулись в парадоксе информации: за последние пять лет получены расчёты, показывающие, как энтропия излучения должна расти и затем убывать — то есть информация всё же выходит. Механизм для реальной чёрной дыры остаётся неизвестным, но математическая картина заметно прояснилась."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Что унести из этой лекции",
+   "text": [
+    "Горизонт — не стенка, а граница области, откуда нет дороги наружу. У крупной дыры его можно пересечь, ничего не заметив, и это делает понятие горизонта глобальным, а не локальным.",
+    "У чёрной дыры есть температура и энтропия, причём энтропия пропорциональна площади горизонта, а не объёму. Это единственное известное исключение из привычного счёта состояний, и из него выросла голографическая гипотеза.",
+    "Парадокс информации — не философский спор, а прямое противоречие между двумя проверенными теориями. Большинство считает, что информация сохраняется, но механизм неизвестен.",
+    "Квантовая гравитация не строится потому, что квантовая теория требует неизменной сцены, а общая теория относительности утверждает, что сцена сама является участником. Проверить любые предположения нечем: планковский масштаб недостижим."
+   ]
+  }
+ },
+ "en": {
+  "title": "Black Holes and the Edge of Theory",
+  "subtitle": "Lecture 3 · Horizons, the Information Paradox, and Why Quantum Gravity Fails",
+  "lead": "Black holes are interesting not because they are black, and not even because nothing returns from them. They are interesting because they are the only place in the Universe where our two best theories are forced to speak simultaneously — and begin to contradict each other.",
+  "blocks": [
+   {
+    "h": "What is the horizon",
+    "kicker": "and why there are actually several",
+    "text": [
+     "The event horizon is not a surface or a wall. It is the boundary of a region from which no signal can escape, because doing so would require a speed greater than light. There is no matter there: flying through the horizon of a large black hole, you would not feel anything special.",
+     "The radius of the horizon is calculated surprisingly simply. Equate the escape velocity to the speed of light in the naive Newtonian formula, and you get exactly the same answer as the full Schwarzschild solution. The coincidence is accidental, the two derivations have nothing in common, but it's convenient to use.",
+     "For the Sun, the radius would be three kilometers, for the Earth — nine millimeters. To turn the planet into a black hole, it would need to be compressed to the size of a cherry."
+    ],
+    "eq": "$r_g = \\frac{2GM}{c^{2}}$",
+    "image": {
+     "h": "Image: a river flowing towards a waterfall",
+     "text": [
+      "Imagine a river accelerating towards a waterfall, and a fish that swims at a maximum speed — say, five kilometers per hour. As long as the current is slower than five, the fish can swim upstream. Where the current reaches exactly five, an invisible boundary passes: below it, the fish paddles with all its might and still gets swept downstream.",
+      "This boundary is the horizon. In water, it is not marked in any way; the fish crosses it without noticing anything. The role of the fish's maximum speed is played by the speed of light, the role of the current — by the curvature of spacetime.",
+      "From this, the main property is clear: the horizon is not a property of a place, but of where you can go in the future. It is determined by the entire future history, not by what is at a given point."
+     ]
+    },
+    "after": [
+     "A rotating black hole indeed has two horizons. The outer one is that same point of no return. The inner one, called the Cauchy horizon, lies deeper, and it comes with a separate problem: beyond it, the equations cease to uniquely determine the future from the past. Predictability, which is taken for granted in physics, breaks down there. Most physicists believe that the actual inner horizon is unstable and collapses at the slightest disturbance — but there is no rigorous proof, and it remains an open question."
+    ]
+   },
+   {
+    "h": "Tidal forces: where you get torn apart and where you don't",
+    "kicker": "an unexpected twist",
+    "text": [
+     "It's a cliché that a person falling into a black hole will be stretched into spaghetti. This is true, but it depends on the size of the hole, and in the opposite way to what intuition suggests.",
+     "It's not the attraction that tears you apart, but its difference between your head and feet — tidal force, discussed in the topic on gravity. It is proportional to mass divided by the cube of distance. And the horizon radius grows linearly with mass. So at the horizon, tidal force falls as one over mass squared: the larger the hole, the calmer the crossing.",
+     "For a stellar-mass black hole, you would be torn apart long before the horizon — thousands of kilometers away. For the supermassive hole at the center of our Galaxy, with four million solar masses, you could cross the horizon without feeling anything. Nothing special would happen — just that from that moment, all your future paths lead inward."
+    ],
+    "note": "From this follows an unpleasant property of the horizon: it cannot be detected locally. You cannot set up an experiment to find out whether you have crossed it or not — because the horizon is determined not by what is here, but by where all roads from here lead. The concept turns out to be global, while all physics is used to being local. This is one of the technical reasons why black holes are so difficult to reconcile with quantum theory."
+   },
+   {
+    "h": "Hawking: black holes evaporate",
+    "kicker": "and this is where it got interesting",
+    "text": [
+     "In 1974, Hawking discovered that if quantum field theory is applied to the space near the horizon, a black hole turns out not to be entirely black. It emits radiation — with a strictly defined temperature inversely proportional to its mass.",
+     "The mechanism is usually explained as follows: the vacuum continuously produces pairs of virtual particles, and near the horizon one of the pair can fall inward while the other escapes outward. The explanation is visual and approximate; the actual derivation is more complicated, but the consequence is indisputable: the hole loses mass and eventually evaporates.",
+     "The numbers come out strange. A solar-mass hole has a temperature of ten-millionths of a kelvin — it is much colder than the cosmic microwave background and therefore is currently only growing by absorbing it. And it should evaporate in $10^{67}$ years. However, small holes are hot and evaporate rapidly, and in the end they explode."
+    ],
+    "eq": "$T_H = \\frac{\\hbar c^{3}}{8\\pi G M k_B}$",
+    "after": [
+     "The most important consequence is not the radiation itself, but that a black hole has a temperature. And since there is temperature, there is entropy. Bekenstein, even before Hawking, realized that it should be proportional to the area of the horizon — and this turned out to be correct.",
+     "Proportional to area, not volume. For everything else in the Universe, entropy grows with volume: double the contents — double the number of states. Here, doubling occurs with growth of the surface. It is from this strange fact that the holographic hypothesis later grew, which will be discussed in the last lecture."
+    ]
+   },
+   {
+    "h": "The information paradox",
+    "kicker": "a debate that lasted forty years",
+    "text": [
+     "Now let's combine two statements and get a contradiction. First: quantum mechanics requires that information be conserved — the evolution of a state is reversible, and from the final state one can always reconstruct the initial one. Second: Hawking radiation is thermal, meaning it is determined only by the mass of the hole and remembers nothing about what fell into it.",
+     "So, if you throw an encyclopedia into a hole and then wait for its complete evaporation, only thermal radiation will come out — and the information about the encyclopedia's contents will disappear from the Universe forever. Quantum mechanics does not allow this.",
+     "For thirty years, Hawking maintained the position that information is indeed lost and quantum mechanics would have to be corrected. Many objected that the error was more likely in the calculation near the horizon. In 1997, Hawking and Thorne made a bet with Preskill; in 2004, Hawking publicly conceded defeat and gave Preskill a baseball encyclopedia, joking that it would be better to burn it and give the ashes."
+    ],
+    "pro": [
+     "Hawking radiation follows from well-tested quantum field theory",
+     "entropy by area is confirmed by several independent calculations",
+     "in model spaces, it has been shown that information is indeed preserved"
+    ],
+    "con": [
+     "the mechanism of its preservation for a real black hole is unknown",
+     "Hawking radiation itself has never been observed and is unlikely to be observed",
+     "proposed solutions require either abandoning familiar physics at the horizon or exotic connections between distant regions"
+    ],
+    "after": [
+     "Today, most believe that information is preserved, but no one understands exactly how it gets out. Solutions have been proposed, each more radical than the last: a firewall — a hot wall at the horizon that incinerates the falling object contrary to the equivalence principle; a connection between the hole's interior and the radiation through quantum entanglement; and the suggestion that the interior is not a separate place at all. The debate is not closed."
+    ]
+   },
+   {
+    "h": "Why quantum gravity doesn't work out",
+    "kicker": "the main unsolved problem in physics",
+    "text": [
+     "The reason is not that the problem is technically complex. It is that the two theories require mutually exclusive things from spacetime.",
+     "Quantum field theory works like this: there is a fixed stage — spacetime — on which events play out. Fields fluctuate, particles are born and disappear, but the stage is unchanged and given in advance. All calculations rely on the ability to expand the field in oscillations on this background.",
+     "General relativity says there is no stage. Spacetime itself is a participant: it curves, oscillates, reacts to everything happening. You cannot expand it in oscillations on a background — the background is what we are looking for.",
+     "Technically, this manifests as non-renormalizability. In electrodynamics, infinities arise in calculations, but they can be hidden in a finite number of measurable quantities — charge and mass. In gravity, an infinite number of such quantities is required: each order of precision generates a new one, and predictive power is completely lost."
+    ],
+    "image": {
+     "h": "Image: drawing a map of a terrain that changes as you draw",
+     "text": [
+      "Ordinary physics is like placing objects on a ready-made map: the terrain is known, you mark houses and roads on it.",
+      "Quantum gravity is an attempt to put the map itself on the map. Each stroke changes the terrain, and the changed terrain changes where the stroke should have been placed. A vicious circle from which there is currently no mathematical escape.",
+      "This is the meaning of the phrase that we do not understand what space and time are at small scales. Not 'we haven't measured', but 'we don't have a consistent way to describe'."
+     ]
+    },
+    "after": [
+     "The scale at which the problem becomes inevitable is called the Planck scale: about $10^{-35}$ meters. This is twenty orders of magnitude smaller than a proton, and we have no way to look there, nor will we in the foreseeable future. To see such distances, you would need an accelerator the size of a galaxy.",
+     "Hence the peculiarity of this area of physics: theories are constructed without any possibility of testing them experimentally. For a science accustomed to pruning the unnecessary through measurement, this state is extremely unusual — and its consequences are discussed in the last lecture."
+    ]
+   },
+   {
+    "h": "Where black holes come from and what is unclear here",
+    "kicker": "questions being discussed now",
+    "text": [
+     "Ordinary stellar-mass holes are born in a clear way: a massive star exhausts its fuel, the core collapses, and if the remnant's mass exceeds about three solar masses, nothing can stop the collapse. This agrees well with observations.",
+     "But with supermassive ones, it's unclear. At the centers of galaxies sit holes with millions and billions of solar masses, and they already existed a few hundred million years after the Big Bang — the Webb telescope found some. There is catastrophically insufficient time for gradual growth from a stellar-mass hole: accretion is limited from above because radiation blows away infalling matter.",
+     "There are several hypotheses, all with difficulties. Direct collapse of huge gas clouds without a stellar stage — requires special conditions. Primordial black holes, born from density fluctuations in the first fractions of a second, are a beautiful idea that also provides a candidate for dark matter, but there is no observational confirmation. Rapid merging of many small ones does not solve the timeline problem.",
+     "There is also the reverse question: why are so few holes with masses between a hundred and a hundred thousand solar masses observed? This interval is called the intermediate-mass desert, and there is no explanation for it yet."
+    ],
+    "note": "Separately, it is worth saying what is definitely not in black holes. The singularity at the center is not a physical object but a sign that the theory has broken down. The equations give infinite density, and infinities in physics always mean a departure from the limits of applicability, not a property of nature. What is actually there is unknown, and we can only find out by having quantum gravity."
+   },
+   {
+    "h": "What is actually observed",
+    "kicker": "from indirect to direct",
+    "text": [
+     "For a long time, black holes were considered a mathematical curiosity. Even Einstein in 1939 published a paper proving that they could not form; the paper contained an error in its assumptions.",
+     "Today there are three kinds of evidence. First — orbits of stars around an invisible object at the center of the Galaxy: one of them orbits it in sixteen years, and from Kepler's third law it follows that the mass is four million solar masses with a size smaller than Mercury's orbit. Nothing but a black hole can provide that. Nobel Prize 2020.",
+     "Second — gravitational waves from mergers, which LIGO has been detecting since 2015. The shape of the signal exactly matches the calculation for two merging horizons, including the characteristic ringdown after merger.",
+     "Third — the image of the shadow: a network of radio telescopes across the planet in 2019 obtained a picture of the region around the hole in the galaxy M87, and later at the center of our own. The size and shape of the shadow matched predictions."
+    ],
+    "now": [
+     "The Event Horizon Telescope is working on obtaining not a snapshot but a video: the matter around the hole moves, and it is possible to track its flow. The first movies are expected in the coming years.",
+     "In parallel, theorists have made significant progress on the information paradox: in the last five years, calculations have been obtained showing how the entropy of radiation should grow and then decline — that is, information does come out. The mechanism for a real black hole remains unknown, but the mathematical picture has become noticeably clearer."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "What to take away from this lecture",
+   "text": [
+    "The horizon is not a wall but the boundary of a region from which there is no way out. For a large black hole, you can cross it without noticing anything, and this makes the concept of the horizon global, not local.",
+    "A black hole has temperature and entropy, with entropy proportional to the area of the horizon, not its volume. This is the only known exception to the usual counting of states, and from it grew the holographic hypothesis.",
+    "The information paradox is not a philosophical debate but a direct contradiction between two well-tested theories. Most believe information is preserved, but the mechanism is unknown.",
+    "Quantum gravity cannot be constructed because quantum theory requires an unchanging stage, while general relativity asserts that the stage itself is a participant. There is no way to test any assumptions: the Planck scale is unreachable."
+   ]
+  }
+ },
+ "es": {
+  "title": "Agujeros negros y el límite de la teoría",
+  "subtitle": "Lección 3 · Horizontes, paradoja de la información y por qué la gravedad cuántica no funciona",
+  "lead": "Los agujeros negros no son interesantes porque son negros, ni siquiera porque nada regresa de ellos. Son interesantes porque es el único lugar en el Universo donde nuestras dos mejores teorías se ven obligadas a hablar simultáneamente — y comienzan a contradecirse.",
+  "blocks": [
+   {
+    "h": "Qué es el horizonte",
+    "kicker": "y por qué en realidad hay varios",
+    "text": [
+     "El horizonte de sucesos no es una superficie ni una pared. Es el límite de una región desde la que ninguna señal puede escapar al exterior, porque para ello se necesitaría una velocidad mayor que la de la luz. Allí no hay materia alguna: al atravesar el horizonte de un agujero negro grande, usted no notará nada especial.",
+     "El radio del horizonte se calcula de forma sorprendentemente simple. Iguale la velocidad de escape a la velocidad de la luz en la ingenua fórmula newtoniana, y obtendrá exactamente la misma respuesta que da la solución completa de Schwarzschild. Es una coincidencia accidental; las dos deducciones no tienen nada en común, pero es cómodo usarla.",
+     "Para el Sol, el radio sería de tres kilómetros; para la Tierra, de nueve milímetros. Para convertir un planeta en un agujero negro, habría que comprimirlo hasta el tamaño de una cereza."
+    ],
+    "eq": "$r_g = \\frac{2GM}{c^{2}}$",
+    "image": {
+     "h": "Imagen: un río que fluye hacia una cascada",
+     "text": [
+      "Imagine un río que se acelera hacia una cascada, y un pez que nada a una velocidad máxima — digamos, cinco kilómetros por hora. Mientras la corriente sea más lenta que cinco, el pez puede nadar hacia arriba. Donde la corriente alcanza exactamente cinco, hay un límite invisible: por debajo de él, el pez rema con todas sus fuerzas y sin embargo es arrastrado hacia abajo.",
+      "Ese límite es el horizonte. En el agua no está marcado de ninguna manera; el pez lo cruza sin notar nada. El papel de la velocidad máxima del pez lo juega la velocidad de la luz, y el de la corriente, la curvatura del espacio-tiempo.",
+      "De aquí se entiende también la propiedad principal: el horizonte no es una propiedad del lugar, sino de hacia dónde se puede ir en el futuro. Está determinado por toda la historia futura, no por lo que hay en ese punto."
+     ]
+    },
+    "after": [
+     "En un agujero en rotación hay realmente dos horizontes. El exterior es el límite de no retorno. El interior, llamado horizonte de Cauchy, está más profundo y conlleva un problema aparte: más allá de él, las ecuaciones dejan de determinar unívocamente el futuro a partir del pasado. La predecibilidad, que en física se da por sentada, se rompe allí. La mayoría de los físicos cree que el horizonte interior real es inestable y se destruye ante la menor perturbación, pero no hay una prueba rigurosa, y es una cuestión abierta."
+    ]
+   },
+   {
+    "h": "Fuerzas de marea: dónde lo destrozarán y dónde no",
+    "kicker": "giro inesperado",
+    "text": [
+     "Un lugar común es que quien cae en un agujero negro se estirará como un espagueti. Esto es cierto, pero depende del tamaño del agujero, y al revés de lo que sugiere la intuición.",
+     "No desgarra la atracción, sino su diferencia entre la cabeza y los pies: la fuerza de marea, analizada en el tema de la gravedad. Es proporcional a la masa dividida por el cubo de la distancia. Y el radio del horizonte crece linealmente con la masa. Por lo tanto, en el horizonte la fuerza de marea cae como uno sobre el cuadrado de la masa: cuanto más grande el agujero, más tranquilo es el cruce.",
+     "En un agujero negro de masa estelar, usted sería destrozado mucho antes del horizonte — a miles de kilómetros. En el agujero supermasivo en el centro de nuestra Galaxia, con cuatro millones de masas solares, se puede cruzar el horizonte sin sentir nada. No ocurrirá nada especial — simplemente, a partir de ese momento, todos sus caminos futuros conducen hacia el interior."
+    ],
+    "note": "De esto se sigue una propiedad incómoda del horizonte: no se puede detectar localmente. No puede realizar un experimento y averiguar si ya lo ha cruzado o no, porque el horizonte no está determinado por lo que hay aquí, sino por adónde llevan todos los caminos desde aquí. El concepto resulta ser global, mientras que toda la física está acostumbrada a ser local. Esta es una de las razones técnicas por las que los agujeros negros son tan difíciles de conciliar con la teoría cuántica."
+   },
+   {
+    "h": "Hawking: los agujeros negros se evaporan",
+    "kicker": "y aquí comenzó lo interesante",
+    "text": [
+     "En 1974, Hawking descubrió que si se aplica la teoría cuántica de campos al espacio cerca del horizonte, un agujero negro resulta no ser del todo negro. Emite radiación — con una temperatura estrictamente definida, inversamente proporcional a la masa.",
+     "El mecanismo se explica a menudo así: el vacío genera continuamente pares de partículas virtuales, y cerca del horizonte una del par puede caer hacia adentro y la otra escapar al exterior. La explicación es intuitiva y aproximada; la derivación real es más compleja, pero la consecuencia es indiscutible: el agujero pierde masa y finalmente se evapora.",
+     "Los números resultan extraños. Un agujero de masa solar tiene una temperatura de diezmillonésimas de kelvin — es mucho más frío que la radiación de fondo y por ahora solo crece, absorbiéndola. Y debería evaporarse en $10^{67}$ años. En cambio, los agujeros pequeños son calientes y se evaporan rápidamente, y al final explotan."
+    ],
+    "eq": "$T_H = \\frac{\\hbar c^{3}}{8\\pi G M k_B}$",
+    "after": [
+     "La consecuencia más importante no es la radiación en sí, sino que un agujero negro tiene temperatura. Y si hay temperatura, hay entropía. Bekenstein, incluso antes que Hawking, se dio cuenta de que ésta debía ser proporcional al área del horizonte — y resultó ser cierto.",
+     "Proporcional al área, no al volumen. Para todo lo demás en el Universo, la entropía crece con el volumen: se duplica el contenido, se duplica el número de estados. Aquí, la duplicación ocurre con el crecimiento de la superficie. De este extraño hecho surgió más tarde la hipótesis holográfica, de la que se hablará en la última lección."
+    ]
+   },
+   {
+    "h": "Paradoja de la información",
+    "kicker": "debate que duró cuarenta años",
+    "text": [
+     "Ahora juntemos dos afirmaciones y obtendremos una contradicción. Primera: la mecánica cuántica exige que la información se conserve — la evolución del estado es reversible, y a partir del estado final siempre se puede recuperar el inicial. Segunda: la radiación de Hawking es térmica, es decir, está determinada solo por la masa del agujero y no recuerda nada de lo que cayó en él.",
+     "Entonces, si se arroja una enciclopedia a un agujero y luego se espera a que se evapore por completo, al exterior solo saldrá radiación térmica — y la información sobre el contenido de la enciclopedia desaparecerá del Universo para siempre. La mecánica cuántica no lo permite.",
+     "Hawking defendió durante treinta años la posición de que la información realmente se pierde y que la mecánica cuántica tendría que ser modificada. Muchos objetaron que más bien había un error en el cálculo cerca del horizonte. En 1997, Hawking y Thorne hicieron una apuesta con Preskill; en 2004, Hawking admitió públicamente la derrota y le entregó a Preskill una enciclopedia de béisbol, bromeando que valdría la pena quemarla y darle las cenizas."
+    ],
+    "pro": [
+     "la radiación de Hawking se deriva de la teoría cuántica de campos bien probada",
+     "la entropía por área se confirma mediante varios cálculos independientes",
+     "en espacios modelo se ha demostrado que la información sí se conserva"
+    ],
+    "con": [
+     "el mecanismo de su conservación para un agujero negro real es desconocido",
+     "la propia radiación de Hawking nunca se ha observado y difícilmente se observará",
+     "las soluciones propuestas requieren o abandonar la física habitual en el horizonte, o vínculos exóticos entre regiones distantes"
+    ],
+    "after": [
+     "Hoy en día, la mayoría cree que la información se conserva, pero nadie entiende exactamente cómo sale. Se han propuesto soluciones cada vez más radicales: firewall — una pared ardiente en el horizonte que incinera al que cae, violando el principio de equivalencia; la conexión del interior del agujero con la radiación a través del entrelazamiento cuántico; y la suposición de que el interior ni siquiera es un lugar separado. El debate no está cerrado."
+    ]
+   },
+   {
+    "h": "Por qué no funciona la gravedad cuántica",
+    "kicker": "el principal problema no resuelto de la física",
+    "text": [
+     "La razón no es que el problema sea técnicamente difícil. Es que las dos teorías exigen del espacio-tiempo cosas mutuamente excluyentes.",
+     "La teoría cuántica de campos funciona así: hay un escenario fijo — el espacio-tiempo — en el que tienen lugar los eventos. Los campos fluctúan, las partículas nacen y desaparecen, pero el escenario es inmutable y está dado de antemano. Todos los cálculos se basan en la posibilidad de descomponer el campo en oscilaciones sobre ese fondo.",
+     "La relatividad general dice que no hay escenario. El espacio-tiempo mismo es un participante: se curva, oscila, reacciona a todo lo que ocurre. No se puede descomponer en oscilaciones sobre un fondo — el fondo es precisamente lo que buscamos.",
+     "Técnicamente, esto se manifiesta como no renormalizabilidad. En electrodinámica, al calcular surgen infinitos, pero se pueden esconder en un número finito de magnitudes medibles — carga y masa. En gravedad, se requieren infinitas de esas magnitudes: cada orden de precisión genera una nueva, y el poder predictivo se pierde por completo."
+    ],
+    "image": {
+     "h": "Imagen: dibujar un mapa de un terreno que cambia al dibujarlo",
+     "text": [
+      "La física ordinaria es como colocar objetos sobre un mapa ya hecho: el relieve es conocido, usted marca en él casas y caminos.",
+      "La gravedad cuántica es el intento de dibujar en el mapa el propio mapa. Cada trazo cambia el relieve, y el relieve cambiado modifica dónde debería haberse puesto el trazo. Un círculo vicioso del que aún no hay salida matemática.",
+      "De ahí el sentido de la frase de que no entendemos qué son el espacio y el tiempo a escalas pequeñas. No es que no lo hayamos medido, sino que no tenemos una forma coherente de describirlo."
+     ]
+    },
+    "after": [
+     "La escala en la que el problema se vuelve inevitable se llama escala de Planck: alrededor de $10^{-35}$ metros. Es veinte órdenes de magnitud más pequeña que un protón, y no tenemos ninguna manera de mirar allí ni la tendremos en el futuro previsible. Para ver distancias así se necesitaría un acelerador del tamaño de una galaxia.",
+     "De ahí la peculiaridad de esta área de la física: las teorías se construyen sin ninguna posibilidad de verificarlas experimentalmente. Para una ciencia acostumbrada a descartar lo superfluo mediante la medición, este estado es sumamente inusual — y de sus consecuencias se habla en la última lección."
+    ]
+   },
+   {
+    "h": "De dónde vienen los agujeros negros y qué no está claro",
+    "kicker": "preguntas que se discuten hoy",
+    "text": [
+     "Los agujeros ordinarios de masas estelares nacen de forma clara: una estrella masiva agota su combustible, el núcleo colapsa, y si la masa del remanente supera aproximadamente tres masas solares, nada puede detener la contracción. Esto concuerda bien con las observaciones.",
+     "Pero con los supermasivos no está claro. En los centros de las galaxias hay agujeros de millones y miles de millones de masas solares, y ya existían unos cientos de millones de años después del Big Bang — el telescopio Webb ha encontrado tales. El tiempo para crecer gradualmente a partir de un agujero estelar es catastróficamente insuficiente: la acreción está limitada desde arriba porque la radiación expulsa la materia que cae.",
+     "Hay varias hipótesis, y todas con dificultades. Colapso directo de enormes nubes de gas sin etapa estelar — requiere condiciones especiales. Agujeros negros primordiales, nacidos de fluctuaciones de densidad en las primeras fracciones de segundo — una idea bonita que además da un candidato para la materia oscura, pero no hay confirmación observacional. Fusión rápida de muchos pequeños — no resuelve el problema de los plazos.",
+     "Y está la pregunta inversa: ¿por qué se observan tan pocos agujeros con masas entre cien y cien mil masas solares? Este intervalo se llama desierto de masas intermedias, y aún no tiene explicación."
+    ],
+    "note": "Por separado, vale la pena decir lo que definitivamente no hay en los agujeros negros. La singularidad en el centro no es un objeto físico, sino una señal de que la teoría se ha roto. Las ecuaciones dan una densidad infinita, y las infinitas en física siempre indican que se ha salido del ámbito de validez, no una propiedad de la naturaleza. Lo que hay realmente allí se desconoce, y solo se puede saber teniendo gravedad cuántica."
+   },
+   {
+    "h": "Lo que realmente se observa",
+    "kicker": "de lo indirecto a lo directo",
+    "text": [
+     "Durante mucho tiempo, los agujeros negros se consideraron una curiosidad matemática. Incluso Einstein publicó en 1939 un artículo demostrando que no podían formarse; el artículo contenía un error en sus suposiciones.",
+     "Hoy hay tres tipos de evidencia. La primera — las órbitas de estrellas alrededor de un objeto invisible en el centro de la Galaxia: una de ellas lo rodea en dieciséis años, y de la tercera ley de Kepler se deduce una masa de cuatro millones de masas solares con un tamaño menor que la órbita de Mercurio. Nada más que un agujero negro puede dar eso. Premio Nobel de 2020.",
+     "La segunda — ondas gravitacionales de fusiones, que LIGO ha detectado desde 2015. La forma de la señal coincide exactamente con el cálculo para dos horizontes fusionándose, incluida la amortiguación característica posterior a la fusión.",
+     "La tercera — la imagen de la sombra: una red de radiotelescopios en todo el planeta obtuvo en 2019 una imagen de la región alrededor del agujero en la galaxia M87, y luego también del centro de la nuestra. El tamaño y la forma de la sombra coincidieron con lo predicho."
+    ],
+    "now": [
+     "El Telescopio del Horizonte de Sucesos está trabajando para obtener no una imagen, sino un video: la materia alrededor del agujero se mueve, y es posible seguir su flujo. Se esperan las primeras películas en los próximos años.",
+     "Paralelamente, los teóricos han avanzado activamente en la paradoja de la información: en los últimos cinco años se han obtenido cálculos que muestran cómo la entropía de la radiación debe crecer y luego disminuir — es decir, la información finalmente sale. El mecanismo para un agujero negro real sigue siendo desconocido, pero el panorama matemático se ha aclarado notablemente."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Qué llevarse de esta conferencia",
+   "text": [
+    "El horizonte no es una pared, sino el límite de una región desde la que no hay camino hacia afuera. En un agujero grande, se puede cruzar sin notar nada, y esto hace que el concepto de horizonte sea global, no local.",
+    "Un agujero negro tiene temperatura y entropía, y la entropía es proporcional al área del horizonte, no al volumen. Esta es la única excepción conocida al recuento habitual de estados, y de ella surgió la hipótesis holográfica.",
+    "La paradoja de la información no es un debate filosófico, sino una contradicción directa entre dos teorías comprobadas. La mayoría cree que la información se conserva, pero se desconoce el mecanismo.",
+    "La gravedad cuántica no se construye porque la teoría cuántica requiere un escenario inmutable, mientras que la relatividad general afirma que el escenario mismo es un participante. No hay con qué poner a prueba ninguna hipótesis: la escala de Planck es inalcanzable."
+   ]
+  }
+ },
+ "ar": {
+  "title": "الثقوب السوداء وحافة النظرية",
+  "subtitle": "المحاضرة 3 · الآفاق، مفارقة المعلومات ولماذا لا تنجح الجاذبية الكمية",
+  "lead": "الثقوب السوداء مثيرة للاهتمام ليس لأنها سوداء، ولا حتى لأنه لا شيء يعود منها. إنها مثيرة للاهتمام لأنها المكان الوحيد في الكون حيث تضطر أفضل نظريتينا إلى التحدث في وقت واحد — وتبدأان في التناقض مع بعضهما البعض.",
+  "blocks": [
+   {
+    "h": "ما هو الأفق",
+    "kicker": "ولماذا يوجد في الواقع عدة آفاق",
+    "text": [
+     "أفق الحدث ليس سطحًا ولا جدارًا. إنه حدود المنطقة التي لا يمكن لأي إشارة أن تخرج منها، لأن ذلك يتطلب سرعة أكبر من سرعة الضوء. لا توجد مادة هناك: عند عبور أفق ثقب أسود ضخم، لن تشعر بأي شيء خاص.",
+     "يحسب نصف قطر الأفق ببساطة مذهلة. ساوِ سرعة الإفلات الثانية بسرعة الضوء في صيغة نيوتنية ساذجة - وستحصل على نفس الإجابة تمامًا التي يعطيها حل شفارتزشيلد الكامل. المصادفة عرضية، والاستنتاجان لا علاقة لهما ببعضهما البعض، لكن من الملائم استخدامه.",
+     "بالنسبة للشمس، سيكون نصف القطر ثلاثة كيلومترات، وللأرض تسعة ملليمترات. لتحويل كوكب إلى ثقب أسود، يجب ضغطه إلى حجم حبة الكرز."
+    ],
+    "eq": "$r_g = \\frac{2GM}{c^{2}}$",
+    "image": {
+     "h": "صورة: نهر يتدفق نحو شلال",
+     "text": [
+      "تخيل نهرًا يتسارع نحو شلال، وسمكة تسبح بأقصى سرعة - لنقل خمسة كيلومترات في الساعة. طالما أن التيار أبطأ من خمسة، يمكن للسمكة السباحة عكس التيار. حيث يصل التيار إلى خمسة بالضبط، يمر حد غير مرئي: تحته، تجدف السمكة بكل قوتها وتظل تُجرف إلى الأسفل.",
+      "هذا الحد هو الأفق. في الماء، لا يتم وضع علامة عليه، تعبره السمكة دون أن تلاحظ شيئًا. دور السرعة القصوى للسمكة تلعبه سرعة الضوء، ودور التيار تلعبه انحناء الزمكان.",
+      "من هنا يتضح الخاصية الرئيسية: الأفق ليس خاصية للمكان، بل لِمَا يمكن أن تصل إليه في المستقبل. إنه يتحدد بكل التاريخ اللاحق، وليس بما هو موجود في تلك النقطة."
+     ]
+    },
+    "after": [
+     "بالنسبة للثقب الدوار، هناك بالفعل أفقان. الخارجي هو حد اللاعودة. الداخلي، المسمى أفق كوشي، يقع أعمق، وترتبط به مشكلة منفصلة: خلفه، تتوقف المعادلات عن تحديد المستقبل بشكل فريد من الماضي. القدرة على التنبؤ، التي تعتبر أمرًا مفروغًا منه في الفيزياء، تنهار هناك. يعتقد معظم الفيزيائيين أن الأفق الداخلي الحقيقي غير مستقر وينهار عند أدنى اضطراب - ولكن لا يوجد دليل صارم، وهذه مسألة مفتوحة."
+    ]
+   },
+   {
+    "h": "قوى المد والجزر: أين ستمزق وأين لا",
+    "kicker": "منعطف غير متوقع",
+    "text": [
+     "من المعروف أن الساقط في ثقب أسود سيمتد كالأسباجيتي. هذا صحيح، لكنه يعتمد على حجم الثقب، وبالعكس مما يوحي به الحدس.",
+     "التمزيق ليس بسبب الجاذبية، بل بسبب الفرق بين الرأس والقدمين - قوة المد والجزر، التي تم شرحها في موضوع الجاذبية. إنها تتناسب مع الكتلة مقسومة على مكعب المسافة. ونصف قطر الأفق ينمو خطيًا مع الكتلة. إذن عند الأفق، تنخفض قوة المد والجزر مثل واحد على مربع الكتلة: كلما كان الثقب أكبر، كان العبور أكثر هدوءًا.",
+     "بالنسبة لثقب أسود ذي كتلة نجمية، ستمزق قبل الأفق بكثير - على بعد آلاف الكيلومترات. بالنسبة للثقب فائق الكتلة في مركز مجرتنا، حيث تبلغ كتلته أربعة ملايين كتلة شمسية، يمكن عبور الأفق دون الشعور بأي شيء. لن يحدث أي شيء خاص - فقط من تلك اللحظة فصاعدًا، جميع مساراتك المستقبلية تؤدي إلى الداخل."
+    ],
+    "note": "من هنا تأتي خاصية غير سارة للأفق: لا يمكن اكتشافه محليًا. لا يمكنك إجراء تجربة ومعرفة ما إذا كنت قد عبرته أم لا - لأن الأفق لا يتحدد بما هو هنا، بل بما تؤدي إليه جميع الطرق من هنا. المفهوم عالمي، بينما الفيزياء كلها معتادة على أن تكون محلية. هذا أحد الأسباب التقنية التي تجعل من الصعب التوفيق بين الثقوب السوداء والنظرية الكمومية."
+   },
+   {
+    "h": "هوكينغ: الثقوب السوداء تتبخر",
+    "kicker": "وهنا بدأ الأمر المثير للاهتمام",
+    "text": [
+     "في عام 1974، اكتشف هوكينغ أنه إذا طُبقت نظرية الحقل الكمومي على الفضاء بالقرب من الأفق، فإن الثقب الأسود ليس أسودًا تمامًا. إنه يشع - بدرجة حرارة محددة بدقة، تتناسب عكسيًا مع الكتلة.",
+     "عادة ما يتم شرح الآلية على النحو التالي: يولد الفراغ باستمرار أزواجًا من الجسيمات الافتراضية، وعند الأفق قد يسقط أحد الزوجين إلى الداخل، بينما يطير الآخر إلى الخارج. الشرح واضح وتقريبي، والاستنتاج الفعلي أكثر تعقيدًا، لكن النتيجة لا جدال فيها: يفقد الثقب كتلته ويتبخر في النهاية.",
+     "الأرقام غريبة. ثقب كتلة شمسية له درجة حرارة أجزاء من عشرة ملايين من كلفن - إنه أبرد بكثير من إشعاع الخلفية الكونية، وبالتالي فهو ينمو حاليًا عن طريق امتصاصه. ويجب أن يتبخر خلال $10^{67}$ سنة. أما الثقوب الصغيرة فهي ساخنة وتتبخر بسرعة، وتنفجر في النهاية."
+    ],
+    "eq": "$T_H = \\frac{\\hbar c^{3}}{8\\pi G M k_B}$",
+    "after": [
+     "أهم نتيجة ليست الإشعاع بحد ذاته، بل أن الثقب الأسود له درجة حرارة. وبما أن هناك درجة حرارة، فهناك إنتروبيا. بيكينشتاين حتى قبل هوكينغ أدرك أنها يجب أن تتناسب مع مساحة الأفق - وهذا كان صحيحًا.",
+     "تتناسب مع المساحة وليس الحجم. لكل شيء آخر في الكون، تزداد الإنتروبيا مع الحجم: تضاعف المحتوى - تضاعف عدد الحالات. هنا، المضاعفة تحدث مع نمو السطح. من هذه الحقيقة الغريبة نشأت لاحقًا الفرضية الهولوغرافية، والتي سيتم الحديث عنها في المحاضرة الأخيرة."
+    ]
+   },
+   {
+    "h": "مفارقة المعلومات",
+    "kicker": "نزاع استمر أربعين عامًا",
+    "text": [
+     "الآن نجمع بين عبارتين ونحصل على تناقض. الأولى: ميكانيكا الكم تتطلب الحفاظ على المعلومات - تطور الحالة قابل للعكس، ويمكن دائمًا استعادة الحالة الأولية من الحالة النهائية. الثانية: إشعاع هوكينغ حراري، أي أنه يتحدد فقط بكتلة الثقب ولا يتذكر أي شيء سقط فيه.",
+     "إذن، إذا ألقينا موسوعة في الثقب، ثم انتظرنا حتى يتبخر تمامًا، سيخرج فقط إشعاع حراري - وستختفي معلومات محتوى الموسوعة من الكون إلى الأبد. ميكانيكا الكم لا تسمح بذلك.",
+     "دافع هوكينغ لمدة ثلاثين عامًا عن موقف مفاده أن المعلومات تُفقد بالفعل وأن ميكانيكا الكم يجب تعديلها. اعترض الكثيرون بأن الخطأ ربما يكون في الحساب بالقرب من الأفق. في عام 1997، أبرم هوكينغ وتورن رهانًا مع بريسكيل؛ في عام 2004، اعترف هوكينغ علنًا بالهزيمة وأعطى بريسكيل موسوعة بيسبول، مازحًا أنه كان يجب حرقها وإعطاء الرماد."
+    ],
+    "pro": [
+     "إشعاع هوكينغ ينبع من نظرية الحقل الكمومي المختبرة جيدًا",
+     "الإنتروبيا حسب المساحة تؤكدها عدة حسابات مستقلة",
+     "في فضاءات نموذجية، تبين أن المعلومات لا تزال محفوظة"
+    ],
+    "con": [
+     "آلية حفظها لثقب أسود حقيقي غير معروفة",
+     "إشعاع هوكينغ نفسه لم يلاحظ أبدًا ومن غير المرجح أن يُلاحظ",
+     "الحلول المقترحة تتطلب إما التخلي عن الفيزياء المألوفة عند الأفق، أو روابط غريبة بين مناطق بعيدة"
+    ],
+    "after": [
+     "اليوم، يعتقد الأغلبية أن المعلومات محفوظة، لكن كيف تخرج بالضبط لا يفهمه أحد. تم اقتراح حلول متطرفة: فايروول - جدار حارق على الأفق يحرق الساقط مخالفًا مبدأ التكافؤ؛ ارتباط داخل الثقب بالإشعاع عبر التشابك الكمومي؛ وافتراض أن الداخل ليس مكانًا منفصلاً على الإطلاق. النزاع لم يُحسم بعد."
+    ]
+   },
+   {
+    "h": "لماذا لا تنجح الجاذبية الكمومية",
+    "kicker": "المسألة الرئيسية غير المحلولة في الفيزياء",
+    "text": [
+     "السبب ليس أن المسألة صعبة تقنيًا. بل أن النظريتين تتطلبان من الزمكان أمرًا متنافيًا.",
+     "نظرية الحقل الكمومي تعمل هكذا: هناك مسرح ثابت - الزمكان - تجري عليه الأحداث. الحقول تتقلب، الجسيمات تخلق وتختفي، لكن المسرح غير متغير ومحدد مسبقًا. كل الحسابات تعتمد على إمكانية تحليل الحقل إلى تذبذبات على هذه الخلفية.",
+     "النسبية العامة تقول أنه لا يوجد مسرح. الزمكان نفسه مشارك: ينحني، يتذبذب، يتفاعل مع كل ما يحدث. لا يمكن تحليله إلى تذبذبات على خلفية - الخلفية هي ما نبحث عنه.",
+     "تقنيًا، يظهر هذا كعدم قابلية إعادة التطبيع. في الديناميكا الكهربائية، تظهر اللانهايات في الحساب، لكن يمكن إخفاؤها في عدد محدود من الكميات القابلة للقياس - الشحنة والكتلة. في الجاذبية، عدد هذه الكميات لا نهائي: كل مستوى دقة يولد كمية جديدة، وتفقد القوة التنبؤية تمامًا."
+    ],
+    "image": {
+     "h": "صورة: رسم خريطة تضاريس تتغير أثناء الرسم",
+     "text": [
+      "الفيزياء العادية تشبه وضع أشياء على خريطة جاهزة: التضاريس معروفة، تضع عليها المنازل والطرق.",
+      "الجاذبية الكمومية هي محاولة لوضع الخريطة نفسها على الخريطة. كل ضربة تغير التضاريس، والتضاريس المتغيرة تغير مكان وضع الضربة. حلقة مفرغة لا يوجد لها مخرج رياضي حتى الآن.",
+      "من هنا يأتي معنى العبارة أننا لا نفهم ما هو المكان والزمان على المقاييس الصغيرة. ليس 'لم نقس'، بل 'ليس لدينا طريقة متسقة لوصف'."
+     ]
+    },
+    "after": [
+     "المقياس الذي تصبح فيه المشكلة حتمية يسمى مقياس بلانك: حوالي $10^{-35}$ متر. هذا أصغر بعشرين مرتبة من البروتون، وليس لدينا أي طريقة للنظر إليه ولن تظهر في المستقبل المنظور. لرؤية مثل هذه المسافات، سنحتاج إلى مسرع بحجم مجرة.",
+     "من هنا خصوصية هذا المجال من الفيزياء: تُبنى النظريات دون أي إمكانية لاختبارها بالتجربة. بالنسبة للعلم المعتاد على استبعاد الزائد بالقياس، هذه الحالة غير مألوفة للغاية - وتناقش عواقبها في المحاضرة الأخيرة."
+    ]
+   },
+   {
+    "h": "من أين تأتي الثقوب السوداء وما هو غير واضح هنا",
+    "kicker": "أسئلة تُناقش الآن",
+    "text": [
+     "الثقوب العادية ذات الكتل النجمية تولد بشكل واضح: نجم ضخم يستنفد وقوده، ينهار اللب، وإذا تجاوزت كتلة البقايا حوالي ثلاث كتل شمسية، لا شيء يمكن أن يوقف الانضغاط. هذا يتوافق جيدًا مع الملاحظات.",
+     "أما بالنسبة للثقوب فائقة الكتلة فالأمر غير واضح. في مراكز المجرات تقع ثقوب كتلتها ملايين ومليارات الكتل الشمسية، وقد كانت موجودة بالفعل بعد بضع مئات الملايين من السنين من الانفجار العظيم - وجد تلسكوب ويب مثل هذه. الوقت للنمو التدريجي من ثقب نجمي غير كافٍ بشكل كارثي: التراكم محدود من الأعلى لأن الإشعاع يدفع المادة الساقطة.",
+     "هناك عدة افتراضات، وكلها تواجه صعوبات. الانهيار المباشر لسحب غازية ضخمة دون مرحلة نجمية - يتطلب شروطًا خاصة. الثقوب السوداء البدائية، التي ولدت من تذبذبات الكثافة في أجزاء الأولى من الثانية، هي فكرة جميلة تعطي أيضًا مرشحًا للمادة المظلمة، لكن لا توجد تأكيدات رصدية. الاندماج السريع للعديد من الثقوب الصغيرة - لا يحل مشكلة التوقيت.",
+     "هناك أيضًا سؤال عكسي: لماذا نلاحظ عددًا قليلاً جدًا من الثقوب ذات الكتل بين مائة ومائة ألف كتلة شمسية؟ هذه الفترة تسمى صحراء الكتل المتوسطة، ولا يوجد لها تفسير حتى الآن."
+    ],
+    "note": "بشكل منفصل، تجدر الإشارة إلى ما لا يوجد بالتأكيد في الثقوب السوداء. التفرد في المركز ليس كائنًا فيزيائيًا، بل علامة على أن النظرية انهارت. المعادلات تعطي كثافة لا نهائية، واللانهايات في الفيزياء تعني دائمًا تجاوز حدود الصلاحية، وليس خاصية طبيعية. ما هو هناك حقًا غير معروف، ولا يمكن معرفته إلا من خلال الجاذبية الكمومية."
+   },
+   {
+    "h": "ما الذي يُلاحظ حقًا",
+    "kicker": "من غير المباشر إلى المباشر",
+    "text": [
+     "لفترة طويلة، اعتبرت الثقوب السوداء فضولًا رياضيًا. حتى أينشتاين نشر في عام 1939 مقالًا يثبت أنها لا يمكن أن تتشكل؛ المقال احتوى على خطأ في الافتراضات.",
+     "اليوم، هناك ثلاثة أنواع من الأدلة. الأول - مدارات النجوم حول جسم غير مرئي في مركز المجرة: أحدها يدور حوله في ستة عشر عامًا، ومن قانون كبلر الثالث تنتج كتلة أربعة ملايين كتلة شمسية بحجم أصغر من مدار عطارد. لا شيء سوى ثقب أسود يمكن أن يعطي ذلك. جائزة نوبل 2020.",
+     "الثاني - موجات الجاذبية من الاندماجات التي يلتقطها LIGO منذ عام 2015. شكل الإشارة يتطابق تمامًا مع حساب أفقين مندمجين، بما في ذلك التخميد المميز بعد الاندماج.",
+     "الثالث - صورة الظل: شبكة من التلسكوبات الراديوية حول الكوكب في عام 2019 حصلت على صورة للمنطقة المحيطة بالثقب في مجرة M87، ثم في مركز مجرتنا. حجم وشكل الظل تطابقا مع المتوقع."
+    ],
+    "now": [
+     "تلسكوب أفق الحدث يعمل على الحصول ليس على صورة بل على فيديو: المادة حول الثقب تتحرك، ويمكن تتبع تدفقها. الأفلام الأولى متوقعة في السنوات القادمة.",
+     "بالتوازي، تقدم المنظرون بنشاط في مفارقة المعلومات: في السنوات الخمس الماضية، تم الحصول على حسابات تظهر كيف يجب أن تزداد إنتروبيا الإشعاع ثم تتناقص - أي أن المعلومات تخرج بالفعل. الآلية لثقب أسود حقيقي تبقى غير معروفة، لكن الصورة الرياضية أصبحت أكثر وضوحًا بشكل ملحوظ."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "الخلاصة من هذه المحاضرة",
+   "text": [
+    "الأفق ليس جداراً، بل حدود منطقة لا يوجد منها طريق إلى الخارج. يمكن عبوره في ثقب كبير دون ملاحظة شيء، وهذا يجعل مفهوم الأفق شاملاً وليس محلياً.",
+    "للثقب الأسود درجة حرارة وإنتروبيا، حيث تتناسب الإنتروبيا مع مساحة الأفق وليس الحجم. هذا هو الاستثناء الوحيد المعروف من العد المعتاد للحالات، ومنه نشأت الفرضية الهولوغرامية.",
+    "مفارقة المعلومات ليست جدلاً فلسفياً، بل تناقضاً مباشراً بين نظريتين مُختبرتين. يعتقد الأغلبية أن المعلومات محفوظة، لكن الآلية غير معروفة.",
+    "الجاذبية الكمية لا تُبنى لأن النظرية الكمية تتطلب مسرحاً ثابتاً، بينما النظرية النسبية العامة تؤكد أن المسرح نفسه مشارك. لا توجد وسيلة لاختبار أي افتراضات: مقياس بلانك غير قابل للوصول."
+   ]
+  }
+ }
+}

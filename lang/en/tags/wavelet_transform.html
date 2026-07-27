@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#wavelet transform — bridge42worlds</title>
+    <meta name="description" content="The secret of wavelets lies in compromise. Fourier analysis provides perfect frequency resolution but loses time information. The windowed Fourier transform fixes this but fixes the window size. Wavelets adjust the window width adaptively: for high frequencies, short windows are used; for low frequencies, long ones. This is like musical notation, where long notes represent bass sounds and short ones represent rapid trills. In practice, wavelets excel at image compression (JPEG 2000 format) and cleaning signals from noise without blurring sharp transitions—for example, in medical tomograms.">
+    <meta property="og:title" content="#wavelet transform — bridge42worlds">
+    <meta property="og:description" content="The secret of wavelets lies in compromise. Fourier analysis provides perfect frequency resolution but loses time information. The windowed Fourier transform fixes this but fixes the window size. Wavelets adjust the window width adaptively: for high frequencies, short windows are used; for low frequencies, long ones. This is like musical notation, where long notes represent bass sounds and short ones represent rapid trills. In practice, wavelets excel at image compression (JPEG 2000 format) and cleaning signals from noise without blurring sharp transitions—for example, in medical tomograms.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/tags/wavelet_transform.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — The gist in 10 seconds"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — As simple as it gets — for a first look"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Tag</div><h1>wavelet transform</h1><button class="share-inline" title="Share" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">1</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">A zoom lens on a camera captures both the entire landscape and the pattern on a butterfly's wing. The wavelet transform similarly changes scale: it decomposes a signal into scaled copies of itself, allowing one to see both the overall shape and the tiniest jumps.</p><div class="practical-app"><strong>In practice:</strong> Digital fingerprints and barcodes are compressed using wavelets. Instruments that search for defects in aircraft parts listen for crack echoes with wavelets.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">The secret of wavelets lies in compromise. Fourier analysis provides perfect frequency resolution but loses time information. The windowed Fourier transform fixes this but fixes the window size. Wavelets adjust the window width adaptively: for high frequencies, short windows are used; for low frequencies, long ones. This is like musical notation, where long notes represent bass sounds and short ones represent rapid trills. In practice, wavelets excel at image compression (JPEG 2000 format) and cleaning signals from noise without blurring sharp transitions—for example, in medical tomograms.</div>
+        <div class="section"><h2>History</h2><p>Wavelets emerged in the 1980s when geophysicist Jean Morlet sought a way to extract weak reflected waves in seismic data. Together with physicist Alex Grossmann, he developed the continuous wavelet transform. Later, mathematician Ingrid Daubechies constructed elegant orthogonal wavelets with compact support, paving the way for fast algorithms.</p></div>
+        <div class="section"><h2>How it works</h2><p>Take a short wave template (the wavelet). Compare it to a segment of the signal at the beginning—you get a similarity number. Shift the template slightly forward—another number. After sliding through the whole signal, you obtain a series of numbers for that template size. Then stretch the template (increase the scale) and repeat. A tiny template catches sharp peaks; a large one captures smooth curves. The collection of such series for different stretches is the wavelet spectrum.</p></div>
+        <div class="fun-fact">💡 Human vision is somewhat similar to wavelet analysis: we can discern both the overall shape of a chair in dim light and a fine inscription on its leg—the brain processes images at multiple scales simultaneously.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">Ordinary Fourier analysis shows which frequencies were present in a signal, but not when. It's as if someone told you that a symphony contains the note C, but not at what moment. The wavelet transform solves this problem: instead of endless sinusoids, it uses small waves—wavelets—that decay. The wavelet is applied to the signal and shifted along like a template. Changing the size of the template (scale) lets you see both broad features and fine details. This yields a map: time on the horizontal axis, scale on the vertical, and color indicating the strength of the match.</div>
+        <div class="section"><h2>History</h2><p>Wavelets emerged in the 1980s when geophysicist Jean Morlet sought a way to extract weak reflected waves in seismic data. Together with physicist Alex Grossmann, he developed the continuous wavelet transform. Later, mathematician Ingrid Daubechies constructed elegant orthogonal wavelets with compact support, paving the way for fast algorithms.</p></div>
+        <div class="section"><h2>How it works</h2><p>Take a short wave template (the wavelet). Compare it to a segment of the signal at the beginning—you get a similarity number. Shift the template slightly forward—another number. After sliding through the whole signal, you obtain a series of numbers for that template size. Then stretch the template (increase the scale) and repeat. A tiny template catches sharp peaks; a large one captures smooth curves. The collection of such series for different stretches is the wavelet spectrum.</p></div>
+        <div class="fun-fact">💡 The FBI in the early 1990s chose wavelet compression for storing digital fingerprints: it preserves fine patterns much better than JPEG.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">The wavelet transform is a mathematical tool for time-frequency analysis of signals with adaptive resolution. The continuous wavelet transform (CWT) is defined as the convolution of a signal with scaled and shifted versions of a mother wavelet. The discrete wavelet transform (DWT) uses multiresolution analysis to obtain a hierarchical set of coefficients—approximation and detail. Wavelets provide optimal localization in the time-frequency domain in the sense of the uncertainty principle, but with variable window width, unlike the fixed-window Fourier transform. They form a basis in function spaces and are used for denoising, compression, feature extraction, and solving differential equations.</div>
+        <div class="section"><h2>History</h2><p>The history of wavelets began with Haar's work (1909)—the simplest step-like system. From the 1930s to the 1980s, separate ideas emerged: the Littlewood–Paley function, quadrature mirror filters by Croisier, Esteban, and Galand. A coherent theory arose in the early 1980s from the work of geophysicist Jean Morlet and mathematician Alex Grossmann, who built the continuous wavelet transform for seismic signal analysis. Then Ingrid Daubechies (1988) created smooth orthogonal wavelets with compact support, enabling a fast transform. Later, Mallat and Meyer developed multiresolution analysis, linking wavelets to signal filtering.</p></div>
+        <div class="section"><h2>How it works</h2><p>The scaling function φ(t) and mother wavelet ψ(t) generate a basis such that {ψ_{j,k}(t) = 2^{-j/2} ψ(2^{-j}t - k)}. Any signal can be decomposed: f(t) = Σ_k a_{j0,k} φ_{j0,k}(t) + Σ_{j≥j0} Σ_k d_{j,k} ψ_{j,k}(t). The coefficients d are obtained by the fast Mallat algorithm using cascaded filtering. At each level, the signal passes through a pair of filters—low-pass (averaging) and high-pass (detailing)—followed by decimation. This is dual to a bank of quadrature mirror filters. The orthogonality condition of the wavelet basis requires the filters to satisfy certain relations. The analysis is flexible: the wavelet shape can be tailored to the data type.</p></div>
+        <div class="formula"><div class="formula-render">W(a,b) = \frac{1}{\sqrt{a}} \int_{-\infty}^{\infty} f(t) \, \overline{\psi\!\left(\frac{t-b}{a}\right)} \, dt</div><div class="formula-meaning">f(t) — signal, ψ — mother wavelet, overline denotes complex conjugation, a — scale (a&gt;0), b — shift, W(a,b) — wavelet coefficients</div></div><div class="formula"><div class="formula-render">f(t) = \sum_{k} a_{j_0,k} \varphi_{j_0,k}(t) + \sum_{j=j_0}^{\infty} \sum_{k} d_{j,k} \psi_{j,k}(t)</div><div class="formula-meaning">φ — scaling function, ψ — wavelet, j₀ — starting scale, a_{j₀,k} — approximation coefficients at level j₀, d_{j,k} — detail coefficients at level j</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Automatic selection of a mother wavelet for a specific signal type; Efficient algorithms for multidimensional wavelet transforms; Wavelet analysis of nonlinear and nonstationary systems with fast chaotic dynamics; Improving reconstruction accuracy after heavy lossy compression</p><p class="fact">💡 The FBI in the early 1990s chose wavelet compression for storing digital fingerprints: it preserves fine patterns much better than JPEG.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div>
+<div class="mini-graph" data-node="t:wavelet_transform"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="wavelet_transform_en_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="wavelet_transform" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="wavelet_transform_en_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related tags</div><a href="/lang/en/tags/digital_image_processing.html" class="side-tag" data-tag="digital_image_processing">Digital Image Processing</a><a href="/lang/en/tags/filtering.html" class="side-tag" data-tag="filtering">Filtering</a><a href="/lang/en/tags/fourier_analysis.html" class="side-tag" data-tag="fourier_analysis">Fourier analysis</a><a href="/lang/en/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">Machine Learning</a><a href="/lang/en/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">signal processing</a><a href="/lang/en/tags/spectral_analysis.html" class="side-tag" data-tag="spectral_analysis">Spectral Analysis</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="wavelet_transform"><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-30</span></div><div class="card-body"><h3><a href="/lang/en/archive/2026-06-30/2607.00123/index.html" title="Threshold 2: How a Rubber Ruler Withstands Endless Averaging">Threshold 2: How a Rubber Ruler Withstands Endless Averaging</a></h3><div class="oneliner">When you average an infinite sequence over and over, its internal structure can break down. For Orlicz spaces—where each scale has its own stiffness, like a rubber ruler with uneven elasticity—the authors found an elegant stability criterion. If a certain decreasing test sequence obeys the rule that</div></div></article></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('wavelet_transform', 'tag', 'en');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

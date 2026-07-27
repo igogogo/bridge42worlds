@@ -183,9 +183,13 @@
                 });
                 // Без рёбер при текущем срезе фильтров — узел «неприкаянный», не показываем его
                 // (не удаляем сущность, просто прячем из ЭТОГО вида графа — обычная фильтрация).
+                // Если при выбранном срезе связей не осталось вовсе (типичный случай: отметили
+                // только один тип узлов, а рёбра между ними не отмечены) — показываем сами узлы,
+                // без связей. Пустой экран пользователь читает как поломку, а это просто срез.
+                var anyLinked = candIds.some(function (id) { return deg[id]; });
                 var idx = {}, nodes = [];
                 candIds.forEach(function (id) {
-                    if (!deg[id]) return;
+                    if (anyLinked && !deg[id]) return;
                     var n = byId[id];
                     idx[id] = nodes.length;
                     nodes.push({ rawid: n.id.slice(2), name: resolveName(n, tn, ln), kind: n.kind, sub: n.sub });

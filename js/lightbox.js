@@ -19,7 +19,11 @@
         box.querySelector('.lightbox-close').addEventListener('click', close);
         box.querySelector('.lightbox-prev').addEventListener('click', () => show(idx - 1));
         box.querySelector('.lightbox-next').addEventListener('click', () => show(idx + 1));
-        box.addEventListener('click', e => { if (e.target === box) close(); });
+        // Клик по фону ИЛИ по самой картинке закрывает (юзер 2026-07-25); крестик остаётся.
+        box.addEventListener('click', e => {
+            if (e.target === box || e.target.classList.contains('lightbox-img')
+                || e.target.classList.contains('lightbox-frame')) close();
+        });
         return box;
     }
 

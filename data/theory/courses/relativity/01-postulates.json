@@ -1,0 +1,1535 @@
+{
+  "id": "01-postulates",
+  "topic": "relativity",
+  "schema": "b42.lesson/1",
+  "model": "srt",
+  "entities": {
+    "laws": [
+      "special_relativity"
+    ],
+    "tags": [
+      "relativity"
+    ],
+    "scientists": [
+      "Albert Einstein"
+    ]
+  },
+  "ru": {
+    "title": "Два постулата",
+    "subtitle": "Параграф 1 · Почему скорость света одинакова для всех",
+    "intro": [
+      "Вы едете в поезде и катите мяч вперёд. Для вас он движется со скоростью пять километров в час, для человека на перроне — со скоростью поезда плюс пять. Скорости складываются, это очевидно, и Галилей записал это четыреста лет назад.",
+      "Теперь включите фонарик. Для вас свет уходит вперёд со скоростью $c$. Логика требует, чтобы для наблюдателя на перроне он летел со скоростью $c$ плюс скорость поезда. Но все опыты говорят: нет, ровно $c$. Одна и та же величина, измеренная из движущегося поезда и с неподвижного перрона.",
+      "Это не странность света, а сообщение об устройстве пространства и времени. Если скорость — это расстояние, делённое на время, и она вышла одинаковой у двух наблюдателей, значит расстояния и времена у них разные. Именно к этому выводу и пришёл Эйнштейн, а всё остальное — следствия."
+    ],
+    "standNote": "На стенде двое световых часов: слева покоящиеся, справа движущиеся. Свет в них ходит между зеркалами с одной и той же скоростью — это постулат, и стенд его выполняет честно. Смотрите на пути: у левых часов свет идёт прямо вверх-вниз, у правых по диагонали, потому что зеркала успевают уехать. Диагональ длиннее вертикали, а скорость та же — значит такт правых часов длиннее. Двигая ползунок скорости, следите за γ: до половины скорости света поправка почти незаметна, а дальше растёт стремительно.",
+    "formula": {
+      "name": "Постулаты специальной теории относительности",
+      "latex": "1)\\;\\text{законы физики одинаковы во всех ИСО} \\qquad 2)\\; c = \\text{const}",
+      "alsoKnown": "Принцип относительности и постоянство скорости света",
+      "authors": [
+        {
+          "who": "Галилео Галилей",
+          "year": "1632",
+          "what": "сформулировал принцип относительности на примере корабля: запершись в каюте, невозможно определить, движется судно равномерно или стоит. Все механические опыты дают одинаковый результат"
+        },
+        {
+          "who": "Джеймс Клерк Максвелл",
+          "year": "1865",
+          "what": "получил уравнения, в которых скорость света выражается через постоянные среды и не содержит никакого указания на систему отсчёта. Именно это и создало противоречие с Галилеем"
+        },
+        {
+          "who": "Альберт Майкельсон и Эдвард Морли",
+          "year": "1887",
+          "what": "попытались обнаружить движение Земли сквозь эфир и получили строгий ноль. Опыт повторяли десятилетиями с растущей точностью — результат тот же"
+        },
+        {
+          "who": "Альберт Эйнштейн",
+          "year": "1905",
+          "what": "предложил принять оба утверждения одновременно и посмотреть, что придётся изменить. Изменить пришлось понятия одновременности, длины и времени — но противоречие исчезло"
+        }
+      ],
+      "story": "Статья 1905 года начинается не с опытов Майкельсона, а с логического неудобства, которое Эйнштейн заметил в электродинамике. Возьмём магнит и катушку. Если двигать магнит, в катушке возникает ток — и объясняют это возникшим вихревым электрическим полем. Если вместо этого двигать катушку, ток тот же самый — но объясняют уже силой Лоренца, действующей на заряды. Явление одно, а объяснения два, и выбор между ними зависит от того, что мы считаем неподвижным. Эйнштейна это раздражало как несимметричность, не имеющая оснований в самом явлении. Из этого раздражения выросла теория, изменившая физику. Полезный урок: иногда стоит доверять эстетическому неудобству больше, чем работающей формуле.",
+      "symbols": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "what": "скорость света в вакууме",
+          "unit": "м/с",
+          "note": "одинакова во всех инерциальных системах — это постулат, а не результат вывода"
+        },
+        {
+          "sym": "ISO",
+          "latex": "\\text{ИСО}",
+          "what": "инерциальная система отсчёта",
+          "unit": "—",
+          "note": "движется равномерно и прямолинейно; в ней выполняется первый закон Ньютона"
+        },
+        {
+          "sym": "beta",
+          "latex": "\\beta",
+          "what": "отношение скорости к световой",
+          "unit": "—",
+          "note": "$\\beta = v/c$; удобная безразмерная мера того, насколько эффекты существенны"
+        },
+        {
+          "sym": "gamma",
+          "latex": "\\gamma",
+          "what": "лоренц-фактор",
+          "unit": "—",
+          "note": "$1/\\sqrt{1-\\beta^{2}}$ — во сколько раз растягивается время и сокращается длина"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: замедление времени из теоремы Пифагора",
+      "lead": "Всё, что понадобится, — прямоугольный треугольник. Это, пожалуй, самый экономный вывод великого результата во всей физике.",
+      "steps": [
+        {
+          "text": "Построим световые часы: два зеркала на расстоянии $L$, между ними бегает вспышка. Один такт — путь туда и обратно. В системе, где часы покоятся, всё просто.",
+          "latex": "\\Delta t_0 = \\frac{2L}{c}",
+          "figure": "vline",
+          "figCaption": "Самые честные часы: их ход задан только скоростью света и расстоянием между зеркалами."
+        },
+        {
+          "text": "Теперь посмотрим на те же часы из системы, относительно которой они летят со скоростью $v$. За время такта часы успевают уехать, и свет вынужден идти по диагонали, чтобы попасть в убежавшее зеркало.",
+          "latex": "\\text{путь света} = c\\,\\Delta t, \\qquad \\text{смещение часов} = v\\,\\Delta t",
+          "figure": "shadow",
+          "figCaption": "Свет идёт по диагонали, потому что зеркало уезжает. Скорость при этом та же — так велит второй постулат."
+        },
+        {
+          "text": "Разберём половину такта и запишем теорему Пифагора для получившегося прямоугольного треугольника: вертикальный катет — расстояние между зеркалами, горизонтальный — смещение часов, гипотенуза — путь света.",
+          "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+          "figure": "vectriangle",
+          "figCaption": "Весь вывод специальной теории относительности умещается в один прямоугольный треугольник."
+        },
+        {
+          "text": "Решаем относительно $\\Delta t$. Переносим и выносим за скобку.",
+          "latex": "\\Delta t^{2}(c^{2} - v^{2}) = 4L^{2} \\;\\Longrightarrow\\; \\Delta t = \\frac{2L}{\\sqrt{c^{2}-v^{2}}}",
+          "figure": "secant",
+          "figCaption": "Обычная алгебра. Ничего сложнее возведения в квадрат здесь не требуется."
+        },
+        {
+          "text": "Вынесем $c$ из-под корня и узнаем в первом множителе собственное время такта.",
+          "latex": "\\Delta t = \\frac{2L}{c}\\cdot\\frac{1}{\\sqrt{1-v^{2}/c^{2}}} = \\gamma\\,\\Delta t_0",
+          "figure": "result",
+          "figCaption": "Движущиеся часы идут медленнее в γ раз. Получено из одного треугольника и одного постулата."
+        },
+        {
+          "text": "Проверим, что при малых скоростях ничего не меняется. Разложение при малом $\\beta$ даёт поправку второго порядка — вот почему тысячи лет никто ничего не замечал.",
+          "latex": "\\gamma \\approx 1 + \\frac{v^{2}}{2c^{2}}: \\quad v = 100\\ \\text{м/с} \\Rightarrow \\gamma - 1 \\approx 6\\cdot 10^{-14}",
+          "figure": "curves",
+          "figCaption": "У пассажирского самолёта поправка в четырнадцатом знаке. Заметить её без атомных часов невозможно."
+        },
+        {
+          "text": "И самое неприятное следствие обоих постулатов — относительность одновременности. Пусть в середине вагона вспыхнула лампа. Для пассажира свет доходит до обеих стенок одновременно. Для наблюдателя на перроне задняя стенка едет навстречу свету, а передняя убегает, — значит свет достигает их в разные моменты.",
+          "latex": "\\text{одновременно для одного} \\;\\neq\\; \\text{одновременно для другого}",
+          "figure": "inertialframe",
+          "figCaption": "Одновременность не абсолютна. Это самое глубокое следствие и самое трудное для принятия."
+        }
+      ],
+      "plate": "Из постоянства скорости света и теоремы Пифагора следует, что движущиеся часы идут медленнее в $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$ раз, а одновременность зависит от наблюдателя.",
+      "note": "Границы применимости и частая путаница. Замедление относительно: для пассажира поезда отстают часы на перроне, и это не противоречие — они просто пользуются разными определениями одновременности. Парадокс близнецов кажется нарушением симметрии, но её нарушает разворот: улетевший близнец меняет систему отсчёта, а оставшийся нет. Кроме того, вся эта теория относится только к инерциальным системам; при наличии тяготения нужна общая теория относительности."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Почему диагональ длиннее — самая суть вывода в одной фразе. Представьте, что вы бросаете мяч вертикально вверх в едущем автобусе и ловите его. Для вас мяч летит вверх-вниз по прямой. Для человека на улице он описывает дугу, потому что успевает уехать вбок. Путь по дуге длиннее пути по прямой — с этим никто не спорит. У мяча это не создаёт проблем: его скорость для уличного наблюдателя тоже больше, и время выходит то же. А вот у света скорость обязана остаться той же. Путь длиннее, скорость та же — значит время больше. Другого выхода нет.",
+        "Как читать лоренц-фактор. Величина $\\gamma$ равна единице при нулевой скорости и растёт до бесконечности при приближении к световой. Полезно запомнить несколько значений: при 10 % скорости света γ = 1,005 — полпроцента; при 50 % — 1,15; при 87 % — 2 (время идёт вдвое медленнее); при 99 % — 7; при 99,99 % — 71. Обратите внимание на характер роста: он почти незаметен до половины и стремителен под конец. Это типичное поведение функции с корнем из разности в знаменателе.",
+        "Почему поправка второго порядка. При малом $x$ верно $1/\\sqrt{1-x} \\approx 1 + x/2$ — то самое разложение из вводной темы. Подставив $x = v^2/c^2$, получаем, что отклонение от единицы идёт как квадрат отношения скоростей. Для самолёта это $10^{-13}$, для спутника $10^{-10}$. Именно поэтому эффект тысячелетиями оставался незамеченным: он не мал, он ничтожен на всех доступных человеку скоростях — кроме тех, что достигаются в ускорителях.",
+        "Что означает относительность одновременности. Это не про то, что мы поздно узнаём о событиях из-за задержки сигнала. Задержку легко учесть, и её учитывают. Речь о другом: даже после всех поправок на время распространения два наблюдателя разойдутся в вопросе, что произошло раньше. Одновременность — не свойство пары событий, а свойство пары событий и системы отсчёта. Именно здесь ломается интуиция, и никакой аналогии из обыденного опыта для этого не существует."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: мюоны, которые не должны долетать",
+      "lead": "Самая наглядная проверка теории — частицы из космических лучей, которые попадают на поверхность Земли вопреки арифметике.",
+      "given": "Мюоны рождаются в верхних слоях атмосферы на высоте около 15 км и летят вниз со скоростью 0,998 c. Собственное время жизни мюона 2,2 микросекунды. Долетят ли они до поверхности?",
+      "law": "Наивно: $L = v\\tau$. По теории относительности: $\\tau' = \\gamma\\tau$",
+      "solution": [
+        {
+          "text": "Сначала наивный расчёт, без всякой относительности.",
+          "latex": "L = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 2{,}2\\cdot 10^{-6} \\approx 660\\ \\text{м}"
+        },
+        {
+          "text": "Получается, что мюон пролетает шестьсот метров и распадается. До земли ему не хватает больше четырнадцати километров.",
+          "latex": "660\\ \\text{м} \\ll 15\\ 000\\ \\text{м}"
+        },
+        {
+          "text": "Теперь считаем лоренц-фактор для этой скорости.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}998^{2}}} = \\frac{1}{\\sqrt{0{,}003996}} \\approx 15{,}8"
+        },
+        {
+          "text": "В системе Земли время жизни мюона растянуто во столько же раз.",
+          "latex": "\\tau' = 15{,}8 \\cdot 2{,}2\\cdot 10^{-6} \\approx 3{,}5\\cdot 10^{-5}\\ \\text{с}"
+        },
+        {
+          "text": "И пройденный путь.",
+          "latex": "L' = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 3{,}5\\cdot 10^{-5} \\approx 10\\ 400\\ \\text{м}"
+        }
+      ],
+      "answer": "Без учёта относительности мюон пролетал бы 660 метров и до земли не добирался. С учётом — свыше десяти километров, и заметная их часть достигает поверхности.",
+      "check": "Мюоны действительно регистрируют на уровне моря, причём в количестве, отвечающем расчёту: примерно один на квадратный сантиметр в минуту проходит сквозь вас прямо сейчас. Особенно поучительно посмотреть на то же самое из системы отсчёта мюона. Там его время идёт нормально, все 2,2 микросекунды, — зато атмосфера летит навстречу и сокращена в 15,8 раза, то есть её толщина не 15 километров, а меньше километра. Оба наблюдателя правы, оба получают один и тот же ответ, но объясняют его разными эффектами: один замедлением времени, другой сокращением длины. Это лучший из известных примеров того, что теория внутренне согласована."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Скорости и лоренц-факторы, дающие чувство того, когда эффекты существенны.",
+      "items": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Скорость света",
+          "value": "3,00 · 10⁸",
+          "unit": "м / с",
+          "why": "Предельная скорость передачи любого воздействия. Не потому, что не хватает двигателей: разгон массивного тела до $c$ требует бесконечной энергии.",
+          "mnemo": "Земля движется по орбите со скоростью 30 км/с — это одна десятитысячная от c. Лоренц-фактор при этом отличается от единицы в девятом знаке."
+        },
+        {
+          "sym": "g_iss2",
+          "latex": "\\gamma_{\\text{МКС}}",
+          "name": "Лоренц-фактор для МКС",
+          "value": "1 + 3 · 10⁻¹⁰",
+          "unit": "—",
+          "why": "Станция летит со скоростью 7,7 км/с. За полгода полёта космонавт становится моложе оставшихся на Земле примерно на пять миллисекунд — эффект измерен.",
+          "mnemo": "Рекордсмен по накопленному «омоложению» — Геннадий Падалка: около 22 миллисекунд за 878 суток на орбите."
+        },
+        {
+          "sym": "g_lhc",
+          "latex": "\\gamma_{\\text{БАК}}",
+          "name": "Лоренц-фактор протонов в коллайдере",
+          "value": "≈ 6900",
+          "unit": "—",
+          "why": "Протоны разогнаны до 0,999999990 c. Их собственное время течёт в семь тысяч раз медленнее, а кольцо длиной 27 км кажется им сжатым до четырёх метров.",
+          "mnemo": "Разогнать до самой скорости света нельзя никогда: γ уходит в бесконечность, а с ним и требуемая энергия."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где это проверено",
+      "lead": "Теория относительности — одна из самых проверенных в физике, и проверки идут ежедневно.",
+      "items": [
+        {
+          "h": "Спутниковая навигация",
+          "text": "Часы на спутниках идут иначе из-за скорости (отстают на 7 мкс/сут) и из-за слабого тяготения на высоте (спешат на 45 мкс/сут). Без поправки в 38 микросекунд накопленная ошибка составляла бы 10 километров в сутки."
+        },
+        {
+          "h": "Мюоны космических лучей",
+          "text": "Долетают до поверхности только благодаря замедлению времени. Опыт Росси и Холла 1941 года — одна из первых прямых проверок."
+        },
+        {
+          "h": "Ускорители",
+          "text": "Все они проектируются по релятивистским формулам. Частица в БАКе имеет γ около семи тысяч, и без учёта этого магниты пришлось бы рассчитывать совершенно иначе."
+        },
+        {
+          "h": "Атомные часы на самолётах",
+          "text": "Опыт Хафеле и Китинга 1971 года: часы облетели Землю в двух направлениях и разошлись с оставшимися на земле ровно на предсказанную величину — десятки наносекунд."
+        },
+        {
+          "h": "Ядерная энергетика",
+          "text": "Дефект массы, из которого выделяется энергия деления и синтеза, — прямое следствие эквивалентности массы и энергии. Об этом третий параграф."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Пощупать относительность сложнее, чем оптику, но кое-что доступно даже без лаборатории.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Мяч в лифте или автобусе",
+          "text": "В едущем без ускорения автобусе подбросьте мяч вертикально вверх и поймайте. Затем попросите кого-нибудь с улицы описать, что он видел.",
+          "answer": "Вы видели вертикальную прямую, наблюдатель снаружи — дугу. Оба описания верны, и различаются они только системой отсчёта. Заметьте главное: для мяча это не создаёт никаких трудностей, потому что его скорость для внешнего наблюдателя тоже больше, и время полёта у обоих выходит одинаковым. Вся теория относительности вырастает из вопроса, что делать, если вместо мяча взять свет, скорость которого расти не имеет права. Дуга остаётся длиннее прямой, а скорость та же — значит различаются времена."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Кто из двоих отстаёт",
+          "text": "Мои часы отстают относительно ваших, если я лечу мимо. Но с моей точки зрения летите вы, и отстают ваши. Оба утверждения верны одновременно. Разве это не прямое противоречие?",
+          "answer": "Противоречия нет, потому что сравнение часов на расстоянии требует определения одновременности, а она у нас разная. Чтобы сказать «сейчас мои показывают больше», нужно решить, что такое «сейчас» в удалённой точке, — а именно в этом мы и расходимся. Настоящее противоречие возникло бы только при повторной встрече, когда часы можно приложить друг к другу. Но чтобы встретиться, кому-то придётся развернуться, то есть сменить систему отсчёта, — и симметрия нарушится. Развернувшийся окажется моложе. Это и есть парадокс близнецов, и разрешается он именно так."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Навигатор без поправки врал бы на десять километров в сутки",
+          "text": "На спутниках GPS часы испытывают два противоположных эффекта: из-за скорости 3,9 км/с они отстают на 7 микросекунд в сутки, а из-за более слабого тяготения на высоте 20 тысяч километров спешат на 45. Суммарно спешат на 38 микросекунд. Свет за это время проходит 11 километров — ровно на столько ошибался бы навигатор ежедневно. Поправку заложили в конструкцию заранее, но не все верили: первый спутник запустили с возможностью её отключить, на случай если теория окажется неверна. Пришлось включить."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Путь длиннее, скорость та же — время больше",
+          "text": "Вся суть замедления в одной строке. Свет в движущихся часах идёт по диагонали, диагональ длиннее вертикали, а скорость света расти не имеет права. Значит такт длиннее. Дальше — только теорема Пифагора."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Когда пора вспоминать про γ",
+          "text": "До 10 % скорости света поправка меньше полупроцента — можно считать по-школьному. При 50 % уже 15 % ошибки. При 87 % время идёт вдвое медленнее. Правило: если в задаче скорость меньше десятой доли световой, релятивизм можно не трогать; если больше — обязательно."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Где специальная теория заканчивается",
+          "text": "Она описывает только инерциальные системы — движущиеся равномерно и прямолинейно. Как только появляется ускорение или тяготение, нужна общая теория относительности. Забавно, что эти два случая оказались одним и тем же: по принципу эквивалентности ускорение неотличимо от тяготения, что мы уже разбирали в теме о гравитации."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: пространство-время Минковского",
+      "lead": "Не входит в проверку. О том, как теория превращается в геометрию, если перестать разделять пространство и время.",
+      "blocks": [
+        {
+          "h": "Что сохраняется",
+          "text": "Расстояние между двумя событиями у разных наблюдателей разное, промежуток времени тоже разный. Но комбинация $s^{2} = c^{2}t^{2} - x^{2}$ у всех одинакова. Это как расстояние на плоскости: координаты зависят от поворота осей, а само расстояние — нет."
+        },
+        {
+          "h": "Поворот в пространстве-времени",
+          "text": "Переход в движущуюся систему отсчёта оказывается поворотом в четырёхмерном пространстве, где четвёртая ось — время, умноженное на скорость света. Минус в формуле означает, что геометрия не евклидова: «поворот» растягивает вместо того, чтобы просто повернуть. Отсюда и все эффекты."
+        },
+        {
+          "h": "Почему c именно предел",
+          "text": "В такой геометрии световой конус разделяет события, на которые можно повлиять, и те, на которые нельзя. Двигаться быстрее света означало бы выйти за конус — и тогда порядок событий станет зависеть от наблюдателя, то есть следствие сможет опередить причину. Предельность скорости света есть требование причинности, а не свойство двигателей."
+        },
+        {
+          "h": "И слова Минковского",
+          "text": "Представляя теорию в 1908 году, он сказал: отныне пространство само по себе и время само по себе обращаются в тени, и лишь их своеобразный союз сохранит самостоятельность. Эйнштейн поначалу счёл эту математизацию излишней — а десять лет спустя без неё не смог бы построить общую теорию относительности."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Скорость света одинакова для всех наблюдателей; отсюда следует, что движущиеся часы идут медленнее в $\\gamma$ раз, а одновременность зависит от системы отсчёта.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Два постулата",
+          "text": "одинаковость законов в ИСО и постоянство $c$"
+        },
+        {
+          "icon": "formula",
+          "title": "$\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$",
+          "text": "выводится из теоремы Пифагора"
+        },
+        {
+          "icon": "sigma",
+          "title": "Поправка идёт как квадрат $v/c$",
+          "text": "потому незаметна на обычных скоростях"
+        },
+        {
+          "icon": "clock",
+          "title": "Одновременность не абсолютна",
+          "text": "это свойство событий и системы отсчёта"
+        },
+        {
+          "icon": "paradox",
+          "title": "Парадокс близнецов разрешается разворотом",
+          "text": "он ломает симметрию"
+        }
+      ],
+      "where": "Спутниковая навигация, мюоны космических лучей, ускорители частиц, атомные часы на самолётах.",
+      "watchOut": "Замедление взаимно: каждый видит отстающими часы другого. Противоречия нет, потому что сравнивать удалённые часы можно лишь договорившись об одновременности, а она у них разная."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Почему из постоянства скорости света следует замедление времени?",
+        "options": [
+          "Свет тормозится в движущейся системе",
+          "Путь света в движущихся часах длиннее, а скорость обязана остаться прежней — значит промежуток времени больше",
+          "Часы ломаются от движения",
+          "Это отдельный постулат, из скорости света он не следует"
+        ],
+        "answer": 1,
+        "why": "Свет в движущихся часах идёт по диагонали, потому что зеркало успевает уехать. Диагональ длиннее вертикали. Если бы скорость могла вырасти, время осталось бы прежним — так происходит с мячом. Но у света скорость фиксирована постулатом, и единственное, что может измениться, — время.",
+        "hint": "Сравните путь света в покоящихся и движущихся часах. Что при этом обязано остаться неизменным?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "Мюон летит со скоростью 0,998 c и живёт 2,2 мкс собственного времени. Почему он долетает до поверхности Земли?",
+        "options": [
+          "Он летит быстрее света",
+          "Его время жизни в системе Земли растянуто в 15,8 раза, и он пролетает более десяти километров",
+          "Он не распадается, пока движется",
+          "Мюоны рождаются гораздо ниже, чем считалось"
+        ],
+        "answer": 1,
+        "why": "Собственное время жизни не меняется, но в системе Земли оно растянуто в γ раз. Из системы самого мюона объяснение другое и столь же верное: его время идёт нормально, зато атмосфера сокращена в те же 15,8 раза. Оба наблюдателя получают одинаковый ответ.",
+        "hint": "Посчитайте γ для 0,998 c: под корнем окажется примерно 0,004."
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "Своими словами: в чём противоречие между механикой Галилея и уравнениями Максвелла, и как его разрешил Эйнштейн?",
+        "keywords": [
+          "скорост",
+          "склад",
+          "постоянн",
+          "не зависит",
+          "систем отсчёт",
+          "систем отсчет",
+          "время",
+          "пространств",
+          "постулат"
+        ],
+        "needed": 2,
+        "why": "По Галилею скорости складываются, значит скорость света должна зависеть от движения наблюдателя. По Максвеллу она выражается через постоянные среды и от наблюдателя не зависит вовсе. Эйнштейн принял оба утверждения — принцип относительности и постоянство скорости света — и отказался от абсолютности времени и длины. Противоречие исчезло ценой пересмотра представлений о пространстве и времени.",
+        "hint": "Что говорит о скорости света сложение скоростей и что говорят уравнения электродинамики? Какое из привычных представлений пришлось отбросить, чтобы примирить их?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "Чему равен лоренц-фактор при скорости 0,6 c?",
+        "answer": 1.25,
+        "unit": "—",
+        "tolerance": 0.1,
+        "why": "γ = 1/√(1 − 0,36) = 1/√0,64 = 1/0,8 = 1,25. Полезная привязка: 0,6 c даёт красивое число ровно 1,25, потому что 0,6 и 0,8 — стороны знаменитого пифагорова треугольника. Именно поэтому в задачах так часто встречаются скорости 0,6 и 0,8 c.",
+        "hint": "Возведите 0,6 в квадрат, вычтите из единицы и извлеките корень. Числа подобраны так, чтобы получилось красиво."
+      }
+    ]
+  },
+  "en": {
+    "title": "Two Postulates",
+    "subtitle": "Section 1 · Why the speed of light is the same for everyone",
+    "intro": [
+      "You ride a train and roll a ball forward. For you, it moves at five kilometers per hour; for a person on the platform, it moves at the speed of the train plus five. Velocities add up, it's obvious, and Galileo recorded this four hundred years ago.",
+      "Now turn on a flashlight. For you, light moves forward at speed $c$. Logic demands that for the observer on the platform, it flies at $c$ plus the train's speed. But all experiments say: no, exactly $c$. The same value, measured from the moving train and from the stationary platform.",
+      "This is not a strangeness of light, but a message about the structure of space and time. If velocity is distance divided by time, and it turned out the same for two observers, then their distances and times are different. This is precisely the conclusion Einstein reached, and everything else follows."
+    ],
+    "standNote": "On the stand there are two light clocks: on the left stationary, on the right moving. Light in them travels between mirrors at the same speed — this is a postulate, and the stand faithfully implements it. Look at the paths: in the left clock, light goes straight up and down; in the right clock, it goes diagonally because the mirrors have time to move. The diagonal is longer than the vertical, but the speed is the same — so the tick of the right clock is longer. By moving the speed slider, watch γ: up to half the speed of light the correction is almost imperceptible, and then it grows rapidly.",
+    "formula": {
+      "name": "Postulates of Special Relativity",
+      "latex": "1)\\;\\text{законы физики одинаковы во всех ИСО} \\qquad 2)\\; c = \\text{const}",
+      "alsoKnown": "Principle of Relativity and Constancy of the Speed of Light",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1632",
+          "what": "formulated the principle of relativity using the example of a ship: locked in a cabin, one cannot determine whether the ship is moving uniformly or at rest. All mechanical experiments give the same result"
+        },
+        {
+          "who": "James Clerk Maxwell",
+          "year": "1865",
+          "what": "derived equations in which the speed of light is expressed through constants of the medium and contains no reference to a frame of reference. This is what created the contradiction with Galileo"
+        },
+        {
+          "who": "Albert Michelson and Edward Morley",
+          "year": "1887",
+          "what": "attempted to detect the Earth's motion through the ether and got a strict zero. The experiment was repeated for decades with increasing precision — the result is the same"
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "proposed to accept both statements simultaneously and see what would need to change. The concepts of simultaneity, length, and time had to change — but the contradiction disappeared"
+        }
+      ],
+      "story": "The 1905 article begins not with Michelson's experiments, but with a logical inconvenience that Einstein noticed in electrodynamics. Take a magnet and a coil. If you move the magnet, a current arises in the coil — and this is explained by the induced vortex electric field. If instead you move the coil, the current is the same — but it is explained by the Lorentz force acting on the charges. The phenomenon is one, but the explanations are two, and the choice between them depends on what we consider stationary. Einstein was irritated by this asymmetry, which had no basis in the phenomenon itself. From this irritation grew a theory that changed physics. A useful lesson: sometimes it is worth trusting aesthetic discomfort more than a working formula.",
+      "symbols": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "what": "speed of light in vacuum",
+          "unit": "m/s",
+          "note": "the same in all inertial frames — this is a postulate, not a result of derivation"
+        },
+        {
+          "sym": "ISO",
+          "latex": "\\text{ИСО}",
+          "what": "inertial reference frame",
+          "unit": "—",
+          "note": "moves uniformly and rectilinearly; Newton's first law holds in it"
+        },
+        {
+          "sym": "beta",
+          "latex": "\\beta",
+          "what": "ratio of speed to speed of light",
+          "unit": "—",
+          "note": "$\\beta = v/c$; a convenient dimensionless measure of how significant the effects are"
+        },
+        {
+          "sym": "gamma",
+          "latex": "\\gamma",
+          "what": "Lorentz factor",
+          "unit": "—",
+          "note": "$1/\\sqrt{1-\\beta^{2}}$ — the factor by which time dilates and length contracts"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation: Time Dilation from the Pythagorean Theorem",
+      "lead": "All you need is a right triangle. This is perhaps the most economical derivation of a great result in all of physics.",
+      "steps": [
+        {
+          "text": "Construct a light clock: two mirrors at distance $L$, with a flash bouncing between them. One tick is the round trip. In the frame where the clock is at rest, everything is straightforward.",
+          "latex": "\\Delta t_0 = \\frac{2L}{c}",
+          "figure": "vline",
+          "figCaption": "The most honest clock: its tick rate is determined only by the speed of light and the mirror separation."
+        },
+        {
+          "text": "Now look at the same clock from a frame relative to which it moves at speed $v$. During one tick, the clock moves away, and the light must travel diagonally to reach the receding mirror.",
+          "latex": "\\text{путь света} = c\\,\\Delta t, \\qquad \\text{смещение часов} = v\\,\\Delta t",
+          "figure": "shadow",
+          "figCaption": "Light travels diagonally because the mirror moves away. The speed remains the same — as the second postulate requires."
+        },
+        {
+          "text": "Consider half a tick and apply the Pythagorean theorem to the resulting right triangle: the vertical leg is the mirror separation, the horizontal leg is the clock's displacement, the hypotenuse is the light's path.",
+          "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+          "figure": "vectriangle",
+          "figCaption": "The entire derivation of special relativity fits into one right triangle."
+        },
+        {
+          "text": "Solve for $\\Delta t$. Rearrange and factor.",
+          "latex": "\\Delta t^{2}(c^{2} - v^{2}) = 4L^{2} \\;\\Longrightarrow\\; \\Delta t = \\frac{2L}{\\sqrt{c^{2}-v^{2}}}",
+          "figure": "secant",
+          "figCaption": "Just ordinary algebra. Nothing more complicated than squaring is needed."
+        },
+        {
+          "text": "Factor $c$ out of the square root and recognize the first factor as the proper tick time.",
+          "latex": "\\Delta t = \\frac{2L}{c}\\cdot\\frac{1}{\\sqrt{1-v^{2}/c^{2}}} = \\gamma\\,\\Delta t_0",
+          "figure": "result",
+          "figCaption": "Moving clocks run slower by a factor of γ. Derived from one triangle and one postulate."
+        },
+        {
+          "text": "Check that nothing changes at low speeds. Expansion for small $\\beta$ gives a second-order correction — that's why no one noticed anything for thousands of years.",
+          "latex": "\\gamma \\approx 1 + \\frac{v^{2}}{2c^{2}}: \\quad v = 100\\ \\text{м/с} \\Rightarrow \\gamma - 1 \\approx 6\\cdot 10^{-14}",
+          "figure": "curves",
+          "figCaption": "For a passenger airliner, the correction is in the 14th decimal place. Impossible to notice without atomic clocks."
+        },
+        {
+          "text": "And the most unsettling consequence of both postulates is the relativity of simultaneity. Suppose a lamp flashes in the middle of a train car. For a passenger, light reaches both walls simultaneously. For an observer on the platform, the rear wall moves toward the light and the front wall moves away, so light reaches them at different times.",
+          "latex": "\\text{одновременно для одного} \\;\\neq\\; \\text{одновременно для другого}",
+          "figure": "inertialframe",
+          "figCaption": "Simultaneity is not absolute. This is the deepest consequence and the hardest to accept."
+        }
+      ],
+      "plate": "From the constancy of the speed of light and the Pythagorean theorem, it follows that moving clocks run slower by a factor $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$, and simultaneity depends on the observer.",
+      "note": "Limits of applicability and common confusion. Time dilation is relative: for a passenger on a train, the platform clock runs slow, and this is not a contradiction — they simply use different definitions of simultaneity. The twin paradox seems to break symmetry, but the asymmetry comes from the turn: the traveling twin changes reference frames, the stay-at-home does not. Also, this entire theory applies only to inertial frames; in the presence of gravity, general relativity is required."
+    },
+    "math": {
+      "title": "The Mathematics Needed Here",
+      "text": [
+        "Why the diagonal is longer — the essence of the derivation in one sentence. Imagine throwing a ball straight up in a moving bus and catching it. For you, the ball goes up and down in a straight line. For a person outside, it traces an arc because it moves sideways. The arc is longer than the straight line — no one argues with that. For the ball, this poses no problem: its speed for the outside observer is also greater, so the time is the same. But for light, the speed must remain the same. The path is longer, the speed is the same — so the time is longer. No other way.",
+        "How to read the Lorentz factor. The quantity $\\gamma$ equals 1 at zero speed and grows to infinity as speed approaches light speed. It is useful to remember a few values: at 10% of light speed, γ = 1.005 — half a percent; at 50% — 1.15; at 87% — 2 (time runs twice as slow); at 99% — 7; at 99.99% — 71. Note the growth pattern: almost imperceptible up to half, then rapid toward the end. This is typical behavior of a function with a square root of a difference in the denominator.",
+        "Why the correction is second order. For small $x$, we have $1/\\sqrt{1-x} \\approx 1 + x/2$ — the same expansion from the introduction. Substituting $x = v^2/c^2$, we find that the deviation from 1 goes as the square of the speed ratio. For an airplane, this is $10^{-13}$, for a satellite $10^{-10}$. This is why the effect went unnoticed for millennia: it is not just small, it is negligible at all speeds accessible to humans — except those achieved in accelerators.",
+        "What relativity of simultaneity means. It is not about us learning about events late due to signal delay. Delay is easy to account for, and it is accounted for. It is about something else: even after all corrections for propagation time, two observers will disagree on which event happened first. Simultaneity is not a property of a pair of events, but a property of a pair of events and a reference frame. This is where intuition breaks, and no analogy from everyday experience exists for this."
+      ]
+    },
+    "example": {
+      "title": "Example with numbers: muons that shouldn't reach the ground",
+      "lead": "The most visual test of the theory — particles from cosmic rays that reach the Earth's surface despite arithmetic.",
+      "given": "Muons are born in the upper atmosphere at an altitude of about 15 km and fly down at a speed of 0.998c. The proper lifetime of a muon is 2.2 microseconds. Will they reach the surface?",
+      "law": "Naively: $L = v\\tau$. According to relativity: $\\tau' = \\gamma\\tau$",
+      "solution": [
+        {
+          "text": "First a naive calculation, without any relativity.",
+          "latex": "L = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 2{,}2\\cdot 10^{-6} \\approx 660\\ \\text{м}"
+        },
+        {
+          "text": "It turns out the muon flies six hundred meters and decays. It falls more than fourteen kilometers short of the ground.",
+          "latex": "660\\ \\text{м} \\ll 15\\ 000\\ \\text{м}"
+        },
+        {
+          "text": "Now calculate the Lorentz factor for this speed.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}998^{2}}} = \\frac{1}{\\sqrt{0{,}003996}} \\approx 15{,}8"
+        },
+        {
+          "text": "In the Earth's frame, the muon's lifetime is dilated by the same factor.",
+          "latex": "\\tau' = 15{,}8 \\cdot 2{,}2\\cdot 10^{-6} \\approx 3{,}5\\cdot 10^{-5}\\ \\text{с}"
+        },
+        {
+          "text": "And the distance traveled.",
+          "latex": "L' = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 3{,}5\\cdot 10^{-5} \\approx 10\\ 400\\ \\text{м}"
+        }
+      ],
+      "answer": "Without relativity, the muon would fly 660 meters and not reach the ground. With it — over ten kilometers, and a noticeable fraction reaches the surface.",
+      "check": "Muons are indeed detected at sea level, in numbers matching the calculation: about one per square centimeter per minute is passing through you right now. It is especially instructive to look at the same thing from the muon's reference frame. There its time runs normally, all 2.2 microseconds — but the atmosphere rushes toward it and is length-contracted by a factor of 15.8, so its thickness is not 15 kilometers but less than a kilometer. Both observers are right, both get the same answer, but explain it by different effects: one by time dilation, the other by length contraction. This is the best-known example that the theory is internally consistent."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Speeds and Lorentz factors giving a sense of when effects become significant.",
+      "items": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Speed of light",
+          "value": "3,00 · 10⁸",
+          "unit": "м / с",
+          "why": "The ultimate speed for transmitting any influence. Not because engines are insufficient: accelerating a massive body to $c$ requires infinite energy.",
+          "mnemo": "Earth moves in orbit at 30 km/s — that's one ten-thousandth of c. The Lorentz factor then differs from unity in the ninth decimal place."
+        },
+        {
+          "sym": "g_iss2",
+          "latex": "\\gamma_{\\text{МКС}}",
+          "name": "Lorentz factor for the ISS",
+          "value": "1 + 3 · 10⁻¹⁰",
+          "unit": "—",
+          "why": "The station travels at 7.7 km/s. In six months of flight, an astronaut becomes about five milliseconds younger than those left on Earth — the effect has been measured.",
+          "mnemo": "The record holder for accumulated 'rejuvenation' is Gennady Padalka: about 22 milliseconds over 878 days in orbit."
+        },
+        {
+          "sym": "g_lhc",
+          "latex": "\\gamma_{\\text{БАК}}",
+          "name": "Lorentz factor of protons in the collider",
+          "value": "≈ 6900",
+          "unit": "—",
+          "why": "Protons are accelerated to 0.999999990c. Their proper time runs seven thousand times slower, and the 27 km ring appears squashed to four meters.",
+          "mnemo": "You can never accelerate to exactly the speed of light: γ goes to infinity, and so does the required energy."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where this has been tested",
+      "lead": "The theory of relativity is one of the most tested in physics, and tests happen daily.",
+      "items": [
+        {
+          "h": "Satellite navigation",
+          "text": "Clocks on satellites run differently due to speed (lag by 7 μs/day) and due to weak gravity at altitude (gain 45 μs/day). Without a correction of 38 microseconds, the accumulated error would be 10 kilometers per day."
+        },
+        {
+          "h": "Cosmic-ray muons",
+          "text": "They reach the surface only because of time dilation. The Rossi–Hall experiment of 1941 was one of the first direct tests."
+        },
+        {
+          "h": "Accelerators",
+          "text": "All are designed using relativistic formulas. A particle in the LHC has γ around seven thousand, and without accounting for this, the magnets would have to be calculated completely differently."
+        },
+        {
+          "h": "Atomic clocks on airplanes",
+          "text": "The Hafele–Keating experiment of 1971: clocks flew around the Earth in both directions and diverged from those left on the ground by exactly the predicted amount — tens of nanoseconds."
+        },
+        {
+          "h": "Nuclear energy",
+          "text": "Mass defect, from which fission and fusion energy is released, is a direct consequence of mass–energy equivalence. That is covered in the third section."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Fun: Try It Yourself",
+      "lead": "Feeling relativity is harder than optics, but some things are accessible even without a lab.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Ball in an elevator or bus",
+          "text": "In a bus moving without acceleration, toss a ball straight up and catch it. Then ask someone outside to describe what they saw.",
+          "answer": "You see a vertical line, the outside observer sees an arc. Both descriptions are correct, differing only by the frame of reference. The key point: this causes no trouble for the ball because its speed relative to the outside observer is also greater, and the flight time is the same for both. The whole theory of relativity grows from the question: what if instead of a ball we take light, whose speed cannot increase? The arc remains longer than the straight line, but the speed is the same — so the times differ."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Which of the two falls behind?",
+          "text": "My clock lags relative to yours if I fly past. But from my perspective, you are flying, and yours lags. Both statements are simultaneously true. Isn't this a direct contradiction?",
+          "answer": "There is no contradiction because comparing distant clocks requires defining simultaneity, and we have different ones. Saying 'now my clock shows more' requires deciding what 'now' means at a distant point — and that's where we diverge. A real contradiction would only arise upon a second meeting, when clocks can be compared side by side. But to meet, someone must turn around, i.e., change the frame of reference — and symmetry is broken. The one who turned will be younger. This is the twin paradox, and that's how it is resolved."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "A navigator without correction would be off by ten kilometers per day",
+          "text": "On GPS satellites, clocks experience two opposing effects: due to speed 3.9 km/s they lag by 7 microseconds per day, and due to weaker gravity at 20 thousand kilometers altitude they gain 45. Total gain: 38 microseconds. Light covers 11 kilometers in that time — exactly the daily error of a navigator. The correction was built into the design in advance, but not everyone believed: the first satellite was launched with the option to disable it, in case the theory turned out wrong. It had to be enabled."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Path longer, speed same — time larger",
+          "text": "The essence of time dilation in one line. Light in a moving clock travels diagonally; the diagonal is longer than the vertical, and the speed of light cannot increase. So the tick is longer. After that, it's just the Pythagorean theorem."
+        },
+        {
+          "icon": "estimate",
+          "kind": "rough estimate",
+          "h": "When to remember γ",
+          "text": "Up to 10% of the speed of light, the correction is less than half a percent — you can use classical formulas. At 50%, already 15% error. At 87%, time runs half as slow. Rule: if the speed is less than a tenth of light speed, you can ignore relativity; if greater, it's mandatory."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Where special relativity ends",
+          "text": "It describes only inertial frames — moving uniformly and in a straight line. As soon as acceleration or gravity appears, general relativity is needed. Interestingly, these two cases turned out to be the same: by the equivalence principle, acceleration is indistinguishable from gravity, which we already discussed in the topic on gravity."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Minkowski Spacetime",
+      "lead": "Not part of the test. About how the theory becomes geometry if we stop separating space and time.",
+      "blocks": [
+        {
+          "h": "What is conserved",
+          "text": "The distance between two events is different for different observers, the time interval is also different. But the combination $s^{2} = c^{2}t^{2} - x^{2}$ is the same for everyone. It's like distance in the plane: coordinates depend on the rotation of axes, but the distance itself does not."
+        },
+        {
+          "h": "Rotation in spacetime",
+          "text": "Transition to a moving reference frame turns out to be a rotation in four-dimensional space, where the fourth axis is time multiplied by the speed of light. The minus sign in the formula means the geometry is non-Euclidean: the 'rotation' stretches instead of just turning. Hence all the effects."
+        },
+        {
+          "h": "Why c is the limit",
+          "text": "In such geometry, the light cone separates events that can be influenced from those that cannot. Moving faster than light would mean leaving the cone — then the order of events would depend on the observer, meaning an effect could precede its cause. The limiting speed of light is a requirement of causality, not a property of engines."
+        },
+        {
+          "h": "And Minkowski's words",
+          "text": "Presenting the theory in 1908, he said: henceforth space by itself and time by itself fade into shadows, and only a kind of union of the two will preserve an independent reality. Einstein initially considered this mathematization excessive — but ten years later, without it, he could not have built general relativity."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The speed of light is the same for all observers; consequently, moving clocks run slower by a factor $\\gamma$, and simultaneity depends on the frame of reference.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Two postulates",
+          "text": "laws are the same in inertial frames and constancy of $c$"
+        },
+        {
+          "icon": "formula",
+          "title": "$\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$",
+          "text": "derived from the Pythagorean theorem"
+        },
+        {
+          "icon": "sigma",
+          "title": "The correction scales as $(v/c)^2$",
+          "text": "hence imperceptible at ordinary speeds"
+        },
+        {
+          "icon": "ruler",
+          "title": "Simultaneity is not absolute",
+          "text": "it depends on the events and the reference frame"
+        },
+        {
+          "icon": "scale",
+          "title": "The twin paradox is resolved by the turnaround",
+          "text": "it breaks the symmetry"
+        }
+      ],
+      "where": "Satellite navigation, cosmic ray muons, particle accelerators, atomic clocks on airplanes.",
+      "watchOut": "Time dilation is mutual: each sees the other's clock running slow. There is no contradiction because comparing distant clocks requires agreement on simultaneity, and they have different ones."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Why does the constancy of the speed of light imply time dilation?",
+        "options": [
+          "Light slows down in a moving system",
+          "The path of light in moving clocks is longer, and the speed must remain the same — so the time interval is longer",
+          "Clocks break down due to motion",
+          "This is a separate postulate, it does not follow from the speed of light"
+        ],
+        "answer": 1,
+        "why": "In moving clocks, light travels along a diagonal because the mirror moves away. The diagonal is longer than the vertical. If the speed could increase, time would stay the same — that's what happens with a ball. But for light, speed is fixed by postulate, and the only thing that can change is time.",
+        "hint": "Compare the path of light in stationary and moving clocks. What must remain unchanged?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "A muon travels at 0.998 c and lives for 2.2 µs of proper time. Why does it reach the Earth's surface?",
+        "options": [
+          "It travels faster than light",
+          "Its lifetime in Earth's frame is dilated by a factor of 15.8, and it covers more than ten kilometers",
+          "It does not decay as long as it moves",
+          "Muons are produced much lower than previously thought"
+        ],
+        "answer": 1,
+        "why": "Proper lifetime does not change, but in Earth's frame it is dilated by γ. From the muon's own frame the explanation is different and equally valid: its time runs normally, but the atmosphere is contracted by the same factor of 15.8. Both observers get the same answer.",
+        "hint": "Calculate γ for 0.998 c: under the square root you'll get about 0.004."
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "In your own words: what is the contradiction between Galilean mechanics and Maxwell's equations, and how did Einstein resolve it?",
+        "keywords": [
+          "speed",
+          "addition",
+          "constant",
+          "does not depend",
+          "reference frame",
+          "reference frames",
+          "time",
+          "space",
+          "postulate"
+        ],
+        "needed": 2,
+        "why": "According to Galileo, velocities add, so the speed of light should depend on the observer's motion. According to Maxwell, it is expressed through constants of the medium and does not depend on the observer at all. Einstein accepted both statements — the principle of relativity and the constancy of the speed of light — and abandoned the absoluteness of time and length. The contradiction disappeared at the cost of revising our concepts of space and time.",
+        "hint": "What does velocity addition say about the speed of light, and what do the equations of electrodynamics say? Which familiar concept had to be discarded to reconcile them?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "What is the Lorentz factor at speed 0.6 c?",
+        "answer": 1.25,
+        "unit": "—",
+        "tolerance": 0.1,
+        "why": "γ = 1/√(1 − 0.36) = 1/√0.64 = 1/0.8 = 1.25. Useful benchmark: 0.6 c yields a nice round 1.25, because 0.6 and 0.8 are sides of the famous Pythagorean triple. That's why speeds 0.6 and 0.8 c appear so often in problems.",
+        "hint": "Square 0.6, subtract from 1, and take the square root. The numbers are chosen to give a tidy result."
+      }
+    ]
+  },
+  "es": {
+    "title": "Dos postulados",
+    "subtitle": "Párrafo 1 · Por qué la velocidad de la luz es la misma para todos",
+    "intro": [
+      "Viajas en un tren y lanzas una pelota hacia adelante. Para ti, se mueve a cinco kilómetros por hora; para una persona en el andén, a la velocidad del tren más cinco. Las velocidades se suman, es obvio, y Galileo lo registró hace cuatrocientos años.",
+      "Ahora enciende una linterna. Para ti, la luz avanza a velocidad $c$. La lógica exige que para el observador en el andén vuele a $c$ más la velocidad del tren. Pero todos los experimentos dicen: no, exactamente $c$. El mismo valor medido desde el tren en movimiento y desde el andén estacionario.",
+      "No es una rareza de la luz, sino un mensaje sobre la estructura del espacio y el tiempo. Si la velocidad es distancia dividida por tiempo, y resultó igual para dos observadores, entonces las distancias y los tiempos son diferentes entre ellos. A esa conclusión llegó Einstein, y todo lo demás son consecuencias."
+    ],
+    "standNote": "En el stand hay dos relojes de luz: el izquierdo en reposo, el derecho en movimiento. La luz viaja entre los espejos a la misma velocidad —eso es un postulado, y el stand lo cumple fielmente. Observa las trayectorias: en el reloj izquierdo, la luz va directamente hacia arriba y abajo; en el derecho, en diagonal, porque los espejos se han movido. La diagonal es más larga que la vertical, y la velocidad es la misma —por lo tanto, el ciclo del reloj derecho es más largo. Al mover el control deslizante de velocidad, observa γ: hasta la mitad de la velocidad de la luz, la corrección es casi imperceptible, pero luego crece rápidamente.",
+    "formula": {
+      "name": "Postulados de la relatividad especial",
+      "latex": "1)\\;\\text{las leyes de la física son las mismas en todos los SRI} \\qquad 2)\\; c = \\text{const}",
+      "alsoKnown": "Principio de relatividad y constancia de la velocidad de la luz",
+      "authors": [
+        {
+          "who": "Galileo Galilei",
+          "year": "1632",
+          "what": "formuló el principio de relatividad con el ejemplo del barco: encerrado en el camarote, es imposible determinar si la nave se mueve uniformemente o está quieta. Todos los experimentos mecánicos dan el mismo resultado."
+        },
+        {
+          "who": "James Clerk Maxwell",
+          "year": "1865",
+          "what": "obtuvo ecuaciones en las que la velocidad de la luz se expresa mediante constantes del medio y no contiene ninguna referencia al sistema de referencia. Esto creó la contradicción con Galileo."
+        },
+        {
+          "who": "Albert Michelson y Edward Morley",
+          "year": "1887",
+          "what": "intentaron detectar el movimiento de la Tierra a través del éter y obtuvieron un cero estricto. El experimento se repitió durante décadas con precisión creciente, con el mismo resultado."
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "propuso aceptar ambas afirmaciones simultáneamente y ver qué había que cambiar. Lo que hubo que cambiar fueron los conceptos de simultaneidad, longitud y tiempo —pero la contradicción desapareció."
+        }
+      ],
+      "story": "El artículo de 1905 no comienza con los experimentos de Michelson, sino con una incomodidad lógica que Einstein notó en la electrodinámica. Tomemos un imán y una bobina. Si movemos el imán, se genera corriente en la bobina —y se explica por un campo eléctrico vorticial inducido. Si en cambio movemos la bobina, la corriente es la misma —pero se explica mediante la fuerza de Lorentz sobre las cargas. El fenómeno es uno, pero las explicaciones son dos, y la elección entre ellas depende de qué consideremos inmóvil. A Einstein le molestaba esta asimetría, sin fundamento en el fenómeno mismo. De esta molestia surgió la teoría que cambió la física. Una lección útil: a veces vale la pena confiar más en una incomodidad estética que en una fórmula que funciona.",
+      "symbols": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "what": "velocidad de la luz en el vacío",
+          "unit": "м/с",
+          "note": "es la misma en todos los sistemas inerciales —es un postulado, no un resultado de derivación"
+        },
+        {
+          "sym": "ISO",
+          "latex": "\\text{SRI}",
+          "what": "sistema de referencia inercial",
+          "unit": "—",
+          "note": "se mueve uniformemente y en línea recta; en él se cumple la primera ley de Newton"
+        },
+        {
+          "sym": "beta",
+          "latex": "\\beta",
+          "what": "relación de la velocidad con la de la luz",
+          "unit": "—",
+          "note": "$\\beta = v/c$; una medida adimensional conveniente de cuán significativos son los efectos"
+        },
+        {
+          "sym": "gamma",
+          "latex": "\\gamma",
+          "what": "factor de Lorentz",
+          "unit": "—",
+          "note": "$1/\\sqrt{1-\\beta^{2}}$ — cuánto se dilata el tiempo y se contrae la longitud"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: dilatación del tiempo a partir del teorema de Pitágoras",
+      "lead": "Todo lo que se necesita es un triángulo rectángulo. Esta es quizás la derivación más económica de un gran resultado en toda la física.",
+      "steps": [
+        {
+          "text": "Construyamos un reloj de luz: dos espejos separados por una distancia $L$, con un destello que viaja entre ellos. Un ciclo es el viaje de ida y vuelta. En el sistema donde el reloj está en reposo, todo es simple.",
+          "latex": "\\Delta t_0 = \\frac{2L}{c}",
+          "figure": "vline",
+          "figCaption": "El reloj más honesto: su marcha está determinada solo por la velocidad de la luz y la distancia entre los espejos."
+        },
+        {
+          "text": "Ahora observemos el mismo reloj desde un sistema en el que se mueve con velocidad $v$. Durante un ciclo, el reloj se desplaza, y la luz debe viajar en diagonal para alcanzar el espejo que se ha movido.",
+          "latex": "\\text{путь света} = c\\,\\Delta t, \\qquad \\text{смещение часов} = v\\,\\Delta t",
+          "figure": "shadow",
+          "figCaption": "La luz viaja en diagonal porque el espejo se aleja. La velocidad es la misma, como lo exige el segundo postulado."
+        },
+        {
+          "text": "Analicemos medio ciclo y escribamos el teorema de Pitágoras para el triángulo rectángulo resultante: el cateto vertical es la distancia entre los espejos, el cateto horizontal es el desplazamiento del reloj, y la hipotenusa es el camino de la luz.",
+          "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+          "figure": "vectriangle",
+          "figCaption": "Toda la derivación de la relatividad especial se resume en un triángulo rectángulo."
+        },
+        {
+          "text": "Resolvemos para $\\Delta t$. Despejamos y factorizamos.",
+          "latex": "\\Delta t^{2}(c^{2} - v^{2}) = 4L^{2} \\;\\Longrightarrow\\; \\Delta t = \\frac{2L}{\\sqrt{c^{2}-v^{2}}}",
+          "figure": "secant",
+          "figCaption": "Álgebra simple. No se necesita nada más complicado que elevar al cuadrado."
+        },
+        {
+          "text": "Extraemos $c$ de la raíz y reconocemos en el primer factor el tiempo propio del ciclo.",
+          "latex": "\\Delta t = \\frac{2L}{c}\\cdot\\frac{1}{\\sqrt{1-v^{2}/c^{2}}} = \\gamma\\,\\Delta t_0",
+          "figure": "result",
+          "figCaption": "Un reloj en movimiento avanza más lento en un factor γ. Obtenido de un triángulo y un postulado."
+        },
+        {
+          "text": "Verifiquemos que a bajas velocidades no cambia nada. La expansión para $\\beta$ pequeño da una corrección de segundo orden — por eso durante miles de años nadie notó nada.",
+          "latex": "\\gamma \\approx 1 + \\frac{v^{2}}{2c^{2}}: \\quad v = 100\\ \\text{м/с} \\Rightarrow \\gamma - 1 \\approx 6\\cdot 10^{-14}",
+          "figure": "curves",
+          "figCaption": "En un avión de pasajeros la corrección está en el decimocuarto decimal. Es imposible notarla sin relojes atómicos."
+        },
+        {
+          "text": "Y la consecuencia más incómoda de ambos postulados es la relatividad de la simultaneidad. Supongamos que en el centro de un vagón se enciende una lámpara. Para el pasajero, la luz llega a ambas paredes al mismo tiempo. Para un observador en el andén, la pared trasera se mueve hacia la luz y la delantera se aleja, por lo que la luz las alcanza en momentos diferentes.",
+          "latex": "\\text{одновременно для одного} \\;\\neq\\; \\text{одновременно для другого}",
+          "figure": "inertialframe",
+          "figCaption": "La simultaneidad no es absoluta. Esta es la consecuencia más profunda y la más difícil de aceptar."
+        }
+      ],
+      "plate": "De la constancia de la velocidad de la luz y del teorema de Pitágoras se deduce que los relojes en movimiento van más lentos en un factor $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$, y que la simultaneidad depende del observador.",
+      "note": "Límites de aplicabilidad y confusión común. La dilatación es relativa: para el pasajero del tren, el reloj del andén va más lento, y eso no es una contradicción — simplemente utilizan diferentes definiciones de simultaneidad. La paradoja de los gemelos parece una violación de la simetría, pero la simetría se rompe por el giro: el gemelo que viaja cambia de sistema de referencia, mientras que el que se queda no. Además, toda esta teoría solo se aplica a sistemas inerciales; en presencia de gravedad se requiere la relatividad general."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Por qué la diagonal es más larga: la esencia de la derivación en una frase. Imagine que lanza una pelota verticalmente hacia arriba en un autobús en movimiento y la atrapa. Para usted, la pelota viaja verticalmente hacia arriba y hacia abajo en línea recta. Para una persona en la calle, la pelota describe un arco porque el autobús se desplaza lateralmente. El camino en arco es más largo que la línea recta, nadie discute eso. En el caso de la pelota, esto no causa problemas: su velocidad para el observador en la calle también es mayor, y el tiempo es el mismo. Pero para la luz, la velocidad debe permanecer igual. Camino más largo, misma velocidad, entonces el tiempo es mayor. No hay otra opción.",
+        "Cómo leer el factor de Lorentz. El valor de $\\gamma$ es igual a la unidad a velocidad cero y crece hasta infinito al acercarse a la velocidad de la luz. Es útil recordar algunos valores: al 10 % de la velocidad de la luz, γ = 1,005 — medio por ciento; al 50 % — 1,15; al 87 % — 2 (el tiempo va a la mitad de velocidad); al 99 % — 7; al 99,99 % — 71. Observe la naturaleza del crecimiento: casi imperceptible hasta la mitad y muy rápido al final. Este es el comportamiento típico de una función con una raíz de la diferencia en el denominador.",
+        "Por qué la corrección es de segundo orden. Para $x$ pequeño se cumple $1/\\sqrt{1-x} \\approx 1 + x/2$ — la misma expansión del tema introductorio. Sustituyendo $x = v^2/c^2$, obtenemos que la desviación de la unidad va como el cuadrado de la relación de velocidades. Para un avión es $10^{-13}$, para un satélite $10^{-10}$. Precisamente por esto el efecto pasó desapercibido durante milenios: no es pequeño, es insignificante a todas las velocidades accesibles para el ser humano, excepto las alcanzadas en aceleradores.",
+        "Qué significa la relatividad de la simultaneidad. No se trata de que nos enteramos tarde de los eventos debido al retardo de la señal. El retardo se puede corregir fácilmente y se corrige. Se trata de otra cosa: incluso después de todas las correcciones por tiempo de propagación, dos observadores discreparán sobre qué ocurrió primero. La simultaneidad no es una propiedad de un par de eventos, sino una propiedad de un par de eventos y un sistema de referencia. Aquí es donde se rompe la intuición, y no existe ninguna analogía de la experiencia cotidiana para esto."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: muones que no deberían llegar",
+      "lead": "La comprobación más evidente de la teoría son las partículas de rayos cósmicos que llegan a la superficie terrestre desafiando la aritmética.",
+      "given": "Los muones se generan en las capas altas de la atmósfera a una altura de unos 15 km y descienden a una velocidad de 0,998 c. El tiempo de vida propio del muón es de 2,2 microsegundos. ¿Alcanzarán la superficie?",
+      "law": "Ingenuamente: $L = v\\tau$. Según la relatividad: $\\tau' = \\gamma\\tau$",
+      "solution": [
+        {
+          "text": "Primero, un cálculo ingenuo, sin relatividad.",
+          "latex": "L = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 2{,}2\\cdot 10^{-6} \\approx 660\\ \\text{м}"
+        },
+        {
+          "text": "Resulta que el muón recorre seiscientos metros y se desintegra. Le faltan más de catorce kilómetros para llegar al suelo.",
+          "latex": "660\\ \\text{м} \\ll 15\\ 000\\ \\text{м}"
+        },
+        {
+          "text": "Ahora calculamos el factor de Lorentz para esta velocidad.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}998^{2}}} = \\frac{1}{\\sqrt{0{,}003996}} \\approx 15{,}8"
+        },
+        {
+          "text": "En el sistema Tierra, la vida del muón se dilata en el mismo factor.",
+          "latex": "\\tau' = 15{,}8 \\cdot 2{,}2\\cdot 10^{-6} \\approx 3{,}5\\cdot 10^{-5}\\ \\text{с}"
+        },
+        {
+          "text": "Y la distancia recorrida.",
+          "latex": "L' = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 3{,}5\\cdot 10^{-5} \\approx 10\\ 400\\ \\text{м}"
+        }
+      ],
+      "answer": "Sin tener en cuenta la relatividad, el muón recorrería 660 metros y no llegaría al suelo. Con ella, recorre más de diez kilómetros, y una fracción notable alcanza la superficie.",
+      "check": "Los muones se registran realmente a nivel del mar, en una cantidad acorde con el cálculo: aproximadamente uno por centímetro cuadrado por minuto te atraviesa ahora mismo. Es especialmente instructivo verlo desde el sistema de referencia del muón. Allí su tiempo transcurre normalmente, los 2,2 microsegundos, pero la atmósfera se aproxima y está contraída en un factor 15,8, es decir, su espesor no es de 15 kilómetros, sino menor de un kilómetro. Ambos observadores tienen razón, ambos obtienen la misma respuesta, pero la explican con efectos diferentes: uno por dilatación del tiempo, el otro por contracción de la longitud. Este es el mejor ejemplo conocido de que la teoría es internamente consistente."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Velocidades y factores de Lorentz que dan una idea de cuándo los efectos son significativos.",
+      "items": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Velocidad de la luz",
+          "value": "3,00 · 10⁸",
+          "unit": "m/s",
+          "why": "Velocidad límite de transmisión de cualquier interacción. No porque falten motores: acelerar un cuerpo masivo hasta $c$ requiere energía infinita.",
+          "mnemo": "La Tierra se mueve en órbita a 30 km/s, una diezmilésima de c. El factor de Lorentz difiere de la unidad en el noveno decimal."
+        },
+        {
+          "sym": "g_iss2",
+          "latex": "\\gamma_{\\text{МКС}}",
+          "name": "Factor de Lorentz para la ISS",
+          "value": "1 + 3 · 10⁻¹⁰",
+          "unit": "—",
+          "why": "La estación viaja a 7,7 km/s. En seis meses de vuelo, el cosmonauta resulta unos cinco milisegundos más joven que los que quedaron en la Tierra; el efecto se ha medido.",
+          "mnemo": "El récord de «rejuvenecimiento» acumulado lo tiene Guennadi Pádalka: unos 22 milisegundos en 878 días en órbita."
+        },
+        {
+          "sym": "g_lhc",
+          "latex": "\\gamma_{\\text{БАК}}",
+          "name": "Factor de Lorentz de protones en el colisionador",
+          "value": "≈ 6900",
+          "unit": "—",
+          "why": "Los protones se aceleran hasta 0,999999990 c. Su tiempo propio transcurre siete mil veces más lento, y el anillo de 27 km les parece comprimido a cuatro metros.",
+          "mnemo": "Nunca se puede acelerar hasta la velocidad de la luz: γ tiende a infinito, y con él la energía requerida."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde se ha comprobado",
+      "lead": "La teoría de la relatividad es una de las más comprobadas en física, y las verificaciones ocurren a diario.",
+      "items": [
+        {
+          "h": "Navegación por satélite",
+          "text": "Los relojes en los satélites funcionan de manera diferente debido a la velocidad (se retrasan 7 μs/día) y a la gravedad reducida en altitud (se adelantan 45 μs/día). Sin la corrección de 38 microsegundos, el error acumulado sería de 10 kilómetros por día."
+        },
+        {
+          "h": "Muones de rayos cósmicos",
+          "text": "Llegan a la superficie solo gracias a la dilatación del tiempo. El experimento de Rossi y Hall de 1941 fue una de las primeras verificaciones directas."
+        },
+        {
+          "h": "Aceleradores",
+          "text": "Todos se diseñan con fórmulas relativistas. Una partícula en el LHC tiene γ de unos siete mil, y sin tenerlo en cuenta, los imanes se calcularían de forma completamente distinta."
+        },
+        {
+          "h": "Relojes atómicos en aviones",
+          "text": "Experimento de Hafele y Keating en 1971: los relojes volaron alrededor de la Tierra en ambas direcciones y divergieron de los que quedaron en tierra exactamente en la cantidad prevista: decenas de nanosegundos."
+        },
+        {
+          "h": "Energía nuclear",
+          "text": "El defecto de masa, del cual se libera la energía de fisión y fusión, es una consecuencia directa de la equivalencia masa-energía. De esto trata el tercer apartado."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: pruébelo con las manos",
+      "lead": "Palpar la relatividad es más difícil que la óptica, pero algo está al alcance incluso sin laboratorio.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Pelota en el ascensor o autobús",
+          "text": "En un autobús que se mueve sin aceleración, lance una pelota verticalmente hacia arriba y atrápela. Luego pida a alguien desde afuera que describa lo que vio.",
+          "answer": "Usted vio una línea recta vertical, el observador externo vio un arco. Ambas descripciones son correctas, y solo difieren por el sistema de referencia. Observe lo principal: para la pelota esto no presenta ninguna dificultad, porque su velocidad para el observador externo también es mayor, y el tiempo de vuelo es el mismo para ambos. Toda la teoría de la relatividad surge de la pregunta: ¿qué hacer si en lugar de la pelota tomamos la luz, cuya velocidad no puede aumentar? El arco sigue siendo más largo que la recta, pero la velocidad es la misma; por lo tanto, los tiempos difieren."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "¿Quién de los dos se retrasa?",
+          "text": "Mi reloj se retrasa respecto al suyo si yo vuelo cerca. Pero desde mi punto de vista, usted es quien vuela, y el suyo se retrasa. Ambas afirmaciones son ciertas al mismo tiempo. ¿No es esto una contradicción directa?",
+          "answer": "No hay contradicción, porque la comparación de relojes a distancia requiere definir la simultaneidad, y esta es diferente para nosotros. Para decir «ahora el mío marca más», hay que decidir qué es «ahora» en un punto lejano, y justamente en eso diferimos. La contradicción real surgiría solo si nos volviéramos a encontrar, cuando los relojes se pueden yuxtaponer. Pero para encontrarse, alguien tiene que dar la vuelta, es decir, cambiar de sistema de referencia, y la simetría se rompe. Quien dio la vuelta resultará más joven. Ese es el paradoxo de los gemelos, y se resuelve exactamente así."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "El navegador sin corrección mentiría diez kilómetros al día",
+          "text": "En los satélites GPS, los relojes experimentan dos efectos opuestos: debido a la velocidad de 3,9 km/s se retrasan 7 microsegundos por día, y debido a la gravedad más débil a 20 mil kilómetros de altura se adelantan 45. En total se adelantan 38 microsegundos. La luz recorre 11 kilómetros en ese tiempo; exactamente así de erróneo sería el navegador cada día. La corrección se incorporó de antemano, pero no todos creían en ella: el primer satélite se lanzó con la opción de desactivarla, por si la teoría resultaba incorrecta. Hubo que activarla."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "nemotecnia",
+          "h": "Camino más largo, misma velocidad — más tiempo",
+          "text": "Toda la esencia de la dilatación en una línea. La luz en un reloj en movimiento viaja en diagonal, la diagonal es más larga que la vertical, y la velocidad de la luz no puede aumentar. Por lo tanto, el ciclo es más largo. Lo demás es solo el teorema de Pitágoras."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Cuándo recordar γ",
+          "text": "Hasta el 10 % de la velocidad de la luz, la corrección es menor del medio por ciento; se puede calcular de forma escolar. Al 50 % ya hay un 15 % de error. Al 87 % el tiempo transcurre a la mitad. Regla: si la velocidad es menor que una décima parte de la de la luz, se puede ignorar la relatividad; si es mayor, es obligatorio tenerla en cuenta."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Dónde termina la teoría especial",
+          "text": "Describe solo sistemas inerciales, que se mueven uniformemente y en línea recta. En cuanto aparece aceleración o gravedad, se necesita la teoría general de la relatividad. Curiosamente, estos dos casos resultaron ser lo mismo: según el principio de equivalencia, la aceleración es indistinguible de la gravedad, como ya vimos en el tema de gravitación."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: espacio-tiempo de Minkowski",
+      "lead": "No forma parte de la prueba. Sobre cómo la teoría se convierte en geometría si dejamos de separar espacio y tiempo.",
+      "blocks": [
+        {
+          "h": "Qué se conserva",
+          "text": "La distancia entre dos eventos es diferente para distintos observadores, el intervalo de tiempo también es diferente. Pero la combinación $s^{2} = c^{2}t^{2} - x^{2}$ es la misma para todos. Es como la distancia en un plano: las coordenadas dependen de la rotación de los ejes, pero la distancia en sí no."
+        },
+        {
+          "h": "Rotación en el espacio-tiempo",
+          "text": "El cambio a un sistema de referencia en movimiento resulta ser una rotación en el espacio cuadridimensional, donde el cuarto eje es el tiempo multiplicado por la velocidad de la luz. El signo menos en la fórmula significa que la geometría no es euclidiana: la «rotación» estira en lugar de simplemente girar. De ahí todos los efectos."
+        },
+        {
+          "h": "Por qué c es el límite",
+          "text": "En esa geometría, el cono de luz separa los eventos sobre los que se puede influir de los que no. Moverse más rápido que la luz significaría salir del cono, y entonces el orden de los eventos dependería del observador, es decir, la consecuencia podría preceder a la causa. El carácter límite de la velocidad de la luz es un requisito de causalidad, no una propiedad de los motores."
+        },
+        {
+          "h": "Y las palabras de Minkowski",
+          "text": "Al presentar la teoría en 1908, dijo: a partir de ahora, el espacio por sí mismo y el tiempo por sí mismo se desvanecen en meras sombras, y solo una especie de unión de ambos conservará una realidad independiente. Einstein al principio consideró esta matematización innecesaria, pero diez años después no habría podido construir la teoría general de la relatividad sin ella."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La velocidad de la luz es la misma para todos los observadores; de ello se deduce que los relojes en movimiento van más lentos en un factor $\\gamma$, y la simultaneidad depende del sistema de referencia.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Dos postulados",
+          "text": "igualdad de las leyes en los SRI y constancia de $c$"
+        },
+        {
+          "icon": "formula",
+          "title": "$\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$",
+          "text": "se deduce del teorema de Pitágoras"
+        },
+        {
+          "icon": "sigma",
+          "title": "La corrección va como el cuadrado de $v/c$",
+          "text": "por eso es imperceptible a velocidades normales"
+        },
+        {
+          "icon": "ruler",
+          "title": "La simultaneidad no es absoluta",
+          "text": "es una propiedad de los eventos y del sistema de referencia"
+        },
+        {
+          "icon": "scale",
+          "title": "El paradoja de los",
+          "text": "El paradoja de los gemelos se resuelve con el giro: rompe la simetría"
+        }
+      ],
+      "where": "Navegación por satélite, muones de rayos cósmicos, aceleradores de partículas, relojes atómicos en aviones.",
+      "watchOut": "La dilatación es mutua: cada uno ve el reloj del otro retrasado. No hay contradicción porque comparar relojes distantes solo es posible acordando una simultaneidad, y esta es diferente para cada uno."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "¿Por qué de la constancia de la velocidad de la luz se deduce la dilatación del tiempo?",
+        "options": [
+          "La luz se frena en un sistema en movimiento",
+          "El camino de la luz en un reloj en movimiento es más largo, y la velocidad debe permanecer igual — por lo tanto el intervalo de tiempo es mayor",
+          "Los relojes se rompen por el movimiento",
+          "Es un postulado separado, no se deduce de la velocidad de la luz"
+        ],
+        "answer": 1,
+        "why": "La luz en un reloj en movimiento recorre una diagonal porque el espejo se ha desplazado. La diagonal es más larga que la vertical. Si la velocidad pudiera aumentar, el tiempo seguiría siendo el mismo — como ocurre con una pelota. Pero la velocidad de la luz está fijada por postulado, y lo único que puede cambiar es el tiempo.",
+        "hint": "Compare el recorrido de la luz en un reloj en reposo y en movimiento. ¿Qué debe permanecer invariante?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "Un muón viaja a 0,998 c y vive 2,2 μs de tiempo propio. ¿Por qué llega a la superficie terrestre?",
+        "options": [
+          "Vuela más rápido que la luz",
+          "Su tiempo de vida en el sistema Tierra está dilatado 15,8 veces, y recorre más de diez kilómetros",
+          "No se desintegra mientras se mueve",
+          "Los muones nacen mucho más abajo de lo que se pensaba"
+        ],
+        "answer": 1,
+        "why": "El tiempo propio de vida no cambia, pero en el sistema Tierra está dilatado por un factor γ. Desde el sistema del propio muón la explicación es diferente e igualmente válida: su tiempo transcurre normal, pero la atmósfera está contraída en los mismos 15,8 veces. Ambos observadores obtienen la misma respuesta.",
+        "hint": "Calcule γ para 0,998 c: bajo la raíz queda aproximadamente 0,004."
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿cuál es la contradicción entre la mecánica de Galileo y las ecuaciones de Maxwell, y cómo la resolvió Einstein?",
+        "keywords": [
+          "velocidad",
+          "suma",
+          "constante",
+          "no depende",
+          "sistema de referencia",
+          "sistema de referencia",
+          "tiempo",
+          "espacio",
+          "postulado"
+        ],
+        "needed": 2,
+        "why": "Según Galileo, las velocidades se suman, por lo que la velocidad de la luz debería depender del movimiento del observador. Según Maxwell, se expresa mediante constantes del medio y no depende del observador en absoluto. Einstein aceptó ambas afirmaciones — el principio de relatividad y la constancia de la velocidad de la luz — y renunció a la absolutidad del tiempo y la longitud. La contradicción desapareció a costa de revisar las concepciones de espacio y tiempo.",
+        "hint": "¿Qué dice la suma de velocidades sobre la velocidad de la luz y qué dicen las ecuaciones de la electrodinámica? ¿Cuál de las concepciones habituales hubo que abandonar para reconciliarlas?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "¿Cuánto vale el factor de Lorentz a una velocidad de 0,6 c?",
+        "answer": 1.25,
+        "unit": "—",
+        "tolerance": 0.1,
+        "why": "γ = 1/√(1 − 0,36) = 1/√0,64 = 1/0,8 = 1,25. Referencia útil: 0,6 c da un número bonito, exactamente 1,25, porque 0,6 y 0,8 son los lados del famoso triángulo pitagórico. Por eso en los problemas aparecen tan a menudo velocidades de 0,6 y 0,8 c.",
+        "hint": "Eleve 0,6 al cuadrado, réstelo de uno y extraiga la raíz. Los números están elegidos para que dé un resultado limpio."
+      }
+    ]
+  },
+  "ar": {
+    "title": "المسلمتان",
+    "subtitle": "الفقرة 1 · لماذا سرعة الضوء واحدة للجميع",
+    "intro": [
+      "أنت تركض في قطار وتدفع كرة للأمام. بالنسبة لك، تتحرك بسرعة خمسة كيلومترات في الساعة، وبالنسبة للشخص على الرصيف، بسرعة القطار زائد خمسة. السرعات تُجمع، هذا بديهي، وقد دوّن غاليلي ذلك قبل أربعمائة سنة.",
+      "الآن أشعل مصباحاً يدوياً. بالنسبة لك، يندفع الضوء للأمام بسرعة $c$. المنطق يقتضي أن يطير للمراقب على الرصيف بسرعة $c$ زائد سرعة القطار. لكن كل التجارب تقول: لا، بالضبط $c$. نفس القيمة، مقاسة من القطار المتحرك ومن الرصيف الثابت.",
+      "هذه ليست غرابة الضوء، بل رسالة عن بنية المكان والزمان. إذا كانت السرعة هي المسافة مقسومة على الزمن، وقد خرجت متساوية لدى راصدين، فالمسافات والأزمنة مختلفة عندهما. إلى هذا الاستنتاج تحديداً توصل أينشتاين، وكل ما تبقى هو نتائج."
+    ],
+    "standNote": "على المنصة ساعتان ضوئيتان: اليسرى ساكنة، اليمنى متحركة. يسير الضوء فيهما بين مرآتين بنفس السرعة — هذه مسلّمة، والمنصة تنفذها بأمانة. انظر إلى المسارات: في الساعة اليسرى، يسير الضوء عمودياً صعوداً وهبوطاً، وفي اليمنى قطرياً لأن المرايا تتحرك. القطر أطول من العامود، والسرعة نفسها — إذن نبضة الساعة اليمنى أطول. بتحريك منزلق السرعة، راقب γ: حتى نصف سرعة الضوء التصحيح يكاد لا يُلحَظ، ثم يتزايد بسرعة.",
+    "formula": {
+      "name": "مسلمتا النسبية الخاصة",
+      "latex": "1)\\;\\text{قوانين الفيزياء واحدة في جميع الأطر العطالية} \\qquad 2)\\; c = \\text{ثابت}",
+      "alsoKnown": "مبدأ النسبية وثبات سرعة الضوء",
+      "authors": [
+        {
+          "who": "جاليليو جاليلي",
+          "year": "1632",
+          "what": "صاغ مبدأ النسبية على مثال سفينة: عند إغلاق المقصورة، لا يمكن تحديد ما إذا كانت السفينة تتحرك بانتظام أم ثابتة. جميع التجارب الميكانيكية تعطي نفس النتيجة"
+        },
+        {
+          "who": "جيمس كليرك ماكسويل",
+          "year": "1865",
+          "what": "حصل على معادلات حيث تُعبر سرعة الضوء عن ثوابت الوسط ولا تحتوي على أي إشارة إلى نظام الإسناد. وهذا ما خلق التناقض مع جاليليو"
+        },
+        {
+          "who": "ألبرت مايكلسون وإدوارد مورلي",
+          "year": "1887",
+          "what": "حاولا كشف حركة الأرض في الأثير وحصلا على صفر مطلق. تكررت التجربة لعقود بدقة متزايدة — نفس النتيجة"
+        },
+        {
+          "who": "ألبرت أينشتاين",
+          "year": "1905",
+          "what": "اقترح قبول كلا الادعاءين في الوقت نفسه ورؤية ما يجب تغييره. تغيرت مفاهيم التزامن والطول والزمن — لكن التناقض اختفى"
+        }
+      ],
+      "story": "مقالة 1905 لا تبدأ بتجارب مايكلسون، بل بعدم ارتياح منطقي لاحظه أينشتاين في الديناميكا الكهربائية. خذ مغناطيساً وملفاً. إذا حركت المغناطيس، ينشأ تيار في الملف — ويُفسر ذلك بوجود مجال كهربائي دوامي. إذا حركت الملف بدلاً من ذلك، التيار نفسه — لكن يُفسر بقوة لورنتز المؤثرة على الشحنات. ظاهرة واحدة وتفسيران، والاختيار بينهما يعتمد على ما نعتبره ثابتاً. أزعج هذا أينشتاين كعدم تناظر لا أساس له في الظاهرة نفسها. من هذا الانزعاج نشأت النظرية التي غيرت الفيزياء. درس مفيد: أحياناً يجدر الثقة بالانزعاج الجمالي أكثر من الصيغة العاملة.",
+      "symbols": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "what": "سرعة الضوء في الفراغ",
+          "unit": "م/ث",
+          "note": "ثابتة في جميع الأطر العطالية — هذه مسلّمة، وليست نتيجة استنتاج"
+        },
+        {
+          "sym": "ISO",
+          "latex": "\\text{إ.ع.}",
+          "what": "نظام إسناد عطالي",
+          "unit": "—",
+          "note": "يتحرك بانتظام وفي خط مستقيم؛ ينطبق فيه قانون نيوتن الأول"
+        },
+        {
+          "sym": "beta",
+          "latex": "\\beta",
+          "what": "نسبة السرعة إلى سرعة الضوء",
+          "unit": "—",
+          "note": "$\\beta = v/c$؛ مقياس لا بعدي مناسب لمدى جوهرية التأثيرات"
+        },
+        {
+          "sym": "gamma",
+          "latex": "\\gamma",
+          "what": "عامل لورنتز",
+          "unit": "—",
+          "note": "$1/\\sqrt{1-\\beta^{2}}$ — كم مرة يتمدد الزمن ويتقلص الطول"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "اشتقاق صارم: تمدد الزمن من نظرية فيثاغورس",
+      "lead": "كل ما نحتاجه هو مثلث قائم الزاوية. ربما يكون هذا أكثر اشتقاق اقتصادي لنتيجة عظيمة في الفيزياء بأكملها.",
+      "steps": [
+        {
+          "text": "نبني ساعة ضوئية: مرآتان على مسافة $L$، بينهما وميض يتحرك. دورة واحدة هي ذهابًا وإيابًا. في النظام الذي تكون فيه الساعة ساكنة، كل شيء بسيط.",
+          "latex": "\\Delta t_0 = \\frac{2L}{c}",
+          "figure": "vline",
+          "figCaption": "أصدق ساعة: مسارها محدد فقط بسرعة الضوء والمسافة بين المرآتين."
+        },
+        {
+          "text": "الآن ننظر إلى نفس الساعة من نظام تتحرك بالنسبة إليه بسرعة $v$. خلال الدورة، تتحرك الساعة، ويضطر الضوء للسير قطريًا ليصل إلى المرآة المبتعدة.",
+          "latex": "\\text{مسار الضوء} = c\\,\\Delta t, \\qquad \\text{إزاحة الساعة} = v\\,\\Delta t",
+          "figure": "shadow",
+          "figCaption": "يسير الضوء قطريًا لأن المرآة تبتعد. السرعة نفسها — كما يفرض الفرض الثاني."
+        },
+        {
+          "text": "نحلل نصف الدورة ونكتب نظرية فيثاغورس للمثلث القائم الناتج: الضلع العمودي هو المسافة بين المرآتين، الأفقي هو إزاحة الساعة، والوتر هو مسار الضوء.",
+          "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+          "figure": "vectriangle",
+          "figCaption": "كل اشتقاق النسبية الخاصة يتلخص في مثلث قائم واحد."
+        },
+        {
+          "text": "نحل بالنسبة لـ $\\Delta t$. ننقل ونخرج العامل المشترك.",
+          "latex": "\\Delta t^{2}(c^{2} - v^{2}) = 4L^{2} \\;\\Longrightarrow\\; \\Delta t = \\frac{2L}{\\sqrt{c^{2}-v^{2}}}",
+          "figure": "secant",
+          "figCaption": "جبر عادي. لا شيء أكثر تعقيدًا من التربيع هنا."
+        },
+        {
+          "text": "نخرج $c$ من تحت الجذر ونتعرف على أن العامل الأول هو الزمن الذاتي للدورة.",
+          "latex": "\\Delta t = \\frac{2L}{c}\\cdot\\frac{1}{\\sqrt{1-v^{2}/c^{2}}} = \\gamma\\,\\Delta t_0",
+          "figure": "result",
+          "figCaption": "الساعة المتحركة تسير أبطأ بمقدار γ مرة. تم الحصول عليها من مثلث واحد وفرض واحد."
+        },
+        {
+          "text": "نتحقق من أنه عند السرعات الصغيرة لا يتغير شيء. التوسع لـ $\\beta$ الصغير يعطي تصحيحًا من الدرجة الثانية — لهذا السبب لم يلاحظ أي شيء لآلاف السنين.",
+          "latex": "\\gamma \\approx 1 + \\frac{v^{2}}{2c^{2}}: \\quad v = 100\\ \\text{م/ث} \\Rightarrow \\gamma - 1 \\approx 6\\cdot 10^{-14}",
+          "figure": "curves",
+          "figCaption": "في طائرة ركاب، التصحيح في الرقم العشري الرابع عشر. ملاحظته بدون ساعات ذرية مستحيل."
+        },
+        {
+          "text": "وأكثر نتيجة غير بديهية للفرضين هي نسبية التزامن. لنفترض أن مصباحًا يومض في منتصف عربة. بالنسبة للراكب، يصل الضوء إلى كلا الجدارين في نفس الوقت. بالنسبة لمراقب على الرصيف، الجدار الخلفي يتحرك باتجاه الضوء، والأمامي يبتعد، وبالتالي يصل الضوء إليهما في لحظتين مختلفتين.",
+          "latex": "\\text{بالتزامن لواحد} \\;\\neq\\; \\text{بالتزامن للآخر}",
+          "figure": "inertialframe",
+          "figCaption": "التزامن ليس مطلقًا. هذه هي النتيجة الأعمق والأكثر صعوبة في تقبلها."
+        }
+      ],
+      "plate": "من ثبات سرعة الضوء ونظرية فيثاغورس ينتج أن الساعات المتحركة تسير أبطأ بمقدار $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$ مرة، وأن التزامن يعتمد على المراقب.",
+      "note": "حدود التطبيق والارتباك الشائع. التمدد نسبي: بالنسبة لراكب القطار، ساعة المنصة تتأخر، وهذا ليس تناقضًا — إنهم ببساطة يستخدمون تعريفات مختلفة للتزامن. مفارقة التوأم تبدو وكأنها انتهاك للتماثل، لكن التماثل يكسره الدوران: التوأم المسافر يغير الإطار المرجعي، بينما التوأم الباقي لا يغيره. بالإضافة إلى ذلك، هذه النظرية تنطبق فقط على الأطر القصورية؛ بوجود الجاذبية، نحتاج إلى النسبية العامة."
+    },
+    "math": {
+      "title": "الرياضيات التي نحتاجها هنا",
+      "text": [
+        "لماذا القطر أطول — جوهر الاشتقاق في جملة واحدة. تخيل أنك ترمي كرة إلى الأعلى عموديًا في حافلة متحركة وتلتقطها. بالنسبة لك، تتحرك الكرة لأعلى ولأسفل في خط مستقيم. بالنسبة لشخص في الخارج، فإنها ترسم قوسًا لأنها تتحرك جانبيًا. المسار على القوس أطول من المسار المستقيم — لا أحد ينكر ذلك. بالنسبة للكرة، لا يسبب هذا مشكلة: سرعتها بالنسبة للمراقب الخارجي أكبر أيضًا، وبالتالي الزمن نفسه. أما بالنسبة للضوء، فالسرعة يجب أن تبقى كما هي. المسار أطول، السرعة نفسها — إذن الزمن أكبر. لا خيار آخر.",
+        "كيفية قراءة عامل لورنتز. قيمة $\\gamma$ تساوي واحدًا عند السرعة الصفرية وتزداد إلى ما لا نهاية عند الاقتراب من سرعة الضوء. من المفيد تذكر بعض القيم: عند 10% من سرعة الضوء، γ = 1.005 — نصف في المئة؛ عند 50% — 1.15؛ عند 87% — 2 (الزمن يسير أبطأ بمقدار الضعفين)؛ عند 99% — 7؛ عند 99.99% — 71. لاحظ طبيعة النمو: يكاد يكون غير ملحوظ حتى النصف وسريع في النهاية. هذا سلوك نموذجي لدالة ذات جذر فرق في المقام.",
+        "لماذا التصحيح من الدرجة الثانية. عند $x$ صغير، $1/\\sqrt{1-x} \\approx 1 + x/2$ — هذا هو التوسع من الموضوع التمهيدي. بتعويض $x = v^2/c^2$، نحصل على أن الانحراف عن الواحد يساوي مربع نسبة السرعات. بالنسبة للطائرة، هذا $10^{-13}$، وبالنسبة للقمر الصناعي $10^{-10}$. لهذا السبب بقي التأثير غير ملحوظ لآلاف السنين: إنه ليس صغيرًا، بل تافه في جميع السرعات المتاحة للبشر — باستثناء تلك التي تتحقق في المسرعات.",
+        "ماذا تعني نسبية التزامن. هذا ليس عن معرفتنا المتأخرة بالأحداث بسبب تأخر الإشارة. من السهل حساب التأخر ويتم أخذه في الاعتبار. الأمر مختلف: حتى بعد كل التصحيحات لزمن الانتشار، يختلف المراقبان حول أي حدث وقع أولاً. التزامن ليس خاصية لزوج من الأحداث، بل خاصية لزوج من الأحداث وإطار مرجعي. هنا تنكسر البديهة، ولا يوجد أي تشبيه من التجربة اليومية لهذا."
+      ]
+    },
+    "example": {
+      "title": "مثال بأرقام: الميونات التي لا ينبغي أن تصل",
+      "lead": "أوضح اختبار للنظرية: جسيمات من الأشعة الكونية تصل إلى سطح الأرض رغم الحسابات الأولية.",
+      "given": "تولد الميونات في الطبقات العليا من الغلاف الجوي على ارتفاع حوالي 15 كم وتطير لأسفل بسرعة 0.998 c. زمن عمر الميون الذاتي هو 2.2 ميكروثانية. هل تصل إلى السطح؟",
+      "law": "بشكل ساذج: $L = v\\tau$. وفقًا للنظرية النسبية: $\\tau' = \\gamma\\tau$",
+      "solution": [
+        {
+          "text": "أولاً، حساب ساذج، دون أي نسبية.",
+          "latex": "L = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 2{,}2\\cdot 10^{-6} \\approx 660\\ \\text{м}"
+        },
+        {
+          "text": "يتبين أن الميون يقطع ستمائة متر ثم يتحلل. لن يصل إلى الأرض، إذ ينقصه أكثر من أربعة عشر كيلومترًا.",
+          "latex": "660\\ \\text{м} \\ll 15\\ 000\\ \\text{м}"
+        },
+        {
+          "text": "الآن نحسب معامل لورنتز لهذه السرعة.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}998^{2}}} = \\frac{1}{\\sqrt{0{,}003996}} \\approx 15{,}8"
+        },
+        {
+          "text": "في نظام الأرض، زمن عمر الميون ممدود بنفس العامل.",
+          "latex": "\\tau' = 15{,}8 \\cdot 2{,}2\\cdot 10^{-6} \\approx 3{,}5\\cdot 10^{-5}\\ \\text{с}"
+        },
+        {
+          "text": "والمسافة المقطوعة.",
+          "latex": "L' = 0{,}998 \\cdot 3\\cdot 10^{8} \\cdot 3{,}5\\cdot 10^{-5} \\approx 10\\ 400\\ \\text{м}"
+        }
+      ],
+      "answer": "بدون أخذ النسبية في الاعتبار، كان الميون سيقطع 660 مترًا ولن يصل إلى الأرض. مع أخذها في الاعتبار، يقطع أكثر من عشرة كيلومترات، وجزء ملحوظ منها يصل إلى السطح.",
+      "check": "في الواقع، تُسجل الميونات عند مستوى سطح البحر، وبكمية تتوافق مع الحساب: حوالي واحد لكل سنتيمتر مربع في الدقيقة يمر عبرها الآن. من المفيد بشكل خاص النظر إلى نفس الظاهرة من إطار الميون. هناك، وقته يسير بشكل طبيعي، 2.2 ميكروثانية كاملة، لكن الغلاف الجوي يندفع نحوه وينكمش بعامل 15.8، أي أن سمكه ليس 15 كيلومترًا بل أقل من كيلومتر. كلا الراصدين محقان، كلاهما يحصل على نفس الإجابة، لكنهما يفسرانها بتأثيرين مختلفين: أحدهما بتمدد الزمن، والآخر بانكماش الطول. هذا أفضل مثال معروف على أن النظرية متسقة داخليًا."
+    },
+    "constants": {
+      "title": "مقادير هذا القسم",
+      "lead": "سرعات ومعاملات لورنتز تعطي فكرة عن متى تكون التأثيرات ملحوظة.",
+      "items": [
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "سرعة الضوء",
+          "value": "3,00 · 10⁸",
+          "unit": "م/ث",
+          "why": "السرعة القصوى لنقل أي تأثير. ليس بسبب نقص المحركات: تسريع جسم كتلته ساكنة إلى $c$ يتطلب طاقة لا نهائية.",
+          "mnemo": "الأرض تتحرك في مدارها بسرعة 30 كم/ث – وهذا جزء من عشرة آلاف من c. معامل لورنتز يختلف عن الواحد في المرتبة التاسعة."
+        },
+        {
+          "sym": "g_iss2",
+          "latex": "\\gamma_{\\text{МКС}}",
+          "name": "معامل لورنتز لمحطة الفضاء الدولية",
+          "value": "1 + 3 · 10⁻¹⁰",
+          "unit": "—",
+          "why": "المحطة تطير بسرعة 7.7 كم/ث. خلال ستة أشهر من الرحلة، يصبح رائد الفضاء أصغر من أولئك المتبقين على الأرض بحوالي خمسة ملي ثانية – التأثير تم قياسه.",
+          "mnemo": "حامل الرقم القياسي في 'التجمع الشبابي' المتراكم – غينادي بادالكا: حوالي 22 ملي ثانية خلال 878 يومًا في المدار."
+        },
+        {
+          "sym": "g_lhc",
+          "latex": "\\gamma_{\\text{БАК}}",
+          "name": "معامل لورنتز للبروتونات في المصادم",
+          "value": "≈ 6900",
+          "unit": "—",
+          "why": "البروتونات مسرعة إلى 0.999999990 c. وقتها الذاتي يسير أبطأ بسبعة آلاف مرة، والحلقة التي يبلغ طولها 27 كم تبدو لهم منكمشة إلى أربعة أمتار.",
+          "mnemo": "لا يمكن أبدًا التسريع إلى سرعة الضوء تمامًا: γ يذهب إلى اللانهاية، وكذلك الطاقة المطلوبة."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين تم اختبار هذا",
+      "lead": "النظرية النسبية – واحدة من أكثر النظريات اختبارًا في الفيزياء، والاختبارات تجري يوميًا.",
+      "items": [
+        {
+          "h": "الملاحة عبر الأقمار الصناعية",
+          "text": "الساعات على الأقمار الصناعية تسير بشكل مختلف بسبب السرعة (تتأخر بمقدار 7 ميكروثانية/يوم) وبسبب الجاذبية الضعيفة على الارتفاع (تتقدم بمقدار 45 ميكروثانية/يوم). بدون تصحيح 38 ميكروثانية، سيكون الخطأ المتراكم 10 كيلومترات في اليوم."
+        },
+        {
+          "h": "ميونات الأشعة الكونية",
+          "text": "تصل إلى السطح فقط بفضل تمدد الزمن. تجربة روسي وهول عام 1941 – واحدة من أولى الاختبارات المباشرة."
+        },
+        {
+          "h": "المسرعات",
+          "text": "كلها تصمم وفقًا للصيغ النسبية. الجسيم في المصادم الكبير له γ حوالي سبعة آلاف، وبدون أخذ ذلك في الاعتبار، لكان يجب حساب المغناطيسات بشكل مختلف تمامًا."
+        },
+        {
+          "h": "الساعات الذرية على الطائرات",
+          "text": "تجربة هافيل وكيتنغ عام 1971: الساعات حلقت حول الأرض في اتجاهين واختلفت عن تلك المتبقية على الأرض بالمقدار المتوقع تمامًا – عشرات النانوثانية."
+        },
+        {
+          "h": "الطاقة النووية",
+          "text": "عيب الكتلة الذي تُستمد منه طاقة الانشطار والاندماج – نتيجة مباشرة لتكافؤ الكتلة والطاقة. هذا ما يتناوله القسم الثالث."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "ممتع: اختبر بنفسك",
+      "lead": "استشعار النسبية أصعب من البصريات، لكن بعضها متاح حتى بدون مختبر.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "كرة في مصعد أو حافلة",
+          "text": "في حافلة تتحرك دون تسارع، ارم كرةً عمودياً للأعلى والتقطها. ثم اطلب من شخص خارج الحافلة أن يصف ما رآه.",
+          "answer": "رأيت مساراً عمودياً، أما المراقب الخارجي فرأى قوساً. كلا الوصفين صحيح، ويختلفان فقط بسبب الإطار المرجعي. لاحظ الشيء الرئيسي: هذا لا يسبب أي صعوبة للكرة، لأن سرعتها بالنسبة للمراقب الخارجي أكبر أيضاً، وزمن الطيران هو نفسه لدى كليهما. تنبثق نظرية النسبية كلها من السؤال: ماذا لو أخذنا ضوءاً بدل الكرة، وسرعته لا يحق لها أن تزيد؟ القوس أطول من المستقيم، والسرعة نفسها — إذن يختلف الزمنان."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "أي منهما يتأخر؟",
+          "text": "ساعتي تتأخر بالنسبة لساعتك إذا كنت أنا طائراً بجانبك. ولكن من وجهة نظري، أنت الطائر، وساعتك هي المتأخرة. كلا القولين صحيح في آنٍ واحد. أليس هذا تناقضاً صريحاً؟",
+          "answer": "لا تناقض، لأن مقارنة الساعات عن بُعد تتطلب تعريفاً للتزامن، وهو مختلف لدينا. لقول «الآن ساعتي تظهر أكثر» يجب تحديد معنى «الآن» في نقطة بعيدة — وهنا نختلف. ينشأ تناقض حقيقي فقط عند اللقاء مرة أخرى، حيث يمكن مقارنة الساعات وجهاً لوجه. ولكن للقاء، يجب على أحدهم أن يدور (أي يغير إطاراً مرجعياً) — فينكسر التماثل. من دار يكون أصغر سناً. هذه هي مفارقة التوأم، وحلها هكذا."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة مثيرة",
+          "h": "بدون تصحيح، كان سيكذب الملاح بعشرة كيلومترات يومياً",
+          "text": "على أقمار GPS، تواجه الساعات تأثيرين متعاكسين: بسبب السرعة 3.9 كم/ث تتأخر 7 ميكروثانية يومياً، وبسبب الجاذبية الأضعف على ارتفاع 20 ألف كيلومتر تتقدم 45 ميكروثانية. المحصلة: تتقدم 38 ميكروثانية يومياً. يقطع الضوء في هذه المدة 11 كيلومتراً — وهذا هو مقدار الخطأ اليومي للملاح. أُدخل التصحيح في التصميم مسبقاً، لكن لم يصدق الجميع: أُطلق أول قمر صناعي مع إمكانية تعطيله، تحسباً لخطأ النظرية. اضطررنا لتشغيله."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "المسار أطول، السرعة نفسها — الزمن أكبر",
+          "text": "جوهر التباطؤ في سطر واحد. يسير الضوء في الساعة المتحركة قطرياً، القطر أطول من العمودي، وسرعة الضوء لا يحق لها الزيادة. إذن الدورة أطول. بعد ذلك — مجرد نظرية فيثاغورس."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "متى يجب تذكر γ",
+          "text": "حتى 10% من سرعة الضوء، التصحيح أقل من نصف بالمئة — يمكن الحساب بالطريقة المدرسية. عند 50%، الخطأ 15%. عند 87%، الزمن يتباطأ إلى النصف. القاعدة: إذا كانت السرعة أقل من عُشر سرعة الضوء، يمكن تجاهل النسبية؛ وإذا كانت أكبر، فتذكرها ضروري."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "أين تنتهي النظرية الخاصة",
+          "text": "تصف فقط الأطر القصورية — المتحركة بسرعة ثابتة وفي خط مستقيم. بمجرد ظهور تسارع أو جاذبية، نحتاج النظرية النسبية العامة. المضحك أن هاتين الحالتين اتضح أنهما شيء واحد: وفق مبدأ التكافؤ، لا يمكن تمييز التسارع عن الجاذبية، وهو ما ناقشناه في موضوع الجاذبية."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: زمكان مينكوفسكي",
+      "lead": "لا يدخل في الاختبار. حول كيف تتحول النظرية إلى هندسة عندما نتوقف عن فصل المكان والزمان.",
+      "blocks": [
+        {
+          "h": "ما الذي يبقى محفوظاً",
+          "text": "المسافة بين حدثين تختلف لدى مراقبين مختلفين، والفاصل الزمني مختلف أيضاً. لكن التركيبة $s^{2} = c^{2}t^{2} - x^{2}$ هي نفسها لدى الجميع. مثل المسافة على المستوى: الإحداثيات تعتمد على دوران المحاور، لكن المسافة نفسها لا."
+        },
+        {
+          "h": "دوران في الزمكان",
+          "text": "الانتقال إلى إطار مرجعي متحرك هو دوران في فضاء رباعي الأبعاد، حيث المحور الرابع هو الزمن مضروباً في سرعة الضوء. علامة الناقص في المعادلة تعني أن الهندسة ليست إقليدية: «الدوران» يمدد بدلاً من أن يدور ببساطة. من هنا تنشأ جميع التأثيرات."
+        },
+        {
+          "h": "لماذا c هي الحد",
+          "text": "في هذه الهندسة، يفصل مخروط ضوئي بين الأحداث التي يمكن التأثير فيها وتلك التي لا يمكن. التحرك أسرع من الضوء يعني الخروج من المخروط — عندها يصبح ترتيب الأحداث معتمداً على المراقب، أي قد تسبق النتيجة السبب. كون سرعة الضوء حداً هو شرط السببية، ليس خاصية للمحركات."
+        },
+        {
+          "h": "وكلمات مينكوفسكي",
+          "text": "عند تقديم النظرية عام 1908، قال: من الآن فصاعداً، المكان وحده والزمان وحده يتحولان إلى ظلال، و فقط اتحادهما الغريب سيحتفظ بالاستقلالية. اعتبر أينشتاين في البداية هذه الرياضيات زائدة — لكن بعد عشر سنوات لم يستطع بناء النسبية العامة بدونها."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "سرعة الضوء ثابتة لجميع المراقبين؛ ومن ثم تتباطأ الساعات المتحركة بعامل γ، والتزامن يعتمد على الإطار المرجعي.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "مبدأان",
+          "text": "تماثل القوانين في الأطر القصورية وثبات c"
+        },
+        {
+          "icon": "formula",
+          "title": "$\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$",
+          "text": "يُستنتج من نظرية فيثاغورس"
+        },
+        {
+          "icon": "sigma",
+          "title": "التصحيح يظهر كمربع v/c",
+          "text": "لذلك غير ملحوظ في السرعات العادية"
+        },
+        {
+          "icon": "ruler",
+          "title": "التزامن ليس مطلقاً",
+          "text": "هو خاصية للأحداث والإطار المرجعي"
+        },
+        {
+          "icon": "scale",
+          "title": "مفارقة التوأم تُحَل بالدوران",
+          "text": "يكسر التماثل"
+        }
+      ],
+      "where": "الملاحة عبر الأقمار الصناعية، الميونات من الأشعة الكونية، مسرعات الجسيمات، الساعات الذرية على الطائرات.",
+      "watchOut": "التباطؤ متبادل: كل واحد يرى ساعة الآخر متأخرة. لا تناقض لأن مقارنة الساعات البعيدة ممكنة فقط بالاتفاق على التزامن، وهو مختلف لديهم."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "لماذا ينتج عن ثبات سرعة الضوء تبطؤ الزمن؟",
+        "options": [
+          "يتباطأ الضوء في النظام المتحرك",
+          "مسار الضوء في الساعة المتحركة أطول، والسرعة يجب أن تبقى كما هي — لذا الفاصل الزمني أكبر",
+          "الساعة تتعطل بسبب الحركة",
+          "هذه مسلمة منفصلة، لا تنتج عن سرعة الضوء"
+        ],
+        "answer": 1,
+        "why": "يسير الضوء في الساعة المتحركة قطرياً لأن المرآة تتحرك بعيداً. القطر أطول من العمودي. إذا كان بإمكان السرعة أن تزيد، لظل الزمن كما هو — هكذا يحدث مع الكرة. لكن سرعة الضوء ثابتة بموجب المسلمة، والشيء الوحيد الذي يمكن أن يتغير هو الزمن.",
+        "hint": "قارن مسار الضوء في الساعة الساكنة والمتحركة. ما الذي يجب أن يبقى دون تغيير؟"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "يطير الميون بسرعة 0,998c ويعيش 2,2 ميكروثانية من الزمن الذاتي. لماذا يصل إلى سطح الأرض؟",
+        "options": [
+          "إنه يطير أسرع من الضوء",
+          "زمن حياته في نظام الأرض ممتد بمقدار 15,8 مرة، ويقطع أكثر من عشرة كيلومترات",
+          "إنه لا يتحلل طالما يتحرك",
+          "تولد الميونات على ارتفاع أقل بكثير مما كان يُعتقد"
+        ],
+        "answer": 1,
+        "why": "زمن الحياة الذاتي لا يتغير، لكنه في نظام الأرض ممتد بعامل γ. من نظام الميون نفسه، التفسير مختلف وصحيح أيضاً: زمنه يسير بشكل طبيعي، لكن الغلاف الجوي متقلص بنفس العامل 15,8 مرة. كلا الراصدين يحصلان على نفس الإجابة.",
+        "hint": "احسب γ لسرعة 0,998c: تحت الجذر سيكون تقريباً 0,004."
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: ما هو التناقض بين ميكانيكا جاليليو ومعادلات ماكسويل، وكيف حله أينشتاين؟",
+        "keywords": [
+          "скорост",
+          "склад",
+          "постоянн",
+          "не зависит",
+          "систем отсчёт",
+          "систем отсчет",
+          "время",
+          "пространств",
+          "постулат"
+        ],
+        "needed": 2,
+        "why": "وفقاً لجاليليو، السرعات تُجمع، لذا يجب أن تعتمد سرعة الضوء على حركة الراصد. وفقاً لماكسويل، تُعبر عنها ثوابت الوسط ولا تعتمد على الراصد مطلقاً. قبل أينشتاين كلا البيانين — مبدأ النسبية وثبات سرعة الضوء — وتخلى عن مطلقية الزمن والطول. اختفى التناقض على حساب إعادة النظر في مفاهيم المكان والزمان.",
+        "hint": "ماذا يقول جمع السرعات عن سرعة الضوء وماذا تقول معادلات الديناميكا الكهربائية؟ أي من المفاهيم المألوفة كان لا بد من التخلي عنها للتوفيق بينهما؟"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "ما قيمة معامل لورينتز عند سرعة 0,6c؟",
+        "answer": 1.25,
+        "unit": "—",
+        "tolerance": 0.1,
+        "why": "γ = 1/√(1 − 0,36) = 1/√0,64 = 1/0,8 = 1,25. رابط مفيد: 0,6c تعطي عدداً جميلاً 1,25 بالضبط، لأن 0,6 و 0,8 هما ضلعا مثلث فيثاغورس الشهير. ولهذا تظهر السرعتان 0,6c و 0,8c بشكل متكرر في المسائل.",
+        "hint": "ارفع 0,6 للتربيع، اطرح من الواحد، ثم خذ الجذر التربيعي. الأرقام مُختارة بحيث تكون النتيجة جميلة."
+      }
+    ]
+  },
+  "tags": [
+    "speed_of_light",
+    "time_dilation"
+  ],
+  "laws": [
+    "pythagorean_theorem",
+    "newtons_first_law"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.05289v1",
+      "why": "совпадение по теме: speed_of_light, time_dilation"
+    },
+    {
+      "id": "2607.03848v1",
+      "why": "совпадение по теме: speed_of_light, time_dilation"
+    },
+    {
+      "id": "2607.02651v1",
+      "why": "совпадение по теме: speed_of_light, time_dilation"
+    }
+  ]
+}

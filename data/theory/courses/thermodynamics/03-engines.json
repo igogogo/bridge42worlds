@@ -1,0 +1,1127 @@
+{
+  "id": "03-engines",
+  "topic": "thermodynamics",
+  "schema": "b42.lesson/1",
+  "model": "processes_engine",
+  "entities": {
+    "laws": [
+      "first_law_of_thermodynamics",
+      "second_law_of_thermodynamics",
+      "carnot_theorem",
+      "third_law_of_thermodynamics"
+    ],
+    "tags": [
+      "entropy",
+      "temperature"
+    ],
+    "scientists": [
+      "Ludwig Boltzmann"
+    ]
+  },
+  "ru": {
+    "title": "Начала термодинамики",
+    "subtitle": "Параграф 3 · Процессы, циклы и тепловые машины",
+    "intro": [
+      "Возьмите велосипедный насос, заткните выход пальцем и сделайте десяток быстрых качков. Цилиндр станет ощутимо тёплым. Никакого огня рядом нет — вы просто давили. Откуда взялось тепло?",
+      "У газа есть ровно четыре способа менять своё состояние, и каждый рисует на диаграмме «давление–объём» свою характерную линию. Три из них привычны, а четвёртый — адиабата — как раз и объясняет горячий насос.",
+      "Соединив эти процессы в замкнутое кольцо, мы получим двигатель. И тогда станет видно, почему его коэффициент полезного действия ограничен не качеством стали, а самой природой теплоты."
+    ],
+    "standNote": "На стенде пять режимов. Ведущий параметр в каждом двигается сам — просто смотрите, какую кривую рисует процесс. Обратите особое внимание на адиабату: при сжатии температура растёт, хотя никакой плиты нет. В режиме «двигатель» точка бежит по замкнутой петле — это ходы поршня, а КПД считается тут же.",
+    "formula": {
+      "name": "Первое начало термодинамики и теорема Карно",
+      "latex": "\\delta Q = dU + P\\,dV \\qquad \\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "alsoKnown": "Закон сохранения энергии для тепловых процессов и предел эффективности",
+      "authors": [
+        {
+          "who": "Сади Карно",
+          "year": "1824",
+          "what": "доказал, что предельный КПД тепловой машины зависит только от температур нагревателя и холодильника — и ни от чего больше"
+        },
+        {
+          "who": "Джеймс Джоуль",
+          "year": "1843",
+          "what": "экспериментально установил эквивалентность теплоты и механической работы, чем подготовил первое начало"
+        },
+        {
+          "who": "Рудольф Клаузиус",
+          "year": "1850",
+          "what": "сформулировал оба начала в современном виде и ввёл энтропию как меру необратимости"
+        }
+      ],
+      "story": "Карно рассуждал об идеальной машине, не зная ни о молекулах, ни о сохранении энергии — он ещё пользовался ошибочной теорией теплорода. Поразительно, но его главный вывод оказался верным: предел эффективности задаётся отношением температур. Двадцать пять лет спустя Клаузиус переформулировал это уже на прочном основании, и результат Карно устоял."
+    },
+    "derivation": {
+      "title": "Строгий вывод",
+      "lead": "Всё содержание этого параграфа вытекает из одного закона — сохранения энергии, записанного для тепловых процессов. Остальное следует автоматически.",
+      "steps": [
+        {
+          "text": "Первое начало: подведённая теплота идёт на изменение внутренней энергии газа и на работу, которую он совершает, расширяясь. Это закон сохранения энергии, и ничего сверх него здесь нет.",
+          "latex": "\\delta Q = dU + P\\,dV",
+          "figure": "firstlaw",
+          "figCaption": "Теплота разделяется на два русла: нагрев газа и работа по перемещению поршня."
+        },
+        {
+          "text": "Адиабатный процесс — это процесс без теплообмена, $\\delta Q = 0$. Тогда газ может совершать работу только за счёт собственной внутренней энергии, то есть за счёт своей температуры. Отсюда и горячий насос.",
+          "latex": "C_V\\,dT + P\\,dV = 0",
+          "figure": "adiabatic",
+          "figCaption": "Сжатие без теплообмена: работа поршня уходит прямо в температуру газа."
+        },
+        {
+          "text": "Подставим $P = nRT/V$ из первого параграфа и разделим переменные — приём тот же, что и в предыдущем параграфе. После интегрирования получаем связь температуры с объёмом.",
+          "latex": "\\frac{dT}{T} = -\\frac{R}{C_V}\\frac{dV}{V} \\;\\Longrightarrow\\; T\\,V^{\\gamma-1} = \\text{const}",
+          "figure": "integrate",
+          "figCaption": "Снова разделение переменных: слева температура, справа объём."
+        },
+        {
+          "text": "Заменяя температуру через уравнение состояния, приходим к самой известной форме — уравнению адиабаты. Показатель $\\gamma$ больше единицы, поэтому на диаграмме адиабата всегда круче изотермы.",
+          "latex": "P\\,V^{\\gamma} = \\text{const}, \\qquad \\gamma = \\frac{C_P}{C_V}",
+          "figure": "curves",
+          "figCaption": "Адиабата круче изотермы: при сжатии давление растёт по двум причинам сразу."
+        },
+        {
+          "text": "Теперь двигатель. За полный цикл газ возвращается в исходное состояние, значит его внутренняя энергия не изменилась: $\\Delta U = 0$. Вся полезная работа равна разности подведённой и отведённой теплоты.",
+          "latex": "W = Q_{\\text{г}} - Q_{\\text{х}}",
+          "figure": "cycle",
+          "figCaption": "Замкнутый цикл: площадь внутри петли и есть работа за один оборот."
+        },
+        {
+          "text": "Коэффициент полезного действия по определению — отношение полученной работы к затраченной теплоте. Отсюда видно: чтобы $\\eta$ равнялся единице, нужно $Q_{\\text{х}} = 0$, то есть вообще ничего не отдавать холодильнику.",
+          "latex": "\\eta = \\frac{W}{Q_{\\text{г}}} = 1 - \\frac{Q_{\\text{х}}}{Q_{\\text{г}}}",
+          "figure": "efficiency",
+          "figCaption": "Часть теплоты обязана уйти в холодильник — иначе цикл не замкнётся."
+        },
+        {
+          "text": "Для идеального цикла Карно, состоящего из двух изотерм и двух адиабат, отношение теплот равно отношению температур. Получается предел, не зависящий ни от вещества, ни от конструкции машины.",
+          "latex": "\\eta_{\\text{Карно}} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+          "figure": "carnot",
+          "figCaption": "Теорема Карно: эффективность задаётся только двумя температурами."
+        }
+      ],
+      "plate": "\\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "plateCap": "Никакая тепловая машина, работающая между этими температурами, не может быть эффективнее. Это запрет природы, а не недоработка инженеров.",
+      "note": "Из формулы видно, почему сто процентов недостижимы: для этого нужен холодильник при абсолютном нуле, что запрещено третьим началом. Отсюда же практический вывод, которым живёт энергетика: выгоднее поднимать температуру горения, чем охлаждать выхлоп — знаменатель работает сильнее числителя. Для автомобиля (около $2000$ К в цилиндре против $300$ К снаружи) теоретический потолок составляет примерно $85\\%$, а реальность — $25$–$30\\%$."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "items": [
+        {
+          "what": "Соотношение Майера",
+          "why": "Теплоёмкость при постоянном давлении больше, чем при постоянном объёме, ровно на газовую постоянную. Причина проста: при постоянном давлении газ не только нагревается, но и расширяется, совершая работу против внешней среды, — и за это приходится доплачивать энергией. Именно поэтому $\\gamma$ всегда больше единицы.",
+          "latex": "C_P - C_V = R"
+        },
+        {
+          "what": "Откуда берётся значение $\\gamma$",
+          "why": "Теплоёмкость определяется числом степеней свободы молекулы: $C_V = \\tfrac{i}{2}R$. У одноатомного газа только три поступательных степени, у двухатомного добавляются две вращательных. Это тот редкий случай, когда константа выводится из геометрии молекулы, а не измеряется.",
+          "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+        },
+        {
+          "what": "Работа как площадь под кривой",
+          "why": "Элементарная работа равна $P\\,dV$, поэтому полная работа есть интеграл давления по объёму — то есть буквально площадь под кривой процесса на диаграмме. Для замкнутого цикла это площадь внутри петли. Утверждение «площадь равна работе» — не метафора, а определение интеграла.",
+          "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{цикл}} = \\oint P\\,dV"
+        }
+      ]
+    },
+    "example": {
+      "title": "Пример с числами",
+      "lead": "Оценим предельную эффективность реального двигателя и сравним с паспортной.",
+      "given": "В цилиндре двигателя температура сгорания достигает $1800$ К, выхлоп уходит при $600$ К. Найти предельный КПД по Карно и сравнить с реальным значением $30\\%$.",
+      "law": "Теорема Карно: $\\eta_{\\max} = 1 - T_{\\text{х}}/T_{\\text{г}}$",
+      "solution": [
+        {
+          "text": "Подставляем температуры — обязательно в кельвинах, иначе отношение потеряет смысл.",
+          "latex": "\\eta_{\\max} = 1 - \\frac{600}{1800}"
+        },
+        {
+          "text": "Дробь считается устно: шестьсот к тысяче восьмистам — это одна треть.",
+          "latex": "\\frac{600}{1800} = \\frac{1}{3} \\approx 0{,}33"
+        },
+        {
+          "text": "Вычитаем из единицы.",
+          "latex": "\\eta_{\\max} = 1 - 0{,}33 = 0{,}67 = 67\\%"
+        }
+      ],
+      "answer": "Предел Карно $\\approx 67\\%$, реальный двигатель даёт $30\\%$ — примерно половину от теоретического максимума",
+      "check": "Разумно ли это? Да: половина от предела Карно — типичный показатель для хорошей тепловой машины. Остальное съедают трение, неполное сгорание, теплоотвод через стенки и необратимость реальных процессов. Заметьте главное: даже идеальная машина здесь потеряла бы треть энергии — и это не поправимо никакой инженерией."
+    },
+    "constants": {
+      "title": "Константы этого параграфа",
+      "lead": "Здесь константы уже не измеряются, а вычисляются из строения молекул и предыдущих величин — хороший признак того, что теория замкнулась.",
+      "items": [
+        {
+          "sym": "γ",
+          "latex": "\\gamma",
+          "name": "Показатель адиабаты",
+          "value": "1,4 (воздух) · 1,67 (гелий)",
+          "unit": "безразмерная",
+          "why": "Отношение теплоёмкостей $C_P/C_V$. Величина безразмерная, поскольку это отношение двух однородных величин. Определяется числом степеней свободы молекулы: для двухатомного воздуха получается $7/5 = 1{,}4$, для одноатомного гелия — $5/3 \\approx 1{,}67$.",
+          "mnemo": "Для воздуха $1{,}4$ — почти $\\sqrt{2} \\approx 1{,}41$. Для одноатомных ровно пять третей."
+        },
+        {
+          "sym": "C_V",
+          "latex": "C_V",
+          "name": "Молярная теплоёмкость при постоянном объёме",
+          "value": "≈ 20,8 (воздух)",
+          "unit": "Дж / (моль · К)",
+          "why": "Сколько энергии принимает моль газа на один градус, если объём заперт и работа не совершается. Вся теплота идёт во внутреннюю энергию, поэтому $C_V = \\tfrac{i}{2}R$: для воздуха с пятью степенями свободы это $2{,}5 \\cdot 8{,}314 \\approx 20{,}8$."
+        },
+        {
+          "sym": "C_P",
+          "latex": "C_P",
+          "name": "Молярная теплоёмкость при постоянном давлении",
+          "value": "≈ 29,1 (воздух)",
+          "unit": "Дж / (моль · К)",
+          "why": "Больше предыдущей ровно на газовую постоянную $R$, потому что при постоянном давлении газ дополнительно совершает работу расширения. Проверьте: $20{,}8 + 8{,}3 = 29{,}1$, и отношение $29{,}1/20{,}8 = 1{,}4$ — тот самый показатель адиабаты.",
+          "mnemo": "$C_P - C_V = R$ — соотношение Майера. Разница теплоёмкостей есть в точности плата за расширение."
+        },
+        {
+          "sym": "r",
+          "latex": "r",
+          "name": "Степень сжатия",
+          "value": "6–11 (бензин) · 14–23 (дизель)",
+          "unit": "безразмерная",
+          "why": "Отношение максимального объёма цилиндра к минимальному. Единственный конструктивный параметр в формуле КПД цикла Отто, поэтому инженеры за него и борются. У бензинового двигателя потолок ставит детонация: смесь вспыхивает от сжатия раньше искры. У дизеля это не дефект, а принцип работы — оттого его КПД выше."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Первое начало — это закон сохранения энергии для тепла. Из него следуют все процессы, а из анализа замкнутого цикла — предел эффективности, зависящий только от двух температур.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Первое начало",
+          "text": "Теплота делится на два русла: нагрев газа и работа расширения. Ничего не пропадает."
+        },
+        {
+          "icon": "clock",
+          "title": "Адиабата",
+          "text": "Без теплообмена сжатие греет газ само. Так работают насос и дизель."
+        },
+        {
+          "icon": "sigma",
+          "title": "Работа = площадь",
+          "text": "Площадь внутри петли на диаграмме P–V буквально равна работе за цикл."
+        },
+        {
+          "icon": "formula",
+          "title": "Предел Карно",
+          "text": "КПД ограничен отношением температур. Сто процентов невозможны в принципе."
+        }
+      ],
+      "where": [
+        "Двигатель автомобиля: цикл Отто, КПД около 25–30%",
+        "Дизель: воздух сжимают в 20 раз, он греется до 700° и поджигает топливо сам",
+        "Холодильник и кондиционер — тот же цикл, прокрученный назад",
+        "Тепловой насос даёт 3–4 кВт тепла на 1 кВт электричества, не нарушая законов"
+      ],
+      "watchOut": "В формуле Карно температуры только абсолютные, в кельвинах. Подстановка градусов Цельсия даёт бессмысленный результат — например, при охладителе в 0 °C получился бы КПД, равный единице."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "Велосипедный насос нагревается при быстром накачивании. Главная причина?",
+        "options": [
+          "Трение поршня о стенки цилиндра",
+          "Работа сжатия переходит во внутреннюю энергию газа — тепло не успевает уйти",
+          "Трение воздуха о шланг при большой скорости потока",
+          "Резина нагревается от растяжения"
+        ],
+        "answer": 1,
+        "why": "Это адиабатическое сжатие. Проверить легко мысленным экспериментом: если качать очень медленно, с паузами, тепло успеет уйти в окружающую среду и насос почти не нагреется — при том же самом трении.",
+        "hint": "Представьте, что вы делаете те же двадцать качков, но крайне медленно, с паузами по минуте. Трение никуда не делось — нагреется ли насос так же сильно? Что изменилось?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Можно ли охладить кухню, оставив дверцу работающего холодильника открытой?",
+        "options": [
+          "Да, холод из камеры распространится по кухне",
+          "Нет, температура на кухне даже вырастет",
+          "Да, но только если холодильник достаточно мощный",
+          "Ничего не изменится: сколько забрал, столько и отдал"
+        ],
+        "answer": 1,
+        "why": "Холодильник переносит теплоту изнутри наружу и вдобавок сбрасывает в комнату всю потреблённую электроэнергию. Баланс для кухни как целого: приход больше расхода, поэтому она нагреется.",
+        "hint": "Посчитайте баланс для комнаты целиком, а не для камеры. Что входит в комнату и что из неё выходит? Не забудьте про розетку: куда в конечном счёте девается потреблённое электричество?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "Своими словами: почему даже идеальный двигатель, без трения и с лучшими материалами, не может превратить в работу всю подведённую теплоту?",
+        "keywords": [
+          "холодильн",
+          "холодн",
+          "разниц",
+          "температур",
+          "сброс",
+          "карно",
+          "течь",
+          "перепад",
+          "отда",
+          "цикл"
+        ],
+        "needed": 1,
+        "why": "Чтобы получить работу, теплота должна течь от горячего к холодному. Значит часть её обязана уйти в холодильник, иначе цикл не замкнётся. Предел Карно обращается в единицу только при абсолютном нуле холодильника, что недостижимо.",
+        "hint": "Аналогия с гидроэлектростанцией: турбина работает, пока вода течёт сверху вниз. Что произойдёт, если убрать нижний уровень и течение прекратится? Что играет роль этого нижнего уровня для теплоты?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Паровая турбина: пар подаётся при 800 К, конденсатор охлаждается рекой при 300 К. Каков предельный КПД в процентах?",
+        "answer": 62,
+        "unit": "%",
+        "tolerance": 1.3,
+        "why": "$\\eta = 1 - 300/800 = 1 - 0{,}375 = 0{,}625$, то есть около $62\\%$. Реальные станции дают $40$–$45\\%$, что составляет примерно две трети от предела — очень хороший показатель для тепловой машины.",
+        "hint": "Формула требует только отношения двух температур. Триста к восьмистам — это чуть больше трети. Что нужно сделать с этой дробью дальше?"
+      }
+    ],
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Первое начало проверяется резинкой у губы, а второе объясняет, почему холодильник греет кухню.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Резинка, которая греется и стынет",
+          "text": "Возьмите широкую канцелярскую резинку, прижмите к губе и резко растяните — губа чувствительнее пальцев. Подержите растянутой несколько секунд, чтобы температура выровнялась, и так же резко отпустите, снова прижав к губе.",
+          "answer": "При растяжении резинка ощутимо теплеет, при отпускании — холодеет. Вы совершили над ней работу, и по первому началу энергия никуда не делась: она перешла во внутреннюю, то есть в нагрев. Обратный ход возвращает работу и остывает. У резины есть и своя тонкость: в отличие от металла, она при нагревании сокращается, потому что упругость её молекулярных цепей имеет энтропийную природу. Подвешенный груз на нагретой резинке поднимается вверх."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Открытый холодильник нагревает кухню",
+          "text": "Кажется очевидным: если оставить дверцу холодильника открытой, в кухне станет прохладнее. На деле температура вырастет. Почему?",
+          "answer": "Холодильник не уничтожает тепло, а переносит его изнутри наружу — и вдобавок сбрасывает в комнату всю потреблённую электроэнергию. Суммарно в кухню поступает больше тепла, чем забирается из камеры: ровно на работу компрессора. Замкнутая кухня с работающим холодильником нагревается со скоростью его потребления. Кондиционер отличается лишь тем, что горячий теплообменник вынесен на улицу — иначе он вёл бы себя точно так же."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Книгу почти не заметили, а бумаги сожгли",
+          "text": "В 1824 году двадцативосьмилетний Сади Карно издал «Размышления о движущей силе огня» тиражом в шестьсот экземпляров. Продавалась книга плохо, и научное сообщество прошло мимо. Карно умер от холеры в 36 лет, и по санитарным правилам того времени большую часть его рукописей сожгли вместе с вещами. Уцелевшие записи показывают, что он подошёл вплотную к сохранению энергии за двадцать лет до Джоуля. Идею спас Эмиль Клапейрон, переизложивший её на языке формул, — иначе предельный КПД тепловой машины открывали бы заново."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "КПД — это единица минус холодное на горячее",
+          "text": "Формула $\\eta_{\\max}=1-T_\\text{х}/T_\\text{г}$ читается просто: чем ближе температуры нагревателя и холодильника, тем меньше можно взять. Единственная ловушка — кельвины: подставив градусы Цельсия, вы получите бессмыслицу вроде отрицательного КПД. И запомните смысл: это не недостаток конструкции, а запрет второго начала. Никакая машина между теми же двумя температурами не даст больше."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Предел для тепловой электростанции",
+          "text": "Пар на входе турбины около 800 кельвинов, сброс в градирню около 300. Предельный КПД равен $1-300/800 \\approx 62$ процента. Реальные блоки дают 40–45: мешают трение, теплопотери и неидеальность процессов. Отсюда видно, почему борются за каждый градус температуры пара — она стоит в знаменателе, и повышение верхней температуры выгоднее любой другой доработки."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Тепловой насос обходит предел",
+          "text": "Формула Карно ограничивает превращение тепла в работу, но не обратный процесс. Тепловой насос, потратив киловатт электричества, приносит в дом три-четыре киловатта тепла — он не создаёт энергию, а переносит её с улицы. Никакого нарушения нет: коэффициент преобразования и КПД — разные величины. Второе начало запрещает лишь получать работу из одного резервуара, без сброса тепла в более холодный."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Что даёт термодинамика машин",
+      "lead": "Два начала определяют потолок для всей энергетики — и никакая инженерия его не поднимает.",
+      "items": [
+        {
+          "h": "Электростанции",
+          "text": "Тепловые, атомные и солнечные концентраторы работают по одной схеме: нагреть рабочее тело, снять работу, сбросить остаток. Разница только в источнике тепла, а предел общий."
+        },
+        {
+          "h": "Транспорт",
+          "text": "Степень сжатия в двигателе — это способ поднять верхнюю температуру цикла, то есть приблизиться к пределу Карно. Дизель эффективнее бензинового именно за счёт большей степени сжатия."
+        },
+        {
+          "h": "Отопление тепловыми насосами",
+          "text": "Перенос тепла вместо его производства даёт трёх-четырёхкратный выигрыш по сравнению с прямым электрическим нагревом. Это самый прямой практический вывод из курса термодинамики."
+        },
+        {
+          "h": "Охлаждение электроники",
+          "text": "Каждый процессор — тепловая машина наоборот: вся потреблённая мощность превращается в тепло, которое надо отвести. Предел плотности вычислений сегодня ставится не физикой транзистора, а теплоотводом."
+        },
+        {
+          "h": "Энергобаланс планеты",
+          "text": "Земля получает тепло от Солнца при высокой температуре и излучает в космос при низкой — разница и питает всю циркуляцию атмосферы и океана. Климатические модели строятся на тех же началах."
+        }
+      ]
+    }
+  },
+  "en": {
+    "title": "Principles of Thermodynamics",
+    "subtitle": "Section 3 · Processes, Cycles, and Heat Engines",
+    "intro": [
+      "Take a bicycle pump, plug the outlet with your finger, and give it a dozen quick strokes. The cylinder will become noticeably warm. There's no fire nearby — you were just pushing. Where did the heat come from?",
+      "A gas has exactly four ways to change its state, and each draws its characteristic line on the pressure–volume diagram. Three of them are familiar, while the fourth — the adiabat — is precisely what explains the hot pump.",
+      "By connecting these processes into a closed loop, we obtain an engine. And then it becomes clear why its efficiency is limited not by the quality of steel, but by the very nature of heat."
+    ],
+    "standNote": "The stand has five modes. In each, the leading parameter moves on its own — just watch what curve the process draws. Pay special attention to the adiabat: during compression, the temperature rises even though there is no heater. In the \"engine\" mode, the point runs along a closed loop — these are the strokes of the piston, and the efficiency is calculated right away.",
+    "formula": {
+      "name": "First Law of Thermodynamics and Carnot Theorem",
+      "latex": "\\delta Q = dU + P\\,dV \\qquad \\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "alsoKnown": "The law of conservation of energy for thermal processes and the efficiency limit",
+      "authors": [
+        {
+          "who": "Sadi Carnot",
+          "year": "1824",
+          "what": "proved that the maximum efficiency of a heat engine depends only on the temperatures of the hot and cold reservoirs — and nothing else"
+        },
+        {
+          "who": "James Joule",
+          "year": "1843",
+          "what": "experimentally established the equivalence of heat and mechanical work, thereby laying the groundwork for the first law"
+        },
+        {
+          "who": "Rudolf Clausius",
+          "year": "1850",
+          "what": "formulated both laws in their modern form and introduced entropy as a measure of irreversibility"
+        }
+      ],
+      "story": "Carnot reasoned about an ideal machine without knowing about molecules or energy conservation — he was still using the erroneous caloric theory. Remarkably, his main conclusion turned out to be correct: the efficiency limit is set by the ratio of temperatures. Twenty-five years later, Clausius reformulated this on a solid foundation, and Carnot's result stood firm."
+    },
+    "derivation": {
+      "title": "Rigorous Derivation",
+      "lead": "All the content of this section follows from one law — conservation of energy, written for thermal processes. The rest follows automatically.",
+      "steps": [
+        {
+          "text": "First law: the heat supplied goes into changing the internal energy of the gas and into the work it does by expanding. This is the law of conservation of energy, and there is nothing beyond it here.",
+          "latex": "\\delta Q = dU + P\\,dV",
+          "figure": "firstlaw",
+          "figCaption": "Heat splits into two channels: heating the gas and work moving the piston."
+        },
+        {
+          "text": "An adiabatic process is a process with no heat exchange, $\\delta Q = 0$. Then the gas can do work only at the expense of its own internal energy, that is, its temperature. Hence the hot pump.",
+          "latex": "C_V\\,dT + P\\,dV = 0",
+          "figure": "adiabatic",
+          "figCaption": "Compression without heat exchange: the work of the piston goes directly into the temperature of the gas."
+        },
+        {
+          "text": "Substituting $P = nRT/V$ from the first section and separating variables — the same technique as in the previous section. After integration, we obtain the relation between temperature and volume.",
+          "latex": "\\frac{dT}{T} = -\\frac{R}{C_V}\\frac{dV}{V} \\;\\Longrightarrow\\; T\\,V^{\\gamma-1} = \\text{const}",
+          "figure": "integrate",
+          "figCaption": "Again separation of variables: temperature on the left, volume on the right."
+        },
+        {
+          "text": "Replacing temperature via the equation of state, we arrive at the most famous form — the adiabatic equation. The exponent $\\gamma$ is greater than one, so on the diagram the adiabat is always steeper than the isotherm.",
+          "latex": "P\\,V^{\\gamma} = \\text{const}, \\qquad \\gamma = \\frac{C_P}{C_V}",
+          "figure": "curves",
+          "figCaption": "The adiabat is steeper than the isotherm: during compression, pressure rises for two reasons at once."
+        },
+        {
+          "text": "Now the engine. Over a complete cycle, the gas returns to its initial state, so its internal energy has not changed: $\\Delta U = 0$. All useful work equals the difference between the heat supplied and the heat rejected.",
+          "latex": "W = Q_{\\text{г}} - Q_{\\text{х}}",
+          "figure": "cycle",
+          "figCaption": "Closed cycle: the area inside the loop is the work per cycle."
+        },
+        {
+          "text": "The efficiency by definition is the ratio of work obtained to heat input. From this it is clear: for $\\eta$ to equal one, we need $Q_{\\text{c}} = 0$, that is, to give nothing at all to the cold reservoir.",
+          "latex": "\\eta = \\frac{W}{Q_{\\text{г}}} = 1 - \\frac{Q_{\\text{х}}}{Q_{\\text{г}}}",
+          "figure": "efficiency",
+          "figCaption": "Part of the heat must go to the cold reservoir — otherwise the cycle would not close."
+        },
+        {
+          "text": "For an ideal Carnot cycle, consisting of two isotherms and two adiabats, the ratio of heats equals the ratio of temperatures. This gives a limit that depends neither on the substance nor on the construction of the machine.",
+          "latex": "\\eta_{\\text{Карно}} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+          "figure": "carnot",
+          "figCaption": "Carnot's theorem: efficiency is determined by only two temperatures."
+        }
+      ],
+      "plate": "\\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "plateCap": "No heat engine operating between these temperatures can be more efficient. This is a prohibition of nature, not a shortcoming of engineers.",
+      "note": "From the formula it is clear why one hundred percent is unattainable: it would require a cold reservoir at absolute zero, which is forbidden by the third law. From this follows the practical conclusion that drives the energy industry: it is more profitable to raise the combustion temperature than to cool the exhaust — the denominator works more strongly than the numerator. For a car (about $2000$ K in the cylinder versus $300$ K outside), the theoretical ceiling is roughly $85\\%$, while reality is $25$–$30\\%$."
+    },
+    "math": {
+      "title": "Mathematics needed here",
+      "items": [
+        {
+          "what": "Mayer's relation",
+          "why": "Heat capacity at constant pressure is greater than at constant volume by exactly the gas constant. The reason is simple: at constant pressure, the gas not only heats up but also expands, doing work against the surroundings — and this costs extra energy. That is why $\\gamma$ is always greater than unity.",
+          "latex": "C_P - C_V = R"
+        },
+        {
+          "what": "Where $\\gamma$ comes from",
+          "why": "Heat capacity is determined by the number of degrees of freedom of the molecule: $C_V = \\tfrac{i}{2}R$. A monatomic gas has only three translational degrees, a diatomic gas adds two rotational. This is one of those rare cases where a constant is derived from molecular geometry rather than measured.",
+          "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+        },
+        {
+          "what": "Work as area under the curve",
+          "why": "Elementary work equals $P\\,dV$, so the total work is the integral of pressure with respect to volume — literally the area under the process curve on the diagram. For a closed cycle, this is the area inside the loop. The statement 'area equals work' is not a metaphor but the definition of an integral.",
+          "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{цикл}} = \\oint P\\,dV"
+        }
+      ]
+    },
+    "example": {
+      "title": "Example with numbers",
+      "lead": "Let's estimate the limiting efficiency of a real engine and compare it with the rated value.",
+      "given": "In the engine cylinder, the combustion temperature reaches $1800$ K, the exhaust leaves at $600$ K. Find the Carnot limiting efficiency and compare with the real value of $30\\%$.",
+      "law": "Carnot theorem: $\\eta_{\\max} = 1 - T_{\\text{х}}/T_{\\text{г}}$",
+      "solution": [
+        {
+          "text": "Substitute the temperatures — necessarily in kelvins, otherwise the ratio loses meaning.",
+          "latex": "\\eta_{\\max} = 1 - \\frac{600}{1800}"
+        },
+        {
+          "text": "The fraction is computed mentally: six hundred to eighteen hundred is one third.",
+          "latex": "\\frac{600}{1800} = \\frac{1}{3} \\approx 0{,}33"
+        },
+        {
+          "text": "Subtract from unity.",
+          "latex": "\\eta_{\\max} = 1 - 0{,}33 = 0{,}67 = 67\\%"
+        }
+      ],
+      "answer": "Carnot limit $\\approx 67\\%$, the real engine yields $30\\%$ — about half of the theoretical maximum",
+      "check": "Is this reasonable? Yes: half of the Carnot limit is a typical indicator for a good heat engine. The rest is consumed by friction, incomplete combustion, heat loss through walls, and irreversibility of real processes. Note the main point: even an ideal machine would lose a third of its energy here — and this cannot be fixed by any engineering."
+    },
+    "constants": {
+      "title": "Constants of this section",
+      "lead": "Here, the constants are no longer measured but calculated from molecular structure and previous quantities — a good sign that the theory is closed.",
+      "items": [
+        {
+          "sym": "γ",
+          "latex": "\\gamma",
+          "name": "Adiabatic index",
+          "value": "1,4 (air) · 1,67 (helium)",
+          "unit": "dimensionless",
+          "why": "Ratio of heat capacities $C_P/C_V$. The quantity is dimensionless because it is the ratio of two homogeneous quantities. It is determined by the number of degrees of freedom of the molecule: for diatomic air we get $7/5 = 1{,}4$, for monatomic helium $5/3 \\approx 1{,}67$.",
+          "mnemo": "For air $1{,}4$ — almost $\\sqrt{2} \\approx 1{,}41$. For monatomic, exactly five thirds."
+        },
+        {
+          "sym": "C_V",
+          "latex": "C_V",
+          "name": "Molar heat capacity at constant volume",
+          "value": "≈ 20,8 (air)",
+          "unit": "J / (mol · K)",
+          "why": "How much energy one mole of gas receives per degree if the volume is fixed and no work is done. All heat goes into internal energy, so $C_V = \\tfrac{i}{2}R$: for air with five degrees of freedom this is $2{,}5 \\cdot 8{,}314 \\approx 20{,}8$."
+        },
+        {
+          "sym": "C_P",
+          "latex": "C_P",
+          "name": "Molar heat capacity at constant pressure",
+          "value": "≈ 29,1 (air)",
+          "unit": "J / (mol · K)",
+          "why": "Greater than the previous by exactly the gas constant $R$, because at constant pressure the gas additionally does expansion work. Check: $20{,}8 + 8{,}3 = 29{,}1$, and the ratio $29{,}1/20{,}8 = 1{,}4$ — the very adiabatic index.",
+          "mnemo": "$C_P - C_V = R$ — Mayer's relation. The difference in heat capacities is exactly the cost of expansion."
+        },
+        {
+          "sym": "r",
+          "latex": "r",
+          "name": "Compression ratio",
+          "value": "6–11 (gasoline) · 14–23 (diesel)",
+          "unit": "dimensionless",
+          "why": "Ratio of the maximum cylinder volume to the minimum. The only design parameter in the Otto cycle efficiency formula, so engineers strive for it. In a gasoline engine, the ceiling is set by detonation: the mixture ignites from compression before the spark. In a diesel, this is not a defect but the operating principle — hence its higher efficiency."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The first law is the law of conservation of energy for heat. All processes follow from it, and from the analysis of a closed cycle — the efficiency limit, depending only on two temperatures.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "First law",
+          "text": "Heat splits into two channels: heating the gas and expansion work. Nothing is lost."
+        },
+        {
+          "icon": "clock",
+          "title": "Adiabatic",
+          "text": "Without heat exchange, compression heats the gas itself. This is how a pump and a diesel work."
+        },
+        {
+          "icon": "sigma",
+          "title": "Work = area",
+          "text": "The area inside the loop on the P–V diagram literally equals the work per cycle."
+        },
+        {
+          "icon": "formula",
+          "title": "Carnot limit",
+          "text": "Efficiency is limited by the temperature ratio. One hundred percent is impossible in principle."
+        }
+      ],
+      "where": [
+        "Car engine: Otto cycle, efficiency about 25–30%",
+        "Diesel: air is compressed 20 times, heats up to 700° and ignites fuel by itself",
+        "Refrigerator and air conditioner — the same cycle, run backward",
+        "Heat pump delivers 3–4 kW of heat per 1 kW of electricity, without violating laws"
+      ],
+      "watchOut": "In the Carnot formula, temperatures are absolute, in kelvins. Substituting Celsius degrees gives a meaningless result — for example, with a cold reservoir at 0 °C, the efficiency would be unity."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "A bicycle pump heats up when pumping quickly. The main reason is?",
+        "options": [
+          "Friction of the piston against the cylinder walls",
+          "Compression work converts into internal energy of the gas — heat does not have time to escape",
+          "Air friction against the hose at high flow speed",
+          "Rubber heats up from stretching"
+        ],
+        "answer": 1,
+        "why": "This is adiabatic compression. It is easy to check with a thought experiment: if you pump very slowly, with pauses, the heat will have time to escape to the environment and the pump will hardly heat up — despite the same friction.",
+        "hint": "Imagine you do the same twenty pumps, but extremely slowly, with minute-long pauses. The friction hasn't gone away — will the pump heat up as much? What changed?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Can you cool a kitchen by leaving the door of a running refrigerator open?",
+        "options": [
+          "Yes, the cold from the chamber will spread throughout the kitchen",
+          "No, the kitchen temperature will even rise",
+          "Yes, but only if the refrigerator is powerful enough",
+          "Nothing will change: as much as it takes, it gives back"
+        ],
+        "answer": 1,
+        "why": "The refrigerator transfers heat from inside to outside and additionally dumps all the consumed electrical energy into the room. The balance for the kitchen as a whole: input exceeds output, so it heats up.",
+        "hint": "Calculate the balance for the entire room, not just the chamber. What enters the room and what leaves it? Don't forget the outlet: where does the consumed electricity ultimately go?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "In your own words: why can't even an ideal engine, without friction and with the best materials, convert all the supplied heat into work?",
+        "keywords": [
+          "refrigerat",
+          "cold",
+          "differ",
+          "temperat",
+          "reject",
+          "carnot",
+          "flow",
+          "drop",
+          "reject",
+          "cycle"
+        ],
+        "needed": 1,
+        "why": "To obtain work, heat must flow from hot to cold. Therefore, part of it must go to the cold reservoir, otherwise the cycle will not close. The Carnot limit becomes unity only at absolute zero of the cold reservoir, which is unattainable.",
+        "hint": "Analogy with a hydroelectric plant: the turbine works as long as water flows from top to bottom. What happens if you remove the lower level and the flow stops? What plays the role of that lower level for heat?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Steam turbine: steam is supplied at 800 K, the condenser is cooled by a river at 300 K. What is the maximum efficiency in percent?",
+        "answer": 62,
+        "unit": "%",
+        "tolerance": 1.3,
+        "why": "$\\eta = 1 - 300/800 = 1 - 0.375 = 0.625$, that is about $62\\%$. Real plants yield $40$–$45\\%$, which is about two-thirds of the limit — a very good figure for a heat engine.",
+        "hint": "The formula requires only the ratio of two temperatures. Three hundred to eight hundred is a little more than a third. What needs to be done with this fraction next?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Fundamentos de la termodinámica",
+    "subtitle": "Párrafo 3 · Procesos, ciclos y máquinas térmicas",
+    "intro": [
+      "Tome una bomba de bicicleta, tape la salida con el dedo y haga una docena de bombazos rápidos. El cilindro se calentará notablemente. No hay fuego cerca — solo ha presionado. ¿De dónde provino el calor?",
+      "Un gas tiene exactamente cuatro formas de cambiar su estado, y cada una dibuja en el diagrama «presión–volumen» su línea característica. Tres de ellas son familiares, y la cuarta —la adiabática— es precisamente la que explica la bomba caliente.",
+      "Al conectar estos procesos en un circuito cerrado, obtenemos un motor. Entonces se hace evidente por qué su coeficiente de eficiencia está limitado no por la calidad del acero, sino por la propia naturaleza del calor."
+    ],
+    "standNote": "En el stand hay cinco modos. El parámetro principal en cada uno se mueve solo — simplemente observe qué curva dibuja el proceso. Preste especial atención a la adiabática: al comprimir, la temperatura aumenta aunque no haya ninguna placa caliente. En el modo «motor», el punto corre por un lazo cerrado — son las carreras del pistón, y el rendimiento se calcula allí mismo.",
+    "formula": {
+      "name": "Primera ley de la termodinámica y teorema de Carnot",
+      "latex": "\\delta Q = dU + P\\,dV \\qquad \\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "alsoKnown": "Ley de conservación de la energía para procesos térmicos y límite de eficiencia",
+      "authors": [
+        {
+          "who": "Sadi Carnot",
+          "year": "1824",
+          "what": "demostró que el rendimiento límite de una máquina térmica depende solo de las temperaturas del foco caliente y del foco frío — y de nada más"
+        },
+        {
+          "who": "James Joule",
+          "year": "1843",
+          "what": "estableció experimentalmente la equivalencia entre calor y trabajo mecánico, preparando así la primera ley"
+        },
+        {
+          "who": "Rudolf Clausius",
+          "year": "1850",
+          "what": "formuló ambas leyes en su forma moderna e introdujo la entropía como medida de la irreversibilidad"
+        }
+      ],
+      "story": "Carnot razonó sobre una máquina ideal sin conocer ni las moléculas ni la conservación de la energía — todavía usaba la errónea teoría del calórico. Sorprendentemente, su conclusión principal resultó correcta: el límite de eficiencia está dado por la relación de temperaturas. Veinticinco años después, Clausius reformuló esto ya sobre una base sólida, y el resultado de Carnot se mantuvo."
+    },
+    "derivation": {
+      "title": "Derivación rigurosa",
+      "lead": "Todo el contenido de este párrafo se desprende de una sola ley — la conservación de la energía, escrita para procesos térmicos. El resto sigue automáticamente.",
+      "steps": [
+        {
+          "text": "Primera ley: el calor suministrado se destina al cambio de energía interna del gas y al trabajo que realiza al expandirse. Es la ley de conservación de la energía, y no hay nada más aquí.",
+          "latex": "\\delta Q = dU + P\\,dV",
+          "figure": "firstlaw",
+          "figCaption": "El calor se divide en dos ramales: calentamiento del gas y trabajo de desplazamiento del pistón."
+        },
+        {
+          "text": "Un proceso adiabático es aquel sin intercambio de calor, $\\delta Q = 0$. Entonces el gas solo puede realizar trabajo a expensas de su propia energía interna, es decir, de su temperatura. De ahí la bomba caliente.",
+          "latex": "C_V\\,dT + P\\,dV = 0",
+          "figure": "adiabatic",
+          "figCaption": "Compresión sin intercambio de calor: el trabajo del pistón se convierte directamente en temperatura del gas."
+        },
+        {
+          "text": "Sustituimos $P = nRT/V$ del primer párrafo y separamos variables — el mismo método que en el párrafo anterior. Después de integrar, obtenemos la relación entre temperatura y volumen.",
+          "latex": "\\frac{dT}{T} = -\\frac{R}{C_V}\\frac{dV}{V} \\;\\Longrightarrow\\; T\\,V^{\\gamma-1} = \\text{const}",
+          "figure": "integrate",
+          "figCaption": "Nuevamente separación de variables: a la izquierda la temperatura, a la derecha el volumen."
+        },
+        {
+          "text": "Reemplazando la temperatura mediante la ecuación de estado, llegamos a la forma más conocida — la ecuación de la adiabática. El exponente $\\gamma$ es mayor que uno, por lo que en el diagrama la adiabática siempre es más empinada que la isoterma.",
+          "latex": "P\\,V^{\\gamma} = \\text{const}, \\qquad \\gamma = \\frac{C_P}{C_V}",
+          "figure": "curves",
+          "figCaption": "La adiabática es más empinada que la isoterma: al comprimir, la presión aumenta por dos razones a la vez."
+        },
+        {
+          "text": "Ahora el motor. Durante un ciclo completo, el gas regresa a su estado inicial, por lo tanto su energía interna no cambia: $\\Delta U = 0$. Todo el trabajo útil es igual a la diferencia entre el calor suministrado y el calor cedido.",
+          "latex": "W = Q_{\\text{г}} - Q_{\\text{х}}",
+          "figure": "cycle",
+          "figCaption": "Ciclo cerrado: el área dentro del lazo es el trabajo por una revolución."
+        },
+        {
+          "text": "El coeficiente de eficiencia se define como la relación entre el trabajo obtenido y el calor suministrado. De aquí se ve: para que $\\eta$ sea igual a la unidad, se necesita $Q_{\\text{х}} = 0$, es decir, no ceder nada al foco frío.",
+          "latex": "\\eta = \\frac{W}{Q_{\\text{г}}} = 1 - \\frac{Q_{\\text{х}}}{Q_{\\text{г}}}",
+          "figure": "efficiency",
+          "figCaption": "Parte del calor debe ir al foco frío — de lo contrario el ciclo no se cierra."
+        },
+        {
+          "text": "Para el ciclo ideal de Carnot, compuesto por dos isotermas y dos adiabáticas, la relación de calores es igual a la relación de temperaturas. Se obtiene un límite que no depende ni de la sustancia ni de la construcción de la máquina.",
+          "latex": "\\eta_{\\text{Карно}} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+          "figure": "carnot",
+          "figCaption": "Teorema de Carnot: la eficiencia está determinada solo por dos temperaturas."
+        }
+      ],
+      "plate": "\\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "plateCap": "Ninguna máquina térmica que opere entre estas temperaturas puede ser más eficiente. Es una prohibición de la naturaleza, no un defecto de ingeniería.",
+      "note": "De la fórmula se ve por qué el cien por ciento es inalcanzable: se necesitaría un foco frío a cero absoluto, lo cual está prohibido por la tercera ley. De aquí también la conclusión práctica que rige la industria energética: es más ventajoso elevar la temperatura de combustión que enfriar los gases de escape — el denominador afecta más que el numerador. Para un automóvil (alrededor de $2000$ K en el cilindro contra $300$ K en el exterior), el techo teórico es aproximadamente $85\\%$, mientras que la realidad es $25$–$30\\%$."
+    },
+    "math": {
+      "title": "Matemáticas necesarias aquí",
+      "items": [
+        {
+          "what": "Relación de Mayer",
+          "why": "La capacidad calorífica a presión constante es mayor que a volumen constante, exactamente en la constante de los gases. La razón es simple: a presión constante, el gas no solo se calienta sino que también se expande, realizando trabajo contra el entorno, y por ello hay que pagar con energía. Es por eso que γ siempre es mayor que uno.",
+          "latex": "C_P - C_V = R"
+        },
+        {
+          "what": "De dónde proviene el valor de γ",
+          "why": "La capacidad calorífica se determina por el número de grados de libertad de la molécula: $C_V = \\tfrac{i}{2}R$. En un gas monoatómico solo hay tres grados de traslación, en un gas diatómico se añaden dos de rotación. Es uno de esos raros casos en que la constante se deduce de la geometría de la molécula, no se mide.",
+          "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+        },
+        {
+          "what": "Trabajo como área bajo la curva",
+          "why": "El trabajo elemental es $P\\,dV$, por lo tanto el trabajo total es la integral de la presión sobre el volumen, es decir, literalmente el área bajo la curva del proceso en el diagrama. Para un ciclo cerrado es el área dentro del lazo. La afirmación «el área es igual al trabajo» no es una metáfora, sino la definición de integral.",
+          "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{cielo}} = \\oint P\\,dV"
+        }
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números",
+      "lead": "Estimemos la eficiencia máxima de un motor real y comparémosla con la especificada.",
+      "given": "En el cilindro del motor, la temperatura de combustión alcanza $1800$ K, el escape sale a $600$ K. Encontrar la eficiencia máxima de Carnot y compararla con el valor real del $30\\%$.",
+      "law": "Teorema de Carnot: $\\eta_{\\max} = 1 - T_{\\text{fría}}/T_{\\text{caliente}}$",
+      "solution": [
+        {
+          "text": "Sustituimos las temperaturas — obligatoriamente en kelvins, de lo contrario la relación pierde sentido.",
+          "latex": "\\eta_{\\max} = 1 - \\frac{600}{1800}"
+        },
+        {
+          "text": "La fracción se calcula mentalmente: seiscientos entre mil ochocientos es un tercio.",
+          "latex": "\\frac{600}{1800} = \\frac{1}{3} \\approx 0{,}33"
+        },
+        {
+          "text": "Restamos de la unidad.",
+          "latex": "\\eta_{\\max} = 1 - 0{,}33 = 0{,}67 = 67\\%"
+        }
+      ],
+      "answer": "El límite de Carnot $\\approx 67\\%$, el motor real da $30\\%$ — aproximadamente la mitad del máximo teórico",
+      "check": "¿Es razonable? Sí: la mitad del límite de Carnot es un indicador típico para una buena máquina térmica. El resto se lo comen la fricción, la combustión incompleta, la pérdida de calor a través de las paredes y la irreversibilidad de los procesos reales. Observe lo principal: incluso la máquina ideal aquí perdería un tercio de la energía, y eso no se puede remediar con ninguna ingeniería."
+    },
+    "constants": {
+      "title": "Constantes de esta sección",
+      "lead": "Aquí las constantes ya no se miden, sino que se calculan a partir de la estructura de las moléculas y de magnitudes anteriores — una buena señal de que la teoría se ha cerrado.",
+      "items": [
+        {
+          "sym": "γ",
+          "latex": "\\gamma",
+          "name": "Índice adiabático",
+          "value": "1,4 (aire) · 1,67 (helio)",
+          "unit": "adimensional",
+          "why": "Relación de capacidades caloríficas $C_P/C_V$. Magnitud adimensional, ya que es la relación de dos magnitudes homogéneas. Se determina por el número de grados de libertad de la molécula: para el aire diatómico resulta $7/5 = 1{,}4$, para el helio monoatómico — $5/3 \\approx 1{,}67$.",
+          "mnemo": "Para el aire $1{,}4$ — casi $\\sqrt{2} \\approx 1{,}41$. Para los monoatómicos exactamente cinco tercios."
+        },
+        {
+          "sym": "C_V",
+          "latex": "C_V",
+          "name": "Capacidad calorífica molar a volumen constante",
+          "value": "≈ 20,8 (aire)",
+          "unit": "J / (mol · K)",
+          "why": "Cuánta energía recibe un mol de gas por cada grado, si el volumen está fijo y no se realiza trabajo. Todo el calor se convierte en energía interna, por lo que $C_V = \\tfrac{i}{2}R$: para el aire con cinco grados de libertad, esto es $2{,}5 \\cdot 8{,}314 \\approx 20{,}8$."
+        },
+        {
+          "sym": "C_P",
+          "latex": "C_P",
+          "name": "Capacidad calorífica molar a presión constante",
+          "value": "≈ 29,1 (aire)",
+          "unit": "J / (mol · K)",
+          "why": "Es mayor que la anterior exactamente en la constante de los gases $R$, porque a presión constante el gas realiza además trabajo de expansión. Compruébelo: $20{,}8 + 8{,}3 = 29{,}1$, y la relación $29{,}1/20{,}8 = 1{,}4$ — el mismo índice adiabático.",
+          "mnemo": "$C_P - C_V = R$ — relación de Mayer. La diferencia de capacidades caloríficas es exactamente el coste de la expansión."
+        },
+        {
+          "sym": "r",
+          "latex": "r",
+          "name": "Relación de compresión",
+          "value": "6–11 (gasolina) · 14–23 (diésel)",
+          "unit": "adimensional",
+          "why": "Relación entre el volumen máximo del cilindro y el mínimo. Es el único parámetro de diseño en la fórmula de la eficiencia del ciclo Otto, por lo que los ingenieros luchan por él. En el motor de gasolina, el límite lo impone la detonación: la mezcla se enciende por compresión antes de la chispa. En el diésel esto no es un defecto, sino un principio de funcionamiento, por lo que su eficiencia es mayor."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La primera ley es la ley de conservación de la energía para el calor. De ella se derivan todos los procesos, y del análisis del ciclo cerrado, el límite de eficiencia, que depende solo de dos temperaturas.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "Primera ley",
+          "text": "El calor se divide en dos cauces: calentamiento del gas y trabajo de expansión. Nada se pierde."
+        },
+        {
+          "icon": "clock",
+          "title": "Adiabática",
+          "text": "Sin intercambio de calor, la compresión calienta el gas por sí misma. Así funcionan la bomba y el diésel."
+        },
+        {
+          "icon": "sigma",
+          "title": "Trabajo = área",
+          "text": "El área dentro del lazo en el diagrama P–V es literalmente igual al trabajo del ciclo."
+        },
+        {
+          "icon": "formula",
+          "title": "Límite de Carnot",
+          "text": "La eficiencia está limitada por la relación de temperaturas. El cien por cien es imposible en principio."
+        }
+      ],
+      "where": [
+        "Motor de automóvil: ciclo Otto, eficiencia alrededor del 25–30%",
+        "Diésel: el aire se comprime 20 veces, se calienta hasta 700° y enciende el combustible por sí mismo",
+        "Refrigerador y aire acondicionado — el mismo ciclo, invertido",
+        "La bomba de calor entrega 3–4 kW de calor por 1 kW de electricidad, sin violar las leyes"
+      ],
+      "watchOut": "En la fórmula de Carnot las temperaturas son solo absolutas, en kelvins. Sustituir grados Celsius da un resultado sin sentido — por ejemplo, con un refrigerador a 0 °C se obtendría una eficiencia igual a uno."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "¿La bomba de bicicleta se calienta al inflar rápidamente? ¿La razón principal?",
+        "options": [
+          "Fricción del pistón contra las paredes del cilindro",
+          "El trabajo de compresión se convierte en energía interna del gas — el calor no tiene tiempo de escapar",
+          "Fricción del aire contra la manguera a alta velocidad de flujo",
+          "El caucho se calienta por estiramiento"
+        ],
+        "answer": 1,
+        "why": "Esto es compresión adiabática. Es fácil de comprobar con un experimento mental: si se bombea muy lentamente, con pausas, el calor tiene tiempo de disiparse al ambiente y la bomba casi no se calienta — con la misma fricción.",
+        "hint": "Imagina que haces los mismos veinte bombeos, pero extremadamente lentos, con pausas de un minuto. La fricción sigue ahí — ¿se calentaría la bomba igual? ¿Qué cambió?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "¿Se puede enfriar la cocina dejando abierta la puerta de un refrigerador en funcionamiento?",
+        "options": [
+          "Sí, el frío del compartimento se esparcirá por la cocina",
+          "No, la temperatura de la cocina incluso aumentará",
+          "Sí, pero solo si el refrigerador es lo suficientemente potente",
+          "No cambiará nada: tanto toma como devuelve"
+        ],
+        "answer": 1,
+        "why": "El refrigerador transfiere calor del interior al exterior y además libera en la habitación toda la energía eléctrica consumida. El balance para la cocina como conjunto: ingreso mayor que egreso, por lo que se calienta.",
+        "hint": "Calcula el balance para toda la habitación, no solo para el compartimento. ¿Qué entra en la habitación y qué sale? No olvides el enchufe: ¿dónde termina finalmente la electricidad consumida?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué incluso un motor ideal, sin fricción y con los mejores materiales, no puede convertir todo el calor suministrado en trabajo?",
+        "keywords": [
+          "refrigerador",
+          "frío",
+          "diferencia",
+          "temperatura",
+          "desecho",
+          "carnot",
+          "flujo",
+          "salto",
+          "cesión",
+          "ciclo"
+        ],
+        "needed": 1,
+        "why": "Para obtener trabajo, el calor debe fluir de lo caliente a lo frío. Por lo tanto, una parte debe ir al refrigerador, de lo contrario el ciclo no se cierra. El límite de Carnot es igual a uno solo con el refrigerador en el cero absoluto, lo que es inalcanzable.",
+        "hint": "Analogía con una central hidroeléctrica: la turbina funciona mientras el agua fluye de arriba a abajo. ¿Qué sucede si se elimina el nivel inferior y el flujo se detiene? ¿Qué representa ese nivel inferior para el calor?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Turbina de vapor: el vapor se suministra a 800 K, el condensador se enfría con un río a 300 K. ¿Cuál es la eficiencia límite en porcentaje?",
+        "answer": 62,
+        "unit": "%",
+        "tolerance": 1.3,
+        "why": "$\\eta = 1 - 300/800 = 1 - 0{,}375 = 0{,}625$, es decir, alrededor de $62\\%$. Las centrales reales dan $40$–$45\\%$, que es aproximadamente dos tercios del límite — un muy buen indicador para una máquina térmica.",
+        "hint": "La fórmula solo requiere la relación de las dos temperaturas. Trescientos a ochocientos es un poco más de un tercio. ¿Qué hay que hacer con esa fracción después?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "مبادئ الديناميكا الحرارية",
+    "subtitle": "الفقرة 3 · العمليات والدورات والآلات الحرارية",
+    "intro": [
+      "خذ مضخة دراجة هوائية، اسد فتحة الخروج بإصبعك وقم بعشرة ضغطات سريعة. ستشعر بأن الأسطوانة أصبحت دافئة بشكل ملحوظ. لا يوجد لهب قريب — لقد ضغطت فقط. من أين أتت الحرارة؟",
+      "هناك أربع طرق بالضبط يمكن للغاز أن يغير بها حالته، وكل منها ترسم خطًا مميزًا على مخطط الضغط-الحجم. ثلاثة منها مألوفة، والرابع — الأدياباتي — هو ما يفسر المضخة الساخنة.",
+      "بربط هذه العمليات في حلقة مغلقة، نحصل على محرك. وعندها يتضح أن كفاءته محدودة ليس بجودة الفولاذ، بل بطبيعة الحرارة نفسها."
+    ],
+    "standNote": "يوجد على المنصة خمسة أوضاع. المعامل الرئيسي في كل وضع يتحرك تلقائيًا — فقط شاهد أي منحنى يرسمه العملية. انتبه بشكل خاص للأدياباتي: أثناء الانضغاط ترتفع درجة الحرارة رغم عدم وجود مصدر حرارة. في وضع «المحرك» تجري النقطة على حلقة مغلقة — هذه هي أشواط المكبس، ويتم حساب الكفاءة هنا.",
+    "formula": {
+      "name": "القانون الأول للديناميكا الحرارية ونظرية كارنو",
+      "latex": "\\delta Q = dU + P\\,dV \\qquad \\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "alsoKnown": "قانون حفظ الطاقة للعمليات الحرارية وحد الكفاءة",
+      "authors": [
+        {
+          "who": "سادي كارنو",
+          "year": "1824",
+          "what": "أثبت أن الكفاءة الحدية للآلة الحرارية تعتمد فقط على درجتي حرارة المصدر الساخن والمبرد — ولا شيء غير ذلك"
+        },
+        {
+          "who": "جيمس جول",
+          "year": "1843",
+          "what": "أثبت تجريبيًا تكافؤ الحرارة والشغل الميكانيكي، مما مهد للقانون الأول"
+        },
+        {
+          "who": "رودولف كلوزيوس",
+          "year": "1850",
+          "what": "صاغ القانونين الأول والثاني في صورتهما الحديثة وأدخل الإنتروبيا كمقياس للاتجاهية"
+        }
+      ],
+      "story": "فكر كارنو في آلة مثالية دون أن يعرف شيئًا عن الجزيئات أو حفظ الطاقة — كان لا يزال يستخدم نظرية المائع الحراري الخاطئة. المذهل أن استنتاجه الرئيسي كان صحيحًا: حد الكفاءة تحدده نسبة درجات الحرارة. بعد خمس وعشرين سنة، أعاد كلوزيوس صياغة ذلك على أساس متين، وثبتت نتيجة كارنو."
+    },
+    "derivation": {
+      "title": "الاستنتاج الدقيق",
+      "lead": "كل محتوى هذه الفقرة ينبع من قانون واحد — حفظ الطاقة، مكتوبًا للعمليات الحرارية. الباقي يأتي تلقائيًا.",
+      "steps": [
+        {
+          "text": "القانون الأول: الحرارة المضافة تذهب لتغير الطاقة الداخلية للغاز والشغل الذي يؤديه أثناء التمدد. هذا هو قانون حفظ الطاقة، ولا شيء إضافي هنا.",
+          "latex": "\\delta Q = dU + P\\,dV",
+          "figure": "firstlaw",
+          "figCaption": "الحرارة تنقسم إلى مسارين: تسخين الغاز والشغل المبذول لتحريك المكبس."
+        },
+        {
+          "text": "العملية الأدياباتية هي عملية دون تبادل حراري، $\\delta Q = 0$. عندها يمكن للغاز أن يبذل شغلًا فقط على حساب طاقته الداخلية، أي على حساب درجة حرارته. من هنا تأتي المضخة الساخنة.",
+          "latex": "C_V\\,dT + P\\,dV = 0",
+          "figure": "adiabatic",
+          "figCaption": "انضغاط دون تبادل حراري: شغل المكبس يتحول مباشرة إلى درجة حرارة الغاز."
+        },
+        {
+          "text": "نعوض $P = nRT/V$ من الفقرة الأولى ونفصل المتغيرات — نفس الأسلوب كما في الفقرة السابقة. بعد المكاملة نحصل على علاقة بين درجة الحرارة والحجم.",
+          "latex": "\\frac{dT}{T} = -\\frac{R}{C_V}\\frac{dV}{V} \\;\\Longrightarrow\\; T\\,V^{\\gamma-1} = \\text{const}",
+          "figure": "integrate",
+          "figCaption": "فصل المتغيرات مرة أخرى: درجة الحرارة على اليسار، الحجم على اليمين."
+        },
+        {
+          "text": "بتعويض درجة الحرارة من معادلة الحالة، نصل إلى الصيغة الأكثر شهرة — معادلة الأدياباتي. الأس $\\gamma$ أكبر من الواحد، لذلك على المخطط يكون الأدياباتي دائمًا أكثر انحدارًا من متساوي الحرارة.",
+          "latex": "P\\,V^{\\gamma} = \\text{const}, \\qquad \\gamma = \\frac{C_P}{C_V}",
+          "figure": "curves",
+          "figCaption": "الأدياباتي أكثر انحدارًا من متساوي الحرارة: أثناء الانضغاط يرتفع الضغط لسببين في آن واحد."
+        },
+        {
+          "text": "الآن المحرك. خلال دورة كاملة يعود الغاز إلى حالته الأولية، أي أن طاقته الداخلية لا تتغير: $\\Delta U = 0$. كل الشغل النافع يساوي الفرق بين الحرارة المضافة والحرارة المطرودة.",
+          "latex": "W = Q_{\\text{г}} - Q_{\\text{х}}",
+          "figure": "cycle",
+          "figCaption": "دورة مغلقة: المساحة داخل الحلقة هي الشغل في دورة واحدة."
+        },
+        {
+          "text": "معامل الكفاءة بحكم التعريف هو نسبة الشغل المكتسب إلى الحرارة المستهلكة. من هنا نرى: لكي يكون $\\eta$ مساويًا للواحد، يجب أن يكون $Q_{\\text{х}} = 0$، أي عدم إعطاء أي شيء للمبرد.",
+          "latex": "\\eta = \\frac{W}{Q_{\\text{г}}} = 1 - \\frac{Q_{\\text{х}}}{Q_{\\text{г}}}",
+          "figure": "efficiency",
+          "figCaption": "جزء من الحرارة يجب أن يذهب إلى المبرد — وإلا لن تغلق الدورة."
+        },
+        {
+          "text": "لدورة كارنو المثالية، المكونة من متساوي حرارة وأدياباتيين، نسبة الحرارة تساوي نسبة درجات الحرارة. نحصل على حد لا يعتمد على المادة ولا على تصميم الآلة.",
+          "latex": "\\eta_{\\text{Карно}} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+          "figure": "carnot",
+          "figCaption": "مبرهنة كارنو: الكفاءة تحددها درجتا حرارة فقط."
+        }
+      ],
+      "plate": "\\eta_{\\max} = 1 - \\frac{T_{\\text{х}}}{T_{\\text{г}}}",
+      "plateCap": "لا يمكن لأي آلة حرارية تعمل بين هاتين الدرجتين أن تكون أكثر كفاءة. هذا حظر من الطبيعة، وليس تقصيرًا من المهندسين.",
+      "note": "من الصيغة يتضح لماذا 100% غير قابلة للتحقيق: لهذا نحتاج مبردًا عند الصفر المطلق، وهو محظور بالقانون الثالث. من هنا تأتي النتيجة العملية التي يعيش بها قطاع الطاقة: من الأفضل رفع درجة حرارة الاحتراق بدلاً من تبريد العادم — المقام يعمل بقوة أكبر من البسط. بالنسبة لسيارة (حوالي $2000$ كلفن في الأسطوانة مقابل $300$ كلفن بالخارج) السقف النظري حوالي $85\\%$، والواقع $25$–$30\\%$."
+    },
+    "math": {
+      "title": "الرياضيات المطلوبة هنا",
+      "items": [
+        {
+          "what": "علاقة ماير",
+          "why": "السعة الحرارية عند ضغط ثابت أكبر منها عند حجم ثابت بمقدار ثابت الغاز تمامًا. السبب بسيط: عند ضغط ثابت، لا يسخن الغاز فحسب، بل يتمدد أيضًا، بذلًا لشغل ضد الوسط الخارجي، وهذا يتطلب دفعًا إضافيًا من الطاقة. لذلك يكون $\\gamma$ دائمًا أكبر من الواحد.",
+          "latex": "C_P - C_V = R"
+        },
+        {
+          "what": "من أين تأتي قيمة $\\gamma$",
+          "why": "تُحدد السعة الحرارية بعدد درجات حرية الجزيء: $C_V = \\tfrac{i}{2}R$. للغاز أحادي الذرة ثلاث درجات انتقالية فقط، وللغاز ثنائي الذرة تضاف درجتان دورانيّتان. هذه حالة نادرة حيث يُستنتج الثابت من هندسة الجزيء وليس من القياس.",
+          "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+        },
+        {
+          "what": "الشغل كمساحة تحت المنحنى",
+          "why": "الشغل الأولي يساوي $P\\,dV$، وبالتالي الشغل الكلي هو تكامل الضغط على الحجم - أي حرفيًا المساحة تحت منحنى العملية على المخطط. بالنسبة لدورة مغلقة، هذه هي المساحة داخل الحلقة. القول 'المساحة تساوي الشغل' ليس مجازًا، بل تعريف التكامل.",
+          "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{цикл}} = \\oint P\\,dV"
+        }
+      ]
+    },
+    "example": {
+      "title": "مثال بأرقام",
+      "lead": "سنقدر الكفاءة القصوى لمحرك حقيقي ونقارنها بالقيمة الاسمية.",
+      "given": "في أسطوانة المحرك، تصل درجة حرارة الاحتراق إلى $1800$ كلفن، ويخرج العادم عند $600$ كلفن. أوجد الكفاءة القصوى حسب كارنو وقارنها بالقيمة الحقيقية $30\\%$.",
+      "law": "نظرية كارنو: $\\eta_{\\max} = 1 - T_{\\text{х}}/T_{\\text{г}}$",
+      "solution": [
+        {
+          "text": "نعوض درجات الحرارة — يجب أن تكون بالكلفن، وإلا تفقد النسبة معناها.",
+          "latex": "\\eta_{\\max} = 1 - \\frac{600}{1800}"
+        },
+        {
+          "text": "يُحسب الكسر ذهنيًا: ستمائة إلى ألف وثمانمائة هو ثلث.",
+          "latex": "\\frac{600}{1800} = \\frac{1}{3} \\approx 0{,}33"
+        },
+        {
+          "text": "نطرح من الواحد.",
+          "latex": "\\eta_{\\max} = 1 - 0{,}33 = 0{,}67 = 67\\%"
+        }
+      ],
+      "answer": "حد كارنو $\\approx 67\\%$، المحرك الحقيقي يعطي $30\\%$ — حوالي نصف الحد الأقصى النظري",
+      "check": "هل هذا معقول؟ نعم: نصف حد كارنو هو مؤشر نموذجي لآلة حرارية جيدة. الباقي يستهلكه الاحتكاك، والاحتراق غير الكامل، وتبديد الحرارة عبر الجدران، وعدم انعكاس العمليات الحقيقية. لاحظ الشيء الرئيسي: حتى الآلة المثالية كانت ستفقد ثلث الطاقة هنا — وهذا لا يمكن إصلاحه بأي هندسة."
+    },
+    "constants": {
+      "title": "ثوابت هذا القسم",
+      "lead": "هنا، لا تُقاس الثوابت بعد الآن، بل تُحسب من بنية الجزيئات والكميات السابقة — علامة جيدة على أن النظرية مغلقة.",
+      "items": [
+        {
+          "sym": "γ",
+          "latex": "\\gamma",
+          "name": "معامل الأديابات",
+          "value": "1,4 (هواء) · 1,67 (هيليوم)",
+          "unit": "بلا بعد",
+          "why": "نسبة السعات الحرارية $C_P/C_V$. كمية لا بعدية، لأنها نسبة كميتين متجانستين. تُحدد بعدد درجات حرية الجزيء: للهواء ثنائي الذرة نحصل على $7/5 = 1{,}4$، وللهيليوم أحادي الذرة $5/3 \\approx 1{,}67$.",
+          "mnemo": "للهواء $1{,}4$ — تقريبًا $\\sqrt{2} \\approx 1{,}41$. للأحادية الذرة بالضبط خمسة على ثلاثة."
+        },
+        {
+          "sym": "C_V",
+          "latex": "C_V",
+          "name": "السعة الحرارية المولارية عند حجم ثابت",
+          "value": "≈ 20,8 (هواء)",
+          "unit": "جول / (مول · كلفن)",
+          "why": "كمية الطاقة التي يستقبلها مول من الغاز لدرجة واحدة إذا كان الحجم محبوسًا ولا يُبذل شغل. كل الحرارة تذهب إلى الطاقة الداخلية، لذلك $C_V = \\tfrac{i}{2}R$: للهواء بخمس درجات حرية، هذا يساوي $2{,}5 \\cdot 8{,}314 \\approx 20{,}8$."
+        },
+        {
+          "sym": "C_P",
+          "latex": "C_P",
+          "name": "السعة الحرارية المولارية عند ضغط ثابت",
+          "value": "≈ 29,1 (هواء)",
+          "unit": "جول / (مول · كلفن)",
+          "why": "أكبر من السابقة بمقدار ثابت الغاز $R$ تمامًا، لأنه عند ضغط ثابت يبذل الغاز شغل تمدد إضافي. تحقق: $20{,}8 + 8{,}3 = 29{,}1$، والنسبة $29{,}1/20{,}8 = 1{,}4$ هي نفسها معامل الأديابات.",
+          "mnemo": "$C_P - C_V = R$ — علاقة ماير. الفرق في السعات الحرارية هو بالضبط ثمن التمدد."
+        },
+        {
+          "sym": "r",
+          "latex": "r",
+          "name": "نسبة الانضغاط",
+          "value": "6–11 (بنزين) · 14–23 (ديزل)",
+          "unit": "بلا بعد",
+          "why": "نسبة الحجم الأقصى للأسطوانة إلى الحجم الأدنى. المعلمة التصميمية الوحيدة في صيغة كفاءة دورة أوتو، لذلك يكافح المهندسون من أجلها. في محرك البنزين، يضع الاشتعال الذاتي حدًا: يشتعل الخليط من الضغط قبل الشرارة. في الديزل، هذا ليس عيبًا بل مبدأ عمل، ولهذا تكون كفاءته أعلى."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "القانون الأول هو قانون حفظ الطاقة للحرارة. منه تتبع جميع العمليات، ومن تحليل الدورة المغلقة — حد الكفاءة المعتمد فقط على درجتي حرارة.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "القانون الأول",
+          "text": "تنقسم الحرارة إلى مسارين: تسخين الغاز وشغل التمدد. لا شيء يضيع."
+        },
+        {
+          "icon": "clock",
+          "title": "الكظومة",
+          "text": "بدون تبادل حراري، يسخن الانضغاط الغاز بنفسه. هكذا يعمل المضخة والديزل."
+        },
+        {
+          "icon": "sigma",
+          "title": "الشغل = المساحة",
+          "text": "المساحة داخل الحلقة على مخطط P–V تساوي حرفيًا الشغل خلال الدورة."
+        },
+        {
+          "icon": "formula",
+          "title": "حد كارنو",
+          "text": "الكفاءة محدودة بنسبة درجات الحرارة. مئة بالمئة مستحيل من حيث المبدأ."
+        }
+      ],
+      "where": [
+        "محرك السيارة: دورة أوتو، كفاءة حوالي 25–30%",
+        "الديزل: يُضغط الهواء 20 مرة، يسخن إلى 700 درجة ويشعل الوقود بنفسه",
+        "الثلاجة ومكيف الهواء — نفس الدورة، معكوسة",
+        "المضخة الحرارية تعطي 3–4 كيلوواط من الحرارة مقابل 1 كيلوواط من الكهرباء، دون انتهاك القوانين"
+      ],
+      "watchOut": "في صيغة كارنو، درجات الحرارة مطلقة فقط، بالكلفن. استخدام الدرجات المئوية يعطي نتيجة لا معنى لها — على سبيل المثال، مع مبرد عند 0 درجة مئوية، ستصبح الكفاءة مساوية للواحد."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "يسخن مضخة الدراجة عند النفخ السريع. السبب الرئيسي؟",
+        "options": [
+          "احتكاك المكبس بجدران الأسطوانة",
+          "عمل الضغط يتحول إلى طاقة داخلية للغاز — الحرارة لا تفلت",
+          "احتكاك الهواء بالخرطوم عند سرعة التدفق العالية",
+          "يسخن المطاط من التمدد"
+        ],
+        "answer": 1,
+        "why": "هذا هو الانضغاط الكظوم. من السهل التحقق بتجربة ذهنية: إذا نفخت ببطء شديد مع توقفات، فإن الحرارة ستنتشر إلى المحيط ولن يسخن المضخة تقريبًا — مع نفس الاحتكاك.",
+        "hint": "تخيل أنك تقوم بنفس العشرين ضغطة، ولكن ببطء شديد مع توقفات دقيقة. الاحتكاك لم يختفِ — هل ستسخن المضخة بنفس القدر؟ ما الذي تغير؟"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "هل يمكن تبريد المطبخ بترك باب الثلاجة العاملة مفتوحًا؟",
+        "options": [
+          "نعم، سينتشر البرد من الحجرة في المطبخ",
+          "لا، سترتفع درجة حرارة المطبخ",
+          "نعم، فقط إذا كانت الثلاجة قوية بما يكفي",
+          "لن يتغير شيء: بقدر ما أخذت، بقدر ما أعادت"
+        ],
+        "answer": 1,
+        "why": "تنقل الثلاجة الحرارة من الداخل إلى الخارج، بالإضافة إلى أنها تطرح في الغرفة كل الطاقة الكهربائية المستهلكة. التوازن للمطبخ ككل: الدخل أكبر من الخرج، لذلك سيسخن.",
+        "hint": "احسب التوازن للغرفة كاملة، وليس للحجرة. ما الذي يدخل الغرفة وما الذي يخرج منها؟ لا تنسَ المقبس: أين تذهب الكهرباء المستهلكة في النهاية؟"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا لا يستطيع حتى محرك مثالي، بدون احتكاك وبأفضل المواد، تحويل كل الحرارة المدخلة إلى عمل؟",
+        "keywords": [
+          "مبرد",
+          "بارد",
+          "فرق",
+          "درجة حرارة",
+          "طرح",
+          "كارنو",
+          "تدفق",
+          "انحدار",
+          "إخراج",
+          "دورة"
+        ],
+        "needed": 1,
+        "why": "للحصول على عمل، يجب أن تتدفق الحرارة من الساخن إلى البارد. لذلك يجب أن يذهب جزء منها إلى المبرد، وإلا فلن تغلق الدورة. حد كارنو يساوي واحدًا فقط عند الصفر المطلق للمبرد، وهو أمر غير قابل للتحقيق.",
+        "hint": "تشبيه بمحطة كهرومائية: تعمل التوربينات طالما يتدفق الماء من أعلى إلى أسفل. ماذا يحدث إذا أزلنا المستوى السفلي وتوقف التدفق؟ ما الذي يلعب دور هذا المستوى السفلي للحرارة؟"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "توربين بخاري: يدخل البخار عند 800 كلفن، المكثف يبرد بالنهر عند 300 كلفن. ما أقصى كفاءة بالنسبة المئوية؟",
+        "answer": 62,
+        "unit": "%",
+        "tolerance": 1.3,
+        "why": "$\\eta = 1 - 300/800 = 1 - 0{,}375 = 0{,}625$، أي حوالي $62\\%$. المحطات الحقيقية تعطي $40$–$45\\%$، وهذا يمثل حوالي ثلثي الحد — وهو مؤشر جيد جدًا لمحرك حراري.",
+        "hint": "الصيغة تتطلب فقط نسبة درجتي الحرارة. ثلاثمائة إلى ثمانمائة هي أكثر بقليل من الثلث. ماذا تفعل بعد ذلك بهذا الكسر؟"
+      }
+    ]
+  },
+  "laws": [
+    "law_of_conservation_of_energy",
+    "carnot_theorem"
+  ]
+}

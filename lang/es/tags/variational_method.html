@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#método variacional — bridge42worlds</title>
+    <meta name="description" content="El método variacional es una potente técnica de aproximación ampliamente utilizada en física y matemáticas aplicadas. Su esencia consiste en minimizar o maximizar un funcional, una regla que asigna un número a una función. En mecánica cuántica, el funcional suele ser la energía media. Se propone una función de onda de prueba con parámetros ajustables y se buscan los valores de esos parámetros que minimizan la energía. Según el principio variacional, la energía obtenida nunca es inferior a la del estado fundamental exacto, por lo que, al refinar la función de prueba (aumentando el número de parámetros), es posible aproximarse arbitrariamente a la verdad. Un enfoque similar se utiliza en la teoría de la elasticidad, la hidrodinámica y el aprendizaje automático, donde los autocodificadores variacionales aprenden a comprimir y reconstruir datos.">
+    <meta property="og:title" content="#método variacional — bridge42worlds">
+    <meta property="og:description" content="El método variacional es una potente técnica de aproximación ampliamente utilizada en física y matemáticas aplicadas. Su esencia consiste en minimizar o maximizar un funcional, una regla que asigna un número a una función. En mecánica cuántica, el funcional suele ser la energía media. Se propone una función de onda de prueba con parámetros ajustables y se buscan los valores de esos parámetros que minimizan la energía. Según el principio variacional, la energía obtenida nunca es inferior a la del estado fundamental exacto, por lo que, al refinar la función de prueba (aumentando el número de parámetros), es posible aproximarse arbitrariamente a la verdad. Un enfoque similar se utiliza en la teoría de la elasticidad, la hidrodinámica y el aprendizaje automático, donde los autocodificadores variacionales aprenden a comprimir y reconstruir datos.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/es/tags/variational_method.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/es/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/es/index.html">main</a>
+            <a href="/lang/es/tags/">tags</a>
+            <a href="/lang/es/laws/">laws</a>
+            <a href="/lang/es/scientists/">scientists</a>
+            <a href="/lang/es/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/es/graph/">graph</a>
+            <a href="/lang/es/theory/">theory</a>
+            <a href="/lang/es/favorites.html" title="Favoritos"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Nivel"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="Mini" title="Mini — La idea esencial en 10 segundos"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="Simple" title="Simple — Lo más simple — para una primera mirada"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="Popular" title="Popular — Más rico que Simple — si la ciencia ya te apasiona"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="Avanzado" title="Avanzado — Con fórmulas e historia completa"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="Search..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="Search..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># tag · @ author · ! scientist</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">Etiqueta</div><h1>método variacional</h1><button class="share-inline" title="Compartir" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">3</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">Estimas la longitud de una cuerda curva reemplazándola por una línea quebrada de segmentos rectos. Este truco ayuda a obtener la respuesta exacta cuando el cálculo directo es imposible.</p><div class="practical-app"><strong>In practice:</strong> Los químicos cuánticos calculan así la forma de las moléculas, y los ingenieros la trayectoria óptima de un cohete con el mínimo consumo de combustible.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">El método variacional es una potente técnica de aproximación ampliamente utilizada en física y matemáticas aplicadas. Su esencia consiste en minimizar o maximizar un funcional, una regla que asigna un número a una función. En mecánica cuántica, el funcional suele ser la energía media. Se propone una función de onda de prueba con parámetros ajustables y se buscan los valores de esos parámetros que minimizan la energía. Según el principio variacional, la energía obtenida nunca es inferior a la del estado fundamental exacto, por lo que, al refinar la función de prueba (aumentando el número de parámetros), es posible aproximarse arbitrariamente a la verdad. Un enfoque similar se utiliza en la teoría de la elasticidad, la hidrodinámica y el aprendizaje automático, donde los autocodificadores variacionales aprenden a comprimir y reconstruir datos.</div>
+        <div class="section"><h2>History</h2><p>Las bases del cálculo de variaciones fueron sentadas por Euler y Lagrange en el siglo XVIII. En mecánica cuántica, el método fue introducido en 1928 por el físico alemán Walter Ritz, quien propuso una forma de calcular las energías atómicas sin ecuaciones complejas.</p></div>
+        <div class="section"><h2>How it works</h2><p>Se elige una familia de posibles soluciones que dependen de varios números (parámetros). Para cada conjunto de números se calcula cierta magnitud (por ejemplo, la energía). De todas las opciones se selecciona aquella que proporciona el valor más pequeño (o más grande), y esa se considera la mejor aproximación a la solución verdadera.</p></div>
+        <div class="fun-fact">💡 El sendero que la gente traza a través del césped suele ser el camino más corto: es una manifestación natural del principio variacional: la trayectoria minimiza el esfuerzo.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">El método variacional es la búsqueda de la mejor aproximación cuando se desconoce la solución exacta. Imagina que necesitas medir el área de un césped de forma caprichosa, pero no tienes una fórmula. Colocas un trozo de tela sobre el césped y lo recortas siguiendo el contorno: cuanto más preciso sea el recorte, más se aproxima el área de la tela al área del césped. Así actúan los matemáticos: prueban diferentes formas simples (aproximaciones) hasta conseguir el mínimo error. En física cuántica, así se determina cómo se distribuyen los electrones en los átomos: se varían (cambian) los parámetros de la función de onda de prueba hasta que la energía calculada desciende al límite inferior.</div>
+        <div class="section"><h2>History</h2><p>Las bases del cálculo de variaciones fueron sentadas por Euler y Lagrange en el siglo XVIII. En mecánica cuántica, el método fue introducido en 1928 por el físico alemán Walter Ritz, quien propuso una forma de calcular las energías atómicas sin ecuaciones complejas.</p></div>
+        <div class="section"><h2>How it works</h2><p>Se elige una familia de posibles soluciones que dependen de varios números (parámetros). Para cada conjunto de números se calcula cierta magnitud (por ejemplo, la energía). De todas las opciones se selecciona aquella que proporciona el valor más pequeño (o más grande), y esa se considera la mejor aproximación a la solución verdadera.</p></div>
+        <div class="fun-fact">💡 Walter Ritz, que dio nombre al método, murió a los 31 años de tuberculosis, pero no solo creó el método de Ritz, sino que también formuló el principio de combinación en espectroscopia, que fue clave para desentrañar la estructura del átomo.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">El método variacional se apoya en el cálculo de variaciones, una rama de las matemáticas que estudia los extremos de los funcionales. El problema básico consiste en encontrar una función y(x) que haga extremo a la integral de la forma J[y] = ∫ L(x, y, y') dx, donde L es el lagrangiano. La condición necesaria de extremo viene dada por la ecuación de Euler-Lagrange. En mecánica cuántica, el método se aplica para resolver de forma aproximada la ecuación de Schrödinger estacionaria. El funcional de energía E[ψ] = ⟨ψ|H|ψ⟩ / ⟨ψ|ψ⟩ se minimiza sobre funciones de prueba ψ pertenecientes a una familia paramétrica dada. En virtud del principio variacional (método de Ritz), el valor mínimo constituye una cota superior de la energía exacta del estado fundamental. Para los estados excitados se impone la condición de ortogonalidad. Los enfoques variacionales son la base del método de los elementos finitos, del campo autoconsistente de Hartree-Fock en química cuántica y de la inferencia bayesiana variacional en aprendizaje automático, donde en lugar de la distribución a posteriori exacta se busca la más próxima dentro de una familia de distribuciones elegida (habitualmente con forma factorizada).</div>
+        <div class="section"><h2>History</h2><p>Las raíces del método se remontan al siglo XVII, con el problema de la braquistócrona resuelto por Johann Bernoulli. El cálculo de variaciones recibió un desarrollo sistemático en los trabajos de Leonhard Euler y Joseph-Louis Lagrange. En 1908, Walter Ritz publicó el método de las funciones de prueba para resolver problemas de contorno, y en 1928 lo aplicó al átomo de helio mecanocuántico, obteniendo valores de energía próximos a los experimentales. Posteriormente, el método se generalizó como una potente herramienta computacional con la llegada de los ordenadores. En física estadística, el enfoque variacional fue desarrollado por Richard Feynman.</p></div>
+        <div class="section"><h2>How it works</h2><p>Para un sistema cuántico se propone una función de onda de prueba ψ(α; x) con parámetros variacionales α = (α1, α2, ...). Se calcula el funcional E(α) = ∫ ψ* H ψ dτ / ∫ |ψ|^2 dτ, donde H es el hamiltoniano. A continuación, se minimiza E(α): ∂E/∂α_i = 0. La solución proporciona los α óptimos y una estimación de la energía E0 ≤ E_exact. La convergencia está garantizada por el teorema de completitud: si la familia de prueba es densa en el espacio funcional adecuado, el límite E_min coincide con la energía exacta. En la inferencia bayesiana variacional se minimiza la divergencia de Kullback-Leibler entre la aproximación y la distribución a posteriori verdadera.</p></div>
+        <div class="formula"><div class="formula-render">\frac{\partial L}{\partial y} - \frac{d}{dx} \left( \frac{\partial L}{\partial y&#x27;} \right) = 0</div><div class="formula-meaning">L es el lagrangiano, que depende de x, y y la derivada y&#x27;, y = y(x) es la función buscada que hace extremo el funcional</div></div><div class="formula"><div class="formula-render">E_0 \leq \frac{\langle \psi | H | \psi \rangle}{\langle \psi | \psi \rangle}</div><div class="formula-meaning">E_0 es la energía exacta del estado fundamental, E_0 ≤ valor medio calculado; H es el hamiltoniano del sistema, ψ es cualquier función de onda de prueba</div></div>
+        <div class="section"><h2>Open problems & fun facts</h2><p>Elección de una variedad adecuada de funciones de prueba, especialmente para sistemas con fuertes correlaciones.; Problema de los mínimos locales en problemas variacionales no lineales.; Complejidad computacional del Monte Carlo variacional para soluciones con superficies nodales.</p><p class="fact">💡 Walter Ritz, que dio nombre al método, murió a los 31 años de tuberculosis, pero no solo creó el método de Ritz, sino que también formuló el principio de combinación en espectroscopia, que fue clave para desentrañar la estructura del átomo.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configurar vista</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> etiquetas</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> leyes</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> científicos</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> etiqueta↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> etiqueta↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> ley↔científico</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> etiqueta↔etiqueta</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> ley↔ley</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> científico↔científico</label></div></div></div>
+<div class="mini-graph" data-node="t:variational_method"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="variational_method_es_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="Me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="No me gusta"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="variational_method" title="favorite"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button></div>
+<div class="feedback" id="feedback" data-article-id="variational_method_es_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">Related</div><a href="/lang/es/tags/differential_equations.html" class="side-tag" data-tag="differential_equations">ecuaciones diferenciales</a><a href="/lang/es/tags/finite_element_method.html" class="side-tag" data-tag="finite_element_method">método de los elementos finitos</a><a href="/lang/es/tags/functional_analysis.html" class="side-tag" data-tag="functional_analysis">análisis funcional</a><a href="/lang/es/tags/hilbert_space.html" class="side-tag" data-tag="hilbert_space">espacio de Hilbert</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">Related articles</h2>
+<div id="search-results" class="entity-list" data-context-tag="variational_method"><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-30</span></div><div class="card-body"><h3><a href="/lang/es/archive/2026-06-30/2607.00123/index.html" title="Umbral 2: cómo una regla de goma resiste el promedio infinito">Umbral 2: cómo una regla de goma resiste el promedio infinito</a></h3><div class="oneliner">Cuando una secuencia infinita se promedia una y otra vez, su estructura interna puede no resistir. Para los espacios de Orlicz —donde cada escala tiene su propia rigidez, como una regla de goma con elasticidad no uniforme— los autores hallaron un elegante criterio de estabilidad. Si cierta secuencia</div></div></article><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-07-01</span></div><div class="card-body"><h3><a href="/lang/es/archive/2026-07-01/2607.00949/index.html" title="La huella de Veronese">La huella de Veronese</a></h3><div class="oneliner">Una variedad casi hermítica cerrada con una 2-forma fundamental armónica se sumerge en la esfera euclidiana unitaria. Su curvatura normal máxima no puede ser menor que \(\sqrt{2n/(n+1)}\). En caso de igualdad exacta, la forma se vuelve paralela, la métrica es käleriana, y la inmersión, salvo isometr</div></div></article><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-07-03</span></div><a class="card-img-wrap" href="/lang/es/archive/2026-07-03/2607.03127/index.html"><img src="/lang/ru/archive/2026-07-03/2607.03127/t_ai.webp" data-fb="/lang/ru/archive/2026-07-03/2607.03127/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/es/archive/2026-07-03/2607.03127/index.html" title="La ilusión gravitacional del símplex: el centro que repele">La ilusión gravitacional del símplex: el centro que repele</a></h3><div class="oneliner">En la gestión de carteras, la diversificación suele percibirse como un movimiento hacia un punto de equilibrio seguro. Sin embargo, nuevos resultados de la teoría de carteras estocástica muestran que, para una amplia clase de aplicaciones simétricas, la región de carteras seguras puede ser no convex</div></div></article></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('variational_method', 'tag', 'es');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

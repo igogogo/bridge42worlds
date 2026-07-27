@@ -1,0 +1,1583 @@
+{
+  "id": "02-orbits",
+  "topic": "gravity",
+  "schema": "b42.lesson/1",
+  "model": "orbit",
+  "entities": {
+    "laws": [
+      "newtons_law_of_universal_gravitation",
+      "conservation_of_energy"
+    ],
+    "tags": [
+      "mechanics",
+      "gravity",
+      "energy"
+    ],
+    "scientists": [
+      "Isaac Newton"
+    ]
+  },
+  "ru": {
+    "title": "Орбиты и космические скорости",
+    "subtitle": "Параграф 2 · Круг, эллипс, парабола — одна сила, разные скорости",
+    "intro": [
+      "Пушка на вершине очень высокой горы. Заряд слабый — ядро падает у подножия. Сильнее — падает дальше. Ещё сильнее — и оно уходит за горизонт. А при некоторой скорости происходит удивительное: ядро падает всё время, но поверхность Земли уходит из-под него ровно с той же быстротой, и приземления не наступает никогда.",
+      "Этот рисунок Ньютон поместил в «Начала», и он до сих пор остаётся лучшим объяснением того, что такое орбита. Спутник не парит и не преодолевает тяготение — он непрерывно падает и непрерывно промахивается.",
+      "Из одного и того же закона получаются четыре разные кривые, и выбор между ними делает единственное число — начальная скорость. Медленно — эллипс, вытянутый внутрь. Ровно столько, сколько нужно, — окружность. Быстрее — эллипс наружу. Ещё быстрее — и тело не вернётся никогда."
+    ],
+    "standNote": "Тело всегда стартует из одной точки с одинакового расстояния, вы задаёте только скорость. Пройдите весь диапазон по порядку и следите за подписью слева вверху. При 1,00 получится окружность. Ниже — эллипс, у которого точка старта становится самой далёкой. Выше — эллипс, у которого старт становится самым близким. При 1,41 кривая перестанет замыкаться: это вторая космическая, ровно корень из двух от круговой. Столбики справа показывают, почему так: полная энергия при этом переходит через ноль.",
+    "formula": {
+      "name": "Энергия орбиты и космические скорости",
+      "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
+      "alsoKnown": "Интеграл энергии · формула живых сил (vis viva)",
+      "authors": [
+        {
+          "who": "Исаак Ньютон",
+          "year": "1687",
+          "what": "нарисовал ту самую пушку на горе, показав, что орбитальное движение и падение суть одно и то же. Рисунок объяснял мысль лучше, чем это удалось бы сделать формулами того времени"
+        },
+        {
+          "who": "Иоганн Бернулли",
+          "year": "1710",
+          "what": "получил соотношение, связывающее скорость с расстоянием и размером орбиты. Его до сих пор называют формулой живых сил — по старому имени кинетической энергии, введённому Лейбницем"
+        },
+        {
+          "who": "Константин Циолковский",
+          "year": "1903",
+          "what": "вывел уравнение движения ракеты и первым посчитал, какая скорость нужна для выхода на орбиту. Работал школьным учителем в Калуге и был почти глух с детства"
+        },
+        {
+          "who": "Вальтер Гоман",
+          "year": "1925",
+          "what": "нашёл самый экономный способ перелёта между круговыми орбитами: два включения двигателя и эллипс между ними. Все межпланетные станции летают его траекторией по сей день"
+        }
+      ],
+      "story": "Особенно поучительна история с первой космической скоростью, которую иногда преподносят как достижение техники. На самом деле трудность никогда не была в скорости самой по себе: 7,9 км/с — это всего в двадцать раз быстрее пули. Трудность в том, что топливо приходится разгонять вместе с ракетой, и потому масса растёт экспоненциально с требуемой скоростью. Циолковский вывел это в 1903 году и показал, что одноступенчатая ракета на тогдашнем топливе невозможна в принципе. Отсюда и родилась идея ступеней: отбрасывать пустые баки, чтобы не разгонять их дальше. Вся космонавтика выросла из борьбы с одной экспонентой.",
+      "symbols": [
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "полная механическая энергия",
+          "unit": "Дж",
+          "note": "отрицательна для замкнутых орбит: тело в яме и без добавки не выберется"
+        },
+        {
+          "sym": "a",
+          "latex": "a",
+          "what": "большая полуось",
+          "unit": "м",
+          "note": "определяется только энергией; форма орбиты при этом может быть любой"
+        },
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "what": "первая космическая скорость",
+          "unit": "м/с",
+          "note": "$\\sqrt{GM/R}$ — минимальная для круговой орбиты у поверхности"
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "what": "вторая космическая (скорость убегания)",
+          "unit": "м/с",
+          "note": "$\\sqrt{2GM/R}$ — ровно в $\\sqrt{2}$ раз больше первой, всегда и для любого тела"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "момент импульса",
+          "unit": "кг·м²/с",
+          "note": "вместе с энергией однозначно задаёт орбиту: энергия даёт размер, момент — вытянутость"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: от энергии к четырём кривым",
+      "lead": "Всё получится из двух сохраняющихся величин. Энергия скажет, какого размера орбита, момент импульса — насколько она вытянута.",
+      "steps": [
+        {
+          "text": "Запишем потенциальную энергию тяготения. Отсчёт ведут от бесконечности, и потому она отрицательна: чтобы увести тело далеко, надо совершить работу, а значит вблизи тело сидит в яме.",
+          "latex": "E_{\\text{п}} = -\\frac{GMm}{r}",
+          "figure": "anywell",
+          "figCaption": "Гравитационная яма: чем ближе к центру, тем глубже. Ноль вынесен на бесконечность."
+        },
+        {
+          "text": "Полная энергия сохраняется, потому что тяготение консервативно — работа не зависит от пути. Отсюда сразу видно, чего тело может достичь: там, где скорость обратилась бы в мнимую, его просто не бывает.",
+          "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = \\text{const} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{2E}{m} + \\frac{2GM}{r}}",
+          "figure": "energyswap",
+          "figCaption": "Кинетическая и потенциальная перетекают друг в друга; сумма неизменна. График под стендом рисует ровно эту зависимость."
+        },
+        {
+          "text": "Условие круговой орбиты мы уже получали: притяжение целиком идёт на поворот. Отсюда первая космическая скорость.",
+          "latex": "\\frac{GMm}{r^{2}} = \\frac{mv^{2}}{r} \\;\\Longrightarrow\\; v_{\\text{I}} = \\sqrt{\\frac{GM}{r}}",
+          "figure": "centripetal",
+          "figCaption": "Скорость ровно такая, чтобы падение в точности компенсировалось уходом поверхности."
+        },
+        {
+          "text": "Условие убегания другое: тело должно добраться до бесконечности, где потенциальная энергия равна нулю. Значит полная энергия должна быть не меньше нуля.",
+          "latex": "\\frac{mv^{2}}{2} - \\frac{GMm}{r} \\geq 0 \\;\\Longrightarrow\\; v_{\\text{II}} = \\sqrt{\\frac{2GM}{r}} = \\sqrt{2}\\,v_{\\text{I}}",
+          "figure": "work",
+          "figCaption": "Вторая космическая ровно в корень из двух больше первой — для любого тела во Вселенной."
+        },
+        {
+          "text": "Теперь общая картина. Знак полной энергии определяет вид траектории, и других вариантов нет. Отрицательная — тело заперто в яме, орбита замкнута. Ноль — граничный случай. Положительная — тело уходит и продолжает двигаться на бесконечности.",
+          "latex": "E < 0:\\ \\text{эллипс}, \\quad E = 0:\\ \\text{парабола}, \\quad E > 0:\\ \\text{гипербола}",
+          "figure": "curves",
+          "figCaption": "Четыре конических сечения — четыре знака энергии. Тип орбиты решается одним числом."
+        },
+        {
+          "text": "Размер орбиты зависит только от энергии, а форма — от момента импульса. Это важное разделение: две орбиты с одинаковой энергией имеют одинаковый период, как бы по-разному они ни выглядели.",
+          "latex": "a = -\\frac{GMm}{2E}, \\qquad e = \\sqrt{1 + \\frac{2EL^{2}}{G^{2}M^{2}m^{3}}}",
+          "figure": "result",
+          "figCaption": "Энергия задаёт большую полуось и период; момент импульса — вытянутость. Две независимые ручки."
+        },
+        {
+          "text": "И следствие, из-за которого космонавтика устроена сложнее, чем кажется. Полная энергия связанной орбиты равна половине потенциальной, а кинетическая — минус половине полной. Опустив спутник ниже, мы уменьшаем полную энергию, но увеличиваем скорость.",
+          "latex": "E = -\\frac{GMm}{2a}, \\qquad E_{\\text{к}} = -E, \\qquad r \\downarrow \\;\\Rightarrow\\; v \\uparrow",
+          "figure": "energy",
+          "figCaption": "Теорема вириала для орбиты: торможение о верхние слои атмосферы разгоняет спутник."
+        }
+      ],
+      "plate": "Знак энергии решает, вернётся тело или нет; величина энергии задаёт размер орбиты и период; момент импульса задаёт вытянутость. Три числа описывают всё движение.",
+      "note": "Границы применимости. Формулы выведены для точечного центра и одного спутника. Реальная Земля не идеальный шар — её сплюснутость заставляет плоскость орбиты медленно поворачиваться, и это учитывают при выводе спутников на солнечно-синхронные орбиты, а иногда используют нарочно. Кроме того, вблизи очень массивных тел ньютоновские формулы перестают работать: у поверхности нейтронной звезды вторая космическая составляет уже половину скорости света, и без теории относительности не обойтись."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Почему потенциальная энергия отрицательна. Это часто сбивает с толку, хотя за этим нет ничего, кроме выбора точки отсчёта. Представьте яму. Вы вольны считать нулём дно ямы — тогда всё вокруг выше нуля. А можете считать нулём поверхность земли вдалеке — тогда всё в яме ниже, то есть отрицательно. Физика от выбора не меняется, меняются только числа. В тяготении удобнее второй вариант: нуль отнесён на бесконечность, и тогда отрицательная энергия сразу означает «сидит в яме, само не выберется», а положительная — «свободно, может уйти».",
+        "Откуда берётся корень из двух. Сравните две задачи. Чтобы летать по кругу, нужна энергия, покрывающая половину глубины ямы. Чтобы выбраться совсем — полную глубину. Энергия пропорциональна квадрату скорости, значит вдвое большей энергии соответствует не вдвое большая скорость, а больше в корень из двух. Отсюда и знаменитое 11,2 против 7,9 км/с. Это соотношение одинаково для Земли, Луны, Солнца и любого другого тела — оно не зависит ни от массы, ни от размера.",
+        "Что такое конические сечения на пальцах. Возьмите фонарик и посветите на стену. Держите прямо — на стене круг. Наклоните — круг вытянется в эллипс. Наклоните сильнее, так чтобы край светового конуса стал параллелен стене, — эллипс разомкнётся в параболу. Ещё сильнее — получится гипербола. Все четыре кривые суть срезы одного конуса под разными углами, и ровно они же получаются как орбиты. Древние греки изучали их как чистую геометрию за две тысячи лет до того, как выяснилось, что по ним ходят планеты.",
+        "Почему масса ракеты растёт экспоненциально. Каждый килограмм топлива нужно разгонять вместе с ракетой, а значит для его разгона нужно ещё топливо, для которого — ещё. Такая самоподдерживающаяся добавка всегда даёт экспоненту: чтобы прибавить одну и ту же порцию скорости, приходится каждый раз умножать стартовую массу на одно и то же число. Это и есть формула Циолковского. Из неё же следует, зачем ступени: отбросив пустой бак, вы перестаёте платить за его разгон."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: три космические скорости Земли",
+      "lead": "Считаем всё, что нужно знать о выходе в космос, из двух чисел — массы и радиуса планеты.",
+      "given": "Масса Земли $5{,}97\\cdot 10^{24}$ кг, радиус $6{,}37\\cdot 10^{6}$ м, $G = 6{,}67\\cdot 10^{-11}$. Найти первую и вторую космические скорости и период низкой круговой орбиты.",
+      "law": "$v_{\\text{I}} = \\sqrt{GM/R}$, $\\;v_{\\text{II}} = \\sqrt{2}\\,v_{\\text{I}}$, $\\;T = 2\\pi R/v_{\\text{I}}$",
+      "solution": [
+        {
+          "text": "Удобно сначала посчитать произведение $GM$ — оно понадобится во всех формулах и известно точнее, чем сомножители по отдельности.",
+          "latex": "GM = 6{,}67\\cdot 10^{-11} \\cdot 5{,}97\\cdot 10^{24} \\approx 3{,}98\\cdot 10^{14}\\ \\text{м}^{3}/\\text{с}^{2}"
+        },
+        {
+          "text": "Первая космическая: скорость круговой орбиты у самой поверхности.",
+          "latex": "v_{\\text{I}} = \\sqrt{\\frac{3{,}98\\cdot 10^{14}}{6{,}37\\cdot 10^{6}}} = \\sqrt{6{,}25\\cdot 10^{7}} \\approx 7{,}9\\ \\text{км/с}"
+        },
+        {
+          "text": "Вторая космическая — просто в корень из двух больше, считать заново не нужно.",
+          "latex": "v_{\\text{II}} = 1{,}414 \\cdot 7{,}9 \\approx 11{,}2\\ \\text{км/с}"
+        },
+        {
+          "text": "Период обращения по низкой орбите.",
+          "latex": "T = \\frac{2\\pi \\cdot 6{,}37\\cdot 10^{6}}{7{,}9\\cdot 10^{3}} \\approx 5{,}07\\cdot 10^{3}\\ \\text{с} \\approx 84\\ \\text{мин}"
+        }
+      ],
+      "answer": "Первая космическая 7,9 км/с, вторая 11,2 км/с, период низкой орбиты около 84 минут.",
+      "check": "Проверка по известному: Международная космическая станция обходит Землю за 92 минуты — чуть дольше наших 84, потому что летит не у самой поверхности, а на высоте 400 км. Замечательно здесь вот что: эти 84 минуты в точности равны удвоенным 42 минутам падения сквозь тоннель из прошлого параграфа. Совпадение не случайно — обе задачи описываются одним и тем же гармоническим движением, просто одно идёт сквозь планету, а другое вокруг неё."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Скорости, которые стоит помнить: они дают чувство масштаба для всей космонавтики.",
+      "items": [
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "name": "Первая космическая скорость Земли",
+          "value": "7,9",
+          "unit": "км / с",
+          "why": "Минимальная скорость круговой орбиты. Всё, что медленнее, вернётся на поверхность; высота при этом почти не помогает — важна именно горизонтальная скорость.",
+          "mnemo": "Примерно 28 000 км/ч — в двадцать раз быстрее пули и в двадцать пять раз быстрее пассажирского самолёта."
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "name": "Вторая космическая скорость Земли",
+          "value": "11,2",
+          "unit": "км / с",
+          "why": "Скорость убегания: при ней тело уходит от Земли и не возвращается. Ровно в $\\sqrt{2}$ раз больше первой — соотношение универсально для любого небесного тела.",
+          "mnemo": "На Луне всего 2,4 км/с — потому она и не удержала атмосферу: молекулы газа при дневном нагреве достигают таких скоростей."
+        },
+        {
+          "sym": "GM",
+          "latex": "GM_{\\oplus}",
+          "name": "Гравитационный параметр Земли",
+          "value": "3,986 · 10¹⁴",
+          "unit": "м³ / с²",
+          "why": "В расчётах орбит используют именно произведение, а не сомножители: оно измерено по движению спутников с точностью до девятого знака, тогда как $G$ известна лишь до пятого.",
+          "mnemo": "Редкий случай, когда произведение известно лучше множителей: орбиты мерить легко, а маленькую $G$ в лаборатории — тяжело."
+        },
+        {
+          "sym": "r_geo",
+          "latex": "r_{\\text{гсо}}",
+          "name": "Радиус геостационарной орбиты",
+          "value": "4,22 · 10⁷",
+          "unit": "м",
+          "why": "Здесь период обращения равен суткам, и спутник висит над одной точкой экватора. Получается прямо из третьего закона Кеплера подстановкой $T = 86400$ с.",
+          "mnemo": "Это примерно 36 000 км над поверхностью — почти шесть земных радиусов. Радиосигнал до спутника и обратно идёт четверть секунды, отсюда задержка в спутниковой связи."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Как это работает на практике",
+      "lead": "Три числа — энергия, момент импульса и масса центрального тела — описывают всю практическую космонавтику.",
+      "items": [
+        {
+          "h": "Гомановский перелёт",
+          "text": "Самый экономный путь между круговыми орбитами: разогнаться в одной точке, пролететь по эллипсу полвитка и разогнаться снова. Так летают все межпланетные станции. К Марсу такой перелёт занимает восемь с половиной месяцев, и стартовое окно открывается раз в 26 месяцев."
+        },
+        {
+          "h": "Гравитационный манёвр",
+          "text": "Пролетая мимо планеты, аппарат отбирает у неё немного орбитальной энергии — планета тормозится на непредставимо малую величину, аппарат разгоняется на километры в секунду. «Вояджеры» ушли за пределы Солнечной системы почти без топлива, использовав редкий парад планет 1977 года."
+        },
+        {
+          "h": "Точки Лагранжа",
+          "text": "Есть пять мест, где притяжение двух тел и центробежный эффект дают равновесие. В точке L2 за Землёй стоит телескоп Уэбба: там Солнце, Земля и Луна всегда с одной стороны, и его можно закрыть одним экраном."
+        },
+        {
+          "h": "Почему Луна без атмосферы",
+          "text": "Вторая космическая на Луне 2,4 км/с, а тепловая скорость молекул при дневном нагреве сравнима с этим. Газ утекает за геологически короткое время. Тот же расчёт объясняет, почему у Земли нет свободного водорода, а у Юпитера есть."
+        },
+        {
+          "h": "Чёрная дыра как предел",
+          "text": "Если сжимать тело, вторая космическая растёт. Приравняв её скорости света, получим радиус, из-под которого не выберется даже свет. Формула Шварцшильда в точности совпадает с этой наивной ньютоновской оценкой — редкое и совершенно случайное совпадение классики с общей теорией относительности."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Орбитальная механика полна вещей, противоречащих интуитивной картине движения.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Конус и четыре кривые",
+          "text": "Возьмите фонарик с узким лучом и посветите на стену перпендикулярно. Затем медленно наклоняйте его, следя за формой светового пятна.",
+          "answer": "Круг, эллипс, а в момент, когда край конуса станет параллелен стене, — незамкнутая парабола. Ещё наклоните — гипербола. Все четыре орбиты, которые вы видели на стенде, суть срезы одного конуса. Аполлоний Пергский изучил их около 200 года до нашей эры как чистую геометрию, и почти два тысячелетия эти кривые считались бесполезной красотой — пока Кеплер не обнаружил, что по ним ходят планеты."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Чтобы догнать — притормози",
+          "text": "Ваш корабль отстаёт от станции на той же круговой орбите. Инстинкт велит разогнаться вдогонку. Космонавты знают, что делать надо наоборот. Почему?",
+          "answer": "Разгон поднимает вас на более высокую орбиту, а там период больше — вы начнёте отставать ещё сильнее. Правильный манёвр обратный: притормозить, опуститься ниже, где период короче, обогнать станцию снизу и затем разогнаться, чтобы подняться обратно. Это одна из первых вещей, которая ломает интуицию новичкам, и на её отработку уходит немалая часть тренировок. Управление в орбитальной механике устроено противоположно всему земному опыту."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Ньютон нарисовал спутник за 270 лет до запуска",
+          "text": "Рисунок пушки на горе появился в «Началах» в 1687 году. Ньютон точно описал орбитальное движение, включая замечание, что при достаточной скорости ядро обойдёт Землю и вернётся к пушке сзади. Первый настоящий спутник полетел в 1957-м. Между вычислением и осуществлением прошло два с половиной века — и они ушли не на понимание, а на инженерию: нужна была химия топлива и металлургия."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Энергия — размер, момент — форма",
+          "text": "Две ручки управления орбитой, и они независимы. Энергия задаёт большую полуось и период, но ничего не говорит о вытянутости. Момент импульса задаёт вытянутость, но не размер. Хотите выше — добавьте энергии. Хотите круглее — добавьте момента, то есть разгоняйтесь поперёк, а не вдоль."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Вторая космическая любого тела за десять секунд",
+          "text": "Для тела земной плотности вторая космическая пропорциональна радиусу. Земля — 11,2 км/с. Значит для астероида радиусом в тысячу раз меньше выйдет около 11 м/с — скорость хорошего прыжка. С небольшого астероида человек может улететь, просто оттолкнувшись, и это не шутка, а рабочее соображение при планировании посадок."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Когда ньютоновской формулы мало",
+          "text": "Пока вторая космическая много меньше скорости света, классика работает превосходно. У поверхности нейтронной звезды она достигает половины световой, и там нужна общая теория относительности. Забавно, что наивный ньютоновский расчёт радиуса, при котором убегание требует скорости света, даёт в точности формулу Шварцшильда — но это совпадение, а не вывод: правильное объяснение выглядит совершенно иначе."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: почему ракеты такие большие",
+      "lead": "Не входит в проверку. О единственной экспоненте, определившей облик всей космонавтики.",
+      "blocks": [
+        {
+          "h": "Формула Циолковского",
+          "text": "Приращение скорости равно скорости истечения газов, умноженной на логарифм отношения начальной массы к конечной. Перевернув: чтобы получить заданную скорость, стартовую массу надо умножить на экспоненту. Скорость истечения у лучших химических двигателей около 4,5 км/с, а нужно набрать порядка 9 км/с с учётом потерь на сопротивление и тяготение. Значит отношение масс около $e^{2} \\approx 7{,}4$ — то есть больше восьмидесяти процентов стартовой массы это топливо."
+        },
+        {
+          "h": "Зачем ступени",
+          "text": "Пустой бак, разогнанный до половины пути, дальше только мешает — его приходится тащить за оставшееся топливо. Отбросив его, вы уменьшаете массу и получаете новую, более выгодную экспоненту. Многоступенчатость не изящное усовершенствование, а единственный способ обойти математику: одноступенчатая ракета на химическом топливе теоретически возможна, но полезной нагрузки в ней почти не остаётся."
+        },
+        {
+          "h": "Почему не помогает высота",
+          "text": "Распространённое заблуждение: чтобы попасть в космос, надо подняться высоко. На самом деле подъём на 100 км требует раз в тридцать меньше энергии, чем разгон до орбитальной скорости. Космос начинается не там, где высоко, а там, где быстро. Суборбитальный полёт туристической ракеты и выход на орбиту различаются не высотой, а энергией — примерно в тридцать раз."
+        },
+        {
+          "h": "И что было бы иначе",
+          "text": "Если бы Земля была чуть массивнее, требуемая скорость выросла бы, а масса ракеты — экспоненциально. При радиусе больше примерно в полтора раза химическая ракета уже не смогла бы вывести полезный груз на орбиту вовсе. Мы оказались на планете, с которой улететь возможно, но едва-едва, — и это обстоятельство иногда приводят как ответ на вопрос, почему космонавтика такая дорогая."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Вид орбиты определяется знаком полной энергии, размер — её величиной, вытянутость — моментом импульса; вторая космическая скорость всегда в $\\sqrt{2}$ раз больше первой.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}}",
+          "text": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}} = \\sqrt{2GM/r}$ — отношение $\\sqrt{2}$ универсально"
+        },
+        {
+          "icon": "formula",
+          "title": "$E < 0$",
+          "text": "эллипс, $E = 0$ — парабола, $E > 0$ — гипербола"
+        },
+        {
+          "icon": "clock",
+          "title": "Период зависит только от",
+          "text": "Период зависит только от большой полуоси, то есть только от энергии"
+        },
+        {
+          "icon": "lamp",
+          "title": "Опускаясь ниже, спутник теряет",
+          "text": "Опускаясь ниже, спутник теряет энергию, но набирает скорость"
+        },
+        {
+          "icon": "scale",
+          "title": "Масса ракеты растёт экспоненциально",
+          "text": "Масса ракеты растёт экспоненциально с требуемой скоростью — отсюда ступени"
+        }
+      ],
+      "where": "Расчёт орбит и перелётов, гравитационные манёвры, точки Лагранжа, удержание атмосферы планетой, оценка радиуса чёрной дыры.",
+      "watchOut": "Интуиция земного движения здесь подводит систематически: чтобы догнать — тормози, чтобы подняться — разгоняйся вбок, а не вверх."
+    },
+    "quiz": [
+      {
+        "id": "o1",
+        "type": "mcq",
+        "q": "Вторая космическая скорость больше первой ровно в $\\sqrt{2}$ раз. Для каких тел это верно?",
+        "options": [
+          "Только для Земли — у других планет отношение другое",
+          "Для планет земной группы, но не для газовых гигантов",
+          "Для любого тела во Вселенной: и масса, и радиус сокращаются при делении",
+          "Только для тел, у которых есть атмосфера"
+        ],
+        "answer": 2,
+        "why": "Разделив $\\sqrt{2GM/r}$ на $\\sqrt{GM/r}$, получаем $\\sqrt{2}$ — от массы и радиуса не осталось ничего. Отношение одинаково для Земли, Луны, Солнца и нейтронной звезды: оно следует лишь из того, что для убегания нужна вдвое большая энергия, чем для круговой орбиты.",
+        "hint": "Просто поделите одну формулу на другую и посмотрите, что сократится."
+      },
+      {
+        "id": "o2",
+        "type": "mcq",
+        "q": "Спутник тормозится о разреженные верхние слои атмосферы. Что происходит с его скоростью?",
+        "options": [
+          "Растёт: спутник опускается ниже, а там круговая скорость больше",
+          "Убывает — торможение всегда замедляет",
+          "Не меняется, пока орбита остаётся круговой",
+          "Сначала растёт, потом убывает"
+        ],
+        "answer": 0,
+        "why": "Полная энергия действительно убывает, и потому спутник опускается. Но круговая скорость растёт как $1/\\sqrt{r}$: потенциальная энергия падает вдвое быстрее, чем растёт кинетическая. Отсюда и парадокс «чтобы догнать — притормози».",
+        "hint": "Разделите энергию на две части. Какая из них убывает, а какая растёт при снижении орбиты?"
+      },
+      {
+        "id": "o3",
+        "type": "free",
+        "q": "Своими словами: почему масса ракеты растёт экспоненциально с требуемой скоростью, а не пропорционально ей?",
+        "keywords": [
+          "топлив",
+          "разгон",
+          "везти",
+          "сам себя",
+          "нести",
+          "ещё топлив",
+          "экспонент",
+          "умнож",
+          "тащ"
+        ],
+        "needed": 2,
+        "why": "Каждая порция топлива должна быть разогнана вместе с ракетой, а значит для её разгона требуется ещё топливо, для которого — ещё. Такая самоподдерживающаяся добавка всегда даёт экспоненту: каждая новая порция скорости требует умножения стартовой массы на одно и то же число. Отсюда и ступени: отброшенный бак больше не нужно разгонять.",
+        "hint": "Спросите себя, что происходит с топливом, залитым в бак: оно только толкает ракету или его тоже приходится везти?"
+      },
+      {
+        "id": "o4",
+        "type": "estimate",
+        "q": "Первая космическая скорость Земли 7,9 км/с. Какова первая космическая скорость на высоте одного земного радиуса над поверхностью, то есть при вдвое большем расстоянии от центра? В км/с.",
+        "answer": 5.6,
+        "unit": "км/с",
+        "tolerance": 0.6,
+        "why": "Скорость убывает как $1/\\sqrt{r}$: увеличив расстояние вдвое, делим скорость на $\\sqrt{2}$. Получаем 7,9/1,41 ≈ 5,6 км/с. Обратите внимание на любопытную симметрию: это то же деление на корень из двух, что связывает первую и вторую космические, только применённое к расстоянию, а не к энергии.",
+        "hint": "Круговая скорость есть корень из GM, делённого на r. Как она изменится, если r удвоить?"
+      }
+    ]
+  },
+  "en": {
+    "title": "Orbits and Cosmic Velocities",
+    "subtitle": "Paragraph 2 · Circle, Ellipse, Parabola — One Force, Different Speeds",
+    "intro": [
+      "A cannon atop a very high mountain. A weak charge — the ball falls at the foot. Stronger — it falls farther. Even stronger — and it goes beyond the horizon. At a certain speed something astonishing happens: the ball keeps falling, but the Earth's surface curves away at exactly the same rate, and it never lands.",
+      "Newton placed this drawing in the Principia, and it remains the best explanation of what an orbit is. A satellite does not float or overcome gravity — it continuously falls and continuously misses.",
+      "From one and the same law come four different curves, and the sole determinant is a single number: initial speed. Slow — an ellipse inward. Exactly what is needed — a circle. Faster — an ellipse outward. Even faster — and the body never returns."
+    ],
+    "standNote": "The body always starts from the same point at the same distance; you only set the speed. Go through the entire range in order and watch the label at the top left. At 1.00 you get a circle. Below — an ellipse where the starting point becomes the farthest. Above — an ellipse where the starting point becomes the closest. At 1.41 the curve ceases to close: that is the escape velocity, exactly the square root of two times the circular velocity. The bars on the right show why: at this point the total energy crosses zero.",
+    "formula": {
+      "name": "Orbital Energy and Cosmic Velocities",
+      "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
+      "alsoKnown": "Energy Integral · Vis Viva Equation",
+      "authors": [
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "drew that very cannon on the mountain, showing that orbital motion and falling are one and the same. The drawing explained the idea better than the formulas of the time could."
+        },
+        {
+          "who": "Johann Bernoulli",
+          "year": "1710",
+          "what": "derived the relation linking speed with distance and orbit size. It is still called the vis viva equation — after the old name for kinetic energy introduced by Leibniz."
+        },
+        {
+          "who": "Konstantin Tsiolkovsky",
+          "year": "1903",
+          "what": "derived the rocket equation and was the first to calculate the speed needed to enter orbit. He worked as a schoolteacher in Kaluga and was nearly deaf since childhood."
+        },
+        {
+          "who": "Walter Hohmann",
+          "year": "1925",
+          "what": "found the most economical way to transfer between circular orbits: two engine burns and an ellipse between them. All interplanetary probes still fly his trajectory."
+        }
+      ],
+      "story": "The story of the first cosmic velocity is especially instructive, sometimes presented as a triumph of engineering. In reality, the difficulty was never the speed itself: 7.9 km/s is only twenty times faster than a bullet. The difficulty is that the fuel must be accelerated along with the rocket, so mass grows exponentially with the required speed. Tsiolkovsky derived this in 1903 and showed that a single‑stage rocket with the fuels of his time was fundamentally impossible. Hence the idea of stages: discard empty tanks so they don't have to be accelerated further. All of astronautics grew out of the battle with a single exponential.",
+      "symbols": [
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "total mechanical energy",
+          "unit": "J",
+          "note": "negative for closed orbits: the body is in a well and cannot escape without an external boost"
+        },
+        {
+          "sym": "a",
+          "latex": "a",
+          "what": "semi-major axis",
+          "unit": "m",
+          "note": "determined solely by energy; the shape of the orbit can be anything"
+        },
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "what": "first cosmic velocity (circular orbital speed)",
+          "unit": "m/s",
+          "note": "$\\sqrt{GM/R}$ — minimum for a circular orbit at the surface"
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "what": "second cosmic velocity (escape velocity)",
+          "unit": "m/s",
+          "note": "$\\sqrt{2GM/R}$ — exactly $\\sqrt{2}$ times the first, always and for any body"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "angular momentum",
+          "unit": "kg·m²/s",
+          "note": "together with energy uniquely determines the orbit: energy gives size, angular momentum gives shape"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation: From Energy to Four Curves",
+      "lead": "Everything follows from two conserved quantities. Energy tells the size of the orbit, angular momentum tells how elongated it is.",
+      "steps": [
+        {
+          "text": "Write down the gravitational potential energy. It is measured from infinity, and therefore it is negative: to move a body far away, work must be done, so near the center the body sits in a well.",
+          "latex": "E_{\\text{п}} = -\\frac{GMm}{r}",
+          "figure": "anywell",
+          "figCaption": "Gravitational well: the closer to the center, the deeper. Zero is set at infinity."
+        },
+        {
+          "text": "Total energy is conserved because gravity is conservative—work does not depend on the path. From this, we immediately see what the body can achieve: where the velocity would become imaginary, the body simply does not go.",
+          "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = \\text{const} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{2E}{m} + \\frac{2GM}{r}}",
+          "figure": "energyswap",
+          "figCaption": "Kinetic and potential energy flow into each other; the sum is unchanged. The graph under the stand depicts exactly this relation."
+        },
+        {
+          "text": "We have already obtained the condition for a circular orbit: attraction entirely provides the centripetal force. Hence the first cosmic velocity.",
+          "latex": "\\frac{GMm}{r^{2}} = \\frac{mv^{2}}{r} \\;\\Longrightarrow\\; v_{\\text{I}} = \\sqrt{\\frac{GM}{r}}",
+          "figure": "centripetal",
+          "figCaption": "Velocity exactly such that falling is precisely compensated by the surface moving away."
+        },
+        {
+          "text": "The escape condition is different: the body must reach infinity, where potential energy is zero. Therefore total energy must be at least zero.",
+          "latex": "\\frac{mv^{2}}{2} - \\frac{GMm}{r} \\geq 0 \\;\\Longrightarrow\\; v_{\\text{II}} = \\sqrt{\\frac{2GM}{r}} = \\sqrt{2}\\,v_{\\text{I}}",
+          "figure": "work",
+          "figCaption": "The second cosmic velocity is exactly the square root of two times the first—for any body in the Universe."
+        },
+        {
+          "text": "Now the big picture. The sign of total energy determines the type of trajectory, and there are no other possibilities. Negative—the body is trapped in a well, orbit closed. Zero—boundary case. Positive—the body escapes and continues moving at infinity.",
+          "latex": "E < 0:\\ \\text{ellipse}, \\quad E = 0:\\ \\text{parabola}, \\quad E > 0:\\ \\text{hyperbola}",
+          "figure": "curves",
+          "figCaption": "Four conic sections—four signs of energy. The orbit type is decided by a single number."
+        },
+        {
+          "text": "The size of the orbit depends only on energy, and the shape on angular momentum. This is an important separation: two orbits with the same energy have the same period, no matter how differently they look.",
+          "latex": "a = -\\frac{GMm}{2E}, \\qquad e = \\sqrt{1 + \\frac{2EL^{2}}{G^{2}M^{2}m^{3}}}",
+          "figure": "result",
+          "figCaption": "Energy sets the semi-major axis and period; angular momentum sets the eccentricity. Two independent knobs."
+        },
+        {
+          "text": "And a consequence that makes astronautics trickier than it seems. The total energy of a bound orbit equals half the potential energy, and the kinetic energy equals minus half the total. Moving a satellite to a lower orbit decreases total energy but increases speed.",
+          "latex": "E = -\\frac{GMm}{2a}, \\qquad E_{\\text{к}} = -E, \\qquad r \\downarrow \\;\\Rightarrow\\; v \\uparrow",
+          "figure": "energy",
+          "figCaption": "Virial theorem for an orbit: drag from the upper atmosphere accelerates the satellite."
+        }
+      ],
+      "plate": "The sign of energy decides whether the body returns; the magnitude of energy sets the orbit size and period; angular momentum sets elongation. Three numbers describe the entire motion.",
+      "note": "Limits of applicability. The formulas are derived for a point center and a single satellite. The real Earth is not a perfect sphere—its oblateness causes the orbital plane to slowly rotate, and this is taken into account when placing satellites into sun-synchronous orbits, and sometimes used deliberately. Moreover, near very massive bodies Newtonian formulas break down: at the surface of a neutron star, the second cosmic velocity is already half the speed of light, and relativity is necessary."
+    },
+    "math": {
+      "title": "Mathematics Needed Here",
+      "text": [
+        "Why potential energy is negative. This often confuses, but there is nothing behind it except the choice of reference point. Imagine a pit. You are free to set zero at the bottom of the pit—then everything around is above zero. Or you can set zero at the ground level far away—then everything in the pit is below, i.e., negative. Physics does not change with the choice, only the numbers do. In gravity, the second option is more convenient: zero is set at infinity, and then negative energy immediately means 'sitting in a well, cannot get out on its own,' and positive means 'free, can escape.'",
+        "Where the square root of two comes from. Compare two tasks. To fly in a circle, you need energy covering half the depth of the well. To escape completely, you need the full depth. Energy is proportional to the square of velocity, so twice the energy corresponds not to twice the velocity, but to velocity multiplied by the square root of two. Hence the famous 11.2 vs 7.9 km/s. This ratio is the same for Earth, Moon, Sun, and any other body—it does not depend on mass or size.",
+        "What conic sections are in simple terms. Take a flashlight and shine it on a wall. Hold it straight—you get a circle on the wall. Tilt it—the circle stretches into an ellipse. Tilt it more so that the edge of the light cone becomes parallel to the wall—the ellipse opens into a parabola. Tilt even more—you get a hyperbola. All four curves are slices of a single cone at different angles, and exactly these curves appear as orbits. The ancient Greeks studied them as pure geometry two thousand years before it was discovered that planets move along them.",
+        "Why rocket mass grows exponentially. Each kilogram of fuel must be accelerated along with the rocket, so to accelerate it you need more fuel, and to accelerate that you need even more. This self-sustaining addition always gives an exponential: to add the same increment of velocity, you must multiply the initial mass by the same number each time. This is Tsiolkovsky's rocket equation. From it also follows why stages are needed: by discarding an empty tank, you stop paying for its acceleration."
+      ]
+    },
+    "example": {
+      "title": "Example with numbers: three cosmic velocities of Earth",
+      "lead": "We compute everything you need to know about space travel from just two numbers—the planet's mass and radius.",
+      "given": "Earth's mass $5{,}97\\cdot 10^{24}$ kg, radius $6{,}37\\cdot 10^{6}$ m, $G = 6{,}67\\cdot 10^{-11}$. Find the first and second cosmic velocities and the period of a low circular orbit.",
+      "law": "$v_{\\text{I}} = \\sqrt{GM/R}$, $\\;v_{\\text{II}} = \\sqrt{2}\\,v_{\\text{I}}$, $\\;T = 2\\pi R/v_{\\text{I}}$",
+      "solution": [
+        {
+          "text": "It is convenient to first compute the product $GM$ — it will be needed in all formulas and is known more accurately than the individual factors.",
+          "latex": "GM = 6{,}67\\cdot 10^{-11} \\cdot 5{,}97\\cdot 10^{24} \\approx 3{,}98\\cdot 10^{14}\\ \\text{м}^{3}/\\text{с}^{2}"
+        },
+        {
+          "text": "First cosmic velocity: the speed of a circular orbit at the very surface.",
+          "latex": "v_{\\text{I}} = \\sqrt{\\frac{3{,}98\\cdot 10^{14}}{6{,}37\\cdot 10^{6}}} = \\sqrt{6{,}25\\cdot 10^{7}} \\approx 7{,}9\\ \\text{км/с}"
+        },
+        {
+          "text": "Second cosmic velocity — simply $\\sqrt{2}$ times larger, no need to recompute.",
+          "latex": "v_{\\text{II}} = 1{,}414 \\cdot 7{,}9 \\approx 11{,}2\\ \\text{км/с}"
+        },
+        {
+          "text": "Orbital period of a low orbit.",
+          "latex": "T = \\frac{2\\pi \\cdot 6{,}37\\cdot 10^{6}}{7{,}9\\cdot 10^{3}} \\approx 5{,}07\\cdot 10^{3}\\ \\text{с} \\approx 84\\ \\text{мин}"
+        }
+      ],
+      "answer": "First cosmic velocity 7.9 km/s, second 11.2 km/s, low orbit period about 84 minutes.",
+      "check": "Check against known data: the International Space Station orbits Earth in 92 minutes — slightly longer than our 84 because it flies not at the surface but at an altitude of 400 km. What's remarkable is that these 84 minutes exactly equal twice the 42 minutes of falling through a tunnel from the previous section. This coincidence is not accidental — both problems are described by the same harmonic motion, one through the planet, the other around it."
+    },
+    "constants": {
+      "title": "Quantities from this section",
+      "lead": "Velocities worth remembering: they give a sense of scale for all of astronautics.",
+      "items": [
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "name": "Earth's first cosmic velocity",
+          "value": "7.9",
+          "unit": "km/s",
+          "why": "Minimum speed for a circular orbit. Anything slower will fall back to the surface; altitude hardly helps — it's the horizontal speed that matters.",
+          "mnemo": "Roughly 28,000 km/h — twenty times faster than a bullet and twenty-five times faster than a passenger jet."
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "name": "Earth's second cosmic velocity",
+          "value": "11.2",
+          "unit": "km/s",
+          "why": "Escape velocity: the body leaves Earth and does not return. Exactly $\\sqrt{2}$ times the first — a universal ratio for any celestial body.",
+          "mnemo": "On the Moon it's only 2.4 km/s — that's why it couldn't retain an atmosphere: gas molecules reach such speeds when heated by the Sun."
+        },
+        {
+          "sym": "GM",
+          "latex": "GM_{\\oplus}",
+          "name": "Earth's gravitational parameter",
+          "value": "3.986 × 10¹⁴",
+          "unit": "m³/s²",
+          "why": "In orbit calculations, the product is used rather than the individual factors: it has been measured from satellite motion to nine decimal places, whereas $G$ is known only to five.",
+          "mnemo": "A rare case where the product is known better than its factors: orbits are easy to measure, while the tiny $G$ is hard to measure in the lab."
+        },
+        {
+          "sym": "r_geo",
+          "latex": "r_{\\text{гсо}}",
+          "name": "Geostationary orbit radius",
+          "value": "4.22 × 10⁷",
+          "unit": "m",
+          "why": "Here the orbital period equals one day, and the satellite hovers over one point on the equator. It follows directly from Kepler's third law by plugging $T = 86400$ s.",
+          "mnemo": "This is about 36,000 km above the surface — nearly six Earth radii. A radio signal to the satellite and back takes a quarter of a second, hence the delay in satellite communications."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "How it works in practice",
+      "lead": "Three numbers — energy, angular momentum, and the mass of the central body — describe all of practical astronautics.",
+      "items": [
+        {
+          "h": "Hohmann transfer",
+          "text": "The most fuel-efficient path between circular orbits: accelerate at one point, fly half an ellipse, and accelerate again. All interplanetary probes use this. To Mars, such a transfer takes eight and a half months, and the launch window opens every 26 months."
+        },
+        {
+          "h": "Gravity assist",
+          "text": "Flying past a planet, the spacecraft steals a bit of its orbital energy — the planet slows by an unimaginably tiny amount, while the craft gains kilometers per second. The Voyagers left the Solar System with almost no fuel by using the rare planetary alignment of 1977."
+        },
+        {
+          "h": "Lagrange points",
+          "text": "There are five locations where the gravity of two bodies and the centrifugal effect balance. At the L2 point behind Earth sits the Webb Telescope: there the Sun, Earth, and Moon are always on one side, so a single shield can block them."
+        },
+        {
+          "h": "Why the Moon has no atmosphere",
+          "text": "The escape velocity on the Moon is 2.4 km/s, and the thermal speed of molecules during daytime heating is comparable. Gas escapes over geologically short times. The same calculation explains why Earth lacks free hydrogen while Jupiter has it."
+        },
+        {
+          "h": "Black hole as a limit",
+          "text": "If you compress a body, the escape velocity increases. Setting it equal to the speed of light gives the radius below which even light cannot escape. The Schwarzschild formula exactly matches this naive Newtonian estimate — a rare and completely accidental coincidence of classical and general relativity."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosities: Hands-On Check",
+      "lead": "Orbital mechanics is full of things that contradict the intuitive picture of motion.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Cone and Four Curves",
+          "text": "Take a flashlight with a narrow beam and shine it perpendicularly on a wall. Then slowly tilt it, watching the shape of the light spot.",
+          "answer": "Circle, ellipse, and when the cone's edge becomes parallel to the wall — an open parabola. Tilt further — hyperbola. All four orbits you saw on the stand are slices of one cone. Apollonius of Perga studied them around 200 BC as pure geometry, and for nearly two millennia these curves were considered useless beauty — until Kepler discovered that planets move along them."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "To Catch Up, Slow Down",
+          "text": "Your spacecraft is lagging behind a station on the same circular orbit. Instinct tells you to speed up to catch up. Astronauts know that the opposite is required. Why?",
+          "answer": "Speeding up raises you to a higher orbit, where the period is longer — you'll fall even further behind. The correct maneuver is the opposite: slow down, drop lower where the period is shorter, overtake the station from below, then speed up to climb back. This is one of the first things that breaks a novice's intuition, and a considerable part of training is spent on mastering it. Control in orbital mechanics is the opposite of all earthly experience."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "Newton Drew a Satellite 270 Years Before Launch",
+          "text": "The drawing of a cannon on a mountain appeared in the 'Principia' in 1687. Newton accurately described orbital motion, including the remark that with sufficient speed the cannonball would go around the Earth and return to the cannon from behind. The first real satellite flew in 1957. Two and a half centuries passed between calculation and realization — and that time was spent not on understanding, but on engineering: chemistry of fuel and metallurgy were needed."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Energy — Size, Angular Momentum — Shape",
+          "text": "Two control knobs for the orbit, and they are independent. Energy determines the semi-major axis and period, but says nothing about elongation. Angular momentum determines elongation, but not size. Want higher? Add energy. Want rounder? Add angular momentum—that is, accelerate perpendicularly, not along the direction of motion."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimation",
+          "h": "Escape Velocity of Any Body in Ten Seconds",
+          "text": "For a body with Earth's density, escape velocity is proportional to radius. Earth: 11.2 km/s. So for an asteroid a thousand times smaller in radius, it would be about 11 m/s — the speed of a good jump. From a small asteroid, a person can fly away by simply pushing off, and this is not a joke but a working consideration when planning landings."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "When Newton's Formula Is Not Enough",
+          "text": "As long as escape velocity is much less than the speed of light, classical physics works excellently. At the surface of a neutron star, it reaches half the speed of light, and general relativity is needed. Interestingly, a naive Newtonian calculation of the radius at which escape requires the speed of light gives exactly the Schwarzschild formula — but this is a coincidence, not a derivation: the correct explanation looks completely different."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Why Rockets Are So Big",
+      "lead": "Not part of the test. About the single exponential that shaped the entire look of astronautics.",
+      "blocks": [
+        {
+          "h": "Tsiolkovsky Rocket Equation",
+          "text": "The velocity increment equals the exhaust velocity multiplied by the logarithm of the initial mass to final mass ratio. Inverting: to achieve a given velocity, the initial mass must be multiplied by the exponential. The exhaust velocity of the best chemical engines is about 4.5 km/s, and we need to achieve about 9 km/s considering losses due to drag and gravity. So the mass ratio is about $e^{2} \\approx 7{,}4$ — meaning more than eighty percent of the launch mass is fuel."
+        },
+        {
+          "h": "Why Stages",
+          "text": "An empty tank, accelerated halfway, only gets in the way from then on — you have to drag it along with the remaining fuel. By dropping it, you reduce mass and get a new, more favorable exponential. Multi-stage rockets are not an elegant refinement but the only way to beat the math: a single-stage chemical rocket is theoretically possible, but almost no payload remains."
+        },
+        {
+          "h": "Why Altitude Doesn't Help",
+          "text": "Common misconception: to get into space, you need to go high. In fact, climbing to 100 km requires about thirty times less energy than accelerating to orbital speed. Space begins not where it is high, but where it is fast. The suborbital flight of a tourist rocket and reaching orbit differ not in altitude but in energy — by a factor of about thirty."
+        },
+        {
+          "h": "What Would Have Been Different",
+          "text": "If Earth were slightly more massive, the required speed would increase, and the rocket mass would increase exponentially. With a radius about one and a half times larger, a chemical rocket could no longer lift any payload to orbit at all. We happen to be on a planet from which it is possible to escape, but just barely — and this fact is sometimes offered as an answer to why astronautics is so expensive."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The type of orbit is determined by the sign of the total energy, its size by the magnitude of that energy, and its elongation by the angular momentum; the second cosmic velocity is always $\\sqrt{2}$ times the first.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}}",
+          "text": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}} = \\sqrt{2GM/r}$ — the $\\sqrt{2}$ ratio is universal"
+        },
+        {
+          "icon": "formula",
+          "title": "$E < 0$",
+          "text": "ellipse, $E = 0$ — parabola, $E > 0$ — hyperbola"
+        },
+        {
+          "icon": "sigma",
+          "title": "The period depends only",
+          "text": "The period depends only on the semi-major axis, i.e., only on the energy"
+        },
+        {
+          "icon": "ruler",
+          "title": "Descending lower, the satellite",
+          "text": "Descending lower, the satellite loses energy but gains speed"
+        },
+        {
+          "icon": "scale",
+          "title": "The mass of a",
+          "text": "The mass of a rocket grows exponentially with the required velocity — hence the stages"
+        }
+      ],
+      "where": "Orbit and transfer calculations, gravity assists, Lagrange points, retaining atmosphere by a planet, estimating the radius of a black hole.",
+      "watchOut": "Intuition from earthly motion systematically fails here: to catch up — slow down, to go higher — accelerate sideways, not upward."
+    },
+    "quiz": [
+      {
+        "id": "o1",
+        "type": "mcq",
+        "q": "The second cosmic velocity is exactly $\\sqrt{2}$ times greater than the first. For which bodies is this true?",
+        "options": [
+          "Only for Earth — other planets have a different ratio",
+          "For terrestrial planets, but not for gas giants",
+          "For any body in the Universe: both mass and radius cancel in the division",
+          "Only for bodies that have an atmosphere"
+        ],
+        "answer": 2,
+        "why": "Dividing $\\sqrt{2GM/r}$ by $\\sqrt{GM/r}$ gives $\\sqrt{2}$ — nothing remains of mass and radius. The ratio is the same for Earth, the Moon, the Sun, and a neutron star: it follows only from the fact that escape requires twice the energy of a circular orbit.",
+        "hint": "Simply divide one formula by the other and see what cancels."
+      },
+      {
+        "id": "o2",
+        "type": "mcq",
+        "q": "A satellite experiences drag from the thin upper atmosphere. What happens to its speed?",
+        "options": [
+          "It increases: the satellite descends lower, where the circular orbital speed is greater",
+          "It decreases — drag always slows things down",
+          "It does not change as long as the orbit remains circular",
+          "First it increases, then it decreases"
+        ],
+        "answer": 0,
+        "why": "The total energy indeed decreases, so the satellite descends. But the circular orbital speed increases as $1/\\sqrt{r}$: the potential energy drops twice as fast as the kinetic energy grows. Hence the paradox 'to catch up, slow down'.",
+        "hint": "Split the energy into two parts. Which one decreases and which increases as the orbit descends?"
+      },
+      {
+        "id": "o3",
+        "type": "free",
+        "q": "In your own words: why does the mass of a rocket grow exponentially with the required velocity, rather than proportionally?",
+        "keywords": [
+          "fuel",
+          "accelerate",
+          "carry",
+          "itself",
+          "haul",
+          "more fuel",
+          "exponential",
+          "multiply",
+          "need"
+        ],
+        "needed": 2,
+        "why": "Each portion of fuel must be accelerated along with the rocket, meaning that to accelerate it requires even more fuel, which in turn requires more. Such a self-reinforcing addition always yields an exponential: each new increment of speed requires multiplying the initial mass by the same factor. Hence the stages: a discarded tank no longer needs to be accelerated.",
+        "hint": "Ask yourself what happens to the fuel in the tank: does it only push the rocket, or does it also have to be carried along?"
+      },
+      {
+        "id": "o4",
+        "type": "estimate",
+        "q": "The first cosmic velocity of Earth is 7.9 km/s. What is the first cosmic velocity at an altitude of one Earth radius above the surface, i.e., at twice the distance from the center? In km/s.",
+        "answer": 5.6,
+        "unit": "km/s",
+        "tolerance": 0.6,
+        "why": "Speed decreases as $1/\\sqrt{r}$: doubling the distance divides the speed by $\\sqrt{2}$. We get 7.9/1.41 ≈ 5.6 km/s. Notice the curious symmetry: it is the same division by the square root of two that relates the first and second cosmic velocities, but applied to distance rather than energy.",
+        "hint": "Circular orbital speed is the square root of GM divided by r. How does it change if r is doubled?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Órbitas y velocidades cósmicas",
+    "subtitle": "Párrafo 2 · Círculo, elipse, parábola — una fuerza, diferentes velocidades",
+    "intro": [
+      "Un cañón en la cima de una montaña muy alta. Carga débil — la bala cae al pie. Más fuerte — cae más lejos. Aún más fuerte — y se va tras el horizonte. Y a cierta velocidad ocurre algo asombroso: la bala cae todo el tiempo, pero la superficie de la Tierra se aleja de ella exactamente a la misma velocidad, y nunca llega a aterrizar.",
+      "Newton incluyó este dibujo en los 'Principia', y sigue siendo la mejor explicación de lo que es una órbita. El satélite no flota ni vence la gravedad — cae continuamente y continuamente falla.",
+      "De la misma ley se obtienen cuatro curvas diferentes, y la elección entre ellas la hace un único número: la velocidad inicial. Lento — elipse alargada hacia adentro. Exactamente lo necesario — círculo. Más rápido — elipse hacia afuera. Aún más rápido — y el cuerpo nunca regresará."
+    ],
+    "standNote": "El cuerpo siempre parte del mismo punto a la misma distancia, solo se fija la velocidad. Recorra todo el rango en orden y observe la etiqueta en la esquina superior izquierda. Con 1,00 se obtiene un círculo. Por debajo — una elipse donde el punto de partida se convierte en el más lejano. Por encima — una elipse donde el punto de partida se vuelve el más cercano. Con 1,41 la curva deja de cerrarse: es la segunda velocidad cósmica, exactamente la raíz cuadrada de dos veces la circular. Las barras de la derecha muestran por qué: la energía total cruza el cero.",
+    "formula": {
+      "name": "Energía de la órbita y velocidades cósmicas",
+      "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
+      "alsoKnown": "Integral de la energía · fórmula de las fuerzas vivas (vis viva)",
+      "authors": [
+        {
+          "who": "Isaac Newton",
+          "year": "1687",
+          "what": "dibujó el famoso cañón en la montaña, mostrando que el movimiento orbital y la caída son lo mismo. El dibujo explicaba la idea mejor de lo que las fórmulas de la época habrían podido hacer."
+        },
+        {
+          "who": "Johann Bernoulli",
+          "year": "1710",
+          "what": "obtuvo la relación que vincula la velocidad con la distancia y el tamaño de la órbita. Todavía se le llama fórmula de las fuerzas vivas, por el antiguo nombre de la energía cinética introducido por Leibniz."
+        },
+        {
+          "who": "Konstantin Tsiolkovski",
+          "year": "1903",
+          "what": "dedujo la ecuación del movimiento de un cohete y fue el primero en calcular la velocidad necesaria para alcanzar la órbita. Trabajó como maestro de escuela en Kaluga y fue casi sordo desde la infancia."
+        },
+        {
+          "who": "Walter Hohmann",
+          "year": "1925",
+          "what": "encontró la forma más económica de transferencia entre órbitas circulares: dos encendidos del motor y una elipse entre ellas. Todas las sondas interplanetarias vuelan por su trayectoria hasta el día de hoy."
+        }
+      ],
+      "story": "Especialmente instructiva es la historia de la primera velocidad cósmica, que a veces se presenta como un logro técnico. En realidad, la dificultad nunca estuvo en la velocidad en sí: 7,9 km/s es solo veinte veces más rápido que una bala. La dificultad radica en que el combustible debe acelerarse junto con el cohete, por lo que la masa crece exponencialmente con la velocidad requerida. Tsiolkovski lo dedujo en 1903 y demostró que un cohete de una sola etapa con el combustible de entonces era imposible en principio. De ahí nació la idea de las etapas: desechar los tanques vacíos para no acelerarlos más. Toda la astronáutica surgió de la lucha contra una sola exponencial.",
+      "symbols": [
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "energía mecánica total",
+          "unit": "J",
+          "note": "negativa para órbitas cerradas: el cuerpo está en un pozo y sin un aporte no saldrá"
+        },
+        {
+          "sym": "a",
+          "latex": "a",
+          "what": "semieje mayor",
+          "unit": "m",
+          "note": "determinado solo por la energía; la forma de la órbita puede ser cualquiera"
+        },
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "what": "primera velocidad cósmica",
+          "unit": "m/s",
+          "note": "$\\sqrt{GM/R}$ — mínima para una órbita circular en la superficie"
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "what": "segunda velocidad cósmica (velocidad de escape)",
+          "unit": "m/s",
+          "note": "$\\sqrt{2GM/R}$ — exactamente $\\sqrt{2}$ veces la primera, siempre y para cualquier cuerpo"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "momento angular",
+          "unit": "kg·m²/s",
+          "note": "junto con la energía define la órbita unívocamente: la energía da el tamaño, el momento da la excentricidad"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Deducción rigurosa: de la energía a las cuatro curvas",
+      "lead": "Todo resulta de dos magnitudes que se conservan. La energía indica el tamaño de la órbita, el momento angular indica cuán alargada es.",
+      "steps": [
+        {
+          "text": "Escribamos la energía potencial gravitatoria. La referencia se toma desde el infinito, por lo que es negativa: para alejar el cuerpo se debe realizar trabajo, por lo tanto cerca el cuerpo se encuentra en un pozo.",
+          "latex": "E_{\\text{п}} = -\\frac{GMm}{r}",
+          "figure": "anywell",
+          "figCaption": "Pozo gravitatorio: cuanto más cerca del centro, más profundo. El cero se sitúa en el infinito."
+        },
+        {
+          "text": "La energía total se conserva porque la gravedad es conservativa: el trabajo no depende de la trayectoria. De aquí se ve inmediatamente lo que el cuerpo puede alcanzar: donde la velocidad se volvería imaginaria, simplemente no existe.",
+          "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = \\text{const} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{2E}{m} + \\frac{2GM}{r}}",
+          "figure": "energyswap",
+          "figCaption": "La energía cinética y potencial se transforman mutuamente; la suma es constante. La gráfica bajo el panel muestra precisamente esta dependencia."
+        },
+        {
+          "text": "Ya obtuvimos la condición para una órbita circular: la atracción se emplea completamente en la rotación. De aquí la primera velocidad cósmica.",
+          "latex": "\\frac{GMm}{r^{2}} = \\frac{mv^{2}}{r} \\;\\Longrightarrow\\; v_{\\text{I}} = \\sqrt{\\frac{GM}{r}}",
+          "figure": "centripetal",
+          "figCaption": "Velocidad justo tal que la caída se compensa exactamente con la curvatura de la superficie."
+        },
+        {
+          "text": "La condición de escape es diferente: el cuerpo debe llegar al infinito, donde la energía potencial es cero. Por lo tanto, la energía total debe ser al menos cero.",
+          "latex": "\\frac{mv^{2}}{2} - \\frac{GMm}{r} \\geq 0 \\;\\Longrightarrow\\; v_{\\text{II}} = \\sqrt{\\frac{2GM}{r}} = \\sqrt{2}\\,v_{\\text{I}}",
+          "figure": "work",
+          "figCaption": "La segunda velocidad cósmica es exactamente raíz de dos veces la primera, para cualquier cuerpo en el universo."
+        },
+        {
+          "text": "Ahora el panorama general. El signo de la energía total determina el tipo de trayectoria, y no hay otras opciones. Negativa: el cuerpo está atrapado en el pozo, órbita cerrada. Cero: caso límite. Positiva: el cuerpo escapa y continúa moviéndose hasta el infinito.",
+          "latex": "E < 0:\\ \\text{elipse}, \\quad E = 0:\\ \\text{parábola}, \\quad E > 0:\\ \\text{hipérbola}",
+          "figure": "curves",
+          "figCaption": "Cuatro secciones cónicas: cuatro signos de energía. El tipo de órbita se decide con un solo número."
+        },
+        {
+          "text": "El tamaño de la órbita depende solo de la energía, y la forma del momento angular. Esta es una división importante: dos órbitas con la misma energía tienen el mismo período, sin importar cuán diferentes se vean.",
+          "latex": "a = -\\frac{GMm}{2E}, \\qquad e = \\sqrt{1 + \\frac{2EL^{2}}{G^{2}M^{2}m^{3}}}",
+          "figure": "result",
+          "figCaption": "La energía determina el semieje mayor y el período; el momento angular determina la excentricidad. Dos controles independientes."
+        },
+        {
+          "text": "Y una consecuencia por la cual la astronáutica es más complicada de lo que parece. La energía total de una órbita ligada es igual a la mitad de la potencial, y la cinética es menos la mitad de la total. Al bajar un satélite, disminuimos la energía total pero aumentamos la velocidad.",
+          "latex": "E = -\\frac{GMm}{2a}, \\qquad E_{\\text{к}} = -E, \\qquad r \\downarrow \\;\\Rightarrow\\; v \\uparrow",
+          "figure": "energy",
+          "figCaption": "Teorema del virial para la órbita: la fricción con las capas superiores de la atmósfera acelera el satélite."
+        }
+      ],
+      "plate": "El signo de la energía decide si el cuerpo regresa o no; la magnitud de la energía determina el tamaño de la órbita y el período; el momento angular determina la excentricidad. Tres números describen todo el movimiento.",
+      "note": "Límites de aplicabilidad. Las fórmulas se derivaron para un centro puntual y un solo satélite. La Tierra real no es una esfera perfecta: su achatamiento hace que el plano orbital gire lentamente, y esto se tiene en cuenta al colocar satélites en órbitas heliosincrónicas, y a veces se usa intencionalmente. Además, cerca de cuerpos muy masivos las fórmulas newtonianas dejan de funcionar: en la superficie de una estrella de neutrones, la segunda velocidad cósmica ya es la mitad de la velocidad de la luz, y no se puede prescindir de la relatividad."
+    },
+    "math": {
+      "title": "Las matemáticas que se necesitan aquí",
+      "text": [
+        "Por qué la energía potencial es negativa. Esto a menudo causa confusión, aunque no hay nada más que la elección del punto de referencia. Imagine un pozo. Puede considerar el fondo del pozo como cero, entonces todo alrededor está por encima de cero. O puede considerar la superficie de la tierra a lo lejos como cero, entonces todo en el pozo está por debajo, es decir, negativo. La física no cambia con la elección, solo cambian los números. En la gravedad, el segundo caso es más conveniente: el cero se coloca en el infinito, y entonces la energía negativa significa inmediatamente 'está en el pozo, no puede salir por sí mismo', y la positiva significa 'libre, puede irse'.",
+        "De dónde viene la raíz de dos. Compare dos problemas. Para volar en círculo se necesita energía que cubra la mitad de la profundidad del pozo. Para escapar completamente se necesita la profundidad total. La energía es proporcional al cuadrado de la velocidad, por lo tanto, al doble de energía le corresponde no el doble de velocidad, sino un aumento en la raíz de dos. De ahí los famosos 11,2 frente a 7,9 km/s. Esta relación es la misma para la Tierra, la Luna, el Sol y cualquier otro cuerpo: no depende ni de la masa ni del tamaño.",
+        "Qué son las secciones cónicas de forma simple. Tome una linterna y apunte a una pared. Manteniéndola recta, obtiene un círculo en la pared. Incline: el círculo se estira formando una elipse. Incline más, de modo que el borde del cono de luz sea paralelo a la pared: la elipse se abre en una parábola. Incline aún más: obtendrá una hipérbola. Las cuatro curvas son cortes de un mismo cono con diferentes ángulos, y son exactamente las mismas que se obtienen como órbitas. Los antiguos griegos las estudiaron como geometría pura dos mil años antes de que se descubriera que los planetas se mueven en ellas.",
+        "Por qué la masa del cohete crece exponencialmente. Cada kilogramo de combustible debe acelerarse junto con el cohete, por lo tanto, para acelerarlo se necesita más combustible, y para ese aún más. Esta adición autocontenida siempre da una exponencial: para agregar un mismo incremento de velocidad, hay que multiplicar la masa inicial por el mismo número cada vez. Esta es la fórmula de Tsiolkovsky. De ella se deduce por qué las etapas: al desechar un tanque vacío, se deja de pagar por su aceleración."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: las tres velocidades cósmicas de la Tierra",
+      "lead": "Calculamos todo lo que hay que saber para salir al espacio a partir de solo dos números: la masa y el radio del planeta.",
+      "given": "Masa de la Tierra $5{,}97\\cdot 10^{24}$ kg, radio $6{,}37\\cdot 10^{6}$ m, $G = 6{,}67\\cdot 10^{-11}$. Hallar la primera y segunda velocidades cósmicas y el período de una órbita circular baja.",
+      "law": "$v_{\\text{I}} = \\sqrt{GM/R}$, $\\;v_{\\text{II}} = \\sqrt{2}\\,v_{\\text{I}}$, $\\;T = 2\\pi R/v_{\\text{I}}$",
+      "solution": [
+        {
+          "text": "Conviene calcular primero el producto $GM$; aparecerá en todas las fórmulas y se conoce con más precisión que los factores por separado.",
+          "latex": "GM = 6{,}67\\cdot 10^{-11} \\cdot 5{,}97\\cdot 10^{24} \\approx 3{,}98\\cdot 10^{14}\\ \\text{м}^{3}/\\text{с}^{2}"
+        },
+        {
+          "text": "Primera velocidad cósmica: velocidad de una órbita circular justo en la superficie.",
+          "latex": "v_{\\text{I}} = \\sqrt{\\frac{3{,}98\\cdot 10^{14}}{6{,}37\\cdot 10^{6}}} = \\sqrt{6{,}25\\cdot 10^{7}} \\approx 7{,}9\\ \\text{км/с}"
+        },
+        {
+          "text": "La segunda velocidad cósmica es simplemente la primera multiplicada por raíz de dos; no hace falta volver a calcular.",
+          "latex": "v_{\\text{II}} = 1{,}414 \\cdot 7{,}9 \\approx 11{,}2\\ \\text{км/с}"
+        },
+        {
+          "text": "Período de una órbita baja.",
+          "latex": "T = \\frac{2\\pi \\cdot 6{,}37\\cdot 10^{6}}{7{,}9\\cdot 10^{3}} \\approx 5{,}07\\cdot 10^{3}\\ \\text{с} \\approx 84\\ \\text{мин}"
+        }
+      ],
+      "answer": "Primera velocidad cósmica 7,9 km/s, segunda 11,2 km/s, período de órbita baja unos 84 minutos.",
+      "check": "Comprobación con datos conocidos: la Estación Espacial Internacional orbita la Tierra en 92 minutos — un poco más que nuestros 84, porque no vuela en la superficie sino a 400 km de altitud. Notable: esos 84 minutos son exactamente el doble de los 42 minutos de caída a través del túnel del párrafo anterior. La coincidencia no es casual: ambos problemas describen el mismo movimiento armónico, solo que uno atraviesa el planeta y el otro lo rodea."
+    },
+    "constants": {
+      "title": "Magnitudes de este párrafo",
+      "lead": "Velocidades que vale la pena recordar: dan una sensación de escala para toda la astronáutica.",
+      "items": [
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "name": "Primera velocidad cósmica de la Tierra",
+          "value": "7,9",
+          "unit": "км / с",
+          "why": "Velocidad mínima para una órbita circular. Todo lo más lento regresa a la superficie; la altura apenas importa — lo decisivo es la velocidad horizontal.",
+          "mnemo": "Unos 28 000 km/h — veinte veces más rápido que una bala y veinticinco veces más que un avión de pasajeros."
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "name": "Segunda velocidad cósmica de la Tierra",
+          "value": "11,2",
+          "unit": "км / с",
+          "why": "Velocidad de escape: con ella un cuerpo abandona la Tierra y no regresa. Es exactamente $\\sqrt{2}$ veces la primera — relación universal para cualquier cuerpo celeste.",
+          "mnemo": "En la Luna es solo 2,4 km/s — por eso no retuvo atmósfera: las moléculas de gas alcanzan esas velocidades con el calor diurno."
+        },
+        {
+          "sym": "GM",
+          "latex": "GM_{\\oplus}",
+          "name": "Parámetro gravitacional de la Tierra",
+          "value": "3,986 · 10¹⁴",
+          "unit": "м³ / с²",
+          "why": "En cálculos orbitales se usa el producto en lugar de los factores por separado: está medido mediante el movimiento de satélites con precisión de nueve cifras, mientras que $G$ se conoce solo hasta la quinta.",
+          "mnemo": "Raro caso en que el producto se conoce mejor que los factores: medir órbitas es fácil, pero la pequeña $G$ en laboratorio es difícil."
+        },
+        {
+          "sym": "r_geo",
+          "latex": "r_{\\text{гсо}}",
+          "name": "Radio de la órbita geoestacionaria",
+          "value": "4,22 · 10⁷",
+          "unit": "м",
+          "why": "Aquí el período orbital es de un día y el satélite permanece sobre un mismo punto del ecuador. Se obtiene directamente de la tercera ley de Kepler sustituyendo $T = 86400$ s.",
+          "mnemo": "Unos 36 000 km sobre la superficie — casi seis radios terrestres. La señal de radio al satélite y de vuelta tarda un cuarto de segundo, de ahí el retardo en las comunicaciones por satélite."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Cómo funciona en la práctica",
+      "lead": "Tres números — energía, momento angular y masa del cuerpo central — describen toda la astronáutica práctica.",
+      "items": [
+        {
+          "h": "Transferencia de Hohmann",
+          "text": "La ruta más económica entre órbitas circulares: acelerar en un punto, recorrer media elipse y acelerar de nuevo. Así viajan todas las sondas interplanetarias. A Marte, una transferencia así dura ocho meses y medio, y la ventana de lanzamiento se abre cada 26 meses."
+        },
+        {
+          "h": "Asistencia gravitatoria",
+          "text": "Al pasar cerca de un planeta, la nave le roba un poco de energía orbital — el planeta frena una cantidad inimaginablemente pequeña, la nave acelera kilómetros por segundo. Las Voyager abandonaron el sistema solar casi sin combustible, aprovechando la rara alineación planetaria de 1977."
+        },
+        {
+          "h": "Puntos de Lagrange",
+          "text": "Hay cinco lugares donde la atracción de dos cuerpos y el efecto centrífugo se equilibran. En el punto L2, detrás de la Tierra, se encuentra el telescopio Webb: allí el Sol, la Tierra y la Luna quedan siempre al mismo lado y se puede proteger con un solo escudo."
+        },
+        {
+          "h": "Por qué la Luna no tiene atmósfera",
+          "text": "La segunda velocidad cósmica en la Luna es 2,4 km/s, y la velocidad térmica de las moléculas con el calor diurno es comparable. El gas se escapa en un tiempo geológicamente corto. El mismo cálculo explica por qué la Tierra no tiene hidrógeno libre, mientras que Júpiter sí."
+        },
+        {
+          "h": "El agujero negro como límite",
+          "text": "Si se comprime un cuerpo, la segunda velocidad cósmica crece. Igualándola a la velocidad de la luz se obtiene el radio por debajo del cual ni la luz puede escapar. La fórmula de Schwarzschild coincide exactamente con esta estimación newtoniana ingenua — una coincidencia rara y totalmente casual entre la mecánica clásica y la relatividad general."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: compruébelo usted mismo",
+      "lead": "La mecánica orbital está llena de cosas que contradicen la imagen intuitiva del movimiento.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "El cono y las cuatro curvas",
+          "text": "Tome una linterna con haz estrecho y apunte perpendicularmente a una pared. Luego inclínela lentamente, observando la forma de la mancha de luz.",
+          "answer": "Círculo, elipse, y cuando el borde del cono sea paralelo a la pared, una parábola abierta. Incline más: una hipérbola. Las cuatro órbitas que vio en el panel son secciones de un mismo cono. Apolonio de Perga las estudió alrededor del año 200 a.C. como geometría pura, y durante casi dos milenios estas curvas fueron consideradas belleza inútil, hasta que Kepler descubrió que los planetas se mueven en ellas."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Para alcanzar, frena",
+          "text": "Su nave va rezagada respecto a la estación en la misma órbita circular. El instinto dice acelerar para alcanzarla. Los astronautas saben que hay que hacer lo contrario. ¿Por qué?",
+          "answer": "Acelerar lo eleva a una órbita más alta, donde el período es mayor, y usted se rezagará aún más. La maniobra correcta es la opuesta: frene, descienda a una órbita más baja donde el período es más corto, adelante a la estación desde abajo, y luego acelere para elevarse de nuevo. Esta es una de las primeras cosas que rompe la intuición de los principiantes, y dedicarle una buena parte del entrenamiento. El control en mecánica orbital es opuesto a toda experiencia terrestre."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Newton dibujó un satélite 270 años antes de su lanzamiento",
+          "text": "El dibujo del cañón en la montaña apareció en los 'Principia' en 1687. Newton describió con precisión el movimiento orbital, incluida la observación de que con suficiente velocidad la bala daría la vuelta a la Tierra y volvería al cañón por detrás. El primer satélite real voló en 1957. Entre el cálculo y la realización pasaron dos siglos y medio, y no se dedicaron a la comprensión sino a la ingeniería: se necesitaba química de combustibles y metalurgia."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Energía: tamaño, momento: forma",
+          "text": "Dos controles de la órbita, y son independientes. La energía determina el semieje mayor y el período, pero no dice nada sobre la excentricidad. El momento angular determina la excentricidad, pero no el tamaño. ¿Quiere más alto? Añada energía. ¿Quiere más circular? Añada momento, es decir, acelere transversalmente, no longitudinalmente."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Velocidad de escape de cualquier cuerpo en diez segundos",
+          "text": "Para un cuerpo de densidad terrestre, la velocidad de escape es proporcional al radio. La Tierra: 11,2 km/s. Para un asteroide con radio mil veces menor, sería unos 11 m/s, la velocidad de un buen salto. Desde un asteroide pequeño, una persona podría escapar simplemente impulsándose, y no es una broma, sino una consideración práctica al planificar aterrizajes."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Cuando la fórmula newtoniana no es suficiente",
+          "text": "Mientras la velocidad de escape sea mucho menor que la velocidad de la luz, la mecánica clásica funciona perfectamente. En la superficie de una estrella de neutrones alcanza la mitad de la velocidad de la luz, y allí se necesita la relatividad general. Es curioso que el cálculo newtoniano ingenuo del radio en el que la velocidad de escape iguala la de la luz da exactamente la fórmula de Schwarzschild, pero es una coincidencia, no una deducción: la explicación correcta es completamente diferente."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: por qué los cohetes son tan grandes",
+      "lead": "No forma parte del examen. Sobre la única exponencial que definió la apariencia de toda la astronáutica.",
+      "blocks": [
+        {
+          "h": "Ecuación de Tsiolkovski",
+          "text": "El incremento de velocidad es igual a la velocidad de escape de los gases multiplicada por el logaritmo de la relación entre la masa inicial y la final. Invirtiéndola: para alcanzar una velocidad dada, la masa inicial debe multiplicarse por la exponencial. La velocidad de escape de los mejores motores químicos es de unos 4,5 km/s, y se necesitan aproximadamente 9 km/s considerando pérdidas por resistencia y gravedad. Por lo tanto, la relación de masas es de aproximadamente $e^{2} \\approx 7{,}4$, es decir, más del ochenta por ciento de la masa inicial es combustible."
+        },
+        {
+          "h": "Para qué las etapas",
+          "text": "Un tanque vacío, acelerado hasta la mitad del camino, solo estorba: hay que arrastrarlo con el combustible restante. Al desecharlo, se reduce la masa y se obtiene una nueva exponencial más favorable. La segmentación no es una mejora elegante, sino la única manera de sortear las matemáticas: un cohete de una sola etapa con combustible químico es teóricamente posible, pero apenas deja carga útil."
+        },
+        {
+          "h": "Por qué no ayuda la altura",
+          "text": "Un error común: para llegar al espacio hay que subir muy alto. En realidad, subir 100 km requiere treinta veces menos energía que acelerar hasta la velocidad orbital. El espacio no comienza donde es alto, sino donde es rápido. Un vuelo suborbital de un cohete turístico y una inserción orbital no se diferencian en altitud, sino en energía, aproximadamente treinta veces."
+        },
+        {
+          "h": "Y qué habría sido diferente",
+          "text": "Si la Tierra fuera un poco más masiva, la velocidad requerida aumentaría, y la masa del cohete, exponencialmente. Con un radio aproximadamente una vez y media mayor, un cohete químico ya no podría poner carga útil en órbita. Estamos en un planeta desde el que es posible escapar, pero apenas, y esta circunstancia se cita a veces como respuesta a por qué la astronáutica es tan cara."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "El tipo de órbita está determinado por el signo de la energía total, el tamaño por su magnitud, la excentricidad por el momento angular; la segunda velocidad cósmica es siempre $\\sqrt{2}$ veces mayor que la primera.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}}",
+          "text": "$v_{\\text{I}} = \\sqrt{GM/r}$, $v_{\\text{II}} = \\sqrt{2GM/r}$ — la relación $\\sqrt{2}$ es universal"
+        },
+        {
+          "icon": "formula",
+          "title": "$E < 0$",
+          "text": "elipse, $E = 0$ — parábola, $E > 0$ — hipérbola"
+        },
+        {
+          "icon": "sigma",
+          "title": "El período depende solo",
+          "text": "El período depende solo del semieje mayor, es decir, solo de la energía"
+        },
+        {
+          "icon": "ruler",
+          "title": "Al descender, el satélite",
+          "text": "Al descender, el satélite pierde energía pero gana velocidad"
+        },
+        {
+          "icon": "scale",
+          "title": "La masa del cohete",
+          "text": "La masa del cohete crece exponencialmente con la velocidad requerida — de ahí las etapas"
+        }
+      ],
+      "where": "Cálculo de órbitas y transferencias, maniobras gravitatorias, puntos de Lagrange, retención de la atmósfera por un planeta, estimación del radio de un agujero negro.",
+      "watchOut": "La intuición del movimiento terrestre aquí falla sistemáticamente: para alcanzar, frena; para ascender, acelera hacia los lados, no hacia arriba."
+    },
+    "quiz": [
+      {
+        "id": "o1",
+        "type": "mcq",
+        "q": "La segunda velocidad cósmica es exactamente $\\sqrt{2}$ veces mayor que la primera. ¿Para qué cuerpos es esto cierto?",
+        "options": [
+          "Solo para la Tierra — en otros planetas la relación es diferente",
+          "Para planetas terrestres, pero no para gigantes gaseosos",
+          "Para cualquier cuerpo en el Universo: tanto la masa como el radio se cancelan al dividir",
+          "Solo para cuerpos que tienen atmósfera"
+        ],
+        "answer": 2,
+        "why": "Al dividir $\\sqrt{2GM/r}$ entre $\\sqrt{GM/r}$, obtenemos $\\sqrt{2}$ — no queda nada de la masa ni del radio. La relación es la misma para la Tierra, la Luna, el Sol y una estrella de neutrones: solo se deriva de que para escapar se necesita el doble de energía que para una órbita circular.",
+        "hint": "Simplemente divida una fórmula entre la otra y vea qué se cancela."
+      },
+      {
+        "id": "o2",
+        "type": "mcq",
+        "q": "Un satélite es frenado por las capas superiores y tenues de la atmósfera. ¿Qué sucede con su velocidad?",
+        "options": [
+          "Aumenta: el satélite desciende y allí la velocidad circular es mayor",
+          "Disminuye — el frenado siempre frena",
+          "No cambia mientras la órbita permanezca circular",
+          "Primero aumenta, luego disminuye"
+        ],
+        "answer": 0,
+        "why": "La energía total realmente disminuye, por lo que el satélite desciende. Pero la velocidad circular crece como $1/\\sqrt{r}$: la energía potencial cae el doble de rápido de lo que crece la cinética. De ahí la paradoja de 'para alcanzar, frena'.",
+        "hint": "Divida la energía en dos partes. ¿Cuál disminuye y cuál aumenta al bajar la órbita?"
+      },
+      {
+        "id": "o3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué la masa del cohete crece exponencialmente con la velocidad requerida y no proporcionalmente?",
+        "keywords": [
+          "combustible",
+          "acelerar",
+          "transportar",
+          "a sí mismo",
+          "llevar",
+          "más combustible",
+          "exponencial",
+          "multiplicar",
+          "arrastrar"
+        ],
+        "needed": 2,
+        "why": "Cada porción de combustible debe ser acelerada junto con el cohete, por lo que para acelerarla se necesita más combustible, y para ese aún más. Esta adición auto-sostenida siempre da una exponencial: cada nuevo incremento de velocidad requiere multiplicar la masa inicial por el mismo número. De ahí las etapas: el tanque desechado ya no necesita ser acelerado.",
+        "hint": "Pregúntate qué sucede con el combustible en el tanque: ¿solo empuja el cohete o también hay que transportarlo?"
+      },
+      {
+        "id": "o4",
+        "type": "estimate",
+        "q": "La primera velocidad cósmica de la Tierra es 7,9 км/с. ¿Cuál es la primera velocidad cósmica a una altura de un radio terrestre sobre la superficie, es decir, al doble de distancia del centro? En км/с.",
+        "answer": 5.6,
+        "unit": "км/с",
+        "tolerance": 0.6,
+        "why": "La velocidad disminuye como $1/\\sqrt{r}$: al duplicar la distancia, dividimos la velocidad por $\\sqrt{2}$. Obtenemos 7,9/1,41 ≈ 5,6 км/с. Observe la curiosa simetría: es la misma división por raíz de dos que relaciona la primera y la segunda velocidad cósmica, pero aplicada a la distancia, no a la energía.",
+        "hint": "La velocidad circular es la raíz de GM dividido por r. ¿Cómo cambia si se duplica r?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "المدارات والسرعات الكونية",
+    "subtitle": "الفقرة 2 · دائرة، قطع ناقص، قطع مكافئ — قوة واحدة، سرعات مختلفة",
+    "intro": [
+      "مدفع على قمة جبل عالٍ جدًا. شحنة ضعيفة — تسقط القذيفة عند سفح الجبل. أقوى — تسقط أبعد. أقوى من ذلك — وتختفي وراء الأفق. وعند سرعة معينة يحدث شيء مذهل: القذيفة تسقط طوال الوقت، لكن سطح الأرض يبتعد عنها بنفس السرعة تمامًا، ولا يحدث هبوط أبدًا.",
+      "وضع نيوتن هذا الرسم في كتابه «الأصول الرياضية للفلسفة الطبيعية»، ولا يزال أفضل شرح لماهية المدار. القمر الصناعي لا يطفو ولا يتغلب على الجاذبية — إنه يسقط باستمرار ويخطئ باستمرار.",
+      "من نفس القانون نحصل على أربعة منحنيات مختلفة، والاختيار بينها يحدده رقم واحد — السرعة الابتدائية. ببطء — قطع ناقص ممتد للداخل. بقدر ما يلزم تمامًا — دائرة. أسرع — قطع ناقص للخارج. أسرع من ذلك — ولن يعود الجسم أبدًا."
+    ],
+    "standNote": "يبدأ الجسم دائمًا من نقطة واحدة على نفس المسافة، أنت تحدد السرعة فقط. مر عبر النطاق الكامل بالترتيب وتابع التسمية في أعلى اليسار. عند 1,00 تحصل على دائرة. أقل من ذلك — قطع ناقص تصبح نقطة البداية فيه أبعد نقطة. أعلى — قطع ناقص تصبح البداية فيه أقرب نقطة. عند 1,41 يتوقف المنحنى عن الانغلاق: هذه هي السرعة الكونية الثانية، بالضبط الجذر التربيعي لاثنين من السرعة الدائرية. الأعمدة على اليمين تظهر لماذا: الطاقة الكلية عندها تعبر الصفر.",
+    "formula": {
+      "name": "طاقة المدار والسرعات الكونية",
+      "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
+      "alsoKnown": "تكامل الطاقة · معادلة القوى الحية (vis viva)",
+      "authors": [
+        {
+          "who": "Исаак Ньютон",
+          "year": "1687",
+          "what": "رسم المدفع الشهير على الجبل، موضحًا أن الحركة المدارية والسقوط هما نفس الشيء. شرح الرسم الفكرة أفضل مما كانت ستفعله صيغ ذلك الزمان."
+        },
+        {
+          "who": "Иоганн Бернулли",
+          "year": "1710",
+          "what": "حصل على العلاقة التي تربط السرعة بالمسافة وحجم المدار. لا تزال تسمى معادلة القوى الحية — نسبة للاسم القديم للطاقة الحركية الذي أدخله لايبنتس."
+        },
+        {
+          "who": "Константин Циолковский",
+          "year": "1903",
+          "what": "اشتق معادلة حركة الصاروخ وكان أول من حسب السرعة اللازمة للوصول إلى المدار. عمل مدرسًا في المدرسة في كالوغا وكان شبه أصم منذ الطفولة."
+        },
+        {
+          "who": "Вальтер Гоман",
+          "year": "1925",
+          "what": "وجد الطريقة الأكثر اقتصادية للانتقال بين المدارات الدائرية: تشغيل المحرك مرتين وقطع ناقص بينهما. لا تزال جميع المحطات بين الكواكب تطير على مساره حتى اليوم."
+        }
+      ],
+      "story": "قصة السرعة الكونية الأولى مفيدة بشكل خاص، حيث تُقدم أحيانًا كإنجاز تقني. في الواقع، لم تكن الصعوبة أبدًا في السرعة بذاتها: 7,9 كم/ث هي أسرع بعشرين مرة فقط من الرصاصة. الصعوبة تكمن في أنه يجب تسريع الوقود مع الصاروخ، وبالتالي تزداد الكتلة أضعافًا مضاعفة مع السرعة المطلوبة. اشتق تسيولكوفسكي هذا في عام 1903 وأظهر أن صاروخًا أحادي المرحلة بالوقود آنذاك مستحيل من حيث المبدأ. من هنا ولدت فكرة المراحل: التخلص من الخزانات الفارغة لتجنب تسريعها أكثر. كل علم الفضاء نشأ من الصراع مع دالة أسية واحدة."
+    },
+    "symbols": [
+      {
+        "sym": "E",
+        "latex": "E",
+        "what": "الطاقة الميكانيكية الكلية",
+        "unit": "Дж",
+        "note": "سالبة للمدارات المغلقة: الجسم في حفرة ولن يخرج بدون إضافة طاقة"
+      },
+      {
+        "sym": "a",
+        "latex": "a",
+        "what": "نصف المحور الأكبر",
+        "unit": "м",
+        "note": "يُحدد بالطاقة فقط؛ شكل المدار يمكن أن يكون أيًا كان"
+      },
+      {
+        "sym": "v1",
+        "latex": "v_{\\text{I}}",
+        "what": "السرعة الكونية الأولى",
+        "unit": "м/с",
+        "note": "$\\sqrt{GM/R}$ — الحد الأدنى لمدار دائري قرب السطح"
+      },
+      {
+        "sym": "v2",
+        "latex": "v_{\\text{II}}",
+        "what": "السرعة الكونية الثانية (سرعة الإفلات)",
+        "unit": "м/с",
+        "note": "$\\sqrt{2GM/R}$ — أكبر من الأولى بمعامل $\\sqrt{2}$ بالضبط، دائمًا ولأي جسم"
+      },
+      {
+        "sym": "L",
+        "latex": "L",
+        "what": "عزم الدوران (الزخم الزاوي)",
+        "unit": "кг·м²/с",
+        "note": "مع الطاقة يحدد المدار بشكل فريد: الطاقة تعطي الحجم، العزم يعطي الاستطالة"
+      }
+    ],
+    "derivation": {
+      "title": "اشتقاق صارم: من الطاقة إلى أربعة منحنيات",
+      "lead": "كل شيء سينتج من كميتين محفوظتين. ستحدد الطاقة حجم المدار، وسيحدد الزخم الزاوي مدى استطالته.",
+      "steps": [
+        {
+          "text": "لنكتب طاقة الوضع للجاذبية. يُحسب المرجع من اللانهاية، وبالتالي فهي سالبة: لأن إبعاد الجسم يتطلب بذل شغل، لذا يكون الجسم قريبًا في حفرة.",
+          "latex": "E_{\\text{п}} = -\\frac{GMm}{r}",
+          "figure": "anywell",
+          "figCaption": "حفرة الجاذبية: كلما اقتربت من المركز، زاد العمق. الصفر عند اللانهاية."
+        },
+        {
+          "text": "الطاقة الكلية محفوظة لأن الجاذبية محافظة - الشغل لا يعتمد على المسار. من هنا نرى مباشرة ما يمكن للجسم تحقيقه: حيث تصبح السرعة تخيلية، لا يوجد الجسم ببساطة.",
+          "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = \\text{const} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{2E}{m} + \\frac{2GM}{r}}",
+          "figure": "energyswap",
+          "figCaption": "الطاقة الحركية وطاقة الوضع تتبادلان، والمجموع ثابت. الرسم البياني أسفل الحامل يوضح هذه العلاقة تمامًا."
+        },
+        {
+          "text": "لقد حصلنا بالفعل على شرط المدار الدائري: الجاذبية تذهب بالكامل للدوران. ومن هنا تأتي السرعة الكونية الأولى.",
+          "latex": "\\frac{GMm}{r^{2}} = \\frac{mv^{2}}{r} \\;\\Longrightarrow\\; v_{\\text{I}} = \\sqrt{\\frac{GM}{r}}",
+          "figure": "centripetal",
+          "figCaption": "السرعة بحيث يتم تعويض السقوط تمامًا بانحناء السطح."
+        },
+        {
+          "text": "شرط الهروب مختلف: يجب أن يصل الجسم إلى اللانهاية، حيث طاقة الوضع صفر. لذا يجب أن تكون الطاقة الكلية أكبر من أو تساوي الصفر.",
+          "latex": "\\frac{mv^{2}}{2} - \\frac{GMm}{r} \\geq 0 \\;\\Longrightarrow\\; v_{\\text{II}} = \\sqrt{\\frac{2GM}{r}} = \\sqrt{2}\\,v_{\\text{I}}",
+          "figure": "work",
+          "figCaption": "السرعة الكونية الثانية تساوي الجذر التربيعي للضعف من الأولى - لأي جسم في الكون."
+        },
+        {
+          "text": "الآن الصورة العامة. تحدد إشارة الطاقة الكلية نوع المسار، ولا توجد خيارات أخرى. السالبة: الجسم محبوس في الحفرة، المدار مغلق. الصفر: حالة حدية. الموجبة: الجسم يغيب ويستمر في الحركة إلى اللانهاية.",
+          "latex": "E < 0:\\ \\text{قطع ناقص}, \\quad E = 0:\\ \\text{قطع مكافئ}, \\quad E > 0:\\ \\text{قطع زائد}",
+          "figure": "curves",
+          "figCaption": "أربعة مقاطع مخروطية - أربع إشارات للطاقة. نوع المدار يحدده رقم واحد."
+        },
+        {
+          "text": "حجم المدار يعتمد فقط على الطاقة، والشكل يعتمد على الزخم الزاوي. هذا فصل مهم: مداران لهما نفس الطاقة لهما نفس الدورة، بغض النظر عن اختلاف شكلهما.",
+          "latex": "a = -\\frac{GMm}{2E}, \\qquad e = \\sqrt{1 + \\frac{2EL^{2}}{G^{2}M^{2}m^{3}}}",
+          "figure": "result",
+          "figCaption": "الطاقة تحدد المحور الرئيسي والدورة؛ الزخم الزاوي يحدد الاستطالة. مقبضان مستقلان."
+        },
+        {
+          "text": "ونتيجة تجعل الملاحة الفضائية أكثر تعقيدًا مما تبدو. الطاقة الكلية للمدار المقيد تساوي نصف طاقة الوضع، والطاقة الحركية تساوي سالب نصف الطاقة الكلية. بخفض القمر الصناعي إلى الأسفل، نقلل الطاقة الكلية ولكن نزيد السرعة.",
+          "latex": "E = -\\frac{GMm}{2a}, \\qquad E_{\\text{к}} = -E, \\qquad r \\downarrow \\;\\Rightarrow\\; v \\uparrow",
+          "figure": "energy",
+          "figCaption": "نظرية فيريال للمدار: التباطؤ في الطبقات العليا من الغلاف الجوي يسرع القمر الصناعي."
+        }
+      ],
+      "plate": "إشارة الطاقة تحدد ما إذا كان الجسم سيعود أم لا؛ مقدار الطاقة يحدد حجم المدار والدورة؛ الزخم الزاوي يحدد الاستطالة. ثلاثة أرقام تصف كل الحركة.",
+      "note": "حدود التطبيق. تم اشتقاق الصيغ لمركز نقطي وقمر صناعي واحد. الأرض الحقيقية ليست كرة مثالية - تسبب تفلطحها دورانًا بطيئًا لمستوى المدار، ويتم أخذ ذلك في الاعتبار عند إطلاق الأقمار الصناعية إلى مدارات متزامنة مع الشمس، وأحيانًا يُستخدم عن قصد. بالإضافة إلى ذلك، بالقرب من الأجسام شديدة الكتلة، تتوقف الصيغ النيوتونية عن العمل: على سطح نجم نيوتروني، تبلغ السرعة الكونية الثانية نصف سرعة الضوء، ولا يمكن الاستغناء عن النظرية النسبية."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت مطلوبة هنا",
+      "text": [
+        "لماذا طاقة الوضع سالبة. هذا غالبًا ما يربك، رغم أنه لا يوجد وراءه سوى اختيار نقطة المرجع. تخيل حفرة. أنت حر في اعتبار قاع الحفرة صفرًا - عندها كل شيء فوق الصفر. أو يمكنك اعتبار سطح الأرض البعيد صفرًا - عندها كل شيء في الحفرة أقل من الصفر، أي سالب. الفيزياء لا تتغير بالاختيار، تتغير الأرقام فقط. في الجاذبية، الخيار الثاني أكثر ملاءمة: الصفر عند اللانهاية، ثم الطاقة السالبة تعني فورًا \"في الحفرة، لا يخرج بمفرده\"، والموجبة تعني \"حر، يمكنه الابتعاد\".",
+        "من أين يأتي الجذر التربيعي للاثنين. قارن بين مشكلتين. للطيران في دائرة، نحتاج طاقة تغطي نصف عمق الحفرة. للهروب تمامًا - العمق الكامل. الطاقة تتناسب مع مربع السرعة، لذا طاقة مضاعفة تقابل سرعة أكبر بمقدار الجذر التربيعي للاثنين. ومن هنا تأتي السرعتان الشهيرتان 11.2 و 7.9 كم/ث. هذه النسبة هي نفسها للأرض والقمر والشمس وأي جسم آخر - لا تعتمد على الكتلة ولا على الحجم.",
+        "ما هي المقاطع المخروطية بطريقة مبسطة. خذ مصباحًا يدويًا وسلطه على حائط. أمسكه مستقيمًا - على الحائط دائرة. أمله - تتمدد الدائرة إلى قطع ناقص. أمله أكثر، بحيث يصبح حافة مخروط الضوء موازية للحائط - يتفتح القطع الناقص إلى قطع مكافئ. أكثر من ذلك - تحصل على قطع زائد. جميع المنحنيات الأربعة هي مقاطع لمخروط واحد بزوايا مختلفة، وهي بالضبط نفس المدارات. درسها الإغريق القدماء كهندسة خالصة قبل ألفي عام من اكتشاف أن الكواكب تتحرك عليها.",
+        "لماذا تزداد كتلة الصاروخ بشكل أسي. كل كيلوغرام من الوقود يجب تسريعه مع الصاروخ، لذا لتسريعه نحتاج وقودًا إضافيًا، وهذا يتطلب وقودًا أكثر. هذه الإضافة ذاتية الاستدامة تعطي دائمًا أسيًا: لإضافة نفس الزيادة في السرعة، يجب مضاعفة الكتلة الابتدائية بنفس العامل في كل مرة. هذه هي معادلة تسيولكوفسكي. ومنها أيضًا تأتي أهمية المراحل: بإلقاء الخزان الفارغ، تتوقف عن دفع ثمن تسريعه."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: ثلاث سرعات كونية للأرض",
+      "lead": "نحسب كل ما يلزم للخروج إلى الفضاء من رقمين — كتلة الكوكب ونصف قطره.",
+      "given": "كتلة الأرض $5{,}97\\cdot 10^{24}$ كجم، نصف القطر $6{,}37\\cdot 10^{6}$ م، $G = 6{,}67\\cdot 10^{-11}$. أوجد السرعة الكونية الأولى والثانية وفترة المدار الدائري المنخفض.",
+      "law": "$v_{\\text{I}} = \\sqrt{GM/R}$, $\\;v_{\\text{II}} = \\sqrt{2}\\,v_{\\text{I}}$, $\\;T = 2\\pi R/v_{\\text{I}}$",
+      "solution": [
+        {
+          "text": "من الأفضل حساب حاصل الضرب $GM$ أولاً — سيظهر في جميع المعادلات وهو معروف بدقة أفضل من العوامل المنفردة.",
+          "latex": "GM = 6{,}67\\cdot 10^{-11} \\cdot 5{,}97\\cdot 10^{24} \\approx 3{,}98\\cdot 10^{14}\\ \\text{м}^{3}/\\text{с}^{2}"
+        },
+        {
+          "text": "السرعة الكونية الأولى: سرعة المدار الدائري على السطح.",
+          "latex": "v_{\\text{I}} = \\sqrt{\\frac{3{,}98\\cdot 10^{14}}{6{,}37\\cdot 10^{6}}} = \\sqrt{6{,}25\\cdot 10^{7}} \\approx 7{,}9\\ \\text{км/с}"
+        },
+        {
+          "text": "السرعة الكونية الثانية — أكبر بجذر 2 فقط، لا حاجة لإعادة الحساب.",
+          "latex": "v_{\\text{II}} = 1{,}414 \\cdot 7{,}9 \\approx 11{,}2\\ \\text{км/с}"
+        },
+        {
+          "text": "فترة المدار المنخفض.",
+          "latex": "T = \\frac{2\\pi \\cdot 6{,}37\\cdot 10^{6}}{7{,}9\\cdot 10^{3}} \\approx 5{,}07\\cdot 10^{3}\\ \\text{с} \\approx 84\\ \\text{мин}"
+        }
+      ],
+      "answer": "السرعة الكونية الأولى 7,9 كم/ث، الثانية 11,2 كم/ث، فترة المدار المنخفض حوالي 84 دقيقة.",
+      "check": "التحقق بالمعلوم: محطة الفضاء الدولية تدور حول الأرض في 92 دقيقة — أطول قليلاً من 84 دقيقة لدينا، لأنها تحلق ليس على السطح مباشرة، بل على ارتفاع 400 كم. المثير هنا أن هذه الـ84 دقيقة تساوي تماماً ضعف 42 دقيقة للسقوط عبر نفق من الفقرة السابقة. هذه ليست مصادفة — فكلتا المسألتين تصفان نفس الحركة التوافقية، إحداهما عبر الكوكب والأخرى حوله."
+    },
+    "constants": {
+      "title": "قيم هذا القسم",
+      "lead": "سرعات تستحق التذكر: تعطي إحساساً بالحجم لعلوم الفضاء بأكملها.",
+      "items": [
+        {
+          "sym": "v1",
+          "latex": "v_{\\text{I}}",
+          "name": "السرعة الكونية الأولى للأرض",
+          "value": "7,9",
+          "unit": "км / с",
+          "why": "السرعة الدنيا للمدار الدائري. كل ما هو أبطأ سيعود إلى السطح؛ الارتفاع لا يساعد هنا — السرعة الأفقية هي المهمة.",
+          "mnemo": "تقريباً 28 000 كم/س — أسرع بعشرين مرة من الرصاص وخمسة وعشرين مرة من الطائرة التجارية."
+        },
+        {
+          "sym": "v2",
+          "latex": "v_{\\text{II}}",
+          "name": "السرعة الكونية الثانية للأرض",
+          "value": "11,2",
+          "unit": "км / с",
+          "why": "سرعة الإفلات: عند هذه السرعة يغادر الجسم الأرض ولا يعود. تساوي $\\sqrt{2}$ ضعف السرعة الأولى — هذه النسبة عالمية لأي جرم سماوي.",
+          "mnemo": "على القمر 2,4 كم/ث فقط — ولهذا لم يحتفظ بغلاف جوي: جزيئات الغاز تصل لهذه السرعات عند التسخين النهاري."
+        },
+        {
+          "sym": "GM",
+          "latex": "GM_{\\oplus}",
+          "name": "المعامل الجذبوي للأرض",
+          "value": "3,986 · 10¹⁴",
+          "unit": "м³ / с²",
+          "why": "في حسابات المدارات يستخدم حاصل الضرب وليس العوامل المنفردة: تم قياسه بدقة تصل إلى الرقم التاسع من حركة الأقمار الصناعية، بينما $G$ معروفة فقط حتى الرقم الخامس.",
+          "mnemo": "حالة نادرة حيث يكون حاصل الضرب معروفاً بدقة أفضل من العوامل: قياس المدارات سهل، بينما قياس $G$ الصغيرة في المخبر صعب."
+        },
+        {
+          "sym": "r_geo",
+          "latex": "r_{\\text{гсо}}",
+          "name": "نصف قطر المدار الثابت الأرضي",
+          "value": "4,22 · 10⁷",
+          "unit": "м",
+          "why": "هنا فترة المدار تساوي يوماً واحداً، والقمر الصناعي يعلق فوق نقطة واحدة على خط الاستواء. يحصل عليها مباشرة من قانون كبلر الثالث بتعويض $T = 86400$ ثانية.",
+          "mnemo": "هذا حوالي 36 000 كم فوق السطح — تقريباً ستة أنصاف أقطار أرضية. إشارة الراديو تذهب وتعود في ربع ثانية، ومن هنا تأخير الاتصال عبر الأقمار الصناعية."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "كيف يعمل هذا عملياً",
+      "lead": "ثلاثة أرقام — الطاقة، الزخم الزاوي، وكتلة الجسم المركزي — تصف كل الملاحة الفضائية العملية.",
+      "items": [
+        {
+          "h": "رحلة هوهمان",
+          "text": "أكثر الطرق اقتصاداً بين المدارات الدائرية: التسارع في نقطة واحدة، الطيران على قطع ناقص لنصف دورة ثم التسارع مرة أخرى. هكذا تسافر جميع المحطات بين الكواكب. تستغرق هذه الرحلة إلى المريخ ثمانية أشهر ونصف، وتفتح نافذة الإطلاق مرة كل 26 شهراً."
+        },
+        {
+          "h": "المناورة الجاذبية",
+          "text": "عند التحليق بالقرب من كوكب، يأخذ المسبار القليل من طاقته المدارية — يتباطأ الكوكب بمقدار ضئيل لا يمكن تصوره، بينما يتسارع المسبار بكيلومترات في الثانية. غادرت فوياجر النظام الشمسي تقريباً بدون وقود، مستفيدة من الاصطفاف النادر للكواكب عام 1977."
+        },
+        {
+          "h": "نقاط لاغرانج",
+          "text": "هناك خمس نقاط حيث جاذبية جسمين والتأثير الطارد المركزي يتوازنان. عند النقطة L2 خلف الأرض يوجد تلسكوب ويب: حيث الشمس والأرض والقمر دائماً على جانب واحد، ويمكن حمايته بدرع واحد."
+        },
+        {
+          "h": "لماذا القمر بلا غلاف جوي",
+          "text": "السرعة الكونية الثانية على القمر 2,4 كم/ث، والسرعة الحرارية للجزيئات عند التسخين النهاري تضاهيها. يهرب الغاز في زمن قصير جيولوجياً. نفس الحساب يفسر لماذا لا يوجد هيدروجين حر على الأرض بينما يوجد على المشتري."
+        },
+        {
+          "h": "الثقب الأسود كحد أقصى",
+          "text": "إذا ضغطنا جسماً، تزداد السرعة الكونية الثانية. بمساواتها بسرعة الضوء نحصل على نصف قطر لا يستطيع الضوء الهروب منه. تتطابق معادلة شوارزشيلد تماماً مع هذا التقدير النيوتوني الساذج — توافق نادر وعشوائي بين الميكانيكا الكلاسيكية والنسبية العامة."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: جرب بنفسك",
+      "lead": "ميكانيكا المدارات مليئة بأمور تتعارض مع التصور البديهي للحركة.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "مخروط وأربعة منحنيات",
+          "text": "خذ مصباحًا يدويًا بشعاع ضيق وسلطه على الحائط بشكل عمودي. ثم أمِلْه ببطء وراقب شكل بقعة الضوء.",
+          "answer": "دائرة، قطع ناقص، وفي اللحظة التي يصبح فيها حافة المخروط موازية للحائط - قطع مكافئ مفتوح. ثم بالمزيد من الميل - قطع زائد. جميع المدارات الأربعة التي رأيتها على اللوحة هي مقاطع لمخروط واحد. درسها أبولونيوس البرغاوي حوالي عام 200 قبل الميلاد كهندسة خالصة، وظلت هذه المنحنيات لمدة ألفي عام تقريبًا جمالًا عديم الفائدة - حتى اكتشف كيبلر أن الكواكب تسير عليها."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "للحاق - أبطئ",
+          "text": "سفينتك تتخلف عن المحطة في نفس المدار الدائري. الغريزة تدفعك للتسارع للحاق بها. رواد الفضاء يعرفون أن عليهم فعل العكس. لماذا؟",
+          "answer": "التسارع يرفعك إلى مدار أعلى، وهناك تكون الفترة أطول - ستبدأ في التخلف أكثر. المناورة الصحيحة هي العكس: أبطئ، انخفض إلى مدار أقل حيث الفترة أقصر، تجاوز المحطة من الأسفل ثم تسارع لترتفع مرة أخرى. هذا أحد أول الأمور التي تكسر حدس المبتدئين، ويستغرق تدريبها جزءًا كبيرًا من التدريبات. التحكم في ميكانيكا المدارات معاكس لكل الخبرات الأرضية."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "نيوتن رسم قمرًا صناعيًا قبل 270 عامًا من الإطلاق",
+          "text": "ظهر رسم المدفع على الجبل في كتاب «المبادئ» عام 1687. وصف نيوتن الحركة المدارية بدقة، بما في ذلك ملاحظة أنه بسرعة كافية ستدور القذيفة حول الأرض وتعود إلى المدفع من الخلف. أول قمر صناعي حقيقي انطلق في 1957. بين الحساب والتنفيذ مر قرنان ونصف - ولم تكن الحاجة إلى الفهم، بل إلى الهندسة: كانت هناك حاجة لكيمياء الوقود وعلم المعادن."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "الطاقة - الحجم، العزم - الشكل",
+          "text": "مقبضا تحكم للمدار، وهما مستقلان. الطاقة تحدد المحور شبه الرئيسي والفترة، لكنها لا تقول شيئًا عن الاستطالة. عزم الزخم يحدد الاستطالة، لكن ليس الحجم. تريد أعلى؟ أضف طاقة. تريد أكثر استدارة؟ أضف عزمًا، أي تسارع عرضيًا وليس طوليًا."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير",
+          "h": "سرعة الإفلات الثانية لأي جسم في عشر ثوانٍ",
+          "text": "لجسم بكثافة الأرض، سرعة الإفلات الثانية تتناسب مع نصف القطر. الأرض: 11.2 كم/ث. إذن لكويكب نصف قطره أصغر بألف مرة سيكون حوالي 11 م/ث - سرعة قفزة جيدة. من كويكب صغير يمكن للإنسان أن يطير بمجرد الدفع، وهذه ليست مزحة، بل اعتبار عملي عند التخطيط للهبوط."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود الصلاحية",
+          "h": "متى لا تكفي صيغة نيوتن",
+          "text": "طالما أن سرعة الإفلات الثانية أقل بكثير من سرعة الضوء، يعمل الميكانيكا الكلاسيكية بشكل ممتاز. على سطح نجم نيوتروني تصل إلى نصف سرعة الضوء، وهناك نحتاج إلى النظرية النسبية العامة. المضحك أن الحساب النيوتوني الساذج لنصف القطر الذي يتطلب الهروب بسرعة الضوء يعطي بالضبط صيغة شفارتسشيلد - لكنها مصادفة وليست استنتاجًا: التفسير الصحيح يبدو مختلفًا تمامًا."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: لماذا الصواريخ كبيرة جدًا",
+      "lead": "غير مدرج في الاختبار. حول الأسي الوحيد الذي شكل ملامح الملاحة الفضائية بأكملها.",
+      "blocks": [
+        {
+          "h": "معادلة تسيولكوفسكي",
+          "text": "زيادة السرعة تساوي سرعة خروج الغازات مضروبة في لوغاريتم نسبة الكتلة الأولية إلى النهائية. وبالعكس: للحصول على سرعة معينة، يجب ضرب الكتلة الابتدائية في الأسي. سرعة الخروج لأفضل المحركات الكيميائية حوالي 4.5 كم/ث، ونحتاج إلى نحو 9 كم/ث مع مراعاة خسائر المقاومة والجاذبية. إذن نسبة الكتل حوالي $e^{2} \\approx 7{,}4$ - أي أكثر من ثمانين بالمائة من الكتلة الابتدائية هي وقود."
+        },
+        {
+          "h": "لماذا المراحل",
+          "text": "الخزان الفارغ، الذي تسارع إلى نصف الطريق، يعيق بعد ذلك - يجب جره مع باقي الوقود. بإسقاطه، تقلل الكتلة وتحصل على أسي جديد أكثر فائدة. تعدد المراحل ليس تحسينًا أنيقًا، بل الطريقة الوحيدة لتجاوز الرياضيات: صاروخ أحادي المرحلة على وقود كيميائي ممكن نظريًا، لكن لا يتبقى فيه حمولة مفيدة تقريبًا."
+        },
+        {
+          "h": "لماذا لا يساعد الارتفاع",
+          "text": "اعتقاد خاطئ شائع: للوصول إلى الفضاء، يجب الصعود عاليًا. في الواقع، الصعود 100 كم يتطلب طاقة أقل بثلاثين مرة من التسارع إلى السرعة المدارية. الفضاء يبدأ ليس حيث الارتفاع، بل حيث السرعة. الرحلة شبه المدارية لصاروخ سياحي والدخول إلى مدار يختلفان ليس في الارتفاع، بل في الطاقة - حوالي ثلاثين مرة."
+        },
+        {
+          "h": "ماذا لو كان مختلفًا",
+          "text": "لو كانت الأرض أكبر قليلاً، لازدادت السرعة المطلوبة، وكتلة الصاروخ أسيًا. عند نصف قطر أكبر بحوالي مرة ونصف، لن يتمكن صاروخ كيميائي من إخراج حمولة إلى المدار أبدًا. نحن على كوكب يمكن الإقلاع منه، ولكن بالكاد - وهذه الظروف تُذكر أحيانًا كإجابة على سؤال لماذا الملاحة الفضائية باهظة الثمن."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "يحدد نوع المدار بإشارة الطاقة الكلية، وحجمها بمقدارها، واستطالتها بعزم الزخم؛ السرعة الكونية الثانية دائماً أكبر من الأولى بمقدار $\\sqrt{2}$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$v_{\\text{I}} = \\sqrt{GM/r}$، $v_{\\text{II}}",
+          "text": "$v_{\\text{I}} = \\sqrt{GM/r}$، $v_{\\text{II}} = \\sqrt{2GM/r}$ — النسبة $\\sqrt{2}$ عالمية"
+        },
+        {
+          "icon": "formula",
+          "title": "$E < 0$",
+          "text": "قطع ناقص، $E = 0$ — قطع مكافئ، $E > 0$ — قطع زائد"
+        },
+        {
+          "icon": "sigma",
+          "title": "تعتمد الفترة فقط على",
+          "text": "تعتمد الفترة فقط على المحور شبه الرئيسي، أي فقط على الطاقة"
+        },
+        {
+          "icon": "ruler",
+          "title": "عند الهبوط إلى الأسفل،",
+          "text": "عند الهبوط إلى الأسفل، يفقد القمر الصناعي طاقة لكنه يكتسب سرعة"
+        },
+        {
+          "icon": "scale",
+          "title": "تزداد كتلة الصاروخ أضعافاً",
+          "text": "تزداد كتلة الصاروخ أضعافاً مضاعفة مع السرعة المطلوبة — ومن هنا تأتي المراحل"
+        }
+      ],
+      "where": "حساب المدارات والرحلات، المناورات الجاذبية، نقاط لاغرانج، احتفاظ الكوكب بالغلاف الجوي، تقدير نصف قطر الثقب الأسود.",
+      "watchOut": "الحدس المستند إلى الحركة الأرضية يخدع هنا بشكل منهجي: للحاق — تبطئ، للصعود — تسارع جانبياً، وليس إلى الأعلى."
+    },
+    "quiz": [
+      {
+        "id": "o1",
+        "type": "mcq",
+        "q": "السرعة الكونية الثانية أكبر من الأولى بمقدار $\\sqrt{2}$ تماماً. لأي الأجسام هذا صحيح؟",
+        "options": [
+          "فقط للأرض — بالنسبة للكواكب الأخرى النسبة مختلفة",
+          "للكواكب الأرضية، وليس للعمالقة الغازية",
+          "لأي جسم في الكون: الكتلة ونصف القطر يختصران عند القسمة",
+          "فقط للأجسام التي لها غلاف جوي"
+        ],
+        "answer": 2,
+        "why": "بقسمة $\\sqrt{2GM/r}$ على $\\sqrt{GM/r}$، نحصل على $\\sqrt{2}$ — لا يبقى شيء من الكتلة ونصف القطر. النسبة متساوية للأرض والقمر والشمس والنجم النيوتروني: إنها تنبع فقط من أن الهروب يحتاج إلى ضعف الطاقة اللازمة للمدار الدائري.",
+        "hint": "ببساطة اقسم صيغة على الأخرى وانظر ما الذي يختصر."
+      },
+      {
+        "id": "o2",
+        "type": "mcq",
+        "q": "قمر صناعي يتباطأ بسبب الطبقات العليا الرقيقة من الغلاف الجوي. ماذا يحدث لسرعته؟",
+        "options": [
+          "تزداد: القمر الصناعي يهبط إلى الأسفل، وهناك السرعة المدارية أكبر",
+          "تقل — التباطؤ دائماً يبطئ",
+          "لا تتغير ما دام المدار دائرياً",
+          "تزداد أولاً ثم تقل"
+        ],
+        "answer": 0,
+        "why": "الطاقة الكلية تتناقص فعلاً، ولذلك يهبط القمر الصناعي. لكن السرعة المدارية تزداد بمقدار $1/\\sqrt{r}$: الطاقة الكامنة تنخفض بضعف سرعة ارتفاع الطاقة الحركية. ومن هنا مفارقة 'للحاق — أبطئ'.",
+        "hint": "قسم الطاقة إلى جزئين. أيهما يتناقص وأيهما يزداد عند انخفاض المدار؟"
+      },
+      {
+        "id": "o3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا تزداد كتلة الصاروخ أضعافاً مضاعفة مع السرعة المطلوبة، وليس بشكل متناسب معها؟",
+        "keywords": [
+          "وقود",
+          "تسارع",
+          "حمل",
+          "نفسه",
+          "يحمل",
+          "المزيد من الوقود",
+          "أسي",
+          "ضرب",
+          "يسحب"
+        ],
+        "needed": 2,
+        "why": "يجب تسريع كل كمية من الوقود مع الصاروخ، وبالتالي فإن تسريعها يتطلب وقوداً إضافياً، وهذا الوقود يحتاج إلى المزيد. هذه الإضافة ذاتية الاستدامة تعطي دائماً أسيّاً: كل زيادة جديدة في السرعة تتطلب ضرب الكتلة الابتدائية في نفس العدد. ومن هنا تأتي المراحل: الخزان المهمل لم يعد بحاجة للتسريع.",
+        "hint": "اسأل نفسك: ماذا يحدث للوقود المملوء في الخزان: هل يدفع الصاروخ فقط أم يجب أيضاً نقله؟"
+      },
+      {
+        "id": "o4",
+        "type": "estimate",
+        "q": "السرعة الكونية الأولى للأرض هي 7,9 كم/ث. ما هي السرعة الكونية الأولى على ارتفاع نصف قطر أرضي واحد فوق السطح، أي عند ضعف المسافة من المركز؟ بالكم/ث.",
+        "answer": 5.6,
+        "unit": "км/с",
+        "tolerance": 0.6,
+        "why": "السرعة تتناقص بمعدل $1/\\sqrt{r}$: بزيادة المسافة إلى الضعف، نقسم السرعة على $\\sqrt{2}$. نحصل على 7,9/1,41 ≈ 5,6 كم/ث. لاحظ التناظر المثير للاهتمام: هذا هو نفس القسمة على جذر اثنين الذي يربط السرعتين الكونيتين الأولى والثانية، لكنه مطبق على المسافة وليس على الطاقة.",
+        "hint": "السرعة المدارية هي جذر GM مقسوماً على r. كيف تتغير إذا تضاعفت r؟"
+      }
+    ]
+  },
+  "tags": [
+    "pulsar",
+    "gravity",
+    "asteroid",
+    "black_hole"
+  ],
+  "laws": [
+    "virial_theorem"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.13992",
+      "why": "совпадение по теме: black_hole, gravity"
+    },
+    {
+      "id": "2607.10561",
+      "why": "совпадение по теме: black_hole, gravity"
+    },
+    {
+      "id": "2607.04121v1",
+      "why": "совпадение по теме: black_hole, pulsar"
+    }
+  ]
+}

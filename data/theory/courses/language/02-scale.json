@@ -1,0 +1,1540 @@
+{
+  "id": "02-scale",
+  "topic": "language",
+  "schema": "b42.lesson/1",
+  "model": "motion",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "mechanics"
+    ],
+    "scientists": []
+  },
+  "ru": {
+    "title": "Размерность и порядок величины",
+    "subtitle": "Параграф 2 · Как получить ответ, не решая задачу",
+    "intro": [
+      "Сколько настройщиков фортепиано работает в Чикаго? Вопрос звучит как издевательство: справочника нет, гуглить нельзя, а ответ требуется через минуту. И тем не менее он решается — с точностью, которой хватает для любого практического решения.",
+      "Приём, которым это делается, физики называют оценкой по порядку величины, а задачи такого рода — задачами Ферми. Это не фокус и не приблизительность от лени. Это способ понять, о каких масштабах вообще идёт речь, — и он часто важнее точного расчёта, потому что точный расчёт можно сделать только тогда, когда уже понимаешь, что считаешь.",
+      "Второй инструмент этого параграфа ещё сильнее. Оказывается, вид формулы часто можно восстановить из одних только единиц измерения, ничего не зная о физике происходящего. Звучит невозможно — но именно так Рэлей объяснил, почему небо голубое, а военные физики в 1950-х вычислили мощность засекреченного взрыва по фотографиям в газете."
+    ],
+    "standNote": "Стенд тот же, что в первом параграфе, и это намеренно. Задайте начальную скорость 20 м/с и ускорение −5 м/с². Прежде чем смотреть на график, прикиньте в уме: тормозить будет около четырёх секунд, средняя скорость около десяти, значит путь порядка сорока метров. Теперь сверьтесь. Умение назвать ответ до расчёта — то, чему учит этот параграф.",
+    "formula": {
+      "name": "Принцип размерной однородности",
+      "latex": "[\\,\\text{левая часть}\\,] = [\\,\\text{правая часть}\\,] \\qquad X = C \\cdot a^{\\alpha} b^{\\beta} c^{\\gamma}",
+      "alsoKnown": "Анализ размерностей · Π-теорема Бэкингема",
+      "authors": [
+        {
+          "who": "Жан Батист Фурье",
+          "year": "1822",
+          "what": "первым записал, что физическое уравнение обязано быть однородным по размерности: складывать метры с секундами нельзя, и это не соглашение, а свойство самих величин"
+        },
+        {
+          "who": "Джон Уильям Стретт (лорд Рэлей)",
+          "year": "1871",
+          "what": "превратил наблюдение Фурье в метод. Показал, что рассеяние света на мелких частицах должно идти обратно пропорционально четвёртой степени длины волны, — отсюда голубое небо и красный закат, без единого уравнения электродинамики"
+        },
+        {
+          "who": "Эдгар Бэкингем",
+          "year": "1914",
+          "what": "доказал общую теорему: любую физическую зависимость между $n$ величинами с $k$ независимыми размерностями можно свести к связи $n - k$ безразмерных комбинаций. Это и есть строгое обоснование приёма"
+        },
+        {
+          "who": "Энрико Ферми",
+          "year": "1945",
+          "what": "довёл оценку до искусства. На испытании в Аламогордо бросил в воздух клочки бумаги и по расстоянию их сноса ударной волной назвал мощность взрыва; результат совпал с приборным по порядку величины"
+        }
+      ],
+      "story": "Самая известная демонстрация метода произошла в 1950 году. Мощность первого атомного взрыва оставалась секретной, но журнал Life опубликовал серию кадров растущего огненного шара с указанием времени и масштаба. Джеффри Тейлор в Англии заметил, что радиус шара может зависеть только от энергии взрыва, плотности воздуха и времени, — а из этих трёх величин размерность длины собирается единственным способом: $R \\sim (E t^2/\\rho)^{1/5}$. Он построил график, снял наклон и опубликовал мощность в открытой печати. В Америке это вызвало переполох: человек рассекретил главную цифру проекта по картинкам в журнале, не имея доступа ни к чему.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "\\mathsf{L}",
+          "what": "размерность длины",
+          "unit": "м",
+          "note": "одна из семи базовых; всё остальное собирается из них"
+        },
+        {
+          "sym": "M",
+          "latex": "\\mathsf{M}",
+          "what": "размерность массы",
+          "unit": "кг",
+          "note": "не путать с весом: вес имеет размерность силы"
+        },
+        {
+          "sym": "T",
+          "latex": "\\mathsf{T}",
+          "what": "размерность времени",
+          "unit": "с",
+          "note": "в механике этих трёх хватает на всё"
+        },
+        {
+          "sym": "C",
+          "latex": "C",
+          "what": "безразмерный множитель",
+          "unit": "—",
+          "note": "метод его не даёт; обычно он между 0,1 и 10, и потому оценка верна по порядку"
+        },
+        {
+          "sym": "Pi",
+          "latex": "\\Pi",
+          "what": "безразмерная комбинация величин",
+          "unit": "—",
+          "note": "например, число Рейнольдса; именно от них и зависит физика"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: формула из одних единиц измерения",
+      "lead": "Выведем период малых колебаний маятника, не написав ни одного уравнения движения. Мы не знаем ни второго закона Ньютона, ни синуса — только то, от чего период может зависеть.",
+      "steps": [
+        {
+          "text": "Составим список величин, от которых период может зависеть в принципе. Длина нити, масса груза, ускорение свободного падения. Больше в задаче ничего нет — и это самый ответственный шаг метода: если что-то существенное забыто, ответ будет неверен.",
+          "latex": "T = f(\\ell,\\; m,\\; g)",
+          "figure": "axes",
+          "figCaption": "Метод начинается со списка величин. Всё дальнейшее — механика, а вот список требует физического понимания."
+        },
+        {
+          "text": "Запишем размерности каждой величины через базовые. Период — время. Длина — длина. Масса — масса. Ускорение — длина, делённая на квадрат времени.",
+          "latex": "[T] = \\mathsf{T}, \\quad [\\ell] = \\mathsf{L}, \\quad [m] = \\mathsf{M}, \\quad [g] = \\mathsf{L}\\,\\mathsf{T}^{-2}",
+          "figure": "vline",
+          "figCaption": "Каждая физическая величина есть произведение базовых размерностей в некоторых степенях."
+        },
+        {
+          "text": "Предположим, что ответ имеет вид произведения степеней — это не ограничение, а следствие теоремы Бэкингема. Приравняем размерности слева и справа.",
+          "latex": "\\mathsf{T} = \\mathsf{L}^{\\alpha} \\cdot \\mathsf{M}^{\\beta} \\cdot (\\mathsf{L}\\,\\mathsf{T}^{-2})^{\\gamma} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+          "figure": "forceprop",
+          "figCaption": "Приравнивание размерностей превращает физическую задачу в маленькую систему уравнений."
+        },
+        {
+          "text": "Показатели при одинаковых размерностях обязаны совпадать. Получаем три уравнения — и обратите внимание на второе: масса выпадает сама, метод сообщает нам это раньше, чем мы успели удивиться.",
+          "latex": "\\begin{cases} \\alpha + \\gamma = 0 \\\\ \\beta = 0 \\\\ -2\\gamma = 1 \\end{cases} \\;\\Longrightarrow\\; \\gamma = -\\tfrac{1}{2}, \\;\\; \\alpha = \\tfrac{1}{2}, \\;\\; \\beta = 0",
+          "figure": "massprop",
+          "figCaption": "Показатель при массе оказался нулевым: период маятника от массы груза не зависит."
+        },
+        {
+          "text": "Собираем ответ. Точное решение уравнения движения даёт множитель $2\\pi \\approx 6{,}3$ — его метод не даёт и дать не может. Но зависимость получена полностью: период растёт как корень из длины и не зависит от массы.",
+          "latex": "T = C\\sqrt{\\frac{\\ell}{g}}, \\qquad \\text{точно: } T = 2\\pi\\sqrt{\\frac{\\ell}{g}}",
+          "figure": "result",
+          "figCaption": "Метод даёт вид формулы; безразмерный множитель приходится добывать иначе — из опыта или из полного решения."
+        },
+        {
+          "text": "Проверим предсказание, ничего не решая. Чтобы удвоить период, длину нужно увеличить вчетверо. Секундный маятник — тот, что тикает в напольных часах, — должен иметь длину около 25 см при полупериоде в секунду. Так и есть: это классическая величина часового дела, известная задолго до всякого анализа размерностей.",
+          "latex": "\\ell = \\frac{g}{\\pi^{2}} \\approx \\frac{9{,}8}{9{,}87} \\approx 0{,}99\\ \\text{м} \\;\\;(\\text{период } 2\\ \\text{с})",
+          "figure": "isochron",
+          "figCaption": "Проверка на известном факте — обязательный шаг: метод мощный, но молча ошибается, если список величин был неполон."
+        },
+        {
+          "text": "И граница метода. Если в списке величин пропущено существенное, ответ будет размерно безупречным и физически неверным. Для маятника с большой амплитудой появляется безразмерный параметр — сам угол, — и период начинает от него зависеть. Размерность здесь бессильна: угол безразмерен, никаких ограничений он не накладывает.",
+          "latex": "T = \\sqrt{\\frac{\\ell}{g}}\\; F(\\theta_0), \\qquad F(\\theta_0 \\to 0) = 2\\pi",
+          "figure": "curves",
+          "figCaption": "Безразмерные параметры метод не ловит: их зависимость приходится искать физикой или опытом."
+        }
+      ],
+      "plate": "Размерность левой части равна размерности правой — это не соглашение, а закон. Из него часто следует вид формулы с точностью до числового множителя порядка единицы.",
+      "note": "Практическое правило на весь курс: закончив вывод, проверьте размерность обеих частей. Это ловит большинство ошибок алгебры за пять секунд и работает даже там, где ответ вы проверить не можете."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Всё, что нужно, — степени и логарифмы, но в непривычном употреблении: как язык масштабов, а не как техника вычисления.",
+        "Первый навык — работать с порядками. Число записывается как мантисса на десять в степени, и при умножении показатели складываются. Оценка ведётся только по показателям, мантиссы округляются до одной значащей цифры. Три на десять в восьмой умножить на два на десять в минус пятой — это шесть на десять в третьей, и посчитано это в уме за секунду.",
+        "Второй навык — знать, что округление в оценках почти не портит результат. Если каждый из пяти сомножителей вы округлили с ошибкой вдвое, ошибки в разные стороны частично гасят друг друга: типичное расхождение растёт как корень из числа сомножителей, а не как их произведение. Именно поэтому задачи Ферми работают, хотя каждая цифра в них взята с потолка.",
+        "Третий навык — читать степенные зависимости по графику. Если величина ведёт себя как $y = C x^{n}$, то на графике, где обе оси логарифмические, получается прямая с наклоном $n$. Так Тейлор и снял показатель одна пятая с газетных фотографий: нанёс радиус против времени в логарифмических осях и приложил линейку.",
+        "И одно предупреждение. Под знаком экспоненты, логарифма или синуса может стоять только безразмерная величина. Выражение вида «синус трёх метров» лишено смысла — и это не педантизм: обнаружив такое в своих выкладках, вы поймали ошибку."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: настройщики фортепиано в Чикаго",
+      "lead": "Классическая задача Ферми. Ни одно из чисел ниже не является справочным — все они прикинуты. Смотрите, что получится.",
+      "given": "Оценить, сколько человек профессионально занимается настройкой фортепиано в городе с населением около трёх миллионов человек.",
+      "law": "Оценка по порядку величины: разбить неизвестное на цепочку величин, каждую из которых можно прикинуть, и перемножить.",
+      "solution": [
+        {
+          "text": "Сколько в городе домохозяйств. Считаем в среднем по три человека на семью.",
+          "latex": "N_{\\text{дом}} \\approx \\frac{3 \\cdot 10^{6}}{3} = 10^{6}"
+        },
+        {
+          "text": "У какой доли есть фортепиано. Пусть примерно у одной из тридцати — инструмент недешёвый и громоздкий.",
+          "latex": "N_{\\text{форт}} \\approx \\frac{10^{6}}{30} \\approx 3 \\cdot 10^{4}"
+        },
+        {
+          "text": "Как часто его настраивают. Раз в год — разумное среднее между заброшенными и концертными.",
+          "latex": "n_{\\text{настроек}} \\approx 3 \\cdot 10^{4}\\ \\text{в год}"
+        },
+        {
+          "text": "Сколько настроек делает один мастер. Настройка занимает пару часов, плюс дорога; пусть четыре в день, двести рабочих дней в году.",
+          "latex": "n_{\\text{на мастера}} \\approx 4 \\cdot 200 = 800\\ \\text{в год}"
+        },
+        {
+          "text": "Делим одно на другое.",
+          "latex": "N_{\\text{мастеров}} \\approx \\frac{3 \\cdot 10^{4}}{800} \\approx 40"
+        }
+      ],
+      "answer": "Порядка нескольких десятков человек. Реальные справочники по Чикаго дают величину того же порядка — от тридцати до сотни, в зависимости от того, кого считать профессионалом.",
+      "check": "Важно не число, а то, что мы узнали. Ответ не оказался ни тремя, ни тремя тысячами — а именно этот вопрос обычно и надо решить на практике. Стоит ли открывать такую мастерскую, хватит ли на всех работы, нужна ли отдельная гильдия — все эти решения зависят от порядка величины и совершенно не зависят от того, сорок там мастеров или пятьдесят пять."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Здесь пригодятся не столько константы, сколько опорные числа — те, что стоит держать в голове, чтобы оценивать без справочника.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Ускорение свободного падения",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "В оценках почти всегда берут 10: ошибка 2 %, зато деление в уме. Заодно $\\pi^2 \\approx 9{,}87$ тоже близко к десяти — совпадение, но удобное.",
+          "mnemo": "π² ≈ g ≈ 10 в системе СИ. Это следствие старого определения метра через секундный маятник, а не случайность."
+        },
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Скорость света",
+          "value": "3 · 10⁸",
+          "unit": "м / с",
+          "why": "Опорная величина для любых оценок в электродинамике и относительности. Всё, что много медленнее, описывается классикой.",
+          "mnemo": "Свет обходит Землю по экватору 7,5 раз в секунду и доходит от Луны за 1,3 секунды."
+        },
+        {
+          "sym": "N_A",
+          "latex": "N_A",
+          "dictKey": "N_A",
+          "name": "Число Авогадро",
+          "value": "6,0 · 10²³",
+          "unit": "1 / моль",
+          "why": "Мост между тем, что видно, и тем, из чего оно состоит. Любая оценка вида «сколько молекул» проходит через него.",
+          "mnemo": "В стакане воды примерно столько же молекул, сколько стаканов воды во всех океанах Земли."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Тренировка: пять оценок, которые стоит уметь делать в уме",
+      "lead": "Не ради ответов, а ради навыка. Попробуйте каждую сами, прежде чем читать разбор, — на это уходит меньше минуты.",
+      "items": [
+        {
+          "h": "Сколько вдохов вы делаете за жизнь",
+          "text": "Примерно 15 вдохов в минуту, миллион минут в году (проверьте: 60 · 24 · 365 ≈ 5 · 10⁵), семьдесят лет. Получается около 5 · 10⁸ — полмиллиарда вдохов."
+        },
+        {
+          "h": "Сколько воды в человеке",
+          "text": "Тело примерно на 60 % состоит из воды, масса около 70 кг — значит порядка 40 литров. Отсюда сразу следует, почему обезвоживание в несколько литров уже опасно: это проценты от целого."
+        },
+        {
+          "h": "Во сколько раз атом меньше человека",
+          "text": "Атом около 10⁻¹⁰ м, человек около 2 м — отношение примерно 10¹⁰. Столько же примерно раз человек меньше диаметра Солнечной системы. Мы ровно посередине известных масштабов, и это не метафора, а арифметика."
+        },
+        {
+          "h": "Хватит ли энергии одного удара молнии на квартиру",
+          "text": "Молния несёт порядка 10⁹ Дж, квартира потребляет около 300 кВт·ч в месяц, то есть примерно 10⁹ Дж. Вывод: одной молнии хватило бы на месяц — и это отвечает, почему идея «запасать молнии» экономически безнадёжна при их редкости."
+        },
+        {
+          "h": "Сколько молекул воздуха вы сейчас вдохнули",
+          "text": "Полулитр воздуха при обычных условиях — это около 1/50 моля, то есть порядка 10²² молекул. Их больше, чем вдохов у всего человечества за всю историю; отсюда известное следствие: в каждом вашем вдохе почти наверняка есть молекулы, побывавшие в лёгких любого человека прошлого."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "В духе Перельмана: опыт, для которого не нужна лаборатория, парадокс, над которым стоит подумать до разгадки, и факты, которые запоминаются сами.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Измерьте молекулу подсолнечным маслом",
+          "text": "Насыпьте на широкую тарелку с водой тонкий слой талька или молотого перца. Капните в середину каплю растительного масла — плёнка расталкивает порошок и образует круг. Замерьте диаметр круга линейкой. Объём капли прикиньте, посчитав, сколько капель в чайной ложке (обычно около сотни, ложка — 5 мл). Теперь разделите объём на площадь круга — получите толщину плёнки.",
+          "answer": "Выйдет порядка $10^{-9}$ метра, то есть нанометр. Масло растекается ровно до слоя в одну молекулу — дальше некуда. Вы измерили размер молекулы кухонной посудой и линейкой. Именно так Рэлей в 1890 году получил первую разумную оценку молекулярных размеров."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Почему нельзя просто увеличить муравья",
+          "text": "Пишут, что муравей поднимает груз в пятьдесят раз тяжелее себя, и делают вывод, что муравей размером с человека был бы неимоверно силён. Проверьте это рассуждение размерностями, прежде чем читать дальше.",
+          "answer": "Сила мышцы растёт как её сечение, то есть как квадрат размера. Масса растёт как объём, то есть как куб. Увеличив муравья в тысячу раз, вы усилили его в миллион, а утяжелили в миллиард — он стал в тысячу раз слабее относительно собственного веса и не смог бы даже стоять. Это правило Галилея о квадрате и кубе; из него же следует, почему у слона колонноподобные ноги, а у мыши тонкие."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Почему кошка падает лучше человека",
+          "text": "Сопротивление воздуха пропорционально площади, а вес — объёму. У мелкого животного отношение площади к массе велико, поэтому предельная скорость падения мала: мышь около 15 км/ч, кошка около 100, человек около 200. Отсюда известное наблюдение ветеринаров: у кошек, упавших с седьмого этажа, травмы в среднем легче, чем упавших с пятого, — они успевают достичь предельной скорости, расслабиться и распластаться."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Число секунд в году",
+          "text": "π · 10⁷ — примерно 3,14 · 10⁷ секунд, тогда как точное значение 3,156 · 10⁷. Ошибка полпроцента, а запоминается навсегда. Совпадение чистое, никакой физики за ним нет, но в оценках экономит много времени."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Правило десяти процентов",
+          "text": "В оценках можно смело считать, что $\\pi \\approx 3$, $\\sqrt{2} \\approx 1{,}4$, $\\sqrt{10} \\approx 3$, а год — это $3 \\cdot 10^{7}$ секунд. Каждое из этих округлений даёт ошибку в единицы процентов, а вместе они почти никогда не сдвигают порядок величины. Считать в уме с такими числами получается вдвое быстрее — и это разница между «прикинул на ходу» и «пришлось садиться за стол»."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: откуда берутся безразмерные числа",
+      "lead": "Не входит в проверку. О том, почему физика в итоге говорит не о метрах и секундах, а о числах без единиц.",
+      "blocks": [
+        {
+          "h": "Единицы — наше изобретение, физика — нет",
+          "text": "Метр и секунда придуманы людьми: их можно было выбрать иначе, и природа этого не заметит. Значит, всякое утверждение о природе обязано формулироваться так, чтобы не зависеть от выбора единиц. Отсюда и следует, что настоящие управляющие параметры любой задачи — безразмерные комбинации."
+        },
+        {
+          "h": "Число Рейнольдса и почему муха не может плавать по-человечески",
+          "text": "Отношение инерционных сил к вязким $\\mathrm{Re} = \\rho v L / \\mu$ — единственная величина, решающая, будет ли течение гладким или турбулентным. Для пловца оно около 10⁶, для бактерии около 10⁻⁵. Это разные миры: бактерия живёт в среде, где инерции нет вовсе, и, перестав грести, останавливается за долю диаметра. Плавать взмахами там бессмысленно — и потому жгутик вращается, а не машет."
+        },
+        {
+          "h": "Постоянная тонкой структуры",
+          "text": "Есть безразмерные числа, которые не собираются ни из чего, а просто такие: например $\\alpha \\approx 1/137$, задающая силу электромагнитного взаимодействия. Фейнман называл её одной из величайших загадок физики: число, которое ни один теоретик не умеет вывести, а вся химия и вся жизнь зависят от того, что оно именно такое."
+        },
+        {
+          "h": "Куда это ведёт",
+          "text": "Вопрос «почему фундаментальные постоянные имеют именно те значения» остаётся открытым и упирается в самый край современной физики. Подробнее — в разделе «Открытые вопросы»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Размерность левой и правой частей уравнения совпадает всегда; из этого часто следует вид формулы, а порядок величины оценивается перемножением грубых прикидок.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Приравнивание размерностей даёт зависимость",
+          "text": "Приравнивание размерностей даёт зависимость с точностью до безразмерного множителя"
+        },
+        {
+          "icon": "formula",
+          "title": "Метод не ловит безразмерные параметры",
+          "text": "там он молча бессилен"
+        },
+        {
+          "icon": "estimate",
+          "title": "Оценка Ферми",
+          "text": "разбить неизвестное на цепочку прикидываемых величин и перемножить"
+        },
+        {
+          "icon": "estimate",
+          "title": "Ошибки округления частично гасят",
+          "text": "Ошибки округления частично гасят друг друга, поэтому грубые прикидки дают верный порядок"
+        },
+        {
+          "icon": "scale",
+          "title": "Проверка размерности в конце",
+          "text": "Проверка размерности в конце вывода ловит большинство ошибок алгебры"
+        }
+      ],
+      "where": "Проверка любой выведенной формулы; оценка выполнимости замысла до расчётов; чтение степенных зависимостей по логарифмическому графику.",
+      "watchOut": "Главная ловушка — неполный список величин. Ответ выйдет размерно безупречным и физически неверным, и метод об этом не предупредит."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Анализ размерностей дал для периода маятника $T = C\\sqrt{\\ell/g}$. Почему в нём нет массы?",
+        "options": [
+          "Масса сократилась при вычислениях случайно",
+          "Массу забыли включить в список величин",
+          "Показатель при массе вышел нулевым: из $\\mathsf{M}$ невозможно составить время, комбинируя её с длиной и ускорением",
+          "Масса входит, но её вклад пренебрежимо мал"
+        ],
+        "answer": 2,
+        "why": "Масса была в списке, но размерность массы не встречается больше нигде — ни у периода, ни у длины, ни у ускорения. Значит, её показатель обязан быть нулевым. Метод сообщил нам физический факт, которого мы не закладывали.",
+        "hint": "Посмотрите на систему уравнений в четвёртом шаге вывода. Откуда взялось уравнение β = 0 и можно ли было получить иначе?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "В чём главная слабость анализа размерностей?",
+        "options": [
+          "Он не даёт безразмерный множитель и бессилен, если в задаче есть безразмерный параметр",
+          "Он работает только в механике",
+          "Он требует знания дифференциальных уравнений",
+          "Он даёт ответ с ошибкой порядка десяти процентов"
+        ],
+        "answer": 0,
+        "why": "Множитель приходится добывать из полного решения или опыта. Хуже другое: безразмерная величина — например, угол отклонения маятника — не накладывает на размерности никаких ограничений, и метод её просто не видит.",
+        "hint": "Вспомните последний шаг вывода: что случилось с формулой, когда амплитуда колебаний перестала быть малой?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "Своими словами: почему оценка Ферми даёт разумный ответ, хотя каждое число в ней взято приблизительно?",
+        "keywords": [
+          "ошибк",
+          "гас",
+          "компенс",
+          "разные сторон",
+          "порядок",
+          "среднем",
+          "корень",
+          "не накаплива"
+        ],
+        "needed": 1,
+        "why": "Ошибки прикидок независимы и направлены в разные стороны, поэтому частично компенсируют друг друга: суммарное расхождение растёт примерно как корень из числа сомножителей, а не как их произведение. Вдобавок нас интересует порядок величины — а он устойчив к промахам вдвое.",
+        "hint": "Представьте, что каждый из пяти множителей вы завысили или занизили вдвое, причём случайным образом. Все ли ошибки будут в одну сторону?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "Скорость волн на глубокой воде может зависеть только от длины волны и ускорения свободного падения. Какова тогда скорость волны длиной 100 метров, в м/с?",
+        "answer": 12.5,
+        "unit": "м/с",
+        "tolerance": 5,
+        "why": "Из λ и g размерность скорости собирается единственным способом: v ~ √(gλ). Подставляя, получаем √(10 · 100) ≈ 30 м/с без множителя, а точное решение даёт v = √(gλ/2π) ≈ 12,5 м/с. Отсюда, между прочим, следует, что длинные волны океанской зыби обгоняют короткие и приходят к берегу первыми — за сутки до самого шторма.",
+        "hint": "Соберите из м и м/с² комбинацию размерности м/с. Какие степени должны быть у длины волны и у g?"
+      }
+    ]
+  },
+  "en": {
+    "title": "Dimension and Order of Magnitude",
+    "subtitle": "Section 2 · How to Get an Answer Without Solving the Problem",
+    "intro": [
+      "How many piano tuners work in Chicago? The question sounds like a joke: there is no reference book, you can't Google it, and you need an answer in a minute. Yet it can be solved—with enough accuracy for any practical decision.",
+      "The technique physicists call this an order-of-magnitude estimate, and problems of this kind are Fermi problems. It's not a trick or sloppiness born of laziness. It's a way to understand which scales we're even talking about—and it's often more important than an exact calculation, because an exact calculation can only be done once you already understand what you're calculating.",
+      "The second tool in this section is even more powerful. It turns out that the form of a formula can often be reconstructed from the units of measurement alone, without knowing anything about the physics at play. It sounds impossible—but that's exactly how Rayleigh explained why the sky is blue, and how military physicists in the 1950s calculated the power of a classified explosion from newspaper photographs."
+    ],
+    "standNote": "The simulation is the same as in the first section, and that is intentional. Set an initial speed of 20 m/s and an acceleration of −5 m/s². Before looking at the graph, estimate in your head: braking will take about four seconds, the average speed is about ten, so the stopping distance is about forty meters. Now check. The ability to name the answer before the calculation is what this section teaches.",
+    "formula": {
+      "name": "Principle of Dimensional Homogeneity",
+      "latex": "[\\,\\text{left-hand side}\\,] = [\\,\\text{right-hand side}\\,] \\qquad X = C \\cdot a^{\\alpha} b^{\\beta} c^{\\gamma}",
+      "alsoKnown": "Dimensional analysis · Buckingham Π theorem",
+      "authors": [
+        {
+          "who": "Jean Baptiste Fourier",
+          "year": "1822",
+          "what": "first wrote that a physical equation must be dimensionally homogeneous: you cannot add meters to seconds, and this is not a convention but a property of the quantities themselves"
+        },
+        {
+          "who": "John William Strutt (Lord Rayleigh)",
+          "year": "1871",
+          "what": "turned Fourier's observation into a method. He showed that scattering of light by small particles must be inversely proportional to the fourth power of the wavelength—hence the blue sky and red sunset, without a single equation of electrodynamics"
+        },
+        {
+          "who": "Edgar Buckingham",
+          "year": "1914",
+          "what": "proved the general theorem: any physical relationship between n quantities with k independent dimensions can be reduced to a relation between n − k dimensionless combinations. This is the rigorous justification of the method"
+        },
+        {
+          "who": "Enrico Fermi",
+          "year": "1945",
+          "what": "elevated estimation to an art. At the Alamogordo test he threw scraps of paper into the air and from the distance they were carried by the shock wave he named the explosion yield; the result agreed with the instrument measurement to an order of magnitude"
+        }
+      ],
+      "story": "The most famous demonstration of the method occurred in 1950. The power of the first atomic explosion remained secret, but Life magazine published a series of images of the growing fireball with time and scale indicated. Geoffrey Taylor in England noticed that the radius of the fireball could depend only on the explosion energy, air density, and time—and from these three quantities, the dimension of length is assembled in only one way: $R \\sim (E t^2/\\rho)^{1/5}$. He plotted the data, extracted the slope, and published the yield in the open press. In America this caused an uproar: a man declassified the project's key figure from magazine pictures, with no access to anything else.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "\\mathsf{L}",
+          "what": "dimension of length",
+          "unit": "m",
+          "note": "one of the seven base dimensions; everything else is built from them"
+        },
+        {
+          "sym": "M",
+          "latex": "\\mathsf{M}",
+          "what": "dimension of mass",
+          "unit": "kg",
+          "note": "do not confuse with weight: weight has the dimension of force"
+        },
+        {
+          "sym": "T",
+          "latex": "\\mathsf{T}",
+          "what": "dimension of time",
+          "unit": "s",
+          "note": "in mechanics these three are sufficient for everything"
+        },
+        {
+          "sym": "C",
+          "latex": "C",
+          "what": "dimensionless factor",
+          "unit": "—",
+          "note": "the method does not provide it; usually between 0.1 and 10, so the estimate is correct to order of magnitude"
+        },
+        {
+          "sym": "Pi",
+          "latex": "\\Pi",
+          "what": "dimensionless combination of quantities",
+          "unit": "—",
+          "note": "for example, the Reynolds number; physics actually depends on these"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation: Formula from Units Alone",
+      "lead": "We will derive the period of small oscillations of a pendulum without writing a single equation of motion. We know neither Newton's second law nor sine — only what the period might depend on.",
+      "steps": [
+        {
+          "text": "Let's list the quantities on which the period could possibly depend: string length, mass of the bob, acceleration due to gravity. There is nothing else in the problem — and this is the most crucial step of the method: if something essential is forgotten, the answer will be wrong.",
+          "latex": "T = f(\\ell,\\; m,\\; g)",
+          "figure": "axes",
+          "figCaption": "The method begins with a list of quantities. Everything that follows is mechanics, but the list requires physical understanding."
+        },
+        {
+          "text": "Let's write the dimensions of each quantity in terms of base units. Period — time. Length — length. Mass — mass. Acceleration — length divided by time squared.",
+          "latex": "[T] = \\mathsf{T}, \\quad [\\ell] = \\mathsf{L}, \\quad [m] = \\mathsf{M}, \\quad [g] = \\mathsf{L}\\,\\mathsf{T}^{-2}",
+          "figure": "vline",
+          "figCaption": "Each physical quantity is a product of base dimensions raised to certain powers."
+        },
+        {
+          "text": "Assume that the answer is a product of powers — this is not a restriction but a consequence of Buckingham's theorem. Equate the dimensions on the left and right.",
+          "latex": "\\mathsf{T} = \\mathsf{L}^{\\alpha} \\cdot \\mathsf{M}^{\\beta} \\cdot (\\mathsf{L}\\,\\mathsf{T}^{-2})^{\\gamma} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+          "figure": "forceprop",
+          "figCaption": "Equating dimensions turns the physical problem into a small system of equations."
+        },
+        {
+          "text": "Exponents for identical dimensions must match. We get three equations — and note the second one: mass cancels out on its own; the method tells us this before we have time to be surprised.",
+          "latex": "\\begin{cases} \\alpha + \\gamma = 0 \\\\ \\beta = 0 \\\\ -2\\gamma = 1 \\end{cases} \\;\\Longrightarrow\\; \\gamma = -\\tfrac{1}{2}, \\;\\; \\alpha = \\tfrac{1}{2}, \\;\\; \\beta = 0",
+          "figure": "massprop",
+          "figCaption": "The exponent for mass turned out to be zero: the pendulum's period does not depend on the mass of the bob."
+        },
+        {
+          "text": "Assemble the answer. The exact solution of the equation of motion gives a factor $2\\pi \\approx 6{,}3$ — the method cannot provide it. But the dependence is fully obtained: the period grows as the square root of length and does not depend on mass.",
+          "latex": "T = C\\sqrt{\\frac{\\ell}{g}}, \\qquad \\text{точно: } T = 2\\pi\\sqrt{\\frac{\\ell}{g}}",
+          "figure": "result",
+          "figCaption": "The method gives the form of the formula; the dimensionless constant must be obtained otherwise — from experiment or from the full solution."
+        },
+        {
+          "text": "Let's test the prediction without solving anything. To double the period, the length must be quadrupled. A seconds pendulum — the one that ticks in grandfath clocks — should have a length of about 25 cm with a half-period of one second. Indeed: this is a classic value in horology, known long before any dimensional analysis.",
+          "latex": "\\ell = \\frac{g}{\\pi^{2}} \\approx \\frac{9{,}8}{9{,}87} \\approx 0{,}99\\ \\text{м} \\;\\;(\\text{период } 2\\ \\text{с})",
+          "figure": "isochron",
+          "figCaption": "Checking against a known fact is a necessary step: the method is powerful, but it silently fails if the list of quantities was incomplete."
+        },
+        {
+          "text": "And the limitation of the method. If an essential quantity is omitted from the list, the answer will be dimensionally flawless but physically incorrect. For a pendulum with large amplitude, a dimensionless parameter appears — the angle itself — and the period starts to depend on it. Dimensional analysis is powerless here: the angle is dimensionless, it imposes no constraints.",
+          "latex": "T = \\sqrt{\\frac{\\ell}{g}}\\; F(\\theta_0), \\qquad F(\\theta_0 \\to 0) = 2\\pi",
+          "figure": "curves",
+          "figCaption": "The method does not catch dimensionless parameters: their dependence must be found through physics or experiment."
+        }
+      ],
+      "plate": "The dimension of the left-hand side equals the dimension of the right-hand side — this is not a convention but a law. From it often follows the form of the formula up to a numerical factor of order unity.",
+      "note": "A practical rule for the entire course: after finishing a derivation, check the dimensions of both sides. This catches most algebra errors in five seconds and works even where you cannot verify the answer."
+    },
+    "math": {
+      "title": "The Mathematics Needed Here",
+      "text": [
+        "All that is needed is powers and logarithms, but used in an unusual way: as the language of scales, not as a calculation technique.",
+        "The first skill is working with orders of magnitude. A number is written as a mantissa times ten to a power, and exponents add when multiplying. Estimation is done only with exponents; mantissas are rounded to one significant digit. Three times ten to the eighth times two times ten to the minus fifth is six times ten to the third, and this is computed mentally in a second.",
+        "The second skill is knowing that rounding in estimates hardly spoils the result. If you round each of five factors with a factor of two error, errors in different directions partially cancel: the typical discrepancy grows as the square root of the number of factors, not as their product. That is why Fermi problems work, even though every number in them is pulled out of thin air.",
+        "The third skill is reading power-law dependencies from a graph. If a quantity behaves as $y = C x^{n}$, then on a log-log plot you get a straight line with slope $n$. That's how Taylor extracted the one-fifth power from newspaper photographs: he plotted radius versus time on log-log axes and applied a ruler.",
+        "And one warning. Only a dimensionless quantity can appear inside an exponential, logarithm, or sine. An expression like 'sine of three meters' is meaningless — and this is not pedantry: if you find such in your calculations, you've caught an error."
+      ]
+    },
+    "example": {
+      "title": "Example with numbers: Piano tuners in Chicago",
+      "lead": "A classic Fermi problem. None of the numbers below are reference values — they are all guessed. See what comes out.",
+      "given": "Estimate how many people are professionally engaged in piano tuning in a city with a population of about three million people.",
+      "law": "Order-of-magnitude estimation: break the unknown into a chain of quantities, each of which can be estimated, and multiply.",
+      "solution": [
+        {
+          "text": "How many households in the city. Assume an average of three people per family.",
+          "latex": "N_{\\text{дом}} \\approx \\frac{3 \\cdot 10^{6}}{3} = 10^{6}"
+        },
+        {
+          "text": "What fraction own a piano. Let's say about one in thirty — the instrument is expensive and bulky.",
+          "latex": "N_{\\text{форт}} \\approx \\frac{10^{6}}{30} \\approx 3 \\cdot 10^{4}"
+        },
+        {
+          "text": "How often is it tuned. Once a year — a reasonable average between neglected and concert pianos.",
+          "latex": "n_{\\text{настроек}} \\approx 3 \\cdot 10^{4}\\ \\text{в год}"
+        },
+        {
+          "text": "How many tunings does one master do. Tuning takes a couple of hours, plus travel; let's say four per day, two hundred working days per year.",
+          "latex": "n_{\\text{на мастера}} \\approx 4 \\cdot 200 = 800\\ \\text{в год}"
+        },
+        {
+          "text": "Divide one by the other.",
+          "latex": "N_{\\text{мастеров}} \\approx \\frac{3 \\cdot 10^{4}}{800} \\approx 40"
+        }
+      ],
+      "answer": "On the order of several tens of people. Real directories for Chicago give a value of the same order — from thirty to a hundred, depending on who is considered a professional.",
+      "check": "What matters is not the number but what we learned. The answer turned out to be neither three nor three thousand — and that is exactly the question that usually needs to be solved in practice. Whether to open such a workshop, whether there is enough work for everyone, whether a separate guild is needed — all these decisions depend on the order of magnitude and are completely independent of whether there are forty masters or fifty-five."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Here, what will be useful are not so much constants as reference numbers — those worth keeping in mind to estimate without a handbook.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Acceleration due to gravity",
+          "value": "9.81",
+          "unit": "m/s²",
+          "why": "In estimations, one almost always takes 10: an error of 2%, but easy mental division. Also $\\pi^2 \\approx 9.87$ is close to ten — a coincidence, but convenient.",
+          "mnemo": "π² ≈ g ≈ 10 in SI. This is a consequence of the old definition of the meter via the seconds pendulum, not an accident."
+        },
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Speed of light",
+          "value": "3 · 10⁸",
+          "unit": "m/s",
+          "why": "Reference value for any estimations in electrodynamics and relativity. Everything much slower is described by classical physics.",
+          "mnemo": "Light circles the Earth at the equator 7.5 times per second and reaches from the Moon in 1.3 seconds."
+        },
+        {
+          "sym": "N_A",
+          "latex": "N_A",
+          "dictKey": "N_A",
+          "name": "Avogadro's number",
+          "value": "6.0 · 10²³",
+          "unit": "1/mol",
+          "why": "A bridge between what is visible and what it is made of. Any estimation of the form 'how many molecules' goes through it.",
+          "mnemo": "There are about as many molecules in a glass of water as there are glasses of water in all the oceans of the Earth."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Training: five estimates worth being able to do mentally",
+      "lead": "Not for the answers, but for the skill. Try each yourself before reading the breakdown — it takes less than a minute.",
+      "items": [
+        {
+          "h": "How many breaths do you take in a lifetime",
+          "text": "About 15 breaths per minute, a million minutes in a year (check: 60·24·365 ≈ 5·10⁵), seventy years. That gives about 5·10⁸ — half a billion breaths."
+        },
+        {
+          "h": "How much water in a human body",
+          "text": "The body is about 60% water, mass about 70 kg — so about 40 liters. From this it immediately follows why dehydration of a few liters is already dangerous: it is a percentage of the whole."
+        },
+        {
+          "h": "How many times smaller is an atom than a human",
+          "text": "Atom about 10⁻¹⁰ m, human about 2 m — ratio about 10¹⁰. That is about the same factor by which a human is smaller than the diameter of the Solar System. We are exactly in the middle of known scales, and this is not a metaphor but arithmetic."
+        },
+        {
+          "h": "Is the energy of one lightning strike enough for an apartment",
+          "text": "A lightning bolt carries about 10⁹ J, an apartment consumes about 300 kWh per month, which is roughly 10⁹ J. Conclusion: one lightning strike would be enough for a month — and this answers why the idea of 'storing lightning' is economically hopeless given its rarity."
+        },
+        {
+          "h": "How many air molecules did you just inhale",
+          "text": "Half a liter of air under normal conditions is about 1/50 mole, i.e., on the order of 10²² molecules. That is more than the number of breaths of all humanity in history; hence a well-known consequence: in each of your breaths, there are almost certainly molecules that have passed through the lungs of any person from the past."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosities: Try It Yourself",
+      "lead": "In the spirit of Perelman: an experiment that needs no lab, a paradox to ponder before revealing the answer, and facts that stick on their own.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Measure a Molecule with Sunflower Oil",
+          "text": "Sprinkle a thin layer of talc or ground pepper on a wide plate of water. Drop a droplet of vegetable oil in the center — the film pushes the powder aside and forms a circle. Measure the diameter of the circle with a ruler. Estimate the droplet volume by counting how many drops are in a teaspoon (usually about a hundred, a teaspoon is 5 ml). Then divide the volume by the area of the circle — you get the film thickness.",
+          "answer": "It will be on the order of $10^{-9}$ meters, i.e., a nanometer. The oil spreads exactly to a layer one molecule thick — it can't go further. You measured the size of a molecule using kitchen utensils and a ruler. That's exactly how Rayleigh in 1890 obtained the first reasonable estimate of molecular sizes."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Why You Can't Simply Scale Up an Ant",
+          "text": "It is said that an ant lifts a load fifty times heavier than itself, leading to the conclusion that an ant the size of a human would be incredibly strong. Check this reasoning with dimensional analysis before reading on.",
+          "answer": "Muscle force scales with its cross-section, i.e., as the square of size. Mass scales with volume, i.e., as the cube. If you scaled up an ant a thousand times, its strength increases a millionfold but its weight increases a billionfold — it becomes a thousand times weaker relative to its own weight and couldn't even stand. This is Galileo's square-cube law; it also explains why elephants have column-like legs and mice have slender ones."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "Why a Cat Falls Better Than a Human",
+          "text": "Air resistance is proportional to area, while weight is proportional to volume. For a small animal, the area-to-mass ratio is large, so the terminal velocity is low: mouse about 15 km/h, cat about 100, human about 200. Hence the well-known veterinary observation: cats falling from the seventh floor have on average lighter injuries than those falling from the fifth — they have time to reach terminal velocity, relax, and spread out."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Number of Seconds in a Year",
+          "text": "π · 10⁷ — about 3.14·10⁷ seconds, while the exact value is 3.156·10⁷. An error of half a percent, and it's unforgettable. It's a pure coincidence, no physics behind it, but it saves a lot of time in estimates."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimation",
+          "h": "The Ten Percent Rule",
+          "text": "In estimates, you can safely use $\\pi \\approx 3$, $\\sqrt{2} \\approx 1{,}4$, $\\sqrt{10} \\approx 3$, and a year is $3 \\cdot 10^{7}$ seconds. Each of these roundings gives a few percent error, and together they almost never change the order of magnitude. Doing mental math with such numbers is twice as fast — and that's the difference between 'rough estimate on the go' and 'having to sit down at a desk'."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Where Dimensionless Numbers Come From",
+      "lead": "Not part of the test. About why physics ultimately speaks not in meters and seconds, but in numbers without units.",
+      "blocks": [
+        {
+          "h": "Units Are Our Invention, Physics Is Not",
+          "text": "The meter and second are human inventions: they could have been chosen differently, and nature wouldn't notice. Therefore, any statement about nature must be formulated so as not to depend on the choice of units. Hence, the true governing parameters of any problem are dimensionless combinations."
+        },
+        {
+          "h": "Reynolds Number and Why a Fly Can't Swim Like a Human",
+          "text": "The ratio of inertial forces to viscous forces $\\mathrm{Re} = \\rho v L / \\mu$ is the sole quantity that decides whether the flow is smooth or turbulent. For a swimmer it is about 10⁶, for a bacterium about 10⁻⁵. These are different worlds: a bacterium lives in a medium where inertia is absent, and when it stops stroking, it stops within a fraction of its diameter. Swimming with strokes is pointless there — which is why flagella rotate, not wave."
+        },
+        {
+          "h": "Fine-Structure Constant",
+          "text": "There are dimensionless numbers that are not derived from anything else; they just are. For example, $\\alpha \\approx 1/137$, which determines the strength of the electromagnetic interaction. Feynman called it one of the greatest mysteries of physics: a number that no theorist can derive, yet all of chemistry and all of life depend on it being just what it is."
+        },
+        {
+          "h": "Where This Leads",
+          "text": "The question 'why do fundamental constants have the values they do' remains open and pushes to the frontier of modern physics. For more details, see the section 'Open Questions'."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "The dimensions of the left and right sides of an equation always match; this often implies the form of the formula, and the order of magnitude is estimated by multiplying rough guesses.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Dimensional analysis yields the",
+          "text": "Dimensional analysis yields the dependence up to a dimensionless factor"
+        },
+        {
+          "icon": "formula",
+          "title": "The method does not",
+          "text": "The method does not catch dimensionless parameters — it is powerless there"
+        },
+        {
+          "icon": "sigma",
+          "title": "Fermi estimate",
+          "text": "break the unknown into a chain of estimable quantities and multiply"
+        },
+        {
+          "icon": "ruler",
+          "title": "Rounding errors partially cancel",
+          "text": "Rounding errors partially cancel each other, so rough estimates give the correct order"
+        },
+        {
+          "icon": "scale",
+          "title": "Dimensional check at the",
+          "text": "Dimensional check at the end of a derivation catches most algebraic mistakes"
+        }
+      ],
+      "where": "Checking any derived formula; assessing feasibility of an idea before calculations; reading power-law dependencies from a logarithmic plot.",
+      "watchOut": "The main pitfall is an incomplete list of quantities. The answer will be dimensionally perfect but physically wrong, and the method will not warn you."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Dimensional analysis gave for the pendulum period $T = C\\sqrt{\\ell/g}$. Why is mass absent from this formula?",
+        "options": [
+          "Mass canceled out during calculations by chance",
+          "Mass was forgotten to be included in the list of quantities",
+          "The exponent for mass turned out to be zero: from $\\mathsf{M}$ it is impossible to form time by combining it with length and acceleration",
+          "Mass is included, but its contribution is negligible"
+        ],
+        "answer": 2,
+        "why": "Mass was in the list, but the dimension of mass appears nowhere else — neither in the period, nor in the length, nor in the acceleration. Hence its exponent must be zero. The method revealed a physical fact that we had not put in.",
+        "hint": "Look at the system of equations in the fourth step of the derivation. Where did the equation β = 0 come from, and could it have been obtained differently?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "What is the main weakness of dimensional analysis?",
+        "options": [
+          "It does not give the dimensionless factor and is powerless if the problem contains a dimensionless parameter",
+          "It works only in mechanics",
+          "It requires knowledge of differential equations",
+          "It gives an answer with an error of about ten percent"
+        ],
+        "answer": 0,
+        "why": "The factor has to be obtained from a complete solution or experiment. Worse is another thing: a dimensionless quantity — for example, the pendulum's deflection angle — imposes no constraints on dimensions, and the method simply does not see it.",
+        "hint": "Recall the last step of the derivation: what happened to the formula when the oscillation amplitude ceased to be small?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "In your own words: why does Fermi’s estimate give a reasonable answer even though every number in it is taken approximately?",
+        "keywords": [
+          "error",
+          "cancel",
+          "compensate",
+          "different sides",
+          "order",
+          "average",
+          "root",
+          "not accumulate"
+        ],
+        "needed": 1,
+        "why": "Errors in estimates are independent and go in different directions, so they partially compensate each other: the total discrepancy grows roughly as the square root of the number of factors, not as their product. Besides, we are interested in the order of magnitude — which is robust to being off by a factor of two.",
+        "hint": "Imagine that each of the five multipliers you overestimate or underestimate by a factor of two, at random. Will all the errors be in the same direction?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "The speed of waves on deep water can depend only on the wavelength and the acceleration due to gravity. What then is the speed of a wave with a wavelength of 100 meters, in м/с?",
+        "answer": 12.5,
+        "unit": "м/с",
+        "tolerance": 5,
+        "why": "From λ and g the dimension of speed can be assembled in only one way: v ~ √(gλ). Substituting gives √(10·100) ≈ 30 м/с without a factor, while the exact solution yields v = √(gλ/2π) ≈ 12.5 м/с. This, by the way, implies that long ocean swell waves outrun short ones and arrive at the shore first — a day before the storm itself.",
+        "hint": "Assemble from м and м/с² a combination of dimension м/с. What exponents must the wavelength and g have?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Dimensionalidad y orden de magnitud",
+    "subtitle": "§ 2 · Cómo obtener la respuesta sin resolver el problema",
+    "intro": [
+      "¿Cuántos afinadores de pianos trabajan en Chicago? La pregunta suena a burla: no hay guía, no se puede buscar en Google, y la respuesta se necesita en un minuto. Y sin embargo se resuelve, con la precisión suficiente para cualquier decisión práctica.",
+      "El método que se usa, los físicos lo llaman estimación de orden de magnitud, y los problemas de este tipo, problemas de Fermi. No es un truco ni una aproximación por pereza. Es una forma de entender de qué escalas se está hablando, y a menudo es más importante que un cálculo preciso, porque un cálculo preciso solo se puede hacer cuando ya se entiende lo que se calcula.",
+      "La segunda herramienta de esta sección es aún más potente. Resulta que la forma de una fórmula a menudo se puede reconstruir solo a partir de las unidades de medida, sin saber nada de la física subyacente. Suena imposible, pero así fue como Rayleigh explicó por qué el cielo es azul, y los físicos militares en la década de 1950 calcularon la potencia de una explosión secreta a partir de fotos de un periódico."
+    ],
+    "standNote": "El ejemplo es el mismo que en la primera sección, y es intencionado. Fije una velocidad inicial de 20 m/s y una aceleración de −5 m/s². Antes de mirar la gráfica, estime mentalmente: frenará durante unos cuatro segundos, la velocidad media será de unos diez, por lo tanto la distancia será del orden de cuarenta metros. Ahora compruébelo. La habilidad de dar la respuesta antes del cálculo es lo que enseña esta sección.",
+    "formula": {
+      "name": "Principio de homogeneidad dimensional",
+      "latex": "[\\,\\text{левая часть}\\,] = [\\,\\text{правая часть}\\,] \\qquad X = C \\cdot a^{\\alpha} b^{\\beta} c^{\\gamma}",
+      "alsoKnown": "Análisis dimensional · Teorema Π de Buckingham",
+      "authors": [
+        {
+          "who": "Jean-Baptiste Fourier",
+          "year": 1822,
+          "what": "fue el primero en escribir que una ecuación física debe ser dimensionalmente homogénea: no se pueden sumar metros con segundos, y esto no es una convención, sino una propiedad de las propias magnitudes."
+        },
+        {
+          "who": "John William Strutt (lord Rayleigh)",
+          "year": 1871,
+          "what": "convirtió la observación de Fourier en un método. Demostró que la dispersión de la luz en partículas pequeñas debe ser inversamente proporcional a la cuarta potencia de la longitud de onda; de ahí el cielo azul y el atardecer rojo, sin una sola ecuación de electrodinámica."
+        },
+        {
+          "who": "Edgar Buckingham",
+          "year": 1914,
+          "what": "demostró un teorema general: cualquier relación física entre $n$ magnitudes con $k$ dimensiones independientes se puede reducir a una relación entre $n - k$ combinaciones adimensionales. Esta es la justificación rigurosa del método."
+        },
+        {
+          "who": "Enrico Fermi",
+          "year": 1945,
+          "what": "llevó la estimación al arte. En la prueba de Alamogordo lanzó trozos de papel al aire y, a partir de la distancia que la onda de choque los desplazó, dio la potencia de la explosión; el resultado coincidió con el instrumental en orden de magnitud."
+        }
+      ],
+      "story": "La demostración más famosa del método ocurrió en 1950. La potencia de la primera explosión atómica seguía siendo secreta, pero la revista Life publicó una serie de imágenes de la creciente bola de fuego con indicación del tiempo y la escala. Geoffrey Taylor en Inglaterra notó que el radio de la bola solo podía depender de la energía de la explosión, la densidad del aire y el tiempo; y de estas tres magnitudes, la dimensión de longitud se forma de una única manera: $R \\sim (E t^2/\\rho)^{1/5}$. Trazó una gráfica, midió la pendiente y publicó la potencia en la prensa abierta. En Estados Unidos esto causó conmoción: un hombre desclasificó la cifra principal del proyecto a partir de imágenes de una revista, sin tener acceso a nada.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "\\mathsf{L}",
+          "what": "dimensión de longitud",
+          "unit": "m",
+          "note": "una de las siete fundamentales; todo lo demás se obtiene de ellas"
+        },
+        {
+          "sym": "M",
+          "latex": "\\mathsf{M}",
+          "what": "dimensión de masa",
+          "unit": "kg",
+          "note": "no confundir con el peso: el peso tiene dimensión de fuerza"
+        },
+        {
+          "sym": "T",
+          "latex": "\\mathsf{T}",
+          "what": "dimensión de tiempo",
+          "unit": "s",
+          "note": "en mecánica, estas tres bastan para todo"
+        },
+        {
+          "sym": "C",
+          "latex": "C",
+          "what": "factor adimensional",
+          "unit": "—",
+          "note": "el método no lo proporciona; generalmente está entre 0,1 y 10, por lo que la estimación es correcta en orden de magnitud"
+        },
+        {
+          "sym": "Pi",
+          "latex": "\\Pi",
+          "what": "combinación adimensional de magnitudes",
+          "unit": "—",
+          "note": "por ejemplo, el número de Reynolds; de ellas depende la física"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: fórmula a partir de unidades de medida",
+      "lead": "Derivemos el período de pequeñas oscilaciones de un péndulo sin escribir una sola ecuación de movimiento. No conocemos ni la segunda ley de Newton ni el seno; solo sabemos de qué puede depender el período.",
+      "steps": [
+        {
+          "text": "Hagamos una lista de las magnitudes de las que el período puede depender en principio. Longitud del hilo, masa del cuerpo, aceleración de la gravedad. No hay nada más en el problema, y este es el paso más crucial del método: si se olvida algo esencial, la respuesta será incorrecta.",
+          "latex": "T = f(\\ell,\\; m,\\; g)",
+          "figure": "axes",
+          "figCaption": "El método comienza con una lista de magnitudes. Todo lo demás es mecánica, pero la lista requiere comprensión física."
+        },
+        {
+          "text": "Escribamos las dimensiones de cada magnitud en términos de las básicas. El período es tiempo. La longitud es longitud. La masa es masa. La aceleración es longitud dividida por tiempo al cuadrado.",
+          "latex": "[T] = \\mathsf{T}, \\quad [\\ell] = \\mathsf{L}, \\quad [m] = \\mathsf{M}, \\quad [g] = \\mathsf{L}\\,\\mathsf{T}^{-2}",
+          "figure": "vline",
+          "figCaption": "Cada magnitud física es un producto de dimensiones básicas elevadas a ciertas potencias."
+        },
+        {
+          "text": "Supongamos que la respuesta tiene la forma de un producto de potencias; esto no es una restricción, sino una consecuencia del teorema de Buckingham. Igualemos las dimensiones de ambos lados.",
+          "latex": "\\mathsf{T} = \\mathsf{L}^{\\alpha} \\cdot \\mathsf{M}^{\\beta} \\cdot (\\mathsf{L}\\,\\mathsf{T}^{-2})^{\\gamma} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+          "figure": "forceprop",
+          "figCaption": "La igualación de dimensiones convierte un problema físico en un pequeño sistema de ecuaciones."
+        },
+        {
+          "text": "Los exponentes de las mismas dimensiones deben coincidir. Obtenemos tres ecuaciones — y observe la segunda: la masa desaparece por sí misma, el método nos lo dice antes de que nos sorprendamos.",
+          "latex": "\\begin{cases} \\alpha + \\gamma = 0 \\\\ \\beta = 0 \\\\ -2\\gamma = 1 \\end{cases} \\;\\Longrightarrow\\; \\gamma = -\\tfrac{1}{2}, \\;\\; \\alpha = \\tfrac{1}{2}, \\;\\; \\beta = 0",
+          "figure": "massprop",
+          "figCaption": "El exponente de la masa resultó ser cero: el período del péndulo no depende de la masa del cuerpo."
+        },
+        {
+          "text": "Armamos la respuesta. La solución exacta de la ecuación de movimiento da un factor $2\\pi \\approx 6{,}3$ — el método no lo proporciona ni puede hacerlo. Pero la dependencia se ha obtenido por completo: el período crece como la raíz cuadrada de la longitud y no depende de la masa.",
+          "latex": "T = C\\sqrt{\\frac{\\ell}{g}}, \\qquad \\text{exactamente: } T = 2\\pi\\sqrt{\\frac{\\ell}{g}}",
+          "figure": "result",
+          "figCaption": "El método proporciona la forma de la fórmula; el factor adimensional debe obtenerse de otra manera — experimentalmente o a partir de la solución completa."
+        },
+        {
+          "text": "Verifiquemos la predicción sin resolver nada. Para duplicar el período, la longitud debe cuadruplicarse. El péndulo de segundos — el que hace tic-tac en los relojes de pie — debe tener una longitud de unos 25 cm para un semiperíodo de un segundo. Así es: este es un valor clásico en la relojería, conocido mucho antes de cualquier análisis dimensional.",
+          "latex": "\\ell = \\frac{g}{\\pi^{2}} \\approx \\frac{9{,}8}{9{,}87} \\approx 0{,}99\\ \\text{m} \\;\\;(\\text{período } 2\\ \\text{s})",
+          "figure": "isochron",
+          "figCaption": "La verificación en un hecho conocido es un paso obligatorio: el método es poderoso, pero falla silenciosamente si la lista de magnitudes estaba incompleta."
+        },
+        {
+          "text": "Y el límite del método. Si en la lista de magnitudes se omite algo esencial, la respuesta será dimensionalmente impecable pero físicamente incorrecta. Para un péndulo de gran amplitud, aparece un parámetro adimensional — el propio ángulo — y el período comienza a depender de él. La dimensión aquí es impotente: el ángulo es adimensional, no impone ninguna restricción.",
+          "latex": "T = \\sqrt{\\frac{\\ell}{g}}\\; F(\\theta_0), \\qquad F(\\theta_0 \\to 0) = 2\\pi",
+          "figure": "curves",
+          "figCaption": "El método no captura parámetros adimensionales: su dependencia debe buscarse mediante la física o la experimentación."
+        }
+      ],
+      "plate": "La dimensión del miembro izquierdo es igual a la del derecho — esto no es una convención, sino una ley. De ella a menudo se sigue la forma de la fórmula, salvo un factor numérico del orden de la unidad.",
+      "note": "Regla práctica para todo el curso: al terminar una derivación, verifique la dimensión de ambos lados. Esto detecta la mayoría de los errores de álgebra en cinco segundos y funciona incluso cuando no puede verificar la respuesta."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Todo lo que se necesita son potencias y logaritmos, pero en un uso inusual: como lenguaje de escalas, no como técnica de cálculo.",
+        "La primera habilidad es trabajar con órdenes de magnitud. Un número se escribe como mantisa por diez elevado a una potencia, y al multiplicar, los exponentes se suman. La estimación se realiza solo con los exponentes, las mantisas se redondean a una cifra significativa. Tres por diez a la octava multiplicado por dos por diez a la menos cinco es seis por diez a la tercera, y se calcula mentalmente en un segundo.",
+        "La segunda habilidad es saber que el redondeo en las estimaciones casi no estropea el resultado. Si cada uno de los cinco factores se redondea con un error del doble, los errores en direcciones opuestas se cancelan parcialmente: la discrepancia típica crece como la raíz cuadrada del número de factores, no como su producto. Es por eso que los problemas de Fermi funcionan, aunque cada cifra esté tomada de la manga.",
+        "La tercera habilidad es leer dependencias de potencias a partir de una gráfica. Si una magnitud se comporta como $y = C x^{n}$, entonces en un gráfico con ambos ejes logarítmicos se obtiene una recta con pendiente $n$. Así fue como Taylor obtuvo el exponente de un quinto de las fotografías de periódicos: trazó el radio contra el tiempo en ejes logarítmicos y aplicó una regla.",
+        "Y una advertencia. Bajo el signo de la exponencial, el logaritmo o el seno solo puede haber una magnitud adimensional. Una expresión como «seno de tres metros» carece de sentido — y esto no es pedantería: si encuentra algo así en sus cálculos, ha detectado un error."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: afinadores de pianos en Chicago",
+      "lead": "Problema clásico de Fermi. Ninguno de los números siguientes es de referencia, todos son estimaciones. Mire lo que resulta.",
+      "given": "Estimar cuántas personas se dedican profesionalmente a la afinación de pianos en una ciudad con una población de aproximadamente tres millones de habitantes.",
+      "law": "Estimación por orden de magnitud: descomponer la incógnita en una cadena de magnitudes, cada una de las cuales se puede estimar, y multiplicarlas.",
+      "solution": [
+        {
+          "text": "¿Cuántos hogares hay en la ciudad? Consideramos un promedio de tres personas por familia.",
+          "latex": "N_{\\text{дом}} \\approx \\frac{3 \\cdot 10^{6}}{3} = 10^{6}"
+        },
+        {
+          "text": "¿Qué fracción tiene un piano? Supongamos que aproximadamente uno de cada treinta, ya que es un instrumento caro y voluminoso.",
+          "latex": "N_{\\text{форт}} \\approx \\frac{10^{6}}{30} \\approx 3 \\cdot 10^{4}"
+        },
+        {
+          "text": "¿Con qué frecuencia se afina? Una vez al año es un promedio razonable entre los abandonados y los de concierto.",
+          "latex": "n_{\\text{настроек}} \\approx 3 \\cdot 10^{4}\\ \\text{в год}"
+        },
+        {
+          "text": "¿Cuántas afinaciones hace un maestro? La afinación toma un par de horas, más el viaje; supongamos cuatro por día, doscientos días laborables al año.",
+          "latex": "n_{\\text{на мастера}} \\approx 4 \\cdot 200 = 800\\ \\text{в год}"
+        },
+        {
+          "text": "Dividimos una cosa entre la otra.",
+          "latex": "N_{\\text{мастеров}} \\approx \\frac{3 \\cdot 10^{4}}{800} \\approx 40"
+        }
+      ],
+      "answer": "Del orden de varias decenas de personas. Los directorios reales de Chicago dan una magnitud del mismo orden, de treinta a cien, dependiendo de a quién se considere profesional.",
+      "check": "No importa el número, sino lo que hemos aprendido. La respuesta no fue ni tres ni tres mil, y esa es precisamente la pregunta que normalmente hay que resolver en la práctica. Si vale la pena abrir un taller de este tipo, si hay suficiente trabajo para todos, si se necesita un gremio separado: todas estas decisiones dependen del orden de magnitud y no dependen en absoluto de si hay cuarenta maestros o cincuenta y cinco."
+    },
+    "constants": {
+      "title": "Magnitudes de este párrafo",
+      "lead": "Aquí serán útiles no tanto las constantes, sino los números de referencia: aquellos que conviene tener en mente para estimar sin un manual.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "Aceleración de la gravedad",
+          "value": "9,81",
+          "unit": "m/s²",
+          "why": "En las estimaciones casi siempre se toma 10: un error del 2%, pero una división mental. Además, $\\pi^2 \\approx 9{,}87$ también está cerca de diez: una coincidencia, pero conveniente.",
+          "mnemo": "π² ≈ g ≈ 10 en el sistema SI. Esto es consecuencia de la antigua definición del metro a través del péndulo de segundos, no una casualidad."
+        },
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "Velocidad de la luz",
+          "value": "3 · 10⁸",
+          "unit": "m/s",
+          "why": "Magnitud de referencia para cualquier estimación en electrodinámica y relatividad. Todo lo que es mucho más lento se describe con la física clásica.",
+          "mnemo": "La luz da la vuelta a la Tierra por el ecuador 7,5 veces por segundo y llega desde la Luna en 1,3 segundos."
+        },
+        {
+          "sym": "N_A",
+          "latex": "N_A",
+          "dictKey": "N_A",
+          "name": "Número de Avogadro",
+          "value": "6,0 · 10²³",
+          "unit": "1/mol",
+          "why": "Puente entre lo que se ve y lo que lo compone. Cualquier estimación del tipo 'cuántas moléculas' pasa por él.",
+          "mnemo": "En un vaso de agua hay aproximadamente tantas moléculas como vasos de agua en todos los océanos de la Tierra."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Entrenamiento: cinco estimaciones que vale la pena saber hacer mentalmente",
+      "lead": "No por las respuestas, sino por la habilidad. Intente cada una usted mismo antes de leer el análisis; lleva menos de un minuto.",
+      "items": [
+        {
+          "h": "¿Cuántas respiraciones haces en la vida?",
+          "text": "Aproximadamente 15 respiraciones por minuto, un millón de minutos al año (compruébelo: 60 · 24 · 365 ≈ 5 · 10⁵), setenta años. Resultan alrededor de 5 · 10⁸, quinientos millones de respiraciones."
+        },
+        {
+          "h": "¿Cuánta agua hay en una persona?",
+          "text": "El cuerpo está compuesto aproximadamente en un 60% de agua, la masa es de unos 70 kg, por lo tanto, alrededor de 40 litros. De ahí se deduce inmediatamente por qué la deshidratación de varios litros ya es peligrosa: son porcentajes del total."
+        },
+        {
+          "h": "¿Cuántas veces es más pequeño un átomo que una persona?",
+          "text": "Un átomo mide unos 10⁻¹⁰ m, una persona unos 2 m; la relación es aproximadamente 10¹⁰. Aproximadamente la misma cantidad de veces que una persona es más pequeña que el diámetro del sistema solar. Estamos exactamente en el medio de las escalas conocidas, y esto no es una metáfora, sino aritmética."
+        },
+        {
+          "h": "¿Bastará la energía de un rayo para un apartamento?",
+          "text": "Un rayo transporta alrededor de 10⁹ J, un apartamento consume unos 300 kWh al mes, es decir, aproximadamente 10⁹ J. Conclusión: un rayo sería suficiente para un mes, y esto responde por qué la idea de 'almacenar rayos' es económicamente inviable dada su rareza."
+        },
+        {
+          "h": "¿Cuántas moléculas de aire acabas de inhalar?",
+          "text": "Medio litro de aire en condiciones normales es aproximadamente 1/50 de mol, es decir, del orden de 10²² moléculas. Son más que las respiraciones de toda la humanidad en toda la historia; de ahí la conocida consecuencia: en cada una de tus respiraciones hay casi con certeza moléculas que estuvieron en los pulmones de cualquier persona del pasado."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: pruébelo con sus manos",
+      "lead": "Al estilo de Perelman: un experimento que no requiere laboratorio, una paradoja para reflexionar antes de la solución, y datos que se recuerdan por sí mismos.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "Mida una molécula con aceite de girasol",
+          "text": "Espolvoree una fina capa de talco o pimienta molida sobre un plato ancho con agua. Deje caer una gota de aceite vegetal en el centro: la película empuja el polvo y forma un círculo. Mida el diámetro del círculo con una regla. Estime el volumen de la gota contando cuántas gotas hay en una cucharadita (normalmente alrededor de cien, la cucharadita son 5 ml). Ahora divida el volumen entre el área del círculo: obtendrá el grosor de la película.",
+          "answer": "Resulta del orden de $10^{-9}$ metros, es decir, un nanómetro. El aceite se extiende exactamente hasta una capa de una molécula, no más allá. Usted midió el tamaño de una molécula con utensilios de cocina y una regla. Así fue como Rayleigh en 1890 obtuvo la primera estimación razonable de los tamaños moleculares."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Por qué no se puede simplemente agrandar una hormiga",
+          "text": "Se dice que una hormiga levanta una carga cincuenta veces más pesada que ella, y se concluye que una hormiga del tamaño de un humano sería increíblemente fuerte. Verifique este razonamiento con análisis dimensional antes de seguir leyendo.",
+          "answer": "La fuerza de un músculo crece con su sección transversal, es decir, como el cuadrado del tamaño. La masa crece con el volumen, es decir, como el cubo. Al agrandar una hormiga mil veces, su fuerza aumenta un millón de veces, pero su peso aumenta mil millones de veces: se vuelve mil veces más débil respecto a su propio peso y ni siquiera podría mantenerse en pie. Es la ley de Galileo del cuadrado y el cubo; de ahí también que un elefante tenga patas como columnas y un ratón patas delgadas."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Por qué un gato cae mejor que un humano",
+          "text": "La resistencia del aire es proporcional al área, y el peso al volumen. En un animal pequeño, la relación área/masa es grande, por lo que la velocidad límite de caída es baja: un ratón unos 15 km/h, un gato unos 100, un humano unos 200. De ahí la conocida observación de los veterinarios: los gatos que caen desde un séptimo piso sufren, en promedio, lesiones más leves que los que caen desde un quinto, porque alcanzan la velocidad límite, se relajan y se extienden."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "El número de segundos en un año",
+          "text": "π · 10⁷ — aproximadamente 3,14 · 10⁷ segundos, mientras que el valor exacto es 3,156 · 10⁷. El error es medio por ciento, y se recuerda para siempre. Es una coincidencia pura, sin física detrás, pero ahorra mucho tiempo en estimaciones."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Regla del diez por ciento",
+          "text": "En estimaciones, se puede considerar sin problemas que $\\pi \\approx 3$, $\\sqrt{2} \\approx 1{,}4$, $\\sqrt{10} \\approx 3$, y que un año son $3 \\cdot 10^{7}$ segundos. Cada una de estas aproximaciones tiene un error de unos pocos por ciento, y juntas casi nunca alteran el orden de magnitud. Hacer cálculos mentales con estos números es el doble de rápido, y esa es la diferencia entre «estimado sobre la marcha» y «tuve que sentarme a la mesa»."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: de dónde vienen los números adimensionales",
+      "lead": "No entra en la evaluación. Sobre por qué la física finalmente no habla de metros y segundos, sino de números sin unidades.",
+      "blocks": [
+        {
+          "h": "Las unidades son invención nuestra, la física no",
+          "text": "El metro y el segundo son inventos humanos: se podrían haber elegido de otra forma y la naturaleza no lo notaría. Por lo tanto, toda afirmación sobre la naturaleza debe formularse de manera que no dependa de la elección de unidades. De ahí se deduce que los verdaderos parámetros que gobiernan cualquier problema son combinaciones adimensionales."
+        },
+        {
+          "h": "El número de Reynolds y por qué una mosca no puede nadar como un humano",
+          "text": "La relación entre fuerzas inerciales y viscosas $\\mathrm{Re} = \\rho v L / \\mu$ es la única magnitud que determina si el flujo es laminar o turbulento. Para un nadador es alrededor de 10⁶, para una bacteria alrededor de 10⁻⁵. Son mundos diferentes: una bacteria vive en un medio donde la inercia no existe, y al dejar de remar se detiene en una fracción de su diámetro. Nadar con brazadas no tiene sentido allí, por eso el flagelo rota en lugar de batir."
+        },
+        {
+          "h": "Constante de estructura fina",
+          "text": "Hay números adimensionales que no se deducen de nada, sino que son así: por ejemplo $\\alpha \\approx 1/137$, que determina la fuerza de la interacción electromagnética. Feynman la llamó uno de los mayores misterios de la física: un número que ningún teórico sabe derivar, y toda la química y toda la vida dependen de que sea exactamente ese."
+        },
+        {
+          "h": "Hacia dónde lleva esto",
+          "text": "La pregunta de por qué las constantes fundamentales tienen esos valores permanece abierta y toca la frontera de la física moderna. Más detalles en la sección «Preguntas abiertas»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La dimensión de los lados izquierdo y derecho de una ecuación siempre coincide; de esto a menudo se deduce la forma de la fórmula, y el orden de magnitud se estima multiplicando aproximaciones groseras.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "Igualar dimensiones da la",
+          "text": "Igualar dimensiones da la dependencia salvo un factor adimensional"
+        },
+        {
+          "icon": "formula",
+          "title": "El método no captura",
+          "text": "El método no captura parámetros adimensionales; ahí es silenciosamente impotente"
+        },
+        {
+          "icon": "sigma",
+          "title": "Estimación de Fermi",
+          "text": "descomponer lo desconocido en una cadena de cantidades estimables y multiplicarlas"
+        },
+        {
+          "icon": "ruler",
+          "title": "Los errores de redondeo",
+          "text": "Los errores de redondeo se cancelan parcialmente, por lo que las estimaciones groseras dan el orden correcto"
+        },
+        {
+          "icon": "scale",
+          "title": "La verificación dimensional al",
+          "text": "La verificación dimensional al final de una deducción detecta la mayoría de los errores algebraicos"
+        }
+      ],
+      "where": "Verificación de cualquier fórmula deducida; evaluación de la viabilidad de una idea antes de los cálculos; lectura de dependencias de potencia en un gráfico logarítmico.",
+      "watchOut": "La principal trampa: una lista incompleta de magnitudes. La respuesta será dimensionalmente impecable pero físicamente incorrecta, y el método no lo advertirá."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "El análisis dimensional dio para el período del péndulo $T = C\\sqrt{\\ell/g}$. ¿Por qué no aparece la masa?",
+        "options": [
+          "La masa se canceló por casualidad en los cálculos",
+          "Olvidaron incluir la masa en la lista de magnitudes",
+          "El exponente de la masa resultó cero: con $\\mathsf{M}$ no es posible formar tiempo combinándola con longitud y aceleración",
+          "La masa aparece, pero su contribución es despreciable"
+        ],
+        "answer": 2,
+        "why": "La masa estaba en la lista, pero la dimensión de la masa no aparece en ninguna otra parte — ni en el período, ni en la longitud, ni en la aceleración. Por lo tanto, su exponente debe ser cero. El método nos reveló un hecho físico que no habíamos incluido.",
+        "hint": "Observa el sistema de ecuaciones en el cuarto paso de la deducción. ¿De dónde surgió la ecuación β = 0 y se podría haber obtenido de otra manera?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "¿Cuál es la principal debilidad del análisis dimensional?",
+        "options": [
+          "No proporciona el factor adimensional y es impotente si el problema tiene un parámetro adimensional",
+          "Solo funciona en mecánica",
+          "Requiere conocimiento de ecuaciones diferenciales",
+          "Da una respuesta con un error del orden del diez por ciento"
+        ],
+        "answer": 0,
+        "why": "El factor debe obtenerse de la solución completa o de la experimentación. Peor aún: una magnitud adimensional — por ejemplo, el ángulo de desviación del péndulo — no impone ninguna restricción a las dimensiones, y el método simplemente no la ve.",
+        "hint": "Recuerda el último paso de la deducción: ¿qué ocurrió con la fórmula cuando la amplitud de las oscilaciones dejó de ser pequeña?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué la estimación de Fermi da una respuesta razonable aunque cada número en ella sea aproximado?",
+        "keywords": [
+          "error",
+          "cancel",
+          "compens",
+          "distint lados",
+          "orden",
+          "promed",
+          "raíz",
+          "no acumul"
+        ],
+        "needed": 1,
+        "why": "Los errores de las estimaciones son independientes y están dirigidos en diferentes direcciones, por lo que se compensan parcialmente entre sí: la discrepancia total crece aproximadamente como la raíz del número de factores, no como su producto. Además, nos interesa el orden de magnitud, que es robusto frente a errores de hasta el doble.",
+        "hint": "Imagina que cada uno de los cinco factores lo aumentaste o disminuiste a la mitad, de manera aleatoria. ¿Todos los errores irán en la misma dirección?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "La velocidad de las olas en aguas profundas puede depender solo de la longitud de onda y la aceleración de la gravedad. ¿Cuál es entonces la velocidad de una ola de 100 metros de longitud, en m/s?",
+        "answer": 12.5,
+        "unit": "м/с",
+        "tolerance": 5,
+        "why": "A partir de λ y g, la dimensión de velocidad se obtiene de una única manera: v ~ √(gλ). Sustituyendo, obtenemos √(10·100) ≈ 30 м/с sin factor, pero la solución exacta da v = √(gλ/2π) ≈ 12,5 м/с. De aquí, por cierto, se deduce que las olas largas del oleaje oceánico superan a las cortas y llegan primero a la costa, un día antes de la propia tormenta.",
+        "hint": "Combina m y m/s² para obtener una combinación con dimensión m/s. ¿Qué exponentes deben tener la longitud de onda y g?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "البُعد والترتيب من حيث المقدار",
+    "subtitle": "الفقرة 2 · كيف تحصل على الإجابة دون حل المسألة",
+    "intro": [
+      "كم عدد مُضبِّطي البيانو في شيكاغو؟ السؤال يبدو كاستهزاء: لا يوجد دليل، ولا يمكن البحث في جوجل، والمطلوب إجابة خلال دقيقة. ومع ذلك يتم حلها — بدقة كافية لأي تطبيق عملي.",
+      "الطريقة التي يتم بها ذلك يسميها الفيزيائيون التقدير حسب الترتيب من حيث المقدار، والمشاكل من هذا النوع تُسمى مسائل فيرمي. إنها ليست خدعة ولا تقريبًا بسبب الكسل. إنها طريقة لفهم المقاييس التي نتحدث عنها — وغالبًا ما تكون أكثر أهمية من الحساب الدقيق، لأن الحساب الدقيق لا يمكن إجراؤه إلا عندما تفهم بالفعل ما تحسبه.",
+      "الأداة الثانية في هذه الفقرة أقوى. يبدو أنه يمكن إعادة بناء شكل المعادلة من وحدات القياس فقط، دون معرفة شيء عن الفيزياء وراءها. يبدو ذلك مستحيلًا — ولكن هكذا شرح رايلي سبب زرقة السماء، وكيف حسب فيزيائيو الجيش في الخمسينيات قوة انفجار سري من صور في جريدة."
+    ],
+    "standNote": "المنصة هي نفسها كما في الفقرة الأولى، وهذا متعمد. اضبط سرعة ابتدائية 20 م/ث وتسارعًا −5 م/ث². قبل النظر إلى الرسم البياني، قدر ذهنيًا: سيتوقف بعد حوالي أربع ثوانٍ، متوسط السرعة حوالي عشرة، لذا المسافة حوالي أربعين مترًا. الآن تحقق. القدرة على تسمية الإجابة قبل الحساب هو ما تعلمه هذه الفقرة.",
+    "formula": {
+      "name": "مبدأ التجانس البُعدي",
+      "latex": "[\\,\\text{левая часть}\\,] = [\\,\\text{правая часть}\\,] \\qquad X = C \\cdot a^{\\alpha} b^{\\beta} c^{\\gamma}",
+      "alsoKnown": "تحليل الأبعاد · نظرية Π لباكينجهام",
+      "authors": [
+        {
+          "who": "جان بابتيست فورييه",
+          "year": "1822",
+          "what": "كان أول من دوّن أن المعادلة الفيزيائية يجب أن تكون متجانسة بعديًا: لا يمكن جمع الأمتار مع الثواني، وهذه ليست اتفاقية بل خاصية للكميات نفسها"
+        },
+        {
+          "who": "جون ويليام سترات (اللورد رايلي)",
+          "year": "1871",
+          "what": "حوّل ملاحظة فورييه إلى طريقة. أظهر أن تشتت الضوء على الجسيمات الصغيرة يجب أن يتناسب عكسيًا مع القوة الرابعة لطول الموجة — ومن هنا السماء الزرقاء وغروب الشمس الأحمر، دون معادلة واحدة من الديناميكا الكهربائية."
+        },
+        {
+          "who": "إدغار باكينجهام",
+          "year": "1914",
+          "what": "أثبت نظرية عامة: أي علاقة فيزيائية بين $n$ كمية مع $k$ بعدًا مستقلاً يمكن اختصارها إلى علاقة بين $n - k$ تركيبات لا بعدية. وهذا هو الأساس الصارم لهذه الطريقة."
+        },
+        {
+          "who": "إنريكو فيرمي",
+          "year": "1945",
+          "what": "رفع التقدير إلى فن. في اختبار ألاموغوردو، ألقى قصاصات ورق في الهواء، ومن مسافة انجرافها بفعل الموجة الصدمية، حدد قوة الانفجار؛ النتيجة تطابقت مع القياسات الآلية من حيث الترتيب من حيث المقدار."
+        }
+      ],
+      "story": "أشهر عرض للطريقة حدث في عام 1950. ظلت قوة أول انفجار نووي سرية، لكن مجلة Life نشرت سلسلة لقطات للكرة النارية المتنامية مع ذكر الزمن والمقياس. لاحظ جيفري تايلور في إنجلترا أن نصف قطر الكرة قد يعتمد فقط على طاقة الانفجار وكثافة الهواء والزمن — ومن هذه الكميات الثلاث، بُعد الطول يُجمَّع بطريقة واحدة: $R \\sim (E t^2/\\rho)^{1/5}$. رسم بيانيًا، أخذ الميل، ونشر القوة في الصحافة المفتوحة. في أمريكا، أثار ذلك ذعرًا: الرجل أفشى الرقم الرئيسي للمشروع من صور في مجلة، دون أن يكون لديه إمكانية الوصول إلى أي شيء.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "\\mathsf{L}",
+          "what": "بُعد الطول",
+          "unit": "م",
+          "note": "واحدة من السبعة الأساسية؛ كل شيء آخر يُشتق منها"
+        },
+        {
+          "sym": "M",
+          "latex": "\\mathsf{M}",
+          "what": "بُعد الكتلة",
+          "unit": "كجم",
+          "note": "لا تخلط مع الوزن: الوزن له بُعد القوة"
+        },
+        {
+          "sym": "T",
+          "latex": "\\mathsf{T}",
+          "what": "بُعد الزمن",
+          "unit": "ث",
+          "note": "في الميكانيكا، هذه الثلاثة تكفي لكل شيء"
+        },
+        {
+          "sym": "C",
+          "latex": "C",
+          "what": "عامل لا بعدي",
+          "unit": "—",
+          "note": "الطريقة لا تعطيه؛ عادة ما يكون بين 0.1 و 10، وبالتالي التقدير صحيح من حيث الترتيب"
+        },
+        {
+          "sym": "Pi",
+          "latex": "\\Pi",
+          "what": "تركيبة لا بعدية للكميات",
+          "unit": "—",
+          "note": "مثل رقم رينولدز؛ الفيزياء تعتمد عليها بالفعل"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "استنتاج صارم: صيغة من وحدات القياس فقط",
+      "lead": "سنستنتج فترة الاهتزازات الصغيرة للبندول دون كتابة أي معادلة حركة. لا نعرف قانون نيوتن الثاني ولا الجيب — فقط ما يمكن أن تعتمد عليه الفترة.",
+      "steps": [
+        {
+          "text": "نقم بعمل قائمة بالكميات التي يمكن أن تعتمد عليها الفترة من حيث المبدأ: طول الخيط، كتلة الثقل، تسارع الجاذبية. لا يوجد شيء آخر في المسألة — وهذه هي الخطوة الأكثر أهمية في الطريقة: إذا نسي شيئًا جوهريًا، ستكون الإجابة خاطئة.",
+          "latex": "T = f(\\ell,\\; m,\\; g)",
+          "figure": "axes",
+          "figCaption": "تبدأ الطريقة بقائمة من الكميات. كل ما يلي هو ميكانيكا، لكن القائمة تتطلب فهمًا فيزيائيًا."
+        },
+        {
+          "text": "نكتب أبعاد كل كمية بدلالة الأساسيات: الفترة هي الزمن، الطول هو الطول، الكتلة هي الكتلة، التسارع هو الطول مقسومًا على مربع الزمن.",
+          "latex": "[T] = \\mathsf{T}, \\quad [\\ell] = \\mathsf{L}, \\quad [m] = \\mathsf{M}, \\quad [g] = \\mathsf{L}\\,\\mathsf{T}^{-2}",
+          "figure": "vline",
+          "figCaption": "كل كمية فيزيائية هي حاصل ضرب الأبعاد الأساسية في أسس معينة."
+        },
+        {
+          "text": "لنفترض أن الإجابة تأخذ شكل حاصل ضرب أسس — هذا ليس تقييدًا، بل نتيجة لنظرية بوكينغهام. نساوي الأبعاد على اليسار واليمين.",
+          "latex": "\\mathsf{T} = \\mathsf{L}^{\\alpha} \\cdot \\mathsf{M}^{\\beta} \\cdot (\\mathsf{L}\\,\\mathsf{T}^{-2})^{\\gamma} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+          "figure": "forceprop",
+          "figCaption": "مساواة الأبعاد تحول المسألة الفيزيائية إلى نظام صغير من المعادلات."
+        },
+        {
+          "text": "يجب أن تتطابق الأسس للأبعاد نفسها. نحصل على ثلاث معادلات — لاحظ الثانية: الكتلة تحذف نفسها، الطريقة تخبرنا بذلك قبل أن نتمكن من الدهشة.",
+          "latex": "\\begin{cases} \\alpha + \\gamma = 0 \\\\ \\beta = 0 \\\\ -2\\gamma = 1 \\end{cases} \\;\\Longrightarrow\\; \\gamma = -\\tfrac{1}{2}, \\;\\; \\alpha = \\tfrac{1}{2}, \\;\\; \\beta = 0",
+          "figure": "massprop",
+          "figCaption": "الأس عند الكتلة تبين أنه صفر: فترة البندول لا تعتمد على كتلة الثقل."
+        },
+        {
+          "text": "نجمع الإجابة. الحل الدقيق لمعادلة الحركة يعطي معاملًا $2\\pi \\approx 6{,}3$ — الطريقة لا تعطيه ولا يمكنها ذلك. ولكن التبعية تم الحصول عليها بالكامل: الفترة تزداد كجذر تربيعي للطول ولا تعتمد على الكتلة.",
+          "latex": "T = C\\sqrt{\\frac{\\ell}{g}}, \\qquad \\text{точно: } T = 2\\pi\\sqrt{\\frac{\\ell}{g}}",
+          "figure": "result",
+          "figCaption": "الطريقة تعطي شكل الصيغة؛ المعامل اللا بعدي يجب الحصول عليه بطريقة أخرى — من التجربة أو من الحل الكامل."
+        },
+        {
+          "text": "لنتحقق من التنبؤ دون حل أي شيء. لمضاعفة الفترة، يجب زيادة الطول أربع مرات. البندول الثواني — الذي يدق في الساعات الأرضية — يجب أن يكون طوله حوالي 25 см مع نصف فترة ثانية. وهذا صحيح: هذه قيمة كلاسيكية في صناعة الساعات، معروفة قبل وقت طويل من تحليل الأبعاد.",
+          "latex": "\\ell = \\frac{g}{\\pi^{2}} \\approx \\frac{9{,}8}{9{,}87} \\approx 0{,}99\\ \\text{м} \\;\\;(\\text{период } 2\\ \\text{с})",
+          "figure": "isochron",
+          "figCaption": "التحقق من حقيقة معروفة — خطوة إلزامية: الطريقة قوية، لكنها تخطئ بصمت إذا كانت قائمة الكميات غير كاملة."
+        },
+        {
+          "text": "وحدود الطريقة. إذا تم حذف شيء جوهري من قائمة الكميات، ستكون الإجابة صحيحة أبعاديًا وخاطئة فيزيائيًا. بالنسبة لبندول ذي سعة كبيرة، يظهر معامل لا بعدي — الزاوية نفسها — وتبدأ الفترة بالاعتماد عليها. الأبعاد عاجزة هنا: الزاوية لا بعدية، لا تفرض أي قيود.",
+          "latex": "T = \\sqrt{\\frac{\\ell}{g}}\\; F(\\theta_0), \\qquad F(\\theta_0 \\to 0) = 2\\pi",
+          "figure": "curves",
+          "figCaption": "الطريقة لا تلتقط المعاملات اللا بعدية: تبعيتها يجب البحث عنها بالفيزياء أو التجربة."
+        }
+      ],
+      "plate": "بعد الطرف الأيسر يساوي بعد الطرف الأيمن — هذه ليست اتفاقية، بل قانون. منه غالبًا ما يتبع شكل الصيغة حتى معامل عددي من مرتبة الوحدة.",
+      "note": "قاعدة عملية طوال الدورة: بعد الانتهاء من الاستنتاج، تحقق من أبعاد الطرفين. هذا يلتقط معظم أخطاء الجبر في خمس ثوانٍ ويعمل حتى حيث لا يمكنك التحقق من الإجابة."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "كل ما نحتاجه هو الأسس واللوغاريتمات، ولكن في استخدام غير مألوف: كلغة للمقاييس، وليس كتقنية حسابية.",
+        "المهارة الأولى — العمل مع الرتب. يُكتب العدد كمعامل مضروبًا في عشرة مرفوعة لأس، وعند الضرب تُجمع الأسس. التقدير يتم فقط بالأسس، ويُقرّب المعامل إلى رقم معنوي واحد. ثلاثة في عشرة للثامنة مضروبًا في اثنين في عشرة للسالبة الخامسة يساوي ستة في عشرة للثالثة، ويتم حسابها ذهنيًا في ثانية.",
+        "المهارة الثانية — معرفة أن التقريب في التقديرات لا يفسد النتيجة تقريبًا. إذا قرّبت كل عامل من خمسة عوامل بخطأ مضاعف، فإن الأخطاء في اتجاهات مختلفة تلغي بعضها جزئيًا: الانحراف النموذجي ينمو كجذر تربيعي لعدد العوامل، وليس كحاصل ضربهم. لهذا السبب تعمل مسائل فيرمي، على الرغم من أن كل رقم فيها مأخوذ من السقف.",
+        "المهارة الثالثة — قراءة التبعيات الأسية من الرسم البياني. إذا كانت الكمية تتصرف مثل $y = C x^{n}$، فعلى رسم بياني حيث كلا المحورين لوغاريتميين، نحصل على خط مستقيم بميل $n$. هكذا استخرج تايلور الأس الخمس من صور الصحف: رسم نصف القطر مقابل الزمن على محاور لوغاريتمية ووضع المسطرة.",
+        "وتحذير واحد: تحت علامة الأسي أو اللوغاريتم أو الجيب يمكن أن تكون فقط كمية لا بعدية. تعبير مثل 'جيب ثلاثة أمتار' لا معنى له — وهذه ليست دقة مفرطة: إذا وجدت مثل هذا في حساباتك، فقد التقطت خطأً."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: مُضبِّطو البيانو في شيكاغو",
+      "lead": "مسألة فيرمي الكلاسيكية. لا يوجد أي من الأرقام أدناه مرجعي - جميعها تقديرات. انظر ماذا يحدث.",
+      "given": "تقدير عدد الأشخاص الذين يعملون بشكل احترافي في ضبط البيانو في مدينة يبلغ عدد سكانها حوالي ثلاثة ملايين نسمة.",
+      "law": "تقدير مرتبة المقدار: تقسيم المجهول إلى سلسلة من الكميات يمكن تقدير كل منها ثم ضربها.",
+      "solution": [
+        {
+          "text": "كم عدد الأسر في المدينة. نحسب بمتوسط ثلاثة أشخاص لكل أسرة.",
+          "latex": "N_{\\text{дом}} \\approx \\frac{3 \\cdot 10^{6}}{3} = 10^{6}"
+        },
+        {
+          "text": "ما نسبة الأسر التي لديها بيانو. لنفترض حوالي واحد من كل ثلاثين - الآلة ليست رخيصة وضخمة.",
+          "latex": "N_{\\text{форт}} \\approx \\frac{10^{6}}{30} \\approx 3 \\cdot 10^{4}"
+        },
+        {
+          "text": "كم مرة يتم ضبطه. مرة في السنة - متوسط معقول بين المهملة والحفلات.",
+          "latex": "n_{\\text{настроек}} \\approx 3 \\cdot 10^{4}\\ \\text{в год}"
+        },
+        {
+          "text": "كم عدد عمليات الضبط التي يقوم بها خبير واحد. يستغرق الضبط بضع ساعات، بالإضافة إلى السفر; لنفترض أربعة في اليوم، ومئتي يوم عمل في السنة.",
+          "latex": "n_{\\text{на мастера}} \\approx 4 \\cdot 200 = 800\\ \\text{в год}"
+        },
+        {
+          "text": "نقسم الأول على الثاني.",
+          "latex": "N_{\\text{мастеров}} \\approx \\frac{3 \\cdot 10^{4}}{800} \\approx 40"
+        }
+      ],
+      "answer": "في حدود عدة عشرات من الأشخاص. تعطي الكتب المرجعية الفعلية لشيكاغو قيمة من نفس الترتيب - من ثلاثين إلى مئة، اعتمادًا على من يُعتبر محترفًا.",
+      "check": "المهم ليس الرقم، بل ما تعلمناه. الإجابة لم تكن ثلاثة ولا ثلاثة آلاف - وهذا هو السؤال الذي نحتاج عادةً إلى حله عمليًا. هل يستحق فتح ورشة عمل كهذه، هل هناك عمل كافٍ للجميع، هل هناك حاجة إلى نقابة منفصلة - كل هذه القرارات تعتمد على مرتبة المقدار ولا تعتمد على ما إذا كان هناك أربعون خبيرًا أو خمسة وخمسون."
+    },
+    "constants": {
+      "title": "كميات هذا القسم",
+      "lead": "هنا، لن تكون الثوابت بقدر ما تكون الأرقام المرجعية مفيدة - تلك التي يجب تذكرها للتقدير دون مرجع.",
+      "items": [
+        {
+          "sym": "g",
+          "latex": "g",
+          "dictKey": "g",
+          "name": "تسارع السقوط الحر",
+          "value": "9,81",
+          "unit": "м / с²",
+          "why": "في التقديرات، نأخذ دائمًا 10 تقريبًا: خطأ 2%، لكن القسمة ذهنيًا. بالإضافة إلى أن $\\pi^2 \\approx 9{,}87$ قريب أيضًا من العشرة - مصادفة لكنها مريحة.",
+          "mnemo": "π² ≈ g ≈ 10 في نظام الوحدات الدولي. هذا نتيجة للتعريف القديم للمتر عبر البندول الثواني، وليس مصادفة."
+        },
+        {
+          "sym": "c",
+          "latex": "c",
+          "dictKey": "c",
+          "name": "سرعة الضوء",
+          "value": "3 · 10⁸",
+          "unit": "м / с",
+          "why": "كمية مرجعية لأي تقديرات في الديناميكا الكهربية والنسبية. كل ما هو أبطأ بكثير يوصف بالكلاسيكي.",
+          "mnemo": "يدور الضوء حول الأرض عند خط الاستواء 7.5 مرة في الثانية ويصل من القمر في 1.3 ثانية."
+        },
+        {
+          "sym": "N_A",
+          "latex": "N_A",
+          "dictKey": "N_A",
+          "name": "عدد أفوجادرو",
+          "value": "6,0 · 10²³",
+          "unit": "1 / моль",
+          "why": "جسر بين ما يُرى وما يتكون منه. أي تقدير من نوع 'كم عدد الجزيئات' يمر عبره.",
+          "mnemo": "في كوب ماء تقريبًا نفس عدد الجزيئات الموجودة في أكواب الماء في جميع محيطات الأرض."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "تمرين: خمس تقديرات يجب أن تكون قادرًا على القيام بها ذهنيًا",
+      "lead": "ليس من أجل الإجابات، بل من أجل المهارة. جرب كلًا منها بنفسك قبل قراءة التحليل - يستغرق أقل من دقيقة.",
+      "items": [
+        {
+          "h": "كم عدد الأنفاس التي تأخذها في حياتك",
+          "text": "حوالي 15 نفسًا في الدقيقة، مليون دقيقة في السنة (تحقق: 60 · 24 · 365 ≈ 5 · 10⁵)، وسبعون سنة. ينتج حوالي 5 · 10⁸ — نصف مليار نفس."
+        },
+        {
+          "h": "كمية الماء في الإنسان",
+          "text": "يتكون الجسم من حوالي 60% ماء، والكتلة حوالي 70 كجم - أي حوالي 40 لترًا. من هنا يتبين فورًا لماذا الجفاف ببضعة لترات خطير بالفعل: إنه نسب مئوية من الكل."
+        },
+        {
+          "h": "كم مرة يكون الذرة أصغر من الإنسان",
+          "text": "الذرة حوالي 10⁻¹⁰ م، الإنسان حوالي 2 م - النسبة حوالي 10¹⁰. بنفس المقدار تقريبًا يكون الإنسان أصغر من قطر النظام الشمسي. نحن بالضبط في منتصف المقاييس المعروفة، وهذا ليس استعارة بل حساب."
+        },
+        {
+          "h": "هل تكفي طاقة صاعقة واحدة لشقة",
+          "text": "تحمل الصاعقة حوالي 10⁹ جول، تستهلك الشقة حوالي 300 كيلوواط ساعة شهريًا، أي حوالي 10⁹ جول. الخلاصة: صاعقة واحدة تكفي لمدة شهر - وهذا يفسر لماذا فكرة 'تخزين الصواعق' غير مجدية اقتصاديًا بسبب ندرتها."
+        },
+        {
+          "h": "كم عدد جزيئات الهواء التي استنشقتها الآن",
+          "text": "نصف لتر من الهواء في الظروف العادية - حوالي 1/50 مول، أي حوالي 10²² جزيء. عددها أكبر من عدد أنفاس البشرية جمعاء عبر التاريخ؛ ومن هنا النتيجة المعروفة: في كل نفس تأخذه، هناك بالتأكيد تقريبًا جزيئات كانت في رئات أي إنسان في الماضي."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: اختبر بنفسك",
+      "lead": "على طريقة بيرلمان: تجربة لا تحتاج مختبرًا، مفارقة تستحق التفكير قبل معرفة الحل، وحقائق تحفظ نفسها بنفسها.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "قس الجزيء بزيت دوار الشمس",
+          "text": "انثر طبقة رقيقة من التلك أو الفلفل المطحون على طبق عريض به ماء. أسقط قطرة من الزيت النباتي في الوسط — يدفع الفيلم المسحوق ويكوّن دائرة. قس قطر الدائرة بمسطرة. قدر حجم القطرة بعد حساب عدد القطرات في ملعقة صغيرة (عادة حوالي مائة، الملعقة 5 مل). الآن اقسم الحجم على مساحة الدائرة لتحصل على سمك الفيلم.",
+          "answer": "سيكون الناتج في حدود $10^{-9}$ متر، أي نانومتر. ينتشر الزيت بالضبط حتى طبقة جزيء واحد — لا يمكن أبعد من ذلك. لقد قست حجم الجزيء بأدوات المطبخ ومسطرة. هكذا حصل رايلي في عام 1890 على أول تقدير معقول للأحجام الجزيئية."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "لماذا لا يمكن ببساطة تكبير النملة",
+          "text": "يُكتب أن النملة ترفع حملاً أثقل منها بخمسين مرة، ويُستنتج أن نملة بحجم الإنسان ستكون قوية بشكل لا يصدق. تحقق من هذا الاستدلال بالأبعاد قبل القراءة أكثر.",
+          "answer": "تنمو قوة العضلة كمقطعها أي كمربع الحجم. تنمو الكتلة كالحجم أي كمكعب. إذا كبرت النملة ألف مرة، قوتها تزيد مليون مرة ووزنها يزيد مليار مرة – تصبح أضعف ألف مرة نسبةً إلى وزنها ولا تستطيع حتى الوقوف. هذه قاعدة غاليليو عن المربع والمكعب؛ منها أيضاً يتبع لماذا للفيل أرجل عمودية وللفأر أرجل رفيعة."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "لماذا تسقط القطة أفضل من الإنسان",
+          "text": "مقاومة الهواء تتناسب مع المساحة، والوزن مع الحجم. للحيوان الصغير نسبة المساحة إلى الكتلة كبيرة، لذا السرعة الحدية للسقوط صغيرة: الفأر حوالي 15 كم/س، القطة حوالي 100، الإنسان حوالي 200. ومن هنا الملاحظة المعروفة للأطباء البيطريين: القطط التي تسقط من الطابق السابع تكون إصاباتها في المتوسط أخف من تلك التي تسقط من الخامس – لأنها تصل إلى السرعة الحدية وتسترخي وتتبسط."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "فن الإستذكار",
+          "h": "عدد الثواني في السنة",
+          "text": "π · 10⁷ — تقريباً 3,14 · 10⁷ ثانية، بينما القيمة الدقيقة 3,156 · 10⁷. الخطأ نصف بالمائة، وتُحفظ للأبد. مصادفة محضة، لا فيزياء خلفها، لكنها توفر الكثير من الوقت في التقديرات."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "قاعدة العشرة بالمائة",
+          "text": "في التقديرات يمكن بثقة اعتبار أن $\\pi \\approx 3$، $\\sqrt{2} \\approx 1{,}4$، $\\sqrt{10} \\approx 3$، والسنة هي $3 \\cdot 10^{7}$ ثانية. كل من هذه التقريبات تعطي خطأً بضعة بالمائة، ومعًا لا تغير تقريبًا رتبة المقدار. الحساب ذهنيًا بهذه الأرقام يكون أسرع بمرتين – وهذا هو الفرق بين «قدرته أثناء المشي» و«اضطررت للجلوس على المكتب»."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "الملحق للمهتمين: من أين تأتي الأعداد اللابعدية",
+      "lead": "لا يدخل في الاختبار. حول لماذا تتحدث الفيزياء في النهاية ليس عن الأمتار والثواني بل عن أعداد بلا وحدات.",
+      "blocks": [
+        {
+          "h": "الوحدات اختراعنا، الفيزياء ليست كذلك",
+          "text": "المتر والثانية من اختراع البشر: كان يمكن اختيارهما بشكل آخر، والطبيعة لن تلاحظ ذلك. إذن، كل عبارة عن الطبيعة يجب أن تصاغ بحيث لا تعتمد على اختيار الوحدات. ومن هنا يتبين أن المعايير الحقيقية المسيطرة لأي مسألة هي التراكيب اللابعدية."
+        },
+        {
+          "h": "عدد رينولدز ولماذا لا تستطيع الذبابة السباحة كالإنسان",
+          "text": "نسبة القوى القصورية إلى اللزوجة $\\mathrm{Re} = \\rho v L / \\mu$ هي الكمية الوحيدة التي تحدد ما إذا كان الجريان منظمًا أم مضطربًا. للسباح هي حوالي 10⁶، للبكتيريا حوالي 10⁻⁵. هما عالمين مختلفين: البكتيريا تعيش في وسط لا قصور فيه البتة، وتتوقف بعد جزء من قطرها إذا توقفت عن التجديف. السباحة بالضربات لا معنى لها هناك – ولذلك يدور السوط بدلاً من أن يخفق."
+        },
+        {
+          "h": "ثابت البنية الدقيقة",
+          "text": "هناك أعداد لابعدية لا تشتق من شيء، بل هي هكذا: مثلاً $\\alpha \\approx 1/137$، الذي يحدد قوة التفاعل الكهرومغناطيسي. أطلق عليها فاينمان واحدة من أعظم ألغاز الفيزياء: عدد لا يستطيع أي منظّر اشتقاقه، بينما كل الكيمياء وكل الحياة تعتمد على كونه هكذا."
+        },
+        {
+          "h": "إلى أين يؤدي هذا",
+          "text": "السؤال «لماذا للثوابت الأساسية تلك القيم تحديدًا» يبقى مفتوحًا ويصل إلى أقصى حدود الفيزياء الحديثة. المزيد في قسم «أسئلة مفتوحة»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "أبعاد الطرفين الأيسر والأيمن للمعادلة تتطابق دائمًا؛ من هذا غالبًا يتبع شكل الصيغة، ورتبة المقدار تُقدّر بضرب تقديرات تقريبية.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "مساواة الأبعاد تعطي اعتمادًا",
+          "text": "مساواة الأبعاد تعطي اعتمادًا بدقة حتى عامل لا بعدي"
+        },
+        {
+          "icon": "formula",
+          "title": "الطريقة لا تلتقط المعاملات",
+          "text": "الطريقة لا تلتقط المعاملات اللابعدية – فهي عاجزة بصمت هناك"
+        },
+        {
+          "icon": "sigma",
+          "title": "تقدير فيرمي",
+          "text": "قسم المجهول إلى سلسلة من الكميات المقدرة واضرب"
+        },
+        {
+          "icon": "ruler",
+          "title": "أخطاء التقريب تلغي بعضها",
+          "text": "أخطاء التقريب تلغي بعضها جزئيًا، لذا التقديرات التقريبية تعطي الرتبة الصحيحة"
+        },
+        {
+          "icon": "scale",
+          "title": "التحقق من الأبعاد في",
+          "text": "التحقق من الأبعاد في نهاية الاشتقاق يكتشف معظم أخطاء الجبر"
+        }
+      ],
+      "where": "التحقق من أي صيغة مشتقة؛ تقدير إمكانية تنفيذ فكرة قبل الحسابات؛ قراءة العلاقات الأسية على رسم بياني لوغاريتمي.",
+      "watchOut": "المصيدة الرئيسية – قائمة غير كاملة من الكميات. سيكون الجواب صحيحًا بعديًا وخاطئًا فيزيائيًا، والطريقة لن تحذر من ذلك."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "تحليل الأبعاد أعطى فترة البندول $T = C\\sqrt{\\ell/g}$. لماذا لا تحتوي على الكتلة؟",
+        "options": [
+          "الكتلة اختصرت في الحسابات صدفة",
+          "نسيت الكتلة في قائمة الكميات",
+          "أس الكتلة صفر: من $\\mathsf{M}$ لا يمكن تكوين الزمن بدمجها مع الطول والتسارع",
+          "الكتلة تدخل ولكن تأثيرها مهمل"
+        ],
+        "answer": 2,
+        "why": "الكتلة كانت في القائمة، لكن بعد الكتلة لا يظهر في أي مكان آخر - لا في الزمن ولا في الطول ولا في التسارع. لذا يجب أن يكون أُسها صفراً. أخبرتنا الطريقة بحقيقة فيزيائية لم نكن نضعها في الاعتبار.",
+        "hint": "انظر إلى نظام المعادلات في الخطوة الرابعة من الاشتقاق. من أين جاءت المعادلة β = 0 وهل كان يمكن الحصول عليها بطريقة أخرى؟"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "ما هي نقطة الضعف الرئيسية في تحليل الأبعاد؟",
+        "options": [
+          "إنه لا يعطي المضاعف اللابعدي ويكون عاجزاً إذا كانت المسألة تحتوي على معامل لابعدي",
+          "يعمل فقط في الميكانيكا",
+          "يتطلب معرفة المعادلات التفاضلية",
+          "يعطي إجابة بخطأ في حدود عشرة بالمائة"
+        ],
+        "answer": 0,
+        "why": "المضاعف يجب الحصول عليه من الحل الكامل أو التجربة. والأسوأ: الكمية اللابعدية - مثل زاوية انحراف البندول - لا تفرض أي قيود على الأبعاد، والطريقة ببساطة لا تراها.",
+        "hint": "تذكر الخطوة الأخيرة من الاشتقاق: ماذا حدث للصيغة عندما توقف سعة الاهتزاز عن كونه صغيراً؟"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا يعطي تقدير فيرمي إجابة معقولة رغم أن كل رقم فيه تقريبي؟",
+        "keywords": [
+          "خطأ",
+          "إلغاء",
+          "تعويض",
+          "جهات مختلفة",
+          "ترتيب",
+          "متوسط",
+          "جذر",
+          "لا تتراكم"
+        ],
+        "needed": 1,
+        "why": "أخطاء التقديرات مستقلة وموجهة في جهات مختلفة، لذا تعوض بعضها البعض جزئياً: الفرق الكلي ينمو تقريباً كجذر عدد العوامل وليس كحاصل ضربها. بالإضافة إلى ذلك، نحن مهتمون بترتيب المقدار - وهو مقاوم للأخطاء بمقدار الضعف.",
+        "hint": "تخيل أن كل عامل من العوامل الخمسة قد بالغت فيه أو قللته إلى النصف، بشكل عشوائي. هل كل الأخطاء ستكون في اتجاه واحد؟"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "سرعة الأمواج في المياه العميقة يمكن أن تعتمد فقط على طول الموجة وتسارع الجاذبية. ما هي سرعة موجة طولها 100 متر، بوحدة م/ث؟",
+        "answer": 12.5,
+        "unit": "м/с",
+        "tolerance": 5,
+        "why": "من λ و g، بُعد السرعة يُجمع بطريقة وحيدة: v ~ √(gλ). بالتعويض نحصل على √(10 · 100) ≈ 30 م/ث بدون مضاعف، والحل الدقيق يعطي v = √(gλ/2π) ≈ 12,5 م/ث. من هذا، بالمناسبة، يتبع أن الأمواج الطويلة للانتفاخ المحيطي تسبق القصيرة وتصل إلى الشاطئ أولاً - قبل العاصفة نفسها بيوم.",
+        "hint": "اجمع من م و م/ث² توليفة ذات بُعد م/ث. ما هي الأسس التي يجب أن تكون لطول الموجة و g؟"
+      }
+    ]
+  },
+  "tags": [
+    "asteroid",
+    "bacterium",
+    "speed_of_light"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2606.04379v1",
+      "why": "совпадение по теме: asteroid, speed_of_light"
+    },
+    {
+      "id": "2607.15183",
+      "why": "совпадение по теме: speed_of_light"
+    },
+    {
+      "id": "2607.15129",
+      "why": "совпадение по теме: speed_of_light"
+    }
+  ]
+}

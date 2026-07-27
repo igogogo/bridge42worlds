@@ -1,0 +1,476 @@
+{
+ "id": "05-semiconductors",
+ "schema": "b42.lecture/1",
+ "ru": {
+  "title": "Полупроводники",
+  "subtitle": "Лекция 5 · Как из зонной теории получается вся электроника",
+  "lead": "Удельное сопротивление меди и кварцевого стекла различается в двадцать четыре порядка. Ни одна другая физическая величина у обычных веществ не меняется в таких пределах. Классическая физика этого объяснить не может вовсе — а объяснение оказалось входом в электронную эпоху.",
+  "blocks": [
+   {
+    "h": "Откуда берутся зоны",
+    "kicker": "атомные уровни в кристалле",
+    "text": [
+     "У одиночного атома электронные уровни дискретны — это разобрано в теме об атоме. Сблизьте два атома: их волновые функции перекроются, и каждый уровень расщепится надвое. Три атома дадут три подуровня, десять — десять.",
+     "Теперь возьмите кристалл, где атомов $10^{23}$. Уровень расщепится на $10^{23}$ подуровней, расположенных так тесно, что они сливаются в сплошную полосу — зону. Ширина зоны при этом остаётся конечной, порядка электронвольта, а промежутки между зонами сохраняются.",
+     "Получается картина: разрешённые зоны, разделённые запрещёнными промежутками. Электроны заполняют разрешённые состояния снизу вверх, по тому же принципу Паули, что и в атоме. И вот здесь возникает главное различие между веществами."
+    ],
+    "image": {
+     "h": "Образ: этажи и лестницы",
+     "text": [
+      "Представьте многоэтажный дом, где на каждом этаже есть зал, а между этажами — лестница. Зал — разрешённая зона, лестничный пролёт без дверей — запрещённая.",
+      "Если зал заполнен людьми лишь наполовину, они свободно перемещаются внутри: достаточно шагнуть в сторону. Это металл — электроны легко меняют состояние и проводят ток.",
+      "Если зал забит битком, шагнуть некуда: чтобы двинуться, надо подняться этажом выше, а туда ведёт длинная лестница. Это изолятор.",
+      "А если лестница короткая, часть людей запрыгивает наверх сама, за счёт тепловой суеты. Это полупроводник — и вся электроника выросла из этого промежуточного случая."
+     ]
+    },
+    "eq": "$n \\propto e^{-E_g / 2k_BT}$"
+   },
+   {
+    "h": "Немного математики, которая всё объясняет",
+    "kicker": "одна экспонента на весь раздел",
+    "text": [
+     "Число электронов, сумевших перескочить через запрещённую зону, определяется распределением Больцмана — тем самым, что разбиралось в термодинамике. Вероятность набрать энергию $E_g$ за счёт теплового движения падает экспоненциально.",
+     "Подставим числа. При комнатной температуре $k_BT \\approx 0{,}026$ эВ. У алмаза ширина зоны 5,5 эВ, отношение в показателе выходит около ста — экспонента даёт $10^{-46}$, и свободных электронов нет вовсе. У кремния 1,12 эВ, показатель около двадцати, и на кубический сантиметр приходится около $10^{10}$ носителей. У металла зазора нет, носителей $10^{23}$.",
+     "Отсюда сразу главное свойство полупроводника, отличающее его от металла: с нагревом его сопротивление падает, а не растёт. У металла число носителей постоянно и мешают колебания решётки; у полупроводника число носителей растёт экспоненциально, и этот рост перекрывает всё остальное.",
+     "И отсюда же практическое: чувствительность к малейшим воздействиям. Экспонента с большим показателем реагирует на изменения резко — нагрев на десять градусов удваивает проводимость. На этом стоят термисторы, фотодатчики и половина сенсорной техники."
+    ],
+    "note": "Обратите внимание, что мы второй раз в курсе встречаем экспоненту с отношением энергии к kT в показателе: сначала в распределении Больцмана, потом в туннелировании, теперь здесь. Это самая частая конструкция во всей физике вещества, и появляется она всегда по одной причине — вероятность случайно набрать энергию, много большую тепловой, падает экспоненциально."
+   },
+   {
+    "h": "Примеси: как управляют проводимостью",
+    "kicker": "легирование в одну строку",
+    "text": [
+     "Чистый кремний интересен мало. Вся техника выросла из добавления примесей — легирования, причём в ничтожных количествах: один атом примеси на миллион кремниевых.",
+     "У кремния четыре валентных электрона, все заняты в связях с соседями. Добавим фосфор, у которого их пять: четыре уйдут в связи, а пятый окажется лишним и почти свободным. Такой полупроводник называют электронным, или n-типа.",
+     "Добавим бор с тремя электронами: одной связи не хватит электрона, останется вакансия. Соседний электрон может перескочить в неё, оставив вакансию на своём месте, — и получится, что по кристаллу движется дырка, ведущая себя как положительный заряд. Это дырочный полупроводник, или p-типа.",
+     "Изменяя концентрацию примеси, проводимость меняют на порядки. А главное — теперь есть два разных типа материала, и вся электроника строится на том, что происходит на границе между ними."
+    ],
+    "image": {
+     "h": "Образ: пустое место в кинозале",
+     "text": [
+      "В заполненном ряду одно место свободно. Зритель слева пересаживается на него — теперь свободно его место. Следующий делает то же самое.",
+      "Со стороны кажется, что вдоль ряда движется пустое место, причём в сторону, противоположную движению людей.",
+      "Дырка в полупроводнике — ровно это. Двигаются электроны, но описывать удобнее движение вакансии: она ведёт себя как самостоятельная частица с положительным зарядом. Приём настолько удобен, что дырке приписывают массу и подвижность, и все расчёты ведут с ней как с реальной частицей."
+     ]
+    }
+   },
+   {
+    "h": "p-n переход: главный кирпич электроники",
+    "kicker": "почему ток идёт только в одну сторону",
+    "text": [
+     "Соедините кусок n-типа с куском p-типа. На границе начнётся диффузия: лишние электроны слева уйдут направо, дырки справа — налево. Встречаясь, они рекомбинируют, и у границы образуется область, лишённая свободных носителей.",
+     "Но ушедшие электроны оставили за собой неподвижные положительные ионы примеси, а ушедшие дырки — отрицательные. Возникает электрическое поле, направленное так, чтобы препятствовать дальнейшей диффузии. Устанавливается равновесие: диффузия ровно уравновешена полем. Это поле создаёт барьер высотой около 0,7 вольта для кремния.",
+     "Теперь подадим внешнее напряжение. Плюсом к p-области — барьер понижается, диффузия возобновляется, ток течёт свободно. Плюсом к n-области — барьер растёт, обеднённая зона расширяется, ток практически прекращается.",
+     "Вот и весь диод. Одностороннее пропускание тока следует из простой картины: диффузия против поля, и внешнее напряжение либо помогает первой, либо усиливает второе."
+    ],
+    "eq": "$I = I_0\\left(e^{\\,eU/k_BT} - 1\\right)$",
+    "after": [
+     "Заметьте, что и здесь появилась та же экспонента с отношением энергии к kT. Отсюда крутизна вольт-амперной характеристики диода: при комнатной температуре увеличение напряжения на 60 милливольт увеличивает ток в десять раз. Такая нелинейность и делает диод полезным."
+    ]
+   },
+   {
+    "h": "Транзистор и почему он изменил всё",
+    "kicker": "усиление из ничего",
+    "text": [
+     "Полевой транзистор устроен так: канал из полупроводника, по которому идёт ток, и управляющий электрод-затвор, отделённый от канала тонким слоем изолятора. Напряжение на затворе создаёт поле, которое притягивает или отталкивает носители в канале, меняя его проводимость.",
+     "Ключевое здесь то, что через затвор ток практически не течёт — он отделён изолятором. Значит управление почти ничего не стоит по мощности, а управляемый ток может быть большим. Это и есть усиление: слабый сигнал управляет сильным.",
+     "Из усиления следует всё остальное. Соединив транзисторы, получают логические элементы: если на обоих входах есть напряжение, на выходе появляется сигнал. Из логических элементов складывают сумматоры, из сумматоров — процессор. Современный чип содержит десятки миллиардов транзисторов, каждый размером в единицы нанометров.",
+     "Первый транзистор в 1947 году был размером с ладонь, собран из германия и полоски золотой фольги. От него до нынешнего процессора прошло меньше восьмидесяти лет — и всё это время работал один и тот же физический принцип, разобранный выше."
+    ],
+    "open": [
+     "Миниатюризация упирается в физику. При размере затвора в несколько нанометров электроны начинают туннелировать сквозь изолятор — то самое туннелирование из темы о квантовой механике, — и транзистор перестаёт запираться. Это не инженерная трудность, а принципиальный предел.",
+     "Куда двигаться дальше, единого мнения нет. Обсуждают трёхмерную компоновку, переход на другие материалы, спинтронику, оптические и квантовые вычисления. Каждый подход имеет сторонников и серьёзные возражения, и предсказать, что победит, сейчас не берётся никто."
+    ]
+   },
+   {
+    "h": "Светодиод и солнечная батарея",
+    "kicker": "два процесса в противоположные стороны",
+    "text": [
+     "Светодиод — тот же p-n переход, работающий в прямом направлении. Электроны и дырки встречаются в области перехода и рекомбинируют, а высвобождающаяся энергия уходит квантом света. Энергия кванта равна ширине запрещённой зоны — значит цвет задаётся выбором материала, а не фильтром.",
+     "Отсюда история синего светодиода. Красные и зелёные научились делать в 1960-х, а синий требовал широкозонного материала, который тридцать лет не удавалось вырастить достаточно чистым. Сюдзи Накамура добился этого на нитриде галлия, работая в маленькой японской компании почти в одиночку. Нобелевская премия 2014 года — и именно с синего светодиода стало возможно белое освещение, поскольку белый получают из синего с люминофором.",
+     "Солнечная батарея — тот же переход наоборот. Квант света рождает пару электрон-дырка, встроенное поле перехода разводит их в разные стороны, и на контактах появляется напряжение. Отсюда и предел эффективности: кванты с энергией меньше ширины зоны не работают вовсе, а избыток энергии высокоэнергичных уходит в тепло. Для одного перехода теоретический потолок около 33 процентов, и он давно почти достигнут."
+    ]
+   },
+   {
+    "h": "Чего зонная теория не объясняет",
+    "kicker": "честные границы",
+    "text": [
+     "Зонная теория предполагает, что каждый электрон движется независимо в усреднённом поле остальных. Приближение прекрасное для кремния и германия — и потому вся кремниевая электроника рассчитывается надёжно.",
+     "Но там, где электроны сильно взаимодействуют друг с другом, оно ломается. Оксиды переходных металлов, которые по зонной теории обязаны быть металлами, оказываются изоляторами. Высокотемпературные сверхпроводники не описываются вовсе. Это область сильно коррелированных систем, и общей теории для неё нет.",
+     "Ситуация поучительная: физика твёрдого тела рассчитывает микросхему с миллиардами элементов и не может предсказать, будет ли проводить простое соединение из двух элементов. Приближение, а не незнание конкретного вещества, — вот что здесь ограничивает."
+    ],
+    "open": [
+     "Сильно коррелированные электронные системы — одна из главных нерешённых задач физики вещества. Численные методы упираются в то, что число состояний растёт экспоненциально с числом частиц: точный расчёт для сотни взаимодействующих электронов невозможен ни на каком компьютере.",
+     "Именно поэтому одну из главных надежд связывают с квантовыми вычислителями: задача моделирования квантовой системы естественно ложится на квантовое устройство. Насколько эта надежда оправдается, пока предмет спора."
+    ],
+    "now": [
+     "Технологические нормы дошли до нескольких нанометров, и дальнейшая миниатюризация упирается в туннелирование. Промышленность перешла к трёхмерным структурам: транзисторы складывают этажами вместо уменьшения.",
+     "Исследуются двумерные материалы толщиной в один атом, спинтроника, где информацию несёт не заряд, а спин, и нейроморфные схемы, повторяющие устройство нервной ткани. Ни одно направление пока не заменило кремний, и спор о том, что будет дальше, вполне открытый."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Что унести из этой лекции",
+   "text": [
+    "Дискретные уровни атома, сблизившись в кристалле, превращаются в зоны. Заполнена зона наполовину — металл, целиком с широким зазором — изолятор, с узким — полупроводник.",
+    "Всё поведение полупроводника определяется одной экспонентой: числом электронов, сумевших перескочить через зазор за счёт тепла. Отсюда и падение сопротивления с нагревом, и резкая чувствительность к любым воздействиям.",
+    "p-n переход даёт одностороннюю проводимость из равновесия между диффузией и встроенным полем. Из него получаются диод, транзистор, светодиод и солнечная батарея — четыре прибора из одной картинки.",
+    "И граница: зонная теория работает, пока электроны можно считать независимыми. Там, где они сильно взаимодействуют, общей теории до сих пор нет — а именно там лежит высокотемпературная сверхпроводимость."
+   ]
+  }
+ },
+ "en": {
+  "title": "Semiconductors",
+  "subtitle": "Lecture 5 · How all electronics emerges from band theory",
+  "lead": "The resistivity of copper and quartz glass differs by twenty-four orders of magnitude. No other physical quantity of ordinary substances varies within such limits. Classical physics cannot explain this at all — and the explanation turned out to be the gateway to the electronic age.",
+  "blocks": [
+   {
+    "h": "Where Bands Come From",
+    "kicker": "atomic levels in a crystal",
+    "text": [
+     "In a single atom, the electronic levels are discrete—this is covered in the topic on the atom. Bring two atoms close: their wave functions overlap, and each level splits in two. Three atoms yield three sublevels, ten atoms—ten.",
+     "Now take a crystal with $10^{23}$ atoms. The level splits into $10^{23}$ sublevels so densely packed that they merge into a continuous band—a zone. The bandwidth remains finite, on the order of an electronvolt, and gaps between bands persist.",
+     "The picture emerges: allowed bands separated by forbidden gaps. Electrons fill allowed states from the bottom up, following the same Pauli principle as in the atom. And here lies the main difference between materials."
+    ],
+    "image": {
+     "h": "Image: floors and staircases",
+     "text": [
+      "Imagine a multi-story building where each floor has a hall, and between floors there is a staircase. The hall is an allowed band, the stairwell without doors is a forbidden gap.",
+      "If the hall is only half full, people move freely inside: just step aside. This is a metal—electrons easily change states and conduct current.",
+      "If the hall is packed, there's no room to move: to shift, one must go up a floor, but a long staircase leads there. This is an insulator.",
+      "And if the staircase is short, some people jump up on their own, thanks to thermal jostling. This is a semiconductor—and all electronics grew out of this intermediate case."
+     ]
+    },
+    "eq": "$n \\propto e^{-E_g / 2k_BT}$"
+   },
+   {
+    "h": "A Little Math That Explains It All",
+    "kicker": "one exponential for the whole section",
+    "text": [
+     "The number of electrons that manage to jump across the forbidden gap is determined by the Boltzmann distribution—the same one discussed in thermodynamics. The probability of acquiring energy $E_g$ from thermal motion drops exponentially.",
+     "Plug in the numbers. At room temperature, $k_BT \\approx 0{,}026$ eV. Diamond has a band gap of 5.5 eV, the ratio in the exponent is about a hundred—the exponential gives $10^{-46}$, and there are no free electrons at all. Silicon has 1.12 eV, the exponent is about twenty, and there are about $10^{10}$ carriers per cubic centimeter. Metal has no gap, carriers $10^{23}$.",
+     "From this immediately follows the main property of a semiconductor distinguishing it from a metal: its resistance decreases with heating, not increases. In a metal, the number of carriers is constant and lattice vibrations hinder; in a semiconductor, the number of carriers grows exponentially, and this growth overwhelms everything else.",
+     "And from this also the practical aspect: sensitivity to the slightest influences. An exponential with a large exponent reacts sharply to changes—heating by ten degrees doubles conductivity. This underlies thermistors, photodetectors, and half of sensor technology."
+    ],
+    "note": "Note that in this course we encounter the exponential with an energy-to-kT ratio in the exponent for the second time: first in the Boltzmann distribution, then in tunneling, now here. This is the most common construct in all condensed-matter physics, and it always appears for one reason—the probability of randomly acquiring energy much larger than thermal energy drops exponentially."
+   },
+   {
+    "h": "Impurities: How to Control Conductivity",
+    "kicker": "doping in one line",
+    "text": [
+     "Pure silicon is of little interest. All technology grew out of adding impurities—doping, in tiny amounts: one impurity atom per million silicon atoms.",
+     "Silicon has four valence electrons, all used in bonds with neighbors. Add phosphorus, which has five: four go into bonds, and the fifth becomes extra and nearly free. Such a semiconductor is called n-type, or electron-type.",
+     "Add boron with three electrons: one bond will lack an electron, leaving a vacancy. A neighboring electron can jump into it, leaving a vacancy in its place—and thus a hole moves through the crystal, behaving like a positive charge. This is a hole semiconductor, or p-type.",
+     "By changing the impurity concentration, conductivity is altered by orders of magnitude. And crucially, we now have two different types of material, and all electronics is built on what happens at the boundary between them."
+    ],
+    "image": {
+     "h": "Image: an empty seat in a cinema",
+     "text": [
+      "In a full row, one seat is empty. The viewer on the left moves into it—now his seat is empty. The next does the same.",
+      "From the side, it looks like an empty seat moves along the row, in the direction opposite to the movement of people.",
+      "A hole in a semiconductor is exactly this. Electrons move, but it is more convenient to describe the motion of vacancies: it behaves like an independent particle with a positive charge. This convention is so useful that the hole is assigned mass and mobility, and all calculations treat it as a real particle."
+     ]
+    }
+   },
+   {
+    "h": "p-n Junction: The Main Building Block of Electronics",
+    "kicker": "why current flows only in one direction",
+    "text": [
+     "Join a piece of n-type with a piece of p-type. At the boundary, diffusion begins: excess electrons from the left go to the right, holes from the right go to the left. When they meet, they recombine, and a region devoid of free carriers forms near the junction.",
+     "But the departed electrons leave behind immobile positive impurity ions, and the departed holes leave negative ones. An electric field arises, directed to oppose further diffusion. Equilibrium is established: diffusion is exactly balanced by the field. This field creates a barrier of about 0.7 volts for silicon.",
+     "Now apply an external voltage. Positive to the p-region—the barrier lowers, diffusion resumes, current flows freely. Positive to the n-region—the barrier increases, the depletion zone widens, and current practically stops.",
+     "That is the entire diode. The unidirectional conduction follows from a simple picture: diffusion against the field, and the external voltage either helps the former or strengthens the latter."
+    ],
+    "eq": "$I = I_0\\left(e^{\\,eU/k_BT} - 1\\right)$",
+    "after": [
+     "Notice that here too we encounter the same exponential with an energy-to-kT ratio. Hence the steepness of the diode's current-voltage characteristic: at room temperature, increasing the voltage by 60 millivolts increases the current tenfold. This nonlinearity is what makes the diode useful."
+    ]
+   },
+   {
+    "h": "The Transistor and Why It Changed Everything",
+    "kicker": "amplification from nothing",
+    "text": [
+     "A field-effect transistor is structured as follows: a semiconductor channel through which current flows, and a control electrode (gate) separated from the channel by a thin insulating layer. The voltage on the gate creates a field that attracts or repels carriers in the channel, changing its conductivity.",
+     "The key point is that virtually no current flows through the gate—it is insulated. Thus control costs almost no power, while the controlled current can be large. This is amplification: a weak signal controls a strong one.",
+     "From amplification follows everything else. Connecting transistors yields logic gates: if voltage is present at both inputs, a signal appears at the output. Logic gates are combined into adders, adders into a processor. A modern chip contains tens of billions of transistors, each measuring just a few nanometers.",
+     "The first transistor in 1947 was palm-sized, made from germanium and a strip of gold foil. From there to today's processor took less than eighty years—and throughout that time, the same physical principle described above has been at work."
+    ],
+    "open": [
+     "Miniaturization runs into physics. When the gate size reaches a few nanometers, electrons begin to tunnel through the insulator—the same tunneling from the quantum mechanics topic—and the transistor can no longer turn off. This is not an engineering difficulty but a fundamental limit.",
+     "There is no consensus on where to go next. Discussions include three-dimensional integration, switching to other materials, spintronics, optical and quantum computing. Each approach has proponents and serious objections, and no one can predict which will win."
+    ]
+   },
+   {
+    "h": "LED and Solar Cell",
+    "kicker": "two processes in opposite directions",
+    "text": [
+     "An LED is the same p-n junction operating in forward bias. Electrons and holes meet in the junction region and recombine, releasing energy as a light quantum. The quantum's energy equals the band gap—meaning the color is set by material choice, not by a filter.",
+     "Hence the story of the blue LED. Red and green were made in the 1960s, but blue required a wide-bandgap material, which for thirty years could not be grown pure enough. Shuji Nakamura achieved it with gallium nitride, working almost alone in a small Japanese company. The 2014 Nobel Prize—and it was the blue LED that made white lighting possible, since white is obtained from blue with a phosphor.",
+     "A solar cell is the same junction in reverse. A light quantum creates an electron-hole pair, the built-in field of the junction separates them, and a voltage appears at the contacts. Hence the efficiency limit: quanta with energy below the band gap do nothing at all, and the excess energy of high-energy quanta is lost as heat. For a single junction, the theoretical ceiling is about 33%, and it has long been nearly reached."
+    ]
+   },
+   {
+    "h": "What Band Theory Does Not Explain",
+    "kicker": "honest limitations",
+    "text": [
+     "Band theory assumes that each electron moves independently in the average field of the others. This approximation works wonderfully for silicon and germanium—and that is why all silicon electronics can be calculated reliably.",
+     "But where electrons strongly interact with each other, it breaks down. Transition metal oxides, which according to band theory should be metals, turn out to be insulators. High-temperature superconductors are not described at all. This is the realm of strongly correlated systems, and there is no general theory for them.",
+     "The situation is instructive: solid-state physics can calculate a chip with billions of elements but cannot predict whether a simple compound of two elements will conduct. It is the approximation, not ignorance of the specific material, that limits here."
+    ],
+    "open": [
+     "Strongly correlated electronic systems are one of the main unsolved problems in condensed matter physics. Numerical methods hit a wall because the number of states grows exponentially with the number of particles: an exact calculation for a hundred interacting electrons is impossible on any computer.",
+     "That is why one of the main hopes is placed on quantum computers: the task of simulating a quantum system naturally fits a quantum device. How justified this hope is remains a matter of debate."
+    ],
+    "now": [
+     "Technology nodes have reached a few nanometers, and further miniaturization runs into tunneling. Industry has shifted to three-dimensional structures: transistors are stacked in layers instead of being shrunk.",
+     "Two-dimensional materials a single atom thick, spintronics where information is carried by spin rather than charge, and neuromorphic circuits mimicking neural tissue are being explored. None of these directions have yet replaced silicon, and the debate about what comes next is wide open."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "What to take away from this lecture",
+   "text": [
+    "Discrete atomic levels, when brought together in a crystal, turn into bands. A half-filled band means a metal, a completely filled band with a wide gap means an insulator, and a narrow gap means a semiconductor.",
+    "The entire behavior of a semiconductor is determined by a single exponential: the number of electrons that manage to jump across the gap due to heat. Hence the decrease in resistance with heating, and the sharp sensitivity to any external influences.",
+    "A p-n junction provides unidirectional conduction from the equilibrium between diffusion and the built-in field. It yields a diode, a transistor, a light-emitting diode, and a solar cell — four devices from one picture.",
+    "And a boundary: band theory works as long as electrons can be considered independent. Where they interact strongly, there is still no general theory — and that is exactly where high-temperature superconductivity lies."
+   ]
+  }
+ },
+ "es": {
+  "title": "Semiconductores",
+  "subtitle": "Lección 5 · Cómo de la teoría de bandas surge toda la electrónica",
+  "lead": "La resistividad del cobre y del vidrio de cuarzo difiere en veinticuatro órdenes de magnitud. Ninguna otra magnitud física en las sustancias comunes varía en tales límites. La física clásica no puede explicar esto en absoluto — y la explicación resultó ser la puerta de entrada a la era electrónica.",
+  "blocks": [
+   {
+    "h": "¿De dónde vienen las bandas?",
+    "kicker": "niveles atómicos en el cristal",
+    "text": [
+     "En un átomo aislado, los niveles electrónicos son discretos — esto se trató en el tema del átomo. Acerca dos átomos: sus funciones de onda se superpondrán y cada nivel se dividirá en dos. Tres átomos darán tres subniveles, diez — diez.",
+     "Ahora toma un cristal con $10^{23}$ átomos. El nivel se dividirá en $10^{23}$ subniveles, tan juntos que se fusionan en una banda continua — la banda. El ancho de la banda sigue siendo finito, del orden de electronvoltio, y se conservan los espacios entre bandas.",
+     "Resulta la imagen: bandas permitidas separadas por intervalos prohibidos. Los electrones llenan los estados permitidos de abajo arriba, siguiendo el mismo principio de Pauli que en el átomo. Y aquí surge la principal diferencia entre las sustancias."
+    ],
+    "image": {
+     "h": "Imagen: pisos y escaleras",
+     "text": [
+      "Imagina un edificio de varios pisos donde en cada piso hay un salón, y entre pisos una escalera. El salón es la banda permitida, el tramo de escalera sin puertas es la banda prohibida.",
+      "Si el salón está medio lleno de personas, se mueven libremente dentro: basta con dar un paso al lado. Esto es un metal: los electrones cambian fácilmente de estado y conducen corriente.",
+      "Si el salón está abarrotado, no hay espacio para moverse: para desplazarse hay que subir al piso superior, y allí lleva una larga escalera. Esto es un aislante.",
+      "Y si la escalera es corta, algunas personas saltan hacia arriba por sí mismas, gracias a la agitación térmica. Esto es un semiconductor — y toda la electrónica surgió de este caso intermedio."
+     ]
+    },
+    "eq": "$n \\propto e^{-E_g / 2k_BT}$"
+   },
+   {
+    "h": "Un poco de matemáticas que lo explica todo",
+    "kicker": "una exponente para toda la sección",
+    "text": [
+     "El número de electrones que logran saltar la banda prohibida está determinado por la distribución de Boltzmann — la misma que se trató en termodinámica. La probabilidad de adquirir energía $E_g$ mediante movimiento térmico cae exponencialmente.",
+     "Sustituyamos números. A temperatura ambiente, $k_BT \\approx 0{,}026$ eV. En el diamante, el ancho de banda es de 5,5 eV, la relación en el exponente es de aproximadamente cien — la exponente da $10^{-46}$, y no hay electrones libres en absoluto. En el silicio, 1,12 eV, el exponente es alrededor de veinte, y por centímetro cúbico hay alrededor de $10^{10}$ portadores. En un metal, no hay brecha, portadores $10^{23}$.",
+     "De aquí surge la principal propiedad del semiconductor que lo distingue del metal: con el calentamiento, su resistencia disminuye, no aumenta. En el metal, el número de portadores es constante y las vibraciones de la red obstaculizan; en el semiconductor, el número de portadores crece exponencialmente, y este crecimiento domina todo lo demás.",
+     "Y de aquí también lo práctico: sensibilidad a las influencias más pequeñas. Una exponente con un exponente grande reacciona bruscamente a los cambios — un calentamiento de diez grados duplica la conductividad. En esto se basan los termistores, fotosensores y la mitad de la tecnología de sensores."
+    ],
+    "note": "Observa que por segunda vez en el curso encontramos una exponente con la relación energía/kT en el exponente: primero en la distribución de Boltzmann, luego en el efecto túnel, ahora aquí. Es la construcción más frecuente en toda la física de la materia, y siempre aparece por la misma razón — la probabilidad de adquirir aleatoriamente una energía mucho mayor que la térmica disminuye exponencialmente."
+   },
+   {
+    "h": "Impurezas: cómo controlar la conductividad",
+    "kicker": "dopaje en una línea",
+    "text": [
+     "El silicio puro es poco interesante. Toda la tecnología surgió de la adición de impurezas — el dopaje, y en cantidades ínfimas: un átomo de impureza por cada millón de átomos de silicio.",
+     "El silicio tiene cuatro electrones de valencia, todos ocupados en enlaces con vecinos. Añadimos fósforo, que tiene cinco: cuatro se usarán en enlaces, y el quinto será superfluo y casi libre. A este semiconductor se le llama electrónico, o tipo n.",
+     "Añadimos boro con tres electrones: a un enlace le faltará un electrón, quedará una vacante. Un electrón vecino puede saltar a ella, dejando una vacante en su lugar — y resulta que por el cristal se mueve un hueco, que se comporta como una carga positiva. Este es un semiconductor de huecos, o tipo p.",
+     "Variando la concentración de la impureza, la conductividad cambia en órdenes de magnitud. Y lo principal: ahora hay dos tipos diferentes de material, y toda la electrónica se basa en lo que sucede en la frontera entre ellos."
+    ],
+    "image": {
+     "h": "Imagen: un asiento vacío en el cine",
+     "text": [
+      "En una fila llena, un asiento está libre. El espectador de la izquierda se muda a él — ahora su asiento queda libre. El siguiente hace lo mismo.",
+      "Desde fuera parece que un asiento vacío se mueve a lo largo de la fila, en dirección opuesta al movimiento de las personas.",
+      "El hueco en un semiconductor es exactamente eso. Los electrones se mueven, pero es más cómodo describir el movimiento de la vacante: se comporta como una partícula independiente con carga positiva. El recurso es tan conveniente que al hueco se le asigna masa y movilidad, y todos los cálculos se realizan con él como si fuera una partícula real."
+     ]
+    }
+   },
+   {
+    "h": "Unión p-n: el ladrillo principal de la electrónica",
+    "kicker": "por qué la corriente solo va en una dirección",
+    "text": [
+     "Conecta una pieza de tipo n con una de tipo p. En la frontera comienza la difusión: los electrones sobrantes de la izquierda se moverán a la derecha, los huecos de la derecha a la izquierda. Al encontrarse, se recombinan, y cerca de la frontera se forma una región desprovista de portadores libres.",
+     "Pero los electrones que se fueron dejaron tras de sí iones de impureza positivos inmóviles, y los huecos que se fueron dejaron iones negativos. Surge un campo eléctrico dirigido para impedir una mayor difusión. Se establece un equilibrio: la difusión está exactamente equilibrada por el campo. Este campo crea una barrera de aproximadamente 0,7 voltios para el silicio.",
+     "Ahora aplicamos un voltaje externo. Positivo a la región p: la barrera disminuye, la difusión se reanuda, la corriente fluye libremente. Positivo a la región n: la barrera aumenta, la zona de agotamiento se expande, la corriente prácticamente cesa.",
+     "Eso es todo el diodo. El paso unidireccional de la corriente se sigue de una imagen simple: difusión contra el campo, y el voltaje externo o ayuda a la primera o refuerza el segundo."
+    ],
+    "eq": "$I = I_0\\left(e^{\\,eU/k_BT} - 1\\right)$",
+    "after": [
+     "Observa que también aquí aparece la misma exponente con la relación energía/kT. De ahí la pendiente de la característica corriente-voltaje del diodo: a temperatura ambiente, un aumento de voltaje de 60 milivoltios aumenta la corriente diez veces. Esta no linealidad es lo que hace útil al diodo."
+    ]
+   },
+   {
+    "h": "El transistor y por qué lo cambió todo",
+    "kicker": "amplificación de la nada",
+    "text": [
+     "El transistor de efecto de campo está dispuesto así: un canal de semiconductor por el que circula corriente, y un electrodo de control (puerta) separado del canal por una fina capa aislante. El voltaje en la puerta crea un campo que atrae o repele los portadores en el canal, cambiando su conductividad.",
+     "Lo clave aquí es que a través de la puerta prácticamente no fluye corriente — está aislada. Por lo tanto, el control casi no cuesta potencia, y la corriente controlada puede ser grande. Esto es la amplificación: una señal débil controla una fuerte.",
+     "De la amplificación se sigue todo lo demás. Conectando transistores se obtienen elementos lógicos: si en ambas entradas hay voltaje, en la salida aparece una señal. De los elementos lógicos se construyen sumadores, de los sumadores un procesador. Un chip moderno contiene decenas de miles de millones de transistores, cada uno de tamaño de unos pocos nanómetros.",
+     "El primer transistor en 1947 era del tamaño de una palma, hecho de germanio y una tira de papel de oro. Desde entonces hasta el procesador actual han pasado menos de ochenta años — y todo ese tiempo ha funcionado el mismo principio físico explicado anteriormente."
+    ],
+    "open": [
+     "La miniaturización topa con la física. Con un tamaño de puerta de pocos nanómetros, los electrones comienzan a tunelizar a través del aislante — el mismo efecto túnel del tema de mecánica cuántica — y el transistor deja de bloquearse. Esto no es una dificultad de ingeniería, sino un límite fundamental.",
+     "No hay consenso sobre hacia dónde avanzar. Se discuten el apilamiento tridimensional, el cambio a otros materiales, la espintrónica, la computación óptica y cuántica. Cada enfoque tiene partidarios y objeciones serias, y nadie se atreve a predecir cuál ganará."
+    ]
+   },
+   {
+    "h": "LED y panel solar",
+    "kicker": "dos procesos en direcciones opuestas",
+    "text": [
+     "El LED es la misma unión p-n trabajando en polarización directa. Los electrones y los huecos se encuentran en la región de la unión y se recombinan, y la energía liberada se va en un cuanto de luz. La energía del cuanto es igual al ancho de la banda prohibida — por lo tanto, el color se determina por la elección del material, no por un filtro.",
+     "De ahí la historia del LED azul. Los rojos y verdes se lograron en la década de 1960, pero el azul requería un material de banda ancha que durante treinta años no se pudo cultivar lo suficientemente puro. Shuji Nakamura lo logró con nitruro de galio, trabajando casi solo en una pequeña empresa japonesa. Premio Nobel 2014 — y fue con el LED azul que se hizo posible la iluminación blanca, ya que el blanco se obtiene del azul con fósforo.",
+     "El panel solar es la misma unión al revés. Un cuanto de luz genera un par electrón-hueco, el campo incorporado de la unión los separa en direcciones opuestas, y aparece voltaje en los contactos. De ahí el límite de eficiencia: los cuantos con energía menor que el ancho de banda no funcionan en absoluto, y el exceso de energía de los de alta energía se disipa en calor. Para una sola unión, el techo teórico es de alrededor del 33 por ciento, y se ha alcanzado hace tiempo."
+    ]
+   },
+   {
+    "h": "Lo que la teoría de bandas no explica",
+    "kicker": "límites honestos",
+    "text": [
+     "La teoría de bandas supone que cada electrón se mueve independientemente en el campo promedio de los demás. La aproximación es excelente para el silicio y el germanio — y por eso toda la electrónica de silicio se calcula de manera confiable.",
+     "Pero donde los electrones interactúan fuertemente entre sí, la teoría falla. Óxidos de metales de transición, que según la teoría de bandas deberían ser metales, resultan ser aislantes. Los superconductores de alta temperatura no se describen en absoluto. Esta es el área de los sistemas fuertemente correlacionados, y no existe una teoría general para ella.",
+     "La situación es aleccionadora: la física del estado sólido calcula un microchip con miles de millones de elementos y no puede predecir si un compuesto simple de dos elementos conducirá. La aproximación, no el desconocimiento de la sustancia concreta, es lo que limita aquí."
+    ],
+    "open": [
+     "Los sistemas electrónicos fuertemente correlacionados son uno de los principales problemas no resueltos de la física de la materia. Los métodos numéricos chocan con que el número de estados crece exponencialmente con el número de partículas: un cálculo exacto para cien electrones interactuantes es imposible en cualquier computadora.",
+     "Por eso una de las principales esperanzas se deposita en las computadoras cuánticas: la tarea de modelar un sistema cuántico encaja naturalmente en un dispositivo cuántico. Hasta qué punto se cumplirá esta esperanza es aún objeto de debate."
+    ],
+    "now": [
+     "Las normas tecnológicas han llegado a unos pocos nanómetros, y la miniaturización adicional choca con el efecto túnel. La industria ha pasado a estructuras tridimensionales: los transistores se apilan en pisos en lugar de reducirse.",
+     "Se investigan materiales bidimensionales de un átomo de espesor, espintrónica, donde la información la lleva el espín y no la carga, y circuitos neuromórficos que imitan la estructura del tejido nervioso. Ninguna dirección ha reemplazado aún al silicio, y el debate sobre lo que viene después está bastante abierto."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Qué llevarse de esta lección",
+   "text": [
+    "Los niveles discretos del átomo, al acercarse en un cristal, se convierten en bandas. Una banda llena hasta la mitad es un metal; completamente llena con una banda prohibida amplia es un aislante; con una banda prohibida estrecha es un semiconductor.",
+    "Todo el comportamiento del semiconductor está determinado por una única exponencial: el número de electrones que logran saltar la banda prohibida gracias al calor. De ahí provienen tanto la disminución de la resistencia con el calentamiento como la aguda sensibilidad a cualquier influencia externa.",
+    "La unión p-n proporciona una conductividad unilateral a partir del equilibrio entre la difusión y el campo incorporado. De ella se derivan el diodo, el transistor, el LED y la célula solar: cuatro dispositivos de una misma imagen.",
+    "Y el límite: la teoría de bandas funciona mientras los electrones puedan considerarse independientes. Allí donde interactúan fuertemente, todavía no existe una teoría general — y es justamente allí donde reside la superconductividad de alta temperatura."
+   ]
+  }
+ },
+ "ar": {
+  "title": "أشباه الموصلات",
+  "subtitle": "المحاضرة 5 · كيف تُشتق كل الإلكترونيات من نظرية النطاقات",
+  "lead": "تختلف المقاومة النوعية للنحاس والزجاج الكوارتزي بأربعة وعشرين مرتبة مقدارية. لا تتغير أي كمية فيزيائية أخرى في المواد العادية ضمن هذا المدى. لا يستطيع الفيزياء الكلاسيكية تفسير ذلك إطلاقًا — لكن التفسير كان بوابة العصر الإلكتروني.",
+  "blocks": [
+   {
+    "h": "من أين تأتي النطاقات",
+    "kicker": "المستويات الذرية في البلورة",
+    "text": [
+     "في الذرة المنفردة، تكون مستويات الإلكترونات متقطعة — وقد تم تناول ذلك في موضوع الذرة. قرّب ذرتين: ستتداخل دوالهما الموجية، وينشق كل مستوى إلى اثنين. ثلاث ذرات تعطي ثلاثة مستويات فرعية، وعشر ذرات تعطي عشرة.",
+     "الآن خذ بلورة تحتوي على $10^{23}$ ذرة. سينشطر المستوى إلى $10^{23}$ مستوى فرعي، متقاربة جدًا بحيث تندمج في شريط متصل — نطاق. يبقى عرض النطاق محدودًا، بترتيب إلكترون فولت، مع بقاء الفجوات بين النطاقات.",
+     "تنتج صورة: نطاقات مسموحة مفصولة بفواصل محظورة. تملأ الإلكترونات الحالات المسموحة من الأسفل إلى الأعلى، وفقًا لمبدأ باولي نفسه كما في الذرة. وهنا يظهر الفرق الرئيسي بين المواد."
+    ],
+    "image": {
+     "h": "صورة: طوابق وسلالم",
+     "text": [
+      "تخيل مبنى متعدد الطوابق، في كل طابق قاعة، وبين الطوابق سلم. القاعة هي النطاق المسموح، وبئر السلم بدون أبواب هو النطاق المحظور.",
+      "إذا كانت القاعة نصف ممتلئة، يتحرك الناس بحرية: يكفي أن يتحركوا جانبًا. هذا هو المعدن — تغير الإلكترونات حالتها بسهولة وتوصل التيار.",
+      "إذا كانت القاعة ممتلئة بالكامل، لا يوجد مكان للتحرك: للانتقال، يجب الصعود إلى الطابق العلوي، وهناك سلم طويل. هذا هو العازل.",
+      "وإذا كان السلم قصيرًا، يقفز بعض الناس إلى الأعلى بأنفسهم بفعل الاضطراب الحراري. هذا هو أشباه الموصلات — وكل الإلكترونيات نشأت من هذه الحالة الوسيطة."
+     ]
+    },
+    "eq": "$n \\propto e^{-E_g / 2k_BT}$"
+   },
+   {
+    "h": "القليل من الرياضيات التي تشرح كل شيء",
+    "kicker": "أس واحد للقسم كله",
+    "text": [
+     "عدد الإلكترونات التي تمكنت من القفز عبر فجوة النطاق يُحدد بتوزيع بولتزمان — نفس ما تم تناوله في الديناميكا الحرارية. احتمالية اكتساب طاقة $E_g$ بفعل الحركة الحرارية تنخفض أسيًا.",
+     "لنعوض بالأرقام. في درجة حرارة الغرفة $k_BT \\approx 0{,}026$ إلكترون فولت. في الماس، عرض النطاق 5.5 إلكترون فولت، النسبة في الأس تبلغ حوالي مائة — الأس يعطي $10^{-46}$، ولا توجد إلكترونات حرة على الإطلاق. في السيليكون 1.12 إلكترون فولت، الأس حوالي عشرين، وفي كل سنتيمتر مكعب يوجد حوالي $10^{10}$ حاملات. في المعدن لا توجد فجوة، عدد الحاملات $10^{23}$.",
+     "من هنا الخاصية الرئيسية لأشباه الموصلات التي تميزها عن المعدن: مع التسخين، تقل مقاومتها بدلاً من أن تزيد. في المعدن، عدد الحاملات ثابت وتهتزات الشبكة تعيق؛ في أشباه الموصلات، يزداد عدد الحاملات أسيًا، وهذا النمو يطغى على كل شيء آخر.",
+     "ومن هنا أيضًا التطبيق العملي: الحساسية لأدنى المؤثرات. الأس ذو الأس الكبير يستجيب للتغيرات بشكل حاد — تسخين بمقدار عشر درجات يضاعف التوصيلية. على هذا تعتمد الثيرمستورات، وأجهزة الاستشعار الضوئي، ونصف تقنيات التحسس."
+    ],
+    "note": "لاحظ أننا نلتقي للمرة الثانية في المقرر بالأس الذي يحتوي على نسبة الطاقة إلى kT: أولاً في توزيع بولتزمان، ثم في النفق الكمومي، والآن هنا. هذا هو البناء الأكثر شيوعًا في فيزياء المادة بأكملها، ويظهر دائمًا لسبب واحد — احتمال اكتساب طاقة بشكل عشوائي أكبر بكثير من الطاقة الحرارية ينخفض أسيًا."
+   },
+   {
+    "h": "الشوائب: كيفية التحكم في التوصيلية",
+    "kicker": "التطعيم في سطر واحد",
+    "text": [
+     "السيليكون النقي قليل الاهتمام. كل التقنيات نشأت من إضافة الشوائب — التطعيم، وبكميات ضئيلة: ذرة شائبة واحدة لكل مليون ذرة سيليكون.",
+     "السيليكون لديه أربعة إلكترونات تكافؤ، جميعها مشغولة في روابط مع الجيران. أضف الفوسفور، الذي لديه خمسة: أربعة ستذهب إلى الروابط، والخامس سيكون زائدًا وتقريبًا حرًا. يسمى هذا النوع من أشباه الموصلات إلكترونيًا، أو من النوع n.",
+     "أضف البورون بثلاثة إلكترونات: رابط واحد سينقصه إلكترون، وستبقى شاغرة. يمكن لإلكترون مجاور أن يقفز إليها، تاركًا شاغرة في مكانه، — وسينتج أن شاغرًا يتحرك عبر البلورة، يتصرف كشحنة موجبة. هذا هو أشباه الموصلات الفجوية، أو من النوع p.",
+     "بتغيير تركيز الشوائب، يمكن تغيير التوصيلية بأضعاف. والأهم — الآن لدينا نوعان مختلفان من المواد، وكل الإلكترونيات مبنية على ما يحدث عند الحدود بينهما."
+    ],
+    "image": {
+     "h": "صورة: مقعد فارغ في قاعة السينما",
+     "text": [
+      "في صف ممتلئ، هناك مقعد واحد فارغ. المشاهد من اليسار ينتقل إليه — الآن يصبح مقعده فارغًا. التالي يفعل الشيء نفسه.",
+      "من الخارج، يبدو أن مقعدًا فارغًا يتحرك على طول الصف، وفي اتجاه معاكس لحركة الناس.",
+      "الفجوة في أشباه الموصلات هي هذا تمامًا. الإلكترونات تتحرك، ولكن من الأسهل وصف حركة الشاغر: يتصرف كجسيم مستقل بشحنة موجبة. هذه الطريقة مريحة لدرجة أن الفجوة تُنسب إليها كتلة وحركية، ويتم إجراء جميع الحسابات معها كجسيم حقيقي."
+     ]
+    }
+   },
+   {
+    "h": "وصلة p-n: لبنة الإلكترونيات الرئيسية",
+    "kicker": "لماذا يسير التيار في اتجاه واحد فقط",
+    "text": [
+     "صل قطعة من النوع n مع قطعة من النوع p. عند الحدود يبدأ الانتشار: الإلكترونات الزائدة من اليسار تذهب إلى اليمين، والفجوات من اليمين إلى اليسار. عندما تلتقي، تعيد الاتحاد، وتتشكل منطقة خالية من الحاملات الحرة عند الحدود.",
+     "لكن الإلكترونات الراحلة تركت خلفها أيونات شائبة موجبة ثابتة، والفجوات الراحلة تركت أيونات سالبة. ينشأ مجال كهربائي موجه لمنع المزيد من الانتشار. يتم تحقيق التوازن: الانتشار متوازن تمامًا مع المجال. هذا المجال يخلق حاجزًا بارتفاع حوالي 0.7 فولت للسيليكون.",
+     "الآن نطبق جهدًا خارجيًا. الموجب إلى منطقة p — ينخفض الحاجز، ويستأنف الانتشار، ويتدفق التيار بحرية. الموجب إلى منطقة n — يرتفع الحاجز، وتتوسع منطقة النضوب، ويتوقف التيار تقريبًا.",
+     "هذا هو كل شيء عن الصمام الثنائي. يتبع التوصيل الأحادي للتيار من صورة بسيطة: الانتشار ضد المجال، والجهد الخارجي إما يساعد الأول أو يعزز الثاني."
+    ],
+    "eq": "$I = I_0\\left(e^{\\,eU/k_BT} - 1\\right)$",
+    "after": [
+     "لاحظ أن نفس الأس مع نسبة الطاقة إلى kT يظهر هنا أيضًا. ومن هنا انحدار خاصية الجهد-تيار للصمام الثنائي: في درجة حرارة الغرفة، زيادة الجهد بمقدار 60 ميلي فولت تزيد التيار عشرة أضعاف. هذه اللاخطية هي ما تجعل الصمام الثنائي مفيدًا."
+    ]
+   },
+   {
+    "h": "الترانزستور ولماذا غير كل شيء",
+    "kicker": "تضخيم من لا شيء",
+    "text": [
+     "يتم ترتيب الترانزستور الحقلي كالتالي: قناة من أشباه الموصلات يمر فيها التيار، وقطب تحكم (البوابة) مفصول عن القناة بطبقة رقيقة من العازل. الجهد على البوابة يخلق مجالًا يجذب أو يطرد الحاملات في القناة، مما يغير موصليتها.",
+     "المفتاح هنا هو أن التيار لا يتدفق تقريبًا عبر البوابة — فهي معزولة. وبالتالي، فإن التحكم لا يكلف شيئًا تقريبًا من حيث الطاقة، بينما يمكن أن يكون التيار المتحكم فيه كبيرًا. هذا هو التضخيم: إشارة ضعيفة تتحكم في إشارة قوية.",
+     "من التضخيم يأتي كل شيء آخر. بتوصيل الترانزستورات، نحصل على عناصر منطقية: إذا كان هناك جهد على كلا المدخلين، يظهر إشارة على المخرج. من العناصر المنطقية نبني الجامعات، ومن الجامعات نبني المعالج. الشريحة الحديثة تحتوي على عشرات المليارات من الترانزستورات، كل منها بحجم بضعة نانومترات.",
+     "أول ترانزستور في عام 1947 كان بحجم كف اليد، مصنوع من الجرمانيوم وشريط من رقاقة الذهب. مر أقل من ثمانين عامًا منه إلى المعالج الحالي — وكل هذا الوقت، كان نفس المبدأ الفيزيائي الموضح أعلاه يعمل."
+    ],
+    "open": [
+     "التصغير يواجه الفيزياء. عندما يكون حجم البوابة بضعة نانومترات، تبدأ الإلكترونات في النفق عبر العازل — نفس النفق الكمومي من موضوع ميكانيكا الكم — ويتوقف الترانزستور عن الإغلاق. هذه ليست صعوبة هندسية، بل حد جوهري.",
+     "لا يوجد إجماع حول إلى أين نتجه بعد ذلك. يتم مناقشة التجميع ثلاثي الأبعاد، والتحول إلى مواد أخرى، والإلكترونيات الدورانية، والحوسبة البصرية والكمومية. كل نهج له مؤيدوه واعتراضات جدية، ولا أحد يستطيع التنبؤ بما سينتصر الآن."
+    ]
+   },
+   {
+    "h": "الصمام الثنائي الباعث للضوء والخلية الشمسية",
+    "kicker": "عمليتان في اتجاهين متعاكسين",
+    "text": [
+     "الصمام الثنائي الباعث للضوء هو نفس وصلة p-n، تعمل في الاتجاه الأمامي. تلتقي الإلكترونات والفجوات في منطقة الوصلة وتعيد الاتحاد، وتتحرر الطاقة ككَم من الضوء. طاقة الكم تساوي عرض فجوة النطاق — وبالتالي اللون يحدده اختيار المادة وليس مرشحًا.",
+     "من هنا قصة الصمام الأزرق. تم تعلم صنع الأحمر والأخضر في ستينيات القرن العشرين، بينما تطلب الأزرق مادة ذات فجوة نطاق واسعة، ولم يتمكنوا من زراعتها نقية بدرجة كافية لمدة ثلاثين عامًا. حقق شوجي ناكامورا ذلك باستخدام نتريد الغاليوم، وهو يعمل في شركة يابانية صغيرة تقريبًا بمفرده. جائزة نوبل 2014 — ومن الصمام الأزرق أصبحت الإضاءة البيضاء ممكنة، حيث يتم الحصول على الأبيض من الأزرق باستخدام الفوسفور.",
+     "الخلية الشمسية هي نفس الوصلة بالعكس. كَم من الضوء يولد زوجًا إلكترون-فجوة، المجال المدمج للوصلة يفرقهما في اتجاهين مختلفين، ويظهر جهد على الأقطاب. ومن هنا حد الكفاءة: الكمات ذات الطاقة الأقل من عرض النطاق لا تعمل على الإطلاق، والطاقة الزائدة من الكمات عالية الطاقة تتحول إلى حرارة. لوصلة واحدة، السقف النظري حوالي 33%، وقد تم الوصول إليه تقريبًا منذ فترة."
+    ]
+   },
+   {
+    "h": "ما لا تفسره نظرية النطاقات",
+    "kicker": "حدود صادقة",
+    "text": [
+     "تفترض نظرية النطاقات أن كل إلكترون يتحرك بشكل مستقل في مجال متوسط للباقي. هذا التقريب ممتاز للسيليكون والجرمانيوم — ولهذا يتم حساب جميع الإلكترونيات السيليكونية بشكل موثوق.",
+     "ولكن حيث تتفاعل الإلكترونات بشدة مع بعضها البعض، ينهار التقريب. أكاسيد المعادن الانتقالية، التي يجب أن تكون معادن وفقًا لنظرية النطاقات، تصبح عازلة. الموصلات الفائقة ذات درجة الحرارة العالية لا توصف على الإطلاق. هذه هي منطقة الأنظمة شديدة الارتباط، ولا توجد نظرية عامة لها.",
+     "الموقف مفيد: فيزياء الجسم الصلب تحسب دائرة متكاملة تحتوي على مليارات العناصر ولا تستطيع التنبؤ بما إذا كان مركب بسيط من عنصرين سيوصل. التقريب، وليس الجهل بمادة معينة، هو ما يحد هنا."
+    ],
+    "open": [
+     "أنظمة الإلكترونات شديدة الارتباط هي واحدة من المشاكل الرئيسية غير المحلولة في فيزياء المادة. تواجه الطرق العددية حقيقة أن عدد الحالات ينمو أسيًا مع عدد الجسيمات: الحساب الدقيق لمئة إلكترون متفاعل مستحيل على أي حاسوب.",
+     "لهذا السبب، أحد الآمال الرئيسية معلقة على الحواسيب الكمومية: مهمة محاكاة نظام كمومي تقع بشكل طبيعي على جهاز كمومي. إلى أي مدى سيتحقق هذا الأمل هو موضوع نقاش."
+    ],
+    "now": [
+     "وصلت المعايير التكنولوجية إلى بضعة نانومترات، ويواجه التصغير الإضافي النفق الكمومي. انتقلت الصناعة إلى هياكل ثلاثية الأبعاد: يتم تكديس الترانزستورات في طبقات بدلاً من التصغير.",
+     "يتم البحث في مواد ثنائية الأبعاد بسماكة ذرة واحدة، والإلكترونيات الدورانية حيث المعلومات لا تحملها الشحنة بل الدوران المغزلي، والدوائر العصبية الشكل التي تحاكي بنية النسيج العصبي. لم يحل أي اتجاه محل السيليكون بعد، والنقاش حول ما سيأتي بعد ذلك مفتوح تمامًا."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "خلاصة المحاضرة",
+   "text": [
+    "مستويات الطاقة المنفصلة في الذرة، عندما تتقارب في البلورة، تتحول إلى نطاقات. النطاق الممتلئ نصفًا هو معدن، والممتلئ بالكامل مع فجوة عريضة هو عازل، ومع فجوة ضيقة هو شبه موصل.",
+    "كل سلوك شبه الموصل يحدده دالة أسية واحدة: عدد الإلكترونات التي تمكنت من القفز عبر الفجوة بفعل الحرارة. ومن هنا يأتي انخفاض المقاومة مع التسخين، والحساسية الحادة لأي تأثيرات.",
+    "وصلة p-n تعطي توصيلًا في اتجاه واحد من التوازن بين الانتشار والمجال المدمج. منها نحصل على الصمام الثنائي، والترانزستور، والصمام الثنائي الباعث للضوء، والخلية الشمسية — أربعة أجهزة من صورة واحدة.",
+    "والحد: نظرية النطاقات تعمل طالما يمكن اعتبار الإلكترونات مستقلة. حيثما تتفاعل بشدة، لا توجد نظرية عامة حتى الآن — وهناك تكمن الموصلية الفائقة عند درجات حرارة عالية."
+   ]
+  }
+ }
+}

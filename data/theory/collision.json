@@ -1,0 +1,87 @@
+{
+  "id": "collision",
+  "model": "collision",
+  "schema": "b42.model/1",
+  "constants": {
+    "tmax": 7,
+    "hit": 3
+  },
+  "params": [
+    {
+      "key": "m1",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "value": 6,
+      "unit": "unit_kg"
+    },
+    {
+      "key": "v1",
+      "min": 0,
+      "max": 6,
+      "step": 0.5,
+      "value": 4,
+      "unit": "unit_ms"
+    },
+    {
+      "key": "m2",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "value": 4,
+      "unit": "unit_kg"
+    },
+    {
+      "key": "v2",
+      "min": -6,
+      "max": 0,
+      "step": 0.5,
+      "value": -2,
+      "unit": "unit_ms"
+    }
+  ],
+  "i18n": {
+    "ru": {
+      "m1": "масса тела A",
+      "v1": "скорость A",
+      "m2": "масса тела B",
+      "v2": "скорость B",
+      "unit_kg": "кг",
+      "unit_ms": "м/с",
+      "reset": "сброс",
+      "xMass2": "масса тела B, кг",
+      "ySpeed": "скорость A после удара, м/с",
+      "mode_elastic": "упругий удар",
+      "mode_inelastic": "неупругий (слипаются)",
+      "beforeHit": "до удара",
+      "afterHit": "после удара",
+      "lost": "энергии потеряно:",
+      "kept": "кинетическая энергия сохранилась полностью",
+      "pLabel": "импульс",
+      "eLabel": "энергия",
+      "noHit": "тела не встретятся — сближения нет",
+      "hitAt": "касание на"
+    },
+    "en": {
+      "m1": "mass of A",
+      "v1": "velocity of A",
+      "m2": "mass of B",
+      "v2": "velocity of B",
+      "unit_kg": "kg",
+      "unit_ms": "m/s",
+      "reset": "reset",
+      "xMass2": "mass of B, kg",
+      "ySpeed": "velocity of A after impact, m/s",
+      "mode_elastic": "elastic collision",
+      "mode_inelastic": "inelastic (they stick)",
+      "beforeHit": "before impact",
+      "afterHit": "after impact",
+      "lost": "energy lost:",
+      "kept": "kinetic energy fully conserved",
+      "pLabel": "momentum",
+      "eLabel": "energy",
+      "noHit": "no impact — they are not closing in",
+      "hitAt": "contact at"
+    }
+  }
+}

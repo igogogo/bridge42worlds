@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestra Without a Conductor: An Elastic Gang for LLM Inference — bridge42worlds</title>
+    <meta name="description" content="Running large language models on a CPU requires synchronous work from many cores bundled into a gang. Interrupting such a group leads to failures. The Anima OS kernel implements an elastic gang: a mechanism that lets an inference group dynamically borrow cores from ordinary processes for the duratio">
+    <meta property="og:title" content="Orchestra Without a Conductor: An Elastic Gang for LLM Inference">
+    <meta property="og:description" content="The ACK-latch protocol turns a group of cores running LLM inference into an elastic ensemble that borrows and returns cores between tokens without hangs or loss of accuracy.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-06/2607.04668/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-06/2607.04668/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Orchestra Without a Conductor: An Elastic Gang for LLM Inference", "description": "The ACK-latch protocol turns a group of cores running LLM inference into an elastic ensemble that borrows and returns cores between tokens without hangs or loss of accuracy.", "inLanguage": "en", "datePublished": "2026-07-06", "url": "https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-06/2607.04668/ai.webp", "author": [{"@type": "Person", "name": "Daeyeon Son"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.04668", "abstract": "On-device decoding of large language models relies on a barrier group of cores doing SIMD work, with each core occupied for milliseconds per token. A standard scheduler preempting a core causes a barrier deadlock or corrupts logits. We introduce the elastic gang in Anima OS—a bare-metal kernel in Rust for x86-64—where the gang is a first-class schedulable entity whose composition can change between any two tokens. The mechanism uses an ACK-latched epoch protocol: a seqlock-style generation-tagged lock combined with RCU/epoch-style membership consensus. For each token, the participants are the intersection of requested cores and those that acked the epoch. A tardy core joins at most one token later. Preempted processes migrate and resume when the generation concludes. On AMD Zen 5 (8C/16T), generation is verified bit-exact across composition changes for 135M and 7B models. Compared to fixed partitions, elastic membership is Pareto-dominant: at intermediate duty cycles, shared-process throughput is higher by 1.75 (25%), 1.52 (50%), and 1."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/en/index.html">main</a>
+            <a href="/lang/en/tags/">tags</a>
+            <a href="/lang/en/laws/">laws</a>
+            <a href="/lang/en/scientists/">scientists</a>
+            <a href="/lang/en/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/en/graph/">graph</a>
+            <a href="/lang/en/theory/">theory</a>
+            <a href="/lang/en/favorites.html" title="Favorites"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="Level"><span class="vs-current">Popular</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/en/archive/2026-07-06/2607.04668/mini.html" data-label="Mini" title="Mini — The gist in 10 seconds"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/en/archive/2026-07-06/2607.04668/simple.html" data-label="Simple" title="Simple — As simple as it gets — for a first look"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/en/archive/2026-07-06/2607.04668/index.html" data-label="Popular" title="Popular — Richer than Simple — if science already excites you"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/en/archive/2026-07-06/2607.04668/advanced.html" data-label="Advanced" title="Advanced — With formulas and the full discovery story"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">Next article →</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>I am the author</h3>
+        <p>Are you one of the authors of this paper? Email us from your institutional or work email address mentioning this article's arXiv ID and we'll verify you and give you edit access to this page.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.04668">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ top</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">Graph</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#related">Related articles</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/en/archive/2026-07-06/2607.04668/simple.html" title="Simple — As simple as it gets — for a first look"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">Simple</span></a><a class="lv-btn active" data-version="popular" href="/lang/en/archive/2026-07-06/2607.04668/index.html" title="Popular — Richer than Simple — if science already excites you"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">Popular</span></a><a class="lv-btn" data-version="advanced" href="/lang/en/archive/2026-07-06/2607.04668/advanced.html" title="Advanced — With formulas and the full discovery story"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">Advanced</span></a></div>
+        <div class="mini-head"><div class="mini-head-l">in short · 20 seconds</div><p>When many processor cores work together to compute a large language model, they must do so in lockstep. If one core gets caught up in another task, the whole operation stalls—like an orchestra where one musician is late and isn't playing. In the Anima OS operating system, they devised a flexible approach: cores can join the shared task only for the duration of processing one word piece, and then immediately return to regular programs. To do this, before each step the cores quickly negotiate who will work, and once the list is made, they stick to it strictly. Those who don't make it in time—no problem, their work is done by others. This elastic orchestra was tested on an AMD Ryzen 9 processor. When a quarter of the time was given to AI, the overall speed for other programs increased by 1.75×—from 327 to 574 service operations per second. Meanwhile, the model made no mistakes in any word. Returning a borrowed core took just 0.22 microseconds. This means that language models and ordinary programs can peacefully share computer resources without interfering with each other.</p></div>
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">Orchestra Without a Conductor: An Elastic Gang for LLM Inference  </h1>
+            <button class="share-btn share-inline" title="Share" onclick="shareArticle('Orchestra Without a Conductor: An Elastic Gang for LLM Inference','https://bridge42worlds.academy/lang/en/archive/2026-07-06/2607.04668/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Elastic Gang: Per-Token Membership Change for a Hard-Barriered LLM Inference Gang Co-Scheduled with OS Processes"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">I am the author</button> · <a href="/lang/en/authors/Daeyeon_Son.html" class="text-author-link" data-author="Daeyeon Son">Daeyeon Son</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.04668" target="_blank" rel="noopener">2607.04668</a> · 2026-07-06 · <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 3 min</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/en/sections/cs_OS.html" data-cat="cs.OS" title="">cs.OS</a> <a class="cat-badge" href="/lang/en/sections/cs_AI.html" data-cat="cs.AI" title="Artificial intelligence, excluding vision, robotics, machine learning, multiagent systems and NLP: expert systems, theorem proving, knowledge representation, planning, uncertainty in AI.">Artificial Intelligence</a> <a class="cat-badge" href="/lang/en/sections/cs_PF.html" data-cat="cs.PF" title="">cs.PF</a></div>
+        <div class="oneliner">The ACK-latch protocol turns a group of cores running LLM inference into an elastic ensemble that borrows and returns cores between tokens without hangs or loss of accuracy.</div>
+        <div class="mosaic"></div>
+        <div class="abstract-lead"><div class="abstract-label">Abstract</div><p>To generate each word in a language model on a CPU, all cores must work in lockstep—this is called a barrier group. A typical operating system can't pull cores from such a group: either the computation crashes or the system hangs. In Anima OS, the group becomes flexible: its lineup can change between words, and cores can be lent to other tasks. The epoch-based mechanism with acknowledgments doesn't wait for specific cores; it gathers whoever shows up. On a real AMD Zen 5, the output is bit-exact regardless of the shuffles. When the model is idle, all cores are free; under moderate load, overall throughput rises by up to 1.75×. Returning a borrowed core costs 0.22 microseconds.</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> configure view</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> tags</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> laws</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> scientists</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> tag↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> tag↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> law↔scientist</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> tag↔tag</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> law↔law</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> scientist↔scientist</label></div></div></div><div class="mini-graph mini-graph--article" data-node="s:Andrey Markov,t:large_language_models,t:machine_learning"><canvas id="minigraph"></canvas></div>
+        <p>Seven cores froze at an invisible barrier. The eighth lingered on someone else's process—and the entire <a href="/lang/en/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">LLM inference</a> hung. That's the central collision of <a href="/lang/en/tags/machine_learning.html" class="text-tag" data-tag="machine_learning">machine learning tasks</a> and ordinary processes sharing a CPU. An inference gang demands that all cores strike in perfect unison—otherwise silence. But the operating system can't just freeze a core mid-token: the barrier will never wait for the latecomer, and allowing a new participant to join would silently distort the result.</p><p>In Anima OS—an operating system written in Rust—they solved this by turning the gang into an elastic orchestra without a conductor. Each core-musician can join or leave the ensemble strictly between measures—that is, between tokens. The ACK-latch protocol works like this: before generation begins, an activity flag is set and the epoch number is incremented. Every core that can lend itself acknowledges the current epoch, having first saved its process state—like a musician pausing their instrument and nodding. The lineup for the next token is frozen in a single atomic word—a bitmask containing only those whose acknowledgment matches the epoch at the moment of fixing. This mask is published before the token starts, and each barrier-waiting point reads exactly that. A core that didn't acknowledge in time simply isn't included in the current token—no one waits for it, and its work is stolen by its neighbors.</p><div class="callout">Even with 301 process migrations within a 10-second window, inference remained bit-identical, and throughput measurement variance stayed below 0.9%.</div><p>Tests on an AMD Ryzen 9 9800X3D (Zen 5 architecture) with <a href="/lang/en/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">SmolLM2-135M</a> and <a href="/lang/en/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">Qwen2.5-7B</a> models showed: when a quarter of the time was spent on inference, overall throughput for ordinary processes rose by 1.75× compared to static core partitioning—from 327 to 574 service quanta per second. Generation speed didn't drop, and model output remained bit-identical to a fixed configuration. The hash of final logits—numerical probability scores for tokens—0x9a2917eca1a62bd1 never changed in any scenario. Core return latency after generation ended was a median of 0.22 microseconds—practically instant. And capturing a busy core, under a conservative policy, takes one scheduler quantum (about 16 milliseconds): the borrowing process doesn't interrupt its quantum; the core joins the gang only after the quantum expires.</p><div class="callout">At 25% inference load, the elastic gang lifted system throughput by 1.75×—and never once made a generation error.</div><p>The elastic gang shatters the conventional wisdom that hard-barrier computations are incompatible with dynamic core reallocation. The ACK-latch protocol turns an inference group into a full-fledged scheduling object: it shares resources with the rest of the system without sacrificing correctness. This opens the door to operating systems where <a href="/lang/en/tags/large_language_models.html" class="text-tag" data-tag="large_language_models">LLM inference</a> is not an isolated task but a routine service that adapts to load, much like an orchestra changing its lineup between symphony movements. The mechanism could be ported to Linux with the SCHED_DEADLINE scheduler, adapted to heterogeneous architectures (big.LITTLE), and integrated with power-saving policies. Thus the elastic gang, synchronizing on a single word-score, takes a step toward solving the fundamental problem of peaceful coexistence for synchronous and asynchronous computations in one system. Now a stalled core is not a disaster. Missing the barrier, it simply skips a beat, and the elastic orchestra plays on—and not a single note rings false.</p>
+        <div class="fun-fact"><p class="fact">🎯 Even with 301 process migrations within a 10-second window, inference remained bit-identical, and throughput measurement variance stayed below 0.9%.</p></div>
+        
+        
+        <div class="actions actions-compact" data-article-id="2607.04668_en_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="Like"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="Dislike"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.04668" title="Favorites"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> add a comment</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/en/archive/2026-07-06/2607.04668/simple.html" title="Simple — As simple as it gets — for a first look"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn active lv-compact" data-version="popular" href="/lang/en/archive/2026-07-06/2607.04668/index.html" title="Popular — Richer than Simple — if science already excites you"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn lv-compact" data-version="advanced" href="/lang/en/archive/2026-07-06/2607.04668/advanced.html" title="Advanced — With formulas and the full discovery story"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.04668_en_popular" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">Reads well</span><span class="fb-chip" data-opt="too_long">Too long</span><span class="fb-chip" data-opt="unclear">Unclear</span><span class="fb-chip" data-opt="great">Great</span><span class="fb-chip" data-opt="dry">A bit dry</span></div><textarea class="fb-comment" rows="2" placeholder="comments are reviewed in batches — we may update the article"></textarea><div class="fb-row"><button class="fb-send">send</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="Related articles"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">Scientists</div><a href="/lang/en/scientists/Andrey_Markov.html" class="side-sci" data-scientist="Andrey Markov">Andrey Markov</a><div class="side-tags-label">Tags</div><a href="/lang/en/tags/large_language_models.html" class="side-tag" data-tag="large_language_models">Large Language Models</a>
+<a href="/lang/en/tags/machine_learning.html" class="side-tag" data-tag="machine_learning">Machine Learning</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.04668', 'article', 'en');
+    if (false && window.logExpressInterest) logExpressInterest('2607.04668', 'en');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

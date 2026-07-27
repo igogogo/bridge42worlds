@@ -151,8 +151,9 @@ def cmd_regen_day(args):
 
 def cmd_html(args):
     import generate
-    generate.regenerate_all_html()
+    generate.regenerate_all_html(only=getattr(args, "only", None))
     generate.rebuild_indexes()
+    _ensure_webp()   # догнать .webp для новых картинок (сайт отдаёт webp, генератор пишет jpg)
 
 
 def cmd_status(args):
@@ -428,6 +429,16 @@ def cmd_graph(args):
     _run_chain([["build_knowledge_graph.py"]])
 
 
+def _ensure_webp():
+    """Догоняем .webp для новых картинок (генератор пишет .jpg, сайт отдаёт .webp).
+    Пропускает уже сконвертированное — дёшево. Вшито после регенера, чтобы у свежих статей
+    гарантированно были картинки (webp-миграция 2026-07-25)."""
+    try:
+        _run_chain([["webp_convert.py"]])
+    except SystemExit:
+        print("⚠️ конвертация webp не удалась — новые картинки могут не отобразиться")
+
+
 def cmd_analytics(args):
     """Пересчитать карту аналитики (статьи/авторы/со-встречаемость) → data/analytics/*.json.
     С --interpret ИИ даёт кластерам человеческие имена+описания (тратит DeepSeek) — «изюминка»
@@ -678,6 +689,11 @@ def build_parser():
     s.set_defaults(func=cmd_regen_day, refine=False)
 
     s = sub.add_parser("html", help="пересобрать HTML из data.json (без API) + индексы")
+    # Точечный режим: страницы указанных статей + агрегаты целиком. Полный проход занимает час,
+    # а после правки нескольких статей переписывать 31 тысячу страниц незачем.
+    s.add_argument("--only", nargs="+", metavar="ДАТА|ID",
+                   help="пересобрать только эти статьи (2026-07-01 или 2607.00742); "
+                        "агрегаты и индексы строятся полностью в любом случае")
     s.set_defaults(func=cmd_html)
 
     s = sub.add_parser("reindex", help="пересобрать индексы и графы из data.json")

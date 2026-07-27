@@ -1,0 +1,1567 @@
+{
+  "id": "01-current",
+  "topic": "electricity",
+  "schema": "b42.lesson/1",
+  "model": "charge",
+  "entities": {
+    "laws": [
+      "ohms_law"
+    ],
+    "tags": [
+      "electromagnetism",
+      "energy"
+    ],
+    "scientists": []
+  },
+  "ru": {
+    "title": "Ток и сопротивление",
+    "subtitle": "Параграф 1 · Что на самом деле течёт по проводам и почему они греются",
+    "intro": [
+      "Щёлкнув выключателем, вы получаете свет мгновенно. Естественно предположить, что электроны пролетают от щитка до лампы за это самое мгновение. На самом деле они ползут по проводу медленнее улитки — около десятой доли миллиметра в секунду. Электрон, вышедший из вашей розетки сейчас, доберётся до лампы через несколько часов.",
+      "Разгадка в том, что течёт не электрон, а сигнал. Провод уже полон свободных электронов по всей длине; включив напряжение, вы создаёте поле, которое распространяется почти со скоростью света и заставляет все электроны сдвинуться одновременно. Как в трубе, уже заполненной водой: нажали с одного конца — потекло с другого сразу, хотя конкретная молекула ещё в начале пути.",
+      "Из этой картины — толпа частиц, медленно ползущая сквозь мешающую им решётку, — получится и закон Ома, и объяснение нагрева, и понимание того, почему провода делают толстыми, а линии электропередачи высоковольтными."
+    ],
+    "standNote": "Стенд тот же, что в электростатике, и это намеренно: ток — это те же заряды в том же поле, только теперь им есть куда двигаться. Поставьте заряды разноимёнными — между ними образуется область, где поле направлено в одну сторону на всём протяжении. Именно такое поле создаёт источник внутри провода, и именно оно гонит электроны. Обратите внимание: поле в середине почти однородно, и потому скорость дрейфа по всей длине провода одинакова.",
+    "formula": {
+      "name": "Закон Ома и мощность тока",
+      "latex": "I = \\frac{U}{R}, \\qquad R = \\rho\\frac{L}{S}, \\qquad P = UI = I^{2}R",
+      "alsoKnown": "Закон Ома для участка цепи · закон Джоуля–Ленца",
+      "authors": [
+        {
+          "who": "Алессандро Вольта",
+          "year": "1800",
+          "what": "построил первый источник постоянного тока. До него электричество умели только накапливать и разряжать искрой, а непрерывный ток был недоступен вовсе — и потому вся эта физика не могла начаться"
+        },
+        {
+          "who": "Георг Ом",
+          "year": "1827",
+          "what": "установил пропорциональность тока напряжению. Работу встретили враждебно: министерство сочло её бесплодной фантазией, Ому пришлось уйти из гимназии, и признание пришло лишь через шестнадцать лет"
+        },
+        {
+          "who": "Джеймс Джоуль",
+          "year": "1841",
+          "what": "измерил, сколько тепла выделяет ток, и получил квадратичную зависимость. Пивовар по профессии, он занимался наукой в свободное время и обладал редкой точностью измерений"
+        },
+        {
+          "who": "Эмилий Ленц",
+          "year": "1842",
+          "what": "независимо получил тот же результат в Петербурге, отчего закон и носит двойное имя. Тот же Ленц, чьё правило о направлении индукционного тока разбирается в третьем параграфе"
+        },
+        {
+          "who": "Пауль Друде",
+          "year": "1900",
+          "what": "объяснил закон Ома на молекулярном уровне, представив электроны как газ, сталкивающийся с ионами решётки. Модель груба и в деталях неверна, зато даёт правильный ответ и понятна с первого раза"
+        }
+      ],
+      "story": "Судьба Георга Ома — хрестоматийный пример того, как встречают верную работу. Он был школьным учителем и ставил опыты на самодельном оборудовании, сам изготавливая проволоку разной длины. Опубликовав результат, он ожидал признания и места в университете, а получил разгром: ведущий журнал назвал работу паутиной голых фантазий, министр просвещения заявил, что физик, проповедующий такую ересь, недостоин преподавать. Ом уволился и шесть лет прожил в бедности. Признали его в Англии — Королевское общество наградило медалью в 1841 году, когда в Германии о нём всё ещё молчали. Профессором он стал за пять лет до смерти.",
+      "symbols": [
+        {
+          "sym": "I",
+          "latex": "I",
+          "what": "сила тока",
+          "unit": "А",
+          "note": "заряд, проходящий через сечение за секунду; ампер — это кулон в секунду"
+        },
+        {
+          "sym": "U",
+          "latex": "U",
+          "what": "напряжение",
+          "unit": "В",
+          "note": "разность потенциалов на участке — то, что гонит заряды"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "сопротивление",
+          "unit": "Ом",
+          "note": "мера того, насколько решётка мешает электронам двигаться"
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho",
+          "what": "удельное сопротивление",
+          "unit": "Ом·м",
+          "note": "свойство материала; у меди $1{,}7\\cdot 10^{-8}$, у стекла в $10^{20}$ раз больше"
+        },
+        {
+          "sym": "P",
+          "latex": "P",
+          "what": "мощность",
+          "unit": "Вт",
+          "note": "энергия в секунду; на сопротивлении вся она уходит в тепло"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "скорость дрейфа",
+          "unit": "м/с",
+          "note": "доли миллиметра в секунду — та самая улиточная скорость электронов"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: от толпы электронов к закону Ома",
+      "lead": "Построим простейшую модель проводника и получим из неё закон Ома. Заодно станет понятно, почему провод греется и почему сопротивление растёт с температурой.",
+      "steps": [
+        {
+          "text": "Определим ток как заряд, проходящий через сечение за единицу времени. Если в единице объёма $n$ свободных электронов и все они дрейфуют со скоростью $u$, то за секунду через сечение $S$ пройдут все, кто был не дальше $u$ от него.",
+          "latex": "I = \\frac{\\Delta q}{\\Delta t} = n\\,e\\,S\\,u",
+          "figure": "microcontact",
+          "figCaption": "Ток — это поток заряженной толпы. Три множителя: сколько их, какого сечения труба и как быстро они ползут."
+        },
+        {
+          "text": "Теперь модель Друде. Поле разгоняет электрон, но он тут же налетает на ион решётки и теряет направленную скорость. В среднем между столкновениями проходит время $\\tau$, и за него электрон успевает набрать некоторую скорость.",
+          "latex": "u = \\frac{eE}{m}\\,\\tau",
+          "figure": "friction",
+          "figCaption": "Разгон и сброс, разгон и сброс. Получается не ускорение, а постоянная средняя скорость — как у парашютиста."
+        },
+        {
+          "text": "Подставим одно в другое. Ток оказывается пропорционален полю — а это и есть закон Ома, только записанный через микроскопические величины.",
+          "latex": "I = \\frac{n e^{2}\\tau}{m}\\,S\\,E = \\sigma S E, \\qquad \\sigma = \\frac{n e^{2}\\tau}{m}",
+          "figure": "forceprop",
+          "figCaption": "Проводимость собрана из свойств вещества: сколько электронов свободно и как долго они летят без помех."
+        },
+        {
+          "text": "Перейдём к привычным величинам. Поле есть напряжение, делённое на длину; собрав множители, получаем закон Ома в школьном виде и выражение для сопротивления.",
+          "latex": "E = \\frac{U}{L} \\;\\Longrightarrow\\; I = \\frac{U}{R}, \\qquad R = \\frac{L}{\\sigma S} = \\rho\\frac{L}{S}",
+          "figure": "cylinder",
+          "figCaption": "Длинный тонкий провод сопротивляется сильнее — как узкая длинная труба для воды."
+        },
+        {
+          "text": "Откуда берётся тепло. Электрон, разогнавшись между столкновениями, отдаёт набранную энергию решётке — то есть раскачивает ионы. Раскачанные ионы это и есть нагрев.",
+          "latex": "P = UI = I^{2}R = \\frac{U^{2}}{R}",
+          "figure": "heating",
+          "figCaption": "Вся работа поля в конечном счёте уходит в тепловое движение решётки. Отсюда и грелка, и чайник, и лампа накаливания."
+        },
+        {
+          "text": "Ключевой практический вывод. При передаче энергии на расстояние потери в проводах пропорциональны квадрату тока. Значит, чтобы передать ту же мощность с меньшими потерями, надо снизить ток и во столько же раз поднять напряжение.",
+          "latex": "P_{\\text{потери}} = I^{2}R, \\qquad P_{\\text{передано}} = UI \\;\\Longrightarrow\\; U \\uparrow \\text{в 10 раз} \\Rightarrow \\text{потери} \\downarrow \\text{в 100}",
+          "figure": "result",
+          "figCaption": "Вот зачем линии электропередачи делают высоковольтными: квадрат в потерях против первой степени в передаче."
+        },
+        {
+          "text": "И почему сопротивление растёт с температурой. Чем горячее решётка, тем сильнее колеблются ионы, тем чаще в них врезаются электроны — время свободного пробега сокращается.",
+          "latex": "T \\uparrow \\;\\Rightarrow\\; \\tau \\downarrow \\;\\Rightarrow\\; \\sigma \\downarrow \\;\\Rightarrow\\; R \\uparrow",
+          "figure": "curves",
+          "figCaption": "У металлов сопротивление растёт с нагревом, у полупроводников падает — там нагрев освобождает новые носители."
+        }
+      ],
+      "plate": "Ток есть поток заряженной толпы, ползущей сквозь мешающую решётку. Отсюда пропорциональность току напряжения, нагрев, пропорциональный квадрату тока, и рост сопротивления с температурой.",
+      "note": "Границы применимости. Закон Ома — не фундаментальный закон природы, а свойство определённых материалов в определённых условиях. Он нарушается всюду, где интересно: в полупроводниковом диоде ток идёт только в одну сторону, в газовом разряде сопротивление падает с ростом тока, в сверхпроводнике оно исчезает вовсе. Модель Друде тоже груба: она не объясняет, почему у металла столько свободных электронов, а у изолятора ни одного, — на это отвечает только квантовая теория твёрдого тела."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Почему сигнал быстрый, а электроны медленные. Возьмите садовый шланг, уже заполненный водой. Открыв кран, вы получите струю с дальнего конца практически сразу — но не потому, что вода долетела, а потому что давление передалось по всей длине. Каждая молекула лишь чуть-чуть подвинула соседнюю. В проводе то же самое: поле устанавливается со скоростью, близкой к световой, и все электроны трогаются одновременно, хотя каждый ползёт медленно. Отсюда и ответ на детский вопрос, почему свет зажигается сразу.",
+        "Что такое скорость дрейфа. Электроны в металле и без всякого напряжения носятся с бешеными скоростями — порядка тысячи километров в секунду, хаотично во все стороны. Поле добавляет к этому хаосу крошечный общий сдвиг: как рой мошкары, который весь целиком медленно сносит ветром, хотя каждая мошка мечется гораздо быстрее. Ток создаёт именно этот снос, а не собственное движение.",
+        "Почему получается постоянная скорость, а не ускорение. Поле действует постоянной силой, и по Ньютону электрон должен разгоняться бесконечно. Но каждое столкновение обнуляет накопленное. Устанавливается равновесие: сколько поле набрало за время между ударами, столько удар и отнял. Ровно так парашютист падает с постоянной скоростью, хотя тяжесть тянет его непрерывно, — и ровно так же устроено любое трение.",
+        "Почему в потерях квадрат, а в передаче первая степень. Передаваемая мощность есть произведение напряжения на ток, и её можно набрать по-разному: большим током при малом напряжении или наоборот. А потери в проводе зависят только от тока, причём квадратично. Значит выгодно всеми силами уменьшать ток. Подняв напряжение вдесятеро и уменьшив ток вдесятеро, вы передадите ту же мощность, а потеряете в сто раз меньше. Вся архитектура электросетей с их подстанциями выросла из этого сопоставления квадрата с единицей."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: как медленно на самом деле ползут электроны",
+      "lead": "Считаем скорость дрейфа в обычном бытовом проводе — число окажется неожиданным.",
+      "given": "Медный провод сечением 1,5 мм² несёт ток 10 А. В меди примерно $8{,}5\\cdot 10^{28}$ свободных электронов на кубометр. Найти скорость их дрейфа.",
+      "law": "$I = neSu \\;\\Longrightarrow\\; u = \\dfrac{I}{neS}$",
+      "solution": [
+        {
+          "text": "Переведём сечение в метры.",
+          "latex": "S = 1{,}5\\ \\text{мм}^{2} = 1{,}5\\cdot 10^{-6}\\ \\text{м}^{2}"
+        },
+        {
+          "text": "Подставляем в формулу.",
+          "latex": "u = \\frac{10}{8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6}}"
+        },
+        {
+          "text": "Считаем знаменатель.",
+          "latex": "8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6} \\approx 2{,}0\\cdot 10^{4}"
+        },
+        {
+          "text": "Получаем скорость дрейфа.",
+          "latex": "u \\approx \\frac{10}{2{,}0\\cdot 10^{4}} \\approx 4{,}9\\cdot 10^{-4}\\ \\text{м/с} \\approx 0{,}5\\ \\text{мм/с}"
+        }
+      ],
+      "answer": "Полмиллиметра в секунду — то есть около двух метров в час.",
+      "check": "Проверка на здравый смысл, которая и делает эту задачу знаменитой. Электрон, вышедший из щитка, доберётся до люстры в соседней комнате часа за два. А свет включается мгновенно, потому что бежит не электрон, а поле — со скоростью около двух третей световой в обычном кабеле. Полезно и такое сравнение: собственная тепловая скорость электронов в меди порядка $10^{6}$ м/с, то есть в два миллиарда раз больше дрейфовой. Ток — это едва заметный перекос в чудовищно быстром хаосе."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Числа, по которым чувствуется масштаб бытового электричества.",
+      "items": [
+        {
+          "sym": "rho_cu",
+          "latex": "\\rho_{\\text{Cu}}",
+          "name": "Удельное сопротивление меди",
+          "value": "1,7 · 10⁻⁸",
+          "unit": "Ом · м",
+          "why": "Одно из самых низких среди доступных металлов; ниже только у серебра, и то на несколько процентов. Поэтому провода делают медными, а не серебряными — разница в цене несопоставима с выигрышем.",
+          "mnemo": "У алюминия примерно вдвое выше, зато он втрое легче — потому дальние линии электропередачи алюминиевые, а домашняя проводка медная."
+        },
+        {
+          "sym": "n_cu",
+          "latex": "n",
+          "name": "Концентрация свободных электронов в меди",
+          "value": "8,5 · 10²⁸",
+          "unit": "1 / м³",
+          "why": "Примерно по одному свободному электрону на атом. Именно это огромное число делает скорость дрейфа такой малой: заряд переносит толпа, а не отдельные быстрые частицы.",
+          "mnemo": "В кубическом сантиметре меди свободных электронов больше, чем звёзд в наблюдаемой Вселенной, — примерно в миллиард раз."
+        },
+        {
+          "sym": "P_home",
+          "latex": "P",
+          "name": "Мощность бытовых приборов",
+          "value": "2 — 2000",
+          "unit": "Вт",
+          "why": "Светодиодная лампа около 8 Вт, ноутбук 50, чайник 2000. Разделив на 220 В, получаете ток: у чайника около 9 А, и это близко к пределу обычной розетки.",
+          "mnemo": "Розетка на 16 А выдерживает примерно 3,5 кВт. Отсюда правило: чайник и обогреватель в один удлинитель — плохая идея."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Закон Ома в быту",
+      "lead": "Редкая формула, которую видно в каждой квартире.",
+      "items": [
+        {
+          "h": "Почему провод греется, а лампа светится",
+          "text": "Мощность на участке равна квадрату тока на сопротивление. Ток в цепи один и тот же, значит греется сильнее то, у чего сопротивление больше — тонкая нить лампы, а не толстый провод. На этом же принципе работают предохранители: тонкая перемычка перегорает первой."
+        },
+        {
+          "h": "Высоковольтные линии",
+          "text": "Потери в проводах идут как квадрат тока, а передаваемая мощность — как произведение напряжения на ток. Поднять напряжение до сотен киловольт означает во столько же раз снизить ток и в квадрат раз — потери."
+        },
+        {
+          "h": "Толщина проводки",
+          "text": "Сопротивление обратно пропорционально сечению. Провод сечением 1,5 мм² рассчитан примерно на 16 А, 2,5 мм² — на 25 А. Превышение ведёт к нагреву изоляции и пожару — самая частая причина возгораний в старых домах."
+        },
+        {
+          "h": "Лампа накаливания",
+          "text": "Холодная нить имеет сопротивление в десять раз меньше горячей, поэтому в первый момент включения через неё идёт огромный ток. Именно поэтому лампы почти всегда перегорают в момент щелчка выключателя, а не посреди вечера."
+        },
+        {
+          "h": "Сопротивление тела",
+          "text": "Сухая кожа даёт сотни килоом, влажная — единицы. Отсюда и разные пороги безопасного напряжения для сухих и сырых помещений: закон Ома объясняет, почему в ванной опасно то, что безопасно в комнате."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Электричество удобно тем, что почти всё в нём можно измерить дешёвым тестером.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Измерьте, сколько платите за чайник",
+          "text": "Посмотрите мощность чайника на дне (обычно 1800–2200 Вт) и засеките секундомером, сколько он кипятит полный объём. Умножьте мощность на время в часах и получите киловатт-часы.",
+          "answer": "Обычно выходит около 0,1 кВт·ч на литр — то есть копейки. Но проверьте физикой: чтобы нагреть литр воды от 20 до 100 градусов, нужно $4200 \\cdot 1 \\cdot 80 = 336$ кДж, а это 0,093 кВт·ч. Сравните с показаниями: разница и есть потери на нагрев корпуса и испарение. У хорошего чайника КПД выходит 85–90 % — заметно выше, чем у любого двигателя, потому что здесь не надо превращать тепло в работу, а надо наоборот."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Свет включается мгновенно, а электроны ползут",
+          "text": "Скорость дрейфа электронов в проводе — доли миллиметра в секунду. От выключателя до люстры метра три. Почему же лампа загорается сразу, а не через два часа?",
+          "answer": "Потому что бежит не электрон, а поле. Провод уже полон свободных электронов по всей длине, и когда вы замыкаете цепь, электрическое поле устанавливается вдоль неё со скоростью около двух третей световой. Все электроны трогаются практически одновременно — в том числе те, что стоят прямо у лампы. Точная аналогия — шланг, уже полный воды: открыли кран, потекло с другого конца сразу, хотя конкретная молекула ещё у начала пути."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Работу Ома назвали паутиной голых фантазий",
+          "text": "Ведущий немецкий физический журнал разгромил статью Ома, а министр просвещения заявил, что физик, проповедующий такую ересь, недостоин преподавать. Ом уволился из гимназии и шесть лет прожил в бедности. Первым его признало Королевское общество в Лондоне, наградив медалью в 1841 году, — за четырнадцать лет до того, как на родине его наконец сделали профессором. Единица сопротивления названа его именем, а фамилий тех, кто писал разгромные отзывы, никто не помнит."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Ток одинаков, греется где тонко",
+          "text": "В последовательной цепи ток везде один и тот же, а мощность есть $I^{2}R$. Значит выделяется тепло там, где больше сопротивление, — в тонкой нити лампы, в плохом контакте, в перетёртом проводе. Отсюда и главное правило электробезопасности: греется — значит плохой контакт, и это опаснее перегрузки."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Ток прибора в уме",
+          "text": "Делите мощность на 220 и получаете ток в амперах. Чайник 2200 Вт — это 10 А. Ноутбук 65 Вт — 0,3 А. Лампочка 8 Вт — 0,04 А. Держите в голове, что бытовая розетка рассчитана на 16 А, то есть примерно 3,5 кВт, и вы всегда будете знать, что можно включать вместе."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Где закон Ома не работает",
+          "text": "Он вообще не фундаментален — это свойство материала, а не природы. В диоде ток идёт только в одну сторону, в газовом разряде сопротивление падает с ростом тока (потому дуга и норовит перейти в короткое замыкание), в лампе накаливания сопротивление меняется в десять раз при нагреве. А в сверхпроводнике оно строго ноль — и это явление объяснила только квантовая механика, да и то не полностью."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: почему одни вещества проводят, а другие нет",
+      "lead": "Не входит в проверку. О вопросе, на который классическая физика ответить не смогла вовсе.",
+      "blocks": [
+        {
+          "h": "Разброс, не имеющий равных",
+          "text": "Удельное сопротивление меди $1{,}7\\cdot 10^{-8}$, кварцевого стекла — около $10^{16}$. Разница в двадцать четыре порядка. Ни одна другая физическая величина не меняется у обычных веществ в таких пределах: плотности различаются в тысячи раз, теплопроводности в тысячи, а здесь — септиллион."
+        },
+        {
+          "h": "Чего не смогла классика",
+          "text": "Модель Друде объясняет закон Ома, но молчит о главном: почему в металле есть свободные электроны, а в стекле их нет, хотя атомы устроены похоже. Классическая физика на этот вопрос ответа не имеет в принципе."
+        },
+        {
+          "h": "Ответ квантовой теории",
+          "text": "В кристалле разрешённые уровни энергии электронов сливаются в зоны, разделённые запрещёнными промежутками. Если верхняя занятая зона заполнена не до конца, электроны могут менять состояние и двигаться — это металл. Если заполнена целиком, а до следующей далеко, двигаться некуда — это изолятор. Если промежуток мал, часть электронов перескакивает за счёт тепла — это полупроводник."
+        },
+        {
+          "h": "И что из этого вышло",
+          "text": "Понимание зонной структуры дало транзистор в 1947 году, а с ним всю электронику. Заодно оно объяснило, почему нагрев увеличивает сопротивление металла и уменьшает у полупроводника: в первом случае мешают колебания решётки, во втором тепло освобождает новые носители. Одна теория, два противоположных ответа — и оба верны."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Ток есть медленный дрейф огромной толпы электронов сквозь мешающую решётку; отсюда пропорциональность току напряжения и нагрев, идущий как квадрат тока.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$I = neSu$",
+          "text": "ток — концентрация, сечение и скорость дрейфа"
+        },
+        {
+          "icon": "clock",
+          "title": "Электроны ползут доли миллиметра",
+          "text": "Электроны ползут доли миллиметра в секунду, сигнал идёт почти со скоростью света"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = \\rho L/S$",
+          "text": "длинный тонкий провод сопротивляется сильнее"
+        },
+        {
+          "icon": "ruler",
+          "title": "$P = I^{2}R$",
+          "text": "потери квадратичны по току, отсюда высоковольтные линии"
+        },
+        {
+          "icon": "scale",
+          "title": "Сопротивление металла растёт с",
+          "text": "Сопротивление металла растёт с нагревом, полупроводника — падает"
+        }
+      ],
+      "where": "Проводка и её сечение, предохранители, линии электропередачи, лампа накаливания, электробезопасность.",
+      "watchOut": "Закон Ома — свойство материала, а не закон природы. Диод, газовый разряд и сверхпроводник ему не подчиняются."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "Почему лампа загорается мгновенно, если электроны в проводе движутся со скоростью около полумиллиметра в секунду?",
+        "options": [
+          "Возле лампы электроны движутся быстрее",
+          "Провод уже полон электронов, а электрическое поле устанавливается вдоль него почти со скоростью света, и все они трогаются одновременно",
+          "На самом деле есть заметная задержка, просто глаз её не замечает",
+          "Ток переносится не электронами, а фотонами"
+        ],
+        "answer": 1,
+        "why": "Бежит сигнал, а не частица. Точная аналогия — шланг, уже заполненный водой: открыли кран, потекло с другого конца сразу. Электрон, вышедший из щитка, доберётся до люстры часа за два, но лампа об этом не знает.",
+        "hint": "Пуст ли провод до включения? Что именно должно добраться до лампы, чтобы её электроны начали двигаться?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Почему линии электропередачи делают высоковольтными?",
+        "options": [
+          "Высокое напряжение легче получить на электростанции",
+          "При высоком напряжении провода меньше нагреваются солнцем",
+          "Передаваемая мощность равна $UI$, а потери равны $I^{2}R$: подняв напряжение вдесятеро, снижаем ток вдесятеро, а потери — в сто раз",
+          "Так требует техника безопасности"
+        ],
+        "answer": 2,
+        "why": "Всё дело в сопоставлении степеней: передача идёт по первой степени тока, потери — по второй. Отсюда вся архитектура сетей с повышающими и понижающими подстанциями. Напряжение поднимают до сотен киловольт именно ради этого квадрата.",
+        "hint": "Сравните, как зависят от тока передаваемая мощность и потери в проводе. Какая зависимость круче?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "Своими словами: почему в цепи греется тонкая нить лампы, а не толстый подводящий провод, хотя ток через них одинаков?",
+        "keywords": [
+          "сопротивлен",
+          "больше",
+          "квадрат",
+          "I2R",
+          "тонк",
+          "сечени",
+          "выделя",
+          "одинаков ток"
+        ],
+        "needed": 2,
+        "why": "В последовательной цепи ток везде одинаков, а мощность на участке равна квадрату тока, умноженному на сопротивление. Значит греется сильнее тот участок, у которого сопротивление больше. У тонкой вольфрамовой нити оно в тысячи раз выше, чем у медного провода, — вся энергия и выделяется там.",
+        "hint": "Что в этой цепи одинаково для обоих участков, а что различается? От чего именно зависит выделяемая мощность?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Электрочайник мощностью 2200 Вт включён в сеть 220 В. Какой ток он потребляет, в амперах?",
+        "answer": 10,
+        "unit": "А",
+        "tolerance": 1,
+        "why": "I = P/U = 2200/220 = 10 А. Полезное правило для быта: делите мощность на 220 и сразу получаете ток. Розетка рассчитана примерно на 16 А, то есть 3,5 кВт, — значит чайник и обогреватель в один удлинитель уже перебор.",
+        "hint": "Мощность есть произведение напряжения на ток. Что надо сделать, чтобы найти ток?"
+      }
+    ]
+  },
+  "en": {
+    "title": "Current and Resistance",
+    "subtitle": "Section 1 · What actually flows through wires and why they heat up",
+    "intro": [
+      "Flicking a switch gives you light instantly. It's natural to assume that electrons fly from the panel to the bulb in that split second. In reality, they crawl along the wire slower than a snail — about a tenth of a millimeter per second. An electron leaving your socket right now will take hours to reach the bulb.",
+      "The secret is that what flows is not an electron but a signal. The wire is already full of free electrons along its entire length; when you turn on the voltage, you create a field that propagates at nearly the speed of light and makes all electrons shift simultaneously. Like a pipe already filled with water: push at one end — flow starts immediately at the other, even though any particular molecule is still near the start.",
+      "From this picture — a crowd of particles slowly crawling through an obstructing lattice — we get Ohm's law, an explanation of heating, and an understanding of why wires are made thick and power lines high-voltage."
+    ],
+    "standNote": "The booth is the same as in electrostatics, and this is intentional: current is the same charges in the same field, only now they have somewhere to move. Place charges of opposite signs — a region forms between them where the field is directed uniformly throughout. This is precisely the kind of field that a source creates inside a wire, and it is this field that drives the electrons. Note: the field near the center is nearly uniform, so the drift velocity is the same along the entire length of the wire.",
+    "formula": {
+      "name": "Ohm's Law and Electric Power",
+      "latex": "I = \\frac{U}{R}, \\qquad R = \\rho\\frac{L}{S}, \\qquad P = UI = I^{2}R",
+      "alsoKnown": "Ohm's law for a circuit segment · Joule–Lenz law",
+      "authors": [
+        {
+          "who": "Alessandro Volta",
+          "year": "1800",
+          "what": "built the first direct current source. Before him, electricity could only be stored and discharged as a spark; continuous current was completely unavailable — and so all this physics could not begin."
+        },
+        {
+          "who": "Georg Ohm",
+          "year": "1827",
+          "what": "established the proportionality of current to voltage. The work was met with hostility: the ministry deemed it a sterile fantasy, Ohm had to leave the gymnasium, and recognition came only sixteen years later."
+        },
+        {
+          "who": "James Joule",
+          "year": "1841",
+          "what": "measured how much heat current produces and obtained a quadratic dependence. A brewer by trade, he pursued science in his spare time and possessed rare measurement accuracy."
+        },
+        {
+          "who": "Emil Lenz",
+          "year": "1842",
+          "what": "independently obtained the same result in St. Petersburg, which is why the law bears a double name. It is the same Lenz whose rule on the direction of induced current is discussed in Section 3."
+        },
+        {
+          "who": "Paul Drude",
+          "year": "1900",
+          "what": "explained Ohm's law at the molecular level, treating electrons as a gas colliding with lattice ions. The model is crude and incorrect in details, but it gives the right answer and is intuitive from the start."
+        }
+      ],
+      "story": "The fate of Georg Ohm is a textbook example of how correct work is received. He was a schoolteacher and conducted experiments on homemade equipment, himself making wires of different lengths. After publishing the result, he expected recognition and a university position but instead faced a debacle: the leading journal called the work a web of bare fancies, the minister of education declared that a physicist preaching such heresy was unworthy of teaching. Ohm resigned and lived in poverty for six years. He was recognized in England — the Royal Society awarded him a medal in 1841, while in Germany he was still being ignored. He became a professor just five years before his death.",
+      "symbols": [
+        {
+          "sym": "I",
+          "latex": "I",
+          "what": "current",
+          "unit": "A",
+          "note": "charge passing through a cross-section per second; an ampere is a coulomb per second"
+        },
+        {
+          "sym": "U",
+          "latex": "U",
+          "what": "voltage",
+          "unit": "V",
+          "note": "potential difference across a segment — what drives the charges"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "resistance",
+          "unit": "Ω",
+          "note": "a measure of how much the lattice hinders electron motion"
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho",
+          "what": "resistivity",
+          "unit": "Ω·m",
+          "note": "material property; for copper $1.7\\times 10^{-8}$, for glass $10^{20}$ times larger"
+        },
+        {
+          "sym": "P",
+          "latex": "P",
+          "what": "power",
+          "unit": "W",
+          "note": "energy per second; across a resistor all of it becomes heat"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "drift velocity",
+          "unit": "m/s",
+          "note": "fractions of a millimeter per second — that snail-like speed of electrons"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Strict derivation: from the electron crowd to Ohm's law",
+      "lead": "Let us build a simple model of a conductor and derive Ohm's law from it. Along the way, it becomes clear why the wire heats up and why resistance increases with temperature.",
+      "steps": [
+        {
+          "text": "Define current as charge passing through a cross-section per unit time. If there are $n$ free electrons per unit volume and they all drift with speed $u$, then in one second all electrons within a distance $u$ from the cross-section $S$ will cross it.",
+          "latex": "I = \\frac{\\Delta q}{\\Delta t} = n\\,e\\,S\\,u",
+          "figure": "microcontact",
+          "figCaption": "Current is a flow of a charged crowd. Three factors: how many, what cross-section of the pipe, and how fast they crawl."
+        },
+        {
+          "text": "Now the Drude model. The field accelerates an electron, but it immediately collides with a lattice ion and loses its directed velocity. On average, between collisions a time $\\tau$ passes, during which the electron acquires some velocity.",
+          "latex": "u = \\frac{eE}{m}\\,\\tau",
+          "figure": "friction",
+          "figCaption": "Acceleration and reset, acceleration and reset. The result is not acceleration but a constant average speed — like a skydiver."
+        },
+        {
+          "text": "Substitute one into the other. The current turns out to be proportional to the field — and that is Ohm's law, but written in terms of microscopic quantities.",
+          "latex": "I = \\frac{n e^{2}\\tau}{m}\\,S\\,E = \\sigma S E, \\qquad \\sigma = \\frac{n e^{2}\\tau}{m}",
+          "figure": "forceprop",
+          "figCaption": "Conductivity is assembled from material properties: how many electrons are free and how long they fly without obstacles."
+        },
+        {
+          "text": "Let us move to familiar quantities. The field is voltage divided by length; collecting factors, we get Ohm's law in its textbook form and an expression for resistance.",
+          "latex": "E = \\frac{U}{L} \\;\\Longrightarrow\\; I = \\frac{U}{R}, \\qquad R = \\frac{L}{\\sigma S} = \\rho\\frac{L}{S}",
+          "figure": "cylinder",
+          "figCaption": "A long thin wire resists more — like a narrow long pipe for water."
+        },
+        {
+          "text": "Where does heat come from. An electron, accelerated between collisions, gives its gained energy to the lattice — i.e., it shakes the ions. Shaken ions are what heating is.",
+          "latex": "P = UI = I^{2}R = \\frac{U^{2}}{R}",
+          "figure": "heating",
+          "figCaption": "All the work of the field ultimately goes into the thermal motion of the lattice. Hence the heater, the kettle, and the incandescent lamp."
+        },
+        {
+          "text": "Key practical conclusion. When transmitting energy over distance, losses in wires are proportional to the square of the current. So, to transmit the same power with lower losses, you need to reduce the current and increase the voltage by the same factor.",
+          "latex": "P_{\\text{потери}} = I^{2}R, \\qquad P_{\\text{передано}} = UI \\;\\Longrightarrow\\; U \\uparrow \\text{в 10 раз} \\Rightarrow \\text{потери} \\downarrow \\text{в 100}",
+          "figure": "result",
+          "figCaption": "That is why power lines are made high-voltage: the square in losses versus the first power in transmission."
+        },
+        {
+          "text": "And why resistance increases with temperature. The hotter the lattice, the more strongly the ions oscillate, and the more often electrons hit them — the mean free time decreases.",
+          "latex": "T \\uparrow \\;\\Rightarrow\\; \\tau \\downarrow \\;\\Rightarrow\\; \\sigma \\downarrow \\;\\Rightarrow\\; R \\uparrow",
+          "figure": "curves",
+          "figCaption": "In metals, resistance increases with heating, in semiconductors it decreases — there, heating frees new charge carriers."
+        }
+      ],
+      "plate": "Current is a flow of a charged crowd crawling through an obstructing lattice. Hence the proportionality of voltage to current, heating proportional to the square of the current, and the increase of resistance with temperature.",
+      "note": "Limits of applicability. Ohm's law is not a fundamental law of nature, but a property of certain materials under certain conditions. It is violated wherever it gets interesting: in a semiconductor diode current flows only in one direction, in a gas discharge resistance decreases with increasing current, in a superconductor it vanishes entirely. The Drude model is also crude: it does not explain why metals have so many free electrons and insulators have none — only quantum theory of solids answers that."
+    },
+    "math": {
+      "title": "Mathematics that was needed here",
+      "text": [
+        "Why the signal is fast and electrons are slow. Take a garden hose already filled with water. When you turn on the tap, water comes out of the far end almost immediately — not because the water traveled that fast, but because pressure propagated along the entire length. Each molecule only slightly pushes its neighbor. The same happens in a wire: the field establishes at nearly the speed of light, and all electrons start moving simultaneously, although each crawls slowly. Hence the answer to a child's question why the light turns on immediately.",
+        "What is drift velocity. Electrons in a metal, even without any voltage, race around at furious speeds — on the order of a thousand kilometers per second, chaotically in all directions. The field adds a tiny overall shift to this chaos: like a swarm of midges that is slowly carried by the wind as a whole, even though each midge darts about much faster. The current is precisely this drift, not the individual motion.",
+        "Why a constant speed results, not acceleration. The field exerts a constant force, and according to Newton, the electron should accelerate indefinitely. But each collision resets the accumulated speed. An equilibrium is established: as much as the field gains between collisions, the collision takes away. Just like a skydiver falls at a constant speed even though gravity continuously pulls them — and that is exactly how any friction works.",
+        "Why losses have a square, and transmission has the first power. The transmitted power is the product of voltage and current, and it can be achieved in different ways: high current at low voltage or vice versa. But losses in the wire depend only on current, and quadratically. So it is advantageous to reduce current as much as possible. By raising the voltage tenfold and reducing the current tenfold, you transmit the same power but lose a hundred times less. The entire architecture of electric grids with their substations grew out of this comparison of a square to a first power."
+      ]
+    },
+    "example": {
+      "title": "Example with numbers: how slowly electrons actually crawl",
+      "lead": "We calculate the drift velocity in an ordinary household wire — the number will be surprising.",
+      "given": "A copper wire with cross-section 1.5 mm² carries a current of 10 A. Copper has approximately $8{,}5\\cdot 10^{28}$ free electrons per cubic meter. Find their drift velocity.",
+      "law": "$I = neSu \\;\\Longrightarrow\\; u = \\dfrac{I}{neS}$",
+      "solution": [
+        {
+          "text": "Convert the cross-section to meters.",
+          "latex": "S = 1{,}5\\ \\text{мм}^{2} = 1{,}5\\cdot 10^{-6}\\ \\text{м}^{2}"
+        },
+        {
+          "text": "Substitute into the formula.",
+          "latex": "u = \\frac{10}{8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6}}"
+        },
+        {
+          "text": "Calculate the denominator.",
+          "latex": "8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6} \\approx 2{,}0\\cdot 10^{4}"
+        },
+        {
+          "text": "Obtain the drift velocity.",
+          "latex": "u \\approx \\frac{10}{2{,}0\\cdot 10^{4}} \\approx 4{,}9\\cdot 10^{-4}\\ \\text{м/с} \\approx 0{,}5\\ \\text{мм/с}"
+        }
+      ],
+      "answer": "Half a millimeter per second — that is about two meters per hour.",
+      "check": "A sanity check, which is what makes this problem famous. An electron leaving the switchboard will reach the chandelier in the next room in about two hours. But the light turns on instantly because it is not the electron that travels, but the field — at about two-thirds the speed of light in an ordinary cable. Another useful comparison: the intrinsic thermal velocity of electrons in copper is on the order of $10^{6}$ m/s, that is two billion times greater than the drift velocity. Current is a barely noticeable bias in a tremendously fast chaos."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Numbers that convey the scale of household electricity.",
+      "items": [
+        {
+          "sym": "rho_cu",
+          "latex": "\\rho_{\\text{Cu}}",
+          "name": "Resistivity of copper",
+          "value": "1.7 · 10⁻⁸",
+          "unit": "Ω · m",
+          "why": "One of the lowest among available metals; only silver is lower, and then only by a few percent. That is why wires are made of copper, not silver — the difference in price is not worth the slight gain.",
+          "mnemo": "Aluminum has roughly twice the resistivity, but it is three times lighter — so long-distance power lines are aluminum, while household wiring is copper."
+        },
+        {
+          "sym": "n_cu",
+          "latex": "n",
+          "name": "Concentration of free electrons in copper",
+          "value": "8.5 · 10²⁸",
+          "unit": "1 / m³",
+          "why": "Roughly one free electron per atom. It is this huge number that makes the drift velocity so small: the charge is carried by a crowd, not by individual fast particles.",
+          "mnemo": "In a cubic centimeter of copper, there are more free electrons than stars in the observable universe — about a billion times more."
+        },
+        {
+          "sym": "P_home",
+          "latex": "P",
+          "name": "Power of household appliances",
+          "value": "2 — 2000",
+          "unit": "W",
+          "why": "An LED lamp is about 8 W, a laptop about 50, a kettle about 2000. Dividing by 220 V gives you the current: for a kettle it is about 9 A, which is close to the limit of a standard outlet.",
+          "mnemo": "A 16 A outlet handles about 3.5 kW. Hence the rule: a kettle and a heater on the same extension cord is a bad idea."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Ohm's Law in everyday life",
+      "lead": "A rare formula that you can see in every apartment.",
+      "items": [
+        {
+          "h": "Why the wire heats up and the lamp glows",
+          "text": "The power dissipated in a section equals the square of the current times the resistance. The current in the circuit is the same, so the part with higher resistance heats up more — the thin filament of a lamp, not the thick wire. Fuses work on the same principle: a thin bridge burns out first."
+        },
+        {
+          "h": "High-voltage lines",
+          "text": "Losses in wires go as the square of the current, while transmitted power is the product of voltage and current. Raising the voltage to hundreds of kilovolts reduces the current by the same factor and losses by the square of that factor."
+        },
+        {
+          "h": "Wire thickness",
+          "text": "Resistance is inversely proportional to cross-section. A 1.5 mm² wire is rated for about 16 A, 2.5 mm² for about 25 A. Exceeding this leads to heating of the insulation and fire — the most common cause of fires in old houses."
+        },
+        {
+          "h": "Incandescent lamp",
+          "text": "The cold filament has a resistance ten times lower than when hot, so at the moment of switching on, a huge current flows through it. That is why lamps almost always burn out at the click of the switch, not in the middle of the evening."
+        },
+        {
+          "h": "Body resistance",
+          "text": "Dry skin gives hundreds of kilo-ohms, wet skin gives a few. Hence the different safe voltage thresholds for dry and wet rooms: Ohm's law explains why what is safe in a room is dangerous in a bathroom."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Interesting: Check with Your Own Hands",
+      "lead": "Electricity is convenient because almost everything about it can be measured with a cheap multimeter.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Measure How Much You Pay for the Kettle",
+          "text": "Look at the kettle's power rating on its base (usually 1800–2200 W) and time how long it takes to boil a full volume. Multiply the power by the time in hours to get kilowatt-hours.",
+          "answer": "Usually it's about 0.1 kWh per liter—just pennies. But check with physics: to heat one liter of water from 20 to 100°C, you need $4200 \\cdot 1 \\cdot 80 = 336$ kJ, which is 0.093 kWh. Compare with the reading: the difference is loss due to heating the body and evaporation. A good kettle has an efficiency of 85–90%—noticeably higher than any engine, because here you don't need to convert heat into work, but the opposite."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "The Light Turns On Instantly, but Electrons Crawl",
+          "text": "The drift speed of electrons in a wire is fractions of a millimeter per second. From the switch to the chandelier is about three meters. So why does the lamp light immediately, not two hours later?",
+          "answer": "Because it's not the electron that moves, but the field. The wire is already full of free electrons along its entire length, and when you close the circuit, the electric field establishes itself along it at about two-thirds the speed of light. All electrons start moving almost simultaneously—including those right at the lamp. An accurate analogy is a hose already full of water: open the faucet, and water flows from the other end immediately, even though a specific water molecule is still at the beginning."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "Ohm's Work Was Called a Web of Naked Fantasies",
+          "text": "A leading German physics journal tore apart Ohm's paper, and the minister of education declared that a physicist preaching such heresy was unworthy to teach. Ohm resigned from the gymnasium and lived in poverty for six years. The first to recognize him was the Royal Society in London, awarding him a medal in 1841—fourteen years before he finally became a professor in his homeland. The unit of resistance is named after him, and no one remembers the names of those who wrote scathing reviews."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Current Is the Same, Heating Where It's Thin",
+          "text": "In a series circuit, the current is the same everywhere, and power is $I^{2}R$. So heat is generated where resistance is higher—in a thin lamp filament, a bad contact, or a frayed wire. Hence the main rule of electrical safety: if it's heating, there's a bad contact, and that is more dangerous than overload."
+        },
+        {
+          "icon": "estimate",
+          "kind": "rough estimate",
+          "h": "Calculating Appliance Current in Your Head",
+          "text": "Divide the power by 220 to get the current in amperes. A 2200 W kettle is 10 A. A 65 W laptop is 0.3 A. An 8 W bulb is 0.04 A. Keep in mind that a household outlet is rated for 16 A, that is about 3.5 kW, and you'll always know what you can plug in together."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Where Ohm's Law Doesn't Work",
+          "text": "It's not fundamental at all—it's a property of materials, not nature. In a diode, current flows only one way; in a gas discharge, resistance decreases with increasing current (which is why an arc tends to become a short circuit); in an incandescent lamp, resistance changes tenfold when heated. And in a superconductor, it's exactly zero—a phenomenon that only quantum mechanics explained, and even then not completely."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Why Some Substances Conduct and Others Don't",
+      "lead": "Not included in the test. About a question that classical physics couldn't answer at all.",
+      "blocks": [
+        {
+          "h": "An Unmatched Range",
+          "text": "The resistivity of copper is $1{,}7\\cdot 10^{-8}$ Ω·m, of quartz glass about $10^{16}$ Ω·m. A difference of twenty-four orders of magnitude. No other physical quantity varies over such a range in ordinary substances: densities differ by thousands, thermal conductivities by thousands, but here—a septillion."
+        },
+        {
+          "h": "What Classical Physics Couldn't Do",
+          "text": "The Drude model explains Ohm's law but is silent on the main point: why are there free electrons in metals but not in glass, even though atoms are similar? Classical physics has no answer to this question in principle."
+        },
+        {
+          "h": "The Answer from Quantum Theory",
+          "text": "In a crystal, the allowed energy levels of electrons merge into bands separated by forbidden gaps. If the highest occupied band is not completely filled, electrons can change state and move—that's a metal. If it is completely filled and the next band is far away, there is nowhere to move—that's an insulator. If the gap is small, some electrons jump across due to thermal energy—that's a semiconductor."
+        },
+        {
+          "h": "And What Came of This",
+          "text": "Understanding the band structure gave us the transistor in 1947, and with it all of electronics. It also explained why heating increases the resistance of metals and decreases it in semiconductors: in the former, lattice vibrations interfere; in the latter, heat frees new carriers. One theory, two opposite answers—both correct."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Current is the slow drift of a huge crowd of electrons through a hindering lattice; hence the proportionality of voltage to current, and heating going as the square of current.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$I = neSu$",
+          "text": "current is concentration, cross-section, and drift speed"
+        },
+        {
+          "icon": "formula",
+          "title": "Electrons crawl at fractions",
+          "text": "Electrons crawl at fractions of a millimeter per second, the signal travels at nearly the speed of light"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = \\rho L/S$",
+          "text": "a long thin wire has more resistance"
+        },
+        {
+          "icon": "ruler",
+          "title": "$P = I^{2}R$",
+          "text": "losses are quadratic in current, hence high-voltage lines"
+        },
+        {
+          "icon": "scale",
+          "title": "Resistance of metals increases",
+          "text": "Resistance of metals increases with heating, of semiconductors decreases"
+        }
+      ],
+      "where": "Wiring and its cross-section, fuses, power transmission lines, incandescent lamp, electrical safety.",
+      "watchOut": "Ohm's law is a property of materials, not a law of nature. Diode, gas discharge, and superconductor do not obey it."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "Why does a lamp light up instantly if electrons in a wire move at about half a millimeter per second?",
+        "options": [
+          "Electrons near the lamp move faster",
+          "The wire is already full of electrons, and the electric field propagates along it at nearly the speed of light, so all electrons start moving simultaneously",
+          "Actually there is a noticeable delay, but the eye doesn't notice it",
+          "Current is carried not by electrons but by photons"
+        ],
+        "answer": 1,
+        "why": "It's the signal that travels, not the particle. A precise analogy is a hose already filled with water: turn on the tap, water flows out the other end immediately. An electron leaving the switchboard will reach the chandelier in about two hours, but the lamp doesn't know that.",
+        "hint": "Is the wire empty before switching on? What exactly must reach the lamp for its electrons to start moving?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Why are power transmission lines made high-voltage?",
+        "options": [
+          "High voltage is easier to generate at a power plant",
+          "At high voltage, wires heat less from the sun",
+          "Transmitted power equals $UI$, and losses equal $I^{2}R$: raising voltage tenfold reduces current tenfold and losses a hundredfold",
+          "Safety regulations require it"
+        ],
+        "answer": 2,
+        "why": "It's all about comparing powers: transmission is linear in current, losses are quadratic. Hence the whole architecture of grids with step-up and step-down substations. Voltage is raised to hundreds of kilovolts precisely because of that square.",
+        "hint": "Compare how transmitted power and wire losses depend on current. Which dependence is steeper?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "In your own words: why does the thin filament of a lamp heat up in a circuit but not the thick connecting wire, even though the current through both is the same?",
+        "keywords": [
+          "resist",
+          "more",
+          "square",
+          "I2R",
+          "thin",
+          "cross",
+          "dissipat",
+          "same current"
+        ],
+        "needed": 2,
+        "why": "In a series circuit, current is the same everywhere, and power across a segment equals current squared times resistance. So the segment with higher resistance heats up more. The thin tungsten filament has thousands of times higher resistance than the copper wire, so all the energy is dissipated there.",
+        "hint": "What is the same in this circuit for both segments, and what differs? On what does the dissipated power depend exactly?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "An electric kettle with a power of 2200 W is connected to a 220 V supply. What current does it draw, in amperes?",
+        "answer": 10,
+        "unit": "А",
+        "tolerance": 1,
+        "why": "I = P/U = 2200/220 = 10 A. A useful rule for home: divide power by 220 and you immediately get current. A socket is rated for about 16 A, i.e., 3.5 kW, so a kettle and a heater on one extension cord is already too much.",
+        "hint": "Power is the product of voltage and current. What needs to be done to find current?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Corriente y resistencia",
+    "subtitle": "Párrafo 1 · Qué es lo que realmente fluye por los cables y por qué se calientan",
+    "intro": [
+      "Al accionar un interruptor, obtienes luz al instante. Es natural suponer que los electrones viajan desde el cuadro hasta la lámpara en ese mismo instante. En realidad, se arrastran por el cable más lentamente que un caracol — alrededor de una décima de milímetro por segundo. Un electrón que sale de tu enchufe ahora tardará varias horas en llegar a la lámpara.",
+      "La clave está en que no fluye un electrón, sino una señal. El cable ya está lleno de electrones libres en toda su longitud; al conectar el voltaje, creas un campo que se propaga casi a la velocidad de la luz y hace que todos los electrones se desplacen simultáneamente. Como en un tubo ya lleno de agua: presionas en un extremo y en el otro sale inmediatamente, aunque una molécula concreta aún esté al principio del camino.",
+      "De esta imagen —una multitud de partículas arrastrándose lentamente a través de una red que las obstaculiza— se obtienen tanto la ley de Ohm como la explicación del calentamiento y la comprensión de por qué los cables se hacen gruesos y las líneas de transmisión de alta tensión."
+    ],
+    "standNote": "El stand es el mismo que en electrostática, y es intencional: la corriente son las mismas cargas en el mismo campo, solo que ahora tienen un lugar por donde moverse. Coloca cargas de signo opuesto: entre ellas se forma una región donde el campo está dirigido en una misma dirección en toda su extensión. Ese es el campo que crea la fuente dentro del cable, y es el que impulsa a los electrones. Observa que el campo en el medio es casi uniforme, y por eso la velocidad de deriva es la misma a lo largo de todo el cable.",
+    "formula": {
+      "name": "Ley de Ohm y potencia de la corriente",
+      "latex": "I = \\frac{U}{R}, \\qquad R = \\rho\\frac{L}{S}, \\qquad P = UI = I^{2}R",
+      "alsoKnown": "Ley de Ohm para un tramo del circuito · ley de Joule–Lenz",
+      "authors": [
+        {
+          "who": "Alessandro Volta",
+          "year": "1800",
+          "what": "construyó la primera fuente de corriente continua. Antes de él, la electricidad solo se podía acumular y descargar en chispas, y la corriente continua era totalmente inaccesible — por lo que toda esta física no podía comenzar"
+        },
+        {
+          "who": "Georg Ohm",
+          "year": "1827",
+          "what": "estableció la proporcionalidad entre corriente y voltaje. Su trabajo fue recibido hostilmente: el ministerio lo consideró una fantasía estéril, Ohm tuvo que dejar el gimnasio, y el reconocimiento llegó solo dieciséis años después"
+        },
+        {
+          "who": "James Joule",
+          "year": "1841",
+          "what": "midió cuánto calor produce la corriente y obtuvo una dependencia cuadrática. Cervecero de profesión, se dedicaba a la ciencia en su tiempo libre y poseía una rara precisión en las mediciones"
+        },
+        {
+          "who": "Emil Lenz",
+          "year": "1842",
+          "what": "obtuvo independientemente el mismo resultado en San Petersburgo, por lo que la ley lleva doble nombre. El mismo Lenz, cuya regla sobre la dirección de la corriente inducida se analiza en el tercer párrafo"
+        },
+        {
+          "who": "Paul Drude",
+          "year": "1900",
+          "what": "explicó la ley de Ohm a nivel molecular, representando los electrones como un gas que choca con los iones de la red. El modelo es burdo e incorrecto en los detalles, pero da la respuesta correcta y se entiende a la primera"
+        }
+      ],
+      "story": "El destino de Georg Ohm es un ejemplo clásico de cómo se recibe un trabajo correcto. Era maestro de escuela y realizaba experimentos con equipo casero, fabricando él mismo alambre de diferentes longitudes. Al publicar su resultado, esperaba reconocimiento y un puesto en la universidad, pero recibió una crítica demoledora: una revista líder calificó el trabajo como una telaraña de puras fantasías, el ministro de educación declaró que un físico que predicaba tal herejía no merecía enseñar. Ohm renunció y vivió seis años en la pobreza. Fue reconocido en Inglaterra: la Royal Society le otorgó una medalla en 1841, cuando en Alemania aún guardaban silencio sobre él. Se convirtió en profesor cinco años antes de su muerte.",
+      "symbols": [
+        {
+          "sym": "I",
+          "latex": "I",
+          "what": "intensidad de corriente",
+          "unit": "А",
+          "note": "carga que pasa por una sección en un segundo; un amperio es un culombio por segundo"
+        },
+        {
+          "sym": "U",
+          "latex": "U",
+          "what": "voltaje",
+          "unit": "В",
+          "note": "diferencia de potencial en el tramo — lo que impulsa las cargas"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "resistencia",
+          "unit": "Ом",
+          "note": "medida de cuánto la red impide el movimiento de los electrones"
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho",
+          "what": "resistividad",
+          "unit": "Ом·м",
+          "note": "propiedad del material; en el cobre $1{,}7\\cdot 10^{-8}$, en el vidrio es $10^{20}$ veces mayor"
+        },
+        {
+          "sym": "P",
+          "latex": "P",
+          "what": "potencia",
+          "unit": "Вт",
+          "note": "energía por segundo; en una resistencia toda se convierte en calor"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "velocidad de deriva",
+          "unit": "м/с",
+          "note": "fracciones de milímetro por segundo — la misma velocidad de caracol de los electrones"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: de la multitud de electrones a la ley de Ohm",
+      "lead": "Construyamos el modelo más simple de un conductor y obtengamos de él la ley de Ohm. De paso, quedará claro por qué el cable se calienta y por qué la resistencia aumenta con la temperatura.",
+      "steps": [
+        {
+          "text": "Definimos la corriente como la carga que pasa por una sección en la unidad de tiempo. Si en la unidad de volumen hay $n$ electrones libres y todos se desplazan con velocidad de deriva $u$, entonces en un segundo a través de la sección $S$ pasarán todos aquellos que estaban a una distancia no mayor que $u$ de ella.",
+          "latex": "I = \\frac{\\Delta q}{\\Delta t} = n\\,e\\,S\\,u",
+          "figure": "microcontact",
+          "figCaption": "La corriente es un flujo de una multitud cargada. Tres factores: cuántos son, qué sección tiene el tubo y qué tan rápido se arrastran."
+        },
+        {
+          "text": "Ahora el modelo de Drude. El campo acelera al electrón, pero inmediatamente choca con un ion de la red y pierde su velocidad direccional. En promedio entre colisiones transcurre un tiempo $\\tau$, y durante ese tiempo el electrón logra alcanzar cierta velocidad.",
+          "latex": "u = \\frac{eE}{m}\\,\\tau",
+          "figure": "friction",
+          "figCaption": "Aceleración y frenado, aceleración y frenado. El resultado no es una aceleración, sino una velocidad media constante, como la de un paracaidista."
+        },
+        {
+          "text": "Sustituimos una en la otra. La corriente resulta proporcional al campo — y esto es la ley de Ohm, solo que escrita en términos de cantidades microscópicas.",
+          "latex": "I = \\frac{n e^{2}\\tau}{m}\\,S\\,E = \\sigma S E, \\qquad \\sigma = \\frac{n e^{2}\\tau}{m}",
+          "figure": "forceprop",
+          "figCaption": "La conductividad se compone de las propiedades del material: cuántos electrones están libres y cuánto tiempo vuelan sin obstáculos."
+        },
+        {
+          "text": "Pasemos a las magnitudes familiares. El campo es el voltaje dividido por la longitud; reuniendo los factores obtenemos la ley de Ohm en su forma escolar y la expresión para la resistencia.",
+          "latex": "E = \\frac{U}{L} \\;\\Longrightarrow\\; I = \\frac{U}{R}, \\qquad R = \\frac{L}{\\sigma S} = \\rho\\frac{L}{S}",
+          "figure": "cylinder",
+          "figCaption": "Un cable largo y delgado ofrece más resistencia, como un tubo largo y estrecho para el agua."
+        },
+        {
+          "text": "De dónde viene el calor. El electrón, tras acelerarse entre colisiones, entrega la energía ganada a la red, es decir, agita los iones. Los iones agitados son el calentamiento.",
+          "latex": "P = UI = I^{2}R = \\frac{U^{2}}{R}",
+          "figure": "heating",
+          "figCaption": "Todo el trabajo del campo termina en movimiento térmico de la red. De ahí la almohadilla térmica, el hervidor y la lámpara incandescente."
+        },
+        {
+          "text": "Conclusión práctica clave. Al transmitir energía a distancia, las pérdidas en los cables son proporcionales al cuadrado de la corriente. Por lo tanto, para transmitir la misma potencia con menores pérdidas, hay que reducir la corriente y aumentar el voltaje en la misma proporción.",
+          "latex": "P_{\\text{потери}} = I^{2}R, \\qquad P_{\\text{передано}} = UI \\;\\Longrightarrow\\; U \\uparrow \\text{в 10 раз} \\Rightarrow \\text{потери} \\downarrow \\text{в 100}",
+          "figure": "result",
+          "figCaption": "Por eso las líneas de transmisión se hacen de alto voltaje: el cuadrado en las pérdidas frente a la primera potencia en la transmisión."
+        },
+        {
+          "text": "Y por qué la resistencia aumenta con la temperatura. Cuanto más caliente está la red, más vibran los iones, más frecuentemente chocan los electrones con ellos — el tiempo de libre recorrido se acorta.",
+          "latex": "T \\uparrow \\;\\Rightarrow\\; \\tau \\downarrow \\;\\Rightarrow\\; \\sigma \\downarrow \\;\\Rightarrow\\; R \\uparrow",
+          "figure": "curves",
+          "figCaption": "En los metales la resistencia aumenta con el calentamiento, en los semiconductores disminuye — allí el calentamiento libera nuevos portadores."
+        }
+      ],
+      "plate": "La corriente es un flujo de multitud cargada arrastrándose a través de una red que obstaculiza. De ahí la proporcionalidad entre voltaje y corriente, el calentamiento proporcional al cuadrado de la corriente, y el aumento de la resistencia con la temperatura.",
+      "note": "Límites de aplicabilidad. La ley de Ohm no es una ley fundamental de la naturaleza, sino una propiedad de ciertos materiales bajo ciertas condiciones. Se viola en todas partes donde es interesante: en un diodo semiconductor la corriente solo fluye en una dirección, en una descarga de gas la resistencia disminuye al aumentar la corriente, en un superconductor desaparece por completo. El modelo de Drude también es tosco: no explica por qué un metal tiene tantos electrones libres y un aislante ninguno, — solo la teoría cuántica del estado sólido responde a eso."
+    },
+    "math": {
+      "title": "Matemáticas que fueron necesarias aquí",
+      "text": [
+        "Por qué la señal es rápida y los electrones lentos. Tome una manguera de jardín ya llena de agua. Al abrir el grifo, obtendrá un chorro en el extremo lejano casi de inmediato, pero no porque el agua haya llegado, sino porque la presión se transmitió a lo largo de toda la longitud. Cada molécula apenas empujó a la vecina. En el cable ocurre lo mismo: el campo se establece a una velocidad cercana a la de la luz, y todos los electrones se mueven simultáneamente, aunque cada uno se arrastra lentamente. De ahí la respuesta a la pregunta infantil de por qué la luz se enciende de inmediato.",
+        "Qué es la velocidad de deriva. Los electrones en un metal, incluso sin voltaje, se mueven a velocidades enormes — del orden de miles de kilómetros por segundo, caóticamente en todas direcciones. El campo agrega a este caos un pequeño desplazamiento común: como un enjambre de mosquitos que es arrastrado lentamente por el viento, aunque cada mosquito se agita mucho más rápido. La corriente crea precisamente este arrastre, no el movimiento propio.",
+        "Por qué se obtiene una velocidad constante y no una aceleración. El campo actúa con una fuerza constante, y según Newton el electrón debería acelerarse indefinidamente. Pero cada colisión anula lo acumulado. Se establece un equilibrio: lo que el campo ganó durante el tiempo entre impactos, el impacto lo quitó. Exactamente así cae un paracaidista a velocidad constante, aunque la gravedad lo atrae continuamente — y así está constituida cualquier fricción.",
+        "Por qué en las pérdidas es el cuadrado y en la transmisión la primera potencia. La potencia transmitida es el producto del voltaje por la corriente, y se puede lograr de diferentes maneras: con gran corriente y bajo voltaje o viceversa. Pero las pérdidas en el cable dependen solo de la corriente, y de forma cuadrática. Por lo tanto, es ventajoso reducir la corriente tanto como sea posible. Al aumentar el voltaje diez veces y reducir la corriente diez veces, se transmite la misma potencia y se pierde cien veces menos. Toda la arquitectura de las redes eléctricas con sus subestaciones surgió de esta comparación del cuadrado con la unidad."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: qué tan lentamente se arrastran realmente los electrones",
+      "lead": "Calculamos la velocidad de deriva en un cable doméstico común: el número resultará inesperado.",
+      "given": "Un cable de cobre de sección 1,5 mm² transporta una corriente de 10 A. En el cobre hay aproximadamente $8{,}5\\cdot 10^{28}$ electrones libres por metro cúbico. Hallar su velocidad de deriva.",
+      "law": "$I = neSu \\;\\Longrightarrow\\; u = \\dfrac{I}{neS}$",
+      "solution": [
+        {
+          "text": "Convertimos la sección a metros.",
+          "latex": "S = 1{,}5\\ \\text{мм}^{2} = 1{,}5\\cdot 10^{-6}\\ \\text{м}^{2}"
+        },
+        {
+          "text": "Sustituimos en la fórmula.",
+          "latex": "u = \\frac{10}{8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6}}"
+        },
+        {
+          "text": "Calculamos el denominador.",
+          "latex": "8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6} \\approx 2{,}0\\cdot 10^{4}"
+        },
+        {
+          "text": "Obtenemos la velocidad de deriva.",
+          "latex": "u \\approx \\frac{10}{2{,}0\\cdot 10^{4}} \\approx 4{,}9\\cdot 10^{-4}\\ \\text{м/с} \\approx 0{,}5\\ \\text{мм/с}"
+        }
+      ],
+      "answer": "Medio milímetro por segundo, es decir, alrededor de dos metros por hora.",
+      "check": "Una comprobación de sentido común, que es lo que hace famoso este problema. Un electrón que sale del tablero de distribución tardará unas dos horas en llegar a la lámpara de la habitación contigua. Pero la luz se enciende al instante porque lo que viaja no es el electrón, sino el campo, a una velocidad de aproximadamente dos tercios de la velocidad de la luz en un cable común. También es útil esta comparación: la velocidad térmica propia de los electrones en el cobre es del orden de $10^{6}$ m/s, es decir, dos mil millones de veces mayor que la velocidad de deriva. La corriente es una desviación apenas perceptible en un caos terriblemente rápido."
+    },
+    "constants": {
+      "title": "Magnitudes de esta sección",
+      "lead": "Números con los que se percibe la escala de la electricidad doméstica.",
+      "items": [
+        {
+          "sym": "rho_cu",
+          "latex": "\\rho_{\\text{Cu}}",
+          "name": "Resistividad del cobre",
+          "value": "1,7 · 10⁻⁸",
+          "unit": "Ом · м",
+          "why": "Una de las más bajas entre los metales disponibles; solo la plata es inferior, y solo por unos pocos por ciento. Por eso los cables son de cobre y no de plata: la diferencia de precio es incomparable con la ganancia.",
+          "mnemo": "La del aluminio es aproximadamente el doble, pero es tres veces más ligero; por eso las líneas de transmisión de larga distancia son de aluminio, mientras que el cableado doméstico es de cobre."
+        },
+        {
+          "sym": "n_cu",
+          "latex": "n",
+          "name": "Concentración de electrones libres en el cobre",
+          "value": "8,5 · 10²⁸",
+          "unit": "1 / м³",
+          "why": "Aproximadamente un electrón libre por átomo. Es este enorme número lo que hace que la velocidad de deriva sea tan pequeña: la carga es transportada por una multitud, no por partículas rápidas individuales.",
+          "mnemo": "En un centímetro cúbico de cobre hay más electrones libres que estrellas en el universo observable, aproximadamente mil millones de veces más."
+        },
+        {
+          "sym": "P_home",
+          "latex": "P",
+          "name": "Potencia de los electrodomésticos",
+          "value": "2 — 2000",
+          "unit": "Вт",
+          "why": "Una lámpara LED alrededor de 8 W, un portátil 50 W, un hervidor 2000 W. Dividiendo por 220 V se obtiene la corriente: en el hervidor unos 9 A, cerca del límite de un enchufe común.",
+          "mnemo": "Un enchufe de 16 A soporta aproximadamente 3,5 kW. De ahí la regla: hervidor y calefactor en un mismo alargador es mala idea."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "La ley de Ohm en la vida cotidiana",
+      "lead": "Una fórmula rara que se ve en todos los hogares.",
+      "items": [
+        {
+          "h": "Por qué el cable se calienta y la lámpara brilla",
+          "text": "La potencia en un tramo es igual al cuadrado de la corriente por la resistencia. La corriente en el circuito es la misma, por lo que se calienta más aquello con mayor resistencia: el filamento delgado de la lámpara, no el cable grueso. En este mismo principio funcionan los fusibles: un puente delgado se funde primero."
+        },
+        {
+          "h": "Líneas de alta tensión",
+          "text": "Las pérdidas en los cables van como el cuadrado de la corriente, mientras que la potencia transmitida es el producto de la tensión por la corriente. Elevar la tensión a cientos de kilovoltios significa reducir la corriente en la misma proporción y las pérdidas en el cuadrado de esa proporción."
+        },
+        {
+          "h": "Grosor del cableado",
+          "text": "La resistencia es inversamente proporcional a la sección. Un cable de sección 1,5 mm² está diseñado para unos 16 A, uno de 2,5 mm² para 25 A. Excederlo provoca calentamiento del aislamiento e incendio: la causa más común de incendios en casas antiguas."
+        },
+        {
+          "h": "Lámpara incandescente",
+          "text": "El filamento frío tiene una resistencia diez veces menor que el caliente, por lo que en el primer instante de encendido circula una corriente enorme. Es por eso que las lámparas casi siempre se funden en el momento del chasquido del interruptor, no en medio de la noche."
+        },
+        {
+          "h": "Resistencia del cuerpo",
+          "text": "La piel seca da cientos de kiloohmios, la húmeda, unidades. De ahí los diferentes umbrales de tensión segura para lugares secos y húmedos: la ley de Ohm explica por qué en el baño es peligroso lo que es seguro en una habitación."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidad: compruébalo con tus manos",
+      "lead": "La electricidad es cómoda porque casi todo en ella se puede medir con un multímetro barato.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Mide cuánto pagas por el hervidor",
+          "text": "Mira la potencia del hervidor en la base (normalmente 1800–2200 W) y cronometra cuánto tarda en hervir el volumen completo. Multiplica la potencia por el tiempo en horas y obtienes los kilovatios-hora.",
+          "answer": "Normalmente sale unos 0,1 kWh por litro, es decir, unos céntimos. Pero compruébalo con la física: para calentar un litro de agua de 20 a 100 grados se necesitan $4200 \\cdot 1 \\cdot 80 = 336$ kJ, que son 0,093 kWh. Compáralo con la medición: la diferencia son las pérdidas por calentar la carcasa y evaporación. En un buen hervidor el rendimiento es del 85-90 %, notablemente superior al de cualquier motor, porque aquí no hay que convertir calor en trabajo, sino al revés."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "La luz se enciende al instante, pero los electrones se arrastran",
+          "text": "La velocidad de deriva de los electrones en un cable es de fracciones de milímetro por segundo. Del interruptor a la lámpara hay unos tres metros. ¿Por qué la lámpara se enciende de inmediato y no dos horas después?",
+          "answer": "Porque lo que viaja no es un electrón, sino el campo. El cable ya está lleno de electrones libres en toda su longitud, y cuando cierras el circuito, el campo eléctrico se establece a lo largo de él a una velocidad de aproximadamente dos tercios de la velocidad de la luz. Todos los electrones se ponen en movimiento casi simultáneamente, incluidos los que están justo en la lámpara. La analogía exacta es una manguera ya llena de agua: al abrir el grifo, el agua sale por el otro extremo de inmediato, aunque una molécula concreta apenas haya comenzado su recorrido."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "El trabajo de Ohm fue llamado telaraña de fantasías desnudas",
+          "text": "La principal revista alemana de física destrozó el artículo de Ohm, y el ministro de Educación declaró que un físico que predicara tal herejía no merecía enseñar. Ohm renunció a su puesto en el gimnasio y vivió en la pobreza durante seis años. La primera institución en reconocerlo fue la Royal Society de Londres, que le otorgó una medalla en 1841, catorce años antes de que finalmente lo nombraran profesor en su país. La unidad de resistencia lleva su nombre, y los apellidos de quienes escribieron las críticas demoledoras nadie los recuerda."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "La corriente es la misma, se calienta donde es angosto",
+          "text": "En un circuito en serie, la corriente es la misma en todas partes, y la potencia es $I^{2}R$. Por lo tanto, el calor se disipa donde hay mayor resistencia: en el filamento fino de una lámpara, en un mal contacto, en un cable desgastado. De ahí la principal regla de seguridad eléctrica: si se calienta, significa mal contacto, y eso es más peligroso que una sobrecarga."
+        },
+        {
+          "icon": "estimate",
+          "kind": "cálculo mental",
+          "h": "Corriente de un aparato en la mente",
+          "text": "Divide la potencia entre 220 y obtienes la corriente en amperios. Un hervidor de 2200 W son 10 A. Un portátil de 65 W son 0,3 A. Una bombilla de 8 W son 0,04 A. Ten presente que un enchufe doméstico está diseñado para 16 A, es decir, unos 3,5 kW, y así sabrás siempre qué puedes conectar junto."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Dónde no funciona la ley de Ohm",
+          "text": "No es fundamental en absoluto: es una propiedad del material, no de la naturaleza. En un diodo, la corriente solo circula en una dirección; en una descarga de gas, la resistencia disminuye al aumentar la corriente (por eso el arco tiende a convertirse en cortocircuito); en una lámpara incandescente, la resistencia cambia diez veces al calentarse. Y en un superconductor es estrictamente cero: este fenómeno solo lo explicó la mecánica cuántica, y ni siquiera por completo."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para los curiosos: por qué unas sustancias conducen y otras no",
+      "lead": "No entra en la evaluación. Sobre la cuestión que la física clásica no pudo responder en absoluto.",
+      "blocks": [
+        {
+          "h": "Una dispersión sin igual",
+          "text": "La resistividad del cobre es $1{,}7\\cdot 10^{-8}$, la del vidrio de cuarzo unos $10^{16}$. La diferencia es de veinticuatro órdenes de magnitud. Ninguna otra magnitud física varía tanto en las sustancias comunes: las densidades difieren en miles de veces, las conductividades térmicas en miles, pero aquí estamos en septillones."
+        },
+        {
+          "h": "Lo que la física clásica no pudo explicar",
+          "text": "El modelo de Drude explica la ley de Ohm, pero calla sobre lo esencial: por qué en los metales hay electrones libres y en el vidrio no, aunque los átomos son similares. La física clásica no tiene respuesta a esta cuestión en principio."
+        },
+        {
+          "h": "Respuesta de la teoría cuántica",
+          "text": "En un cristal, los niveles de energía permitidos de los electrones se fusionan en bandas separadas por intervalos prohibidos. Si la banda superior ocupada no está llena por completo, los electrones pueden cambiar de estado y moverse: eso es un metal. Si está completamente llena y la siguiente banda está lejos, no hay a dónde moverse: eso es un aislante. Si el intervalo es pequeño, algunos electrones saltan gracias al calor: eso es un semiconductor."
+        },
+        {
+          "h": "Y qué resultó de ello",
+          "text": "La comprensión de la estructura de bandas dio el transistor en 1947, y con él toda la electrónica. También explicó por qué el calor aumenta la resistencia de los metales y la disminuye en los semiconductores: en el primer caso, interfieren las vibraciones de la red; en el segundo, el calor libera nuevos portadores. Una misma teoría, dos respuestas opuestas, y ambas correctas."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La corriente es una deriva lenta de una enorme multitud de electrones a través de una red que los obstaculiza; de ahí la proporcionalidad entre tensión y corriente, y el calentamiento que va como el cuadrado de la corriente.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$I = neSu$",
+          "text": "corriente es concentración, sección y velocidad de deriva"
+        },
+        {
+          "icon": "formula",
+          "title": "Los electrones se arrastran",
+          "text": "Los electrones se arrastran fracciones de milímetro por segundo, la señal viaja casi a la velocidad de la luz"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = \\rho L/S$",
+          "text": "un cable largo y delgado ofrece más resistencia"
+        },
+        {
+          "icon": "ruler",
+          "title": "$P = I^{2}R$",
+          "text": "las pérdidas son cuadráticas en la corriente, de ahí las líneas de alta tensión"
+        },
+        {
+          "icon": "scale",
+          "title": "La resistencia de los",
+          "text": "La resistencia de los metales aumenta al calentarse, la de los semiconductores disminuye"
+        }
+      ],
+      "where": "Cableado y su sección, fusibles, líneas de transmisión eléctrica, lámpara incandescente, seguridad eléctrica.",
+      "watchOut": "La ley de Ohm es una propiedad del material, no una ley de la naturaleza. El diodo, la descarga en gases y el superconductor no la obedecen."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "¿Por qué una lámpara se enciende instantáneamente si los electrones en el cable se mueven a una velocidad de aproximadamente medio milímetro por segundo?",
+        "options": [
+          "Cerca de la lámpara los electrones se mueven más rápido",
+          "El cable ya está lleno de electrones, y el campo eléctrico se establece a lo largo de él casi a la velocidad de la luz, y todos se ponen en movimiento al mismo tiempo",
+          "En realidad hay un retraso notable, pero el ojo no lo percibe",
+          "La corriente no es transportada por electrones sino por fotones"
+        ],
+        "answer": 1,
+        "why": "Corre la señal, no la partícula. Una analogía precisa es una manguera ya llena de agua: al abrir la llave, el agua sale por el otro extremo de inmediato. Un electrón que sale del cuadro eléctrico tardaría unas dos horas en llegar a la lámpara, pero la lámpara no lo sabe.",
+        "hint": "¿Está vacío el cable antes de encender? ¿Qué es exactamente lo que debe llegar a la lámpara para que sus electrones comiencen a moverse?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "¿Por qué las líneas de transmisión eléctrica son de alta tensión?",
+        "options": [
+          "Es más fácil generar alta tensión en la central eléctrica",
+          "Con alta tensión los cables se calientan menos por el sol",
+          "La potencia transmitida es $UI$, y las pérdidas son $I^{2}R$: al aumentar la tensión diez veces, reducimos la corriente diez veces, y las pérdidas cien veces",
+          "Así lo exige la seguridad"
+        ],
+        "answer": 2,
+        "why": "Todo es cuestión de comparar potencias: la transmisión va con la primera potencia de la corriente, las pérdidas con la segunda. De ahí toda la arquitectura de redes con subestaciones elevadoras y reductoras. La tensión se eleva a cientos de kilovoltios precisamente por ese cuadrado.",
+        "hint": "Compare cómo dependen de la corriente la potencia transmitida y las pérdidas en el cable. ¿Cuál dependencia es más pronunciada?"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué en un circuito se calienta el filamento delgado de una lámpara y no el cable grueso de alimentación, aunque la corriente a través de ambos es la misma?",
+        "keywords": [
+          "resistencia",
+          "mayor",
+          "cuadrado",
+          "I2R",
+          "delgado",
+          "sección",
+          "disipa",
+          "misma corriente"
+        ],
+        "needed": 2,
+        "why": "En un circuito en serie, la corriente es la misma en todas partes, y la potencia en un segmento es igual al cuadrado de la corriente multiplicado por la resistencia. Por lo tanto, se calienta más el segmento que tiene mayor resistencia. El filamento delgado de tungsteno tiene una resistencia miles de veces mayor que la del cable de cobre, por lo que toda la energía se disipa allí.",
+        "hint": "¿Qué es igual en ambos segmentos de este circuito y qué es diferente? ¿De qué depende exactamente la potencia disipada?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Un hervidor eléctrico de 2200 W está conectado a una red de 220 V. ¿Qué corriente consume, en amperios?",
+        "answer": 10,
+        "unit": "A",
+        "tolerance": 1,
+        "why": "I = P/U = 2200/220 = 10 A. Una regla útil para el hogar: divide la potencia entre 220 y obtienes la corriente. Un enchufe típico está diseñado para unos 16 A, es decir, 3,5 kW, por lo que un hervidor y un calefactor en un mismo alargador ya es demasiado.",
+        "hint": "La potencia es el producto del voltaje por la corriente. ¿Qué hay que hacer para encontrar la corriente?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "التيار والمقاومة",
+    "subtitle": "الفقرة 1 · ما الذي يتدفق فعليًا في الأسلاك ولماذا تسخن",
+    "intro": [
+      "عند تشغيل المفتاح، تحصل على الضوء فورًا. من الطبيعي أن نفترض أن الإلكترونات تطير من اللوحة الكهربائية إلى المصباح في تلك اللحظة بالذات. في الواقع، تزحف عبر السلك ببطء أبطأ من الحلزون — حوالي عُشر الملليمتر في الثانية. الإلكترون الذي يخرج من مقبسك الآن سيصل إلى المصباح بعد عدة ساعات.",
+      "الحل هو أن ما يتدفق ليس الإلكترون، بل الإشارة. السلك مليء بالفعل بإلكترونات حرة على طوله بالكامل؛ عند تشغيل الجهد، تقوم بإنشاء مجال ينتشر بسرعة تقارب سرعة الضوء ويجعل جميع الإلكترونات تتحرك في وقت واحد. كما في أنبوب مملوء بالماء بالفعل: تضغط من أحد الأطراف — يتدفق من الطرف الآخر فورًا، على الرغم من أن الجزيء الفردي لا يزال في بداية الطريق.",
+      "من هذه الصورة — حشد من الجسيمات تزحف ببطء عبر شبكة تعيقها — سيظهر قانون أوم، وتفسير التسخين، وفهم لماذا تُصنع الأسلاك سميكة وخطوط النقل عالية الجهد."
+    ],
+    "standNote": "نفس الحامل المستخدم في الكهرباء الساكنة، وهذا متعمد: التيار هو نفس الشحنات في نفس المجال، لكن الآن لديها مكان لتتحرك إليه. ضع شحنات متعاكسة — تتشكل بينهما منطقة يكون فيها المجال موجهًا في اتجاه واحد على طول المسار بأكمله. هذا النوع من المجال ينتجه المصدر داخل السلك، وهو الذي يدفع الإلكترونات. لاحظ: المجال في المنتصف متجانس تقريبًا، ولذلك سرعة الانجراف متساوية على طول السلك بالكامل.",
+    "formula": {
+      "name": "قانون أوم وقدرة التيار",
+      "latex": "I = \\frac{U}{R}, \\qquad R = \\rho\\frac{L}{S}, \\qquad P = UI = I^{2}R",
+      "alsoKnown": "قانون أوم لجزء من الدائرة · قانون جول-لينز",
+      "authors": [
+        {
+          "who": "أليساندرو فولتا",
+          "year": "1800",
+          "what": "بنى أول مصدر للتيار المستمر. قبله، كان الكهرباء تُعرف فقط بالتخزين والتفريغ كشرارة، والتيار المستمر لم يكن متاحًا على الإطلاق — وبالتالي لم يكن من الممكن أن تبدأ هذه الفيزياء."
+        },
+        {
+          "who": "جورج أوم",
+          "year": "1827",
+          "what": "أثبت تناسب التيار مع الجهد. استُقبل العمل بعداء: اعتبرته الوزارة خيالًا عقيمًا، واضطر أوم إلى ترك المدرسة، وجاء الاعتراف بعد ستة عشر عامًا فقط."
+        },
+        {
+          "who": "جيمس جول",
+          "year": "1841",
+          "what": "قام بقياس كمية الحرارة التي ينتجها التيار وحصل على علاقة تربيعية. كان صانع جعة حسب المهنة، واشتغل بالعلوم في وقت فراغه وامتلك دقة نادرة في القياسات."
+        },
+        {
+          "who": "إيميليوس لينز",
+          "year": "1842",
+          "what": "حصل بشكل مستقل على نفس النتيجة في سانت بطرسبرغ، ولهذا يحمل القانون اسمًا مزدوجًا. نفس لينز الذي تناقش قاعدته حول اتجاه التيار الحثي في الفقرة الثالثة."
+        },
+        {
+          "who": "باول درود",
+          "year": "1900",
+          "what": "شرح قانون أوم على المستوى الجزيئي، ممثلًا الإلكترونات كغاز يتصادم مع أيونات الشبكة. النموذج تقريبي وغير دقيق في التفاصيل، لكنه يعطي الإجابة الصحيحة ويسهل فهمه من المرة الأولى."
+        }
+      ],
+      "story": "مصير جورج أوم هو مثال نموذجي لكيفية استقبال العمل الصحيح. كان مدرسًا في المدرسة وأجرى تجاربه على معدات منزلية الصنع، وصنع الأسلاك بأطوال مختلفة بنفسه. بعد نشر النتيجة، توقع التقدير ومنصبًا جامعيًا، لكنه تلقى هجومًا: وصفت مجلة رائدة العمل بأنه شبكة من الخيالات العارية، وصرح وزير التعليم بأن فيزيائيًا يبشر بهذه البدعة لا يستحق التدريس. استقال أوم وعاش في فقر لمدة ست سنوات. تم الاعتراف به في إنجلترا — منحته الجمعية الملكية ميدالية في عام 1841، بينما كان لا يزال صامتًا عنه في ألمانيا. أصبح أستاذًا قبل خمس سنوات من وفاته.",
+      "symbols": [
+        {
+          "sym": "I",
+          "latex": "I",
+          "what": "شدة التيار",
+          "unit": "А",
+          "note": "الشحنة المارة عبر المقطع في الثانية؛ الأمبير هو كولوم في الثانية"
+        },
+        {
+          "sym": "U",
+          "latex": "U",
+          "what": "الجهد",
+          "unit": "В",
+          "note": "فرق الجهد عبر الجزء — ما يدفع الشحنات"
+        },
+        {
+          "sym": "R",
+          "latex": "R",
+          "what": "المقاومة",
+          "unit": "Ом",
+          "note": "قياس مدى إعاقة الشبكة لحركة الإلكترونات"
+        },
+        {
+          "sym": "rho",
+          "latex": "\\rho",
+          "what": "المقاومية",
+          "unit": "Ом·м",
+          "note": "خاصية المادة؛ للنحاس $1{,}7\\cdot 10^{-8}$، وللزجاج أكبر بـ $10^{20}$ مرة"
+        },
+        {
+          "sym": "P",
+          "latex": "P",
+          "what": "القدرة",
+          "unit": "Вт",
+          "note": "الطاقة في الثانية؛ في المقاومة تتحول كلها إلى حرارة"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "سرعة الانجراف",
+          "unit": "м/с",
+          "note": "أجزاء من الملليمتر في الثانية — تلك السرعة الحلزونية للإلكترونات"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "اشتقاق صارم: من حشد الإلكترونات إلى قانون أوم",
+      "lead": "سنبني أبسط نموذج للموصل ونستخرج منه قانون أوم. وفي الوقت نفسه، سنفهم لماذا يسخن السلك ولماذا تزداد المقاومة مع درجة الحرارة.",
+      "steps": [
+        {
+          "text": "نعرف التيار بأنه الشحنة المارة عبر مقطع في وحدة الزمن. إذا كان هناك $n$ إلكترونًا حرًا في وحدة الحجم وكلها تنجرف بسرعة $u$، ففي الثانية ستمر عبر المقطع $S$ جميع الإلكترونات التي كانت على مسافة لا تزيد عن $u$ منه.",
+          "latex": "I = \\frac{\\Delta q}{\\Delta t} = n\\,e\\,S\\,u",
+          "figure": "microcontact",
+          "figCaption": "التيار هو تدفق حشد مشحون. ثلاثة عوامل: عددهم، مقطع الأنبوب، ومدى سرعة زحفهم."
+        },
+        {
+          "text": "الآن نموذج درود. المجال يُسرّع الإلكترون، لكنه يصطدم فورًا بأيون الشبكة ويفقد سرعته الاتجاهية. في المتوسط، يمر زمن $\\tau$ بين التصادمات، وخلاله يتمكن الإلكترون من اكتساب سرعة معينة.",
+          "latex": "u = \\frac{eE}{m}\\,\\tau",
+          "figure": "friction",
+          "figCaption": "تسارع وإعادة ضبط، تسارع وإعادة ضبط. النتيجة ليست تسارعًا بل سرعة متوسطة ثابتة - مثل المظلي."
+        },
+        {
+          "text": "نعوض إحداهما في الأخرى. يتبين أن التيار متناسب مع المجال - وهذا هو قانون أوم، لكن مكتوبًا بمقادير مجهرية.",
+          "latex": "I = \\frac{n e^{2}\\tau}{m}\\,S\\,E = \\sigma S E, \\qquad \\sigma = \\frac{n e^{2}\\tau}{m}",
+          "figure": "forceprop",
+          "figCaption": "الموصلية مكونة من خصائص المادة: كم عدد الإلكترونات الحرة وكم من الوقت تطير دون عوائق."
+        },
+        {
+          "text": "ننتقل إلى المقادير المألوفة. المجال هو الجهد مقسومًا على الطول؛ بجمع العوامل، نحصل على قانون أوم بالصيغة المدرسية وتعبير للمقاومة.",
+          "latex": "E = \\frac{U}{L} \\;\\Longrightarrow\\; I = \\frac{U}{R}, \\qquad R = \\frac{L}{\\sigma S} = \\rho\\frac{L}{S}",
+          "figure": "cylinder",
+          "figCaption": "السلك الطويل الرفيع يقاوم أكثر - مثل أنبوب ماء ضيق طويل."
+        },
+        {
+          "text": "من أين تأتي الحرارة. الإلكترون، بعد تسارعه بين التصادمات، يعطي الطاقة المكتسبة للشبكة - أي يهز الأيونات. الأيونات المهتزة هي التسخين.",
+          "latex": "P = UI = I^{2}R = \\frac{U^{2}}{R}",
+          "figure": "heating",
+          "figCaption": "جميع عمل المجال يذهب في النهاية إلى الحركة الحرارية للشبكة. من هنا تأتي السخان والغلاية والمصباح المتوهج."
+        },
+        {
+          "text": "الاستنتاج العملي الرئيسي. عند نقل الطاقة لمسافات، الخسائر في الأسلاك تتناسب مع مربع التيار. لذلك، لنفس القدرة مع خسائر أقل، يجب خفض التيار ورفع الجهد بنفس المقدار.",
+          "latex": "P_{\\text{потери}} = I^{2}R, \\qquad P_{\\text{передано}} = UI \\;\\Longrightarrow\\; U \\uparrow \\text{в 10 раз} \\Rightarrow \\text{потери} \\downarrow \\text{в 100}",
+          "figure": "result",
+          "figCaption": "لهذا السبب تُصنع خطوط نقل الكهرباء بجهد عالٍ: مربع في الخسائر مقابل الدرجة الأولى في النقل."
+        },
+        {
+          "text": "ولماذا تزداد المقاومة مع درجة الحرارة. كلما زادت سخونة الشبكة، زادت اهتزازات الأيونات، وزاد اصطدام الإلكترونات بها - يقل زمن الطيران الحر.",
+          "latex": "T \\uparrow \\;\\Rightarrow\\; \\tau \\downarrow \\;\\Rightarrow\\; \\sigma \\downarrow \\;\\Rightarrow\\; R \\uparrow",
+          "figure": "curves",
+          "figCaption": "في المعادن، تزداد المقاومة بالتسخين، وفي أشباه الموصلات تنخفض - حيث يحرر التسخين حاملات جديدة."
+        }
+      ],
+      "plate": "التيار هو تدفق حشد مشحون يزحف عبر شبكة معيقة. ومن هنا تأتي تناسب الجهد مع التيار، والتسخين المتناسب مع مربع التيار، وزيادة المقاومة مع درجة الحرارة.",
+      "note": "حدود التطبيق. قانون أوم ليس قانونًا طبيعيًا أساسيًا، بل خاصية لمواد معينة في ظروف معينة. يُخالف في كل مكان مثير للاهتمام: في الصمام الثنائي الشبه موصل، يسري التيار في اتجاه واحد فقط، في التفريغ الغازي تقل المقاومة مع زيادة التيار، في الموصل الفائق تختفي تمامًا. نموذج درود تقريبي أيضًا: لا يشرح لماذا تحتوي المعادن على هذا العدد الكبير من الإلكترونات الحرة بينما العوازل لا تحتوي على أي منها - فقط نظرية الكم للأجسام الصلبة تجيب على ذلك."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "لماذا الإشارة سريعة والإلكترونات بطيئة. خذ خرطوم حديقة مملوءًا بالفعل بالماء. بمجرد فتح الصنبور، تحصل على تيار من الطرف البعيد على الفور تقريبًا - ليس لأن الماء وصل، بل لأن الضغط انتقل على طول الخرطوم. كل جزيء حرك جاره قليلاً. في السلك نفس الشيء: المجال ينتشر بسرعة قريبة من سرعة الضوء، وتتحرك جميع الإلكترونات في وقت واحد، على الرغم من أن كل واحد يزحف ببطء. ومن هنا يأتي الجواب على سؤال الطفولة لماذا يضيء الضوء فورًا.",
+        "ما هي سرعة الانجراف. الإلكترونات في المعدن حتى بدون جهد تتحرك بسرعات هائلة - حوالي ألف كيلومتر في الثانية، بشكل عشوائي في كل الاتجاهات. يضيف المجال إلى هذه الفوضى انزياحًا صغيرًا مشتركًا: مثل سرب من البراغيش ينجرف ببطء ككل بفعل الرياح، على الرغم من أن كل برغوث يتحرك أسرع بكثير. التيار يخلق هذا الانجراف، وليس الحركة الذاتية.",
+        "لماذا نحصل على سرعة ثابتة وليس تسارعًا. يؤثر المجال بقوة ثابتة، ووفقًا لنيوتن يجب أن يتسارع الإلكترون بلا حدود. لكن كل تصادم يعيد السرعة إلى الصفر. ينشأ توازن: ما تكتسبه من المجال بين التصادمات، يفقده في التصادم. تمامًا مثل المظلي الذي يسقط بسرعة ثابتة على الرغم من أن الجاذبية تسحبه باستمرار - وهكذا يعمل أي احتكاك.",
+        "لماذا الخسائر تربيعية والنقل خطي. القدرة المنقولة هي حاصل ضرب الجهد في التيار، ويمكن تحقيقها بطرق مختلفة: تيار كبير بجهد صغير أو العكس. أما الخسائر في السلك فتعتمد فقط على التيار، وبشكل تربيعي. لذلك من المفيد تقليل التيار قدر الإمكان. برفع الجهد عشرة أضعاف وخفض التيار عشرة أضعاف، تنقل نفس القدرة ولكن تخسر أقل بمئة مرة. كل بنية شبكات الكهرباء مع محطاتها التحويلية نشأت من هذه المقارنة بين المربع والواحد."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: ما مدى بطء حركة الإلكترونات في الواقع",
+      "lead": "نحسب سرعة الانجراف في سلك منزلي عادي — وسيكون الرقم مفاجئًا.",
+      "given": "سلك نحاسي بمقطع عرضي 1.5 مم² يحمل تيارًا مقداره 10 أمبير. في النحاس يوجد تقريبًا $8{,}5\\cdot 10^{28}$ إلكترونًا حرًا في المتر المكعب. أوجد سرعة انجرافها.",
+      "law": "$I = neSu \\;\\Longrightarrow\\; u = \\dfrac{I}{neS}$",
+      "solution": [
+        {
+          "text": "نحول المقطع إلى أمتار.",
+          "latex": "S = 1{,}5\\ \\text{мм}^{2} = 1{,}5\\cdot 10^{-6}\\ \\text{м}^{2}"
+        },
+        {
+          "text": "نعوض في المعادلة.",
+          "latex": "u = \\frac{10}{8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6}}"
+        },
+        {
+          "text": "نحسب المقام.",
+          "latex": "8{,}5\\cdot 10^{28} \\cdot 1{,}6\\cdot 10^{-19} \\cdot 1{,}5\\cdot 10^{-6} \\approx 2{,}0\\cdot 10^{4}"
+        },
+        {
+          "text": "نحصل على سرعة الانجراف.",
+          "latex": "u \\approx \\frac{10}{2{,}0\\cdot 10^{4}} \\approx 4{,}9\\cdot 10^{-4}\\ \\text{м/с} \\approx 0{,}5\\ \\text{мм/с}"
+        }
+      ],
+      "answer": "نصف ملليمتر في الثانية — أي حوالي مترين في الساعة.",
+      "check": "اختبار الفطرة السليمة، وهو ما يجعل هذه المسألة مشهورة. الإلكترون الذي يخرج من لوحة التوزيع سيصل إلى الثريا في الغرفة المجاورة خلال ساعتين تقريبًا. لكن الضوء يُضاء فورًا، لأن ما ينتقل ليس الإلكترون بل المجال — بسرعة تبلغ نحو ثلثي سرعة الضوء في الكابل العادي. ومن المفيد أيضًا هذه المقارنة: سرعة الإلكترونات الحرارية الذاتية في النحاس في حدود $10^{6}$ م/ث، أي أكبر بملياري مرة من سرعة الانجراف. التيار هو مجرد انحراف طفيف في فوضى سريعة للغاية."
+    },
+    "constants": {
+      "title": "قيم هذه الفقرة",
+      "lead": "أرقام تعطي إحساسًا بحجم الكهرباء المنزلية.",
+      "items": [
+        {
+          "sym": "rho_cu",
+          "latex": "\\rho_{\\text{Cu}}",
+          "name": "المقاومة النوعية للنحاس",
+          "value": "1,7 · 10⁻⁸",
+          "unit": "أوم · م",
+          "why": "واحدة من أدنى القيم بين المعادن المتاحة؛ أقل منها فقط الفضة، وبنسبة قليلة. لذلك تُصنع الأسلاك من النحاس وليس الفضة — الفرق في السعر لا يُقارن بالمكسب.",
+          "mnemo": "الألومنيوم أعلى بحوالي الضعف، لكنه أخف بثلاث مرات — لذلك خطوط نقل الكهرباء البعيدة من الألومنيوم، بينما الأسلاك المنزلية من النحاس."
+        },
+        {
+          "sym": "n_cu",
+          "latex": "n",
+          "name": "تركيز الإلكترونات الحرة في النحاس",
+          "value": "8,5 · 10²⁸",
+          "unit": "1 / م³",
+          "why": "تقريبًا إلكترون حر واحد لكل ذرة. هذا العدد الهائل هو ما يجعل سرعة الانجراف صغيرة جدًا: الشحنة تنقلها حشد، وليس جسيمات سريعة منفردة.",
+          "mnemo": "في سنتيمتر مكعب من النحاس، عدد الإلكترونات الحرة أكثر من عدد النجوم في الكون المرصود — بحوالي مليار مرة."
+        },
+        {
+          "sym": "P_home",
+          "latex": "P",
+          "name": "قدرة الأجهزة المنزلية",
+          "value": "2 — 2000",
+          "unit": "واط",
+          "why": "مصباح LED حوالي 8 واط، لابتوب 50، غلاية 2000. بقسمة 220 فولت تحصل على التيار: الغلاية حوالي 9 أمبير، وهذا قريب من حد المقبس العادي.",
+          "mnemo": "مقبس 16 أمبير يتحمل حوالي 3.5 كيلوواط. ومن هنا القاعدة: غلاية ومدفأة في مشترك واحد فكرة سيئة."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "قانون أوم في الحياة اليومية",
+      "lead": "معادلة نادرة نراها في كل شقة.",
+      "items": [
+        {
+          "h": "لماذا يسخن السلك ويضيء المصباح",
+          "text": "القدرة على جزء من الدائرة تساوي مربع التيار مضروبًا في المقاومة. التيار في الدائرة واحد، لذلك يسخن أكثر الجزء ذو المقاومة الأعلى — السلك الرفيع للمصباح وليس السلك السميك. على هذا المبدأ تعمل الصمامات: القطعة الرفيعة تحترق أولاً."
+        },
+        {
+          "h": "خطوط الجهد العالي",
+          "text": "الفقد في الأسلاك يتناسب مع مربع التيار، بينما القدرة المنقولة هي حاصل ضرب الجهد في التيار. رفع الجهد إلى مئات الكيلوفولت يعني تقليل التيار بنفس المقدار وتقليل الفقد بمربع ذلك المقدار."
+        },
+        {
+          "h": "سمك الأسلاك",
+          "text": "المقاومة تتناسب عكسيًا مع مساحة المقطع. سلك بمقطع 1.5 مم² مصمم لحوالي 16 أمبير، و2.5 مم² لـ 25 أمبير. تجاوز ذلك يؤدي إلى تسخين العزل واشتعال النار — السبب الأكثر شيوعًا للحرائق في المنازل القديمة."
+        },
+        {
+          "h": "المصباح المتوهج",
+          "text": "الفتيل البارد له مقاومة أقل بعشر مرات من الفتيل الساخن، لذلك في أول لحظة تشغيل يسري فيه تيار هائل. هذا هو السبب في أن المصابيح تحترق دائمًا عند طقطقة المفتاح وليس في منتصف المساء."
+        },
+        {
+          "h": "مقاومة الجسم",
+          "text": "الجلد الجاف يعطي مئات الكيلوأوم، والرطب يعطي وحدات. ومن هنا تنشأ حدود الجهد الآمن المختلفة للأماكن الجافة والرطبة: قانون أوم يفسر لماذا يكون ما آمن في الغرفة خطرًا في الحمام."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: جرب بنفسك",
+      "lead": "الميزة في الكهرباء أن كل شيء تقريبًا يمكن قياسه بجهاز اختبار رخيص.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "احسب كم تدفع ثمن تشغيل الغلاية",
+          "text": "انظر إلى قدرة الغلاية على قاعدتها (عادة 1800–2200 واط) واحسب بالساعة كم تستغرق لغليان السعة الكاملة. اضرب القدرة في الوقت بالساعات لتحصل على كيلوواط-ساعة.",
+          "answer": "عادة يخرج حوالي 0.1 كيلوواط-ساعة لكل لتر – أي زهيد الثمن. لكن تحقق بالفيزياء: لتسخين لتر ماء من 20 إلى 100 درجة مئوية، نحتاج $4200 \\cdot 1 \\cdot 80 = 336$ كيلوجول، أي 0.093 كيلوواط-ساعة. قارن مع القراءة: الفرق هو الفقد في تسخين الهيكل والتبخر. في غلاية جيدة تصل الكفاءة إلى 85–90% – وهي أعلى ملحوظة من أي محرك، لأن هنا لا نحتاج لتحويل الحرارة إلى عمل، بل العكس."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "الضوء يضيء فورًا بينما الإلكترونات تزحف",
+          "text": "سرعة انجراف الإلكترونات في السلك هي أجزاء من المليمتر في الثانية. من المفتاح إلى الثريا مسافة ثلاثة أمتار. لماذا يضيء المصباح فورًا وليس بعد ساعتين؟",
+          "answer": "لأن الذي ينتشر ليس الإلكترون بل المجال. السلك مليء بالفعل بالإلكترونات الحرة على طوله، وعندما تغلق الدائرة، ينشأ المجال الكهربي على طولها بسرعة تقل قليلاً عن سرعة الضوء. جميع الإلكترونات تتحرك في وقت واحد تقريبًا – بما فيها تلك التي عند المصباح. التشبيه الدقيق: خرطوم ممتلئ بالماء، عندما تفتح الصنبور يندفع الماء من الطرف الآخر فورًا، على الرغم من أن جزيء الماء المحدد لا يزال في بداية الطريق."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة مسلية",
+          "h": "مقاومة أوم وُصفت بأنها نسيج من الخيالات العارية",
+          "text": "مجلة الفيزياء الألمانية الرائدة سحقت مقالة أوم، وصرح وزير التعليم بأن فيزيائيًا يبشر بهذه البدعة لا يستحق التدريس. استقال أوم من المدرسة الثانوية وعاش في فقر لمدة ست سنوات. أول من اعترف به كانت الجمعية الملكية في لندن، ومنحته ميدالية عام 1841 – قبل أربعة عشر عامًا من أن يصبح أستاذًا في وطنه أخيرًا. سُميت وحدة المقاومة باسمه، ولا أحد يتذكر أسماء الذين كتبوا الانتقادات الساحقة."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "التيار نفسه، يسخن حيث المقاومة عالية",
+          "text": "في الدائرة الموصولة على التوالي التيار نفسه في كل مكان، والقدرة هي $I^{2}R$. إذن تتولد الحرارة حيث المقاومة أكبر – في خيط المصباح الرفيع، في التلامس السيئ، في السلك المهترئ. ومن هنا القاعدة الرئيسية للسلامة الكهربائية: إذا سخن شيء فهذا يعني تلامسًا سيئًا، وهو أخطر من التحميل الزائد."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "تيار الجهاز في ذهنك",
+          "text": "اقسم القدرة على 220 لتحصل على التيار بالأمبير. غلاية بقدرة 2200 واط تعطي 10 أمبير. كمبيوتر محمول بقدرة 65 واط يعطي 0.3 أمبير. مصباح بقدرة 8 واط يعطي 0.04 أمبير. تذكر أن المقبس المنزلي مصمم لـ 16 أمبير، أي حوالي 3.5 كيلوواط، وبذلك تعرف دائمًا ما يمكن تشغيله معًا."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود الصلاحية",
+          "h": "أين لا يعمل قانون أوم",
+          "text": "إنه ليس أساسيًا – إنها خاصية للمادة وليست من قوانين الطبيعة. في الدايود يمر التيار باتجاه واحد فقط، في التفريغ الغازي تنخفض المقاومة مع زيادة التيار (ولهذا يميل القوس إلى التحول إلى قصر في الدائرة)، في المصباح المتوهج تتغير المقاومة عشرة أضعاف عند التسخين. وفي الموصل الفائق تكون المقاومة صفرًا تمامًا – وهذه الظاهرة فسرتها ميكانيكا الكم فقط، وحتى ذلك ليس تمامًا."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: لماذا بعض المواد توصل والبعض الآخر لا",
+      "lead": "غير مطلوب للاختبار. يتعلق بسؤال لم تستطع الفيزياء الكلاسيكية الإجابة عليه نهائيًا.",
+      "blocks": [
+        {
+          "h": "نطاق لا مثيل له",
+          "text": "المقاومة النوعية للنحاس $1{,}7\\cdot 10^{-8}$، ولزجاج الكوارتز حوالي $10^{16}$. الفرق هو أربعة وعشرون مرتبة قدرية. لا تتغير أي كمية فيزيائية أخرى للمواد العادية ضمن هذه الحدود: الكثافات تختلف بآلاف المرات، الناقلية الحرارية بآلاف، وهنا – سبتيليون."
+        },
+        {
+          "h": "ما عجزت عنه الفيزياء الكلاسيكية",
+          "text": "نموذج درود يشرح قانون أوم، لكنه صامت عن الشيء الرئيسي: لماذا توجد إلكترونات حرة في المعدن بينما لا توجد في الزجاج رغم أن الذرات متشابهة. الفيزياء الكلاسيكية ليست لديها إجابة على هذا السؤال من الأساس."
+        },
+        {
+          "h": "إجابة نظرية الكم",
+          "text": "في البلورة، تندمج مستويات الطاقة المسموحة للإلكترونات في نطاقات تفصلها فجوات محظورة. إذا كان النطاق العلوي المشغول غير ممتلئ بالكامل، يمكن للإلكترونات تغيير حالتها والتحرك – وهذا معدن. إذا كان ممتلئًا بالكامل وبعيدًا عن النطاق التالي، فلا مكان للحركة – هذا عازل. إذا كانت الفجوة صغيرة، تقفز بعض الإلكترونات بفعل الحرارة – هذا شبه موصل."
+        },
+        {
+          "h": "وماذا نتج عن ذلك",
+          "text": "فهم بنية النطاقات أدى إلى اختراع الترانزستور في عام 1947، ومعه الإلكترونيات كلها. كما شرح لماذا تزيد الحرارة مقاومة المعدن وتقللها في شبه الموصل: في الحالة الأولى، تعيق اهتزازات الشبكة، في الثانية، تحرر الحرارة حاملات جديدة. نظرية واحدة، إجابتان متعارضتان – وكلاهما صحيح."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "التيار هو انجراف بطيء لحشد هائل من الإلكترونات عبر شبكة معيقة؛ ومن هنا التناسب بين الجهد والتيار، والتسخين الذي يتناسب مع مربع التيار.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$I = neSu$",
+          "text": "التيار = التركيز × المقطع العرضي × سرعة الانجراف"
+        },
+        {
+          "icon": "formula",
+          "title": "الإلكترونات تزحف أجزاء من",
+          "text": "الإلكترونات تزحف أجزاء من المليمتر في الثانية، الإشارة تنتقل تقريبًا بسرعة الضوء"
+        },
+        {
+          "icon": "sigma",
+          "title": "$R = \\rho L/S$",
+          "text": "$R = \\rho L/S$ – سلك طويل رفيع يعطي مقاومة أكبر"
+        },
+        {
+          "icon": "ruler",
+          "title": "$P = I^{2}R$ –",
+          "text": "$P = I^{2}R$ – الفقد يتناسب مع مربع التيار، ومن هنا خطوط النقل عالية الجهد"
+        },
+        {
+          "icon": "scale",
+          "title": "مقاومة المعدن تزيد مع",
+          "text": "مقاومة المعدن تزيد مع الحرارة، ومقاومة شبه الموصل تقل"
+        }
+      ],
+      "where": "أسلاك التمديدات ومقاطعها، الفيوزات، خطوط نقل الكهرباء، المصباح المتوهج، السلامة الكهربائية.",
+      "watchOut": "قانون أوم هو خاصية للمادة وليس قانونًا طبيعيًا. الدايود، التفريغ الغازي، والموصل الفائق لا يطيعونه."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "لماذا يضيء المصباح فورًا إذا كانت الإلكترونات في السلك تتحرك بسرعة حوالي نصف ملليمتر في الثانية؟",
+        "options": [
+          "الإلكترونات بالقرب من المصباح تتحرك أسرع",
+          "السلك ممتلئ بالفعل بالإلكترونات، والمجال الكهربائي ينتشر على طوله بسرعة تقارب سرعة الضوء، وتتحرك جميعها في وقت واحد",
+          "في الواقع هناك تأخير ملحوظ، لكن العين لا تدركه",
+          "التيار لا ينقله الإلكترونات بل الفوتونات"
+        ],
+        "answer": 1,
+        "why": "الإشارة هي التي تنتقل، وليس الجسيم. التشبيه الدقيق هو خرطوم مليء بالمياه بالفعل: فتحت الصنبور، يتدفق من الطرف الآخر فورًا. الإلكترون الذي يغادر اللوحة الكهربائية سيستغرق حوالي ساعتين للوصول إلى الثريا، لكن المصباح لا يعلم بذلك.",
+        "hint": "هل السلك فارغ قبل التوصيل؟ ما الذي يجب أن يصل إلى المصباح بالضبط لكي تبدأ إلكتروناته في الحركة؟"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "لماذا تُصنع خطوط نقل الطاقة الكهربائية بجهد عالٍ؟",
+        "options": [
+          "من السهل الحصول على الجهد العالي في محطة الطاقة",
+          "عند الجهد العالي، تسخن الأسلاك أقل من الشمس",
+          "القدرة المنقولة تساوي $UI$، والخسائر تساوي $I^{2}R$: برفع الجهد عشرة أضعاف، نقلل التيار عشرة أضعاف، والخسائر مئة ضعف",
+          "هكذا تتطلب قواعد السلامة"
+        ],
+        "answer": 2,
+        "why": "الأمر كله يتعلق بمقارنة القوى: النقل يعتمد على القوة الأولى للتيار، والخسائر على القوة الثانية. من هنا تأتي بنية الشبكات بالكامل مع محطات الرفع والخفض. يُرفع الجهد إلى مئات الكيلوفولتات من أجل هذا المربع.",
+        "hint": "قارن كيف تعتمد القدرة المنقولة والخسائر في السلك على التيار. أي الاعتمادين أشد؟"
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا يسخن الفتيل الرفيع للمصباح في الدائرة وليس السلك السميك الموصل، على الرغم من أن التيار من خلالهما متساوٍ؟",
+        "keywords": [
+          "مقاومة",
+          "أكبر",
+          "مربع",
+          "I2R",
+          "رفيع",
+          "مقطع",
+          "ينطلق",
+          "تيار متساو"
+        ],
+        "needed": 2,
+        "why": "في الدائرة المتوالية، التيار هو نفسه في كل مكان، والقدرة على القطعة تساوي مربع التيار مضروبًا في المقاومة. وبالتالي فإن القطعة ذات المقاومة الأعلى تسخن أكثر. الفتيل الرفيع من التنجستن له مقاومة أعلى بآلاف المرات من السلك النحاسي، لذلك تنطلق كل الطاقة هناك.",
+        "hint": "ما هو الشيء نفسه في هذه الدائرة لكلا الجزأين، وما الذي يختلف؟ على ماذا تعتمد القدرة المنبعثة بالضبط؟"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "غلاية كهربائية بقدرة 2200 واط موصولة بشبكة 220 فولط. ما التيار الذي تستهلكه، بالأمبير؟",
+        "answer": 10,
+        "unit": "А",
+        "tolerance": 1,
+        "why": "I = P/U = 2200/220 = 10 А. قاعدة مفيدة للمنزل: اقسم القدرة على 220 واحصل فورًا على التيار. المقبس مصمم لحوالي 16 أمبير، أي 3.5 كيلوواط، مما يعني أن الغلاية والمدفأة معًا في وصلة تمديد واحدة هو بالفعل إفراط.",
+        "hint": "القدرة هي حاصل ضرب الجهد في التيار. ما الذي يجب فعله لإيجاد التيار؟"
+      }
+    ]
+  },
+  "laws": [
+    "ohms_law"
+  ]
+}

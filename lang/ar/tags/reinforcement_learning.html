@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#التعلم المعزز — bridge42worlds</title>
+    <meta name="description" content="التعلم المعزز (Reinforcement Learning, RL) هو فرع من تعلم الآلة (machine learning) حيث يتقن الوكيل (agent) السلوك الأمثل بشكل مستقل عن طريق التجربة والخطأ، بالتفاعل مع البيئة (environment). على عكس التعلم المُشرف (supervised learning)، لا توجد إجابات صحيحة جاهزة - فقط إشارة مكافأة (reward signal) قد تكون نادرة ومشوشة. يجب على الوكيل الموازنة بين استكشاف (exploration) استراتيجيات جديدة (ربما تكون أفضل؟) واستخدام الاستراتيجيات المعروفة (استغلال - exploitation). معضلة الاستكشاف-الاستغلال (exploration-exploitation dilemma) هذه هي جوهر RL. الخوارزميات الحديثة مثل Deep Q-Networks و Proximal Policy Optimization تستخدم شبكات عصبية عميقة (deep neural networks) لمعالجة المدخلات البصرية المعقدة وإدارة عشرات الإجراءات بالتوازي.">
+    <meta property="og:title" content="#التعلم المعزز — bridge42worlds">
+    <meta property="og:description" content="التعلم المعزز (Reinforcement Learning, RL) هو فرع من تعلم الآلة (machine learning) حيث يتقن الوكيل (agent) السلوك الأمثل بشكل مستقل عن طريق التجربة والخطأ، بالتفاعل مع البيئة (environment). على عكس التعلم المُشرف (supervised learning)، لا توجد إجابات صحيحة جاهزة - فقط إشارة مكافأة (reward signal) قد تكون نادرة ومشوشة. يجب على الوكيل الموازنة بين استكشاف (exploration) استراتيجيات جديدة (ربما تكون أفضل؟) واستخدام الاستراتيجيات المعروفة (استغلال - exploitation). معضلة الاستكشاف-الاستغلال (exploration-exploitation dilemma) هذه هي جوهر RL. الخوارزميات الحديثة مثل Deep Q-Networks و Proximal Policy Optimization تستخدم شبكات عصبية عميقة (deep neural networks) لمعالجة المدخلات البصرية المعقدة وإدارة عشرات الإجراءات بالتوازي.">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/tags/reinforcement_learning.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><button type="button" class="vs-dot" data-version="mini" data-idx="0" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></button><button type="button" class="vs-dot" data-version="simple" data-idx="1" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></button><button type="button" class="vs-dot active" data-version="popular" data-idx="2" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></button><button type="button" class="vs-dot" data-version="advanced" data-idx="3" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></button></div></div>
+        <div class="search-bar">
+            <button type="button" id="search-toggle-btn" class="cal-btn" title="بحث..."><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><line x1="14.9" y1="14.9" x2="20" y2="20"/></svg></button>
+            <div class="search-panel" id="search-panel">
+                <div class="search-row">
+                    <input type="text" class="search-box" placeholder="بحث..." oninput="doSearch(this.value)">
+                    <button type="button" class="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+                </div>
+                <div class="search-hint"># وسم · @ مؤلف · ! عالم</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="langs" id="langs-bar"></div>
+
+<div class="tag-header">
+    
+    <div class="tag-title-row">
+        <div class="entity-kind">وسم</div><h1>التعلم المعزز</h1><button class="share-inline" title="مشاركة" onclick="shareArticle((document.querySelector('h1')||{}).textContent.trim(), location.href)"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        
+    </div>
+    <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">2</a></div>
+    <div class="tag-ver" data-ver="mini" style="display:none">
+        <p class="mini-desc">الطفل الصغير يحصل على مكافأة عندما يحضر الكرة، ويتذكر: القيام بذلك مفيد. التعلم المعزز يدرب البرنامج بنفس الطريقة تمامًا - من خلال المكافآت والأخطاء.</p><div class="practical-app"><strong>في الواقع:</strong> روبوتات الألعاب (الشطرنج، StarCraft)، الطيارات الآلية للسيارات، تحسين العمليات الصناعية، أنظمة التوصية.</div>
+    </div>
+    <div class="tag-ver" data-ver="popular">
+        <div class="desc" data-raw="">التعلم المعزز (Reinforcement Learning, RL) هو فرع من تعلم الآلة (machine learning) حيث يتقن الوكيل (agent) السلوك الأمثل بشكل مستقل عن طريق التجربة والخطأ، بالتفاعل مع البيئة (environment). على عكس التعلم المُشرف (supervised learning)، لا توجد إجابات صحيحة جاهزة - فقط إشارة مكافأة (reward signal) قد تكون نادرة ومشوشة. يجب على الوكيل الموازنة بين استكشاف (exploration) استراتيجيات جديدة (ربما تكون أفضل؟) واستخدام الاستراتيجيات المعروفة (استغلال - exploitation). معضلة الاستكشاف-الاستغلال (exploration-exploitation dilemma) هذه هي جوهر RL. الخوارزميات الحديثة مثل Deep Q-Networks و Proximal Policy Optimization تستخدم شبكات عصبية عميقة (deep neural networks) لمعالجة المدخلات البصرية المعقدة وإدارة عشرات الإجراءات بالتوازي.</div>
+        <div class="section"><h2>التاريخ</h2><p>تعود الفكرة إلى منتصف القرن العشرين عندما شرح علماء النفس كيف تتعلم الحيوانات من خلال المكافآت. في الثمانينيات، ظهرت خوارزميات قادرة على لعب الطاولة (لعبة استراتيجية) بمستوى بشري، وفي العقد الثاني من القرن الحادي والعشرين، أتقنت برامج من Google DeepMind ألعاب Atari وتغلبت على بطل في لعبة Go.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يقوم الأساس على المخطط التالي: ينظر الوكيل إلى الحالة، يختار إجراءً، ويتلقى مكافأة. تدريجيًا، يبني جدولًا أو يستخدم شبكة عصبية لتذكر أي الحركات أكثر فائدة في كل موقف. على سبيل المثال، في لعبة الثعبان، الانعطاف نحو التفاحة يكسب نقاطًا، بينما الاصطدام بالذيل يعطي عقوبة. بمرور الوقت، يتحرك الثعبان نحو الهدف تقريبًا بدون أخطاء.</p></div>
+        <div class="fun-fact">💡 خلال تدريب برنامج AlphaGo Zero، تغلب في ثلاثة أيام على النسخة التي هزمت البطل لي سيدول بنتيجة 100:0، مع العلم أنه تعلم فقط من خلال اللعب مع نفسه، دون الوصول إلى مباريات بشرية.</div>
+    </div>
+    <div class="tag-ver" data-ver="simple" style="display:none">
+        <div class="desc" data-raw="">في التعلم المعزز، يعيش برنامج الوكيل في عالمه الخاص (على سبيل المثال، في محاكاة تقاطع طرق). يرى البيئة المحيطة - سرعة السيارات، إشارة المرور. مهمته: اتخاذ إجراءات (إدارة عجلة القيادة، التسارع) لتحقيق أكبر عدد ممكن من النقاط. تُمنح النقاط للنجاح - الوصول إلى الهدف، وتُخصم عند الحوادث. يجرب الوكيل حركات مختلفة، مثل طفل يتعلم المشي: سقط - يشعر بالألم، ينهض ويواصل. بعد آلاف المحاولات، تترسخ الاستراتيجية.</div>
+        <div class="section"><h2>التاريخ</h2><p>تعود الفكرة إلى منتصف القرن العشرين عندما شرح علماء النفس كيف تتعلم الحيوانات من خلال المكافآت. في الثمانينيات، ظهرت خوارزميات قادرة على لعب الطاولة (لعبة استراتيجية) بمستوى بشري، وفي العقد الثاني من القرن الحادي والعشرين، أتقنت برامج من Google DeepMind ألعاب Atari وتغلبت على بطل في لعبة Go.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>يقوم الأساس على المخطط التالي: ينظر الوكيل إلى الحالة، يختار إجراءً، ويتلقى مكافأة. تدريجيًا، يبني جدولًا أو يستخدم شبكة عصبية لتذكر أي الحركات أكثر فائدة في كل موقف. على سبيل المثال، في لعبة الثعبان، الانعطاف نحو التفاحة يكسب نقاطًا، بينما الاصطدام بالذيل يعطي عقوبة. بمرور الوقت، يتحرك الثعبان نحو الهدف تقريبًا بدون أخطاء.</p></div>
+        <div class="fun-fact">💡 في تجربة شهيرة لتعليم روبوت قلب الفطائر في مقلاة، اكتشف وكيل التعلم المعزز، غير الراضي عن التعلم البطيء من خلال المحاولات الحقيقية، طريقة لتدوير المقلاة بتردد 50 هرتز - مما أدى إلى تآكل المعدات، لكنه استوفى المهمة رسميًا.</div>
+    </div>
+    <div class="tag-ver" data-ver="advanced" style="display:none">
+        <div class="desc" data-raw="">يتم صياغة التعلم المعزز كعملية قرار ماركوف (Markov Decision Process, MDP)، معرفة بالمجموعة (S, A, P, R, γ)، حيث S فضاء الحالات، A فضاء الإجراءات، P(s'|s, a) ديناميكية الانتقال، R(s, a) دالة المكافأة، γ ∈ [0,1] عامل خصم المكافآت المستقبلية. الهدف هو إيجاد سياسة π(a|s) تزيد من مجموع المكافآت المخصومة المتوقعة: J = E[Σ γ^t R_t]. المفاهيم الأساسية: دالة قيمة الحالة V(s) = E[Σ γ^t R_t | s0 = s] ودالة قيمة الإجراء Q(s, a). تنقسم الخوارزميات إلى مبنية على القيمة (Q-learning, DQN)، ومبنية على السياسة (Policy Gradient, REINFORCE) وخوارزميات الممثل-الناقد (Actor-Critic، مثل A2C, PPO) التي تجمع بين النهجين. يستخدم التعلم المعزز العميق الشبكات العصبية لتمثيل V، Q أو π، وتدريبها باستخدام تنويعات النزول التدرجي (gradient descent) وذاكرة إعادة التشغيل (replay buffers) لتثبيت التدريب.</div>
+        <div class="section"><h2>التاريخ</h2><p>تكمن جذور التعلم المعزز في مفاهيم علم النفس عن التكيف الإجرائي (operant conditioning) (ثورندايك، سكينر). في مجال الذكاء الاصطناعي، كانت أول مساهمة كبيرة أطروحة مينسكي حول الشبكات العصبية والتعزيز (1954). في الثمانينيات، وضع ساتون وبارتو الأساس النظري. وجاء الاختراق الذي وصل للجمهور العام في عام 2015 عندما عرضت DeepMind نظامًا يلعب 49 لعبة Atari بمستوى بشري. تبع ذلك AlphaGo (2016)، AlphaZero (2017) و OpenAI Five (2019) التي أثبتت فعاليتها في بيئات معقدة متعددة الوكلاء.</p></div>
+        <div class="section"><h2>كيف يعمل</h2><p>الأساس هو معادلات بيلمان. بالنسبة لـ Q-learning: Q*(s, a) = E[R(s,a) + γ max_a' Q*(s', a')]. تقوم الخوارزمية بتحديث التقدير: Q(s,a) ← Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]. في Q-learning العميق، تقوم شبكة Q بتقليل خطأ التنبؤ: L = E[(r + γ max_a' Q(s', a'; θ^-) - Q(s, a; θ))^2] باستخدام طرق النزول التدرجي، حيث θ^- معاملات الشبكة الهدف المجمدة. تعمل طرق السياسة على تحسين J(θ) مباشرة عبر الانحدار: ∇θ J ≈ E[Σ_t ∇θ log π(a_t|s_t) · G_t]، حيث G_t هي المكافأة الكاملة. ويقيد PPO الحديث تغيير السياسة بعقوبة تقريبية، مما يضمن تحديثات مستقرة.</p></div>
+        <div class="formula"><div class="formula-render">Q^*(s, a) = \mathbb{E}\left[ R(s, a) + \gamma \max_{a&#x27;} Q^*(s&#x27;, a&#x27;) \right]</div><div class="formula-meaning">Q* — دالة قيمة الإجراء المثلى، s — الحالة، a — الإجراء، R — المكافأة، γ — عامل الخصم (0 ≤ γ ≤ 1)</div></div>
+        <div class="section"><h2>مسائل مفتوحة وحقائق طريفة</h2><p>معضلة الاستكشاف-الاستغلال دون ضمانات للاستكشاف الأمثل; مشكلة التعميم على حالات جديدة غير مسبوقة; التعلم الفعال في بيئات ذات مكافآت نادرة جدًا; الأمان والقابلية للتنبؤ عند النشر في العالم الحقيقي</p><p class="fact">💡 في تجربة شهيرة لتعليم روبوت قلب الفطائر في مقلاة، اكتشف وكيل التعلم المعزز، غير الراضي عن التعلم البطيء من خلال المحاولات الحقيقية، طريقة لتدوير المقلاة بتردد 50 هرتز - مما أدى إلى تآكل المعدات، لكنه استوفى المهمة رسميًا.</p></div>
+    </div>
+</div>
+
+<div class="entity-wrapper">
+<div class="entity-body">
+<div class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci"> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci"> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci"> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div>
+<div class="mini-graph" data-node="t:reinforcement_learning"><canvas id="minigraph"></canvas></div>
+
+<div class="actions actions-compact" data-article-id="reinforcement_learning_ar_page" data-entity-type="tag"><div class="reactions"><button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button><button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button></div><button class="fav-btn" data-fav="reinforcement_learning" title="مفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button><button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> أضف تعليقًا</button></div>
+<div class="feedback" id="feedback" data-article-id="reinforcement_learning_ar_page" data-entity-type="tag"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+
+
+<div class="filters" id="active-filters"></div>
+</div>
+<div class="article-side"><div class="side-tags-label">وسوم ذات صلة</div><a href="/lang/ar/tags/control_theory.html" class="side-tag" data-tag="control_theory">نظرية التحكم (control theory)</a><a href="/lang/ar/tags/game_theory.html" class="side-tag" data-tag="game_theory">نظرية الألعاب</a><a href="/lang/ar/tags/neural_networks.html" class="side-tag" data-tag="neural_networks">الشبكات العصبية (Neural Networks)</a><a href="/lang/ar/tags/optimization.html" class="side-tag" data-tag="optimization">التحسين</a><a href="/lang/ar/tags/robotics.html" class="side-tag" data-tag="robotics">الروبوتية</a></div>
+</div>
+
+<h2 class="section-title" id="article-list">مقالات ذات صلة</h2>
+<div id="search-results" class="entity-list" data-context-tag="reinforcement_learning"><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-29</span></div><a class="card-img-wrap" href="/lang/ar/archive/2026-06-29/2607.00039/index.html"><img src="/lang/ru/archive/2026-06-29/2607.00039/t_ai.webp" data-fb="/lang/ru/archive/2026-06-29/2607.00039/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/ar/archive/2026-06-29/2607.00039/index.html" title="البروتوكول الدبلوماسي بين الشريحة والكود">البروتوكول الدبلوماسي بين الشريحة والكود</a></h3><div class="oneliner">السيارة الحديثة عبارة عن تكتل لعشرات الوحدات الإلكترونية، برمجياتها مربوطة بإحكام بالعتاد. لتحويل المركبة إلى منصة مرنة قابلة للتحديث عبر الهواء (SDV)، نحتاج إلى «مترجم» فعال وهو طبقة تجريد العتاد (HAL). قام باحثون من شتوتغارت بتقييمٍ منهجي لحلول HAL من قطاع السيارات والهواتف الذكية والشبكات والصناع</div></div></article><article class="article-card"><div class="card-eyebrow"><span class="card-date">2026-06-30</span></div><a class="card-img-wrap" href="/lang/ar/archive/2026-06-30/2607.00254/index.html"><img src="/lang/ru/archive/2026-06-30/2607.00254/t_ai.webp" data-fb="/lang/ru/archive/2026-06-30/2607.00254/ai.webp" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb');}else{this.closest('.card-img-wrap').style.display='none';}" alt=""></a><div class="card-body"><h3><a href="/lang/ar/archive/2026-06-30/2607.00254/index.html" title="غربلة الذهب: تحسين خطوط أنابيب الذكاء الاصطناعي بأساليب قواعد البيانات">غربلة الذهب: تحسين خطوط أنابيب الذكاء الاصطناعي بأساليب قواعد البيانات</a></h3><div class="oneliner">غالبًا ما تنحصر خطوط أنابيب تدريب نماذج اللغة الكبيرة الحديثة في تمريرها عبر دالة تقييم باهظة التكلفة — مثلاً، استدعاء نموذج المكافأة مئات الآلاف من المرات لانتقاء أفضل الإجابات. لكن تبيّن أن العديد من هذه الحسابات زائدة عن الحاجة: يمكن تقدير المُجمّعات من عينة صغيرة بدقة مضمونة، كما يمكن لمصنف خفيف</div></div></article></div>
+
+<footer><p>bridge42worlds </p></footer>
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('reinforcement_learning', 'tag', 'ar');
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    // Переключение .tag-ver по бегунку сложности — общий обработчик в search.js.
+});
+</script>
+</body>
+</html>

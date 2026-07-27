@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دوارة فروبينوس: أسس نظامية بلا تعداد — bridge42worlds</title>
+    <meta name="description" content="في الحقول المحدودة (finite fields)، الأساس النظامي (normal basis) هو دوارة من العناصر المترافقة يديرها تشاكل فروبينوس الذاتي (Frobenius automorphism) أي الرفع للقوة q. يمكن إيجاد مثل هذا الأساس دائماً، لكن الخوارزميات التقليدية إما اعتمدت على العشوائية أو على ضرب المصفوفات. يقدم العمل الجديد طريقة ح">
+    <meta property="og:title" content="دوارة فروبينوس: أسس نظامية بلا تعداد">
+    <meta property="og:description" content="خوارزمية حتمية تبني أساساً نظامياً (أساساً من عناصر منزاحة دورياً) لحقل محدود بزمن شبه تربيعي، مستبدلةً البحث العشوائي بحساب محدد مصفوفة دائرية واحدة.">
+    <meta property="og:image" content="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00313/ai.webp">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="960">
+    <meta property="og:url" content="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00313/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00313/index.html">
+    <link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00313/index.html">
+    <link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/archive/2026-07-01/2607.00313/index.html">
+    <link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/archive/2026-07-01/2607.00313/index.html">
+    <link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00313/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00313/index.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?v=4304a811a1">
+    <script data-goatcounter="https://bridge42worlds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "دوارة فروبينوس: أسس نظامية بلا تعداد", "description": "خوارزمية حتمية تبني أساساً نظامياً (أساساً من عناصر منزاحة دورياً) لحقل محدود بزمن شبه تربيعي، مستبدلةً البحث العشوائي بحساب محدد مصفوفة دائرية واحدة.", "inLanguage": "ar", "datePublished": "2026-07-01", "url": "https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00313/index.html", "image": "https://bridge42worlds.academy/lang/ru/archive/2026-07-01/2607.00313/ai.webp", "author": [{"@type": "Person", "name": "Mark Giesbrecht"}, {"@type": "Person", "name": "Armin Jamshidpey"}, {"@type": "Person", "name": "Éric Schost"}], "publisher": {"@type": "Organization", "name": "bridge42worlds"}, "isBasedOn": "https://arxiv.org/abs/2607.00313", "abstract": "يتناول البحث مسألة البحث القطعي عن عنصر طبيعي (normal element) في امتداد حقل محدود من الدرجة n. الفكرة الأساسية: العنصر β_t = (θ - t)^{-1} حيث t ∈ F_q يكون طبيعيًا لجميع قيم t، باستثناء ما لا يزيد عن n(n-1) قيمة. يُعبَّر عن شرط الطبيعية بعدم انعدام محدد مصفوفة دائرية (circulant matrix) — بدايةً باستخدام مصفوفة مور المختزلة (reduced Moore matrix) على F_{q^n}[T]، ثم، من أجل الكفاءة، باستخدام مصفوفة غرام (Gram matrix) المكافئة على F_q[T]؛ بحيث لا تتجاوز درجة المحدد n(n-1). الجِدَّة الخوارزمية المحورية تكمن في الحساب السريع لمحدد مصفوفة دائرية n×n على F_q[t] (حيث درجة العناصر ≤ m) باستخدام إسقاطات على مجموعات مثلثية والتركيب المقاسي (modular composition)، وصولاً إلى تعقيد O_ϵ((nm log q)^{1+ϵ}) من عمليات البت. عندما يكون حجم الحقل غير كافٍ (q < n(n-1))، تُغمر المسألة في امتداد من درجة صغيرة مع تكاليف إضافية متعددة اللوغاريتمات. الخوارزم النهائي يعثر على عنصر طبيعي خلال O_ϵ((n^2 log q)^{1+ϵ}) + O~(n log^2 q) من عمليات البت."}</script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body class="article-page">
+
+<div class="top-bar">
+    <a href="/lang/ar/index.html" class="logo">bridge42worlds</a>
+    <div class="header-right">
+        <div class="nav-links">
+            <a href="/lang/ar/index.html">main</a>
+            <a href="/lang/ar/tags/">tags</a>
+            <a href="/lang/ar/laws/">laws</a>
+            <a href="/lang/ar/scientists/">scientists</a>
+            <a href="/lang/ar/sections/">sections</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/ar/graph/">graph</a>
+            <a href="/lang/ar/theory/">theory</a>
+            <a href="/lang/ar/favorites.html" title="المفضلة"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
+        </div>
+        <div class="version-slider" id="version-toggle" data-count="4" role="group" aria-label="المستوى"><span class="vs-current">مبسّط</span><div class="vs-track"><div class="vs-fill" style="width:66.67%"></div><div class="vs-thumb" style="left:66.67%"></div><a class="vs-dot" data-version="mini" data-idx="0" href="/lang/ar/archive/2026-07-01/2607.00313/mini.html" data-label="مصغّر" title="مصغّر — الخلاصة في 10 ثوانٍ"></a><a class="vs-dot" data-version="simple" data-idx="1" href="/lang/ar/archive/2026-07-01/2607.00313/simple.html" data-label="بسيط" title="بسيط — الأبسط - لأول نظرة"></a><a class="vs-dot active" data-version="popular" data-idx="2" href="/lang/ar/archive/2026-07-01/2607.00313/index.html" data-label="مبسّط" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"></a><a class="vs-dot" data-version="advanced" data-idx="3" href="/lang/ar/archive/2026-07-01/2607.00313/advanced.html" data-label="متقدم" title="متقدم — بالمعادلات والقصة الكاملة"></a></div></div>
+    </div>
+</div>
+
+<div class="langs-row">
+    <div class="langs" id="langs-bar"></div>
+    <button type="button" class="next-btn next-btn-top">المقال التالي ←</button>
+</div>
+
+<div id="author-verify-modal" class="modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box">
+        <button type="button" class="modal-close" onclick="document.getElementById('author-verify-modal').classList.remove('open')">×</button>
+        <h3>أنا المؤلف</h3>
+        <p>هل أنت أحد مؤلفي هذا البحث؟ راسلنا من بريدك المؤسسي أو المهني مع ذكر رقم arXiv لهذا المقال، وسنتحقق منك ونمنحك صلاحية تحرير هذه الصفحة.</p>
+        <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%202607.00313">author@bridge42worlds.academy</a></p>
+    </div>
+</div>
+
+<nav class="article-nav" id="section-nav"><ul><li class="article-nav-home"><a href="#article-top">↑ للأعلى</a></li><li class="article-nav-sep"></li><li><a href="#article-graph">الشبكة</a></li><li><a href="#feedback">التعليقات</a></li><li><a href="#related">مقالات ذات صلة</a></li></ul></nav>
+<div class="article-wrapper">
+    <div class="article-main">
+        <div class="lv-switch"><a class="lv-btn" data-version="simple" href="/lang/ar/archive/2026-07-01/2607.00313/simple.html" title="بسيط — الأبسط - لأول نظرة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg><span class="lv-t">بسيط</span></a><a class="lv-btn active" data-version="popular" href="/lang/ar/archive/2026-07-01/2607.00313/index.html" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg><span class="lv-t">مبسّط</span></a><a class="lv-btn" data-version="advanced" href="/lang/ar/archive/2026-07-01/2607.00313/advanced.html" title="متقدم — بالمعادلات والقصة الكاملة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg><span class="lv-t">متقدم</span></a></div>
+        <div class="mini-head"><div class="mini-head-l">باختصار · 20 ثانية</div><p>الحقول المحدودة تشبه الدوارة: تتوزع العناصر على المقاعد. إذا طُبق على كل عدد الضرب المتكرر (الرفع لقوة)، تبدأ بالحركة — ينتقل كل واحد إلى المقعد المجاور، والأخير إلى الأول. هذه الحركة (تشاكل فروبينوس الذاتي) أشبه بدوران منتظم. لكي تدور الدوارة بلا اختلالات، يلزم ترتيب ابتدائي صحيح (الأساس النظامي). سابقاً كان هذا الأساس يُعثر عليه بالتخمين: بتجربة خيارات مختلفة — بطيء وغير موثوق. الطريقة الجديدة تقدم وصفة دون عشوائية: يبني العلماء عائلة من المواضع الصالحة غالباً، ثم بمساعدة عبارة رياضية واحدة (محدد المصفوفة الدائرية) يجدون فوراً ويستبعدون كل الحالات الخاطئة النادرة. النتيجة: ترتيب مضمون الصحة يُحسب بأجزاء من الثانية. هذا مهم للتشفير والحسابات المعقدة.</p></div>
+        <div class="title-row">
+            <h1 class="article-title-top" id="article-top">دوارة فروبينوس: أسس نظامية بلا تعداد  </h1>
+            <button class="share-btn share-inline" title="مشاركة" onclick="shareArticle('دوارة فروبينوس: أسس نظامية بلا تعداد','https://bridge42worlds.academy/lang/ar/archive/2026-07-01/2607.00313/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
+        </div>
+        <div class="original-title original-title-top">Original: "Fast Deterministic Normal Bases and Circulant Polynomial Determinants"</div>
+        <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">أنا المؤلف</button> · <a href="/lang/en/authors/Mark_Giesbrecht.html" class="text-author-link" data-author="Mark Giesbrecht">Mark Giesbrecht</a>, <a href="/lang/en/authors/Armin_Jamshidpey.html" class="text-author-link" data-author="Armin Jamshidpey">Armin Jamshidpey</a>, <a href="/lang/en/authors/Éric_Schost.html" class="text-author-link" data-author="Éric Schost">Éric Schost</a></div>
+        <div class="meta">
+            arXiv:<a href="https://arxiv.org/abs/2607.00313" target="_blank" rel="noopener">2607.00313</a> · 2026-07-01 · <a href="http://arxiv.org/licenses/nonexclusive-distrib/1.0/" target="_blank" rel="noopener">CC BY</a> · <span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> 2 دقيقة</span>
+        </div>
+        <div class="meta-cats"><a class="cat-badge" href="/lang/ar/sections/cs_SC.html" data-cat="cs.SC" title="">الحساب الرمزي</a> <a class="cat-badge" href="/lang/ar/sections/cs_CC.html" data-cat="cs.CC" title="نماذج الحوسبة، صفوف التعقيد، التعقيد البنيوي، مقايضات التعقيد، الحدود العليا والدنيا.">التعقيد الحسابي</a></div>
+        <div class="oneliner">خوارزمية حتمية تبني أساساً نظامياً (أساساً من عناصر منزاحة دورياً) لحقل محدود بزمن شبه تربيعي، مستبدلةً البحث العشوائي بحساب محدد مصفوفة دائرية واحدة.</div>
+        <div class="mosaic"></div>
+        <div class="abstract-lead"><div class="abstract-label">الملخّص</div><p>تخيل أن لديك خزنة برقم سري مكون من مليار رقم — فتحها أسرع بكثير إذا عرفت النظام. في الحقول المحدودة (finite fields)، يلعب ما يُسمى بالأساس الطبيعي (normal basis) دور هذا النظام: مجموعة من العناصر تتولد من قوى عنصر واحد. في السابق، كان البحث عن هذا الأساس يتم بالتخمين. أما الآن، فقد طُرحت طريقة قطعية: المُرشح من الشكل 1/(θ - t) يصلح دائمًا تقريبًا، ولا يضطر الخوارزم إلى تجربة بدائل إلا في عدد ضئيل جدًا من قيم t. حساب سريع لمحدد مصفوفة من كثيرات الحدود يسمح بالتحقق من صلاحية الأساس في زمن شبه تربيعي. هذا يجعل توليد الأسس الطبيعية موثوقًا به في التشفير (cryptography) وترميز تصحيح الأخطاء (error-correcting codes).</p></div>
+        <div id="article-graph" class="mini-graph-config"><button type="button" class="mg-config-toggle"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> ضبط العرض</button><div class="mini-graph-filters" hidden><div class="mg-kinds"><label><input type="checkbox" class="mg-kind" value="tag" checked> <span style="color:#6C5CE7">●</span> وسوم</label><label><input type="checkbox" class="mg-kind" value="law" checked> <span style="color:#D64545">●</span> قوانين</label><label><input type="checkbox" class="mg-kind" value="sci" checked> <span style="color:#2FA84F">●</span> علماء</label><span class="mini-depth-ctrl"><button type="button" id="mini-depth-minus">−</button><span id="mini-depth-val">1</span><button type="button" id="mini-depth-plus">+</button></span></div><div class="mg-edges"><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-law" checked> وسم↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-sci" checked> وسم↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-sci" checked> قانون↔عالِم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="tag-tag"> وسم↔وسم</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="law-law"> قانون↔قانون</label><label class="mg-edge-label"><input type="checkbox" class="mg-edge" value="sci-sci"> عالِم↔عالِم</label></div></div></div><div class="mini-graph mini-graph--article" data-node="l:maximum_entropy_principle,s:Claude Shannon,t:numerical_simulation,t:fourier_analysis,t:optimization,t:signal_processing,t:spectral_analysis,t:graphs"><canvas id="minigraph"></canvas></div>
+        <p>بمجرد أن تبدأ الحركة، تدور دوارة فروبينوس: ينتقل كل عنصر من الحقل المحدود إلى خليفته من الدرجة q، وتنزاح الإحداثيات دورياً. هذه العملية — <a href="/lang/ar/tags/fourier_analysis.html" class="text-tag" data-tag="fourier_analysis">تحليل فورييه</a> — قد وصفها <a href="/lang/ar/scientists/Carl_Friedrich_Gauss.html" class="text-scientist" data-scientist="Carl Friedrich Gauss">Carl Friedrich Gauss</a> في أبحاثه الحسابية، لكن زمناً طويلاً لم يكن تشغيل الدوارة بدون اختلالات ممكناً إلا بتعداد شامل أو التلاعب بالمصفوفات.</p><p>سر الدوران السلس يكمن في الترتيب الصحيح: يجب إيجاد <a href="/lang/ar/tags/numerical_simulation.html" class="text-tag" data-tag="numerical_simulation">المحاكاة العددية</a> بحيث يقوم التشاكل الذاتي بتبديل عناصره دورياً ببساطة. يقترح مؤلفو الورقة ألا يجربوا التذاكر عشوائياً، بل أن يحسبوا مباشرة قائمة بكل الأماكن المعيبة. من أجل التمديد من الدرجة n، يبنون عائلة من المرشحين β_t = (θ − t)⁻¹ — أشبه بمقاعد على المنصة، وتقريباً جميعها صالحة.</p><div class="callout">في الواقع، عدد قيم t غير الصالحة لا يتجاوز n(n−1). حتى مع n=1000 و q من رتبة مليون، هذا لا يزيد عن 10⁶ خيار — فحصها بالتعداد المباشر يستغرق بضع ثوانٍ. لكن الخوارزمية تذهب أبعد: إنها لا تعدّد، بل تحسب محدداً حدودياً واحداً، جذوره تشطب بالضبط كل المعاملات المعيبة.</div><p>جوهر الطريقة هو الحساب فائق السرعة لـ <a href="/lang/ar/tags/spectral_analysis.html" class="text-tag" data-tag="spectral_analysis">التحليل الطيفي</a> ذي المدخلات الحدودية. تُختزل المصفوفة إلى متعددة حدود مميزة في جبر مزود بقاعدة غروبنر (Groebner basis)، ويتفادى الرفع p-أدي خبيث (p-adic lifting) الأصفار في مقامات صيغ لفيرييه (Leverrier's formulas). بفضل تقنية المجموعات المثلثة والتركيب المودولي (modular composition)، يستغرق الحساب كله زمناً شبه خطي بالنسبة لحجم الدخل — O_ϵ((n² log q)^{1+ϵ}) عملية بت. بالنسبة للحقول الصغيرة، يُوسع الحقل مؤقتاً بضرب لوغاريتمي، يُبنى عنصر نظامي هناك، ثم يُعاد بعناية — وكل هذا <a href="/lang/ar/tags/optimization.html" class="text-tag" data-tag="optimization">التحسين</a>.</p><div class="callout">بالإضافة إلى النتيجة الرئيسية، أُثبت عَرَضاً أن <a href="/lang/ar/tags/signal_processing.html" class="text-tag" data-tag="signal_processing">معالجة الإشارات</a> بحجم n ومتعددات حدود من الدرجة m يمكن حسابه خلال O_ϵ((nm log q)^{1+ϵ}) بت — أداة مستقلة للحسابات الرمزية ونظرية الترميز.</div><p>الآن، تدور الدوارة لا بعينين مغمضتين، بل بمعرفة تامة بنقطة الانطلاق الآمنة. يمنح هذا <a href="/lang/ar/tags/information_theory.html" class="text-tag" data-tag="information_theory">نظرية المعلومات</a> متانة مضمونة، ولأنظمة الجبر الحاسوبي قابلية إعادة إنتاج الحسابات. الخطوة التالية هي تسريع <a href="/lang/ar/tags/graphs.html" class="text-tag" data-tag="graphs">الغرافات (graphs)</a> إلى زمن خطي حقاً، وعندئذ سينخفض التعقيد الكلي إلى O˜(n²). فيما مضى كان غاوس يدوّر الأعداد يدوياً؛ أما اليوم فالدوارة الخوارزمية تفعل ذلك في أجزاء من الثانية، تاركةً لنا الإعجاب بالرياضيات البحتة.</p>
+        <div class="fun-fact"><p class="fact">🎯 إذا كان n=1000 و q عدداً أولياً يزيد قليلاً عن 10⁶، فإن عدد قيم t 'السيئة' لا يتجاوز 10⁶، وسيكون تعداد مليون قيمة فقط كافياً — وهي مهمة ممكنة حتى باستخدام آلة حاسبة مكتبية. الفكرة كلها هي ألا نفعل ذلك بالتعداد الغبي، بل بحساب متعددة حدود واحدة وتقييمها في n(n−1)+1 نقطة.</p></div>
+        <div class="formula"><div class="formula-render">\beta_t = (\theta - t)^{-1}</div><div class="formula-meaning">عنصر حقل، نظامي لجميع قيم t تقريباً</div></div><div class="formula"><div class="formula-render">D(T) = \det\operatorname{Circ}(g_0(T),\dots,g_{n-1}(T))</div><div class="formula-meaning">متعددة حدود على الحقل الأساسي، جذورها هي المستثناة</div></div>
+        
+        <div class="actions actions-compact" data-article-id="2607.00313_ar_popular">
+            <div class="reactions">
+                <button class="react-btn" data-react="like" title="أعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V10l4.2-6.6c.9 0 1.8.8 1.8 1.8V9h4.7c1.1 0 1.9 1 1.6 2.1l-1.6 6.3c-.2.8-.9 1.3-1.7 1.3H7Z"/><path d="M7 10H4v11h3"/></svg><span class="rc">…</span></button>
+                <button class="react-btn" data-react="dislike" title="لم يعجبني"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v11l4.2 6.6c.9 0 1.8-.8 1.8-1.8V15h4.7c1.1 0 1.9-1 1.6-2.1L17.7 6.6c-.2-.8-.9-1.3-1.7-1.3H7Z"/><path d="M7 14H4V3h3"/></svg><span class="rc">…</span></button>
+            </div>
+            <button class="fav-btn" data-fav="2607.00313" title="المفضلة"><span class="fav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg></span></button>
+            <button type="button" class="fb-comment-toggle actions-comment"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> أضف تعليقًا</button>
+        </div>
+        <div class="lv-bottom"><div class="lv-switch lv-switch-compact"><a class="lv-btn lv-compact" data-version="simple" href="/lang/ar/archive/2026-07-01/2607.00313/simple.html" title="بسيط — الأبسط - لأول نظرة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/><path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/></svg></a><a class="lv-btn active lv-compact" data-version="popular" href="/lang/ar/archive/2026-07-01/2607.00313/index.html" title="مبسّط — أغنى من «مبسّط» - إذا كان العلم يثيرك"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/><path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/></svg></a><a class="lv-btn lv-compact" data-version="advanced" href="/lang/ar/archive/2026-07-01/2607.00313/advanced.html" title="متقدم — بالمعادلات والقصة الكاملة"><svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/><path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/></svg></a></div></div>
+        <div class="feedback" id="feedback" data-article-id="2607.00313_ar_popular" data-entity-type="article"><div class="fb-expand" hidden><div class="fb-chips"><span class="fb-chip" data-opt="reads_well">سهل القراءة</span><span class="fb-chip" data-opt="too_long">طويل جدًا</span><span class="fb-chip" data-opt="unclear">غير واضح</span><span class="fb-chip" data-opt="great">ممتاز</span><span class="fb-chip" data-opt="dry">جاف قليلاً</span></div><textarea class="fb-comment" rows="2" placeholder="تتم مراجعة التعليقات دفعة واحدة — قد نُحدّث المقال عند الحاجة"></textarea><div class="fb-row"><button class="fb-send">إرسال</button></div></div><span class="fb-status"></span></div>
+        <div class="related" id="related" data-label="مقالات ذات صلة"></div>
+    </div>
+    <div class="article-side"><div class="side-sci-label">العلماء</div><a href="/lang/ar/scientists/Claude_Shannon.html" class="side-sci" data-scientist="Claude Shannon">Claude Shannon</a><div class="side-tags-label">الوسوم</div><a href="/lang/ar/tags/numerical_simulation.html" class="side-tag" data-tag="numerical_simulation">المحاكاة العددية</a>
+<a href="/lang/ar/tags/fourier_analysis.html" class="side-tag" data-tag="fourier_analysis">تحليل فورييه</a>
+<a href="/lang/ar/tags/optimization.html" class="side-tag" data-tag="optimization">التحسين</a>
+<a href="/lang/ar/tags/signal_processing.html" class="side-tag" data-tag="signal_processing">معالجة الإشارات</a>
+<a href="/lang/ar/tags/spectral_analysis.html" class="side-tag" data-tag="spectral_analysis">التحليل الطيفي</a>
+<a href="/lang/ar/tags/graphs.html" class="side-tag" data-tag="graphs">الغرافات (graphs)</a>
+<a href="/lang/ar/tags/information_theory.html" class="side-tag" data-tag="information_theory">نظرية المعلومات</a><div class="side-laws-label">قوانين</div><a href="/lang/ar/laws/maximum_entropy_principle.html" class="side-law" data-law="maximum_entropy_principle">مبدأ الإنتروبيا القصوى</a></div>
+</div>
+
+<script src="/js/likes.js?v=4304a811a1"></script>
+<script src="/js/search.js?v=4304a811a1"></script>
+<script src="/js/scroll.js?v=4304a811a1"></script>
+<script src="/js/lightbox.js?v=4304a811a1"></script>
+<script src="/js/gallery.js?v=4304a811a1"></script>
+<script src="/js/force-graph.js?v=4304a811a1"></script>
+<script src="/js/mini-graph.js?v=4304a811a1"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('2607.00313', 'article', 'ar');
+    if (false && window.logExpressInterest) logExpressInterest('2607.00313', 'ar');
+    var main = document.querySelector('.article-main');
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);  // знак доллара; литералом нельзя — шаблонизатор его подставляет
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
+    });
+    var sections = document.querySelectorAll('#section-nav a');
+    if (sections.length) {
+        window.addEventListener('scroll', function() {
+            var current = '';
+            document.querySelectorAll('section[id]').forEach(function(sec) {
+                if (sec.getBoundingClientRect().top < 100) current = sec.id;
+            });
+            sections.forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    // .article-nav/.article-side (position:fixed на ≥1280px) раньше держались на захардкоженном
+    // top:245px — совпадало, пока заголовок сидел вне .article-wrapper на предсказуемой высоте.
+    // Теперь H1 переехал внутрь .article-main (юзер-фидбек: "подними вровень с названием"), и его
+    // реальная высота гуляет от статьи к статье (длина шапки/бейджей/авторов) — жёсткая константа
+    // то промахивается вниз, то вверх. Меряем H1 живьём и синхронизируем обе колонки на лету.
+    var h1 = document.querySelector('.article-title-top');
+    function syncSideNavTop() {
+        if (!h1 || window.innerWidth < 1280) return;
+        var top = Math.round(h1.getBoundingClientRect().top + window.scrollY);
+        document.documentElement.style.setProperty('--article-side-top', top + 'px');
+    }
+    syncSideNavTop();
+    window.addEventListener('resize', syncSideNavTop);
+});
+</script>
+</body>
+</html>

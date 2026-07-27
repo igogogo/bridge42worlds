@@ -1,0 +1,1548 @@
+{
+  "id": "02-standing",
+  "topic": "waves",
+  "schema": "b42.lesson/1",
+  "model": "wave",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "mechanics",
+      "energy"
+    ],
+    "scientists": [
+      "Christiaan Huygens"
+    ]
+  },
+  "ru": {
+    "title": "Стоячие волны и звук",
+    "subtitle": "Параграф 2 · Почему у струны есть ноты, а не любые частоты",
+    "intro": [
+      "Гитарная струна может звучать далеко не как угодно. Она выдаёт вполне определённую ноту, а если тронуть её иначе — ту же ноту октавой выше или квинтой, но никогда что-то среднее. Между соседними возможностями зияет пустота, куда струне хода нет.",
+      "Это удивительное обстоятельство: среда непрерывна, колебаться может как угодно, а разрешённых частот оказывается счётное множество. Из непрерывного получилось дискретное — и не по какому-то запрету, а просто потому, что концы струны закреплены.",
+      "Запомните эту логику накрепко: **закрепить концы — значит получить дискретный набор**. Через двести лет ровно тем же рассуждением объяснят, почему электрон в атоме имеет отдельные уровни энергии, а не любые. Атомные спектры и гитарные лады — явления одной природы."
+    ],
+    "standNote": "Переключите стенд в режим стоячей волны. Красными точками отмечены узлы — места, которые не двигаются никогда. Проверьте главное: узлы стоят, а между ними среда качается вся разом, в одной фазе. Теперь меняйте длину волны и следите за расстоянием между узлами: оно всегда ровно половина длины волны. Именно это условие и порождает дискретность — на струне определённой длины помещается только целое число полуволн.",
+    "formula": {
+      "name": "Условие стоячей волны на струне",
+      "latex": "L = n\\frac{\\lambda}{2} \\;\\Longrightarrow\\; f_n = \\frac{n\\,v}{2L}, \\quad n = 1, 2, 3, \\ldots",
+      "alsoKnown": "Гармонический ряд · собственные частоты закреплённой струны",
+      "authors": [
+        {
+          "who": "Пифагор",
+          "year": "≈530 до н. э.",
+          "what": "нашёл, что струна вдвое короче звучит октавой выше, а отношение три к двум даёт квинту. Не имея понятия о волнах, он открыл целочисленность собственных частот — и увидел в этом устройство мироздания"
+        },
+        {
+          "who": "Марен Мерсенн",
+          "year": "1636",
+          "what": "вывел, как частота зависит от длины, натяжения и толщины струны. Эти три закона до сих пор носят его имя и лежат в основе конструкции любого струнного инструмента"
+        },
+        {
+          "who": "Брук Тейлор",
+          "year": "1713",
+          "what": "первым получил формулу основной частоты струны из механики, а не из опыта. Тот самый Тейлор, чьим рядом мы пользовались в теме о моделях"
+        },
+        {
+          "who": "Даниил Бернулли",
+          "year": "1753",
+          "what": "высказал мысль, что общее колебание струны есть сумма всех её гармоник одновременно. Эйлер и Даламбер спорили с ним годами; прав оказался Бернулли, а строгое обоснование дал позже Фурье"
+        },
+        {
+          "who": "Эрнст Хладни",
+          "year": "1787",
+          "what": "посыпал песком металлические пластинки и водил по краю смычком — песок собирался в узлах, рисуя фигуры поразительной красоты. Первая в истории визуализация стоячих волн, которую и сегодня повторяют в каждой лаборатории"
+        }
+      ],
+      "story": "Именно на струне человечество впервые столкнулось с квантованием, за два с половиной тысячелетия до квантовой механики. Пифагорейцы обнаружили, что приятные созвучия отвечают отношениям малых целых чисел, и сделали из этого вывод космического масштаба: раз мир подчиняется числу, число и есть сущность вещей. Вывод был преждевременным, но интуиция — верной. Когда в 1913 году Бор постулировал дискретные орбиты электрона, а в 1926-м де Бройль и Шрёдингер объяснили их как условие целого числа длин волн на орбите, физика вернулась ровно к пифагорейской картине: разрешено то, что укладывается целое число раз.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "длина струны или трубы",
+          "unit": "м",
+          "note": "именно закреплённость на концах и порождает дискретность"
+        },
+        {
+          "sym": "n",
+          "latex": "n",
+          "what": "номер гармоники",
+          "unit": "—",
+          "note": "целое число — то самое квантовое число, только в классической задаче"
+        },
+        {
+          "sym": "f1",
+          "latex": "f_1",
+          "what": "основной тон",
+          "unit": "Гц",
+          "note": "самая низкая возможная частота; она и определяет высоту ноты"
+        },
+        {
+          "sym": "v",
+          "latex": "v",
+          "what": "скорость волны в струне",
+          "unit": "м/с",
+          "note": "$v = \\sqrt{F/\\mu}$ — растёт с натяжением, падает с толщиной"
+        },
+        {
+          "sym": "mu",
+          "latex": "\\mu",
+          "what": "линейная плотность струны",
+          "unit": "кг/м",
+          "note": "масса на метр длины; басовые струны потому и толстые"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: откуда берётся дискретность",
+      "lead": "Пойдём от сложения двух встречных волн к целым числам. Ключевой момент наступит на четвёртом шаге — и это будет самое важное место всей темы.",
+      "steps": [
+        {
+          "text": "Отражённая от закреплённого конца волна бежит навстречу падающей. Складываем их — здесь работает принцип суперпозиции: смещения просто суммируются.",
+          "latex": "y = A\\sin(kx - \\omega t) + A\\sin(kx + \\omega t)",
+          "figure": "vectriangle",
+          "figCaption": "Две одинаковые волны навстречу друг другу. Ничего, кроме сложения, дальше не понадобится."
+        },
+        {
+          "text": "Раскрываем по формуле суммы синусов. Смотрите на результат внимательно: координата и время разошлись по разным сомножителям. Волна перестала бежать.",
+          "latex": "y = 2A\\sin(kx)\\cos(\\omega t)",
+          "figure": "sinederiv",
+          "figCaption": "Пространство отдельно, время отдельно. Форма стоит на месте, меняется только её высота."
+        },
+        {
+          "text": "Отсюда сразу узлы. Там, где первый сомножитель обращается в ноль, точка не двигается никогда — независимо от времени. Такие места отстоят друг от друга ровно на половину длины волны.",
+          "latex": "\\sin(kx) = 0 \\;\\Longrightarrow\\; x_n = n\\frac{\\lambda}{2}",
+          "figure": "shadow",
+          "figCaption": "Узлы неподвижны всегда. Между ними — пучности, где размах вдвое больше исходного."
+        },
+        {
+          "text": "И вот главный шаг. Струна закреплена с обоих концов, значит на концах обязаны быть узлы. Но узлы отстоят на полволны — следовательно, на длине струны должно уложиться целое число полуволн. Никаких других вариантов среда не допускает.",
+          "latex": "L = n\\frac{\\lambda_n}{2} \\;\\Longrightarrow\\; \\lambda_n = \\frac{2L}{n}",
+          "figure": "anywell",
+          "figCaption": "Граничное условие превращает непрерывное множество возможностей в счётное. Здесь рождается дискретность."
+        },
+        {
+          "text": "Переводим длины волн в частоты. Получается ряд, в котором каждая следующая частота кратна первой. Это и есть натуральный звукоряд.",
+          "latex": "f_n = \\frac{v}{\\lambda_n} = n\\,\\frac{v}{2L} = n f_1",
+          "figure": "matchfreq",
+          "figCaption": "Гармоники идут строго по целым: 1, 2, 3… Октава — это удвоение, квинта — отношение 3:2."
+        },
+        {
+          "text": "Подставим скорость волны в струне и получим формулу Мерсенна — рабочий инструмент любого настройщика.",
+          "latex": "v = \\sqrt{\\frac{F}{\\mu}} \\;\\Longrightarrow\\; f_1 = \\frac{1}{2L}\\sqrt{\\frac{F}{\\mu}}",
+          "figure": "springlaw",
+          "figCaption": "Три ручки управления высотой ноты: длина, натяжение и толщина струны."
+        },
+        {
+          "text": "И почему инструменты звучат по-разному, играя одну ноту. Реальная струна колеблется всеми гармониками сразу, и набор их громкостей зависит от того, где и чем её тронули. Основной тон задаёт ноту, обертоны — тембр.",
+          "latex": "y(x,t) = \\sum_n A_n \\sin(k_n x)\\cos(\\omega_n t)",
+          "figure": "curves",
+          "figCaption": "Тембр есть набор амплитуд обертонов. Скрипка и рояль на одной ноте различаются именно им."
+        }
+      ],
+      "plate": "Закрепление концов заставляет уложиться целое число полуволн — и непрерывная среда выдаёт дискретный набор частот $f_n = n f_1$. Дискретность приходит из граничного условия, а не из запрета.",
+      "note": "Границы применимости и важное уточнение. Ряд строго кратен только для идеально гибкой струны. Реальная струна имеет жёсткость, и её высокие обертоны идут чуть выше кратных значений — это называется негармоничностью и особенно заметно у рояля. Настройщики учитывают её вручную, растягивая настройку к краям диапазона; из-за этого рояль, настроенный «математически точно», звучит фальшиво. У духовых инструментов картина другая: у трубы, открытой с обоих концов, ряд полный, а у закрытой с одного конца присутствуют только нечётные гармоники — потому кларнет звучит иначе, чем флейта того же размера."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Как две бегущие волны дают стоячую — без формул. Представьте двух человек, тянущих скакалку каждый со своей стороны и качающих её навстречу. Там, где их воздействия всегда противоположны, скакалка не двигается вовсе — это узел. Там, где всегда совпадают, размах удваивается — это пучность. Никто не стоит на месте специально: неподвижность узла есть результат постоянного взаимного погашения. Формула $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ говорит ровно это, только короче.",
+        "Что означает разделение переменных. В бегущей волне координата и время сидели вместе, в одной скобке, — и потому форма ехала. В стоячей они разъехались по разным сомножителям: один отвечает за то, где, другой — за то, когда. Форма задана раз и навсегда, меняется только её масштаб, как у дышащего рисунка. Этот приём — разделение переменных — окажется главным инструментом при решении уравнения Шрёдингера, и там он даст ровно тот же результат: стоячие волны с дискретным набором частот.",
+        "Почему из непрерывного получается дискретное. Вот, пожалуй, самая важная мысль всего курса, и её стоит осмыслить не спеша. Длина волны может быть любой — среда непрерывна и ничего не запрещает. Но струна закреплена, и на концах обязаны быть узлы. Представьте, что вы выкладываете плитку на полу фиксированной ширины: плитки бывают любого размера, но уложить их без обрезки можно только теми, что делят ширину нацело. Ограничение появилось не из свойств плитки, а из размера комнаты. Точно так же дискретность нот приходит не из свойств струны, а из её закреплённости.",
+        "Почему октава — это удвоение. Отношение частот два к одному ухо слышит как «та же нота, только выше», и это не соглашение культуры, а следствие устройства обертонов. Все гармоники ноты с частотой $2f$ входят и в набор гармоник ноты $f$ — второй звук не добавляет ничего чужеродного, потому и сливается. Квинта с отношением три к двум делит обертоны почти так же дружно, и потому звучит следующей по чистоте. Пифагор, перебирая длины струн, нащупал именно это."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: настроим гитару",
+      "lead": "Считаем то, что музыкант делает на слух, и заодно проверяем формулу Мерсенна.",
+      "given": "Первая струна гитары длиной 65 см должна давать ноту ми второй октавы — 330 Гц. Линейная плотность струны $0{,}4$ г/м. Найти нужное натяжение и частоты первых трёх гармоник.",
+      "law": "$f_1 = \\dfrac{1}{2L}\\sqrt{\\dfrac{F}{\\mu}}$, $\\;f_n = n f_1$",
+      "solution": [
+        {
+          "text": "Сначала найдём скорость волны, которая нужна для такой частоты.",
+          "latex": "v = 2Lf_1 = 2 \\cdot 0{,}65 \\cdot 330 \\approx 429\\ \\text{м/с}"
+        },
+        {
+          "text": "Теперь натяжение из формулы скорости.",
+          "latex": "F = \\mu v^{2} = 4\\cdot 10^{-4} \\cdot 429^{2} \\approx 74\\ \\text{Н}"
+        },
+        {
+          "text": "Это вес какого груза?",
+          "latex": "m = F/g \\approx 74/9{,}8 \\approx 7{,}5\\ \\text{кг}"
+        },
+        {
+          "text": "Гармоники — просто кратные основного тона.",
+          "latex": "f_1 = 330,\\quad f_2 = 660,\\quad f_3 = 990\\ \\text{Гц}"
+        }
+      ],
+      "answer": "Натяжение около 74 ньютонов — как если бы на струне висел груз в семь с половиной килограммов. Гармоники: 330, 660 и 990 Гц.",
+      "check": "Проверка на здравый смысл и заодно объяснение бытового факта. Шесть струн по семьдесят ньютонов дают суммарное натяжение около полутонны силы — вот почему у гитары массивный гриф с анкерным стержнем внутри, а у рояля чугунная рама: там натяжение всех струн доходит до двадцати тонн. Второй вывод: прижав струну на двенадцатом ладу, вы делите её пополам и получаете частоту вдвое выше — октаву. Именно поэтому двенадцатый лад ровно посередине струны, и это можно проверить линейкой на любой гитаре."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Числа музыкальной акустики — редкий случай, когда физические константы слышны на слух.",
+      "items": [
+        {
+          "sym": "A4",
+          "latex": "f_{\\text{ля}}",
+          "name": "Камертонное ля первой октавы",
+          "value": "440",
+          "unit": "Гц",
+          "why": "Международный эталон настройки с 1955 года. До этого каждый оркестр держал свою высоту, и разброс между городами достигал полутона.",
+          "mnemo": "Октавы вверх удваивают: 440, 880, 1760. Октавы вниз делят: 220, 110, 55. Весь слышимый диапазон умещается примерно в десять таких удвоений."
+        },
+        {
+          "sym": "octave",
+          "latex": "2{:}1",
+          "name": "Отношение частот в октаве",
+          "value": "2,000",
+          "unit": "—",
+          "why": "Единственное отношение, которое ухо слышит как повторение той же ноты. Причина в обертонах: все гармоники верхней ноты входят в набор нижней.",
+          "mnemo": "Квинта — 3:2, кварта — 4:3, большая терция — 5:4. Чем проще дробь, тем чище созвучие; это и обнаружил Пифагор на струне."
+        },
+        {
+          "sym": "semitone",
+          "latex": "\\sqrt[12]{2}",
+          "name": "Отношение частот в полутоне",
+          "value": "1,0595",
+          "unit": "—",
+          "why": "В равномерной темперации октаву делят на двенадцать одинаковых шагов, и каждый есть корень двенадцатой степени из двойки. Все интервалы при этом чуть фальшивы, зато одинаково — и можно играть в любой тональности.",
+          "mnemo": "Компромисс, на который согласилась вся европейская музыка: квинта в темперации отличается от чистой на два цента, и это ухо прощает."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где ещё запертая волна даёт дискретность",
+      "lead": "Логика «закрепить границы — получить целые числа» встречается в физике снова и снова, и каждый раз кажется новой.",
+      "items": [
+        {
+          "h": "Духовые инструменты",
+          "text": "Воздушный столб вместо струны. У трубы, открытой с обоих концов, полный ряд гармоник; у закрытой с одного — только нечётные. Отсюда разница в тембре флейты и кларнета при одинаковой длине."
+        },
+        {
+          "h": "Фигуры Хладни",
+          "text": "Двумерная задача: песок на пластине собирается в узловые линии, рисуя симметричные узоры. Каждая частота даёт свой рисунок — и это буквально портрет собственной моды колебаний."
+        },
+        {
+          "h": "Микроволновая печь",
+          "text": "Внутри стоит стоячая волна с узлами через полдлины волны, около шести сантиметров. Потому и нужен вращающийся столик: без него еда грелась бы полосами. Расстояние между пригоревшими местами позволяет измерить скорость света на кухне."
+        },
+        {
+          "h": "Лазер",
+          "text": "Между зеркалами резонатора укладывается целое число полуволн — ровно условие струны. Отсюда исключительная монохроматичность лазерного света: разрешены только те частоты, что помещаются целиком."
+        },
+        {
+          "h": "Электрон в атоме",
+          "text": "Волна де Бройля, запертая около ядра, должна укладываться целое число раз. Отсюда дискретные уровни энергии и линейчатые спектры. Атом устроен как трёхмерная струна — и это не метафора, а тот же расчёт."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Стоячие волны — самая наглядная часть темы: их можно увидеть, услышать и даже измерить ими скорость света.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Измерьте скорость света микроволновкой",
+          "text": "Выньте из микроволновой печи вращающийся столик. Положите на тарелку слой тёртого сыра или зефира и включите на полминуты. Достаньте и измерьте линейкой расстояние между расплавленными пятнами.",
+          "answer": "Пятна появятся в пучностях стоячей волны, а расстояние между ними — половина длины волны, около 6 см. Частота печи написана на задней стенке, обычно 2450 МГц. Умножьте: $c = \\lambda f = 0{,}12 \\cdot 2{,}45\\cdot 10^{9} \\approx 2{,}9\\cdot 10^{8}$ м/с. Вы измерили скорость света на кухне с точностью в несколько процентов. Именно из-за этих узлов печи и нужен вращающийся столик."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Флажолеты на гитаре",
+          "text": "Если есть гитара: слегка коснитесь струны точно над двенадцатым ладом, не прижимая, и дёрните. Затем над седьмым. Затем над пятым.",
+          "answer": "Раздастся чистый высокий звук — октава, потом квинта через октаву, потом две октавы. Коснувшись струны, вы заставили её иметь узел в этом месте и тем самым запретили основной тон, оставив только те гармоники, у которых там и так узел. Музыканты называют это флажолетами, а физики — выбором моды. Заодно проверьте линейкой: двенадцатый лад стоит ровно посередине струны, седьмой — на трети."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Как из непрерывного получается дискретное",
+          "text": "Струна — сплошная среда, никаких ступенек в ней нет. Длина волны может быть какой угодно. Откуда же берётся жёсткий набор разрешённых нот, между которыми пустота?",
+          "answer": "Из закреплённости концов. Волна может быть любой, но уложиться на струне без разрыва способна только та, у которой на концах узлы, — а узлы отстоят на полволны. Ограничение пришло не из свойств среды, а из граничного условия. Ровно этот довод в 1926 году объяснил дискретность уровней энергии в атоме: электронная волна заперта около ядра и обязана укладываться целое число раз. Квантование — не отдельная загадка, а свойство любой запертой волны."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Рояль настраивают неправильно нарочно",
+          "text": "У реальной струны есть жёсткость, и её обертоны идут чуть выше точно кратных. Если настроить рояль математически точно, обертоны нижних нот не совпадут с основными тонами верхних, и инструмент зазвучит фальшиво. Поэтому настройщики растягивают строй: басы занижают, дисканты завышают, иногда на треть полутона к краям. Это называется растянутой настройкой, и она — компромисс между математикой и живым ухом."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Закрепи концы — получишь целые числа",
+          "text": "Одна строчка, объясняющая и гитару, и лазер, и атом. Свободная волна — любая длина. Запертая волна — только те длины, что укладываются целое число раз. Всякий раз, встречая в физике целые числа, ищите, что именно там заперто."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Идеальная струна против настоящей",
+          "text": "Формула $f_n = nf_1$ верна для гибкой струны без потерь. Настоящая имеет жёсткость (обертоны уползают вверх), трение (звук затухает) и конечную толщину. Кроме того, при сильном щипке колебание перестаёт быть линейным, и гармоники начинают обмениваться энергией друг с другом. Именно эти отклонения от идеала и делают звук живого инструмента отличимым от синтезированного."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: от струны к атому",
+      "lead": "Не входит в проверку. О том, как задача о гитарной струне через двести пятьдесят лет объяснила устройство вещества.",
+      "blocks": [
+        {
+          "h": "Загадка спектров",
+          "text": "К концу XIX века было накоплено море данных: каждый элемент, будучи нагрет, светится строго определённым набором линий. Водород давал ряд, который Бальмер в 1885 году подогнал простой формулой с целыми числами. Формула работала безупречно и не имела ни малейшего объяснения — откуда в атоме целые числа, никто не понимал."
+        },
+        {
+          "h": "Догадка де Бройля",
+          "text": "В 1924 году де Бройль предположил, что электрон — тоже волна, с длиной, обратной импульсу. Тогда устойчивая орбита есть та, на которой волна укладывается целое число раз и не гасит сама себя. Это буквально условие струны, свёрнутой в кольцо. Диссертация была настолько дерзкой, что научный руководитель отправил её Эйнштейну — тот ответил, что автор приподнял край великой завесы."
+        },
+        {
+          "h": "Уравнение Шрёдингера",
+          "text": "Через два года Шрёдингер записал волновое уравнение для электрона и решил его для водорода. Решение существует не при любой энергии, а только при определённых — ровно как стоячая волна существует не при любой длине. Целые числа Бальмера появились сами, из граничных условий. Дискретность энергии оказалась дискретностью гармоник."
+        },
+        {
+          "h": "Что это значит",
+          "text": "Квантование — не дополнительный постулат, приклеенный к физике снаружи. Это свойство любой волны, запертой в конечной области. Разница лишь в том, что струна заперта зажимами, а электрон — притяжением ядра. Пифагор, слушая струну, был ближе к устройству атома, чем мог вообразить."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Две встречные волны дают стоячую с неподвижными узлами; закрепление концов требует целого числа полуволн и порождает дискретный ряд частот $f_n = n f_1$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega",
+          "text": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ — переменные разделились"
+        },
+        {
+          "icon": "formula",
+          "title": "Расстояние между узлами всегда $\\lambda/2$",
+          "text": "Расстояние между узлами всегда $\\lambda/2$"
+        },
+        {
+          "icon": "sigma",
+          "title": "Граничное условие превращает непрерывное в дискретное",
+          "text": "Граничное условие превращает непрерывное в дискретное"
+        },
+        {
+          "icon": "formula",
+          "title": "Формула Мерсенна",
+          "text": "$f_1 = \\frac{1}{2L}\\sqrt{F/\\mu}$ — длина, натяжение, толщина"
+        },
+        {
+          "icon": "scale",
+          "title": "Основной тон даёт ноту, набор обертонов",
+          "text": "тембр"
+        }
+      ],
+      "where": "Струнные и духовые инструменты, фигуры Хладни, резонатор лазера, узлы в микроволновой печи, уровни энергии электрона в атоме.",
+      "watchOut": "Узел неподвижен не потому, что там ничего не происходит, а потому что две волны там постоянно гасят друг друга. Энергия в узел приходит — просто с двух сторон и в противофазе."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Почему струна не может звучать на произвольной частоте?",
+        "options": [
+          "Материал струны допускает только определённые колебания",
+          "Концы закреплены и обязаны быть узлами, а узлы отстоят на полволны — значит длина струны должна вмещать целое их число",
+          "Ухо человека слышит только определённые частоты",
+          "Мешает трение о воздух, гасящее промежуточные частоты"
+        ],
+        "answer": 1,
+        "why": "Ограничение приходит не от материала и не от восприятия, а от граничного условия. Любая длина волны возможна в свободной среде; на закреплённой струне выживают только те, что укладываются целое число полуволн. Это ровно тот же довод, что объясняет уровни энергии в атоме.",
+        "hint": "Что обязательно должно происходить в тех точках струны, которые зажаты? И как далеко друг от друга могут стоять такие точки?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "Скрипка и рояль играют одну и ту же ноту ля. Чем физически различаются эти звуки?",
+        "options": [
+          "Частотой основного тона — она у них чуть разная",
+          "Скоростью распространения звука от инструмента",
+          "Набором амплитуд обертонов, то есть тембром",
+          "Только громкостью"
+        ],
+        "answer": 2,
+        "why": "Основной тон одинаков — иначе это была бы другая нота. Различие в том, какие гармоники и насколько сильно примешаны: это зависит от того, где и чем возбуждают струну, и от резонансных свойств корпуса. Тембр есть спектр, и Фурье позволяет его разложить.",
+        "hint": "Струна колеблется не одной гармоникой, а всеми сразу. Что может отличаться у двух инструментов, если основная частота у них совпадает?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "Своими словами: как из непрерывной среды получается дискретный набор частот, и почему это важно для квантовой физики?",
+        "keywords": [
+          "закреп",
+          "конц",
+          "узл",
+          "целое число",
+          "укладыва",
+          "границ",
+          "услови",
+          "атом",
+          "электрон",
+          "уровн"
+        ],
+        "needed": 2,
+        "why": "Среда непрерывна и допускает любую длину волны, но закреплённые концы требуют узлов, а узлы отстоят на полволны. Значит на струне помещается только целое число полуволн. Дискретность родилась из граничного условия. Тем же рассуждением объясняются уровни энергии электрона: его волна заперта около ядра и обязана укладываться целое число раз.",
+        "hint": "Ограничение приходит от струны или от того, что её зажали? И что в атоме играет роль зажимов?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "Струна длиной 65 см даёт основной тон 330 Гц. Какова частота третьей гармоники в герцах?",
+        "answer": 990,
+        "unit": "Гц",
+        "tolerance": 50,
+        "why": "Гармоники кратны основному тону: f₃ = 3 · 330 = 990 Гц. Полезно расслышать музыкальный смысл: удвоение (660 Гц) даёт октаву, а отношение третьей гармоники ко второй — 990 к 660, то есть 3:2, — и есть чистая квинта, найденная Пифагором на струне.",
+        "hint": "Гармоники идут строго по целым числам от основного тона. Какая по счёту третья?"
+      }
+    ]
+  },
+  "en": {
+    "title": "Standing Waves and Sound",
+    "subtitle": "Section 2 · Why a string has notes and not any frequencies",
+    "intro": [
+      "A guitar string does not sound just any way. It produces a very definite note, and if you pluck it differently — the same note an octave higher or a fifth, but never something in between. Between the neighboring possibilities lies an empty gap, where the string cannot go.",
+      "This is an amazing circumstance: the medium is continuous, it can vibrate in any way, yet the allowed frequencies turn out to be a countable set. The continuous becomes discrete — not due to some prohibition, but simply because the ends of the string are fixed.",
+      "Remember this logic firmly: **fixing the ends means obtaining a discrete set**. Two hundred years later, exactly the same reasoning will explain why an electron in an atom has discrete energy levels and not any. Atomic spectra and guitar frets are phenomena of the same nature."
+    ],
+    "standNote": "Switch the stand to standing wave mode. Red dots mark nodes — places that never move. Check the main point: nodes are stationary, and between them the medium oscillates all at once, in one phase. Now change the wavelength and watch the distance between nodes: it is always exactly half a wavelength. This condition is precisely what gives rise to discreteness — on a string of a given length, only an integer number of half-waves fit.",
+    "formula": {
+      "name": "Condition for a standing wave on a string",
+      "latex": "L = n\\frac{\\lambda}{2} \\;\\Longrightarrow\\; f_n = \\frac{n\\,v}{2L}, \\quad n = 1, 2, 3, \\ldots",
+      "alsoKnown": "Harmonic series · natural frequencies of a fixed string",
+      "authors": [
+        {
+          "who": "Pythagoras",
+          "year": "≈530 BCE",
+          "what": "found that a string half the length sounds an octave higher, and the ratio three to two gives a fifth. Without any concept of waves, he discovered the integer nature of natural frequencies — and saw in this the structure of the universe."
+        },
+        {
+          "who": "Marin Mersenne",
+          "year": "1636",
+          "what": "derived how frequency depends on length, tension, and thickness of the string. These three laws still bear his name and form the basis of the design of any string instrument."
+        },
+        {
+          "who": "Brook Taylor",
+          "year": "1713",
+          "what": "first derived the formula for the fundamental frequency of a string from mechanics, not from experiment. The very same Taylor whose series we used in the topic about models."
+        },
+        {
+          "who": "Daniel Bernoulli",
+          "year": "1753",
+          "what": "suggested that the general vibration of a string is the sum of all its harmonics simultaneously. Euler and d'Alembert argued with him for years; Bernoulli turned out to be right, and a rigorous justification was later given by Fourier."
+        },
+        {
+          "who": "Ernst Chladni",
+          "year": "1787",
+          "what": "sprinkled sand on metal plates and drew a bow along the edge — the sand collected at the nodes, drawing figures of astonishing beauty. The first visualization of standing waves in history, still repeated in every laboratory today."
+        }
+      ],
+      "story": "It was on the string that humanity first encountered quantization, two and a half millennia before quantum mechanics. The Pythagoreans discovered that pleasant consonances correspond to ratios of small integers, and drew a cosmic-scale conclusion: since the world obeys number, number is the essence of things. The conclusion was premature, but the intuition was correct. When in 1913 Bohr postulated discrete electron orbits, and in 1926 de Broglie and Schrödinger explained them as the condition of an integer number of wavelengths on an orbit, physics returned exactly to the Pythagorean picture: what is allowed is that which fits an integer number of times.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "length of the string or tube",
+          "unit": "m",
+          "note": "it is the fixed ends that cause discreteness"
+        },
+        {
+          "sym": "n",
+          "latex": "n",
+          "what": "harmonic number",
+          "unit": "—",
+          "note": "an integer — the very quantum number, but in a classical problem"
+        },
+        {
+          "sym": "f1",
+          "latex": "f_1",
+          "what": "fundamental tone",
+          "unit": "Hz",
+          "note": "the lowest possible frequency; it determines the pitch of the note"
+        },
+        {
+          "sym": "v",
+          "latex": "v",
+          "what": "wave speed in the string",
+          "unit": "m/s",
+          "note": "$v = \\sqrt{F/\\mu}$ — increases with tension, decreases with thickness"
+        },
+        {
+          "sym": "mu",
+          "latex": "\\mu",
+          "what": "linear density of the string",
+          "unit": "kg/m",
+          "note": "mass per meter length; bass strings are therefore thicker"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Strict Derivation: Where Discreteness Comes From",
+      "lead": "Let's go from adding two counter-propagating waves to whole numbers. The key moment will arrive at the fourth step — and it will be the most important point of the whole topic.",
+      "steps": [
+        {
+          "text": "A wave reflected from a fixed end travels toward the incident wave. We add them — the superposition principle applies: displacements simply sum.",
+          "latex": "y = A\\sin(kx - \\omega t) + A\\sin(kx + \\omega t)",
+          "figure": "vectriangle",
+          "figCaption": "Two identical waves moving towards each other. Nothing but addition will be needed later."
+        },
+        {
+          "text": "We expand using the sum of sines formula. Look at the result carefully: the coordinate and time separated into different factors. The wave stopped traveling.",
+          "latex": "y = 2A\\sin(kx)\\cos(\\omega t)",
+          "figure": "sinederiv",
+          "figCaption": "Space separate, time separate. The shape stands still, only its height changes."
+        },
+        {
+          "text": "From this, nodes immediately follow. Where the first factor is zero, the point never moves — regardless of time. Such places are exactly half a wavelength apart.",
+          "latex": "\\sin(kx) = 0 \\;\\Longrightarrow\\; x_n = n\\frac{\\lambda}{2}",
+          "figure": "shadow",
+          "figCaption": "Nodes are always motionless. Between them are antinodes, where the amplitude is twice the original."
+        },
+        {
+          "text": "And here is the main step. The string is fixed at both ends, so nodes must occur at the ends. But nodes are spaced half a wavelength apart — therefore, the string length must contain an integer number of half-wavelengths. The medium allows no other options.",
+          "latex": "L = n\\frac{\\lambda_n}{2} \\;\\Longrightarrow\\; \\lambda_n = \\frac{2L}{n}",
+          "figure": "anywell",
+          "figCaption": "The boundary condition turns a continuous set of possibilities into a countable one. Discreteness is born here."
+        },
+        {
+          "text": "Convert wavelengths to frequencies. We get a series where each subsequent frequency is a multiple of the first. This is the natural overtone series.",
+          "latex": "f_n = \\frac{v}{\\lambda_n} = n\\,\\frac{v}{2L} = n f_1",
+          "figure": "matchfreq",
+          "figCaption": "Harmonics go strictly by integers: 1, 2, 3… An octave is a doubling, a fifth is a 3:2 ratio."
+        },
+        {
+          "text": "Substitute the wave speed in the string and we get Mersenne's law — a working tool for any tuner.",
+          "latex": "v = \\sqrt{\\frac{F}{\\mu}} \\;\\Longrightarrow\\; f_1 = \\frac{1}{2L}\\sqrt{\\frac{F}{\\mu}}",
+          "figure": "springlaw",
+          "figCaption": "Three controls for pitch: length, tension, and string thickness."
+        },
+        {
+          "text": "And why instruments sound different playing the same note. A real string vibrates with all harmonics simultaneously, and the set of their loudness depends on where and how it is plucked. The fundamental gives the note, the overtones give the timbre.",
+          "latex": "y(x,t) = \\sum_n A_n \\sin(k_n x)\\cos(\\omega_n t)",
+          "figure": "curves",
+          "figCaption": "Timbre is a set of overtone amplitudes. A violin and a piano on the same note differ exactly in this."
+        }
+      ],
+      "plate": "Fixing the ends forces an integer number of half-wavelengths — and the continuous medium yields a discrete set of frequencies $f_n = n f_1$. Discreteness comes from the boundary condition, not from a prohibition.",
+      "note": "Limits of applicability and an important clarification. The series is exactly integer only for an ideally flexible string. A real string has stiffness, and its high overtones are slightly above integer multiples — this is called inharmonicity and is especially noticeable on the piano. Tuners account for it manually by stretching the tuning at the extremes of the range; because of this, a piano tuned 'mathematically exactly' sounds out of tune. For wind instruments, the picture is different: for a trumpet open at both ends, the series is complete, while for a pipe closed at one end only odd harmonics are present — that's why a clarinet sounds different from a flute of the same length."
+    },
+    "math": {
+      "title": "Mathematics Needed Here",
+      "text": [
+        "How two traveling waves form a standing wave — without formulas. Imagine two people pulling a jump rope from opposite sides and shaking it towards each other. Where their actions are always opposite, the rope does not move at all — that's a node. Where they always coincide, the amplitude doubles — that's an antinode. No one stands still on purpose: the node's immobility is a result of constant mutual cancellation. The formula $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ says exactly this, only more briefly.",
+        "What separation of variables means. In a traveling wave, coordinate and time sat together in one parenthesis — so the shape moved. In a standing wave, they separated into different factors: one determines where, the other determines when. The shape is fixed once and for all, only its scale changes, like a breathing picture. This technique — separation of variables — will be the main tool when solving the Schrödinger equation, and it will give exactly the same result: standing waves with a discrete set of frequencies.",
+        "Why the continuous becomes discrete. This is perhaps the most important idea of the entire course, and it is worth thinking about slowly. The wavelength can be anything — the medium is continuous and allows everything. But the string is fixed, and nodes must be at the ends. Imagine you are laying tiles on a floor of fixed width: tiles can be of any size, but to lay them without cutting you can only use those that divide the width evenly. The limitation came not from the properties of the tile, but from the size of the room. Similarly, the discreteness of notes comes not from the properties of the string, but from its fixed ends.",
+        "Why an octave is a doubling. The ear hears a frequency ratio of two to one as 'the same note, only higher', and this is not a cultural convention but a consequence of the overtone structure. All harmonics of a note with frequency $2f$ are included in the harmonic set of note $f$ — the second sound adds nothing foreign, so it blends. A fifth with ratio three to two shares overtones almost as harmoniously, so it sounds next in purity. Pythagoras, experimenting with string lengths, hit upon exactly this."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: tuning a guitar",
+      "lead": "We calculate what a musician does by ear, and at the same time verify Mersenne's formula.",
+      "given": "The first string of a guitar, length 65 cm, should produce the note E of the second octave — 330 Hz. The linear density of the string is $0{,}4$ g/m. Find the required tension and the frequencies of the first three harmonics.",
+      "law": "$f_1 = \\dfrac{1}{2L}\\sqrt{\\dfrac{F}{\\mu}}$, $\\;f_n = n f_1$",
+      "solution": [
+        {
+          "text": "First, find the wave speed needed for this frequency.",
+          "latex": "v = 2Lf_1 = 2 \\cdot 0{,}65 \\cdot 330 \\approx 429\\ \\text{м/с}"
+        },
+        {
+          "text": "Now the tension from the speed formula.",
+          "latex": "F = \\mu v^{2} = 4\\cdot 10^{-4} \\cdot 429^{2} \\approx 74\\ \\text{Н}"
+        },
+        {
+          "text": "What weight does this correspond to?",
+          "latex": "m = F/g \\approx 74/9{,}8 \\approx 7{,}5\\ \\text{кг}"
+        },
+        {
+          "text": "Harmonics are simply multiples of the fundamental tone.",
+          "latex": "f_1 = 330,\\quad f_2 = 660,\\quad f_3 = 990\\ \\text{Гц}"
+        }
+      ],
+      "answer": "Tension about 74 newtons — as if a 7.5 kg weight were hanging on the string. Harmonics: 330, 660, and 990 Hz.",
+      "check": "A sanity check and at the same time an explanation of a common fact. Six strings at seventy newtons each give a total tension of about half a ton of force — that's why the guitar has a massive neck with a truss rod inside, and a piano has a cast iron frame: there the total string tension reaches twenty tons. Second conclusion: pressing a string at the twelfth fret divides it in half and gives a frequency twice as high — an octave. That's why the twelfth fret is exactly in the middle of the string, and this can be checked with a ruler on any guitar."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "The numbers of musical acoustics are a rare case where physical constants can be heard by ear.",
+      "items": [
+        {
+          "sym": "A4",
+          "latex": "f_{\\text{ля}}",
+          "name": "Concert A of the first octave",
+          "value": "440",
+          "unit": "Hz",
+          "why": "International pitch standard since 1955. Before that, each orchestra had its own pitch, and the variation between cities could reach a semitone.",
+          "mnemo": "Octaves upward double: 440, 880, 1760. Octaves downward halve: 220, 110, 55. The entire audible range fits into about ten such doublings."
+        },
+        {
+          "sym": "octave",
+          "latex": "2{:}1",
+          "name": "Frequency ratio of an octave",
+          "value": "2,000",
+          "unit": "—",
+          "why": "The only interval that the ear perceives as the repetition of the same note. The reason lies in overtones: all harmonics of the higher note are present in the lower note's series.",
+          "mnemo": "Fifth — 3:2, fourth — 4:3, major third — 5:4. The simpler the fraction, the purer the consonance; Pythagoras discovered this on a string."
+        },
+        {
+          "sym": "semitone",
+          "latex": "\\sqrt[12]{2}",
+          "name": "Frequency ratio of a semitone",
+          "value": "1,0595",
+          "unit": "—",
+          "why": "In equal temperament, the octave is divided into twelve equal steps, each being the twelfth root of two. All intervals are slightly out of tune, but equally so — allowing playing in any key.",
+          "mnemo": "A compromise accepted by all European music: a fifth in equal temperament differs from a pure fifth by two cents, and the ear forgives this."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where else does a trapped wave produce discreteness?",
+      "lead": "The logic of 'fix the boundaries — get integers' appears in physics again and again, and each time it feels new.",
+      "items": [
+        {
+          "h": "Wind instruments",
+          "text": "An air column instead of a string. A pipe open at both ends has a full series of harmonics; a pipe closed at one end has only odd harmonics. Hence the difference in timbre between a flute and a clarinet of the same length."
+        },
+        {
+          "h": "Chladni figures",
+          "text": "A two‑dimensional problem: sand on a plate collects along nodal lines, drawing symmetric patterns. Each frequency yields its own pattern — this is literally a portrait of a normal vibration mode."
+        },
+        {
+          "h": "Microwave oven",
+          "text": "Inside, a standing wave has nodes every half‑wavelength, about six centimeters. That's why a rotating turntable is needed: without it, food would heat in stripes. The distance between burnt spots allows you to measure the speed of light in your kitchen."
+        },
+        {
+          "h": "Laser",
+          "text": "An integer number of half‑wavelengths fits between the resonator mirrors — exactly the same condition as for a string. Hence the exceptional monochromaticity of laser light: only frequencies that fit entirely are allowed."
+        },
+        {
+          "h": "Electron in an atom",
+          "text": "The de Broglie wave trapped near the nucleus must fit an integer number of times. Hence discrete energy levels and line spectra. The atom is structured like a three‑dimensional string — and this is not a metaphor but the same calculation."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Interactive: hands-on experiments",
+      "lead": "Standing waves are the most visual part of the topic: you can see them, hear them, and even measure the speed of light with them.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Measure the speed of light with a microwave oven",
+          "text": "Remove the rotating turntable from the microwave oven. Place a layer of grated cheese or marshmallows on a plate and microwave for half a minute. Take it out and measure the distance between the melted spots with a ruler.",
+          "answer": "The spots appear at the antinodes of the standing wave, and the distance between them is half the wavelength, about 6 cm. The oven's frequency is written on the back, typically 2450 MHz. Multiply: $c = \\lambda f = 0{,}12 \\cdot 2{,}45\\cdot 10^{9} \\approx 2{,}9\\cdot 10^{8}$ m/s. You measured the speed of light in your kitchen with an accuracy of a few percent. It is precisely because of these nodes that the oven needs a rotating turntable."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Harmonics on a guitar",
+          "text": "If you have a guitar: lightly touch the string right above the twelfth fret without pressing it down, and pluck it. Then above the seventh. Then above the fifth.",
+          "answer": "A pure high sound will emerge — an octave, then a fifth an octave higher, then two octaves. By touching the string, you forced it to have a node at that point and thus suppressed the fundamental, leaving only those harmonics that already have a node there. Musicians call this harmonics, and physicists call it mode selection. Also check with a ruler: the twelfth fret is exactly in the middle of the string, the seventh is at one third."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "How the continuous gives rise to the discrete",
+          "text": "A string is a continuous medium, with no steps in it. The wavelength can be anything. Where does the rigid set of allowed notes come from, with emptiness between them?",
+          "answer": "From the fixed ends. The wave can be anything, but only those waves that have nodes at the ends can fit on the string without breaking — and the nodes are half a wavelength apart. The constraint came not from the properties of the medium, but from the boundary condition. Exactly this argument in 1926 explained the discreteness of energy levels in the atom: the electron wave is confined near the nucleus and must fit an integer number of times. Quantization is not a separate mystery, but a property of any confined wave."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "Pianos are intentionally tuned incorrectly",
+          "text": "Real strings have stiffness, and their overtones are slightly higher than exact multiples. If you tune a piano mathematically precisely, the overtones of low notes won't match the fundamentals of high notes, and the instrument will sound out of tune. Therefore, tuners stretch the tuning: bass notes are lowered, treble notes are raised, sometimes by a third of a semitone at the extremes. This is called stretched tuning, and it is a compromise between mathematics and the living ear."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Fix the ends — get integers",
+          "text": "One line that explains the guitar, the laser, and the atom. A free wave can have any wavelength. A confined wave only has those wavelengths that fit an integer number of times. Whenever you encounter integers in physics, look for what is confined there."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Ideal string vs. real string",
+          "text": "The formula $f_n = nf_1$ holds for a flexible string without losses. A real string has stiffness (overtones shift upward), friction (sound decays), and finite thickness. Moreover, with a strong pluck, the vibration becomes nonlinear, and harmonics start exchanging energy with each other. It is these deviations from ideality that make the sound of a live instrument distinguishable from a synthesized one."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the curious: from string to atom",
+      "lead": "Not part of the test. About how the problem of the guitar string, two hundred fifty years later, explained the structure of matter.",
+      "blocks": [
+        {
+          "h": "The mystery of spectra",
+          "text": "By the end of the 19th century, a sea of data had been accumulated: each element, when heated, glows with a strictly defined set of lines. Hydrogen gave a series that Balmer in 1885 fitted with a simple formula involving integers. The formula worked perfectly and had no explanation whatsoever — no one understood where the integers in the atom came from."
+        },
+        {
+          "h": "De Broglie's insight",
+          "text": "In 1924, de Broglie proposed that the electron is also a wave, with wavelength inversely proportional to momentum. Then a stable orbit is one where the wave fits an integer number of times and does not cancel itself. This is literally the condition of a string bent into a circle. The dissertation was so daring that the supervisor sent it to Einstein — who replied that the author had lifted a corner of the great veil."
+        },
+        {
+          "h": "Schrödinger's equation",
+          "text": "Two years later, Schrödinger wrote down the wave equation for the electron and solved it for hydrogen. The solution exists not for any energy, but only for specific ones — just as a standing wave exists only for certain lengths. Balmer's integers emerged naturally from the boundary conditions. The discreteness of energy turned out to be the discreteness of harmonics."
+        },
+        {
+          "h": "What this means",
+          "text": "Quantization is not an additional postulate attached to physics from the outside. It is a property of any wave confined in a finite region. The difference is only that the string is confined by clamps, and the electron by the attraction of the nucleus. Pythagoras, listening to a string, was closer to the structure of the atom than he could have imagined."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Two counter-propagating waves create a standing wave with stationary nodes; fixing the ends requires an integer number of half-waves and generates a discrete set of frequencies $f_n = n f_1$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega",
+          "text": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ — variables separated"
+        },
+        {
+          "icon": "formula",
+          "title": "Distance between nodes is always $\\lambda/2$",
+          "text": "Distance between nodes is always $\\lambda/2$"
+        },
+        {
+          "icon": "sigma",
+          "title": "Boundary condition turns continuous into discrete",
+          "text": "Boundary condition turns continuous into discrete"
+        },
+        {
+          "icon": "ruler",
+          "title": "Mersenne's law",
+          "text": "$f_1 = \\frac{1}{2L}\\sqrt{F/\\mu}$ — length, tension, thickness"
+        },
+        {
+          "icon": "scale",
+          "title": "Fundamental gives the pitch",
+          "text": "Fundamental gives the pitch, the set of overtones gives the timbre"
+        }
+      ],
+      "where": "String and wind instruments, Chladni figures, laser resonator, nodes in a microwave oven, electron energy levels in an atom.",
+      "watchOut": "A node is stationary not because nothing happens there, but because two waves constantly cancel each other there. Energy comes to the node — just from two sides and in opposite phase."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "Why can't a string sound at any arbitrary frequency?",
+        "options": [
+          "The material of the string only permits certain vibrations",
+          "The ends are fixed and must be nodes, and nodes are half-wavelength apart, so the string length must accommodate an integer number of them",
+          "Human ear only hears certain frequencies",
+          "Friction with the air dampens intermediate frequencies"
+        ],
+        "answer": 1,
+        "why": "The limitation comes not from the material or from perception, but from the boundary condition. Any wavelength is possible in a free medium; on a fixed string, only those that fit an integer number of half-wavelengths survive. This is exactly the same argument that explains energy levels in an atom.",
+        "hint": "What must necessarily happen at the points where the string is fixed? And how far apart can such points be?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "A violin and a piano play the same note A. How do these sounds differ physically?",
+        "options": [
+          "The frequency of the fundamental is slightly different",
+          "The speed of sound propagation from the instrument",
+          "The set of amplitudes of overtones, i.e., timbre",
+          "Only loudness"
+        ],
+        "answer": 2,
+        "why": "The fundamental is the same — otherwise it would be a different note. The difference lies in which harmonics are present and how strongly they are mixed: this depends on where and how the string is excited, and on the resonance properties of the body. Timbre is a spectrum, and Fourier allows its decomposition.",
+        "hint": "The string vibrates not just with one harmonic but with all at once. What can differ between two instruments if their fundamental frequency is the same?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "In your own words: how does a discrete set of frequencies arise from a continuous medium, and why is this important for quantum physics?",
+        "keywords": [
+          "fix",
+          "end",
+          "node",
+          "integer number",
+          "fit",
+          "boundary",
+          "condition",
+          "atom",
+          "electron",
+          "level"
+        ],
+        "needed": 2,
+        "why": "The medium is continuous and allows any wavelength, but the fixed ends require nodes, and nodes are half-wavelength apart. Therefore only an integer number of half-wavelengths fit on the string. Discreteness arises from the boundary condition. The same reasoning explains electron energy levels: its wave is confined near the nucleus and must fit an integer number of times.",
+        "hint": "Does the limitation come from the string or from the fact that it is clamped? And what in the atom plays the role of the clamps?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "A string 65 cm long produces a fundamental of 330 Hz. What is the frequency of the third harmonic in hertz?",
+        "answer": 990,
+        "unit": "Hz",
+        "tolerance": 50,
+        "why": "Harmonics are multiples of the fundamental: f₃ = 3 · 330 = 990 Hz. It is useful to hear the musical meaning: doubling (660 Hz) gives an octave, and the ratio of the third harmonic to the second — 990 to 660, that is 3:2 — is a perfect fifth, discovered by Pythagoras on the string.",
+        "hint": "Harmonics go strictly by integer multiples of the fundamental. Which one is the third?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Ondas estacionarias y sonido",
+    "subtitle": "Párrafo 2 · Por qué la cuerda tiene notas y no cualquier frecuencia",
+    "intro": [
+      "Una cuerda de guitarra no puede sonar de cualquier manera. Produce una nota muy definida, y si se toca de otra forma, la misma nota una octava más alta o una quinta, pero nunca algo intermedio. Entre las posibilidades vecinas existe un vacío al que la cuerda no puede acceder.",
+      "He aquí una circunstancia sorprendente: el medio es continuo, puede vibrar de cualquier manera, pero las frecuencias permitidas son un conjunto numerable. De lo continuo surgió lo discreto, no por alguna prohibición, sino simplemente porque los extremos de la cuerda están fijos.",
+      "Recuerden bien esta lógica: **fijar los extremos significa obtener un conjunto discreto**. Doscientos años después, exactamente con el mismo razonamiento se explicará por qué el electrón en el átomo tiene niveles de energía discretos y no cualquier valor. Los espectros atómicos y los trastes de la guitarra son fenómenos de la misma naturaleza."
+    ],
+    "standNote": "Cambie el panel al modo de onda estacionaria. Los puntos rojos marcan los nodos: lugares que nunca se mueven. Compruebe lo principal: los nodos están fijos, y entre ellos el medio oscila todo a la vez, en una misma fase. Ahora varíe la longitud de onda y observe la distancia entre nodos: siempre es exactamente media longitud de onda. Es precisamente esta condición la que genera la discretitud: en una cuerda de longitud determinada solo cabe un número entero de semiondas.",
+    "formula": {
+      "name": "Condición de onda estacionaria en una cuerda",
+      "latex": "L = n\\frac{\\lambda}{2} \\;\\Longrightarrow\\; f_n = \\frac{n\\,v}{2L}, \\quad n = 1, 2, 3, \\ldots",
+      "alsoKnown": "Serie armónica · frecuencias propias de una cuerda fija",
+      "authors": [
+        {
+          "who": "Pitágoras",
+          "year": "≈530 a. C.",
+          "what": "descubrió que una cuerda dos veces más corta suena una octava más alta, y la relación de tres a dos da una quinta. Sin tener idea de ondas, descubrió la naturaleza entera de las frecuencias propias y vio en ello la estructura del universo"
+        },
+        {
+          "who": "Marin Mersenne",
+          "year": "1636",
+          "what": "dedujo cómo la frecuencia depende de la longitud, la tensión y el grosor de la cuerda. Estas tres leyes aún llevan su nombre y son la base de la construcción de cualquier instrumento de cuerda"
+        },
+        {
+          "who": "Brook Taylor",
+          "year": "1713",
+          "what": "fue el primero en obtener la fórmula de la frecuencia fundamental de la cuerda a partir de la mecánica, no de la experiencia. El mismo Taylor cuya serie usamos en el tema de modelos"
+        },
+        {
+          "who": "Daniel Bernoulli",
+          "year": "1753",
+          "what": "expresó la idea de que la vibración general de una cuerda es la suma de todos sus armónicos simultáneamente. Euler y D'Alembert discutieron con él durante años; Bernoulli resultó tener razón, y más tarde Fourier dio la justificación rigurosa"
+        },
+        {
+          "who": "Ernst Chladni",
+          "year": "1787",
+          "what": "esparcía arena sobre placas metálicas y pasaba un arco por el borde; la arena se acumulaba en los nodos, dibujando figuras de asombrosa belleza. La primera visualización de ondas estacionarias en la historia, que aún hoy se repite en todos los laboratorios"
+        }
+      ],
+      "story": "Fue en la cuerda donde la humanidad se encontró por primera vez con la cuantización, dos milenios y medio antes de la mecánica cuántica. Los pitagóricos descubrieron que las consonancias agradables corresponden a relaciones de números enteros pequeños, y de ello extrajeron una conclusión de escala cósmica: ya que el mundo obedece al número, el número es la esencia de las cosas. La conclusión fue prematura, pero la intuición era correcta. Cuando en 1913 Bohr postuló órbitas discretas para el electrón, y en 1926 De Broglie y Schrödinger las explicaron como la condición de un número entero de longitudes de onda en la órbita, la física regresó exactamente a la imagen pitagórica: está permitido lo que encaja un número entero de veces.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "longitud de la cuerda o tubo",
+          "unit": "m",
+          "note": "precisamente la fijación en los extremos genera la discretitud"
+        },
+        {
+          "sym": "n",
+          "latex": "n",
+          "what": "número de armónico",
+          "unit": "—",
+          "note": "número entero — el mismo número cuántico, pero en un problema clásico"
+        },
+        {
+          "sym": "f1",
+          "latex": "f_1",
+          "what": "tono fundamental",
+          "unit": "Hz",
+          "note": "la frecuencia más baja posible; ella determina la altura de la nota"
+        },
+        {
+          "sym": "v",
+          "latex": "v",
+          "what": "velocidad de la onda en la cuerda",
+          "unit": "m/s",
+          "note": "$v = \\sqrt{F/\\mu}$ — aumenta con la tensión, disminuye con el grosor"
+        },
+        {
+          "sym": "mu",
+          "latex": "\\mu",
+          "what": "densidad lineal de la cuerda",
+          "unit": "kg/m",
+          "note": "masa por metro de longitud; por eso las cuerdas de graves son más gruesas"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: de dónde surge la discretización",
+      "lead": "Partamos de la suma de dos ondas que se encuentran hacia números enteros. El momento clave llegará en el cuarto paso — y será el lugar más importante de todo el tema.",
+      "steps": [
+        {
+          "text": "La onda reflejada desde el extremo fijo viaja hacia la onda incidente. Las sumamos — aquí opera el principio de superposición: los desplazamientos simplemente se suman.",
+          "latex": "y = A\\sin(kx - \\omega t) + A\\sin(kx + \\omega t)",
+          "figure": "vectriangle",
+          "figCaption": "Dos ondas iguales que se dirigen una hacia la otra. Nada más que la suma será necesario más adelante."
+        },
+        {
+          "text": "Desarrollamos usando la fórmula de la suma de senos. Mire el resultado atentamente: la coordenada y el tiempo se han separado en diferentes factores. La onda ha dejado de viajar.",
+          "latex": "y = 2A\\sin(kx)\\cos(\\omega t)",
+          "figure": "sinederiv",
+          "figCaption": "Espacio por separado, tiempo por separado. La forma permanece fija, solo cambia su altura."
+        },
+        {
+          "text": "De aquí se deducen inmediatamente los nodos. Donde el primer factor se hace cero, el punto nunca se mueve — independientemente del tiempo. Tales lugares están separados exactamente por media longitud de onda.",
+          "latex": "\\sin(kx) = 0 \\;\\Longrightarrow\\; x_n = n\\frac{\\lambda}{2}",
+          "figure": "shadow",
+          "figCaption": "Los nodos están siempre inmóviles. Entre ellos, los vientres, donde la amplitud es el doble de la original."
+        },
+        {
+          "text": "Y ahora el paso principal. La cuerda está fija en ambos extremos, por lo tanto en los extremos deben haber nodos. Pero los nodos están separados por media onda — por lo tanto, en la longitud de la cuerda debe caber un número entero de semiondas. El medio no admite otras opciones.",
+          "latex": "L = n\\frac{\\lambda_n}{2} \\;\\Longrightarrow\\; \\lambda_n = \\frac{2L}{n}",
+          "figure": "anywell",
+          "figCaption": "La condición de contorno transforma un conjunto continuo de posibilidades en uno contable. Aquí nace la discretización."
+        },
+        {
+          "text": "Convertimos las longitudes de onda en frecuencias. Se obtiene una serie en la que cada frecuencia siguiente es múltiplo de la primera. Esta es la serie armónica natural.",
+          "latex": "f_n = \\frac{v}{\\lambda_n} = n\\,\\frac{v}{2L} = n f_1",
+          "figure": "matchfreq",
+          "figCaption": "Los armónicos siguen estrictamente números enteros: 1, 2, 3… La octava es la duplicación, la quinta es la relación 3:2."
+        },
+        {
+          "text": "Sustituimos la velocidad de la onda en la cuerda y obtenemos la fórmula de Mersenne — herramienta de trabajo de cualquier afinador.",
+          "latex": "v = \\sqrt{\\frac{F}{\\mu}} \\;\\Longrightarrow\\; f_1 = \\frac{1}{2L}\\sqrt{\\frac{F}{\\mu}}",
+          "figure": "springlaw",
+          "figCaption": "Tres controles para la altura de la nota: longitud, tensión y grosor de la cuerda."
+        },
+        {
+          "text": "Y por qué los instrumentos suenan diferente al tocar la misma nota. Una cuerda real vibra con todos los armónicos a la vez, y el conjunto de sus amplitudes depende de dónde y cómo se la pulse. El tono fundamental define la nota, los armónicos superiores el timbre.",
+          "latex": "y(x,t) = \\sum_n A_n \\sin(k_n x)\\cos(\\omega_n t)",
+          "figure": "curves",
+          "figCaption": "El timbre es el conjunto de amplitudes de los armónicos superiores. El violín y el piano en la misma nota se diferencian precisamente por eso."
+        }
+      ],
+      "plate": "La fijación de los extremos obliga a que quepa un número entero de semiondas — y el medio continuo produce un conjunto discreto de frecuencias $f_n = n f_1$. La discretización proviene de la condición de contorno, no de una prohibición.",
+      "note": "Límites de aplicabilidad y aclaración importante. La serie es estrictamente múltiplo solo para una cuerda idealmente flexible. Una cuerda real tiene rigidez, y sus armónicos superiores son ligeramente superiores a los valores múltiplos — esto se llama inharmonicidad y es especialmente notable en el piano. Los afinadores la tienen en cuenta manualmente, estirando la afinación hacia los extremos del rango; por eso un piano afinado «matemáticamente exacto» suena desafinado. En los instrumentos de viento el panorama es diferente: en una trompeta, abierta en ambos extremos, la serie es completa, mientras que en uno cerrado en un extremo solo están presentes los armónicos impares — por eso el clarinete suena diferente de una flauta del mismo tamaño."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Cómo dos ondas viajeras producen una onda estacionaria — sin fórmulas. Imagine a dos personas tirando de una cuerda cada una desde su lado y agitándola una hacia la otra. Donde sus acciones son siempre opuestas, la cuerda no se mueve en absoluto — eso es un nodo. Donde siempre coinciden, la amplitud se duplica — eso es un vientre. Nadie se queda quieto a propósito: la inmovilidad del nodo es el resultado de una cancelación mutua constante. La fórmula $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ dice exactamente eso, solo que más breve.",
+        "Qué significa la separación de variables. En una onda viajera, la coordenada y el tiempo estaban juntos, en un mismo paréntesis — y por eso la forma se desplazaba. En una estacionaria se han separado en diferentes factores: uno responde por el dónde, el otro por el cuándo. La forma queda fijada de una vez por todas, solo cambia su escala, como un dibujo que respira. Esta técnica — separación de variables — resultará ser la herramienta principal al resolver la ecuación de Schrödinger, y allí dará exactamente el mismo resultado: ondas estacionarias con un conjunto discreto de frecuencias.",
+        "Por qué de lo continuo se obtiene lo discreto. Este es, quizás, el pensamiento más importante de todo el curso, y vale la pena asimilarlo sin prisa. La longitud de onda puede ser cualquiera — el medio es continuo y no prohíbe nada. Pero la cuerda está fija, y en los extremos deben haber nodos. Imagine que está colocando baldosas en un piso de ancho fijo: las baldosas pueden ser de cualquier tamaño, pero solo se pueden colocar sin cortar aquellas que dividen el ancho exactamente. La restricción no surgió de las propiedades de la baldosa, sino del tamaño de la habitación. Del mismo modo, la discretización de las notas no proviene de las propiedades de la cuerda, sino de su fijación.",
+        "Por qué la octava es una duplicación. La relación de frecuencias de dos a uno el oído la percibe como «la misma nota, pero más aguda», y no es una convención cultural, sino una consecuencia de la estructura de los armónicos. Todos los armónicos de la nota con frecuencia $2f$ están incluidos en el conjunto de armónicos de la nota $f$ — el segundo sonido no agrega nada extraño, por eso se fusiona. La quinta con relación tres a dos comparte armónicos casi tan armoniosamente, y por eso suena como la siguiente en pureza. Pitágoras, experimentando con longitudes de cuerdas, dio con esto."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: afinando la guitarra",
+      "lead": "Calculamos lo que el músico hace de oído, y de paso verificamos la fórmula de Mersenne.",
+      "given": "La primera cuerda de una guitarra de 65 cm de longitud debe producir la nota mi de la segunda octava — 330 Hz. La densidad lineal de la cuerda es $0{,}4$ g/m. Hallar la tensión necesaria y las frecuencias de los primeros tres armónicos.",
+      "law": "$f_1 = \\dfrac{1}{2L}\\sqrt{\\dfrac{F}{\\mu}}$, $\\;f_n = n f_1$",
+      "solution": [
+        {
+          "text": "Primero encontremos la velocidad de onda necesaria para esa frecuencia.",
+          "latex": "v = 2Lf_1 = 2 \\cdot 0{,}65 \\cdot 330 \\approx 429\\ \\text{м/с}"
+        },
+        {
+          "text": "Ahora la tensión a partir de la fórmula de la velocidad.",
+          "latex": "F = \\mu v^{2} = 4\\cdot 10^{-4} \\cdot 429^{2} \\approx 74\\ \\text{Н}"
+        },
+        {
+          "text": "¿Qué peso tiene esa carga?",
+          "latex": "m = F/g \\approx 74/9{,}8 \\approx 7{,}5\\ \\text{кг}"
+        },
+        {
+          "text": "Los armónicos son simplemente múltiplos del tono fundamental.",
+          "latex": "f_1 = 330,\\quad f_2 = 660,\\quad f_3 = 990\\ \\text{Гц}"
+        }
+      ],
+      "answer": "La tensión es de aproximadamente 74 newtons — como si de la cuerda colgara una masa de siete kilos y medio. Armónicos: 330, 660 y 990 Hz.",
+      "check": "Verificación de sentido común y también explicación de un hecho cotidiano. Seis cuerdas con setenta newtons cada una dan una tensión total de alrededor de media tonelada de fuerza — por eso la guitarra tiene un mástil robusto con un alma interna, y el piano tiene un marco de hierro fundido: la tensión total de todas las cuerdas alcanza las veinte toneladas. Segunda conclusión: al pisar la cuerda en el duodécimo traste, la divides por la mitad y obtienes una frecuencia el doble de alta — una octava. Por eso el duodécimo traste está exactamente en la mitad de la cuerda, y se puede comprobar con una regla en cualquier guitarra."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "Los números de la acústica musical son un caso raro en que las constantes físicas se oyen con el oído.",
+      "items": [
+        {
+          "sym": "A4",
+          "latex": "f_{\\text{ля}}",
+          "name": "La de diapasón de la primera octava",
+          "value": "440",
+          "unit": "Гц",
+          "why": "Estándar internacional de afinación desde 1955. Antes de eso, cada orquesta mantenía su propia altura, y la dispersión entre ciudades alcanzaba un semitono.",
+          "mnemo": "Las octavas hacia arriba duplican: 440, 880, 1760. Las octavas hacia abajo dividen: 220, 110, 55. Todo el rango audible cabe aproximadamente en diez de estas duplicaciones."
+        },
+        {
+          "sym": "octave",
+          "latex": "2{:}1",
+          "name": "Relación de frecuencias en una octava",
+          "value": "2,000",
+          "unit": "—",
+          "why": "La única relación que el oído oye como repetición de la misma nota. La razón está en los armónicos: todos los armónicos de la nota superior están contenidos en el conjunto de la inferior.",
+          "mnemo": "Quinta — 3:2, cuarta — 4:3, tercera mayor — 5:4. Cuanto más simple la fracción, más pura la consonancia; eso es lo que descubrió Pitágoras en la cuerda."
+        },
+        {
+          "sym": "semitone",
+          "latex": "\\sqrt[12]{2}",
+          "name": "Relación de frecuencias en un semitono",
+          "value": "1,0595",
+          "unit": "—",
+          "why": "En el temperamento igual, la octava se divide en doce pasos iguales, y cada uno es la raíz duodécima de dos. Todos los intervalos son ligeramente falsos, pero por igual — y se puede tocar en cualquier tonalidad.",
+          "mnemo": "El compromiso que aceptó toda la música europea: la quinta en el temperamento difiere de la pura en dos cents, y el oído lo perdona."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde más una onda confinada produce discretitud",
+      "lead": "La lógica de «fijar los límites — obtener números enteros» aparece en la física una y otra vez, y cada vez parece nueva.",
+      "items": [
+        {
+          "h": "Instrumentos de viento",
+          "text": "Una columna de aire en lugar de una cuerda. En un tubo abierto por ambos extremos, serie completa de armónicos; en uno cerrado por un extremo, solo los impares. De ahí la diferencia de timbre entre la flauta y el clarinete con la misma longitud."
+        },
+        {
+          "h": "Figuras de Chladni",
+          "text": "Problema bidimensional: la arena sobre una placa se acumula en líneas nodales, dibujando patrones simétricos. Cada frecuencia da su propio dibujo — y es literalmente un retrato del modo propio de vibración."
+        },
+        {
+          "h": "Horno microondas",
+          "text": "En su interior hay una onda estacionaria con nodos cada media longitud de onda, unos seis centímetros. Por eso se necesita un plato giratorio: sin él, la comida se calentaría en franjas. La distancia entre puntos quemados permite medir la velocidad de la luz en la cocina."
+        },
+        {
+          "h": "Láser",
+          "text": "Entre los espejos del resonador cabe un número entero de medias ondas — exactamente la condición de la cuerda. De ahí la excepcional monocromaticidad de la luz láser: solo están permitidas las frecuencias que encajan completamente."
+        },
+        {
+          "h": "Electrón en el átomo",
+          "text": "La onda de Broglie, confinada cerca del núcleo, debe encajar un número entero de veces. De ahí los niveles de energía discretos y los espectros de líneas. El átomo está estructurado como una cuerda tridimensional — y no es una metáfora, es el mismo cálculo."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: compruébelo con sus manos",
+      "lead": "Las ondas estacionarias son la parte más visual del tema: se pueden ver, escuchar e incluso medir la velocidad de la luz con ellas.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Mida la velocidad de la luz con un microondas",
+          "text": "Retire el plato giratorio del microondas. Coloque una capa de queso rallado o malvaviscos en un plato y encienda por medio minuto. Saque y mida con una regla la distancia entre las manchas derretidas.",
+          "answer": "Las manchas aparecen en los vientres de la onda estacionaria, y la distancia entre ellas es la mitad de la longitud de onda, aproximadamente 6 cm. La frecuencia del horno está escrita en la parte trasera, normalmente 2450 MHz. Multiplique: $c = \\lambda f = 0{,}12 \\cdot 2{,}45\\cdot 10^{9} \\approx 2{,}9\\cdot 10^{8}$ m/s. Ha medido la velocidad de la luz en la cocina con una precisión de unos pocos por ciento. Precisamente por estos nodos, el horno necesita el plato giratorio."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Armónicos en la guitarra",
+          "text": "Si tiene una guitarra: toque ligeramente la cuerda exactamente sobre el duodécimo traste, sin presionar, y pulse. Luego sobre el séptimo. Luego sobre el quinto.",
+          "answer": "Sonará un sonido agudo y puro: una octava, luego una quinta sobre la octava, luego dos octavas. Al tocar la cuerda, la obligó a tener un nodo en ese lugar y, por lo tanto, prohibió el tono fundamental, dejando solo aquellos armónicos que ya tenían un nodo allí. Los músicos llaman a esto armónicos, y los físicos, selección de modos. Aproveche para verificar con una regla: el duodécimo traste está exactamente en el medio de la cuerda, el séptimo en un tercio."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Cómo de lo continuo surge lo discreto",
+          "text": "La cuerda es un medio continuo, no tiene escalones. La longitud de onda puede ser cualquiera. ¿De dónde viene entonces un conjunto rígido de notas permitidas, entre las cuales hay vacío?",
+          "answer": "Por la fijación de los extremos. La onda puede ser cualquiera, pero solo aquella que tiene nodos en los extremos puede encajar en la cuerda sin romperse, y los nodos están separados por media longitud de onda. La limitación no provino de las propiedades del medio, sino de la condición de frontera. Exactamente este argumento explicó en 1926 la discreción de los niveles de energía en el átomo: la onda electrónica está confinada cerca del núcleo y debe encajar un número entero de veces. La cuantización no es un enigma separado, sino una propiedad de cualquier onda confinada."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "El piano se afina incorrectamente a propósito",
+          "text": "Una cuerda real tiene rigidez, y sus armónicos están ligeramente por encima de los múltiplos exactos. Si se afina un piano matemáticamente exacto, los armónicos de las notas graves no coincidirán con los tonos fundamentales de las agudas, y el instrumento sonará desafinado. Por eso los afinadores estiran la afinación: bajan los graves, suben los agudos, a veces hasta un tercio de semitono en los extremos. Esto se llama afinación estirada, y es un compromiso entre las matemáticas y el oído vivo."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Fija los extremos y obtendrás números enteros",
+          "text": "Una línea que explica tanto la guitarra como el láser y el átomo. Onda libre: cualquier longitud. Onda confinada: solo aquellas longitudes que encajan un número entero de veces. Siempre que encuentres números enteros en física, busca qué está confinado allí."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicación",
+          "h": "Cuerda ideal versus cuerda real",
+          "text": "La fórmula $f_n = nf_1$ es válida para una cuerda flexible sin pérdidas. Una cuerda real tiene rigidez (los armónicos se desplazan hacia arriba), fricción (el sonido se amortigua) y un grosor finito. Además, con un pellizco fuerte, la oscilación deja de ser lineal y los armónicos comienzan a intercambiar energía entre sí. Son precisamente estas desviaciones del ideal las que hacen que el sonido de un instrumento real se distinga del sintetizado."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: de la cuerda al átomo",
+      "lead": "No forma parte de la verificación. Sobre cómo el problema de la cuerda de guitarra, doscientos cincuenta años después, explicó la estructura de la materia.",
+      "blocks": [
+        {
+          "h": "El enigma de los espectros",
+          "text": "A finales del siglo XIX se había acumulado una gran cantidad de datos: cada elemento, al calentarse, brilla con un conjunto estrictamente definido de líneas. El hidrógeno daba una serie que Balmer en 1885 ajustó con una fórmula simple con números enteros. La fórmula funcionaba impecablemente y no tenía la menor explicación: nadie entendía de dónde venían los números enteros en el átomo."
+        },
+        {
+          "h": "La conjetura de De Broglie",
+          "text": "En 1924, De Broglie sugirió que el electrón también es una onda, con una longitud inversa al momento. Entonces, una órbita estable es aquella en la que la onda encaja un número entero de veces y no se anula a sí misma. Esto es literalmente la condición de una cuerda enrollada en un anillo. La tesis fue tan audaz que su supervisor se la envió a Einstein, quien respondió que el autor había levantado el borde del gran velo."
+        },
+        {
+          "h": "La ecuación de Schrödinger",
+          "text": "Dos años después, Schrödinger escribió la ecuación de onda para el electrón y la resolvió para el hidrógeno. La solución existe no para cualquier energía, sino solo para ciertas energías, exactamente como una onda estacionaria existe no para cualquier longitud. Los números enteros de Balmer aparecieron por sí solos, a partir de las condiciones de frontera. La discretización de la energía resultó ser la discretización de los armónicos."
+        },
+        {
+          "h": "Qué significa esto",
+          "text": "La cuantización no es un postulado adicional pegado a la física desde fuera. Es una propiedad de cualquier onda confinada en una región finita. La única diferencia es que la cuerda está confinada por los apoyos, y el electrón por la atracción del núcleo. Pitágoras, al escuchar la cuerda, estaba más cerca de la estructura del átomo de lo que podría imaginar."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Dos ondas que se encuentran producen una onda estacionaria con nodos fijos; la fijación de los extremos requiere un número entero de semiondas y genera una serie discreta de frecuencias $f_n = n f_1$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega",
+          "text": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ — las variables se separan"
+        },
+        {
+          "icon": "formula",
+          "title": "La distancia entre nodos",
+          "text": "La distancia entre nodos siempre es $\\lambda/2$"
+        },
+        {
+          "icon": "sigma",
+          "title": "La condición de frontera",
+          "text": "La condición de frontera convierte lo continuo en discreto"
+        },
+        {
+          "icon": "ruler",
+          "title": "Fórmula de Mersenne",
+          "text": "$f_1 = \\frac{1}{2L}\\sqrt{F/\\mu}$ — longitud, tensión, espesor"
+        },
+        {
+          "icon": "scale",
+          "title": "El tono fundamental da",
+          "text": "El tono fundamental da la nota, el conjunto de armónicos da el timbre"
+        }
+      ],
+      "where": "Instrumentos de cuerda y viento, figuras de Chladni, resonador del láser, nodos en el microondas, niveles de energía del electrón en el átomo.",
+      "watchOut": "El nodo no está inmóvil porque no suceda nada allí, sino porque dos ondas se cancelan constantemente entre sí. La energía llega al nodo, pero desde ambos lados y en contrafase."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "¿Por qué una cuerda no puede sonar a una frecuencia arbitraria?",
+        "options": [
+          "El material de la cuerda solo permite ciertas vibraciones",
+          "Los extremos están fijos y deben ser nodos, y los nodos están separados por media longitud de onda, por lo que la longitud de la cuerda debe contener un número entero de ellos",
+          "El oído humano solo escucha ciertas frecuencias",
+          "La fricción con el aire amortigua las frecuencias intermedias"
+        ],
+        "answer": 1,
+        "why": "La limitación no proviene del material ni de la percepción, sino de la condición de frontera. Cualquier longitud de onda es posible en un medio libre; en una cuerda fija solo sobreviven aquellas que encajan un número entero de semiondas. Este es exactamente el mismo argumento que explica los niveles de energía en el átomo.",
+        "hint": "¿Qué debe suceder necesariamente en los puntos de la cuerda que están fijos? ¿Y qué tan separados pueden estar esos puntos?"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "Un violín y un piano tocan la misma nota la. ¿En qué se diferencian físicamente estos sonidos?",
+        "options": [
+          "La frecuencia del tono fundamental es ligeramente diferente",
+          "La velocidad de propagación del sonido desde el instrumento",
+          "El conjunto de amplitudes de los armónicos, es decir, el timbre",
+          "Solo en el volumen"
+        ],
+        "answer": 2,
+        "why": "El tono fundamental es el mismo, de lo contrario sería una nota diferente. La diferencia radica en qué armónicos y con qué intensidad se mezclan: esto depende de dónde y cómo se excita la cuerda, y de las propiedades de resonancia del cuerpo. El timbre es un espectro, y Fourier permite descomponerlo.",
+        "hint": "La cuerda no vibra con un solo armónico, sino con todos a la vez. ¿Qué puede diferir entre dos instrumentos si su frecuencia fundamental coincide?"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "Con tus propias palabras: ¿cómo se obtiene un conjunto discreto de frecuencias a partir de un medio continuo, y por qué es importante para la física cuántica?",
+        "keywords": [
+          "fij",
+          "extrem",
+          "nod",
+          "número entero",
+          "cabi",
+          "fronter",
+          "condi",
+          "átom",
+          "electrón",
+          "niv"
+        ],
+        "needed": 2,
+        "why": "El medio es continuo y permite cualquier longitud de onda, pero los extremos fijos requieren nodos, y los nodos están separados por media longitud de onda. Por lo tanto, en la cuerda solo cabe un número entero de semiondas. La discreción nace de la condición de frontera. El mismo razonamiento explica los niveles de energía del electrón: su onda está confinada cerca del núcleo y debe encajar un número entero de veces.",
+        "hint": "¿La limitación viene de la cuerda o de que está sujeta? ¿Y qué juega el papel de las sujeciones en el átomo?"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "Una cuerda de 65 cm produce un tono fundamental de 330 Hz. ¿Cuál es la frecuencia del tercer armónico en hercios?",
+        "answer": 990,
+        "unit": "Hz",
+        "tolerance": 50,
+        "why": "Los armónicos son múltiplos del tono fundamental: f₃ = 3 · 330 = 990 Hz. Es útil percibir el significado musical: la duplicación (660 Hz) da una octava, y la relación del tercer armónico con el segundo — 990 a 660, es decir 3:2 — es una quinta justa, descubierta por Pitágoras en la cuerda.",
+        "hint": "Los armónicos siguen estrictamente números enteros del tono fundamental. ¿Cuál es el tercero en orden?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "الموجات المستقرة والصوت",
+    "subtitle": "الفقرة 2 · لماذا للأوتار نغمات محددة وليس أي ترددات",
+    "intro": [
+      "وتر الغيتار لا يمكنه إصدار أي صوت عشوائي. بل يصدر نغمة محددة بدقة، وإذا تم العزف عليه بطريقة مختلفة، فإنه يعطي نفس النغمة ولكن أوكتاف أعلى أو بخمسة، ولكن أبداً نغمة متوسطة بينهما. بين الاحتمالات المتجاورة هناك فراغ لا يمكن للوتر الوصول إليه.",
+      "هذه حقيقة مدهشة: الوسط مستمر، ويمكنه التذبذب بأي طريقة، ولكن الترددات المسموحة هي مجموعة قابلة للعد. من المستمر نحصل على المتقطع - وليس بسبب أي منع، بل ببساطة لأن طرفي الوتر مثبتان.",
+      "تذكر هذا المنطق جيداً: **تثبيت الأطراف يعني الحصول على مجموعة متقطعة**. بعد مئتي عام، سيتم شرح نفس المنطق لسبب وجود مستويات طاقة منفصلة للإلكترون في الذرة بدلاً من أي مستويات. الأطياف الذرية وحنقات الجيتار هي ظواهر من نفس الطبيعة."
+    ],
+    "standNote": "بدّل العرض إلى وضع الموجة المستقرة. النقاط الحمراء تمثل العقد - الأماكن التي لا تتحرك أبداً. تحقق من الأساسي: العقد ثابتة، وبينها الوسط بأكمله يهتز مرة واحدة، في نفس الطور. الآن غير طول الموجة وراقب المسافة بين العقد: هي دائماً نصف الطول الموجي بالضبط. هذا الشرط هو الذي يولد التقطع - على وتر ذي طول معين، لا يمكن وضع إلا عدد صحيح من نصف الموجات.",
+    "formula": {
+      "name": "شرط الموجة المستقرة على الوتر",
+      "latex": "L = n\\frac{\\lambda}{2} \\;\\Longrightarrow\\; f_n = \\frac{n\\,v}{2L}, \\quad n = 1, 2, 3, \\ldots",
+      "alsoKnown": "المتسلسلة التوافقية · الترددات الذاتية لوتر مثبت الأطراف",
+      "authors": [
+        {
+          "who": "فيثاغورس",
+          "year": "≈530 ق.م.",
+          "what": "اكتشف أن الوتر الأقصر بمقدار النصف يصدر نغمة أعلى بأوكتاف، والنسبة 3:2 تعطي نغمة الخامسة. دون أن يكون لديه فكرة عن الموجات، اكتشف أن الترددات الذاتية أعداد صحيحة - ورأى في ذلك بنية الكون."
+        },
+        {
+          "who": "مارين ميرسين",
+          "year": "1636",
+          "what": "استنتج كيف يعتمد التردد على طول الوتر وشدته وسمكه. هذه القوانين الثلاثة لا تزال تحمل اسمه وتشكل أساس تصميم أي آلة وترية."
+        },
+        {
+          "who": "بروك تايلور",
+          "year": "1713",
+          "what": "أول من حصل على صيغة التردد الأساسي للوتر من الميكانيكا وليس من التجربة. نفس تايلور الذي استخدمنا متسلسلته في موضوع النماذج."
+        },
+        {
+          "who": "دانييل برنولي",
+          "year": "1753",
+          "what": "طرح فكرة أن التذبذب الكلي للوتر هو مجموع جميع توافقاته في نفس الوقت. جادلاه أويلر ودالمبير لسنوات؛ تبين أن برنولي كان محقاً، وجاء فورييه لاحقاً بالإثبات الدقيق."
+        },
+        {
+          "who": "إرنست خلادني",
+          "year": "1787",
+          "what": "رش الرمل على ألواح معدنية ومرر قوس الكمان على الحافة - تجمع الرمل عند العقد رسم أشكالاً ذات جمال مذهل. أول تصور بصري للموجات المستقرة في التاريخ، والذي يُكرر اليوم في كل مختبر."
+        }
+      ],
+      "story": "على الوتر، واجهت البشرية التكميم لأول مرة، قبل ألفين وخمسمائة عام من ميكانيكا الكم. اكتشف الفيثاغوريون أن التناغمات الجميلة تتوافق مع نسب أعداد صحيحة صغيرة، واستخلصوا استنتاجاً كونيًا: بما أن العالم يخضع للعدد، فالعدد هو جوهر الأشياء. كان الاستنتاج سابقاً لأوانه، لكن الحدس كان صحيحاً. في عام 1913 عندما افترض بور مدارات إلكترونية منفصلة، وفي عام 1926 عندما شرحها دي بروي وشرودنغر كشرط لعدد صحيح من الأطوال الموجية على المدار، عادت الفيزياء تماماً إلى الصورة الفيثاغورية: مسموح به ما يتكرر عدداً صحيحاً من المرات.",
+      "symbols": [
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "طول الوتر أو الأنبوب",
+          "unit": "م",
+          "note": "تثبيت الأطراف هو الذي يولد التقطع."
+        },
+        {
+          "sym": "n",
+          "latex": "n",
+          "what": "رقم التوافقية",
+          "unit": "—",
+          "note": "عدد صحيح - هو نفس العدد الكمي، ولكن في المسألة الكلاسيكية."
+        },
+        {
+          "sym": "f1",
+          "latex": "f_1",
+          "what": "النغمة الأساسية",
+          "unit": "هرتز",
+          "note": "أدنى تردد ممكن؛ وهو يحدد طبقة النغمة."
+        },
+        {
+          "sym": "v",
+          "latex": "v",
+          "what": "سرعة الموجة في الوتر",
+          "unit": "م/ث",
+          "note": "$v = \\sqrt{F/\\mu}$ - تزداد مع الشد، وتقل مع السمك."
+        },
+        {
+          "sym": "mu",
+          "latex": "\\mu",
+          "what": "الكثافة الخطية للوتر",
+          "unit": "كغم/م",
+          "note": "الكتلة لكل متر طول؛ ولهذا السبب تكون أوتار الباس سميكة."
+        }
+      ]
+    },
+    "derivation": {
+      "title": "الاشتقاق الصارم: من أين تأتي التقطع",
+      "lead": "سنبدأ من جمع موجتين متقابلتين إلى الأعداد الصحيحة. اللحظة الحاسمة ستكون في الخطوة الرابعة — وهذا سيكون أهم جزء في الموضوع بأكمله.",
+      "steps": [
+        {
+          "text": "الموجة المنعكسة من الطرف الثابت تسير نحو الموجة الساقطة. نجمعها — هنا يعمل مبدأ التراكب: الإزاحات تُجمع ببساطة.",
+          "latex": "y = A\\sin(kx - \\omega t) + A\\sin(kx + \\omega t)",
+          "figure": "vectriangle",
+          "figCaption": "موجتان متماثلتان تتجهان نحو بعضهما. لا نحتاج أكثر من الجمع فيما بعد."
+        },
+        {
+          "text": "نفك باستخدام صيغة جمع الجيوب. انظر إلى النتيجة باهتمام: الإحداثيات والزمن انفصلا إلى عاملين مختلفين. توقفت الموجة عن الحركة.",
+          "latex": "y = 2A\\sin(kx)\\cos(\\omega t)",
+          "figure": "sinederiv",
+          "figCaption": "المكان منفصل، الزمن منفصل. الشكل ثابت في مكانه، يتغير ارتفاعه فقط."
+        },
+        {
+          "text": "من هنا نستنتج العقد مباشرة. حيث العامل الأول يساوي صفرًا، لا تتحرك النقطة أبدًا — بغض النظر عن الزمن. هذه الأماكن تفصل بينها مسافة نصف طول موجة.",
+          "latex": "\\sin(kx) = 0 \\;\\Longrightarrow\\; x_n = n\\frac{\\lambda}{2}",
+          "figure": "shadow",
+          "figCaption": "العقد ثابتة دائمًا. بينها البطون، حيث السعة مضاعفة مقارنة بالأصل."
+        },
+        {
+          "text": "وهذه هي الخطوة الرئيسية. الوتر مثبت من كلا الطرفين، لذا يجب أن تكون العقد عند الطرفين. ولكن العقد تفصل بينها نصف موجة — وبالتالي، يجب أن يحتوي طول الوتر على عدد صحيح من أنصاف الموجات. لا تسمح الوسيط بأي خيارات أخرى.",
+          "latex": "L = n\\frac{\\lambda_n}{2} \\;\\Longrightarrow\\; \\lambda_n = \\frac{2L}{n}",
+          "figure": "anywell",
+          "figCaption": "الشرط الحدّي يحول مجموعة الاحتمالات المستمرة إلى مجموعة قابلة للعد. هنا يولد التقطع."
+        },
+        {
+          "text": "نحول الأطوال الموجية إلى ترددات. نحصل على سلسلة حيث كل تردد تالٍ هو مضاعف للأول. هذا هو السلم الطبيعي.",
+          "latex": "f_n = \\frac{v}{\\lambda_n} = n\\,\\frac{v}{2L} = n f_1",
+          "figure": "matchfreq",
+          "figCaption": "التوافقيات تسير بدقة على الأعداد الصحيحة: 1، 2، 3… الأوكتاف هو المضاعفة، والخميس هو النسبة 3:2."
+        },
+        {
+          "text": "نعوض سرعة الموجة في الوتر ونحصل على صيغة مرسين — أداة عمل لكل ضابط آلات.",
+          "latex": "v = \\sqrt{\\frac{F}{\\mu}} \\;\\Longrightarrow\\; f_1 = \\frac{1}{2L}\\sqrt{\\frac{F}{\\mu}}",
+          "figure": "springlaw",
+          "figCaption": "ثلاثة مفاتيح تحكم في طبقة النغمة: الطول، الشد، وسمك الوتر."
+        },
+        {
+          "text": "ولماذا تختلف الآلات في الصوت وهي تعزف نفس النغمة. الوتر الحقيقي يهتز بكل التوافقيات في آن واحد، ومجموعة جهارتها تعتمد على أين وكيف تم لمسه. النغمة الأساسية تحدد الطبقة، والنغمات التوافقية تحدد الجرس.",
+          "latex": "y(x,t) = \\sum_n A_n \\sin(k_n x)\\cos(\\omega_n t)",
+          "figure": "curves",
+          "figCaption": "الجرس هو مجموعة سعات التوافقيات. الكمان والبيانو على نفس النغمة يختلفان بهذا."
+        }
+      ],
+      "plate": "تثبيت الطرفين يجبر على احتواء عدد صحيح من أنصاف الموجات — والوسط المستمر يعطي مجموعة متقطعة من الترددات $f_n = n f_1$. التقطع يأتي من الشرط الحدّي، لا من حظر.",
+      "note": "حدود الصلاحية وتوضيح مهم. السلسلة هي مضاعفات دقيقة فقط لوتر مرن تمامًا. الوتر الحقيقي له صلابة، وتوافقيته العليا تكون أعلى قليلاً من المضاعفات — وهذا يسمى اللاتوافقية، وهو ملحوظ بشكل خاص في البيانو. يأخذ الضابطون ذلك في الاعتبار يدويًا بتمديد الضبط نحو أطراف المجال؛ ولهذا البيانو المضبوط \"رياضيًا بدقة\" يبدو غير صحيح. في الآلات النفخية الوضع مختلف: في البوق المفتوح من كلا الطرفين، السلسلة كاملة، أما في المغلق من طرف واحد فحسب التوافقيات الفردية موجودة — ولهذا يبدو الكلارينيت مختلفًا عن الناي بنفس الحجم."
+    },
+    "math": {
+      "title": "الرياضيات التي استخدمناها هنا",
+      "text": [
+        "كيف تصبح موجتان متحركتان موجة واقفة — بدون صيغ. تخيل شخصين يسحبان حبلًا من كل جانب ويهزان تجاه بعضهما. حيث يكون تأثيراهما متعاكسين دائمًا، لا يتحرك الحبل أبدًا — هذه عقدة. حيث يتطابقان دائمًا، تتضاعف السعة — هذا بطن. لا أحد يقف ساكنًا عن قصد: سكون العقدة هو نتيجة الإلغاء المتبادل المستمر. الصيغة $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ تقول هذا بالضبط، لكن بشكل أقصر.",
+        "ماذا يعني فصل المتغيرات. في الموجة المتحركة، كان الإحداثي والزمن معًا في قوس واحد — وبالتالي كان الشكل يتحرك. في الموجة الواقفة انفصلا إلى عاملين مختلفين: أحدهما مسؤول عن المكان، والآخر عن الزمن. الشكل محدد مرة واحدة وإلى الأبد، يتغير مقياسه فقط، مثل رسم يتنفس. هذه الطريقة — فصل المتغيرات — ستكون الأداة الرئيسية في حل معادلة شرودنغر، وستعطي هناك نفس النتيجة: موجات واقفة بمجموعة متقطعة من الترددات.",
+        "لماذا من المستمر نحصل على المتقطع. ها هي، ربما، أهم فكرة في الدورة بأكملها، ويجب التفكير فيها ببطء. يمكن أن يكون الطول الموجي أي شيء — الوسط مستمر ولا يمنع شيئًا. لكن الوتر مثبت، ويجب أن تكون العقد عند الطرفين. تخيل أنك تضع بلاطًا على أرضية ذات عرض ثابت: البلاط بأي حجم، ولكن وضعه بدون قص ممكن فقط بتلك التي تقسم العرض بدون باقي. ظهر القيد ليس من خواص البلاط، بل من حجم الغرفة. بنفس الطريقة، يأتي تقطع النغمات ليس من خواص الوتر، بل من تثبيته.",
+        "لماذا الأوكتاف هو مضاعفة. نسبة التردد اثنان إلى واحد تسمعها الأذن كـ \"نفس النغمة لكن أعلى\"، وهذا ليس اتفاقًا ثقافيًا، بل نتيجة لتركيب التوافقيات. كل توافقيات النغمة ذات التردد $2f$ موجودة أيضًا في مجموعة توافقيات النغمة $f$ — الصوت الثاني لا يضيف شيئًا غريبًا، ولذا يندمج. الخميس بنسبة ثلاثة إلى اثنين يشارك التوافقيات بنفس الود تقريبًا، ولذا يبدو التالي في النقاء. فيثاغورس، بتجربة أطوال الأوتار، اكتشف هذا بالضبط."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: ضبط الجيتار",
+      "lead": "نحسب ما يفعله الموسيقي بالأذن، ونتحقق في نفس الوقت من صيغة ميرسين.",
+      "given": "الوتر الأول للجيتار بطول 65 سم يجب أن يعطي نوتة مي من الأوكتاف الثاني – 330 هرتز. الكثافة الخطية للوتر $0{,}4$ غ/م. أوجد الشد المطلوب وترددات التوافقيات الثلاث الأولى.",
+      "law": "$f_1 = \\dfrac{1}{2L}\\sqrt{\\dfrac{F}{\\mu}}$, $\\;f_n = n f_1$",
+      "solution": [
+        {
+          "text": "أولاً، نجد سرعة الموجة اللازمة لهذا التردد.",
+          "latex": "v = 2Lf_1 = 2 \\cdot 0{,}65 \\cdot 330 \\approx 429\\ \\text{م/ث}"
+        },
+        {
+          "text": "الآن، نحسب الشد من معادلة السرعة.",
+          "latex": "F = \\mu v^{2} = 4\\cdot 10^{-4} \\cdot 429^{2} \\approx 74\\ \\text{ن}"
+        },
+        {
+          "text": "ما وزن الثقل الذي يعادل هذا؟",
+          "latex": "m = F/g \\approx 74/9{,}8 \\approx 7{,}5\\ \\text{كغم}"
+        },
+        {
+          "text": "التوافقيات هي مجرد مضاعفات التردد الأساسي.",
+          "latex": "f_1 = 330,\\quad f_2 = 660,\\quad f_3 = 990\\ \\text{هرتز}"
+        }
+      ],
+      "answer": "الشد حوالي 74 نيوتن – وكأن ثقلاً وزنه سبعة كيلوغرامات ونصف معلق بالوتر. التوافقيات: 330 و 660 و 990 هرتز.",
+      "check": "تحقق من المنطق السليم وفي نفس الوقت شرح حقيقة يومية. ستة أوتار كل منها بقوة سبعين نيوتن تعطي شداً إجمالياً حوالي نصف طن من القوة – ولهذا السبب تحتوي الجيتار على زند ضخم بقضيب تثبيت داخلي، بينما يحتوي البيانو على إطار من الحديد الزهر: حيث يصل شد جميع الأوتار فيه إلى عشرين طناً. الاستنتاج الثاني: بالضغط على الوتر عند الحنق الثاني عشر، تقسمه إلى نصفين وتحصل على تردد مضاعف – أوكتاف. ولهذا يكون الحنق الثاني عشر بالضبط في منتصف الوتر، ويمكن التحقق من ذلك باستخدام مسطرة على أي جيتار."
+    },
+    "constants": {
+      "title": "ثوابت هذا القسم",
+      "lead": "أرقام الصوتيات الموسيقية هي حالة نادرة حيث يمكن سماع الثوابت الفيزيائية بالأذن.",
+      "items": [
+        {
+          "sym": "A4",
+          "latex": "f_{\\text{ля}}",
+          "name": "لا المعياري (A4) من الأوكتاف الأول",
+          "value": "440",
+          "unit": "هرتز",
+          "why": "معيار الضبط الدولي منذ عام 1955. قبل ذلك، كان كل أوركسترا يضبط بنبرته الخاصة، وكان الفرق بين المدن يصل إلى نصف نغمة.",
+          "mnemo": "الأوكتافات للأعلى تضاعف: 440, 880, 1760. الأوكتافات للأسفل تقسم: 220, 110, 55. النطاق المسموع بأكمله يتسع تقريباً لعشرة من هذه المضاعفات."
+        },
+        {
+          "sym": "octave",
+          "latex": "2{:}1",
+          "name": "نسبة الترددات في الأوكتاف",
+          "value": "2,000",
+          "unit": "—",
+          "why": "النسبة الوحيدة التي تسمعها الأذن كتكرار لنفس النغمة. السبب هو النغمات الفوقية: جميع توافقيات النغمة الأعلى موجودة في مجموعة النغمة الأدنى.",
+          "mnemo": "الخامسة الكاملة – 3:2، الرابعة الكاملة – 4:3، الثالثة الكبرى – 5:4. كلما كان الكسر أبسط، كان التناغم أنقى؛ وهذا ما اكتشفه فيثاغورس على الوتر."
+        },
+        {
+          "sym": "semitone",
+          "latex": "\\sqrt[12]{2}",
+          "name": "نسبة الترددات في نصف النغمة",
+          "value": "1,0595",
+          "unit": "—",
+          "why": "في المزاج المتساوي (التعديل المتساوي)، يقسم الأوكتاف إلى اثنتي عشرة خطوة متساوية، وكل خطوة هي الجذر الثاني عشر للعدد 2. جميع الفترات (الفواصل) تكون خاطئة قليلاً، ولكن بنفس القدر – مما يسمح بالعزف في أي مفتاح.",
+          "mnemo": "حل وسط وافقت عليه الموسيقى الأوروبية بأكملها: الخامسة في المزاج المتساوي تختلف عن الخامسة النقية بحوالي سنتين (cents)، والأذن تسامح ذلك."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين تعطي الموجة المحصورة قيماً منفصلة أيضاً؟",
+      "lead": "منطق «تثبيت الحدود – الحصول على أعداد صحيحة» يتكرر في الفيزياء مراراً، ويبدو في كل مرة جديداً.",
+      "items": [
+        {
+          "h": "آلات النفخ",
+          "text": "عمود هوائي بدلاً من الوتر. في الأنبوب المفتوح من كلا الطرفين، سلسلة كاملة من التوافقيات؛ في المغلق من طرف واحد، توافقيات فردية فقط. من هنا الفرق في جرس الفلوت (الناي) والكلارينت عند نفس الطول."
+        },
+        {
+          "h": "أشكال خلادني",
+          "text": "مشكلة ثنائية الأبعاد: الرمل على صفيحة يتجمع على خطوط عقدية (عُقد)، مرسماً أنماطاً متماثلة. كل تردد يعطي شكله الخاص – وهذه حرفياً صورة للنمط الذاتي للاهتزاز."
+        },
+        {
+          "h": "فرن الميكروويف",
+          "text": "توجد داخله موجة واقفة مع عُقد كل نصف طول موجي، حوالي ستة سنتيمترات. ولهذا السبب نحتاج إلى طاولة دوارة: بدونها، سيسخن الطعام بشكل خطوط (مخطط). المسافة بين الأماكن المحترقة تسمح بقياس سرعة الضوء في المطبخ."
+        },
+        {
+          "h": "الليزر",
+          "text": "بين مرايا الرنان، يتسع عدد صحيح من أنصاف الأطوال الموجية – تماماً شرط الوتر. من هنا أحادية اللون الاستثنائية لضوء الليزر: يُسمح فقط بالترددات التي تناسب بالكامل."
+        },
+        {
+          "h": "الإلكترون في الذرة",
+          "text": "موجة دو برولي المحصورة حول النواة يجب أن تنطبق عدداً صحيحاً من المرات. من هنا مستويات الطاقة المنفصلة والأطياف الخطية. الذرة مشكلة كوتر ثلاثي الأبعاد – وهذه ليست استعارة، بل نفس الحساب."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مسلٍّ: تحقق بنفسك",
+      "lead": "الموجات المستقرة هي الجزء الأكثر وضوحًا في الموضوع: يمكن رؤيتها وسماعها وحتى قياس سرعة الضوء بها.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "قس سرعة الضوء باستخدام الميكروويف",
+          "text": "أزل القرص الدوار من فرن الميكروويف. ضع طبقة من الجبن المبشور أو أعشاب من الفصيلة الخبازية على طبق وشغّل الفرن لمدة نصف دقيقة. أخرج الطبق وقس المسافة بين البقع الذائبة باستخدام مسطرة.",
+          "answer": "تظهر البقع في عقد الموجة المستقرة، والمسافة بينها تساوي نصف طول الموجة، حوالي 6 سم. تردد الفرن مكتوب على الجدار الخلفي، عادة 2450 MHz. اضرب: $c = \\lambda f = 0{,}12 \\cdot 2{,}45\\cdot 10^{9} \\approx 2{,}9\\cdot 10^{8}$ م/ث. لقد قست سرعة الضوء في مطبخك بدقة تصل إلى بضعة في المئة. بسبب هذه العقد، يحتاج الفرن إلى قرص دوار."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "النغمات التوافقية على الجيتار",
+          "text": "إذا كان لديك جيتار: المس الوتر برفق فوق الحنق الثاني عشر مباشرةً دون الضغط عليه، ثم اضرب الوتر. ثم فوق الحنق السابع، ثم فوق الخامس.",
+          "answer": "سينتج صوت عالٍ نقي — الأوكتاف، ثم الخُمس عبر الأوكتاف، ثم الأوكتافان. بلمس الوتر، أجبرته على أن تكون له عقدة في تلك النقطة، مما منع النغمة الأساسية وأبقى فقط التوافقيات التي لها عقدة هناك أصلاً. يسمي الموسيقيون هذا النغمات التوافقية، والفيزيائيون يسمونه اختيار المنوال. تحقق باستخدام المسطرة: الحنق الثاني عشر يقع في منتصف الوتر تمامًا، والسابع عند الثلث."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "كيف ينشأ المتقطع من المستمر",
+          "text": "الوتر وسط متصل، لا توجد فيه درجات سلم. يمكن أن يكون طول الموجة أي طول. فمن أين تأتي المجموعة الجامدة من النوتات المسموحة مع فراغ بينها؟",
+          "answer": "من تثبيت الطرفين. يمكن أن تكون الموجة أي شيء، لكن الموجة الوحيدة التي يمكن أن تتسع على الوتر دون انقطاع هي تلك التي لها عقد عند الطرفين — والعقد تبعد نصف طول موجي. جاء التقييد ليس من خواص الوسط، بل من الشرط الحدّي. هذا الدليل نفسه في عام 1926 شرح تكميم مستويات الطاقة في الذرة: الموجة الإلكترونية محصورة حول النواة ويجب أن تتكرر عددًا صحيحًا من المرات. التكميم ليس لغزًا منفصلاً، بل خاصية لأي موجة محصورة."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة طريفة",
+          "h": "ضبط البيانو يكون غير صحيح عن قصد",
+          "text": "للأوتار الحقيقية صلابة، لذا تكون نغماتها العلوية أعلى قليلاً من المضاعفات الدقيقة. إذا ضبط البيانو بدقة رياضية، فإن النغمات العلوية للأوتار المنخفضة لن تتطابق مع النغمات الأساسية للأوتار العليا، وسيبدو الآلة غير متناغمة. لذلك، يقوم الضابطون بتمديد السلم: تخفض الجهير وترفع الحاد، أحيانًا بثلث نصف نغمة عند الأطراف. يسمى هذا الضبط الممتد، وهو حل وسط بين الرياضيات والأذن الحية."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "تذكرة",
+          "h": "ثبّت الأطراف لتحصل على أعداد صحيحة",
+          "text": "سطر واحد يشرح الجيتار والليزر والذرة. الموجة الحرة — أي طول. الموجة المحصورة — فقط الأطوال التي تتكرر عددًا صحيحًا من المرات. كلما صادفت أعدادًا صحيحة في الفيزياء، ابحث عن الشيء المحصور."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "الوتر المثالي مقابل الوتر الحقيقي",
+          "text": "الصيغة $f_n = nf_1$ صحيحة لوتر مرن دون فقد. الوتر الحقيقي له صلابة (النغمات العلوية تزحف للأعلى)، واحتكاك (يخفت الصوت)، وسماكة محدودة. بالإضافة إلى ذلك، عند النقر بقوة، يصبح الاهتزاز غير خطي، وتبدأ التوافقيات في تبادل الطاقة فيما بينها. هذه الانحرافات عن المثالية هي التي تجعل صوت الآلة الحية مختلفًا عن الصوت المركب."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمتطلعين: من الوتر إلى الذرة",
+      "lead": "ليس ضمن الاختبار. حول كيف أن مسألة وتر الجيتار بعد مئتين وخمسين سنة أوضحت بنية المادة.",
+      "blocks": [
+        {
+          "h": "لغز الأطياف",
+          "text": "بحلول نهاية القرن التاسع عشر، تجمعت بيانات كثيرة: كل عنصر، عند تسخينه، يضيء بمجموعة محددة بدقة من الخطوط. الهيدروجين أعطى سلسلة، وقد وضع بالمر في عام 1885 صيغة بسيطة بأعداد صحيحة. الصيغة عملت بشكل لا تشوبه شائبة ولكن دون أي تفسير — لا أحد فهم من أين تأتي الأعداد الصحيحة في الذرة."
+        },
+        {
+          "h": "فكرة دي بروي",
+          "text": "في عام 1924، افترض دي بروي أن الإلكترون هو أيضًا موجة، طولها عكسي مع الزخم. إذن، المدار المستقر هو ذلك الذي تتناسب فيه الموجة عددًا صحيحًا من المرات ولا تلغي نفسها. هذا حرفيًا شرط الوتر الملفوف على شكل حلقة. كانت الأطروحة جريئة لدرجة أن المشرف أرسلها إلى أينشتاين، الذي رد بأن المؤلف قد رفع طرف الحجاب العظيم."
+        },
+        {
+          "h": "معادلة شرودنغر",
+          "text": "بعد عامين، كتب شرودنغر معادلة موجية للإلكترون وحلها للهيدروجين. الحل لا يوجد لأي طاقة، بل فقط لطاقات معينة — تمامًا كما توجد الموجة المستقرة ليس لأي طول. ظهرت الأعداد الصحيحة لبالمر من تلقاء نفسها من الشروط الحدية. تكميم الطاقة أصبح تكميمًا للتوافقيات."
+        },
+        {
+          "h": "ما يعنيه هذا",
+          "text": "التكميم ليس مسلمة إضافية ملصقة بالفيزياء من الخارج. إنها خاصية لأي موجة محصورة في منطقة محدودة. الفرق فقط أن الوتر محصور بمشابك، والإلكترون محصور بجاذبية النواة. كان فيثاغورس، وهو يستمع إلى الوتر، أقرب إلى بنية الذرة مما قد يتصور."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "موجتان متقابلتان تعطيان موجة واقفة ذات عقد ثابتة؛ تثبيت الأطراف يتطلب عدداً صحيحاً من أنصاف الأمواج ويولد سلسلة منفصلة من الترددات $f_n = n f_1$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega",
+          "text": "$\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ — المتغيرات انفصلت"
+        },
+        {
+          "icon": "formula",
+          "title": "المسافة بين العقد دائماً $\\lambda/2$",
+          "text": "المسافة بين العقد دائماً $\\lambda/2$"
+        },
+        {
+          "icon": "sigma",
+          "title": "الشرط الحدّي يحول المستمر إلى منفصل",
+          "text": "الشرط الحدّي يحول المستمر إلى منفصل"
+        },
+        {
+          "icon": "ruler",
+          "title": "صيغة ميرسين",
+          "text": "$f_1 = \\frac{1}{2L}\\sqrt{F/\\mu}$ — الطول، الشد، السماكة"
+        },
+        {
+          "icon": "scale",
+          "title": "النغمة الأساسية تعطي نغمة",
+          "text": "النغمة الأساسية تعطي نغمة موسيقية، ومجموعة التوافقيات تعطي الجرس"
+        }
+      ],
+      "where": "الآلات الوترية والنفخية، أشكال كلادني، مرنان الليزر، العقد في فرن الميكروويف، مستويات الطاقة للإلكترون في الذرة.",
+      "watchOut": "العقدة ساكنة لا لأن شيئاً لا يحدث هناك، بل لأن الموجتين تطفئان بعضهما باستمرار. الطاقة تصل إلى العقدة — فقط من جهتين وفي طور معاكس."
+    },
+    "quiz": [
+      {
+        "id": "s1",
+        "type": "mcq",
+        "q": "لماذا لا يمكن للوتر أن يصدر صوتاً بتردد عشوائي؟",
+        "options": [
+          "مادة الوتر تسمح فقط باهتزازات معينة",
+          "النهايات مثبتة ويجب أن تكون عقداً، والعقد تفصلها نصف موجة — لذا يجب أن يحتوي طول الوتر عدداً صحيحاً منها",
+          "أذن الإنسان تسمع فقط ترددات معينة",
+          "يعيق الاحتكاك بالهواء الذي يخمد الترددات الوسيطة"
+        ],
+        "answer": 1,
+        "why": "لا يأتي القيد من المادة ولا من الإدراك، بل من الشرط الحدّي. أي طول موجي ممكن في وسط حر؛ على وتر مثبت، تبقى فقط تلك التي تتطابق مع عدد صحيح من أنصاف الأمواج. هذه هي نفس الحجة التي تشرح مستويات الطاقة في الذرة.",
+        "hint": "ما الذي يجب أن يحدث بالضرورة في نقاط الوتر المثبتة؟ وكم تبعد هذه النقاط عن بعضها؟"
+      },
+      {
+        "id": "s2",
+        "type": "mcq",
+        "q": "الكمان والبيانو يعزفان نفس النغمة (لا). كيف يختلف هذان الصوتان فيزيائياً؟",
+        "options": [
+          "تردد النغمة الأساسية — يختلف قليلاً بينهما",
+          "سرعة انتشار الصوت من الآلة",
+          "مجموعة سعات التوافقيات، أي الجرس",
+          "فقط بالجهارة"
+        ],
+        "answer": 2,
+        "why": "النغمة الأساسية متطابقة — وإلا لكانت نغمة مختلفة. الفرق في أي التوافقيات ومدى قوتها: يعتمد على مكان وطريقة إثارة الوتر، وخصائص الرنين للجسم. الجرس هو طيف، وتحويل فورييه يسمح بتحليله.",
+        "hint": "الوتر يهتز ليس بتوافقية واحدة بل بكل التوافقيات معاً. ما الذي يمكن أن يختلف بين آلتين إذا كان التردد الأساسي متطابقاً؟"
+      },
+      {
+        "id": "s3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: كيف نحصل من وسط مستمر على مجموعة منفصلة من الترددات، ولماذا هذا مهم للفيزياء الكمومية؟",
+        "keywords": [
+          "تثبيت",
+          "نهايات",
+          "عقد",
+          "عدد صحيح",
+          "تطابق",
+          "حد",
+          "شرط",
+          "ذرة",
+          "إلكترون",
+          "مستوى"
+        ],
+        "needed": 2,
+        "why": "الوسط مستمر ويسمح بأي طول موجي، لكن النهايات المثبتة تتطلب عقداً، والعقد تفصلها نصف موجة. لذا فإن الوتر يسع فقط عدداً صحيحاً من أنصاف الأمواج. النفصلية وُلدت من الشرط الحدّي. بنفس المنطق تشرح مستويات الطاقة للإلكترون: موجته محصورة حول النواة ويجب أن تتطابق عدداً صحيحاً من المرات.",
+        "hint": "هل يأتي القيد من الوتر أم من تثبيته؟ وما الذي يلعب دور المثبتات في الذرة؟"
+      },
+      {
+        "id": "s4",
+        "type": "estimate",
+        "q": "وتر طوله 65 سم يعطي نغمة أساسية 330 هرتز. ما هو تردد التوافقية الثالثة بالهرتز؟",
+        "answer": 990,
+        "unit": "هرتز",
+        "tolerance": 50,
+        "why": "التوافقيات مضاعفة للنغمة الأساسية: f₃ = 3 · 330 = 990 هرتز. من المفيد سماع المعنى الموسيقي: المضاعفة (660 هرتز) تعطي الأوكتاف، ونسبة التوافقية الثالثة إلى الثانية — 990 إلى 660، أي 3:2 — هي الخامسة النقية التي وجدها فيثاغورس على الوتر.",
+        "hint": "التوافقيات تأتي حسب أعداد صحيحة من النغمة الأساسية. ما هي الثالثة بالترتيب؟"
+      }
+    ]
+  }
+}

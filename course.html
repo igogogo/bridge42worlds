@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Курс — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  /* Палитра и типографика — как в наших theory-статьях (reports_theory/*_article.html):
+     тёплая бумага, serif для текста, Futura для заголовков, тонкие линии-разделители.
+     Никаких цветных плашек с боковой полосой — только правила и воздух. */
+  :root{
+    --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C;
+    --font-display:'Futura','Century Gothic','Futura PT','Segoe UI Semibold','Segoe UI',sans-serif;
+    --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+    --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
+    /* мост к общим компонентам движка/тьютора, которые ждут переменные сайта */
+    --bg:var(--paper); --text:var(--ink); --muted:var(--ink-soft); --soft:var(--ink-soft);
+    --border:var(--rule); --link:var(--steel); --tag-bg:var(--paper-raised); --card-bg:var(--paper-raised);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  }
+  :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{max-width:900px;margin:0 auto;padding:24px 16px 60px;background:var(--paper);color:var(--ink);
+    font-family:var(--font-body);font-size:18px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  h1{font-family:var(--font-display);font-weight:700;font-size:2.1rem;line-height:1.15;
+    letter-spacing:-.01em;max-width:680px;margin-bottom:.25em}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin-bottom:26px}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--ink-soft);text-decoration:none;letter-spacing:.02em}
+  .logo:hover{color:var(--steel)}
+  .theme-toggle{background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+  .theme-toggle:hover{color:var(--ink)}
+  .k-sub{max-width:680px;font-family:var(--font-display);font-size:14px;color:var(--ink-soft);
+    letter-spacing:.02em;margin:2px 0 16px}
+  .k-lead{max-width:680px;font-size:1.06rem;line-height:1.7;color:var(--ink-soft);margin-bottom:22px}
+  .k-sec{max-width:680px;margin:34px 0}
+  .k-sec h2{font-family:var(--font-display);font-size:1.45rem;font-weight:700;letter-spacing:-.005em;
+    margin:0 0 .35em;padding-bottom:.35em;border-bottom:1px solid var(--rule)}
+  .k-sec h3{font-family:var(--font-display);font-size:1.02rem;font-weight:700;margin:22px 0 7px}
+  .k-sec p{margin:0 0 1.05em;max-width:680px}
+  /* карточка закона: имя формулы + авторы — в стиле сайта: тонкие линии, без заливок */
+  .k-law{max-width:620px;margin:26px 0;padding:18px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .k-law-name{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--soft);margin-bottom:10px}
+  .k-law-eq{text-align:center;margin:14px 0 12px;font-size:24px}
+  .k-law-alt{font-size:12.5px;color:var(--soft);text-align:center;margin:-4px 0 14px}
+  .k-author{display:flex;gap:10px;font-size:13px;line-height:1.6;margin-top:8px;color:var(--muted)}
+  .k-author b{color:var(--text);font-weight:600;white-space:nowrap}
+  .k-author .k-year{color:var(--soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .k-story{font-size:13.5px;line-height:1.7;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+  /* шаги вывода: текст + формула + схема */
+  .k-step{max-width:620px;margin:0 0 22px;padding:0 0 20px;border-bottom:1px dashed var(--border)}
+  .k-step:last-child{border-bottom:none}
+  .k-step-n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:50%;background:var(--link);color:#fff;font-size:12px;font-weight:600;margin-right:8px;flex-shrink:0}
+  .k-step-t{font-size:15.5px;line-height:1.75;color:var(--text);margin-bottom:10px;display:flex;align-items:flex-start}
+  .k-step-eq{margin:12px 0;padding:12px 0;overflow-x:auto;text-align:center;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .k-fig{margin:14px 0 6px;text-align:center}
+  .k-fig svg{max-width:100%;height:auto}
+  .k-fig-cap{font-family:var(--font-display);font-size:12px;line-height:1.5;color:var(--ink-soft);
+    margin-top:8px;text-align:center}
+  .k-plate{max-width:680px;margin:26px 0;padding:22px 0;text-align:center;
+    border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .k-plate-eq{font-size:1.7rem;margin-bottom:12px}
+  .k-plate-cap{font-family:var(--font-display);font-size:12.5px;line-height:1.6;color:var(--ink-soft);
+    max-width:520px;margin:0 auto}
+  .k-note{max-width:680px;font-size:.94rem;line-height:1.7;color:var(--ink-soft);margin:20px 0;
+    padding:14px 0;border-top:1px solid var(--rule)}
+  .k-note::before{content:"Замечание";display:block;font-family:var(--font-display);font-size:10.5px;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--brass);margin-bottom:6px}
+  /* край известного — чем тема упирается в нерешённое */
+  .k-closing{border-top:2px solid var(--brass);padding-top:18px}
+  .k-closing p{max-width:680px}
+  .k-frontier-link{font-family:var(--font-display);font-size:.92rem;color:var(--steel);
+    text-decoration:none;border-bottom:1px solid var(--rule)}
+  .k-frontier-link:hover{border-bottom-color:var(--steel)}
+  /* пример с числами — как задачи в наших статьях: компактнее основного текста, без заливок */
+  .k-ex{max-width:680px;margin:18px 0;font-size:.92rem;line-height:1.7}
+  .k-ex-row{margin:12px 0}
+  .k-ex-label{font-family:var(--font-display);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--ink-soft);display:block;margin-bottom:4px}
+  .k-ex-ans{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--moss);
+    padding:12px 0;margin-top:14px;border-top:1px solid var(--rule)}
+  .k-ex-check{font-size:.88rem;line-height:1.65;color:var(--ink-soft);margin-top:10px;font-style:italic}
+  /* константы */
+  .k-const{max-width:680px;margin:14px 0}
+  .k-const-item{padding:14px 0;border-top:1px solid var(--rule);display:flex;gap:16px;align-items:flex-start}
+  .k-const-sym{font-size:1.2rem;min-width:46px;text-align:center;padding-top:2px;color:var(--steel)}
+  .k-const-body{flex:1;min-width:0}
+  .k-const-name{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--ink)}
+  .k-const-val{font-family:var(--font-mono);font-size:.88rem;color:var(--brass);
+    font-variant-numeric:tabular-nums;margin:4px 0 7px}
+  .k-const-unit{color:var(--ink-soft);font-size:.8rem;margin-left:5px}
+  .k-const-why{font-size:.9rem;line-height:1.65;color:var(--ink-soft)}
+  .k-const-mnemo{font-size:.85rem;line-height:1.6;color:var(--ink-soft);margin-top:8px;padding-top:8px;
+    border-top:1px dashed var(--rule)}
+  .k-const-mnemo b{font-family:var(--font-display);color:var(--brass);font-size:.78rem;
+    text-transform:uppercase;letter-spacing:.08em}
+  /* навигация по курсу — текстовая строка, без плашек */
+  .k-nav{max-width:680px;display:flex;flex-wrap:wrap;gap:14px;margin:0 0 24px;padding-bottom:12px;
+    border-bottom:1px solid var(--rule);font-family:var(--font-display);font-size:12px}
+  .k-nav a{text-decoration:none;color:var(--ink-soft)}
+  .k-nav a:hover{color:var(--steel)}
+  .k-nav a.active{color:var(--ink);font-weight:700}
+  /* Оглавление — как в учебнике: нумерованный список с тонкими разделителями, без карточек */
+  .k-lessons{max-width:680px;margin:18px 0 8px;border-top:1px solid var(--rule)}
+  .k-lesson{display:block;padding:15px 2px;text-decoration:none;color:inherit;
+    border-bottom:1px solid var(--rule);transition:padding-left .15s}
+  .k-lesson:hover{padding-left:8px}
+  .k-lesson:hover .k-lesson-t{color:var(--steel)}
+  .k-lesson-n{font-family:var(--font-display);font-size:10.5px;text-transform:uppercase;
+    letter-spacing:.11em;color:var(--ink-soft);display:flex;align-items:center;gap:9px}
+  .k-lesson-t{font-family:var(--font-display);font-size:1.18rem;font-weight:700;color:var(--ink);margin:5px 0 2px}
+  .k-lesson-s{font-size:.92rem;color:var(--ink-soft)}
+  .k-lesson-law{font-family:var(--font-display);font-size:11.5px;color:var(--steel);margin-top:7px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .k-memo-link{color:var(--brass);cursor:pointer;font-size:11px}
+  .k-memo-link:hover{text-decoration:underline}
+  /* балл за параграф */
+  .k-score{font-family:var(--font-display);font-size:10px;letter-spacing:.06em;padding:2px 8px;
+    border:1px solid currentColor;border-radius:10px;font-weight:700}
+  .k-score-new{color:var(--ink-soft);border-color:var(--rule);font-weight:400}
+  .k-progress{max-width:680px;margin:16px 0 0}
+  .k-progress-bar{height:3px;background:var(--rule);overflow:hidden}
+  .k-progress-fill{height:100%;background:var(--moss);transition:width .5s ease}
+  .k-progress-t{font-family:var(--font-display);font-size:11.5px;color:var(--ink-soft);margin-top:7px}
+  .k-progress-t b{color:var(--ink)}
+  /* геймификация: звёзды за качество прохождения */
+  .k-stars{margin-right:8px;letter-spacing:1px}
+  .k-star{color:var(--rule);font-size:11px}
+  .k-star.on{color:var(--brass)}
+  .k-star-total{float:right;color:var(--brass);font-weight:700}
+  .k-unlocked{margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);
+    font-family:var(--font-display);font-size:.82rem;color:var(--moss);display:flex;align-items:center;gap:4px}
+  /* Образная картинка параграфа — визуальный якорь для запоминания (FLUX, наша палитра) */
+  .k-guide-link{display:block;max-width:680px;margin:0 0 24px;padding:12px 0;
+    font-family:var(--font-display);font-size:.92rem;color:var(--steel);text-decoration:none;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .k-guide-link:hover{color:var(--ink)}
+  /* итог параграфа — показывается сразу после последнего ответа, с разбором */
+  .k-done{max-width:680px;margin:24px 0 0;padding:18px 0;border-top:2px solid var(--ink)}
+  .k-done-h{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--font-display);font-size:.95rem;font-weight:700;margin-bottom:10px}
+  .k-done-h b{font-size:1.3rem;color:var(--moss)}
+  .k-done-bar{height:3px;background:var(--rule);overflow:hidden;margin-bottom:12px}
+  .k-done-fill{height:100%;background:var(--moss);transition:width .6s ease}
+  .k-done-v{font-size:.95rem;color:var(--ink);margin-bottom:12px}
+  .k-done-list{margin:0 0 12px}
+  .k-done-row{display:flex;gap:10px;align-items:baseline;font-size:.86rem;line-height:1.55;
+    padding:5px 0;border-bottom:1px solid var(--rule);color:var(--ink-soft)}
+  .k-done-row:last-child{border-bottom:none}
+  .k-done-m{font-family:var(--font-mono);font-weight:700;min-width:14px}
+  .k-done-row.ok .k-done-m{color:var(--moss)}
+  .k-done-row.no .k-done-m{color:var(--red)}
+  .k-done-tip{font-size:.82rem;line-height:1.55;color:var(--ink-soft);margin-top:8px;font-style:italic}
+  /* аппендикс для любознательных — свёрнут по умолчанию, не мешает основному пути */
+  /* занимательное по Перельману — опыт, парадокс, факт, мнемоника */
+  .k-curio{max-width:680px;margin-top:14px}
+  .k-curio-item{display:flex;gap:14px;padding:15px 0;border-top:1px solid var(--rule)}
+  .k-curio-ic{flex:0 0 auto;color:var(--brass);padding-top:2px}
+  .k-curio-body{min-width:0}
+  .k-curio-kind{font-family:var(--font-display);font-size:.62rem;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--brass);margin-bottom:2px}
+  .k-curio-h{font-family:var(--font-display);font-weight:700;font-size:1rem;margin-bottom:3px}
+  .k-curio-t{font-size:.96rem;line-height:1.65;color:var(--ink-soft)}
+  .k-curio-a{font-size:.92rem;line-height:1.6;color:var(--ink-soft);margin-top:7px;
+    padding-left:12px;border-left:2px solid var(--rule)}
+  .k-appendix{max-width:680px;margin:30px 0;padding:16px 0;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .k-appendix summary{font-family:var(--font-display);font-size:1rem;font-weight:700;
+    cursor:pointer;color:var(--brass);list-style:none;display:flex;align-items:center;gap:4px}
+  .k-appendix summary::-webkit-details-marker{display:none}
+  .k-appendix summary::after{content:"развернуть";font-size:.72rem;font-weight:400;
+    color:var(--ink-soft);margin-left:auto;text-transform:uppercase;letter-spacing:.08em}
+  .k-appendix[open] summary::after{content:"свернуть"}
+  .k-appendix summary:hover{color:var(--ink)}
+  .k-app-lead{font-size:.92rem;line-height:1.7;color:var(--ink-soft);margin:14px 0 0;font-style:italic}
+  .k-app-h{font-family:var(--font-display);font-size:1rem;font-weight:700;margin:22px 0 6px}
+  .k-app-t{font-size:.96rem;line-height:1.75}
+  /* свои иконки: штриховые, наследуют цвет текста, выравнены по базовой линии */
+  .b42-ic{display:inline-block;vertical-align:-2px;margin-right:5px;opacity:.75}
+  h2 .b42-ic{vertical-align:-3px;opacity:.6}
+  .k-lesson-law .b42-ic{margin-right:4px;opacity:.7}
+  .k-units .b42-ic{vertical-align:-2px;opacity:.6}
+  /* легенда символов формулы — сразу под ней */
+  .k-symbols{margin:16px 0 0;padding-top:14px;border-top:1px dashed var(--rule)}
+  .k-symbols-t{font-family:var(--font-display);font-size:10.5px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--ink-soft);margin-bottom:10px}
+  .k-sym{display:flex;gap:14px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule)}
+  .k-sym:last-child{border-bottom:none}
+  .k-sym-s{min-width:34px;text-align:center;font-size:1.05rem;color:var(--steel)}
+  .k-sym-b{flex:1;min-width:0;font-size:.92rem}
+  .k-sym-b b{font-family:var(--font-display);font-weight:700}
+  .k-sym-u{font-family:var(--font-mono);font-size:.78rem;color:var(--brass);margin-left:9px}
+  .k-sym-n{font-size:.85rem;line-height:1.55;color:var(--ink-soft);margin-top:3px}
+  .k-has-tip{cursor:help}
+  .k-has-tip:hover{background:rgba(21,94,116,.05)}
+  /* тултип-карточка константы */
+  .k-tip{display:none;position:absolute;z-index:200;width:300px;padding:13px 15px;
+    background:var(--paper-raised);border:1px solid var(--ink);box-shadow:0 6px 24px rgba(20,25,35,.18)}
+  .k-tip-n{font-family:var(--font-display);font-size:.92rem;font-weight:700;margin-bottom:4px}
+  .k-tip-v{font-family:var(--font-mono);font-size:.85rem;color:var(--brass);margin-bottom:8px}
+  .k-tip-v span{color:var(--ink-soft)}
+  .k-tip-w{font-size:.85rem;line-height:1.6;color:var(--ink)}
+  .k-tip-m{font-size:.8rem;line-height:1.55;color:var(--ink-soft);margin-top:8px;padding-top:8px;
+    border-top:1px solid var(--rule)}
+  .k-tip-m b{font-family:var(--font-display);color:var(--brass)}
+  .k-tip-x{font-size:.75rem;color:var(--ink-soft);margin-top:6px;font-style:italic}
+  .k-modes{display:flex;flex-wrap:wrap;gap:14px;max-width:680px;margin:0 0 10px;
+    font-family:var(--font-display);font-size:12px}
+  .k-modes button{font-family:inherit;font-size:12px;padding:0 0 3px;cursor:pointer;background:none;
+    border:none;border-bottom:2px solid transparent;color:var(--ink-soft)}
+  .k-modes button:hover{color:var(--steel)}
+  .k-modes button.active{color:var(--ink);font-weight:700;border-bottom-color:var(--steel)}
+  .k-mode-hint{max-width:680px;font-size:.9rem;line-height:1.6;color:var(--ink-soft);margin:0 0 12px}
+  .k-hero{max-width:680px;margin:20px 0 26px}
+  .k-hero img{width:100%;display:block;border:1px solid var(--rule)}
+  .k-hero-cap{font-family:var(--font-display);font-size:11.5px;color:var(--ink-soft);
+    margin-top:8px;text-align:center}
+  .k-lesson{display:flex;gap:16px;align-items:flex-start}
+  .k-lesson-thumb{width:96px;height:96px;flex-shrink:0;border:1px solid var(--rule);object-fit:cover}
+  .k-lesson-body{flex:1;min-width:0}
+  @media(max-width:560px){.k-lesson-thumb{width:64px;height:64px}}
+  .k-person{margin:16px 0;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+  .k-person:last-child{border-bottom:none}
+  .k-person-n{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--ink)}
+  .k-person-y{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-soft);margin-left:8px}
+  .k-person-w{font-size:.94rem;line-height:1.7;color:var(--ink-soft);margin-top:5px}
+  .k-units{max-width:680px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:0 0 20px;
+    padding-bottom:12px;border-bottom:1px solid var(--rule);font-family:var(--font-display);font-size:11.5px}
+  .k-units span{color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+  .k-units button{font-family:inherit;font-size:11.5px;padding:0;cursor:pointer;
+    background:none;border:none;border-bottom:1px solid transparent;color:var(--ink-soft)}
+  .k-units button:hover{color:var(--steel)}
+  .k-units button.active{color:var(--ink);font-weight:700;border-bottom-color:var(--steel)}
+  .k-prev-next{max-width:680px;display:flex;justify-content:space-between;gap:10px;margin:40px 0 0;
+    padding-top:18px;border-top:1px solid var(--rule);font-family:var(--font-display);font-size:.9rem}
+  .k-prev-next a{text-decoration:none;color:var(--steel);max-width:48%}
+  .k-links{max-width:680px;margin:22px 0;font-family:var(--font-display);font-size:11.5px;
+    color:var(--ink-soft);line-height:2;padding-top:14px;border-top:1px solid var(--rule)}
+  .k-links a{color:var(--ink-soft);text-decoration:none;margin-right:12px}
+  .k-links a:hover{color:var(--steel);text-decoration:underline}
+
+  /* Испытание: мини-игра на стенде параграфа */
+  .k-chal{margin:14px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;
+    background:var(--surface);max-width:620px}
+  .k-chal-h{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:9px}
+  .k-chal-i{display:inline-flex;color:var(--accent)}
+  .k-chal-task{font-size:14px;line-height:1.6}
+  .k-chal-goal{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+  .k-chal-bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+  .k-chal-fill{height:100%;width:2%;background:var(--muted);border-radius:3px;
+    transition:width .25s ease, background-color .25s ease}
+  .k-chal-fill.near{background:#b8860b}
+  .k-chal-fill.hit{background:#2e7d32}
+  .k-chal-now{font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}
+  .k-chal-msg{font-size:12.5px;line-height:1.55;color:var(--muted);margin-top:6px;min-height:1.6em}
+  .k-chal-msg.near{color:#b8860b}
+  .k-chal-msg.win{color:#2e7d32;font-weight:600}
+  .k-chal-btn{margin-top:10px;font:inherit;font-size:12.5px;padding:7px 15px;border-radius:16px;
+    border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+  .k-chal-btn:hover{border-color:var(--accent);color:var(--accent)}
+  @media (max-width:640px){.k-chal{padding:12px 13px}}
+</style>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="top-bar" style="max-width:620px">
+  <a href="/learn.html" class="logo">bridge42worlds · дерево знаний</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<div id="k-root"></div>
+
+<script>
+if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+  if (location.port !== '8787') window.B42_TUTOR_API = 'http://127.0.0.1:8787/api/tutor';
+}
+</script>
+<script src="/js/icons.js?v=2"></script>
+<script src="/js/explorable.js?v=5"></script>
+<script src="/js/models.js?v=22"></script>
+<script src="/js/tutor.js?v=3"></script>
+<script src="/js/figures.js?v=9"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru';
+  var qs = new URLSearchParams(location.search);
+  var TOPIC = qs.get('t') || 'thermodynamics';
+  var PART = qs.get('p');
+  var BASE = '/data/theory/courses/' + TOPIC + '/';
+  var root = document.getElementById('k-root');
+  var APIS = [], BOT = null;
+
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function md(s) { return String(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  // свои иконки вместо эмодзи — единый вид во всех системах
+  function ic(name, size) { return (window.B42Icons && B42Icons[name]) ? B42Icons[name](size || 15) : ''; }
+
+  // Любые формулы В ТЕКСТЕ (переменные, соотношения) тоже должны быть набраны математически,
+  // а не обычным шрифтом. Пишем их в контенте как $...$ и прогоняем весь блок авто-рендером.
+  function renderMath(node) {
+    if (!window.renderMathInElement) return;
+    try {
+      renderMathInElement(node, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        ignoredClasses: ['k-step-eq', 'k-law-eq', 'k-plate-eq', 'k-const-sym'],
+        throwOnError: false
+      });
+    } catch (e) {}
+  }
+  function tex(target, latex, display) {
+    if (!window.katex) { target.textContent = latex; return; }
+    try { katex.render(latex, target, { throwOnError: false, displayMode: display !== false }); }
+    catch (e) { target.textContent = latex; }
+  }
+
+  // ── общий словарь констант: одна константа описана один раз на весь курс ──
+  var CONSTANTS = null;
+  var tipBox = null;
+  function attachConstTip(node, c) {
+    node.classList.add('k-has-tip');
+    function show() {
+      if (!tipBox) { tipBox = el('div', 'k-tip'); document.body.appendChild(tipBox); }
+      var loc = c[LANG] || c.ru || {};
+      tipBox.innerHTML = '<div class="k-tip-n">' + loc.name + '</div>' +
+        '<div class="k-tip-v">' + c.value + ' <span>' + (c.unit || '') + '</span></div>' +
+        '<div class="k-tip-w">' + (loc.why || '') + '</div>' +
+        (loc.mnemo ? '<div class="k-tip-m"><b>Как запомнить:</b> ' + loc.mnemo + '</div>' : '') +
+        (loc.note ? '<div class="k-tip-x">' + loc.note + '</div>' : '') +
+        (c.exact ? '<div class="k-tip-x">Значение зафиксировано точно</div>' : '');
+      var r = node.getBoundingClientRect();
+      tipBox.style.display = 'block';
+      var top = r.bottom + window.scrollY + 6;
+      var left = Math.min(r.left + window.scrollX, window.innerWidth - 320);
+      tipBox.style.top = top + 'px';
+      tipBox.style.left = Math.max(8, left) + 'px';
+    }
+    function hide() { if (tipBox) tipBox.style.display = 'none'; }
+    node.addEventListener('mouseenter', show);
+    node.addEventListener('mouseleave', hide);
+    node.addEventListener('click', function (e) { e.preventDefault(); show(); });
+  }
+
+  // ── прогресс по курсу: балл за каждый параграф живёт в localStorage ──
+  var PKEY = 'b42_progress_' + TOPIC;
+  function loadProgress() {
+    try { return JSON.parse(localStorage.getItem(PKEY) || '{}'); } catch (e) { return {}; }
+  }
+  function saveScore(lessonId, right, total) {
+    try {
+      var p = loadProgress();
+      p[lessonId] = { right: right, total: total, ts: Date.now() };
+      localStorage.setItem(PKEY, JSON.stringify(p));
+    } catch (e) {}
+  }
+
+  function unitSwitch() {
+    var host = el('div', 'k-units');
+    host.appendChild(el('span', null, ic('ruler', 13) + ' Единицы:'));
+    var list = window.B42Units ? window.B42Units.list : {};
+    try { window.B42_UNITS = localStorage.getItem('b42_units') || 'metric'; } catch (e) { window.B42_UNITS = 'metric'; }
+    Object.keys(list).forEach(function (key) {
+      var b = el('button', key === window.B42_UNITS ? 'active' : '', list[key].name);
+      b.type = 'button'; b.title = 'T: ' + list[key].T + ' · P: ' + list[key].P + ' · V: ' + list[key].V;
+      b.addEventListener('click', function () {
+        window.B42_UNITS = key;
+        host.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+        try { localStorage.setItem('b42_units', key); } catch (e) {}
+        APIS.forEach(function (a) { try { a.render(); } catch (e) {} });
+      });
+      host.appendChild(b);
+    });
+    return host;
+  }
+
+  function entityLinks(ent) {
+    if (!ent) return null;
+    var wrap = el('div', 'k-links');
+    function row(label, items, base, fmt) {
+      if (!items || !items.length) return;
+      var line = el('div', null, '<b>' + label + ':</b> ');
+      items.forEach(function (n) { var a = el('a', null, n.replace(/_/g, ' ')); a.href = base + fmt(n) + '.html'; line.appendChild(a); });
+      wrap.appendChild(line);
+    }
+    row('Теги', ent.tags, '/lang/' + LANG + '/tags/', encodeURIComponent);
+    row('Законы', ent.laws, '/lang/' + LANG + '/laws/', encodeURIComponent);
+    row('Учёные', ent.scientists, '/lang/' + LANG + '/scientists/', function (n) { return n.replace(/\s+/g, '_'); });
+    return wrap;
+  }
+
+  // ── ОБЗОРНАЯ ГЛАВА (видение темы) ──
+  function renderOverview(c) {
+    var C = c[LANG] || c.ru;
+    document.title = C.title + ' — bridge42worlds';
+    root.appendChild(el('h1', null, C.title));
+    root.appendChild(el('div', 'k-sub', C.subtitle));
+    root.appendChild(el('p', 'k-lead', C.lead));
+
+    // методичка «как работать с материалом» — до начала занятий
+    var gl = el('a', 'k-guide-link', ic('book') + ' Как работать с этим курсом · сколько времени займёт · опыты · материалы по теме');
+    gl.href = '?t=' + c.id + '&p=guide';
+    root.appendChild(gl);
+
+    var why = el('section', 'k-sec');
+    why.appendChild(el('h2', null, C.why.title));
+    C.why.text.forEach(function (p) { why.appendChild(el('p', null, md(p))); });
+    root.appendChild(why);
+
+    var map = el('section', 'k-sec');
+    map.appendChild(el('h2', null, C.map.title));
+    map.appendChild(el('p', null, C.map.lead));
+    var prog = loadProgress();
+    var doneCount = 0;
+    var ls = el('div', 'k-lessons');
+    c.lessons.forEach(function (l, i) {
+      var a = el('a', 'k-lesson');
+      a.href = '?t=' + c.id + '&p=' + l.id;
+      var sc = prog[l.id];
+      var badge = '';
+      if (sc) {
+        doneCount++;
+        var pct = Math.round(100 * sc.right / sc.total);
+        var color = pct >= 70 ? '#2e7d32' : (pct >= 40 ? '#b8860b' : 'var(--red)');
+        // Звёзды за качество прохождения: три — безупречно, две — хорошо, одна — зачёт.
+        var stars = pct >= 90 ? 3 : (pct >= 65 ? 2 : 1);
+        var starStr = '';
+        for (var si = 0; si < 3; si++) starStr += '<span class="k-star' + (si < stars ? ' on' : '') + '">★</span>';
+        badge = '<span class="k-stars" title="' + sc.right + ' из ' + sc.total + '">' + starStr + '</span>' +
+          '<span class="k-score" style="color:' + color + ';border-color:' + color + '">' +
+          sc.right + '/' + sc.total + '</span>';
+      } else {
+        badge = '<span class="k-score k-score-new">не пройден</span>';
+      }
+      // миниатюра-образ параграфа (если картинка есть; нет — блок просто не появится)
+      var thumb = el('img', 'k-lesson-thumb');
+      thumb.src = BASE + 'img/' + l.id + '.jpg';
+      thumb.alt = '';
+      thumb.addEventListener('error', function () { thumb.style.display = 'none'; });
+      a.appendChild(thumb);
+      var body = el('div', 'k-lesson-body');
+      body.appendChild(el('div', 'k-lesson-n', 'Параграф ' + (i + 1) + badge));
+      body.appendChild(el('div', 'k-lesson-t', l.title));
+      body.appendChild(el('div', 'k-lesson-s', l.sub));
+      body.appendChild(el('div', 'k-lesson-law', ic('scale', 13) + ' ' + l.law + '<span class="k-memo-link">' + ic('printer', 13) + ' шпаргалка</span>'));
+      body.querySelector('.k-memo-link').addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        location.href = '/memo.html?t=' + c.id + '&p=' + l.id;
+      });
+      a.appendChild(body);
+      ls.appendChild(a);
+    });
+    map.appendChild(ls);
+    // полоса общего прогресса по теме + суммарные звёзды
+    var totalStars = 0, maxStars = c.lessons.length * 3;
+    c.lessons.forEach(function (l) {
+      var s = prog[l.id];
+      if (s) { var pc = 100 * s.right / s.total; totalStars += pc >= 90 ? 3 : (pc >= 65 ? 2 : 1); }
+    });
+    var bar = el('div', 'k-progress');
+    var done = doneCount === c.lessons.length;
+    bar.innerHTML = '<div class="k-progress-bar"><div class="k-progress-fill" style="width:' +
+      Math.round(100 * doneCount / c.lessons.length) + '%"></div></div>' +
+      '<div class="k-progress-t">Пройдено параграфов: <b>' + doneCount + ' из ' + c.lessons.length + '</b>' +
+      '<span class="k-star-total">★ ' + totalStars + ' / ' + maxStars + '</span></div>' +
+      (done ? '<div class="k-unlocked">' + ic('star', 14) + ' Тема пройдена целиком — открыт доступ к следующей теме курса.</div>' : '');
+    map.appendChild(bar);
+    map.appendChild(el('p', null, md('**Итог:** ' + C.map.outcome)));
+    root.appendChild(map);
+
+    var hist = el('section', 'k-sec');
+    hist.appendChild(el('h2', null, ic('history') + ' ' + C.history.title));
+    C.history.people.forEach(function (p) {
+      var d = el('div', 'k-person');
+      d.appendChild(el('div', 'k-person-n', p.name + '<span class="k-person-y">' + p.years + '</span>'));
+      d.appendChild(el('div', 'k-person-w', p.what));
+      hist.appendChild(d);
+    });
+    root.appendChild(hist);
+
+    var pre = el('section', 'k-sec');
+    pre.appendChild(el('h2', null, C.prereq.title));
+    var ul = el('ul');
+    ul.style.cssText = 'margin:0 0 12px 20px;font-size:15px;line-height:1.8;color:var(--muted)';
+    C.prereq.items.forEach(function (i) { ul.appendChild(el('li', null, md(i))); });
+    pre.appendChild(ul);
+    pre.appendChild(el('div', 'k-note', C.prereq.note));
+    root.appendChild(pre);
+
+    // край известного: чем тема упирается в нерешённое (не у всех тем есть)
+    if (C.closing) {
+      var cl = el('section', 'k-sec k-closing');
+      cl.appendChild(el('h2', null, C.closing.title));
+      C.closing.text.forEach(function (t) { cl.appendChild(el('p', null, md(t))); });
+      if (C.closing.link) {
+        cl.appendChild(el('p', null,
+          '<a class="k-frontier-link" href="' + C.closing.link.href + '">' + C.closing.link.text + ' →</a>'));
+      }
+      root.appendChild(cl);
+    }
+
+    var links = entityLinks(c.entities);
+    if (links) root.appendChild(links);
+  }
+
+  // ── МЕТОДИЧКА (как работать с курсом) ──
+  function renderGuide(g, course) {
+    var G = g[LANG] || g.ru;
+    document.title = G.title + ' — bridge42worlds';
+    var nav = el('div', 'k-nav');
+    var back = el('a', null, '← ' + (course[LANG] || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
+    root.appendChild(nav);
+    root.appendChild(el('h1', null, G.title));
+    root.appendChild(el('div', 'k-sub', G.subtitle));
+    root.appendChild(el('p', 'k-lead', G.lead));
+
+    // сколько времени
+    var b = el('section', 'k-sec');
+    b.appendChild(el('h2', null, G.budget.title));
+    b.appendChild(el('p', null, G.budget.lead));
+    var tbl = el('table', 'k-const');
+    G.budget.rows.forEach(function (r) {
+      var tr = el('tr');
+      tr.appendChild(el('td', null, '<div class="k-const-name">' + r.what + '</div><div class="k-const-why">' + r.note + '</div>'));
+      var td = el('td', null, r.time);
+      td.style.cssText = 'white-space:nowrap;text-align:right;font-family:var(--font-mono);font-size:.85rem;color:var(--brass);vertical-align:top';
+      tr.appendChild(td);
+      tbl.appendChild(tr);
+    });
+    b.appendChild(tbl);
+    b.appendChild(el('div', 'k-note', G.budget.note));
+    root.appendChild(b);
+
+    // уровень
+    var lv = el('section', 'k-sec');
+    lv.appendChild(el('h2', null, G.level.title));
+    G.level.text.forEach(function (t) { lv.appendChild(el('p', null, md(t))); });
+    root.appendChild(lv);
+
+    // как проходить
+    var h = el('section', 'k-sec');
+    h.appendChild(el('h2', null, G.howto.title));
+    h.appendChild(el('p', null, G.howto.lead));
+    G.howto.steps.forEach(function (s) {
+      var d = el('div', 'k-step');
+      var t = el('div', 'k-step-t');
+      t.appendChild(el('span', 'k-step-n', s.n));
+      t.appendChild(el('span', null, '<b>' + s.what + '</b>'));
+      d.appendChild(t);
+      d.appendChild(el('div', 'k-const-why', md(s.how)));
+      h.appendChild(d);
+    });
+    root.appendChild(h);
+
+    // если застряли
+    var st = el('section', 'k-sec');
+    st.appendChild(el('h2', null, G.stuck.title));
+    var t2 = el('table', 'k-const');
+    G.stuck.items.forEach(function (i) {
+      var tr = el('tr');
+      tr.appendChild(el('td', null, '<div class="k-const-name">' + i.case + '</div><div class="k-const-why">' + md(i.do) + '</div>'));
+      t2.appendChild(tr);
+    });
+    st.appendChild(t2);
+    root.appendChild(st);
+
+    // опыты
+    var ex = el('section', 'k-sec');
+    ex.appendChild(el('h2', null, G.experiments.title));
+    ex.appendChild(el('p', null, G.experiments.lead));
+    var t3 = el('table', 'k-const');
+    G.experiments.items.forEach(function (i) {
+      var tr = el('tr');
+      var c1 = el('td', 'k-const-sym', '§' + i.p); c1.style.fontSize = '.9rem';
+      tr.appendChild(c1);
+      tr.appendChild(el('td', null, '<div class="k-const-name">' + i.what + '</div><div class="k-const-why">' + i.why + '</div>'));
+      t3.appendChild(tr);
+    });
+    ex.appendChild(t3);
+    root.appendChild(ex);
+
+    // материалы по теме — реальные ссылки в нашу базу
+    var lib = el('section', 'k-sec');
+    lib.appendChild(el('h2', null, G.library.title));
+    lib.appendChild(el('p', null, G.library.lead));
+    function linkRow(items, base, fmt, icon) {
+      var t = el('table', 'k-const');
+      items.forEach(function (i) {
+        var tr = el('tr');
+        var c = el('td', 'k-const-sym', icon); c.style.fontSize = '1rem';
+        tr.appendChild(c);
+        var a = '<a href="' + base + fmt(i.id) + '.html" style="color:var(--steel);text-decoration:none;font-weight:700">' + i.name + '</a>';
+        tr.appendChild(el('td', null, '<div class="k-const-name">' + a + '</div>' +
+          (i.note ? '<div class="k-const-why">' + i.note + '</div>' : '')));
+        t.appendChild(tr);
+      });
+      return t;
+    }
+    lib.appendChild(el('h3', null, ic('scale') + ' Законы'));
+    lib.appendChild(linkRow(G.library.laws, '/lang/' + LANG + '/laws/', function (x) { return x; }, '<i data-ic="scale"></i>'));
+    lib.appendChild(el('h3', null, ic('person') + ' Учёные'));
+    lib.appendChild(linkRow(G.library.scientists, '/lang/' + LANG + '/scientists/', function (x) { return x; }, '<i data-ic="person"></i>'));
+    lib.appendChild(el('h3', null, ic('tag') + ' Темы'));
+    lib.appendChild(linkRow(G.library.tags, '/lang/' + LANG + '/tags/', function (x) { return x; }, '<i data-ic="tag"></i>'));
+    lib.appendChild(el('div', 'k-note', G.library.note));
+    root.appendChild(lib);
+
+    // куда дальше
+    var nx = el('section', 'k-sec');
+    nx.appendChild(el('h2', null, G.next.title));
+    var ul = el('ul');
+    ul.style.cssText = 'margin:0 0 12px 20px;line-height:1.8;color:var(--ink-soft)';
+    G.next.items.forEach(function (i) { ul.appendChild(el('li', null, md(i))); });
+    nx.appendChild(ul);
+    root.appendChild(nx);
+  }
+
+  // ── ПАРАГРАФ (урок с выводом) ──
+  function renderLesson(lesson, course, modelData) {
+    var L = lesson[LANG] || lesson.ru;
+    document.title = L.title + ' — ' + (course[LANG] || course.ru).title + ' — bridge42worlds';
+
+    // навигация по курсу
+    var nav = el('div', 'k-nav');
+    var back = el('a', null, '← ' + (course[LANG] || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
+    course.lessons.forEach(function (l, i) {
+      var a = el('a', l.id === lesson.id ? 'active' : '', (i + 1) + '. ' + l.title);
+      a.href = '?t=' + course.id + '&p=' + l.id; nav.appendChild(a);
+    });
+    root.appendChild(nav);
+
+    root.appendChild(el('h1', null, L.title));
+    root.appendChild(el('div', 'k-sub', L.subtitle));
+
+    // Образная картинка параграфа — зрительный якорь до чтения текста
+    var hero = el('div', 'k-hero');
+    var heroImg = el('img');
+    heroImg.src = BASE + 'img/' + lesson.id + '.jpg';
+    heroImg.alt = L.title;
+    heroImg.addEventListener('error', function () { hero.style.display = 'none'; });
+    hero.appendChild(heroImg);
+    if (L.heroCap) hero.appendChild(el('div', 'k-hero-cap', L.heroCap));
+    root.appendChild(hero);
+
+    root.appendChild(unitSwitch());
+
+    var intro = el('section', 'k-sec');
+    L.intro.forEach(function (p) { intro.appendChild(el('p', null, md(p))); });
+    root.appendChild(intro);
+
+    // интерактивный стенд
+    if (lesson.model && modelData && window.B42Models) {
+      var factory = { ideal_gas: 'gas', phase_transition: 'kettle', processes_engine: 'engine',
+                      motion: 'motion', newton: 'newton', collision: 'collision',
+                      rotation: 'rotation', oscillator: 'oscillator',
+                      resonance: 'resonance', entropy: 'entropy',
+                      orbit: 'orbit', wave: 'wave', charge: 'charge', magnet: 'magnet',
+                      srt: 'srt', quantum: 'quantum', nucleus: 'nucleus' }[lesson.model];
+      if (factory) {
+        var mdl = B42Models[factory](modelData);
+        var wrap = el('div'); wrap.style.margin = '20px 0';
+        // Многорежимная модель (процессы + двигатель) — кнопки переключения над стендом.
+        // Без них третий параграф показывал бы только изотерму, а он именно про четыре процесса.
+        var mount = el('div');
+        if (mdl.modes && mdl.modes.length) {
+          var mb = el('div', 'k-modes');
+          mdl.modes.forEach(function (m) {
+            var b = el('button', m === mdl.getMode() ? 'active' : '',
+              (modelData.i18n[LANG] && modelData.i18n[LANG]['mode_' + m]) || m);
+            b.type = 'button';
+            b.addEventListener('click', function () {
+              mdl.setMode(m);
+              mb.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+              var hint = modelData.i18n[LANG] && modelData.i18n[LANG]['hint_' + m];
+              if (hintBox) hintBox.textContent = hint || '';
+              api.render();
+            });
+            mb.appendChild(b);
+          });
+          wrap.appendChild(mb);
+          var hintBox = el('div', 'k-mode-hint');
+          hintBox.textContent = (modelData.i18n[LANG] && modelData.i18n[LANG]['hint_' + mdl.getMode()]) || '';
+          wrap.appendChild(hintBox);
+        }
+        wrap.appendChild(mount);
+        var extras = el('div'); extras.style.cssText = 'max-width:620px;margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7';
+        wrap.appendChild(extras);
+        if (L.standNote) { var sn = el('p', null, md(L.standNote)); sn.style.cssText = 'max-width:620px;font-size:13.5px;line-height:1.6;color:var(--soft);margin:10px 0 0'; wrap.appendChild(sn); }
+        root.appendChild(wrap);
+        var cfg = mdl.cfg; cfg.lang = LANG;
+        var api = Explorable(mount, cfg); APIS.push(api);
+        window.__api = api; window.__mdl = mdl;   // отладочный доступ (проверка анимации/связей)
+        if (mdl.bindHost) mdl.bindHost(mount);
+        // мини-игра: цель в величинах модели. Считает сам стенд, игра лишь смотрит на состояние.
+        if (window.B42Challenge) {
+          try { B42Challenge.mount(wrap, mdl, api, modelData, LANG); } catch (e) {}
+        }
+        if (mdl.extras) setInterval(function () {
+          try { extras.innerHTML = mdl.extras(api.state, null, function (k) { var d = modelData.i18n[LANG]; return (d && d[k]) || k; }); } catch (e) {}
+        }, 300);
+      }
+    }
+
+    // карточка закона: имя, формула, авторы, история
+    if (L.formula) {
+      var lw = el('div', 'k-law');
+      lw.appendChild(el('div', 'k-law-name', ic('scale') + ' ' + L.formula.name));
+      var eq = el('div', 'k-law-eq'); tex(eq, L.formula.latex); lw.appendChild(eq);
+      if (L.formula.alsoKnown) lw.appendChild(el('div', 'k-law-alt', L.formula.alsoKnown));
+      (L.formula.authors || []).forEach(function (a) {
+        var r = el('div', 'k-author');
+        r.innerHTML = '<b>' + a.who + '</b><span class="k-year">' + a.year + '</span><span>' + a.what + '</span>';
+        lw.appendChild(r);
+      });
+      // Расшифровка КАЖДОГО символа — сразу под формулой, до всего остального.
+      // Читатель не должен искать, что значит буква, где-то внизу страницы.
+      if (L.formula.symbols && L.formula.symbols.length) {
+        var sl = el('div', 'k-symbols');
+        sl.appendChild(el('div', 'k-symbols-t', 'Что означает каждый символ'));
+        L.formula.symbols.forEach(function (s) {
+          var row = el('div', 'k-sym');
+          var sy = el('span', 'k-sym-s'); tex(sy, s.latex || s.sym, false);
+          row.appendChild(sy);
+          var body = el('span', 'k-sym-b');
+          body.innerHTML = '<b>' + s.what + '</b><span class="k-sym-u">' + (s.unit || '') + '</span>' +
+            (s.note ? '<div class="k-sym-n">' + md(s.note) + '</div>' : '');
+          row.appendChild(body);
+          // если символ есть в общем словаре констант — вешаем тултип-карточку
+          if (s.const && CONSTANTS && CONSTANTS[s.const]) attachConstTip(row, CONSTANTS[s.const]);
+          sl.appendChild(row);
+        });
+        lw.appendChild(sl);
+      }
+      if (L.formula.story) lw.appendChild(el('div', 'k-story', L.formula.story));
+      root.appendChild(lw);
+    }
+
+    // вывод формулы: шаг → формула → схема
+    if (L.derivation) {
+      var d = el('section', 'k-sec');
+      d.appendChild(el('h2', null, ic('sigma') + ' ' + L.derivation.title));
+      if (L.derivation.lead) d.appendChild(el('p', null, L.derivation.lead));
+      (L.derivation.steps || []).forEach(function (s, i) {
+        var st = el('div', 'k-step');
+        var t = el('div', 'k-step-t');
+        t.appendChild(el('span', 'k-step-n', String(i + 1)));
+        t.appendChild(el('span', null, md(s.text)));
+        st.appendChild(t);
+        if (s.latex) { var e = el('div', 'k-step-eq'); tex(e, s.latex); st.appendChild(e); }
+        if (s.figure && window.B42Figures && B42Figures[s.figure]) {
+          var f = el('div', 'k-fig');
+          f.innerHTML = B42Figures[s.figure]();
+          if (s.figCaption) f.appendChild(el('div', 'k-fig-cap', s.figCaption));
+          st.appendChild(f);
+        }
+        d.appendChild(st);
+      });
+      if (L.derivation.plate) {
+        var pl = el('div', 'k-plate');
+        var pe = el('div', 'k-plate-eq'); tex(pe, L.derivation.plate); pl.appendChild(pe);
+        if (L.derivation.plateCap) pl.appendChild(el('div', 'k-plate-cap', L.derivation.plateCap));
+        d.appendChild(pl);
+      }
+      if (L.derivation.note) d.appendChild(el('div', 'k-note', md(L.derivation.note)));
+      root.appendChild(d);
+    }
+
+    // математический аппарат
+    if (L.math) {
+      var m = el('section', 'k-sec');
+      m.appendChild(el('h2', null, ic('sigma') + ' ' + L.math.title));
+      (L.math.items || []).forEach(function (it) {
+        m.appendChild(el('h3', null, it.what));
+        m.appendChild(el('p', null, md(it.why)));
+        if (it.latex) { var e2 = el('div', 'k-step-eq'); tex(e2, it.latex); m.appendChild(e2); }
+      });
+      root.appendChild(m);
+    }
+
+    // пример с числами: Дано → Закон → Решение → Ответ
+    if (L.example) {
+      var ex = el('section', 'k-sec');
+      ex.appendChild(el('h2', null, ic('pencil') + ' ' + L.example.title));
+      if (L.example.lead) ex.appendChild(el('p', null, L.example.lead));
+      var box = el('div', 'k-ex');
+      var g = el('div', 'k-ex-row'); g.innerHTML = '<span class="k-ex-label">Дано</span>' + L.example.given; box.appendChild(g);
+      var lw2 = el('div', 'k-ex-row'); lw2.innerHTML = '<span class="k-ex-label">Закон</span>' + L.example.law; box.appendChild(lw2);
+      var sol = el('div', 'k-ex-row'); sol.innerHTML = '<span class="k-ex-label">Решение</span>'; box.appendChild(sol);
+      (L.example.solution || []).forEach(function (s) {
+        var r = el('div'); r.style.margin = '8px 0';
+        r.appendChild(el('div', null, md(s.text)));
+        if (s.latex) { var e3 = el('div', 'k-step-eq'); tex(e3, s.latex); r.appendChild(e3); }
+        box.appendChild(r);
+      });
+      box.appendChild(el('div', 'k-ex-ans', '✓ ' + L.example.answer));
+      if (L.example.check) box.appendChild(el('div', 'k-ex-check', L.example.check));
+      ex.appendChild(box);
+      root.appendChild(ex);
+    }
+
+    // константы — с единицами измерения
+    if (L.constants) {
+      var cs = el('section', 'k-sec');
+      cs.appendChild(el('h2', null, ic('hash') + ' ' + L.constants.title));
+      if (L.constants.lead) cs.appendChild(el('p', null, L.constants.lead));
+      var list = el('div', 'k-const');
+      (L.constants.items || []).forEach(function (c) {
+        var it = el('div', 'k-const-item');
+        var sym = el('div', 'k-const-sym'); tex(sym, c.latex || c.sym, false); it.appendChild(sym);
+        var b = el('div', 'k-const-body');
+        b.appendChild(el('div', 'k-const-name', c.name));
+        b.appendChild(el('div', 'k-const-val', c.value + '<span class="k-const-unit">' + (c.unit || '') + '</span>'));
+        b.appendChild(el('div', 'k-const-why', md(c.why)));
+        if (c.mnemo) b.appendChild(el('div', 'k-const-mnemo', '<b>Как запомнить:</b> ' + md(c.mnemo)));
+        it.appendChild(b);
+        // если константа есть в общем словаре — символ получает тултип-карточку
+        var key = c.dictKey || c.sym;
+        if (CONSTANTS && CONSTANTS[key]) attachConstTip(sym, CONSTANTS[key]);
+        list.appendChild(it);
+      });
+      cs.appendChild(list);
+      root.appendChild(cs);
+    }
+
+    // ── Сквозной пример: как параграфы темы работают вместе на одном явлении ──
+    if (L.synthesis) {
+      var sy = el('section', 'k-sec');
+      sy.appendChild(el('h2', null, ic('star') + ' ' + L.synthesis.title));
+      if (L.synthesis.lead) sy.appendChild(el('p', null, L.synthesis.lead));
+      var st2 = el('table', 'k-const');
+      (L.synthesis.items || []).forEach(function (i) {
+        var tr = el('tr');
+        tr.appendChild(el('td', null, '<div class="k-const-name">' + i.h + '</div>' +
+          '<div class="k-const-why">' + md(i.text) + '</div>'));
+        st2.appendChild(tr);
+      });
+      sy.appendChild(st2);
+      root.appendChild(sy);
+    }
+
+    // ── Занимательное по Перельману: опыт на кухне, парадокс, факт ──
+    // Каждый пункт помечен своей иконкой: kitchen / fact / paradox / mnemo / estimate / edge
+    if (L.curiosities) {
+      var cu = el('section', 'k-sec');
+      cu.appendChild(el('h2', null, ic('flask') + ' ' + L.curiosities.title));
+      if (L.curiosities.lead) cu.appendChild(el('p', null, L.curiosities.lead));
+      var cul = el('div', 'k-curio');
+      (L.curiosities.items || []).forEach(function (i) {
+        var it = el('div', 'k-curio-item');
+        it.appendChild(el('div', 'k-curio-ic', ic(i.icon || 'fact', 19)));
+        var b = el('div', 'k-curio-body');
+        b.appendChild(el('div', 'k-curio-kind', i.kind || ''));
+        b.appendChild(el('div', 'k-curio-h', i.h));
+        b.appendChild(el('div', 'k-curio-t', md(i.text)));
+        if (i.answer) b.appendChild(el('div', 'k-curio-a', '<b>Разгадка.</b> ' + md(i.answer)));
+        it.appendChild(b);
+        cul.appendChild(it);
+      });
+      cu.appendChild(cul);
+      root.appendChild(cu);
+    }
+
+    // ── Аппендикс для любознательных: сворачиваемый, не входит в проверку ──
+    if (L.appendix) {
+      var ap = el('details', 'k-appendix');
+      var sum = el('summary');
+      sum.innerHTML = ic('lamp') + ' ' + L.appendix.title;
+      ap.appendChild(sum);
+      if (L.appendix.lead) ap.appendChild(el('div', 'k-app-lead', md(L.appendix.lead)));
+      (L.appendix.blocks || []).forEach(function (b) {
+        if (b.h) ap.appendChild(el('h3', 'k-app-h', b.h));
+        ap.appendChild(el('div', 'k-app-t', md(b.text)));
+        if (b.latex) { var e4 = el('div', 'k-step-eq'); tex(e4, b.latex); ap.appendChild(e4); }
+      });
+      root.appendChild(ap);
+    }
+
+    // проверка понимания
+    if (L.quiz && L.quiz.length && window.B42Tutor) {
+      var q = el('section', 'k-sec');
+      q.appendChild(el('h2', null, ic('check') + ' Проверьте себя'));
+      var qh = el('div'); q.appendChild(qh);
+      root.appendChild(q);
+      var ctxText = L.intro.join(' ') + '\n\n' + (L.derivation ? L.derivation.steps.map(function (s) { return s.text; }).join(' ') : '');
+      L.quiz.forEach(function (x) { x.ctx = ctxText; x.ctxTitle = L.title; });
+      // Балл за параграф запоминается — на обзорной странице видно, что уже пройдено
+      var quiz = B42Tutor.Quiz(qh, L.quiz, UI_STRINGS, BOT, {
+        onAnswer: function (res) {
+          var keys = Object.keys(res);
+          var right = keys.filter(function (k) { return res[k].correct; }).length;
+          saveScore(lesson.id, right, L.quiz.length);
+          if (keys.length === L.quiz.length && !q.querySelector('.k-done')) {
+            // Показываем итог СРАЗУ и с разбором: что усвоено, где промах, что перечитать.
+            var pct = Math.round(100 * right / L.quiz.length);
+            var verdict = pct === 100 ? 'Отлично — все вопросы верно.'
+              : (pct >= 60 ? 'Хорошо, но пара мест требует возврата.'
+                           : 'Стоит перечитать вывод и покрутить стенд ещё раз.');
+            var done = el('div', 'k-done');
+            var head = el('div', 'k-done-h');
+            head.innerHTML = '<span>Параграф пройден</span><b>' + right + ' / ' + L.quiz.length + '</b>';
+            done.appendChild(head);
+            var bar = el('div', 'k-done-bar');
+            bar.innerHTML = '<div class="k-done-fill" style="width:' + pct + '%"></div>';
+            done.appendChild(bar);
+            done.appendChild(el('div', 'k-done-v', verdict));
+            // разбор по вопросам — видно, какая именно идея не села
+            var ul = el('div', 'k-done-list');
+            L.quiz.forEach(function (qq, i) {
+              var r = res[qq.id];
+              var okv = r && r.correct;
+              var row = el('div', 'k-done-row' + (okv ? ' ok' : ' no'));
+              row.innerHTML = '<span class="k-done-m">' + (okv ? '✓' : '✕') + '</span>' +
+                '<span>' + (i + 1) + '. ' + qq.q.slice(0, 90) + (qq.q.length > 90 ? '…' : '') + '</span>';
+              ul.appendChild(row);
+            });
+            done.appendChild(ul);
+            if (right < L.quiz.length) {
+              var tip = el('div', 'k-done-tip');
+              tip.textContent = 'Не сошлось — нажмите «подведи к идее» под нужным вопросом: тьютор задаст встречный вопрос, не называя ответа.';
+              done.appendChild(tip);
+            }
+            done.appendChild(el('div', 'k-done-tip', 'Результат сохранён — он виден в оглавлении курса.'));
+            q.appendChild(done);
+          }
+        }
+      });
+    }
+
+    var links2 = entityLinks(lesson.entities);
+    if (links2) root.appendChild(links2);
+
+    // предыдущий / следующий параграф
+    var idx = course.lessons.findIndex(function (l) { return l.id === lesson.id; });
+    var pn = el('div', 'k-prev-next');
+    if (idx > 0) { var pa = el('a', null, '← ' + course.lessons[idx - 1].title); pa.href = '?t=' + course.id + '&p=' + course.lessons[idx - 1].id; pn.appendChild(pa); }
+    else pn.appendChild(el('span'));
+    if (idx < course.lessons.length - 1) { var na = el('a', null, course.lessons[idx + 1].title + ' →'); na.href = '?t=' + course.id + '&p=' + course.lessons[idx + 1].id; na.style.textAlign = 'right'; pn.appendChild(na); }
+    root.appendChild(pn);
+  }
+
+  var UI_STRINGS = {
+    right: 'Верно!', notQuite: 'Не совсем.', check: 'Проверить',
+    freePlaceholder: 'Ответьте своими словами…',
+    estPlaceholder: 'Прикиньте в уме — важен порядок',
+    estRight: 'Порядок верный!', estWrong: 'Мимо порядка.',
+    estAnswer: 'Точное значение', estOff: 'вы промахнулись в',
+    askMore: 'Спросить глубже', leadMe: 'Не понимаю — подведи к идее',
+    seedDeeper: 'Объясни глубже, почему это так: ',
+    seedStuck: 'Я ответил так: ', seedStuck2: 'Не понимаю, где ошибка. Вопрос: ',
+    seedEstimate: 'Помоги прикинуть в уме, по шагам, не давая сразу число: ',
+    noAnswer: 'не знаю', quizCtx: 'Проверка знаний',
+    botTitle: 'Тьютор', botCtx: 'по разделу',
+    botPlaceholder: 'Спросите о том, что не сходится…', botSend: 'Спросить',
+    botHello: 'Спрашивайте что угодно по этому параграфу — объясню на пальцах.',
+    botThinking: 'Думаю…',
+    botDemo: '<i data-ic="warn"></i>️ Демо-режим: живой тьютор включается на сервере. Это заготовленная подсказка.',
+    botOffline: '<i data-ic="warn"></i>️ Живой тьютор сейчас не подключён.'
+  };
+
+  // общий словарь констант грузим один раз на страницу (не блокируя рендер, если его нет)
+  fetch('/data/theory/constants.json', { cache: 'no-cache' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) { CONSTANTS = d.items; })
+    .catch(function () { CONSTANTS = null; });
+
+  fetch(BASE + 'course.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (course) {
+    // оглавление на языке читателя: заголовки параграфов лежат в языковых ветках
+    if (course[LANG] && course[LANG].lessons) course.lessons = course[LANG].lessons;
+    BOT = B42Tutor.Bot({ lang: LANG, strings: UI_STRINGS, maxQuestions: 10, maxLen: 600 });
+    if (PART === 'guide') {
+      return fetch(BASE + 'guide.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (g) {
+        renderGuide(g, course);
+        setTimeout(function () { renderMath(root); }, 300);
+      });
+    }
+    if (!PART) { renderOverview(course); setTimeout(function () { renderMath(root); }, 300); return; }
+    return fetch(BASE + PART + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (lesson) {
+      function done(md2) {
+        renderLesson(lesson, course, md2);
+        // формулы внутри обычного текста ($...$) — тоже математическим набором
+        setTimeout(function () { renderMath(root); }, 300);
+      }
+      if (!lesson.model) { done(null); return; }
+      return fetch('/data/theory/' + lesson.model + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(done);
+    });
+  }).catch(function (e) {
+    root.appendChild(el('h1', null, 'Не удалось загрузить материал'));
+    root.appendChild(el('p', null, String(e)));
+  });
+})();
+</script>
+
+<script>
+// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.querySelector('.top-bar, .topnav');
+  if (!bar || document.getElementById('course-langs')) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'langs'; wrap.id = 'course-langs';
+  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+    var a = document.createElement('a');
+    a.href = '?lang=' + l;
+    a.textContent = l.toUpperCase();
+    if (l === window.B42_LANG) a.className = 'active';
+    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
+    wrap.appendChild(a);
+  });
+  bar.appendChild(wrap);
+});
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.B42Icons) return;
+  document.querySelectorAll('i[data-ic]').forEach(function (n) {
+    var f = B42Icons[n.getAttribute('data-ic')];
+    if (f) n.outerHTML = f(15);
+  });
+});
+</script>
+<script src="/js/course-challenge.js?v=1"></script>
+</body>
+</html>

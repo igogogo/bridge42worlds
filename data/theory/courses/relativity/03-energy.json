@@ -1,0 +1,1580 @@
+{
+  "id": "03-energy",
+  "topic": "relativity",
+  "schema": "b42.lesson/1",
+  "model": "srt",
+  "entities": {
+    "laws": [
+      "mass_energy_equivalence",
+      "conservation_of_energy"
+    ],
+    "tags": [
+      "relativity",
+      "energy"
+    ],
+    "scientists": [
+      "Albert Einstein"
+    ]
+  },
+  "ru": {
+    "title": "Масса и энергия",
+    "subtitle": "Параграф 3 · Откуда берётся E = mc²",
+    "intro": [
+      "Самая известная формула физики появилась в трёхстраничной заметке, дописанной к основной статье через несколько месяцев. Эйнштейн заканчивал её осторожным предположением: возможно, теорию удастся проверить на веществах с большим содержанием энергии, вроде солей радия. Через сорок лет проверка состоялась способом, которого он не желал.",
+      "Смысл формулы не в том, что массу можно превратить в энергию. Смысл глубже: масса и есть энергия, просто выраженная в других единицах, — как расстояние можно мерить метрами или световыми секундами. Множитель $c^{2}$ здесь работает переводным коэффициентом, а не физическим механизмом.",
+      "Из этого следует, что нагретое тело тяжелее холодного, сжатая пружина тяжелее свободной, а масса протона на девяносто девять процентов состоит вовсе не из масс составляющих его кварков, а из энергии их движения и связи. Масса оказалась не количеством вещества, а мерой полной энергии покоящегося тела."
+    ],
+    "standNote": "Смотрите на последнюю строку под сценой — прирост энергии относительно покоя в процентах. При малых скоростях он совпадает с обычной кинетической энергией, но по мере приближения к скорости света уходит вверх без всякого предела. Разгоните ползунок до 0,99 и увидите, что энергия выросла в семь раз против покоя. Отсюда и невозможность достичь скорости света: не потому, что не хватает двигателя, а потому что требуемая энергия обращается в бесконечность.",
+    "formula": {
+      "name": "Эквивалентность массы и энергии",
+      "latex": "E = \\gamma m c^{2}, \\qquad E_0 = mc^{2}, \\qquad E^{2} = (pc)^{2} + (mc^{2})^{2}",
+      "alsoKnown": "Формула Эйнштейна · энергия покоя",
+      "authors": [
+        {
+          "who": "Альберт Эйнштейн",
+          "year": "1905",
+          "what": "вывел формулу в короткой заметке, разобрав, как меняется масса тела, испустившего свет в двух направлениях. Заголовок был вопросительным: зависит ли инерция тела от содержащейся в нём энергии"
+        },
+        {
+          "who": "Анри Пуанкаре",
+          "year": "1900",
+          "what": "получил соотношение между энергией и массой для электромагнитного излучения ещё раньше, но истолковал его как свойство эфира, а не как общий закон природы"
+        },
+        {
+          "who": "Артур Эддингтон",
+          "year": "1920",
+          "what": "первым предположил, что звёзды светят за счёт превращения водорода в гелий с выделением энергии по этой формуле. Возражавшим, что температуры Солнца недостаточно, ответил: поищите местечко погорячее"
+        },
+        {
+          "who": "Ханс Бете",
+          "year": "1939",
+          "what": "рассчитал цепочку ядерных реакций в недрах звёзд и объяснил, откуда конкретно берётся солнечная энергия. Нобелевская премия пришла через тридцать восемь лет"
+        },
+        {
+          "who": "Лиза Мейтнер",
+          "year": "1939",
+          "what": "объяснила деление урана и посчитала выделяющуюся энергию по формуле Эйнштейна, получив 200 МэВ на ядро. Нобелевскую премию за открытие деления дали её соавтору Гану, её обошли"
+        }
+      ],
+      "story": "Заметка 1905 года заканчивается фразой, которую стоит прочесть целиком: не исключено, что проверка теории окажется возможной на телах, содержание энергии в которых меняется в высокой степени, — например, на солях радия. Эйнштейн предлагал измерить убыль массы при радиоактивном распаде. Ни о каких бомбах и реакторах речи не шло: сама возможность цепной реакции была осознана только в 1933 году Силардом, а до того даже Резерфорд называл разговоры об извлечении ядерной энергии вздором. Эйнштейн узнал о Хиросиме из радиосводки и, по свидетельству секретарши, сказал только «горе мне». Формулу, ставшую символом атомной эры, он вывел в патентном бюро, размышляя об излучении.",
+      "symbols": [
+        {
+          "sym": "E0",
+          "latex": "E_0",
+          "what": "энергия покоя",
+          "unit": "Дж",
+          "note": "то, что тело содержит, даже стоя на месте; для килограмма — $9\\cdot 10^{16}$ Дж"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "масса покоя",
+          "unit": "кг",
+          "note": "инвариант: одинакова во всех системах отсчёта. Понятие «релятивистской массы» сегодня не используют"
+        },
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "полная энергия",
+          "unit": "Дж",
+          "note": "растёт с скоростью как $\\gamma$ и уходит в бесконечность при $v \\to c$"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "импульс",
+          "unit": "кг·м/с",
+          "note": "$p = \\gamma mv$; для фотона $p = E/c$ при нулевой массе"
+        },
+        {
+          "sym": "dm",
+          "latex": "\\Delta m",
+          "what": "дефект массы",
+          "unit": "кг",
+          "note": "разница между суммой масс частей и массой целого; она и выделяется как энергия связи"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: почему масса растёт вместе с энергией",
+      "lead": "Проследим рассуждение самого Эйнштейна — оно на удивление простое и не требует ничего, кроме сохранения импульса.",
+      "steps": [
+        {
+          "text": "Возьмём покоящееся тело, испускающее две одинаковые вспышки света в противоположные стороны. Импульсы вспышек равны и противоположны, значит тело остаётся на месте. Его энергия уменьшилась на суммарную энергию излучения.",
+          "latex": "E \\to E - \\Delta E, \\qquad \\vec{p}_{\\text{тела}} = 0 \\;\\text{до и после}",
+          "figure": "action",
+          "figCaption": "Симметричное испускание: тело теряет энергию, но не приобретает скорости."
+        },
+        {
+          "text": "Теперь посмотрим на то же самое из системы, движущейся со скоростью $v$. Там тело летит, а вспышки уходят вперёд и назад под углом. Их импульсы уже не компенсируются полностью — появляется составляющая вдоль движения.",
+          "latex": "p_{\\text{света}} = \\frac{\\Delta E}{c}\\cdot\\frac{v}{c} \\;\\;\\text{(вдоль движения)}",
+          "figure": "vectriangle",
+          "figCaption": "В движущейся системе излучение уносит импульс вперёд. Свет имеет импульс, хотя массы у него нет."
+        },
+        {
+          "text": "Но импульс обязан сохраняться и в этой системе. Тело скорости не меняло — значит уменьшился множитель при скорости, то есть масса.",
+          "latex": "p_{\\text{тела}} = mv \\;\\Longrightarrow\\; \\Delta m \\cdot v = \\frac{\\Delta E \\, v}{c^{2}}",
+          "figure": "momentum",
+          "figCaption": "Единственный способ сохранить импульс — признать, что тело стало легче."
+        },
+        {
+          "text": "Сокращаем скорость и получаем результат: испустив энергию, тело потеряло массу.",
+          "latex": "\\Delta m = \\frac{\\Delta E}{c^{2}} \\;\\Longleftrightarrow\\; \\Delta E = \\Delta m\\,c^{2}",
+          "figure": "result",
+          "figCaption": "Вывод не требует ничего, кроме сохранения импульса и того, что свет несёт импульс."
+        },
+        {
+          "text": "Обобщим. Полная энергия движущегося тела растёт как $\\gamma$, и при нулевой скорости остаётся не ноль, а энергия покоя — величина, которой в классической механике не было вовсе.",
+          "latex": "E = \\gamma mc^{2} = \\frac{mc^{2}}{\\sqrt{1-v^{2}/c^{2}}}",
+          "figure": "curves",
+          "figCaption": "При $v \\to c$ энергия уходит в бесконечность — потому массивное тело и не может достичь скорости света."
+        },
+        {
+          "text": "Проверим соответствие классике. Разложим при малой скорости: первое слагаемое — энергия покоя, второе — знакомая кинетическая энергия. Ньютоновская механика оказалась приближением.",
+          "latex": "E \\approx mc^{2} + \\frac{mv^{2}}{2} + \\ldots",
+          "figure": "kinetic",
+          "figCaption": "Формула $mv^{2}/2$ — первый поправочный член разложения. Принцип соответствия выполнен."
+        },
+        {
+          "text": "И общее соотношение, связывающее энергию, импульс и массу. Из него видно, что безмассовая частица возможна — если она движется точно со скоростью света.",
+          "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2}, \\qquad m = 0 \\Rightarrow E = pc",
+          "figure": "vectriangle",
+          "figCaption": "Прямоугольный треугольник в мире энергий: масса и импульс складываются как катеты."
+        }
+      ],
+      "plate": "Масса есть мера полной энергии покоящегося тела. Испустив энергию, тело легчает; энергия движущегося тела растёт как $\\gamma$ и обращается в бесконечность при приближении к скорости света.",
+      "note": "Границы применимости и важное уточнение о терминологии. В старых книгах пишут о растущей с скоростью «релятивистской массе» $m\\gamma$. Сегодня так не делают: масса определяется как инвариант, одинаковый во всех системах, а растёт энергия. Причина не в педантизме — понятие релятивистской массы работает для продольного движения и ломается для поперечного, из-за чего порождает больше путаницы, чем удобства. Ещё одно уточнение: формула не означает, что вещество легко превратить в энергию. В химических реакциях дефект массы порядка $10^{-10}$, в ядерных $10^{-3}$, и только аннигиляция даёт единицу."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Почему в формуле квадрат скорости света. Здесь часто ищут глубокий смысл, а он простой: $c^{2}$ работает переводным коэффициентом между единицами массы и энергии, как 1000 между километрами и метрами. Если бы мы измеряли время в тех же единицах, что расстояние — в световых секундах, — формула выглядела бы просто $E = m$. Квадрат появляется от того, что энергия имеет размерность массы на квадрат скорости, и никакой иной комбинации из массы и скорости света не составить. Это тот же анализ размерностей из вводной темы.",
+        "Как читать соотношение энергии и импульса. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ — теорема Пифагора, где катеты это импульс и масса, а гипотенуза полная энергия. Отсюда сразу два предельных случая. Покоящееся тело: импульс ноль, энергия равна массе. Фотон: масса ноль, энергия равна импульсу на скорость света. И между ними всё промежуточное. Треугольник — удобная картинка, чтобы не путаться в релятивистских формулах.",
+        "Что такое дефект массы. Соберите ядро из протонов и нейтронов — его масса окажется меньше суммы масс частей. Разница ушла в энергию связи, выделившуюся при сборке. Аналогия: чтобы разнять слипшиеся магниты, надо совершить работу, значит слипшиеся содержат меньше энергии, чем разнесённые, — а раз меньше энергии, то и меньше массы. Разница ничтожна для магнитов и заметна для ядер: у гелия она составляет 0,7 процента.",
+        "Почему нельзя разогнаться до скорости света. Посмотрите на формулу энергии: в знаменателе стоит корень, обращающийся в ноль при $v = c$. Энергия уходит в бесконечность. Разгонять можно сколько угодно, но каждая следующая добавка скорости обходится дороже предыдущей, и последний шаг стоит бесконечно много. В ускорителях это видно прямо: протоны в коллайдере движутся со скоростью 0,999999990 c, и дальнейший разгон почти не меняет скорость, зато растит энергию."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: сколько энергии в грамме и почему светит Солнце",
+      "lead": "Считаем энергию покоя грамма вещества и убыль массы Солнца — числа получаются несоразмерные привычным.",
+      "given": "Найти энергию покоя одного грамма любого вещества. Затем: мощность Солнца $3{,}8\\cdot 10^{26}$ Вт. Оценить, сколько массы оно теряет ежесекундно.",
+      "law": "$E_0 = mc^{2}$; $\\;\\Delta m = P\\,\\Delta t/c^{2}$",
+      "solution": [
+        {
+          "text": "Энергия покоя грамма.",
+          "latex": "E = 10^{-3} \\cdot (3\\cdot 10^{8})^{2} = 9\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Переведём в понятные единицы: это 25 миллионов киловатт-часов.",
+          "latex": "\\frac{9\\cdot 10^{13}}{3{,}6\\cdot 10^{6}} = 2{,}5\\cdot 10^{7}\\ \\text{кВт·ч}"
+        },
+        {
+          "text": "Теперь Солнце: масса, теряемая за секунду.",
+          "latex": "\\Delta m = \\frac{3{,}8\\cdot 10^{26}}{9\\cdot 10^{16}} \\approx 4{,}2\\cdot 10^{9}\\ \\text{кг/с}"
+        },
+        {
+          "text": "За год.",
+          "latex": "4{,}2\\cdot 10^{9} \\cdot 3{,}16\\cdot 10^{7} \\approx 1{,}3\\cdot 10^{17}\\ \\text{кг/год}"
+        },
+        {
+          "text": "Сравним с полной массой Солнца.",
+          "latex": "\\frac{1{,}3\\cdot 10^{17}}{2\\cdot 10^{30}} \\approx 7\\cdot 10^{-14}\\ \\text{в год}"
+        }
+      ],
+      "answer": "В грамме вещества заключено 9·10¹³ джоулей — 25 миллионов киловатт-часов, месячное потребление города с населением в сотню тысяч. Солнце теряет 4,2 миллиона тонн в секунду, но это меньше одной десятитриллионной доли его массы в год.",
+      "check": "Оба числа стоит осмыслить. Грамм вещества, полностью превращённый в энергию, дал бы больше, чем сжигание вагона угля, — но именно полностью, чего в природе достигает только аннигиляция с антивеществом. В ядерном реакторе в энергию переходит около одной тысячной массы топлива, в химическом горении — одна десятимиллиардная. Что до Солнца: четыре миллиона тонн в секунду звучит устрашающе, а на деле за пять миллиардов лет оно потеряло около трёх сотых процента массы. Топлива хватит ещё примерно на столько же."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Энергии покоя — естественная шкала для всей физики частиц.",
+      "items": [
+        {
+          "sym": "mec2",
+          "latex": "m_ec^{2}",
+          "name": "Энергия покоя электрона",
+          "value": "0,511",
+          "unit": "МэВ",
+          "why": "Опорное число всей ядерной физики. Аннигиляция электрона с позитроном даёт два гамма-кванта по 0,511 МэВ — характерная линия, по которой позитроны и обнаруживают.",
+          "mnemo": "Полмегаэлектронвольта. Энергия связи электрона в атоме водорода 13,6 эВ — в сорок тысяч раз меньше, поэтому химия и ядерная физика живут в разных мирах."
+        },
+        {
+          "sym": "mpc2",
+          "latex": "m_pc^{2}",
+          "name": "Энергия покоя протона",
+          "value": "938",
+          "unit": "МэВ",
+          "why": "Почти гигаэлектронвольт. При этом суммарная масса трёх кварков внутри — около 10 МэВ; остальные 99 % массы протона суть энергия движения кварков и глюонного поля.",
+          "mnemo": "Ваша масса на 99 % состоит не из массы частиц, а из энергии их взаимодействия. Вещество почти целиком есть связанная энергия."
+        },
+        {
+          "sym": "E1g",
+          "latex": "E_{1\\text{г}}",
+          "name": "Энергия покоя одного грамма",
+          "value": "9 · 10¹³",
+          "unit": "Дж",
+          "why": "25 миллионов киловатт-часов. Для сравнения: при делении килограмма урана освобождается около тысячной доли этой величины, при сгорании килограмма нефти — одна десятимиллиардная.",
+          "mnemo": "Грамм в полном превращении примерно равен взрыву в 20 килотонн — мощности бомбы, сброшенной на Нагасаки. Там, впрочем, превратился всего грамм из десяти килограммов плутония."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где работает эквивалентность",
+      "lead": "Формула перестала быть теорией и вошла в инженерию, медицину и астрофизику.",
+      "items": [
+        {
+          "h": "Звёзды",
+          "text": "Четыре ядра водорода превращаются в ядро гелия, которое легче суммы на 0,7 процента. Эта разница и есть свет Солнца. За секунду в гелий переходит 600 миллионов тонн водорода, из них 4 миллиона тонн становятся излучением."
+        },
+        {
+          "h": "Ядерная энергетика",
+          "text": "При делении ядра урана выделяется около 200 МэВ — это дефект массы примерно в одну тысячную. Килограмм урана даёт энергию, равную сжиганию трёх тысяч тонн угля."
+        },
+        {
+          "h": "Позитронная томография",
+          "text": "В организм вводят изотоп, испускающий позитроны; те аннигилируют с электронами, давая два кванта по 0,511 МэВ, разлетающихся строго в противоположные стороны. По совпадениям детекторов восстанавливают точку распада."
+        },
+        {
+          "h": "Ускорители",
+          "text": "В столкновении рождаются частицы тяжелее исходных — за счёт кинетической энергии. Так открывали бозон Хиггса: его масса 125 ГэВ взялась целиком из энергии столкновения протонов."
+        },
+        {
+          "h": "Масса вещества",
+          "text": "Масса протона на 99 % есть энергия движения кварков и поля, связывающего их. Практически вся масса вашего тела — не масса составляющих частиц, а энергия их взаимодействия."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Дефект массы не увидеть на кухне, зато его следствия окружают нас со всех сторон.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Горячий чайник тяжелее холодного",
+          "text": "Нагрев литр воды от 20 до 100 градусов, мы добавили ему 336 килоджоулей. Значит по формуле его масса выросла. На сколько — и почему этого никто не замечает?",
+          "answer": "Прирост массы равен $336000/9\\cdot 10^{16} \\approx 3{,}7\\cdot 10^{-12}$ килограмма, то есть около четырёх пикограммов. Это меньше массы одной бактерии и в миллиард раз ниже чувствительности лучших лабораторных весов. Тем не менее эффект абсолютно реален и в ядерной физике становится главным: там относительная добавка не $10^{-12}$, а $10^{-3}$, и её измеряют рутинно. Сжатая пружина, заряженный аккумулятор и раскрученный маховик тоже тяжелее — на столь же неразличимую величину."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Из чего сделана ваша масса",
+          "text": "Протон состоит из трёх кварков. Суммарная масса кварков — около 10 МэВ, масса протона 938 МэВ. Где остальные 99 процентов?",
+          "answer": "В энергии. Кварки внутри протона движутся почти со скоростью света, а связывающее их глюонное поле несёт огромную энергию — и вся она по формуле Эйнштейна проявляется как масса. То есть масса вашего тела почти целиком состоит не из массы частиц, а из энергии их движения и взаимодействия. Вещество — это связанная энергия, принявшая устойчивую форму. Пожалуй, самое неожиданное следствие формулы, и оно куда важнее бомб."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Резерфорд называл ядерную энергию вздором",
+          "text": "В 1933 году он публично заявил, что всякий, кто ждёт получения энергии из превращения атомов, говорит чепуху. На следующий день Лео Силард, прочитавший это в газете, шёл по лондонской улице и на светофоре сообразил идею цепной реакции: если распад ядра высвобождает больше нейтронов, чем поглощает, процесс будет самоподдерживающимся. Он запатентовал идею и передал патент британскому адмиралтейству, чтобы засекретить. Прошло шесть лет до открытия деления урана."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Масса — это энергия в других единицах",
+          "text": "Не «масса превращается в энергию», а «масса и есть энергия покоя, посчитанная в килограммах вместо джоулей». Множитель $c^{2}$ — курс обмена, как 1000 между километром и метром. Отсюда сразу следует, что всё содержащее энергию имеет массу: горячее тяжелее холодного, сжатое тяжелее свободного."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Доля массы, переходящая в энергию",
+          "text": "Химия: $10^{-10}$ — потому уголь надо возить вагонами. Деление ядер: $10^{-3}$ — потому топливо в реакторе меняют раз в год. Синтез: $7\\cdot 10^{-3}$ — вдесятеро эффективнее деления. Аннигиляция: 1 — предел, недостижимый ни в какой технологии. Вся энергетика человечества умещается между $10^{-10}$ и $10^{-3}$."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Почему формула не даёт бесплатной энергии",
+          "text": "Она говорит, сколько энергии содержится, но ничего не говорит о том, как её извлечь. В природе известен единственный способ полного превращения — аннигиляция с антивеществом, а антивещество приходится производить, тратя больше энергии, чем потом получишь. Все реальные источники освобождают лишь тысячные доли, и это не техническое отставание, а устройство ядерных сил."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: почему светит Солнце и почему не взрывается",
+      "lead": "Не входит в проверку. О самом большом термоядерном реакторе в окрестностях и о том, что удерживает его в равновесии.",
+      "blocks": [
+        {
+          "h": "Цепочка реакций",
+          "text": "Четыре протона в несколько этапов превращаются в ядро гелия, два позитрона и два нейтрино. Масса гелия на 0,7 процента меньше суммы масс четырёх протонов — эта разница и уходит в энергию, около 26 МэВ на каждое рождённое ядро."
+        },
+        {
+          "h": "Почему это не взрыв",
+          "text": "Солнце удерживается в равновесии обратной связью. Ускорится реакция — вырастет температура — газ расширится — плотность упадёт — реакция замедлится. Термостат работает автоматически и потому стабильно уже пять миллиардов лет. Взорваться Солнце не может по той же причине, по которой не может закипеть чайник с открытой крышкой."
+        },
+        {
+          "h": "Насколько это медленно",
+          "text": "Удельное энерговыделение в центре Солнца — около 275 ватт на кубометр. Это меньше, чем выделяет компостная куча того же объёма. Солнце светит ярко не потому, что реакция бурная, а потому что оно огромно. Первая ступень реакции требует превращения протона в нейтрон через слабое взаимодействие, и среднее время ожидания для отдельного протона — миллиарды лет."
+        },
+        {
+          "h": "И почему термоядерный реактор так труден",
+          "text": "Повторить солнечный процесс на Земле нельзя: он слишком медленный. Приходится брать более быстрые реакции с дейтерием и тритием, а для них нужны сотни миллионов градусов — вдесятеро больше, чем в центре Солнца, потому что нет ни его давления, ни его размеров. Плазму такой температуры удерживают магнитным полем, и это остаётся нерешённой инженерной задачей уже семьдесят лет."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Масса есть мера полной энергии покоящегося тела; $E = \\gamma mc^{2}$, а при нулевой скорости остаётся энергия покоя $mc^{2}$.",
+      "keyIdeas": [
+        {
+          "icon": "scale",
+          "title": "$c^{2}$",
+          "text": "переводной коэффициент между массой и энергией, а не механизм"
+        },
+        {
+          "icon": "lamp",
+          "title": "$E^{2} = (pc)^{2} + (mc^{2})^{2}$",
+          "text": "прямоугольный треугольник энергий"
+        },
+        {
+          "icon": "lamp",
+          "title": "Энергия уходит в бесконечность при $v \\to c$",
+          "text": "разогнаться до света нельзя"
+        },
+        {
+          "icon": "ruler",
+          "title": "Разложение при малых скоростях",
+          "text": "Разложение при малых скоростях даёт $mc^{2} + mv^{2}/2$ — классика как приближение"
+        },
+        {
+          "icon": "scale",
+          "title": "Дефект массы",
+          "text": "связанная система легче суммы своих частей"
+        }
+      ],
+      "where": "Свечение звёзд, ядерная энергетика, позитронная томография, рождение частиц в ускорителях, происхождение массы вещества.",
+      "watchOut": "Формула говорит, сколько энергии содержится, но не как её извлечь. В химии освобождается $10^{-10}$ массы, в ядерных реакциях $10^{-3}$, полностью — только при аннигиляции."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "Что означает множитель $c^{2}$ в формуле $E = mc^{2}$?",
+        "options": [
+          "Свет участвует в превращении массы в энергию",
+          "Это переводной коэффициент между единицами массы и энергии, подобный 1000 между километром и метром",
+          "Масса движется со скоростью света в квадрате",
+          "Он показывает, во сколько раз энергия больше массы физически"
+        ],
+        "answer": 1,
+        "why": "Никакой свет в превращении не участвует. Энергия имеет размерность массы, умноженной на квадрат скорости, и единственная выделенная скорость в природе — световая. Если измерять время в световых секундах, формула примет вид $E = m$: масса и есть энергия, просто в других единицах.",
+        "hint": "Проверьте размерности: что нужно умножить на килограммы, чтобы получились джоули?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Почему массивное тело нельзя разогнать до скорости света?",
+        "options": [
+          "Не хватает мощности существующих двигателей",
+          "Мешает сопротивление межзвёздной среды",
+          "Полная энергия растёт как $\\gamma$ и обращается в бесконечность при $v \\to c$",
+          "Тело разрушится от перегрузки раньше"
+        ],
+        "answer": 2,
+        "why": "Дело не в технике: в знаменателе формулы стоит корень, обращающийся в ноль. Каждая следующая добавка скорости обходится дороже предыдущей, а последний шаг требует бесконечной энергии. В коллайдере это видно прямо: протоны идут со скоростью 0,999999990 c, и дальнейший разгон почти не меняет скорость, зато растит энергию.",
+        "hint": "Посмотрите, что происходит со знаменателем в формуле полной энергии при приближении скорости к световой."
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "Своими словами: почему масса протона в сто раз больше суммы масс составляющих его кварков?",
+        "keywords": [
+          "энерг",
+          "движен",
+          "связ",
+          "глюон",
+          "поле",
+          "взаимодейств",
+          "переходит в масс",
+          "не из масс"
+        ],
+        "needed": 2,
+        "why": "Кварки внутри движутся почти со скоростью света, а связывающее их поле несёт огромную энергию. Вся эта энергия по формуле Эйнштейна проявляется как масса. То есть масса вещества почти целиком есть энергия движения и взаимодействия, а не сумма масс составных частей. Вещество — это связанная энергия в устойчивой форме.",
+        "hint": "Если масса есть мера полной энергии покоящейся системы, что входит в эту энергию помимо масс отдельных частиц?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "Сколько энергии заключено в одном грамме вещества? Дайте показатель степени десяти в джоулях.",
+        "answer": 14,
+        "unit": "порядок (степень десяти)",
+        "tolerance": 1,
+        "why": "E = 10⁻³ · (3·10⁸)² = 9·10¹³ Дж, то есть порядка 10¹⁴. Это 25 миллионов киловатт-часов — месячное потребление небольшого города. Правда, полностью извлечь их можно только аннигиляцией: в ядерной реакции освобождается тысячная доля, в химической — одна десятимиллиардная.",
+        "hint": "Умножьте массу в килограммах на квадрат скорости света. Не забудьте, что грамм — это 10⁻³ кг."
+      }
+    ]
+  },
+  "en": {
+    "title": "Mass and Energy",
+    "subtitle": "Section 3 · Where E = mc² Comes From",
+    "intro": [
+      "The most famous formula in physics appeared in a three-page supplement added to the main paper a few months later. Einstein concluded it with a cautious suggestion: perhaps the theory could be tested on substances with high energy content, such as radium salts. Forty years later, the test came in a way he did not wish.",
+      "The meaning of the formula is not that mass can be converted into energy. It is deeper: mass is energy, just expressed in different units — just as distance can be measured in meters or light-seconds. The factor $c^{2}$ acts as a conversion coefficient, not a physical mechanism.",
+      "It follows that a hot body is heavier than a cold one, a compressed spring is heavier than a relaxed one, and the mass of a proton is ninety-nine percent not from the masses of its constituent quarks but from the energy of their motion and binding. Mass turned out not to be a measure of the amount of matter, but a measure of the total energy of a body at rest."
+    ],
+    "standNote": "Look at the last line below the scene — the percentage increase in energy relative to rest. At low speeds, it matches ordinary kinetic energy, but as you approach the speed of light, it shoots upward without limit. Slide the slider to 0.99 and you'll see that energy has increased sevenfold over rest. Hence the impossibility of reaching the speed of light: not because you lack an engine, but because the required energy becomes infinite.",
+    "formula": {
+      "name": "Mass–Energy Equivalence",
+      "latex": "E = \\gamma m c^{2}, \\qquad E_0 = mc^{2}, \\qquad E^{2} = (pc)^{2} + (mc^{2})^{2}",
+      "alsoKnown": "Einstein's formula · rest energy",
+      "authors": [
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "derived the formula in a short paper, analyzing how the mass of a body changes when it emits light in two directions. The title was a question: Does the inertia of a body depend upon its energy content?"
+        },
+        {
+          "who": "Henri Poincaré",
+          "year": "1900",
+          "what": "obtained the relation between energy and mass for electromagnetic radiation even earlier, but interpreted it as a property of the ether, not as a universal law of nature"
+        },
+        {
+          "who": "Arthur Eddington",
+          "year": "1920",
+          "what": "was the first to suggest that stars shine by converting hydrogen into helium, releasing energy according to this formula. To those who objected that the Sun's temperature was insufficient, he replied: 'Go find a hotter place.'"
+        },
+        {
+          "who": "Hans Bethe",
+          "year": "1939",
+          "what": "calculated the chain of nuclear reactions in stellar interiors and explained exactly where solar energy comes from. The Nobel Prize came thirty-eight years later"
+        },
+        {
+          "who": "Lise Meitner",
+          "year": "1939",
+          "what": "explained uranium fission and calculated the released energy using Einstein's formula, obtaining 200 MeV per nucleus. The Nobel Prize for the discovery of fission was awarded to her co-author Hahn, she was overlooked"
+        }
+      ],
+      "story": "The 1905 note ends with a sentence worth reading in full: it is not impossible that the theory may be tested on bodies whose energy content changes to a high degree — for example, on radium salts. Einstein proposed measuring the loss of mass during radioactive decay. There was no talk of bombs or reactors: the very possibility of a chain reaction was only realized in 1933 by Szilard, and until then even Rutherford called talk of extracting nuclear energy nonsense. Einstein learned about Hiroshima from a radio broadcast and, according to his secretary, only said 'woe is me.' The formula that became the symbol of the atomic age he derived in the patent office, thinking about radiation.",
+      "symbols": [
+        {
+          "sym": "E0",
+          "latex": "E_0",
+          "what": "rest energy",
+          "unit": "J",
+          "note": "the energy a body has even when at rest; for a kilogram — $9\\cdot 10^{16}$ J"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "rest mass",
+          "unit": "kg",
+          "note": "invariant: same in all reference frames. The concept of 'relativistic mass' is no longer used"
+        },
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "total energy",
+          "unit": "J",
+          "note": "increases with speed as $\\gamma$ and goes to infinity as $v \\to c$"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "momentum",
+          "unit": "kg·m/s",
+          "note": "$p = \\gamma mv$; for a photon $p = E/c$ with zero mass"
+        },
+        {
+          "sym": "dm",
+          "latex": "\\Delta m",
+          "what": "mass defect",
+          "unit": "kg",
+          "note": "the difference between the sum of the masses of the parts and the mass of the whole; it is released as binding energy"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Strict Derivation: Why Mass Increases with Energy",
+      "lead": "Let us follow Einstein's own reasoning — surprisingly simple and requiring nothing but conservation of momentum.",
+      "steps": [
+        {
+          "text": "Take a body at rest emitting two identical flashes of light in opposite directions. The momenta of the flashes are equal and opposite, so the body remains at rest. Its energy decreases by the total energy of the radiation.",
+          "latex": "E \\to E - \\Delta E, \\qquad \\vec{p}_{\\text{body}} = 0 \\;\\text{before and after}",
+          "figure": "action",
+          "figCaption": "Symmetric emission: the body loses energy but does not gain speed."
+        },
+        {
+          "text": "Now let us look at the same process from a system moving with speed $v$. There the body is flying, and the flashes go forward and backward at an angle. Their momenta no longer cancel completely — a component along the direction of motion appears.",
+          "latex": "p_{\\text{light}} = \\frac{\\Delta E}{c}\\cdot\\frac{v}{c} \\;\\;\\text{(along the motion)}",
+          "figure": "vectriangle",
+          "figCaption": "In the moving frame, the radiation carries momentum forward. Light has momentum even though it has no mass."
+        },
+        {
+          "text": "But momentum must also be conserved in this frame. The body did not change its speed — so the factor multiplying the speed decreased, i.e., its mass.",
+          "latex": "p_{\\text{body}} = mv \\;\\Longrightarrow\\; \\Delta m \\cdot v = \\frac{\\Delta E \\, v}{c^{2}}",
+          "figure": "momentum",
+          "figCaption": "The only way to conserve momentum is to admit that the body became lighter."
+        },
+        {
+          "text": "Cancel the speed and obtain the result: having emitted energy, the body lost mass.",
+          "latex": "\\Delta m = \\frac{\\Delta E}{c^{2}} \\;\\Longleftrightarrow\\; \\Delta E = \\Delta m\\,c^{2}",
+          "figure": "result",
+          "figCaption": "The derivation requires nothing but conservation of momentum and the fact that light carries momentum."
+        },
+        {
+          "text": "Let us generalize. The total energy of a moving body increases as $\\gamma$, and at zero speed it is not zero but the rest energy — a quantity that did not exist in classical mechanics at all.",
+          "latex": "E = \\gamma mc^{2} = \\frac{mc^{2}}{\\sqrt{1-v^{2}/c^{2}}}",
+          "figure": "curves",
+          "figCaption": "As $v \\to c$ energy goes to infinity — that is why a massive body cannot reach the speed of light."
+        },
+        {
+          "text": "Let us check consistency with classical physics. Expand at low speed: the first term is rest energy, the second is the familiar kinetic energy. Newtonian mechanics turned out to be an approximation.",
+          "latex": "E \\approx mc^{2} + \\frac{mv^{2}}{2} + \\ldots",
+          "figure": "kinetic",
+          "figCaption": "The formula $mv^{2}/2$ is the first correction term in the expansion. The correspondence principle is satisfied."
+        },
+        {
+          "text": "And the general relation connecting energy, momentum, and mass. From it we see that a massless particle is possible — if it moves exactly at the speed of light.",
+          "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2}, \\qquad m = 0 \\Rightarrow E = pc",
+          "figure": "vectriangle",
+          "figCaption": "A right triangle in the world of energies: mass and momentum add up like legs."
+        }
+      ],
+      "plate": "Mass is a measure of the total energy of a body at rest. Having emitted energy, the body becomes lighter; the energy of a moving body grows as $\\gamma$ and goes to infinity as it approaches the speed of light.",
+      "note": "Limits of applicability and an important terminological clarification. Older textbooks speak of a speed-dependent 'relativistic mass' $m\\gamma$. Today we do not do this: mass is defined as an invariant, the same in all frames, and it is energy that increases. The reason is not pedantry — the concept of relativistic mass works for longitudinal motion but breaks down for transverse motion, causing more confusion than convenience. Another clarification: the formula does not mean that matter is easily converted into energy. In chemical reactions the mass defect is of order $10^{-10}$, in nuclear reactions $10^{-3}$, and only annihilation yields unity."
+    },
+    "math": {
+      "title": "Mathematics Needed Here",
+      "text": [
+        "Why the square of the speed of light appears in the formula. People often look for deep meaning, but it is simple: $c^{2}$ acts as a conversion factor between units of mass and energy, like 1000 between kilometers and meters. If we measured time in the same units as distance — in light-seconds — the formula would simply be $E = m$. The square appears because energy has dimensions of mass times speed squared, and no other combination of mass and the speed of light can be formed. This is the same dimensional analysis from the introductory topic.",
+        "How to read the energy-momentum relation. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ is the Pythagorean theorem, where the legs are momentum and mass, and the hypotenuse is total energy. This immediately gives two limiting cases. A body at rest: momentum zero, energy equals mass. A photon: mass zero, energy equals momentum times the speed of light. And everything in between. The triangle is a convenient picture to avoid confusion with relativistic formulas.",
+        "What is mass defect. Assemble a nucleus from protons and neutrons — its mass turns out to be less than the sum of the masses of the parts. The difference went into binding energy released during assembly. Analogy: to separate stuck magnets, you must do work, so the stuck system contains less energy than the separated ones — and less energy means less mass. The difference is negligible for magnets and noticeable for nuclei: for helium it is 0.7 percent.",
+        "Why you cannot accelerate to the speed of light. Look at the energy formula: the denominator contains a square root that goes to zero at $v = c$. Energy goes to infinity. You can accelerate as much as you like, but each subsequent increment of speed costs more than the previous one, and the last step costs an infinite amount. This is directly visible in accelerators: protons in a collider move at 0.999999990 c, and further acceleration hardly changes the speed, but increases the energy."
+      ]
+    },
+    "example": {
+      "title": "Numerical Example: How Much Energy in a Gram and Why the Sun Shines",
+      "lead": "We calculate the rest energy of a gram of matter and the Sun's mass loss — the numbers are disproportionate to everyday experience.",
+      "given": "Find the rest energy of one gram of any substance. Then: the Sun's power is $3{,}8\\cdot 10^{26}$ W. Estimate how much mass it loses each second.",
+      "law": "$E_0 = mc^{2}$; $\\;\\Delta m = P\\,\\Delta t/c^{2}$",
+      "solution": [
+        {
+          "text": "Rest energy of a gram.",
+          "latex": "E = 10^{-3} \\cdot (3\\cdot 10^{8})^{2} = 9\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Convert to familiar units: that is 25 million kilowatt-hours.",
+          "latex": "\\frac{9\\cdot 10^{13}}{3{,}6\\cdot 10^{6}} = 2{,}5\\cdot 10^{7}\\ \\text{кВт·ч}"
+        },
+        {
+          "text": "Now the Sun: mass lost per second.",
+          "latex": "\\Delta m = \\frac{3{,}8\\cdot 10^{26}}{9\\cdot 10^{16}} \\approx 4{,}2\\cdot 10^{9}\\ \\text{кг/с}"
+        },
+        {
+          "text": "Per year.",
+          "latex": "4{,}2\\cdot 10^{9} \\cdot 3{,}16\\cdot 10^{7} \\approx 1{,}3\\cdot 10^{17}\\ \\text{кг/год}"
+        },
+        {
+          "text": "Compare with the Sun's total mass.",
+          "latex": "\\frac{1{,}3\\cdot 10^{17}}{2\\cdot 10^{30}} \\approx 7\\cdot 10^{-14}\\ \\text{в год}"
+        }
+      ],
+      "answer": "A gram of matter contains 9×10¹³ joules — 25 million kilowatt-hours, the monthly consumption of a city with a population of a hundred thousand. The Sun loses 4.2 million tons per second, but that is less than one ten-trillionth of its mass per year.",
+      "check": "Both numbers are worth contemplating. A gram of matter completely converted to energy would yield more than burning a wagonload of coal — but only completely, which in nature is achieved only by annihilation with antimatter. In a nuclear reactor, about one thousandth of the fuel mass is converted to energy; in chemical combustion, one ten-billionth. As for the Sun: four million tons per second sounds alarming, but in fact over five billion years it has lost about three hundredths of a percent of its mass. The fuel will last for about as long again."
+    },
+    "constants": {
+      "title": "Quantities in This Section",
+      "lead": "Rest energies — the natural scale for all particle physics.",
+      "items": [
+        {
+          "sym": "mec2",
+          "latex": "m_ec^{2}",
+          "name": "Electron rest energy",
+          "value": "0,511",
+          "unit": "МэВ",
+          "why": "Reference number for all nuclear physics. Annihilation of an electron with a positron yields two gamma quanta of 0.511 MeV — a characteristic line by which positrons are detected.",
+          "mnemo": "Half a megaelectronvolt. The binding energy of an electron in a hydrogen atom is 13.6 eV — forty thousand times smaller, which is why chemistry and nuclear physics live in different worlds."
+        },
+        {
+          "sym": "mpc2",
+          "latex": "m_pc^{2}",
+          "name": "Proton rest energy",
+          "value": "938",
+          "unit": "МэВ",
+          "why": "Almost a gigaelectronvolt. Yet the combined mass of the three quarks inside is about 10 MeV; the remaining 99% of the proton's mass is the energy of quark motion and the gluon field.",
+          "mnemo": "Your mass is 99% not from the mass of particles but from the energy of their interactions. Matter is almost entirely bound energy."
+        },
+        {
+          "sym": "E1g",
+          "latex": "E_{1\\text{г}}",
+          "name": "Rest energy of one gram",
+          "value": "9 · 10¹³",
+          "unit": "Дж",
+          "why": "25 million kilowatt-hours. For comparison: in fission of a kilogram of uranium, about one thousandth of this amount is released; in burning a kilogram of oil, one ten-billionth.",
+          "mnemo": "A gram in full conversion is approximately equal to a 20-kiloton explosion — the power of the bomb dropped on Nagasaki. There, however, only one gram out of ten kilograms of plutonium was converted."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where Equivalence Works",
+      "lead": "The formula has ceased to be theory and entered engineering, medicine, and astrophysics.",
+      "items": [
+        {
+          "h": "Stars",
+          "text": "Four hydrogen nuclei transform into a helium nucleus, which is 0.7% lighter than the sum. That difference is the Sun's light. Every second, 600 million tons of hydrogen are converted into helium, of which 4 million tons become radiation."
+        },
+        {
+          "h": "Nuclear Energy",
+          "text": "In fission of a uranium nucleus, about 200 MeV is released — a mass defect of about one thousandth. A kilogram of uranium yields energy equivalent to burning three thousand tons of coal."
+        },
+        {
+          "h": "Positron Emission Tomography",
+          "text": "An isotope emitting positrons is introduced into the body; they annihilate with electrons, yielding two quanta of 0.511 MeV that fly apart in exactly opposite directions. From detector coincidences, the decay point is reconstructed."
+        },
+        {
+          "h": "Accelerators",
+          "text": "In collisions, particles heavier than the initial ones are born, from kinetic energy. That is how the Higgs boson was discovered: its mass of 125 GeV came entirely from the energy of proton collisions."
+        },
+        {
+          "h": "Mass of Matter",
+          "text": "The mass of a proton is 99% the energy of quark motion and the field binding them. Virtually all of your body's mass is not the mass of constituent particles but the energy of their interactions."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curious: try it yourself",
+      "lead": "Mass defect is not visible in the kitchen, but its consequences surround us everywhere.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "A hot kettle is heavier than a cold one",
+          "text": "Heating a liter of water from 20 to 100 degrees, we added 336 kilojoules to it. According to the formula, its mass increased. By how much — and why does no one notice?",
+          "answer": "The mass increase is $336000/9\\cdot 10^{16} \\approx 3{,}7\\cdot 10^{-12}$ kilograms, that is about four picograms. This is less than the mass of one bacterium and a billion times below the sensitivity of the best laboratory scales. Nevertheless, the effect is absolutely real and becomes dominant in nuclear physics: there the relative addition is not $10^{-12}$, but $10^{-3}$, and it is routinely measured. A compressed spring, a charged battery, and a spinning flywheel are also heavier — by equally imperceptible amounts."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "What your mass is made of",
+          "text": "A proton consists of three quarks. The total mass of the quarks is about 10 MeV, the proton mass is 938 MeV. Where are the remaining 99 percent?",
+          "answer": "In energy. The quarks inside the proton move at nearly the speed of light, and the gluon field that binds them carries enormous energy — and all of it, according to Einstein's formula, manifests as mass. That is, the mass of your body almost entirely consists not of the mass of particles, but of the energy of their motion and interaction. Matter is bound energy that has taken a stable form. Perhaps the most unexpected consequence of the formula, and it is far more important than bombs."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "Rutherford called nuclear energy nonsense",
+          "text": "In 1933 he publicly stated that anyone expecting energy from atomic transformations was talking nonsense. The next day, Leo Szilard, reading this in the newspaper, was walking down a London street and at a traffic light came up with the idea of a chain reaction: if a nuclear decay releases more neutrons than it absorbs, the process becomes self-sustaining. He patented the idea and gave the patent to the British Admiralty to keep it secret. Six years passed before the discovery of uranium fission."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Mass is energy in other units",
+          "text": "It's not 'mass turns into energy', but 'mass is rest energy, measured in kilograms instead of joules'. The factor $c^{2}$ is an exchange rate, like 1000 between kilometer and meter. From this it immediately follows that everything containing energy has mass: hot things are heavier than cold, compressed things are heavier than free."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimation",
+          "h": "Fraction of mass converted to energy",
+          "text": "Chemistry: $10^{-10}$ — that's why coal must be transported in railcars. Nuclear fission: $10^{-3}$ — that's why fuel in a reactor is replaced once a year. Fusion: $7\\cdot 10^{-3}$ — ten times more efficient than fission. Annihilation: 1 — a limit unattainable by any technology. All of humanity's energy production lies between $10^{-10}$ and $10^{-3}$."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Why the formula does not give free energy",
+          "text": "It tells how much energy is contained, but says nothing about how to extract it. In nature, the only known way of complete conversion is annihilation with antimatter, and antimatter must be produced, spending more energy than you will get back. All real sources release only thousandths of a percent, and this is not a technical lag but the nature of nuclear forces."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the curious: why the Sun shines and why it does not explode",
+      "lead": "Not included in the test. About the largest thermonuclear reactor in the vicinity and what keeps it in equilibrium.",
+      "blocks": [
+        {
+          "h": "Reaction chain",
+          "text": "Four protons in several stages turn into a helium nucleus, two positrons, and two neutrinos. The mass of helium is 0.7 percent less than the sum of the masses of four protons — this difference goes into energy, about 26 MeV per each produced nucleus."
+        },
+        {
+          "h": "Why this is not an explosion",
+          "text": "The Sun is held in equilibrium by feedback. If the reaction speeds up, temperature rises, gas expands, density drops, reaction slows down. The thermostat works automatically and has been stable for five billion years. The Sun cannot explode for the same reason a kettle with an open lid cannot boil over."
+        },
+        {
+          "h": "How slow it is",
+          "text": "Specific energy release in the center of the Sun is about 275 watts per cubic meter. That is less than what a compost heap of the same volume produces. The Sun shines brightly not because the reaction is violent, but because it is huge. The first step of the reaction requires converting a proton into a neutron via the weak interaction, and the average waiting time for an individual proton is billions of years."
+        },
+        {
+          "h": "And why a fusion reactor is so difficult",
+          "text": "Repeating the solar process on Earth is impossible: it is too slow. We have to use faster reactions with deuterium and tritium, and these require hundreds of millions of degrees — ten times more than in the Sun's core, because we have neither its pressure nor its size. Plasma at such temperatures is confined by a magnetic field, and this has remained an unsolved engineering problem for seventy years."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Mass is a measure of the total energy of a body at rest; $E = \\gamma mc^{2}$, and at zero velocity the rest energy $mc^{2}$ remains.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$c^{2}$ is a conversion",
+          "text": "$c^{2}$ is a conversion factor between mass and energy, not a mechanism"
+        },
+        {
+          "icon": "formula",
+          "title": "$E^{2} = (pc)^{2} + (mc^{2})^{2}$",
+          "text": "right triangle of energies"
+        },
+        {
+          "icon": "sigma",
+          "title": "Energy goes to infinity as $v \\to c$",
+          "text": "accelerating to light speed is impossible"
+        },
+        {
+          "icon": "ruler",
+          "title": "Expansion at low speeds",
+          "text": "Expansion at low speeds gives $mc^{2} + mv^{2}/2$ — classical physics as an approximation"
+        },
+        {
+          "icon": "scale",
+          "title": "Mass defect",
+          "text": "a bound system is lighter than the sum of its parts"
+        }
+      ],
+      "where": "Stellar luminosity, nuclear power, positron emission tomography, particle creation in accelerators, origin of the mass of matter.",
+      "watchOut": "The formula tells how much energy is contained, but not how to extract it. In chemistry, $10^{-10}$ of mass is released, in nuclear reactions $10^{-3}$, completely — only in annihilation."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "What does the factor $c^{2}$ mean in the formula $E = mc^{2}$?",
+        "options": [
+          "Light participates in converting mass into energy",
+          "It is a conversion factor between units of mass and energy, like 1000 between kilometer and meter",
+          "Mass moves at the speed of light squared",
+          "It shows how many times energy is greater than mass physically"
+        ],
+        "answer": 1,
+        "why": "No light participates in the conversion. Energy has the dimension of mass times velocity squared, and the only distinguished speed in nature is the speed of light. If we measure time in light-seconds, the formula becomes $E = m$: mass and energy are the same, just in different units.",
+        "hint": "Check the dimensions: what do you need to multiply kilograms by to get joules?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "Why can't a massive body be accelerated to the speed of light?",
+        "options": [
+          "Existing engines lack power",
+          "Resistance from interstellar medium prevents it",
+          "Total energy grows as $\\gamma$ and becomes infinite at $v \\to c$",
+          "The body would be destroyed by overload earlier"
+        ],
+        "answer": 2,
+        "why": "It's not a technical issue: the denominator of the formula contains a root that goes to zero. Each additional increment of speed costs more than the previous one, and the final step requires infinite energy. This is directly visible in colliders: protons travel at 0.999999990 c, and further acceleration hardly changes the speed but increases the energy.",
+        "hint": "Look at what happens to the denominator in the total energy formula as speed approaches the speed of light."
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "In your own words: why is the mass of a proton a hundred times greater than the sum of the masses of its constituent quarks?",
+        "keywords": [
+          "energy",
+          "motion",
+          "binding",
+          "gluon",
+          "field",
+          "interaction",
+          "converts to mass",
+          "not from mass"
+        ],
+        "needed": 2,
+        "why": "Quarks inside move at nearly the speed of light, and the field binding them carries enormous energy. All this energy manifests as mass by Einstein's formula. That is, the mass of matter is almost entirely the energy of motion and interaction, not the sum of the masses of its parts. Matter is bound energy in a stable form.",
+        "hint": "If mass is a measure of the total energy of a system at rest, what contributes to this energy besides the masses of individual particles?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "How much energy is contained in one gram of matter? Give the exponent of ten in joules.",
+        "answer": 14,
+        "unit": "order (power of ten)",
+        "tolerance": 1,
+        "why": "E = 10⁻³ · (3·10⁸)² = 9·10¹³ J, that is of order 10¹⁴. That's 25 million kilowatt-hours — the monthly consumption of a small town. However, it can be fully extracted only by annihilation: in a nuclear reaction a thousandth is released, in a chemical one one ten-billionth.",
+        "hint": "Multiply the mass in kilograms by the square of the speed of light. Don't forget that a gram is 10⁻³ kg."
+      }
+    ]
+  },
+  "es": {
+    "title": "Masa y energía",
+    "subtitle": "Párrafo 3 · De dónde viene E = mc²",
+    "intro": [
+      "La fórmula más famosa de la física apareció en una nota de tres páginas, agregada al artículo principal unos meses después. Einstein la terminaba con una cautelosa suposición: quizás la teoría pudiera verificarse en sustancias con alto contenido energético, como las sales de radio. Cuarenta años después, la verificación ocurrió de una manera que él no deseaba.",
+      "El significado de la fórmula no es que la masa pueda convertirse en energía. El significado es más profundo: la masa es energía, simplemente expresada en otras unidades, como la distancia puede medirse en metros o en segundos luz. El factor $c^{2}$ actúa aquí como un coeficiente de conversión, no como un mecanismo físico.",
+      "De esto se deduce que un cuerpo caliente es más pesado que uno frío, un resorte comprimido es más pesado que uno libre, y la masa de un protón consiste en un noventa y nueve por ciento no en las masas de los quarks que lo componen, sino en la energía de su movimiento y enlace. La masa resultó no ser una cantidad de materia, sino una medida de la energía total de un cuerpo en reposo."
+    ],
+    "standNote": "Observe la última línea debajo de la escena: el incremento de energía respecto al reposo en porcentaje. A bajas velocidades coincide con la energía cinética ordinaria, pero a medida que se acerca a la velocidad de la luz se dispara sin límite. Mueva el control deslizante hasta 0,99 y verá que la energía ha aumentado siete veces respecto al reposo. De ahí la imposibilidad de alcanzar la velocidad de la luz: no porque falte motor, sino porque la energía requerida se vuelve infinita.",
+    "formula": {
+      "name": "Equivalencia masa-energía",
+      "latex": "E = \\gamma m c^{2}, \\qquad E_0 = mc^{2}, \\qquad E^{2} = (pc)^{2} + (mc^{2})^{2}",
+      "alsoKnown": "Fórmula de Einstein · energía en reposo",
+      "authors": [
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "dedujo la fórmula en una breve nota, analizando cómo cambia la masa de un cuerpo que emite luz en dos direcciones. El título era interrogativo: ¿depende la inercia de un cuerpo de la energía que contiene?"
+        },
+        {
+          "who": "Henri Poincaré",
+          "year": "1900",
+          "what": "obtuvo la relación entre energía y masa para la radiación electromagnética aún antes, pero la interpretó como una propiedad del éter, no como una ley general de la naturaleza"
+        },
+        {
+          "who": "Arthur Eddington",
+          "year": "1920",
+          "what": "primero sugirió que las estrellas brillan gracias a la conversión de hidrógeno en helio con liberación de energía según esta fórmula. A quienes objetaban que la temperatura del Sol no era suficiente, respondió: busquen un lugar más caliente"
+        },
+        {
+          "who": "Hans Bethe",
+          "year": "1939",
+          "what": "calculó la cadena de reacciones nucleares en el interior de las estrellas y explicó de dónde proviene exactamente la energía solar. El Premio Nobel llegó treinta y ocho años después"
+        },
+        {
+          "who": "Lise Meitner",
+          "year": "1939",
+          "what": "explicó la fisión del uranio y calculó la energía liberada mediante la fórmula de Einstein, obteniendo 200 MeV por núcleo. El Premio Nobel por el descubrimiento de la fisión fue otorgado a su coautor Hahn, a ella la pasaron por alto"
+        }
+      ],
+      "story": "La nota de 1905 termina con una frase que vale la pena leer completa: no se descarta que la verificación de la teoría sea posible en cuerpos cuyo contenido de energía varía en alto grado — por ejemplo, en las sales de radio. Einstein proponía medir la pérdida de masa en la desintegración radiactiva. No se hablaba de bombas ni reactores: la posibilidad misma de una reacción en cadena no se comprendió hasta 1933 por Szilard, y antes incluso Rutherford calificaba las charlas sobre extracción de energía nuclear como tonterías. Einstein se enteró de Hiroshima por un resumen de radio y, según el testimonio de su secretaria, solo dijo «ay de mí». La fórmula que se convirtió en símbolo de la era atómica la dedujo en la oficina de patentes, reflexionando sobre la radiación.",
+      "symbols": [
+        {
+          "sym": "E0",
+          "latex": "E_0",
+          "what": "energía en reposo",
+          "unit": "J",
+          "note": "lo que un cuerpo contiene incluso estando quieto; para un kilogramo — $9\\cdot 10^{16}$ J"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "masa en reposo",
+          "unit": "kg",
+          "note": "invariante: igual en todos los sistemas de referencia. El concepto de «masa relativista» hoy no se utiliza"
+        },
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "energía total",
+          "unit": "J",
+          "note": "crece con la velocidad como $\\gamma$ y tiende a infinito cuando $v \\to c$"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "momento lineal",
+          "unit": "kg·m/s",
+          "note": "$p = \\gamma mv$; para un fotón $p = E/c$ con masa cero"
+        },
+        {
+          "sym": "dm",
+          "latex": "\\Delta m",
+          "what": "defecto de masa",
+          "unit": "kg",
+          "note": "diferencia entre la suma de las masas de las partes y la masa del todo; se libera como energía de enlace"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: por qué la masa crece con la energía",
+      "lead": "Sigamos el razonamiento del propio Einstein: es sorprendentemente simple y no requiere nada más que la conservación del momento.",
+      "steps": [
+        {
+          "text": "Tomemos un cuerpo en reposo que emite dos destellos de luz idénticos en direcciones opuestas. Los momentos de los destellos son iguales y opuestos, por lo que el cuerpo permanece en su lugar. Su energía disminuyó en la energía total de la radiación.",
+          "latex": "E \\to E - \\Delta E, \\qquad \\vec{p}_{\\text{тела}} = 0 \\;\\text{до и после}",
+          "figure": "action",
+          "figCaption": "Emisión simétrica: el cuerpo pierde energía pero no adquiere velocidad."
+        },
+        {
+          "text": "Ahora miremos la misma situación desde un sistema que se mueve con velocidad $v$. Allí el cuerpo vuela, y los destellos se alejan hacia adelante y hacia atrás formando un ángulo. Sus momentos ya no se compensan completamente: aparece una componente a lo largo del movimiento.",
+          "latex": "p_{\\text{света}} = \\frac{\\Delta E}{c}\\cdot\\frac{v}{c} \\;\\;\\text{(вдоль движения)}",
+          "figure": "vectriangle",
+          "figCaption": "En el sistema en movimiento, la radiación se lleva momento hacia adelante. La luz tiene momento, aunque no tenga masa."
+        },
+        {
+          "text": "Pero el momento debe conservarse también en este sistema. El cuerpo no cambió su velocidad, por lo que el factor que multiplica a la velocidad disminuyó, es decir, la masa.",
+          "latex": "p_{\\text{тела}} = mv \\;\\Longrightarrow\\; \\Delta m \\cdot v = \\frac{\\Delta E \\, v}{c^{2}}",
+          "figure": "momentum",
+          "figCaption": "La única manera de conservar el momento es admitir que el cuerpo se volvió más ligero."
+        },
+        {
+          "text": "Cancelamos la velocidad y obtenemos el resultado: al emitir energía, el cuerpo perdió masa.",
+          "latex": "\\Delta m = \\frac{\\Delta E}{c^{2}} \\;\\Longleftrightarrow\\; \\Delta E = \\Delta m\\,c^{2}",
+          "figure": "result",
+          "figCaption": "La deducción no requiere nada más que la conservación del momento y el hecho de que la luz lleva momento."
+        },
+        {
+          "text": "Generalicemos. La energía total de un cuerpo en movimiento crece como $\\gamma$, y a velocidad cero queda no cero, sino la energía en reposo — una magnitud que no existía en la mecánica clásica.",
+          "latex": "E = \\gamma mc^{2} = \\frac{mc^{2}}{\\sqrt{1-v^{2}/c^{2}}}",
+          "figure": "curves",
+          "figCaption": "Cuando $v \\to c$, la energía tiende a infinito — por eso un cuerpo con masa no puede alcanzar la velocidad de la luz."
+        },
+        {
+          "text": "Verifiquemos la correspondencia con la mecánica clásica. Expandamos para velocidad pequeña: el primer término es la energía en reposo, el segundo es la conocida energía cinética. La mecánica newtoniana resultó ser una aproximación.",
+          "latex": "E \\approx mc^{2} + \\frac{mv^{2}}{2} + \\ldots",
+          "figure": "kinetic",
+          "figCaption": "La fórmula $mv^{2}/2$ es el primer término de corrección de la expansión. Se cumple el principio de correspondencia."
+        },
+        {
+          "text": "Y la relación general que conecta energía, momento y masa. De ella se ve que una partícula sin masa es posible — si se mueve exactamente a la velocidad de la luz.",
+          "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2}, \\qquad m = 0 \\Rightarrow E = pc",
+          "figure": "vectriangle",
+          "figCaption": "Triángulo rectángulo en el mundo de las energías: masa y momento se suman como catetos."
+        }
+      ],
+      "plate": "La masa es una medida de la energía total de un cuerpo en reposo. Al emitir energía, el cuerpo se aligera; la energía de un cuerpo en movimiento crece como $\\gamma$ y tiende a infinito al acercarse a la velocidad de la luz.",
+      "note": "Límites de aplicabilidad y una aclaración importante sobre la terminología. En libros antiguos se habla de una 'masa relativista' $m\\gamma$ que crece con la velocidad. Hoy no se hace así: la masa se define como un invariante, igual en todos los sistemas, y lo que crece es la energía. La razón no es pedantería: el concepto de masa relativista funciona para el movimiento longitudinal y falla para el transversal, generando más confusión que utilidad. Otra aclaración: la fórmula no significa que la materia se convierta fácilmente en energía. En reacciones químicas, el defecto de masa es del orden de $10^{-10}$, en reacciones nucleares de $10^{-3}$, y solo la aniquilación da la unidad."
+    },
+    "math": {
+      "title": "Las matemáticas que fueron necesarias aquí",
+      "text": [
+        "Por qué en la fórmula aparece el cuadrado de la velocidad de la luz. A menudo se busca un significado profundo, pero es simple: $c^{2}$ actúa como factor de conversión entre unidades de masa y energía, como 1000 entre kilómetros y metros. Si midiéramos el tiempo en las mismas unidades que la distancia —en segundos luz—, la fórmula sería simplemente $E = m$. El cuadrado aparece porque la energía tiene dimensiones de masa por velocidad al cuadrado, y no se puede formar ninguna otra combinación con masa y velocidad de la luz. Es el mismo análisis dimensional del tema introductorio.",
+        "Cómo leer la relación entre energía y momento. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ es el teorema de Pitágoras, donde los catetos son el momento y la masa, y la hipotenusa es la energía total. De aquí se siguen dos casos límite. Cuerpo en reposo: momento cero, energía igual a la masa. Fotón: masa cero, energía igual al momento por la velocidad de la luz. Y entre ellos todo lo intermedio. El triángulo es una imagen útil para no confundirse con las fórmulas relativistas.",
+        "Qué es el defecto de masa. Ensamble un núcleo a partir de protones y neutrones: su masa resultará menor que la suma de las masas de las partes. La diferencia se fue en energía de enlace, liberada durante el ensamblaje. Analogía: para separar imanes pegados hay que realizar trabajo, por lo que los imanes pegados contienen menos energía que separados — y menos energía implica menos masa. La diferencia es insignificante para imanes y notable para núcleos: en el helio es del 0,7 por ciento.",
+        "Por qué no se puede acelerar hasta la velocidad de la luz. Mire la fórmula de la energía: en el denominador hay una raíz que se anula para $v = c$. La energía tiende a infinito. Se puede acelerar tanto como se quiera, pero cada nuevo incremento de velocidad cuesta más que el anterior, y el último paso cuesta infinito. En los aceleradores se ve directamente: los protones en un colisionador se mueven a 0,999999990 c, y una mayor aceleración casi no cambia la velocidad, pero aumenta la energía."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: cuánta energía hay en un gramo y por qué brilla el Sol",
+      "lead": "Calculamos la energía en reposo de un gramo de materia y la pérdida de masa del Sol: las cifras resultan desproporcionadas con lo habitual.",
+      "given": "Hallar la energía en reposo de un gramo de cualquier sustancia. Luego: la potencia del Sol $3{,}8\\cdot 10^{26}$ W. Estimar cuánta masa pierde cada segundo.",
+      "law": "$E_0 = mc^{2}$; $\\;\\Delta m = P\\,\\Delta t/c^{2}$",
+      "solution": [
+        {
+          "text": "Energía en reposo de un gramo.",
+          "latex": "E = 10^{-3} \\cdot (3\\cdot 10^{8})^{2} = 9\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "Convertimos a unidades comprensibles: son 25 millones de kilovatios-hora.",
+          "latex": "\\frac{9\\cdot 10^{13}}{3{,}6\\cdot 10^{6}} = 2{,}5\\cdot 10^{7}\\ \\text{кВт·ч}"
+        },
+        {
+          "text": "Ahora el Sol: masa perdida por segundo.",
+          "latex": "\\Delta m = \\frac{3{,}8\\cdot 10^{26}}{9\\cdot 10^{16}} \\approx 4{,}2\\cdot 10^{9}\\ \\text{кг/с}"
+        },
+        {
+          "text": "En un año.",
+          "latex": "4{,}2\\cdot 10^{9} \\cdot 3{,}16\\cdot 10^{7} \\approx 1{,}3\\cdot 10^{17}\\ \\text{кг/год}"
+        },
+        {
+          "text": "Comparación con la masa total del Sol.",
+          "latex": "\\frac{1{,}3\\cdot 10^{17}}{2\\cdot 10^{30}} \\approx 7\\cdot 10^{-14}\\ \\text{в год}"
+        }
+      ],
+      "answer": "En un gramo de materia hay 9·10¹³ julios — 25 millones de kilovatios-hora, el consumo mensual de una ciudad de cien mil habitantes. El Sol pierde 4,2 millones de toneladas por segundo, pero esto es menos de una diez billonésima parte de su masa al año.",
+      "check": "Ambos números merecen reflexión. Un gramo de materia completamente convertido en energía daría más que quemar un vagón de carbón — pero completamente, lo que en la naturaleza solo logra la aniquilación con antimateria. En un reactor nuclear, alrededor de una milésima parte de la masa del combustible se convierte en energía; en la combustión química, una diez milmillonésima parte. En cuanto al Sol: cuatro millones de toneladas por segundo suena aterrador, pero en realidad, en cinco mil millones de años ha perdido alrededor de tres centésimas por ciento de su masa. El combustible le durará aproximadamente otro tanto."
+    },
+    "constants": {
+      "title": "Magnitudes de este apartado",
+      "lead": "La energía en reposo es la escala natural de toda la física de partículas.",
+      "items": [
+        {
+          "sym": "mec2",
+          "latex": "m_ec^{2}",
+          "name": "Energía en reposo del electrón",
+          "value": "0,511",
+          "unit": "MeV",
+          "why": "Número de referencia de toda la física nuclear. La aniquilación de un electrón con un positrón produce dos rayos gamma de 0,511 MeV cada uno — una línea característica que permite detectar positrones.",
+          "mnemo": "Medio megaelectrónvoltio. La energía de enlace del electrón en el átomo de hidrógeno es 13,6 eV — cuarenta mil veces menor, por eso la química y la física nuclear viven en mundos distintos."
+        },
+        {
+          "sym": "mpc2",
+          "latex": "m_pc^{2}",
+          "name": "Energía en reposo del protón",
+          "value": "938",
+          "unit": "MeV",
+          "why": "Casi un gigaelectronvoltio. Sin embargo, la masa total de los tres quarks en su interior es de unos 10 MeV; el 99% restante de la masa del protón es energía del movimiento de los quarks y del campo gluónico.",
+          "mnemo": "Su masa proviene en un 99% no de la masa de las partículas, sino de la energía de su interacción. La materia es casi por completo energía ligada."
+        },
+        {
+          "sym": "E1g",
+          "latex": "E_{1\\text{г}}",
+          "name": "Energía en reposo de un gramo",
+          "value": "9 · 10¹³",
+          "unit": "J",
+          "why": "25 millones de kilovatios-hora. En comparación: en la fisión de un kilogramo de uranio se libera aproximadamente una milésima parte de esta cantidad; al quemar un kilogramo de petróleo, una diez milmillonésima parte.",
+          "mnemo": "Un gramo completamente convertido equivale aproximadamente a una explosión de 20 kilotones — la potencia de la bomba lanzada sobre Nagasaki. Allí, sin embargo, solo se convirtió un gramo de los diez kilogramos de plutonio."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde funciona la equivalencia",
+      "lead": "La fórmula dejó de ser teoría y entró en la ingeniería, la medicina y la astrofísica.",
+      "items": [
+        {
+          "h": "Estrellas",
+          "text": "Cuatro núcleos de hidrógeno se convierten en un núcleo de helio, que es un 0,7% más ligero que la suma. Esa diferencia es la luz del Sol. Por segundo, 600 millones de toneladas de hidrógeno se convierten en helio, de las cuales 4 millones de toneladas se convierten en radiación."
+        },
+        {
+          "h": "Energía nuclear",
+          "text": "En la fisión de un núcleo de uranio se liberan unos 200 MeV — un defecto de masa de aproximadamente una milésima parte. Un kilogramo de uranio produce la energía equivalente a quemar tres mil toneladas de carbón."
+        },
+        {
+          "h": "Tomografía por emisión de positrones",
+          "text": "Se introduce en el organismo un isótopo que emite positrones; estos se aniquilan con electrones, produciendo dos cuantos de 0,511 MeV que se alejan en direcciones estrictamente opuestas. Mediante coincidencias de detectores se reconstruye el punto de desintegración."
+        },
+        {
+          "h": "Aceleradores",
+          "text": "En las colisiones nacen partículas más pesadas que las originales — a expensas de la energía cinética. Así se descubrió el bosón de Higgs: su masa de 125 GeV provino enteramente de la energía de la colisión de protones."
+        },
+        {
+          "h": "Masa de la materia",
+          "text": "La masa del protón es en un 99% energía del movimiento de los quarks y del campo que los une. Prácticamente toda la masa de su cuerpo no es la masa de las partículas constituyentes, sino la energía de su interacción."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: compruébelo usted mismo",
+      "lead": "El defecto de masa no se ve en la cocina, pero sus consecuencias nos rodean por todas partes.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Un hervidor caliente pesa más que uno frío",
+          "text": "Al calentar un litro de agua de 20 a 100 grados, le añadimos 336 kilojulios. Según la fórmula, su masa aumentó. ¿Cuánto y por qué nadie lo nota?",
+          "answer": "El aumento de masa es $336000/9\\cdot 10^{16} \\approx 3{,}7\\cdot 10^{-12}$ kilogramos, es decir, unos cuatro picogramos. Es menos que la masa de una bacteria y mil millones de veces menor que la sensibilidad de las mejores balanzas de laboratorio. Sin embargo, el efecto es absolutamente real y en física nuclear se vuelve principal: allí el incremento relativo no es $10^{-12}$, sino $10^{-3}$, y se mide rutinariamente. Un resorte comprimido, una batería cargada y un volante en rotación también pesan más, en una cantidad igualmente imperceptible."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "De qué está hecha tu masa",
+          "text": "Un protón consta de tres quarks. La masa total de los quarks es de unos 10 MeV, la masa del protón es 938 MeV. ¿Dónde está el 99% restante?",
+          "answer": "En energía. Los quarks dentro del protón se mueven casi a la velocidad de la luz, y el campo gluon que los une lleva una enorme energía, y toda ella, según la fórmula de Einstein, se manifiesta como masa. Es decir, la masa de tu cuerpo no está compuesta casi en su totalidad por la masa de las partículas, sino por la energía de su movimiento e interacción. La materia es energía ligada que ha adoptado una forma estable. Quizás sea la consecuencia más inesperada de la fórmula, y es mucho más importante que las bombas."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Rutherford llamó a la energía nuclear una tontería",
+          "text": "En 1933 declaró públicamente que cualquiera que espere obtener energía de la transformación de átomos dice tonterías. Al día siguiente, Leo Szilard, que lo leyó en el periódico, caminaba por una calle de Londres y en un semáforo concibió la idea de la reacción en cadena: si la desintegración de un núcleo libera más neutrones de los que absorbe, el proceso se autosostiene. Patentó la idea y cedió la patente al Almirantazgo británico para mantenerla en secreto. Pasaron seis años hasta el descubrimiento de la fisión del uranio."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "La masa es energía en otras unidades",
+          "text": "No es 'la masa se convierte en energía', sino 'la masa es la energía en reposo, contada en kilogramos en lugar de julios'. El factor $c^{2}$ es el tipo de cambio, como 1000 entre kilómetro y metro. De aquí se sigue inmediatamente que todo lo que contiene energía tiene masa: lo caliente pesa más que lo frío, lo comprimido pesa más que lo libre."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Fracción de masa que se convierte en energía",
+          "text": "Química: $10^{-10}$ — por eso el carbón hay que transportarlo en vagones. Fisión nuclear: $10^{-3}$ — por eso el combustible del reactor se cambia una vez al año. Fusión: $7\\cdot 10^{-3}$ — diez veces más eficiente que la fisión. Aniquilación: 1 — el límite, inalcanzable con cualquier tecnología. Toda la energía de la humanidad se encuentra entre $10^{-10}$ y $10^{-3}$."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Por qué la fórmula no da energía gratis",
+          "text": "La fórmula dice cuánta energía hay, pero no dice cómo extraerla. En la naturaleza se conoce un único método de conversión completa: la aniquilación con antimateria, y la antimateria hay que producirla gastando más energía de la que luego se obtiene. Todas las fuentes reales liberan solo milésimas partes, y esto no es un retraso técnico, sino la naturaleza de las fuerzas nucleares."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: por qué brilla el Sol y por qué no explota",
+      "lead": "No entra en la verificación. Sobre el reactor de fusión más grande de los alrededores y qué lo mantiene en equilibrio.",
+      "blocks": [
+        {
+          "h": "Cadena de reacciones",
+          "text": "Cuatro protones se convierten en varias etapas en un núcleo de helio, dos positrones y dos neutrinos. La masa del helio es un 0,7% menor que la suma de las masas de los cuatro protones; esta diferencia se convierte en energía, unos 26 MeV por cada núcleo generado."
+        },
+        {
+          "h": "Por qué esto no es una explosión",
+          "text": "El Sol se mantiene en equilibrio mediante retroalimentación. Si la reacción se acelera, la temperatura aumenta, el gas se expande, la densidad disminuye y la reacción se ralentiza. El termostato funciona automáticamente y por eso es estable desde hace cinco mil millones de años. El Sol no puede explotar por la misma razón por la que no puede hervir una tetera con la tapa abierta."
+        },
+        {
+          "h": "Qué tan lento es",
+          "text": "La producción específica de energía en el centro del Sol es de unos 275 vatios por metro cúbico. Es menos de lo que produce una pila de compost del mismo volumen. El Sol brilla intensamente no porque la reacción sea violenta, sino porque es enorme. La primera etapa de la reacción requiere la conversión de un protón en un neutrón a través de la interacción débil, y el tiempo medio de espera para un protón individual es de miles de millones de años."
+        },
+        {
+          "h": "Y por qué el reactor de fusión es tan difícil",
+          "text": "No se puede repetir el proceso solar en la Tierra: es demasiado lento. Hay que tomar reacciones más rápidas con deuterio y tritio, y para ellas se necesitan cientos de millones de grados, diez veces más que en el centro del Sol, porque no tenemos ni su presión ni su tamaño. El plasma a esa temperatura se mantiene con un campo magnético, y esto sigue siendo un problema de ingeniería no resuelto desde hace setenta años."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "La masa es una medida de la energía total de un cuerpo en reposo; $E = \\gamma mc^{2}$, y a velocidad cero queda la energía en reposo $mc^{2}$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$c^{2}$ es un factor",
+          "text": "$c^{2}$ es un factor de conversión entre masa y energía, no un mecanismo"
+        },
+        {
+          "icon": "formula",
+          "title": "$E^{2} = (pc)^{2} + (mc^{2})^{2}$",
+          "text": "triángulo rectángulo de energías"
+        },
+        {
+          "icon": "sigma",
+          "title": "La energía tiende a infinito cuando $v \\to c$",
+          "text": "no se puede acelerar hasta la luz"
+        },
+        {
+          "icon": "ruler",
+          "title": "El desarrollo a bajas",
+          "text": "El desarrollo a bajas velocidades da $mc^{2} + mv^{2}/2$ — la clásica como aproximación"
+        },
+        {
+          "icon": "scale",
+          "title": "Defecto de masa",
+          "text": "un sistema ligado pesa menos que la suma de sus partes"
+        }
+      ],
+      "where": "Brillo de las estrellas, energía nuclear, tomografía por emisión de positrones, creación de partículas en aceleradores, origen de la masa de la materia.",
+      "watchOut": "La fórmula dice cuánta energía hay, pero no cómo extraerla. En química se libera $10^{-10}$ de la masa, en reacciones nucleares $10^{-3}$, completamente solo en la aniquilación."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "¿Qué significa el factor $c^{2}$ en la fórmula $E = mc^{2}$?",
+        "options": [
+          "La luz participa en la conversión de masa en energía",
+          "Es un factor de conversión entre unidades de masa y energía, similar a 1000 entre kilómetro y metro",
+          "La masa se mueve a la velocidad de la luz al cuadrado",
+          "Muestra cuántas veces la energía es mayor que la masa físicamente"
+        ],
+        "answer": 1,
+        "why": "Ninguna luz participa en la conversión. La energía tiene dimensiones de masa multiplicada por velocidad al cuadrado, y la única velocidad destacada en la naturaleza es la de la luz. Si medimos el tiempo en segundos luz, la fórmula toma la forma $E = m$: la masa es energía, solo que en otras unidades.",
+        "hint": "Verifique las dimensiones: ¿qué se necesita multiplicar por kilogramos para obtener julios?"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "¿Por qué no se puede acelerar un cuerpo masivo hasta la velocidad de la luz?",
+        "options": [
+          "No hay suficiente potencia en los motores existentes",
+          "La resistencia del medio interestelar lo impide",
+          "La energía total crece como $\\gamma$ y se vuelve infinita cuando $v \\to c$",
+          "El cuerpo se destruirá por sobrecarga antes"
+        ],
+        "answer": 2,
+        "why": "No es cuestión de tecnología: en el denominador de la fórmula hay una raíz que se vuelve cero. Cada incremento adicional de velocidad cuesta más que el anterior, y el último paso requiere energía infinita. En un colisionador se ve directamente: los protones viajan a 0,999999990 c, y una mayor aceleración casi no cambia la velocidad, pero aumenta la energía.",
+        "hint": "Observe qué sucede con el denominador en la fórmula de la energía total cuando la velocidad se aproxima a la de la luz."
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué la masa del protón es cien veces mayor que la suma de las masas de los quarks que lo componen?",
+        "keywords": [
+          "energ",
+          "movimient",
+          "enlac",
+          "gluón",
+          "campo",
+          "interacci",
+          "se convierte en masa",
+          "no de masas"
+        ],
+        "needed": 2,
+        "why": "Los quarks en el interior se mueven casi a la velocidad de la luz, y el campo que los une transporta una enorme energía. Toda esta energía se manifiesta como masa según la fórmula de Einstein. Es decir, la masa de la materia es casi en su totalidad energía de movimiento e interacción, no la suma de las masas de sus partes constituyentes. La materia es energía ligada en una forma estable.",
+        "hint": "Si la masa es una medida de la energía total de un sistema en reposo, ¿qué entra en esta energía además de las masas de las partículas individuales?"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "¿Cuánta energía está contenida en un gramo de materia? Dé el exponente de la potencia de diez en julios.",
+        "answer": 14,
+        "unit": "orden (potencia de diez)",
+        "tolerance": 1,
+        "why": "E = 10⁻³ · (3·10⁸)² = 9·10¹³ J, es decir, del orden de 10¹⁴. Esto son 25 millones de kilovatios-hora: el consumo mensual de una ciudad pequeña. Sin embargo, solo se puede extraer completamente mediante aniquilación: en una reacción nuclear se libera una milésima parte, en una reacción química, una diez mil millonésima parte.",
+        "hint": "Multiplique la masa en kilogramos por el cuadrado de la velocidad de la luz. No olvide que un gramo es 10⁻³ kg."
+      }
+    ]
+  },
+  "ar": {
+    "title": "الكتلة والطاقة",
+    "subtitle": "الفقرة 3 · من أين تأتي E = mc²",
+    "intro": [
+      "ظهرت أشهر معادلة في الفيزياء في مذكرة من ثلاث صفحات، تمت إضافتها إلى المقال الرئيسي بعد بضعة أشهر. اختتمها أينشتاين بافتراض حذر: ربما يمكن اختبار النظرية على مواد ذات محتوى طاقي كبير، مثل أملاح الراديوم. بعد أربعين عامًا، تم الاختبار بطريقة لم يكن يتمناها.",
+      "معنى المعادلة ليس أن الكتلة يمكن تحويلها إلى طاقة. المعنى أعمق: الكتلة هي طاقة، معبر عنها بوحدات مختلفة، تمامًا كما يمكن قياس المسافة بالأمتار أو الثواني الضوئية. المضروب $c^{2}$ هنا يعمل كمعامل تحويل، وليس كآلية فيزيائية.",
+      "ويترتب على ذلك أن الجسم الساخن أثقل من البارد، والزنبرك المضغوط أثقل من الحر، وأن كتلة البروتون تتكون بنسبة تسعة وتسعين في المئة ليس من كتل الكواركات المكونة له، بل من طاقة حركتها وترابطها. تبين أن الكتلة ليست كمية من المادة، بل هي مقياس للطاقة الكلية لجسم ساكن."
+    ],
+    "standNote": "انظر إلى السطر الأخير تحت المشهد — الزيادة في الطاقة بالنسبة للسكون كنسبة مئوية. عند السرعات الصغيرة، تتطابق مع الطاقة الحركية العادية، ولكن مع الاقتراب من سرعة الضوء، ترتفع بلا حدود. حرّك المنزلق إلى 0,99 وسترى أن الطاقة زادت سبع مرات عن السكون. من هنا استحالة الوصول إلى سرعة الضوء: ليس بسبب نقص المحرك، بل لأن الطاقة المطلوبة تتحول إلى ما لا نهاية.",
+    "formula": {
+      "name": "تكافؤ الكتلة والطاقة",
+      "latex": "E = \\gamma m c^{2}, \\qquad E_0 = mc^{2}, \\qquad E^{2} = (pc)^{2} + (mc^{2})^{2}",
+      "alsoKnown": "معادلة أينشتاين · طاقة السكون",
+      "authors": [
+        {
+          "who": "ألبرت أينشتاين",
+          "year": "1905",
+          "what": "اشتق المعادلة في مذكرة قصيرة، بتحليل كيفية تغير كتلة جسم يصدر ضوءًا في اتجاهين. كان العنوان استفهاميًا: هل تعتمد قصور الذات للجسم على الطاقة التي يحتويها؟"
+        },
+        {
+          "who": "هنري بوانكاريه",
+          "year": "1900",
+          "what": "حصل على العلاقة بين الطاقة والكتلة للإشعاع الكهرومغناطيسي في وقت سابق، لكنه فسّرها كخاصية للأثير، وليس كقانون عام للطبيعة"
+        },
+        {
+          "who": "آرثر إدينغتون",
+          "year": "1920",
+          "what": "كان أول من افترض أن النجوم تضيء بتحويل الهيدروجين إلى هيليوم مع إطلاق طاقة وفق هذه المعادلة. لمن اعترضوا بأن درجة حرارة الشمس غير كافية، أجاب: ابحثوا عن مكان أكثر حرارة"
+        },
+        {
+          "who": "هانز بيته",
+          "year": "1939",
+          "what": "حسب سلسلة التفاعلات النووية في باطن النجوم وشرح من أين تأتي الطاقة الشمسية تحديدًا. حصل على جائزة نوبل بعد ثمانية وثلاثين عامًا"
+        },
+        {
+          "who": "ليزا مايتنر",
+          "year": "1939",
+          "what": "شرحت انشطار اليورانيوم وحسبت الطاقة المنبعثة باستخدام معادلة أينشتاين، وحصلت على 200 MeV لكل نواة. مُنحت جائزة نوبل لاكتشاف الانشطار لمؤلفها المشارك هان، بينما تم تجاهلها"
+        }
+      ],
+      "story": "تنتهي مذكرة عام 1905 بعبارة تستحق القراءة كاملة: ليس مستبعدًا أن يكون اختبار النظرية ممكنًا على أجسام يتغير محتواها الطاقي بدرجة عالية، مثل أملاح الراديوم. اقترح أينشتاين قياس نقص الكتلة أثناء التحلل الإشعاعي. لم يكن هناك حديث عن قنابل أو مفاعلات: حتى إمكانية التفاعل المتسلسل لم تدرك إلا في عام 1933 بواسطة سيلارد، وقبل ذلك حتى رذرفورد وصف الحديث عن استخلاص الطاقة النووية بالهراء. علم أينشتاين بهيروشيما من نشرة إذاعية، ووفقًا لشهادة سكرتيرته، قال فقط 'ويل لي'. المعادلة التي أصبحت رمزًا للعصر الذري اشتقها في مكتب البراءات، وهو يتأمل في الإشعاع.",
+      "symbols": [
+        {
+          "sym": "E0",
+          "latex": "E_0",
+          "what": "طاقة السكون",
+          "unit": "J",
+          "note": "ما يحتويه الجسم حتى وهو ساكن؛ للكيلوغرام — $9\\cdot 10^{16}$ J"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "كتلة السكون",
+          "unit": "kg",
+          "note": "ثابت: متساوية في جميع الأطر المرجعية. مفهوم 'الكتلة النسبية' لا يُستخدم اليوم"
+        },
+        {
+          "sym": "E",
+          "latex": "E",
+          "what": "الطاقة الكلية",
+          "unit": "J",
+          "note": "تزداد مع السرعة مثل $\\gamma$ وتذهب إلى اللانهاية عندما $v \\to c$"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "الزخم",
+          "unit": "kg·m/s",
+          "note": "$p = \\gamma mv$; للفوتون $p = E/c$ عند كتلة صفرية"
+        },
+        {
+          "sym": "dm",
+          "latex": "\\Delta m",
+          "what": "عيب الكتلة",
+          "unit": "kg",
+          "note": "الفرق بين مجموع كتل الأجزاء وكتلة الكل؛ وهي تنطلق كطاقة ربط"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "استنتاج صارم: لماذا تزداد الكتلة مع الطاقة",
+      "lead": "لنتتبع استنتاج أينشتاين نفسه — إنه بسيط بشكل مدهش ولا يتطلب سوى حفظ الزخم.",
+      "steps": [
+        {
+          "text": "لنأخذ جسماً ساكناً يصدر وميضين ضوئيين متماثلين في اتجاهين متعاكسين. زخما الوميضين متساويان ومتعاكسان، لذا يبقى الجسم في مكانه. تقل طاقته بمقدار الطاقة الإشعاعية الكلية.",
+          "latex": "E \\to E - \\Delta E, \\qquad \\vec{p}_{\\text{тела}} = 0 \\;\\text{до и после}",
+          "figure": "action",
+          "figCaption": "الإصدار المتناظر: يفقد الجسم طاقة لكنه لا يكتسب سرعة."
+        },
+        {
+          "text": "الآن لننظر إلى نفس العملية من نظام يتحرك بسرعة $v$. هناك، الجسم يطير، والوميضان يذهبان للأمام والخلف بزاوية. لم يعد زخماها يعوضان بعضهما تماماً — يظهر مركِّب على طول الحركة.",
+          "latex": "p_{\\text{света}} = \\frac{\\Delta E}{c}\\cdot\\frac{v}{c} \\;\\;\\text{(вдоль движения)}",
+          "figure": "vectriangle",
+          "figCaption": "في النظام المتحرك، الإشعاع يحمل زخماً للأمام. الضوء له زخم رغم أنه عديم الكتلة."
+        },
+        {
+          "text": "لكن الزخم يجب أن ينحفظ في هذا النظام أيضاً. الجسم لم يغير سرعته — مما يعني أن معامل السرعة (أي الكتلة) قد انخفض.",
+          "latex": "p_{\\text{тела}} = mv \\;\\Longrightarrow\\; \\Delta m \\cdot v = \\frac{\\Delta E \\, v}{c^{2}}",
+          "figure": "momentum",
+          "figCaption": "الطريقة الوحيدة لحفظ الزخم هي الاعتراف بأن الجسم أصبح أخف."
+        },
+        {
+          "text": "نحذف السرعة ونحصل على النتيجة: بإطلاق الطاقة، يفقد الجسم كتلة.",
+          "latex": "\\Delta m = \\frac{\\Delta E}{c^{2}} \\;\\Longleftrightarrow\\; \\Delta E = \\Delta m\\,c^{2}",
+          "figure": "result",
+          "figCaption": "الاستنتاج لا يتطلب أكثر من حفظ الزخم وحقيقة أن الضوء يحمل زخماً."
+        },
+        {
+          "text": "لنعمم. الطاقة الكلية لجسم متحرك تزداد مثل $\\gamma$، وعند السرعة الصفرية لا تكون صفراً بل طاقة السكون — كمية لم تكن موجودة في الميكانيكا الكلاسيكية.",
+          "latex": "E = \\gamma mc^{2} = \\frac{mc^{2}}{\\sqrt{1-v^{2}/c^{2}}}",
+          "figure": "curves",
+          "figCaption": "عند $v \\to c$ تذهب الطاقة إلى اللانهاية — ولهذا لا يمكن لجسم ذي كتلة بلوغ سرعة الضوء."
+        },
+        {
+          "text": "لنتحقق من التوافق مع الكلاسيكية. نفكك عند السرعة الصغيرة: الحد الأول هو طاقة السكون، والثاني هو الطاقة الحركية المألوفة. تبين أن الميكانيكا النيوتونية تقريب.",
+          "latex": "E \\approx mc^{2} + \\frac{mv^{2}}{2} + \\ldots",
+          "figure": "kinetic",
+          "figCaption": "الصيغة $mv^{2}/2$ هي أول حد تصحيحي في المفكوك. مبدأ التوافق محقق."
+        },
+        {
+          "text": "والعلاقة العامة التي تربط الطاقة والزخم والكتلة. منها يتضح أن جسيماً عديم الكتلة ممكن — إذا تحرك بالضبط بسرعة الضوء.",
+          "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2}, \\qquad m = 0 \\Rightarrow E = pc",
+          "figure": "vectriangle",
+          "figCaption": "مثلث قائم الزاوية في عالم الطاقات: الكتلة والزخم يتجمعان كساقين."
+        }
+      ],
+      "plate": "الكتلة هي مقياس الطاقة الكلية لجسم ساكن. بإطلاق طاقة، يخف الجسم؛ طاقة الجسم المتحرك تزداد مثل $\\gamma$ وتصبح لانهائية عند الاقتراب من سرعة الضوء.",
+      "note": "حدود الصلاحية وتوضيح مهم حول المصطلحات. في الكتب القديمة يكتبون عن «الكتلة النسبية» $m\\gamma$ التي تزداد مع السرعة. اليوم لا نفعل ذلك: الكتلة تعرف باعتبارها لامتغيرة، نفسها في جميع الأطر، والطاقة هي التي تزداد. السبب ليس التحذلق — مفهوم الكتلة النسبية يعمل للحركة الطولية وينهار للعرضية، مما يولد ارتباكاً أكثر من الفائدة. توضيح آخر: الصيغة لا تعني أن المادة تتحول بسهولة إلى طاقة. في التفاعلات الكيميائية، عجز الكتلة من رتبة $10^{-10}$، وفي النووية $10^{-3}$، فقط الإفناء يعطي واحداً."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "لماذا مربع سرعة الضوء في الصيغة. كثيراً ما يبحثون عن معنى عميق، لكنه بسيط: $c^{2}$ يعمل كمعامل تحويل بين وحدات الكتلة والطاقة، مثل 1000 بين الكيلومتر والمتر. إذا كنا نقيس الزمن بنفس وحدات المسافة — بالثواني الضوئية — لكانت الصيغة ببساطة $E = m$. يظهر المربع لأن الطاقة لها بعد كتلة مضروبة في مربع سرعة، ولا يمكن تركيب أي توليفة أخرى من الكتلة وسرعة الضوء. هذا هو نفس تحليل الأبعاد من الموضوع التمهيدي.",
+        "كيف نقرأ علاقة الطاقة والزخم. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ — نظرية فيثاغورس، حيث الساقان هما الزخم والكتلة، والوتر هو الطاقة الكلية. من هنا حالتان حديتان مباشرتان. جسم ساكن: الزخم صفر، الطاقة تساوي الكتلة. فوتون: الكتلة صفر، الطاقة تساوي الزخم مضروباً في سرعة الضوء. وبينهما كل الحالات الوسيطة. المثلث صورة مريحة لتجنب الخلط في الصيغ النسبية.",
+        "ما هو عجز الكتلة. اجمع نواة من بروتونات ونيوترونات — ستكون كتلتها أقل من مجموع كتل الأجزاء. الفرق ذهب إلى طاقة الارتباط التي انطلقت أثناء التجميع. تشبيه: لتفكيك مغناطيسين ملتصقين، يجب بذل شغل، لذا الملتصقان يحويان طاقة أقل من المنفصلين — وبما أن الطاقة أقل، فالكتلة أقل. الفرق ضئيل للمغناطيس وملحوظ للنوى: في الهيليوم يبلغ 0.7 بالمئة.",
+        "لماذا لا يمكن التسريع إلى سرعة الضوء. انظر إلى صيغة الطاقة: في المقام جذر يصبح صفراً عند $v = c$. الطاقة تذهب إلى اللانهاية. يمكن التسريع بقدر ما نريد، لكن كل زيادة تالية في السرعة تكلف أكثر من السابقة، والخطوة الأخيرة تكلف لا متناهياً. في المسرعات يظهر هذا بوضوح: البروتونات في المصادم تتحرك بسرعة 0.999999990 c، والتسريع الإضافي لا يغير السرعة تقريباً بل يزيد الطاقة."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: كم من الطاقة في غرام ولماذا تشرق الشمس",
+      "lead": "نحسب طاقة السكون لغرام من المادة وفقدان كتلة الشمس — الأرقام غير متناسبة مع المألوف.",
+      "given": "أوجد طاقة السكون لغرام واحد من أي مادة. ثم: قدرة الشمس $3{,}8\\cdot 10^{26}$ واط. قدر كم من الكتلة تفقدها كل ثانية.",
+      "law": "$E_0 = mc^{2}$; $\\;\\Delta m = P\\,\\Delta t/c^{2}$",
+      "solution": [
+        {
+          "text": "طاقة السكون لغرام.",
+          "latex": "E = 10^{-3} \\cdot (3\\cdot 10^{8})^{2} = 9\\cdot 10^{13}\\ \\text{Дж}"
+        },
+        {
+          "text": "نحول إلى وحدات مألوفة: هذا يعادل 25 مليون كيلوواط ساعة.",
+          "latex": "\\frac{9\\cdot 10^{13}}{3{,}6\\cdot 10^{6}} = 2{,}5\\cdot 10^{7}\\ \\text{кВт·ч}"
+        },
+        {
+          "text": "الآن الشمس: الكتلة المفقودة في الثانية.",
+          "latex": "\\Delta m = \\frac{3{,}8\\cdot 10^{26}}{9\\cdot 10^{16}} \\approx 4{,}2\\cdot 10^{9}\\ \\text{кг/с}"
+        },
+        {
+          "text": "خلال عام.",
+          "latex": "4{,}2\\cdot 10^{9} \\cdot 3{,}16\\cdot 10^{7} \\approx 1{,}3\\cdot 10^{17}\\ \\text{кг/год}"
+        },
+        {
+          "text": "قارن مع الكتلة الكلية للشمس.",
+          "latex": "\\frac{1{,}3\\cdot 10^{17}}{2\\cdot 10^{30}} \\approx 7\\cdot 10^{-14}\\ \\text{в год}"
+        }
+      ],
+      "answer": "في غرام من المادة يوجد 9·10¹³ جول — 25 مليون كيلوواط ساعة، وهو الاستهلاك الشهري لمدينة يبلغ تعداد سكانها مئة ألف. تفقد الشمس 4.2 مليون طن في الثانية، لكن هذا أقل من واحد على عشرة تريليون من كتلتها سنويًا.",
+      "check": "كلا الرقمين يستحقان التفكير. إن غرامًا من المادة تحول بالكامل إلى طاقة سيعطي أكثر من حرق عربة من الفحم، ولكن هذا التحول الكامل لا يحدث في الطبيعة إلا عن طريق الإفناء مع المادة المضادة. في المفاعل النووي، يتحول حوالي واحد على ألف من كتلة الوقود إلى طاقة، وفي الاحتراق الكيميائي واحد على عشرة مليارات. أما بالنسبة للشمس: أربعة ملايين طن في الثانية تبدو مرعبة، ولكن في الواقع خلال خمسة مليارات سنة فقدت حوالي ثلاثة أجزاء من مئة بالمائة من كتلتها. الوقود يكفي لنفس المدة تقريبًا."
+    },
+    "constants": {
+      "title": "مقادير هذا القسم",
+      "lead": "طاقات السكون — مقياس طبيعي لفيزياء الجسيمات بأكملها.",
+      "items": [
+        {
+          "sym": "mec2",
+          "latex": "m_ec^{2}",
+          "name": "طاقة سكون الإلكترون",
+          "value": "0,511",
+          "unit": "МэВ",
+          "why": "رقم مرجعي لكل الفيزياء النووية. إفناء الإلكترون مع البوزيترون يعطي كمين جاما بقدر 0,511 МэВ — خط مميز يكتشف به البوزيترونات.",
+          "mnemo": "نصف ميجا إلكترون فولت. طاقة ربط الإلكترون في ذرة الهيدروجين 13,6 эВ — أقل بأربعين ألف مرة، لذلك تعيش الكيمياء والفيزياء النووية في عوالم مختلفة."
+        },
+        {
+          "sym": "mpc2",
+          "latex": "m_pc^{2}",
+          "name": "طاقة سكون البروتون",
+          "value": "938",
+          "unit": "МэВ",
+          "why": "تقريبًا جيجا إلكترون فولت. بينما الكتلة الكلية للثلاثة كواركات داخله حوالي 10 МэВ؛ أما الـ 99% المتبقية من كتلة البروتون فهي طاقة حركة الكواركات وحقل الغلوونات.",
+          "mnemo": "كتلتك مكونة بنسبة 99% ليس من كتلة الجسيمات بل من طاقة تفاعلها. المادة تقريبًا بالكامل هي طاقة مرتبطة."
+        },
+        {
+          "sym": "E1g",
+          "latex": "E_{1\\text{г}}",
+          "name": "طاقة سكون غرام واحد",
+          "value": "9 · 10¹³",
+          "unit": "Дж",
+          "why": "25 مليون كيلوواط ساعة. للمقارنة: عند انشطار كيلوغرام من اليورانيوم يتحرر حوالي واحد على ألف من هذه القيمة، وعند احتراق كيلوغرام من النفط واحد على عشرة مليارات.",
+          "mnemo": "الغرام في تحوله الكامل يعادل تقريبًا انفجار 20 كيلوطن — قوة القنبلة التي ألقيت على ناغازاكي. هناك، على أي حال، تحول غرام واحد فقط من عشرة كيلوغرامات من البلوتونيوم."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين تعمل التكافؤ",
+      "lead": "لم تعد المعادلة نظرية بل دخلت الهندسة والطب والفيزياء الفلكية.",
+      "items": [
+        {
+          "h": "النجوم",
+          "text": "أربعة أنوية هيدروجين تتحول إلى نواة هيليوم، وهي أخف من المجموع بنسبة 0.7 في المئة. هذا الفرق هو ضوء الشمس. في الثانية يتحول 600 مليون طن من الهيدروجين إلى هيليوم، منها 4 ملايين طن تصبح إشعاعًا."
+        },
+        {
+          "h": "الطاقة النووية",
+          "text": "عند انشطار نواة اليورانيوم ينطلق حوالي 200 ميجا إلكترون فولت — وهو عجز كتلة مقداره واحد على ألف. كيلوغرام من اليورانيوم يعطي طاقة تعادل حرق ثلاثة آلاف طن من الفحم."
+        },
+        {
+          "h": "التصوير المقطعي بالإصدار البوزيتروني",
+          "text": "يُدخل إلى الجسم نظير مشع يصدر بوزيترونات؛ تفنى هذه مع الإلكترونات معطية كمين بقدر 0,511 ميجا إلكترون فولت، ينطلقان في اتجاهين متعاكسين تمامًا. من توافقات الكواشف تُستعاد نقطة الاضمحلال."
+        },
+        {
+          "h": "المسرعات",
+          "text": "في التصادم تولد جسيمات أثقل من الأصلية — بفضل الطاقة الحركية. هكذا اكتشف بوزون هيغز: كتلته 125 جيجا إلكترون فولت أتت بالكامل من طاقة تصادم البروتونات."
+        },
+        {
+          "h": "كتلة المادة",
+          "text": "كتلة البروتون 99% منها هي طاقة حركة الكواركات والحقل الذي يربطها. عمليًا كل كتلة جسمك ليست كتلة الجسيمات المكونة، بل طاقة تفاعلها."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: جرب بنفسك",
+      "lead": "لا يمكن رؤية عجز الكتلة في المطبخ، لكن آثاره تحيط بنا من كل جانب.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "إبريق الشاي الساخن أثقل من البارد",
+          "text": "بتسخين لتر من الماء من 20 إلى 100 درجة، أضفنا له 336 كيلوجول. لذا، وفقًا للمعادلة، زادت كتلته. كم زادت؟ ولماذا لا يلاحظ أحد ذلك؟",
+          "answer": "الزيادة في الكتلة تساوي $336000/9\\cdot 10^{16} \\approx 3{,}7\\cdot 10^{-12}$ كيلوجرام، أي حوالي أربع بيكوجرامات. هذا أقل من كتلة بكتيريا واحدة وأقل بمليار مرة من حساسية أفضل الموازين المختبرية. مع ذلك، التأثير حقيقي تمامًا، وفي الفيزياء النووية يصبح رئيسيًا: حيث الزيادة النسبية ليست $10^{-12}$ بل $10^{-3}$، ويُقاس بشكل روتيني. الزنبرك المضغوط، والبطارية المشحونة، والحدافة الدوارة هي أيضًا أثقل - بنفس المقدار غير المحسوس."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "مما تتكون كتلتك؟",
+          "text": "يتكون البروتون من ثلاثة كواركات. الكتلة الإجمالية للكواركات حوالي 10 ميغا إلكترون فولت، بينما كتلة البروتون 938 ميغا إلكترون فولت. أين الـ 99 بالمئة المتبقية؟",
+          "answer": "في الطاقة. تتحرك الكواركات داخل البروتون بسرعة تقارب سرعة الضوء، ويحمل حقل الغلوون الذي يربطها طاقة هائلة - وكلها، وفقًا لمعادلة أينشتاين، تظهر ككتلة. أي أن كتلة جسمك تقريبًا بالكامل لا تأتي من كتلة الجسيمات، بل من طاقة حركتها وتفاعلها. المادة هي طاقة مقيدة اتخذت شكلاً مستقرًا. ربما تكون هذه النتيجة الأكثر غرابة للمعادلة، وهي أهم بكثير من القنابل."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "رذرفورد وصف الطاقة النووية بالهراء",
+          "text": "في عام 1933، أعلن علنًا أن أي شخص يتوقع الحصول على طاقة من تحويل الذرات يقول هراء. في اليوم التالي، كان ليو زيلارد، الذي قرأ ذلك في الجريدة، يسير في شارع لندني وعند إشارة المرور خطرت له فكرة التفاعل المتسلسل: إذا أطلق انشطار النواة نيوترونات أكثر مما يمتص، فستستمر العملية ذاتيًا. حصل على براءة اختراع للفكرة وسلمها إلى الأميرالية البريطانية لإبقائها سرية. مرت ست سنوات قبل اكتشاف انشطار اليورانيوم."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرة مساعدة",
+          "h": "الكتلة هي الطاقة بوحدات أخرى",
+          "text": "ليست 'الكتلة تتحول إلى طاقة'، بل 'الكتلة هي طاقة السكون محسوبة بالكيلوجرام بدلاً من الجول'. العامل $c^{2}$ هو سعر الصرف، مثل 1000 بين الكيلومتر والمتر. من هذا يتبع فورًا أن كل ما يحتوي على طاقة له كتلة: الساخن أثقل من البارد، والمضغوط أثقل من الحر."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "نسبة الكتلة المتحولة إلى طاقة",
+          "text": "الكيمياء: $10^{-10}$ - لذلك يجب نقل الفحم بعربات. انشطار النوى: $10^{-3}$ - لذلك يُغير الوقود في المفاعل مرة في السنة. الاندماج: $7\\cdot 10^{-3}$ - أكثر فعالية بعشر مرات من الانشطار. الإفناء: 1 - الحد الأقصى الذي لا يمكن تحقيقه بأي تقنية. كل طاقة البشرية تقع بين $10^{-10}$ و $10^{-3}$."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "لماذا لا توفر المعادلة طاقة مجانية",
+          "text": "إنها تقول مقدار الطاقة الموجودة، لكنها لا تقول شيئًا عن كيفية استخراجها. في الطبيعة، الطريقة الوحيدة المعروفة للتحويل الكامل هي الإفناء مع المادة المضادة، والمادة المضادة يجب إنتاجها باستهلاك طاقة أكثر مما يمكن الحصول عليه لاحقًا. جميع المصادر الحقيقية تطلق فقط أجزاء من الألف، وهذا ليس تخلفًا تقنيًا، بل هو طبيعة القوى النووية."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: لماذا تشرق الشمس ولماذا لا تنفجر",
+      "lead": "غير مدرج في الاختبار. عن أكبر مفاعل اندماج نووي في الجوار وما يبقيه في حالة توازن.",
+      "blocks": [
+        {
+          "h": "سلسلة التفاعلات",
+          "text": "أربعة بروتونات تتحول عبر عدة مراحل إلى نواة هيليوم، وبوزيترونين، ونيوترينوين. كتلة الهيليوم أقل بنسبة 0.7 بالمئة من مجموع كتل البروتونات الأربعة - وهذا الفرق يتحول إلى طاقة، حوالي 26 ميغا إلكترون فولت لكل نواة مولدة."
+        },
+        {
+          "h": "لماذا هذا ليس انفجارًا",
+          "text": "تُحفظ الشمس في حالة توازن بواسطة تغذية عكسية. إذا تسارع التفاعل - ترتفع درجة الحرارة - يتمدد الغاز - تنخفض الكثافة - يتباطأ التفاعل. يعمل منظم الحرارة تلقائيًا وباستقرار منذ خمسة مليارات سنة. لا يمكن للشمس أن تنفجر لنفس السبب الذي يمنع غلاية مفتوحة الغطاء من الغليان."
+        },
+        {
+          "h": "كم هذا بطيء",
+          "text": "إنتاج الطاقة النوعي في مركز الشمس حوالي 275 واط لكل متر مكعب. هذا أقل مما ينتجه كومة سماد من نفس الحجم. الشمس تشرق ساطعة ليس لأن التفاعل عنيف، بل لأنها ضخمة. الخطوة الأولى من التفاعل تتطلب تحويل بروتون إلى نيوترون عبر التفاعل الضعيف، ومتوسط وقت الانتظار لبروتون فردي هو مليارات السنين."
+        },
+        {
+          "h": "ولماذا المفاعل النووي الحراري صعب جدًا",
+          "text": "لا يمكن تكرار العملية الشمسية على الأرض: إنها بطيئة جدًا. يجب استخدام تفاعلات أسرع مع الديوتيريوم والتريتيوم، وهذه تتطلب مئات الملايين من الدرجات - عشرة أضعاف ما في مركز الشمس، لأنه لا يوجد ضغطها ولا حجمها. البلازما في هذه الدرجة تُحتجز بالمجال المغناطيسي، وهذا يظل مشكلة هندسية غير محلولة منذ سبعين سنة."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "الكتلة هي مقياس للطاقة الكلية لجسم ساكن؛ $E = \\gamma mc^{2}$، وعند السرعة الصفرية تبقى طاقة السكون $mc^{2}$.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$c^{2}$ - معامل تحويل",
+          "text": "$c^{2}$ - معامل تحويل بين الكتلة والطاقة، وليس آلية"
+        },
+        {
+          "icon": "formula",
+          "title": "$E^{2} = (pc)^{2} +",
+          "text": "$E^{2} = (pc)^{2} + (mc^{2})^{2}$ - مثلث قائم للطاقات"
+        },
+        {
+          "icon": "sigma",
+          "title": "الطاقة تذهب إلى اللانهاية عندما $v \\to c$",
+          "text": "لا يمكن التسارع إلى سرعة الضوء"
+        },
+        {
+          "icon": "ruler",
+          "title": "التفكيك عند السرعات الصغيرة",
+          "text": "التفكيك عند السرعات الصغيرة يعطي $mc^{2} + mv^{2}/2$ - الكلاسيكية كتقريب"
+        },
+        {
+          "icon": "scale",
+          "title": "عجز الكتلة",
+          "text": "النظام المقيد أخف من مجموع أجزائه"
+        }
+      ],
+      "where": "إضاءة النجوم، الطاقة النووية، التصوير المقطعي بالإصدار البوزيتروني، إنتاج الجسيمات في المسرعات، أصل كتلة المادة.",
+      "watchOut": "المعادلة تقول مقدار الطاقة الموجودة، لكنها لا تقول كيفية استخراجها. في الكيمياء تتحرر $10^{-10}$ من الكتلة، في التفاعلات النووية $10^{-3}$، بالكامل فقط عند الإفناء."
+    },
+    "quiz": [
+      {
+        "id": "e1",
+        "type": "mcq",
+        "q": "ماذا يعني المعامل $c^{2}$ في المعادلة $E = mc^{2}$?",
+        "options": [
+          "الضوء يشارك في تحويل الكتلة إلى طاقة",
+          "هو معامل تحويل بين وحدات الكتلة والطاقة، مشابه للرقم 1000 بين الكيلومتر والمتر",
+          "الكتلة تتحرك بسرعة الضوء مربعة",
+          "يوضح كم مرة تكون الطاقة أكبر من الكتلة فيزيائياً"
+        ],
+        "answer": 1,
+        "why": "لا يشارك أي ضوء في التحويل. الطاقة لها بُعد الكتلة مضروبة في مربع السرعة، والسرعة الوحيدة المميزة في الطبيعة هي سرعة الضوء. إذا قيست الزمن بالثواني الضوئية، تصبح المعادلة $E = m$: الكتلة هي الطاقة، لكن بوحدات مختلفة.",
+        "hint": "تحقق من الأبعاد: ما الذي يجب ضربه في الكيلوجرامات للحصول على جول؟"
+      },
+      {
+        "id": "e2",
+        "type": "mcq",
+        "q": "لماذا لا يمكن تسريع جسم ضخم إلى سرعة الضوء؟",
+        "options": [
+          "لا تكفي قوة المحركات الموجودة",
+          "تعيق مقاومة الوسط بين النجوم",
+          "الطاقة الكلية تزداد مثل $\\gamma$ وتصبح لانهائية عندما $v \\to c$",
+          "سيتدمر الجسم من التحميل الزائد قبل ذلك"
+        ],
+        "answer": 2,
+        "why": "الأمر ليس تقنياً: في مقام المعادلة يوجد جذر يصبح صفراً. كل زيادة لاحقة في السرعة تكلف أكثر من السابقة، والخطوة الأخيرة تتطلب طاقة لانهائية. في المصادم يُرى ذلك مباشرة: البروتونات تتحرك بسرعة 0.999999990 ج، والتسريع الإضافي لا يغير السرعة تقريباً، لكنه يزيد الطاقة.",
+        "hint": "انظر ماذا يحدث للمقام في معادلة الطاقة الكلية عند اقتراب السرعة من سرعة الضوء."
+      },
+      {
+        "id": "e3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا كتلة البروتون أكبر بمئة مرة من مجموع كتل الكواركات المكونة له؟",
+        "keywords": [
+          "طاقة",
+          "حركة",
+          "ترابط",
+          "غلوون",
+          "مجال",
+          "تفاعل",
+          "يتحول إلى كتلة",
+          "ليس من كتلة"
+        ],
+        "needed": 2,
+        "why": "الكواركات في الداخل تتحرك تقريباً بسرعة الضوء، والمجال الذي يربطها يحمل طاقة هائلة. كل هذه الطاقة حسب معادلة أينشتاين تظهر ككتلة. أي أن كتلة المادة بالكامل تقريباً هي طاقة حركة وتفاعل، وليس مجموع كتل الأجزاء المكونة. المادة هي طاقة مرتبطة في شكل مستقر.",
+        "hint": "إذا كانت الكتلة هي مقياس الطاقة الكلية لنظام ساكن، فما الذي يدخل في هذه الطاقة بالإضافة إلى كتل الجسيمات الفردية؟"
+      },
+      {
+        "id": "e4",
+        "type": "estimate",
+        "q": "كم طاقة موجودة في جرام واحد من المادة؟ أعط أس العشرة بالجول.",
+        "answer": 14,
+        "unit": "الأس (قوة العشرة)",
+        "tolerance": 1,
+        "why": "E = 10⁻³ · (3·10⁸)² = 9·10¹³ جول، أي من رتبة 10¹⁴. هذا يعادل 25 مليون كيلوواط ساعة — استهلاك شهر لمدينة صغيرة. لكن، يمكن استخراجها بالكامل فقط عن طريق الإفناء: في التفاعل النووي يتحرر جزء من ألف، وفي التفاعل الكيميائي جزء من عشرة مليارات.",
+        "hint": "اضرب الكتلة بالكيلوجرامات في مربع سرعة الضوء. لا تنس أن الجرام هو 10⁻³ كجم."
+      }
+    ]
+  },
+  "tags": [
+    "pulsar",
+    "sun",
+    "hydrogen",
+    "speed_of_light",
+    "higgs_boson"
+  ],
+  "laws": [
+    "massenergy_equivalence",
+    "pythagorean_theorem"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.05289v1",
+      "why": "совпадение по теме: hydrogen, pulsar, speed_of_light"
+    },
+    {
+      "id": "2607.02228v1",
+      "why": "совпадение по теме: hydrogen, pulsar, speed_of_light"
+    },
+    {
+      "id": "2607.01666v1",
+      "why": "совпадение по теме: hydrogen, pulsar, speed_of_light"
+    }
+  ]
+}

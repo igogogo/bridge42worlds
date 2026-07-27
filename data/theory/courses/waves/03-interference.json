@@ -1,0 +1,1528 @@
+{
+  "id": "03-interference",
+  "topic": "waves",
+  "schema": "b42.lesson/1",
+  "model": "wave",
+  "entities": {
+    "laws": [],
+    "tags": [
+      "mechanics",
+      "energy"
+    ],
+    "scientists": [
+      "Christiaan Huygens"
+    ]
+  },
+  "ru": {
+    "title": "Интерференция и Доплер",
+    "subtitle": "Параграф 3 · Когда волны складываются и когда гасят друг друга",
+    "intro": [
+      "Свет плюс свет равняется темнота. Звучит как ошибка, но именно это увидел Томас Юнг в 1801 году, пропустив свет через две узкие щели: на экране появились полосы, и между светлыми лежали тёмные. Там, куда приходило освещение сразу от обеих щелей, было темнее, чем от одной.",
+      "Частицы так себя не ведут. Два потока песчинок дают в сумме больше песка, а не меньше. А волны — могут: если гребень одной приходит одновременно с впадиной другой, они уничтожаются. Именно этот опыт решил двухсотлетний спор о природе света в пользу волн.",
+      "И тот же принцип сложения объясняет ещё две знакомые вещи: почему расстроенные струны дают пульсирующее биение и почему у проезжающей мимо машины сирена сначала выше, а потом ниже. Всё это следствия одного правила — волны просто складываются."
+    ],
+    "standNote": "Переключите стенд в режим двух волн и медленно меняйте отношение частот от единицы вверх. При точном равенстве волны идут в ногу. Чуть разошлись — появляется медленное биение: места, где они складываются, побежали вдоль оси, и суммарный размах то растёт, то падает до нуля. Обратите внимание на график внизу: пробная точка теперь качается с переменной громкостью. Именно это ухо слышит как «вау-вау» при настройке гитары.",
+    "formula": {
+      "name": "Принцип суперпозиции и условие интерференции",
+      "latex": "\\Delta = m\\lambda \\;\\text{— усиление}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— гашение}",
+      "alsoKnown": "Сложение волн · условие максимумов и минимумов",
+      "authors": [
+        {
+          "who": "Христиан Гюйгенс",
+          "year": "1678",
+          "what": "заявил, что свет есть волна, и построил на этом теорию отражения и преломления. Проиграл спор Ньютону при жизни — авторитет автора «Начал» перевесил доводы"
+        },
+        {
+          "who": "Томас Юнг",
+          "year": "1801",
+          "what": "поставил опыт с двумя щелями и получил полосы, необъяснимые для частиц. Работу встретили насмешками в британской печати; признание пришло через двадцать лет, после работ Френеля"
+        },
+        {
+          "who": "Огюстен Френель",
+          "year": "1818",
+          "what": "подал на конкурс Академии волновую теорию дифракции. Пуассон, сторонник корпускул, вывел из неё нелепое, как ему казалось, следствие: в центре тени от круглого диска должно быть светлое пятно. Араго поставил опыт — пятно там оказалось"
+        },
+        {
+          "who": "Кристиан Доплер",
+          "year": "1842",
+          "what": "предсказал изменение частоты при движении источника, разбирая цвет двойных звёзд. В звёздах он ошибся, но эффект оказался верным и был подтверждён на слух тремя годами позже — с трубачами в открытом вагоне"
+        }
+      ],
+      "story": "Самая красивая история здесь — про пятно Пуассона. В 1818 году Френель представил Академии наук волновую теорию света. Симеон Пуассон, убеждённый противник, взялся показать её нелепость: если следовать теории Френеля, вывел он, то за круглым непрозрачным диском, точно в середине тени, обязано быть светлое пятно — ведь волны, обогнувшие край, придут в центр с одинаковым запаздыванием и сложатся. Довод казался убийственным: кто видел свет в самой середине тени? Председатель комиссии Араго молча пошёл в лабораторию и поставил опыт. Пятно было. Возражение, задуманное как приговор, стало решающим подтверждением, и в физике его до сих пор называют пятном Пуассона — по имени человека, который не верил.",
+      "symbols": [
+        {
+          "sym": "Delta",
+          "latex": "\\Delta",
+          "what": "разность хода",
+          "unit": "м",
+          "note": "насколько один путь длиннее другого; именно она решает, усиление будет или гашение"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "порядок максимума",
+          "unit": "—",
+          "note": "целое число: сколько длин волн укладывается в разности хода"
+        },
+        {
+          "sym": "fbeat",
+          "latex": "f_{\\text{б}}",
+          "what": "частота биений",
+          "unit": "Гц",
+          "note": "равна разности частот: две струны, расходящиеся на 2 Гц, дают два удара в секунду"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "скорость источника или наблюдателя",
+          "unit": "м/с",
+          "note": "в эффекте Доплера важно, кто именно движется, — формулы для этих случаев разные"
+        },
+        {
+          "sym": "f0",
+          "latex": "f_0",
+          "what": "собственная частота источника",
+          "unit": "Гц",
+          "note": "то, что излучается; принимаемая частота от неё отличается при движении"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: сложение, биения и Доплер",
+      "lead": "Всё в этом параграфе следует из одного правила: смещения складываются. Проследим три разных следствия одного и того же.",
+      "steps": [
+        {
+          "text": "Принцип суперпозиции: если через точку проходят две волны, смещение среды равно сумме смещений от каждой. Это не постулат, а следствие линейности: пока возмущения малы, среда откликается пропорционально.",
+          "latex": "y = y_1 + y_2",
+          "figure": "vectriangle",
+          "figCaption": "Волны проходят друг сквозь друга, не мешая: после встречи каждая идёт как ни в чём не бывало."
+        },
+        {
+          "text": "Возьмём две волны от разных источников, пришедшие в одну точку разными путями. Разница длин путей превращается в разницу фаз: на каждую длину волны запаздывания приходится полный оборот.",
+          "latex": "\\Delta\\varphi = \\frac{2\\pi}{\\lambda}\\,\\Delta",
+          "figure": "shadow",
+          "figCaption": "Разность хода переводится в разность фаз делением на длину волны."
+        },
+        {
+          "text": "Отсюда два условия. Если разность хода вмещает целое число длин волн, гребни встречаются с гребнями — усиление. Если целое плюс половина — гребень встречается с впадиной, и они гасят друг друга.",
+          "latex": "\\Delta = m\\lambda \\;\\Rightarrow\\; A = 2A_0; \\qquad \\Delta = \\left(m+\\tfrac{1}{2}\\right)\\lambda \\;\\Rightarrow\\; A = 0",
+          "figure": "matchfreq",
+          "figCaption": "Полосы на экране Юнга — это чередование мест с целой и полуцелой разностью хода."
+        },
+        {
+          "text": "Проверим сохранение энергии, потому что здесь возникает законное беспокойство. В тёмных полосах энергии нет — куда она делась? Никуда: в светлых её вчетверо больше, а не вдвое, ведь энергия идёт как квадрат амплитуды. Среднее по экрану сходится.",
+          "latex": "\\langle A^{2}\\rangle: \\quad \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} = A_0^{2} + A_0^{2}",
+          "figure": "energy",
+          "figCaption": "Интерференция не уничтожает энергию, а перераспределяет её из тёмных мест в светлые."
+        },
+        {
+          "text": "Теперь биения. Сложим две волны близких частот в одной точке. Тригонометрия даёт произведение: быстрое колебание на средней частоте, умноженное на медленно меняющуюся огибающую.",
+          "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\cos\\!\\frac{\\omega_1-\\omega_2}{2}t \\cdot \\cos\\!\\frac{\\omega_1+\\omega_2}{2}t",
+          "figure": "sinederiv",
+          "figCaption": "Быстрый тон под медленной огибающей. Ухо слышит один звук с плавающей громкостью."
+        },
+        {
+          "text": "Громкость максимальна дважды за период огибающей, поэтому частота биений равна не половине разности, а полной разности частот. Настройщик слышит удары и подтягивает колок, пока они не исчезнут.",
+          "latex": "f_{\\text{б}} = |f_1 - f_2|",
+          "figure": "curves",
+          "figCaption": "Способ настроить инструмент точнее, чем позволяет прямое сравнение высоты: считать удары."
+        },
+        {
+          "text": "И наконец Доплер. Источник, двигаясь, догоняет собственные волны: за период он проходит расстояние $uT$, и на это укорачивается длина волны впереди. Позади она на столько же удлиняется.",
+          "latex": "\\lambda' = (v \\mp u)T \\;\\Longrightarrow\\; f' = f_0\\,\\frac{v}{v \\mp u}",
+          "figure": "circmotion",
+          "figCaption": "Гребни спереди сгущаются, сзади разрежаются. Отсюда повышение тона на подходе и понижение на отходе."
+        }
+      ],
+      "plate": "Волны складываются смещениями. Разность хода в целое число длин волн даёт усиление, в полуцелое — гашение; близкие частоты дают биения с частотой их разности; движение источника сдвигает частоту.",
+      "note": "Границы применимости. Устойчивая картина полос получается только у когерентных волн — с постоянной разностью фаз. Две обычные лампы полос не дадут: фазы их излучения меняются хаотично миллиарды раз в секунду, и картина смазывается в равномерный свет. Именно поэтому Юнг пропускал свет от одного источника через две щели, а не брал две свечи. Кроме того, приведённая формула Доплера верна для звука, где есть среда; для света она другая — там нет выделенной среды, и разница между движением источника и наблюдателя исчезает, что и стало одним из первых намёков на теорию относительности."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Что такое разность хода — совсем просто. Представьте двух курьеров, вышедших одновременно из одной точки к вашей двери разными улицами. Если один путь длиннее ровно на целое число кварталов, курьеры придут в ногу — шаг в шаг. Если длиннее на полтора квартала, один будет ступать правой, когда второй левой. Волны точно так же: важно не абсолютное расстояние, а насколько один путь длиннее другого, измеренное в длинах волн. Целое число — совпали, целое с половиной — противофаза и взаимное уничтожение.",
+        "Почему при сложении близких частот получается пульсация. Вообразите двух барабанщиков, отбивающих почти одинаковый темп: один сто ударов в минуту, другой сто два. Сначала они бьют вместе, звук громкий. Постепенно второй убегает вперёд, и к моменту, когда он опередит на полудара, удары попадают в промежутки — звук размазывается. Ещё немного, и он опередит на целый удар: снова вместе. За минуту такое совпадение случится ровно два раза — разность темпов. Это и есть частота биений, и она не требует никаких формул, только счёта.",
+        "Как понять эффект Доплера без формулы. Представьте, что вы стоите в воде, а к вам плывёт утка, крякая раз в секунду. Каждый крик уходит в воздух со своей скоростью, но утка за секунду успевает приблизиться — и следующий крик стартует уже ближе. Значит промежутки между приходящими к вам криками короче секунды. Вы слышите чаще, чем утка крякает. Когда она проплывёт мимо и станет удаляться, всё наоборот. Ничего, кроме сложения расстояний, здесь нет.",
+        "Почему в интерференции энергия не пропадает. Это место, где часто возникает подозрение в нарушении сохранения. Разгадка в квадрате. Сложив две волны в фазе, получаем вдвое большую амплитуду — но вчетверо большую энергию, а не вдвое. В противофазе получаем ноль. Усреднив по экрану, получим ровно сумму исходных энергий: половина мест получила вчетверо, половина — ничего, среднее вышло вдвое. Энергия не создаётся и не исчезает, она перераспределяется в пространстве."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: сколько отсчётов даёт расстроенная струна и на сколько меняется тон сирены",
+      "lead": "Две задачи из одного параграфа: одна для музыканта, другая для того, кто стоит у дороги.",
+      "given": "1) Две струны настроены на 440 и 443 Гц. 2) Машина со звуком сирены 700 Гц проезжает мимо со скоростью 20 м/с; скорость звука 340 м/с.",
+      "law": "$f_{\\text{б}} = |f_1 - f_2|$; $\\;f' = f_0\\,\\dfrac{v}{v \\mp u}$",
+      "solution": [
+        {
+          "text": "Биения — просто разность частот.",
+          "latex": "f_{\\text{б}} = |443 - 440| = 3\\ \\text{Гц} \\;\\;(\\text{три удара в секунду})"
+        },
+        {
+          "text": "Сирена приближается: в знаменателе минус, частота растёт.",
+          "latex": "f'_{\\text{прибл}} = 700 \\cdot \\frac{340}{340 - 20} = 700 \\cdot 1{,}0625 \\approx 744\\ \\text{Гц}"
+        },
+        {
+          "text": "Удаляется: в знаменателе плюс.",
+          "latex": "f'_{\\text{удал}} = 700 \\cdot \\frac{340}{340 + 20} \\approx 661\\ \\text{Гц}"
+        },
+        {
+          "text": "Скачок в момент проезда.",
+          "latex": "\\Delta f = 744 - 661 = 83\\ \\text{Гц} \\;\\;(\\text{около двух полутонов})"
+        }
+      ],
+      "answer": "Три удара в секунду у струн; сирена меняет тон с 744 на 661 Гц, то есть примерно на два полутона в момент проезда.",
+      "check": "Проверка на слуховом опыте. Два полутона — интервал, который отчётливо слышит любой человек без музыкального образования, и именно поэтому эффект Доплера так узнаваем. Заодно объяснение приёма настройщиков: на слух отличить 440 от 443 Гц почти невозможно — это меньше десятой доли полутона. А вот три удара в секунду слышны безошибочно. Считая биения, ухо достигает точности, недоступной ему при прямом сравнении высоты, — приём, которым пользуются с XVII века и который в физике называют гетеродинированием."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Числа, по которым удобно проверять себя в задачах на интерференцию и Доплер.",
+      "items": [
+        {
+          "sym": "lam_vis",
+          "latex": "\\lambda_{\\text{вид}}",
+          "name": "Длина волны видимого света",
+          "value": "0,4 — 0,7",
+          "unit": "мкм",
+          "why": "Фиолетовый край около 400 нм, красный около 700. Именно эта величина задаёт предел разрешения оптического микроскопа и ширину полос в опыте Юнга.",
+          "mnemo": "Красный примерно вдвое длиннее фиолетового — то есть видимый диапазон занимает ровно одну октаву. У звука мы слышим десять октав, у света видим одну."
+        },
+        {
+          "sym": "f_beat",
+          "latex": "f_{\\text{б}}",
+          "name": "Различимая на слух частота биений",
+          "value": "0,5 — 10",
+          "unit": "Гц",
+          "why": "Медленнее половины герца ухо не воспринимает как пульсацию, быстрее десяти — слышит как хрипловатый общий тон. Настройщики работают в этом окне.",
+          "mnemo": "Один удар в секунду — расстройка ровно в 1 Гц, независимо от высоты ноты. Абсолютная величина, а не относительная, — потому в басах настраивать точнее."
+        },
+        {
+          "sym": "z",
+          "latex": "z",
+          "name": "Красное смещение далёких галактик",
+          "value": "до 11",
+          "unit": "—",
+          "why": "Тот же эффект Доплера, но космологический: свет самых далёких наблюдаемых галактик растянут более чем в десять раз. Ультрафиолет источника приходит к нам инфракрасным.",
+          "mnemo": "Именно по красному смещению Хаббл в 1929 году обнаружил расширение Вселенной. Один волновой эффект — и вся современная космология."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где это работает",
+      "lead": "Сложение волн и сдвиг частоты — два самых используемых волновых явления в технике.",
+      "items": [
+        {
+          "h": "Шумоподавляющие наушники",
+          "text": "Микрофон снаружи слушает шум, электроника мгновенно строит волну в противофазе и подаёт её в динамик. Условие гашения выполняется намеренно. Работает хорошо на низких частотах и плохо на высоких: там длина волны мала, и достаточно сдвинуть голову, чтобы разность хода испортилась."
+        },
+        {
+          "h": "Просветление оптики",
+          "text": "Фиолетовый отлив на объективах — тонкая плёнка толщиной в четверть длины волны. Отражения от её двух поверхностей приходят в противофазе и гасятся, и потому в объектив попадает больше света. Толщину подбирают под середину видимого диапазона, отсюда и цвет остатка."
+        },
+        {
+          "h": "Радар и УЗИ сосудов",
+          "text": "Отражённый сигнал сдвинут по частоте на доплеровскую величину, пропорциональную скорости цели. Так измеряют скорость машины на дороге и скорость крови в артерии — прибор в больнице так и называется, доплерография."
+        },
+        {
+          "h": "Голография",
+          "text": "Запись картины интерференции опорного и отражённого пучков сохраняет не только яркость, но и фазу. Поэтому восстановленное изображение объёмное — и потому осколок голограммы содержит всю сцену целиком, только менее чётко."
+        },
+        {
+          "h": "Гравитационные волны",
+          "text": "Детектор LIGO — интерферометр с плечами в четыре километра. Проходящая волна меняет их длину на тысячную долю размера протона, и это ловят по сдвигу полос. Тот же принцип, что у Юнга в 1801-м, доведённый до предела возможного."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Интерференцию можно увидеть в луже и услышать двумя пальцами по стакану.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Радуга в мыльной плёнке",
+          "text": "Окуните в мыльный раствор рамку из проволоки и подержите вертикально на свету пару минут, наблюдая за плёнкой.",
+          "answer": "Появятся цветные горизонтальные полосы, медленно ползущие вниз: жидкость стекает, и плёнка вверху становится тоньше. Цвет задаётся интерференцией лучей, отражённых от передней и задней поверхностей плёнки: гасится та длина волны, для которой разность хода полуцелая. Меняется толщина — меняется гасимый цвет. Перед самым разрывом верх плёнки чернеет: там она тоньше длины волны, и гасятся все цвета сразу. Ньютон описал эти кольца ещё в 1704 году — и, по иронии, они же стали доводом против его собственной теории света."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Биения двумя стаканами",
+          "text": "Возьмите два одинаковых стакана, налейте в один воды на палец. Смочите пальцы и поводите по краям обоих одновременно — или просто щёлкните по ним по очереди и вместе.",
+          "answer": "Вместе они дадут не два тона, а один пульсирующий: «уа-уа-уа». Частота пульсации равна разности их собственных частот. Долейте воды — пульсация замедлится, когда частоты сблизятся, и исчезнет при совпадении. Ровно этим приёмом настраивают рояли и органы уже четыреста лет: считать удары гораздо надёжнее, чем сравнивать высоту на слух."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Свет плюс свет даёт темноту — куда девалась энергия",
+          "text": "В тёмных полосах опыта Юнга света нет вовсе, хотя туда приходит освещение от обеих щелей. Закон сохранения энергии, кажется, нарушен. Где ошибка в рассуждении?",
+          "answer": "Ошибка в том, что мы смотрим только на тёмные места. Энергия волны идёт как квадрат амплитуды: сложив две волны в фазе, получаем вдвое большую амплитуду и вчетверо большую энергию. В светлых полосах её не вдвое больше, а вчетверо — и этот избыток в точности покрывает то, чего недостаёт в тёмных. Проинтегрируйте по экрану — получите ровно сумму исходных. Интерференция ничего не уничтожает, она перекладывает энергию из одних мест в другие."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Пятно Пуассона",
+          "text": "Пуассон вывел из теории Френеля абсурдное, как ему казалось, следствие: в самом центре тени от круглого диска должно быть светло. Араго поставил опыт — светлая точка там оказалась. Возражение, задуманное как опровержение, вошло в историю как доказательство и до сих пор носит имя того, кто в теорию не верил. Хороший урок: если следствие кажется абсурдным, стоит сначала проверить, а потом смеяться."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Целое — светло, полуцелое — темно",
+          "text": "Всё условие интерференции в одной строке. Разность хода в целых длинах волн — гребень на гребень, максимум. Плюс половина — гребень на впадину, ноль. Отсюда же биения (медленно набегающая разность фаз) и просветление оптики (плёнка в четверть волны даёт полуволновую разность хода за два прохода)."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Почему две лампы не дают полос",
+          "text": "Устойчивая картина требует постоянной разности фаз — когерентности. Обычные источники излучают вспышками длительностью в наносекунды, со случайной фазой каждая, и картина полос меняется быстрее, чем её можно заметить. В среднем получается ровное освещение. Поэтому Юнг пропускал свет одного источника через две щели, а лазер, у которого когерентность огромна, даёт интерференцию где угодно — достаточно посветить на пыльное стекло."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: тот же опыт с электронами",
+      "lead": "Не входит в проверку. О том, как опыт Юнга поставили заново — и получили ответ, которого никто не ждал.",
+      "blocks": [
+        {
+          "h": "Электроны тоже дают полосы",
+          "text": "В 1927 году Дэвиссон и Джермер обнаружили, что пучок электронов, отражённый от кристалла, даёт интерференционную картину. Частицы вещества вели себя как волны — ровно так, как за три года до того предположил де Бройль. Двухщелевой опыт с электронами поставили позже, и полосы появились."
+        },
+        {
+          "h": "И это не про толпу",
+          "text": "Главное сделали в опытах, где электроны пускали по одному, с большими промежутками. Каждый оставлял на экране одну точку — как частица. Но точки, накапливаясь часами, складывались в те же полосы. Интерферировать было не с чем: в приборе всегда находился только один электрон. Он проходил через обе щели сразу."
+        },
+        {
+          "h": "Попытка подсмотреть",
+          "text": "Если поставить у щелей детектор и узнать, через какую именно прошёл электрон, полосы исчезают — остаются два размытых пятна, как для частиц. Причём достаточно самой возможности узнать: физически трогать электрон не обязательно. Наличие информации о пути уничтожает интерференцию."
+        },
+        {
+          "h": "Что с этим делать",
+          "text": "Фейнман называл двухщелевой опыт единственной загадкой квантовой механики, утверждая, что всё остальное из неё следует. Формализм считает результат безупречно и подтверждается до десятого знака. Вопрос, что при этом происходит на самом деле, остаётся открытым — подробнее в разделе «Открытые вопросы»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Волны складываются смещениями: целая разность хода даёт усиление, полуцелая — гашение; близкие частоты дают биения с частотой разности; движение источника сдвигает частоту.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta = m\\lambda$",
+          "text": "максимум, $\\Delta = (m+\\frac{1}{2})\\lambda$ — минимум"
+        },
+        {
+          "icon": "lamp",
+          "title": "Энергия не исчезает",
+          "text": "в максимумах её вчетверо больше, а не вдвое"
+        },
+        {
+          "icon": "sigma",
+          "title": "$f_{\\text{б}} = |f_1 - f_2|$",
+          "text": "способ настроить точнее, чем позволяет слух"
+        },
+        {
+          "icon": "ruler",
+          "title": "Доплер",
+          "text": "гребни спереди сгущаются, сзади разрежаются"
+        },
+        {
+          "icon": "scale",
+          "title": "Полосы требуют когерентности",
+          "text": "постоянной разности фаз"
+        }
+      ],
+      "where": "Шумоподавляющие наушники, просветление оптики, радар и доплерография, голография, детектор гравитационных волн, красное смещение галактик.",
+      "watchOut": "Две независимые лампы полос не дают: их фазы меняются хаотично. Интерференция требует общего происхождения волн."
+    },
+    "quiz": [
+      {
+        "id": "i1",
+        "type": "mcq",
+        "q": "В тёмных полосах опыта Юнга света нет, хотя туда приходит освещение от обеих щелей. Куда девается энергия?",
+        "options": [
+          "Превращается в тепло в экране",
+          "Перераспределяется: в светлых полосах энергии вчетверо больше исходной, а не вдвое",
+          "Действительно исчезает — интерференция нарушает сохранение энергии",
+          "Уходит обратно к источнику"
+        ],
+        "answer": 1,
+        "why": "Энергия пропорциональна квадрату амплитуды. Удвоенная амплитуда даёт учетверённую энергию, и этот избыток ровно покрывает нехватку в тёмных полосах. Усреднение по экрану даёт в точности сумму исходных энергий.",
+        "hint": "Как связаны амплитуда и энергия — линейно или нет? Что будет с энергией, если амплитуда удвоится?"
+      },
+      {
+        "id": "i2",
+        "type": "mcq",
+        "q": "Две струны звучат на 440 и 444 Гц. Что услышит настройщик?",
+        "options": [
+          "Два отдельных тона, различимых по высоте",
+          "Один тон 442 Гц, пульсирующий четыре раза в секунду",
+          "Один тон 884 Гц",
+          "Ничего особенного — разница слишком мала"
+        ],
+        "answer": 1,
+        "why": "Сумма двух близких синусов есть колебание на средней частоте с медленно меняющейся огибающей. Ухо слышит средний тон 442 Гц, громкость которого пульсирует с частотой, равной разности, — четыре удара в секунду. Различить 440 и 444 напрямую слух не в состоянии, а удары считает безошибочно.",
+        "hint": "Вспомните двух барабанщиков с почти одинаковым темпом. Сколько раз в минуту они совпадут, если один бьёт 100, а другой 104 удара?"
+      },
+      {
+        "id": "i3",
+        "type": "free",
+        "q": "Своими словами: почему проезжающая мимо сирена сначала звучит выше, а потом ниже?",
+        "keywords": [
+          "догон",
+          "сближ",
+          "укорач",
+          "сгуща",
+          "прибли",
+          "удал",
+          "растяг",
+          "длина волн",
+          "чаще",
+          "реже"
+        ],
+        "needed": 2,
+        "why": "Двигаясь к вам, источник за период успевает приблизиться, и следующий гребень стартует ближе предыдущего — гребни спереди сгущаются, длина волны укорачивается, частота растёт. Позади всё наоборот: гребни разрежаются, тон падает. Сама скорость звука при этом не меняется, меняется расстояние между гребнями.",
+        "hint": "Представьте утку, которая крякает раз в секунду и плывёт к вам. Успевает ли она приблизиться между двумя криками, и что это делает с промежутком между ними на вашей стороне?"
+      },
+      {
+        "id": "i4",
+        "type": "estimate",
+        "q": "Просветляющее покрытие на объективе должно гасить отражённый свет. Какой толщины должна быть плёнка для зелёного света с длиной волны 550 нм в плёнке? В нанометрах.",
+        "answer": 137,
+        "unit": "нм",
+        "tolerance": 30,
+        "why": "Нужна четверть длины волны: свет проходит плёнку дважды, туда и обратно, и набирает разность хода в половину длины волны — условие гашения. 550/4 ≈ 137 нм. Именно поэтому такие покрытия называют четвертьволновыми, а остаточный отражённый свет на краях диапазона даёт объективам характерный фиолетовый отлив.",
+        "hint": "Луч проходит плёнку дважды. Какая разность хода нужна для гашения и во сколько раз меньше должна быть сама толщина?"
+      }
+    ]
+  },
+  "en": {
+    "title": "Interference and Doppler",
+    "subtitle": "Section 3 · When waves add and when they cancel each other out",
+    "intro": [
+      "Light plus light equals darkness. Sounds like a mistake, but that's exactly what Thomas Young saw in 1801, passing light through two narrow slits: stripes appeared on the screen, and dark ones lay between bright ones. Where illumination came from both slits at once, it was darker than from one.",
+      "Particles don't behave that way. Two streams of sand grains give more sand in total, not less. But waves can: if the crest of one arrives simultaneously with the trough of another, they cancel out. This experiment settled a two-hundred-year debate about the nature of light in favor of waves.",
+      "And the same principle of addition explains two other familiar phenomena: why out-of-tune strings produce a pulsating beat and why the siren of a passing car sounds higher first and then lower. All of this follows from one rule — waves simply add."
+    ],
+    "standNote": "Switch the stand to two-wave mode and slowly increase the frequency ratio from 1. When exactly equal, the waves are in step. Slightly off, a slow beat appears: points where they add move along the axis, and the total amplitude increases and decreases to zero. Notice the graph below: the test point now oscillates with varying loudness. That's exactly what the ear hears as 'wa-wa' when tuning a guitar.",
+    "formula": {
+      "name": "Superposition principle and condition for interference",
+      "latex": "\\Delta = m\\lambda \\;\\text{— усиление}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— гашение}",
+      "alsoKnown": "Addition of waves · condition for maxima and minima",
+      "authors": [
+        {
+          "who": "Christiaan Huygens",
+          "year": "1678",
+          "what": "stated that light is a wave and built a theory of reflection and refraction on this basis. Lost the debate to Newton during his lifetime — the authority of the author of the 'Principia' outweighed the arguments."
+        },
+        {
+          "who": "Thomas Young",
+          "year": "1801",
+          "what": "performed the double-slit experiment and obtained fringes inexplicable by particles. The work was met with ridicule in the British press; recognition came twenty years later, after Fresnel's work."
+        },
+        {
+          "who": "Augustin-Jean Fresnel",
+          "year": "1818",
+          "what": "submitted the wave theory of diffraction to the Academy competition. Poisson, a proponent of corpuscles, derived an absurd consequence, as he thought: in the center of the shadow of a circular disk, there should be a bright spot. Arago performed the experiment — the spot was there."
+        },
+        {
+          "who": "Christian Doppler",
+          "year": "1842",
+          "what": "predicted the change in frequency when the source moves, while studying the color of double stars. He was wrong about the stars, but the effect proved correct and was confirmed by ear three years later — with trumpeters in an open train car."
+        }
+      ],
+      "story": "The most beautiful story here is about Poisson's spot. In 1818, Fresnel presented the wave theory of light to the Academy of Sciences. Siméon Poisson, a committed opponent, set out to show its absurdity: according to Fresnel's theory, he deduced, behind an opaque circular disk, exactly in the middle of the shadow, there must be a bright spot — because waves diffracting around the edge arrive at the center with the same delay and add. The argument seemed devastating: who had ever seen light in the very center of a shadow? The commission chair Arago silently went to the laboratory and performed the experiment. The spot was there. The objection, intended as a death blow, became decisive confirmation, and in physics it is still called Poisson's spot — after the man who didn't believe.",
+      "symbols": [
+        {
+          "sym": "Delta",
+          "latex": "\\Delta",
+          "what": "path difference",
+          "unit": "m",
+          "note": "how much longer one path is than the other; it determines whether there will be reinforcement or cancellation"
+        },
+        {
+          "sym": "m",
+          "latex": "m",
+          "what": "order of maximum",
+          "unit": "—",
+          "note": "integer: how many wavelengths fit into the path difference"
+        },
+        {
+          "sym": "fbeat",
+          "latex": "f_{\\text{б}}",
+          "what": "beat frequency",
+          "unit": "Hz",
+          "note": "equals the difference in frequencies: two strings differing by 2 Hz produce two beats per second"
+        },
+        {
+          "sym": "u",
+          "latex": "u",
+          "what": "speed of source or observer",
+          "unit": "m/s",
+          "note": "in the Doppler effect it matters which one is moving — the formulas are different for each case"
+        },
+        {
+          "sym": "f0",
+          "latex": "f_0",
+          "what": "natural frequency of the source",
+          "unit": "Hz",
+          "note": "what is emitted; the received frequency differs from it when in motion"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Rigorous Derivation: Addition, Beats, and Doppler",
+      "lead": "Everything in this section follows from one rule: displacements add. Let's trace three different consequences of the same principle.",
+      "steps": [
+        {
+          "text": "Superposition principle: if two waves pass through a point, the displacement of the medium is the sum of the displacements from each. This is not a postulate but a consequence of linearity: as long as disturbances are small, the medium responds proportionally.",
+          "latex": "y = y_1 + y_2",
+          "figure": "vectriangle",
+          "figCaption": "Waves pass through each other without interference: after meeting, each continues as if nothing happened."
+        },
+        {
+          "text": "Take two waves from different sources arriving at a point via different paths. The difference in path lengths becomes a phase difference: for each wavelength of delay, there is a full cycle.",
+          "latex": "\\Delta\\varphi = \\frac{2\\pi}{\\lambda}\\,\\Delta",
+          "figure": "shadow",
+          "figCaption": "Path difference is converted to phase difference by dividing by wavelength."
+        },
+        {
+          "text": "Hence two conditions. If the path difference contains an integer number of wavelengths, crests meet crests — enhancement. If an integer plus a half, a crest meets a trough, and they cancel each other.",
+          "latex": "\\Delta = m\\lambda \\;\\Rightarrow\\; A = 2A_0; \\qquad \\Delta = \\left(m+\\tfrac{1}{2}\\right)\\lambda \\;\\Rightarrow\\; A = 0",
+          "figure": "matchfreq",
+          "figCaption": "Fringes on Young's screen are alternating locations of integer and half-integer path difference."
+        },
+        {
+          "text": "Let's check energy conservation, because here legitimate concern arises. In dark fringes there is no energy — where did it go? Nowhere: in bright fringes it is four times greater, not twice, since energy goes as the square of amplitude. The average over the screen matches.",
+          "latex": "\\langle A^{2}\\rangle: \\quad \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} = A_0^{2} + A_0^{2}",
+          "figure": "energy",
+          "figCaption": "Interference does not destroy energy but redistributes it from dark to bright places."
+        },
+        {
+          "text": "Now beats. Add two waves of close frequencies at one point. Trigonometry gives a product: a fast oscillation at the average frequency multiplied by a slowly varying envelope.",
+          "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\cos\\!\\frac{\\omega_1-\\omega_2}{2}t \\cdot \\cos\\!\\frac{\\omega_1+\\omega_2}{2}t",
+          "figure": "sinederiv",
+          "figCaption": "Fast tone under a slow envelope. The ear hears one sound with fluctuating loudness."
+        },
+        {
+          "text": "Loudness is maximal twice per envelope period, so beat frequency equals the full difference of frequencies, not half. The tuner hears beats and tightens the peg until they disappear.",
+          "latex": "f_{\\text{б}} = |f_1 - f_2|",
+          "figure": "curves",
+          "figCaption": "A way to tune an instrument more accurately than direct pitch comparison: count beats."
+        },
+        {
+          "text": "And finally Doppler. A moving source catches up with its own waves: in one period it travels distance $uT$, and by that amount the wavelength ahead shortens. Behind, it lengthens by the same amount.",
+          "latex": "\\lambda' = (v \\mp u)T \\;\\Longrightarrow\\; f' = f_0\\,\\frac{v}{v \\mp u}",
+          "figure": "circmotion",
+          "figCaption": "Crests bunch up ahead and spread out behind. Hence pitch increases on approach and decreases on recession."
+        }
+      ],
+      "plate": "Waves add by displacements. Path difference of an integer number of wavelengths gives enhancement, half-integer gives cancellation; close frequencies produce beats at their difference frequency; source motion shifts frequency.",
+      "note": "Limits of applicability. A stable interference pattern is obtained only with coherent waves — with constant phase difference. Two ordinary lamps will not produce fringes: their emission phases change chaotically billions of times per second, and the pattern smears into uniform light. That is why Young passed light from one source through two slits, rather than using two candles. Moreover, the given Doppler formula is valid for sound, where a medium exists; for light it is different — there is no preferred medium, and the distinction between source and observer motion disappears, which became one of the first hints at relativity theory."
+    },
+    "math": {
+      "title": "Mathematics Needed Here",
+      "text": [
+        "What is path difference — quite simple. Imagine two couriers leaving simultaneously from one point to your door via different streets. If one path is longer by exactly an integer number of blocks, the couriers arrive in step — step for step. If longer by one and a half blocks, one will step with the right foot when the other steps with the left. Waves are the same: what matters is not the absolute distance, but how much longer one path is than the other, measured in wavelengths. An integer — they coincide; integer plus a half — opposite phase and mutual cancellation.",
+        "Why adding close frequencies produces pulsation. Imagine two drummers beating almost the same tempo: one 100 beats per minute, the other 102. At first they strike together, sound loud. Gradually the second pulls ahead, and by the time he is half a beat ahead, the strikes fall in between — sound smears. A bit more, and he is a full beat ahead: together again. In one minute such coincidence happens exactly twice — the difference in tempos. That is the beat frequency, and it requires no formulas, only counting.",
+        "How to understand the Doppler effect without a formula. Imagine you are standing in water, and a duck swims toward you quacking once per second. Each quack travels through the air at its own speed, but the duck gets closer during that second — so the next quack starts closer. Hence the intervals between arriving quacks are shorter than a second. You hear more often than the duck quacks. When it passes and moves away, the opposite. Nothing more than adding distances is involved.",
+        "Why energy is not lost in interference. This is where suspicion of violation of conservation often arises. The answer is in the square. Adding two waves in phase gives twice the amplitude — but four times the energy, not twice. Out of phase gives zero. Averaging over the screen, we get exactly the sum of the original energies: half the places got four times, half got nothing, average came out to twice. Energy is neither created nor destroyed; it is redistributed in space."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: how many beats a detuned string produces and how much the siren's pitch changes",
+      "lead": "Two problems from one section: one for a musician, the other for someone standing by the road.",
+      "given": "1) Two strings are tuned to 440 and 443 Hz. 2) A car with a siren sound of 700 Hz passes by at a speed of 20 m/s; speed of sound 340 m/s.",
+      "law": "$f_{\\text{б}} = |f_1 - f_2|$; $\\;f' = f_0\\,\\dfrac{v}{v \\mp u}$",
+      "solution": [
+        {
+          "text": "Beats are simply the frequency difference.",
+          "latex": "f_{\\text{б}} = |443 - 440| = 3\\ \\text{Гц} \\;\\;(\\text{три удара в секунду})"
+        },
+        {
+          "text": "Siren approaching: minus in denominator, frequency increases.",
+          "latex": "f'_{\\text{прибл}} = 700 \\cdot \\frac{340}{340 - 20} = 700 \\cdot 1{,}0625 \\approx 744\\ \\text{Гц}"
+        },
+        {
+          "text": "Receding: plus in denominator.",
+          "latex": "f'_{\\text{удал}} = 700 \\cdot \\frac{340}{340 + 20} \\approx 661\\ \\text{Гц}"
+        },
+        {
+          "text": "Jump at the moment of passing.",
+          "latex": "\\Delta f = 744 - 661 = 83\\ \\text{Гц} \\;\\;(\\text{около двух полутонов})"
+        }
+      ],
+      "answer": "Three beats per second for the strings; the siren changes pitch from 744 to 661 Hz, that is about two semitones at the moment of passing.",
+      "check": "Verification by auditory experience. Two semitones is an interval clearly audible to any person without musical training, and this is precisely why the Doppler effect is so recognizable. It also explains the tuners' technique: by ear, distinguishing 440 from 443 Hz is almost impossible — it is less than a tenth of a semitone. But three beats per second are unmistakably audible. By counting beats, the ear achieves accuracy unattainable by direct pitch comparison — a technique used since the 17th century and called heterodyning in physics."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Numbers convenient for self-checking in problems on interference and Doppler.",
+      "items": [
+        {
+          "sym": "lam_vis",
+          "latex": "\\lambda_{\\text{вид}}",
+          "name": "Wavelength of visible light",
+          "value": "0,4 — 0,7",
+          "unit": "μm",
+          "why": "The violet edge is around 400 nm, the red around 700. This value determines the resolution limit of an optical microscope and the fringe width in Young's experiment.",
+          "mnemo": "Red is roughly twice as long as violet — that is, the visible range spans exactly one octave. We hear ten octaves of sound, but we see only one octave of light."
+        },
+        {
+          "sym": "f_beat",
+          "latex": "f_{\\text{б}}",
+          "name": "Audible beat frequency",
+          "value": "0,5 — 10",
+          "unit": "Hz",
+          "why": "Slower than half a hertz, the ear does not perceive as pulsation; faster than ten, it hears as a rough overall tone. Tuners work within this window.",
+          "mnemo": "One beat per second is a detuning of exactly 1 Hz, regardless of the note's pitch. It's an absolute value, not relative — which is why tuning in the bass is more precise."
+        },
+        {
+          "sym": "z",
+          "latex": "z",
+          "name": "Redshift of distant galaxies",
+          "value": "до 11",
+          "unit": "—",
+          "why": "The same Doppler effect, but cosmological: the light from the most distant observable galaxies is stretched more than tenfold. The source's ultraviolet reaches us as infrared.",
+          "mnemo": "It was from redshift that Hubble discovered the expansion of the Universe in 1929. One wave effect — and all of modern cosmology."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where it works",
+      "lead": "Wave superposition and frequency shift — the two most commonly used wave phenomena in technology.",
+      "items": [
+        {
+          "h": "Noise-canceling headphones",
+          "text": "An external microphone listens to noise; electronics instantly create a wave in antiphase and send it to the speaker. The cancellation condition is deliberately met. It works well at low frequencies and poorly at high ones: there the wavelength is small, and shifting the head is enough to spoil the path difference."
+        },
+        {
+          "h": "Antireflection coating",
+          "text": "The purple tint on lenses is a thin film a quarter wavelength thick. Reflections from its two surfaces arrive in antiphase and cancel, so more light enters the lens. The thickness is chosen for the middle of the visible range, hence the residual color."
+        },
+        {
+          "h": "Radar and Doppler ultrasound of blood vessels",
+          "text": "The reflected signal is frequency-shifted by the Doppler quantity proportional to the target's speed. This is how the speed of a car on the road and the speed of blood in an artery are measured — the hospital instrument is called Doppler ultrasound."
+        },
+        {
+          "h": "Holography",
+          "text": "Recording the interference pattern of the reference and reflected beams preserves not only intensity but also phase. Hence the reconstructed image is three-dimensional — and why a fragment of a hologram contains the entire scene, just less sharply."
+        },
+        {
+          "h": "Gravitational waves",
+          "text": "The LIGO detector is an interferometer with arms four kilometers long. A passing wave changes their length by a thousandth of a proton's diameter, and this is caught by the shift of fringes. The same principle as Young's in 1801, pushed to the limit of what is possible."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Fun: Try It Yourself",
+      "lead": "Interference can be seen in a puddle and heard with two fingers on a glass.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Rainbow in a Soap Film",
+          "text": "Dip a wire frame into soap solution and hold it vertically in light for a couple of minutes, watching the film.",
+          "answer": "Colored horizontal stripes appear, slowly crawling downward: the liquid drains, and the film at the top becomes thinner. The color is determined by interference of rays reflected from the front and back surfaces of the film: the wavelength for which the path difference is half-integer is canceled. As thickness changes, the canceled color changes. Just before rupture, the top of the film turns black: there it is thinner than the wavelength, and all colors are canceled at once. Newton described these rings back in 1704 — and, ironically, they became an argument against his own theory of light."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Beats with Two Glasses",
+          "text": "Take two identical glasses, pour water into one to a finger's depth. Wet your fingers and run them along the rims of both simultaneously — or simply snap them one after another and together.",
+          "answer": "Together they produce not two tones but one pulsating: 'wah-wah-wah'. The pulsation frequency equals the difference of their natural frequencies. Add water — the pulsation slows as the frequencies approach, and disappears when they match. This is exactly how pianos and organs have been tuned for four hundred years: counting beats is much more reliable than comparing pitch by ear."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Light Plus Light Gives Darkness — Where Does the Energy Go?",
+          "text": "In the dark fringes of Young's experiment there is no light at all, even though light from both slits reaches there. The law of conservation of energy seems violated. Where is the flaw in reasoning?",
+          "answer": "The mistake is that we look only at the dark spots. Wave energy goes as amplitude squared: adding two waves in phase gives twice the amplitude and four times the energy. In the bright fringes, the energy is not double but quadruple — and this excess exactly compensates for what is missing in the dark fringes. Integrate over the screen — you get exactly the sum of the original energies. Interference does not destroy anything; it redistributes energy from one place to another."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "Poisson's Spot",
+          "text": "Poisson deduced from Fresnel's theory what seemed to him an absurd consequence: there should be a bright spot at the very center of the shadow of a circular disk. Arago performed the experiment — and a bright spot appeared. The objection intended as a refutation went down in history as proof and still bears the name of the one who did not believe in the theory. A good lesson: if a consequence seems absurd, it's worth checking first, then laughing."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Whole is Bright, Half-Integer is Dark",
+          "text": "The entire interference condition in one line. Path difference in whole wavelengths — crest on crest, maximum. Plus half — crest on trough, zero. Hence beats (slowly accumulating phase difference) and anti-reflection coatings (quarter-wave film gives half-wave path difference after two passes)."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Why Two Lamps Don't Produce Fringes",
+          "text": "A stable pattern requires a constant phase difference — coherence. Ordinary sources emit flashes lasting nanoseconds, each with random phase, and the fringe pattern changes faster than one can notice. On average, uniform illumination results. That's why Young passed light from a single source through two slits, and a laser, which has huge coherence, gives interference anywhere — just shine it on a dusty glass."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: The Same Experiment with Electrons",
+      "lead": "Not part of the test. About how Young's experiment was repeated — and got an answer nobody expected.",
+      "blocks": [
+        {
+          "h": "Electrons Also Produce Fringes",
+          "text": "In 1927, Davisson and Germer discovered that a beam of electrons reflected from a crystal produced an interference pattern. Particles of matter behaved like waves — exactly as de Broglie had proposed three years earlier. The double-slit experiment with electrons was performed later, and fringes appeared."
+        },
+        {
+          "h": "And It's Not About a Crowd",
+          "text": "The crucial thing was done in experiments where electrons were sent one by one, with long intervals. Each left a single spot on the screen — like a particle. But the spots, accumulating over hours, formed the same fringes. There was nothing to interfere with: only one electron was ever in the apparatus. It passed through both slits at once."
+        },
+        {
+          "h": "Attempt to Peek",
+          "text": "If you place a detector at the slits and find out which slit the electron went through, the fringes disappear — only two blurred spots remain, as for particles. Moreover, just the possibility of knowing is enough: physically touching the electron is not required. The presence of which-path information destroys interference."
+        },
+        {
+          "h": "What to Do With This",
+          "text": "Feynman called the double-slit experiment the only mystery of quantum mechanics, claiming that everything else follows from it. The formalism calculates the result flawlessly and is verified to ten decimal places. The question of what actually happens remains open — more in the 'Open Questions' section."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Waves add by displacements: whole path difference gives reinforcement, half-integer gives cancellation; close frequencies produce beats at the difference frequency; source motion shifts frequency.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta = m\\lambda$",
+          "text": "maximum, $\\Delta = (m+\\frac{1}{2})\\lambda$ — minimum"
+        },
+        {
+          "icon": "formula",
+          "title": "Energy is not lost",
+          "text": "in maxima it is four times as much, not twice."
+        },
+        {
+          "icon": "sigma",
+          "title": "$f_{\\text{б}} = |f_1 - f_2|$",
+          "text": "a way to tune more accurately than hearing allows."
+        },
+        {
+          "icon": "ruler",
+          "title": "Doppler",
+          "text": "crests in front bunch up, behind they spread out."
+        },
+        {
+          "icon": "scale",
+          "title": "Fringes require coherence",
+          "text": "constant phase difference."
+        }
+      ],
+      "where": "Noise-cancelling headphones, anti-reflection coatings, radar and Dopplerography, holography, gravitational wave detector, galactic redshift.",
+      "watchOut": "Two independent lamps do not produce fringes: their phases change chaotically. Interference requires a common origin of waves."
+    },
+    "quiz": [
+      {
+        "id": "i1",
+        "type": "mcq",
+        "q": "In the dark fringes of Young's experiment there is no light, although light from both slits reaches there. Where does the energy go?",
+        "options": [
+          "It turns into heat in the screen.",
+          "It is redistributed: in the bright fringes the energy is four times greater than the original, not twice.",
+          "It actually disappears — interference violates energy conservation.",
+          "It goes back to the source."
+        ],
+        "answer": 1,
+        "why": "Energy is proportional to the square of the amplitude. Doubling the amplitude gives quadruple the energy, and this excess exactly compensates for the deficit in the dark fringes. Averaging over the screen gives exactly the sum of the original energies.",
+        "hint": "How are amplitude and energy related — linearly or not? What happens to the energy if the amplitude is doubled?"
+      },
+      {
+        "id": "i2",
+        "type": "mcq",
+        "q": "Two strings sound at 440 and 444 Hz. What will the tuner hear?",
+        "options": [
+          "Two distinct tones, distinguishable in pitch.",
+          "A single tone of 442 Hz, pulsating four times per second.",
+          "A single tone of 884 Hz.",
+          "Nothing special — the difference is too small."
+        ],
+        "answer": 1,
+        "why": "The sum of two close sinusoids is an oscillation at the average frequency with a slowly varying envelope. The ear hears the average tone of 442 Hz, whose volume pulsates at the difference frequency — four beats per second. The ear cannot directly distinguish 440 and 444 Hz, but it counts the beats without error.",
+        "hint": "Recall two drummers with almost the same tempo. How many times per minute do they coincide if one beats 100 and the other 104 beats?"
+      },
+      {
+        "id": "i3",
+        "type": "free",
+        "q": "In your own words: why does a passing siren sound higher first and then lower?",
+        "keywords": [
+          "chase",
+          "approach",
+          "shorten",
+          "compress",
+          "approach",
+          "recede",
+          "stretch",
+          "wavelength",
+          "higher frequency",
+          "lower frequency"
+        ],
+        "needed": 2,
+        "why": "Moving towards you, the source approaches during each period, so the next crest starts closer than the previous one — crests in front are compressed, wavelength shortens, frequency increases. Behind, the opposite: crests are rarefied, pitch drops. The speed of sound itself does not change, only the distance between crests changes.",
+        "hint": "Imagine a duck that quacks once per second and swims toward you. Does it get closer between two calls, and what does that do to the interval between them from your side?"
+      },
+      {
+        "id": "i4",
+        "type": "estimate",
+        "q": "An anti-reflective coating on a lens should cancel reflected light. What thickness should the film be for green light with a wavelength of 550 nm in the film? In nanometers.",
+        "answer": 137,
+        "unit": "нм",
+        "tolerance": 30,
+        "why": "A quarter-wavelength is needed: light passes through the film twice, back and forth, and gains a path difference of half a wavelength — the condition for cancellation. 550/4 ≈ 137 nm. That is why such coatings are called quarter-wave, and the residual reflected light at the edges of the range gives lenses their characteristic purple hue.",
+        "hint": "The ray passes through the film twice. What path difference is needed for cancellation, and how many times smaller should the thickness be?"
+      }
+    ]
+  },
+  "es": {
+    "title": "Interferencia y Doppler",
+    "subtitle": "Párrafo 3 · Cuando las ondas se suman y cuando se anulan mutuamente",
+    "intro": [
+      "Luz más luz igual a oscuridad. Suena a error, pero eso fue exactamente lo que Thomas Young vio en 1801 al hacer pasar luz por dos rendijas estrechas: en la pantalla aparecieron franjas, y entre las brillantes había oscuras. Allí donde llegaba iluminación de ambas rendijas a la vez, era más oscuro que de una sola.",
+      "Las partículas no se comportan así. Dos chorros de granos de arena suman más arena, no menos. Pero las ondas sí pueden: si la cresta de una llega al mismo tiempo que el valle de otra, se aniquilan. Este experimento resolvió una disputa de dos siglos sobre la naturaleza de la luz a favor de las ondas.",
+      "Y el mismo principio de suma explica dos cosas familiares más: por qué las cuerdas desafinadas producen un latido pulsante y por qué la sirena de un coche que pasa suena primero más aguda y luego más grave. Todo esto son consecuencias de una única regla: las ondas simplemente se suman."
+    ],
+    "standNote": "Cambie el simulador al modo de dos ondas y varíe lentamente la relación de frecuencias desde uno hacia arriba. Con igualdad exacta, las ondas van al unísono. Se separan un poco y aparece un latido lento: los lugares donde se suman corren a lo largo del eje, y la amplitud total crece y decrece hasta cero. Observe el gráfico inferior: el punto de prueba oscila ahora con volumen variable. Eso es lo que el oído escucha como un 'uau-uau' al afinar una guitarra.",
+    "formula": {
+      "name": "Principio de superposición y condición de interferencia",
+      "latex": "\\Delta = m\\lambda \\;\\text{— усиление}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— гашение}",
+      "alsoKnown": "Suma de ondas · condición de máximos y mínimos",
+      "authors": [
+        {
+          "who": "Christiaan Huygens",
+          "year": "1678",
+          "what": "declaró que la luz es una onda y construyó sobre ello la teoría de la reflexión y la refracción. Perdió la discusión con Newton en vida: la autoridad del autor de los 'Principia' pesó más que los argumentos."
+        },
+        {
+          "who": "Thomas Young",
+          "year": "1801",
+          "what": "realizó el experimento de las dos rendijas y obtuvo franjas inexplicables para las partículas. Su trabajo fue recibido con burlas en la prensa británica; el reconocimiento llegó veinte años después, tras los trabajos de Fresnel."
+        },
+        {
+          "who": "Augustin Fresnel",
+          "year": "1818",
+          "what": "presentó al concurso de la Academia la teoría ondulatoria de la difracción. Poisson, partidario de los corpúsculos, dedujo de ella una consecuencia absurda, según él: en el centro de la sombra de un disco circular debía haber una mancha brillante. Arago realizó el experimento y la mancha estaba allí."
+        },
+        {
+          "who": "Christian Doppler",
+          "year": "1842",
+          "what": "predijo el cambio de frecuencia con el movimiento de la fuente al analizar el color de las estrellas dobles. Se equivocó en las estrellas, pero el efecto resultó correcto y fue confirmado auditivamente tres años después, con trompetistas en un vagón abierto."
+        }
+      ]
+    },
+    "story": "La historia más bonita aquí es la de la mancha de Poisson. En 1818, Fresnel presentó a la Academia de Ciencias la teoría ondulatoria de la luz. Siméon Poisson, un oponente convencido, se propuso mostrar su absurdo: si se seguía la teoría de Fresnel, dedujo, detrás de un disco opaco circular, exactamente en el centro de la sombra, debía haber una mancha brillante, pues las ondas que rodean el borde llegarían al centro con el mismo retardo y se sumarían. El argumento parecía demoledor: ¿quién había visto luz en el mismo centro de una sombra? El presidente de la comisión, Arago, fue en silencio al laboratorio y realizó el experimento. La mancha estaba allí. La objeción, concebida como una condena, se convirtió en la confirmación decisiva, y en física se sigue llamando mancha de Poisson, por el nombre del hombre que no creía.",
+    "symbols": [
+      {
+        "sym": "Delta",
+        "latex": "\\Delta",
+        "what": "diferencia de camino",
+        "unit": "m",
+        "note": "cuánto más largo es un camino respecto al otro; es ella quien decide si habrá refuerzo o cancelación"
+      },
+      {
+        "sym": "m",
+        "latex": "m",
+        "what": "orden del máximo",
+        "unit": "—",
+        "note": "número entero: cuántas longitudes de onda caben en la diferencia de camino"
+      },
+      {
+        "sym": "fbeat",
+        "latex": "f_{\\text{б}}",
+        "what": "frecuencia de latido",
+        "unit": "Hz",
+        "note": "es igual a la diferencia de frecuencias: dos cuerdas que difieren en 2 Hz producen dos pulsos por segundo"
+      },
+      {
+        "sym": "u",
+        "latex": "u",
+        "what": "velocidad de la fuente o del observador",
+        "unit": "m/s",
+        "note": "en el efecto Doppler es importante quién se mueve exactamente: las fórmulas para estos casos son diferentes"
+      },
+      {
+        "sym": "f0",
+        "latex": "f_0",
+        "what": "frecuencia propia de la fuente",
+        "unit": "Hz",
+        "note": "lo que se emite; la frecuencia recibida difiere de ella con el movimiento"
+      }
+    ],
+    "derivation": {
+      "title": "Deducción rigurosa: suma, batidos y Doppler",
+      "lead": "Todo en esta sección se deduce de una regla: los desplazamientos se suman. Observemos tres consecuencias distintas de una misma regla.",
+      "steps": [
+        {
+          "text": "Principio de superposición: si a través de un punto pasan dos ondas, el desplazamiento del medio es la suma de los desplazamientos de cada una. No es un postulado, sino una consecuencia de la linealidad: mientras las perturbaciones sean pequeñas, el medio responde proporcionalmente.",
+          "latex": "y = y_1 + y_2",
+          "figure": "vectriangle",
+          "figCaption": "Las ondas se atraviesan unas a otras sin interferirse: después del encuentro, cada una sigue como si nada."
+        },
+        {
+          "text": "Tomemos dos ondas de fuentes diferentes, que llegan a un mismo punto por caminos distintos. La diferencia de longitudes de los caminos se convierte en diferencia de fase: por cada longitud de onda de retardo corresponde un giro completo.",
+          "latex": "\\Delta\\varphi = \\frac{2\\pi}{\\lambda}\\,\\Delta",
+          "figure": "shadow",
+          "figCaption": "La diferencia de camino se traduce en diferencia de fase dividiendo por la longitud de onda."
+        },
+        {
+          "text": "De ahí dos condiciones. Si la diferencia de camino contiene un número entero de longitudes de onda, crestas se encuentran con crestas — refuerzo. Si contiene un entero más una mitad, cresta se encuentra con valle, y se anulan mutuamente.",
+          "latex": "\\Delta = m\\lambda \\;\\Rightarrow\\; A = 2A_0; \\qquad \\Delta = \\left(m+\\tfrac{1}{2}\\right)\\lambda \\;\\Rightarrow\\; A = 0",
+          "figure": "matchfreq",
+          "figCaption": "Las franjas en la pantalla de Young son una alternancia de lugares con diferencia de camino entera y semientera."
+        },
+        {
+          "text": "Verifiquemos la conservación de la energía, porque aquí surge una preocupación legítima. En las franjas oscuras no hay energía — ¿a dónde se fue? A ninguna parte: en las claras hay cuatro veces más, no dos, ya que la energía va como el cuadrado de la amplitud. El promedio sobre la pantalla coincide.",
+          "latex": "\\langle A^{2}\\rangle: \\quad \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} = A_0^{2} + A_0^{2}",
+          "figure": "energy",
+          "figCaption": "La interferencia no destruye la energía, sino que la redistribuye de los lugares oscuros a los claros."
+        },
+        {
+          "text": "Ahora los batidos. Sumemos dos ondas de frecuencias cercanas en un mismo punto. La trigonometría da un producto: una oscilación rápida en la frecuencia media, multiplicada por una envolvente que varía lentamente.",
+          "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\cos\\!\\frac{\\omega_1-\\omega_2}{2}t \\cdot \\cos\\!\\frac{\\omega_1+\\omega_2}{2}t",
+          "figure": "sinederiv",
+          "figCaption": "Un tono rápido bajo una envolvente lenta. El oído escucha un sonido único con volumen fluctuante."
+        },
+        {
+          "text": "El volumen es máximo dos veces por periodo de la envolvente, por lo que la frecuencia de batido no es la mitad de la diferencia, sino la diferencia completa. El afinador oye los pulsos y tensa la clavija hasta que desaparecen.",
+          "latex": "f_{\\text{б}} = |f_1 - f_2|",
+          "figure": "curves",
+          "figCaption": "Una forma de afinar un instrumento con más precisión que la comparación directa de tono: contar los pulsos."
+        },
+        {
+          "text": "Y finalmente Doppler. La fuente, al moverse, alcanza sus propias ondas: en un periodo recorre una distancia $uT$, y esto acorta la longitud de onda delante. Detrás se alarga en la misma cantidad.",
+          "latex": "\\lambda' = (v \\mp u)T \\;\\Longrightarrow\\; f' = f_0\\,\\frac{v}{v \\mp u}",
+          "figure": "circmotion",
+          "figCaption": "Las crestas delante se condensan, detrás se enrarecen. De ahí el aumento de tono al acercarse y la disminución al alejarse."
+        }
+      ],
+      "plate": "Las ondas se suman mediante desplazamientos. La diferencia de camino en un número entero de longitudes de onda produce refuerzo; en un número semientero, anulación; frecuencias cercanas producen batidos con frecuencia igual a su diferencia; el movimiento de la fuente desplaza la frecuencia.",
+      "note": "Límites de aplicabilidad. Un patrón de franjas estable solo se obtiene con ondas coherentes — con diferencia de fase constante. Dos lámparas comunes no darán franjas: sus fases de emisión cambian caóticamente miles de millones de veces por segundo, y el patrón se difumina en luz uniforme. Por eso Young hacía pasar luz de una sola fuente a través de dos rendijas, en lugar de usar dos velas. Además, la fórmula de Doppler presentada es válida para el sonido, donde hay un medio; para la luz es diferente — allí no hay un medio privilegiado, y la diferencia entre movimiento de la fuente y del observador desaparece, lo que se convirtió en una de las primeras pistas hacia la teoría de la relatividad."
+    },
+    "math": {
+      "title": "Matemáticas que se necesitaron aquí",
+      "text": [
+        "Qué es la diferencia de camino — algo muy simple. Imagine dos mensajeros que salen al mismo tiempo de un mismo punto hacia su puerta por calles diferentes. Si un camino es más largo exactamente por un número entero de manzanas, los mensajeros llegarán a la par — paso a paso. Si es más largo por una manzana y media, uno pisará con el pie derecho mientras el otro con el izquierdo. Las ondas hacen exactamente igual: lo importante no es la distancia absoluta, sino cuánto más largo es un camino que el otro, medido en longitudes de onda. Número entero — coinciden; entero más media — antifase y aniquilación mutua.",
+        "Por qué la suma de frecuencias cercanas produce pulsaciones. Imagine dos bateristas tocando un ritmo casi igual: uno cien golpes por minuto, el otro ciento dos. Al principio golpean juntos, el sonido es fuerte. Poco a poco el segundo se adelanta, y cuando se adelanta por medio golpe, los golpes caen en los intervalos — el sonido se difumina. Un poco más y se adelanta por un golpe entero: de nuevo juntos. En un minuto, tal coincidencia ocurre exactamente dos veces — la diferencia de ritmos. Esta es la frecuencia de batido, y no requiere ninguna fórmula, solo contar.",
+        "Cómo entender el efecto Doppler sin fórmula. Imagínese de pie en el agua, y un pato nada hacia usted graznando una vez por segundo. Cada graznido viaja en el aire a su velocidad, pero el pato se acerca en un segundo — y el siguiente graznido parte ya más cerca. Por tanto, los intervalos entre los graznidos que llegan a usted son menores de un segundo. Usted oye más seguido de lo que el pato grazna. Cuando pase de largo y se aleje, todo al revés. No hay nada más que suma de distancias.",
+        "Por qué en la interferencia la energía no desaparece. Este es el punto donde a menudo surge la sospecha de violación de la conservación. La clave está en el cuadrado. Al sumar dos ondas en fase, obtenemos una amplitud doble — pero una energía cuádruple, no doble. En antifase obtenemos cero. Promediando sobre la pantalla, obtenemos exactamente la suma de las energías originales: la mitad de los lugares recibe cuatro veces, la mitad nada, el promedio resulta el doble. La energía no se crea ni se destruye, se redistribuye en el espacio."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: cuántos batidos da una cuerda desafinada y cuánto cambia el tono de una sirena",
+      "lead": "Dos problemas de un mismo párrafo: uno para el músico, otro para quien está al borde de la carretera.",
+      "given": "1) Dos cuerdas están afinadas a 440 y 443 Hz. 2) Un coche con sonido de sirena de 700 Hz pasa a una velocidad de 20 m/s; velocidad del sonido 340 m/s.",
+      "law": "$f_{\\text{б}} = |f_1 - f_2|$; $\\;f' = f_0\\,\\dfrac{v}{v \\mp u}$",
+      "solution": [
+        {
+          "text": "Los batidos son simplemente la diferencia de frecuencias.",
+          "latex": "f_{\\text{б}} = |443 - 440| = 3\\ \\text{Гц} \\;\\;(\\text{три удара в секунду})"
+        },
+        {
+          "text": "La sirena se acerca: en el denominador, menos, la frecuencia aumenta.",
+          "latex": "f'_{\\text{прибл}} = 700 \\cdot \\frac{340}{340 - 20} = 700 \\cdot 1{,}0625 \\approx 744\\ \\text{Гц}"
+        },
+        {
+          "text": "Se aleja: en el denominador, más.",
+          "latex": "f'_{\\text{удал}} = 700 \\cdot \\frac{340}{340 + 20} \\approx 661\\ \\text{Гц}"
+        },
+        {
+          "text": "Salto en el momento de pasar.",
+          "latex": "\\Delta f = 744 - 661 = 83\\ \\text{Гц} \\;\\;(\\text{около двух полутонов})"
+        }
+      ],
+      "answer": "Tres batidos por segundo en las cuerdas; la sirena cambia de tono de 744 a 661 Hz, es decir, aproximadamente dos semitonos en el momento de pasar.",
+      "check": "Verificación mediante experiencia auditiva. Dos semitonos es un intervalo que cualquier persona sin formación musical escucha claramente, y precisamente por eso el efecto Doppler es tan reconocible. También explica la técnica de los afinadores: al oído, distinguir 440 de 443 Hz es casi imposible, es menos de una décima parte de un semitono. Pero tres batidos por segundo se oyen sin error. Contando los batidos, el oído alcanza una precisión inaccesible en la comparación directa de altura: una técnica utilizada desde el siglo XVII y que en física se llama heterodinaje."
+    },
+    "constants": {
+      "title": "Magnitudes de este párrafo",
+      "lead": "Números con los que es conveniente comprobarse en problemas de interferencia y Doppler.",
+      "items": [
+        {
+          "sym": "lam_vis",
+          "latex": "\\lambda_{\\text{вид}}",
+          "name": "Longitud de onda de la luz visible",
+          "value": "0,4 — 0,7",
+          "unit": "мкм",
+          "why": "El extremo violeta alrededor de 400 nm, el rojo alrededor de 700. Precisamente este valor establece el límite de resolución del microscopio óptico y la anchura de las franjas en el experimento de Young.",
+          "mnemo": "El rojo es aproximadamente el doble de largo que el violeta, es decir, el rango visible ocupa exactamente una octava. Del sonido oímos diez octavas, de la luz vemos una."
+        },
+        {
+          "sym": "f_beat",
+          "latex": "f_{\\text{б}}",
+          "name": "Frecuencia de batidos audible",
+          "value": "0,5 — 10",
+          "unit": "Гц",
+          "why": "Por debajo de medio hercio el oído no lo percibe como pulsación, por encima de diez lo oye como un tono general ronco. Los afinadores trabajan en esta ventana.",
+          "mnemo": "Un batido por segundo es una desafinación de exactamente 1 Hz, independientemente de la altura de la nota. Es una magnitud absoluta, no relativa, por eso en los graves se afina con más precisión."
+        },
+        {
+          "sym": "z",
+          "latex": "z",
+          "name": "Corrimiento al rojo de galaxias lejanas",
+          "value": "до 11",
+          "unit": "—",
+          "why": "El mismo efecto Doppler, pero cosmológico: la luz de las galaxias observables más lejanas se estira más de diez veces. El ultravioleta de la fuente nos llega como infrarrojo.",
+          "mnemo": "Precisamente por el corrimiento al rojo Hubble descubrió en 1929 la expansión del Universo. Un solo efecto ondulatorio y toda la cosmología moderna."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde funciona",
+      "lead": "La superposición de ondas y el desplazamiento de frecuencia son los dos fenómenos ondulatorios más utilizados en la técnica.",
+      "items": [
+        {
+          "h": "Auriculares con cancelación de ruido",
+          "text": "Un micrófono externo capta el ruido, la electrónica construye instantáneamente una onda en contrafase y la envía al altavoz. La condición de cancelación se cumple deliberadamente. Funciona bien en frecuencias bajas y mal en altas: allí la longitud de onda es pequeña y basta mover la cabeza para que la diferencia de camino se estropee."
+        },
+        {
+          "h": "Revestimiento antirreflectante",
+          "text": "El tono violáceo de los objetivos es una fina película de un cuarto de longitud de onda. Las reflexiones en sus dos superficies llegan en contrafase y se cancelan, por lo que entra más luz en el objetivo. El espesor se elige para el centro del rango visible, de ahí el color residual."
+        },
+        {
+          "h": "Radar y ecografía Doppler vascular",
+          "text": "La señal reflejada tiene un desplazamiento de frecuencia Doppler proporcional a la velocidad del blanco. Así se mide la velocidad de un coche en la carretera y la velocidad de la sangre en una arteria; el aparato en el hospital se llama Dopplerografía."
+        },
+        {
+          "h": "Holografía",
+          "text": "El registro del patrón de interferencia del haz de referencia y el reflejado conserva no solo la intensidad sino también la fase. Por eso la imagen reconstruida es tridimensional, y por eso un fragmento del holograma contiene toda la escena completa, solo que con menos nitidez."
+        },
+        {
+          "h": "Ondas gravitacionales",
+          "text": "El detector LIGO es un interferómetro con brazos de cuatro kilómetros. Una onda que pasa cambia su longitud en una milésima del tamaño de un protón, y esto se detecta mediante el desplazamiento de las franjas. El mismo principio que Young en 1801, llevado al límite de lo posible."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curioso: compruébalo con tus manos",
+      "lead": "La interferencia se puede ver en un charco y escuchar con dos dedos en un vaso.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "Arcoíris en una película de jabón",
+          "text": "Sumerge un marco de alambre en solución jabonosa y mantenlo vertical a la luz unos minutos, observando la película.",
+          "answer": "Aparecerán franjas horizontales de colores que se deslizan lentamente hacia abajo: el líquido drena y la película en la parte superior se vuelve más delgada. El color viene dado por la interferencia de los rayos reflejados en las superficies frontal y trasera de la película: se anula la longitud de onda para la cual la diferencia de camino es semientera. Al cambiar el grosor, cambia el color anulado. Justo antes de romperse, la parte superior de la película se vuelve negra: es más delgada que la longitud de onda, y todos los colores se anulan a la vez. Newton describió estos anillos ya en 1704 y, paradójicamente, sirvieron como argumento en contra de su propia teoría de la luz."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "experimento de cocina",
+          "h": "Pulsaciones con dos vasos",
+          "text": "Toma dos vasos iguales, vierte agua en uno hasta un dedo. Moja los dedos y frota los bordes de ambos simultáneamente, o simplemente golpéalos por turno y juntos.",
+          "answer": "Juntos producirán no dos tonos, sino uno pulsante: 'uá-uá-uá'. La frecuencia de pulsación es la diferencia de sus frecuencias propias. Añade más agua: la pulsación se ralentiza cuando las frecuencias se acercan, y desaparece cuando coinciden. Exactamente con este truco se afinan pianos y órganos desde hace cuatrocientos años: contar los golpes es mucho más fiable que comparar la altura de oído."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Luz más luz da oscuridad: ¿dónde fue la energía?",
+          "text": "En las franjas oscuras del experimento de Young no hay luz, aunque llega iluminación de ambas rendijas. La ley de conservación de la energía parece violada. ¿Dónde está el error en el razonamiento?",
+          "answer": "El error es que solo miramos las zonas oscuras. La energía de una onda es proporcional al cuadrado de la amplitud: al sumar dos ondas en fase, obtenemos el doble de amplitud y cuatro veces la energía. En las franjas brillantes no hay el doble, sino el cuádruple, y ese exceso compensa exactamente lo que falta en las oscuras. Integra sobre la pantalla y obtendrás exactamente la suma de las originales. La interferencia no destruye nada, solo redistribuye la energía de unos lugares a otros."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Mancha de Poisson",
+          "text": "Poisson dedujo de la teoría de Fresnel una consecuencia que le pareció absurda: en el centro mismo de la sombra de un disco circular debería haber luz. Arago realizó el experimento: allí apareció un punto brillante. La objeción, pensada como refutación, pasó a la historia como prueba y aún lleva el nombre de quien no creía en la teoría. Buena lección: si una consecuencia parece absurda, primero verifica y luego ríe."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Entero: claro, semientero: oscuro",
+          "text": "Toda la condición de interferencia en una línea. Diferencia de camino en longitudes de onda enteras: cresta sobre cresta, máximo. Más media: cresta sobre valle, cero. De aquí también las pulsaciones (diferencia de fase que aumenta lentamente) y el antirreflejo (una película de un cuarto de onda da media onda de diferencia de camino en dos pasos)."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "Por qué dos lámparas no producen franjas",
+          "text": "Un patrón estable requiere una diferencia de fase constante: coherencia. Las fuentes ordinarias emiten destellos de nanosegundos, cada uno con fase aleatoria, y el patrón de franjas cambia más rápido de lo que se puede percibir. En promedio, se obtiene una iluminación uniforme. Por eso Young hacía pasar la luz de una sola fuente por dos rendijas, y un láser, con enorme coherencia, produce interferencia en cualquier lugar: basta con iluminar un vidrio polvoriento."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: el mismo experimento con electrones",
+      "lead": "No entra en la prueba. Sobre cómo se repitió el experimento de Young y se obtuvo una respuesta que nadie esperaba.",
+      "blocks": [
+        {
+          "h": "Los electrones también producen franjas",
+          "text": "En 1927, Davisson y Germer descubrieron que un haz de electrones reflejado en un cristal produce un patrón de interferencia. Las partículas de materia se comportaban como ondas, exactamente como de Broglie había sugerido tres años antes. El experimento de doble rendija con electrones se realizó más tarde y aparecieron las franjas."
+        },
+        {
+          "h": "Y no es cuestión de multitud",
+          "text": "Lo principal se hizo en experimentos donde se enviaban electrones uno por uno, con grandes intervalos. Cada uno dejaba un punto en la pantalla, como una partícula. Pero los puntos, acumulándose durante horas, formaban las mismas franjas. No había nada con lo que interferir: en el aparato siempre había solo un electrón. Pasaba por ambas rendijas a la vez."
+        },
+        {
+          "h": "Intento de espiar",
+          "text": "Si se coloca un detector cerca de las rendijas y se sabe por cuál pasó el electrón, las franjas desaparecen: quedan dos manchas borrosas, como para partículas. Además, basta con la posibilidad de saberlo: no es necesario tocar físicamente el electrón. La existencia de información sobre la trayectoria destruye la interferencia."
+        },
+        {
+          "h": "Qué hacer con esto",
+          "text": "Feynman llamó al experimento de doble rendija el único misterio de la mecánica cuántica, afirmando que todo lo demás se sigue de él. El formalismo calcula el resultado impecablemente y se confirma hasta el décimo decimal. La cuestión de qué ocurre realmente permanece abierta; más detalles en la sección 'Preguntas abiertas'."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Las ondas se suman por desplazamientos: diferencia de camino entera da refuerzo, semientera da cancelación; frecuencias cercanas producen pulsaciones con la frecuencia de diferencia; el movimiento de la fuente desplaza la frecuencia.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta = m\\lambda$",
+          "text": "máximo, $\\Delta = (m+\\frac{1}{2})\\lambda$ — mínimo"
+        },
+        {
+          "icon": "formula",
+          "title": "La energía no desaparece",
+          "text": "en los máximos es cuatro veces mayor, no el doble"
+        },
+        {
+          "icon": "sigma",
+          "title": "$f_{\\text{б}} = |f_1 - f_2|$",
+          "text": "forma de afinar con más precisión de lo que permite el oído"
+        },
+        {
+          "icon": "ruler",
+          "title": "Doppler",
+          "text": "las crestas se condensan delante, se enrarece detrás"
+        },
+        {
+          "icon": "scale",
+          "title": "Las franjas requieren coherencia",
+          "text": "diferencia de fase constante"
+        }
+      ],
+      "where": "Auriculares con cancelación de ruido, antirreflejos ópticos, radar y dopplerografía, holografía, detector de ondas gravitacionales, corrimiento al rojo de galaxias.",
+      "watchOut": "Dos lámparas independientes no producen franjas: sus fases cambian caóticamente. La interferencia requiere un origen común de las ondas."
+    },
+    "quiz": [
+      {
+        "id": "i1",
+        "type": "mcq",
+        "q": "En las franjas oscuras del experimento de Young no hay luz, aunque la iluminación llega desde ambas rendijas. ¿A dónde va la energía?",
+        "options": [
+          "Se convierte en calor en la pantalla",
+          "Se redistribuye: en las franjas claras la energía es cuatro veces mayor que la original, no el doble",
+          "Realmente desaparece: la interferencia viola la conservación de la energía",
+          "Vuelve a la fuente"
+        ],
+        "answer": 1,
+        "why": "La energía es proporcional al cuadrado de la amplitud. Una amplitud duplicada da una energía cuadruplicada, y ese exceso compensa exactamente la falta en las franjas oscuras. El promedio en la pantalla da exactamente la suma de las energías originales.",
+        "hint": "¿Cómo se relacionan la amplitud y la energía: linealmente o no? ¿Qué sucede con la energía si la amplitud se duplica?"
+      },
+      {
+        "id": "i2",
+        "type": "mcq",
+        "q": "Dos cuerdas suenan a 440 y 444 Hz. ¿Qué escuchará el afinador?",
+        "options": [
+          "Dos tonos separados, distinguibles por la altura",
+          "Un solo tono de 442 Hz que pulsa cuatro veces por segundo",
+          "Un solo tono de 884 Hz",
+          "Nada especial: la diferencia es demasiado pequeña"
+        ],
+        "answer": 1,
+        "why": "La suma de dos senos cercanos es una oscilación a la frecuencia media con una envolvente que varía lentamente. El oído escucha el tono medio de 442 Hz, cuyo volumen pulsa a la frecuencia de la diferencia: cuatro pulsos por segundo. El oído no puede distinguir directamente 440 y 444, pero cuenta los pulsos sin error.",
+        "hint": "Recuerde a dos bateristas con un tempo casi idéntico. ¿Cuántas veces por minuto coincidirán si uno toca 100 y el otro 104 golpes?"
+      },
+      {
+        "id": "i3",
+        "type": "free",
+        "q": "En sus propias palabras: ¿por qué una sirena que pasa cerca suena primero más aguda y luego más grave?",
+        "keywords": [
+          "persecución",
+          "acercamiento",
+          "aproximación",
+          "acortamiento",
+          "compresión",
+          "alejamiento",
+          "alargamiento",
+          "longitud de onda",
+          "más frecuente",
+          "menos frecuente"
+        ],
+        "needed": 2,
+        "why": "Al moverse hacia usted, la fuente se acerca durante un período, y la siguiente cresta comienza más cerca que la anterior: las crestas del frente se comprimen, la longitud de onda se acorta, la frecuencia aumenta. Detrás ocurre lo contrario: las crestas se expanden, el tono baja. La velocidad del sonido en sí no cambia, solo cambia la distancia entre crestas.",
+        "hint": "Imagine un pato que grazna una vez por segundo y nada hacia usted. ¿Logra acercarse entre dos graznidos, y qué hace eso con el intervalo entre ellos en su lado?"
+      },
+      {
+        "id": "i4",
+        "type": "estimate",
+        "q": "El recubrimiento antirreflejante en un objetivo debe eliminar la luz reflejada. ¿Qué grosor debe tener la película para luz verde con longitud de onda de 550 nm dentro de la película? En nanómetros.",
+        "answer": 137,
+        "unit": "нм",
+        "tolerance": 30,
+        "why": "Se necesita un cuarto de longitud de onda: la luz atraviesa la película dos veces, ida y vuelta, y acumula una diferencia de camino de media longitud de onda, condición de cancelación. 550/4 ≈ 137 nm. Por eso estos recubrimientos se llaman de cuarto de onda, y la luz reflejada residual en los extremos del rango da a los objetivos su característico tono violeta.",
+        "hint": "El rayo atraviesa la película dos veces. ¿Qué diferencia de camino se necesita para la cancelación y cuántas veces menor debe ser el grosor?"
+      }
+    ]
+  },
+  "ar": {
+    "title": "التداخل ودوبلر",
+    "subtitle": "الفقرة 3 · عندما تتراكم الموجات وعندما تلغي بعضها البعض",
+    "intro": [
+      "ضوء زائد ضوء يساوي ظلام. يبدو كخطأ، لكن هذا ما رآه توماس يونغ في عام 1801، عندما مرر الضوء عبر شقين ضيقين: ظهرت على الشاشة أشرطة، وبين المضيئة كانت هناك أشرطة مظلمة. هناك، حيث وصل الإضاءة من كلا الشقين في وقت واحد، كان أظلم من الشق الواحد.",
+      "الجسيمات لا تتصرف هكذا. تياران من حبيبات الرمل يعطيان كمية أكبر من الرمل، وليس أقل. أما الموجات فبإمكانها: إذا جاء قمة موجة مع قاع موجة أخرى في نفس الوقت، فإنهما يلغيان بعضهما البعض. هذه التجربة بالتحديد حسمت جدلًا دام مئتي عام حول طبيعة الضوء لصالح الموجات.",
+      "ونفس مبدأ التراكم يشرح أمرين مألوفين آخرين: لماذا تعطي الأوتار غير المضبوطة نبضًا خافقًا، ولماذا صفارة سيارة مارّة تكون عالية أولًا ثم منخفضة. كل هذا نتائج لقاعدة واحدة — الموجات ببساطة تتراكم."
+    ],
+    "standNote": "بدّل المنصة إلى وضع الموجتين وقم بتغيير نسبة الترددات ببطء من الواحد لأعلى. عند التساوي التام، تسير الموجتان متوافقتين. افترقتا قليلًا — يظهر خفقان بطيء: المواضع التي تتراكم فيها الموجات تجري على طول المحور، ويتذبذب المدى الكلي صعودًا وهبوطًا حتى الصفر. لاحظ الرسم البياني في الأسفل: النقطة التجريبية الآن تتأرجح بشدة متغيرة. هذا بالضبط ما تسمعه الأذن كصوت \"واو-واو\" عند ضبط الجيتار.",
+    "formula": {
+      "name": "مبدأ التراكب وشرط التداخل",
+      "latex": "\\Delta = m\\lambda \\;\\text{— усиление}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— гашение}",
+      "alsoKnown": "تراكب الموجات · شرط القيم العظمى والصغرى",
+      "authors": [
+        {
+          "who": "كريستيان هويجنز",
+          "year": "1678",
+          "what": "أعلن أن الضوء موجة، وبنى عليها نظرية الانعكاس والانكسار. خسر الجدال أمام نيوتن في حياته — سلطة مؤلف «المبادئ» رجحت كفة الحجج"
+        },
+        {
+          "who": "توماس يونغ",
+          "year": "1801",
+          "what": "أجرى تجربة الشقين المزدوج وحصل على أشرطة لا يمكن تفسيرها بالجسيمات. قوبل العمل بسخرية في الصحافة البريطانية؛ وجاء الاعتراف بعد عشرين عامًا، بعد أعمال فريسنل"
+        },
+        {
+          "who": "أوغستان فريسنل",
+          "year": "1818",
+          "what": "قدم لنظرية الحيود الموجية في مسابقة الأكاديمية. استنتج بواسون، المؤيد للجسيمات، منها نتيجة سخيفة في رأيه: يجب أن تكون بقعة مضيئة في وسط ظل قرص دائري. أجرى أراجو التجربة — وُجدت البقعة"
+        },
+        {
+          "who": "كريستيان دوبلر",
+          "year": "1842",
+          "what": "تنبأ بتغير التردد عند حركة المصدر، أثناء تحليله لألوان النجوم المزدوجة. أخطأ في النجوم، لكن التأثير كان صحيحًا وثبت سمعيًا بعد ثلاث سنوات — مع عازفي بوق في عربة مفتوحة"
+        }
+      ],
+      "story": "أجمل قصة هنا هي قصة بقعة بواسون. في عام 1818، قدم فريسنل للأكاديمية الفرنسية نظرية الضوء الموجية. سيميون بواسون، المعارض المقتنع، أخذ ليبين سخافتها: إذا اتبعنا نظرية فريسنل، استنتج، فلا بد أن يكون خلف قرص معتم دائري، تمامًا في منتصف الظل، بقعة مضيئة — لأن الموجات التي دارت حول الحافة ستصل إلى المركز بنفس التأخير وتتراكم. بدت الحجة قاتلة: من رأى ضوءًا في وسط الظل؟ رئيس اللجنة أراجو ذهب بصمت إلى المختبر وأجرى التجربة. البقعة كانت موجودة. الاعتراض الذي صُمم كحكم أصبح تأكيدًا حاسمًا، ولا يزال في الفيزياء يُسمى بقعة بواسون — باسم الشخص الذي لم يصدق."
+    },
+    "symbols": [
+      {
+        "sym": "Delta",
+        "latex": "\\Delta",
+        "what": "فرق المسير",
+        "unit": "م",
+        "note": "مقدار طول أحد المسارين عن الآخر؛ هو الذي يقرر ما إذا كان سيكون تقوية أم إلغاء"
+      },
+      {
+        "sym": "m",
+        "latex": "m",
+        "what": "رتبة القيمة العظمى",
+        "unit": "—",
+        "note": "عدد صحيح: كم طول موجة ينطبق في فرق المسير"
+      },
+      {
+        "sym": "fbeat",
+        "latex": "f_{\\text{б}}",
+        "what": "تردد الخفقان",
+        "unit": "هرتز",
+        "note": "يساوي فرق الترددين: وتران متباعدان بمقدار 2 هرتز يعطيان دقتين في الثانية"
+      },
+      {
+        "sym": "u",
+        "latex": "u",
+        "what": "سرعة المصدر أو الراصد",
+        "unit": "م/ث",
+        "note": "في تأثير دوبلر، المهم من يتحرك — فالصيغ تختلف في هاتين الحالتين"
+      },
+      {
+        "sym": "f0",
+        "latex": "f_0",
+        "what": "التردد الطبيعي للمصدر",
+        "unit": "هرتز",
+        "note": "ما ينبعث؛ التردد المستقبل يختلف عنه عند الحركة"
+      }
+    ],
+    "derivation": {
+      "title": "اشتقاق صارم: التراكب، الخفقان، ودوبلر",
+      "lead": "كل شيء في هذا القسم يتبع قاعدة واحدة: الإزاحات تُجمع. سنتتبع ثلاث نتائج مختلفة لنفس الشيء.",
+      "steps": [
+        {
+          "text": "مبدأ التراكب: إذا مرت موجتان عبر نقطة، فإن إزاحة الوسط تساوي مجموع الإزاحات من كل موجة. هذه ليست مسلمة، بل نتيجة للخطية: طالما الاضطرابات صغيرة، يستجيب الوسط بشكل متناسب.",
+          "latex": "y = y_1 + y_2",
+          "figure": "vectriangle",
+          "figCaption": "الموجات تمر عبر بعضها دون تداخل: بعد اللقاء، تستمر كل موجة وكأن شيئًا لم يحدث."
+        },
+        {
+          "text": "لنأخذ موجتين من مصدرين مختلفين، وصلتا إلى نفس النقطة عبر مسارين مختلفين. الفرق في أطوال المسارات يتحول إلى فرق في الطور: لكل طول موجي من التأخير، هناك دورة كاملة.",
+          "latex": "\\Delta\\varphi = \\frac{2\\pi}{\\lambda}\\,\\Delta",
+          "figure": "shadow",
+          "figCaption": "يُحول فرق المسار إلى فرق طور بالقسمة على طول الموجة."
+        },
+        {
+          "text": "من هنا شرطان. إذا كان فرق المسار يحتوي على عدد صحيح من أطوال الموجات، تلتقي القمم مع القمم — تعزيز. إذا كان عددًا صحيحًا زائد نصف، تلتقي القمة مع القاع، ويُلغيان بعضهما.",
+          "latex": "\\Delta = m\\lambda \\;\\Rightarrow\\; A = 2A_0; \\qquad \\Delta = \\left(m+\\tfrac{1}{2}\\right)\\lambda \\;\\Rightarrow\\; A = 0",
+          "figure": "matchfreq",
+          "figCaption": "الأهداب على شاشة يونغ هي تناوب بين مواقع بفرق مسار صحيح ونصف صحيح."
+        },
+        {
+          "text": "دعنا نتحقق من حفظ الطاقة، لأن هنا ينشأ قلق مشروع. في الأهداب المظلمة لا توجد طاقة — أين ذهبت؟ لا مكان: في الأهداب المضيئة تكون أكبر بأربع مرات، وليس ضعفين، لأن الطاقة تتناسب مع مربع السعة. المتوسط عبر الشاشة متطابق.",
+          "latex": "\\langle A^{2}\\rangle: \\quad \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} = A_0^{2} + A_0^{2}",
+          "figure": "energy",
+          "figCaption": "التداخل لا يدمر الطاقة، بل يعيد توزيعها من المناطق المظلمة إلى المضيئة."
+        },
+        {
+          "text": "الآن الخفقان. لنجمع موجتين بترددات متقاربة في نقطة واحدة. علم المثلثات يعطي حاصل ضرب: تذبذب سريع بتردد متوسط، مضروبًا في غلاف بطيء التغير.",
+          "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\cos\\!\\frac{\\omega_1-\\omega_2}{2}t \\cdot \\cos\\!\\frac{\\omega_1+\\omega_2}{2}t",
+          "figure": "sinederiv",
+          "figCaption": "نغمة سريعة تحت غلاف بطيء. الأذن تسمع صوتًا واحدًا بحجم متغير."
+        },
+        {
+          "text": "يكون الصوت أعلى ما يمكن مرتين خلال دورة الغلاف، لذا فإن تردد الخفقان يساوي ليس نصف الفرق، بل الفرق الكامل للترددات. الموالف يسمع النبضات ويضبط المفتاح حتى تختفي.",
+          "latex": "f_{\\text{б}} = |f_1 - f_2|",
+          "figure": "curves",
+          "figCaption": "طريقة لضبط الآلة بدقة أكبر مما يسمح به المقارنة المباشرة لطبقة الصوت: عد النبضات."
+        },
+        {
+          "text": "وأخيرًا دوبلر. المصدر، عندما يتحرك، يلحق بموجاته الخاصة: خلال فترة زمنية يقطع مسافة $uT$، وبهذا يقصر طول الموجة أمامه. خلفه يطول بنفس المقدار.",
+          "latex": "\\lambda' = (v \\mp u)T \\;\\Longrightarrow\\; f' = f_0\\,\\frac{v}{v \\mp u}",
+          "figure": "circmotion",
+          "figCaption": "القمم من الأمام تتقارب، ومن الخلف تتباعد. من هنا ارتفاع النغمة عند الاقتراب وانخفاضها عند الابتعاد."
+        }
+      ],
+      "plate": "تتجمع الموجات بالإزاحات. فرق المسار بعدد صحيح من أطوال الموجات يعطي تعزيزًا، وبعدد صحيح ونصف يعطي إلغاءً؛ الترددات المتقاربة تعطي خفقانًا بتردد يساوي فرقها؛ حركة المصدر تُزاح التردد.",
+      "note": "حدود قابلية التطبيق. يتم الحصول على نمط مستقر من الأهداب فقط مع الموجات المترابطة — بفارق طور ثابت. مصباحان عاديان لن يعطيا أهدابًا: أطوار إشعاعهما تتغير بشكل عشوائي مليارات المرات في الثانية، ويتم مسح النمط إلى ضوء منتظم. لهذا السبب، مرر يونغ الضوء من مصدر واحد عبر شقين، بدلاً من استخدام شمعتين. علاوة على ذلك، فإن صيغة دوبلر المذكورة صحيحة للصوت، حيث يوجد وسط؛ أما بالنسبة للضوء فهي مختلفة — فلا يوجد وسط مميز، ويختفي الفرق بين حركة المصدر والمراقب، وهذا كان أحد التلميحات الأولى لنظرية النسبية."
+    },
+    "math": {
+      "title": "الرياضيات التي استُخدمت هنا",
+      "text": [
+        "ما هو فرق المسار؟ الأمر بسيط جدًا. تخيل اثنين من السعاة يخرجان في نفس الوقت من نفس النقطة إلى باب منزلك عبر شوارع مختلفة. إذا كان أحد المسارات أطول بعدد صحيح من المربعات السكنية، فإن السعاة سيصلون متزامنين — خطوة بخطوة. إذا كان أطول بمقدار مربع ونصف، فسيطأ أحدهما باليمنى بينما الآخر باليسرى. الموجات هي نفسها: المهم ليس المسافة المطلقة، بل مقدار طول أحد المسارين عن الآخر، مقاسًا بأطوال الموجات. عدد صحيح — متطابقان، عدد صحيح ونصف — طور معاكس وإلغاء متبادل.",
+        "لماذا ينتج عن جمع ترددات متقاربة نبض؟ تخيل عازفي طبول يضربان بإيقاع متقارب: واحد يضرب مئة مرة في الدقيقة، والآخر مئة واثنتين. في البداية يضربان معًا، الصوت عالٍ. تدريجيًا، يتقدم الثاني، وعندما يتقدم بنصف ضربة، تقع الضربات في الفواصل الزمنية — ينتشر الصوت. قليلًا بعد ذلك، يتقدم بضربة كاملة: يعودان معًا. خلال دقيقة، يحدث هذا التزامن مرتين بالضبط — الفرق في الإيقاع. هذا هو تردد الخفقان، ولا يتطلب أي صيغ، فقط العد.",
+        "كيف تفهم تأثير دوبلر بدون صيغة. تخيل أنك تقف في الماء، وبطة تسبح نحوك وتصدر صوتًا مرة كل ثانية. كل صوت ينتقل في الهواء بسرعته، لكن البطة تنجز الاقتراب خلال ثانية — ويبدأ الصوت التالي من مسافة أقرب. لذا، الفترات الزمنية بين الأصوات القادمة إليك تكون أقصر من ثانية. تسمعها بتردد أعلى مما تصدره البطة. عندما تسبح البطة بجانبك وتبتعد، يحدث العكس. لا شيء هنا سوى جمع المسافات.",
+        "لماذا لا تختفي الطاقة في التداخل؟ هذا هو المكان الذي يظهر فيه الشك غالبًا في انتهاك الحفظ. الحل في التربيع. بجمع موجتين في الطور، نحصل على سعة مضاعفة — ولكن طاقة أكبر بأربع مرات، وليس ضعفين. في الطور المعاكس، نحصل على صفر. بأخذ المتوسط عبر الشاشة، نحصل بالضبط على مجموع الطاقات الأصلية: نصف المواقع حصلت على أربعة أضعاف، والنصف الآخر على لا شيء، والمتوسط أصبح ضعفين. الطاقة لا تُخلق ولا تُفنى، بل تُعاد توزيعها في الفضاء."
+      ]
+    },
+    "example": {
+      "title": "مثال بأرقام: كم عدد النبضات التي يعطيها وتر غير مضبوط وكم يتغير نغمة صفارة الإنذار",
+      "lead": "مسألتان من فقرة واحدة: إحداهما للموسيقي والأخرى لمن يقف على الطريق.",
+      "given": "1) وتران مضبوطان على 440 و 443 هرتز. 2) سيارة بصوت صفارة إنذار 700 هرتز تمر بسرعة 20 م/ث؛ سرعة الصوت 340 م/ث.",
+      "law": "$f_{\\text{б}} = |f_1 - f_2|$; $\\;f' = f_0\\,\\dfrac{v}{v \\mp u}$",
+      "solution": [
+        {
+          "text": "النبضات هي مجرد فرق الترددات.",
+          "latex": "f_{\\text{б}} = |443 - 440| = 3\\ \\text{Гц} \\;\\;(\\text{ثلاث نبضات في الثانية})"
+        },
+        {
+          "text": "صفارة الإنذار تقترب: في المقام إشارة سالبة، التردد يزداد.",
+          "latex": "f'_{\\text{прибл}} = 700 \\cdot \\frac{340}{340 - 20} = 700 \\cdot 1{,}0625 \\approx 744\\ \\text{Гц}"
+        },
+        {
+          "text": "تبتعد: في المقام إشارة موجبة.",
+          "latex": "f'_{\\text{удал}} = 700 \\cdot \\frac{340}{340 + 20} \\approx 661\\ \\text{Гц}"
+        },
+        {
+          "text": "القفزة لحظة المرور.",
+          "latex": "\\Delta f = 744 - 661 = 83\\ \\text{Гц} \\;\\;(\\text{حوالي نصف نغمتين})"
+        }
+      ],
+      "answer": "ثلاث نبضات في الثانية للأوتار؛ يتغير نغمة صفارة الإنذار من 744 إلى 661 هرتز، أي حوالي نصف نغمتين في لحظة المرور.",
+      "check": "التحقق بالتجربة السمعية. نصف نغمتين — فاصل زمني يسمعه بوضوح أي شخص دون تعليم موسيقي، ولهذا السبب فإن تأثير دوبلر مميز جدًا. وفي الوقت نفسه شرح طريقة الموالفين: من الصعب تمييز 440 عن 443 هرتز بالأذن — فهي أقل من عُشر نصف نغمة. أما ثلاث نبضات في الثانية فتسمع بلا خطأ. بإحصاء النبضات، تصل الأذن إلى دقة لا تستطيعها عند المقارنة المباشرة لطبقة الصوت — وهي طريقة استُخدمت منذ القرن السابع عشر ويطلق عليها في الفيزياء اسم التردد الخلطي."
+    },
+    "constants": {
+      "title": "ثوابت هذه الفقرة",
+      "lead": "أرقام مناسبة لفحص نفسك في مسائل التداخل ودوبلر.",
+      "items": [
+        {
+          "sym": "lam_vis",
+          "latex": "\\lambda_{\\text{вид}}",
+          "name": "طول موجة الضوء المرئي",
+          "value": "0,4 — 0,7",
+          "unit": "ميكرومتر",
+          "why": "الحد البنفسجي حوالي 400 نانومتر، والأحمر حوالي 700. هذا الحجم يحدد حد دقة المجهر الضوئي وعرض الأهداب في تجربة يونغ.",
+          "mnemo": "الأحمر أطول بحوالي ضعف البنفسجي — أي أن النطاق المرئي يشغل تمامًا أوكتافًا واحدًا. للصوت نسمع عشرة أوكتافات، للضوء نرى أوكتافًا واحدًا."
+        },
+        {
+          "sym": "f_beat",
+          "latex": "f_{\\text{б}}",
+          "name": "تردد النبضات المسموعة بوضوح",
+          "value": "0,5 — 10",
+          "unit": "هرتز",
+          "why": "أقل من نصف هرتز لا تدركه الأذن كنبض، وأسرع من عشرة هرتز تسمعه كنغمة أجشّة عامة. يعمل الموالفون ضمن هذه النافذة.",
+          "mnemo": "نبضة واحدة في الثانية — انفلات دقيق بمقدار 1 هرتز بغض النظر عن طبقة النوتة. كمية مطلقة وليست نسبية — ولهذا في الجهير يصبح الضبط أكثر دقة."
+        },
+        {
+          "sym": "z",
+          "latex": "z",
+          "name": "الانزياح نحو الأحمر للمجرات البعيدة",
+          "value": "حتى 11",
+          "unit": "—",
+          "why": "نفس تأثير دوبلر ولكن كوني: ضوء أبعد المجرات المرصودة ممتد بأكثر من عشر مرات. الأشعة فوق البنفسجية من المصدر تصل إلينا كأشعة تحت الحمراء.",
+          "mnemo": "بالانزياح نحو الأحمر اكتشف هابل في عام 1929 تمدد الكون. تأثير موجي واحد — وعلم الكونيات الحديث بأكمله."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين يعمل هذا",
+      "lead": "تراكب الموجات وإزاحة التردد — أكثر ظاهرتين موجيتين استخدامًا في التقنية.",
+      "items": [
+        {
+          "h": "سماعات إلغاء الضوضاء",
+          "text": "ميكروفون خارجي يستمع للضوضاء، إلكترونيات تبني فورًا موجة معاكسة في الطور وتغذيها في السماعة. شرط الإطفاء يتحقق عن قصد. يعمل جيدًا على الترددات المنخفضة وسيئًا على العالية: حيث طول الموجة صغير، وتحريك الرأس كافٍ لإفساد فرق المسار."
+        },
+        {
+          "h": "طلاء العدسات المضاد للانعكاس",
+          "text": "البريق البنفسجي على العدسات — طبقة رقيقة سمكها ربع طول الموجة. الانعكاسات من سطحيها تأتي في طور متعاكس وتُطفأ، ولذا يدخل العدسة ضوء أكثر. يُختار السمك لوسط النطاق المرئي، ومن هنا يأتي لون البقية."
+        },
+        {
+          "h": "الرادار والموجات فوق الصوتية للأوعية",
+          "text": "الإشارة المنعكسة منزاحة التردد بقيمة دوبلر تتناسب مع سرعة الهدف. هكذا تقاس سرعة السيارة على الطريق وسرعة الدم في الشريان — والجهاز في المستشفى يُسمى دوبلرغرافيا."
+        },
+        {
+          "h": "التصوير المجسم (الهولوغرافي)",
+          "text": "تسجيل صورة التداخل بين حزمة مرجعية وحزمة منعكسة يحافظ ليس فقط على السطوع بل على الطور. لذا تكون الصورة المستعادة ثلاثية الأبعاد — ولهذا فإن قطعة من الهولوغرام تحتوي على المشهد بأكمله ولكن بدقة أقل."
+        },
+        {
+          "h": "موجات الجاذبية",
+          "text": "كاشف LIGO هو مقياس تداخل بأذرع طولها أربعة كيلومترات. موجة عابرة تغير طولها بمقدار جزء من ألف من حجم البروتون، ويُلتقط ذلك من إزاحة الأهداب. نفس المبدأ الذي استخدمه يونغ في عام 1801، وصل إلى أقصى حد ممكن."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: جرب بنفسك",
+      "lead": "يمكن رؤية التداخل في بركة ماء وسماعه بإصبعين على كأس.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "قوس قزح في غشاء صابون",
+          "text": "اغمس إطارًا سلكيًا في محلول صابون وأمسكه عموديًا في الضوء لبضع دقائق، مع مراقبة الغشاء.",
+          "answer": "ستظهر أشرطة أفقية ملونة تزحف ببطء إلى الأسفل: السائل يتدفق والغشاء يصبح أرق في الأعلى. اللون يتحدد بتداخل الأشعة المنعكسة من السطحين الأمامي والخلفي للغشاء: يُخمد الطول الموجي الذي يكون فرق مساره نصف عدد صحيح. يتغير السمك — يتغير اللون المخمد. قبل التمزق مباشرة، يصبح الجزء العلوي من الغشاء أسودًا: حيث يكون أرق من الطول الموجي، ويتم إخماد جميع الألوان دفعة واحدة. وصف نيوتن هذه الحلقات في عام 1704 — ومن المفارقة أنها أصبحت حجة ضد نظريته الخاصة في الضوء."
+        },
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "النبض بكأسين",
+          "text": "خذ كأسين متطابقين، صب ماء في أحدهما بمقدار إصبع. بلل أصابعك وامسح بها حواف الكأسين معًا — أو فقط اضغط عليهما تباعًا ومعًا.",
+          "answer": "معًا، سيعطيان نغمة واحدة نابضة: «وا-وا-وا». تردد النبض يساوي فرق تردداتهما الذاتية. أضف ماءً — يتباطأ النبض كلما اقتربت الترددات، ويختفي عند التطابق. بهذه الطريقة بالضبط يتم ضبط البيانو والأرغن منذ أربعمائة عام: عد النبضات أكثر موثوقية من مقارنة درجة الصوت بالأذن."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "ضوء زائد ضوء يعطي ظلامًا — أين ذهبت الطاقة",
+          "text": "في الأشرطة المظلمة في تجربة يونغ، لا يوجد ضوء على الإطلاق، على الرغم من أن الإضاءة من كلا الشقين تصل إليها. يبدو أن قانون حفظ الطاقة قد انتهك. أين الخطأ في التفكير؟",
+          "answer": "الخطأ هو أننا ننظر فقط إلى الأماكن المظلمة. طاقة الموجة تتناسب مع مربع السعة: جمع موجتين في الطور يعطي ضعف السعة وأربع أضعاف الطاقة. في الأشرطة المضيئة، الطاقة ليست ضعفين بل أربعة أضعاف — وهذا الفائض يعوض بالضبط ما ينقص في المظلمة. قم بالتكامل عبر الشاشة — ستحصل بالضبط على مجموع الطاقتين الأصليتين. التداخل لا يدمر شيئًا، بل يعيد توزيع الطاقة من مكان إلى آخر."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "بقعة بواسون",
+          "text": "استنتج بواسون من نظرية فريسنل نتيجة بدت له سخيفة: في مركز ظل قرص دائري يجب أن يكون هناك ضوء. أجرى أراغو التجربة — ووجد النقطة المضيئة هناك. الاعتراض الذي كان مقصودًا كدحض دخل التاريخ كدليل ولا يزال يحمل اسم من لم يؤمن بالنظرية. درس جيد: إذا بدت النتيجة سخيفة، فمن الأفضل التحقق أولاً ثم الضحك."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "ذاكرية",
+          "h": "العدد الصحيح — مضيء، النصف عدد — مظلم",
+          "text": "شرط التداخل كله في سطر واحد. فرق مسار بطول موجي كامل — قمة على قمة، عظمى. زائد نصف — قمة على قاع، صفر. من هنا أيضًا النبض (فرق طور متزايد ببطء) وتقليل الانعكاس في البصريات (غشاء بربع موجة يعطي فرق مسار نصف موجي خلال مرورين)."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود التطبيق",
+          "h": "لماذا لا تعطي مصباحان أشرطة؟",
+          "text": "النمط المستقر يتطلب فرق طور ثابت — التماسك. المصادر العادية تصدر ومضات مدتها نانوثانية، بطور عشوائي لكل منها، ويتغير نمط الأشرطة أسرع من أن يُلاحظ. في المتوسط، نحصل على إضاءة متساوية. لذلك، مرر يونغ ضوء مصدر واحد عبر شقين، بينما الليزر، الذي له تماسك هائل، يعطي تداخلًا في أي مكان — يكفي تسليطه على زجاج مغبر."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للمهتمين: نفس التجربة مع الإلكترونات",
+      "lead": "غير مشمول في الاختبار. حول كيفية إعادة تجربة يونغ — والحصول على إجابة لم يتوقعها أحد.",
+      "blocks": [
+        {
+          "h": "الإلكترونات تعطي أيضًا أشرطة",
+          "text": "في عام 1927، اكتشف دافيسون وجيرمر أن حزمة إلكترونات منعكسة من بلورة تعطي نمط تداخل. تصرفت جسيمات المادة كموجات — تمامًا كما افترض دي بروي قبل ثلاث سنوات. تم إجراء تجربة الشق المزدوج مع الإلكترونات لاحقًا، وظهرت الأشرطة."
+        },
+        {
+          "h": "وهذا ليس عن المجموعة",
+          "text": "الأهم تم في تجارب حيث أُطلقت الإلكترونات واحدًا تلو الآخر مع فترات زمنية كبيرة. كل إلكترون يترك نقطة واحدة على الشاشة — كجسيم. لكن النقاط، المتراكمة على مدار ساعات، تشكلت في نفس الأشرطة. لم يكن هناك ما يتداخل: كان هناك دائمًا إلكترون واحد فقط في الجهاز. كان يمر عبر كلا الشقين في وقت واحد."
+        },
+        {
+          "h": "محاولة النظر",
+          "text": "إذا وضعت كاشفًا عند الشقين وعرفت من أي منهما مر الإلكترون، تختفي الأشرطة — ويبقى بقعتان ضبابيتان، كما في الجسيمات. بل إن مجرد إمكانية المعرفة كافية: ليس من الضروري لمس الإلكترون فيزيائيًا. وجود معلومات عن المسار يدمر التداخل."
+        },
+        {
+          "h": "ماذا نفعل حيال ذلك",
+          "text": "اعتبر فاينمان تجربة الشق المزدوج هي اللغز الوحيد لميكانيكا الكم، مدعيًا أن كل شيء آخر يأتي منها. الشكلانية تحسب النتيجة بدقة وتؤكد حتى العلامة العشرية. السؤال حول ما يحدث بالفعل يبقى مفتوحًا — مزيد من التفاصيل في قسم «أسئلة مفتوحة»."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "تتجمع الموجات بإزاحات: فرق مسار كامل يعطي تضخيمًا، نصف كامل — إخمادًا؛ ترددات متقاربة تعطي نبض بتردد الفرق؛ حركة المصدر تغير التردد.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta = m\\lambda$",
+          "text": "عظمى، $\\Delta = (m+\\frac{1}{2})\\lambda$ — صغرى"
+        },
+        {
+          "icon": "formula",
+          "title": "الطاقة لا تختفي",
+          "text": "في العظمى تكون أربعة أضعاف، وليس ضعفين"
+        },
+        {
+          "icon": "sigma",
+          "title": "$f_{\\text{б}} = |f_1 - f_2|$",
+          "text": "طريقة للضبط بدقة أكبر مما تسمح به الأذن"
+        },
+        {
+          "icon": "ruler",
+          "title": "دوبلر",
+          "text": "القمم تتكاثف من الأمام وتتخلخل من الخلف"
+        },
+        {
+          "icon": "scale",
+          "title": "الأشرطة تتطلب تماسكًا",
+          "text": "فرق طور ثابت"
+        }
+      ],
+      "where": "سماعات عزل الضوضاء، طلاء مضاد للانعكاس، الرادار والدوبلرغرافيا، التصوير المجسم، كاشف الموجات الثقالية، الانزياح الأحمر للمجرات.",
+      "watchOut": "مصباحان مستقلان لا يعطيان أشرطة: أطوارهما تتغير بشكل عشوائي. التداخل يتطلب منشأ مشتركًا للموجات."
+    },
+    "quiz": [
+      {
+        "id": "i1",
+        "type": "mcq",
+        "q": "في الأشرطة المظلمة لتجربة يونغ لا يوجد ضوء، على الرغم من أن الإضاءة تأتي من كلا الشقين. أين تذهب الطاقة؟",
+        "options": [
+          "تتحول إلى حرارة في الشاشة",
+          "توزع: في الأشرطة المضيئة الطاقة أربعة أضعاف المصدر، وليس ضعفين",
+          "تختفي فعلياً — التداخل ينتهك حفظ الطاقة",
+          "تعود إلى المصدر"
+        ],
+        "answer": 1,
+        "why": "الطاقة تتناسب مع مربع السعة. السعة المضاعفة تعطي طاقة أربعة أضعاف، وهذه الزيادة تغطي النقص في الأشرطة المظلمة تمامًا. متوسط الطاقة عبر الشاشة يعطي بالضبط مجموع الطاقتين الأصليتين.",
+        "hint": "كيف ترتبط السعة والطاقة — خطياً أم لا؟ ماذا يحدث للطاقة إذا تضاعفت السعة؟"
+      },
+      {
+        "id": "i2",
+        "type": "mcq",
+        "q": "وتران يصدران صوتًا بتردد 440 و 444 هرتز. ماذا يسمع الموالف؟",
+        "options": [
+          "نغمتان منفصلتان يمكن تمييزهما في درجة الصوت",
+          "نغمة واحدة 442 هرتز، تنبض أربع مرات في الثانية",
+          "نغمة واحدة 884 هرتز",
+          "لا شيء مميز — الفرق صغير جداً"
+        ],
+        "answer": 1,
+        "why": "مجموع موجة جيبيتين قريبتين هو تردد متوسط مع غلاف يتغير ببطء. تسمع الأذن النغمة المتوسطة 442 هرتز، وتنبعث شدتها بتردد يساوي الفرق — أربع دقات في الثانية. لا تستطيع الأذن تمييز 440 و 444 مباشرة، لكنها تحسب الدقات بدقة.",
+        "hint": "تذكر عازفي طبول بإيقاع متقارب. كم مرة في الدقيقة سيتزامنان إذا ضرب أحدهما 100 والآخر 104 ضربة؟"
+      },
+      {
+        "id": "i3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا صوت صفارة الإنذار العابرة يبدو أعلى ثم أدنى؟",
+        "keywords": [
+          "لحاق",
+          "اقتراب",
+          "تقصير",
+          "تكثف",
+          "اقترب",
+          "ابتعاد",
+          "تمد",
+          "طول الموجة",
+          "أكثر تكراراً",
+          "أقل تكراراً"
+        ],
+        "needed": 2,
+        "why": "عند التحرك نحوك، يتمكن المصدر خلال فترة واحدة من الاقتراب، وتبدأ القمة التالية أقرب إلى القمة السابقة — تتكثف القمم في الأمام، ويقصر طول الموجة، ويزداد التردد. في الخلف العكس: تتباعد القمم، وينخفض الصوت. سرعة الصوت نفسها لا تتغير، بل تتغير المسافة بين القمم.",
+        "hint": "تخيل بطة تصدر صوتاً مرة كل ثانية وتسبح نحوك. هل تتمكن من الاقتراب بين الصوتين، وماذا يفعل ذلك بالفاصل بينهما من جهتك؟"
+      },
+      {
+        "id": "i4",
+        "type": "estimate",
+        "q": "يجب أن يعمل الطلاء المضاد للانعكاس على العدسة على إلغاء الضوء المنعكس. ما سمك الفيلم المطلوب للضوء الأخضر بطول موجة 550 نانومتر في الفيلم؟ بالنانومتر.",
+        "answer": 137,
+        "unit": "نانومتر",
+        "tolerance": 30,
+        "why": "يلزم ربع طول الموجة: يمر الضوء عبر الفيلم مرتين، ذهاباً وإياباً، ويكتسب فرق مسار مقداره نصف طول الموجة — شرط الإلغاء. 550/4 ≈ 137 نانومتر. ولهذا تسمى هذه الطلاءات ربع موجية، والضوء المنعكس المتبقي عند حواف النطاق يعطي العدسات لوناً أرجوانياً مميزاً.",
+        "hint": "يمر الشعاع عبر الفيلم مرتين. ما فرق المسار المطلوب للإلغاء، وبكم مرة يجب أن يكون السمك أصغر؟"
+      }
+    ]
+  }
+}

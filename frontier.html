@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Открытые вопросы — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C;
+    --font-display:'Futura','Century Gothic','Futura PT','Segoe UI Semibold','Segoe UI',sans-serif;
+    --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+    --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  }
+  :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
+    --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
+  :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
+    --rule:#D9D5C7; --brass:#8F6417; --steel:#155E74; --moss:#4C6B4E; --red:#9B2C2C}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:18px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:24px 16px 70px}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--ink-soft);text-decoration:none}
+  .logo:hover{color:var(--steel)}
+  .theme-toggle{background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+
+  h1{font-family:var(--font-display);font-weight:700;font-size:2.3rem;line-height:1.12;margin-bottom:.2em}
+  .f-sub{font-family:var(--font-display);font-size:14px;color:var(--ink-soft);margin-bottom:18px}
+  .col{max-width:680px}
+  .col p{margin-bottom:.85em}
+  .f-lead{font-size:1.06rem;color:var(--ink-soft);border-left:2px solid var(--brass);
+    padding-left:16px;margin-bottom:28px}
+
+  /* макет: левое оглавление + колонка */
+  .layout{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:start}
+  @media (max-width:860px){ .layout{grid-template-columns:1fr;gap:0} .toc{display:none} }
+  .toc{position:sticky;top:20px;font-family:var(--font-display);font-size:.82rem;line-height:1.5}
+  .toc a{display:block;padding:5px 0 5px 10px;color:var(--ink-soft);text-decoration:none;
+    border-left:1px solid var(--rule)}
+  .toc a:hover{color:var(--steel);border-left-color:var(--steel)}
+  .toc a.key{color:var(--brass)}
+  .toc .toc-h{color:var(--ink);font-weight:700;margin:14px 0 4px;padding-left:10px;
+    border-left:1px solid transparent;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+
+  h2{font-family:var(--font-display);font-size:1.5rem;font-weight:700;line-height:1.2;
+    margin:44px 0 6px;padding-top:18px;border-top:2px solid var(--ink);scroll-margin-top:16px}
+  h3{font-family:var(--font-display);font-size:1.06rem;font-weight:700;margin:26px 0 6px}
+  .q-short{font-size:.95rem;color:var(--ink-soft);margin-bottom:14px;font-style:italic}
+  .q-key{display:inline-block;font-family:var(--font-display);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--paper);background:var(--brass);padding:2px 7px;
+    vertical-align:middle;margin-left:10px;border-radius:2px}
+  .q-status{font-family:var(--font-display);font-size:.84rem;color:var(--ink);background:var(--paper-raised);
+    border:1px solid var(--rule);border-left:3px solid var(--steel);padding:9px 13px;margin:14px 0}
+  .q-conn{font-size:.84rem;color:var(--ink-soft);font-family:var(--font-display);margin-top:8px}
+  .q-conn span{display:inline-block;border:1px solid var(--rule);padding:2px 8px;margin:0 5px 5px 0}
+
+  .card{background:var(--paper-raised);border:1px solid var(--rule);padding:16px 18px;margin:16px 0}
+  .card h3{margin-top:0}
+  .wh{display:grid;grid-template-columns:130px 1fr;gap:10px 16px;margin-top:14px;font-size:.94rem}
+  .wh dt{font-family:var(--font-display);font-weight:700;color:var(--brass)}
+  .wh dd{color:var(--ink-soft);line-height:1.55}
+  @media (max-width:560px){ .wh{grid-template-columns:1fr;gap:2px 0} .wh dd{margin-bottom:10px} }
+
+  .close-block{margin-top:46px;padding:24px 26px;border:1px solid var(--rule);
+    border-top:3px solid var(--brass);background:var(--paper-raised)}
+  .close-block h2{margin-top:0;padding-top:0;border-top:none;font-size:1.35rem}
+  .close-block p{margin-bottom:.9em}
+  .close-block p:last-child{margin-bottom:0}
+  .foot-nav{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);
+    font-family:var(--font-display);font-size:.86rem}
+  .foot-nav a{color:var(--steel);text-decoration:none;margin-right:20px}
+  .foot-nav a:hover{text-decoration:underline}
+</style>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top-bar">
+  <a href="/learn.html" class="logo">bridge42worlds · дерево знаний</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<div id="root"></div>
+</div>
+
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru', root = document.getElementById('root');
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function paras(host, arr) { (arr || []).forEach(function (p) { host.appendChild(el('p', null, p)); }); }
+
+  fetch('/data/theory/frontier.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
+    var C = d[LANG] || d.ru, toc = [];
+    document.title = C.title + ' — bridge42worlds';
+
+    root.appendChild(el('h1', null, C.title));
+    root.appendChild(el('div', 'f-sub', C.subtitle));
+    root.appendChild(el('p', 'f-lead col', C.lead));
+
+    var layout = el('div', 'layout');
+    var nav = el('nav', 'toc');
+    var main = el('div', 'col');
+    layout.appendChild(nav); layout.appendChild(main); root.appendChild(layout);
+
+    function head(id, text, key) {
+      var h = el('h2', null, text); h.id = id; main.appendChild(h);
+      toc.push({ id: id, text: text, key: key });
+    }
+
+    paras(main, C.opening);
+
+    // — открытые вопросы
+    toc.push({ h: 'Вопросы' });
+    C.questions.forEach(function (q) {
+      head(q.id, q.title + (q.key ? '<span class="q-key">ключевое</span>' : ''), q.key);
+      toc[toc.length - 1].text = q.title;
+      main.appendChild(el('div', 'q-short', q.short));
+      paras(main, q.text);
+      main.appendChild(el('div', 'q-status', '<b>Статус.</b> ' + q.status));
+      if (q.connects) {
+        main.appendChild(el('div', 'q-conn',
+          'Связано с курсом: ' + q.connects.map(function (c) { return '<span>' + c + '</span>'; }).join('')));
+      }
+    });
+
+    // — фазовое пространство
+    var P = C.phase;
+    toc.push({ h: 'Язык физики' });
+    head('phase', P.title, true);
+    main.appendChild(el('p', 'q-short', P.lead));
+    P.blocks.forEach(function (b) {
+      var card = el('div', 'card');
+      card.appendChild(el('h3', null, b.h));
+      if (b.text) paras(card, b.text);
+      if (b.items) {
+        var dl = el('dl', 'wh');
+        b.items.forEach(function (it) {
+          dl.appendChild(el('dt', null, it.what));
+          dl.appendChild(el('dd', null, it.why));
+        });
+        card.appendChild(dl);
+      }
+      main.appendChild(card);
+    });
+    main.appendChild(el('p', null, '<em>' + P.close + '</em>'));
+
+    // — физика как практика
+    toc.push({ h: 'Смысл' });
+    head('practice', C.practice.title);
+    paras(main, C.practice.text);
+
+    // — физика повсюду
+    head('everywhere', C.everywhere.title);
+    main.appendChild(el('p', 'q-short', C.everywhere.lead));
+    var dl = el('dl', 'wh');
+    C.everywhere.items.forEach(function (it) {
+      dl.appendChild(el('dt', null, it.where));
+      dl.appendChild(el('dd', null, it.what));
+    });
+    main.appendChild(dl);
+
+    // — слово ученику
+    var cb = el('div', 'close-block');
+    var h = el('h2', null, C.closing.title); h.id = 'closing'; cb.appendChild(h);
+    toc.push({ id: 'closing', text: C.closing.title });
+    paras(cb, C.closing.text);
+    main.appendChild(cb);
+
+    main.appendChild(el('div', 'foot-nav',
+      '<a href="/learn.html">← дерево знаний</a>' +
+      '<a href="/course.html?t=mechanics">механика</a>' +
+      '<a href="/course.html?t=thermodynamics">термодинамика</a>'));
+
+    // оглавление
+    toc.forEach(function (t) {
+      if (t.h) { nav.appendChild(el('div', 'toc-h', t.h)); return; }
+      var a = el('a', t.key ? 'key' : null, t.text); a.href = '#' + t.id; nav.appendChild(a);
+    });
+
+    // KaTeX подключён с defer — ждём, пока auto-render появится
+    (function tex(tries) {
+      if (window.renderMathInElement) {
+        renderMathInElement(root, {
+          delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false
+        });
+      } else if (tries < 40) { setTimeout(function () { tex(tries + 1); }, 50); }
+    })(0);
+  }).catch(function (e) { root.innerHTML = '<p>Не удалось загрузить данные: ' + e + '</p>'; });
+})();
+</script>
+<script src="/js/icons.js?v=2"></script>
+
+<script>
+// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.querySelector('.top-bar, .topnav');
+  if (!bar || document.getElementById('course-langs')) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'langs'; wrap.id = 'course-langs';
+  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+    var a = document.createElement('a');
+    a.href = '?lang=' + l;
+    a.textContent = l.toUpperCase();
+    if (l === window.B42_LANG) a.className = 'active';
+    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
+    wrap.appendChild(a);
+  });
+  bar.appendChild(wrap);
+});
+</script>
+<script src="/js/course-i18n.js?v=1"></script>
+</body>
+</html>

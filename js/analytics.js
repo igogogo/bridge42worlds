@@ -42,6 +42,204 @@
     ar: { tab: 'تحليق', fs: 'ملء الشاشة', speed: 'السرعة', hint: 'وجّه للدوران · العجلة/المنزلق للسرعة · انقر النجمة في المنتصف لفتحها',
           intro: 'أنت <b>تحلّق عبر كوننا من المقالات</b>. كل نجمة بحث؛ كلما زاد سطوعها اقتربت. وجّه بالفأرة أو الإصبع، وغيّر السرعة بالعجلة أو المنزلق. صوّب نحو النجمة في المنتصف لتراها وانقر لفتحها.' }
   })[LANG] || { tab: 'Fly', fs: 'fullscreen', speed: 'speed', hint: 'steer · wheel = speed · click centre star', intro: '' };
+  var HEAT = ({
+    ru: { tab: 'Тепло', hint: 'тяни — вращать · колесо — приблизить',
+          intro: 'Тепловой <b>ландшафт проекта</b>: по одной оси — тематические группы, по другой — месяцы. Чем выше и ярче столбик, тем больше статей вышло по этой теме в этот месяц. Тяни, чтобы покрутить.' },
+    en: { tab: 'Heat', hint: 'drag to rotate · wheel to zoom',
+          intro: 'A heat <b>landscape of the project</b>: one axis is topic groups, the other is months. The taller and brighter the bar, the more articles came out on that topic that month. Drag to rotate.' },
+    es: { tab: 'Calor', hint: 'arrastra para girar · rueda para acercar',
+          intro: 'Un <b>paisaje térmico del proyecto</b>: un eje son los grupos temáticos, el otro los meses. Cuanto más alta y brillante la barra, más artículos hubo. Arrastra para girar.' },
+    ar: { tab: 'الحرارة', hint: 'اسحب للتدوير · العجلة للتقريب',
+          intro: 'تضاريس حرارية <b>للمشروع</b>: محور للمجموعات الموضوعية وآخر للأشهر. كلما ارتفع العمود وسطع، زادت المقالات في ذلك الشهر. اسحب للتدوير.' }
+  })[LANG] || { tab: 'Heat', hint: 'drag to rotate', intro: '' };
+
+  // Новые представления (идеи владельца 2026-07-27): «замкнутое множество, покрутить», лист Мёбиуса.
+  var VIEWS = ({
+    ru: {
+      sphere: 'Сфера', mobius: 'Мёбиус', matrix: 'Связи',
+      sphereIntro: 'Всё знание проекта на <b>одной сфере</b>: понятия, законы и учёные разложены так, что близкое по смыслу оказалось рядом. Это <b>замкнутое множество</b> — у знания нет края, поверхность возвращается к себе. Крути глобус и смотри, какие материки образовались.',
+      mobiusIntro: 'Наши статьи на <b>ленте Мёбиуса</b>. У неё одна сторона: идёшь вперёд — и возвращаешься к началу, только перевёрнутым. Так и с наукой: путь по «внешней» стороне незаметно выводит на «внутреннюю». Цвет — тематическая группа, лента закручена по времени.',
+      matrixIntro: 'Квадрат <b>понятие × понятие</b>: чем ярче клетка, тем чаще два понятия встречаются в одной статье. Плотные квадраты вдоль диагонали — это области науки. А одинокие яркие точки вдали от диагонали — <b>мосты между дисциплинами</b>, самое интересное, что у нас есть.',
+      hint: 'тяни — вращать · колесо — приблизить · наведи на точку'
+    },
+    en: {
+      sphere: 'Sphere', mobius: 'Möbius', matrix: 'Links',
+      sphereIntro: 'All the project’s knowledge on <b>one sphere</b>: concepts, laws and scientists arranged so that related things sit together. A <b>closed set</b> — knowledge has no edge, the surface returns to itself. Spin the globe and see which continents formed.',
+      mobiusIntro: 'Our articles on a <b>Möbius strip</b>. It has one side: go forward and you return to the start, flipped. Science works the same way — the “outer” path quietly becomes the inner one. Colour is the topic group; the strip is wound by time.',
+      matrixIntro: 'A <b>concept × concept</b> grid: the brighter the cell, the more often two ideas appear in one article. Dense squares along the diagonal are fields of science. Lone bright dots far from it are <b>bridges between disciplines</b> — the most interesting thing we have.',
+      hint: 'drag to rotate · wheel to zoom · hover a point'
+    },
+    es: {
+      sphere: 'Esfera', mobius: 'Möbius', matrix: 'Enlaces',
+      sphereIntro: 'Todo el conocimiento en <b>una esfera</b>: conceptos, leyes y científicos colocados de modo que lo afín quede junto. Un <b>conjunto cerrado</b>: el saber no tiene borde. Gira el globo y mira qué continentes se formaron.',
+      mobiusIntro: 'Nuestros artículos en una <b>cinta de Möbius</b>. Tiene una sola cara: avanzas y vuelves al inicio, del revés. Así es la ciencia. El color es el grupo temático.',
+      matrixIntro: 'Una malla <b>concepto × concepto</b>: cuanto más brillante la celda, más veces aparecen juntos. Los cuadros densos son campos; los puntos aislados, <b>puentes entre disciplinas</b>.',
+      hint: 'arrastra para rotar · rueda para acercar'
+    },
+    ar: {
+      sphere: 'الكرة', mobius: 'موبيوس', matrix: 'الروابط',
+      sphereIntro: 'كل معرفة المشروع على <b>كرة واحدة</b>: المفاهيم والقوانين والعلماء موزّعون بحيث يتجاور المتقارب. إنها <b>مجموعة مغلقة</b> — لا حافة للمعرفة. أدر الكرة وانظر أي قارات تشكّلت.',
+      mobiusIntro: 'مقالاتنا على <b>شريط موبيوس</b>. له وجه واحد: تمضي قدمًا فتعود إلى البداية مقلوبًا. هكذا هو العلم. اللون يدل على المجموعة الموضوعية.',
+      matrixIntro: 'شبكة <b>مفهوم × مفهوم</b>: كلما سطعت الخلية زاد ورودهما معًا. المربعات الكثيفة حقول علمية، والنقاط المنعزلة <b>جسور بين التخصصات</b>.',
+      hint: 'اسحب للتدوير · العجلة للتقريب'
+    }
+  })[LANG] || null;
+  var V = VIEWS || { sphere: 'Sphere', mobius: 'Mobius', matrix: 'Links',
+                     sphereIntro: '', mobiusIntro: '', matrixIntro: '', hint: 'drag to rotate' };
+
+
+  var V2 = ({
+    ru: { tree: 'Дерево', spectrum: 'Ритм',
+          treeIntro: 'Знание <b>упорядоченным деревом</b>, а не клубком связей: от ствола расходятся ветви-направления, на каждой — листья-статьи. Ветви подписаны именами, которые дал им ИИ, и отсортированы по весу: сверху то, чем проект богат, снизу — тонкие места.',
+          specIntro: 'Есть ли у науки <b>ритм</b>? Это периодограмма Ломба-Скаргла — метод из астрономии для рядов с пропусками (в какие-то дни статей нет вовсе). По горизонтали период в днях, по вертикали сила повтора. Пики показывают, с какой периодичностью в нашем архиве всплывают публикации.' },
+    en: { tree: 'Tree', spectrum: 'Rhythm',
+          treeIntro: 'Knowledge as an <b>ordered tree</b> rather than a tangle: branches are directions, leaves are articles. Branch names come from AI, sorted by weight — the rich topics on top, thin ones below.',
+          specIntro: 'Does science have a <b>rhythm</b>? A Lomb-Scargle periodogram — an astronomy method for uneven series (some days have no papers). X is period in days, Y is the strength of repetition. Peaks show how often publications surface in our archive.' },
+    es: { tree: 'Árbol', spectrum: 'Ritmo',
+          treeIntro: 'El conocimiento como <b>árbol ordenado</b>: las ramas son direcciones, las hojas artículos. Los nombres los da la IA y se ordenan por peso.',
+          specIntro: '¿Tiene ritmo la ciencia? Periodograma de Lomb-Scargle, método astronómico para series irregulares. X: periodo en días; Y: fuerza de repetición.' },
+    ar: { tree: 'الشجرة', spectrum: 'الإيقاع',
+          treeIntro: 'المعرفة على هيئة <b>شجرة مرتّبة</b> لا شبكة متشابكة: الأفرع اتجاهات والأوراق مقالات. أسماء الأفرع من الذكاء الاصطناعي، مرتّبة حسب الوزن.',
+          specIntro: 'هل للعلم <b>إيقاع</b>؟ مخطط لومب-سكارغل الدوري، وهو أسلوب فلكي للسلاسل غير المنتظمة. الأفقي: الدورة بالأيام، الرأسي: قوة التكرار.' }
+  })[LANG] || { tree: 'Tree', spectrum: 'Rhythm', treeIntro: '', specIntro: '' };
+
+
+  var V3 = ({
+    ru: { tab: 'Напряжение',
+          intro: 'Самое интересное в науке — не там, где много работ, а там, где области <b>сцепляются</b>. Слева — <b>мосты</b>: понятия из разных групп, которые постоянно встречаются в одних статьях. Справа — <b>разрывы</b>: области, где у нас много материала, но общего понятия между ними нет. Разрыв это не ошибка, а подсказка, куда расти.',
+          bridges: 'Мосты между областями', gaps: 'Разрывы: связь напрашивается, но не названа',
+          leads: 'что к нему ведёт' },
+    en: { tab: 'Tension',
+          intro: 'The interesting part of science is not where papers pile up, but where fields <b>lock together</b>. Left — <b>bridges</b>: concepts from different groups that keep appearing in the same articles. Right — <b>gaps</b>: areas rich in material but with no shared concept between them. A gap is not an error, it is a hint where to grow.',
+          bridges: 'Bridges between fields', gaps: 'Gaps: a link begs to exist but is unnamed',
+          leads: 'what leads to it' },
+    es: { tab: 'Tensión',
+          intro: 'Lo interesante no está donde hay muchos trabajos, sino donde los campos <b>se enganchan</b>. Izquierda: <b>puentes</b>. Derecha: <b>vacíos</b>, áreas ricas sin concepto común.',
+          bridges: 'Puentes entre campos', gaps: 'Vacíos: falta el concepto que une', leads: 'qué lleva a él' },
+    ar: { tab: 'التوتر',
+          intro: 'الأهم ليس حيث تكثر الأبحاث بل حيث <b>تتشابك</b> المجالات. يسارًا <b>الجسور</b>، ويمينًا <b>الفجوات</b>: مجالات غنية بلا مفهوم يجمعها.',
+          bridges: 'جسور بين المجالات', gaps: 'فجوات: رابط ينقصه الاسم', leads: 'ما يقود إليه' }
+  })[LANG] || { tab: 'Tension', intro: '', bridges: 'Bridges', gaps: 'Gaps', leads: 'leads to' };
+
+
+  // ── Трактовка: что именно видно на этом виде ПРЯМО СЕЙЧАС (считается по данным) ──────────
+  var RD = ({
+    ru: { h: 'Что это значит', of: 'из', arts: 'статей', biggest: 'Самая крупная группа',
+          share: 'это {p}% архива', period: 'Самый заметный ритм — период около {n} дней',
+          periodWhy: 'значит публикации приходят волнами такой длительности, а не ровным потоком',
+          branches: 'Ветвей на дереве', thick: 'самая толстая', thin: 'самая тонкая',
+          bridge: 'Сильнейший мост между областями', gapTxt: 'Разрывов, где связь напрашивается, но понятия нет',
+          dense: 'Плотнее всего понятия связаны внутри', links: 'связей между разными областями',
+          people: 'исследователей', theorists: 'из них тяготеют к теории', spread: 'облако раскинуто на',
+          groups: 'тематических групп', noData: 'Данных пока мало для вывода.' },
+    en: { h: 'What this means', of: 'of', arts: 'articles', biggest: 'Largest group',
+          share: 'that is {p}% of the archive', period: 'Strongest rhythm — a period near {n} days',
+          periodWhy: 'so papers arrive in waves of that length rather than a steady stream',
+          branches: 'Branches on the tree', thick: 'thickest', thin: 'thinnest',
+          bridge: 'Strongest bridge between fields', gapTxt: 'Gaps where a link begs to exist but has no concept',
+          dense: 'Concepts are most tightly linked inside', links: 'links between different fields',
+          people: 'researchers', theorists: 'of them lean theoretical', spread: 'the cloud spans',
+          groups: 'topic groups', noData: 'Not enough data yet.' },
+    es: { h: 'Qué significa', of: 'de', arts: 'artículos', biggest: 'Grupo más grande',
+          share: 'es el {p}% del archivo', period: 'Ritmo más fuerte: periodo de unos {n} días',
+          periodWhy: 'los artículos llegan en oleadas de esa duración', branches: 'Ramas del árbol',
+          thick: 'la más gruesa', thin: 'la más fina', bridge: 'Puente más fuerte',
+          gapTxt: 'Vacíos sin concepto que una', dense: 'Los conceptos se enlazan más dentro de',
+          links: 'enlaces entre campos', people: 'investigadores', theorists: 'tienden a la teoría',
+          spread: 'la nube abarca', groups: 'grupos temáticos', noData: 'Aún faltan datos.' },
+    ar: { h: 'ماذا يعني هذا', of: 'من', arts: 'مقالة', biggest: 'أكبر مجموعة',
+          share: 'أي {p}% من الأرشيف', period: 'أقوى إيقاع — دورة نحو {n} يومًا',
+          periodWhy: 'أي أن الأبحاث تأتي على موجات بهذا الطول', branches: 'أفرع الشجرة',
+          thick: 'الأسمك', thin: 'الأدق', bridge: 'أقوى جسر بين المجالات',
+          gapTxt: 'فجوات ينقصها مفهوم جامع', dense: 'ترتبط المفاهيم بكثافة داخل',
+          links: 'روابط بين مجالات مختلفة', people: 'باحثًا', theorists: 'يميلون إلى النظرية',
+          spread: 'تمتد السحابة على', groups: 'مجموعات موضوعية', noData: 'البيانات غير كافية بعد.' }
+  })[LANG] || null;
+  var R = RD || { h: 'What this means', noData: '' };
+
+  function clusterTitle(c) {
+    var titles = (cache.articles && cache.articles.titles) || (state.data && state.data.titles) || {};
+    var lt = titles[c] && (titles[c][LANG] || titles[c].en);
+    return (lt && lt.title) || ('#' + c);
+  }
+
+  function reading(mode) {
+    var d = state.data || {};
+    var out = [];
+    try {
+      if (mode === 'articles' || mode === 'mobius' || mode === 'fly') {
+        var cnt = {}; (d.points || []).forEach(function (p) { cnt[p.c] = (cnt[p.c] || 0) + 1; });
+        var top = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; })[0];
+        var n = d.n || (d.points || []).length;
+        if (top != null) {
+          out.push('<b>' + R.biggest + ':</b> «' + clusterTitle(+top) + '» — ' + cnt[top] + ' ' + R.arts
+                   + ', ' + R.share.replace('{p}', Math.round(cnt[top] / Math.max(1, n) * 100)) + '.');
+          out.push(Object.keys(cnt).length + ' ' + R.groups + ' ' + R.of + ' ' + n + ' ' + R.arts + '.');
+        }
+      } else if (mode === 'authors') {
+        var pts = d.points || [];
+        var th = pts.filter(function (p) { return (p.th || 0) > 0.6; }).length;
+        out.push('<b>' + pts.length.toLocaleString() + '</b> ' + R.people + ', ' + th.toLocaleString()
+                 + ' ' + R.theorists + '.');
+      } else if (mode === 'heat') {
+        var h = state.heat;
+        if (h) {
+          var best = null;
+          Object.keys(h.cells).forEach(function (k) { if (!best || h.cells[k] > h.cells[best]) best = k; });
+          if (best) {
+            var parts = best.split('|');
+            out.push('<b>' + R.biggest + ':</b> «' + clusterTitle(+parts[0]) + '» — ' + h.cells[best]
+                     + ' ' + R.arts + ' (' + parts[1] + ').');
+          }
+        }
+      } else if (mode === 'spectrum') {
+        var sp = state.spec;
+        if (sp) {
+          var pk = sp.pts.slice().sort(function (a, b) { return b.p - a.p; })[0];
+          out.push('<b>' + R.period.replace('{n}', pk.per) + '</b> — ' + R.periodWhy + '.');
+          out.push(sp.total + ' ' + R.arts + ' ' + R.of + ' ' + sp.days + ' ' + (LANG === 'ru' ? 'дней' : 'days') + '.');
+        }
+      } else if (mode === 'tree') {
+        var tr = state.tree || [];
+        if (tr.length) {
+          out.push('<b>' + R.branches + ':</b> ' + tr.length + '. ' + R.thick + ' — «'
+                   + clusterTitle(tr[0].c) + '» (' + tr[0].items.length + '), ' + R.thin + ' — «'
+                   + clusterTitle(tr[tr.length - 1].c) + '» (' + tr[tr.length - 1].items.length + ').');
+        }
+      } else if (mode === 'tension') {
+        var tn = state.tension;
+        if (tn && tn.bridges && tn.bridges.length) {
+          var b = tn.bridges[0];
+          out.push('<b>' + R.bridge + ':</b> ' + niceLabel(b.a.id) + ' ⟷ ' + niceLabel(b.b.id) + '.');
+          out.push(tn.bridges.length + ' ' + R.links + '. ' + R.gapTxt + ': ' + tn.gaps.length + '.');
+        }
+      } else if (mode === 'sphere' || mode === 'matrix') {
+        var ents = (d.entities || []);
+        var byC = {}; ents.forEach(function (e) { byC[e.c] = (byC[e.c] || 0) + 1; });
+        var bc = Object.keys(byC).sort(function (a, b) { return byC[b] - byC[a]; })[0];
+        out.push('<b>' + ents.length + '</b> ' + (LANG === 'ru' ? 'понятий в' : 'concepts in') + ' '
+                 + Object.keys(byC).length + ' ' + R.groups + '.');
+        if (bc != null) out.push(R.dense + ' «' + clusterTitle(+bc) + '» (' + byC[bc] + ').');
+      }
+    } catch (e) { /* трактовка не должна ронять вид */ }
+    if (!out.length) return '';
+    return '<div class="an-read"><div class="an-read-h">' + R.h + '</div><p>' + out.join(' ') + '</p></div>';
+  }
+
+  // честные подсказки: где нечего вращать — не обещаем вращение
+  var HINTS = ({
+    ru: { spectrum: 'наведи на пик — период в днях', tree: 'ветви сверху — самые крупные направления',
+          tension: 'слева мосты, справа разрывы', matrix: 'ярче клетка — чаще встречаются вместе',
+          sphere: 'тяни — вращать глобус · колесо — приблизить', mobius: 'тяни — вращать ленту · колесо — приблизить' },
+    en: { spectrum: 'hover a peak — period in days', tree: 'top branches are the largest directions',
+          tension: 'bridges on the left, gaps on the right', matrix: 'brighter cell — appear together more often',
+          sphere: 'drag to spin the globe · wheel to zoom', mobius: 'drag to spin the strip · wheel to zoom' },
+    es: { spectrum: 'pasa sobre un pico', tree: 'arriba las ramas mayores', tension: 'puentes y vacíos',
+          matrix: 'celda más brillante = más coincidencias', sphere: 'arrastra para girar', mobius: 'arrastra para girar' },
+    ar: { spectrum: 'مرّر فوق القمة', tree: 'الأفرع العليا هي الأكبر', tension: 'الجسور والفجوات',
+          matrix: 'الخلية الأسطع تعني تكرارًا أكثر', sphere: 'اسحب لتدوير الكرة', mobius: 'اسحب لتدوير الشريط' }
+  })[LANG] || {};
+
   var PAL = ['#2E8AA0', '#C77F3A', '#6C5CE7', '#2FA84F', '#D64545', '#C9A227', '#5AA9C9', '#E4A860',
              '#9B7EDE', '#4CAF50', '#E06666', '#00897B', '#8E24AA', '#F4511E', '#3949AB', '#00ACC1',
              '#7CB342', '#D81B60', '#5E35B1', '#FB8C00', '#43A047', '#1E88E5', '#6D4C41', '#546E7A'];
@@ -100,10 +298,17 @@
     '<h1 class="dash-h1">' + T.title + '</h1>' +
     '<div class="an-tabs"><button class="an-tab active" data-t="articles">' + T.articles + '</button>' +
     '<button class="an-tab" data-t="authors">' + T.authors + '</button>' +
-    '<button class="an-tab" data-t="fly">✦ ' + FLY.tab + '</button></div>' +
+    '<button class="an-tab" data-t="fly"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l18-8-7 18-2.5-7.5L3 12Z"/></svg> ' + FLY.tab + '</button>' +
+    '<button class="an-tab" data-t="heat"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="13" width="4" height="7.5" rx="1"/><rect x="10" y="8" width="4" height="12.5" rx="1"/><rect x="16.5" y="4" width="4" height="16.5" rx="1"/></svg> ' + HEAT.tab + '</button>' +
+    '<button class="an-tab" data-t="sphere"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="8" ry="3.4"/><path d="M12 4c2.2 2.3 3.4 5 3.4 8s-1.2 5.7-3.4 8"/><path d="M12 4c-2.2 2.3-3.4 5-3.4 8s1.2 5.7 3.4 8"/></svg> ' + V.sphere + '</button>' +
+    '<button class="an-tab" data-t="mobius"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12c0-2.8 3.4-5 7.5-5s7.5 2.2 7.5 5-3.4 5-7.5 5-7.5-2.2-7.5-5Z"/><path d="M6.5 9.5c3 1.6 8 3.4 11 5"/></svg> ' + V.mobius + '</button>' +
+    '<button class="an-tab" data-t="matrix"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg> ' + V.matrix + '</button>' +
+    '<button class="an-tab" data-t="tree"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4"/><path d="M8 12V6h5"/><path d="M8 12v6h5"/><circle cx="15" cy="6" r="2"/><circle cx="15" cy="18" r="2"/><circle cx="4" cy="12" r="1.6"/></svg> ' + V2.tree + '</button>' +
+    '<button class="an-tab" data-t="spectrum"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18l3-6 3 9 3-13 3 8 3-4 3 6"/></svg> ' + V2.spectrum + '</button>' +
+    '<button class="an-tab" data-t="tension"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h5"/><path d="M15 12h5"/><path d="M9 8.5 12 12l-3 3.5"/><path d="M15 8.5 12 12l3 3.5"/></svg> ' + V3.tab + '</button></div>' +
     '<p class="an-intro" id="an-intro">' + T.introA + '</p>' +
     '<div class="an-stage" id="an-stage"><canvas id="an-canvas"></canvas><div class="an-hint">' + T.hint + '</div>' +
-    '<div class="an-stage-ctl"><button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '">⛶</button></div>' +
+    '<div class="an-stage-ctl"><button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button></div>' +
     '<div class="an-speed" id="an-speed"><span>' + (FLY.speed || 'speed') + '</span>' +
     '<input type="range" id="an-speed-r" min="0" max="60" value="18"></div>' +
     '<div class="an-tip" id="an-tip" hidden></div></div>' +
@@ -135,9 +340,15 @@
     var intro = document.getElementById('an-intro');
     var hintEl = document.querySelector('.an-hint');
     // «Полёт» летит по облаку статей — переиспользуем те же точки; свой intro/hint, без легенды-кластеров.
-    var dataMode = mode === 'fly' ? 'articles' : mode;
-    if (intro) intro.innerHTML = mode === 'fly' ? FLY.intro : (mode === 'authors' ? T.introB : T.introA);
-    if (hintEl) hintEl.textContent = mode === 'fly' ? FLY.hint : T.hint;
+    // сфера и матрица живут на со-встречаемости тегов, Мёбиус — на облаке статей
+    var dataMode = (mode === 'fly' || mode === 'heat' || mode === 'mobius'
+                 || mode === 'tree' || mode === 'spectrum') ? 'articles'
+                 : ((mode === 'sphere' || mode === 'matrix' || mode === 'tension') ? 'cooc' : mode);
+    var INTRO = { tension: V3.intro, tree: V2.treeIntro, spectrum: V2.specIntro,
+                  sphere: V.sphereIntro, mobius: V.mobiusIntro, matrix: V.matrixIntro,
+                  fly: FLY.intro, heat: HEAT.intro, authors: T.introB, articles: T.introA };
+    if (intro) intro.innerHTML = INTRO[mode] || T.introA;
+    if (hintEl) hintEl.textContent = HINTS[mode] || (mode === 'fly' ? FLY.hint : (mode === 'heat' ? HEAT.hint : T.hint));
     if (mode === 'fly') { state.travel = 0; state.fyaw = 0; state.fpitch = 0; state.speed = 0.0011; }
     var speedBox = document.getElementById('an-speed');
     if (speedBox) speedBox.style.display = mode === 'fly' ? 'flex' : 'none';
@@ -145,7 +356,8 @@
     if (sr && mode === 'fly') sr.value = Math.round(state.speed / 0.006 * 60);
     if (cache[dataMode]) { state.data = cache[dataMode]; prep(); return; }
     document.getElementById('an-loading').style.display = '';
-    fetch('/data/analytics/' + (dataMode === 'authors' ? 'authors-map' : 'articles-map') + '.json')
+    var FILE = { authors: 'authors-map', articles: 'articles-map', cooc: 'tags-cooc' };
+    fetch('/data/analytics/' + (FILE[dataMode] || 'articles-map') + '.json')
       .then(function (r) { return r.json(); })
       .then(function (d) { cache[dataMode] = d; state.data = d; prep(); })
       .catch(function () { document.getElementById('an-loading').textContent = '—'; });
@@ -153,6 +365,21 @@
 
   function prep() {
     document.getElementById('an-loading').style.display = 'none';
+    // Виды на со-встречаемости (сфера, связи, напряжение) приходят без поля points — там entities.
+    // Раньше строка ниже падала на них и молча ломала весь режим.
+    if (!state.data || !Array.isArray(state.data.points)) {
+      state.raw = state.data;
+      var stage = document.getElementById('an-stage');
+      if (state.mode === 'tension') {
+        buildTension(); legendEl.innerHTML = renderTension();
+        if (stage) stage.style.display = 'none';
+        return;
+      }
+      if (stage) stage.style.display = '';
+      if (state.mode === 'sphere') { buildSphere(); legendEl.innerHTML = ''; draw(); return; }
+      if (state.mode === 'matrix') { legendEl.innerHTML = ''; draw(); return; }
+      return;
+    }
     // центрируем точки в [-0.5,0.5]
     state.pts = state.data.points.map(function (p) {
       return { x: p.x - 0.5, y: p.y - 0.5, z: (p.z != null ? p.z : 0.5) - 0.5,
@@ -162,8 +389,23 @@
     var N = state.pts.length;
     state.ptScale = N > 8000 ? 0.5 : N > 4000 ? 0.7 : 1;
     state.ptAlpha = N > 8000 ? 0.5 : N > 4000 ? 0.7 : 1;
-    if (state.mode === 'fly') { legendEl.innerHTML = ''; } else { renderLegend(); }
+    if (state.mode === 'tension') { buildTension();
+      var _tnHtml = renderTension();
+      var _tnRead = reading('tension');
+      legendEl.innerHTML = _tnHtml + (_tnRead || '');
+      document.getElementById('an-stage').style.display = 'none'; return; }
+    document.getElementById('an-stage').style.display = '';
+    if (state.mode === 'tree') { buildTree(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'spectrum') { buildSpectrum(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'sphere') { state.raw = state.data; buildSphere(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'mobius') { buildMobius(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'matrix') { state.raw = state.data; legendEl.innerHTML = ''; }
+    else if (state.mode === 'heat') { buildHeat(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'fly') { legendEl.innerHTML = ''; }
+    else { renderLegend(); }
     draw();
+    var rd = reading(state.mode);
+    if (rd) legendEl.innerHTML = legendEl.innerHTML + rd;
   }
 
   function colorOf(p) {
@@ -226,10 +468,362 @@
     ctx.moveTo(cxp + 15, cyp); ctx.lineTo(cxp + 20, cyp); ctx.stroke();
   }
 
+  // ── Тепловой 3D-ландшафт: тема (кластер) × месяц, высота = число статей ──
+  function buildHeat() {
+    var months = {}, cells = {}, maxV = 0;
+    (state.data.points || []).forEach(function (p) {
+      var ym = (p.d || '').slice(0, 7); if (!ym) return;
+      months[ym] = 1;
+      var k = p.c + '|' + ym;
+      cells[k] = (cells[k] || 0) + 1;
+      if (cells[k] > maxV) maxV = cells[k];
+    });
+    var ms = Object.keys(months).sort();
+    var cs = Object.keys(state.data.clusters || {}).map(Number).sort(function (a, b) { return a - b; });
+    state.heat = { ms: ms, cs: cs, cells: cells, max: maxV || 1 };
+    state.zoom = 1;
+  }
+  function drawHeat() {
+    var h = state.heat; if (!h || !h.ms.length) return;
+    ctx.clearRect(0, 0, state.W, state.H);
+    var nx = h.ms.length, nz = h.cs.length;
+    var bars = [];
+    for (var i = 0; i < nx; i++) {
+      for (var j = 0; j < nz; j++) {
+        var v = h.cells[h.cs[j] + '|' + h.ms[i]] || 0;
+        if (!v) continue;
+        var fx = (i / Math.max(1, nx - 1)) - 0.5, fz = (j / Math.max(1, nz - 1)) - 0.5;
+        var hh = (v / h.max) * 0.55;
+        var base = project({ x: fx, y: 0.28, z: fz });
+        var top = project({ x: fx, y: 0.28 - hh, z: fz });
+        bars.push({ b: base, t: top, v: v, c: h.cs[j], depth: base.depth, w: Math.max(2, 26 / Math.max(nx, 8) * base.r * 4) });
+      }
+    }
+    bars.sort(function (a, b) { return b.depth - a.depth; });
+    bars.forEach(function (q) {
+      var col = PAL[q.c % PAL.length];
+      var inten = 0.35 + 0.65 * (q.v / h.max);
+      ctx.globalAlpha = Math.max(0.25, Math.min(1, inten));
+      ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, q.w);
+      ctx.beginPath(); ctx.moveTo(q.b.sx, q.b.sy); ctx.lineTo(q.t.sx, q.t.sy); ctx.stroke();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(q.t.sx, q.t.sy, Math.max(1.5, q.w * 0.55), 0, 6.283); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+
+  // ── Сфера знания: понятия/законы/учёные на замкнутой поверхности ──────────────────────────
+  // Раскладка Фибоначчи даёт равномерное покрытие, а угол закреплён за кластером — так близкое
+  // по смыслу садится рядом и на глобусе проступают «материки» (владелец: «замкнутое множество»).
+  function buildSphere() {
+    var ents = (state.raw && state.raw.entities) || [];
+    var n = ents.length || 1;
+    var pts = ents.map(function (e, i) {
+      var y = 1 - (i / Math.max(1, n - 1)) * 2;
+      var r = Math.sqrt(Math.max(0, 1 - y * y));
+      var golden = Math.PI * (3 - Math.sqrt(5));
+      var th = golden * i + (e.c || 0) * 0.7;      // сдвиг по кластеру — группируем родственное
+      return { x: Math.cos(th) * r * 0.5, y: y * 0.5, z: Math.sin(th) * r * 0.5,
+               c: e.c || 0, label: niceLabel(e.id), id: e.id, w: e.n || 1 };
+    });
+    state.pts = pts;
+    state.ptScale = 1; state.ptAlpha = 1; state.zoom = 1.15;
+  }
+
+  // ── Лист Мёбиуса: у ленты одна сторона — пройдя круг, возвращаешься перевёрнутым ───────────
+  function buildMobius() {
+    var src = (state.data && state.data.points) || [];
+    var n = src.length || 1;
+    var pts = src.map(function (p, i) {
+      var u = (i / n) * Math.PI * 2;                       // вдоль ленты — по порядку (время)
+      var v = ((p.c % 7) / 6 - 0.5) * 0.34;                // поперёк — по кластеру
+      var R = 0.42;
+      var cu = Math.cos(u), su = Math.sin(u), h = Math.cos(u / 2), s2 = Math.sin(u / 2);
+      return { x: (R + v * h) * cu, y: v * s2, z: (R + v * h) * su,
+               c: p.c, label: p.t || p.id, url: p.url, id: p.id };
+    });
+    state.pts = pts;
+    state.ptScale = 0.8; state.ptAlpha = 0.85; state.zoom = 1.25;
+  }
+
+  // ── Тепловая матрица связей: понятие × понятие ────────────────────────────────────────────
+  function drawMatrix() {
+    var ents = (state.raw && state.raw.entities) || [];
+    if (!ents.length) return;
+    var m = Math.min(ents.length, 60);
+    var list = ents.slice(0, m);
+    var idx = {}; list.forEach(function (e, i) { idx[e.id] = i; });
+    var W = state.W, H = state.H, pad = 8;
+    var cell = Math.max(3, Math.floor((Math.min(W, H) - pad * 2) / m));
+    var ox = (W - cell * m) / 2, oy = (H - cell * m) / 2;
+    ctx.clearRect(0, 0, W, H);
+    list.forEach(function (e, i) {
+      (e.nb || []).forEach(function (nb) {
+        var j = idx[nb[0]];
+        if (j == null) return;
+        var v = Math.min(1, nb[1] * 3);
+        ctx.fillStyle = PAL[e.c % PAL.length];
+        ctx.globalAlpha = 0.12 + v * 0.88;
+        ctx.fillRect(ox + j * cell, oy + i * cell, cell - 1, cell - 1);
+        ctx.fillRect(ox + i * cell, oy + j * cell, cell - 1, cell - 1);
+      });
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = PAL[e.c % PAL.length];
+      ctx.fillRect(ox + i * cell, oy + i * cell, cell - 1, cell - 1);   // диагональ
+    });
+    ctx.globalAlpha = 1;
+    state.matrix = { list: list, cell: cell, ox: ox, oy: oy, m: m };
+  }
+
+
+  // ── Каркасы форм: без них все виды выглядят одинаковой россыпью точек ────────────────────
+  function strokeWire(pts3, close, alpha) {
+    if (pts3.length < 2) return;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    for (var i = 0; i < pts3.length; i++) {
+      var pr = project(pts3[i]);
+      if (i === 0) ctx.moveTo(pr.sx, pr.sy); else ctx.lineTo(pr.sx, pr.sy);
+    }
+    if (close) ctx.closePath();
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawGlobeWire() {
+    ctx.strokeStyle = 'rgba(140,150,160,.34)';
+    ctx.lineWidth = 1;
+    var R = 0.5, i, j, ring;
+    for (j = -2; j <= 2; j++) {                       // параллели
+      var y = j * 0.19, r = Math.sqrt(Math.max(0.001, R * R - y * y));
+      ring = [];
+      for (i = 0; i <= 48; i++) {
+        var a = i / 48 * Math.PI * 2;
+        ring.push({ x: Math.cos(a) * r, y: y, z: Math.sin(a) * r });
+      }
+      strokeWire(ring, true, j === 0 ? 0.5 : 0.28);
+    }
+    for (j = 0; j < 6; j++) {                          // меридианы
+      var ph = j / 6 * Math.PI;
+      ring = [];
+      for (i = 0; i <= 48; i++) {
+        var b = i / 48 * Math.PI * 2;
+        ring.push({ x: Math.cos(b) * R * Math.cos(ph), y: Math.sin(b) * R, z: Math.cos(b) * R * Math.sin(ph) });
+      }
+      strokeWire(ring, true, 0.22);
+    }
+  }
+
+  function drawMobiusWire() {
+    // сама лента: два края + перемычки, чтобы читалась поверхность с одной стороной
+    ctx.strokeStyle = 'rgba(140,150,160,.4)';
+    ctx.lineWidth = 1;
+    var R = 0.42, w = 0.17, edgeA = [], edgeB = [], i, u, h, s2, cu, su;
+    for (i = 0; i <= 160; i++) {
+      u = i / 160 * Math.PI * 2;
+      cu = Math.cos(u); su = Math.sin(u); h = Math.cos(u / 2); s2 = Math.sin(u / 2);
+      edgeA.push({ x: (R + w * h) * cu, y: w * s2, z: (R + w * h) * su });
+      edgeB.push({ x: (R - w * h) * cu, y: -w * s2, z: (R - w * h) * su });
+    }
+    strokeWire(edgeA, false, 0.55);
+    strokeWire(edgeB, false, 0.55);
+    ctx.globalAlpha = 0.2;
+    for (i = 0; i < edgeA.length; i += 8) {
+      var a = project(edgeA[i]), b = project(edgeB[i]);
+      ctx.beginPath(); ctx.moveTo(a.sx, a.sy); ctx.lineTo(b.sx, b.sy); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // ── Дерево знаний: упорядоченная иерархия, а не граф (владелец 2026-07-27) ───────────────
+  // Область науки → раздел → понятия. Растёт слева направо, ветви подписаны.
+  function buildTree() {
+    var src = (state.data && state.data.points) || [];
+    var groups = {};
+    src.forEach(function (p) {
+      var c = String(p.c);
+      (groups[c] = groups[c] || []).push(p);
+    });
+    state.tree = Object.keys(groups).sort(function (a, b) { return groups[b].length - groups[a].length; })
+      .slice(0, 14).map(function (c) { return { c: +c, items: groups[c] }; });
+  }
+
+  function drawTree() {
+    var tr = state.tree || [];
+    if (!tr.length) return;
+    ctx.clearRect(0, 0, state.W, state.H);
+    var titles = (state.data && state.data.titles) || {};
+    var padL = 14, padT = 18, rowH = Math.max(20, Math.min(34, (state.H - padT * 2) / tr.length));
+    var x0 = padL, x1 = state.W * 0.38, x2 = state.W - 16;
+    ctx.textBaseline = 'middle';
+    tr.forEach(function (br, i) {
+      var y = padT + i * rowH + rowH / 2;
+      var col = PAL[br.c % PAL.length];
+      // ствол → ветвь
+      ctx.strokeStyle = col; ctx.globalAlpha = 0.5; ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(x0, state.H / 2);
+      ctx.bezierCurveTo(x0 + 40, state.H / 2, x1 - 60, y, x1, y);
+      ctx.stroke();
+      // листья — статьи ветви
+      ctx.globalAlpha = 0.85;
+      var n = Math.min(br.items.length, Math.floor((x2 - x1) / 7));
+      for (var k = 0; k < n; k++) {
+        var lx = x1 + 8 + k * 7, r = 2.1;
+        ctx.fillStyle = col;
+        ctx.globalAlpha = 0.35 + 0.5 * (k / Math.max(1, n));
+        ctx.beginPath(); ctx.arc(lx, y, r, 0, 6.283); ctx.fill();
+      }
+      // подпись ветви — человеческое имя кластера от ИИ
+      var lt = titles[br.c] && (titles[br.c][LANG] || titles[br.c].en);
+      var label = (lt && lt.title) || ('#' + br.c);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text') || '#333';
+      ctx.font = '11px ' + (getComputedStyle(document.body).getPropertyValue('--mono') || 'monospace');
+      ctx.textAlign = 'right';
+      ctx.fillText(label.slice(0, 26) + '  ' + br.items.length, x1 - 6, y);
+    });
+    ctx.globalAlpha = 1; ctx.textAlign = 'left';
+  }
+
+  // ── Статистика: спектр публикационной активности (Фурье) и периодограмма Ломба-Скаргла ──
+  // Ряд неравномерный (в какие-то дни статей нет), поэтому Ломб-Скаргл честнее обычного Фурье —
+  // он для неравномерных выборок и как раз пришёл из астрономии.
+  function buildSpectrum() {
+    var src = (state.data && state.data.points) || [];
+    var byDay = {};
+    src.forEach(function (p) { if (p.d) byDay[p.d] = (byDay[p.d] || 0) + 1; });
+    var days = Object.keys(byDay).sort();
+    if (days.length < 8) { state.spec = null; return; }
+    var t0 = new Date(days[0]).getTime();
+    var ts = days.map(function (d) { return (new Date(d).getTime() - t0) / 86400000; });
+    var ys = days.map(function (d) { return byDay[d]; });
+    var mean = ys.reduce(function (a, b) { return a + b; }, 0) / ys.length;
+    var varr = ys.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / Math.max(1, ys.length - 1);
+
+    var out = [];
+    for (var per = 2; per <= 200; per += 1) {          // период в днях
+      var w = 2 * Math.PI / per;
+      var s2 = 0, c2 = 0, k;
+      for (k = 0; k < ts.length; k++) { s2 += Math.sin(2 * w * ts[k]); c2 += Math.cos(2 * w * ts[k]); }
+      var tau = Math.atan2(s2, c2) / (2 * w);
+      var cs = 0, ss = 0, cc = 0, sss = 0;
+      for (k = 0; k < ts.length; k++) {
+        var dt = ts[k] - tau, C = Math.cos(w * dt), S = Math.sin(w * dt), yv = ys[k] - mean;
+        cs += yv * C; ss += yv * S; cc += C * C; sss += S * S;
+      }
+      var power = 0.5 * ((cc ? cs * cs / cc : 0) + (sss ? ss * ss / sss : 0)) / Math.max(1e-9, varr);
+      out.push({ per: per, p: power });
+    }
+    var mx = out.reduce(function (a, b) { return b.p > a ? b.p : a; }, 0.0001);
+    out.forEach(function (o) { o.p /= mx; });
+    state.spec = { pts: out, days: days.length, total: ys.reduce(function (a, b) { return a + b; }, 0) };
+  }
+
+  function drawSpectrum() {
+    var sp = state.spec;
+    ctx.clearRect(0, 0, state.W, state.H);
+    if (!sp) return;
+    var padL = 40, padB = 28, padT = 16, padR = 12;
+    var W = state.W - padL - padR, H = state.H - padT - padB;
+    // оси
+    ctx.strokeStyle = 'rgba(140,150,160,.45)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + H); ctx.lineTo(padL + W, padT + H); ctx.stroke();
+    // кривая мощности
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--cyan') || '#2E8AA0';
+    ctx.lineWidth = 1.6; ctx.beginPath();
+    sp.pts.forEach(function (o, i) {
+      var x = padL + (i / (sp.pts.length - 1)) * W, y = padT + H - o.p * H;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    // пики
+    var top = sp.pts.slice().sort(function (a, b) { return b.p - a.p; }).slice(0, 3);
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--ochre') || '#C77F3A';
+    ctx.font = '11px ' + (getComputedStyle(document.body).getPropertyValue('--mono') || 'monospace');
+    top.forEach(function (o) {
+      var i = sp.pts.indexOf(o);
+      var x = padL + (i / (sp.pts.length - 1)) * W, y = padT + H - o.p * H;
+      ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 6.283); ctx.fill();
+      ctx.fillText(o.per + ' дн', Math.min(x + 6, state.W - 46), Math.max(12, y - 6));
+    });
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--soft') || '#888';
+    ctx.fillText('период, дни →', padL + 4, state.H - 8);
+  }
+
+
+  // ── Напряжение: мосты между областями и разрывы там, где связь напрашивается ─────────────
+  function buildTension() {
+    var ents = ((state.data && state.data.entities) || []);
+    var by = {};
+    ents.forEach(function (e) { by[e.id] = e; });
+
+    var seen = {}, bridges = [];
+    ents.forEach(function (e) {
+      (e.nb || []).forEach(function (nb) {
+        var o = by[nb[0]];
+        if (!o || o.c === e.c) return;                   // мост — только между РАЗНЫМИ группами
+        var key = [e.id, o.id].sort().join('|');
+        if (seen[key]) return;
+        seen[key] = 1;
+        bridges.push({ a: e, b: o, w: nb[1] });
+      });
+    });
+    bridges.sort(function (x, y) { return y.w - x.w; });
+
+    // разрывы: крупные группы, между которыми НЕТ ни одного моста
+    var size = {}, linked = {};
+    ents.forEach(function (e) { size[e.c] = (size[e.c] || 0) + (e.n || 1); });
+    bridges.forEach(function (b) { linked[[b.a.c, b.b.c].sort().join('|')] = 1; });
+    var cs = Object.keys(size).map(Number).sort(function (a, b) { return size[b] - size[a]; }).slice(0, 6);
+    var gaps = [];
+    for (var i = 0; i < cs.length; i++) {
+      for (var j = i + 1; j < cs.length; j++) {
+        if (!linked[[cs[i], cs[j]].sort().join('|')]) {
+          gaps.push({ a: cs[i], b: cs[j], w: size[cs[i]] + size[cs[j]] });
+        }
+      }
+    }
+    gaps.sort(function (x, y) { return y.w - x.w; });
+    state.tension = { bridges: bridges.slice(0, 12), gaps: gaps.slice(0, 5), by: by };
+  }
+
+  function renderTension() {
+    var d = state.tension;
+    if (!d) return '';
+    var titles = (cache.articles && cache.articles.titles) || {};
+    function clusterName(c) {
+      var lt = titles[c] && (titles[c][LANG] || titles[c].en);
+      return (lt && lt.title) || ('#' + c);
+    }
+    var br = d.bridges.map(function (b) {
+      var pct = Math.round(b.w * 100);
+      return '<div class="tn-row"><span class="tn-bar" style="width:' + Math.max(8, pct * 2) + 'px;background:'
+        + PAL[b.a.c % PAL.length] + '"></span>'
+        + '<span class="tn-n">' + niceLabel(b.a.id) + '</span>'
+        + '<span class="tn-x">⟷</span>'
+        + '<span class="tn-n">' + niceLabel(b.b.id) + '</span>'
+        + '<span class="tn-w">' + pct + '</span></div>';
+    }).join('');
+    var gp = d.gaps.map(function (g) {
+      return '<div class="tn-gap"><b>' + clusterName(g.a) + '</b><span class="tn-x">✕</span><b>'
+        + clusterName(g.b) + '</b><span class="tn-w">' + g.w + '</span></div>';
+    }).join('');
+    return '<div class="tn-wrap"><div class="tn-col"><div class="tn-h">' + V3.bridges + '</div>' + br + '</div>'
+      + '<div class="tn-col"><div class="tn-h">' + V3.gaps + '</div>' + gp + '</div></div>';
+  }
+
   function draw() {
     if (!state.pts) return;
+    if (state.mode === 'matrix') { drawMatrix(); return; }
+    if (state.mode === 'tree') { drawTree(); return; }
+    if (state.mode === 'spectrum') { drawSpectrum(); return; }
+    if (state.mode === 'heat') { drawHeat(); return; }
     if (state.mode === 'fly') { drawFly(); return; }
     ctx.clearRect(0, 0, state.W, state.H);
+    if (state.mode === 'sphere') drawGlobeWire();
+    if (state.mode === 'mobius') drawMobiusWire();
     var proj = state.pts.map(function (p, i) { var pr = project(p); pr.i = i; pr.color = colorOf(p); return pr; });
     proj.sort(function (a, b) { return a.depth - b.depth; }); // дальние сначала
     for (var k = 0; k < proj.length; k++) {

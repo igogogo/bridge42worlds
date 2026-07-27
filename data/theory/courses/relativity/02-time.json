@@ -1,0 +1,1571 @@
+{
+  "id": "02-time",
+  "topic": "relativity",
+  "schema": "b42.lesson/1",
+  "model": "srt",
+  "entities": {
+    "laws": [
+      "special_relativity"
+    ],
+    "tags": [
+      "relativity"
+    ],
+    "scientists": [
+      "Albert Einstein"
+    ]
+  },
+  "ru": {
+    "title": "Время и длина",
+    "subtitle": "Параграф 2 · Движущиеся часы отстают, движущиеся линейки короче",
+    "intro": [
+      "В 1971 году двое учёных купили билеты на обычные рейсы гражданской авиации — и ещё несколько билетов для чемоданов с атомными часами. Облетели Землю на восток, потом на запад, вернулись и сравнили показания с часами Морской обсерватории. Разошлись на десятки наносекунд, ровно на предсказанную величину.",
+      "Эксперимент Хафеле и Китинга обошёлся дешевле большинства физических опытов и проверил самое дикое утверждение теории: время не универсально. Оно течёт по-разному для разных наблюдателей, и разница измерима обычными приборами на обычных самолётах.",
+      "В этом параграфе разберём оба эффекта — замедление времени и сокращение длины, — и увидим, что это не два разных явления, а одно, увиденное с двух сторон. И заодно поймём, почему знаменитый парадокс близнецов вовсе не парадокс."
+    ],
+    "standNote": "Ползунок скорости управляет обоими эффектами сразу — числа под сценой показывают, сколько отсчитают движущиеся часы и какой станет движущаяся линейка. Проверьте важное: произведение этих поправок остаётся постоянным. Время растягивается во столько же раз, во сколько сжимается длина, и это не совпадение. Пройдите весь диапазон и обратите внимание, где кривая γ начинает загибаться вверх: примерно после 0,7 скорости света эффекты перестают быть поправками и становятся главными.",
+    "formula": {
+      "name": "Преобразования Лоренца",
+      "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\gamma = \\frac{1}{\\sqrt{1-v^{2}/c^{2}}}",
+      "alsoKnown": "Замедление времени и лоренцево сокращение",
+      "authors": [
+        {
+          "who": "Джордж Фицджеральд",
+          "year": "1889",
+          "what": "первым предположил сокращение длины, чтобы объяснить нулевой результат Майкельсона. Идея была догадкой без обоснования — но угаданная формула оказалась верной"
+        },
+        {
+          "who": "Хендрик Лоренц",
+          "year": "1892",
+          "what": "вывел ту же формулу из электродинамики и ввёл понятие местного времени как вспомогательной математической величины. Считал его удобным приёмом, а не настоящим временем"
+        },
+        {
+          "who": "Альберт Эйнштейн",
+          "year": "1905",
+          "what": "объяснил, что местное время Лоренца и есть настоящее время движущегося наблюдателя, а сокращение не результат сжатия тела силами, а свойство измерения длины в движущейся системе"
+        },
+        {
+          "who": "Брюно Росси и Дэвид Холл",
+          "year": "1941",
+          "what": "измерили поток мюонов на вершине горы Вашингтон и у её подножия. Разница потоков подтвердила замедление времени количественно — первая прямая проверка на природном источнике"
+        },
+        {
+          "who": "Джозеф Хафеле и Ричард Китинг",
+          "year": "1971",
+          "what": "провезли атомные часы вокруг света на рейсовых самолётах и получили расхождение с наземными в согласии с расчётом. Стоимость опыта — восемь тысяч долларов, в основном на билеты"
+        }
+      ],
+      "story": "Опыт Хафеле и Китинга замечателен своей будничностью. Часы летели пассажирами, для них купили отдельные места, и в полётном журнале они значились как «мистер Часы». Расчёт включал два эффекта разного знака: замедление от скорости и ускорение хода от более слабого тяготения на высоте — второй эффект относится уже к общей теории относительности. При полёте на восток, по вращению Земли, скорость относительно неподвижной системы больше, при полёте на запад меньше, поэтому и результаты вышли разные: на восток часы отстали на 59 наносекунд, на запад ушли вперёд на 273. Оба числа совпали с предсказанием в пределах погрешности. С тех пор опыт повторяли многократно с растущей точностью.",
+      "symbols": [
+        {
+          "sym": "dt0",
+          "latex": "\\Delta t_0",
+          "what": "собственное время",
+          "unit": "с",
+          "note": "промежуток, измеренный часами, покоящимися относительно события; он всегда наименьший"
+        },
+        {
+          "sym": "dt",
+          "latex": "\\Delta t",
+          "what": "время в лабораторной системе",
+          "unit": "с",
+          "note": "то, что показывают часы наблюдателя, мимо которого движется объект"
+        },
+        {
+          "sym": "L0",
+          "latex": "L_0",
+          "what": "собственная длина",
+          "unit": "м",
+          "note": "длина, измеренная в системе, где предмет покоится; она всегда наибольшая"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "длина в лабораторной системе",
+          "unit": "м",
+          "note": "сокращается только вдоль движения; поперечные размеры не меняются"
+        },
+        {
+          "sym": "gamma2",
+          "latex": "\\gamma",
+          "what": "лоренц-фактор",
+          "unit": "—",
+          "note": "одно число управляет обоими эффектами: время умножается на него, длина делится"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Строгий вывод: сокращение длины как следствие замедления времени",
+      "lead": "Замедление времени мы уже получили из световых часов. Покажем, что сокращение длины следует из него автоматически — иначе два наблюдателя разошлись бы в том, что произошло.",
+      "steps": [
+        {
+          "text": "Возьмём результат прошлого параграфа. Часы, движущиеся относительно наблюдателя, идут медленнее — их такт растянут в $\\gamma$ раз.",
+          "latex": "\\Delta t = \\gamma\\,\\Delta t_0",
+          "figure": "isochron",
+          "figCaption": "Собственное время всегда наименьшее: любой другой наблюдатель насчитает больше."
+        },
+        {
+          "text": "Теперь измерим длину. Пусть мимо наблюдателя летит стержень; он засекает время между прохождением переднего и заднего концов и умножает на скорость. Это честный способ измерения — им пользуются в ускорителях.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}}",
+          "figure": "vline",
+          "figCaption": "Длина движущегося тела определяется по времени пролёта мимо одной точки."
+        },
+        {
+          "text": "А теперь посмотрим на то же самое из системы стержня. Там он покоится и имеет собственную длину, а мимо него летит наблюдатель. Событие «наблюдатель поравнялся с концом» происходит в разных точках стержня, но в одной точке для самого наблюдателя.",
+          "latex": "L_0 = v\\,\\Delta t_{\\text{стержня}}",
+          "figure": "inertialframe",
+          "figCaption": "Ключ ко всему выводу: два события происходят в одном месте для одного наблюдателя и в разных для другого."
+        },
+        {
+          "text": "Раз оба события случаются в одной точке для наблюдателя, его время между ними — собственное, то есть наименьшее. Значит время в системе стержня больше в $\\gamma$ раз.",
+          "latex": "\\Delta t_{\\text{стержня}} = \\gamma\\,\\Delta t_{\\text{лаб}}",
+          "figure": "secant",
+          "figCaption": "Собственным здесь оказывается время наблюдателя, а не стержня, — за этим надо следить внимательно."
+        },
+        {
+          "text": "Подставляем одно в другое и получаем сокращение длины.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}} = v\\,\\frac{\\Delta t_{\\text{стержня}}}{\\gamma} = \\frac{L_0}{\\gamma}",
+          "figure": "result",
+          "figCaption": "Сокращение длины не самостоятельный постулат, а следствие замедления времени."
+        },
+        {
+          "text": "Проверим, что сокращается только продольный размер. Поперечные размеры измеряются событиями, происходящими одновременно в обеих системах, и потому не меняются — иначе возникло бы противоречие вроде поезда, который одновременно и уже, и шире тоннеля.",
+          "latex": "L_{\\parallel} = \\frac{L_0}{\\gamma}, \\qquad L_{\\perp} = L_{\\perp 0}",
+          "figure": "frame",
+          "figCaption": "Вдоль движения сжимается, поперёк — нет. Иначе теория была бы внутренне противоречивой."
+        },
+        {
+          "text": "И парадокс близнецов. Улетевший разворачивается, то есть меняет систему отсчёта, — а оставшийся нет. Симметрия нарушается разворотом, и потому вернувшийся оказывается моложе. Проверено на атомных часах и на мюонах в накопительных кольцах.",
+          "latex": "\\Delta t_{\\text{домосед}} = \\gamma\\,\\Delta t_{\\text{путешественник}}",
+          "figure": "curves",
+          "figCaption": "Парадокса нет: ситуации не симметричны, потому что разворот испытывает только один."
+        }
+      ],
+      "plate": "Движущиеся часы отстают в $\\gamma$ раз, движущиеся линейки укорачиваются вдоль движения во столько же раз. Это не два эффекта, а один, увиденный с двух сторон.",
+      "note": "Границы применимости и постоянная путаница. Сокращение длины — не сжатие тела силами: стержень не деформируется, в нём не возникает напряжений. Речь о том, что процедура измерения длины движущегося тела требует одновременной фиксации положений двух концов, а одновременность у наблюдателей разная. Кроме того, увидеть сокращение глазом нельзя: свет от разных точек тела идёт до глаза разное время, и визуально быстро летящий куб выглядит повёрнутым, а не сплюснутым. Это заметили только в 1959 году, через полвека после создания теории."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "text": [
+        "Что такое собственное время — понятие, без которого в задачах не разобраться. Это время, измеренное часами, которые находятся при событиях, то есть не двигаются относительно них. Такое время всегда наименьшее из всех возможных. Полезное правило: спросите себя, у кого оба события происходят в одной и той же точке пространства, — у того и собственное время. У мюона это он сам: родился и распался в одном месте своей системы. У наблюдателя на Земле эти события разнесены на десять километров, и его время больше.",
+        "Почему время умножается, а длина делится. Это постоянный источник ошибок в задачах, и запомнить лучше не формулу, а смысл. Собственное время — наименьшее, значит любое другое больше: умножаем на γ, которое всегда больше единицы. Собственная длина — наибольшая, значит любая другая меньше: делим. Проверяйте себя вопросом «что здесь должно быть больше», а не пытайтесь вспомнить, где стоит γ.",
+        "Как согласуются два взгляда на мюон. Здесь удобно свести всё в одну строку. Наблюдатель на Земле: атмосфера толщиной 15 км, время жизни растянуто в 15,8 раза, мюон успевает. Сам мюон: время жизни обычное, 2,2 микросекунды, зато атмосфера сокращена в 15,8 раза и составляет меньше километра — он снова успевает. Оба считают по-разному, оба получают одно и то же. Это и есть внутренняя согласованность теории: расхождение в описании при совпадении наблюдаемого.",
+        "Отчего разворот всё меняет. В парадоксе близнецов кажется, что ситуации симметричны, но это не так. Пока оба летят равномерно, они действительно равноправны и каждый видит отстающими часы другого. Однако встретиться они смогут, только если кто-то развернётся. Разворот означает ускорение, то есть выход из инерциальной системы, — и вот здесь симметрия ломается. Формально: у оставшегося одна система отсчёта на весь путь, у улетевшего две разные, и при их склейке возникает скачок в определении одновременности. Именно этот скачок и даёт всю разницу возрастов."
+      ]
+    },
+    "example": {
+      "title": "Пример с числами: часы на спутнике и полёт к соседней звезде",
+      "lead": "Одна задача из ежедневной инженерии, вторая — из области, куда мы пока не летали.",
+      "given": "1) Спутник навигации движется со скоростью 3,9 км/с. 2) Корабль летит к Проксиме Центавра, до которой 4,2 светового года, со скоростью 0,95 c. Найти суточное отставание часов спутника и время полёта по часам экипажа.",
+      "law": "$\\gamma \\approx 1 + \\dfrac{v^{2}}{2c^{2}}$ при малых скоростях; $\\;\\Delta t_0 = \\Delta t/\\gamma$",
+      "solution": [
+        {
+          "text": "Для спутника скорость мала, пользуемся разложением.",
+          "latex": "\\gamma - 1 \\approx \\frac{v^{2}}{2c^{2}} = \\frac{(3{,}9\\cdot 10^{3})^{2}}{2(3\\cdot 10^{8})^{2}} \\approx 8{,}5\\cdot 10^{-11}"
+        },
+        {
+          "text": "За сутки набегает.",
+          "latex": "\\Delta = 8{,}5\\cdot 10^{-11} \\cdot 86400 \\approx 7{,}3\\cdot 10^{-6}\\ \\text{с} = 7{,}3\\ \\text{мкс}"
+        },
+        {
+          "text": "Теперь звёздный перелёт. Лоренц-фактор для 0,95 c.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}9025}} = \\frac{1}{\\sqrt{0{,}0975}} \\approx 3{,}20"
+        },
+        {
+          "text": "По часам Земли полёт занимает расстояние, делённое на скорость.",
+          "latex": "t_{\\text{Земля}} = \\frac{4{,}2}{0{,}95} \\approx 4{,}42\\ \\text{года}"
+        },
+        {
+          "text": "А по часам экипажа — в γ раз меньше.",
+          "latex": "t_{\\text{экипаж}} = \\frac{4{,}42}{3{,}20} \\approx 1{,}38\\ \\text{года}"
+        }
+      ],
+      "answer": "Часы спутника отстают на 7,3 микросекунды в сутки от скорости. Экипаж долетит до Проксимы за год и четыре месяца по своим часам, тогда как на Земле пройдёт четыре с половиной года.",
+      "check": "Оба ответа стоит проверить с другой стороны. Для спутника есть и второй эффект, противоположного знака: на высоте 20 тысяч километров тяготение слабее, и часы спешат на 45 микросекунд в сутки. Суммарно спешат на 38, и именно эту величину закладывают в аппаратуру. Без поправки навигатор ошибался бы на одиннадцать километров ежедневно. Для звездолёта поучительно посмотреть из системы экипажа: их время идёт нормально, зато расстояние до Проксимы сокращено в 3,2 раза и составляет 1,31 светового года — при скорости 0,95 c это как раз 1,38 года. Снова два описания и один ответ."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Числа, показывающие, где эффекты ничтожны, а где определяют всё.",
+      "items": [
+        {
+          "sym": "dGPS",
+          "latex": "\\Delta t_{\\text{GPS}}",
+          "name": "Суточная поправка часов спутника",
+          "value": "+38",
+          "unit": "мкс / сут",
+          "why": "Разность двух эффектов: минус 7 микросекунд от скорости и плюс 45 от ослабленного тяготения. Свет за 38 микросекунд проходит 11 километров — ровно такой была бы ежедневная ошибка навигации.",
+          "mnemo": "Единственная бытовая техника, которая не работала бы без теории относительности. Проверка идёт круглосуточно уже сорок лет."
+        },
+        {
+          "sym": "tau_mu",
+          "latex": "\\tau_{\\mu}",
+          "name": "Собственное время жизни мюона",
+          "value": "2,2",
+          "unit": "мкс",
+          "why": "Постоянная величина в системе самого мюона. В лабораторной системе она умножается на γ, и в накопительных кольцах мюоны живут в тридцать раз дольше — измерено с точностью до долей процента.",
+          "mnemo": "За 2,2 микросекунды свет проходит 660 метров. Сравните с толщиной атмосферы, и станет ясно, почему мюоны — лучшая проверка теории."
+        },
+        {
+          "sym": "gamma_tab",
+          "latex": "\\gamma(\\beta)",
+          "name": "Опорные значения лоренц-фактора",
+          "value": "1,005 / 1,15 / 2 / 7",
+          "unit": "при 0,1 / 0,5 / 0,87 / 0,99 c",
+          "why": "Полезно держать в голове весь ряд: до половины скорости света поправка мала, при 0,87 время идёт вдвое медленнее, при 0,99 — всемеро.",
+          "mnemo": "Красивые числа: 0,6 c даёт ровно 1,25, а 0,8 c — ровно 1,667. Оба из пифагорова треугольника 3-4-5."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Что из этого следует",
+      "lead": "Замедление времени перестало быть экзотикой и вошло в инженерные расчёты.",
+      "items": [
+        {
+          "h": "Навигация",
+          "text": "Все системы спутниковой навигации учитывают обе поправки на уровне прошивки. Это единственный массовый прибор, где теория относительности используется напрямую, а не через следствия."
+        },
+        {
+          "h": "Ускорители",
+          "text": "Мюоны в накопительном кольце живут в тридцать раз дольше собственного времени жизни — иначе эксперименты с ними были бы невозможны. Проверка идёт каждый рабочий день."
+        },
+        {
+          "h": "Космические лучи",
+          "text": "Частицы сверхвысоких энергий пересекают Галактику, хотя по собственным часам их путешествие длится недолго. Без замедления времени они распались бы гораздо раньше."
+        },
+        {
+          "h": "Ядерные часы и метрология",
+          "text": "Секунда определена через переход в атоме цезия, и любое перемещение эталона требует релятивистской поправки. Сравнение часов между лабораториями разных стран — прикладная задача теории относительности."
+        },
+        {
+          "h": "Межзвёздные перелёты",
+          "text": "При постоянном ускорении в 1 g до центра Галактики можно долететь за двадцать лет собственного времени. На Земле при этом пройдёт двадцать пять тысяч лет — путешествие в один конец."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Здесь опытов на кухне не поставить, зато есть мысленные — и они работают не хуже.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Шест длиннее сарая",
+          "text": "Бегун несёт шест длиной 10 метров, вбегая в сарай длиной 8 метров. На скорости 0,8 c шест для наблюдателя у сарая сокращается до 6 метров и целиком помещается внутрь — можно на миг закрыть обе двери. Но с точки зрения бегуна сокращается сарай, до 4,8 метра, и шест не помещается никак. Кто прав?",
+          "answer": "Оба. Разгадка в относительности одновременности. Для наблюдателя у сарая события «закрылась задняя дверь» и «закрылась передняя» одновременны, и в этот момент шест внутри. Для бегуна они происходят в разное время: сначала закрывается и снова открывается дальняя дверь, когда конец шеста ещё снаружи, потом ближняя, когда начало уже вышло. Обе двери успевают побывать закрытыми, но не одновременно. Никакого противоречия: физически наблюдаемое — шест не сломан — совпадает в обоих описаниях."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Летящий куб выглядит повёрнутым",
+          "text": "Полвека все считали, что быстро летящий предмет должен выглядеть сплюснутым вдоль движения. В 1959 году выяснилось, что это неверно. В чём ошибка?",
+          "answer": "В смешении измерения и наблюдения. Сокращение относится к результату измерения, где положения концов фиксируются одновременно. А глаз или фотоаппарат ловят свет, пришедший в один момент, — но вышедший из разных точек в разное время, потому что дальние части дальше. Складывая эти два эффекта, получаем, что куб выглядит не сжатым, а повёрнутым: видна его задняя грань, которая в покое была бы скрыта. Ошибку не замечали пятьдесят четыре года, и заметили её сразу двое независимо — Терелл и Пенроуз."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Часы летели как пассажиры",
+          "text": "В опыте Хафеле и Китинга 1971 года для атомных часов купили отдельные билеты, и в списке пассажиров они значились как «мистер Часы». Весь опыт обошёлся примерно в восемь тысяч долларов, из которых большая часть ушла на билеты. Результат: при полёте на восток часы отстали на 59 наносекунд, на запад — ушли вперёд на 273. Оба значения совпали с расчётом. Пожалуй, лучшее соотношение цены и значимости в истории экспериментальной физики."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Собственное время наименьшее, собственная длина наибольшая",
+          "text": "Два правила, из которых восстанавливаются обе формулы. Собственное время — то, что измерено там, где оба события в одной точке; оно всегда меньше остальных, значит остальные получаются умножением на γ. Собственная длина измеряется там, где предмет покоится; она наибольшая, значит остальные получаются делением."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Поправка на бытовых скоростях",
+          "text": "Отклонение γ от единицы равно половине квадрата отношения скоростей. Автомобиль на трассе: $5\\cdot 10^{-15}$. Самолёт: $3\\cdot 10^{-13}$. Спутник: $10^{-10}$. Каждый раз, когда кажется, что релятивизм важен в обычной жизни, посчитайте это отношение — почти всегда окажется, что нет."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Сокращение — не сжатие",
+          "text": "В стержне не возникает никаких напряжений, его не давят никакие силы, атомы не сближаются. Меняется результат процедуры измерения, потому что она требует одновременности, а одновременность у наблюдателей разная. Лоренц изначально думал иначе — считал, что тела действительно сжимаются давлением эфира, — и в этом состояла его ошибка при верной формуле."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Аппендикс для любознательных: полёт к центру Галактики",
+      "lead": "Не входит в проверку. Расчёт, показывающий, что межзвёздные расстояния преодолимы — но только в один конец.",
+      "blocks": [
+        {
+          "h": "Постановка",
+          "text": "Пусть корабль постоянно ускоряется с 1 g — комфортным для человека ускорением, создающим привычную силу тяжести. Половину пути разгоняется, половину тормозит. Куда можно долететь за человеческую жизнь по собственным часам?"
+        },
+        {
+          "h": "Ответ",
+          "text": "До ближайшей звезды — около 3,6 года. До центра Галактики, 26 тысяч световых лет, — примерно 20 лет собственного времени. До туманности Андромеды, 2,5 миллиона световых лет, — около 28 лет. Дальше расстояние почти не влияет: время растёт логарифмически, потому что скорость подходит к световой и сокращение длины делает всю работу."
+        },
+        {
+          "h": "Что мешает",
+          "text": "Энергия. Разогнать корабль массой в сто тонн до нужных скоростей требует энергии, сравнимой с годовым потреблением человечества, помноженным на тысячи, — и это при идеальном двигателе с полным превращением массы в энергию. Плюс встречное вещество, которое на таких скоростях становится смертельным излучением."
+        },
+        {
+          "h": "И главное",
+          "text": "Обратной дороги нет. Пока экипаж летит двадцать лет, на Земле проходит двадцать пять тысяч. Вернуться можно только в другую эпоху. Это не техническое ограничение, которое обойдут лучшие двигатели, а прямое следствие устройства пространства-времени."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Движущиеся часы отстают в $\\gamma$ раз, движущиеся линейки сокращаются вдоль движения во столько же; это два взгляда на одно явление.",
+      "keyIdeas": [
+        {
+          "icon": "clock",
+          "title": "$\\Delta t = \\gamma\\Delta t_0$",
+          "text": "собственное время наименьшее"
+        },
+        {
+          "icon": "formula",
+          "title": "$L = L_0/\\gamma$",
+          "text": "собственная длина наибольшая, поперёк движения не меняется"
+        },
+        {
+          "icon": "clock",
+          "title": "Сокращение длины следует из",
+          "text": "Сокращение длины следует из замедления времени, а не постулируется отдельно"
+        },
+        {
+          "icon": "paradox",
+          "title": "Парадокс близнецов разрешается разворотом",
+          "text": "симметрия нарушается ускорением"
+        },
+        {
+          "icon": "ruler",
+          "title": "Сокращение",
+          "text": "свойство измерения, а не сжатие тела силами"
+        }
+      ],
+      "where": "Спутниковая навигация, мюоны в атмосфере и в накопительных кольцах, атомные часы на самолётах, космические лучи.",
+      "watchOut": "Сокращение нельзя увидеть глазом: свет от разных частей тела идёт разное время, и быстро летящий куб выглядит повёрнутым, а не сплюснутым."
+    },
+    "quiz": [
+      {
+        "id": "t1",
+        "type": "mcq",
+        "q": "Какое время называют собственным?",
+        "options": [
+          "Время по часам самого точного прибора",
+          "Время, измеренное часами, для которых оба события происходят в одной точке пространства",
+          "Время в системе отсчёта Земли",
+          "Среднее из показаний всех наблюдателей"
+        ],
+        "answer": 1,
+        "why": "Собственное время связано не с точностью прибора, а с расположением событий: часы должны быть при них обоих, то есть покоиться относительно происходящего. Такое время всегда наименьшее из возможных — любой другой наблюдатель насчитает больше.",
+        "hint": "Для мюона его рождение и распад происходят в одной точке — в какой системе отсчёта?"
+      },
+      {
+        "id": "t2",
+        "type": "mcq",
+        "q": "Стержень летит мимо наблюдателя. Что происходит с его размерами?",
+        "options": [
+          "Сокращаются все размеры одинаково",
+          "Сокращается только размер вдоль движения, поперечные не меняются",
+          "Сокращаются только поперечные размеры",
+          "Размеры не меняются, меняется только видимая форма"
+        ],
+        "answer": 1,
+        "why": "Сокращается лишь продольный размер. Поперечные измеряются событиями, одновременными в обеих системах, и потому одинаковы — иначе теория была бы противоречивой: поезд оказался бы одновременно уже и шире тоннеля.",
+        "hint": "Представьте поезд, влетающий в тоннель. Что случилось бы, если бы сокращалась и ширина, — и что сказали бы об этом два наблюдателя?"
+      },
+      {
+        "id": "t3",
+        "type": "free",
+        "q": "Своими словами: почему парадокс близнецов не является настоящим парадоксом?",
+        "keywords": [
+          "разворот",
+          "ускорен",
+          "смена систем",
+          "не симметр",
+          "инерциальн",
+          "один разворачива",
+          "две систем"
+        ],
+        "needed": 2,
+        "why": "Пока оба движутся равномерно, ситуация симметрична и каждый видит отстающими часы другого — противоречия нет, потому что сравнить их можно только договорившись об одновременности, а она разная. Чтобы встретиться, один обязан развернуться, то есть испытать ускорение и сменить систему отсчёта. Этим симметрия и нарушается: у оставшегося одна система на весь путь, у улетевшего две.",
+        "hint": "Что должен сделать улетевший, чтобы вернуться? Проделывает ли то же самое оставшийся дома?"
+      },
+      {
+        "id": "t4",
+        "type": "estimate",
+        "q": "Корабль летит со скоростью 0,8 c. Во сколько раз медленнее идут его часы для земного наблюдателя?",
+        "answer": 1.67,
+        "unit": "раз",
+        "tolerance": 0.15,
+        "why": "γ = 1/√(1 − 0,64) = 1/√0,36 = 1/0,6 ≈ 1,67. Красивое число: 0,8 и 0,6 — стороны пифагорова треугольника 3-4-5, поэтому задачи со скоростью 0,8 c всегда решаются в уме.",
+        "hint": "Возведите 0,8 в квадрат, вычтите из единицы и извлеките корень. Получится знакомое число."
+      }
+    ]
+  },
+  "en": {
+    "title": "Time and Length",
+    "subtitle": "Section 2 · Moving clocks run slow, moving rulers shrink",
+    "intro": [
+      "In 1971, two scientists bought tickets on regular commercial flights — and a few extra tickets for suitcases containing atomic clocks. They flew around the Earth eastward, then westward, returned, and compared the readings with the clocks at the Naval Observatory. The discrepancies were tens of nanoseconds, exactly as predicted.",
+      "The Hafele–Keating experiment cost less than most physics experiments and tested the wildest claim of the theory: time is not universal. It flows differently for different observers, and the difference is measurable with ordinary instruments on ordinary airplanes.",
+      "In this section we'll examine both effects — time dilation and length contraction — and see that they are not two separate phenomena but one, seen from two sides. Along the way we'll understand why the famous twin paradox is not a paradox at all."
+    ],
+    "standNote": "The speed slider controls both effects simultaneously — the numbers below the scene show how much the moving clock ticks and how long the moving ruler becomes. Check an important fact: the product of these corrections remains constant. Time stretches by the same factor as length contracts, and this is no coincidence. Sweep through the entire range and notice where the γ curve starts to bend upward: roughly after 0.7 times the speed of light, the effects cease to be corrections and become dominant.",
+    "formula": {
+      "name": "Lorentz transformations",
+      "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\gamma = \\frac{1}{\\sqrt{1-v^{2}/c^{2}}}",
+      "alsoKnown": "Time dilation and Lorentz contraction",
+      "authors": [
+        {
+          "who": "George FitzGerald",
+          "year": "1889",
+          "what": "first proposed length contraction to explain the null result of Michelson. The idea was a guess without justification — but the guessed formula turned out to be correct"
+        },
+        {
+          "who": "Hendrik Lorentz",
+          "year": "1892",
+          "what": "derived the same formula from electrodynamics and introduced the concept of local time as an auxiliary mathematical quantity. He considered it a convenient trick, not real time"
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "explained that Lorentz's local time is the real time of a moving observer, and contraction is not a result of forces compressing the body but a property of length measurement in a moving system"
+        },
+        {
+          "who": "Bruno Rossi and David Hall",
+          "year": "1941",
+          "what": "measured the muon flux at the top of Mount Washington and at its base. The difference in fluxes confirmed time dilation quantitatively — the first direct test using a natural source"
+        },
+        {
+          "who": "Joseph Hafele and Richard Keating",
+          "year": "1971",
+          "what": "carried atomic clocks around the world on commercial flights and obtained a discrepancy with ground clocks consistent with calculations. The cost of the experiment was eight thousand dollars, mostly for tickets"
+        }
+      ],
+      "story": "The Hafele–Keating experiment is remarkable for its ordinariness. The clocks flew as passengers; separate seats were bought for them, and on the flight manifest they were listed as 'Mr. Clock'. The calculation included two effects of opposite sign: slowing from speed and speeding up from weaker gravity at altitude — the second effect already belongs to general relativity. For the eastward flight, in the direction of Earth's rotation, the speed relative to the inertial frame was greater; for the westward flight it was smaller, so the results differed: eastward clocks lagged by 59 nanoseconds, westward clocks gained 273. Both numbers agreed with predictions within error. Since then the experiment has been repeated many times with increasing accuracy."
+    },
+    "symbols": [
+      {
+        "sym": "dt0",
+        "latex": "\\Delta t_0",
+        "what": "proper time",
+        "unit": "s",
+        "note": "the interval measured by a clock at rest relative to the event; it is always the smallest"
+      },
+      {
+        "sym": "dt",
+        "latex": "\\Delta t",
+        "what": "time in the lab frame",
+        "unit": "s",
+        "note": "what the clock of an observer past which the object moves shows"
+      },
+      {
+        "sym": "L0",
+        "latex": "L_0",
+        "what": "proper length",
+        "unit": "m",
+        "note": "the length measured in the frame where the object is at rest; it is always the longest"
+      },
+      {
+        "sym": "L",
+        "latex": "L",
+        "what": "length in the lab frame",
+        "unit": "m",
+        "note": "contracts only along the direction of motion; transverse dimensions do not change"
+      },
+      {
+        "sym": "gamma2",
+        "latex": "\\gamma",
+        "what": "Lorentz factor",
+        "unit": "—",
+        "note": "a single number controls both effects: time is multiplied by it, length is divided by it"
+      }
+    ],
+    "derivation": {
+      "title": "Rigorous Derivation: Length Contraction as a Consequence of Time Dilation",
+      "lead": "We already derived time dilation from light clocks. Let's show that length contraction follows automatically — otherwise two observers would disagree on what happened.",
+      "steps": [
+        {
+          "text": "Take the result from the previous section. Clocks moving relative to an observer run slower — their period is stretched by a factor of $\\gamma$.",
+          "latex": "\\Delta t = \\gamma\\,\\Delta t_0",
+          "figure": "isochron",
+          "figCaption": "Proper time is always the smallest: any other observer will count more."
+        },
+        {
+          "text": "Now let's measure length. Suppose a rod flies past an observer; he measures the time between the passing of the front and back ends and multiplies by speed. This is a legitimate measurement method — used in accelerators.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}}",
+          "figure": "vline",
+          "figCaption": "The length of a moving object is determined by the time it takes to pass a single point."
+        },
+        {
+          "text": "Now let's look at the same situation from the rod's frame. There it is at rest and has its proper length, while the observer flies past. The event 'the observer aligns with an end' occurs at different points on the rod, but at a single point for the observer himself.",
+          "latex": "L_0 = v\\,\\Delta t_{\\text{стержня}}",
+          "figure": "inertialframe",
+          "figCaption": "The key to the entire derivation: two events occur at the same location for one observer and at different locations for the other."
+        },
+        {
+          "text": "Since both events happen at the same point for the observer, his time between them is proper, hence the smallest. Therefore, the time in the rod's frame is larger by a factor of $\\gamma$.",
+          "latex": "\\Delta t_{\\text{стержня}} = \\gamma\\,\\Delta t_{\\text{лаб}}",
+          "figure": "secant",
+          "figCaption": "Here, the proper time belongs to the observer, not the rod — one must pay careful attention."
+        },
+        {
+          "text": "Substituting one into the other gives length contraction.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}} = v\\,\\frac{\\Delta t_{\\text{стержня}}}{\\gamma} = \\frac{L_0}{\\gamma}",
+          "figure": "result",
+          "figCaption": "Length contraction is not an independent postulate but a consequence of time dilation."
+        },
+        {
+          "text": "Check that only the longitudinal dimension contracts. Transverse dimensions are measured by events that are simultaneous in both frames, so they remain unchanged — otherwise a contradiction would arise, like a train that is simultaneously narrower and wider than a tunnel.",
+          "latex": "L_{\\parallel} = \\frac{L_0}{\\gamma}, \\qquad L_{\\perp} = L_{\\perp 0}",
+          "figure": "frame",
+          "figCaption": "It contracts along motion, not perpendicular. Otherwise the theory would be internally inconsistent."
+        },
+        {
+          "text": "And the twin paradox. The traveling twin turns around, i.e., changes reference frames — the stay-at-home does not. Symmetry is broken by the turnaround, so the returning twin is younger. Verified with atomic clocks and muons in storage rings.",
+          "latex": "\\Delta t_{\\text{домосед}} = \\gamma\\,\\Delta t_{\\text{путешественник}}",
+          "figure": "curves",
+          "figCaption": "There is no paradox: the situations are not symmetric because only one undergoes the turnaround."
+        }
+      ],
+      "plate": "Moving clocks run slow by a factor of $\\gamma$, moving rulers contract along motion by the same factor. These are not two effects but one, seen from two sides.",
+      "note": "Limits of applicability and persistent confusion. Length contraction is not compression by forces: the rod does not deform, no stresses arise. It is about the measurement procedure: measuring the length of a moving object requires simultaneous recording of the positions of both ends, and simultaneity differs for observers. Moreover, contraction cannot be seen with the eye: light from different points of the object takes different times to reach the eye, so a fast-moving cube visually appears rotated, not flattened. This was noticed only in 1959, half a century after the theory was created."
+    },
+    "math": {
+      "title": "The Mathematics Needed Here",
+      "text": [
+        "What is proper time — a concept essential for solving problems. It is the time measured by a clock that is present at the events, i.e., not moving relative to them. Such time is always the smallest of all possible. A useful rule: ask yourself, for whom do both events occur at the same point in space — that person has proper time. For a muon, it is the muon itself: born and decaying at the same point in its own frame. For an observer on Earth, these events are separated by ten kilometers, and his time is larger.",
+        "Why time is multiplied and length is divided. This is a constant source of errors in problems, so it's better to remember the meaning rather than the formula. Proper time is the smallest, so any other time is larger: multiply by γ, which is always greater than one. Proper length is the largest, so any other length is smaller: divide. Check yourself by asking 'what should be larger here' instead of trying to recall where γ goes.",
+        "How the two views of the muon align. Here it's convenient to summarize in one line. Earth observer: atmosphere 15 km thick, lifetime stretched by factor 15.8, muon makes it. The muon itself: normal lifetime of 2.2 microseconds, but the atmosphere contracted by factor 15.8 to less than a kilometer — it again makes it. Both calculate differently, both get the same result. This is the internal consistency of the theory: disagreement in description but agreement in observation.",
+        "Why the turnaround changes everything. In the twin paradox, it seems the situations are symmetric, but they are not. While both travel uniformly, they are indeed equivalent and each sees the other's clock running slow. However, they can only meet if one turns around. Turnaround means acceleration, i.e., leaving an inertial frame — and here the symmetry breaks. Formally: the stay-at-home has one reference frame for the whole journey, the traveler has two different ones, and when they are patched together, there is a jump in the definition of simultaneity. It is this jump that accounts for the entire age difference."
+      ]
+    },
+    "example": {
+      "title": "Numerical example: satellite clock and flight to a nearby star",
+      "lead": "One problem from everyday engineering, the second from a realm we have not yet flown to.",
+      "given": "1) A navigation satellite travels at 3.9 km/s. 2) A spaceship flies to Proxima Centauri, 4.2 light-years away, at 0.95 c. Find the daily clock lag of the satellite and the flight time according to the crew's clock.",
+      "law": "$\\gamma \\approx 1 + \\dfrac{v^{2}}{2c^{2}}$ for small speeds; $\\;\\Delta t_0 = \\Delta t/\\gamma$",
+      "solution": [
+        {
+          "text": "For the satellite, the speed is small, we use the expansion.",
+          "latex": "\\gamma - 1 \\approx \\frac{v^{2}}{2c^{2}} = \\frac{(3{,}9\\cdot 10^{3})^{2}}{2(3\\cdot 10^{8})^{2}} \\approx 8{,}5\\cdot 10^{-11}"
+        },
+        {
+          "text": "Over a day it accumulates.",
+          "latex": "\\Delta = 8{,}5\\cdot 10^{-11} \\cdot 86400 \\approx 7{,}3\\cdot 10^{-6}\\ \\text{с} = 7{,}3\\ \\text{мкс}"
+        },
+        {
+          "text": "Now the stellar flight. Lorentz factor for 0.95 c.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}9025}} = \\frac{1}{\\sqrt{0{,}0975}} \\approx 3{,}20"
+        },
+        {
+          "text": "According to Earth's clock, the flight takes distance divided by speed.",
+          "latex": "t_{\\text{Земля}} = \\frac{4{,}2}{0{,}95} \\approx 4{,}42\\ \\text{года}"
+        },
+        {
+          "text": "And by the crew's clock, it is γ times less.",
+          "latex": "t_{\\text{экипаж}} = \\frac{4{,}42}{3{,}20} \\approx 1{,}38\\ \\text{года}"
+        }
+      ],
+      "answer": "The satellite clock lags by 7.3 microseconds per day due to speed. The crew will reach Proxima in one year and four months by their clock, while on Earth four and a half years will pass.",
+      "check": "Both answers are worth checking from the other side. For the satellite, there is a second effect of opposite sign: at an altitude of 20,000 kilometers, gravity is weaker, and the clock gains 45 microseconds per day. The net gain is 38 microseconds, and exactly this value is built into the hardware. Without correction, the navigator would be off by eleven kilometers daily. For the spaceship, it is instructive to look from the crew's frame: their time runs normally, but the distance to Proxima is contracted by a factor of 3.2 to 1.31 light-years — at 0.95 c that gives exactly 1.38 years. Again two descriptions and one answer."
+    },
+    "constants": {
+      "title": "Quantities in this section",
+      "lead": "Numbers showing where effects are negligible and where they determine everything.",
+      "items": [
+        {
+          "sym": "dGPS",
+          "latex": "\\Delta t_{\\text{GPS}}",
+          "name": "Daily satellite clock correction",
+          "value": "+38",
+          "unit": "μs / day",
+          "why": "Difference of two effects: minus 7 microseconds from speed and plus 45 from weakened gravity. Light travels 11 kilometers in 38 microseconds — exactly the daily navigation error if uncorrected.",
+          "mnemo": "The only everyday technology that would not work without relativity. Verification runs around the clock for forty years."
+        },
+        {
+          "sym": "tau_mu",
+          "latex": "\\tau_{\\mu}",
+          "name": "Muon proper lifetime",
+          "value": "2.2",
+          "unit": "μs",
+          "why": "A constant in the muon's own frame. In the lab frame it is multiplied by γ, and in storage rings muons live thirty times longer — measured to within fractions of a percent.",
+          "mnemo": "In 2.2 microseconds, light travels 660 meters. Compare with the thickness of the atmosphere, and it becomes clear why muons are the best test of the theory."
+        },
+        {
+          "sym": "gamma_tab",
+          "latex": "\\gamma(\\beta)",
+          "name": "Reference values of the Lorentz factor",
+          "value": "1.005 / 1.15 / 2 / 7",
+          "unit": "at 0.1 / 0.5 / 0.87 / 0.99 c",
+          "why": "Useful to keep the whole series in mind: up to half the speed of light the correction is small, at 0.87 time runs half as fast, at 0.99 it is seven times slower.",
+          "mnemo": "Nice numbers: 0.6 c gives exactly 1.25, and 0.8 c gives exactly 1.667. Both from the 3-4-5 Pythagorean triple."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "What follows from this",
+      "lead": "Time dilation has ceased to be exotic and has entered engineering calculations.",
+      "items": [
+        {
+          "h": "Navigation",
+          "text": "All satellite navigation systems account for both corrections at the firmware level. This is the only mass-market device where relativity is used directly, not through consequences."
+        },
+        {
+          "h": "Accelerators",
+          "text": "Muons in a storage ring live thirty times longer than their proper lifetime — otherwise experiments with them would be impossible. Verification happens every working day."
+        },
+        {
+          "h": "Cosmic rays",
+          "text": "Ultra-high-energy particles cross the galaxy, though by their own clocks their journey lasts a short time. Without time dilation, they would have decayed much earlier."
+        },
+        {
+          "h": "Nuclear clocks and metrology",
+          "text": "The second is defined through a transition in the cesium atom, and any movement of the standard requires a relativistic correction. Comparing clocks between laboratories in different countries is an applied problem of relativity."
+        },
+        {
+          "h": "Interstellar flights",
+          "text": "With constant acceleration of 1 g, one can reach the center of the galaxy in twenty years of proper time. On Earth, twenty-five thousand years will pass — a one-way trip."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosities: Try It Yourself",
+      "lead": "You can't perform kitchen experiments here, but thought experiments—and they work just as well.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Pole Longer Than Barn",
+          "text": "A runner carries a pole 10 meters long, running into a barn 8 meters long. At a speed of 0.8c, the pole for the observer at the barn contracts to 6 meters and fits entirely inside—you can close both doors for a moment. But from the runner's perspective, the barn contracts to 4.8 meters, and the pole does not fit at all. Who is right?",
+          "answer": "Both. The answer lies in the relativity of simultaneity. For the observer at the barn, the events 'the back door closed' and 'the front door closed' are simultaneous, and at that moment the pole is inside. For the runner, they occur at different times: first the far door closes and opens again while the end of the pole is still outside, then the near door closes when the front has already exited. Both doors are closed at some time, but not simultaneously. No contradiction: the physically observed fact—the pole is not broken—coincides in both descriptions."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Flying Cube Appears Rotated",
+          "text": "For half a century, everyone thought a fast-moving object should appear flattened along the direction of motion. In 1959, it turned out this is incorrect. What was the mistake?",
+          "answer": "Confusing measurement and observation. Contraction refers to the result of a measurement, where the positions of the ends are recorded simultaneously. But the eye or camera capture light arriving at one moment—yet emitted from different points at different times, because farther parts are farther away. Combining these two effects, the cube appears not compressed but rotated: its back face becomes visible, which would be hidden at rest. The error went unnoticed for fifty-four years, and it was noticed by two people independently—Terrell and Penrose."
+        },
+        {
+          "icon": "fact",
+          "kind": "interesting fact",
+          "h": "Clocks Flew as Passengers",
+          "text": "In the 1971 Hafele–Keating experiment, atomic clocks were bought separate tickets, and on the passenger list they were listed as 'Mr. Clock'. The whole experiment cost about eight thousand dollars, most of which went to tickets. Result: flying east, the clocks lagged by 59 nanoseconds; flying west, they were ahead by 273. Both values matched the calculation. Perhaps the best price-to-significance ratio in the history of experimental physics."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Proper Time is Shortest, Proper Length is Longest",
+          "text": "Two rules from which both formulas can be recovered. Proper time is measured where both events occur at the same point; it is always less than others, so others are obtained by multiplying by γ. Proper length is measured where the object is at rest; it is the largest, so others are obtained by dividing."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimate",
+          "h": "Correction at Everyday Speeds",
+          "text": "The deviation of γ from unity equals half the square of the speed ratio. Car on highway: $5\\cdot 10^{-15}$. Airplane: $3\\cdot 10^{-13}$. Satellite: $10^{-10}$. Whenever it seems that relativity matters in everyday life, compute this ratio—almost always it turns out it doesn't."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "Length Contraction Is Not Compression",
+          "text": "No stresses arise in the rod, no forces press it, atoms do not move closer together. What changes is the outcome of the measurement procedure, because it requires simultaneity, and simultaneity differs among observers. Lorentz originally thought otherwise—he believed bodies indeed compressed under the pressure of the ether—and this was his mistake despite the correct formula."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Appendix for the Curious: Flight to the Galactic Center",
+      "lead": "Not part of the test. A calculation showing that interstellar distances are surmountable—but only one way.",
+      "blocks": [
+        {
+          "h": "Setup",
+          "text": "Suppose a spaceship accelerates constantly at 1 g—a comfortable acceleration for humans, creating the familiar force of gravity. It accelerates for half the journey and decelerates for the other half. Where can you fly within a human lifetime by the ship's own clock?"
+        },
+        {
+          "h": "Answer",
+          "text": "To the nearest star—about 3.6 years. To the center of the Galaxy, 26 thousand light-years away—about 20 years of proper time. To the Andromeda Galaxy, 2.5 million light-years away—about 28 years. Further distances have little effect: the time grows logarithmically, because the speed approaches light and length contraction does all the work."
+        },
+        {
+          "h": "What Stands in the Way",
+          "text": "Energy. Accelerating a ship of 100 tons to the required speeds requires energy comparable to humanity's annual consumption multiplied by thousands—even with an ideal engine that fully converts mass to energy. Plus, incoming matter at such speeds becomes deadly radiation."
+        },
+        {
+          "h": "And Most Importantly",
+          "text": "There is no way back. While the crew flies for twenty years, twenty-five thousand years pass on Earth. You can only return to a different era. This is not a technical limitation that better engines will overcome, but a direct consequence of the structure of spacetime."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Moving clocks run slow by a factor $\\gamma$, moving rulers contract along the direction of motion by the same factor; these are two views of the same phenomenon.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta t = \\gamma\\Delta t_0$",
+          "text": "proper time is shortest"
+        },
+        {
+          "icon": "formula",
+          "title": "$L = L_0/\\gamma$",
+          "text": "proper length is longest, transverse direction unchanged"
+        },
+        {
+          "icon": "sigma",
+          "title": "Length contraction follows from",
+          "text": "Length contraction follows from time dilation, not postulated separately"
+        },
+        {
+          "icon": "ruler",
+          "title": "The twin paradox is resolved by the turnaround",
+          "text": "symmetry is broken by acceleration"
+        },
+        {
+          "icon": "scale",
+          "title": "Contraction is a property",
+          "text": "Contraction is a property of measurement, not a compression of the body by forces"
+        }
+      ],
+      "where": "Satellite navigation, muons in the atmosphere and in storage rings, atomic clocks on airplanes, cosmic rays.",
+      "watchOut": "Length contraction cannot be seen by the eye: light from different parts of the body takes different times, and a fast-moving cube appears rotated, not flattened."
+    },
+    "quiz": [
+      {
+        "id": "t1",
+        "type": "mcq",
+        "q": "Which time is called proper time?",
+        "options": [
+          "Time measured by the most precise instrument",
+          "Time measured by a clock for which both events occur at the same point in space",
+          "Time in Earth's reference frame",
+          "Average of all observers' readings"
+        ],
+        "answer": 1,
+        "why": "Proper time is not about the precision of the instrument but about the location of events: the clock must be present at both events, i.e., at rest relative to what is happening. Such time is always the smallest possible — any other observer will measure a longer time.",
+        "hint": "For a muon, its birth and decay occur at the same point — in which reference frame?"
+      },
+      {
+        "id": "t2",
+        "type": "mcq",
+        "q": "A rod flies past an observer. What happens to its dimensions?",
+        "options": [
+          "All dimensions contract equally",
+          "Only the dimension along the motion contracts, the transverse ones do not change",
+          "Only the transverse dimensions contract",
+          "Dimensions do not change, only the apparent shape changes"
+        ],
+        "answer": 1,
+        "why": "Only the longitudinal dimension contracts. Transverse dimensions are measured by events simultaneous in both systems, and hence are the same — otherwise the theory would be contradictory: the train would simultaneously be narrower and wider than the tunnel.",
+        "hint": "Imagine a train entering a tunnel. What would happen if the width also contracted, and what would two observers say about it?"
+      },
+      {
+        "id": "t3",
+        "type": "free",
+        "q": "In your own words: why is the twin paradox not a real paradox?",
+        "keywords": [
+          "turnaround",
+          "acceleration",
+          "frame change",
+          "not symmetric",
+          "inertial",
+          "one turns",
+          "two frames"
+        ],
+        "needed": 2,
+        "why": "While both move uniformly, the situation is symmetric and each sees the other's clock running slow — there is no contradiction because to compare them, one must agree on simultaneity, which is different. To meet, one must turn around, i.e., undergo acceleration and change reference frames. This breaks the symmetry: the one who stays has a single frame for the whole journey, the traveler has two.",
+        "hint": "What must the traveler do to return? Does the stay-at-home do the same?"
+      },
+      {
+        "id": "t4",
+        "type": "estimate",
+        "q": "A spaceship travels at speed 0.8c. How much slower do its clocks run for an Earth observer?",
+        "answer": 1.67,
+        "unit": "times",
+        "tolerance": 0.15,
+        "why": "γ = 1/√(1 − 0.64) = 1/√0.36 = 1/0.6 ≈ 1.67. A nice number: 0.8 and 0.6 are sides of a 3-4-5 Pythagorean triple, so problems with speed 0.8c can always be solved mentally.",
+        "hint": "Square 0.8, subtract from 1, and take the square root. You'll get a familiar number."
+      }
+    ]
+  },
+  "es": {
+    "title": "Tiempo y longitud",
+    "subtitle": "Párrafo 2 · Los relojes en movimiento se retrasan, las reglas en movimiento se acortan",
+    "intro": [
+      "En 1971, dos científicos compraron boletos en vuelos comerciales ordinarios — y varios boletos adicionales para maletas con relojes atómicos. Volaron alrededor de la Tierra hacia el este, luego hacia el oeste, regresaron y compararon las lecturas con los relojes del Observatorio Naval. Diferían en decenas de nanosegundos, exactamente en la cantidad predicha.",
+      "El experimento de Hafele y Keating costó menos que la mayoría de los experimentos físicos y verificó la afirmación más radical de la teoría: el tiempo no es universal. Fluye de manera diferente para diferentes observadores, y la diferencia es medible con instrumentos comunes en aviones comunes.",
+      "En este párrafo analizaremos ambos efectos — la dilatación del tiempo y la contracción de la longitud — y veremos que no son dos fenómenos diferentes, sino uno visto desde dos lados. Y al mismo tiempo entenderemos por qué el famoso paradoja de los gemelos no es una paradoja."
+    ],
+    "standNote": "El control deslizante de velocidad controla ambos efectos a la vez — los números debajo de la escena muestran cuánto marcará el reloj en movimiento y qué tan larga será la regla en movimiento. Verifique algo importante: el producto de estas correcciones permanece constante. El tiempo se estira tantas veces como la longitud se contrae, y esto no es una coincidencia. Recorra todo el rango y observe dónde la curva γ comienza a flexionarse hacia arriba: aproximadamente después de 0.7 de la velocidad de la luz, los efectos dejan de ser correcciones y se convierten en los principales.",
+    "formula": {
+      "name": "Transformaciones de Lorentz",
+      "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\gamma = \\frac{1}{\\sqrt{1-v^{2}/c^{2}}}",
+      "alsoKnown": "Dilatación del tiempo y contracción de Lorentz",
+      "authors": [
+        {
+          "who": "George FitzGerald",
+          "year": "1889",
+          "what": "fue el primero en proponer la contracción de la longitud para explicar el resultado nulo de Michelson. La idea fue una conjetura sin fundamento — pero la fórmula adivinada resultó correcta."
+        },
+        {
+          "who": "Hendrik Lorentz",
+          "year": "1892",
+          "what": "derivó la misma fórmula a partir de la electrodinámica e introdujo el concepto de tiempo local como una cantidad matemática auxiliar. Lo consideró un recurso conveniente, no el tiempo real."
+        },
+        {
+          "who": "Albert Einstein",
+          "year": "1905",
+          "what": "explicó que el tiempo local de Lorentz es el tiempo real del observador en movimiento, y que la contracción no es el resultado de la compresión del cuerpo por fuerzas, sino una propiedad de la medición de la longitud en un sistema en movimiento."
+        },
+        {
+          "who": "Bruno Rossi",
+          "year": "1941",
+          "what": "midieron el flujo de muones en la cima del Monte Washington y en su base. La diferencia en los flujos confirmó cuantitativamente la dilatación del tiempo — la primera verificación directa con una fuente natural."
+        },
+        {
+          "who": "Joseph Hafele",
+          "year": "1971",
+          "what": "transportaron relojes atómicos alrededor del mundo en vuelos comerciales y obtuvieron una discrepancia con los terrestres de acuerdo con el cálculo. El costo del experimento fue de ocho mil dólares, principalmente en boletos."
+        }
+      ],
+      "story": "El experimento de Hafele y Keating es notable por su cotidianidad. Los relojes volaron como pasajeros, se compraron asientos separados para ellos, y en el registro de vuelo figuraban como «Sr. Reloj». El cálculo incluía dos efectos de signo opuesto: la dilatación por la velocidad y la aceleración del ritmo debido a la gravedad más débil en altitud — el segundo efecto ya pertenece a la relatividad general. Al volar hacia el este, en la dirección de rotación de la Tierra, la velocidad relativa al sistema inercial es mayor; al volar hacia el oeste, menor, por lo que los resultados fueron diferentes: hacia el este, los relojes se retrasaron 59 nanosegundos; hacia el oeste, se adelantaron 273. Ambos números coincidieron con la predicción dentro del margen de error. Desde entonces, el experimento se ha repetido muchas veces con precisión creciente.",
+      "symbols": [
+        {
+          "sym": "dt0",
+          "latex": "\\Delta t_0",
+          "what": "tiempo propio",
+          "unit": "s",
+          "note": "intervalo medido por un reloj en reposo respecto al evento; siempre es el menor"
+        },
+        {
+          "sym": "dt",
+          "latex": "\\Delta t",
+          "what": "tiempo en el sistema de laboratorio",
+          "unit": "s",
+          "note": "lo que muestra el reloj del observador por el cual pasa el objeto"
+        },
+        {
+          "sym": "L0",
+          "latex": "L_0",
+          "what": "longitud propia",
+          "unit": "m",
+          "note": "longitud medida en el sistema donde el objeto está en reposo; siempre es la mayor"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "longitud en el sistema de laboratorio",
+          "unit": "m",
+          "note": "se contrae solo a lo largo del movimiento; las dimensiones transversales no cambian"
+        },
+        {
+          "sym": "gamma2",
+          "latex": "\\gamma",
+          "what": "factor de Lorentz",
+          "unit": "—",
+          "note": "un solo número controla ambos efectos: el tiempo se multiplica por él, la longitud se divide"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Derivación rigurosa: contracción de la longitud como consecuencia de la dilatación del tiempo",
+      "lead": "Ya obtuvimos la dilatación del tiempo a partir del reloj de luz. Demostremos que la contracción de la longitud se sigue automáticamente —de lo contrario, dos observadores diferirían sobre lo que ocurrió.",
+      "steps": [
+        {
+          "text": "Tomemos el resultado del párrafo anterior. Los relojes en movimiento respecto a un observador van más despacio: su período se alarga en un factor $\\gamma$.",
+          "latex": "\\Delta t = \\gamma\\,\\Delta t_0",
+          "figure": "isochron",
+          "figCaption": "El tiempo propio siempre es el menor: cualquier otro observador medirá un tiempo mayor."
+        },
+        {
+          "text": "Ahora midamos la longitud. Supongamos que una barra vuela pasando a un observador; él registra el tiempo entre el paso del extremo delantero y trasero y lo multiplica por la velocidad. Es un método honesto de medición —se usa en aceleradores.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}}",
+          "figure": "vline",
+          "figCaption": "La longitud de un cuerpo en movimiento se determina por el tiempo de vuelo frente a un punto fijo."
+        },
+        {
+          "text": "Ahora miremos lo mismo desde el sistema de la barra. Allí ella está en reposo y tiene su longitud propia, mientras que el observador vuela junto a ella. El evento «el observador se alinea con el extremo» ocurre en diferentes puntos de la barra, pero en un mismo punto para el observador.",
+          "latex": "L_0 = v\\,\\Delta t_{\\text{sterjnya}}",
+          "figure": "inertialframe",
+          "figCaption": "Clave de toda la derivación: dos eventos ocurren en el mismo lugar para un observador y en diferentes para el otro."
+        },
+        {
+          "text": "Como ambos eventos ocurren en el mismo punto para el observador, su tiempo entre ellos es el tiempo propio, es decir, el menor. Por lo tanto, el tiempo en el sistema de la barra es mayor en un factor $\\gamma$.",
+          "latex": "\\Delta t_{\\text{sterjnya}} = \\gamma\\,\\Delta t_{\\text{лаб}}",
+          "figure": "secant",
+          "figCaption": "Aquí el tiempo propio resulta ser el del observador, no el de la barra —esto hay que tenerlo muy presente."
+        },
+        {
+          "text": "Sustituyendo una en otra obtenemos la contracción de la longitud.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}} = v\\,\\frac{\\Delta t_{\\text{sterjnya}}}{\\gamma} = \\frac{L_0}{\\gamma}",
+          "figure": "result",
+          "figCaption": "La contracción de la longitud no es un postulado independiente, sino una consecuencia de la dilatación del tiempo."
+        },
+        {
+          "text": "Verifiquemos que solo se contrae la dimensión longitudinal. Las dimensiones transversales se miden con eventos que ocurren simultáneamente en ambos sistemas, por lo que no cambian —de lo contrario surgiría una contradicción como un tren que a la vez es más estrecho y más ancho que el túnel.",
+          "latex": "L_{\\parallel} = \\frac{L_0}{\\gamma}, \\qquad L_{\\perp} = L_{\\perp 0}",
+          "figure": "frame",
+          "figCaption": "A lo largo del movimiento se contrae, transversalmente no. De lo contrario, la teoría sería internamente contradictoria."
+        },
+        {
+          "text": "Y la paradoja de los gemelos. El que se va gira, es decir, cambia de sistema de referencia —mientras que el que se queda no. La simetría se rompe con el giro, por lo que el que regresa resulta más joven. Verificado con relojes atómicos y con muones en anillos de almacenamiento.",
+          "latex": "\\Delta t_{\\text{domosed}} = \\gamma\\,\\Delta t_{\\text{puteshestvennik}}",
+          "figure": "curves",
+          "figCaption": "No hay paradoja: las situaciones no son simétricas, porque solo uno experimenta el giro."
+        }
+      ],
+      "plate": "Los relojes en movimiento retrasan en un factor $\\gamma$, las reglas en movimiento se acortan a lo largo del movimiento en el mismo factor. No son dos efectos, sino uno visto desde dos perspectivas.",
+      "note": "Límites de aplicabilidad y confusión habitual. La contracción de la longitud no es una compresión del cuerpo por fuerzas: la barra no se deforma, no surgen tensiones en ella. Se trata de que el procedimiento de medir la longitud de un cuerpo en movimiento requiere fijar simultáneamente las posiciones de los dos extremos, y la simultaneidad es diferente para distintos observadores. Además, no se puede ver la contracción a simple vista: la luz de diferentes puntos del cuerpo tarda tiempos distintos en llegar al ojo, y visualmente un cubo que vuela rápido parece girado, no achatado. Esto solo se notó en 1959, medio siglo después de la creación de la teoría."
+    },
+    "math": {
+      "title": "Las matemáticas que se necesitaron aquí",
+      "text": [
+        "Qué es el tiempo propio —un concepto indispensable para resolver problemas. Es el tiempo medido por relojes que están presentes en los eventos, es decir, que no se mueven respecto a ellos. Ese tiempo siempre es el menor de todos los posibles. Una regla útil: pregúntese para quién ambos eventos ocurren en el mismo punto del espacio —ese es quien tiene el tiempo propio. Para un muon, es él mismo: nació y decayó en un mismo lugar de su sistema. Para un observador en la Tierra, esos eventos están separados por diez kilómetros, y su tiempo es mayor.",
+        "Por qué el tiempo se multiplica y la longitud se divide. Esta es una fuente constante de errores en los problemas, y es mejor recordar el significado, no la fórmula. El tiempo propio es el menor, por lo tanto cualquier otro es mayor: multiplicamos por γ, que siempre es mayor que 1. La longitud propia es la mayor, por lo tanto cualquier otra es menor: dividimos. Pregúntese «qué debe ser mayor aquí», en lugar de intentar recordar dónde va γ.",
+        "Cómo se concilian las dos visiones sobre el muon. Aquí conviene resumirlo todo en una línea. Observador en la Tierra: atmósfera de 15 km de espesor, vida media dilatada en un factor 15,8, el muon llega. El propio muon: vida media normal, 2,2 microsegundos, pero la atmósfera se contrae en un factor 15,8 y mide menos de un kilómetro —de nuevo llega. Ambos calculan de manera diferente, ambos obtienen lo mismo. Esta es la consistencia interna de la teoría: discrepancia en la descripción, coincidencia en lo observado.",
+        "Por qué el giro lo cambia todo. En la paradoja de los gemelos, parece que las situaciones son simétricas, pero no es así. Mientras ambos viajan uniformemente, son realmente equivalentes y cada uno ve los relojes del otro atrasados. Sin embargo, solo pueden encontrarse si uno gira. El giro implica aceleración, es decir, salir del sistema inercial, y ahí se rompe la simetría. Formalmente: el que se queda tiene un único sistema de referencia durante todo el trayecto, el que viaja tiene dos diferentes, y al empalmarlos surge un salto en la definición de simultaneidad. Ese salto produce toda la diferencia de edades."
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números: relojes en un satélite y vuelo a la estrella vecina",
+      "lead": "Un problema de la ingeniería cotidiana, el otro de un área a la que todavía no hemos volado.",
+      "given": "1) Un satélite de navegación se mueve a 3,9 km/s. 2) Una nave viaja a Próxima Centauri, que está a 4,2 años luz, a 0,95 c. Encontrar el retraso diario del reloj del satélite y el tiempo de vuelo según el reloj de la tripulación.",
+      "law": "$\\gamma \\approx 1 + \\dfrac{v^{2}}{2c^{2}}$ a bajas velocidades; $\\;\\Delta t_0 = \\Delta t/\\gamma$",
+      "solution": [
+        {
+          "text": "Para el satélite, la velocidad es pequeña, usamos la expansión.",
+          "latex": "\\gamma - 1 \\approx \\frac{v^{2}}{2c^{2}} = \\frac{(3{,}9\\cdot 10^{3})^{2}}{2(3\\cdot 10^{8})^{2}} \\approx 8{,}5\\cdot 10^{-11}"
+        },
+        {
+          "text": "En un día se acumula.",
+          "latex": "\\Delta = 8{,}5\\cdot 10^{-11} \\cdot 86400 \\approx 7{,}3\\cdot 10^{-6}\\ \\text{с} = 7{,}3\\ \\text{мкс}"
+        },
+        {
+          "text": "Ahora el vuelo estelar. Factor de Lorentz para 0,95 c.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}9025}} = \\frac{1}{\\sqrt{0{,}0975}} \\approx 3{,}20"
+        },
+        {
+          "text": "Según el reloj terrestre, el vuelo toma la distancia dividida por la velocidad.",
+          "latex": "t_{\\text{Земля}} = \\frac{4{,}2}{0{,}95} \\approx 4{,}42\\ \\text{года}"
+        },
+        {
+          "text": "Y según el reloj de la tripulación, es γ veces menor.",
+          "latex": "t_{\\text{экипаж}} = \\frac{4{,}42}{3{,}20} \\approx 1{,}38\\ \\text{года}"
+        }
+      ],
+      "answer": "El reloj del satélite se retrasa 7,3 microsegundos por día debido a la velocidad. La tripulación llegará a Próxima en un año y cuatro meses según su reloj, mientras que en la Tierra pasarán cuatro años y medio.",
+      "check": "Ambas respuestas merecen ser verificadas desde otro lado. Para el satélite hay un segundo efecto de signo opuesto: a 20 mil kilómetros de altitud la gravedad es más débil, y el reloj se adelanta 45 microsegundos por día. En total se adelanta 38, y ese es el valor que se programa en el equipo. Sin la corrección, el navegador se equivocaría once kilómetros diarios. Para la nave estelar, es instructivo ver desde el sistema de la tripulación: su tiempo transcurre normal, pero la distancia a Próxima se contrae en un factor de 3,2 y resulta ser 1,31 años luz — a 0,95 c eso da exactamente 1,38 años. De nuevo dos descripciones y una misma respuesta."
+    },
+    "constants": {
+      "title": "Cantidades de este apartado",
+      "lead": "Números que muestran dónde los efectos son insignificantes y dónde lo determinan todo.",
+      "items": [
+        {
+          "sym": "dGPS",
+          "latex": "\\Delta t_{\\text{GPS}}",
+          "name": "Corrección diaria del reloj del satélite",
+          "value": "+38",
+          "unit": "μs/día",
+          "why": "Diferencia de dos efectos: menos 7 μs por la velocidad y más 45 por la gravedad debilitada. La luz recorre 11 km en 38 μs — ese sería el error diario de navegación.",
+          "mnemo": "El único dispositivo cotidiano que no funcionaría sin la relatividad. Lleva cuarenta años funcionando 24/7."
+        },
+        {
+          "sym": "tau_mu",
+          "latex": "\\tau_{\\mu}",
+          "name": "Vida propia del muón",
+          "value": "2,2",
+          "unit": "μs",
+          "why": "Cantidad constante en el sistema del propio muón. En el sistema de laboratorio se multiplica por γ, y en anillos de almacenamiento los muones viven treinta veces más — medido con precisión de fracciones de porcentaje.",
+          "mnemo": "En 2,2 μs la luz recorre 660 m. Compárese con el espesor de la atmósfera y quedará claro por qué los muones son la mejor prueba de la teoría."
+        },
+        {
+          "sym": "gamma_tab",
+          "latex": "\\gamma(\\beta)",
+          "name": "Valores de referencia del factor de Lorentz",
+          "value": "1,005 / 1,15 / 2 / 7",
+          "unit": "a 0,1 / 0,5 / 0,87 / 0,99 c",
+          "why": "Es útil tener toda la serie en mente: hasta la mitad de la velocidad de la luz la corrección es pequeña, a 0,87 el tiempo va dos veces más lento, a 0,99 siete veces.",
+          "mnemo": "Números bonitos: 0,6 c da exactamente 1,25, y 0,8 c da exactamente 1,667. Ambos del triángulo pitagórico 3-4-5."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Qué se sigue de esto",
+      "lead": "La dilatación del tiempo ha dejado de ser exótica y ha entrado en los cálculos de ingeniería.",
+      "items": [
+        {
+          "h": "Navegación",
+          "text": "Todos los sistemas de navegación por satélite tienen en cuenta ambas correcciones a nivel de firmware. Es el único dispositivo masivo donde la relatividad se usa directamente, no a través de consecuencias."
+        },
+        {
+          "h": "Aceleradores",
+          "text": "Los muones en un anillo de almacenamiento viven treinta veces más que su vida propia; de otro modo los experimentos con ellos serían imposibles. La verificación ocurre cada día laborable."
+        },
+        {
+          "h": "Rayos cósmicos",
+          "text": "Las partículas de ultraalta energía cruzan la Galaxia, aunque según su propio reloj su viaje dura poco. Sin la dilatación del tiempo, se habrían desintegrado mucho antes."
+        },
+        {
+          "h": "Relojes nucleares y metrología",
+          "text": "El segundo se define mediante una transición en el átomo de cesio, y cualquier desplazamiento del patrón requiere una corrección relativista. La comparación de relojes entre laboratorios de diferentes países es un problema aplicado de la relatividad."
+        },
+        {
+          "h": "Viajes interestelares",
+          "text": "Con una aceleración constante de 1 g, se puede llegar al centro de la Galaxia en veinte años de tiempo propio. En la Tierra, mientras tanto, habrán pasado veinticinco mil años — un viaje de ida."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: compruébelo con sus manos",
+      "lead": "Aquí no se pueden hacer experimentos en la cocina, pero sí mentales, y funcionan igual de bien.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Una vara más larga que el cobertizo",
+          "text": "Un corredor lleva una vara de 10 metros de largo y corre hacia un cobertizo de 8 metros. A una velocidad de 0,8 c, la vara se contrae a 6 metros para el observador junto al cobertizo y cabe completamente dentro — puede cerrar ambas puertas por un instante. Pero desde el punto de vista del corredor, el cobertizo se contrae a 4,8 metros y la vara no cabe de ninguna manera. ¿Quién tiene razón?",
+          "answer": "Ambos. La clave está en la relatividad de la simultaneidad. Para el observador junto al cobertizo, los eventos «la puerta trasera se cerró» y «la puerta delantera se cerró» son simultáneos, y en ese momento la vara está dentro. Para el corredor ocurren en tiempos diferentes: primero se cierra y se vuelve a abrir la puerta lejana cuando el extremo de la vara aún está fuera, luego la cercana cuando la punta ya ha salido. Ambas puertas llegan a estar cerradas, pero no simultáneamente. No hay contradicción: lo observado físicamente —la vara no está rota— coincide en ambas descripciones."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Un cubo en vuelo parece girado",
+          "text": "Durante medio siglo todos creyeron que un objeto en movimiento rápido debería verse achatado en la dirección del movimiento. En 1959 se descubrió que esto era incorrecto. ¿Cuál es el error?",
+          "answer": "En la confusión entre medición y observación. La contracción se refiere al resultado de la medición, donde las posiciones de los extremos se registran simultáneamente. Pero el ojo o la cámara captan la luz que llega en un mismo instante, pero que salió de diferentes puntos en tiempos distintos, porque las partes más lejanas están más lejos. Combinando estos dos efectos, obtenemos que el cubo no se ve comprimido sino girado: se ve su cara trasera, que en reposo estaría oculta. El error pasó desapercibido durante cincuenta y cuatro años, y fue notado simultáneamente por dos personas de forma independiente: Terrell y Penrose."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Los relojes volaron como pasajeros",
+          "text": "En el experimento de Hafele y Keating en 1971, compraron boletos separados para los relojes atómicos, y en la lista de pasajeros aparecían como «Sr. Reloj». Todo el experimento costó unos ocho mil dólares, la mayor parte en boletos. Resultado: en el vuelo hacia el este, los relojes se atrasaron 59 nanosegundos; hacia el oeste, se adelantaron 273. Ambos valores coincidieron con el cálculo. Quizás la mejor relación costo-significado en la historia de la física experimental."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "El tiempo propio es el menor, la longitud propia es la mayor",
+          "text": "Dos reglas de las que se deducen ambas fórmulas. El tiempo propio es el medido donde ambos eventos ocurren en el mismo punto; siempre es menor que los demás, por lo que los demás se obtienen multiplicando por γ. La longitud propia se mide donde el objeto está en reposo; es la mayor, por lo que las demás se obtienen dividiendo."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Corrección a velocidades cotidianas",
+          "text": "La desviación de γ de la unidad es igual a la mitad del cuadrado de la relación de velocidades. Automóvil en carretera: $5\\cdot 10^{-15}$. Avión: $3\\cdot 10^{-13}$. Satélite: $10^{-10}$. Cada vez que parezca que la relatividad es importante en la vida cotidiana, calcule esta relación — casi siempre resultará que no."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicabilidad",
+          "h": "La contracción no es compresión",
+          "text": "En una barra no surgen tensiones, no actúan fuerzas, los átomos no se acercan. Lo que cambia es el resultado del procedimiento de medición, porque requiere simultaneidad, y la simultaneidad es diferente para distintos observadores. Lorentz inicialmente pensó de otra manera — creía que los cuerpos realmente se comprimían por la presión del éter — y ese fue su error, aunque la fórmula era correcta."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Apéndice para curiosos: vuelo al centro de la Galaxia",
+      "lead": "No entra en la verificación. Cálculo que muestra que las distancias interestelares son superables, pero solo en un sentido.",
+      "blocks": [
+        {
+          "h": "Planteamiento",
+          "text": "Supongamos que una nave acelera constantemente a 1 g — una aceleración cómoda para el ser humano que genera la gravedad familiar. La mitad del camino acelera y la mitad desacelera. ¿Hasta dónde se puede llegar en una vida humana según el tiempo propio?"
+        },
+        {
+          "h": "Respuesta",
+          "text": "Hasta la estrella más cercana: unos 3,6 años. Hasta el centro de la Galaxia, 26 000 años luz: unos 20 años de tiempo propio. Hasta la galaxia de Andrómeda, 2,5 millones de años luz: unos 28 años. Más allá, la distancia casi no influye: el tiempo crece logarítmicamente porque la velocidad se acerca a la de la luz y la contracción de la longitud hace todo el trabajo."
+        },
+        {
+          "h": "Qué lo impide",
+          "text": "La energía. Acelerar una nave de cien toneladas a las velocidades necesarias requiere una energía comparable al consumo anual de la humanidad multiplicado por miles, y eso con un motor ideal que convierta completamente la masa en energía. Además, la materia interestelar, que a esas velocidades se convierte en radiación letal."
+        },
+        {
+          "h": "Y lo principal",
+          "text": "No hay camino de regreso. Mientras la tripulación vuela veinte años, en la Tierra pasan veinticinco mil. Solo se puede regresar a otra época. Esto no es una limitación técnica que los mejores motores puedan sortear, sino una consecuencia directa de la estructura del espacio-tiempo."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "Los relojes en movimiento se retrasan en un factor $\\gamma$, las reglas en movimiento se contraen en la dirección del movimiento en el mismo factor; son dos perspectivas del mismo fenómeno.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta t = \\gamma\\Delta t_0$",
+          "text": "el tiempo propio es el menor"
+        },
+        {
+          "icon": "formula",
+          "title": "$L = L_0/\\gamma$",
+          "text": "la longitud propia es la mayor, no cambia transversalmente"
+        },
+        {
+          "icon": "sigma",
+          "title": "La contracción de la",
+          "text": "La contracción de la longitud se deduce de la dilatación del tiempo, no se postula por separado"
+        },
+        {
+          "icon": "ruler",
+          "title": "La paradoja de los",
+          "text": "La paradoja de los gemelos se resuelve con el giro: la simetría se rompe por la aceleración"
+        },
+        {
+          "icon": "scale",
+          "title": "La contracción es una",
+          "text": "La contracción es una propiedad de la medición, no una compresión del cuerpo por fuerzas"
+        }
+      ],
+      "where": "Navegación por satélite, muones en la atmósfera y en anillos de almacenamiento, relojes atómicos en aviones, rayos cósmicos.",
+      "watchOut": "La contracción no se puede ver a simple vista: la luz de diferentes partes del cuerpo tarda tiempos distintos, y un cubo en movimiento rápido se ve girado, no achatado."
+    },
+    "quiz": [
+      {
+        "id": "t1",
+        "type": "mcq",
+        "q": "¿Qué tiempo se llama propio?",
+        "options": [
+          "El tiempo medido por el reloj más preciso",
+          "El tiempo medido por un reloj para el cual ambos eventos ocurren en el mismo punto del espacio",
+          "El tiempo en el sistema de referencia de la Tierra",
+          "El promedio de las lecturas de todos los observadores"
+        ],
+        "answer": 1,
+        "why": "El tiempo propio no está relacionado con la precisión del reloj, sino con la ubicación de los eventos: el reloj debe estar presente en ambos, es decir, en reposo respecto a lo que ocurre. Ese tiempo siempre es el menor posible — cualquier otro observador contará más.",
+        "hint": "Para un muón, su nacimiento y decaimiento ocurren en el mismo punto: ¿en qué sistema de referencia?"
+      },
+      {
+        "id": "t2",
+        "type": "mcq",
+        "q": "Una barra vuela frente a un observador. ¿Qué sucede con sus dimensiones?",
+        "options": [
+          "Todas las dimensiones se contraen por igual",
+          "Solo se contrae la dimensión a lo largo del movimiento, las transversales no cambian",
+          "Solo se contraen las dimensiones transversales",
+          "Las dimensiones no cambian, solo cambia la forma aparente"
+        ],
+        "answer": 1,
+        "why": "Solo se contrae la dimensión longitudinal. Las transversales se miden con eventos simultáneos en ambos sistemas y, por lo tanto, son iguales — de lo contrario, la teoría sería contradictoria: el tren resultaría a la vez más estrecho y más ancho que el túnel.",
+        "hint": "Imagine un tren entrando en un túnel. ¿Qué pasaría si también se contrajera el ancho? ¿Y qué dirían dos observadores al respecto?"
+      },
+      {
+        "id": "t3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿por qué la paradoja de los gemelos no es una verdadera paradoja?",
+        "keywords": [
+          "giro",
+          "aceleración",
+          "cambio de sistemas",
+          "no simétrico",
+          "inercial",
+          "uno gira",
+          "dos sistemas"
+        ],
+        "needed": 2,
+        "why": "Mientras ambos se mueven uniformemente, la situación es simétrica y cada uno ve que el reloj del otro se atrasa — no hay contradicción porque solo se pueden comparar acordando la simultaneidad, y esta es diferente. Para encontrarse, uno debe dar la vuelta, es decir, experimentar aceleración y cambiar de sistema de referencia. Así se rompe la simetría: el que se queda tiene un solo sistema para todo el viaje, el que se va tiene dos.",
+        "hint": "¿Qué debe hacer el que se va para regresar? ¿Hace lo mismo el que se queda en casa?"
+      },
+      {
+        "id": "t4",
+        "type": "estimate",
+        "q": "Una nave viaja a una velocidad de 0,8 c. ¿Cuántas veces más lentamente van sus relojes para un observador terrestre?",
+        "answer": 1.67,
+        "unit": "veces",
+        "tolerance": 0.15,
+        "why": "γ = 1/√(1 − 0,64) = 1/√0,36 = 1/0,6 ≈ 1,67. Un número bonito: 0,8 y 0,6 son los lados de un triángulo pitagórico 3-4-5, por lo que los problemas con velocidad 0,8 c siempre se resuelven mentalmente.",
+        "hint": "Eleva 0,8 al cuadrado, réstalo de la unidad y saca la raíz cuadrada. Obtendrás un número familiar."
+      }
+    ]
+  },
+  "ar": {
+    "title": "الزمن والطول",
+    "subtitle": "الفقرة 2 · الساعات المتحركة تتأخر، المساطر المتحركة أقصر",
+    "intro": [
+      "في عام 1971، اشترى عالمان تذاكر لرحلات جوية مدنية عادية - وبعض التذاكر الإضافية لحقائب تحتوي على ساعات ذرية. طارا حول الأرض شرقاً ثم غرباً، عادا وقارنا القراءات بساعات المرصد البحري. اختلفت القراءات بعشرات النانوثانية، تماماً كما تنبأت النظرية.",
+      "تجربة هافيل وكيتينغ كانت أرخص من معظم التجارب الفيزيائية، واختبرت أغرب ادعاء في النظرية: الزمن ليس كونياً. يتدفق بشكل مختلف بالنسبة لمراقبين مختلفين، والفرق قابل للقياس بأجهزة عادية على طائرات عادية.",
+      "في هذه الفقرة سنتناول كلا التأثيرين - تمدد الزمن وتقلص الطول - وسنرى أنهما ليسا ظاهرتين مختلفتين، بل ظاهرة واحدة من وجهين. وسنفهم أيضاً لماذا مفارقة التوأم الشهيرة ليست مفارقة في الحقيقة."
+    ],
+    "standNote": "شريط تمرير السرعة يتحكم في كلا التأثيرين في آن واحد - الأرقام تحت المشهد توضح كم سجلت الساعة المتحركة وما أصبح عليه طول المسطرة المتحركة. لاحظ شيئاً مهماً: حاصل ضرب هذه التصحيحات يبقى ثابتاً. الزمن يتمدد بنفس المعامل الذي يتقلص به الطول، وهذا ليس صدفة. جرّب النطاق الكامل ولاحظ أين يبدأ منحنى γ في الانحناء للأعلى: تقريباً بعد 0.7 من سرعة الضوء، تتوقف التأثيرات عن كونها تصحيحات وتصبح هي الأساس.",
+    "formula": {
+      "name": "تحويلات لورنتز",
+      "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\gamma = \\frac{1}{\\sqrt{1-v^{2}/c^{2}}}",
+      "alsoKnown": "تمدد الزمن وتقلص لورنتز",
+      "authors": [
+        {
+          "who": "جورج فيتزجيرالد",
+          "year": "1889",
+          "what": "أول من افترض تقلص الطول لتفسير نتيجة ميكلسون الصفرية. كانت الفكرة تخميناً بدون مبرر - ولكن الصيغة التي تنبأ بها كانت صحيحة."
+        },
+        {
+          "who": "هندريك لورنتز",
+          "year": "1892",
+          "what": "اشتق نفس الصيغة من الديناميكا الكهربائية وقدم مفهوم الزمن المحلي ككمية رياضية مساعدة. اعتبرها أداة ملائمة وليس زمناً حقيقياً."
+        },
+        {
+          "who": "ألبرت أينشتاين",
+          "year": "1905",
+          "what": "شرح أن الزمن المحلي للورنتز هو الزمن الحقيقي للمراقب المتحرك، وأن التقلص ليس نتيجة انضغاط الجسم بقوى، بل هو خاصية لقياس الطول في النظام المتحرك."
+        },
+        {
+          "who": "برونو روسي وديفيد هول",
+          "year": "1941",
+          "what": "قاسا تدفق الميونات على قمة جبل واشنطن وعند سفحه. الفرق في التدفق أكد تمدد الزمن كمياً - أول اختبار مباشر على مصدر طبيعي."
+        },
+        {
+          "who": "جوزيف هافيل وريتشارد كيتينغ",
+          "year": "1971",
+          "what": "نقلا ساعات ذرية حول العالم على طائرات مدنية وحصلا على فرق مع الساعات الأرضية متوافقاً مع الحسابات. كلفت التجربة ثمانية آلاف دولار، معظمها على التذاكر."
+        }
+      ],
+      "story": "تجربة هافيل وكيتينغ رائعة لعاديتها. الساعات سافرت كركاب، واشتروا لها مقاعد منفصلة، وفي سجل الرحلة أدرجت باسم 'السيد ساعة'. تضمن الحساب تأثيرين بإشارتين مختلفتين: التمدد من السرعة وتسارع التوقيت من الجاذبية الأضعف على الارتفاع - التأثير الثاني ينتمي للنسبية العامة. عند الطيران شرقاً مع دوران الأرض، تكون السرعة بالنسبة للنظام الساكن أكبر، وعند الطيران غرباً أقل، لذلك كانت النتائج مختلفة: شرقاً تأخرت الساعات 59 نانوثانية، وغرباً تقدمت 273. كلا الرقمين توافقا مع التوقع ضمن هامش الخطأ. منذ ذلك الحين، تكررت التجربة مرات عديدة بدقة متزايدة.",
+      "symbols": [
+        {
+          "sym": "dt0",
+          "latex": "\\Delta t_0",
+          "what": "الزمن الذاتي",
+          "unit": "ث",
+          "note": "الفاصل الزمني المقاس بساعة ساكنة بالنسبة للحدث؛ وهو الأصغر دائماً"
+        },
+        {
+          "sym": "dt",
+          "latex": "\\Delta t",
+          "what": "الزمن في النظام المخبري",
+          "unit": "ث",
+          "note": "ما تظهره ساعة المراقب الذي يتحرك بجانبه الجسم"
+        },
+        {
+          "sym": "L0",
+          "latex": "L_0",
+          "what": "الطول الذاتي",
+          "unit": "م",
+          "note": "الطول المقاس في النظام الذي يكون فيه الجسم ساكناً؛ وهو الأكبر دائماً"
+        },
+        {
+          "sym": "L",
+          "latex": "L",
+          "what": "الطول في النظام المخبري",
+          "unit": "م",
+          "note": "يتقلص فقط في اتجاه الحركة؛ الأبعاد العرضية لا تتغير"
+        },
+        {
+          "sym": "gamma2",
+          "latex": "\\gamma",
+          "what": "معامل لورنتز",
+          "unit": "—",
+          "note": "رقم واحد يتحكم في كلا التأثيرين: الزمن يُضرب به، الطول يُقسم عليه"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "استنتاج صارم: تقلص الطول كنتيجة لتباطؤ الزمن",
+      "lead": "لقد حصلنا بالفعل على تباطؤ الزمن من الساعات الضوئية. سنبين أن تقلص الطول يتبع منه تلقائيًا — وإلا لاختلف الراصدان حول ما حدث.",
+      "steps": [
+        {
+          "text": "لنأخذ نتيجة الفقرة السابقة. الساعات المتحركة بالنسبة للراصد تسير أبطأ — دورتها ممتدة بمقدار γ مرة.",
+          "latex": "\\Delta t = \\gamma\\,\\Delta t_0",
+          "figure": "isochron",
+          "figCaption": "الزمن الذاتي دائمًا هو الأصغر: أي راصد آخر سيحسب زمنًا أكبر."
+        },
+        {
+          "text": "الآن نقيس الطول. لنفترض أن قضيبًا يطير بجانب الراصد؛ فهو يسجل الوقت بين مرور الطرف الأمامي والخلفي ويضربه في السرعة. هذه طريقة قياس صادقة — تُستخدم في المسرعات.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}}",
+          "figure": "vline",
+          "figCaption": "طول الجسم المتحرك يُحدد بزمن العبور بجانب نقطة واحدة."
+        },
+        {
+          "text": "والآن لننظر إلى نفس الشيء من إطار القضيب. هناك هو ساكن وله طول ذاتي، والراصد يطير بجانبه. حدث 'الراصد يحاذي الطرف' يحدث في نقاط مختلفة من القضيب، لكن في نقطة واحدة بالنسبة للراصد نفسه.",
+          "latex": "L_0 = v\\,\\Delta t_{\\text{стержня}}",
+          "figure": "inertialframe",
+          "figCaption": "مفتاح الاستنتاج بأكمله: حدثان يحدثان في مكان واحد لراصد وفي مكانين مختلفين لآخر."
+        },
+        {
+          "text": "بما أن كلا الحدثين يحدثان في نقطة واحدة للراصد، فإن زمنه بينهما هو الزمن الذاتي، أي الأصغر. إذن الزمن في إطار القضيب أكبر بمقدار γ مرة.",
+          "latex": "\\Delta t_{\\text{стержня}} = \\gamma\\,\\Delta t_{\\text{лаб}}",
+          "figure": "secant",
+          "figCaption": "الزمن الذاتي هنا هو زمن الراصد وليس زمن القضيب — يجب الانتباه إلى ذلك بعناية."
+        },
+        {
+          "text": "نعوض واحدة في الأخرى ونحصل على تقلص الطول.",
+          "latex": "L = v\\,\\Delta t_{\\text{лаб}} = v\\,\\frac{\\Delta t_{\\text{стержня}}}{\\gamma} = \\frac{L_0}{\\gamma}",
+          "figure": "result",
+          "figCaption": "تقلص الطول ليس مسلمة مستقلة، بل نتيجة لتباطؤ الزمن."
+        },
+        {
+          "text": "لنتحقق من أن الحجم الطولي فقط هو الذي يتقلص. الأبعاد العرضية تُقاس بأحداث تحدث في وقت واحد في كلا الإطارين، وبالتالي لا تتغير — وإلا لنشأ تناقض مثل قطار يكون في نفس الوقت أضيق وأعرض من النفق.",
+          "latex": "L_{\\parallel} = \\frac{L_0}{\\gamma}, \\qquad L_{\\perp} = L_{\\perp 0}",
+          "figure": "frame",
+          "figCaption": "على طول الحركة ينكمش، وعرضيًا لا. وإلا لكانت النظرية متناقضة داخليًا."
+        },
+        {
+          "text": "ومفارقة التوأمين. الطائر يدور، أي يغير إطاره المرجعي، بينما الباقي لا يفعل. التناظر يُكسر بالدوران، ولذا يعود الأصغر سنًا. تم التحقق منه بالساعات الذرية والميونات في حلقات التخزين.",
+          "latex": "\\Delta t_{\\text{домосед}} = \\gamma\\,\\Delta t_{\\text{путешественник}}",
+          "figure": "curves",
+          "figCaption": "لا توجد مفارقة: الحالتان غير متماثلتين لأن الدوران يختبره واحد فقط."
+        }
+      ],
+      "plate": "الساعات المتحركة تتأخر بمقدار γ مرة، والمساطر المتحركة تقصر على طول الحركة بنفس المقدار. هذان ليسا تأثيرين منفصلين، بل تأثير واحد يُرى من جانبين.",
+      "note": "حدود التطبيق والخلط المستمر. تقلص الطول ليس انضغاطًا للجسم بقوى: القضيب لا يتشوه، ولا تنشأ فيه إجهادات. الأمر يتعلق بأن إجراء قياس طول جسم متحرك يتطلب تثبيت موضعي الطرفين في نفس الوقت، والتزامن يختلف بين الراصدين. علاوة على ذلك، لا يمكن رؤية التقلص بالعين: الضوء من نقاط مختلفة من الجسم يصل إلى العين في أوقات مختلفة، وبصريًا يبدو المكعب سريع الحركة مدورًا وليس مفلطحًا. لاحظوا ذلك فقط في عام 1959، بعد نصف قرن من إنشاء النظرية."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت ضرورية هنا",
+      "text": [
+        "ما هو الزمن الذاتي — مفهوم لا يمكن فهم المسائل بدونه. هو الزمن الذي تقيسه ساعة تكون عند الأحداث، أي لا تتحرك بالنسبة إليها. هذا الزمن دائمًا هو الأصغر بين كل الزمن الممكنة. قاعدة مفيدة: اسأل نفسك، عند من يحدث كلا الحدثين في نفس النقطة في الفضاء — عنده الزمن الذاتي. بالنسبة للميون، هو نفسه: وُلد واضمحل في نفس المكان في إطاره. بالنسبة للراصد على الأرض، هذان الحدثان متباعدان بعشرة كيلومترات، وزمنه أكبر.",
+        "لماذا يُضرب الزمن ويُقسم الطول. هذا مصدر دائم للأخطاء في المسائل، والأفضل حفظ المعنى وليس الصيغة. الزمن الذاتي هو الأصغر، إذن أي زمن آخر أكبر: نضرب في γ الذي دائمًا أكبر من واحد. الطول الذاتي هو الأكبر، إذن أي طول آخر أصغر: نقسم. اختبر نفسك بسؤال 'ماذا يجب أن يكون أكبر هنا'، بدلاً من محاولة تذكر أين توضع γ.",
+        "كيف يتوافق الرأيان حول الميون. هنا من المناسب تلخيص كل شيء في سطر واحد. الراصد على الأرض: الغلاف الجوي بسماكة 15 كم، زمن الحياة ممدد بمقدار 15.8 مرة، الميون ينجح. الميون نفسه: زمن حياته عادي، 2.2 ميكروثانية، لكن الغلاف الجوي تقلص بمقدار 15.8 مرة وأصبح أقل من كيلومتر — ينجح مرة أخرى. كلاهما يحسب بشكل مختلف، وكلاهما يحصل على نفس النتيجة. هذا هو الاتساق الداخلي للنظرية: اختلاف في الوصف مع تطابق في المشاهَد.",
+        "لماذا يغير الدوران كل شيء. في مفارقة التوأمين، يبدو أن الحالتين متماثلتان، لكن الأمر ليس كذلك. طالما أن كليهما يطيران بشكل منتظم، فهما متساويان بالفعل ويرى كل منهما أن ساعة الآخر تتأخر. لكنهما يستطيعان اللقاء فقط إذا انعطف أحدهما. الانعطاف يعني تسارعًا، أي خروجًا من الإطار القصوري — وهنا ينكسر التماثل. رسميًا: لدى الباقي إطار مرجعي واحد طوال الرحلة، بينما لدى الطائر إطاران مختلفان، وعند لصقهما يحدث قفزة في تعريف التزامن. هذه القفزة هي التي تعطي كل فارق العمر."
+      ]
+    },
+    "example": {
+      "title": "مثال بالأرقام: ساعة على قمر اصطناعي ورحلة إلى نجم مجاور",
+      "lead": "مهمة من الهندسة اليومية، والأخرى من مجال لم نصل إليه بعد.",
+      "given": "1) قمر ملاحي يتحرك بسرعة 3.9 كم/ث. 2) سفينة تتجه نحو بروكسيما قنطورس التي تبعد 4.2 سنة ضوئية، بسرعة 0.95 c. أوجد التأخر اليومي لساعة القمر وزمن الرحلة حسب ساعة الطاقم.",
+      "law": "عند السرعات الصغيرة: $\\gamma \\approx 1 + \\dfrac{v^{2}}{2c^{2}}$; $\\Delta t_0 = \\Delta t/\\gamma$",
+      "solution": [
+        {
+          "text": "بالنسبة للقمر السرعة صغيرة، نستخدم التقريب.",
+          "latex": "\\gamma - 1 \\approx \\frac{v^{2}}{2c^{2}} = \\frac{(3{,}9\\cdot 10^{3})^{2}}{2(3\\cdot 10^{8})^{2}} \\approx 8{,}5\\cdot 10^{-11}"
+        },
+        {
+          "text": "في اليوم يتراكم.",
+          "latex": "\\Delta = 8{,}5\\cdot 10^{-11} \\cdot 86400 \\approx 7{,}3\\cdot 10^{-6}\\ \\text{с} = 7{,}3\\ \\text{мкс}"
+        },
+        {
+          "text": "الآن الرحلة النجمية. عامل لورينتز لـ 0.95 c.",
+          "latex": "\\gamma = \\frac{1}{\\sqrt{1-0{,}9025}} = \\frac{1}{\\sqrt{0{,}0975}} \\approx 3{,}20"
+        },
+        {
+          "text": "حسب ساعة الأرض، الرحلة تستغرق المسافة مقسومة على السرعة.",
+          "latex": "t_{\\text{Земля}} = \\frac{4{,}2}{0{,}95} \\approx 4{,}42\\ \\text{года}"
+        },
+        {
+          "text": "أما حسب ساعة الطاقم، فهي أقل بعامل γ.",
+          "latex": "t_{\\text{экипаж}} = \\frac{4{,}42}{3{,}20} \\approx 1{,}38\\ \\text{года}"
+        }
+      ],
+      "answer": "تتأخر ساعة القمر بمقدار 7.3 ميكروثانية في اليوم بسبب السرعة. سيصل الطاقم إلى بروكسيما في عام وأربعة أشهر حسب ساعاتهم، بينما على الأرض سيمر أربع سنوات ونصف.",
+      "check": "كلا الإجابتين يجدر التحقق منهما من جهة أخرى. بالنسبة للقمر هناك تأثير ثانٍ معاكس: على ارتفاع 20 ألف كيلومتر، الجاذبية أضعف، وتتقدم الساعة بمقدار 45 ميكروثانية في اليوم. إجمالاً تتقدم بمقدار 38، وهذه القيمة هي التي تضبط في الجهاز. بدون التصحيح، سيكون خطأ الملاحة أحد عشر كيلومترًا يوميًا. بالنسبة للسفينة الفضائية، من المفيد النظر من نظام الطاقم: وقتهم يسير بشكل طبيعي، لكن المسافة إلى بروكسيما تنكمش بعامل 3.2 لتصبح 1.31 سنة ضوئية – بسرعة 0.95 c، هذا يعادل 1.38 سنة. مرة أخرى وصفان وإجابة واحدة."
+    },
+    "constants": {
+      "title": "قيم هذا القسم",
+      "lead": "أرقام توضح أين تكون التأثيرات ضئيلة وأين تحدد كل شيء.",
+      "items": [
+        {
+          "sym": "dGPS",
+          "latex": "\\Delta t_{\\text{GPS}}",
+          "name": "التصحيح اليومي لساعة القمر",
+          "value": "+38",
+          "unit": "ميكروثانية/يوم",
+          "why": "الفرق بين تأثيرين: ناقص 7 ميكروثانية من السرعة وزائد 45 من الجاذبية المخففة. الضوء يقطع 11 كيلومترًا في 38 ميكروثانية – هذا هو الخطأ اليومي للملاحة دون تصحيح.",
+          "mnemo": "الجهاز المنزلي الوحيد الذي لن يعمل دون نظرية النسبية. يتم التحقق منه على مدار الساعة منذ أربعين عامًا."
+        },
+        {
+          "sym": "tau_mu",
+          "latex": "\\tau_{\\mu}",
+          "name": "زمن حياة الميون الذاتي",
+          "value": "2,2",
+          "unit": "ميكروثانية",
+          "why": "قيمة ثابتة في نظام الميون نفسه. في النظام المخبري تُضرب في γ، وفي حلقات التخزين تعيش الميونات ثلاثين مرة أطول – تم قياسها بدقة تصل إلى كسور في المئة.",
+          "mnemo": "في 2,2 ميكروثانية يقطع الضوء 660 مترًا. قارن مع سمك الغلاف الجوي، وسيتضح لماذا الميونات هي أفضل اختبار للنظرية."
+        },
+        {
+          "sym": "gamma_tab",
+          "latex": "\\gamma(\\beta)",
+          "name": "القيم المرجعية لعامل لورينتز",
+          "value": "1,005 / 1,15 / 2 / 7",
+          "unit": "عند 0,1 / 0,5 / 0,87 / 0,99 c",
+          "why": "من المفيد حفظ السلسلة: حتى نصف سرعة الضوء التصحيح صغير، عند 0,87 الزمن يمر بنصف السرعة، عند 0,99 سبع مرات.",
+          "mnemo": "أرقام جميلة: 0,6 c تعطي 1,25 بالضبط، و 0,8 c تعطي 1,667 بالضبط. كلاهما من مثلث فيثاغورث 3-4-5."
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "ما ينتج عن هذا",
+      "lead": "توقف تمدد الزمن عن كونه غريبًا وأصبح جزءًا من الحسابات الهندسية.",
+      "items": [
+        {
+          "h": "الملاحة",
+          "text": "جميع أنظمة الملاحة عبر الأقمار الاصطناعية تأخذ في الاعتبار كلا التصحيحين على مستوى البرنامج الثابت. هذا هو الجهاز الوحيد واسع الانتشار الذي تستخدم فيه نظرية النسبية مباشرة، وليس من خلال النتائج."
+        },
+        {
+          "h": "المعجلات",
+          "text": "تعيش الميونات في حلقة التخزين ثلاثين مرة أطول من زمن حياتها الذاتي – وإلا لكانت التجارب معها مستحيلة. يتم التحقق يوميًا."
+        },
+        {
+          "h": "الأشعة الكونية",
+          "text": "جسيمات فائقة الطاقة تعبر المجرة، على الرغم من أن رحلتها تستمر لفترة قصيرة حسب ساعتها الذاتية. بدون تمدد الزمن، لكانت اضمحلت في وقت أبكر."
+        },
+        {
+          "h": "الساعات النووية وعلم القياس",
+          "text": "تعرف الثانية من خلال انتقال في ذرة السيزيوم، وأي نقل للمعيار يتطلب تصحيحًا نسبويًا. مقارنة الساعات بين مختبرات الدول المختلفة هي مسألة تطبيقية للنظرية النسبية."
+        },
+        {
+          "h": "الرحلات بين النجوم",
+          "text": "بتسارع ثابت مقداره 1 g، يمكن الوصول إلى مركز المجرة في عشرين سنة من الزمن الذاتي. على الأرض ستمر خمسة وعشرون ألف سنة – رحلة بلا عودة."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: اختبر بنفسك",
+      "lead": "لا يمكن إجراء تجارب في المطبخ هنا، لكن هناك تجارب ذهنية، وهي تعمل تمامًا مثلها.",
+      "items": [
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "عمود أطول من الحظيرة",
+          "text": "عداء يحمل عمودًا طوله 10 أمتار، ويركض إلى حظيرة طولها 8 أمتار. عند سرعة 0.8c، ينكمش العمود بالنسبة لمراقب عند الحظيرة إلى 6 أمتار ويدخل بالكامل - يمكن إغلاق البابين للحظة. لكن من وجهة نظر العداء، تنكمش الحظيرة إلى 4.8 أمتار، ولا يمكن للعمود أن يدخل بأي حال. من هو الصحيح؟",
+          "answer": "كلاهما. الحل يكمن في نسبية التزامن. بالنسبة للمراقب عند الحظيرة، فإن حدثي 'إغلاق الباب الخلفي' و'إغلاق الباب الأمامي' متزامنان، وفي تلك اللحظة يكون العمود بالداخل. بالنسبة للعداء، يحدثان في أوقات مختلفة: أولاً يُغلق ويُفتح الباب البعيد بينما نهاية العمود لا تزال في الخارج، ثم الباب القريب عندما تكون البداية قد خرجت بالفعل. كلا البابين يكونان مغلقين في وقت ما، لكن ليس في وقت واحد. لا يوجد تناقض: ما يُلاحظ فعليًا - العمود غير مكسور - متطابق في كلا الوصفين."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "المكعب الطائر يبدو ملتفًا",
+          "text": "لنصف قرن، اعتقد الجميع أن جسمًا سريع الطيران يجب أن يبدو مفلطحًا على طول اتجاه الحركة. في عام 1959، تبين أن هذا غير صحيح. ما هو الخطأ؟",
+          "answer": "في الخلط بين القياس والملاحظة. يتعلق الانكماش بنتيجة القياس، حيث يتم تثبيت مواضع النهايات في وقت واحد. أما العين أو الكاميرا فتلتقط الضوء الذي يصل في لحظة واحدة - لكنه صدر من نقاط مختلفة في أوقات مختلفة، لأن الأجزاء البعيدة أبعد. عند جمع هذين التأثيرين، نجد أن المكعب لا يبدو مضغوطًا، بل ملتفًا: يظهر وجهه الخلفي الذي كان مخفيًا في حالة السكون. لم يُلاحظ هذا الخطأ لمدة أربعة وخمسين عامًا، وقد لاحظه اثنان في وقت واحد بشكل مستقل - تيريل وبينروز."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة مثيرة للاهتمام",
+          "h": "الساعات سافرت كركاب",
+          "text": "في تجربة هافيلي وكيتنغ عام 1971، تم شراء تذاكر منفصلة للساعات الذرية، وفي قائمة الركاب تم إدراجها باسم 'السيد ساعة'. كلفت التجربة بأكملها حوالي ثمانية آلاف دولار، ذهب معظمها للتذاكر. النتيجة: عند الطيران شرقًا، تأخرت الساعات بمقدار 59 نانوثانية، وعند الطيران غربًا، تقدمت بمقدار 273 نانوثانية. تطابقت كلتا القيمتين مع الحساب. ربما تكون أفضل نسبة سعر إلى أهمية في تاريخ الفيزياء التجريبية."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "وسيلة تذكير",
+          "h": "الزمن الذاتي هو الأصغر، والطول الذاتي هو الأكبر",
+          "text": "قاعدتان يمكن من خلالهما استعادة كلتا المعادلتين. الزمن الذاتي هو الزمن المقاس عندما يكون كلا الحدثين في نفس النقطة؛ وهو دائمًا أقل من الآخرين، لذلك يتم الحصول على الآخرين بالضرب في γ. الطول الذاتي يقاس عندما يكون الجسم ساكنًا؛ وهو الأكبر، لذلك يتم الحصول على الآخرين بالقسمة."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "التصحيح في السرعات اليومية",
+          "text": "انحراف γ عن الواحد يساوي نصف مربع نسبة السرعات. سيارة على الطريق السريع: $5\\cdot 10^{-15}$. طائرة: $3\\cdot 10^{-13}$. قمر صناعي: $10^{-10}$. كلما بدا أن النسبية مهمة في الحياة اليومية، احسب هذه النسبة - سنجد دائمًا أنها ليست كذلك."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود الصلاحية",
+          "h": "الانكماش ليس ضغطًا",
+          "text": "لا تنشأ أي ضغوط في القضيب، ولا توجد قوى تضغط عليه، ولا تقترب الذرات من بعضها. يتغير نتيجة إجراء القياس لأنه يتطلب التزامن، والتزامن يختلف بين المراقبين. اعتقد لورنتز في البداية خلاف ذلك - أنه تتقلص الأجسام بالفعل بضغط الأثير - وكان هذا خطأه رغم صحة المعادلة."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "ملحق للفضوليين: رحلة إلى مركز المجرة",
+      "lead": "غير مدرج في الاختبار. حساب يوضح أن المسافات بين النجوم يمكن تجاوزها - ولكن فقط في اتجاه واحد.",
+      "blocks": [
+        {
+          "h": "الفرضية",
+          "text": "لنفترض أن سفينة تتسارع باستمرار بمقدار 1 g - تسارع مريح للإنسان يخلق قوة جاذبية مألوفة. نصف الطريق تتسارع، والنصف الآخر تتباطأ. إلى أين يمكن الوصول في عمر بشري وفقًا للساعة الذاتية؟"
+        },
+        {
+          "h": "الإجابة",
+          "text": "إلى أقرب نجم - حوالي 3.6 سنة. إلى مركز المجرة، 26 ألف سنة ضوئية - حوالي 20 سنة من الزمن الذاتي. إلى سديم أندروميدا، 2.5 مليون سنة ضوئية - حوالي 28 سنة. أبعد من ذلك، لا تؤثر المسافة كثيرًا: الزمن يزيد لوغاريتميًا، لأن السرعة تقترب من سرعة الضوء وانكماش الطول يقوم بكل العمل."
+        },
+        {
+          "h": "ما الذي يعيق؟",
+          "text": "الطاقة. تسريع سفينة كتلتها مائة طن إلى السرعات المطلوبة يتطلب طاقة تعادل الاستهلاك السنوي للبشرية مضروبًا في آلاف - وذلك بمحرك مثالي مع تحويل كامل للكتلة إلى طاقة. بالإضافة إلى المادة المقابلة التي تصبح إشعاعًا مميتًا بهذه السرعات."
+        },
+        {
+          "h": "والأهم",
+          "text": "لا يوجد طريق للعودة. بينما يطير الطاقم لمدة عشرين عامًا، تمر على الأرض خمسة وعشرون ألف عام. يمكن العودة فقط إلى عصر آخر. هذا ليس قيدًا تقنيًا يمكن تجاوزه بمحركات أفضل، بل نتيجة مباشرة لبنية الزمكان."
+        }
+      ]
+    },
+    "memo": {
+      "essence": "الساعات المتحركة تتأخر بعامل $\\gamma$، والمساطر المتحركة تنكمش على طول الحركة بنفس المقدار؛ هاتان نظرتان لنفس الظاهرة.",
+      "keyIdeas": [
+        {
+          "icon": "lamp",
+          "title": "$\\Delta t = \\gamma\\Delta t_0$",
+          "text": "الزمن الذاتي هو الأصغر"
+        },
+        {
+          "icon": "formula",
+          "title": "$L = L_0/\\gamma$",
+          "text": "الطول الذاتي هو الأكبر، لا يتغير عرضيًا للحركة"
+        },
+        {
+          "icon": "sigma",
+          "title": "انكماش الطول يتبع من",
+          "text": "انكماش الطول يتبع من تمدد الزمن، وليس مفترضًا بشكل منفصل"
+        },
+        {
+          "icon": "ruler",
+          "title": "مفارقة التوأم تُحل بالدوران",
+          "text": "التماثل يُكسر بالتسارع"
+        },
+        {
+          "icon": "scale",
+          "title": "الانكماش هو خاصية القياس،",
+          "text": "الانكماش هو خاصية القياس، وليس ضغط الجسم بقوى"
+        }
+      ],
+      "where": "الملاحة عبر الأقمار الصناعية، الميونات في الغلاف الجوي وفي حلقات التخزين، الساعات الذرية على الطائرات، الأشعة الكونية.",
+      "watchOut": "لا يمكن رؤية الانكماش بالعين: الضوء من أجزاء مختلفة من الجسم يستغرق أوقاتًا مختلفة، والمكعب الطائر بسرعة يبدو ملتفًا وليس مفلطحًا."
+    },
+    "quiz": [
+      {
+        "id": "t1",
+        "type": "mcq",
+        "q": "ما هو الوقت الذي يُسمى الوقت الخاص؟",
+        "options": [
+          "الوقت وفقًا لأدق ساعة",
+          "الوقت الذي يقاس بساعة يكون فيها كلا الحدثين في نفس النقطة في الفضاء",
+          "الوقت في الإطار المرجعي للأرض",
+          "متوسط قراءات جميع المراقبين"
+        ],
+        "answer": 1,
+        "why": "الزمن الخاص لا يرتبط بدقة الساعة، بل بموقع الأحداث: يجب أن تكون الساعة عند كلا الحدثين، أي ساكنة بالنسبة لما يحدث. هذا الزمن دائمًا هو الأصغر الممكن — أي مراقب آخر سيحسب زمنًا أكبر.",
+        "hint": "بالنسبة للميون، ولادته واضمحلاله يحدثان في نفس النقطة — في أي إطار مرجعي؟"
+      },
+      {
+        "id": "t2",
+        "type": "mcq",
+        "q": "قضيب يطير بجانب مراقب. ماذا يحدث لأبعاده؟",
+        "options": [
+          "تتقلص جميع الأبعاد بالتساوي",
+          "يتقلص البعد في اتجاه الحركة فقط، بينما الأبعاد العرضية لا تتغير",
+          "تتقلص الأبعاد العرضية فقط",
+          "الأبعاد لا تتغير، بل يتغير الشكل الظاهري فقط"
+        ],
+        "answer": 1,
+        "why": "يتقلص البعد الطولي فقط. الأبعاد العرضية تُقاس بأحداث متزامنة في كلا النظامين، ولذا فهي متساوية — وإلا لكانت النظرية متناقضة: لكان القطار أضيق وأعرض من النفق في نفس الوقت.",
+        "hint": "تخيل قطارًا يدخل نفقًا. ماذا سيحدث إذا تقلص العرض أيضًا — وماذا سيقول مراقبان عن ذلك؟"
+      },
+      {
+        "id": "t3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: لماذا مفارقة التوأم ليست مفارقة حقيقية؟",
+        "keywords": [
+          "دوران",
+          "تسارع",
+          "تغيير الإطارات",
+          "غير متماثل",
+          "قصوري",
+          "أحدهما يدور",
+          "إطاران"
+        ],
+        "needed": 2,
+        "why": "طالما أن كليهما يتحركان بشكل منتظم، فإن الموقف متماثل وكل منهما يرى ساعة الآخر أبطأ — لا تناقض، لأن المقارنة تتطلب الاتفاق على التزامن، وهو مختلف. للقاء، يجب على أحدهما أن يدور، أي أن يتسارع ويغير الإطار المرجعي. بهذا ينكسر التماثل: لدى الباقي إطار واحد طوال الرحلة، ولدى المسافر إطاران.",
+        "hint": "ماذا يجب أن يفعل المسافر ليعود؟ هل يفعل الباقي في المنزل الشيء نفسه؟"
+      },
+      {
+        "id": "t4",
+        "type": "estimate",
+        "q": "سفينة تتحرك بسرعة 0.8 ج. كم مرة تكون ساعتها أبطأ بالنسبة لمراقب على الأرض؟",
+        "answer": 1.67,
+        "unit": "مرة",
+        "tolerance": 0.15,
+        "why": "γ = 1/√(1 − 0.64) = 1/√0.36 = 1/0.6 ≈ 1.67. رقم جميل: 0.8 و 0.6 هما ضلعي مثلث فيثاغورس 3-4-5، لذا فإن المسائل بسرعة 0.8 ج تُحل ذهنيًا دائمًا.",
+        "hint": "ارفع 0.8 للتربيع، اطرح من الواحد، ثم خذ الجذر التربيعي. ستحصل على رقم مألوف."
+      }
+    ]
+  },
+  "tags": [
+    "time_dilation",
+    "galaxy",
+    "cosmic_rays"
+  ],
+  "laws": [
+    "lorentz_transformations"
+  ],
+  "examples_from_articles": [
+    {
+      "id": "2607.09845",
+      "why": "совпадение по теме: cosmic_rays, galaxy"
+    },
+    {
+      "id": "2607.05289v1",
+      "why": "совпадение по теме: galaxy, time_dilation"
+    },
+    {
+      "id": "2607.03848v1",
+      "why": "совпадение по теме: galaxy, time_dilation"
+    }
+  ]
+}

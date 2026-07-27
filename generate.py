@@ -167,12 +167,12 @@ def gen_mosaic(images, aid, date_str, captions=None, cover_url=None):
 
     items = []  # (full_url, thumb_url, caption)
     if cover_url:
-        cover_thumb = f"{base}/t_ai.jpg" if (folder / "t_ai.jpg").exists() else cover_url
+        cover_thumb = f"{base}/t_ai.webp" if (folder / "t_ai.jpg").exists() else cover_url
         items.append((cover_url, cover_thumb, ""))
     for i in range(len(images)):
         if i == dup_idx:
             continue
-        u = f"{base}/{i}.jpg"
+        u = f"{base}/{i}.webp"
         items.append((u, u, cap_of(i)))
 
     if not items:
@@ -203,6 +203,9 @@ def gen_mosaic(images, aid, date_str, captions=None, cover_url=None):
 
 
 from gen_llm import *  # LLM-слой вынесен в gen_llm.py
+# Флаг экономии (ТЗ 2026-07-27, §6.5): advanced — самый крупный и самый редко читаемый уровень.
+# По умолчанию true, чтобы ничего не сломать на существующем архиве.
+TRANSLATE_ADVANCED = CONFIG.get("translate_advanced", True)
 
 REFINE = os.environ.get("REFINE") == "1" or CONFIG.get("refine", False)
 
@@ -265,7 +268,7 @@ def build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_full="
         "description": scipop.get("oneliner", "")[:250],
         "inLanguage": lang, "datePublished": date_str,
         "url": canonical_url,
-        "image": f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article['id']}/ai.jpg",
+        "image": f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article['id']}/ai.webp",
         "author": [{"@type": "Person", "name": a} for a in article.get("authors", [])[:10]],
         "publisher": {"@type": "Organization", "name": SITE_NAME},
         "isBasedOn": f"https://arxiv.org/abs/{article['id']}",
@@ -439,7 +442,8 @@ FEEDBACK_UI_LOC = {
 
 def feedback_comment_label(lang):
     """Подпись кнопки «+ комментарий» — нужна и снаружи (когда кнопка живёт в строке лайков статьи)."""
-    return FEEDBACK_UI_LOC.get(lang, ("", "+ add a comment", "", ""))[1]
+    # своя SVG-иконка вместо голого «+» (юзер 2026-07-25: «+ add comment — сделать нашу иконку»)
+    return '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.35-.28-3.36-.78L4.5 20l1.3-4.1A7.5 7.5 0 1 1 20 12Z"/></svg> ' + FEEDBACK_UI_LOC.get(lang, ("", "add a comment", "", ""))[1].lstrip("+ ")
 
 
 def build_feedback_html(like_id, lang, entity_type="article", next_button_html="", inline_toggle=False):
@@ -632,8 +636,8 @@ def entity_article_card(a, lang):
     как в тегах, единообразно»). Раньше тут была голая .card-content без картинки."""
     base = f"/{LANG_DIR}/{DEFAULT_LANG}/archive/{a['date']}/{a['id']}/"
     has_img = a.get("image") is not False
-    thumb = (f'<a class="card-img-wrap" href="{a["url"]}"><img src="{base}t_ai.jpg" '
-             f'data-fb="{base}ai.jpg" loading="lazy" '
+    thumb = (f'<a class="card-img-wrap" href="{a["url"]}"><img src="{base}t_ai.webp" '
+             f'data-fb="{base}ai.webp" loading="lazy" '
              f"onerror=\"if(this.dataset.fb){{this.src=this.dataset.fb;this.removeAttribute('data-fb');}}"
              f"else{{this.closest('.card-img-wrap').style.display='none';}}\" alt=\"\"></a>") if has_img else ''
     desc = safe(a.get("description", a.get("oneliner", "")))
@@ -885,7 +889,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # AI-обложка (ai.jpg) идёт ПЕРВЫМ кадром галереи, а не отдельным блоком сверху (юзер-фидбек
     # 2026-07-20: "AI картинки первые, отдельную первую убрать"). Отдельного .ai-cover больше нет.
     ai_jpg = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"] / "ai.jpg"
-    ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.jpg' if ai_jpg.exists() else None
+    ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.webp' if ai_jpg.exists() else None
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions, cover_url=ai_url)
     ai_cover_html = ""
     tags_side_html = gen_tags_side(tags, lang)
@@ -907,6 +911,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
 
     page_file = VERSION_FILES[version]
     version_toggle_html = version_toggle_links(lang, version, date_str, article["id"])
+    # Фаза 4: иконочный переключатель над названием + компактный дубль внизу статьи,
+    # плюс карточка «коротко» шапкой (решения владельца 2026-07-27).
+    level_switch_html = level_switch_links(lang, version, date_str, article["id"])
+    level_switch_bottom_html = level_switch_links(lang, version, date_str, article["id"], compact=True)
+    mini_head_html = mini_header_html((scipop.get("mini") or "").strip(), lang)
     # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
     canonical_url = f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/{page_file}"
 
@@ -950,6 +959,9 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         id=article["id"], date=date_str,
         like_id=like_id,
         version_toggle_html=version_toggle_html,
+        level_switch_html=level_switch_html,
+        level_switch_bottom_html=level_switch_bottom_html,
+        mini_head_html=mini_head_html,
         authors_full=authors_html,
         search_placeholder=safe(loc.get("search", "")),
         search_hint=safe(loc.get("hint", "# tag · @ author · ! scientist")),
@@ -1381,7 +1393,7 @@ def generate_tag_page(tag_id, lang):
         fav_title=safe(nav_fav_title(lang)),
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         tag_id=attr_safe(tag_id),
-        tag_name=safe(tag_data.get("name", tag_id)), article_count=tag_graph.get("article_count", 0),
+        tag_name=safe(tag_data.get("name", tag_id)), entity_kind_html=entity_kind_html("tag", lang), article_count=tag_graph.get("article_count", 0),
         tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{tag_graph.get("article_count", 0)}</a></div>'
                          if tag_graph.get("article_count", 0) else ""),
         ai_cover_html=ai_cover_html,
@@ -1474,6 +1486,24 @@ def law_type_label(t, lang):
 
 # Раздел науки тега (для группировки облака списком) — фиксированный английский slug (НЕ переводится
 # через LLM, чтобы группировка/цвета не разъезжались по языкам); подписи — тут, локализуются вручную.
+# Подпись ТИПА страницы-сущности над заголовком — чтобы читатель понимал, где он находится
+# (юзер 2026-07-25: «на карточках тегов/законов/учёных надо писать, что это за тип»).
+ENTITY_KIND_LABELS = {
+    "tag":       {"ru": "Тег", "en": "Tag", "es": "Etiqueta", "ar": "وسم"},
+    "law":       {"ru": "Закон", "en": "Law", "es": "Ley", "ar": "قانون"},
+    "scientist": {"ru": "Учёный", "en": "Scientist", "es": "Científico", "ar": "عالِم"},
+    "section":   {"ru": "Раздел", "en": "Section", "es": "Sección", "ar": "قسم"},
+    "author":    {"ru": "Автор", "en": "Author", "es": "Autor", "ar": "مؤلف"},
+}
+
+
+def entity_kind_html(kind, lang):
+    e = ENTITY_KIND_LABELS.get(kind)
+    if not e:
+        return ""
+    return f'<div class="entity-kind">{safe(e.get(lang, e["en"]))}</div>'
+
+
 TAG_DOMAIN_LABELS = {
     "cosmology":              {"ru": "Космология", "en": "Cosmology", "es": "Cosmología", "ar": "علم الكونيات"},
     "astrophysics":           {"ru": "Астрофизика", "en": "Astrophysics", "es": "Astrofísica", "ar": "الفيزياء الفلكية"},
@@ -1745,7 +1775,7 @@ def generate_law_page(law_id, lang):
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
         og_meta_html=og_meta_html,
-        law_name=safe(L.get("name", law_id)), law_type=safe(L.get("type", "")),
+        law_name=safe(L.get("name", law_id)), entity_kind_html=entity_kind_html("law", lang), law_type=safe(L.get("type", "")),
         ai_cover_html=ai_cover_html,
         actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
         entity_side_html=entity_side_html,
@@ -2034,7 +2064,7 @@ def generate_scientist_page(sid, lang):
         scientist_id=attr_safe(sid),
         version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
         actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
-        scientist_name=safe(sid), lifespan=safe(localize_present(data.get("lifespan", ""), lang)),
+        scientist_name=safe(sid), entity_kind_html=entity_kind_html("scientist", lang), lifespan=safe(localize_present(data.get("lifespan", ""), lang)),
         fields=", ".join(as_list(data.get("fields", []))),
         scientist_description=safe(data.get("description", "")),
         scientist_biography=safe(data.get("biography", "")),
@@ -2742,8 +2772,12 @@ def generate_sitemaps():
             for a in json.loads(idx.read_text(encoding="utf-8")):
                 if a["id"] in ids_seen: continue
                 ids_seen.add(a["id"])
+                # Только существующие файлы: у экспресс-статьи без короткого текста mini.html
+                # не пишется, а карта сайта звала поисковик на несуществующий адрес.
+                art_dir = Path(LANG_DIR) / lang / "archive" / a["date"] / a["id"]
                 for vf in VERSION_FILES.values():
-                    urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/{vf}")
+                    if (art_dir / vf).exists():
+                        urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/{vf}")
         for tid in tags_graph:
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tid}.html")
         fn = f"sitemap-{lang}.xml"
@@ -2804,7 +2838,10 @@ def write_arxiv_categories_json():
         json.dumps(ARXIV_CATEGORY_DESCRIPTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def _write_text_retry(path, text, retries=3, encoding="utf-8"):
+_WRITE_FAILURES = []
+
+
+def _write_text_retry(path, text, retries=5, encoding="utf-8"):
     # encoding принимается только ради совместимости с вызовами вида write_text(..., encoding="utf-8"),
     # переведёнными на этот хелпер: пишем всегда в utf-8.
     """write_text() с ретраем — Windows иногда отдаёт OSError [Errno 22] на ровном месте при
@@ -2813,25 +2850,40 @@ def _write_text_retry(path, text, retries=3, encoding="utf-8"):
     Оба случая, что видели (2508.01648 в ar_backfill, 2601.16015 здесь) — не воспроизвелись
     повторно, чисто транзиентно."""
     import time
+    delay = 0.3
     for attempt in range(retries):
         try:
             path.write_text(text, encoding="utf-8")
-            return
-        except OSError:
+            return True
+        except OSError as e:
             if attempt == retries - 1:
-                raise
-            time.sleep(0.3)
+                # Ронять час работы из-за одной сорванной записи нельзя: запоминаем и идём дальше.
+                # Список печатается в конце прогона — эти страницы дописываются точечным регеном.
+                _WRITE_FAILURES.append((str(path), f"{type(e).__name__}: {e}"))
+                return False
+            time.sleep(delay)
+            delay *= 2
 
 
-def regenerate_all_html():
-    """Пересобирает HTML всех статей из data.json (без API). Идёт по источнику правды,
-    а не по индексам — устойчиво к их повреждению."""
-    print("🔄 Regenerate HTML only (no API)")
+def regenerate_all_html(only=None):
+    """Пересобирает HTML статей из data.json (без API). Идёт по источнику правды,
+    а не по индексам — устойчиво к их повреждению.
+
+    only — список дат (2026-07-01) и/или id статей (2607.00742). Если задан, страницы статей
+    пересобираются только для них, а агрегаты (теги, законы, учёные, архив, ленты, карты сайта,
+    индексы) всё равно строятся целиком: они ссылаются на статьи, и частичная сборка оставила бы
+    их рассогласованными. Полный проход тратит час на 31 тысячу страниц, точечный — минуты."""
+    only = set(only or ())
+    print("🔄 Regenerate HTML only (no API)"
+          + (f" · выборочно: {', '.join(sorted(only))}" if only else ""))
+    _WRITE_FAILURES.clear()
     write_arxiv_categories_json()
     for lang in LANGUAGES: ensure_lang_structure(lang)
     count = 0
     for data, folder in iter_articles():
         date_str = data.get("date", folder.parent.name)
+        if only and not ({date_str, data.get("id"), folder.parent.name} & only):
+            continue
         # только контентные картинки 0.jpg..N-1.jpg (ai.jpg — обложка, не в мозаике)
         images = sorted([p for p in folder.glob("*.jpg") if p.stem.isdigit()],
                         key=lambda p: int(p.stem))
@@ -2911,6 +2963,11 @@ def regenerate_all_html():
     generate_feeds()
     generate_status_page()
     print(f"  ✅ Regenerated {count} HTML pages + tags/scientists/authors/laws/graph")
+    if _WRITE_FAILURES:
+        print(f"  ⚠️ не записалось страниц: {len(_WRITE_FAILURES)} — допишите точечно "
+              f"(run.py html --only <дата|id>):")
+        for path, err in _WRITE_FAILURES[:12]:
+            print(f"       {path} — {err}")
 
 
 ARXIV_BASE_ID_RE = re.compile(r"v\d+$")
@@ -3037,16 +3094,22 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
                         _gf.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 except Exception as _e:
                     print(f"    ⚠️ gap-suggestions write: {_e}")
-            # Simple и Popular зависят ТОЛЬКО от Advanced (не друг от друга) → генерим параллельно.
-            with ThreadPoolExecutor(max_workers=2) as ex:
-                fs, fp = ex.submit(generate_simple, scipop_adv), ex.submit(generate_popular, scipop_adv)
-                scipop_simple, scipop_pop = fs.result(), fp.result()
+            # ЦЕПОЧКА (ТЗ контент-менеджера 2026-07-27, §4): advanced → popular → simple+mini.
+            # Раньше был веер (simple и popular независимо из advanced) — версии расходились по
+            # фактам и акцентам. Теперь popular наследует advanced, а simple+mini делаются ОДНИМ
+            # вызовом из popular; вся фактура переносится кодом (inherit_facts), не пересказом.
+            scipop_pop = generate_popular(scipop_adv)
+            scipop_simple, mini_ru = generate_simple_mini(scipop_pop)
+            if mini_ru:
+                scipop_pop["mini"] = mini_ru
+                scipop_simple["mini"] = mini_ru
             (article_folder / "api" / "simple-ru.json").write_text(
                 json.dumps(scipop_simple, ensure_ascii=False, indent=2), encoding="utf-8")
             (article_folder / "api" / "popular-ru.json").write_text(
                 json.dumps(scipop_pop, ensure_ascii=False, indent=2), encoding="utf-8")
 
-        # Рефлексивная шлифовка (--refine) — Simple и Popular независимы, шлифуем параллельно.
+        # Рефлексивная шлифовка — РУЧНОЙ инструмент (ТЗ 2026-07-27, §4): в штатный цикл не входит,
+        # чеклисты перенесены в промпты генерации как самопроверка. Остаётся для флагманских статей.
         # Экспресс сюда не заходит — его Simple уже прошлифован раньше (безусловно, не под --refine,
         # см. блок generate_express выше), Popular/Advanced в дефолтной конфигурации не публикуются.
         if REFINE and not express:
@@ -3486,7 +3549,7 @@ def regenerate_article(aid, force=True):
         print(f"  ❌ не удалось получить метаданные {aid} с arXiv")
         return False
     if not date_str:
-        date_str = (a.get("published", "")[:10]) or TARGET_DATE
+        date_str = iso_day(a.get("published")) or TARGET_DATE
     for lang in LANGUAGES: ensure_lang_structure(lang)
     item = build_article(a, date_str, load_generation_inputs(), force=True)
     if not item:
@@ -3503,6 +3566,25 @@ def regenerate_article(aid, force=True):
     update_all_authors()
     print(f"  ✅ {aid} пересоздана ({date_str})")
     return True
+
+
+def iso_day(v):
+    """Дата статьи в виде ГГГГ-ММ-ДД.
+
+    arXiv отдаёт published то в ISO, то в формате письма («Fri, 03 Jul 2026 12:00:00 GMT»).
+    Слепое обрезание до десяти символов давало имя папки «Fri, 03 Ju» — папку-обрубок, из-за
+    которой ломались ссылки во всех четырёх языках (ловилось дважды: 2026-07-27)."""
+    v = (v or "").strip()
+    if re.match(r"^\d{4}-\d{2}-\d{2}", v):
+        return v[:10]
+    m = re.search(r"(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})", v)
+    if m:
+        try:
+            return datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)}",
+                                     "%d %b %Y").strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+    return ""
 
 
 def _refresh_all_aggregates():
@@ -3524,7 +3606,7 @@ def generate_ids(id_list, force=False):
         if not a:
             print(f"  ❌ {aid}: нет метаданных на arXiv")
             return None
-        date_str = (a.get("published", "")[:10]) or TARGET_DATE
+        date_str = iso_day(a.get("published")) or TARGET_DATE
         item = build_article(a, date_str, inputs, force=force)
         if item: item["date_str"] = date_str
         return item
@@ -3577,7 +3659,7 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
         print(f"\n🚀 Батч {batch_num}/{total_batches}: {len(batch)} статей...")
 
         def _prep(a):
-            date_str = (a.get("published") or "")[:10] or TARGET_DATE
+            date_str = iso_day(a.get("published")) or TARGET_DATE
             item = build_article(a, date_str, inputs, force, express)
             if item: item["date_str"] = date_str
             return item
@@ -3636,7 +3718,7 @@ def search_arxiv_author(name, from_date=None, to_date=None, max_results=200):
         out.append({
             "id": idnode.text.split("/abs/")[-1],
             "title": (e.find("atom:title", ns).text or "").strip().replace("\n", " "),
-            "published": (e.find("atom:published", ns).text or "")[:10],
+            "published": iso_day(e.find("atom:published", ns).text),
         })
     return out
 
@@ -3743,7 +3825,13 @@ def backfill_images(force=False, gen_images=False, preset="image_cheap"):
 
 def entity_image_url(kind, entity_id):
     """URL AI-обложки тега/закона (единая на все языки, живёт под default_lang), либо '' если нет файла."""
+    # Файл на диске остаётся .jpg (его пишет генератор картинок), а отдаём .webp — он в 3 раза
+    # легче и уже сконвертирован (webp_convert.py). Аудит 2026-07-27 нашёл, что у тегов и законов
+    # ссылки остались старыми, хотя webp-файлы были готовы.
     p = Path(LANG_DIR) / DEFAULT_LANG / kind / "img" / f"{entity_id}.jpg"
+    w = p.with_suffix(".webp")
+    if w.exists():
+        return f"/{LANG_DIR}/{DEFAULT_LANG}/{kind}/img/{entity_id}.webp"
     return f"/{LANG_DIR}/{DEFAULT_LANG}/{kind}/img/{entity_id}.jpg" if p.exists() else ""
 
 

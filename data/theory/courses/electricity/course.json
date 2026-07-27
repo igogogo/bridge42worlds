@@ -1,0 +1,410 @@
+{
+  "id": "electricity",
+  "schema": "b42.course/2",
+  "kind": "overview",
+  "order": 8,
+  "entities": {
+    "laws": [
+      "ohms_law",
+      "faradays_law_of_induction"
+    ],
+    "tags": [
+      "electromagnetism",
+      "energy"
+    ],
+    "scientists": [
+      "Michael Faraday"
+    ]
+  },
+  "lessons": [
+    {
+      "id": "01-current",
+      "title": "Ток и сопротивление",
+      "sub": "Что на самом деле течёт по проводам и почему они греются",
+      "law": "Закон Ома",
+      "model": "charge"
+    },
+    {
+      "id": "02-magnetism",
+      "title": "Магнитное поле",
+      "sub": "Сила, которая не совершает работы",
+      "law": "Сила Лоренца",
+      "model": "magnet"
+    },
+    {
+      "id": "03-induction",
+      "title": "Индукция",
+      "sub": "Как движение превращается в электричество",
+      "law": "Закон Фарадея",
+      "model": "magnet"
+    }
+  ],
+  "ru": {
+    "title": "Ток и магнетизм",
+    "subtitle": "Движущийся заряд рождает поле",
+    "lead": "Тема, в которой два явления, тысячелетиями считавшиеся разными, оказались одним. Янтарь, притягивающий соломинки, и камень, поворачивающий стрелку компаса, — это одно взаимодействие, увиденное из разных систем отсчёта.",
+    "why": {
+      "title": "Зачем это знать",
+      "text": [
+        "До 1820 года электричество и магнетизм были разными главами учебника. Электричество получали трением, магнетизм добывали из железной руды, и никакой связи между ними не находили — хотя искали.",
+        "Всё изменилось на лекции датского профессора Эрстеда, который случайно заметил, что стрелка компаса дёргается, когда рядом замыкают цепь. Наблюдение заняло секунду, а последствия растянулись на два века: за ним пошли электродвигатель, генератор, трансформатор, радио и вся электротехника.",
+        "Но глубже практики лежит вот что. Максвелл, сведя оба явления в четыре уравнения, обнаружил в них волну, идущую со скоростью света, — и понял, что свет и есть электромагнитная волна. Впервые физика предсказала целое явление на кончике пера, до всякого опыта.",
+        "И ещё одно, ради чего эту тему стоит пройти внимательно. Магнетизм оказался не самостоятельной силой, а электричеством, увиденным из движущейся системы отсчёта. Из этого прямо выросла теория относительности: Эйнштейн начал свою статью 1905 года именно с разбора того, как выглядит электромагнитная индукция с точки зрения магнита и с точки зрения проводника."
+      ]
+    },
+    "history": {
+      "title": "Кто её создал",
+      "people": [
+        {
+          "name": "Ханс Кристиан Эрстед",
+          "years": "1777–1851",
+          "what": "Заметил на лекции, что стрелка компаса поворачивается при замыкании цепи. Есть спор, было ли это случайностью: Эрстед годами верил в единство сил природы и, по-видимому, ставил опыт нарочно, но эффект оказался сильнее ожидаемого."
+        },
+        {
+          "name": "Андре Мари Ампер",
+          "years": "1775–1836",
+          "what": "Услышав о находке Эрстеда, за неделю построил теорию взаимодействия токов и показал, что магнетизм вообще сводится к движению зарядов. Предположил, что магнит содержит крошечные незатухающие токи, — за столетие до открытия спина электрона."
+        },
+        {
+          "name": "Майкл Фарадей",
+          "years": "1791–1867",
+          "what": "Десять лет искал обратный эффект: если ток создаёт магнетизм, магнетизм должен создавать ток. Нашёл в 1831 году — но лишь при изменении поля. На вопрос о пользе открытия, по преданию, ответил, что не знает, но однажды правительство обложит это налогом."
+        },
+        {
+          "name": "Джеймс Клерк Максвелл",
+          "years": "1831–1879",
+          "what": "Свёл всё в систему уравнений и обнаружил в них волну со скоростью, совпадающей с измеренной скоростью света. Написал: трудно избежать вывода, что свет есть колебания той же среды, которая является причиной электрических и магнитных явлений."
+        },
+        {
+          "name": "Генрих Герц",
+          "years": "1857–1894",
+          "what": "Получил и принял электромагнитные волны в лаборатории, подтвердив Максвелла. О практическом применении отзывался скептически: никакой пользы, просто опыт, доказывающий правоту мэтра. Через семь лет после его смерти Маркони передал сигнал через Атлантику."
+        }
+      ]
+    },
+    "map": {
+      "title": "Что вы изучите",
+      "lead": "Три параграфа: ток и почему провода греются; магнитное поле и странная сила, которая не совершает работы; индукция, на которой стоит вся электроэнергетика.",
+      "outcome": "Пройдя все три, вы будете понимать, что электроны в проводе ползут медленнее улитки, а лампа зажигается мгновенно; почему магнитная сила не может ни разогнать, ни затормозить частицу; и как вращение турбины превращается в напряжение в вашей розетке."
+    },
+    "prereq": {
+      "title": "Что нужно знать заранее",
+      "items": [
+        "Электростатику целиком: заряд, поле, потенциал. Особенно понятие разности потенциалов — она и гонит ток.",
+        "Векторное произведение хотя бы на уровне «результат перпендикулярен обоим сомножителям». Разберём по ходу на правиле руки.",
+        "Из механики — работу силы и то, что сила, перпендикулярная перемещению, работы не совершает. Это ключ ко всему второму параграфу."
+      ],
+      "note": "Магнетизм считается трудной темой из-за трёхмерности: сила направлена не туда, куда поле, и не туда, куда скорость, а поперёк обоих. Совет: не пытайтесь удержать это в голове словами, пользуйтесь рукой. Правило правой руки — единственный способ не запутаться, и им пользуются даже те, кто занимается этим сорок лет."
+    },
+    "closing": {
+      "title": "И главное",
+      "text": [
+        "Объединение электричества и магнетизма — первый в истории случай, когда две разные силы оказались одной. С тех пор объединение стало главной стратегией физики: слабое взаимодействие соединили с электромагнитным, сильное почти присоединили. Не поддаётся только гравитация.",
+        "И один вопрос из этой темы остаётся открытым уже сорок лет. Сверхпроводимость при высоких температурах открыли в 1986 году, а объяснить до сих пор не смогли — при том, что обычную сверхпроводимость поняли ещё в пятидесятые."
+      ],
+      "link": {
+        "href": "/frontier.html#gravity",
+        "text": "Открытые вопросы: что осталось несоединённым"
+      }
+    },
+    "lessons": [
+      {
+        "id": "01-current",
+        "title": "Ток и сопротивление",
+        "sub": "Что на самом деле течёт по проводам и почему они греются",
+        "law": "Закон Ома",
+        "model": "charge"
+      },
+      {
+        "id": "02-magnetism",
+        "title": "Магнитное поле",
+        "sub": "Сила, которая не совершает работы",
+        "law": "Сила Лоренца",
+        "model": "magnet"
+      },
+      {
+        "id": "03-induction",
+        "title": "Индукция",
+        "sub": "Как движение превращается в электричество",
+        "law": "Закон Фарадея",
+        "model": "magnet"
+      }
+    ]
+  },
+  "en": {
+    "title": "Current and Magnetism",
+    "subtitle": "Moving charge creates a field",
+    "lead": "A subject in which two phenomena, considered separate for millennia, turned out to be one. Amber attracting straws and the stone turning the compass needle — these are the same interaction seen from different reference frames.",
+    "why": {
+      "title": "Why know this",
+      "text": [
+        "Before 1820, electricity and magnetism were different chapters in textbooks. Electricity was obtained by friction, magnetism was extracted from iron ore, and no connection was found between them — although it was sought.",
+        "Everything changed during a lecture by a Danish professor, Ørsted, who accidentally noticed that a compass needle twitches when a nearby circuit is closed. The observation took a second, but the consequences spanned two centuries: it led to the electric motor, generator, transformer, radio, and all electrical engineering.",
+        "But deeper than practicality lies this: Maxwell, unifying both phenomena into four equations, discovered a wave traveling at the speed of light — and realized that light itself is an electromagnetic wave. For the first time, physics predicted an entire phenomenon at the tip of a pen, before any experiment.",
+        "And one more reason to study this topic carefully. Magnetism turned out not to be an independent force, but electricity seen from a moving reference frame. From this directly grew the theory of relativity: Einstein began his 1905 paper precisely by analyzing how electromagnetic induction looks from the magnet's point of view and from the conductor's point of view."
+      ]
+    },
+    "history": {
+      "title": "Who created it",
+      "people": [
+        {
+          "name": "Hans Christian Ørsted",
+          "years": "1777–1851",
+          "what": "Noticed during a lecture that a compass needle turns when a circuit is closed. There is debate whether it was accidental: Ørsted had believed for years in the unity of natural forces and apparently set up the experiment on purpose, but the effect was stronger than expected."
+        },
+        {
+          "name": "André-Marie Ampère",
+          "years": "1775–1836",
+          "what": "Upon hearing of Ørsted's discovery, built a theory of current interaction in a week and showed that magnetism reduces entirely to the motion of charges. He hypothesized that a magnet contains tiny, unceasing currents — a century before the discovery of electron spin."
+        },
+        {
+          "name": "Michael Faraday",
+          "years": "1791–1867",
+          "what": "Spent ten years seeking the reverse effect: if current creates magnetism, magnetism should create current. He found it in 1831 — but only when the field changes. When asked about the usefulness of the discovery, he reportedly replied that he did not know, but that one day the government would tax it."
+        },
+        {
+          "name": "James Clerk Maxwell",
+          "years": "1831–1879",
+          "what": "Unified everything into a system of equations and discovered in them a wave traveling at a speed matching the measured speed of light. He wrote: it is difficult to avoid the conclusion that light consists of vibrations of the same medium which is the cause of electric and magnetic phenomena."
+        },
+        {
+          "name": "Heinrich Hertz",
+          "years": "1857–1894",
+          "what": "Generated and received electromagnetic waves in the laboratory, confirming Maxwell. He was skeptical about practical applications: no use, just an experiment proving the master's correctness. Seven years after his death, Marconi transmitted a signal across the Atlantic."
+        }
+      ]
+    },
+    "map": {
+      "title": "What you will study",
+      "lead": "Three sections: current and why wires heat up; magnetic field and the strange force that does no work; induction, on which all electrical power generation rests.",
+      "outcome": "After completing all three, you will understand that electrons in a wire crawl slower than a snail, yet the lamp lights instantly; why magnetic force can neither accelerate nor decelerate a particle; and how the rotation of a turbine turns into voltage in your outlet."
+    },
+    "prereq": {
+      "title": "What you need to know in advance",
+      "items": [
+        "Electrostatics entirely: charge, field, potential. Especially the concept of potential difference — it drives current.",
+        "Cross product at least at the level of 'result is perpendicular to both factors'. We'll cover it along the way with the right-hand rule.",
+        "From mechanics — work of a force and that a force perpendicular to displacement does no work. This is key to the entire second section."
+      ],
+      "note": "Magnetism is considered a difficult topic because of three-dimensionality: the force is directed neither along the field nor along the velocity, but perpendicular to both. Advice: don't try to keep it in your head with words, use your hand. The right-hand rule is the only way not to get confused, and even those who have been doing this for forty years use it."
+    },
+    "closing": {
+      "title": "And the main thing",
+      "text": [
+        "The unification of electricity and magnetism is the first instance in history where two different forces turned out to be one. Since then, unification has become the main strategy of physics: the weak interaction was combined with the electromagnetic, the strong almost joined. Only gravity remains elusive.",
+        "And one question from this subject has remained open for forty years. High-temperature superconductivity was discovered in 1986, but still cannot be explained — even though conventional superconductivity was understood back in the 1950s."
+      ],
+      "link": {
+        "href": "/frontier.html#gravity",
+        "text": "Open questions: what remains ununited"
+      }
+    },
+    "lessons": [
+      {
+        "id": "01-current",
+        "title": "Current and Resistance",
+        "sub": "Section 1 · What actually flows through wires and why they heat up",
+        "law": "Закон Ома",
+        "model": "charge"
+      },
+      {
+        "id": "02-magnetism",
+        "title": "Magnetic Field",
+        "sub": "Section 2 · The Force That Does No Work",
+        "law": "Сила Лоренца",
+        "model": "magnet"
+      },
+      {
+        "id": "03-induction",
+        "title": "Induction",
+        "sub": "Section 3 · How Motion Turns into Electricity",
+        "law": "Закон Фарадея",
+        "model": "magnet"
+      }
+    ]
+  },
+  "es": {
+    "title": "Corriente y magnetismo",
+    "subtitle": "La carga en movimiento genera un campo",
+    "lead": "Un tema donde dos fenómenos, considerados diferentes durante milenios, resultaron ser uno solo. El ámbar que atrae pajas y la piedra que gira la aguja de la brújula son una misma interacción, vista desde distintos sistemas de referencia.",
+    "why": {
+      "title": "Por qué saber esto",
+      "text": [
+        "Hasta 1820, la electricidad y el magnetismo eran capítulos distintos en los libros de texto. La electricidad se obtenía por fricción, el magnetismo se extraía del mineral de hierro, y no se encontraba ninguna conexión entre ellos, aunque se buscaba.",
+        "Todo cambió en una conferencia del profesor danés Ørsted, quien observó casualmente que la aguja de la brújula se movía al cerrar un circuito cercano. La observación duró un segundo, pero sus consecuencias se extendieron dos siglos: le siguieron el motor eléctrico, el generador, el transformador, la radio y toda la electrotecnia.",
+        "Pero más allá de la práctica está esto: Maxwell, al unificar ambos fenómenos en cuatro ecuaciones, encontró en ellas una onda que viaja a la velocidad de la luz, y comprendió que la luz es una onda electromagnética. Por primera vez, la física predijo un fenómeno completo con la punta del lápiz, antes de cualquier experimento.",
+        "Y hay una razón más para estudiar este tema con atención: el magnetismo resultó no ser una fuerza independiente, sino electricidad vista desde un sistema de referencia en movimiento. De esto surgió directamente la teoría de la relatividad: Einstein comenzó su artículo de 1905 precisamente analizando cómo se ve la inducción electromagnética desde el punto de vista de un imán y desde el punto de vista de un conductor."
+      ]
+    },
+    "history": {
+      "title": "Quién la creó",
+      "people": [
+        {
+          "name": "Hans Christian Ørsted",
+          "years": "1777–1851",
+          "what": "Observó en una conferencia que la aguja de la brújula giraba al cerrar un circuito. Hay debate sobre si fue casualidad: Ørsted creía durante años en la unidad de las fuerzas naturales y aparentemente realizó el experimento a propósito, pero el efecto resultó más fuerte de lo esperado."
+        },
+        {
+          "name": "André Marie Ampère",
+          "years": "1775–1836",
+          "what": "Al enterarse del hallazgo de Ørsted, en una semana construyó una teoría de la interacción de las corrientes y demostró que el magnetismo se reduce al movimiento de cargas. Supuso que un imán contiene diminutas corrientes persistentes, un siglo antes del descubrimiento del espín del electrón."
+        },
+        {
+          "name": "Michael Faraday",
+          "years": "1791–1867",
+          "what": "Buscó durante diez años el efecto inverso: si la corriente produce magnetismo, el magnetismo debe producir corriente. Lo encontró en 1831, pero solo al variar el campo. Preguntado sobre la utilidad del descubrimiento, según la tradición respondió que no lo sabía, pero que algún día el gobierno lo gravará con impuestos."
+        },
+        {
+          "name": "James Clerk Maxwell",
+          "years": "1831–1879",
+          "what": "Unificó todo en un sistema de ecuaciones y encontró en ellas una onda con una velocidad que coincidía con la velocidad medida de la luz. Escribió: es difícil evitar la conclusión de que la luz es una oscilación del mismo medio que causa los fenómenos eléctricos y magnéticos."
+        },
+        {
+          "name": "Heinrich Hertz",
+          "years": "1857–1894",
+          "what": "Generó y recibió ondas electromagnéticas en el laboratorio, confirmando a Maxwell. Sobre su aplicación práctica se mostraba escéptico: ninguna utilidad, solo un experimento que prueba la razón del maestro. Siete años después de su muerte, Marconi transmitió una señal a través del Atlántico."
+        }
+      ]
+    },
+    "map": {
+      "title": "Qué aprenderá",
+      "lead": "Tres secciones: la corriente y por qué se calientan los cables; el campo magnético y la extraña fuerza que no realiza trabajo; la inducción, sobre la que se basa toda la industria eléctrica.",
+      "outcome": "Al completar las tres, comprenderá que los electrones en un cable se arrastran más lentamente que un caracol, pero la lámpara se enciende instantáneamente; por qué la fuerza magnética no puede acelerar ni frenar una partícula; y cómo la rotación de una turbina se convierte en el voltaje de su enchufe."
+    },
+    "prereq": {
+      "title": "Qué necesita saber de antemano",
+      "items": [
+        "La electrostática completa: carga, campo, potencial. Especialmente el concepto de diferencia de potencial, que es lo que impulsa la corriente.",
+        "El producto vectorial, al menos a nivel de «el resultado es perpendicular a ambos factores». Lo explicaremos sobre la marcha con la regla de la mano.",
+        "De la mecánica: el trabajo de una fuerza y que una fuerza perpendicular al desplazamiento no realiza trabajo. Esta es la clave para toda la segunda sección."
+      ],
+      "note": "El magnetismo se considera un tema difícil debido a su tridimensionalidad: la fuerza no apunta hacia donde apunta el campo, ni hacia donde apunta la velocidad, sino transversal a ambos. Consejo: no intente retenerlo con palabras, use la mano. La regla de la mano derecha es la única forma de no confundirse, y la usan incluso quienes llevan cuarenta años trabajando en esto."
+    },
+    "closing": {
+      "title": "Y lo principal",
+      "text": [
+        "La unificación de la electricidad y el magnetismo es el primer caso en la historia en que dos fuerzas diferentes resultaron ser una. Desde entonces, la unificación se ha convertido en la estrategia principal de la física: la interacción débil se unió con la electromagnética, y la fuerte casi se ha unido. Solo la gravedad se resiste.",
+        "Y una pregunta de este tema sigue abierta desde hace cuarenta años. La superconductividad a altas temperaturas se descubrió en 1986, y aún no se ha podido explicar, a pesar de que la superconductividad convencional se comprendió ya en los años cincuenta."
+      ],
+      "link": {
+        "href": "/frontier.html#gravity",
+        "text": "Preguntas abiertas: qué queda por unificar"
+      }
+    },
+    "lessons": [
+      {
+        "id": "01-current",
+        "title": "Corriente y resistencia",
+        "sub": "Párrafo 1 · Qué es lo que realmente fluye por los cables y por qué se calientan",
+        "law": "Закон Ома",
+        "model": "charge"
+      },
+      {
+        "id": "02-magnetism",
+        "title": "Campo magnético",
+        "sub": "Párrafo 2 · La fuerza que no realiza trabajo",
+        "law": "Сила Лоренца",
+        "model": "magnet"
+      },
+      {
+        "id": "03-induction",
+        "title": "Inducción",
+        "sub": "Párrafo 3 · Cómo el movimiento se convierte en electricidad",
+        "law": "Закон Фарадея",
+        "model": "magnet"
+      }
+    ]
+  },
+  "ar": {
+    "title": "التيار والمغناطيسية",
+    "subtitle": "الشحنة المتحركة تولد مجالاً",
+    "lead": "موضوعٌ فيه ظاهرتان، اعتُبرتا على مدى آلاف السنين مختلفتين، تبين أنهما واحدة. العنبر الذي يجذب القش، والحجر الذي يدير إبرة البوصلة — هذا تفاعل واحد يُرى من أنظمة مرجعية مختلفة.",
+    "why": {
+      "title": "لماذا يجب معرفة هذا",
+      "text": [
+        "حتى عام 1820، كان الكهرباء والمغناطيسية فصلين منفصلين في الكتاب المدرسي. كان يتم الحصول على الكهرباء بالاحتكاك، والمغناطيسية من خام الحديد، ولم يجدوا أي صلة بينهما — رغم أنهم بحثوا.",
+        "تغير كل شيء في محاضرة البروفيسور الدنماركي أورستد، الذي لاحظ بالصدفة أن إبرة البوصلة تتحرك عند إغلاق دائرة كهربائية بجانبها. استغرقت الملاحظة ثانية، وامتدت العواقب لقرنين: تلتها المحرك الكهربائي، المولد، المحول، الراديو، وكل الهندسة الكهربائية.",
+        "لكن الأعمق من التطبيق هو ما يلي. ماكسويل، بدمج الظاهرتين في أربع معادلات، وجد فيهما موجة تسير بسرعة الضوء — وأدرك أن الضوء هو موجة كهرومغناطيسية. لأول مرة، تتنبأ الفيزياء بظاهرة كاملة بطرف القلم، قبل أي تجربة.",
+        "وشيء آخر يستحق الاهتمام به في هذا الموضوع. اتضح أن المغناطيسية ليست قوة مستقلة، بل كهرباء تُرى من نظام مرجعي متحرك. من هذا نشأت نظرية النسبية مباشرة: بدأ أينشتاين مقالته عام 1905 بتحليل كيف تبدو الحث الكهرومغناطيسي من وجهة نظر المغناطيس ومن وجهة نظر الموصل."
+      ]
+    },
+    "history": {
+      "title": "من صنعها",
+      "people": [
+        {
+          "name": "هانز كريستيان أورستد",
+          "years": "1777–1851",
+          "what": "لاحظ في محاضرته أن إبرة البوصلة تدور عند إغلاق الدائرة. هناك جدل حول ما إذا كانت صدفة: فقد كان أورستد يؤمن لسنوات بوحدة القوى الطبيعية، ويبدو أنه أجرى التجربة عمدًا، لكن التأثير كان أقوى من المتوقع."
+        },
+        {
+          "name": "أندريه ماري أمبير",
+          "years": "1775–1836",
+          "what": "بعد سماعه باكتشاف أورستد، بنى نظرية تفاعل التيارات في أسبوع وأظهر أن المغناطيسية بشكل عام تختزل إلى حركة الشحنات. افترض أن المغناطيس يحتوي على تيارات صغيرة غير متلاشية — قبل قرن من اكتشاف لف الإلكترون."
+        },
+        {
+          "name": "مايكل فاراداي",
+          "years": "1791–1867",
+          "what": "بحث لمدة عشر سنوات عن التأثير المعاكس: إذا كان التيار يخلق مغناطيسية، فيجب أن تخلق المغناطيسية تيارًا. وجده في عام 1831 — ولكن فقط عند تغير المجال. وعندما سئل عن فائدة الاكتشاف، وفقًا للأسطورة، أجاب بأنه لا يعرف، لكن يومًا ما ستفرض الحكومة ضريبة عليه."
+        },
+        {
+          "name": "جيمس كليرك ماكسويل",
+          "years": "1831–1879",
+          "what": "جمع كل شيء في نظام من المعادلات ووجد فيها موجة بسرعة تطابق سرعة الضوء المقاسة. كتب: من الصعب تجنب الاستنتاج أن الضوء هو تذبذبات لنفس الوسط الذي يسبب الظواهر الكهربائية والمغناطيسية."
+        },
+        {
+          "name": "هاينريش هيرتز",
+          "years": "1857–1894",
+          "what": "استقبل وأنتج موجات كهرومغناطيسية في المختبر، مؤكدًا نظرية ماكسويل. كان متشككًا في التطبيق العملي: لا فائدة، مجرد تجربة تثبت صحة الأستاذ. بعد سبع سنوات من وفاته، أرسل ماركوني إشارة عبر الأطلسي."
+        }
+      ]
+    },
+    "map": {
+      "title": "ماذا ستتعلم",
+      "lead": "ثلاثة أقسام: التيار ولماذا تسخن الأسلاك؛ المجال المغناطيسي والقوة الغريبة التي لا تؤدي شغلًا؛ الحث الذي تقوم عليه كل صناعة الطاقة الكهربائية.",
+      "outcome": "بعد اجتياز الأقسام الثلاثة، ستفهم أن الإلكترونات في السلك تزحف أبطأ من الحلزون، لكن المصباح يضيء فورًا؛ لماذا لا تستطيع القوة المغناطيسية تسريع أو إبطاء الجسيم؛ وكيف يتحول دوران التوربين إلى جهد كهربائي في مقبسك."
+    },
+    "prereq": {
+      "title": "ما تحتاج معرفته مسبقًا",
+      "items": [
+        "الإلكتروستاتيكا بالكامل: الشحنة، المجال، الجهد. خاصة مفهوم فرق الجهد — فهو الذي يحرك التيار.",
+        "الضرب الاتجاهي على الأقل بمستوى 'النتيجة عمودية على كلا العاملين'. سنشرحه أثناء المساعدة بقاعدة اليد.",
+        "من الميكانيكا — شغل القوة وحقيقة أن القوة العمودية على الإزاحة لا تؤدي شغلًا. هذا هو مفتاح القسم الثاني بأكمله."
+      ],
+      "note": "تعتبر المغناطيسية موضوعًا صعبًا بسبب الأبعاد الثلاثة: القوة ليست موجهة نحو المجال ولا نحو السرعة، بل عمودية عليهما. نصيحة: لا تحاول تثبيت ذلك في ذهنك بالكلمات، استخدم يدك. قاعدة اليد اليمنى هي الطريقة الوحيدة لتجنب الارتباك، ويستخدمها حتى من يعملون في هذا المجال لأربعين عامًا."
+    },
+    "closing": {
+      "title": "والأهم",
+      "text": [
+        "توحيد الكهرباء والمغناطيسية هو أول حالة في التاريخ حيث تكون قوتان مختلفتان واحدة. منذ ذلك الحين، أصبح التوحيد الاستراتيجية الرئيسية للفيزياء: تم ربط التفاعل الضعيف بالكهرومغناطيسي، وكاد التفاعل القوي أن ينضم. فقط الجاذبية تقاوم.",
+        "وسؤال واحد من هذا الموضوع يظل مفتوحًا منذ أربعين عامًا. تم اكتشاف الموصلية الفائقة عند درجات حرارة عالية في عام 1986، ولم يتمكنوا من تفسيرها حتى الآن — على الرغم من أن الموصلية الفائقة العادية تم فهمها في الخمسينيات."
+      ],
+      "link": {
+        "href": "/frontier.html#gravity",
+        "text": "أسئلة مفتوحة: ما الذي لم يتم توحيده بعد"
+      }
+    },
+    "lessons": [
+      {
+        "id": "01-current",
+        "title": "التيار والمقاومة",
+        "sub": "الفقرة 1 · ما الذي يتدفق فعليًا في الأسلاك ولماذا تسخن",
+        "law": "Закон Ома",
+        "model": "charge"
+      },
+      {
+        "id": "02-magnetism",
+        "title": "الحقل المغناطيسي",
+        "sub": "الفقرة 2 · القوة التي لا تبذل شغلًا",
+        "law": "Сила Лоренца",
+        "model": "magnet"
+      },
+      {
+        "id": "03-induction",
+        "title": "الحث",
+        "sub": "الفقرة 3 · كيف تتحول الحركة إلى كهرباء",
+        "law": "Закон Фарадея",
+        "model": "magnet"
+      }
+    ]
+  }
+}

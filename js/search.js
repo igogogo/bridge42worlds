@@ -377,13 +377,15 @@ function renderSiteStats() {
     var nS = Object.keys(window.scientistsData || {}).length;
     var nAu = Object.keys(window.authorsGraph || {}).length;
     var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
-    function part(n, w){ return '<b>' + n + '</b> ' + w; }
+    // Компактная ОДНА строка (юзер 2026-07-25 «сократи, сожми, уплотни»): 16795 → 16.8k.
+    function kfmt(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace('.0', '') + 'k' : String(n); }
+    function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
     var bits = [
-        part(nA, L.articles) + ' (' + full + ' ' + L.full + ' · ' + express + ' ' + L.express + ')',
+        part(nA, L.articles),
         part(nL, L.laws), part(nT, L.tags), part(nSec, L.sections),
         part(nS, L.scientists), part(nAu, L.authors), part(nLang, L.langs)
     ];
-    el.innerHTML = bits.join(' / ');
+    el.innerHTML = bits.join(' · ');
     if (!el.dataset.builtLoaded) {
         el.dataset.builtLoaded = '1';
         var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث'}[lang] || 'updated';
@@ -807,9 +809,9 @@ function cardHTML(item) {
         '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">⭐</button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
-    var img = base + 't_ai.jpg';
-    var imgFb = base + 'ai.jpg';
-    // item.image === false — решено уже при генерации (нет ai.jpg), не пытаемся грузить и не
+    var img = base + 't_ai.webp';
+    var imgFb = base + 'ai.webp';
+    // item.image === false — решено уже при генерации (нет ai.webp), не пытаемся грузить и не
     // резервируем место под картинку. undefined (старый индекс до пересборки) — считаем как есть.
     var hasImg = item.image !== false;
     // Мета-строка (раздел·дата·бейдж) — полноширинный «eyebrow» НАД картинкой: тогда плавающая
@@ -982,7 +984,7 @@ function initCalendar() {
         html += '</div></div>';
     });
     panel.innerHTML = html;
-    btn.onclick = function() { panel.classList.toggle('open'); };
+    btn.onclick = function(e) { if (e) e.stopPropagation(); panel.classList.toggle('open'); };
     panel.onclick = function(e) {
         var t = e.target;
         if (t.classList && t.classList.contains('cal-all')) { showLatest(); panel.classList.remove('open'); return; }
@@ -992,7 +994,7 @@ function initCalendar() {
         if (head) { var sub = head.nextElementSibling; if (sub) { sub.hidden = !sub.hidden; head.classList.toggle('open', !sub.hidden); } }
     };
     document.addEventListener('click', function(e) {
-        if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+        if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
             panel.classList.remove('open');
         }
     });
@@ -1107,6 +1109,18 @@ function getOrCreateTooltip() {
         if (tooltipHideTimer) { clearTimeout(tooltipHideTimer); tooltipHideTimer = null; }
     });
     tip.addEventListener('mouseleave', scheduleHideTooltip);
+    // Крестик: на мобиле нет mouseleave, и подсказка «залипала» намертво (юзер 2026-07-25).
+    var x = document.createElement('button');
+    x.type = 'button'; x.className = 'tip-close'; x.setAttribute('aria-label', 'Close');
+    x.textContent = '×';
+    x.addEventListener('click', function (e) { e.stopPropagation(); tip.style.display = 'none'; });
+    tip.appendChild(x);
+    // Тап/клик вне подсказки — тоже закрывает.
+    document.addEventListener('click', function (e) {
+        if (tip.style.display !== 'none' && !tip.contains(e.target) && !e.target.closest('[data-tag],[data-author],[data-scientist],[data-law]')) {
+            tip.style.display = 'none';
+        }
+    });
     return tip;
 }
 
@@ -1219,7 +1233,7 @@ function collapseNavOverflow() {
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'nav-more-btn';
-    btn.textContent = '☰';
+    btn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>';
     btn.setAttribute('aria-label', 'Menu');
     var panel = document.createElement('div');
     panel.className = 'nav-more-panel';
@@ -1291,7 +1305,14 @@ function collapseNavOverflow() {
         wrap.classList.toggle('open');
     });
     document.addEventListener('click', function(e) {
-        if (!wrap.contains(e.target)) wrap.classList.remove('open');
+        if (!wrap.contains(e.target)) { wrap.classList.remove('open'); return; }
+        // На мобиле панель — шторка снизу, а затемнение это ::before САМОГО wrap: клик по нему
+        // даёт e.target === wrap, и старая проверка считала его «кликом внутри» → не закрывалось.
+        if (e.target === wrap) wrap.classList.remove('open');
+    });
+    // Escape закрывает шторку
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') wrap.classList.remove('open');
     });
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
@@ -1347,12 +1368,17 @@ function initSearchToggle() {
     var btn = document.getElementById('search-toggle-btn');
     var panel = document.getElementById('search-panel');
     if (!btn || !panel) return;
-    btn.onclick = function() {
+    btn.onclick = function(e) {
+        // stopPropagation: иначе этот же клик всплывает до document-закрывашки ниже и панель
+        // схлопывается в тот же тик — кнопка «переставала нажиматься» (юзер 2026-07-25).
+        if (e) e.stopPropagation();
         var open = panel.classList.toggle('open');
         if (open) { var input = panel.querySelector('.search-box'); if (input) input.focus(); }
     };
     document.addEventListener('click', function(e) {
-        if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+        // btn.contains(e.target), а не e.target !== btn: клик приходит по SVG-иконке ВНУТРИ кнопки,
+        // и строгое сравнение считало его «кликом снаружи» → мгновенное закрытие.
+        if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
             panel.classList.remove('open');
         }
     });
@@ -1368,7 +1394,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var btn = document.getElementById('calendar-btn'), panel = document.getElementById('calendar-panel');
     if (!btn || !panel || btn.onclick) return;
     panel.innerHTML = '<div class="cal-all" style="text-align:center;color:var(--soft)">…</div>';
-    btn.onclick = function() { panel.classList.toggle('open'); };
+    btn.onclick = function(e) { if (e) e.stopPropagation(); panel.classList.toggle('open'); };
 });
 
 // ── Бегунок сложности (заменил кнопки-вкладки) ──────────────────────────────
@@ -1478,4 +1504,47 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(timer);
         timer = setTimeout(function() { real(q); }, 160);
     };
+})();
+
+// Плавающая кнопка «наверх» — появляется после прокрутки (юзер 2026-07-25). Одна для всех страниц.
+document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('to-top')) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.id = 'to-top'; b.setAttribute('aria-label', 'Top'); b.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6"/><path d="M6 12l6-6 6 6"/></svg>';
+    b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    document.body.appendChild(b);
+    var tick = false;
+    window.addEventListener('scroll', function () {
+        if (tick) return;
+        tick = true;
+        requestAnimationFrame(function () {
+            b.classList.toggle('show', window.scrollY > 500);
+            tick = false;
+        });
+    }, { passive: true });
+});
+
+// ── Язык и уровень держатся ЕДИНЫМИ по всему сайту (юзер 2026-07-25: «не сбиваться при
+// переходах, даже где не применимо»). Уровень уже живёт в localStorage b42_version; язык
+// запоминаем здесь. Страницы авторов существуют только на en — чтобы переход туда не сбивал
+// язык интерфейса, на них восстанавливаем сохранённый язык в ссылках шапки и в ленте.
+(function () {
+    var isAuthors = /\/authors\//.test(location.pathname);
+    try {
+        if (!isAuthors) localStorage.setItem('b42_lang', lang);
+    } catch (e) {}
+    if (!isAuthors) return;
+    var saved = null;
+    try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+    if (!saved || saved === lang) return;
+    document.addEventListener('DOMContentLoaded', function () {
+        // ссылки шапки/логотипа — обратно на язык пользователя (кроме самих страниц авторов)
+        document.querySelectorAll('a[href^="/lang/en/"]').forEach(function (a) {
+            var h = a.getAttribute('href');
+            if (/\/authors\//.test(h)) return;
+            a.setAttribute('href', h.replace('/lang/en/', '/lang/' + saved + '/'));
+        });
+        // лента статей автора — на сохранённом языке
+        if (typeof switchFeedLang === 'function') switchFeedLang(saved);
+    });
 })();

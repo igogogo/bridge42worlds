@@ -89,7 +89,7 @@ function updateFavoriteUI(aid) {
     const on = isFavorite(aid);
     document.querySelectorAll(`[data-fav="${aid}"]`).forEach(b => {
         b.classList.toggle('active', on);
-        const ic = b.querySelector('.fav-ic'); if (ic) ic.textContent = on ? '★' : '☆';
+        const ic = b.querySelector('.fav-ic'); if (ic) ic.innerHTML = on ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg>' : '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg>';
     });
 }
 
@@ -106,7 +106,15 @@ async function submitFeedback(id, wrap, entityType) {
     });
     if (error) console.error('feedback insert failed:', error.message);
     const status = box.querySelector('.fb-status');
-    if (status) status.textContent = error ? '⚠️ не отправлено' : '✓ спасибо!';
+    // Статус отклика — ЛОКАЛИЗОВАН (был русский хардкод на всех языках, юзер 2026-07-25).
+    const FB_MSG = {
+        ru: { ok: '✓ спасибо!', err: '⚠ не отправлено' },
+        en: { ok: '✓ thank you!', err: '⚠ not sent' },
+        es: { ok: '✓ ¡gracias!', err: '⚠ no enviado' },
+        ar: { ok: '✓ شكرًا لك!', err: '⚠ لم يُرسل' }
+    };
+    const _m = FB_MSG[window.lang] || FB_MSG.en;
+    if (status) status.textContent = error ? _m.err : _m.ok;
     if (!error) box.querySelectorAll('.fb-chip.active').forEach(c => c.classList.remove('active'));
     if (!error && box.querySelector('.fb-comment')) box.querySelector('.fb-comment').value = '';
 }

@@ -26,26 +26,46 @@
 
     var STYLE_ID = 'xpl-style';
     var CSS = [
-        '.xpl{max-width:620px;margin:20px 0 28px;font-size:14px}',
-        '.xpl-stage-wrap,.xpl-plot-wrap{position:relative;border:0.5px solid var(--border,#e2e2e2);border-radius:12px;background:var(--tag-bg,#f3f3f3);overflow:hidden}',
-        '.xpl-plot-wrap{margin-top:12px}',
+        /* Единое поле прибора: сцена, ползунки, формула и график живут в ОДНОЙ рамке и
+           разделены тонкими линиями — визуально это один инструмент, а не три блока подряд. */
+        '.xpl{max-width:680px;margin:22px 0 30px;font-size:14px;border:1px solid var(--border,#e2e2e2);',
+        'border-radius:14px;overflow:hidden;background:var(--bg,#fff)}',
+        '.xpl-stage-wrap,.xpl-plot-wrap{position:relative;overflow:hidden;background:var(--tag-bg,#f3f3f3)}',
+        '.xpl-plot-wrap{border-top:1px solid var(--border,#e2e2e2)}',
         '.xpl-stage,.xpl-plot{display:block;width:100%}',
-        '.xpl-panel{margin-top:12px}',
+        '.xpl-panel{padding:14px 16px;border-top:1px solid var(--border,#e2e2e2);background:var(--bg,#fff)}',
         '.xpl-controls{display:flex;flex-wrap:wrap;gap:12px 22px}',
         '.xpl-ctrl{flex:1 1 200px;min-width:170px}',
         '.xpl-ctrl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}',
         '.xpl-ctrl-label{font-size:12.5px;color:var(--muted,#6b6b6b)}',
         '.xpl-ctrl-val{font-size:13px;font-weight:600;color:var(--text,#2c2c2c);font-variant-numeric:tabular-nums}',
         '.xpl-ctrl input[type=range]{width:100%;accent-color:var(--link,#4a7c9b);cursor:pointer}',
-        '.xpl-formula{margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(74,106,146,0.07);',
-        'font-size:15px;line-height:1.7;overflow-x:auto}',
+        '.xpl-formula{margin-top:14px;padding-top:12px;border-top:1px dashed var(--border,#e2e2e2);',
+        'font-size:15px;line-height:1.7;overflow-x:auto;text-align:center}',
         '.xpl-formula .xf-var{color:var(--link,#4a7c9b);font-weight:600;font-variant-numeric:tabular-nums}',
         '.xpl-formula .xf-res{color:var(--text,#2c2c2c);font-weight:700;font-variant-numeric:tabular-nums}',
         '.xpl-formula .xf-op{color:var(--soft,#8a8a8a)}',
         '.xpl-formula i{color:var(--muted,#6b6b6b);font-style:italic}',
         '.xpl-reset{margin-top:10px;font-size:12px;color:var(--soft,#8a8a8a);background:none;',
         'border:1px solid var(--border,#e2e2e2);border-radius:14px;padding:3px 12px;cursor:pointer}',
-        '.xpl-reset:hover{border-color:var(--link,#4a7c9b);color:var(--link,#4a7c9b)}'
+        '.xpl-reset:hover{border-color:var(--link,#4a7c9b);color:var(--link,#4a7c9b)}',
+        /* Замок у связанной величины: закрытый — держим значение, открытый — величина
+           свободна и поедет сама, когда сдвинут соседний ползунок. */
+        '.xpl-lock{margin-left:8px;font-size:12px;line-height:1;background:none;border:none;cursor:pointer;',
+        'color:var(--soft,#8a8a8a);padding:0 2px}',
+        '.xpl-lock.on{color:var(--brass,#b8860b)}',
+        '.xpl-lock:hover{color:var(--link,#4a7c9b)}',
+        '.xpl-ctrl input[type=range].xpl-range-free{accent-color:var(--brass,#b8860b);opacity:.92}',
+        /* Приборная строка поверх сцены — крупные значения, как на панели установки */
+        '.xpl-readout{display:flex;flex-wrap:wrap;gap:0;background:var(--bg,#fff);',
+        'border-top:1px solid var(--border,#e2e2e2)}',
+        '.xpl-ro{flex:1 1 90px;min-width:80px;padding:5px 8px 6px;text-align:center;',
+        'border-right:1px solid var(--border,#e2e2e2)}',
+        '.xpl-ro:last-child{border-right:none}',
+        '.xpl-ro-val{font-size:14px;font-weight:700;color:var(--text,#2c2c2c);',
+        'font-variant-numeric:tabular-nums;line-height:1.2}',
+        '.xpl-ro-lab{font-size:9.5px;color:var(--soft,#8a8a8a);text-transform:uppercase;',
+        'letter-spacing:.06em;margin-top:2px;line-height:1.25}'
     ].join('');
 
     function injectStyle() {
@@ -126,24 +146,62 @@
         if (plotWrap) root.appendChild(plotWrap);
 
         // ── контролы ──
-        var ctrlRefs = [];
+        // У связанных величин (cfg.link) каждый ползунок получает замок. Замкнутые держатся,
+        // незамкнутые пересчитываются моделью и ФИЗИЧЕСКИ едут следом — видно, что величины
+        // не независимы, а связаны уравнением.
+        var ctrlRefs = [], linked = cfg.link || null;
+        var locks = {};
+        if (linked) linked.keys.forEach(function (k, i) { locks[k] = !!(linked.lockedByDefault || [])[i]; });
+
         cfg.params.forEach(function (p) {
             var wrap = el('div', 'xpl-ctrl');
             var top = el('div', 'xpl-ctrl-top');
             var lab = el('span', 'xpl-ctrl-label');
             var val = el('span', 'xpl-ctrl-val');
             top.appendChild(lab); top.appendChild(val);
+
+            var lockBtn = null;
+            if (linked && linked.keys.indexOf(p.key) >= 0) {
+                lockBtn = el('button', 'xpl-lock');
+                lockBtn.type = 'button';
+                lockBtn.addEventListener('click', function () {
+                    // хотя бы одна величина обязана оставаться свободной, иначе решать нечего
+                    var free = linked.keys.filter(function (k) { return !locks[k]; });
+                    if (!locks[p.key] && free.length <= 1) return;
+                    locks[p.key] = !locks[p.key];
+                    syncLabels();
+                });
+                top.appendChild(lockBtn);
+            }
+
             var input = el('input');
             input.type = 'range'; input.min = p.min; input.max = p.max;
             input.step = p.step != null ? p.step : 1; input.value = p.value;
             input.addEventListener('input', function () {
                 state[p.key] = parseFloat(input.value);
+                if (linked && linked.keys.indexOf(p.key) >= 0) relax(p.key);
                 syncLabels(); if (paused) frame(lastT);
             });
             wrap.appendChild(top); wrap.appendChild(input);
             controls.appendChild(wrap);
-            ctrlRefs.push({ p: p, lab: lab, val: val, input: input });
+            ctrlRefs.push({ p: p, lab: lab, val: val, input: input, lock: lockBtn });
         });
+
+        // Пересчёт связанных величин: модель возвращает новые значения для свободных ключей,
+        // мы их вгоняем в допустимый диапазон и двигаем сами ползунки.
+        function relax(changed) {
+            var free = linked.keys.filter(function (k) { return k !== changed && !locks[k]; });
+            if (!free.length) return;
+            var upd = linked.solve(state, changed, free) || {};
+            Object.keys(upd).forEach(function (k) {
+                var r = byKey(k); if (!r) return;
+                var v = clamp(upd[k], r.p.min, r.p.max);
+                state[k] = v; r.input.value = v;
+            });
+        }
+        function byKey(k) { for (var i = 0; i < ctrlRefs.length; i++) if (ctrlRefs[i].p.key === k) return ctrlRefs[i]; return null; }
+        function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
         var reset = el('button', 'xpl-reset');
         reset.type = 'button';
         reset.addEventListener('click', function () {
@@ -152,8 +210,11 @@
         });
         panel.appendChild(reset);
 
+        // Значение ползунка в выбранной системе единиц: если у параметра указан kind,
+        // число и подпись берутся из общей установки единиц страницы.
         function fmtVal(p) {
-            var v = state[p.key];
+            var v = state[p.key], U = global.B42Units;
+            if (p.kind && U && U.fmt[p.kind]) return U.fmt[p.kind](v);
             var s = p.fmt ? p.fmt(v) : (Math.abs(v) >= 100 ? Math.round(v) : v);
             return s + (p.unit ? (' ' + T(p.unit)) : '');
         }
@@ -161,8 +222,42 @@
             ctrlRefs.forEach(function (r) {
                 r.lab.textContent = T(r.p.label);
                 r.val.textContent = fmtVal(r.p);
+                if (r.lock) {
+                    var on = !!locks[r.p.key];
+                    r.lock.className = 'xpl-lock' + (on ? ' on' : '');
+                    r.lock.textContent = on ? '◉' : '○';
+                    r.lock.title = on ? T('lockedHint') : T('freeHint');
+                    r.input.classList.toggle('xpl-range-free', !on);
+                }
             });
             reset.textContent = '↺ ' + T('reset');
+            if (readout) drawReadout();
+        }
+
+        // ── приборная строка: ключевые величины крупно, рядом со стендом ──
+        var readout = null, readoutRefs = [];
+        if (cfg.readout && cfg.readout.length) {
+            readout = el('div', 'xpl-readout');
+            cfg.readout.forEach(function (r) {
+                var cell = el('div', 'xpl-ro');
+                var v = el('div', 'xpl-ro-val'), l = el('div', 'xpl-ro-lab');
+                cell.appendChild(v); cell.appendChild(l);
+                readout.appendChild(cell);
+                readoutRefs.push({ r: r, v: v, l: l });
+            });
+            stageWrap.appendChild(readout);
+        }
+        function drawReadout(derived, anim) {
+            readoutRefs.forEach(function (x) {
+                var U = global.B42Units, val;
+                try { val = x.r.get(state, derived || {}, anim || {}); } catch (e) { val = null; }
+                if (val == null) val = '—';
+                else if (x.r.kind && U && U.fmt[x.r.kind]) val = U.fmt[x.r.kind](val);
+                else if (typeof val === 'number') val = (Math.abs(val) >= 100 ? Math.round(val) : Math.round(val * 100) / 100) +
+                    (x.r.unit ? ' ' + T(x.r.unit) : '');
+                x.v.textContent = val;
+                x.l.textContent = T(x.r.label);
+            });
         }
 
         // ── график (общий рисовальщик) ──
@@ -184,10 +279,17 @@
             g.textAlign = 'center'; g.fillText(T(pl.x.label), (x0 + x1) / 2, H - 8);
             g.save(); g.translate(12, (y0 + y1) / 2); g.rotate(-Math.PI / 2);
             g.textAlign = 'center'; g.fillText(T(pl.y.label), 0, 0); g.restore();
-            // деления по Y (мин/макс)
+            // Деления по Y — в ВЫБРАННОЙ системе единиц. Если ось помечена видом величины
+            // (pl.y.kind: 'P' | 'T' | 'V'), число пересчитывается тем же конвертером, что и приборы:
+            // переключил единицы — поменялось всё, включая график.
+            var U = global.B42Units;
+            function axisNum(v, kind) {
+                if (U && kind && U.raw && U.raw[kind]) return U.raw[kind](v);
+                return Math.round(v);
+            }
             g.textAlign = 'right'; g.fillStyle = col.soft;
-            g.fillText(Math.round(ymax), x0 - 6, y1 + 8);
-            g.fillText(Math.round(ymin), x0 - 6, y0);
+            g.fillText(axisNum(ymax, pl.y.kind), x0 - 6, y1 + 8);
+            g.fillText(axisNum(ymin, pl.y.kind), x0 - 6, y0);
             // кривая — curve() может вернуть null/NaN (напр. вертикальный участок, который не
             // является функцией y(x)); тогда «отрываем перо», а не тянем линию через 0.
             var n = pl.samples || 120;
@@ -213,7 +315,11 @@
                     g.beginPath(); g.arc(mx, my, 4.5, 0, 7); g.fill();
                     g.fillStyle = col.text; g.textAlign = (mx > (x0 + x1) / 2) ? 'right' : 'left';
                     g.font = '600 12px Inter, sans-serif';
-                    g.fillText(Math.round(m.y) + (pl.y.unit ? (' ' + T(pl.y.unit)) : ''), mx + (mx > (x0 + x1) / 2 ? -8 : 8), my - 8);
+                    // подпись маркера — тоже в выбранной системе (с единицей), иначе график «отстаёт» от приборов
+                    var mlabel = (U && pl.y.kind && U.fmt && U.fmt[pl.y.kind])
+                        ? U.fmt[pl.y.kind](m.y)
+                        : Math.round(m.y) + (pl.y.unit ? (' ' + T(pl.y.unit)) : '');
+                    g.fillText(mlabel, mx + (mx > (x0 + x1) / 2 ? -8 : 8), my - 8);
                 }
             }
         }
@@ -234,6 +340,8 @@
             cfg.stage.draw(g, { W: stageC.W, H: stageC.H, state: state, anim: anim, derived: derived, time: t, c: colors(), rtl: rtl, T: T });
             // формула
             formula.innerHTML = cfg.formula ? cfg.formula(state, derived, T) : '';
+            // приборы
+            if (readout) drawReadout(derived, anim);
             // график
             if (plotC) drawPlot(plotC, derived, anim);
         }

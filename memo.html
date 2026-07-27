@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карточка-шпаргалка — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  /* Карточка-шпаргалка: плотная сетка блоков, каждый самодостаточен. Рассчитана на печать
+     A4 и на сохранение картинкой — поэтому свои цвета, не зависящие от темы сайта. */
+  :root{
+    --ink:#1c2430; --soft:#6b7684; --line:#e4e8ee; --paper:#fff; --wash:#f5f7fa;
+    --brand:#4a7c9b; --warm:#b8860b; --moss:#2e7d32; --red:#b31b1b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,-apple-system,sans-serif;background:var(--wash);color:var(--ink);
+    padding:24px 16px;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bar{max-width:780px;margin:0 auto 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .bar a,.bar button{font-size:13px;padding:7px 15px;border-radius:16px;cursor:pointer;text-decoration:none;
+    background:#fff;border:1px solid var(--line);color:var(--soft);font-family:inherit}
+  .bar button:hover,.bar a:hover{border-color:var(--brand);color:var(--brand)}
+  .bar .primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+  .card{max-width:780px;margin:0 auto;background:var(--paper);border-radius:16px;
+    box-shadow:0 2px 20px rgba(20,30,45,.09);overflow:hidden}
+  .hd{padding:20px 26px 16px;border-bottom:2px solid var(--ink)}
+  .hd-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--soft);margin-bottom:6px}
+  .hd h1{font-family:'Source Serif 4',Georgia,serif;font-size:27px;font-weight:600;line-height:1.2}
+  .hd .sub{font-size:13.5px;color:var(--soft);margin-top:3px}
+
+  /* главная формула */
+  .eqbox{padding:22px 26px;text-align:center;background:linear-gradient(180deg,rgba(74,124,155,.08),rgba(74,124,155,.02));
+    border-bottom:1px solid var(--line)}
+  .eqbox .eq{font-size:30px;margin-bottom:10px}
+  .eqbox .nm{font-size:14px;font-weight:600;color:var(--ink)}
+  .eqbox .au{font-size:12px;color:var(--soft);margin-top:5px}
+
+  .scheme{margin:2px 0 0}
+  .idea-i{margin-bottom:6px;color:var(--accent, #4a7c9b)}
+  .idea-i svg{display:block}
+  @media print{.scheme{break-inside:avoid}}
+  .essence{padding:16px 26px;font-size:14.5px;line-height:1.65;border-bottom:1px solid var(--line);background:var(--wash)}
+
+  .sec{padding:18px 26px;border-bottom:1px solid var(--line)}
+  .sec:last-child{border-bottom:none}
+  .sec-t{font-size:10.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--soft);
+    font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+  .sec-t::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* сетка ключевых идей — как в карточках греческих букв */
+  .ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+  .idea{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fff}
+  .idea svg{display:block;margin:0 auto 8px}
+  .idea-t{font-size:13px;font-weight:700;text-align:center;margin-bottom:5px}
+  .idea-x{font-size:11.5px;line-height:1.55;color:var(--soft);text-align:center}
+
+  /* константы */
+  .consts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .cst{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start}
+  .cst-s{font-size:17px;min-width:30px;text-align:center;color:var(--brand)}
+  .cst-n{font-size:11px;color:var(--soft);text-transform:uppercase;letter-spacing:.04em}
+  .cst-v{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:1px}
+  .cst-u{font-size:11px;color:var(--soft);font-weight:400;margin-left:3px}
+
+  .mnemo{display:flex;flex-direction:column;gap:9px}
+  .mn{display:flex;gap:11px;font-size:12.5px;line-height:1.6;align-items:flex-start}
+  .mn-k{font-weight:700;color:var(--brand);white-space:nowrap;min-width:78px}
+  .mn-v{color:var(--ink)}
+
+  .where{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+  .wh{font-size:12.5px;line-height:1.55;padding-left:17px;position:relative;color:var(--ink)}
+  .wh::before{content:"→";position:absolute;left:0;color:var(--brand);font-weight:700}
+
+  .warn{background:rgba(179,27,27,.06);border-left:3px solid var(--red);padding:11px 14px;
+    border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.6}
+  .warn b{color:var(--red)}
+
+  .ex{background:var(--wash);border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.7}
+  .ex-g{color:var(--soft)}
+  .ex-a{font-weight:700;color:var(--moss);margin-top:4px}
+
+  .ft{padding:12px 26px;display:flex;justify-content:space-between;align-items:center;
+    font-size:10.5px;color:var(--soft);background:var(--wash);border-top:1px solid var(--line)}
+  .ft b{color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:12px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .bar{display:none}
+    .card{box-shadow:none;border-radius:0;max-width:100%}
+    .sec{page-break-inside:avoid}
+    .idea,.cst{break-inside:avoid}
+  }
+  @page{size:A4;margin:12mm}
+</style>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+// Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
+// Материалы переведены на ru/en/es/ar, поэтому страница просто читает нужную ветку JSON.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="bar" id="bar">
+  <a href="/learn.html"><i data-ic="home"></i> Дерево знаний</a>
+  <a href="#" id="back"><i data-ic="book"></i> К параграфу</a>
+  <button type="button" class="primary" onclick="window.print()"><i data-ic="printer"></i> Распечатать / PDF</button>
+</div>
+
+<div class="card" id="card"></div>
+
+<script src="/js/figures.js?v=5"></script>
+<script src="/js/explorable.js?v=3"></script>
+<script src="/js/models.js?v=3"></script>
+<script>
+(function () {
+  var LANG = window.B42_LANG || 'ru';
+  var qs = new URLSearchParams(location.search);
+  var TOPIC = qs.get('t') || 'thermodynamics';
+  var PART = qs.get('p') || '01-molecules';
+  var card = document.getElementById('card');
+
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function tex(target, latex, display) {
+    if (!window.katex) { target.textContent = latex; return; }
+    try { katex.render(latex, target, { throwOnError: false, displayMode: display !== false }); }
+    catch (e) { target.textContent = latex; }
+  }
+  function sec(title, node) {
+    var s = el('div', 'sec');
+    s.appendChild(el('div', 'sec-t', title));
+    s.appendChild(node);
+    return s;
+  }
+
+  // Мини-иконки для блоков «ключевые идеи» — свои, простые, печатаются чётко
+  var ICON = {
+    impact: '<svg width="46" height="34" viewBox="0 0 46 34"><line x1="34" y1="4" x2="34" y2="30" stroke="#1c2430" stroke-width="2.5"/>' +
+      '<circle cx="12" cy="12" r="4" fill="#4a7c9b"/><circle cx="16" cy="24" r="4" fill="#4a7c9b"/>' +
+      '<line x1="17" y1="12" x2="30" y2="12" stroke="#4a7c9b" stroke-width="1.5"/><line x1="21" y1="24" x2="30" y2="24" stroke="#4a7c9b" stroke-width="1.5"/></svg>',
+    speed: '<svg width="46" height="34" viewBox="0 0 46 34"><circle cx="14" cy="17" r="5" fill="#b31b1b"/>' +
+      '<line x1="21" y1="17" x2="40" y2="17" stroke="#b31b1b" stroke-width="2"/>' +
+      '<line x1="22" y1="9" x2="34" y2="9" stroke="#b31b1b" stroke-width="1.2" opacity=".5"/>' +
+      '<line x1="22" y1="25" x2="34" y2="25" stroke="#b31b1b" stroke-width="1.2" opacity=".5"/></svg>',
+    third: '<svg width="46" height="34" viewBox="0 0 46 34"><line x1="23" y1="17" x2="41" y2="17" stroke="#4a7c9b" stroke-width="2"/>' +
+      '<line x1="23" y1="17" x2="23" y2="3" stroke="#4a7c9b" stroke-width="2"/>' +
+      '<line x1="23" y1="17" x2="10" y2="28" stroke="#4a7c9b" stroke-width="2"/><circle cx="23" cy="17" r="3.5" fill="#1c2430"/></svg>',
+    ideal: '<svg width="46" height="34" viewBox="0 0 46 34"><rect x="8" y="6" width="30" height="22" rx="2" fill="none" stroke="#1c2430" stroke-width="2"/>' +
+      '<circle cx="16" cy="13" r="2.5" fill="#4a7c9b"/><circle cx="28" cy="11" r="2.5" fill="#4a7c9b"/>' +
+      '<circle cx="22" cy="21" r="2.5" fill="#4a7c9b"/><circle cx="32" cy="22" r="2.5" fill="#4a7c9b"/></svg>'
+  };
+
+  Promise.all([
+    fetch('/data/theory/courses/' + TOPIC + '/course.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+    fetch('/data/theory/courses/' + TOPIC + '/' + PART + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+  ]).then(function (res) {
+    var course = res[0], lesson = res[1], L = lesson[LANG] || lesson.ru, C = course[LANG] || course.ru;
+    var idx = course.lessons.findIndex(function (l) { return l.id === lesson.id; });
+    document.title = 'Шпаргалка · ' + L.title + ' — bridge42worlds';
+    document.getElementById('back').href = '/course.html?t=' + TOPIC + '&p=' + PART;
+
+    // шапка
+    var hd = el('div', 'hd');
+    hd.appendChild(el('div', 'hd-top',
+      '<span>' + C.title + ' · параграф ' + (idx + 1) + '</span><span>Карточка-шпаргалка</span>'));
+    hd.appendChild(el('h1', null, L.title));
+    if (L.subtitle) hd.appendChild(el('div', 'sub', L.subtitle.replace(/^Параграф \d+ · /, '')));
+    card.appendChild(hd);
+
+    // главная формула + автор
+    if (L.formula) {
+      var eb = el('div', 'eqbox');
+      var eq = el('div', 'eq'); tex(eq, L.formula.latex); eb.appendChild(eq);
+      eb.appendChild(el('div', 'nm', L.formula.name));
+      var au = (L.formula.authors || []).map(function (a) { return a.who + ' · ' + a.year; }).join('   |   ');
+      if (au) eb.appendChild(el('div', 'au', au));
+      card.appendChild(eb);
+    }
+
+    // суть одной фразой
+    if (L.memo && L.memo.essence) card.appendChild(el('div', 'essence', L.memo.essence));
+
+    // Схема параграфа: тот же стенд, что и в уроке. Шпаргалку читают перед экзаменом и печатают,
+    // поэтому стенд здесь компактный, а модель подгружается отдельно и не мешает, если её нет.
+    if (lesson.model && window.B42Models && window.Explorable) {
+      var FACTORY = { ideal_gas: 'gas', phase_transition: 'kettle', processes_engine: 'engine',
+        motion: 'motion', newton: 'newton', collision: 'collision', rotation: 'rotation',
+        oscillator: 'oscillator', resonance: 'resonance', entropy: 'entropy', orbit: 'orbit',
+        wave: 'wave', charge: 'charge', magnet: 'magnet', srt: 'srt', quantum: 'quantum',
+        nucleus: 'nucleus' }[lesson.model];
+      if (FACTORY) {
+        fetch('/data/theory/' + lesson.model + '.json', { cache: 'no-cache' })
+          .then(function (r) { return r.json(); })
+          .then(function (md) {
+            var mount = el('div', 'scheme');
+            var mdl = B42Models[FACTORY](md);
+            var cfg = mdl.cfg; cfg.lang = LANG;
+            var box = sec('Схема', mount);
+            // вставляем сразу после сути, до ключевых идей — чтобы картинка шла первой
+            var anchor = card.querySelector('.essence');
+            if (anchor && anchor.nextSibling) card.insertBefore(box, anchor.nextSibling);
+            else card.appendChild(box);
+            Explorable(mount, cfg);
+            if (mdl.bindHost) mdl.bindHost(mount);
+          })
+          .catch(function () { /* схема — дополнение: без неё карточка остаётся полной */ });
+      }
+    }
+
+    // ключевые идеи — сетка карточек с иконками
+    if (L.memo && L.memo.keyIdeas) {
+      var grid = el('div', 'ideas');
+      L.memo.keyIdeas.forEach(function (k) {
+        var d = el('div', 'idea');
+        // сначала наш общий набор, затем старые рисунки этой страницы
+        var svg = (window.B42Icons && B42Icons[k.icon]) ? B42Icons[k.icon](26) : ICON[k.icon];
+        if (svg) d.innerHTML = '<div class="idea-i">' + svg + '</div>';
+        d.appendChild(el('div', 'idea-t', k.title));
+        d.appendChild(el('div', 'idea-x', k.text));
+        grid.appendChild(d);
+      });
+      card.appendChild(sec('Что нужно понимать', grid));
+    }
+
+    // константы с единицами
+    if (L.constants && L.constants.items) {
+      var cg = el('div', 'consts');
+      L.constants.items.forEach(function (c) {
+        if (!c.value || c.value === 'измеряемая величина') return;
+        var d = el('div', 'cst');
+        var s = el('div', 'cst-s'); tex(s, c.latex || c.sym, false); d.appendChild(s);
+        var b = el('div');
+        b.appendChild(el('div', 'cst-n', c.name));
+        b.appendChild(el('div', 'cst-v', c.value + '<span class="cst-u">' + (c.unit || '') + '</span>'));
+        d.appendChild(b);
+        cg.appendChild(d);
+      });
+      card.appendChild(sec('Константы', cg));
+    }
+
+    // мнемоника
+    var mn = (L.constants && L.constants.items || []).filter(function (c) { return c.mnemo; });
+    if (mn.length) {
+      var mw = el('div', 'mnemo');
+      mn.forEach(function (c) {
+        var r = el('div', 'mn');
+        r.appendChild(el('div', 'mn-k', c.sym));
+        r.appendChild(el('div', 'mn-v', c.mnemo));
+        mw.appendChild(r);
+      });
+      card.appendChild(sec('Как запомнить', mw));
+    }
+
+    // пример счёта
+    if (L.example) {
+      var ex = el('div', 'ex');
+      ex.appendChild(el('div', 'ex-g', L.example.given));
+      ex.appendChild(el('div', null, L.example.law));
+      ex.appendChild(el('div', 'ex-a', '✓ ' + L.example.answer));
+      card.appendChild(sec('Типовой расчёт', ex));
+    }
+
+    // где встречается
+    if (L.memo && L.memo.where) {
+      var wg = el('div', 'where');
+      L.memo.where.forEach(function (w) { wg.appendChild(el('div', 'wh', w)); });
+      card.appendChild(sec('Где это встречается', wg));
+    }
+
+    // частая ошибка
+    if (L.memo && L.memo.watchOut) {
+      card.appendChild(sec('Частая ошибка', el('div', 'warn', '<b>Внимание.</b> ' + L.memo.watchOut)));
+    }
+
+    card.appendChild(el('div', 'ft',
+      '<span><b>bridge42worlds</b> · интерактивный учебник</span><span>' + C.title + ' · ' + (idx + 1) + '/' + course.lessons.length + '</span>'));
+
+    // Формулы внутри текста карточки ($...$) — тоже математическим набором, а не сырым текстом.
+    // Главная формула уже отрисована katex.render, поэтому её блок исключаем из авто-прохода.
+    setTimeout(function () {
+      if (!window.renderMathInElement) return;
+      try {
+        renderMathInElement(card, {
+          delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
+          ignoredClasses: ['eqbox', 'cst-s'],
+          throwOnError: false
+        });
+      } catch (e) {}
+    }, 200);
+  }).catch(function (e) {
+    card.appendChild(el('div', 'sec', 'Не удалось загрузить карточку: ' + e));
+  });
+})();
+</script>
+<script src="/js/icons.js?v=2"></script>
+<script src="/js/course-i18n.js?v=1"></script>
+
+<script>
+// Подставляем наш штриховой набор вместо эмодзи после загрузки icons.js
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.B42Icons) return;
+  document.querySelectorAll('i[data-ic]').forEach(function (n) {
+    var f = B42Icons[n.getAttribute('data-ic')];
+    if (f) n.outerHTML = f(15);
+  });
+});
+</script>
+</body>
+</html>
