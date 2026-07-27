@@ -16,9 +16,14 @@ from pathlib import Path
 
 # Порядок важен: сперва код и данные (по ним читается всё остальное), затем языки.
 # lang/en идёт последним и режется надвое — там 17 тысяч страниц авторов.
+# ВАЖНО про шаблоны: в git-pathspec обычная звёздочка пересекает границы папок, поэтому «*.html»
+# захватывает и lang/**/*.html — то есть весь сайт в первую же часть (поймано 2026-07-27).
+# Приставка :(glob) заставляет звёздочку остановиться на разделителе, а :(top) отсчитывает
+# от корня репозитория.
 PARTS = [
     ("код, данные и новые страницы раздела",
-     ["*.py", "*.html", "js", "css", "data", "content-manager", ".gitignore", "config.json"]),
+     [":(top,glob)*.py", ":(top,glob)*.html", "js", "css", "data", "content-manager",
+      ".gitignore", "config.json"]),
     ("страницы: русская версия", ["lang/ru"]),
     ("страницы: испанская версия", ["lang/es"]),
     ("страницы: арабская версия", ["lang/ar"]),
@@ -68,7 +73,7 @@ def main():
 
     total = len(PARTS)
     for i, (name, paths) in enumerate(PARTS, 1):
-        existing = [p for p in paths if p in (".", "*.py", "*.html") or Path(p).exists()]
+        existing = [p for p in paths if p == "." or p.startswith(":(") or Path(p).exists()]
         if not existing:
             continue
         run(["git", "add", "--"] + existing, check=False)
