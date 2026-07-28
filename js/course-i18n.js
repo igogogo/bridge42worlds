@@ -240,7 +240,34 @@
         document.title = t;
     }
 
+    /* Переключатель языков в шапке — рисуем здесь, а не в каждой странице отдельно.
+       Раньше его вставлял скрипт по списку файлов, и четыре новых справочника в список не попали:
+       материалы переведены, а сменить язык нечем (юзер 2026-07-28). Теперь достаточно подключить
+       этот файл — переключатель появится сам. */
+    function mountSwitcher() {
+        var bar = document.querySelector('.top-bar, .topnav, .bar');
+        if (!bar || document.getElementById('course-langs')) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'langs';
+        wrap.id = 'course-langs';
+        ['ru', 'en', 'es', 'ar'].forEach(function (l) {
+            var a = document.createElement('a');
+            // сохраняем текущий адрес и параметры, меняем только язык
+            var qs = new URLSearchParams(location.search);
+            qs.set('lang', l);
+            a.href = location.pathname + '?' + qs.toString() + location.hash;
+            a.textContent = l.toUpperCase();
+            if (l === LANG) a.className = 'active';
+            a.addEventListener('click', function () {
+                try { localStorage.setItem('b42_lang', l); } catch (e) {}
+            });
+            wrap.appendChild(a);
+        });
+        bar.appendChild(wrap);
+    }
+
     function start() {
+        mountSwitcher();
         if (LANG === 'ru') return;
         translate(document.body);
         translateTitle();

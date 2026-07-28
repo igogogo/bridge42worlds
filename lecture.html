@@ -247,24 +247,6 @@
 })();
 </script>
 
-<script>
-// Переключатель языков в шапке курса — тот же вид, что на остальном сайте.
-document.addEventListener('DOMContentLoaded', function () {
-  var bar = document.querySelector('.top-bar, .topnav');
-  if (!bar || document.getElementById('course-langs')) return;
-  var wrap = document.createElement('div');
-  wrap.className = 'langs'; wrap.id = 'course-langs';
-  ['ru', 'en', 'es', 'ar'].forEach(function (l) {
-    var a = document.createElement('a');
-    a.href = '?lang=' + l;
-    a.textContent = l.toUpperCase();
-    if (l === window.B42_LANG) a.className = 'active';
-    a.addEventListener('click', function () { try { localStorage.setItem('b42_lang', l); } catch (e) {} });
-    wrap.appendChild(a);
-  });
-  bar.appendChild(wrap);
-});
-</script>
 <script src="/js/course-i18n.js?v=1"></script>
 </body>
 </html>

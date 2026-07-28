@@ -13,9 +13,10 @@ var VERSION_INDEX_LATEST_FILES = { popular: 'articles-latest.json', simple: 'art
 let currentVersion = (function() {
     try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; }
 })();
-// «мини» — не отдельный индекс, а режим ленты (полный threads-текст). Работает только там,
-// где есть кнопка «мини» (главная). На прочих страницах трактуем как popular, чтобы ленты/описания не пустовали.
-if (currentVersion === 'mini' && !document.querySelector('[data-version="mini"]')) currentVersion = 'popular';
+// «Мини» — это отдельная страница статьи (mini.html), а не режим ленты. Раньше он был режимом
+// показа и молча превращался в popular, если у статьи не было короткого текста: читатель нажимал
+// и не видел никакой разницы (2026-07-28). В лентах уровень всегда один из трёх.
+if (currentVersion === 'mini') currentVersion = 'popular';
 // Эффективная версия для выборки статей: мини берёт popular-статьи.
 function effVersion() { return currentVersion === 'mini' ? 'popular' : currentVersion; }
 window.__favoritesPage = /\/favorites(\.html)?([?#]|$)/.test(location.pathname);
@@ -776,17 +777,48 @@ window.initImgSpinners = initImgSpinners;
 window.initReveal = initReveal;
 document.addEventListener('DOMContentLoaded', initReveal);
 
+// ── Уровни прямо на карточке ────────────────────────────────────────────────
+// Три ссылки над заголовком: попасть сразу в нужную глубину, не открывая статью и не
+// переключаясь внутри. Заменили общий бегунок в шапке (2026-07-28). Иконки те же, что на
+// странице статьи, — вид один на весь сайт.
+var LVL_SVG = {
+    simple: '<path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/>'
+          + '<path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/>',
+    popular: '<path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/>'
+           + '<path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/>',
+    advanced: '<circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/>'
+            + '<path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/>'
+};
+var LVL_FILE = { simple: 'simple.html', popular: 'index.html', advanced: 'advanced.html' };
+var LVL_LABEL = {
+    ru: { simple: 'Просто', popular: 'Популярно', advanced: 'Подробно' },
+    en: { simple: 'Simple', popular: 'Popular', advanced: 'Advanced' },
+    es: { simple: 'Simple', popular: 'Popular', advanced: 'Avanzado' },
+    ar: { simple: 'بسيط', popular: 'مبسّط', advanced: 'مفصّل' }
+};
+
+function levelSwitchHTML(base) {
+    var loc = LVL_LABEL[lang] || LVL_LABEL.en;
+    return '<div class="lv-switch lv-switch-card">' + ['simple', 'popular', 'advanced'].map(function (v) {
+        var on = (currentVersion === v) ? ' active' : '';
+        return '<a class="lv-btn lv-compact' + on + '" data-version="' + v + '" href="' + base + LVL_FILE[v]
+             + '" title="' + loc[v] + '">'
+             + '<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+             + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + LVL_SVG[v] + '</svg>'
+             + '<span class="lv-t">' + loc[v] + '</span></a>';
+    }).join('') + '</div>';
+}
+
 function cardHTML(item) {
     var base = '/lang/' + defaultLang + '/archive/' + item.date + '/' + item.id + '/';
-    var isMini = (currentVersion === 'mini' && item.threads);
-    // В мини-режиме ссылка карточки должна вести на mini.html, иначе клик «сбрасывает»
-    // выбор на popular (item.url всегда указывает на index.html — версия mini своего URL в индексе не имеет).
-    var url = isMini ? (base + 'mini.html') : (item.url || (base + 'index.html'));
+    // Заголовок открывает статью в ТОМ уровне, который читатель выбрал, — иначе выбор
+    // ни на что не влияет и кажется, что кнопки не работают (2026-07-28).
+    var url = base + (LVL_FILE[currentVersion] || 'index.html');
     // В списках — полная аннотация (адаптация авторского arXiv-abstract) БЕЗ обрезки на дисплее —
     // нужный размер уже задан в промпте генерации (data/prompts/adapt-abstract.txt: 350/550/900
     // символов на popular/simple/advanced), здесь всегда показываем как есть, целиком.
     // Мини — свой threads-текст, короче по своей природе, но и он не режется.
-    var bodyText = isMini ? item.threads : (item.abstract || item.description || item.oneliner || '');
+    var bodyText = item.abstract || item.description || item.oneliner || '';
     var cat = (item.categories || [])[0] || '';
     var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
     var catDesc = (window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[cat]) || '';
@@ -831,8 +863,9 @@ function cardHTML(item) {
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
         '</a>') : '') +
         '<div class="card-body">' +
+            levelSwitchHTML(base) +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
-            (bodyText ? '<div class="card-desc' + (isMini ? ' card-mini' : '') + '">' + bodyText + '</div>' : '') +
+            (bodyText ? '<div class="card-desc">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
             '<div class="card-meta">' + (item.reading ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> ' + item.reading + ' ' + UI.min + '<span class="sep">·</span>' : '') + 'arXiv:' + item.id + '</div>' +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
@@ -1403,6 +1436,63 @@ document.addEventListener('DOMContentLoaded', function() {
 // учёные), либо <a href data-version> (обычная навигация на странице статьи — работает
 // без JS вообще). На тег/закон-страницах тот же клик ещё переключает видимые блоки
 // .tag-ver — раньше это был отдельный дублированный инлайн-скрипт в каждом шаблоне.
+// ── Уровень чтения: запоминание выбора ──────────────────────────────────────
+// Бегунок убран (2026-07-28), управление перешло к иконочным кнопкам .lv-btn. Раньше вся
+// логика висела на #version-toggle — после его удаления выбор уровня просто перестал
+// сохраняться, и страницы открывались не тем уровнем, что читатель выбрал.
+// На карточках и в статье кнопки — обычные ссылки: переход работает и без JS, а скрипт лишь
+// запоминает выбранный уровень, чтобы следующая страница открылась в нём же.
+document.addEventListener('DOMContentLoaded', function () {
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.lv-btn[data-version]'));
+    if (!btns.length) return;
+
+    // Страница статьи сама сообщает свой уровень активной кнопкой — записываем его,
+    // иначе переход со статьи на тег/закон сбрасывал уровень на прошлый.
+    var here = document.querySelector('.article-main .lv-btn.active[data-version]');
+    if (here) {
+        currentVersion = here.dataset.version;
+        try { localStorage.setItem('b42_version', currentVersion); } catch (e) {}
+    }
+
+    // Текст тега/закона/учёного лежит на странице во всех версиях сразу (блоки .tag-ver),
+    // видна одна. Кнопка без href — это переключатель такого текста: показываем нужный блок
+    // и заодно перерисовываем список статей ниже, иначе он остаётся на прежнем уровне.
+    var verBlocks = Array.prototype.slice.call(document.querySelectorAll('.tag-ver[data-ver]'));
+    function showVer(v) {
+        if (!verBlocks.length) return;
+        var has = verBlocks.some(function (el) { return el.dataset.ver === v; });
+        var use = has ? v : 'popular';
+        verBlocks.forEach(function (el) { el.style.display = el.dataset.ver === use ? '' : 'none'; });
+    }
+
+    btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+            var v = b.dataset.version;
+            try { localStorage.setItem('b42_version', v); } catch (e) {}
+            if (b.tagName === 'A') return;          // ссылка — переход сделает браузер
+            currentVersion = v;
+            showVer(v);
+            btns.forEach(function (x) { x.classList.toggle('active', x.dataset.version === v); });
+            var input = document.querySelector('.search-box');
+            if (input && input.value.trim()) { doSearch(input.value); }
+            else if (typeof _defaultFeed === 'function') { _defaultFeed(); }
+        });
+    });
+
+    // начальное состояние текста карточки — под выбранный уровень
+    if (verBlocks.length) showVer(currentVersion);
+
+    // Подсветить выбранный уровень везде, где переключатель не привязан к открытому файлу.
+    // Исключение — ряд внутри статьи: там активное состояние ставит сервер по тому, какая
+    // версия открыта, и перекрашивать его нельзя.
+    document.querySelectorAll('.lv-switch').forEach(function (sw) {
+        if (sw.closest('.article-main')) return;
+        sw.querySelectorAll('.lv-btn').forEach(function (b) {
+            b.classList.toggle('active', b.dataset.version === currentVersion);
+        });
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     var wrap = document.getElementById('version-toggle');
     if (!wrap) return;

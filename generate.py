@@ -642,10 +642,14 @@ def entity_article_card(a, lang):
              f"else{{this.closest('.card-img-wrap').style.display='none';}}\" alt=\"\"></a>") if has_img else ''
     desc = safe(a.get("description", a.get("oneliner", "")))
     title = safe(a["title"])
+    # Три уровня прямо на карточке — чтобы попадать сразу в нужную глубину, не открывая
+    # статью и не переключаясь внутри. Заменили общий бегунок в шапке (юзер 2026-07-28).
+    levels = level_switch_links(lang, "popular", a["date"], a["id"], compact=True)
     return (f'<article class="article-card">'
             f'<div class="card-eyebrow"><span class="card-date">{a["date"]}</span></div>'
             f'{thumb}'
-            f'<div class="card-body"><h3><a href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a></h3>'
+            f'<div class="card-body">{levels}'
+            f'<h3><a href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a></h3>'
             f'<div class="oneliner">{desc}</div></div></article>')
 
 
@@ -910,10 +914,10 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             f'data-law="{attr_safe(lid)}">{safe(name)}</a>' for lid, name in side_laws))
 
     page_file = VERSION_FILES[version]
-    version_toggle_html = version_toggle_links(lang, version, date_str, article["id"])
+    version_toggle_html = ""   # бегунок заменён иконочным переключателем (2026-07-28)
     # Фаза 4: иконочный переключатель над названием + компактный дубль внизу статьи,
     # плюс карточка «коротко» шапкой (решения владельца 2026-07-27).
-    level_switch_html = level_switch_links(lang, version, date_str, article["id"])
+    level_switch_html = level_switch_links(lang, version, date_str, article["id"], with_mini=True)
     level_switch_bottom_html = level_switch_links(lang, version, date_str, article["id"], compact=True)
     mini_head_html = mini_header_html((scipop.get("mini") or "").strip(), lang)
     # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
@@ -1164,7 +1168,7 @@ def generate_index_page(lang):
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         loading_text=safe(loc["loading"]), footer_text=safe(loc["footer"]),
         intro_html=loc["intro"], calendar_title=safe(calendar_title), about_title=safe(about_title),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True)
+        version_toggle_html=""
     )
     base = Path(LANG_DIR) / lang
     (base / "index.html").write_text(html, encoding="utf-8")
@@ -1269,7 +1273,7 @@ def generate_tags_cloud(lang):
     _write_text_retry(Path(LANG_DIR) / lang / "tags" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html="",
         tags_title=safe(loc["title"]), tags_subtitle=safe(loc["subtitle"]),
         footer_text=safe(loc["footer"]), selected_tags_html="", tags_cloud_html=cloud_html,
         treemap_data=treemap_data,
@@ -1350,7 +1354,7 @@ def generate_tag_page(tag_id, lang):
     # id НЕ переименовываем в tag-version-toggle: search.js слушает именно #version-toggle,
     # чтобы синхронно перерисовать список статей внизу при смене версии (был баг — текст тега
     # переключался, а список статей оставался на старой версии).
-    tag_version_toggle = version_toggle_spans(lang, "popular", include_mini=True)
+    tag_version_toggle = level_switch_spans(lang, "popular")
 
     desc_pop = tag_data.get("description_popular") or tag_data.get("description_simple") or tag_data.get("description", "")
     desc_simple = tag_data.get("description_simple") or tag_data.get("description", "")
@@ -1672,7 +1676,7 @@ def generate_laws_cloud(lang):
     _write_text_retry(Path(LANG_DIR) / lang / "laws" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html="",
         laws_title=safe(loc["title"]), laws_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]),
         laws_cloud_html=cloud or f'<p>{safe(loc["subtitle"])}</p>',
@@ -1695,7 +1699,7 @@ def generate_law_page(law_id, lang):
 
     # id НЕ переименовываем (см. тот же комментарий у тегов) — иначе список статей внизу не
     # синхронизируется с переключением версии.
-    toggle = version_toggle_spans(lang, "popular", include_mini=True)
+    toggle = level_switch_spans(lang, "popular")
     law_img_url = entity_image_url("laws", law_id)
     ai_cover_html = f'<div class="ai-cover"><img src="{law_img_url}" alt=""></div>' if law_img_url else ""
     formulas_html = render_formulas(L.get("formulas", []))
@@ -1885,7 +1889,7 @@ def generate_knowledge_graph_page(lang):
     _write_text_retry(Path(LANG_DIR) / lang / "graph" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html="",
         graph_title=safe(loc["title"]), graph_subtitle=safe(loc["subtitle"]),
         nodes_label=safe(loc["nodes"]), edges_label=safe(loc["edges"]), presets_label=safe(loc["presets"]),
         tags_label=safe(loc["tags"]), laws_label=safe(loc["laws"]), scientists_label=safe(loc["scientists"]),
@@ -1955,7 +1959,7 @@ def generate_scientists_cloud(lang):
     _write_text_retry(Path(LANG_DIR) / lang / "scientists" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html="",
         scientists_title=safe(loc["title"]), scientists_subtitle=safe(loc["subtitle"]),
         search_placeholder=safe(loc["search"]), scientists_cloud_html=cloud_html,
         footer_text=safe(loc["footer"]),
@@ -2062,7 +2066,7 @@ def generate_scientist_page(sid, lang):
         og_meta_html=og_meta_html, entity_side_html=entity_side_html,
         articles_label=safe(loc.get("articles", loc.get("related", "Articles"))),
         scientist_id=attr_safe(sid),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html=level_switch_spans(lang, "popular"),
         actions_html=actions_html, feedback_html=feedback_html, share_label=safe(share_label_for(lang)),
         scientist_name=safe(sid), entity_kind_html=entity_kind_html("scientist", lang), lifespan=safe(localize_present(data.get("lifespan", ""), lang)),
         fields=", ".join(as_list(data.get("fields", []))),
@@ -2171,7 +2175,7 @@ def generate_section_page(cat, lang, index=None):
     _write_text_retry(Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html=level_switch_spans(lang, "popular"),
         section_name=safe(cat_name(cat, lang)), section_id=safe(cat),
         section_desc=safe(cat_desc(cat, lang)),
         article_count=count, articles_label=safe(loc["articles"]),
@@ -2228,7 +2232,7 @@ def generate_sections_cloud(lang):
     _write_text_retry(Path(LANG_DIR) / lang / "sections" / "index.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
         fav_title=safe(nav_fav_title(lang)),
-        version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+        version_toggle_html="",
         sections_title=safe(loc["title"]), sections_subtitle=safe(loc["subtitle"]),
         name_col=safe(loc["name_col"]), code_col=safe(loc["code_col"]), count_col=safe(loc["count_col"]),
         sections_cloud_html=rows, footer_text=safe(loc["footer"]),
@@ -2380,7 +2384,7 @@ def update_all_authors():
         _write_text_retry(Path(LANG_DIR) / lang / "authors" / "index.html", tpl_cloud.substitute(
             lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
             fav_title=safe(nav_fav_title(lang)),
-            version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+            version_toggle_html="",
             page_title=safe(loc["title"]), authors_title=safe(loc["title"]),
             authors_subtitle=safe(index_subtitle), alphabet_nav_html=gen_alphabet_nav(),
             search_placeholder=safe(loc["find"]),
@@ -2392,7 +2396,7 @@ def update_all_authors():
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{letter.lower()}.html", tpl_cloud.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
-                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                version_toggle_html="",
                 page_title=safe(f"{loc['title']} — {letter}"), authors_title=loc["title"],
                 authors_subtitle=safe(f"{letter} — {len(sections[letter])} {author_count_label}"),
                 alphabet_nav_html=gen_alphabet_nav(active_letter=letter), search_placeholder=safe(loc["find"]),
@@ -2402,7 +2406,7 @@ def update_all_authors():
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / "other.html", tpl_cloud.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
-                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                version_toggle_html="",
                 page_title=safe(f"{loc['title']} — #"), authors_title=loc["title"],
                 authors_subtitle=safe(f"# — {len(sections['#'])} {author_count_label}"),
                 alphabet_nav_html=gen_alphabet_nav(active_letter="#"), search_placeholder=safe(loc["find"]),
@@ -2440,7 +2444,7 @@ def update_all_authors():
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
-                version_toggle_html=version_toggle_spans(lang, "popular", include_mini=True),
+                version_toggle_html="",
                 author_slug=attr_safe(slug),
                 author_name=author_name, author_name_attr=attr_safe(author_name),
                 author_tags_attr=attr_safe(",".join(author_tags)),

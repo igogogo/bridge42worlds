@@ -1948,7 +1948,11 @@ html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right:
 /* Ровная одна высота всего правого кластера шапки (search-bar был 30 против 28 у остальных) */
 .header-right > .search-bar, .header-right > .version-slider, .header-right > .nav-links,
 .header-right > .theme-toggle { height: 28px; display: inline-flex; align-items: center; }
-.header-right > .search-bar > * { height: 28px; display: inline-flex; align-items: center; }
+/* Выравниваем по высоте только сами кнопки кластера. Выпадающая панель поиска — тоже
+   прямой потомок .search-bar, и это правило перебивало ей display:none (приоритет выше),
+   отчего поиск был раскрыт всегда (поймано 2026-07-28). */
+.header-right > .search-bar > *:not(.search-panel) { height: 28px; display: inline-flex;
+  align-items: center; }
 /* Языки — по ширине контента, иначе строка уезжала шире колонки (юзер 2026-07-25: «съехало») */
 .langs, .langs-row { max-width: var(--w-text); }
 
@@ -2134,14 +2138,22 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 .tn-wrap { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; max-width: 680px; }
 .tn-h { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--ochre); margin-bottom: 10px; }
-.tn-row { display: flex; align-items: center; gap: 7px; font-size: 12.5px; margin-bottom: 7px; }
-.tn-bar { height: 4px; border-radius: 2px; flex: none; opacity: .75; }
-.tn-n { color: var(--ink); }
-.tn-x { color: var(--soft); font-size: 11px; }
-.tn-w { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--soft); }
-.tn-gap { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 9px;
+/* Связи выравниваем по колонкам, а не потоком: имена разной длины разъезжались, и строки
+   читались как каша (замечание юзера 2026-07-28). Сетка — полоса, имя, знак, имя, вес. */
+.tn-row { display: grid; grid-template-columns: 46px minmax(0,1fr) 16px minmax(0,1fr) 34px;
+  align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 6px; }
+.tn-bar { height: 4px; border-radius: 2px; opacity: .8; justify-self: start; }
+.tn-n { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tn-n:last-of-type { text-align: start; }
+.tn-x { color: var(--soft); font-size: 11px; text-align: center; }
+.tn-w { font-family: var(--mono); font-size: 11px; color: var(--soft); text-align: end;
+  font-variant-numeric: tabular-nums; }
+.tn-gap { display: grid; grid-template-columns: minmax(0,1fr) 16px minmax(0,1fr) 34px;
+  align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 8px;
   padding: 8px 10px; border: 1px dashed var(--hair); border-radius: var(--radius-sm); color: var(--muted); }
-.tn-gap b { color: var(--ink); font-weight: 600; }
+.tn-gap b { color: var(--ink); font-weight: 600; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.tn-gap .tn-w { text-align: end; }
 @media (max-width: 640px) { .tn-wrap { grid-template-columns: 1fr; gap: 18px; } }
 /* Трактовка под каждым видом аналитики + вкладки в два ряда по ширине колонки (2026-07-27) */
 .an-tabs { flex-wrap: wrap; max-width: var(--w-text); row-gap: 6px; }
@@ -2151,3 +2163,63 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
   color: var(--ochre); margin-bottom: 5px; }
 .an-read p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 .an-read b { color: var(--ink); font-weight: 600; }
+
+/* Уровни на карточке: лёгкий ряд над заголовком. Не должен спорить с названием статьи,
+   поэтому мельче основного текста и в приглушённом цвете, акцент — только у активного. */
+.lv-switch-card { gap: 4px; margin: 0 0 8px; max-width: none; }
+.lv-switch-card .lv-btn { flex: none; min-height: 26px; padding: 0 9px; font-size: 11.5px;
+  border-radius: 13px; color: var(--muted); gap: 5px; }
+.lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
+.lv-switch-card .lv-btn:hover { color: var(--link); border-color: var(--link); }
+.lv-switch-card .lv-btn.active { color: #fff; background: var(--link); border-color: var(--link); }
+@media (max-width: 640px) {
+  .lv-switch-card .lv-btn { padding: 0 7px; font-size: 11px; }
+  .lv-switch-card .lv-btn .lv-t { display: none; }
+}
+
+/* На странице статьи ряд уровней прилипает к верху: сменить глубину можно с любого места
+   текста, не возвращаясь к началу. */
+.article-main > .lv-switch { position: sticky; top: 0; z-index: 20; padding: 8px 0;
+  background: var(--bg); backdrop-filter: blur(6px); }
+
+/* Активное автовращение видно на кнопке — иначе непонятно, крутится сцена или замерла. */
+.an-btn.active { color: var(--link); border-color: var(--link); }
+.an-stage-ctl { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 640px) { .an-stage-ctl { gap: 4px; } }
+
+/* Аналитика: приёмы из инженерного дашборда (образец юзера, 2026-07-28) — сдержанно.
+   Суть: каждый вид живёт в карточке-панели с мягкой двойной тенью, у панели есть шапка
+   (название слева, пояснение справа), а сетка и подписи осей приглушены, чтобы данные
+   читались первыми, а не оформление. */
+.an-stage {
+  box-shadow: 0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+  background: var(--surface);
+}
+:root[data-theme="dark"] .an-stage,
+html[data-theme="dark"] .an-stage {
+  box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+}
+/* шапка вида: что показано и как читать — одной строкой над сценой */
+.an-head { display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 8px; }
+.an-head-t { font-size: 13.5px; font-weight: 650; color: var(--ink); }
+.an-head-n { font-size: 11.5px; color: var(--muted); }
+
+/* легенда кластеров — компактный ряд с точками вместо столбца */
+.an-legend .lg-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  font-size: 11.5px; color: var(--soft); }
+.an-legend .lg-key { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.an-legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+/* живые показания — как KPI-плитки: подпись капителью, крупное число, тонкий индикатор */
+.an-rd { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px; margin-top: 12px; }
+.an-rd-cell { background: var(--surface); border: 1px solid var(--hair); border-radius: 12px;
+  padding: 10px 12px; }
+.an-rd-l { font-size: 11px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: .05em; font-weight: 650; }
+.an-rd-v { font-size: 22px; font-weight: 650; letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums; margin-top: 2px; }
+.an-rd-m { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 6px; }
+.an-rd-m > i { display: block; height: 100%; background: var(--link); border-radius: 3px; }
+@media (max-width: 640px) { .an-rd { grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); } }

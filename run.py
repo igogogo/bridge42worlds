@@ -150,10 +150,18 @@ def cmd_regen_day(args):
 
 
 def cmd_html(args):
+    """Пересборка HTML. На время работы ставим файл-замок: заливка в R2, запущенная
+    параллельно, прочитает наполовину переписанное дерево и зальёт смесь версий."""
     import generate
-    generate.regenerate_all_html(only=getattr(args, "only", None))
-    generate.rebuild_indexes()
-    _ensure_webp()   # догнать .webp для новых картинок (сайт отдаёт webp, генератор пишет jpg)
+    from datetime import datetime
+    lock = Path(".build.lock")
+    lock.write_text(f"начата {datetime.now():%H:%M}, pid {os.getpid()}", encoding="utf-8")
+    try:
+        generate.regenerate_all_html(only=getattr(args, "only", None))
+        generate.rebuild_indexes()
+        _ensure_webp()   # догнать .webp для новых картинок (сайт отдаёт webp, генератор пишет jpg)
+    finally:
+        lock.unlink(missing_ok=True)
 
 
 def cmd_status(args):

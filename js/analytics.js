@@ -3,6 +3,16 @@
 // препросчёт analytics_build.py, БЕЗ DeepSeek). Юзер 2026-07-24: показать группировки, 3D, «вау».
 (function () {
   var root = document.getElementById('analytics');
+  // Мини-панель вида: без неё сцена «замирала» — перетаскивание выключает автовращение,
+  // а включить обратно было нечем (замечание юзера 2026-07-28).
+  var CTL = ({
+    ru: { spin: 'вращение', zin: 'приблизить', zout: 'отдалить', reset: 'вернуть вид' },
+    en: { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' },
+    es: { spin: 'rotación', zin: 'acercar', zout: 'alejar', reset: 'restablecer vista' },
+    ar: { spin: 'دوران تلقائي', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض' }
+  })[LANG] || { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
+
+
   if (!root) return;
   var LANG = window.lang || 'en';
   var L = ({
@@ -308,7 +318,12 @@
     '<button class="an-tab" data-t="tension"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h5"/><path d="M15 12h5"/><path d="M9 8.5 12 12l-3 3.5"/><path d="M15 8.5 12 12l3 3.5"/></svg> ' + V3.tab + '</button></div>' +
     '<p class="an-intro" id="an-intro">' + T.introA + '</p>' +
     '<div class="an-stage" id="an-stage"><canvas id="an-canvas"></canvas><div class="an-hint">' + T.hint + '</div>' +
-    '<div class="an-stage-ctl"><button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button></div>' +
+    '<div class="an-stage-ctl">' +
+    '<button class="an-btn" id="an-spin" title="' + CTL.spin + '" aria-pressed="true"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v4h-4"/></svg></button>' +
+    '<button class="an-btn" id="an-zin" title="' + CTL.zin + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/><path d="M10.5 8v5"/></svg></button>' +
+    '<button class="an-btn" id="an-zout" title="' + CTL.zout + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg></button>' +
+    '<button class="an-btn" id="an-home" title="' + CTL.reset + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6.5 9.5V19h11V9.5"/></svg></button>' +
+    '<button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button></div>' +
     '<div class="an-speed" id="an-speed"><span>' + (FLY.speed || 'speed') + '</span>' +
     '<input type="range" id="an-speed-r" min="0" max="60" value="18"></div>' +
     '<div class="an-tip" id="an-tip" hidden></div></div>' +
@@ -639,14 +654,30 @@
   // ── Дерево знаний: упорядоченная иерархия, а не граф (владелец 2026-07-27) ───────────────
   // Область науки → раздел → понятия. Растёт слева направо, ветви подписаны.
   function buildTree() {
+    // Дерево должно ветвиться, а не расходиться веером из одной точки. Уровни настоящие,
+    // из данных: ствол → тема (кластер) → год → статьи. Год — не украшение: по нему видно,
+    // какая тема выросла недавно, а какая держится ровно.
     var src = (state.data && state.data.points) || [];
     var groups = {};
     src.forEach(function (p) {
       var c = String(p.c);
       (groups[c] = groups[c] || []).push(p);
     });
-    state.tree = Object.keys(groups).sort(function (a, b) { return groups[b].length - groups[a].length; })
-      .slice(0, 14).map(function (c) { return { c: +c, items: groups[c] }; });
+    state.tree = Object.keys(groups)
+      .sort(function (a, b) { return groups[b].length - groups[a].length; })
+      .slice(0, 12)
+      .map(function (c) {
+        var items = groups[c];
+        var byYear = {};
+        items.forEach(function (p) {
+          var y = String(p.d || '').slice(0, 4) || '—';
+          (byYear[y] = byYear[y] || []).push(p);
+        });
+        var twigs = Object.keys(byYear).sort().map(function (y) {
+          return { year: y, items: byYear[y] };
+        });
+        return { c: +c, items: items, twigs: twigs };
+      });
   }
 
   function drawTree() {
@@ -654,35 +685,83 @@
     if (!tr.length) return;
     ctx.clearRect(0, 0, state.W, state.H);
     var titles = (state.data && state.data.titles) || {};
-    var padL = 14, padT = 18, rowH = Math.max(20, Math.min(34, (state.H - padT * 2) / tr.length));
-    var x0 = padL, x1 = state.W * 0.38, x2 = state.W - 16;
+    var css = getComputedStyle(document.body);
+    var ink = css.getPropertyValue('--text') || '#333';
+    var mono = css.getPropertyValue('--mono') || 'monospace';
+
+    // Сколько вертикали нужно: у каждой темы столько строк, сколько у неё лет.
+    var rows = tr.reduce(function (s, b) { return s + b.twigs.length; }, 0);
+    var padT = 22, padB = 14;
+    var rowH = Math.max(11, Math.min(26, (state.H - padT - padB) / Math.max(1, rows)));
+    var xTrunk = 16, xBranch = Math.max(120, state.W * 0.30), xTwig = xBranch + 54;
+    var xLeaf = xTwig + 34, xEnd = state.W - 12;
+
     ctx.textBaseline = 'middle';
-    tr.forEach(function (br, i) {
-      var y = padT + i * rowH + rowH / 2;
+    ctx.lineCap = 'round';
+
+    // ствол
+    var yTop = padT, yBot = state.H - padB;
+    ctx.strokeStyle = ink; ctx.globalAlpha = 0.22; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(xTrunk, yTop); ctx.lineTo(xTrunk, yBot); ctx.stroke();
+
+    var y = padT;
+    tr.forEach(function (br) {
       var col = PAL[br.c % PAL.length];
-      // ствол → ветвь
-      ctx.strokeStyle = col; ctx.globalAlpha = 0.5; ctx.lineWidth = 1.6;
+      var yFirst = y + rowH / 2;
+      var yLast = y + (br.twigs.length - 0.5) * rowH;
+      var yMid = (yFirst + yLast) / 2;
+
+      // ствол → ветвь темы
+      ctx.strokeStyle = col; ctx.globalAlpha = 0.55; ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(x0, state.H / 2);
-      ctx.bezierCurveTo(x0 + 40, state.H / 2, x1 - 60, y, x1, y);
+      ctx.moveTo(xTrunk, yMid);
+      ctx.bezierCurveTo(xTrunk + 46, yMid, xBranch - 46, yMid, xBranch, yMid);
       ctx.stroke();
-      // листья — статьи ветви
-      ctx.globalAlpha = 0.85;
-      var n = Math.min(br.items.length, Math.floor((x2 - x1) / 7));
-      for (var k = 0; k < n; k++) {
-        var lx = x1 + 8 + k * 7, r = 2.1;
-        ctx.fillStyle = col;
-        ctx.globalAlpha = 0.35 + 0.5 * (k / Math.max(1, n));
-        ctx.beginPath(); ctx.arc(lx, y, r, 0, 6.283); ctx.fill();
+
+      // вертикаль ветви, от которой отходят годы
+      if (br.twigs.length > 1) {
+        ctx.globalAlpha = 0.35; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(xBranch, yFirst); ctx.lineTo(xBranch, yLast); ctx.stroke();
       }
-      // подпись ветви — человеческое имя кластера от ИИ
+
+      // подпись темы — человеческое имя от ИИ
       var lt = titles[br.c] && (titles[br.c][LANG] || titles[br.c].en);
       var label = (lt && lt.title) || ('#' + br.c);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text') || '#333';
-      ctx.font = '11px ' + (getComputedStyle(document.body).getPropertyValue('--mono') || 'monospace');
-      ctx.textAlign = 'right';
-      ctx.fillText(label.slice(0, 26) + '  ' + br.items.length, x1 - 6, y);
+      ctx.globalAlpha = 1; ctx.fillStyle = ink;
+      ctx.font = '11.5px ' + mono; ctx.textAlign = 'right';
+      ctx.fillText(label.slice(0, 30), xBranch - 8, yMid - 6);
+      ctx.globalAlpha = 0.5;
+      ctx.font = '10px ' + mono;
+      ctx.fillText(br.items.length + '', xBranch - 8, yMid + 7);
+
+      br.twigs.forEach(function (tw) {
+        var ty = y + rowH / 2;
+        // ветвь → год
+        ctx.strokeStyle = col; ctx.globalAlpha = 0.4; ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(xBranch, ty);
+        ctx.bezierCurveTo(xBranch + 20, ty, xTwig - 20, ty, xTwig, ty);
+        ctx.stroke();
+
+        // подпись года
+        ctx.globalAlpha = 0.65; ctx.fillStyle = ink;
+        ctx.font = '9.5px ' + mono; ctx.textAlign = 'left';
+        ctx.fillText(tw.year, xTwig + 3, ty);
+
+        // листья — статьи этого года
+        var maxN = Math.max(1, Math.floor((xEnd - xLeaf) / 6));
+        var n = Math.min(tw.items.length, maxN);
+        for (var k = 0; k < n; k++) {
+          ctx.fillStyle = col;
+          ctx.globalAlpha = 0.3 + 0.55 * (k / Math.max(1, n));
+          ctx.beginPath(); ctx.arc(xLeaf + k * 6, ty, 2, 0, 6.283); ctx.fill();
+        }
+        if (tw.items.length > maxN) {
+          ctx.globalAlpha = 0.5; ctx.fillStyle = ink; ctx.font = '9px ' + mono;
+          ctx.fillText('+' + (tw.items.length - maxN), xLeaf + n * 6 + 4, ty);
+        }
+        y += rowH;
+      });
     });
     ctx.globalAlpha = 1; ctx.textAlign = 'left';
   }
@@ -721,37 +800,103 @@
     state.spec = { pts: out, days: days.length, total: ys.reduce(function (a, b) { return a + b; }, 0) };
   }
 
+  // Подписи осей спектра — по ним читается, что вообще отложено на графике.
+  var SPEC_AX = {
+    ru: { x: 'период повторения, дни', y: 'сила ритма', days: 'дн' },
+    en: { x: 'repeat period, days', y: 'rhythm strength', days: 'd' },
+    es: { x: 'período de repetición, días', y: 'fuerza del ritmo', days: 'd' },
+    ar: { x: 'دورة التكرار، أيام', y: 'قوة الإيقاع', days: 'ي' }
+  };
+
   function drawSpectrum() {
     var sp = state.spec;
     ctx.clearRect(0, 0, state.W, state.H);
-    if (!sp) return;
-    var padL = 40, padB = 28, padT = 16, padR = 12;
+    if (!sp || !sp.pts || !sp.pts.length) return;
+    var css = getComputedStyle(document.body);
+    var mono = css.getPropertyValue('--mono') || 'monospace';
+    var ink = css.getPropertyValue('--text') || '#333';
+    var soft = css.getPropertyValue('--soft') || '#888';
+    var padL = 52, padB = 40, padT = 26, padR = 16;
     var W = state.W - padL - padR, H = state.H - padT - padB;
+    var n = sp.pts.length;
+    var xAt = function (i) { return padL + (i / Math.max(1, n - 1)) * W; };
+    var yAt = function (v) { return padT + H - v * H; };
+
+    // Сетка — без неё по графику невозможно ничего прочесть: не видно ни уровня мощности,
+    // ни того, какому периоду отвечает пик (замечание юзера 2026-07-28).
+    ctx.font = '10px ' + mono;
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = 'rgba(140,150,160,.16)'; ctx.lineWidth = 1;
+    ctx.fillStyle = soft; ctx.textAlign = 'right';
+    for (var g = 0; g <= 4; g++) {
+      var v = g / 4, gy = yAt(v);
+      ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + W, gy); ctx.stroke();
+      ctx.fillText(v.toFixed(2), padL - 7, gy);
+    }
+    // вертикальная сетка с подписями периодов
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    var ticks = 6;
+    for (var s = 0; s <= ticks; s++) {
+      var i = Math.round((s / ticks) * (n - 1));
+      var gx = xAt(i);
+      ctx.strokeStyle = 'rgba(140,150,160,.12)';
+      ctx.beginPath(); ctx.moveTo(gx, padT); ctx.lineTo(gx, padT + H); ctx.stroke();
+      ctx.fillStyle = soft;
+      ctx.fillText(String(sp.pts[i].per), gx, padT + H + 6);
+    }
+
     // оси
-    ctx.strokeStyle = 'rgba(140,150,160,.45)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + H); ctx.lineTo(padL + W, padT + H); ctx.stroke();
+    ctx.strokeStyle = 'rgba(140,150,160,.5)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + H); ctx.lineTo(padL + W, padT + H);
+    ctx.stroke();
+
+    // подписи осей
+    var L = (SPEC_AX && SPEC_AX[LANG]) || SPEC_AX.ru;
+    ctx.fillStyle = ink; ctx.font = '10.5px ' + mono;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText(L.x, padL + W / 2, state.H - 8);
+    ctx.save();
+    ctx.translate(13, padT + H / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center'; ctx.fillText(L.y, 0, 0);
+    ctx.restore();
+
+    // заливка под кривой — так виден сам «рельеф», а не только линия
+    var cyan = css.getPropertyValue('--cyan') || '#2E8AA0';
+    ctx.beginPath();
+    ctx.moveTo(xAt(0), padT + H);
+    sp.pts.forEach(function (o, i) { ctx.lineTo(xAt(i), yAt(o.p)); });
+    ctx.lineTo(xAt(n - 1), padT + H); ctx.closePath();
+    ctx.globalAlpha = 0.12; ctx.fillStyle = cyan; ctx.fill(); ctx.globalAlpha = 1;
+
     // кривая мощности
-    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--cyan') || '#2E8AA0';
-    ctx.lineWidth = 1.6; ctx.beginPath();
+    ctx.strokeStyle = cyan; ctx.lineWidth = 1.7; ctx.beginPath();
     sp.pts.forEach(function (o, i) {
-      var x = padL + (i / (sp.pts.length - 1)) * W, y = padT + H - o.p * H;
+      var x = xAt(i), y = yAt(o.p);
       if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     });
     ctx.stroke();
-    // пики
-    var top = sp.pts.slice().sort(function (a, b) { return b.p - a.p; }).slice(0, 3);
-    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--ochre') || '#C77F3A';
-    ctx.font = '11px ' + (getComputedStyle(document.body).getPropertyValue('--mono') || 'monospace');
-    top.forEach(function (o) {
-      var i = sp.pts.indexOf(o);
-      var x = padL + (i / (sp.pts.length - 1)) * W, y = padT + H - o.p * H;
-      ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 6.283); ctx.fill();
-      ctx.fillText(o.per + ' дн', Math.min(x + 6, state.W - 46), Math.max(12, y - 6));
-    });
-    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--soft') || '#888';
-    ctx.fillText('период, дни →', padL + 4, state.H - 8);
-  }
 
+    // Пики: подсвечиваем кружком с ореолом и ведём вертикаль к оси — сразу видно период.
+    var ochre = css.getPropertyValue('--ochre') || '#C77F3A';
+    var top = sp.pts.slice().sort(function (a, b) { return b.p - a.p; }).slice(0, 3);
+    ctx.font = '11px ' + mono;
+    top.forEach(function (o) {
+      var i = sp.pts.indexOf(o), x = xAt(i), y = yAt(o.p);
+      ctx.strokeStyle = ochre; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, padT + H); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 0.18; ctx.fillStyle = ochre;
+      ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(x, y, 3.4, 0, 6.283); ctx.fill();
+      ctx.fillStyle = ink; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(o.per + ' ' + L.days, Math.min(x + 8, state.W - 60), Math.max(14, y - 8));
+      ctx.fillStyle = ochre;
+    });
+    ctx.globalAlpha = 1; ctx.textAlign = 'left';
+  }
 
   // ── Напряжение: мосты между областями и разрывы там, где связь напрашивается ─────────────
   function buildTension() {
@@ -878,8 +1023,33 @@
   }
 
   // взаимодействие
+
+  // Управление видом. Автовращение выключается перетаскиванием (так удобнее целиться),
+  // поэтому нужна явная кнопка вернуть его — иначе сцена остаётся неподвижной навсегда.
+  function setSpin(on) {
+    state.spin = on;
+    var b = document.getElementById('an-spin');
+    if (b) { b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  }
+  var spinBtn = document.getElementById('an-spin');
+  if (spinBtn) spinBtn.addEventListener('click', function () { setSpin(!state.spin); });
+  var zinBtn = document.getElementById('an-zin');
+  if (zinBtn) zinBtn.addEventListener('click', function () {
+    state.zoom = Math.min(4, state.zoom * 1.25); draw();
+  });
+  var zoutBtn = document.getElementById('an-zout');
+  if (zoutBtn) zoutBtn.addEventListener('click', function () {
+    state.zoom = Math.max(0.4, state.zoom / 1.25); draw();
+  });
+  var homeBtn = document.getElementById('an-home');
+  if (homeBtn) homeBtn.addEventListener('click', function () {
+    state.yaw = 0.6; state.pitch = -0.3;
+    state.zoom = (state.mode === 'authors') ? 1.7 : 1;
+    setSpin(true); draw();
+  });
+
   var drag = null;
-  canvas.addEventListener('mousedown', function (e) { drag = { x: e.clientX, y: e.clientY }; state.spin = false; });
+  canvas.addEventListener('mousedown', function (e) { drag = { x: e.clientX, y: e.clientY }; setSpin(false); });
   window.addEventListener('mouseup', function () { drag = null; });
   window.addEventListener('mousemove', function (e) {
     if (drag) {

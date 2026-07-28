@@ -372,11 +372,17 @@ def _level_btn(v, lang, active, href=None, compact=False):
             f'title="{label} — {hint}">{inner}</button>')
 
 
-def level_switch_links(lang, current, date_str, aid, compact=False):
-    """Для страницы статьи: ссылки на файлы уровней (работает и без JS)."""
+def level_switch_links(lang, current, date_str, aid, compact=False, with_mini=False):
+    """Для страницы статьи: ссылки на файлы уровней (работает и без JS).
+
+    with_mini — добавляет «мини» четвёртой кнопкой. На странице статьи это настоящий файл
+    (mini.html), поэтому уровень честный. В лентах мини не показываем: там он был не выбором
+    версии, а режимом показа, который молча превращался в «популярно», если у статьи не было
+    короткого текста, — читатель нажимал и не видел разницы (2026-07-28)."""
+    order = LEVEL_ORDER + (["mini"] if with_mini else [])
     btns = "".join(_level_btn(v, lang, v == current,
                               href=f"/{LANG_DIR}/{lang}/archive/{date_str}/{aid}/{VERSION_FILES[v]}",
-                              compact=compact) for v in LEVEL_ORDER)
+                              compact=compact) for v in order)
     return f'<div class="lv-switch{" lv-switch-compact" if compact else ""}">{btns}</div>'
 
 
