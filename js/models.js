@@ -259,16 +259,19 @@
                     height: 260,
                     draw: function (g, ctx) {
                         var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, a = ctx.anim, d = ctx.derived, Tmax = 130;
-                        function rr(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
                         var tx = 26, ttop = 24, tbot = H - 40, tlen = tbot - ttop;          // термометр
-                        g.strokeStyle = col.border; g.lineWidth = 2; g.beginPath(); g.moveTo(tx, ttop); g.lineTo(tx, tbot); g.stroke();
-                        g.fillStyle = col.warn; g.beginPath(); g.arc(tx, tbot + 6, 6, 0, 6.2832); g.fill();
+                        KIT.thermometer(g, tx, ttop, tlen, Math.max(0, Math.min(1, d.T / Tmax)), {
+                            color: col.warn, track: col.border, trackWidth: 2, width: 4,
+                            bulbR: 6, cap: 'butt'
+                        });
                         var my = tbot - tlen * Math.max(0, Math.min(1, d.T / Tmax));
-                        g.strokeStyle = col.warn; g.lineWidth = 4; g.beginPath(); g.moveTo(tx, tbot); g.lineTo(tx, my); g.stroke();
                         var byk = tbot - tlen * Math.max(0, Math.min(1, d.Tb / Tmax));      // пунктир точки кипения
-                        g.strokeStyle = col.soft; g.lineWidth = 1; g.setLineDash([3, 2]);
-                        g.beginPath(); g.moveTo(tx - 6, byk); g.lineTo(tx + 10, byk); g.stroke(); g.setLineDash([]);
-                        g.fillStyle = col.text; g.font = '600 10px Inter'; g.textAlign = 'left'; g.fillText(Math.round(d.T) + '°', tx + 7, my - 3);
+                        KIT.dashed(g, [3, 2], function () {
+                            g.strokeStyle = col.soft; g.lineWidth = 1;
+                            g.beginPath(); g.moveTo(tx - 6, byk); g.lineTo(tx + 10, byk); g.stroke();
+                        });
+                        KIT.text(g, Math.round(d.T) + '°', tx + 7, my - 3,
+                                 { size: 10, weight: '600', color: col.text, align: 'left', font: 'Inter' });
                         // ── ЧАЙНИК: корпус слегка на конус (как настоящий), гнутый носик,
                         // дугообразная ручка, крышка с шишечкой. Рисуем до воды, чтобы вода легла внутрь.
                         var bx = 92, bw = Math.min(W - bx - 62, 210), by = 46, bh = H - 116;
@@ -307,16 +310,21 @@
                         g.fillStyle = 'rgba(74,124,170,0.30)'; g.fillRect(wx, wTop, wxw, wyBot - wTop);
                         g.strokeStyle = 'rgba(74,124,170,0.65)'; g.lineWidth = 1.5;
                         g.beginPath(); g.moveTo(wx, wTop); g.lineTo(wx + wxw, wTop); g.stroke();
-                        g.fillStyle = hueBySpeed((d.T - 20) / 110);
-                        for (var i = 0; i < a.mol.length; i++) { var p = a.mol[i]; g.beginPath(); g.arc(wx + p.x * wxw, wTop + p.y * (wyBot - wTop), 2.4, 0, 6.2832); g.fill(); }
-                        g.strokeStyle = 'rgba(255,255,255,0.75)'; g.lineWidth = 1.2;
-                        for (var b2 = 0; b2 < a.bub.length; b2++) { var bb = a.bub[b2]; g.beginPath(); g.arc(wx + bb.x * wxw, wTop + bb.y * (wyBot - wTop), bb.r, 0, 6.2832); g.stroke(); }
+                        // молекулы, пузырьки и пар — один блок частиц в трёх ролях
+                        var wh = wyBot - wTop;
+                        KIT.particles(g, a.mol, { r: 2.4, color: hueBySpeed((d.T - 20) / 110),
+                            toX: function (p) { return wx + p.x * wxw; },
+                            toY: function (p) { return wTop + p.y * wh; } });
+                        KIT.particles(g, a.bub, { stroke: true, width: 1.2, color: 'rgba(255,255,255,0.75)',
+                            r: function (p) { return p.r; },
+                            toX: function (p) { return wx + p.x * wxw; },
+                            toY: function (p) { return wTop + p.y * wh; } });
                         var spx = bx + bw + 16, spy = by - 6;
-                        for (var s2 = 0; s2 < a.steam.length; s2++) {
-                            var ss = a.steam[s2]; g.globalAlpha = Math.max(0, ss.life) * 0.45; g.fillStyle = col.soft;
-                            g.beginPath(); g.arc(spx + ss.dx, spy - ss.y, ss.r, 0, 6.2832); g.fill();
-                        }
-                        g.globalAlpha = 1;
+                        KIT.particles(g, a.steam, { color: col.soft,
+                            r: function (p) { return p.r; },
+                            alpha: function (p) { return Math.max(0, p.life) * 0.45; },
+                            toX: function (p) { return spx + p.dx; },
+                            toY: function (p) { return spy - p.y; } });
                         var fy = by + bh, pw = (st.power - 500) / 2500, fh = 9 + pw * 26;    // пламя ∝ мощности
                         for (var f = 0; f < 7; f++) {
                             var fx = bx + bw * (0.16 + 0.68 * f / 6);
@@ -460,19 +468,15 @@
                         var frac = Math.max(0, Math.min(1, (a.V - Vmin) / (Vmax - Vmin)));
                         var wbox = (W - 96) * (0.24 + 0.72 * frac), xP = x0 + wbox;
                         g.strokeStyle = col.soft; g.lineWidth = 2; g.strokeRect(x0, y0, wbox, hbox);
-                        g.fillStyle = col.link; g.fillRect(xP, y0 - 2, 8, hbox + 4);
-                        g.strokeStyle = col.link; g.lineWidth = 4;
-                        g.beginPath(); g.moveTo(xP + 8, y0 + hbox / 2); g.lineTo(xP + 34, y0 + hbox / 2); g.stroke();
+                        KIT.piston(g, xP, y0, hbox, { color: col.link, thickness: 8, rod: 34, rodWidth: 4 });
                         var tt = Math.max(0, Math.min(1, (a.T - 250) / 900));
                         g.fillStyle = 'hsla(' + Math.round(210 * (1 - tt)) + ',70%,55%,0.30)';
                         g.fillRect(x0 + 2, y0 + 2, wbox - 4, hbox - 4);
-                        g.fillStyle = hueBySpeed(tt);
-                        for (var i = 0; i < a.parts.length; i++) {
-                            var pp = a.parts[i];
-                            g.beginPath(); g.arc(x0 + 6 + pp.x * (wbox - 12), y0 + 6 + pp.y * (hbox - 12), 2.6, 0, 6.2832); g.fill();
-                        }
-                        g.fillStyle = col.soft; g.font = '11px Inter'; g.textAlign = 'center';
-                        g.fillText(Math.round(a.T) + ' K', x0 + wbox / 2, y0 + hbox + 16);
+                        KIT.particles(g, a.parts, { r: 2.6, color: hueBySpeed(tt),
+                            toX: function (p) { return x0 + 6 + p.x * (wbox - 12); },
+                            toY: function (p) { return y0 + 6 + p.y * (hbox - 12); } });
+                        KIT.text(g, Math.round(a.T) + ' K', x0 + wbox / 2, y0 + hbox + 16,
+                                 { size: 11, color: col.soft, font: 'Inter' });
                     }
                 },
                 formula: function (st, d, T) {

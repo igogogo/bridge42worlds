@@ -40,7 +40,7 @@
     function text(g, str, x, y, o) {
         o = o || {};
         g.save();
-        g.font = (o.weight ? o.weight + ' ' : '') + (o.size || 10) + 'px ' + FONT;
+        g.font = (o.weight ? o.weight + ' ' : '') + (o.size || 10) + 'px ' + (o.font || FONT);
         g.fillStyle = o.color || '#2c2c2c';
         g.textAlign = o.align || 'center';
         g.textBaseline = o.baseline || 'alphabetic';
@@ -167,13 +167,15 @@
         o = o || {};
         var r = o.r || 2.8;
         g.save();
+        if (o.stroke) g.lineWidth = o.width || 1;
         for (var i = 0; i < list.length; i++) {
             var p = list[i];
-            g.fillStyle = typeof o.color === 'function' ? o.color(p, i) : (o.color || palette.blue);
+            var c = typeof o.color === 'function' ? o.color(p, i) : (o.color || palette.blue);
+            if (o.stroke) g.strokeStyle = c; else g.fillStyle = c;
             if (o.alpha != null) g.globalAlpha = typeof o.alpha === 'function' ? o.alpha(p, i) : o.alpha;
             g.beginPath();
-            g.arc(o.toX ? o.toX(p) : p.x, o.toY ? o.toY(p) : p.y, typeof r === 'function' ? r(p) : r, 0, 6.2832);
-            g.fill();
+            g.arc(o.toX ? o.toX(p) : p.x, o.toY ? o.toY(p) : p.y, typeof r === 'function' ? r(p, i) : r, 0, 6.2832);
+            if (o.stroke) g.stroke(); else g.fill();
         }
         g.restore();
     }
@@ -402,7 +404,8 @@
         var col = o.color || palette.warm, wid = o.width || 6, bulbR = o.bulbR || 7;
         frac = Math.max(0, Math.min(1, frac));
         g.save();
-        g.strokeStyle = o.track || '#e2e2e2'; g.lineWidth = wid; g.lineCap = 'round';
+        g.strokeStyle = o.track || '#e2e2e2';
+        g.lineWidth = o.trackWidth || wid; g.lineCap = o.cap || 'round';
         g.beginPath(); g.moveTo(x, yTop); g.lineTo(x, yTop + h); g.stroke();
         g.strokeStyle = col; g.lineWidth = wid;
         g.beginPath(); g.moveTo(x, yTop + h); g.lineTo(x, yTop + h * (1 - frac)); g.stroke();
