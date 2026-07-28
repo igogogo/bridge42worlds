@@ -312,7 +312,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 <script src="/js/icons.js?v=2"></script>
 <script src="/js/explorable.js?v=5"></script>
 <script src="/js/stage-kit.js?v=4"></script>
-<script src="/js/models.js?v=26"></script>
+<script src="/js/models.js?v=27"></script>
 <script src="/js/tutor.js?v=3"></script>
 <script src="/js/figures.js?v=9"></script>
 <script>
@@ -727,6 +727,11 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
         var api = Explorable(mount, cfg); APIS.push(api);
         window.__api = api; window.__mdl = mdl;   // отладочный доступ (проверка анимации/связей)
         if (mdl.bindHost) mdl.bindHost(mount);
+        // Предсказание: спросить направление ДО того, как читатель начнёт крутить сам.
+        // Идёт перед испытанием — сначала проверить догадку, потом уже добиваться цели.
+        if (window.B42Predict) {
+          try { B42Predict.mount(wrap, mdl, api, modelData, LANG); } catch (e) {}
+        }
         // мини-игра: цель в величинах модели. Считает сам стенд, игра лишь смотрит на состояние.
         if (window.B42Challenge) {
           try { B42Challenge.mount(wrap, mdl, api, modelData, LANG); } catch (e) {}
@@ -1037,6 +1042,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+<script src="/js/course-predict.js?v=4"></script>
 <script src="/js/course-challenge.js?v=1"></script>
 </body>
 </html>
