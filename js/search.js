@@ -800,9 +800,9 @@ function levelSwitchHTML(base) {
     var loc = LVL_LABEL[lang] || LVL_LABEL.en;
     return '<div class="lv-switch lv-switch-card">' + ['simple', 'popular', 'advanced'].map(function (v) {
         var on = (currentVersion === v) ? ' active' : '';
-        return '<a class="lv-btn lv-compact' + on + '" data-version="' + v + '" href="' + base + LVL_FILE[v]
+        return '<a class="lv-btn' + on + '" data-version="' + v + '" href="' + base + LVL_FILE[v]
              + '" title="' + loc[v] + '">'
-             + '<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+             + '<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
              + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + LVL_SVG[v] + '</svg>'
              + '<span class="lv-t">' + loc[v] + '</span></a>';
     }).join('') + '</div>';

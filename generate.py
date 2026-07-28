@@ -644,7 +644,7 @@ def entity_article_card(a, lang):
     title = safe(a["title"])
     # Три уровня прямо на карточке — чтобы попадать сразу в нужную глубину, не открывая
     # статью и не переключаясь внутри. Заменили общий бегунок в шапке (юзер 2026-07-28).
-    levels = level_switch_links(lang, "popular", a["date"], a["id"], compact=True)
+    levels = level_switch_links(lang, "popular", a["date"], a["id"])
     return (f'<article class="article-card">'
             f'<div class="card-eyebrow"><span class="card-date">{a["date"]}</span></div>'
             f'{thumb}'

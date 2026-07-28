@@ -71,7 +71,7 @@ VERSION_FALLBACK = {"popular": ["popular", "simple", "advanced"],
 
 # Иконки уровня изложения (решение владельца 2026-07-27: «кнопки в виде иконок, а не ползунок»).
 # Росток — самое начало объяснения; раскрытая книга — связный рассказ; лупа — разбор деталей.
-_SVG = ('<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+_SVG = ('<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
         'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{}</svg>')
 # Знак уровня — про то, СКОЛЬКО текста: одна строка, две, три. Прежние картинки (росток,
 # раскрытая книга, лупа) на 13 пикселях читались как непонятные значки, и смысл приходилось

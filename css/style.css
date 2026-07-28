@@ -2164,20 +2164,21 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 .an-read p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 .an-read b { color: var(--ink); font-weight: 600; }
 
-/* Уровни на карточке — маленький аккуратный ряд над заголовком. Не спорит с названием
-   статьи: мельче основного текста, приглушённый, акцент только у выбранного. Иконка — строки
-   (одна/две/три), знак про объём текста; прежние росток-книга-лупа на этом размере не читались. */
-.lv-switch-card { gap: 3px; margin: 0 0 9px; max-width: none; flex-wrap: nowrap; }
-.lv-switch-card .lv-btn { flex: none; min-height: 24px; padding: 0 8px; font-size: 11px;
-  border-radius: 12px; color: var(--muted); gap: 5px; letter-spacing: .01em;
-  border-color: var(--hair); background: transparent; }
-.lv-switch-card .lv-btn .vs-ic { width: 12px; height: 12px; opacity: .85; }
-.lv-switch-card .lv-btn:hover { color: var(--link); border-color: var(--link); background: transparent; }
-.lv-switch-card .lv-btn.active { color: #fff; background: var(--link); border-color: var(--link); }
-.lv-switch-card .lv-btn.active .vs-ic { opacity: 1; }
+/* Уровни на карточке — сегментный переключатель. Ряд лежит на своей подложке, выбранный
+   сегмент залит акцентом с белыми жирными черточками: видно сразу, какой уровень открыт,
+   и не спутаешь с меню (юзер 2026-07-28). Знак — количество строк, то есть объём текста. */
+.lv-switch-card { display: inline-flex; gap: 2px; margin: 0 0 10px; max-width: none;
+  flex-wrap: nowrap; padding: 2px; border-radius: 15px; background: var(--tag-bg, rgba(46,138,160,.08)); }
+.lv-switch-card .lv-btn { flex: none; min-height: 26px; padding: 0 11px; font-size: 11.5px;
+  border-radius: 13px; border: none; background: transparent; color: var(--muted);
+  gap: 6px; font-weight: 600; letter-spacing: .005em; }
+.lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
+.lv-switch-card .lv-btn:hover { color: var(--link); background: rgba(46,138,160,.10); }
+.lv-switch-card .lv-btn.active { color: #fff; background: var(--link);
+  box-shadow: 0 1px 3px rgba(20,30,45,.18); }
+.lv-switch-card .lv-btn.active .vs-ic { color: #fff; }
 @media (max-width: 640px) {
-  .lv-switch-card { gap: 4px; }
-  .lv-switch-card .lv-btn { padding: 0 9px; min-height: 26px; font-size: 11px; }
+  .lv-switch-card .lv-btn { padding: 0 10px; font-size: 11px; }
 }
 
 /* На странице статьи ряд уровней прилипает к верху: сменить глубину можно с любого места
