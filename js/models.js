@@ -1255,64 +1255,49 @@
                         var W = ctx.W, H = ctx.H, col = ctx.c, d = ctx.derived, a = ctx.anim;
                         var bx = W * 0.06, bw = W * 0.56, by = 16, bh = H - 86;
                         // ящик и перегородка-отметка посередине
-                        g.strokeStyle = col.border; g.lineWidth = 1.5;
-                        g.strokeRect(bx, by, bw, bh);
-                        g.setLineDash([3, 4]); g.strokeStyle = col.soft;
-                        g.beginPath(); g.moveTo(bx + bw / 2, by); g.lineTo(bx + bw / 2, by + bh); g.stroke();
-                        g.setLineDash([]);
+                        KIT.vessel(g, bx, by, bw, bh, { color: col.border, width: 1.5,
+                            divider: true, dividerDash: [3, 4], dividerColor: col.soft, dividerWidth: 1.5 });
                         // частицы: цвет по стороне, чтобы перемешивание было видно
                         if (a && a.sim) {
-                            for (var i = 0; i < a.sim.p.length; i++) {
-                                var q = a.sim.p[i];
-                                g.fillStyle = q.side === 0 ? '#155E74' : '#8F6417';
-                                g.globalAlpha = .75;
-                                g.beginPath();
-                                g.arc(bx + q.x * bw, by + q.y * bh, 2.6, 0, 6.2832);
-                                g.fill();
-                            }
-                            g.globalAlpha = 1;
+                            KIT.particles(g, a.sim.p, { r: 2.6, alpha: .75,
+                                color: function (q) { return q.side === 0 ? '#155E74' : '#8F6417'; },
+                                toX: function (q) { return bx + q.x * bw; },
+                                toY: function (q) { return by + q.y * bh; } });
                         }
                         // счётчики под ящиком
-                        g.font = '600 12px Inter, sans-serif'; g.textAlign = 'center';
-                        g.fillStyle = '#155E74';
-                        g.fillText(ctx.T('leftN') + ' ' + d.left, bx + bw * 0.25, by + bh + 20);
-                        g.fillStyle = '#8F6417';
-                        g.fillText(ctx.T('rightN') + ' ' + d.right, bx + bw * 0.75, by + bh + 20);
+                        KIT.text(g, ctx.T('leftN') + ' ' + d.left, bx + bw * 0.25, by + bh + 20,
+                                 { size: 12, weight: '600', color: '#155E74' });
+                        KIT.text(g, ctx.T('rightN') + ' ' + d.right, bx + bw * 0.75, by + bh + 20,
+                                 { size: 12, weight: '600', color: '#8F6417' });
 
                         // справа — история числа слева, чтобы видеть сползание к половине
                         var gx = bx + bw + 22, gw = W - gx - 14, gy = by, gh = bh;
-                        g.strokeStyle = col.border; g.lineWidth = 1;
-                        g.strokeRect(gx, gy, gw, gh);
+                        KIT.vessel(g, gx, gy, gw, gh, { color: col.border, width: 1 });
                         // линия равновесия N/2 и коридор флуктуаций ±σ
                         var yOf = function (v) { return gy + gh * (1 - v / d.N); };
-                        g.fillStyle = col.soft; g.globalAlpha = .13;
-                        g.fillRect(gx, yOf(d.N / 2 + d.sig), gw, yOf(d.N / 2 - d.sig) - yOf(d.N / 2 + d.sig));
-                        g.globalAlpha = 1;
-                        g.strokeStyle = col.soft; g.setLineDash([2, 3]);
-                        g.beginPath(); g.moveTo(gx, yOf(d.N / 2)); g.lineTo(gx + gw, yOf(d.N / 2)); g.stroke();
-                        g.setLineDash([]);
+                        KIT.alpha(g, .13, function () {
+                            g.fillStyle = col.soft;
+                            g.fillRect(gx, yOf(d.N / 2 + d.sig), gw, yOf(d.N / 2 - d.sig) - yOf(d.N / 2 + d.sig));
+                        });
+                        KIT.dashed(g, [2, 3], function () {
+                            g.strokeStyle = col.soft; g.lineWidth = 1;
+                            g.beginPath(); g.moveTo(gx, yOf(d.N / 2)); g.lineTo(gx + gw, yOf(d.N / 2)); g.stroke();
+                        });
                         if (a && a.sim && a.sim.hist.length > 1) {
                             var hs = a.sim.hist, n0 = hs.length;
-                            g.strokeStyle = '#155E74'; g.lineWidth = 1.4; g.beginPath();
-                            for (var h = 0; h < n0; h++) {
-                                var xx = gx + gw * h / Math.max(1, n0 - 1);
-                                if (h === 0) g.moveTo(xx, yOf(hs[h].left)); else g.lineTo(xx, yOf(hs[h].left));
-                            }
-                            g.stroke();
+                            KIT.polyline(g, hs.map(function (p, h) {
+                                return [gx + gw * h / Math.max(1, n0 - 1), yOf(p.left)];
+                            }), { color: '#155E74', width: 1.4 });
                         }
-                        g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'left';
-                        g.fillText(ctx.T('histLabel'), gx + 4, gy + 13);
-                        g.textAlign = 'right';
-                        g.fillText('N/2 ± √N/2', gx + gw - 4, yOf(d.N / 2) - 5);
+                        KIT.text(g, ctx.T('histLabel'), gx + 4, gy + 13, { color: col.soft, align: 'left' });
+                        KIT.text(g, 'N/2 ± √N/2', gx + gw - 4, yOf(d.N / 2) - 5, { color: col.soft, align: 'right' });
 
                         // полоса энтропии внизу
                         var eb = H - 34, ew = W - 28, ex0 = 14;
-                        g.strokeStyle = col.border; g.strokeRect(ex0, eb, ew, 9);
-                        g.fillStyle = '#4C6B4E';
-                        g.fillRect(ex0, eb, ew * Math.max(0, Math.min(1, d.S / (d.Smax || 1))), 9);
-                        g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'left';
-                        g.fillText(ctx.T('entLabel') + ' S/k = ' + d.S.toFixed(1) +
-                                   '  (max ' + d.Smax.toFixed(1) + ')', ex0, eb - 5);
+                        KIT.bar(g, ex0, eb, ew, 9, { borderFirst: true, border: col.border,
+                            color: '#4C6B4E', frac: d.S / (d.Smax || 1) });
+                        KIT.text(g, ctx.T('entLabel') + ' S/k = ' + d.S.toFixed(1) +
+                                 '  (max ' + d.Smax.toFixed(1) + ')', ex0, eb - 5, { color: col.soft, align: 'left' });
                     }
                 },
                 formula: function (st, d, T) {
@@ -1421,32 +1406,28 @@
 
                         // след орбиты
                         if (a && a.sim && a.sim.trail.length > 1) {
-                            g.strokeStyle = col.soft; g.lineWidth = 1; g.globalAlpha = .55;
-                            g.beginPath();
-                            a.sim.trail.forEach(function (p, i) {
-                                var px = cx + p.x * scale, py = cy - p.y * scale;
-                                if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
-                            });
-                            g.stroke(); g.globalAlpha = 1;
+                            KIT.trail(g, a.sim.trail.map(function (p) {
+                                return [cx + p.x * scale, cy - p.y * scale];
+                            }), { color: col.soft, width: 1, alpha: .55 });
                         }
                         // центральное тело
                         var cr = 7 + Math.sqrt(ctx.state.M) * 4;
-                        g.fillStyle = '#8F6417'; g.beginPath(); g.arc(cx, cy, cr, 0, 6.2832); g.fill();
+                        KIT.body(g, cx, cy, { shape: 'dot', size: 2 * cr, color: '#8F6417' });
                         // окружность старта — для сравнения с круговой орбитой
-                        g.strokeStyle = col.border; g.setLineDash([2, 4]); g.lineWidth = 1;
-                        g.beginPath(); g.arc(cx, cy, scale, 0, 6.2832); g.stroke(); g.setLineDash([]);
+                        KIT.dashed(g, [2, 4], function () {
+                            g.strokeStyle = col.border; g.lineWidth = 1;
+                            g.beginPath(); g.arc(cx, cy, scale, 0, 6.2832); g.stroke();
+                        });
 
                         // тело
                         if (a && a.sim) {
                             var bx = cx + a.sim.x * scale, by = cy - a.sim.y * scale;
                             if (Math.abs(bx - cx) < W && Math.abs(by - cy) < H) {
-                                g.fillStyle = '#155E74';
-                                g.beginPath(); g.arc(bx, by, 5, 0, 6.2832); g.fill();
-                                // вектор скорости
-                                g.strokeStyle = '#155E74'; g.lineWidth = 1.6;
+                                KIT.body(g, bx, by, { shape: 'dot', size: 10, color: '#155E74' });
+                                // вектор скорости — без наконечника, важно направление
                                 var k = 16 / Math.max(0.2, d.vCirc);
-                                g.beginPath(); g.moveTo(bx, by);
-                                g.lineTo(bx + a.sim.vx * k, by - a.sim.vy * k); g.stroke();
+                                KIT.polyline(g, [[bx, by], [bx + a.sim.vx * k, by - a.sim.vy * k]],
+                                             { color: '#155E74', width: 1.6 });
                             }
                         }
 
@@ -1454,28 +1435,24 @@
                         var kind = d.escaped ? ctx.T('kindEscape')
                                  : (d.e < 0.03 ? ctx.T('kindCircle')
                                  : (d.e < 1 ? ctx.T('kindEllipse') : ctx.T('kindHyper')));
-                        g.font = '600 12px Inter, sans-serif'; g.textAlign = 'left';
-                        g.fillStyle = d.escaped ? '#9B2C2C' : '#155E74';
-                        g.fillText(kind, 12, 20);
-                        g.fillStyle = col.soft; g.font = '10.5px Inter, sans-serif';
-                        g.fillText(ctx.T('eLabel') + ' e = ' + (isFinite(d.e) ? d.e.toFixed(2) : '—'), 12, 36);
-                        g.fillText(ctx.T('vCircLabel') + ' ' + d.vCirc.toFixed(2) +
-                                   ' · ' + ctx.T('vEscLabel') + ' ' + d.vEsc.toFixed(2), 12, 50);
+                        KIT.readout(g, [
+                            { text: kind, y: 20, size: 12, weight: '600', color: d.escaped ? '#9B2C2C' : '#155E74' },
+                            { text: ctx.T('eLabel') + ' e = ' + (isFinite(d.e) ? d.e.toFixed(2) : '—'), y: 36, size: 10.5, color: col.soft },
+                            { text: ctx.T('vCircLabel') + ' ' + d.vCirc.toFixed(2) + ' · ' +
+                                    ctx.T('vEscLabel') + ' ' + d.vEsc.toFixed(2), y: 50, size: 10.5, color: col.soft }
+                        ]);
 
                         // столбики энергии: кинетическая, потенциальная, полная
                         var bw2 = 13, bx0 = W - 96, base = H - 28, hmax = H * 0.30;
                         var scaleE = hmax / Math.max(0.6, Math.abs(d.Ep));
                         function bar(i, val, color, lab) {
-                            var xx = bx0 + i * 30, hh = Math.max(1, Math.abs(val) * scaleE);
-                            g.fillStyle = color; g.globalAlpha = .8;
-                            if (val >= 0) g.fillRect(xx, base - hh, bw2, hh);
-                            else g.fillRect(xx, base, bw2, hh);
-                            g.globalAlpha = 1;
-                            g.fillStyle = col.soft; g.font = '9.5px Inter, sans-serif'; g.textAlign = 'center';
-                            g.fillText(lab, xx + bw2 / 2, base + 26);
+                            var xx = bx0 + i * 30;
+                            KIT.alpha(g, .8, function () {
+                                KIT.signedBar(g, xx, base, bw2, val, { scale: scaleE, pos: color, neg: color, min: 1 });
+                            });
+                            KIT.text(g, lab, xx + bw2 / 2, base + 26, { size: 9.5, color: col.soft });
                         }
-                        g.strokeStyle = col.border; g.lineWidth = 1;
-                        g.beginPath(); g.moveTo(bx0 - 8, base); g.lineTo(W - 10, base); g.stroke();
+                        KIT.axis(g, bx0 - 8, W - 10, base, { color: col.border });
                         bar(0, d.Ek, '#4C6B4E', 'Eк');
                         bar(1, d.Ep, '#8F6417', 'Eп');
                         bar(2, d.E, '#155E74', 'E');
@@ -1574,22 +1551,15 @@
                         }
 
                         // сама волна
-                        g.strokeStyle = '#155E74'; g.lineWidth = 2; g.beginPath();
-                        for (var x2 = 0; x2 <= L; x2 += 0.02) {
-                            var yy = yAt(x2, a.t, st);
-                            if (x2 === 0) g.moveTo(px(x2), py(yy)); else g.lineTo(px(x2), py(yy));
-                        }
-                        g.stroke();
+                        var wavePts = [];                       // шаг 0.02 накоплением — как было
+                        for (var x2 = 0; x2 <= L; x2 += 0.02) wavePts.push([px(x2), py(yAt(x2, a.t, st))]);
+                        KIT.polyline(g, wavePts, { color: '#155E74', width: 2 });
 
                         // пробная частица: она колеблется поперёк и никуда не едет
                         var yp = yAt(st.xprobe, a.t, st);
-                        g.fillStyle = '#8F6417';
-                        g.beginPath(); g.arc(px(st.xprobe), py(yp), 5, 0, 6.2832); g.fill();
-                        g.strokeStyle = '#8F6417'; g.setLineDash([2, 3]); g.lineWidth = 1;
-                        g.beginPath(); g.moveTo(px(st.xprobe), midY - 40); g.lineTo(px(st.xprobe), midY + 40); g.stroke();
-                        g.setLineDash([]);
-                        g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'center';
-                        g.fillText(ctx.T('probeNote'), px(st.xprobe), midY + 58);
+                        KIT.body(g, px(st.xprobe), py(yp), { shape: 'dot', size: 10, color: '#8F6417' });
+                        KIT.marker(g, px(st.xprobe), midY - 40, midY + 40, { dash: [2, 3], color: '#8F6417' });
+                        KIT.text(g, ctx.T('probeNote'), px(st.xprobe), midY + 58, { color: col.soft });
 
                         // длина волны стрелкой — главное, что надо увидеть глазами.
                         // Держим её у нижнего края: наверху уже стоит подпись режима.
@@ -1597,18 +1567,19 @@
                             var y0 = H - 26;
                             g.strokeStyle = '#4C6B4E'; g.lineWidth = 1.4;
                             g.beginPath(); g.moveTo(px(0.5), y0); g.lineTo(px(0.5 + st.lam), y0); g.stroke();
-                            [0.5, 0.5 + st.lam].forEach(function (xx) {
+                            [0.5, 0.5 + st.lam].forEach(function (xx) {   // засечки по краям размера
                                 g.beginPath(); g.moveTo(px(xx), y0 - 5); g.lineTo(px(xx), y0 + 5); g.stroke();
                             });
-                            g.fillStyle = '#4C6B4E'; g.textAlign = 'center';
-                            g.fillText('λ = ' + st.lam.toFixed(1) + ' м', px(0.5 + st.lam / 2), y0 - 9);
+                            KIT.text(g, 'λ = ' + st.lam.toFixed(1) + ' м', px(0.5 + st.lam / 2), y0 - 9,
+                                     { color: '#4C6B4E' });
                         }
 
                         // подпись режима
-                        g.font = '600 12px Inter, sans-serif'; g.textAlign = 'left'; g.fillStyle = '#155E74';
-                        g.fillText(ctx.T('mode_' + mode), 20, 20);
-                        g.font = '10.5px Inter, sans-serif'; g.fillStyle = col.soft;
-                        g.fillText(ctx.T('periodNote') + ' T = ' + d.T.toFixed(2) + ' с · f = ' + d.f.toFixed(2) + ' Гц', 20, 36);
+                        KIT.readout(g, [
+                            { text: ctx.T('mode_' + mode), y: 20, size: 12, weight: '600', color: '#155E74' },
+                            { text: ctx.T('periodNote') + ' T = ' + d.T.toFixed(2) + ' с · f = ' +
+                                    d.f.toFixed(2) + ' Гц', y: 36, size: 10.5, color: col.soft }
+                        ], { x: 20 });
                     }
                 },
                 formula: function (st, d, T) {
@@ -1709,37 +1680,32 @@
                         }
 
                         // ось
-                        g.strokeStyle = col.border; g.lineWidth = 1;
-                        g.beginPath(); g.moveTo(PX(-4.4), cy); g.lineTo(PX(4.4), cy); g.stroke();
+                        KIT.axis(g, PX(-4.4), PX(4.4), cy, { color: col.border });
 
                         // сами заряды: цвет по знаку, размер по величине
                         [[d.x1, st.q1], [d.x2, st.q2]].forEach(function (c) {
                             var r = 8 + Math.abs(c[1]) * 2.2;
-                            g.fillStyle = c[1] >= 0 ? '#9B2C2C' : '#155E74';
-                            g.beginPath(); g.arc(PX(c[0]), cy, r, 0, 6.2832); g.fill();
-                            g.fillStyle = '#fff'; g.font = '600 12px Inter, sans-serif';
-                            g.textAlign = 'center'; g.textBaseline = 'middle';
-                            g.fillText(c[1] > 0 ? '+' : (c[1] < 0 ? '−' : '0'), PX(c[0]), cy);
-                            g.textBaseline = 'alphabetic';
-                            g.fillStyle = col.soft; g.font = '10.5px Inter, sans-serif';
-                            g.fillText(c[1] + ' ' + ctx.T('unit_q'), PX(c[0]), cy + r + 14);
+                            KIT.body(g, PX(c[0]), cy, { shape: 'dot', size: 2 * r,
+                                                        color: c[1] >= 0 ? '#9B2C2C' : '#155E74' });
+                            KIT.text(g, c[1] > 0 ? '+' : (c[1] < 0 ? '−' : '0'), PX(c[0]), cy,
+                                     { size: 12, weight: '600', color: '#fff', baseline: 'middle' });
+                            KIT.text(g, c[1] + ' ' + ctx.T('unit_q'), PX(c[0]), cy + r + 14,
+                                     { size: 10.5, color: col.soft });
                         });
 
                         // точка нулевого поля — только для одноимённых
                         if (d.zero !== null && Math.abs(d.zero) < 4.3) {
-                            g.strokeStyle = '#4C6B4E'; g.setLineDash([3, 3]); g.lineWidth = 1.4;
-                            g.beginPath(); g.moveTo(PX(d.zero), cy - 34); g.lineTo(PX(d.zero), cy + 34); g.stroke();
-                            g.setLineDash([]);
-                            g.fillStyle = '#4C6B4E'; g.font = '10.5px Inter, sans-serif'; g.textAlign = 'center';
-                            g.fillText(ctx.T('zeroNote'), PX(d.zero), cy - 40);
+                            KIT.marker(g, PX(d.zero), cy - 34, cy + 34,
+                                       { dash: [3, 3], color: '#4C6B4E', width: 1.4 });
+                            KIT.text(g, ctx.T('zeroNote'), PX(d.zero), cy - 40, { size: 10.5, color: '#4C6B4E' });
                         }
 
                         // пробный заряд и сила на него
                         var tx = PX(st.xt);
-                        g.fillStyle = '#8F6417';
-                        g.beginPath(); g.arc(tx, cy, 5, 0, 6.2832); g.fill();
+                        KIT.body(g, tx, cy, { shape: 'dot', size: 10, color: '#8F6417' });
                         var scaleF = 26 / Math.max(0.4, Math.abs(d.E));
                         var arrow = Math.max(-70, Math.min(70, d.E * scaleF));
+                        // наконечник здесь «птичкой» из двух штрихов, а не залитым треугольником
                         g.strokeStyle = '#8F6417'; g.lineWidth = 2;
                         g.beginPath(); g.moveTo(tx, cy - 22); g.lineTo(tx + arrow, cy - 22); g.stroke();
                         g.beginPath();
@@ -1748,14 +1714,13 @@
                         g.moveTo(tx + arrow, cy - 22);
                         g.lineTo(tx + arrow - Math.sign(arrow) * 6, cy - 18);
                         g.stroke();
-                        g.fillStyle = '#8F6417'; g.font = '10.5px Inter, sans-serif'; g.textAlign = 'center';
-                        g.fillText(ctx.T('probeQ'), tx, cy + 22);
+                        KIT.text(g, ctx.T('probeQ'), tx, cy + 22, { size: 10.5, color: '#8F6417' });
 
                         // читаемые значения в углу
-                        g.textAlign = 'left'; g.font = '600 11.5px Inter, sans-serif'; g.fillStyle = '#155E74';
-                        g.fillText(ctx.T(d.same ? 'kindSame' : 'kindOpp'), 12, 18);
-                        g.font = '10.5px Inter, sans-serif'; g.fillStyle = col.soft;
-                        g.fillText('E = ' + d.E.toFixed(2) + ' · φ = ' + d.V.toFixed(2), 12, 34);
+                        KIT.readout(g, [
+                            { text: ctx.T(d.same ? 'kindSame' : 'kindOpp'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'E = ' + d.E.toFixed(2) + ' · φ = ' + d.V.toFixed(2), y: 34, size: 10.5, color: col.soft }
+                        ]);
                     }
                 },
                 formula: function (st, d, T) {
@@ -1843,55 +1808,42 @@
                         var PY = function (y) { return cy - y * sc; };
 
                         // поле B «из плоскости» — сетка точек в кружках, стандартное обозначение
-                        g.strokeStyle = col.soft; g.globalAlpha = .45; g.lineWidth = 1;
-                        for (var gx = -5.5; gx <= 5.5; gx += 1.1) {
-                            for (var gy = -3; gy <= 3; gy += 1.1) {
+                        KIT.alpha(g, .45, function () {
+                            g.strokeStyle = col.soft; g.lineWidth = 1;
+                            KIT.fieldGrid(g, { x1: -5.5, x2: 5.5, y1: -3, y2: 3, step: 1.1 }, function (gx, gy) {
                                 g.beginPath(); g.arc(PX(gx), PY(gy), 4, 0, 6.2832); g.stroke();
                                 g.beginPath(); g.arc(PX(gx), PY(gy), 1.2, 0, 6.2832); g.fillStyle = col.soft; g.fill();
-                            }
-                        }
-                        g.globalAlpha = 1;
+                            });
+                        });
 
                         // след частицы
                         if (a && a.sim && a.sim.trail.length > 1) {
-                            g.strokeStyle = '#155E74'; g.lineWidth = 1.6; g.globalAlpha = .75; g.beginPath();
-                            a.sim.trail.forEach(function (p, i) {
-                                if (i === 0) g.moveTo(PX(p.x), PY(p.y)); else g.lineTo(PX(p.x), PY(p.y));
-                            });
-                            g.stroke(); g.globalAlpha = 1;
+                            KIT.trail(g, a.sim.trail.map(function (p) { return [PX(p.x), PY(p.y)]; }),
+                                      { color: '#155E74', width: 1.6, alpha: .75 });
                         }
-                        // частица и векторы
+                        // частица и векторы (без наконечников — важно направление, не величина)
                         if (a && a.sim) {
                             var bx = PX(a.sim.x), by = PY(a.sim.y);
-                            g.fillStyle = st.q >= 0 ? '#9B2C2C' : '#155E74';
-                            g.beginPath(); g.arc(bx, by, 6, 0, 6.2832); g.fill();
-                            // скорость
+                            KIT.body(g, bx, by, { shape: 'dot', size: 12, color: st.q >= 0 ? '#9B2C2C' : '#155E74' });
                             var vv = Math.sqrt(a.sim.vx * a.sim.vx + a.sim.vy * a.sim.vy) || 1;
-                            g.strokeStyle = '#4C6B4E'; g.lineWidth = 2;
-                            g.beginPath(); g.moveTo(bx, by);
-                            g.lineTo(bx + a.sim.vx / vv * 30, by - a.sim.vy / vv * 30); g.stroke();
+                            var ux = a.sim.vx / vv, uy = a.sim.vy / vv;
+                            KIT.polyline(g, [[bx, by], [bx + ux * 30, by - uy * 30]], { color: '#4C6B4E', width: 2 });
                             // сила Лоренца — всегда поперёк скорости
                             var fx = st.q * a.sim.vy * st.B, fy = -st.q * a.sim.vx * st.B;
                             var ff = Math.sqrt(fx * fx + fy * fy) || 1;
-                            g.strokeStyle = '#8F6417'; g.lineWidth = 2;
-                            g.beginPath(); g.moveTo(bx, by);
-                            g.lineTo(bx + fx / ff * 24, by - fy / ff * 24); g.stroke();
-                            g.fillStyle = '#4C6B4E'; g.font = '10px Inter, sans-serif'; g.textAlign = 'center';
-                            g.fillText('v', bx + a.sim.vx / vv * 38, by - a.sim.vy / vv * 38);
-                            g.fillStyle = '#8F6417';
-                            g.fillText('F', bx + fx / ff * 32, by - fy / ff * 32);
+                            KIT.polyline(g, [[bx, by], [bx + fx / ff * 24, by - fy / ff * 24]], { color: '#8F6417', width: 2 });
+                            KIT.text(g, 'v', bx + ux * 38, by - uy * 38, { color: '#4C6B4E' });
+                            KIT.text(g, 'F', bx + fx / ff * 32, by - fy / ff * 32, { color: '#8F6417' });
                         }
 
                         // подписи
-                        g.textAlign = 'left'; g.font = '600 11.5px Inter, sans-serif'; g.fillStyle = '#155E74';
-                        g.fillText(ctx.T('mode_' + mode), 12, 18);
-                        g.font = '10.5px Inter, sans-serif'; g.fillStyle = col.soft;
-                        g.fillText(ctx.T('bOut') + ' · R = ' + (isFinite(d.R) ? d.R.toFixed(2) : '∞') +
-                                   ' · T = ' + (isFinite(d.T) ? d.T.toFixed(2) : '∞'), 12, 34);
-                        if (mode === 'drift') {
-                            g.fillStyle = '#4C6B4E';
-                            g.fillText(ctx.T('driftNote') + ' v = E/B = ' + d.drift.toFixed(2), 12, 50);
-                        }
+                        KIT.readout(g, [
+                            { text: ctx.T('mode_' + mode), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('bOut') + ' · R = ' + (isFinite(d.R) ? d.R.toFixed(2) : '∞') +
+                                    ' · T = ' + (isFinite(d.T) ? d.T.toFixed(2) : '∞'), y: 34, size: 10.5, color: col.soft },
+                            mode === 'drift' ? { text: ctx.T('driftNote') + ' v = E/B = ' + d.drift.toFixed(2),
+                                                 y: 50, size: 10.5, color: '#4C6B4E' } : null
+                        ]);
                     }
                 },
                 formula: function (st, d, T) {
@@ -1951,10 +1903,8 @@
                         var p = d.ph < 0.5 ? d.ph * 2 : (1 - d.ph) * 2;    // вверх-вниз
                         g2.strokeStyle = '#8F6417'; g2.lineWidth = 1.5;
                         g2.beginPath(); g2.moveTo(x1, midY + hh); g2.lineTo(x1, midY - hh); g2.stroke();
-                        g2.fillStyle = '#8F6417';
-                        g2.beginPath(); g2.arc(x1, midY + hh - 2 * hh * p, 5, 0, 6.2832); g2.fill();
-                        g2.fillStyle = col.soft; g2.font = '10.5px Inter, sans-serif'; g2.textAlign = 'center';
-                        g2.fillText(ctx.T('restClock'), x1, midY + hh + 22);
+                        KIT.body(g2, x1, midY + hh - 2 * hh * p, { shape: 'dot', size: 10, color: '#8F6417' });
+                        KIT.text(g2, ctx.T('restClock'), x1, midY + hh + 22, { size: 10.5, color: col.soft });
 
                         // — правые часы: движутся, свет идёт по диагонали
                         var x2 = W * 0.62, span = Math.min(W * 0.22, 120) * st.beta;
@@ -1965,33 +1915,27 @@
                         g2.moveTo(x2 + shift - 26, midY + hh); g2.lineTo(x2 + shift + 26, midY + hh);
                         g2.stroke();
                         // диагональный путь света — вот он и длиннее
-                        g2.strokeStyle = '#155E74'; g2.lineWidth = 1.5;
-                        g2.beginPath();
-                        g2.moveTo(x2 - span / 2, midY + hh);
-                        g2.lineTo(x2, midY - hh);
-                        g2.lineTo(x2 + span / 2, midY + hh);
-                        g2.stroke();
-                        var px, py;
-                        if (d.ph < 0.5) { px = x2 - span / 2 + span * d.ph; py = midY + hh - 2 * hh * (d.ph * 2); }
-                        else { px = x2 - span / 2 + span * d.ph; py = midY - hh + 2 * hh * ((d.ph - 0.5) * 2); }
-                        g2.fillStyle = '#155E74';
-                        g2.beginPath(); g2.arc(px, py, 5, 0, 6.2832); g2.fill();
-                        g2.fillStyle = col.soft; g2.textAlign = 'center';
-                        g2.fillText(ctx.T('movingClock'), x2, midY + hh + 22);
-                        // стрелка скорости
+                        KIT.polyline(g2, [[x2 - span / 2, midY + hh], [x2, midY - hh], [x2 + span / 2, midY + hh]],
+                                     { color: '#155E74', width: 1.5 });
+                        var px = x2 - span / 2 + span * d.ph;
+                        var py = d.ph < 0.5 ? midY + hh - 2 * hh * (d.ph * 2)
+                                            : midY - hh + 2 * hh * ((d.ph - 0.5) * 2);
+                        KIT.body(g2, px, py, { shape: 'dot', size: 10, color: '#155E74' });
+                        KIT.text(g2, ctx.T('movingClock'), x2, midY + hh + 22, { size: 10.5, color: col.soft });
+                        // стрелка скорости — наконечник «птичкой» из двух штрихов
                         g2.strokeStyle = '#4C6B4E'; g2.lineWidth = 2;
                         g2.beginPath(); g2.moveTo(x2 - 30, midY - hh - 20); g2.lineTo(x2 + 30, midY - hh - 20); g2.stroke();
                         g2.beginPath(); g2.moveTo(x2 + 30, midY - hh - 20); g2.lineTo(x2 + 22, midY - hh - 24);
                         g2.moveTo(x2 + 30, midY - hh - 20); g2.lineTo(x2 + 22, midY - hh - 16); g2.stroke();
-                        g2.fillStyle = '#4C6B4E'; g2.font = '10.5px Inter, sans-serif';
-                        g2.fillText('v = ' + (st.beta * 100).toFixed(0) + ' % c', x2, midY - hh - 26);
+                        KIT.text(g2, 'v = ' + (st.beta * 100).toFixed(0) + ' % c', x2, midY - hh - 26,
+                                 { size: 10.5, color: '#4C6B4E' });
 
                         // сводка справа
-                        g2.textAlign = 'left'; g2.font = '600 11.5px Inter, sans-serif'; g2.fillStyle = '#155E74';
-                        g2.fillText('γ = ' + d.g.toFixed(3), 12, 18);
-                        g2.font = '10.5px Inter, sans-serif'; g2.fillStyle = col.soft;
-                        g2.fillText(ctx.T('dilNote') + ' ' + d.tDil.toFixed(2) + ' ' + ctx.T('unit_s'), 12, 34);
-                        g2.fillText(ctx.T('conNote') + ' ' + d.lCon.toFixed(2) + ' ' + ctx.T('unit_m'), 12, 50);
+                        KIT.readout(g2, [
+                            { text: 'γ = ' + d.g.toFixed(3), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('dilNote') + ' ' + d.tDil.toFixed(2) + ' ' + ctx.T('unit_s'), y: 34, size: 10.5, color: col.soft },
+                            { text: ctx.T('conNote') + ' ' + d.lCon.toFixed(2) + ' ' + ctx.T('unit_m'), y: 50, size: 10.5, color: col.soft }
+                        ]);
                     }
                 },
                 formula: function (st, d, T) {
@@ -2054,19 +1998,16 @@
 
                         // сама волновая функция (мигает во времени) или плотность вероятности
                         var isProb = mode === 'prob';
-                        g.strokeStyle = isProb ? '#4C6B4E' : '#155E74'; g.lineWidth = 2;
-                        g.beginPath();
+                        var psiPts = [];
                         for (var x = 0; x <= st.L; x += st.L / 300) {
                             var v = psi(x, d.n, st.L);
-                            var y = isProb ? -(v * v) * amp * 0.9 : v * (a ? a.ph : 1) * amp;
-                            if (x === 0) g.moveTo(PX(x), midY - y); else g.lineTo(PX(x), midY - y);
+                            psiPts.push([PX(x), midY - (isProb ? -(v * v) * amp * 0.9 : v * (a ? a.ph : 1) * amp)]);
                         }
-                        g.stroke();
+                        KIT.polyline(g, psiPts, { color: isProb ? '#4C6B4E' : '#155E74', width: 2 });
 
                         // узлы — точки, где частицы не бывает никогда
-                        g.fillStyle = '#9B2C2C';
                         for (var k = 1; k < d.n; k++) {
-                            g.beginPath(); g.arc(PX(k * st.L / d.n), midY, 3.5, 0, 6.2832); g.fill();
+                            KIT.body(g, PX(k * st.L / d.n), midY, { shape: 'dot', size: 7, color: '#9B2C2C' });
                         }
 
                         // лесенка уровней справа
@@ -2074,22 +2015,18 @@
                         g.strokeStyle = col.border; g.lineWidth = 1;
                         g.beginPath(); g.moveTo(lx - 6, ly0); g.lineTo(lx - 6, ly0 - lh); g.stroke();
                         for (var lev = 1; lev <= 5; lev++) {
-                            var yy = ly0 - lh * (lev * lev) / 25;
-                            g.strokeStyle = lev === d.n ? '#8F6417' : col.soft;
-                            g.lineWidth = lev === d.n ? 2.5 : 1;
-                            g.beginPath(); g.moveTo(lx, yy); g.lineTo(lx + 44, yy); g.stroke();
-                            g.fillStyle = lev === d.n ? '#8F6417' : col.soft;
-                            g.font = '10px Inter, sans-serif'; g.textAlign = 'left';
-                            g.fillText('n=' + lev, lx + 48, yy + 3);
+                            var yy = ly0 - lh * (lev * lev) / 25, on = (lev === d.n);
+                            KIT.polyline(g, [[lx, yy], [lx + 44, yy]],
+                                         { color: on ? '#8F6417' : col.soft, width: on ? 2.5 : 1 });
+                            KIT.text(g, 'n=' + lev, lx + 48, yy + 3, { color: on ? '#8F6417' : col.soft, align: 'left' });
                         }
-                        g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'left';
-                        g.fillText(ctx.T('levelsNote'), lx - 6, ly0 - lh - 8);
+                        KIT.text(g, ctx.T('levelsNote'), lx - 6, ly0 - lh - 8, { color: col.soft, align: 'left' });
 
                         // подписи
-                        g.textAlign = 'left'; g.font = '600 11.5px Inter, sans-serif'; g.fillStyle = '#155E74';
-                        g.fillText(ctx.T('mode_' + mode), 12, 18);
-                        g.font = '10.5px Inter, sans-serif'; g.fillStyle = col.soft;
-                        g.fillText('λ = 2L/n = ' + d.lam.toFixed(2) + ' · E ∝ n² = ' + d.ratio, 12, 34);
+                        KIT.readout(g, [
+                            { text: ctx.T('mode_' + mode), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'λ = 2L/n = ' + d.lam.toFixed(2) + ' · E ∝ n² = ' + d.ratio, y: 34, size: 10.5, color: col.soft }
+                        ]);
                     }
                 },
                 formula: function (st, d, T) {
@@ -2159,21 +2096,18 @@
                         var W = ctx.W, H = ctx.H, col = ctx.c, d = ctx.derived;
                         // — слева: само ядро горстью нуклонов
                         var cx = W * 0.20, cy = H * 0.42, R = 8 + Math.cbrt(d.A) * 7;
-                        var seedA = d.A;
-                        for (var i = 0; i < d.A && i < 240; i++) {
-                            // раскладка по спирали Фибоначчи — устойчивая и без случайности
-                            var t2 = i * 2.39996, rr = R * Math.sqrt(i / Math.max(1, d.A));
-                            var px = cx + rr * Math.cos(t2), py = cy + rr * Math.sin(t2);
-                            g.fillStyle = i < d.Z ? '#9B2C2C' : '#155E74';
-                            g.globalAlpha = .85;
-                            g.beginPath(); g.arc(px, py, 3.2, 0, 6.2832); g.fill();
-                        }
-                        g.globalAlpha = 1;
-                        g.fillStyle = col.soft; g.font = '10.5px Inter, sans-serif'; g.textAlign = 'center';
-                        g.fillText(ctx.T('protons') + ' ' + d.Z + ' · ' + ctx.T('neutrons') + ' ' + d.N, cx, cy + R + 24);
-                        g.fillStyle = d.stable ? '#4C6B4E' : '#9B2C2C'; g.font = '600 11px Inter, sans-serif';
-                        g.fillText(ctx.T(d.stable ? 'stable' : 'unstable') +
-                                   (d.stable ? '' : ' · ' + ctx.T('bestZ') + ' ' + d.bestZ), cx, cy + R + 40);
+                        // раскладка по спирали Фибоначчи — устойчивая и без случайности
+                        var nucleons = [];
+                        for (var i = 0; i < d.A && i < 240; i++) nucleons.push(i);
+                        KIT.particles(g, nucleons, { r: 3.2, alpha: .85,
+                            color: function (i) { return i < d.Z ? '#9B2C2C' : '#155E74'; },
+                            toX: function (i) { return cx + R * Math.sqrt(i / Math.max(1, d.A)) * Math.cos(i * 2.39996); },
+                            toY: function (i) { return cy + R * Math.sqrt(i / Math.max(1, d.A)) * Math.sin(i * 2.39996); } });
+                        KIT.text(g, ctx.T('protons') + ' ' + d.Z + ' · ' + ctx.T('neutrons') + ' ' + d.N,
+                                 cx, cy + R + 24, { size: 10.5, color: col.soft });
+                        KIT.text(g, ctx.T(d.stable ? 'stable' : 'unstable') +
+                                 (d.stable ? '' : ' · ' + ctx.T('bestZ') + ' ' + d.bestZ),
+                                 cx, cy + R + 40, { size: 11, weight: '600', color: d.stable ? '#4C6B4E' : '#9B2C2C' });
 
                         // — справа: разложение энергии связи по вкладам
                         var bx = W * 0.46, by = H * 0.16, bw = W * 0.48, rowH = 22;
@@ -2183,22 +2117,24 @@
                         rows.forEach(function (r, i) {
                             var y = by + i * rowH;
                             var len = Math.max(-bw / 2, Math.min(bw / 2, r[1] * scale));
-                            g.fillStyle = r[2]; g.globalAlpha = .75;
-                            if (len >= 0) g.fillRect(bx + bw / 2, y, len, 13);
-                            else g.fillRect(bx + bw / 2 + len, y, -len, 13);
-                            g.globalAlpha = 1;
-                            g.fillStyle = col.soft; g.font = '10px Inter, sans-serif'; g.textAlign = 'left';
-                            g.fillText(ctx.T('term_' + r[0]) + ' ' + r[1].toFixed(2), bx, y + 24);
+                            KIT.alpha(g, .75, function () {          // вклад вправо или влево от нуля
+                                g.fillStyle = r[2];
+                                if (len >= 0) g.fillRect(bx + bw / 2, y, len, 13);
+                                else g.fillRect(bx + bw / 2 + len, y, -len, 13);
+                            });
+                            KIT.text(g, ctx.T('term_' + r[0]) + ' ' + r[1].toFixed(2), bx, y + 24,
+                                     { color: col.soft, align: 'left' });
                         });
-                        g.strokeStyle = col.border; g.lineWidth = 1;
-                        g.beginPath(); g.moveTo(bx + bw / 2, by - 4); g.lineTo(bx + bw / 2, by + 4 * rowH); g.stroke();
+                        KIT.polyline(g, [[bx + bw / 2, by - 4], [bx + bw / 2, by + 4 * rowH]],
+                                     { color: col.border, width: 1 });
 
                         // итог
-                        g.textAlign = 'left'; g.font = '600 12px Inter, sans-serif'; g.fillStyle = '#155E74';
-                        g.fillText(ctx.T('bindPer') + ' ' + d.BA.toFixed(2) + ' ' + ctx.T('unit_mev'),
-                                   bx, H - 30);
-                        g.font = '10.5px Inter, sans-serif'; g.fillStyle = col.soft;
-                        g.fillText(ctx.T(d.fusion ? 'fusionSide' : 'fissionSide'), bx, H - 14);
+                        KIT.readout(g, [
+                            { text: ctx.T('bindPer') + ' ' + d.BA.toFixed(2) + ' ' + ctx.T('unit_mev'),
+                              y: H - 30, size: 12, weight: '600', color: '#155E74' },
+                            { text: ctx.T(d.fusion ? 'fusionSide' : 'fissionSide'),
+                              y: H - 14, size: 10.5, color: col.soft }
+                        ], { x: bx });
                     }
                 },
                 formula: function (st, d, T) {

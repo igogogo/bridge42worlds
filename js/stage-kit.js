@@ -214,6 +214,11 @@
     function bar(g, x, y, w, h, o) {
         o = o || {};
         g.save();
+        // borderFirst — рамка под заливкой (часть стендов рисовала именно так)
+        if (o.borderFirst) {
+            g.strokeStyle = o.border || '#e2e2e2'; g.lineWidth = 1;
+            g.strokeRect(x, y, w, h);
+        }
         if (o.split != null) {
             var f = Math.max(0, Math.min(1, o.split));
             g.fillStyle = o.colorA || palette.green; g.fillRect(x, y, w * f, h);
@@ -222,22 +227,27 @@
             var fr = Math.max(0, Math.min(1, o.frac || 0));
             g.fillStyle = o.color || palette.primary; g.fillRect(x, y, w * fr, h);
         }
-        g.strokeStyle = o.border || '#e2e2e2'; g.lineWidth = 1;
-        g.strokeRect(x, y, w, h);
+        if (!o.borderFirst) {
+            g.strokeStyle = o.border || '#e2e2e2'; g.lineWidth = 1;
+            g.strokeRect(x, y, w, h);
+        }
         g.restore();
         if (o.labelLeft) text(g, o.labelLeft, x - 6, y + h, { size: 9.5, color: o.labelColor || '#8a8a8a', align: 'right' });
         if (o.labelRight) text(g, o.labelRight, x + w + 6, y + h, { size: 9.5, color: o.labelColor || '#8a8a8a', align: 'left' });
     }
 
     // Знаковый бар от нулевой оси (энергии на орбите, вклады в энергию связи ядра).
+    // Растёт вверх при value ≥ 0 и вниз при value < 0. min — минимальная видимая высота,
+    // чтобы нулевой вклад не пропадал со сцены совсем.
     function signedBar(g, x, y0, w, value, o) {
         o = o || {};
-        var h = value * (o.scale || 1);
+        var mag = Math.max(o.min || 0, Math.abs(value * (o.scale || 1)));
+        var up = value >= 0;
         g.save();
-        g.fillStyle = value >= 0 ? (o.pos || palette.green) : (o.neg || palette.red);
-        g.fillRect(x, h >= 0 ? y0 - h : y0, w, Math.abs(h));
+        g.fillStyle = up ? (o.pos || palette.green) : (o.neg || palette.red);
+        g.fillRect(x, up ? y0 - mag : y0, w, mag);
         g.restore();
-        if (o.label) text(g, o.label, x + w / 2, y0 + (h >= 0 ? 12 : -Math.abs(h) - 5), { size: 9.5, color: o.labelColor || '#8a8a8a' });
+        if (o.label) text(g, o.label, x + w / 2, y0 + (up ? 12 : -mag - 5), { size: 9.5, color: o.labelColor || '#8a8a8a' });
     }
 
     // ── конструкции ────────────────────────────────────────────────
@@ -247,16 +257,20 @@
         o = o || {};
         g.save();
         g.strokeStyle = o.color || palette.primary; g.lineWidth = o.width || 2;
-        g.beginPath();
-        if (o.open !== 'left')   { g.moveTo(x, y); g.lineTo(x, y + h); }
-        if (o.open !== 'right')  { g.moveTo(x + w, y); g.lineTo(x + w, y + h); }
-        if (o.open !== 'top')    { g.moveTo(x, y); g.lineTo(x + w, y); }
-        if (o.open !== 'bottom') { g.moveTo(x, y + h); g.lineTo(x + w, y + h); }
-        g.stroke();
+        if (!o.open) {
+            g.strokeRect(x, y, w, h);            // замкнутый — одним контуром, углы со стыком
+        } else {
+            g.beginPath();
+            if (o.open !== 'left')   { g.moveTo(x, y); g.lineTo(x, y + h); }
+            if (o.open !== 'right')  { g.moveTo(x + w, y); g.lineTo(x + w, y + h); }
+            if (o.open !== 'top')    { g.moveTo(x, y); g.lineTo(x + w, y); }
+            if (o.open !== 'bottom') { g.moveTo(x, y + h); g.lineTo(x + w, y + h); }
+            g.stroke();
+        }
         g.restore();
         if (o.divider) {
-            dashed(g, [4, 4], function () {
-                g.strokeStyle = o.dividerColor || '#8a8a8a'; g.lineWidth = 1;
+            dashed(g, o.dividerDash || [4, 4], function () {
+                g.strokeStyle = o.dividerColor || '#8a8a8a'; g.lineWidth = o.dividerWidth || 1;
                 g.beginPath(); g.moveTo(x + w / 2, y); g.lineTo(x + w / 2, y + h); g.stroke();
             });
         }
