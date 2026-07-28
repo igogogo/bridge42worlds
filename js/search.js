@@ -782,12 +782,11 @@ document.addEventListener('DOMContentLoaded', initReveal);
 // переключаясь внутри. Заменили общий бегунок в шапке (2026-07-28). Иконки те же, что на
 // странице статьи, — вид один на весь сайт.
 var LVL_SVG = {
-    simple: '<path d="M12 20v-7"/><path d="M12 13c0-3 2.2-5.4 5.5-5.8C17.2 10.4 15 13 12 13Z"/>'
-          + '<path d="M12 13C9 13 6.8 10.6 6.5 7.2 9.8 7.6 12 10 12 13Z"/>',
-    popular: '<path d="M12 6.5C10.3 5.2 8.2 4.7 5 4.8v12c3.2-.1 5.3.4 7 1.7"/>'
-           + '<path d="M12 6.5c1.7-1.3 3.8-1.8 7-1.7v12c-3.2-.1-5.3.4-7 1.7"/><path d="M12 6.5v12"/>',
-    advanced: '<circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6 20 20"/>'
-            + '<path d="M8.3 10.5h4.4"/><path d="M10.5 8.3v4.4"/>'
+    // Одна строка / две / три — знак про объём текста. Прежние росток-книга-лупа на мелком
+    // размере не читались (2026-07-28).
+    simple: '<path d="M5 12h14"/>',
+    popular: '<path d="M5 9h14"/><path d="M5 15h9"/>',
+    advanced: '<path d="M5 7h14"/><path d="M5 12h14"/><path d="M5 17h8"/>'
 };
 var LVL_FILE = { simple: 'simple.html', popular: 'index.html', advanced: 'advanced.html' };
 var LVL_LABEL = {
@@ -810,7 +809,9 @@ function levelSwitchHTML(base) {
 }
 
 function cardHTML(item) {
-    var base = '/lang/' + defaultLang + '/archive/' + item.date + '/' + item.id + '/';
+    // Язык страницы, а НЕ язык по умолчанию: иначе с английской ленты клик уводил
+    // на русскую статью и выбранный язык терялся (2026-07-28).
+    var base = '/lang/' + lang + '/archive/' + item.date + '/' + item.id + '/';
     // Заголовок открывает статью в ТОМ уровне, который читатель выбрал, — иначе выбор
     // ни на что не влияет и кажется, что кнопки не работают (2026-07-28).
     var url = base + (LVL_FILE[currentVersion] || 'index.html');

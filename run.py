@@ -180,6 +180,28 @@ def _run_chain(chain):
             sys.exit(code)
 
 
+def _publish_to_r2():
+    """Публикует изменения сайта в R2 — вызывается автоматически после КАЖДОЙ команды run.py
+    (см. ПРАВИЛА-РАБОТЫ.md: публикацию больше никто не запускает руками). Дёшево: дельта по md5,
+    ничего не заливает, если нечего заливать. Ошибка публикации не должна маскировать успешную
+    генерацию — громко печатаем и пишем в лог, но не роняем run.py кодом ошибки."""
+    if os.environ.get("SKIP_R2_PUBLISH"):
+        return
+    script = Path(__file__).resolve().parent / "cloudflare" / "deploy_r2.py"
+    if not script.exists():
+        return
+    print(f"\n{'=' * 60}\n▶️  публикация в R2\n{'=' * 60}")
+    child_env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+    result = subprocess.run([sys.executable, str(script)], env=child_env)
+    if result.returncode != 0:
+        cmd = sys.argv[1] if len(sys.argv) > 1 else "?"
+        msg = f"{datetime.now():%Y-%m-%d %H:%M} — deploy_r2.py упал с кодом {result.returncode} после run.py {cmd}\n"
+        (Path(__file__).resolve().parent / "cloudflare" / "publish-failures.log").open(
+            "a", encoding="utf-8").write(msg)
+        print(f"⚠️  публикация в R2 не удалась (код {result.returncode}) — контент сгенерирован "
+              f"успешно, но сайт не обновлён. Подробности: cloudflare/publish-failures.log")
+
+
 def cmd_tags(args):
     """Теги: список(и) → описания+граф → перевод → облака/страницы.
     По умолчанию — ДОГЕНЕРАЦИЯ недостающего (top-up, не трогает уже описанное).
@@ -825,3 +847,4 @@ def build_parser():
 if __name__ == "__main__":
     args = build_parser().parse_args()
     args.func(args)
+    _publish_to_r2()

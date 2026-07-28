@@ -2488,7 +2488,7 @@ def generate_archive_page(lang):
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
 <a href="/{LANG_DIR}/{lang}/sections/">sections</a><a href="/{LANG_DIR}/en/authors/">authors</a>
-<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/{LANG_DIR}/{lang}/theory/">theory</a>
+<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/learn.html">learn</a>
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="{safe(nav_fav_title(lang))}"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
 </div></div></div>
 <div class="langs" id="langs-bar"></div>
@@ -2521,7 +2521,7 @@ def generate_analytics_page(lang):
 <a href="/{LANG_DIR}/{lang}/index.html">main</a><a href="/{LANG_DIR}/{lang}/tags/">tags</a>
 <a href="/{LANG_DIR}/{lang}/laws/">laws</a><a href="/{LANG_DIR}/{lang}/scientists/">scientists</a>
 <a href="/{LANG_DIR}/{lang}/sections/">sections</a><a href="/{LANG_DIR}/en/authors/">authors</a>
-<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/{LANG_DIR}/{lang}/theory/">theory</a>
+<a href="/{LANG_DIR}/{lang}/graph/">graph</a><a href="/learn.html">learn</a>
 <a href="/{LANG_DIR}/{lang}/favorites.html" title="{safe(nav_fav_title(lang))}"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
 </div></div></div>
 <div class="langs" id="langs-bar"></div>

@@ -2164,17 +2164,20 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 .an-read p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 .an-read b { color: var(--ink); font-weight: 600; }
 
-/* Уровни на карточке: лёгкий ряд над заголовком. Не должен спорить с названием статьи,
-   поэтому мельче основного текста и в приглушённом цвете, акцент — только у активного. */
-.lv-switch-card { gap: 4px; margin: 0 0 8px; max-width: none; }
-.lv-switch-card .lv-btn { flex: none; min-height: 26px; padding: 0 9px; font-size: 11.5px;
-  border-radius: 13px; color: var(--muted); gap: 5px; }
-.lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
-.lv-switch-card .lv-btn:hover { color: var(--link); border-color: var(--link); }
+/* Уровни на карточке — маленький аккуратный ряд над заголовком. Не спорит с названием
+   статьи: мельче основного текста, приглушённый, акцент только у выбранного. Иконка — строки
+   (одна/две/три), знак про объём текста; прежние росток-книга-лупа на этом размере не читались. */
+.lv-switch-card { gap: 3px; margin: 0 0 9px; max-width: none; flex-wrap: nowrap; }
+.lv-switch-card .lv-btn { flex: none; min-height: 24px; padding: 0 8px; font-size: 11px;
+  border-radius: 12px; color: var(--muted); gap: 5px; letter-spacing: .01em;
+  border-color: var(--hair); background: transparent; }
+.lv-switch-card .lv-btn .vs-ic { width: 12px; height: 12px; opacity: .85; }
+.lv-switch-card .lv-btn:hover { color: var(--link); border-color: var(--link); background: transparent; }
 .lv-switch-card .lv-btn.active { color: #fff; background: var(--link); border-color: var(--link); }
+.lv-switch-card .lv-btn.active .vs-ic { opacity: 1; }
 @media (max-width: 640px) {
-  .lv-switch-card .lv-btn { padding: 0 7px; font-size: 11px; }
-  .lv-switch-card .lv-btn .lv-t { display: none; }
+  .lv-switch-card { gap: 4px; }
+  .lv-switch-card .lv-btn { padding: 0 9px; min-height: 26px; font-size: 11px; }
 }
 
 /* На странице статьи ряд уровней прилипает к верху: сменить глубину можно с любого места
@@ -2223,3 +2226,19 @@ html[data-theme="dark"] .an-stage {
 .an-rd-m { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 6px; }
 .an-rd-m > i { display: block; height: 100%; background: var(--link); border-radius: 3px; }
 @media (max-width: 640px) { .an-rd { grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); } }
+
+/* Уровень текста на карточке тега/закона/учёного/раздела.
+   Стоял в шапке — ломал кластер меню и читался как набор непонятных значков (юзер 2026-07-28).
+   Место ему рядом с текстом, которым он управляет, и со словами: иконка без подписи здесь
+   ничего не объясняет, в отличие от страницы статьи, где контекст очевиден. */
+.entity-levels { margin: 14px 0 16px; }
+.entity-levels .lv-switch { max-width: none; gap: 6px; margin: 0; }
+.entity-levels .lv-btn { flex: none; min-height: 30px; padding: 0 13px; font-size: 12.5px;
+  border-radius: 15px; color: var(--muted); gap: 6px; }
+.entity-levels .lv-btn .vs-ic { width: 14px; height: 14px; }
+.entity-levels .lv-btn .lv-t { display: inline; }
+.entity-levels .lv-btn:hover { color: var(--link); border-color: var(--link); }
+.entity-levels .lv-btn.active { color: #fff; background: var(--link); border-color: var(--link); }
+@media (max-width: 640px) {
+  .entity-levels .lv-btn { padding: 0 10px; font-size: 12px; }
+}
