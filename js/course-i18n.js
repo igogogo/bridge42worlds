@@ -93,6 +93,7 @@
         'Законы': ['Laws', 'Leyes', 'القوانين'],
         'Учёные': ['Scientists', 'Científicos', 'العلماء'],
         'Темы': ['Topics', 'Temas', 'المواضيع'],
+        'Статьи по теме:': ['Articles on this topic:', 'Artículos sobre el tema:', 'مقالات في هذا الموضوع:'],
         'Тьютор': ['Tutor', 'Tutor', 'المرشد'],
         'Проверить': ['Check', 'Comprobar', 'تحقّق'],
         'Спросить': ['Ask', 'Preguntar', 'اسأل'],

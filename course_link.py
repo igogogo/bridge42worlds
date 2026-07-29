@@ -13,6 +13,7 @@
     python course_link.py             # записать привязки в уроки
 """
 import json
+import os
 import re
 import sys
 from collections import Counter
@@ -22,20 +23,46 @@ LANG = "ru"
 LESSONS = Path("data/theory/courses")
 
 
+def site_root():
+    """Где лежат справочники сайта.
+
+    Теги, законы, учёные и индекс статей живут в СОБРАННОМ сайте (`lang/**`), а он по правилам
+    не хранится в git — в рабочем дереве роли его просто нет. Поэтому ищем: сначала здесь,
+    затем по B42_SITE_ROOT, затем в соседних деревьях того же репозитория."""
+    probe = f"lang/{LANG}/data/tags-list.json"
+    if Path(probe).exists():
+        return Path(".")
+    env = os.environ.get("B42_SITE_ROOT")
+    if env and (Path(env) / probe).exists():
+        return Path(env)
+    parent = Path("..")
+    if parent.exists():
+        for sib in sorted(parent.iterdir()):
+            if sib.is_dir() and (sib / probe).exists():
+                return sib
+    raise SystemExit(
+        "Не найдены справочники сайта (" + probe + ").\n"
+        "Они появляются только после сборки. Укажите дерево, где она есть:\n"
+        "    B42_SITE_ROOT=../bridge42worlds python course_link.py --check")
+
+
+ROOT = Path(".")   # корень со справочниками; выставляется в main()
+
+
 def norm(s):
     return re.sub(r"[^а-яёa-z0-9 ]+", " ", (s or "").lower())
 
 
 def load_refs():
-    tags = json.loads(Path(f"lang/{LANG}/data/tags-list.json").read_text(encoding="utf-8"))
+    tags = json.loads((ROOT / f"lang/{LANG}/data/tags-list.json").read_text(encoding="utf-8"))
     tag_names = {t["en"]: (t.get("ru") or t["en"]) for t in tags}
-    laws_p = Path(f"lang/{LANG}/data/laws-list.json")
+    laws_p = ROOT / f"lang/{LANG}/data/laws-list.json"
     laws = json.loads(laws_p.read_text(encoding="utf-8")) if laws_p.exists() else []
     law_names = {}
     for l in laws:
         if isinstance(l, dict):
             law_names[l.get("id") or l.get("en") or l.get("name", "")] = l.get("name") or l.get("ru") or ""
-    sci_p = Path(f"lang/{LANG}/data/scientists.json")
+    sci_p = ROOT / f"lang/{LANG}/data/scientists.json"
     sci = json.loads(sci_p.read_text(encoding="utf-8")) if sci_p.exists() else {}
     return tag_names, law_names, sci
 
@@ -107,9 +134,11 @@ def articles_for(tags, idx, limit=3):
 
 
 def main():
+    global ROOT
+    ROOT = site_root()
     check = "--check" in sys.argv
     tag_names, law_names, sci = load_refs()
-    idx = json.loads(Path(f"lang/{LANG}/articles-index.json").read_text(encoding="utf-8"))
+    idx = json.loads((ROOT / f"lang/{LANG}/articles-index.json").read_text(encoding="utf-8"))
     seen_ids, uniq = set(), []
     for a in idx:
         if a["id"] not in seen_ids:

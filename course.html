@@ -430,12 +430,37 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     function row(label, items, base, fmt) {
       if (!items || !items.length) return;
       var line = el('div', null, '<b>' + label + ':</b> ');
-      items.forEach(function (n) { var a = el('a', null, n.replace(/_/g, ' ')); a.href = base + fmt(n) + '.html'; line.appendChild(a); });
+      items.forEach(function (n, i) {
+        if (i) line.appendChild(document.createTextNode(' · '));   // иначе ссылки слипаются в одну
+        var a = el('a', null, n.replace(/_/g, ' '));
+        a.href = base + fmt(n) + '.html';
+        line.appendChild(a);
+      });
       wrap.appendChild(line);
     }
     row('Теги', ent.tags, '/lang/' + LANG + '/tags/', encodeURIComponent);
     row('Законы', ent.laws, '/lang/' + LANG + '/laws/', encodeURIComponent);
     row('Учёные', ent.scientists, '/lang/' + LANG + '/scientists/', function (n) { return n.replace(/\s+/g, '_'); });
+    // Свежие статьи архива по теме параграфа. Ради этого курс и связывают с сайтом: из урока
+    // видно живую науку, а не только учебник. Заголовок берём на языке страницы — он лежит
+    // рядом со ссылкой на всех четырёх языках.
+    var arts = ent.examples_from_articles;
+    if (arts && arts.length) {
+      var line = el('div', null, '<b>Статьи по теме:</b> ');
+      var shown = 0;
+      arts.forEach(function (a) {
+        if (!a.date) return;                 // без даты адрес в архиве не собрать
+        var t = a.title;
+        var name = (t && (typeof t === 'string' ? t : (t[LANG] || t.ru))) || a.id;
+        if (shown) line.appendChild(document.createTextNode(' · '));
+        var link = el('a', null, name);
+        link.href = '/lang/' + LANG + '/archive/' + a.date + '/' + a.id + '/';
+        link.title = a.why ? a.why.replace(/_/g, ' ') : a.id;
+        line.appendChild(link);
+        shown++;
+      });
+      if (shown) wrap.appendChild(line);
+    }
     return wrap;
   }
 
@@ -1053,7 +1078,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=3"></script>
+<script src="/js/course-i18n.js?v=4"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
