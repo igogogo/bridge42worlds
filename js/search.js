@@ -908,21 +908,84 @@ function updateSearchRowVisibility() {
     if (!show && results) results.innerHTML = '';
 }
 
-function showLatest() {
-    // Порядок ленты (юзер 2026-07-24): сначала ПОЛНЫЕ статьи, потом express; внутри — новые сверху.
-    // Плюс верхние ~10 перемешиваем при каждой загрузке, чтобы лента не была одинаковой и скучной
-    // («первые случайные, потом по дате»). Math.random здесь — обычный клиентский код, ок.
-    var arr = applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); }))
-        .sort(function(a, b) {
-            var ae = a.express ? 1 : 0, be = b.express ? 1 : 0;
-            if (ae !== be) return ae - be;
-            return b.date.localeCompare(a.date);
-        });
-    var topN = Math.min(10, arr.length);
-    for (var i = topN - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+// Порядок ленты — выбор читателя, по умолчанию случайный (юзер 2026-07-29).
+// Причина отказа от даты по умолчанию: у нас две тысячи статей, а по дате наверху всегда
+// одни и те же свежие. Остальное читатель не видел ни разу. Случайный порядок открывает
+// архив, ради которого всё и делалось.
+var SORT_MODES = ['random', 'new', 'old'];
+var SORT_LABELS = {
+    ru: { random: 'вперемешку', new: 'сначала новые', old: 'сначала старые', label: 'Порядок' },
+    en: { random: 'shuffled',    new: 'newest first', old: 'oldest first',  label: 'Order' },
+    es: { random: 'al azar',     new: 'nuevos antes', old: 'antiguos antes', label: 'Orden' },
+    ar: { random: 'عشوائي',      new: 'الأحدث أولاً', old: 'الأقدم أولاً',   label: 'الترتيب' }
+};
+function getSortMode() {
+    try {
+        var v = localStorage.getItem('b42_sort');
+        if (SORT_MODES.indexOf(v) !== -1) return v;
+    } catch (e) {}
+    return 'random';
+}
+function setSortMode(m) {
+    try { localStorage.setItem('b42_sort', m); } catch (e) {}
+}
+
+function sortFeed(arr, mode) {
+    if (mode === 'random') {
+        // Тасование Фишера — Йетса по всему списку, а не по верхушке.
+        for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+        }
+        return arr;
     }
+    // По дате: полные статьи выше express — короткая заметка не должна вытеснять разбор.
+    return arr.sort(function(a, b) {
+        var ae = a.express ? 1 : 0, be = b.express ? 1 : 0;
+        if (ae !== be) return ae - be;
+        return mode === 'old' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
+    });
+}
+
+// Порядок относится к ленте целиком. В отфильтрованных списках (избранное, раздел, дата,
+// результаты поиска) он бы врал: там свой порядок и своя логика — прячем.
+function hideSortControl() {
+    var box = document.getElementById('feed-sort');
+    if (box) box.style.display = 'none';
+}
+
+function mountSortControl() {
+    var results = document.getElementById('search-results');
+    if (!results) return;
+    var L = SORT_LABELS[lang] || SORT_LABELS.en;
+    var box = document.getElementById('feed-sort');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'feed-sort';
+        box.className = 'feed-sort';
+        results.parentNode.insertBefore(box, results);
+    }
+    box.style.display = '';
+    var cur = getSortMode();
+    box.innerHTML = '<span class="feed-sort-label">' + L.label + '</span>' +
+        SORT_MODES.map(function (m) {
+            return '<button type="button" class="feed-sort-btn' + (m === cur ? ' active' : '') +
+                   '" data-sort="' + m + '">' + L[m] + '</button>';
+        }).join('');
+    box.onclick = function (e) {
+        var b = e.target.closest('[data-sort]');
+        if (!b) return;
+        setSortMode(b.dataset.sort);
+        showLatest();
+    };
+}
+
+function showLatest() {
+    var arr = sortFeed(
+        applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); })),
+        getSortMode()
+    );
+    mountSortControl();
     feed.items = arr;
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
@@ -934,6 +997,7 @@ window.showLatest = showLatest;
 
 // Вкладка «Избранное»: карточки из localStorage.favorites (клиент, без сервера).
 function showFavorites() {
+    hideSortControl();
     var favs = [];
     try { favs = JSON.parse(localStorage.getItem('favorites') || '[]'); } catch (e) {}
     var favSet = {};
@@ -954,6 +1018,7 @@ window.showFavorites = showFavorites;
 function _defaultFeed() { if (window.__favoritesPage) showFavorites(); else showLatest(); }
 
 function filterByCategory(cat) {
+    hideSortControl();
     var items = applyPageContext(searchIndex.filter(function(item) {
         return item.version === effVersion() && (item.categories || []).indexOf(cat) !== -1;
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
@@ -977,6 +1042,7 @@ var CAL_LABELS = {
 };
 
 function filterByDate(prefix, label) {
+    hideSortControl();
     feed.items = applyPageContext(searchIndex.filter(function(item) {
         return item.version === effVersion() && (item.date || '').indexOf(prefix) === 0;
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
