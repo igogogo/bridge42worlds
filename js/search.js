@@ -28,13 +28,19 @@ window.__favoritesPage = /\/favorites(\.html)?([?#]|$)/.test(location.pathname);
             document.documentElement.setAttribute('data-theme', 'dark');
     } catch (e) {}
 })();
+/* Знак из нашего набора (js/icons.js). Запасной вариант нужен на случай, если
+   набор не приехал: кнопка не должна остаться пустой и безымянной. */
+function b42ic(name, size, fallback) {
+    return (window.B42Icons && B42Icons[name]) ? B42Icons[name](size) : (fallback || '');
+}
 function toggleTheme() {
     var dark = document.documentElement.getAttribute('data-theme') === 'dark';
     if (dark) document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', 'dark');
     try { localStorage.setItem('b42_theme', dark ? 'light' : 'dark'); } catch (e) {}
     var b = document.getElementById('theme-toggle');
-    if (b) b.textContent = dark ? '☾' : '☀';
+    // кнопка показывает, куда переключит: в тёмной теме — солнце, в светлой — луна
+    if (b) b.innerHTML = dark ? b42ic('moon', 18, '☾') : b42ic('sun', 18, '☀');
 }
 window.toggleTheme = toggleTheme;
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var b = document.createElement('button');
         b.id = 'theme-toggle'; b.type = 'button'; b.className = 'theme-toggle';
         b.setAttribute('aria-label', 'Theme');
-        b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀' : '☾';
+        b.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark'
+            ? b42ic('sun', 18, '☀') : b42ic('moon', 18, '☾');
         b.addEventListener('click', toggleTheme);
         host.appendChild(b);
     }
@@ -837,9 +844,9 @@ function cardHTML(item) {
     var _favOn = (typeof isFavorite === 'function' && isFavorite(item.id));
     var cardActions =
         '<div class="card-actions" data-article-id="' + _likeId + '">' +
-        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">👍</button>' +
-        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">👎</button>' +
-        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">⭐</button>' +
+        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '</button>' +
+        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '</button>' +
+        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '</button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
     var img = base + 't_ai.webp';
@@ -1033,12 +1040,16 @@ function filterByCategory(cat) {
 window.filterByCategory = filterByCategory;
 
 // ── Календарь-фильтр (main): год→месяц→день, клик по дню фильтрует ленту ──
+// title уходит во всплывающую подсказку кнопки — там нужен чистый текст.
+// Раньше в него был вшит 📅: подсказка читалась как «📅 Календарь», причём
+// эмодзи рисовала система, то есть на каждой ОС по-своему. Знак теперь на самой
+// кнопке и из нашего набора.
 var CAL_LABELS = {
-    ru: { title: '📅 Календарь', all: 'Все даты', months: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] },
-    en: { title: '📅 Calendar', all: 'All dates', months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] },
-    zh: { title: '📅 日历', all: '全部日期', months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'] },
-    fr: { title: '📅 Calendrier', all: 'Toutes les dates', months: ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'] },
-    ar: { title: '📅 التقويم', all: 'كل التواريخ', months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'] }
+    ru: { title: 'Календарь', all: 'Все даты', months: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] },
+    en: { title: 'Calendar', all: 'All dates', months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] },
+    zh: { title: '日历', all: '全部日期', months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'] },
+    fr: { title: 'Calendrier', all: 'Toutes les dates', months: ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'] },
+    ar: { title: 'التقويم', all: 'كل التواريخ', months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'] }
 };
 
 function filterByDate(prefix, label) {
@@ -1302,7 +1313,11 @@ function localizeStaticUI() {
     if (superBtn) superBtn.title = UI.superlike;
 
     var expressBadge = document.querySelector('.express-badge');
-    if (expressBadge) { expressBadge.title = UI.expressTip; expressBadge.textContent = '⚡ ' + UI.express; }
+    if (expressBadge) {
+        expressBadge.title = UI.expressTip;
+        expressBadge.innerHTML = b42ic('bolt', 13, '⚡');
+        expressBadge.appendChild(document.createTextNode(' ' + UI.express));
+    }
 
     var refineBadge = document.querySelector('.refine-badge');
     if (refineBadge) refineBadge.title = UI.refineTip;

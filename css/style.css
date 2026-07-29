@@ -61,6 +61,8 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
     --shadow: 0 20px 44px -26px rgba(15,22,38,.34);
     --shadow-sm: 0 10px 24px -18px rgba(15,22,38,.30);
     --radius: 16px; --radius-sm: 12px;
+    /* Лампа из набора для ::before врезки — рисунок один в один с B42Icons.lamp */
+    --ic-lamp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7v.4h5.2v-.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
     /* Шрифты — системные, по design-system.md (совпадают с About/деком, без веб-шрифтов) */
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
     --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -813,7 +815,16 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 /* Врезка внутри сплошного текста статьи — акцент/любопытный факт, оживляет монолит */
 .callout { margin: 16px 0; padding: 12px 16px; max-width: 620px; background: rgba(74,106,146,0.07); border-radius: 10px;
     font-size: 15.5px; line-height: 1.6; color: var(--text); }
-.callout::before { content: "💡"; margin-right: 8px; }
+/* Знак врезки — лампа из нашего набора (js/icons.js). Через content вставить SVG нельзя,
+   поэтому кладём его маской: заливка идёт currentColor, значит знак сам подстраивается
+   под цвет текста и под обе темы. Раньше здесь стоял 💡 — его рисовала система, и во
+   врезке посреди строгой статьи он выглядел единственным цветным пятном. */
+.callout::before {
+    content: ""; display: inline-block; width: 1.05em; height: 1.05em;
+    vertical-align: -.15em; margin-right: 8px; background-color: currentColor;
+    -webkit-mask: var(--ic-lamp) center / contain no-repeat;
+    mask: var(--ic-lamp) center / contain no-repeat;
+}
 
 /* ── Article wrapper ──────────── */
 /* sticky (не fixed!) — важно: sticky остаётся ВНУТРИ flex-раскладки, поэтому .article-main

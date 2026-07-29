@@ -138,7 +138,11 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
   function md(s) { return String(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
 
   function sectionAskBtn(title, text) {
-    var b = el('button', 'c-ask', UI.askSection || '<i data-ic="chat"></i> Спросить тьютора');
+    // Знак берём сразу из набора, а не через <i data-ic>: подстановка тех тегов
+    // работает один раз на загрузке страницы, а эта кнопка рождается позже — значок
+    // в ней так и остался бы пустым тегом.
+    var b = el('button', 'c-ask',
+        (window.B42Icons ? B42Icons.chat(15) + ' ' : '') + (UI.askSection || 'Спросить тьютора'));
     b.type = 'button';
     b.addEventListener('click', function () { BOT.open({ title: title, text: text }); });
     return b;

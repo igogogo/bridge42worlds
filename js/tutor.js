@@ -74,6 +74,11 @@
         if (html != null) e.innerHTML = html;
         return e;
     }
+    /* Знак из нашего набора (js/icons.js). Запасной вариант — типографский символ,
+       он рисуется шрифтом и одинаков везде; эмодзи в запас не берём именно поэтому. */
+    function tIcon(name, size, fallback) {
+        return (global.B42Icons && B42Icons[name]) ? B42Icons[name](size || 16) : (fallback || '');
+    }
 
     // ═════════════ БОТ ═════════════
     function Bot(opts) {
@@ -115,8 +120,18 @@
         panel.appendChild(head); panel.appendChild(body); panel.appendChild(foot);
         document.body.appendChild(fab); document.body.appendChild(panel);
 
-        function msg(text, who) {
-            var m = el('div', 'tb-msg ' + who); m.textContent = text;
+        /* icon — необязательный знак из набора перед текстом. Раньше он был вшит в саму
+           строку («🔑 Нужен токен…»), из-за чего эмодзи ехал в файлы переводов и рисовался
+           системой по-разному. Текст кладём через textContent: он приходит из локали и
+           разметкой быть не должен. */
+        function msg(text, who, icon) {
+            var m = el('div', 'tb-msg ' + who);
+            if (icon) {
+                m.innerHTML = tIcon(icon, 15, '');
+                m.appendChild(document.createTextNode(' ' + text));
+            } else {
+                m.textContent = text;
+            }
             body.appendChild(m); body.scrollTop = body.scrollHeight;
             return m;
         }
@@ -186,24 +201,25 @@
                     if (typeof data.left === 'number' && data.left <= 20)
                         msg((L.tokenLeft || 'Осталось вопросов по токену') + ': ' + data.left, 'sys');
                 } else if (data.error === 'token_required' || data.error === 'token_invalid') {
-                    msg(L.tokenNeeded || '🔑 Нужен токен доступа — он выдаётся на неделю и ограничен по числу вопросов.', 'sys');
+                    msg(L.tokenNeeded || 'Нужен токен доступа — он выдаётся на неделю и ограничен по числу вопросов.', 'sys', 'key');
                     var got = promptToken();
                     if (got) { busy = false; return ask(question, mode, demoHint); }
                 } else if (data.error === 'token_expired') {
-                    msg(L.tokenExpired || '🔑 Срок действия токена истёк — попросите новый.', 'sys');
+                    msg(L.tokenExpired || 'Срок действия токена истёк — попросите новый.', 'sys', 'key');
                 } else if (data.error === 'limit_total' || data.error === 'limit_day') {
                     msg((data.error === 'limit_day'
-                        ? (L.limitDay || '⏳ На сегодня лимит вопросов исчерпан. Возвращайтесь завтра.')
-                        : (L.limitTotal || '⏳ Лимит вопросов по этому токену исчерпан.')), 'sys');
+                        ? (L.limitDay || 'На сегодня лимит вопросов исчерпан. Возвращайтесь завтра.')
+                        : (L.limitTotal || 'Лимит вопросов по этому токену исчерпан.')), 'sys', 'clock');
                 } else if (demoHint) {
                     msg(demoHint, 'bot');
-                    msg(L.botDemo || '⚠️ Демо-режим: живой тьютор подключается на сервере (ключ DeepSeek). Это заготовленная подсказка из материала урока.', 'sys');
+                    msg(L.botDemo || 'Демо-режим: живой тьютор подключается на сервере (ключ DeepSeek). Это заготовленная подсказка из материала урока.', 'sys', 'warn');
                 } else {
-                    msg(L.botOffline || '⚠️ Тьютор сейчас недоступен (нет ключа DeepSeek на сервере). Подсказка к этому вопросу есть в материале раздела.', 'sys');
+                    msg(L.botOffline || 'Тьютор сейчас недоступен (нет ключа DeepSeek на сервере). Подсказка к этому вопросу есть в материале раздела.', 'sys', 'warn');
                 }
             } catch (e) {
                 pend.remove();
-                msg(demoHint || (L.botOffline || '⚠️ Тьютор недоступен.'), demoHint ? 'bot' : 'sys');
+                msg(demoHint || (L.botOffline || 'Тьютор недоступен.'), demoHint ? 'bot' : 'sys',
+                    demoHint ? null : 'warn');
             }
             busy = false;
         }
@@ -239,12 +255,17 @@
             function settle(correct, userText) {
                 results[q.id] = { correct: correct, answer: userText || '' };
                 fb.className = 'tq-fb ' + (correct ? 'ok' : 'no');
-                fb.innerHTML = (correct ? '✅ ' : '🤔 ') + (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) +
-                    ' ' + (q.why || '');
+                // Верно — галочка из набора, мимо — знак вопроса (paradox): он про «подумай ещё»,
+                // а не про ошибку. Эмодзи здесь рисовала система, и «✅» на каждой ОС был своего
+                // оттенка зелёного — рядом со штриховым набором это выбивалось.
+                fb.innerHTML = tIcon(correct ? 'check' : 'paradox', 16, correct ? '✓' : '?') + ' ' +
+                    (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) + ' ' + (q.why || '');
                 fb.style.display = '';
                 actions.innerHTML = ''; actions.style.display = '';
                 // Кнопка «довести до идеи» — бот в режиме hint (правильный ответ не выдаёт)
-                var askBtn = el('button', 'tq-ask', correct ? ('💬 ' + (L.askMore || 'Спросить глубже')) : ('💡 ' + (L.leadMe || 'Не понимаю — подведи к идее')));
+                var askBtn = el('button', 'tq-ask', '');
+                askBtn.innerHTML = tIcon(correct ? 'chat' : 'lamp', 16, '') + ' ' +
+                    (correct ? (L.askMore || 'Спросить глубже') : (L.leadMe || 'Не понимаю — подведи к идее'));
                 askBtn.type = 'button';
                 askBtn.addEventListener('click', function () {
                     var question = correct
@@ -279,7 +300,7 @@
                     var ratio = val > 0 && q.answer > 0 ? Math.max(val / q.answer, q.answer / val) : Infinity;
                     var ok = ratio <= tol;
                     fb.className = 'tq-fb ' + (ok ? 'ok' : 'no');
-                    fb.innerHTML = (ok ? '✅ ' : '🤔 ') +
+                    fb.innerHTML = tIcon(ok ? 'check' : 'paradox', 16, ok ? '✓' : '?') + ' ' +
                         (ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')) +
                         ' ' + (L.estAnswer || 'Точное значение') + ': <b>' + q.answer + ' ' + (q.unit || '') + '</b>' +
                         (ok ? '' : ' — ' + (L.estOff || 'вы промахнулись в') + ' ' + ratio.toFixed(1) + '×') +
@@ -288,7 +309,9 @@
                     results[q.id] = { correct: ok, answer: raw };
                     ei.disabled = true; eb.disabled = true; eb.style.opacity = .5;
                     actions.innerHTML = ''; actions.style.display = '';
-                    var ab = el('button', 'tq-ask', ok ? ('💬 ' + (L.askMore || 'Спросить глубже')) : ('💡 ' + (L.leadMe || 'Как это прикинуть?')));
+                    var ab = el('button', 'tq-ask', '');
+                    ab.innerHTML = tIcon(ok ? 'chat' : 'lamp', 16, '') + ' ' +
+                        (ok ? (L.askMore || 'Спросить глубже') : (L.leadMe || 'Как это прикинуть?'));
                     ab.type = 'button';
                     ab.addEventListener('click', function () {
                         bot.askWithContext({ title: q.ctxTitle || (L.quizCtx || 'Оценка'), text: (q.ctx || '') + '\n\n' + q.q },

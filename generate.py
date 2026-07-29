@@ -2494,6 +2494,7 @@ def generate_archive_page(lang):
 <div class="langs" id="langs-bar"></div>
 <div id="dashboard"></div>
 <footer><p>bridge42worlds </p></footer>
+<script src="/js/icons.js?v={asset_ver()}"></script>
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/dashboard.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
@@ -2527,6 +2528,7 @@ def generate_analytics_page(lang):
 <div class="langs" id="langs-bar"></div>
 <div id="analytics"></div>
 <footer><p>bridge42worlds </p></footer>
+<script src="/js/icons.js?v={asset_ver()}"></script>
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/analytics.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "analytics").mkdir(parents=True, exist_ok=True)
