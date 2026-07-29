@@ -398,6 +398,12 @@ body.graph-fs-open { overflow: hidden; }
     /* строго ОДНА строка: не переносим, лишнее — горизонтальным свайпом (юзер 2026-07-25) */
     white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
 .site-stats::-webkit-scrollbar { display: none; }
+/* На телефоне «одна строка со свайпом» не работала: хвост «201 учёный · 17.4k авторов»
+   стоял за краем экрана без возможности доскроллить (QA 2026-07-29, x=434..539 при 375).
+   Одна строка остаётся правилом десктопа; на узком — перенос, читатель видит всё. */
+@media (max-width: 640px) {
+  .site-stats { white-space: normal; overflow-x: visible; }
+}
 .site-stats b { color: var(--text); font-weight: 600; }
 .related { margin-top: 26px; }
 .related-h { font-size: 14px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }

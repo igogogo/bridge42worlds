@@ -132,17 +132,19 @@
        Ширина у этих девяти страниц разная, поэтому не прописываем число, а равняемся на реальный
        контентный блок страницы. */
     function alignToContent() {
-        var cand = document.querySelector('#root, main, .wrap, .container');
-        if (!cand) {
-            // запасной путь: самый широкий блок-потомок body, кроме самой шапки
-            var best = null;
-            [].forEach.call(document.body.children, function (el) {
-                if (el === bar || !el.getBoundingClientRect) return;
-                var w = el.getBoundingClientRect().width;
-                if (w > 0 && (!best || w > best.getBoundingClientRect().width)) best = el;
-            });
-            cand = best;
+        // Эталон ширины — САМЫЙ ШИРОКИЙ из именованных кандидатов И прямых детей body.
+        // Просто первый кандидат не годится: в mathkit #root — правая колонка грида,
+        // и равнение по нему уводило шапку на 224px от текста (QA 2026-07-29). Дети body
+        // в переборе обязательны: страничный контейнер грида может не носить ни одного
+        // из ожидаемых имён.
+        var cand = null;
+        function consider(el) {
+            if (!el || el === bar || el === langsRow || !el.getBoundingClientRect) return;
+            var w = el.getBoundingClientRect().width;
+            if (w > 0 && (!cand || w > cand.getBoundingClientRect().width)) cand = el;
         }
+        [].forEach.call(document.querySelectorAll('#root, main, .wrap, .container'), consider);
+        [].forEach.call(document.body.children, consider);
         if (!cand) return;
         var target = cand.getBoundingClientRect();
         // .langs-row в общем CSS тоже ограничена (680px) — равняем её по тому же контенту,
@@ -153,8 +155,13 @@
             el.style.width = Math.round(target.width) + 'px';
             var delta = Math.round(target.left - el.getBoundingClientRect().left);
             if (Math.abs(delta) > 1) {
-                var cur = parseFloat(getComputedStyle(el).marginInlineStart) || 0;
-                el.style.marginInlineStart = (cur + delta) + 'px';
+                var cs = getComputedStyle(el);
+                var cur = parseFloat(cs.marginInlineStart) || 0;
+                // delta посчитан в ФИЗИЧЕСКИХ левых координатах, а margin-inline-start в RTL
+                // — это правое поле: рост поля двигает блок ВЛЕВО. Без учёта направления
+                // поправка удваивала ошибку и с каждым resize уводила шапку за край (QA).
+                var sign = cs.direction === 'rtl' ? -1 : 1;
+                el.style.marginInlineStart = (cur + delta * sign) + 'px';
             }
         });
     }
