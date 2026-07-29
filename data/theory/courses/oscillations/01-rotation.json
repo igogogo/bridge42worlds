@@ -1,1255 +1,1468 @@
 {
-  "id": "01-rotation",
-  "topic": "oscillations",
-  "schema": "b42.lesson/1",
-  "model": "rotation",
-  "entities": {
-    "laws": [
-      "newtons_laws_of_motion"
-    ],
-    "tags": [
-      "mechanics"
-    ],
-    "scientists": [
-      "Isaac Newton",
-      "Christiaan Huygens"
-    ]
-  },
-  "ru": {
-    "title": "Вращение и системы отсчёта",
-    "subtitle": "Параграф 1 · Почему во вращающемся мире появляются силы без источника",
-    "intro": [
-      "Начнём с вопроса, который кажется детским, но упирается в основания физики. Вы едете в автобусе, он резко тормозит — вас бросает вперёд. Какая сила вас толкнула?",
-      "Ответ обескураживает: никакая. Вас никто не толкал. Вы просто продолжали двигаться по инерции, а автобус под вами замедлился. Но ощущение силы совершенно реальное, его чувствует тело, его показывают приборы. Как быть с силой, которую чувствуешь, но у которой нет источника?",
-      "Именно здесь физика делает шаг, важнее многих формул: она признаёт, что описание зависит от того, откуда смотреть. Есть системы отсчёта, где законы Ньютона работают в чистом виде, — их называют инерциальными. И есть все остальные, где приходится вводить силы-фикции, чтобы законы сошлись. Разобравшись с этим, мы заодно поймём вращение — и обнаружим в нём колебание."
-    ],
-    "standNote": "На стенде — тело на вращающемся диске. Слева вы видите картину глазами неподвижного наблюдателя: тело движется по окружности, а верёвка тянет его к центру. Справа — та же сцена глазами наблюдателя, сидящего на диске: тело покоится, и чтобы это объяснить, приходится добавить центробежную силу, направленную наружу. Одно движение, два описания. Обратите внимание на нижний график: проекция вращения на ось есть в точности синус — это мостик к следующему параграфу.",
-    "formula": {
-      "name": "Центростремительное ускорение",
-      "latex": "a_{\\text{ц}} = \\frac{v^{2}}{R} = \\omega^{2} R",
-      "alsoKnown": "Ускорение при равномерном движении по окружности",
-      "authors": [
-        {
-          "who": "Христиан Гюйгенс",
-          "year": "1659",
-          "what": "первым вывел выражение для центробежной силы при круговом движении — за 28 лет до «Начал» Ньютона, в работе о маятниковых часах"
-        },
-        {
-          "who": "Исаак Ньютон",
-          "year": "1687",
-          "what": "включил круговое движение в общую динамику и показал, что Луна «падает» на Землю по той же причине, что и яблоко"
-        },
-        {
-          "who": "Гаспар-Гюстав Кориолис",
-          "year": "1835",
-          "what": "описал вторую силу инерции, возникающую при движении внутри вращающейся системы, — она объясняет закручивание циклонов и отклонение снарядов"
-        }
-      ],
-      "story": "Гюйгенс получил закон центробежной силы, работая над часами: ему нужно было понять, как ведёт себя груз на вращающемся стержне. Он вывел результат в 1659 году, но опубликовал лишь в 1673-м — и то в виде теорем без доказательств. Ньютон пришёл к тому же независимо, и именно объединение кругового движения с законом тяготения позволило ему сделать главный шаг: показать, что Луна — это снаряд, который падает на Землю, но промахивается, потому что летит слишком быстро вбок.",
-      "symbols": [
-        {
-          "sym": "aц",
-          "latex": "a_{\\text{ц}}",
-          "what": "центростремительное ускорение",
-          "unit": "м/с²",
-          "note": "направлено к центру окружности; меняет не величину скорости, а её направление"
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "what": "линейная скорость",
-          "unit": "м/с",
-          "note": "по модулю постоянна при равномерном вращении, но вектор всё время поворачивается"
-        },
-        {
-          "sym": "R",
-          "latex": "R",
-          "what": "радиус окружности",
-          "unit": "м",
-          "note": "чем круче поворот, тем больше требуется ускорение"
-        },
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "what": "угловая скорость",
-          "unit": "рад/с",
-          "note": "сколько радиан проходит радиус за секунду; связана с линейной как v = ωR"
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "what": "период обращения",
-          "unit": "с",
-          "note": "время одного полного оборота; ω = 2π/T"
-        }
-      ]
-    },
-    "derivation": {
-      "title": "Строгий вывод",
-      "lead": "Сначала выясним, почему равномерное вращение вообще требует ускорения, потом получим его величину геометрически, а затем разберёмся с силами, которых «не существует».",
-      "steps": [
-        {
-          "text": "Главное недоразумение: при равномерном вращении скорость постоянна по величине, но НЕ постоянна как вектор — она всё время поворачивается. А ускорение по определению есть скорость изменения вектора скорости. Значит ускорение есть, хотя спидометр показывает одно и то же число.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{но} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
-          "figure": "circmotion",
-          "figCaption": "Скорость направлена по касательной и непрерывно поворачивается — это и есть ускорение."
-        },
-        {
-          "text": "Найдём его величину. За малое время тело проходит по дуге угол $\\Delta\\varphi$, и вектор скорости поворачивается ровно на тот же угол. Треугольник, построенный на векторах скорости, подобен треугольнику, построенному на радиусах, — отсюда пропорция.",
-          "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
-          "figure": "vectriangle",
-          "figCaption": "Треугольник скоростей подобен треугольнику перемещений — ключ ко всему выводу."
-        },
-        {
-          "text": "Делим изменение скорости на время и переходим к пределу. Учитывая, что перемещение за время $\\Delta t$ равно $v\\,\\Delta t$, получаем искомое ускорение. Направлено оно к центру — потому и называется центростремительным.",
-          "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
-          "figure": "centripetal",
-          "figCaption": "Ускорение смотрит строго в центр, перпендикулярно скорости."
-        },
-        {
-          "text": "Через угловую скорость выражение становится ещё проще. Подставляя $v = \\omega R$, видим, что ускорение растёт как квадрат частоты вращения — вот почему разогнанная центрифуга развивает чудовищные перегрузки при скромном радиусе.",
-          "latex": "a_{\\text{ц}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
-          "figure": "omega",
-          "figCaption": "Удвоили частоту вращения — ускорение выросло вчетверо."
-        },
-        {
-          "text": "Теперь философски важный шаг. Наблюдатель, стоящий на земле, объясняет движение просто: есть сила натяжения верёвки, она создаёт центростремительное ускорение, законы Ньютона выполнены. Такая система отсчёта называется инерциальной — в ней тело без сил движется равномерно и прямолинейно.",
-          "latex": "\\text{ИСО:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{выполняется как есть}",
-          "figure": "inertialframe",
-          "figCaption": "Инерциальный наблюдатель: есть реальная сила, есть ускорение, всё сходится."
-        },
-        {
-          "text": "А наблюдатель, сидящий на самом диске, видит другое: тело перед ним неподвижно. Но верёвка-то натянута! Сила есть, а ускорения нет — второй закон нарушен. Чтобы спасти его, приходится добавить в уравнение ещё одну силу, направленную наружу. Это и есть центробежная сила инерции.",
-          "latex": "\\text{НСО:} \\quad \\vec{T} + \\vec{F}_{\\text{цб}} = 0, \\qquad F_{\\text{цб}} = m\\omega^{2}R",
-          "figure": "rotframe",
-          "figCaption": "Вращающийся наблюдатель вынужден ввести силу, у которой нет источника."
-        },
-        {
-          "text": "У силы инерции нет тела-источника и нет партнёра по третьему закону — она возникает исключительно из-за выбора системы отсчёта. Это не значит, что она «ненастоящая»: в своей системе она действует совершенно реально, деформирует тела и отбрасывает воду в барабане стиральной машины. Просто она — плата за удобство описания.",
-          "latex": "\\vec{F}_{\\text{ин}} = -m\\vec{a}_{\\text{системы}}",
-          "figure": "fictitious",
-          "figCaption": "Сила инерции пропорциональна ускорению самой системы отсчёта и направлена против него."
-        }
-      ],
-      "plate": "a_{\\text{ц}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
-      "plateCap": "Равномерное вращение — это непрерывное падение к центру, которое всё время промахивается. Именно так Луна обращается вокруг Земли.",
-      "note": "Отсюда один шаг до глубокой идеи. Сидя в закрытой кабине, вы не можете отличить силу тяжести от силы инерции ускоренно движущейся кабины: и та и другая прижимают вас к полу и пропорциональны массе. Эйнштейн возвёл эту невозможность в принцип эквивалентности и построил на нём общую теорию относительности, где тяготение перестало быть силой и стало кривизной пространства-времени. Вопрос «какая сила меня толкнула в автобусе» ведёт, если тянуть за ниточку достаточно долго, прямо к чёрным дырам."
-    },
-    "math": {
-      "title": "Математика, которая здесь понадобилась",
-      "items": [
-        {
-          "what": "Радиан — почему угол измеряют длиной",
-          "why": "Радиан есть угол, при котором длина дуги равна радиусу. Такое определение кажется странным, пока не заметишь: только в радианах работают простые формулы $s = R\\varphi$ и $v = \\omega R$, и только в радианах производная синуса равна косинусу без лишних множителей. Градусы — историческая условность вавилонян; радиан — естественная мера, встроенная в саму геометрию круга.",
-          "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
-        },
-        {
-          "what": "Подобие треугольников как физический инструмент",
-          "why": "В выводе мы приравняли отношения сторон двух треугольников — на векторах скорости и на радиусах. Это типичный ход классической физики: заменить трудное вычисление геометрическим подобием. Ньютон в «Началах» доказывал почти всё именно так, без анализа, — его геометрические доказательства сегодня читать труднее, чем современные выкладки.",
-          "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
-        },
-        {
-          "what": "Проекция вращения — уже синус",
-          "why": "Если точка равномерно бежит по окружности радиуса $A$ с угловой скоростью $\\omega$, то её координата вдоль оси меняется как $A\\cos\\omega t$. То есть равномерное вращение, спроецированное на прямую, даёт в точности гармоническое колебание. Мы вернёмся к этому в следующем параграфе — и увидим, что это не аналогия, а тождество.",
-          "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
-        }
-      ]
-    },
-    "example": {
-      "title": "Пример с числами",
-      "lead": "Оценим перегрузку в центрифуге — и заодно поймём, почему космонавтов тренируют именно так.",
-      "given": "Кабина центрифуги вращается по окружности радиусом $8$ м, делая полный оборот за $4$ секунды. Найти центростремительное ускорение и сравнить с $g = 10$ м/с².",
-      "law": "$a_{\\text{ц}} = \\omega^{2}R$, где $\\omega = 2\\pi/T$",
-      "solution": [
-        {
-          "text": "Находим угловую скорость: полный оборот — это $2\\pi$ радиан.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{рад/с}"
-        },
-        {
-          "text": "Подставляем в формулу ускорения.",
-          "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
-        },
-        {
-          "text": "Считаем и переводим в единицах g.",
-          "latex": "a \\approx 19{,}7\\ \\text{м/с}^2 \\approx 2\\,g"
-        }
-      ],
-      "answer": "Ускорение около $20$ м/с², то есть перегрузка примерно $2g$",
-      "check": "Правдоподобно: при таком вращении человек чувствует себя вдвое тяжелее. Заметьте, как резко растёт эффект с частотой: сократив период вдвое, до 2 секунд, мы получим уже $8g$ — предел для тренированного пилота. Квадрат в формуле здесь работает беспощадно."
-    },
-    "constants": {
-      "title": "Величины этого параграфа",
-      "lead": "Здесь появляются угловые величины — второй язык описания движения, без которого не обойтись ни в колебаниях, ни в волнах, ни в квантовой механике.",
-      "items": [
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "name": "Угловая скорость",
-          "value": "ω = 2π/T",
-          "unit": "рад / с",
-          "why": "Сколько радиан поворота приходится на секунду. Через неё все формулы вращения становятся проще, а связь с колебаниями — очевидной: та же буква обозначает циклическую частоту колебаний, и это не совпадение.",
-          "mnemo": "Один оборот — это 2π радиан, поэтому в формуле всегда появляется 6,28, делённое на период."
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "name": "Период обращения",
-          "value": "T = 2π/ω",
-          "unit": "с",
-          "why": "Время одного полного оборота или одного полного колебания. Обратная ему величина — частота, измеряемая в герцах: сколько оборотов в секунду."
-        },
-        {
-          "sym": "рад",
-          "latex": "\\text{рад}",
-          "name": "Радиан",
-          "value": "1 рад ≈ 57,3°",
-          "unit": "безразмерная",
-          "why": "Формально безразмерен, поскольку это отношение длины дуги к радиусу — метры делятся на метры. Именно поэтому радианы можно «терять» в размерностях: рад/с и с⁻¹ имеют одинаковую размерность, хотя смысл разный.",
-          "mnemo": "Полный круг — 2π ≈ 6,28 радиан. Один радиан чуть меньше 60 градусов."
-        },
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Ускорение свободного падения",
-          "value": "9,81",
-          "unit": "м / с²",
-          "why": "Здесь используется как единица перегрузки: ускорение центрифуги принято выражать в долях g, потому что именно с ним организм сравнивает нагрузку."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "Равномерное вращение требует ускорения, потому что вектор скорости непрерывно поворачивается. В инерциальной системе это объясняется реальной силой, во вращающейся приходится добавить силу инерции — у неё нет источника, но в своей системе она вполне ощутима.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Скорость — вектор",
-          "text": "При равномерном вращении её величина постоянна, но направление меняется. Значит ускорение есть."
-        },
-        {
-          "icon": "clock",
-          "title": "К центру",
-          "text": "aц = v²/R = ω²R, направлено строго в центр, перпендикулярно скорости."
-        },
-        {
-          "icon": "sigma",
-          "title": "Две системы",
-          "text": "Инерциальная: работает F = ma как есть. Неинерциальная: нужны силы инерции, чтобы уравнения сошлись."
-        },
-        {
-          "icon": "formula",
-          "title": "Мост к колебаниям",
-          "text": "Проекция равномерного вращения на прямую — в точности синус. Это не аналогия, а тождество."
-        }
-      ],
-      "where": [
-        "Центрифуга стиральной машины: вода летит по прямой, а бельё удерживается барабаном",
-        "Наклон полотна на повороте дороги — чтобы часть силы реакции стала центростремительной",
-        "Циклоны закручиваются из-за силы Кориолиса: в северном полушарии против часовой стрелки",
-        "Спутник на орбите — свободное падение, которое всё время промахивается мимо Земли"
-      ],
-      "watchOut": "Центробежная сила не действует на тело в инерциальной системе отсчёта. Верёвка тянет камень только к центру; наружу не тянет ничто. Ощущение «отбрасывания» возникает потому, что вы сами находитесь во вращающейся системе. Ошибка «на тело действует центробежная сила» — самая частая в этой теме."
-    },
-    "quiz": [
-      {
-        "id": "r1",
-        "type": "mcq",
-        "q": "Камень вращают на верёвке. В момент, когда верёвка обрывается, куда полетит камень?",
-        "options": [
-          "По радиусу наружу, от центра",
-          "По касательной к окружности — туда, куда была направлена скорость",
-          "По спирали, постепенно удаляясь",
-          "Сначала наружу, потом по касательной"
-        ],
-        "answer": 1,
-        "why": "Как только сила исчезла, работает первый закон: тело движется прямолинейно с той скоростью, что была. Скорость при вращении направлена по касательной — туда камень и полетит. Никакой силы «наружу» в инерциальной системе не было.",
-        "hint": "Что говорит первый закон о теле, на которое перестали действовать силы? А куда была направлена скорость камня в последний момент перед обрывом — вдоль радиуса или поперёк?"
-      },
-      {
-        "id": "r2",
-        "type": "mcq",
-        "q": "Чем принципиально отличается сила инерции от обычной силы?",
-        "options": [
-          "Она слабее и потому ею можно пренебречь",
-          "У неё нет тела-источника и нет пары по третьему закону — она возникает из-за выбора системы отсчёта",
-          "Она действует только на вращающиеся тела",
-          "Она не создаёт ускорения"
-        ],
-        "answer": 1,
-        "why": "Обычная сила всегда есть действие одного тела на другое, и у неё есть партнёр по третьему закону. У силы инерции нет ни источника, ни партнёра: она появляется в уравнениях исключительно потому, что мы описываем движение из ускоренно движущейся системы отсчёта.",
-        "hint": "Задайте про центробежную силу простой вопрос: какое конкретно тело её создаёт? И на какое тело действует ответная сила по третьему закону?"
-      },
-      {
-        "id": "r3",
-        "type": "free",
-        "q": "Своими словами: почему при равномерном движении по окружности есть ускорение, хотя скорость по величине не меняется?",
-        "keywords": [
-          "направлен",
-          "вектор",
-          "поворачива",
-          "меняет направление",
-          "не только величин"
-        ],
-        "needed": 1,
-        "why": "Потому что ускорение — это скорость изменения вектора скорости, а вектор меняется не только когда меняется длина, но и когда поворачивается. При вращении длина постоянна, а направление меняется непрерывно — отсюда и ускорение, направленное к центру.",
-        "hint": "Вспомните, что скорость — величина векторная. Сколько у вектора характеристик, которые могут меняться? Достаточно ли постоянства одной из них, чтобы вектор оставался неизменным?"
-      },
-      {
-        "id": "r4",
-        "type": "estimate",
-        "q": "Карусель радиусом 5 м делает оборот за 6 секунд. Каково центростремительное ускорение в м/с²?",
-        "answer": 5.5,
-        "unit": "м/с²",
-        "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1,05 рад/с; a = ω²R = 1,1 · 5 ≈ 5,5 м/с². Это примерно половина g — как раз та ощутимая, но безопасная нагрузка, на которую рассчитывают аттракционы.",
-        "hint": "Сначала угловая скорость: 2π разделить на период, это чуть больше единицы. Затем возвести в квадрат и умножить на радиус."
-      }
-    ],
-    "curiosities": {
-      "title": "Занимательное: проверьте руками",
-      "lead": "Центробежной силы не существует — но ведро с водой над головой об этом не знает.",
-      "items": [
-        {
-          "icon": "kitchen",
-          "kind": "опыт на кухне",
-          "h": "Ведро воды над головой",
-          "text": "Налейте в небольшое ведро воды на треть, возьмите за дужку и раскрутите в вертикальной плоскости — так, чтобы в верхней точке ведро оказалось дном вверх. Делайте это во дворе. Потом попробуйте то же самое медленно.",
-          "answer": "На быстром вращении вода не выливается, на медленном — обливает вас. Порог считается: вода останется, если в верхней точке потребное центростремительное ускорение не меньше $g$, то есть $v^2/R \\ge g$, откуда $v \\ge \\sqrt{gR}$. Для руки с ведром радиус около метра — нужно чуть больше трёх метров в секунду. Вода не «прижимается» ничем: она просто падает по своей траектории, а ведро падает вместе с ней, всё время оказываясь снизу."
-        },
-        {
-          "icon": "paradox",
-          "kind": "парадокс",
-          "h": "Сила, которой нет, но которая чувствуется",
-          "text": "На повороте вас прижимает к дверце — ощущение отчётливое и измеримое. При этом физика утверждает, что центробежной силы не существует. Что же тогда давит на плечо?",
-          "answer": "В неподвижной системе отсчёта всё просто: вы движетесь прямо по инерции, а дверца поворачивает и наезжает на вас. Единственная реальная сила — это её давление, направленное к центру поворота. Центробежная сила появляется только внутри вращающейся системы, где вы считаете себя неподвижным: чтобы объяснить равновесие, приходится дописать силу, у которой нет источника и нет пары по третьему закону. Такие силы называют силами инерции; они удобны для расчёта и совершенно реальны по последствиям, но существуют лишь в выбранной системе отсчёта."
-        },
-        {
-          "icon": "fact",
-          "kind": "занимательный факт",
-          "h": "Маятник, доказавший вращение Земли",
-          "text": "В 1851 году Леон Фуко подвесил под куполом парижского Пантеона груз в 28 килограммов на проволоке длиной 67 метров. Плоскость качания медленно поворачивалась — примерно на одиннадцать градусов в час. Маятнику незачем поворачиваться: поворачивался пол вместе со зданием и городом. Впервые вращение Земли увидели прямо, в помещении, без астрономических наблюдений. На полюсе полный оборот занял бы ровно сутки, на экваторе поворота нет вовсе, а в промежутке период растёт как единица делить на синус широты."
-        },
-        {
-          "icon": "mnemo",
-          "kind": "мнемоника",
-          "h": "Ускорение смотрит туда, куда поворачиваешь",
-          "text": "При равномерном движении по окружности скорость не меняется по величине, но меняется по направлению — а значит ускорение есть, и направлено оно строго к центру. Отсюда название: центростремительное, то есть стремящееся к центру. Запомнить величину помогает двойная запись $v^2/R=\\omega^2R$: первая удобна, когда известна скорость, вторая — когда известна частота вращения."
-        },
-        {
-          "icon": "estimate",
-          "kind": "прикидка",
-          "h": "Насколько вы легче на экваторе",
-          "text": "Экваториальная скорость вращения Земли около 465 метров в секунду, радиус 6378 километров. Центростремительное ускорение получается $v^2/R \\approx 0{,}034$ метра в секунду за секунду — примерно три тысячных от $g$. Значит, человек массой 70 килограммов на экваторе весит примерно на 240 граммов меньше, чем на полюсе, и это ещё без учёта сплюснутости планеты. Ракеты запускают ближе к экватору именно потому, что вращение планеты даёт бесплатную добавку к скорости."
-        },
-        {
-          "icon": "edge",
-          "kind": "граница применимости",
-          "h": "Только для равномерного вращения",
-          "text": "Формула $a=v^2/R$ описывает лишь ту часть ускорения, что отвечает за поворот. Если скорость по величине тоже меняется — автомобиль разгоняется на дуге, — добавляется касательная составляющая, и полное ускорение есть их векторная сумма. А при движении по произвольной кривой в формулу входит не радиус траектории целиком, а радиус соприкасающейся окружности в данной точке."
-        }
-      ]
-    },
-    "synthesis": {
-      "title": "Где работает поворот",
-      "lead": "Всё перечисленное живёт на одном факте: чтобы двигаться по кривой, нужно ускорение к центру.",
-      "items": [
-        {
-          "h": "Виражи дорог и трасс",
-          "text": "Полотно наклоняют внутрь поворота так, чтобы составляющая силы тяжести брала на себя часть поворачивающего усилия. Угол считают по расчётной скорости; на треках он доходит до тридцати градусов и больше."
-        },
-        {
-          "h": "Центрифуги",
-          "text": "Разделение крови на плазму и клетки, обогащение урана, отжим в стиральной машине — везде используется то, что при вращении более плотные частицы уходят от оси. Лабораторная центрифуга даёт ускорения в тысячи $g$."
-        },
-        {
-          "h": "Орбиты",
-          "text": "Спутник не падает лишь потому, что его скорость такова, что нужное центростремительное ускорение точно равно ускорению свободного падения на этой высоте. Отсюда первая космическая — около 7,9 километра в секунду."
-        },
-        {
-          "h": "Ускорители частиц",
-          "text": "В кольцевом ускорителе магнитное поле поворачивает пучок, обеспечивая ровно то ускорение к центру, которое нужно на данной энергии. Чем выше энергия, тем больше радиус — отсюда двадцатисемикилометровое кольцо Большого адронного коллайдера."
-        },
-        {
-          "h": "Погода",
-          "text": "Сила Кориолиса — второй эффект вращающейся системы — закручивает циклоны против часовой стрелки в северном полушарии и по часовой в южном. Она же отклоняет океанские течения и дальние артиллерийские снаряды."
-        }
-      ]
-    }
-  },
-  "en": {
-    "title": "Rotation and Reference Frames",
-    "subtitle": "Section 1 · Why forces without a source appear in a rotating world",
-    "intro": [
-      "Let's start with a question that seems childish but touches the foundations of physics. You are on a bus that brakes suddenly — you are thrown forward. What force pushed you?",
-      "The answer is disconcerting: none. No one pushed you. You simply continued moving by inertia, while the bus under you slowed down. But the sensation of force is completely real; the body feels it, instruments show it. What to do with a force that is felt but has no source?",
-      "This is where physics takes a step more important than many formulas: it acknowledges that the description depends on where you look from. There are reference frames where Newton's laws work in their pure form — they are called inertial. And there are all the others, where we have to introduce fictitious forces to make the laws match. Once we understand this, we will also understand rotation — and discover oscillation within it."
-    ],
-    "standNote": "On the stand — a body on a rotating disk. On the left you see the picture from the perspective of a stationary observer: the body moves in a circle, and the rope pulls it toward the center. On the right — the same scene from the perspective of an observer sitting on the disk: the body is at rest, and to explain this, one must add a centrifugal force directed outward. One motion, two descriptions. Notice the lower graph: the projection of rotation onto an axis is exactly a sine — this is a bridge to the next section.",
-    "formula": {
-      "name": "Centripetal acceleration",
-      "latex": "a_{\\text{c}} = \\frac{v^{2}}{R} = \\omega^{2} R",
-      "alsoKnown": "Acceleration in uniform circular motion",
-      "authors": [
-        {
-          "who": "Christiaan Huygens",
-          "year": "1659",
-          "what": "first derived the expression for centrifugal force in circular motion — 28 years before Newton's 'Principia', in a work on pendulum clocks"
-        },
-        {
-          "who": "Isaac Newton",
-          "year": "1687",
-          "what": "incorporated circular motion into general dynamics and showed that the Moon 'falls' to Earth for the same reason as an apple"
-        },
-        {
-          "who": "Gaspard-Gustave de Coriolis",
-          "year": "1835",
-          "what": "described the second inertial force that arises when moving inside a rotating system — it explains the twisting of cyclones and the deflection of projectiles"
-        }
-      ],
-      "story": "Huygens derived the law of centrifugal force while working on clocks: he needed to understand how a weight behaves on a rotating rod. He obtained the result in 1659 but published it only in 1673 — and then as theorems without proofs. Newton arrived at the same independently, and it was the unification of circular motion with the law of gravity that allowed him to make the main step: showing that the Moon is a projectile that falls to Earth but misses because it is moving too fast sideways.",
-      "symbols": [
-        {
-          "sym": "a_c",
-          "latex": "a_{\\text{c}}",
-          "what": "centripetal acceleration",
-          "unit": "m/s²",
-          "note": "directed toward the center of the circle; it changes the direction of velocity, not its magnitude"
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "what": "linear velocity",
-          "unit": "m/s",
-          "note": "constant in magnitude during uniform rotation, but the vector turns continuously"
-        },
-        {
-          "sym": "R",
-          "latex": "R",
-          "what": "radius of the circle",
-          "unit": "m",
-          "note": "the sharper the turn, the greater the acceleration required"
-        },
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "what": "angular velocity",
-          "unit": "rad/s",
-          "note": "how many radians the radius sweeps per second; related to linear velocity as v = ωR"
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "what": "period",
-          "unit": "s",
-          "note": "time for one complete revolution; ω = 2π/T"
-        }
-      ]
-    },
-    "derivation": {
-      "title": "Rigorous Derivation",
-      "lead": "First, let's find out why uniform rotation requires acceleration at all, then derive its magnitude geometrically, and then understand the forces that 'don't exist'.",
-      "steps": [
-        {
-          "text": "The main misconception: in uniform rotation, the speed is constant in magnitude, but NOT constant as a vector — it continuously turns. And acceleration by definition is the rate of change of the velocity vector. Therefore acceleration exists, even though the speedometer shows the same number.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{but} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
-          "figure": "circmotion",
-          "figCaption": "Velocity is directed along the tangent and continuously turns — that is acceleration."
-        },
-        {
-          "text": "Let's find its magnitude. In a small time, the body travels an arc of angle Δφ, and the velocity vector rotates by exactly the same angle. The triangle built on the velocity vectors is similar to the triangle built on the radii — hence the proportion.",
-          "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
-          "figure": "vectriangle",
-          "figCaption": "The velocity triangle is similar to the displacement triangle — the key to the entire derivation."
-        },
-        {
-          "text": "Divide the change in velocity by time and take the limit. Considering that the displacement in time Δt equals vΔt, we obtain the desired acceleration. It is directed toward the center — hence called centripetal.",
-          "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
-          "figure": "centripetal",
-          "figCaption": "Acceleration points strictly toward the center, perpendicular to velocity."
-        },
-        {
-          "text": "Through angular velocity the expression becomes even simpler. Substituting v = ωR, we see that acceleration grows as the square of the rotation frequency — that is why an accelerated centrifuge produces enormous overloads at a modest radius.",
-          "latex": "a_{\\text{c}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
-          "figure": "omega",
-          "figCaption": "Double the rotation frequency — acceleration increased fourfold."
-        },
-        {
-          "text": "Now a philosophically important step. An observer standing on the ground explains the motion simply: there is a tension force in the string, it creates centripetal acceleration, Newton's laws are satisfied. This reference frame is called inertial — in it, a body without forces moves uniformly and rectilinearly.",
-          "latex": "\\text{IFR:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{holds as is}",
-          "figure": "inertialframe",
-          "figCaption": "Inertial observer: there is a real force, there is acceleration, everything fits."
-        },
-        {
-          "text": "But an observer sitting on the disk itself sees something else: the body before him is motionless. Yet the string is taut! There is a force, but no acceleration — the second law is violated. To save it, we must add another force to the equation, directed outward. This is the centrifugal force of inertia.",
-          "latex": "\\text{NFR:} \\quad \\vec{T} + \\vec{F}_{\\text{centrifugal}} = 0, \\qquad F_{\\text{centrifugal}} = m\\omega^{2}R",
-          "figure": "rotframe",
-          "figCaption": "The rotating observer is forced to introduce a force that has no source."
-        },
-        {
-          "text": "The force of inertia has no source body and no partner according to the third law — it arises solely from the choice of reference frame. This does not mean it is 'unreal': in its own frame it acts perfectly real, deforms bodies, and pushes water in a washing machine drum. It is simply the price for convenience of description.",
-          "latex": "\\vec{F}_{\\text{in}} = -m\\vec{a}_{\\text{systems}}",
-          "figure": "fictitious",
-          "figCaption": "The force of inertia is proportional to the acceleration of the reference frame itself and directed opposite to it."
-        }
-      ],
-      "plate": "a_{\\text{c}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
-      "plateCap": "Uniform rotation is a continuous fall toward the center that keeps missing. This is exactly how the Moon orbits the Earth.",
-      "note": "From here it is one step to a profound idea. Sitting in a closed cabin, you cannot distinguish the force of gravity from the inertial force of an accelerating cabin: both press you to the floor and are proportional to mass. Einstein elevated this impossibility into the equivalence principle and built general relativity on it, where gravity ceased to be a force and became curvature of spacetime. The question 'what force pushed me in the bus' leads, if you pull the thread long enough, straight to black holes."
-    },
-    "math": {
-      "title": "Mathematics needed here",
-      "items": [
-        {
-          "what": "Radian — why angle is measured by length",
-          "why": "A radian is the angle for which the arc length equals the radius. This definition seems strange until you notice: only in radians do the simple formulas s = Rφ and v = ωR work, and only in radians is the derivative of sine equal to cosine without extra factors. Degrees are a historical convention of the Babylonians; the radian is a natural measure built into the very geometry of the circle.",
-          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
-        },
-        {
-          "what": "Similarity of triangles as a physical tool",
-          "why": "In the derivation, we equated the ratios of sides of two triangles — on the velocity vectors and on the radii. This is a typical move of classical physics: replace a difficult calculation with geometric similarity. Newton in the 'Principia' proved almost everything in this way, without calculus — his geometric proofs are harder to read today than modern derivations.",
-          "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
-        },
-        {
-          "what": "Projection of rotation is already a sine",
-          "why": "If a point runs uniformly around a circle of radius A with angular velocity ω, then its coordinate along the axis changes as A cos ωt. That is, uniform rotation, projected onto a straight line, gives exactly harmonic oscillation. We will return to this in the next section — and see that it is not an analogy but an identity.",
-          "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
-        }
-      ]
-    },
-    "example": {
-      "title": "Numerical Example",
-      "lead": "Let's estimate the g-force in a centrifuge — and understand why cosmonauts are trained this way.",
-      "given": "A centrifuge cabin rotates in a circle of radius $8$ m, completing one full revolution in $4$ seconds. Find the centripetal acceleration and compare it with $g = 10$ m/s².",
-      "law": "$a_{\\text{c}} = \\omega^{2}R$, where $\\omega = 2\\pi/T$",
-      "solution": [
-        {
-          "text": "Find the angular velocity: a full revolution is $2\\pi$ radians.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
-        },
-        {
-          "text": "Substitute into the acceleration formula.",
-          "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
-        },
-        {
-          "text": "Calculate and convert to units of g.",
-          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
-        }
-      ],
-      "answer": "Acceleration about $20$ m/s², meaning a g-force of roughly $2g$",
-      "check": "Plausible: with this rotation, a person feels twice as heavy. Notice how sharply the effect increases with frequency: halving the period to 2 seconds gives $8g$ — the limit for a trained pilot. The square in the formula is relentless here."
-    },
-    "constants": {
-      "title": "Quantities in This Section",
-      "lead": "Here angular quantities appear — a second language for describing motion, indispensable in oscillations, waves, and quantum mechanics.",
-      "items": [
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "name": "Angular velocity",
-          "value": "ω = 2π/T",
-          "unit": "rad / s",
-          "why": "How many radians of rotation per second. It simplifies all rotation formulas, and the connection to oscillations becomes obvious: the same letter denotes cyclic frequency, and that is no coincidence.",
-          "mnemo": "One full revolution is 2π radians, so the formula always includes 6.28 divided by the period."
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "name": "Period of revolution",
-          "value": "T = 2π/ω",
-          "unit": "s",
-          "why": "Time of one full revolution or one full oscillation. Its reciprocal is frequency, measured in hertz: how many revolutions per second."
-        },
-        {
-          "sym": "rad",
-          "latex": "\\text{rad}",
-          "name": "Radian",
-          "value": "1 rad ≈ 57.3°",
-          "unit": "dimensionless",
-          "why": "Formally dimensionless, since it is the ratio of arc length to radius — meters divided by meters. This is why radians can be 'lost' in dimensions: rad/s and s⁻¹ have the same dimension, though different meaning.",
-          "mnemo": "Full circle — 2π ≈ 6.28 radians. One radian is just under 60 degrees."
-        },
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Acceleration due to gravity",
-          "value": "9.81",
-          "unit": "m / s²",
-          "why": "Here it is used as a unit of g-force: centrifuge acceleration is expressed in multiples of g because the body compares load to it."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "Uniform rotation requires acceleration because the velocity vector continuously turns. In an inertial frame, this is explained by a real force; in a rotating frame, an inertial force must be added — it has no source, but within its own frame it is quite tangible.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Velocity is a vector",
-          "text": "In uniform rotation, its magnitude is constant but direction changes. Therefore acceleration exists."
-        },
-        {
-          "icon": "clock",
-          "title": "Toward the center",
-          "text": "a_c = v²/R = ω²R, directed exactly toward the center, perpendicular to velocity."
-        },
-        {
-          "icon": "sigma",
-          "title": "Two frames",
-          "text": "Inertial frame: F = ma works as is. Non-inertial: inertial forces are needed to make equations consistent."
-        },
-        {
-          "icon": "formula",
-          "title": "Bridge to oscillations",
-          "text": "The projection of uniform rotation onto a line is exactly a sine. This is not an analogy but an identity."
-        }
-      ],
-      "where": [
-        "Washing machine centrifuge: water flies out in a straight line, while clothes are held by the drum",
-        "Banking of a road curve — so that part of the normal force becomes centripetal",
-        "Cyclones spin due to the Coriolis force: counterclockwise in the Northern Hemisphere",
-        "Satellite in orbit — free fall that constantly misses Earth"
-      ],
-      "watchOut": "Centrifugal force does not act on a body in an inertial reference frame. The rope pulls the stone only toward the center; nothing pulls outward. The feeling of being 'thrown outward' arises because you yourself are in a rotating system. The mistake 'a centrifugal force acts on the body' is the most common one in this topic."
-    },
-    "quiz": [
-      {
-        "id": "r1",
-        "type": "mcq",
-        "q": "A stone is swung in a circle on a string. At the moment the string breaks, which way will the stone fly?",
-        "options": [
-          "Radially outward, away from the center",
-          "Tangentially to the circle — in the direction of its velocity at that instant",
-          "Along a spiral, gradually moving away",
-          "First outward, then tangentially"
-        ],
-        "answer": 1,
-        "why": "As soon as the force disappears, Newton's first law applies: the body continues in straight-line motion with the velocity it already had. During rotation, the velocity is directed tangentially — so the stone will fly in that direction. There is no 'outward' force in an inertial frame.",
-        "hint": "What does the first law say about a body when no forces act on it? And what was the direction of the stone's velocity at the last moment before the string broke — along the radius or perpendicular to it?"
-      },
-      {
-        "id": "r2",
-        "type": "mcq",
-        "q": "What is the fundamental difference between an inertial force and an ordinary force?",
-        "options": [
-          "It is weaker and can therefore be neglected",
-          "It has no source body and no pair according to Newton's third law — it arises from the choice of reference frame",
-          "It acts only on rotating bodies",
-          "It does not produce acceleration"
-        ],
-        "answer": 1,
-        "why": "An ordinary force is always an interaction between two bodies and has a partner according to the third law. An inertial force has neither a source nor a partner: it appears in the equations solely because we describe motion from an accelerated reference frame.",
-        "hint": "Ask a simple question about centrifugal force: which specific body creates it? And on which body does the reaction force act according to the third law?"
-      },
-      {
-        "id": "r3",
-        "type": "free",
-        "q": "In your own words: why is there acceleration during uniform circular motion, even though the speed (magnitude of velocity) does not change?",
-        "keywords": [
-          "directed",
-          "vector",
-          "turns",
-          "changes direction",
-          "not only magnitude"
-        ],
-        "needed": 1,
-        "why": "Because acceleration is the rate of change of the velocity vector, and the vector changes not only when its length changes but also when it rotates. During rotation, the length is constant but the direction changes continuously — hence the acceleration, directed toward the center.",
-        "hint": "Remember that velocity is a vector quantity. How many characteristics of a vector can change? Is it enough for just one of them to remain constant for the vector to stay unchanged?"
-      },
-      {
-        "id": "r4",
-        "type": "estimate",
-        "q": "A merry-go-round of radius 5 m completes one rotation in 6 seconds. What is the centripetal acceleration in m/s²?",
-        "answer": 5.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1.05 rad/s; a = ω²R = 1.1 · 5 ≈ 5.5 m/s². This is about half of g — exactly the noticeable but safe load that amusement rides are designed for.",
-        "hint": "First the angular velocity: 2π divided by the period, which is just above one. Then square it and multiply by the radius."
-      }
-    ]
-  },
-  "es": {
-    "title": "Rotación y sistemas de referencia",
-    "subtitle": "Párrafo 1 · Por qué en un mundo giratorio aparecen fuerzas sin fuente",
-    "intro": [
-      "Empecemos con una pregunta que parece infantil, pero que toca los fundamentos de la física. Viajas en un autobús, frena bruscamente y te lanzas hacia adelante. ¿Qué fuerza te empujó?",
-      "La respuesta es desconcertante: ninguna. Nadie te empujó. Simplemente continuaste moviéndote por inercia, mientras el autobús bajo ti frenaba. Pero la sensación de fuerza es completamente real, la siente el cuerpo, la muestran los instrumentos. ¿Qué hacer con una fuerza que se siente pero que no tiene fuente?",
-      "Es aquí donde la física da un paso más importante que muchas fórmulas: reconoce que la descripción depende de desde dónde se mire. Hay sistemas de referencia donde las leyes de Newton funcionan en su forma pura, llamados inerciales. Y están todos los demás, donde es necesario introducir fuerzas ficticias para que las leyes concuerden. Al entender esto, comprenderemos la rotación y descubriremos en ella una oscilación."
-    ],
-    "standNote": "En el stand hay un cuerpo sobre un disco giratorio. A la izquierda ves la imagen desde los ojos de un observador inmóvil: el cuerpo se mueve en círculo y una cuerda lo jala hacia el centro. A la derecha, la misma escena desde los ojos de un observador sentado en el disco: el cuerpo está en reposo, y para explicarlo hay que agregar una fuerza centrífuga dirigida hacia afuera. Un mismo movimiento, dos descripciones. Observa el gráfico inferior: la proyección de la rotación sobre un eje es exactamente un seno — es un puente hacia el siguiente párrafo.",
-    "formula": {
-      "name": "Aceleración centrípeta",
-      "latex": "a_{\\text{cent}} = \\frac{v^{2}}{R} = \\omega^{2} R",
-      "alsoKnown": "Aceleración en el movimiento circular uniforme",
-      "authors": [
-        {
-          "who": "Christiaan Huygens",
-          "year": "1659",
-          "what": "fue el primero en deducir la expresión de la fuerza centrífuga en el movimiento circular — 28 años antes de los 'Principia' de Newton, en su trabajo sobre relojes de péndulo"
-        },
-        {
-          "who": "Isaac Newton",
-          "year": "1687",
-          "what": "incluyó el movimiento circular en la dinámica general y mostró que la Luna 'cae' hacia la Tierra por la misma razón que una manzana"
-        },
-        {
-          "who": "Gaspard-Gustave Coriolis",
-          "year": "1835",
-          "what": "describió la segunda fuerza de inercia que aparece al moverse dentro de un sistema en rotación — explica la rotación de los ciclones y la desviación de los proyectiles"
-        }
-      ],
-      "story": "Huygens obtuvo la ley de la fuerza centrífuga mientras trabajaba en relojes: necesitaba entender cómo se comporta una masa en una varilla giratoria. Derivó el resultado en 1659, pero lo publicó solo en 1673 — y además en forma de teoremas sin demostraciones. Newton llegó al mismo resultado de forma independiente, y fue precisamente la unión del movimiento circular con la ley de gravitación lo que le permitió dar el paso crucial: mostrar que la Luna es un proyectil que cae hacia la Tierra, pero falla porque se mueve demasiado rápido de lado.",
-      "symbols": [
-        {
-          "sym": "a_c",
-          "latex": "a_{\\text{cent}}",
-          "what": "aceleración centrípeta",
-          "unit": "m/s²",
-          "note": "dirigida hacia el centro de la circunferencia; no cambia la magnitud de la velocidad, sino su dirección"
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "what": "velocidad lineal",
-          "unit": "m/s",
-          "note": "su módulo es constante en la rotación uniforme, pero el vector gira continuamente"
-        },
-        {
-          "sym": "R",
-          "latex": "R",
-          "what": "radio de la circunferencia",
-          "unit": "m",
-          "note": "cuanto más cerrada es la curva, mayor aceleración se requiere"
-        },
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "what": "velocidad angular",
-          "unit": "rad/s",
-          "note": "cuántos radianes recorre el radio por segundo; se relaciona con la velocidad lineal como v = ωR"
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "what": "período de revolución",
-          "unit": "s",
-          "note": "tiempo de una vuelta completa; ω = 2π/T"
-        }
-      ]
-    },
-    "derivation": {
-      "title": "Derivación rigurosa",
-      "lead": "Primero averigüemos por qué la rotación uniforme en general requiere aceleración, luego obtengamos su magnitud geométricamente, y luego analicemos las fuerzas que «no existen».",
-      "steps": [
-        {
-          "text": "El principal malentendido: en la rotación uniforme, la velocidad es constante en magnitud, pero NO constante como vector — siempre está girando. Y la aceleración, por definición, es la tasa de cambio del vector velocidad. Por lo tanto, hay aceleración, aunque el velocímetro muestre el mismo número.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{pero} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
-          "figure": "circmotion",
-          "figCaption": "La velocidad es tangencial y gira continuamente — eso es la aceleración."
-        },
-        {
-          "text": "Encontremos su magnitud. En un tiempo pequeño, el cuerpo recorre un arco de ángulo $\\Delta\\varphi$, y el vector velocidad gira exactamente el mismo ángulo. El triángulo construido sobre los vectores velocidad es semejante al triángulo construido sobre los radios — de ahí la proporción.",
-          "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
-          "figure": "vectriangle",
-          "figCaption": "El triángulo de velocidades es semejante al triángulo de desplazamientos — clave de toda la derivación."
-        },
-        {
-          "text": "Dividimos el cambio de velocidad por el tiempo y tomamos el límite. Considerando que el desplazamiento en el tiempo $\\Delta t$ es $v\\,\\Delta t$, obtenemos la aceleración buscada. Está dirigida hacia el centro — por eso se llama centrípeta.",
-          "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
-          "figure": "centripetal",
-          "figCaption": "La aceleración apunta estrictamente al centro, perpendicular a la velocidad."
-        },
-        {
-          "text": "Mediante la velocidad angular, la expresión se vuelve aún más simple. Sustituyendo $v = \\omega R$, vemos que la aceleración crece como el cuadrado de la frecuencia de rotación — por eso una centrífuga acelerada desarrolla sobrecargas enormes con un radio modesto.",
-          "latex": "a_{\\text{cent}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
-          "figure": "omega",
-          "figCaption": "Duplicamos la frecuencia de rotación — la aceleración se cuadruplica."
-        },
-        {
-          "text": "Ahora un paso filosóficamente importante. Un observador en tierra explica el movimiento simplemente: hay una fuerza de tensión en la cuerda, crea una aceleración centrípeta, las leyes de Newton se cumplen. Ese sistema de referencia se llama inercial — en él, un cuerpo sin fuerzas se mueve uniformemente y en línea recta.",
-          "latex": "\\text{SRI:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{se ejecuta tal cual}",
-          "figure": "inertialframe",
-          "figCaption": "Observador inercial: hay una fuerza real, hay aceleración, todo concuerda."
-        },
-        {
-          "text": "Pero un observador sentado en el propio disco ve otra cosa: el cuerpo frente a él está inmóvil. ¡Pero la cuerda está tensa! Hay fuerza, pero no hay aceleración — la segunda ley se viola. Para salvarla, es necesario agregar otra fuerza en la ecuación, dirigida hacia afuera. Esa es la fuerza centrífuga de inercia.",
-          "latex": "\\text{SNI:} \\quad \\vec{T} + \\vec{F}_{\\text{centríf}} = 0, \\qquad F_{\\text{centríf}} = m\\omega^{2}R",
-          "figure": "rotframe",
-          "figCaption": "El observador rotante se ve obligado a introducir una fuerza que no tiene fuente."
-        },
-        {
-          "text": "La fuerza de inercia no tiene cuerpo fuente ni pareja según la tercera ley — surge únicamente debido a la elección del sistema de referencia. Esto no significa que sea «irreal»: en su sistema actúa de manera completamente real, deforma cuerpos y expulsa el agua en el tambor de una lavadora. Simplemente es el precio por la conveniencia de la descripción.",
-          "latex": "\\vec{F}_{\\text{ind}} = -m\\vec{a}_{\\text{sistemas}}",
-          "figure": "fictitious",
-          "figCaption": "La fuerza de inercia es proporcional a la aceleración del propio sistema de referencia y está dirigida en contra de ella."
-        }
-      ],
-      "plate": "a_{\\text{cent}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
-      "plateCap": "La rotación uniforme es una caída continua hacia el centro que siempre falla. Así es como la Luna orbita la Tierra.",
-      "note": "Desde aquí hay un paso hacia una idea profunda. Sentado en una cabina cerrada, no puedes distinguir la fuerza de gravedad de la fuerza de inercia de una cabina que acelera: ambas te presionan contra el suelo y son proporcionales a la masa. Einstein elevó esta imposibilidad al principio de equivalencia y construyó sobre él la teoría general de la relatividad, donde la gravedad dejó de ser una fuerza y se convirtió en curvatura del espacio-tiempo. La pregunta «¿qué fuerza me empujó en el autobús?» lleva, si tiras del hilo lo suficiente, directamente a los agujeros negros."
-    },
-    "math": {
-      "title": "Matemáticas que se necesitaron aquí",
-      "items": [
-        {
-          "what": "Radián — por qué el ángulo se mide con longitud",
-          "why": "El radián es el ángulo para el cual la longitud del arco es igual al radio. Esta definición parece extraña hasta que notas: solo en radianes funcionan las fórmulas simples $s = R\\varphi$ y $v = \\omega R$, y solo en radianes la derivada del seno es igual al coseno sin factores adicionales. Los grados son una convención histórica de los babilonios; el radián es una medida natural, integrada en la geometría del círculo mismo.",
-          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
-        },
-        {
-          "what": "Semejanza de triángulos como herramienta física",
-          "why": "En la derivación, igualamos las razones de los lados de dos triángulos — sobre los vectores velocidad y sobre los radios. Este es un movimiento típico de la física clásica: reemplazar un cálculo difícil con semejanza geométrica. Newton en los «Principia» demostraba casi todo así, sin análisis — sus demostraciones geométricas hoy son más difíciles de leer que los cálculos modernos.",
-          "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
-        },
-        {
-          "what": "Proyección de la rotación — ya es seno",
-          "why": "Si un punto corre uniformemente sobre un círculo de radio $A$ con velocidad angular $\\omega$, entonces su coordenada a lo largo del eje cambia como $A\\cos\\omega t$. Es decir, la rotación uniforme proyectada sobre una recta da exactamente una oscilación armónica. Volveremos a esto en la siguiente sección — y veremos que no es una analogía, sino una identidad.",
-          "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
-        }
-      ]
-    },
-    "example": {
-      "title": "Ejemplo con números",
-      "lead": "Estimemos la sobrecarga en una centrífuga — y de paso entendamos por qué los astronautas se entrenan precisamente así.",
-      "given": "La cabina de una centrífuga gira en una circunferencia de radio $8$ m, dando una vuelta completa en $4$ segundos. Encontrar la aceleración centrípeta y compararla con $g = 10$ m/s².",
-      "law": "$a_{\\text{cent}} = \\omega^{2}R$, donde $\\omega = 2\\pi/T$",
-      "solution": [
-        {
-          "text": "Encontramos la velocidad angular: una vuelta completa son $2\\pi$ radianes.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
-        },
-        {
-          "text": "Sustituimos en la fórmula de la aceleración.",
-          "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
-        },
-        {
-          "text": "Calculamos y convertimos a unidades de g.",
-          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
-        }
-      ],
-      "answer": "Aceleración de unos $20$ m/s², es decir, sobrecarga de aproximadamente $2g$",
-      "check": "Es plausible: con esa rotación, una persona se siente el doble de pesada. Observa cómo el efecto crece drásticamente con la frecuencia: si reducimos el periodo a la mitad, a 2 segundos, obtendríamos $8g$ — el límite para un piloto entrenado. El cuadrado en la fórmula actúa sin piedad."
-    },
-    "constants": {
-      "title": "Magnitudes de este apartado",
-      "lead": "Aquí aparecen las magnitudes angulares — el segundo lenguaje para describir el movimiento, indispensable tanto en oscilaciones como en ondas y en mecánica cuántica.",
-      "items": [
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "name": "Velocidad angular",
-          "value": "ω = 2π/T",
-          "unit": "rad / s",
-          "why": "Cuántos radianes de giro por segundo. A través de ella, todas las fórmulas de rotación se simplifican, y la conexión con las oscilaciones se vuelve evidente: la misma letra denota la frecuencia angular de las oscilaciones, y no es una coincidencia.",
-          "mnemo": "Una vuelta son 2π radianes, por lo que en la fórmula siempre aparece 6,28 dividido por el periodo."
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "name": "Periodo de revolución",
-          "value": "T = 2π/ω",
-          "unit": "s",
-          "why": "Tiempo de una vuelta completa o de una oscilación completa. Su inversa es la frecuencia, medida en hercios: cuántas vueltas por segundo."
-        },
-        {
-          "sym": "rad",
-          "latex": "\\text{rad}",
-          "name": "Radián",
-          "value": "1 rad ≈ 57,3°",
-          "unit": "adimensional",
-          "why": "Formalmente adimensional, ya que es la relación entre la longitud del arco y el radio — metros divididos por metros. Por eso los radianes pueden «perderse» en las dimensiones: rad/s y s⁻¹ tienen la misma dimensión, aunque el significado es diferente.",
-          "mnemo": "Un círculo completo son 2π ≈ 6,28 radianes. Un radián es un poco menos de 60 grados."
-        },
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Aceleración de la gravedad",
-          "value": "9,81",
-          "unit": "m/s²",
-          "why": "Aquí se usa como unidad de sobrecarga: la aceleración de la centrífuga se expresa en fracciones de g, porque es con ella con lo que el organismo compara la carga."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "La rotación uniforme requiere aceleración porque el vector velocidad gira continuamente. En un sistema inercial, esto se explica por una fuerza real; en el sistema rotante, hay que añadir una fuerza de inercia — no tiene fuente, pero en su sistema es perfectamente perceptible.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "La velocidad es un vector",
-          "text": "En la rotación uniforme, su magnitud es constante, pero la dirección cambia. Por lo tanto, hay aceleración."
-        },
-        {
-          "icon": "clock",
-          "title": "Hacia el centro",
-          "text": "a_c = v²/R = ω²R, dirigida estrictamente al centro, perpendicular a la velocidad."
-        },
-        {
-          "icon": "sigma",
-          "title": "Dos sistemas",
-          "text": "Inercial: funciona F = ma tal cual. No inercial: se necesitan fuerzas de inercia para que las ecuaciones concuerden."
-        },
-        {
-          "icon": "formula",
-          "title": "Puente a las oscilaciones",
-          "text": "La proyección de una rotación uniforme sobre una recta es exactamente un seno. No es una analogía, sino una identidad."
-        }
-      ],
-      "where": [
-        "Centrífuga de lavadora: el agua vuela en línea recta, pero la ropa es retenida por el tambor",
-        "Inclinación de la calzada en una curva — para que parte de la fuerza de reacción se vuelva centrípeta",
-        "Los ciclones giran debido a la fuerza de Coriolis: en el hemisferio norte, en sentido antihorario",
-        "Satélite en órbita — caída libre que siempre falla el objetivo de la Tierra"
-      ],
-      "watchOut": "La fuerza centrífuga no actúa sobre un cuerpo en un sistema de referencia inercial. La cuerda tira de la piedra solo hacia el centro; nada tira hacia afuera. La sensación de «ser lanzado» surge porque uno mismo está en un sistema rotante. El error de que «sobre el cuerpo actúa una fuerza centrífuga» es el más común en este tema."
-    },
-    "quiz": [
-      {
-        "id": "r1",
-        "type": "mcq",
-        "q": "Se hace girar una piedra atada a una cuerda. En el momento en que la cuerda se rompe, ¿hacia dónde volará la piedra?",
-        "options": [
-          "Radialmente hacia afuera, desde el centro",
-          "Tangencialmente a la circunferencia — hacia donde estaba dirigida la velocidad",
-          "En espiral, alejándose gradualmente",
-          "Primero hacia afuera, luego tangencialmente"
-        ],
-        "answer": 1,
-        "why": "Tan pronto como la fuerza desaparece, actúa la primera ley: el cuerpo se mueve en línea recta con la velocidad que tenía. La velocidad durante la rotación está dirigida tangencialmente — hacia allí volará la piedra. No existía ninguna fuerza «hacia afuera» en el sistema inercial.",
-        "hint": "¿Qué dice la primera ley sobre un cuerpo sobre el que dejan de actuar fuerzas? ¿Y hacia dónde estaba dirigida la velocidad de la piedra en el último momento antes de la rotura — a lo largo del radio o transversalmente?"
-      },
-      {
-        "id": "r2",
-        "type": "mcq",
-        "q": "¿En qué se diferencia fundamentalmente la fuerza de inercia de una fuerza ordinaria?",
-        "options": [
-          "Es más débil y por lo tanto se puede despreciar",
-          "No tiene un cuerpo fuente ni un par según la tercera ley — surge debido a la elección del sistema de referencia",
-          "Actúa solo sobre cuerpos en rotación",
-          "No produce aceleración"
-        ],
-        "answer": 1,
-        "why": "Una fuerza ordinaria es siempre la acción de un cuerpo sobre otro, y tiene un compañero según la tercera ley. La fuerza de inercia no tiene fuente ni compañero: aparece en las ecuaciones únicamente porque describimos el movimiento desde un sistema de referencia acelerado.",
-        "hint": "Hágase una pregunta simple sobre la fuerza centrífuga: ¿qué cuerpo concreto la crea? ¿Y sobre qué cuerpo actúa la fuerza de reacción según la tercera ley?"
-      },
-      {
-        "id": "r3",
-        "type": "free",
-        "q": "Con tus propias palabras: ¿por qué en el movimiento circular uniforme hay aceleración aunque la rapidez no cambia?",
-        "keywords": [
-          "dirigid",
-          "vector",
-          "gir",
-          "cambia de dirección",
-          "no solo la magnitud"
-        ],
-        "needed": 1,
-        "why": "Porque la aceleración es la tasa de cambio del vector velocidad, y el vector cambia no solo cuando cambia su magnitud, sino también cuando gira. En la rotación, la magnitud es constante, pero la dirección cambia continuamente — de ahí la aceleración dirigida hacia el centro.",
-        "hint": "Recuerda que la velocidad es una magnitud vectorial. ¿Cuántas características de un vector pueden cambiar? ¿Es suficiente que una de ellas sea constante para que el vector permanezca sin cambios?"
-      },
-      {
-        "id": "r4",
-        "type": "estimate",
-        "q": "Un carrusel de 5 m de radio da una vuelta en 6 segundos. ¿Cuál es la aceleración centrípeta en m/s²?",
-        "answer": 5.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1,05 rad/s; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². Esto es aproximadamente la mitad de g — justo la carga perceptible pero segura para la que se diseñan las atracciones.",
-        "hint": "Primero la velocidad angular: 2π dividido por el periodo, es un poco más que la unidad. Luego elevar al cuadrado y multiplicar por el radio."
-      }
-    ]
-  },
-  "ar": {
-    "title": "الدوران والأطر المرجعية",
-    "subtitle": "الفقرة 1 · لماذا تظهر قوى بلا مصدر في عالم دوار",
-    "intro": [
-      "لنبدأ بسؤال يبدو طفولياً، لكنه يصطدم بأساسيات الفيزياء. أنت راكب في حافلة، تتوقف فجأة – تُدفع إلى الأمام. أي قوة دفعك؟",
-      "الإجابة محبطة: لا شيء. لم يدفعك أحد. أنت فقط استمريت في الحركة بالقصور الذاتي، بينما تباطأت الحافلة تحتك. لكن الإحساس بالقوة حقيقي تماماً، يشعر به الجسم، وتظهره الأجهزة. ماذا نفعل بقوة تشعر بها ولكن ليس لها مصدر؟",
-      "هنا بالضبط تخطو الفيزياء خطوة أهم من العديد من المعادلات: تعترف بأن الوصف يعتمد على من أين تنظر. هناك أطر مرجعية تعمل فيها قوانين نيوتن بشكل نقي – تسمى الأطر القصورية. وهناك كل الأطر الأخرى حيث يجب إدخال قوى وهمية لتتوافق القوانين. بعد فهم هذا، سندرك أيضاً الدوران – وسنجد فيه تذبذباً."
-    ],
-    "standNote": "على المنصة – جسم على قرص دوار. على اليسار ترى المشهد بعيون مراقب ثابت: الجسم يتحرك في دائرة، والحبل يسحبه نحو المركز. على اليمين – نفس المشهد بعيون مراقب جالس على القرص: الجسم ساكن، ولتفسير ذلك يجب إضافة قوة طرد مركزي موجهة للخارج. حركة واحدة، وصفان. لاحظ الرسم البياني السفلي: إسقاط الدوران على المحور هو بالضبط جيب – هذا جسر إلى الفقرة التالية.",
-    "formula": {
-      "name": "التسارع المركزي",
-      "latex": "a_{\\text{مركز}} = \\frac{v^{2}}{R} = \\omega^{2} R",
-      "alsoKnown": "التسارع في الحركة الدائرية المنتظمة",
-      "authors": [
-        {
-          "who": "كريستيان هويغنس",
-          "year": "1659",
-          "what": "كان أول من اشتق تعبيراً عن قوة الطرد المركزي في الحركة الدائرية – قبل 28 عاماً من 'المبادئ' لنيوتن، في عمل حول الساعات البندولية"
-        },
-        {
-          "who": "إسحاق نيوتن",
-          "year": "1687",
-          "what": "أدرج الحركة الدائرية في الديناميكا العامة وأظهر أن القمر 'يسقط' نحو الأرض لنفس سبب سقوط التفاحة"
-        },
-        {
-          "who": "غاسبار-غوستاف كوريوليس",
-          "year": "1835",
-          "what": "وصف قوة القصور الذاتي الثانية التي تنشأ عند الحركة داخل نظام دوار – وهي تفسر دوران الأعاصير وانحراف المقذوفات"
-        }
-      ],
-      "story": "حصل هويغنس على قانون قوة الطرد المركزي أثناء عمله على الساعات: كان بحاجة لفهم كيف يتصرف ثقل على قضيب دوار. اشتق النتيجة في عام 1659، لكنه نشرها فقط في 1673 – وحتى ذلك في شكل نظريات بدون براهين. توصل نيوتن إلى نفس النتيجة بشكل مستقل، وكان دمج الحركة الدائرية مع قانون الجاذبية هو ما سمح له باتخاذ الخطوة الرئيسية: إظهار أن القمر هو قذيفة تسقط نحو الأرض لكنها تخطئها لأنها تطير بسرعة كبيرة جانبياً.",
-      "symbols": [
-        {
-          "sym": "a_c",
-          "latex": "a_{\\text{مركز}}",
-          "what": "التسارع المركزي",
-          "unit": "m/s²",
-          "note": "موجه نحو مركز الدائرة؛ يغير اتجاه السرعة وليس مقدارها"
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "what": "السرعة الخطية",
-          "unit": "m/s",
-          "note": "ثابتة المقدار في الدوران المنتظم، لكن المتجه يدور طوال الوقت"
-        },
-        {
-          "sym": "R",
-          "latex": "R",
-          "what": "نصف قطر الدائرة",
-          "unit": "m",
-          "note": "كلما كان الانعطاف أشد، كلما كان التسارع المطلوب أكبر"
-        },
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "what": "السرعة الزاوية",
-          "unit": "rad/s",
-          "note": "كم راديان يقطع نصف القطر في الثانية؛ مرتبطة بالخطية بـ v = ωR"
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "what": "فترة الدوران",
-          "unit": "s",
-          "note": "زمن دورة كاملة؛ ω = 2π/T"
-        }
-      ]
-    },
-    "derivation": {
-      "title": "الاشتقاق الصارم",
-      "lead": "أولًا، لنفهم لماذا تتطلب الحركة الدورانية المنتظمة تسارعًا، ثم نحصل على مقداره هندسيًا، ثم نتعامل مع القوى التي «لا وجود لها».",
-      "steps": [
-        {
-          "text": "سوء الفهم الرئيسي: في الدوران المنتظم، السرعة ثابتة المقدار، لكنها ليست ثابتة كمتجه - فهي تدور باستمرار. والتسارع بحكم تعريفه هو معدل تغير متجه السرعة. إذن هناك تسارع، على الرغم من أن عداد السرعة يظهر نفس الرقم.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{but} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
-          "figure": "circmotion",
-          "figCaption": "السرعة موجهة على طول المماس وتدور باستمرار - هذا هو التسارع."
-        },
-        {
-          "text": "نجد مقداره. في زمن قصير، يتحرك الجسم عبر قوس بزاوية $\\Delta\\varphi$، ويدور متجه السرعة بنفس الزاوية تمامًا. المثلث المبني على متجهات السرعة مشابه للمثلث المبني على أنصاف الأقطار - ومن هنا تأتي النسبة.",
-          "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
-          "figure": "vectriangle",
-          "figCaption": "مثلث السرعات مشابه لمثلث الإزاحات - المفتاح للاشتقاق بأكمله."
-        },
-        {
-          "text": "نقسم تغير السرعة على الزمن ونأخذ النهاية. مع الأخذ في الاعتبار أن الإزاحة في الزمن $\\Delta t$ تساوي $v\\,\\Delta t$، نحصل على التسارع المطلوب. اتجاهه نحو المركز - ولهذا يسمى جاذبًا مركزيًا.",
-          "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
-          "figure": "centripetal",
-          "figCaption": "التسارع يشير مباشرة إلى المركز، عموديًا على السرعة."
-        },
-        {
-          "text": "من خلال السرعة الزاوية يصبح التعبير أبسط. بالتعويض $v = \\omega R$، نرى أن التسارع ينمو كمربع تردد الدوران - ولهذا السبب يولد جهاز الطرد المركزي عند تسريعه أحمالًا زائدة هائلة عند نصف قطر متواضع.",
-          "latex": "a_{\\text{مركز}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
-          "figure": "omega",
-          "figCaption": "ضاعف تردد الدوران - تضاعف التسارع أربع مرات."
-        },
-        {
-          "text": "الآن الخطوة المهمة فلسفيًا. الراصد الواقف على الأرض يشرح الحركة ببساطة: هناك قوة شد الحبل، تخلق تسارعًا جاذبًا مركزيًا، وقوانين نيوتن محققة. هذا الإطار المرجعي يسمى قصوريًا - فيه يتحرك الجسم بدون قوى بشكل منتظم ومستقيم.",
-          "latex": "\\text{إطار عطالي:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{تحقق كما هي}",
-          "figure": "inertialframe",
-          "figCaption": "الراصد القصوري: هناك قوة حقيقية، هناك تسارع، كل شيء متسق."
-        },
-        {
-          "text": "أما الراصد الجالس على القرص نفسه فيرى شيئًا آخر: الجسم أمامه ساكن. لكن الحبل مشدود! هناك قوة، ولا تسارع - القانون الثاني منتهك. لإنقاذه، نضيف قوة أخرى إلى المعادلة موجهة للخارج. هذه هي قوة الطرد المركزي القصورية.",
-          "latex": "\\text{إطار غير عطالي:} \\quad \\vec{T} + \\vec{F}_{\\text{طرد مركزي}} = 0, \\qquad F_{\\text{طرد مركزي}} = m\\omega^{2}R",
-          "figure": "rotframe",
-          "figCaption": "الراصد الدوار يضطر إلى إدخال قوة ليس لها مصدر."
-        },
-        {
-          "text": "ليس لقوة القصور الذاتي جسم مصدر ولا شريك في القانون الثالث - فهي تنشأ فقط من اختيار الإطار المرجعي. هذا لا يعني أنها «غير حقيقية»: في إطارها تعمل بشكل واقعي تمامًا، تشوه الأجسام وتدفع الماء في أسطوانة الغسالة. إنها ببساطة ثمن راحة الوصف.",
-          "latex": "\\vec{F}_{\\text{عطالة}} = -m\\vec{a}_{\\text{أنظمة}}",
-          "figure": "fictitious",
-          "figCaption": "قوة القصور الذاتي تتناسب مع تسارع الإطار المرجعي نفسه وموجهة ضده."
-        }
-      ],
-      "plate": "a_{\\text{مركز}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
-      "plateCap": "الحركة الدورانية المنتظمة هي سقوط مستمر نحو المركز يخطئه دائمًا. هكذا يدور القمر حول الأرض.",
-      "note": "من هنا خطوة واحدة إلى فكرة عميقة. بالجلوس في مقصورة مغلقة، لا يمكنك التمييز بين قوة الجاذبية وقوة القصور الذاتي لمقصورة متسارعة: كلاهما يضغطك على الأرض ويتناسب مع الكتلة. رفع أينشتاين هذا الاستحالة إلى مبدأ التكافؤ وبنى عليه النسبية العامة، حيث توقفت الجاذبية عن كونها قوة وأصبحت انحناء الزمكان. السؤال «أي قوة دفعتني في الحافلة» يقود، إذا سحبت الخيط لفترة كافية، مباشرة إلى الثقوب السوداء."
-    },
-    "math": {
-      "title": "الرياضيات التي تطلبتها المسألة",
-      "items": [
-        {
-          "what": "الراديان - لماذا نقيس الزاوية بالطول",
-          "why": "الراديان هو الزاوية التي يكون فيها طول القوس مساويًا لنصف القطر. يبدو هذا التعريف غريبًا حتى تلاحظ: فقط بالراديان تعمل الصيغ البسيطة $s = R\\varphi$ و $v = \\omega R$، وفقط بالراديان يكون مشتق الجيب مساويًا لجيب التمام دون معاملات إضافية. الدرجات هي اصطلاح تاريخي من البابليين؛ الراديان هو مقياس طبيعي مدمج في هندسة الدائرة نفسها.",
-          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
-        },
-        {
-          "what": "تشابه المثلثات كأداة فيزيائية",
-          "why": "في الاستنتاج، ساوينا نسب أضلاع مثلثين - على متجهات السرعة وأنصاف الأقطار. هذه خطوة نموذجية في الفيزياء الكلاسيكية: استبدال حساب صعب بتشابه هندسي. نيوتن في «المبادئ» أثبت كل شيء تقريبًا بهذه الطريقة، بدون تحليل - براهينه الهندسية أصعب في القراءة اليوم من الحسابات الحديثة.",
-          "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
-        },
-        {
-          "what": "إسقاط الدوران - هو الجيب بالفعل",
-          "why": "إذا تحركت نقطة بانتظام على دائرة نصف قطرها $A$ بسرعة زاوية $\\omega$، فإن إحداثيتها على المحور تتغير كـ $A\\cos\\omega t$. أي أن الدوران المنتظم، عند إسقاطه على خط مستقيم، يعطي بالضبط تذبذبًا توافقيًا. سنعود إلى هذا في الفقرة التالية - وسنرى أن هذه ليست تشبيهًا بل تطابقًا.",
-          "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
-        }
-      ]
-    },
-    "example": {
-      "title": "مثال مع الأرقام",
-      "lead": "سوف نقدر التحميل الزائد في جهاز الطرد المركزي — وسنفهم لماذا يتم تدريب رواد الفضاء بهذه الطريقة.",
-      "given": "كابينة جهاز الطرد المركزي تدور في دائرة نصف قطرها $8$ م، وتكمل دورة كاملة في $4$ ثوانٍ. أوجد التسارع المركزي وقارنه مع $g = 10$ م/ث².",
-      "law": "$a_{\\text{مركز}} = \\omega^{2}R$، حيث $\\omega = 2\\pi/T$",
-      "solution": [
-        {
-          "text": "نحسب السرعة الزاوية: الدورة الكاملة تعادل $2\\pi$ راديان.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
-        },
-        {
-          "text": "نعوض في معادلة التسارع.",
-          "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
-        },
-        {
-          "text": "نحسب ونحول إلى وحدات g.",
-          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
-        }
-      ],
-      "answer": "التسارع حوالي $20$ م/ث²، أي تحميل زائد يبلغ حوالي $2g$",
-      "check": "معقول: عند هذا الدوران يشعر الإنسان بأنه أثقل بمرتين. لاحظ كيف يزداد التأثير بشكل حاد مع التردد: إذا قصرنا الفترة إلى النصف، إلى ثانيتين، سنحصل على $8g$ — وهو الحد الأقصى للطيار المدرب. المربع في المعادلة يعمل بلا رحمة هنا."
-    },
-    "constants": {
-      "title": "كميات هذا الفصل",
-      "lead": "تظهر هنا الكميات الزاوية — اللغة الثانية لوصف الحركة، التي لا يمكن الاستغناء عنها في التذبذبات ولا في الأمواج ولا في ميكانيكا الكم.",
-      "items": [
-        {
-          "sym": "ω",
-          "latex": "\\omega",
-          "name": "السرعة الزاوية",
-          "value": "ω = 2π/T",
-          "unit": "راديان/ث",
-          "why": "كم راديان من الدوران في الثانية. من خلالها تصبح جميع معادلات الدوران أبسط، والارتباط بالتذبذبات واضح: نفس الحرف يرمز للتردد الزاوي للتذبذبات، وهذا ليس مصادفة.",
-          "mnemo": "دورة واحدة تساوي 2π راديان، لذلك يظهر في المعادلة دائماً 6,28 مقسوماً على الفترة."
-        },
-        {
-          "sym": "T",
-          "latex": "T",
-          "name": "فترة الدوران",
-          "value": "T = 2π/ω",
-          "unit": "ث",
-          "why": "زمن دورة كاملة أو تذبذب كامل. القيمة العكسية له هي التردد، ويُقاس بالهرتز: عدد الدورات في الثانية."
-        },
-        {
-          "sym": "rad",
-          "latex": "\\text{rad}",
-          "name": "راديان",
-          "value": "1 rad ≈ 57,3°",
-          "unit": "بدون أبعاد",
-          "why": "بلا أبعاد شكلياً، لأنه نسبة طول القوس إلى نصف القطر — متر مقسوم على متر. لهذا يمكن «فقدان» الراديان في الأبعاد: راديان/ث و ث⁻¹ لهما نفس البعد، رغم أن المعنى مختلف.",
-          "mnemo": "الدائرة الكاملة تساوي 2π ≈ 6,28 راديان. الراديان الواحد أقل بقليل من 60 درجة."
-        },
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "تسارع السقوط الحر",
-          "value": "9,81",
-          "unit": "م/ث²",
-          "why": "يستخدم هنا كوحدة للتحميل الزائد: يُعبر عادة عن تسارع جهاز الطرد المركزي بأجزاء من g، لأن الجسم يقارن الحمل به."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "الدوران المنتظم يتطلب تسارعاً، لأن متجه السرعة يدور باستمرار. في النظام القصوري يُفسر هذا بقوة حقيقية، أما في النظام الدوار فلا بد من إضافة قوة قصورية — ليس لها مصدر، لكنها ملموسة في نظامها.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "السرعة متجه",
-          "text": "أثناء الدوران المنتظم، مقدارها ثابت لكن اتجاهها يتغير. إذن يوجد تسارع."
-        },
-        {
-          "icon": "clock",
-          "title": "نحو المركز",
-          "text": "a_c = v²/R = ω²R، موجه بدقة نحو المركز، عمودي على السرعة."
-        },
-        {
-          "icon": "sigma",
-          "title": "نظامان",
-          "text": "النظام القصوري: تعمل F = ma كما هي. النظام غير القصوري: نحتاج قوى قصورية لكي تتطابق المعادلات."
-        },
-        {
-          "icon": "formula",
-          "title": "جسر إلى التذبذبات",
-          "text": "إسقاط الدوران المنتظم على خط مستقيم هو بالضبط جيب. هذا ليس تشبيهاً، بل تطابق."
-        }
-      ],
-      "where": [
-        "جهاز الطرد المركزي في الغسالة: الماء يطير في خط مستقيم، بينما تمسك الملابس بالأسطوانة",
-        "ميل الطريق عند المنعطفات — لجعل جزء من قوة رد الفعل مركزياً",
-        "تتشكل الأعاصير بسبب قوة كوريوليس: في نصف الكرة الشمالي عكس عقارب الساعة",
-        "قمر صناعي في مداره — سقوط حر يخطئ الأرض باستمرار"
-      ],
-      "watchOut": "القوة الطاردة المركزية لا تؤثر على الجسم في نظام إسناد قصوري. الحبل يسحب الحجر نحو المركز فقط؛ لا شيء يسحب للخارج. الشعور بـ«الدفع للخارج» ينشأ لأنك أنت نفسك في نظام دوار. الخطأ «تؤثر قوة طاردة مركزية على الجسم» هو الأكثر شيوعاً في هذا الموضوع."
-    },
-    "quiz": [
-      {
-        "id": "r1",
-        "type": "mcq",
-        "q": "يُدار حجر بحبل. في اللحظة التي ينقطع فيها الحبل، إلى أين سيطير الحجر؟",
-        "options": [
-          "على طول نصف القطر إلى الخارج، بعيداً عن المركز",
-          "على طول المماس للدائرة — إلى حيث كان متجه السرعة",
-          "على شكل حلزوني، مبتعداً تدريجياً",
-          "أولاً إلى الخارج ثم على طول المماس"
-        ],
-        "answer": 1,
-        "why": "بمجرد زوال القوة، يعمل القانون الأول: يتحرك الجسم في خط مستقيم بنفس السرعة التي كان عليها. السرعة أثناء الدوران موجهة على طول المماس — إلى هناك سيطير الحجر. لا توجد قوة 'إلى الخارج' في النظام القصوري.",
-        "hint": "ماذا يقول القانون الأول عن جسم توقفت القوى المؤثرة عليه؟ وأين كانت سرعة الحجر موجهة في اللحظة الأخيرة قبل القطع — على طول نصف القطر أم بشكل عرضي؟"
-      },
-      {
-        "id": "r2",
-        "type": "mcq",
-        "q": "ما الفرق الجوهري بين قوة القصور الذاتي والقوة العادية؟",
-        "options": [
-          "إنها أضعف وبالتالي يمكن إهمالها",
-          "ليس لها جسم مصدر ولا زوج وفقاً للقانون الثالث — تنشأ من اختيار النظام الإسنادي",
-          "تؤثر فقط على الأجسام الدوارة",
-          "لا تسبب تسارعاً"
-        ],
-        "answer": 1,
-        "why": "القوة العادية هي دائماً فعل جسم على آخر، ولها شريك وفقاً للقانون الثالث. قوة القصور الذاتي ليس لها مصدر ولا شريك: تظهر في المعادلات فقط لأننا نصف الحركة من نظام إسنادي متسارع.",
-        "hint": "اسأل عن القوة الطاردة المركزية سؤالاً بسيطاً: أي جسم محدد يولدها؟ وعلى أي جسم تؤثر القوة المقابلة وفقاً للقانون الثالث؟"
-      },
-      {
-        "id": "r3",
-        "type": "free",
-        "q": "بكلماتك الخاصة: لماذا يوجد تسارع في الحركة الدائرية المنتظمة، رغم أن مقدار السرعة لا يتغير؟",
-        "keywords": [
-          "موجه",
-          "متجه",
-          "يدور",
-          "يغير اتجاه",
-          "ليس فقط المقدار"
-        ],
-        "needed": 1,
-        "why": "لأن التسارع هو معدل تغير متجه السرعة، والمتجه يتغير ليس فقط عندما يتغير طوله، بل أيضاً عندما يدور. أثناء الدوران، الطول ثابت والاتجاه يتغير باستمرار — ومن هنا يأتي التسارع الموجه نحو المركز.",
-        "hint": "تذكر أن السرعة كمية متجهة. كم خاصية للمتجه يمكن أن تتغير؟ هل يكفي ثبات واحدة منها ليبقى المتجه دون تغيير؟"
-      },
-      {
-        "id": "r4",
-        "type": "estimate",
-        "q": "لعبة دوارة نصف قطرها 5 m تكمل دورة كاملة في 6 s. ما هو التسارع المركزي بوحدة m/s²؟",
-        "answer": 5.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1,05 rad/s; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². هذا تقريباً نصف g — وهو الحمل المحسوس ولكن الآمن الذي تصمم عليه الألعاب.",
-        "hint": "أولاً السرعة الزاوية: 2π مقسومة على الزمن الدوري، وهي أكبر قليلاً من الواحد. ثم ربّعها واضرب في نصف القطر."
-      }
-    ]
-  },
+ "id": "01-rotation",
+ "topic": "oscillations",
+ "schema": "b42.lesson/1",
+ "model": "rotation",
+ "entities": {
   "laws": [
-    "equivalence_principle"
+   "newtons_laws_of_motion"
+  ],
+  "tags": [
+   "mechanics"
+  ],
+  "scientists": [
+   "Isaac Newton",
+   "Christiaan Huygens"
   ]
+ },
+ "ru": {
+  "title": "Вращение и системы отсчёта",
+  "subtitle": "Параграф 1 · Почему во вращающемся мире появляются силы без источника",
+  "intro": [
+   "Начнём с вопроса, который кажется детским, но упирается в основания физики. Вы едете в автобусе, он резко тормозит — вас бросает вперёд. Какая сила вас толкнула?",
+   "Ответ обескураживает: никакая. Вас никто не толкал. Вы просто продолжали двигаться по инерции, а автобус под вами замедлился. Но ощущение силы совершенно реальное, его чувствует тело, его показывают приборы. Как быть с силой, которую чувствуешь, но у которой нет источника?",
+   "Именно здесь физика делает шаг, важнее многих формул: она признаёт, что описание зависит от того, откуда смотреть. Есть системы отсчёта, где законы Ньютона работают в чистом виде, — их называют инерциальными. И есть все остальные, где приходится вводить силы-фикции, чтобы законы сошлись. Разобравшись с этим, мы заодно поймём вращение — и обнаружим в нём колебание."
+  ],
+  "standNote": "На стенде — тело на вращающемся диске. Слева вы видите картину глазами неподвижного наблюдателя: тело движется по окружности, а верёвка тянет его к центру. Справа — та же сцена глазами наблюдателя, сидящего на диске: тело покоится, и чтобы это объяснить, приходится добавить центробежную силу, направленную наружу. Одно движение, два описания. Обратите внимание на нижний график: проекция вращения на ось есть в точности синус — это мостик к следующему параграфу.",
+  "formula": {
+   "name": "Центростремительное ускорение",
+   "latex": "a_{\\text{ц}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+   "alsoKnown": "Ускорение при равномерном движении по окружности",
+   "authors": [
+    {
+     "who": "Христиан Гюйгенс",
+     "year": "1659",
+     "what": "первым вывел выражение для центробежной силы при круговом движении — за 28 лет до «Начал» Ньютона, в работе о маятниковых часах"
+    },
+    {
+     "who": "Исаак Ньютон",
+     "year": "1687",
+     "what": "включил круговое движение в общую динамику и показал, что Луна «падает» на Землю по той же причине, что и яблоко"
+    },
+    {
+     "who": "Гаспар-Гюстав Кориолис",
+     "year": "1835",
+     "what": "описал вторую силу инерции, возникающую при движении внутри вращающейся системы, — она объясняет закручивание циклонов и отклонение снарядов"
+    }
+   ],
+   "story": "Гюйгенс получил закон центробежной силы, работая над часами: ему нужно было понять, как ведёт себя груз на вращающемся стержне. Он вывел результат в 1659 году, но опубликовал лишь в 1673-м — и то в виде теорем без доказательств. Ньютон пришёл к тому же независимо, и именно объединение кругового движения с законом тяготения позволило ему сделать главный шаг: показать, что Луна — это снаряд, который падает на Землю, но промахивается, потому что летит слишком быстро вбок.",
+   "symbols": [
+    {
+     "sym": "aц",
+     "latex": "a_{\\text{ц}}",
+     "what": "центростремительное ускорение",
+     "unit": "м/с²",
+     "note": "направлено к центру окружности; меняет не величину скорости, а её направление"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "линейная скорость",
+     "unit": "м/с",
+     "note": "по модулю постоянна при равномерном вращении, но вектор всё время поворачивается"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "радиус окружности",
+     "unit": "м",
+     "note": "чем круче поворот, тем больше требуется ускорение"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "угловая скорость",
+     "unit": "рад/с",
+     "note": "сколько радиан проходит радиус за секунду; связана с линейной как v = ωR"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "период обращения",
+     "unit": "с",
+     "note": "время одного полного оборота; ω = 2π/T"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Строгий вывод",
+   "lead": "Сначала выясним, почему равномерное вращение вообще требует ускорения, потом получим его величину геометрически, а затем разберёмся с силами, которых «не существует».",
+   "steps": [
+    {
+     "text": "Главное недоразумение: при равномерном вращении скорость постоянна по величине, но НЕ постоянна как вектор — она всё время поворачивается. А ускорение по определению есть скорость изменения вектора скорости. Значит ускорение есть, хотя спидометр показывает одно и то же число.",
+     "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{но} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+     "figure": "circmotion",
+     "figCaption": "Скорость направлена по касательной и непрерывно поворачивается — это и есть ускорение."
+    },
+    {
+     "text": "Найдём его величину. За малое время тело проходит по дуге угол $\\Delta\\varphi$, и вектор скорости поворачивается ровно на тот же угол. Треугольник, построенный на векторах скорости, подобен треугольнику, построенному на радиусах, — отсюда пропорция.",
+     "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
+     "figure": "vectriangle",
+     "figCaption": "Треугольник скоростей подобен треугольнику перемещений — ключ ко всему выводу."
+    },
+    {
+     "text": "Делим изменение скорости на время и переходим к пределу. Учитывая, что перемещение за время $\\Delta t$ равно $v\\,\\Delta t$, получаем искомое ускорение. Направлено оно к центру — потому и называется центростремительным.",
+     "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
+     "figure": "centripetal",
+     "figCaption": "Ускорение смотрит строго в центр, перпендикулярно скорости."
+    },
+    {
+     "text": "Через угловую скорость выражение становится ещё проще. Подставляя $v = \\omega R$, видим, что ускорение растёт как квадрат частоты вращения — вот почему разогнанная центрифуга развивает чудовищные перегрузки при скромном радиусе.",
+     "latex": "a_{\\text{ц}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+     "figure": "omega",
+     "figCaption": "Удвоили частоту вращения — ускорение выросло вчетверо."
+    },
+    {
+     "text": "Теперь философски важный шаг. Наблюдатель, стоящий на земле, объясняет движение просто: есть сила натяжения верёвки, она создаёт центростремительное ускорение, законы Ньютона выполнены. Такая система отсчёта называется инерциальной — в ней тело без сил движется равномерно и прямолинейно.",
+     "latex": "\\text{ИСО:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{выполняется как есть}",
+     "figure": "inertialframe",
+     "figCaption": "Инерциальный наблюдатель: есть реальная сила, есть ускорение, всё сходится."
+    },
+    {
+     "text": "А наблюдатель, сидящий на самом диске, видит другое: тело перед ним неподвижно. Но верёвка-то натянута! Сила есть, а ускорения нет — второй закон нарушен. Чтобы спасти его, приходится добавить в уравнение ещё одну силу, направленную наружу. Это и есть центробежная сила инерции.",
+     "latex": "\\text{НСО:} \\quad \\vec{T} + \\vec{F}_{\\text{цб}} = 0, \\qquad F_{\\text{цб}} = m\\omega^{2}R",
+     "figure": "rotframe",
+     "figCaption": "Вращающийся наблюдатель вынужден ввести силу, у которой нет источника."
+    },
+    {
+     "text": "У силы инерции нет тела-источника и нет партнёра по третьему закону — она возникает исключительно из-за выбора системы отсчёта. Это не значит, что она «ненастоящая»: в своей системе она действует совершенно реально, деформирует тела и отбрасывает воду в барабане стиральной машины. Просто она — плата за удобство описания.",
+     "latex": "\\vec{F}_{\\text{ин}} = -m\\vec{a}_{\\text{системы}}",
+     "figure": "fictitious",
+     "figCaption": "Сила инерции пропорциональна ускорению самой системы отсчёта и направлена против него."
+    }
+   ],
+   "plate": "a_{\\text{ц}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+   "plateCap": "Равномерное вращение — это непрерывное падение к центру, которое всё время промахивается. Именно так Луна обращается вокруг Земли.",
+   "note": "Отсюда один шаг до глубокой идеи. Сидя в закрытой кабине, вы не можете отличить силу тяжести от силы инерции ускоренно движущейся кабины: и та и другая прижимают вас к полу и пропорциональны массе. Эйнштейн возвёл эту невозможность в принцип эквивалентности и построил на нём общую теорию относительности, где тяготение перестало быть силой и стало кривизной пространства-времени. Вопрос «какая сила меня толкнула в автобусе» ведёт, если тянуть за ниточку достаточно долго, прямо к чёрным дырам."
+  },
+  "math": {
+   "title": "Математика, которая здесь понадобилась",
+   "items": [
+    {
+     "what": "Радиан — почему угол измеряют длиной",
+     "why": "Радиан есть угол, при котором длина дуги равна радиусу. Такое определение кажется странным, пока не заметишь: только в радианах работают простые формулы $s = R\\varphi$ и $v = \\omega R$, и только в радианах производная синуса равна косинусу без лишних множителей. Градусы — историческая условность вавилонян; радиан — естественная мера, встроенная в саму геометрию круга.",
+     "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
+    },
+    {
+     "what": "Подобие треугольников как физический инструмент",
+     "why": "В выводе мы приравняли отношения сторон двух треугольников — на векторах скорости и на радиусах. Это типичный ход классической физики: заменить трудное вычисление геометрическим подобием. Ньютон в «Началах» доказывал почти всё именно так, без анализа, — его геометрические доказательства сегодня читать труднее, чем современные выкладки.",
+     "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
+    },
+    {
+     "what": "Проекция вращения — уже синус",
+     "why": "Если точка равномерно бежит по окружности радиуса $A$ с угловой скоростью $\\omega$, то её координата вдоль оси меняется как $A\\cos\\omega t$. То есть равномерное вращение, спроецированное на прямую, даёт в точности гармоническое колебание. Мы вернёмся к этому в следующем параграфе — и увидим, что это не аналогия, а тождество.",
+     "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
+    }
+   ]
+  },
+  "example": {
+   "title": "Пример с числами",
+   "lead": "Оценим перегрузку в центрифуге — и заодно поймём, почему космонавтов тренируют именно так.",
+   "given": "Кабина центрифуги вращается по окружности радиусом $8$ м, делая полный оборот за $4$ секунды. Найти центростремительное ускорение и сравнить с $g = 10$ м/с².",
+   "law": "$a_{\\text{ц}} = \\omega^{2}R$, где $\\omega = 2\\pi/T$",
+   "solution": [
+    {
+     "text": "Находим угловую скорость: полный оборот — это $2\\pi$ радиан.",
+     "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{рад/с}"
+    },
+    {
+     "text": "Подставляем в формулу ускорения.",
+     "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
+    },
+    {
+     "text": "Считаем и переводим в единицах g.",
+     "latex": "a \\approx 19{,}7\\ \\text{м/с}^2 \\approx 2\\,g"
+    }
+   ],
+   "answer": "Ускорение около $20$ м/с², то есть перегрузка примерно $2g$",
+   "check": "Правдоподобно: при таком вращении человек чувствует себя вдвое тяжелее. Заметьте, как резко растёт эффект с частотой: сократив период вдвое, до 2 секунд, мы получим уже $8g$ — предел для тренированного пилота. Квадрат в формуле здесь работает беспощадно."
+  },
+  "constants": {
+   "title": "Величины этого параграфа",
+   "lead": "Здесь появляются угловые величины — второй язык описания движения, без которого не обойтись ни в колебаниях, ни в волнах, ни в квантовой механике.",
+   "items": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "Угловая скорость",
+     "value": "ω = 2π/T",
+     "unit": "рад / с",
+     "why": "Сколько радиан поворота приходится на секунду. Через неё все формулы вращения становятся проще, а связь с колебаниями — очевидной: та же буква обозначает циклическую частоту колебаний, и это не совпадение.",
+     "mnemo": "Один оборот — это 2π радиан, поэтому в формуле всегда появляется 6,28, делённое на период."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "Период обращения",
+     "value": "T = 2π/ω",
+     "unit": "с",
+     "why": "Время одного полного оборота или одного полного колебания. Обратная ему величина — частота, измеряемая в герцах: сколько оборотов в секунду."
+    },
+    {
+     "sym": "рад",
+     "latex": "\\text{рад}",
+     "name": "Радиан",
+     "value": "1 рад ≈ 57,3°",
+     "unit": "безразмерная",
+     "why": "Формально безразмерен, поскольку это отношение длины дуги к радиусу — метры делятся на метры. Именно поэтому радианы можно «терять» в размерностях: рад/с и с⁻¹ имеют одинаковую размерность, хотя смысл разный.",
+     "mnemo": "Полный круг — 2π ≈ 6,28 радиан. Один радиан чуть меньше 60 градусов."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Ускорение свободного падения",
+     "value": "9,81",
+     "unit": "м / с²",
+     "why": "Здесь используется как единица перегрузки: ускорение центрифуги принято выражать в долях g, потому что именно с ним организм сравнивает нагрузку."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Равномерное вращение требует ускорения, потому что вектор скорости непрерывно поворачивается. В инерциальной системе это объясняется реальной силой, во вращающейся приходится добавить силу инерции — у неё нет источника, но в своей системе она вполне ощутима.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Скорость — вектор",
+     "text": "При равномерном вращении её величина постоянна, но направление меняется. Значит ускорение есть."
+    },
+    {
+     "icon": "clock",
+     "title": "К центру",
+     "text": "aц = v²/R = ω²R, направлено строго в центр, перпендикулярно скорости."
+    },
+    {
+     "icon": "sigma",
+     "title": "Две системы",
+     "text": "Инерциальная: работает F = ma как есть. Неинерциальная: нужны силы инерции, чтобы уравнения сошлись."
+    },
+    {
+     "icon": "formula",
+     "title": "Мост к колебаниям",
+     "text": "Проекция равномерного вращения на прямую — в точности синус. Это не аналогия, а тождество."
+    }
+   ],
+   "where": [
+    "Центрифуга стиральной машины: вода летит по прямой, а бельё удерживается барабаном",
+    "Наклон полотна на повороте дороги — чтобы часть силы реакции стала центростремительной",
+    "Циклоны закручиваются из-за силы Кориолиса: в северном полушарии против часовой стрелки",
+    "Спутник на орбите — свободное падение, которое всё время промахивается мимо Земли"
+   ],
+   "watchOut": "Центробежная сила не действует на тело в инерциальной системе отсчёта. Верёвка тянет камень только к центру; наружу не тянет ничто. Ощущение «отбрасывания» возникает потому, что вы сами находитесь во вращающейся системе. Ошибка «на тело действует центробежная сила» — самая частая в этой теме."
+  },
+  "quiz": [
+   {
+    "id": "r1",
+    "type": "mcq",
+    "q": "Камень вращают на верёвке. В момент, когда верёвка обрывается, куда полетит камень?",
+    "options": [
+     "По радиусу наружу, от центра",
+     "По касательной к окружности — туда, куда была направлена скорость",
+     "По спирали, постепенно удаляясь",
+     "Сначала наружу, потом по касательной"
+    ],
+    "answer": 1,
+    "why": "Как только сила исчезла, работает первый закон: тело движется прямолинейно с той скоростью, что была. Скорость при вращении направлена по касательной — туда камень и полетит. Никакой силы «наружу» в инерциальной системе не было.",
+    "hint": "Что говорит первый закон о теле, на которое перестали действовать силы? А куда была направлена скорость камня в последний момент перед обрывом — вдоль радиуса или поперёк?"
+   },
+   {
+    "id": "r2",
+    "type": "mcq",
+    "q": "Чем принципиально отличается сила инерции от обычной силы?",
+    "options": [
+     "Она слабее и потому ею можно пренебречь",
+     "У неё нет тела-источника и нет пары по третьему закону — она возникает из-за выбора системы отсчёта",
+     "Она действует только на вращающиеся тела",
+     "Она не создаёт ускорения"
+    ],
+    "answer": 1,
+    "why": "Обычная сила всегда есть действие одного тела на другое, и у неё есть партнёр по третьему закону. У силы инерции нет ни источника, ни партнёра: она появляется в уравнениях исключительно потому, что мы описываем движение из ускоренно движущейся системы отсчёта.",
+    "hint": "Задайте про центробежную силу простой вопрос: какое конкретно тело её создаёт? И на какое тело действует ответная сила по третьему закону?"
+   },
+   {
+    "id": "r3",
+    "type": "free",
+    "q": "Своими словами: почему при равномерном движении по окружности есть ускорение, хотя скорость по величине не меняется?",
+    "keywords": [
+     "направлен",
+     "вектор",
+     "поворачива",
+     "меняет направление",
+     "не только величин"
+    ],
+    "needed": 1,
+    "why": "Потому что ускорение — это скорость изменения вектора скорости, а вектор меняется не только когда меняется длина, но и когда поворачивается. При вращении длина постоянна, а направление меняется непрерывно — отсюда и ускорение, направленное к центру.",
+    "hint": "Вспомните, что скорость — величина векторная. Сколько у вектора характеристик, которые могут меняться? Достаточно ли постоянства одной из них, чтобы вектор оставался неизменным?"
+   },
+   {
+    "id": "r4",
+    "type": "estimate",
+    "q": "Карусель радиусом 5 м делает оборот за 6 секунд. Каково центростремительное ускорение в м/с²?",
+    "answer": 5.5,
+    "unit": "м/с²",
+    "tolerance": 1.4,
+    "why": "ω = 2π/6 ≈ 1,05 рад/с; a = ω²R = 1,1 · 5 ≈ 5,5 м/с². Это примерно половина g — как раз та ощутимая, но безопасная нагрузка, на которую рассчитывают аттракционы.",
+    "hint": "Сначала угловая скорость: 2π разделить на период, это чуть больше единицы. Затем возвести в квадрат и умножить на радиус."
+   }
+  ],
+  "curiosities": {
+   "title": "Занимательное: проверьте руками",
+   "lead": "Центробежной силы не существует — но ведро с водой над головой об этом не знает.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "опыт на кухне",
+     "h": "Ведро воды над головой",
+     "text": "Налейте в небольшое ведро воды на треть, возьмите за дужку и раскрутите в вертикальной плоскости — так, чтобы в верхней точке ведро оказалось дном вверх. Делайте это во дворе. Потом попробуйте то же самое медленно.",
+     "answer": "На быстром вращении вода не выливается, на медленном — обливает вас. Порог считается: вода останется, если в верхней точке потребное центростремительное ускорение не меньше $g$, то есть $v^2/R \\ge g$, откуда $v \\ge \\sqrt{gR}$. Для руки с ведром радиус около метра — нужно чуть больше трёх метров в секунду. Вода не «прижимается» ничем: она просто падает по своей траектории, а ведро падает вместе с ней, всё время оказываясь снизу."
+    },
+    {
+     "icon": "paradox",
+     "kind": "парадокс",
+     "h": "Сила, которой нет, но которая чувствуется",
+     "text": "На повороте вас прижимает к дверце — ощущение отчётливое и измеримое. При этом физика утверждает, что центробежной силы не существует. Что же тогда давит на плечо?",
+     "answer": "В неподвижной системе отсчёта всё просто: вы движетесь прямо по инерции, а дверца поворачивает и наезжает на вас. Единственная реальная сила — это её давление, направленное к центру поворота. Центробежная сила появляется только внутри вращающейся системы, где вы считаете себя неподвижным: чтобы объяснить равновесие, приходится дописать силу, у которой нет источника и нет пары по третьему закону. Такие силы называют силами инерции; они удобны для расчёта и совершенно реальны по последствиям, но существуют лишь в выбранной системе отсчёта."
+    },
+    {
+     "icon": "fact",
+     "kind": "занимательный факт",
+     "h": "Маятник, доказавший вращение Земли",
+     "text": "В 1851 году Леон Фуко подвесил под куполом парижского Пантеона груз в 28 килограммов на проволоке длиной 67 метров. Плоскость качания медленно поворачивалась — примерно на одиннадцать градусов в час. Маятнику незачем поворачиваться: поворачивался пол вместе со зданием и городом. Впервые вращение Земли увидели прямо, в помещении, без астрономических наблюдений. На полюсе полный оборот занял бы ровно сутки, на экваторе поворота нет вовсе, а в промежутке период растёт как единица делить на синус широты."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "мнемоника",
+     "h": "Ускорение смотрит туда, куда поворачиваешь",
+     "text": "При равномерном движении по окружности скорость не меняется по величине, но меняется по направлению — а значит ускорение есть, и направлено оно строго к центру. Отсюда название: центростремительное, то есть стремящееся к центру. Запомнить величину помогает двойная запись $v^2/R=\\omega^2R$: первая удобна, когда известна скорость, вторая — когда известна частота вращения."
+    },
+    {
+     "icon": "estimate",
+     "kind": "прикидка",
+     "h": "Насколько вы легче на экваторе",
+     "text": "Экваториальная скорость вращения Земли около 465 метров в секунду, радиус 6378 километров. Центростремительное ускорение получается $v^2/R \\approx 0{,}034$ метра в секунду за секунду — примерно три тысячных от $g$. Значит, человек массой 70 килограммов на экваторе весит примерно на 240 граммов меньше, чем на полюсе, и это ещё без учёта сплюснутости планеты. Ракеты запускают ближе к экватору именно потому, что вращение планеты даёт бесплатную добавку к скорости."
+    },
+    {
+     "icon": "edge",
+     "kind": "граница применимости",
+     "h": "Только для равномерного вращения",
+     "text": "Формула $a=v^2/R$ описывает лишь ту часть ускорения, что отвечает за поворот. Если скорость по величине тоже меняется — автомобиль разгоняется на дуге, — добавляется касательная составляющая, и полное ускорение есть их векторная сумма. А при движении по произвольной кривой в формулу входит не радиус траектории целиком, а радиус соприкасающейся окружности в данной точке."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Где работает поворот",
+   "lead": "Всё перечисленное живёт на одном факте: чтобы двигаться по кривой, нужно ускорение к центру.",
+   "items": [
+    {
+     "h": "Виражи дорог и трасс",
+     "text": "Полотно наклоняют внутрь поворота так, чтобы составляющая силы тяжести брала на себя часть поворачивающего усилия. Угол считают по расчётной скорости; на треках он доходит до тридцати градусов и больше."
+    },
+    {
+     "h": "Центрифуги",
+     "text": "Разделение крови на плазму и клетки, обогащение урана, отжим в стиральной машине — везде используется то, что при вращении более плотные частицы уходят от оси. Лабораторная центрифуга даёт ускорения в тысячи $g$."
+    },
+    {
+     "h": "Орбиты",
+     "text": "Спутник не падает лишь потому, что его скорость такова, что нужное центростремительное ускорение точно равно ускорению свободного падения на этой высоте. Отсюда первая космическая — около 7,9 километра в секунду."
+    },
+    {
+     "h": "Ускорители частиц",
+     "text": "В кольцевом ускорителе магнитное поле поворачивает пучок, обеспечивая ровно то ускорение к центру, которое нужно на данной энергии. Чем выше энергия, тем больше радиус — отсюда двадцатисемикилометровое кольцо Большого адронного коллайдера."
+    },
+    {
+     "h": "Погода",
+     "text": "Сила Кориолиса — второй эффект вращающейся системы — закручивает циклоны против часовой стрелки в северном полушарии и по часовой в южном. Она же отклоняет океанские течения и дальние артиллерийские снаряды."
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "Rotation and Reference Frames",
+  "subtitle": "Section 1 · Why forces without a source appear in a rotating world",
+  "intro": [
+   "Let's start with a question that seems childish but touches the foundations of physics. You are on a bus that brakes suddenly — you are thrown forward. What force pushed you?",
+   "The answer is disconcerting: none. No one pushed you. You simply continued moving by inertia, while the bus under you slowed down. But the sensation of force is completely real; the body feels it, instruments show it. What to do with a force that is felt but has no source?",
+   "This is where physics takes a step more important than many formulas: it acknowledges that the description depends on where you look from. There are reference frames where Newton's laws work in their pure form — they are called inertial. And there are all the others, where we have to introduce fictitious forces to make the laws match. Once we understand this, we will also understand rotation — and discover oscillation within it."
+  ],
+  "standNote": "On the stand — a body on a rotating disk. On the left you see the picture from the perspective of a stationary observer: the body moves in a circle, and the rope pulls it toward the center. On the right — the same scene from the perspective of an observer sitting on the disk: the body is at rest, and to explain this, one must add a centrifugal force directed outward. One motion, two descriptions. Notice the lower graph: the projection of rotation onto an axis is exactly a sine — this is a bridge to the next section.",
+  "formula": {
+   "name": "Centripetal acceleration",
+   "latex": "a_{\\text{c}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+   "alsoKnown": "Acceleration in uniform circular motion",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1659",
+     "what": "first derived the expression for centrifugal force in circular motion — 28 years before Newton's 'Principia', in a work on pendulum clocks"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "incorporated circular motion into general dynamics and showed that the Moon 'falls' to Earth for the same reason as an apple"
+    },
+    {
+     "who": "Gaspard-Gustave de Coriolis",
+     "year": "1835",
+     "what": "described the second inertial force that arises when moving inside a rotating system — it explains the twisting of cyclones and the deflection of projectiles"
+    }
+   ],
+   "story": "Huygens derived the law of centrifugal force while working on clocks: he needed to understand how a weight behaves on a rotating rod. He obtained the result in 1659 but published it only in 1673 — and then as theorems without proofs. Newton arrived at the same independently, and it was the unification of circular motion with the law of gravity that allowed him to make the main step: showing that the Moon is a projectile that falls to Earth but misses because it is moving too fast sideways.",
+   "symbols": [
+    {
+     "sym": "a_c",
+     "latex": "a_{\\text{c}}",
+     "what": "centripetal acceleration",
+     "unit": "m/s²",
+     "note": "directed toward the center of the circle; it changes the direction of velocity, not its magnitude"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "linear velocity",
+     "unit": "m/s",
+     "note": "constant in magnitude during uniform rotation, but the vector turns continuously"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "radius of the circle",
+     "unit": "m",
+     "note": "the sharper the turn, the greater the acceleration required"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "angular velocity",
+     "unit": "rad/s",
+     "note": "how many radians the radius sweeps per second; related to linear velocity as v = ωR"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "period",
+     "unit": "s",
+     "note": "time for one complete revolution; ω = 2π/T"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous Derivation",
+   "lead": "First, let's find out why uniform rotation requires acceleration at all, then derive its magnitude geometrically, and then understand the forces that 'don't exist'.",
+   "steps": [
+    {
+     "text": "The main misconception: in uniform rotation, the speed is constant in magnitude, but NOT constant as a vector — it continuously turns. And acceleration by definition is the rate of change of the velocity vector. Therefore acceleration exists, even though the speedometer shows the same number.",
+     "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{but} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+     "figure": "circmotion",
+     "figCaption": "Velocity is directed along the tangent and continuously turns — that is acceleration."
+    },
+    {
+     "text": "Let's find its magnitude. In a small time, the body travels an arc of angle Δφ, and the velocity vector rotates by exactly the same angle. The triangle built on the velocity vectors is similar to the triangle built on the radii — hence the proportion.",
+     "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
+     "figure": "vectriangle",
+     "figCaption": "The velocity triangle is similar to the displacement triangle — the key to the entire derivation."
+    },
+    {
+     "text": "Divide the change in velocity by time and take the limit. Considering that the displacement in time Δt equals vΔt, we obtain the desired acceleration. It is directed toward the center — hence called centripetal.",
+     "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
+     "figure": "centripetal",
+     "figCaption": "Acceleration points strictly toward the center, perpendicular to velocity."
+    },
+    {
+     "text": "Through angular velocity the expression becomes even simpler. Substituting v = ωR, we see that acceleration grows as the square of the rotation frequency — that is why an accelerated centrifuge produces enormous overloads at a modest radius.",
+     "latex": "a_{\\text{c}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+     "figure": "omega",
+     "figCaption": "Double the rotation frequency — acceleration increased fourfold."
+    },
+    {
+     "text": "Now a philosophically important step. An observer standing on the ground explains the motion simply: there is a tension force in the string, it creates centripetal acceleration, Newton's laws are satisfied. This reference frame is called inertial — in it, a body without forces moves uniformly and rectilinearly.",
+     "latex": "\\text{IFR:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{holds as is}",
+     "figure": "inertialframe",
+     "figCaption": "Inertial observer: there is a real force, there is acceleration, everything fits."
+    },
+    {
+     "text": "But an observer sitting on the disk itself sees something else: the body before him is motionless. Yet the string is taut! There is a force, but no acceleration — the second law is violated. To save it, we must add another force to the equation, directed outward. This is the centrifugal force of inertia.",
+     "latex": "\\text{NFR:} \\quad \\vec{T} + \\vec{F}_{\\text{centrifugal}} = 0, \\qquad F_{\\text{centrifugal}} = m\\omega^{2}R",
+     "figure": "rotframe",
+     "figCaption": "The rotating observer is forced to introduce a force that has no source."
+    },
+    {
+     "text": "The force of inertia has no source body and no partner according to the third law — it arises solely from the choice of reference frame. This does not mean it is 'unreal': in its own frame it acts perfectly real, deforms bodies, and pushes water in a washing machine drum. It is simply the price for convenience of description.",
+     "latex": "\\vec{F}_{\\text{in}} = -m\\vec{a}_{\\text{systems}}",
+     "figure": "fictitious",
+     "figCaption": "The force of inertia is proportional to the acceleration of the reference frame itself and directed opposite to it."
+    }
+   ],
+   "plate": "a_{\\text{c}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+   "plateCap": "Uniform rotation is a continuous fall toward the center that keeps missing. This is exactly how the Moon orbits the Earth.",
+   "note": "From here it is one step to a profound idea. Sitting in a closed cabin, you cannot distinguish the force of gravity from the inertial force of an accelerating cabin: both press you to the floor and are proportional to mass. Einstein elevated this impossibility into the equivalence principle and built general relativity on it, where gravity ceased to be a force and became curvature of spacetime. The question 'what force pushed me in the bus' leads, if you pull the thread long enough, straight to black holes."
+  },
+  "math": {
+   "title": "Mathematics needed here",
+   "items": [
+    {
+     "what": "Radian — why angle is measured by length",
+     "why": "A radian is the angle for which the arc length equals the radius. This definition seems strange until you notice: only in radians do the simple formulas s = Rφ and v = ωR work, and only in radians is the derivative of sine equal to cosine without extra factors. Degrees are a historical convention of the Babylonians; the radian is a natural measure built into the very geometry of the circle.",
+     "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
+    },
+    {
+     "what": "Similarity of triangles as a physical tool",
+     "why": "In the derivation, we equated the ratios of sides of two triangles — on the velocity vectors and on the radii. This is a typical move of classical physics: replace a difficult calculation with geometric similarity. Newton in the 'Principia' proved almost everything in this way, without calculus — his geometric proofs are harder to read today than modern derivations.",
+     "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
+    },
+    {
+     "what": "Projection of rotation is already a sine",
+     "why": "If a point runs uniformly around a circle of radius A with angular velocity ω, then its coordinate along the axis changes as A cos ωt. That is, uniform rotation, projected onto a straight line, gives exactly harmonic oscillation. We will return to this in the next section — and see that it is not an analogy but an identity.",
+     "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
+    }
+   ]
+  },
+  "example": {
+   "title": "Numerical Example",
+   "lead": "Let's estimate the g-force in a centrifuge — and understand why cosmonauts are trained this way.",
+   "given": "A centrifuge cabin rotates in a circle of radius $8$ m, completing one full revolution in $4$ seconds. Find the centripetal acceleration and compare it with $g = 10$ m/s².",
+   "law": "$a_{\\text{c}} = \\omega^{2}R$, where $\\omega = 2\\pi/T$",
+   "solution": [
+    {
+     "text": "Find the angular velocity: a full revolution is $2\\pi$ radians.",
+     "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
+    },
+    {
+     "text": "Substitute into the acceleration formula.",
+     "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
+    },
+    {
+     "text": "Calculate and convert to units of g.",
+     "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
+    }
+   ],
+   "answer": "Acceleration about $20$ m/s², meaning a g-force of roughly $2g$",
+   "check": "Plausible: with this rotation, a person feels twice as heavy. Notice how sharply the effect increases with frequency: halving the period to 2 seconds gives $8g$ — the limit for a trained pilot. The square in the formula is relentless here."
+  },
+  "constants": {
+   "title": "Quantities in This Section",
+   "lead": "Here angular quantities appear — a second language for describing motion, indispensable in oscillations, waves, and quantum mechanics.",
+   "items": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "Angular velocity",
+     "value": "ω = 2π/T",
+     "unit": "rad / s",
+     "why": "How many radians of rotation per second. It simplifies all rotation formulas, and the connection to oscillations becomes obvious: the same letter denotes cyclic frequency, and that is no coincidence.",
+     "mnemo": "One full revolution is 2π radians, so the formula always includes 6.28 divided by the period."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "Period of revolution",
+     "value": "T = 2π/ω",
+     "unit": "s",
+     "why": "Time of one full revolution or one full oscillation. Its reciprocal is frequency, measured in hertz: how many revolutions per second."
+    },
+    {
+     "sym": "rad",
+     "latex": "\\text{rad}",
+     "name": "Radian",
+     "value": "1 rad ≈ 57.3°",
+     "unit": "dimensionless",
+     "why": "Formally dimensionless, since it is the ratio of arc length to radius — meters divided by meters. This is why radians can be 'lost' in dimensions: rad/s and s⁻¹ have the same dimension, though different meaning.",
+     "mnemo": "Full circle — 2π ≈ 6.28 radians. One radian is just under 60 degrees."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Acceleration due to gravity",
+     "value": "9.81",
+     "unit": "m / s²",
+     "why": "Here it is used as a unit of g-force: centrifuge acceleration is expressed in multiples of g because the body compares load to it."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Uniform rotation requires acceleration because the velocity vector continuously turns. In an inertial frame, this is explained by a real force; in a rotating frame, an inertial force must be added — it has no source, but within its own frame it is quite tangible.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Velocity is a vector",
+     "text": "In uniform rotation, its magnitude is constant but direction changes. Therefore acceleration exists."
+    },
+    {
+     "icon": "clock",
+     "title": "Toward the center",
+     "text": "a_c = v²/R = ω²R, directed exactly toward the center, perpendicular to velocity."
+    },
+    {
+     "icon": "sigma",
+     "title": "Two frames",
+     "text": "Inertial frame: F = ma works as is. Non-inertial: inertial forces are needed to make equations consistent."
+    },
+    {
+     "icon": "formula",
+     "title": "Bridge to oscillations",
+     "text": "The projection of uniform rotation onto a line is exactly a sine. This is not an analogy but an identity."
+    }
+   ],
+   "where": [
+    "Washing machine centrifuge: water flies out in a straight line, while clothes are held by the drum",
+    "Banking of a road curve — so that part of the normal force becomes centripetal",
+    "Cyclones spin due to the Coriolis force: counterclockwise in the Northern Hemisphere",
+    "Satellite in orbit — free fall that constantly misses Earth"
+   ],
+   "watchOut": "Centrifugal force does not act on a body in an inertial reference frame. The rope pulls the stone only toward the center; nothing pulls outward. The feeling of being 'thrown outward' arises because you yourself are in a rotating system. The mistake 'a centrifugal force acts on the body' is the most common one in this topic."
+  },
+  "quiz": [
+   {
+    "id": "r1",
+    "type": "mcq",
+    "q": "A stone is swung in a circle on a string. At the moment the string breaks, which way will the stone fly?",
+    "options": [
+     "Radially outward, away from the center",
+     "Tangentially to the circle — in the direction of its velocity at that instant",
+     "Along a spiral, gradually moving away",
+     "First outward, then tangentially"
+    ],
+    "answer": 1,
+    "why": "As soon as the force disappears, Newton's first law applies: the body continues in straight-line motion with the velocity it already had. During rotation, the velocity is directed tangentially — so the stone will fly in that direction. There is no 'outward' force in an inertial frame.",
+    "hint": "What does the first law say about a body when no forces act on it? And what was the direction of the stone's velocity at the last moment before the string broke — along the radius or perpendicular to it?"
+   },
+   {
+    "id": "r2",
+    "type": "mcq",
+    "q": "What is the fundamental difference between an inertial force and an ordinary force?",
+    "options": [
+     "It is weaker and can therefore be neglected",
+     "It has no source body and no pair according to Newton's third law — it arises from the choice of reference frame",
+     "It acts only on rotating bodies",
+     "It does not produce acceleration"
+    ],
+    "answer": 1,
+    "why": "An ordinary force is always an interaction between two bodies and has a partner according to the third law. An inertial force has neither a source nor a partner: it appears in the equations solely because we describe motion from an accelerated reference frame.",
+    "hint": "Ask a simple question about centrifugal force: which specific body creates it? And on which body does the reaction force act according to the third law?"
+   },
+   {
+    "id": "r3",
+    "type": "free",
+    "q": "In your own words: why is there acceleration during uniform circular motion, even though the speed (magnitude of velocity) does not change?",
+    "keywords": [
+     "directed",
+     "vector",
+     "turns",
+     "changes direction",
+     "not only magnitude"
+    ],
+    "needed": 1,
+    "why": "Because acceleration is the rate of change of the velocity vector, and the vector changes not only when its length changes but also when it rotates. During rotation, the length is constant but the direction changes continuously — hence the acceleration, directed toward the center.",
+    "hint": "Remember that velocity is a vector quantity. How many characteristics of a vector can change? Is it enough for just one of them to remain constant for the vector to stay unchanged?"
+   },
+   {
+    "id": "r4",
+    "type": "estimate",
+    "q": "A merry-go-round of radius 5 m completes one rotation in 6 seconds. What is the centripetal acceleration in m/s²?",
+    "answer": 5.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "ω = 2π/6 ≈ 1.05 rad/s; a = ω²R = 1.1 · 5 ≈ 5.5 m/s². This is about half of g — exactly the noticeable but safe load that amusement rides are designed for.",
+    "hint": "First the angular velocity: 2π divided by the period, which is just above one. Then square it and multiply by the radius."
+   }
+  ],
+  "curiosities": {
+   "title": "Hands-on fun",
+   "lead": "Centrifugal force does not exist — but a bucket of water over your head doesn't know that.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Bucket of water over your head",
+     "text": "Fill a small bucket about a third full with water, hold it by the handle, and spin it in a vertical plane so that at the top the bucket is upside down. Do this outside. Then try the same thing slowly.",
+     "answer": "On fast rotation the water does not spill; on slow rotation it douses you. The threshold is: water stays if at the top the required centripetal acceleration is at least $g$, i.e. $v^2/R \\ge g$, from which $v \\ge \\sqrt{gR}$. For an arm with a bucket, the radius is about a meter—you need just over three meters per second. The water is not 'pressed' by anything: it simply falls along its trajectory, and the bucket falls with it, always remaining below."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "A force that does not exist but is felt",
+     "text": "On a turn you are pressed against the door—a distinct and measurable sensation. Yet physics says centrifugal force does not exist. So what is pushing against your shoulder?",
+     "answer": "In an inertial frame it's simple: you move straight by inertia, and the door turns and runs into you. The only real force is its pressure directed toward the center of the turn. The centrifugal force appears only inside the rotating frame, where you consider yourself stationary: to explain equilibrium, you have to add a force that has no source and no Newton-third-law pair. Such forces are called fictitious (inertial) forces; they are convenient for calculations and completely real in their effects, but exist only in the chosen frame of reference."
+    },
+    {
+     "icon": "fact",
+     "kind": "interesting fact",
+     "h": "The pendulum that proved Earth's rotation",
+     "text": "In 1851, Léon Foucault suspended a 28-kilogram weight under the dome of the Panthéon in Paris from a 67-meter wire. The plane of oscillation slowly rotated—about eleven degrees per hour. The pendulum had no reason to turn; the floor, building, and city were rotating. For the first time Earth's rotation was seen directly, indoors, without astronomical observations. At the pole a full rotation would take exactly one day; at the equator there is no rotation at all; and in between the period grows as one divided by the sine of the latitude.",
+     "answer": null
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemonic",
+     "h": "Acceleration points toward the turn",
+     "text": "In uniform circular motion, speed does not change in magnitude but changes in direction—so there is acceleration, and it points straight toward the center. Hence the name: centripetal, meaning center-seeking. The magnitude is easy to remember with the double expression $v^2/R=\\omega^2R$: the first is convenient when you know the speed, the second when you know the angular frequency."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "How much lighter you are at the equator",
+     "text": "The equatorial rotation speed of Earth is about 465 meters per second, radius 6378 kilometers. The centripetal acceleration is $v^2/R \\approx 0{,}034$ meters per second per second—about three thousandths of $g$. So a person of mass 70 kilograms weighs about 240 grams less at the equator than at the pole, and this is without considering the planet's oblateness. Rockets are launched closer to the equator precisely because the planet's rotation gives a free speed boost.",
+     "answer": null
+    },
+    {
+     "icon": "edge",
+     "kind": "limitations",
+     "h": "Only for uniform circular motion",
+     "text": "The formula $a=v^2/R$ describes only that part of acceleration responsible for turning. If the speed also changes in magnitude—a car accelerating on a curve—a tangential component is added, and the total acceleration is the vector sum. For motion along an arbitrary curve, the formula uses not the whole radius of the trajectory but the radius of the osculating circle at that point.",
+     "answer": null
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Where turning comes into play",
+   "lead": "Everything above rests on one fact: to move along a curve, you need acceleration toward the center.",
+   "items": [
+    {
+     "h": "Road and track curves",
+     "text": "The road surface is banked inward so that a component of gravity takes part of the turning force. The angle is set for a design speed; on race tracks it can reach thirty degrees or more."
+    },
+    {
+     "h": "Centrifuges",
+     "text": "Separating blood into plasma and cells, enriching uranium, spinning in a washing machine—all use the fact that during rotation denser particles move away from the axis. A laboratory centrifuge provides accelerations of thousands of $g$."
+    },
+    {
+     "h": "Orbits",
+     "text": "A satellite does not fall only because its speed is such that the required centripetal acceleration exactly equals the acceleration due to gravity at that altitude. Hence the first cosmic velocity—about 7.9 kilometers per second."
+    },
+    {
+     "h": "Particle accelerators",
+     "text": "In a circular accelerator, a magnetic field bends the beam, providing exactly the centripetal acceleration needed at that energy. The higher the energy, the larger the radius—hence the 27-kilometer ring of the Large Hadron Collider."
+    },
+    {
+     "h": "Weather",
+     "text": "The Coriolis force, the second effect of a rotating system, spins cyclones counterclockwise in the Northern Hemisphere and clockwise in the Southern Hemisphere. It also deflects ocean currents and long-range artillery shells."
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Rotación y sistemas de referencia",
+  "subtitle": "Párrafo 1 · Por qué en un mundo giratorio aparecen fuerzas sin fuente",
+  "intro": [
+   "Empecemos con una pregunta que parece infantil, pero que toca los fundamentos de la física. Viajas en un autobús, frena bruscamente y te lanzas hacia adelante. ¿Qué fuerza te empujó?",
+   "La respuesta es desconcertante: ninguna. Nadie te empujó. Simplemente continuaste moviéndote por inercia, mientras el autobús bajo ti frenaba. Pero la sensación de fuerza es completamente real, la siente el cuerpo, la muestran los instrumentos. ¿Qué hacer con una fuerza que se siente pero que no tiene fuente?",
+   "Es aquí donde la física da un paso más importante que muchas fórmulas: reconoce que la descripción depende de desde dónde se mire. Hay sistemas de referencia donde las leyes de Newton funcionan en su forma pura, llamados inerciales. Y están todos los demás, donde es necesario introducir fuerzas ficticias para que las leyes concuerden. Al entender esto, comprenderemos la rotación y descubriremos en ella una oscilación."
+  ],
+  "standNote": "En el stand hay un cuerpo sobre un disco giratorio. A la izquierda ves la imagen desde los ojos de un observador inmóvil: el cuerpo se mueve en círculo y una cuerda lo jala hacia el centro. A la derecha, la misma escena desde los ojos de un observador sentado en el disco: el cuerpo está en reposo, y para explicarlo hay que agregar una fuerza centrífuga dirigida hacia afuera. Un mismo movimiento, dos descripciones. Observa el gráfico inferior: la proyección de la rotación sobre un eje es exactamente un seno — es un puente hacia el siguiente párrafo.",
+  "formula": {
+   "name": "Aceleración centrípeta",
+   "latex": "a_{\\text{cent}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+   "alsoKnown": "Aceleración en el movimiento circular uniforme",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1659",
+     "what": "fue el primero en deducir la expresión de la fuerza centrífuga en el movimiento circular — 28 años antes de los 'Principia' de Newton, en su trabajo sobre relojes de péndulo"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "incluyó el movimiento circular en la dinámica general y mostró que la Luna 'cae' hacia la Tierra por la misma razón que una manzana"
+    },
+    {
+     "who": "Gaspard-Gustave Coriolis",
+     "year": "1835",
+     "what": "describió la segunda fuerza de inercia que aparece al moverse dentro de un sistema en rotación — explica la rotación de los ciclones y la desviación de los proyectiles"
+    }
+   ],
+   "story": "Huygens obtuvo la ley de la fuerza centrífuga mientras trabajaba en relojes: necesitaba entender cómo se comporta una masa en una varilla giratoria. Derivó el resultado en 1659, pero lo publicó solo en 1673 — y además en forma de teoremas sin demostraciones. Newton llegó al mismo resultado de forma independiente, y fue precisamente la unión del movimiento circular con la ley de gravitación lo que le permitió dar el paso crucial: mostrar que la Luna es un proyectil que cae hacia la Tierra, pero falla porque se mueve demasiado rápido de lado.",
+   "symbols": [
+    {
+     "sym": "a_c",
+     "latex": "a_{\\text{cent}}",
+     "what": "aceleración centrípeta",
+     "unit": "m/s²",
+     "note": "dirigida hacia el centro de la circunferencia; no cambia la magnitud de la velocidad, sino su dirección"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "velocidad lineal",
+     "unit": "m/s",
+     "note": "su módulo es constante en la rotación uniforme, pero el vector gira continuamente"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "radio de la circunferencia",
+     "unit": "m",
+     "note": "cuanto más cerrada es la curva, mayor aceleración se requiere"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "velocidad angular",
+     "unit": "rad/s",
+     "note": "cuántos radianes recorre el radio por segundo; se relaciona con la velocidad lineal como v = ωR"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "período de revolución",
+     "unit": "s",
+     "note": "tiempo de una vuelta completa; ω = 2π/T"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Primero averigüemos por qué la rotación uniforme en general requiere aceleración, luego obtengamos su magnitud geométricamente, y luego analicemos las fuerzas que «no existen».",
+   "steps": [
+    {
+     "text": "El principal malentendido: en la rotación uniforme, la velocidad es constante en magnitud, pero NO constante como vector — siempre está girando. Y la aceleración, por definición, es la tasa de cambio del vector velocidad. Por lo tanto, hay aceleración, aunque el velocímetro muestre el mismo número.",
+     "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{pero} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+     "figure": "circmotion",
+     "figCaption": "La velocidad es tangencial y gira continuamente — eso es la aceleración."
+    },
+    {
+     "text": "Encontremos su magnitud. En un tiempo pequeño, el cuerpo recorre un arco de ángulo $\\Delta\\varphi$, y el vector velocidad gira exactamente el mismo ángulo. El triángulo construido sobre los vectores velocidad es semejante al triángulo construido sobre los radios — de ahí la proporción.",
+     "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
+     "figure": "vectriangle",
+     "figCaption": "El triángulo de velocidades es semejante al triángulo de desplazamientos — clave de toda la derivación."
+    },
+    {
+     "text": "Dividimos el cambio de velocidad por el tiempo y tomamos el límite. Considerando que el desplazamiento en el tiempo $\\Delta t$ es $v\\,\\Delta t$, obtenemos la aceleración buscada. Está dirigida hacia el centro — por eso se llama centrípeta.",
+     "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
+     "figure": "centripetal",
+     "figCaption": "La aceleración apunta estrictamente al centro, perpendicular a la velocidad."
+    },
+    {
+     "text": "Mediante la velocidad angular, la expresión se vuelve aún más simple. Sustituyendo $v = \\omega R$, vemos que la aceleración crece como el cuadrado de la frecuencia de rotación — por eso una centrífuga acelerada desarrolla sobrecargas enormes con un radio modesto.",
+     "latex": "a_{\\text{cent}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+     "figure": "omega",
+     "figCaption": "Duplicamos la frecuencia de rotación — la aceleración se cuadruplica."
+    },
+    {
+     "text": "Ahora un paso filosóficamente importante. Un observador en tierra explica el movimiento simplemente: hay una fuerza de tensión en la cuerda, crea una aceleración centrípeta, las leyes de Newton se cumplen. Ese sistema de referencia se llama inercial — en él, un cuerpo sin fuerzas se mueve uniformemente y en línea recta.",
+     "latex": "\\text{SRI:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{se ejecuta tal cual}",
+     "figure": "inertialframe",
+     "figCaption": "Observador inercial: hay una fuerza real, hay aceleración, todo concuerda."
+    },
+    {
+     "text": "Pero un observador sentado en el propio disco ve otra cosa: el cuerpo frente a él está inmóvil. ¡Pero la cuerda está tensa! Hay fuerza, pero no hay aceleración — la segunda ley se viola. Para salvarla, es necesario agregar otra fuerza en la ecuación, dirigida hacia afuera. Esa es la fuerza centrífuga de inercia.",
+     "latex": "\\text{SNI:} \\quad \\vec{T} + \\vec{F}_{\\text{centríf}} = 0, \\qquad F_{\\text{centríf}} = m\\omega^{2}R",
+     "figure": "rotframe",
+     "figCaption": "El observador rotante se ve obligado a introducir una fuerza que no tiene fuente."
+    },
+    {
+     "text": "La fuerza de inercia no tiene cuerpo fuente ni pareja según la tercera ley — surge únicamente debido a la elección del sistema de referencia. Esto no significa que sea «irreal»: en su sistema actúa de manera completamente real, deforma cuerpos y expulsa el agua en el tambor de una lavadora. Simplemente es el precio por la conveniencia de la descripción.",
+     "latex": "\\vec{F}_{\\text{ind}} = -m\\vec{a}_{\\text{sistemas}}",
+     "figure": "fictitious",
+     "figCaption": "La fuerza de inercia es proporcional a la aceleración del propio sistema de referencia y está dirigida en contra de ella."
+    }
+   ],
+   "plate": "a_{\\text{cent}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+   "plateCap": "La rotación uniforme es una caída continua hacia el centro que siempre falla. Así es como la Luna orbita la Tierra.",
+   "note": "Desde aquí hay un paso hacia una idea profunda. Sentado en una cabina cerrada, no puedes distinguir la fuerza de gravedad de la fuerza de inercia de una cabina que acelera: ambas te presionan contra el suelo y son proporcionales a la masa. Einstein elevó esta imposibilidad al principio de equivalencia y construyó sobre él la teoría general de la relatividad, donde la gravedad dejó de ser una fuerza y se convirtió en curvatura del espacio-tiempo. La pregunta «¿qué fuerza me empujó en el autobús?» lleva, si tiras del hilo lo suficiente, directamente a los agujeros negros."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "items": [
+    {
+     "what": "Radián — por qué el ángulo se mide con longitud",
+     "why": "El radián es el ángulo para el cual la longitud del arco es igual al radio. Esta definición parece extraña hasta que notas: solo en radianes funcionan las fórmulas simples $s = R\\varphi$ y $v = \\omega R$, y solo en radianes la derivada del seno es igual al coseno sin factores adicionales. Los grados son una convención histórica de los babilonios; el radián es una medida natural, integrada en la geometría del círculo mismo.",
+     "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
+    },
+    {
+     "what": "Semejanza de triángulos como herramienta física",
+     "why": "En la derivación, igualamos las razones de los lados de dos triángulos — sobre los vectores velocidad y sobre los radios. Este es un movimiento típico de la física clásica: reemplazar un cálculo difícil con semejanza geométrica. Newton en los «Principia» demostraba casi todo así, sin análisis — sus demostraciones geométricas hoy son más difíciles de leer que los cálculos modernos.",
+     "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
+    },
+    {
+     "what": "Proyección de la rotación — ya es seno",
+     "why": "Si un punto corre uniformemente sobre un círculo de radio $A$ con velocidad angular $\\omega$, entonces su coordenada a lo largo del eje cambia como $A\\cos\\omega t$. Es decir, la rotación uniforme proyectada sobre una recta da exactamente una oscilación armónica. Volveremos a esto en la siguiente sección — y veremos que no es una analogía, sino una identidad.",
+     "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Estimemos la sobrecarga en una centrífuga — y de paso entendamos por qué los astronautas se entrenan precisamente así.",
+   "given": "La cabina de una centrífuga gira en una circunferencia de radio $8$ m, dando una vuelta completa en $4$ segundos. Encontrar la aceleración centrípeta y compararla con $g = 10$ m/s².",
+   "law": "$a_{\\text{cent}} = \\omega^{2}R$, donde $\\omega = 2\\pi/T$",
+   "solution": [
+    {
+     "text": "Encontramos la velocidad angular: una vuelta completa son $2\\pi$ radianes.",
+     "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
+    },
+    {
+     "text": "Sustituimos en la fórmula de la aceleración.",
+     "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
+    },
+    {
+     "text": "Calculamos y convertimos a unidades de g.",
+     "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
+    }
+   ],
+   "answer": "Aceleración de unos $20$ m/s², es decir, sobrecarga de aproximadamente $2g$",
+   "check": "Es plausible: con esa rotación, una persona se siente el doble de pesada. Observa cómo el efecto crece drásticamente con la frecuencia: si reducimos el periodo a la mitad, a 2 segundos, obtendríamos $8g$ — el límite para un piloto entrenado. El cuadrado en la fórmula actúa sin piedad."
+  },
+  "constants": {
+   "title": "Magnitudes de este apartado",
+   "lead": "Aquí aparecen las magnitudes angulares — el segundo lenguaje para describir el movimiento, indispensable tanto en oscilaciones como en ondas y en mecánica cuántica.",
+   "items": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "Velocidad angular",
+     "value": "ω = 2π/T",
+     "unit": "rad / s",
+     "why": "Cuántos radianes de giro por segundo. A través de ella, todas las fórmulas de rotación se simplifican, y la conexión con las oscilaciones se vuelve evidente: la misma letra denota la frecuencia angular de las oscilaciones, y no es una coincidencia.",
+     "mnemo": "Una vuelta son 2π radianes, por lo que en la fórmula siempre aparece 6,28 dividido por el periodo."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "Periodo de revolución",
+     "value": "T = 2π/ω",
+     "unit": "s",
+     "why": "Tiempo de una vuelta completa o de una oscilación completa. Su inversa es la frecuencia, medida en hercios: cuántas vueltas por segundo."
+    },
+    {
+     "sym": "rad",
+     "latex": "\\text{rad}",
+     "name": "Radián",
+     "value": "1 rad ≈ 57,3°",
+     "unit": "adimensional",
+     "why": "Formalmente adimensional, ya que es la relación entre la longitud del arco y el radio — metros divididos por metros. Por eso los radianes pueden «perderse» en las dimensiones: rad/s y s⁻¹ tienen la misma dimensión, aunque el significado es diferente.",
+     "mnemo": "Un círculo completo son 2π ≈ 6,28 radianes. Un radián es un poco menos de 60 grados."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Aceleración de la gravedad",
+     "value": "9,81",
+     "unit": "m/s²",
+     "why": "Aquí se usa como unidad de sobrecarga: la aceleración de la centrífuga se expresa en fracciones de g, porque es con ella con lo que el organismo compara la carga."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La rotación uniforme requiere aceleración porque el vector velocidad gira continuamente. En un sistema inercial, esto se explica por una fuerza real; en el sistema rotante, hay que añadir una fuerza de inercia — no tiene fuente, pero en su sistema es perfectamente perceptible.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "La velocidad es un vector",
+     "text": "En la rotación uniforme, su magnitud es constante, pero la dirección cambia. Por lo tanto, hay aceleración."
+    },
+    {
+     "icon": "clock",
+     "title": "Hacia el centro",
+     "text": "a_c = v²/R = ω²R, dirigida estrictamente al centro, perpendicular a la velocidad."
+    },
+    {
+     "icon": "sigma",
+     "title": "Dos sistemas",
+     "text": "Inercial: funciona F = ma tal cual. No inercial: se necesitan fuerzas de inercia para que las ecuaciones concuerden."
+    },
+    {
+     "icon": "formula",
+     "title": "Puente a las oscilaciones",
+     "text": "La proyección de una rotación uniforme sobre una recta es exactamente un seno. No es una analogía, sino una identidad."
+    }
+   ],
+   "where": [
+    "Centrífuga de lavadora: el agua vuela en línea recta, pero la ropa es retenida por el tambor",
+    "Inclinación de la calzada en una curva — para que parte de la fuerza de reacción se vuelva centrípeta",
+    "Los ciclones giran debido a la fuerza de Coriolis: en el hemisferio norte, en sentido antihorario",
+    "Satélite en órbita — caída libre que siempre falla el objetivo de la Tierra"
+   ],
+   "watchOut": "La fuerza centrífuga no actúa sobre un cuerpo en un sistema de referencia inercial. La cuerda tira de la piedra solo hacia el centro; nada tira hacia afuera. La sensación de «ser lanzado» surge porque uno mismo está en un sistema rotante. El error de que «sobre el cuerpo actúa una fuerza centrífuga» es el más común en este tema."
+  },
+  "quiz": [
+   {
+    "id": "r1",
+    "type": "mcq",
+    "q": "Se hace girar una piedra atada a una cuerda. En el momento en que la cuerda se rompe, ¿hacia dónde volará la piedra?",
+    "options": [
+     "Radialmente hacia afuera, desde el centro",
+     "Tangencialmente a la circunferencia — hacia donde estaba dirigida la velocidad",
+     "En espiral, alejándose gradualmente",
+     "Primero hacia afuera, luego tangencialmente"
+    ],
+    "answer": 1,
+    "why": "Tan pronto como la fuerza desaparece, actúa la primera ley: el cuerpo se mueve en línea recta con la velocidad que tenía. La velocidad durante la rotación está dirigida tangencialmente — hacia allí volará la piedra. No existía ninguna fuerza «hacia afuera» en el sistema inercial.",
+    "hint": "¿Qué dice la primera ley sobre un cuerpo sobre el que dejan de actuar fuerzas? ¿Y hacia dónde estaba dirigida la velocidad de la piedra en el último momento antes de la rotura — a lo largo del radio o transversalmente?"
+   },
+   {
+    "id": "r2",
+    "type": "mcq",
+    "q": "¿En qué se diferencia fundamentalmente la fuerza de inercia de una fuerza ordinaria?",
+    "options": [
+     "Es más débil y por lo tanto se puede despreciar",
+     "No tiene un cuerpo fuente ni un par según la tercera ley — surge debido a la elección del sistema de referencia",
+     "Actúa solo sobre cuerpos en rotación",
+     "No produce aceleración"
+    ],
+    "answer": 1,
+    "why": "Una fuerza ordinaria es siempre la acción de un cuerpo sobre otro, y tiene un compañero según la tercera ley. La fuerza de inercia no tiene fuente ni compañero: aparece en las ecuaciones únicamente porque describimos el movimiento desde un sistema de referencia acelerado.",
+    "hint": "Hágase una pregunta simple sobre la fuerza centrífuga: ¿qué cuerpo concreto la crea? ¿Y sobre qué cuerpo actúa la fuerza de reacción según la tercera ley?"
+   },
+   {
+    "id": "r3",
+    "type": "free",
+    "q": "Con tus propias palabras: ¿por qué en el movimiento circular uniforme hay aceleración aunque la rapidez no cambia?",
+    "keywords": [
+     "dirigid",
+     "vector",
+     "gir",
+     "cambia de dirección",
+     "no solo la magnitud"
+    ],
+    "needed": 1,
+    "why": "Porque la aceleración es la tasa de cambio del vector velocidad, y el vector cambia no solo cuando cambia su magnitud, sino también cuando gira. En la rotación, la magnitud es constante, pero la dirección cambia continuamente — de ahí la aceleración dirigida hacia el centro.",
+    "hint": "Recuerda que la velocidad es una magnitud vectorial. ¿Cuántas características de un vector pueden cambiar? ¿Es suficiente que una de ellas sea constante para que el vector permanezca sin cambios?"
+   },
+   {
+    "id": "r4",
+    "type": "estimate",
+    "q": "Un carrusel de 5 m de radio da una vuelta en 6 segundos. ¿Cuál es la aceleración centrípeta en m/s²?",
+    "answer": 5.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "ω = 2π/6 ≈ 1,05 rad/s; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². Esto es aproximadamente la mitad de g — justo la carga perceptible pero segura para la que se diseñan las atracciones.",
+    "hint": "Primero la velocidad angular: 2π dividido por el periodo, es un poco más que la unidad. Luego elevar al cuadrado y multiplicar por el radio."
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosidades: pruébelo usted mismo",
+   "lead": "La fuerza centrífuga no existe, pero un cubo de agua sobre la cabeza no lo sabe.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Cubo de agua sobre la cabeza",
+     "text": "Llene un cubo pequeño con agua hasta un tercio, tómelo por el asa y gírelo en un plano vertical de modo que en el punto más alto el cubo quede con el fondo hacia arriba. Hágalo en el patio. Luego intente lo mismo lentamente.",
+     "answer": "Con un giro rápido, el agua no se derrama; con uno lento, lo moja. El umbral se calcula: el agua permanece si en el punto más alto la aceleración centrípeta requerida no es menor que $g$, es decir $v^2/R \\ge g$, de donde $v \\ge \\sqrt{gR}$. Para un brazo con un cubo, el radio es de aproximadamente un metro: se necesita un poco más de tres metros por segundo. El agua no está 'presionada' por nada: simplemente cae a lo largo de su trayectoria, y el cubo cae con ella, estando siempre debajo."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Una fuerza que no existe pero se siente",
+     "text": "En una curva, usted es presionado contra la puerta: la sensación es clara y medible. Sin embargo, la física afirma que la fuerza centrífuga no existe. Entonces, ¿qué presiona su hombro?",
+     "answer": "En un sistema de referencia inercial, es simple: usted se mueve en línea recta por inercia, y la puerta gira y choca contra usted. La única fuerza real es su presión, dirigida hacia el centro de la curva. La fuerza centrífuga aparece solo dentro del sistema rotante, donde usted se considera inmóvil: para explicar el equilibrio, es necesario agregar una fuerza que no tiene fuente ni par según la tercera ley. Estas fuerzas se llaman fuerzas de inercia; son convenientes para los cálculos y completamente reales en sus consecuencias, pero existen solo en el sistema de referencia elegido."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "El péndulo que demostró la rotación de la Tierra",
+     "text": "En 1851, Léon Foucault suspendió bajo la cúpula del Panteón de París un peso de 28 kilogramos en un alambre de 67 metros de longitud. El plano de oscilación giraba lentamente, aproximadamente once grados por hora. El péndulo no tiene razón para girar: era el suelo el que giraba junto con el edificio y la ciudad. Por primera vez, la rotación de la Tierra se vio directamente, en un recinto cerrado, sin observaciones astronómicas. En el polo, una vuelta completa tomaría exactamente un día; en el ecuador no hay giro en absoluto; y en latitudes intermedias, el período aumenta como uno dividido por el seno de la latitud."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemotecnia",
+     "h": "La aceleración apunta hacia donde se gira",
+     "text": "En un movimiento circular uniforme, la velocidad no cambia en magnitud pero sí en dirección, por lo tanto hay aceleración, y está dirigida estrictamente hacia el centro. De ahí el nombre: centrípeta, es decir, que tiende hacia el centro. Recordar la magnitud ayuda la doble escritura $v^2/R=\\omega^2R$: la primera es conveniente cuando se conoce la velocidad, la segunda cuando se conoce la frecuencia de rotación."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "Cuánto más ligero es usted en el ecuador",
+     "text": "La velocidad de rotación ecuatorial de la Tierra es de aproximadamente 465 metros por segundo, el radio de 6378 kilómetros. La aceleración centrípeta resulta $v^2/R \\approx 0{,}034$ metros por segundo al cuadrado, aproximadamente tres milésimas de $g$. Por lo tanto, una persona de 70 kilogramos en el ecuador pesa unos 240 gramos menos que en el polo, y esto sin tener en cuenta el achatamiento del planeta. Los cohetes se lanzan cerca del ecuador precisamente porque la rotación del planeta proporciona un aumento gratuito de velocidad."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Solo para rotación uniforme",
+     "text": "La fórmula $a=v^2/R$ describe solo la parte de la aceleración responsable del giro. Si la velocidad también cambia en magnitud (un automóvil acelera en una curva), se agrega una componente tangencial, y la aceleración total es su suma vectorial. Y en el movimiento a lo largo de una curva arbitraria, en la fórmula no entra el radio completo de la trayectoria, sino el radio de la circunferencia osculatriz en ese punto."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Dónde funciona el giro",
+   "lead": "Todo lo anterior se basa en un hecho: para moverse en una curva, se necesita una aceleración hacia el centro.",
+   "items": [
+    {
+     "h": "Curvas de carreteras y autopistas",
+     "text": "La superficie se inclina hacia el interior de la curva para que la componente de la gravedad asuma parte del esfuerzo de giro. El ángulo se calcula a partir de la velocidad de diseño; en las pistas alcanza los treinta grados o más."
+    },
+    {
+     "h": "Centrífugas",
+     "text": "La separación de la sangre en plasma y células, el enriquecimiento de uranio, el centrifugado en lavadoras: en todas partes se usa que, al girar, las partículas más densas se alejan del eje. Una centrífuga de laboratorio proporciona aceleraciones de miles de $g$."
+    },
+    {
+     "h": "Órbitas",
+     "text": "Un satélite no cae solo porque su velocidad es tal que la aceleración centrípeta necesaria es exactamente igual a la aceleración de la gravedad a esa altitud. De ahí la primera velocidad cósmica: unos 7,9 kilómetros por segundo."
+    },
+    {
+     "h": "Aceleradores de partículas",
+     "text": "En un acelerador circular, el campo magnético gira el haz, proporcionando exactamente la aceleración hacia el centro necesaria para esa energía. Cuanto mayor es la energía, mayor es el radio; de ahí el anillo de 27 kilómetros del Gran Colisionador de Hadrones."
+    },
+    {
+     "h": "Clima",
+     "text": "La fuerza de Coriolis, el segundo efecto de un sistema en rotación, hace girar los ciclones en sentido antihorario en el hemisferio norte y en sentido horario en el sur. También desvía las corrientes oceánicas y los proyectiles de artillería de largo alcance."
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "الدوران والأطر المرجعية",
+  "subtitle": "الفقرة 1 · لماذا تظهر قوى بلا مصدر في عالم دوار",
+  "intro": [
+   "لنبدأ بسؤال يبدو طفولياً، لكنه يصطدم بأساسيات الفيزياء. أنت راكب في حافلة، تتوقف فجأة – تُدفع إلى الأمام. أي قوة دفعك؟",
+   "الإجابة محبطة: لا شيء. لم يدفعك أحد. أنت فقط استمريت في الحركة بالقصور الذاتي، بينما تباطأت الحافلة تحتك. لكن الإحساس بالقوة حقيقي تماماً، يشعر به الجسم، وتظهره الأجهزة. ماذا نفعل بقوة تشعر بها ولكن ليس لها مصدر؟",
+   "هنا بالضبط تخطو الفيزياء خطوة أهم من العديد من المعادلات: تعترف بأن الوصف يعتمد على من أين تنظر. هناك أطر مرجعية تعمل فيها قوانين نيوتن بشكل نقي – تسمى الأطر القصورية. وهناك كل الأطر الأخرى حيث يجب إدخال قوى وهمية لتتوافق القوانين. بعد فهم هذا، سندرك أيضاً الدوران – وسنجد فيه تذبذباً."
+  ],
+  "standNote": "على المنصة – جسم على قرص دوار. على اليسار ترى المشهد بعيون مراقب ثابت: الجسم يتحرك في دائرة، والحبل يسحبه نحو المركز. على اليمين – نفس المشهد بعيون مراقب جالس على القرص: الجسم ساكن، ولتفسير ذلك يجب إضافة قوة طرد مركزي موجهة للخارج. حركة واحدة، وصفان. لاحظ الرسم البياني السفلي: إسقاط الدوران على المحور هو بالضبط جيب – هذا جسر إلى الفقرة التالية.",
+  "formula": {
+   "name": "التسارع المركزي",
+   "latex": "a_{\\text{مركز}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+   "alsoKnown": "التسارع في الحركة الدائرية المنتظمة",
+   "authors": [
+    {
+     "who": "كريستيان هويغنس",
+     "year": "1659",
+     "what": "كان أول من اشتق تعبيراً عن قوة الطرد المركزي في الحركة الدائرية – قبل 28 عاماً من 'المبادئ' لنيوتن، في عمل حول الساعات البندولية"
+    },
+    {
+     "who": "إسحاق نيوتن",
+     "year": "1687",
+     "what": "أدرج الحركة الدائرية في الديناميكا العامة وأظهر أن القمر 'يسقط' نحو الأرض لنفس سبب سقوط التفاحة"
+    },
+    {
+     "who": "غاسبار-غوستاف كوريوليس",
+     "year": "1835",
+     "what": "وصف قوة القصور الذاتي الثانية التي تنشأ عند الحركة داخل نظام دوار – وهي تفسر دوران الأعاصير وانحراف المقذوفات"
+    }
+   ],
+   "story": "حصل هويغنس على قانون قوة الطرد المركزي أثناء عمله على الساعات: كان بحاجة لفهم كيف يتصرف ثقل على قضيب دوار. اشتق النتيجة في عام 1659، لكنه نشرها فقط في 1673 – وحتى ذلك في شكل نظريات بدون براهين. توصل نيوتن إلى نفس النتيجة بشكل مستقل، وكان دمج الحركة الدائرية مع قانون الجاذبية هو ما سمح له باتخاذ الخطوة الرئيسية: إظهار أن القمر هو قذيفة تسقط نحو الأرض لكنها تخطئها لأنها تطير بسرعة كبيرة جانبياً.",
+   "symbols": [
+    {
+     "sym": "a_c",
+     "latex": "a_{\\text{مركز}}",
+     "what": "التسارع المركزي",
+     "unit": "m/s²",
+     "note": "موجه نحو مركز الدائرة؛ يغير اتجاه السرعة وليس مقدارها"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "السرعة الخطية",
+     "unit": "m/s",
+     "note": "ثابتة المقدار في الدوران المنتظم، لكن المتجه يدور طوال الوقت"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "نصف قطر الدائرة",
+     "unit": "m",
+     "note": "كلما كان الانعطاف أشد، كلما كان التسارع المطلوب أكبر"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "السرعة الزاوية",
+     "unit": "rad/s",
+     "note": "كم راديان يقطع نصف القطر في الثانية؛ مرتبطة بالخطية بـ v = ωR"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "فترة الدوران",
+     "unit": "s",
+     "note": "زمن دورة كاملة؛ ω = 2π/T"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "أولًا، لنفهم لماذا تتطلب الحركة الدورانية المنتظمة تسارعًا، ثم نحصل على مقداره هندسيًا، ثم نتعامل مع القوى التي «لا وجود لها».",
+   "steps": [
+    {
+     "text": "سوء الفهم الرئيسي: في الدوران المنتظم، السرعة ثابتة المقدار، لكنها ليست ثابتة كمتجه - فهي تدور باستمرار. والتسارع بحكم تعريفه هو معدل تغير متجه السرعة. إذن هناك تسارع، على الرغم من أن عداد السرعة يظهر نفس الرقم.",
+     "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{but} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+     "figure": "circmotion",
+     "figCaption": "السرعة موجهة على طول المماس وتدور باستمرار - هذا هو التسارع."
+    },
+    {
+     "text": "نجد مقداره. في زمن قصير، يتحرك الجسم عبر قوس بزاوية $\\Delta\\varphi$، ويدور متجه السرعة بنفس الزاوية تمامًا. المثلث المبني على متجهات السرعة مشابه للمثلث المبني على أنصاف الأقطار - ومن هنا تأتي النسبة.",
+     "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
+     "figure": "vectriangle",
+     "figCaption": "مثلث السرعات مشابه لمثلث الإزاحات - المفتاح للاشتقاق بأكمله."
+    },
+    {
+     "text": "نقسم تغير السرعة على الزمن ونأخذ النهاية. مع الأخذ في الاعتبار أن الإزاحة في الزمن $\\Delta t$ تساوي $v\\,\\Delta t$، نحصل على التسارع المطلوب. اتجاهه نحو المركز - ولهذا يسمى جاذبًا مركزيًا.",
+     "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
+     "figure": "centripetal",
+     "figCaption": "التسارع يشير مباشرة إلى المركز، عموديًا على السرعة."
+    },
+    {
+     "text": "من خلال السرعة الزاوية يصبح التعبير أبسط. بالتعويض $v = \\omega R$، نرى أن التسارع ينمو كمربع تردد الدوران - ولهذا السبب يولد جهاز الطرد المركزي عند تسريعه أحمالًا زائدة هائلة عند نصف قطر متواضع.",
+     "latex": "a_{\\text{مركز}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+     "figure": "omega",
+     "figCaption": "ضاعف تردد الدوران - تضاعف التسارع أربع مرات."
+    },
+    {
+     "text": "الآن الخطوة المهمة فلسفيًا. الراصد الواقف على الأرض يشرح الحركة ببساطة: هناك قوة شد الحبل، تخلق تسارعًا جاذبًا مركزيًا، وقوانين نيوتن محققة. هذا الإطار المرجعي يسمى قصوريًا - فيه يتحرك الجسم بدون قوى بشكل منتظم ومستقيم.",
+     "latex": "\\text{إطار عطالي:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{تحقق كما هي}",
+     "figure": "inertialframe",
+     "figCaption": "الراصد القصوري: هناك قوة حقيقية، هناك تسارع، كل شيء متسق."
+    },
+    {
+     "text": "أما الراصد الجالس على القرص نفسه فيرى شيئًا آخر: الجسم أمامه ساكن. لكن الحبل مشدود! هناك قوة، ولا تسارع - القانون الثاني منتهك. لإنقاذه، نضيف قوة أخرى إلى المعادلة موجهة للخارج. هذه هي قوة الطرد المركزي القصورية.",
+     "latex": "\\text{إطار غير عطالي:} \\quad \\vec{T} + \\vec{F}_{\\text{طرد مركزي}} = 0, \\qquad F_{\\text{طرد مركزي}} = m\\omega^{2}R",
+     "figure": "rotframe",
+     "figCaption": "الراصد الدوار يضطر إلى إدخال قوة ليس لها مصدر."
+    },
+    {
+     "text": "ليس لقوة القصور الذاتي جسم مصدر ولا شريك في القانون الثالث - فهي تنشأ فقط من اختيار الإطار المرجعي. هذا لا يعني أنها «غير حقيقية»: في إطارها تعمل بشكل واقعي تمامًا، تشوه الأجسام وتدفع الماء في أسطوانة الغسالة. إنها ببساطة ثمن راحة الوصف.",
+     "latex": "\\vec{F}_{\\text{عطالة}} = -m\\vec{a}_{\\text{أنظمة}}",
+     "figure": "fictitious",
+     "figCaption": "قوة القصور الذاتي تتناسب مع تسارع الإطار المرجعي نفسه وموجهة ضده."
+    }
+   ],
+   "plate": "a_{\\text{مركز}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+   "plateCap": "الحركة الدورانية المنتظمة هي سقوط مستمر نحو المركز يخطئه دائمًا. هكذا يدور القمر حول الأرض.",
+   "note": "من هنا خطوة واحدة إلى فكرة عميقة. بالجلوس في مقصورة مغلقة، لا يمكنك التمييز بين قوة الجاذبية وقوة القصور الذاتي لمقصورة متسارعة: كلاهما يضغطك على الأرض ويتناسب مع الكتلة. رفع أينشتاين هذا الاستحالة إلى مبدأ التكافؤ وبنى عليه النسبية العامة، حيث توقفت الجاذبية عن كونها قوة وأصبحت انحناء الزمكان. السؤال «أي قوة دفعتني في الحافلة» يقود، إذا سحبت الخيط لفترة كافية، مباشرة إلى الثقوب السوداء."
+  },
+  "math": {
+   "title": "الرياضيات التي تطلبتها المسألة",
+   "items": [
+    {
+     "what": "الراديان - لماذا نقيس الزاوية بالطول",
+     "why": "الراديان هو الزاوية التي يكون فيها طول القوس مساويًا لنصف القطر. يبدو هذا التعريف غريبًا حتى تلاحظ: فقط بالراديان تعمل الصيغ البسيطة $s = R\\varphi$ و $v = \\omega R$، وفقط بالراديان يكون مشتق الجيب مساويًا لجيب التمام دون معاملات إضافية. الدرجات هي اصطلاح تاريخي من البابليين؛ الراديان هو مقياس طبيعي مدمج في هندسة الدائرة نفسها.",
+     "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
+    },
+    {
+     "what": "تشابه المثلثات كأداة فيزيائية",
+     "why": "في الاستنتاج، ساوينا نسب أضلاع مثلثين - على متجهات السرعة وأنصاف الأقطار. هذه خطوة نموذجية في الفيزياء الكلاسيكية: استبدال حساب صعب بتشابه هندسي. نيوتن في «المبادئ» أثبت كل شيء تقريبًا بهذه الطريقة، بدون تحليل - براهينه الهندسية أصعب في القراءة اليوم من الحسابات الحديثة.",
+     "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
+    },
+    {
+     "what": "إسقاط الدوران - هو الجيب بالفعل",
+     "why": "إذا تحركت نقطة بانتظام على دائرة نصف قطرها $A$ بسرعة زاوية $\\omega$، فإن إحداثيتها على المحور تتغير كـ $A\\cos\\omega t$. أي أن الدوران المنتظم، عند إسقاطه على خط مستقيم، يعطي بالضبط تذبذبًا توافقيًا. سنعود إلى هذا في الفقرة التالية - وسنرى أن هذه ليست تشبيهًا بل تطابقًا.",
+     "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال مع الأرقام",
+   "lead": "سوف نقدر التحميل الزائد في جهاز الطرد المركزي — وسنفهم لماذا يتم تدريب رواد الفضاء بهذه الطريقة.",
+   "given": "كابينة جهاز الطرد المركزي تدور في دائرة نصف قطرها $8$ م، وتكمل دورة كاملة في $4$ ثوانٍ. أوجد التسارع المركزي وقارنه مع $g = 10$ م/ث².",
+   "law": "$a_{\\text{مركز}} = \\omega^{2}R$، حيث $\\omega = 2\\pi/T$",
+   "solution": [
+    {
+     "text": "نحسب السرعة الزاوية: الدورة الكاملة تعادل $2\\pi$ راديان.",
+     "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
+    },
+    {
+     "text": "نعوض في معادلة التسارع.",
+     "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
+    },
+    {
+     "text": "نحسب ونحول إلى وحدات g.",
+     "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
+    }
+   ],
+   "answer": "التسارع حوالي $20$ م/ث²، أي تحميل زائد يبلغ حوالي $2g$",
+   "check": "معقول: عند هذا الدوران يشعر الإنسان بأنه أثقل بمرتين. لاحظ كيف يزداد التأثير بشكل حاد مع التردد: إذا قصرنا الفترة إلى النصف، إلى ثانيتين، سنحصل على $8g$ — وهو الحد الأقصى للطيار المدرب. المربع في المعادلة يعمل بلا رحمة هنا."
+  },
+  "constants": {
+   "title": "كميات هذا الفصل",
+   "lead": "تظهر هنا الكميات الزاوية — اللغة الثانية لوصف الحركة، التي لا يمكن الاستغناء عنها في التذبذبات ولا في الأمواج ولا في ميكانيكا الكم.",
+   "items": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "السرعة الزاوية",
+     "value": "ω = 2π/T",
+     "unit": "راديان/ث",
+     "why": "كم راديان من الدوران في الثانية. من خلالها تصبح جميع معادلات الدوران أبسط، والارتباط بالتذبذبات واضح: نفس الحرف يرمز للتردد الزاوي للتذبذبات، وهذا ليس مصادفة.",
+     "mnemo": "دورة واحدة تساوي 2π راديان، لذلك يظهر في المعادلة دائماً 6,28 مقسوماً على الفترة."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "فترة الدوران",
+     "value": "T = 2π/ω",
+     "unit": "ث",
+     "why": "زمن دورة كاملة أو تذبذب كامل. القيمة العكسية له هي التردد، ويُقاس بالهرتز: عدد الدورات في الثانية."
+    },
+    {
+     "sym": "rad",
+     "latex": "\\text{rad}",
+     "name": "راديان",
+     "value": "1 rad ≈ 57,3°",
+     "unit": "بدون أبعاد",
+     "why": "بلا أبعاد شكلياً، لأنه نسبة طول القوس إلى نصف القطر — متر مقسوم على متر. لهذا يمكن «فقدان» الراديان في الأبعاد: راديان/ث و ث⁻¹ لهما نفس البعد، رغم أن المعنى مختلف.",
+     "mnemo": "الدائرة الكاملة تساوي 2π ≈ 6,28 راديان. الراديان الواحد أقل بقليل من 60 درجة."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "تسارع السقوط الحر",
+     "value": "9,81",
+     "unit": "م/ث²",
+     "why": "يستخدم هنا كوحدة للتحميل الزائد: يُعبر عادة عن تسارع جهاز الطرد المركزي بأجزاء من g، لأن الجسم يقارن الحمل به."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "الدوران المنتظم يتطلب تسارعاً، لأن متجه السرعة يدور باستمرار. في النظام القصوري يُفسر هذا بقوة حقيقية، أما في النظام الدوار فلا بد من إضافة قوة قصورية — ليس لها مصدر، لكنها ملموسة في نظامها.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "السرعة متجه",
+     "text": "أثناء الدوران المنتظم، مقدارها ثابت لكن اتجاهها يتغير. إذن يوجد تسارع."
+    },
+    {
+     "icon": "clock",
+     "title": "نحو المركز",
+     "text": "a_c = v²/R = ω²R، موجه بدقة نحو المركز، عمودي على السرعة."
+    },
+    {
+     "icon": "sigma",
+     "title": "نظامان",
+     "text": "النظام القصوري: تعمل F = ma كما هي. النظام غير القصوري: نحتاج قوى قصورية لكي تتطابق المعادلات."
+    },
+    {
+     "icon": "formula",
+     "title": "جسر إلى التذبذبات",
+     "text": "إسقاط الدوران المنتظم على خط مستقيم هو بالضبط جيب. هذا ليس تشبيهاً، بل تطابق."
+    }
+   ],
+   "where": [
+    "جهاز الطرد المركزي في الغسالة: الماء يطير في خط مستقيم، بينما تمسك الملابس بالأسطوانة",
+    "ميل الطريق عند المنعطفات — لجعل جزء من قوة رد الفعل مركزياً",
+    "تتشكل الأعاصير بسبب قوة كوريوليس: في نصف الكرة الشمالي عكس عقارب الساعة",
+    "قمر صناعي في مداره — سقوط حر يخطئ الأرض باستمرار"
+   ],
+   "watchOut": "القوة الطاردة المركزية لا تؤثر على الجسم في نظام إسناد قصوري. الحبل يسحب الحجر نحو المركز فقط؛ لا شيء يسحب للخارج. الشعور بـ«الدفع للخارج» ينشأ لأنك أنت نفسك في نظام دوار. الخطأ «تؤثر قوة طاردة مركزية على الجسم» هو الأكثر شيوعاً في هذا الموضوع."
+  },
+  "quiz": [
+   {
+    "id": "r1",
+    "type": "mcq",
+    "q": "يُدار حجر بحبل. في اللحظة التي ينقطع فيها الحبل، إلى أين سيطير الحجر؟",
+    "options": [
+     "على طول نصف القطر إلى الخارج، بعيداً عن المركز",
+     "على طول المماس للدائرة — إلى حيث كان متجه السرعة",
+     "على شكل حلزوني، مبتعداً تدريجياً",
+     "أولاً إلى الخارج ثم على طول المماس"
+    ],
+    "answer": 1,
+    "why": "بمجرد زوال القوة، يعمل القانون الأول: يتحرك الجسم في خط مستقيم بنفس السرعة التي كان عليها. السرعة أثناء الدوران موجهة على طول المماس — إلى هناك سيطير الحجر. لا توجد قوة 'إلى الخارج' في النظام القصوري.",
+    "hint": "ماذا يقول القانون الأول عن جسم توقفت القوى المؤثرة عليه؟ وأين كانت سرعة الحجر موجهة في اللحظة الأخيرة قبل القطع — على طول نصف القطر أم بشكل عرضي؟"
+   },
+   {
+    "id": "r2",
+    "type": "mcq",
+    "q": "ما الفرق الجوهري بين قوة القصور الذاتي والقوة العادية؟",
+    "options": [
+     "إنها أضعف وبالتالي يمكن إهمالها",
+     "ليس لها جسم مصدر ولا زوج وفقاً للقانون الثالث — تنشأ من اختيار النظام الإسنادي",
+     "تؤثر فقط على الأجسام الدوارة",
+     "لا تسبب تسارعاً"
+    ],
+    "answer": 1,
+    "why": "القوة العادية هي دائماً فعل جسم على آخر، ولها شريك وفقاً للقانون الثالث. قوة القصور الذاتي ليس لها مصدر ولا شريك: تظهر في المعادلات فقط لأننا نصف الحركة من نظام إسنادي متسارع.",
+    "hint": "اسأل عن القوة الطاردة المركزية سؤالاً بسيطاً: أي جسم محدد يولدها؟ وعلى أي جسم تؤثر القوة المقابلة وفقاً للقانون الثالث؟"
+   },
+   {
+    "id": "r3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا يوجد تسارع في الحركة الدائرية المنتظمة، رغم أن مقدار السرعة لا يتغير؟",
+    "keywords": [
+     "موجه",
+     "متجه",
+     "يدور",
+     "يغير اتجاه",
+     "ليس فقط المقدار"
+    ],
+    "needed": 1,
+    "why": "لأن التسارع هو معدل تغير متجه السرعة، والمتجه يتغير ليس فقط عندما يتغير طوله، بل أيضاً عندما يدور. أثناء الدوران، الطول ثابت والاتجاه يتغير باستمرار — ومن هنا يأتي التسارع الموجه نحو المركز.",
+    "hint": "تذكر أن السرعة كمية متجهة. كم خاصية للمتجه يمكن أن تتغير؟ هل يكفي ثبات واحدة منها ليبقى المتجه دون تغيير؟"
+   },
+   {
+    "id": "r4",
+    "type": "estimate",
+    "q": "لعبة دوارة نصف قطرها 5 m تكمل دورة كاملة في 6 s. ما هو التسارع المركزي بوحدة m/s²؟",
+    "answer": 5.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "ω = 2π/6 ≈ 1,05 rad/s; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². هذا تقريباً نصف g — وهو الحمل المحسوس ولكن الآمن الذي تصمم عليه الألعاب.",
+    "hint": "أولاً السرعة الزاوية: 2π مقسومة على الزمن الدوري، وهي أكبر قليلاً من الواحد. ثم ربّعها واضرب في نصف القطر."
+   }
+  ],
+  "curiosities": {
+   "title": "مثير للاهتمام: اختبره بيديك",
+   "lead": "لا توجد قوة طرد مركزي — لكن دلو الماء فوق الرأس لا يعلم بذلك.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "دلو ماء فوق الرأس",
+     "text": "صب الماء في دلو صغير حتى ثلثه، أمسكه من المقبض ولفه في مستوى عمودي — بحيث يكون قاع الدلو لأعلى عند النقطة العليا. افعل ذلك في الفناء. ثم جرب نفس الشيء ببطء.",
+     "answer": "عند الدوران السريع لا ينسكب الماء، وعند البطء يبللك. يُحسب الحد: سيبقى الماء إذا كان التسارع المركزي المطلوب عند النقطة العليا لا يقل عن $g$، أي $v^2/R \\ge g$، ومنه $v \\ge \\sqrt{gR}$. ليد مع دلو نصف قطرها حوالي متر — تحتاج إلى ما يزيد قليلاً عن ثلاثة أمتار في الثانية. الماء لا «ينضغط» بأي شيء: إنه ببساطة يسقط في مساره، ويسقط الدلو معه، ويظل دائمًا في الأسفل."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "قوة ليست موجودة لكنها محسوسة",
+     "text": "عند المنعطف، يضغطك على الباب — إحساس واضح وقابل للقياس. لكن الفيزياء تؤكد أن قوة الطرد المركزي غير موجودة. إذن ما الذي يضغط على كتفك؟",
+     "answer": "في إطار مرجعي ثابت، الأمر بسيط: أنت تتحرك في خط مستقيم بالقصور الذاتي، بينما يدور الباب ويصطدم بك. القوة الحقيقية الوحيدة هي ضغطه الموجه نحو مركز المنعطف. تظهر قوة الطرد المركزي فقط داخل نظام دوار، حيث تعتبر نفسك ساكنًا: لتفسير التوازن، يجب إضافة قوة ليس لها مصدر ولا زوج وفقًا للقانون الثالث. تسمى هذه القوى قوى القصور الذاتي؛ فهي مريحة للحساب وحقيقية تمامًا في عواقبها، لكنها موجودة فقط في الإطار المرجعي المختار."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة ممتعة",
+     "h": "البندول الذي أثبت دوران الأرض",
+     "text": "في عام 1851، علق ليون فوكو ثقلاً وزنه 28 كيلوغراماً تحت قبة البانثيون في باريس على سلك طوله 67 متراً. كان مستوى التأرجح يدور ببطء — حوالي إحدى عشرة درجة في الساعة. ليس للبندول سبب ليدور: بل كانت الأرضية تدور مع المبنى والمدينة. لأول مرة، شوهد دوران الأرض مباشرة داخل الغرفة دون ملاحظات فلكية. عند القطب، ستستغرق الدورة الكاملة يومًا بالضبط، وفي خط الاستواء لا يوجد دوران على الإطلاق، وفيما بينهما تزداد الفترة كواحد مقسوم على جيب خط العرض."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "استذكار",
+     "h": "التسارع يتجه نحو حيث تتجه",
+     "text": "في الحركة الدائرية المنتظمة، لا تتغير السرعة في المقدار، لكنها تتغير في الاتجاه — وبالتالي يوجد تسارع، وهو موجه بدقة نحو المركز. ومن هنا جاء الاسم: تسارع مركزي، أي متجه نحو المركز. تساعد الصيغة المزدوجة $v^2/R=\\omega^2R$ على تذكر المقدار: الأولى مفيدة عندما تكون السرعة معروفة، والثانية عندما يكون تردد الدوران معروفًا."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "كم تصبح أخف على خط الاستواء؟",
+     "text": "السرعة الاستوائية لدوران الأرض حوالي 465 مترًا في الثانية، ونصف القطر 6378 كيلومترًا. التسارع المركزي يساوي $v^2/R \\approx 0{,}034$ متر في الثانية المربعة — حوالي ثلاثة آلاف من $g$. وبالتالي، فإن شخصًا كتلته 70 كيلوغرامًا على خط الاستواء يزن حوالي 240 غرامًا أقل منه عند القطب، وهذا دون احتساب تفلطح الكوكب. تُطلق الصواريخ أقرب إلى خط الاستواء تحديدًا لأن دوران الكوكب يعطي إضافة مجانية للسرعة."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "فقط للدوران المنتظم",
+     "text": "تصف الصيغة $a=v^2/R$ فقط جزء التسارع المسؤول عن الانعطاف. إذا تغيرت السرعة في المقدار أيضًا — سيارة تتسارع على قوس — يُضاف مركبة مماسية، ويكون التسارع الكلي مجموعهما الاتجاهي. وعند الحركة على منحنى عشوائي، لا تدخل في الصيغة نصف قطر المسار بالكامل، بل نصف قطر دائرة الانحناء عند تلك النقطة."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "أين يعمل الانعطاف؟",
+   "lead": "كل ما ذكر يعتمد على حقيقة واحدة: للتحرك على منحنى، نحتاج إلى تسارع نحو المركز.",
+   "items": [
+    {
+     "h": "منحنيات الطرق والمسارات",
+     "text": "يُمال سطح الطريق نحو داخل المنعطف بحيث يأخذ مركب الجاذبية جزءًا من قوة الانعطاف. تُحسب الزاوية بناءً على السرعة التصميمية؛ على المضامير تصل إلى ثلاثين درجة أو أكثر."
+    },
+    {
+     "h": "أجهزة الطرد المركزي",
+     "text": "فصل الدم إلى بلازما وخلايا، تخصيب اليورانيوم، العصر في الغسالة — في كل مكان يُستخدم أن الجسيمات الأكثر كثافة تبتعد عن المحور أثناء الدوران. يعطي جهاز الطرد المركزي المختبري تسارعًا بآلاف $g$."
+    },
+    {
+     "h": "المدارات",
+     "text": "لا يسقط القمر الصناعي إلا لأن سرعته تجعل التسارع المركزي المطلوب مساويًا تمامًا لتسارع الجاذبية على ذلك الارتفاع. ومن هنا تأتي السرعة الكونية الأولى — حوالي 7.9 كيلومتر في الثانية."
+    },
+    {
+     "h": "مسرعات الجسيمات",
+     "text": "في المسرع الحلقي، يقوم المجال المغناطيسي بتحويل الحزمة، مما يوفر بالضبط التسارع نحو المركز المطلوب عند تلك الطاقة. كلما زادت الطاقة، زاد نصف القطر — ومن هنا يأتي الحلقة التي يبلغ طولها 27 كيلومترًا لمصادم الهادرونات الكبير."
+    },
+    {
+     "h": "الطقس",
+     "text": "قوة كوريوليس — التأثير الثاني للنظام الدوار — تلف الأعاصير عكس عقارب الساعة في نصف الكرة الشمالي ومع عقارب الساعة في نصف الكرة الجنوبي. كما تنحرف بها التيارات المحيطية وقذائف المدفعية بعيدة المدى."
+    }
+   ]
+  }
+ },
+ "laws": [
+  "equivalence_principle"
+ ]
 }

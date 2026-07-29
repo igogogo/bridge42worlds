@@ -1,1151 +1,1361 @@
 {
-  "id": "01-kinematics",
-  "topic": "mechanics",
-  "schema": "b42.lesson/1",
-  "model": "motion",
-  "entities": {
-    "laws": [
-      "newtons_laws_of_motion"
-    ],
-    "tags": [
-      "mechanics"
-    ],
-    "scientists": [
-      "Galileo Galilei",
-      "Isaac Newton"
-    ]
-  },
-  "ru": {
-    "title": "Материальная точка",
-    "subtitle": "Параграф 1 · Как описать движение, не зная его причин",
-    "intro": [
-      "Начнём с приёма, который выглядит как жульничество, а на деле составляет суть физического метода. Чтобы описать полёт мяча, мы объявим мяч точкой. Без размера, без вращения, без швов на покрышке — просто точка, у которой есть масса и положение.",
-      "Это не лень и не упрощение ради простоты. Это осознанный выбор того, что в данной задаче существенно. Для полёта мяча через поле его диаметр не важен — важна траектория центра. А вот для удара по воротам, где мяч закручивают, размер и вращение становятся главными, и тогда точка не годится.",
-      "Умение выбрать правильную идеализацию — половина работы физика. Мы начнём с самой простой: тело есть точка, и всё, что мы про неё знаем, — где она сейчас и как быстро движется."
-    ],
-    "standNote": "Покрутите стенд перед чтением вывода. Задайте начальную скорость и ускорение, посмотрите на векторы: зелёный — скорость, красный — ускорение. Обратите внимание на главное: когда векторы направлены в разные стороны, тело сначала тормозит, останавливается — и едет назад, хотя ускорение всё это время не менялось.",
-    "formula": {
-      "name": "Уравнение равноускоренного движения",
-      "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-      "alsoKnown": "Кинематическое уравнение движения с постоянным ускорением",
-      "authors": [
-        {
-          "who": "Галилео Галилей",
-          "year": "1638",
-          "what": "установил, что при свободном падении пройденный путь растёт пропорционально квадрату времени — вопреки убеждению, что скорость падения зависит от массы"
-        },
-        {
-          "who": "Исаак Ньютон и Готфрид Лейбниц",
-          "year": "1670-е",
-          "what": "независимо создали дифференциальное исчисление, превратившее словесное описание Галилея в точное уравнение"
-        }
-      ],
-      "story": "Галилей не имел ни точных часов, ни исчисления. Он скатывал шары по наклонному жёлобу, замедляя падение настолько, чтобы успевать засекать время — по водяным часам, а по некоторым свидетельствам, напевая мелодию как метроном. И обнаружил поразительное: за первую единицу времени шар проходит одну единицу пути, за вторую — три, за третью — пять. Нечётные числа. А их сумма — это в точности квадраты: 1, 4, 9. Так родилась квадратичная зависимость.",
-      "symbols": [
-        {
-          "sym": "x(t)",
-          "latex": "x(t)",
-          "what": "координата в момент t",
-          "unit": "м",
-          "note": "именно координата, а не путь: при движении назад она уменьшается"
-        },
-        {
-          "sym": "x₀",
-          "latex": "x_0",
-          "what": "начальная координата",
-          "unit": "м",
-          "note": "где тело было в момент t = 0; часто удобно принять за ноль"
-        },
-        {
-          "sym": "v₀",
-          "latex": "v_0",
-          "what": "начальная скорость",
-          "unit": "м/с",
-          "note": "векторная величина: знак говорит о направлении вдоль оси"
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "what": "ускорение",
-          "unit": "м/с²",
-          "note": "постоянно в этой формуле; если ускорение меняется, нужен другой аппарат"
-        },
-        {
-          "sym": "t",
-          "latex": "t",
-          "what": "время от начала отсчёта",
-          "unit": "с",
-          "note": "всегда неотрицательно и отсчитывается от выбранного нами момента"
-        }
-      ]
+ "id": "01-kinematics",
+ "topic": "mechanics",
+ "schema": "b42.lesson/1",
+ "model": "motion",
+ "entities": {
+  "laws": [
+   "newtons_laws_of_motion"
+  ],
+  "tags": [
+   "mechanics"
+  ],
+  "scientists": [
+   "Galileo Galilei",
+   "Isaac Newton"
+  ]
+ },
+ "ru": {
+  "title": "Материальная точка",
+  "subtitle": "Параграф 1 · Как описать движение, не зная его причин",
+  "intro": [
+   "Начнём с приёма, который выглядит как жульничество, а на деле составляет суть физического метода. Чтобы описать полёт мяча, мы объявим мяч точкой. Без размера, без вращения, без швов на покрышке — просто точка, у которой есть масса и положение.",
+   "Это не лень и не упрощение ради простоты. Это осознанный выбор того, что в данной задаче существенно. Для полёта мяча через поле его диаметр не важен — важна траектория центра. А вот для удара по воротам, где мяч закручивают, размер и вращение становятся главными, и тогда точка не годится.",
+   "Умение выбрать правильную идеализацию — половина работы физика. Мы начнём с самой простой: тело есть точка, и всё, что мы про неё знаем, — где она сейчас и как быстро движется."
+  ],
+  "standNote": "Покрутите стенд перед чтением вывода. Задайте начальную скорость и ускорение, посмотрите на векторы: зелёный — скорость, красный — ускорение. Обратите внимание на главное: когда векторы направлены в разные стороны, тело сначала тормозит, останавливается — и едет назад, хотя ускорение всё это время не менялось.",
+  "formula": {
+   "name": "Уравнение равноускоренного движения",
+   "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+   "alsoKnown": "Кинематическое уравнение движения с постоянным ускорением",
+   "authors": [
+    {
+     "who": "Галилео Галилей",
+     "year": "1638",
+     "what": "установил, что при свободном падении пройденный путь растёт пропорционально квадрату времени — вопреки убеждению, что скорость падения зависит от массы"
     },
-    "derivation": {
-      "title": "Строгий вывод",
-      "lead": "Нам понадобятся всего два определения — скорости и ускорения — и одна геометрическая идея: путь есть площадь под графиком скорости.",
-      "steps": [
-        {
-          "text": "Сначала договоримся, что вообще значит «положение». Само по себе оно бессмысленно: нужно тело отсчёта, оси и часы. Пассажир неподвижен относительно вагона и мчится относительно перрона — оба утверждения верны одновременно. Это и называется системой отсчёта.",
-          "latex": "x = x(t) \\quad \\text{в выбранной системе отсчёта}",
-          "figure": "frame",
-          "figCaption": "Одно движение, два наблюдателя, два разных ответа — и оба правильные."
-        },
-        {
-          "text": "Средняя скорость — это перемещение, делённое на время. Но она мало что говорит: проехав город со средней скоростью $30$ км/ч, вы могли стоять в пробке и мчаться по проспекту. Нужна скорость в данный момент.",
-          "latex": "v_{\\text{ср}} = \\frac{\\Delta x}{\\Delta t}",
-          "figure": "secant",
-          "figCaption": "Средняя скорость — наклон секущей, соединяющей две точки на графике координаты."
-        },
-        {
-          "text": "Будем уменьшать промежуток $\\Delta t$. Секущая поворачивается и в пределе становится касательной. Наклон этой касательной и есть мгновенная скорость. Здесь производная появляется не как формальность из курса математики, а как единственный способ ответить на вопрос «с какой скоростью тело движется прямо сейчас».",
-          "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
-          "figure": "tangent",
-          "figCaption": "Предел секущих — касательная. Её наклон и есть скорость в данное мгновение."
-        },
-        {
-          "text": "Ускорение определяется точно так же, но на ступень выше: это скорость изменения скорости. Отсюда и странная на вид размерность — метр на секунду в квадрате: за каждую секунду скорость меняется на столько-то метров в секунду.",
-          "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
-          "figure": "accel",
-          "figCaption": "Ускорение говорит не о том, быстро ли тело едет, а о том, быстро ли меняется его скорость."
-        },
-        {
-          "text": "Пусть ускорение постоянно. Тогда скорость растёт равномерно: к начальной прибавляется по $a$ за каждую секунду. Это первое из кинематических уравнений, и получается оно прямым интегрированием определения ускорения.",
-          "latex": "v(t) = v_0 + a t",
-          "figure": "vline",
-          "figCaption": "При постоянном ускорении график скорости — прямая с наклоном a."
-        },
-        {
-          "text": "Теперь ключевой геометрический шаг. Перемещение есть интеграл скорости по времени, то есть площадь под графиком $v(t)$. А эта фигура — трапеция: прямоугольник высотой $v_0$ плюс треугольник с катетами $t$ и $at$. Складываем площади и получаем ответ.",
-          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{прямоугольник}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{треугольник}}",
-          "figure": "area",
-          "figCaption": "Путь — это площадь под графиком скорости. Трапеция раскладывается на прямоугольник и треугольник."
-        },
-        {
-          "text": "Прибавляя начальную координату, получаем итоговое уравнение. Обратите внимание на структуру: слагаемое с $t$ отвечает за равномерное движение, слагаемое с $t^2$ — за разгон. Именно квадрат и делает траекторию параболой.",
-          "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-          "figure": "parabola",
-          "figCaption": "График координаты — парабола. Её кривизна задаётся ускорением."
-        }
-      ],
-      "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
-      "plateCap": "Три слагаемых — три вклада: где были, куда двигались, как разгонялись. Всё остальное в кинематике равноускоренного движения выводится отсюда.",
-      "note": "Формула верна только при постоянном ускорении. Как только $a$ начинает меняться — при движении с сопротивлением воздуха, при колебаниях пружины, при полёте к далёкой планете — она перестаёт работать, и нужно решать дифференциальное уравнение. Мы вернёмся к этому в теме о колебаниях."
-    },
-    "math": {
-      "title": "Математика, которая здесь понадобилась",
-      "items": [
-        {
-          "what": "Что такое производная — по-физически",
-          "why": "Производная есть мера скорости изменения. Математик скажет «предел отношения приращений», физик — «насколько быстро величина меняется прямо сейчас». Это одно и то же. Ключевая мысль: чтобы узнать мгновенное значение, мы берём всё меньший промежуток и смотрим, к чему стремится результат. Тот же приём даст нам силу тока (скорость изменения заряда), мощность (скорость изменения энергии) и скорость реакции в химии.",
-          "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
-        },
-        {
-          "what": "Почему интеграл — это площадь",
-          "why": "Разобьём время на крошечные кусочки. За каждый кусочек $\\Delta t$ тело проходит примерно $v\\,\\Delta t$ — это площадь узкого прямоугольника под графиком. Сложим все прямоугольники, устремим их ширину к нулю — получим точную площадь и точный путь. Интеграл и есть такая сумма бесконечного числа бесконечно малых вкладов.",
-          "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
-        },
-        {
-          "what": "Векторы: почему знак важнее, чем кажется",
-          "why": "Скорость и ускорение — векторы. На прямой это сводится к знаку, но знак решает всё: если $v$ и $a$ разных знаков, тело тормозит; если одинаковых — разгоняется. Именно поэтому подброшенный вверх мяч имеет нулевую скорость в верхней точке, но ускорение там по-прежнему $9{,}8$ м/с², направленное вниз.",
-          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{разгон}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{торможение}"
-        }
-      ]
-    },
-    "example": {
-      "title": "Пример с числами",
-      "lead": "Классическая задача про торможение — та самая, что стоит за правилами дорожного движения.",
-      "given": "Автомобиль едет со скоростью $20$ м/с (это $72$ км/ч) и тормозит с ускорением $5$ м/с². Найти тормозной путь.",
-      "law": "$v(t) = v_0 + at$ и $x(t) = v_0 t + at^2/2$, где $a = -5$ м/с² (знак минус: ускорение против движения)",
-      "solution": [
-        {
-          "text": "Сначала найдём время до полной остановки: скорость должна обратиться в ноль.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{с}"
-        },
-        {
-          "text": "Подставляем это время в уравнение координаты.",
-          "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
-        },
-        {
-          "text": "Получаем тормозной путь.",
-          "latex": "x = 40\\ \\text{м}"
-        }
-      ],
-      "answer": "Тормозной путь — $40$ метров",
-      "check": "Стоит запомнить не число, а зависимость: путь пропорционален квадрату скорости. Вдвое быстрее — вчетверо дальше. При $40$ м/с тот же автомобиль проедет уже $160$ метров, а не $80$. Именно это соотношение стоит за резким ростом тяжести аварий с ростом скорости — и оно прямо следует из слагаемого с $t^2$ в нашей формуле."
-    },
-    "constants": {
-      "title": "Величины этого параграфа",
-      "lead": "Констант здесь почти нет — кинематика описывает любое движение. Единственная привязка к нашей планете появляется, когда речь заходит о падении.",
-      "items": [
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Ускорение свободного падения",
-          "value": "9,81",
-          "unit": "м / с²",
-          "why": "Ускорение, с которым падает любое тело у поверхности Земли — независимо от массы, если пренебречь сопротивлением воздуха. Именно это открытие Галилея противоречило двухтысячелетней традиции.",
-          "mnemo": "В задачах почти всегда берут 10 м/с² — ошибка около 2%, зато считается в уме."
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "name": "Скорость",
-          "value": "производная координаты",
-          "unit": "м / с",
-          "why": "Размерность прямо читается как определение: метры (перемещение) на секунду (время). Всякий раз, когда видите дробь в единицах, ищите в ней смысл — там почти всегда спрятано определение величины."
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "name": "Ускорение",
-          "value": "производная скорости",
-          "unit": "м / с²",
-          "why": "Метр на секунду в квадрате читается так: «на столько метров в секунду меняется скорость за каждую секунду». Секунда возводится в квадрат потому, что деление на время произошло дважды."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "Материальная точка — осознанный выбор существенного. Скорость есть производная координаты, ускорение — производная скорости, а путь — площадь под графиком скорости. Всё уравнение равноускоренного движения следует из этих трёх утверждений.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Идеализация",
-          "text": "Тело сводим к точке, когда его размер и вращение для задачи несущественны."
-        },
-        {
-          "icon": "clock",
-          "title": "Производная",
-          "text": "Мгновенная скорость — наклон касательной к графику координаты, а не отношение полного пути ко времени."
-        },
-        {
-          "icon": "sigma",
-          "title": "Путь как площадь",
-          "text": "Перемещение равно площади под графиком скорости. Отсюда и берётся слагаемое с квадратом времени."
-        },
-        {
-          "icon": "formula",
-          "title": "Знак решает",
-          "text": "Скорость и ускорение направлены в разные стороны — тело тормозит, хотя ускорение постоянно."
-        }
-      ],
-      "where": [
-        "Тормозной путь растёт как квадрат скорости: вдвое быстрее — вчетверо дальше",
-        "Разгон автомобиля «до сотни за 6 секунд» — это ускорение около 4,6 м/с²",
-        "В верхней точке подброшенного мяча скорость ноль, а ускорение остаётся 9,8 м/с²",
-        "Лифт: вы чувствуете не скорость, а ускорение — при равномерном движении ощущений нет"
-      ],
-      "watchOut": "Путь и перемещение — не одно и то же. Пройдя круг по стадиону, вы преодолели 400 метров пути, но ваше перемещение равно нулю. В формуле стоит именно координата, поэтому при движении назад она уменьшается."
-    },
-    "quiz": [
-      {
-        "id": "k1",
-        "type": "mcq",
-        "q": "Мяч подброшен вертикально вверх. Что происходит в высшей точке траектории?",
-        "options": [
-          "И скорость, и ускорение равны нулю",
-          "Скорость равна нулю, ускорение по-прежнему 9,8 м/с² вниз",
-          "Скорость максимальна, ускорение равно нулю",
-          "Ускорение меняет знак на противоположный"
-        ],
-        "answer": 1,
-        "why": "Скорость проходит через ноль — тело на мгновение зависает. Но ускорение задаётся тяготением, которое никуда не делось: оно остаётся направленным вниз и равным g на протяжении всего полёта.",
-        "hint": "Спросите себя: что создаёт ускорение в этой задаче? Исчезает ли эта причина, когда мяч на мгновение останавливается?"
-      },
-      {
-        "id": "k2",
-        "type": "free",
-        "q": "Своими словами: почему для описания движения обязательно нужна система отсчёта? Приведите пример, где два наблюдателя дадут разные, но одинаково верные ответы.",
-        "keywords": [
-          "относител",
-          "наблюдател",
-          "отсчёт",
-          "отсчет",
-          "вагон",
-          "поезд",
-          "земл",
-          "движется относительно"
-        ],
-        "needed": 1,
-        "why": "Положение и скорость не существуют сами по себе — только относительно чего-то. Пассажир поезда неподвижен относительно вагона и движется со скоростью 100 км/ч относительно перрона. Оба описания верны, противоречия нет: это разные системы отсчёта.",
-        "hint": "Представьте, что вы сидите в поезде и роняете ключи. Как опишете их движение вы — и как человек на платформе? Кто из вас прав?"
-      },
-      {
-        "id": "k3",
-        "type": "estimate",
-        "q": "Автомобиль разгоняется с места до 100 км/ч за 8 секунд. Каково его среднее ускорение в м/с²?",
-        "answer": 3.5,
-        "unit": "м/с²",
-        "tolerance": 1.4,
-        "why": "100 км/ч — это примерно 28 м/с (делим на 3,6). Ускорение равно изменению скорости, делённому на время: 28/8 ≈ 3,5 м/с². Для сравнения: свободное падение даёт 9,8 — почти втрое больше.",
-        "hint": "Сначала переведите километры в час в метры в секунду — разделите на 3,6. Затем вспомните определение ускорения: изменение скорости за время."
-      }
-    ],
-    "curiosities": {
-      "title": "Занимательное: проверьте руками",
-      "lead": "Кинематика измеряется линейкой: она про то, где тело и когда, а не про то, почему.",
-      "items": [
-        {
-          "icon": "kitchen",
-          "kind": "опыт на кухне",
-          "h": "Линейка вместо секундомера",
-          "text": "Попросите кого-нибудь держать линейку вертикально за верхний конец. Держите пальцы у нулевой отметки, не касаясь. Партнёр отпускает линейку без предупреждения — вы ловите её как можно быстрее. Запомните, на какой отметке поймали.",
-          "answer": "Пройденный путь переводится во время по $t=\\sqrt{2h/g}$. Двадцать сантиметров дают около 0,20 секунды, тридцать — около 0,25. Это ваше время реакции, и вы измерили его без единого прибора: линейка сама работает секундомером, потому что падение с известным ускорением однозначно связывает путь со временем. Отсюда же оценка тормозного пути: за 0,2 секунды реакции автомобиль на скорости 60 км/ч проезжает больше трёх метров, ещё не начав тормозить."
-        },
-        {
-          "icon": "paradox",
-          "kind": "парадокс",
-          "h": "Две монеты, один звук",
-          "text": "Положите монету на край стола. Вторую держите рядом на той же высоте. Резким щелчком запустите первую горизонтально — далеко вперёд, — и одновременно отпустите вторую вертикально вниз. Первая пролетит метр в сторону, вторая упадёт отвесно. Кто коснётся пола раньше?",
-          "answer": "Обе — одновременно, вы услышите один удар. Горизонтальное движение никак не влияет на вертикальное: по вертикали обе монеты падают с одним и тем же ускорением из одной высоты. Это называется независимостью движений, и именно поэтому сложное движение раскладывается на простые по осям. Пуля, выпущенная горизонтально, и пуля, просто выпущенная из руки в тот же момент, коснутся земли вместе — при условии, что земля ровная, а сопротивлением воздуха можно пренебречь."
-        },
-        {
-          "icon": "fact",
-          "kind": "занимательный факт",
-          "h": "Галилей замедлил тяготение",
-          "text": "Измерить свободное падение в начале XVII века было нечем: тело пролетает два метра за две трети секунды, а часов такой точности не существовало. Галилей обошёл это, пустив шар по наклонному жёлобу: тот же закон, но ускорение во столько раз меньше, во сколько наклон положе. Время он отсчитывал по весу воды, вытекшей из сосуда через узкое отверстие. Так был получен главный результат: путь растёт как квадрат времени, а не пропорционально ему, как думали до него. Приём остался в физике навсегда — если явление слишком быстрое, найдите способ его замедлить, не меняя сути."
-        },
-        {
-          "icon": "mnemo",
-          "kind": "мнемоника",
-          "h": "Скорость — наклон графика, ускорение — наклон наклона",
-          "text": "На графике «координата от времени» скорость есть крутизна кривой: горизонтальный участок — стоим, круче линия — быстрее едем. Возьмите крутизну ещё раз, теперь от графика скорости, — получите ускорение. Отсюда сразу видно и обратное: площадь под графиком скорости есть пройденный путь. Два действия, «наклон» и «площадь», связывают все три величины и избавляют от заучивания формул."
-        },
-        {
-          "icon": "estimate",
-          "kind": "прикидка",
-          "h": "Вдвое быстрее — вчетверо дальше",
-          "text": "Тормозной путь при постоянном замедлении равен $v^2/2a$ — скорость входит в квадрате. Значит, разгон с 50 до 100 км/ч удлиняет тормозной путь не вдвое, а вчетверо: примерно с пятнадцати метров до шестидесяти, плюс путь за время реакции. Именно квадрат, а не удвоение, стоит за ограничениями скорости в городах, и это тот редкий случай, когда школьная формула прямо считает вероятность выжить."
-        },
-        {
-          "icon": "edge",
-          "kind": "граница применимости",
-          "h": "Формула требует постоянного ускорения",
-          "text": "Выражение $x=x_0+v_0t+at^2/2$ верно, только пока ускорение не меняется. Парашютист после раскрытия купола падает почти равномерно: сопротивление воздуха растёт со скоростью и уравновешивает тяжесть. Ракета ускоряется всё сильнее по мере выгорания топлива, потому что масса уменьшается. В обоих случаях нужна не эта формула, а уравнение движения, которое решается численно."
-        }
-      ]
-    },
-    "synthesis": {
-      "title": "Что даёт кинематика",
-      "lead": "Описание движения без причин кажется полумерой — но именно оно лежит в основе навигации и безопасности.",
-      "items": [
-        {
-          "h": "Спутниковая навигация",
-          "text": "Приёмник в телефоне не измеряет расстояние линейкой: он сравнивает время прихода сигналов от нескольких спутников и решает кинематическую задачу. Ошибка в наносекунду даёт промах в тридцать сантиметров, поэтому в расчёт входят и поправки теории относительности."
-        },
-        {
-          "h": "Безопасность на дорогах",
-          "text": "Квадратичная связь скорости и тормозного пути определяет разметку, дистанцию и предельные скорости. Сюда же входит время реакции — та самая величина, которую ловят падающей линейкой."
-        },
-        {
-          "h": "Спорт и биомеханика",
-          "text": "Траектория прыжка, угол вылета копья, оптимальная точка отталкивания рассчитываются как движение точки с заданной начальной скоростью. Тренеры разбирают видеозапись покадрово, получая скорость как наклон, а ускорение как наклон наклона."
-        },
-        {
-          "h": "Астрономия и баллистика",
-          "text": "Предсказание положения планеты на годы вперёд и расчёт траектории аппарата к Марсу — задачи одного класса: известны начальные условия и закон изменения ускорения, требуется координата в момент времени."
-        },
-        {
-          "h": "Компьютерная графика",
-          "text": "Физические движки игр и кино пересчитывают положение тысяч объектов шестьдесят раз в секунду по тем же формулам, только шагами по времени. Реалистичность падения предметов на экране — это правильно проинтегрированная кинематика."
-        }
-      ]
+    {
+     "who": "Исаак Ньютон и Готфрид Лейбниц",
+     "year": "1670-е",
+     "what": "независимо создали дифференциальное исчисление, превратившее словесное описание Галилея в точное уравнение"
     }
+   ],
+   "story": "Галилей не имел ни точных часов, ни исчисления. Он скатывал шары по наклонному жёлобу, замедляя падение настолько, чтобы успевать засекать время — по водяным часам, а по некоторым свидетельствам, напевая мелодию как метроном. И обнаружил поразительное: за первую единицу времени шар проходит одну единицу пути, за вторую — три, за третью — пять. Нечётные числа. А их сумма — это в точности квадраты: 1, 4, 9. Так родилась квадратичная зависимость.",
+   "symbols": [
+    {
+     "sym": "x(t)",
+     "latex": "x(t)",
+     "what": "координата в момент t",
+     "unit": "м",
+     "note": "именно координата, а не путь: при движении назад она уменьшается"
+    },
+    {
+     "sym": "x₀",
+     "latex": "x_0",
+     "what": "начальная координата",
+     "unit": "м",
+     "note": "где тело было в момент t = 0; часто удобно принять за ноль"
+    },
+    {
+     "sym": "v₀",
+     "latex": "v_0",
+     "what": "начальная скорость",
+     "unit": "м/с",
+     "note": "векторная величина: знак говорит о направлении вдоль оси"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "ускорение",
+     "unit": "м/с²",
+     "note": "постоянно в этой формуле; если ускорение меняется, нужен другой аппарат"
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "время от начала отсчёта",
+     "unit": "с",
+     "note": "всегда неотрицательно и отсчитывается от выбранного нами момента"
+    }
+   ]
   },
-  "en": {
-    "title": "Material Point",
-    "subtitle": "Section 1 · How to describe motion without knowing its causes",
-    "intro": [
-      "Let's start with a technique that looks like cheating, but in fact constitutes the essence of the physical method. To describe the flight of a ball, we declare the ball to be a point. Without size, without rotation, without seams on the cover — just a point that has mass and position.",
-      "This is not laziness or simplification for its own sake. It is a deliberate choice of what is essential in a given problem. For the flight of a ball across a field, its diameter is not important — the trajectory of its center is. But for a shot on goal, where the ball is spinning, size and rotation become crucial, and then the point model is not suitable.",
-      "The ability to choose the right idealization is half the work of a physicist. We'll start with the simplest: the body is a point, and all we know about it is where it is now and how fast it is moving."
-    ],
-    "standNote": "Play with the stand before reading the conclusion. Set the initial velocity and acceleration, look at the vectors: green — velocity, red — acceleration. Pay attention to the key point: when the vectors point in opposite directions, the body first slows down, stops — and then moves backward, even though the acceleration has not changed throughout.",
-    "formula": {
-      "name": "Equation of uniformly accelerated motion",
-      "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-      "alsoKnown": "Kinematic equation of motion with constant acceleration",
-      "authors": [
-        {
-          "who": "Galileo Galilei",
-          "year": "1638",
-          "what": "established that during free fall, the distance traveled increases proportionally to the square of time — contrary to the belief that the speed of fall depends on mass"
-        },
-        {
-          "who": "Isaac Newton and Gottfried Leibniz",
-          "year": "1670s",
-          "what": "independently created differential calculus, turning Galileo's verbal description into a precise equation"
-        }
-      ],
-      "story": "Galileo had neither precise clocks nor calculus. He rolled balls down an inclined groove, slowing the fall enough to measure time — using water clocks, and according to some accounts, humming a melody as a metronome. And he discovered something astonishing: in the first unit of time, the ball travels one unit of distance, in the second — three, in the third — five. Odd numbers. And their sum is exactly squares: 1, 4, 9. Thus the quadratic dependence was born.",
-      "symbols": [
-        {
-          "sym": "x(t)",
-          "latex": "x(t)",
-          "what": "coordinate at time t",
-          "unit": "m",
-          "note": "It is the coordinate, not distance: when moving backward it decreases"
-        },
-        {
-          "sym": "x₀",
-          "latex": "x_0",
-          "what": "initial coordinate",
-          "unit": "m",
-          "note": "where the body was at time t = 0; it is often convenient to set it to zero"
-        },
-        {
-          "sym": "v₀",
-          "latex": "v_0",
-          "what": "initial velocity",
-          "unit": "m/s",
-          "note": "vector quantity: the sign indicates the direction along the axis"
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "what": "acceleration",
-          "unit": "m/s²",
-          "note": "constant in this formula; if acceleration changes, a different apparatus is needed"
-        },
-        {
-          "sym": "t",
-          "latex": "t",
-          "what": "time from the start of reference",
-          "unit": "s",
-          "note": "always non-negative and measured from the chosen moment"
-        }
-      ]
+  "derivation": {
+   "title": "Строгий вывод",
+   "lead": "Нам понадобятся всего два определения — скорости и ускорения — и одна геометрическая идея: путь есть площадь под графиком скорости.",
+   "steps": [
+    {
+     "text": "Сначала договоримся, что вообще значит «положение». Само по себе оно бессмысленно: нужно тело отсчёта, оси и часы. Пассажир неподвижен относительно вагона и мчится относительно перрона — оба утверждения верны одновременно. Это и называется системой отсчёта.",
+     "latex": "x = x(t) \\quad \\text{в выбранной системе отсчёта}",
+     "figure": "frame",
+     "figCaption": "Одно движение, два наблюдателя, два разных ответа — и оба правильные."
     },
-    "derivation": {
-      "title": "Rigorous derivation",
-      "lead": "We need only two definitions — velocity and acceleration — and one geometric idea: distance is the area under the velocity-time graph.",
-      "steps": [
-        {
-          "text": "First, let's agree on what 'position' actually means. By itself, it is meaningless: we need a reference body, axes, and a clock. A passenger is stationary relative to the train car but racing relative to the platform — both statements are simultaneously true. This is called a frame of reference.",
-          "latex": "x = x(t) \\quad \\text{in the chosen reference frame}",
-          "figure": "frame",
-          "figCaption": "One motion, two observers, two different answers — and both correct."
-        },
-        {
-          "text": "Average velocity is displacement divided by time. But it tells us little: having driven through a city at an average speed of $30$ km/h, you might have stood in traffic and sped along an avenue. We need velocity at a given instant.",
-          "latex": "v_{\\text{avg}} = \\frac{\\Delta x}{\\Delta t}",
-          "figure": "secant",
-          "figCaption": "Average velocity is the slope of the secant line connecting two points on the position-time graph."
-        },
-        {
-          "text": "Let us reduce the interval $\\Delta t$. The secant line rotates and in the limit becomes the tangent line. The slope of this tangent is the instantaneous velocity. Here the derivative appears not as a formality from a math course, but as the only way to answer the question 'how fast is the body moving right now'.",
-          "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
-          "figure": "tangent",
-          "figCaption": "The limit of secants is the tangent. Its slope is the velocity at that instant."
-        },
-        {
-          "text": "Acceleration is defined exactly the same way, but one step up: it is the rate of change of velocity. Hence the odd-looking unit — meter per second squared: each second the velocity changes by so many meters per second.",
-          "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
-          "figure": "accel",
-          "figCaption": "Acceleration tells not about how fast the body is moving, but about how fast its velocity is changing."
-        },
-        {
-          "text": "Let acceleration be constant. Then velocity increases uniformly: starting velocity plus $a$ each second. This is the first kinematic equation, and it comes from direct integration of the definition of acceleration.",
-          "latex": "v(t) = v_0 + a t",
-          "figure": "vline",
-          "figCaption": "With constant acceleration, the velocity-time graph is a straight line with slope a."
-        },
-        {
-          "text": "Now the key geometric step. Displacement is the integral of velocity over time, i.e., the area under the graph of $v(t)$. And this figure is a trapezoid: a rectangle of height $v_0$ plus a triangle with legs $t$ and $at$. Adding areas gives the answer.",
-          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectangle}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triangle}}",
-          "figure": "area",
-          "figCaption": "Distance is the area under the velocity-time graph. The trapezoid is decomposed into a rectangle and a triangle."
-        },
-        {
-          "text": "Adding the initial coordinate, we get the final equation. Note the structure: the term with $t$ corresponds to uniform motion, the term with $t^2$ to acceleration. It is the square that makes the trajectory a parabola.",
-          "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-          "figure": "parabola",
-          "figCaption": "The position-time graph is a parabola. Its curvature is determined by acceleration."
-        }
-      ],
-      "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
-      "plateCap": "Three terms — three contributions: where you were, how you moved, how you accelerated. Everything else in kinematics of uniformly accelerated motion is derived from here.",
-      "note": "The formula is valid only under constant acceleration. As soon as $a$ starts changing — in motion with air resistance, with spring oscillations, in a flight to a distant planet — it ceases to work, and we need to solve a differential equation. We will return to this in the topic of oscillations."
+    {
+     "text": "Средняя скорость — это перемещение, делённое на время. Но она мало что говорит: проехав город со средней скоростью $30$ км/ч, вы могли стоять в пробке и мчаться по проспекту. Нужна скорость в данный момент.",
+     "latex": "v_{\\text{ср}} = \\frac{\\Delta x}{\\Delta t}",
+     "figure": "secant",
+     "figCaption": "Средняя скорость — наклон секущей, соединяющей две точки на графике координаты."
     },
-    "math": {
-      "title": "The mathematics needed here",
-      "items": [
-        {
-          "what": "What a derivative is — physically",
-          "why": "Derivative is a measure of the rate of change. A mathematician would say 'limit of the ratio of increments', a physicist — 'how fast a quantity is changing right now'. They are the same. Key idea: to know the instantaneous value, we take ever smaller intervals and see what the result approaches. The same trick gives us electric current (rate of change of charge), power (rate of change of energy), and rate of reaction in chemistry.",
-          "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
-        },
-        {
-          "what": "Why an integral is area",
-          "why": "Let us divide time into tiny pieces. For each piece $\\Delta t$, the body travels approximately $v\\,\\Delta t$ — this is the area of a narrow rectangle under the graph. Sum all rectangles, let their width tend to zero — we obtain the exact area and the exact distance. An integral is exactly such a sum of an infinite number of infinitesimally small contributions.",
-          "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
-        },
-        {
-          "what": "Vectors: why sign matters more than it seems",
-          "why": "Velocity and acceleration are vectors. On a line this reduces to a sign, but the sign decides everything: if $v$ and $a$ have opposite signs, the body slows down; if the same sign, it speeds up. This is exactly why a ball thrown upward has zero velocity at the top, but there its acceleration is still $9.8$ m/s² directed downward.",
-          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{acceleration}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{braking}"
-        }
-      ]
+    {
+     "text": "Будем уменьшать промежуток $\\Delta t$. Секущая поворачивается и в пределе становится касательной. Наклон этой касательной и есть мгновенная скорость. Здесь производная появляется не как формальность из курса математики, а как единственный способ ответить на вопрос «с какой скоростью тело движется прямо сейчас».",
+     "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
+     "figure": "tangent",
+     "figCaption": "Предел секущих — касательная. Её наклон и есть скорость в данное мгновение."
     },
-    "example": {
-      "title": "Example with Numbers",
-      "lead": "The classic braking problem—the one that underpins traffic rules.",
-      "given": "A car is moving at $20$ m/s (which is $72$ km/h) and brakes with an acceleration of $5$ m/s². Find the braking distance.",
-      "law": "$v(t) = v_0 + at$ and $x(t) = v_0 t + at^2/2$, where $a = -5$ m/s² (the minus sign: acceleration opposite to motion)",
-      "solution": [
-        {
-          "text": "First, find the time to a complete stop: the speed must become zero.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
-        },
-        {
-          "text": "Substitute this time into the position equation.",
-          "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
-        },
-        {
-          "text": "We obtain the braking distance.",
-          "latex": "x = 40\\ \\text{m}"
-        }
-      ],
-      "answer": "Braking distance — $40$ meters",
-      "check": "Remember not the number, but the relationship: distance is proportional to the square of speed. Twice as fast — four times as far. At $40$ m/s the same car would travel $160$ meters, not $80$. This ratio is behind the sharp increase in the severity of accidents with speed — and it follows directly from the $t^2$ term in our formula."
+    {
+     "text": "Ускорение определяется точно так же, но на ступень выше: это скорость изменения скорости. Отсюда и странная на вид размерность — метр на секунду в квадрате: за каждую секунду скорость меняется на столько-то метров в секунду.",
+     "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
+     "figure": "accel",
+     "figCaption": "Ускорение говорит не о том, быстро ли тело едет, а о том, быстро ли меняется его скорость."
     },
-    "constants": {
-      "title": "Quantities of this Section",
-      "lead": "There are almost no constants here — kinematics describes any motion. The only link to our planet appears when discussing falling.",
-      "items": [
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Acceleration due to gravity",
-          "value": "9,81",
-          "unit": "m/s²",
-          "why": "The acceleration with which any body falls near the Earth's surface — regardless of mass, if air resistance is neglected. This discovery by Galileo contradicted a two-thousand-year tradition.",
-          "mnemo": "In problems, we almost always take 10 m/s² — an error of about 2%, but easier to calculate mentally."
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "name": "Velocity",
-          "value": "derivative of coordinate",
-          "unit": "m/s",
-          "why": "The dimension reads directly as the definition: meters (displacement) per second (time). Whenever you see a fraction in units, look for its meaning — it almost always hides the definition of the quantity."
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "name": "Acceleration",
-          "value": "derivative of velocity",
-          "unit": "m/s²",
-          "why": "Meters per second squared reads as: 'by how many meters per second the speed changes each second.' The second is squared because division by time occurred twice."
-        }
-      ]
+    {
+     "text": "Пусть ускорение постоянно. Тогда скорость растёт равномерно: к начальной прибавляется по $a$ за каждую секунду. Это первое из кинематических уравнений, и получается оно прямым интегрированием определения ускорения.",
+     "latex": "v(t) = v_0 + a t",
+     "figure": "vline",
+     "figCaption": "При постоянном ускорении график скорости — прямая с наклоном a."
     },
-    "memo": {
-      "essence": "The material point is a conscious choice of what is essential. Velocity is the derivative of position, acceleration is the derivative of velocity, and displacement is the area under the velocity graph. The entire equation of uniformly accelerated motion follows from these three statements.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Idealization",
-          "text": "We reduce a body to a point when its size and rotation are irrelevant to the problem."
-        },
-        {
-          "icon": "clock",
-          "title": "Derivative",
-          "text": "Instantaneous velocity is the slope of the tangent to the position graph, not the ratio of total distance to time."
-        },
-        {
-          "icon": "sigma",
-          "title": "Displacement as Area",
-          "text": "Displacement equals the area under the velocity graph. This is where the term with the square of time comes from."
-        },
-        {
-          "icon": "formula",
-          "title": "Sign Matters",
-          "text": "Velocity and acceleration are in opposite directions—the body decelerates, even though the acceleration is constant."
-        }
-      ],
-      "where": [
-        "Braking distance grows as the square of speed: twice as fast — four times as far",
-        "A car accelerating 'to 100 km/h in 6 seconds' means an acceleration of about 4.6 m/s²",
-        "At the top of a thrown ball's trajectory, speed is zero, but acceleration remains 9.8 m/s²",
-        "Elevator: you feel not speed, but acceleration — during uniform motion there is no sensation"
-      ],
-      "watchOut": "Distance and displacement are not the same. After going around a stadium track, you've covered 400 meters of distance, but your displacement is zero. The formula uses position, which decreases when moving backward."
+    {
+     "text": "Теперь ключевой геометрический шаг. Перемещение есть интеграл скорости по времени, то есть площадь под графиком $v(t)$. А эта фигура — трапеция: прямоугольник высотой $v_0$ плюс треугольник с катетами $t$ и $at$. Складываем площади и получаем ответ.",
+     "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{прямоугольник}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{треугольник}}",
+     "figure": "area",
+     "figCaption": "Путь — это площадь под графиком скорости. Трапеция раскладывается на прямоугольник и треугольник."
     },
-    "quiz": [
-      {
-        "id": "k1",
-        "type": "mcq",
-        "q": "A ball is thrown vertically upward. What happens at the highest point of the trajectory?",
-        "options": [
-          "Both velocity and acceleration are zero",
-          "Velocity is zero, acceleration is still 9.8 m/s² downward",
-          "Velocity is maximum, acceleration is zero",
-          "Acceleration changes sign to the opposite"
-        ],
-        "answer": 1,
-        "why": "Velocity passes through zero — the body momentarily hangs. But acceleration is due to gravity, which hasn't disappeared: it remains directed downward and equal to g throughout the entire flight.",
-        "hint": "Ask yourself: what creates acceleration in this problem? Does that cause disappear when the ball momentarily stops?"
-      },
-      {
-        "id": "k2",
-        "type": "free",
-        "q": "In your own words: why is a reference frame necessary to describe motion? Give an example where two observers give different but equally correct answers.",
-        "keywords": [
-          "relative",
-          "observer",
-          "reference frame",
-          "frame of reference",
-          "train car",
-          "train",
-          "earth",
-          "moves relative to"
-        ],
-        "needed": 1,
-        "why": "Position and velocity do not exist by themselves — only relative to something. A train passenger is stationary relative to the train car and moves at 100 km/h relative to the platform. Both descriptions are correct; there is no contradiction: they are different reference frames.",
-        "hint": "Imagine you are sitting on a train and drop your keys. How would you describe their motion — and how would a person on the platform? Which one is right?"
-      },
-      {
-        "id": "k3",
-        "type": "estimate",
-        "q": "A car accelerates from rest to 100 km/h in 8 seconds. What is its average acceleration in m/s²?",
-        "answer": 3.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "100 km/h is about 28 m/s (divide by 3.6). Acceleration equals change in velocity divided by time: 28/8 ≈ 3.5 m/s². For comparison: free fall gives 9.8 — almost three times as much.",
-        "hint": "First convert kilometers per hour to meters per second — divide by 3.6. Then recall the definition of acceleration: change in velocity over time."
-      }
-    ]
+    {
+     "text": "Прибавляя начальную координату, получаем итоговое уравнение. Обратите внимание на структуру: слагаемое с $t$ отвечает за равномерное движение, слагаемое с $t^2$ — за разгон. Именно квадрат и делает траекторию параболой.",
+     "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+     "figure": "parabola",
+     "figCaption": "График координаты — парабола. Её кривизна задаётся ускорением."
+    }
+   ],
+   "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
+   "plateCap": "Три слагаемых — три вклада: где были, куда двигались, как разгонялись. Всё остальное в кинематике равноускоренного движения выводится отсюда.",
+   "note": "Формула верна только при постоянном ускорении. Как только $a$ начинает меняться — при движении с сопротивлением воздуха, при колебаниях пружины, при полёте к далёкой планете — она перестаёт работать, и нужно решать дифференциальное уравнение. Мы вернёмся к этому в теме о колебаниях."
   },
-  "es": {
-    "title": "Punto material",
-    "subtitle": "Párrafo 1 · Cómo describir el movimiento sin conocer sus causas",
-    "intro": [
-      "Empecemos con un truco que parece una trampa, pero que en realidad constituye la esencia del método físico. Para describir el vuelo de una pelota, declararemos que la pelota es un punto. Sin tamaño, sin rotación, sin costuras en el cuero — solo un punto que tiene masa y posición.",
-      "Esto no es pereza ni simplificación por simpleza. Es una elección consciente de lo que es esencial en el problema. Para el vuelo de una pelota a través del campo, su diámetro no importa — lo importante es la trayectoria del centro. Pero para un tiro a portería, donde la pelota lleva efecto, el tamaño y la rotación se vuelven cruciales, y entonces el punto no sirve.",
-      "La capacidad de elegir la idealización correcta es la mitad del trabajo de un físico. Empezaremos con la más simple: el cuerpo es un punto, y todo lo que sabemos de él es dónde está ahora y qué tan rápido se mueve."
-    ],
-    "standNote": "Gire el soporte antes de leer la conclusión. Establezca la velocidad inicial y la aceleración, observe los vectores: verde — velocidad, rojo — aceleración. Preste atención a lo principal: cuando los vectores apuntan en direcciones opuestas, el cuerpo primero frena, se detiene — y retrocede, aunque la aceleración no haya cambiado durante todo este tiempo.",
-    "formula": {
-      "name": "Ecuación del movimiento uniformemente acelerado",
-      "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-      "alsoKnown": "Ecuación cinemática del movimiento con aceleración constante",
-      "authors": [
-        {
-          "who": "Galileo Galilei",
-          "year": "1638",
-          "what": "estableció que en caída libre la distancia recorrida crece proporcionalmente al cuadrado del tiempo — en contra de la creencia de que la velocidad de caída depende de la masa"
-        },
-        {
-          "who": "Isaac Newton y Gottfried Leibniz",
-          "year": "década de 1670",
-          "what": "crearon independientemente el cálculo diferencial, que transformó la descripción verbal de Galileo en una ecuación precisa"
-        }
-      ],
-      "story": "Galileo no tenía ni relojes precisos ni cálculo. Hacía rodar bolas por una rampa inclinada, ralentizando la caída lo suficiente como para poder medir el tiempo — con un reloj de agua, y según algunos testimonios, tarareando una melodía como metrónomo. Y descubrió algo sorprendente: en la primera unidad de tiempo la bola recorre una unidad de distancia, en la segunda — tres, en la tercera — cinco. Números impares. Y su suma son exactamente cuadrados: 1, 4, 9. Así nació la dependencia cuadrática.",
-      "symbols": [
-        {
-          "sym": "x(t)",
-          "latex": "x(t)",
-          "what": "coordenada en el instante t",
-          "unit": "m",
-          "note": "es la coordenada, no la distancia recorrida: al moverse hacia atrás disminuye"
-        },
-        {
-          "sym": "x₀",
-          "latex": "x_0",
-          "what": "coordenada inicial",
-          "unit": "m",
-          "note": "donde estaba el cuerpo en el instante t = 0; a menudo es conveniente tomarla como cero"
-        },
-        {
-          "sym": "v₀",
-          "latex": "v_0",
-          "what": "velocidad inicial",
-          "unit": "m/s",
-          "note": "magnitud vectorial: el signo indica la dirección a lo largo del eje"
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "what": "aceleración",
-          "unit": "m/s²",
-          "note": "constante en esta fórmula; si la aceleración cambia, se necesita otro aparato"
-        },
-        {
-          "sym": "t",
-          "latex": "t",
-          "what": "tiempo desde el inicio de la medición",
-          "unit": "s",
-          "note": "siempre no negativo y se mide desde el momento que hemos elegido"
-        }
-      ]
+  "math": {
+   "title": "Математика, которая здесь понадобилась",
+   "items": [
+    {
+     "what": "Что такое производная — по-физически",
+     "why": "Производная есть мера скорости изменения. Математик скажет «предел отношения приращений», физик — «насколько быстро величина меняется прямо сейчас». Это одно и то же. Ключевая мысль: чтобы узнать мгновенное значение, мы берём всё меньший промежуток и смотрим, к чему стремится результат. Тот же приём даст нам силу тока (скорость изменения заряда), мощность (скорость изменения энергии) и скорость реакции в химии.",
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
     },
-    "derivation": {
-      "title": "Deducción rigurosa",
-      "lead": "Solo necesitaremos dos definiciones — velocidad y aceleración — y una idea geométrica: el desplazamiento es el área bajo la gráfica de velocidad.",
-      "steps": [
-        {
-          "text": "Primero acordemos qué significa realmente 'posición'. Por sí mismo no tiene sentido: se necesitan un cuerpo de referencia, ejes y un reloj. Un pasajero está inmóvil respecto al vagón pero se desplaza velozmente respecto al andén; ambas afirmaciones son ciertas a la vez. Esto se denomina sistema de referencia.",
-          "latex": "x = x(t) \\quad \\text{en el sistema de referencia elegido}",
-          "figure": "frame",
-          "figCaption": "Un mismo movimiento, dos observadores, dos respuestas diferentes — y ambas correctas."
-        },
-        {
-          "text": "La velocidad media es el desplazamiento dividido entre el tiempo. Pero dice poco: recorrer una ciudad a una velocidad media de $30$ km/h podría implicar que estuviste atrapado en un atasco y luego aceleraste en la avenida. Necesitamos la velocidad en un instante dado.",
-          "latex": "v_{\\text{prom}} = \\frac{\\Delta x}{\\Delta t}",
-          "figure": "secant",
-          "figCaption": "La velocidad media es la pendiente de la recta secante que conecta dos puntos en la gráfica de coordenadas."
-        },
-        {
-          "text": "Reduzcamos el intervalo $\\Delta t$. La secante gira y en el límite se convierte en tangente. La pendiente de esta tangente es la velocidad instantánea. Aquí la derivada aparece no como un formalismo de un curso de matemáticas, sino como la única manera de responder a la pregunta '¿a qué velocidad se mueve el cuerpo en este preciso instante?'",
-          "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
-          "figure": "tangent",
-          "figCaption": "El límite de las secantes es la tangente. Su pendiente es la velocidad en ese instante."
-        },
-        {
-          "text": "La aceleración se define exactamente igual, pero un escalón más arriba: es la tasa de cambio de la velocidad. De ahí su extraña dimensión — metro por segundo al cuadrado: cada segundo la velocidad cambia en tantos metros por segundo.",
-          "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
-          "figure": "accel",
-          "figCaption": "La aceleración no indica qué tan rápido se mueve el cuerpo, sino qué tan rápido cambia su velocidad."
-        },
-        {
-          "text": "Supongamos que la aceleración es constante. Entonces la velocidad aumenta uniformemente: se suma $a$ a la velocidad inicial cada segundo. Esta es la primera de las ecuaciones cinemáticas, y se obtiene integrando directamente la definición de aceleración.",
-          "latex": "v(t) = v_0 + a t",
-          "figure": "vline",
-          "figCaption": "Con aceleración constante, la gráfica de velocidad es una recta con pendiente a."
-        },
-        {
-          "text": "Ahora el paso geométrico clave. El desplazamiento es la integral de la velocidad respecto al tiempo, es decir, el área bajo la gráfica de $v(t)$. Y esta figura es un trapecio: un rectángulo de altura $v_0$ más un triángulo de catetos $t$ y $at$. Sumamos las áreas y obtenemos la respuesta.",
-          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectángulo}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triángulo}}",
-          "figure": "area",
-          "figCaption": "El desplazamiento es el área bajo la gráfica de velocidad. El trapecio se descompone en un rectángulo y un triángulo."
-        },
-        {
-          "text": "Sumando la coordenada inicial, obtenemos la ecuación final. Observe la estructura: el término con $t$ corresponde al movimiento uniforme, el término con $t^2$ a la aceleración. Es precisamente el cuadrado lo que hace que la trayectoria sea una parábola.",
-          "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-          "figure": "parabola",
-          "figCaption": "La gráfica de coordenadas es una parábola. Su curvatura viene dada por la aceleración."
-        }
-      ],
-      "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
-      "plateCap": "Tres términos — tres contribuciones: dónde estábamos, hacia dónde nos movíamos, cómo acelerábamos. Todo lo demás en la cinemática del movimiento uniformemente acelerado se deduce de aquí.",
-      "note": "La fórmula solo es válida para aceleración constante. En cuanto $a$ comienza a cambiar — en movimiento con resistencia del aire, en oscilaciones de un resorte, en un vuelo hacia un planeta lejano — deja de funcionar y hay que resolver una ecuación diferencial. Volveremos a esto en el tema de oscilaciones."
+    {
+     "what": "Почему интеграл — это площадь",
+     "why": "Разобьём время на крошечные кусочки. За каждый кусочек $\\Delta t$ тело проходит примерно $v\\,\\Delta t$ — это площадь узкого прямоугольника под графиком. Сложим все прямоугольники, устремим их ширину к нулю — получим точную площадь и точный путь. Интеграл и есть такая сумма бесконечного числа бесконечно малых вкладов.",
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
     },
-    "math": {
-      "title": "Matemáticas que se necesitaron aquí",
-      "items": [
-        {
-          "what": "Qué es la derivada — desde un punto de vista físico",
-          "why": "La derivada es una medida de la tasa de cambio. Un matemático dirá 'límite de la razón de incrementos', un físico dirá 'qué tan rápido cambia una magnitud en este instante'. Es lo mismo. La idea clave: para conocer el valor instantáneo, tomamos intervalos cada vez más pequeños y vemos hacia qué tiende el resultado. El mismo procedimiento nos dará la corriente eléctrica (tasa de cambio de la carga), la potencia (tasa de cambio de la energía) y la velocidad de reacción en química.",
-          "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
-        },
-        {
-          "what": "Por qué la integral es un área",
-          "why": "Dividimos el tiempo en fragmentos diminutos. En cada fragmento $\\Delta t$, el cuerpo recorre aproximadamente $v\\,\\Delta t$ — esto es el área de un rectángulo estrecho bajo la gráfica. Sumamos todos los rectángulos, hacemos tender su ancho a cero — obtenemos el área exacta y el recorrido exacto. La integral es esa suma de un número infinito de contribuciones infinitesimales.",
-          "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
-        },
-        {
-          "what": "Vectores: por qué el signo es más importante de lo que parece",
-          "why": "La velocidad y la aceleración son vectores. En una línea recta esto se reduce al signo, pero el signo lo decide todo: si $v$ y $a$ tienen signos opuestos, el cuerpo frena; si tienen el mismo signo, acelera. Por eso una pelota lanzada hacia arriba tiene velocidad cero en el punto más alto, pero su aceleración sigue siendo $9{,}8$ m/s² dirigida hacia abajo.",
-          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{aceleración}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{frenado}"
-        }
-      ]
-    },
-    "example": {
-      "title": "Ejemplo con números",
-      "lead": "El clásico problema de frenado — el mismo que está detrás de las reglas de tránsito.",
-      "given": "Un automóvil viaja a $20$ m/s (que son $72$ km/h) y frena con una aceleración de $5$ m/s². Encuentre la distancia de frenado.",
-      "law": "$v(t) = v_0 + at$ y $x(t) = v_0 t + at^2/2$, donde $a = -5$ m/s² (el signo menos: aceleración en contra del movimiento)",
-      "solution": [
-        {
-          "text": "Primero encontremos el tiempo hasta detenerse por completo: la velocidad debe llegar a cero.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
-        },
-        {
-          "text": "Sustituimos este tiempo en la ecuación de la posición.",
-          "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
-        },
-        {
-          "text": "Obtenemos la distancia de frenado.",
-          "latex": "x = 40\\ \\text{m}"
-        }
-      ],
-      "answer": "La distancia de frenado es $40$ metros",
-      "check": "Vale la pena recordar no el número, sino la dependencia: la distancia es proporcional al cuadrado de la velocidad. El doble de rápido — el cuádruple de distancia. A $40$ m/s el mismo automóvil recorrería $160$ metros, no $80$. Esta relación es la responsable del fuerte aumento de la gravedad de los accidentes con la velocidad — y se deriva directamente del término con $t^2$ en nuestra fórmula."
-    },
-    "constants": {
-      "title": "Magnitudes de esta sección",
-      "lead": "Aquí casi no hay constantes — la cinemática describe cualquier movimiento. El único vínculo con nuestro planeta aparece cuando hablamos de caída.",
-      "items": [
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "Aceleración de la gravedad",
-          "value": "9,81",
-          "unit": "m/s²",
-          "why": "La aceleración con la que cae cualquier cuerpo cerca de la superficie terrestre — independientemente de su masa, si se desprecia la resistencia del aire. Este descubrimiento de Galileo contradecía una tradición de dos milenios.",
-          "mnemo": "En los problemas casi siempre se toma 10 m/s² — el error es de aproximadamente 2%, pero se calcula mentalmente."
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "name": "Velocidad",
-          "value": "derivada de la posición",
-          "unit": "m/s",
-          "why": "La dimensión se lee directamente como definición: metros (desplazamiento) por segundo (tiempo). Cada vez que vea una fracción en las unidades, busque su significado — allí casi siempre se esconde la definición de la magnitud."
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "name": "Aceleración",
-          "value": "derivada de la velocidad",
-          "unit": "m/s²",
-          "why": "Metro por segundo al cuadrado se lee así: 'en tantos metros por segundo cambia la velocidad cada segundo'. El segundo se eleva al cuadrado porque la división por el tiempo ocurrió dos veces."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "El punto material — una elección consciente de lo esencial. La velocidad es la derivada de la posición, la aceleración es la derivada de la velocidad, y la distancia es el área bajo la gráfica de velocidad. Toda la ecuación del movimiento uniformemente acelerado se deriva de estas tres afirmaciones.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Idealización",
-          "text": "Reducimos el cuerpo a un punto cuando su tamaño y rotación no son relevantes para el problema."
-        },
-        {
-          "icon": "clock",
-          "title": "Derivada",
-          "text": "La velocidad instantánea es la pendiente de la tangente a la gráfica de la posición, no la relación entre la distancia total y el tiempo."
-        },
-        {
-          "icon": "sigma",
-          "title": "Distancia como área",
-          "text": "El desplazamiento es igual al área bajo la gráfica de velocidad. De ahí surge el término con el cuadrado del tiempo."
-        },
-        {
-          "icon": "formula",
-          "title": "El signo decide",
-          "text": "La velocidad y la aceleración apuntan en direcciones opuestas — el cuerpo frena, aunque la aceleración sea constante."
-        }
-      ],
-      "where": [
-        "La distancia de frenado crece como el cuadrado de la velocidad: el doble de rápido — el cuádruple de distancia",
-        "La aceleración de un automóvil 'de 0 a 100 en 6 segundos' es una aceleración de aproximadamente 4,6 m/s²",
-        "En el punto más alto de una pelota lanzada hacia arriba, la velocidad es cero, pero la aceleración sigue siendo 9,8 m/s²",
-        "Ascensor: no se siente la velocidad, sino la aceleración — en movimiento uniforme no hay sensación"
-      ],
-      "watchOut": "La distancia recorrida y el desplazamiento no son lo mismo. Al dar una vuelta a una pista, recorres 400 metros de distancia, pero tu desplazamiento es cero. En la fórmula se usa la coordenada, por lo que al moverse hacia atrás disminuye."
-    },
-    "quiz": [
-      {
-        "id": "k1",
-        "type": "mcq",
-        "q": "Se lanza una pelota verticalmente hacia arriba. ¿Qué sucede en el punto más alto de la trayectoria?",
-        "options": [
-          "Tanto la velocidad como la aceleración son cero",
-          "La velocidad es cero, la aceleración sigue siendo 9,8 m/s² hacia abajo",
-          "La velocidad es máxima, la aceleración es cero",
-          "La aceleración cambia de signo al opuesto"
-        ],
-        "answer": 1,
-        "why": "La velocidad pasa por cero — el cuerpo se detiene por un instante. Pero la aceleración es debida a la gravedad, que no ha desaparecido: permanece dirigida hacia abajo e igual a g durante todo el vuelo.",
-        "hint": "Pregúntate: ¿qué causa la aceleración en este problema? ¿Desaparece esa causa cuando la pelota se detiene por un instante?"
-      },
-      {
-        "id": "k2",
-        "type": "free",
-        "q": "En tus propias palabras: ¿por qué es necesario un sistema de referencia para describir el movimiento? Da un ejemplo donde dos observadores den respuestas diferentes pero igualmente válidas.",
-        "keywords": [
-          "relativ",
-          "observ",
-          "referenc",
-          "vagón",
-          "tren",
-          "tierr",
-          "mover respecto a"
-        ],
-        "needed": 1,
-        "why": "La posición y la velocidad no existen por sí mismas — solo en relación con algo. Un pasajero de un tren está inmóvil respecto al vagón y se mueve a 100 km/h respecto al andén. Ambas descripciones son correctas, no hay contradicción: son diferentes sistemas de referencia.",
-        "hint": "Imagina que estás sentado en un tren y dejas caer las llaves. ¿Cómo describirías su movimiento tú, y cómo lo haría una persona en el andén? ¿Quién tiene razón?"
-      },
-      {
-        "id": "k3",
-        "type": "estimate",
-        "q": "Un automóvil acelera desde el reposo hasta 100 km/h en 8 segundos. ¿Cuál es su aceleración media en m/s²?",
-        "answer": 3.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "100 km/h son aproximadamente 28 m/s (dividimos entre 3,6). La aceleración es igual al cambio de velocidad dividido por el tiempo: 28/8 ≈ 3,5 m/s². Para comparar: la caída libre da 9,8 — casi tres veces más.",
-        "hint": "Primero convierta kilómetros por hora a metros por segundo — divida entre 3,6. Luego recuerde la definición de aceleración: cambio de velocidad en el tiempo."
-      }
-    ]
+    {
+     "what": "Векторы: почему знак важнее, чем кажется",
+     "why": "Скорость и ускорение — векторы. На прямой это сводится к знаку, но знак решает всё: если $v$ и $a$ разных знаков, тело тормозит; если одинаковых — разгоняется. Именно поэтому подброшенный вверх мяч имеет нулевую скорость в верхней точке, но ускорение там по-прежнему $9{,}8$ м/с², направленное вниз.",
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{разгон}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{торможение}"
+    }
+   ]
   },
-  "ar": {
-    "title": "نقطة مادية",
-    "subtitle": "الفقرة 1 · كيف نصف الحركة دون معرفة أسبابها",
-    "intro": [
-      "لنبدأ بأسلوب يبدو كخدعة، لكنه في الواقع جوهر المنهج الفيزيائي. لوصف طيران كرة، سنعتبر الكرة نقطة. بلا حجم، بلا دوران، بلا خطوط على السطح — مجرد نقطة لها كتلة وموقع.",
-      "هذا ليس كسلاً ولا تبسيطاً من أجل التبسيط. إنه اختيار واعٍ لما هو جوهري في هذه المسألة. لطيران الكرة عبر الملعب، قطرها غير مهم — المهم هو مسار مركزها. أما بالنسبة لتسديدة نحو المرمى حيث تُدور الكرة، فالحجم والدوران يصبحان أساسيين، وعندها لا تصلح النقطة.",
-      "القدرة على اختيار النموذج المثالي الصحيح هي نصف عمل الفيزيائي. سنبدأ بأبسط نموذج: الجسم نقطة، وكل ما نعرفه عنها هو أين هي الآن وكم هي سرعتها."
+  "example": {
+   "title": "Пример с числами",
+   "lead": "Классическая задача про торможение — та самая, что стоит за правилами дорожного движения.",
+   "given": "Автомобиль едет со скоростью $20$ м/с (это $72$ км/ч) и тормозит с ускорением $5$ м/с². Найти тормозной путь.",
+   "law": "$v(t) = v_0 + at$ и $x(t) = v_0 t + at^2/2$, где $a = -5$ м/с² (знак минус: ускорение против движения)",
+   "solution": [
+    {
+     "text": "Сначала найдём время до полной остановки: скорость должна обратиться в ноль.",
+     "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{с}"
+    },
+    {
+     "text": "Подставляем это время в уравнение координаты.",
+     "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
+    },
+    {
+     "text": "Получаем тормозной путь.",
+     "latex": "x = 40\\ \\text{м}"
+    }
+   ],
+   "answer": "Тормозной путь — $40$ метров",
+   "check": "Стоит запомнить не число, а зависимость: путь пропорционален квадрату скорости. Вдвое быстрее — вчетверо дальше. При $40$ м/с тот же автомобиль проедет уже $160$ метров, а не $80$. Именно это соотношение стоит за резким ростом тяжести аварий с ростом скорости — и оно прямо следует из слагаемого с $t^2$ в нашей формуле."
+  },
+  "constants": {
+   "title": "Величины этого параграфа",
+   "lead": "Констант здесь почти нет — кинематика описывает любое движение. Единственная привязка к нашей планете появляется, когда речь заходит о падении.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Ускорение свободного падения",
+     "value": "9,81",
+     "unit": "м / с²",
+     "why": "Ускорение, с которым падает любое тело у поверхности Земли — независимо от массы, если пренебречь сопротивлением воздуха. Именно это открытие Галилея противоречило двухтысячелетней традиции.",
+     "mnemo": "В задачах почти всегда берут 10 м/с² — ошибка около 2%, зато считается в уме."
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "name": "Скорость",
+     "value": "производная координаты",
+     "unit": "м / с",
+     "why": "Размерность прямо читается как определение: метры (перемещение) на секунду (время). Всякий раз, когда видите дробь в единицах, ищите в ней смысл — там почти всегда спрятано определение величины."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "name": "Ускорение",
+     "value": "производная скорости",
+     "unit": "м / с²",
+     "why": "Метр на секунду в квадрате читается так: «на столько метров в секунду меняется скорость за каждую секунду». Секунда возводится в квадрат потому, что деление на время произошло дважды."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Материальная точка — осознанный выбор существенного. Скорость есть производная координаты, ускорение — производная скорости, а путь — площадь под графиком скорости. Всё уравнение равноускоренного движения следует из этих трёх утверждений.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Идеализация",
+     "text": "Тело сводим к точке, когда его размер и вращение для задачи несущественны."
+    },
+    {
+     "icon": "clock",
+     "title": "Производная",
+     "text": "Мгновенная скорость — наклон касательной к графику координаты, а не отношение полного пути ко времени."
+    },
+    {
+     "icon": "sigma",
+     "title": "Путь как площадь",
+     "text": "Перемещение равно площади под графиком скорости. Отсюда и берётся слагаемое с квадратом времени."
+    },
+    {
+     "icon": "formula",
+     "title": "Знак решает",
+     "text": "Скорость и ускорение направлены в разные стороны — тело тормозит, хотя ускорение постоянно."
+    }
+   ],
+   "where": [
+    "Тормозной путь растёт как квадрат скорости: вдвое быстрее — вчетверо дальше",
+    "Разгон автомобиля «до сотни за 6 секунд» — это ускорение около 4,6 м/с²",
+    "В верхней точке подброшенного мяча скорость ноль, а ускорение остаётся 9,8 м/с²",
+    "Лифт: вы чувствуете не скорость, а ускорение — при равномерном движении ощущений нет"
+   ],
+   "watchOut": "Путь и перемещение — не одно и то же. Пройдя круг по стадиону, вы преодолели 400 метров пути, но ваше перемещение равно нулю. В формуле стоит именно координата, поэтому при движении назад она уменьшается."
+  },
+  "quiz": [
+   {
+    "id": "k1",
+    "type": "mcq",
+    "q": "Мяч подброшен вертикально вверх. Что происходит в высшей точке траектории?",
+    "options": [
+     "И скорость, и ускорение равны нулю",
+     "Скорость равна нулю, ускорение по-прежнему 9,8 м/с² вниз",
+     "Скорость максимальна, ускорение равно нулю",
+     "Ускорение меняет знак на противоположный"
     ],
-    "standNote": "تفاعل مع المحاكاة قبل قراءة الاستنتاج. اضبط السرعة الابتدائية والتسارع، وانظر إلى المتجهات: الأخضر للسرعة، الأحمر للتسارع. لاحظ الشيء الرئيسي: عندما تكون المتجهات متعاكسة الاتجاه، يتباطأ الجسم أولاً ثم يتوقف ويعود إلى الخلف، مع أن التسارع لم يتغير طوال الوقت.",
-    "formula": {
-      "name": "معادلة الحركة المتسارعة بانتظام",
-      "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-      "alsoKnown": "معادلة الحركة الحركية بتسارع ثابت",
-      "authors": [
-        {
-          "who": "جاليليو جاليلي",
-          "year": 1638,
-          "what": "أثبت أن المسافة المقطوعة أثناء السقوط الحر تتناسب مع مربع الزمن — خلافاً للاعتقاد بأن سرعة السقوط تعتمد على الكتلة"
-        },
-        {
-          "who": "إسحاق نيوتن وغوتفريد لايبنتس",
-          "year": "عقد 1670",
-          "what": "ابتكرا بشكل مستقل التفاضل والتكامل، مما حول الوصف اللفظي لجاليليو إلى معادلة دقيقة"
-        }
-      ],
-      "story": "لم يكن لدى جاليليو ساعات دقيقة ولا حساب التفاضل. لقد دحرج كرات على مزلاج مائل، مما أبطأ السقوط بما يكفي لقياس الوقت — باستخدام ساعة مائية، وبحسب بعض الروايات، عبر الترنيم بلحن كبندول الإيقاع. واكتشف أمراً مذهلاً: في الوحدة الزمنية الأولى تقطع الكرة وحدة مسافة واحدة، في الثانية ثلاث وحدات، في الثالثة خمس وحدات. أعداد فردية. ومجموعها هو بالضبط المربعات: 1، 4، 9. هكذا وُلد الاعتماد التربيعي."
-    },
-    "symbols": [
-      {
-        "sym": "x(t)",
-        "latex": "x(t)",
-        "what": "الإحداثي عند اللحظة t",
-        "unit": "م",
-        "note": "هو الإحداثي وليس المسافة: عند الحركة للخلف يتناقص"
-      },
-      {
-        "sym": "x₀",
-        "latex": "x_0",
-        "what": "الإحداثي الابتدائي",
-        "unit": "م",
-        "note": "أين كان الجسم عند اللحظة t = 0؛ غالباً ما نجعله صفراً للتسهيل"
-      },
-      {
-        "sym": "v₀",
-        "latex": "v_0",
-        "what": "السرعة الابتدائية",
-        "unit": "م/ث",
-        "note": "كمية متجهة: الإشارة تحدد الاتجاه على طول المحور"
-      },
-      {
-        "sym": "a",
-        "latex": "a",
-        "what": "التسارع",
-        "unit": "م/ث²",
-        "note": "ثابت في هذه المعادلة؛ إذا تغير التسارع نحتاج إلى أدوات أخرى"
-      },
-      {
-        "sym": "t",
-        "latex": "t",
-        "what": "الزمن من بداية القياس",
-        "unit": "ث",
-        "note": "دائماً غير سالب ويُحسب من اللحظة التي اخترناها"
-      }
+    "answer": 1,
+    "why": "Скорость проходит через ноль — тело на мгновение зависает. Но ускорение задаётся тяготением, которое никуда не делось: оно остаётся направленным вниз и равным g на протяжении всего полёта.",
+    "hint": "Спросите себя: что создаёт ускорение в этой задаче? Исчезает ли эта причина, когда мяч на мгновение останавливается?"
+   },
+   {
+    "id": "k2",
+    "type": "free",
+    "q": "Своими словами: почему для описания движения обязательно нужна система отсчёта? Приведите пример, где два наблюдателя дадут разные, но одинаково верные ответы.",
+    "keywords": [
+     "относител",
+     "наблюдател",
+     "отсчёт",
+     "отсчет",
+     "вагон",
+     "поезд",
+     "земл",
+     "движется относительно"
     ],
-    "derivation": {
-      "title": "الاشتقاق الصارم",
-      "lead": "سنحتاج فقط إلى تعريفين - السرعة والتسارع - وفكرة هندسية واحدة: المساحة تحت منحنى السرعة هي المسافة المقطوعة.",
-      "steps": [
-        {
-          "text": "أولاً، دعنا نتفق على ما تعنيه كلمة 'موقع'. بمفردها لا معنى لها: نحتاج إلى جسم مرجعي ومحاور وساعة. الراكب ساكن بالنسبة للعربة ويتحرك بسرعة بالنسبة للرصيف - كلا العبارتين صحيحتان في نفس الوقت. وهذا ما يسمى نظام الإسناد.",
-          "latex": "x = x(t) \\quad \\text{في نظام الإسناد المختار}",
-          "figure": "frame",
-          "figCaption": "حركة واحدة، راصدان، إجابتان مختلفتان - وكلتاهما صحيحة."
-        },
-        {
-          "text": "السرعة المتوسطة هي الإزاحة مقسومة على الزمن. لكنها لا تخبرنا كثيرًا: بعد قيادة السيارة عبر المدينة بسرعة متوسطة 30 كم/س، قد تكون واقفًا في زحام وتندفع في الشارع الرئيسي. نحتاج السرعة اللحظية.",
-          "latex": "v_{\\text{متوسط}} = \\frac{\\Delta x}{\\Delta t}",
-          "figure": "secant",
-          "figCaption": "السرعة المتوسطة - ميل القاطع الذي يربط نقطتين على منحنى الموقع."
-        },
-        {
-          "text": "سنقوم بتقليل الفاصل الزمني $\\Delta t$. يدور القاطع ويصبح في النهاية مماسًا. ميل هذا المماس هو السرعة اللحظية. هنا تظهر المشتقة ليس كإجراء شكلي من مقرر الرياضيات، ولكن كالطريقة الوحيدة للإجابة على سؤال 'بأي سرعة يتحرك الجسم الآن'.",
-          "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
-          "figure": "tangent",
-          "figCaption": "نهاية القواطع - المماس. ميله هو السرعة في تلك اللحظة."
-        },
-        {
-          "text": "يُعرّف التسارع بنفس الطريقة، ولكن بمستوى أعلى: هو معدل تغير السرعة. ومن هنا يأتي البعد الغريب - متر لكل ثانية مربعة: في كل ثانية، تتغير السرعة بمقدار معين من الأمتار في الثانية.",
-          "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
-          "figure": "accel",
-          "figCaption": "التسارع لا يخبرنا إذا كان الجسم يتحرك بسرعة، بل عن مدى سرعة تغير سرعته."
-        },
-        {
-          "text": "لنفترض أن التسارع ثابت. عندها تزداد السرعة بانتظام: يضاف بمقدار a كل ثانية إلى السرعة الابتدائية. هذه هي أول معادلة من معادلات الحركة، ويتم الحصول عليها عن طريق التكامل المباشر لتعريف التسارع.",
-          "latex": "v(t) = v_0 + a t",
-          "figure": "vline",
-          "figCaption": "عند تسارع ثابت، يكون منحنى السرعة خطًا مستقيمًا بميل a."
-        },
-        {
-          "text": "الآن الخطوة الهندسية الرئيسية. الإزاحة هي تكامل السرعة بالنسبة للزمن، أي المساحة تحت منحنى $v(t)$. وهذا الشكل هو شبه منحرف: مستطيل بارتفاع $v_0$ بالإضافة إلى مثلث بأضلاع $t$ و $at$. نجمع المساحات ونحصل على الإجابة.",
-          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{مستطيل}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{مثلث}}",
-          "figure": "area",
-          "figCaption": "المسافة المقطوعة هي المساحة تحت منحنى السرعة. شبه المنحرف ينقسم إلى مستطيل ومثلث."
-        },
-        {
-          "text": "بإضافة الموقع الابتدائي، نحصل على المعادلة النهائية. لاحظ البنية: الحد الذي يحتوي على $t$ يمثل الحركة المنتظمة، والحد الذي يحتوي على $t^2$ يمثل التسارع. المربع هو ما يجعل المسار قطعًا مكافئًا.",
-          "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
-          "figure": "parabola",
-          "figCaption": "منحنى الموقع - قطع مكافئ. انحناؤه يحدده التسارع."
-        }
-      ],
-      "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
-      "plateCap": "ثلاثة حدود - ثلاث مساهمات: أين كنا، وإلى أين كنا نتحرك، وكيف تسارعنا. كل شيء آخر في حركيات الحركة المتسارعة بانتظام يُشتق من هنا.",
-      "note": "الصيغة صالحة فقط للتسارع الثابت. بمجرد أن يبدأ $a$ في التغير - مثل الحركة مع مقاومة الهواء، أو اهتزازات الزنبرك، أو الطيران إلى كوكب بعيد - فإنها تتوقف عن العمل، ويجب حل معادلة تفاضلية. سنعود إلى هذا في موضوع الاهتزازات."
+    "needed": 1,
+    "why": "Положение и скорость не существуют сами по себе — только относительно чего-то. Пассажир поезда неподвижен относительно вагона и движется со скоростью 100 км/ч относительно перрона. Оба описания верны, противоречия нет: это разные системы отсчёта.",
+    "hint": "Представьте, что вы сидите в поезде и роняете ключи. Как опишете их движение вы — и как человек на платформе? Кто из вас прав?"
+   },
+   {
+    "id": "k3",
+    "type": "estimate",
+    "q": "Автомобиль разгоняется с места до 100 км/ч за 8 секунд. Каково его среднее ускорение в м/с²?",
+    "answer": 3.5,
+    "unit": "м/с²",
+    "tolerance": 1.4,
+    "why": "100 км/ч — это примерно 28 м/с (делим на 3,6). Ускорение равно изменению скорости, делённому на время: 28/8 ≈ 3,5 м/с². Для сравнения: свободное падение даёт 9,8 — почти втрое больше.",
+    "hint": "Сначала переведите километры в час в метры в секунду — разделите на 3,6. Затем вспомните определение ускорения: изменение скорости за время."
+   }
+  ],
+  "curiosities": {
+   "title": "Занимательное: проверьте руками",
+   "lead": "Кинематика измеряется линейкой: она про то, где тело и когда, а не про то, почему.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "опыт на кухне",
+     "h": "Линейка вместо секундомера",
+     "text": "Попросите кого-нибудь держать линейку вертикально за верхний конец. Держите пальцы у нулевой отметки, не касаясь. Партнёр отпускает линейку без предупреждения — вы ловите её как можно быстрее. Запомните, на какой отметке поймали.",
+     "answer": "Пройденный путь переводится во время по $t=\\sqrt{2h/g}$. Двадцать сантиметров дают около 0,20 секунды, тридцать — около 0,25. Это ваше время реакции, и вы измерили его без единого прибора: линейка сама работает секундомером, потому что падение с известным ускорением однозначно связывает путь со временем. Отсюда же оценка тормозного пути: за 0,2 секунды реакции автомобиль на скорости 60 км/ч проезжает больше трёх метров, ещё не начав тормозить."
     },
-    "math": {
-      "title": "الرياضيات التي كانت ضرورية هنا",
-      "items": [
-        {
-          "what": "ما هي المشتقة - فيزيائياً",
-          "why": "المشتقة هي مقياس لمعدل التغير. عالم الرياضيات سيقول 'نهاية نسبة الزيادات'، بينما الفيزيائي سيقول 'مدى سرعة تغير الكمية الآن'. هذا هو نفس الشيء. الفكرة الرئيسية: لمعرفة القيمة اللحظية، نأخذ فترة زمنية أصغر فأصغر ونرى إلى أين تتجه النتيجة. نفس الأسلوب سيعطينا شدة التيار (معدل تغير الشحنة)، والقدرة (معدل تغير الطاقة)، ومعدل التفاعل في الكيمياء.",
-          "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
-        },
-        {
-          "what": "لماذا التكامل هو مساحة",
-          "why": "نقسم الزمن إلى قطع صغيرة جداً. في كل قطعة $\\Delta t$، يقطع الجسم مسافة تقريبية $v\\,\\Delta t$ - وهي مساحة مستطيل ضيق تحت المنحنى. نجمع كل المستطيلات، ونجعل عرضها يؤول إلى الصفر - نحصل على المساحة الدقيقة والمسار الدقيق. التكامل هو مثل هذا المجموع من عدد لا نهائي من المساهمات المتناهية في الصغر.",
-          "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
-        },
-        {
-          "what": "المتجهات: لماذا الإشارة أهم مما يبدو",
-          "why": "السرعة والتسارع متجهان. على خط مستقيم، يتعلق الأمر بالإشارة، ولكن الإشارة تحدد كل شيء: إذا كانت $v$ و $a$ بإشارتين مختلفتين، يتباطأ الجسم؛ إذا كانتا بنفس الإشارة، يتسارع. لهذا السبب، الكرة المرمية لأعلى تكون سرعتها صفرًا عند القمة، لكن تسارعها لا يزال $9{,}8$ م/ث² متجهًا لأسفل.",
-          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{تسارع}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{تباطؤ}"
-        }
-      ]
+    {
+     "icon": "paradox",
+     "kind": "парадокс",
+     "h": "Две монеты, один звук",
+     "text": "Положите монету на край стола. Вторую держите рядом на той же высоте. Резким щелчком запустите первую горизонтально — далеко вперёд, — и одновременно отпустите вторую вертикально вниз. Первая пролетит метр в сторону, вторая упадёт отвесно. Кто коснётся пола раньше?",
+     "answer": "Обе — одновременно, вы услышите один удар. Горизонтальное движение никак не влияет на вертикальное: по вертикали обе монеты падают с одним и тем же ускорением из одной высоты. Это называется независимостью движений, и именно поэтому сложное движение раскладывается на простые по осям. Пуля, выпущенная горизонтально, и пуля, просто выпущенная из руки в тот же момент, коснутся земли вместе — при условии, что земля ровная, а сопротивлением воздуха можно пренебречь."
     },
-    "example": {
-      "title": "مثال بالأرقام",
-      "lead": "المسألة الكلاسيكية عن الكبح - هي نفسها التي تقف وراء قواعد المرور.",
-      "given": "تتحرك سيارة بسرعة $20$ m/s (أي $72$ km/h) وتكبح بتسارع $5$ m/s². أوجد مسافة الكبح.",
-      "law": "$v(t) = v_0 + at$ و $x(t) = v_0 t + at^2/2$، حيث $a = -5$ m/s² (علامة الطرح: التسارع عكس اتجاه الحركة)",
-      "solution": [
-        {
-          "text": "أولاً نوجد الزمن حتى التوقف التام: يجب أن تصبح السرعة صفراً.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{مع}"
-        },
-        {
-          "text": "نعوض هذا الزمن في معادلة الموضع.",
-          "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
-        },
-        {
-          "text": "نحصل على مسافة الكبح.",
-          "latex": "x = 40\\ \\text{m}"
-        }
-      ],
-      "answer": "مسافة الكبح — $40$ متراً",
-      "check": "يجدر تذكر ليس الرقم بل العلاقة: المسافة تتناسب مع مربع السرعة. ضعف السرعة يعني أربعة أضعاف المسافة. عند $40$ m/s ستقطع نفس السيارة $160$ متراً وليس $80$. هذه العلاقة هي ما يقف وراء الزيادة الحادة في خطورة الحوادث مع زيادة السرعة - وهي تتبع مباشرة من الحد $t^2$ في صيغتنا."
+    {
+     "icon": "fact",
+     "kind": "занимательный факт",
+     "h": "Галилей замедлил тяготение",
+     "text": "Измерить свободное падение в начале XVII века было нечем: тело пролетает два метра за две трети секунды, а часов такой точности не существовало. Галилей обошёл это, пустив шар по наклонному жёлобу: тот же закон, но ускорение во столько раз меньше, во сколько наклон положе. Время он отсчитывал по весу воды, вытекшей из сосуда через узкое отверстие. Так был получен главный результат: путь растёт как квадрат времени, а не пропорционально ему, как думали до него. Приём остался в физике навсегда — если явление слишком быстрое, найдите способ его замедлить, не меняя сути."
     },
-    "constants": {
-      "title": "الكميات في هذا القسم",
-      "lead": "لا توجد ثوابت هنا تقريباً - علم الحركة يصف أي حركة. الارتباط الوحيد بكوكبنا يظهر عندما نتحدث عن السقوط.",
-      "items": [
-        {
-          "sym": "g",
-          "latex": "g",
-          "dictKey": "g",
-          "name": "تسارع الجاذبية الأرضية",
-          "value": "9,81",
-          "unit": "m/s²",
-          "why": "التسارع الذي يسقط به أي جسم قرب سطح الأرض - بغض النظر عن كتلته، إذا أُهملت مقاومة الهواء. هذا اكتشاف غاليليو الذي تعارض مع تقليد دام ألفي عام.",
-          "mnemo": "في المسائل غالباً ما نأخذ 10 m/s² - الخطأ حوالي 2%، لكن الحساب ذهني."
-        },
-        {
-          "sym": "v",
-          "latex": "v",
-          "name": "السرعة",
-          "value": "مشتق الموضع",
-          "unit": "m/s",
-          "why": "البعد يُقرأ مباشرة كتعريف: متر (إزاحة) في الثانية (زمن). كلما رأيت كسراً في الوحدات، ابحث عن المعنى - فغالباً ما يكون تعريف الكمية مخبأً هناك."
-        },
-        {
-          "sym": "a",
-          "latex": "a",
-          "name": "التسارع",
-          "value": "مشتق السرعة",
-          "unit": "m/s²",
-          "why": "متر لكل ثانية مربعة يُقرأ كالتالي: 'بمقدار كذا متر في الثانية تتغير السرعة كل ثانية'. الثانية ترفع للأس اثنان لأن القسمة على الزمن حدثت مرتين."
-        }
-      ]
+    {
+     "icon": "mnemo",
+     "kind": "мнемоника",
+     "h": "Скорость — наклон графика, ускорение — наклон наклона",
+     "text": "На графике «координата от времени» скорость есть крутизна кривой: горизонтальный участок — стоим, круче линия — быстрее едем. Возьмите крутизну ещё раз, теперь от графика скорости, — получите ускорение. Отсюда сразу видно и обратное: площадь под графиком скорости есть пройденный путь. Два действия, «наклон» и «площадь», связывают все три величины и избавляют от заучивания формул."
     },
-    "memo": {
-      "essence": "النقطة المادية - اختيار واعي للجوهري. السرعة هي مشتق الموضع، والتسارع هو مشتق السرعة، والمسافة هي المساحة تحت منحنى السرعة. كل معادلات الحركة بتسارع ثابت تتبع من هذه العبارات الثلاث.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "المثالية",
-          "text": "نختزل الجسم إلى نقطة عندما يكون حجمه ودورانه غير مهمين للمسألة."
-        },
-        {
-          "icon": "clock",
-          "title": "المشتق",
-          "text": "السرعة اللحظية هي ميل المماس لمنحنى الموضع، وليس نسبة المسافة الكلية إلى الزمن."
-        },
-        {
-          "icon": "sigma",
-          "title": "المسافة كمساحة",
-          "text": "الإزاحة تساوي المساحة تحت منحنى السرعة. ومن هنا يأتي الحد المربع للزمن."
-        },
-        {
-          "icon": "formula",
-          "title": "الإشارة تحدد",
-          "text": "السرعة والتسارع في اتجاهين متعاكسين - الجسم يتباطأ رغم أن التسارع ثابت."
-        }
-      ],
-      "where": [
-        "مسافة الكبح تزداد كمربع السرعة: ضعف السرعة يعني أربعة أضعاف المسافة",
-        "تسارع السيارة 'إلى المئة في 6 ثوان' هو تسارع حوالي 4,6 m/s²",
-        "في أعلى نقطة للكرة المقذوفة لأعلى، السرعة صفر والتسارع يبقى 9,8 m/s²",
-        "المصعد: تشعر بالتسارع وليس السرعة - ففي الحركة المنتظمة لا تشعر بشيء"
-      ],
-      "watchOut": "المسافة والإزاحة ليسا الشيء نفسه. عند قطع دائرة حول الملعب، تكون قد قطعت 400 متر من المسافة، لكن إزاحتك صفر. في المعادلة نستخدم الإحداثي، لذلك عند الحركة للخلف ينقص."
+    {
+     "icon": "estimate",
+     "kind": "прикидка",
+     "h": "Вдвое быстрее — вчетверо дальше",
+     "text": "Тормозной путь при постоянном замедлении равен $v^2/2a$ — скорость входит в квадрате. Значит, разгон с 50 до 100 км/ч удлиняет тормозной путь не вдвое, а вчетверо: примерно с пятнадцати метров до шестидесяти, плюс путь за время реакции. Именно квадрат, а не удвоение, стоит за ограничениями скорости в городах, и это тот редкий случай, когда школьная формула прямо считает вероятность выжить."
     },
-    "quiz": [
-      {
-        "id": "k1",
-        "type": "mcq",
-        "q": "تم قذف كرة رأسياً لأعلى. ماذا يحدث في أعلى نقطة من المسار؟",
-        "options": [
-          "كل من السرعة والتسارع يساويان صفراً",
-          "السرعة تساوي صفراً، والتسارع لا يزال 9,8 m/s² للأسفل",
-          "السرعة قصوى، والتسارع يساوي صفراً",
-          "التسارع يغير إشارته للعكس"
-        ],
-        "answer": 1,
-        "why": "السرعة تمر بالصفر - يتوقف الجسم للحظة. لكن التسارع تحدده الجاذبية التي لم تختف: يبقى موجهاً للأسفل ويساوي g طوال الرحلة.",
-        "hint": "اسأل نفسك: ما الذي يسبب التسارع في هذه المسألة؟ هل يختفي هذا السبب عندما تتوقف الكرة للحظة؟"
-      },
-      {
-        "id": "k2",
-        "type": "free",
-        "q": "بكلماتك الخاصة: لماذا نحتاج حتماً نظام إسناد لوصف الحركة؟ أعط مثالاً حيث يعطي راصدان إجابتين مختلفتين لكن كلتاهما صحيحة.",
-        "keywords": [
-          "نسب",
-          "راصد",
-          "إسناد",
-          "إسناد",
-          "عربة",
-          "قطار",
-          "أرض",
-          "يتحرك بالنسبة"
-        ],
-        "needed": 1,
-        "why": "الموضع والسرعة لا وجود لهما بذاتهما - فقط نسبياً لشيء ما. راكب القطار ساكن بالنسبة للعربة ويتحرك بسرعة 100 km/h بالنسبة للرصيف. كلا الوصفين صحيحان، لا تناقض: هما نظاما إسناد مختلفان.",
-        "hint": "تخيل أنك جالس في قطار وتُسقط مفاتيحك. كيف تصف حركتها أنت - وكيف يصفها الشخص على المنصة؟ من منكما على صواب؟"
-      },
-      {
-        "id": "k3",
-        "type": "estimate",
-        "q": "سيارة تتسارع من السكون إلى 100 km/h خلال 8 ثوان. ما متوسط تسارعها بوحدة m/s²؟",
-        "answer": 3.5,
-        "unit": "m/s²",
-        "tolerance": 1.4,
-        "why": "100 km/h تعادل تقريباً 28 m/s (نقسم على 3,6). التسارع يساوي تغير السرعة مقسوماً على الزمن: 28/8 ≈ 3,5 m/s². للمقارنة: السقوط الحر يعطي 9,8 - أي تقريباً ثلاثة أضعاف.",
-        "hint": "أولاً حول الكيلومترات في الساعة إلى أمتار في الثانية - اقسم على 3,6. ثم تذكر تعريف التسارع: تغير السرعة مقسوم على الزمن."
-      }
-    ]
+    {
+     "icon": "edge",
+     "kind": "граница применимости",
+     "h": "Формула требует постоянного ускорения",
+     "text": "Выражение $x=x_0+v_0t+at^2/2$ верно, только пока ускорение не меняется. Парашютист после раскрытия купола падает почти равномерно: сопротивление воздуха растёт со скоростью и уравновешивает тяжесть. Ракета ускоряется всё сильнее по мере выгорания топлива, потому что масса уменьшается. В обоих случаях нужна не эта формула, а уравнение движения, которое решается численно."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Что даёт кинематика",
+   "lead": "Описание движения без причин кажется полумерой — но именно оно лежит в основе навигации и безопасности.",
+   "items": [
+    {
+     "h": "Спутниковая навигация",
+     "text": "Приёмник в телефоне не измеряет расстояние линейкой: он сравнивает время прихода сигналов от нескольких спутников и решает кинематическую задачу. Ошибка в наносекунду даёт промах в тридцать сантиметров, поэтому в расчёт входят и поправки теории относительности."
+    },
+    {
+     "h": "Безопасность на дорогах",
+     "text": "Квадратичная связь скорости и тормозного пути определяет разметку, дистанцию и предельные скорости. Сюда же входит время реакции — та самая величина, которую ловят падающей линейкой."
+    },
+    {
+     "h": "Спорт и биомеханика",
+     "text": "Траектория прыжка, угол вылета копья, оптимальная точка отталкивания рассчитываются как движение точки с заданной начальной скоростью. Тренеры разбирают видеозапись покадрово, получая скорость как наклон, а ускорение как наклон наклона."
+    },
+    {
+     "h": "Астрономия и баллистика",
+     "text": "Предсказание положения планеты на годы вперёд и расчёт траектории аппарата к Марсу — задачи одного класса: известны начальные условия и закон изменения ускорения, требуется координата в момент времени."
+    },
+    {
+     "h": "Компьютерная графика",
+     "text": "Физические движки игр и кино пересчитывают положение тысяч объектов шестьдесят раз в секунду по тем же формулам, только шагами по времени. Реалистичность падения предметов на экране — это правильно проинтегрированная кинематика."
+    }
+   ]
   }
+ },
+ "en": {
+  "title": "Material Point",
+  "subtitle": "Section 1 · How to describe motion without knowing its causes",
+  "intro": [
+   "Let's start with a technique that looks like cheating, but in fact constitutes the essence of the physical method. To describe the flight of a ball, we declare the ball to be a point. Without size, without rotation, without seams on the cover — just a point that has mass and position.",
+   "This is not laziness or simplification for its own sake. It is a deliberate choice of what is essential in a given problem. For the flight of a ball across a field, its diameter is not important — the trajectory of its center is. But for a shot on goal, where the ball is spinning, size and rotation become crucial, and then the point model is not suitable.",
+   "The ability to choose the right idealization is half the work of a physicist. We'll start with the simplest: the body is a point, and all we know about it is where it is now and how fast it is moving."
+  ],
+  "standNote": "Play with the stand before reading the conclusion. Set the initial velocity and acceleration, look at the vectors: green — velocity, red — acceleration. Pay attention to the key point: when the vectors point in opposite directions, the body first slows down, stops — and then moves backward, even though the acceleration has not changed throughout.",
+  "formula": {
+   "name": "Equation of uniformly accelerated motion",
+   "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+   "alsoKnown": "Kinematic equation of motion with constant acceleration",
+   "authors": [
+    {
+     "who": "Galileo Galilei",
+     "year": "1638",
+     "what": "established that during free fall, the distance traveled increases proportionally to the square of time — contrary to the belief that the speed of fall depends on mass"
+    },
+    {
+     "who": "Isaac Newton and Gottfried Leibniz",
+     "year": "1670s",
+     "what": "independently created differential calculus, turning Galileo's verbal description into a precise equation"
+    }
+   ],
+   "story": "Galileo had neither precise clocks nor calculus. He rolled balls down an inclined groove, slowing the fall enough to measure time — using water clocks, and according to some accounts, humming a melody as a metronome. And he discovered something astonishing: in the first unit of time, the ball travels one unit of distance, in the second — three, in the third — five. Odd numbers. And their sum is exactly squares: 1, 4, 9. Thus the quadratic dependence was born.",
+   "symbols": [
+    {
+     "sym": "x(t)",
+     "latex": "x(t)",
+     "what": "coordinate at time t",
+     "unit": "m",
+     "note": "It is the coordinate, not distance: when moving backward it decreases"
+    },
+    {
+     "sym": "x₀",
+     "latex": "x_0",
+     "what": "initial coordinate",
+     "unit": "m",
+     "note": "where the body was at time t = 0; it is often convenient to set it to zero"
+    },
+    {
+     "sym": "v₀",
+     "latex": "v_0",
+     "what": "initial velocity",
+     "unit": "m/s",
+     "note": "vector quantity: the sign indicates the direction along the axis"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "acceleration",
+     "unit": "m/s²",
+     "note": "constant in this formula; if acceleration changes, a different apparatus is needed"
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "time from the start of reference",
+     "unit": "s",
+     "note": "always non-negative and measured from the chosen moment"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "We need only two definitions — velocity and acceleration — and one geometric idea: distance is the area under the velocity-time graph.",
+   "steps": [
+    {
+     "text": "First, let's agree on what 'position' actually means. By itself, it is meaningless: we need a reference body, axes, and a clock. A passenger is stationary relative to the train car but racing relative to the platform — both statements are simultaneously true. This is called a frame of reference.",
+     "latex": "x = x(t) \\quad \\text{in the chosen reference frame}",
+     "figure": "frame",
+     "figCaption": "One motion, two observers, two different answers — and both correct."
+    },
+    {
+     "text": "Average velocity is displacement divided by time. But it tells us little: having driven through a city at an average speed of $30$ km/h, you might have stood in traffic and sped along an avenue. We need velocity at a given instant.",
+     "latex": "v_{\\text{avg}} = \\frac{\\Delta x}{\\Delta t}",
+     "figure": "secant",
+     "figCaption": "Average velocity is the slope of the secant line connecting two points on the position-time graph."
+    },
+    {
+     "text": "Let us reduce the interval $\\Delta t$. The secant line rotates and in the limit becomes the tangent line. The slope of this tangent is the instantaneous velocity. Here the derivative appears not as a formality from a math course, but as the only way to answer the question 'how fast is the body moving right now'.",
+     "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
+     "figure": "tangent",
+     "figCaption": "The limit of secants is the tangent. Its slope is the velocity at that instant."
+    },
+    {
+     "text": "Acceleration is defined exactly the same way, but one step up: it is the rate of change of velocity. Hence the odd-looking unit — meter per second squared: each second the velocity changes by so many meters per second.",
+     "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
+     "figure": "accel",
+     "figCaption": "Acceleration tells not about how fast the body is moving, but about how fast its velocity is changing."
+    },
+    {
+     "text": "Let acceleration be constant. Then velocity increases uniformly: starting velocity plus $a$ each second. This is the first kinematic equation, and it comes from direct integration of the definition of acceleration.",
+     "latex": "v(t) = v_0 + a t",
+     "figure": "vline",
+     "figCaption": "With constant acceleration, the velocity-time graph is a straight line with slope a."
+    },
+    {
+     "text": "Now the key geometric step. Displacement is the integral of velocity over time, i.e., the area under the graph of $v(t)$. And this figure is a trapezoid: a rectangle of height $v_0$ plus a triangle with legs $t$ and $at$. Adding areas gives the answer.",
+     "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectangle}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triangle}}",
+     "figure": "area",
+     "figCaption": "Distance is the area under the velocity-time graph. The trapezoid is decomposed into a rectangle and a triangle."
+    },
+    {
+     "text": "Adding the initial coordinate, we get the final equation. Note the structure: the term with $t$ corresponds to uniform motion, the term with $t^2$ to acceleration. It is the square that makes the trajectory a parabola.",
+     "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+     "figure": "parabola",
+     "figCaption": "The position-time graph is a parabola. Its curvature is determined by acceleration."
+    }
+   ],
+   "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
+   "plateCap": "Three terms — three contributions: where you were, how you moved, how you accelerated. Everything else in kinematics of uniformly accelerated motion is derived from here.",
+   "note": "The formula is valid only under constant acceleration. As soon as $a$ starts changing — in motion with air resistance, with spring oscillations, in a flight to a distant planet — it ceases to work, and we need to solve a differential equation. We will return to this in the topic of oscillations."
+  },
+  "math": {
+   "title": "The mathematics needed here",
+   "items": [
+    {
+     "what": "What a derivative is — physically",
+     "why": "Derivative is a measure of the rate of change. A mathematician would say 'limit of the ratio of increments', a physicist — 'how fast a quantity is changing right now'. They are the same. Key idea: to know the instantaneous value, we take ever smaller intervals and see what the result approaches. The same trick gives us electric current (rate of change of charge), power (rate of change of energy), and rate of reaction in chemistry.",
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
+    },
+    {
+     "what": "Why an integral is area",
+     "why": "Let us divide time into tiny pieces. For each piece $\\Delta t$, the body travels approximately $v\\,\\Delta t$ — this is the area of a narrow rectangle under the graph. Sum all rectangles, let their width tend to zero — we obtain the exact area and the exact distance. An integral is exactly such a sum of an infinite number of infinitesimally small contributions.",
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
+    },
+    {
+     "what": "Vectors: why sign matters more than it seems",
+     "why": "Velocity and acceleration are vectors. On a line this reduces to a sign, but the sign decides everything: if $v$ and $a$ have opposite signs, the body slows down; if the same sign, it speeds up. This is exactly why a ball thrown upward has zero velocity at the top, but there its acceleration is still $9.8$ m/s² directed downward.",
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{acceleration}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{braking}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with Numbers",
+   "lead": "The classic braking problem—the one that underpins traffic rules.",
+   "given": "A car is moving at $20$ m/s (which is $72$ km/h) and brakes with an acceleration of $5$ m/s². Find the braking distance.",
+   "law": "$v(t) = v_0 + at$ and $x(t) = v_0 t + at^2/2$, where $a = -5$ m/s² (the minus sign: acceleration opposite to motion)",
+   "solution": [
+    {
+     "text": "First, find the time to a complete stop: the speed must become zero.",
+     "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
+    },
+    {
+     "text": "Substitute this time into the position equation.",
+     "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
+    },
+    {
+     "text": "We obtain the braking distance.",
+     "latex": "x = 40\\ \\text{m}"
+    }
+   ],
+   "answer": "Braking distance — $40$ meters",
+   "check": "Remember not the number, but the relationship: distance is proportional to the square of speed. Twice as fast — four times as far. At $40$ m/s the same car would travel $160$ meters, not $80$. This ratio is behind the sharp increase in the severity of accidents with speed — and it follows directly from the $t^2$ term in our formula."
+  },
+  "constants": {
+   "title": "Quantities of this Section",
+   "lead": "There are almost no constants here — kinematics describes any motion. The only link to our planet appears when discussing falling.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Acceleration due to gravity",
+     "value": "9,81",
+     "unit": "m/s²",
+     "why": "The acceleration with which any body falls near the Earth's surface — regardless of mass, if air resistance is neglected. This discovery by Galileo contradicted a two-thousand-year tradition.",
+     "mnemo": "In problems, we almost always take 10 m/s² — an error of about 2%, but easier to calculate mentally."
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "name": "Velocity",
+     "value": "derivative of coordinate",
+     "unit": "m/s",
+     "why": "The dimension reads directly as the definition: meters (displacement) per second (time). Whenever you see a fraction in units, look for its meaning — it almost always hides the definition of the quantity."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "name": "Acceleration",
+     "value": "derivative of velocity",
+     "unit": "m/s²",
+     "why": "Meters per second squared reads as: 'by how many meters per second the speed changes each second.' The second is squared because division by time occurred twice."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "The material point is a conscious choice of what is essential. Velocity is the derivative of position, acceleration is the derivative of velocity, and displacement is the area under the velocity graph. The entire equation of uniformly accelerated motion follows from these three statements.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Idealization",
+     "text": "We reduce a body to a point when its size and rotation are irrelevant to the problem."
+    },
+    {
+     "icon": "clock",
+     "title": "Derivative",
+     "text": "Instantaneous velocity is the slope of the tangent to the position graph, not the ratio of total distance to time."
+    },
+    {
+     "icon": "sigma",
+     "title": "Displacement as Area",
+     "text": "Displacement equals the area under the velocity graph. This is where the term with the square of time comes from."
+    },
+    {
+     "icon": "formula",
+     "title": "Sign Matters",
+     "text": "Velocity and acceleration are in opposite directions—the body decelerates, even though the acceleration is constant."
+    }
+   ],
+   "where": [
+    "Braking distance grows as the square of speed: twice as fast — four times as far",
+    "A car accelerating 'to 100 km/h in 6 seconds' means an acceleration of about 4.6 m/s²",
+    "At the top of a thrown ball's trajectory, speed is zero, but acceleration remains 9.8 m/s²",
+    "Elevator: you feel not speed, but acceleration — during uniform motion there is no sensation"
+   ],
+   "watchOut": "Distance and displacement are not the same. After going around a stadium track, you've covered 400 meters of distance, but your displacement is zero. The formula uses position, which decreases when moving backward."
+  },
+  "quiz": [
+   {
+    "id": "k1",
+    "type": "mcq",
+    "q": "A ball is thrown vertically upward. What happens at the highest point of the trajectory?",
+    "options": [
+     "Both velocity and acceleration are zero",
+     "Velocity is zero, acceleration is still 9.8 m/s² downward",
+     "Velocity is maximum, acceleration is zero",
+     "Acceleration changes sign to the opposite"
+    ],
+    "answer": 1,
+    "why": "Velocity passes through zero — the body momentarily hangs. But acceleration is due to gravity, which hasn't disappeared: it remains directed downward and equal to g throughout the entire flight.",
+    "hint": "Ask yourself: what creates acceleration in this problem? Does that cause disappear when the ball momentarily stops?"
+   },
+   {
+    "id": "k2",
+    "type": "free",
+    "q": "In your own words: why is a reference frame necessary to describe motion? Give an example where two observers give different but equally correct answers.",
+    "keywords": [
+     "relative",
+     "observer",
+     "reference frame",
+     "frame of reference",
+     "train car",
+     "train",
+     "earth",
+     "moves relative to"
+    ],
+    "needed": 1,
+    "why": "Position and velocity do not exist by themselves — only relative to something. A train passenger is stationary relative to the train car and moves at 100 km/h relative to the platform. Both descriptions are correct; there is no contradiction: they are different reference frames.",
+    "hint": "Imagine you are sitting on a train and drop your keys. How would you describe their motion — and how would a person on the platform? Which one is right?"
+   },
+   {
+    "id": "k3",
+    "type": "estimate",
+    "q": "A car accelerates from rest to 100 km/h in 8 seconds. What is its average acceleration in m/s²?",
+    "answer": 3.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "100 km/h is about 28 m/s (divide by 3.6). Acceleration equals change in velocity divided by time: 28/8 ≈ 3.5 m/s². For comparison: free fall gives 9.8 — almost three times as much.",
+    "hint": "First convert kilometers per hour to meters per second — divide by 3.6. Then recall the definition of acceleration: change in velocity over time."
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosities: try it yourself",
+   "lead": "Kinematics is measured with a ruler: it's about where a body is and when, not about why.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "A ruler instead of a stopwatch",
+     "text": "Ask someone to hold a ruler vertically by its top end. Place your fingers near the zero mark without touching. The partner releases the ruler without warning — you catch it as fast as you can. Note the mark where you caught it.",
+     "answer": "The distance traveled is converted into time by $t=\\sqrt{2h/g}$. Twenty centimeters give about 0.20 seconds, thirty — about 0.25. This is your reaction time, and you measured it without any instrument: the ruler itself acts as a stopwatch because falling with a known acceleration unambiguously links distance to time. From here also comes an estimate of braking distance: in 0.2 seconds of reaction, a car at 60 km/h travels more than three meters before even starting to brake."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Two coins, one sound",
+     "text": "Place one coin on the edge of a table. Hold the other next to it at the same height. With a sharp flick, launch the first one horizontally — far forward — and simultaneously release the second one vertically downward. The first flies a meter sideways, the second falls straight down. Which one touches the floor first?",
+     "answer": "Both — simultaneously; you will hear a single hit. Horizontal motion does not affect vertical motion at all: vertically, both coins fall with the same acceleration from the same height. This is called independence of motions, and it is why complex motion can be decomposed into simple components along axes. A bullet fired horizontally and a bullet simply dropped from hand at the same moment will hit the ground together — provided the ground is flat and air resistance is negligible."
+    },
+    {
+     "icon": "fact",
+     "kind": "interesting fact",
+     "h": "Galileo slowed down gravity",
+     "text": "In the early 17th century, there was no way to measure free fall: a body falls two meters in two-thirds of a second, and no clocks had such precision. Galileo circumvented this by rolling a ball down an inclined groove: the same law applies, but the acceleration is as many times smaller as the slope is shallower. He measured time by the weight of water flowing from a vessel through a narrow opening. This yielded the key result: distance grows as the square of time, not proportional to it as previously thought. The trick has remained in physics forever — if a phenomenon is too fast, find a way to slow it down without changing its essence."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemonic",
+     "h": "Velocity is the slope of the graph, acceleration is the slope of the slope",
+     "text": "On a position vs. time graph, velocity is the steepness of the curve: a horizontal segment means standing still, a steeper line means faster speed. Take the steepness again, now from the velocity graph — you get acceleration. The converse is also immediately visible: the area under the velocity graph is the distance traveled. Two actions, 'slope' and 'area', connect all three quantities and eliminate the need to memorize formulas."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Twice as fast — four times as far",
+     "text": "Braking distance under constant deceleration is $v^2/2a$ — speed appears squared. So accelerating from 50 to 100 km/h lengthens braking distance not by a factor of two, but by a factor of four: from about fifteen meters to sixty, plus the distance during reaction time. It is the square, not the doubling, that lies behind speed limits in cities, and this is one of those rare cases where a school formula directly calculates the probability of survival."
+    },
+    {
+     "icon": "edge",
+     "kind": "applicability limit",
+     "h": "The formula requires constant acceleration",
+     "text": "The expression $x=x_0+v_0t+at^2/2$ is valid only as long as acceleration is constant. A skydiver after parachute opening falls almost uniformly: air resistance increases with speed and balances gravity. A rocket accelerates more and more as fuel burns because mass decreases. In both cases, this formula is not enough — the equation of motion must be solved numerically."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "What kinematics provides",
+   "lead": "Describing motion without causes seems like a half-measure — but it is precisely what underlies navigation and safety.",
+   "items": [
+    {
+     "h": "Satellite navigation",
+     "text": "The receiver in a phone does not measure distance with a ruler: it compares the arrival times of signals from several satellites and solves a kinematic problem. An error of one nanosecond gives a miss of thirty centimeters, so corrections from relativity theory are also included in the calculation."
+    },
+    {
+     "h": "Road safety",
+     "text": "The quadratic relationship between speed and braking distance determines road markings, following distance, and speed limits. Also included is reaction time — the same quantity that is caught with a falling ruler."
+    },
+    {
+     "h": "Sports and biomechanics",
+     "text": "The trajectory of a jump, the launch angle of a javelin, the optimal push-off point are calculated as the motion of a point with a given initial velocity. Coaches analyze video footage frame by frame, obtaining velocity as slope and acceleration as slope of slope."
+    },
+    {
+     "h": "Astronomy and ballistics",
+     "text": "Predicting a planet's position years ahead and calculating a spacecraft's trajectory to Mars are problems of the same class: initial conditions and the law of acceleration change are known, and the coordinate at a given time is required."
+    },
+    {
+     "h": "Computer graphics",
+     "text": "Physics engines in games and movies recalculate the position of thousands of objects sixty times per second using the same formulas, but in time steps. The realism of falling objects on screen is correctly integrated kinematics."
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Punto material",
+  "subtitle": "Párrafo 1 · Cómo describir el movimiento sin conocer sus causas",
+  "intro": [
+   "Empecemos con un truco que parece una trampa, pero que en realidad constituye la esencia del método físico. Para describir el vuelo de una pelota, declararemos que la pelota es un punto. Sin tamaño, sin rotación, sin costuras en el cuero — solo un punto que tiene masa y posición.",
+   "Esto no es pereza ni simplificación por simpleza. Es una elección consciente de lo que es esencial en el problema. Para el vuelo de una pelota a través del campo, su diámetro no importa — lo importante es la trayectoria del centro. Pero para un tiro a portería, donde la pelota lleva efecto, el tamaño y la rotación se vuelven cruciales, y entonces el punto no sirve.",
+   "La capacidad de elegir la idealización correcta es la mitad del trabajo de un físico. Empezaremos con la más simple: el cuerpo es un punto, y todo lo que sabemos de él es dónde está ahora y qué tan rápido se mueve."
+  ],
+  "standNote": "Gire el soporte antes de leer la conclusión. Establezca la velocidad inicial y la aceleración, observe los vectores: verde — velocidad, rojo — aceleración. Preste atención a lo principal: cuando los vectores apuntan en direcciones opuestas, el cuerpo primero frena, se detiene — y retrocede, aunque la aceleración no haya cambiado durante todo este tiempo.",
+  "formula": {
+   "name": "Ecuación del movimiento uniformemente acelerado",
+   "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+   "alsoKnown": "Ecuación cinemática del movimiento con aceleración constante",
+   "authors": [
+    {
+     "who": "Galileo Galilei",
+     "year": "1638",
+     "what": "estableció que en caída libre la distancia recorrida crece proporcionalmente al cuadrado del tiempo — en contra de la creencia de que la velocidad de caída depende de la masa"
+    },
+    {
+     "who": "Isaac Newton y Gottfried Leibniz",
+     "year": "década de 1670",
+     "what": "crearon independientemente el cálculo diferencial, que transformó la descripción verbal de Galileo en una ecuación precisa"
+    }
+   ],
+   "story": "Galileo no tenía ni relojes precisos ni cálculo. Hacía rodar bolas por una rampa inclinada, ralentizando la caída lo suficiente como para poder medir el tiempo — con un reloj de agua, y según algunos testimonios, tarareando una melodía como metrónomo. Y descubrió algo sorprendente: en la primera unidad de tiempo la bola recorre una unidad de distancia, en la segunda — tres, en la tercera — cinco. Números impares. Y su suma son exactamente cuadrados: 1, 4, 9. Así nació la dependencia cuadrática.",
+   "symbols": [
+    {
+     "sym": "x(t)",
+     "latex": "x(t)",
+     "what": "coordenada en el instante t",
+     "unit": "m",
+     "note": "es la coordenada, no la distancia recorrida: al moverse hacia atrás disminuye"
+    },
+    {
+     "sym": "x₀",
+     "latex": "x_0",
+     "what": "coordenada inicial",
+     "unit": "m",
+     "note": "donde estaba el cuerpo en el instante t = 0; a menudo es conveniente tomarla como cero"
+    },
+    {
+     "sym": "v₀",
+     "latex": "v_0",
+     "what": "velocidad inicial",
+     "unit": "m/s",
+     "note": "magnitud vectorial: el signo indica la dirección a lo largo del eje"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "aceleración",
+     "unit": "m/s²",
+     "note": "constante en esta fórmula; si la aceleración cambia, se necesita otro aparato"
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "tiempo desde el inicio de la medición",
+     "unit": "s",
+     "note": "siempre no negativo y se mide desde el momento que hemos elegido"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Deducción rigurosa",
+   "lead": "Solo necesitaremos dos definiciones — velocidad y aceleración — y una idea geométrica: el desplazamiento es el área bajo la gráfica de velocidad.",
+   "steps": [
+    {
+     "text": "Primero acordemos qué significa realmente 'posición'. Por sí mismo no tiene sentido: se necesitan un cuerpo de referencia, ejes y un reloj. Un pasajero está inmóvil respecto al vagón pero se desplaza velozmente respecto al andén; ambas afirmaciones son ciertas a la vez. Esto se denomina sistema de referencia.",
+     "latex": "x = x(t) \\quad \\text{en el sistema de referencia elegido}",
+     "figure": "frame",
+     "figCaption": "Un mismo movimiento, dos observadores, dos respuestas diferentes — y ambas correctas."
+    },
+    {
+     "text": "La velocidad media es el desplazamiento dividido entre el tiempo. Pero dice poco: recorrer una ciudad a una velocidad media de $30$ km/h podría implicar que estuviste atrapado en un atasco y luego aceleraste en la avenida. Necesitamos la velocidad en un instante dado.",
+     "latex": "v_{\\text{prom}} = \\frac{\\Delta x}{\\Delta t}",
+     "figure": "secant",
+     "figCaption": "La velocidad media es la pendiente de la recta secante que conecta dos puntos en la gráfica de coordenadas."
+    },
+    {
+     "text": "Reduzcamos el intervalo $\\Delta t$. La secante gira y en el límite se convierte en tangente. La pendiente de esta tangente es la velocidad instantánea. Aquí la derivada aparece no como un formalismo de un curso de matemáticas, sino como la única manera de responder a la pregunta '¿a qué velocidad se mueve el cuerpo en este preciso instante?'",
+     "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
+     "figure": "tangent",
+     "figCaption": "El límite de las secantes es la tangente. Su pendiente es la velocidad en ese instante."
+    },
+    {
+     "text": "La aceleración se define exactamente igual, pero un escalón más arriba: es la tasa de cambio de la velocidad. De ahí su extraña dimensión — metro por segundo al cuadrado: cada segundo la velocidad cambia en tantos metros por segundo.",
+     "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
+     "figure": "accel",
+     "figCaption": "La aceleración no indica qué tan rápido se mueve el cuerpo, sino qué tan rápido cambia su velocidad."
+    },
+    {
+     "text": "Supongamos que la aceleración es constante. Entonces la velocidad aumenta uniformemente: se suma $a$ a la velocidad inicial cada segundo. Esta es la primera de las ecuaciones cinemáticas, y se obtiene integrando directamente la definición de aceleración.",
+     "latex": "v(t) = v_0 + a t",
+     "figure": "vline",
+     "figCaption": "Con aceleración constante, la gráfica de velocidad es una recta con pendiente a."
+    },
+    {
+     "text": "Ahora el paso geométrico clave. El desplazamiento es la integral de la velocidad respecto al tiempo, es decir, el área bajo la gráfica de $v(t)$. Y esta figura es un trapecio: un rectángulo de altura $v_0$ más un triángulo de catetos $t$ y $at$. Sumamos las áreas y obtenemos la respuesta.",
+     "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectángulo}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triángulo}}",
+     "figure": "area",
+     "figCaption": "El desplazamiento es el área bajo la gráfica de velocidad. El trapecio se descompone en un rectángulo y un triángulo."
+    },
+    {
+     "text": "Sumando la coordenada inicial, obtenemos la ecuación final. Observe la estructura: el término con $t$ corresponde al movimiento uniforme, el término con $t^2$ a la aceleración. Es precisamente el cuadrado lo que hace que la trayectoria sea una parábola.",
+     "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+     "figure": "parabola",
+     "figCaption": "La gráfica de coordenadas es una parábola. Su curvatura viene dada por la aceleración."
+    }
+   ],
+   "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
+   "plateCap": "Tres términos — tres contribuciones: dónde estábamos, hacia dónde nos movíamos, cómo acelerábamos. Todo lo demás en la cinemática del movimiento uniformemente acelerado se deduce de aquí.",
+   "note": "La fórmula solo es válida para aceleración constante. En cuanto $a$ comienza a cambiar — en movimiento con resistencia del aire, en oscilaciones de un resorte, en un vuelo hacia un planeta lejano — deja de funcionar y hay que resolver una ecuación diferencial. Volveremos a esto en el tema de oscilaciones."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "items": [
+    {
+     "what": "Qué es la derivada — desde un punto de vista físico",
+     "why": "La derivada es una medida de la tasa de cambio. Un matemático dirá 'límite de la razón de incrementos', un físico dirá 'qué tan rápido cambia una magnitud en este instante'. Es lo mismo. La idea clave: para conocer el valor instantáneo, tomamos intervalos cada vez más pequeños y vemos hacia qué tiende el resultado. El mismo procedimiento nos dará la corriente eléctrica (tasa de cambio de la carga), la potencia (tasa de cambio de la energía) y la velocidad de reacción en química.",
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
+    },
+    {
+     "what": "Por qué la integral es un área",
+     "why": "Dividimos el tiempo en fragmentos diminutos. En cada fragmento $\\Delta t$, el cuerpo recorre aproximadamente $v\\,\\Delta t$ — esto es el área de un rectángulo estrecho bajo la gráfica. Sumamos todos los rectángulos, hacemos tender su ancho a cero — obtenemos el área exacta y el recorrido exacto. La integral es esa suma de un número infinito de contribuciones infinitesimales.",
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
+    },
+    {
+     "what": "Vectores: por qué el signo es más importante de lo que parece",
+     "why": "La velocidad y la aceleración son vectores. En una línea recta esto se reduce al signo, pero el signo lo decide todo: si $v$ y $a$ tienen signos opuestos, el cuerpo frena; si tienen el mismo signo, acelera. Por eso una pelota lanzada hacia arriba tiene velocidad cero en el punto más alto, pero su aceleración sigue siendo $9{,}8$ m/s² dirigida hacia abajo.",
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{aceleración}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{frenado}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "El clásico problema de frenado — el mismo que está detrás de las reglas de tránsito.",
+   "given": "Un automóvil viaja a $20$ m/s (que son $72$ km/h) y frena con una aceleración de $5$ m/s². Encuentre la distancia de frenado.",
+   "law": "$v(t) = v_0 + at$ y $x(t) = v_0 t + at^2/2$, donde $a = -5$ m/s² (el signo menos: aceleración en contra del movimiento)",
+   "solution": [
+    {
+     "text": "Primero encontremos el tiempo hasta detenerse por completo: la velocidad debe llegar a cero.",
+     "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
+    },
+    {
+     "text": "Sustituimos este tiempo en la ecuación de la posición.",
+     "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
+    },
+    {
+     "text": "Obtenemos la distancia de frenado.",
+     "latex": "x = 40\\ \\text{m}"
+    }
+   ],
+   "answer": "La distancia de frenado es $40$ metros",
+   "check": "Vale la pena recordar no el número, sino la dependencia: la distancia es proporcional al cuadrado de la velocidad. El doble de rápido — el cuádruple de distancia. A $40$ m/s el mismo automóvil recorrería $160$ metros, no $80$. Esta relación es la responsable del fuerte aumento de la gravedad de los accidentes con la velocidad — y se deriva directamente del término con $t^2$ en nuestra fórmula."
+  },
+  "constants": {
+   "title": "Magnitudes de esta sección",
+   "lead": "Aquí casi no hay constantes — la cinemática describe cualquier movimiento. El único vínculo con nuestro planeta aparece cuando hablamos de caída.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Aceleración de la gravedad",
+     "value": "9,81",
+     "unit": "m/s²",
+     "why": "La aceleración con la que cae cualquier cuerpo cerca de la superficie terrestre — independientemente de su masa, si se desprecia la resistencia del aire. Este descubrimiento de Galileo contradecía una tradición de dos milenios.",
+     "mnemo": "En los problemas casi siempre se toma 10 m/s² — el error es de aproximadamente 2%, pero se calcula mentalmente."
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "name": "Velocidad",
+     "value": "derivada de la posición",
+     "unit": "m/s",
+     "why": "La dimensión se lee directamente como definición: metros (desplazamiento) por segundo (tiempo). Cada vez que vea una fracción en las unidades, busque su significado — allí casi siempre se esconde la definición de la magnitud."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "name": "Aceleración",
+     "value": "derivada de la velocidad",
+     "unit": "m/s²",
+     "why": "Metro por segundo al cuadrado se lee así: 'en tantos metros por segundo cambia la velocidad cada segundo'. El segundo se eleva al cuadrado porque la división por el tiempo ocurrió dos veces."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "El punto material — una elección consciente de lo esencial. La velocidad es la derivada de la posición, la aceleración es la derivada de la velocidad, y la distancia es el área bajo la gráfica de velocidad. Toda la ecuación del movimiento uniformemente acelerado se deriva de estas tres afirmaciones.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Idealización",
+     "text": "Reducimos el cuerpo a un punto cuando su tamaño y rotación no son relevantes para el problema."
+    },
+    {
+     "icon": "clock",
+     "title": "Derivada",
+     "text": "La velocidad instantánea es la pendiente de la tangente a la gráfica de la posición, no la relación entre la distancia total y el tiempo."
+    },
+    {
+     "icon": "sigma",
+     "title": "Distancia como área",
+     "text": "El desplazamiento es igual al área bajo la gráfica de velocidad. De ahí surge el término con el cuadrado del tiempo."
+    },
+    {
+     "icon": "formula",
+     "title": "El signo decide",
+     "text": "La velocidad y la aceleración apuntan en direcciones opuestas — el cuerpo frena, aunque la aceleración sea constante."
+    }
+   ],
+   "where": [
+    "La distancia de frenado crece como el cuadrado de la velocidad: el doble de rápido — el cuádruple de distancia",
+    "La aceleración de un automóvil 'de 0 a 100 en 6 segundos' es una aceleración de aproximadamente 4,6 m/s²",
+    "En el punto más alto de una pelota lanzada hacia arriba, la velocidad es cero, pero la aceleración sigue siendo 9,8 m/s²",
+    "Ascensor: no se siente la velocidad, sino la aceleración — en movimiento uniforme no hay sensación"
+   ],
+   "watchOut": "La distancia recorrida y el desplazamiento no son lo mismo. Al dar una vuelta a una pista, recorres 400 metros de distancia, pero tu desplazamiento es cero. En la fórmula se usa la coordenada, por lo que al moverse hacia atrás disminuye."
+  },
+  "quiz": [
+   {
+    "id": "k1",
+    "type": "mcq",
+    "q": "Se lanza una pelota verticalmente hacia arriba. ¿Qué sucede en el punto más alto de la trayectoria?",
+    "options": [
+     "Tanto la velocidad como la aceleración son cero",
+     "La velocidad es cero, la aceleración sigue siendo 9,8 m/s² hacia abajo",
+     "La velocidad es máxima, la aceleración es cero",
+     "La aceleración cambia de signo al opuesto"
+    ],
+    "answer": 1,
+    "why": "La velocidad pasa por cero — el cuerpo se detiene por un instante. Pero la aceleración es debida a la gravedad, que no ha desaparecido: permanece dirigida hacia abajo e igual a g durante todo el vuelo.",
+    "hint": "Pregúntate: ¿qué causa la aceleración en este problema? ¿Desaparece esa causa cuando la pelota se detiene por un instante?"
+   },
+   {
+    "id": "k2",
+    "type": "free",
+    "q": "En tus propias palabras: ¿por qué es necesario un sistema de referencia para describir el movimiento? Da un ejemplo donde dos observadores den respuestas diferentes pero igualmente válidas.",
+    "keywords": [
+     "relativ",
+     "observ",
+     "referenc",
+     "vagón",
+     "tren",
+     "tierr",
+     "mover respecto a"
+    ],
+    "needed": 1,
+    "why": "La posición y la velocidad no existen por sí mismas — solo en relación con algo. Un pasajero de un tren está inmóvil respecto al vagón y se mueve a 100 km/h respecto al andén. Ambas descripciones son correctas, no hay contradicción: son diferentes sistemas de referencia.",
+    "hint": "Imagina que estás sentado en un tren y dejas caer las llaves. ¿Cómo describirías su movimiento tú, y cómo lo haría una persona en el andén? ¿Quién tiene razón?"
+   },
+   {
+    "id": "k3",
+    "type": "estimate",
+    "q": "Un automóvil acelera desde el reposo hasta 100 km/h en 8 segundos. ¿Cuál es su aceleración media en m/s²?",
+    "answer": 3.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "100 km/h son aproximadamente 28 m/s (dividimos entre 3,6). La aceleración es igual al cambio de velocidad dividido por el tiempo: 28/8 ≈ 3,5 m/s². Para comparar: la caída libre da 9,8 — casi tres veces más.",
+    "hint": "Primero convierta kilómetros por hora a metros por segundo — divida entre 3,6. Luego recuerde la definición de aceleración: cambio de velocidad en el tiempo."
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosidades: pruébelo con las manos",
+   "lead": "La cinemática se mide con una regla: trata de dónde está el cuerpo y cuándo, no de por qué.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "La regla como cronómetro",
+     "text": "Pida a alguien que sostenga una regla verticalmente por el extremo superior. Mantenga sus dedos cerca de la marca cero, sin tocarla. El compañero suelta la regla sin aviso — usted la atrapa lo más rápido posible. Recuerde en qué marca la atrapó.",
+     "answer": "La distancia recorrida se convierte en tiempo mediante $t=\\sqrt{2h/g}$. Veinte centímetros dan unos 0,20 segundos, treinta — unos 0,25. Este es su tiempo de reacción, y lo ha medido sin ningún instrumento: la propia regla funciona como cronómetro, porque la caída con aceleración conocida relaciona inequívocamente la distancia con el tiempo. De aquí también se obtiene una estimación de la distancia de frenado: en 0,2 segundos de reacción, un automóvil a 60 km/h recorre más de tres metros sin haber empezado a frenar."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Dos monedas, un solo sonido",
+     "text": "Coloque una moneda en el borde de la mesa. Sostenga la segunda cerca, a la misma altura. Con un golpe seco, lance la primera horizontalmente — lejos hacia adelante — y simultáneamente suelte la segunda verticalmente hacia abajo. La primera volará un metro hacia un lado, la segunda caerá verticalmente. ¿Cuál tocará el suelo primero?",
+     "answer": "Ambas — al mismo tiempo, escuchará un solo golpe. El movimiento horizontal no afecta en absoluto al vertical: verticalmente, ambas monedas caen con la misma aceleración desde la misma altura. Esto se llama independencia de los movimientos, y es por ello que el movimiento complejo se descompone en movimientos simples a lo largo de los ejes. Una bala disparada horizontalmente y una bala simplemente soltada desde la mano en el mismo instante tocarán el suelo juntas — siempre que el suelo sea plano y se pueda despreciar la resistencia del aire."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Galileo ralentizó la gravedad",
+     "text": "A principios del siglo XVII no había con qué medir la caída libre: un cuerpo recorre dos metros en dos tercios de segundo, y no existían relojes de tal precisión. Galileo lo solucionó haciendo rodar una bola por un canal inclinado: la misma ley, pero la aceleración es tantas veces menor como más suave es la inclinación. El tiempo lo medía por el peso del agua que salía de un recipiente a través de un orificio estrecho. Así se obtuvo el resultado principal: la distancia crece como el cuadrado del tiempo, no proporcionalmente a él, como se pensaba antes. El truco quedó para siempre en la física: si un fenómeno es demasiado rápido, encuentre la manera de ralentizarlo sin cambiar su esencia."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemotecnia",
+     "h": "Velocidad: pendiente de la gráfica; aceleración: pendiente de la pendiente",
+     "text": "En la gráfica 'posición frente a tiempo', la velocidad es la pendiente de la curva: un tramo horizontal significa que estamos quietos; cuanto más inclinada la línea, más rápido nos movemos. Tome la pendiente otra vez, ahora de la gráfica de velocidad, y obtendrá la aceleración. De aquí se ve también lo inverso: el área bajo la gráfica de velocidad es la distancia recorrida. Dos operaciones, 'pendiente' y 'área', relacionan las tres magnitudes y evitan tener que memorizar fórmulas."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "El doble de rápido, cuatro veces más lejos",
+     "text": "La distancia de frenado con desaceleración constante es $v^2/2a$ — la velocidad aparece al cuadrado. Por lo tanto, aumentar la velocidad de 50 a 100 km/h alarga la distancia de frenado no al doble, sino al cuádruple: aproximadamente de quince a sesenta metros, más la distancia durante el tiempo de reacción. Es precisamente el cuadrado, y no la duplicación, lo que justifica los límites de velocidad en las ciudades, y es uno de esos raros casos en que una fórmula escolar calcula directamente la probabilidad de sobrevivir."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de validez",
+     "h": "La fórmula requiere aceleración constante",
+     "text": "La expresión $x=x_0+v_0t+at^2/2$ es válida solo mientras la aceleración no cambie. Un paracaidista después de abrir el dosel cae casi uniformemente: la resistencia del aire aumenta con la velocidad y equilibra el peso. Un cohete acelera cada vez más a medida que se quema el combustible, porque la masa disminuye. En ambos casos no se necesita esta fórmula, sino la ecuación del movimiento, que se resuelve numéricamente."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Lo que aporta la cinemática",
+   "lead": "Describir el movimiento sin causas parece una media medida — pero es precisamente lo que subyace a la navegación y la seguridad.",
+   "items": [
+    {
+     "h": "Navegación por satélite",
+     "text": "El receptor en el teléfono no mide la distancia con una regla: compara los tiempos de llegada de señales de varios satélites y resuelve un problema cinemático. Un error de un nanosegundo produce un fallo de treinta centímetros, por lo que en el cálculo también se incluyen las correcciones de la teoría de la relatividad."
+    },
+    {
+     "h": "Seguridad vial",
+     "text": "La relación cuadrática entre la velocidad y la distancia de frenado determina la señalización, la distancia de seguridad y los límites de velocidad. También incluye el tiempo de reacción — esa misma magnitud que se mide atrapando una regla que cae."
+    },
+    {
+     "h": "Deporte y biomecánica",
+     "text": "La trayectoria de un salto, el ángulo de lanzamiento de una jabalina, el punto óptimo de despegue se calculan como el movimiento de un punto con una velocidad inicial dada. Los entrenadores analizan la grabación de video cuadro por cuadro, obteniendo la velocidad como pendiente y la aceleración como pendiente de la pendiente."
+    },
+    {
+     "h": "Astronomía y balística",
+     "text": "Predecir la posición de un planeta años adelante y calcular la trayectoria de una nave a Marte son problemas de la misma clase: se conocen las condiciones iniciales y la ley de variación de la aceleración, y se requiere la coordenada en un instante de tiempo."
+    },
+    {
+     "h": "Gráficos por computadora",
+     "text": "Los motores físicos de juegos y cine recalculan la posición de miles de objetos sesenta veces por segundo con las mismas fórmulas, solo que en pasos de tiempo. El realismo de la caída de objetos en la pantalla es cinemática correctamente integrada."
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "نقطة مادية",
+  "subtitle": "الفقرة 1 · كيف نصف الحركة دون معرفة أسبابها",
+  "intro": [
+   "لنبدأ بأسلوب يبدو كخدعة، لكنه في الواقع جوهر المنهج الفيزيائي. لوصف طيران كرة، سنعتبر الكرة نقطة. بلا حجم، بلا دوران، بلا خطوط على السطح — مجرد نقطة لها كتلة وموقع.",
+   "هذا ليس كسلاً ولا تبسيطاً من أجل التبسيط. إنه اختيار واعٍ لما هو جوهري في هذه المسألة. لطيران الكرة عبر الملعب، قطرها غير مهم — المهم هو مسار مركزها. أما بالنسبة لتسديدة نحو المرمى حيث تُدور الكرة، فالحجم والدوران يصبحان أساسيين، وعندها لا تصلح النقطة.",
+   "القدرة على اختيار النموذج المثالي الصحيح هي نصف عمل الفيزيائي. سنبدأ بأبسط نموذج: الجسم نقطة، وكل ما نعرفه عنها هو أين هي الآن وكم هي سرعتها."
+  ],
+  "standNote": "تفاعل مع المحاكاة قبل قراءة الاستنتاج. اضبط السرعة الابتدائية والتسارع، وانظر إلى المتجهات: الأخضر للسرعة، الأحمر للتسارع. لاحظ الشيء الرئيسي: عندما تكون المتجهات متعاكسة الاتجاه، يتباطأ الجسم أولاً ثم يتوقف ويعود إلى الخلف، مع أن التسارع لم يتغير طوال الوقت.",
+  "formula": {
+   "name": "معادلة الحركة المتسارعة بانتظام",
+   "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+   "alsoKnown": "معادلة الحركة الحركية بتسارع ثابت",
+   "authors": [
+    {
+     "who": "جاليليو جاليلي",
+     "year": 1638,
+     "what": "أثبت أن المسافة المقطوعة أثناء السقوط الحر تتناسب مع مربع الزمن — خلافاً للاعتقاد بأن سرعة السقوط تعتمد على الكتلة"
+    },
+    {
+     "who": "إسحاق نيوتن وغوتفريد لايبنتس",
+     "year": "عقد 1670",
+     "what": "ابتكرا بشكل مستقل التفاضل والتكامل، مما حول الوصف اللفظي لجاليليو إلى معادلة دقيقة"
+    }
+   ],
+   "story": "لم يكن لدى جاليليو ساعات دقيقة ولا حساب التفاضل. لقد دحرج كرات على مزلاج مائل، مما أبطأ السقوط بما يكفي لقياس الوقت — باستخدام ساعة مائية، وبحسب بعض الروايات، عبر الترنيم بلحن كبندول الإيقاع. واكتشف أمراً مذهلاً: في الوحدة الزمنية الأولى تقطع الكرة وحدة مسافة واحدة، في الثانية ثلاث وحدات، في الثالثة خمس وحدات. أعداد فردية. ومجموعها هو بالضبط المربعات: 1، 4، 9. هكذا وُلد الاعتماد التربيعي."
+  },
+  "symbols": [
+   {
+    "sym": "x(t)",
+    "latex": "x(t)",
+    "what": "الإحداثي عند اللحظة t",
+    "unit": "م",
+    "note": "هو الإحداثي وليس المسافة: عند الحركة للخلف يتناقص"
+   },
+   {
+    "sym": "x₀",
+    "latex": "x_0",
+    "what": "الإحداثي الابتدائي",
+    "unit": "م",
+    "note": "أين كان الجسم عند اللحظة t = 0؛ غالباً ما نجعله صفراً للتسهيل"
+   },
+   {
+    "sym": "v₀",
+    "latex": "v_0",
+    "what": "السرعة الابتدائية",
+    "unit": "م/ث",
+    "note": "كمية متجهة: الإشارة تحدد الاتجاه على طول المحور"
+   },
+   {
+    "sym": "a",
+    "latex": "a",
+    "what": "التسارع",
+    "unit": "م/ث²",
+    "note": "ثابت في هذه المعادلة؛ إذا تغير التسارع نحتاج إلى أدوات أخرى"
+   },
+   {
+    "sym": "t",
+    "latex": "t",
+    "what": "الزمن من بداية القياس",
+    "unit": "ث",
+    "note": "دائماً غير سالب ويُحسب من اللحظة التي اخترناها"
+   }
+  ],
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "سنحتاج فقط إلى تعريفين - السرعة والتسارع - وفكرة هندسية واحدة: المساحة تحت منحنى السرعة هي المسافة المقطوعة.",
+   "steps": [
+    {
+     "text": "أولاً، دعنا نتفق على ما تعنيه كلمة 'موقع'. بمفردها لا معنى لها: نحتاج إلى جسم مرجعي ومحاور وساعة. الراكب ساكن بالنسبة للعربة ويتحرك بسرعة بالنسبة للرصيف - كلا العبارتين صحيحتان في نفس الوقت. وهذا ما يسمى نظام الإسناد.",
+     "latex": "x = x(t) \\quad \\text{في نظام الإسناد المختار}",
+     "figure": "frame",
+     "figCaption": "حركة واحدة، راصدان، إجابتان مختلفتان - وكلتاهما صحيحة."
+    },
+    {
+     "text": "السرعة المتوسطة هي الإزاحة مقسومة على الزمن. لكنها لا تخبرنا كثيرًا: بعد قيادة السيارة عبر المدينة بسرعة متوسطة 30 كم/س، قد تكون واقفًا في زحام وتندفع في الشارع الرئيسي. نحتاج السرعة اللحظية.",
+     "latex": "v_{\\text{متوسط}} = \\frac{\\Delta x}{\\Delta t}",
+     "figure": "secant",
+     "figCaption": "السرعة المتوسطة - ميل القاطع الذي يربط نقطتين على منحنى الموقع."
+    },
+    {
+     "text": "سنقوم بتقليل الفاصل الزمني $\\Delta t$. يدور القاطع ويصبح في النهاية مماسًا. ميل هذا المماس هو السرعة اللحظية. هنا تظهر المشتقة ليس كإجراء شكلي من مقرر الرياضيات، ولكن كالطريقة الوحيدة للإجابة على سؤال 'بأي سرعة يتحرك الجسم الآن'.",
+     "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
+     "figure": "tangent",
+     "figCaption": "نهاية القواطع - المماس. ميله هو السرعة في تلك اللحظة."
+    },
+    {
+     "text": "يُعرّف التسارع بنفس الطريقة، ولكن بمستوى أعلى: هو معدل تغير السرعة. ومن هنا يأتي البعد الغريب - متر لكل ثانية مربعة: في كل ثانية، تتغير السرعة بمقدار معين من الأمتار في الثانية.",
+     "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
+     "figure": "accel",
+     "figCaption": "التسارع لا يخبرنا إذا كان الجسم يتحرك بسرعة، بل عن مدى سرعة تغير سرعته."
+    },
+    {
+     "text": "لنفترض أن التسارع ثابت. عندها تزداد السرعة بانتظام: يضاف بمقدار a كل ثانية إلى السرعة الابتدائية. هذه هي أول معادلة من معادلات الحركة، ويتم الحصول عليها عن طريق التكامل المباشر لتعريف التسارع.",
+     "latex": "v(t) = v_0 + a t",
+     "figure": "vline",
+     "figCaption": "عند تسارع ثابت، يكون منحنى السرعة خطًا مستقيمًا بميل a."
+    },
+    {
+     "text": "الآن الخطوة الهندسية الرئيسية. الإزاحة هي تكامل السرعة بالنسبة للزمن، أي المساحة تحت منحنى $v(t)$. وهذا الشكل هو شبه منحرف: مستطيل بارتفاع $v_0$ بالإضافة إلى مثلث بأضلاع $t$ و $at$. نجمع المساحات ونحصل على الإجابة.",
+     "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{مستطيل}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{مثلث}}",
+     "figure": "area",
+     "figCaption": "المسافة المقطوعة هي المساحة تحت منحنى السرعة. شبه المنحرف ينقسم إلى مستطيل ومثلث."
+    },
+    {
+     "text": "بإضافة الموقع الابتدائي، نحصل على المعادلة النهائية. لاحظ البنية: الحد الذي يحتوي على $t$ يمثل الحركة المنتظمة، والحد الذي يحتوي على $t^2$ يمثل التسارع. المربع هو ما يجعل المسار قطعًا مكافئًا.",
+     "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+     "figure": "parabola",
+     "figCaption": "منحنى الموقع - قطع مكافئ. انحناؤه يحدده التسارع."
+    }
+   ],
+   "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
+   "plateCap": "ثلاثة حدود - ثلاث مساهمات: أين كنا، وإلى أين كنا نتحرك، وكيف تسارعنا. كل شيء آخر في حركيات الحركة المتسارعة بانتظام يُشتق من هنا.",
+   "note": "الصيغة صالحة فقط للتسارع الثابت. بمجرد أن يبدأ $a$ في التغير - مثل الحركة مع مقاومة الهواء، أو اهتزازات الزنبرك، أو الطيران إلى كوكب بعيد - فإنها تتوقف عن العمل، ويجب حل معادلة تفاضلية. سنعود إلى هذا في موضوع الاهتزازات."
+  },
+  "math": {
+   "title": "الرياضيات التي كانت ضرورية هنا",
+   "items": [
+    {
+     "what": "ما هي المشتقة - فيزيائياً",
+     "why": "المشتقة هي مقياس لمعدل التغير. عالم الرياضيات سيقول 'نهاية نسبة الزيادات'، بينما الفيزيائي سيقول 'مدى سرعة تغير الكمية الآن'. هذا هو نفس الشيء. الفكرة الرئيسية: لمعرفة القيمة اللحظية، نأخذ فترة زمنية أصغر فأصغر ونرى إلى أين تتجه النتيجة. نفس الأسلوب سيعطينا شدة التيار (معدل تغير الشحنة)، والقدرة (معدل تغير الطاقة)، ومعدل التفاعل في الكيمياء.",
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
+    },
+    {
+     "what": "لماذا التكامل هو مساحة",
+     "why": "نقسم الزمن إلى قطع صغيرة جداً. في كل قطعة $\\Delta t$، يقطع الجسم مسافة تقريبية $v\\,\\Delta t$ - وهي مساحة مستطيل ضيق تحت المنحنى. نجمع كل المستطيلات، ونجعل عرضها يؤول إلى الصفر - نحصل على المساحة الدقيقة والمسار الدقيق. التكامل هو مثل هذا المجموع من عدد لا نهائي من المساهمات المتناهية في الصغر.",
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
+    },
+    {
+     "what": "المتجهات: لماذا الإشارة أهم مما يبدو",
+     "why": "السرعة والتسارع متجهان. على خط مستقيم، يتعلق الأمر بالإشارة، ولكن الإشارة تحدد كل شيء: إذا كانت $v$ و $a$ بإشارتين مختلفتين، يتباطأ الجسم؛ إذا كانتا بنفس الإشارة، يتسارع. لهذا السبب، الكرة المرمية لأعلى تكون سرعتها صفرًا عند القمة، لكن تسارعها لا يزال $9{,}8$ م/ث² متجهًا لأسفل.",
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{تسارع}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{تباطؤ}"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "المسألة الكلاسيكية عن الكبح - هي نفسها التي تقف وراء قواعد المرور.",
+   "given": "تتحرك سيارة بسرعة $20$ m/s (أي $72$ km/h) وتكبح بتسارع $5$ m/s². أوجد مسافة الكبح.",
+   "law": "$v(t) = v_0 + at$ و $x(t) = v_0 t + at^2/2$، حيث $a = -5$ m/s² (علامة الطرح: التسارع عكس اتجاه الحركة)",
+   "solution": [
+    {
+     "text": "أولاً نوجد الزمن حتى التوقف التام: يجب أن تصبح السرعة صفراً.",
+     "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{مع}"
+    },
+    {
+     "text": "نعوض هذا الزمن في معادلة الموضع.",
+     "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
+    },
+    {
+     "text": "نحصل على مسافة الكبح.",
+     "latex": "x = 40\\ \\text{m}"
+    }
+   ],
+   "answer": "مسافة الكبح — $40$ متراً",
+   "check": "يجدر تذكر ليس الرقم بل العلاقة: المسافة تتناسب مع مربع السرعة. ضعف السرعة يعني أربعة أضعاف المسافة. عند $40$ m/s ستقطع نفس السيارة $160$ متراً وليس $80$. هذه العلاقة هي ما يقف وراء الزيادة الحادة في خطورة الحوادث مع زيادة السرعة - وهي تتبع مباشرة من الحد $t^2$ في صيغتنا."
+  },
+  "constants": {
+   "title": "الكميات في هذا القسم",
+   "lead": "لا توجد ثوابت هنا تقريباً - علم الحركة يصف أي حركة. الارتباط الوحيد بكوكبنا يظهر عندما نتحدث عن السقوط.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "تسارع الجاذبية الأرضية",
+     "value": "9,81",
+     "unit": "m/s²",
+     "why": "التسارع الذي يسقط به أي جسم قرب سطح الأرض - بغض النظر عن كتلته، إذا أُهملت مقاومة الهواء. هذا اكتشاف غاليليو الذي تعارض مع تقليد دام ألفي عام.",
+     "mnemo": "في المسائل غالباً ما نأخذ 10 m/s² - الخطأ حوالي 2%، لكن الحساب ذهني."
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "name": "السرعة",
+     "value": "مشتق الموضع",
+     "unit": "m/s",
+     "why": "البعد يُقرأ مباشرة كتعريف: متر (إزاحة) في الثانية (زمن). كلما رأيت كسراً في الوحدات، ابحث عن المعنى - فغالباً ما يكون تعريف الكمية مخبأً هناك."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "name": "التسارع",
+     "value": "مشتق السرعة",
+     "unit": "m/s²",
+     "why": "متر لكل ثانية مربعة يُقرأ كالتالي: 'بمقدار كذا متر في الثانية تتغير السرعة كل ثانية'. الثانية ترفع للأس اثنان لأن القسمة على الزمن حدثت مرتين."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "النقطة المادية - اختيار واعي للجوهري. السرعة هي مشتق الموضع، والتسارع هو مشتق السرعة، والمسافة هي المساحة تحت منحنى السرعة. كل معادلات الحركة بتسارع ثابت تتبع من هذه العبارات الثلاث.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "المثالية",
+     "text": "نختزل الجسم إلى نقطة عندما يكون حجمه ودورانه غير مهمين للمسألة."
+    },
+    {
+     "icon": "clock",
+     "title": "المشتق",
+     "text": "السرعة اللحظية هي ميل المماس لمنحنى الموضع، وليس نسبة المسافة الكلية إلى الزمن."
+    },
+    {
+     "icon": "sigma",
+     "title": "المسافة كمساحة",
+     "text": "الإزاحة تساوي المساحة تحت منحنى السرعة. ومن هنا يأتي الحد المربع للزمن."
+    },
+    {
+     "icon": "formula",
+     "title": "الإشارة تحدد",
+     "text": "السرعة والتسارع في اتجاهين متعاكسين - الجسم يتباطأ رغم أن التسارع ثابت."
+    }
+   ],
+   "where": [
+    "مسافة الكبح تزداد كمربع السرعة: ضعف السرعة يعني أربعة أضعاف المسافة",
+    "تسارع السيارة 'إلى المئة في 6 ثوان' هو تسارع حوالي 4,6 m/s²",
+    "في أعلى نقطة للكرة المقذوفة لأعلى، السرعة صفر والتسارع يبقى 9,8 m/s²",
+    "المصعد: تشعر بالتسارع وليس السرعة - ففي الحركة المنتظمة لا تشعر بشيء"
+   ],
+   "watchOut": "المسافة والإزاحة ليسا الشيء نفسه. عند قطع دائرة حول الملعب، تكون قد قطعت 400 متر من المسافة، لكن إزاحتك صفر. في المعادلة نستخدم الإحداثي، لذلك عند الحركة للخلف ينقص."
+  },
+  "quiz": [
+   {
+    "id": "k1",
+    "type": "mcq",
+    "q": "تم قذف كرة رأسياً لأعلى. ماذا يحدث في أعلى نقطة من المسار؟",
+    "options": [
+     "كل من السرعة والتسارع يساويان صفراً",
+     "السرعة تساوي صفراً، والتسارع لا يزال 9,8 m/s² للأسفل",
+     "السرعة قصوى، والتسارع يساوي صفراً",
+     "التسارع يغير إشارته للعكس"
+    ],
+    "answer": 1,
+    "why": "السرعة تمر بالصفر - يتوقف الجسم للحظة. لكن التسارع تحدده الجاذبية التي لم تختف: يبقى موجهاً للأسفل ويساوي g طوال الرحلة.",
+    "hint": "اسأل نفسك: ما الذي يسبب التسارع في هذه المسألة؟ هل يختفي هذا السبب عندما تتوقف الكرة للحظة؟"
+   },
+   {
+    "id": "k2",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا نحتاج حتماً نظام إسناد لوصف الحركة؟ أعط مثالاً حيث يعطي راصدان إجابتين مختلفتين لكن كلتاهما صحيحة.",
+    "keywords": [
+     "نسب",
+     "راصد",
+     "إسناد",
+     "إسناد",
+     "عربة",
+     "قطار",
+     "أرض",
+     "يتحرك بالنسبة"
+    ],
+    "needed": 1,
+    "why": "الموضع والسرعة لا وجود لهما بذاتهما - فقط نسبياً لشيء ما. راكب القطار ساكن بالنسبة للعربة ويتحرك بسرعة 100 km/h بالنسبة للرصيف. كلا الوصفين صحيحان، لا تناقض: هما نظاما إسناد مختلفان.",
+    "hint": "تخيل أنك جالس في قطار وتُسقط مفاتيحك. كيف تصف حركتها أنت - وكيف يصفها الشخص على المنصة؟ من منكما على صواب؟"
+   },
+   {
+    "id": "k3",
+    "type": "estimate",
+    "q": "سيارة تتسارع من السكون إلى 100 km/h خلال 8 ثوان. ما متوسط تسارعها بوحدة m/s²؟",
+    "answer": 3.5,
+    "unit": "m/s²",
+    "tolerance": 1.4,
+    "why": "100 km/h تعادل تقريباً 28 m/s (نقسم على 3,6). التسارع يساوي تغير السرعة مقسوماً على الزمن: 28/8 ≈ 3,5 m/s². للمقارنة: السقوط الحر يعطي 9,8 - أي تقريباً ثلاثة أضعاف.",
+    "hint": "أولاً حول الكيلومترات في الساعة إلى أمتار في الثانية - اقسم على 3,6. ثم تذكر تعريف التسارع: تغير السرعة مقسوم على الزمن."
+   }
+  ],
+  "curiosities": {
+   "title": "أمور طريفة: اختبر بنفسك",
+   "lead": "تقاس الكينماتيكا بالمسطرة: إنها عن أين يكون الجسم ومتى، وليس عن السبب.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "مسطرة بدلاً من ساعة الإيقاف",
+     "text": "اطلب من شخص أن يمسك مسطرة رأسياً من الطرف العلوي. أبق أصابعك بالقرب من علامة الصفر دون لمسها. يطلق الشريك المسطرة دون إنذار — فتلتقطها بأسرع ما يمكن. تذكر عند أي علامة التقطتها.",
+     "answer": "يُحول المسافة المقطوعة إلى زمن باستخدام $t=\\sqrt{2h/g}$. عشرون سنتيمتراً تعطي حوالي 0.20 ثانية، وثلاثون حوالي 0.25. هذا هو زمن رد فعلك، وقد قسته دون جهاز واحد: المسطرة نفسها تعمل كساعة إيقاف لأن السقوط بتسارع معروف يربط المسافة بالزمن بشكل لا لبس فيه. ومن هنا أيضاً تقدير مسافة الكبح: في 0.2 ثانية من رد الفعل، تقطع سيارة بسرعة 60 كم/ساعة أكثر من ثلاثة أمتار قبل أن تبدأ في الكبح."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "عملتان، صوت واحد",
+     "text": "ضع عملة على حافة الطاولة. أمسك الثانية بجانبها على نفس الارتفاع. بنقرة حادة، أطلق الأولى أفقياً – بعيداً إلى الأمام – وأطلق في نفس الوقت الثانية شاقولياً إلى الأسفل. الأولى ستطير مسافة متر جانبياً، والثانية ستسقط مباشرة. أيهما يلمس الأرض أولاً؟",
+     "answer": "كلاهما – في نفس الوقت، ستسمع صوتاً واحداً. الحركة الأفقية لا تؤثر على الحركة الشاقولية: شاقولياً، تسقط كلتا العملتين بنفس التسارع من نفس الارتفاع. يسمى هذا استقلال الحركات، ولهذا السبب تحلل الحركة المعقدة إلى مكونات بسيطة على المحاور. رصاصة أطلقت أفقياً ورصاصة أسقطت من اليد في نفس اللحظة ستلمسان الأرض معاً – بشرط أن تكون الأرض مستوية وأن مقاومة الهواء مهملة."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة طريفة",
+     "h": "جاليليو أبطأ الجاذبية",
+     "text": "في بداية القرن السابع عشر، لم تكن هناك وسيلة لقياس السقوط الحر: يسقط جسم مترين في ثلثي الثانية، ولم تكن ساعات بهذه الدقة موجودة. تجاوز جاليليو ذلك بإرسال كرة على مجرى مائل: نفس القانون، ولكن التسارع أقل بمقدار ميل الميل. كان يقيس الزمن بوزن الماء المتدفق من وعاء عبر ثقب ضيق. وهكذا حصل على النتيجة الرئيسية: المسافة تزداد كمربع الزمن، وليس بشكل خطي كما كان يُعتقد سابقاً. بقيت هذه الحيلة في الفيزياء إلى الأبد – إذا كانت الظاهرة سريعة جداً، ابحث عن طريقة لإبطائها دون تغيير جوهرها."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "تذكير",
+     "h": "السرعة هي ميل الرسم البياني، العجلة هي ميل الميل",
+     "text": "على الرسم البياني للإحداثيات مقابل الزمن، السرعة هي انحدار المنحنى: قطعة أفقية تعني ثبات، خط أكثر انحداراً يعني أسرع. خذ الانحدار مرة أخرى، الآن من مخطط السرعة، تحصل على العجلة. من هذا يظهر العكس مباشرة: المساحة تحت مخطط السرعة هي المسافة المقطوعة. عمليتان، 'الميل' و'المساحة'، تربط الكميات الثلاث وتلغي الحاجة لحفظ الصيغ."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "أسرع بمرتين – أبعد بأربع مرات",
+     "text": "مسافة الكبح عند التباطؤ الثابت تساوي $v^2/2a$ – السرعة تربيع. لذلك، زيادة السرعة من 50 إلى 100 كم/ساعة تطيل مسافة الكبح ليس مرتين، بل أربع مرات: من حوالي خمسة عشر متراً إلى ستين، بالإضافة إلى المسافة خلال زمن رد الفعل. إنه المربع، وليس المضاعفة، الذي يقف وراء حدود السرعة في المدن، وهذه إحدى الحالات النادرة التي تحسب فيها صيغة مدرسية احتمال البقاء على قيد الحياة."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "الصيغة تتطلب عجلة ثابتة",
+     "text": "التعبير $x=x_0+v_0t+at^2/2$ صحيح فقط طالما أن العجلة ثابتة. مظلي بعد فتح المظلة يسقط بشكل منتظم تقريباً: مقاومة الهواء تزداد مع السرعة وتوازن الثقل. صاروخ يتسارع أكثر فأكثر مع احتراق الوقود، لأن الكتلة تتناقص. في كلتا الحالتين، لا نحتاج هذه الصيغة بل معادلة الحركة التي تحل عددياً."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "ماذا تقدم الكينماتيكا",
+   "lead": "وصف الحركة دون أسباب يبدو نصف إجراء – لكنه أساس الملاحة والسلامة.",
+   "items": [
+    {
+     "h": "الملاحة عبر الأقمار الصناعية",
+     "text": "جهاز الاستقبال في الهاتف لا يقيس المسافة بمسطرة: إنه يقارن أوقات وصول الإشارات من عدة أقمار صناعية ويحل مسألة كينماتيكية. خطأ بمقدار نانوثانية يعطي خطأ ثلاثين سنتيمتراً، لذا تدخل في الحساب تصحيحات نظرية النسبية."
+    },
+    {
+     "h": "السلامة على الطرق",
+     "text": "العلاقة التربيعية بين السرعة ومسافة الكبح تحدد العلامات والمسافة والسرعات القصوى. وهذا يشمل أيضاً زمن رد الفعل – نفس الكمية التي يتم التقاطها بالمسطرة الساقطة."
+    },
+    {
+     "h": "الرياضة والميكانيكا الحيوية",
+     "text": "مسار القفزة، زاوية انطلاق الرمح، نقطة الانطلاق المثلى تُحسب كحركة نقطة بسرعة ابتدائية معينة. يقوم المدربون بتحليل لقطات الفيديو إطاراً بإطار، الحصول على السرعة كميل والعجلة كميل الميل."
+    },
+    {
+     "h": "علم الفلك والمقذوفات",
+     "text": "التنبؤ بموقع كوكب لسنوات قادمة وحساب مسار مركبة فضائية إلى المريخ هما من نفس الفئة: الشروط الابتدائية وقانون تغير العجلة معروفان، والمطلوب الإحداثيات عند زمن معين."
+    },
+    {
+     "h": "رسوميات الحاسوب",
+     "text": "محركات الفيزياء في الألعاب والأفلام تعيد حساب مواقع آلاف الأجسام ستين مرة في الثانية باستخدام نفس الصيغ، ولكن بخطوات زمنية. واقعية سقوط الأجسام على الشاشة هي كينماتيكا مدمجة بشكل صحيح."
+    }
+   ]
+  }
+ }
 }

@@ -43,18 +43,18 @@ def targets():
     return sorted(files)
 
 
-PROMPT = """Translate this physics-course material into {lang}. It is educational text for a
+PROMPT = r"""Translate this physics-course material into {lang}. It is educational text for a
 popular-science site, adult non-expert audience.
 
 RULES — critical:
 - Translate ONLY human-readable text (titles, explanations, examples, notes).
 - Do NOT translate or alter: LaTeX/KaTeX commands and structure, symbols of quantities
   (E, F, q, Δt…), numbers, constant names/ids, JSON keys, and any technical identifiers.
-- IMPORTANT — words INSIDE formulas: text written as \text{…} or \mathrm{…} is a human-readable
-  label (a subscript such as \text{ionisation}, or a caption). Translate what is inside the
-  braces, keep the command and the braces intact. Leaving a Russian word inside \text{} is a
+- IMPORTANT — words INSIDE formulas: text written as \text{{…}} or \mathrm{{…}} is a human-readable
+  label (a subscript such as \text{{ionisation}}, or a caption). Translate what is inside the
+  braces, keep the command and the braces intact. Leaving a Russian word inside \text{{}} is a
   bug: the reader sees Cyrillic in an English/Spanish/Arabic formula.
-  Units inside \text{} become the international symbols: м→m, с→s, кг→kg, Дж→J, Н→N, Вт→W,
+  Units inside \text{{}} become the international symbols: м→m, с→s, кг→kg, Дж→J, Н→N, Вт→W,
   В→V, А→A, Кл→C, К→K, Гц→Hz, эВ→eV, МэВ→MeV, моль→mol.
 - Names of laws and effects (fields like "law") ARE human-readable — translate them using the
   standard name in {lang} ("Закон Ома" → "Ohm's law").
@@ -89,13 +89,22 @@ def translate_block(block, lang, chunk_chars=6000):
     """Переводим ПО ЧАСТЯМ: урок целиком (40k+ символов) не помещается в ответ модели —
     ответ обрывался на середине JSON. Режем по ключам верхнего уровня, мелкие группируем."""
     out, batch, size = {}, {}, 0
+    failed = []
 
+    # ВАЖНО. Здесь стоял молчаливый откат: при сбое запроса в перевод писался РУССКИЙ оригинал
+    # (`out.update(got if ... else batch)`). Выглядело безобидно, а на деле давало худший из
+    # исходов: читатель на английском видел русский текст, а файл после этого навсегда считался
+    # переведённым — блок больше никогда не пробовали перевести заново. Именно так по курсу
+    # разошлась кириллица. Теперь при сбое НИЧЕГО не пишем: пропуск виден и будет повторён.
     def flush():
         nonlocal batch, size
         if not batch:
             return
         got = _one(batch, lang)
-        out.update(got if isinstance(got, dict) else batch)
+        if isinstance(got, dict):
+            out.update(got)
+        else:
+            failed.extend(batch.keys())
         batch, size = {}, 0
 
     for k, v in block.items():
@@ -103,13 +112,19 @@ def translate_block(block, lang, chunk_chars=6000):
         if s > chunk_chars:          # крупный раздел — отдельным запросом
             flush()
             got = _one({k: v}, lang)
-            out[k] = (got or {}).get(k, v)
+            if isinstance(got, dict) and k in got:
+                out[k] = got[k]
+            else:
+                failed.append(k)
             continue
         if size + s > chunk_chars:
             flush()
         batch[k] = v
         size += s
     flush()
+    if failed:
+        print(f"    ⚠️ {lang}: не переведены {', '.join(sorted(set(failed)))} — оставлены пустыми,"
+              f" повторный прогон возьмётся за них", flush=True)
     return out
 
 
@@ -124,15 +139,38 @@ def main():
     todo = []
     for f in files:
         d = json.loads(f.read_text(encoding="utf-8"))
-        missing = [l for l in langs if l not in d]
+        # Пропуск считаем ПО БЛОКАМ, а не по наличию языковой ветки. Раньше проверялось только
+        # `lang not in d`: если перевод одного блока однажды сорвался, ветка оставалась неполной,
+        # а файл навсегда считался переведённым. Так по курсу пропали `curiosities` у 27 уроков
+        # и `synthesis` у 22 — читатель на en/es/ar не видел ни опытов на кухне, ни сквозного примера.
+        missing = {}
+        for l in langs:
+            if l not in d:
+                missing[l] = list(d["ru"].keys())
+            else:
+                gaps = [k for k in d["ru"] if k not in d[l]]
+                if gaps:
+                    missing[l] = gaps
         if missing:
             todo.append((f, missing))
     if limit:
         todo = todo[:limit]
 
-    chars = sum(len(json.dumps(json.loads(f.read_text(encoding="utf-8"))["ru"], ensure_ascii=False)) * len(m)
-                for f, m in todo)
-    print(f"материалов курса: {len(files)} | к переводу: {len(todo)} файлов, ~{chars/1000:.0f}k символов", flush=True)
+    def part(ru, keys):
+        return {k: ru[k] for k in keys if k in ru}
+
+    chars = 0
+    for f, m in todo:
+        ru = json.loads(f.read_text(encoding="utf-8"))["ru"]
+        for keys in m.values():
+            chars += len(json.dumps(part(ru, keys), ensure_ascii=False))
+    gaps = sum(len(v) for _, m in todo for v in m.values())
+    print(f"материалов курса: {len(files)} | к переводу: {len(todo)} файлов, "
+          f"{gaps} блоков, ~{chars/1000:.0f}k символов", flush=True)
+    if "--check" in argv:
+        for f, m in todo[:20]:
+            for lang, keys in sorted(m.items()):
+                print(f"  {f.parent.name}/{f.name} [{lang}]: {', '.join(keys[:6])}", flush=True)
     if "--check" in argv or not todo:
         return
 
@@ -146,15 +184,21 @@ def main():
         f, missing = item
         d = json.loads(f.read_text(encoding="utf-8"))
         made = []
-        for lang in missing:
+        for lang, keys in missing.items():
             try:
-                d[lang] = translate_block(d["ru"], lang)
-                made.append(lang)
+                got = translate_block(part(d["ru"], keys), lang)
+                if not got:
+                    continue
+                # Дополняем ветку, а не перезаписываем: уже переведённое трогать незачем.
+                d.setdefault(lang, {})
+                for k, v in got.items():
+                    d[lang][k] = v
+                made.append(f"{lang}:{len(got)}")
             except Exception as e:
                 print(f"  ✗ {f.name} → {lang}: {str(e)[:80]}", flush=True)
         if made:
             f.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
-            print(f"  ✔ {f.name} → {', '.join(made)}", flush=True)
+            print(f"  ✔ {f.parent.name}/{f.name} → {', '.join(made)}", flush=True)
         return len(made)
 
     with ThreadPoolExecutor(max_workers=4) as ex:
