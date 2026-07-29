@@ -1436,6 +1436,83 @@ function collapseNavOverflow() {
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
 
+// ── Иконки шапки уезжают в шторку, когда строка перестаёт помещаться ─────────
+// Сворачивание выше разбирается со СПИСКОМ пунктов — оно всегда прячет одни и те же
+// разделы, независимо от ширины. Иконок это не касалось, и на 320 строка ломалась
+// на два яруса: названию, меню и трём иконкам нужно около 330 пикселей при 288
+// доступных. Уменьшать кнопки нельзя — 44 это порог касания, — поэтому лишние
+// иконки уезжают туда же, куда давно уезжают лишние пункты.
+// Решение принимается по факту переноса, а не по контрольной ширине: так оно верно и
+// для длинных названий на других языках, где та же строка ломается раньше.
+function fitHeaderCluster() {
+    var bar = document.querySelector('.top-bar');
+    var right = document.querySelector('.header-right');
+    var panel = document.querySelector('.nav-more-panel');
+    if (!bar || !right || !panel) return;
+
+    // Когда все пункты уехали в шторку, обёртка остаётся в строке и всё равно съедает
+    // просвет. CSS-правило :empty её не ловит: внутри остаётся пробельный узел, а для
+    // :empty это уже «не пусто». Прячем по факту отсутствия ссылок.
+    var navBox = right.querySelector('.nav-links');
+    if (navBox) navBox.style.display = navBox.querySelector('a') ? '' : 'none';
+
+    function wraps() {
+        var kids = Array.prototype.filter.call(bar.children, function (el) {
+            return el.getBoundingClientRect().width > 0;
+        });
+        if (kids.length < 2) return false;
+        var tops = kids.map(function (el) { return Math.round(el.getBoundingClientRect().top); });
+        return Math.max.apply(null, tops) - Math.min.apply(null, tops) > 6;
+    }
+    // Порядок вытеснения: сначала то, что реже нужно на ходу. Переключатель темы и поиск
+    // не трогаем — ими пользуются с любой страницы.
+    // Календаря здесь намеренно нет: он тянет за собой сетку месяцев шириной под 620,
+    // и в шторке она растягивала список до 1256, возвращая прокрутку вбок. На самых узких
+    // экранах он убран из шапки стилями — см. «Шапка на узком экране» в style.css.
+    // :not(.nav-moved) обязательно — иначе на следующем витке цикл снова находит то,
+    // что уже лежит в шторке (она сама внутри шапки), и перекладывает его по кругу.
+    var order = ['.nav-links a[href*="/learn"]:not(.nav-moved)',
+                 '.header-right a[href*="/favorites"]:not(.nav-moved)',
+                 '.nav-links a.nav-ic:not(.nav-moved)'];
+
+    var guard = 0;
+    while (wraps() && guard++ < 5) {
+        var el = null;
+        for (var i = 0; i < order.length && !el; i++) el = bar.querySelector(order[i]);
+        if (!el) break;
+        // В шторке пункты подписаны словами, поэтому к иконке добавляем её подсказку —
+        // иначе в списке окажется безымянный значок.
+        var label = (el.getAttribute('title') || '').trim();
+        if (label && !el.textContent.trim()) el.appendChild(document.createTextNode(' ' + label));
+        el.classList.add('nav-moved');
+        panel.appendChild(el);
+    }
+
+    // Переключатель уровней (страницы закона, тега, учёного) в шторку не годится: это
+    // главный контрол страницы, а не редкая ссылка. Если строка всё ещё не помещается —
+    // кладём его под шапку во всю ширину, ровно так он и живёт на статьях.
+    if (wraps()) {
+        var lv = bar.querySelector('.lv-switch:not(.lv-moved)');
+        if (lv && bar.parentNode) {
+            lv.classList.add('lv-moved');
+            bar.parentNode.insertBefore(lv, bar.nextSibling);
+        }
+    }
+}
+// Считать приходится трижды, и это не перестраховка: на DOMContentLoaded заголовок ещё
+// набран запасным шрифтом, его ширина отличается, и строка кажется помещающейся. Тот же
+// приём уже используется для высоты липкой шапки ниже.
+document.addEventListener('DOMContentLoaded', function () {
+    fitHeaderCluster();
+    setTimeout(fitHeaderCluster, 60);
+});
+window.addEventListener('load', fitHeaderCluster);
+var _fitTimer = null;
+window.addEventListener('resize', function () {
+    clearTimeout(_fitTimer);
+    _fitTimer = setTimeout(fitHeaderCluster, 180);
+});
+
 // Список разделов: группы раскрываемые — клик по строке-группе разворачивает её разделы
 // (юзер 2026-07-24: «разделы нажимаем — они раскрываются»). По умолчанию всё свёрнуто.
 document.addEventListener('click', function (e) {
