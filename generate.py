@@ -3307,7 +3307,12 @@ def write_article_pages(item, date_str):
             scipop, translated = pick_scipop(versions_ru, translations, v, lang)
             (lang_folder / VERSION_FILES[v]).write_text(
                 gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract,
-                                 has_mini=bool((versions_ru.get("popular", {})).get("threads"))),
+                                 # mini живёт в "mini" у нового конвейера (с 2026-07-27) и в
+                                 # "threads" у старого — проверяем ОБА, как regenerate_all_html.
+                                 # Проверка только threads молча оставила без mini.html все
+                                 # статьи догона 17–28 июля (mini был сгенерирован и оплачен).
+                                 has_mini=bool((versions_ru.get("popular", {})).get("threads")
+                                               or (versions_ru.get("popular", {})).get("mini"))),
                 encoding="utf-8")
             if translated:
                 update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
@@ -3318,7 +3323,7 @@ def write_article_pages(item, date_str):
     # ПО ЯЗЫКУ: раньше mini_scipop строился один раз из versions_ru (русской версии) ВНЕ цикла
     # по языкам и переиспользовался для всех — на mini у en/es был русский текст под локализованной
     # обвязкой. Теперь источник берём per-язык: свой tier из translations, не всегда RU.
-    if (versions_ru.get("popular", {})).get("threads"):
+    if (versions_ru.get("popular", {})).get("threads") or (versions_ru.get("popular", {})).get("mini"):
         for l in LANGUAGES:
             if l == DEFAULT_LANG:
                 mini_source = versions_ru["popular"]
@@ -3332,7 +3337,8 @@ def write_article_pages(item, date_str):
             # express: реальный тир (simple) хранит короткий текст в поле "mini", не "threads"
             # ("threads" — только у попап-заглушки, express_locked_scipop бэкфиллит его из RU).
             threads_text = (mini_source.get("threads") or mini_source.get("mini")
-                             or (versions_ru.get("popular", {})).get("threads", ""))
+                             or (versions_ru.get("popular", {})).get("threads")
+                             or (versions_ru.get("popular", {})).get("mini", ""))
             mini_scipop = dict(mini_source)
             mini_scipop["text"] = threads_text
             lf = Path(LANG_DIR) / l / "archive" / date_str / a["id"]
