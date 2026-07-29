@@ -29,9 +29,12 @@
         ['laws', '/lang/' + L + '/laws/'],
         ['scientists', '/lang/' + L + '/scientists/'],
         ['sections', '/lang/' + L + '/sections/'],
-        ['authors', '/lang/' + L + '/authors/'],
+        // Авторы собраны только по-английски (решение: имена не переводятся, −600МБ),
+        // раздел работает — ведём читателя любого языка в en, а не прячем пункт.
+        ['authors', '/lang/en/authors/'],
         ['graph', '/lang/' + L + '/graph/'],
-        ['theory', '/lang/' + L + '/theory/'],
+        // theory — старый раздел, удалён решением владельца (2026-07-23 «старая часть
+        // в архив», подтверждено 2026-07-29): пункт вёл в 404 на всех языках.
         ['learn', '/learn.html'],
         ['analytics', '/lang/' + L + '/analytics/'],
         ['about', '/lang/' + L + '/about.html']

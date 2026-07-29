@@ -71,6 +71,10 @@
 <script>
 function filterLaws(q) {
     q = (q || '').toLowerCase().trim();
+    // Вид по умолчанию — «структура», а фильтр работает по списку #law-cloud: человек
+    // вводил запрос в скрытый контейнер и не видел ничего (QA 2026-07-29). Ввод запроса
+    // теперь сам переключает в «список»; пустой запрос возвращает как было.
+    if (q && window.__lawsSetView) window.__lawsSetView('list');
     var container = document.getElementById('law-cloud');
     var group = null, groupHasVisible = false;
     Array.prototype.forEach.call(container.children, function(el) {
@@ -89,6 +93,7 @@ function filterLaws(q) {
 (function(){
   var V={structured:'treeview',treemap:'treemap',list:'law-cloud',graph:'laws-graph'};
   var B={structured:'view-structured',treemap:'view-treemap',list:'view-list',graph:'view-graph'};
+  window.__lawsSetView = set;
   function set(name){
     for(var k in V){var el=document.getElementById(V[k]);if(el)el.style.display=(k===name)?'':'none';
       var b=document.getElementById(B[k]);if(b)b.classList.toggle('active',k===name);}

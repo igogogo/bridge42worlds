@@ -484,11 +484,22 @@ function doFullSearch(query) {
             });
         });
     }
+    // На странице избранного поиск ищет ВНУТРИ избранного: подмена его всем сайтом
+    // лишала раздел смысла (QA 2026-07-29). Пустое избранное отвечает пустотой честно.
+    if (window.__favoritesPage) {
+        var favSet = {};
+        try { JSON.parse(localStorage.getItem('favorites') || '[]').forEach(function (id) { favSet[id] = true; }); } catch (e) {}
+        results = results.filter(function (item) { return favSet[item.id]; });
+    }
     if (filters.text) {
         var q = filters.text;
         results = results.filter(function(item) {
             return (item.title || '').toLowerCase().includes(q) ||
                    (item.oneliner || '').toLowerCase().includes(q) ||
+                   // Ищем по тому же тексту, что видит читатель на карточке (abstract),
+                   // а не только по description: фильтр по невидимому полю давал и пропуски
+                   // (en «quantum» — 119 статей мимо), и «мусорную» выдачу (QA 2026-07-29).
+                   (item.abstract || '').toLowerCase().includes(q) ||
                    (item.description || '').toLowerCase().includes(q) ||
                    (item.authors || []).some(function(a) { return a.toLowerCase().includes(q); });
         });

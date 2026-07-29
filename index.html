@@ -28,7 +28,15 @@
     </style>
 </head>
 <body>
-<script>window.location.replace('/lang/en/index.html');</script>
+<script>
+// Читатель, выбравший язык, при заходе с корня попадает В СВОЙ язык, а не в английский:
+// безусловный replace на en убивал выбор и делал недостижимым весь код ниже (QA 2026-07-29).
+(function () {
+    var saved = null;
+    try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+    window.location.replace('/lang/' + (saved || 'en') + '/index.html');
+})();
+</script>
 <div class="landing">
     <h1>bridge<span class="n">42</span>worlds</h1>
     <p>A bridge between science and the world — new discoveries, in plain words.</p>

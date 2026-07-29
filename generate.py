@@ -383,13 +383,16 @@ def render_formulas(formulas):
     )
 
 
-def trivia_html(fun_fact, scifi=""):
-    """Единый блок «интересный факт + в фантастике» под текстом статьи (одна карточка, не два разрозненных блока)."""
+def trivia_html(fun_fact, scifi="", lang=DEFAULT_LANG):
+    """Единый блок «интересный факт + в фантастике» под текстом статьи (одна карточка, не два разрозненных блока).
+
+    Текст идёт через parse_markers: модель размечает [tag:…]/[scientist:…] и в fun_fact,
+    и раньше маркеры печатались читателю сырыми — 1419 файлов (QA 2026-07-29)."""
     rows = []
     if fun_fact:
-        rows.append(f'<p class="fact">🎯 {safe(fun_fact)}</p>')
+        rows.append(f'<p class="fact">🎯 {parse_markers(fun_fact, lang)}</p>')
     if scifi:
-        rows.append(f'<p class="fact fact-scifi">🎬 {safe(scifi)}</p>')
+        rows.append(f'<p class="fact fact-scifi">🎬 {parse_markers(scifi, lang)}</p>')
     return f'<div class="fun-fact">{"".join(rows)}</div>' if rows else ""
 
 
@@ -696,6 +699,17 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_body": "Are you one of the authors of this paper? Email us from your institutional "
                                       "or work email address mentioning this article's arXiv ID and we'll verify "
                                       "you and give you edit access to this page."},
+        "es": {"search": "Buscar artículos, #etiquetas, @autores", "hint": "# etiqueta · @ autor · ! científico",
+               "share": "Compartir", "next": "Siguiente artículo",
+               "license": "Original", "scientists": "Científicos:", "key_numbers": "Cifras clave",
+               "context": "Contexto", "methods": "Métodos", "results": "Resultados",
+               "implications": "Implicaciones", "future_development": "Desarrollo futuro",
+               "impact_on": "Impacto", "next_steps": "Próximos pasos",
+               "key_problems_connection": "Problemas abiertos clave",
+               "author_verify_label": "Soy el autor",
+               "author_verify_body": "¿Es usted uno de los autores de este trabajo? Escríbanos desde su correo "
+                                      "institucional o profesional indicando el arXiv ID de este artículo: "
+                                      "le verificaremos y le daremos acceso de edición a esta página."},
         "ru": {"search": "Поиск статей, #теги, @авторы", "hint": "# тег · @ автор · ! учёный",
                "share": "Поделиться", "next": "Следующая статья",
                "license": "Оригинал", "scientists": "Учёные:", "key_numbers": "Ключевые числа",
@@ -750,10 +764,10 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                         "you and give you edit access to this page.",
                  "impact_on": "Impact", "next_steps": "Next steps",
                  "key_problems_connection": "Key open problems"})
-    loc["min"] = {"ru": "мин", "en": "min", "zh": "分钟", "fr": "min", "ar": "دقيقة"}.get(lang, "min")
-    loc["related_articles"] = {"ru": "Похожие статьи", "en": "Related articles", "zh": "相关文章",
-                               "fr": "Articles similaires", "ar": "مقالات ذات صلة"}.get(lang, "Related articles")
-    loc["feedback_nav"] = {"ru": "Отклик", "en": "Feedback", "zh": "反馈",
+    loc["min"] = {"ru": "мин", "en": "min", "es": "min", "zh": "分钟", "fr": "min", "ar": "دقيقة"}.get(lang, "min")
+    loc["related_articles"] = {"ru": "Похожие статьи", "en": "Related articles", "es": "Artículos relacionados",
+                               "zh": "相关文章", "fr": "Articles similaires", "ar": "مقالات ذات صلة"}.get(lang, "Related articles")
+    loc["feedback_nav"] = {"ru": "Отклик", "en": "Feedback", "es": "Comentarios", "zh": "反馈",
                             "fr": "Retour", "ar": "التعليقات"}.get(lang, "Feedback")
 
     # "Следующая статья" — на ту же строку, что заголовок отклика (юзер-фидбек 2026-07-15:
@@ -851,7 +865,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         key_numbers_html = ""
         nav_html = '<nav class="article-nav" id="section-nav"><ul>' + nav_top_item + '<li class="article-nav-sep"></li>' + "".join(nav_extra_items) + '</ul></nav>'
         formulas_html = render_formulas(scipop.get("formulas", []))
-        fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""))
+        fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""), lang)
     else:
         sections = [
             ("context", loc["context"]), ("methods", loc["methods"]), ("results", loc["results"]),
@@ -875,7 +889,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         if kn:
             key_numbers_html = f'<div class="key-numbers"><h3>{safe(loc["key_numbers"])}</h3><ul>' + \
                                "".join(f"<li><strong>{k}:</strong> {v}</li>" for k, v in kn.items()) + '</ul></div>'
-        fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""))
+        fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""), lang)
 
     if scipop.get("express_locked"):
         # Показываем баннер сверху текста: "показана версия X, Y пока не готова" — текст уже
@@ -1229,6 +1243,7 @@ def generate_tags_cloud(lang):
 
     loc = {
         "en": {"title": "Tags", "subtitle": "Select tags to filter articles.", "footer": "science made simple"},
+        "es": {"title": "Etiquetas", "subtitle": "Elige etiquetas para filtrar artículos.", "footer": "ciencia en palabras sencillas"},
         "ru": {"title": "Теги", "subtitle": "Выберите теги для фильтрации статей.", "footer": "наука простыми словами"},
         "zh": {"title": "标签", "subtitle": "选择标签以筛选文章。", "footer": "让科学变简单"},
         "fr": {"title": "Tags", "subtitle": "Sélectionnez des tags pour filtrer les articles.",
@@ -1308,6 +1323,12 @@ def generate_tag_page(tag_id, lang):
         "en": {"related": "Related tags", "history": "History", "how": "How it works", "problems": "Open problems & fun facts",
                "search": "Search...", "hint": "# tag · @ author · ! scientist", "footer": "science made simple",
                "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice", "articles": "Related articles"},
+        "es": {"related": "Etiquetas relacionadas", "history": "Historia", "how": "Cómo funciona",
+               "problems": "Problemas abiertos y curiosidades",
+               "search": "Buscar...", "hint": "# etiqueta · @ autor · ! científico",
+               "footer": "ciencia en palabras sencillas", "scientists": "Científicos:",
+               "no_articles": "Aún no hay artículos", "practical": "En la práctica",
+               "articles": "Artículos relacionados"},
         "ar": {"related": "وسوم ذات صلة", "history": "التاريخ", "how": "كيف يعمل",
                "problems": "مسائل مفتوحة وحقائق طريفة", "search": "بحث...",
                "hint": "# وسم · @ مؤلف · ! عالم", "footer": "العلم ببساطة",
@@ -1585,7 +1606,7 @@ ABSTRACT_LABEL = {"ru": "Аннотация", "en": "Abstract", "zh": "摘要", 
 EXPRESS_LOCKED_BANNER = {
     "ru": '📄 Показана версия «{shown}» — «{locked}» пока не готова. Добавьте ★ в избранное, если хотите её ускорить.',
     "en": '📄 Showing the "{shown}" version — "{locked}" is not ready yet. Add it to favorites to help prioritize it.',
-    "es": '📄 Mostrando la version "{shown}" — "{locked}" aun no esta lista. Anadelo a favoritos para ayudar a priorizarla.',
+    "es": '📄 Mostrando la versión "{shown}" — "{locked}" aún no está lista. Añádelo a favoritos para ayudar a priorizarla.',
     "zh": '📄 当前显示"{shown}"版本 — "{locked}"尚未准备好。收藏可以帮助优先制作。',
     "fr": '📄 Version "{shown}" affichee, "{locked}" n est pas encore prete. Ajoutez-le aux favoris pour aider a la prioriser.',
     "ar": '📄 معروضة نسخة «{shown}» — «{locked}» غير جاهزة بعد. أضفه إلى المفضّلة للمساعدة في تسريعها.',
@@ -1950,6 +1971,8 @@ def generate_scientists_cloud(lang):
     loc = {
         "en": {"title": "Scientists", "subtitle": "Great minds behind the discoveries.",
                "search": "Find scientists...", "footer": "science made simple"},
+        "es": {"title": "Científicos", "subtitle": "Las grandes mentes detrás de los descubrimientos.",
+               "search": "Buscar científicos...", "footer": "ciencia en palabras sencillas"},
         "ru": {"title": "Учёные", "subtitle": "Великие умы стоящие за открытиями.", "search": "Найти учёных...",
                "footer": "наука простыми словами"},
         "zh": {"title": "科学家", "subtitle": "发现背后的伟大头脑。", "search": "查找科学家...",
@@ -2010,6 +2033,12 @@ def generate_scientist_page(sid, lang):
         "en": {"related": "Related tags", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Key discoveries", "bio": "Biography", "quote": "Quote",
                "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "science made simple",
                "no_articles": "No articles yet", "articles": "Related articles"},
+        "es": {"related": "Etiquetas relacionadas", "related_laws": "Leyes relacionadas",
+               "related_scientists": "Científicos relacionados", "discoveries": "Descubrimientos clave",
+               "bio": "Biografía", "quote": "Cita",
+               "search": "Buscar...", "hint": "! científico · # etiqueta · @ autor",
+               "footer": "ciencia en palabras sencillas",
+               "no_articles": "Aún no hay artículos", "articles": "Artículos relacionados"},
         "ar": {"related": "وسوم ذات صلة", "related_laws": "قوانين ذات صلة", "related_scientists": "علماء ذوو صلة", "discoveries": "اكتشافات رئيسية", "bio": "سيرة", "quote": "اقتباس",
                "search": "بحث...", "hint": "! عالم · # وسم · @ مؤلف", "footer": "العلم ببساطة",
                "no_articles": "لا مقالات بعد", "articles": "مقالات ذات صلة"},
