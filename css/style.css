@@ -18,6 +18,13 @@ html[lang="ar"] .authors-top, html[lang="ar"] .card-authors,
 html[lang="ar"] .related-tags { unicode-bidi: plaintext; overflow-wrap: anywhere; }
 /* картинка карточки статьи — обтекание с другой стороны */
 html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 8px 16px; }
+/* На телефоне картинка идёт во всю ширину над текстом, и обтекать её нечем. Правило выше
+   этого не знало: у него вес больше, чем у мобильного «.card-img-wrap { float: none }»,
+   поэтому в арабской версии картинка оставалась плавающей и текст наезжал на неё — 307
+   на 173 пикселя внахлёст (проверено на 375). Зеркалим обтекание только там, где оно есть. */
+@media (max-width: 700px) {
+    html[lang="ar"] .card-img-wrap { float: none; margin: 0 0 12px; }
+}
 /* разделитель чипов категорий — тоже зеркалим */
 html[lang="ar"] .cat-chip { border-right: none; border-left: 1px solid var(--border); }
 html[lang="ar"] .cat-chip:last-child { border-left: none; }
