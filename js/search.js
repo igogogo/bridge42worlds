@@ -849,8 +849,13 @@ function cardHTML(item) {
         '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '</button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
-    var img = base + 't_ai.webp';
-    var imgFb = base + 'ai.webp';
+    // Обложки лежат ОДИН раз, под ru (умысел: экономия гигабайтов). Ссылки — по языку
+    // страницы, а картинки — всегда из ru-папки. Сборка пути по языку страницы давала
+    // ленты en/es/ar вовсе без обложек: оба запроса 404 (QA-блокер №1, 2026-07-29).
+    var imgBase = '/lang/' + (typeof defaultLang !== 'undefined' ? defaultLang : 'ru') +
+                  '/archive/' + item.date + '/' + item.id + '/';
+    var img = imgBase + 't_ai.webp';
+    var imgFb = imgBase + 'ai.webp';
     // item.image === false — решено уже при генерации (нет ai.webp), не пытаемся грузить и не
     // резервируем место под картинку. undefined (старый индекс до пересборки) — считаем как есть.
     var hasImg = item.image !== false;
