@@ -629,13 +629,16 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     ex.appendChild(t3);
     root.appendChild(ex);
 
-    // материалы по теме — реальные ссылки в нашу базу
-    var lib = el('section', 'k-sec');
+    // Материалы по теме — реальные ссылки в нашу базу.
+    // Раздел и любая его строка необязательны: часть уроков ещё не связана с базой сайта,
+    // и отсутствие связок не повод ронять всю страницу (так уже падала карточка-шпаргалка).
+    var lib = G.library ? el('section', 'k-sec') : null;
+    if (lib) {
     lib.appendChild(el('h2', null, G.library.title));
     lib.appendChild(el('p', null, G.library.lead));
     function linkRow(items, base, fmt, icon) {
       var t = el('table', 'k-const');
-      items.forEach(function (i) {
+      (items || []).forEach(function (i) {
         var tr = el('tr');
         var c = el('td', 'k-const-sym', icon); c.style.fontSize = '1rem';
         tr.appendChild(c);
@@ -646,14 +649,19 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       });
       return t;
     }
-    lib.appendChild(el('h3', null, ic('scale') + ' Законы'));
-    lib.appendChild(linkRow(G.library.laws, '/lang/' + LANG + '/laws/', function (x) { return x; }, '<i data-ic="scale"></i>'));
-    lib.appendChild(el('h3', null, ic('person') + ' Учёные'));
-    lib.appendChild(linkRow(G.library.scientists, '/lang/' + LANG + '/scientists/', function (x) { return x; }, '<i data-ic="person"></i>'));
-    lib.appendChild(el('h3', null, ic('tag') + ' Темы'));
-    lib.appendChild(linkRow(G.library.tags, '/lang/' + LANG + '/tags/', function (x) { return x; }, '<i data-ic="tag"></i>'));
-    lib.appendChild(el('div', 'k-note', G.library.note));
+    // подраздел показываем, только если в нём есть хоть одна ссылка
+    function libPart(items, head, icon, base) {
+      if (!items || !items.length) return;
+      lib.appendChild(el('h3', null, ic(icon) + ' ' + head));
+      lib.appendChild(linkRow(items, '/lang/' + LANG + base, function (x) { return x; },
+                              '<i data-ic="' + icon + '"></i>'));
+    }
+    libPart(G.library.laws, 'Законы', 'scale', '/laws/');
+    libPart(G.library.scientists, 'Учёные', 'person', '/scientists/');
+    libPart(G.library.tags, 'Темы', 'tag', '/tags/');
+    if (G.library.note) lib.appendChild(el('div', 'k-note', G.library.note));
     root.appendChild(lib);
+    }
 
     // куда дальше
     var nx = el('section', 'k-sec');
@@ -1045,7 +1053,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=2"></script>
+<script src="/js/course-i18n.js?v=3"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

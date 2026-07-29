@@ -92,6 +92,7 @@
         'Теги': ['Tags', 'Etiquetas', 'الوسوم'],
         'Законы': ['Laws', 'Leyes', 'القوانين'],
         'Учёные': ['Scientists', 'Científicos', 'العلماء'],
+        'Темы': ['Topics', 'Temas', 'المواضيع'],
         'Тьютор': ['Tutor', 'Tutor', 'المرشد'],
         'Проверить': ['Check', 'Comprobar', 'تحقّق'],
         'Спросить': ['Ask', 'Preguntar', 'اسأل'],
