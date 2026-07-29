@@ -63,6 +63,8 @@ def _valid_date(s):
 
 # ── init: последовательный прогон standalone-скриптов ──
 def cmd_init(args):
+    _refuse_if_peak("init")
+
     steps = [
         ("Список тегов", "tag_list.py"),
         ("Законы", "law_list.py"),          # ←тегов (+ чистит теги-дубли законов)
@@ -88,6 +90,8 @@ def cmd_init(args):
 
 
 def cmd_daily(args):
+    _refuse_if_peak("daily")
+
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
@@ -95,6 +99,8 @@ def cmd_daily(args):
 
 
 def cmd_range(args):
+    _refuse_if_peak("range")
+
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
@@ -104,6 +110,15 @@ def cmd_range(args):
         print("❌ --from позже --to"); sys.exit(1)
     total = 0
     while d <= end:
+        # Начали в дешёвое окно — не вкатываемся в пик посреди прогона: остановка между
+        # днями безопасна, повторный запуск того же range доберёт недостающие дни
+        # (готовые статьи пропускаются).
+        from common import deepseek_peak_status
+        _is_peak, _ = deepseek_peak_status()
+        if _is_peak and os.environ.get("B42_PEAK_OK") != "1":
+            print(f"\n⏸️  Наступили пиковые часы DeepSeek (цена x2) — останавливаюсь перед {d:%Y-%m-%d}.")
+            print("   Повторный запуск той же команды в дешёвое окно продолжит с этого места.")
+            break
         if args.limit is not None and total >= args.limit:
             print(f"\n🏁 Достигнут общий лимит {args.limit} статей — останавливаюсь раньше срока.")
             break
@@ -143,10 +158,31 @@ def cmd_bulk_generate(args):
 
 
 def cmd_regen_day(args):
+    _refuse_if_peak("regen-day")
+
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
     generate.process_day(args.date, force=True)
+
+
+def _refuse_if_peak(command):
+    """DeepSeek в пиковые часы стоит x2. Правило владельца 2026-07-29: в пик не генерим,
+    и это заглушка в коде, а не памятка — прогон 17-28 июля стартовал в пике и первые
+    36 статей ушли по двойной цене, потому что проверка была только в bulk-generate.
+
+    Осознанный обход: B42_PEAK_OK=1 (например, срочная починка одной статьи).
+    """
+    if os.environ.get("B42_PEAK_OK") == "1":
+        return
+    from common import deepseek_peak_status
+    is_peak, hrs = deepseek_peak_status()
+    if not is_peak:
+        return
+    print(f"\n⛔ Сейчас пиковые часы DeepSeek — цена x2. `run.py {command}` не запускаю.")
+    print(f"   Дешёвое окно откроется через {hrs:.1f} ч.")
+    print("   Поставь запуск на потом; если правда срочно: B42_PEAK_OK=1 python run.py " + command)
+    sys.exit(3)
 
 
 def _refuse_if_not_lead(command):
@@ -272,6 +308,8 @@ def _backup_to_r2():
 
 
 def cmd_tags(args):
+    _refuse_if_peak("tags")
+
     """Теги: список(и) → описания+граф → перевод → облака/страницы.
     По умолчанию — ДОГЕНЕРАЦИЯ недостающего (top-up, не трогает уже описанное).
       --force        переописать все описания (список не трогаем)
@@ -308,6 +346,8 @@ def cmd_tags(args):
 
 
 def cmd_laws(args):
+    _refuse_if_peak("laws")
+
     """Законы: реестр → описания+формулы+граф → перевод → облако/граф + секции на тегах.
     По умолчанию — ДОГЕНЕРАЦИЯ недостающего. --force переописать все; --rebuild снести реестр.
     --gaps N пробел-осведомлённая догенерация +N по реальному корпусу (Итерация 2)."""
@@ -334,6 +374,8 @@ def cmd_laws(args):
 
 
 def cmd_scientists(args):
+    _refuse_if_peak("scientists")
+
     """Учёные: список (top-up до цели) → перевод справочников → облака/страницы.
     --rebuild снести scientists.json и собрать заново.
     --gaps N пробел-осведомлённая догенерация +N по реальному корпусу (Итерация 2)."""
@@ -357,6 +399,8 @@ def cmd_scientists(args):
 
 
 def cmd_evolve(args):
+    _refuse_if_peak("evolve")
+
     """Ко-эволюция графа знаний (Трек 3, Итерация 2): растит tags/laws/scientists пробел-
     осведомлённо (--gaps), понемногу за раунд, до потолков из config.json → growth.*_max.
     Раньше рост делался вручную (поднять *_count в config.json → перезапустить) — теперь
@@ -555,6 +599,8 @@ def cmd_delete(args):
 
 
 def cmd_regen(args):
+    _refuse_if_peak("regen")
+
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
@@ -595,6 +641,8 @@ def cmd_ids(args):
 
 
 def cmd_author(args):
+    _refuse_if_peak("author")
+
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
@@ -615,6 +663,8 @@ def cmd_author(args):
 
 
 def cmd_images(args):
+    _refuse_if_peak("images")
+
     import generate
     if not args.refs_only:
         generate.backfill_images(force=args.force, gen_images=args.gen_images, preset=args.preset)
@@ -627,12 +677,16 @@ def cmd_images(args):
 
 
 def cmd_abstracts(args):
+    _refuse_if_peak("abstracts")
+
     import generate
     generate.backfill_abstracts(force=args.force)
     generate.regenerate_all_html()
 
 
 def cmd_add_lang(args):
+    _refuse_if_peak("add-lang")
+
     lang = args.code
     cfg_path = Path("config.json")
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
@@ -663,6 +717,8 @@ def cmd_add_lang(args):
 
 
 def cmd_translate_one(args):
+    _refuse_if_peak("translate-one")
+
     import generate
     generate.translate_article_lang(args.id, args.lang, force=args.force)
 
