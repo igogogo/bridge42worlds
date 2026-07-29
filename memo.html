@@ -89,6 +89,19 @@
     font-size:10.5px;color:var(--soft);background:var(--wash);border-top:1px solid var(--line)}
   .ft b{color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:12px}
 
+  /* Широкая формула не должна распирать карточку: она прокручивается внутри своей рамки,
+     а сама страница по горизонтали не едет. На узком экране ещё и кегль меньше. */
+  .eqbox .eq,.katex-display,.ex,.mn-v{overflow-x:auto;overflow-y:hidden;max-width:100%}
+  .katex-display{padding-bottom:3px}
+  @media (max-width:520px){
+    body{padding:14px 10px}
+    .card{border-radius:12px}
+    .hd,.eqbox,.essence,.sec,.ft{padding-left:16px;padding-right:16px}
+    .hd h1{font-size:22px}
+    .eqbox .eq{font-size:20px}
+    .eqbox{padding-top:16px;padding-bottom:16px}
+    .ideas,.consts,.where{grid-template-columns:1fr}
+  }
   @media print{
     body{background:#fff;padding:0}
     .bar{display:none}
@@ -143,6 +156,17 @@
     if (!window.katex) { target.textContent = latex; return; }
     try { katex.render(latex, target, { throwOnError: false, displayMode: display !== false }); }
     catch (e) { target.textContent = latex; }
+  }
+  // Поля карточки приходят из уроков то списком, то одной строкой (в 300+ местах — строкой).
+  // Отображение обязано принимать оба вида: иначе одна «не та» запись роняет весь рендер,
+  // а вместе с ним и авто-набор формул — читатель видит сырые $…$ и «Не удалось загрузить».
+  function asList(v) {
+    if (v == null) return [];
+    if (Array.isArray(v)) return v;
+    return String(v).split(/\s*;\s+/).filter(Boolean);
+  }
+  function asText(v) {
+    return Array.isArray(v) ? v.join(' ') : (v == null ? '' : String(v));
   }
   function sec(title, node) {
     var s = el('div', 'sec');
@@ -226,7 +250,7 @@
     }
 
     // ключевые идеи — сетка карточек с иконками
-    if (L.memo && L.memo.keyIdeas) {
+    if (L.memo && Array.isArray(L.memo.keyIdeas) && L.memo.keyIdeas.length) {
       var grid = el('div', 'ideas');
       L.memo.keyIdeas.forEach(function (k) {
         var d = el('div', 'idea');
@@ -279,15 +303,15 @@
     }
 
     // где встречается
-    if (L.memo && L.memo.where) {
+    if (L.memo && asList(L.memo.where).length) {
       var wg = el('div', 'where');
-      L.memo.where.forEach(function (w) { wg.appendChild(el('div', 'wh', w)); });
+      asList(L.memo.where).forEach(function (w) { wg.appendChild(el('div', 'wh', w)); });
       card.appendChild(sec('Где это встречается', wg));
     }
 
     // частая ошибка
     if (L.memo && L.memo.watchOut) {
-      card.appendChild(sec('Частая ошибка', el('div', 'warn', '<b>Внимание.</b> ' + L.memo.watchOut)));
+      card.appendChild(sec('Частая ошибка', el('div', 'warn', '<b>Внимание.</b> ' + asText(L.memo.watchOut))));
     }
 
     card.appendChild(el('div', 'ft',
@@ -295,8 +319,22 @@
 
     // Формулы внутри текста карточки ($...$) — тоже математическим набором, а не сырым текстом.
     // Главная формула уже отрисована katex.render, поэтому её блок исключаем из авто-прохода.
-    setTimeout(function () {
-      if (!window.renderMathInElement) return;
+    typeset();
+  }).catch(function (e) {
+    card.appendChild(el('div', 'sec', 'Не удалось загрузить карточку: ' + e));
+    typeset();                      // формулы в уже отрисованной части набрать всё равно нужно
+  });
+
+  /* Скрипты KaTeX подключены с defer, поэтому к моменту отрисовки карточки их может ещё не быть.
+     Раньше здесь стоял единственный setTimeout(200) — на телефоне он regularly не успевал, авто-набор
+     молча пропускался, и читатель видел сырые $…$ и \rho вместо формул. Ждём появления функции. */
+  function typeset() {
+    var tries = 0;
+    (function attempt() {
+      if (!window.renderMathInElement) {
+        if (tries++ < 40) return setTimeout(attempt, 100);   // до 4 секунд
+        return;
+      }
       try {
         renderMathInElement(card, {
           delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
@@ -304,10 +342,8 @@
           throwOnError: false
         });
       } catch (e) {}
-    }, 200);
-  }).catch(function (e) {
-    card.appendChild(el('div', 'sec', 'Не удалось загрузить карточку: ' + e));
-  });
+    })();
+  }
 })();
 </script>
 <script src="/js/icons.js?v=2"></script>

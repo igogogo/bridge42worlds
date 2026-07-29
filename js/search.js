@@ -1254,7 +1254,9 @@ function collapseNavOverflow() {
     var nav = document.querySelector('.nav-links');
     if (!nav || nav.dataset.navCollapsed) return;
     nav.dataset.navCollapsed = '1';
-    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/', '/theory/'];
+    // Что уезжает в шторку. /theory/ убран — раздела больше нет; /learn.html не сворачиваем,
+    // он остаётся иконкой в строке и места почти не занимает.
+    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/'];
     var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
     var toCollapse = links.filter(function(a) {
         var href = a.getAttribute('href') || '';
@@ -1281,7 +1283,7 @@ function collapseNavOverflow() {
 
     // Extras в ☰ по смыслу (юзер 2026-07-25: «map→analytics, пересортируй, about не в центре»):
     // сначала исследование (dashboard, analytics), «о проекте» — последним.
-    [['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
+    [['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];

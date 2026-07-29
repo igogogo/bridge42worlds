@@ -2243,3 +2243,41 @@ html[data-theme="dark"] .an-stage {
 @media (max-width: 640px) {
   .entity-levels .lv-btn { padding: 0 10px; font-size: 12px; }
 }
+
+/* ── Шапка на телефоне: одна строка и палец вместо пикселя (юзер 2026-07-29) ────────────
+   Меню переносилось на вторую строку и «прыгало» при переходах между страницами: набор
+   пунктов разный, и высота шапки менялась. Запрещаем перенос — лишнее уходит в шторку. */
+@media (max-width: 640px) {
+  .header-right { flex-wrap: nowrap; row-gap: 0; }
+  .nav-links { flex-wrap: nowrap; row-gap: 0; gap: 2px; min-width: 0; }
+  /* Кнопки под палец: 44 пикселя — размер, рекомендованный для касания. Было 40 и мельче. */
+  .header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn,
+  .header-right .fav-btn, .nav-more-btn, .theme-toggle, .nav-links a.nav-ic {
+    min-height: 44px; min-width: 44px; padding: 0 8px;
+    display: inline-flex; align-items: center; justify-content: center; }
+  .header-right .ico-svg, .nav-more-btn .ico-svg { width: 21px; height: 21px; }
+  /* Текстовые пункты, что остались в строке, не должны переноситься внутри себя */
+  .nav-links a { white-space: nowrap; }
+}
+
+/* «Учебный курс» в строке — иконкой: восемь текстовых пунктов в 375 пикселей не помещаются. */
+.nav-links a.nav-ic { display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 6px; border-bottom: none; }
+.nav-links a.nav-ic .ico-svg { width: 17px; height: 17px; }
+
+/* Фильтры графа на телефоне: ряд «теги · законы · учёные · ± » переносился, и переключатель
+   уезжал на вторую строку. Место есть — его съедали зазоры (юзер 2026-07-29). */
+@media (max-width: 640px) {
+  .kg-controls { padding: 10px 11px; font-size: 11px; }
+  .kg-row { gap: 4px 6px; padding: 3px 0; }
+  .kg-row label { gap: 3px; }
+  .kg-row input[type="checkbox"] { width: 15px; height: 15px; }   /* палец, а не пиксель */
+  .kg-sep { margin: 0 2px; }
+  .kg-row button { padding: 3px 8px; min-height: 30px; }
+  .kg-search-input, .kg-search-wrap { flex: 1 1 96px; max-width: none; width: auto; }
+}
+
+/* Предупреждение о крупном графе — это кнопка «открыть на весь экран», а не просто текст. */
+.graph-size-warning:hover { color: var(--link); border-color: var(--link); }
+.graph-size-warning:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (max-width: 640px) { .graph-size-warning { min-height: 40px; display: flex; align-items: center; } }
