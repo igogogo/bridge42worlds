@@ -1,1029 +1,1277 @@
 {
-  "id": "02-phase",
-  "topic": "thermodynamics",
-  "schema": "b42.lesson/1",
-  "model": "phase_transition",
-  "entities": {
-    "laws": [
-      "ideal_gas_law",
-      "first_law_of_thermodynamics"
-    ],
-    "tags": [
-      "phase_transition",
-      "temperature"
-    ],
-    "scientists": [
-      "Emile Clapeyron"
-    ]
-  },
-  "ru": {
-    "title": "Фазовые переходы",
-    "subtitle": "Параграф 2 · Скрытая теплота и точка кипения",
-    "intro": [
-      "Поставьте чайник и следите за термометром. Он послушно ползёт вверх: $40^\\circ$, $70^\\circ$, $95^\\circ$ — и упирается. Плита продолжает вливать киловатты, энергия льётся рекой, а стрелка стоит на сотне и не двигается, пока вода не выкипит досуха.",
-      "Закон сохранения энергии нарушен? Разумеется, нет. Энергия никуда не пропала — она ушла на другую работу, невидимую термометру.",
-      "Чтобы молекуле воды покинуть жидкость и стать паром, мало быть быстрой. Ей нужно разорвать связи с соседками. У воды эти связи — водородные — необычно прочные, и именно на их разрыв уходит вся мощность плиты, пока идёт кипение."
-    ],
-    "standNote": "На стенде ползунок давления — это, по сути, высота над уровнем моря. Поставьте $0{,}5$ атм (примерно вершина Эльбруса) — вода закипит при $81^\\circ$C. Поставьте $2$ атм (скороварка) — только при $121^\\circ$C. И следите за графиком: пока идёт кипение, кривая идёт строго горизонтально. Эта полка и есть скрытая теплота во плоти.",
-    "formula": {
-      "name": "Уравнение Клаузиуса — Клапейрона",
-      "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
-      "alsoKnown": "Закон, связывающий давление и температуру фазового перехода",
-      "authors": [
-        {
-          "who": "Эмиль Клапейрон",
-          "year": "1834",
-          "what": "вывел соотношение из анализа цикла Карно, применённого к переходу жидкость–пар"
-        },
-        {
-          "who": "Рудольф Клаузиус",
-          "year": "1850",
-          "what": "придал уравнению строгую термодинамическую форму, опираясь на введённое им понятие энтропии"
-        }
-      ],
-      "story": "Клапейрон получил это соотношение, рассуждая о паровой машине: он мысленно провёл рабочее вещество через цикл, часть которого проходит по границе кипения. Клаузиус позже показал, что уравнение есть прямое следствие второго начала — равенства химических потенциалов сосуществующих фаз."
-    },
-    "derivation": {
-      "title": "Строгий вывод",
-      "lead": "Здесь два разных вопроса, и решаются они по-разному. Первый — куда девается энергия при кипении — простая арифметика. Второй — почему точка кипения зависит от давления — требует настоящей термодинамики.",
-      "steps": [
-        {
-          "text": "Пока вода нагревается, вся подведённая теплота идёт на рост температуры. Это обычная теплоёмкость: масса, умноженная на удельную теплоёмкость и на разность температур.",
-          "latex": "Q_1 = c\\,m\\,\\Delta T",
-          "figure": "heating",
-          "figCaption": "Нагрев: энергия разгоняет молекулы, термометр растёт."
-        },
-        {
-          "text": "Для чайника с $m = 0{,}2$ кг воды, нагреваемой от $20^\\circ$ до $100^\\circ$C, получаем конкретное число.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{кДж}",
-          "figure": "heatbar1",
-          "figCaption": "Шестьдесят семь килоджоулей — это весь путь от комнатной температуры до кипения."
-        },
-        {
-          "text": "Как только началось кипение, температура замирает. Теплота продолжает поступать, но идёт целиком на превращение жидкости в пар. Разности температур здесь нет вовсе — есть только масса и удельная теплота парообразования.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{кДж}",
-          "figure": "boiling",
-          "figCaption": "Кипение: энергия рвёт связи между молекулами, термометр стоит."
-        },
-        {
-          "text": "Сравним два числа. Вот численный ответ на загадку из начала: чтобы довести воду до кипения, нужно в несколько раз меньше энергии, чем чтобы её выкипятить.",
-          "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
-          "figure": "heatbar2",
-          "figCaption": "Отношение почти семикратное — поэтому закипает за минуты, а выкипает за десятки минут."
-        },
-        {
-          "text": "Теперь вторая задача. Кипение — это равновесие жидкости и пара: сколько молекул улетает, столько же возвращается. Сдвиг этого равновесия при изменении давления описывает уравнение Клаузиуса–Клапейрона, где $\\Delta V$ — прирост объёма при испарении.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{мол}}}{T\\,\\Delta V}",
-          "figure": "equilibrium",
-          "figCaption": "Пузырьку пара нужно раздвинуть атмосферу над водой — чем сильнее она давит, тем труднее родиться пузырьку."
-        },
-        {
-          "text": "Пар занимает объём в тысячи раз больший, чем породившая его жидкость, поэтому $\\Delta V \\approx V_{\\text{пар}}$. Считая пар идеальным газом из первого параграфа, подставляем $V = RT/P$ и разделяем переменные.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{мол}}}{R}\\,\\frac{dT}{T^{2}}",
-          "figure": "integrate",
-          "figCaption": "Переменные разделились: слева только давление, справа только температура — можно интегрировать."
-        },
-        {
-          "text": "Интегрируя обе части и полагая теплоту парообразования постоянной, получаем связь давления с температурой кипения. Именно по этой формуле считает наш стенд.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
-          "figure": "boilcurve",
-          "figCaption": "Кривая кипения: в горах давление ниже — вода вскипает раньше, в скороварке позже."
-        }
-      ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
-      "plateCap": "Слева — скрытая теплота: энергия, ушедшая в разрыв связей, а не в градусы. Справа — закон, связавший внешнее давление с температурой кипения.",
-      "note": "Почему вода так необычна? Её молекулы связаны водородными связями, аномально прочными для столь малой молекулы. Отсюда рекордная теплота парообразования: у ацетона она вчетверо меньше, у эфира — вшестеро. Если бы вода вела себя как обычная жидкость, океаны испарялись бы стремительно, а испарение пота не спасало бы нас от перегрева."
-    },
-    "math": {
-      "title": "Математика, которая здесь понадобилась",
-      "items": [
-        {
-          "what": "Разделение переменных",
-          "why": "Уравнение вида $dP/dT = f(P)\\,g(T)$ решается так: собираем всё, что зависит от $P$, слева, всё, что зависит от $T$, — справа, и интегрируем обе части независимо. Это стандартный приём для дифференциальных уравнений первого порядка, и он же используется при выводе адиабаты в следующем параграфе.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
-        },
-        {
-          "what": "Почему появился логарифм",
-          "why": "Интеграл от $1/P$ по $dP$ равен натуральному логарифму — это единственная функция, производная которой равна $1/x$. Поэтому логарифмы неизбежно возникают всюду, где скорость изменения величины пропорциональна ей самой: в радиоактивном распаде, в росте популяций, в давлении насыщенного пара.",
-          "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
-        }
-      ]
-    },
-    "example": {
-      "title": "Пример с числами",
-      "lead": "Классическая задача, которая объясняет, почему в горах трудно готовить.",
-      "given": "Турист поднялся на высоту, где давление составляет $0{,}6$ атм. При какой температуре там закипит вода? Принять $L_{\\text{мол}} = 40\\,660$ Дж/моль, $T_0 = 373$ К, $R = 8{,}314$ Дж/(моль·К).",
-      "law": "Уравнение Клаузиуса–Клапейрона в интегральной форме, разрешённое относительно $T$",
-      "solution": [
-        {
-          "text": "Считаем логарифм отношения давлений. Он отрицателен, так как давление упало.",
-          "latex": "\\ln(0{,}6) \\approx -0{,}51"
-        },
-        {
-          "text": "Отношение $R/L_{\\text{мол}}$ даёт масштабный множитель.",
-          "latex": "\\frac{R}{L_{\\text{мол}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
-        },
-        {
-          "text": "Подставляем в формулу для обратной температуры.",
-          "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
-        },
-        {
-          "text": "Обращаем и переводим в градусы Цельсия.",
-          "latex": "T \\approx 360\\ \\text{К} = 87^\\circ\\text{C}"
-        }
-      ],
-      "answer": "Вода закипит примерно при $87^\\circ$C",
-      "check": "Правдоподобно ли? На высоте около четырёх километров давление как раз близко к $0{,}6$ атм, и справочники дают температуру кипения $87$–$88^\\circ$C. Яйцо всмятку там сварить уже трудно: белок требует более высокой температуры, а горячее «кипятка» вода не станет, сколько ни грей."
-    },
-    "constants": {
-      "title": "Константы этого параграфа",
-      "lead": "Обратите внимание на единицы: они прямо подсказывают, что означает величина и на что её надо умножать.",
-      "items": [
-        {
-          "sym": "c",
-          "latex": "c",
-          "name": "Удельная теплоёмкость воды",
-          "value": "4200",
-          "unit": "Дж / (кг · К)",
-          "why": "Сколько энергии нужно, чтобы нагреть один килограмм воды на один градус. Единицы читаются буквально: джоули на килограмм и на кельвин. Значение аномально велико — у большинства веществ оно в четыре-пять раз меньше, и именно поэтому вода служит теплоносителем в отоплении и охлаждении двигателей.",
-          "mnemo": "Число $4200$ легко удержать: почти наше $42$ с двумя нулями. Историческая связь: калорию определяли как нагрев одного грамма воды на градус, отсюда $1$ кал $= 4{,}184$ Дж."
-        },
-        {
-          "sym": "L",
-          "latex": "L",
-          "name": "Удельная теплота парообразования",
-          "value": "2 260 000",
-          "unit": "Дж / кг",
-          "why": "Энергия, необходимая для превращения одного килограмма жидкости в пар без всякого нагрева. Единицы — джоули на килограмм, температуры в них нет вовсе, потому что при фазовом переходе она не меняется. Рекорд среди обычных жидкостей.",
-          "mnemo": "Держите в голове не само число, а отношение: выкипятить примерно в семь раз дороже, чем довести до кипения."
-        },
-        {
-          "sym": "L_мол",
-          "latex": "L_{\\text{мол}}",
-          "name": "Молярная теплота парообразования",
-          "value": "40 660",
-          "unit": "Дж / моль",
-          "why": "То же самое, но в пересчёте на моль: $L$ умножается на молярную массу воды $0{,}018$ кг/моль. Именно эта форма входит в уравнение Клаузиуса–Клапейрона, потому что рядом стоит газовая постоянная $R$, тоже молярная. Единицы обеих величин согласованы — это и есть проверка правильности формулы."
-        },
-        {
-          "sym": "T₀, P₀",
-          "latex": "T_0,\\;P_0",
-          "name": "Нормальная точка кипения",
-          "value": "373,15 К при 101,325",
-          "unit": "кПа",
-          "why": "Опорная точка, от которой формула отсчитывает сдвиг. Важно понимать: сто градусов — не свойство воды самой по себе, а свойство воды при нормальном атмосферном давлении. Изначально шкала Цельсия именно так и строилась: ноль — таяние льда, сто — кипение при уровне моря."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "При фазовом переходе температура стоит, а энергия идёт на разрыв связей между молекулами. Точка кипения — не константа вещества, а результат сделки с внешним давлением.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Скрытая теплота",
-          "text": "Энергия, которая тратится не на градусы, а на разрыв связей. Термометр её не видит."
-        },
-        {
-          "icon": "clock",
-          "title": "Плато на графике",
-          "text": "Пока идёт кипение, температура постоянна, сколько ни увеличивай мощность нагрева."
-        },
-        {
-          "icon": "sigma",
-          "title": "Семикратная цена",
-          "text": "Выкипятить воду примерно в 6,8 раза дороже по энергии, чем нагреть её до кипения."
-        },
-        {
-          "icon": "formula",
-          "title": "Давление правит",
-          "text": "Ниже давление — раньше кипение. В горах 87°, в скороварке 121°."
-        }
-      ],
-      "where": [
-        "Скороварка: давление 2 атм поднимает кипение до 121° и ускоряет готовку втрое",
-        "Холодильник: хладагент кипит при −25°, забирая тепло из камеры",
-        "Ожог паром тяжелее ожога кипятком: пар отдаёт ещё и скрытую теплоту",
-        "Испарение пота охлаждает тело, унося самые быстрые молекулы"
-      ],
-      "watchOut": "В формулу Клаузиуса–Клапейрона температура подставляется только в кельвинах, а теплота — в молярной форме. Смешение удельной и молярной теплоты — источник ошибки ровно в 18 раз (молярная масса воды)."
-    },
-    "quiz": [
-      {
-        "id": "p1",
-        "type": "mcq",
-        "q": "Мы увеличили мощность плиты вдвое под уже кипящей водой. Что произойдёт?",
-        "options": [
-          "Температура воды вырастет выше 100°",
-          "Вода закипит бурнее и выкипит вдвое быстрее, но температура не изменится",
-          "Ничего не изменится: кипение идёт с постоянной скоростью",
-          "Температура сначала вырастет, потом вернётся к 100°"
-        ],
-        "answer": 1,
-        "why": "Вся дополнительная мощность идёт на парообразование, а не на нагрев. Больше энергии в секунду — больше пара в секунду, но температура держится на точке кипения, пока остаётся жидкость.",
-        "hint": "Посмотрите на график на стенде: во время кипения кривая горизонтальна. Что определяет её высоту — мощность нагрева или что-то другое? А на что тогда влияет мощность?"
-      },
-      {
-        "id": "p2",
-        "type": "free",
-        "q": "Своими словами: почему испарение пота охлаждает тело, хотя сам пот той же температуры, что и кожа?",
-        "keywords": [
-          "быстр",
-          "энерг",
-          "унос",
-          "скрыт",
-          "испар",
-          "средн"
-        ],
-        "needed": 1,
-        "why": "Улетают не случайные молекулы, а самые быстрые — только у них хватает энергии порвать связи. Они уносят с собой непропорционально большую долю энергии, и средняя скорость оставшихся падает. А средняя скорость и есть температура.",
-        "hint": "Задайте себе вопрос: любая ли молекула может покинуть жидкость, или для этого нужен запас энергии? Если улетают только избранные — что происходит со средней энергией тех, кто остался?"
-      },
-      {
-        "id": "p3",
-        "type": "estimate",
-        "q": "Сколько энергии нужно, чтобы полностью выпарить 1 кг уже кипящей воды? Ответ в килоджоулях.",
-        "answer": 2260,
-        "unit": "кДж",
-        "tolerance": 1.5,
-        "why": "Это в точности определение удельной теплоты парообразования: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ кДж. Для сравнения: нагреть тот же килограмм от нуля до ста градусов стоит всего 420 кДж.",
-        "hint": "Вода уже кипит, значит нагревать её не нужно — работает только одна константа из этого параграфа. Какая из них измеряется в джоулях на килограмм?"
-      }
-    ],
-    "curiosities": {
-      "title": "Занимательное: проверьте руками",
-      "lead": "Чайник — лучший прибор для изучения фазовых переходов: термометр в нём останавливается на самом интересном месте.",
-      "items": [
-        {
-          "icon": "kitchen",
-          "kind": "опыт на кухне",
-          "h": "Термометр, который замер",
-          "text": "Поставьте кастрюлю воды на огонь и опустите кулинарный термометр. Записывайте показания каждую минуту — и продолжайте записывать, когда вода уже кипит вовсю.",
-          "answer": "До кипения температура растёт равномерно, а с началом кипения останавливается намертво, хотя плита продолжает отдавать те же киловатты. Энергия уходит не на нагрев, а на разрыв связей между молекулами — это и есть скрытая теплота. Пока в кастрюле есть вода, температура не поднимется выше точки кипения ни на градус, сколько ни увеличивай огонь. Поэтому прибавлять газ под кипящей кастрюлей бессмысленно: еда быстрее не приготовится, просто вода выкипит раньше."
-        },
-        {
-          "icon": "paradox",
-          "kind": "парадокс",
-          "h": "Проволока проходит сквозь лёд, а лёд остаётся целым",
-          "text": "Положите на брусок льда тонкую проволоку и подвесьте к её концам груз. Через несколько часов проволока окажется внутри бруска, а потом и пройдёт насквозь — но брусок не развалится на две части.",
-          "answer": "Под проволокой давление велико, а у воды редкое свойство: при замерзании она расширяется, поэтому давление понижает температуру плавления. Лёд под проволокой тает, она опускается, а вода, оказавшись сверху без избыточного давления, немедленно замерзает снова и затягивает разрез. В уравнении Клаузиуса–Клапейрона это виден знак: у воды $\\Delta V$ при плавлении отрицательна, и наклон линии равновесия получается обратным по сравнению почти со всеми другими веществами."
-        },
-        {
-          "icon": "fact",
-          "kind": "занимательный факт",
-          "h": "Скрытая теплота воды аномально велика",
-          "text": "Чтобы превратить килограмм кипящей воды в пар, нужно 2260 килоджоулей — почти в семь раз больше, чем чтобы нагреть тот же килограмм от комнатной температуры до кипения. Отсюда практическое следствие: ожог паром при ста градусах гораздо тяжелее ожога кипятком той же температуры, потому что конденсирующийся на коже пар отдаёт всю эту скрытую теплоту. По той же причине потоотделение так эффективно охлаждает, а океаны сглаживают климат планеты."
-        },
-        {
-          "icon": "mnemo",
-          "kind": "мнемоника",
-          "h": "Энергия идёт на разрыв связей, а не на разгон",
-          "text": "При фазовом переходе подводимая энергия расходуется на то, чтобы растащить молекулы, а не увеличить их скорость. Средняя скорость — это температура, и потому она стоит на месте. Обратный процесс возвращает ту же энергию: конденсация греет, кристаллизация греет. Отсюда правило: любая величина, измеряемая в джоулях на килограмм, скорее всего описывает перестройку структуры."
-        },
-        {
-          "icon": "estimate",
-          "kind": "прикидка",
-          "h": "Почему чайник выкипает так долго",
-          "text": "Нагреть литр воды от 20 до 100 градусов — это $4200 \\cdot 80 \\approx 335$ килоджоулей. Выпарить его целиком — 2260 килоджоулей, почти в семь раз больше. Чайник мощностью два киловатта закипает примерно за три минуты, а выкипает досуха за двадцать с лишним. Та же арифметика объясняет, почему кастрюля не пригорает, пока в ней есть вода."
-        },
-        {
-          "icon": "edge",
-          "kind": "граница применимости",
-          "h": "У критической точки формула ломается",
-          "text": "Уравнение Клаузиуса–Клапейрона описывает равновесие двух фаз и требует, чтобы у них были разные плотности. При приближении к критической точке — для воды это 374 градуса и 218 атмосфер — разница между жидкостью и паром исчезает, $\\Delta V$ стремится к нулю, и формула теряет смысл. За критической точкой фазового перехода нет вовсе: вещество переходит из плотного состояния в разреженное непрерывно, без кипения."
-        }
-      ]
-    },
-    "synthesis": {
-      "title": "Где используют скрытую теплоту",
-      "lead": "Способность вещества запасать энергию в самой перестройке структуры лежит в основе всей холодильной техники.",
-      "items": [
-        {
-          "h": "Холодильники и кондиционеры",
-          "text": "Хладагент испаряется внутри, забирая скрытую теплоту, и конденсируется снаружи, отдавая её. Перенос тепла идёт не за счёт нагрева, а за счёт фазового перехода — поэтому он такой эффективный."
-        },
-        {
-          "h": "Облака и осадки",
-          "text": "Конденсация пара в поднимающемся воздухе выделяет огромную энергию, которая подпитывает восходящий поток. Именно этот механизм превращает обычную облачность в грозу, а над тёплым океаном — в тропический циклон."
-        },
-        {
-          "h": "Скороварка и автоклав",
-          "text": "Повышенное давление поднимает точку кипения: при двух атмосферах вода кипит при 120 градусах, и приготовление ускоряется в разы. В медицине тот же принцип стерилизует инструменты, потому что споры бактерий не выдерживают такой температуры."
-        },
-        {
-          "h": "Металлургия и литьё",
-          "text": "Скрытая теплота кристаллизации определяет, как быстро остывает отливка и какая структура зерна в ней сформируется. От этого напрямую зависит прочность готовой детали."
-        },
-        {
-          "h": "Аккумуляторы тепла",
-          "text": "Материалы с фазовым переходом вблизи комнатной температуры — например, парафины — встраивают в стены и одежду: они плавятся при нагреве и застывают при охлаждении, сглаживая перепады без всякой электроники."
-        }
-      ]
-    }
-  },
-  "en": {
-    "title": "Phase Transitions",
-    "subtitle": "Section 2 · Latent Heat and Boiling Point",
-    "intro": [
-      "Put a kettle on and watch the thermometer. It obediently climbs upward: $40^\\circ$, $70^\\circ$, $95^\\circ$ — and then stops. The stove keeps pouring in kilowatts, energy flows like a river, but the needle sits at one hundred and does not move until the water boils away completely.",
-      "Is the law of conservation of energy broken? Of course not. The energy didn't disappear — it went into another job, invisible to the thermometer.",
-      "For a water molecule to leave the liquid and become vapor, being fast is not enough. It needs to break the bonds with its neighbors. In water, these bonds — hydrogen bonds — are unusually strong, and it is precisely on breaking them that all the stove's power is spent while boiling continues."
-    ],
-    "standNote": "On the stand, the pressure slider is essentially the altitude above sea level. Set it to $0{,}5$ atm (roughly the summit of Elbrus) — water boils at $81^\\circ$C. Set it to $2$ atm (pressure cooker) — only at $121^\\circ$C. And watch the graph: while boiling continues, the curve goes strictly horizontal. This plateau is latent heat in the flesh.",
-    "formula": {
-      "name": "Clausius–Clapeyron Equation",
-      "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
-      "alsoKnown": "Law relating pressure and temperature of a phase transition",
-      "authors": [
-        {
-          "who": "Émile Clapeyron",
-          "year": 1834,
-          "what": "derived the relation from analysis of the Carnot cycle applied to the liquid–vapor transition"
-        },
-        {
-          "who": "Rudolf Clausius",
-          "year": 1850,
-          "what": "gave the equation a strict thermodynamic form, relying on his introduced concept of entropy"
-        }
-      ],
-      "story": "Clapeyron obtained this relation by reasoning about a steam engine: he mentally ran the working substance through a cycle, part of which runs along the boiling boundary. Clausius later showed that the equation is a direct consequence of the second law — the equality of chemical potentials of coexisting phases."
-    },
-    "derivation": {
-      "title": "Rigorous Derivation",
-      "lead": "Here there are two different questions, and they are solved differently. The first — where does the energy go during boiling — is simple arithmetic. The second — why the boiling point depends on pressure — requires real thermodynamics.",
-      "steps": [
-        {
-          "text": "While water heats up, all supplied heat goes into raising the temperature. This is ordinary heat capacity: mass times specific heat capacity times temperature difference.",
-          "latex": "Q_1 = c\\,m\\,\\Delta T",
-          "figure": "heating",
-          "figCaption": "Heating: energy accelerates molecules, thermometer rises."
-        },
-        {
-          "text": "For a kettle with $m = 0{,}2$ kg of water heated from $20^\\circ$ to $100^\\circ$C, we get a specific number.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
-          "figure": "heatbar1",
-          "figCaption": "Sixty-seven kilojoules — that's the entire journey from room temperature to boiling."
-        },
-        {
-          "text": "As soon as boiling starts, the temperature freezes. Heat continues to be supplied, but goes entirely into converting liquid to vapor. There is no temperature difference here at all — only mass and specific latent heat of vaporization.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
-          "figure": "boiling",
-          "figCaption": "Boiling: energy breaks bonds between molecules, thermometer stands still."
-        },
-        {
-          "text": "Let's compare the two numbers. Here is the numerical answer to the riddle from the beginning: to bring water to a boil requires several times less energy than to boil it away.",
-          "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
-          "figure": "heatbar2",
-          "figCaption": "The ratio is almost sevenfold — that's why it boils in minutes but boils away in tens of minutes."
-        },
-        {
-          "text": "Now the second task. Boiling is an equilibrium of liquid and vapor: as many molecules leave, the same number return. The shift of this equilibrium under pressure change is described by the Clausius–Clapeyron equation, where $\\Delta V$ is the increase in volume upon evaporation.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
-          "figure": "equilibrium",
-          "figCaption": "A vapor bubble needs to push aside the atmosphere above the water — the harder it pushes, the harder it is for the bubble to be born."
-        },
-        {
-          "text": "Vapor occupies a volume thousands of times larger than the liquid that produced it, so $\\Delta V \\approx V_{\\text{pair}}$. Assuming the vapor is an ideal gas from the first section, we substitute $V = RT/P$ and separate variables.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
-          "figure": "integrate",
-          "figCaption": "Variables separated: left only pressure, right only temperature — can integrate."
-        },
-        {
-          "text": "Integrating both sides and assuming the heat of vaporization is constant, we obtain the relation between pressure and boiling temperature. Our stand calculates exactly by this formula.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
-          "figure": "boilcurve",
-          "figCaption": "Boiling curve: in the mountains pressure is lower — water boils sooner, in a pressure cooker later."
-        }
-      ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
-      "plateCap": "Left — latent heat: energy that went into breaking bonds, not into degrees. Right — a law that connects external pressure with boiling temperature.",
-      "note": "Why is water so unusual? Its molecules are held together by hydrogen bonds, anomalously strong for such a small molecule. Hence the record heat of vaporization: for acetone it is four times smaller, for ether six times smaller. If water behaved like an ordinary liquid, the oceans would evaporate rapidly, and sweat evaporation would not save us from overheating."
-    },
-    "math": {
-      "title": "Mathematics needed here",
-      "items": [
-        {
-          "what": "Separation of variables",
-          "why": "An equation of the form $dP/dT = f(P)\\,g(T)$ is solved like this: collect everything that depends on $P$ on the left, everything that depends on $T$ on the right, and integrate both sides independently. This is a standard technique for first-order differential equations, and it is also used in deriving the adiabat in the next section.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
-        },
-        {
-          "what": "Why the logarithm appears",
-          "why": "The integral of $1/P$ with respect to $dP$ equals the natural logarithm — it is the only function whose derivative is $1/x$. Therefore logarithms inevitably arise wherever the rate of change of a quantity is proportional to the quantity itself: in radioactive decay, population growth, saturated vapor pressure.",
-          "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
-        }
-      ]
-    },
-    "example": {
-      "title": "Example with numbers",
-      "lead": "A classic problem that explains why cooking is difficult in the mountains.",
-      "given": "A hiker climbed to an altitude where the pressure is $0{,}6$ atm. At what temperature will water boil there? Take $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
-      "law": "The Clausius–Clapeyron equation in integral form, solved for $T$",
-      "solution": [
-        {
-          "text": "Calculate the logarithm of the pressure ratio. It is negative because the pressure decreased.",
-          "latex": "\\ln(0{,}6) \\approx -0{,}51"
-        },
-        {
-          "text": "The ratio $R/L_{\\text{mol}}$ gives the scaling factor.",
-          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
-        },
-        {
-          "text": "Substitute into the formula for the reciprocal temperature.",
-          "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
-        },
-        {
-          "text": "Invert and convert to degrees Celsius.",
-          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
-        }
-      ],
-      "answer": "Water will boil at approximately $87^\\circ$C",
-      "check": "Is it plausible? At an altitude of about four kilometers, the pressure is indeed close to $0{,}6$ atm, and reference books give a boiling temperature of $87$–$88^\\circ$C. It's already difficult to soft-boil an egg there: the protein requires a higher temperature, and the water will not get hotter than boiling water, no matter how much you heat it."
-    },
-    "constants": {
-      "title": "Constants of this section",
-      "lead": "Pay attention to the units: they directly suggest what the quantity means and what it should be multiplied by.",
-      "items": [
-        {
-          "sym": "c",
-          "latex": "c",
-          "name": "Specific heat capacity of water",
-          "value": "4200",
-          "unit": "J / (kg · K)",
-          "why": "How much energy is needed to heat one kilogram of water by one degree. The units are read literally: joules per kilogram per kelvin. The value is anomalously large — for most substances it is four to five times smaller, and that is why water serves as a coolant in heating and engine cooling.",
-          "mnemo": "The number $4200$ is easy to remember: almost our $42$ with two zeros. Historical connection: the calorie was defined as heating one gram of water by one degree, hence $1$ cal $= 4{,}184$ J."
-        },
-        {
-          "sym": "L",
-          "latex": "L",
-          "name": "Specific latent heat of vaporization",
-          "value": "2 260 000",
-          "unit": "J / kg",
-          "why": "Energy needed to turn one kilogram of liquid into vapor without any heating. The units are joules per kilogram, no temperature in them because it does not change during a phase transition. A record among common liquids.",
-          "mnemo": "Keep in mind not the number itself, but the ratio: boiling away costs about seven times more energy than bringing to a boil."
-        },
-        {
-          "sym": "L_mol",
-          "latex": "L_{\\text{mol}}",
-          "name": "Molar heat of vaporization",
-          "value": "40 660",
-          "unit": "J / mol",
-          "why": "The same thing, but per mole: $L$ multiplied by the molar mass of water $0{,}018$ kg/mol. This form enters the Clausius–Clapeyron equation because alongside it stands the gas constant $R$, also molar. The units of both quantities are consistent — that is a check of the formula's correctness."
-        },
-        {
-          "sym": "T₀, P₀",
-          "latex": "T_0,\\;P_0",
-          "name": "Normal boiling point",
-          "value": "373,15 K at 101,325",
-          "unit": "kPa",
-          "why": "A reference point from which the formula calculates the shift. It is important to understand: a hundred degrees is not a property of water itself, but a property of water at normal atmospheric pressure. Originally, the Celsius scale was built exactly this way: zero — melting ice, one hundred — boiling at sea level."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "During a phase transition, the temperature stands still, and energy goes into breaking bonds between molecules. The boiling point is not a constant of the substance, but a result of a deal with external pressure.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Latent heat",
-          "text": "Energy spent not on degrees but on breaking bonds. The thermometer does not see it."
-        },
-        {
-          "icon": "clock",
-          "title": "Plateau on the graph",
-          "text": "While boiling, the temperature is constant, no matter how much you increase the heating power."
-        },
-        {
-          "icon": "sigma",
-          "title": "Sevenfold cost",
-          "text": "Boiling water costs about 6,8 times more energy than heating it to the boiling point."
-        },
-        {
-          "icon": "formula",
-          "title": "Pressure rules",
-          "text": "Lower pressure — earlier boiling. In the mountains 87°, in a pressure cooker 121°."
-        }
-      ],
-      "where": [
-        "Pressure cooker: pressure of 2 atm raises boiling to 121° and speeds up cooking threefold",
-        "Refrigerator: refrigerant boils at −25°, taking heat from the chamber",
-        "Steam burn is worse than boiling water burn: steam also releases latent heat",
-        "Sweat evaporation cools the body, carrying away the fastest molecules"
-      ],
-      "watchOut": "In the Clausius–Clapeyron equation, temperature is substituted only in kelvins, and heat in molar form. Mixing specific and molar heat leads to a factor of 18 error (molar mass of water)."
-    },
-    "quiz": [
-      {
-        "id": "p1",
-        "type": "mcq",
-        "q": "We doubled the power of the stove under already boiling water. What will happen?",
-        "options": [
-          "The water temperature will rise above 100°",
-          "The water will boil more vigorously and evaporate twice as fast, but the temperature will not change",
-          "Nothing will change: boiling proceeds at a constant rate",
-          "The temperature will first rise, then return to 100°"
-        ],
-        "answer": 1,
-        "why": "All additional power goes into vaporization, not into heating. More energy per second means more steam per second, but the temperature stays at the boiling point as long as liquid remains.",
-        "hint": "Look at the graph on the poster: during boiling the curve is horizontal. What determines its height — the heating power or something else? And what does the power affect then?"
-      },
-      {
-        "id": "p2",
-        "type": "free",
-        "q": "In your own words: why does the evaporation of sweat cool the body, even though the sweat itself is the same temperature as the skin?",
-        "keywords": [
-          "fast",
-          "energy",
-          "entrain",
-          "latent",
-          "evap",
-          "avg"
-        ],
-        "needed": 1,
-        "why": "It is not random molecules that escape, but the fastest ones — only they have enough energy to break bonds. They carry away a disproportionately large share of energy, and the average speed of the remaining ones decreases. And average speed is temperature.",
-        "hint": "Ask yourself: can any molecule leave the liquid, or is an energy reserve needed? If only the chosen ones fly away — what happens to the average energy of those left behind?"
-      },
-      {
-        "id": "p3",
-        "type": "estimate",
-        "q": "How much energy is needed to completely evaporate 1 kg of already boiling water? Answer in kilojoules.",
-        "answer": 2260,
-        "unit": "kJ",
-        "tolerance": 1.5,
-        "why": "This is exactly the definition of specific latent heat of vaporization: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. For comparison: heating the same kilogram from zero to one hundred degrees costs only 420 kJ.",
-        "hint": "The water is already boiling, so it does not need to be heated — only one constant from this section works. Which one is measured in joules per kilogram?"
-      }
-    ]
-  },
-  "es": {
-    "title": "Transiciones de fase",
-    "subtitle": "Párrafo 2 · Calor latente y punto de ebullición",
-    "intro": [
-      "Pon una tetera y observa el termómetro. Sube obedientemente: $40^\\circ$, $70^\\circ$, $95^\\circ$ — y se detiene. La cocina sigue inyectando kilovatios, la energía fluye como un río, pero la aguja se queda en cien y no se mueve hasta que el agua se evapora por completo.",
-      "¿Se viola la ley de conservación de la energía? Por supuesto que no. La energía no ha desaparecido: se ha ido a otro trabajo, invisible para el termómetro.",
-      "Para que una molécula de agua abandone el líquido y se convierta en vapor, no basta con ser rápida. Necesita romper los enlaces con sus vecinas. En el agua, estos enlaces —puentes de hidrógeno— son inusualmente fuertes, y es precisamente en romperlos que se gasta toda la potencia de la cocina mientras hierve."
-    ],
-    "standNote": "En el panel, el control deslizante de presión es, en esencia, la altitud sobre el nivel del mar. Pon $0{,}5$ atm (aproximadamente la cima del Elbrús) — el agua hervirá a $81^\\circ$C. Pon $2$ atm (olla a presión) — solo a $121^\\circ$C. Y sigue la gráfica: mientras hierve, la curva es estrictamente horizontal. Esta meseta es el calor latente en persona.",
-    "formula": {
-      "name": "Ecuación de Clausius-Clapeyron",
-      "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
-      "alsoKnown": "Ley que relaciona presión y temperatura de transición de fase",
-      "authors": [
-        {
-          "who": "Émile Clapeyron",
-          "year": "1834",
-          "what": "derivó la relación a partir del análisis del ciclo de Carnot aplicado a la transición líquido-vapor"
-        },
-        {
-          "who": "Rudolf Clausius",
-          "year": "1850",
-          "what": "dio a la ecuación una forma termodinámica rigurosa, basándose en el concepto de entropía que él introdujo"
-        }
-      ],
-      "story": "Clapeyron obtuvo esta relación razonando sobre la máquina de vapor: imaginó llevar una sustancia de trabajo a través de un ciclo, parte del cual recorre la frontera de ebullición. Clausius luego mostró que la ecuación es una consecuencia directa de la segunda ley — la igualdad de los potenciales químicos de las fases coexistentes."
-    },
-    "derivation": {
-      "title": "Derivación rigurosa",
-      "lead": "Aquí hay dos preguntas diferentes, y se resuelven de manera diferente. La primera — ¿a dónde va la energía al hervir? — es aritmética simple. La segunda — por qué el punto de ebullición depende de la presión — requiere verdadera termodinámica.",
-      "steps": [
-        {
-          "text": "Mientras el agua se calienta, todo el calor suministrado se destina al aumento de temperatura. Esto es la capacidad calorífica habitual: masa multiplicada por el calor específico y por la diferencia de temperaturas.",
-          "latex": "Q_1 = c\\,m\\,\\Delta T",
-          "figure": "heating",
-          "figCaption": "Calentamiento: la energía acelera las moléculas, el termómetro sube."
-        },
-        {
-          "text": "Para una tetera con $m = 0{,}2$ kg de agua, calentada de $20^\\circ$ a $100^\\circ$C, obtenemos un número concreto.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
-          "figure": "heatbar1",
-          "figCaption": "Sesenta y siete kilojulios — ese es todo el camino desde la temperatura ambiente hasta la ebullición."
-        },
-        {
-          "text": "Tan pronto comienza la ebullición, la temperatura se congela. El calor sigue entrando, pero se destina completamente a convertir el líquido en vapor. Aquí no hay diferencia de temperatura en absoluto — solo hay masa y calor latente de vaporización.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
-          "figure": "boiling",
-          "figCaption": "Ebullición: la energía rompe los enlaces entre moléculas, el termómetro se detiene."
-        },
-        {
-          "text": "Comparemos los dos números. Aquí está la respuesta numérica al enigma del principio: para llevar el agua a ebullición se necesita varias veces menos energía que para evaporarla por completo.",
-          "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
-          "figure": "heatbar2",
-          "figCaption": "La relación es casi de siete veces — por eso hierve en minutos, pero se evapora por completo en decenas de minutos."
-        },
-        {
-          "text": "Ahora la segunda tarea. La ebullición es un equilibrio entre líquido y vapor: tantas moléculas escapan como regresan. El desplazamiento de este equilibrio al cambiar la presión está descrito por la ecuación de Clausius-Clapeyron, donde $\\Delta V$ es el aumento de volumen al evaporarse.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
-          "figure": "equilibrium",
-          "figCaption": "Una burbuja de vapor debe empujar la atmósfera sobre el agua — cuanto más presiona, más difícil es que nazca la burbuja."
-        },
-        {
-          "text": "El vapor ocupa un volumen miles de veces mayor que el líquido que lo generó, por lo que $\\Delta V \\approx V_{\\text{vap}}$. Considerando el vapor como gas ideal del primer párrafo, sustituimos $V = RT/P$ y separamos variables.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
-          "figure": "integrate",
-          "figCaption": "Las variables se separaron: a la izquierda solo presión, a la derecha solo temperatura — se puede integrar."
-        },
-        {
-          "text": "Integrando ambos lados y suponiendo constante el calor de vaporización, obtenemos la relación entre presión y temperatura de ebullición. Es según esta fórmula que calcula nuestro panel.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
-          "figure": "boilcurve",
-          "figCaption": "Curva de ebullición: en las montañas la presión es menor — el agua hierve antes, en olla a presión después."
-        }
-      ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
-      "plateCap": "A la izquierda — calor latente: energía que se fue en romper enlaces, no en grados. A la derecha — la ley que vincula la presión externa con la temperatura de ebullición.",
-      "note": "¿Por qué es tan inusual el agua? Sus moléculas están unidas por puentes de hidrógeno, anómalamente fuertes para una molécula tan pequeña. De ahí el récord de calor latente de vaporización: en la acetona es cuatro veces menor, en el éter seis veces menor. Si el agua se comportara como un líquido normal, los océanos se evaporarían rápidamente y la evaporación del sudor no nos salvaría del sobrecalentamiento."
-    },
-    "math": {
-      "title": "Matemáticas necesarias aquí",
-      "items": [
-        {
-          "what": "Separación de variables",
-          "why": "Una ecuación de la forma $dP/dT = f(P)\\,g(T)$ se resuelve así: reunimos todo lo que depende de $P$ a la izquierda, todo lo que depende de $T$ a la derecha, e integramos ambos lados de forma independiente. Es un método estándar para ecuaciones diferenciales de primer orden, y se usa también para deducir la adiabática en la siguiente sección.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
-        },
-        {
-          "what": "Por qué aparece el logaritmo",
-          "why": "La integral de $1/P$ respecto a $dP$ es el logaritmo natural — es la única función cuya derivada es $1/x$. Por eso los logaritmos surgen inevitablemente siempre que la tasa de cambio de una magnitud es proporcional a ella misma: en la desintegración radiactiva, en el crecimiento de poblaciones, en la presión de vapor saturante.",
-          "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
-        }
-      ]
-    },
-    "example": {
-      "title": "Ejemplo con números",
-      "lead": "Un problema clásico que explica por qué es difícil cocinar en las montañas.",
-      "given": "Un turista subió a una altitud donde la presión es de $0{,}6$ atm. ¿A qué temperatura hervirá el agua allí? Tomar $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
-      "law": "Ecuación de Clausius-Clapeyron en forma integral, despejada para $T$",
-      "solution": [
-        {
-          "text": "Calculamos el logaritmo de la relación de presiones. Es negativo porque la presión ha disminuido.",
-          "latex": "\\ln(0{,}6) \\approx -0{,}51"
-        },
-        {
-          "text": "La relación $R/L_{\\text{mol}}$ da el factor de escala.",
-          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
-        },
-        {
-          "text": "Sustituimos en la fórmula de la temperatura inversa.",
-          "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
-        },
-        {
-          "text": "Invertimos y convertimos a grados Celsius.",
-          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
-        }
-      ],
-      "answer": "El agua hervirá aproximadamente a $87^\\circ$C",
-      "check": "¿Es plausible? A unos cuatro kilómetros de altitud la presión es cercana a $0{,}6$ atm, y los manuales dan una temperatura de ebullición de $87$–$88^\\circ$C. Allí ya es difícil cocer un huevo pasado por agua: la clara requiere una temperatura más alta, y el agua no se calentará más por mucho que se caliente."
-    },
-    "constants": {
-      "title": "Constantes de esta sección",
-      "lead": "Observe las unidades: indican directamente qué significa la magnitud y por qué hay que multiplicarla.",
-      "items": [
-        {
-          "sym": "c",
-          "latex": "c",
-          "name": "Capacidad calorífica específica del agua",
-          "value": "4200",
-          "unit": "J / (kg · K)",
-          "why": "Cuánta energía se necesita para calentar un kilogramo de agua un grado. Las unidades se leen literalmente: julios por kilogramo y por kelvin. El valor es anómalamente grande — en la mayoría de las sustancias es de cuatro a cinco veces menor, y por eso el agua sirve como refrigerante en calefacción y motores.",
-          "mnemo": "El número $4200$ es fácil de recordar: casi nuestro $42$ con dos ceros. Vínculo histórico: la caloría se definió como el calentamiento de un gramo de agua un grado, de ahí $1$ cal $= 4{,}184$ J."
-        },
-        {
-          "sym": "L",
-          "latex": "L",
-          "name": "Calor latente específico de vaporización",
-          "value": "2 260 000",
-          "unit": "J / kg",
-          "why": "Energía necesaria para convertir un kilogramo de líquido en vapor sin calentamiento. Las unidades son julios por kilogramo, no contienen temperatura porque en la transición de fase esta no cambia. Récord entre los líquidos comunes.",
-          "mnemo": "No memorice el número en sí, sino la relación: hervir cuesta aproximadamente siete veces más que calentar hasta la ebullición."
-        },
-        {
-          "sym": "L_mol",
-          "latex": "L_{\\text{mol}}",
-          "name": "Calor latente molar de vaporización",
-          "value": "40 660",
-          "unit": "J / mol",
-          "why": "Lo mismo, pero por mol: $L$ multiplicado por la masa molar del agua $0{,}018$ kg/mol. Esta forma aparece en la ecuación de Clausius-Clapeyron porque al lado está la constante de los gases $R$, también molar. Las unidades de ambas magnitudes están coordinadas — esto es una verificación de la corrección de la fórmula.",
-          "mnemo": ""
-        },
-        {
-          "sym": "T₀, P₀",
-          "latex": "T_0,\\;P_0",
-          "name": "Punto de ebullición normal",
-          "value": "373,15 K a 101,325",
-          "unit": "kPa",
-          "why": "Punto de referencia desde el cual la fórmula calcula el desplazamiento. Es importante entender: cien grados no son una propiedad del agua en sí misma, sino del agua a presión atmosférica normal. Originalmente la escala Celsius se construyó así: cero — fusión del hielo, cien — ebullición a nivel del mar."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "Durante una transición de fase la temperatura se detiene y la energía se invierte en romper enlaces entre moléculas. El punto de ebullición no es una constante de la sustancia, sino el resultado de un acuerdo con la presión externa.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "Calor latente",
-          "text": "Energía que se gasta no en grados, sino en romper enlaces. El termómetro no la ve."
-        },
-        {
-          "icon": "clock",
-          "title": "Meseta en la gráfica",
-          "text": "Mientras ocurre la ebullición, la temperatura es constante, por más que se aumente la potencia de calentamiento."
-        },
-        {
-          "icon": "sigma",
-          "title": "Coste séptuplo",
-          "text": "Hervir agua cuesta aproximadamente 6,8 veces más energía que calentarla hasta la ebullición."
-        },
-        {
-          "icon": "formula",
-          "title": "La presión manda",
-          "text": "Menos presión — ebullición más temprana. En las montañas 87°, en una olla a presión 121°."
-        }
-      ],
-      "where": [
-        "Olla a presión: 2 atm elevan la ebullición a 121° y aceleran la cocción al triple",
-        "Refrigerador: el refrigerante hierve a −25°, extrayendo calor del interior",
-        "La quemadura con vapor es peor que con agua hirviendo: el vapor también libera el calor latente",
-        "La evaporación del sudor enfría el cuerpo, llevándose las moléculas más rápidas"
-      ],
-      "watchOut": "En la fórmula de Clausius-Clapeyron la temperatura se introduce solo en kelvins, y el calor en forma molar. Mezclar calor específico y molar es una fuente de error exactamente de 18 veces (masa molar del agua)."
-    },
-    "quiz": [
-      {
-        "id": "p1",
-        "type": "mcq",
-        "q": "Duplicamos la potencia de la placa bajo agua ya hirviendo. ¿Qué sucede?",
-        "options": [
-          "La temperatura del agua subirá por encima de 100°",
-          "El agua hervirá más vigorosamente y se evaporará el doble de rápido, pero la temperatura no cambiará",
-          "No pasará nada: la ebullición ocurre a velocidad constante",
-          "La temperatura primero subirá, luego volverá a 100°"
-        ],
-        "answer": 1,
-        "why": "Toda la potencia adicional se destina a la vaporización, no al calentamiento. Más energía por segundo significa más vapor por segundo, pero la temperatura se mantiene en el punto de ebullición mientras quede líquido.",
-        "hint": "Mira la gráfica en el panel: durante la ebullición la curva es horizontal. ¿Qué determina su altura: la potencia de calentamiento o algo más? ¿Y en qué influye entonces la potencia?"
-      },
-      {
-        "id": "p2",
-        "type": "free",
-        "q": "En tus propias palabras: ¿por qué la evaporación del sudor enfría el cuerpo, si el sudor está a la misma temperatura que la piel?",
-        "keywords": [
-          "rápid",
-          "energ",
-          "arrastr",
-          "latent",
-          "evapor",
-          "promed"
-        ],
-        "needed": 1,
-        "why": "No se van moléculas al azar, sino las más rápidas: solo ellas tienen suficiente energía para romper los enlaces. Se llevan consigo una fracción desproporcionadamente grande de energía, y la velocidad promedio de las que quedan disminuye. Y la velocidad promedio es la temperatura.",
-        "hint": "Pregúntate: ¿cualquier molécula puede abandonar el líquido o se necesita un excedente de energía? Si solo se van las selectas, ¿qué sucede con la energía promedio de las que quedan?"
-      },
-      {
-        "id": "p3",
-        "type": "estimate",
-        "q": "¿Cuánta energía se necesita para evaporar completamente 1 kg de agua que ya está hirviendo? Respuesta en kilojulios.",
-        "answer": 2260,
-        "unit": "kJ",
-        "tolerance": 1.5,
-        "why": "Esta es precisamente la definición del calor latente de vaporización: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. Para comparar: calentar el mismo kilogramo de cero a cien grados cuesta solo 420 kJ.",
-        "hint": "El agua ya está hirviendo, por lo que no es necesario calentarla; solo actúa una constante de este apartado. ¿Cuál de ellas se mide en julios por kilogramo?"
-      }
-    ]
-  },
-  "ar": {
-    "title": "التحولات الطورية",
-    "subtitle": "الفقرة 2 · الحرارة الكامنة ونقطة الغليان",
-    "intro": [
-      "ضع غلاية وراقب مقياس الحرارة. إنه يتسلق بطاعة: $40^\\circ$, $70^\\circ$, $95^\\circ$ — ثم يتوقف. يستمر الموقد في ضخ الكيلوواط، تتدفق الطاقة كالنهر، لكن المؤشر يقف عند المئة ولا يتحرك حتى يغلي الماء تمامًا.",
-      "هل انتهك قانون حفظ الطاقة؟ كلا بالطبع. لم تختفِ الطاقة — لقد ذهبت إلى عمل آخر غير مرئي لمقياس الحرارة.",
-      "لكي يغادر جزيء الماء السائل ويصبح بخارًا، لا يكفي أن يكون سريعًا. بل يحتاج إلى كسر الروابط مع جيرانه. في الماء، هذه الروابط — الهيدروجينية — قوية بشكل غير عادي، وعند الغليان تذهب كل قدرة الموقد إلى كسرها."
-    ],
-    "standNote": "في المنصة، منزلق الضغط هو في الأساس الارتفاع عن سطح البحر. اضبط $0{,}5$ ضغط جوي (تقريبًا قمة إلبروس) — سوف يغلي الماء عند $81^\\circ$م. اضبط $2$ ضغط جوي (قدر الضغط) — فقط عند $121^\\circ$م. وراقب الرسم البياني: أثناء الغليان، يسير المنحنى أفقيًا تمامًا. هذه الرفوة هي الحرارة الكامنة متجسدة.",
-    "formula": {
-      "name": "معادلة كلاوزيوس-كلابيرون",
-      "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
-      "alsoKnown": "القانون الذي يربط الضغط ودرجة حرارة التحول الطوري",
-      "authors": [
-        {
-          "who": "إميل كلابيرون",
-          "year": "1834",
-          "what": "استنتج العلاقة من تحليل دورة كارنو المطبقة على التحول سائل-بخار"
-        },
-        {
-          "who": "رودولف كلاوزيوس",
-          "year": "1850",
-          "what": "أعطى المعادلة شكلها الديناميكي الحراري الدقيق، بالاعتماد على مفهوم الإنتروبيا الذي قدمه"
-        }
-      ],
-      "story": "حصل كلابيرون على هذه العلاقة وهو يفكر في المحرك البخاري: أجرى المادة العاملة ذهنيًا خلال دورة، جزء منها يمر على طول حد الغليان. أظهر كلاوزيوس لاحقًا أن المعادلة هي نتيجة مباشرة للقانون الثاني — تساوي الجهد الكيميائي للأطوار المتواجدة."
-    },
-    "derivation": {
-      "title": "الاستنتاج الدقيق",
-      "lead": "هنا سؤالان مختلفان، ويتم حلهما بشكل مختلف. الأول — أين تذهب الطاقة أثناء الغليان — هو حساب بسيط. الثاني — لماذا تعتمد نقطة الغليان على الضغط — يتطلب ديناميكا حرارية حقيقية.",
-      "steps": [
-        {
-          "text": "أثناء تسخين الماء، تذهب كل الحرارة الموردة لزيادة درجة الحرارة. هذه هي السعة الحرارية العادية: الكتلة مضروبة في السعة الحرارية النوعية وفرق درجة الحرارة.",
-          "latex": "Q_1 = c\\,m\\,\\Delta T",
-          "figure": "heating",
-          "figCaption": "التسخين: الطاقة تسرع الجزيئات، مقياس الحرارة يرتفع."
-        },
-        {
-          "text": "لغلاية تحتوي $m = 0{,}2$ كجم من الماء، مسخن من $20^\\circ$ إلى $100^\\circ$م، نحصل على رقم محدد.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
-          "figure": "heatbar1",
-          "figCaption": "سبعة وستون كيلوجول — هذا هو المسار الكامل من درجة حرارة الغرفة إلى الغليان."
-        },
-        {
-          "text": "بمجرد أن يبدأ الغليان، تتجمد درجة الحرارة. تستمر الحرارة في التدفق، لكنها تذهب بالكامل لتحويل السائل إلى بخار. لا يوجد فرق في درجة الحرارة هنا على الإطلاق — هناك فقط الكتلة والحرارة النوعية للتبخر.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
-          "figure": "boiling",
-          "figCaption": "الغليان: الطاقة تكسر الروابط بين الجزيئات، مقياس الحرارة ثابت."
-        },
-        {
-          "text": "لنقارن الرقمين. هذا هو الجواب العددي على اللغز من البداية: لجلب الماء إلى الغليان، نحتاج إلى طاقة أقل بعدة مرات من غليه بالكامل.",
-          "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
-          "figure": "heatbar2",
-          "figCaption": "النسبة تقريبًا سبعة أضعاف — لذا يغلي في دقائق، ويتبخر في عشرات الدقائق."
-        },
-        {
-          "text": "الآن المهمة الثانية. الغليان هو توازن بين السائل والبخار: عدد الجزيئات التي تغادر يعادل عدد التي تعود. إزاحة هذا التوازن عند تغير الضغط تصفها معادلة كلاوزيوس-كلابيرون، حيث $\\Delta V$ هي الزيادة في الحجم عند التبخر.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
-          "figure": "equilibrium",
-          "figCaption": "تحتاج فقاعة البخار إلى دفع الغلاف الجوي فوق الماء — كلما زاد ضغطه، زادت صعوبة ولادة الفقاعة."
-        },
-        {
-          "text": "يشغل البخار حجمًا أكبر بآلاف المرات من السائل الذي أنتجه، لذا $\\Delta V \\approx V_{\\text{بخار}}$. باعتبار البخار غازًا مثاليًا من الفقرة الأولى، نعوض $V = RT/P$ ونفصل المتغيرات.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
-          "figure": "integrate",
-          "figCaption": "انفصلت المتغيرات: على اليسار الضغط فقط، على اليمين درجة الحرارة فقط — يمكن التكامل."
-        },
-        {
-          "text": "بتكامل كلا الطرفين واعتبار حرارة التبخر ثابتة، نحصل على العلاقة بين الضغط ودرجة حرارة الغليان. بهذه الصيغة بالضبط تعمل منصتنا.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
-          "figure": "boilcurve",
-          "figCaption": "منحنى الغليان: في الجبال الضغط أقل — يغلي الماء مبكرًا، في قدر الضغط لاحقًا."
-        }
-      ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
-      "plateCap": "على اليسار — الحرارة الكامنة: الطاقة التي ذهبت لكسر الروابط وليس لدرجات الحرارة. على اليمين — القانون الذي ربط الضغط الخارجي بدرجة حرارة الغليان.",
-      "note": "لماذا الماء غير عادي؟ جزيئاته مرتبطة بروابط هيدروجينية، قوية بشكل غير طبيعي لمثل هذا الجزيء الصغير. من هنا تأتي الحرارة القياسية للتبخر: في الأسيتون أقل بأربع مرات، في الإيثر أقل بستة. لو تصرف الماء مثل سائل عادي، لتبخرت المحيطات بسرعة، ولما كان تبخر العرق ينقذنا من ارتفاع الحرارة."
-    },
-    "math": {
-      "title": "الرياضيات التي سنحتاجها هنا",
-      "items": [
-        {
-          "what": "فصل المتغيرات",
-          "why": "المعادلة من الشكل $dP/dT = f(P)\\,g(T)$ تُحل كالتالي: نجمع كل ما يعتمد على $P$ إلى اليسار، وكل ما يعتمد على $T$ إلى اليمين، ثم نكامل الطرفين بشكل مستقل. هذه طريقة قياسية للمعادلات التفاضلية من الدرجة الأولى، وتُستخدم أيضاً في اشتقاق الأدياباتي في الفقرة التالية.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
-        },
-        {
-          "what": "لماذا يظهر اللوغاريتم",
-          "why": "تكامل $1/P$ بالنسبة إلى $dP$ يساوي اللوغاريتم الطبيعي — هذه هي الدالة الوحيدة التي مشتقتها تساوي $1/x$. لذا تظهر اللوغاريتمات حتماً في كل مكان يتناسب فيه معدل تغير كمية مع تلك الكمية نفسها: في الاضمحلال الإشعاعي، في النمو السكاني، في ضغط البخار المشبع.",
-          "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
-        }
-      ]
-    },
-    "example": {
-      "title": "مثال بالأرقام",
-      "lead": "مسألة كلاسيكية تشرح لماذا يصعب الطهي في الجبال.",
-      "given": "ارتفع سائح إلى ارتفاع حيث الضغط $0{,}6$ ضغط جوي. عند أي درجة حرارة يغلي الماء هناك؟ افترض $L_{\\text{mol}} = 40\\,660$ جول/مول، $T_0 = 373$ كلفن، $R = 8{,}314$ جول/(مول·كلفن).",
-      "law": "معادلة كلوزيوس-كلابيرون في الصورة التكاملية، محلولة بالنسبة لـ $T$",
-      "solution": [
-        {
-          "text": "نحسب لوغاريتم نسبة الضغوط. إنه سالب لأن الضغط انخفض.",
-          "latex": "\\ln(0{,}6) \\approx -0{,}51"
-        },
-        {
-          "text": "النسبة $R/L_{\\text{mol}}$ تعطي عامل القياس.",
-          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
-        },
-        {
-          "text": "نعوض في صيغة درجة الحرارة المقلوبة.",
-          "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
-        },
-        {
-          "text": "نقلب ونحول إلى درجات مئوية.",
-          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
-        }
-      ],
-      "answer": "سيغلي الماء عند حوالي $87^\\circ$C",
-      "check": "هل هذا معقول؟ على ارتفاع حوالي أربعة كيلومترات، الضغط قريب من $0{,}6$ ضغط جوي، وتذكر الكتب المرجعية درجة غليان $87$–$88^\\circ$C. من الصعب سلق بيضة مسلوقة هناك: بياض البيض يحتاج إلى درجة حرارة أعلى، والماء لن يصبح أسخن من نقطة الغليان مهما سخنت."
-    },
-    "constants": {
-      "title": "ثوابت هذا القسم",
-      "lead": "انتبه إلى الوحدات: إنها تخبرك مباشرة بماذا تعني الكمية وعلى ماذا يجب ضربها.",
-      "items": [
-        {
-          "sym": "c",
-          "latex": "c",
-          "name": "السعة الحرارية النوعية للماء",
-          "value": "4200",
-          "unit": "J / (kg · K)",
-          "why": "كمية الطاقة اللازمة لتسخين كيلوغرام واحد من الماء بدرجة واحدة. الوحدات تُقرأ حرفياً: جول لكل كيلوغرام ولكل كلفن. القيمة كبيرة بشكل غير طبيعي — بالنسبة لمعظم المواد تكون أقل بأربع إلى خمس مرات، ولهذا السبب يُستخدم الماء كوسيط حراري في التدفئة وتبريد المحركات.",
-          "mnemo": "الرقم $4200$ سهل التذكر: تقريباً $42$ مع صفرين. صلة تاريخية: تم تعريف السعر الحراري (الكالوري) على أنه تسخين غرام واحد من الماء بدرجة واحدة، ومن هنا $1$ كالوري $= 4{,}184$ جول."
-        },
-        {
-          "sym": "L",
-          "latex": "L",
-          "name": "الحرارة النوعية للتبخر",
-          "value": "2 260 000",
-          "unit": "J / kg",
-          "why": "الطاقة اللازمة لتحويل كيلوغرام واحد من السائل إلى بخار دون أي تسخين. الوحدات هي جول لكل كيلوغرام، ولا يوجد فيها درجة حرارة على الإطلاق، لأنها لا تتغير أثناء التحول الطوري. رقم قياسي بين السوائل العادية.",
-          "mnemo": "احفظ في ذهنك ليس الرقم نفسه، بل النسبة: الغليان الكامل يكلف حوالي سبعة أضعاف ما يكلفه التسخين حتى نقطة الغليان."
-        },
-        {
-          "sym": "L_mol",
-          "latex": "L_{\\text{mol}}",
-          "name": "الحرارة المولية للتبخر",
-          "value": "40 660",
-          "unit": "J / mol",
-          "why": "نفس الشيء، لكن محسوباً لكل مول: $L$ مضروب في الكتلة المولية للماء $0{,}018$ كغ/مول. هذه هي الصيغة التي تدخل في معادلة كلوزيوس-كلابيرون، لأن ثابت الغاز $R$ هو أيضاً مولي. وحدات الكميتين متطابقة — وهذا هو اختبار صحة الصيغة."
-        },
-        {
-          "sym": "T₀, P₀",
-          "latex": "T_0,\\;P_0",
-          "name": "نقطة الغليان الطبيعية",
-          "value": "373,15 K عند 101,325",
-          "unit": "kPa",
-          "why": "نقطة مرجعية تحسب منها الصيغة الانحراف. من المهم أن نفهم: مئة درجة مئوية ليست خاصية للماء بذاته، بل خاصية للماء عند الضغط الجوي العادي. في الأصل، تم بناء سلم سلزيوس بهذه الطريقة: الصفر هو ذوبان الجليد، والمئة هي الغليان عند مستوى سطح البحر."
-        }
-      ]
-    },
-    "memo": {
-      "essence": "أثناء التحول الطوري، تظل درجة الحرارة ثابتة، وتذهب الطاقة لكسر الروابط بين الجزيئات. نقطة الغليان ليست ثابتاً للمادة، بل هي نتيجة مساومة مع الضغط الخارجي.",
-      "keyIdeas": [
-        {
-          "icon": "scale",
-          "title": "الحرارة الكامنة",
-          "text": "الطاقة التي تُنفق ليس على رفع درجة الحرارة، بل على كسر الروابط. مقياس الحرارة لا يراها."
-        },
-        {
-          "icon": "clock",
-          "title": "الهضبة على الرسم البياني",
-          "text": "أثناء الغليان، تظل درجة الحرارة ثابتة، مهما زدت من قوة التسخين."
-        },
-        {
-          "icon": "sigma",
-          "title": "التكلفة سبعة أضعاف",
-          "text": "غليان الماء بالكامل يكلف من الطاقة حوالي 6,8 أضعاف ما يكلفه تسخينه حتى نقطة الغليان."
-        },
-        {
-          "icon": "formula",
-          "title": "الضغط هو الحاكم",
-          "text": "كلما انخفض الضغط، كلما حدث الغليان مبكراً. في الجبال 87°، في قدر الضغط 121°."
-        }
-      ],
-      "where": [
-        "قدر الضغط: ضغط 2 ضغط جوي يرفع الغليان إلى 121° ويسرع الطهي ثلاث مرات",
-        "الثلاجة: وسيط التبريد يغلي عند −25°، مأخذاً الحرارة من الحجرة",
-        "حرق البخار أشد من حرق الماء المغلي: البخار يطلق أيضاً الحرارة الكامنة",
-        "تبخر العرق يبرد الجسم، آخذاً أسرع الجزيئات"
-      ],
-      "watchOut": "في معادلة كلوزيوس-كلابيرون، تُدرج درجة الحرارة فقط بالكلفن، والحرارة بالصيغة المولية. الخلط بين الحرارة النوعية والحرارة المولية يسبب خطأ بمقدار 18 مرة (الكتلة المولية للماء)."
-    },
-    "quiz": [
-      {
-        "id": "p1",
-        "type": "mcq",
-        "q": "ضاعفنا استطاعة الموقد تحت ماء يغلي بالفعل. ماذا سيحدث؟",
-        "options": [
-          "ستزداد درجة حرارة الماء فوق 100°",
-          "سيغلي الماء بعنف ويتبخر أسرع مرتين، لكن درجة الحرارة لن تتغير",
-          "لن يتغير شيء: الغليان يجري بسرعة ثابتة",
-          "سترتفع درجة الحرارة أولاً ثم تعود إلى 100°"
-        ],
-        "answer": 1,
-        "why": "كل الاستطاعة الإضافية تذهب إلى التبخر، وليس إلى التسخين. طاقة أكثر في الثانية تعني بخاراً أكثر في الثانية، لكن درجة الحرارة تبقى عند نقطة الغليان ما دام السائل موجوداً.",
-        "hint": "انظر إلى الرسم البياني على اللوحة: أثناء الغليان، يكون المنحنى أفقيًا. ما الذي يحدد ارتفاعه — استطاعة التسخين أم شيء آخر؟ وعلى ماذا تؤثر الاستطاعة إذن؟"
-      },
-      {
-        "id": "p2",
-        "type": "free",
-        "q": "بكلماتك الخاصة: لماذا تبخر العرق يبرد الجسم، مع أن العرق نفسه بنفس درجة حرارة الجلد؟",
-        "keywords": [
-          "سريع",
-          "طاقة",
-          "يحمل",
-          "كامن",
-          "تبخر",
-          "متوسط"
-        ],
-        "needed": 1,
-        "why": "ليست أي جزيء عشوائي يغادر، بل أسرعها — فقط هذه تملك طاقة كافية لقطع الروابط. تحمل معها حصة كبيرة غير متناسبة من الطاقة، فينخفض متوسط سرعة الباقين. ومتوسط السرعة هو درجة الحرارة.",
-        "hint": "اسأل نفسك: هل يمكن لأي جزيء أن يغادر السائل، أم يحتاج إلى مخزون من الطاقة؟ إذا غادرت فقط الجزيئات المختارة — ماذا يحدث لمتوسط طاقة الباقين؟"
-      },
-      {
-        "id": "p3",
-        "type": "estimate",
-        "q": "كم الطاقة اللازمة لتبخير 1 كجم من الماء المغلي بالكامل؟ الإجابة بالكيلوجول.",
-        "answer": 2260,
-        "unit": "كيلوجول",
-        "tolerance": 1.5,
-        "why": "هذا تحديداً تعريف الحرارة النوعية للتبخر: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ كيلوجول. للمقارنة: تسخين نفس الكيلوجرام من الصفر إلى مئة درجة يكلف 420 كيلوجول فقط.",
-        "hint": "الماء يغلي بالفعل، لذا لا حاجة لتسخينه — يعمل فقط ثابت واحد من هذه الفقرة. أي منها يقاس بالجول لكل كيلوغرام؟"
-      }
-    ]
-  },
+ "id": "02-phase",
+ "topic": "thermodynamics",
+ "schema": "b42.lesson/1",
+ "model": "phase_transition",
+ "entities": {
   "laws": [
-    "law_of_conservation_of_energy"
+   "ideal_gas_law",
+   "first_law_of_thermodynamics"
+  ],
+  "tags": [
+   "phase_transition",
+   "water"
+  ],
+  "scientists": [
+   "Emile Clapeyron"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2607.15239",
+    "date": "2026-07-16",
+    "title": {
+     "ru": "Как пульс артерий двигает жидкость в мозге",
+     "en": "How arterial pulse moves fluid in the brain",
+     "es": "Cómo el pulso de las arterias mueve el líquido en el cerebro",
+     "ar": "كيف يدفع نبض الشرايين السائل في الدماغ"
+    },
+    "why": "water"
+   },
+   {
+    "id": "2607.15183",
+    "date": "2026-07-16",
+    "title": {
+     "ru": "Подводный робот-почтальон с зарядкой",
+     "en": "Underwater Postman Robot with Charging",
+     "es": "Robot submarino cartero con recarga",
+     "ar": "روبوت بريدي تحت الماء مع الشحن"
+    },
+    "why": "water"
+   },
+   {
+    "id": "2607.15144",
+    "date": "2026-07-16",
+    "title": {
+     "ru": "Ледяная прописка: большинство горячих юпитеров родом из холода",
+     "en": "Icy Origins: Most Hot Jupiters Come from the Cold",
+     "es": "Origen helado: la mayoría de los Júpiter calientes provienen del frío",
+     "ar": "نشأة جليدية: معظم كواكب المشتري الحارة من أصل بارد"
+    },
+    "why": "water"
+   }
   ]
+ },
+ "ru": {
+  "title": "Фазовые переходы",
+  "subtitle": "Параграф 2 · Скрытая теплота и точка кипения",
+  "intro": [
+   "Поставьте чайник и следите за термометром. Он послушно ползёт вверх: $40^\\circ$, $70^\\circ$, $95^\\circ$ — и упирается. Плита продолжает вливать киловатты, энергия льётся рекой, а стрелка стоит на сотне и не двигается, пока вода не выкипит досуха.",
+   "Закон сохранения энергии нарушен? Разумеется, нет. Энергия никуда не пропала — она ушла на другую работу, невидимую термометру.",
+   "Чтобы молекуле воды покинуть жидкость и стать паром, мало быть быстрой. Ей нужно разорвать связи с соседками. У воды эти связи — водородные — необычно прочные, и именно на их разрыв уходит вся мощность плиты, пока идёт кипение."
+  ],
+  "standNote": "На стенде ползунок давления — это, по сути, высота над уровнем моря. Поставьте $0{,}5$ атм (примерно вершина Эльбруса) — вода закипит при $81^\\circ$C. Поставьте $2$ атм (скороварка) — только при $121^\\circ$C. И следите за графиком: пока идёт кипение, кривая идёт строго горизонтально. Эта полка и есть скрытая теплота во плоти.",
+  "formula": {
+   "name": "Уравнение Клаузиуса — Клапейрона",
+   "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
+   "alsoKnown": "Закон, связывающий давление и температуру фазового перехода",
+   "authors": [
+    {
+     "who": "Эмиль Клапейрон",
+     "year": "1834",
+     "what": "вывел соотношение из анализа цикла Карно, применённого к переходу жидкость–пар"
+    },
+    {
+     "who": "Рудольф Клаузиус",
+     "year": "1850",
+     "what": "придал уравнению строгую термодинамическую форму, опираясь на введённое им понятие энтропии"
+    }
+   ],
+   "story": "Клапейрон получил это соотношение, рассуждая о паровой машине: он мысленно провёл рабочее вещество через цикл, часть которого проходит по границе кипения. Клаузиус позже показал, что уравнение есть прямое следствие второго начала — равенства химических потенциалов сосуществующих фаз."
+  },
+  "derivation": {
+   "title": "Строгий вывод",
+   "lead": "Здесь два разных вопроса, и решаются они по-разному. Первый — куда девается энергия при кипении — простая арифметика. Второй — почему точка кипения зависит от давления — требует настоящей термодинамики.",
+   "steps": [
+    {
+     "text": "Пока вода нагревается, вся подведённая теплота идёт на рост температуры. Это обычная теплоёмкость: масса, умноженная на удельную теплоёмкость и на разность температур.",
+     "latex": "Q_1 = c\\,m\\,\\Delta T",
+     "figure": "heating",
+     "figCaption": "Нагрев: энергия разгоняет молекулы, термометр растёт."
+    },
+    {
+     "text": "Для чайника с $m = 0{,}2$ кг воды, нагреваемой от $20^\\circ$ до $100^\\circ$C, получаем конкретное число.",
+     "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{кДж}",
+     "figure": "heatbar1",
+     "figCaption": "Шестьдесят семь килоджоулей — это весь путь от комнатной температуры до кипения."
+    },
+    {
+     "text": "Как только началось кипение, температура замирает. Теплота продолжает поступать, но идёт целиком на превращение жидкости в пар. Разности температур здесь нет вовсе — есть только масса и удельная теплота парообразования.",
+     "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{кДж}",
+     "figure": "boiling",
+     "figCaption": "Кипение: энергия рвёт связи между молекулами, термометр стоит."
+    },
+    {
+     "text": "Сравним два числа. Вот численный ответ на загадку из начала: чтобы довести воду до кипения, нужно в несколько раз меньше энергии, чем чтобы её выкипятить.",
+     "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
+     "figure": "heatbar2",
+     "figCaption": "Отношение почти семикратное — поэтому закипает за минуты, а выкипает за десятки минут."
+    },
+    {
+     "text": "Теперь вторая задача. Кипение — это равновесие жидкости и пара: сколько молекул улетает, столько же возвращается. Сдвиг этого равновесия при изменении давления описывает уравнение Клаузиуса–Клапейрона, где $\\Delta V$ — прирост объёма при испарении.",
+     "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{мол}}}{T\\,\\Delta V}",
+     "figure": "equilibrium",
+     "figCaption": "Пузырьку пара нужно раздвинуть атмосферу над водой — чем сильнее она давит, тем труднее родиться пузырьку."
+    },
+    {
+     "text": "Пар занимает объём в тысячи раз больший, чем породившая его жидкость, поэтому $\\Delta V \\approx V_{\\text{пар}}$. Считая пар идеальным газом из первого параграфа, подставляем $V = RT/P$ и разделяем переменные.",
+     "latex": "\\frac{dP}{P} = \\frac{L_{\\text{мол}}}{R}\\,\\frac{dT}{T^{2}}",
+     "figure": "integrate",
+     "figCaption": "Переменные разделились: слева только давление, справа только температура — можно интегрировать."
+    },
+    {
+     "text": "Интегрируя обе части и полагая теплоту парообразования постоянной, получаем связь давления с температурой кипения. Именно по этой формуле считает наш стенд.",
+     "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+     "figure": "boilcurve",
+     "figCaption": "Кривая кипения: в горах давление ниже — вода вскипает раньше, в скороварке позже."
+    }
+   ],
+   "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+   "plateCap": "Слева — скрытая теплота: энергия, ушедшая в разрыв связей, а не в градусы. Справа — закон, связавший внешнее давление с температурой кипения.",
+   "note": "Почему вода так необычна? Её молекулы связаны водородными связями, аномально прочными для столь малой молекулы. Отсюда рекордная теплота парообразования: у ацетона она вчетверо меньше, у эфира — вшестеро. Если бы вода вела себя как обычная жидкость, океаны испарялись бы стремительно, а испарение пота не спасало бы нас от перегрева."
+  },
+  "math": {
+   "title": "Математика, которая здесь понадобилась",
+   "items": [
+    {
+     "what": "Разделение переменных",
+     "why": "Уравнение вида $dP/dT = f(P)\\,g(T)$ решается так: собираем всё, что зависит от $P$, слева, всё, что зависит от $T$, — справа, и интегрируем обе части независимо. Это стандартный приём для дифференциальных уравнений первого порядка, и он же используется при выводе адиабаты в следующем параграфе.",
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
+    },
+    {
+     "what": "Почему появился логарифм",
+     "why": "Интеграл от $1/P$ по $dP$ равен натуральному логарифму — это единственная функция, производная которой равна $1/x$. Поэтому логарифмы неизбежно возникают всюду, где скорость изменения величины пропорциональна ей самой: в радиоактивном распаде, в росте популяций, в давлении насыщенного пара.",
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+    }
+   ]
+  },
+  "example": {
+   "title": "Пример с числами",
+   "lead": "Классическая задача, которая объясняет, почему в горах трудно готовить.",
+   "given": "Турист поднялся на высоту, где давление составляет $0{,}6$ атм. При какой температуре там закипит вода? Принять $L_{\\text{мол}} = 40\\,660$ Дж/моль, $T_0 = 373$ К, $R = 8{,}314$ Дж/(моль·К).",
+   "law": "Уравнение Клаузиуса–Клапейрона в интегральной форме, разрешённое относительно $T$",
+   "solution": [
+    {
+     "text": "Считаем логарифм отношения давлений. Он отрицателен, так как давление упало.",
+     "latex": "\\ln(0{,}6) \\approx -0{,}51"
+    },
+    {
+     "text": "Отношение $R/L_{\\text{мол}}$ даёт масштабный множитель.",
+     "latex": "\\frac{R}{L_{\\text{мол}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+    },
+    {
+     "text": "Подставляем в формулу для обратной температуры.",
+     "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
+    },
+    {
+     "text": "Обращаем и переводим в градусы Цельсия.",
+     "latex": "T \\approx 360\\ \\text{К} = 87^\\circ\\text{C}"
+    }
+   ],
+   "answer": "Вода закипит примерно при $87^\\circ$C",
+   "check": "Правдоподобно ли? На высоте около четырёх километров давление как раз близко к $0{,}6$ атм, и справочники дают температуру кипения $87$–$88^\\circ$C. Яйцо всмятку там сварить уже трудно: белок требует более высокой температуры, а горячее «кипятка» вода не станет, сколько ни грей."
+  },
+  "constants": {
+   "title": "Константы этого параграфа",
+   "lead": "Обратите внимание на единицы: они прямо подсказывают, что означает величина и на что её надо умножать.",
+   "items": [
+    {
+     "sym": "c",
+     "latex": "c",
+     "name": "Удельная теплоёмкость воды",
+     "value": "4200",
+     "unit": "Дж / (кг · К)",
+     "why": "Сколько энергии нужно, чтобы нагреть один килограмм воды на один градус. Единицы читаются буквально: джоули на килограмм и на кельвин. Значение аномально велико — у большинства веществ оно в четыре-пять раз меньше, и именно поэтому вода служит теплоносителем в отоплении и охлаждении двигателей.",
+     "mnemo": "Число $4200$ легко удержать: почти наше $42$ с двумя нулями. Историческая связь: калорию определяли как нагрев одного грамма воды на градус, отсюда $1$ кал $= 4{,}184$ Дж."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "Удельная теплота парообразования",
+     "value": "2 260 000",
+     "unit": "Дж / кг",
+     "why": "Энергия, необходимая для превращения одного килограмма жидкости в пар без всякого нагрева. Единицы — джоули на килограмм, температуры в них нет вовсе, потому что при фазовом переходе она не меняется. Рекорд среди обычных жидкостей.",
+     "mnemo": "Держите в голове не само число, а отношение: выкипятить примерно в семь раз дороже, чем довести до кипения."
+    },
+    {
+     "sym": "L_мол",
+     "latex": "L_{\\text{мол}}",
+     "name": "Молярная теплота парообразования",
+     "value": "40 660",
+     "unit": "Дж / моль",
+     "why": "То же самое, но в пересчёте на моль: $L$ умножается на молярную массу воды $0{,}018$ кг/моль. Именно эта форма входит в уравнение Клаузиуса–Клапейрона, потому что рядом стоит газовая постоянная $R$, тоже молярная. Единицы обеих величин согласованы — это и есть проверка правильности формулы."
+    },
+    {
+     "sym": "T₀, P₀",
+     "latex": "T_0,\\;P_0",
+     "name": "Нормальная точка кипения",
+     "value": "373,15 К при 101,325",
+     "unit": "кПа",
+     "why": "Опорная точка, от которой формула отсчитывает сдвиг. Важно понимать: сто градусов — не свойство воды самой по себе, а свойство воды при нормальном атмосферном давлении. Изначально шкала Цельсия именно так и строилась: ноль — таяние льда, сто — кипение при уровне моря."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "При фазовом переходе температура стоит, а энергия идёт на разрыв связей между молекулами. Точка кипения — не константа вещества, а результат сделки с внешним давлением.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Скрытая теплота",
+     "text": "Энергия, которая тратится не на градусы, а на разрыв связей. Термометр её не видит."
+    },
+    {
+     "icon": "clock",
+     "title": "Плато на графике",
+     "text": "Пока идёт кипение, температура постоянна, сколько ни увеличивай мощность нагрева."
+    },
+    {
+     "icon": "sigma",
+     "title": "Семикратная цена",
+     "text": "Выкипятить воду примерно в 6,8 раза дороже по энергии, чем нагреть её до кипения."
+    },
+    {
+     "icon": "formula",
+     "title": "Давление правит",
+     "text": "Ниже давление — раньше кипение. В горах 87°, в скороварке 121°."
+    }
+   ],
+   "where": [
+    "Скороварка: давление 2 атм поднимает кипение до 121° и ускоряет готовку втрое",
+    "Холодильник: хладагент кипит при −25°, забирая тепло из камеры",
+    "Ожог паром тяжелее ожога кипятком: пар отдаёт ещё и скрытую теплоту",
+    "Испарение пота охлаждает тело, унося самые быстрые молекулы"
+   ],
+   "watchOut": "В формулу Клаузиуса–Клапейрона температура подставляется только в кельвинах, а теплота — в молярной форме. Смешение удельной и молярной теплоты — источник ошибки ровно в 18 раз (молярная масса воды)."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "Мы увеличили мощность плиты вдвое под уже кипящей водой. Что произойдёт?",
+    "options": [
+     "Температура воды вырастет выше 100°",
+     "Вода закипит бурнее и выкипит вдвое быстрее, но температура не изменится",
+     "Ничего не изменится: кипение идёт с постоянной скоростью",
+     "Температура сначала вырастет, потом вернётся к 100°"
+    ],
+    "answer": 1,
+    "why": "Вся дополнительная мощность идёт на парообразование, а не на нагрев. Больше энергии в секунду — больше пара в секунду, но температура держится на точке кипения, пока остаётся жидкость.",
+    "hint": "Посмотрите на график на стенде: во время кипения кривая горизонтальна. Что определяет её высоту — мощность нагрева или что-то другое? А на что тогда влияет мощность?"
+   },
+   {
+    "id": "p2",
+    "type": "free",
+    "q": "Своими словами: почему испарение пота охлаждает тело, хотя сам пот той же температуры, что и кожа?",
+    "keywords": [
+     "быстр",
+     "энерг",
+     "унос",
+     "скрыт",
+     "испар",
+     "средн"
+    ],
+    "needed": 1,
+    "why": "Улетают не случайные молекулы, а самые быстрые — только у них хватает энергии порвать связи. Они уносят с собой непропорционально большую долю энергии, и средняя скорость оставшихся падает. А средняя скорость и есть температура.",
+    "hint": "Задайте себе вопрос: любая ли молекула может покинуть жидкость, или для этого нужен запас энергии? Если улетают только избранные — что происходит со средней энергией тех, кто остался?"
+   },
+   {
+    "id": "p3",
+    "type": "estimate",
+    "q": "Сколько энергии нужно, чтобы полностью выпарить 1 кг уже кипящей воды? Ответ в килоджоулях.",
+    "answer": 2260,
+    "unit": "кДж",
+    "tolerance": 1.5,
+    "why": "Это в точности определение удельной теплоты парообразования: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ кДж. Для сравнения: нагреть тот же килограмм от нуля до ста градусов стоит всего 420 кДж.",
+    "hint": "Вода уже кипит, значит нагревать её не нужно — работает только одна константа из этого параграфа. Какая из них измеряется в джоулях на килограмм?"
+   }
+  ],
+  "curiosities": {
+   "title": "Занимательное: проверьте руками",
+   "lead": "Чайник — лучший прибор для изучения фазовых переходов: термометр в нём останавливается на самом интересном месте.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "опыт на кухне",
+     "h": "Термометр, который замер",
+     "text": "Поставьте кастрюлю воды на огонь и опустите кулинарный термометр. Записывайте показания каждую минуту — и продолжайте записывать, когда вода уже кипит вовсю.",
+     "answer": "До кипения температура растёт равномерно, а с началом кипения останавливается намертво, хотя плита продолжает отдавать те же киловатты. Энергия уходит не на нагрев, а на разрыв связей между молекулами — это и есть скрытая теплота. Пока в кастрюле есть вода, температура не поднимется выше точки кипения ни на градус, сколько ни увеличивай огонь. Поэтому прибавлять газ под кипящей кастрюлей бессмысленно: еда быстрее не приготовится, просто вода выкипит раньше."
+    },
+    {
+     "icon": "paradox",
+     "kind": "парадокс",
+     "h": "Проволока проходит сквозь лёд, а лёд остаётся целым",
+     "text": "Положите на брусок льда тонкую проволоку и подвесьте к её концам груз. Через несколько часов проволока окажется внутри бруска, а потом и пройдёт насквозь — но брусок не развалится на две части.",
+     "answer": "Под проволокой давление велико, а у воды редкое свойство: при замерзании она расширяется, поэтому давление понижает температуру плавления. Лёд под проволокой тает, она опускается, а вода, оказавшись сверху без избыточного давления, немедленно замерзает снова и затягивает разрез. В уравнении Клаузиуса–Клапейрона это виден знак: у воды $\\Delta V$ при плавлении отрицательна, и наклон линии равновесия получается обратным по сравнению почти со всеми другими веществами."
+    },
+    {
+     "icon": "fact",
+     "kind": "занимательный факт",
+     "h": "Скрытая теплота воды аномально велика",
+     "text": "Чтобы превратить килограмм кипящей воды в пар, нужно 2260 килоджоулей — почти в семь раз больше, чем чтобы нагреть тот же килограмм от комнатной температуры до кипения. Отсюда практическое следствие: ожог паром при ста градусах гораздо тяжелее ожога кипятком той же температуры, потому что конденсирующийся на коже пар отдаёт всю эту скрытую теплоту. По той же причине потоотделение так эффективно охлаждает, а океаны сглаживают климат планеты."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "мнемоника",
+     "h": "Энергия идёт на разрыв связей, а не на разгон",
+     "text": "При фазовом переходе подводимая энергия расходуется на то, чтобы растащить молекулы, а не увеличить их скорость. Средняя скорость — это температура, и потому она стоит на месте. Обратный процесс возвращает ту же энергию: конденсация греет, кристаллизация греет. Отсюда правило: любая величина, измеряемая в джоулях на килограмм, скорее всего описывает перестройку структуры."
+    },
+    {
+     "icon": "estimate",
+     "kind": "прикидка",
+     "h": "Почему чайник выкипает так долго",
+     "text": "Нагреть литр воды от 20 до 100 градусов — это $4200 \\cdot 80 \\approx 335$ килоджоулей. Выпарить его целиком — 2260 килоджоулей, почти в семь раз больше. Чайник мощностью два киловатта закипает примерно за три минуты, а выкипает досуха за двадцать с лишним. Та же арифметика объясняет, почему кастрюля не пригорает, пока в ней есть вода."
+    },
+    {
+     "icon": "edge",
+     "kind": "граница применимости",
+     "h": "У критической точки формула ломается",
+     "text": "Уравнение Клаузиуса–Клапейрона описывает равновесие двух фаз и требует, чтобы у них были разные плотности. При приближении к критической точке — для воды это 374 градуса и 218 атмосфер — разница между жидкостью и паром исчезает, $\\Delta V$ стремится к нулю, и формула теряет смысл. За критической точкой фазового перехода нет вовсе: вещество переходит из плотного состояния в разреженное непрерывно, без кипения."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Где используют скрытую теплоту",
+   "lead": "Способность вещества запасать энергию в самой перестройке структуры лежит в основе всей холодильной техники.",
+   "items": [
+    {
+     "h": "Холодильники и кондиционеры",
+     "text": "Хладагент испаряется внутри, забирая скрытую теплоту, и конденсируется снаружи, отдавая её. Перенос тепла идёт не за счёт нагрева, а за счёт фазового перехода — поэтому он такой эффективный."
+    },
+    {
+     "h": "Облака и осадки",
+     "text": "Конденсация пара в поднимающемся воздухе выделяет огромную энергию, которая подпитывает восходящий поток. Именно этот механизм превращает обычную облачность в грозу, а над тёплым океаном — в тропический циклон."
+    },
+    {
+     "h": "Скороварка и автоклав",
+     "text": "Повышенное давление поднимает точку кипения: при двух атмосферах вода кипит при 120 градусах, и приготовление ускоряется в разы. В медицине тот же принцип стерилизует инструменты, потому что споры бактерий не выдерживают такой температуры."
+    },
+    {
+     "h": "Металлургия и литьё",
+     "text": "Скрытая теплота кристаллизации определяет, как быстро остывает отливка и какая структура зерна в ней сформируется. От этого напрямую зависит прочность готовой детали."
+    },
+    {
+     "h": "Аккумуляторы тепла",
+     "text": "Материалы с фазовым переходом вблизи комнатной температуры — например, парафины — встраивают в стены и одежду: они плавятся при нагреве и застывают при охлаждении, сглаживая перепады без всякой электроники."
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "Phase Transitions",
+  "subtitle": "Section 2 · Latent Heat and Boiling Point",
+  "intro": [
+   "Put a kettle on and watch the thermometer. It obediently climbs upward: $40^\\circ$, $70^\\circ$, $95^\\circ$ — and then stops. The stove keeps pouring in kilowatts, energy flows like a river, but the needle sits at one hundred and does not move until the water boils away completely.",
+   "Is the law of conservation of energy broken? Of course not. The energy didn't disappear — it went into another job, invisible to the thermometer.",
+   "For a water molecule to leave the liquid and become vapor, being fast is not enough. It needs to break the bonds with its neighbors. In water, these bonds — hydrogen bonds — are unusually strong, and it is precisely on breaking them that all the stove's power is spent while boiling continues."
+  ],
+  "standNote": "On the stand, the pressure slider is essentially the altitude above sea level. Set it to $0{,}5$ atm (roughly the summit of Elbrus) — water boils at $81^\\circ$C. Set it to $2$ atm (pressure cooker) — only at $121^\\circ$C. And watch the graph: while boiling continues, the curve goes strictly horizontal. This plateau is latent heat in the flesh.",
+  "formula": {
+   "name": "Clausius–Clapeyron Equation",
+   "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
+   "alsoKnown": "Law relating pressure and temperature of a phase transition",
+   "authors": [
+    {
+     "who": "Émile Clapeyron",
+     "year": 1834,
+     "what": "derived the relation from analysis of the Carnot cycle applied to the liquid–vapor transition"
+    },
+    {
+     "who": "Rudolf Clausius",
+     "year": 1850,
+     "what": "gave the equation a strict thermodynamic form, relying on his introduced concept of entropy"
+    }
+   ],
+   "story": "Clapeyron obtained this relation by reasoning about a steam engine: he mentally ran the working substance through a cycle, part of which runs along the boiling boundary. Clausius later showed that the equation is a direct consequence of the second law — the equality of chemical potentials of coexisting phases."
+  },
+  "derivation": {
+   "title": "Rigorous Derivation",
+   "lead": "Here there are two different questions, and they are solved differently. The first — where does the energy go during boiling — is simple arithmetic. The second — why the boiling point depends on pressure — requires real thermodynamics.",
+   "steps": [
+    {
+     "text": "While water heats up, all supplied heat goes into raising the temperature. This is ordinary heat capacity: mass times specific heat capacity times temperature difference.",
+     "latex": "Q_1 = c\\,m\\,\\Delta T",
+     "figure": "heating",
+     "figCaption": "Heating: energy accelerates molecules, thermometer rises."
+    },
+    {
+     "text": "For a kettle with $m = 0{,}2$ kg of water heated from $20^\\circ$ to $100^\\circ$C, we get a specific number.",
+     "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
+     "figure": "heatbar1",
+     "figCaption": "Sixty-seven kilojoules — that's the entire journey from room temperature to boiling."
+    },
+    {
+     "text": "As soon as boiling starts, the temperature freezes. Heat continues to be supplied, but goes entirely into converting liquid to vapor. There is no temperature difference here at all — only mass and specific latent heat of vaporization.",
+     "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
+     "figure": "boiling",
+     "figCaption": "Boiling: energy breaks bonds between molecules, thermometer stands still."
+    },
+    {
+     "text": "Let's compare the two numbers. Here is the numerical answer to the riddle from the beginning: to bring water to a boil requires several times less energy than to boil it away.",
+     "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
+     "figure": "heatbar2",
+     "figCaption": "The ratio is almost sevenfold — that's why it boils in minutes but boils away in tens of minutes."
+    },
+    {
+     "text": "Now the second task. Boiling is an equilibrium of liquid and vapor: as many molecules leave, the same number return. The shift of this equilibrium under pressure change is described by the Clausius–Clapeyron equation, where $\\Delta V$ is the increase in volume upon evaporation.",
+     "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
+     "figure": "equilibrium",
+     "figCaption": "A vapor bubble needs to push aside the atmosphere above the water — the harder it pushes, the harder it is for the bubble to be born."
+    },
+    {
+     "text": "Vapor occupies a volume thousands of times larger than the liquid that produced it, so $\\Delta V \\approx V_{\\text{pair}}$. Assuming the vapor is an ideal gas from the first section, we substitute $V = RT/P$ and separate variables.",
+     "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
+     "figure": "integrate",
+     "figCaption": "Variables separated: left only pressure, right only temperature — can integrate."
+    },
+    {
+     "text": "Integrating both sides and assuming the heat of vaporization is constant, we obtain the relation between pressure and boiling temperature. Our stand calculates exactly by this formula.",
+     "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+     "figure": "boilcurve",
+     "figCaption": "Boiling curve: in the mountains pressure is lower — water boils sooner, in a pressure cooker later."
+    }
+   ],
+   "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+   "plateCap": "Left — latent heat: energy that went into breaking bonds, not into degrees. Right — a law that connects external pressure with boiling temperature.",
+   "note": "Why is water so unusual? Its molecules are held together by hydrogen bonds, anomalously strong for such a small molecule. Hence the record heat of vaporization: for acetone it is four times smaller, for ether six times smaller. If water behaved like an ordinary liquid, the oceans would evaporate rapidly, and sweat evaporation would not save us from overheating."
+  },
+  "math": {
+   "title": "Mathematics needed here",
+   "items": [
+    {
+     "what": "Separation of variables",
+     "why": "An equation of the form $dP/dT = f(P)\\,g(T)$ is solved like this: collect everything that depends on $P$ on the left, everything that depends on $T$ on the right, and integrate both sides independently. This is a standard technique for first-order differential equations, and it is also used in deriving the adiabat in the next section.",
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
+    },
+    {
+     "what": "Why the logarithm appears",
+     "why": "The integral of $1/P$ with respect to $dP$ equals the natural logarithm — it is the only function whose derivative is $1/x$. Therefore logarithms inevitably arise wherever the rate of change of a quantity is proportional to the quantity itself: in radioactive decay, population growth, saturated vapor pressure.",
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "A classic problem that explains why cooking is difficult in the mountains.",
+   "given": "A hiker climbed to an altitude where the pressure is $0{,}6$ atm. At what temperature will water boil there? Take $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
+   "law": "The Clausius–Clapeyron equation in integral form, solved for $T$",
+   "solution": [
+    {
+     "text": "Calculate the logarithm of the pressure ratio. It is negative because the pressure decreased.",
+     "latex": "\\ln(0{,}6) \\approx -0{,}51"
+    },
+    {
+     "text": "The ratio $R/L_{\\text{mol}}$ gives the scaling factor.",
+     "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+    },
+    {
+     "text": "Substitute into the formula for the reciprocal temperature.",
+     "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
+    },
+    {
+     "text": "Invert and convert to degrees Celsius.",
+     "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
+    }
+   ],
+   "answer": "Water will boil at approximately $87^\\circ$C",
+   "check": "Is it plausible? At an altitude of about four kilometers, the pressure is indeed close to $0{,}6$ atm, and reference books give a boiling temperature of $87$–$88^\\circ$C. It's already difficult to soft-boil an egg there: the protein requires a higher temperature, and the water will not get hotter than boiling water, no matter how much you heat it."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Pay attention to the units: they directly suggest what the quantity means and what it should be multiplied by.",
+   "items": [
+    {
+     "sym": "c",
+     "latex": "c",
+     "name": "Specific heat capacity of water",
+     "value": "4200",
+     "unit": "J / (kg · K)",
+     "why": "How much energy is needed to heat one kilogram of water by one degree. The units are read literally: joules per kilogram per kelvin. The value is anomalously large — for most substances it is four to five times smaller, and that is why water serves as a coolant in heating and engine cooling.",
+     "mnemo": "The number $4200$ is easy to remember: almost our $42$ with two zeros. Historical connection: the calorie was defined as heating one gram of water by one degree, hence $1$ cal $= 4{,}184$ J."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "Specific latent heat of vaporization",
+     "value": "2 260 000",
+     "unit": "J / kg",
+     "why": "Energy needed to turn one kilogram of liquid into vapor without any heating. The units are joules per kilogram, no temperature in them because it does not change during a phase transition. A record among common liquids.",
+     "mnemo": "Keep in mind not the number itself, but the ratio: boiling away costs about seven times more energy than bringing to a boil."
+    },
+    {
+     "sym": "L_mol",
+     "latex": "L_{\\text{mol}}",
+     "name": "Molar heat of vaporization",
+     "value": "40 660",
+     "unit": "J / mol",
+     "why": "The same thing, but per mole: $L$ multiplied by the molar mass of water $0{,}018$ kg/mol. This form enters the Clausius–Clapeyron equation because alongside it stands the gas constant $R$, also molar. The units of both quantities are consistent — that is a check of the formula's correctness."
+    },
+    {
+     "sym": "T₀, P₀",
+     "latex": "T_0,\\;P_0",
+     "name": "Normal boiling point",
+     "value": "373,15 K at 101,325",
+     "unit": "kPa",
+     "why": "A reference point from which the formula calculates the shift. It is important to understand: a hundred degrees is not a property of water itself, but a property of water at normal atmospheric pressure. Originally, the Celsius scale was built exactly this way: zero — melting ice, one hundred — boiling at sea level."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "During a phase transition, the temperature stands still, and energy goes into breaking bonds between molecules. The boiling point is not a constant of the substance, but a result of a deal with external pressure.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Latent heat",
+     "text": "Energy spent not on degrees but on breaking bonds. The thermometer does not see it."
+    },
+    {
+     "icon": "clock",
+     "title": "Plateau on the graph",
+     "text": "While boiling, the temperature is constant, no matter how much you increase the heating power."
+    },
+    {
+     "icon": "sigma",
+     "title": "Sevenfold cost",
+     "text": "Boiling water costs about 6,8 times more energy than heating it to the boiling point."
+    },
+    {
+     "icon": "formula",
+     "title": "Pressure rules",
+     "text": "Lower pressure — earlier boiling. In the mountains 87°, in a pressure cooker 121°."
+    }
+   ],
+   "where": [
+    "Pressure cooker: pressure of 2 atm raises boiling to 121° and speeds up cooking threefold",
+    "Refrigerator: refrigerant boils at −25°, taking heat from the chamber",
+    "Steam burn is worse than boiling water burn: steam also releases latent heat",
+    "Sweat evaporation cools the body, carrying away the fastest molecules"
+   ],
+   "watchOut": "In the Clausius–Clapeyron equation, temperature is substituted only in kelvins, and heat in molar form. Mixing specific and molar heat leads to a factor of 18 error (molar mass of water)."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "We doubled the power of the stove under already boiling water. What will happen?",
+    "options": [
+     "The water temperature will rise above 100°",
+     "The water will boil more vigorously and evaporate twice as fast, but the temperature will not change",
+     "Nothing will change: boiling proceeds at a constant rate",
+     "The temperature will first rise, then return to 100°"
+    ],
+    "answer": 1,
+    "why": "All additional power goes into vaporization, not into heating. More energy per second means more steam per second, but the temperature stays at the boiling point as long as liquid remains.",
+    "hint": "Look at the graph on the poster: during boiling the curve is horizontal. What determines its height — the heating power or something else? And what does the power affect then?"
+   },
+   {
+    "id": "p2",
+    "type": "free",
+    "q": "In your own words: why does the evaporation of sweat cool the body, even though the sweat itself is the same temperature as the skin?",
+    "keywords": [
+     "fast",
+     "energy",
+     "entrain",
+     "latent",
+     "evap",
+     "avg"
+    ],
+    "needed": 1,
+    "why": "It is not random molecules that escape, but the fastest ones — only they have enough energy to break bonds. They carry away a disproportionately large share of energy, and the average speed of the remaining ones decreases. And average speed is temperature.",
+    "hint": "Ask yourself: can any molecule leave the liquid, or is an energy reserve needed? If only the chosen ones fly away — what happens to the average energy of those left behind?"
+   },
+   {
+    "id": "p3",
+    "type": "estimate",
+    "q": "How much energy is needed to completely evaporate 1 kg of already boiling water? Answer in kilojoules.",
+    "answer": 2260,
+    "unit": "kJ",
+    "tolerance": 1.5,
+    "why": "This is exactly the definition of specific latent heat of vaporization: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. For comparison: heating the same kilogram from zero to one hundred degrees costs only 420 kJ.",
+    "hint": "The water is already boiling, so it does not need to be heated — only one constant from this section works. Which one is measured in joules per kilogram?"
+   }
+  ],
+  "curiosities": {
+   "title": "Curious: Try It Yourself",
+   "lead": "A kettle is the best device for studying phase transitions: the thermometer stops at the most interesting point.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "The Thermometer That Stalled",
+     "text": "Place a pot of water on the stove and dip a cooking thermometer into it. Record the reading every minute—and keep recording even after the water is boiling vigorously.",
+     "answer": "Before boiling, the temperature rises uniformly, but as soon as boiling starts, it stops dead, even though the stove continues to deliver the same kilowatts. The energy goes not into heating but into breaking bonds between molecules—that is latent heat. As long as there is water in the pot, the temperature will not rise above the boiling point by even one degree, no matter how much you increase the heat. Therefore, turning up the gas under a boiling pot is pointless: the food won't cook faster; the water will just boil away sooner."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Wire Passes Through Ice, Ice Remains Intact",
+     "text": "Place a thin wire on a block of ice and hang weights from its ends. After a few hours, the wire will be inside the block, and eventually pass through it—but the block will not break into two pieces.",
+     "answer": "Under the wire, the pressure is high, and water has a rare property: it expands upon freezing, so pressure lowers the melting point. The ice under the wire melts, the wire descends, and the water above, now without excess pressure, immediately refreezes and seals the cut. In the Clausius–Clapeyron equation, this is evident by the sign: for water, $\\Delta V$ upon melting is negative, so the slope of the equilibrium line is reversed compared to almost all other substances."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "Water's Latent Heat Is Anomalously Large",
+     "text": "To turn a kilogram of boiling water into steam requires 2260 kilojoules—almost seven times more than to heat the same kilogram from room temperature to boiling. A practical consequence: a steam burn at one hundred degrees is much more severe than a scalding water burn at the same temperature, because condensing steam on the skin releases all that latent heat. For the same reason, sweating is such an effective coolant, and oceans stabilize the planet's climate."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemonic",
+     "h": "Energy Goes to Breaking Bonds, Not Speeding Up",
+     "text": "During a phase transition, the supplied energy is used to pull molecules apart, not to increase their speed. Average speed is temperature, so it stays put. The reverse process returns the same energy: condensation heats, crystallization heats. Hence the rule: any quantity measured in joules per kilogram likely describes a structural rearrangement.",
+     "answer": "During a phase transition, the supplied energy is used to pull molecules apart, not to increase their speed. Average speed is temperature, so it stays put. The reverse process returns the same energy: condensation heats, crystallization heats. Hence the rule: any quantity measured in joules per kilogram likely describes a structural rearrangement."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Why the Kettle Takes So Long to Boil Dry",
+     "text": "Heating a liter of water from 20 to 100 degrees is $4200 \\cdot 80 \\approx 335$ kilojoules. Evaporating it completely is 2260 kilojoules, almost seven times more. A two-kilowatt kettle boils in about three minutes, but boils dry in over twenty minutes. The same arithmetic explains why a pot does not burn as long as there is water in it.",
+     "answer": "Heating a liter of water from 20 to 100 degrees is $4200 \\cdot 80 \\approx 335$ kilojoules. Evaporating it completely is 2260 kilojoules, almost seven times more. A two-kilowatt kettle boils in about three minutes, but boils dry in over twenty minutes. The same arithmetic explains why a pot does not burn as long as there is water in it."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "At the Critical Point the Formula Breaks Down",
+     "text": "The Clausius–Clapeyron equation describes the equilibrium of two phases and requires them to have different densities. As the critical point is approached—for water, 374 degrees and 218 atmospheres—the difference between liquid and vapor disappears, $\\Delta V$ tends to zero, and the formula loses meaning. Beyond the critical point, there is no phase transition at all: the substance passes continuously from a dense to a rarefied state without boiling.",
+     "answer": "The Clausius–Clapeyron equation describes the equilibrium of two phases and requires them to have different densities. As the critical point is approached—for water, 374 degrees and 218 atmospheres—the difference between liquid and vapor disappears, $\\Delta V$ tends to zero, and the formula loses meaning. Beyond the critical point, there is no phase transition at all: the substance passes continuously from a dense to a rarefied state without boiling."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Where Latent Heat Is Used",
+   "lead": "The ability of a substance to store energy in the restructuring of its structure underlies all refrigeration technology.",
+   "items": [
+    {
+     "h": "Refrigerators and Air Conditioners",
+     "text": "The refrigerant evaporates inside, absorbing latent heat, and condenses outside, releasing it. Heat transfer occurs not through heating but through phase change—which is why it is so efficient."
+    },
+    {
+     "h": "Clouds and Precipitation",
+     "text": "Condensation of vapor in rising air releases huge amounts of energy, which fuels the updraft. This mechanism turns ordinary clouds into thunderstorms, and over warm oceans into tropical cyclones."
+    },
+    {
+     "h": "Pressure Cooker and Autoclave",
+     "text": "Increased pressure raises the boiling point: at two atmospheres, water boils at 120 degrees, and cooking is accelerated many times. In medicine, the same principle sterilizes instruments because bacterial spores cannot withstand such temperatures."
+    },
+    {
+     "h": "Metallurgy and Casting",
+     "text": "The latent heat of crystallization determines how quickly a casting cools and what grain structure forms inside. This directly affects the strength of the finished part."
+    },
+    {
+     "h": "Heat Storage",
+     "text": "Phase-change materials near room temperature—for example, paraffins—are embedded into walls and clothing: they melt when heated and solidify when cooled, smoothing out temperature swings without any electronics."
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Transiciones de fase",
+  "subtitle": "Párrafo 2 · Calor latente y punto de ebullición",
+  "intro": [
+   "Pon una tetera y observa el termómetro. Sube obedientemente: $40^\\circ$, $70^\\circ$, $95^\\circ$ — y se detiene. La cocina sigue inyectando kilovatios, la energía fluye como un río, pero la aguja se queda en cien y no se mueve hasta que el agua se evapora por completo.",
+   "¿Se viola la ley de conservación de la energía? Por supuesto que no. La energía no ha desaparecido: se ha ido a otro trabajo, invisible para el termómetro.",
+   "Para que una molécula de agua abandone el líquido y se convierta en vapor, no basta con ser rápida. Necesita romper los enlaces con sus vecinas. En el agua, estos enlaces —puentes de hidrógeno— son inusualmente fuertes, y es precisamente en romperlos que se gasta toda la potencia de la cocina mientras hierve."
+  ],
+  "standNote": "En el panel, el control deslizante de presión es, en esencia, la altitud sobre el nivel del mar. Pon $0{,}5$ atm (aproximadamente la cima del Elbrús) — el agua hervirá a $81^\\circ$C. Pon $2$ atm (olla a presión) — solo a $121^\\circ$C. Y sigue la gráfica: mientras hierve, la curva es estrictamente horizontal. Esta meseta es el calor latente en persona.",
+  "formula": {
+   "name": "Ecuación de Clausius-Clapeyron",
+   "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
+   "alsoKnown": "Ley que relaciona presión y temperatura de transición de fase",
+   "authors": [
+    {
+     "who": "Émile Clapeyron",
+     "year": "1834",
+     "what": "derivó la relación a partir del análisis del ciclo de Carnot aplicado a la transición líquido-vapor"
+    },
+    {
+     "who": "Rudolf Clausius",
+     "year": "1850",
+     "what": "dio a la ecuación una forma termodinámica rigurosa, basándose en el concepto de entropía que él introdujo"
+    }
+   ],
+   "story": "Clapeyron obtuvo esta relación razonando sobre la máquina de vapor: imaginó llevar una sustancia de trabajo a través de un ciclo, parte del cual recorre la frontera de ebullición. Clausius luego mostró que la ecuación es una consecuencia directa de la segunda ley — la igualdad de los potenciales químicos de las fases coexistentes."
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Aquí hay dos preguntas diferentes, y se resuelven de manera diferente. La primera — ¿a dónde va la energía al hervir? — es aritmética simple. La segunda — por qué el punto de ebullición depende de la presión — requiere verdadera termodinámica.",
+   "steps": [
+    {
+     "text": "Mientras el agua se calienta, todo el calor suministrado se destina al aumento de temperatura. Esto es la capacidad calorífica habitual: masa multiplicada por el calor específico y por la diferencia de temperaturas.",
+     "latex": "Q_1 = c\\,m\\,\\Delta T",
+     "figure": "heating",
+     "figCaption": "Calentamiento: la energía acelera las moléculas, el termómetro sube."
+    },
+    {
+     "text": "Para una tetera con $m = 0{,}2$ kg de agua, calentada de $20^\\circ$ a $100^\\circ$C, obtenemos un número concreto.",
+     "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
+     "figure": "heatbar1",
+     "figCaption": "Sesenta y siete kilojulios — ese es todo el camino desde la temperatura ambiente hasta la ebullición."
+    },
+    {
+     "text": "Tan pronto comienza la ebullición, la temperatura se congela. El calor sigue entrando, pero se destina completamente a convertir el líquido en vapor. Aquí no hay diferencia de temperatura en absoluto — solo hay masa y calor latente de vaporización.",
+     "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
+     "figure": "boiling",
+     "figCaption": "Ebullición: la energía rompe los enlaces entre moléculas, el termómetro se detiene."
+    },
+    {
+     "text": "Comparemos los dos números. Aquí está la respuesta numérica al enigma del principio: para llevar el agua a ebullición se necesita varias veces menos energía que para evaporarla por completo.",
+     "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
+     "figure": "heatbar2",
+     "figCaption": "La relación es casi de siete veces — por eso hierve en minutos, pero se evapora por completo en decenas de minutos."
+    },
+    {
+     "text": "Ahora la segunda tarea. La ebullición es un equilibrio entre líquido y vapor: tantas moléculas escapan como regresan. El desplazamiento de este equilibrio al cambiar la presión está descrito por la ecuación de Clausius-Clapeyron, donde $\\Delta V$ es el aumento de volumen al evaporarse.",
+     "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
+     "figure": "equilibrium",
+     "figCaption": "Una burbuja de vapor debe empujar la atmósfera sobre el agua — cuanto más presiona, más difícil es que nazca la burbuja."
+    },
+    {
+     "text": "El vapor ocupa un volumen miles de veces mayor que el líquido que lo generó, por lo que $\\Delta V \\approx V_{\\text{vap}}$. Considerando el vapor como gas ideal del primer párrafo, sustituimos $V = RT/P$ y separamos variables.",
+     "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
+     "figure": "integrate",
+     "figCaption": "Las variables se separaron: a la izquierda solo presión, a la derecha solo temperatura — se puede integrar."
+    },
+    {
+     "text": "Integrando ambos lados y suponiendo constante el calor de vaporización, obtenemos la relación entre presión y temperatura de ebullición. Es según esta fórmula que calcula nuestro panel.",
+     "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+     "figure": "boilcurve",
+     "figCaption": "Curva de ebullición: en las montañas la presión es menor — el agua hierve antes, en olla a presión después."
+    }
+   ],
+   "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+   "plateCap": "A la izquierda — calor latente: energía que se fue en romper enlaces, no en grados. A la derecha — la ley que vincula la presión externa con la temperatura de ebullición.",
+   "note": "¿Por qué es tan inusual el agua? Sus moléculas están unidas por puentes de hidrógeno, anómalamente fuertes para una molécula tan pequeña. De ahí el récord de calor latente de vaporización: en la acetona es cuatro veces menor, en el éter seis veces menor. Si el agua se comportara como un líquido normal, los océanos se evaporarían rápidamente y la evaporación del sudor no nos salvaría del sobrecalentamiento."
+  },
+  "math": {
+   "title": "Matemáticas necesarias aquí",
+   "items": [
+    {
+     "what": "Separación de variables",
+     "why": "Una ecuación de la forma $dP/dT = f(P)\\,g(T)$ se resuelve así: reunimos todo lo que depende de $P$ a la izquierda, todo lo que depende de $T$ a la derecha, e integramos ambos lados de forma independiente. Es un método estándar para ecuaciones diferenciales de primer orden, y se usa también para deducir la adiabática en la siguiente sección.",
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
+    },
+    {
+     "what": "Por qué aparece el logaritmo",
+     "why": "La integral de $1/P$ respecto a $dP$ es el logaritmo natural — es la única función cuya derivada es $1/x$. Por eso los logaritmos surgen inevitablemente siempre que la tasa de cambio de una magnitud es proporcional a ella misma: en la desintegración radiactiva, en el crecimiento de poblaciones, en la presión de vapor saturante.",
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Un problema clásico que explica por qué es difícil cocinar en las montañas.",
+   "given": "Un turista subió a una altitud donde la presión es de $0{,}6$ atm. ¿A qué temperatura hervirá el agua allí? Tomar $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
+   "law": "Ecuación de Clausius-Clapeyron en forma integral, despejada para $T$",
+   "solution": [
+    {
+     "text": "Calculamos el logaritmo de la relación de presiones. Es negativo porque la presión ha disminuido.",
+     "latex": "\\ln(0{,}6) \\approx -0{,}51"
+    },
+    {
+     "text": "La relación $R/L_{\\text{mol}}$ da el factor de escala.",
+     "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+    },
+    {
+     "text": "Sustituimos en la fórmula de la temperatura inversa.",
+     "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
+    },
+    {
+     "text": "Invertimos y convertimos a grados Celsius.",
+     "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
+    }
+   ],
+   "answer": "El agua hervirá aproximadamente a $87^\\circ$C",
+   "check": "¿Es plausible? A unos cuatro kilómetros de altitud la presión es cercana a $0{,}6$ atm, y los manuales dan una temperatura de ebullición de $87$–$88^\\circ$C. Allí ya es difícil cocer un huevo pasado por agua: la clara requiere una temperatura más alta, y el agua no se calentará más por mucho que se caliente."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Observe las unidades: indican directamente qué significa la magnitud y por qué hay que multiplicarla.",
+   "items": [
+    {
+     "sym": "c",
+     "latex": "c",
+     "name": "Capacidad calorífica específica del agua",
+     "value": "4200",
+     "unit": "J / (kg · K)",
+     "why": "Cuánta energía se necesita para calentar un kilogramo de agua un grado. Las unidades se leen literalmente: julios por kilogramo y por kelvin. El valor es anómalamente grande — en la mayoría de las sustancias es de cuatro a cinco veces menor, y por eso el agua sirve como refrigerante en calefacción y motores.",
+     "mnemo": "El número $4200$ es fácil de recordar: casi nuestro $42$ con dos ceros. Vínculo histórico: la caloría se definió como el calentamiento de un gramo de agua un grado, de ahí $1$ cal $= 4{,}184$ J."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "Calor latente específico de vaporización",
+     "value": "2 260 000",
+     "unit": "J / kg",
+     "why": "Energía necesaria para convertir un kilogramo de líquido en vapor sin calentamiento. Las unidades son julios por kilogramo, no contienen temperatura porque en la transición de fase esta no cambia. Récord entre los líquidos comunes.",
+     "mnemo": "No memorice el número en sí, sino la relación: hervir cuesta aproximadamente siete veces más que calentar hasta la ebullición."
+    },
+    {
+     "sym": "L_mol",
+     "latex": "L_{\\text{mol}}",
+     "name": "Calor latente molar de vaporización",
+     "value": "40 660",
+     "unit": "J / mol",
+     "why": "Lo mismo, pero por mol: $L$ multiplicado por la masa molar del agua $0{,}018$ kg/mol. Esta forma aparece en la ecuación de Clausius-Clapeyron porque al lado está la constante de los gases $R$, también molar. Las unidades de ambas magnitudes están coordinadas — esto es una verificación de la corrección de la fórmula.",
+     "mnemo": ""
+    },
+    {
+     "sym": "T₀, P₀",
+     "latex": "T_0,\\;P_0",
+     "name": "Punto de ebullición normal",
+     "value": "373,15 K a 101,325",
+     "unit": "kPa",
+     "why": "Punto de referencia desde el cual la fórmula calcula el desplazamiento. Es importante entender: cien grados no son una propiedad del agua en sí misma, sino del agua a presión atmosférica normal. Originalmente la escala Celsius se construyó así: cero — fusión del hielo, cien — ebullición a nivel del mar."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Durante una transición de fase la temperatura se detiene y la energía se invierte en romper enlaces entre moléculas. El punto de ebullición no es una constante de la sustancia, sino el resultado de un acuerdo con la presión externa.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Calor latente",
+     "text": "Energía que se gasta no en grados, sino en romper enlaces. El termómetro no la ve."
+    },
+    {
+     "icon": "clock",
+     "title": "Meseta en la gráfica",
+     "text": "Mientras ocurre la ebullición, la temperatura es constante, por más que se aumente la potencia de calentamiento."
+    },
+    {
+     "icon": "sigma",
+     "title": "Coste séptuplo",
+     "text": "Hervir agua cuesta aproximadamente 6,8 veces más energía que calentarla hasta la ebullición."
+    },
+    {
+     "icon": "formula",
+     "title": "La presión manda",
+     "text": "Menos presión — ebullición más temprana. En las montañas 87°, en una olla a presión 121°."
+    }
+   ],
+   "where": [
+    "Olla a presión: 2 atm elevan la ebullición a 121° y aceleran la cocción al triple",
+    "Refrigerador: el refrigerante hierve a −25°, extrayendo calor del interior",
+    "La quemadura con vapor es peor que con agua hirviendo: el vapor también libera el calor latente",
+    "La evaporación del sudor enfría el cuerpo, llevándose las moléculas más rápidas"
+   ],
+   "watchOut": "En la fórmula de Clausius-Clapeyron la temperatura se introduce solo en kelvins, y el calor en forma molar. Mezclar calor específico y molar es una fuente de error exactamente de 18 veces (masa molar del agua)."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "Duplicamos la potencia de la placa bajo agua ya hirviendo. ¿Qué sucede?",
+    "options": [
+     "La temperatura del agua subirá por encima de 100°",
+     "El agua hervirá más vigorosamente y se evaporará el doble de rápido, pero la temperatura no cambiará",
+     "No pasará nada: la ebullición ocurre a velocidad constante",
+     "La temperatura primero subirá, luego volverá a 100°"
+    ],
+    "answer": 1,
+    "why": "Toda la potencia adicional se destina a la vaporización, no al calentamiento. Más energía por segundo significa más vapor por segundo, pero la temperatura se mantiene en el punto de ebullición mientras quede líquido.",
+    "hint": "Mira la gráfica en el panel: durante la ebullición la curva es horizontal. ¿Qué determina su altura: la potencia de calentamiento o algo más? ¿Y en qué influye entonces la potencia?"
+   },
+   {
+    "id": "p2",
+    "type": "free",
+    "q": "En tus propias palabras: ¿por qué la evaporación del sudor enfría el cuerpo, si el sudor está a la misma temperatura que la piel?",
+    "keywords": [
+     "rápid",
+     "energ",
+     "arrastr",
+     "latent",
+     "evapor",
+     "promed"
+    ],
+    "needed": 1,
+    "why": "No se van moléculas al azar, sino las más rápidas: solo ellas tienen suficiente energía para romper los enlaces. Se llevan consigo una fracción desproporcionadamente grande de energía, y la velocidad promedio de las que quedan disminuye. Y la velocidad promedio es la temperatura.",
+    "hint": "Pregúntate: ¿cualquier molécula puede abandonar el líquido o se necesita un excedente de energía? Si solo se van las selectas, ¿qué sucede con la energía promedio de las que quedan?"
+   },
+   {
+    "id": "p3",
+    "type": "estimate",
+    "q": "¿Cuánta energía se necesita para evaporar completamente 1 kg de agua que ya está hirviendo? Respuesta en kilojulios.",
+    "answer": 2260,
+    "unit": "kJ",
+    "tolerance": 1.5,
+    "why": "Esta es precisamente la definición del calor latente de vaporización: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. Para comparar: calentar el mismo kilogramo de cero a cien grados cuesta solo 420 kJ.",
+    "hint": "El agua ya está hirviendo, por lo que no es necesario calentarla; solo actúa una constante de este apartado. ¿Cuál de ellas se mide en julios por kilogramo?"
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosidades: pruébelo con las manos",
+   "lead": "La tetera es el mejor aparato para estudiar las transiciones de fase: el termómetro se detiene en el punto más interesante.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "El termómetro que se paraliza",
+     "text": "Ponga una olla de agua al fuego y sumerja un termómetro de cocina. Anote las lecturas cada minuto y continúe anotando cuando el agua ya esté hirviendo vigorosamente.",
+     "answer": "Antes de hervir, la temperatura sube de manera uniforme, pero al comenzar la ebullición se detiene por completo, aunque la cocina siga suministrando los mismos kilovatios. La energía no se usa para calentar, sino para romper los enlaces entre las moléculas: eso es el calor latente. Mientras haya agua en la olla, la temperatura no superará el punto de ebullición ni un grado, por más que se aumente el fuego. Por lo tanto, es inútil aumentar el gas debajo de una olla hirviendo: la comida no se cocinará más rápido, simplemente el agua se evaporará antes."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Un alambre atraviesa el hielo y el hielo permanece intacto",
+     "text": "Coloque un alambre delgado sobre un bloque de hielo y cuelgue un peso en sus extremos. Después de unas horas, el alambre estará dentro del bloque y luego lo atravesará por completo, pero el bloque no se partirá en dos.",
+     "answer": "Debajo del alambre la presión es alta, y el agua tiene una propiedad poco común: al congelarse se expande, por lo que la presión reduce la temperatura de fusión. El hielo debajo del alambre se derrite, el alambre desciende, y el agua que queda arriba sin presión excesiva se congela inmediatamente y sella el corte. En la ecuación de Clausius-Clapeyron esto se ve en el signo: para el agua, $\\Delta V$ en la fusión es negativo, y la pendiente de la línea de equilibrio resulta inversa en comparación con casi todas las demás sustancias."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "El calor latente del agua es anómalamente grande",
+     "text": "Para convertir un kilogramo de agua hirviendo en vapor se necesitan 2260 kilojulios, casi siete veces más que para calentar el mismo kilogramo desde temperatura ambiente hasta la ebullición. De ahí una consecuencia práctica: una quemadura con vapor a cien grados es mucho más grave que una con agua hirviendo a la misma temperatura, porque el vapor que se condensa en la piel libera todo ese calor latente. Por la misma razón, la sudoración es tan eficaz para enfriar, y los océanos suavizan el clima del planeta."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemotecnia",
+     "h": "La energía se usa para romper enlaces, no para acelerar",
+     "text": "Durante una transición de fase, la energía suministrada se gasta en separar las moléculas, no en aumentar su velocidad. La velocidad promedio es la temperatura, por lo que esta permanece constante. El proceso inverso devuelve la misma energía: la condensación calienta, la cristalización calienta. De ahí la regla: cualquier magnitud medida en julios por kilogramo probablemente describe una reorganización de la estructura."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "Por qué la tetera hierve tanto tiempo",
+     "text": "Calentar un litro de agua de 20 a 100 grados son $4200 \\cdot 80 \\approx 335$ kilojulios. Evaporarlo por completo son 2260 kilojulios, casi siete veces más. Una tetera de dos kilovatios hierve en unos tres minutos, pero se evapora por completo en más de veinte minutos. La misma aritmética explica por qué una olla no se quema mientras tenga agua."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "En el punto crítico, la fórmula se rompe",
+     "text": "La ecuación de Clausius-Clapeyron describe el equilibrio de dos fases y requiere que tengan densidades diferentes. Al acercarse al punto crítico — para el agua, 374 grados y 218 atmósferas — la diferencia entre líquido y vapor desaparece, $\\Delta V$ tiende a cero, y la fórmula pierde sentido. Más allá del punto crítico no hay transición de fase: la sustancia pasa de un estado denso a uno enrarecido de forma continua, sin ebullición."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Dónde se usa el calor latente",
+   "lead": "La capacidad de una sustancia para almacenar energía en la propia reorganización de su estructura es la base de toda la tecnología de refrigeración.",
+   "items": [
+    {
+     "h": "Refrigeradores y aires acondicionados",
+     "text": "El refrigerante se evapora en el interior, absorbiendo calor latente, y se condensa en el exterior, liberándolo. La transferencia de calor no ocurre por calentamiento sino por transición de fase, por lo que es tan eficiente."
+    },
+    {
+     "h": "Nubes y precipitaciones",
+     "text": "La condensación del vapor en el aire ascendente libera una enorme energía que alimenta la corriente ascendente. Este mecanismo convierte la nubosidad ordinaria en una tormenta, y sobre el océano cálido, en un ciclón tropical."
+    },
+    {
+     "h": "Olla a presión y autoclave",
+     "text": "La presión elevada aumenta el punto de ebullición: a dos atmósferas, el agua hierve a 120 grados, y la cocción se acelera varias veces. En medicina, el mismo principio esteriliza los instrumentos porque las esporas bacterianas no resisten esa temperatura."
+    },
+    {
+     "h": "Metalurgia y fundición",
+     "text": "El calor latente de cristalización determina qué tan rápido se enfría la pieza fundida y qué estructura de grano se forma. De esto depende directamente la resistencia de la pieza terminada."
+    },
+    {
+     "h": "Acumuladores de calor",
+     "text": "Los materiales con transición de fase cerca de la temperatura ambiente —por ejemplo, las parafinas— se integran en paredes y ropa: se derriten al calentarse y se solidifican al enfriarse, suavizando las fluctuaciones sin necesidad de electrónica."
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "التحولات الطورية",
+  "subtitle": "الفقرة 2 · الحرارة الكامنة ونقطة الغليان",
+  "intro": [
+   "ضع غلاية وراقب مقياس الحرارة. إنه يتسلق بطاعة: $40^\\circ$, $70^\\circ$, $95^\\circ$ — ثم يتوقف. يستمر الموقد في ضخ الكيلوواط، تتدفق الطاقة كالنهر، لكن المؤشر يقف عند المئة ولا يتحرك حتى يغلي الماء تمامًا.",
+   "هل انتهك قانون حفظ الطاقة؟ كلا بالطبع. لم تختفِ الطاقة — لقد ذهبت إلى عمل آخر غير مرئي لمقياس الحرارة.",
+   "لكي يغادر جزيء الماء السائل ويصبح بخارًا، لا يكفي أن يكون سريعًا. بل يحتاج إلى كسر الروابط مع جيرانه. في الماء، هذه الروابط — الهيدروجينية — قوية بشكل غير عادي، وعند الغليان تذهب كل قدرة الموقد إلى كسرها."
+  ],
+  "standNote": "في المنصة، منزلق الضغط هو في الأساس الارتفاع عن سطح البحر. اضبط $0{,}5$ ضغط جوي (تقريبًا قمة إلبروس) — سوف يغلي الماء عند $81^\\circ$م. اضبط $2$ ضغط جوي (قدر الضغط) — فقط عند $121^\\circ$م. وراقب الرسم البياني: أثناء الغليان، يسير المنحنى أفقيًا تمامًا. هذه الرفوة هي الحرارة الكامنة متجسدة.",
+  "formula": {
+   "name": "معادلة كلاوزيوس-كلابيرون",
+   "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
+   "alsoKnown": "القانون الذي يربط الضغط ودرجة حرارة التحول الطوري",
+   "authors": [
+    {
+     "who": "إميل كلابيرون",
+     "year": "1834",
+     "what": "استنتج العلاقة من تحليل دورة كارنو المطبقة على التحول سائل-بخار"
+    },
+    {
+     "who": "رودولف كلاوزيوس",
+     "year": "1850",
+     "what": "أعطى المعادلة شكلها الديناميكي الحراري الدقيق، بالاعتماد على مفهوم الإنتروبيا الذي قدمه"
+    }
+   ],
+   "story": "حصل كلابيرون على هذه العلاقة وهو يفكر في المحرك البخاري: أجرى المادة العاملة ذهنيًا خلال دورة، جزء منها يمر على طول حد الغليان. أظهر كلاوزيوس لاحقًا أن المعادلة هي نتيجة مباشرة للقانون الثاني — تساوي الجهد الكيميائي للأطوار المتواجدة."
+  },
+  "derivation": {
+   "title": "الاستنتاج الدقيق",
+   "lead": "هنا سؤالان مختلفان، ويتم حلهما بشكل مختلف. الأول — أين تذهب الطاقة أثناء الغليان — هو حساب بسيط. الثاني — لماذا تعتمد نقطة الغليان على الضغط — يتطلب ديناميكا حرارية حقيقية.",
+   "steps": [
+    {
+     "text": "أثناء تسخين الماء، تذهب كل الحرارة الموردة لزيادة درجة الحرارة. هذه هي السعة الحرارية العادية: الكتلة مضروبة في السعة الحرارية النوعية وفرق درجة الحرارة.",
+     "latex": "Q_1 = c\\,m\\,\\Delta T",
+     "figure": "heating",
+     "figCaption": "التسخين: الطاقة تسرع الجزيئات، مقياس الحرارة يرتفع."
+    },
+    {
+     "text": "لغلاية تحتوي $m = 0{,}2$ كجم من الماء، مسخن من $20^\\circ$ إلى $100^\\circ$م، نحصل على رقم محدد.",
+     "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
+     "figure": "heatbar1",
+     "figCaption": "سبعة وستون كيلوجول — هذا هو المسار الكامل من درجة حرارة الغرفة إلى الغليان."
+    },
+    {
+     "text": "بمجرد أن يبدأ الغليان، تتجمد درجة الحرارة. تستمر الحرارة في التدفق، لكنها تذهب بالكامل لتحويل السائل إلى بخار. لا يوجد فرق في درجة الحرارة هنا على الإطلاق — هناك فقط الكتلة والحرارة النوعية للتبخر.",
+     "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
+     "figure": "boiling",
+     "figCaption": "الغليان: الطاقة تكسر الروابط بين الجزيئات، مقياس الحرارة ثابت."
+    },
+    {
+     "text": "لنقارن الرقمين. هذا هو الجواب العددي على اللغز من البداية: لجلب الماء إلى الغليان، نحتاج إلى طاقة أقل بعدة مرات من غليه بالكامل.",
+     "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
+     "figure": "heatbar2",
+     "figCaption": "النسبة تقريبًا سبعة أضعاف — لذا يغلي في دقائق، ويتبخر في عشرات الدقائق."
+    },
+    {
+     "text": "الآن المهمة الثانية. الغليان هو توازن بين السائل والبخار: عدد الجزيئات التي تغادر يعادل عدد التي تعود. إزاحة هذا التوازن عند تغير الضغط تصفها معادلة كلاوزيوس-كلابيرون، حيث $\\Delta V$ هي الزيادة في الحجم عند التبخر.",
+     "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
+     "figure": "equilibrium",
+     "figCaption": "تحتاج فقاعة البخار إلى دفع الغلاف الجوي فوق الماء — كلما زاد ضغطه، زادت صعوبة ولادة الفقاعة."
+    },
+    {
+     "text": "يشغل البخار حجمًا أكبر بآلاف المرات من السائل الذي أنتجه، لذا $\\Delta V \\approx V_{\\text{بخار}}$. باعتبار البخار غازًا مثاليًا من الفقرة الأولى، نعوض $V = RT/P$ ونفصل المتغيرات.",
+     "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
+     "figure": "integrate",
+     "figCaption": "انفصلت المتغيرات: على اليسار الضغط فقط، على اليمين درجة الحرارة فقط — يمكن التكامل."
+    },
+    {
+     "text": "بتكامل كلا الطرفين واعتبار حرارة التبخر ثابتة، نحصل على العلاقة بين الضغط ودرجة حرارة الغليان. بهذه الصيغة بالضبط تعمل منصتنا.",
+     "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+     "figure": "boilcurve",
+     "figCaption": "منحنى الغليان: في الجبال الضغط أقل — يغلي الماء مبكرًا، في قدر الضغط لاحقًا."
+    }
+   ],
+   "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+   "plateCap": "على اليسار — الحرارة الكامنة: الطاقة التي ذهبت لكسر الروابط وليس لدرجات الحرارة. على اليمين — القانون الذي ربط الضغط الخارجي بدرجة حرارة الغليان.",
+   "note": "لماذا الماء غير عادي؟ جزيئاته مرتبطة بروابط هيدروجينية، قوية بشكل غير طبيعي لمثل هذا الجزيء الصغير. من هنا تأتي الحرارة القياسية للتبخر: في الأسيتون أقل بأربع مرات، في الإيثر أقل بستة. لو تصرف الماء مثل سائل عادي، لتبخرت المحيطات بسرعة، ولما كان تبخر العرق ينقذنا من ارتفاع الحرارة."
+  },
+  "math": {
+   "title": "الرياضيات التي سنحتاجها هنا",
+   "items": [
+    {
+     "what": "فصل المتغيرات",
+     "why": "المعادلة من الشكل $dP/dT = f(P)\\,g(T)$ تُحل كالتالي: نجمع كل ما يعتمد على $P$ إلى اليسار، وكل ما يعتمد على $T$ إلى اليمين، ثم نكامل الطرفين بشكل مستقل. هذه طريقة قياسية للمعادلات التفاضلية من الدرجة الأولى، وتُستخدم أيضاً في اشتقاق الأدياباتي في الفقرة التالية.",
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
+    },
+    {
+     "what": "لماذا يظهر اللوغاريتم",
+     "why": "تكامل $1/P$ بالنسبة إلى $dP$ يساوي اللوغاريتم الطبيعي — هذه هي الدالة الوحيدة التي مشتقتها تساوي $1/x$. لذا تظهر اللوغاريتمات حتماً في كل مكان يتناسب فيه معدل تغير كمية مع تلك الكمية نفسها: في الاضمحلال الإشعاعي، في النمو السكاني، في ضغط البخار المشبع.",
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "مسألة كلاسيكية تشرح لماذا يصعب الطهي في الجبال.",
+   "given": "ارتفع سائح إلى ارتفاع حيث الضغط $0{,}6$ ضغط جوي. عند أي درجة حرارة يغلي الماء هناك؟ افترض $L_{\\text{mol}} = 40\\,660$ جول/مول، $T_0 = 373$ كلفن، $R = 8{,}314$ جول/(مول·كلفن).",
+   "law": "معادلة كلوزيوس-كلابيرون في الصورة التكاملية، محلولة بالنسبة لـ $T$",
+   "solution": [
+    {
+     "text": "نحسب لوغاريتم نسبة الضغوط. إنه سالب لأن الضغط انخفض.",
+     "latex": "\\ln(0{,}6) \\approx -0{,}51"
+    },
+    {
+     "text": "النسبة $R/L_{\\text{mol}}$ تعطي عامل القياس.",
+     "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+    },
+    {
+     "text": "نعوض في صيغة درجة الحرارة المقلوبة.",
+     "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
+    },
+    {
+     "text": "نقلب ونحول إلى درجات مئوية.",
+     "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
+    }
+   ],
+   "answer": "سيغلي الماء عند حوالي $87^\\circ$C",
+   "check": "هل هذا معقول؟ على ارتفاع حوالي أربعة كيلومترات، الضغط قريب من $0{,}6$ ضغط جوي، وتذكر الكتب المرجعية درجة غليان $87$–$88^\\circ$C. من الصعب سلق بيضة مسلوقة هناك: بياض البيض يحتاج إلى درجة حرارة أعلى، والماء لن يصبح أسخن من نقطة الغليان مهما سخنت."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "انتبه إلى الوحدات: إنها تخبرك مباشرة بماذا تعني الكمية وعلى ماذا يجب ضربها.",
+   "items": [
+    {
+     "sym": "c",
+     "latex": "c",
+     "name": "السعة الحرارية النوعية للماء",
+     "value": "4200",
+     "unit": "J / (kg · K)",
+     "why": "كمية الطاقة اللازمة لتسخين كيلوغرام واحد من الماء بدرجة واحدة. الوحدات تُقرأ حرفياً: جول لكل كيلوغرام ولكل كلفن. القيمة كبيرة بشكل غير طبيعي — بالنسبة لمعظم المواد تكون أقل بأربع إلى خمس مرات، ولهذا السبب يُستخدم الماء كوسيط حراري في التدفئة وتبريد المحركات.",
+     "mnemo": "الرقم $4200$ سهل التذكر: تقريباً $42$ مع صفرين. صلة تاريخية: تم تعريف السعر الحراري (الكالوري) على أنه تسخين غرام واحد من الماء بدرجة واحدة، ومن هنا $1$ كالوري $= 4{,}184$ جول."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "الحرارة النوعية للتبخر",
+     "value": "2 260 000",
+     "unit": "J / kg",
+     "why": "الطاقة اللازمة لتحويل كيلوغرام واحد من السائل إلى بخار دون أي تسخين. الوحدات هي جول لكل كيلوغرام، ولا يوجد فيها درجة حرارة على الإطلاق، لأنها لا تتغير أثناء التحول الطوري. رقم قياسي بين السوائل العادية.",
+     "mnemo": "احفظ في ذهنك ليس الرقم نفسه، بل النسبة: الغليان الكامل يكلف حوالي سبعة أضعاف ما يكلفه التسخين حتى نقطة الغليان."
+    },
+    {
+     "sym": "L_mol",
+     "latex": "L_{\\text{mol}}",
+     "name": "الحرارة المولية للتبخر",
+     "value": "40 660",
+     "unit": "J / mol",
+     "why": "نفس الشيء، لكن محسوباً لكل مول: $L$ مضروب في الكتلة المولية للماء $0{,}018$ كغ/مول. هذه هي الصيغة التي تدخل في معادلة كلوزيوس-كلابيرون، لأن ثابت الغاز $R$ هو أيضاً مولي. وحدات الكميتين متطابقة — وهذا هو اختبار صحة الصيغة."
+    },
+    {
+     "sym": "T₀, P₀",
+     "latex": "T_0,\\;P_0",
+     "name": "نقطة الغليان الطبيعية",
+     "value": "373,15 K عند 101,325",
+     "unit": "kPa",
+     "why": "نقطة مرجعية تحسب منها الصيغة الانحراف. من المهم أن نفهم: مئة درجة مئوية ليست خاصية للماء بذاته، بل خاصية للماء عند الضغط الجوي العادي. في الأصل، تم بناء سلم سلزيوس بهذه الطريقة: الصفر هو ذوبان الجليد، والمئة هي الغليان عند مستوى سطح البحر."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "أثناء التحول الطوري، تظل درجة الحرارة ثابتة، وتذهب الطاقة لكسر الروابط بين الجزيئات. نقطة الغليان ليست ثابتاً للمادة، بل هي نتيجة مساومة مع الضغط الخارجي.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "الحرارة الكامنة",
+     "text": "الطاقة التي تُنفق ليس على رفع درجة الحرارة، بل على كسر الروابط. مقياس الحرارة لا يراها."
+    },
+    {
+     "icon": "clock",
+     "title": "الهضبة على الرسم البياني",
+     "text": "أثناء الغليان، تظل درجة الحرارة ثابتة، مهما زدت من قوة التسخين."
+    },
+    {
+     "icon": "sigma",
+     "title": "التكلفة سبعة أضعاف",
+     "text": "غليان الماء بالكامل يكلف من الطاقة حوالي 6,8 أضعاف ما يكلفه تسخينه حتى نقطة الغليان."
+    },
+    {
+     "icon": "formula",
+     "title": "الضغط هو الحاكم",
+     "text": "كلما انخفض الضغط، كلما حدث الغليان مبكراً. في الجبال 87°، في قدر الضغط 121°."
+    }
+   ],
+   "where": [
+    "قدر الضغط: ضغط 2 ضغط جوي يرفع الغليان إلى 121° ويسرع الطهي ثلاث مرات",
+    "الثلاجة: وسيط التبريد يغلي عند −25°، مأخذاً الحرارة من الحجرة",
+    "حرق البخار أشد من حرق الماء المغلي: البخار يطلق أيضاً الحرارة الكامنة",
+    "تبخر العرق يبرد الجسم، آخذاً أسرع الجزيئات"
+   ],
+   "watchOut": "في معادلة كلوزيوس-كلابيرون، تُدرج درجة الحرارة فقط بالكلفن، والحرارة بالصيغة المولية. الخلط بين الحرارة النوعية والحرارة المولية يسبب خطأ بمقدار 18 مرة (الكتلة المولية للماء)."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "ضاعفنا استطاعة الموقد تحت ماء يغلي بالفعل. ماذا سيحدث؟",
+    "options": [
+     "ستزداد درجة حرارة الماء فوق 100°",
+     "سيغلي الماء بعنف ويتبخر أسرع مرتين، لكن درجة الحرارة لن تتغير",
+     "لن يتغير شيء: الغليان يجري بسرعة ثابتة",
+     "سترتفع درجة الحرارة أولاً ثم تعود إلى 100°"
+    ],
+    "answer": 1,
+    "why": "كل الاستطاعة الإضافية تذهب إلى التبخر، وليس إلى التسخين. طاقة أكثر في الثانية تعني بخاراً أكثر في الثانية، لكن درجة الحرارة تبقى عند نقطة الغليان ما دام السائل موجوداً.",
+    "hint": "انظر إلى الرسم البياني على اللوحة: أثناء الغليان، يكون المنحنى أفقيًا. ما الذي يحدد ارتفاعه — استطاعة التسخين أم شيء آخر؟ وعلى ماذا تؤثر الاستطاعة إذن؟"
+   },
+   {
+    "id": "p2",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا تبخر العرق يبرد الجسم، مع أن العرق نفسه بنفس درجة حرارة الجلد؟",
+    "keywords": [
+     "سريع",
+     "طاقة",
+     "يحمل",
+     "كامن",
+     "تبخر",
+     "متوسط"
+    ],
+    "needed": 1,
+    "why": "ليست أي جزيء عشوائي يغادر، بل أسرعها — فقط هذه تملك طاقة كافية لقطع الروابط. تحمل معها حصة كبيرة غير متناسبة من الطاقة، فينخفض متوسط سرعة الباقين. ومتوسط السرعة هو درجة الحرارة.",
+    "hint": "اسأل نفسك: هل يمكن لأي جزيء أن يغادر السائل، أم يحتاج إلى مخزون من الطاقة؟ إذا غادرت فقط الجزيئات المختارة — ماذا يحدث لمتوسط طاقة الباقين؟"
+   },
+   {
+    "id": "p3",
+    "type": "estimate",
+    "q": "كم الطاقة اللازمة لتبخير 1 كجم من الماء المغلي بالكامل؟ الإجابة بالكيلوجول.",
+    "answer": 2260,
+    "unit": "كيلوجول",
+    "tolerance": 1.5,
+    "why": "هذا تحديداً تعريف الحرارة النوعية للتبخر: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ كيلوجول. للمقارنة: تسخين نفس الكيلوجرام من الصفر إلى مئة درجة يكلف 420 كيلوجول فقط.",
+    "hint": "الماء يغلي بالفعل، لذا لا حاجة لتسخينه — يعمل فقط ثابت واحد من هذه الفقرة. أي منها يقاس بالجول لكل كيلوغرام؟"
+   }
+  ],
+  "curiosities": {
+   "title": "شيء ممتع: جرب بنفسك",
+   "lead": "الغلاية هي أفضل أداة لدراسة التحولات الطورية: مقياس الحرارة فيها يتوقف عند أكثر نقطة إثارة للاهتمام.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "مقياس حرارة يتجمد",
+     "text": "ضع قدرًا من الماء على النار وأسقط فيه مقياس حرارة الطهي. سجل القراءات كل دقيقة - واستمر في التسجيل حتى عندما يغلي الماء بشدة.",
+     "answer": "قبل الغليان، ترتفع درجة الحرارة بانتظام، ولكن بمجرد بدء الغليان تتوقف تمامًا، رغم أن الموقد يستمر في إعطاء نفس الكيلووات. تذهب الطاقة ليس للتسخين بل لكسر الروابط بين الجزيئات - وهذه هي الحرارة الكامنة. طالما يوجد ماء في القدر، لن ترتفع درجة الحرارة فوق نقطة الغليان ولو بدرجة واحدة، مهما زدت النار. لذلك، زيادة الغاز تحت القدر المغلي لا طائل منه: الطعام لن يُطهى أسرع، فقط سيبخر الماء مبكرًا."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "سلك يمر عبر الجليد ويبقى الجليد سليمًا",
+     "text": "ضع سلكًا رفيعًا على قطعة جليد وعلق ثقلًا في طرفيه. بعد بضع ساعات، سيكون السلك داخل القطعة، ثم سيخرج من الجانب الآخر - لكن القطعة لن تنقسم إلى نصفين.",
+     "answer": "تحت السلك، الضغط كبير، وللماء خاصية نادرة: عندما يتجمد يتمدد، لذا فإن الضغط يخفض درجة الانصهار. يذوب الجليد تحت السلك، فينخفض السلك، والماء الذي يصبح فوق السلك بدون ضغط زائد يتجمد فورًا ويغلق الشق. في معادلة كلوزيوس-كلابيرون، تظهر الإشارة: بالنسبة للماء، $\\Delta V$ أثناء الانصهار سالبة، وبالتالي فإن ميل خط التوازن يكون عكسيًا مقارنة بجميع المواد الأخرى تقريبًا."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة ممتعة",
+     "h": "الحرارة الكامنة للماء عالية بشكل غير طبيعي",
+     "text": "لتحويل كيلوغرام من الماء المغلي إلى بخار، نحتاج 2260 كيلوجول - أي ما يقرب من سبعة أضعاف الطاقة اللازمة لتسخين نفس الكيلوغرام من درجة حرارة الغرفة إلى الغليان. ومن هنا تأتي النتيجة العملية: حرق البخار عند مئة درجة أخطر بكثير من حرق الماء المغلي عند نفس الدرجة، لأن البخار المتكثف على الجلد يطلق كل هذه الحرارة الكامنة. لنفس السبب، التعرق فعال جدًا في التبريد، والمحيطات تعمل على تخفيف مناخ الكوكب."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "ذاكرة مساعدة",
+     "h": "الطاقة تذهب لكسر الروابط، وليس لزيادة السرعة",
+     "text": "أثناء التحول الطوري، تُستهلك الطاقة المضافة لتفريق الجزيئات، وليس لزيادة سرعتها. متوسط السرعة هو درجة الحرارة، ولذلك تبقى ثابتة. العملية العكسية تعيد نفس الطاقة: التكثيف يُسخن، والتبلور يُسخن. ومن هنا القاعدة: أي كمية تُقاس بالجول لكل كيلوغرام تصف على الأرجح إعادة هيكلة البنية."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "لماذا تستغرق الغلاية وقتًا طويلاً حتى تجف",
+     "text": "تسخين لتر من الماء من 20 إلى 100 درجة يتطلب $4200 \\cdot 80 \\approx 335$ كيلوجول. تبخيره بالكامل يتطلب 2260 كيلوجول، أي حوالي سبعة أضعاف. غلاية بقدرة 2 كيلووات تغلي في حوالي 3 دقائق، وتجف تمامًا في أكثر من عشرين دقيقة. نفس الحسابات تفسر لماذا لا يحترق الطعام في القدر طالما يوجد ماء."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "عند النقطة الحرجة، تنهار المعادلة",
+     "text": "تصف معادلة كلوزيوس-كلابيرون توازن مرحلتين وتتطلب أن تكون كثافتهما مختلفة. عند الاقتراب من النقطة الحرجة - بالنسبة للماء 374 درجة و218 ضغطًا جويًا - يختفي الفرق بين السائل والبخار، وتقترب $\\Delta V$ من الصفر، وتفقد المعادلة معناها. بعد النقطة الحرجة، لا يوجد تحول طوري على الإطلاق: تنتقل المادة من الحالة الكثيفة إلى الحالة المخلخلة بشكل مستمر، دون غليان."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "أين تُستخدم الحرارة الكامنة",
+   "lead": "قدرة المادة على تخزين الطاقة في إعادة هيكلتها هي أساس كل تقنية التبريد.",
+   "items": [
+    {
+     "h": "الثلاجات ومكيفات الهواء",
+     "text": "يتبخر المبرد في الداخل، مأخذًا الحرارة الكامنة، ويتكثف في الخارج، طارحًا إياها. ينتقل الحرارة ليس بالتسخين بل بواسطة التحول الطوري - ولهذا هو فعال جدًا."
+    },
+    {
+     "h": "الغيوم والهطول",
+     "text": "تكثف البخار في الهواء الصاعد يطلق طاقة هائلة تغذي التيار الصاعد. هذه الآلية تحول السحب العادية إلى عواصف رعدية، وفوق المحيط الدافئ إلى أعاصير مدارية."
+    },
+    {
+     "h": "حلة الضغط والأوتوكلاف",
+     "text": "الضغط المرتفع يرفع نقطة الغليان: عند ضغطي جو، يغلي الماء عند 120 درجة، ويتسارع الطهي عدة مرات. في الطب، نفس المبدأ يعقم الأدوات لأن جراثيم البكتيريا لا تتحمل تلك الحرارة."
+    },
+    {
+     "h": "علم المعادن والصب",
+     "text": "الحرارة الكامنة للتبلور تحدد مدى سرعة تبريد المسبوكة والبنية الحبيبية التي تتشكل. وهذا يؤثر مباشرة على قوة القطعة النهائية."
+    },
+    {
+     "h": "بطاريات حرارية",
+     "text": "المواد ذات التحول الطوري قرب درجة حرارة الغرفة - مثل البارافينات - تُدمج في الجدران والملابس: تذوب عند التسخين وتتجمد عند التبريد، مما يخفف التقلبات دون أي إلكترونيات."
+    }
+   ]
+  }
+ },
+ "laws": [
+  "law_of_conservation_of_energy"
+ ]
 }

@@ -1,0 +1,742 @@
+{
+ "id": "guide",
+ "topic": "oscillations",
+ "schema": "b42.guide/1",
+ "kind": "guide",
+ "ru": {
+  "title": "Как работать с этим материалом",
+  "subtitle": "Методичка для самостоятельного изучения",
+  "lead": "Колебание — самое повторяющееся движение в природе: маятник, атом в кристалле, ток в контуре описываются одним уравнением. Здесь же появляется резонанс — причина и музыки, и разрушенных мостов.",
+  "budget": {
+   "title": "Сколько это займёт",
+   "lead": "Тема рассчитана примерно на 3–4 часа вдумчивой работы. Это не «прочитать за вечер»: при быстром чтении материал не удерживается. Разумный ритм — один параграф за подход.",
+   "rows": [
+    {
+     "what": "Обзорная глава",
+     "time": "15–20 мин",
+     "note": "читается один раз, без формул — задаёт контекст"
+    },
+    {
+     "what": "Параграф 1 · Вращение и системы отсчёта",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 2 · Закон Гука и осциллятор",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 3 · Затухание и резонанс",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Итоговая проверка",
+     "time": "15 мин",
+     "note": "вопросы на понимание, не на память"
+    }
+   ],
+   "note": "Если на параграф уходит вдвое больше — это нормально и даже хорошо. Плохо обратное: пробежать за двадцать минут и решить, что понятно."
+  },
+  "level": {
+   "title": "На кого рассчитан",
+   "text": [
+    "Нужна механика. Понадобится синус и косинус как функции времени, а не просто как отношения сторон треугольника.",
+    "Темы, на которые опирается этот материал: mechanics. Если они не пройдены, часть выводов будет держаться на честном слове.",
+    "Честно о границе: в этой теме до сих пор не решено — когда нелинейность рождает хаос и почему прогноз имеет предел."
+   ]
+  },
+  "howto": {
+   "title": "Как проходить параграф",
+   "lead": "Порядок блоков внутри параграфа не случаен — он повторяет естественный путь понимания: сначала образ, потом опыт, потом строгость, потом проверка. Рекомендуем не перескакивать.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Посмотрите на картинку и прочитайте вступление",
+     "how": "Две минуты. Задача — поймать образ, а не запомнить детали. Образ потом станет крючком, за который зацепится формула."
+    },
+    {
+     "n": "2",
+     "what": "Поиграйте со стендом ДО чтения вывода",
+     "how": "Обязательный шаг, самый недооценённый. Подвигайте ползунки, посмотрите, что растёт, а что падает. Попробуйте предсказать, что произойдёт, ПЕРЕД тем как двигать. Когда потом дойдёте до формулы, она опишет уже знакомое поведение — и запомнится вдвое легче."
+    },
+    {
+     "n": "3",
+     "what": "Прочитайте вывод формулы по шагам",
+     "how": "Каждый шаг снабжён схемой. Не идите дальше, пока текущий шаг непонятен: вывод устроен как лестница, пропустив ступеньку, дальше будете карабкаться. Если застряли — нажмите «спросить тьютора» прямо на этом разделе."
+    },
+    {
+     "n": "4",
+     "what": "Разберите константы",
+     "how": "Не заучивайте числа — поймите, что означает каждая единица измерения. Джоуль на кельвин и джоуль на моль-кельвин отличаются ровно на число Авогадро, и это видно прямо из записи. Мнемоники под каждой константой — для тех, кому всё-таки нужно запомнить цифру."
+    },
+    {
+     "n": "5",
+     "what": "Пройдите пример с числами вместе с текстом",
+     "how": "Не читайте решение глазами — считайте параллельно на бумаге. Разница огромна: при чтении кажется понятным всё, при счёте всплывают настоящие вопросы."
+    },
+    {
+     "n": "6",
+     "what": "Ответьте на вопросы",
+     "how": "Отвечайте до того, как посмотрите варианты, — сформулируйте мысль про себя. Вопросы качественные, считать почти не нужно: проверяется понимание, а не арифметика."
+    },
+    {
+     "n": "7",
+     "what": "Распечатайте или сохраните шпаргалку",
+     "how": "Одна карточка на параграф. Через неделю именно она вернёт материал в память за две минуты вместо получаса перечитывания."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Что делать, если застряли",
+   "items": [
+    {
+     "case": "Не понял шаг вывода",
+     "do": "Нажмите «не понимаю — подведи к идее» под ближайшим вопросом или «спросить тьютора» в разделе. Тьютор не назовёт ответ — он задаст встречный вопрос, который обычно и распутывает узел."
+    },
+    {
+     "case": "Формула кажется абстрактной",
+     "do": "Вернитесь к стенду и покрутите именно те величины, что стоят в формуле. Абстракция исчезает, когда видишь, как символ двигает стрелку прибора."
+    },
+    {
+     "case": "Не сходится размерность",
+     "do": "Это лучший сигнал, что где-то ошибка. Проверьте по разделу констант: единицы всегда подсказывают, что на что нужно умножить."
+    },
+    {
+     "case": "Всё понятно, но через день забылось",
+     "do": "Нормально. Сделайте домашний опыт из параграфа — физическое действие закрепляет память надёжнее любого повторения. И пройдите тест ещё раз через несколько дней."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Опыты, которые стоит проделать",
+   "lead": "Каждый занимает несколько минут и не требует ничего, кроме кухни. Это не украшение курса — именно они превращают прочитанное в понятое.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Ведро воды над головой",
+     "why": "Налейте в небольшое ведро воды на треть, возьмите за дужку и раскрутите в вертикальной плоскости — так, чтобы в верхней точке ведро оказалось дном вверх."
+    },
+    {
+     "p": "2",
+     "what": "Резинка как динамометр",
+     "why": "Подвесьте канцелярскую резинку и цепляйте к ней одинаковые предметы — например, пакетики чая или монеты в мешочке."
+    },
+    {
+     "p": "3",
+     "what": "Два маятника на одной нитке",
+     "why": "Натяните между спинками двух стульев горизонтальную нитку."
+    },
+    {
+     "p": "3",
+     "what": "Поющий бокал",
+     "why": "Намочите палец и ведите им по краю тонкостенного бокала — раздастся чистый тон."
+    }
+   ]
+  },
+  "next": {
+   "title": "Куда двигаться после темы",
+   "items": [
+    "Волны — то же колебание, но передающееся дальше.",
+    "Электрические колебания: контур ведёт себя как маятник."
+   ]
+  },
+  "library": {
+   "title": "Материалы по теме на сайте",
+   "lead": "Курс не изолирован: законы и учёные, упомянутые здесь, имеют собственные страницы в нашей базе — с формулами, связями и статьями, где этот закон работает на практике.",
+   "laws": [
+    {
+     "id": "newtons_laws_of_motion",
+     "name": "Центростремительное ускорение",
+     "note": "разбирается в параграфе 1"
+    },
+    {
+     "id": "hookes_law",
+     "name": "Закон Гука и уравнение гармонического осциллятора",
+     "note": "разбирается в параграфе 2"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "Christiaan_Huygens",
+     "name": "Christiaan Huygens"
+    },
+    {
+     "id": "Robert_Hooke",
+     "name": "Robert Hooke"
+    },
+    {
+     "id": "Galileo_Galilei",
+     "name": "Galileo Galilei"
+    }
+   ],
+   "tags": [
+    {
+     "id": "mechanics",
+     "name": "mechanics"
+    },
+    {
+     "id": "energy",
+     "name": "energy"
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "How to Work with This Material",
+  "subtitle": "Self-Study Guide",
+  "lead": "Oscillation is the most repetitive motion in nature: a pendulum, an atom in a crystal, a current in a circuit are all described by the same equation. Resonance also appears here — the cause of both music and collapsed bridges.",
+  "budget": {
+   "title": "How Long It Will Take",
+   "lead": "The topic is designed for approximately 3–4 hours of focused work. It’s not 'read in one evening': with fast reading, the material doesn’t stick. A reasonable pace is one section per session.",
+   "rows": [
+    {
+     "what": "Overview chapter",
+     "time": "15–20 min",
+     "note": "read once, without formulas — sets the context"
+    },
+    {
+     "what": "Section 1 · Rotation and Frames of Reference",
+     "time": "60–80 min",
+     "note": "simulation, derivation, and knowledge check"
+    },
+    {
+     "what": "Section 2 · Hooke's Law and Oscillator",
+     "time": "60–80 min",
+     "note": "simulation, derivation, and knowledge check"
+    },
+    {
+     "what": "Section 3 · Damping and Resonance",
+     "time": "60–80 min",
+     "note": "simulation, derivation, and knowledge check"
+    },
+    {
+     "what": "Final check",
+     "time": "15 min",
+     "note": "questions for understanding, not memory"
+    }
+   ],
+   "note": "If a section takes twice as long, that’s normal and even good. The opposite is bad: skimming through in twenty minutes and thinking it’s understood."
+  },
+  "level": {
+   "title": "Who It Is For",
+   "text": [
+    "Mechanics is needed. You will need sine and cosine as functions of time, not just as ratios of triangle sides.",
+    "Topics that this material relies on: mechanics. If they haven’t been covered, some conclusions will be taken on trust.",
+    "Honest about the frontier: in this topic, it is still not resolved when nonlinearity gives rise to chaos and why prediction has a limit."
+   ]
+  },
+  "howto": {
+   "title": "How to Go Through a Section",
+   "lead": "The order of blocks within a section is not random — it follows the natural path of understanding: first an image, then an experiment, then rigor, then verification. We recommend not skipping.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Look at the picture and read the introduction",
+     "how": "Two minutes. The goal is to catch an image, not memorize details. The image will later become a hook for the formula."
+    },
+    {
+     "n": "2",
+     "what": "Play with the simulation BEFORE reading the derivation",
+     "how": "A mandatory step, the most underestimated. Move the sliders, see what increases and what decreases. Try to predict what will happen BEFORE you move. When you later get to the formula, it will describe familiar behavior — and will be remembered twice as easily."
+    },
+    {
+     "n": "3",
+     "what": "Read the formula derivation step by step",
+     "how": "Each step is accompanied by a diagram. Do not proceed until the current step is clear: the derivation is constructed like a staircase; if you miss a step, you will struggle later. If stuck, press 'ask a tutor' right in this section."
+    },
+    {
+     "n": "4",
+     "what": "Examine the constants",
+     "how": "Don’t memorize numbers — understand what each unit means. A joule per kelvin and a joule per mole-kelvin differ exactly by Avogadro’s number, and that is visible directly from the notation. Mnemonics under each constant are for those who still need to remember the number."
+    },
+    {
+     "n": "5",
+     "what": "Work through the numerical example alongside the text",
+     "how": "Don’t read the solution with your eyes — calculate in parallel on paper. The difference is huge: when reading, everything seems clear; when calculating, real questions surface."
+    },
+    {
+     "n": "6",
+     "what": "Answer the questions",
+     "how": "Answer before looking at the options — formulate the thought in your mind. The questions are qualitative; almost no calculation is needed: understanding is tested, not arithmetic."
+    },
+    {
+     "n": "7",
+     "what": "Print or save the cheat sheet",
+     "how": "One card per section. In a week, it will bring the material back to memory in two minutes instead of half an hour of re-reading."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "What to Do If You Get Stuck",
+   "items": [
+    {
+     "case": "I didn't understand a derivation step",
+     "do": "Press 'I don’t understand — lead me to the idea' under the nearest question or 'ask a tutor' in the section. The tutor won’t give the answer — he will ask a counter-question that usually untangles the knot."
+    },
+    {
+     "case": "The formula seems abstract",
+     "do": "Go back to the simulation and adjust exactly the quantities that appear in the formula. Abstraction disappears when you see how a symbol moves a meter needle."
+    },
+    {
+     "case": "Dimension check fails",
+     "do": "This is the best signal that there is an error somewhere. Check the constants section: units always hint what to multiply by what."
+    },
+    {
+     "case": "Everything is clear, but forgotten the next day",
+     "do": "That’s normal. Do the home experiment from the section — physical action consolidates memory more reliably than any repetition. And take the test again after a few days."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experiments Worth Doing",
+   "lead": "Each takes a few minutes and requires nothing but a kitchen. These are not decoration for the course — they turn reading into understanding.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Bucket of water over head",
+     "why": "Fill a small bucket a third full of water, hold it by the handle and spin it in a vertical plane so that at the top point the bucket is upside down."
+    },
+    {
+     "p": "2",
+     "what": "Rubber band as a dynamometer",
+     "why": "Hang a rubber band and attach identical objects to it — for example, tea bags or coins in a pouch."
+    },
+    {
+     "p": "3",
+     "what": "Two pendulums on one string",
+     "why": "Stretch a horizontal string between the backs of two chairs."
+    },
+    {
+     "p": "3",
+     "what": "Singing glass",
+     "why": "Wet your finger and run it along the rim of a thin-walled glass — a clear tone will sound."
+    }
+   ]
+  },
+  "next": {
+   "title": "Where to Go After the Topic",
+   "items": [
+    "Waves — the same oscillation, but propagating further.",
+    "Electrical oscillations: a circuit behaves like a pendulum."
+   ]
+  },
+  "library": {
+   "title": "Materials on the topic on the site",
+   "lead": "The course is not isolated: the laws and scientists mentioned here have their own pages in our database — with formulas, connections, and articles where this law works in practice.",
+   "laws": [
+    {
+     "id": "newtons_laws_of_motion",
+     "name": "Centripetal acceleration",
+     "note": "covered in section 1"
+    },
+    {
+     "id": "hookes_law",
+     "name": "Hooke's law and the harmonic oscillator equation",
+     "note": "covered in section 2"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "Christiaan_Huygens",
+     "name": "Christiaan Huygens"
+    },
+    {
+     "id": "Robert_Hooke",
+     "name": "Robert Hooke"
+    },
+    {
+     "id": "Galileo_Galilei",
+     "name": "Galileo Galilei"
+    }
+   ],
+   "tags": [
+    {
+     "id": "mechanics",
+     "name": "mechanics"
+    },
+    {
+     "id": "energy",
+     "name": "energy"
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Cómo trabajar con este material",
+  "subtitle": "Guía de autoestudio",
+  "lead": "La oscilación es el movimiento más repetitivo en la naturaleza: un péndulo, un átomo en un cristal, la corriente en un circuito se describen con una misma ecuación. Aquí también aparece la resonancia — causa tanto de la música como de puentes destruidos.",
+  "budget": {
+   "title": "Cuánto tiempo tomará",
+   "lead": "El tema está pensado para aproximadamente 3–4 horas de trabajo concentrado. No es para «leer en una noche»: con una lectura rápida el material no se retiene. Un ritmo razonable es un párrafo por sesión.",
+   "rows": [
+    {
+     "what": "Capítulo de visión general",
+     "time": "15–20 min",
+     "note": "se lee una vez, sin fórmulas — establece el contexto"
+    },
+    {
+     "what": "Párrafo 1 · Rotación y sistemas de referencia",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y verificación de conocimientos"
+    },
+    {
+     "what": "Párrafo 2 · Ley de Hooke y oscilador",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y verificación de conocimientos"
+    },
+    {
+     "what": "Párrafo 3 · Amortiguamiento y resonancia",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y verificación de conocimientos"
+    },
+    {
+     "what": "Verificación final",
+     "time": "15 min",
+     "note": "preguntas de comprensión, no de memoria"
+    }
+   ],
+   "note": "Si un párrafo te lleva el doble de tiempo, es normal e incluso bueno. Lo malo es lo contrario: recorrerlo en veinte minutos y creer que lo entiendes."
+  },
+  "level": {
+   "title": "¿Para quién está pensado?",
+   "text": [
+    "Se necesita mecánica. Se requerirá seno y coseno como funciones del tiempo, no solo como razones de lados de un triángulo.",
+    "Temas en los que se basa este material: mecánica. Si no los has visto, algunas conclusiones se sostendrán solo por fe.",
+    "Honestamente sobre el límite: en este tema aún no está resuelto cuándo la no linealidad genera caos y por qué el pronóstico tiene un límite."
+   ]
+  },
+  "howto": {
+   "title": "Cómo abordar un párrafo",
+   "lead": "El orden de los bloques dentro de un párrafo no es casual — repite el camino natural del entendimiento: primero la imagen, luego la experiencia, luego el rigor, luego la verificación. Recomendamos no saltarte pasos.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Mira la imagen y lee la introducción",
+     "how": "Dos minutos. La tarea es captar la imagen, no recordar detalles. La imagen luego se convertirá en el gancho del que colgará la fórmula."
+    },
+    {
+     "n": "2",
+     "what": "Juega con la simulación ANTES de leer la deducción",
+     "how": "Paso obligatorio, el más subestimado. Mueve los deslizadores, observa qué crece y qué disminuye. Intenta predecir qué ocurrirá ANTES de moverlo. Cuando luego llegues a la fórmula, describirá un comportamiento ya familiar — y se recordará el doble de fácil."
+    },
+    {
+     "n": "3",
+     "what": "Lee la deducción de la fórmula paso a paso",
+     "how": "Cada paso viene acompañado de un diagrama. No avances hasta que el paso actual te quede claro: la deducción es como una escalera, si te saltas un escalón, luego tendrás que trepar. Si te atas, presiona «preguntar al tutor» en esa misma sección."
+    },
+    {
+     "n": "4",
+     "what": "Analiza las constantes",
+     "how": "No memorices los números — entiende qué significa cada unidad de medida. Julio por kelvin y julio por mol-kelvin difieren exactamente en el número de Avogadro, y se ve directamente en la notación. Las reglas mnemotécnicas debajo de cada constante son para quienes aún necesitan recordar el número."
+    },
+    {
+     "n": "5",
+     "what": "Sigue el ejemplo numérico junto con el texto",
+     "how": "No leas la solución solo con los ojos — calcula paralelamente en papel. La diferencia es enorme: al leer parece que todo está claro, al calcular surgen las preguntas reales."
+    },
+    {
+     "n": "6",
+     "what": "Responde las preguntas",
+     "how": "Responde antes de mirar las opciones — formula tu pensamiento internamente. Las preguntas son cualitativas, casi no requieren cálculos: se evalúa la comprensión, no la aritmética."
+    },
+    {
+     "n": "7",
+     "what": "Imprime o guarda una chuleta",
+     "how": "Una tarjeta por párrafo. En una semana, esa tarjeta te devolverá el material en dos minutos en lugar de media hora de relectura."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Qué hacer si te atas",
+   "items": [
+    {
+     "case": "No entendí un paso de la deducción",
+     "do": "Presiona «no entiendo — llévame a la idea» debajo de la pregunta más cercana o «preguntar al tutor» en la sección. El tutor no dará la respuesta — hará una pregunta que generalmente deshace el nudo."
+    },
+    {
+     "case": "La fórmula parece abstracta",
+     "do": "Vuelve a la simulación y mueve exactamente las magnitudes que aparecen en la fórmula. La abstracción desaparece cuando ves cómo el símbolo mueve la aguja del instrumento."
+    },
+    {
+     "case": "No coinciden las dimensiones",
+     "do": "Es la mejor señal de que hay un error. Revisa la sección de constantes: las unidades siempre indican qué multiplicar por qué."
+    },
+    {
+     "case": "Todo claro, pero al día siguiente se olvida",
+     "do": "Es normal. Haz el experimento casero del párrafo — la acción física fija la memoria mejor que cualquier repetición. Y vuelve a hacer el test unos días después."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experimentos que vale la pena hacer",
+   "lead": "Cada uno toma unos minutos y no requiere nada más que la cocina. No son un adorno del curso — son ellos los que convierten lo leído en comprendido.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Cubo de agua sobre la cabeza",
+     "why": "Llena un cubo pequeño con agua hasta un tercio, tómalo por el asa y gíralo en un plano vertical — de modo que en el punto más alto el cubo quede con el fondo hacia arriba."
+    },
+    {
+     "p": "2",
+     "what": "Goma elástica como dinamómetro",
+     "why": "Cuelga una goma elástica de oficina y engancha objetos iguales — por ejemplo, bolsitas de té o monedas en una bolsita."
+    },
+    {
+     "p": "3",
+     "what": "Dos péndulos en un mismo hilo",
+     "why": "Estira un hilo horizontal entre los respaldos de dos sillas."
+    },
+    {
+     "p": "3",
+     "what": "Copa que canta",
+     "why": "Mójate un dedo y pásalo por el borde de una copa de pared fina — se escuchará un tono puro."
+    }
+   ]
+  },
+  "next": {
+   "title": "Hacia dónde avanzar después del tema",
+   "items": [
+    "Las ondas — la misma oscilación, pero transmitiéndose a distancia.",
+    "Oscilaciones eléctricas: el circuito se comporta como un péndulo."
+   ]
+  },
+  "library": {
+   "title": "Materiales sobre el tema en el sitio",
+   "lead": "El curso no está aislado: las leyes y los científicos mencionados aquí tienen sus propias páginas en nuestra base de datos — con fórmulas, relaciones y artículos donde esta ley funciona en la práctica.",
+   "laws": [
+    {
+     "id": "newtons_laws_of_motion",
+     "name": "Aceleración centrípeta",
+     "note": "se analiza en el párrafo 1"
+    },
+    {
+     "id": "hookes_law",
+     "name": "Ley de Hooke y ecuación del oscilador armónico",
+     "note": "se analiza en el párrafo 2"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "Christiaan_Huygens",
+     "name": "Christiaan Huygens"
+    },
+    {
+     "id": "Robert_Hooke",
+     "name": "Robert Hooke"
+    },
+    {
+     "id": "Galileo_Galilei",
+     "name": "Galileo Galilei"
+    }
+   ],
+   "tags": [
+    {
+     "id": "mechanics",
+     "name": "mecánica"
+    },
+    {
+     "id": "energy",
+     "name": "energía"
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "كيفية العمل مع هذه المادة",
+  "subtitle": "دليل للدراسة الذاتية",
+  "lead": "الاهتزاز هو أكثر الحركات تكراراً في الطبيعة: البندول، الذرة في البلورة، التيار في الدائرة كلها توصف بمعادلة واحدة. وهنا يظهر الرنين — سبب الموسيقى والجسور المدمرة.",
+  "budget": {
+   "title": "كم من الوقت سيستغرق",
+   "lead": "الموضوع مصمم لحوالي 3-4 ساعات من العمل المركز. ليس «قراءة في مساء واحد»: القراءة السريعة لا تثبت المادة. الإيقاع المعقول هو فقرة واحدة في الجلسة.",
+   "rows": [
+    {
+     "what": "فصل نظرة عامة",
+     "time": "15–20 دقيقة",
+     "note": "يقرأ مرة واحدة، بدون معادلات — يضع السياق"
+    },
+    {
+     "what": "الفقرة 1 · الدوران وأنظمة الإسناد",
+     "time": "60–80 دقيقة",
+     "note": "محاكاة، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 2 · قانون هوك والمذبذب",
+     "time": "60–80 دقيقة",
+     "note": "محاكاة، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 3 · التخميد والرنين",
+     "time": "60–80 دقيقة",
+     "note": "محاكاة، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الاختبار النهائي",
+     "time": "15 دقيقة",
+     "note": "أسئلة للفهم، لا للحفظ"
+    }
+   ],
+   "note": "إذا استغرقت الفقرة ضعف الوقت فهذا طبيعي بل جيد. السيء هو العكس: القراءة السريعة في عشرين دقيقة والاعتقاد بأنك فهمت."
+  },
+  "level": {
+   "title": "لمن صُمم",
+   "text": [
+    "تحتاج إلى ميكانيكا. ستحتاج إلى الجيب وجيب التمام كدوال للزمن، وليس فقط كنسب أضلاع المثلث.",
+    "المواضيع التي يعتمد عليها هذا المادة: الميكانيكا. إذا لم تكن قد درستها، فبعض الاستنتاجات ستكون مبنية على الثقة فقط.",
+    "بصراحة عن الحدود: في هذا الموضوع لم يحل بعد - متى تنتج اللاخطية فوضى ولماذا للتنبؤ حد."
+   ]
+  },
+  "howto": {
+   "title": "كيفية متابعة الفقرة",
+   "lead": "ترتيب الكتل داخل الفقرة ليس عشوائياً - إنه يكرر المسار الطبيعي للفهم: أولاً الصورة، ثم التجربة، ثم الدقة، ثم الاختبار. نوصي بعدم التخطي.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "انظر إلى الصورة واقرأ المقدمة",
+     "how": "دقيقتان. المهمة هي التقاط الصورة، وليس حفظ التفاصيل. الصورة ستصبح لاحقاً الخطاف الذي ستتعلق به المعادلة."
+    },
+    {
+     "n": "2",
+     "what": "العب بالمحاكاة قبل قراءة الاشتقاق",
+     "how": "خطوة إلزامية، الأكثر استهانة. حرك المنزلقات، لاحظ ما يزيد وما ينقص. حاول توقع ما سيحدث قبل أن تحرك. عندما تصل لاحقاً إلى المعادلة، ستصف سلوكاً مألوفاً - وستتذكرها بسهولة مضاعفة."
+    },
+    {
+     "n": "3",
+     "what": "اقرأ اشتقاق المعادلة خطوة بخطوة",
+     "how": "كل خطوة مصحوبة برسم تخطيطي. لا تتقدم حتى تفهم الخطوة الحالية: الاشتقاق مصمم كسلم، إذا تخطيت درجة فستتسلق بصعوبة لاحقاً. إذا علقت، اضغط على «اسأل المعلم» مباشرة في هذا القسم."
+    },
+    {
+     "n": "4",
+     "what": "حلل الثوابت",
+     "how": "لا تحفظ الأرقام - افهم ما تعنيه كل وحدة قياس. الجول لكل كلفن والجول لكل مول-كلفن يختلفان بالضبط بعدد أفوجادرو، وهذا واضح من الترميز. وسائل مساعدة للذاكرة تحت كل ثابت - لمن يحتاج حفظ الرقم."
+    },
+    {
+     "n": "5",
+     "what": "اتبع المثال العددي مع النص",
+     "how": "لا تقرأ الحل بعينيك - احسب بالتوازي على الورق. الفرق كبير: عند القراءة يبدو كل شيء واضحاً، عند الحساب تظهر الأسئلة الحقيقية."
+    },
+    {
+     "n": "6",
+     "what": "أجب على الأسئلة",
+     "how": "أجب قبل أن تنظر إلى الخيارات - صغ الفكرة في ذهنك. الأسئلة نوعية، لا تحتاج حساباً تقريباً: الهدف هو اختبار الفهم وليس الحساب."
+    },
+    {
+     "n": "7",
+     "what": "اطبع أو احفظ ورقة الملخص",
+     "how": "بطاقة واحدة لكل فقرة. بعد أسبوع، هي التي ستعيد المادة إلى الذاكرة في دقيقتين بدلاً من نصف ساعة من إعادة القراءة."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "ماذا تفعل إذا علقت",
+   "items": [
+    {
+     "case": "لم أفهم خطوة الاشتقاق",
+     "do": "اضغط على «لا أفهم - أوصلني إلى الفكرة» تحت أقرب سؤال أو «اسأل المعلم» في القسم. المعلم لن يخبرك بالإجابة - بل سيطرح سؤالاً مضاداً عادة ما يحل العقدة."
+    },
+    {
+     "case": "المعادلة تبدو مجردة",
+     "do": "عد إلى المحاكاة وحرك بالضبط الكميات الموجودة في المعادلة. التجريد يختفي عندما ترى كيف يحرك الرمز مؤشر الجهاز."
+    },
+    {
+     "case": "لا تتطابق الأبعاد",
+     "do": "هذه أفضل إشارة على وجود خطأ ما. تحقق من قسم الثوابت: الوحدات تخبرك دائماً بما يجب ضربه بماذا."
+    },
+    {
+     "case": "كل شيء مفهوم ولكن يُنسى بعد يوم",
+     "do": "هذا طبيعي. قم بالتجربة المنزلية من الفقرة - الفعل الجسدي يثبت الذاكرة بشكل أفضل من أي تكرار. واخضع للاختبار مرة أخرى بعد بضعة أيام."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "تجارب تستحق القيام بها",
+   "lead": "كل منها يستغرق بضع دقائق ولا يتطلب شيئاً سوى المطبخ. ليست زينة للدورة - بل هي التي تحول المقروء إلى مفهوم.",
+   "items": [
+    {
+     "p": "1",
+     "what": "دلو ماء فوق الرأس",
+     "why": "املأ دلو صغيراً بالماء حتى الثلث، أمسكه بالمقبض ولفه في مستوى عمودي - بحيث يكون الدلو في أعلى نقطة قاعه لأعلى."
+    },
+    {
+     "p": "2",
+     "what": "شريط مطاطي كمقياس قوة",
+     "why": "علق شريطاً مطاطياً وأرفق به أشياء متطابقة - مثل أكياس الشاي أو عملات معدنية في كيس صغير."
+    },
+    {
+     "p": "3",
+     "what": "بندولان على خيط واحد",
+     "why": "مد خيطاً أفقياً بين ظهري كرسيين."
+    },
+    {
+     "p": "3",
+     "what": "كأس غنائي",
+     "why": "بلل إصبعك وامسح به على حافة كأس رقيق الجدران - سيصدر صوت نقي."
+    }
+   ]
+  },
+  "next": {
+   "title": "إلى أين تتجه بعد الموضوع",
+   "items": [
+    "الأمواج - نفس الاهتزاز لكن ينتقل لمسافات أبعد.",
+    "الاهتزازات الكهربائية: الدائرة تتصرف مثل البندول."
+   ]
+  },
+  "library": {
+   "title": "مواد متعلقة بالموضوع في الموقع",
+   "lead": "الدورة ليست منعزلة: القوانين والعلماء المذكورون هنا لديهم صفحات خاصة في قاعدتنا — مع الصيغ والروابط والمقالات حيث يتم تطبيق هذا القانون عمليًا.",
+   "laws": [
+    {
+     "id": "newtons_laws_of_motion",
+     "name": "التسارع المركزي",
+     "note": "يتم شرحه في الفقرة 1"
+    },
+    {
+     "id": "hookes_law",
+     "name": "قانون هوك ومعادلة المذبذب التوافقي",
+     "note": "يتم شرحه في الفقرة 2"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "Christiaan_Huygens",
+     "name": "Christiaan Huygens"
+    },
+    {
+     "id": "Robert_Hooke",
+     "name": "Robert Hooke"
+    },
+    {
+     "id": "Galileo_Galilei",
+     "name": "Galileo Galilei"
+    }
+   ],
+   "tags": [
+    {
+     "id": "mechanics",
+     "name": "mechanics"
+    },
+    {
+     "id": "energy",
+     "name": "energy"
+    }
+   ]
+  }
+ }
+}
