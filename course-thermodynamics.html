@@ -112,10 +112,12 @@
 <div id="c-chapters"></div>
 <div class="c-final" id="c-final"></div>
 
-<p class="c-note" id="c-note">Интерактивный учебник на движке <code>explorable.js</code> + <code>models.js</code>.
-Весь текст, вопросы и подсказки — в <code>/data/theory/course-thermodynamics.json</code> (перевод на en/es/ar
-подключается без правки кода). Тьютор работает через наш Cloudflare Worker с ключом DeepSeek;
-без ключа — демо-режим с заготовленными подсказками.</p>
+<!-- Записка для разработчика, а не для читателя: раньше она стояла в видимом тексте страницы
+     и на всех языках выводилась по-русски, вперемешку с содержанием учебника.
+     Движок: explorable.js + models.js. Весь текст, вопросы и подсказки — в
+     /data/theory/course-thermodynamics.json (ветки ru/en/es/ar внутри полей ui и course,
+     переводятся course_translate.py). Тьютор работает через наш Cloudflare Worker с ключом
+     DeepSeek; без ключа — демо-режим с заготовленными подсказками. -->
 
 <script>
 // Локальная разработка: статика на одном порту, Worker с ботом (wrangler dev) — на 8787.
@@ -185,7 +187,9 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       if (mdl.modes) {                                    // многорежимная модель — кнопки-табы
         modeBar = el('div', 'c-modes');
         mdl.modes.forEach(function (m) {
-          var b = el('button', m === mdl.getMode() ? 'active' : '', MODELDATA[ch.model].i18n[LANG]['mode_' + m] || m);
+          // словарь модели тоже берём с откатом на русский: нет языка — не повод ронять стенд
+          var mi = MODELDATA[ch.model].i18n[LANG] || MODELDATA[ch.model].i18n.ru || {};
+          var b = el('button', m === mdl.getMode() ? 'active' : '', mi['mode_' + m] || m);
           b.type = 'button';
           b.addEventListener('click', function () {
             mdl.setMode(m);
@@ -210,7 +214,10 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       if (mdl.extras) {
         setInterval(function () {
           try {
-            var T = function (k) { var d = MODELDATA[ch.model].i18n[LANG]; return (d && d[k]) || k; };
+            var T = function (k) {
+              var i = MODELDATA[ch.model].i18n, d = i[LANG] || i.ru;
+              return (d && d[k]) || k;
+            };
             extras.innerHTML = mdl.extras(api.state, null, T);
           } catch (e) {}
         }, 300);
@@ -313,11 +320,15 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     var host = document.getElementById('c-units');
     host.innerHTML = '';
     host.appendChild(el('span', 'c-units-label', '<i data-ic="ruler"></i> Единицы:'));
-    var list = window.B42Units ? window.B42Units.list : {};
+    var U = window.B42Units, list = U ? U.list : {};
     Object.keys(list).forEach(function (key) {
-      var b = el('button', key === (window.B42_UNITS || 'metric') ? 'active' : '', list[key].name);
+      // Название системы и обозначения — на языке страницы (UNIT_I18N в models.js). Раньше брали
+      // list[key].name, то есть русское название: англичанин, испанец и араб читали «бытовая».
+      var sym = (U && U.unitSym) || function (s) { return s; };
+      var b = el('button', key === (window.B42_UNITS || 'metric') ? 'active' : '',
+                 (U && U.sysName) ? U.sysName(key) : list[key].name);
       b.type = 'button';
-      b.title = 'T: ' + list[key].T + ' · P: ' + list[key].P + ' · V: ' + list[key].V;
+      b.title = 'T: ' + sym(list[key].T) + ' · P: ' + sym(list[key].P) + ' · V: ' + sym(list[key].V);
       b.addEventListener('click', function () {
         window.B42_UNITS = key;
         host.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
@@ -404,7 +415,9 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     .then(function (r) { return r.json(); })
     .then(function (data) {
       window.__COURSE_ENTITIES = data.entities;
-      UI = data.ui[LANG]; COURSE = data.course[LANG];
+      // Нет ветки языка — показываем русскую. Пустая страница с TypeError хуже, чем текст
+      // на чужом языке: читатель хотя бы видит стенды, формулы и может переключить язык.
+      UI = data.ui[LANG] || data.ui.ru; COURSE = data.course[LANG] || data.course.ru;
       BOT = B42Tutor.Bot({ lang: LANG, strings: UI, maxQuestions: 10, maxLen: 600 });
       // модели курса грузим параллельно — их JSON'ы уже существуют и переиспользуются со стендов
       return Promise.all(data.models.map(function (m) {

@@ -24,6 +24,20 @@ CYR = re.compile(r"[А-Яа-яЁё]")
 ROOTS = [Path("data/theory/courses"), Path("data/theory/lectures"), Path("data/theory")]
 
 
+def branches(d):
+    """Наборы языковых веток в файле.
+
+    Обычно ветки лежат на верхнем уровне: рядом с id и schema стоят ru/en/es/ar. Но у
+    интерактивного учебника (course-thermodynamics.json) их два и оба внутри полей: `ui` и
+    `course`. Такой файл переводчик просто не видел — искал `d["ru"]`, не находил и молча
+    проходил мимо. Из-за этого учебник остался единственным материалом курса без перевода,
+    а страница на en/es/ar падала с TypeError вместо содержания.
+    """
+    if isinstance(d.get("ru"), dict):
+        return {"": d}
+    return {k: v for k, v in d.items() if isinstance(v, dict) and isinstance(v.get("ru"), dict)}
+
+
 def targets():
     files, seen = [], set()
     for r in ROOTS:
@@ -39,7 +53,7 @@ def targets():
                 d = json.loads(f.read_text(encoding="utf-8"))
             except Exception:
                 continue
-            if isinstance(d, dict) and isinstance(d.get("ru"), dict):
+            if isinstance(d, dict) and branches(d):
                 seen.add(f)
                 files.append(f)
     return sorted(files)
@@ -87,6 +101,56 @@ def _one(payload, lang, retries=2):
     return None
 
 
+def _big(v, lang, limit):
+    """Крупный кусок режем по составу: список — по элементам, словарь — по ключам.
+
+    Раньше «слишком большое» уходило одним запросом, и если оно не помещалось в ответ, ответ
+    обрывался на середине JSON — блок терялся целиком. У учебника три главы по десять тысяч
+    знаков, каждая заведомо больше предела, поэтому без деления перевести его нельзя.
+    """
+    if isinstance(v, (list, dict)):
+        items = enumerate(v) if isinstance(v, list) else v.items()
+        out = [] if isinstance(v, list) else {}
+        for k, x in items:
+            if isinstance(x, (list, dict)) and len(json.dumps(x, ensure_ascii=False)) > limit:
+                got = _big(x, lang, limit)
+            else:
+                key = "v" if isinstance(v, list) else k
+                g = _one({key: x}, lang)
+                got = g.get(key) if isinstance(g, dict) else None
+            if got is None:
+                return None
+            if isinstance(v, list):
+                out.append(got)
+            else:
+                out[k] = got
+        return out
+    g = _one({"v": v}, lang)
+    return g.get("v") if isinstance(g, dict) else None
+
+
+def graft(orig, got):
+    """Сшиваем перевод с оригиналом по форме оригинала.
+
+    Модель переводит текст, но заодно может переставить ключи, потерять элемент списка или
+    «перевести» служебное значение. В тесте это стоит правильного ответа: `answer` — номер
+    варианта, и сдвиг на единицу делает вопрос неверным молча. Поэтому из перевода берём
+    только строки, а числа, флаги, идентификаторы и длину списков сохраняем исходные.
+    """
+    if isinstance(orig, dict):
+        if not isinstance(got, dict):
+            return orig
+        return {k: (orig[k] if k in ("id", "model", "type", "href", "icon") else graft(v, got.get(k)))
+                for k, v in orig.items()}
+    if isinstance(orig, list):
+        if not isinstance(got, list) or len(got) != len(orig):
+            return orig
+        return [graft(a, b) for a, b in zip(orig, got)]
+    if isinstance(orig, str):
+        return got if isinstance(got, str) and got.strip() else orig
+    return orig          # числа и флаги остаются как есть
+
+
 def translate_block(block, lang, chunk_chars=6000):
     """Переводим ПО ЧАСТЯМ: урок целиком (40k+ символов) не помещается в ответ модели —
     ответ обрывался на середине JSON. Режем по ключам верхнего уровня, мелкие группируем."""
@@ -104,20 +168,23 @@ def translate_block(block, lang, chunk_chars=6000):
             return
         got = _one(batch, lang)
         if isinstance(got, dict):
-            out.update(got)
+            out.update({k: graft(v, got.get(k)) for k, v in batch.items()})
         else:
             failed.extend(batch.keys())
         batch, size = {}, 0
 
     for k, v in block.items():
         s = len(json.dumps(v, ensure_ascii=False))
-        if s > chunk_chars:          # крупный раздел — отдельным запросом
+        if s > chunk_chars:          # крупный раздел — отдельным запросом, при нужде по частям
             flush()
-            got = _one({k: v}, lang)
-            if isinstance(got, dict) and k in got:
-                out[k] = got[k]
-            else:
+            # совсем крупное (главы учебника — по десять тысяч знаков) сразу делим по составу:
+            # одним запросом такое не возвращается, попытка только тратит время
+            got = None if s > 3 * chunk_chars else _one({k: v}, lang)
+            got = got[k] if isinstance(got, dict) and k in got else _big(v, lang, chunk_chars)
+            if got is None:
                 failed.append(k)
+            else:
+                out[k] = graft(v, got)
             continue
         if size + s > chunk_chars:
             flush()
@@ -150,14 +217,15 @@ def main():
         # видит кириллицу, а файл навсегда считается готовым. Так уцелел ar-блок mathkit.json.
         # Поэтому готовность меряем по содержимому: кириллица в en/es/ar — это непереведённый блок.
         missing = {}
-        for l in langs:
-            if l not in d:
-                missing[l] = list(d["ru"].keys())
-            else:
-                gaps = [k for k in d["ru"]
-                        if k not in d[l] or CYR.search(json.dumps(d[l][k], ensure_ascii=False))]
+        for owner, br in branches(d).items():
+            for l in langs:
+                if l not in br:
+                    gaps = list(br["ru"].keys())
+                else:
+                    gaps = [k for k in br["ru"]
+                            if k not in br[l] or CYR.search(json.dumps(br[l][k], ensure_ascii=False))]
                 if gaps:
-                    missing[l] = gaps
+                    missing[(owner, l)] = gaps
         if missing:
             todo.append((f, missing))
     if limit:
@@ -168,16 +236,17 @@ def main():
 
     chars = 0
     for f, m in todo:
-        ru = json.loads(f.read_text(encoding="utf-8"))["ru"]
-        for keys in m.values():
-            chars += len(json.dumps(part(ru, keys), ensure_ascii=False))
+        br = branches(json.loads(f.read_text(encoding="utf-8")))
+        for (owner, _l), keys in m.items():
+            chars += len(json.dumps(part(br[owner]["ru"], keys), ensure_ascii=False))
     gaps = sum(len(v) for _, m in todo for v in m.values())
     print(f"материалов курса: {len(files)} | к переводу: {len(todo)} файлов, "
           f"{gaps} блоков, ~{chars/1000:.0f}k символов", flush=True)
     if "--check" in argv:
         for f, m in todo[:20]:
-            for lang, keys in sorted(m.items()):
-                print(f"  {f.parent.name}/{f.name} [{lang}]: {', '.join(keys[:6])}", flush=True)
+            for (owner, lang), keys in sorted(m.items()):
+                where = f"{owner}." if owner else ""
+                print(f"  {f.parent.name}/{f.name} [{lang}]: {where}{(', ' + where).join(keys[:6])}", flush=True)
     if "--check" in argv or not todo:
         return
 
@@ -191,16 +260,17 @@ def main():
         f, missing = item
         d = json.loads(f.read_text(encoding="utf-8"))
         made = []
-        for lang, keys in missing.items():
+        br = branches(d)
+        for (owner, lang), keys in missing.items():
             try:
-                got = translate_block(part(d["ru"], keys), lang)
+                got = translate_block(part(br[owner]["ru"], keys), lang)
                 if not got:
                     continue
                 # Дополняем ветку, а не перезаписываем: уже переведённое трогать незачем.
-                d.setdefault(lang, {})
+                br[owner].setdefault(lang, {})
                 for k, v in got.items():
-                    d[lang][k] = v
-                made.append(f"{lang}:{len(got)}")
+                    br[owner][lang][k] = v
+                made.append(f"{lang}:{(owner + '.') if owner else ''}{len(got)}")
             except Exception as e:
                 print(f"  ✗ {f.name} → {lang}: {str(e)[:80]}", flush=True)
         if made:
