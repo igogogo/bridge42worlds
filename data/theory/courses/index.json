@@ -1,1555 +1,1572 @@
 {
-  "schema": "b42.tree/1",
-  "ru": {
-    "title": "Дерево знаний",
-    "subtitle": "Физика от материальной точки до атомного ядра — и до края, где кончается известное",
-    "lead": "Курс растёт снизу вверх: каждая тема опирается на предыдущие и питает следующие. Но дерево не заканчивается кроной. У каждой темы отмечено, что в ней осталось нерешённым, — потому что физика не свод готовых ответов, а способ описывать мир, и описание всё ещё строится.",
-    "blocks": [
-      {
-        "id": "0",
-        "title": "Язык физики",
-        "sub": "как вообще устроено описание природы"
-      },
-      {
-        "id": "I",
-        "title": "Механика",
-        "sub": "язык, на котором говорит вся физика"
-      },
-      {
-        "id": "II",
-        "title": "Колебания и тепло",
-        "sub": "от одного маятника до миллиарда молекул"
-      },
-      {
-        "id": "III",
-        "title": "Электромагнетизм",
-        "sub": "поле как способ описания природы"
-      },
-      {
-        "id": "IV",
-        "title": "Современная физика",
-        "sub": "где классика перестаёт работать"
-      }
-    ],
-    "openLabel": "не решено",
-    "threads": [
-      {
-        "id": "model",
-        "name": "Модель и её границы",
-        "path": [
-          "language",
-          "mechanics",
-          "relativity",
-          "quantum"
-        ],
-        "note": "любая теория верна в своей области и ломается за её пределами; знать границу важнее, чем знать формулу"
-      },
-      {
-        "id": "osc",
-        "name": "Осциллятор",
-        "path": [
-          "oscillations",
-          "electricity",
-          "quantum"
-        ],
-        "note": "маятник → колебательный контур → квантовая яма: один аппарат, три мира"
-      },
-      {
-        "id": "energy",
-        "name": "Сохранение энергии",
-        "path": [
-          "mechanics",
-          "thermodynamics",
-          "relativity",
-          "nuclear"
-        ],
-        "note": "работа → теплота → E=mc² → энергия связи ядра"
-      },
-      {
-        "id": "wave",
-        "name": "Волна",
-        "path": [
-          "waves",
-          "optics",
-          "quantum"
-        ],
-        "note": "звук → свет → волны материи; двухщелевой опыт повторяется дважды и означает разное"
-      },
-      {
-        "id": "entro",
-        "name": "Энтропия и информация",
-        "path": [
-          "thermodynamics",
-          "entropy",
-          "quantum",
-          "nuclear"
-        ],
-        "note": "мера беспорядка, мера незнания и мера информации оказались одной величиной; отсюда же единственная в физике стрела времени"
-      },
-      {
-        "id": "prob",
-        "name": "Вероятность",
-        "path": [
-          "entropy",
-          "quantum"
-        ],
-        "note": "тепловой хаос и квантовая неопределённость — принципиально разные вероятности"
-      },
-      {
-        "id": "phase",
-        "name": "Пространство состояний",
-        "path": [
-          "language",
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "note": "заменяя память на размерность, получаем точку вместо истории — и дальше этот приём не меняется, меняется только физика"
-      }
-    ],
-    "topics": [
-      {
-        "id": "language",
-        "block": "0",
-        "n": 0,
-        "title": "Как физика описывает мир",
-        "sub": "Модель · размерность · порядок величины · пространство состояний",
-        "status": "ready",
-        "needs": [],
-        "feeds": [
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "open": "почему математика вообще работает применительно к природе"
-      },
-      {
-        "id": "mechanics",
-        "block": "I",
-        "n": 1,
-        "title": "Механика",
-        "sub": "Материальная точка · Ньютон · Сохранение",
-        "status": "ready",
-        "needs": [
-          "language"
-        ],
-        "feeds": [
-          "oscillations",
-          "gravity",
-          "relativity"
-        ],
-        "open": "что такое инерция и почему инертная масса равна гравитационной"
-      },
-      {
-        "id": "gravity",
-        "block": "I",
-        "n": 2,
-        "title": "Гравитация и орбиты",
-        "sub": "Почему планеты не падают и не улетают",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "relativity"
-        ],
-        "open": "как проквантовать гравитацию; природа тёмной материи"
-      },
-      {
-        "id": "oscillations",
-        "block": "II",
-        "n": 3,
-        "title": "Колебания и вращение",
-        "sub": "Гук · осциллятор · резонанс",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "waves",
-          "electricity",
-          "quantum"
-        ],
-        "open": "когда нелинейность рождает хаос и почему прогноз имеет предел"
-      },
-      {
-        "id": "waves",
-        "block": "II",
-        "n": 4,
-        "title": "Волны",
-        "sub": "Как колебание отправляется в путь",
-        "status": "ready",
-        "needs": [
-          "oscillations"
-        ],
-        "feeds": [
-          "optics",
-          "quantum"
-        ],
-        "open": "турбулентность — старейшая нерешённая задача классической физики"
-      },
-      {
-        "id": "thermodynamics",
-        "block": "II",
-        "n": 5,
-        "title": "Термодинамика",
-        "sub": "Молекулы · фазовые переходы · двигатель",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "entropy"
-        ],
-        "open": "почему обратимые законы дают необратимый мир"
-      },
-      {
-        "id": "entropy",
-        "block": "II",
-        "n": 6,
-        "title": "Энтропия и стрела времени",
-        "sub": "Беспорядок · информация · направление времени",
-        "status": "ready",
-        "needs": [
-          "thermodynamics"
-        ],
-        "feeds": [
-          "quantum",
-          "nuclear"
-        ],
-        "key": true,
-        "open": "почему энтропия Вселенной была изначально столь мала"
-      },
-      {
-        "id": "electrostatics",
-        "block": "III",
-        "n": 7,
-        "title": "Электростатика",
-        "sub": "Заряд, поле, потенциал",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "electricity"
-        ],
-        "open": "почему заряд квантуется строго кратно элементарному"
-      },
-      {
-        "id": "electricity",
-        "block": "III",
-        "n": 8,
-        "title": "Ток и магнетизм",
-        "sub": "Движущийся заряд рождает поле",
-        "status": "ready",
-        "needs": [
-          "electrostatics",
-          "oscillations"
-        ],
-        "feeds": [
-          "optics"
-        ],
-        "open": "высокотемпературная сверхпроводимость не объяснена до сих пор"
-      },
-      {
-        "id": "optics",
-        "block": "III",
-        "n": 9,
-        "title": "Волны и оптика",
-        "sub": "Свет как электромагнитная волна",
-        "status": "ready",
-        "needs": [
-          "electricity",
-          "waves"
-        ],
-        "feeds": [
-          "quantum",
-          "relativity"
-        ],
-        "open": "свет ведёт себя и как волна, и как частица — что он такое"
-      },
-      {
-        "id": "relativity",
-        "block": "IV",
-        "n": 10,
-        "title": "Теория относительности",
-        "sub": "Когда скорость света — предел",
-        "status": "ready",
-        "needs": [
-          "mechanics",
-          "optics"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "что происходит внутри чёрной дыры, где теория теряет силу"
-      },
-      {
-        "id": "quantum",
-        "block": "IV",
-        "n": 11,
-        "title": "Квантовая физика",
-        "sub": "Почему природа дискретна",
-        "status": "ready",
-        "needs": [
-          "waves",
-          "optics"
-        ],
-        "feeds": [
-          "atom"
-        ],
-        "open": "что считать измерением и нужен ли для него наблюдатель"
-      },
-      {
-        "id": "atom",
-        "block": "IV",
-        "n": 12,
-        "title": "Атом и спектры",
-        "sub": "Уравнение Шрёдингера как стоячая волна",
-        "status": "ready",
-        "needs": [
-          "quantum",
-          "oscillations"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "точно решается только атом водорода; дальше — приближения"
-      },
-      {
-        "id": "nuclear",
-        "block": "IV",
-        "n": 13,
-        "title": "Ядро и частицы",
-        "sub": "Откуда берётся энергия звёзд",
-        "status": "ready",
-        "needs": [
-          "atom",
-          "relativity"
-        ],
-        "feeds": [],
-        "open": "почему массы частиц именно такие и куда делась антиматерия"
-      }
-    ]
-  },
-  "topics": [
-    {
-      "id": "language",
-      "block": "0",
-      "n": 0,
-      "title": "Как физика описывает мир",
-      "sub": "Модель · размерность · порядок величины · пространство состояний",
-      "status": "ready",
-      "needs": [],
-      "feeds": [
-        "mechanics",
-        "entropy",
-        "quantum"
-      ],
-      "open": "почему математика вообще работает применительно к природе"
-    },
-    {
-      "id": "mechanics",
-      "block": "I",
-      "n": 1,
-      "title": "Механика",
-      "sub": "Материальная точка · Ньютон · Сохранение",
-      "status": "ready",
-      "needs": [
-        "language"
-      ],
-      "feeds": [
-        "oscillations",
-        "gravity",
-        "relativity"
-      ],
-      "open": "что такое инерция и почему инертная масса равна гравитационной"
-    },
-    {
-      "id": "gravity",
-      "block": "I",
-      "n": 2,
-      "title": "Гравитация и орбиты",
-      "sub": "Почему планеты не падают и не улетают",
-      "status": "ready",
-      "needs": [
-        "mechanics"
-      ],
-      "feeds": [
-        "relativity"
-      ],
-      "open": "как проквантовать гравитацию; природа тёмной материи"
-    },
-    {
-      "id": "oscillations",
-      "block": "II",
-      "n": 3,
-      "title": "Колебания и вращение",
-      "sub": "Гук · осциллятор · резонанс",
-      "status": "ready",
-      "needs": [
-        "mechanics"
-      ],
-      "feeds": [
-        "waves",
-        "electricity",
-        "quantum"
-      ],
-      "open": "когда нелинейность рождает хаос и почему прогноз имеет предел"
-    },
-    {
-      "id": "waves",
-      "block": "II",
-      "n": 4,
-      "title": "Волны",
-      "sub": "Как колебание отправляется в путь",
-      "status": "ready",
-      "needs": [
-        "oscillations"
-      ],
-      "feeds": [
-        "optics",
-        "quantum"
-      ],
-      "open": "турбулентность — старейшая нерешённая задача классической физики"
-    },
-    {
-      "id": "thermodynamics",
-      "block": "II",
-      "n": 5,
-      "title": "Термодинамика",
-      "sub": "Молекулы · фазовые переходы · двигатель",
-      "status": "ready",
-      "needs": [
-        "mechanics"
-      ],
-      "feeds": [
-        "entropy"
-      ],
-      "open": "почему обратимые законы дают необратимый мир"
-    },
-    {
-      "id": "entropy",
-      "block": "II",
-      "n": 6,
-      "title": "Энтропия и стрела времени",
-      "sub": "Беспорядок · информация · направление времени",
-      "status": "ready",
-      "needs": [
-        "thermodynamics"
-      ],
-      "feeds": [
-        "quantum",
-        "nuclear"
-      ],
-      "key": true,
-      "open": "почему энтропия Вселенной была изначально столь мала"
-    },
-    {
-      "id": "electrostatics",
-      "block": "III",
-      "n": 7,
-      "title": "Электростатика",
-      "sub": "Заряд, поле, потенциал",
-      "status": "ready",
-      "needs": [
-        "mechanics"
-      ],
-      "feeds": [
-        "electricity"
-      ],
-      "open": "почему заряд квантуется строго кратно элементарному"
-    },
-    {
-      "id": "electricity",
-      "block": "III",
-      "n": 8,
-      "title": "Ток и магнетизм",
-      "sub": "Движущийся заряд рождает поле",
-      "status": "ready",
-      "needs": [
-        "electrostatics",
-        "oscillations"
-      ],
-      "feeds": [
-        "optics"
-      ],
-      "open": "высокотемпературная сверхпроводимость не объяснена до сих пор"
-    },
-    {
-      "id": "optics",
-      "block": "III",
-      "n": 9,
-      "title": "Волны и оптика",
-      "sub": "Свет как электромагнитная волна",
-      "status": "ready",
-      "needs": [
-        "electricity",
-        "waves"
-      ],
-      "feeds": [
-        "quantum",
-        "relativity"
-      ],
-      "open": "свет ведёт себя и как волна, и как частица — что он такое"
-    },
-    {
-      "id": "relativity",
-      "block": "IV",
-      "n": 10,
-      "title": "Теория относительности",
-      "sub": "Когда скорость света — предел",
-      "status": "ready",
-      "needs": [
-        "mechanics",
-        "optics"
-      ],
-      "feeds": [
-        "nuclear"
-      ],
-      "open": "что происходит внутри чёрной дыры, где теория теряет силу"
-    },
-    {
-      "id": "quantum",
-      "block": "IV",
-      "n": 11,
-      "title": "Квантовая физика",
-      "sub": "Почему природа дискретна",
-      "status": "ready",
-      "needs": [
-        "waves",
-        "optics"
-      ],
-      "feeds": [
-        "atom"
-      ],
-      "open": "что считать измерением и нужен ли для него наблюдатель"
-    },
-    {
-      "id": "atom",
-      "block": "IV",
-      "n": 12,
-      "title": "Атом и спектры",
-      "sub": "Уравнение Шрёдингера как стоячая волна",
-      "status": "ready",
-      "needs": [
-        "quantum",
-        "oscillations"
-      ],
-      "feeds": [
-        "nuclear"
-      ],
-      "open": "точно решается только атом водорода; дальше — приближения"
-    },
-    {
-      "id": "nuclear",
-      "block": "IV",
-      "n": 13,
-      "title": "Ядро и частицы",
-      "sub": "Откуда берётся энергия звёзд",
-      "status": "ready",
-      "needs": [
-        "atom",
-        "relativity"
-      ],
-      "feeds": [],
-      "open": "почему массы частиц именно такие и куда делась антиматерия"
-    }
+ "schema": "b42.tree/1",
+ "ru": {
+  "title": "Дерево знаний",
+  "subtitle": "Физика от материальной точки до атомного ядра — и до края, где кончается известное",
+  "lead": "Курс растёт снизу вверх: каждая тема опирается на предыдущие и питает следующие. Но дерево не заканчивается кроной. У каждой темы отмечено, что в ней осталось нерешённым, — потому что физика не свод готовых ответов, а способ описывать мир, и описание всё ещё строится.",
+  "blocks": [
+   {
+    "id": "0",
+    "title": "Язык физики",
+    "sub": "как вообще устроено описание природы"
+   },
+   {
+    "id": "I",
+    "title": "Механика",
+    "sub": "язык, на котором говорит вся физика"
+   },
+   {
+    "id": "II",
+    "title": "Колебания и тепло",
+    "sub": "от одного маятника до миллиарда молекул"
+   },
+   {
+    "id": "III",
+    "title": "Электромагнетизм",
+    "sub": "поле как способ описания природы"
+   },
+   {
+    "id": "IV",
+    "title": "Современная физика",
+    "sub": "где классика перестаёт работать"
+   }
   ],
-  "en": {
-    "title": "Tree of Knowledge",
-    "subtitle": "Physics from a material point to the atomic nucleus — and to the edge where the known ends",
-    "lead": "The course grows from the bottom up: each topic builds on the previous ones and feeds the next. But the tree does not end at the crown. For each topic, what remains unsolved is marked — because physics is not a collection of ready-made answers, but a way to describe the world, and the description is still being built.",
-    "blocks": [
-      {
-        "id": "0",
-        "title": "Language of Physics",
-        "sub": "how the description of nature works in general"
-      },
-      {
-        "id": "I",
-        "title": "Mechanics",
-        "sub": "the language spoken by all physics"
-      },
-      {
-        "id": "II",
-        "title": "Oscillations and Heat",
-        "sub": "from a single pendulum to billions of molecules"
-      },
-      {
-        "id": "III",
-        "title": "Electromagnetism",
-        "sub": "field as a way to describe nature"
-      },
-      {
-        "id": "IV",
-        "title": "Modern Physics",
-        "sub": "where classical physics stops working"
-      }
+  "openLabel": "не решено",
+  "threads": [
+   {
+    "id": "model",
+    "name": "Модель и её границы",
+    "path": [
+     "language",
+     "mechanics",
+     "relativity",
+     "quantum"
     ],
-    "openLabel": "unsolved",
-    "threads": [
-      {
-        "id": "model",
-        "name": "Model and Its Limits",
-        "path": [
-          "language",
-          "mechanics",
-          "relativity",
-          "quantum"
-        ],
-        "note": "any theory is valid in its domain and breaks down outside it; knowing the boundary is more important than knowing the formula"
-      },
-      {
-        "id": "osc",
-        "name": "Oscillator",
-        "path": [
-          "oscillations",
-          "electricity",
-          "quantum"
-        ],
-        "note": "pendulum → oscillatory circuit → quantum well: one apparatus, three worlds"
-      },
-      {
-        "id": "energy",
-        "name": "Conservation of Energy",
-        "path": [
-          "mechanics",
-          "thermodynamics",
-          "relativity",
-          "nuclear"
-        ],
-        "note": "work → heat → E=mc² → nuclear binding energy"
-      },
-      {
-        "id": "wave",
-        "name": "Wave",
-        "path": [
-          "waves",
-          "optics",
-          "quantum"
-        ],
-        "note": "sound → light → matter waves; the double-slit experiment is repeated twice and means different things"
-      },
-      {
-        "id": "entro",
-        "name": "Entropy and Information",
-        "path": [
-          "thermodynamics",
-          "entropy",
-          "quantum",
-          "nuclear"
-        ],
-        "note": "a measure of disorder, a measure of ignorance, and a measure of information turned out to be the same quantity; hence the only arrow of time in physics"
-      },
-      {
-        "id": "prob",
-        "name": "Probability",
-        "path": [
-          "entropy",
-          "quantum"
-        ],
-        "note": "thermal chaos and quantum uncertainty are fundamentally different probabilities"
-      },
-      {
-        "id": "phase",
-        "name": "State Space",
-        "path": [
-          "language",
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "note": "replacing memory with dimension gives a point instead of a history — and beyond that, this technique remains unchanged, only the physics changes"
-      }
+    "note": "любая теория верна в своей области и ломается за её пределами; знать границу важнее, чем знать формулу"
+   },
+   {
+    "id": "osc",
+    "name": "Осциллятор",
+    "path": [
+     "oscillations",
+     "electricity",
+     "quantum"
     ],
-    "topics": [
-      {
-        "id": "language",
-        "block": "0",
-        "n": 0,
-        "title": "How Physics Describes the World",
-        "sub": "Introductory Topic: Not Laws, but the Way Laws Are Structured",
-        "status": "ready",
-        "needs": [],
-        "feeds": [
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "open": "why mathematics works for nature at all"
-      },
-      {
-        "id": "mechanics",
-        "block": "I",
-        "n": 1,
-        "title": "Mechanics",
-        "sub": "The science of motion — and the language spoken by all other physics",
-        "status": "ready",
-        "needs": [
-          "language"
-        ],
-        "feeds": [
-          "oscillations",
-          "gravity",
-          "relativity"
-        ],
-        "open": "what inertia is, and why inertial mass equals gravitational mass"
-      },
-      {
-        "id": "gravity",
-        "block": "I",
-        "n": 2,
-        "title": "Gravity and Orbits",
-        "sub": "Why Planets Don't Fall or Fly Away",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "relativity"
-        ],
-        "open": "how to quantise gravity; the nature of dark matter"
-      },
-      {
-        "id": "oscillations",
-        "block": "II",
-        "n": 3,
-        "title": "Oscillations and Rotation",
-        "sub": "One motion in two guises — and why nature is so fond of the sine",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "waves",
-          "electricity",
-          "quantum"
-        ],
-        "open": "when nonlinearity breeds chaos, and why forecasts have a limit"
-      },
-      {
-        "id": "waves",
-        "block": "II",
-        "n": 4,
-        "title": "Waves",
-        "sub": "How a Vibration Sets Off",
-        "status": "ready",
-        "needs": [
-          "oscillations"
-        ],
-        "feeds": [
-          "optics",
-          "quantum"
-        ],
-        "open": "turbulence — the oldest unsolved problem of classical physics"
-      },
-      {
-        "id": "thermodynamics",
-        "block": "II",
-        "n": 5,
-        "title": "Thermodynamics",
-        "sub": "The science of heat, work, and why you can't get something for nothing",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "entropy"
-        ],
-        "open": "why reversible laws produce an irreversible world"
-      },
-      {
-        "id": "entropy",
-        "block": "II",
-        "n": 6,
-        "title": "Entropy and the Arrow of Time",
-        "sub": "The deepest topic in the course—and the only one that touches on an unsolved question",
-        "status": "ready",
-        "needs": [
-          "thermodynamics"
-        ],
-        "feeds": [
-          "quantum",
-          "nuclear"
-        ],
-        "key": true,
-        "open": "why the entropy of the Universe started out so low"
-      },
-      {
-        "id": "electrostatics",
-        "block": "III",
-        "n": 7,
-        "title": "Electrostatics",
-        "sub": "Charge, Field, Potential",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "electricity"
-        ],
-        "open": "why charge is quantised in strict multiples of the elementary one"
-      },
-      {
-        "id": "electricity",
-        "block": "III",
-        "n": 8,
-        "title": "Current and Magnetism",
-        "sub": "Moving charge creates a field",
-        "status": "ready",
-        "needs": [
-          "electrostatics",
-          "oscillations"
-        ],
-        "feeds": [
-          "optics"
-        ],
-        "open": "high-temperature superconductivity is still unexplained"
-      },
-      {
-        "id": "optics",
-        "block": "III",
-        "n": 9,
-        "title": "Waves and Optics",
-        "sub": "Light as an Electromagnetic Wave",
-        "status": "ready",
-        "needs": [
-          "electricity",
-          "waves"
-        ],
-        "feeds": [
-          "quantum",
-          "relativity"
-        ],
-        "open": "light behaves as both wave and particle — so what is it"
-      },
-      {
-        "id": "relativity",
-        "block": "IV",
-        "n": 10,
-        "title": "Theory of Relativity",
-        "sub": "When the speed of light is the limit",
-        "status": "ready",
-        "needs": [
-          "mechanics",
-          "optics"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "what happens inside a black hole, where the theory breaks down"
-      },
-      {
-        "id": "quantum",
-        "block": "IV",
-        "n": 11,
-        "title": "Quantum Physics",
-        "sub": "Why Nature Is Discrete",
-        "status": "ready",
-        "needs": [
-          "waves",
-          "optics"
-        ],
-        "feeds": [
-          "atom"
-        ],
-        "open": "what counts as a measurement, and whether it needs an observer"
-      },
-      {
-        "id": "atom",
-        "block": "IV",
-        "n": 12,
-        "title": "Atom and Spectra",
-        "sub": "The Schrödinger Equation as a Standing Wave",
-        "status": "ready",
-        "needs": [
-          "quantum",
-          "oscillations"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "only the hydrogen atom is solved exactly; beyond it — approximations"
-      },
-      {
-        "id": "nuclear",
-        "block": "IV",
-        "n": 13,
-        "title": "Nuclei and Particles",
-        "sub": "Where Stars Get Their Energy",
-        "status": "ready",
-        "needs": [
-          "atom",
-          "relativity"
-        ],
-        "feeds": [],
-        "open": "why particle masses are what they are, and where the antimatter went"
-      }
-    ]
+    "note": "маятник → колебательный контур → квантовая яма: один аппарат, три мира"
+   },
+   {
+    "id": "energy",
+    "name": "Сохранение энергии",
+    "path": [
+     "mechanics",
+     "thermodynamics",
+     "relativity",
+     "nuclear"
+    ],
+    "note": "работа → теплота → E=mc² → энергия связи ядра"
+   },
+   {
+    "id": "wave",
+    "name": "Волна",
+    "path": [
+     "waves",
+     "optics",
+     "quantum"
+    ],
+    "note": "звук → свет → волны материи; двухщелевой опыт повторяется дважды и означает разное"
+   },
+   {
+    "id": "entro",
+    "name": "Энтропия и информация",
+    "path": [
+     "thermodynamics",
+     "entropy",
+     "quantum",
+     "nuclear"
+    ],
+    "note": "мера беспорядка, мера незнания и мера информации оказались одной величиной; отсюда же единственная в физике стрела времени"
+   },
+   {
+    "id": "prob",
+    "name": "Вероятность",
+    "path": [
+     "entropy",
+     "quantum"
+    ],
+    "note": "тепловой хаос и квантовая неопределённость — принципиально разные вероятности"
+   },
+   {
+    "id": "phase",
+    "name": "Пространство состояний",
+    "path": [
+     "language",
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "note": "заменяя память на размерность, получаем точку вместо истории — и дальше этот приём не меняется, меняется только физика"
+   }
+  ],
+  "topics": [
+   {
+    "id": "language",
+    "block": "0",
+    "n": 0,
+    "title": "Как физика описывает мир",
+    "sub": "Модель · размерность · порядок величины · пространство состояний",
+    "status": "ready",
+    "needs": [],
+    "feeds": [
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "open": "почему математика вообще работает применительно к природе"
+   },
+   {
+    "id": "mechanics",
+    "block": "I",
+    "n": 1,
+    "title": "Механика",
+    "sub": "Материальная точка · Ньютон · Сохранение",
+    "status": "ready",
+    "needs": [
+     "language"
+    ],
+    "feeds": [
+     "oscillations",
+     "gravity",
+     "relativity"
+    ],
+    "open": "что такое инерция и почему инертная масса равна гравитационной"
+   },
+   {
+    "id": "gravity",
+    "block": "I",
+    "n": 2,
+    "title": "Гравитация и орбиты",
+    "sub": "Почему планеты не падают и не улетают",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "relativity"
+    ],
+    "open": "как проквантовать гравитацию; природа тёмной материи"
+   },
+   {
+    "id": "oscillations",
+    "block": "II",
+    "n": 3,
+    "title": "Колебания и вращение",
+    "sub": "Гук · осциллятор · резонанс",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "waves",
+     "electricity",
+     "quantum"
+    ],
+    "open": "когда нелинейность рождает хаос и почему прогноз имеет предел"
+   },
+   {
+    "id": "waves",
+    "block": "II",
+    "n": 4,
+    "title": "Волны",
+    "sub": "Как колебание отправляется в путь",
+    "status": "ready",
+    "needs": [
+     "oscillations"
+    ],
+    "feeds": [
+     "optics",
+     "quantum"
+    ],
+    "open": "турбулентность — старейшая нерешённая задача классической физики"
+   },
+   {
+    "id": "thermodynamics",
+    "block": "II",
+    "n": 5,
+    "title": "Термодинамика",
+    "sub": "Молекулы · фазовые переходы · двигатель",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "entropy"
+    ],
+    "open": "почему обратимые законы дают необратимый мир"
+   },
+   {
+    "id": "entropy",
+    "block": "II",
+    "n": 6,
+    "title": "Энтропия и стрела времени",
+    "sub": "Беспорядок · информация · направление времени",
+    "status": "ready",
+    "needs": [
+     "thermodynamics"
+    ],
+    "feeds": [
+     "quantum",
+     "nuclear"
+    ],
+    "key": true,
+    "open": "почему энтропия Вселенной была изначально столь мала"
+   },
+   {
+    "id": "electrostatics",
+    "block": "III",
+    "n": 7,
+    "title": "Электростатика",
+    "sub": "Заряд, поле, потенциал",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "electricity"
+    ],
+    "open": "почему заряд квантуется строго кратно элементарному"
+   },
+   {
+    "id": "electricity",
+    "block": "III",
+    "n": 8,
+    "title": "Ток и магнетизм",
+    "sub": "Движущийся заряд рождает поле",
+    "status": "ready",
+    "needs": [
+     "electrostatics",
+     "oscillations"
+    ],
+    "feeds": [
+     "optics"
+    ],
+    "open": "высокотемпературная сверхпроводимость не объяснена до сих пор"
+   },
+   {
+    "id": "optics",
+    "block": "III",
+    "n": 9,
+    "title": "Волны и оптика",
+    "sub": "Свет как электромагнитная волна",
+    "status": "ready",
+    "needs": [
+     "electricity",
+     "waves"
+    ],
+    "feeds": [
+     "quantum",
+     "relativity"
+    ],
+    "open": "свет ведёт себя и как волна, и как частица — что он такое"
+   },
+   {
+    "id": "relativity",
+    "block": "IV",
+    "n": 10,
+    "title": "Теория относительности",
+    "sub": "Когда скорость света — предел",
+    "status": "ready",
+    "needs": [
+     "mechanics",
+     "optics"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "что происходит внутри чёрной дыры, где теория теряет силу"
+   },
+   {
+    "id": "quantum",
+    "block": "IV",
+    "n": 11,
+    "title": "Квантовая физика",
+    "sub": "Почему природа дискретна",
+    "status": "ready",
+    "needs": [
+     "waves",
+     "optics"
+    ],
+    "feeds": [
+     "atom"
+    ],
+    "open": "что считать измерением и нужен ли для него наблюдатель"
+   },
+   {
+    "id": "atom",
+    "block": "IV",
+    "n": 12,
+    "title": "Атом и спектры",
+    "sub": "Уравнение Шрёдингера как стоячая волна",
+    "status": "ready",
+    "needs": [
+     "quantum",
+     "oscillations"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "точно решается только атом водорода; дальше — приближения"
+   },
+   {
+    "id": "nuclear",
+    "block": "IV",
+    "n": 13,
+    "title": "Ядро и частицы",
+    "sub": "Откуда берётся энергия звёзд",
+    "status": "ready",
+    "needs": [
+     "atom",
+     "relativity"
+    ],
+    "feeds": [],
+    "open": "почему массы частиц именно такие и куда делась антиматерия"
+   }
+  ]
+ },
+ "topics": [
+  {
+   "id": "language",
+   "block": "0",
+   "n": 0,
+   "title": "Как физика описывает мир",
+   "sub": "Модель · размерность · порядок величины · пространство состояний",
+   "status": "ready",
+   "needs": [],
+   "feeds": [
+    "mechanics",
+    "entropy",
+    "quantum"
+   ],
+   "open": "почему математика вообще работает применительно к природе"
   },
-  "es": {
-    "title": "Árbol del conocimiento",
-    "subtitle": "Física desde el punto material hasta el núcleo atómico — y hasta el borde donde termina lo conocido",
-    "lead": "El curso crece de abajo hacia arriba: cada tema se apoya en los anteriores y alimenta a los siguientes. Pero el árbol no termina en la copa. En cada tema se señala lo que queda sin resolver, porque la física no es un compendio de respuestas hechas, sino una forma de describir el mundo, y la descripción aún se está construyendo.",
-    "blocks": [
-      {
-        "id": "0",
-        "title": "Lenguaje de la física",
-        "sub": "cómo está estructurada la descripción de la naturaleza"
-      },
-      {
-        "id": "I",
-        "title": "Mecánica",
-        "sub": "el idioma en el que habla toda la física"
-      },
-      {
-        "id": "II",
-        "title": "Oscilaciones y calor",
-        "sub": "desde un solo péndulo hasta mil millones de moléculas"
-      },
-      {
-        "id": "III",
-        "title": "Electromagnetismo",
-        "sub": "el campo como forma de describir la naturaleza"
-      },
-      {
-        "id": "IV",
-        "title": "Física moderna",
-        "sub": "donde la clásica deja de funcionar"
-      }
-    ],
-    "openLabel": "sin resolver",
-    "threads": [
-      {
-        "id": "model",
-        "name": "Modelo y sus límites",
-        "path": [
-          "language",
-          "mechanics",
-          "relativity",
-          "quantum"
-        ],
-        "note": "cualquier teoría es válida en su dominio y se rompe fuera de él; conocer el límite es más importante que conocer la fórmula"
-      },
-      {
-        "id": "osc",
-        "name": "Oscilador",
-        "path": [
-          "oscillations",
-          "electricity",
-          "quantum"
-        ],
-        "note": "péndulo → circuito oscilante → pozo cuántico: un mismo aparato, tres mundos"
-      },
-      {
-        "id": "energy",
-        "name": "Conservación de la energía",
-        "path": [
-          "mechanics",
-          "thermodynamics",
-          "relativity",
-          "nuclear"
-        ],
-        "note": "trabajo → calor → E=mc² → energía de enlace nuclear"
-      },
-      {
-        "id": "wave",
-        "name": "Onda",
-        "path": [
-          "waves",
-          "optics",
-          "quantum"
-        ],
-        "note": "sonido → luz → ondas de materia; el experimento de la doble rendija se repite dos veces y significa cosas distintas"
-      },
-      {
-        "id": "entro",
-        "name": "Entropía e información",
-        "path": [
-          "thermodynamics",
-          "entropy",
-          "quantum",
-          "nuclear"
-        ],
-        "note": "medida del desorden, medida de la ignorancia y medida de la información resultaron ser una misma magnitud; de ahí también la única flecha del tiempo en física"
-      },
-      {
-        "id": "prob",
-        "name": "Probabilidad",
-        "path": [
-          "entropy",
-          "quantum"
-        ],
-        "note": "el caos térmico y la incertidumbre cuántica son probabilidades fundamentalmente distintas"
-      },
-      {
-        "id": "phase",
-        "name": "Espacio de estados",
-        "path": [
-          "language",
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "note": "reemplazando la memoria por la dimensión, obtenemos un punto en lugar de una historia — y de ahí en adelante este recurso no cambia, solo cambia la física"
-      }
-    ],
-    "topics": [
-      {
-        "id": "language",
-        "block": "0",
-        "n": 0,
-        "title": "Cómo la física describe el mundo",
-        "sub": "Tema introductorio: no las leyes, sino la forma en que están estructuradas las leyes",
-        "status": "ready",
-        "needs": [],
-        "feeds": [
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "open": "por qué las matemáticas funcionan para la naturaleza"
-      },
-      {
-        "id": "mechanics",
-        "block": "I",
-        "n": 1,
-        "title": "Mecánica",
-        "sub": "La ciencia del movimiento — y el lenguaje que habla el resto de la física",
-        "status": "ready",
-        "needs": [
-          "language"
-        ],
-        "feeds": [
-          "oscillations",
-          "gravity",
-          "relativity"
-        ],
-        "open": "qué es la inercia y por qué la masa inercial es igual a la gravitatoria"
-      },
-      {
-        "id": "gravity",
-        "block": "I",
-        "n": 2,
-        "title": "Gravedad y órbitas",
-        "sub": "Por qué los planetas no caen ni se escapan",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "relativity"
-        ],
-        "open": "cómo cuantizar la gravedad; la naturaleza de la materia oscura"
-      },
-      {
-        "id": "oscillations",
-        "block": "II",
-        "n": 3,
-        "title": "Oscilaciones y rotación",
-        "sub": "Un mismo movimiento en dos formas — y por qué la naturaleza ama tanto el seno",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "waves",
-          "electricity",
-          "quantum"
-        ],
-        "open": "cuándo la no linealidad genera caos y por qué el pronóstico tiene un límite"
-      },
-      {
-        "id": "waves",
-        "block": "II",
-        "n": 4,
-        "title": "Ondas",
-        "sub": "Cómo la oscilación se pone en marcha",
-        "status": "ready",
-        "needs": [
-          "oscillations"
-        ],
-        "feeds": [
-          "optics",
-          "quantum"
-        ],
-        "open": "la turbulencia: el problema sin resolver más antiguo de la física clásica"
-      },
-      {
-        "id": "thermodynamics",
-        "block": "II",
-        "n": 5,
-        "title": "Termodinámica",
-        "sub": "La ciencia del calor, el trabajo y por qué no se puede obtener algo de la nada",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "entropy"
-        ],
-        "open": "por qué leyes reversibles producen un mundo irreversible"
-      },
-      {
-        "id": "entropy",
-        "block": "II",
-        "n": 6,
-        "title": "Entropía y la flecha del tiempo",
-        "sub": "El tema más profundo del curso — y el único que topa con una pregunta sin resolver",
-        "status": "ready",
-        "needs": [
-          "thermodynamics"
-        ],
-        "feeds": [
-          "quantum",
-          "nuclear"
-        ],
-        "key": true,
-        "open": "por qué la entropía del Universo era tan baja al principio"
-      },
-      {
-        "id": "electrostatics",
-        "block": "III",
-        "n": 7,
-        "title": "Electrostática",
-        "sub": "Carga, campo, potencial",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "electricity"
-        ],
-        "open": "por qué la carga se cuantiza en múltiplos estrictos de la elemental"
-      },
-      {
-        "id": "electricity",
-        "block": "III",
-        "n": 8,
-        "title": "Corriente y magnetismo",
-        "sub": "La carga en movimiento genera un campo",
-        "status": "ready",
-        "needs": [
-          "electrostatics",
-          "oscillations"
-        ],
-        "feeds": [
-          "optics"
-        ],
-        "open": "la superconductividad de alta temperatura sigue sin explicación"
-      },
-      {
-        "id": "optics",
-        "block": "III",
-        "n": 9,
-        "title": "Ondas y óptica",
-        "sub": "La luz como onda electromagnética",
-        "status": "ready",
-        "needs": [
-          "electricity",
-          "waves"
-        ],
-        "feeds": [
-          "quantum",
-          "relativity"
-        ],
-        "open": "la luz se comporta como onda y como partícula: entonces, ¿qué es?"
-      },
-      {
-        "id": "relativity",
-        "block": "IV",
-        "n": 10,
-        "title": "Teoría de la relatividad",
-        "sub": "Cuando la velocidad de la luz es el límite",
-        "status": "ready",
-        "needs": [
-          "mechanics",
-          "optics"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "qué ocurre dentro de un agujero negro, donde la teoría deja de valer"
-      },
-      {
-        "id": "quantum",
-        "block": "IV",
-        "n": 11,
-        "title": "Física cuántica",
-        "sub": "Por qué la naturaleza es discreta",
-        "status": "ready",
-        "needs": [
-          "waves",
-          "optics"
-        ],
-        "feeds": [
-          "atom"
-        ],
-        "open": "qué cuenta como medición y si hace falta un observador"
-      },
-      {
-        "id": "atom",
-        "block": "IV",
-        "n": 12,
-        "title": "El átomo y los espectros",
-        "sub": "La ecuación de Schrödinger como onda estacionaria",
-        "status": "ready",
-        "needs": [
-          "quantum",
-          "oscillations"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "solo el átomo de hidrógeno se resuelve exactamente; más allá, aproximaciones"
-      },
-      {
-        "id": "nuclear",
-        "block": "IV",
-        "n": 13,
-        "title": "Núcleo y partículas",
-        "sub": "De dónde proviene la energía de las estrellas",
-        "status": "ready",
-        "needs": [
-          "atom",
-          "relativity"
-        ],
-        "feeds": [],
-        "open": "por qué las masas de las partículas son las que son y adónde fue la antimateria"
-      }
-    ]
+  {
+   "id": "mechanics",
+   "block": "I",
+   "n": 1,
+   "title": "Механика",
+   "sub": "Материальная точка · Ньютон · Сохранение",
+   "status": "ready",
+   "needs": [
+    "language"
+   ],
+   "feeds": [
+    "oscillations",
+    "gravity",
+    "relativity"
+   ],
+   "open": "что такое инерция и почему инертная масса равна гравитационной"
   },
-  "ar": {
-    "title": "شجرة المعرفة",
-    "subtitle": "الفيزياء من نقطة مادية إلى نواة الذرة — وإلى الحافة حيث ينتهي المعلوم",
-    "lead": "تنمو الدورة من الأسفل إلى الأعلى: كل موضوع يعتمد على السابق ويغذي التالي. لكن الشجرة لا تنتهي بالتاج. عند كل موضوع يُشار إلى ما بقي غير محلول فيه — لأن الفيزياء ليست مجموعة إجابات جاهزة، بل طريقة لوصف العالم، والوصف لا يزال قيد البناء.",
-    "blocks": [
-      {
-        "id": "0",
-        "title": "لغة الفيزياء",
-        "sub": "كيف يُنظم وصف الطبيعة أساسًا"
-      },
-      {
-        "id": "I",
-        "title": "الميكانيكا",
-        "sub": "اللغة التي تتحدث بها كل الفيزياء"
-      },
-      {
-        "id": "II",
-        "title": "الاهتزازات والحرارة",
-        "sub": "من بندول واحد إلى مليار جزيء"
-      },
-      {
-        "id": "III",
-        "title": "الكهرومغناطيسية",
-        "sub": "المجال كطريقة لوصف الطبيعة"
-      },
-      {
-        "id": "IV",
-        "title": "الفيزياء الحديثة",
-        "sub": "حيث تتوقف الكلاسيكية عن العمل"
-      }
-    ],
-    "openLabel": "غير محلول",
-    "threads": [
-      {
-        "id": "model",
-        "name": "النموذج وحدوده",
-        "path": [
-          "language",
-          "mechanics",
-          "relativity",
-          "quantum"
-        ],
-        "note": "أي نظرية صحيحة في مجالها وتنهار خارجه؛ معرفة الحدود أهم من معرفة الصيغة"
-      },
-      {
-        "id": "osc",
-        "name": "المذبذب",
-        "path": [
-          "oscillations",
-          "electricity",
-          "quantum"
-        ],
-        "note": "بندول ← دائرة تذبذبية ← بئر كمومية: جهاز واحد، ثلاثة عوالم"
-      },
-      {
-        "id": "energy",
-        "name": "حفظ الطاقة",
-        "path": [
-          "mechanics",
-          "thermodynamics",
-          "relativity",
-          "nuclear"
-        ],
-        "note": "شغل ← حرارة ← E=mc² ← طاقة ربط النواة"
-      },
-      {
-        "id": "wave",
-        "name": "الموجة",
-        "path": [
-          "waves",
-          "optics",
-          "quantum"
-        ],
-        "note": "صوت ← ضوء ← موجات مادية؛ تجربة الشق المزدوج تتكرر مرتين وتعني شيئًا مختلفًا"
-      },
-      {
-        "id": "entro",
-        "name": "الإنتروبيا والمعلومات",
-        "path": [
-          "thermodynamics",
-          "entropy",
-          "quantum",
-          "nuclear"
-        ],
-        "note": "مقياس الفوضى، مقياس الجهل ومقياس المعلومات اتضح أنهم مقدار واحد؛ ومن هنا أيضًا سهم الزمن الوحيد في الفيزياء"
-      },
-      {
-        "id": "prob",
-        "name": "الاحتمال",
-        "path": [
-          "entropy",
-          "quantum"
-        ],
-        "note": "الفوضى الحرارية واللاحتمية الكمومية — احتمالان مختلفان جوهريًا"
-      },
-      {
-        "id": "phase",
-        "name": "فضاء الحالات",
-        "path": [
-          "language",
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "note": "باستبدال الذاكرة بالبعد، نحصل على نقطة بدلاً من تاريخ — ومن ثم لا تتغير هذه التقنية، تتغير الفيزياء فقط"
-      }
-    ],
-    "topics": [
-      {
-        "id": "language",
-        "block": "0",
-        "n": 0,
-        "title": "كيف تصف الفيزياء العالم",
-        "sub": "موضوع تمهيدي: ليس القوانين، بل الطريقة التي تُنظّم بها القوانين",
-        "status": "ready",
-        "needs": [],
-        "feeds": [
-          "mechanics",
-          "entropy",
-          "quantum"
-        ],
-        "open": "لماذا تصلح الرياضيات لوصف الطبيعة أصلاً"
-      },
-      {
-        "id": "mechanics",
-        "block": "I",
-        "n": 1,
-        "title": "الميكانيكا",
-        "sub": "علم الحركة — واللغة التي تتحدث بها بقية الفيزياء",
-        "status": "ready",
-        "needs": [
-          "language"
-        ],
-        "feeds": [
-          "oscillations",
-          "gravity",
-          "relativity"
-        ],
-        "open": "ما هو القصور الذاتي، ولماذا تساوي الكتلة القصورية الكتلة الثقالية"
-      },
-      {
-        "id": "gravity",
-        "block": "I",
-        "n": 2,
-        "title": "الجاذبية والمدارات",
-        "sub": "لماذا لا تسقط الكواكب ولا تفلت؟",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "relativity"
-        ],
-        "open": "كيف نُكمّم الجاذبية؛ وما طبيعة المادة المظلمة"
-      },
-      {
-        "id": "oscillations",
-        "block": "II",
-        "n": 3,
-        "title": "الاهتزاز والدوران",
-        "sub": "حركة واحدة في وجهين - ولماذا تحب الطبيعة الجيب بهذا القدر",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "waves",
-          "electricity",
-          "quantum"
-        ],
-        "open": "متى تولّد اللاخطية الفوضى، ولماذا للتنبؤ حدّ"
-      },
-      {
-        "id": "waves",
-        "block": "II",
-        "n": 4,
-        "title": "الموجات",
-        "sub": "كيف ينطلق الاهتزاز في رحلته",
-        "status": "ready",
-        "needs": [
-          "oscillations"
-        ],
-        "feeds": [
-          "optics",
-          "quantum"
-        ],
-        "open": "الاضطراب — أقدم مسألة لم تُحل في الفيزياء الكلاسيكية"
-      },
-      {
-        "id": "thermodynamics",
-        "block": "II",
-        "n": 5,
-        "title": "الديناميكا الحرارية",
-        "sub": "علم الحرارة والشغل ولماذا لا يمكن الحصول على شيء من لا شيء",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "entropy"
-        ],
-        "open": "لماذا تنتج قوانين عكوسة عالماً غير عكوس"
-      },
-      {
-        "id": "entropy",
-        "block": "II",
-        "n": 6,
-        "title": "الإنتروبيا وسهم الزمن",
-        "sub": "أعمق موضوع في الدورة — والوحيد الذي يصطدم بسؤال غير محلول",
-        "status": "ready",
-        "needs": [
-          "thermodynamics"
-        ],
-        "feeds": [
-          "quantum",
-          "nuclear"
-        ],
-        "key": true,
-        "open": "لماذا كانت إنتروبيا الكون منخفضة إلى هذا الحد في البداية"
-      },
-      {
-        "id": "electrostatics",
-        "block": "III",
-        "n": 7,
-        "title": "الكهرباء الساكنة",
-        "sub": "الشحنة، المجال، الجهد",
-        "status": "ready",
-        "needs": [
-          "mechanics"
-        ],
-        "feeds": [
-          "electricity"
-        ],
-        "open": "لماذا تتكمّم الشحنة بمضاعفات دقيقة للشحنة الأولية"
-      },
-      {
-        "id": "electricity",
-        "block": "III",
-        "n": 8,
-        "title": "التيار والمغناطيسية",
-        "sub": "الشحنة المتحركة تولد مجالاً",
-        "status": "ready",
-        "needs": [
-          "electrostatics",
-          "oscillations"
-        ],
-        "feeds": [
-          "optics"
-        ],
-        "open": "الموصلية الفائقة عند درجات الحرارة العالية لا تزال بلا تفسير"
-      },
-      {
-        "id": "optics",
-        "block": "III",
-        "n": 9,
-        "title": "الموجات والبصريات",
-        "sub": "الضوء كموجة كهرومغناطيسية",
-        "status": "ready",
-        "needs": [
-          "electricity",
-          "waves"
-        ],
-        "feeds": [
-          "quantum",
-          "relativity"
-        ],
-        "open": "يسلك الضوء سلوك الموجة والجسيم معاً — فما هو إذن"
-      },
-      {
-        "id": "relativity",
-        "block": "IV",
-        "n": 10,
-        "title": "نظرية النسبية",
-        "sub": "عندما تكون سرعة الضوء هي الحد",
-        "status": "ready",
-        "needs": [
-          "mechanics",
-          "optics"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "ماذا يحدث داخل الثقب الأسود حيث تفقد النظرية صلاحيتها"
-      },
-      {
-        "id": "quantum",
-        "block": "IV",
-        "n": 11,
-        "title": "الفيزياء الكمومية",
-        "sub": "لماذا الطبيعة متقطعة",
-        "status": "ready",
-        "needs": [
-          "waves",
-          "optics"
-        ],
-        "feeds": [
-          "atom"
-        ],
-        "open": "ما الذي يُعدّ قياساً، وهل يحتاج إلى مراقب"
-      },
-      {
-        "id": "atom",
-        "block": "IV",
-        "n": 12,
-        "title": "الذرة والأطياف",
-        "sub": "معادلة شرودنغر كموجة واقفة",
-        "status": "ready",
-        "needs": [
-          "quantum",
-          "oscillations"
-        ],
-        "feeds": [
-          "nuclear"
-        ],
-        "open": "لا يُحلّ بدقة سوى ذرة الهيدروجين؛ وما بعدها تقريبات"
-      },
-      {
-        "id": "nuclear",
-        "block": "IV",
-        "n": 13,
-        "title": "النواة والجسيمات",
-        "sub": "من أين تأتي طاقة النجوم",
-        "status": "ready",
-        "needs": [
-          "atom",
-          "relativity"
-        ],
-        "feeds": [],
-        "open": "لماذا كتل الجسيمات على ما هي عليه، وأين ذهبت المادة المضادة"
-      }
-    ]
+  {
+   "id": "gravity",
+   "block": "I",
+   "n": 2,
+   "title": "Гравитация и орбиты",
+   "sub": "Почему планеты не падают и не улетают",
+   "status": "ready",
+   "needs": [
+    "mechanics"
+   ],
+   "feeds": [
+    "relativity"
+   ],
+   "open": "как проквантовать гравитацию; природа тёмной материи"
+  },
+  {
+   "id": "oscillations",
+   "block": "II",
+   "n": 3,
+   "title": "Колебания и вращение",
+   "sub": "Гук · осциллятор · резонанс",
+   "status": "ready",
+   "needs": [
+    "mechanics"
+   ],
+   "feeds": [
+    "waves",
+    "electricity",
+    "quantum"
+   ],
+   "open": "когда нелинейность рождает хаос и почему прогноз имеет предел"
+  },
+  {
+   "id": "waves",
+   "block": "II",
+   "n": 4,
+   "title": "Волны",
+   "sub": "Как колебание отправляется в путь",
+   "status": "ready",
+   "needs": [
+    "oscillations"
+   ],
+   "feeds": [
+    "optics",
+    "quantum"
+   ],
+   "open": "турбулентность — старейшая нерешённая задача классической физики"
+  },
+  {
+   "id": "thermodynamics",
+   "block": "II",
+   "n": 5,
+   "title": "Термодинамика",
+   "sub": "Молекулы · фазовые переходы · двигатель",
+   "status": "ready",
+   "needs": [
+    "mechanics"
+   ],
+   "feeds": [
+    "entropy"
+   ],
+   "open": "почему обратимые законы дают необратимый мир"
+  },
+  {
+   "id": "entropy",
+   "block": "II",
+   "n": 6,
+   "title": "Энтропия и стрела времени",
+   "sub": "Беспорядок · информация · направление времени",
+   "status": "ready",
+   "needs": [
+    "thermodynamics"
+   ],
+   "feeds": [
+    "quantum",
+    "nuclear"
+   ],
+   "key": true,
+   "open": "почему энтропия Вселенной была изначально столь мала"
+  },
+  {
+   "id": "electrostatics",
+   "block": "III",
+   "n": 7,
+   "title": "Электростатика",
+   "sub": "Заряд, поле, потенциал",
+   "status": "ready",
+   "needs": [
+    "mechanics"
+   ],
+   "feeds": [
+    "electricity"
+   ],
+   "open": "почему заряд квантуется строго кратно элементарному"
+  },
+  {
+   "id": "electricity",
+   "block": "III",
+   "n": 8,
+   "title": "Ток и магнетизм",
+   "sub": "Движущийся заряд рождает поле",
+   "status": "ready",
+   "needs": [
+    "electrostatics",
+    "oscillations"
+   ],
+   "feeds": [
+    "optics"
+   ],
+   "open": "высокотемпературная сверхпроводимость не объяснена до сих пор"
+  },
+  {
+   "id": "optics",
+   "block": "III",
+   "n": 9,
+   "title": "Волны и оптика",
+   "sub": "Свет как электромагнитная волна",
+   "status": "ready",
+   "needs": [
+    "electricity",
+    "waves"
+   ],
+   "feeds": [
+    "quantum",
+    "relativity"
+   ],
+   "open": "свет ведёт себя и как волна, и как частица — что он такое"
+  },
+  {
+   "id": "relativity",
+   "block": "IV",
+   "n": 10,
+   "title": "Теория относительности",
+   "sub": "Когда скорость света — предел",
+   "status": "ready",
+   "needs": [
+    "mechanics",
+    "optics"
+   ],
+   "feeds": [
+    "nuclear"
+   ],
+   "open": "что происходит внутри чёрной дыры, где теория теряет силу"
+  },
+  {
+   "id": "quantum",
+   "block": "IV",
+   "n": 11,
+   "title": "Квантовая физика",
+   "sub": "Почему природа дискретна",
+   "status": "ready",
+   "needs": [
+    "waves",
+    "optics"
+   ],
+   "feeds": [
+    "atom"
+   ],
+   "open": "что считать измерением и нужен ли для него наблюдатель"
+  },
+  {
+   "id": "atom",
+   "block": "IV",
+   "n": 12,
+   "title": "Атом и спектры",
+   "sub": "Уравнение Шрёдингера как стоячая волна",
+   "status": "ready",
+   "needs": [
+    "quantum",
+    "oscillations"
+   ],
+   "feeds": [
+    "nuclear"
+   ],
+   "open": "точно решается только атом водорода; дальше — приближения"
+  },
+  {
+   "id": "nuclear",
+   "block": "IV",
+   "n": 13,
+   "title": "Ядро и частицы",
+   "sub": "Откуда берётся энергия звёзд",
+   "status": "ready",
+   "needs": [
+    "atom",
+    "relativity"
+   ],
+   "feeds": [],
+   "open": "почему массы частиц именно такие и куда делась антиматерия"
+  },
+  {
+   "id": "analytical",
+   "block": "V",
+   "n": 14,
+   "title": "Теоретическая механика",
+   "sub": "Наименьшее действие · Симметрии · Фазовое пространство",
+   "status": "ready",
+   "needs": [
+    "mechanics",
+    "oscillations"
+   ],
+   "feeds": [
+    "quantum",
+    "entropy"
+   ],
+   "open": "почему природа вообще экономна — принцип работает, но объяснения самому принципу нет"
   }
+ ],
+ "en": {
+  "title": "Tree of Knowledge",
+  "subtitle": "Physics from a material point to the atomic nucleus — and to the edge where the known ends",
+  "lead": "The course grows from the bottom up: each topic builds on the previous ones and feeds the next. But the tree does not end at the crown. For each topic, what remains unsolved is marked — because physics is not a collection of ready-made answers, but a way to describe the world, and the description is still being built.",
+  "blocks": [
+   {
+    "id": "0",
+    "title": "Language of Physics",
+    "sub": "how the description of nature works in general"
+   },
+   {
+    "id": "I",
+    "title": "Mechanics",
+    "sub": "the language spoken by all physics"
+   },
+   {
+    "id": "II",
+    "title": "Oscillations and Heat",
+    "sub": "from a single pendulum to billions of molecules"
+   },
+   {
+    "id": "III",
+    "title": "Electromagnetism",
+    "sub": "field as a way to describe nature"
+   },
+   {
+    "id": "IV",
+    "title": "Modern Physics",
+    "sub": "where classical physics stops working"
+   }
+  ],
+  "openLabel": "unsolved",
+  "threads": [
+   {
+    "id": "model",
+    "name": "Model and Its Limits",
+    "path": [
+     "language",
+     "mechanics",
+     "relativity",
+     "quantum"
+    ],
+    "note": "any theory is valid in its domain and breaks down outside it; knowing the boundary is more important than knowing the formula"
+   },
+   {
+    "id": "osc",
+    "name": "Oscillator",
+    "path": [
+     "oscillations",
+     "electricity",
+     "quantum"
+    ],
+    "note": "pendulum → oscillatory circuit → quantum well: one apparatus, three worlds"
+   },
+   {
+    "id": "energy",
+    "name": "Conservation of Energy",
+    "path": [
+     "mechanics",
+     "thermodynamics",
+     "relativity",
+     "nuclear"
+    ],
+    "note": "work → heat → E=mc² → nuclear binding energy"
+   },
+   {
+    "id": "wave",
+    "name": "Wave",
+    "path": [
+     "waves",
+     "optics",
+     "quantum"
+    ],
+    "note": "sound → light → matter waves; the double-slit experiment is repeated twice and means different things"
+   },
+   {
+    "id": "entro",
+    "name": "Entropy and Information",
+    "path": [
+     "thermodynamics",
+     "entropy",
+     "quantum",
+     "nuclear"
+    ],
+    "note": "a measure of disorder, a measure of ignorance, and a measure of information turned out to be the same quantity; hence the only arrow of time in physics"
+   },
+   {
+    "id": "prob",
+    "name": "Probability",
+    "path": [
+     "entropy",
+     "quantum"
+    ],
+    "note": "thermal chaos and quantum uncertainty are fundamentally different probabilities"
+   },
+   {
+    "id": "phase",
+    "name": "State Space",
+    "path": [
+     "language",
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "note": "replacing memory with dimension gives a point instead of a history — and beyond that, this technique remains unchanged, only the physics changes"
+   }
+  ],
+  "topics": [
+   {
+    "id": "language",
+    "block": "0",
+    "n": 0,
+    "title": "How Physics Describes the World",
+    "sub": "Introductory Topic: Not Laws, but the Way Laws Are Structured",
+    "status": "ready",
+    "needs": [],
+    "feeds": [
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "open": "why mathematics works for nature at all"
+   },
+   {
+    "id": "mechanics",
+    "block": "I",
+    "n": 1,
+    "title": "Mechanics",
+    "sub": "The science of motion — and the language spoken by all other physics",
+    "status": "ready",
+    "needs": [
+     "language"
+    ],
+    "feeds": [
+     "oscillations",
+     "gravity",
+     "relativity"
+    ],
+    "open": "what inertia is, and why inertial mass equals gravitational mass"
+   },
+   {
+    "id": "gravity",
+    "block": "I",
+    "n": 2,
+    "title": "Gravity and Orbits",
+    "sub": "Why Planets Don't Fall or Fly Away",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "relativity"
+    ],
+    "open": "how to quantise gravity; the nature of dark matter"
+   },
+   {
+    "id": "oscillations",
+    "block": "II",
+    "n": 3,
+    "title": "Oscillations and Rotation",
+    "sub": "One motion in two guises — and why nature is so fond of the sine",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "waves",
+     "electricity",
+     "quantum"
+    ],
+    "open": "when nonlinearity breeds chaos, and why forecasts have a limit"
+   },
+   {
+    "id": "waves",
+    "block": "II",
+    "n": 4,
+    "title": "Waves",
+    "sub": "How a Vibration Sets Off",
+    "status": "ready",
+    "needs": [
+     "oscillations"
+    ],
+    "feeds": [
+     "optics",
+     "quantum"
+    ],
+    "open": "turbulence — the oldest unsolved problem of classical physics"
+   },
+   {
+    "id": "thermodynamics",
+    "block": "II",
+    "n": 5,
+    "title": "Thermodynamics",
+    "sub": "The science of heat, work, and why you can't get something for nothing",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "entropy"
+    ],
+    "open": "why reversible laws produce an irreversible world"
+   },
+   {
+    "id": "entropy",
+    "block": "II",
+    "n": 6,
+    "title": "Entropy and the Arrow of Time",
+    "sub": "The deepest topic in the course—and the only one that touches on an unsolved question",
+    "status": "ready",
+    "needs": [
+     "thermodynamics"
+    ],
+    "feeds": [
+     "quantum",
+     "nuclear"
+    ],
+    "key": true,
+    "open": "why the entropy of the Universe started out so low"
+   },
+   {
+    "id": "electrostatics",
+    "block": "III",
+    "n": 7,
+    "title": "Electrostatics",
+    "sub": "Charge, Field, Potential",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "electricity"
+    ],
+    "open": "why charge is quantised in strict multiples of the elementary one"
+   },
+   {
+    "id": "electricity",
+    "block": "III",
+    "n": 8,
+    "title": "Current and Magnetism",
+    "sub": "Moving charge creates a field",
+    "status": "ready",
+    "needs": [
+     "electrostatics",
+     "oscillations"
+    ],
+    "feeds": [
+     "optics"
+    ],
+    "open": "high-temperature superconductivity is still unexplained"
+   },
+   {
+    "id": "optics",
+    "block": "III",
+    "n": 9,
+    "title": "Waves and Optics",
+    "sub": "Light as an Electromagnetic Wave",
+    "status": "ready",
+    "needs": [
+     "electricity",
+     "waves"
+    ],
+    "feeds": [
+     "quantum",
+     "relativity"
+    ],
+    "open": "light behaves as both wave and particle — so what is it"
+   },
+   {
+    "id": "relativity",
+    "block": "IV",
+    "n": 10,
+    "title": "Theory of Relativity",
+    "sub": "When the speed of light is the limit",
+    "status": "ready",
+    "needs": [
+     "mechanics",
+     "optics"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "what happens inside a black hole, where the theory breaks down"
+   },
+   {
+    "id": "quantum",
+    "block": "IV",
+    "n": 11,
+    "title": "Quantum Physics",
+    "sub": "Why Nature Is Discrete",
+    "status": "ready",
+    "needs": [
+     "waves",
+     "optics"
+    ],
+    "feeds": [
+     "atom"
+    ],
+    "open": "what counts as a measurement, and whether it needs an observer"
+   },
+   {
+    "id": "atom",
+    "block": "IV",
+    "n": 12,
+    "title": "Atom and Spectra",
+    "sub": "The Schrödinger Equation as a Standing Wave",
+    "status": "ready",
+    "needs": [
+     "quantum",
+     "oscillations"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "only the hydrogen atom is solved exactly; beyond it — approximations"
+   },
+   {
+    "id": "nuclear",
+    "block": "IV",
+    "n": 13,
+    "title": "Nuclei and Particles",
+    "sub": "Where Stars Get Their Energy",
+    "status": "ready",
+    "needs": [
+     "atom",
+     "relativity"
+    ],
+    "feeds": [],
+    "open": "why particle masses are what they are, and where the antimatter went"
+   }
+  ]
+ },
+ "es": {
+  "title": "Árbol del conocimiento",
+  "subtitle": "Física desde el punto material hasta el núcleo atómico — y hasta el borde donde termina lo conocido",
+  "lead": "El curso crece de abajo hacia arriba: cada tema se apoya en los anteriores y alimenta a los siguientes. Pero el árbol no termina en la copa. En cada tema se señala lo que queda sin resolver, porque la física no es un compendio de respuestas hechas, sino una forma de describir el mundo, y la descripción aún se está construyendo.",
+  "blocks": [
+   {
+    "id": "0",
+    "title": "Lenguaje de la física",
+    "sub": "cómo está estructurada la descripción de la naturaleza"
+   },
+   {
+    "id": "I",
+    "title": "Mecánica",
+    "sub": "el idioma en el que habla toda la física"
+   },
+   {
+    "id": "II",
+    "title": "Oscilaciones y calor",
+    "sub": "desde un solo péndulo hasta mil millones de moléculas"
+   },
+   {
+    "id": "III",
+    "title": "Electromagnetismo",
+    "sub": "el campo como forma de describir la naturaleza"
+   },
+   {
+    "id": "IV",
+    "title": "Física moderna",
+    "sub": "donde la clásica deja de funcionar"
+   }
+  ],
+  "openLabel": "sin resolver",
+  "threads": [
+   {
+    "id": "model",
+    "name": "Modelo y sus límites",
+    "path": [
+     "language",
+     "mechanics",
+     "relativity",
+     "quantum"
+    ],
+    "note": "cualquier teoría es válida en su dominio y se rompe fuera de él; conocer el límite es más importante que conocer la fórmula"
+   },
+   {
+    "id": "osc",
+    "name": "Oscilador",
+    "path": [
+     "oscillations",
+     "electricity",
+     "quantum"
+    ],
+    "note": "péndulo → circuito oscilante → pozo cuántico: un mismo aparato, tres mundos"
+   },
+   {
+    "id": "energy",
+    "name": "Conservación de la energía",
+    "path": [
+     "mechanics",
+     "thermodynamics",
+     "relativity",
+     "nuclear"
+    ],
+    "note": "trabajo → calor → E=mc² → energía de enlace nuclear"
+   },
+   {
+    "id": "wave",
+    "name": "Onda",
+    "path": [
+     "waves",
+     "optics",
+     "quantum"
+    ],
+    "note": "sonido → luz → ondas de materia; el experimento de la doble rendija se repite dos veces y significa cosas distintas"
+   },
+   {
+    "id": "entro",
+    "name": "Entropía e información",
+    "path": [
+     "thermodynamics",
+     "entropy",
+     "quantum",
+     "nuclear"
+    ],
+    "note": "medida del desorden, medida de la ignorancia y medida de la información resultaron ser una misma magnitud; de ahí también la única flecha del tiempo en física"
+   },
+   {
+    "id": "prob",
+    "name": "Probabilidad",
+    "path": [
+     "entropy",
+     "quantum"
+    ],
+    "note": "el caos térmico y la incertidumbre cuántica son probabilidades fundamentalmente distintas"
+   },
+   {
+    "id": "phase",
+    "name": "Espacio de estados",
+    "path": [
+     "language",
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "note": "reemplazando la memoria por la dimensión, obtenemos un punto en lugar de una historia — y de ahí en adelante este recurso no cambia, solo cambia la física"
+   }
+  ],
+  "topics": [
+   {
+    "id": "language",
+    "block": "0",
+    "n": 0,
+    "title": "Cómo la física describe el mundo",
+    "sub": "Tema introductorio: no las leyes, sino la forma en que están estructuradas las leyes",
+    "status": "ready",
+    "needs": [],
+    "feeds": [
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "open": "por qué las matemáticas funcionan para la naturaleza"
+   },
+   {
+    "id": "mechanics",
+    "block": "I",
+    "n": 1,
+    "title": "Mecánica",
+    "sub": "La ciencia del movimiento — y el lenguaje que habla el resto de la física",
+    "status": "ready",
+    "needs": [
+     "language"
+    ],
+    "feeds": [
+     "oscillations",
+     "gravity",
+     "relativity"
+    ],
+    "open": "qué es la inercia y por qué la masa inercial es igual a la gravitatoria"
+   },
+   {
+    "id": "gravity",
+    "block": "I",
+    "n": 2,
+    "title": "Gravedad y órbitas",
+    "sub": "Por qué los planetas no caen ni se escapan",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "relativity"
+    ],
+    "open": "cómo cuantizar la gravedad; la naturaleza de la materia oscura"
+   },
+   {
+    "id": "oscillations",
+    "block": "II",
+    "n": 3,
+    "title": "Oscilaciones y rotación",
+    "sub": "Un mismo movimiento en dos formas — y por qué la naturaleza ama tanto el seno",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "waves",
+     "electricity",
+     "quantum"
+    ],
+    "open": "cuándo la no linealidad genera caos y por qué el pronóstico tiene un límite"
+   },
+   {
+    "id": "waves",
+    "block": "II",
+    "n": 4,
+    "title": "Ondas",
+    "sub": "Cómo la oscilación se pone en marcha",
+    "status": "ready",
+    "needs": [
+     "oscillations"
+    ],
+    "feeds": [
+     "optics",
+     "quantum"
+    ],
+    "open": "la turbulencia: el problema sin resolver más antiguo de la física clásica"
+   },
+   {
+    "id": "thermodynamics",
+    "block": "II",
+    "n": 5,
+    "title": "Termodinámica",
+    "sub": "La ciencia del calor, el trabajo y por qué no se puede obtener algo de la nada",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "entropy"
+    ],
+    "open": "por qué leyes reversibles producen un mundo irreversible"
+   },
+   {
+    "id": "entropy",
+    "block": "II",
+    "n": 6,
+    "title": "Entropía y la flecha del tiempo",
+    "sub": "El tema más profundo del curso — y el único que topa con una pregunta sin resolver",
+    "status": "ready",
+    "needs": [
+     "thermodynamics"
+    ],
+    "feeds": [
+     "quantum",
+     "nuclear"
+    ],
+    "key": true,
+    "open": "por qué la entropía del Universo era tan baja al principio"
+   },
+   {
+    "id": "electrostatics",
+    "block": "III",
+    "n": 7,
+    "title": "Electrostática",
+    "sub": "Carga, campo, potencial",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "electricity"
+    ],
+    "open": "por qué la carga se cuantiza en múltiplos estrictos de la elemental"
+   },
+   {
+    "id": "electricity",
+    "block": "III",
+    "n": 8,
+    "title": "Corriente y magnetismo",
+    "sub": "La carga en movimiento genera un campo",
+    "status": "ready",
+    "needs": [
+     "electrostatics",
+     "oscillations"
+    ],
+    "feeds": [
+     "optics"
+    ],
+    "open": "la superconductividad de alta temperatura sigue sin explicación"
+   },
+   {
+    "id": "optics",
+    "block": "III",
+    "n": 9,
+    "title": "Ondas y óptica",
+    "sub": "La luz como onda electromagnética",
+    "status": "ready",
+    "needs": [
+     "electricity",
+     "waves"
+    ],
+    "feeds": [
+     "quantum",
+     "relativity"
+    ],
+    "open": "la luz se comporta como onda y como partícula: entonces, ¿qué es?"
+   },
+   {
+    "id": "relativity",
+    "block": "IV",
+    "n": 10,
+    "title": "Teoría de la relatividad",
+    "sub": "Cuando la velocidad de la luz es el límite",
+    "status": "ready",
+    "needs": [
+     "mechanics",
+     "optics"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "qué ocurre dentro de un agujero negro, donde la teoría deja de valer"
+   },
+   {
+    "id": "quantum",
+    "block": "IV",
+    "n": 11,
+    "title": "Física cuántica",
+    "sub": "Por qué la naturaleza es discreta",
+    "status": "ready",
+    "needs": [
+     "waves",
+     "optics"
+    ],
+    "feeds": [
+     "atom"
+    ],
+    "open": "qué cuenta como medición y si hace falta un observador"
+   },
+   {
+    "id": "atom",
+    "block": "IV",
+    "n": 12,
+    "title": "El átomo y los espectros",
+    "sub": "La ecuación de Schrödinger como onda estacionaria",
+    "status": "ready",
+    "needs": [
+     "quantum",
+     "oscillations"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "solo el átomo de hidrógeno se resuelve exactamente; más allá, aproximaciones"
+   },
+   {
+    "id": "nuclear",
+    "block": "IV",
+    "n": 13,
+    "title": "Núcleo y partículas",
+    "sub": "De dónde proviene la energía de las estrellas",
+    "status": "ready",
+    "needs": [
+     "atom",
+     "relativity"
+    ],
+    "feeds": [],
+    "open": "por qué las masas de las partículas son las que son y adónde fue la antimateria"
+   }
+  ]
+ },
+ "ar": {
+  "title": "شجرة المعرفة",
+  "subtitle": "الفيزياء من نقطة مادية إلى نواة الذرة — وإلى الحافة حيث ينتهي المعلوم",
+  "lead": "تنمو الدورة من الأسفل إلى الأعلى: كل موضوع يعتمد على السابق ويغذي التالي. لكن الشجرة لا تنتهي بالتاج. عند كل موضوع يُشار إلى ما بقي غير محلول فيه — لأن الفيزياء ليست مجموعة إجابات جاهزة، بل طريقة لوصف العالم، والوصف لا يزال قيد البناء.",
+  "blocks": [
+   {
+    "id": "0",
+    "title": "لغة الفيزياء",
+    "sub": "كيف يُنظم وصف الطبيعة أساسًا"
+   },
+   {
+    "id": "I",
+    "title": "الميكانيكا",
+    "sub": "اللغة التي تتحدث بها كل الفيزياء"
+   },
+   {
+    "id": "II",
+    "title": "الاهتزازات والحرارة",
+    "sub": "من بندول واحد إلى مليار جزيء"
+   },
+   {
+    "id": "III",
+    "title": "الكهرومغناطيسية",
+    "sub": "المجال كطريقة لوصف الطبيعة"
+   },
+   {
+    "id": "IV",
+    "title": "الفيزياء الحديثة",
+    "sub": "حيث تتوقف الكلاسيكية عن العمل"
+   }
+  ],
+  "openLabel": "غير محلول",
+  "threads": [
+   {
+    "id": "model",
+    "name": "النموذج وحدوده",
+    "path": [
+     "language",
+     "mechanics",
+     "relativity",
+     "quantum"
+    ],
+    "note": "أي نظرية صحيحة في مجالها وتنهار خارجه؛ معرفة الحدود أهم من معرفة الصيغة"
+   },
+   {
+    "id": "osc",
+    "name": "المذبذب",
+    "path": [
+     "oscillations",
+     "electricity",
+     "quantum"
+    ],
+    "note": "بندول ← دائرة تذبذبية ← بئر كمومية: جهاز واحد، ثلاثة عوالم"
+   },
+   {
+    "id": "energy",
+    "name": "حفظ الطاقة",
+    "path": [
+     "mechanics",
+     "thermodynamics",
+     "relativity",
+     "nuclear"
+    ],
+    "note": "شغل ← حرارة ← E=mc² ← طاقة ربط النواة"
+   },
+   {
+    "id": "wave",
+    "name": "الموجة",
+    "path": [
+     "waves",
+     "optics",
+     "quantum"
+    ],
+    "note": "صوت ← ضوء ← موجات مادية؛ تجربة الشق المزدوج تتكرر مرتين وتعني شيئًا مختلفًا"
+   },
+   {
+    "id": "entro",
+    "name": "الإنتروبيا والمعلومات",
+    "path": [
+     "thermodynamics",
+     "entropy",
+     "quantum",
+     "nuclear"
+    ],
+    "note": "مقياس الفوضى، مقياس الجهل ومقياس المعلومات اتضح أنهم مقدار واحد؛ ومن هنا أيضًا سهم الزمن الوحيد في الفيزياء"
+   },
+   {
+    "id": "prob",
+    "name": "الاحتمال",
+    "path": [
+     "entropy",
+     "quantum"
+    ],
+    "note": "الفوضى الحرارية واللاحتمية الكمومية — احتمالان مختلفان جوهريًا"
+   },
+   {
+    "id": "phase",
+    "name": "فضاء الحالات",
+    "path": [
+     "language",
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "note": "باستبدال الذاكرة بالبعد، نحصل على نقطة بدلاً من تاريخ — ومن ثم لا تتغير هذه التقنية، تتغير الفيزياء فقط"
+   }
+  ],
+  "topics": [
+   {
+    "id": "language",
+    "block": "0",
+    "n": 0,
+    "title": "كيف تصف الفيزياء العالم",
+    "sub": "موضوع تمهيدي: ليس القوانين، بل الطريقة التي تُنظّم بها القوانين",
+    "status": "ready",
+    "needs": [],
+    "feeds": [
+     "mechanics",
+     "entropy",
+     "quantum"
+    ],
+    "open": "لماذا تصلح الرياضيات لوصف الطبيعة أصلاً"
+   },
+   {
+    "id": "mechanics",
+    "block": "I",
+    "n": 1,
+    "title": "الميكانيكا",
+    "sub": "علم الحركة — واللغة التي تتحدث بها بقية الفيزياء",
+    "status": "ready",
+    "needs": [
+     "language"
+    ],
+    "feeds": [
+     "oscillations",
+     "gravity",
+     "relativity"
+    ],
+    "open": "ما هو القصور الذاتي، ولماذا تساوي الكتلة القصورية الكتلة الثقالية"
+   },
+   {
+    "id": "gravity",
+    "block": "I",
+    "n": 2,
+    "title": "الجاذبية والمدارات",
+    "sub": "لماذا لا تسقط الكواكب ولا تفلت؟",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "relativity"
+    ],
+    "open": "كيف نُكمّم الجاذبية؛ وما طبيعة المادة المظلمة"
+   },
+   {
+    "id": "oscillations",
+    "block": "II",
+    "n": 3,
+    "title": "الاهتزاز والدوران",
+    "sub": "حركة واحدة في وجهين - ولماذا تحب الطبيعة الجيب بهذا القدر",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "waves",
+     "electricity",
+     "quantum"
+    ],
+    "open": "متى تولّد اللاخطية الفوضى، ولماذا للتنبؤ حدّ"
+   },
+   {
+    "id": "waves",
+    "block": "II",
+    "n": 4,
+    "title": "الموجات",
+    "sub": "كيف ينطلق الاهتزاز في رحلته",
+    "status": "ready",
+    "needs": [
+     "oscillations"
+    ],
+    "feeds": [
+     "optics",
+     "quantum"
+    ],
+    "open": "الاضطراب — أقدم مسألة لم تُحل في الفيزياء الكلاسيكية"
+   },
+   {
+    "id": "thermodynamics",
+    "block": "II",
+    "n": 5,
+    "title": "الديناميكا الحرارية",
+    "sub": "علم الحرارة والشغل ولماذا لا يمكن الحصول على شيء من لا شيء",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "entropy"
+    ],
+    "open": "لماذا تنتج قوانين عكوسة عالماً غير عكوس"
+   },
+   {
+    "id": "entropy",
+    "block": "II",
+    "n": 6,
+    "title": "الإنتروبيا وسهم الزمن",
+    "sub": "أعمق موضوع في الدورة — والوحيد الذي يصطدم بسؤال غير محلول",
+    "status": "ready",
+    "needs": [
+     "thermodynamics"
+    ],
+    "feeds": [
+     "quantum",
+     "nuclear"
+    ],
+    "key": true,
+    "open": "لماذا كانت إنتروبيا الكون منخفضة إلى هذا الحد في البداية"
+   },
+   {
+    "id": "electrostatics",
+    "block": "III",
+    "n": 7,
+    "title": "الكهرباء الساكنة",
+    "sub": "الشحنة، المجال، الجهد",
+    "status": "ready",
+    "needs": [
+     "mechanics"
+    ],
+    "feeds": [
+     "electricity"
+    ],
+    "open": "لماذا تتكمّم الشحنة بمضاعفات دقيقة للشحنة الأولية"
+   },
+   {
+    "id": "electricity",
+    "block": "III",
+    "n": 8,
+    "title": "التيار والمغناطيسية",
+    "sub": "الشحنة المتحركة تولد مجالاً",
+    "status": "ready",
+    "needs": [
+     "electrostatics",
+     "oscillations"
+    ],
+    "feeds": [
+     "optics"
+    ],
+    "open": "الموصلية الفائقة عند درجات الحرارة العالية لا تزال بلا تفسير"
+   },
+   {
+    "id": "optics",
+    "block": "III",
+    "n": 9,
+    "title": "الموجات والبصريات",
+    "sub": "الضوء كموجة كهرومغناطيسية",
+    "status": "ready",
+    "needs": [
+     "electricity",
+     "waves"
+    ],
+    "feeds": [
+     "quantum",
+     "relativity"
+    ],
+    "open": "يسلك الضوء سلوك الموجة والجسيم معاً — فما هو إذن"
+   },
+   {
+    "id": "relativity",
+    "block": "IV",
+    "n": 10,
+    "title": "نظرية النسبية",
+    "sub": "عندما تكون سرعة الضوء هي الحد",
+    "status": "ready",
+    "needs": [
+     "mechanics",
+     "optics"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "ماذا يحدث داخل الثقب الأسود حيث تفقد النظرية صلاحيتها"
+   },
+   {
+    "id": "quantum",
+    "block": "IV",
+    "n": 11,
+    "title": "الفيزياء الكمومية",
+    "sub": "لماذا الطبيعة متقطعة",
+    "status": "ready",
+    "needs": [
+     "waves",
+     "optics"
+    ],
+    "feeds": [
+     "atom"
+    ],
+    "open": "ما الذي يُعدّ قياساً، وهل يحتاج إلى مراقب"
+   },
+   {
+    "id": "atom",
+    "block": "IV",
+    "n": 12,
+    "title": "الذرة والأطياف",
+    "sub": "معادلة شرودنغر كموجة واقفة",
+    "status": "ready",
+    "needs": [
+     "quantum",
+     "oscillations"
+    ],
+    "feeds": [
+     "nuclear"
+    ],
+    "open": "لا يُحلّ بدقة سوى ذرة الهيدروجين؛ وما بعدها تقريبات"
+   },
+   {
+    "id": "nuclear",
+    "block": "IV",
+    "n": 13,
+    "title": "النواة والجسيمات",
+    "sub": "من أين تأتي طاقة النجوم",
+    "status": "ready",
+    "needs": [
+     "atom",
+     "relativity"
+    ],
+    "feeds": [],
+    "open": "لماذا كتل الجسيمات على ما هي عليه، وأين ذهبت المادة المضادة"
+   }
+  ]
+ }
 }

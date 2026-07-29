@@ -1,0 +1,1258 @@
+{
+  "id": "03-hamilton",
+  "topic": "analytical",
+  "schema": "b42.lesson/1",
+  "model": "oscillator",
+  "entities": {
+    "tags": [
+      "entropy",
+      "quantum_information"
+    ],
+    "laws": [
+      "law_of_conservation_of_energy"
+    ],
+    "examples_from_articles": [
+      {
+        "id": "2607.08713",
+        "date": "2026-07-09",
+        "title": {
+          "ru": "Квантовый двигатель против запрета Карно: мощность и КПД без компромисса",
+          "en": "Quantum Engine vs. Carnot's Barrier: Power and Efficiency Without Compromise",
+          "es": "Motor cuántico vs. el límite de Carnot: potencia y eficiencia sin concesiones",
+          "ar": "محرك كمي يتحدى قيد كارنو: قدرة وكفاءة بلا تنازلات"
+        },
+        "why": "entropy, quantum_information"
+      },
+      {
+        "id": "2607.08708",
+        "date": "2026-07-09",
+        "title": {
+          "ru": "Почему квантовый алгоритм QAOA не справился со стеклянным хаосом",
+          "en": "Why the QAOA Quantum Algorithm Failed Against Spin Glass Chaos",
+          "es": "Por qué el algoritmo cuántico QAOA no pudo con el caos vítreo",
+          "ar": "لماذا لم تفلح خوارزمية QAOA الكمومية في مواجهة الفوضى الزجاجية"
+        },
+        "why": "entropy, quantum_information"
+      },
+      {
+        "id": "2607.03545",
+        "date": "2026-07-03",
+        "title": {
+          "ru": "Клеточный оркестр: как гены учатся играть в такт с хаосом",
+          "en": "The Cellular Orchestra: How Genes Learn to Play in Tune with Chaos",
+          "es": "La orquesta celular: cómo los genes aprenden a tocar al ritmo del caos",
+          "ar": "الأوركسترا الخلوية: كيف تتعلم الجينات العزف بتناغم مع الفوضى"
+        },
+        "why": "entropy, quantum_information"
+      }
+    ]
+  },
+  "ru": {
+    "title": "Гамильтониан и фазовое пространство",
+    "subtitle": "Система как точка, а не как линия",
+    "intro": [
+      "До сих пор движение рисовалось линией: вот тело, вот его траектория. Гамильтон предложил другой чертёж. Отложим по одной оси координату, по другой — импульс. Тогда всё состояние системы в данный момент — это одна точка, а движение — путь этой точки.",
+      "Выигрыш не сразу очевиден: вместо привычной картинки появляется абстрактная. Но именно она пережила смену эпох. Когда физика дошла до газа из миллиардов частиц, траектории стало невозможно рисовать — а точку в пространстве состояний можно. Когда дошла до квантовой механики, траектории не стало вообще — а состояние осталось.",
+      "Этот параграф о том, как выглядит механика, переписанная на язык состояний, и почему именно этот язык оказался пригоден там, где прежний отказал."
+    ],
+    "standNote": "На стенде — груз на пружине. Слева крутится колесо-фантом: его угол и есть положение точки в фазовом пространстве, а проекция на ось даёт привычную координату груза. Меняйте массу и жёсткость и смотрите, как меняется скорость обхода круга. Круг при этом остаётся кругом — это и есть сохранение энергии на языке состояний.",
+    "formula": {
+      "name": "Уравнения Гамильтона",
+      "latex": "H = K + U, \\qquad \\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Канонические уравнения движения",
+      "authors": [
+        {
+          "who": "Уильям Роуэн Гамильтон",
+          "year": "1834",
+          "what": "переписал механику через координаты и импульсы, заметив её сходство с оптикой"
+        },
+        {
+          "who": "Карл Якоби",
+          "year": "1842",
+          "what": "развил формализм и довёл его до рабочего метода решения задач"
+        }
+      ],
+      "story": "Гамильтон искал общий язык для механики и оптики и нашёл его: и луч света, и летящее тело подчиняются похожим уравнениям. Современники сочли это изящным курьёзом. Через девяносто лет Шрёдингер, отталкиваясь ровно от этой аналогии, написал уравнение волновой механики: если механика похожа на оптику лучей, у неё должна быть и волновая версия.",
+      "symbols": [
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "гамильтониан; для обычных систем — полная энергия",
+          "unit": "Дж"
+        },
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "координата — где система находится",
+          "unit": "любая"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "импульс — как быстро и с какой инерцией она движется",
+          "unit": "кг·м/с"
+        },
+        {
+          "sym": "(q, p)",
+          "latex": "(q, p)",
+          "what": "пара, полностью задающая состояние системы",
+          "unit": "—"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Как траектория превращается в точку",
+      "lead": "Переход делается в три шага и меняет не физику, а способ на неё смотреть.",
+      "steps": [
+        {
+          "text": "В лагранжевом описании независимыми были координата и скорость. Гамильтон заменяет скорость на импульс — ту самую величину, которая, как мы выяснили, сохраняется при симметрии. Взамен получается симметричная пара переменных.",
+          "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+          "figure": "action",
+          "figCaption": "Скорость уступает место импульсу — переменные становятся равноправными"
+        },
+        {
+          "text": "Вместо одного уравнения второго порядка получаются два первого. Читаются они просто: первое говорит, куда система движется, второе — как меняется её импульс. Обратите внимание на минус: он и делает движение вращением, а не разбеганием.",
+          "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+          "figure": "energyswap",
+          "figCaption": "Два уравнения вместо одного: координата и импульс меняются согласованно"
+        },
+        {
+          "text": "Нарисуем состояние точкой на плоскости $(q, p)$. Для груза на пружине энергия складывается из двух квадратов, а линия постоянной энергии на такой плоскости — эллипс. Движение оказывается обходом этого эллипса с постоянной скоростью по площади.",
+          "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+          "figure": "shadow",
+          "figCaption": "Колебание в фазовом пространстве — замкнутая кривая, а не линия туда-обратно"
+        },
+        {
+          "text": "Сохранение энергии на этом языке выглядит наглядно: точка не может сойти со своей кривой. А теорема Лиувилля добавляет: если взять не одну точку, а облако начальных состояний, его площадь не меняется со временем. Отсюда позже вырастет статистическая физика.",
+          "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{площадь облака состояний} = \\text{const}",
+          "figure": "anywell",
+          "figCaption": "Замкнутая кривая — это и есть закон сохранения энергии в фазовом виде"
+        }
+      ],
+      "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+      "plateCap": "Состояние системы — точка $(q,p)$, движение — путь этой точки по линии постоянной энергии",
+      "note": "Гамильтониан совпадает с полной энергией не всегда: если связи в системе зависят от времени или выбраны вращающиеся координаты, эти две величины расходятся. Для задач курса совпадение выполняется, но помнить о различии стоит."
+    },
+    "math": {
+      "title": "Математика, которая здесь понадобилась",
+      "lead": "Ни одного нового приёма — только новый взгляд на плоскость.",
+      "items": [
+        {
+          "h": "Плоскость, где оси разные по смыслу",
+          "text": "Мы привыкли, что на осях одинаковые величины: метры и метры. Здесь по одной оси метры, по другой — килограмм-метры в секунду. Складывать их бессмысленно, а вот рисовать точку — вполне: она означает не место, а состояние."
+        },
+        {
+          "h": "Почему эллипс, а не окружность",
+          "text": "Уравнение $p^2/2m + kq^2/2 = E$ — это сумма двух квадратов с разными коэффициентами, то есть эллипс. Если подобрать масштаб осей, он превращается в окружность — именно так и нарисовано колесо на стенде. Форма зависит от выбора единиц, а физика — нет."
+        },
+        {
+          "h": "Площадь как сохраняющаяся величина",
+          "text": "Площадь под замкнутой кривой в фазовом пространстве оказывается связанной с энергией и периодом. В квантовой механике эта же площадь окажется квантованной — кратной постоянной Планка. Первый намёк на это дал ещё Бор."
+        }
+      ]
+    },
+    "example": {
+      "title": "Пример с числами",
+      "lead": "Посчитаем фазовую траекторию груза со стенда и убедимся, что она замкнута.",
+      "given": "Груз $m = 2$ кг на пружине жёсткостью $k = 30$ Н/м отведён на $A = 6$ см и отпущен без начальной скорости.",
+      "law": "$H = \\dfrac{p^2}{2m} + \\dfrac{kq^2}{2} = \\text{const}$",
+      "solution": [
+        {
+          "text": "В момент отпускания скорость нулевая — вся энергия потенциальная.",
+          "latex": "E = \\frac{30 \\cdot 0{,}06^2}{2} = 0{,}054\\ \\text{Дж}",
+          "num": ""
+        },
+        {
+          "text": "В положении равновесия координата нулевая — вся энергия кинетическая.",
+          "latex": "\\frac{p^2}{2 \\cdot 2} = 0{,}054 \\;\\Longrightarrow\\; p \\approx 0{,}46\\ \\text{кг·м/с}",
+          "num": ""
+        },
+        {
+          "text": "Полуоси эллипса: по координате 0,06 м, по импульсу 0,46 кг·м/с.",
+          "latex": "\\omega = \\sqrt{k/m} = \\sqrt{15} \\approx 3{,}9\\ \\text{рад/с}",
+          "num": ""
+        }
+      ],
+      "answer": "Точка обходит эллипс с полуосями 0,06 и 0,46 примерно за 1,6 с — это и есть период колебаний.",
+      "sanity": "Проверка на здравый смысл: если увеличить амплитуду вдвое, эллипс вырастет вдвое по обеим осям, а время обхода не изменится. Это то же самое свойство маятника, о котором говорилось в теме колебаний, но здесь оно видно геометрически."
+    },
+    "constants": {
+      "title": "Величины этого параграфа",
+      "lead": "Как и в предыдущих параграфах темы, мировых констант нет: гамильтонов формализм — это язык, а не набор чисел.",
+      "items": [
+        {
+          "sym": "H",
+          "latex": "H = K + U",
+          "name": "Гамильтониан",
+          "value": "Дж",
+          "why": "для обычных систем совпадает с полной энергией"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "name": "Импульс как независимая переменная",
+          "value": "кг·м/с",
+          "why": "здесь он не производная величина, а равноправная координате"
+        },
+        {
+          "sym": "ħ",
+          "latex": "\\hbar",
+          "name": "Постоянная Планка",
+          "value": "1,055·10⁻³⁴ Дж·с",
+          "dictKey": "hbar",
+          "why": "единица площади в фазовом пространстве — именно ею измеряется «одно состояние» в квантовой физике"
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Где это работает",
+      "lead": "Фазовое пространство — не украшение, а рабочая система координат сразу для нескольких разделов.",
+      "items": [
+        {
+          "h": "Статистическая физика",
+          "text": "Газ из миллиардов частиц описывается не траекториями, а облаком точек в фазовом пространстве. Энтропия оказывается логарифмом объёма этого облака — именно так она и вводилась в теме энтропии."
+        },
+        {
+          "h": "Квантовая механика",
+          "text": "Гамильтониан переходит в оператор, а уравнение Шрёдингера буквально повторяет структуру уравнений Гамильтона. Соотношение неопределённостей запрещает точке в фазовом пространстве быть точкой: у неё есть минимальная площадь порядка $\\hbar$."
+        },
+        {
+          "h": "Небесная механика и хаос",
+          "text": "Устойчивость Солнечной системы исследуют именно в фазовом пространстве: там видно, остаётся траектория на своей поверхности или расползается. Отсюда выросла теория динамического хаоса."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Занимательное: проверьте руками",
+      "lead": "Фазовое пространство трудно потрогать, но его можно увидеть на кухне и в собственных ощущениях.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "опыт на кухне",
+          "h": "Маятник из ключей и нитки",
+          "text": "Подвесьте связку ключей на нитке и качните. Заметьте два момента: в крайней точке скорость нулевая, а отклонение наибольшее; в нижней — наоборот. Это два конца одного эллипса. Пройдите взглядом по колебанию несколько раз, отслеживая обе величины сразу — вы буквально обводите фазовую траекторию."
+        },
+        {
+          "icon": "paradox",
+          "kind": "парадокс",
+          "h": "Движение по кругу без круга",
+          "text": "Груз ходит по прямой туда-сюда, а в фазовом пространстве описывает замкнутый эллипс. Откуда взялось вращение, если тело никуда не вращается?",
+          "answer": "Вращается не тело, а состояние. Координата и импульс сдвинуты по фазе на четверть периода: когда одна максимальна, другая нулевая. Пара таких величин и даёт круговой обход — то же самое видно на стенде, где колесо-фантом крутится, а груз ездит по прямой."
+        },
+        {
+          "icon": "fact",
+          "kind": "занимательный факт",
+          "h": "Аналогия, которая сработала через 90 лет",
+          "text": "Гамильтон строил свою механику по образцу оптики просто из любви к единству. Практической пользы не было почти век. В 1926 году Шрёдингер довёл аналогию до конца — и получил волновую механику. Красивая формальность оказалась подсказкой о том, как устроен мир."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "мнемоника",
+          "h": "Где и как быстро",
+          "text": "Состояние — это ответ на два вопроса: где система и как быстро движется. Координата и импульс. Всё остальное из этой пары вычисляется, поэтому именно она и рисуется на осях."
+        },
+        {
+          "icon": "estimate",
+          "kind": "прикидка",
+          "h": "Сколько квантовых состояний в маятнике",
+          "text": "Прикиньте: площадь фазовой траектории ключей на нитке — порядка $10^{-3}$ Дж·с, а «одно состояние» занимает $10^{-34}$. Значит в обычном маятнике умещается около $10^{31}$ квантовых состояний. Вот почему квантовость там незаметна."
+        },
+        {
+          "icon": "edge",
+          "kind": "граница применимости",
+          "h": "Когда H перестаёт быть энергией",
+          "text": "Если система описана во вращающейся системе отсчёта или связи меняются со временем, гамильтониан и полная энергия расходятся. Формализм при этом работает, но привычное «H — это энергия» становится ловушкой."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Для любознательных: теорема Лиувилля и стрела времени",
+      "text": "Если взять не одну точку, а маленькое пятно начальных состояний, то со временем оно будет растягиваться и изгибаться — но его площадь останется неизменной. Это теорема Лиувилля. Из неё следует неожиданное: информация о начальном состоянии в механике не теряется, она только размазывается по пространству состояний до неузнаваемости. Именно на этом различии — «потеряна» против «размазана» — держится весь разговор о стреле времени из темы энтропии."
+    },
+    "memo": {
+      "essence": "Состояние системы — точка $(q,p)$ в фазовом пространстве, а движение — путь этой точки. Уравнения Гамильтона описывают этот путь двумя симметричными уравнениями первого порядка, а сохранение энергии выглядит как замкнутость кривой.",
+      "keyIdeas": [
+        {
+          "icon": "formula",
+          "title": "Состояние задаётся парой",
+          "text": "Состояние задаётся парой: координата и импульс, а не координата и скорость"
+        },
+        {
+          "icon": "estimate",
+          "title": "Колебание — замкнутая кривая",
+          "text": "Колебание в фазовом пространстве — замкнутая кривая, обход которой и есть период"
+        },
+        {
+          "icon": "fact",
+          "title": "Площадь состояний сохраняется",
+          "text": "Площадь облака состояний не меняется со временем — теорема Лиувилля"
+        },
+        {
+          "icon": "edge",
+          "title": "H не всегда энергия",
+          "text": "Гамильтониан совпадает с энергией не всегда: при зависящих от времени связях они расходятся"
+        }
+      ],
+      "where": "Статистическая физика (энтропия как объём в фазовом пространстве), квантовая механика (уравнение Шрёдингера, соотношение неопределённостей), небесная механика и теория хаоса, теория управления.",
+      "watchOut": "Частая ошибка — считать фазовую плоскость обычной картинкой движения. По её осям стоят величины разной природы, и точка на ней означает состояние, а не место в пространстве."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "Что означает одна точка в фазовом пространстве?",
+        "options": [
+          "Положение тела в данный момент",
+          "Полное состояние системы: где она и с каким импульсом",
+          "Значение энергии",
+          "Момент времени"
+        ],
+        "answer": 1,
+        "why": "Точка задаёт пару $(q,p)$ — координату и импульс. Этого достаточно, чтобы предсказать всё дальнейшее движение."
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "Почему колебание изображается замкнутой кривой?",
+        "options": [
+          "Потому что тело возвращается в исходную точку пространства",
+          "Потому что энергия сохраняется, а линия постоянной энергии замкнута",
+          "Потому что так удобнее рисовать",
+          "Потому что импульс всегда положителен"
+        ],
+        "answer": 1,
+        "why": "Точка не может сойти с линии постоянной энергии, а для осциллятора эта линия — эллипс. Замкнутость кривой и есть сохранение энергии в фазовом виде."
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "Своими словами: чем гамильтонов взгляд оказался полезнее лагранжева, когда физика дошла до газа и до квантов?",
+        "keywords": [
+          "состояни",
+          "траектор",
+          "облако",
+          "миллиард",
+          "квант",
+          "нет траектор",
+          "фазов"
+        ],
+        "why": "Траекторию миллиардов частиц не нарисовать, а облако состояний — можно; в квантовой механике траектории нет вообще, а состояние остаётся. Язык состояний пережил обе смены картины мира."
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "Маятник с амплитудой 0,1 м и импульсом до 0,5 кг·м/с. Оцените, сколько квантовых состояний площадью ħ ≈ 10⁻³⁴ Дж·с в него умещается — порядок величины.",
+        "answer": 5e+32,
+        "unit": "состояний",
+        "tolerance": 10,
+        "why": "Площадь эллипса порядка $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ Дж·с. Делим на $10^{-34}$ — выходит около $10^{33}$. Точный множитель неважен: важно, что квантовость на таком масштабе незаметна."
+      }
+    ]
+  },
+  "en": {
+    "title": "Hamiltonian and Phase Space",
+    "subtitle": "System as a Point, Not as a Line",
+    "intro": [
+      "Until now, motion was drawn as a line: here is the body, here is its trajectory. Hamilton proposed a different drawing. Place coordinate on one axis and momentum on the other. Then the entire state of the system at a given moment is a single point, and motion is the path of this point.",
+      "The advantage is not immediately obvious: instead of a familiar picture, an abstract one appears. But it is this picture that survived the change of eras. When physics reached a gas of billions of particles, trajectories became impossible to draw — but a point in state space can be drawn. When it reached quantum mechanics, trajectories disappeared altogether — but the state remained.",
+      "This section is about what mechanics looks like when rewritten in the language of states, and why this language turned out to be suitable where the previous one failed."
+    ],
+    "standNote": "On the stand there is a mass on a spring. On the left, a phantom wheel rotates: its angle is the position of the point in phase space, and the projection onto the axis gives the familiar coordinate of the mass. Change the mass and stiffness and watch how the speed of traversing the circle changes. The circle remains a circle — that is the conservation of energy in the language of states.",
+    "formula": {
+      "name": "Hamilton's equations",
+      "latex": "H = K + U, \\qquad \\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Canonical equations of motion",
+      "authors": [
+        {
+          "who": "William Rowan Hamilton",
+          "year": "1834",
+          "what": "rewrote mechanics in terms of coordinates and momenta, noticing its similarity to optics"
+        },
+        {
+          "who": "Carl Jacobi",
+          "year": "1842",
+          "what": "developed the formalism and turned it into a working method for solving problems"
+        }
+      ],
+      "story": "Hamilton was looking for a common language for mechanics and optics and found it: a ray of light and a flying body obey similar equations. Contemporaries considered it an elegant curiosity. Ninety years later, Schrödinger, starting precisely from this analogy, wrote the equation of wave mechanics: if mechanics resembles ray optics, it must have a wave version.",
+      "symbols": [
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "Hamiltonian; for ordinary systems — total energy",
+          "unit": "J"
+        },
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "coordinate — where the system is",
+          "unit": "any"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "momentum — how fast and with what inertia it moves",
+          "unit": "kg·m/s"
+        },
+        {
+          "sym": "(q, p)",
+          "latex": "(q, p)",
+          "what": "pair that completely specifies the state of the system",
+          "unit": "—"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "How a trajectory becomes a point",
+      "lead": "The transition is done in three steps and changes not the physics, but the way of looking at it.",
+      "steps": [
+        {
+          "text": "In the Lagrangian description, coordinate and velocity were independent. Hamilton replaces velocity with momentum — the very quantity that, as we found, is conserved under symmetry. In return, we get a symmetric pair of variables.",
+          "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+          "figure": "action",
+          "figCaption": "Velocity gives way to momentum — the variables become equal in rights"
+        },
+        {
+          "text": "Instead of one second-order equation, we get two first-order ones. They are read simply: the first says where the system is moving, the second how its momentum changes. Note the minus sign: it makes motion a rotation, not a divergence.",
+          "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+          "figure": "energyswap",
+          "figCaption": "Two equations instead of one: coordinate and momentum change in concert"
+        },
+        {
+          "text": "Let us draw the state as a point on the $(q, p)$ plane. For a mass on a spring, energy is the sum of two squares, and the constant-energy line on that plane is an ellipse. Motion turns out to be a traversal of this ellipse with a constant speed in area.",
+          "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+          "figure": "shadow",
+          "figCaption": "Oscillation in phase space is a closed curve, not a back-and-forth line"
+        },
+        {
+          "text": "Conservation of energy in this language looks clear: the point cannot leave its curve. And Liouville's theorem adds: if we take not one point but a cloud of initial states, its area does not change over time. From this, statistical physics will later grow.",
+          "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{area of cloud of states} = \\text{const}",
+          "figure": "anywell",
+          "figCaption": "Closed curve — that is the law of conservation of energy in phase space form"
+        }
+      ],
+      "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+      "plateCap": "State of the system is a point $(q,p)$, motion is the path of this point along the constant-energy line",
+      "note": "The Hamiltonian does not always coincide with total energy: if constraints depend on time or rotating coordinates are chosen, these two quantities diverge. For the course problems, the coincidence holds, but it is worth remembering the difference."
+    },
+    "math": {
+      "title": "Mathematics needed here",
+      "lead": "No new technique — just a new perspective on the plane.",
+      "items": [
+        {
+          "h": "A plane where axes have different meanings",
+          "text": "We are used to having the same quantities on the axes: meters and meters. Here one axis is meters, the other is kilogram-meters per second. Adding them is meaningless, but drawing a point is quite possible: it denotes not a place, but a state."
+        },
+        {
+          "h": "Why an ellipse and not a circle",
+          "text": "The equation $p^2/2m + kq^2/2 = E$ is the sum of two squares with different coefficients, that is, an ellipse. If we choose the scale of the axes, it becomes a circle — that's exactly how the wheel on the stand is drawn. The shape depends on the choice of units, but the physics does not."
+        },
+        {
+          "h": "Area as a conserved quantity",
+          "text": "The area under a closed curve in phase space turns out to be related to energy and period. In quantum mechanics, this same area will be quantized — a multiple of Planck's constant. The first hint of this was given by Bohr."
+        }
+      ]
+    },
+    "example": {
+      "title": "Example with Numbers",
+      "lead": "Let us calculate the phase trajectory of a weight from the stand and verify that it is closed.",
+      "given": "A weight $m = 2$ kg on a spring with stiffness $k = 30$ N/m is displaced by $A = 6$ cm and released without initial velocity.",
+      "law": "$H = \\dfrac{p^2}{2m} + \\dfrac{kq^2}{2} = \\text{const}$",
+      "solution": [
+        {
+          "text": "At the moment of release, the velocity is zero — all energy is potential.",
+          "latex": "E = \\frac{30 \\cdot 0{,}06^2}{2} = 0{,}054\\ \\text{J}",
+          "num": ""
+        },
+        {
+          "text": "At the equilibrium position, the coordinate is zero — all energy is kinetic.",
+          "latex": "\\frac{p^2}{2 \\cdot 2} = 0{,}054 \\;\\Longrightarrow\\; p \\approx 0{,}46\\ \\text{kg·m/s}",
+          "num": ""
+        },
+        {
+          "text": "The semi-axes of the ellipse: along the coordinate 0,06 m, along the momentum 0,46 kg·m/s.",
+          "latex": "\\omega = \\sqrt{k/m} = \\sqrt{15} \\approx 3{,}9\\ \\text{rad/s}",
+          "num": ""
+        }
+      ],
+      "answer": "The point goes around the ellipse with semi-axes 0,06 and 0,46 in about 1,6 s — that is the period of oscillation.",
+      "sanity": "Sanity check: if the amplitude is doubled, the ellipse grows twice along both axes, but the traversal time does not change. This is the same property of the pendulum that was discussed in the topic of oscillations, but here it is seen geometrically."
+    },
+    "constants": {
+      "title": "Quantities of This Section",
+      "lead": "As in the previous sections of the topic, there are no fundamental constants: Hamiltonian formalism is a language, not a set of numbers.",
+      "items": [
+        {
+          "sym": "H",
+          "latex": "H = K + U",
+          "name": "Hamiltonian",
+          "value": "J",
+          "why": "for ordinary systems coincides with the total energy"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "name": "Momentum as an independent variable",
+          "value": "kg·m/s",
+          "why": "here it is not a derived quantity, but a coordinate on equal footing"
+        },
+        {
+          "sym": "ħ",
+          "latex": "\\hbar",
+          "name": "Planck's constant",
+          "value": "1,055·10⁻³⁴ J·s",
+          "dictKey": "hbar",
+          "why": "unit of area in phase space — it is used to measure 'one state' in quantum physics"
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Where It Works",
+      "lead": "Phase space is not a decoration, but a working coordinate system for several branches at once.",
+      "items": [
+        {
+          "h": "Statistical physics",
+          "text": "A gas of billions of particles is described not by trajectories, but by a cloud of points in phase space. Entropy turns out to be the logarithm of the volume of this cloud — exactly as it was introduced in the topic of entropy."
+        },
+        {
+          "h": "Quantum mechanics",
+          "text": "The Hamiltonian turns into an operator, and the Schrödinger equation literally repeats the structure of Hamilton's equations. The uncertainty principle forbids a point in phase space from being a point: it has a minimum area of order $\\hbar$."
+        },
+        {
+          "h": "Celestial mechanics and chaos",
+          "text": "The stability of the Solar System is studied precisely in phase space: there one can see whether the trajectory stays on its surface or spreads out. From this grew the theory of dynamical chaos."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Fun Stuff: Try It Yourself",
+      "lead": "Phase space is hard to touch, but you can see it in the kitchen and in your own sensations.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "kitchen experiment",
+          "h": "Pendulum made of keys and string",
+          "text": "Hang a bunch of keys on a string and swing it. Notice two moments: at the extreme point the velocity is zero and the displacement is greatest; at the bottom — the opposite. These are two ends of one ellipse. Follow the oscillation with your eyes several times, tracking both quantities at once — you are literally tracing the phase trajectory."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradox",
+          "h": "Circular motion without a circle",
+          "text": "The weight moves back and forth along a straight line, but in phase space it traces a closed ellipse. Where did the rotation come from if the body is not rotating anywhere?",
+          "answer": "It is not the body that rotates, but the state. The coordinate and momentum are phase-shifted by a quarter period: when one is maximum, the other is zero. A pair of such quantities yields a circular traversal — the same is seen on the stand, where a phantom wheel rotates while the weight moves along a straight line."
+        },
+        {
+          "icon": "fact",
+          "kind": "fun fact",
+          "h": "An analogy that worked 90 years later",
+          "text": "Hamilton built his mechanics following the model of optics simply out of love for unity. There was almost no practical use for a century. In 1926, Schrödinger carried the analogy to its conclusion — and obtained wave mechanics. A beautiful formality turned out to be a hint about how the world works."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemonic",
+          "h": "Where and how fast",
+          "text": "A state is the answer to two questions: where is the system and how fast is it moving. Coordinate and momentum. Everything else is calculated from this pair, so it is precisely this pair that is plotted on the axes."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimate",
+          "h": "How many quantum states in a pendulum",
+          "text": "Estimate: the area of the phase trajectory of the keys on a string is of order $10^{-3}$ J·s, and 'one state' occupies $10^{-34}$. So in an ordinary pendulum, about $10^{31}$ quantum states fit. That is why quantum nature is not noticeable there."
+        },
+        {
+          "icon": "edge",
+          "kind": "limit of applicability",
+          "h": "When H ceases to be energy",
+          "text": "If the system is described in a rotating reference frame or constraints change with time, the Hamiltonian and the total energy diverge. The formalism still works, but the familiar 'H is energy' becomes a trap."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "For the Curious: Liouville's Theorem and the Arrow of Time",
+      "text": "If you take not one point, but a small patch of initial states, over time it will stretch and bend — but its area will remain unchanged. This is Liouville's theorem. From it follows an unexpected conclusion: information about the initial state in mechanics is not lost, it is only smeared over the state space beyond recognition. It is precisely on this distinction — 'lost' vs 'smeared' — that the entire discussion of the arrow of time from the topic of entropy rests."
+    },
+    "memo": {
+      "essence": "The state of a system is a point $(q,p)$ in phase space, and motion is the path of this point. Hamilton's equations describe this path by two symmetric first-order equations, and energy conservation appears as the closedness of the curve.",
+      "keyIdeas": [
+        {
+          "icon": "formula",
+          "title": "State given by a pair",
+          "text": "State is given by a pair: coordinate and momentum, not coordinate and velocity"
+        },
+        {
+          "icon": "estimate",
+          "title": "Oscillation is a closed curve",
+          "text": "An oscillation in phase space is a closed curve, traversing it is the period"
+        },
+        {
+          "icon": "fact",
+          "title": "Area of states is conserved",
+          "text": "The area of a cloud of states does not change over time — Liouville's theorem"
+        },
+        {
+          "icon": "edge",
+          "title": "H is not always energy",
+          "text": "The Hamiltonian does not always coincide with energy: they diverge under time-dependent constraints"
+        }
+      ],
+      "where": "Statistical physics (entropy as volume in phase space), quantum mechanics (Schrödinger equation, uncertainty relation), celestial mechanics and chaos theory, control theory.",
+      "watchOut": "A common mistake is to think of the phase plane as an ordinary picture of motion. Its axes are quantities of different nature, and a point on it denotes a state, not a location in space."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "What does a single point in phase space represent?",
+        "options": [
+          "The position of the body at a given moment",
+          "The full state of the system: where it is and with what momentum",
+          "The value of energy",
+          "An instant in time"
+        ],
+        "answer": 1,
+        "why": "A point specifies the pair $(q,p)$ — coordinate and momentum. This is enough to predict all subsequent motion."
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "Why is an oscillation represented by a closed curve?",
+        "options": [
+          "Because the body returns to its original point in space",
+          "Because energy is conserved and the constant-energy line is closed",
+          "Because it's more convenient to draw",
+          "Because momentum is always positive"
+        ],
+        "answer": 1,
+        "why": "The point cannot leave the constant-energy line, and for an oscillator this line is an ellipse. The closedness of the curve is energy conservation in phase space form."
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "In your own words: how was the Hamiltonian approach more useful than the Lagrangian one when physics reached gas and quantum theory?",
+        "keywords": [
+          "state",
+          "trajectory",
+          "cloud",
+          "billion",
+          "quantum",
+          "no trajectory",
+          "phase"
+        ],
+        "why": "You cannot draw the trajectory of billions of particles, but you can draw a cloud of states; in quantum mechanics there is no trajectory at all, but the state remains. The language of states survived both changes of worldview."
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "A pendulum with amplitude 0.1 m and momentum up to 0.5 kg·m/s. Estimate how many quantum states of area ħ ≈ 10⁻³⁴ J·s fit into it — order of magnitude.",
+        "answer": 5e+32,
+        "unit": "states",
+        "tolerance": 10,
+        "why": "The area of the ellipse is about $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Divide by $10^{-34}$ — we get about $10^{33}$. The exact factor is not important: the point is that quantum effects are unnoticeable on this scale."
+      }
+    ]
+  },
+  "es": {
+    "title": "Hamiltoniano y espacio de fases",
+    "subtitle": "El sistema como un punto, no como una línea",
+    "intro": [
+      "Hasta ahora, el movimiento se dibujaba como una línea: aquí el cuerpo, aquí su trayectoria. Hamilton propuso otro dibujo. Coloquemos la coordenada en un eje y el impulso en el otro. Entonces todo el estado del sistema en un momento dado es un solo punto, y el movimiento es el camino de ese punto.",
+      "La ventaja no es evidente de inmediato: en lugar de la imagen familiar aparece una abstracta. Pero fue esta la que sobrevivió al cambio de épocas. Cuando la física llegó a un gas de miles de millones de partículas, fue imposible dibujar trayectorias, pero sí se puede dibujar un punto en el espacio de estados. Cuando llegó a la mecánica cuántica, las trayectorias desaparecieron por completo, pero el estado permaneció.",
+      "Este párrafo trata sobre cómo se ve la mecánica reescrita en el lenguaje de los estados y por qué este lenguaje resultó adecuado donde el anterior falló."
+    ],
+    "standNote": "En el stand: una masa en un resorte. A la izquierda gira una rueda fantasma: su ángulo es la posición del punto en el espacio de fases, y la proyección sobre el eje da la coordenada habitual de la masa. Cambie la masa y la rigidez y observe cómo cambia la velocidad con la que se recorre el círculo. El círculo sigue siendo un círculo: esto es la conservación de la energía en el lenguaje de los estados.",
+    "formula": {
+      "name": "Ecuaciones de Hamilton",
+      "latex": "H = K + U, \\qquad \\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "Ecuaciones canónicas del movimiento",
+      "authors": [
+        {
+          "who": "William Rowan Hamilton",
+          "year": "1834",
+          "what": "reescribió la mecánica usando coordenadas e impulsos, notando su similitud con la óptica"
+        },
+        {
+          "who": "Carl Gustav Jacobi",
+          "year": "1842",
+          "what": "desarrolló el formalismo y lo llevó a un método práctico para resolver problemas"
+        }
+      ],
+      "story": "Hamilton buscaba un lenguaje común para la mecánica y la óptica y lo encontró: tanto el rayo de luz como un cuerpo en movimiento obedecen ecuaciones similares. Los contemporáneos lo consideraron una elegante curiosidad. Noventa años después, Schrödinger, partiendo exactamente de esta analogía, escribió la ecuación de la mecánica ondulatoria: si la mecánica es similar a la óptica de rayos, debe tener también una versión ondulatoria.",
+      "symbols": [
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "hamiltoniano; para sistemas comunes, la energía total",
+          "unit": "J"
+        },
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "coordenada: dónde está el sistema",
+          "unit": "cualquiera"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "impulso: qué tan rápido y con qué inercia se mueve",
+          "unit": "kg·m/s"
+        },
+        {
+          "sym": "(q, p)",
+          "latex": "(q, p)",
+          "what": "par que define completamente el estado del sistema",
+          "unit": "—"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "Cómo la trayectoria se convierte en un punto",
+      "lead": "La transición se realiza en tres pasos y no cambia la física, sino la forma de mirarla.",
+      "steps": [
+        {
+          "text": "En la descripción lagrangiana, la coordenada y la velocidad eran independientes. Hamilton reemplaza la velocidad por el impulso — la misma cantidad que, como descubrimos, se conserva bajo simetría. A cambio, se obtiene un par simétrico de variables.",
+          "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+          "figure": "action",
+          "figCaption": "La velocidad cede el paso al impulso — las variables se vuelven equivalentes"
+        },
+        {
+          "text": "En lugar de una ecuación de segundo orden, se obtienen dos de primer orden. Se leen de manera simple: la primera dice hacia dónde se mueve el sistema, la segunda cómo cambia su impulso. Observe el signo menos: es lo que hace que el movimiento sea una rotación, no una dispersión.",
+          "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+          "figure": "energyswap",
+          "figCaption": "Dos ecuaciones en lugar de una: la coordenada y el impulso cambian de manera coordinada"
+        },
+        {
+          "text": "Dibujemos el estado como un punto en el plano $(q, p)$. Para una masa en un resorte, la energía es la suma de dos cuadrados, y la línea de energía constante en ese plano es una elipse. El movimiento resulta ser un recorrido de esa elipse a velocidad constante en área.",
+          "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+          "figure": "shadow",
+          "figCaption": "La oscilación en el espacio de fases es una curva cerrada, no una línea de ida y vuelta"
+        },
+        {
+          "text": "La conservación de la energía en este lenguaje es evidente: el punto no puede salir de su curva. Y el teorema de Liouville añade: si tomamos no un punto, sino una nube de estados iniciales, su área no cambia con el tiempo. De aquí surgirá más tarde la física estadística.",
+          "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{área de la nube de estados} = \\text{const}",
+          "figure": "anywell",
+          "figCaption": "La curva cerrada es precisamente la ley de conservación de la energía en forma de fase"
+        }
+      ],
+      "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+      "plateCap": "El estado del sistema es un punto $(q,p)$, el movimiento es el camino de ese punto a lo largo de la línea de energía constante",
+      "note": "El hamiltoniano no siempre coincide con la energía total: si las ligaduras del sistema dependen del tiempo o se eligen coordenadas rotatorias, estas dos cantidades divergen. Para los problemas del curso, la coincidencia se cumple, pero conviene recordar la diferencia."
+    },
+    "math": {
+      "title": "Las matemáticas que se necesitaron aquí",
+      "lead": "Ninguna técnica nueva, solo una nueva visión del plano.",
+      "items": [
+        {
+          "h": "Plano donde los ejes tienen diferente significado",
+          "text": "Estamos acostumbrados a que los ejes tengan las mismas magnitudes: metros y metros. Aquí un eje tiene metros, el otro kilogramos-metros por segundo. Sumarlos no tiene sentido, pero dibujar un punto sí: no significa un lugar, sino un estado."
+        },
+        {
+          "h": "Por qué una elipse y no un círculo",
+          "text": "La ecuación $p^2/2m + kq^2/2 = E$ es la suma de dos cuadrados con diferentes coeficientes, es decir, una elipse. Si se ajusta la escala de los ejes, se convierte en un círculo — así es como se dibuja la rueda en el stand. La forma depende de la elección de unidades, pero la física no."
+        },
+        {
+          "h": "El área como una cantidad que se conserva",
+          "text": "El área bajo una curva cerrada en el espacio de fases resulta estar relacionada con la energía y el período. En mecánica cuántica, esta misma área resultará cuantizada — múltiplo de la constante de Planck. La primera sugerencia de esto la dio ya Bohr."
+        }
+      ]
+    },
+    "example": {
+      "title": "Ejemplo con números",
+      "lead": "Calculemos la trayectoria de fase de la carga del soporte y comprobemos que es cerrada.",
+      "given": "Una carga $m = 2$ kg en un resorte de rigidez $k = 30$ N/m se desplaza $A = 6$ cm y se suelta sin velocidad inicial.",
+      "law": "$H = \\dfrac{p^2}{2m} + \\dfrac{kq^2}{2} = \\text{constante}$",
+      "solution": [
+        {
+          "text": "En el momento de soltarla, la velocidad es nula — toda la energía es potencial.",
+          "latex": "E = \\frac{30 \\cdot 0{,}06^2}{2} = 0{,}054\\ \\text{J}",
+          "num": ""
+        },
+        {
+          "text": "En la posición de equilibrio, la coordenada es nula — toda la energía es cinética.",
+          "latex": "\\frac{p^2}{2 \\cdot 2} = 0{,}054 \\;\\Longrightarrow\\; p \\approx 0{,}46\\ \\text{kg·m/s}",
+          "num": ""
+        },
+        {
+          "text": "Semiejes de la elipse: coordenada 0,06 m, impulso 0,46 kg·m/s.",
+          "latex": "\\omega = \\sqrt{k/m} = \\sqrt{15} \\approx 3{,}9\\ \\text{rad/s}",
+          "num": ""
+        }
+      ],
+      "answer": "El punto recorre la elipse con semiejes 0,06 y 0,46 en aproximadamente 1,6 s — este es el período de oscilación.",
+      "sanity": "Comprobación de sentido común: si se duplica la amplitud, la elipse se duplica en ambos ejes, pero el tiempo de recorrido no cambia. Es la misma propiedad del péndulo que se mencionó en el tema de oscilaciones, pero aquí se ve geométricamente."
+    },
+    "constants": {
+      "title": "Magnitudes de esta sección",
+      "lead": "Como en las secciones anteriores del tema, no hay constantes universales: el formalismo hamiltoniano es un lenguaje, no un conjunto de números.",
+      "items": [
+        {
+          "sym": "H",
+          "latex": "H = K + U",
+          "name": "Hamiltoniano",
+          "value": "J",
+          "why": "para sistemas ordinarios coincide con la energía total"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "name": "Momento como variable independiente",
+          "value": "kg·m/s",
+          "why": "aquí no es una cantidad derivada, sino una coordenada en igualdad de condiciones"
+        },
+        {
+          "sym": "ħ",
+          "latex": "\\hbar",
+          "name": "Constante de Planck",
+          "value": "1,055·10⁻³⁴ J·s",
+          "dictKey": "hbar",
+          "why": "unidad de área en el espacio de fases — con ella se mide «un estado» en física cuántica"
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "Dónde funciona",
+      "lead": "El espacio de fases no es un adorno, sino un sistema de coordenadas de trabajo para varias ramas.",
+      "items": [
+        {
+          "h": "Física estadística",
+          "text": "Un gas de miles de millones de partículas no se describe mediante trayectorias, sino como una nube de puntos en el espacio de fases. La entropía resulta ser el logaritmo del volumen de esa nube — así es como se introdujo en el tema de entropía."
+        },
+        {
+          "h": "Mecánica cuántica",
+          "text": "El hamiltoniano se convierte en un operador, y la ecuación de Schrödinger repite literalmente la estructura de las ecuaciones de Hamilton. El principio de incertidumbre impide que un punto en el espacio de fases sea un punto: tiene un área mínima del orden de $\\hbar$."
+        },
+        {
+          "h": "Mecánica celeste y caos",
+          "text": "La estabilidad del sistema solar se investiga precisamente en el espacio de fases: allí se ve si la trayectoria permanece en su superficie o se dispersa. De aquí surgió la teoría del caos dinámico."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "Curiosidades: compruébelo usted mismo",
+      "lead": "El espacio de fases es difícil de tocar, pero se puede ver en la cocina y en las propias sensaciones.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "experimento en la cocina",
+          "h": "Péndulo de llaves e hilo",
+          "text": "Cuelgue un llavero de un hilo y haga que oscile. Observe dos momentos: en el punto extremo, la velocidad es nula y la desviación es máxima; en el punto inferior, al contrario. Estos son dos extremos de una misma elipse. Recorra con la mirada la oscilación varias veces, siguiendo ambas magnitudes a la vez — está literalmente trazando la trayectoria de fase."
+        },
+        {
+          "icon": "paradox",
+          "kind": "paradoja",
+          "h": "Movimiento circular sin círculo",
+          "text": "La carga va y viene en línea recta, pero en el espacio de fases describe una elipse cerrada. ¿De dónde surge la rotación si el cuerpo no gira?",
+          "answer": "No gira el cuerpo, sino el estado. La coordenada y el momento están desfasados un cuarto de período: cuando una es máxima, la otra es nula. Un par de tales magnitudes produce un recorrido circular — lo mismo se ve en el soporte, donde la rueda fantasma gira y la carga se mueve en línea recta."
+        },
+        {
+          "icon": "fact",
+          "kind": "dato curioso",
+          "h": "Analogía que funcionó 90 años después",
+          "text": "Hamilton construyó su mecánica siguiendo el modelo de la óptica simplemente por amor a la unidad. No tuvo utilidad práctica durante casi un siglo. En 1926, Schrödinger llevó la analogía hasta el final — y obtuvo la mecánica ondulatoria. Una elegante formalidad resultó ser una pista sobre cómo está hecho el mundo."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "mnemotecnia",
+          "h": "Dónde y qué tan rápido",
+          "text": "El estado es la respuesta a dos preguntas: dónde está el sistema y qué tan rápido se mueve. Coordenada y momento. Todo lo demás se calcula a partir de este par, por eso son ellos los que se representan en los ejes."
+        },
+        {
+          "icon": "estimate",
+          "kind": "estimación",
+          "h": "Cuántos estados cuánticos hay en un péndulo",
+          "text": "Estime: el área de la trayectoria de fase de las llaves en el hilo es del orden de $10^{-3}$ J·s, y «un estado» ocupa $10^{-34}$. Por lo tanto, en un péndulo ordinario caben alrededor de $10^{31}$ estados cuánticos. Por eso la cuanticidad no se nota allí."
+        },
+        {
+          "icon": "edge",
+          "kind": "límite de aplicación",
+          "h": "Cuando H deja de ser energía",
+          "text": "Si el sistema se describe en un sistema de referencia rotatorio o los vínculos cambian con el tiempo, el hamiltoniano y la energía total divergen. El formalismo sigue funcionando, pero la costumbre de «H es la energía» se convierte en una trampa."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "Para los curiosos: teorema de Liouville y la flecha del tiempo",
+      "text": "Si se toma no un solo punto, sino una pequeña mancha de estados iniciales, con el tiempo esta se estirará y deformará — pero su área permanecerá constante. Esto es el teorema de Liouville. De él se sigue algo inesperado: la información sobre el estado inicial en mecánica no se pierde, solo se esparce por el espacio de estados hasta hacerse irreconocible. Es precisamente en esta diferencia — «perdida» frente a «esparcida» — que se basa toda la discusión sobre la flecha del tiempo del tema de entropía."
+    },
+    "memo": {
+      "essence": "El estado del sistema es un punto $(q,p)$ en el espacio de fases, y el movimiento es el camino de ese punto. Las ecuaciones de Hamilton describen este camino mediante dos ecuaciones simétricas de primer orden, y la conservación de la energía se manifiesta como el cierre de la curva.",
+      "keyIdeas": [
+        {
+          "icon": "formula",
+          "title": "El estado se define por un par",
+          "text": "El estado se define por un par: coordenada y momento, no coordenada y velocidad"
+        },
+        {
+          "icon": "estimate",
+          "title": "La oscilación es una curva cerrada",
+          "text": "La oscilación en el espacio de fases es una curva cerrada, cuyo recorrido constituye el período"
+        },
+        {
+          "icon": "fact",
+          "title": "El área de estados se conserva",
+          "text": "El área de la nube de estados no cambia con el tiempo: teorema de Liouville"
+        },
+        {
+          "icon": "edge",
+          "title": "H no siempre es energía",
+          "text": "El hamiltoniano no siempre coincide con la energía: cuando hay vínculos dependientes del tiempo, divergen"
+        }
+      ],
+      "where": "Física estadística (entropía como volumen en el espacio de fases), mecánica cuántica (ecuación de Schrödinger, relación de indeterminación), mecánica celeste y teoría del caos, teoría de control.",
+      "watchOut": "Un error frecuente es considerar el plano de fases como una imagen ordinaria del movimiento. En sus ejes se representan magnitudes de diferente naturaleza, y un punto en él significa un estado, no un lugar en el espacio."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "¿Qué significa un punto en el espacio de fases?",
+        "options": [
+          "La posición del cuerpo en un instante dado",
+          "El estado completo del sistema: dónde está y con qué momento",
+          "El valor de la energía",
+          "El instante de tiempo"
+        ],
+        "answer": 1,
+        "why": "El punto define el par $(q,p)$: coordenada y momento. Esto es suficiente para predecir todo el movimiento posterior."
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "¿Por qué una oscilación se representa como una curva cerrada?",
+        "options": [
+          "Porque el cuerpo vuelve al punto inicial en el espacio",
+          "Porque la energía se conserva y la línea de energía constante es cerrada",
+          "Porque es más fácil de dibujar",
+          "Porque el momento siempre es positivo"
+        ],
+        "answer": 1,
+        "why": "El punto no puede salirse de la línea de energía constante, y para un oscilador esa línea es una elipse. El cierre de la curva es la conservación de la energía en forma de fase."
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "En tus propias palabras: ¿en qué resultó más útil la perspectiva hamiltoniana que la lagrangiana cuando la física llegó a los gases y a los cuantos?",
+        "keywords": [
+          "estad",
+          "trayector",
+          "nube",
+          "mil millon",
+          "cuant",
+          "no trayector",
+          "fas"
+        ],
+        "why": "No se puede dibujar la trayectoria de miles de millones de partículas, pero sí la nube de estados; en mecánica cuántica no existe trayectoria alguna, pero el estado permanece. El lenguaje de los estados sobrevivió a ambos cambios de paradigma."
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "Un péndulo con amplitud de 0,1 m y momento hasta 0,5 kg·m/s. Estime cuántos estados cuánticos de área ħ ≈ 10⁻³⁴ J·s caben en él — orden de magnitud.",
+        "answer": 5e+32,
+        "unit": "estados",
+        "tolerance": 10,
+        "why": "El área de la elipse es del orden de $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Dividiendo por $10^{-34}$ se obtiene alrededor de $10^{33}$. El factor exacto no es importante: lo relevante es que la cuanticidad es imperceptible a esa escala."
+      }
+    ]
+  },
+  "ar": {
+    "title": "هاملتوني وفضاء الطور",
+    "subtitle": "النظام كنقطة، وليس كخط",
+    "intro": [
+      "حتى الآن، كان الحركة تُرسم كخط: ها هو الجسم، وها هو مساره. اقترح هاملتون رسمًا آخر. نضع على أحد المحاور الإحداثيات، وعلى الآخر الزخم. عندئذ، كل حالة النظام في لحظة معينة هي نقطة واحدة، والحركة هي مسار هذه النقطة.",
+      "المكسب ليس واضحًا فورًا: بدلاً من الصورة المألوفة تظهر صورة مجردة. لكنها هي التي نجت عبر تغير العصور. عندما وصلت الفيزياء إلى غاز من مليارات الجسيمات، أصبح رسم المسارات مستحيلًا — لكن النقطة في فضاء الحالات ممكنة. عندما وصلت إلى ميكانيكا الكم، اختفت المسارات تمامًا — لكن الحالة بقيت.",
+      "تدور هذه الفقرة حول كيف تبدو الميكانيكا عند إعادة كتابتها بلغة الحالات، ولماذا كانت هذه اللغة مناسبة حيث فشلت السابقة."
+    ],
+    "standNote": "على المنصة - ثقل على نابض. على اليسار تدور عجلة وهمية: زاويتها هي موضع النقطة في فضاء الطور، والإسقاط على المحور يعطي الإحداثي المألوف للثقل. غير الكتلة والصلابة وشاهد كيف تتغير سرعة الدوران حول الدائرة. تظل الدائرة دائرة - وهذا هو حفظ الطاقة بلغة الحالات.",
+    "formula": {
+      "name": "معادلات هاملتون",
+      "latex": "H = K + U, \\qquad \\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+      "alsoKnown": "المعادلات القانونية للحركة",
+      "authors": [
+        {
+          "who": "ويليام روان هاملتون",
+          "year": "1834",
+          "what": "أعاد كتابة الميكانيكا باستخدام الإحداثيات والزخم، ملاحظًا تشابهها مع البصريات"
+        },
+        {
+          "who": "كارل ياكوبي",
+          "year": "1842",
+          "what": "طور الشكلانية وجعلها طريقة عملية لحل المسائل"
+        }
+      ],
+      "story": "كان هاملتون يبحث عن لغة مشتركة للميكانيكا والبصريات ووجدها: شعاع الضوء والجسم الطائر يخضعان لمعادلات متشابهة. اعتبر المعاصرون ذلك فضولًا أنيقًا. بعد تسعين عامًا، شرودنغر، انطلاقًا من هذا التشبيه بالضبط، كتب معادلة ميكانيكا الموجة: إذا كانت الميكانيكا تشبه بصريات الأشعة، فيجب أن يكون لها نسخة موجية.",
+      "symbols": [
+        {
+          "sym": "H",
+          "latex": "H",
+          "what": "الهاملتوني؛ للأنظمة العادية - الطاقة الكلية",
+          "unit": "J"
+        },
+        {
+          "sym": "q",
+          "latex": "q",
+          "what": "الإحداثي - أين يوجد النظام",
+          "unit": "أي"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "what": "الزخم - مدى سرعة وقصور حركته",
+          "unit": "kg·m/s"
+        },
+        {
+          "sym": "(q, p)",
+          "latex": "(q, p)",
+          "what": "زوج يحدد حالة النظام بالكامل",
+          "unit": "—"
+        }
+      ]
+    },
+    "derivation": {
+      "title": "كيف يتحول المسار إلى نقطة",
+      "lead": "الانتقال يتم في ثلاث خطوات ولا يغير الفيزياء، بل طريقة النظر إليها.",
+      "steps": [
+        {
+          "text": "في الوصف اللاغرانجي، كانت الإحداثيات والسرعة مستقلتين. يستبدل هاملتون السرعة بالزخم - نفس الكمية التي، كما اكتشفنا، تُحفظ تحت التناظر. في المقابل، نحصل على زوج متماثل من المتغيرات.",
+          "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+          "figure": "action",
+          "figCaption": "السرعة تفسح المجال للزخم - تصبح المتغيرات متكافئة"
+        },
+        {
+          "text": "بدلاً من معادلة واحدة من الدرجة الثانية، نحصل على معادلتين من الدرجة الأولى. قراءتها بسيطة: الأولى تخبر أين يتجه النظام، والثانية كيف يتغير زخمه. انتبه إلى علامة الناقص: هي التي تجعل الحركة دورانًا وليس تفرقعًا.",
+          "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+          "figure": "energyswap",
+          "figCaption": "معادلتان بدلاً من واحدة: الإحداثي والزخم يتغيران بشكل منسق"
+        },
+        {
+          "text": "لنرسم الحالة كنقطة على المستوى $(q, p)$. بالنسبة لثقل على نابض، تتكون الطاقة من مربعين، وخط الطاقة الثابت على هذا المستوى هو قطع ناقص. الحركة تكون دورانًا حول هذا القطع الناقص بسرعة مساحية ثابتة.",
+          "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+          "figure": "shadow",
+          "figCaption": "الاهتزاز في فضاء الطور - منحنى مغلق، وليس خطًا ذهابًا وإيابًا"
+        },
+        {
+          "text": "حفظ الطاقة بهذه اللغة يبدو واضحًا: لا يمكن للنقطة أن تخرج عن منحناها. وتضيف نظرية ليوفيل: إذا أخذنا ليست نقطة واحدة، بل سحابة من الحالات الأولية، فإن مساحتها لا تتغير مع الزمن. من هنا ستنشأ لاحقًا الفيزياء الإحصائية.",
+          "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{مساحة سحابة الحالات} = \\text{const}",
+          "figure": "anywell",
+          "figCaption": "المنحنى المغلق - هذا هو قانون حفظ الطاقة في شكل طوري"
+        }
+      ],
+      "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+      "plateCap": "حالة النظام هي نقطة $(q,p)$، والحركة هي مسار هذه النقطة على طول خط الطاقة الثابت",
+      "note": "الهاملتوني لا يتطابق دائمًا مع الطاقة الكلية: إذا كانت القيود في النظام تعتمد على الزمن أو تم اختيار إحداثيات دوارة، فإن هاتين الكميتين تتباعدان. بالنسبة لمسائل الدورة، يتحقق التطابق، لكن يجدر تذكر الفرق."
+    },
+    "math": {
+      "title": "الرياضيات التي كانت مطلوبة هنا",
+      "lead": "لا توجد تقنية جديدة واحدة - فقط نظرة جديدة على المستوى.",
+      "items": [
+        {
+          "h": "مستوى حيث المحاور مختلفة في المعنى",
+          "text": "اعتادنا على أن المحاور تحمل كميات متشابهة: متر ومتر. هنا على أحد المحاور متر، وعلى الآخر كيلوجرام-متر في الثانية. جمعهما لا معنى له، لكن رسم نقطة ممكن تمامًا: إنها لا تعني مكانًا، بل حالة."
+        },
+        {
+          "h": "لماذا قطع ناقص وليس دائرة",
+          "text": "المعادلة $p^2/2m + kq^2/2 = E$ هي مجموع مربعين بمعاملات مختلفة، أي قطع ناقص. إذا اخترنا مقياس المحاور، يتحول إلى دائرة - هكذا بالضبط رسمت العجلة على المنصة. الشكل يعتمد على اختيار الوحدات، لكن الفيزياء لا تعتمد."
+        },
+        {
+          "h": "المساحة ككمية محفوظة",
+          "text": "المساحة تحت المنحنى المغلق في فضاء الطور تبين أنها مرتبطة بالطاقة والدورة. في ميكانيكا الكم، ستكون هذه المساحة مكممة - مضاعفة لثابت بلانك. أول إشارة إلى ذلك قدمها بور."
+        }
+      ]
+    },
+    "example": {
+      "title": "مثال مع الأرقام",
+      "lead": "لنحسب مسار الطور لحمل المنضدة ونتأكد من أنه مغلق.",
+      "given": "حمل $m = 2$ كجم على زنبرك صلابته $k = 30$ N/م يُبعد بمقدار $A = 6$ سم ويُترك بدون سرعة ابتدائية.",
+      "law": "$H = \\dfrac{p^2}{2m} + \\dfrac{kq^2}{2} = \\text{ثابت}$",
+      "solution": [
+        {
+          "text": "في لحظة الإطلاق السرعة صفر — كل الطاقة كامنة.",
+          "latex": "E = \\frac{30 \\cdot 0{,}06^2}{2} = 0{,}054\\ \\text{J}",
+          "num": ""
+        },
+        {
+          "text": "في وضع الاتزان الإحداثي صفر — كل الطاقة حركية.",
+          "latex": "\\frac{p^2}{2 \\cdot 2} = 0{,}054 \\;\\Longrightarrow\\; p \\approx 0{,}46\\ \\text{kg·m/s}",
+          "num": ""
+        },
+        {
+          "text": "أنصاف محاور القطع الناقص: بالنسبة للإحداثي 0,06 m، وبالنسبة للكمية الحركية 0,46 kg·m/s.",
+          "latex": "\\omega = \\sqrt{k/m} = \\sqrt{15} \\approx 3{,}9\\ \\text{rad/s}",
+          "num": ""
+        }
+      ],
+      "answer": "النقطة تدور حول القطع الناقص بأنصاف محاور 0,06 و0,46 تقريبًا في 1,6 s — هذه هي فترة التذبذب.",
+      "sanity": "فحص المنطق السليم: إذا ضاعفنا السعة، سيتضاعف القطع الناقص على كلا المحورين، بينما لا يتغير زمن الدوران. هذه نفس خاصية البندول التي نوقشت في موضوع التذبذبات، لكنها هنا مرئية هندسيًا."
+    },
+    "constants": {
+      "title": "كميات هذا القسم",
+      "lead": "كما في الأقسام السابقة من الموضوع، لا توجد ثوابت كونية: الصياغة الهاميلتونية هي لغة، وليست مجموعة أرقام.",
+      "items": [
+        {
+          "sym": "H",
+          "latex": "H = K + U",
+          "name": "هاملتوني",
+          "value": "J",
+          "why": "في الأنظمة العادية يتطابق مع الطاقة الكلية"
+        },
+        {
+          "sym": "p",
+          "latex": "p",
+          "name": "الكمية الحركية كمتغير مستقل",
+          "value": "kg·m/s",
+          "why": "هنا ليست كمية مشتقة، بل مساوية للإحداثي في الأهمية"
+        },
+        {
+          "sym": "ħ",
+          "latex": "\\hbar",
+          "name": "ثابت بلانك",
+          "value": "1,055·10⁻³⁴ J·s",
+          "dictKey": "hbar",
+          "why": "وحدة المساحة في فضاء الطور — بها يُقاس 'حالة واحدة' في الفيزياء الكمية"
+        }
+      ]
+    },
+    "synthesis": {
+      "title": "أين يعمل هذا",
+      "lead": "فضاء الطور ليس زينة، بل نظام إحداثيات عملي لعدة أقسام في آن واحد.",
+      "items": [
+        {
+          "h": "الفيزياء الإحصائية",
+          "text": "الغاز المكون من مليارات الجسيمات لا يوصف بمسارات، بل بسحابة من النقاط في فضاء الطور. يتضح أن الإنتروبيا هي لوغاريتم حجم هذه السحابة — هكذا تم تقديمها في موضوع الإنتروبيا."
+        },
+        {
+          "h": "ميكانيكا الكم",
+          "text": "الهاملتوني يتحول إلى مؤثر، ومعادلة شرودنغر تكرر حرفيًا بنية معادلات هاملتون. مبدأ عدم اليقين يمنع النقطة في فضاء الطور من أن تكون نقطة: لها مساحة صغرى من رتبة $\\hbar$."
+        },
+        {
+          "h": "الميكانيكا السماوية والفوضى",
+          "text": "يُدرس استقرار المجموعة الشمسية في فضاء الطور: هناك يُرى ما إذا كان المسار يبقى على سطحه أم ينتشر. من هنا نشأت نظرية الفوضى الديناميكية."
+        }
+      ]
+    },
+    "curiosities": {
+      "title": "مثير للاهتمام: اختبر بنفسك",
+      "lead": "من الصعب لمس فضاء الطور، لكن يمكن رؤيته في المطبخ وفي أحاسيسك الخاصة.",
+      "items": [
+        {
+          "icon": "kitchen",
+          "kind": "تجربة في المطبخ",
+          "h": "بندول من المفاتيح والخيط",
+          "text": "علق مجموعة مفاتيح على خيط وأرجحها. لاحظ لحظتين: عند النقطة القصوى السرعة صفر والانزياح أكبر ما يمكن؛ عند النقطة السفلى العكس. هذان طرفا قطع ناقص واحد. تابع التذبذب بنظرك عدة مرات، متتبعًا كلا الكميتين في آن — أنت حرفيًا ترسم مسار الطور."
+        },
+        {
+          "icon": "paradox",
+          "kind": "مفارقة",
+          "h": "حركة دائرية بدون دائرة",
+          "text": "الحمل يتحرك في خط مستقيم ذهابًا وإيابًا، لكن في فضاء الطور يرسم قطعًا ناقصًا مغلقًا. من أين أتت الحركة الدورانية إذا كان الجسم لا يدور في أي اتجاه؟",
+          "answer": "لا يدور الجسم، بل الحالة. الإحداثي والكمية الحركية منزاحان في الطور بربع دورة: عندما يكون أحدهما أقصى، الآخر صفر. زوج من هذه الكميات يعطي دورانًا دائريًا — نفس الشيء يُرى على المنضدة حيث تدور عجلة وهمية بينما يتحرك الحمل على خط مستقيم."
+        },
+        {
+          "icon": "fact",
+          "kind": "حقيقة ممتعة",
+          "h": "تشبيه أثمر بعد 90 عامًا",
+          "text": "بنى هاملتون ميكانيكاه على نموذج البصريات فقط حبًا في الوحدة. لم تكن ذات فائدة عملية لنحو قرن. في عام 1926، أكمل شرودنغر التشبيه — وحصل على ميكانيكا الموجات. تبين أن شكلانية جميلة كانت تلميحًا لكيفية عمل العالم."
+        },
+        {
+          "icon": "mnemo",
+          "kind": "وسيلة استذكار",
+          "h": "أين وبأي سرعة",
+          "text": "الحالة هي إجابة سؤالين: أين النظام وبأي سرعة يتحرك. الإحداثي والكمية الحركية. كل شيء آخر يُحسب من هذين الزوجين، لذلك يُرسمان على المحاور."
+        },
+        {
+          "icon": "estimate",
+          "kind": "تقدير تقريبي",
+          "h": "كم عدد الحالات الكمية في البندول",
+          "text": "قدّر: مساحة مسار الطور للمفاتيح على الخيط هي من رتبة $10^{-3}$ J·s، و'حالة واحدة' تشغل $10^{-34}$. إذن في بندول عادي يتسع لحوالي $10^{31}$ حالة كمية. لهذا السبب الكم غير ملحوظ هناك."
+        },
+        {
+          "icon": "edge",
+          "kind": "حدود الصلاحية",
+          "h": "متى يتوقف H عن كونه طاقة",
+          "text": "إذا وُصف النظام في إطار مرجعي دوار أو تغيرت القيود مع الزمن، يختلف الهاملتوني عن الطاقة الكلية. الصياغة تعمل في هذه الحالة، لكن المألوف 'H هي الطاقة' يصبح فخًا."
+        }
+      ]
+    },
+    "appendix": {
+      "title": "للمهتمين: نظرية ليوفيل وسهم الزمن",
+      "text": "إذا أخذنا ليس نقطة واحدة، بل بقعة صغيرة من الحالات الابتدائية، فمع الزمن ستمتد وتنحني — لكن مساحتها ستبقى ثابتة. هذه نظرية ليوفيل. منها يتبع أمر غير متوقع: المعلومات عن الحالة الابتدائية في الميكانيكا لا تُفقد، بل تنتشر في فضاء الحالة حتى تصبح غير قابلة للتعرف. على هذا الفرق — 'مفقودة' مقابل 'منتشرة' — يقوم كل الحديث عن سهم الزمن من موضوع الإنتروبيا."
+    },
+    "memo": {
+      "essence": "حالة النظام هي نقطة $(q,p)$ في الفضاء الطوري، والحركة هي مسار هذه النقطة. معادلات هاميلتون تصف هذا المسار بمعادلتين متماثلتين من الرتبة الأولى، ويظهر حفظ الطاقة كإغلاق المنحنى.",
+      "keyIdeas": [
+        {
+          "icon": "formula",
+          "title": "تُعطى الحالة بزوج",
+          "text": "تُعطى الحالة بزوج: الإحداثيات والزخم، وليس الإحداثيات والسرعة"
+        },
+        {
+          "icon": "estimate",
+          "title": "الاهتزاز - منحنى مغلق",
+          "text": "الاهتزاز في الفضاء الطوري هو منحنى مغلق، والجولة حوله هي الفترة"
+        },
+        {
+          "icon": "fact",
+          "title": "مساحة الحالات محفوظة",
+          "text": "مساحة سحابة الحالات لا تتغير مع الزمن - نظرية ليوفيل"
+        },
+        {
+          "icon": "edge",
+          "title": "H ليست دائماً الطاقة",
+          "text": "هاملتونيان لا يتطابق مع الطاقة دائماً: في ظل القيود المعتمدة على الزمن، يتباعدان"
+        }
+      ],
+      "where": "الفيزياء الإحصائية (الإنتروبيا كحجم في الفضاء الطوري)، ميكانيكا الكم (معادلة شرودنغر، مبدأ عدم اليقين)، الميكانيكا السماوية ونظرية الفوضى، نظرية التحكم.",
+      "watchOut": "خطأ شائع هو اعتبار المستوى الطوري صورة عادية للحركة. على محاوره توجد كميات ذات طبيعة مختلفة، والنقطة عليه تعني حالة، وليس مكاناً في الفضاء."
+    },
+    "quiz": [
+      {
+        "id": "h1",
+        "type": "mcq",
+        "q": "ماذا تعني نقطة واحدة في الفضاء الطوري؟",
+        "options": [
+          "موقع الجسم في لحظة معينة",
+          "الحالة الكاملة للنظام: أين هو وبأي زخم",
+          "قيمة الطاقة",
+          "لحظة زمنية"
+        ],
+        "answer": 1,
+        "why": "النقطة تحدد زوجاً $(q,p)$ - الإحداثيات والزخم. هذا يكفي للتنبؤ بكل الحركة المستقبلية."
+      },
+      {
+        "id": "h2",
+        "type": "mcq",
+        "q": "لماذا يُصوَّر الاهتزاز بمنحنى مغلق؟",
+        "options": [
+          "لأن الجسم يعود إلى نقطته الأصلية في الفضاء",
+          "لأن الطاقة محفوظة، وخط الطاقة الثابتة مغلق",
+          "لأنه من الأسهل الرسم بهذه الطريقة",
+          "لأن الزخم موجب دائماً"
+        ],
+        "answer": 1,
+        "why": "لا يمكن للنقطة أن تخرج عن خط الطاقة الثابتة، وبالنسبة للمهتز، هذا الخط هو قطع ناقص. إغلاق المنحنى هو حفظ الطاقة في الصورة الطورية."
+      },
+      {
+        "id": "h3",
+        "type": "free",
+        "q": "بكلماتك الخاصة: كيف كانت النظرة الهاميلتونية أكثر فائدة من النظرة اللاغرانجية عندما وصلت الفيزياء إلى الغاز والكم؟",
+        "keywords": [
+          "حالة",
+          "مسار",
+          "سحابة",
+          "مليار",
+          "كم",
+          "لا مسار",
+          "طوري"
+        ],
+        "why": "لا يمكن رسم مسار مليارات الجسيمات، بينما يمكن رسم سحابة الحالات؛ في ميكانيكا الكم، لا يوجد مسار على الإطلاق، بينما تبقى الحالة. لغة الحالات نجت من كلا التغييرين في صورة العالم."
+      },
+      {
+        "id": "h4",
+        "type": "estimate",
+        "q": "بندول بسعة 0.1 m وزخم يصل إلى 0.5 kg·m/s. قدِّر عدد الحالات الكمومية ذات المساحة ħ ≈ 10⁻³⁴ J·s التي تناسبه - رتبة المقدار.",
+        "answer": 5e+32,
+        "unit": "حالة",
+        "tolerance": 10,
+        "why": "مساحة القطع الناقص من رتبة $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. نقسم على $10^{-34}$ - نحصل على حوالي $10^{33}$. العامل الدقيق غير مهم: المهم أن الكمومية على هذا المقياس غير ملحوظة."
+      }
+    ]
+  }
+}

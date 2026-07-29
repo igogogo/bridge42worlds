@@ -1000,5 +1000,61 @@
         return svg(W, H, s);
     };
 
+    // ── Теоретическая механика: принцип наименьшего действия ──
+
+    // Из точки в точку ведёт бесконечно много путей — природа выбирает один.
+    F.manypaths = function () {
+        var W = 420, H = 160, x0 = 60, x1 = 360, y = 120;
+        var s = '';
+        [-46, -26, 0, 22, 40].forEach(function (h, i) {
+            var mid = (x0 + x1) / 2;
+            s += '<path d="M' + x0 + ',' + y + ' Q' + mid + ',' + (y + 2 * h) + ' ' + x1 + ',' + y + '" ' +
+                'fill="none" stroke="' + (h === 0 ? LINK : SOFT) + '" stroke-width="' + (h === 0 ? 2.6 : 1.2) +
+                '"' + (h === 0 ? '' : ' stroke-dasharray="4 4" opacity="0.75"') + '/>';
+        });
+        s += '<circle cx="' + x0 + '" cy="' + y + '" r="5" fill="' + INK + '"/>';
+        s += '<circle cx="' + x1 + '" cy="' + y + '" r="5" fill="' + INK + '"/>';
+        s += txt(x0, y + 20, 'начало', SOFT, 10);
+        s += txt(x1, y + 20, 'конец', SOFT, 10);
+        s += txt((x0 + x1) / 2, 28, 'путей бесконечно много', SOFT, 11);
+        s += txt((x0 + x1) / 2, y - 4, 'истинный', LINK, 11);
+        return svg(W, H, s);
+    };
+
+    // Действие складывается по кусочкам: на каждом шаге берём разность энергий.
+    F.actionsum = function () {
+        var W = 420, H = 165, x0 = 50, base = 118, bw = 30;
+        var s = '<line x1="' + (x0 - 10) + '" y1="' + base + '" x2="' + (x0 + 9 * bw + 14) + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        [26, 20, 12, 5, -2, -6, -4, 4, 16].forEach(function (h, i) {
+            var x = x0 + i * bw;
+            s += '<rect x="' + x + '" y="' + (h >= 0 ? base - h : base) + '" width="' + (bw - 6) +
+                '" height="' + Math.abs(h) + '" fill="' + (h >= 0 ? LINK : WARN) + '" opacity="0.55"/>';
+        });
+        s += txt(x0 + 4.5 * bw, 26, 'K − U на каждом шаге', INK, 11.5);
+        s += txt(x0 + 4.5 * bw, 146, 'сумма по всем шагам и есть действие', SOFT, 10.5);
+        s += arrow(x0 + 9 * bw + 4, base, x0 + 9 * bw + 4, base - 34, LINK, 'ahl');
+        s += txt(x0 + 9 * bw + 4, base - 42, 'S', LINK, 12);
+        return svg(W, H, s);
+    };
+
+    // Кривая действия: у истинного пути минимум, отклонение в любую сторону его увеличивает.
+    F.actionmin = function () {
+        var W = 400, H = 175, cx = 200, base = 130, k = 0.011;
+        var pts = [];
+        for (var x = -150; x <= 150; x += 5) pts.push((cx + x) + ',' + (base - k * x * x));
+        var s = '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.4"/>';
+        s += '<line x1="' + (cx - 165) + '" y1="' + base + '" x2="' + (cx + 165) + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (base + 8) + '" x2="' + cx + '" y2="30" stroke="' + BORD +
+            '" stroke-width="1" stroke-dasharray="3 3"/>';
+        s += '<circle cx="' + cx + '" cy="' + base + '" r="5" fill="' + MOSS + '"/>';
+        s += txt(cx, base + 20, 'истинный путь', MOSS, 10.5);
+        s += txt(cx - 105, base - 40, 'отклонение', SOFT, 10);
+        s += txt(cx + 105, base - 40, 'отклонение', SOFT, 10);
+        s += txt(cx, 24, 'действие S', INK, 11.5);
+        return svg(W, H, s);
+    };
+
     global.B42Figures = F;
 })(window);

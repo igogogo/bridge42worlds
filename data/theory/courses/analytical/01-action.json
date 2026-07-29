@@ -1,0 +1,1276 @@
+{
+ "id": "01-action",
+ "topic": "analytical",
+ "schema": "b42.lesson/1",
+ "model": "action",
+ "entities": {
+  "tags": [
+   "numerical_simulation",
+   "quantum_field"
+  ],
+  "laws": [
+   "law_of_conservation_of_energy"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2607.09468",
+    "date": "2026-07-10",
+    "title": {
+     "ru": "Тайный ветер нейтронных звёзд: как нейтроны подгоняют магнитные вихри",
+     "en": "The Hidden Wind of Neutron Stars: How Neutrons Propel Magnetic Vortices",
+     "es": "El viento secreto de las estrellas de neutrones: cómo los neutrones empujan los vórtices magnéticos",
+     "ar": "الريح الخفية للنجوم النيوترونية: كيف تدفع النيوترونات الدوامات المغناطيسية"
+    },
+    "why": "numerical_simulation, quantum_field"
+   },
+   {
+    "id": "2607.09432",
+    "date": "2026-07-10",
+    "title": {
+     "ru": "Ракетный эффект доменных стенок: асимметрия масс разгоняет вакуумы",
+     "en": "The Rocket Effect of Domain Walls: Mass Asymmetry Propels Vacuums",
+     "es": "Efecto cohete de las paredes de dominio: la asimetría de masas acelera los vacíos",
+     "ar": "تأثير الصاروخ في جدران المجال: عدم تناظر الكتل يُسرّع الفراغات"
+    },
+    "why": "numerical_simulation, quantum_field"
+   },
+   {
+    "id": "2607.08822",
+    "date": "2026-07-09",
+    "title": {
+     "ru": "Танец электронов на сомбреро: рождение дробных квантовых кристаллов",
+     "en": "Electron Dance on the Sombrero: Birth of Fractional Quantum Crystals",
+     "es": "Danza de electrones sobre el sombrero: el nacimiento de cristales cuánticos fraccionarios",
+     "ar": "رقصة الإلكترونات على السومبريرو: ولادة البلورات الكمومية الكسرية"
+    },
+    "why": "numerical_simulation, quantum_field"
+   }
+  ]
+ },
+ "ru": {
+  "title": "Принцип наименьшего действия",
+  "subtitle": "Почему из бесконечности путей природа выбирает ровно один",
+  "intro": [
+   "Подбросьте мяч и поймайте его в той же точке через две секунды. Между броском и ловлей мяч мог бы двигаться как угодно: взлететь повыше и упасть быстрее, дёрнуться вбок, пройти зигзагом. Все эти пути соединяют одни и те же две точки за одно и то же время. Но настоящий путь — один.",
+   "Странность в том, что мяч будто знает будущее. Второй закон Ньютона решает задачу по шагам: вот сила сейчас, вот ускорение сейчас, вот где тело окажется мгновением позже. А принцип наименьшего действия говорит иначе: возьми путь целиком, от начала до конца, посчитай для него одно число — и настоящим окажется тот путь, где это число наименьшее.",
+   "Оба описания дают одинаковый ответ. Но второе оказалось глубже: из него выводится не только механика, но и оптика, и электродинамика, и — позже — квантовая механика. Эта тема о том, что это за число и почему природа его экономит."
+  ],
+  "standNote": "Двигайте «отклонение»: пробный путь уходит от истинного, оставаясь привязанным к тем же концам. Смотрите на число внизу и на кривую справа — действие растёт в обе стороны, а в нуле у него дно. Попробуйте поймать минимум на глаз, а потом сверьтесь с графиком.",
+  "formula": {
+   "name": "Принцип наименьшего действия",
+   "latex": "S = \\int_{t_1}^{t_2} (K - U)\\,dt \\;\\longrightarrow\\; \\min",
+   "alsoKnown": "Принцип Гамильтона; в старой форме — принцип Мопертюи",
+   "authors": [
+    {
+     "who": "Пьер Мопертюи",
+     "year": "1744",
+     "what": "предположил, что природа экономна, и ввёл понятие действия"
+    },
+    {
+     "who": "Леонард Эйлер",
+     "year": "1744",
+     "what": "придал принципу математическую форму"
+    },
+    {
+     "who": "Жозеф Лагранж",
+     "year": "1788",
+     "what": "вывел из него уравнения движения в общем виде"
+    },
+    {
+     "who": "Уильям Гамильтон",
+     "year": "1834",
+     "what": "сформулировал принцип в том виде, в котором им пользуются сегодня"
+    }
+   ],
+   "story": "Мопертюи считал экономность природы доказательством разумного замысла и спорил об этом публично. Спор вышел скандальным, а принцип остался — и оказался вернее, чем аргумент, ради которого его придумали. Физика умеет забирать хорошие идеи у неверных объяснений.",
+   "symbols": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "действие — число, приписанное пути целиком",
+     "unit": "Дж·с"
+    },
+    {
+     "sym": "K",
+     "latex": "K",
+     "what": "кинетическая энергия в данный момент",
+     "unit": "Дж"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "потенциальная энергия в данный момент",
+     "unit": "Дж"
+    },
+    {
+     "sym": "t₁, t₂",
+     "latex": "t_1, t_2",
+     "what": "моменты начала и конца — они закреплены, как и точки",
+     "unit": "с"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Откуда берётся минимум",
+   "lead": "Проследим за рассуждением по шагам: от «путей много» до «настоящий тот, где действие не меняется при малом шевелении».",
+   "steps": [
+    {
+     "text": "Закрепим начало и конец: тело выходит из точки $A$ в момент $t_1$ и приходит в точку $B$ в момент $t_2$. Всё, что между ними, пока не задано — путей бесконечно много, и каждый из них мыслим.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "Концы закреплены, середина свободна: любая кривая между точками — кандидат"
+    },
+    {
+     "text": "Каждому пути припишем одно число. Для этого в каждый момент возьмём разность кинетической и потенциальной энергии и просуммируем её по всему времени движения. Сумма бесконечно мелких кусочков — это интеграл.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "Действие складывается по кусочкам: на каждом шаге берётся разность энергий"
+    },
+    {
+     "text": "Теперь сравним пути. Возьмём истинный путь и слегка пошевелим его в середине, не трогая концов. Если действие при этом растёт в обе стороны — мы стоим в минимуме. Именно это и происходит: у настоящего движения действие наименьшее.",
+     "latex": "\\delta S = 0 \\quad \\text{при малом шевелении пути}",
+     "figure": "actionmin",
+     "figCaption": "Кривая действия: истинный путь стоит на дне, отклонение в любую сторону поднимает"
+    },
+    {
+     "text": "Требование «действие не меняется при малом шевелении» — это уравнение на функцию. Раскрыв его, получаем уравнение Эйлера — Лагранжа, а для механической энергии оно превращается ровно во второй закон Ньютона. То есть Ньютон не отменён: он следствие.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "noether",
+     "figCaption": "Из одного требования вырастают привычные уравнения движения"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "Настоящий путь — тот, на котором действие принимает наименьшее значение",
+   "note": "Строго говоря, действие не всегда минимально: правильное условие — оно стационарно, то есть не меняется в первом порядке при малом шевелении. Для обычных задач это минимум, но бывают случаи, где стационарная точка оказывается седловой. Название «принцип наименьшего действия» исторически прижилось раньше, чем эта тонкость выяснилась."
+  },
+  "math": {
+   "title": "Математика, которая здесь понадобилась",
+   "lead": "Здесь впервые ищется не число, а функция — и привычная производная для этого не годится.",
+   "items": [
+    {
+     "h": "Интеграл как накопление",
+     "text": "Знак $\\int$ здесь не «площадь под графиком», а именно накопление: мы идём по времени маленькими шагами, на каждом берём $(K-U)\\cdot dt$ и всё складываем. Стенд считает действие именно так — суммой по 240 шагам, а не готовой формулой. Поэтому число на экране получено тем же способом, каким его посчитал бы человек с калькулятором."
+    },
+    {
+     "h": "Что такое «шевельнуть функцию»",
+     "text": "Обычная производная спрашивает: как изменится $y$, если чуть сдвинуть $x$. Здесь вопрос другой: как изменится число $S$, если чуть изменить всю функцию $y(t)$ сразу. Раздел математики, который этим занимается, называется вариационным исчислением, а маленькое изменение функции обозначают $\\delta$."
+    },
+    {
+     "h": "Почему концы закреплены",
+     "text": "Если отпустить концы, минимума не будет: всегда найдётся путь с меньшим действием. Закрепление концов — не техническая деталь, а часть постановки задачи: мы спрашиваем не «куда полетит тело», а «каким путём оно попадёт из этого состояния в то»."
+    }
+   ]
+  },
+  "example": {
+   "title": "Пример с числами",
+   "lead": "Посчитаем, насколько дороже обходится неправильный путь — на том же броске, что и на стенде.",
+   "given": "Тело массой $m = 2$ кг брошено вверх и возвращается в ту же точку через $T = 2$ с. Пробный путь отличается от истинного горбом высотой $a = 1$ м в середине.",
+   "law": "$S = \\int_0^T (K - U)\\,dt$, прирост действия $\\Delta S = \\dfrac{m a^2 \\pi^2}{4T}$",
+   "solution": [
+    {
+     "text": "Подставим числа в выражение для прироста.",
+     "latex": "\\Delta S = \\frac{2 \\cdot 1^2 \\cdot \\pi^2}{4 \\cdot 2}",
+     "num": ""
+    },
+    {
+     "text": "Считаем: $\\pi^2$ примерно $9{,}87$, делим на $8$ и умножаем на $2$.",
+     "latex": "\\Delta S \\approx \\frac{2 \\cdot 9{,}87}{8} \\approx 2{,}5",
+     "num": ""
+    }
+   ],
+   "answer": "Горб высотой в один метр стоит примерно $2{,}5$ Дж·с лишнего действия. Стенд показывает то же число — сверьте.",
+   "sanity": "Проверка на здравый смысл: прирост пропорционален квадрату отклонения, значит вдвое больший горб обойдётся вчетверо дороже. Именно поэтому кривая действия на графике — парабола, а не прямая."
+  },
+  "constants": {
+   "title": "Величины этого параграфа",
+   "lead": "Мировых констант здесь нет вовсе: все величины принадлежат конкретной задаче. Это важная особенность принципа — он не про числа природы, а про способ рассуждения.",
+   "items": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "name": "Действие",
+     "value": "Дж·с",
+     "why": "размерность энергии на время — та же, что у постоянной Планка, и это совпадение окажется неслучайным в квантовой механике"
+    },
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Лагранжиан",
+     "value": "Дж",
+     "why": "подынтегральная величина; именно её, а не энергию, природа суммирует по пути"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Ускорение свободного падения",
+     "value": "9,81 м/с²",
+     "dictKey": "g",
+     "why": "единственная внешняя величина в задаче о броске"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Где это работает",
+   "lead": "Принцип не остался красивой переформулировкой: именно в этом виде физика пользуется им до сих пор.",
+   "items": [
+    {
+     "h": "Оптика",
+     "text": "Свет идёт по пути наименьшего времени — закон преломления выводится отсюда за две строки, без всяких лучей и углов."
+    },
+    {
+     "h": "Квантовая механика",
+     "text": "Фейнман переписал квантовую теорию как сумму по всем путям сразу: каждый путь вносит вклад, а классический побеждает потому, что рядом с ним вклады складываются, а не гасятся."
+    },
+    {
+     "h": "Теория относительности",
+     "text": "Тело в поле тяготения движется по кривой, на которой собственное время максимально. Формулировка другая, идея та же: экстремум величины, приписанной пути целиком."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Занимательное: проверьте руками",
+   "lead": "Принцип кажется абстрактным, пока не увидишь его в мыльной плёнке и в собственных шагах.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "опыт на кухне",
+     "h": "Мыльная плёнка ищет минимум сама",
+     "text": "Согните из проволоки любой замкнутый контур и окуните в мыльный раствор. Плёнка натянется так, что её площадь будет наименьшей из возможных. Никто её не считал — поверхностное натяжение делает это само. Ровно так же природа обходится с действием: не вычисляет, а оказывается в минимуме."
+    },
+    {
+     "icon": "paradox",
+     "kind": "парадокс",
+     "h": "Откуда мяч знает, куда лететь",
+     "text": "Если настоящий путь определяется сравнением со всеми остальными, выходит, что тело должно заранее знать, где окажется в конце. Как это уживается с причинностью?",
+     "answer": "Никакого ясновидения нет: требование минимума локально эквивалентно уравнению движения, которое смотрит только на «здесь и сейчас». Два описания — одно про путь целиком, другое пошаговое — дают одинаковый ответ. Это как разница между «маршрут кратчайший» и «на каждом перекрёстке поворачивай правильно»."
+    },
+    {
+     "icon": "fact",
+     "kind": "занимательный факт",
+     "h": "Размерность, которая позже выстрелила",
+     "text": "Действие измеряется в джоуль-секундах. Ровно такую же размерность имеет постоянная Планка. В классической механике это выглядело курьёзом, а в квантовой оказалось ключом: действие измеряется в единицах $\\hbar$, и когда оно сравнимо с ним, классическая картина перестаёт работать."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "мнемоника",
+     "h": "Ленивая природа",
+     "text": "Запоминается так: природа ленива, но лень у неё хитрая — экономит не энергию и не время, а разность $K - U$, накопленную за весь путь. Ленивый выбирает не самый короткий маршрут, а самый необременительный в сумме."
+    },
+    {
+     "icon": "estimate",
+     "kind": "прикидка",
+     "h": "Насколько мал минимум",
+     "text": "Прикиньте в уме: если отклонение вдвое меньше метра, во сколько раз подешевеет лишнее действие? Квадратичная зависимость — значит вчетверо. Это и объясняет, почему вблизи истинного пути действие почти не меняется: там дно пологое."
+    },
+    {
+     "icon": "edge",
+     "kind": "граница применимости",
+     "h": "Не всегда минимум",
+     "text": "Для длинных путей и для движения в сильно искривлённых полях стационарная точка бывает не минимумом, а седлом. Принцип от этого не ломается — уравнения движения получаются те же, — но название приходится читать как «принцип стационарного действия»."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Для любознательных: почему именно $K - U$, а не сумма",
+   "text": "Естественно было бы предположить, что природа экономит полную энергию $K + U$. Но она сохраняется и потому одинакова на всех путях — экономить нечего. Разность же ведёт себя иначе: она различает пути, на которых тело медленно поднимается, и те, где оно быстро проскакивает высоту. Проверить это можно прямо на стенде: сделайте отклонение положительным и отрицательным. Полная энергия в обоих случаях устроена похоже, а действие растёт одинаково в обе стороны — именно потому, что в него входит разность."
+  },
+  "memo": {
+   "essence": "Из бесконечности путей между двумя точками природа выбирает тот, на котором действие — накопленная за путь разность кинетической и потенциальной энергии — принимает наименьшее значение. Второй закон Ньютона следует отсюда, а не наоборот.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Действие приписывается пути целиком",
+     "text": "Действие приписывается пути целиком, а не моменту времени: это интеграл $S=\\int(K-U)dt$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Концы закреплены",
+     "text": "Концы закреплены: сравниваются только пути, соединяющие одни и те же события"
+    },
+    {
+     "icon": "edge",
+     "title": "Точное условие — стационарность",
+     "text": "Точное условие — стационарность действия, а не обязательно минимум"
+    },
+    {
+     "icon": "fact",
+     "title": "Размерность действия — Дж·с",
+     "text": "Размерность действия — Дж·с, та же, что у постоянной Планка"
+    }
+   ],
+   "where": "Оптика (закон преломления), квантовая механика (сумма по путям Фейнмана), теория относительности (движение по экстремали собственного времени), инженерные задачи оптимального управления.",
+   "watchOut": "Частая ошибка — считать, что экономится энергия. Полная энергия сохраняется и потому одинакова на всех путях; экономится именно накопленная разность $K-U$."
+  },
+  "quiz": [
+   {
+    "id": "a1",
+    "type": "mcq",
+    "q": "Почему в действие входит разность $K - U$, а не сумма?",
+    "options": [
+     "Сумма сохраняется и потому одинакова на всех путях — по ней пути не различить",
+     "Так исторически сложилось, физического смысла нет",
+     "Сумма даёт отрицательные значения, а действие должно быть положительным",
+     "Разность проще считать"
+    ],
+    "answer": 0,
+    "why": "Полная энергия одинакова на всех допустимых путях, поэтому минимизировать её бессмысленно. Разность различает пути и потому годится."
+   },
+   {
+    "id": "a2",
+    "type": "mcq",
+    "q": "Отклонение пробного пути увеличили вдвое. Что стало с лишним действием?",
+    "options": [
+     "Выросло вдвое",
+     "Выросло вчетверо",
+     "Не изменилось",
+     "Уменьшилось вдвое"
+    ],
+    "answer": 1,
+    "why": "Вблизи минимума прирост квадратичен по отклонению: вдвое большее отклонение обходится вчетверо дороже. Это видно и на графике — там парабола."
+   },
+   {
+    "id": "a3",
+    "type": "free",
+    "q": "Своими словами: как принцип наименьшего действия уживается с причинностью, если тело будто знает, где окажется в конце?",
+    "keywords": [
+     "эквивалент",
+     "уравнени",
+     "локальн",
+     "шаг",
+     "не знает",
+     "то же самое"
+    ],
+    "why": "Требование минимума математически эквивалентно локальному уравнению движения, которое смотрит только на текущий момент. Это два описания одного и того же, а не предсказание будущего."
+   },
+   {
+    "id": "a4",
+    "type": "estimate",
+    "q": "Тело массой 2 кг, время полёта 2 с, отклонение 2 м. Оцените лишнее действие в Дж·с.",
+    "answer": 9.9,
+    "unit": "Дж·с",
+    "tolerance": 2,
+    "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Достаточно помнить квадратичность: при вдвое большем отклонении, чем в примере, выходит вчетверо больше 2,5."
+   }
+  ]
+ },
+ "en": {
+  "title": "Principle of least action",
+  "subtitle": "Why from an infinite number of paths nature chooses exactly one",
+  "intro": [
+   "Throw a ball and catch it at the same point two seconds later. Between throw and catch, the ball could move in any way: fly higher and fall faster, jerk sideways, go in a zigzag. All these paths connect the same two points in the same time. But the actual path is one.",
+   "The strangeness is that the ball seems to know the future. Newton's second law solves the problem step by step: here is the force now, here is the acceleration now, here is where the body will be an instant later. But the principle of least action says differently: take the whole path from start to end, calculate one number for it — and the real path will be the one where this number is smallest.",
+   "Both descriptions give the same answer. But the second turned out to be deeper: from it follow not only mechanics, but also optics, electrodynamics, and — later — quantum mechanics. This topic is about what that number is and why nature economizes it."
+  ],
+  "standNote": "Move the «deviation»: the trial path moves away from the true one while remaining attached to the same ends. Watch the number below and the curve on the right — the action increases on both sides, and at zero it has a bottom. Try to catch the minimum by eye, then check against the graph.",
+  "formula": {
+   "name": "Principle of least action",
+   "latex": "S = \\int_{t_1}^{t_2} (K - U)\\,dt \\;\\longrightarrow\\; \\min",
+   "alsoKnown": "Hamilton's principle; in its older form — Maupertuis's principle",
+   "authors": [
+    {
+     "who": "Pierre Maupertuis",
+     "year": 1744,
+     "what": "assumed nature is economical and introduced the concept of action"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": 1744,
+     "what": "gave the principle a mathematical form"
+    },
+    {
+     "who": "Joseph Lagrange",
+     "year": 1788,
+     "what": "derived from it the equations of motion in general form"
+    },
+    {
+     "who": "William Hamilton",
+     "year": 1834,
+     "what": "formulated the principle in the form used today"
+    }
+   ],
+   "story": "Maupertuis considered the economy of nature as proof of intelligent design and argued about it publicly. The dispute became scandalous, but the principle remained — and turned out to be more correct than the argument for which it was invented. Physics knows how to take good ideas from wrong explanations.",
+   "symbols": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "action — a number assigned to the entire path",
+     "unit": "J·s"
+    },
+    {
+     "sym": "K",
+     "latex": "K",
+     "what": "kinetic energy at a given moment",
+     "unit": "J"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "potential energy at a given moment",
+     "unit": "J"
+    },
+    {
+     "sym": "t₁, t₂",
+     "latex": "t_1, t_2",
+     "what": "moments of start and end — they are fixed, as are the points",
+     "unit": "s"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Where does the minimum come from",
+   "lead": "Let's follow the reasoning step by step: from «many paths» to «the real path is the one where the action does not change under a small variation».",
+   "steps": [
+    {
+     "text": "Fix the start and end: the body leaves point $A$ at time $t_1$ and arrives at point $B$ at time $t_2$. Everything in between is not yet given — there are infinitely many paths, and each is conceivable.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "The ends are fixed, the middle is free: any curve between the points is a candidate"
+    },
+    {
+     "text": "Assign a single number to each path. To do this, at each instant take the difference between kinetic and potential energy and sum it over the entire time of motion. The sum of infinitely many tiny pieces is an integral.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "The action is summed piece by piece: at each step the difference of energies is taken"
+    },
+    {
+     "text": "Now compare the paths. Take the true path and slightly vary it in the middle, without touching the ends. If the action increases on both sides, we are at a minimum. This is exactly what happens: for real motion the action is smallest.",
+     "latex": "\\delta S = 0 \\quad \\text{under a small variation of the path}",
+     "figure": "actionmin",
+     "figCaption": "Action curve: the true path is at the bottom, deviation in any direction raises it"
+    },
+    {
+     "text": "The requirement «the action does not change under a small variation» is an equation for the function. Expanding it gives the Euler–Lagrange equation, and for mechanical energy it turns exactly into Newton's second law. That is, Newton is not abolished: he is a consequence.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "noether",
+     "figCaption": "From one requirement, the familiar equations of motion emerge"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "The real path is the one on which the action takes the smallest value",
+   "note": "Strictly speaking, the action is not always minimal: the correct condition is that it is stationary, i.e., it does not change to first order under a small variation. For ordinary problems this is a minimum, but there are cases where the stationary point turns out to be a saddle. The name «principle of least action» became established historically before this subtlety was discovered."
+  },
+  "math": {
+   "title": "Mathematics needed here",
+   "lead": "Here we seek not a number but a function — and the ordinary derivative is not suitable.",
+   "items": [
+    {
+     "h": "Integral as accumulation",
+     "text": "The sign $\\int$ here is not 'area under the graph' but precisely accumulation: we move in time in small steps, at each step take $(K-U)\\cdot dt$ and sum everything. The stand calculates the action exactly this way — as a sum over 240 steps, not by a ready formula. Therefore, the number on the screen is obtained in the same way as a person with a calculator would compute it."
+    },
+    {
+     "h": "What does 'wiggle a function' mean",
+     "text": "The ordinary derivative asks: how does $y$ change if we shift $x$ a little. Here the question is different: how does the number $S$ change if we slightly alter the entire function $y(t)$ at once. The branch of mathematics that deals with this is called the calculus of variations, and a small change of a function is denoted by $\\delta$."
+    },
+    {
+     "h": "Why the ends are fixed",
+     "text": "If we let the ends free, there would be no minimum: a path with even smaller action can always be found. Fixing the ends is not a technical detail but part of the problem statement: we are not asking 'where will the body go' but 'by which path will it go from this state to that'."
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's calculate how much more expensive the wrong path is — on the same throw as on the stand.",
+   "given": "A body of mass $m = 2$ kg is thrown upward and returns to the same point after $T = 2$ s. The trial path differs from the true one by a hump of height $a = 1$ m at the midpoint.",
+   "law": "$S = \\int_0^T (K - U)\\,dt$, increase in action $\\Delta S = \\dfrac{m a^2 \\pi^2}{4T}$",
+   "solution": [
+    {
+     "text": "Substitute the numbers into the expression for the increase.",
+     "latex": "\\Delta S = \\frac{2 \\cdot 1^2 \\cdot \\pi^2}{4 \\cdot 2}",
+     "num": ""
+    },
+    {
+     "text": "Compute: $\\pi^2$ is approximately $9{,}87$, divide by $8$ and multiply by $2$.",
+     "latex": "\\Delta S \\approx \\frac{2 \\cdot 9{,}87}{8} \\approx 2{,}5",
+     "num": ""
+    }
+   ],
+   "answer": "A hump one meter high costs about $2{,}5$ J·s of extra action. The stand shows the same number — check it.",
+   "sanity": "Reality check: the increase is proportional to the square of the deviation, so a hump twice as large would cost four times as much. That is why the action curve on the graph is a parabola, not a line."
+  },
+  "constants": {
+   "title": "Quantities in this section",
+   "lead": "There are no universal constants here at all: all quantities belong to a specific problem. This is an important feature of the principle — it is not about numbers of nature but about a way of reasoning.",
+   "items": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "name": "Action",
+     "value": "J·s",
+     "why": "dimension of energy times time — the same as Planck's constant, and this coincidence will turn out to be no coincidence in quantum mechanics",
+     "dictKey": "S"
+    },
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangian",
+     "value": "J",
+     "why": "integrand; it is this quantity, not energy, that nature sums along the path",
+     "dictKey": "L"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Acceleration due to gravity",
+     "value": "9,81 m/s²",
+     "why": "the only external quantity in the throwing problem",
+     "dictKey": "g"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Where it works",
+   "lead": "The principle did not remain a beautiful reformulation: it is in this form that physics still uses it.",
+   "items": [
+    {
+     "h": "Optics",
+     "text": "Light takes the path of least time — the law of refraction follows from here in two lines, without any rays or angles."
+    },
+    {
+     "h": "Quantum mechanics",
+     "text": "Feynman rewrote quantum theory as a sum over all paths at once: each path contributes, and the classical one wins because nearby contributions add up rather than cancel."
+    },
+    {
+     "h": "Theory of relativity",
+     "text": "A body in a gravitational field moves along a curve where proper time is maximal. The formulation is different, but the idea is the same: extremum of a quantity assigned to the entire path."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun fact: check it yourself",
+   "lead": "The principle seems abstract until you see it in a soap film and in your own steps.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Soap film finds the minimum by itself",
+     "text": "Bend any closed loop from wire and dip it into soap solution. The film will stretch so that its area is the smallest possible. Nobody calculated it — surface tension does it on its own. Exactly the same way nature handles action: it doesn't calculate, but ends up at the minimum."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "How does the ball know where to fly",
+     "text": "If the actual path is determined by comparison with all others, it turns out that the body must know in advance where it will end up. How does this reconcile with causality?",
+     "answer": "There is no clairvoyance: the requirement of a minimum is locally equivalent to the equation of motion, which only looks at the 'here and now'. The two descriptions — one about the whole path, the other step-by-step — give the same answer. It's like the difference between 'the shortest route' and 'at each intersection turn correctly'."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "A dimension that later shot out",
+     "text": "Action is measured in joule-seconds. Exactly the same dimension as Planck's constant. In classical mechanics this seemed a curiosity, but in quantum mechanics it turned out to be the key: action is measured in units of $\\hbar$, and when it is comparable to it, the classical picture breaks down."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemonic",
+     "h": "Lazy nature",
+     "text": "It's easy to remember: nature is lazy, but its laziness is cunning — it saves not energy or time, but the difference $K - U$ accumulated over the entire path. The lazy one chooses not the shortest route, but the least burdensome in total."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "How small is the minimum",
+     "text": "Estimate in your mind: if the deviation is half a meter, how many times cheaper will the excess action be? Quadratic dependence means four times. This explains why near the true path the action hardly changes: there the bottom is flat."
+    },
+    {
+     "icon": "edge",
+     "kind": "boundary of applicability",
+     "h": "Not always a minimum",
+     "text": "For long paths and for motion in strongly curved fields, the stationary point can be not a minimum but a saddle. The principle does not break because of this — the equations of motion remain the same — but the name has to be read as 'the principle of stationary action'."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "For the curious: why exactly $K - U$ and not the sum",
+   "text": "It would be natural to assume that nature economizes on total energy $K + U$. But it is conserved and therefore the same on all paths — there is nothing to economize. The difference behaves differently: it distinguishes paths where the body rises slowly from those where it quickly passes the height. You can check this directly on a stand: make the deviation positive and negative. Total energy is similar in both cases, but action grows equally in both directions — precisely because it includes the difference."
+  },
+  "memo": {
+   "essence": "From the infinity of paths between two points, nature chooses the one on which the action — the accumulated difference between kinetic and potential energy over the path — takes the smallest value. Newton's second law follows from this, not the other way around.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Action is attributed to the entire path",
+     "text": "Action is attributed to the entire path, not to a moment in time: it is the integral $S=\\int(K-U)dt$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Endpoints are fixed",
+     "text": "Endpoints are fixed: only paths connecting the same events are compared"
+    },
+    {
+     "icon": "edge",
+     "title": "The exact condition is stationarity",
+     "text": "The exact condition is stationarity of the action, not necessarily a minimum"
+    },
+    {
+     "icon": "fact",
+     "title": "Dimension of action is J·s",
+     "text": "Dimension of action is J·s, the same as Planck's constant"
+    }
+   ],
+   "where": "Optics (Snell's law), quantum mechanics (Feynman path integral), relativity (motion along extremal proper time), engineering optimal control problems.",
+   "watchOut": "A common mistake is to think that energy is saved. Total energy is conserved and therefore the same on all paths; what is saved is the accumulated difference $K-U$."
+  },
+  "quiz": [
+   {
+    "id": "a1",
+    "type": "mcq",
+    "q": "Why does the action include the difference $K - U$ rather than the sum?",
+    "options": [
+     "The sum is conserved and therefore the same on all paths — it cannot distinguish paths",
+     "It's a historical convention, no physical meaning",
+     "The sum gives negative values, but action must be positive",
+     "The difference is easier to calculate"
+    ],
+    "answer": 0,
+    "why": "Total energy is the same on all allowed paths, so minimizing it is meaningless. The difference distinguishes paths and is therefore suitable."
+   },
+   {
+    "id": "a2",
+    "type": "mcq",
+    "q": "The deviation of a trial path is doubled. What happens to the excess action?",
+    "options": [
+     "It doubles",
+     "It quadruples",
+     "It does not change",
+     "It halves"
+    ],
+    "answer": 1,
+    "why": "Near the minimum, the increase is quadratic in deviation: twice the deviation costs four times more. This is also visible on the graph — it's a parabola."
+   },
+   {
+    "id": "a3",
+    "type": "free",
+    "q": "In your own words: how does the principle of least action reconcile with causality, if the body seems to know where it will end up?",
+    "keywords": [
+     "equivalent",
+     "equation",
+     "local",
+     "step",
+     "does not know",
+     "same thing"
+    ],
+    "why": "The requirement of a minimum is mathematically equivalent to a local equation of motion that only looks at the current moment. These are two descriptions of the same thing, not a prediction of the future."
+   },
+   {
+    "id": "a4",
+    "type": "estimate",
+    "q": "A body of mass 2 kg, flight time 2 s, deviation 2 m. Estimate the excess action in J·s.",
+    "answer": 9.9,
+    "unit": "J·s",
+    "tolerance": 2,
+    "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. It's enough to remember the quadratic dependence: with twice the deviation as in the example, it is four times more than 2.5."
+   }
+  ]
+ },
+ "es": {
+  "title": "Principio de mínima acción",
+  "subtitle": "Por qué de entre infinitos caminos la naturaleza elige solo uno",
+  "intro": [
+   "Lanza una pelota y atrápala en el mismo punto dos segundos después. Entre el lanzamiento y la captura, la pelota podría moverse de cualquier manera: elevarse más y caer más rápido, desviarse lateralmente, hacer zigzag. Todos esos caminos conectan los mismos dos puntos en el mismo tiempo. Pero el camino real es uno solo.",
+   "Lo extraño es que la pelota parece conocer el futuro. La segunda ley de Newton resuelve el problema paso a paso: aquí la fuerza ahora, aquí la aceleración ahora, aquí donde estará el cuerpo un instante después. Pero el principio de mínima acción dice otra cosa: toma el camino completo, de principio a fin, calcula un único número para él — y el real será aquel donde ese número sea el menor.",
+   "Ambas descripciones dan la misma respuesta. Pero la segunda resultó ser más profunda: de ella se deriva no solo la mecánica, sino también la óptica, la electrodinámica y, más tarde, la mecánica cuántica. Este tema trata sobre qué es ese número y por qué la naturaleza lo economiza."
+  ],
+  "standNote": "Mueva la «desviación»: el camino de prueba se aleja del real, manteniéndose fijo en los mismos extremos. Observe el número de abajo y la curva de la derecha — la acción aumenta en ambas direcciones, y en cero tiene un fondo. Intente encontrar el mínimo a ojo, luego compárelo con la gráfica.",
+  "formula": {
+   "name": "Principio de mínima acción",
+   "latex": "S = \\int_{t_1}^{t_2} (K - U)\\,dt \\;\\longrightarrow\\; \\min",
+   "alsoKnown": "Principio de Hamilton; en su forma antigua — principio de Maupertuis",
+   "authors": [
+    {
+     "who": "Pierre Maupertuis",
+     "year": "1744",
+     "what": "supuso que la naturaleza es económica e introdujo el concepto de acción"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1744",
+     "what": "le dio forma matemática al principio"
+    },
+    {
+     "who": "Joseph Lagrange",
+     "year": "1788",
+     "what": "dedujo de él las ecuaciones de movimiento en forma general"
+    },
+    {
+     "who": "William Hamilton",
+     "year": "1834",
+     "what": "formuló el principio en la forma que se usa hoy"
+    }
+   ],
+   "story": "Maupertuis consideraba la economía de la naturaleza como prueba de un diseño inteligente y discutió públicamente sobre ello. La controversia fue escandalosa, pero el principio perduró — y resultó ser más cierto que el argumento para el que fue concebido. La física sabe tomar buenas ideas de explicaciones incorrectas.",
+   "symbols": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "acción — número asignado al camino completo",
+     "unit": "J·s"
+    },
+    {
+     "sym": "K",
+     "latex": "K",
+     "what": "energía cinética en ese instante",
+     "unit": "J"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "energía potencial en ese instante",
+     "unit": "J"
+    },
+    {
+     "sym": "t₁, t₂",
+     "latex": "t_1, t_2",
+     "what": "instantes de inicio y fin — están fijos, al igual que los puntos",
+     "unit": "s"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "De dónde proviene el mínimo",
+   "lead": "Sigamos el razonamiento paso a paso: desde 'muchos caminos' hasta 'el real es aquel donde la acción no cambia con pequeñas perturbaciones'.",
+   "steps": [
+    {
+     "text": "Fijemos el inicio y el final: el cuerpo sale del punto $A$ en el instante $t_1$ y llega al punto $B$ en el instante $t_2$. Todo lo que está entre ellos aún no está dado — hay infinitos caminos, y cada uno es concebible.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "Los extremos están fijos, el medio libre: cualquier curva entre los puntos es candidata"
+    },
+    {
+     "text": "A cada camino le asignamos un único número. Para ello, en cada instante tomamos la diferencia entre la energía cinética y la potencial, y la sumamos a lo largo de todo el tiempo de movimiento. La suma de trozos infinitesimales es una integral.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "La acción se suma por partes: en cada paso se toma la diferencia de energías"
+    },
+    {
+     "text": "Ahora comparemos los caminos. Tomemos el camino real y lo perturbamos ligeramente en el medio, sin tocar los extremos. Si la acción aumenta en ambas direcciones — estamos en un mínimo. Eso es precisamente lo que ocurre: en el movimiento real la acción es la menor.",
+     "latex": "\\delta S = 0 \\quad \\text{con una pequeña variación de la trayectoria}",
+     "figure": "actionmin",
+     "figCaption": "Curva de acción: el camino real está en el fondo, desviarse en cualquier dirección lo eleva"
+    },
+    {
+     "text": "La condición «la acción no cambia con pequeñas perturbaciones» es una ecuación para la función. Desarrollándola, obtenemos la ecuación de Euler-Lagrange, y para la energía mecánica se convierte exactamente en la segunda ley de Newton. Es decir, Newton no es anulado: es una consecuencia.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "noether",
+     "figCaption": "De una sola condición surgen las ecuaciones de movimiento habituales"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "El camino real es aquel en el que la acción toma el menor valor",
+   "note": "Estrictamente hablando, la acción no siempre es mínima: la condición correcta es que sea estacionaria, es decir, que no cambie en primer orden bajo pequeñas perturbaciones. Para problemas ordinarios es un mínimo, pero hay casos donde el punto estacionario resulta ser un punto de silla. El nombre 'principio de mínima acción' se consolidó históricamente antes de que se aclarara este matiz."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Aquí por primera vez se busca no un número, sino una función — y la derivada habitual no sirve para esto.",
+   "items": [
+    {
+     "h": "La integral como acumulación",
+     "text": "El signo $\\int$ aquí no es «área bajo la gráfica», sino acumulación: avanzamos en el tiempo con pequeños pasos, en cada uno tomamos $(K-U)\\cdot dt$ y sumamos todo. El stand calcula la acción exactamente así — como suma de 240 pasos, no mediante una fórmula ya hecha. Por lo tanto, el número en la pantalla se obtuvo de la misma manera en que lo calcularía una persona con una calculadora."
+    },
+    {
+     "h": "Qué significa «mover la función»",
+     "text": "La derivada habitual pregunta: ¿cómo cambiará $y$ si desplazamos un poco $x$? Aquí la pregunta es otra: ¿cómo cambiará el número $S$ si alteramos ligeramente toda la función $y(t)$ a la vez? La rama de las matemáticas que se ocupa de esto se llama cálculo de variaciones, y la pequeña variación de la función se denota con $\\delta$."
+    },
+    {
+     "h": "Por qué los extremos están fijados",
+     "text": "Si se sueltan los extremos, no habrá mínimo: siempre se encontrará un camino con menor acción. La fijación de los extremos no es un detalle técnico, sino parte del planteamiento del problema: no preguntamos «hacia dónde volará el cuerpo», sino «por qué camino llegará de este estado a aquel»."
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos cuánto más caro resulta el camino incorrecto — en el mismo lanzamiento que en el stand.",
+   "given": "Un cuerpo de masa $m = 2$ kg se lanza hacia arriba y regresa al mismo punto después de $T = 2$ s. El camino de prueba se diferencia del verdadero por una protuberancia de altura $a = 1$ m en el medio.",
+   "law": "$S = \\int_0^T (K - U)\\,dt$, el incremento de la acción $\\Delta S = \\dfrac{m a^2 \\pi^2}{4T}$",
+   "solution": [
+    {
+     "text": "Sustituimos los números en la expresión del incremento.",
+     "latex": "\\Delta S = \\frac{2 \\cdot 1^2 \\cdot \\pi^2}{4 \\cdot 2}",
+     "num": ""
+    },
+    {
+     "text": "Calculamos: $\\pi^2$ es aproximadamente $9{,}87$, dividimos entre $8$ y multiplicamos por $2$.",
+     "latex": "\\Delta S \\approx \\frac{2 \\cdot 9{,}87}{8} \\approx 2{,}5",
+     "num": ""
+    }
+   ],
+   "answer": "Una protuberancia de un metro de altura cuesta aproximadamente $2{,}5$ J·s de acción extra. El stand muestra el mismo número — compruébelo.",
+   "sanity": "Verificación de sentido común: el incremento es proporcional al cuadrado de la desviación, por lo tanto una protuberancia el doble de grande costará cuatro veces más. Precisamente por eso la curva de acción en la gráfica es una parábola, no una recta."
+  },
+  "constants": {
+   "title": "Magnitudes de esta sección",
+   "lead": "No hay constantes universales aquí: todas las magnitudes pertenecen a un problema concreto. Esta es una característica importante del principio: no se trata de números de la naturaleza, sino de una forma de razonar.",
+   "items": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "name": "Acción",
+     "value": "J·s",
+     "why": "dimensión de energía por tiempo — la misma que la constante de Planck, y esta coincidencia resultará no ser casual en la mecánica cuántica"
+    },
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangiano",
+     "value": "J",
+     "why": "magnitud integrando; es ella, y no la energía, la que la naturaleza suma a lo largo del camino"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Aceleración de la gravedad",
+     "value": "9,81 m/s²",
+     "dictKey": "g",
+     "why": "la única magnitud externa en el problema del lanzamiento"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Dónde funciona",
+   "lead": "El principio no quedó como una mera reformulación elegante: es precisamente en esta forma que la física lo utiliza hasta hoy.",
+   "items": [
+    {
+     "h": "Óptica",
+     "text": "La luz sigue el camino de menor tiempo — la ley de refracción se deduce de aquí en dos renglones, sin rayos ni ángulos."
+    },
+    {
+     "h": "Mecánica cuántica",
+     "text": "Feynman reescribió la teoría cuántica como una suma sobre todos los caminos a la vez: cada camino contribuye, y el clásico gana porque cerca de él las contribuciones se suman, no se cancelan."
+    },
+    {
+     "h": "Teoría de la relatividad",
+     "text": "Un cuerpo en un campo gravitatorio se mueve a lo largo de una curva en la que el tiempo propio es máximo. La formulación es otra, la idea es la misma: extremo de una magnitud asignada a todo el camino."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébalo con tus manos",
+   "lead": "El principio parece abstracto hasta que lo ves en una película de jabón y en tus propios pasos.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "La película de jabón busca el mínimo por sí sola",
+     "text": "Doble un alambre en cualquier contorno cerrado y sumérjalo en solución jabonosa. La película se estirará de modo que su área sea la más pequeña posible. Nadie la calculó: la tensión superficial lo hace sola. Exactamente así trata la naturaleza a la acción: no calcula, sino que se encuentra en el mínimo."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "¿Cómo sabe la pelota hacia dónde volar?",
+     "text": "Si el camino real se determina comparándolo con todos los demás, resulta que el cuerpo debe saber de antemano dónde estará al final. ¿Cómo se concilia esto con la causalidad?",
+     "answer": "No hay clarividencia: la condición de mínimo es localmente equivalente a la ecuación de movimiento, que solo mira el «aquí y ahora». Las dos descripciones —una sobre el camino completo, otra paso a paso— dan la misma respuesta. Es como la diferencia entre «la ruta más corta» y «en cada cruce gira correctamente»."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "La dimensión que luego fue clave",
+     "text": "La acción se mide en julios-segundo. Exactamente la misma dimensión tiene la constante de Planck. En mecánica clásica esto parecía una curiosidad, pero en cuántica resultó ser la clave: la acción se mide en unidades de $\\hbar$, y cuando es comparable a ella, la imagen clásica deja de funcionar."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemotecnia",
+     "h": "La naturaleza perezosa",
+     "text": "Se recuerda así: la naturaleza es perezosa, pero su pereza es astuta: ahorra no energía ni tiempo, sino la diferencia $K - U$ acumulada durante todo el camino. El perezoso no elige la ruta más corta, sino la menos gravosa en total."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "Qué tan pequeño es el mínimo",
+     "text": "Calcule mentalmente: si la desviación es la mitad de un metro, ¿cuántas veces más barata es la acción extra? Dependencia cuadrática: entonces cuatro veces. Esto explica por qué cerca del camino verdadero la acción casi no cambia: el fondo es plano."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "No siempre mínimo",
+     "text": "Para caminos largos y para movimiento en campos fuertemente curvados, el punto estacionario no es un mínimo sino un punto de silla. El principio no se rompe: las ecuaciones de movimiento son las mismas, pero el nombre debe leerse como «principio de acción estacionaria»."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Para curiosos: por qué precisamente $K - U$ y no la suma",
+   "text": "Naturalmente se podría suponer que la naturaleza ahorra la energía total $K + U$. Pero ella se conserva y por lo tanto es igual en todos los caminos: no hay nada que ahorrar. La diferencia, en cambio, se comporta de otra manera: distingue caminos en los que el cuerpo sube lentamente de aquellos en los que pasa rápidamente la altura. Se puede comprobar directamente en el banco de pruebas: haga la desviación positiva y negativa. La energía total en ambos casos es similar, pero la acción crece igual en ambas direcciones — precisamente porque incluye la diferencia."
+  },
+  "memo": {
+   "essence": "De la infinidad de caminos entre dos puntos, la naturaleza elige aquel en el que la acción —la diferencia de energía cinética y potencial acumulada a lo largo del camino— toma el valor más pequeño. La segunda ley de Newton se deduce de aquí, no al revés.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "La acción se asigna al camino completo",
+     "text": "La acción se asigna al camino completo, no a un instante de tiempo: es la integral $S=\\int(K-U)dt$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Los extremos están fijos",
+     "text": "Los extremos están fijos: solo se comparan caminos que conectan los mismos eventos"
+    },
+    {
+     "icon": "edge",
+     "title": "La condición exacta es la estacionariedad",
+     "text": "La condición exacta es la estacionariedad de la acción, no necesariamente un mínimo"
+    },
+    {
+     "icon": "fact",
+     "title": "La dimensión de la acción es J·s",
+     "text": "La dimensión de la acción es J·s, la misma que la constante de Planck"
+    }
+   ],
+   "where": "Óptica (ley de refracción), mecánica cuántica (suma sobre caminos de Feynman), teoría de la relatividad (movimiento a lo largo de la extremal del tiempo propio), problemas de ingeniería de control óptimo.",
+   "watchOut": "Un error frecuente es pensar que se ahorra energía. La energía total se conserva y por tanto es igual en todos los caminos; se ahorra precisamente la diferencia acumulada $K-U$."
+  },
+  "quiz": [
+   {
+    "id": "a1",
+    "type": "mcq",
+    "q": "¿Por qué en la acción aparece la diferencia $K - U$ y no la suma?",
+    "options": [
+     "La suma se conserva y por tanto es igual en todos los caminos — no se distinguen por ella",
+     "Históricamente es así, no tiene sentido físico",
+     "La suma da valores negativos y la acción debe ser positiva",
+     "La diferencia es más fácil de calcular"
+    ],
+    "answer": 0,
+    "why": "La energía total es igual en todos los caminos permitidos, por lo que minimizarla no tiene sentido. La diferencia distingue caminos y por eso sirve."
+   },
+   {
+    "id": "a2",
+    "type": "mcq",
+    "q": "Se duplicó la desviación del camino de prueba. ¿Qué pasó con la acción extra?",
+    "options": [
+     "Aumentó al doble",
+     "Aumentó al cuádruple",
+     "No cambió",
+     "Disminuyó a la mitad"
+    ],
+    "answer": 1,
+    "why": "Cerca del mínimo, el incremento es cuadrático en la desviación: una desviación dos veces mayor cuesta cuatro veces más. Se ve también en la gráfica: es una parábola."
+   },
+   {
+    "id": "a3",
+    "type": "free",
+    "q": "Con tus propias palabras: ¿cómo se concilia el principio de mínima acción con la causalidad si el cuerpo parece saber dónde terminará?",
+    "keywords": [
+     "equivalente",
+     "ecuación",
+     "local",
+     "paso",
+     "no sabe",
+     "lo mismo"
+    ],
+    "why": "La condición de mínimo es matemáticamente equivalente a la ecuación de movimiento local que solo mira el momento actual. Son dos descripciones de lo mismo, no una predicción del futuro."
+   },
+   {
+    "id": "a4",
+    "type": "estimate",
+    "q": "Cuerpo de 2 kg, tiempo de vuelo 2 s, desviación 2 m. Estime la acción extra en J·s.",
+    "answer": 9.9,
+    "unit": "J·s",
+    "tolerance": 2,
+    "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Basta recordar la cuadraticidad: con una desviación dos veces mayor que en el ejemplo, resulta cuatro veces más que 2,5."
+   }
+  ]
+ },
+ "ar": {
+  "title": "مبدأ الفعل الأقل",
+  "subtitle": "لماذا تختار الطبيعة مسارًا واحدًا من بين عدد لا نهائي من المسارات؟",
+  "intro": [
+   "ارمِ كرةً ثم التقطها في نفس النقطة بعد ثانيتين. بين الرمي والالتقاط، كان بإمكان الكرة أن تتحرك بأي شكل: أن ترتفع عاليًا وتسقط أسرع، أن تنحرف جانبًا، أن تسلك مسارًا متعرجًا. كل هذه المسارات تربط نفس النقطتين في نفس الوقت. لكن المسار الحقيقي واحد فقط.",
+   "الغرابة هنا هي أن الكرة تبدو وكأنها تعرف المستقبل. قانون نيوتن الثاني يحل المسألة خطوة بخطوة: هذه هي القوة الآن، هذا هو التسارع الآن، هذا هو مكان الجسم بعد لحظة. أما مبدأ الفعل الأقل فيقول خلاف ذلك: خذ المسار كاملًا من البداية إلى النهاية، واحسب له رقمًا واحدًا — وسيكون المسار الحقيقي هو ذاك الذي يكون هذا الرقم فيه أصغر ما يمكن.",
+   "كلا الوصفين يعطيان نفس الإجابة. لكن الثاني تبين أنه أعمق: منه لا يُشتق علم الميكانيكا فحسب، بل أيضًا البصريات والديناميكا الكهربائية — وفيما بعد ميكانيكا الكم. هذا الموضوع يدور حول ما هو هذا الرقم ولماذا تدخره الطبيعة."
+  ],
+  "standNote": "حرك «الانحراف»: المسار التجريبي يبتعد عن المسار الحقيقي مع بقائه مرتبطًا بنفس النهايات. انظر إلى الرقم أدناه والمنحنى على اليمين — الفعل يزداد في كلا الاتجاهين، وعند الصفر يكون له قاع. حاول التقاط الحد الأدنى بالعين، ثم تحقق من الرسم البياني.",
+  "formula": {
+   "name": "مبدأ الفعل الأقل",
+   "latex": "S = \\int_{t_1}^{t_2} (K - U)\\,dt \\;\\longrightarrow\\; \\min",
+   "alsoKnown": "مبدأ هاملتون؛ في الصيغة القديمة — مبدأ موبرتوي",
+   "authors": [
+    {
+     "who": "بيير موبرتوي",
+     "year": "1744",
+     "what": "افترض أن الطبيعة اقتصادية، وأدخل مفهوم الفعل"
+    },
+    {
+     "who": "ليونارد أويلر",
+     "year": "1744",
+     "what": "أعطى المبدأ صياغة رياضية"
+    },
+    {
+     "who": "جوزيف لاغرانج",
+     "year": "1788",
+     "what": "استنتج منه معادلات الحركة بشكل عام"
+    },
+    {
+     "who": "ويليام هاملتون",
+     "year": "1834",
+     "what": "صاغ المبدأ بالشكل المستخدم اليوم"
+    }
+   ],
+   "story": "اعتبر موبرتوي اقتصاد الطبيعة دليلاً على التصميم الذكي وجادل علنًا في ذلك. كان الجدال فاضحًا، لكن المبدأ بقي — وتبين أنه أكثر صحة من الحجة التي اخترع من أجلها. الفيزياء تعرف كيف تأخذ الأفكار الجيدة من التفسيرات الخاطئة.",
+   "symbols": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "الفعل — عدد يُنسب إلى المسار بأكمله",
+     "unit": "J·s"
+    },
+    {
+     "sym": "K",
+     "latex": "K",
+     "what": "الطاقة الحركية في لحظة معينة",
+     "unit": "J"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "الطاقة الكامنة في لحظة معينة",
+     "unit": "J"
+    },
+    {
+     "sym": "t₁, t₂",
+     "latex": "t_1, t_2",
+     "what": "لحظات البداية والنهاية — وهي ثابتة مثل النقاط",
+     "unit": "s"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "من أين يأتي الحد الأدنى",
+   "lead": "دعنا نتتبع المنطق خطوة بخطوة: من «مسارات كثيرة» إلى «الحقيقي هو الذي لا يتغير فيه الفعل عند اهتزاز صغير».",
+   "steps": [
+    {
+     "text": "نثبت البداية والنهاية: يغادر الجسم النقطة $A$ عند الزمن $t_1$ ويصل إلى النقطة $B$ عند الزمن $t_2$. كل ما بينهما ليس محددًا بعد — هناك عدد لا نهائي من المسارات، وكل منها ممكن.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "النهايات ثابتة، الوسط حر: أي منحنى بين النقطتين هو مرشح"
+    },
+    {
+     "text": "نعطي لكل مسار رقمًا واحدًا. للقيام بذلك، نأخذ في كل لحظة الفرق بين الطاقة الحركية والطاقة الكامنة ونجمعه على كامل زمن الحركة. مجموع القطع المتناهية في الصغر هو التكامل.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "يتكون الفعل تدريجيًا: في كل خطوة نأخذ الفرق بين الطاقتين"
+    },
+    {
+     "text": "الآن نقارن المسارات. نأخذ المسار الحقيقي ونحركه قليلاً في المنتصف دون لمس النهايات. إذا زاد الفعل في كلا الاتجاهين — فنحن عند الحد الأدنى. وهذا ما يحدث بالضبط: في الحركة الحقيقية، الفعل هو الأصغر.",
+     "latex": "\\delta S = 0 \\quad \\text{عند اهتزاز صغير في المسار}",
+     "figure": "actionmin",
+     "figCaption": "منحنى الفعل: المسار الحقيقي عند القاع، الانحراف في أي اتجاه يرفعه"
+    },
+    {
+     "text": "شرط «لا يتغير الفعل عند اهتزاز صغير» هو معادلة على الدالة. بفكها، نحصل على معادلة أويلر-لاغرانج، وبالنسبة للطاقة الميكانيكية تتحول تمامًا إلى قانون نيوتن الثاني. أي أن نيوتن لم يُلغَ: إنه نتيجة.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "noether",
+     "figCaption": "من شرط واحد تنبثق معادلات الحركة المألوفة"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "المسار الحقيقي هو الذي يأخذ فيه الفعل أقل قيمة",
+   "note": "بالمعنى الدقيق، الفعل ليس دائمًا في حده الأدنى: الشرط الصحيح هو أنه ثابت، أي لا يتغير في الدرجة الأولى عند اهتزاز صغير. في المسائل العادية، هذا هو الحد الأدنى، ولكن هناك حالات تكون فيها النقطة الثابتة نقطة سرج. اسم «مبدأ الفعل الأقل» ترسخ تاريخيًا قبل اكتشاف هذه الدقة."
+  },
+  "math": {
+   "title": "الرياضيات المطلوبة هنا",
+   "lead": "هنا نبحث أول مرة ليس عن عدد، بل عن دالة — والمشتق المألوف لا يصلح لذلك.",
+   "items": [
+    {
+     "h": "التكامل كتراكم",
+     "text": "العلامة $\\int$ هنا ليست «المساحة تحت المنحنى»، بل التراكم: نسير عبر الزمن بخطوات صغيرة، في كل خطوة نأخذ $(K-U)\\cdot dt$ ونجمع الكل. يقوم العرض بحساب الفعل بهذه الطريقة — بجمع 240 خطوة، وليس بصيغة جاهزة. لذلك الرقم على الشاشة حصل بنفس الطريقة التي كان سيحسبها بها شخص باستخدام آلة حاسبة."
+    },
+    {
+     "h": "معنى «تحريك دالة»",
+     "text": "المشتق العادي يسأل: كيف سيتغير $y$ إذا حركنا $x$ قليلاً. هنا السؤال مختلف: كيف سيتغير العدد $S$ إذا غيرنا الدالة بأكملها $y(t)$ مرة واحدة؟ فرع الرياضيات الذي يتعامل مع هذا يسمى حساب التغيرات (Calculus of Variations)، والتغيير الصغير للدالة يرمز له بـ $\\delta$."
+    },
+    {
+     "h": "لماذا الأطراف مثبتة",
+     "text": "إذا أطلقنا الأطراف، لن يكون هناك حد أدنى: سيكون هناك دائماً مسار ذو فعل أقل. تثبيت الأطراف ليس تفصيلاً تقنياً، بل جزء من صياغة المسألة: نحن لا نسأل «أين سيذهب الجسم»، بل «بأي طريق سيصل من هذه الحالة إلى تلك»."
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأعداد",
+   "lead": "سنحسب كم يكلف المسار الخاطئ أكثر — على نفس الرمية كما في العرض.",
+   "given": "جسم كتلته $m = 2$ kg قُذف إلى الأعلى وعاد إلى نفس النقطة بعد $T = 2$ s. المسار التجريبي يختلف عن المسار الحقيقي بارتفاع محدب $a = 1$ m في المنتصف.",
+   "law": "$S = \\int_0^T (K - U)\\,dt$، زيادة الفعل $\\Delta S = \\dfrac{m a^2 \\pi^2}{4T}$",
+   "solution": [
+    {
+     "text": "نعوض الأعداد في تعبير الزيادة.",
+     "latex": "\\Delta S = \\frac{2 \\cdot 1^2 \\cdot \\pi^2}{4 \\cdot 2}",
+     "num": ""
+    },
+    {
+     "text": "نحسب: $\\pi^2$ تقريباً $9.87$، نقسم على $8$ ونضرب في $2$.",
+     "latex": "\\Delta S \\approx \\frac{2 \\cdot 9.87}{8} \\approx 2.5",
+     "num": ""
+    }
+   ],
+   "answer": "التحدب بارتفاع متر واحد يكلف حوالي $2.5$ J·s من الفعل الإضافي. العرض يظهر نفس الرقم — تحقق.",
+   "sanity": "التحقق من المنطق السليم: الزيادة تتناسب مع مربع الانحراف، لذا تحدب أكبر بمرتين سيكلف أربع مرات أكثر. لهذا السبب منحنى الفعل على الرسم البياني هو قطع مكافئ، وليس خطاً مستقيماً."
+  },
+  "constants": {
+   "title": "كميات هذا القسم",
+   "lead": "لا توجد ثوابت كونية هنا على الإطلاق: كل الكميات تنتمي إلى مسألة محددة. هذه سمة مهمة للمبدأ — إنه ليس عن أرقام الطبيعة، بل عن طريقة التفكير.",
+   "items": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "name": "الفعل",
+     "value": "J·s",
+     "why": "بعد الطاقة في الزمن — نفس بعد ثابت بلانك، وهذه المصادفة ستثبت أنها غير عشوائية في ميكانيكا الكم"
+    },
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "لاغرانجيان",
+     "value": "J",
+     "why": "الكمية تحت التكامل؛ الطبيعة تجمعها على طول المسار، وليس الطاقة"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "تسارع الجاذبية",
+     "value": "9.81 m/s²",
+     "dictKey": "g",
+     "why": "الكمية الخارجية الوحيدة في مسألة القذف"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "أين يعمل هذا",
+   "lead": "لم يبق المبدأ مجرد إعادة صياغة جميلة: الفيزياء لا تزال تستخدمه بهذه الصورة حتى الآن.",
+   "items": [
+    {
+     "h": "البصريات",
+     "text": "الضوء يسلك مسار أقل زمن — قانون الانكسار يُستنتج من هنا في سطرين، دون أي أشعة أو زوايا."
+    },
+    {
+     "h": "ميكانيكا الكم",
+     "text": "أعاد فاينمان كتابة نظرية الكم كمجموع فوق جميع المسارات مرة واحدة: كل مسار يساهم، والمسار الكلاسيكي يفوز لأن المساهمات القريبة منه تتجمع ولا تتلاشى."
+    },
+    {
+     "h": "النظرية النسبية",
+     "text": "الجسم في مجال الجاذبية يتحرك على منحنى يكون فيه الزمن الذاتي أقصى. الصياغة مختلفة، لكن الفكرة نفسها: حد أقصى لكمية منسوبة إلى المسار كاملاً."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "ممتع: جرب بنفسك",
+   "lead": "يبدو المبدأ مجردًا حتى تراه في غشاء صابوني وفي خطواتك الخاصة.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "غشاء الصابون يبحث عن الحد الأدنى بنفسه",
+     "text": "قم بثني أي شكل مغلق من السلك واغمسه في محلول صابوني. سوف يتمدد الغشاء بحيث تكون مساحته أصغر ما يمكن. لم يحسبها أحد - التوتر السطحي يفعل ذلك بنفسه. هكذا تتعامل الطبيعة مع الفعل: لا تحسب، بل توجد في الحد الأدنى."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "من أين تعرف الكرة أين تطير؟",
+     "text": "إذا تم تحديد المسار الحقيقي من خلال المقارنة مع جميع المسارات الأخرى، فهذا يعني أن الجسم يجب أن يعرف مسبقًا أين سينتهي. كيف يتوافق هذا مع السببية؟",
+     "answer": "لا توجد استبصار: شرط الحد الأدنى محليًا يعادل معادلة الحركة التي تنظر فقط إلى «هنا والآن». وصفان - أحدهما عن المسار بأكمله والآخر خطوة بخطوة - يعطي نفس الإجابة. إنه مثل الفرق بين «أقصر طريق» و«انعطف بشكل صحيح عند كل تقاطع»."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة ممتعة",
+     "h": "البعد الذي انطلق لاحقًا",
+     "text": "يُقاس الفعل بوحدات جول-ثانية. نفس البعد تمامًا لثابت بلانك. في الميكانيكا الكلاسيكية بدا هذا كفضول، ولكن في الميكانيكا الكمومية تبين أنه المفتاح: يُقاس الفعل بوحدات $\\hbar$, وعندما يصبح مشابهًا له، تتوقف الصورة الكلاسيكية عن العمل."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "فن الإستذكار",
+     "h": "الطبيعة الكسولة",
+     "text": "يُحفظ هكذا: الطبيعة كسولة، لكن كسلها ذكي - فهي لا توفر الطاقة ولا الوقت، بل توفر الفرق $K - U$ المتراكم على طول المسار. الكسول لا يختار أقصر طريق، بل الأقل إرهاقًا في المجموع."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "كم هو صغير الحد الأدنى",
+     "text": "قدر في ذهنك: إذا كان الانحراف نصف متر، فكم مرة يصبح الفعل الزائد أرخص؟ اعتماد تربيعي - يعني أربع مرات. وهذا يفسر لماذا بالقرب من المسار الحقيقي لا يتغير الفعل تقريبًا: القاع ضحل."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "ليس دائمًا حد أدنى",
+     "text": "بالنسبة للمسارات الطويلة والحركة في مجالات منحنية بشدة، قد تكون النقطة الثابتة ليست حدًا أدنى بل نقطة سرج. المبدأ لا ينهار من ذلك - معادلات الحركة تظل نفسها - ولكن يجب قراءة الاسم على أنه «مبدأ الفعل الثابت»."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "للمهتمين: لماذا $K - U$ وليس المجموع",
+   "text": "سيكون من الطبيعي افتراض أن الطبيعة توفر الطاقة الكلية $K + U$. لكنها محفوظة وبالتالي متساوية في جميع المسارات - لا شيء لتوفره. أما الفرق فيتصرف بشكل مختلف: فهو يميز بين المسارات التي يصعد فيها الجسم ببطء وتلك التي يجتاز فيها الارتفاع بسرعة. يمكن التحقق من ذلك مباشرة على المنصة: اجعل الانحراف موجبًا وسالبًا. الطاقة الكلية في كلتا الحالتين متشابهة، ولكن الفعل يزداد بالتساوي في كلا الاتجاهين - لأن الفرق يدخل فيه."
+  },
+  "memo": {
+   "essence": "من بين عدد لا نهائي من المسارات بين نقطتين، تختار الطبيعة المسار الذي يكون فيه الفعل - الفرق المتراكم بين الطاقة الحركية والطاقة الكامنة على طول المسار - أصغر قيمة. قانون نيوتن الثاني يتبع من هذا، وليس العكس.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "يُعزى الفعل إلى المسار بأكمله",
+     "text": "يُعزى الفعل إلى المسار بأكمله، وليس إلى لحظة زمنية: إنه التكامل $S=\\int(K-U)dt$"
+    },
+    {
+     "icon": "estimate",
+     "title": "النهايات ثابتة",
+     "text": "النهايات ثابتة: تتم مقارنة فقط المسارات التي تربط نفس الأحداث"
+    },
+    {
+     "icon": "edge",
+     "title": "الشرط الدقيق هو الثبات",
+     "text": "الشرط الدقيق هو ثبات الفعل، وليس بالضرورة حد أدنى"
+    },
+    {
+     "icon": "fact",
+     "title": "بعد الفعل هو جول·ثانية",
+     "text": "بعد الفعل هو جول·ثانية، نفس ثابت بلانك"
+    }
+   ],
+   "where": "البصريات (قانون الانكسار)، ميكانيكا الكم (مجموع المسارات لفاينمان)، النسبية (الحركة على طول الخط المتطرف للزمن الخاص)، مسائل الهندسة في التحكم الأمثل.",
+   "watchOut": "خطأ شائع هو الاعتقاد بأن الطاقة يتم توفيرها. الطاقة الكلية محفوظة وبالتالي متساوية في جميع المسارات؛ ما يتم توفيره هو الفرق المتراكم $K-U$."
+  },
+  "quiz": [
+   {
+    "id": "a1",
+    "type": "mcq",
+    "q": "لماذا يدخل الفرق $K - U$ في الفعل بدلاً من المجموع؟",
+    "options": [
+     "المجموع محفوظ وبالتالي متساوٍ في جميع المسارات - لا يمكن تمييز المسارات به",
+     "هكذا حدث تاريخيًا، لا معنى فيزيائي",
+     "المجموع يعطي قيمًا سالبة، بينما يجب أن يكون الفعل موجبًا",
+     "الفرق أسهل في الحساب"
+    ],
+    "answer": 0,
+    "why": "الطاقة الكلية متساوية في جميع المسارات المسموح بها، لذا لا معنى لتصغيرها. الفرق يميز المسارات وبالتالي مناسب."
+   },
+   {
+    "id": "a2",
+    "type": "mcq",
+    "q": "تمت مضاعفة انحراف المسار التجريبي. ماذا حدث للفعل الزائد؟",
+    "options": [
+     "نما إلى الضعف",
+     "نما إلى أربعة أضعاف",
+     "لم يتغير",
+     "انخفض إلى النصف"
+    ],
+    "answer": 1,
+    "why": "بالقرب من الحد الأدنى، الزيادة تربيعية مع الانحراف: انحراف مضاعف يكلف أربعة أضعاف. يظهر ذلك أيضًا على الرسم البياني - إنه قطع مكافئ."
+   },
+   {
+    "id": "a3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: كيف يتوافق مبدأ الفعل الأقل مع السببية إذا كان الجسم يبدو وكأنه يعرف أين سينتهي؟",
+    "keywords": [
+     "مكافئ",
+     "معادلة",
+     "محلي",
+     "خطوة",
+     "لا يعرف",
+     "نفس الشيء"
+    ],
+    "why": "شرط الحد الأدنى مكافئ رياضيًا لمعادلة الحركة المحلية التي تنظر فقط إلى اللحظة الحالية. هذان وصفان لنفس الشيء، وليس توقعًا للمستقبل."
+   },
+   {
+    "id": "a4",
+    "type": "estimate",
+    "q": "جسم كتلته 2 كجم، زمن الطيران 2 ث، انحراف 2 م. قدر الفعل الزائد بوحدة جول·ثانية.",
+    "answer": 9.9,
+    "unit": "جول·ثانية",
+    "tolerance": 2,
+    "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. يكفي تذكر التربيع: مع انحراف مضاعف مقارنة بالمثال، نحصل على أربعة أضعاف 2.5."
+   }
+  ]
+ }
+}

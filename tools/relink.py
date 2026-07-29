@@ -78,6 +78,9 @@ TAGS = {
     "nuclear/01-nucleus": ["nucleosynthesis", "neutron_star"],
     "nuclear/02-decay": ["nucleosynthesis", "supernova"],
     "nuclear/03-energy": ["nucleosynthesis", "sun", "supernova"],
+    "analytical/01-action": ["numerical_simulation", "quantum_field"],
+    "analytical/02-lagrange": ["standard_model", "quantum_field"],
+    "analytical/03-hamilton": ["entropy", "quantum_information"],
 }
 
 # Законы, которых в уроке не стояло вовсе. Страницы всех этих законов в базе есть —
@@ -99,6 +102,9 @@ LAWS_ADD = {
     "oscillations/02-hooke": ["hookes_law"],
     "language/03-phase": ["stefanboltzmann_law"],
     "nuclear/02-decay": ["massenergy_equivalence"],
+    "analytical/01-action": ["law_of_conservation_of_energy"],
+    "analytical/02-lagrange": ["law_of_conservation_of_momentum", "law_of_conservation_of_angular_momentum"],
+    "analytical/03-hamilton": ["law_of_conservation_of_energy"],
 }
 
 
