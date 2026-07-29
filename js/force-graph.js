@@ -51,6 +51,16 @@ window.createForceGraph = function (opts) {
         warn = document.createElement('div');
         warn.className = 'graph-size-warning';
         warn.style.display = 'none';
+        // Предупреждение советует открыть на весь экран — пусть само туда и открывает.
+        // Оно выглядит как кнопка в левом верхнем углу, читатель по нему жал, а оно молчало
+        // (юзер 2026-07-29). Теперь это настоящая кнопка.
+        warn.setAttribute('role', 'button');
+        warn.setAttribute('tabindex', '0');
+        warn.style.cursor = 'pointer';
+        warn.addEventListener('click', function (e) { e.stopPropagation(); setFs(true); });
+        warn.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFs(true); }
+        });
         fsContainer.appendChild(warn);
     }
     // Мобильный лимит узлов (юзер 2026-07-25): на телефоне большой граф не читается и симуляция
