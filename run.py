@@ -220,6 +220,15 @@ def _publish_to_r2():
     генерацию — громко печатаем и пишем в лог, но не роняем run.py кодом ошибки."""
     if os.environ.get("SKIP_R2_PUBLISH"):
         return
+    # Публикация — это выпуск, а не побочный эффект. 2026-07-29 прогон `run.py links`
+    # после слияния молча опубликовал сайт ДО проверки QA — команда «проверка ссылок»
+    # по названию ничего не обещает заливать, и о выпуске узнали из уведомления сторожа.
+    # Поэтому публикуют только команды, которые меняют сайт по своей сути; проверки
+    # и сводки — никогда. Разовый выпуск без пересборки: run.py publish.
+    READONLY = {"stats", "check", "links", "status", "ids"}
+    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    if cmd in READONLY:
+        return
     script = Path(__file__).resolve().parent / "cloudflare" / "deploy_r2.py"
     if not script.exists():
         return
@@ -784,6 +793,10 @@ def build_parser():
 
     s = sub.add_parser("reindex", help="пересобрать индексы и графы из data.json")
     s.set_defaults(func=cmd_reindex)
+
+    s = sub.add_parser("publish", help="опубликовать текущее дерево в R2 (без пересборки); "
+                                       "выпуск делает ведущая сессия после проверки QA")
+    s.set_defaults(func=lambda a: None)   # вся работа — в _publish_to_r2() после команды
 
     s = sub.add_parser("status", help="собрать дашборд состояния → status.html")
     s.set_defaults(func=cmd_status)
