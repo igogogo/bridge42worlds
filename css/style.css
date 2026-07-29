@@ -2069,11 +2069,15 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
     content: ""; position: fixed; inset: 0; background: rgba(0,0,0,.38);
     z-index: 1100; backdrop-filter: blur(1.5px);
   }
-  /* тач-таргеты в шапке: было 28px — мелко для пальца */
+  /* Тач-таргеты в шапке. 44 пикселя — рекомендованный размер под касание; было 28, потом 40.
+     Число обязано совпадать с блоком «кнопки под палец» ниже по файлу: там селекторы легче
+     по весу (.theme-toggle против .header-right > button), поэтому ЭТО правило выигрывает,
+     и расхождение молча оставляло часть кнопок мельче — так переключатель темы застрял на 40
+     (юзер 2026-07-29). Меняешь здесь — меняй и там. */
   .header-right > a, .header-right > button, .header-right .fav-btn,
   .header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn,
   .nav-more-btn, .topnav-burger {
-    min-height: 40px; min-width: 40px; padding: 0 9px;
+    min-height: 44px; min-width: 44px; padding: 0 9px;
   }
   .header-right .ico-svg { width: 19px; height: 19px; }
 }
@@ -2250,12 +2254,15 @@ html[data-theme="dark"] .an-stage {
 @media (max-width: 640px) {
   .header-right { flex-wrap: nowrap; row-gap: 0; }
   .nav-links { flex-wrap: nowrap; row-gap: 0; gap: 2px; min-width: 0; }
-  /* Кнопки под палец: 44 пикселя — размер, рекомендованный для касания. Было 40 и мельче. */
+  /* Кнопки под палец: 44 пикселя — размер, рекомендованный для касания. Было 40 и мельче.
+     .topnav-burger в этот список не попал и остался на 40 из блока выше — отсюда жалоба
+     «гамбургер мелкий, сложно нажать» (юзер 2026-07-29). */
   .header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn,
-  .header-right .fav-btn, .nav-more-btn, .theme-toggle, .nav-links a.nav-ic {
+  .header-right .fav-btn, .nav-more-btn, .theme-toggle, .nav-links a.nav-ic,
+  .topnav-burger {
     min-height: 44px; min-width: 44px; padding: 0 8px;
     display: inline-flex; align-items: center; justify-content: center; }
-  .header-right .ico-svg, .nav-more-btn .ico-svg { width: 21px; height: 21px; }
+  .header-right .ico-svg, .nav-more-btn .ico-svg, .topnav-burger .ico-svg { width: 21px; height: 21px; }
   /* Текстовые пункты, что остались в строке, не должны переноситься внутри себя */
   .nav-links a { white-space: nowrap; }
 }
