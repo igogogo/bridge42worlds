@@ -167,8 +167,26 @@
 
   fetch('/data/theory/courses/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
     var C = d[LANG] || d.ru, byId = {};
-    // темы на языке читателя: заголовки и открытые вопросы лежат в языковых ветках
-    if (C.topics) d.topics = C.topics;
+    // Состав курса задаётся ОДНИМ списком — верхним. Языковые ветки дают только перевод
+    // названий, и накладываются поверх по id.
+    //
+    // Раньше строка была `if (C.topics) d.topics = C.topics` — языковая ветка ЗАМЕЩАЛА список
+    // целиком. Из-за этого тема, добавленная наверх, но ещё не переведённая, пропадала со
+    // страницы на всех четырёх языках: так пятнадцатая тема оказалась недоступной, хотя все
+    // её материалы были на месте. Тема без перевода теперь просто показывается с исходным
+    // названием — это видно и чинится, в отличие от молчаливого исчезновения.
+    if (C.topics) {
+      var tr = {};
+      C.topics.forEach(function (t) { tr[t.id] = t; });
+      d.topics = d.topics.map(function (t) {
+        var x = tr[t.id];
+        if (!x) return t;
+        var o = {}, k;
+        for (k in t) o[k] = t[k];
+        ['title', 'sub', 'open'].forEach(function (f) { if (x[f]) o[f] = x[f]; });
+        return o;
+      });
+    }
     d.topics.forEach(function (t) { byId[t.id] = t; });
 
     document.title = C.title + ' — bridge42worlds';
@@ -190,8 +208,17 @@
       '<span class="stars"><b>★ ' + totalStars + '</b><span class="lbl">звёзд собрано</span></span>';
     root.appendChild(tot);
 
-    // ярусы дерева
-    C.blocks.forEach(function (b) {
+    // Ярусы дерева. Темы раскладываются по блокам, поэтому тема с блоком, которого нет
+    // в списке, раньше просто не попадала никуда — исчезала со страницы без единой жалобы.
+    // Так и потерялась пятнадцатая тема. Теперь такие темы собираются в последний ярус:
+    // видно, что что-то настроено неверно, но читатель материал всё равно находит.
+    var known = {};
+    C.blocks.forEach(function (b) { known[b.id] = true; });
+    var orphans = d.topics.filter(function (t) { return !known[t.block]; });
+    var blocks = orphans.length
+      ? C.blocks.concat([{ id: '?', title: C.orphanBlock || 'Вне ярусов', sub: '' }])
+      : C.blocks;
+    blocks.forEach(function (b) {
       var sec = el('div', 't-block');
       var h = el('div', 't-block-h');
       h.innerHTML = '<span class="t-block-n">' + b.id + '</span>' +
@@ -200,7 +227,8 @@
       sec.appendChild(h);
 
       var grid = el('div', 't-grid');
-      d.topics.filter(function (t) { return t.block === b.id; }).forEach(function (t) {
+      var inBlock = b.id === '?' ? orphans : d.topics.filter(function (t) { return t.block === b.id; });
+      inBlock.forEach(function (t) {
         var open = t.status === 'ready' || t.status === 'partial';
         var node = el(open ? 'a' : 'div', 't-node ' + t.status + (open ? '' : ' locked'));
         if (open) node.href = '/course.html?t=' + t.id;

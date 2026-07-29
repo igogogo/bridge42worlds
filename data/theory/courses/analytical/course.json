@@ -1,6 +1,6 @@
 {
  "id": "analytical",
- "schema": "b42.course/1",
+ "schema": "b42.course/2",
  "kind": "course",
  "order": 14,
  "entities": {},
@@ -31,24 +31,48 @@
   "title": "Теоретическая механика",
   "subtitle": "Принцип наименьшего действия · Лагранжиан и симметрии · Гамильтониан и фазовое пространство",
   "lead": "До сих пор законы природы приходили к нам списком: второй закон Ньютона, закон сохранения энергии, закон сохранения импульса. Их надо было запоминать по отдельности. Эта тема показывает, что список лишний: все они выводятся из одного принципа, а сохраняющиеся величины появляются не по волшебству, а из симметрий мира.",
-  "why": "Без этой темы квантовая механика выглядит фокусом: непонятно, откуда берётся её уравнение и почему оно именно такое. С ней — становится следующим шагом той же логики.",
-  "blocks": [
-   {
-    "h": "Один принцип вместо списка законов",
-    "text": "Из точки в точку тело может двигаться бесконечным числом способов. Природа выбирает ровно один — тот, на котором величина по имени действие принимает наименьшее значение. Из этого требования выводится второй закон Ньютона, а не наоборот."
-   },
-   {
-    "h": "Симметрия рождает закон сохранения",
-    "text": "Если законы не меняются от того, где вы поставили опыт, — сохраняется импульс. Если от того, когда, — энергия. Если от поворота установки — момент импульса. Это теорема Нётер, и она превращает сохранение из правила в следствие."
-   },
-   {
-    "h": "Состояние вместо траектории",
-    "text": "Гамильтонов взгляд описывает систему не линией в пространстве, а точкой в пространстве состояний. Такой язык оказался пригоден там, где траектории вообще нет: в статистической физике и в квантовой механике."
-   }
-  ],
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Школьная механика отвечает на вопрос «что будет дальше»: известны силы, известно положение сейчас — можно посчитать следующий миг, потом ещё один. Аналитическая механика задаёт другой вопрос: из всех мыслимых траекторий между двумя точками природа выбирает одну. Чем она лучше остальных? Оказывается, у неё наименьшее действие, и одного этого условия хватает, чтобы получить все уравнения движения заново.",
+    "Выигрыш не в красоте, а в силе. Задача о маятнике на подвижной тележке через силы решается страницей выкладок с реакциями связей, а через функцию Лагранжа — в несколько строк, потому что реакции просто не входят в запись. Там, где координаты неудобны (шарик в чаше, бусина на проволоке, двойной маятник), выбор переменных становится свободным: уравнения получаются одинаковым способом в любых.",
+    "Но главное впереди. Симметрия задачи здесь напрямую превращается в закон сохранения: не зависит от времени — сохраняется энергия, не зависит от поворота — момент импульса. А язык Гамильтона, придуманный для планет и волчков, спустя век дословно перешёл в квантовую механику. Без этой темы её уравнение выглядит фокусом: непонятно, откуда взялось и почему именно такое. С ней — становится следующим шагом той же логики."
+   ]
+  },
   "history": {
-   "title": "Как это появилось",
-   "text": "Ферма заметил, что свет идёт по пути наименьшего времени, и это выглядело подозрительно: откуда луч знает заранее, куда ему выгоднее? Мопертюи в 1744 году предположил, что природа вообще экономна, и назвал экономимую величину действием. Строгую форму принципу придали Эйлер и Лагранж, а Гамильтон в 1834 году переписал механику так, что она стала похожа на оптику. Через сто лет это сходство оказалось не случайным: именно из него выросла волновая механика."
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Пьер Ферма",
+     "years": "1607–1665",
+     "what": "Заметил, что свет идёт по пути наименьшего времени, и этим объяснил преломление. Мысль выглядела подозрительно: откуда луч знает заранее, какой путь окажется быстрее? Первый намёк, что природу можно описывать не силами, а выбором наилучшего варианта."
+    },
+    {
+     "name": "Пьер Мопертюи",
+     "years": "1698–1759",
+     "what": "В 1744 году предположил, что экономность природы — общий закон, а не свойство света, и назвал экономимую величину действием. Обоснование у него было скорее философское, чем математическое, но название и сама идея прижились."
+    },
+    {
+     "name": "Леонард Эйлер",
+     "years": "1707–1783",
+     "what": "Превратил расплывчатый принцип в математику: вывел уравнение, которому обязана удовлетворять кривая, дающая наименьшее значение интегралу. Так появилось вариационное исчисление — инструмент, работающий далеко за пределами механики."
+    },
+    {
+     "name": "Жозеф Луи Лагранж",
+     "years": "1736–1813",
+     "what": "Построил механику, в которой нет ни сил реакции, ни привязки к декартовым координатам: достаточно разности кинетической и потенциальной энергии. В «Аналитической механике» (1788) он с гордостью отмечал, что в книге нет ни одного чертежа."
+    },
+    {
+     "name": "Уильям Роуэн Гамильтон",
+     "years": "1805–1865",
+     "what": "В 1834 году переписал механику через энергию и импульсы так, что она стала похожа на оптику: траектория частицы — как луч, а движение — как распространение волнового фронта. Аналогия казалась изящной странностью."
+    },
+    {
+     "name": "Эмми Нётер",
+     "years": "1882–1935",
+     "what": "В 1918 году доказала то, что связывает всю тему воедино: каждой непрерывной симметрии отвечает свой закон сохранения. Законы сохранения перестали быть отдельными фактами и стали следствием устройства задачи."
+    }
+   ]
   },
   "lessons": [
    {
@@ -73,31 +97,26 @@
     "model": "oscillator"
    }
   ],
-  "open": "почему природа вообще экономна — принцип работает, но объяснения самому принципу у физики нет"
+  "open": "почему природа вообще экономна — принцип работает, но объяснения самому принципу у физики нет",
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема идёт по нарастающей: сначала один принцип вместо списка законов, потом связь симметрии и сохранения, потом язык состояний, на котором написана вся современная физика.",
+   "outcome": "Пройдя все три параграфа, вы будете понимать, откуда берётся второй закон Ньютона, почему сохраняются именно импульс, энергия и момент импульса, и что означает фраза «система описывается точкой в фазовом пространстве»."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Механика: второй закон Ньютона, работа, кинетическая и потенциальная энергия.",
+    "Колебания: период, частота, фаза — они понадобятся в третьем параграфе.",
+    "Производная хотя бы на уровне «скорость изменения». Интеграл объясним по ходу: здесь он означает накопление, а не площадь."
+   ],
+   "note": "Главная трудность темы не в математике, а в привычке: искать придётся не число, а целую функцию."
+  }
  },
  "en": {
   "title": "Theoretical Mechanics",
   "subtitle": "Principle of Least Action · Lagrangian and Symmetries · Hamiltonian and Phase Space",
   "lead": "So far, the laws of nature came to us as a list: Newton's second law, the law of conservation of energy, the law of conservation of momentum. They had to be memorized separately. This topic shows that the list is redundant: they all follow from a single principle, and conserved quantities arise not by magic but from the symmetries of the world.",
-  "why": "Without this topic, quantum mechanics looks like a trick: it's unclear where its equation comes from and why it is that way. With it, it becomes the next step of the same logic.",
-  "blocks": [
-   {
-    "h": "One principle instead of a list of laws",
-    "text": "A body can move from one point to another in an infinite number of ways. Nature selects exactly one — the one on which a quantity called action takes the smallest value. From this requirement, Newton's second law is derived, not the other way around."
-   },
-   {
-    "h": "Symmetry gives birth to conservation law",
-    "text": "If the laws do not change depending on where you perform the experiment, momentum is conserved. If they do not change depending on when, energy is conserved. If they do not change upon rotating the setup, angular momentum is conserved. This is Noether's theorem, and it transforms conservation from a rule into a consequence."
-   },
-   {
-    "h": "State instead of trajectory",
-    "text": "The Hamiltonian view describes a system not as a line in space but as a point in state space. This language proved useful where there is no trajectory at all: in statistical physics and quantum mechanics."
-   }
-  ],
-  "history": {
-   "title": "How it appeared",
-   "text": "Fermat noticed that light travels along the path of least time, and this looked suspicious: how does the ray know in advance which path is more advantageous? Maupertuis in 1744 suggested that nature is generally economical and called the quantity being economized action. Euler and Lagrange gave the principle a strict form, and Hamilton in 1834 rewrote mechanics so that it resembled optics. A hundred years later, this resemblance turned out not to be accidental: it was from this that wave mechanics grew."
-  },
   "lessons": [
    {
     "id": "01-action",
@@ -121,31 +140,69 @@
     "model": "oscillator"
    }
   ],
-  "open": "why nature is economical at all — the principle works, but physics has no explanation for the principle itself"
+  "open": "why nature is economical at all — the principle works, but physics has no explanation for the principle itself",
+  "map": {
+   "title": "What you will learn",
+   "lead": "The topic progresses gradually: first one principle instead of a list of laws, then the connection between symmetry and conservation, then the language of states in which all modern physics is written.",
+   "outcome": "After completing all three sections, you will understand where Newton's second law comes from, why it is precisely momentum, energy, and angular momentum that are conserved, and what the phrase 'the system is described by a point in phase space' means."
+  },
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "Mechanics: Newton's second law, work, kinetic and potential energy.",
+    "Oscillations: period, frequency, phase — they will be needed in the third section.",
+    "Derivative at least at the level of 'rate of change'. We will explain the integral along the way: here it means accumulation, not area."
+   ],
+   "note": "The main difficulty of the topic is not in mathematics, but in habit: you will have to search not for a number, but for an entire function."
+  },
+  "why": {
+   "title": "Why This Matters",
+   "text": [
+    "School mechanics answers the question “what happens next”: forces are known, the current state is known — you can calculate the next instant, then another. Analytical mechanics asks a different question: out of all conceivable trajectories between two points, nature chooses one. What makes it better than the others? It turns out it has the least action, and this single condition is enough to derive all equations of motion anew.",
+    "The gain is not in beauty but in power. The problem of a pendulum on a moving cart, solved via forces, takes a page of calculations with constraint reactions, while through the Lagrange function it takes a few lines because the reactions simply do not enter the formulation. Where coordinates are inconvenient (a ball in a bowl, a bead on a wire, a double pendulum), the choice of variables becomes free: the equations are obtained in the same way in any coordinates.",
+    "But the main part lies ahead. The symmetry of the problem directly translates into a conservation law: if it does not depend on time — energy is conserved, if it does not depend on rotation — angular momentum is conserved. And the Hamiltonian formalism, invented for planets and spinning tops, a century later migrated verbatim into quantum mechanics. Without this topic, its equation looks like a trick: it is unclear where it came from and why it is exactly that. With it, it becomes the logical next step."
+   ]
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
+    {
+     "name": "Pierre Fermat",
+     "years": "1607–1665",
+     "what": "Noticed that light takes the path of least time and thereby explained refraction. The idea seemed suspicious: how does the ray know in advance which path will be faster? The first hint that nature can be described not by forces but by the choice of the best option."
+    },
+    {
+     "name": "Pierre Maupertuis",
+     "years": "1698–1759",
+     "what": "In 1744, he suggested that nature’s economy is a general law, not a property of light, and called the conserved quantity action. His justification was more philosophical than mathematical, but the name and the idea itself caught on."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Turned the vague principle into mathematics: derived the equation that must be satisfied by the curve giving the minimum value of an integral. Thus the calculus of variations emerged — a tool that works far beyond mechanics."
+    },
+    {
+     "name": "Joseph Louis Lagrange",
+     "years": "1736–1813",
+     "what": "Built mechanics without constraint forces or dependence on Cartesian coordinates: the difference between kinetic and potential energy suffices. In 'Analytical Mechanics' (1788), he proudly noted that the book contains not a single diagram."
+    },
+    {
+     "name": "William Rowan Hamilton",
+     "years": "1805–1865",
+     "what": "In 1834, he rewrote mechanics in terms of energy and momenta so that it resembled optics: a particle’s trajectory is like a ray, and motion is like the propagation of a wavefront. The analogy seemed an elegant oddity."
+    },
+    {
+     "name": "Emmy Noether",
+     "years": "1882–1935",
+     "what": "In 1918, she proved what ties the whole topic together: for each continuous symmetry, there is a corresponding conservation law. Conservation laws ceased to be isolated facts and became a consequence of the structure of the problem."
+    }
+   ]
+  }
  },
  "es": {
   "title": "Mecánica teórica",
   "subtitle": "Principio de mínima acción · Lagrangiano y simetrías · Hamiltoniano y espacio de fases",
   "lead": "Hasta ahora, las leyes de la naturaleza llegaban a nosotros como una lista: la segunda ley de Newton, la ley de conservación de la energía, la ley de conservación del momento. Había que memorizarlas por separado. Este tema muestra que la lista es innecesaria: todas se derivan de un solo principio, y las cantidades conservadas no aparecen por arte de magia, sino a partir de las simetrías del mundo.",
-  "why": "Sin este tema, la mecánica cuántica parece un truco: no se entiende de dónde viene su ecuación y por qué es exactamente así. Con él, se convierte en el siguiente paso de la misma lógica.",
-  "blocks": [
-   {
-    "h": "Un principio en lugar de una lista de leyes",
-    "text": "De un punto a otro, un cuerpo puede moverse de infinitas formas. La naturaleza elige exactamente una: aquella en la que la cantidad llamada acción toma el valor mínimo. De este requisito se deriva la segunda ley de Newton, y no al revés."
-   },
-   {
-    "h": "La simetría genera una ley de conservación",
-    "text": "Si las leyes no cambian según dónde realices el experimento, se conserva el momento. Si no cambian según cuándo, se conserva la energía. Si no cambian al girar el dispositivo, se conserva el momento angular. Esto es el teorema de Noether, y convierte la conservación de una regla en una consecuencia."
-   },
-   {
-    "h": "Estado en lugar de trayectoria",
-    "text": "La visión hamiltoniana describe el sistema no como una línea en el espacio, sino como un punto en el espacio de estados. Este lenguaje resultó útil donde no hay trayectoria alguna: en la física estadística y en la mecánica cuántica."
-   }
-  ],
-  "history": {
-   "title": "Cómo surgió",
-   "text": "Fermat observó que la luz sigue el camino de menor tiempo, y esto parecía sospechoso: ¿cómo sabe el rayo de antemano hacia dónde le conviene ir? Maupertuis en 1744 supuso que la naturaleza es en general económica, y llamó acción a la cantidad economizada. Euler y Lagrange dieron una forma rigurosa al principio, y Hamilton en 1834 reescribió la mecánica de modo que se asemejara a la óptica. Cien años después, esta similitud resultó no ser casual: de ella surgió la mecánica ondulatoria."
-  },
   "lessons": [
    {
     "id": "01-action",
@@ -169,31 +226,69 @@
     "model": "oscillator"
    }
   ],
-  "open": "por qué la naturaleza es en general económica — el principio funciona, pero la física no tiene explicación para el principio mismo"
+  "open": "por qué la naturaleza es en general económica — el principio funciona, pero la física no tiene explicación para el principio mismo",
+  "map": {
+   "title": "Lo que aprenderá",
+   "lead": "El tema va en aumento: primero un principio en lugar de una lista de leyes, luego la relación entre simetría y conservación, luego el lenguaje de los estados en el que está escrita toda la física moderna.",
+   "outcome": "Después de pasar los tres párrafos, entenderá de dónde proviene la segunda ley de Newton, por qué se conservan precisamente el momento, la energía y el momento angular, y qué significa la frase «el sistema se describe como un punto en el espacio de fases»."
+  },
+  "prereq": {
+   "title": "Lo que necesita saber de antemano",
+   "items": [
+    "Mecánica: segunda ley de Newton, trabajo, energía cinética y potencial.",
+    "Oscilaciones: período, frecuencia, fase — serán necesarias en el tercer párrafo.",
+    "Derivada al menos a nivel de «tasa de cambio». La integral la explicaremos sobre la marcha: aquí significa acumulación, no área."
+   ],
+   "note": "La principal dificultad del tema no está en las matemáticas, sino en el hábito: habrá que buscar no un número, sino una función completa."
+  },
+  "why": {
+   "title": "Por qué es importante",
+   "text": [
+    "La mecánica escolar responde a la pregunta «qué sucederá después»: conociendo las fuerzas y la posición actual, se puede calcular el instante siguiente, luego otro más. La mecánica analítica plantea otra pregunta: de todas las trayectorias posibles entre dos puntos, la naturaleza elige una. ¿En qué es mejor que las demás? Resulta que tiene la menor acción, y esta única condición es suficiente para obtener todas las ecuaciones de movimiento nuevamente.",
+    "La ventaja no está en la belleza, sino en la potencia. El problema del péndulo sobre un carro móvil se resuelve mediante fuerzas con una página de cálculos con reacciones de vínculo, mientras que mediante la función de Lagrange se resuelve en unas pocas líneas, porque las reacciones simplemente no aparecen en la expresión. Allí donde las coordenadas son incómodas (una bola en un cuenco, una cuenta en un alambre, un péndulo doble), la elección de variables se vuelve libre: las ecuaciones se obtienen de la misma manera en cualquier sistema.",
+    "Pero lo principal está por venir. La simetría del problema se convierte directamente en una ley de conservación: si no depende del tiempo, se conserva la energía; si no depende de la rotación, se conserva el momento angular. Y el lenguaje de Hamilton, concebido para planetas y trompos, un siglo después pasó literalmente a la mecánica cuántica. Sin este tema, su ecuación parece un truco: no se entiende de dónde surgió y por qué es precisamente así. Con él, se convierte en el siguiente paso de la misma lógica."
+   ]
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Pierre de Fermat",
+     "years": "1607–1665",
+     "what": "Notó que la luz sigue el camino de menor tiempo, y con ello explicó la refracción. La idea parecía sospechosa: ¿cómo sabe el rayo de antemano qué camino será más rápido? La primera pista de que la naturaleza puede describirse no mediante fuerzas, sino mediante la elección de la mejor opción."
+    },
+    {
+     "name": "Pierre Maupertuis",
+     "years": "1698–1759",
+     "what": "En 1744 supuso que el ahorro de la naturaleza es una ley general, no una propiedad de la luz, y llamó acción a la cantidad ahorrada. Su fundamentación fue más filosófica que matemática, pero el nombre y la idea misma se arraigaron."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Convirtió el vago principio en matemáticas: dedujo la ecuación que debe satisfacer la curva que da el menor valor a la integral. Así surgió el cálculo de variaciones, una herramienta que funciona mucho más allá de la mecánica."
+    },
+    {
+     "name": "Joseph-Louis Lagrange",
+     "years": "1736–1813",
+     "what": "Construyó una mecánica en la que no hay fuerzas de reacción ni dependencia de coordenadas cartesianas: basta con la diferencia entre energía cinética y potencial. En su «Mecánica analítica» (1788) señaló con orgullo que el libro no contenía ningún diagrama."
+    },
+    {
+     "name": "William Rowan Hamilton",
+     "years": "1805–1865",
+     "what": "En 1834 reescribió la mecánica en términos de energía y momentos de modo que se asemejó a la óptica: la trayectoria de una partícula como un rayo, y el movimiento como la propagación de un frente de onda. La analogía parecía una elegante rareza."
+    },
+    {
+     "name": "Emmy Noether",
+     "years": "1882–1935",
+     "what": "En 1918 demostró lo que une todo el tema: a cada simetría continua le corresponde una ley de conservación. Las leyes de conservación dejaron de ser hechos aislados y se convirtieron en consecuencia de la estructura del problema."
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الميكانيكا النظرية",
   "subtitle": "مبدأ الفعل الأقل · لاغرانجيان والتناظرات · هاميلتونيان وفضاء الطور",
   "lead": "حتى الآن، كانت قوانين الطبيعة تأتي إلينا كقائمة: قانون نيوتن الثاني، قانون حفظ الطاقة، قانون حفظ الزخم. كان لا بد من حفظها بشكل منفصل. يوضح هذا الموضوع أن القائمة زائدة: كلها تُشتق من مبدأ واحد، والكميات المحفوظة لا تظهر بالسحر، بل من تناظرات العالم.",
-  "why": "بدون هذا الموضوع، تبدو ميكانيكا الكم وكأنها خدعة: من غير الواضح من أين تأتي معادلتها ولماذا هي بهذا الشكل. معه، تصبح الخطوة التالية لنفس المنطق.",
-  "blocks": [
-   {
-    "h": "مبدأ واحد بدلاً من قائمة القوانين",
-    "text": "يمكن لجسم أن يتحرك من نقطة إلى أخرى بأعداد لا نهائية من الطرق. تختار الطبيعة واحدًا فقط — ذلك الذي تأخذ فيه الكمية المسماة الفعل أقل قيمة. من هذا المطلب يُشتق قانون نيوتن الثاني، وليس العكس."
-   },
-   {
-    "h": "التناظر يولد قانون الحفظ",
-    "text": "إذا كانت القوانين لا تتغير بتغير مكان إجراء التجربة، فإن الزخم يُحفظ. إذا كانت لا تتغير بتغير الزمن، فإن الطاقة تُحفظ. إذا كانت لا تتغير بتدوير الجهاز، فإن الزخم الزاوي يُحفظ. هذه هي نظرية نويثر، وهي تحول الحفظ من قاعدة إلى نتيجة."
-   },
-   {
-    "h": "الحالة بدلاً من المسار",
-    "text": "ينظر نهج هاملتون إلى النظام ليس كخط في الفضاء، بل كنقطة في فضاء الحالات. تبين أن هذه اللغة مناسبة حيث لا يوجد مسار على الإطلاق: في الفيزياء الإحصائية وميكانيكا الكم."
-   }
-  ],
-  "history": {
-   "title": "كيف ظهر هذا",
-   "text": "لاحظ فيرما أن الضوء يسلك المسار الأقل زمنًا، وبدا ذلك مريبًا: كيف يعرف الشعاع مسبقًا أين هو أفضل له؟ افترض موبرتيوس في عام 1744 أن الطبيعة مقتصدة بشكل عام، وأسمى الكمية المقتصدة بالفعل. أعطى أويلر ولاغرانج شكلاً صارمًا للمبدأ، وأعاد هاملتون في عام 1834 كتابة الميكانيكا لتصبح مشابهة للبصريات. بعد مائة عام، تبين أن هذا التشابه ليس مصادفة: منه نشأت ميكانيكا الموجات."
-  },
   "lessons": [
    {
     "id": "01-action",
@@ -217,6 +312,63 @@
     "model": "oscillator"
    }
   ],
-  "open": "لماذا الطبيعة مقتصدة بشكل عام — المبدأ يعمل، لكن لا يوجد تفسير للمبدأ نفسه في الفيزياء"
+  "open": "لماذا الطبيعة مقتصدة بشكل عام — المبدأ يعمل، لكن لا يوجد تفسير للمبدأ نفسه في الفيزياء",
+  "map": {
+   "title": "ما ستتعلمه",
+   "lead": "الموضوع يتصاعد: أولاً مبدأ واحد بدلاً من قائمة القوانين، ثم العلاقة بين التماثل والحفظ، ثم لغة الحالات التي كُتبت بها كل الفيزياء الحديثة.",
+   "outcome": "بعد إتمام الفقرات الثلاث، ستفهم من أين يأتي قانون نيوتن الثاني، ولماذا يُحفظ الزخم والطاقة والزخم الزاوي تحديداً، وماذا تعني عبارة «النظام يوصف بنقطة في فضاء الطور»."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقاً",
+   "items": [
+    "الميكانيكا: قانون نيوتن الثاني، الشغل، الطاقة الحركية والطاقة الكامنة.",
+    "الاهتزازات: الدورة، التردد، الطور — ستكون ضرورية في الفقرة الثالثة.",
+    "المشتقة على الأقل بمستوى «معدل التغير». سنشرح التكامل خلال الطريق: هنا يعني التراكم، وليس المساحة."
+   ],
+   "note": "الصعوبة الرئيسية للموضوع ليست في الرياضيات، بل في الاعتياد: سيكون المطلوب إيجاد ليس عدداً، بل دالة كاملة."
+  },
+  "why": {
+   "title": "أهمية هذا الموضوع",
+   "text": [
+    "الميكانيكا المدرسية تجيب على سؤال «ماذا سيحدث بعد ذلك»: إذا عُرفت القوى وموقع الجسم الآن، يمكن حساب اللحظة التالية، ثم التي تليها. أما الميكانيكا التحليلية فتطرح سؤالاً آخر: من بين جميع المسارات الممكنة بين نقطتين، تختار الطبيعة واحداً. ما الذي يميزه عن البقية؟ اتضح أن له أصغر فعل، وهذه الحالة وحدها تكفي لاشتقاق جميع معادلات الحركة من جديد.",
+    "المكسب ليس في الجمال، بل في القوة. مسألة البندول على عربة متحركة تُحل باستخدام القوى بصفحة من الحسابات مع قيود التفاعلات، أما باستخدام دالة لاغرانج فتُحل في بضعة أسطر، لأن التفاعلات ببساطة لا تدخل في المعادلات. حيثما تكون الإحداثيات غير ملائمة (كرة في وعاء، خرزة على سلك، بندول مزدوج)، يصبح اختيار المتغيرات حراً: المعادلات تُستخرج بنفس الطريقة في أي إحداثيات.",
+    "لكن الأهم قادم. التناظر في المسألة يتحول هنا مباشرة إلى قانون حفظ: إذا لم تعتمد على الزمن — تحفظ الطاقة، إذا لم تعتمد على الدوران — يحفظ الزخم الزاوي. أما لغة هاملتون، التي وضعت للكواكب والقمم الدوارة، فبعد قرن انتقلت حرفياً إلى ميكانيكا الكم. بدون هذا الموضوع، تبدو معادلة الكم وكأنها خدعة: ليس واضحاً من أين أتت ولماذا هي بهذه الصورة. معه، تصبح الخطوة التالية لنفس المنطق."
+   ]
+  },
+  "history": {
+   "title": "من هم منشئو هذه النظرية؟",
+   "people": [
+    {
+     "name": "بيير فيرما",
+     "years": "1607–1665",
+     "what": "لاحظ أن الضوء يسلك المسار ذا الزمن الأصغر، وبذلك فسر الانكسار. بدت الفكرة مريبة: كيف يعرف الشعاع مسبقاً أي مسار سيكون أسرع؟ أول تلميح على أن الطبيعة يمكن وصفها ليس بالقوى، بل باختيار الخيار الأمثل."
+    },
+    {
+     "name": "بيير موبرتيوس",
+     "years": "1698–1759",
+     "what": "في عام 1744 افترض أن اقتصاد الطبيعة هو قانون عام، وليس خاصية للضوء، وأسمى الكمية المقتصدة بالفعل. كان أساسه فلسفياً أكثر منه رياضياً، لكن الاسم والفكرة نفسها بقيتا."
+    },
+    {
+     "name": "ليونارد أويلر",
+     "years": "1707–1783",
+     "what": "حول المبدأ الغامض إلى رياضيات: اشتق معادلة يجب أن يحققها المنحنى الذي يعطي أصغر قيمة للتكامل. وهكذا ظهر حساب التغيرات — أداة تعمل بعيداً عن نطاق الميكانيكا."
+    },
+    {
+     "name": "جوزيف لويس لاغرانج",
+     "years": "1736–1813",
+     "what": "بنى ميكانيكا لا تحتوي على قوى رد الفعل ولا ترتبط بالإحداثيات الديكارتية: يكفي فرق طاقة الحركة وطاقة الوضع. في كتابه «الميكانيكا التحليلية» (1788) ذكر بفخر أنه لا يوجد في الكتاب أي رسم."
+    },
+    {
+     "name": "ويليام روان هاميلتون",
+     "years": "1805–1865",
+     "what": "في عام 1834 أعاد كتابة الميكانيكا من خلال الطاقة والعزم بحيث أصبحت مشابهة للبصريات: مسار الجسيم مثل الشعاع، والحركة مثل انتشار جبهة موجة. بدا التشبيه غرابة أنيقة."
+    },
+    {
+     "name": "إيمي نويثر",
+     "years": "1882–1935",
+     "what": "في عام 1918 أثبتت ما يربط الموضوع بأكمله: كل تناظر مستمر يقابله قانون حفظ. توقفت قوانين الحفظ عن كونها حقائق منفصلة وأصبحت نتيجة لبنية المسألة."
+    }
+   ]
+  }
  }
 }
