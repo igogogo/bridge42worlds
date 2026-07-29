@@ -2301,3 +2301,112 @@ html[data-theme="dark"] .an-stage {
 .feed-sort-btn:hover { color: var(--link); border-color: var(--link); }
 .feed-sort-btn.active { color: var(--link); border-color: var(--link);
   background: color-mix(in srgb, var(--cyan) 12%, transparent); }
+
+/* ═══ Шкала касания (2026-07-29, дизайн) ═══════════════════════════════════
+   Размеры кнопок набирались поштучно: на главной рядом жили 14, 21, 24, 26,
+   32 и 44 пикселя, и каждая новая кнопка приносила свой размер. Ступеней
+   теперь три — крупная, обычная, мелкая, — и значение меняется в одном месте
+   при переходе на узкий экран. Порог касания держится сам собой, а не
+   переписыванием тридцати правил; новая кнопка берёт ступень и попадает в него.
+
+   44 пикселя — не наш вкус, а порог, ниже которого промахи растут у всех.
+   Считаем по узкой стороне: кнопка 120×32 — это кнопка 32. */
+:root {
+    --tap-lg: 40px;   /* главное действие: открыть, показать всё, подтвердить */
+    --tap-md: 32px;   /* обычная кнопка: иконка шапки, реакция, сортировка */
+    --tap-sm: 26px;   /* плотный ряд внутри панели: графы, чекбоксы, шаги */
+    --ico-lg: 22px; --ico-md: 18px; --ico-sm: 15px;
+    --ico-stroke: 1.7;  /* толщина штриха иконок — тоньше читается как грязь */
+    --tap-gap: 8px;   /* просвет между кнопками: попадание зависит и от соседа */
+}
+@media (max-width: 640px) {
+    /* Палец вместо мыши. Мелкой ступени здесь нет — она равна обычной:
+       «плотно» на телефоне означает «мимо», а не «компактно». */
+    :root {
+        --tap-lg: 48px; --tap-md: 44px; --tap-sm: 44px;
+        --ico-lg: 24px; --ico-md: 22px; --ico-sm: 20px;
+        --ico-stroke: 2;   /* на телефоне волосяной штрих пропадает */
+    }
+}
+
+/* Иконки одной толщины по всему сайту. Раньше её задавал каждый рисунок сам:
+   набор в js/icons.js рисовал 1.6, гамбургер в search.js — 1.7, и на светлом
+   фоне разница читалась как неряшливость. */
+.ico-svg, .b42-ic { stroke-width: var(--ico-stroke); }
+.header-right .ico-svg, .nav-links a.nav-ic .ico-svg { width: var(--ico-md); height: var(--ico-md); }
+
+/* Гамбургер отвечает за всё меню целиком, и в кнопке 44 пикселя рисунок в 21
+   выглядел потерянным: кнопка большая, знак маленький. Даём ему крупную
+   ступень — три черты должны читаться, а не намекать на себя. */
+.nav-more-btn .ico-svg, .topnav-burger .ico-svg {
+    width: var(--ico-lg); height: var(--ico-lg);
+}
+
+/* Ступень обычной кнопки. Именно min-*: они сильнее заданных выше height/width,
+   поэтому старые поштучные значения не нужно выискивать и вычищать по файлу. */
+.cal-btn, .react-btn, .fav-btn, .share-btn, .feed-sort-btn, .lv-btn,
+.view-toggle button, .tip-close, .mini-depth-ctrl button, .kg-row button,
+.graph-fs-btn, .graph-fs-bgbtn, .graph-fs-collapse-btn, .gbm-actions button,
+.next-btn-top, .mg-config-toggle, #to-top, .refine-toggle,
+.fb-comment-toggle, .fb-chip, .share-inline, .nav-express-toggle, .search-clear,
+.cal-day, .dash-chip {
+    min-height: var(--tap-md); min-width: var(--tap-md);
+}
+/* Уровни чтения перечислены отдельно: у них есть правила вида
+   «.lv-switch-card .lv-btn», и они весомее одиночного класса — порядок строк
+   такой спор не решает, нужен равный вес. */
+.lv-btn.lv-compact, .lv-switch-card .lv-btn, .entity-levels .lv-btn {
+    min-height: var(--tap-md); min-width: var(--tap-md);
+}
+
+/* Пункты меню в шапке — такая же цель для пальца, как кнопка с иконкой.
+   Прежние правила поднимали до порога только «a.nav-ic», а соседний текстовый
+   пункт оставался 22×29: рядом с кнопкой в 44 он читался как одно поле, но
+   нажимался как узкая полоска. */
+.nav-links a {
+    min-height: var(--tap-md); min-width: var(--tap-md);
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Логотип — заголовок, а не кнопка на панели: делать его высотой в 44 значит
+   раздвинуть шапку ради цели, в которую и так попадают (122 пикселя ширины).
+   Поэтому вид оставляем, а зону нажатия доводим по вертикали — тем же приёмом,
+   что и у значков. */
+.logo { position: relative; }
+.logo::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 50%;
+    height: var(--tap-md); transform: translateY(-50%);
+}
+
+/* Просвет между кнопками. Два пикселя на телефоне означают, что промах мимо
+   края уходит соседу, а не в пустоту — и нажатие делает не то, что хотели.
+   Один токен на шапку, чтобы просвет не расходился по местам. */
+.header-right, .hdr-icons { gap: var(--tap-gap); }
+.nav-links { gap: var(--tap-gap); }
+
+/* Переключатель уровней на узком экране: четыре пилюли делят 327 пикселей, и
+   «Популярно» вместе со значком просит на пять больше, чем ему достаётся, —
+   подпись вылезала за овал. Ужимаем внутренние отступы, а не прячем значок:
+   он показывает объём текста числом строк и несёт смысл. */
+@media (max-width: 400px) {
+    .lv-switch .lv-btn { padding: 0 5px; gap: 3px; font-size: 11px; }
+    .lv-switch .vs-ic { width: 15px; height: 15px; }
+}
+
+/* Значки-точки: «i» у логотипа, крестик на чипе, «ещё» в строке категорий.
+   Раздувать сам знак нельзя — он часть строки, а не кнопка на панели. Поэтому
+   растим только область нажатия, невидимым слоем поверх центра. Вид прежний,
+   палец попадает.
+   «Я автор» здесь же: это тихая ссылка внутри строки авторов, у неё нарочно
+   нулевой отступ. Дай ей размер — и радиус в 999 пикселей превратит её в
+   таблетку, наехавшую на соседние имена. */
+.logo-info, .cat-chip-add, .selected-bar .chip .remove, .category-bar-more,
+.author-verify-btn {
+    position: relative;
+}
+.logo-info::after, .cat-chip-add::after, .author-verify-btn::after,
+.selected-bar .chip .remove::after, .category-bar-more::after {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: var(--tap-md); height: var(--tap-md);
+    transform: translate(-50%, -50%);
+}

@@ -1335,7 +1335,9 @@ function collapseNavOverflow() {
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'nav-more-btn';
-    btn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>';
+    // Толщину штриха держит --ico-stroke в стилях (на телефоне жирнее); здесь
+    // то же значение запасным, чтобы иконка не тончала, если стиль не приехал.
+    btn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>';
     btn.setAttribute('aria-label', 'Menu');
     var panel = document.createElement('div');
     panel.className = 'nav-more-panel';
