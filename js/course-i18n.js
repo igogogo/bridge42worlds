@@ -153,6 +153,8 @@
         'Разгадка.': ['The answer.', 'La clave.', 'الحل.'],
         'Дано': ['Given', 'Datos', 'المعطيات'],
         'Закон': ['Law', 'Ley', 'القانون'],
+        'Решение': ['Solution', 'Solución', 'الحل'],
+        'Ответ': ['Answer', 'Respuesta', 'الإجابة'],
         'Как запомнить:': ['How to remember:', 'Cómo recordarlo:', 'كيف تتذكره:'],
         'Не удалось загрузить материал': ['Could not load the material', 'No se pudo cargar el material',
             'تعذّر تحميل المادة'],

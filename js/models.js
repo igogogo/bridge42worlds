@@ -2206,6 +2206,19 @@
         'Вт': 'W', 'Кл': 'C', 'Ом': 'Ω', 'Тл': 'T', 'бит': 'bit', 'моль': 'mol', 'рад': 'rad',
         'м': 'm', 'с': 's', 'К': 'K', 'Н': 'N', 'В': 'V', 'А': 'A', 'г': 'g', 'л': 'L'
     };
+    // Отдельные СЛОВА, оставшиеся в формулах. Их мало (проверено по всем 42 урокам: три штуки),
+    // поэтому держим здесь, а не разводим ещё один словарь. Если станет больше — переносить
+    // в i18n модели, там уже есть все четыре языка.
+    var WORD_TEXT = {
+        'слева':    { en: 'left',   es: 'a la izquierda', ar: 'يسار' },
+        'из':       { en: 'of',     es: 'de',             ar: 'من' },
+        'усиление': { en: 'gain',   es: 'ganancia',       ar: 'تضخيم' }
+    };
+    var WORD_RE = new RegExp(
+        '(^|[\\s(>\\u00A0;]|&nbsp;)(' +
+        Object.keys(WORD_TEXT).sort(function (a, b) { return b.length - a.length; }).join('|') +
+        ')(?=$|[\\s<)\\u00A0.,;:!?]|&nbsp;)', 'g');
+
     var UNIT_RE = new RegExp(
         '(^|[\\s(>\\u00A0;]|&nbsp;)(' +
         Object.keys(UNIT_TEXT).sort(function (a, b) { return b.length - a.length; })
@@ -2214,7 +2227,13 @@
 
     function localizeUnits(html) {
         if (typeof html !== 'string' || pageLang() === 'ru') return html;
-        return html.replace(UNIT_RE, function (_, pre, unit) { return pre + UNIT_TEXT[unit]; });
+        var lang = pageLang();
+        return html
+            .replace(UNIT_RE, function (_, pre, unit) { return pre + UNIT_TEXT[unit]; })
+            .replace(WORD_RE, function (m, pre, word) {
+                var w = WORD_TEXT[word][lang];
+                return w ? pre + w : m;
+            });
     }
 
     /** Оборачивает модель так, чтобы её текст выходил с единицами языка страницы. */
