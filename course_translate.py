@@ -13,12 +13,14 @@
     python course_translate.py --limit 5        # первые 5 файлов (проба)
 """
 import json
+import re
 import sys
 from pathlib import Path
 
 from common import chat, clean_json, parse_json_salvage
 
 LANG_NAME = {"en": "English", "es": "Spanish", "ar": "Arabic"}
+CYR = re.compile(r"[А-Яа-яЁё]")
 ROOTS = [Path("data/theory/courses"), Path("data/theory/lectures"), Path("data/theory")]
 
 
@@ -143,12 +145,17 @@ def main():
         # `lang not in d`: если перевод одного блока однажды сорвался, ветка оставалась неполной,
         # а файл навсегда считался переведённым. Так по курсу пропали `curiosities` у 27 уроков
         # и `synthesis` у 22 — читатель на en/es/ar не видел ни опытов на кухне, ни сквозного примера.
+        # Блок «есть» ещё не значит «переведён». До того как из translate_block убрали молчаливый
+        # откат, сорвавшийся запрос записывал в ветку РУССКИЙ оригинал — ключ на месте, читатель
+        # видит кириллицу, а файл навсегда считается готовым. Так уцелел ar-блок mathkit.json.
+        # Поэтому готовность меряем по содержимому: кириллица в en/es/ar — это непереведённый блок.
         missing = {}
         for l in langs:
             if l not in d:
                 missing[l] = list(d["ru"].keys())
             else:
-                gaps = [k for k in d["ru"] if k not in d[l]]
+                gaps = [k for k in d["ru"]
+                        if k not in d[l] or CYR.search(json.dumps(d[l][k], ensure_ascii=False))]
                 if gaps:
                     missing[l] = gaps
         if missing:

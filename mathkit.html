@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Математика на пальцах — bridge42worlds</title>
-<link rel="icon" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -132,7 +134,10 @@
         var card = el('div', 'm-card');
         card.id = 'm-' + it.id;
         card.appendChild(el('div', 'm-name', ic(it.icon) + '<span>' + (loc.name || it.name) + '</span>'));
-        if (it.latex) { var eq = el('div', 'm-eq'); tex(eq, it.latex); card.appendChild(eq); }
+        // Формула общая для всех языков, но подписи внутри \text{} человекочитаемы — ветка может
+        // переопределить latex целиком, иначе читатель на арабском видит кириллицу в формуле.
+        var ltx = loc.latex || it.latex;
+        if (ltx) { var eq = el('div', 'm-eq'); tex(eq, ltx); card.appendChild(eq); }
 
         var means = el('div', 'm-row');
         means.innerHTML = '<b>' + T.meansLabel + '</b>' + (loc.means || it.means);
@@ -158,6 +163,7 @@
     .catch(function (e) { root.appendChild(el('div', 'm-empty', String(e))); });
 })();
 </script>
-<script src="/js/course-i18n.js?v=1"></script>
+<script src="/js/course-i18n.js?v=5"></script>
+<script src="/js/sitenav.js?v=1"></script>
 </body>
 </html>

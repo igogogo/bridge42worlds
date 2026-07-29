@@ -270,8 +270,19 @@
         bar.appendChild(wrap);
     }
 
+    /* Логотип учебных страниц статичен и потому всегда вёл на русскую главную. Подставляем
+       текущий язык здесь, а не в десяти файлах: тот же приём, что и с переключателем. */
+    function fixHomeLink() {
+        Array.prototype.forEach.call(document.querySelectorAll('a.logo'), function (a) {
+            if (/^\/lang\/[a-z]{2}\/index\.html$/.test(a.getAttribute('href') || '')) {
+                a.href = '/lang/' + LANG + '/index.html';
+            }
+        });
+    }
+
     function start() {
         mountSwitcher();
+        fixHomeLink();
         if (LANG === 'ru') return;
         translate(document.body);
         translateTitle();

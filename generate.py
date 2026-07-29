@@ -673,7 +673,8 @@ def build_actions_html(like_id, fav_id, lang, entity_type="article", inline_comm
             f'</div>')
 
 
-def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None):
+def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None,
+                     has_mini=True):
     tpl = load_template("article")
     if not tpl.template: return "<html><body>Template not found</body></html>"
     abstract_text = abstract_for(abstract, lang, version)
@@ -917,7 +918,9 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     version_toggle_html = ""   # бегунок заменён иконочным переключателем (2026-07-28)
     # Фаза 4: иконочный переключатель над названием + компактный дубль внизу статьи,
     # плюс карточка «коротко» шапкой (решения владельца 2026-07-27).
-    level_switch_html = level_switch_links(lang, version, date_str, article["id"], with_mini=True)
+    # «Мини» показываем, только если mini.html для этой статьи действительно пишется: у экспресс-
+    # статьи без короткого текста его нет, а кнопка стояла всегда и вела в 404 (нашли 2026-07-29).
+    level_switch_html = level_switch_links(lang, version, date_str, article["id"], with_mini=has_mini)
     level_switch_bottom_html = level_switch_links(lang, version, date_str, article["id"], compact=True)
     mini_head_html = mini_header_html((scipop.get("mini") or "").strip(), lang)
     # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
@@ -2905,6 +2908,17 @@ def regenerate_all_html(only=None):
             "express_tiers": data.get("express_tiers", []),
         }
         abstract = data.get("abstract") or {}
+        # Наличие мини считаем ДО страниц уровней: кнопка «Мини» на них должна появляться только
+        # там, где mini.html ниже действительно запишется (условие то же — есть короткий текст).
+        mini_ok = {}
+        for lang in LANGUAGES:
+            bs = version_scipop(data, "popular", lang) or version_scipop(data, "simple", lang) or {}
+            if bs.get("express_locked"):
+                bs = version_scipop(data, "simple", lang) or bs
+            if lang != DEFAULT_LANG and payload_in_source_lang(bs):
+                bs = untranslated_stub(bs, lang, {"en": version_scipop(data, "popular", "en") or {}})
+                bs["threads"] = bs["text"]
+            mini_ok[lang] = bool(bs.get("threads") or bs.get("mini"))
         for version in VERSIONS:
             for lang in LANGUAGES:
                 scipop = version_scipop(data, version, lang)
@@ -2915,7 +2929,8 @@ def regenerate_all_html(only=None):
                     scipop = untranslated_stub(scipop, lang, {"en": version_scipop(data, version, "en") or {}})
                 html = gen_article_html(scipop, article_obj, date_str,
                                         [str(p) for p in images], lang, version,
-                                        captions_for_lang(captions, lang), abstract)
+                                        captions_for_lang(captions, lang), abstract,
+                                        has_mini=mini_ok.get(lang, True))
                 out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / VERSION_FILES[version]
                 out.parent.mkdir(parents=True, exist_ok=True)
                 _write_text_retry(out, html)
@@ -3289,7 +3304,9 @@ def write_article_pages(item, date_str):
         for v in VERSIONS:
             scipop, translated = pick_scipop(versions_ru, translations, v, lang)
             (lang_folder / VERSION_FILES[v]).write_text(
-                gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract), encoding="utf-8")
+                gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract,
+                                 has_mini=bool((versions_ru.get("popular", {})).get("threads"))),
+                encoding="utf-8")
             if translated:
                 update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
     # Mini-версия — threads-текст (полный, до обрезки). Источник title/oneliner для мини —
@@ -3320,7 +3337,8 @@ def write_article_pages(item, date_str):
             lf.mkdir(parents=True, exist_ok=True)
             (lf / "mini.html").write_text(
                 gen_article_html(mini_scipop, a, date_str, images, l, "mini",
-                                 captions_for_lang(captions, l), abstract), encoding="utf-8")
+                                 captions_for_lang(captions, l), abstract, has_mini=True),
+                encoding="utf-8")
     update_authors_graph(a)
     update_tag_counts(versions_ru["advanced"])
     print(f"  ✅ {a['id']} done")
@@ -3960,17 +3978,18 @@ def translate_article_lang(aid, target_lang, force=False):
     }
     lang_folder = Path(LANG_DIR) / target_lang / "archive" / date_str / aid
     lang_folder.mkdir(parents=True, exist_ok=True)
+    base_scipop = version_scipop(data, "popular", target_lang) or version_scipop(data, "simple", target_lang) or {}
+    if base_scipop.get("express_locked"):
+        base_scipop = version_scipop(data, "simple", target_lang) or base_scipop
+    threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
     for version in VERSIONS:
         scipop = version_scipop(data, version, target_lang)
         if not scipop:
             continue
         html = gen_article_html(scipop, article_obj, date_str, [str(p) for p in images],
-                                 target_lang, version, lang_captions, data.get("abstract") or {})
+                                 target_lang, version, lang_captions, data.get("abstract") or {},
+                                 has_mini=bool(threads_text))
         (lang_folder / VERSION_FILES[version]).write_text(html, encoding="utf-8")
-    base_scipop = version_scipop(data, "popular", target_lang) or version_scipop(data, "simple", target_lang) or {}
-    if base_scipop.get("express_locked"):
-        base_scipop = version_scipop(data, "simple", target_lang) or base_scipop
-    threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
     if threads_text:
         mini_scipop = dict(base_scipop)
         mini_scipop["text"] = threads_text
