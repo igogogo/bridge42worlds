@@ -1,0 +1,698 @@
+{
+ "id": "guide",
+ "topic": "entropy",
+ "schema": "b42.guide/1",
+ "kind": "guide",
+ "ru": {
+  "title": "Как работать с этим материалом",
+  "subtitle": "Методичка для самостоятельного изучения",
+  "lead": "Энтропия — не «мера беспорядка», а счёт числа состояний. Отсюда становится понятно, почему время идёт в одну сторону, хотя законы механики этого не запрещают.",
+  "budget": {
+   "title": "Сколько это займёт",
+   "lead": "Тема рассчитана примерно на 3–4 часа вдумчивой работы. Это не «прочитать за вечер»: при быстром чтении материал не удерживается. Разумный ритм — один параграф за подход.",
+   "rows": [
+    {
+     "what": "Обзорная глава",
+     "time": "15–20 мин",
+     "note": "читается один раз, без формул — задаёт контекст"
+    },
+    {
+     "what": "Параграф 1 · Энтропия по Больцману",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 2 · Стрела времени",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 3 · Энтропия и информация",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Итоговая проверка",
+     "time": "15 мин",
+     "note": "вопросы на понимание, не на память"
+    }
+   ],
+   "note": "Если на параграф уходит вдвое больше — это нормально и даже хорошо. Плохо обратное: пробежать за двадцать минут и решить, что понятно."
+  },
+  "level": {
+   "title": "На кого рассчитан",
+   "text": [
+    "Нужна термодинамика. Пригодятся логарифм и умение считать число сочетаний.",
+    "Темы, на которые опирается этот материал: thermodynamics. Если они не пройдены, часть выводов будет держаться на честном слове.",
+    "Честно о границе: в этой теме до сих пор не решено — почему энтропия Вселенной была изначально столь мала."
+   ]
+  },
+  "howto": {
+   "title": "Как проходить параграф",
+   "lead": "Порядок блоков внутри параграфа не случаен — он повторяет естественный путь понимания: сначала образ, потом опыт, потом строгость, потом проверка. Рекомендуем не перескакивать.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Посмотрите на картинку и прочитайте вступление",
+     "how": "Две минуты. Задача — поймать образ, а не запомнить детали. Образ потом станет крючком, за который зацепится формула."
+    },
+    {
+     "n": "2",
+     "what": "Поиграйте со стендом ДО чтения вывода",
+     "how": "Обязательный шаг, самый недооценённый. Подвигайте ползунки, посмотрите, что растёт, а что падает. Попробуйте предсказать, что произойдёт, ПЕРЕД тем как двигать. Когда потом дойдёте до формулы, она опишет уже знакомое поведение — и запомнится вдвое легче."
+    },
+    {
+     "n": "3",
+     "what": "Прочитайте вывод формулы по шагам",
+     "how": "Каждый шаг снабжён схемой. Не идите дальше, пока текущий шаг непонятен: вывод устроен как лестница, пропустив ступеньку, дальше будете карабкаться. Если застряли — нажмите «спросить тьютора» прямо на этом разделе."
+    },
+    {
+     "n": "4",
+     "what": "Разберите константы",
+     "how": "Не заучивайте числа — поймите, что означает каждая единица измерения. Джоуль на кельвин и джоуль на моль-кельвин отличаются ровно на число Авогадро, и это видно прямо из записи. Мнемоники под каждой константой — для тех, кому всё-таки нужно запомнить цифру."
+    },
+    {
+     "n": "5",
+     "what": "Пройдите пример с числами вместе с текстом",
+     "how": "Не читайте решение глазами — считайте параллельно на бумаге. Разница огромна: при чтении кажется понятным всё, при счёте всплывают настоящие вопросы."
+    },
+    {
+     "n": "6",
+     "what": "Ответьте на вопросы",
+     "how": "Отвечайте до того, как посмотрите варианты, — сформулируйте мысль про себя. Вопросы качественные, считать почти не нужно: проверяется понимание, а не арифметика."
+    },
+    {
+     "n": "7",
+     "what": "Распечатайте или сохраните шпаргалку",
+     "how": "Одна карточка на параграф. Через неделю именно она вернёт материал в память за две минуты вместо получаса перечитывания."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Что делать, если застряли",
+   "items": [
+    {
+     "case": "Не понял шаг вывода",
+     "do": "Нажмите «не понимаю — подведи к идее» под ближайшим вопросом или «спросить тьютора» в разделе. Тьютор не назовёт ответ — он задаст встречный вопрос, который обычно и распутывает узел."
+    },
+    {
+     "case": "Формула кажется абстрактной",
+     "do": "Вернитесь к стенду и покрутите именно те величины, что стоят в формуле. Абстракция исчезает, когда видишь, как символ двигает стрелку прибора."
+    },
+    {
+     "case": "Не сходится размерность",
+     "do": "Это лучший сигнал, что где-то ошибка. Проверьте по разделу констант: единицы всегда подсказывают, что на что нужно умножить."
+    },
+    {
+     "case": "Всё понятно, но через день забылось",
+     "do": "Нормально. Сделайте домашний опыт из параграфа — физическое действие закрепляет память надёжнее любого повторения. И пройдите тест ещё раз через несколько дней."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Опыты, которые стоит проделать",
+   "lead": "Каждый занимает несколько минут и не требует ничего, кроме кухни. Это не украшение курса — именно они превращают прочитанное в понятое.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Резинка, которая греет губу",
+     "why": "Возьмите широкую канцелярскую резинку, прижмите её к губе — самому чувствительному участку кожи — и резко растяните."
+    },
+    {
+     "p": "1",
+     "what": "Двадцать монет",
+     "why": "Возьмите двадцать монет, разложите все орлом вверх и запишите."
+    },
+    {
+     "p": "2",
+     "what": "Перемешивание, которое обращается вспять",
+     "why": "Возьмите высокий стакан, вставьте в него банку поменьше, а зазор заполните густым мёдом или глицерином."
+    },
+    {
+     "p": "3",
+     "what": "Отгадай число за семь вопросов",
+     "why": "Попросите кого-нибудь загадать число от 1 до 100 и отгадайте его вопросами с ответом «да» или «нет»."
+    },
+    {
+     "p": "3",
+     "what": "Сожмите текст сами",
+     "why": "Возьмите любой текстовый файл и заархивируйте его."
+    }
+   ]
+  },
+  "next": {
+   "title": "Куда двигаться после темы",
+   "items": [
+    "Статистическая физика: как из хаоса частиц рождается точный закон.",
+    "Теория информации Шеннона — та же формула в другой области.",
+    "Открытые вопросы курса: стрела времени до сих пор не объяснена до конца."
+   ]
+  },
+  "library": {
+   "title": "Материалы по теме на сайте",
+   "lead": "Курс не изолирован: законы и учёные, упомянутые здесь, имеют собственные страницы в нашей базе — с формулами, связями и статьями, где этот закон работает на практике.",
+   "laws": [
+    {
+     "id": "second_law_of_thermodynamics",
+     "name": "Формула Больцмана",
+     "note": "разбирается в параграфе 1"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Ludwig_Boltzmann",
+     "name": "Ludwig Boltzmann"
+    }
+   ],
+   "tags": [
+    {
+     "id": "entropy",
+     "name": "entropy"
+    },
+    {
+     "id": "temperature",
+     "name": "temperature"
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "How to work with this material",
+  "subtitle": "Self-study guide",
+  "lead": "Entropy is not a 'measure of disorder' but a count of the number of states. From this it becomes clear why time moves in one direction, although the laws of mechanics do not forbid it.",
+  "budget": {
+   "title": "How long it will take",
+   "lead": "The topic is designed for approximately 3–4 hours of thoughtful work. It's not 'read in one evening': with fast reading the material does not stick. A reasonable pace is one section per sitting.",
+   "rows": [
+    {
+     "what": "Overview chapter",
+     "time": "15–20 min",
+     "note": "read once, without formulas — sets the context"
+    },
+    {
+     "what": "Section 1 · Boltzmann entropy",
+     "time": "60–80 min",
+     "note": "interactive, derivation of formula and knowledge check"
+    },
+    {
+     "what": "Section 2 · Arrow of time",
+     "time": "60–80 min",
+     "note": "interactive, derivation of formula and knowledge check"
+    },
+    {
+     "what": "Section 3 · Entropy and information",
+     "time": "60–80 min",
+     "note": "interactive, derivation of formula and knowledge check"
+    },
+    {
+     "what": "Final check",
+     "time": "15 min",
+     "note": "questions on understanding, not on memory"
+    }
+   ],
+   "note": "If a section takes twice as long — that's normal and even good. The opposite is bad: skim through in twenty minutes and think you understand."
+  },
+  "level": {
+   "title": "Target audience",
+   "text": [
+    "You need thermodynamics. Logarithm and ability to count combinations will be useful.",
+    "Topics on which this material relies: thermodynamics. If they have not been covered, some conclusions will be taken on faith.",
+    "Honestly about the frontier: in this topic it is still unsolved why the entropy of the Universe was initially so small."
+   ]
+  },
+  "howto": {
+   "title": "How to go through a section",
+   "lead": "The order of blocks within a section is not random — it follows the natural path of understanding: first an image, then experience, then rigor, then verification. We recommend not skipping steps.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Look at the picture and read the introduction",
+     "how": "Two minutes. The goal is to grasp the image, not to remember details. The image will later become a hook for the formula."
+    },
+    {
+     "n": "2",
+     "what": "Play with the interactive BEFORE reading the derivation",
+     "how": "Mandatory step, the most underestimated. Move the sliders, see what increases and what decreases. Try to predict what will happen BEFORE moving. When you later get to the formula, it will describe already familiar behavior — and will be remembered twice as easily."
+    },
+    {
+     "n": "3",
+     "what": "Read the formula derivation step by step",
+     "how": "Each step is accompanied by a diagram. Do not proceed until the current step is clear: the derivation is like a staircase, skipping a step, you will struggle later. If stuck, click 'ask the tutor' right on this section."
+    },
+    {
+     "n": "4",
+     "what": "Analyze the constants",
+     "how": "Don't memorize numbers — understand what each unit means. Joule per kelvin and joule per mole-kelvin differ exactly by Avogadro's number, and that is evident from the notation. Mnemonics under each constant are for those who still need to remember the number."
+    },
+    {
+     "n": "5",
+     "what": "Go through the numerical example with the text",
+     "how": "Don't read the solution with your eyes — calculate along on paper. The difference is huge: when reading, everything seems clear; when calculating, real questions arise."
+    },
+    {
+     "n": "6",
+     "what": "Answer the questions",
+     "how": "Answer before looking at the options — formulate the thought in your own mind. The questions are qualitative, almost no calculation needed: understanding is tested, not arithmetic."
+    },
+    {
+     "n": "7",
+     "what": "Print or save the cheat sheet",
+     "how": "One card per section. In a week, it will bring the material back to memory in two minutes instead of half an hour of rereading."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "What to do if you get stuck",
+   "items": [
+    {
+     "case": "I didn't understand a step in the derivation",
+     "do": "Click 'I don't understand — lead me to the idea' under the nearest question or 'ask the tutor' in the section. The tutor won't give the answer — he will ask a counterquestion that usually disentangles the knot."
+    },
+    {
+     "case": "The formula seems abstract",
+     "do": "Return to the interactive and adjust exactly the quantities that appear in the formula. Abstraction disappears when you see how a symbol moves a pointer on a gauge."
+    },
+    {
+     "case": "Units don't match",
+     "do": "This is the best signal that something is wrong. Check the constants section: units always hint what to multiply by what."
+    },
+    {
+     "case": "Everything is clear, but forgotten the next day",
+     "do": "That's normal. Do the home experiment from the section — physical action fixes memory more reliably than any repetition. And take the test again after a few days."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experiments worth trying",
+   "lead": "Each takes a few minutes and requires nothing but a kitchen. They are not decoration of the course — they turn what you've read into what you understand.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Rubber band that warms the lip",
+     "why": "Take a wide rubber band, press it to your lip — the most sensitive area of skin — and sharply stretch it."
+    },
+    {
+     "p": "1",
+     "what": "Twenty coins",
+     "why": "Take twenty coins, lay them all heads up and write it down."
+    },
+    {
+     "p": "2",
+     "what": "Mixing that reverses",
+     "why": "Take a tall glass, insert a smaller jar into it, and fill the gap with thick honey or glycerin."
+    },
+    {
+     "p": "3",
+     "what": "Guess the number in seven questions",
+     "why": "Ask someone to think of a number from 1 to 100 and guess it with yes/no questions."
+    },
+    {
+     "p": "3",
+     "what": "Compress text yourself",
+     "why": "Take any text file and archive it."
+    }
+   ]
+  },
+  "next": {
+   "title": "Where to go after this topic",
+   "items": [
+    "Statistical physics: how a precise law emerges from chaos of particles.",
+    "Shannon's information theory — the same formula in a different field.",
+    "Open questions of the course: the arrow of time is still not fully explained."
+   ]
+  },
+  "library": {
+   "title": "Topic Materials on the Site",
+   "lead": "The course is not isolated: the laws and scientists mentioned here have their own pages in our database — with formulas, relationships, and articles where each law is applied in practice.",
+   "laws": [
+    {
+     "id": "second_law_of_thermodynamics",
+     "name": "Boltzmann formula",
+     "note": "discussed in Section 1"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Ludwig_Boltzmann",
+     "name": "Ludwig Boltzmann"
+    }
+   ],
+   "tags": [
+    {
+     "id": "entropy",
+     "name": "entropy"
+    },
+    {
+     "id": "temperature",
+     "name": "temperature"
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Cómo trabajar con este material",
+  "subtitle": "Guía de estudio autodidacta",
+  "lead": "La entropía no es una «medida del desorden», sino un conteo del número de estados. De ahí se entiende por qué el tiempo va en una dirección, aunque las leyes de la mecánica no lo prohíban.",
+  "budget": {
+   "title": "Cuánto tiempo tomará",
+   "lead": "El tema está pensado para aproximadamente 3–4 horas de trabajo reflexivo. No es «leer en una noche»: con una lectura rápida el material no se retiene. El ritmo razonable es un párrafo por sesión.",
+   "rows": [
+    {
+     "what": "Capítulo de visión general",
+     "time": "15–20 min",
+     "note": "se lee una vez, sin fórmulas — establece el contexto"
+    },
+    {
+     "what": "Sección 1 · Entropía según Boltzmann",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Sección 2 · Flecha del tiempo",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Sección 3 · Entropía e información",
+     "time": "60–80 min",
+     "note": "simulación, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Evaluación final",
+     "time": "15 min",
+     "note": "preguntas de comprensión, no de memoria"
+    }
+   ],
+   "note": "Si en una sección se tarda el doble, es normal e incluso bueno. Lo malo es lo contrario: recorrerla en veinte minutos y creer que se entendió."
+  },
+  "level": {
+   "title": "A quién está dirigido",
+   "text": [
+    "Se necesita termodinámica. Serán útiles el logaritmo y la capacidad de contar combinaciones.",
+    "Temas en los que se basa este material: termodinámica. Si no se han estudiado, parte de las conclusiones se tomarán como un acto de fe.",
+    "Honestamente sobre el límite: en este tema todavía no se ha resuelto por qué la entropía del Universo era inicialmente tan baja."
+   ]
+  },
+  "howto": {
+   "title": "Cómo abordar una sección",
+   "lead": "El orden de los bloques dentro de una sección no es casual: sigue el camino natural de comprensión: primero imagen, luego experimento, luego rigor, luego verificación. Recomendamos no saltarse pasos.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Mire la imagen y lea la introducción",
+     "how": "Dos minutos. La meta es captar la imagen, no memorizar detalles. La imagen luego se convertirá en el gancho del que se agarrará la fórmula."
+    },
+    {
+     "n": "2",
+     "what": "Juegue con la simulación ANTES de leer la deducción",
+     "how": "Paso obligatorio, el más subestimado. Mueva los controles deslizantes, observe qué crece y qué disminuye. Intente predecir qué ocurrirá ANTES de moverlos. Cuando luego llegue a la fórmula, describirá un comportamiento ya familiar y se recordará el doble de fácil."
+    },
+    {
+     "n": "3",
+     "what": "Lea la deducción de la fórmula paso a paso",
+     "how": "Cada paso va acompañado de un esquema. No avance hasta que el paso actual esté claro: la deducción es como una escalera, si se salta un escalón, luego tendrá que trepar. Si se atasca, pulse «preguntar al tutor» directamente en esta sección."
+    },
+    {
+     "n": "4",
+     "what": "Analice las constantes",
+     "how": "No memorice números: entienda qué significa cada unidad de medida. Julio sobre kelvin y julio por mol-kelvin difieren exactamente en el número de Avogadro, y esto se ve directamente en la notación. Las reglas mnemotécnicas debajo de cada constante son para quienes necesitan recordar la cifra."
+    },
+    {
+     "n": "5",
+     "what": "Realice el ejemplo con números junto con el texto",
+     "how": "No lea la solución con la mirada: calcule paralelamente en papel. La diferencia es enorme: al leer todo parece claro, al calcular surgen las verdaderas preguntas."
+    },
+    {
+     "n": "6",
+     "what": "Responda las preguntas",
+     "how": "Responda antes de mirar las opciones: formule la idea para sí mismo. Las preguntas son cualitativas, casi no hay que calcular: se evalúa la comprensión, no la aritmética."
+    },
+    {
+     "n": "7",
+     "what": "Imprima o guarde la hoja de referencia",
+     "how": "Una tarjeta por sección. En una semana, será ella la que devuelva el material a la memoria en dos minutos en lugar de media hora de relectura."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Qué hacer si se atasca",
+   "items": [
+    {
+     "case": "No entendí un paso de la deducción",
+     "do": "Pulse «no entiendo — llévame a la idea» debajo de la pregunta más cercana o «preguntar al tutor» en la sección. El tutor no dará la respuesta: hará una pregunta inversa que normalmente desenreda el nudo."
+    },
+    {
+     "case": "La fórmula parece abstracta",
+     "do": "Vuelva a la simulación y manipule exactamente las magnitudes que aparecen en la fórmula. La abstracción desaparece cuando se ve cómo un símbolo mueve la aguja del instrumento."
+    },
+    {
+     "case": "No coincide la dimensión",
+     "do": "Es la mejor señal de que hay un error en alguna parte. Verifique en la sección de constantes: las unidades siempre indican qué multiplicar por qué."
+    },
+    {
+     "case": "Todo está claro, pero al día siguiente se olvidó",
+     "do": "Normal. Realice el experimento casero de la sección: la acción física fija la memoria más que cualquier repetición. Y vuelva a hacer el test unos días después."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experimentos que vale la pena realizar",
+   "lead": "Cada uno toma unos minutos y no requiere nada más que la cocina. No son un adorno del curso: son precisamente ellos los que convierten lo leído en comprendido.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Goma que calienta el labio",
+     "why": "Tome una goma elástica ancha de oficina, presiónela contra el labio —la zona más sensible de la piel— y estírela bruscamente."
+    },
+    {
+     "p": "1",
+     "what": "Veinte monedas",
+     "why": "Tome veinte monedas, colóquelas todas con la cara hacia arriba y anote."
+    },
+    {
+     "p": "2",
+     "what": "Mezcla que se invierte",
+     "why": "Tome un vaso alto, inserte en él un frasco más pequeño y llene el espacio con miel espesa o glicerina."
+    },
+    {
+     "p": "3",
+     "what": "Adivina el número en siete preguntas",
+     "why": "Pida a alguien que piense un número del 1 al 100 y adivínelo con preguntas de respuesta «sí» o «no»."
+    },
+    {
+     "p": "3",
+     "what": "Comprima el texto usted mismo",
+     "why": "Tome cualquier archivo de texto y comprímalo."
+    }
+   ]
+  },
+  "next": {
+   "title": "Hacia dónde avanzar después del tema",
+   "items": [
+    "Física estadística: cómo del caos de las partículas surge una ley precisa.",
+    "Teoría de la información de Shannon: la misma fórmula en otro campo.",
+    "Preguntas abiertas del curso: la flecha del tiempo aún no se ha explicado completamente."
+   ]
+  },
+  "library": {
+   "title": "Materiales sobre el tema en el sitio",
+   "lead": "El curso no está aislado: las leyes y científicos mencionados aquí tienen sus propias páginas en nuestra base de datos, con fórmulas, relaciones y artículos donde esta ley funciona en la práctica.",
+   "laws": [
+    {
+     "id": "second_law_of_thermodynamics",
+     "name": "Fórmula de Boltzmann",
+     "note": "se explica en el párrafo 1"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Ludwig_Boltzmann",
+     "name": "Ludwig Boltzmann"
+    }
+   ],
+   "tags": [
+    {
+     "id": "entropy",
+     "name": "entropy"
+    },
+    {
+     "id": "temperature",
+     "name": "temperature"
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "كيفية العمل مع هذه المادة",
+  "subtitle": "دليل للدراسة الذاتية",
+  "lead": "الإنتروبيا ليست 'مقياس الفوضى'، بل هي عدّ لعدد الحالات. ومن هنا يتضح لماذا يتجه الزمن في اتجاه واحد، رغم أن قوانين الميكانيكا لا تمنع ذلك.",
+  "budget": {
+   "title": "كم سيستغرق هذا",
+   "lead": "الموضوع يقدر بحوالي 3-4 ساعات من العمل المركز. ليس 'قراءة في المساء': فالقراءة السريعة لا تثبت المادة. الإيقاع المعقول هو فقرة واحدة في كل جلسة.",
+   "rows": [
+    {
+     "what": "فصل نظرة عامة",
+     "time": "15-20 دقيقة",
+     "note": "يقرأ مرة واحدة، بدون معادلات - يحدد السياق"
+    },
+    {
+     "what": "الفقرة 1 · إنتروبيا بولتزمان",
+     "time": "60-80 دقيقة",
+     "note": "العرض التفاعلي، استنتاج المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 2 · سهم الزمن",
+     "time": "60-80 دقيقة",
+     "note": "العرض التفاعلي، استنتاج المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 3 · الإنتروبيا والمعلومات",
+     "time": "60-80 دقيقة",
+     "note": "العرض التفاعلي، استنتاج المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الاختبار النهائي",
+     "time": "15 دقيقة",
+     "note": "أسئلة للفهم، وليس للحفظ"
+    }
+   ],
+   "note": "إذا استغرقت الفقرة ضعف الوقت، فهذا طبيعي وجيد. السيء هو العكس: أن تقرأها في عشرين دقيقة وتعتقد أنك فهمتها."
+  },
+  "level": {
+   "title": "لمن أعدت",
+   "text": [
+    "تحتاج إلى الديناميكا الحرارية. ستحتاج إلى اللوغاريتم ومعرفة حساب التوافيق.",
+    "الموضوعات التي يعتمد عليها هذا المادة: الديناميكا الحرارية. إذا لم تكن قد درستها، فبعض الاستنتاجات ستكون مبنية على الثقة فقط.",
+    "بصراحة عن الحدود: لم يتم حل هذه المسألة بعد - لماذا كانت إنتروبيا الكون صغيرة جداً في البداية."
+   ]
+  },
+  "howto": {
+   "title": "كيفية متابعة الفقرة",
+   "lead": "ترتيب الأقسام داخل الفقرة ليس عشوائياً - فهو يكرر المسار الطبيعي للفهم: أولاً الصورة، ثم التجربة، ثم الدقة، ثم الاختبار. نوصي بعدم التخطي.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "انظر إلى الصورة واقرأ المقدمة",
+     "how": "دقيقتان. المهمة هي التقاط الصورة، وليس حفظ التفاصيل. الصورة ستصبح لاحقاً خطافاً تعلق به المعادلة."
+    },
+    {
+     "n": "2",
+     "what": "العب بالعرض التفاعلي قبل قراءة الاستنتاج",
+     "how": "خطوة إلزامية، الأكثر استخفافاً. حرك المنزلقات، وانظر ما يزيد وما ينقص. حاول أن تتنبأ بما سيحدث قبل أن تحرك. عندما تصل لاحقاً إلى المعادلة، ستصف سلوكاً مألوفاً بالفعل - وستتذكرها بسهولة مضاعفة."
+    },
+    {
+     "n": "3",
+     "what": "اقرأ استنتاج المعادلة خطوة بخطوة",
+     "how": "كل خطوة مصحوبة برسم تخطيطي. لا تنتقل إلى الخطوة التالية قبل فهم الحالية: الاستنتاج مبني كسلم، إذا تخطيت درجة فستتسلق بصعوبة. إذا علقت، اضغط على 'اسأل المعلم' مباشرة في هذا القسم."
+    },
+    {
+     "n": "4",
+     "what": "حلل الثوابت",
+     "how": "لا تحفظ الأرقام - افهم معنى كل وحدة قياس. الجول لكل كلفن والجول لكل مول-كلفن يختلفان بعدد أفوجادرو بالضبط، وهذا واضح من الترميز. يوجد مساعدات تذكير تحت كل ثابت لمن يحتاج حقاً لحفظ الرقم."
+    },
+    {
+     "n": "5",
+     "what": "اتبع المثال بالأرقام مع النص",
+     "how": "لا تقرأ الحل بعينيك - احسب بالتوازي على الورق. الفرق كبير: عند القراءة يبدو كل شيء واضحاً، وعند الحساب تظهر الأسئلة الحقيقية."
+    },
+    {
+     "n": "6",
+     "what": "أجب على الأسئلة",
+     "how": "أجب قبل أن تنظر إلى الخيارات - صغ الفكرة في ذهنك. الأسئلة نوعية، لا تحتاج إلى حساب تقريباً: الهدف هو فهم الفكرة وليس الحساب."
+    },
+    {
+     "n": "7",
+     "what": "اطبع أو احفظ ورقة المساعدة",
+     "how": "بطاقة واحدة لكل فقرة. بعد أسبوع، ستعيد المادة إلى الذاكرة في دقيقتين بدلاً من نصف ساعة من إعادة القراءة."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "ماذا تفعل إذا علقت",
+   "items": [
+    {
+     "case": "لم تفهم خطوة الاستنتاج",
+     "do": "اضغط على 'لا أفهم - أوصلني إلى الفكرة' تحت أقرب سؤال أو 'اسأل المعلم' في القسم. المعلم لن يعطيك الإجابة - بل سيطرح سؤالاً مضاداً عادة ما يفك العقدة."
+    },
+    {
+     "case": "تبدو المعادلة مجردة",
+     "do": "عد إلى العرض التفاعلي وحرك بالضبط الكميات الموجودة في المعادلة. يختفي التجريد عندما ترى كيف يحرك الرمز مؤشر الجهاز."
+    },
+    {
+     "case": "لا تتطابق الأبعاد",
+     "do": "هذه أفضل إشارة على وجود خطأ ما. تحقق من قسم الثوابت: الوحدات تخبرك دائماً بما يجب ضربه بماذا."
+    },
+    {
+     "case": "كل شيء واضح، لكنه نُسي بعد يوم",
+     "do": "هذا طبيعي. قم بالتجربة المنزلية من الفقرة - الفعل البدني يثبت الذاكرة بشكل أكثر موثوقية من أي تكرار. وأعد الاختبار بعد بضعة أيام."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "تجارب تستحق القيام بها",
+   "lead": "كل تجربة تستغرق بضع دقائق ولا تحتاج إلى شيء سوى المطبخ. هذه ليست زينة للدورة - بل هي التي تحول المقروء إلى مفهوم.",
+   "items": [
+    {
+     "p": "1",
+     "what": "شريط مطاطي يسخن الشفة",
+     "why": "خذ شريطاً مطاطياً عريضاً من المكتب، اضغطه على شفتك - أكثر منطقة حساسة في الجلد - ثم اسحبه فجأة."
+    },
+    {
+     "p": "1",
+     "what": "عشرون عملة معدنية",
+     "why": "خذ عشرين عملة، ضعها جميعاً بحيث تكون الصورة لأعلى، وسجل."
+    },
+    {
+     "p": "2",
+     "what": "خلط يعود إلى الوراء",
+     "why": "خذ كأساً طويلاً، ضع فيه علبة أصغر، واملأ الفجوة بعسل كثيف أو جليسرين."
+    },
+    {
+     "p": "3",
+     "what": "خمن الرقم في سبعة أسئلة",
+     "why": "اطلب من شخص ما أن يختار رقمًا من 1 إلى 100 واخمنه بأسئلة إجابتها 'نعم' أو 'لا'."
+    },
+    {
+     "p": "3",
+     "what": "اضغط النص بنفسك",
+     "why": "خذ أي ملف نصي وقم بضغطه."
+    }
+   ]
+  },
+  "next": {
+   "title": "إلى أين تتجه بعد الموضوع",
+   "items": [
+    "الفيزياء الإحصائية: كيف يولد القانون الدقيق من فوضى الجسيمات.",
+    "نظرية المعلومات لشانون - نفس المعادلة في مجال آخر.",
+    "أسئلة مفتوحة في الدورة: سهم الزمن لم يفسر بالكامل بعد."
+   ]
+  },
+  "library": {
+   "title": "مواد ذات صلة على الموقع",
+   "lead": "الدورة ليست معزولة: القوانين والعلماء المذكورون هنا لديهم صفحات خاصة في قاعدتنا - مع الصيغ والروابط والمقالات التي توضح تطبيق هذا القانون عمليًا.",
+   "laws": [
+    {
+     "id": "second_law_of_thermodynamics",
+     "name": "صيغة بولتزمان",
+     "note": "تناقش في القسم 1"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Ludwig_Boltzmann",
+     "name": "لودفيغ بولتزمان"
+    }
+   ],
+   "tags": [
+    {
+     "id": "entropy",
+     "name": "إنتروبيا"
+    },
+    {
+     "id": "temperature",
+     "name": "درجة حرارة"
+    }
+   ]
+  }
+ }
+}

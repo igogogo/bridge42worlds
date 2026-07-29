@@ -2299,6 +2299,7 @@ html[data-theme="dark"] .an-stage {
      «гамбургер мелкий, сложно нажать» (юзер 2026-07-29). */
   .header-right #search-toggle-btn, .header-right .cal-btn, .header-right .share-btn,
   .header-right .fav-btn, .nav-more-btn, .theme-toggle, .nav-links a.nav-ic,
+  .nav-links a:has(> .ico-svg:only-child),
   .topnav-burger {
     min-height: 44px; min-width: 44px; padding: 0 8px;
     display: inline-flex; align-items: center; justify-content: center; }
@@ -2310,6 +2311,13 @@ html[data-theme="dark"] .an-stage {
 /* «Учебный курс» в строке — иконкой: восемь текстовых пунктов в 375 пикселей не помещаются. */
 .nav-links a.nav-ic { display: inline-flex; align-items: center; justify-content: center;
   padding: 0 6px; border-bottom: none; }
+/* Страховка: любая ссылка в меню, внутри которой только иконка, ведёт себя как .nav-ic —
+   даже если автор забыл класс. Так было со звездой «избранное»: она жила в тринадцати
+   шаблонах, класс проставили не везде, и на телефоне выходил тач-таргет 21x28 при
+   норме 44 (2026-07-29). Правило, живущее в дюжине мест, обязательно разойдётся —
+   поэтому размер задан по факту содержимого, а не по обещанию проставить класс. */
+.nav-links a:has(> .ico-svg:only-child) { display: inline-flex; align-items: center;
+  justify-content: center; padding: 0 6px; border-bottom: none; }
 .nav-links a.nav-ic .ico-svg { width: 17px; height: 17px; }
 
 /* Фильтры графа на телефоне: ряд «теги · законы · учёные · ± » переносился, и переключатель

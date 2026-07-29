@@ -235,6 +235,29 @@ def _publish_to_r2():
               f"успешно, но сайт не обновлён. Подробности: cloudflare/publish-failures.log")
 
 
+def _backup_to_r2():
+    """Резервная копия исходников (data.json, реестры, оригиналы обложек) в ПРИВАТНЫЙ бакет.
+    Тоже автоматически, по той же причине, что и публикация: то, что нужно помнить запускать
+    руками, однажды забудут. До 2026-07-29 копии не существовало нигде — единственный экземпляр
+    исходников всех статей лежал на одной машине (задача 00 в задачи/devops.md).
+    Дельта по md5: если ничего не менялось, отрабатывает вхолостую за секунды."""
+    if os.environ.get("SKIP_R2_BACKUP"):
+        return
+    script = Path(__file__).resolve().parent / "cloudflare" / "backup_r2.py"
+    if not script.exists():
+        return
+    print(f"\n{'=' * 60}\n▶️  резервная копия исходников\n{'=' * 60}")
+    child_env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+    result = subprocess.run([sys.executable, str(script)], env=child_env)
+    if result.returncode != 0:
+        cmd = sys.argv[1] if len(sys.argv) > 1 else "?"
+        msg = f"{datetime.now():%Y-%m-%d %H:%M} — backup_r2.py упал с кодом {result.returncode} после run.py {cmd}\n"
+        (Path(__file__).resolve().parent / "cloudflare" / "publish-failures.log").open(
+            "a", encoding="utf-8").write(msg)
+        print(f"⚠️  резервная копия не удалась (код {result.returncode}). "
+              f"Подробности: cloudflare/publish-failures.log")
+
+
 def cmd_tags(args):
     """Теги: список(и) → описания+граф → перевод → облака/страницы.
     По умолчанию — ДОГЕНЕРАЦИЯ недостающего (top-up, не трогает уже описанное).
@@ -881,3 +904,4 @@ if __name__ == "__main__":
     args = build_parser().parse_args()
     args.func(args)
     _publish_to_r2()
+    _backup_to_r2()

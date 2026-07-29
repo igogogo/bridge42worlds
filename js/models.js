@@ -46,7 +46,8 @@
     };
     var UNIT_SYM = { 'Па': 'Pa', 'м³': 'm³', 'атм': 'atm', 'л': 'L', 'бар': 'bar' };
     function pageLang() {
-        var l = global.B42_LANG || (global.document && document.documentElement.getAttribute('lang')) || 'ru';
+        var l = global.B42_LANG ||
+                (global.document && global.document.documentElement.getAttribute('lang')) || 'ru';
         return UNIT_I18N.si[l] ? l : 'ru';
     }
     /** Название системы и обозначение единицы на языке страницы. */
@@ -2186,10 +2187,78 @@
         };
     }
 
-    global.B42Models = { gas: gasModel, kettle: kettleModel, engine: engineModel,
-                         motion: motionModel, newton: newtonModel, collision: collisionModel,
-                         rotation: rotationModel, oscillator: oscillatorModel,
-                         resonance: resonanceModel, entropy: entropyModel,
-                         orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
-                         srt: srtModel, quantum: quantumModel, nucleus: nucleusModel };
+    // ── ЕДИНИЦЫ В ГОТОВОЙ СТРОКЕ ──────────────────────────────────
+    // Формулы и строка показателей написаны с кириллическими единицами — так их пишут в русских
+    // учебниках, и для русской версии это правильно. Английскому, испанскому и арабскому
+    // читателю там нужны международные обозначения.
+    //
+    // Подменяем НЕ в сотне литералов по всем моделям (легко пропустить и больно поддерживать),
+    // а один раз в готовой строке — на выходе из formula() и extras(). Заодно любая новая модель
+    // получает это даром.
+    //
+    // Токен считается единицей, только если он стоит отдельным словом: между пробелом, скобкой
+    // или закрывающим тегом с одной стороны и таким же разделителем с другой. Поэтому «м» внутри
+    // слова «максимум» не тронется, а « м/с²» — тронется.
+    var UNIT_TEXT = {
+        'м/с²': 'm/s²', 'кг·м/с': 'kg·m/s', 'рад/с': 'rad/s', 'рад/м': 'rad/m', 'км/с': 'km/s',
+        'м/с': 'm/s', 'Дж/К': 'J/K', 'кДж': 'kJ', 'МэВ': 'MeV', 'кэВ': 'keV', 'эВ': 'eV',
+        'Дж': 'J', 'Гц': 'Hz', 'кг': 'kg', 'см': 'cm', 'мм': 'mm', 'нм': 'nm', 'мкм': 'µm',
+        'Вт': 'W', 'Кл': 'C', 'Ом': 'Ω', 'Тл': 'T', 'бит': 'bit', 'моль': 'mol', 'рад': 'rad',
+        'м': 'm', 'с': 's', 'К': 'K', 'Н': 'N', 'В': 'V', 'А': 'A', 'г': 'g', 'л': 'L'
+    };
+    // Отдельные СЛОВА, оставшиеся в формулах. Их мало (проверено по всем 42 урокам: три штуки),
+    // поэтому держим здесь, а не разводим ещё один словарь. Если станет больше — переносить
+    // в i18n модели, там уже есть все четыре языка.
+    var WORD_TEXT = {
+        'слева':    { en: 'left',   es: 'a la izquierda', ar: 'يسار' },
+        'из':       { en: 'of',     es: 'de',             ar: 'من' },
+        'усиление': { en: 'gain',   es: 'ganancia',       ar: 'تضخيم' }
+    };
+    var WORD_RE = new RegExp(
+        '(^|[\\s(>\\u00A0;]|&nbsp;)(' +
+        Object.keys(WORD_TEXT).sort(function (a, b) { return b.length - a.length; }).join('|') +
+        ')(?=$|[\\s<)\\u00A0.,;:!?]|&nbsp;)', 'g');
+
+    var UNIT_RE = new RegExp(
+        '(^|[\\s(>\\u00A0;]|&nbsp;)(' +
+        Object.keys(UNIT_TEXT).sort(function (a, b) { return b.length - a.length; })
+              .map(function (u) { return u.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|') +
+        ')(?=$|[\\s<)\\u00A0.,;:!?]|&nbsp;)', 'g');
+
+    function localizeUnits(html) {
+        if (typeof html !== 'string' || pageLang() === 'ru') return html;
+        var lang = pageLang();
+        return html
+            .replace(UNIT_RE, function (_, pre, unit) { return pre + UNIT_TEXT[unit]; })
+            .replace(WORD_RE, function (m, pre, word) {
+                var w = WORD_TEXT[word][lang];
+                return w ? pre + w : m;
+            });
+    }
+
+    /** Оборачивает модель так, чтобы её текст выходил с единицами языка страницы. */
+    function withUnits(factory) {
+        return function () {
+            var m = factory.apply(null, arguments);
+            if (m && m.cfg && typeof m.cfg.formula === 'function') {
+                var f = m.cfg.formula;
+                m.cfg.formula = function () { return localizeUnits(f.apply(this, arguments)); };
+            }
+            if (m && typeof m.extras === 'function') {
+                var e = m.extras;
+                m.extras = function () { return localizeUnits(e.apply(this, arguments)); };
+            }
+            return m;
+        };
+    }
+
+    var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
+                      motion: motionModel, newton: newtonModel, collision: collisionModel,
+                      rotation: rotationModel, oscillator: oscillatorModel,
+                      resonance: resonanceModel, entropy: entropyModel,
+                      orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
+                      srt: srtModel, quantum: quantumModel, nucleus: nucleusModel };
+    global.B42Models = {};
+    Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
+    global.B42Models._localizeUnits = localizeUnits;   // для проверок
 })(window);

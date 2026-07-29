@@ -321,9 +321,10 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 <script src="/js/icons.js?v=2"></script>
 <script src="/js/explorable.js?v=5"></script>
 <script src="/js/stage-kit.js?v=4"></script>
-<script src="/js/models.js?v=28"></script>
+<script src="/js/models.js?v=30"></script>
 <script src="/js/tutor.js?v=3"></script>
-<script src="/js/figures.js?v=9"></script>
+<script src="/js/figures-i18n.js?v=1"></script>
+<script src="/js/figures.js?v=10"></script>
 <script>
 (function () {
   var LANG = window.B42_LANG || 'ru';
@@ -429,12 +430,37 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     function row(label, items, base, fmt) {
       if (!items || !items.length) return;
       var line = el('div', null, '<b>' + label + ':</b> ');
-      items.forEach(function (n) { var a = el('a', null, n.replace(/_/g, ' ')); a.href = base + fmt(n) + '.html'; line.appendChild(a); });
+      items.forEach(function (n, i) {
+        if (i) line.appendChild(document.createTextNode(' · '));   // иначе ссылки слипаются в одну
+        var a = el('a', null, n.replace(/_/g, ' '));
+        a.href = base + fmt(n) + '.html';
+        line.appendChild(a);
+      });
       wrap.appendChild(line);
     }
     row('Теги', ent.tags, '/lang/' + LANG + '/tags/', encodeURIComponent);
     row('Законы', ent.laws, '/lang/' + LANG + '/laws/', encodeURIComponent);
     row('Учёные', ent.scientists, '/lang/' + LANG + '/scientists/', function (n) { return n.replace(/\s+/g, '_'); });
+    // Свежие статьи архива по теме параграфа. Ради этого курс и связывают с сайтом: из урока
+    // видно живую науку, а не только учебник. Заголовок берём на языке страницы — он лежит
+    // рядом со ссылкой на всех четырёх языках.
+    var arts = ent.examples_from_articles;
+    if (arts && arts.length) {
+      var line = el('div', null, '<b>Статьи по теме:</b> ');
+      var shown = 0;
+      arts.forEach(function (a) {
+        if (!a.date) return;                 // без даты адрес в архиве не собрать
+        var t = a.title;
+        var name = (t && (typeof t === 'string' ? t : (t[LANG] || t.ru))) || a.id;
+        if (shown) line.appendChild(document.createTextNode(' · '));
+        var link = el('a', null, name);
+        link.href = '/lang/' + LANG + '/archive/' + a.date + '/' + a.id + '/';
+        link.title = a.why ? a.why.replace(/_/g, ' ') : a.id;
+        line.appendChild(link);
+        shown++;
+      });
+      if (shown) wrap.appendChild(line);
+    }
     return wrap;
   }
 
@@ -628,13 +654,16 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     ex.appendChild(t3);
     root.appendChild(ex);
 
-    // материалы по теме — реальные ссылки в нашу базу
-    var lib = el('section', 'k-sec');
+    // Материалы по теме — реальные ссылки в нашу базу.
+    // Раздел и любая его строка необязательны: часть уроков ещё не связана с базой сайта,
+    // и отсутствие связок не повод ронять всю страницу (так уже падала карточка-шпаргалка).
+    var lib = G.library ? el('section', 'k-sec') : null;
+    if (lib) {
     lib.appendChild(el('h2', null, G.library.title));
     lib.appendChild(el('p', null, G.library.lead));
     function linkRow(items, base, fmt, icon) {
       var t = el('table', 'k-const');
-      items.forEach(function (i) {
+      (items || []).forEach(function (i) {
         var tr = el('tr');
         var c = el('td', 'k-const-sym', icon); c.style.fontSize = '1rem';
         tr.appendChild(c);
@@ -645,14 +674,19 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       });
       return t;
     }
-    lib.appendChild(el('h3', null, ic('scale') + ' Законы'));
-    lib.appendChild(linkRow(G.library.laws, '/lang/' + LANG + '/laws/', function (x) { return x; }, '<i data-ic="scale"></i>'));
-    lib.appendChild(el('h3', null, ic('person') + ' Учёные'));
-    lib.appendChild(linkRow(G.library.scientists, '/lang/' + LANG + '/scientists/', function (x) { return x; }, '<i data-ic="person"></i>'));
-    lib.appendChild(el('h3', null, ic('tag') + ' Темы'));
-    lib.appendChild(linkRow(G.library.tags, '/lang/' + LANG + '/tags/', function (x) { return x; }, '<i data-ic="tag"></i>'));
-    lib.appendChild(el('div', 'k-note', G.library.note));
+    // подраздел показываем, только если в нём есть хоть одна ссылка
+    function libPart(items, head, icon, base) {
+      if (!items || !items.length) return;
+      lib.appendChild(el('h3', null, ic(icon) + ' ' + head));
+      lib.appendChild(linkRow(items, '/lang/' + LANG + base, function (x) { return x; },
+                              '<i data-ic="' + icon + '"></i>'));
+    }
+    libPart(G.library.laws, 'Законы', 'scale', '/laws/');
+    libPart(G.library.scientists, 'Учёные', 'person', '/scientists/');
+    libPart(G.library.tags, 'Темы', 'tag', '/tags/');
+    if (G.library.note) lib.appendChild(el('div', 'k-note', G.library.note));
     root.appendChild(lib);
+    }
 
     // куда дальше
     var nx = el('section', 'k-sec');
@@ -1046,7 +1080,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=1"></script>
+<script src="/js/course-i18n.js?v=4"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
