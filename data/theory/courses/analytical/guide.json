@@ -1,0 +1,726 @@
+{
+ "id": "guide",
+ "topic": "analytical",
+ "schema": "b42.guide/1",
+ "kind": "guide",
+ "ru": {
+  "title": "Как работать с этим материалом",
+  "subtitle": "Методичка для самостоятельного изучения",
+  "lead": "Эта тема отвечает на вопрос, который в остальном курсе оставался без ответа: откуда берутся сами законы. Оказывается, их не нужно запоминать списком — все они следуют из одного требования, а сохраняющиеся величины рождаются из симметрий мира.",
+  "budget": {
+   "title": "Сколько это займёт",
+   "lead": "Тема рассчитана примерно на 3–4 часа вдумчивой работы. Это не «прочитать за вечер»: при быстром чтении материал не удерживается. Разумный ритм — один параграф за подход.",
+   "rows": [
+    {
+     "what": "Обзорная глава",
+     "time": "15–20 мин",
+     "note": "читается один раз, без формул — задаёт контекст"
+    },
+    {
+     "what": "Параграф 1 · Принцип наименьшего действия",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 2 · Лагранжиан и симметрии",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 3 · Гамильтониан и фазовое пространство",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Итоговая проверка",
+     "time": "15 мин",
+     "note": "вопросы на понимание, не на память"
+    }
+   ],
+   "note": "Если на параграф уходит вдвое больше — это нормально и даже хорошо. Плохо обратное: пробежать за двадцать минут и решить, что понятно."
+  },
+  "level": {
+   "title": "На кого рассчитан",
+   "text": [
+    "Нужны механика и колебания. Понадобится понятие производной и готовность к тому, что искать придётся не число, а целую функцию.",
+    "Темы, на которые опирается этот материал: mechanics, oscillations. Если они не пройдены, часть выводов будет держаться на честном слове.",
+    "Честно о границе: в этой теме до сих пор не решено — почему природа вообще экономна — принцип работает, но объяснения самому принципу нет."
+   ]
+  },
+  "howto": {
+   "title": "Как проходить параграф",
+   "lead": "Порядок блоков внутри параграфа не случаен — он повторяет естественный путь понимания: сначала образ, потом опыт, потом строгость, потом проверка. Рекомендуем не перескакивать.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Посмотрите на картинку и прочитайте вступление",
+     "how": "Две минуты. Задача — поймать образ, а не запомнить детали. Образ потом станет крючком, за который зацепится формула."
+    },
+    {
+     "n": "2",
+     "what": "Поиграйте со стендом ДО чтения вывода",
+     "how": "Обязательный шаг, самый недооценённый. Подвигайте ползунки, посмотрите, что растёт, а что падает. Попробуйте предсказать, что произойдёт, ПЕРЕД тем как двигать. Когда потом дойдёте до формулы, она опишет уже знакомое поведение — и запомнится вдвое легче."
+    },
+    {
+     "n": "3",
+     "what": "Прочитайте вывод формулы по шагам",
+     "how": "Каждый шаг снабжён схемой. Не идите дальше, пока текущий шаг непонятен: вывод устроен как лестница, пропустив ступеньку, дальше будете карабкаться. Если застряли — нажмите «спросить тьютора» прямо на этом разделе."
+    },
+    {
+     "n": "4",
+     "what": "Разберите константы",
+     "how": "Не заучивайте числа — поймите, что означает каждая единица измерения. Джоуль на кельвин и джоуль на моль-кельвин отличаются ровно на число Авогадро, и это видно прямо из записи. Мнемоники под каждой константой — для тех, кому всё-таки нужно запомнить цифру."
+    },
+    {
+     "n": "5",
+     "what": "Пройдите пример с числами вместе с текстом",
+     "how": "Не читайте решение глазами — считайте параллельно на бумаге. Разница огромна: при чтении кажется понятным всё, при счёте всплывают настоящие вопросы."
+    },
+    {
+     "n": "6",
+     "what": "Ответьте на вопросы",
+     "how": "Отвечайте до того, как посмотрите варианты, — сформулируйте мысль про себя. Вопросы качественные, считать почти не нужно: проверяется понимание, а не арифметика."
+    },
+    {
+     "n": "7",
+     "what": "Распечатайте или сохраните шпаргалку",
+     "how": "Одна карточка на параграф. Через неделю именно она вернёт материал в память за две минуты вместо получаса перечитывания."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Что делать, если застряли",
+   "items": [
+    {
+     "case": "Не понял шаг вывода",
+     "do": "Нажмите «не понимаю — подведи к идее» под ближайшим вопросом или «спросить тьютора» в разделе. Тьютор не назовёт ответ — он задаст встречный вопрос, который обычно и распутывает узел."
+    },
+    {
+     "case": "Формула кажется абстрактной",
+     "do": "Вернитесь к стенду и покрутите именно те величины, что стоят в формуле. Абстракция исчезает, когда видишь, как символ двигает стрелку прибора."
+    },
+    {
+     "case": "Не сходится размерность",
+     "do": "Это лучший сигнал, что где-то ошибка. Проверьте по разделу констант: единицы всегда подсказывают, что на что нужно умножить."
+    },
+    {
+     "case": "Всё понятно, но через день забылось",
+     "do": "Нормально. Сделайте домашний опыт из параграфа — физическое действие закрепляет память надёжнее любого повторения. И пройдите тест ещё раз через несколько дней."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Опыты, которые стоит проделать",
+   "lead": "Каждый занимает несколько минут и не требует ничего, кроме кухни. Это не украшение курса — именно они превращают прочитанное в понятое.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Мыльная плёнка ищет минимум сама",
+     "why": "Согните из проволоки любой замкнутый контур и окуните в мыльный раствор."
+    },
+    {
+     "p": "2",
+     "what": "Вращающийся стул без стула",
+     "why": "Сядьте на офисное кресло, оттолкнитесь и раскрутитесь с вытянутыми руками, затем прижмите их к груди."
+    },
+    {
+     "p": "3",
+     "what": "Маятник из ключей и нитки",
+     "why": "Подвесьте связку ключей на нитке и качните."
+    }
+   ]
+  },
+  "next": {
+   "title": "Куда двигаться после темы",
+   "items": [
+    "Квантовая физика — там гамильтониан становится оператором, а уравнение Шрёдингера повторяет структуру уравнений Гамильтона.",
+    "Энтропия и информация: фазовое пространство оказывается тем самым местом, где считается число состояний.",
+    "«Механика» Ландау и Лифшица — весь этот курс изложен на сорока страницах."
+   ]
+  },
+  "library": {
+   "title": "Материалы по теме на сайте",
+   "lead": "Курс не изолирован: законы и учёные, упомянутые здесь, имеют собственные страницы в нашей базе — с формулами, связями и статьями, где этот закон работает на практике.",
+   "laws": [
+    {
+     "id": "law_of_conservation_of_energy",
+     "name": "Принцип наименьшего действия",
+     "note": "разбирается в параграфе 1"
+    },
+    {
+     "id": "law_of_conservation_of_momentum",
+     "name": "Теорема Нётер",
+     "note": "разбирается в параграфе 2"
+    },
+    {
+     "id": "law_of_conservation_of_angular_momentum",
+     "name": "law of conservation of angular momentum",
+     "note": "разбирается в параграфе 2"
+    }
+   ],
+   "scientists": [],
+   "tags": [
+    {
+     "id": "numerical_simulation",
+     "name": "numerical simulation"
+    },
+    {
+     "id": "quantum_field",
+     "name": "quantum field"
+    },
+    {
+     "id": "standard_model",
+     "name": "standard model"
+    },
+    {
+     "id": "entropy",
+     "name": "entropy"
+    },
+    {
+     "id": "quantum_information",
+     "name": "quantum information"
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "How to Work with This Material",
+  "subtitle": "A Self-Study Guide",
+  "lead": "This topic answers a question that remained unanswered in the rest of the course: where do the laws themselves come from. It turns out they don't need to be memorized as a list — they all follow from a single requirement, and conserved quantities arise from the symmetries of the world.",
+  "budget": {
+   "title": "How Long It Will Take",
+   "lead": "The topic is designed for about 3–4 hours of thoughtful work. It’s not something to read in one evening: with fast reading, the material doesn’t stick. A reasonable pace is one section per session.",
+   "rows": [
+    {
+     "what": "Overview chapter",
+     "time": "15–20 min",
+     "note": "read once, without formulas — sets the context"
+    },
+    {
+     "what": "Section 1 · Principle of Least Action",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Section 2 · Lagrangian and Symmetries",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Section 3 · Hamiltonian and Phase Space",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Final review",
+     "time": "15 min",
+     "note": "questions for understanding, not memorization"
+    }
+   ],
+   "note": "If it takes twice as long on a section, that’s normal and even good. The opposite is bad: breezing through in twenty minutes and thinking you understand."
+  },
+  "level": {
+   "title": "Who This Is For",
+   "text": [
+    "You need mechanics and oscillations. You’ll need the concept of a derivative and a willingness to search not for a number but for an entire function.",
+    "Topics this material relies on: mechanics, oscillations. If you haven’t covered them, some conclusions will be taken on faith.",
+    "Honestly about the limit: in this topic, it is still unresolved — why nature is economical at all; the principle works, but there is no explanation for the principle itself."
+   ]
+  },
+  "howto": {
+   "title": "How to Go Through a Section",
+   "lead": "The order of blocks within a section is not random — it follows the natural path of understanding: first an image, then experience, then rigor, then verification. We recommend not skipping.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Look at the picture and read the introduction",
+     "how": "Two minutes. The goal is to catch an image, not to remember details. The image will later become a hook for the formula."
+    },
+    {
+     "n": "2",
+     "what": "Play with the interactive demo BEFORE reading the derivation",
+     "how": "Mandatory step, the most underestimated. Move the sliders, see what increases and what decreases. Try to predict what will happen BEFORE moving. When you later get to the formula, it will describe already familiar behavior — and it will be twice as easy to remember."
+    },
+    {
+     "n": "3",
+     "what": "Read the derivation of the formula step by step",
+     "how": "Each step is accompanied by a diagram. Do not move on until the current step is clear: the derivation is structured like a staircase; if you skip a step, you'll be climbing later. If you get stuck, click 'ask the tutor' right on this section."
+    },
+    {
+     "n": "4",
+     "what": "Analyze the constants",
+     "how": "Don't memorize numbers — understand what each unit of measurement means. Joule per kelvin and joule per mole-kelvin differ exactly by Avogadro's number, and that's visible directly from the notation. Mnemonics under each constant are for those who still need to remember the number."
+    },
+    {
+     "n": "5",
+     "what": "Go through the numerical example along with the text",
+     "how": "Don't read the solution with your eyes — calculate along on paper. The difference is huge: when reading, everything seems clear; when calculating, real questions arise."
+    },
+    {
+     "n": "6",
+     "what": "Answer the questions",
+     "how": "Answer before looking at the options — formulate the idea in your mind. The questions are qualitative, almost no calculation needed: understanding is tested, not arithmetic."
+    },
+    {
+     "n": "7",
+     "what": "Print or save the cheat sheet",
+     "how": "One card per section. In a week, it will bring the material back to memory in two minutes instead of half an hour of rereading."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "What to Do If You Get Stuck",
+   "items": [
+    {
+     "case": "I didn't understand a step in the derivation",
+     "do": "Click 'I don't understand — lead me to the idea' under the nearest question or 'ask the tutor' in the section. The tutor won't give the answer — they'll ask a counter-question that usually untangles the knot."
+    },
+    {
+     "case": "The formula seems abstract",
+     "do": "Go back to the interactive demo and tweak exactly those quantities that appear in the formula. The abstraction disappears when you see how the symbol moves the instrument needle."
+    },
+    {
+     "case": "The dimensions don't match",
+     "do": "This is the best signal that there's an error somewhere. Check the constants section: units always hint what needs to be multiplied by what."
+    },
+    {
+     "case": "Everything is clear, but forgotten the next day",
+     "do": "That's normal. Do the home experiment from the section — physical action solidifies memory more reliably than any repetition. And retake the test after a few days."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experiments Worth Trying",
+   "lead": "Each takes a few minutes and requires nothing beyond the kitchen. They are not a decoration of the course — they are what turns reading into understanding.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Soap film finds the minimum by itself",
+     "why": "Bend any closed contour from wire and dip it into soap solution."
+    },
+    {
+     "p": "2",
+     "what": "Spinning chair without a chair",
+     "why": "Sit on an office chair, push off, and spin with arms extended, then pull them to your chest."
+    },
+    {
+     "p": "3",
+     "what": "Pendulum from keys and string",
+     "why": "Suspend a bunch of keys on a string and swing it."
+    }
+   ]
+  },
+  "next": {
+   "title": "Where to Go After the Topic",
+   "items": [
+    "Quantum physics — there the Hamiltonian becomes an operator, and the Schrödinger equation repeats the structure of Hamilton's equations.",
+    "Entropy and information: phase space turns out to be the very place where the number of states is counted.",
+    "Landau and Lifshitz's 'Mechanics' — the entire course is laid out in forty pages."
+   ]
+  },
+  "library": {
+   "title": "Related materials on the site",
+   "lead": "The course is not isolated: the laws and scientists mentioned here have their own pages in our database — with formulas, connections, and articles where this law is applied in practice.",
+   "laws": [
+    {
+     "id": "law_of_conservation_of_energy",
+     "name": "Principle of least action",
+     "note": "discussed in section 1"
+    },
+    {
+     "id": "law_of_conservation_of_momentum",
+     "name": "Noether's theorem",
+     "note": "discussed in section 2"
+    },
+    {
+     "id": "law_of_conservation_of_angular_momentum",
+     "name": "law of conservation of angular momentum",
+     "note": "discussed in section 2"
+    }
+   ],
+   "scientists": [],
+   "tags": [
+    {
+     "id": "numerical_simulation",
+     "name": "numerical simulation"
+    },
+    {
+     "id": "quantum_field",
+     "name": "quantum field"
+    },
+    {
+     "id": "standard_model",
+     "name": "standard model"
+    },
+    {
+     "id": "entropy",
+     "name": "entropy"
+    },
+    {
+     "id": "quantum_information",
+     "name": "quantum information"
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Cómo trabajar con este material",
+  "subtitle": "Guía para el estudio autónomo",
+  "lead": "Este tema responde a la pregunta que en el resto del curso quedó sin respuesta: de dónde vienen las propias leyes. Resulta que no hay que memorizarlas en una lista — todas se derivan de un único requisito, y las magnitudes conservadas nacen de las simetrías del mundo.",
+  "budget": {
+   "title": "Cuánto tiempo tomará",
+   "lead": "El tema está diseñado para aproximadamente 3–4 horas de trabajo reflexivo. No es para 'leer en una noche': con una lectura rápida el material no se retiene. Un ritmo razonable es un párrafo por sesión.",
+   "rows": [
+    {
+     "what": "Capítulo de visión general",
+     "time": "15–20 min",
+     "note": "se lee una vez, sin fórmulas — establece el contexto"
+    },
+    {
+     "what": "Sección 1 · Principio de mínima acción",
+     "time": "60–80 min",
+     "note": "stand, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Sección 2 · Lagrangiano y simetrías",
+     "time": "60–80 min",
+     "note": "stand, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Sección 3 · Hamiltoniano y espacio de fases",
+     "time": "60–80 min",
+     "note": "stand, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Comprobación final",
+     "time": "15 min",
+     "note": "preguntas de comprensión, no de memoria"
+    }
+   ],
+   "note": "Si un párrafo lleva el doble de tiempo, es normal e incluso bueno. Lo malo es lo contrario: repasarlo en veinte minutos y pensar que se ha entendido."
+  },
+  "level": {
+   "title": "A quién está dirigido",
+   "text": [
+    "Se necesitan mecánica y oscilaciones. Se requiere el concepto de derivada y la disposición a buscar no un número, sino una función completa.",
+    "Los temas en los que se basa este material son: mechanics, oscillations. Si no se han estudiado, parte de las conclusiones se apoyarán en la confianza.",
+    "Honestamente sobre el límite: en este tema aún no está resuelto — por qué la naturaleza es económica — el principio funciona, pero no hay explicación del principio en sí."
+   ]
+  },
+  "howto": {
+   "title": "Cómo abordar una sección",
+   "lead": "El orden de los bloques dentro de una sección no es aleatorio — repite el camino natural de comprensión: primero imagen, luego experiencia, luego rigor, luego comprobación. Recomendamos no saltarse pasos.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Mire la imagen y lea la introducción",
+     "how": "Dos minutos. La tarea es captar la imagen, no memorizar detalles. La imagen luego se convertirá en el gancho al que se aferrará la fórmula."
+    },
+    {
+     "n": "2",
+     "what": "Juegue con el stand ANTES de leer la deducción",
+     "how": "Paso obligatorio, el más infravalorado. Mueva los controles deslizantes, observe qué aumenta y qué disminuye. Intente predecir qué sucederá ANTES de moverlos. Cuando luego llegue a la fórmula, describirá un comportamiento ya familiar — y se recordará el doble de fácil."
+    },
+    {
+     "n": "3",
+     "what": "Lea la deducción de la fórmula paso a paso",
+     "how": "Cada paso está acompañado de un esquema. No continúe hasta que el paso actual sea claro: la deducción es como una escalera, si se salta un escalón, luego trepará con dificultad. Si se queda atascado, presione 'preguntar al tutor' directamente en esta sección."
+    },
+    {
+     "n": "4",
+     "what": "Analice las constantes",
+     "how": "No memorice números — entienda qué significa cada unidad de medida. Julio por kelvin y julio por mol-kelvin se diferencian exactamente en el número de Avogadro, y esto se ve directamente en la notación. Las mnemotecnias debajo de cada constante son para quienes aún necesitan recordar el valor."
+    },
+    {
+     "n": "5",
+     "what": "Revise el ejemplo numérico junto con el texto",
+     "how": "No lea la solución con los ojos — calcúlela en paralelo en papel. La diferencia es enorme: al leer parece que todo se entiende, al calcular surgen las verdaderas preguntas."
+    },
+    {
+     "n": "6",
+     "what": "Responda las preguntas",
+     "how": "Responda antes de mirar las opciones — formule la idea para sí mismo. Las preguntas son cualitativas, casi no requiere calcular: se evalúa la comprensión, no la aritmética."
+    },
+    {
+     "n": "7",
+     "what": "Imprima o guarde la chuleta",
+     "how": "Una tarjeta por sección. En una semana, precisamente ella devolverá el material a la memoria en dos minutos en lugar de media hora de relectura."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Qué hacer si se queda atascado",
+   "items": [
+    {
+     "case": "No entendí un paso de la deducción",
+     "do": "Presione 'no entiendo — guíame hacia la idea' debajo de la pregunta más cercana o 'preguntar al tutor' en la sección. El tutor no dará la respuesta — hará una pregunta de seguimiento que normalmente desenreda el nudo."
+    },
+    {
+     "case": "La fórmula parece abstracta",
+     "do": "Vuelva al stand y manipule precisamente las magnitudes que aparecen en la fórmula. La abstracción desaparece cuando se ve cómo el símbolo mueve la aguja del instrumento."
+    },
+    {
+     "case": "Las dimensiones no coinciden",
+     "do": "Esta es la mejor señal de que hay un error. Revise la sección de constantes: las unidades siempre indican qué multiplicar con qué."
+    },
+    {
+     "case": "Todo está claro, pero al día siguiente se olvida",
+     "do": "Es normal. Realice el experimento casero de la sección — la acción física consolida la memoria más que cualquier repetición. Y vuelva a hacer el examen unos días después."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experimentos que vale la pena realizar",
+   "lead": "Cada uno toma unos minutos y no requiere nada más que la cocina. No son un adorno del curso — son precisamente ellos los que convierten lo leído en comprendido.",
+   "items": [
+    {
+     "p": "1",
+     "what": "La película de jabón busca el mínimo por sí sola",
+     "why": "Doble un lazo cerrado de alambre y sumérjalo en solución jabonosa."
+    },
+    {
+     "p": "2",
+     "what": "Silla giratoria sin silla",
+     "why": "Siéntese en una silla de oficina, empújese y gire con los brazos extendidos, luego presiónelos contra el pecho."
+    },
+    {
+     "p": "3",
+     "what": "Péndulo de llaves y cuerda",
+     "why": "Cuelgue un llavero de una cuerda y balancéelo."
+    }
+   ]
+  },
+  "next": {
+   "title": "Hacia dónde avanzar después del tema",
+   "items": [
+    "Física cuántica — allí el hamiltoniano se convierte en operador, y la ecuación de Schrödinger repite la estructura de las ecuaciones de Hamilton.",
+    "Entropía e información: el espacio de fases resulta ser el lugar donde se cuenta el número de estados.",
+    "La 'Mecánica' de Landau y Lifshitz — todo este curso está expuesto en cuarenta páginas."
+   ]
+  },
+  "library": {
+   "title": "Materiales sobre el tema en el sitio web",
+   "lead": "El curso no está aislado: las leyes y científicos mencionados aquí tienen sus propias páginas en nuestra base de datos — con fórmulas, conexiones y artículos donde esta ley funciona en la práctica.",
+   "laws": [
+    {
+     "id": "law_of_conservation_of_energy",
+     "name": "Principio de mínima acción",
+     "note": "se explica en la sección 1"
+    },
+    {
+     "id": "law_of_conservation_of_momentum",
+     "name": "Teorema de Noether",
+     "note": "se explica en la sección 2"
+    },
+    {
+     "id": "law_of_conservation_of_angular_momentum",
+     "name": "ley de conservación del momento angular",
+     "note": "se explica en la sección 2"
+    }
+   ],
+   "scientists": [],
+   "tags": [
+    {
+     "id": "numerical_simulation",
+     "name": "simulación numérica"
+    },
+    {
+     "id": "quantum_field",
+     "name": "campo cuántico"
+    },
+    {
+     "id": "standard_model",
+     "name": "modelo estándar"
+    },
+    {
+     "id": "entropy",
+     "name": "entropía"
+    },
+    {
+     "id": "quantum_information",
+     "name": "información cuántica"
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "كيفية العمل مع هذه المادة",
+  "subtitle": "دليل للدراسة الذاتية",
+  "lead": "يجيب هذا الموضوع على سؤال ظل بلا إجابة في بقية الدورة: من أين تأتي القوانين نفسها. اتضح أنها لا تحتاج إلى حفظها كقائمة - فجميعها تتبع من مطلب واحد، وتنشأ الكميات المحفوظة من تماثلات العالم.",
+  "budget": {
+   "title": "كم يستغرق هذا",
+   "lead": "الموضوع مصمم لحوالي 3-4 ساعات من العمل المركز. إنها ليست 'قراءة في مساء واحد': فالقراءة السريعة لا تثبت المادة. الإيقاع المعقول هو فقرة واحدة في كل جلسة.",
+   "rows": [
+    {
+     "what": "فصل تمهيدي",
+     "time": "15-20 دقيقة",
+     "note": "يُقرأ مرة واحدة بدون صيغ - يحدد السياق"
+    },
+    {
+     "what": "الفقرة 1 · مبدأ الفعل الأصغر",
+     "time": "60-80 دقيقة",
+     "note": "محاكاة، اشتقاق الصيغة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 2 · لاغرانجيان والتماثلات",
+     "time": "60-80 دقيقة",
+     "note": "محاكاة، اشتقاق الصيغة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 3 · هاملتونيان وفضاء الطور",
+     "time": "60-80 دقيقة",
+     "note": "محاكاة، اشتقاق الصيغة واختبار المعرفة"
+    },
+    {
+     "what": "الاختبار النهائي",
+     "time": "15 دقيقة",
+     "note": "أسئلة للفهم، وليس للحفظ"
+    }
+   ],
+   "note": "إذا استغرقت الفقرة ضعف الوقت، فهذا طبيعي بل جيد. العكس سيء: قراءتها في عشرين دقيقة والاعتقاد بأنك فهمتها."
+  },
+  "level": {
+   "title": "لمن صُمم",
+   "text": [
+    "تحتاج إلى الميكانيكا والتذبذبات. ستحتاج إلى مفهوم المشتقة والاستعداد للبحث ليس عن رقم بل عن دالة كاملة.",
+    "الموضوعات التي يعتمد عليها هذا المحتوى: الميكانيكا، التذبذبات. إذا لم تكن قد درستها، فبعض الاستنتاجات ستكون مبنية على الثقة فقط.",
+    "بصراحة عن الحدود: لم يتم حل هذا الموضوع بعد - لماذا الطبيعة مقتصدة أصلاً؟ المبدأ يعمل، لكن لا يوجد تفسير للمبدأ نفسه."
+   ]
+  },
+  "howto": {
+   "title": "كيفية متابعة الفقرة",
+   "lead": "ترتيب الكتل داخل الفقرة ليس عشوائياً - إنه يكرر المسار الطبيعي للفهم: أولاً صورة، ثم تجربة، ثم دقة، ثم اختبار. نوصي بعدم القفز.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "انظر إلى الصورة واقرأ المقدمة",
+     "how": "دقيقتان. المهمة هي التقاط الصورة، وليس حفظ التفاصيل. ستكون الصورة لاحقاً الخطاف الذي تعلق عليه الصيغة."
+    },
+    {
+     "n": "2",
+     "what": "تفاعل مع المحاكاة قبل قراءة الاشتقاق",
+     "how": "خطوة إلزامية، وهي الأكثر استهانة بها. حرك أشرطة التمرير، وانظر ما يزيد وما ينقص. حاول توقع ما سيحدث قبل أن تحرك. عندما تصل لاحقاً إلى الصيغة، ستصف سلوكاً مألوفاً بالفعل - وستتذكرها بسهولة مضاعفة."
+    },
+    {
+     "n": "3",
+     "what": "اقرأ اشتقاق الصيغة خطوة بخطوة",
+     "how": "كل خطوة مصحوبة برسم تخطيطي. لا تتقدم حتى تفهم الخطوة الحالية: الاشتقاق مبني كسلم، إذا فاتتك درجة ستتسلق بصعوبة. إذا علقت، اضغط 'اسأل المدرس' مباشرة في هذا القسم."
+    },
+    {
+     "n": "4",
+     "what": "ادرس الثوابت",
+     "how": "لا تحفظ الأرقام - افهم ما تعنيه كل وحدة قياس. جول لكل كلفن وجول لكل مول-كلفن يختلفان بعدد أفوجادرو، وهذا واضح من الترميز. وسائل التذكر تحت كل ثابت - لمن يحتاج حقاً لحفظ الرقم."
+    },
+    {
+     "n": "5",
+     "what": "تابع المثال بالأرقام مع النص",
+     "how": "لا تقرأ الحل بعينيك - احسب بالتوازي على الورق. الفرق كبير: عند القراءة يبدو كل شيء واضحاً، وعند الحساب تظهر الأسئلة الحقيقية."
+    },
+    {
+     "n": "6",
+     "what": "أجب على الأسئلة",
+     "how": "أجب قبل أن تنظر إلى الخيارات - صغ الفكرة لنفسك. الأسئلة نوعية، لا تحتاج عادةً إلى حساب: يُختبر الفهم وليس الحساب."
+    },
+    {
+     "n": "7",
+     "what": "اطبع أو احفظ ورقة المراجعة",
+     "how": "بطاقة واحدة لكل فقرة. بعد أسبوع، ستعيد المادة إلى ذاكرتك في دقيقتين بدلاً من نصف ساعة من إعادة القراءة."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "ماذا تفعل إذا علقت",
+   "items": [
+    {
+     "case": "لم أفهم خطوة في الاشتقاق",
+     "do": "اضغط 'لا أفهم - أوصلني إلى الفكرة' تحت أقرب سؤال أو 'اسأل المدرس' في القسم. المدرس لن يخبرك بالإجابة - بل سيطرح سؤالاً مضاداً عادةً ما يحل العقدة."
+    },
+    {
+     "case": "الصيغة تبدو مجردة",
+     "do": "عد إلى المحاكاة وحرك بالضبط الكميات الموجودة في الصيغة. يختفي التجريد عندما ترى كيف يحرك الرمز مؤشر الجهاز."
+    },
+    {
+     "case": "الأبعاد لا تتطابق",
+     "do": "هذه أفضل إشارة على وجود خطأ ما. تحقق من قسم الثوابت: الوحدات دائماً تخبرك بما يجب ضربه بماذا."
+    },
+    {
+     "case": "كل شيء واضح لكنه نُسي بعد يوم",
+     "do": "هذا طبيعي. قم بالتجربة المنزلية من الفقرة - العمل الجسدي يثبت الذاكرة أكثر من أي تكرار. وأعد الاختبار بعد بضعة أيام."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "تجارب تستحق القيام بها",
+   "lead": "كل منها يستغرق بضع دقائق ولا يتطلب سوى المطبخ. إنها ليست زينة للدورة - بل هي التي تحول المقروء إلى مفهوم.",
+   "items": [
+    {
+     "p": "1",
+     "what": "غشاء الصابون يبحث عن الأصغر بنفسه",
+     "why": "اثن سلكاً إلى أي شكل مغلق واغمسه في محلول صابون."
+    },
+    {
+     "p": "2",
+     "what": "كرسي دوار بدون كرسي",
+     "why": "اجلس على كرسي مكتب، ادفع واستدر وأذرعك ممدودة، ثم اضغطها إلى صدرك."
+    },
+    {
+     "p": "3",
+     "what": "بندول من مفاتيح وخيط",
+     "why": "علق مجموعة مفاتيح على خيط وأرجحها."
+    }
+   ]
+  },
+  "next": {
+   "title": "إلى أين تتجه بعد الموضوع",
+   "items": [
+    "الفيزياء الكمومية - حيث يصبح الهاملتونيان مؤثراً، وتكرر معادلة شرودنغر بنية معادلات هاملتون.",
+    "الإنتروبيا والمعلومات: فضاء الطور هو المكان الذي يُحسب فيه عدد الحالات.",
+    "كتاب 'الميكانيكا' لانداو وليفشيتز - هذه الدورة كلها معروضة في أربعين صفحة."
+   ]
+  },
+  "library": {
+   "title": "مواد حول الموضوع على الموقع",
+   "lead": "الدورة ليست معزولة: القوانين والعلماء المذكورون هنا لديهم صفحات خاصة في قاعدة بياناتنا - مع الصيغ والروابط والمقالات حيث يعمل هذا القانون عملياً.",
+   "laws": [
+    {
+     "id": "law_of_conservation_of_energy",
+     "name": "مبدأ الفعل الأصغر",
+     "note": "يُناقش في الفقرة 1"
+    },
+    {
+     "id": "law_of_conservation_of_momentum",
+     "name": "نظرية نويثر",
+     "note": "يُناقش في الفقرة 2"
+    },
+    {
+     "id": "law_of_conservation_of_angular_momentum",
+     "name": "قانون حفظ الزخم الزاوي",
+     "note": "يُناقش في الفقرة 2"
+    }
+   ],
+   "scientists": [],
+   "tags": [
+    {
+     "id": "numerical_simulation",
+     "name": "محاكاة عددية"
+    },
+    {
+     "id": "quantum_field",
+     "name": "حقل كمي"
+    },
+    {
+     "id": "standard_model",
+     "name": "النموذج المعياري"
+    },
+    {
+     "id": "entropy",
+     "name": "إنتروبيا"
+    },
+    {
+     "id": "quantum_information",
+     "name": "المعلومات الكمومية"
+    }
+   ]
+  }
+ }
+}

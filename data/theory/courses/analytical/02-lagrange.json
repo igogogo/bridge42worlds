@@ -3,7 +3,51 @@
  "topic": "analytical",
  "schema": "b42.lesson/1",
  "model": "collision",
- "entities": {},
+ "entities": {
+  "tags": [
+   "standard_model",
+   "quantum_field"
+  ],
+  "laws": [
+   "law_of_conservation_of_momentum",
+   "law_of_conservation_of_angular_momentum"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2607.14529",
+    "date": "2026-07-16",
+    "title": {
+     "ru": "Сильно смешанные миры: инфляция как космический коллайдер",
+     "en": "Strongly Mixed Worlds: Inflation as a Cosmic Collider",
+     "es": "Mundos fuertemente mezclados: la inflación como colisionador cósmico",
+     "ar": "عوالم مختلطة بقوة: التضخم كمصادم كوني"
+    },
+    "why": "quantum_field, standard_model"
+   },
+   {
+    "id": "2607.11589",
+    "date": "2026-07-13",
+    "title": {
+     "ru": "Лазерный вихрь рождает аксионы: когда свет исчезает в воздухе",
+     "en": "Laser Vortex Spawns Axions: When Light Vanishes in Air",
+     "es": "El vórtice láser engendra axiones: cuando la luz desaparece en el aire",
+     "ar": "دوامة الليزر تُولّد الأكسيونات: عندما يختفي الضوء في الهواء"
+    },
+    "why": "quantum_field, standard_model"
+   },
+   {
+    "id": "2607.10607",
+    "date": "2026-07-12",
+    "title": {
+     "ru": "Космический колокол: единый пик рождает тёмную материю и гравитационные волны",
+     "en": "The Cosmic Bell: One Peak Gives Birth to Dark Matter and Gravitational Waves",
+     "es": "Campana cósmica: un único pico genera materia oscura y ondas gravitacionales",
+     "ar": "الجرس الكوني: ذروة واحدة تلد المادة المظلمة والموجات الثقالية"
+    },
+    "why": "quantum_field, standard_model"
+   }
+  ]
+ },
  "ru": {
   "title": "Лагранжиан и симметрии",
   "subtitle": "Откуда на самом деле берутся законы сохранения",
@@ -18,15 +62,43 @@
    "latex": "L = K - U, \\qquad \\frac{\\partial L}{\\partial q} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
    "alsoKnown": "Симметрия рождает закон сохранения",
    "authors": [
-    { "who": "Эмми Нётер", "year": "1918", "what": "доказала общую связь между симметриями и сохраняющимися величинами" },
-    { "who": "Давид Гильберт", "year": "1915", "what": "поставил задачу, приведшую к теореме, и добился приглашения Нётер в Гёттинген" }
+    {
+     "who": "Эмми Нётер",
+     "year": "1918",
+     "what": "доказала общую связь между симметриями и сохраняющимися величинами"
+    },
+    {
+     "who": "Давид Гильберт",
+     "year": "1915",
+     "what": "поставил задачу, приведшую к теореме, и добился приглашения Нётер в Гёттинген"
+    }
    ],
    "story": "Нётер не имела права преподавать: женщин в университет не брали, и первые годы она читала лекции под чужим именем. Гильберт возражал коллегам: «Здесь университет, а не баня». Теорема, которую она доказала, сегодня лежит в основании всей теоретической физики — от механики до Стандартной модели.",
    "symbols": [
-    { "sym": "L", "latex": "L", "what": "лагранжиан, разность кинетической и потенциальной энергии", "unit": "Дж" },
-    { "sym": "q", "latex": "q", "what": "обобщённая координата — не обязательно расстояние, годится и угол", "unit": "любая" },
-    { "sym": "q̇", "latex": "\\dot{q}", "what": "скорость изменения этой координаты", "unit": "любая/с" },
-    { "sym": "∂L/∂q̇", "latex": "\\partial L / \\partial \\dot{q}", "what": "обобщённый импульс — то, что сохраняется", "unit": "зависит от q" }
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "лагранжиан, разность кинетической и потенциальной энергии",
+     "unit": "Дж"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "обобщённая координата — не обязательно расстояние, годится и угол",
+     "unit": "любая"
+    },
+    {
+     "sym": "q̇",
+     "latex": "\\dot{q}",
+     "what": "скорость изменения этой координаты",
+     "unit": "любая/с"
+    },
+    {
+     "sym": "∂L/∂q̇",
+     "latex": "\\partial L / \\partial \\dot{q}",
+     "what": "обобщённый импульс — то, что сохраняется",
+     "unit": "зависит от q"
+    }
    ]
   },
   "derivation": {
@@ -86,9 +158,21 @@
    "given": "Тело $m_1 = 4$ кг движется со скоростью $3$ м/с и слипается с покоящимся телом $m_2 = 2$ кг.",
    "law": "$p = m_1 v_1 + m_2 v_2 = \\text{const}$",
    "solution": [
-    { "text": "Импульс до удара: движется только первое тело.", "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{кг·м/с}", "num": "" },
-    { "text": "После удара тела движутся вместе общей массой 6 кг.", "latex": "u = \\frac{12}{6} = 2\\ \\text{м/с}", "num": "" },
-    { "text": "Сравним энергии до и после.", "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{Дж}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{Дж}", "num": "" }
+    {
+     "text": "Импульс до удара: движется только первое тело.",
+     "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{кг·м/с}",
+     "num": ""
+    },
+    {
+     "text": "После удара тела движутся вместе общей массой 6 кг.",
+     "latex": "u = \\frac{12}{6} = 2\\ \\text{м/с}",
+     "num": ""
+    },
+    {
+     "text": "Сравним энергии до и после.",
+     "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{Дж}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{Дж}",
+     "num": ""
+    }
    ],
    "answer": "Импульс сохранился полностью, энергия упала с 18 до 12 Дж — треть ушла в тепло и деформацию.",
    "sanity": "Проверка на здравый смысл: почему повезло именно импульсу? Потому что однородность пространства при ударе никуда не делась, а вот механическая энергия перешла в тепло — то есть в другую форму, за которой мы в этой задаче не следим."
@@ -97,18 +181,45 @@
    "title": "Величины этого параграфа",
    "lead": "Здесь нет ни одной мировой константы: теорема Нётер говорит о структуре законов, а не о числах.",
    "items": [
-    { "sym": "L", "latex": "L = K - U", "name": "Лагранжиан", "value": "Дж", "why": "функция, из которой выводится всё движение системы" },
-    { "sym": "p", "latex": "p = \\partial L/\\partial \\dot{x}", "name": "Обобщённый импульс", "value": "кг·м/с", "why": "для свободного тела совпадает с обычным $mv$, для вращения — с моментом импульса" },
-    { "sym": "q", "latex": "q", "name": "Обобщённая координата", "value": "любая", "why": "длина, угол, объём — что удобнее для описания системы" }
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Лагранжиан",
+     "value": "Дж",
+     "why": "функция, из которой выводится всё движение системы"
+    },
+    {
+     "sym": "p",
+     "latex": "p = \\partial L/\\partial \\dot{x}",
+     "name": "Обобщённый импульс",
+     "value": "кг·м/с",
+     "why": "для свободного тела совпадает с обычным $mv$, для вращения — с моментом импульса"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "name": "Обобщённая координата",
+     "value": "любая",
+     "why": "длина, угол, объём — что удобнее для описания системы"
+    }
    ]
   },
   "synthesis": {
    "title": "Где это работает",
    "lead": "Теорема Нётер — не украшение курса, а рабочий инструмент современной физики.",
    "items": [
-    { "h": "Физика частиц", "text": "Сохранение электрического заряда следует из симметрии, которую невозможно увидеть глазами: она касается фазы волновой функции. Заряд сохраняется потому, что мир не замечает сдвига этой фазы." },
-    { "h": "Космология", "text": "Расширяющаяся Вселенная не симметрична относительно сдвига во времени — и энергия в ней, строго говоря, не сохраняется. Это не парадокс, а прямое следствие теоремы." },
-    { "h": "Инженерия", "text": "Если в задаче есть симметрия, ищите сохраняющуюся величину: она сократит расчёт на порядок. Так считают орбиты спутников и колебания конструкций." }
+    {
+     "h": "Физика частиц",
+     "text": "Сохранение электрического заряда следует из симметрии, которую невозможно увидеть глазами: она касается фазы волновой функции. Заряд сохраняется потому, что мир не замечает сдвига этой фазы."
+    },
+    {
+     "h": "Космология",
+     "text": "Расширяющаяся Вселенная не симметрична относительно сдвига во времени — и энергия в ней, строго говоря, не сохраняется. Это не парадокс, а прямое следствие теоремы."
+    },
+    {
+     "h": "Инженерия",
+     "text": "Если в задаче есть симметрия, ищите сохраняющуюся величину: она сократит расчёт на порядок. Так считают орбиты спутников и колебания конструкций."
+    }
    ]
   },
   "curiosities": {
@@ -161,10 +272,26 @@
   "memo": {
    "essence": "Каждой непрерывной симметрии отвечает своя сохраняющаяся величина. Однородность пространства даёт импульс, однородность времени — энергию, изотропность — момент импульса. Законы сохранения не постулируются, а выводятся.",
    "keyIdeas": [
-    { "icon": "formula", "title": "Если лагранжиан не зависит от координаты", "text": "Если лагранжиан не зависит от координаты, соответствующий обобщённый импульс сохраняется" },
-    { "icon": "fact", "title": "Три симметрии — три закона", "text": "Три симметрии — три закона: где, когда, куда повёрнуто" },
-    { "icon": "edge", "title": "Нужна непрерывная симметрия", "text": "Нужна непрерывная симметрия: зеркальное отражение сохраняющейся величины не даёт" },
-    { "icon": "estimate", "title": "Координатой может быть угол", "text": "Координатой может быть угол — тогда сохраняется момент импульса" }
+    {
+     "icon": "formula",
+     "title": "Если лагранжиан не зависит от координаты",
+     "text": "Если лагранжиан не зависит от координаты, соответствующий обобщённый импульс сохраняется"
+    },
+    {
+     "icon": "fact",
+     "title": "Три симметрии — три закона",
+     "text": "Три симметрии — три закона: где, когда, куда повёрнуто"
+    },
+    {
+     "icon": "edge",
+     "title": "Нужна непрерывная симметрия",
+     "text": "Нужна непрерывная симметрия: зеркальное отражение сохраняющейся величины не даёт"
+    },
+    {
+     "icon": "estimate",
+     "title": "Координатой может быть угол",
+     "text": "Координатой может быть угол — тогда сохраняется момент импульса"
+    }
    ],
    "where": "Физика частиц (сохранение заряда из фазовой симметрии), космология (энергия не сохраняется в расширяющейся Вселенной), расчёт орбит и колебаний, любая задача, где есть симметрия.",
    "watchOut": "Частая ошибка — считать сохранение энергии абсолютным законом. Оно следует из независимости законов от времени; там, где эта независимость нарушена, вывод не работает."
@@ -200,7 +327,15 @@
     "id": "n3",
     "type": "free",
     "q": "Своими словами: что означает фраза «лагранжиан не зависит от координаты» и почему из неё что-то следует?",
-    "keywords": ["сдвиг", "не меня", "симметри", "однородн", "производн", "ноль", "сохран"],
+    "keywords": [
+     "сдвиг",
+     "не меня",
+     "симметри",
+     "однородн",
+     "производн",
+     "ноль",
+     "сохран"
+    ],
     "why": "Это значит, что сдвиг системы ничего не меняет. Тогда правая часть уравнения движения обращается в ноль, а величина под производной по времени остаётся постоянной."
    },
    {
@@ -211,6 +346,909 @@
     "unit": "рад/с",
     "tolerance": 1.5,
     "why": "Момент импульса $I\\omega$ сохраняется: $4\\cdot2 = 1\\cdot\\omega$, значит $\\omega = 8$ рад/с."
+   }
+  ]
+ },
+ "en": {
+  "title": "Lagrangian and Symmetries",
+  "subtitle": "Where conservation laws actually come from",
+  "intro": [
+   "Conservation laws seem like a gift: momentum is conserved, energy is conserved, angular momentum is conserved. Why exactly these three quantities and not some others? In the school curriculum there is no answer — they are simply tested by experiment and memorized.",
+   "The answer was given by Emmy Noether in 1918, and it turned out to be unexpectedly simple. What is conserved is not what nature cherishes, but what it does not notice a shift in. If the result of an experiment does not depend on where you perform it, momentum is conserved. If on when, energy. If on rotating the setup, angular momentum.",
+   "This turns the list of laws into one idea: each symmetry has its own conserved quantity. And conversely — if something is conserved, look for the symmetry that is responsible for it."
+  ],
+  "standNote": "On the stand — a collision of two bodies. Change masses and velocities and watch the momentum line below the scene: it remains the same before and after the impact for any settings. Energy can be lost in the process. Ask yourself why momentum deserves such a privilege — the answer will be in the conclusion.",
+  "formula": {
+   "name": "Noether's theorem",
+   "latex": "L = K - U, \\qquad \\frac{\\partial L}{\\partial q} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+   "alsoKnown": "Symmetry gives birth to conservation law",
+   "authors": [
+    {
+     "who": "Emmy Noether",
+     "year": "1918",
+     "what": "proved the general connection between symmetries and conserved quantities"
+    },
+    {
+     "who": "David Hilbert",
+     "year": "1915",
+     "what": "posed the problem that led to the theorem and secured Noether's invitation to Göttingen"
+    }
+   ],
+   "story": "Noether was not allowed to teach: women were not accepted at the university, and in the early years she lectured under someone else's name. Hilbert objected to colleagues: 'This is a university, not a bathhouse.' The theorem she proved today lies at the foundation of all theoretical physics — from mechanics to the Standard Model.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "Lagrangian, difference of kinetic and potential energy",
+     "unit": "J"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "generalized coordinate — not necessarily distance, an angle works too",
+     "unit": "any"
+    },
+    {
+     "sym": "q̇",
+     "latex": "\\dot{q}",
+     "what": "rate of change of this coordinate",
+     "unit": "any/s"
+    },
+    {
+     "sym": "∂L/∂q̇",
+     "latex": "\\partial L / \\partial \\dot{q}",
+     "what": "generalized momentum — the conserved quantity",
+     "unit": "depends on q"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "How symmetry turns into conservation",
+   "lead": "The reasoning is short if you are not afraid of the derivative with respect to a function.",
+   "steps": [
+    {
+     "text": "Take the equation we obtained in the previous section from the principle of least action. It connects two quantities: how the Lagrangian changes with a coordinate shift and how it changes with a change in velocity.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "action",
+     "figCaption": "Equation of motion in the form resulting from variation of action"
+    },
+    {
+     "text": "Now suppose the system is symmetric with respect to a coordinate shift: move the setup by a meter — nothing changed. In the language of formulas, this means the Lagrangian does not depend on $q$ at all, so the right-hand side is zero.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "Each symmetry corresponds to its own conserved quantity"
+    },
+    {
+     "text": "But if the time derivative of something is zero, then that something does not change over time. We have obtained a conservation law without postulating it.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "momentum",
+     "figCaption": "Conserved quantity — generalized momentum"
+    },
+    {
+     "text": "Let's check with a simple case. For a free body, the Lagrangian is only kinetic energy. The derivative with respect to velocity gives the familiar momentum: conservation of momentum turns out to be a consequence of the homogeneity of space.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "Collision: momentum before and after is the same because space is homogeneous"
+    }
+   ],
+   "plate": "\\text{symmetry} \\;\\longrightarrow\\; \\text{conservation law}",
+   "plateCap": "Homogeneity of space gives momentum, homogeneity of time gives energy, isotropy gives angular momentum",
+   "note": "The theorem requires continuous symmetry: the shift can be made arbitrarily small. Discrete symmetries — for example, mirror reflection — do not give a conserved quantity in this sense, although they impose strong constraints on physics."
+  },
+  "math": {
+   "title": "Mathematics needed here",
+   "lead": "One new notation and one familiar idea in an unfamiliar place.",
+   "items": [
+    {
+     "h": "Partial derivative",
+     "text": "The symbol $\\partial$ means: we change one quantity, keeping the others frozen. $\\partial L/\\partial \\dot{q}$ — how much the Lagrangian changes if we slightly tweak the velocity without touching the coordinate. This is not new mathematics, but accounting: we count the contribution of each variable separately."
+    },
+    {
+     "h": "Generalized coordinate",
+     "text": "The coordinate does not have to be length. For a pendulum, an angle is more convenient; for a gas, volume; for a chain of atoms, the node number. The Lagrangian approach is good precisely because it does not require Cartesian axes: take the quantity that is convenient for describing the system, and everything works."
+    },
+    {
+     "h": "Zero derivative means constancy",
+     "text": "The entire derivation rests on a school fact: if the time derivative of a function is zero, the function does not change. We simply applied it to an unusual object — the derivative of the Lagrangian with respect to velocity."
+    }
+   ]
+  },
+  "example": {
+   "title": "Numerical example",
+   "lead": "Let's test it on the bench: is momentum conserved in an inelastic collision when energy is clearly lost?",
+   "given": "A body $m_1 = 4$ kg moves with speed $3$ m/s and sticks to a stationary body $m_2 = 2$ kg.",
+   "law": "$p = m_1 v_1 + m_2 v_2 = \\text{const}$",
+   "solution": [
+    {
+     "text": "Momentum before impact: only the first body moves.",
+     "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{kg·m/s}",
+     "num": ""
+    },
+    {
+     "text": "After impact, the bodies move together with a total mass of 6 kg.",
+     "latex": "u = \\frac{12}{6} = 2\\ \\text{m/s}",
+     "num": ""
+    },
+    {
+     "text": "Compare the energies before and after.",
+     "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{J}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{J}",
+     "num": ""
+    }
+   ],
+   "answer": "Momentum is fully conserved, energy dropped from 18 to 12 J — a third went into heat and deformation.",
+   "sanity": "Reality check: why did momentum get lucky? Because the homogeneity of space during the collision did not disappear, but mechanical energy turned into heat — that is, into another form that we are not tracking in this problem."
+  },
+  "constants": {
+   "title": "Quantities of this section",
+   "lead": "There is not a single fundamental constant here: Noether's theorem talks about the structure of laws, not about numbers.",
+   "items": [
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangian",
+     "value": "J",
+     "why": "function from which all motion of the system is derived"
+    },
+    {
+     "sym": "p",
+     "latex": "p = \\partial L/\\partial \\dot{x}",
+     "name": "Generalized momentum",
+     "value": "kg·m/s",
+     "why": "for a free body it coincides with ordinary $mv$, for rotation — with angular momentum"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "name": "Generalized coordinate",
+     "value": "any",
+     "why": "length, angle, volume — whichever is more convenient for describing the system"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Where it works",
+   "lead": "Noether's theorem is not a decoration of the course, but a working tool of modern physics.",
+   "items": [
+    {
+     "h": "Particle physics",
+     "text": "Conservation of electric charge follows from a symmetry that cannot be seen with the eyes: it concerns the phase of the wave function. Charge is conserved because the world does not notice a shift in that phase."
+    },
+    {
+     "h": "Cosmology",
+     "text": "The expanding Universe is not symmetric under time translation — and energy in it, strictly speaking, is not conserved. This is not a paradox, but a direct consequence of the theorem."
+    },
+    {
+     "h": "Engineering",
+     "text": "If a problem has symmetry, look for a conserved quantity: it will cut the calculation by an order of magnitude. This is how satellite orbits and structural vibrations are calculated."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun stuff: test it with your hands",
+   "lead": "Symmetry is easier to feel with the body than to derive on paper.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Spinning chair trick",
+     "text": "Sit on an office chair, push off and spin with your arms outstretched, then pull them to your chest. The rotation speed will increase noticeably. Angular momentum is conserved — because around the vertical axis, the world is the same in all directions. Safety: hold onto the seat, do not dangle your legs."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Energy that is not conserved",
+     "text": "We've been told all our lives that energy is always conserved. But in the expanding Universe this is false. Where's the catch?",
+     "answer": "There is no catch: energy conservation follows from time homogeneity. The expanding Universe changes with time, the symmetry is broken — and the conclusion does not apply. Photons of the cosmic microwave background redden, losing energy, and it does not 'go' anywhere: the law simply does not apply."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "The theorem that was almost lost",
+     "text": "Noether's work appeared in an obscure proceedings, and physicists appreciated it only decades later. Einstein, after reading it, wrote to Hilbert that he was surprised by its depth; but the theorem entered textbooks only after the author's death."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemonic",
+     "h": "Where, when, where",
+     "text": "Three symmetries are remembered by three questions. It doesn't matter WHERE — momentum is conserved. It doesn't matter WHEN — energy is conserved. It doesn't matter WHICH WAY it's turned — angular momentum is conserved."
+    },
+    {
+     "icon": "estimate",
+     "kind": "rough estimate",
+     "h": "How many times faster will a figure skater spin",
+     "text": "Estimate: a figure skater pulls in arms and reduces moment of inertia by a factor of three. How many times will the angular speed increase? Answer — also three times, because the product is conserved. The rotational energy will also increase threefold — it comes from the work of muscles."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "Only continuous symmetries",
+     "text": "The theorem works for symmetries that can be turned on gradually. Mirror reflection cannot do that — it is either there or not. Therefore, parity does not yield a conserved quantity in Noether's sense, although its violation in weak interactions became the discovery of the century."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "For the curious: why a coordinate can be an angle",
+   "text": "If we take the rotation angle as $q$, then $\\partial L/\\partial \\dot{\\varphi}$ turns out to be angular momentum — the very quantity that increases for the figure skater. Not a single new formula had to be derived: we substituted a different coordinate and got a different conservation law. It is this universality that makes the Lagrangian approach the language of modern physics: it is not tied to the specific geometry of the problem."
+  },
+  "memo": {
+   "essence": "Each continuous symmetry corresponds to a conserved quantity. Homogeneity of space gives momentum, homogeneity of time gives energy, isotropy gives angular momentum. Conservation laws are not postulated but derived.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "If the Lagrangian does not depend on a coordinate",
+     "text": "If the Lagrangian does not depend on a coordinate, the corresponding generalized momentum is conserved."
+    },
+    {
+     "icon": "fact",
+     "title": "Three symmetries — three laws",
+     "text": "Three symmetries — three laws: where, when, and which way it is turned."
+    },
+    {
+     "icon": "edge",
+     "title": "Continuous symmetry required",
+     "text": "Continuous symmetry is required: mirror reflection does not give a conserved quantity."
+    },
+    {
+     "icon": "estimate",
+     "title": "A coordinate can be an angle",
+     "text": "A coordinate can be an angle — then angular momentum is conserved."
+    }
+   ],
+   "where": "Particle physics (charge conservation from phase symmetry), cosmology (energy is not conserved in an expanding universe), calculation of orbits and oscillations, any problem with symmetry.",
+   "watchOut": "A common mistake is to consider energy conservation an absolute law. It follows from the independence of laws from time; where that independence is broken, the conclusion does not hold."
+  },
+  "quiz": [
+   {
+    "id": "n1",
+    "type": "mcq",
+    "q": "From which symmetry does momentum conservation follow?",
+    "options": [
+     "From homogeneity of space: the experiment gives the same result wherever it is set up",
+     "From homogeneity of time",
+     "From isotropy of space",
+     "From mirror symmetry"
+    ],
+    "answer": 0,
+    "why": "Independence of the Lagrangian from a coordinate means homogeneity of space, and that is what gives momentum conservation."
+   },
+   {
+    "id": "n2",
+    "type": "mcq",
+    "q": "In an inelastic collision, energy is lost but momentum is not. Why?",
+    "options": [
+     "Momentum is a vector quantity, while energy is scalar",
+     "Homogeneity of space is preserved during the collision, while mechanical energy turns into heat",
+     "Momentum is always conserved, it is more fundamental than energy",
+     "Energy is also conserved, we just calculate it incorrectly"
+    ],
+    "answer": 1,
+    "why": "Total energy is indeed conserved, but part of it goes into heat — a form we do not track in the problem. Momentum remains entirely mechanical."
+   },
+   {
+    "id": "n3",
+    "type": "free",
+    "q": "In your own words: what does the phrase 'the Lagrangian does not depend on a coordinate' mean, and why does something follow from it?",
+    "keywords": [
+     "shift",
+     "unchanged",
+     "symmetry",
+     "homogeneous",
+     "derivative",
+     "zero",
+     "conserved"
+    ],
+    "why": "This means that a shift of the system changes nothing. Then the right-hand side of the equation of motion becomes zero, and the quantity under the time derivative remains constant."
+   },
+   {
+    "id": "n4",
+    "type": "estimate",
+    "q": "A figure skater reduced their moment of inertia from 4 to 1 kg·m². The angular velocity was 2 rad/s. Estimate the new value in rad/s.",
+    "answer": 8,
+    "unit": "rad/s",
+    "tolerance": 1.5,
+    "why": "Angular momentum $I\\omega$ is conserved: $4\\cdot2 = 1\\cdot\\omega$, so $\\omega = 8$ rad/s."
+   }
+  ]
+ },
+ "es": {
+  "title": "El lagrangiano y las simetrías",
+  "subtitle": "De dónde vienen realmente las leyes de conservación",
+  "intro": [
+   "Las leyes de conservación parecen un regalo: el momento se conserva, la energía se conserva, el momento angular se conserva. ¿Por qué estas tres magnitudes y no otras? En el curso escolar no hay respuesta — simplemente se verifican experimentalmente y se memorizan.",
+   "La respuesta la dio Emmy Noether en 1918, y resultó sorprendentemente simple. No se conserva lo que la naturaleza cuida, sino lo que no nota un desplazamiento. Si el resultado de un experimento no depende de dónde lo coloques, se conserva el momento. Si depende de cuándo, la energía. Si depende de la rotación del dispositivo, el momento angular.",
+   "Esto convierte la lista de leyes en una sola idea: cada simetría tiene su propia cantidad conservada. Y viceversa: si algo se conserva, busca la simetría que lo explica."
+  ],
+  "standNote": "En el stand, una colisión de dos cuerpos. Cambia las masas y las velocidades y observa la línea del momento debajo de la escena: permanece igual antes y después del impacto con cualquier configuración. La energía puede perderse. Pregúntate por qué el momento tiene ese privilegio: la respuesta estará en la conclusión.",
+  "formula": {
+   "name": "Teorema de Noether",
+   "latex": "L = K - U, \\qquad \\frac{\\partial L}{\\partial q} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+   "alsoKnown": "La simetría genera una ley de conservación",
+   "authors": [
+    {
+     "who": "Emmy Noether",
+     "year": "1918",
+     "what": "demostró la relación general entre simetrías y cantidades conservadas"
+    },
+    {
+     "who": "David Hilbert",
+     "year": "1915",
+     "what": "planteó el problema que condujo al teorema y logró invitar a Noether a Gotinga"
+    }
+   ],
+   "story": "Noether no tenía permiso para enseñar: las mujeres no eran aceptadas en la universidad, y los primeros años dio conferencias bajo otro nombre. Hilbert objetó a sus colegas: «Aquí hay una universidad, no una casa de baños». El teorema que demostró hoy está en la base de toda la física teórica, desde la mecánica hasta el modelo estándar.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "lagrangiano, diferencia entre energía cinética y potencial",
+     "unit": "J"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "coordenada generalizada — no necesariamente distancia, también vale un ángulo",
+     "unit": "cualquiera"
+    },
+    {
+     "sym": "q̇",
+     "latex": "\\dot{q}",
+     "what": "velocidad de cambio de esta coordenada",
+     "unit": "cualquiera/s"
+    },
+    {
+     "sym": "∂L/∂q̇",
+     "latex": "\\partial L / \\partial \\dot{q}",
+     "what": "momento generalizado — lo que se conserva",
+     "unit": "depende de q"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Cómo la simetría se convierte en conservación",
+   "lead": "El razonamiento es corto, si no temes al símbolo de derivada respecto a una función.",
+   "steps": [
+    {
+     "text": "Tomemos la ecuación que obtuvimos en el párrafo anterior a partir del principio de mínima acción. Relaciona dos cantidades: cómo cambia el lagrangiano con un desplazamiento de la coordenada y cómo cambia con un cambio de velocidad.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "action",
+     "figCaption": "Ecuación de movimiento en la forma a la que llevó la variación de la acción"
+    },
+    {
+     "text": "Ahora supongamos que el sistema es simétrico respecto al desplazamiento de la coordenada: movemos el dispositivo un metro y no ha cambiado nada. En lenguaje de fórmulas, esto significa que el lagrangiano no depende de $q$, es decir, el lado derecho es cero.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "A cada simetría le corresponde su cantidad conservada"
+    },
+    {
+     "text": "Pero si la derivada temporal de algo es cero, entonces ese algo no cambia en el tiempo. Hemos obtenido una ley de conservación sin postularla.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "momentum",
+     "figCaption": "La cantidad conservada es el momento generalizado"
+    },
+    {
+     "text": "Verifiquemos en un caso simple. Para un cuerpo libre, el lagrangiano es solo la energía cinética. La derivada respecto a la velocidad da el momento familiar: la conservación del momento resultó ser consecuencia de la homogeneidad del espacio.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "Colisión: el momento antes y después es el mismo porque el espacio es homogéneo"
+    }
+   ],
+   "plate": "\\text{simetría} \\;\\longrightarrow\\; \\text{ley de conservación}",
+   "plateCap": "La homogeneidad del espacio da el momento, la homogeneidad del tiempo la energía, la isotropía el momento angular",
+   "note": "El teorema requiere simetría continua: el desplazamiento puede ser arbitrariamente pequeño. Las simetrías discretas —por ejemplo, la reflexión especular— no dan una cantidad conservada en este sentido, aunque imponen fuertes restricciones a la física."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Una notación nueva y una idea familiar en un lugar inusual.",
+   "items": [
+    {
+     "h": "Derivada parcial",
+     "text": "El símbolo $\\partial$ significa: cambiamos una cantidad, las demás las mantenemos congeladas. $\\partial L/\\partial \\dot{q}$ — cuánto cambia el lagrangiano si ajustamos ligeramente la velocidad sin tocar la coordenada. Esto no es matemática nueva, sino contabilidad: calculamos la contribución de cada variable por separado."
+    },
+    {
+     "h": "Coordenada generalizada",
+     "text": "La coordenada no tiene que ser la longitud. Para un péndulo es más conveniente el ángulo, para un gas el volumen, para una cadena de átomos el número de nodo. El enfoque lagrangiano es bueno precisamente porque no requiere ejes cartesianos: toma la magnitud que sea conveniente para describir el sistema y todo funciona."
+    },
+    {
+     "h": "Cero de la derivada significa constancia",
+     "text": "Todo el cálculo se basa en un hecho escolar: si la derivada de una función respecto al tiempo es cero, la función no cambia. Simplemente lo aplicamos a un objeto inusual: la derivada del lagrangiano con respecto a la velocidad."
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Verifiquemos en el banco: ¿se conserva el momento en un choque inelástico cuando la energía se pierde claramente?",
+   "given": "Un cuerpo $m_1 = 4$ kg se mueve a $3$ m/s y se pega con un cuerpo en reposo $m_2 = 2$ kg.",
+   "law": "$p = m_1 v_1 + m_2 v_2 = \\text{constante}$",
+   "solution": [
+    {
+     "text": "Momento antes del choque: solo se mueve el primer cuerpo.",
+     "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{kg·m/s}",
+     "num": ""
+    },
+    {
+     "text": "Después del choque los cuerpos se mueven juntos con una masa total de 6 kg.",
+     "latex": "u = \\frac{12}{6} = 2\\ \\text{m/s}",
+     "num": ""
+    },
+    {
+     "text": "Comparemos las energías antes y después.",
+     "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{J}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{J}",
+     "num": ""
+    }
+   ],
+   "answer": "El momento se conservó completamente, la energía cayó de 18 a 12 J — un tercio se fue en calor y deformación.",
+   "sanity": "Verificación de sentido común: ¿por qué le fue bien al momento? Porque la homogeneidad del espacio en el choque no desapareció, mientras que la energía mecánica se transformó en calor — es decir, en otra forma que no estamos siguiendo en este problema."
+  },
+  "constants": {
+   "title": "Magnitudes de esta sección",
+   "lead": "Aquí no hay ninguna constante universal: el teorema de Noether habla de la estructura de las leyes, no de números.",
+   "items": [
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangiano",
+     "value": "J",
+     "why": "función de la que se deduce todo el movimiento del sistema"
+    },
+    {
+     "sym": "p",
+     "latex": "p = \\partial L/\\partial \\dot{x}",
+     "name": "Momento generalizado",
+     "value": "kg·m/s",
+     "why": "para un cuerpo libre coincide con el momento lineal $mv$, para rotación — con el momento angular"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "name": "Coordenada generalizada",
+     "value": "cualquiera",
+     "why": "longitud, ángulo, volumen — lo que sea más conveniente para describir el sistema"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Dónde funciona",
+   "lead": "El teorema de Noether no es un adorno del curso, sino una herramienta de trabajo de la física moderna.",
+   "items": [
+    {
+     "h": "Física de partículas",
+     "text": "La conservación de la carga eléctrica se deriva de una simetría que no se puede ver a simple vista: se refiere a la fase de la función de onda. La carga se conserva porque el mundo no nota el desplazamiento de esta fase."
+    },
+    {
+     "h": "Cosmología",
+     "text": "El universo en expansión no es simétrico respecto al desplazamiento temporal — y la energía en él, estrictamente hablando, no se conserva. Esto no es una paradoja, sino una consecuencia directa del teorema."
+    },
+    {
+     "h": "Ingeniería",
+     "text": "Si en un problema hay simetría, busque una cantidad conservada: reducirá el cálculo en un orden. Así se calculan las órbitas de satélites y las vibraciones de estructuras."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con las manos",
+   "lead": "La simetría es más fácil de sentir con el cuerpo que de deducir en papel.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "La silla giratoria sin silla",
+     "text": "Siéntese en una silla de oficina, empújese y gire con los brazos extendidos, luego apriételos contra el pecho. La velocidad de rotación aumentará notablemente. El momento angular se conservó — porque alrededor del eje vertical el mundo es igual en todas direcciones. Seguridad: agárrese al asiento, no cuelgue las piernas."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "La energía que no se conserva",
+     "text": "Toda la vida nos han dicho que la energía se conserva siempre. Pero en el universo en expansión esto no es cierto. ¿Dónde está el truco?",
+     "answer": "No hay truco: la conservación de la energía se deriva de la homogeneidad del tiempo. El universo en expansión cambia con el tiempo, la simetría se rompe — y la conclusión no funciona. Los fotones de la radiación de fondo se enrojecen, perdiendo energía, y ésta no «se va» a ninguna parte: la ley simplemente no es aplicable."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "El teorema que casi se pierde",
+     "text": "El trabajo de Noether apareció en una colección poco conocida, y los físicos lo apreciaron solo décadas después. Einstein, al leerlo, escribió a Hilbert que estaba sorprendido por la profundidad; pero el teorema llegó a los libros de texto ya después de la muerte de la autora."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnemotecnia",
+     "h": "Dónde, cuándo, hacia dónde",
+     "text": "Tres simetrías se recuerdan con tres preguntas. No importa DÓNDE — se conserva el momento. No importa CUÁNDO — la energía. No importa HACIA DÓNDE esté orientado — el momento angular."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "¿Cuántas veces se acelerará un patinador?",
+     "text": "Estime: un patinador aprieta los brazos y reduce el momento de inercia a la tercera parte. ¿Cuántas veces aumentará la velocidad angular? Respuesta — también tres veces, porque el producto se conserva. Y la energía de rotación aumentará también tres veces — la proporciona el trabajo de los músculos."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Solo simetrías continuas",
+     "text": "El teorema funciona para simetrías que se pueden aplicar gradualmente. La reflexión especular no puede hacer eso — o está o no está. Por lo tanto, la paridad no da una cantidad conservada en el sentido de Noether, aunque su violación en las interacciones débiles fue un descubrimiento del siglo."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Para los curiosos: por qué la coordenada puede ser un ángulo",
+   "text": "Si se toma como $q$ el ángulo de rotación, entonces $\\partial L/\\partial \\dot{\\varphi}$ resulta ser el momento angular — la misma cantidad que aumenta en el patinador. No fue necesario deducir ninguna fórmula nueva: se sustituyó otra coordenada, se obtuvo otra ley de conservación. Es esta universalidad la que hace del enfoque lagrangiano el lenguaje de la física moderna: no está ligado a la geometría específica del problema."
+  },
+  "memo": {
+   "essence": "A cada simetría continua le corresponde una cantidad conservada. La homogeneidad del espacio da el momento lineal, la homogeneidad del tiempo la energía, la isotropía el momento angular. Las leyes de conservación no se postulan, sino que se deducen.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Si el lagrangiano no depende de la coordenada",
+     "text": "Si el lagrangiano no depende de la coordenada, el correspondiente momento generalizado se conserva"
+    },
+    {
+     "icon": "fact",
+     "title": "Tres simetrías — tres leyes",
+     "text": "Tres simetrías — tres leyes: dónde, cuándo, hacia dónde está girado"
+    },
+    {
+     "icon": "edge",
+     "title": "Se necesita simetría continua",
+     "text": "Se necesita simetría continua: la reflexión especular no produce una cantidad conservada"
+    },
+    {
+     "icon": "estimate",
+     "title": "La coordenada puede ser un ángulo",
+     "text": "La coordenada puede ser un ángulo — entonces se conserva el momento angular"
+    }
+   ],
+   "where": "Física de partículas (conservación de la carga a partir de la simetría de fase), cosmología (la energía no se conserva en el universo en expansión), cálculo de órbitas y oscilaciones, cualquier problema donde haya simetría.",
+   "watchOut": "Error frecuente — considerar la conservación de la energía como una ley absoluta. Se deriva de la independencia de las leyes respecto al tiempo; allí donde esta independencia se rompe, la conclusión no funciona."
+  },
+  "quiz": [
+   {
+    "id": "n1",
+    "type": "mcq",
+    "q": "¿De qué simetría se deriva la conservación del momento lineal?",
+    "options": [
+     "De la homogeneidad del espacio: el experimento da el mismo resultado dondequiera que se realice",
+     "De la homogeneidad del tiempo",
+     "De la isotropía del espacio",
+     "De la simetría especular"
+    ],
+    "answer": 0,
+    "why": "La independencia del lagrangiano respecto a la coordenada significa homogeneidad del espacio, y es precisamente ella la que da la conservación del momento lineal."
+   },
+   {
+    "id": "n2",
+    "type": "mcq",
+    "q": "En un choque inelástico la energía se pierde, pero el momento lineal no. ¿Por qué?",
+    "options": [
+     "El momento lineal es una magnitud vectorial y la energía es escalar",
+     "La homogeneidad del espacio se conserva en el choque, mientras que la energía mecánica se transforma en calor",
+     "El momento lineal siempre se conserva, es más fundamental que la energía",
+     "La energía también se conserva, simplemente la calculamos mal"
+    ],
+    "answer": 1,
+    "why": "La energía total realmente se conserva, pero una parte se convierte en calor — una forma que no rastreamos en el problema. El momento lineal en cambio permanece completamente mecánico."
+   },
+   {
+    "id": "n3",
+    "type": "free",
+    "q": "En tus propias palabras: ¿qué significa la frase «el lagrangiano no depende de la coordenada» y por qué de ello se sigue algo?",
+    "keywords": [
+     "desplazamiento",
+     "no camb",
+     "simetr",
+     "homogéne",
+     "derivad",
+     "cero",
+     "conserv"
+    ],
+    "why": "Esto significa que un desplazamiento del sistema no cambia nada. Entonces el lado derecho de la ecuación de movimiento se anula, y la magnitud bajo la derivada temporal permanece constante."
+   },
+   {
+    "id": "n4",
+    "type": "estimate",
+    "q": "Un patinador redujo su momento de inercia de 4 a 1 kg·m². La velocidad angular era 2 rad/s. Estime la nueva en rad/s.",
+    "answer": 8,
+    "unit": "rad/s",
+    "tolerance": 1.5,
+    "why": "El momento angular $I\\omega$ se conserva: $4\\cdot2 = 1\\cdot\\omega$, por lo tanto $\\omega = 8$ rad/s."
+   }
+  ]
+ },
+ "ar": {
+  "title": "لاغرانجيان والتماثلات",
+  "subtitle": "من أين تأتي قوانين الحفظ حقًا؟",
+  "intro": [
+   "تبدو قوانين الحفظ كهدية: الزخم محفوظ، الطاقة محفوظة، الزخم الزاوي محفوظ. لماذا هذه الكميات الثلاث تحديدًا، وليس غيرها؟ في المناهج المدرسية لا توجد إجابة - يتم اختبارها تجريبيًا وحفظها.",
+   "أعطت إيمي نويثر الإجابة في عام 1918، واتضح أنها بسيطة بشكل غير متوقع. لا يتم حفظ ما تحافظ عليه الطبيعة، بل ما لا يلاحظ الإزاحة. إذا كانت نتيجة التجربة لا تعتمد على مكان وضعها، فإن الزخم محفوظ. إذا كانت لا تعتمد على الزمن، فالطاقة محفوظة. إذا كانت لا تعتمد على دوران الجهاز، فالزخم الزاوي محفوظ.",
+   "هذا يحول قائمة القوانين إلى فكرة واحدة: لكل تماثل كمية محفوظة خاصة به. والعكس صحيح - إذا كان شيء ما محفوظًا، ابحث عن التماثل المسؤول عن ذلك."
+  ],
+  "standNote": "على المنصة - تصادم جسمين. قم بتغيير الكتل والسرعات وراقب سطر الزخم أسفل المشهد: يبقى كما هو قبل وبعد الاصطدام مهما كانت الإعدادات. الطاقة قد تفقد. اسأل نفسك لماذا يستحق الزخم هذه الامتياز - الإجابة ستكون في الاستنتاج.",
+  "formula": {
+   "name": "نظرية نويثر",
+   "latex": "L = K - U, \\qquad \\frac{\\partial L}{\\partial q} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+   "alsoKnown": "التماثل يولد قانون الحفظ",
+   "authors": [
+    {
+     "who": "إيمي نويثر",
+     "year": "1918",
+     "what": "أثبتت العلاقة العامة بين التماثلات والكميات المحفوظة"
+    },
+    {
+     "who": "ديفيد هيلبرت",
+     "year": "1915",
+     "what": "طرح المسألة التي أدت إلى النظرية، ونجح في دعوة نويثر إلى غوتنغن"
+    }
+   ],
+   "story": "لم يكن لنويثر حق التدريس: لم تكن النساء مقبولات في الجامعة، وفي السنوات الأولى كانت تلقي المحاضرات تحت اسم شخص آخر. اعترض هيلبرت على زملائه: 'هنا جامعة وليس حمامًا'. النظرية التي أثبتتها تقع اليوم في أساس كل الفيزياء النظرية - من الميكانيكا إلى النموذج القياسي.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "لاغرانجيان، الفرق بين الطاقة الحركية والطاقة الكامنة",
+     "unit": "J"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "إحداثي معمم - ليس بالضرورة مسافة، يمكن أن يكون زاوية",
+     "unit": "أي"
+    },
+    {
+     "sym": "q̇",
+     "latex": "\\dot{q}",
+     "what": "معدل تغير هذا الإحداثي",
+     "unit": "أي/ث"
+    },
+    {
+     "sym": "∂L/∂q̇",
+     "latex": "\\partial L / \\partial \\dot{q}",
+     "what": "الزخم المعمم - ما يتم حفظه",
+     "unit": "يعتمد على q"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "كيف يتحول التماثل إلى حفظ",
+   "lead": "المنطق قصير، إذا لم تخف من رمز الاشتقاق بالنسبة للدالة.",
+   "steps": [
+    {
+     "text": "لنأخذ المعادلة التي حصلنا عليها في الفقرة السابقة من مبدأ الفعل الأصغر. وهي تربط بين كميتين: كيف يتغير اللاغرانجيان عند إزاحة الإحداثي، وكيف يتغير عند تغير السرعة.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "action",
+     "figCaption": "معادلة الحركة بالشكل الذي أدى إليه تباين الفعل"
+    },
+    {
+     "text": "الآن لنفترض أن النظام متماثل بالنسبة لإزاحة الإحداثي: نقلنا الجهاز بمتر - لم يتغير شيء. بلغة الصيغ، هذا يعني أن اللاغرانجيان لا يعتمد على $q$ على الإطلاق، أي أن الطرف الأيمن يساوي صفرًا.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "كل تماثل يقابله كمية محفوظة خاصة به"
+    },
+    {
+     "text": "ولكن إذا كان المشتق الزمني لشيء ما يساوي صفرًا، فإن هذا الشيء لا يتغير مع الزمن. لقد حصلنا على قانون الحفظ دون افتراضه.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "momentum",
+     "figCaption": "الكمية المحفوظة - الزخم المعمم"
+    },
+    {
+     "text": "دعنا نتحقق من حالة بسيطة. بالنسبة لجسم حر، اللاغرانجيان هو فقط الطاقة الحركية. المشتق بالنسبة للسرعة يعطي الزخم المألوف: تبين أن حفظ الزخم هو نتيجة لتجانس الفضاء.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "تصادم: الزخم قبل وبعد متساوٍ، لأن الفضاء متجانس"
+    }
+   ],
+   "plate": "\\text{تماثل} \\;\\longrightarrow\\; \\text{قانون الحفظ}",
+   "plateCap": "تجانس الفضاء يعطي الزخم، تجانس الزمن يعطي الطاقة، الخواص يعطي الزخم الزاوي",
+   "note": "تتطلب النظرية تماثلًا مستمرًا: يمكن جعل الإزاحة صغيرة بقدر ما نريد. التماثلات المنفصلة - مثل الانعكاس المرآوي - لا تعطي كمية محفوظة بهذا المعنى، رغم أنها تفرض قيودًا قوية على الفيزياء."
+  },
+  "math": {
+   "title": "الرياضيات التي كانت ضرورية هنا",
+   "lead": "رمز جديد وفكرة مألوفة في مكان غير مألوف.",
+   "items": [
+    {
+     "h": "المشتق الجزئي",
+     "text": "الرمز $\\partial$ يعني: نغير كمية واحدة ونبقي الباقي ثابتًا. $\\partial L/\\partial \\dot{q}$ - مقدار تغير اللاغرانجيان إذا قمنا بزيادة السرعة قليلًا دون لمس الإحداثي. هذه ليست رياضيات جديدة، بل محاسبة: نحسب مساهمة كل متغير على حدة."
+    },
+    {
+     "h": "الإحداثي المعمم",
+     "text": "ليس بالضرورة أن يكون الإحداثي هو الطول. بالنسبة للبندول، الزاوية أكثر ملاءمة، للغاز - الحجم، لسلسلة الذرات - رقم العقدة. ميزة منهج لاغرانج أنه لا يتطلب محاور ديكارتية: خذ الكمية التي تناسب وصف النظام، وكل شيء يعمل."
+    },
+    {
+     "h": "صفر المشتق يعني الثبات",
+     "text": "كل الحساب يعتمد على حقيقة مدرسية: إذا كان مشتق دالة بالنسبة للزمن يساوي صفرًا، فإن الدالة لا تتغير. نحن ببساطة طبقنا هذا على كائن غير عادي - على مشتق اللاغرانجيان بالنسبة للسرعة."
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنختبر على المنصة: هل يبقى الزخم محفوظًا في التصادم غير المرن عندما تُفقد الطاقة بوضوح؟",
+   "given": "جسم $m_1 = 4$ كجم يتحرك بسرعة $3$ م/ث ويلتصق بجسم ساكن $m_2 = 2$ كجم.",
+   "law": "$p = m_1 v_1 + m_2 v_2 = \\text{ثابت}$",
+   "solution": [
+    {
+     "text": "الزخم قبل التصادم: يتحرك الجسم الأول فقط.",
+     "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{kg·m/s}",
+     "num": ""
+    },
+    {
+     "text": "بعد التصادم، يتحرك الجسمان معًا بكتلة كلية 6 كجم.",
+     "latex": "u = \\frac{12}{6} = 2\\ \\text{m/s}",
+     "num": ""
+    },
+    {
+     "text": "دعونا نقارن الطاقة قبل وبعد.",
+     "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{J}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{J}",
+     "num": ""
+    }
+   ],
+   "answer": "انحفظ الزخم بالكامل، وانخفضت الطاقة من 18 إلى 12 جول — ذهب الثلث إلى حرارة وتشوه.",
+   "sanity": "فحص المنطق السليم: لماذا حظي الزخم بالحفظ؟ لأن تجانس الفضاء لم يختفِ أثناء التصادم، بينما تحولت الطاقة الميكانيكية إلى حرارة – أي إلى شكل آخر لا نتابعه في هذه المسألة."
+  },
+  "constants": {
+   "title": "المقادير في هذا القسم",
+   "lead": "لا توجد هنا أي ثابت كوني: نظرية نويثر تتحدث عن بنية القوانين، لا عن الأعداد.",
+   "items": [
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "لاغرانجيان",
+     "value": "J",
+     "why": "دالة يُشتق منها كل حركة النظام"
+    },
+    {
+     "sym": "p",
+     "latex": "p = \\partial L/\\partial \\dot{x}",
+     "name": "الزخم المعمّم",
+     "value": "kg·m/s",
+     "why": "لجسم حر يطابق $mv$ العادي، وللدوران يطابق الزخم الزاوي"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "name": "الإحداثي المعمّم",
+     "value": "أي",
+     "why": "طول، زاوية، حجم — ما هو الأنسب لوصف النظام"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "أين يعمل هذا؟",
+   "lead": "نظرية نويثر ليست زينة للمقرر، بل أداة عمل في الفيزياء الحديثة.",
+   "items": [
+    {
+     "h": "فيزياء الجسيمات",
+     "text": "حفظ الشحنة الكهربائية نابع من تناظر لا يمكن رؤيته بالعين: إنه يتعلق بطور الدالة الموجية. تُحفظ الشحنة لأن العالم لا يلاحظ إزاحة هذا الطور."
+    },
+    {
+     "h": "علم الكون",
+     "text": "الكون المتوسع ليس متناظرًا تحت الإزاحة الزمنية — وبالتالي الطاقة فيه، بالمعنى الدقيق، لا تُحفظ. هذه ليست مفارقة، بل نتيجة مباشرة للنظرية."
+    },
+    {
+     "h": "الهندسة",
+     "text": "إذا وُجد تناظر في مسألة، ابحث عن كمية محفوظة: ستختصر الحساب بدرجة كبيرة. هكذا تُحسب مدارات الأقمار الصناعية واهتزازات المنشآت."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مسلي: اختبر بنفسك",
+   "lead": "من الأسهل الشعور بالتناظر بالجسد من استنتاجه على الورق.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "الكرسي الدوار",
+     "text": "اجلس على كرسي مكتب، ادفع نفسك وابدأ بالدوران مع تمديد ذراعيك، ثم اضغطهما إلى صدرك. ستزداد سرعة الدوران ملحوظًا. الزخم الزاوي محفوظ — لأن العالم متماثل في جميع الاتجاهات حول المحور الرأسي. السلامة: تمسك بالمقعد، لا تدلِّ قدميك."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "طاقة لا تُحفظ",
+     "text": "طالما قيل لنا أن الطاقة تُحفظ دائمًا. ولكن في الكون المتوسع، هذا غير صحيح. أين المكمن؟",
+     "answer": "لا مكمن: حفظ الطاقة نابع من تجانس الزمن. الكون المتوسع يتغير مع الزمن، والتناظر مكسور — وبالتالي الاستنتاج لا ينطبق. فوتونات الإشعاع الخلفي تتحول إلى الأحمر، وتفقد طاقتها، ولا تذهب الطاقة إلى أي مكان: القانون ببساطة لا ينطبق."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مسلية",
+     "h": "نظرية كادت أن تضيع",
+     "text": "ظهر عمل نويثر في مجموعة غير معروفة، ولم يقدرها الفيزيائيون إلا بعد عقود. أينشتاين، بعد قراءته، كتب إلى هيلبرت مندهشًا من العمق؛ لكن النظرية دخلت الكتب الدراسية بعد وفاة المؤلفة."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "ذاكرة مساعدة",
+     "h": "أين، متى، إلى أين",
+     "text": "تتذكر ثلاث تماثلات بثلاثة أسئلة. لا يهم أين — يُحفظ الزخم. لا يهم متى — تُحفظ الطاقة. لا يهم إلى أين متجه — يُحفظ الزخم الزاوي."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير تقريبي",
+     "h": "كم مرة سيزداد دوران المتزلج",
+     "text": "قدِّر: متزلج ضغط ذراعيه فقلَّ عزم القصور الذاتي ثلاث مرات. كم مرة ستزداد السرعة الزاوية؟ الجواب — ثلاث مرات أيضًا، لأن حاصل الضرب محفوظ. وطاقة الدوران ستزداد ثلاث مرات أيضًا — مصدرها عمل العضلات."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "فقط تماثلات مستمرة",
+     "text": "النظرية تعمل مع التماثلات التي يمكن تطبيقها تدريجيًا. الانعكاس المرآوي لا يستطيع ذلك — فهو إما موجود أو لا. لذا فإن التكافؤ لا يعطي كمية محفوظة بمعنى نويثر، رغم أن انتهاكه في التفاعلات الضعيفة كان اكتشاف القرن."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "للمهتمين: لماذا يمكن أن يكون الإحداثي زاوية",
+   "text": "إذا اتخذنا $q$ كزاوية دوران، فإن $\\partial L/\\partial \\dot{\\varphi}$ سيكون الزخم الزاوي — نفس الكمية التي تزداد عند المتزلج. لم نحتج إلى استنتاج أي معادلة جديدة: عوضنا بإحداثي آخر، وحصلنا على قانون حفظ آخر. هذه العالمية هي ما تجعل منهج لاغرانج لغة الفيزياء الحديثة: فهو غير مرتبط بهندسة محددة للمسألة."
+  },
+  "memo": {
+   "essence": "كل تناظر مستمر له كمية محفوظة مقابلة. تجانس الفضاء يعطي كمية الحركة، وتجانس الزمن يعطي الطاقة، والتناظر الخواصي يعطي الزخم الزاوي. قوانين الحفظ لا تُفترض بل تُستنتج.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "إذا كان اللاغرانجي مستقلًا عن الإحداثي",
+     "text": "إذا كان اللاغرانجي مستقلًا عن الإحداثي، فإن الزخم المعمم المقابل يُحفظ"
+    },
+    {
+     "icon": "fact",
+     "title": "ثلاثة تناظرات - ثلاثة قوانين",
+     "text": "ثلاثة تناظرات - ثلاثة قوانين: أين، متى، وإلى أي اتجاه يُدور"
+    },
+    {
+     "icon": "edge",
+     "title": "يحتاج تناظرًا مستمرًا",
+     "text": "يحتاج تناظرًا مستمرًا: الانعكاس المرآتي لا يعطي كمية محفوظة"
+    },
+    {
+     "icon": "estimate",
+     "title": "يمكن أن تكون الإحداثية زاوية",
+     "text": "يمكن أن تكون الإحداثية زاوية - عندها يُحفظ الزخم الزاوي"
+    }
+   ],
+   "where": "فيزياء الجسيمات (حفظ الشحنة من التناظر الطوري)، علم الكون (الطاقة لا تُحفظ في الكون المتوسع)، حساب المدارات والاهتزازات، أي مسألة يوجد فيها تناظر.",
+   "watchOut": "خطأ شائع هو اعتبار حفظ الطاقة قانونًا مطلقًا. إنه يتبع من استقلال القوانين عن الزمن؛ حيث يُنتهك هذا الاستقلال، لا يعمل الاستنتاج."
+  },
+  "quiz": [
+   {
+    "id": "n1",
+    "type": "mcq",
+    "q": "من أي تناظر يتبع حفظ كمية الحركة؟",
+    "options": [
+     "من تجانس الفضاء: التجربة تعطي نفس النتيجة أينما وضعتها",
+     "من تجانس الزمن",
+     "من تناظر الفضاء الخواصي",
+     "من التناظر المرآتي"
+    ],
+    "answer": 0,
+    "why": "استقلال اللاغرانجي عن الإحداثي يعني تجانس الفضاء، وهو الذي يعطي حفظ كمية الحركة."
+   },
+   {
+    "id": "n2",
+    "type": "mcq",
+    "q": "في التصادم غير المرن، تفقد الطاقة ولا تفقد كمية الحركة. لماذا؟",
+    "options": [
+     "كمية الحركة كمية متجهة، والطاقة كمية قياسية",
+     "تجانس الفضاء يُحفظ أثناء التصادم، بينما تتحول الطاقة الميكانيكية إلى حرارة",
+     "كمية الحركة تُحفظ دائمًا، وهي أكثر أساسية من الطاقة",
+     "الطاقة أيضًا تُحفظ، لكننا نحسبها بشكل خاطئ"
+    ],
+    "answer": 1,
+    "why": "الطاقة الكلية تُحفظ بالفعل، لكن جزءًا منها يتحول إلى حرارة - شكل لا نتبعه في المسألة. أما كمية الحركة فتبقى ميكانيكية بالكامل."
+   },
+   {
+    "id": "n3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: ماذا تعني عبارة «اللاغرانجي مستقل عن الإحداثي» ولماذا يتبع منها شيء؟",
+    "keywords": [
+     "إزاحة",
+     "لا يتغير",
+     "تناظر",
+     "تجانس",
+     "مشتق",
+     "صفر",
+     "حفظ"
+    ],
+    "why": "هذا يعني أن إزاحة النظام لا تغير شيئًا. عندها يصبح الطرف الأيمن من معادلة الحركة صفرًا، وتبقى الكمية تحت المشتقة الزمنية ثابتة."
+   },
+   {
+    "id": "n4",
+    "type": "estimate",
+    "q": "قلل متزلج فني عزم القصور الذاتي من 4 إلى 1 كجم·م². كانت السرعة الزاوية 2 راد/ث. قدر السرعة الزاوية الجديدة بوحدة راد/ث.",
+    "answer": 8,
+    "unit": "راديان/ثانية",
+    "tolerance": 1.5,
+    "why": "الزخم الزاوي $I\\omega$ يُحفظ: $4\\cdot2 = 1\\cdot\\omega$، إذن $\\omega = 8$ راديان/ثانية."
    }
   ]
  }
