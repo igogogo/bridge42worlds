@@ -38,13 +38,15 @@ window.createForceGraph = function (opts) {
     // Предупреждение про большие графы (>100 узлов) — с подсказкой на кнопку ⛶ (юзер-фидбек
     // 2026-07-17: облако/эксплорер без фильтра по тегам легко перевал за 200+ узлов, тормозит и
     // нечитаемо). Один текст-шаблон общий для всех графов сайта (мини/облако/эксплорер).
+    // Знак предупреждения ставит код (см. updateSizeWarning) — в самих строках его нет,
+    // иначе рядом окажутся два предупреждающих знака: наш и вшитый в текст.
     var SIZE_WARN = {
-        ru: '⚠ {n} объектов — построение графа может занять время. Для просмотра рекомендуем полноэкранный режим (⛶ сверху справа).',
-        en: '⚠ {n} entities — building the graph may take a moment. For viewing we recommend fullscreen mode (⛶ top right).',
-        es: '⚠ {n} entidades — construir el grafo puede tardar un momento. Para verlo mejor, recomendamos el modo pantalla completa (⛶ arriba a la derecha).',
-        zh: '⚠ {n} 个实体 — 图谱生成可能需要一点时间。建议使用全屏模式查看（右上角 ⛶）。',
-        fr: '⚠ {n} entités — la construction du graphe peut prendre un moment. Pour la consultation, nous recommandons le mode plein écran (⛶ en haut à droite).',
-        ar: '⚠ {n} كيان — قد يستغرق بناء الرسم البياني بعض الوقت. للعرض الأفضل، ننصح بوضع ملء الشاشة (⛶ أعلى اليمين).'
+        ru: '{n} объектов — построение графа может занять время. Для просмотра рекомендуем полноэкранный режим (кнопка сверху справа).',
+        en: '{n} entities — building the graph may take a moment. For viewing we recommend fullscreen mode (button top right).',
+        es: '{n} entidades — construir el grafo puede tardar un momento. Para verlo mejor, recomendamos el modo pantalla completa (botón arriba a la derecha).',
+        zh: '{n} 个实体 — 图谱生成可能需要一点时间。建议使用全屏模式查看（右上角按钮）。',
+        fr: '{n} entités — la construction du graphe peut prendre un moment. Pour la consultation, nous recommandons le mode plein écran (bouton en haut à droite).',
+        ar: '{n} كيان — قد يستغرق بناء الرسم البياني بعض الوقت. للعرض الأفضل، ننصح بوضع ملء الشاشة (الزر أعلى اليمين).'
     };
     var warn = null;
     if (fsContainer) {
@@ -93,7 +95,7 @@ window.createForceGraph = function (opts) {
         if (!warn) return;
         if (cappedFrom) {
             var t = (CAP_NOTE[lang] || CAP_NOTE.en).replace('{n}', n).replace('{tot}', cappedFrom);
-            warn.innerHTML = '⚠ ' + t;
+            warn.innerHTML = ((window.B42Icons && B42Icons.warn) ? B42Icons.warn(15) : '⚠') + ' ' + t;
             var a = document.createElement('a');
             a.href = '#'; a.className = 'graph-show-all'; a.textContent = SHOW_ALL[lang] || SHOW_ALL.en;
             a.addEventListener('click', function (e) {
@@ -157,7 +159,9 @@ window.createForceGraph = function (opts) {
     if (fsContainer) {
         fsBtn = document.createElement('button');
         fsBtn.type = 'button'; fsBtn.className = 'graph-fs-btn'; fsBtn.setAttribute('aria-label', 'fullscreen');
-        fsBtn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg>';
+        // рисунок берём из набора, чтобы «во весь экран» здесь и в других местах был одним знаком
+        fsBtn.innerHTML = (window.B42Icons && B42Icons.expand) ? B42Icons.expand(18)
+            : '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.6H3.6V9"/><path d="M15 3.6h5.4V9"/><path d="M20.4 15v5.4H15"/><path d="M9 20.4H3.6V15"/></svg>';
         fsBtn.addEventListener('click', function (e) { e.stopPropagation(); setFs(!isFs); });
         fsContainer.appendChild(fsBtn);
 
@@ -175,7 +179,7 @@ window.createForceGraph = function (opts) {
             if (fsCollapsible.length) {
                 fsCollapseBtn = document.createElement('button');
                 fsCollapseBtn.type = 'button'; fsCollapseBtn.className = 'graph-fs-collapse-btn';
-                fsCollapseBtn.textContent = '☰';
+                fsCollapseBtn.innerHTML = (window.B42Icons && B42Icons.menu) ? B42Icons.menu(18) : '☰';
                 fsCollapseBtn.setAttribute('aria-label', 'filters');
                 fsCollapseWrap = document.createElement('div');
                 fsCollapseWrap.className = 'graph-fs-collapse';

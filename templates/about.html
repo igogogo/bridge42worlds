@@ -123,6 +123,15 @@
   .topnav > a:hover { color: var(--cyan); }
   .topnav-more { position: relative; }
   .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 9px; border-radius: 8px; transition: color .16s, background .16s; }
+  /* Шкала касания. Гид самодостаточен и общий css сюда не приходит, поэтому
+     значения держим у себя — но ровно те же, что в css/style.css: на телефоне
+     44 пикселя, ниже промахи растут у всех. */
+  :root { --tap-md: 32px; --ico-md: 20px; }
+  @media (max-width: 640px) { :root { --tap-md: 44px; --ico-md: 24px; } }
+  .topnav-burger { min-height: var(--tap-md); min-width: var(--tap-md);
+    display: inline-flex; align-items: center; justify-content: center; padding: 0 9px; }
+  .topnav-burger .ico-svg { width: var(--ico-md); height: var(--ico-md); stroke-width: 2; }
+  .topnav > a, .topnav-logo, .topnav-panel a { min-height: var(--tap-md); display: inline-flex; align-items: center; }
   .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--cyan); background: var(--card); }
   .topnav-panel { position: absolute; inset-inline-start: 0; top: 132%;  /* ☰ теперь слева — раскрываем панель вправо, чтобы не уходила за экран */ display: none; flex-direction: column; gap: 2px; min-width: 158px;
     background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 8px; box-shadow: 0 18px 40px -20px rgba(0,0,0,.4); z-index: 30; }
@@ -141,7 +150,7 @@
   <div class="topnav">
     <a class="topnav-logo" href="/lang/$lang/index.html">bridge42worlds</a>
     <span class="topnav-more">
-      <button type="button" class="topnav-burger" aria-label="Menu" aria-expanded="false">☰</button>
+      <button type="button" class="topnav-burger" aria-label="Menu" aria-expanded="false"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></button>
       <span class="topnav-panel">
         <a href="/lang/$lang/index.html">main</a>
         <a href="/lang/$lang/tags/">tags</a>

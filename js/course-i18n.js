@@ -129,14 +129,16 @@
         'Карточка-шпаргалка': ['Cheat sheet', 'Chuleta', 'بطاقة مراجعة'],
         'шпаргалка': ['cheat sheet', 'chuleta', 'بطاقة مراجعة'],
         'дерево знаний': ['knowledge tree', 'árbol del conocimiento', 'شجرة المعرفة'],
-        '🌳 Дерево знаний': ['🌳 Knowledge tree', '🌳 Árbol del conocimiento', '🌳 شجرة المعرفة'],
         'Дерево знаний': ['Knowledge tree', 'Árbol del conocimiento', 'شجرة المعرفة'],
         '← дерево знаний': ['← knowledge tree', '← árbol del conocimiento', '← شجرة المعرفة'],
         '← открытые вопросы': ['← open questions', '← preguntas abiertas', '← الأسئلة المفتوحة'],
         'Открытые вопросы': ['Open questions', 'Preguntas abiertas', 'الأسئلة المفتوحة'],
         '← К параграфу': ['← Back to the paragraph', '← Volver al párrafo', '← العودة إلى الفقرة'],
-        '💬 Спросить тьютора': ['💬 Ask the tutor', '💬 Preguntar al tutor', '💬 اسأل المرشد'],
-        '🖨 Распечатать / PDF': ['🖨 Print / PDF', '🖨 Imprimir / PDF', '🖨 طباعة / PDF'],
+        // Ключи с эмодзи («🌳 Дерево знаний», «💬 Спросить тьютора», «🖨 Распечатать / PDF»)
+        // убраны 2026-07-29: в разметке таких надписей давно нет, знак теперь ставит код из
+        // нашего набора, а словарь искал совпадение по строке вместе с эмодзи и не находил.
+        'Спросить тьютора': ['Ask the tutor', 'Preguntar al tutor', 'اسأل المرشد'],
+        'Распечатать / PDF': ['Print / PDF', 'Imprimir / PDF', 'طباعة / PDF'],
         'Язык физики': ['The language of physics', 'El lenguaje de la física', 'لغة الفيزياء'],
         'механика': ['mechanics', 'mecánica', 'الميكانيكا'],
         'термодинамика': ['thermodynamics', 'termodinámica', 'الديناميكا الحرارية'],

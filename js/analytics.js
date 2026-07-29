@@ -304,6 +304,55 @@
       + '<p>حاليًا وجهان: <b>المقالات</b> و<b>المؤلفون</b>. لاحقًا <b>خريطة عامة</b> بعلامات تبويب للقوانين والعلماء والوسوم.</p>'
   })[LANG] || '';
 
+  /* Шапка вида: слева — что это, справа — как читать. Раньше у десяти представлений был один
+     заголовок на всю страницу, и, переключив вкладку, читатель видел новую картинку без единого
+     слова о том, что перед ним. Стили (.an-head) были написаны заранее, но ни разу не подключены. */
+  var HEAD = ({
+    ru: { articles: 'точка — статья, цвет — тематическая группа',
+          authors: 'точка — автор, цвет — от эксперимента к теории',
+          fly: 'полёт внутри облака статей',
+          heat: 'месяцы по горизонтали, группы по вертикали',
+          sphere: 'теги на сфере: рядом те, что встречаются вместе',
+          mobius: 'лента без изнанки — статьи по кругу',
+          matrix: 'клетка — как часто два понятия встречаются вместе',
+          tree: 'ветви — разделы, листья — статьи',
+          spectrum: 'ритм выхода статей во времени',
+          tension: 'мосты между областями и разрывы между ними' },
+    en: { articles: 'a dot is an article, colour is a topic group',
+          authors: 'a dot is an author, colour runs from experiment to theory',
+          fly: 'a flight inside the cloud of articles',
+          heat: 'months across, groups down',
+          sphere: 'tags on a sphere: those that co-occur sit close',
+          mobius: 'a one-sided band — articles around it',
+          matrix: 'a cell shows how often two notions meet',
+          tree: 'branches are sections, leaves are articles',
+          spectrum: 'the rhythm of publishing over time',
+          tension: 'bridges between fields and the gaps between them' },
+    es: { articles: 'un punto es un artículo, el color es un grupo temático',
+          authors: 'un punto es un autor, el color va de experimento a teoría',
+          fly: 'un vuelo dentro de la nube de artículos',
+          heat: 'meses en horizontal, grupos en vertical',
+          sphere: 'etiquetas en una esfera: juntas las que coinciden',
+          mobius: 'una banda de una sola cara — artículos alrededor',
+          matrix: 'la celda muestra cuánto coinciden dos nociones',
+          tree: 'las ramas son secciones, las hojas artículos',
+          spectrum: 'el ritmo de publicación en el tiempo',
+          tension: 'puentes entre áreas y las brechas entre ellas' },
+    ar: { articles: 'النقطة مقالة، واللون مجموعة موضوعية',
+          authors: 'النقطة مؤلف، واللون يتدرّج من التجريب إلى النظرية',
+          fly: 'تحليق داخل سحابة المقالات',
+          heat: 'الأشهر أفقيًا والمجموعات رأسيًا',
+          sphere: 'وسوم على كرة: المتجاورة تتكرّر معًا',
+          mobius: 'شريط بوجه واحد — المقالات حوله',
+          matrix: 'الخلية تُظهر كم يلتقي مفهومان',
+          tree: 'الفروع أقسام والأوراق مقالات',
+          spectrum: 'إيقاع النشر عبر الزمن',
+          tension: 'جسور بين المجالات والفجوات بينها' }
+  })[LANG] || {};
+  var HEAD_T = { articles: T.articles, authors: T.authors, fly: FLY.tab, heat: HEAT.tab,
+                 sphere: V.sphere, mobius: V.mobius, matrix: V.matrix,
+                 tree: V2.tree, spectrum: V2.spectrum, tension: V3.tab };
+
   root.innerHTML =
     '<h1 class="dash-h1">' + T.title + '</h1>' +
     '<div class="an-tabs"><button class="an-tab active" data-t="articles">' + T.articles + '</button>' +
@@ -317,6 +366,7 @@
     '<button class="an-tab" data-t="spectrum"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18l3-6 3 9 3-13 3 8 3-4 3 6"/></svg> ' + V2.spectrum + '</button>' +
     '<button class="an-tab" data-t="tension"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h5"/><path d="M15 12h5"/><path d="M9 8.5 12 12l-3 3.5"/><path d="M15 8.5 12 12l3 3.5"/></svg> ' + V3.tab + '</button></div>' +
     '<p class="an-intro" id="an-intro">' + T.introA + '</p>' +
+    '<div class="an-head" id="an-head"></div>' +
     '<div class="an-stage" id="an-stage"><canvas id="an-canvas"></canvas><div class="an-hint">' + T.hint + '</div>' +
     '<div class="an-stage-ctl">' +
     '<button class="an-btn" id="an-spin" title="' + CTL.spin + '" aria-pressed="true"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v4h-4"/></svg></button>' +
@@ -363,6 +413,11 @@
                   sphere: V.sphereIntro, mobius: V.mobiusIntro, matrix: V.matrixIntro,
                   fly: FLY.intro, heat: HEAT.intro, authors: T.introB, articles: T.introA };
     if (intro) intro.innerHTML = INTRO[mode] || T.introA;
+    var headEl = document.getElementById('an-head');
+    if (headEl) {
+      headEl.innerHTML = '<span class="an-head-t">' + (HEAD_T[mode] || '') + '</span>' +
+                         '<span class="an-head-n">' + (HEAD[mode] || '') + '</span>';
+    }
     if (hintEl) hintEl.textContent = HINTS[mode] || (mode === 'fly' ? FLY.hint : (mode === 'heat' ? HEAT.hint : T.hint));
     if (mode === 'fly') { state.travel = 0; state.fyaw = 0; state.fpitch = 0; state.speed = 0.0011; }
     var speedBox = document.getElementById('an-speed');
@@ -410,13 +465,15 @@
       legendEl.innerHTML = _tnHtml + (_tnRead || '');
       document.getElementById('an-stage').style.display = 'none'; return; }
     document.getElementById('an-stage').style.display = '';
-    if (state.mode === 'tree') { buildTree(); legendEl.innerHTML = ''; }
+    // Где цвет означает кластер — показываем ряд точек с названиями групп; где не означает
+    // (спектр, сфера и матрица на со-встречаемости) — легенда осталась бы обманом.
+    if (state.mode === 'tree') { buildTree(); legendEl.innerHTML = clusterRow(); }
     else if (state.mode === 'spectrum') { buildSpectrum(); legendEl.innerHTML = ''; }
     else if (state.mode === 'sphere') { state.raw = state.data; buildSphere(); legendEl.innerHTML = ''; }
-    else if (state.mode === 'mobius') { buildMobius(); legendEl.innerHTML = ''; }
+    else if (state.mode === 'mobius') { buildMobius(); legendEl.innerHTML = clusterRow(); }
     else if (state.mode === 'matrix') { state.raw = state.data; legendEl.innerHTML = ''; }
-    else if (state.mode === 'heat') { buildHeat(); legendEl.innerHTML = ''; }
-    else if (state.mode === 'fly') { legendEl.innerHTML = ''; }
+    else if (state.mode === 'heat') { buildHeat(); legendEl.innerHTML = clusterRow(); }
+    else if (state.mode === 'fly') { legendEl.innerHTML = clusterRow(); }
     else { renderLegend(); }
     draw();
     var rd = reading(state.mode);
@@ -997,6 +1054,24 @@
     var t = window.tagsLoc && tagsLoc[raw];
     return (t && t.name) || raw.replace(/_/g, ' ');
   }
+  /* Компактная легенда — ряд точек с названиями групп. Карточки (.an-cards) слишком тяжелы для
+     видов, где цвет лишь подсказка, а не предмет разговора, поэтому там легенду раньше просто
+     стирали: у «дерева», «ленты», «тепла» и «полёта» цвет означал кластер, но что именно —
+     нигде не было сказано. Стили (.lg-row/.lg-key/.lg-dot) лежали в CSS без применения. */
+  function clusterRow() {
+    var cl = (state.data && state.data.clusters) || {};
+    var titles = state.data && state.data.titles;
+    var keys = Object.keys(cl);
+    if (!keys.length) return '';
+    var items = keys.slice(0, 12).map(function (c) {
+      var lt = titles && titles[c] ? (titles[c][LANG] || titles[c].en) : null;
+      var name = lt ? lt.title : (cl[c] || []).map(niceLabel).slice(0, 2).join(' · ');
+      return '<span class="lg-key"><i class="lg-dot" style="background:' + PAL[c % PAL.length] + '"></i>'
+             + name + '</span>';
+    }).join('');
+    return '<div class="lg-row">' + items + '</div>';
+  }
+
   function renderLegend() {
     var cl = state.data.clusters || {};
     var titles = state.data.titles || null;   // человеческие названия от LLM-трактовщика (если посчитаны)

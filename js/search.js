@@ -28,13 +28,19 @@ window.__favoritesPage = /\/favorites(\.html)?([?#]|$)/.test(location.pathname);
             document.documentElement.setAttribute('data-theme', 'dark');
     } catch (e) {}
 })();
+/* Знак из нашего набора (js/icons.js). Запасной вариант нужен на случай, если
+   набор не приехал: кнопка не должна остаться пустой и безымянной. */
+function b42ic(name, size, fallback) {
+    return (window.B42Icons && B42Icons[name]) ? B42Icons[name](size) : (fallback || '');
+}
 function toggleTheme() {
     var dark = document.documentElement.getAttribute('data-theme') === 'dark';
     if (dark) document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', 'dark');
     try { localStorage.setItem('b42_theme', dark ? 'light' : 'dark'); } catch (e) {}
     var b = document.getElementById('theme-toggle');
-    if (b) b.textContent = dark ? '☾' : '☀';
+    // кнопка показывает, куда переключит: в тёмной теме — солнце, в светлой — луна
+    if (b) b.innerHTML = dark ? b42ic('moon', 18, '☾') : b42ic('sun', 18, '☀');
 }
 window.toggleTheme = toggleTheme;
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var b = document.createElement('button');
         b.id = 'theme-toggle'; b.type = 'button'; b.className = 'theme-toggle';
         b.setAttribute('aria-label', 'Theme');
-        b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀' : '☾';
+        b.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark'
+            ? b42ic('sun', 18, '☀') : b42ic('moon', 18, '☾');
         b.addEventListener('click', toggleTheme);
         host.appendChild(b);
     }
@@ -837,9 +844,9 @@ function cardHTML(item) {
     var _favOn = (typeof isFavorite === 'function' && isFavorite(item.id));
     var cardActions =
         '<div class="card-actions" data-article-id="' + _likeId + '">' +
-        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">👍</button>' +
-        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">👎</button>' +
-        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">⭐</button>' +
+        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '</button>' +
+        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '</button>' +
+        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '</button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
     var img = base + 't_ai.webp';
@@ -1033,12 +1040,16 @@ function filterByCategory(cat) {
 window.filterByCategory = filterByCategory;
 
 // ── Календарь-фильтр (main): год→месяц→день, клик по дню фильтрует ленту ──
+// title уходит во всплывающую подсказку кнопки — там нужен чистый текст.
+// Раньше в него был вшит 📅: подсказка читалась как «📅 Календарь», причём
+// эмодзи рисовала система, то есть на каждой ОС по-своему. Знак теперь на самой
+// кнопке и из нашего набора.
 var CAL_LABELS = {
-    ru: { title: '📅 Календарь', all: 'Все даты', months: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] },
-    en: { title: '📅 Calendar', all: 'All dates', months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] },
-    zh: { title: '📅 日历', all: '全部日期', months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'] },
-    fr: { title: '📅 Calendrier', all: 'Toutes les dates', months: ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'] },
-    ar: { title: '📅 التقويم', all: 'كل التواريخ', months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'] }
+    ru: { title: 'Календарь', all: 'Все даты', months: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] },
+    en: { title: 'Calendar', all: 'All dates', months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] },
+    zh: { title: '日历', all: '全部日期', months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'] },
+    fr: { title: 'Calendrier', all: 'Toutes les dates', months: ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'] },
+    ar: { title: 'التقويم', all: 'كل التواريخ', months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'] }
 };
 
 function filterByDate(prefix, label) {
@@ -1302,7 +1313,11 @@ function localizeStaticUI() {
     if (superBtn) superBtn.title = UI.superlike;
 
     var expressBadge = document.querySelector('.express-badge');
-    if (expressBadge) { expressBadge.title = UI.expressTip; expressBadge.textContent = '⚡ ' + UI.express; }
+    if (expressBadge) {
+        expressBadge.title = UI.expressTip;
+        expressBadge.innerHTML = b42ic('bolt', 13, '⚡');
+        expressBadge.appendChild(document.createTextNode(' ' + UI.express));
+    }
 
     var refineBadge = document.querySelector('.refine-badge');
     if (refineBadge) refineBadge.title = UI.refineTip;
@@ -1335,7 +1350,9 @@ function collapseNavOverflow() {
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'nav-more-btn';
-    btn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>';
+    // Толщину штриха держит --ico-stroke в стилях (на телефоне жирнее); здесь
+    // то же значение запасным, чтобы иконка не тончала, если стиль не приехал.
+    btn.innerHTML = '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>';
     btn.setAttribute('aria-label', 'Menu');
     var panel = document.createElement('div');
     panel.className = 'nav-more-panel';
@@ -1418,6 +1435,83 @@ function collapseNavOverflow() {
     });
 }
 document.addEventListener('DOMContentLoaded', collapseNavOverflow);
+
+// ── Иконки шапки уезжают в шторку, когда строка перестаёт помещаться ─────────
+// Сворачивание выше разбирается со СПИСКОМ пунктов — оно всегда прячет одни и те же
+// разделы, независимо от ширины. Иконок это не касалось, и на 320 строка ломалась
+// на два яруса: названию, меню и трём иконкам нужно около 330 пикселей при 288
+// доступных. Уменьшать кнопки нельзя — 44 это порог касания, — поэтому лишние
+// иконки уезжают туда же, куда давно уезжают лишние пункты.
+// Решение принимается по факту переноса, а не по контрольной ширине: так оно верно и
+// для длинных названий на других языках, где та же строка ломается раньше.
+function fitHeaderCluster() {
+    var bar = document.querySelector('.top-bar');
+    var right = document.querySelector('.header-right');
+    var panel = document.querySelector('.nav-more-panel');
+    if (!bar || !right || !panel) return;
+
+    // Когда все пункты уехали в шторку, обёртка остаётся в строке и всё равно съедает
+    // просвет. CSS-правило :empty её не ловит: внутри остаётся пробельный узел, а для
+    // :empty это уже «не пусто». Прячем по факту отсутствия ссылок.
+    var navBox = right.querySelector('.nav-links');
+    if (navBox) navBox.style.display = navBox.querySelector('a') ? '' : 'none';
+
+    function wraps() {
+        var kids = Array.prototype.filter.call(bar.children, function (el) {
+            return el.getBoundingClientRect().width > 0;
+        });
+        if (kids.length < 2) return false;
+        var tops = kids.map(function (el) { return Math.round(el.getBoundingClientRect().top); });
+        return Math.max.apply(null, tops) - Math.min.apply(null, tops) > 6;
+    }
+    // Порядок вытеснения: сначала то, что реже нужно на ходу. Переключатель темы и поиск
+    // не трогаем — ими пользуются с любой страницы.
+    // Календаря здесь намеренно нет: он тянет за собой сетку месяцев шириной под 620,
+    // и в шторке она растягивала список до 1256, возвращая прокрутку вбок. На самых узких
+    // экранах он убран из шапки стилями — см. «Шапка на узком экране» в style.css.
+    // :not(.nav-moved) обязательно — иначе на следующем витке цикл снова находит то,
+    // что уже лежит в шторке (она сама внутри шапки), и перекладывает его по кругу.
+    var order = ['.nav-links a[href*="/learn"]:not(.nav-moved)',
+                 '.header-right a[href*="/favorites"]:not(.nav-moved)',
+                 '.nav-links a.nav-ic:not(.nav-moved)'];
+
+    var guard = 0;
+    while (wraps() && guard++ < 5) {
+        var el = null;
+        for (var i = 0; i < order.length && !el; i++) el = bar.querySelector(order[i]);
+        if (!el) break;
+        // В шторке пункты подписаны словами, поэтому к иконке добавляем её подсказку —
+        // иначе в списке окажется безымянный значок.
+        var label = (el.getAttribute('title') || '').trim();
+        if (label && !el.textContent.trim()) el.appendChild(document.createTextNode(' ' + label));
+        el.classList.add('nav-moved');
+        panel.appendChild(el);
+    }
+
+    // Переключатель уровней (страницы закона, тега, учёного) в шторку не годится: это
+    // главный контрол страницы, а не редкая ссылка. Если строка всё ещё не помещается —
+    // кладём его под шапку во всю ширину, ровно так он и живёт на статьях.
+    if (wraps()) {
+        var lv = bar.querySelector('.lv-switch:not(.lv-moved)');
+        if (lv && bar.parentNode) {
+            lv.classList.add('lv-moved');
+            bar.parentNode.insertBefore(lv, bar.nextSibling);
+        }
+    }
+}
+// Считать приходится трижды, и это не перестраховка: на DOMContentLoaded заголовок ещё
+// набран запасным шрифтом, его ширина отличается, и строка кажется помещающейся. Тот же
+// приём уже используется для высоты липкой шапки ниже.
+document.addEventListener('DOMContentLoaded', function () {
+    fitHeaderCluster();
+    setTimeout(fitHeaderCluster, 60);
+});
+window.addEventListener('load', fitHeaderCluster);
+var _fitTimer = null;
+window.addEventListener('resize', function () {
+    clearTimeout(_fitTimer);
+    _fitTimer = setTimeout(fitHeaderCluster, 180);
+});
 
 // Список разделов: группы раскрываемые — клик по строке-группе разворачивает её разделы
 // (юзер 2026-07-24: «разделы нажимаем — они раскрываются»). По умолчанию всё свёрнуто.
