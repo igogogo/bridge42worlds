@@ -1897,6 +1897,114 @@
        Свет ходит между зеркалами. В движущейся системе он вынужден идти по
        диагонали — путь длиннее, а скорость та же, значит такт длиннее.
        Замедление времени получается из одной теоремы Пифагора. */
+    // ═══════════════════════════════════════════════════════════════
+    // ПРИНЦИП НАИМЕНЬШЕГО ДЕЙСТВИЯ — почему из бесконечности путей природа выбирает один
+    // ═══════════════════════════════════════════════════════════════
+    // Тело брошено вверх и возвращается в ту же точку ровно за время T. Концы закреплены,
+    // поэтому пробный путь берём как истинный плюс горб: y(t) = y₀(t) + a·sin(πt/T) — при любом a
+    // концы остаются на месте. Действие S = ∫(K − U)dt считаем ЧИСЛЕННО: так видно, что минимум
+    // не подогнан формулой, а получается сложением по кусочкам, как и в настоящем расчёте.
+    function actionModel(data) {
+        var G = 9.81, N = 240;                       // шагов численного интегрирования
+
+        function yTrue(t, st) { return G * st.T * t / 2 - G * t * t / 2; }
+        function yPath(t, st, a) { return yTrue(t, st) + a * Math.sin(Math.PI * t / st.T); }
+        function vPath(t, st, a) {
+            return G * st.T / 2 - G * t + a * (Math.PI / st.T) * Math.cos(Math.PI * t / st.T);
+        }
+        /** Действие вдоль пробного пути: сумма (кинетическая − потенциальная) по шагам. */
+        function action(st, a) {
+            var dt = st.T / N, s = 0;
+            for (var i = 0; i < N; i++) {
+                var t = (i + 0.5) * dt, v = vPath(t, st, a), y = yPath(t, st, a);
+                s += (st.m * v * v / 2 - st.m * G * y) * dt;
+            }
+            return s;
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) {
+                    var ph = (t % (st.T * 1.6)) / (st.T * 1.6);      // пауза между пролётами
+                    var tt = Math.min(1, ph / 0.75) * st.T;
+                    return { t: t, tt: tt };
+                },
+                derive: function (st, a) {
+                    var S = action(st, st.dev), S0 = action(st, 0);
+                    return { S: S, S0: S0, extra: S - S0, tt: a.tt,
+                             K: st.m * Math.pow(vPath(a.tt, st, st.dev), 2) / 2,
+                             U: st.m * G * yPath(a.tt, st, st.dev) };
+                },
+                stage: {
+                    height: 250,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 40, base = H - 46, top = 30;
+                        var hMax = G * st.T * st.T / 8 + 3.2;         // запас под отклонение
+                        var SX = KIT.scale({ min: 0, max: st.T, from: pad, to: W - pad });
+                        var SY = KIT.scale({ min: 0, max: hMax, from: base, to: top });
+
+                        KIT.ground(g, 12, W - 12, base, { color: col.soft, width: 1.5, step: 14, hatch: 7 });
+
+                        function curve(a, color, width, dash) {
+                            var pts = [];
+                            for (var i = 0; i <= 80; i++) {
+                                var t = st.T * i / 80;
+                                pts.push([SX(t), SY(Math.max(0, yPath(t, st, a)))]);
+                            }
+                            KIT.polyline(g, pts, { color: color, width: width, dash: dash });
+                        }
+                        curve(0, col.border, 2, [4, 4]);             // истинный путь — пунктиром
+                        curve(st.dev, '#155E74', 2.5);               // пробный — сплошным
+
+                        // тело бежит по пробному пути
+                        var bx = SX(d.tt), by = SY(Math.max(0, yPath(d.tt, st, st.dev)));
+                        KIT.body(g, bx, by, { shape: 'dot', size: 13, color: '#8F6417' });
+
+                        // энергии в текущий момент — видно, из чего складывается действие
+                        var eb = H - 22, ew = W * 0.42, ex0 = W * 0.30;
+                        var tot = Math.max(1e-6, d.K + Math.abs(d.U));
+                        KIT.bar(g, ex0, eb, ew, 7, { split: d.K / tot, border: col.border,
+                            labelLeft: ctx.T('kinetic'), labelRight: ctx.T('potential'), labelColor: col.soft });
+
+                        KIT.readout(g, [
+                            { text: ctx.T('tryPath'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('truePath'), y: 34, size: 10.5, color: col.soft },
+                            { text: Math.abs(st.dev) < 0.03 ? ctx.T('minHere') : ctx.T('hint'),
+                              y: 50, size: 10.5, color: Math.abs(st.dev) < 0.03 ? '#4C6B4E' : col.soft }
+                        ]);
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">S = ∫(K − U)dt = </span><span class="xf-res">' +
+                        d.S.toFixed(1) + ' ' + T('unit_J') + '</span>' +
+                        '<span class="xf-op"> · ' + T('truePath') + ': </span><span class="xf-var">' +
+                        d.S0.toFixed(1) + '</span>' +
+                        '<br><i>' + (Math.abs(st.dev) < 0.03
+                            ? T('minHere')
+                            : '+' + d.extra.toFixed(1) + ' ' + T('unit_J') + ' — ' + T('hint')) + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xDev', min: -3, max: 3 },
+                    y: { label: 'yAction',
+                         min: function (s) { return Math.round(action(s, 0) - 2); },
+                         max: function (s) { return Math.round(action(s, 3) + 2); } },
+                    samples: 120,
+                    curve: function (a, s) { return action(s, a); },
+                    marker: function (s, a, d) { return { x: s.dev, y: d.S }; }
+                }
+            },
+            extras: function (st, d, T) {
+                var S0 = action(st, 0), S = action(st, st.dev);
+                return '<b>S</b> ' + S.toFixed(1) + ' Дж·с &nbsp;·&nbsp; <b>S₀</b> ' + S0.toFixed(1) +
+                    ' &nbsp;·&nbsp; <b>ΔS</b> +' + (S - S0).toFixed(2);
+            }
+        };
+    }
+
     function srtModel(data) {
         function gamma(b) { return 1 / Math.sqrt(1 - b * b); }
         return {
@@ -2257,7 +2365,8 @@
                       rotation: rotationModel, oscillator: oscillatorModel,
                       resonance: resonanceModel, entropy: entropyModel,
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
-                      srt: srtModel, quantum: quantumModel, nucleus: nucleusModel };
+                      srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
+                      action: actionModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок

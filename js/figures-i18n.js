@@ -10,17 +10,17 @@ window.B42FigText = {
   "стенка": {
     "en": "wall",
     "es": "pared",
-    "ar": "جدار"
+    "ar": "الجدار"
   },
   "долетят": {
-    "en": "reach",
-    "es": "llegan",
+    "en": "will reach",
+    "es": "alcanzan",
     "ar": "تصل"
   },
   "за &#916;t": {
     "en": "in &#916;t",
     "es": "en &#916;t",
-    "ar": "خلال &#916;t"
+    "ar": "خلال Δt"
   },
   "много": {
     "en": "many",
@@ -29,8 +29,8 @@ window.B42FigText = {
   },
   "ударов": {
     "en": "collisions",
-    "es": "choques",
-    "ar": "الضربات"
+    "es": "impactos",
+    "ar": "ضربات"
   },
   "постоянная сила": {
     "en": "constant force",
@@ -50,22 +50,22 @@ window.B42FigText = {
   "ни одно направление": {
     "en": "no direction",
     "es": "ninguna dirección",
-    "ar": "لا اتجاه واحد"
+    "ar": "لا اتجاه"
   },
   "не выделено": {
-    "en": "is not preferred",
-    "es": "no destacada",
-    "ar": "غير مميز"
+    "en": "not distinguished",
+    "es": "privilegiada",
+    "ar": "غير محدد"
   },
   "k&#8342; — курс обмена": {
     "en": "k&#8342; — exchange rate",
-    "es": "k&#8342; — tasa de intercambio",
-    "ar": "k&#8342; — سعر الصرف"
+    "es": "k&#8342; — tipo de cambio",
+    "ar": "k′ — سعر الصرف"
   },
   "Дж &#8596; К": {
     "en": "J &#8596; K",
     "es": "J &#8596; K",
-    "ar": "J &#8596; K"
+    "ar": "J ↔ K"
   },
   "микромир: N, m, v": {
     "en": "microcosm: N, m, v",
@@ -80,17 +80,17 @@ window.B42FigText = {
   "T растёт": {
     "en": "T increases",
     "es": "T aumenta",
-    "ar": "T يزداد"
+    "ar": "T تزداد"
   },
   "T стоит": {
-    "en": "T is constant",
+    "en": "T constant",
     "es": "T constante",
     "ar": "T ثابت"
   },
   "связи рвутся": {
     "en": "bonds break",
     "es": "los enlaces se rompen",
-    "ar": "الروابط تنكسر"
+    "ar": "تنكسر الروابط"
   },
   "нагрев": {
     "en": "heating",
@@ -114,7 +114,7 @@ window.B42FigText = {
   },
   "в 6,8 раза больше": {
     "en": "6.8 times larger",
-    "es": "6.8 veces más",
+    "es": "6.8 veces mayor",
     "ar": "أكبر بـ 6.8 مرة"
   },
   "пар": {
@@ -125,7 +125,7 @@ window.B42FigText = {
   "давление атмосферы": {
     "en": "atmospheric pressure",
     "es": "presión atmosférica",
-    "ar": "الضغط الجوي"
+    "ar": "ضغط الجو"
   },
   "пузырёк": {
     "en": "bubble",
@@ -134,8 +134,8 @@ window.B42FigText = {
   },
   "раздвигает": {
     "en": "expands",
-    "es": "desplaza",
-    "ar": "يدفع"
+    "es": "empuja",
+    "ar": "يفصل"
   },
   "только давление": {
     "en": "only pressure",
@@ -150,7 +150,7 @@ window.B42FigText = {
   "&#8747; каждую часть отдельно": {
     "en": "&#8747; each part separately",
     "es": "&#8747; cada parte por separado",
-    "ar": "&#8747; كل جزء على حدة"
+    "ar": "∫ كل جزء على حدة"
   },
   "0,5 атм": {
     "en": "0.5 atm",
@@ -188,8 +188,8 @@ window.B42FigText = {
     "ar": "لا شيء"
   },
   "не пропадает": {
-    "en": "does not disappear",
-    "es": "no desaparece",
+    "en": "nothing lost",
+    "es": "no se pierde",
     "ar": "لا يختفي"
   },
   "до: 300 K": {
@@ -214,18 +214,18 @@ window.B42FigText = {
   },
   "не уходит": {
     "en": "does not escape",
-    "es": "no sale",
+    "es": "no se escapa",
     "ar": "لا يخرج"
   },
   "адиабата": {
-    "en": "adiabatic",
+    "en": "adiabat",
     "es": "adiabática",
     "ar": "أدياباتي"
   },
   "изотерма P·V": {
     "en": "isotherm P·V",
     "es": "isoterma P·V",
-    "ar": "متساوية الحرارة P·V"
+    "ar": "إيزوثيرم P·V"
   },
   "работа": {
     "en": "work",
@@ -243,12 +243,12 @@ window.B42FigText = {
     "ar": "= شغل"
   },
   "нагреватель": {
-    "en": "heat source",
-    "es": "calentador",
+    "en": "heater",
+    "es": "foco caliente",
     "ar": "مسخن"
   },
   "холодильник": {
-    "en": "cold reservoir",
+    "en": "refrigerator",
     "es": "foco frío",
     "ar": "مبرد"
   },
@@ -260,17 +260,17 @@ window.B42FigText = {
   "Q&#1093; никогда не ноль": {
     "en": "Q&#1093; never zero",
     "es": "Q&#1093; nunca es cero",
-    "ar": "Q&#1093; أبداً صفر"
+    "ar": "Qх ليس صفرًا أبدًا"
   },
   "только температуры": {
     "en": "only temperatures",
     "es": "solo temperaturas",
-    "ar": "درجات الحرارة فقط"
+    "ar": "فقط درجات الحرارة"
   },
   "никакой конструкции": {
-    "en": "no specific design",
-    "es": "ninguna construcción",
-    "ar": "لا تصميم معين"
+    "en": "no construction",
+    "es": "sin construcción específica",
+    "ar": "لا بناء"
   },
   "пассажир": {
     "en": "passenger",
@@ -288,7 +288,7 @@ window.B42FigText = {
     "ar": "مراقب"
   },
   "v = 0 в вагоне": {
-    "en": "v = 0 on the train",
+    "en": "v = 0 in the train car",
     "es": "v = 0 en el vagón",
     "ar": "v = 0 في العربة"
   },
@@ -325,12 +325,12 @@ window.B42FigText = {
   "каждая ступень —": {
     "en": "each step —",
     "es": "cada paso —",
-    "ar": "كل خطوة —"
+    "ar": "كل مرحلة —"
   },
   "деление на время": {
     "en": "division by time",
     "es": "división por tiempo",
-    "ar": "قسمة على الزمن"
+    "ar": "القسمة على الزمن"
   },
   "a = скорость изменения скорости": {
     "en": "a = rate of change of velocity",
@@ -340,7 +340,7 @@ window.B42FigText = {
   "наклон прямой = ускорение": {
     "en": "slope of line = acceleration",
     "es": "pendiente de la recta = aceleración",
-    "ar": "ميل الخط المستقيم = التسارع"
+    "ar": "ميل المستقيم = التسارع"
   },
   "площадь трапеции = перемещение": {
     "en": "area of trapezoid = displacement",
@@ -350,26 +350,26 @@ window.B42FigText = {
   "v&#8320;t — равномерная часть": {
     "en": "v&#8320;t — uniform part",
     "es": "v&#8320;t — parte uniforme",
-    "ar": "v&#8320;t — الجزء المنتظم"
+    "ar": "v₀t — الجزء المنتظم"
   },
   "сил нет — скорость постоянна": {
     "en": "no forces — velocity constant",
-    "es": "sin fuerzas — velocidad constante",
+    "es": "no hay fuerzas — velocidad constante",
     "ar": "لا قوى — السرعة ثابتة"
   },
   "равные промежутки за равное время": {
-    "en": "equal displacements in equal time intervals",
+    "en": "equal intervals in equal time",
     "es": "distancias iguales en tiempos iguales",
     "ar": "مسافات متساوية في أزمنة متساوية"
   },
   "вдвое большая сила — вдвое большее ускорение": {
     "en": "twice the force — twice the acceleration",
-    "es": "doble fuerza — doble aceleración",
-    "ar": "قوة مضاعفة — تسارع مضاعف"
+    "es": "fuerza doble — aceleración doble",
+    "ar": "ضعف القوة — ضعف التسارع"
   },
   "та же сила: вдвое тяжелее — вдвое медленнее разгон": {
-    "en": "same force: twice as heavy — twice as slow acceleration",
-    "es": "misma fuerza: doble masa — mitad de aceleración",
+    "en": "same force: twice mass — half acceleration",
+    "es": "misma fuerza: masa doble — aceleración mitad",
     "ar": "نفس القوة: ضعف الكتلة — نصف التسارع"
   },
   "больше сила →": {
@@ -379,7 +379,7 @@ window.B42FigText = {
   },
   "быстрее разгон": {
     "en": "faster acceleration",
-    "es": "aceleración más rápida",
+    "es": "mayor aceleración",
     "ar": "تسارع أسرع"
   },
   "больше масса →": {
@@ -389,7 +389,7 @@ window.B42FigText = {
   },
   "медленнее разгон": {
     "en": "slower acceleration",
-    "es": "aceleración más lenta",
+    "es": "menor aceleración",
     "ar": "تسارع أبطأ"
   },
   "1 Н = 1 кг · 1 м/с²": {
@@ -399,8 +399,8 @@ window.B42FigText = {
   },
   "масса уходит назад": {
     "en": "mass goes backward",
-    "es": "masa retrocede",
-    "ar": "الكتلة تتجه للخلف"
+    "es": "la masa se va hacia atrás",
+    "ar": "الكتلة تندفع للخلف"
   },
   "верно даже когда": {
     "en": "true even when",
@@ -414,8 +414,8 @@ window.B42FigText = {
   },
   "равны по величине, приложены к РАЗНЫМ телам": {
     "en": "equal in magnitude, applied to DIFFERENT bodies",
-    "es": "iguales en magnitud, aplicadas a cuerpos DISTINTOS",
-    "ar": "متساوية في المقدار، مؤثرة على أجسام مختلفة"
+    "es": "iguales en magnitud, aplicadas a CUERPOS DIFERENTES",
+    "ar": "متساويان في المقدار، على جسمين مختلفين"
   },
   "замкнутая система": {
     "en": "closed system",
@@ -424,8 +424,8 @@ window.B42FigText = {
   },
   "внутренние силы гасятся → Σp = const": {
     "en": "internal forces cancel → Σp = const",
-    "es": "fuerzas internas se cancelan → Σp = cte",
-    "ar": "القوى الداخلية تلغى → Σp = ثابت"
+    "es": "fuerzas internas se cancelan → Σp = const",
+    "ar": "القوى الداخلية تتلاشى → Σp = ثابت"
   },
   "упругий": {
     "en": "elastic",
@@ -433,13 +433,13 @@ window.B42FigText = {
     "ar": "مرن"
   },
   "разлетелись,": {
-    "en": "flew apart,",
+    "en": "scattered,",
     "es": "se separaron,",
-    "ar": "انفصلوا،"
+    "ar": "تفرقت،"
   },
   "E сохранилась": {
     "en": "E conserved",
-    "es": "E se conservó",
+    "es": "E conservada",
     "ar": "E محفوظة"
   },
   "неупругий": {
@@ -449,8 +449,8 @@ window.B42FigText = {
   },
   "слиплись,": {
     "en": "stuck together,",
-    "es": "se pegaron,",
-    "ar": "التصقوا،"
+    "es": "fusionados,",
+    "ar": "التصقت،"
   },
   "часть E → тепло": {
     "en": "part of E → heat",
@@ -459,23 +459,23 @@ window.B42FigText = {
   },
   "импульс сохраняется в обоих случаях": {
     "en": "momentum conserved in both cases",
-    "es": "el momento se conserva en ambos casos",
+    "es": "el impulso se conserva en ambos casos",
     "ar": "الزخم محفوظ في كلتا الحالتين"
   },
   "сдвиг в пространстве": {
     "en": "shift in space",
-    "es": "traslación espacial",
-    "ar": "إزاحة مكانية"
+    "es": "desplazamiento espacial",
+    "ar": "الانتقال في الفضاء"
   },
   "импульс": {
     "en": "momentum",
-    "es": "momento",
+    "es": "momento lineal",
     "ar": "الزخم"
   },
   "сдвиг во времени": {
     "en": "shift in time",
-    "es": "traslación temporal",
-    "ar": "الإزاحة الزمنية"
+    "es": "desplazamiento temporal",
+    "ar": "الانتقال في الزمن"
   },
   "энергия": {
     "en": "energy",
@@ -498,8 +498,8 @@ window.B42FigText = {
     "ar": "التناظر يولد قانون الحفظ"
   },
   "величина v": {
-    "en": "magnitude of v",
-    "es": "magnitud v",
+    "en": "magnitude v",
+    "es": "magnitud de v",
     "ar": "مقدار v"
   },
   "постоянна,": {
@@ -520,7 +520,7 @@ window.B42FigText = {
   "значит есть ускорение": {
     "en": "so there is acceleration",
     "es": "significa que hay aceleración",
-    "ar": "إذاً هناك تسارع"
+    "ar": "إذن هناك تسارع"
   },
   "треугольник радиусов": {
     "en": "triangle of radii",
@@ -538,24 +538,24 @@ window.B42FigText = {
     "ar": "دائماً نحو المركز"
   },
   "наблюдатель стоит": {
-    "en": "observer stands still",
+    "en": "observer stationary",
     "es": "observador en reposo",
     "ar": "المراقب ساكن"
   },
   "сила есть,": {
-    "en": "force exists,",
+    "en": "force present,",
     "es": "hay fuerza,",
     "ar": "توجد قوة،"
   },
   "ускорение есть,": {
-    "en": "acceleration exists,",
+    "en": "acceleration present,",
     "es": "hay aceleración,",
     "ar": "يوجد تسارع،"
   },
   "F = ma сходится": {
     "en": "F = ma works",
     "es": "F = ma se cumple",
-    "ar": "F = ma متوافقة"
+    "ar": "F = ma صحيحة"
   },
   "наблюдатель вращается": {
     "en": "observer rotates",
@@ -569,48 +569,48 @@ window.B42FigText = {
   },
   "силы уравновешены —": {
     "en": "forces are balanced —",
-    "es": "las fuerzas se equilibran —",
+    "es": "fuerzas equilibradas —",
     "ar": "القوى متوازنة —"
   },
   "но откуда F?": {
     "en": "but where does F come from?",
-    "es": "pero ¿de dónde F?",
-    "ar": "لكن من أين F؟"
+    "es": "pero ¿de dónde viene F?",
+    "ar": "لكن من أين القوة؟"
   },
   "кабина ускоряется": {
-    "en": "cabin accelerates",
+    "en": "cab accelerates",
     "es": "la cabina acelera",
-    "ar": "الكابينة تتسارع"
+    "ar": "المقصورة تتسارع"
   },
   "нет источника,": {
     "en": "no source,",
-    "es": "sin fuente,",
+    "es": "no hay fuente,",
     "ar": "لا مصدر،"
   },
   "нет пары по": {
     "en": "no pair according to",
-    "es": "no hay par según",
-    "ar": "لا زوج وفق"
+    "es": "no hay par por",
+    "ar": "لا زوج حسب"
   },
   "третьему закону": {
     "en": "third law",
-    "es": "la tercera ley",
-    "ar": "للقانون الثالث"
+    "es": "tercera ley",
+    "ar": "القانون الثالث"
   },
   "оттянули вправо —": {
     "en": "pulled to the right —",
-    "es": "se estiró a la derecha —",
+    "es": "se tiró a la derecha —",
     "ar": "سحبنا لليمين —"
   },
   "тянет влево": {
-    "en": "pulls to the left",
-    "es": "jala hacia la izquierda",
-    "ar": "يسحب لليسار"
+    "en": "pulls left",
+    "es": "tira hacia la izquierda",
+    "ar": "يجذب لليسار"
   },
   "дважды продифференцировали — вернулись с минусом": {
-    "en": "differentiated twice — came back with a minus",
-    "es": "se derivó dos veces — se obtiene menos",
-    "ar": "اشتقاق مرتين — عدنا بإشارة سالبة"
+    "en": "differentiated twice — got back with a minus",
+    "es": "se derivó dos veces — regresó con signo menos",
+    "ar": "فاضلنا مرتين — عدنا بإشارة سالبة"
   },
   "A сокращается": {
     "en": "A cancels",
@@ -618,24 +618,24 @@ window.B42FigText = {
     "ar": "A تُختصر"
   },
   "уравнению всё равно, как сильно качнули": {
-    "en": "equation does not care how far you pulled",
-    "es": "a la ecuación le da igual la amplitud",
-    "ar": "المعادلة لا تهتم بكمية الإزاحة"
+    "en": "equation doesn't care how hard you push",
+    "es": "no importa la amplitud del desplazamiento",
+    "ar": "المعادلة مستقلة عن السعة"
   },
   "T — общий": {
-    "en": "T is common",
-    "es": "T común",
+    "en": "T common",
+    "es": "T — común",
     "ar": "T — مشترك"
   },
   "большая A": {
     "en": "large A",
     "es": "A grande",
-    "ar": "A كبير"
+    "ar": "A كبيرة"
   },
   "малая A": {
     "en": "small A",
     "es": "A pequeña",
-    "ar": "A صغير"
+    "ar": "A صغيرة"
   },
   "тень": {
     "en": "shadow",
@@ -644,23 +644,23 @@ window.B42FigText = {
   },
   "точка вращается": {
     "en": "point rotates",
-    "es": "punto gira",
-    "ar": "نقطة تدور"
+    "es": "el punto gira",
+    "ar": "النقطة تدور"
   },
   "тень колеблется": {
     "en": "shadow oscillates",
-    "es": "sombra oscila",
-    "ar": "الظل يهتز"
+    "es": "la sombra oscila",
+    "ar": "الظل يتذبذب"
   },
   "край": {
     "en": "edge",
-    "es": "extremo",
-    "ar": "حافة"
+    "es": "borde",
+    "ar": "الطرف"
   },
   "центр": {
     "en": "center",
     "es": "centro",
-    "ar": "مركز"
+    "ar": "المركز"
   },
   "зелёное — движение, охра — пружина": {
     "en": "green — motion, ochre — spring",
@@ -669,13 +669,13 @@ window.B42FigText = {
   },
   "сумма всегда одна: E = kA²/2": {
     "en": "sum always the same: E = kA²/2",
-    "es": "la suma es siempre la misma: E = kA²/2",
-    "ar": "المجموع دائماً واحد: E = kA²/2"
+    "es": "la suma siempre es la misma: E = kA²/2",
+    "ar": "المجموع ثابت دائمًا: E = kA²/2"
   },
   "у дна — парабола": {
     "en": "at bottom — parabola",
     "es": "en el fondo — parábola",
-    "ar": "عند القاع — قطع مكافئ"
+    "ar": "في القاع — قطع مكافئ"
   },
   "сложная яма": {
     "en": "complex well",
@@ -683,9 +683,9 @@ window.B42FigText = {
     "ar": "بئر معقد"
   },
   "значит внутри спрятана пружина": {
-    "en": "means a spring is hidden inside",
-    "es": "significa que dentro hay un resorte",
-    "ar": "إذاً بداخله زنبرك مخفي"
+    "en": "means a spring hidden inside",
+    "es": "significa que dentro hay un resorte escondido",
+    "ar": "أي أن بداخله زنبرك مخفي"
   },
   "дальше от оси —": {
     "en": "farther from axis —",
@@ -693,44 +693,44 @@ window.B42FigText = {
     "ar": "أبعد عن المحور —"
   },
   "больше момент": {
-    "en": "greater torque",
-    "es": "mayor momento",
+    "en": "greater moment",
+    "es": "mayor momento de inercia",
     "ar": "عزم أكبر"
   },
   "момент импульса учитывает плечо": {
     "en": "angular momentum includes lever arm",
-    "es": "el momento angular considera el brazo",
+    "es": "el momento angular considera el brazo de momento",
     "ar": "الزخم الزاوي يأخذ في الاعتبار الذراع"
   },
   "руки раскинуты: I большой, ω малая": {
     "en": "arms spread: I large, ω small",
     "es": "brazos extendidos: I grande, ω pequeña",
-    "ar": "الذراعان ممدودتان: I كبير، ω صغيرة"
+    "ar": "الذراعان ممدودتان: I كبير، ω صغير"
   },
   "руки прижаты: I малый, ω большая": {
-    "en": "arms close: I small, ω large",
+    "en": "arms pressed: I small, ω large",
     "es": "brazos pegados: I pequeño, ω grande",
-    "ar": "الذراعان مضغوطتان: I صغير، ω كبيرة"
+    "ar": "الذراعان مضمومتان: I صغير، ω كبير"
   },
   "срыв": {
-    "en": "breakaway",
-    "es": "desprendimiento",
+    "en": "slip",
+    "es": "deslizamiento",
     "ar": "انزلاق"
   },
   "покоя": {
     "en": "static",
     "es": "reposo",
-    "ar": "السكون"
+    "ar": "سكون"
   },
   "скольжения": {
     "en": "kinetic",
     "es": "deslizamiento",
-    "ar": "الانزلاق"
+    "ar": "انزلاق"
   },
   "тяга": {
     "en": "traction",
     "es": "tracción",
-    "ar": "قوة الجر"
+    "ar": "الجر"
   },
   "малая площадь": {
     "en": "small area",
@@ -743,8 +743,53 @@ window.B42FigText = {
     "ar": "مساحة كبيرة"
   },
   "точек контакта столько же — сила трения та же": {
-    "en": "same number of contact points — same friction force",
-    "es": "la cantidad de puntos de contacto es la misma — la fuerza de fricción es la misma",
-    "ar": "نقاط التلامس نفس العدد — قوة الاحتكاك نفسها"
+    "en": "contact points same number — friction force same",
+    "es": "puntos de contacto iguales — misma fuerza de fricción",
+    "ar": "عدد نقاط التلامس نفس العدد — قوة الاحتكاك نفسها"
+  },
+  "начало": {
+    "en": "start",
+    "es": "inicio",
+    "ar": "بداية"
+  },
+  "конец": {
+    "en": "end",
+    "es": "fin",
+    "ar": "نهاية"
+  },
+  "путей бесконечно много": {
+    "en": "infinitely many paths",
+    "es": "infinitos caminos",
+    "ar": "مسارات لا نهائية"
+  },
+  "истинный": {
+    "en": "true",
+    "es": "verdadero",
+    "ar": "حقيقي"
+  },
+  "K − U на каждом шаге": {
+    "en": "K − U at each step",
+    "es": "K − U en cada paso",
+    "ar": "K − U في كل خطوة"
+  },
+  "сумма по всем шагам и есть действие": {
+    "en": "sum over all steps is the action",
+    "es": "suma sobre todos los pasos es la acción",
+    "ar": "مجموع كل الخطوات هو الفعل"
+  },
+  "истинный путь": {
+    "en": "true path",
+    "es": "camino verdadero",
+    "ar": "المسار الحقيقي"
+  },
+  "отклонение": {
+    "en": "deviation",
+    "es": "desviación",
+    "ar": "انحراف"
+  },
+  "действие S": {
+    "en": "action S",
+    "es": "acción S",
+    "ar": "الفعل S"
   }
 };
