@@ -56,6 +56,10 @@
   .k-law{max-width:620px;margin:26px 0;padding:18px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
   .k-law-name{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--soft);margin-bottom:10px}
   .k-law-eq{text-align:center;margin:14px 0 12px;font-size:24px}
+  /* Формула шире экрана прокручивается ВНУТРИ своего блока. Иначе на телефоне вбок уезжает
+     вся страница: замерено до 2000 px горизонтального выноса на длинных выводах. */
+  .k-law-eq,.k-plate-eq,.katex-display,.k-example,.k-math{overflow-x:auto;overflow-y:hidden;max-width:100%}
+  .katex-display{padding-bottom:3px}
   .k-law-alt{font-size:12.5px;color:var(--soft);text-align:center;margin:-4px 0 14px}
   .k-author{display:flex;gap:10px;font-size:13px;line-height:1.6;margin-top:8px;color:var(--muted)}
   .k-author b{color:var(--text);font-weight:600;white-space:nowrap}
@@ -234,7 +238,12 @@
   .k-lesson{display:flex;gap:16px;align-items:flex-start}
   .k-lesson-thumb{width:96px;height:96px;flex-shrink:0;border:1px solid var(--rule);object-fit:cover}
   .k-lesson-body{flex:1;min-width:0}
-  @media(max-width:560px){.k-lesson-thumb{width:64px;height:64px}}
+  @media(max-width:560px){
+    .k-lesson-thumb{width:64px;height:64px}
+    .k-law-eq{font-size:19px}
+    .k-plate-eq{font-size:19px}
+    body{overflow-x:hidden}          /* страховка: страница не ездит вбок ни при каком контенте */
+  }
   .k-person{margin:16px 0;padding-bottom:14px;border-bottom:1px solid var(--rule)}
   .k-person:last-child{border-bottom:none}
   .k-person-n{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--ink)}
