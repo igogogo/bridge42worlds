@@ -149,9 +149,42 @@ def cmd_regen_day(args):
     generate.process_day(args.date, force=True)
 
 
+def _refuse_if_not_lead(command):
+    """Полная пересборка запускается только ведущей сессией и только из main.
+
+    Правило это было записано в ПРАВИЛА-РАБОТЫ.md, но правило, которое надо помнить,
+    рано или поздно нарушат: команда безобидно называется, а последствие — час работы,
+    переписанное дерево целиком и ветка, которую потом нельзя слить. Поэтому проверка
+    живёт в коде, а не в документе.
+
+    Обойти сознательно можно: B42_LEAD=1 в окружении. Это защита от случайности.
+    """
+    if os.environ.get("B42_LEAD") == "1":
+        return
+    try:
+        branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                                capture_output=True, text=True, timeout=10).stdout.strip()
+    except Exception:
+        return          # не git-дерево или git недоступен — не мешаем работать
+    if branch in ("main", "HEAD", ""):
+        return
+    print(f"\n⛔ `run.py {command}` из ветки «{branch}» — не надо.\n")
+    print("   Полную пересборку делает ведущая сессия и только из main. Причина:")
+    print("   команда переписывает собранный сайт целиком, это около часа работы,")
+    print("   и ветка после неё не сливается по-человечески.\n")
+    print("   Что делать вместо этого:")
+    print("     • правки в js/ и css/ видны сразу — python -m http.server 8420 и Ctrl+F5")
+    print("     • одна статья — python run.py html --only 2026-07-01")
+    print("     • нужна полная сборка — отдайте ветку ведущей сессии\n")
+    print("   Подробности: ПРАВИЛА-РАБОТЫ.md\n")
+    sys.exit(2)
+
+
 def cmd_html(args):
     """Пересборка HTML. На время работы ставим файл-замок: заливка в R2, запущенная
     параллельно, прочитает наполовину переписанное дерево и зальёт смесь версий."""
+    if not getattr(args, "only", None):
+        _refuse_if_not_lead("html")
     import generate
     from datetime import datetime
     lock = Path(".build.lock")
