@@ -456,21 +456,21 @@
           "sym": "B",
           "latex": "B",
           "what": "nuclear binding energy",
-          "unit": "МэВ",
+          "unit": "MeV",
           "note": "how much energy is needed to break the nucleus into individual nucleons"
         },
         {
           "sym": "BA",
           "latex": "B/A",
           "what": "specific binding energy",
-          "unit": "МэВ",
+          "unit": "MeV",
           "note": "per nucleon; the key quantity of all nuclear physics, maximum around 8.8 for iron"
         },
         {
           "sym": "R",
           "latex": "R",
           "what": "nuclear radius",
-          "unit": "м",
+          "unit": "m",
           "note": "$R \\approx 1{,}2\\cdot 10^{-15}A^{1/3}$ m — grows as the cube root, so density is the same for all nuclei"
         }
       ]
@@ -481,43 +481,43 @@
       "steps": [
         {
           "text": "First, let's estimate the scale of the problem. The Coulomb repulsion between two protons at nuclear distance is enormous — so the binding force must be even larger.",
-          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{Н}",
+          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{N}",
           "figure": "forceprop",
           "figCaption": "One hundred newtons between two protons — the weight of a ten-kilogram dumbbell on an object the size of a femtometer."
         },
         {
           "text": "Volume term. Each nucleon is attracted to its neighbors, and the number of neighbors is the same for each — the nuclear force is short-range and doesn't reach beyond the nearest. Hence the contribution is proportional to the number of nucleons.",
-          "latex": "B_{\\text{об}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{rev}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{MeV}",
           "figure": "microcontact",
           "figCaption": "Like in a liquid drop: each molecule is bonded only to its neighbors, and the energy is proportional to their number."
         },
         {
           "text": "Surface correction. Nucleons at the edge have fewer neighbors, so they are bound more weakly. The number of such nucleons is proportional to the surface area, which grows as $A^{2/3}$.",
-          "latex": "B_{\\text{пов}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{surf}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{MeV}",
           "figure": "pressure",
           "figCaption": "The same as surface tension in a drop. This correction harms small nuclei more — they have a large surface fraction."
         },
         {
           "text": "Coulomb term. All protons repel each other, and each repels every other — not just neighbors, because the electric force is long-range. Hence quadratic growth with the number of protons.",
-          "latex": "B_{\\text{кул}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{МэВ}",
+          "latex": "B_{\\text{coul}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "Key difference: attraction only from neighbors, repulsion from all. Hence the limit on nuclear size."
         },
         {
           "text": "Symmetry term. Protons and neutrons fill their own levels according to the Pauli principle, and it is more favorable when they are equal: an imbalance forces occupation of higher levels.",
-          "latex": "B_{\\text{сим}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{МэВ}",
+          "latex": "B_{\\text{sym}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{MeV}",
           "figure": "anywell",
           "figCaption": "Two independent sets of levels. Filling both to the same height is more favorable than filling one deep."
         },
         {
           "text": "And pairing correction: nucleons prefer to pair with opposite spins. Even-even nuclei are more stable than odd-odd ones.",
-          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{или}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{МэВ}",
+          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{or}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "Of 254 stable isotopes, 148 are even-even and only four are odd-odd."
         },
         {
           "text": "Add everything and divide by the number of nucleons. The result is a curve with a maximum near iron — the main graph of nuclear physics, which you see under the stand.",
-          "latex": "\\frac{B}{A}: \\;\\text{максимум} \\approx 8{,}8\\ \\text{МэВ при } A \\approx 56{-}62",
+          "latex": "\\frac{B}{A}: \\;\\text{maximum} \\approx 8{,}8\\ \\text{MeV at } A \\approx 56{-}62",
           "figure": "curves",
           "figCaption": "To the left of the maximum, fusion is favorable; to the right, fission. All of nuclear energy is read from this curve."
         }
@@ -538,23 +538,23 @@
       "title": "Example with numbers: mass defect of helium",
       "lead": "We calculate how much lighter the nucleus is than its parts, and what the difference turns into.",
       "given": "Mass of proton 1,00728 a.m.u., neutron 1,00866, helium-4 nucleus — 4,00151 a.m.u. Find the mass defect and binding energy. Assume that 1 a.m.u. corresponds to 931,5 MeV.",
-      "law": "$\\Delta m = Zm_p + Nm_n - m_{\\text{ядра}}$, $\\;B = \\Delta m c^{2}$",
+      "law": "$\\Delta m = Zm_p + Nm_n - m_{\\text{nuclei}}$, $\\;B = \\Delta m c^{2}$",
       "solution": [
         {
           "text": "Sum of the masses of two protons and two neutrons.",
-          "latex": "2 \\cdot 1{,}00728 + 2 \\cdot 1{,}00866 = 4{,}03188\\ \\text{а.е.м.}"
+          "latex": "2 \\cdot 1{,}00728 + 2 \\cdot 1{,}00866 = 4{,}03188\\ \\text{amu}"
         },
         {
           "text": "Mass defect — the difference from the actual mass of the nucleus.",
-          "latex": "\\Delta m = 4{,}03188 - 4{,}00151 = 0{,}03037\\ \\text{а.е.м.}"
+          "latex": "\\Delta m = 4{,}03188 - 4{,}00151 = 0{,}03037\\ \\text{amu}"
         },
         {
           "text": "Convert to energy.",
-          "latex": "B = 0{,}03037 \\cdot 931{,}5 \\approx 28{,}3\\ \\text{МэВ}"
+          "latex": "B = 0{,}03037 \\cdot 931{,}5 \\approx 28{,}3\\ \\text{MeV}"
         },
         {
           "text": "Per nucleon.",
-          "latex": "\\frac{B}{A} = \\frac{28{,}3}{4} \\approx 7{,}1\\ \\text{МэВ}"
+          "latex": "\\frac{B}{A} = \\frac{28{,}3}{4} \\approx 7{,}1\\ \\text{MeV}"
         }
       ],
       "answer": "The helium nucleus is 0,03 a.m.u. lighter than its parts, which corresponds to a binding energy of 28,3 MeV, or 7,1 MeV per nucleon.",
@@ -566,7 +566,7 @@
       "items": [
         {
           "sym": "u",
-          "latex": "\\text{а.е.м.}",
+          "latex": "\\text{amu}",
           "name": "Atomic mass unit",
           "value": "1,661 · 10⁻²⁷",
           "unit": "kg = 931,5 MeV",
@@ -862,43 +862,43 @@
       "steps": [
         {
           "text": "Primero, evaluemos la magnitud del problema. La repulsión coulombiana entre dos protones a distancia nuclear es enorme — por lo tanto, la fuerza de retención debe ser aún mayor.",
-          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{Н}",
+          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{N}",
           "figure": "forceprop",
           "figCaption": "Cien newtons entre dos protones — el peso de una pesa de diez kilogramos sobre un objeto de tamaño femtometro."
         },
         {
           "text": "Término de volumen. Cada nucleón es atraído por sus vecinos, y el número de vecinos es el mismo para todos — la fuerza nuclear es de corto alcance y no alcanza más allá de los más cercanos. Por lo tanto, la contribución es proporcional al número de nucleones.",
-          "latex": "B_{\\text{об}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{vol}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{MeV}",
           "figure": "microcontact",
           "figCaption": "Como en una gota de líquido: cada molécula está enlazada solo con sus vecinos, y la energía es proporcional a su número."
         },
         {
           "text": "Corrección de superficie. Los nucleones en el borde tienen menos vecinos, por lo que están más débilmente enlazados. El número de tales nucleones es proporcional al área de la superficie, y esta crece como $A^{2/3}$.",
-          "latex": "B_{\\text{пов}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{sup}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{MeV}",
           "figure": "pressure",
           "figCaption": "Lo mismo que la tensión superficial en una gota. Esta corrección perjudica más a los núcleos pequeños — tienen una gran fracción de superficie."
         },
         {
           "text": "Término coulombiano. Todos los protones se repelen entre sí, y cada uno repela a todos los demás — no solo a los vecinos, porque la fuerza eléctrica es de largo alcance. De ahí el crecimiento cuadrático con el número de protones.",
-          "latex": "B_{\\text{кул}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{МэВ}",
+          "latex": "B_{\\text{C}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "Diferencia clave: la atracción solo de los vecinos, la repulsión de todos. De ahí el límite del tamaño nuclear."
         },
         {
           "text": "Término de simetría. Los protones y neutrones ocupan sus niveles según el principio de Pauli, y es más ventajoso cuando están igualados: un desequilibrio obliga a poblar niveles más altos.",
-          "latex": "B_{\\text{сим}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{МэВ}",
+          "latex": "B_{\\text{sim}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{MeV}",
           "figure": "anywell",
           "figCaption": "Dos conjuntos independientes de niveles. Llenar ambos hasta la misma altura es más ventajoso que llenar uno profundamente."
         },
         {
           "text": "Y la corrección por apareamiento: los nucleones prefieren formar pares con espines opuestos. Los núcleos par-par son más estables que los impar-impar.",
-          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{o}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{МэВ}",
+          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{o}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "De los 254 isótopos estables, 148 son par-par y solo cuatro son impar-impar."
         },
         {
           "text": "Sumamos todo y dividimos por el número de nucleones. Se obtiene una curva con un máximo cerca del hierro — el gráfico principal de la física nuclear, que ves en el stand.",
-          "latex": "\\frac{B}{A}: \\;\\text{máximo} \\approx 8{,}8\\ \\text{МэВ en } A \\approx 56{-}62",
+          "latex": "\\frac{B}{A}: \\;\\text{máximo} \\approx 8{,}8\\ \\text{MeV en } A \\approx 56{-}62",
           "figure": "curves",
           "figCaption": "A la izquierda del máximo es favorable la fusión, a la derecha la fisión. Toda la energía nuclear se lee en esta curva."
         }
@@ -1218,22 +1218,22 @@
           "sym": "B",
           "latex": "B",
           "what": "طاقة الارتباط النووي",
-          "unit": "МэВ",
+          "unit": "MeV",
           "note": "كمية الطاقة اللازمة لتفكيك النواة إلى نوكليونات منفردة"
         },
         {
           "sym": "BA",
           "latex": "B/A",
           "what": "طاقة الارتباط النوعية",
-          "unit": "МэВ",
+          "unit": "MeV",
           "note": "لكل نوكليون؛ الكمية الرئيسية في الفيزياء النووية، أقصاها حوالي 8,8 للحديد"
         },
         {
           "sym": "R",
           "latex": "R",
           "what": "نصف قطر النواة",
-          "unit": "м",
-          "note": "$R \\approx 1{,}2\\cdot 10^{-15}A^{1/3}$ м — ينمو كالجذر التكعيبي، لذا الكثافة متساوية لجميع النوى"
+          "unit": "m",
+          "note": "$R \\approx 1{,}2\\cdot 10^{-15}A^{1/3}$ m — ينمو كالجذر التكعيبي، لذا الكثافة متساوية لجميع النوى"
         }
       ]
     },
@@ -1243,49 +1243,49 @@
       "steps": [
         {
           "text": "أولاً، دعنا نقدر حجم المشكلة. التنافر الكولومي بين بروتونين على مسافة نووية هائل — مما يعني أن القوة الممسكة يجب أن تكون أكبر.",
-          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{Н}",
+          "latex": "F = \\frac{ke^{2}}{r^{2}} = \\frac{9\\cdot 10^{9}(1{,}6\\cdot 10^{-19})^{2}}{(1{,}5\\cdot 10^{-15})^{2}} \\approx 100\\ \\text{N}",
           "figure": "forceprop",
           "figCaption": "مئة نيوتن بين بروتونين — وزن ثقل عشرة كيلوغرامات على جسم بحجم فيمتومتر."
         },
         {
           "text": "الحد الحجمي. كل نوكليون ينجذب إلى جيرانه، وعدد الجيران متساوٍ لكل نوكليون — القوة النووية قصيرة المدى ولا تصل إلى أبعد من الأقرباء. إذن المساهمة تتناسب مع عدد النوكليونات.",
-          "latex": "B_{\\text{об}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{مدار}} = a_V A, \\qquad a_V \\approx 15{,}8\\ \\text{MeV}",
           "figure": "microcontact",
           "figCaption": "كما في قطرة السائل: كل جزيء مرتبط فقط بجيرانه، والطاقة تتناسب مع عددهم."
         },
         {
           "text": "تصحيح السطح. النوكليونات على الحافة لها جيران أقل، لذا فهي مرتبطة بشكل أضعف. عدد هذه النوكليونات يتناسب مع مساحة السطح، والتي تنمو كـ $A^{2/3}$.",
-          "latex": "B_{\\text{пов}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{МэВ}",
+          "latex": "B_{\\text{سطح}} = -a_S A^{2/3}, \\qquad a_S \\approx 17{,}8\\ \\text{MeV}",
           "figure": "pressure",
           "figCaption": "نفس التوتر السطحي للقطرة. النوى الصغيرة تتضرر أكثر من هذا التصحيح — لأن نسبة السطح لديها كبيرة."
         },
         {
           "text": "الحد الكولومي. جميع البروتونات تتنافر مع بعضها البعض، كل منها مع الآخر — وليس فقط الجيران، لأن القوة الكهربائية بعيدة المدى. ومن هنا النمو التربيعي مع عدد البروتونات.",
-          "latex": "B_{\\text{кул}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{МэВ}",
+          "latex": "B_{\\text{كولوم}} = -a_C\\frac{Z(Z-1)}{A^{1/3}}, \\qquad a_C \\approx 0{,}71\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "الفرق الجوهري: التجاذب فقط من الجيران، التنافر من الجميع. ومن هنا حد حجم النواة."
         },
         {
           "text": "حد التناظر. البروتونات والنيوترونات تملأ مستوياتها وفق مبدأ باولي، ومن الأفضل أن تكون متساوية: الانحراف يجبر على شغل مستويات أعلى.",
-          "latex": "B_{\\text{сим}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{МэВ}",
+          "latex": "B_{\\text{تناظر}} = -a_A\\frac{(A-2Z)^{2}}{A}, \\qquad a_A \\approx 23{,}7\\ \\text{MeV}",
           "figure": "anywell",
           "figCaption": "مجموعتان مستقلتان من المستويات. ملء كليهما إلى نفس الارتفاع أفضل من ملء واحد بعمق."
         },
         {
           "text": "وتصحيح التزاوج: النوكليونات تفضل الاقتران في أزواج ذات سبينات متعاكسة. النواة الزوجية-الزوجية أكثر استقرارًا من الفردية-الفردية.",
-          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{или}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{МэВ}",
+          "latex": "\\delta = \\pm\\frac{a_P}{\\sqrt{A}} \\;\\text{أو}\\; 0, \\qquad a_P \\approx 11{,}2\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "من بين 254 نظيرًا مستقرًا، 148 زوجي-زوجي وأربعة فقط فردي-فردي."
         },
         {
           "text": "نجمع كل شيء ونقسم على عدد النوكليونات. نحصل على منحنى بقمة قرب الحديد — الرسم البياني الرئيسي للفيزياء النووية الذي ترونه تحت المنصة.",
-          "latex": "\\frac{B}{A}: \\;\\text{максимум} \\approx 8{,}8\\ \\text{МэВ при } A \\approx 56{-}62",
+          "latex": "\\frac{B}{A}: \\;\\text{أقصى} \\approx 8{,}8\\ \\text{MeV عند } A \\approx 56{-}62",
           "figure": "curves",
           "figCaption": "يسار القمة: الاندماج مفيد، يمينها: الانشطار. كل الطاقة النووية تُقرأ من هذا المنحنى."
         }
       ],
       "plate": "النواة تُمسك بتفاعل قوي قصير المدى ضد التنافر الكولومي بعيد المدى. من تنافس هاتين القوتين نحصل على منحنى طاقة الربط بقمة قرب الحديد.",
-      "note": "حدود التطبيق. نموذج القطرة يصف النوى المتوسطة والثقيلة جيدًا ويخطئ بشكل ملحوظ في الخفيفة: بالنسبة للهيليوم-4 يعطي حوالي 5.7 МэВ لكل نوكليون بدلاً من 7.1 الحقيقية. السبب هو أن التأثيرات الغلافية كبيرة في النوى الخفيفة — نفسها كما في الذرة، ولكن للنوكليونات. النوى ذات الأعداد السحرية من البروتونات أو النيوترونات (2, 8, 20, 28, 50, 82, 126) أكثر استقرارًا بشكل ملحوظ من المتوقع، والهيليوم-4 ذو البروتونين والنيوترونين هو سحري مزدوج. الوصف الكامل يتطلب مزيجًا من كلا النموذجين."
+      "note": "حدود التطبيق. نموذج القطرة يصف النوى المتوسطة والثقيلة جيدًا ويخطئ بشكل ملحوظ في الخفيفة: بالنسبة للهيليوم-4 يعطي حوالي 5.7 MeV لكل نوكليون بدلاً من 7.1 الحقيقية. السبب هو أن التأثيرات الغلافية كبيرة في النوى الخفيفة — نفسها كما في الذرة، ولكن للنوكليونات. النوى ذات الأعداد السحرية من البروتونات أو النيوترونات (2, 8, 20, 28, 50, 82, 126) أكثر استقرارًا بشكل ملحوظ من المتوقع، والهيليوم-4 ذو البروتونين والنيوترونين هو سحري مزدوج. الوصف الكامل يتطلب مزيجًا من كلا النموذجين."
     },
     "math": {
       "title": "الرياضيات التي تطلبتها هذه المسألة",
@@ -1300,23 +1300,23 @@
       "title": "مثال بالأرقام: عجز كتلة الهيليوم",
       "lead": "نحسب كم تكون النواة أخف من مكوناتها، وماذا يتحول الفرق.",
       "given": "كتلة البروتون 1,00728 وحدة كتل ذرية، والنيوترون 1,00866، ونواة الهيليوم-4 — 4,00151 وحدة كتل ذرية. أوجد عجز الكتلة وطاقة الترابط. اعتبر أن 1 وحدة كتل ذرية يقابل 931,5 MeV.",
-      "law": "$\\Delta m = Zm_p + Nm_n - m_{\\text{ядра}}$, $\\;B = \\Delta m c^{2}$",
+      "law": "$\\Delta m = Zm_p + Nm_n - m_{\\text{النواة}}$, $\\;B = \\Delta m c^{2}$",
       "solution": [
         {
           "text": "مجموع كتلتي بروتونين ونيوترونين.",
-          "latex": "2 \\cdot 1{,}00728 + 2 \\cdot 1{,}00866 = 4{,}03188\\ \\text{а.е.м.}"
+          "latex": "2 \\cdot 1{,}00728 + 2 \\cdot 1{,}00866 = 4{,}03188\\ \\text{u}"
         },
         {
           "text": "عجز الكتلة — الفرق مع الكتلة الحقيقية للنواة.",
-          "latex": "\\Delta m = 4{,}03188 - 4{,}00151 = 0{,}03037\\ \\text{а.е.м.}"
+          "latex": "\\Delta m = 4{,}03188 - 4{,}00151 = 0{,}03037\\ \\text{u}"
         },
         {
           "text": "نحولها إلى طاقة.",
-          "latex": "B = 0{,}03037 \\cdot 931{,}5 \\approx 28{,}3\\ \\text{МэВ}"
+          "latex": "B = 0{,}03037 \\cdot 931{,}5 \\approx 28{,}3\\ \\text{MeV}"
         },
         {
           "text": "لكل نوكليون.",
-          "latex": "\\frac{B}{A} = \\frac{28{,}3}{4} \\approx 7{,}1\\ \\text{МэВ}"
+          "latex": "\\frac{B}{A} = \\frac{28{,}3}{4} \\approx 7{,}1\\ \\text{MeV}"
         }
       ],
       "answer": "نواة الهيليوم أخف من مكوناتها بمقدار 0,03 وحدة كتل ذرية، وهو ما يعادل طاقة ترابط 28,3 MeV، أو 7,1 MeV لكل نوكليون.",
@@ -1328,7 +1328,7 @@
       "items": [
         {
           "sym": "u",
-          "latex": "\\text{а.е.м.}",
+          "latex": "\\text{u}",
           "name": "وحدة الكتل الذرية",
           "value": "1,661 · 10⁻²⁷",
           "unit": "كغ = 931,5 MeV",

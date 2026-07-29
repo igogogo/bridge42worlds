@@ -451,21 +451,21 @@
         "sym": "E",
         "latex": "\\mathcal{E}",
         "what": "electromotive force",
-        "unit": "В",
+        "unit": "V",
         "note": "not a force but a voltage; the name is historical and unfortunate"
       },
       {
         "sym": "Phi",
         "latex": "\\Phi",
         "what": "magnetic flux",
-        "unit": "Вб",
+        "unit": "Wb",
         "note": "how many field lines pass through the loop; a weber is a tesla times a square meter"
       },
       {
         "sym": "S",
         "latex": "S",
         "what": "loop area",
-        "unit": "м²",
+        "unit": "m²",
         "note": "the flux can be changed by field, area, or rotation—all three methods are used"
       },
       {
@@ -553,23 +553,23 @@
       "title": "Numerical example: what a loop produces and why a transformer is needed",
       "lead": "First, we calculate the simplest generator, then a power transmission line — and see where kilovolts come from.",
       "given": "1) A loop of 200 turns with an area of 0.05 m² rotates at 50 revolutions per second in a field of 0.4 T. 2) A power of 1 MW is transmitted at 10 kV and at 400 kV; the line resistance is 10 Ω.",
-      "law": "$\\mathcal{E}_{\\max} = N B S \\omega$; $\\;P_{\\text{пот}} = I^{2}R$, $\\;I = P/U$",
+      "law": "$\\mathcal{E}_{\\max} = N B S \\omega$; $\\;P_{\\text{flux}} = I^{2}R$, $\\;I = P/U$",
       "solution": [
         {
           "text": "Angular velocity of the loop.",
-          "latex": "\\omega = 2\\pi f = 2\\pi \\cdot 50 \\approx 314\\ \\text{рад/с}"
+          "latex": "\\omega = 2\\pi f = 2\\pi \\cdot 50 \\approx 314\\ \\text{rad/s}"
         },
         {
           "text": "Amplitude of the EMF.",
-          "latex": "\\mathcal{E}_{\\max} = 200 \\cdot 0{,}4 \\cdot 0{,}05 \\cdot 314 \\approx 1256\\ \\text{В}"
+          "latex": "\\mathcal{E}_{\\max} = 200 \\cdot 0{,}4 \\cdot 0{,}05 \\cdot 314 \\approx 1256\\ \\text{V}"
         },
         {
           "text": "Now the line at 10 kV: current and losses.",
-          "latex": "I = \\frac{10^{6}}{10^{4}} = 100\\ \\text{А}, \\qquad P_{\\text{пот}} = 100^{2} \\cdot 10 = 10^{5}\\ \\text{Вт} = 10\\ \\%"
+          "latex": "I = \\frac{10^{6}}{10^{4}} = 100\\ \\text{A}, \\qquad P_{\\text{flux}} = 100^{2} \\cdot 10 = 10^{5}\\ \\text{W} = 10\\ \\%"
         },
         {
           "text": "And the same line at 400 kV.",
-          "latex": "I = \\frac{10^{6}}{4\\cdot 10^{5}} = 2{,}5\\ \\text{А}, \\qquad P_{\\text{пот}} = 2{,}5^{2}\\cdot 10 \\approx 63\\ \\text{Вт} = 0{,}006\\ \\%"
+          "latex": "I = \\frac{10^{6}}{4\\cdot 10^{5}} = 2{,}5\\ \\text{A}, \\qquad P_{\\text{flux}} = 2{,}5^{2}\\cdot 10 \\approx 63\\ \\text{W} = 0{,}006\\ \\%"
         }
       ],
       "answer": "The loop gives about 1250 volts amplitude. Raising the voltage from 10 to 400 kV reduces line losses from ten percent to six thousandths.",
@@ -590,7 +590,7 @@
         },
         {
           "sym": "U_line",
-          "latex": "U_{\\text{лэп}}",
+          "latex": "U_{\\text{TL}}",
           "name": "Voltage of trunk lines",
           "value": "220 — 750",
           "unit": "kV",
@@ -894,13 +894,13 @@
         },
         {
           "text": "Las cargas se acumulan en los extremos, creando un campo eléctrico que impide una mayor separación. El equilibrio se alcanza cuando la fuerza eléctrica equilibra la fuerza magnética.",
-          "latex": "qE_{\\text{разд}} = qvB \\;\\Longrightarrow\\; E_{\\text{разд}} = vB",
+          "latex": "qE_{\\text{separ}} = qvB \\;\\Longrightarrow\\; E_{\\text{separ}} = vB",
           "figure": "equilibrium",
           "figCaption": "La separación de cargas continúa hasta que el campo generado equilibra la fuerza magnética."
         },
         {
           "text": "La diferencia de potencial entre los extremos es el campo multiplicado por la longitud. Esto es la FEM: la barra se ha convertido en una pila.",
-          "latex": "\\mathcal{E} = E_{\\text{разд}}\\,\\ell = B\\ell v",
+          "latex": "\\mathcal{E} = E_{\\text{separ}}\\,\\ell = B\\ell v",
           "figure": "work",
           "figCaption": "Un conductor que se mueve en un campo es una fuente de voltaje. Sin química, solo mecánica y magnetismo."
         },
@@ -912,7 +912,7 @@
         },
         {
           "text": "El signo menos y la regla de Lenz. Supongamos lo contrario: que la corriente inducida refuerza el cambio que la causó. Entonces el refuerzo generaría una corriente aún mayor, esta a su vez un refuerzo aún mayor, y el sistema se aceleraría por sí mismo de la nada. La energía surgiría de la nada.",
-          "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt} \\;\\;\\text{— иначе вечный двигатель}",
+          "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt} \\;\\;\\text{— de lo contrario movimiento perpetuo}",
           "figure": "firstlaw",
           "figCaption": "La regla de Lenz no es una ley separada, sino la conservación de la energía escrita con un signo."
         },
@@ -945,23 +945,23 @@
       "title": "Ejemplo con números: cuánto da una bobina y para qué sirve el transformador",
       "lead": "Calculamos primero el generador más simple, luego la línea de transmisión — y vemos de dónde vienen los kilovoltios.",
       "given": "1) Una bobina de 200 vueltas con área de 0,05 m² gira a 50 revoluciones por segundo en un campo de 0,4 T. 2) Por una línea se transmite una potencia de 1 MW a 10 kV y a 400 kV; la resistencia de la línea es 10 Ω.",
-      "law": "$\\mathcal{E}_{\\max} = N B S \\omega$; $\\;P_{\\text{пот}} = I^{2}R$, $\\;I = P/U$",
+      "law": "$\\mathcal{E}_{\\max} = N B S \\omega$; $\\;P_{\\text{flujo}} = I^{2}R$, $\\;I = P/U$",
       "solution": [
         {
           "text": "Velocidad angular de la bobina.",
-          "latex": "\\omega = 2\\pi f = 2\\pi \\cdot 50 \\approx 314\\ \\text{рад/с}"
+          "latex": "\\omega = 2\\pi f = 2\\pi \\cdot 50 \\approx 314\\ \\text{rad/s}"
         },
         {
           "text": "Amplitud de la FEM.",
-          "latex": "\\mathcal{E}_{\\max} = 200 \\cdot 0{,}4 \\cdot 0{,}05 \\cdot 314 \\approx 1256\\ \\text{В}"
+          "latex": "\\mathcal{E}_{\\max} = 200 \\cdot 0{,}4 \\cdot 0{,}05 \\cdot 314 \\approx 1256\\ \\text{V}"
         },
         {
           "text": "Ahora la línea a 10 kV: corriente y pérdidas.",
-          "latex": "I = \\frac{10^{6}}{10^{4}} = 100\\ \\text{А}, \\qquad P_{\\text{пот}} = 100^{2} \\cdot 10 = 10^{5}\\ \\text{Вт} = 10\\ \\%"
+          "latex": "I = \\frac{10^{6}}{10^{4}} = 100\\ \\text{A}, \\qquad P_{\\text{flujo}} = 100^{2} \\cdot 10 = 10^{5}\\ \\text{W} = 10\\ \\%"
         },
         {
           "text": "Y la misma línea a 400 kV.",
-          "latex": "I = \\frac{10^{6}}{4\\cdot 10^{5}} = 2{,}5\\ \\text{А}, \\qquad P_{\\text{пот}} = 2{,}5^{2}\\cdot 10 \\approx 63\\ \\text{Вт} = 0{,}006\\ \\%"
+          "latex": "I = \\frac{10^{6}}{4\\cdot 10^{5}} = 2{,}5\\ \\text{A}, \\qquad P_{\\text{flujo}} = 2{,}5^{2}\\cdot 10 \\approx 63\\ \\text{W} = 0{,}006\\ \\%"
         }
       ],
       "answer": "La bobina da unos 1250 voltios de amplitud. La elevación del voltaje de 10 a 400 kV reduce las pérdidas en la línea del diez por ciento a seis milésimas.",
@@ -982,7 +982,7 @@
         },
         {
           "sym": "U_line",
-          "latex": "U_{\\text{лэп}}",
+          "latex": "U_{\\text{LE}}",
           "name": "Tensión de las líneas principales",
           "value": "220 — 750",
           "unit": "kV",
@@ -1230,21 +1230,21 @@
           "sym": "E",
           "latex": "\\mathcal{E}",
           "what": "القوة الدافعة الكهربائية",
-          "unit": "В",
+          "unit": "V",
           "note": "ليست قوة، بل جهد؛ الاسم تاريخي وغير موفق"
         },
         {
           "sym": "Phi",
           "latex": "\\Phi",
           "what": "التدفق المغناطيسي",
-          "unit": "Вб",
+          "unit": "Wb",
           "note": "عدد خطوط المجال التي تخترق الحلقة؛ ويبر هو تسلا لكل متر مربع"
         },
         {
           "sym": "S",
           "latex": "S",
           "what": "مساحة الحلقة",
-          "unit": "м²",
+          "unit": "m²",
           "note": "يمكن تغيير التدفق إما بالمجال أو المساحة أو الدوران - جميع الطرق الثلاث مستخدمة"
         },
         {
@@ -1282,13 +1282,13 @@
         },
         {
           "text": "تتراكم الشحنات على الأطراف، مما يخلق مجالًا كهربائيًا يمنع المزيد من الانفصال. يتحقق التوازن عندما توازن القوة الكهربائية القوة المغناطيسية.",
-          "latex": "qE_{\\text{разд}} = qvB \\;\\Longrightarrow\\; E_{\\text{разд}} = vB",
+          "latex": "qE_{\\text{قسم}} = qvB \\;\\Longrightarrow\\; E_{\\text{قسم}} = vB",
           "figure": "equilibrium",
           "figCaption": "يستمر فصل الشحنات حتى يوازن المجال الناتج القوة المغناطيسية."
         },
         {
           "text": "فرق الجهد بين الطرفين هو المجال مضروبًا في الطول. هذه هي القوة الدافعة الكهربائية — أصبح القضيب بطارية.",
-          "latex": "\\mathcal{E} = E_{\\text{разд}}\\,\\ell = B\\ell v",
+          "latex": "\\mathcal{E} = E_{\\text{قسم}}\\,\\ell = B\\ell v",
           "figure": "work",
           "figCaption": "الموصل المتحرك في المجال هو مصدر جهد. لا كيمياء، فقط ميكانيكا ومغناطيسية."
         },
@@ -1333,23 +1333,23 @@
       "title": "مثال بالأرقام: كم ينتج الملف وما فائدة المحول",
       "lead": "نحسب أولاً أبسط مولد، ثم خط نقل الطاقة – ونرى من أين تأتي الكيلوفولتات.",
       "given": "1) ملف مكون من 200 لفة مساحته 0.05 م² يدور بتردد 50 دورة في الثانية في مجال 0.4 تسلا. 2) عبر الخط ينقل قدرة 1 ميجاوات بجهد 10 كيلوفولت و 400 كيلوفولت؛ مقاومة الخط 10 أوم.",
-      "law": "\\\\mathcal{E}_{\\\\max} = N B S \\\\omega; \\\\;P_{\\\\text{пот}} = I^{2}R, \\\\;I = P/U",
+      "law": "\\\\mathcal{E}_{\\\\max} = N B S \\\\omega; \\\\;P_{\\\\text{تدفق}} = I^{2}R, \\\\;I = P/U",
       "solution": [
         {
           "text": "السرعة الزاوية للملف.",
-          "latex": "\\\\omega = 2\\\\pi f = 2\\\\pi \\\\cdot 50 \\\\approx 314\\\\ \\\\text{рад/с}"
+          "latex": "\\\\omega = 2\\\\pi f = 2\\\\pi \\\\cdot 50 \\\\approx 314\\\\ \\\\text{rad/s}"
         },
         {
           "text": "سعة القوة الدافعة الكهربائية.",
-          "latex": "\\\\mathcal{E}_{\\\\max} = 200 \\\\cdot 0{,}4 \\\\cdot 0{,}05 \\\\cdot 314 \\\\approx 1256\\\\ \\\\text{В}"
+          "latex": "\\\\mathcal{E}_{\\\\max} = 200 \\\\cdot 0{,}4 \\\\cdot 0{,}05 \\\\cdot 314 \\\\approx 1256\\\\ \\\\text{V}"
         },
         {
           "text": "الآن الخط عند 10 ك.ف: التيار والفقد.",
-          "latex": "I = \\\\frac{10^{6}}{10^{4}} = 100\\\\ \\\\text{А}, \\\\qquad P_{\\\\text{пот}} = 100^{2} \\\\cdot 10 = 10^{5}\\\\ \\\\text{Вт} = 10\\\\ \\\\%"
+          "latex": "I = \\\\frac{10^{6}}{10^{4}} = 100\\\\ \\\\text{A}, \\\\qquad P_{\\\\text{تدفق}} = 100^{2} \\\\cdot 10 = 10^{5}\\\\ \\\\text{W} = 10\\\\ \\\\%"
         },
         {
           "text": "ونفس الخط عند 400 ك.ف.",
-          "latex": "I = \\\\frac{10^{6}}{4\\\\cdot 10^{5}} = 2{,}5\\\\ \\\\text{А}, \\\\qquad P_{\\\\text{пот}} = 2{,}5^{2}\\\\cdot 10 \\\\approx 63\\\\ \\\\text{Вт} = 0{,}006\\\\ \\\\%"
+          "latex": "I = \\\\frac{10^{6}}{4\\\\cdot 10^{5}} = 2{,}5\\\\ \\\\text{A}, \\\\qquad P_{\\\\text{تدفق}} = 2{,}5^{2}\\\\cdot 10 \\\\approx 63\\\\ \\\\text{W} = 0{,}006\\\\ \\\\%"
         }
       ],
       "answer": "الملف يعطي حوالي 1250 فولت سعة. رفع الجهد من 10 إلى 400 ك.ف يقلل الفقد في الخط من عشرة بالمائة إلى ستة أجزاء من الألف.",
@@ -1370,7 +1370,7 @@
         },
         {
           "sym": "U_line",
-          "latex": "U_{\\\\text{лэп}}",
+          "latex": "U_{\\\\text{خط النقل}}",
           "name": "جهد خطوط النقل الرئيسية",
           "value": "220 — 750",
           "unit": "ك.ف",

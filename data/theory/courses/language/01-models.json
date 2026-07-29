@@ -423,7 +423,7 @@
       "steps": [
         {
           "text": "First decision: treat the body as a point. This is valid when the body's dimensions are much smaller than the distances involved. A stone 10 cm in size over a path of 10 m gives an error of about one percent—acceptable. The same stone cannot be considered a point when describing its impact with the ground: the whole meaning lies in deformation, i.e., in size.",
-          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "latex": "\\ell_{\\text{of the body}} \\ll L_{\\text{tasks}}",
           "figure": "frame",
           "figCaption": "A body is replaced by a point when its own size is irrelevant for the scale under consideration."
         },
@@ -435,25 +435,25 @@
         },
         {
           "text": "Third decision: ignore air resistance. Here we must be careful, because it grows as the square of speed and at some speed becomes comparable to weight. For a dense compact body over a distance of ten meters, the correction is a few percent. For a sheet of paper, it is hundreds. The same neglect is valid in one case and destructive in another.",
-          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "latex": "F_{\\text{res}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{res}}}{mg} \\ll 1 \\;?",
           "figure": "friction",
           "figCaption": "Air resistance grows with the square of speed—the validity of neglecting it depends on how far the body has accelerated."
         },
         {
           "text": "Only now, after three explicit decisions, do we have the right to write the familiar formula. It does not describe a falling stone. It exactly describes the fall of a point mass in a uniform field without a medium—and how well this matches a stone, we have just estimated.",
-          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{s}",
           "figure": "parabola",
           "figCaption": "The free-fall formula is an exact statement about the model, not an approximate one about the stone."
         },
         {
           "text": "A crucial step that is usually skipped: checking with feedback. We assumed the speed is low—now we must verify that the solution does not contradict this. The speed at the end of the fall is about 14 m/s, air resistance for a stone at that speed is indeed small. The model is self-consistent. If it had turned out to be 140 m/s, we would have to go back and revise.",
-          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "latex": "v = gt \\approx 14\\ \\text{m/s} \\;\\Rightarrow\\; \\text{assumption confirmed}",
           "figure": "result",
           "figCaption": "The solution must check its own assumptions—otherwise the model may be internally inconsistent."
         },
         {
           "text": "And finally: every model has a successor. The point mass does not handle rotation—enter the rigid body with moment of inertia. Newtonian mechanics does not handle near-light speeds—enter relativity. None of the old models are thereby abolished: they remain valid in their domain, and the new theory must reduce to them in that domain.",
-          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{SR} \\to \\text{Newtonian mechanics}",
           "figure": "curves",
           "figCaption": "A new theory does not abolish the old one, but contains it as a limiting case. This requirement is called the correspondence principle."
         }
@@ -474,27 +474,27 @@
       "title": "Example with numbers: when neglect stops working",
       "lead": "The problem is not about a formula, but about the decision on a formula. Almost nothing to calculate — the order of steps itself matters.",
       "given": "A steel ball of diameter $2$ cm falls from a height of $10$ m. Determine whether the free fall model is applicable here — and what changes for a sheet of paper of the same mass.",
-      "law": "Criterion for the validity of neglect: $F_{\\text{сопр}} / mg \\ll 1$, where $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "law": "Criterion for the validity of neglect: $F_{\\text{res}} / mg \\ll 1$, where $F_{\\text{res}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
       "solution": [
         {
           "text": "Let us estimate the speed at the end of the fall — that's where drag is maximum, and if we are checking, it's at the worst point.",
-          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{m/s}"
         },
         {
           "text": "Cross-sectional area of the ball and air parameters. The shape factor for a sphere is close to half.",
-          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{m}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{kg/m}^3, \\quad C \\approx 0{,}5"
         },
         {
           "text": "Drag force at this speed.",
-          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{N}"
         },
         {
           "text": "Weight of the ball: steel with density $7800$ kg/m³ in a volume of about $4 \\cdot 10^{-6}$ m³.",
-          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+          "latex": "m \\approx 0{,}033\\ \\text{kg}, \\qquad mg \\approx 0{,}33\\ \\text{N}"
         },
         {
           "text": "We compare — and get the answer to the original question.",
-          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+          "latex": "\\frac{F_{\\text{res}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
         }
       ],
       "answer": "For the ball, the model is valid: the error is on the order of a few percent. For a sheet of paper of the same mass, the area is hundreds of times larger, the ratio exceeds unity long before the end of the fall — there the model is fundamentally inapplicable.",
@@ -525,7 +525,7 @@
         },
         {
           "sym": "rho",
-          "latex": "\\rho_{\\text{возд}}",
+          "latex": "\\rho_{\\text{air}}",
           "name": "Air density",
           "value": "1,2",
           "unit": "kg / m³",
@@ -679,7 +679,7 @@
     "standNote": "En el stand — movimiento de un cuerpo con aceleración constante. Observa qué no tiene: el cuerpo no tiene tamaño, no tiene rotación, no tiene resistencia del aire. Eso es el punto material. Gira la velocidad inicial y la aceleración y mira la gráfica: la parábola resulta perfectamente suave. En un experimento real no lo será — y más adelante veremos cuánto.",
     "formula": {
       "name": "Principio de modelado",
-      "latex": "\\text{Явление} \\;\\longrightarrow\\; \\text{модель} \\;\\longrightarrow\\; \\text{предсказание} \\;\\longrightarrow\\; \\text{опыт}",
+      "latex": "\\text{Fenómeno} \\;\\longrightarrow\\; \\text{modelo} \\;\\longrightarrow\\; \\text{predicción} \\;\\longrightarrow\\; \\text{experimento}",
       "alsoKnown": "Método científico en su forma física",
       "authors": [
         {
@@ -729,7 +729,7 @@
       "steps": [
         {
           "text": "Primera decisión: considerar el cuerpo como un punto. Es válido cuando las dimensiones del cuerpo son mucho menores que las distancias involucradas. Una piedra de 10 cm en un recorrido de 10 m da un error de alrededor del uno por ciento, aceptable. La misma piedra al describir su impacto contra el suelo ya no puede considerarse un punto: allí todo el sentido está en la deformación, es decir, en el tamaño.",
-          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "latex": "\\ell_{\\text{cuerpos}} \\ll L_{\\text{problemas}}",
           "figure": "frame",
           "figCaption": "El cuerpo se reemplaza por un punto cuando su propio tamaño es irrelevante para la escala considerada."
         },
@@ -741,25 +741,25 @@
         },
         {
           "text": "Tercera decisión: despreciar la resistencia del aire. Aquí hay que tener cuidado, porque crece como el cuadrado de la velocidad y a cierta velocidad se iguala al peso. Para un cuerpo denso y compacto en una distancia de diez metros, la corrección es de unos pocos por ciento. Para una hoja de papel, cientos. La misma despreciación es válida en un caso y destructiva en otro.",
-          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "latex": "F_{\\text{res}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{res}}}{mg} \\ll 1 \\;?",
           "figure": "friction",
           "figCaption": "La resistencia del medio crece con el cuadrado de la velocidad; la validez de la despreciación depende de qué tan lejos ha logrado acelerarse el cuerpo."
         },
         {
           "text": "Solo ahora, después de tres decisiones explícitas, tenemos derecho a escribir la fórmula habitual. No describe la caída de una piedra. Describe exactamente la caída de un punto material en un campo uniforme sin medio; y qué tanto se parece a una piedra, lo acabamos de evaluar.",
-          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{s}",
           "figure": "parabola",
           "figCaption": "La fórmula de caída libre es una afirmación exacta sobre el modelo, no aproximada sobre la piedra."
         },
         {
           "text": "El paso clave que normalmente se omite: la verificación por retroalimentación. Supusimos que la velocidad es pequeña; ahora debemos asegurarnos de que la solución obtenida no lo contradiga. La velocidad al final de la caída es de unos 14 m/s, la resistencia del aire para una piedra a esa velocidad es realmente pequeña. El modelo es autoconsistente. Si hubiera sido 140 m/s, habríamos tenido que volver atrás y rehacerlo.",
-          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "latex": "v = gt \\approx 14\\ \\text{m/s} \\;\\Rightarrow\\; \\text{suposición confirmada}",
           "figure": "result",
           "figCaption": "La solución debe verificar sus propias suposiciones; de lo contrario, el modelo podría resultar internamente contradictorio."
         },
         {
           "text": "Y por último: cada modelo tiene un sucesor. El punto material no resiste la rotación; aparece el cuerpo rígido con momento de inercia. La mecánica newtoniana no resiste velocidades cercanas a la luz; aparece la teoría de la relatividad. Ninguno de los modelos antiguos se cancela por ello: sigue siendo válido en su dominio, y la nueva teoría debe transicionar a ese dominio.",
-          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{RE} \\to \\text{mecánica newtoniana}",
           "figure": "curves",
           "figCaption": "La nueva teoría no anula la antigua, sino que la contiene como caso límite. Este requisito se llama principio de correspondencia."
         }
@@ -780,27 +780,27 @@
       "title": "Ejemplo con números: cuándo la aproximación deja de ser válida",
       "lead": "El problema no es sobre la fórmula, sino sobre la decisión respecto a la fórmula. Apenas hay que calcular — lo importante es el orden de las acciones.",
       "given": "Una esfera de acero de $2$ cm de diámetro cae desde una altura de $10$ m. Determinar si el modelo de caída libre es aplicable aquí — y qué cambiaría para una hoja de papel de la misma masa.",
-      "law": "Criterio de validez de la aproximación: $F_{\\text{сопр}} / mg \\ll 1$, donde $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "law": "Criterio de validez de la aproximación: $F_{\\text{res}} / mg \\ll 1$, donde $F_{\\text{res}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
       "solution": [
         {
           "text": "Estimemos la velocidad al final de la caída — es allí donde la resistencia es máxima, y si hay que verificar, es en el peor punto.",
-          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{m/s}"
         },
         {
           "text": "Área de sección transversal de la esfera y parámetros del aire. El coeficiente de forma para una esfera es cercano a 0,5.",
-          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{m}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{kg/m}^3, \\quad C \\approx 0{,}5"
         },
         {
           "text": "Fuerza de resistencia a esta velocidad.",
-          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{N}"
         },
         {
           "text": "Peso de la esfera: acero con densidad $7800$ kg/m³ en un volumen de aproximadamente $4 \\cdot 10^{-6}$ m³.",
-          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+          "latex": "m \\approx 0{,}033\\ \\text{kg}, \\qquad mg \\approx 0{,}33\\ \\text{N}"
         },
         {
           "text": "Comparamos — y obtenemos la respuesta a la pregunta original.",
-          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+          "latex": "\\frac{F_{\\text{res}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
         }
       ],
       "answer": "Para la esfera, el modelo es adecuado: el error es del orden de unos pocos por ciento. Para una hoja de papel de la misma masa, el área es cientos de veces mayor, la relación supera la unidad mucho antes del final de la caída — allí el modelo es inaplicable en principio.",
@@ -832,7 +832,7 @@
         },
         {
           "sym": "rho",
-          "latex": "\\rho_{\\text{возд}}",
+          "latex": "\\rho_{\\text{aire}}",
           "dictKey": "rho_air",
           "name": "Densidad del aire",
           "value": "1,2",
@@ -987,7 +987,7 @@
     "standNote": "على المنصة — حركة جسم بتسارع ثابت. لاحظ ما ليس فيه: الجسم ليس له حجم، ولا دوران، ولا مقاومة هواء. هذه هي النقطة المادية. قم بتغيير السرعة الابتدائية والتسارع وانظر إلى الرسم البياني: القطع المكافئ سيكون سلسًا تمامًا. في التجربة الواقعية لن يكون كذلك - وسنناقش لاحقًا إلى أي مدى.",
     "formula": {
       "name": "مبدأ النمذجة",
-      "latex": "\\text{Явление} \\;\\longrightarrow\\; \\text{модель} \\;\\longrightarrow\\; \\text{предсказание} \\;\\longrightarrow\\; \\text{опыт}",
+      "latex": "\\text{ظاهرة} \\;\\longrightarrow\\; \\text{نموذج} \\;\\longrightarrow\\; \\text{تنبؤ} \\;\\longrightarrow\\; \\text{تجربة}",
       "alsoKnown": "المنهج العلمي في صورته الفيزيائية",
       "authors": [
         {
@@ -1037,7 +1037,7 @@
       "steps": [
         {
           "text": "القرار الأول: اعتبار الجسم نقطة. هذا جائز عندما تكون أبعاد الجسم أصغر بكثير من المسافات المعنية. حجر بحجم 10 سم على مسار 10 م يعطي خطأ حوالي واحد بالمائة - مقبول. نفس الحجر عند وصف اصطدامه بالأرض لا يمكن اعتباره نقطة: فالمعنى كله في التشوه، أي في الحجم.",
-          "latex": "\\ell_{\\text{тела}} \\ll L_{\\text{задачи}}",
+          "latex": "\\ell_{\\text{الجسم}} \\ll L_{\\text{مسائل}}",
           "figure": "frame",
           "figCaption": "يُستبدل الجسم بنقطة عندما لا يكون حجمه مهماً للمقياس المدروس."
         },
@@ -1049,25 +1049,25 @@
         },
         {
           "text": "القرار الثالث: تجاهل مقاومة الهواء. هنا يجب توخي الحذر، لأنها تزداد كتربيع السرعة وعند سرعة معينة تصبح مساوية للوزن. لجسم كثيف ومضغوط على مسافة عشرة أمتار، التصحيح يكون بضع نسب مئوية. لورقة - مئات. نفس الإهمال جائز في حالة ومدمر في أخرى.",
-          "latex": "F_{\\text{сопр}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ll 1 \\;?",
+          "latex": "F_{\\text{مقاومة}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{مقاومة}}}{mg} \\ll 1 \\;?",
           "figure": "friction",
           "figCaption": "مقاومة الوسط تزداد بتربيع السرعة - مشروعية الإهمال تعتمد على مدى تسارع الجسم."
         },
         {
           "text": "الآن فقط، بعد ثلاثة قرارات صريحة، يحق لنا كتابة الصيغة المألوفة. إنها لا تصف سقوط حجر. إنها تصف بدقة سقوط نقطة مادية في مجال منتظم بدون وسط - ومدى تشابه ذلك مع الحجر قدرناه للتو.",
-          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{с}",
+          "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{مع}",
           "figure": "parabola",
           "figCaption": "صيغة السقوط الحر - عبارة دقيقة عن النموذج، وليس تقديرية عن الحجر."
         },
         {
           "text": "الخطوة الرئيسية التي تُغفل عادةً: التحقق بالتغذية الراجعة. افترضنا أن السرعة صغيرة - الآن يجب التأكد من أن الحل لا يناقض ذلك. السرعة في نهاية السقوط حوالي 14 م/ث، مقاومة الهواء للحجر عند هذه السرعة صغيرة بالفعل. النموذج متسق ذاتياً. لو كانت النتيجة 140 م/ث، لكنا عدنا وأعدنا.",
-          "latex": "v = gt \\approx 14\\ \\text{м/с} \\;\\Rightarrow\\; \\text{предположение подтверждено}",
+          "latex": "v = gt \\approx 14\\ \\text{m/s} \\;\\Rightarrow\\; \\text{الافتراض مؤكد}",
           "figure": "result",
           "figCaption": "يجب على الحل التحقق من افتراضاته الخاصة - وإلا قد يكون النموذج متناقضاً داخلياً."
         },
         {
           "text": "وأخيراً: لكل نموذج خلف. النقطة المادية لا تتحمل الدوران - يظهر الجسم الصلب بعزم القصور الذاتي. الميكانيكا النيوتونية لا تتحمل السرعات القريبة من الضوء - تظهر النظرية النسبية. لا تُلغى أي من النماذج القديمة: تظل صحيحة في مجالها، والنظرية الجديدة يجب أن تتحول إلى هذا المجال.",
-          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{СТО} \\to \\text{механика Ньютона}",
+          "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{النسبية الخاصة} \\to \\text{ميكانيكا نيوتن}",
           "figure": "curves",
           "figCaption": "النظرية الجديدة لا تلغي القديمة، بل تحتويها كحالة حدية. يُسمى هذا المطلب مبدأ المطابقة."
         }
@@ -1088,27 +1088,27 @@
       "title": "مثال بالأرقام: عندما يتوقف الإهمال عن العمل",
       "lead": "المهمة ليست حول الصيغة، بل حول قرار بشأن الصيغة. لا يوجد شيء تقريبًا لحسابه - المهم هو تسلسل الإجراءات نفسه.",
       "given": "كرة فولاذية قطرها $2$ سم تسقط من ارتفاع $10$ م. تحديد ما إذا كان نموذج السقوط الحر مناسبًا هنا - وما الذي سيتغير بالنسبة لورقة من نفس الكتلة.",
-      "law": "معيار شرعية الإهمال: $F_{\\text{сопр}} / mg \\ll 1$، حيث $F_{\\text{сопр}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+      "law": "معيار شرعية الإهمال: $F_{\\text{مقاومة}} / mg \\ll 1$، حيث $F_{\\text{مقاومة}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
       "solution": [
         {
           "text": "سنقدر السرعة في نهاية السقوط - فهناك تكون المقاومة قصوى، وإذا كنا سنفحص، ففي أسوأ نقطة.",
-          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{м/с}"
+          "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{m/s}"
         },
         {
           "text": "مساحة مقطع الكرة ومعاملات الهواء. معامل الشكل للكرة قريب من النصف.",
-          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{м}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{кг/м}^3, \\quad C \\approx 0{,}5"
+          "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{m}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{kg/m}^3, \\quad C \\approx 0{,}5"
         },
         {
           "text": "قوة المقاومة عند هذه السرعة.",
-          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{Н}"
+          "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{N}"
         },
         {
           "text": "وزن الكرة: فولاذ كثافته $7800$ كجم/م³ في حجم حوالي $4 \\cdot 10^{-6}$ م³.",
-          "latex": "m \\approx 0{,}033\\ \\text{кг}, \\qquad mg \\approx 0{,}33\\ \\text{Н}"
+          "latex": "m \\approx 0{,}033\\ \\text{kg}, \\qquad mg \\approx 0{,}33\\ \\text{N}"
         },
         {
           "text": "نقارن - ونحصل على إجابة السؤال الأصلي.",
-          "latex": "\\frac{F_{\\text{сопр}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+          "latex": "\\frac{F_{\\text{مقاومة}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
         }
       ],
       "answer": "بالنسبة للكرة، النموذج مناسب: الخطأ في حدود بضع نسبة مئوية. بالنسبة لورقة من نفس الكتلة، تكون المساحة أكبر بمئات المرات، وستتجاوز النسبة الوحدة قبل وقت طويل من نهاية السقوط - هناك النموذج غير قابل للتطبيق من حيث المبدأ.",
@@ -1124,7 +1124,7 @@
           "dictKey": "g",
           "name": "تسارع السقوط الحر",
           "value": "9,81",
-          "unit": "м / с²",
+          "unit": "m / s²",
           "why": "ثابت لجميع الأجسام إذا أهملنا الوسط. هذا هو تأكيد جاليليو وكان أول نموذج مبني بوعي في الفيزياء.",
           "mnemo": "في التقديرات نأخذ 10 - الخطأ 2%، لكنها تقبل القسمة ذهنيًا."
         },
@@ -1134,17 +1134,17 @@
           "dictKey": "R",
           "name": "نصف قطر الأرض",
           "value": "6,4 · 10⁶",
-          "unit": "м",
+          "unit": "m",
           "why": "ليس مطلوبًا بذاته، بل لتقدير مدى ثبات قوة الجاذبية: نسبة ارتفاع الرفع إلى هذا الرقم هي مقياس عدم الثبات.",
           "mnemo": "محيط الأرض حوالي 40,000 كم - المتر كان يُعرّف يومًا بأنه جزء من أربعين مليونًا. من هنا يتم الحصول على نصف القطر بالقسمة على 2π."
         },
         {
           "sym": "rho",
-          "latex": "\\rho_{\\text{возд}}",
+          "latex": "\\rho_{\\text{هواء}}",
           "dictKey": "rho",
           "name": "كثافة الهواء",
           "value": "1,2",
-          "unit": "кг / م³",
+          "unit": "kg / m³",
           "why": "تدخل في قوة المقاومة. هذه الكمية هي التي تقرر ما إذا كان إهمال الوسط سيكون تصحيحًا بنسبة مئوية أم خطأ بمضاعفات.",
           "mnemo": "أخف من الماء بحوالي 800 مرة. الهواء في غرفة 5 × 4 × 3 م يزن حوالي 70 كجم - مثل شخص بالغ."
         }

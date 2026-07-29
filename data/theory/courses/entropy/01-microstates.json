@@ -461,19 +461,19 @@
       "steps": [
         {
           "text": "We distinguish two levels of description. A microstate is a complete list: which particular particle is where. A macrostate is what we see from outside: how many particles are on the left. One macrostate corresponds to many microstates, and that difference is the whole point.",
-          "latex": "\\text{микро}: (1{\\to}\\text{л}, 2{\\to}\\text{п}, \\ldots) \\qquad \\text{макро}: n_{\\text{лев}} = 60",
+          "latex": "\\text{micro}: (1{\\to}\\text{L}, 2{\\to}\\text{p}, \\ldots) \\qquad \\text{macro}: n_{\\text{left}} = 60",
           "figure": "microcontact",
           "figCaption": "From outside only the number on the left is visible; from inside individual particles are distinguishable."
         },
         {
           "text": "The only physical postulate of all statistical physics: all microstates are equally probable. It is not derived but assumed — and justified by the fact that its consequences agree with experiment. From this it follows immediately: the probability of a macrostate is proportional to the number of microstates that correspond to it.",
-          "latex": "P(\\text{макро}) \\propto W(\\text{макро})",
+          "latex": "P(\\text{macro}) \\propto W(\\text{macro})",
           "figure": "axes",
           "figCaption": "Equal probability of microstates is a postulate. Everything else in this section follows from it."
         },
         {
           "text": "Let's count. Each of the $N$ particles independently ends up left or right, so the total number of microstates is $2^N$. And the number of arrangements with exactly $n$ particles on the left is given by the binomial coefficient.",
-          "latex": "W_{\\text{всего}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
+          "latex": "W_{\\text{total}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
           "figure": "curves",
           "figCaption": "The binomial coefficient is a bell curve with a maximum in the middle, and the larger N, the sharper it is."
         },
@@ -518,7 +518,7 @@
       "title": "Numerical Example: Will All Air Gather in One Corner of the Room?",
       "lead": "We calculate what is usually presented as impossible and verify that it's not a matter of impossibility.",
       "given": "Room volume 50 m³. Estimate the probability that all air spontaneously gathers in its left half, and the expected waiting time for such an event.",
-      "law": "$P = 2^{-N}$, where $N$ is the number of molecules; waiting time $\\tau \\approx t_{\\text{перестройки}} / P$",
+      "law": "$P = 2^{-N}$, where $N$ is the number of molecules; waiting time $\\tau \\approx t_{\\text{restructuring}} / P$",
       "solution": [
         {
           "text": "Number of molecules: one mole occupies 24 liters under normal conditions, the room is 50,000 liters.",
@@ -534,7 +534,7 @@
         },
         {
           "text": "Molecules rearrange roughly once per nanosecond. The waiting time is the inverse probability multiplied by this time.",
-          "latex": "\\tau \\approx 10^{-9} \\cdot 10^{3{,}8 \\cdot 10^{26}}\\ \\text{с}"
+          "latex": "\\tau \\approx 10^{-9} \\cdot 10^{3{,}8 \\cdot 10^{26}}\\ \\text{s}"
         }
       ],
       "answer": "The probability exists and is exactly $10^{-3{,}8 \\cdot 10^{26}}$. The waiting time would have an exponent with twenty-seven digits, while the age of the Universe is about $10^{17}$ seconds.",
@@ -805,14 +805,14 @@
           "sym": "S",
           "latex": "S",
           "what": "entropía",
-          "unit": "Дж/К",
+          "unit": "J/K",
           "note": "magnitud de estado: depende de dónde está el sistema ahora, no de cómo llegó allí"
         },
         {
           "sym": "k_B",
           "latex": "k_B",
           "what": "constante de Boltzmann",
-          "unit": "Дж/К",
+          "unit": "J/K",
           "note": "convierte el conteo de opciones en las unidades térmicas habituales"
         },
         {
@@ -837,19 +837,19 @@
       "steps": [
         {
           "text": "Distinguimos dos niveles de descripción. Microestado — la lista completa: qué partícula está dónde. Macroestado — lo que vemos desde fuera: cuántas partículas están a la izquierda. A un macroestado corresponden muchos microestados, y en esa diferencia está la clave.",
-          "latex": "\\text{микро}: (1{\\to}\\text{л}, 2{\\to}\\text{п}, \\ldots) \\qquad \\text{макро}: n_{\\text{лев}} = 60",
+          "latex": "\\text{micro}: (1{\\to}\\text{L}, 2{\\to}\\text{p}, \\ldots) \\qquad \\text{macro}: n_{\\text{izq}} = 60",
           "figure": "microcontact",
           "figCaption": "Desde fuera solo se ve el número de la izquierda; desde dentro se distinguen las partículas individuales."
         },
         {
           "text": "El único supuesto físico de toda la física estadística: todos los microestados son igualmente probables. No se deduce, sino que se acepta — y se justifica porque las consecuencias coinciden con la experiencia. De ahí inmediatamente: la probabilidad de un macroestado es proporcional al número de microestados que le corresponden.",
-          "latex": "P(\\text{макро}) \\propto W(\\text{макро})",
+          "latex": "P(\\text{macro}) \\propto W(\\text{macro})",
           "figure": "axes",
           "figCaption": "La equiprobabilidad de los microestados es un postulado. Todo lo demás en este parágrafo se deduce de él."
         },
         {
           "text": "Contamos. Cada una de las $N$ partículas cae independientemente a la izquierda o a la derecha, así que el total de microestados es $2^N$. Y el número de disposiciones exactamente con $n$ partículas a la izquierda está dado por el coeficiente binomial.",
-          "latex": "W_{\\text{всего}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
+          "latex": "W_{\\text{total}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
           "figure": "curves",
           "figCaption": "El coeficiente binomial es una campana con máximo en el centro, y tanto más pronunciada cuanto mayor es N."
         },
@@ -1178,14 +1178,14 @@
           "sym": "S",
           "latex": "S",
           "what": "إنتروبيا",
-          "unit": "Дж/К",
+          "unit": "J/K",
           "note": "كمية حالة: تعتمد على مكان النظام الآن، وليس على كيف وصل إلى هنا."
         },
         {
           "sym": "k_B",
           "latex": "k_B",
           "what": "ثابت بولتزمان",
-          "unit": "Дж/К",
+          "unit": "J/K",
           "note": "يحول عدد الاحتمالات إلى وحدات حرارية مألوفة."
         },
         {
@@ -1210,19 +1210,19 @@
       "steps": [
         {
           "text": "نميز مستويين من الوصف. الحالة الدقيقة — قائمة كاملة: أي جسيم بالتحديد أين يقع. الحالة الكلية — ما نراه من الخارج: عدد الجسيمات على اليسار. حالة كلية واحدة يقابلها حالات دقيقة كثيرة، وفي هذا الفرق يكمن كل شيء.",
-          "latex": "\\text{микро}: (1{\\to}\\text{л}, 2{\\to}\\text{п}, \\ldots) \\qquad \\text{макро}: n_{\\text{лев}} = 60",
+          "latex": "\\text{ميكرو}: (1{\\to}\\text{L}, 2{\\to}\\text{حقل}, \\ldots) \\qquad \\text{ماكرو}: n_{\\text{يسار}} = 60",
           "figure": "microcontact",
           "figCaption": "من الخارج يُرى العدد على اليسار فقط؛ من الداخل يمكن تمييز الجسيمات المفردة."
         },
         {
           "text": "الافتراض الفيزيائي الوحيد لكل الفيزياء الإحصائية: جميع الحالات الدقيقة متساوية الاحتمال. إنه لا يُشتق بل يُقبل — ويُبرر بتطابق النتائج مع التجربة. ومن هنا مباشرة: احتمال الحالة الكلية يتناسب مع عدد الحالات الدقيقة المقابلة لها.",
-          "latex": "P(\\text{макро}) \\propto W(\\text{макро})",
+          "latex": "P(\\text{ماكرو}) \\propto W(\\text{ماكرو})",
           "figure": "axes",
           "figCaption": "مساواة احتمال الحالات الدقيقة هي مسلمة. كل ما تبقى في هذه الفقرة يتبع منها."
         },
         {
           "text": "نحسب. كل جسيم من $N$ جسيم يقع بشكل مستقل على اليسار أو اليمين، إذن مجموع الحالات الدقيقة $2^N$. وعدد التوزيعات التي تحتوي بالضبط على $n$ جسيم على اليسار يُعطى بمعامل ذي الحدين.",
-          "latex": "W_{\\text{всего}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
+          "latex": "W_{\\text{المجموع}} = 2^{N}, \\qquad W(n) = \\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}",
           "figure": "curves",
           "figCaption": "معامل ذي الحدين — جرس بقمة في المنتصف، وكلما زاد N كان أكثر حدة."
         },

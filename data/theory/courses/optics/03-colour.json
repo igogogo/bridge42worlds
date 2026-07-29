@@ -477,13 +477,13 @@
       "steps": [
         {
           "text": "Let us list the quantities on which scattering by a particle much smaller than the wavelength may depend. The amplitude of the scattered wave depends on the volume of the particle, the distance to it, and the wavelength. There is nothing else in the problem.",
-          "latex": "A_{\\text{рас}} = f(V,\\; r,\\; \\lambda)",
+          "latex": "A_{\\text{dist}} = f(V,\\; r,\\; \\lambda)",
           "figure": "axes",
           "figCaption": "The same technique as in the introductory topic: first an honest list of quantities, then dimensions."
         },
         {
           "text": "The amplitude must decay as one over distance (otherwise energy is not conserved) and be proportional to the particle's volume. It remains to choose the power of the wavelength so that the dimensions match.",
-          "latex": "A_{\\text{рас}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
+          "latex": "A_{\\text{dist}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
           "figure": "forceprop",
           "figCaption": "Dimensionality requires precisely the square of the wavelength — otherwise the expression would not be dimensionless."
         },
@@ -495,7 +495,7 @@
         },
         {
           "text": "Plug in numbers for the edge of the visible range. Blue scatters almost six times stronger than red — and therefore the sky, glowing with scattered light, appears blue.",
-          "latex": "\\frac{I_{\\text{син}}}{I_{\\text{кр}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
+          "latex": "\\frac{I_{\\text{sin}}}{I_{\\text{cr}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
           "figure": "curves",
           "figCaption": "The sky is blue, not violet, because there is less violet in the solar spectrum and the eye is less sensitive to it."
         },
@@ -513,7 +513,7 @@
         },
         {
           "text": "A practical conclusion for all instruments at once. If you want to see smaller details, use a shorter wave. An optical microscope hits 200 nanometers, an electron microscope sees atoms because the electron wavelength is thousands of times smaller.",
-          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{свет} \\to 0{,}2\\ \\text{мкм}, \\quad \\text{электрон} \\to 0{,}05\\ \\text{нм}",
+          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{light} \\to 0{,}2\\ \\text{μm}, \\quad \\text{electron} \\to 0{,}05\\ \\text{nm}",
           "figure": "massprop",
           "figCaption": "An electron microscope is not more powerful optics, but a different wavelength."
         }
@@ -538,7 +538,7 @@
       "solution": [
         {
           "text": "Ratio of wavelengths.",
-          "latex": "\\frac{\\lambda_{\\text{кр}}}{\\lambda_{\\text{син}}} = \\frac{700}{450} \\approx 1{,}556"
+          "latex": "\\frac{\\lambda_{\\text{cr}}}{\\lambda_{\\text{sin}}} = \\frac{700}{450} \\approx 1{,}556"
         },
         {
           "text": "Raise to the fourth power — this is the gain of blue in scattering.",
@@ -546,11 +546,11 @@
         },
         {
           "text": "Now the resolution limit of the microscope.",
-          "latex": "d_{\\min} = \\frac{550\\ \\text{нм}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{нм}"
+          "latex": "d_{\\min} = \\frac{550\\ \\text{nm}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{nm}"
         },
         {
           "text": "Compare with the sizes of objects.",
-          "latex": "\\text{бактерия} \\sim 1000\\ \\text{нм}, \\quad \\text{вирус} \\sim 100\\ \\text{нм}, \\quad \\text{молекула ДНК} \\sim 2\\ \\text{нм}"
+          "latex": "\\text{bacterium} \\sim 1000\\ \\text{nm}, \\quad \\text{virus} \\sim 100\\ \\text{nm}, \\quad \\text{DNA molecule} \\sim 2\\ \\text{nm}"
         }
       ],
       "answer": "Blue scatters almost six times more strongly than red. An optical microscope resolves details no smaller than about 200 nanometers.",
@@ -562,10 +562,10 @@
       "items": [
         {
           "sym": "d_eye",
-          "latex": "d_{\\text{глаз}}",
+          "latex": "d_{\\text{eye}}",
           "name": "Resolution of the human eye",
           "value": "≈ 1",
-          "unit": "угл. мин",
+          "unit": "arcmin",
           "why": "Determined by diffraction at the pupil about 2–3 mm in diameter and the spacing of retinal receptors — two limitations coincide, and this is not a coincidence but a result of evolutionary tuning.",
           "mnemo": "One arcminute is about 0.3 mm at a distance of one meter, or a coin at a kilometer. Hence the standard distance for vision tests using a chart."
         },
@@ -574,7 +574,7 @@
           "latex": "d_{\\min}",
           "name": "Limit of optical microscope",
           "value": "≈ 200",
-          "unit": "нм",
+          "unit": "nm",
           "why": "Half the wavelength of visible light divided by the numerical aperture. A bacterium is visible, a virus is not. It can only be bypassed with a shorter wavelength or nonlinear methods.",
           "mnemo": "Coincides with the size of the largest viruses. The boundary between 'visible in a school microscope' and 'needs an electron microscope' lies roughly here."
         },
@@ -583,7 +583,7 @@
           "latex": "\\lambda_e",
           "name": "Wavelength of the electron in an electron microscope",
           "value": "≈ 0,004",
-          "unit": "нм",
+          "unit": "nm",
           "why": "At an accelerating voltage of 100 kV. A hundred thousand times shorter than visible light — that is why the electron microscope can resolve individual atoms.",
           "mnemo": "The resolution of the electron microscope is limited not by the wavelength but by the quality of magnetic lenses: here technology for the first time turned out to be worse than physics."
         }
@@ -859,13 +859,13 @@
       "steps": [
         {
           "text": "Listemos las magnitudes de las que puede depender la dispersión en una partícula mucho más pequeña que la longitud de onda. La amplitud de la onda dispersada depende del volumen de la partícula, la distancia a ella y la longitud de onda. No hay nada más en el problema.",
-          "latex": "A_{\\text{рас}} = f(V,\\; r,\\; \\lambda)",
+          "latex": "A_{\\text{dist}} = f(V,\\; r,\\; \\lambda)",
           "figure": "axes",
           "figCaption": "El mismo truco que en el tema introductorio: primero una lista honesta de magnitudes, luego las dimensiones."
         },
         {
           "text": "La amplitud debe decrecer como uno sobre la distancia (de lo contrario no se conservaría la energía) y ser proporcional al volumen de la partícula. Solo queda ajustar la potencia de la longitud de onda para que las dimensiones coincidan.",
-          "latex": "A_{\\text{рас}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
+          "latex": "A_{\\text{dist}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
           "figure": "forceprop",
           "figCaption": "La dimensión exige exactamente el cuadrado de la longitud de onda — de lo contrario la expresión no sería adimensional."
         },
@@ -877,7 +877,7 @@
         },
         {
           "text": "Sustituyamos números para el extremo del rango visible. El azul se dispersa casi seis veces más que el rojo — y por eso el cielo, iluminado por luz dispersada, se ve azul.",
-          "latex": "\\frac{I_{\\text{син}}}{I_{\\text{кр}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
+          "latex": "\\frac{I_{\\text{sinc}}}{I_{\\text{crit}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
           "figure": "curves",
           "figCaption": "El cielo es azul, no violeta, porque hay menos violeta en el espectro solar y el ojo es menos sensible a él."
         },
@@ -895,7 +895,7 @@
         },
         {
           "text": "Conclusión práctica para todos los instrumentos a la vez. Si quiere ver más pequeño, use una onda más corta. El microscopio óptico llega hasta 200 nanómetros, el electrónico ve átomos porque la longitud de onda del electrón es miles de veces menor.",
-          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{свет} \\to 0{,}2\\ \\text{мкм}, \\quad \\text{электрон} \\to 0{,}05\\ \\text{нм}",
+          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{luz} \\to 0{,}2\\ \\text{µm}, \\quad \\text{electrón} \\to 0{,}05\\ \\text{nm}",
           "figure": "massprop",
           "figCaption": "El microscopio electrónico no es una óptica más potente, sino otra longitud de onda."
         }
@@ -920,7 +920,7 @@
       "solution": [
         {
           "text": "Relación de longitudes de onda.",
-          "latex": "\\frac{\\lambda_{\\text{кр}}}{\\lambda_{\\text{син}}} = \\frac{700}{450} \\approx 1{,}556"
+          "latex": "\\frac{\\lambda_{\\text{crit}}}{\\lambda_{\\text{sinc}}} = \\frac{700}{450} \\approx 1{,}556"
         },
         {
           "text": "Elevamos a la cuarta potencia: esta es la ventaja del azul en la dispersión.",
@@ -928,11 +928,11 @@
         },
         {
           "text": "Ahora el límite de resolución del microscopio.",
-          "latex": "d_{\\min} = \\frac{550\\ \\text{нм}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{нм}"
+          "latex": "d_{\\min} = \\frac{550\\ \\text{nm}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{nm}"
         },
         {
           "text": "Comparemos con los tamaños de los objetos.",
-          "latex": "\\text{бактерия} \\sim 1000\\ \\text{нм}, \\quad \\text{вирус} \\sim 100\\ \\text{нм}, \\quad \\text{молекула ДНК} \\sim 2\\ \\text{нм}"
+          "latex": "\\text{bacteria} \\sim 1000\\ \\text{nm}, \\quad \\text{virus} \\sim 100\\ \\text{nm}, \\quad \\text{molécula de ADN} \\sim 2\\ \\text{nm}"
         }
       ],
       "answer": "El azul se dispersa casi seis veces más fuerte que el rojo. El microscopio óptico distingue detalles no más pequeños de aproximadamente 200 nanómetros.",
@@ -944,7 +944,7 @@
       "items": [
         {
           "sym": "d_eye",
-          "latex": "d_{\\text{глаз}}",
+          "latex": "d_{\\text{ojo}}",
           "name": "Resolución del ojo humano",
           "value": "≈ 1",
           "unit": "min. de arco",
@@ -1241,13 +1241,13 @@
       "steps": [
         {
           "text": "دعونا ندرج الكميات التي قد يعتمد عليها التشتت على جسيم أصغر بكثير من الطول الموجي. سعة الموجة المتناثرة تعتمد على حجم الجسيم، المسافة إليه، والطول الموجي. لا يوجد شيء آخر في المسألة.",
-          "latex": "A_{\\text{рас}} = f(V,\\; r,\\; \\lambda)",
+          "latex": "A_{\\text{مسافة}} = f(V,\\; r,\\; \\lambda)",
           "figure": "axes",
           "figCaption": "نفس الأسلوب كما في الموضوع التمهيدي: أولاً قائمة صادقة بالكميات، ثم الأبعاد."
         },
         {
           "text": "يجب أن تتناقص السعة كواحد على المسافة (وإلا لن تُحفظ الطاقة) وتتناسب مع حجم الجسيم. يبقى اختيار قوة الطول الموجي بحيث تتطابق الأبعاد.",
-          "latex": "A_{\\text{рас}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
+          "latex": "A_{\\text{مسافة}} \\propto \\frac{V}{r\\,\\lambda^{2}}",
           "figure": "forceprop",
           "figCaption": "الأبعاد تتطلب تحديدًا مربع الطول الموجي - وإلا لن يكون المقدار بلا أبعاد."
         },
@@ -1259,7 +1259,7 @@
         },
         {
           "text": "لنعوض بالأرقام لطرف النطاق المرئي. يتشتت الأزرق بقوة أكبر بستة أضعاف تقريبًا من الأحمر - ولهذا تبدو السماء، المتوهجة بالضوء المتناثر، زرقاء.",
-          "latex": "\\frac{I_{\\text{син}}}{I_{\\text{кр}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
+          "latex": "\\frac{I_{\\text{sin}}}{I_{\\text{حرج}}} = \\left(\\frac{700}{450}\\right)^{4} \\approx 5{,}9",
           "figure": "curves",
           "figCaption": "السماء زرقاء وليست بنفسجية لأن البنفسجي أقل في الطيف الشمسي والعين أقل حساسية له."
         },
@@ -1277,7 +1277,7 @@
         },
         {
           "text": "استنتاج عملي لجميع الأجهزة دفعة واحدة. أتريد رؤية أشياء أصغر؟ استخدم موجة أقصر. الميكروسكوب البصري يتوقف عند 200 نانومتر، والميكروسكوب الإلكتروني يرى الذرات لأن الطول الموجي للإلكترون أصغر بآلاف المرات.",
-          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{свет} \\to 0{,}2\\ \\text{мкм}, \\quad \\text{электрон} \\to 0{,}05\\ \\text{нм}",
+          "latex": "d_{\\min} \\sim \\frac{\\lambda}{2} : \\quad \\text{ضوء} \\to 0{,}2\\ \\text{μm}, \\quad \\text{إلكترون} \\to 0{,}05\\ \\text{nm}",
           "figure": "massprop",
           "figCaption": "الميكروسكوب الإلكتروني ليس بصريات أكثر قوة، بل طول موجي مختلف."
         }
@@ -1302,7 +1302,7 @@
       "solution": [
         {
           "text": "نسبة الأطوال الموجية.",
-          "latex": "\\frac{\\lambda_{\\text{кр}}}{\\lambda_{\\text{син}}} = \\frac{700}{450} \\approx 1{,}556"
+          "latex": "\\frac{\\lambda_{\\text{حرج}}}{\\lambda_{\\text{sin}}} = \\frac{700}{450} \\approx 1{,}556"
         },
         {
           "text": "نرفعها إلى الأس الرابع – وهذا هو تفوق الأزرق في التشتت.",
@@ -1310,11 +1310,11 @@
         },
         {
           "text": "الآن حد دقة المجهر.",
-          "latex": "d_{\\min} = \\frac{550\\ \\text{нм}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{нм}"
+          "latex": "d_{\\min} = \\frac{550\\ \\text{nm}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{nm}"
         },
         {
           "text": "لنقارن مع أحجام الأجسام.",
-          "latex": "\\text{бактерия} \\sim 1000\\ \\text{нм}, \\quad \\text{вирус} \\sim 100\\ \\text{нм}, \\quad \\text{молекула ДНК} \\sim 2\\ \\text{нм}"
+          "latex": "\\text{بكتيريا} \\sim 1000\\ \\text{nm}, \\quad \\text{فيروس} \\sim 100\\ \\text{nm}, \\quad \\text{جزيء DNA} \\sim 2\\ \\text{nm}"
         }
       ],
       "answer": "يتشتت الضوء الأزرق بقوة تزيد ستة أضعاف عن الأحمر تقريبًا. المجهر الضوئي يميز تفاصيل لا تقل عن حوالي 200 نانومتر.",
@@ -1326,7 +1326,7 @@
       "items": [
         {
           "sym": "d_eye",
-          "latex": "d_{\\text{глаз}}",
+          "latex": "d_{\\text{عين}}",
           "name": "دقة العين البشرية",
           "value": "≈ 1",
           "unit": "دقيقة قوسية",

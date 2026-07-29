@@ -382,35 +382,35 @@
           "sym": "x(t)",
           "latex": "x(t)",
           "what": "coordinate at time t",
-          "unit": "м",
+          "unit": "m",
           "note": "It is the coordinate, not distance: when moving backward it decreases"
         },
         {
           "sym": "x₀",
           "latex": "x_0",
           "what": "initial coordinate",
-          "unit": "м",
+          "unit": "m",
           "note": "where the body was at time t = 0; it is often convenient to set it to zero"
         },
         {
           "sym": "v₀",
           "latex": "v_0",
           "what": "initial velocity",
-          "unit": "м/с",
+          "unit": "m/s",
           "note": "vector quantity: the sign indicates the direction along the axis"
         },
         {
           "sym": "a",
           "latex": "a",
           "what": "acceleration",
-          "unit": "м/с²",
+          "unit": "m/s²",
           "note": "constant in this formula; if acceleration changes, a different apparatus is needed"
         },
         {
           "sym": "t",
           "latex": "t",
           "what": "time from the start of reference",
-          "unit": "с",
+          "unit": "s",
           "note": "always non-negative and measured from the chosen moment"
         }
       ]
@@ -421,13 +421,13 @@
       "steps": [
         {
           "text": "First, let's agree on what 'position' actually means. By itself, it is meaningless: we need a reference body, axes, and a clock. A passenger is stationary relative to the train car but racing relative to the platform — both statements are simultaneously true. This is called a frame of reference.",
-          "latex": "x = x(t) \\quad \\text{в выбранной системе отсчёта}",
+          "latex": "x = x(t) \\quad \\text{in the chosen reference frame}",
           "figure": "frame",
           "figCaption": "One motion, two observers, two different answers — and both correct."
         },
         {
           "text": "Average velocity is displacement divided by time. But it tells us little: having driven through a city at an average speed of $30$ km/h, you might have stood in traffic and sped along an avenue. We need velocity at a given instant.",
-          "latex": "v_{\\text{ср}} = \\frac{\\Delta x}{\\Delta t}",
+          "latex": "v_{\\text{avg}} = \\frac{\\Delta x}{\\Delta t}",
           "figure": "secant",
           "figCaption": "Average velocity is the slope of the secant line connecting two points on the position-time graph."
         },
@@ -451,7 +451,7 @@
         },
         {
           "text": "Now the key geometric step. Displacement is the integral of velocity over time, i.e., the area under the graph of $v(t)$. And this figure is a trapezoid: a rectangle of height $v_0$ plus a triangle with legs $t$ and $at$. Adding areas gives the answer.",
-          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{прямоугольник}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{треугольник}}",
+          "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectangle}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triangle}}",
           "figure": "area",
           "figCaption": "Distance is the area under the velocity-time graph. The trapezoid is decomposed into a rectangle and a triangle."
         },
@@ -482,7 +482,7 @@
         {
           "what": "Vectors: why sign matters more than it seems",
           "why": "Velocity and acceleration are vectors. On a line this reduces to a sign, but the sign decides everything: if $v$ and $a$ have opposite signs, the body slows down; if the same sign, it speeds up. This is exactly why a ball thrown upward has zero velocity at the top, but there its acceleration is still $9.8$ m/s² directed downward.",
-          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{разгон}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{торможение}"
+          "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{acceleration}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{braking}"
         }
       ]
     },
@@ -494,7 +494,7 @@
       "solution": [
         {
           "text": "First, find the time to a complete stop: the speed must become zero.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{с}"
+          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
         },
         {
           "text": "Substitute this time into the position equation.",
@@ -502,7 +502,7 @@
         },
         {
           "text": "We obtain the braking distance.",
-          "latex": "x = 40\\ \\text{м}"
+          "latex": "x = 40\\ \\text{m}"
         }
       ],
       "answer": "Braking distance — $40$ meters",
@@ -518,7 +518,7 @@
           "dictKey": "g",
           "name": "Acceleration due to gravity",
           "value": "9,81",
-          "unit": "м / с²",
+          "unit": "m/s²",
           "why": "The acceleration with which any body falls near the Earth's surface — regardless of mass, if air resistance is neglected. This discovery by Galileo contradicted a two-thousand-year tradition.",
           "mnemo": "In problems, we almost always take 10 m/s² — an error of about 2%, but easier to calculate mentally."
         },
@@ -526,16 +526,16 @@
           "sym": "v",
           "latex": "v",
           "name": "Velocity",
-          "value": "производная координаты",
-          "unit": "м / с",
+          "value": "derivative of coordinate",
+          "unit": "m/s",
           "why": "The dimension reads directly as the definition: meters (displacement) per second (time). Whenever you see a fraction in units, look for its meaning — it almost always hides the definition of the quantity."
         },
         {
           "sym": "a",
           "latex": "a",
           "name": "Acceleration",
-          "value": "производная скорости",
-          "unit": "м / с²",
+          "value": "derivative of velocity",
+          "unit": "m/s²",
           "why": "Meters per second squared reads as: 'by how many meters per second the speed changes each second.' The second is squared because division by time occurred twice."
         }
       ]
@@ -610,7 +610,7 @@
         "type": "estimate",
         "q": "A car accelerates from rest to 100 km/h in 8 seconds. What is its average acceleration in m/s²?",
         "answer": 3.5,
-        "unit": "м/с²",
+        "unit": "m/s²",
         "tolerance": 1.4,
         "why": "100 km/h is about 28 m/s (divide by 3.6). Acceleration equals change in velocity divided by time: 28/8 ≈ 3.5 m/s². For comparison: free fall gives 9.8 — almost three times as much.",
         "hint": "First convert kilometers per hour to meters per second — divide by 3.6. Then recall the definition of acceleration: change in velocity over time."
@@ -693,7 +693,7 @@
         },
         {
           "text": "La velocidad media es el desplazamiento dividido entre el tiempo. Pero dice poco: recorrer una ciudad a una velocidad media de $30$ km/h podría implicar que estuviste atrapado en un atasco y luego aceleraste en la avenida. Necesitamos la velocidad en un instante dado.",
-          "latex": "v_{\\text{ср}} = \\frac{\\Delta x}{\\Delta t}",
+          "latex": "v_{\\text{prom}} = \\frac{\\Delta x}{\\Delta t}",
           "figure": "secant",
           "figCaption": "La velocidad media es la pendiente de la recta secante que conecta dos puntos en la gráfica de coordenadas."
         },
@@ -760,7 +760,7 @@
       "solution": [
         {
           "text": "Primero encontremos el tiempo hasta detenerse por completo: la velocidad debe llegar a cero.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{с}"
+          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
         },
         {
           "text": "Sustituimos este tiempo en la ecuación de la posición.",
@@ -768,7 +768,7 @@
         },
         {
           "text": "Obtenemos la distancia de frenado.",
-          "latex": "x = 40\\ \\text{м}"
+          "latex": "x = 40\\ \\text{m}"
         }
       ],
       "answer": "La distancia de frenado es $40$ metros",
@@ -903,7 +903,7 @@
         },
         {
           "who": "إسحاق نيوتن وغوتفريد لايبنتس",
-          "year": "1670-е",
+          "year": "عقد 1670",
           "what": "ابتكرا بشكل مستقل التفاضل والتكامل، مما حول الوصف اللفظي لجاليليو إلى معادلة دقيقة"
         }
       ],
@@ -958,7 +958,7 @@
         },
         {
           "text": "السرعة المتوسطة هي الإزاحة مقسومة على الزمن. لكنها لا تخبرنا كثيرًا: بعد قيادة السيارة عبر المدينة بسرعة متوسطة 30 كم/س، قد تكون واقفًا في زحام وتندفع في الشارع الرئيسي. نحتاج السرعة اللحظية.",
-          "latex": "v_{\\text{ср}} = \\frac{\\Delta x}{\\Delta t}",
+          "latex": "v_{\\text{متوسط}} = \\frac{\\Delta x}{\\Delta t}",
           "figure": "secant",
           "figCaption": "السرعة المتوسطة - ميل القاطع الذي يربط نقطتين على منحنى الموقع."
         },
@@ -1025,7 +1025,7 @@
       "solution": [
         {
           "text": "أولاً نوجد الزمن حتى التوقف التام: يجب أن تصبح السرعة صفراً.",
-          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{с}"
+          "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{مع}"
         },
         {
           "text": "نعوض هذا الزمن في معادلة الموضع.",
@@ -1033,7 +1033,7 @@
         },
         {
           "text": "نحصل على مسافة الكبح.",
-          "latex": "x = 40\\ \\text{м}"
+          "latex": "x = 40\\ \\text{m}"
         }
       ],
       "answer": "مسافة الكبح — $40$ متراً",

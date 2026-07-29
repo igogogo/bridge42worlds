@@ -312,7 +312,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 <script src="/js/icons.js?v=2"></script>
 <script src="/js/explorable.js?v=5"></script>
 <script src="/js/stage-kit.js?v=4"></script>
-<script src="/js/models.js?v=27"></script>
+<script src="/js/models.js?v=28"></script>
 <script src="/js/tutor.js?v=3"></script>
 <script src="/js/figures.js?v=9"></script>
 <script>
@@ -397,8 +397,12 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     var list = window.B42Units ? window.B42Units.list : {};
     try { window.B42_UNITS = localStorage.getItem('b42_units') || 'metric'; } catch (e) { window.B42_UNITS = 'metric'; }
     Object.keys(list).forEach(function (key) {
-      var b = el('button', key === window.B42_UNITS ? 'active' : '', list[key].name);
-      b.type = 'button'; b.title = 'T: ' + list[key].T + ' · P: ' + list[key].P + ' · V: ' + list[key].V;
+      // название системы и обозначения — на языке страницы (см. UNIT_I18N в models.js)
+      var U = window.B42Units, sym = (U && U.unitSym) || function (s) { return s; };
+      var b = el('button', key === window.B42_UNITS ? 'active' : '',
+                 (U && U.sysName) ? U.sysName(key) : list[key].name);
+      b.type = 'button';
+      b.title = 'T: ' + sym(list[key].T) + ' · P: ' + sym(list[key].P) + ' · V: ' + sym(list[key].V);
       b.addEventListener('click', function () {
         window.B42_UNITS = key;
         host.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });

@@ -387,7 +387,7 @@
     "standNote": "On the stand — a body on a rotating disk. On the left you see the picture from the perspective of a stationary observer: the body moves in a circle, and the rope pulls it toward the center. On the right — the same scene from the perspective of an observer sitting on the disk: the body is at rest, and to explain this, one must add a centrifugal force directed outward. One motion, two descriptions. Notice the lower graph: the projection of rotation onto an axis is exactly a sine — this is a bridge to the next section.",
     "formula": {
       "name": "Centripetal acceleration",
-      "latex": "a_{\\text{ц}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+      "latex": "a_{\\text{c}} = \\frac{v^{2}}{R} = \\omega^{2} R",
       "alsoKnown": "Acceleration in uniform circular motion",
       "authors": [
         {
@@ -409,8 +409,8 @@
       "story": "Huygens derived the law of centrifugal force while working on clocks: he needed to understand how a weight behaves on a rotating rod. He obtained the result in 1659 but published it only in 1673 — and then as theorems without proofs. Newton arrived at the same independently, and it was the unification of circular motion with the law of gravity that allowed him to make the main step: showing that the Moon is a projectile that falls to Earth but misses because it is moving too fast sideways.",
       "symbols": [
         {
-          "sym": "aц",
-          "latex": "a_{\\text{ц}}",
+          "sym": "a_c",
+          "latex": "a_{\\text{c}}",
           "what": "centripetal acceleration",
           "unit": "m/s²",
           "note": "directed toward the center of the circle; it changes the direction of velocity, not its magnitude"
@@ -451,7 +451,7 @@
       "steps": [
         {
           "text": "The main misconception: in uniform rotation, the speed is constant in magnitude, but NOT constant as a vector — it continuously turns. And acceleration by definition is the rate of change of the velocity vector. Therefore acceleration exists, even though the speedometer shows the same number.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{но} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{but} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
           "figure": "circmotion",
           "figCaption": "Velocity is directed along the tangent and continuously turns — that is acceleration."
         },
@@ -469,30 +469,30 @@
         },
         {
           "text": "Through angular velocity the expression becomes even simpler. Substituting v = ωR, we see that acceleration grows as the square of the rotation frequency — that is why an accelerated centrifuge produces enormous overloads at a modest radius.",
-          "latex": "a_{\\text{ц}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+          "latex": "a_{\\text{c}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
           "figure": "omega",
           "figCaption": "Double the rotation frequency — acceleration increased fourfold."
         },
         {
           "text": "Now a philosophically important step. An observer standing on the ground explains the motion simply: there is a tension force in the string, it creates centripetal acceleration, Newton's laws are satisfied. This reference frame is called inertial — in it, a body without forces moves uniformly and rectilinearly.",
-          "latex": "\\text{ИСО:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{выполняется как есть}",
+          "latex": "\\text{IFR:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{holds as is}",
           "figure": "inertialframe",
           "figCaption": "Inertial observer: there is a real force, there is acceleration, everything fits."
         },
         {
           "text": "But an observer sitting on the disk itself sees something else: the body before him is motionless. Yet the string is taut! There is a force, but no acceleration — the second law is violated. To save it, we must add another force to the equation, directed outward. This is the centrifugal force of inertia.",
-          "latex": "\\text{НСО:} \\quad \\vec{T} + \\vec{F}_{\\text{цб}} = 0, \\qquad F_{\\text{цб}} = m\\omega^{2}R",
+          "latex": "\\text{NFR:} \\quad \\vec{T} + \\vec{F}_{\\text{centrifugal}} = 0, \\qquad F_{\\text{centrifugal}} = m\\omega^{2}R",
           "figure": "rotframe",
           "figCaption": "The rotating observer is forced to introduce a force that has no source."
         },
         {
           "text": "The force of inertia has no source body and no partner according to the third law — it arises solely from the choice of reference frame. This does not mean it is 'unreal': in its own frame it acts perfectly real, deforms bodies, and pushes water in a washing machine drum. It is simply the price for convenience of description.",
-          "latex": "\\vec{F}_{\\text{ин}} = -m\\vec{a}_{\\text{системы}}",
+          "latex": "\\vec{F}_{\\text{in}} = -m\\vec{a}_{\\text{systems}}",
           "figure": "fictitious",
           "figCaption": "The force of inertia is proportional to the acceleration of the reference frame itself and directed opposite to it."
         }
       ],
-      "plate": "a_{\\text{ц}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+      "plate": "a_{\\text{c}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
       "plateCap": "Uniform rotation is a continuous fall toward the center that keeps missing. This is exactly how the Moon orbits the Earth.",
       "note": "From here it is one step to a profound idea. Sitting in a closed cabin, you cannot distinguish the force of gravity from the inertial force of an accelerating cabin: both press you to the floor and are proportional to mass. Einstein elevated this impossibility into the equivalence principle and built general relativity on it, where gravity ceased to be a force and became curvature of spacetime. The question 'what force pushed me in the bus' leads, if you pull the thread long enough, straight to black holes."
     },
@@ -502,7 +502,7 @@
         {
           "what": "Radian — why angle is measured by length",
           "why": "A radian is the angle for which the arc length equals the radius. This definition seems strange until you notice: only in radians do the simple formulas s = Rφ and v = ωR work, and only in radians is the derivative of sine equal to cosine without extra factors. Degrees are a historical convention of the Babylonians; the radian is a natural measure built into the very geometry of the circle.",
-          "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
+          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
         },
         {
           "what": "Similarity of triangles as a physical tool",
@@ -520,11 +520,11 @@
       "title": "Numerical Example",
       "lead": "Let's estimate the g-force in a centrifuge — and understand why cosmonauts are trained this way.",
       "given": "A centrifuge cabin rotates in a circle of radius $8$ m, completing one full revolution in $4$ seconds. Find the centripetal acceleration and compare it with $g = 10$ m/s².",
-      "law": "$a_{\\text{ц}} = \\omega^{2}R$, where $\\omega = 2\\pi/T$",
+      "law": "$a_{\\text{c}} = \\omega^{2}R$, where $\\omega = 2\\pi/T$",
       "solution": [
         {
           "text": "Find the angular velocity: a full revolution is $2\\pi$ radians.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{рад/с}"
+          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
         },
         {
           "text": "Substitute into the acceleration formula.",
@@ -532,7 +532,7 @@
         },
         {
           "text": "Calculate and convert to units of g.",
-          "latex": "a \\approx 19{,}7\\ \\text{м/с}^2 \\approx 2\\,g"
+          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
         }
       ],
       "answer": "Acceleration about $20$ m/s², meaning a g-force of roughly $2g$",
@@ -560,8 +560,8 @@
           "why": "Time of one full revolution or one full oscillation. Its reciprocal is frequency, measured in hertz: how many revolutions per second."
         },
         {
-          "sym": "рад",
-          "latex": "\\text{рад}",
+          "sym": "rad",
+          "latex": "\\text{rad}",
           "name": "Radian",
           "value": "1 rad ≈ 57.3°",
           "unit": "dimensionless",
@@ -658,11 +658,11 @@
       {
         "id": "r4",
         "type": "estimate",
-        "q": "A merry-go-round of radius 5 m completes one rotation in 6 seconds. What is the centripetal acceleration in м/с²?",
+        "q": "A merry-go-round of radius 5 m completes one rotation in 6 seconds. What is the centripetal acceleration in m/s²?",
         "answer": 5.5,
-        "unit": "м/с²",
+        "unit": "m/s²",
         "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1,05 рад/с; a = ω²R = 1,1 · 5 ≈ 5,5 м/с². This is about half of g — exactly the noticeable but safe load that amusement rides are designed for.",
+        "why": "ω = 2π/6 ≈ 1.05 rad/s; a = ω²R = 1.1 · 5 ≈ 5.5 m/s². This is about half of g — exactly the noticeable but safe load that amusement rides are designed for.",
         "hint": "First the angular velocity: 2π divided by the period, which is just above one. Then square it and multiply by the radius."
       }
     ]
@@ -678,7 +678,7 @@
     "standNote": "En el stand hay un cuerpo sobre un disco giratorio. A la izquierda ves la imagen desde los ojos de un observador inmóvil: el cuerpo se mueve en círculo y una cuerda lo jala hacia el centro. A la derecha, la misma escena desde los ojos de un observador sentado en el disco: el cuerpo está en reposo, y para explicarlo hay que agregar una fuerza centrífuga dirigida hacia afuera. Un mismo movimiento, dos descripciones. Observa el gráfico inferior: la proyección de la rotación sobre un eje es exactamente un seno — es un puente hacia el siguiente párrafo.",
     "formula": {
       "name": "Aceleración centrípeta",
-      "latex": "a_{\\text{ц}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+      "latex": "a_{\\text{cent}} = \\frac{v^{2}}{R} = \\omega^{2} R",
       "alsoKnown": "Aceleración en el movimiento circular uniforme",
       "authors": [
         {
@@ -700,8 +700,8 @@
       "story": "Huygens obtuvo la ley de la fuerza centrífuga mientras trabajaba en relojes: necesitaba entender cómo se comporta una masa en una varilla giratoria. Derivó el resultado en 1659, pero lo publicó solo en 1673 — y además en forma de teoremas sin demostraciones. Newton llegó al mismo resultado de forma independiente, y fue precisamente la unión del movimiento circular con la ley de gravitación lo que le permitió dar el paso crucial: mostrar que la Luna es un proyectil que cae hacia la Tierra, pero falla porque se mueve demasiado rápido de lado.",
       "symbols": [
         {
-          "sym": "aц",
-          "latex": "a_{\\text{ц}}",
+          "sym": "a_c",
+          "latex": "a_{\\text{cent}}",
           "what": "aceleración centrípeta",
           "unit": "m/s²",
           "note": "dirigida hacia el centro de la circunferencia; no cambia la magnitud de la velocidad, sino su dirección"
@@ -742,7 +742,7 @@
       "steps": [
         {
           "text": "El principal malentendido: en la rotación uniforme, la velocidad es constante en magnitud, pero NO constante como vector — siempre está girando. Y la aceleración, por definición, es la tasa de cambio del vector velocidad. Por lo tanto, hay aceleración, aunque el velocímetro muestre el mismo número.",
-          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{но} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+          "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{pero} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
           "figure": "circmotion",
           "figCaption": "La velocidad es tangencial y gira continuamente — eso es la aceleración."
         },
@@ -760,30 +760,30 @@
         },
         {
           "text": "Mediante la velocidad angular, la expresión se vuelve aún más simple. Sustituyendo $v = \\omega R$, vemos que la aceleración crece como el cuadrado de la frecuencia de rotación — por eso una centrífuga acelerada desarrolla sobrecargas enormes con un radio modesto.",
-          "latex": "a_{\\text{ц}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+          "latex": "a_{\\text{cent}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
           "figure": "omega",
           "figCaption": "Duplicamos la frecuencia de rotación — la aceleración se cuadruplica."
         },
         {
           "text": "Ahora un paso filosóficamente importante. Un observador en tierra explica el movimiento simplemente: hay una fuerza de tensión en la cuerda, crea una aceleración centrípeta, las leyes de Newton se cumplen. Ese sistema de referencia se llama inercial — en él, un cuerpo sin fuerzas se mueve uniformemente y en línea recta.",
-          "latex": "\\text{ИСО:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{выполняется как есть}",
+          "latex": "\\text{SRI:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{se ejecuta tal cual}",
           "figure": "inertialframe",
           "figCaption": "Observador inercial: hay una fuerza real, hay aceleración, todo concuerda."
         },
         {
           "text": "Pero un observador sentado en el propio disco ve otra cosa: el cuerpo frente a él está inmóvil. ¡Pero la cuerda está tensa! Hay fuerza, pero no hay aceleración — la segunda ley se viola. Para salvarla, es necesario agregar otra fuerza en la ecuación, dirigida hacia afuera. Esa es la fuerza centrífuga de inercia.",
-          "latex": "\\text{НСО:} \\quad \\vec{T} + \\vec{F}_{\\text{цб}} = 0, \\qquad F_{\\text{цб}} = m\\omega^{2}R",
+          "latex": "\\text{SNI:} \\quad \\vec{T} + \\vec{F}_{\\text{centríf}} = 0, \\qquad F_{\\text{centríf}} = m\\omega^{2}R",
           "figure": "rotframe",
           "figCaption": "El observador rotante se ve obligado a introducir una fuerza que no tiene fuente."
         },
         {
           "text": "La fuerza de inercia no tiene cuerpo fuente ni pareja según la tercera ley — surge únicamente debido a la elección del sistema de referencia. Esto no significa que sea «irreal»: en su sistema actúa de manera completamente real, deforma cuerpos y expulsa el agua en el tambor de una lavadora. Simplemente es el precio por la conveniencia de la descripción.",
-          "latex": "\\vec{F}_{\\text{ин}} = -m\\vec{a}_{\\text{системы}}",
+          "latex": "\\vec{F}_{\\text{ind}} = -m\\vec{a}_{\\text{sistemas}}",
           "figure": "fictitious",
           "figCaption": "La fuerza de inercia es proporcional a la aceleración del propio sistema de referencia y está dirigida en contra de ella."
         }
       ],
-      "plate": "a_{\\text{ц}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+      "plate": "a_{\\text{cent}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
       "plateCap": "La rotación uniforme es una caída continua hacia el centro que siempre falla. Así es como la Luna orbita la Tierra.",
       "note": "Desde aquí hay un paso hacia una idea profunda. Sentado en una cabina cerrada, no puedes distinguir la fuerza de gravedad de la fuerza de inercia de una cabina que acelera: ambas te presionan contra el suelo y son proporcionales a la masa. Einstein elevó esta imposibilidad al principio de equivalencia y construyó sobre él la teoría general de la relatividad, donde la gravedad dejó de ser una fuerza y se convirtió en curvatura del espacio-tiempo. La pregunta «¿qué fuerza me empujó en el autobús?» lleva, si tiras del hilo lo suficiente, directamente a los agujeros negros."
     },
@@ -793,7 +793,7 @@
         {
           "what": "Radián — por qué el ángulo se mide con longitud",
           "why": "El radián es el ángulo para el cual la longitud del arco es igual al radio. Esta definición parece extraña hasta que notas: solo en radianes funcionan las fórmulas simples $s = R\\varphi$ y $v = \\omega R$, y solo en radianes la derivada del seno es igual al coseno sin factores adicionales. Los grados son una convención histórica de los babilonios; el radián es una medida natural, integrada en la geometría del círculo mismo.",
-          "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
+          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
         },
         {
           "what": "Semejanza de triángulos como herramienta física",
@@ -811,11 +811,11 @@
       "title": "Ejemplo con números",
       "lead": "Estimemos la sobrecarga en una centrífuga — y de paso entendamos por qué los astronautas se entrenan precisamente así.",
       "given": "La cabina de una centrífuga gira en una circunferencia de radio $8$ m, dando una vuelta completa en $4$ segundos. Encontrar la aceleración centrípeta y compararla con $g = 10$ m/s².",
-      "law": "$a_{\\text{ц}} = \\omega^{2}R$, donde $\\omega = 2\\pi/T$",
+      "law": "$a_{\\text{cent}} = \\omega^{2}R$, donde $\\omega = 2\\pi/T$",
       "solution": [
         {
           "text": "Encontramos la velocidad angular: una vuelta completa son $2\\pi$ radianes.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{рад/с}"
+          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
         },
         {
           "text": "Sustituimos en la fórmula de la aceleración.",
@@ -823,7 +823,7 @@
         },
         {
           "text": "Calculamos y convertimos a unidades de g.",
-          "latex": "a \\approx 19{,}7\\ \\text{м/с}^2 \\approx 2\\,g"
+          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
         }
       ],
       "answer": "Aceleración de unos $20$ m/s², es decir, sobrecarga de aproximadamente $2g$",
@@ -851,8 +851,8 @@
           "why": "Tiempo de una vuelta completa o de una oscilación completa. Su inversa es la frecuencia, medida en hercios: cuántas vueltas por segundo."
         },
         {
-          "sym": "рад",
-          "latex": "\\text{рад}",
+          "sym": "rad",
+          "latex": "\\text{rad}",
           "name": "Radián",
           "value": "1 rad ≈ 57,3°",
           "unit": "adimensional",
@@ -881,7 +881,7 @@
         {
           "icon": "clock",
           "title": "Hacia el centro",
-          "text": "aц = v²/R = ω²R, dirigida estrictamente al centro, perpendicular a la velocidad."
+          "text": "a_c = v²/R = ω²R, dirigida estrictamente al centro, perpendicular a la velocidad."
         },
         {
           "icon": "sigma",
@@ -969,7 +969,7 @@
     "standNote": "على المنصة – جسم على قرص دوار. على اليسار ترى المشهد بعيون مراقب ثابت: الجسم يتحرك في دائرة، والحبل يسحبه نحو المركز. على اليمين – نفس المشهد بعيون مراقب جالس على القرص: الجسم ساكن، ولتفسير ذلك يجب إضافة قوة طرد مركزي موجهة للخارج. حركة واحدة، وصفان. لاحظ الرسم البياني السفلي: إسقاط الدوران على المحور هو بالضبط جيب – هذا جسر إلى الفقرة التالية.",
     "formula": {
       "name": "التسارع المركزي",
-      "latex": "a_{\\text{ц}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+      "latex": "a_{\\text{مركز}} = \\frac{v^{2}}{R} = \\omega^{2} R",
       "alsoKnown": "التسارع في الحركة الدائرية المنتظمة",
       "authors": [
         {
@@ -991,8 +991,8 @@
       "story": "حصل هويغنس على قانون قوة الطرد المركزي أثناء عمله على الساعات: كان بحاجة لفهم كيف يتصرف ثقل على قضيب دوار. اشتق النتيجة في عام 1659، لكنه نشرها فقط في 1673 – وحتى ذلك في شكل نظريات بدون براهين. توصل نيوتن إلى نفس النتيجة بشكل مستقل، وكان دمج الحركة الدائرية مع قانون الجاذبية هو ما سمح له باتخاذ الخطوة الرئيسية: إظهار أن القمر هو قذيفة تسقط نحو الأرض لكنها تخطئها لأنها تطير بسرعة كبيرة جانبياً.",
       "symbols": [
         {
-          "sym": "aц",
-          "latex": "a_{\\text{ц}}",
+          "sym": "a_c",
+          "latex": "a_{\\text{مركز}}",
           "what": "التسارع المركزي",
           "unit": "m/s²",
           "note": "موجه نحو مركز الدائرة؛ يغير اتجاه السرعة وليس مقدارها"
@@ -1051,30 +1051,30 @@
         },
         {
           "text": "من خلال السرعة الزاوية يصبح التعبير أبسط. بالتعويض $v = \\omega R$، نرى أن التسارع ينمو كمربع تردد الدوران - ولهذا السبب يولد جهاز الطرد المركزي عند تسريعه أحمالًا زائدة هائلة عند نصف قطر متواضع.",
-          "latex": "a_{\\text{ц}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+          "latex": "a_{\\text{مركز}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
           "figure": "omega",
           "figCaption": "ضاعف تردد الدوران - تضاعف التسارع أربع مرات."
         },
         {
           "text": "الآن الخطوة المهمة فلسفيًا. الراصد الواقف على الأرض يشرح الحركة ببساطة: هناك قوة شد الحبل، تخلق تسارعًا جاذبًا مركزيًا، وقوانين نيوتن محققة. هذا الإطار المرجعي يسمى قصوريًا - فيه يتحرك الجسم بدون قوى بشكل منتظم ومستقيم.",
-          "latex": "\\text{ИСО:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{تحقق كما هي}",
+          "latex": "\\text{إطار عطالي:} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{تحقق كما هي}",
           "figure": "inertialframe",
           "figCaption": "الراصد القصوري: هناك قوة حقيقية، هناك تسارع، كل شيء متسق."
         },
         {
           "text": "أما الراصد الجالس على القرص نفسه فيرى شيئًا آخر: الجسم أمامه ساكن. لكن الحبل مشدود! هناك قوة، ولا تسارع - القانون الثاني منتهك. لإنقاذه، نضيف قوة أخرى إلى المعادلة موجهة للخارج. هذه هي قوة الطرد المركزي القصورية.",
-          "latex": "\\text{НСО:} \\quad \\vec{T} + \\vec{F}_{\\text{цб}} = 0, \\qquad F_{\\text{цб}} = m\\omega^{2}R",
+          "latex": "\\text{إطار غير عطالي:} \\quad \\vec{T} + \\vec{F}_{\\text{طرد مركزي}} = 0, \\qquad F_{\\text{طرد مركزي}} = m\\omega^{2}R",
           "figure": "rotframe",
           "figCaption": "الراصد الدوار يضطر إلى إدخال قوة ليس لها مصدر."
         },
         {
           "text": "ليس لقوة القصور الذاتي جسم مصدر ولا شريك في القانون الثالث - فهي تنشأ فقط من اختيار الإطار المرجعي. هذا لا يعني أنها «غير حقيقية»: في إطارها تعمل بشكل واقعي تمامًا، تشوه الأجسام وتدفع الماء في أسطوانة الغسالة. إنها ببساطة ثمن راحة الوصف.",
-          "latex": "\\vec{F}_{\\text{ин}} = -m\\vec{a}_{\\text{системы}}",
+          "latex": "\\vec{F}_{\\text{عطالة}} = -m\\vec{a}_{\\text{أنظمة}}",
           "figure": "fictitious",
           "figCaption": "قوة القصور الذاتي تتناسب مع تسارع الإطار المرجعي نفسه وموجهة ضده."
         }
       ],
-      "plate": "a_{\\text{ц}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+      "plate": "a_{\\text{مركز}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
       "plateCap": "الحركة الدورانية المنتظمة هي سقوط مستمر نحو المركز يخطئه دائمًا. هكذا يدور القمر حول الأرض.",
       "note": "من هنا خطوة واحدة إلى فكرة عميقة. بالجلوس في مقصورة مغلقة، لا يمكنك التمييز بين قوة الجاذبية وقوة القصور الذاتي لمقصورة متسارعة: كلاهما يضغطك على الأرض ويتناسب مع الكتلة. رفع أينشتاين هذا الاستحالة إلى مبدأ التكافؤ وبنى عليه النسبية العامة، حيث توقفت الجاذبية عن كونها قوة وأصبحت انحناء الزمكان. السؤال «أي قوة دفعتني في الحافلة» يقود، إذا سحبت الخيط لفترة كافية، مباشرة إلى الثقوب السوداء."
     },
@@ -1084,7 +1084,7 @@
         {
           "what": "الراديان - لماذا نقيس الزاوية بالطول",
           "why": "الراديان هو الزاوية التي يكون فيها طول القوس مساويًا لنصف القطر. يبدو هذا التعريف غريبًا حتى تلاحظ: فقط بالراديان تعمل الصيغ البسيطة $s = R\\varphi$ و $v = \\omega R$، وفقط بالراديان يكون مشتق الجيب مساويًا لجيب التمام دون معاملات إضافية. الدرجات هي اصطلاح تاريخي من البابليين؛ الراديان هو مقياس طبيعي مدمج في هندسة الدائرة نفسها.",
-          "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
+          "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
         },
         {
           "what": "تشابه المثلثات كأداة فيزيائية",
@@ -1102,11 +1102,11 @@
       "title": "مثال مع الأرقام",
       "lead": "سوف نقدر التحميل الزائد في جهاز الطرد المركزي — وسنفهم لماذا يتم تدريب رواد الفضاء بهذه الطريقة.",
       "given": "كابينة جهاز الطرد المركزي تدور في دائرة نصف قطرها $8$ م، وتكمل دورة كاملة في $4$ ثوانٍ. أوجد التسارع المركزي وقارنه مع $g = 10$ م/ث².",
-      "law": "$a_{\\text{ц}} = \\omega^{2}R$، حيث $\\omega = 2\\pi/T$",
+      "law": "$a_{\\text{مركز}} = \\omega^{2}R$، حيث $\\omega = 2\\pi/T$",
       "solution": [
         {
           "text": "نحسب السرعة الزاوية: الدورة الكاملة تعادل $2\\pi$ راديان.",
-          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{рад/с}"
+          "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
         },
         {
           "text": "نعوض في معادلة التسارع.",
@@ -1114,7 +1114,7 @@
         },
         {
           "text": "نحسب ونحول إلى وحدات g.",
-          "latex": "a \\approx 19{,}7\\ \\text{м/с}^2 \\approx 2\\,g"
+          "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
         }
       ],
       "answer": "التسارع حوالي $20$ م/ث²، أي تحميل زائد يبلغ حوالي $2g$",
@@ -1142,10 +1142,10 @@
           "why": "زمن دورة كاملة أو تذبذب كامل. القيمة العكسية له هي التردد، ويُقاس بالهرتز: عدد الدورات في الثانية."
         },
         {
-          "sym": "рад",
-          "latex": "\\text{рад}",
+          "sym": "rad",
+          "latex": "\\text{rad}",
           "name": "راديان",
-          "value": "1 рад ≈ 57,3°",
+          "value": "1 rad ≈ 57,3°",
           "unit": "بدون أبعاد",
           "why": "بلا أبعاد شكلياً، لأنه نسبة طول القوس إلى نصف القطر — متر مقسوم على متر. لهذا يمكن «فقدان» الراديان في الأبعاد: راديان/ث و ث⁻¹ لهما نفس البعد، رغم أن المعنى مختلف.",
           "mnemo": "الدائرة الكاملة تساوي 2π ≈ 6,28 راديان. الراديان الواحد أقل بقليل من 60 درجة."
@@ -1172,7 +1172,7 @@
         {
           "icon": "clock",
           "title": "نحو المركز",
-          "text": "aц = v²/R = ω²R، موجه بدقة نحو المركز، عمودي على السرعة."
+          "text": "a_c = v²/R = ω²R، موجه بدقة نحو المركز، عمودي على السرعة."
         },
         {
           "icon": "sigma",
@@ -1240,11 +1240,11 @@
       {
         "id": "r4",
         "type": "estimate",
-        "q": "لعبة دوارة نصف قطرها 5 м تكمل دورة كاملة في 6 секунд. ما هو التسارع المركزي بوحدة м/с²؟",
+        "q": "لعبة دوارة نصف قطرها 5 m تكمل دورة كاملة في 6 s. ما هو التسارع المركزي بوحدة m/s²؟",
         "answer": 5.5,
-        "unit": "м/с²",
+        "unit": "m/s²",
         "tolerance": 1.4,
-        "why": "ω = 2π/6 ≈ 1,05 рад/с; a = ω²R = 1,1 · 5 ≈ 5,5 м/с². هذا تقريباً نصف g — وهو الحمل المحسوس ولكن الآمن الذي تصمم عليه الألعاب.",
+        "why": "ω = 2π/6 ≈ 1,05 rad/s; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². هذا تقريباً نصف g — وهو الحمل المحسوس ولكن الآمن الذي تصمم عليه الألعاب.",
         "hint": "أولاً السرعة الزاوية: 2π مقسومة على الزمن الدوري، وهي أكبر قليلاً من الواحد. ثم ربّعها واضرب في نصف القطر."
       }
     ]

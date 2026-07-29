@@ -406,7 +406,7 @@
     "standNote": "Move the mass number across the full range and watch the curve below. On the left, it rises steeply — fusion there yields a lot of energy, which is why hydrogen burns. At iron, it has a maximum and a flat top: nothing to do with it. On the right, a gentle decline — fission gives significantly less per nucleon, but there are many heavy nuclei and they are technically easier to split. Notice the label under the nucleus: it tells you which side of the curve you are on and what is beneficial to do with that nucleus.",
     "formula": {
       "name": "Energy Yield of a Nuclear Reaction",
-      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{con}} - \\left(\\frac{B}{A}\\right)_{\\text{init}}\\right] A",
       "alsoKnown": "Binding Energy Curve · Condition for Energy Release",
       "authors": [
         {
@@ -461,7 +461,7 @@
       },
       {
         "sym": "Tign",
-        "latex": "T_{\\text{заж}}",
+        "latex": "T_{\\text{ign}}",
         "what": "fusion ignition temperature",
         "unit": "K",
         "note": "about $10^{8}$ K for deuterium with tritium — ten times higher than in the Sun's core"
@@ -486,37 +486,37 @@
         },
         {
           "text": "Uranium fission. A nucleus with $B/A \\approx 7{,}6$ MeV decays into two medium-mass fragments, which have $B/A \\approx 8{,}5$. The gain is almost a mega-electronvolt per nucleon, multiplied by 235 nucleons.",
-          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "Two hundred mega-electronvolts per nucleus — fifty million times more than the burning of a carbon atom."
         },
         {
           "text": "Chain reaction. During fission, two to three neutrons are emitted, each capable of causing a new fission. Stability is determined by how many of them, on average, complete the job.",
-          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "latex": "k < 1 \\;\\text{decays}, \\quad k = 1 \\;\\text{stationary}, \\quad k > 1 \\;\\text{acceleration}",
           "figure": "microcontact",
           "figCaption": "The reactor operates exactly at one. Control is possible thanks to delayed neutrons."
         },
         {
           "text": "Now fusion. Four protons turn into a helium nucleus, which has $B/A = 7{,}1$ MeV versus zero for free protons. The gain per nucleon is almost eight times greater than in fission.",
-          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "Fusion is more efficient than fission per mass of fuel — but requires incomparably more difficult conditions."
         },
         {
           "text": "Why fusion is so difficult. Nuclei must come very close, overcoming a Coulomb barrier hundreds of kilo-electronvolts high. Thermal energy is insufficient even at millions of degrees — tunneling comes to the rescue.",
-          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "latex": "E_{\\text{barrier}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{MeV} \\;\\;\\text{against}\\;\\; kT \\approx 1\\ \\text{keV at } 10^{7}\\ \\text{K}",
           "figure": "anywell",
           "figCaption": "A thousand-fold difference. The reaction proceeds only due to quantum tunneling through the barrier."
         },
         {
           "text": "Hence the slowness of solar burning. The tunneling probability is small, and the first step of the chain also requires weak interaction — conversion of a proton into a neutron. The average waiting time for an individual proton is billions of years.",
-          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "latex": "\\text{specific power of the Sun} \\approx 275\\ \\text{W/m}^{3}",
           "figure": "heating",
           "figCaption": "Less than what a compost heap produces. The Sun shines brightly not because of the intensity of the reaction, but because of its size."
         },
         {
           "text": "And the end of the journey. Reaching iron, a star hits the maximum of the curve: further fusion does not release energy but consumes it. The support against gravity disappears, and the core collapses in seconds.",
-          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{at}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{collapse and supernova}",
           "figure": "result",
           "figCaption": "Iron — the ash of stellar fire. Everything heavier than iron was created in explosions, where energy is spent, not gained."
         }
@@ -541,19 +541,19 @@
       "solution": [
         {
           "text": "Number of nuclei in a kilogram of uranium-235.",
-          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+          "latex": "N = \\frac{1000\\ \\text{g}}{235\\ \\text{g/mol}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
         },
         {
           "text": "Energy of one fission in joules.",
-          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{J}"
         },
         {
           "text": "Total energy.",
-          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{J}"
         },
         {
           "text": "Equivalent amount of coal.",
-          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{kg} = 2800\\ \\text{tons}"
         }
       ],
       "answer": "A kilogram of uranium-235 provides as much energy as almost three thousand tons of coal — a train of fifty cars.",
@@ -565,19 +565,19 @@
       "items": [
         {
           "sym": "Qfis",
-          "latex": "Q_{\\text{дел}}",
+          "latex": "Q_{\\text{div}}",
           "name": "Energy of fission of a uranium-235 nucleus",
           "value": "≈ 200",
-          "unit": "МэВ",
+          "unit": "MeV",
           "why": "Of this, about 165 MeV is carried away by the fragments as kinetic energy; the rest goes to neutrons, gamma rays, and subsequent decays. It is the kinetic energy of the fragments that heats the fuel in the reactor.",
           "mnemo": "One fission gives fifty million times more energy than the combustion of a single carbon atom. A kilogram of uranium is equivalent to three thousand tons of coal."
         },
         {
           "sym": "Qfus",
-          "latex": "Q_{\\text{синт}}",
+          "latex": "Q_{\\text{synth}}",
           "name": "Energy of fusion of deuterium with tritium",
           "value": "17,6",
-          "unit": "МэВ",
+          "unit": "MeV",
           "why": "The most accessible fusion reaction: it has the smallest Coulomb barrier and the largest cross section. The primary reaction for future thermonuclear reactors.",
           "mnemo": "Per nucleon, this is 3.5 MeV versus 0.9 for fission — four times more efficient per fuel mass. The deuterium in one liter of seawater would provide the energy of three hundred liters of gasoline."
         },
@@ -586,7 +586,7 @@
           "latex": "P_{\\odot}",
           "name": "Specific power in the center of the Sun",
           "value": "≈ 275",
-          "unit": "Вт / м³",
+          "unit": "W/m³",
           "why": "Less than a compost heap of the same volume releases. The Sun shines brightly solely because of its size, not the intensity of the reaction.",
           "mnemo": "It is this slowness that allows the Sun to burn for billions of years. If the reaction were faster, it would have burned out long before life appeared."
         }
@@ -787,7 +787,7 @@
     "standNote": "Desplace el número másico a lo largo de todo el rango y observe la curva inferior. A la izquierda asciende abruptamente: allí la fusión produce mucha energía, por eso arde el hidrógeno. En el hierro hay un máximo y una cima plana: no se puede hacer nada con él. A la derecha hay una pendiente suave: la fisión produce notablemente menos energía por nucleón, pero hay muchos núcleos pesados y dividirlos es técnicamente más sencillo. Preste atención al texto bajo el núcleo: indica en qué lado de la curva se encuentra y qué conviene hacer con ese núcleo.",
     "formula": {
       "name": "Salida energética de una reacción nuclear",
-      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{cond}} - \\left(\\frac{B}{A}\\right)_{\\text{inic}}\\right] A",
       "alsoKnown": "Curva de energía de enlace · condición de liberación de energía",
       "authors": [
         {
@@ -841,7 +841,7 @@
         },
         {
           "sym": "Tign",
-          "latex": "T_{\\text{заж}}",
+          "latex": "T_{\\text{ign}}",
           "what": "temperatura de ignición de fusión",
           "unit": "K",
           "note": "alrededor de $10^{8}$ K para deuterio con tritio — diez veces más que en el centro del Sol"
@@ -867,37 +867,37 @@
         },
         {
           "text": "Fisión del uranio. Un núcleo con $B/A \\approx 7{,}6$ MeV se divide en dos fragmentos de masa media, con $B/A \\approx 8{,}5$. La ganancia es de casi un megaelectronvoltio por nucleón, multiplicado por 235 nucleones.",
-          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "Doscientos megaelectronvoltios por núcleo: cincuenta millones de veces más que la combustión de un átomo de carbono."
         },
         {
           "text": "Reacción en cadena. En la fisión se emiten dos o tres neutrones, cada uno capaz de provocar una nueva fisión. La estabilidad se determina por cuántos de ellos, en promedio, logran completar el proceso.",
-          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "latex": "k < 1 \\;\\text{decae}, \\quad k = 1 \\;\\text{estacionario}, \\quad k > 1 \\;\\text{aceleración}",
           "figure": "microcontact",
           "figCaption": "El reactor funciona exactamente en uno. El control es posible gracias a los neutrones retardados."
         },
         {
           "text": "Ahora la fusión. Cuatro protones se transforman en un núcleo de helio, con $B/A = 7{,}1$ MeV frente a cero de los protones libres. La ganancia por nucleón es casi ocho veces mayor que en la fisión.",
-          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "La fusión es más eficiente que la fisión en masa de combustible, pero requiere condiciones incomparablemente más difíciles."
         },
         {
           "text": "Por qué la fusión es tan difícil. Los núcleos deben acercarse hasta rozarse, superando una barrera coulombiana de cientos de kiloelectronvoltios. La energía térmica, incluso a millones de grados, no es suficiente; el efecto túnel es el que salva.",
-          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "latex": "E_{\\text{barrera}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{MeV} \\;\\;\\text{contra}\\;\\; kT \\approx 1\\ \\text{keV a } 10^{7}\\ \\text{K}",
           "figure": "anywell",
           "figCaption": "Diferencia de mil veces. La reacción solo ocurre gracias a la penetración de la barrera."
         },
         {
           "text": "De ahí la lentitud del horno solar. La probabilidad de efecto túnel es pequeña, y la primera etapa de la cadena requiere además la interacción débil: la conversión de protón en neutrón. El tiempo medio de espera para un protón individual es de miles de millones de años.",
-          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "latex": "\\text{potencia específica del Sol} \\approx 275\\ \\text{W/m}^{3}",
           "figure": "heating",
           "figCaption": "Menos que la de un montón de compost. El Sol brilla intensamente no por la violencia de la reacción, sino por su tamaño."
         },
         {
           "text": "Y el final del camino. Al llegar al hierro, la estrella choca con el máximo de la curva: la fusión posterior no da energía, sino que la consume. El soporte contra la gravedad desaparece y el núcleo colapsa en segundos.",
-          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{a}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{colapso y supernova}",
           "figure": "result",
           "figCaption": "El hierro es la ceniza del fuego estelar. Todo lo más pesado se crea en explosiones, donde se gasta energía, no se obtiene."
         }
@@ -918,23 +918,23 @@
       "title": "Ejemplo numérico: un kilogramo de uranio contra un vagón de carbón",
       "lead": "Calculamos cuánta energía produce el combustible nuclear y lo comparamos con lo familiar.",
       "given": "En la fisión de un núcleo de uranio-235 se liberan 200 MeV. Hallar la energía liberada al fisionar un kilogramo y compararla con el calor de combustión del carbón (29 MJ/kg).",
-      "law": "$E = N \\cdot Q$, где $N = \\dfrac{m}{M}N_A$",
+      "law": "$E = N \\cdot Q$, donde $N = \\dfrac{m}{M}N_A$",
       "solution": [
         {
           "text": "Número de núcleos en un kilogramo de uranio-235.",
-          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+          "latex": "N = \\frac{1000\\ \\text{g}}{235\\ \\text{g/mol}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
         },
         {
           "text": "Energía de una fisión en julios.",
-          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{J}"
         },
         {
           "text": "Energía total.",
-          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{J}"
         },
         {
           "text": "Cuánto carbón equivale.",
-          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{kg} = 2800\\ \\text{toneladas}"
         }
       ],
       "answer": "Un kilogramo de uranio-235 produce tanta energía como casi tres mil toneladas de carbón: un tren de unos cincuenta vagones.",
@@ -946,7 +946,7 @@
       "items": [
         {
           "sym": "Qfis",
-          "latex": "$Q_{\\text{дел}}$",
+          "latex": "$Q_{\\text{fis}}$",
           "name": "Energía de fisión del núcleo de uranio-235",
           "value": "≈ 200",
           "unit": "MeV",
@@ -955,7 +955,7 @@
         },
         {
           "sym": "Qfus",
-          "latex": "$Q_{\\text{синт}}$",
+          "latex": "$Q_{\\text{sint}}$",
           "name": "Energía de fusión de deuterio con tritio",
           "value": "17,6",
           "unit": "MeV",
@@ -1168,7 +1168,7 @@
     "standNote": "حرّك العدد الكتلي عبر النطاق كله وراقب المنحنى في الأسفل. على اليسار، يرتفع بحدة — الاندماج هناك ينتج طاقة كبيرة، ولهذا يحترق الهيدروجين. عند الحديد، ذروة وقمة مسطحة: لا شيء يمكن فعله به. على اليمين، انخفاض تدريجي — الانشطار يعطي طاقة أقل بكثير لكل نوكليون، لكن الأنوية الثقيلة كثيرة وانشطارها أسهل تقنياً. لاحظ التسمية تحت النواة: فهي تخبرك في أي جانب من المنحنى أنت وماذا يفيد فعله بهذه النواة.",
     "formula": {
       "name": "الناتج الطاقي للتفاعل النووي",
-      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+      "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{نهائي}} - \\left(\\frac{B}{A}\\right)_{\\text{بداية}}\\right] A",
       "alsoKnown": "منحنى طاقة الارتباط · شرط إطلاق الطاقة",
       "authors": [
         {
@@ -1223,7 +1223,7 @@
       },
       {
         "sym": "Tign",
-        "latex": "T_{\\text{заж}}",
+        "latex": "T_{\\text{إشعال}}",
         "what": "درجة حرارة اشتعال الاندماج",
         "unit": "K",
         "note": "حوالي $10^{8}$ K للديوتيريوم مع التريتيوم — أعلى بعشر مرات من مركز الشمس"
@@ -1248,37 +1248,37 @@
         },
         {
           "text": "انشطار اليورانيوم. نواة طاقتها الربطية النوعية حوالي $B/A \\approx 7{,}6$ MeV تنقسم إلى شظيتين متوسطتي الكتلة طاقتهما الربطية النوعية حوالي $B/A \\approx 8{,}5$ MeV. الربح هو ما يقرب من مليون إلكترون فولت لكل نوية مضروبًا في 235 نوية.",
-          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{МэВ}",
+          "latex": "Q \\approx (8{,}5 - 7{,}6)\\cdot 235 \\approx 200\\ \\text{MeV}",
           "figure": "elastic",
           "figCaption": "مئتان مليون إلكترون فولت من نواة واحدة - أكبر بخمسين مليون مرة من احتراق ذرة كربون."
         },
         {
           "text": "التفاعل المتسلسل. عند الانشطار ينبعث نيوترونان أو ثلاثة، كل منها قادر على التسبب في انشطار جديد. الاستقرار يحدده عدد تلك النيوترونات التي تؤدي في المتوسط إلى انشطار.",
-          "latex": "k < 1 \\;\\text{затухает}, \\quad k = 1 \\;\\text{стационарно}, \\quad k > 1 \\;\\text{разгон}",
+          "latex": "k < 1 \\;\\text{اضمحلال}, \\quad k = 1 \\;\\text{مستقر}, \\quad k > 1 \\;\\text{تسارع}",
           "figure": "microcontact",
           "figCaption": "يعمل المفاعل تمامًا عند الواحد. التحكم ممكن بفضل النيوترونات المتأخرة."
         },
         {
           "text": "الآن الاندماج. أربعة بروتونات تتحول إلى نواة هيليوم طاقتها الربطية النوعية $B/A = 7{,}1$ MeV مقارنة بصفر للبروتونات الحرة. الربح لكل نوية أكبر بحوالي ثماني مرات من الانشطار.",
-          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{МэВ}",
+          "latex": "4p \\to\\; ^{4}\\text{He} + 2e^{+} + 2\\nu, \\qquad Q \\approx 26{,}7\\ \\text{MeV}",
           "figure": "action",
           "figCaption": "الاندماج أكثر كفاءة من الانشطار من حيث كتلة الوقود - لكنه يتطلب ظروفًا أصعب بكثير."
         },
         {
           "text": "لماذا الاندماج صعب للغاية. تحتاج الأنوية إلى الاقتراب عن كثب، متغلبة على حاجز كولوم بارتفاع مئات الكيلو إلكترون فولت. الطاقة الحرارية حتى عند ملايين الدرجات غير كافية - الأنفاق الكمومي هو المنقذ.",
-          "latex": "E_{\\text{барьер}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{МэВ} \\;\\;\\text{против}\\;\\; kT \\approx 1\\ \\text{кэВ при } 10^{7}\\ \\text{К}",
+          "latex": "E_{\\text{حاجز}} = \\frac{ke^{2}}{r} \\approx 1\\ \\text{MeV} \\;\\;\\text{ضد}\\;\\; kT \\approx 1\\ \\text{keV عند } 10^{7}\\ \\text{K}",
           "figure": "anywell",
           "figCaption": "الفرق ألف ضعف. يحدث التفاعل فقط بسبب النفاذ عبر الحاجز."
         },
         {
           "text": "من هنا بطء الاحتراق الشمسي. احتمال الأنفاق الكمومي صغير، والخطوة الأولى في السلسلة تتطلب أيضًا تفاعلًا ضعيفًا - تحول بروتون إلى نيوترون. متوسط زمن الانتظار لبروتون فردي هو مليارات السنين.",
-          "latex": "\\text{удельная мощность Солнца} \\approx 275\\ \\text{Вт/м}^{3}",
+          "latex": "\\text{القدرة النوعية للشمس} \\approx 275\\ \\text{W/m}^{3}",
           "figure": "heating",
           "figCaption": "أقل مما تطلقه كومة سماد. الشمس تشرق ساطعة ليس بسبب شدة التفاعل، بل بسبب حجمها."
         },
         {
           "text": "ونهاية الطريق. عند الوصول إلى الحديد، يصل النجم إلى قمة المنحنى: المزيد من الاندماج لا يطلق طاقة بل يحتاجها. ينعدم الدعم ضد الجاذبية، وينهار القلب في ثوانٍ.",
-          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{при}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{коллапс и сверхновая}",
+          "latex": "\\left(\\frac{B}{A}\\right)_{\\max} \\;\\text{عند}\\; A \\approx 56 \\;\\Longrightarrow\\; \\text{الانهيار والمستعر الأعظم}",
           "figure": "result",
           "figCaption": "الحديد هو رماد النار النجمية. كل ما هو أثقل منه خُلق في انفجارات، حيث تُستهلك الطاقة ولا تُنتج."
         }
@@ -1303,19 +1303,19 @@
       "solution": [
         {
           "text": "عدد النوى في كيلوغرام من يورانيوم-235.",
-          "latex": "N = \\frac{1000\\ \\text{г}}{235\\ \\text{г/моль}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
+          "latex": "N = \\frac{1000\\ \\text{g}}{235\\ \\text{g/mol}} \\cdot 6{,}02\\cdot 10^{23} \\approx 2{,}56\\cdot 10^{24}"
         },
         {
           "text": "طاقة انشطار واحد بالجول.",
-          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{Дж}"
+          "latex": "Q = 200\\cdot 10^{6} \\cdot 1{,}6\\cdot 10^{-19} = 3{,}2\\cdot 10^{-11}\\ \\text{J}"
         },
         {
           "text": "الطاقة الكلية.",
-          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{Дж}"
+          "latex": "E = 2{,}56\\cdot 10^{24} \\cdot 3{,}2\\cdot 10^{-11} \\approx 8{,}2\\cdot 10^{13}\\ \\text{J}"
         },
         {
           "text": "كم يعادل ذلك من الفحم.",
-          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{кг} = 2800\\ \\text{тонн}"
+          "latex": "\\frac{8{,}2\\cdot 10^{13}}{2{,}9\\cdot 10^{7}} \\approx 2{,}8\\cdot 10^{6}\\ \\text{kg} = 2800\\ \\text{أطنان}"
         }
       ],
       "answer": "كيلوغرام من يورانيوم-235 يعطي طاقة تعادل طاقة ما يقرب من ثلاثة آلاف طن من الفحم - قطار من خمسين عربة.",
@@ -1327,19 +1327,19 @@
       "items": [
         {
           "sym": "Qfis",
-          "latex": "Q_{\\text{дел}}",
+          "latex": "Q_{\\text{انشطار}}",
           "name": "طاقة انشطار نواة يورانيوم-235",
           "value": "≈ 200",
-          "unit": "МэВ",
+          "unit": "MeV",
           "why": "منها حوالي 165 تحملها الشظايا كطاقة حركية، والباقي نيوترونات وأشعة غاما وتحللات لاحقة. والطاقة الحركية للشظايا هي التي تسخن الوقود في المفاعل.",
           "mnemo": "انشطار واحد يعطي خمسين مليون مرة أكثر من احتراق ذرة كربون واحدة. كيلوغرام من اليورانيوم يعادل ثلاثة آلاف طن من الفحم."
         },
         {
           "sym": "Qfus",
-          "latex": "Q_{\\text{синт}}",
+          "latex": "Q_{\\text{اصطناعي}}",
           "name": "طاقة اندماج الديوتيريوم مع التريتيوم",
           "value": "17,6",
-          "unit": "МэВ",
+          "unit": "MeV",
           "why": "أسهل تفاعل اندماجي: له أقل حاجز كولوم وأكبر مقطع عرضي. التفاعل الرئيسي لمفاعلات الاندماج المستقبلية.",
           "mnemo": "لكل نيكلون هذا 3.5 MeV مقابل 0.9 للانشطار - أكثر كفاءة بأربع مرات من حيث كتلة الوقود. الديوتيريوم في لتر من ماء البحر يكفي لطاقة ثلاثمئة لتر من البنزين."
         },
@@ -1348,7 +1348,7 @@
           "latex": "P_{\\odot}",
           "name": "القدرة النوعية في مركز الشمس",
           "value": "≈ 275",
-          "unit": "Вт / м³",
+          "unit": "W / m³",
           "why": "أقل مما تطلقه كومة سماد من نفس الحجم. الشمس تشرق ساطعة فقط بسبب حجمها، لا بسبب شدة التفاعل.",
           "mnemo": "هذا البطء هو ما يسمح للشمس بالاحتراق مليارات السنين. لو كان التفاعل أسرع، لاحترقت قبل ظهور الحياة بوقت طويل."
         }

@@ -542,19 +542,19 @@
       "solution": [
         {
           "text": "Cost of one bit at room temperature.",
-          "latex": "k_B T \\ln 2 = 1{,}38\\cdot 10^{-23} \\cdot 300 \\cdot 0{,}693 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{Дж}"
+          "latex": "k_B T \\ln 2 = 1{,}38\\cdot 10^{-23} \\cdot 300 \\cdot 0{,}693 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{J}"
         },
         {
           "text": "Number of erasures per second.",
-          "latex": "f \\cdot N = 3\\cdot 10^{9} \\cdot 10^{9} = 3 \\cdot 10^{18}\\ \\text{бит/с}"
+          "latex": "f \\cdot N = 3\\cdot 10^{9} \\cdot 10^{9} = 3 \\cdot 10^{18}\\ \\text{bit/s}"
         },
         {
           "text": "Minimum power.",
-          "latex": "P_{\\min} \\approx 2{,}9\\cdot 10^{-21} \\cdot 3\\cdot 10^{18} \\approx 8{,}7 \\cdot 10^{-3}\\ \\text{Вт}"
+          "latex": "P_{\\min} \\approx 2{,}9\\cdot 10^{-21} \\cdot 3\\cdot 10^{18} \\approx 8{,}7 \\cdot 10^{-3}\\ \\text{W}"
         },
         {
           "text": "Actual heat dissipation of such a processor.",
-          "latex": "P_{\\text{факт}} \\approx 100\\ \\text{Вт} \\;\\Longrightarrow\\; \\frac{P_{\\text{факт}}}{P_{\\min}} \\approx 10^{4}"
+          "latex": "P_{\\text{fact}} \\approx 100\\ \\text{W} \\;\\Longrightarrow\\; \\frac{P_{\\text{fact}}}{P_{\\min}} \\approx 10^{4}"
         }
       ],
       "answer": "The thermodynamic minimum is about nine milliwatts versus actual one hundred watts — a margin of about ten thousand times.",
@@ -569,7 +569,7 @@
           "latex": "k_B T \\ln 2",
           "name": "Cost of erasing one bit at 300 K",
           "value": "2,9 · 10⁻²¹",
-          "unit": "Дж",
+          "unit": "J",
           "why": "Thermodynamic limit of computation. First measured in 2012 in an experiment with a colloidal particle in an optical trap — theory confirmed.",
           "mnemo": "This is about 1/60 of an electronvolt — noticeably less than the thermal energy of a molecule, but it multiplies by billions of operations per second."
         },
@@ -579,7 +579,7 @@
           "dictKey": "k_B",
           "name": "Boltzmann constant",
           "value": "1,381 · 10⁻²³",
-          "unit": "Дж / К",
+          "unit": "J/K",
           "why": "Converts entropy from a dimensionless count of states into joules per kelvin. It is what makes information a physical quantity, not an abstraction.",
           "mnemo": "$S = k_B\\ln W$ and $H = -\\sum p\\log_2 p$ — one formula in two systems of units. Exchange rate: 1 bit = $k_B\\ln 2$."
         },
@@ -873,19 +873,19 @@
         },
         {
           "text": "Tomemos la máquina de Szilard — un demonio extremadamente simplificado. En el recipiente hay una molécula. El demonio observa en qué mitad está e inserta un pistón por el lado adecuado. La molécula, al chocar, empuja el pistón — el gas de una partícula realiza una expansión isotérmica.",
-          "latex": "A = \\int_{V/2}^{V} P\\,dV = k_B T \\ln 2 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{Дж при } 300\\ \\text{К}",
+          "latex": "A = \\int_{V/2}^{V} P\\,dV = k_B T \\ln 2 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{J a } 300\\ \\text{K}",
           "figure": "cylinder",
           "figCaption": "Una molécula, un bit de información sobre su posición — y exactamente $k_BT\\ln 2$ de trabajo."
         },
         {
           "text": "Se ha obtenido trabajo, se ha extraído calor del entorno — a primera vista, la segunda ley está violada. Pero el ciclo no está completo: para repetirlo, hay que devolver el sistema a su estado inicial. Todo ha vuelto excepto una cosa: en la memoria del demonio queda un registro de si la molécula estaba a la izquierda o a la derecha.",
-          "latex": "\\text{цикл замкнут по газу и поршню, но } \\text{память}: \\;\\varnothing \\to 1\\ \\text{бит}",
+          "latex": "\\text{ciclo cerrado en gas y pistón, pero } \\text{memoria}: \\;\\varnothing \\to 1\\ \\text{bit}",
           "figure": "cycle",
           "figCaption": "La falta de cierre del ciclo no está oculta en la máquina, sino en la memoria del observador."
         },
         {
           "text": "Aquí está la respuesta de Landauer. Se puede medir tan barato como se quiera, y también calcular, si se hace reversiblemente. Pero no se puede borrar un bit: la operación reduce dos estados distintos de memoria a uno, es decir, reduce a la mitad el número de microestados.",
-          "latex": "W_{\\text{память}}: 2 \\to 1 \\;\\Longrightarrow\\; \\Delta S_{\\text{память}} = -k_B\\ln 2",
+          "latex": "W_{\\text{memoria}}: 2 \\to 1 \\;\\Longrightarrow\\; \\Delta S_{\\text{memoria}} = -k_B\\ln 2",
           "figure": "elastic",
           "figCaption": "El borrado es lógicamente irreversible: a partir del estado final no se puede recuperar el inicial."
         },
@@ -897,13 +897,13 @@
         },
         {
           "text": "Hacemos el balance del ciclo. El trabajo extraído es exactamente igual al costo mínimo de borrado de la memoria. El demonio ni gana ni pierde — la segunda ley se cumple con igualdad exacta.",
-          "latex": "A_{\\text{получено}} = k_B T\\ln 2 = Q_{\\text{на стирание}} \\;\\Longrightarrow\\; \\Delta S_{\\text{полн}} \\geq 0",
+          "latex": "A_{\\text{obtenido}} = k_B T\\ln 2 = Q_{\\text{en borrado}} \\;\\Longrightarrow\\; \\Delta S_{\\text{total}} \\geq 0",
           "figure": "result",
           "figCaption": "El demonio ideal empata exactamente. Cualquier demonio real tiene pérdidas."
         },
         {
           "text": "Y una consecuencia que preocupa a los ingenieros. Cada borrado de un bit en un procesador libera al menos $k_BT\\ln 2$. Multiplicando por el número de operaciones de un chip moderno, obtenemos un límite al que la tecnología se acerca gradualmente desde abajo.",
-          "latex": "P_{\\min} = k_B T \\ln 2 \\cdot f \\cdot N_{\\text{бит}}",
+          "latex": "P_{\\min} = k_B T \\ln 2 \\cdot f \\cdot N_{\\text{bit}}",
           "figure": "heating",
           "figCaption": "El calentamiento del procesador tiene un suelo termodinámico, y no se evita mejorando la tecnología."
         }
@@ -928,19 +928,19 @@
       "solution": [
         {
           "text": "Costo de un bit a temperatura ambiente.",
-          "latex": "k_B T \\ln 2 = 1{,}38\\cdot 10^{-23} \\cdot 300 \\cdot 0{,}693 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{Дж}"
+          "latex": "k_B T \\ln 2 = 1{,}38\\cdot 10^{-23} \\cdot 300 \\cdot 0{,}693 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{J}"
         },
         {
           "text": "Número de borrados por segundo.",
-          "latex": "f \\cdot N = 3\\cdot 10^{9} \\cdot 10^{9} = 3 \\cdot 10^{18}\\ \\text{бит/с}"
+          "latex": "f \\cdot N = 3\\cdot 10^{9} \\cdot 10^{9} = 3 \\cdot 10^{18}\\ \\text{bit/s}"
         },
         {
           "text": "Potencia mínima.",
-          "latex": "P_{\\min} \\approx 2{,}9\\cdot 10^{-21} \\cdot 3\\cdot 10^{18} \\approx 8{,}7 \\cdot 10^{-3}\\ \\text{Вт}"
+          "latex": "P_{\\min} \\approx 2{,}9\\cdot 10^{-21} \\cdot 3\\cdot 10^{18} \\approx 8{,}7 \\cdot 10^{-3}\\ \\text{W}"
         },
         {
           "text": "Disipación real de calor de dicho procesador.",
-          "latex": "P_{\\text{факт}} \\approx 100\\ \\text{Вт} \\;\\Longrightarrow\\; \\frac{P_{\\text{факт}}}{P_{\\min}} \\approx 10^{4}"
+          "latex": "P_{\\text{hecho}} \\approx 100\\ \\text{W} \\;\\Longrightarrow\\; \\frac{P_{\\text{hecho}}}{P_{\\min}} \\approx 10^{4}"
         }
       ],
       "answer": "El mínimo termodinámico es de unos nueve milivatios frente a los cien vatios reales: un margen de aproximadamente diez mil veces.",
@@ -1404,7 +1404,7 @@
           "kind": "تجربة في المطبخ",
           "h": "اضغط النص بنفسك",
           "text": "خذ أي ملف نصي وقم بأرشفته. سجل كم مرة انخفض حجمه. ثم خذ ملفًا ببيانات عشوائية — مثل صورة بتنسيق jpeg أو أرشيف مضغوط بالفعل — وكرر الأمر.",
-          "answer": "النص العادي سيضغط حوالي ثلاث إلى أربع مرات، أما jpeg أو الأرشيف فلا يضغط تقريبًا، وأحيانًا يزداد بضع بايتات. السبب هو أن النص يحتوي على الكثير من التكرار: بعد «объясн» تقريبًا يأتي «ение»، وهذا التوقع يقلل الإنتروبيا. البيانات المضغوطة قد استنزفت التكرار بالفعل، والإنتروبيا قريبة من الحد الأقصى — لا شيء لضغطه. النص الروسي، وفق تقديرات شانون للغات الطبيعية، يحمل حوالي بت واحد لكل حرف بدلاً من الخمسة النظرية."
+          "answer": "النص العادي سيضغط حوالي ثلاث إلى أربع مرات، أما jpeg أو الأرشيف فلا يضغط تقريبًا، وأحيانًا يزداد بضع بايتات. السبب هو أن النص يحتوي على الكثير من التكرار: بعد «توضي» تقريبًا يأتي «ح»، وهذا التوقع يقلل الإنتروبيا. البيانات المضغوطة قد استنزفت التكرار بالفعل، والإنتروبيا قريبة من الحد الأقصى — لا شيء لضغطه. النص الروسي، وفق تقديرات شانون للغات الطبيعية، يحمل حوالي بت واحد لكل حرف بدلاً من الخمسة النظرية."
         },
         {
           "icon": "paradox",

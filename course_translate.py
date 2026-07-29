@@ -48,8 +48,16 @@ popular-science site, adult non-expert audience.
 
 RULES — critical:
 - Translate ONLY human-readable text (titles, explanations, examples, notes).
-- Do NOT translate or alter: LaTeX/KaTeX formulas, symbols of quantities (E, F, q, Δt…), units
-  (m/s, J, K…), numbers, constant names/ids, JSON keys, and any technical identifiers.
+- Do NOT translate or alter: LaTeX/KaTeX commands and structure, symbols of quantities
+  (E, F, q, Δt…), numbers, constant names/ids, JSON keys, and any technical identifiers.
+- IMPORTANT — words INSIDE formulas: text written as \text{…} or \mathrm{…} is a human-readable
+  label (a subscript such as \text{ionisation}, or a caption). Translate what is inside the
+  braces, keep the command and the braces intact. Leaving a Russian word inside \text{} is a
+  bug: the reader sees Cyrillic in an English/Spanish/Arabic formula.
+  Units inside \text{} become the international symbols: м→m, с→s, кг→kg, Дж→J, Н→N, Вт→W,
+  В→V, А→A, Кл→C, К→K, Гц→Hz, эВ→eV, МэВ→MeV, моль→mol.
+- Names of laws and effects (fields like "law") ARE human-readable — translate them using the
+  standard name in {lang} ("Закон Ома" → "Ohm's law").
 - Keep the EXACT same JSON structure and keys; only values change.
 - Keep the tone of the original: clear, engaging, no condescension, no jargon left unexplained.
 - No alcohol analogies.

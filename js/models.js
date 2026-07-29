@@ -34,6 +34,25 @@
     var PL = { T: 1.416784e32, P: 4.63309e110 /* кПа */, V: 4.2217e-102 /* л */ };
     function exp3(x) { return x.toExponential(2).replace('e', '·10^').replace('+', ''); }
 
+    // Названия систем и кириллические обозначения — на четырёх языках: переключатель единиц
+    // стоит на КАЖДОЙ странице урока, и по-русски он выглядел одинаково для англичанина,
+    // испанца и араба. Единицы кириллицей уместны только в русской версии.
+    var UNIT_I18N = {
+        si:       { ru: 'СИ',          en: 'SI',        es: 'SI',        ar: 'الدولي' },
+        metric:   { ru: 'бытовая',     en: 'everyday',  es: 'cotidiana', ar: 'اليومي' },
+        bar:      { ru: 'техническая', en: 'technical', es: 'técnica',   ar: 'التقني' },
+        imperial: { ru: 'имперская',   en: 'imperial',  es: 'imperial',  ar: 'الإمبراطوري' },
+        planck:   { ru: 'планковская', en: 'Planck',    es: 'de Planck', ar: 'بلانك' }
+    };
+    var UNIT_SYM = { 'Па': 'Pa', 'м³': 'm³', 'атм': 'atm', 'л': 'L', 'бар': 'bar' };
+    function pageLang() {
+        var l = global.B42_LANG || (global.document && document.documentElement.getAttribute('lang')) || 'ru';
+        return UNIT_I18N.si[l] ? l : 'ru';
+    }
+    /** Название системы и обозначение единицы на языке страницы. */
+    function sysName(key) { return UNIT_I18N[key] ? UNIT_I18N[key][pageLang()] : key; }
+    function unitSym(sym) { return pageLang() === 'ru' ? sym : (UNIT_SYM[sym] || sym); }
+
     var UNIT_SYSTEMS = {
         si:       { name: 'СИ',          T: 'K',   P: 'Па',  V: 'м³',
                     Tf: function (K) { return K; },  Pf: function (kPa) { return kPa * 1000; },     Vf: function (L) { return L / 1000; },      Td: 0, Pd: 0, Vd: 4 },
@@ -48,13 +67,15 @@
     };
     function units() { return UNIT_SYSTEMS[global.B42_UNITS] || UNIT_SYSTEMS.metric; }
     function num(v, d, sci) { return sci ? exp3(v) : v.toFixed(d); }
-    function fmtT(K) { var u = units(); return num(u.Tf(K), u.Td, u.sci) + ' ' + u.T; }
-    function fmtP(kPa) { var u = units(); return num(u.Pf(kPa), u.Pd, u.sci) + ' ' + u.P; }
-    function fmtV(L) { var u = units(); return num(u.Vf(L), u.Vd, u.sci) + ' ' + u.V; }
+    function fmtT(K) { var u = units(); return num(u.Tf(K), u.Td, u.sci) + ' ' + unitSym(u.T); }
+    function fmtP(kPa) { var u = units(); return num(u.Pf(kPa), u.Pd, u.sci) + ' ' + unitSym(u.P); }
+    function fmtV(L) { var u = units(); return num(u.Vf(L), u.Vd, u.sci) + ' ' + unitSym(u.V); }
     // raw — только число в выбранной системе (для делений осей), fmt — число с единицей (для подписей).
     // Через них график в explorable.js пересчитывается той же логикой, что и приборы на сцене.
     global.B42Units = {
         list: UNIT_SYSTEMS, T: fmtT, P: fmtP, V: fmtV, current: units,
+        sysName: sysName,          // подпись кнопки переключателя на языке страницы
+        unitSym: unitSym,
         raw: {
             T: function (K) { var u = units(); return u.sci ? exp3(u.Tf(K)) : Math.round(u.Tf(K) * Math.pow(10, u.Td)) / Math.pow(10, u.Td); },
             // Tc — вход в градусах Цельсия (так считает модель чайника), а не в кельвинах

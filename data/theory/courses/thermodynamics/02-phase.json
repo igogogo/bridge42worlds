@@ -359,13 +359,13 @@
         },
         {
           "text": "For a kettle with $m = 0{,}2$ kg of water heated from $20^\\circ$ to $100^\\circ$C, we get a specific number.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{кДж}",
+          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
           "figure": "heatbar1",
           "figCaption": "Sixty-seven kilojoules — that's the entire journey from room temperature to boiling."
         },
         {
           "text": "As soon as boiling starts, the temperature freezes. Heat continues to be supplied, but goes entirely into converting liquid to vapor. There is no temperature difference here at all — only mass and specific latent heat of vaporization.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{кДж}",
+          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
           "figure": "boiling",
           "figCaption": "Boiling: energy breaks bonds between molecules, thermometer stands still."
         },
@@ -377,24 +377,24 @@
         },
         {
           "text": "Now the second task. Boiling is an equilibrium of liquid and vapor: as many molecules leave, the same number return. The shift of this equilibrium under pressure change is described by the Clausius–Clapeyron equation, where $\\Delta V$ is the increase in volume upon evaporation.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{мол}}}{T\\,\\Delta V}",
+          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
           "figure": "equilibrium",
           "figCaption": "A vapor bubble needs to push aside the atmosphere above the water — the harder it pushes, the harder it is for the bubble to be born."
         },
         {
-          "text": "Vapor occupies a volume thousands of times larger than the liquid that produced it, so $\\Delta V \\approx V_{\\text{пар}}$. Assuming the vapor is an ideal gas from the first section, we substitute $V = RT/P$ and separate variables.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{мол}}}{R}\\,\\frac{dT}{T^{2}}",
+          "text": "Vapor occupies a volume thousands of times larger than the liquid that produced it, so $\\Delta V \\approx V_{\\text{pair}}$. Assuming the vapor is an ideal gas from the first section, we substitute $V = RT/P$ and separate variables.",
+          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
           "figure": "integrate",
           "figCaption": "Variables separated: left only pressure, right only temperature — can integrate."
         },
         {
           "text": "Integrating both sides and assuming the heat of vaporization is constant, we obtain the relation between pressure and boiling temperature. Our stand calculates exactly by this formula.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
           "figure": "boilcurve",
           "figCaption": "Boiling curve: in the mountains pressure is lower — water boils sooner, in a pressure cooker later."
         }
       ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
       "plateCap": "Left — latent heat: energy that went into breaking bonds, not into degrees. Right — a law that connects external pressure with boiling temperature.",
       "note": "Why is water so unusual? Its molecules are held together by hydrogen bonds, anomalously strong for such a small molecule. Hence the record heat of vaporization: for acetone it is four times smaller, for ether six times smaller. If water behaved like an ordinary liquid, the oceans would evaporate rapidly, and sweat evaporation would not save us from overheating."
     },
@@ -404,7 +404,7 @@
         {
           "what": "Separation of variables",
           "why": "An equation of the form $dP/dT = f(P)\\,g(T)$ is solved like this: collect everything that depends on $P$ on the left, everything that depends on $T$ on the right, and integrate both sides independently. This is a standard technique for first-order differential equations, and it is also used in deriving the adiabat in the next section.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
+          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
         },
         {
           "what": "Why the logarithm appears",
@@ -416,7 +416,7 @@
     "example": {
       "title": "Example with numbers",
       "lead": "A classic problem that explains why cooking is difficult in the mountains.",
-      "given": "A hiker climbed to an altitude where the pressure is $0{,}6$ atm. At what temperature will water boil there? Take $L_{\\text{мол}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
+      "given": "A hiker climbed to an altitude where the pressure is $0{,}6$ atm. At what temperature will water boil there? Take $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
       "law": "The Clausius–Clapeyron equation in integral form, solved for $T$",
       "solution": [
         {
@@ -424,8 +424,8 @@
           "latex": "\\ln(0{,}6) \\approx -0{,}51"
         },
         {
-          "text": "The ratio $R/L_{\\text{мол}}$ gives the scaling factor.",
-          "latex": "\\frac{R}{L_{\\text{мол}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+          "text": "The ratio $R/L_{\\text{mol}}$ gives the scaling factor.",
+          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
         },
         {
           "text": "Substitute into the formula for the reciprocal temperature.",
@@ -433,7 +433,7 @@
         },
         {
           "text": "Invert and convert to degrees Celsius.",
-          "latex": "T \\approx 360\\ \\text{К} = 87^\\circ\\text{C}"
+          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
         }
       ],
       "answer": "Water will boil at approximately $87^\\circ$C",
@@ -462,8 +462,8 @@
           "mnemo": "Keep in mind not the number itself, but the ratio: boiling away costs about seven times more energy than bringing to a boil."
         },
         {
-          "sym": "L_мол",
-          "latex": "L_{\\text{мол}}",
+          "sym": "L_mol",
+          "latex": "L_{\\text{mol}}",
           "name": "Molar heat of vaporization",
           "value": "40 660",
           "unit": "J / mol",
@@ -531,12 +531,12 @@
         "type": "free",
         "q": "In your own words: why does the evaporation of sweat cool the body, even though the sweat itself is the same temperature as the skin?",
         "keywords": [
-          "быстр",
-          "энерг",
-          "унос",
-          "скрыт",
-          "испар",
-          "средн"
+          "fast",
+          "energy",
+          "entrain",
+          "latent",
+          "evap",
+          "avg"
         ],
         "needed": 1,
         "why": "It is not random molecules that escape, but the fastest ones — only they have enough energy to break bonds. They carry away a disproportionately large share of energy, and the average speed of the remaining ones decreases. And average speed is temperature.",
@@ -593,13 +593,13 @@
         },
         {
           "text": "Para una tetera con $m = 0{,}2$ kg de agua, calentada de $20^\\circ$ a $100^\\circ$C, obtenemos un número concreto.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{кДж}",
+          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
           "figure": "heatbar1",
           "figCaption": "Sesenta y siete kilojulios — ese es todo el camino desde la temperatura ambiente hasta la ebullición."
         },
         {
           "text": "Tan pronto comienza la ebullición, la temperatura se congela. El calor sigue entrando, pero se destina completamente a convertir el líquido en vapor. Aquí no hay diferencia de temperatura en absoluto — solo hay masa y calor latente de vaporización.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{кДж}",
+          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
           "figure": "boiling",
           "figCaption": "Ebullición: la energía rompe los enlaces entre moléculas, el termómetro se detiene."
         },
@@ -611,24 +611,24 @@
         },
         {
           "text": "Ahora la segunda tarea. La ebullición es un equilibrio entre líquido y vapor: tantas moléculas escapan como regresan. El desplazamiento de este equilibrio al cambiar la presión está descrito por la ecuación de Clausius-Clapeyron, donde $\\Delta V$ es el aumento de volumen al evaporarse.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{мол}}}{T\\,\\Delta V}",
+          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
           "figure": "equilibrium",
           "figCaption": "Una burbuja de vapor debe empujar la atmósfera sobre el agua — cuanto más presiona, más difícil es que nazca la burbuja."
         },
         {
           "text": "El vapor ocupa un volumen miles de veces mayor que el líquido que lo generó, por lo que $\\Delta V \\approx V_{\\text{vap}}$. Considerando el vapor como gas ideal del primer párrafo, sustituimos $V = RT/P$ y separamos variables.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{мол}}}{R}\\,\\frac{dT}{T^{2}}",
+          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
           "figure": "integrate",
           "figCaption": "Las variables se separaron: a la izquierda solo presión, a la derecha solo temperatura — se puede integrar."
         },
         {
           "text": "Integrando ambos lados y suponiendo constante el calor de vaporización, obtenemos la relación entre presión y temperatura de ebullición. Es según esta fórmula que calcula nuestro panel.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
           "figure": "boilcurve",
           "figCaption": "Curva de ebullición: en las montañas la presión es menor — el agua hierve antes, en olla a presión después."
         }
       ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
       "plateCap": "A la izquierda — calor latente: energía que se fue en romper enlaces, no en grados. A la derecha — la ley que vincula la presión externa con la temperatura de ebullición.",
       "note": "¿Por qué es tan inusual el agua? Sus moléculas están unidas por puentes de hidrógeno, anómalamente fuertes para una molécula tan pequeña. De ahí el récord de calor latente de vaporización: en la acetona es cuatro veces menor, en el éter seis veces menor. Si el agua se comportara como un líquido normal, los océanos se evaporarían rápidamente y la evaporación del sudor no nos salvaría del sobrecalentamiento."
     },
@@ -638,7 +638,7 @@
         {
           "what": "Separación de variables",
           "why": "Una ecuación de la forma $dP/dT = f(P)\\,g(T)$ se resuelve así: reunimos todo lo que depende de $P$ a la izquierda, todo lo que depende de $T$ a la derecha, e integramos ambos lados de forma independiente. Es un método estándar para ecuaciones diferenciales de primer orden, y se usa también para deducir la adiabática en la siguiente sección.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
+          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
         },
         {
           "what": "Por qué aparece el logaritmo",
@@ -650,7 +650,7 @@
     "example": {
       "title": "Ejemplo con números",
       "lead": "Un problema clásico que explica por qué es difícil cocinar en las montañas.",
-      "given": "Un turista subió a una altitud donde la presión es de $0{,}6$ atm. ¿A qué temperatura hervirá el agua allí? Tomar $L_{\\text{мол}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
+      "given": "Un turista subió a una altitud donde la presión es de $0{,}6$ atm. ¿A qué temperatura hervirá el agua allí? Tomar $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
       "law": "Ecuación de Clausius-Clapeyron en forma integral, despejada para $T$",
       "solution": [
         {
@@ -658,8 +658,8 @@
           "latex": "\\ln(0{,}6) \\approx -0{,}51"
         },
         {
-          "text": "La relación $R/L_{\\text{мол}}$ da el factor de escala.",
-          "latex": "\\frac{R}{L_{\\text{мол}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+          "text": "La relación $R/L_{\\text{mol}}$ da el factor de escala.",
+          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
         },
         {
           "text": "Sustituimos en la fórmula de la temperatura inversa.",
@@ -667,7 +667,7 @@
         },
         {
           "text": "Invertimos y convertimos a grados Celsius.",
-          "latex": "T \\approx 360\\ \\text{К} = 87^\\circ\\text{C}"
+          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
         }
       ],
       "answer": "El agua hervirá aproximadamente a $87^\\circ$C",
@@ -682,7 +682,7 @@
           "latex": "c",
           "name": "Capacidad calorífica específica del agua",
           "value": "4200",
-          "unit": "Дж / (кг · К)",
+          "unit": "J / (kg · K)",
           "why": "Cuánta energía se necesita para calentar un kilogramo de agua un grado. Las unidades se leen literalmente: julios por kilogramo y por kelvin. El valor es anómalamente grande — en la mayoría de las sustancias es de cuatro a cinco veces menor, y por eso el agua sirve como refrigerante en calefacción y motores.",
           "mnemo": "El número $4200$ es fácil de recordar: casi nuestro $42$ con dos ceros. Vínculo histórico: la caloría se definió como el calentamiento de un gramo de agua un grado, de ahí $1$ cal $= 4{,}184$ J."
         },
@@ -691,16 +691,16 @@
           "latex": "L",
           "name": "Calor latente específico de vaporización",
           "value": "2 260 000",
-          "unit": "Дж / кг",
+          "unit": "J / kg",
           "why": "Energía necesaria para convertir un kilogramo de líquido en vapor sin calentamiento. Las unidades son julios por kilogramo, no contienen temperatura porque en la transición de fase esta no cambia. Récord entre los líquidos comunes.",
           "mnemo": "No memorice el número en sí, sino la relación: hervir cuesta aproximadamente siete veces más que calentar hasta la ebullición."
         },
         {
-          "sym": "L_мол",
-          "latex": "L_{\\text{мол}}",
+          "sym": "L_mol",
+          "latex": "L_{\\text{mol}}",
           "name": "Calor latente molar de vaporización",
           "value": "40 660",
-          "unit": "Дж / моль",
+          "unit": "J / mol",
           "why": "Lo mismo, pero por mol: $L$ multiplicado por la masa molar del agua $0{,}018$ kg/mol. Esta forma aparece en la ecuación de Clausius-Clapeyron porque al lado está la constante de los gases $R$, también molar. Las unidades de ambas magnitudes están coordinadas — esto es una verificación de la corrección de la fórmula.",
           "mnemo": ""
         },
@@ -708,8 +708,8 @@
           "sym": "T₀, P₀",
           "latex": "T_0,\\;P_0",
           "name": "Punto de ebullición normal",
-          "value": "373,15 К при 101,325",
-          "unit": "кПа",
+          "value": "373,15 K a 101,325",
+          "unit": "kPa",
           "why": "Punto de referencia desde el cual la fórmula calcula el desplazamiento. Es importante entender: cien grados no son una propiedad del agua en sí misma, sino del agua a presión atmosférica normal. Originalmente la escala Celsius se construyó así: cero — fusión del hielo, cien — ebullición a nivel del mar."
         }
       ]
@@ -782,9 +782,9 @@
         "type": "estimate",
         "q": "¿Cuánta energía se necesita para evaporar completamente 1 kg de agua que ya está hirviendo? Respuesta en kilojulios.",
         "answer": 2260,
-        "unit": "кДж",
+        "unit": "kJ",
         "tolerance": 1.5,
-        "why": "Esta es precisamente la definición del calor latente de vaporización: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ кДж. Para comparar: calentar el mismo kilogramo de cero a cien grados cuesta solo 420 кДж.",
+        "why": "Esta es precisamente la definición del calor latente de vaporización: $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. Para comparar: calentar el mismo kilogramo de cero a cien grados cuesta solo 420 kJ.",
         "hint": "El agua ya está hirviendo, por lo que no es necesario calentarla; solo actúa una constante de este apartado. ¿Cuál de ellas se mide en julios por kilogramo?"
       }
     ]
@@ -828,13 +828,13 @@
         },
         {
           "text": "لغلاية تحتوي $m = 0{,}2$ كجم من الماء، مسخن من $20^\\circ$ إلى $100^\\circ$م، نحصل على رقم محدد.",
-          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{кДж}",
+          "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
           "figure": "heatbar1",
           "figCaption": "سبعة وستون كيلوجول — هذا هو المسار الكامل من درجة حرارة الغرفة إلى الغليان."
         },
         {
           "text": "بمجرد أن يبدأ الغليان، تتجمد درجة الحرارة. تستمر الحرارة في التدفق، لكنها تذهب بالكامل لتحويل السائل إلى بخار. لا يوجد فرق في درجة الحرارة هنا على الإطلاق — هناك فقط الكتلة والحرارة النوعية للتبخر.",
-          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{кДж}",
+          "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
           "figure": "boiling",
           "figCaption": "الغليان: الطاقة تكسر الروابط بين الجزيئات، مقياس الحرارة ثابت."
         },
@@ -846,24 +846,24 @@
         },
         {
           "text": "الآن المهمة الثانية. الغليان هو توازن بين السائل والبخار: عدد الجزيئات التي تغادر يعادل عدد التي تعود. إزاحة هذا التوازن عند تغير الضغط تصفها معادلة كلاوزيوس-كلابيرون، حيث $\\Delta V$ هي الزيادة في الحجم عند التبخر.",
-          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{мол}}}{T\\,\\Delta V}",
+          "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
           "figure": "equilibrium",
           "figCaption": "تحتاج فقاعة البخار إلى دفع الغلاف الجوي فوق الماء — كلما زاد ضغطه، زادت صعوبة ولادة الفقاعة."
         },
         {
-          "text": "يشغل البخار حجمًا أكبر بآلاف المرات من السائل الذي أنتجه، لذا $\\Delta V \\approx V_{\\text{пар}}$. باعتبار البخار غازًا مثاليًا من الفقرة الأولى، نعوض $V = RT/P$ ونفصل المتغيرات.",
-          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{мол}}}{R}\\,\\frac{dT}{T^{2}}",
+          "text": "يشغل البخار حجمًا أكبر بآلاف المرات من السائل الذي أنتجه، لذا $\\Delta V \\approx V_{\\text{بخار}}$. باعتبار البخار غازًا مثاليًا من الفقرة الأولى، نعوض $V = RT/P$ ونفصل المتغيرات.",
+          "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
           "figure": "integrate",
           "figCaption": "انفصلت المتغيرات: على اليسار الضغط فقط، على اليمين درجة الحرارة فقط — يمكن التكامل."
         },
         {
           "text": "بتكامل كلا الطرفين واعتبار حرارة التبخر ثابتة، نحصل على العلاقة بين الضغط ودرجة حرارة الغليان. بهذه الصيغة بالضبط تعمل منصتنا.",
-          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+          "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
           "figure": "boilcurve",
           "figCaption": "منحنى الغليان: في الجبال الضغط أقل — يغلي الماء مبكرًا، في قدر الضغط لاحقًا."
         }
       ],
-      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{мол}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+      "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
       "plateCap": "على اليسار — الحرارة الكامنة: الطاقة التي ذهبت لكسر الروابط وليس لدرجات الحرارة. على اليمين — القانون الذي ربط الضغط الخارجي بدرجة حرارة الغليان.",
       "note": "لماذا الماء غير عادي؟ جزيئاته مرتبطة بروابط هيدروجينية، قوية بشكل غير طبيعي لمثل هذا الجزيء الصغير. من هنا تأتي الحرارة القياسية للتبخر: في الأسيتون أقل بأربع مرات، في الإيثر أقل بستة. لو تصرف الماء مثل سائل عادي، لتبخرت المحيطات بسرعة، ولما كان تبخر العرق ينقذنا من ارتفاع الحرارة."
     },
@@ -873,7 +873,7 @@
         {
           "what": "فصل المتغيرات",
           "why": "المعادلة من الشكل $dP/dT = f(P)\\,g(T)$ تُحل كالتالي: نجمع كل ما يعتمد على $P$ إلى اليسار، وكل ما يعتمد على $T$ إلى اليمين، ثم نكامل الطرفين بشكل مستقل. هذه طريقة قياسية للمعادلات التفاضلية من الدرجة الأولى، وتُستخدم أيضاً في اشتقاق الأدياباتي في الفقرة التالية.",
-          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
+          "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
         },
         {
           "what": "لماذا يظهر اللوغاريتم",
@@ -885,7 +885,7 @@
     "example": {
       "title": "مثال بالأرقام",
       "lead": "مسألة كلاسيكية تشرح لماذا يصعب الطهي في الجبال.",
-      "given": "ارتفع سائح إلى ارتفاع حيث الضغط $0{,}6$ ضغط جوي. عند أي درجة حرارة يغلي الماء هناك؟ افترض $L_{\\text{мол}} = 40\\,660$ جول/مول، $T_0 = 373$ كلفن، $R = 8{,}314$ جول/(مول·كلفن).",
+      "given": "ارتفع سائح إلى ارتفاع حيث الضغط $0{,}6$ ضغط جوي. عند أي درجة حرارة يغلي الماء هناك؟ افترض $L_{\\text{mol}} = 40\\,660$ جول/مول، $T_0 = 373$ كلفن، $R = 8{,}314$ جول/(مول·كلفن).",
       "law": "معادلة كلوزيوس-كلابيرون في الصورة التكاملية، محلولة بالنسبة لـ $T$",
       "solution": [
         {
@@ -893,8 +893,8 @@
           "latex": "\\ln(0{,}6) \\approx -0{,}51"
         },
         {
-          "text": "النسبة $R/L_{\\text{мол}}$ تعطي عامل القياس.",
-          "latex": "\\frac{R}{L_{\\text{мол}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+          "text": "النسبة $R/L_{\\text{mol}}$ تعطي عامل القياس.",
+          "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
         },
         {
           "text": "نعوض في صيغة درجة الحرارة المقلوبة.",
@@ -902,7 +902,7 @@
         },
         {
           "text": "نقلب ونحول إلى درجات مئوية.",
-          "latex": "T \\approx 360\\ \\text{К} = 87^\\circ\\text{C}"
+          "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
         }
       ],
       "answer": "سيغلي الماء عند حوالي $87^\\circ$C",
@@ -931,8 +931,8 @@
           "mnemo": "احفظ في ذهنك ليس الرقم نفسه، بل النسبة: الغليان الكامل يكلف حوالي سبعة أضعاف ما يكلفه التسخين حتى نقطة الغليان."
         },
         {
-          "sym": "L_мол",
-          "latex": "L_{\\text{мол}}",
+          "sym": "L_mol",
+          "latex": "L_{\\text{mol}}",
           "name": "الحرارة المولية للتبخر",
           "value": "40 660",
           "unit": "J / mol",
@@ -942,8 +942,8 @@
           "sym": "T₀, P₀",
           "latex": "T_0,\\;P_0",
           "name": "نقطة الغليان الطبيعية",
-          "value": "373,15 К при 101,325",
-          "unit": "kПа",
+          "value": "373,15 K عند 101,325",
+          "unit": "kPa",
           "why": "نقطة مرجعية تحسب منها الصيغة الانحراف. من المهم أن نفهم: مئة درجة مئوية ليست خاصية للماء بذاته، بل خاصية للماء عند الضغط الجوي العادي. في الأصل، تم بناء سلم سلزيوس بهذه الطريقة: الصفر هو ذوبان الجليد، والمئة هي الغليان عند مستوى سطح البحر."
         }
       ]
