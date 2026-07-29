@@ -92,8 +92,14 @@ def fetch_arxiv_local(date_str, category="astro-ph.*"):
 # ── arXiv ──
 def fetch_arxiv(date_str, category="astro-ph.*"):
     local = fetch_arxiv_local(date_str, category)
-    if local is not None:
+    if local:
         return local
+    # Пустой список из чанка — НЕ повод верить, что статей нет: у сырьевой выгрузки arXiv
+    # лаг в дни/недели, и чанк месяца может кончаться серединой месяца. Именно так конвейер
+    # молча простоял 13 дней (16–29 июля 2026): чанк июля существовал, дни после 16-го в нём
+    # отсутствовали, и ночной прогон честно находил ноль. Пусто в кэше → проверяем живой API.
+    if local is not None:
+        print("  📦 Кэш пуст за этот день — падаю на живой arXiv API (лаг выгрузки)")
     f = f"{date_str.replace('-', '')}0000"
     t = f"{date_str.replace('-', '')}2359"
     url = "http://es.arxiv.org/api/query"
