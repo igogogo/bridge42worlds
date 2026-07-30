@@ -7,15 +7,17 @@
     var author = box.getAttribute('data-author') || '';
     var tags = (box.getAttribute('data-tags') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     if (!tags.length) return;
-    var BUST = '?_=' + Date.now();
+    /* Метки времени в адресе тут больше нет: она делала адрес уникальным, кэш не
+       срабатывал никогда, и файлы качались вторым комплектом поверх того, что уже
+       прочитал search.js. Свежесть держат заголовки (max-age=300 у справочников). */
     var TAG_COLOR = '#2E8AA0';  // тег — единый цвет типа (синхронно с mini-graph.js KIND_COLORS)
 
     createForceGraph({
         canvas: 'minigraph', resizeKey: '__authorGraphResize',
         build: function (lang) {
             return Promise.all([
-                fetch('/data/knowledge-graph.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return { nodes: [], edges: [] }; }),
-                fetch('/lang/' + lang + '/data/tags.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
+                fetch('/data/knowledge-graph.json').then(function (r) { return r.json(); }).catch(function () { return { nodes: [], edges: [] }; }),
+                fetch('/lang/' + lang + '/data/tags.json').then(function (r) { return r.json(); }).catch(function () { return {}; })
             ]).then(function (res) {
                 var kg = res[0], tn = res[1];
                 var sub = {};  // tag id -> level/sub из KG

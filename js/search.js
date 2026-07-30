@@ -251,9 +251,18 @@ function fetchLatest(version) {
         .then(function(r) { if (!r.ok) throw 0; return r.json(); });
 }
 
-var _fullIndexPromise = fetchIndex(effVersion());  // стартуем полный индекс сразу, параллельно latest
+/* Индекс статей нужен только там, где есть СПИСОК: лента главной и избранного, выдача
+   на странице тега/закона/учёного/раздела/автора. На странице СТАТЬИ и на /analytics
+   контейнера списка нет вовсе — а индекс качался и разбирался всё равно: на статье это
+   6,3 МБ разбора вдобавок к тому, что тот же файл вторым заходом берёт scroll.js для
+   «следующей статьи», на карте проекта — 19 МБ ради трёхмерной сцены, которая индексом
+   не пользуется (замер живого сайта 2026-07-30).
+   Тултипы и строка статистики от индекса не зависят — им нужны справочники, они грузятся
+   отдельной волной, поэтому ниже вызываются в обеих ветках. */
+var HAS_LIST = !!document.getElementById('search-results');
+var _fullIndexPromise = HAS_LIST ? fetchIndex(effVersion()) : Promise.resolve([]);
 
-if (!window.__favoritesPage) {
+if (HAS_LIST && !window.__favoritesPage) {
     fetchLatest(effVersion()).then(function(latest) {
         if (searchIndex.length) return;   // полный уже успел прийти — latest не нужен
         searchIndex = latest;
@@ -270,16 +279,18 @@ _fullIndexPromise.then(function(primary) {
     // вызове склеил бы уже склеенное — каждая статья размножилась бы в ленте.
     window.__primaryIndex = primary;
 
-    var container = document.getElementById('search-results');
-    if (container && !document.querySelector('.search-box')?.value) {
-        _defaultFeed();
-    }
-    if (window.__favoritesPage) {
-        ['calendar-btn', 'calendar-panel', 'category-bar'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
-    } else {
-        initCalendar();
-        initCategoryBar();
-        initExpressFilter();
+    if (HAS_LIST) {
+        var container = document.getElementById('search-results');
+        if (container && !document.querySelector('.search-box')?.value) {
+            _defaultFeed();
+        }
+        if (window.__favoritesPage) {
+            ['calendar-btn', 'calendar-panel', 'category-bar'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+        } else {
+            initCalendar();
+            initCategoryBar();
+            initExpressFilter();
+        }
     }
     initAllTooltips();
     renderSiteStats();
@@ -365,10 +376,17 @@ window.B42Refs = Promise.all(
     // потоке телефона; нужен для @-подсказок, тултипа автора и счётчика в статистике.
     // Индексы соседних уровней: 2,5 МБ, нужны при переключении «просто/популярно/подробно»
     // и для того, чтобы поиск находил статьи во всех трёх видах.
-    whenIdle(function () {
-        ensureAuthorsGraph();
-        ensureOtherVersions();
-    });
+    // Обе вещи нужны только странице со списком: граф авторов — для @-подсказок и
+    // счётчика в статистике, индексы соседних уровней — чтобы поиск находил статьи
+    // во всех трёх видах. На статье и на карте проекта ни того, ни другого нет,
+    // а разбор стоил 10,5 и 2,5 МБ. Обе функции остаются вызываемыми по требованию:
+    // @-подсказки и фильтр авторов дёргают ensureAuthorsGraph сами.
+    if (HAS_LIST) {
+        whenIdle(function () {
+            ensureAuthorsGraph();
+            ensureOtherVersions();
+        });
+    }
     return { tagsLoc: tagsLoc, lawsData: lawsData, scientistsData: scientistsData };
 }).catch(function(e) {
     console.error('Background data load error:', e);
