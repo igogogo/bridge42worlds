@@ -953,6 +953,19 @@ function setSortMode(m) {
     try { localStorage.setItem('b42_sort', m); } catch (e) {}
 }
 
+// Первый экран ленты — витрина: наверх только статьи с настоящей обложкой
+// (владелец, ночь 2026-07-30: «первый десяток — картинки наши обязательно хорошие»).
+// Перемешивание честное, но безкартиночные опускаются ниже десятого места: пустая
+// рамка в первом экране читается как недоделанность, даже если текст отличный.
+function promoteWithCovers(arr, topN) {
+    var withImg = [], without = [];
+    for (var i = 0; i < arr.length; i++) {
+        (arr[i].image !== false ? withImg : without).push(arr[i]);
+    }
+    if (withImg.length >= topN) return withImg.concat(without);
+    return arr;   // картинок мало — не перетасовываем, лента честнее полупустой витрины
+}
+
 function sortFeed(arr, mode) {
     if (mode === 'random') {
         // Тасование Фишера — Йетса по всему списку, а не по верхушке.
@@ -960,14 +973,14 @@ function sortFeed(arr, mode) {
             var j = Math.floor(Math.random() * (i + 1));
             var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
         }
-        return arr;
+        return promoteWithCovers(arr, 10);
     }
     // По дате: полные статьи выше express — короткая заметка не должна вытеснять разбор.
-    return arr.sort(function(a, b) {
+    return promoteWithCovers(arr.sort(function(a, b) {
         var ae = a.express ? 1 : 0, be = b.express ? 1 : 0;
         if (ae !== be) return ae - be;
         return mode === 'old' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
-    });
+    }), 10);
 }
 
 // Порядок относится к ленте целиком. В отфильтрованных списках (избранное, раздел, дата,
