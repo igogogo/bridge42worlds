@@ -3643,7 +3643,13 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
 def _index_entry(scipop, data, date_str, lang, version):
     url = f"/{LANG_DIR}/{lang}/archive/{date_str}/{data['id']}/{VERSION_FILES[version]}"
     abstract = abstract_for(data.get("abstract"), lang, version)
-    has_image = (Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / data["id"] / "ai.jpg").exists()
+    # Проверяем ровно то, что запросит страница: карточка грузит t_ai.webp с откатом на
+    # ai.webp, а здесь раньше проверялся ai.jpg. Обычно одно следует из другого (webp
+    # делается в точке рождения картинки), но там, где конверсия не прошла или файл вышел
+    # вырожденным, индекс обещал обложку, которой нет, и карточка ловила 404.
+    _img_dir = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / data["id"]
+    has_image = any((_img_dir / n).exists() and (_img_dir / n).stat().st_size > 1000
+                    for n in ("t_ai.webp", "ai.webp"))
     return {
         "id": data["id"], "version": version,
         "title": scipop.get("title", data.get("original_title", "")),
