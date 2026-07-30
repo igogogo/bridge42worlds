@@ -16,10 +16,13 @@
     --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
     --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
   }
-  @media (prefers-color-scheme: dark){
-    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
-      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
-  }
+  /* Системная тёмная тема здесь намеренно не ловится — тему переключает только data-theme.
+     Общий css/style.css подключён ниже и про prefers-color-scheme не знает вовсе, поэтому
+     от этого блока переворачивалась половина палитры: фон плитки брался тёмный отсюда,
+     а цвет текста — тёмный из общего файла. Контраст 1.07 у 28 блоков, в том числе
+     у плиток тем — на телефоне в ночном режиме дерево курса читалось как пустые
+     прямоугольники. Правило про тему живёт в одном месте.
+     (QA, 2026-07-29 — та же причина, что на frontier.html) */
   :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
     --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
   :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
