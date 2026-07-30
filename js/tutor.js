@@ -60,7 +60,33 @@
         'padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text)}',
         '.tb-foot button{align-self:flex-end;background:var(--link);color:#fff;border:none;border-radius:10px;',
         'padding:9px 14px;font-size:13px;cursor:pointer}',
-        '@media(max-width:640px){.tb-panel{right:8px;left:8px;width:auto;bottom:8px}.tb-fab{right:14px;bottom:14px}}'
+        '@media(max-width:640px){.tb-panel{right:8px;left:8px;width:auto;bottom:8px}.tb-fab{right:14px;bottom:14px}}',
+        /* ── Доводка вида по мокапу задачи «диалог бота» (задачи/мокапы/бот-диалог.html) ── */
+        /* Знак у реплик бота: чей это пузырь, раньше читалось только по цвету и стороне,
+           а на тёмной теме форма различается надёжнее цвета. */
+        '.tb-msg.bot{position:relative;margin-left:26px}',
+        '.tb-msg.bot::before{content:"";position:absolute;left:-26px;top:2px;width:18px;height:18px;',
+        'background-color:var(--link);opacity:.75;-webkit-mask:var(--tb-ic-chat) center/contain no-repeat;',
+        'mask:var(--tb-ic-chat) center/contain no-repeat}',
+        /* Остаток вопросов — тихой строкой в шапке. Системной репликой он уезжал вверх
+           при первой же прокрутке, то есть исчезал именно тогда, когда становился важен. */
+        '.tb-quota{font-family:var(--mono,monospace);font-size:10.5px;color:var(--soft);margin-top:3px}',
+        '.tb-quota:empty{display:none}',
+        /* «Думаю…» словом читалось как ещё одна реплика бота — три точки однозначнее. */
+        '.tb-typing{align-self:flex-start;display:flex;gap:4px;padding:11px 14px;background:var(--tag-bg);',
+        'border-radius:12px;border-bottom-left-radius:4px}',
+        '.tb-typing i{width:6px;height:6px;border-radius:50%;background:var(--soft);display:block;',
+        'animation:tbDot 1.2s infinite ease-in-out}',
+        '.tb-typing i:nth-child(2){animation-delay:.15s}.tb-typing i:nth-child(3){animation-delay:.3s}',
+        '@keyframes tbDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}',
+        '@media(prefers-reduced-motion:reduce){.tb-typing i{animation:none;opacity:.5}}',
+        /* Системная реплика — это состояние, а не слова тьютора: отделяем знаком. */
+        '.tb-msg.sys{display:inline-flex;align-items:center;gap:6px}',
+        '.tb-msg.sys .b42-ic{flex:none;color:var(--ochre)}',
+        /* Ровный обрез списка не показывает, что выше есть ещё. */
+        '.tb-body::before{content:"";position:sticky;top:-12px;display:block;height:14px;',
+        'margin:-12px -14px 0;background:linear-gradient(var(--bg),transparent);pointer-events:none}',
+        ':root{--tb-ic-chat:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'black\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z\'/%3E%3Cpath d=\'M8 9h8\'/%3E%3Cpath d=\'M8 12.5h5\'/%3E%3C/svg%3E")}'
     ].join('');
 
     function injectStyle() {
@@ -109,7 +135,10 @@
         var titleWrap = el('div');
         var title = el('div', 'tb-title', L.botTitle || 'Тьютор');
         var ctxLine = el('div', 'tb-ctx', '');
-        titleWrap.appendChild(title); titleWrap.appendChild(ctxLine);
+        // Остаток вопросов живёт здесь, а не репликой в потоке: в потоке он уезжал вверх
+        // при первой прокрутке — исчезал тогда, когда как раз становился нужен.
+        var quotaLine = el('div', 'tb-quota', '');
+        titleWrap.appendChild(title); titleWrap.appendChild(ctxLine); titleWrap.appendChild(quotaLine);
         var close = el('button', 'tb-close', '×'); close.type = 'button';
         head.appendChild(titleWrap); head.appendChild(close);
         var body = el('div', 'tb-body');
@@ -142,7 +171,9 @@
         function open(c, seed) {
             if (c) setCtx(c);
             panel.classList.add('open'); fab.style.display = 'none';
-            if (!body.childNodes.length) msg(L.botHello || 'Спросите что угодно по этому разделу — объясню на пальцах.', 'sys');
+            // Приветствие — это слова тьютора, а не состояние: пузырём бота, со знаком.
+            // Раньше шло как системная реплика и читалось наравне с «демо-режим» и «нужен токен».
+            if (!body.childNodes.length) msg(L.botHello || 'Спросите что угодно по этому разделу — объясню на пальцах.', 'bot');
             if (seed) { input.value = seed; }
             input.focus();
         }
@@ -182,7 +213,12 @@
             asked++;
             busy = true; msg(question, 'me');
             input.value = '';
-            var pend = msg(L.botThinking || 'Думаю…', 'sys');
+            // Ожидание — тремя точками: слово «Думаю…» в потоке читалось как ещё одна
+            // реплика бота. Подпись для скринридера остаётся словом.
+            var pend = el('div', 'tb-typing', '<i></i><i></i><i></i>');
+            pend.setAttribute('aria-label', L.botThinking || 'Думаю…');
+            pend.setAttribute('role', 'status');
+            body.appendChild(pend); body.scrollTop = body.scrollHeight;
             try {
                 var headers = { 'content-type': 'application/json' };
                 var tok = getToken();
@@ -199,7 +235,7 @@
                 if (r.ok && data.answer) {
                     msg(data.answer, 'bot');
                     if (typeof data.left === 'number' && data.left <= 20)
-                        msg((L.tokenLeft || 'Осталось вопросов по токену') + ': ' + data.left, 'sys');
+                        quotaLine.textContent = (L.tokenLeft || 'Осталось вопросов по токену') + ': ' + data.left;
                 } else if (data.error === 'token_required' || data.error === 'token_invalid') {
                     msg(L.tokenNeeded || 'Нужен токен доступа — он выдаётся на неделю и ограничен по числу вопросов.', 'sys', 'key');
                     var got = promptToken();
