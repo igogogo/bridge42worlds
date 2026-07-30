@@ -577,6 +577,60 @@ const SEARCH_MODEL = "@cf/baai/bge-m3";
 const SEARCH_MAX_LEN = 300;      // длиннее запросов у живых людей не бывает
 const SEARCH_TOP_K = 12;
 
+// Перевод коротких строк дешёвой моделью. Используется в поиске: запрос читателя приводим
+// к английскому (индекс построен по нему), а заголовки результатов — к языку читателя.
+// Ключ модели живёт в секретах Worker'а, в страницу не попадает.
+async function translateText(env, text, to) {
+  if (!env.DEEPSEEK_API_KEY || !text) return null;
+  const names = { en: "English", ru: "Russian", es: "Spanish", ar: "Arabic" };
+  try {
+    const r = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json",
+                 authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
+        model: env.DEEPSEEK_MODEL || "deepseek-v4-flash",
+        messages: [
+          { role: "system", content:
+            `Translate to ${names[to] || to}. Scientific text: keep terminology precise. ` +
+            `Answer with the translation only, no quotes, no explanation.` },
+          { role: "user", content: text },
+        ],
+        temperature: 0, max_tokens: 300, thinking: { type: "disabled" },
+      }),
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d?.choices?.[0]?.message?.content?.trim() || null;
+  } catch { return null; }
+}
+
+// Заголовки результатов на язык читателя. Запоминаем в KV по паре (статья, язык):
+// корпус меняется редко, поэтому второй запрос той же статьи уже ничего не стоит.
+async function translateTitles(env, results, lang) {
+  if (!env.TOKENS || !results.length) return;
+  const need = [];
+  await Promise.all(results.map(async (r) => {
+    const k = `t:${r.id}:${lang}`;
+    const hit = await env.TOKENS.get(k);
+    if (hit) r.title = hit;
+    else need.push(r);
+  }));
+  if (!need.length) return;
+
+  // Одним вызовом на весь список, а не по одному на заголовок: двенадцать отдельных
+  // обращений к модели ради двенадцати строк — расточительство.
+  const joined = need.map((r, i) => `${i + 1}. ${r.title_en || r.title}`).join("\n");
+  const out = await translateText(env, joined, lang);
+  if (!out) return;
+  const lines = out.split("\n").map((s) => s.replace(/^\s*\d+[.)]\s*/, "").trim()).filter(Boolean);
+  await Promise.all(need.map(async (r, i) => {
+    if (!lines[i]) return;
+    r.title = lines[i];
+    await env.TOKENS.put(`t:${r.id}:${lang}`, lines[i], { expirationTtl: 90 * 86400 });
+  }));
+}
+
 async function handleSearch(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (!env.VECTORIZE || !env.AI) {
@@ -593,34 +647,61 @@ async function handleSearch(request, env) {
   }
   q = String(q).trim().slice(0, SEARCH_MAX_LEN);
   if (q.length < 2) return Response.json({ error: "query_too_short" }, { status: 400 });
+  const lang = ["ru", "en", "es", "ar"].includes(url.searchParams.get("lang"))
+    ? url.searchParams.get("lang") : "ru";
 
-  // Учёта расхода на пользователя пока нет (задача 0), поэтому грубый предохранитель:
-  // одинаковые запросы отдаём из кэша края, а не гоняем модель заново.
-  const cacheKey = new Request(`https://b42-search-cache/${encodeURIComponent(q.toLowerCase())}`);
+  // Одинаковые запросы отдаём из кэша края, а не гоняем модель заново: люди ищут одно и то же
+  // пачками. Язык в ключе — выдача на разных языках разная.
+  const cacheKey = new Request(
+    `https://b42-search-cache/${lang}/${encodeURIComponent(q.toLowerCase())}`);
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
 
+  // Поиск — тоже расход, считаем с первого дня.
+  const who = await identify(request, env);
+  const spent = await quotaSpend(env, who.uid, 1, who.lim);
+  if (!spent.ok) {
+    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
+      { status: spent.code });
+  }
+
+  // Индекс построен по АНГЛИЙСКОМУ тексту (решение владельца: английский каноничен для научных
+  // терминов). Запрос на другом языке сначала переводим — иначе сравниваем разноязычные вектора
+  // и теряем точность на терминах.
+  let queryForVector = q;
+  if (lang !== "en") {
+    const t = await translateText(env, q, "en");
+    if (t) queryForVector = t;
+  }
+
   let vector;
   try {
-    const emb = await env.AI.run(SEARCH_MODEL, { text: [q] });
+    const emb = await env.AI.run(SEARCH_MODEL, { text: [queryForVector] });
     vector = emb.data[0];
   } catch {
     return Response.json({ error: "embedding_failed" }, { status: 502 });
   }
 
   const found = await env.VECTORIZE.query(vector, {
-    topK: SEARCH_TOP_K, returnMetadata: "all",
+    topK: SEARCH_TOP_K, returnMetadata: "all", namespace: "ours",
   });
   const results = (found.matches || []).map((m) => ({
     id: m.id,
     score: Math.round(m.score * 1000) / 1000,
-    title: m.metadata?.title || "",
+    title: m.metadata?.title || m.metadata?.title_en || "",
+    title_en: m.metadata?.title_en || "",
     url: m.metadata?.url || "",
     date: m.metadata?.date || "",
     category: m.metadata?.primary_category || "",
   }));
 
-  const res = Response.json({ q, results });
+  // Заголовки у нас есть на русском и английском. Если читателю нужен третий язык —
+  // переводим на лету и запоминаем: второй такой запрос уже бесплатный.
+  if (lang !== "ru" && lang !== "en") {
+    await translateTitles(env, results, lang);
+  }
+
+  const res = Response.json({ q, lang, results, dayLeft: spent.dayLeft });
   // Кэш на час: корпус меняется раз в сутки, а повторные запросы приходят пачками.
   res.headers.set("cache-control", "public, max-age=3600");
   await caches.default.put(cacheKey, res.clone());

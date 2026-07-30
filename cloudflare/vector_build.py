@@ -91,21 +91,27 @@ def main():
     headers = {"Authorization": f"Bearer {token}"}
     session = requests.Session()
 
-    idx = ROOT / "lang" / "ru" / "articles-index.json"
-    if not idx.exists():
-        print(f"нет {idx} — сначала нужен собранный индекс статей. Стоп.")
+    # Источник — выгрузка ML (embeddings_export.py). Текст АНГЛИЙСКИЙ: решение владельца
+    # 2026-07-30, английский каноничен для научных терминов, есть у всех документов, и вектор
+    # из него точнее. Не из русского оригинала и не из переводов.
+    src = Path(os.environ.get("B42_DATA_ROOT") or ROOT) / "data" / "embeddings-ours.jsonl"
+    if not src.exists():
+        print(f"нет {src} — сначала: python embeddings_export.py. Стоп.")
         return 1
-    articles = json.loads(idx.read_text(encoding="utf-8"))
+    articles = []
+    with src.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                articles.append(json.loads(line))
 
     old = {} if args.all else (
         json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {})
     new, todo = {}, []
     for a in articles:
         aid = a.get("id")
-        if not aid:
-            continue
-        text = article_text(a)
-        if not text:
+        text = (a.get("text") or "").strip()
+        if not (aid and text):
             continue
         h = hashlib.md5(text.encode("utf-8")).hexdigest()
         new[aid] = h
@@ -122,15 +128,21 @@ def main():
         vecs = embed([t for _, t, _ in chunk], session, headers)
         batch = []
         for (aid, _, a), v in zip(chunk, vecs):
+            m = a.get("metadata") or {}
             batch.append({
                 "id": aid,
                 "values": v,
+                # Namespace обязателен (требование ML): 2000 наших статей утонут среди
+                # миллионов абстрактов arXiv, когда те приедут в тот же индекс.
+                "namespace": a.get("namespace") or "ours",
                 # Метаданные нужны, чтобы отдать результат поиска без похода в другой индекс.
+                # Держим оба заголовка: вектор считан по английскому, показываем читателю русский.
                 "metadata": {
-                    "title": (a.get("title") or "")[:400],
-                    "url": a.get("url") or "",
-                    "date": a.get("date") or "",
-                    "primary_category": a.get("primary_category") or "",
+                    "title": (m.get("title_ru") or m.get("title_en") or "")[:400],
+                    "title_en": (m.get("title_en") or "")[:400],
+                    "url": m.get("url") or "",
+                    "date": m.get("date") or "",
+                    "primary_category": m.get("cat") or "",
                 },
             })
         for j in range(0, len(batch), UPSERT_BATCH):
