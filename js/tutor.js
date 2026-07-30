@@ -86,7 +86,19 @@
         /* Ровный обрез списка не показывает, что выше есть ещё. */
         '.tb-body::before{content:"";position:sticky;top:-12px;display:block;height:14px;',
         'margin:-12px -14px 0;background:linear-gradient(var(--bg),transparent);pointer-events:none}',
-        ':root{--tb-ic-chat:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'black\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z\'/%3E%3Cpath d=\'M8 9h8\'/%3E%3Cpath d=\'M8 12.5h5\'/%3E%3C/svg%3E")}'
+        ':root{--tb-ic-chat:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'black\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z\'/%3E%3Cpath d=\'M8 9h8\'/%3E%3Cpath d=\'M8 12.5h5\'/%3E%3C/svg%3E")}',
+        /* ── Шкала касания внутри панели (QA, круг 2: .tb-close меряется 12×20) ──
+           Панель живёт своей вёрсткой, поэтому общая шкала из css/style.css её не
+           накрывала: крестик был ровно по глифу «×», а «Спросить» — 85×33. Закрыть
+           диалог — единственный способ его убрать, и именно эта кнопка была самой
+           мелкой на экране. Берём те же ступени, что и весь сайт. */
+        '.tb-close{background:none;border:none;font-size:20px;line-height:1;cursor:pointer;color:var(--soft);',
+        'min-width:var(--tap-md,44px);min-height:var(--tap-md,44px);display:inline-flex;',
+        'align-items:center;justify-content:center;border-radius:10px;margin:-6px -6px -6px 0}',
+        '.tb-close:hover{color:var(--text);background:var(--tag-bg)}',
+        '.tb-foot button{min-height:var(--tap-md,44px);min-width:var(--tap-md,44px)}',
+        '.tb-foot textarea{min-height:var(--tap-md,44px)}',
+        '.tb-fab{min-width:var(--tap-md,44px);min-height:var(--tap-md,44px)}'
     ].join('');
 
     function injectStyle() {
