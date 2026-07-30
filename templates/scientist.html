@@ -58,7 +58,9 @@
     <div class="section"><h2>$bio_label</h2><p>$scientist_biography</p></div>
     <div class="section"><h2>$discoveries_label</h2><ul class="discoveries-list">$scientist_discoveries</ul></div>
     <div class="fact">💡 $scientist_fun_fact</div>
-    <div class="quote"><strong>$quote_label:</strong> "$scientist_quote"</div>
+    <!-- Слово «Цитата» лишнее: блок уже курсивом, приглушён и отбит линией.
+         Подпись — в aria-label. Пустая цитата блок не печатает (см. generate.py). -->
+    $scientist_quote_html
 </div>
 
 <div class="entity-wrapper">
@@ -75,7 +77,10 @@ $feedback_html
 <div class="article-side">$entity_side_html</div>
 </div>
 
-<h2 class="section-title">$articles_label</h2>
+<!-- id обязателен: на него ведёт «стрелка к списку» из строки статистики, и по нему
+     же search-ui гасит заголовок, когда идёт поиск по всему сайту. У остальных страниц
+     сущностей он был, у учёного — нет, и заголовок висел над чужой выдачей. -->
+<h2 class="section-title" id="article-list">$articles_label</h2>
 <div id="search-results" class="entity-list" data-context-scientist="$scientist_id">$articles_list_html</div>
 
 <footer><p>bridge42worlds </p></footer>

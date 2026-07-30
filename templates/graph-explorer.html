@@ -55,10 +55,14 @@
         </span>
         <button type="button" id="kg-search-clear" title="$clear_label">✕</button>
         <span class="kg-sep"></span>
-        <strong>$depth_label</strong>
-        <button type="button" id="kg-depth-minus">−</button>
-        <span id="kg-depth-val">1</span>
-        <button type="button" id="kg-depth-plus">+</button>
+        <!-- Слово «Глубина» убрано: пара «− 1 +» уже читается сама, и ровно такой контрол
+             без подписи давно стоит на карточках тега/закона/учёного (.mini-depth-ctrl).
+             Подпись остаётся для читалок с экрана и как всплывающая. -->
+        <span class="kg-depth" role="group" aria-label="$depth_label" title="$depth_label">
+          <button type="button" id="kg-depth-minus">−</button>
+          <span id="kg-depth-val">1</span>
+          <button type="button" id="kg-depth-plus">+</button>
+        </span>
     </div>
     <div class="kg-chips" id="kg-chips-all"></div>
     <div class="kg-row"><strong>$nodes_label</strong>

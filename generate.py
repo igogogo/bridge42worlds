@@ -45,6 +45,18 @@ GRAPH_ICO = ('<svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true">'
              '<g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/>'
              '<circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg>')
 
+# Иконка «настройки» — три ползунка, а не шестерёнка: шестерёнка в интерфейсе обычно
+# означает настройки ПРИЛОЖЕНИЯ, а тут настраивается вид одного блока. Нужна потому,
+# что кнопка «настройки мини-графа» рисовалась глифом ГРАФА: значок обещал показать
+# граф, а кнопка раскрывала панель фильтров.
+SLIDERS_ICO = ('<svg class="ico-sliders" viewBox="0 0 25 25" aria-hidden="true" fill="none" '
+               'stroke="currentColor" stroke-width="1.7" stroke-linecap="round">'
+               '<line x1="4" y1="7" x2="21" y2="7"/><line x1="4" y1="12.5" x2="21" y2="12.5"/>'
+               '<line x1="4" y1="18" x2="21" y2="18"/>'
+               '<circle cx="9" cy="7" r="2.2" fill="var(--card-bg, #fff)"/>'
+               '<circle cx="16" cy="12.5" r="2.2" fill="var(--card-bg, #fff)"/>'
+               '<circle cx="7" cy="18" r="2.2" fill="var(--card-bg, #fff)"/></svg>')
+
 
 def asset_ver():
     """Хэш от содержимого всех css/js — заменяет ручной ?v=N (забывали бампать, у части
@@ -623,7 +635,7 @@ def mini_graph_filters_html(lang, center_kind="tag"):
     # проблему «связи не влезают в строку» — их просто не видно, пока не открыл. Единый вид на ВСЕХ
     # карточках (статья/тег/закон/учёный) — функция общая.
     cfg_lbl = MINI_CONFIG_LABEL.get(lang, MINI_CONFIG_LABEL["en"])
-    return (f'<button type="button" class="mg-config-toggle">{GRAPH_ICO} {safe(cfg_lbl)}</button>'
+    return (f'<button type="button" class="mg-config-toggle">{SLIDERS_ICO} {safe(cfg_lbl)}</button>'
             f'<div class="mini-graph-filters" hidden>'
             f'<div class="mg-kinds">{kind_boxes}{depth}</div>'
             f'<div class="mg-edges">{edge_boxes}</div>'
@@ -2109,6 +2121,7 @@ def generate_scientist_page(sid, lang):
         + side_chip_group(loc["related_scientists"], side_sci_chips)
     )
 
+    _sci_quote = (data.get("quote") or "").strip()
     sci_like_id = f"{author_slug(sid)}_{lang}_page"
     actions_html = build_actions_html(sci_like_id, sid, lang, "scientist", inline_comment=True)
     feedback_html = build_feedback_html(sci_like_id, lang, "scientist", inline_toggle=True)
@@ -2129,7 +2142,11 @@ def generate_scientist_page(sid, lang):
         scientist_description=safe(data.get("description", "")),
         scientist_biography=safe(data.get("biography", "")),
         scientist_discoveries="".join(f"<li>{safe(d)}</li>" for d in as_list(data.get("key_discoveries", []))),
-        scientist_quote=safe(data.get("quote", "")), scientist_fun_fact=safe(data.get("fun_fact", "")),
+        # Пустая цитата печатала голое `Цитата: ""` — блок из одних кавычек. Строим ряд
+        # целиком здесь, чтобы при отсутствии цитаты его не было вовсе.
+        scientist_quote_html=(f'<div class="quote" aria-label="{attr_safe(loc["quote"])}">'
+                              f'"{safe(_sci_quote)}"</div>' if _sci_quote else ""),
+        scientist_fun_fact=safe(data.get("fun_fact", "")),
         discoveries_label=safe(loc["discoveries"]), bio_label=safe(loc["bio"]),
         quote_label=safe(loc["quote"]),
         related_tags_block=related_tags_block, related_laws_block=related_laws_block,
@@ -2511,8 +2528,11 @@ def update_all_authors():
                 coauthor_count=len(data.get("coauthors", [])), coauthors_label=safe(loc["coauthors"]),
                 coauthors_html=coauthors_html, search_placeholder=safe(loc["search"]),
                 search_hint=safe(loc["hint"]),
-                tags_label=safe(loc["tags"]), author_tags_html=author_tags_html or "—",
-                laws_label=safe(loc["laws"]), author_laws_html=author_laws_html or "—",
+                # Раньше пустой ряд подменялся прочерком — при подписи «Теги:» это читалось,
+                # без подписи ряд из одного «—» бессмыслен. Отдаём пусто: .related-tags:empty
+                # скрывает такой ряд целиком.
+                tags_label=safe(loc["tags"]), author_tags_html=author_tags_html,
+                laws_label=safe(loc["laws"]), author_laws_html=author_laws_html,
                 articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
                 footer_text=safe(loc["footer"])
             ), encoding="utf-8")

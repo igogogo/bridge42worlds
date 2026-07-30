@@ -53,20 +53,13 @@
 <div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> $article_count $articles_label · $coauthor_count $coauthors_word · $last_seen</div>
 
 <div class="entity-body">
-<div class="related-tags">
-    <strong>$coauthors_label:</strong>
-    $coauthors_html
-</div>
-
-<div class="related-tags">
-    <strong>$tags_label:</strong>
-    $author_tags_html
-</div>
-
-<div class="related-tags">
-    <strong>$laws_label:</strong>
-    $author_laws_html
-</div>
+<!-- Слова-заголовки над рядами убраны (владелец 2026-07-30: «слово связанные лишнее,
+     и так понятно»). Здесь они пережили правку последними — во всех остальных шаблонах
+     ряды строит related_row(). Группы различаются CSS-классом, подпись живёт в aria-label
+     для читалок с экрана. Пустой ряд не печатается вовсе: :empty его скрывает. -->
+<div class="related-tags related-coauthors" aria-label="$coauthors_label">$coauthors_html</div>
+<div class="related-tags related-tag" aria-label="$tags_label">$author_tags_html</div>
+<div class="related-tags related-laws" aria-label="$laws_label">$author_laws_html</div>
 
 <!-- мини-граф автора убран по просьбе юзера (не до конца понятно как правильно строить/показывать) —
      разметка/данные не удалены, просто закомментированы, чтобы быстро вернуть, когда решим как:

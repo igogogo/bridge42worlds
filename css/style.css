@@ -285,7 +285,7 @@ body.graph-fs-open { overflow: hidden; }
 }
 /* Иконка «граф знаний» — глиф из 3 узлов+рёбер (currentColor, работает в любой теме) вместо
    эмодзи-паутины 🕸, которая читалась как web/сеть, а не как граф (юзер-фидбек 2026-07-19). */
-.ico-graph { width: 1.05em; height: 1.05em; vertical-align: -0.15em; flex: none; }
+.ico-graph, .ico-sliders { width: 1.05em; height: 1.05em; vertical-align: -0.15em; flex: none; }
 /* Фильтр типов узлов мини-графа (тег/закон/учёный) — те же чекбоксы, что на большом графе.
    flex-wrap — на широкой колонке (620px, страница тега/закона/учёного) в 1 строку и так
    помещается, ничего не меняет; в узком сайдбаре статьи (160px) не даёт строке чекбоксов
@@ -395,6 +395,9 @@ body.graph-fs-open { overflow: hidden; }
     display: inline-flex; align-items: center; justify-content: center;
 }
 #kg-depth-val { min-width: 12px; text-align: center; color: var(--text); font-weight: 600; }
+/* Группа «− 1 +» без словесной подписи — держим её единым блоком, чтобы при переносе
+   строки контрол не разрывался на «−» в конце одной строки и «1 +» в начале следующей. */
+.kg-depth { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .selected-bar:empty, .filters:empty { display: none; }
 
 /* ── Оживление: появление на скролле ── */
@@ -1801,7 +1804,7 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
     display: inline-flex; align-items: center; gap: 6px; margin: 10px 0 2px;
     transition: color .16s, border-color .16s; }
 .mg-config-toggle:hover, .mg-config-toggle.open { color: var(--link); border-color: var(--link); }
-.mg-config-toggle .ico-graph { width: 1em; height: 1em; }
+.mg-config-toggle .ico-graph, .mg-config-toggle .ico-sliders { width: 1em; height: 1em; }
 .mini-graph-filters[hidden] { display: none; }
 /* Боковые колонки поднимаем к строке меню и морозим там (юзер 2026-07-24). На десктопе они уже
    position:fixed (заморожены), просто опускались на уровень заголовка — поднимаем top к высоте
@@ -2671,6 +2674,10 @@ html[data-theme="dark"] .an-stage {
 /* Слои связей без словесных заголовков: группы различаются оттенком и шрифтом */
 .related-laws a { font-family: var(--mono); border-style: dashed !important; }
 .related-sci a  { color: #2e7d32 !important; }
+/* Соавторы — НЕ учёные: зелёный в проекте закреплён за узлом «учёный» (.side-sci,
+   KIND_COLORS в графах), красить им соавторов-arXiv значило бы сломать цветовой код,
+   ради которого подписи и убрали. Отличаем засечками — как имена в выходных данных. */
+.related-coauthors a { font-family: var(--serif); font-style: italic; }
 .entity-body .related-tags + .related-tags { margin-top: 8px; }
 
 /* Портрет телефона: связи (теги/законы/учёные) уезжали в самый низ страницы —
