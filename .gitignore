@@ -58,6 +58,9 @@ cloudflare/publish-failures.log
 cloudflare/__pycache__/
 data/bulk-select/
 data/arxiv-index.jsonl
+# Выгрузка на эмбеддинг (embeddings_export.py): наши статьи 2,5 МБ, с arXiv будут гигабайты.
+# Пересоздаётся одной командой, в git ему делать нечего.
+data/embeddings-*.jsonl
 _devops-handoff.zip
 
 # Собранный сайт публикуется через cloudflare/deploy_r2.py (R2), не через git-пуш —
