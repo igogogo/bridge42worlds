@@ -94,11 +94,61 @@ def do_translate(payload, lang):
     return {"url": f"/lang/{to}/archive/{arxiv_id}/", "arxiv_id": arxiv_id, "lang": to}
 
 
+def find_arxiv_paper(topic):
+    """Тема читателя → конкретная статья arXiv. Мы не пишем статьи из головы: каждая наша
+    статья — пересказ конкретной работы, иначе нечего показать как источник.
+
+    Берём свежайшую по релевантности: читатель просит тему, а не «что-нибудь древнее».
+    Домен arXiv намеренно es.arxiv.org — export не отвечал (см. грабли проекта)."""
+    import xml.etree.ElementTree as ET
+    q = f'all:"{topic}"' if " " in topic else f"all:{topic}"
+    r = requests.get("http://es.arxiv.org/api/query", timeout=40, params={
+        "search_query": q, "start": 0, "max_results": 5,
+        "sortBy": "relevance", "sortOrder": "descending"})
+    try:
+        root = ET.fromstring(r.text)
+    except ET.ParseError:
+        return None
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    for e in root.findall("atom:entry", ns):
+        idnode = e.find("atom:id", ns)
+        if idnode is None:
+            continue
+        return {
+            "id": idnode.text.split("/abs/")[-1].split("v")[0],
+            "title": (e.find("atom:title", ns).text or "").strip().replace("\n", " "),
+        }
+    return None
+
+
 def do_article(payload, lang):
-    # Осознанно не запускаем генерацию сами: статья стоит денег, и решение «делать» должно
-    # быть человеческим, пока не согласован потолок. Заказ копится и виден в очереди.
-    raise NotImplementedError(
-        "генерация статьи по заказу ещё не включена — ждём согласованный потолок расхода")
+    """«Хочу статью про это». Путь написан целиком и проверяем, но по умолчанию ВЫКЛЮЧЕН:
+    каждый прогон стоит денег, а потолок на это не назначен — решение архитектора (вопросы
+    в отчёте от 2026-07-30). Включается одной переменной, правка кода не нужна:
+        ORDERS_ARTICLE_ENABLED=1 python cloudflare/queue_worker.py
+    Заказы тем временем принимаются и копятся в очереди — ничего не теряется."""
+    if os.environ.get("ORDERS_ARTICLE_ENABLED", "0") != "1":
+        raise NotImplementedError(
+            "генерация по заказу выключена: ждём решения по потолку расхода")
+
+    arxiv_id = payload.get("hint_arxiv_id")
+    title = None
+    if not arxiv_id:
+        topic = str(payload.get("topic") or "").strip()
+        if not topic:
+            raise ValueError("в заказе нет ни темы, ни arxiv_id")
+        found = find_arxiv_paper(topic)
+        if not found:
+            # Честный отказ лучше выдуманной статьи: читателю покажем, что не нашли работу.
+            raise ValueError(f"на arXiv не нашлось работы по теме «{topic}»")
+        arxiv_id, title = found["id"], found["title"]
+
+    code = subprocess.run(
+        [sys.executable, "run.py", "ids", arxiv_id],
+        cwd=ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
+    if code != 0:
+        raise RuntimeError(f"генерация завершилась с кодом {code}")
+    return {"arxiv_id": arxiv_id, "title": title, "url": f"/lang/{lang}/archive/"}
 
 
 def do_ask(payload, lang):
