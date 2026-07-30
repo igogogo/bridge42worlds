@@ -45,7 +45,7 @@
     function pageLang() {
         var l = global.B42_LANG ||
                 (global.document && global.document.documentElement.getAttribute('lang')) || 'ru';
-        return ['ru', 'en', 'es', 'ar'].indexOf(l) >= 0 ? l : 'ru';
+        return ['ru', 'en', 'es', 'ar', 'fr'].indexOf(l) >= 0 ? l : 'ru';
     }
     function label(s) {
         var lang = pageLang();
