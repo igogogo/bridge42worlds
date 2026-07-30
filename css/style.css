@@ -1902,9 +1902,15 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .pie-lg b { color: var(--ink); }
 
 /* Аналитика — 3D карта облака (canvas) */
-#analytics { max-width: 900px; }
+/* Правый край страницы аналитики гулял на 280px: сцена и вкладки жили по стандарту
+   (--w-wide / --w-text), пояснение по 660, вводный абзац по 640, а сам контейнер по 900 —
+   блоки идут встык, и разнобой читается как небрежность (аудит 2026-07-30). Сводим всё
+   к тем же двум переменным, что и остальной сайт. Единственное исключение — .an-cards
+   ниже: у неё сетка auto-fill, и сужение до 680 сменит три колонки на две. Это заметное
+   изменение вида, его решает владелец, поэтому карточкам оставлена своя ширина. */
+#analytics { max-width: var(--w-wide); }
 .an-tabs { display: flex; gap: 8px; margin: 6px 0 12px; }
-.an-intro { max-width: 640px; margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.an-intro { max-width: var(--w-text); margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 .an-intro b { color: var(--ink); font-weight: 600; }
 .an-tab { font-family: var(--mono); font-size: 12px; padding: 5px 14px; border: 1px solid var(--hair);
   border-radius: 999px; background: none; color: var(--soft); cursor: pointer; transition: color .15s, border-color .15s; }
@@ -1924,7 +1930,7 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .an-lg i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
 .an-axis { margin-top: 8px; font-size: 11px; color: var(--soft); font-family: var(--mono); }
 /* Панель-объяснение под картой (документация для пользователя, юзер 2026-07-25) */
-.an-about { max-width: 660px; margin: 26px 0 8px; }
+.an-about { max-width: var(--w-text); margin: 26px 0 8px; }
 .an-about h3 { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .08em;
   text-transform: uppercase; color: var(--ochre); margin: 20px 0 8px; }
 .an-about h3:first-child { margin-top: 0; }
@@ -1933,6 +1939,11 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .an-about li { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-bottom: 4px; }
 .an-about b { color: var(--ink); font-weight: 600; }
 /* Кластеры карточками (юзер 2026-07-25): заголовок крупнее + описание под ним */
+/* Карточки кластеров ограничены контейнером (--w-wide) и потому идут в ДВА столбца,
+   а не в три, как раньше при 900px. Это видимое изменение, и оно намеренное: раньше
+   карточки торчали правее сцены и пояснения на 220px — правый край страницы гулял.
+   Если владелец захочет три столбца обратно, это одна строка: #analytics { max-width: 900px }
+   и то же значение сюда, но тогда возвращается и разнобой краёв. */
 .an-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-top: 6px; }
 .an-card { border: 1px solid var(--hair); border-left: 3px solid var(--cc, var(--cyan));
   border-radius: var(--radius-sm); background: var(--surface); padding: 10px 13px;
