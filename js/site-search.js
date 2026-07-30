@@ -66,6 +66,22 @@
 
     function norm(s) { return (s || '').toString().toLowerCase().trim(); }
 
+    /* Аббревиатура понятия из его латинского id: cosmic_microwave_background → CMB.
+       Физик набирает «CMB», а не полное название, и получал ноль при существующем теге
+       (нашёл QA). Считаем здесь, а не храним в индексе: id уже есть в каждой записи,
+       поле стоило бы двенадцать килобайт на язык, а русский и так в 396 из 400.
+       Латинский id один на все языки — поэтому «CMB» работает и на арабской странице. */
+    var ID_STOPWORDS = { of: 1, the: 1, and: 1, 'in': 1, on: 1, 'for': 1, de: 1, la: 1, le: 1 };
+
+    function abbrev(id) {
+        var words = (id || '').split(/[_\-\s]+/).filter(function (w) {
+            return w && !ID_STOPWORDS[w.toLowerCase()];
+        });
+        if (words.length < 2) return '';
+        var ab = words.map(function (w) { return w.charAt(0); }).join('').toLowerCase();
+        return ab.length >= 2 ? ab : '';
+    }
+
     /* Вес совпадения — порядок из ТЗ. Разрыв между ступенями заведомо больше любого
        счётчика статей, чтобы популярность не перебивала точное совпадение имени. */
     function score(row, q) {
@@ -78,6 +94,9 @@
             var s = v === q ? 4000 : (v.indexOf(q) === 0 ? 3000 : (v.indexOf(q) !== -1 ? 2000 : 0));
             if (s > best) best = s;
         }
+        // Аббревиатура — только точным совпадением: «CMB» обязано находить понятие, но
+        // подстрочное совпадение по двум буквам засоряло бы выдачу на каждом коротком запросе.
+        if (!best && row.t !== 'art' && abbrev(row.id) === q) best = 3500;
         return best;
     }
 
@@ -123,9 +142,60 @@
         return g;
     }
 
+    /* Мягкое совпадение по основам слов: «white dwarfs» не находил тег «white dwarf», а
+       «чёрные дыры» — «чёрную дыру» (нашёл QA). Отбрасывать окончание последнего слова мало:
+       в русском множественное меняет ОБА слова, и «чёрные дыры» → «чёрные дыр» не совпадёт
+       ни с чем. Поэтому сравниваем основы: каждое слово запроса должно начинать какое-нибудь
+       слово названия. Длинные слова режем на два символа — этого хватает на падеж и число,
+       короткие сравниваем целиком, иначе «оси» начнут находить «осцилляторы».
+
+       Полноценной морфологии на пять языков здесь быть не должно — это работа вектора.
+       Мягкий проход включается, только если строгий не нашёл ни одного ПОНЯТИЯ. */
+    function commonPrefix(a, b) {
+        var i = 0, n = Math.min(a.length, b.length);
+        while (i < n && a.charAt(i) === b.charAt(i)) i++;
+        return i;
+    }
+
+    /* Слова считаем «одним и тем же», если общая часть либо не меньше четырёх букв
+       («чёрные»/«чёрная» → чёрн), либо покрывает слово целиком минус окончание
+       («дыры»/«дыра» → дыр). Отсечка в три буквы обязательна: без неё «оси» слипалось бы
+       с «осцилляциями». */
+    function sameWord(w, h) {
+        var k = commonPrefix(w, h);
+        if (k >= 4) return true;
+        return k >= 3 && k >= Math.min(w.length, h.length) - 1;
+    }
+
+    function softMatch(row, q) {
+        var words = q.split(/\s+/).filter(Boolean);
+        if (!words.length) return false;
+        var hay = [norm(row.n), norm(row.id).replace(/[_\-]/g, ' ')]
+            .concat((row.a || []).map(norm)).join(' ').split(/\s+/);
+        return words.every(function (w) {
+            return hay.some(function (h) { return sameWord(w, h); });
+        });
+    }
+
     function localSearch(q, opts) {
         return loadIndex().then(function (rows) {
             var ranked = inScope(rank(rows, q), opts.scope);
+            // Мягкий проход нужен, когда не нашлось ПОНЯТИЙ, а не когда пусто вообще:
+            // «white dwarfs» находил две статьи и на этом останавливался, так что тег
+            // «white dwarf» читателю не показывался (нашёл QA). Статьи по строгому запросу
+            // остаются первыми, мягкие находки добавляются следом и своих не вытесняют.
+            var hasEntity = ranked.some(function (r) { return r.t !== 'art'; });
+            if (!hasEntity) {
+                var seen = {};
+                ranked.forEach(function (r) { seen[r.t + r.id] = 1; });
+                var soft = rows.filter(function (r) {
+                    return r.t !== 'art' && !seen[r.t + r.id] && softMatch(r, q);
+                }).sort(function (a, b) { return (b.c || 0) - (a.c || 0); });
+                ranked = ranked.concat(soft.map(function (r) {
+                    return { t: r.t, id: r.id, n: r.n, nl: r.nl, url: urlFor(r),
+                             c: r.c, s: r.s, d: r.d, score: 1000 };
+                }));
+            }
             return {
                 q: q, source: 'local', total: ranked.length,
                 groups: group(ranked, opts.limits)
