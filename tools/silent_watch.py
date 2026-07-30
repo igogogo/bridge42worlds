@@ -6,7 +6,7 @@
 секрета, webp не конвертился, отбор возвращал ноль, тултип съедал клик, счётчик
 накручивался, шаг конверсии жил не там.
 
-Скрипт считает такие места и НЕ ДАЁТ ЧИСЛУ РАСТИ: базовая линия в data/silent-baseline.json,
+Скрипт считает такие места и НЕ ДАЁТ ЧИСЛУ РАСТИ: базовая линия в tools/silent-baseline.json,
 при превышении — ненулевой код возврата. Это не запрет фолбэков: осознанный фолбэк
 допустим, но он обязан оставлять след (лог, счётчик, пометка) — и тогда добавляется
 в исключения ниже с причиной.
@@ -29,7 +29,10 @@ for _s in (sys.stdout, sys.stderr):
         pass
 
 ROOT = Path(__file__).resolve().parent.parent
-BASELINE = ROOT / "data" / "silent-baseline.json"
+# Рядом со скриптом, а НЕ в data/: каталог data/ публикуется на сайт целиком
+# (INCLUDE_DIRS в cloudflare/deploy_r2.py), и карта наших же слабых мест уехала бы
+# на публичный адрес. tools/ не публикуется.
+BASELINE = Path(__file__).resolve().parent / "silent-baseline.json"
 
 PATTERNS = [
     (r"except\s*:\s*\n\s*pass", "except: pass"),

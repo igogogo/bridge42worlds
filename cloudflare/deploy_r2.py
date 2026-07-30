@@ -34,6 +34,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 MANIFEST = ROOT / "cloudflare" / ".r2-manifest.json"
+# ВНИМАНИЕ: data/ публикуется ЦЕЛИКОМ, за вычетом исключений ниже. Всё, что кладут
+# в data/, оказывается по публичному адресу — рабочим файлам разработки там не место,
+# им место рядом со своим скриптом (tools/ и подобные каталоги не публикуются вовсе).
 INCLUDE_DIRS = ["lang", "css", "js", "data"]
 # config.json обязателен: по нему строится строка выбора языков (search.js). Без него
 # переключателя языков нет на всём сайте, а ошибка глушится пустым catch — молча.

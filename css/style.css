@@ -1467,9 +1467,14 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
     font-size: 12px; color: var(--soft); white-space: nowrap; margin-left: 12px;
 }
 .author-row .author-tags {
-    flex: 1; margin: 0 12px; display: flex; gap: 3px; flex-wrap: wrap;
+    /* min-width: 0 обязателен: у флекс-элемента он по умолчанию auto, то есть
+       min-content, а при flex-wrap это ширина САМОЙ ШИРОКОЙ плашки — и та не может
+       сжаться (white-space: nowrap ниже). На узком экране строка «фамилия + плашка +
+       счётчик» упиралась в эту ширину и распирала строку за экран. */
+    flex: 1; min-width: 0; margin: 0 12px; display: flex; gap: 3px; flex-wrap: wrap;
     max-height: 2.6em; overflow: hidden;
 }
+.author-row { min-width: 0; }
 .author-row .author-tags span {
     font-size: 10px; padding: 1px 6px; border-radius: 10px; line-height: 1.6;
     background: var(--tag-bg); color: var(--link); white-space: nowrap;
@@ -1503,6 +1508,9 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
     display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
     padding: 3px 2px; cursor: pointer; text-decoration: none;
     color: var(--text); font-size: 13.5px; break-inside: avoid;
+    /* Облака живут в колонках (column-width), а multicol содержимое не обрезает:
+       слово длиннее колонки вылезает за неё. Рвём только когда иначе не влезает. */
+    overflow-wrap: anywhere;
 }
 .tag-item:hover, .scientist-item:hover, .law-item:hover { color: var(--link); }
 .tag-item.educational { color: var(--soft); font-style: italic; }

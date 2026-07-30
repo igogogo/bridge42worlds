@@ -119,6 +119,10 @@
         }
 
         return load().then(function (d) {
+            // Каталога может не быть (не собран, не доехал) — тогда карточка показала бы
+            // полосу загрузки над пустотой. Пустое ожидание хуже отсутствующего:
+            // говорим об этом вызывающему, и он снимает карточку целиком.
+            if (!(d.facts || []).length && !(d.quizzes || []).length) return null;
             (Math.random() < 0.55 ? showQuiz : showFact)(d);
             return function again() { (Math.random() < 0.5 ? showQuiz : showFact)(d); };
         });
@@ -142,6 +146,10 @@
 
         mount(ov.querySelector('.b42-wait-body'), ov.querySelector('.b42-rank'))
             .then(function (again) {
+                if (!again) {   // каталог пуст — прячем и кнопку «ещё факт», и подвал
+                    ov.querySelector('.b42-wait-foot').style.display = 'none';
+                    return;
+                }
                 ov.querySelector('.b42-wait-next').addEventListener('click', again);
             });
 
@@ -184,7 +192,9 @@
             host.insertBefore(node, host.firstChild);
             mount(node.querySelector('.b42-wait-body'), node.querySelector('.b42-rank'))
                 .then(function (again) {
-                    if (node) node.querySelector('.b42-wait-next').addEventListener('click', again);
+                    if (!node) return;
+                    if (!again) { node.remove(); node = null; return; }   // показывать нечего
+                    node.querySelector('.b42-wait-next').addEventListener('click', again);
                 });
         }, delay);
 
