@@ -145,7 +145,11 @@ def main():
             seen_ids.add(a["id"])
             uniq.append(a)
 
-    lessons = sorted(f for f in LESSONS.rglob("*.json") if f.name[0].isdigit())
+    # --only <тема>: пройти уроки одной темы. Нужно, чтобы правка одной темы не помечала
+    # изменёнными все сорок с лишним уроков курса — иначе ветка распухает чужими файлами.
+    only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else ""
+    lessons = sorted(f for f in LESSONS.rglob("*.json")
+                     if f.name[0].isdigit() and (not only or f.parent.name == only))
     stats = Counter()
     for f in lessons:
         try:
@@ -169,15 +173,21 @@ def main():
             print(f"{f.parent.name}/{f.name}: теги {tags[:4]} · законы {laws[:2]} · статей {len(arts)}")
             continue
 
+        # Пишем в `entities` — именно оттуда страница урока берёт связи. Раньше эти же ключи
+        # ложились в КОРЕНЬ файла: прогон отчитывался «привязки записаны», а на странице связей
+        # не появлялось, потому что читалось другое место. В корне уроков от прежних прогонов
+        # остался дубль — вычистить отдельно, чтобы не путал (пункт в задачи/обучение.md).
+        ent = d.setdefault("entities", {})
         if tags:
-            d["tags"] = tags
+            ent["tags"] = tags
         if laws:
-            d["laws"] = laws
+            ent["laws"] = laws
         if scientists:
-            d["scientists"] = scientists
+            ent["scientists"] = scientists
         if arts:
-            d["examples_from_articles"] = arts
-        f.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+            ent["examples_from_articles"] = arts
+        # перевод строки в конце: без него каждый прогон помечал изменённым КАЖДЫЙ урок курса
+        f.write_text(json.dumps(d, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     print(f"\nуроков: {len(lessons)} | с тегами: {stats['tags']} · с законами: {stats['laws']} "
           f"· с учёными: {stats['scientists']} · со статьями: {stats['articles']}")

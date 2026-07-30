@@ -760,7 +760,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
                       resonance: 'resonance', entropy: 'entropy',
                       orbit: 'orbit', wave: 'wave', charge: 'charge', magnet: 'magnet',
                       srt: 'srt', quantum: 'quantum', nucleus: 'nucleus',
-                      action: 'action' }[lesson.model];
+                      action: 'action', expansion: 'expansion' }[lesson.model];
       if (factory) {
         var mdl = B42Models[factory](modelData);
         var wrap = el('div'); wrap.style.margin = '20px 0';
@@ -880,8 +880,11 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       var m = el('section', 'k-sec');
       m.appendChild(el('h2', null, ic('sigma') + ' ' + L.math.title));
       (L.math.items || []).forEach(function (it) {
-        m.appendChild(el('h3', null, it.what));
-        m.appendChild(el('p', null, md(it.why)));
+        // Два имени у одних и тех же полей: часть материалов написана как what/why, часть как
+        // h/text. Раньше несовпадение давало пустой заголовок и слово «undefined» абзацем —
+        // читатель видел это на трёх параграфах темы 15. Терпим оба варианта.
+        m.appendChild(el('h3', null, it.what || it.h || ''));
+        m.appendChild(el('p', null, md(it.why || it.text || '')));
         if (it.latex) { var e2 = el('div', 'k-step-eq'); tex(e2, it.latex); m.appendChild(e2); }
       });
       root.appendChild(m);
