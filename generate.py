@@ -737,9 +737,27 @@ def site_og_meta(lang, url):
     return build_og_meta(title, desc, url, latest_cover_url(lang))
 
 
+def _og_cut(text, limit=200):
+    """Обрезка описания для карточки ссылки — по концу предложения, потом по слову."""
+    t = " ".join((text or "").split())
+    if len(t) <= limit:
+        return t
+    head = t[:limit]
+    for stop in (". ", "! ", "? ", "; "):
+        i = head.rfind(stop)
+        if i > limit * 0.5:
+            return head[:i + 1]
+    i = head.rfind(" ")
+    return (head[:i] if i > limit * 0.5 else head).rstrip(" ,;:") + "…"
+
+
 def build_og_meta(title, description, url, image_url=""):
     """og:/twitter: + meta description — общий блок для тег/закон/учёный страниц
     (у статьи свой набор в шаблоне — там ещё JSON-LD и hreflang)."""
+    # Описание режем по границе предложения: у тегов сюда приходило 700+ знаков, у законов
+    # 420 — площадки всё равно обрежут на ~160-200, но обрежут ПОСРЕДИНЕ слова, и карточка
+    # выглядит оборванной. Лучше закончить мысль самим.
+    description = _og_cut(description)
     title, description = attr_safe(title), attr_safe(description)
     img_html = (f'<meta property="og:image" content="{image_url}">\n    '
                 f'<meta name="twitter:card" content="summary_large_image">') if image_url else \
@@ -748,6 +766,9 @@ def build_og_meta(title, description, url, image_url=""):
             f'<meta property="og:title" content="{title}">\n    '
             f'<meta property="og:description" content="{description}">\n    '
             f'<meta property="og:url" content="{attr_safe(url)}">\n    '
+            # canonical у страниц тега/закона/учёного не было вовсе — поисковик считал
+            # пять языковых версий пятью разными страницами об одном и том же.
+            f'<link rel="canonical" href="{attr_safe(url)}">\n    '
             f'<meta property="og:type" content="website">\n    '
             f'{img_html}')
 
