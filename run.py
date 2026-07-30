@@ -96,6 +96,7 @@ def cmd_daily(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.process_day(args.date or _yesterday(), force=args.force, express=args.express, category=args.category, limit=args.limit)
+    _ensure_webp()   # без этого шага свежие статьи выходят без картинок (возврат QA 2026-07-30)
 
 
 def cmd_range(args):
@@ -164,6 +165,7 @@ def cmd_regen_day(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.process_day(args.date, force=True)
+    _ensure_webp()
 
 
 def _refuse_if_peak(command):
@@ -632,6 +634,7 @@ def cmd_regen(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.regenerate_article(args.id)
+    _ensure_webp()   # regen-статья 2607.23119v2 вышла без единого webp — возврат QA
 
 
 def cmd_check(args):
