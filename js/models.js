@@ -2360,13 +2360,143 @@
         };
     }
 
+    /** Расширение Вселенной и красное смещение: закон Хаббла на «резиновой линейке». */
+    function expansionModel(data) {
+        var C = 299792.458;                          // скорость света, км/с
+        var MPC_LY = 3.26156;                        // 1 Мпк ≈ 3,26 млн световых лет
+
+        // z считаем строго по определению через масштабный фактор, а линейный закон Хаббла
+        // (v = H₀·d) остаётся тем, чем он и является: приближением для близких галактик.
+        // Ползунок расстояния доходит до 1000 Мпк, где расхождение уже заметно, — и стенд
+        // показывает это честно, вместо того чтобы прятать за удобной формулой.
+        function vel(st) { return st.H0 * st.d; }            // км/с, линейный закон
+        function zLin(st) { return vel(st) / C; }
+        function zRel(st) {                                  // релятивистский доплер, для сравнения
+            var b = Math.min(0.995, vel(st) / C);
+            return Math.sqrt((1 + b) / (1 - b)) - 1;
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) {
+                    // Ход расширения: 0 → 1 за цикл. Все галактики отодвигаются в одной пропорции,
+                    // поэтому дальняя за то же время уходит дальше — это и есть закон Хаббла.
+                    var per = 5.2;
+                    return { t: t, gr: (t % per) / per };
+                },
+                derive: function (st, a) {
+                    var v = vel(st), z = zLin(st);
+                    return { v: v, z: z, zRel: zRel(st),
+                             lam: st.lam * (1 + z),                  // наблюдаемая длина волны
+                             travel: st.d * MPC_LY,                  // млн световых лет пути
+                             ageGy: 977.79 / st.H0,                  // 1/H₀ в млрд лет
+                             stretch: 1 + z, gr: a.gr };
+                },
+                stage: {
+                    height: 280,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 34, lane = 78, grow = 1 + 0.22 * d.gr;
+                        var SX = KIT.scale({ min: 0, max: 1000, from: pad, to: W - pad - 16 });
+
+                        // — 1. Резиновая лента: галактики уносятся пропорционально расстоянию
+                        KIT.text(g, ctx.T('lane'), pad, lane - 30, { size: 10.5, color: col.soft });
+                        KIT.dashed(g, [3, 5], function () {
+                            g.strokeStyle = col.border; g.lineWidth = 1;
+                            g.beginPath(); g.moveTo(pad, lane); g.lineTo(W - pad, lane); g.stroke();
+                        });
+                        KIT.body(g, pad, lane, { shape: 'dot', size: 11, color: '#155E74' });
+                        KIT.text(g, ctx.T('here'), pad, lane + 22, { size: 10, color: col.soft, align: 'center' });
+
+                        [180, 400, 640, 880].forEach(function (dk) {
+                            var x = SX(Math.min(1000, dk * grow));
+                            KIT.alpha(g, 0.75, function () {
+                                KIT.body(g, x, lane, { shape: 'dot', size: 7, color: '#8F6417' });
+                            });
+                            // стрелка тем длиннее, чем дальше галактика: v ∝ d
+                            KIT.arrow(g, x, lane, 8 + dk * 0.018, 0, { color: col.soft, width: 1.2, head: 4 });
+                        });
+
+                        // выбранная галактика — крупнее, с подписью скорости
+                        var gx = SX(Math.min(1000, st.d * grow));
+                        KIT.body(g, gx, lane, { shape: 'dot', size: 12, color: '#9B2C2C' });
+                        KIT.arrow(g, gx, lane, 10 + st.d * 0.02, 0, { color: '#9B2C2C', width: 2, head: 5 });
+                        KIT.text(g, Math.round(d.v) + ' ' + ctx.T('unit_kms'), gx, lane - 14,
+                                 { size: 10.5, color: '#9B2C2C', align: 'center', weight: '600' });
+
+                        // — 2. Луч в пути: волна растягивается вместе с пространством
+                        var wy = lane + 74, x0 = pad + 6, x1 = W - pad - 10;
+                        KIT.text(g, ctx.T('onTheWay'), pad, wy - 26, { size: 10.5, color: col.soft });
+                        var pts = [], ph = d.gr * Math.PI * 2;
+                        for (var i = 0; i <= 220; i++) {
+                            var f = i / 220, x = x0 + (x1 - x0) * f;
+                            // шаг волны растёт по пути: у наблюдателя (справа) длина в (1+z) раз больше
+                            var k = 26 / (1 + (d.stretch - 1) * f);
+                            pts.push([x, wy - 13 * Math.sin(f * (x1 - x0) / k * 0.55 - ph)]);
+                        }
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2 });
+                        KIT.text(g, ctx.T('emitted'), x0, wy + 26, { size: 10, color: col.soft });
+                        KIT.text(g, ctx.T('received'), x1, wy + 26, { size: 10, color: '#9B2C2C', align: 'right' });
+
+                        // — 3. Спектр: где была линия и куда она уехала
+                        var sy = H - 44, sx0 = pad, sw = W - pad * 2 - 16;
+                        var SL = KIT.scale({ min: 380, max: 780, from: sx0, to: sx0 + sw });
+                        for (var p = 0; p <= sw; p += 2) {                 // радуга-подложка
+                            var nm = 380 + (p / sw) * 400;
+                            g.fillStyle = 'hsl(' + (280 - (nm - 380) * 0.70) + ',72%,52%)';
+                            g.fillRect(sx0 + p, sy, 3, 15);
+                        }
+                        KIT.marker(g, SL(st.lam), sy - 8, sy + 23, { color: col.ink || '#1B222B', width: 2,
+                            label: Math.round(st.lam) + ' ' + ctx.T('unit_nm'), size: 10 });
+                        var lamShown = Math.min(778, d.lam);
+                        KIT.marker(g, SL(lamShown), sy - 8, sy + 23, { color: '#9B2C2C', width: 2.5,
+                            label: Math.round(d.lam) + ' ' + ctx.T('unit_nm'), size: 10 });
+                        if (d.lam > 780) {
+                            KIT.text(g, ctx.T('offScale'), sx0 + sw, sy + 34, { size: 10, color: '#9B2C2C', align: 'right' });
+                        }
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('zIs') + ' ' + d.z.toFixed(3), y: 34, size: 10.5, color: col.soft },
+                            { text: d.z > 0.1 ? ctx.T('warnLinear') : ctx.T('okLinear'),
+                              y: 50, size: 10.5, color: d.z > 0.1 ? '#8F6417' : '#4C6B4E' }
+                        ]);
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">v = H₀·d = </span><span class="xf-res">' +
+                        Math.round(d.v) + ' ' + T('unit_kms') + '</span>' +
+                        '<span class="xf-op"> · z = </span><span class="xf-var">' + d.z.toFixed(3) + '</span>' +
+                        '<br><i>' + T('lamFrom') + ' ' + Math.round(st.lam) + ' ' + T('unit_nm') +
+                        ' → ' + Math.round(d.lam) + ' ' + T('unit_nm') +
+                        ' · ' + T('ageIs') + ' ' + d.ageGy.toFixed(1) + ' ' + T('unit_Gyr') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xDist', min: 0, max: 1000 },
+                    y: { label: 'yVel', min: 0, max: function (s) { return Math.round(s.H0 * 1000); } },
+                    samples: 100,
+                    curve: function (dist, s) { return s.H0 * dist; },
+                    marker: function (s, a, d) { return { x: s.d, y: d.v }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>z</b> ' + d.z.toFixed(3) + ' &nbsp;·&nbsp; <b>' + T('travelIs') + '</b> ' +
+                    Math.round(d.travel) + ' ' + T('unit_Mly') + ' &nbsp;·&nbsp; <b>z</b> ' +
+                    T('relIs') + ' ' + d.zRel.toFixed(3);
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
                       resonance: resonanceModel, entropy: entropyModel,
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
-                      action: actionModel };
+                      action: actionModel, expansion: expansionModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок
