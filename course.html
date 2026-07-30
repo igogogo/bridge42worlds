@@ -24,10 +24,13 @@
     --bg:var(--paper); --text:var(--ink); --muted:var(--ink-soft); --soft:var(--ink-soft);
     --border:var(--rule); --link:var(--steel); --tag-bg:var(--paper-raised); --card-bg:var(--paper-raised);
   }
-  @media (prefers-color-scheme: dark){
-    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
-      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
-  }
+  /* Здесь стоял @media (prefers-color-scheme: dark) с тёмной палитрой — убран 2026-07-30.
+     Общий css/style.css подключён НИЖЕ (строка 289) и про prefers-color-scheme не знает
+     вовсе, поэтому от этого блока переворачивалась половина палитры: цвета текста брались
+     тёмные отсюда (--ink-soft #9BA6A2, --steel #6FC2DD, --brass #D6A84A), а фон — светлый
+     из общего файла, и он же побеждал как подключённый позже. Контраст падал до 1.80–2.24
+     (QA, 2026-07-29). Правило про тему живёт в одном месте — атрибут data-theme; ровно так
+     эта же причина уже закрыта на learn.html, lecture.html и frontier.html. */
   :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
     --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
   :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
