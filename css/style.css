@@ -188,6 +188,7 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
 #kg-graph {
     position: relative; border: 0.5px solid var(--border); border-radius: 12px; background: var(--tag-bg);
     max-width: 900px; margin: 0 auto;   /* выровнено по ширине контента, не 100vw */
+    overflow: hidden;                   /* страховка поверх клампа подсказки, как у .an-stage */
 }
 #kgcanvas { width: 100%; height: 640px; display: block; touch-action: none; cursor: grab; }
 
@@ -196,6 +197,7 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
 .mini-graph {
     position: relative; max-width: 620px; margin: 18px 0; border: 0.5px solid var(--border);
     border-radius: 12px; background: var(--tag-bg);
+    overflow: hidden;
 }
 #minigraph { width: 100%; height: 300px; display: block; touch-action: none; cursor: grab; }
 /* Тот же движок и класс на страницах-облаках (◉ на тегах/законах/учёных) — без центра, весь
@@ -237,7 +239,10 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
 }
 .graph-fs-active {
     position: fixed !important; inset: 0 !important; z-index: 1000;
-    max-width: none !important; width: 100vw !important; height: 100vh !important;
+    /* Размер даёт inset: 0. Прежние 100vw/100vh были ШИРЕ и ВЫШЕ вьюпорта:
+       vw включает полосу прокрутки, vh — «большой» вьюпорт со свёрнутой адресной
+       строкой. Так же сделан .an-stage.an-fs. */
+    max-width: none !important;
     margin: 0 !important; border-radius: 0 !important;
     background: var(--bg) !important;  /* сплошной фон по умолчанию; тумблер ◑ делает прозрачным */
 }
@@ -1344,6 +1349,11 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
    (пусто → "" совсем без элемента) — здесь просто подстраховка на случай, если где-то
    элемент всё же дойдёт до рендера с пустым содержимым. */
 .fun-fact:empty, .section:empty, .related-tags:empty, .desc:empty { display: none; }
+/* Те же призраки, найденные аудитом 2026-07-30: у статьи без тегов/законов/учёных
+   колонка связей приходит пустой (только во французском — 4378 страниц), а «похожие»
+   пустуют, пока не ответит fetch, и навсегда там, где нечему быть похожим. На телефоне
+   пустая .article-side-inline — это две линии с 18px пустоты между ними. */
+.article-side:empty, .article-side-inline:empty, .related:empty, .tm-bar:empty { display: none; }
 .fun-fact .fact { margin: 0; }
 .fun-fact .fact + .fact { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 .fun-fact .fact-scifi { font-style: italic; }
@@ -1535,7 +1545,15 @@ footer a { color: var(--soft); }
         width: 100%; position: static;
         display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px;
     }
-    .article-side .side-tag { display: inline-block; margin-bottom: 0; }
+        /* Контейнер выше уже даёт gap: 4px — собственный margin-bottom плашек к нему
+       ПРИБАВЛЯЛСЯ, и строки законов и учёных стояли на 7px против 4px у тегов.
+       Обнуляем у всех трёх, ритм внутри группы становится одинаковым. */
+    .article-side .side-tag, .article-side .side-law, .article-side .side-sci {
+        display: inline-block; margin-bottom: 0;
+    }
+    /* Правая колонка на телефоне уезжает в поток — паддинг, который держал от неё
+       расстояние, остаётся охранять пустоту и рассинхронизирует края одной колонки. */
+    .article-main { padding-right: 0; }
     .mosaic-track { aspect-ratio: 3 / 1; }
     .mosaic-item { width: calc(33.333% - 2.7px); }
     h1 { font-size: 20px; }
@@ -1999,8 +2017,13 @@ html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right:
 .title-row, .tag-title-row { display: flex; align-items: center; gap: 8px; }
 .share-inline { display: inline-flex; align-items: center; justify-content: center;
   vertical-align: middle; align-self: center; flex: none; }
-/* Крестик у всплывающей подсказки (на мобиле её иначе не закрыть) */
-.tag-tooltip { position: relative; padding-right: 22px; }
+/* Крестик у всплывающей подсказки (на мобиле её иначе не закрыть).
+   Здесь ДОЛЖНО быть только про крестик: правило когда-то несло ещё
+   `position: relative` — и, стоя ниже по файлу при равной специфичности, оно било
+   `position: fixed` со строки 1261. А js кладёт в left/top координаты вьюпорта
+   (getBoundingClientRect), которые при relative отсчитываются от статического места
+   тултипа — конца документа. Подсказка улетала в подвал страницы на любом устройстве.
+   Крестику containing block даёт сам fixed, отдельный relative не нужен. */
 .tip-close { position: absolute; top: 2px; right: 4px; width: 18px; height: 18px; line-height: 1;
   border: none; background: none; color: var(--soft); font-size: 15px; cursor: pointer; padding: 0; }
 .tip-close:hover { color: var(--link); }
@@ -2157,7 +2180,10 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 /* Дубль внизу статьи — чтобы не возвращаться мышью наверх */
 .lv-bottom { display: flex; align-items: center; gap: 10px; max-width: var(--w-text);
   margin: 22px 0 6px; padding-top: 12px; border-top: 1px dashed var(--hair); }
-.lv-bottom::before { content: attr(data-label); }
+/* Здесь был ::before с content: attr(data-label). Атрибут не выставляет никто —
+   ни шаблоны, ни генератор, ни js, — поэтому псевдоэлемент рождался пустым,
+   но занимал место флекс-элемента и вместе с gap сдвигал весь нижний переключатель
+   на 10px относительно верхнего и относительно текста. */
 /* Карточка «коротко» — первый экран любой страницы */
 .mini-head { max-width: var(--w-text); margin: 0 0 16px; padding: 13px 15px;
   border-radius: var(--radius); background: color-mix(in srgb, var(--cyan) 7%, var(--surface));
@@ -2605,6 +2631,26 @@ html[data-theme="dark"] .an-stage {
     content: ''; position: absolute; left: 50%; top: 50%;
     width: var(--tap-md); height: var(--tap-md);
     transform: translate(-50%, -50%);
+}
+/* Два значка из этого списка крошечные и стоят ВПЛОТНУЮ к чужому кликабельному
+   элементу — отцентрованный слой в 44px вылезал на соседа примерно на 15-18px и
+   перехватывал его нажатия (аудит 2026-07-30):
+     · «+» в чипе раздела — слой ложился на левый паддинг СЛЕДУЮЩЕГО чипа, и
+       closest('.cat-chip') возвращал предыдущий: палец по краю соседа добавлял
+       чужой раздел вместо замены набора;
+     · «i» у логотипа — слой съедал последние ~13px названия сайта, и попытка уйти
+       на главную открывала поповер «о проекте».
+   Лечим не высотой, а шириной — по вертикали 44px остаются, шкала касания цела.
+   Лекарства разные, потому что мешают разные соседи. */
+/* «+» зажат внутри своего чипа: соседи есть с ОБЕИХ сторон, поэтому слой остаётся
+   отцентрованным, но не выходит за собственный паддинг чипа (0 9px). */
+.cat-chip-add::after { width: 24px; }
+/* «i» стоит в конце строки логотипа: мешает только текст названия, который ему
+   предшествует, — уводим слой в противоположную сторону. Логические свойства, чтобы
+   в арабской раскладке зеркалилось само. */
+.logo-info::after {
+    left: auto; right: auto; inset-inline-start: -2px;
+    width: 30px; transform: translate(0, -50%);
 }
 
 /* Мобильные находки владельца 2026-07-30 (ночь) */

@@ -862,7 +862,8 @@
     ru: { x: 'период повторения, дни', y: 'сила ритма', days: 'дн' },
     en: { x: 'repeat period, days', y: 'rhythm strength', days: 'd' },
     es: { x: 'período de repetición, días', y: 'fuerza del ritmo', days: 'd' },
-    ar: { x: 'دورة التكرار، أيام', y: 'قوة الإيقاع', days: 'ي' }
+    ar: { x: 'دورة التكرار، أيام', y: 'قوة الإيقاع', days: 'ي' },
+    fr: { x: 'période de répétition, jours', y: 'force du rythme', days: 'j' }
   };
 
   function drawSpectrum() {

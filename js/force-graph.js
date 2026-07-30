@@ -88,9 +88,11 @@ window.createForceGraph = function (opts) {
         ru: 'Показаны {n} из {tot} (лёгкая мобильная версия — крупный граф на телефоне тормозит). ',
         en: 'Showing {n} of {tot} (light mobile version — a large graph lags on phones). ',
         es: 'Mostrando {n} de {tot} (versión móvil ligera — un grafo grande va lento en el teléfono). ',
-        ar: 'عرض {n} من {tot} (نسخة هاتف مبسّطة — الرسم الكبير يتباطأ على الهاتف). '
+        ar: 'عرض {n} من {tot} (نسخة هاتف مبسّطة — الرسم الكبير يتباطأ على الهاتف). ',
+        fr: 'Affichage de {n} sur {tot} (version mobile allégée — un grand graphe rame sur téléphone). '
     };
-    var SHOW_ALL = { ru: 'показать все', en: 'show all', es: 'mostrar todo', ar: 'عرض الكل' };
+    var SHOW_ALL = { ru: 'показать все', en: 'show all', es: 'mostrar todo', ar: 'عرض الكل',
+                     fr: 'tout afficher' };
     function updateSizeWarning(n, cappedFrom) {
         if (!warn) return;
         if (cappedFrom) {
@@ -120,7 +122,8 @@ window.createForceGraph = function (opts) {
         ru: { t: 'Большой граф', d: 'Выбрано {n} объектов — построение займёт время, а на маленьком поле это плохо читается.', fs: 'Открыть на весь экран', ok: 'Всё равно показать' },
         en: { t: 'Large graph', d: '{n} objects selected — it will take a while and is hard to read in a small frame.', fs: 'Open fullscreen', ok: 'Show anyway' },
         es: { t: 'Grafo grande', d: '{n} objetos seleccionados — tardará y se lee mal en un marco pequeño.', fs: 'Pantalla completa', ok: 'Mostrar igual' },
-        ar: { t: 'رسم بياني كبير', d: 'تم اختيار {n} عنصرًا — سيستغرق وقتًا ويصعب قراءته في إطار صغير.', fs: 'ملء الشاشة', ok: 'اعرض على أي حال' }
+        ar: { t: 'رسم بياني كبير', d: 'تم اختيار {n} عنصرًا — سيستغرق وقتًا ويصعب قراءته في إطار صغير.', fs: 'ملء الشاشة', ok: 'اعرض على أي حال' },
+        fr: { t: 'Grand graphe', d: '{n} objets sélectionnés — le calcul prendra du temps et se lit mal dans un cadre étroit.', fs: 'Plein écran', ok: 'Afficher quand même' }
     };
     var bigShown = false;
     function showBigModal(n) {
@@ -143,8 +146,15 @@ window.createForceGraph = function (opts) {
         var text = opts.tooltip(node);
         if (!text) { tip.style.display = 'none'; return; }
         tip.textContent = text;
-        tip.style.left = x + 'px'; tip.style.top = y + 'px';
         tip.style.display = 'block';
+        /* Кламп по контейнеру. Подсказка — 280px, а контейнер на телефоне около 343px:
+           у узла возле правого края она вылезала наружу и давала горизонтальную прокрутку
+           всей страницы. Раньше координата ставилась как есть (курсор + 14). Комментарий
+           «на тач наведения нет» тут не спасал: у канваса touch-action: none, протяжка
+           пальцем идёт в ветку hover и подсказку действительно показывает. */
+        var box = fsContainer.clientWidth, boxH = fsContainer.clientHeight;
+        tip.style.left = Math.max(4, Math.min(x, box - tip.offsetWidth - 8)) + 'px';
+        tip.style.top = Math.max(4, Math.min(y, boxH - tip.offsetHeight - 8)) + 'px';
     }
     function hideTip() { if (tip) tip.style.display = 'none'; }
 

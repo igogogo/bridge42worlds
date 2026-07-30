@@ -942,7 +942,8 @@ var SORT_LABELS = {
     ru: { random: 'вперемешку', new: 'сначала новые', old: 'сначала старые', label: 'Порядок' },
     en: { random: 'shuffled',    new: 'newest first', old: 'oldest first',  label: 'Order' },
     es: { random: 'al azar',     new: 'nuevos antes', old: 'antiguos antes', label: 'Orden' },
-    ar: { random: 'عشوائي',      new: 'الأحدث أولاً', old: 'الأقدم أولاً',   label: 'الترتيب' }
+    ar: { random: 'عشوائي',      new: 'الأحدث أولاً', old: 'الأقدم أولاً',   label: 'الترتيب' },
+    fr: { random: 'mélangé',     new: 'récents d\'abord', old: 'anciens d\'abord', label: 'Ordre' }
 };
 function getSortMode() {
     try {
@@ -1263,6 +1264,41 @@ window.addEventListener('scroll', function() {
 
 var tooltipHideTimer = null;
 
+/* Ставит подсказку рядом с плашкой, не давая ей уехать за экран.
+   Раньше здесь стояло `left = Math.min(rect.left, innerWidth - 330)` и `top = rect.bottom + 6`.
+   Обе половины врали (аудит 2026-07-30):
+     · 330 — ширина, которой у карточки нет (max-width 280px), а нижнего предела не было
+       вовсе: у плашки в начале строки на 320px получалось left: -10px;
+     · по вертикали ограничения не было совсем, и у плашки внизу длинного текста
+       подсказка уходила ниже экрана — а она position: fixed, доскроллить до неё нельзя.
+   Меряем факт, а не константу, и при нехватке места снизу переворачиваем вверх.
+   Порядок важен: сначала сбрасываем left в край, иначе shrink-to-fit посчитает
+   ширину для прошлого, уже прижатого положения. */
+function placeTip(tip, rect) {
+    var M = 8;
+    tip.style.left = M + 'px';
+    tip.style.top = '0px';
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.max(M, Math.min(rect.left, window.innerWidth - w - M)) + 'px';
+    var below = rect.bottom + 6;
+    tip.style.top = (below + h + M > window.innerHeight
+        ? Math.max(M, rect.top - h - 6)
+        : below) + 'px';
+}
+
+/* Обрезка описаний в подсказках. Раньше в двух местах стояло substring(0, 200) + '...',
+   то есть многоточие лепилось ВСЕГДА — даже к описанию в полторы строки, которое влезло
+   целиком. Оборванная на полуслове фраза выталкивает читателя на страницу, то есть
+   работает ровно против подсказки. Режем по границе слова и только при превышении. */
+function tipCut(text, limit) {
+    var t = (text || '').trim();
+    var n = limit || 200;
+    if (t.length <= n) return t;
+    var cut = t.slice(0, n);
+    var sp = cut.lastIndexOf(' ');
+    return (sp > n * 0.6 ? cut.slice(0, sp) : cut).replace(/[.,;:\s]+$/, '') + '…';
+}
+
 function getOrCreateTooltip() {
     var tip = document.getElementById('entity-tooltip');
     if (tip) return tip;
@@ -1344,17 +1380,17 @@ function initAllTooltips() {
             if (el.dataset.tag) {
                 var t = tagsLoc[el.dataset.tag];
                 content = t
-                    ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + descByVersion(t) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + tipCut(descByVersion(t)) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
                     : '<strong>' + (el.textContent || el.dataset.tag) + '</strong> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.scientist) {
                 var s = scientistsData[el.dataset.scientist];
                 content = s
-                    ? '<strong>' + s.name + '</strong> (' + s.lifespan + ') &mdash; <span class="tip-desc">' + (s.description || '').substring(0, 200) + '...</span> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + s.name + '</strong> (' + s.lifespan + ') &mdash; <span class="tip-desc">' + tipCut(s.description) + '</span> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>'
                     : '<strong>' + el.dataset.scientist + '</strong> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.profile + '</a>';
             } else if (el.dataset.law) {
                 var lw = lawsData[el.dataset.law];
                 content = lw
-                    ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + descByVersion(lw).substring(0, 200) + '...</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + tipCut(descByVersion(lw)) + '</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
                     : '<strong>' + (el.textContent || el.dataset.law) + '</strong> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.author) {
                 var a = authorsGraph[el.dataset.author];
@@ -1387,9 +1423,7 @@ function initAllTooltips() {
                     tip.appendChild(_x);
                 }
                 tip.style.display = 'block';
-                var rect = el.getBoundingClientRect();
-                tip.style.left = Math.min(rect.left, window.innerWidth - 330) + 'px';
-                tip.style.top = (rect.bottom + 6) + 'px';
+                placeTip(tip, el.getBoundingClientRect());
             }
     }
 }

@@ -139,7 +139,18 @@ function updateNextButton(version) {
         var label = btn.dataset.baseLabel;
 
         if (next) {
-            btn.textContent = label + ': ' + next.title.substring(0, 30) + '... ' + arr;
+            // Многоточие лепилось всегда, даже к заголовку в три слова, а 30 знаков
+            // арабской вязи — совсем не та физическая длина, что 30 латинских: режем
+            // по границе слова и только при реальном превышении. Полный заголовок и
+            // подзаголовок уходят в title — переход перестаёт быть переходом вслепую.
+            var full = next.title || '';
+            var short = full;
+            if (full.length > 34) {
+                var cut = full.slice(0, 34), sp = cut.lastIndexOf(' ');
+                short = (sp > 20 ? cut.slice(0, sp) : cut) + '…';
+            }
+            btn.textContent = label + ': ' + short + ' ' + arr;
+            btn.title = full + (next.oneliner ? ' — ' + next.oneliner : '');
             btn.onclick = function() {
                 viewedIds.add(next.id);
                 persistViewed();
