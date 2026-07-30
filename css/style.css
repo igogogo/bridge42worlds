@@ -2648,3 +2648,51 @@ html[data-theme="dark"] .an-stage {
    и от реакций, чтобы читались как отдельный слой, а не хвост абзаца */
 .article-side-inline { margin: 18px 0 6px !important; padding: 14px 0 4px !important;
   border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+
+/* ═══ Экран ожидания: факты, мини-опрос, звания (идея владельца 2026-07-30) ═══
+   Пока статья переводится или пишется — читатель играет. Всё в брендстиле, ничего
+   не выходит за 320px, кнопки по шкале касания. */
+body.b42-wait-open { overflow: hidden; }
+.b42-wait { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center;
+  justify-content: center; padding: 16px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(3px); }
+.b42-wait-box { width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto;
+  background: var(--card-bg); border: 1px solid var(--hair); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 18px 18px 14px; }
+.b42-wait-head b { display: block; font-family: var(--serif); font-size: 17px; color: var(--ink); }
+.b42-wait-sub { display: block; margin-top: 2px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+.b42-wait-bar { height: 3px; margin: 12px 0 14px; border-radius: 2px;
+  background: color-mix(in srgb, var(--hair) 70%, transparent); overflow: hidden; }
+.b42-wait-bar i { display: block; height: 100%; width: 40%; border-radius: 2px;
+  background: var(--link); animation: b42wait 1.6s ease-in-out infinite; }
+@keyframes b42wait { 0% { margin-inline-start: -40%; } 100% { margin-inline-start: 100%; } }
+.b42-fact { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--text); }
+.b42-fact-src, .b42-quiz-res a { font-family: var(--mono); font-size: 12px; color: var(--link);
+  text-decoration: none; }
+.b42-quiz-q { font-size: 13px; color: var(--soft); font-family: var(--mono);
+  letter-spacing: .06em; text-transform: uppercase; }
+.b42-quiz-q b { display: block; margin: 6px 0 12px; font-family: var(--serif); font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--ink); }
+.b42-quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+.b42-opt { min-height: var(--tap-md, 44px); padding: 0 14px; text-align: start;
+  border: 1px solid var(--hair); border-radius: 999px; background: none;
+  font-family: var(--mono); font-size: 14px; color: var(--text); cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s; }
+.b42-opt:hover:not(:disabled) { border-color: var(--link); color: var(--link); }
+.b42-opt.right { border-color: #2e7d32; color: #2e7d32;
+  background: color-mix(in srgb, #2e7d32 10%, transparent); }
+.b42-opt.wrong { border-color: var(--ochre); color: var(--ochre); }
+.b42-quiz-res { margin-top: 10px; font-size: 13px; }
+.b42-quiz-res .ok { color: #2e7d32; } .b42-quiz-res .no { color: var(--soft); }
+.b42-wait-foot { display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--hair); }
+.b42-rank { font-family: var(--mono); font-size: 12px; color: var(--soft); }
+.b42-wait-next { min-height: var(--tap-md, 44px); padding: 0 14px; border: 1px solid var(--hair);
+  border-radius: 999px; background: none; font-family: var(--mono); font-size: 12.5px;
+  color: var(--text); cursor: pointer; }
+.b42-wait-next:hover { border-color: var(--link); color: var(--link); }
+@media (max-width: 640px) {
+  .b42-wait { padding: 10px; align-items: flex-end; }
+  .b42-wait-box { max-width: none; border-radius: 16px 16px 0 0; padding: 16px 14px 12px; }
+}
