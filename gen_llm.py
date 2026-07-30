@@ -443,7 +443,7 @@ def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
         if ok:
             return out
         if attempt < retries and all(pr.startswith("кириллица") for pr in problems):
-            if _retranslate_cyrillic_fields(out, target_lang, target_language):
+            if _retranslate_cyrillic_fields(out, target_lang, target_language, slim):
                 ok2, _ = validate_translation(tier, out, target_lang)
                 if ok2:
                     return out
@@ -570,12 +570,29 @@ _NUM_RE = re.compile(r"\d+(?:[.,]\d+)?(?:\s*[×x]\s*10\^?-?\d+)?")
 _CYR_RE = re.compile(r"[а-яА-ЯёЁ]")
 
 
+# Служебные ключи структуры — это имена полей, а не текст для читателя. Всё остальное
+# в ключах словаря читатель ВИДИТ: key_numbers выводится на странице как «ключ: значение».
+_STRUCT_KEYS = frozenset((
+    "title", "oneliner", "description", "text", "context", "methods", "results",
+    "implications", "future_development", "impact_on", "next_steps", "mini",
+    "key_problems_connection", "key_problems", "fun_fact", "scifi", "formulas",
+    "latex", "meaning", "key_numbers", "main_tag", "extra_tags", "tags", "laws",
+    "scientists", "glossary", "metaphor", "term", "plain", "threads", "history",
+))
+
+
 def _flat_text(obj):
-    """Весь человекочитаемый текст структуры одной строкой (для подсчётов)."""
+    """Весь человекочитаемый текст структуры одной строкой (для подсчётов).
+
+    Ключи словарей тоже считаются: в key_numbers ключ — это подпись на странице
+    («типичная масса компонента: 0.6 M☉»). Пока их не считали, непереведённый
+    key_numbers проходил валидацию молча и уезжал на прод — так на арабской
+    странице 2607.23119v2 осталось 167 знаков кириллицы (замер 2026-07-30)."""
     if isinstance(obj, str):
         return obj
     if isinstance(obj, dict):
-        return " ".join(_flat_text(v) for v in obj.values())
+        keys = [k for k in obj if isinstance(k, str) and k not in _STRUCT_KEYS]
+        return " ".join(keys + [_flat_text(v) for v in obj.values()])
     if isinstance(obj, list):
         return " ".join(_flat_text(v) for v in obj)
     return ""
@@ -730,18 +747,21 @@ def _translation_system(target_language, src=None):
 
 _CYR_FIELD_RE = _CYR_RE
 
-def _retranslate_cyrillic_fields(out, target_lang, target_language):
+def _retranslate_cyrillic_fields(out, target_lang, target_language, src=None):
     """Точечный добор вместо полного повтора (решение владельца 2026-07-30):
     из-за пары строк с кириллицей раньше на ретрай уезжал ВЕСЬ уровень статьи —
     десятки тысяч знаков по полной цене. Теперь собираем только грязные строки,
     переводим их одним маленьким вызовом и подставляем на место."""
-    dirty = []   # [(контейнер, ключ/индекс, строка)]
+    dirty = []      # [(контейнер, ключ/индекс, строка)] — значения
+    dirty_keys = []  # [(словарь, ключ)] — сами ключи: в key_numbers ключ видит читатель
 
     def walk(node):
         if isinstance(node, dict):
-            for k, v in node.items():
+            for k, v in list(node.items()):
                 if k in ("latex", "main_tag", "extra_tags", "tags", "scientists", "laws"):
                     continue
+                if k not in _STRUCT_KEYS and len(_CYR_FIELD_RE.findall(k)) > 3:
+                    dirty_keys.append((node, k))
                 if isinstance(v, str):
                     stripped = _MARKER_RE.sub("", v)
                     if len(_CYR_FIELD_RE.findall(stripped)) > 3:
@@ -757,22 +777,32 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language):
                     walk(v)
 
     walk(out)
-    if not dirty or len(dirty) > 40:      # слишком много грязи = перевод не удался в целом
+    if not dirty and not dirty_keys:
         return False
-    strings = [v for _, _, v in dirty]
+    if len(dirty) + len(dirty_keys) > 40:   # слишком много грязи = перевод не удался в целом
+        return False
+    strings = [v for _, _, v in dirty] + [k for _, k in dirty_keys]
     prompt = ("Translate each string of this JSON array. Keep [tag:...]/[scientist:...] markers, "
               "numbers and $latex$ untouched. Answer with a JSON object {\"strings\": [...]} "
               "of the same length and order.\n" + json.dumps(strings, ensure_ascii=False))
     try:
-        r = chat("translate", prompt, system=_translation_system(target_language, scipop))
+        r = chat("translate", prompt, system=_translation_system(target_language, src))
         fixed = json.loads(clean_json(r.choices[0].message.content)).get("strings")
         if not isinstance(fixed, list) or len(fixed) != len(strings):
             return False
     except Exception:
         return False
-    for (container, key, _), new_val in zip(dirty, fixed):
+    for (container, key, _), new_val in zip(dirty, fixed[:len(dirty)]):
         if isinstance(new_val, str) and new_val.strip():
             container[key] = new_val
+    # Ключи меняем с сохранением порядка: key_numbers выводится списком, и перестановка
+    # строк выглядела бы как правка данных.
+    for (node, old_key), new_key in zip(dirty_keys, fixed[len(dirty):]):
+        if not (isinstance(new_key, str) and new_key.strip()) or new_key == old_key:
+            continue
+        renamed = {(new_key if k == old_key else k): v for k, v in node.items()}
+        node.clear()
+        node.update(renamed)
     return True
 
 
@@ -809,7 +839,7 @@ def translate_scipop(scipop, target_lang, retries=3, translate_glossary=False):
         # Кириллица — единственная проблема? Точечный добор грязных полей маленьким
         # вызовом вместо полного повтора всего уровня (экономия и времени, и денег).
         if all(p.startswith("кириллица") for p in problems):
-            if _retranslate_cyrillic_fields(out, target_lang, target_language):
+            if _retranslate_cyrillic_fields(out, target_lang, target_language, scipop):
                 ok2, problems2 = validate_translation(scipop, out, target_lang)
                 if ok2:
                     print(f"    ✚ перевод {target_lang}: добор полей вместо полного повтора — прошло")
