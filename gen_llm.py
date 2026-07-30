@@ -76,6 +76,24 @@ IMG_VARIATIONS = {
 }
 
 
+
+def _base_id(arxiv_id):
+    """2607.19435v1 -> 2607.19435. Модель отбора возвращает id без версии, живой API отдаёт
+    с версией — точное сравнение давало пустое пересечение, и день молча пропадал
+    (2026-07-21: 15 выбранных, 0 в обработку; повторилось на замере 30-го)."""
+    return re.sub(r"v\d+$", "", str(arxiv_id or ""))
+
+
+def _match_selected(articles, ids, count):
+    want = {_base_id(i) for i in ids}
+    picked = [a for a in articles if _base_id(a["id"]) in want][:count]
+    if ids and not picked:
+        print(f"  ⚠️ отбор вернул {len(ids)} id, но ни один не совпал с кандидатами — "
+              f"беру топ-{count} по порядку (раньше тут молча выходил ноль)")
+        return articles[:count]
+    return picked
+
+
 def select_best(articles, date_str):
     total = len(articles)
     count = max(1, total * SELECTION_PERCENT // 100)
@@ -94,7 +112,7 @@ def select_best(articles, date_str):
         ids = [x["id"] for x in data.get("articles", data if isinstance(data, list) else [])]
         if not ids and isinstance(data, dict):
             ids = [x["id"] for x in data.get("selection", data.get("articles", []))]
-        return [a for a in articles if a["id"] in ids][:count]
+        return _match_selected(articles, ids, count)
     except Exception:
         return articles[:count]
 
@@ -118,7 +136,7 @@ def select_best_n(articles, count, tag="bulk"):
         ids = [x["id"] for x in data.get("articles", data if isinstance(data, list) else [])]
         if not ids and isinstance(data, dict):
             ids = [x["id"] for x in data.get("selection", data.get("articles", []))]
-        return [a for a in articles if a["id"] in ids][:count]
+        return _match_selected(articles, ids, count)
     except Exception:
         return articles[:count]
 

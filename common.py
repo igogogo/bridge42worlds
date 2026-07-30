@@ -230,13 +230,29 @@ def chat(agent, user_prompt, retries=3, system=None, **overrides):
     p.update({k: v for k, v in overrides.items() if v is not None})
     for attempt in range(1, retries + 1):
         try:
-            return client.chat.completions.create(
+            _resp = client.chat.completions.create(
                 model=p["model"],
                 messages=[{"role": "system", "content": system or SYSTEM_PROMPT},
                           {"role": "user", "content": user_prompt}],
                 temperature=p["temperature"], max_tokens=p["max_tokens"],
                 response_format={"type": "json_object"},
             )
+            # Журнал расхода (замер экономики, 2026-07-30): каждый вызов — строка jsonl.
+            # По нему раскладывается цена статьи по шагам; сумма калибруется по балансу.
+            try:
+                u = getattr(_resp, "usage", None)
+                if u is not None:
+                    rec = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "agent": agent,
+                           "model": p["model"],
+                           "prompt": getattr(u, "prompt_tokens", 0),
+                           "completion": getattr(u, "completion_tokens", 0),
+                           "cache_hit": getattr(u, "prompt_cache_hit_tokens", 0),
+                           "cache_miss": getattr(u, "prompt_cache_miss_tokens", 0)}
+                    with open("data/usage-log.jsonl", "a", encoding="utf-8") as f:
+                        f.write(json.dumps(rec, ensure_ascii=False) + chr(10))
+            except Exception:
+                pass
+            return _resp
         except Exception as e:
             if attempt == retries:
                 raise
