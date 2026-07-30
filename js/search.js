@@ -370,7 +370,8 @@ var STATS_LABELS2 = {
     ru: {articles:'статей', full:'полных', express:'экспресс', laws:'законов', tags:'тегов', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
     en: {articles:'articles', full:'full', express:'express', laws:'laws', tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
     es: {articles:'artículos', full:'completos', express:'exprés', laws:'leyes', tags:'etiquetas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
-    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين', tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'}
+    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين', tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'},
+    fr: {articles:'articles', full:'complets', express:'express', laws:'lois', tags:'tags', sections:'sections', scientists:'scientifiques', authors:'auteurs', langs:'langues'}
 };
 function renderSiteStats() {
     var el = document.getElementById('site-stats');
@@ -811,7 +812,8 @@ var LVL_LABEL = {
     ru: { simple: 'Просто', popular: 'Популярно', advanced: 'Подробно' },
     en: { simple: 'Simple', popular: 'Popular', advanced: 'Advanced' },
     es: { simple: 'Simple', popular: 'Popular', advanced: 'Avanzado' },
-    ar: { simple: 'بسيط', popular: 'مبسّط', advanced: 'مفصّل' }
+    ar: { simple: 'بسيط', popular: 'مبسّط', advanced: 'مفصّل' },
+    fr: { simple: 'Simple', popular: 'Populaire', advanced: 'Détaillé' }
 };
 
 function levelSwitchHTML(base) {

@@ -19,7 +19,11 @@ os.chdir(Path(__file__).parent)
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
 
-LANGS = ["ru", "en", "es", "ar"]
+import json as _json
+from pathlib import Path as _Path
+# Языки берём из config.json, а не списком: хардкод ["ru","en","es","ar"] — причина того,
+# что пятый язык (fr) прошёл мимо половины инструментов (аудит 2026-07-30).
+LANGS = _json.loads(_Path("config.json").read_text(encoding="utf-8")).get("languages", ["ru"])
 SITE = "https://bridge42worlds.academy"
 SCRIPT = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
 TAGS = re.compile(r"<[^>]+>")

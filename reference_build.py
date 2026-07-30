@@ -13,8 +13,11 @@ from pathlib import Path
 os.chdir(Path(__file__).parent)
 COURSES = Path("data/theory/courses")
 OUT = Path("data/theory/reference.json")
-LANGS = ["ru", "en", "es", "ar"]
-
+import json as _json
+from pathlib import Path as _Path
+# Языки берём из config.json, а не списком: хардкод ["ru","en","es","ar"] — причина того,
+# что пятый язык (fr) прошёл мимо половины инструментов (аудит 2026-07-30).
+LANGS = _json.loads(_Path("config.json").read_text(encoding="utf-8")).get("languages", ["ru"])
 UI = {
     "ru": {
         "title": "Справочник: формулы, константы, принципы",
