@@ -197,7 +197,20 @@ def do_article(payload, lang):
         cwd=DATA_ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
     if code != 0:
         raise RuntimeError(f"генерация завершилась с кодом {code}")
-    return {"arxiv_id": arxiv_id, "title": title, "url": f"/lang/{lang}/archive/"}
+
+    # Настоящий адрес статьи знает только генератор: дату он берёт из метаданных arXiv,
+    # а не из сегодняшнего дня. Ищем, куда она легла, вместо того чтобы гадать.
+    found_dir = next(DATA_ROOT.glob(f"lang/ru/archive/*/{arxiv_id}"), None)
+    if not found_dir:
+        raise RuntimeError("генератор отработал, но статьи на диске нет")
+    day = found_dir.parent.name
+    url = f"/lang/{lang}/archive/{day}/{arxiv_id}/"
+
+    # Честность про видимость. `run.py ids` сайт НЕ публикует — по правилам проекта публикация
+    # это выпуск, а не побочный эффект, и делает его ведущая сессия после приёмки. Значит
+    # статья готова, но читателю ещё не видна. Говорим об этом прямо, иначе он пойдёт по
+    # ссылке и упрётся в 404, решив, что мы соврали.
+    return {"arxiv_id": arxiv_id, "title": title, "url": url, "awaiting_publish": True}
 
 
 def do_ask(payload, lang):
