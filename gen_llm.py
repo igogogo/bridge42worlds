@@ -637,14 +637,28 @@ def _termbase_block(scipop, target_lang):
 
 
 
-def _translation_system(target_language):
+def _translation_system(target_language, src=None):
     """Системная роль переводчика. Язык вывода — ЗДЕСЬ, а не в user-тексте:
-    в user модель его теряла, и статья уходила на полный ретрай (цена x2, x3)."""
-    return (f"You are a professional scientific translator. TARGET LANGUAGE: {target_language}. "
+    в user модель его теряла, и статья уходила на полный ретрай (цена x2, x3).
+
+    src — исходный scipop: из него в роль вшиваются ТОЧНЫЕ счётчики маркеров и список
+    чисел. Замер 2026-07-30 показал: после фикса языка модель стала терять маркеры
+    и числа (62 вызова перевода на 3 статьи вместо ~36, переводы = 75% цены статьи).
+    Обещание «не теряй» не работает — работает контракт с числами, который валидатор
+    потом проверяет теми же счётчиками."""
+    base = (f"You are a professional scientific translator. TARGET LANGUAGE: {target_language}. "
             f"Every text value in your JSON answer MUST be written in {target_language} only. "
             f"Cyrillic characters are FORBIDDEN in the output (exception: content inside "
-            f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). "
-            f"Do not add, drop or alter any numbers, markers or latex.")
+            f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). ")
+    if src is not None:
+        st = _flat_text(src)
+        markers = _MARKER_RE.findall(st)
+        nums = sorted(set(_NUM_RE.findall(st)))[:40]
+        base += (f"HARD CONTRACT (validator rejects your answer otherwise): the source contains "
+                 f"EXACTLY {len(markers)} entity markers — reproduce every one of them, same IDs, "
+                 f"no more, no fewer. These numbers appear in the source and every one of them "
+                 f"must appear in your output unchanged: {', '.join(nums)}. ")
+    return base + "Do not add, drop or alter any numbers, markers or latex."
 
 
 _CYR_FIELD_RE = _CYR_RE
@@ -683,7 +697,7 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language):
               "numbers and $latex$ untouched. Answer with a JSON object {\"strings\": [...]} "
               "of the same length and order.\n" + json.dumps(strings, ensure_ascii=False))
     try:
-        r = chat("translate", prompt, system=_translation_system(target_language))
+        r = chat("translate", prompt, system=_translation_system(target_language, scipop))
         fixed = json.loads(clean_json(r.choices[0].message.content)).get("strings")
         if not isinstance(fixed, list) or len(fixed) != len(strings):
             return False
