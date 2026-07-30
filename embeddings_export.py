@@ -60,6 +60,8 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--archive", default=os.environ.get("B42_ARCHIVE", ""),
                     help="путь к lang/ru/archive, если запускаем не из главной папки")
+    ap.add_argument("--since", default="",
+                    help="только статьи с датой >= ГГГГ-ММ-ДД — ежедневная дозаливка индекса")
     args = ap.parse_args()
 
     archive = pathlib.Path(args.archive) if args.archive else ARCHIVE
@@ -79,6 +81,12 @@ def main():
             continue
 
         aid = j.get("id")
+        # Дельта для ежедневной дозаливки. Отбираем по дате статьи, а не по времени файла:
+        # пересборка HTML трогает файлы, но статью не меняет — по mtime мы бы каждый раз
+        # перезаливали весь архив и платили за это.
+        if args.since and (j.get("date") or "") < args.since:
+            continue
+
         text, src = pick_text(j)
         if not aid or len(text) < 40:
             skipped.append((aid or str(p), "нет английского текста"))
