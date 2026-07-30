@@ -2490,13 +2490,129 @@
         };
     }
 
+    /** Реликтовое излучение: спектр чёрного тела, остывание вместе с расширением, анизотропия. */
+    function cmbModel(data) {
+        var B_WIEN = 2.897771955e-3;                 // м·К, постоянная смещения Вина
+        var T0 = 2.725;                              // К, температура реликта сегодня
+
+        // Температура падает обратно масштабному фактору: T = T₀(1+z). Это не подгонка под
+        // наблюдения, а следствие того же растяжения волн, что даёт красное смещение.
+        function temp(st) { return T0 * (1 + st.z); }
+        function lamMax(T) { return B_WIEN / T; }     // м
+        /** Спектр Планка по длине волны, в условных единицах — важна форма и положение пика. */
+        function planck(lamM, T) {
+            var h = 6.62607015e-34, c = 299792458, k = 1.380649e-23;
+            var x = h * c / (lamM * k * T);
+            if (x > 700) return 0;                   // экспонента ушла за пределы double
+            return 1e-14 / Math.pow(lamM, 5) / (Math.exp(x) - 1);
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t * 0.35) % 1 }; },
+                derive: function (st, a) {
+                    var T = temp(st), lm = lamMax(T);
+                    return { T: T, z: st.z,
+                             lamMM: lm * 1000,                       // пик в миллиметрах
+                             lamUM: lm * 1e6,                        // и в микрометрах
+                             // Размах анизотропии — величина ФИЗИЧЕСКАЯ: ΔT/T ≈ 10⁻⁵ всегда.
+                             // Ползунок усиливает только видимость пятен на карте и в число не
+                             // входит: иначе подпись показывала «±300 000 мкК» и читатель уносил
+                             // с урока неверный порядок.
+                             dT: T * 1e-5,
+                             dTuK: T * 1e-5 * 1e6,
+                             ageKy: 380 / Math.pow((1 + st.z) / 1090, 1.5),  // грубо: t ∝ (1+z)^(-3/2)
+                             visible: lm * 1e9 < 750 && lm * 1e9 > 380,
+                             ph: a.ph };
+                },
+                stage: {
+                    height: 290,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var mapH = 96, pad = 26;
+
+                        // — 1. Карта неба: пятна анизотропии. Размах в реальности одна
+                        // стотысячная градуса, поэтому усиление подписано честно.
+                        var amp = st.aniso;
+                        for (var i = 0; i < 130; i++) {
+                            var px = pad + ((i * 61) % (W - pad * 2));
+                            var py = 34 + ((i * 37) % (mapH - 20));
+                            var s = Math.sin(i * 1.7 + d.ph * 6.28) * amp / 3;
+                            g.fillStyle = s > 0 ? 'rgba(155,44,44,' + Math.min(0.75, 0.12 + s * 0.5) + ')'
+                                                : 'rgba(21,94,116,' + Math.min(0.75, 0.12 - s * 0.5) + ')';
+                            g.beginPath(); g.arc(px, py, 9 + (i % 4) * 2.5, 0, 6.2832); g.fill();
+                        }
+                        KIT.text(g, ctx.T('skyMap'), pad, 20, { size: 10.5, color: col.soft });
+                        KIT.text(g, ctx.T('boosted') + ' ×' + Math.round(st.aniso * 1000), W - pad, 20,
+                                 { size: 10.5, color: col.soft, align: 'right' });
+
+                        // — 2. Спектр: кривая Планка и где стоит её пик
+                        var base = H - 42, top = mapH + 54, x0 = pad, x1 = W - pad;
+                        // ось длин волн: от 0,05 до 5 мм в логарифме — пик влезает при любой T
+                        var LG0 = Math.log10(5e-5), LG1 = Math.log10(5e-3);
+                        var SX = KIT.scale({ min: LG0, max: LG1, from: x0, to: x1 });
+                        var peak = planck(lamMax(d.T), d.T) || 1;
+                        var pts = [];
+                        for (var k = 0; k <= 160; k++) {
+                            var lg = LG0 + (LG1 - LG0) * k / 160;
+                            var lam = Math.pow(10, lg);
+                            pts.push([SX(lg), base - (base - top) * Math.min(1, planck(lam, d.T) / peak)]);
+                        }
+                        KIT.axis(g, x0, x1, base, { color: col.border });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.4 });
+                        var xp = SX(Math.log10(lamMax(d.T)));
+                        KIT.marker(g, xp, top - 12, base, { color: '#9B2C2C', width: 2,
+                            label: d.lamMM < 1 ? Math.round(d.lamUM) + ' ' + ctx.T('unit_um')
+                                               : d.lamMM.toFixed(2) + ' ' + ctx.T('unit_mm'), size: 10.5 });
+                        KIT.text(g, ctx.T('xLam'), x1, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.text(g, ctx.T('peakIs'), xp, base + 16, { size: 10, color: '#9B2C2C', align: 'center' });
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 20, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'T = ' + (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + ctx.T('unit_K'), y: 36, size: 10.5, color: col.soft },
+                            { text: st.z < 1 ? ctx.T('nowIs') : (d.visible ? ctx.T('wasGlow') : ctx.T('wasHot')),
+                              y: 52, size: 10.5, color: st.z > 900 ? '#8F6417' : col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">T = T₀(1 + z) = </span><span class="xf-res">' +
+                        (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + T('unit_K') + '</span>' +
+                        '<span class="xf-op"> · λ<sub>max</sub> = b/T = </span><span class="xf-var">' +
+                        (d.lamMM < 1 ? Math.round(d.lamUM) + ' ' + T('unit_um') : d.lamMM.toFixed(2) + ' ' + T('unit_mm')) +
+                        '</span><br><i>' + T('anisoIs') + ' ±' +
+                        (d.dTuK < 1000 ? Math.round(d.dTuK) + ' ' + T('unit_uK')
+                                       : (d.dT * 1000).toFixed(1) + ' ' + T('unit_mK')) +
+                        ' — ' + T('anisoNote') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xZ', min: 0, max: 1400 },
+                    y: { label: 'yT', min: 0, max: 3900 },
+                    samples: 120,
+                    curve: function (z, s) { return T0 * (1 + z); },
+                    marker: function (s, a, d) { return { x: s.z, y: d.T }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>z</b> ' + Math.round(st.z) + ' &nbsp;·&nbsp; <b>T</b> ' +
+                    (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + T('unit_K') +
+                    ' &nbsp;·&nbsp; <b>' + T('ageIs') + '</b> ' +
+                    (d.ageKy > 1000 ? (d.ageKy / 1000).toFixed(1) + ' ' + T('unit_My')
+                                    : Math.round(d.ageKy) + ' ' + T('unit_ky'));
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
                       resonance: resonanceModel, entropy: entropyModel,
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
-                      action: actionModel, expansion: expansionModel };
+                      action: actionModel, expansion: expansionModel, cmb: cmbModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок
