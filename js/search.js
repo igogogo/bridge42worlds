@@ -1292,15 +1292,32 @@ function descByVersion(obj) {
 }
 
 function initAllTooltips() {
-    // Тач-устройства: mouseenter эмулируется первым тапом, и ссылка открывалась только
-    // со второго (владелец с телефона, 2026-07-30). Без hover тултипы не вешаем вовсе —
-    // тап ведёт на карточку сразу; подсказкой служит сама карточка.
-    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
+    // Тач-паттерн (решение владельца 2026-07-30): тап по плашке НЕ переходит сразу,
+    // а открывает тултип, и уже В НЁМ два действия — «подробнее» (переход на карточку)
+    // и «закрыть» (крестик; тап мимо тоже закрывает — оба уже были). Раньше поведение
+    // было случайным: mouseenter эмулировался тапом, переход происходил со второго тапа
+    // без всякого объяснения читателю.
+    var TOUCH = window.matchMedia && window.matchMedia('(hover: none)').matches;
     document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author]').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
-        el.addEventListener('mouseenter', function(e) {
+        if (TOUCH) {
+            // У авторов тултип не нужен (владелец): обычная ссылка, один тап — переход.
+            // Раньше mouseenter-эмуляция «подсвечивала» с первого тапа и пускала со второго.
+            if (el.dataset.author) return;
+            el.addEventListener('click', function (e) {
+                e.preventDefault();          // переход — только через «подробнее» в тултипе
+                e.stopPropagation();
+                showTipFor(el);
+            });
+            return;
+        }
+        el.addEventListener('mouseenter', function(e) { showTipFor(el); });
+        el.addEventListener('mouseleave', scheduleHideTooltip);
+    });
+
+    function showTipFor(el) {
             if (tooltipHideTimer) { clearTimeout(tooltipHideTimer); tooltipHideTimer = null; }
             var tip = getOrCreateTooltip();
 
@@ -1333,10 +1350,7 @@ function initAllTooltips() {
                 tip.style.left = Math.min(rect.left, window.innerWidth - 330) + 'px';
                 tip.style.top = (rect.bottom + 6) + 'px';
             }
-        });
-
-        el.addEventListener('mouseleave', scheduleHideTooltip);
-    });
+    }
 }
 
 // ── Локализация статичных строк из серверного HTML ──────────────────────────
