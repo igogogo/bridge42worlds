@@ -316,9 +316,17 @@ def article_og_image_html(date_str, article_id):
     url = f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article_id}/ai.webp"
     size = ""
     try:
+        import warnings
+
         from PIL import Image
-        with Image.open(webp) as im:
-            w, h = im.size
+        with warnings.catch_warnings():
+            # Image.open читает только заголовок, распаковки не происходит — а Pillow всё
+            # равно предупреждает про «бомбу» на каждой обложке крупнее 89 мегапикселей,
+            # и таких у нас достаточно, чтобы залить весь лог сборки и спрятать в нём
+            # настоящую ошибку. Глушим ровно здесь и ровно это.
+            warnings.simplefilter("ignore", Image.DecompressionBombWarning)
+            with Image.open(webp) as im:
+                w, h = im.size
         # Ниже 200x200 карточку не принимает часть площадок — лучше без картинки.
         if w < 200 or h < 200:
             return '<meta name="twitter:card" content="summary">'
