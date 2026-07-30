@@ -637,18 +637,22 @@ async function handleTutor(request, env) {
   let body;
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
-  const gate = await checkToken(request, env, body);
-  if (!gate.ok) return Response.json({ error: gate.error, limit: gate.limit }, { status: gate.code });
+  // Токен, выданный вручную, больше НЕ обязателен (решение владельца 2026-07-30: стартуем
+  // на анонимной норме). Он остаётся как способ дать кому-то повышенный лимит: если предъявлен —
+  // проверяем и считаем по нему, если нет — пускаем по обычной норме читателя.
+  const token = (request.headers.get("x-b42-token") || body.token || "").trim();
+  if (token) {
+    const gate = await checkToken(request, env, body);
+    if (!gate.ok) return Response.json({ error: gate.error, limit: gate.limit }, { status: gate.code });
+  }
 
-  // Второй рубеж поверх токена: общий потолок проекта и норма на человека. Раньше лимит был
-  // только на выданный вручную токен — то есть считался расход одного приглашённого, а не наш.
-  const who = gate.gateless ? null : await identify(request, env);
-  if (who) {
-    const spent = await quotaSpend(env, who.uid, 1, who.lim);
-    if (!spent.ok) {
-      return Response.json({ error: spent.error, dayLimit: spent.dayLimit,
-        dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
-    }
+  // Норма — главный и единственный обязательный рубеж. Считаем всем: и анонимному (3 в сутки),
+  // и вошедшему (20), и поверх этого стоит суточный потолок на весь проект.
+  const who = await identify(request, env);
+  const spent = await quotaSpend(env, who.uid, 1, who.lim);
+  if (!spent.ok) {
+    return Response.json({ error: spent.error, dayLimit: spent.dayLimit,
+      dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
   }
 
   const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
@@ -698,8 +702,9 @@ async function handleTutor(request, env) {
       }), { expirationTtl: 90 * 86400 }).catch(() => {});
     }
 
-    // left/leftToday отдаём фронту — ученик видит, сколько вопросов осталось по токену
-    return Response.json({ answer, left: gate.left, leftToday: gate.leftToday, expires: gate.expires },
+    // Остаток отдаём фронту — ученик видит, сколько вопросов у него осталось. Берём его из
+    // нормы, а не из выданного вручную токена: норма теперь главный и единственный рубеж.
+    return Response.json({ answer, left: spent.weekLeft, leftToday: spent.dayLeft },
       { headers: { "cache-control": "no-store" } });
   } catch (e) {
     return Response.json({ error: "fetch_failed" }, { status: 502 });
