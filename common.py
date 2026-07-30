@@ -214,10 +214,15 @@ def agent_cfg(agent):
     }
 
 
-def chat(agent, user_prompt, retries=3, **overrides):
+def chat(agent, user_prompt, retries=3, system=None, **overrides):
     """Вызов LLM по ИМЕНИ АГЕНТА (модель/температура/max_tokens из config.agents).
     overrides позволяет точечно переопределить (напр. max_tokens) в конкретном вызове.
-    Ретраи — сетевой сбой не должен терять статью."""
+    Ретраи — сетевой сбой не должен терять статью.
+
+    system — своя системная роль для этого вызова. Заведено 2026-07-30 для переводов:
+    требование «пиши на языке X» жило только в user-тексте, и модель его теряла —
+    отсюда ретраи по 2-3 раза (каждый — полная цена). Инструкция про язык вывода
+    обязана жить в системной роли (тот же урок, что с суб-агентами)."""
     if client is None:
         raise RuntimeError("DEEPSEEK_API_KEY не задан — операция с API невозможна")
     guard_peak(f"агент {agent}")  # стоп в пиковые часы, если не ALLOW_PEAK=1 (защита от переплаты ×2)
@@ -227,7 +232,7 @@ def chat(agent, user_prompt, retries=3, **overrides):
         try:
             return client.chat.completions.create(
                 model=p["model"],
-                messages=[{"role": "system", "content": SYSTEM_PROMPT},
+                messages=[{"role": "system", "content": system or SYSTEM_PROMPT},
                           {"role": "user", "content": user_prompt}],
                 temperature=p["temperature"], max_tokens=p["max_tokens"],
                 response_format={"type": "json_object"},

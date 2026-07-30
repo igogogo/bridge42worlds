@@ -618,6 +618,65 @@ def _termbase_block(scipop, target_lang):
     return head + json.dumps(tb, ensure_ascii=False, indent=1)
 
 
+
+def _translation_system(target_language):
+    """Системная роль переводчика. Язык вывода — ЗДЕСЬ, а не в user-тексте:
+    в user модель его теряла, и статья уходила на полный ретрай (цена x2, x3)."""
+    return (f"You are a professional scientific translator. TARGET LANGUAGE: {target_language}. "
+            f"Every text value in your JSON answer MUST be written in {target_language} only. "
+            f"Cyrillic characters are FORBIDDEN in the output (exception: content inside "
+            f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). "
+            f"Do not add, drop or alter any numbers, markers or latex.")
+
+
+_CYR_FIELD_RE = _CYR_RE
+
+def _retranslate_cyrillic_fields(out, target_lang, target_language):
+    """Точечный добор вместо полного повтора (решение владельца 2026-07-30):
+    из-за пары строк с кириллицей раньше на ретрай уезжал ВЕСЬ уровень статьи —
+    десятки тысяч знаков по полной цене. Теперь собираем только грязные строки,
+    переводим их одним маленьким вызовом и подставляем на место."""
+    dirty = []   # [(контейнер, ключ/индекс, строка)]
+
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k in ("latex", "main_tag", "extra_tags", "tags", "scientists", "laws"):
+                    continue
+                if isinstance(v, str):
+                    stripped = _MARKER_RE.sub("", v)
+                    if len(_CYR_FIELD_RE.findall(stripped)) > 3:
+                        dirty.append((node, k, v))
+                else:
+                    walk(v)
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                if isinstance(v, str):
+                    if len(_CYR_FIELD_RE.findall(_MARKER_RE.sub("", v))) > 3:
+                        dirty.append((node, i, v))
+                else:
+                    walk(v)
+
+    walk(out)
+    if not dirty or len(dirty) > 40:      # слишком много грязи = перевод не удался в целом
+        return False
+    strings = [v for _, _, v in dirty]
+    prompt = ("Translate each string of this JSON array. Keep [tag:...]/[scientist:...] markers, "
+              "numbers and $latex$ untouched. Answer with a JSON object {\"strings\": [...]} "
+              "of the same length and order.\n" + json.dumps(strings, ensure_ascii=False))
+    try:
+        r = chat("translate", prompt, system=_translation_system(target_language))
+        fixed = json.loads(clean_json(r.choices[0].message.content)).get("strings")
+        if not isinstance(fixed, list) or len(fixed) != len(strings):
+            return False
+    except Exception:
+        return False
+    for (container, key, _), new_val in zip(dirty, fixed):
+        if isinstance(new_val, str) and new_val.strip():
+            container[key] = new_val
+    return True
+
+
 def translate_scipop(scipop, target_lang, retries=3):
     """retries — сбой здесь почти всегда НЕ сетевой (chat() уже отретраила сетевые сама, см.
     common.chat retries=3), а невалидный/недо-JSON в самом ответе модели — стохастическая штука,
@@ -628,7 +687,7 @@ def translate_scipop(scipop, target_lang, retries=3):
         article_json=json.dumps(scipop, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(scipop, target_lang)
     for attempt in range(1, retries + 1):
-        r = chat("translate", prompt)
+        r = chat("translate", prompt, system=_translation_system(target_language))
         try:
             out = json.loads(clean_json(r.choices[0].message.content))
         except Exception as e:
@@ -645,6 +704,14 @@ def translate_scipop(scipop, target_lang, retries=3):
         ok, problems = validate_translation(scipop, out, target_lang)
         if ok:
             return out
+        # Кириллица — единственная проблема? Точечный добор грязных полей маленьким
+        # вызовом вместо полного повтора всего уровня (экономия и времени, и денег).
+        if all(p.startswith("кириллица") for p in problems):
+            if _retranslate_cyrillic_fields(out, target_lang, target_language):
+                ok2, problems2 = validate_translation(scipop, out, target_lang)
+                if ok2:
+                    print(f"    ✚ перевод {target_lang}: добор полей вместо полного повтора — прошло")
+                    return out
         if attempt == retries:
             _log_translation_failure("scipop", target_lang,
                                      f"{scipop.get('title', '')[:60]!r}: брак перевода — {'; '.join(problems)}")
