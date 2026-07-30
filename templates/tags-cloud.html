@@ -81,7 +81,9 @@
     try{localStorage.setItem('b42_tagview',name);}catch(e){}
   }
   Object.keys(B).forEach(function(k){document.getElementById(B[k]).onclick=function(){set(k);};});
-  var saved='structured';try{saved=localStorage.getItem('b42_tagview')||'structured';}catch(e){}
+  // На телефоне дефолт — список: структура/тримап на 375 нечитаемы (владелец 2026-07-30).
+  var _def=(window.matchMedia&&matchMedia('(max-width: 640px)').matches)?'list':'structured';
+  var saved=_def;try{saved=localStorage.getItem('b42_tagview')||_def;}catch(e){}
   if(!V[saved])saved='structured';
   set(saved);
 })();

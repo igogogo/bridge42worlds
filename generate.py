@@ -511,12 +511,15 @@ def text_section_html(label, text):
     return f'<div class="section"><h2>{safe(label)}</h2><p>{safe(text)}</p></div>' if text else ""
 
 
-def related_row(label, links):
-    """Единый плоский список «Связанные X» — без плашек, мелким шрифтом, через « · ».
-    links — список готовых строк <a href=...>Name</a>; пусто → пустая строка (блок не рисуется)."""
+def related_row(label, links, kind=""):
+    """Ряд плашек связей. Заголовки-слова («Связанные:», «Открыли:») убраны — владелец
+    2026-07-30: «слово связанные лишнее, и так понятно»; группы различаются CSS-классом
+    (row-tags / row-laws / row-sci — оттенок и шрифт), label остаётся в aria для читалок."""
     if not links:
         return ""
-    return f'<div class="related-tags"><strong>{safe(label)}:</strong> {" · ".join(links)}</div>'
+    cls = f" related-{kind}" if kind else ""
+    return (f'<div class="related-tags{cls}" aria-label="{safe(label)}">'
+            f'{" · ".join(links)}</div>')
 
 
 def side_chip_group(label, chip_html_list):
@@ -1367,7 +1370,7 @@ def generate_tag_page(tag_id, lang):
         fun_fact_popular_html = f'<div class="fun-fact">💡 {safe(ff_pop)}</div>'
 
     scientists_link_list = [scientist_link_or_text(s, lang) for s in tag_data.get("scientists", [])]
-    scientists_section_html = related_row(loc["scientists"].rstrip(":"), scientists_link_list)
+    scientists_section_html = related_row(loc["scientists"].rstrip(":"), scientists_link_list, "sci")
 
     mini_html = f'<p class="mini-desc">{safe(tag_data["mini"])}</p>' if tag_data.get("mini") else ""
     if tag_data.get("practical_application"):
@@ -1636,7 +1639,7 @@ def laws_for_tag(tag_id, lang):
     links = [
         f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(L.get("name", lid))}</a>'
         for lid, L in related[:14]]
-    return related_row(loc["laws"].rstrip(":"), links)
+    return related_row(loc["laws"].rstrip(":"), links, "laws")
 
 
 def generate_laws_cloud(lang):

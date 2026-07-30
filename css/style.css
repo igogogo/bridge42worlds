@@ -2616,3 +2616,13 @@ html[data-theme="dark"] .an-stage {
   /* Подпись «Порядок» ломала кнопки сортировки во второй ряд — на узких она лишняя */
   .feed-sort-label { display: none; }
 }
+
+/* Тултип: панель действий сверху — «подробнее» и крестик под большим пальцем */
+.tag-tooltip .tip-top { display: flex; justify-content: flex-start; margin: 0 28px 8px 0;
+  padding-bottom: 6px; border-bottom: 1px dashed var(--hair); }
+.tag-tooltip .tip-more { font-family: var(--mono); font-size: 12px; text-decoration: none;
+  color: var(--link); min-height: 32px; display: inline-flex; align-items: center; }
+/* Слои связей без словесных заголовков: группы различаются оттенком и шрифтом */
+.related-laws a { font-family: var(--mono); border-style: dashed !important; }
+.related-sci a  { color: #2e7d32 !important; }
+.entity-body .related-tags + .related-tags { margin-top: 8px; }

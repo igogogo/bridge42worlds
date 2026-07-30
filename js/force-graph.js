@@ -221,9 +221,12 @@ window.createForceGraph = function (opts) {
         fsContainer.classList.toggle('graph-fs-active', v);
         document.body.classList.toggle('graph-fs-open', v);
         fsBtn.innerHTML = v ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>' : '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg>';
-        // Прозрачный фон в полноэкранном — ПО УМОЛЧАНИЮ (юзер 2026-07-25): граф ложится поверх
-        // страницы, контекст не теряется; кнопка-тумблер по-прежнему переключает.
-        if (v) fsContainer.classList.add('graph-fs-transparent');
+        // Фон полноэкранного: на десктопе прозрачный по умолчанию (юзер 2026-07-25 —
+        // «сквозь граф видна страница, смотрится круто»), НА МОБИЛЬНОМ — сплошной
+        // (владелец 2026-07-30: на телефоне прозрачность выглядит непонятно);
+        // кнопка ◑ переключает в обе стороны на любом устройстве.
+        var _touchFs = window.matchMedia && window.matchMedia('(hover: none)').matches;
+        if (v && !_touchFs) fsContainer.classList.add('graph-fs-transparent');
         if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
         // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
         // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.

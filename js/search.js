@@ -1344,6 +1344,13 @@ function initAllTooltips() {
             }
 
             if (content) {
+                // Действия — ВВЕРХУ тултипа (владелец: «чтобы палец не двигать»):
+                // выносим ссылку «подробнее» из хвоста текста в шапку, рядом с крестиком.
+                var mTop = content.match(/<a href="([^"]+)"[^>]*>([^<]*)<\/a>\s*$/);
+                if (mTop) {
+                    content = '<div class="tip-top"><a class="tip-more" href="' + mTop[1] + '">' +
+                              mTop[2] + ' →</a></div>' + content.replace(mTop[0], '');
+                }
                 tip.innerHTML = content;
                 tip.style.display = 'block';
                 var rect = el.getBoundingClientRect();
