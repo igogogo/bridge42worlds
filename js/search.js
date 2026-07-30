@@ -1673,11 +1673,22 @@ document.addEventListener('click', function (e) {
 // налезать (юзер 2026-07-23: «языки должны встать под верхнее меню, оно тоже морозится»). Высота
 // шапки плавает (десктоп — одна строка, мобилка переносит), поэтому меряем вживую и кладём в
 // --stick-top, к которому привязан top у .langs / .langs-row. Пересчитываем на ресайз.
+// Ярусов на самом деле ДВА: под шапкой на части страниц стоит своя липкая строка (языки —
+// .langs / .langs-row), и всё, что липнет третьим (ряд уровней на статье, буква-разделитель
+// на странице авторов), обязано вставать уже под ней. Обе эти вещи были прибиты к top: 0 и
+// уезжали под непрозрачную шапку: буква на /authors/ не видна вовсе, переключатель уровней
+// «прилипал» вслепую. Поэтому меряем стопку целиком и отдаём вторую переменную.
 (function () {
     function syncStickTop() {
         var tb = document.querySelector('.top-bar');
         var h = tb ? Math.round(tb.getBoundingClientRect().height) : 0;
         document.documentElement.style.setProperty('--stick-top', h + 'px');
+
+        var row = document.querySelector('.langs-row, .langs');
+        // Только если строка реально липкая: на части страниц она обычная и ничего не занимает.
+        var sticky = row && getComputedStyle(row).position === 'sticky';
+        var h2 = sticky ? Math.round(row.getBoundingClientRect().height) : 0;
+        document.documentElement.style.setProperty('--stick-top2', (h + h2) + 'px');
     }
     document.addEventListener('DOMContentLoaded', function () {
         syncStickTop();

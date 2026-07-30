@@ -795,6 +795,10 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
     padding: 6px 10px; border-bottom: 1px solid var(--border);
 }
 .sections-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+/* Настоящая таблица без обёртки с прокруткой: при table-layout: auto она растёт до
+   min-content, то есть до самого длинного слова. Разрешаем перенос ТОЛЬКО в колонке
+   имени — код раздела (astro-ph.IM) рвать посередине нельзя, он перестанет читаться. */
+.sections-table td:first-child { overflow-wrap: anywhere; }
 .sections-table tr:hover td { background: var(--tag-bg); }
 .sections-table a { color: var(--text); text-decoration: none; }
 .sections-table a:hover { color: var(--link); }
@@ -1447,7 +1451,10 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
 .letter-heading {
     font-size: 20px; font-weight: 700; color: var(--text);
     border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 10px;
-    position: sticky; top: 0; background: var(--bg); z-index: 1;
+    /* Под шапкой и строкой языков, а не под самым верхом вьюпорта: с top: 0 буква
+       прилипала ПОД непрозрачную шапку и не была видна вообще. --stick-top2 меряет
+       всю липкую стопку (js/search.js). z-index ниже обеих — она третий ярус. */
+    position: sticky; top: var(--stick-top2, 91px); background: var(--bg); z-index: 1;
 }
 .author-list { display: flex; flex-direction: column; gap: 1px; }
 .author-row {
@@ -1676,10 +1683,10 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 /* ── Точечные фиксы 2026-07-23 ── */
 /* Строка языков — закрепляется при прокрутке. На статье в неё же вынесена кнопка «следующая
    статья» (юзер 2026-07-23: «next в ту же строку с языками и заморозить»). */
-.langs { position: sticky; top: var(--stick-top, 0px); z-index: 40; background: var(--bg); padding: 6px 0; margin-top: 6px; }
+.langs { position: sticky; top: var(--stick-top, 47px); z-index: 40; background: var(--bg); padding: 6px 0; margin-top: 6px; }
 /* Та же коробка, что и .article-main (max-width 680px, правый паддинг), чтобы правый конец
    кнопки next совпадал с правым краем текста статьи, а не с краем окна (юзер 2026-07-23). */
-.langs-row { position: sticky; top: var(--stick-top, 0px); z-index: 40; background: var(--bg);
+.langs-row { position: sticky; top: var(--stick-top, 47px); z-index: 40; background: var(--bg);
     max-width: 620px; padding: 4px 0; margin: 0;
     display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .langs-row .langs { position: static; padding: 0; margin: 0; z-index: auto; flex: 1 1 auto; }
@@ -2247,8 +2254,8 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 
 /* На странице статьи ряд уровней прилипает к верху: сменить глубину можно с любого места
    текста, не возвращаясь к началу. */
-.article-main > .lv-switch { position: sticky; top: 0; z-index: 20; padding: 8px 0;
-  background: var(--bg); backdrop-filter: blur(6px); }
+.article-main > .lv-switch { position: sticky; top: var(--stick-top2, 91px); z-index: 20;
+  padding: 8px 0; background: var(--bg); backdrop-filter: blur(6px); }
 
 /* Активное автовращение видно на кнопке — иначе непонятно, крутится сцена или замерла. */
 .an-btn.active { color: var(--link); border-color: var(--link); }
