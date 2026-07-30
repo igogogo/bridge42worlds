@@ -253,6 +253,29 @@ def _run_chain(chain):
             sys.exit(code)
 
 
+def _build_search_index():
+    """Лёгкий индекс поиска (lang/*/search-index.json) — последним шагом генерации, до публикации.
+
+    Ставится здесь, а не внутри отдельных команд, по той же причине, что публикация и бэкап:
+    индекс собирается из уже готовых articles-index и справочников, и любая команда, которая
+    их меняет, обязана его обновить. Забыть один вызов — значит показывать читателю поиск
+    по вчерашнему корпусу, причём молча. Считается за секунды, поэтому лишний вызов не жалко.
+    Проверки контент не трогают — им индекс пересобирать незачем."""
+    if (sys.argv[1] if len(sys.argv) > 1 else "") in {"stats", "check", "links", "status", "ids"}:
+        return
+    script = Path(__file__).resolve().parent / "search_index_build.py"
+    if not script.exists():
+        return
+    print(f"\n{'=' * 60}\n▶️  индекс поиска\n{'=' * 60}")
+    child_env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+    result = subprocess.run([sys.executable, str(script)], env=child_env)
+    if result.returncode != 0:
+        # Не роняем прогон: сайт сгенерирован, страдает только поиск — но сказать об этом надо
+        # громко, иначе расхождение индекса с корпусом заметит первым читатель.
+        print(f"⚠️  индекс поиска не пересобран (код {result.returncode}) — поиск покажет "
+              f"прошлый корпус, перезапустите search_index_build.py")
+
+
 def _publish_to_r2():
     """Публикует изменения сайта в R2 — вызывается автоматически после КАЖДОЙ команды run.py
     (см. ПРАВИЛА-РАБОТЫ.md: публикацию больше никто не запускает руками). Дёшево: дельта по md5,
@@ -980,5 +1003,6 @@ def build_parser():
 if __name__ == "__main__":
     args = build_parser().parse_args()
     args.func(args)
+    _build_search_index()
     _publish_to_r2()
     _backup_to_r2()
