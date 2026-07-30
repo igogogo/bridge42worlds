@@ -358,24 +358,15 @@ def inherit_facts(child, parent):
     return child
 
 
-def generate_simple(scipop_advanced):
-    prompt = load_prompt("article-generate-simple").format(
-        advanced_json=json.dumps(scipop_advanced, ensure_ascii=False))
-    reinforce = "\n\nВНИМАНИЕ: пиши СТРОГО на русском языке."
-    data = None
-    for attempt in range(2):
-        r = chat("article_simple", prompt if attempt == 0 else prompt + reinforce)
-        try:
-            data = json.loads(clean_json(r.choices[0].message.content))
-        except Exception:
-            return scipop_advanced
-        if _default_lang_ok(data):
-            break
-    return inherit_facts(data, scipop_advanced)
+# generate_simple() убрана 2026-07-30: её никто не вызывал (живой путь —
+# generate_simple_mini из popular), а работать она уже не могла: подставляла advanced_json
+# в article-generate-simple.txt, который принимает Popular и отдаёт simple+mini.
+# Мёртвый код, который сломался бы при первом же вызове, хуже отсутствующего.
 
 
 def generate_popular(scipop_adv):
-    """Самая простая версия, генерируется из Advanced (не из Simple — независимо)."""
+    """Popular генерируется из Advanced. Simple и mini — уже из Popular
+    (generate_simple_mini), чтобы уровни не расходились."""
     prompt = load_prompt("article-generate-popular").format(
         advanced_json=json.dumps(scipop_adv, ensure_ascii=False))
     reinforce = "\n\nВНИМАНИЕ: пиши СТРОГО на русском языке."
