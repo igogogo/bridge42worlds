@@ -1056,5 +1056,101 @@
         return svg(W, H, s);
     };
 
+    // ── Космология: расширение и красное смещение ──
+
+    // Резинка с метками: номера остаются, расстояния растут в одной пропорции.
+    F.rubberband = function () {
+        var W = 430, H = 175, x0 = 46, y1 = 58, y2 = 126, k = 1.5;
+        var s = txt(W / 2, 24, 'одно и то же растяжение повсюду', SOFT, 11);
+        // до растяжения
+        s += '<line x1="' + x0 + '" y1="' + y1 + '" x2="' + (x0 + 210) + '" y2="' + y1 +
+            '" stroke="' + BORD + '" stroke-width="6" opacity="0.5"/>';
+        // после растяжения
+        s += '<line x1="' + x0 + '" y1="' + y2 + '" x2="' + (x0 + 210 * k) + '" y2="' + y2 +
+            '" stroke="' + LINK + '" stroke-width="6" opacity="0.35"/>';
+        [0, 1, 2, 3].forEach(function (n) {
+            var xa = x0 + n * 70, xb = x0 + n * 70 * k;
+            s += '<circle cx="' + xa + '" cy="' + y1 + '" r="5" fill="' + (n === 0 ? LINK : WARN) + '"/>';
+            s += '<circle cx="' + xb + '" cy="' + y2 + '" r="5" fill="' + (n === 0 ? LINK : WARN) + '"/>';
+            s += txt(xa, y1 - 12, String(n), SOFT, 10);
+            s += txt(xb, y2 + 20, String(n), SOFT, 10);
+            if (n) s += '<line x1="' + xa + '" y1="' + (y1 + 9) + '" x2="' + xb + '" y2="' + (y2 - 9) +
+                '" stroke="' + SOFT + '" stroke-width="0.8" stroke-dasharray="2 3"/>';
+        });
+        s += txt(x0 - 6, y1 + 4, 'до', SOFT, 10, 'end');
+        s += txt(x0 - 6, y2 + 4, 'после', SOFT, 10, 'end');
+        s += txt(W / 2, H - 8, 'метка стоит на своём номере, растёт расстояние', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Скорость пропорциональна расстоянию: стрелки удлиняются линейно, центра нет.
+    F.hubblelaw = function () {
+        var W = 430, H = 165, x0 = 50, y = 92;
+        var s = txt(W / 2, 24, 'дальше — значит быстрее', INK, 11.5);
+        s += '<line x1="' + (x0 - 12) + '" y1="' + y + '" x2="' + (W - 20) + '" y2="' + y +
+            '" stroke="' + BORD + '" stroke-width="1" stroke-dasharray="3 4"/>';
+        s += '<circle cx="' + x0 + '" cy="' + y + '" r="6" fill="' + LINK + '"/>';
+        s += txt(x0, y + 22, 'наблюдатель', LINK, 10);
+        [1, 2, 3].forEach(function (n) {
+            var x = x0 + n * 95;
+            s += '<circle cx="' + x + '" cy="' + y + '" r="5" fill="' + WARN + '"/>';
+            s += arrow(x + 8, y, x + 8 + n * 20, y, WARN, 'ahl');
+            s += txt(x + 8 + n * 10, y - 12, n + 'v', WARN, 10.5);
+            s += txt(x, y + 22, n + 'd', SOFT, 10);
+        });
+        s += txt(W / 2, H - 8, 'v = H₀·d — та же картина из любой точки', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Волна в пути: пространство растёт, гребни расходятся, линия краснеет.
+    F.redshiftwave = function () {
+        var W = 430, H = 170, x0 = 40, x1 = 390, y = 86;
+        var pts = [], i, f, k;
+        for (i = 0; i <= 300; i++) {
+            f = i / 300;
+            k = 15 + 22 * f;                       // шаг волны растёт по пути
+            pts.push((x0 + (x1 - x0) * f) + ',' + (y - 17 * Math.sin(f * (x1 - x0) / k * 0.9)));
+        }
+        var s = '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.2"/>';
+        s += '<circle cx="' + x0 + '" cy="' + y + '" r="5" fill="' + WARN + '"/>';
+        s += txt(x0, y + 34, 'галактика', WARN, 10);
+        s += '<circle cx="' + x1 + '" cy="' + y + '" r="5" fill="' + LINK + '"/>';
+        s += txt(x1, y + 34, 'мы', LINK, 10);
+        s += txt(W / 2, 24, 'волна растягивается вместе с пространством', INK, 11.5);
+        s += txt(x0 + 40, H - 10, 'короткая волна', SOFT, 10);
+        s += txt(x1 - 46, H - 10, 'длинная — краснее', WARN, 10);
+        return svg(W, H, s);
+    };
+
+    // H — не размер и не скорость, а их отношение: скорость роста на текущий размер.
+    F.hubbleconst = function () {
+        var W = 420, H = 170, y = 84, x0 = 54;
+        var s = txt(W / 2, 24, 'H = скорость роста ÷ текущий размер', INK, 11.5);
+        s += '<line x1="' + x0 + '" y1="' + y + '" x2="' + (x0 + 130) + '" y2="' + y +
+            '" stroke="' + BORD + '" stroke-width="7" opacity="0.55"/>';
+        s += arrow(x0 + 134, y, x0 + 188, y, LINK, 'ahl');
+        s += txt(x0 + 161, y - 12, 'ȧ', LINK, 12);
+        s += txt(x0 + 65, y + 22, 'a — размер сейчас', SOFT, 10.5);
+        s += txt(W / 2, y + 56, 'одно и то же H для всех пар галактик', SOFT, 10.5);
+        s += txt(W / 2, y + 76, '1/H₀ ≈ 14 млрд лет — оценка, не возраст', WARN, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Рабочая цепочка астронома: спектр → z → скорость → расстояние.
+    F.zladder = function () {
+        var W = 440, H = 150, y = 78, bw = 86, gap = 30, x0 = 26;
+        var items = ['спектр', 'z', 'v = cz', 'd = v/H₀'];
+        var s = txt(W / 2, 26, 'от линии в спектре к расстоянию', INK, 11.5);
+        items.forEach(function (t, i) {
+            var x = x0 + i * (bw + gap);
+            s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + bw + '" height="36" rx="6" fill="none" stroke="' +
+                (i === 0 ? WARN : LINK) + '" stroke-width="1.4" opacity="0.85"/>';
+            s += txt(x + bw / 2, y + 5, t, i === 0 ? WARN : LINK, 12);
+            if (i < items.length - 1) s += arrow(x + bw + 4, y, x + bw + gap - 6, y, SOFT, 'ahl');
+        });
+        s += txt(W / 2, H - 12, 'последний шаг верен только при малом z', WARN, 10.5);
+        return svg(W, H, s);
+    };
+
     global.B42Figures = F;
 })(window);

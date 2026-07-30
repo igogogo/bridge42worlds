@@ -791,5 +791,100 @@ window.B42FigText = {
     "en": "action S",
     "es": "acción S",
     "ar": "الفعل S"
+  },
+  "одно и то же растяжение повсюду": {
+    "en": "the same stretching everywhere",
+    "es": "el mismo estiramiento en todas partes",
+    "ar": "التمدّد نفسه في كل مكان"
+  },
+  "до": {
+    "en": "before",
+    "es": "antes",
+    "ar": "قبل"
+  },
+  "после": {
+    "en": "after",
+    "es": "después",
+    "ar": "بعد"
+  },
+  "метка стоит на своём номере, растёт расстояние": {
+    "en": "each mark keeps its number; the distance grows",
+    "es": "cada marca conserva su número; crece la distancia",
+    "ar": "كل علامة تحفظ رقمها، والمسافة تنمو"
+  },
+  "дальше — значит быстрее": {
+    "en": "farther means faster",
+    "es": "más lejos significa más rápido",
+    "ar": "الأبعد يعني الأسرع"
+  },
+  "наблюдатель": {
+    "en": "observer",
+    "es": "observador",
+    "ar": "المراقب"
+  },
+  "v = H₀·d — та же картина из любой точки": {
+    "en": "v = H₀·d — the same picture from any point",
+    "es": "v = H₀·d: la misma imagen desde cualquier punto",
+    "ar": "v = H₀·d — الصورة نفسها من أي نقطة"
+  },
+  "волна растягивается вместе с пространством": {
+    "en": "the wave stretches along with space",
+    "es": "la onda se estira junto con el espacio",
+    "ar": "الموجة تستطيل مع الفضاء"
+  },
+  "галактика": {
+    "en": "galaxy",
+    "es": "galaxia",
+    "ar": "مجرّة"
+  },
+  "мы": {
+    "en": "us",
+    "es": "nosotros",
+    "ar": "نحن"
+  },
+  "короткая волна": {
+    "en": "short wave",
+    "es": "onda corta",
+    "ar": "موجة قصيرة"
+  },
+  "длинная — краснее": {
+    "en": "longer — redder",
+    "es": "más larga: más roja",
+    "ar": "أطول — أكثر حمرة"
+  },
+  "H = скорость роста ÷ текущий размер": {
+    "en": "H = growth rate ÷ current size",
+    "es": "H = ritmo de crecimiento ÷ tamaño actual",
+    "ar": "H = معدّل النمو ÷ الحجم الحالي"
+  },
+  "a — размер сейчас": {
+    "en": "a — size now",
+    "es": "a: tamaño actual",
+    "ar": "a — الحجم الآن"
+  },
+  "одно и то же H для всех пар галактик": {
+    "en": "the same H for every pair of galaxies",
+    "es": "el mismo H para cada par de galaxias",
+    "ar": "نفس H لكل زوج من المجرّات"
+  },
+  "1/H₀ ≈ 14 млрд лет — оценка, не возраст": {
+    "en": "1/H₀ ≈ 14 Gyr — an estimate, not the age",
+    "es": "1/H₀ ≈ 14 mil millones de años: una estimación, no la edad",
+    "ar": "1/H₀ ≈ 14 مليار سنة — تقدير لا عمر"
+  },
+  "от линии в спектре к расстоянию": {
+    "en": "from a spectral line to a distance",
+    "es": "de una línea espectral a una distancia",
+    "ar": "من خط طيفي إلى مسافة"
+  },
+  "спектр": {
+    "en": "spectrum",
+    "es": "espectro",
+    "ar": "الطيف"
+  },
+  "последний шаг верен только при малом z": {
+    "en": "the last step holds only for small z",
+    "es": "el último paso solo vale para z pequeño",
+    "ar": "الخطوة الأخيرة تصحّ فقط عند z الصغير"
   }
 };

@@ -1,0 +1,1353 @@
+{
+ "id": "01-expansion",
+ "topic": "cosmology",
+ "schema": "b42.lesson/1",
+ "model": "expansion",
+ "entities": {
+  "tags": [
+   "galaxy",
+   "hubble",
+   "redshift",
+   "hydrogen",
+   "supernova",
+   "speed_of_light"
+  ],
+  "laws": [
+   "hubbles_law"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2607.00505v1",
+    "why": "совпадение по теме: galaxy, hubble, hydrogen"
+   },
+   {
+    "id": "2607.05289v1",
+    "why": "совпадение по теме: galaxy, hydrogen, speed_of_light"
+   },
+   {
+    "id": "2607.04460",
+    "why": "совпадение по теме: galaxy, hubble, redshift"
+   }
+  ]
+ },
+ "ru": {
+  "title": "Расширение и красное смещение",
+  "subtitle": "Почему далёкие галактики уходят быстрее и почему это не значит, что мы в центре",
+  "intro": [
+   "Возьмите канцелярскую резинку и поставьте на ней три точки через равные промежутки. Растяните: все расстояния выросли, и каждая точка «уехала» от соседки. Теперь встаньте в любую из точек и спросите, что вы видите. Ближняя точка отодвинулась немного, дальняя — вдвое сильнее, потому что между вами и ею было вдвое больше резинки, и вся она растянулась. Выделенной точки на резинке нет: любая видит одну и ту же картину.",
+   "Именно эту картину показывают галактики. Свет далёких галактик приходит покрасневшим — все длины волн в нём растянуты по сравнению с лабораторными, и тем сильнее, чем дальше галактика. Читать это как «они летят от нас сквозь пространство» соблазнительно, но неверно: растёт само расстояние между ними, а вместе с расстоянием растягивается и волна света, пока он идёт.",
+   "Разница не в словах. Из «летят сквозь пространство» следовал бы центр разлёта — точка, откуда всё началось. Из «растёт расстояние» не следует никакого центра: наблюдатель в любой галактике видит то же самое. Эта тема о том, как из одного измеримого числа — красного смещения — получается и скорость удаления, и расстояние, и грубая оценка возраста Вселенной."
+  ],
+  "standNote": "Двигайте расстояние до галактики: стрелка скорости растёт пропорционально — это и есть закон Хаббла, а справа он же прямой линией на графике. Смотрите на волну в середине: по пути к нам она растягивается, и линия водорода на спектре уезжает вправо, к красному краю. Доведите расстояние до края шкалы: подпись предупредит, что линейной формулы здесь уже мало.",
+  "formula": {
+   "name": "Закон Хаббла",
+   "latex": "v = H_0 \\, d, \\qquad 1 + z = \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}}",
+   "alsoKnown": "Закон Хаббла — Леметра (так его называют с 2018 года по решению Международного астрономического союза)",
+   "authors": [
+    {
+     "who": "Весто Слайфер",
+     "year": "1912–1917",
+     "what": "первым измерил смещения линий у спиральных туманностей и обнаружил, что почти все они красные"
+    },
+    {
+     "who": "Жорж Леметр",
+     "year": "1927",
+     "what": "получил линейную связь скорости и расстояния из уравнений общей теории относительности и оценил коэффициент"
+    },
+    {
+     "who": "Эдвин Хаббл",
+     "year": "1929",
+     "what": "измерил расстояния до галактик по цефеидам и показал связь на данных"
+    },
+    {
+     "who": "Милтон Хьюмасон",
+     "year": "1929–1936",
+     "what": "получил спектры далёких галактик, на которых держались измерения Хаббла"
+    }
+   ],
+   "story": "Слайфер увидел красные смещения на пятнадцать лет раньше Хаббла, но не знал расстояний — без них связь не построить. Леметр вывел закон теоретически за два года до Хаббла, опубликовал по-французски в малоизвестном журнале, и работу почти не заметили. Имя закона исправляли почти сто лет: в 2018 году союз астрономов постановил называть его законом Хаббла — Леметра.",
+   "symbols": [
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "скорость удаления галактики",
+     "unit": "км/с"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "расстояние до галактики",
+     "unit": "Мпк"
+    },
+    {
+     "sym": "H₀",
+     "latex": "H_0",
+     "what": "постоянная Хаббла — скорость расширения сегодня",
+     "unit": "км/(с·Мпк)"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "красное смещение: во сколько раз растянулась волна, минус единица",
+     "unit": "—"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "длина волны линии: наблюдаемая и лабораторная",
+     "unit": "нм"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Откуда берётся линейная связь",
+   "lead": "Пройдём от «всё растягивается одинаково» до формулы. Единственное допущение по дороге — что расширение однородно: одна и та же доля прироста повсюду.",
+   "steps": [
+    {
+     "text": "Опишем расширение одним числом. Пусть у каждой пары галактик есть неизменная «координатная» разность $\\chi$ — их номер на резинке, — а физическое расстояние получается умножением на общий для всей Вселенной масштабный фактор $a(t)$. Растяжение при этом одинаково везде: выделенной точки в записи нет.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "Метки на резинке остаются на своих номерах, расстояние между ними растёт вместе с a(t)"
+    },
+    {
+     "text": "Скорость удаления — это производная расстояния по времени. Продифференцируем и заметим, что $\\chi$ постоянна: галактика не ползёт по резинке, а стоит на своей метке.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "Скорость выходит пропорциональной расстоянию: множитель ȧ/a один для всех"
+    },
+    {
+     "text": "Множитель $\\dot a / a$ и есть постоянная Хаббла. Постоянная — только в пространстве: в один и тот же момент она одна для всех галактик, но со временем меняется. Поэтому у неё индекс нуль: значение сегодня.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{в наше время}",
+     "figure": "hubbleconst",
+     "figCaption": "H — отношение скорости роста к текущему размеру, одинаковое для всех пар галактик"
+    },
+    {
+     "text": "Теперь свет. Волна, вышедшая из галактики, растягивается вместе с пространством ровно во столько раз, во сколько выросло расстояние за время пути. Это и есть красное смещение — не движение источника, а история расширения, записанная в длине волны.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "Волна в пути: чем дольше идёт свет, тем сильнее растянут его гребень"
+    },
+    {
+     "text": "Для близких галактик, где растяжение мало, красное смещение сводится к привычной доплеровской дроби. Отсюда рабочая связка: измерили $z$ по спектру — получили скорость, поделили на $H_0$ — получили расстояние. Для далёких галактик так делать нельзя: там нужно знать всю историю $a(t)$, а не только сегодняшнюю скорость.",
+     "latex": "z \\approx \\frac{v}{c} \\quad (z \\ll 1) \\;\\Longrightarrow\\; d \\approx \\frac{c\\,z}{H_0}",
+     "figure": "zladder",
+     "figCaption": "Рабочая цепочка: линия в спектре даёт z, из z скорость, из скорости расстояние"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "Слева — то, что нельзя измерить напрямую: скорость и расстояние. Справа — то, что читается со спектра линейкой. Закон связывает одно с другим.",
+   "note": "Обратите внимание, чего в выводе нет: положения наблюдателя. Формула получилась одинаковой для любой галактики, и это не удача, а следствие однородности. Если бы расширение имело центр, линейной связи не вышло бы."
+  },
+  "math": {
+   "title": "Математика, которая здесь понадобилась",
+   "lead": "Вся необычность вывода держится на одном свойстве линейной функции — и на аккуратном обращении со словом «постоянная».",
+   "items": [
+    {
+     "what": "Почему именно линейная связь означает «без центра»",
+     "why": "Однородное растяжение — это умножение всех расстояний на одно число. Только у линейной зависимости $v = H d$ картина одинакова для всех наблюдателей: перейдя в другую галактику, вы вычтете её скорость из всех остальных и получите ровно тот же закон. Для любой другой зависимости — например $v \\propto d^2$ — так не выйдет, и в картине появится выделенная точка. Так что линейность здесь не приближение ради удобства, а прямое выражение того, что центра нет."
+    },
+    {
+     "what": "«Постоянная», которая меняется",
+     "why": "$H$ постоянна в пространстве и переменна во времени: это скорость роста, поделённая на текущий размер, а обе величины со временем меняются. Сегодня $H_0 \\approx 70$ км/(с·Мпк). В единицах, где сокращаются километры и мегапарсеки, это примерно $2{,}3\\cdot10^{-18}$ обратных секунд — то есть каждая единица расстояния прирастает на две миллиардные доли процента за век. Незаметно для линейки и заметно для света, прошедшего миллиарды лет."
+    },
+    {
+     "what": "Мегапарсек и почему астрономы не пользуются метрами",
+     "why": "Один парсек — расстояние, с которого радиус орбиты Земли виден под углом одна угловая секунда, около $3{,}26$ светового года. Мегапарсек — миллион парсеков, типичное расстояние между галактиками. В метрах это $3{,}1\\cdot10^{22}$: числа, с которыми неудобно работать и легко ошибиться на порядок."
+    },
+    {
+     "what": "Единица, поделённая на постоянную Хаббла",
+     "why": "Величина $1/H_0$ имеет размерность времени и равна примерно $14$ миллиардам лет. Это не возраст Вселенной, а его оценка по порядку величины — она была бы точным ответом, только если бы расширение всегда шло с неизменной скоростью. Оно шло не так: сначала тормозило под действием тяготения, потом стало ускоряться. Настоящий возраст, $13{,}8$ миллиарда лет, оказался близок к оценке почти случайно — два отклонения частично погасили друг друга."
+    }
+   ]
+  },
+  "example": {
+   "title": "Пример с числами",
+   "lead": "Пройдём путь астронома: со спектра — к расстоянию. Работаем с линией водорода, той же, что на стенде.",
+   "given": "В спектре галактики линия водорода $H_\\alpha$, лабораторная длина волны которой $656{,}3$ нм, наблюдается на $702$ нм. Постоянная Хаббла $H_0 = 70$ км/(с·Мпк).",
+   "law": "$1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}$, затем $v \\approx cz$ и $d \\approx v / H_0$",
+   "solution": [
+    {
+     "text": "Сначала красное смещение: делим наблюдаемую длину волны на лабораторную и вычитаем единицу.",
+     "latex": "z = \\frac{702}{656{,}3} - 1 \\approx 0{,}070",
+     "num": ""
+    },
+    {
+     "text": "Скорость удаления для такого малого $z$ — просто доля скорости света.",
+     "latex": "v \\approx c z = 299\\,792 \\cdot 0{,}070 \\approx 21\\,000 \\ \\text{км/с}",
+     "num": ""
+    },
+    {
+     "text": "Расстояние получаем делением на постоянную Хаббла. Единицы подобраны так, что километры в секунду делятся на километры в секунду на мегапарсек и остаются мегапарсеки.",
+     "latex": "d \\approx \\frac{21\\,000}{70} = 300 \\ \\text{Мпк}",
+     "num": ""
+    }
+   ],
+   "answer": "Галактика удаляется со скоростью около $21\\,000$ км/с и находится примерно в $300$ Мпк — это порядка миллиарда световых лет. Поставьте на стенде расстояние $300$ и сверьте все три числа.",
+   "sanity": "Проверка на здравый смысл: $21\\,000$ км/с — это семь процентов скорости света, и красное смещение вышло тоже семь процентов. Так и должно быть: при малых $z$ эти два числа совпадают. Если у вас получилось, что скорость составляет проценты от световой, а $z$ — десятки процентов, где-то потеряна скорость света."
+  },
+  "constants": {
+   "title": "Константы: откуда взялись и что означают",
+   "lead": "Три числа, без которых в этой теме не посчитать ничего, и одно расхождение, из-за которого спорят прямо сейчас.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "постоянная Хаббла",
+     "why": "Два способа измерения дают разные ответы, и это не разброс, а устойчивое расхождение. По реликтовому излучению — то есть по ранней Вселенной с моделью её последующей истории — выходит $67{,}4$. По ближним галактикам напрямую, через цефеиды и сверхновые, — $73{,}0$. Погрешности обоих измерений около процента, а разница между ними — восемь процентов. Это и называют напряжением Хаббла; в курсе мы берём круглое $70$.",
+     "value": "67,4 или 73,0 км/(с·Мпк)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "скорость света",
+     "why": "Переводит красное смещение в скорость. С 1983 года это не измеряемая величина, а определение: метр задан через секунду и через $c$, поэтому у скорости света нет погрешности.",
+     "value": "299 792,458 км/с",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Мпк",
+     "name": "мегапарсек",
+     "why": "Рабочая единица межгалактических расстояний. Через неё измеряется и постоянная Хаббла, поэтому в её единицах мегапарсек стоит в знаменателе.",
+     "value": "3,26 млн световых лет = 3,086·10²² м",
+     "latex": "1\\,\text{Мпк}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "линия водорода Hα",
+     "why": "Переход электрона в атоме водорода между третьим и вторым уровнями. Годится линейкой для всей Вселенной именно потому, что не зависит ни от чего: атом водорода в далёкой галактике устроен так же, как в лаборатории.",
+     "value": "656,28 нм",
+     "latex": "\\lambda(H_\u0007lpha)"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Как это связано с остальным курсом",
+   "lead": "Космология не начинается с нуля: она собрана из того, что уже разобрано в других темах.",
+   "items": [
+    {
+     "h": "Волны",
+     "text": "Красное смещение читается тем же способом, каким слышно приближающуюся сирену: по сдвигу частоты. Но причина другая — не скорость источника, а рост расстояния по пути волны."
+    },
+    {
+     "h": "Относительность",
+     "text": "Линейный закон и запрет на сверхсветовое движение уживаются только потому, что галактики не движутся сквозь пространство. Ограничение $c$ касается движения внутри пространства, а не роста самого пространства."
+    },
+    {
+     "h": "Атом",
+     "text": "Вся дальняя астрономия держится на том, что уровни энергии атома везде одинаковы. Линия водорода — эталон, привезённый из темы про атом."
+    },
+    {
+     "h": "Гравитация",
+     "text": "Расширение замедляет тяготение всей материи Вселенной. Что именно побеждает — тяготение или ускоряющая составляющая — разбирается в третьем параграфе этой темы."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Опыты дома и любопытные подробности",
+   "lead": "Расширение Вселенной — единственная тема курса, где опыт на кухне честно воспроизводит главную идею, а не только иллюстрирует её.",
+   "items": [
+    {
+     "h": "Резинка и линейка (пять минут)",
+     "text": "Возьмите широкую резинку, поставьте маркером метки через один сантиметр и подпишите их номерами. Приложите линейку, растяните резинку вдвое и снова измерьте. Метка номер один отодвинулась на сантиметр, номер три — на три. Скорость «разлёта» пропорциональна расстоянию, хотя вы тянули за концы, а не за метки. Теперь главное: посчитайте всё заново, считая началом координат метку номер два. Числа сойдутся те же самые — центра у растяжения нет.",
+     "icon": "kitchen",
+     "kind": "опыт на кухне"
+    },
+    {
+     "h": "Кекс с изюмом",
+     "text": "Пока тесто поднимается, каждая изюминка отодвигается от остальных, и дальние расходятся быстрее ближних. Аналогия хороша ровно до края формы: у кекса есть граница и есть центр, а у Вселенной, насколько мы можем судить, нет ни того, ни другого.",
+     "icon": "kitchen",
+     "kind": "опыт на кухне"
+    },
+    {
+     "h": "Андромеда идёт на нас",
+     "text": "Соседняя большая галактика приближается со скоростью около $110$ км/с — её спектр смещён в синюю сторону. Противоречия нет: на расстоянии в семьсот килопарсек тяготение сильнее расширения, и Местная группа галактик держится вместе. Расширение видно только там, где тяготение уже не справляется — от десятков мегапарсек и дальше.",
+     "icon": "fact",
+     "kind": "любопытная подробность"
+    },
+    {
+     "h": "Галактики, уходящие быстрее света",
+     "text": "Подставьте в закон Хаббла расстояние около $4300$ Мпк — получите скорость больше скорости света. Это не ошибка и не нарушение относительности: так растёт расстояние, а не летит тело. Свет от таких галактик до нас всё-таки доходит, потому что по дороге он попадает в области, которые удаляются медленнее.",
+     "icon": "edge",
+     "kind": "край известного"
+    },
+    {
+     "h": "Как узнали расстояния",
+     "text": "Красное смещение измерить легко, расстояние — трудно, а без него закона нет. Хаббл опирался на цефеиды: переменные звёзды, у которых период мигания связан со светимостью. Знаешь настоящую яркость и видимую — знаешь расстояние. Сегодня ту же роль дальше играют сверхновые типа Ia, и именно на них построено значение $73$, спорящее с реликтовым.",
+     "icon": "fact",
+     "kind": "как это узнали"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Почему это не противоречит теории относительности",
+   "text": "Запрет из специальной теории относительности касается движения объектов друг относительно друга в одной точке пространства: обгонать свет нельзя. Расширение — про другое: между двумя далёкими галактиками прибывает пространство, и суммарная скорость их разлёта может превышать $c$ без того, чтобы кто-то из них двигался быстрее света в своей окрестности. Локально, у себя, каждая галактика покоится, и никакой сигнал никого не обгоняет. Именно поэтому космологическое красное смещение и доплеровский сдвиг — разные вещи, хотя в области малых $z$ они дают одинаковые числа."
+  },
+  "memo": {
+   "essence": "Расстояния между галактиками растут пропорционально самим расстояниям: $v = H_0 d$. Свет, идущий сквозь растущее пространство, растягивается в $(1+z)$ раз, поэтому красное смещение — измеримый след истории расширения, а не скорости источника.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Скорость пропорциональна расстоянию",
+     "text": "Скорость удаления пропорциональна расстоянию: $v = H_0 d$, множитель одинаков для всех галактик"
+    },
+    {
+     "icon": "estimate",
+     "title": "Центра у расширения нет",
+     "text": "Линейный закон выглядит одинаково из любой галактики — выделенной точки не существует"
+    },
+    {
+     "icon": "fact",
+     "title": "z — это растяжение волны",
+     "text": "$1+z$ — во сколько раз растянулась волна, то есть во сколько раз выросла Вселенная за время пути света"
+    },
+    {
+     "icon": "edge",
+     "title": "1/H₀ — только оценка",
+     "text": "$1/H_0 \\approx 14$ млрд лет — оценка возраста по порядку величины, а не сам возраст"
+    }
+   ],
+   "where": "Измерение расстояний до галактик, поиск сверхновых, калибровка космологических моделей, спор о напряжении Хаббла, оценка возраста и размера наблюдаемой Вселенной.",
+   "watchOut": "Две частые ошибки. Первая — считать, что галактики летят сквозь пространство от точки взрыва; тогда неизбежно появляется центр, которого нет. Вторая — применять $d = cz/H_0$ к далёким галактикам с $z$ около единицы: там формула врёт в разы, потому что нужна вся история расширения, а не только сегодняшняя скорость."
+  },
+  "quiz": [
+   {
+    "id": "c1",
+    "type": "mcq",
+    "q": "Почему из закона Хаббла не следует, что мы находимся в центре расширения?",
+    "options": [
+     "Потому что линейная связь скорости и расстояния выглядит одинаково для наблюдателя в любой галактике",
+     "Потому что скорости слишком велики, чтобы определить центр",
+     "Потому что мы не знаем расстояний достаточно точно",
+     "Потому что галактики движутся во всех направлениях случайно"
+    ],
+    "answer": 0,
+    "why": "Перейдя в другую галактику, мы вычтем её скорость из всех остальных и получим ровно тот же закон. Такое свойство есть только у линейной зависимости — она и означает отсутствие выделенной точки."
+   },
+   {
+    "id": "c2",
+    "type": "mcq",
+    "q": "Линия в спектре галактики наблюдается на длине волны вдвое больше лабораторной. Что это значит?",
+    "options": [
+     "Пока свет шёл, Вселенная выросла вдвое; z = 1",
+     "Галактика удаляется со скоростью, равной удвоенной скорости света",
+     "Галактика вдвое дальше, чем при z = 0,5",
+     "Спектр искажён межгалактической пылью"
+    ],
+    "answer": 0,
+    "why": "$1+z$ — это отношение наблюдаемой длины волны к лабораторной, оно же отношение размеров Вселенной. Удвоение волны означает $z = 1$ и двукратный рост за время пути. Скорость при таком $z$ считать по $v = cz$ уже нельзя."
+   },
+   {
+    "id": "c3",
+    "type": "free",
+    "q": "Своими словами: почему галактика Андромеды приближается к нам, хотя Вселенная расширяется?",
+    "keywords": [
+     "тяготение",
+     "сильнее",
+     "близк",
+     "местн",
+     "групп",
+     "связан"
+    ],
+    "why": "На малых расстояниях взаимное тяготение сильнее расширения, и связанные системы — галактики, их группы и скопления — не разбегаются. Расширение проявляется там, где тяготение уже не удерживает: от десятков мегапарсек."
+   },
+   {
+    "id": "c4",
+    "type": "estimate",
+    "q": "Галактика удаляется со скоростью 14 000 км/с. Оцените расстояние до неё в мегапарсеках при H₀ = 70 км/(с·Мпк).",
+    "answer": 200,
+    "unit": "Мпк",
+    "tolerance": 30,
+    "why": "$d = v/H_0 = 14\\,000/70 = 200$ Мпк. Считать удобно так: при $H_0 = 70$ каждые $70$ км/с — это один мегапарсек, значит $14\\,000$ км/с дают $200$."
+   }
+  ]
+ },
+ "en": {
+  "title": "Expansion and Redshift",
+  "subtitle": "Why distant galaxies recede faster and why it does not mean we are at the center",
+  "intro": [
+   "Take a rubber band and mark three points at equal intervals. Stretch it: all distances increase, and each point 'moves away' from its neighbor. Now stand at any point and ask what you see. The nearer point moved away a little, the farther one twice as much, because between you and it there was twice as much rubber band, and all of it stretched. There is no special point on the rubber band: any point sees the same picture.",
+   "This is exactly the picture that galaxies show. The light from distant galaxies arrives redshifted — all its wavelengths are stretched compared to laboratory ones, and the more so the farther the galaxy. It is tempting to read this as 'they are flying away from us through space,' but it is incorrect: the distance itself grows, and along with it, the light wave stretches as it travels.",
+   "The difference is not just words. From 'flying through space' one would infer a center of expansion — a point where everything started. From 'distance grows' there is no center: an observer in any galaxy sees the same thing. This topic is about how from one measurable number — redshift — we obtain both recession speed and distance, and a rough estimate of the age of the Universe."
+  ],
+  "standNote": "Adjust the distance to the galaxy: the speed arrow grows proportionally — this is Hubble's law, and on the right it is the same straight line on the graph. Look at the wave in the middle: on its way to us it stretches, and the hydrogen line in the spectrum shifts to the right, toward the red edge. Move the distance to the edge of the scale: a note will warn that the linear formula is no longer enough here.",
+  "formula": {
+   "name": "Hubble's law",
+   "latex": "v = H_0 \\, d, \\qquad 1 + z = \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}}",
+   "alsoKnown": "Hubble–Lemaître law (as it has been called since 2018 by decision of the International Astronomical Union)",
+   "authors": [
+    {
+     "who": "Vesto Slipher",
+     "year": "1912–1917",
+     "what": "first measured line shifts in spiral nebulae and found that almost all of them are redshifted"
+    },
+    {
+     "who": "Georges Lemaître",
+     "year": "1927",
+     "what": "derived the linear relation between speed and distance from the equations of general relativity and estimated the coefficient"
+    },
+    {
+     "who": "Edwin Hubble",
+     "year": "1929",
+     "what": "measured distances to galaxies using Cepheids and demonstrated the relation with data"
+    },
+    {
+     "who": "Milton Humason",
+     "year": "1929–1936",
+     "what": "obtained spectra of distant galaxies that underpinned Hubble's measurements"
+    }
+   ],
+   "story": "Slipher saw redshifts fifteen years before Hubble, but did not know distances — without them one cannot build the relation. Lemaître derived the law theoretically two years before Hubble, published it in French in a little-known journal, and the work was almost unnoticed. The name of the law was corrected for nearly a century: in 2018 the astronomical union decided to call it the Hubble–Lemaître law.",
+   "symbols": [
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "recession speed of the galaxy",
+     "unit": "km/s"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "distance to the galaxy",
+     "unit": "Mpc"
+    },
+    {
+     "sym": "H₀",
+     "latex": "H_0",
+     "what": "Hubble constant — expansion rate today",
+     "unit": "km/(s·Mpc)"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "redshift: how many times the wave has stretched, minus one",
+     "unit": "—"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "wavelength of the line: observed and laboratory",
+     "unit": "nm"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Where the Linear Relation Comes From",
+   "lead": "We go from 'everything stretches equally' to the formula. The only assumption along the way is that the expansion is homogeneous: the same fraction of growth everywhere.",
+   "steps": [
+    {
+     "text": "Let’s describe the expansion with a single number. Suppose each pair of galaxies has an unchanging 'coordinate' separation $\\chi$—their label on the rubber band—and the physical distance is obtained by multiplying by the scale factor $a(t)$, common to the entire Universe. The stretching is then the same everywhere: there is no distinguished point in the description.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "Labels on the rubber band remain on their numbers, the distance between them grows with a(t)"
+    },
+    {
+     "text": "The recession velocity is the derivative of distance with respect to time. Differentiate and note that $\\chi$ is constant: the galaxy does not crawl along the rubber band but stands at its label.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "Velocity turns out to be proportional to distance: the factor ȧ/a is the same for all"
+    },
+    {
+     "text": "The factor $\\dot a / a$ is the Hubble constant. Constant only in space: at a given moment it is the same for all galaxies, but changes with time. Hence its subscript zero: the value today.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{today}",
+     "figure": "hubbleconst",
+     "figCaption": "H is the ratio of the growth rate to the current size, the same for all pairs of galaxies"
+    },
+    {
+     "text": "Now light. A wave emitted from a galaxy stretches with space exactly as much as the distance has grown during the travel time. This is redshift—not the motion of the source, but the history of expansion recorded in the wavelength.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "Wave in transit: the longer the light travels, the more its crest is stretched"
+    },
+    {
+     "text": "For nearby galaxies, where the stretching is small, redshift reduces to the familiar Doppler fraction. Hence a working chain: measure $z$ from the spectrum—get velocity, divide by $H_0$—get distance. For distant galaxies this cannot be done: there one needs to know the entire history $a(t)$, not just today's velocity.",
+     "latex": "z \\approx \\frac{v}{c} \\quad (z \\ll 1) \\;\\Longrightarrow\\; d \\approx \\frac{c\\,z}{H_0}",
+     "figure": "zladder",
+     "figCaption": "Working chain: a line in the spectrum gives z, from z we get velocity, from velocity we get distance"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "Left: quantities that cannot be measured directly—velocity and distance. Right: what is read from the spectrum with a ruler. The law connects the two.",
+   "note": "Note what is absent from the derivation: the position of the observer. The formula turned out the same for any galaxy, and this is not a coincidence but a consequence of homogeneity. If the expansion had a center, the linear relation would not hold."
+  },
+  "math": {
+   "title": "The mathematics needed here",
+   "lead": "The entire peculiarity of the derivation rests on one property of a linear function—and on careful handling of the word 'constant.'",
+   "items": [
+    {
+     "what": "Why a linear relation means 'no center'",
+     "why": "Homogeneous stretching means multiplying all distances by a single number. Only for a linear relation $v = H d$ does the picture look the same for all observers: moving to another galaxy, you subtract its velocity from all others and get exactly the same law. For any other dependence—for example $v \\propto d^2$—this does not work, and a distinguished point appears in the picture. So linearity here is not an approximation for convenience, but a direct expression that there is no center."
+    },
+    {
+     "what": "A 'constant' that changes",
+     "why": "$H$ is constant in space and variable in time: it is the growth rate divided by the current size, and both quantities change with time. Today $H_0 \\approx 70$ km/(s·Mpc). In units where kilometers and megaparsecs cancel, this is about $2{,}3\\cdot10^{-18}$ inverse seconds—that is, each unit of distance increases by two billionths of a percent per century. Imperceptible for a ruler, but noticeable for light that has traveled billions of years."
+    },
+    {
+     "what": "Megaparsec and why astronomers do not use meters",
+     "why": "One parsec is the distance from which the radius of the Earth's orbit is seen at an angle of one arcsecond, about $3{,}26$ light-years. A megaparsec is a million parsecs, a typical distance between galaxies. In meters it is $3{,}1\\cdot10^{22}$: numbers that are inconvenient to work with and easy to get wrong by an order of magnitude."
+    },
+    {
+     "what": "One divided by the Hubble constant",
+     "why": "The quantity $1/H_0$ has the dimension of time and is about $14$ billion years. This is not the age of the Universe, but an order-of-magnitude estimate—it would be exact only if the expansion had always proceeded at a constant rate. It did not: first it decelerated under gravity, then began to accelerate. The true age, $13{,}8$ billion years, turned out close to the estimate almost by chance—the two deviations partially canceled each other."
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with Numbers",
+   "lead": "Let's follow an astronomer's path: from spectrum to distance. We will work with the hydrogen line, the same one as on the stand.",
+   "given": "In the galaxy's spectrum, the hydrogen line $H_\\alpha$, whose laboratory wavelength is $656.3$ nm, is observed at $702$ nm. The Hubble constant is $H_0 = 70$ km/(s·Mpc).",
+   "law": "$1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}$, then $v \\approx cz$ and $d \\approx v / H_0$",
+   "solution": [
+    {
+     "text": "First, the redshift: divide the observed wavelength by the laboratory wavelength and subtract one.",
+     "latex": "z = \\frac{702}{656.3} - 1 \\approx 0.070",
+     "num": ""
+    },
+    {
+     "text": "The recession velocity for such a small $z$ is simply a fraction of the speed of light.",
+     "latex": "v \\approx c z = 299\\,792 \\cdot 0.070 \\approx 21\\,000 \\ \\text{km/s}",
+     "num": ""
+    },
+    {
+     "text": "Distance is obtained by dividing by the Hubble constant. The units are chosen so that kilometers per second divided by kilometers per second per megaparsec leaves megaparsecs.",
+     "latex": "d \\approx \\frac{21\\,000}{70} = 300 \\ \\text{Mpc}",
+     "num": ""
+    }
+   ],
+   "answer": "The galaxy is receding at about $21\\,000$ km/s and is located roughly $300$ Mpc away — that's about a billion light-years. Set the distance to $300$ on the stand and check all three numbers.",
+   "sanity": "Sanity check: $21\\,000$ km/s is seven percent of the speed of light, and the redshift also came out to seven percent. That's how it should be: for small $z$ these two numbers coincide. If you got that the velocity is a few percent of light speed while $z$ is tens of percent, then the speed of light was lost somewhere."
+  },
+  "constants": {
+   "title": "Constants: where they come from and what they mean",
+   "lead": "Three numbers without which nothing in this topic can be calculated, and one discrepancy that is being debated right now.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "Hubble constant",
+     "why": "Two methods of measurement give different answers, and this is not scatter but a persistent discrepancy. From the cosmic microwave background — that is, from the early universe with a model of its subsequent history — it comes out to $67.4$. From nearby galaxies directly, via Cepheids and supernovae, — $73.0$. The uncertainties of both measurements are about one percent, and the difference between them is eight percent. This is called the Hubble tension; in this course we take the round number $70$.",
+     "value": "67.4 or 73.0 km/(s·Mpc)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "speed of light",
+     "why": "Converts redshift to velocity. Since 1983, this is not a measured quantity but a definition: the meter is defined via the second and via $c$, so the speed of light has no uncertainty.",
+     "value": "299 792.458 km/s",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Mpc",
+     "name": "megaparsec",
+     "why": "The working unit of intergalactic distances. The Hubble constant is also measured through it, so in its units the megaparsec appears in the denominator.",
+     "value": "3.26 million light-years = 3.086·10²² m",
+     "latex": "1\\,\\text{Mpc}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "hydrogen line Hα",
+     "why": "Transition of an electron in a hydrogen atom between the third and second levels. It works as a ruler for the entire universe precisely because it does not depend on anything: a hydrogen atom in a distant galaxy is the same as in the laboratory.",
+     "value": "656.28 nm",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "Cosmology does not start from scratch: it is assembled from what has already been covered in other topics.",
+   "items": [
+    {
+     "h": "Waves",
+     "text": "Redshift is read the same way as an approaching siren is heard: by the shift in frequency. But the reason is different — not the source's velocity, but the expansion of distance along the wave's path."
+    },
+    {
+     "h": "Relativity",
+     "text": "The linear law and the prohibition of superluminal motion coexist only because galaxies are not moving through space. The limit $c$ applies to motion within space, not to the growth of space itself."
+    },
+    {
+     "h": "Atom",
+     "text": "All of distant astronomy relies on the fact that atomic energy levels are the same everywhere. The hydrogen line is a standard brought from the topic on the atom."
+    },
+    {
+     "h": "Gravity",
+     "text": "Expansion is slowed by the gravity of all the matter in the universe. Which one wins — gravity or the accelerating component — is discussed in the third paragraph of this topic."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Experiments at Home and Curious Details",
+   "lead": "The expansion of the Universe is the only topic in the course where a kitchen experiment faithfully reproduces the main idea, not just illustrates it.",
+   "items": [
+    {
+     "h": "Rubber band and ruler (five minutes)",
+     "text": "Take a wide rubber band, mark it with a marker at intervals of one centimeter and label them with numbers. Put a ruler alongside, stretch the rubber band to twice its length, and measure again. Mark number one moved by one centimeter, number three by three. The 'recession' speed is proportional to distance, even though you pulled the ends, not the marks. Now the main point: recalculate everything, taking mark number two as the origin. The numbers will be the same — there is no center of stretching.",
+     "icon": "kitchen",
+     "kind": "kitchen experiment"
+    },
+    {
+     "h": "Raisin cake",
+     "text": "While the dough rises, each raisin moves away from the others, and the farther ones recede faster than the nearer ones. The analogy works perfectly up to the edge of the pan: a cake has a boundary and a center, while the Universe, as far as we can tell, has neither.",
+     "icon": "kitchen",
+     "kind": "kitchen experiment"
+    },
+    {
+     "h": "Andromeda is coming toward us",
+     "text": "The neighboring large galaxy is approaching us at about $110$ km/s — its spectrum is blueshifted. There's no contradiction: at a distance of seven hundred kiloparsecs, gravity is stronger than expansion, and the Local Group of galaxies holds together. Expansion is visible only where gravity can no longer cope — from tens of megaparsecs onward.",
+     "icon": "fact",
+     "kind": "curious detail"
+    },
+    {
+     "h": "Galaxies receding faster than light",
+     "text": "Plug a distance of about $4300$ Mpc into Hubble's law — you get a speed greater than the speed of light. This is not an error nor a violation of relativity: it is the distance that grows, not a body moving. Light from such galaxies still reaches us because along the way it passes through regions that are receding more slowly.",
+     "icon": "edge",
+     "kind": "edge of known"
+    },
+    {
+     "h": "How distances were determined",
+     "text": "Redshift is easy to measure, distance is hard, but without it there is no law. Hubble relied on Cepheids: variable stars whose period of pulsation is related to luminosity. Knowing the true brightness and the apparent brightness gives the distance. Today, Type Ia supernovae play the same role for greater distances, and it is on them that the value $73$ is based, which disputes that from the CMB.",
+     "icon": "fact",
+     "kind": "how it was discovered"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Why this does not contradict relativity",
+   "text": "The prohibition from special relativity concerns the motion of objects relative to each other at a single point in space: nothing can outrun light. Expansion is different: space is being added between two distant galaxies, and the total recession speed can exceed $c$ without any of them moving faster than light in its own vicinity. Locally, each galaxy is at rest, and no signal overtakes anything. That is why cosmological redshift and Doppler shift are different things, although at small $z$ they yield the same numbers."
+  },
+  "memo": {
+   "essence": "Distances between galaxies grow proportionally to the distances themselves: $v = H_0 d$. Light traveling through expanding space is stretched by a factor $(1+z)$, so redshift is a measurable trace of the expansion history, not of the source's speed.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Speed proportional to distance",
+     "text": "Recession speed is proportional to distance: $v = H_0 d$, the same factor for all galaxies"
+    },
+    {
+     "icon": "estimate",
+     "title": "No center of expansion",
+     "text": "The linear law looks the same from any galaxy — there is no special point"
+    },
+    {
+     "icon": "fact",
+     "title": "z is wave stretching",
+     "text": "$1+z$ is how many times the wave has stretched, that is, how many times the Universe has grown during the light's journey"
+    },
+    {
+     "icon": "edge",
+     "title": "1/H₀ is only an estimate",
+     "text": "$1/H_0 \\approx 14$ billion years is an order-of-magnitude estimate of the age, not the age itself"
+    }
+   ],
+   "where": "Measuring distances to galaxies, searching for supernovae, calibrating cosmological models, the Hubble tension debate, estimating the age and size of the observable Universe.",
+   "watchOut": "Two common mistakes. The first is thinking that galaxies are flying through space from an explosion point; then a center inevitably appears, which does not exist. The second is applying $d = cz/H_0$ to distant galaxies with $z$ around one: there the formula is off by a factor, because the whole expansion history is needed, not just today's speed."
+  },
+  "quiz": [
+   {
+    "id": "c1",
+    "type": "mcq",
+    "q": "Why doesn't Hubble's law imply that we are at the center of the expansion?",
+    "options": [
+     "Because the linear relationship between speed and distance looks the same for an observer in any galaxy",
+     "Because the speeds are too large to determine the center",
+     "Because we don't know distances accurately enough",
+     "Because galaxies move randomly in all directions"
+    ],
+    "answer": 0,
+    "why": "By moving to another galaxy, we subtract its velocity from all others and get exactly the same law. This property holds only for a linear relationship — it means there is no special point."
+   },
+   {
+    "id": "c2",
+    "type": "mcq",
+    "q": "A line in a galaxy's spectrum is observed at twice the laboratory wavelength. What does this mean?",
+    "options": [
+     "While the light was traveling, the Universe doubled in size; $z = 1$",
+     "The galaxy is receding at twice the speed of light",
+     "The galaxy is twice as far as at $z = 0.5$",
+     "The spectrum is distorted by intergalactic dust"
+    ],
+    "answer": 0,
+    "why": "$1+z$ is the ratio of observed wavelength to laboratory wavelength, also the ratio of the Universe's sizes. Doubling the wavelength means $z = 1$ and twofold growth during the travel time. The velocity at such $z$ can no longer be calculated by $v = cz$."
+   },
+   {
+    "id": "c3",
+    "type": "free",
+    "q": "In your own words: why is the Andromeda galaxy approaching us, even though the Universe is expanding?",
+    "keywords": [
+     "gravity",
+     "stronger",
+     "close",
+     "local",
+     "group",
+     "bound"
+    ],
+    "why": "On small scales, mutual gravity is stronger than expansion, and bound systems — galaxies, their groups and clusters — do not fly apart. Expansion becomes apparent where gravity can no longer hold things together: from tens of megaparsecs."
+   },
+   {
+    "id": "c4",
+    "type": "estimate",
+    "q": "A galaxy is receding at 14,000 km/s. Estimate its distance in megaparsecs with $H_0 = 70$ km/(s·Mpc).",
+    "answer": 200,
+    "unit": "Mpc",
+    "tolerance": 30,
+    "why": "$d = v/H_0 = 14\\,000/70 = 200$ Mpc. It's convenient to think: with $H_0 = 70$, every $70$ km/s corresponds to one megaparsec, so $14\\,000$ km/s gives $200$."
+   }
+  ]
+ },
+ "es": {
+  "title": "Expansión y corrimiento al rojo",
+  "subtitle": "Por qué las galaxias lejanas se alejan más rápido y por qué eso no significa que estamos en el centro",
+  "intro": [
+   "Tome una goma elástica y marque tres puntos a intervalos iguales. Estírela: todas las distancias aumentan y cada punto se ha «alejado» de su vecino. Ahora colóquese en cualquier punto y pregúntese qué ve. El punto cercano se ha movido un poco, el lejano el doble, porque entre usted y él había el doble de goma elástica, y toda se ha estirado. No hay ningún punto destacado en la goma: cualquiera ve el mismo panorama.",
+   "Eso es exactamente lo que muestran las galaxias. La luz de las galaxias lejanas nos llega enrojecida: todas las longitudes de onda están estiradas en comparación con las de laboratorio, y cuanto más lejana la galaxia, mayor es el estiramiento. Es tentador interpretarlo como «se están alejando de nosotros a través del espacio», pero es incorrecto: lo que crece es la distancia misma entre ellas, y a medida que la distancia crece, la onda de luz se estira mientras viaja.",
+   "La diferencia no es solo de palabras. De «se alejan a través del espacio» se seguiría un centro de dispersión: un punto desde el cual todo comenzó. De «la distancia crece» no se sigue ningún centro: un observador en cualquier galaxia ve lo mismo. Este tema trata de cómo a partir de un solo número medible —el corrimiento al rojo— se obtienen tanto la velocidad de alejamiento como la distancia y una estimación aproximada de la edad del universo."
+  ],
+  "standNote": "Mueva la distancia a la galaxia: la flecha de velocidad crece proporcionalmente; esa es la ley de Hubble, y a la derecha se muestra como una línea recta en el gráfico. Observe la onda en el medio: en su camino hacia nosotros se estira, y la línea del hidrógeno en el espectro se desplaza hacia la derecha, hacia el extremo rojo. Lleve la distancia al extremo de la escala: una nota advertirá que la fórmula lineal ya no es suficiente.",
+  "formula": {
+   "name": "Ley de Hubble",
+   "latex": "v = H_0 \\, d, \\qquad 1 + z = \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}}",
+   "alsoKnown": "Ley de Hubble-Lemaître (así se denomina desde 2018 por decisión de la Unión Astronómica Internacional)",
+   "authors": [
+    {
+     "who": "Vesto Slipher",
+     "year": "1912–1917",
+     "what": "midió por primera vez los desplazamientos de las líneas en las nebulosas espirales y descubrió que casi todas son rojas"
+    },
+    {
+     "who": "Georges Lemaître",
+     "year": "1927",
+     "what": "obtuvo una relación lineal entre velocidad y distancia a partir de las ecuaciones de la relatividad general y estimó el coeficiente"
+    },
+    {
+     "who": "Edwin Hubble",
+     "year": "1929",
+     "what": "midió las distancias a las galaxias mediante cefeidas y demostró la relación con los datos"
+    },
+    {
+     "who": "Milton Humason",
+     "year": "1929–1936",
+     "what": "obtuvo los espectros de galaxias lejanas en los que se basaron las mediciones de Hubble"
+    }
+   ],
+   "story": "Slipher observó los corrimientos al rojo quince años antes que Hubble, pero no conocía las distancias, sin las cuales no se puede establecer la relación. Lemaître dedujo la ley teóricamente dos años antes que Hubble, la publicó en francés en una revista poco conocida, y el trabajo pasó casi desapercibido. El nombre de la ley se corrigió durante casi cien años: en 2018, la Unión Astronómica Internacional resolvió llamarla ley de Hubble-Lemaître.",
+   "symbols": [
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "velocidad de alejamiento de la galaxia",
+     "unit": "km/s"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "distancia a la galaxia",
+     "unit": "Mpc"
+    },
+    {
+     "sym": "H₀",
+     "latex": "H_0",
+     "what": "constante de Hubble — velocidad de expansión hoy",
+     "unit": "km/(s·Mpc)"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "corrimiento al rojo: cuántas veces se ha estirado la onda, menos uno",
+     "unit": "—"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "longitud de onda de la línea: observada y de laboratorio",
+     "unit": "nm"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "De dónde viene la relación lineal",
+   "lead": "Pasemos de «todo se estira por igual» a la fórmula. La única suposición en el camino es que la expansión es homogénea: la misma fracción de aumento en todas partes.",
+   "steps": [
+    {
+     "text": "Describamos la expansión con un solo número. Supongamos que cada par de galaxias tiene una diferencia «coordenada» invariante $\\chi$ — su número en la goma elástica — y la distancia física se obtiene multiplicando por el factor de escala $a(t)$, común para todo el universo. La expansión es la misma en todas partes: no hay un punto privilegiado en la descripción.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "Las marcas en la goma elástica permanecen en sus números, la distancia entre ellas crece junto con a(t)"
+    },
+    {
+     "text": "La velocidad de recesión es la derivada de la distancia respecto al tiempo. Derivamos y notamos que $\\chi$ es constante: la galaxia no se arrastra por la goma elástica, sino que permanece en su marca.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "La velocidad resulta proporcional a la distancia: el factor $\\dot a / a$ es el mismo para todos"
+    },
+    {
+     "text": "El factor $\\dot a / a$ es la constante de Hubble. Constante solo en el espacio: en un mismo instante es la misma para todas las galaxias, pero cambia con el tiempo. Por eso tiene un subíndice cero: el valor actual.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{en nuestra época}",
+     "figure": "hubbleconst",
+     "figCaption": "H — la razón entre la tasa de crecimiento y el tamaño actual, igual para todos los pares de galaxias"
+    },
+    {
+     "text": "Ahora la luz. Una onda que sale de una galaxia se estira junto con el espacio exactamente en la misma proporción en que ha crecido la distancia durante el tiempo de viaje. Esto es el corrimiento al rojo — no el movimiento de la fuente, sino la historia de la expansión, registrada en la longitud de onda.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "Onda en camino: cuanto más tiempo viaja la luz, más estirada está su cresta"
+    },
+    {
+     "text": "Para galaxias cercanas, donde la expansión es pequeña, el corrimiento al rojo se reduce a la fracción Doppler habitual. De aquí la cadena práctica: se mide $z$ en el espectro — se obtiene la velocidad, se divide por $H_0$ — se obtiene la distancia. Para galaxias lejanas no se puede hacer así: allí se necesita conocer toda la historia de $a(t)$, no solo la velocidad actual.",
+     "latex": "z \\approx \\frac{v}{c} \\quad (z \\ll 1) \\;\\Longrightarrow\\; d \\approx \\frac{c\\,z}{H_0}",
+     "figure": "zladder",
+     "figCaption": "Cadena práctica: la línea en el espectro da $z$, de $z$ la velocidad, de la velocidad la distancia"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "A la izquierda — lo que no se puede medir directamente: velocidad y distancia. A la derecha — lo que se lee del espectro con una regla. La ley relaciona uno con el otro.",
+   "note": "Observe lo que no está en la derivación: la posición del observador. La fórmula resultó igual para cualquier galaxia, y esto no es casualidad, sino una consecuencia de la homogeneidad. Si la expansión tuviera un centro, no surgiría una relación lineal."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Toda la singularidad de la deducción se basa en una propiedad de la función lineal — y en un manejo cuidadoso de la palabra 'constante'.",
+   "items": [
+    {
+     "what": "Por qué una relación lineal significa 'sin centro'",
+     "why": "El estiramiento homogéneo es la multiplicación de todas las distancias por un mismo número. Solo en la dependencia lineal $v = H d$ la imagen es la misma para todos los observadores: al pasar a otra galaxia, se resta su velocidad de todas las demás y se obtiene exactamente la misma ley. Para cualquier otra dependencia — por ejemplo $v \\propto d^2$ — no funciona, y aparece un punto distinguido en la imagen. Así que la linealidad aquí no es una aproximación por conveniencia, sino una expresión directa de que no hay centro."
+    },
+    {
+     "what": "'Constante' que cambia",
+     "why": "$H$ es constante en el espacio y variable en el tiempo: es la tasa de crecimiento dividida por el tamaño actual, y ambas cantidades cambian con el tiempo. Hoy $H_0 \\approx 70$ km/(s·Mpc). En unidades donde se cancelan kilómetros y megaparsecs, esto es aproximadamente $2{,}3\\cdot10^{-18}$ segundos inversos — es decir, cada unidad de distancia aumenta en dos milmillonésimas de porcentaje por siglo. Imperceptible para una regla, pero notable para la luz que ha viajado miles de millones de años."
+    },
+    {
+     "what": "Megaparsec y por qué los astrónomos no usan metros",
+     "why": "Un parsec es la distancia desde la cual el radio de la órbita terrestre se ve bajo un ángulo de un segundo de arco, unos $3{,}26$ años luz. Un megaparsec es un millón de parsecs, la distancia típica entre galaxias. En metros son $3{,}1\\cdot10^{22}$: números con los que es incómodo trabajar y fáciles de equivocar en un orden de magnitud."
+    },
+    {
+     "what": "Unidad dividida por la constante de Hubble",
+     "why": "La cantidad $1/H_0$ tiene dimensión de tiempo y es aproximadamente $14$ mil millones de años. No es la edad del universo, sino una estimación de orden de magnitud — sería la respuesta exacta solo si la expansión siempre hubiera ocurrido a velocidad constante. No fue así: primero frenó debido a la gravedad, luego comenzó a acelerarse. La edad real, $13{,}8$ mil millones de años, resultó cercana a la estimación casi por casualidad — dos desviaciones se cancelaron parcialmente."
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Recorramos el camino del astrónomo: del espectro a la distancia. Trabajamos con la línea del hidrógeno, la misma que en el banco.",
+   "given": "En el espectro de una galaxia, la línea del hidrógeno $H_\\alpha$, cuya longitud de onda en laboratorio es $656{,}3$ nm, se observa en $702$ nm. La constante de Hubble $H_0 = 70$ km/(s·Mpc).",
+   "law": "$1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}$, luego $v \\approx cz$ y $d \\approx v / H_0$",
+   "solution": [
+    {
+     "text": "Primero, el corrimiento al rojo: dividimos la longitud de onda observada entre la de laboratorio y restamos uno.",
+     "latex": "z = \\frac{702}{656{,}3} - 1 \\approx 0{,}070",
+     "num": ""
+    },
+    {
+     "text": "La velocidad de recesión para un $z$ tan pequeño es simplemente una fracción de la velocidad de la luz.",
+     "latex": "v \\approx c z = 299\\,792 \\cdot 0{,}070 \\approx 21\\,000 \\ \\text{km/s}",
+     "num": ""
+    },
+    {
+     "text": "La distancia se obtiene dividiendo por la constante de Hubble. Las unidades están ajustadas de modo que los kilómetros por segundo se dividen por kilómetros por segundo por megapársec y quedan megapársecs.",
+     "latex": "d \\approx \\frac{21\\,000}{70} = 300 \\ \\text{Mpc}",
+     "num": ""
+    }
+   ],
+   "answer": "La galaxia se aleja a una velocidad de unos $21\\,000$ km/s y se encuentra a unos $300$ Mpc — esto es del orden de mil millones de años luz. Coloque en el banco la distancia $300$ y verifique los tres números.",
+   "sanity": "Prueba de cordura: $21\\,000$ km/s es el siete por ciento de la velocidad de la luz, y el corrimiento al rojo también resultó ser del siete por ciento. Así debe ser: para $z$ pequeños, estos dos números coinciden. Si le ha resultado que la velocidad es un porcentaje de la velocidad de la luz y $z$ es un porcentaje de decenas, en algún lado se perdió la velocidad de la luz."
+  },
+  "constants": {
+   "title": "Constantes: de dónde vienen y qué significan",
+   "lead": "Tres números sin los cuales no se puede calcular nada en este tema, y una discrepancia por la que se discute ahora mismo.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "constante de Hubble",
+     "why": "Dos métodos de medición dan respuestas diferentes, y no es una dispersión, sino una discrepancia persistente. Según la radiación de fondo de microondas — es decir, del universo temprano con un modelo de su historia posterior — da $67{,}4$. Según galaxias cercanas directamente, mediante cefeidas y supernovas, — $73{,}0$. Las incertidumbres de ambas mediciones son alrededor del uno por ciento, y la diferencia entre ellas es del ocho por ciento. A esto se le llama tensión de Hubble; en el curso tomamos un valor redondo de $70$.",
+     "value": "67,4 o 73,0 km/(s·Mpc)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "velocidad de la luz",
+     "why": "Convierte el corrimiento al rojo en velocidad. Desde 1983 no es una magnitud medible, sino una definición: el metro está definido a partir del segundo y de $c$, por lo que la velocidad de la luz no tiene incertidumbre.",
+     "value": "299 792,458 km/s",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Mpc",
+     "name": "megapársec",
+     "why": "Unidad de trabajo para distancias intergalácticas. A través de ella se mide también la constante de Hubble, por lo que en sus unidades el megapársec está en el denominador.",
+     "value": "3,26 millones de años luz = 3,086·10²² m",
+     "latex": "1\\,\\text{Mpc}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "línea del hidrógeno Hα",
+     "why": "Transición del electrón en el átomo de hidrógeno entre el tercer y segundo nivel. Sirve como regla para todo el Universo precisamente porque no depende de nada: el átomo de hidrógeno en una galaxia lejana está constituido igual que en el laboratorio.",
+     "value": "656,28 nm",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "La cosmología no comienza desde cero: está armada a partir de lo que ya se ha visto en otros temas.",
+   "items": [
+    {
+     "h": "Ondas",
+     "text": "El corrimiento al rojo se lee de la misma manera que se escucha una sirena que se acerca: por el desplazamiento de frecuencia. Pero la causa es diferente — no es la velocidad de la fuente, sino el aumento de la distancia a lo largo del camino de la onda."
+    },
+    {
+     "h": "Relatividad",
+     "text": "La ley lineal y la prohibición del movimiento superlumínico conviven solo porque las galaxias no se mueven a través del espacio. La limitación de $c$ se refiere al movimiento dentro del espacio, no al crecimiento del espacio mismo."
+    },
+    {
+     "h": "Átomo",
+     "text": "Toda la astronomía lejana se sustenta en que los niveles de energía del átomo son iguales en todas partes. La línea del hidrógeno es un estándar traído del tema del átomo."
+    },
+    {
+     "h": "Gravedad",
+     "text": "La expansión es frenada por la gravedad de toda la materia del Universo. Qué es lo que vence — la gravedad o el componente acelerador — se analiza en el tercer párrafo de este tema."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Experimentos caseros y curiosidades",
+   "lead": "La expansión del Universo es el único tema del curso donde un experimento en la cocina reproduce fielmente la idea principal, y no solo la ilustra.",
+   "items": [
+    {
+     "h": "Goma elástica y regla (cinco minutos)",
+     "text": "Toma una goma elástica ancha, marca con un rotulador cada centímetro y numéralos. Aplica la regla, estira la goma al doble y mide de nuevo. La marca número uno se movió un centímetro, la número tres tres centímetros. La velocidad de «separación» es proporcional a la distancia, aunque tiraste de los extremos, no de las marcas. Ahora lo principal: recalcula todo tomando como origen la marca número dos. Los números serán los mismos — no hay centro de estiramiento.",
+     "icon": "kitchen",
+     "kind": "experimento en la cocina"
+    },
+    {
+     "h": "Bizcocho con pasas",
+     "text": "Mientras la masa sube, cada pasa se aleja de las demás, y las más lejanas se separan más rápido que las cercanas. La analogía es buena hasta el borde del molde: el bizcocho tiene un límite y un centro, mientras que el Universo, hasta donde podemos saber, no tiene ni uno ni otro.",
+     "icon": "kitchen",
+     "kind": "experimento en la cocina"
+    },
+    {
+     "h": "Andrómeda se acerca a nosotros",
+     "text": "La gran galaxia vecina se acerca a una velocidad de unos $110$ km/s — su espectro está desplazado hacia el azul. No hay contradicción: a una distancia de setecientos kiloparsecs, la gravedad es más fuerte que la expansión, y el Grupo Local de galaxias se mantiene unido. La expansión solo se aprecia donde la gravedad ya no puede contrarrestarla — desde decenas de megaparsecs en adelante.",
+     "icon": "fact",
+     "kind": "detalle curioso"
+    },
+    {
+     "h": "Galaxias que se alejan más rápido que la luz",
+     "text": "Introduzca en la ley de Hubble una distancia de unos $4300$ Mpc — obtendrá una velocidad mayor que la de la luz. Esto no es un error ni una violación de la relatividad: es la distancia la que crece, no un cuerpo que se mueve. La luz de estas galaxias aún nos llega porque en el camino atraviesa regiones que se alejan más lentamente.",
+     "icon": "edge",
+     "kind": "frontera de lo conocido"
+    },
+    {
+     "h": "Cómo se determinaron las distancias",
+     "text": "El corrimiento al rojo es fácil de medir, la distancia es difícil, y sin ella no hay ley. Hubble se basó en las cefeidas: estrellas variables cuyo período de pulsación está relacionado con la luminosidad. Conoces la luminosidad real y la aparente, conoces la distancia. Hoy en día, las supernovas de tipo Ia desempeñan ese mismo papel, y es en ellas que se basa el valor $73$, que discrepa con el valor del fondo cósmico.",
+     "icon": "fact",
+     "kind": "cómo se descubrió"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Por qué esto no contradice la teoría de la relatividad",
+   "text": "La prohibición de la teoría de la relatividad especial se refiere al movimiento de objetos entre sí en un mismo punto del espacio: no se puede superar la luz. La expansión es otra cosa: entre dos galaxias lejanas se genera espacio, y la velocidad total de su separación puede exceder $c$ sin que ninguna de ellas se mueva más rápido que la luz en su vecindad. Localmente, cada galaxia está en reposo, y ninguna señal supera a otra. Precisamente por eso el corrimiento al rojo cosmológico y el desplazamiento Doppler son diferentes, aunque en el rango de $z$ pequeño dan los mismos números."
+  },
+  "memo": {
+   "essence": "Las distancias entre galaxias crecen proporcionalmente a las propias distancias: $v = H_0 d$. La luz que viaja a través del espacio en expansión se estira en un factor $(1+z)$, por lo que el corrimiento al rojo es una huella medible de la historia de la expansión, no de la velocidad de la fuente.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "La velocidad es proporcional a la distancia",
+     "text": "La velocidad de alejamiento es proporcional a la distancia: $v = H_0 d$, el factor es el mismo para todas las galaxias"
+    },
+    {
+     "icon": "estimate",
+     "title": "No hay centro de expansión",
+     "text": "La ley lineal se ve igual desde cualquier galaxia — no existe un punto privilegiado"
+    },
+    {
+     "icon": "fact",
+     "title": "z es el estiramiento de la onda",
+     "text": "$1+z$ es el factor en que se ha estirado la onda, es decir, cuánto ha crecido el Universo durante el tiempo de viaje de la luz"
+    },
+    {
+     "icon": "edge",
+     "title": "1/H₀ es solo una estimación",
+     "text": "$1/H_0 \\approx 14$ mil millones de años — una estimación del orden de magnitud de la edad, no la edad misma"
+    }
+   ],
+   "where": "Medición de distancias a galaxias, búsqueda de supernovas, calibración de modelos cosmológicos, debate sobre la tensión de Hubble, estimación de la edad y el tamaño del Universo observable.",
+   "watchOut": "Dos errores frecuentes. El primero es pensar que las galaxias vuelan a través del espacio desde un punto de explosión; entonces aparece inevitablemente un centro que no existe. El segundo es aplicar $d = cz/H_0$ a galaxias lejanas con $z$ cercano a uno: allí la fórmula falla por un factor, porque se necesita toda la historia de la expansión, no solo la velocidad actual."
+  },
+  "quiz": [
+   {
+    "id": "c1",
+    "type": "mcq",
+    "q": "¿Por qué de la ley de Hubble no se deduce que estamos en el centro de la expansión?",
+    "options": [
+     "Porque la relación lineal entre velocidad y distancia se ve igual para un observador en cualquier galaxia",
+     "Porque las velocidades son demasiado grandes para determinar el centro",
+     "Porque no conocemos las distancias con suficiente precisión",
+     "Porque las galaxias se mueven en todas direcciones aleatoriamente"
+    ],
+    "answer": 0,
+    "why": "Al trasladarnos a otra galaxia, restamos su velocidad de todas las demás y obtenemos exactamente la misma ley. Esta propiedad solo la tiene una relación lineal — y eso significa que no hay un punto privilegiado."
+   },
+   {
+    "id": "c2",
+    "type": "mcq",
+    "q": "Una línea en el espectro de una galaxia se observa en una longitud de onda el doble de la de laboratorio. ¿Qué significa esto?",
+    "options": [
+     "Mientras la luz viajaba, el Universo se duplicó; z = 1",
+     "La galaxia se aleja a una velocidad igual al doble de la velocidad de la luz",
+     "La galaxia está al doble de distancia que cuando z = 0,5",
+     "El espectro está distorsionado por polvo intergaláctico"
+    ],
+    "answer": 0,
+    "why": "$1+z$ es la relación entre la longitud de onda observada y la de laboratorio, y también la relación de los tamaños del Universo. Duplicar la longitud de onda significa $z = 1$ y un crecimiento doble durante el viaje. La velocidad para tal $z$ ya no puede calcularse con $v = cz$."
+   },
+   {
+    "id": "c3",
+    "type": "free",
+    "q": "En tus propias palabras: ¿por qué la galaxia de Andrómeda se acerca a nosotros aunque el Universo se expande?",
+    "keywords": [
+     "gravedad",
+     "más fuerte",
+     "cerca",
+     "local",
+     "grupo",
+     "ligado"
+    ],
+    "why": "A distancias pequeñas, la gravedad mutua es más fuerte que la expansión, y los sistemas ligados — galaxias, sus grupos y cúmulos — no se separan. La expansión se manifiesta donde la gravedad ya no retiene: a partir de decenas de megapársecs."
+   },
+   {
+    "id": "c4",
+    "type": "estimate",
+    "q": "Una galaxia se aleja a una velocidad de 14 000 km/s. Estima la distancia hasta ella en megapársecs con H₀ = 70 km/(s·Mpc).",
+    "answer": 200,
+    "unit": "Mpc",
+    "tolerance": 30,
+    "why": "$d = v/H_0 = 14\\,000/70 = 200$ Mpc. Es fácil calcularlo: con $H_0 = 70$, cada $70$ km/s corresponden a un megapársec, entonces $14\\,000$ km/s dan $200$."
+   }
+  ]
+ },
+ "ar": {
+  "title": "التمدد والانزياح الأحمر",
+  "subtitle": "لماذا تبتعد المجرات البعيدة بشكل أسرع، ولماذا لا يعني ذلك أننا في المركز",
+  "intro": [
+   "خذ شريطًا مطاطيًا وارسم عليه ثلاث نقاط بمسافات متساوية. قم بتمديده: ستزداد جميع المسافات، وكل نقطة «ستبتعد» عن جارتها. الآن قف عند أي نقطة واسأل ما الذي تراه. النقطة القريبة ابتعدت قليلًا، والنقطة البعيدة ابتعدت بمقدار الضعف، لأن بينك وبينها كان هناك ضعف كمية المطاط، وقد تمدد بالكامل. لا توجد نقطة مميزة على الشريط: أي نقطة ترى نفس المشهد.",
+   "هذا بالضبط ما تظهره المجرات. ضوء المجرات البعيدة يصل إلينا وقد احمرت ألوانه — جميع الأطوال الموجية فيه تمددت مقارنة بتلك المختبرية، وكلما كانت المجرة أبعد، كان التمدد أكبر. من المغري تفسير ذلك على أنه «إنها تطير مبتعدة عنا عبر الفضاء»، لكن هذا غير صحيح: المسافة بينها وبيننا هي التي تنمو، ومع نمو المسافة تتمد موجة الضوء أيضًا أثناء رحلتها.",
+   "الفرق ليس مجرد كلمات. من «تطير عبر الفضاء» كان ينتج مركز للانفجار — نقطة بدأ منها كل شيء. من «المسافة تنمو» لا ينتج أي مركز: راصد في أي مجرة يرى نفس الشيء. هذا الموضوع يدور حول كيفية الحصول من رقم واحد قابل للقياس — الانزياح الأحمر — على سرعة الابتعاد والمسافة وتقدير تقريبي لعمر الكون."
+  ],
+  "standNote": "حرّك المسافة إلى المجرة: سهم السرعة ينمو بشكل متناسب — هذا هو قانون هابل، وعلى اليمين نفس العلاقة كخط مستقيم على الرسم البياني. انظر إلى الموجة في الوسط: في طريقها إلينا تتمدد، وينزاح خط الهيدروجين في الطيف إلى اليمين، نحو الطرف الأحمر. أوصل المسافة إلى حافة المقياس: سيحذرك النص بأن الصيغة الخطية لم تعد كافية هنا.",
+  "formula": {
+   "name": "قانون هابل",
+   "latex": "v = H_0 \\, d, \\qquad 1 + z = \\frac{\\lambda_{\\text{المرصودة}}}{\\lambda_{\\text{المنبعثة}}}",
+   "alsoKnown": "قانون هابل-ليميتر (هكذا يُسمى منذ 2018 بقرار من الاتحاد الفلكي الدولي)",
+   "authors": [
+    {
+     "who": "فيستو سلايفر",
+     "year": "1912–1917",
+     "what": "أول من قاس انزياحات الخطوط في السدم الحلزونية واكتشف أن جميعها تقريبًا حمراء"
+    },
+    {
+     "who": "جورج ليميتر",
+     "year": "1927",
+     "what": "حصل على العلاقة الخطية بين السرعة والمسافة من معادلات النسبية العامة وقدّر المعامل"
+    },
+    {
+     "who": "إدوين هابل",
+     "year": "1929",
+     "what": "قام بقياس المسافات إلى المجرات باستخدام المتغيرات القيفاوية وأظهر العلاقة على البيانات"
+    },
+    {
+     "who": "ميلتون هيوماسون",
+     "year": "1929–1936",
+     "what": "حصل على أطياف المجرات البعيدة التي اعتمدت عليها قياسات هابل"
+    }
+   ],
+   "story": "رأى سلايفر الانزياحات الحمراء قبل هابل بخمسة عشر عامًا، لكنه لم يعرف المسافات — وبدونها لا يمكن بناء العلاقة. استنتج ليميتر القانون نظريًا قبل هابل بعامين، ونشره بالفرنسية في مجلة غير معروفة، فلم يُلحظ العمل تقريبًا. تم تصحيح اسم القانون بعد مئة عام تقريبًا: في 2018 قرر الاتحاد الفلكي تسميته قانون هابل-ليميتر.",
+   "symbols": [
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "سرعة ابتعاد المجرة",
+     "unit": "km/s"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "المسافة إلى المجرة",
+     "unit": "Mpc"
+    },
+    {
+     "sym": "H₀",
+     "latex": "H_0",
+     "what": "ثابت هابل — معدل التمدد اليوم",
+     "unit": "km/(s·Mpc)"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "الانزياح الأحمر: عدد مرات تمدد الموجة ناقص واحد",
+     "unit": "—"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "طول الموجة للخط: المرصودة والمختبرية",
+     "unit": "nm"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "من أين تأتي العلاقة الخطية",
+   "lead": "لننتقل من 'كل شيء يتمدد بنفس الطريقة' إلى المعادلة. الافتراض الوحيد في الطريق هو أن التمدد منتظم: نفس نسبة الزيادة في كل مكان.",
+   "steps": [
+    {
+     "text": "لنصف التمدد برقم واحد. لنفترض أن كل زوج من المجرات لديه فرق 'إحداثي' ثابت $\\chi$ - رقمه على الشريط المطاطي - والمسافة الفيزيائية تُحصل بضربها في عامل القياس الكوني $a(t)$. التمدد متساوٍ في كل مكان: لا توجد نقطة مميزة في المعادلة.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "العلامات على الشريط المطاطي تبقى على أرقامها، المسافة بينها تزداد مع a(t)"
+    },
+    {
+     "text": "سرعة التباعد هي مشتقة المسافة بالنسبة للزمن. لنفاضل ولنلاحظ أن $\\chi$ ثابتة: المجرة لا تزحف على الشريط المطاطي بل تقف على علامتها.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "السرعة تتناسب طردياً مع المسافة: العامل ȧ/a واحد للجميع"
+    },
+    {
+     "text": "العامل $\\dot a / a$ هو ثابت هابل. ثابت فقط في المكان: في نفس اللحظة هو واحد لجميع المجرات، لكنه يتغير مع الزمن. لذلك له دليل صفر: القيمة اليوم.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{اليوم}",
+     "figure": "hubbleconst",
+     "figCaption": "H هي نسبة سرعة النمو إلى الحجم الحالي، متساوية لجميع أزواج المجرات"
+    },
+    {
+     "text": "الآن الضوء. الموجة الصادرة من المجرة تتمدد مع الفضاء بنفس النسبة التي نمت بها المسافة خلال زمن الرحلة. هذا هو الانزياح الأحمر - ليس حركة المصدر، بل تاريخ التمدد المسجل في طول الموجة.",
+     "latex": "\\frac{\\lambda_{\\text{مرصود}}}{\\lambda_{\\text{منبعث}}} = \\frac{a_{\\text{مرصود}}}{a_{\\text{منبعث}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "الموجة في الطريق: كلما طال زمن سير الضوء، زاد تمدد قمته"
+    },
+    {
+     "text": "للمجرات القريبة حيث التمدد صغير، يتحول الانزياح الأحمر إلى كسر دوبلر المألوف. من هنا الربط العملي: قاس $z$ من الطيف - حصلت على السرعة، قسمت على $H_0$ - حصلت على المسافة. للمجرات البعيدة لا يمكن فعل ذلك: هناك تحتاج إلى معرفة تاريخ $a(t)$ بأكمله، وليس فقط السرعة الحالية.",
+     "latex": "z \\approx \\frac{v}{c} \\quad (z \\ll 1) \\;\\Longrightarrow\\; d \\approx \\frac{c\\,z}{H_0}",
+     "figure": "zladder",
+     "figCaption": "سلسلة العمل: خط في الطيف يعطي z، من z السرعة، من السرعة المسافة"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{مرصود}} / \\lambda_{\\text{منبعث}}",
+   "plateCap": "على اليسار - ما لا يمكن قياسه مباشرة: السرعة والمسافة. على اليمين - ما يُقرأ من الطيف بالمسطرة. القانون يربط بينهما.",
+   "note": "لاحظ ما ليس في الاشتقاق: موقع الراصد. المعادلة أصبحت متساوية لأي مجرة، وهذا ليس صدفة بل نتيجة للتجانس. لو كان للتمدد مركز، لم تكن العلاقة الخطية لتظهر."
+  },
+  "math": {
+   "title": "الرياضيات التي كانت ضرورية هنا",
+   "lead": "كل غرابة الاشتقاق تعتمد على خاصية واحدة للدالة الخطية - وعلى التعامل الدقيق مع كلمة 'ثابت'.",
+   "items": [
+    {
+     "what": "لماذا تعني العلاقة الخطية بالذات 'بلا مركز'",
+     "why": "التمدد المنتظم هو ضرب جميع المسافات في رقم واحد. فقط للعلاقة الخطية $v = H d$ يكون المشهد متساوياً لجميع الراصدين: بالانتقال إلى مجرة أخرى، تطرح سرعتها من جميع السرعات الأخرى وتحصل على نفس القانون تماماً. لأي علاقة أخرى - مثلاً $v \\propto d^2$ - لن يحدث ذلك، وسيظهر في المشهد نقطة مميزة. لذا فالخطية هنا ليست تقريباً للراحة، بل تعبير مباشر عن عدم وجود مركز."
+    },
+    {
+     "what": "ثابت يتغير",
+     "why": "$H$ ثابت في المكان ومتغير في الزمان: هو نسبة سرعة النمو إلى الحجم الحالي، وكلتا الكميتين تتغيران مع الزمن. اليوم $H_0 \\approx 70$ km/(s·Mpc). بالوحدات حيث تُلغى الكيلومترات والميغابارسيكات، هذا يساوي تقريباً $2{,}3\\cdot10^{-18}$ ثانية مقلوبة - أي أن كل وحدة مسافة تزداد بجزئين من المليار في المئة كل قرن. غير ملحوظ للمسطرة وملحوظ للضوء الذي قطع مليارات السنين."
+    },
+    {
+     "what": "الميغابارسيك ولماذا لا يستخدم الفلكيون الأمتار",
+     "why": "الفرسخ الواحد هو المسافة التي يُرى منها نصف قطر مدار الأرض بزاوية ثانية قوسية واحدة، حوالي $3{,}26$ سنة ضوئية. الميغابارسيك هو مليون فرسخ، مسافة نموذجية بين المجرات. بالأمتار هذا $3{,}1\\cdot10^{22}$: أرقام غير مريحة للتعامل وسهل الخطأ في رتبة المقدار."
+    },
+    {
+     "what": "الوحدة مقسومة على ثابت هابل",
+     "why": "الكمية $1/H_0$ لها بعد زمني وتساوي حوالي $14$ مليار سنة. هذا ليس عمر الكون بل تقدير لرتبة المقدار - كان سيكون الإجابة الدقيقة فقط لو كان التمدد دائمًا بسرعة ثابتة. لكنه لم يكن كذلك: في البداية تباطأ بفعل الجاذبية، ثم تسارع. العمر الحقيقي، $13{,}8$ مليار سنة، تبين أنه قريب من التقدير بشكل شبه عشوائي - انحرافان تعويضا بعضهما جزئيًا."
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "دعنا نسير في طريق الفلكي: من الطيف إلى المسافة. نعمل مع خط الهيدروجين، نفس الخط الموجود على المنصة.",
+   "given": "في طيف المجرة، خط الهيدروجين $H_\\alpha$، الذي طول موجته المخبرية $656{,}3$ nm، يُرصد عند $702$ nm. ثابت هابل $H_0 = 70$ km/(s·Mpc).",
+   "law": "$1 + z = \\lambda_{\\text{مرصود}} / \\lambda_{\\text{منبعث}}$، ثم $v \\approx cz$ و $d \\approx v / H_0$",
+   "solution": [
+    {
+     "text": "أولاً، الانزياح الأحمر: نقسم الطول الموجي المرصود على الطول المخبري ونطرح واحدًا.",
+     "latex": "z = \\frac{702}{656{,}3} - 1 \\approx 0{,}070",
+     "num": ""
+    },
+    {
+     "text": "سرعة التباعد لمثل هذا $z$ الصغير هي مجرد جزء من سرعة الضوء.",
+     "latex": "v \\approx c z = 299\\,792 \\cdot 0{,}070 \\approx 21\\,000 \\ \\text{km/s}",
+     "num": ""
+    },
+    {
+     "text": "نحصل على المسافة بالقسمة على ثابت هابل. الوحدات مختارة بحيث أن الكيلومترات في الثانية تقسم على الكيلومترات في الثانية لكل ميجا فرسخ فلكي، وتتبقى ميجا فرسخ فلكي.",
+     "latex": "d \\approx \\frac{21\\,000}{70} = 300 \\ \\text{Mpc}",
+     "num": ""
+    }
+   ],
+   "answer": "المجرة تبتعد بسرعة حوالي $21\\,000$ km/s وتقع على بعد حوالي $300$ Mpc — أي حوالي مليار سنة ضوئية. ضع المسافة $300$ على المنصة وقارن الأرقام الثلاثة.",
+   "sanity": "فحص الفطرة السليمة: $21\\,000$ km/s هي سبعة بالمائة من سرعة الضوء، والانزياح الأحمر هو أيضًا سبعة بالمائة. هذا هو المفروض: عند $z$ الصغير، يتطابق الرقمان. إذا حصلت على أن السرعة هي نسبة مئوية من سرعة الضوء بينما $z$ عشرات بالمائة، فهناك خطأ في مكان ما في سرعة الضوء."
+  },
+  "constants": {
+   "title": "الثوابت: من أين أتت وماذا تعني",
+   "lead": "ثلاثة أرقام، بدونها لا يمكن حساب أي شيء في هذا الموضوع، وخلاف واحد يثير الجدل حالياً.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "ثابت هابل",
+     "why": "طريقتان للقياس تعطيان إجابتين مختلفتين، وهذا ليس تشتتًا بل اختلافًا ثابتًا. بناءً على الإشعاع الخلفي للميكروويف - أي الكون المبكر مع نموذج تاريخه اللاحق - نحصل على $67{,}4$. وبالنسبة للمجرات القريبة مباشرة، من خلال النجوم القيفاوية والمستعرات العظيمة، نحصل على $73{,}0$. أخطاء كلا القياسين حوالي واحد بالمائة، والفرق بينهما ثمانية بالمائة. وهذا ما يسمى توتر هابل؛ في هذه الدورة نأخذ القيمة المستديرة $70$.",
+     "value": "67,4 أو 73,0 km/(s·Mpc)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "سرعة الضوء",
+     "why": "يحول الانزياح الأحمر إلى سرعة. منذ عام 1983، لم تعد هذه كمية تقاس، بل تعريف: المتر معرّف بالثانية وبـ $c$، لذلك ليس لسرعة الضوء خطأ.",
+     "value": "299 792,458 km/s",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Mpc",
+     "name": "ميجا فرسخ فلكي",
+     "why": "الوحدة العملية للمسافات بين المجرات. من خلالها يُقاس ثابت هابل أيضًا، لذلك في وحداته، الميجا فرسخ الفلكي موجود في المقام.",
+     "value": "3,26 مليون سنة ضوئية = 3,086·10²² m",
+     "latex": "1\\,\\text{Mpc}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "خط الهيدروجين Hα",
+     "why": "انتقال الإلكترون في ذرة الهيدروجين بين المستوى الثالث والثاني. يصلح كمسطرة للكون بأكمله لأنه لا يعتمد على أي شيء: ذرة الهيدروجين في مجرة بعيدة مبنية بنفس الطريقة كما في المختبر.",
+     "value": "656,28 nm",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "علم الكون لا يبدأ من الصفر: إنه مبني على ما تم تغطيته بالفعل في مواضيع أخرى.",
+   "items": [
+    {
+     "h": "الأمواج",
+     "text": "يُقرأ الانزياح الأحمر بنفس الطريقة التي تُسمع بها صفارة الإنذار المقتربة: من خلال تحول التردد. لكن السبب مختلف - ليس سرعة المصدر، بل نمو المسافة على طول مسار الموجة."
+    },
+    {
+     "h": "النسبية",
+     "text": "القانون الخطي وحظر الحركة الأسرع من الضوء يتوافقان فقط لأن المجرات لا تتحرك عبر الفضاء. الحد $c$ يتعلق بالحركة داخل الفضاء، وليس بنمو الفضاء نفسه."
+    },
+    {
+     "h": "الذرة",
+     "text": "كل علم الفلك البعيد يعتمد على حقيقة أن مستويات الطاقة للذرة هي نفسها في كل مكان. خط الهيدروجين هو معيار تم إحضاره من موضوع الذرة."
+    },
+    {
+     "h": "الجاذبية",
+     "text": "التوسع يتباطأ بسبب جاذبية كل مادة الكون. ما الذي ينتصر بالضبط - الجاذبية أو المكون المتسارع - يتم مناقشته في الفقرة الثالثة من هذا الموضوع."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "تجارب منزلية وتفاصيل مثيرة للاهتمام",
+   "lead": "توسع الكون هو الموضوع الوحيد في الدورة حيث تجربة المطبخ تعيد إنتاج الفكرة الرئيسية بأمانة، ولا تكتفي بتوضيحها فقط.",
+   "items": [
+    {
+     "h": "شريط مطاطي ومسطرة (خمس دقائق)",
+     "text": "خذ شريطًا مطاطيًا عريضًا، ضع علامات بقلم تحديد كل سنتيمتر واكتب أرقامها. ضع المسطرة، ومد الشريط إلى الضعف ثم قس مرة أخرى. العلامة رقم 1 ابتعدت سنتيمترًا، ورقم 3 ابتعدت ثلاثة سنتيمترات. سرعة «الابتعاد» تتناسب مع المسافة، بالرغم من أنك شددت من الأطراف وليس من العلامات. الآن الأمر المهم: احسب كل شيء من جديد، مع اعتبار العلامة رقم 2 كنقطة أصل. الأرقام ستكون نفسها — لا يوجد مركز للتمدد.",
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ"
+    },
+    {
+     "h": "كعكة بالزبيب",
+     "text": "بينما يرتفع العجين، تبتعد كل زبيبة عن الأخرى، والبعيدة تبتعد أسرع من القريبة. التشبيه جيد تمامًا حتى حافة القالب: الكعكة لها حدود ومركز، أما الكون، بقدر ما نستطيع الحكم، فلا حدود له ولا مركز.",
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ"
+    },
+    {
+     "h": "أندروميدا تقترب منا",
+     "text": "المجرة الكبيرة المجاورة تقترب منا بسرعة حوالي $110$ km/s — طيفها منزاح نحو الأزرق. لا يوجد تناقض: على مسافة سبعمائة كيلو فرسخ فلكي، الجاذبية أقوى من التوسع، والمجموعة المحلية من المجرات تبقى متماسكة. التوسع لا يُرى إلا حيث الجاذبية لا تستطيع التغلب عليه — من عشرات الميغا فرسخ فلكي وما بعدها.",
+     "icon": "fact",
+     "kind": "تفاصيل مثيرة"
+    },
+    {
+     "h": "مجرات تبتعد أسرع من الضوء",
+     "text": "عوّض في قانون هابل بمسافة حوالي $4300$ Mpc — ستحصل على سرعة أكبر من سرعة الضوء. هذا ليس خطأ ولا انتهاكًا للنسبية: إنها المسافة التي تنمو، وليس جسمًا يطير. الضوء من هذه المجرات يصل إلينا مع ذلك، لأنه في الطريق يمر عبر مناطق تبتعد ببطء أكبر.",
+     "icon": "edge",
+     "kind": "حدود المعرفة"
+    },
+    {
+     "h": "كيف عُرفت المسافات",
+     "text": "الانزياح الأحمر سهل القياس، والمسافة صعبة، وبدونها لا يوجد قانون. اعتمد هابل على القيافيات: نجوم متغيرة ترتبط فترة وميضها بسطوعها. إذا عرفت السطوع الحقيقي والظاهري، عرفت المسافة. اليوم، تلعب المستعرات العظمى من النوع Ia نفس الدور لمسافات أبعد، وهي التي بني عليها القيمة $73$ التي تتنافس مع قيمة الخلفية الميكروية الكونية.",
+     "icon": "fact",
+     "kind": "كيف عُرف هذا"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "لماذا لا يتعارض هذا مع نظرية النسبية",
+   "text": "المنع من النسبية الخاصة يتعلق بحركة الأجسام بالنسبة لبعضها البعض في نفس النقطة من الفضاء: لا يمكن تجاوز الضوء. التوسع شيء آخر: بين مجرتين بعيدتين، يزداد الفضاء، والسرعة الكلية لابتعادهما يمكن أن تتجاوز $c$ دون أن يتحرك أي منهما أسرع من الضوء في محيطه. محليًا، كل مجرة ساكنة في مكانها، ولا توجد إشارة تتجاوز أي شيء. لهذا السبب، الانزياح الأحمر الكوني والإزاحة الدوبلرية شيئان مختلفان، رغم أنهما يعطيان نفس الأرقام في نطاق $z$ الصغير."
+  },
+  "memo": {
+   "essence": "المسافات بين المجرات تنمو بتناسب مع المسافات نفسها: $v = H_0 d$. الضوء الذي يسير عبر الفضاء المتوسع يتمدد بمعدل $(1+z)$ مرة، وبالتالي فإن الانزياح الأحمر هو أثر قابل للقياس لتاريخ التوسع، وليس لسرعة المصدر.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "السرعة تتناسب مع المسافة",
+     "text": "سرعة الابتعاد تتناسب مع المسافة: $v = H_0 d$، العامل نفسه لجميع المجرات"
+    },
+    {
+     "icon": "estimate",
+     "title": "لا يوجد مركز للتوسع",
+     "text": "القانون الخطي يبدو نفسه من أي مجرة — لا توجد نقطة مميزة"
+    },
+    {
+     "icon": "fact",
+     "title": "z هو تمدد الموجة",
+     "text": "$1+z$ — كم مرة تمددت الموجة، أي كم مرة نما الكون خلال زمن رحلة الضوء"
+    },
+    {
+     "icon": "edge",
+     "title": "1/H₀ مجرد تقدير",
+     "text": "$1/H_0 \\approx 14$ مليار سنة — تقدير تقريبي للعمر، وليس العمر نفسه"
+    }
+   ],
+   "where": "قياس المسافات إلى المجرات، البحث عن المستعرات العظمى، معايرة النماذج الكونية، الجدل حول توتر هابل، تقدير عمر وحجم الكون المرئي.",
+   "watchOut": "خطأان شائعان. الأول: الاعتقاد أن المجرات تطير عبر الفضاء من نقطة انفجار؛ عندها يظهر مركز لا وجود له. الثاني: تطبيق $d = cz/H_0$ على المجرات البعيدة ذات $z$ قريب من الواحد: هنا تكذب الصيغة بعدة أضعاف، لأننا نحتاج إلى تاريخ التوسع بأكمله، وليس فقط السرعة الحالية."
+  },
+  "quiz": [
+   {
+    "id": "c1",
+    "type": "mcq",
+    "q": "لماذا لا يستنتج من قانون هابل أننا في مركز التوسع؟",
+    "options": [
+     "لأن العلاقة الخطية بين السرعة والمسافة تبدو متطابقة لأي راصد في أي مجرة",
+     "لأن السرعات كبيرة جدًا بحيث لا يمكن تحديد المركز",
+     "لأننا لا نعرف المسافات بدقة كافية",
+     "لأن المجرات تتحرك في جميع الاتجاهات بشكل عشوائي"
+    ],
+    "answer": 0,
+    "why": "بالانتقال إلى مجرة أخرى، سنطرح سرعتها من سرعات البقية وسنحصل على نفس القانون تمامًا. هذه الخاصية موجودة فقط في العلاقة الخطية — وهي تعني عدم وجود نقطة مميزة."
+   },
+   {
+    "id": "c2",
+    "type": "mcq",
+    "q": "يُلاحظ خط في طيف مجرة عند طول موجي ضعف الطول المخبري. ماذا يعني ذلك؟",
+    "options": [
+     "بينما كان الضوء في طريقه، تضاعف حجم الكون؛ z = 1",
+     "المجرة تبتعد بسرعة تعادل ضعف سرعة الضوء",
+     "المجرة أبعد بمرتين مما هي عليه عند z = 0.5",
+     "الطيف مشوه بسبب الغبار بين المجرات"
+    ],
+    "answer": 0,
+    "why": "$1+z$ هي نسبة الطول الموجي المرصود إلى المخبري، وهي نفس نسبة حجم الكون. مضاعفة الطول تعني $z = 1$ والنمو المضاعف خلال زمن الرحلة. لا يمكن حساب السرعة عند هذا $z$ باستخدام $v = cz$."
+   },
+   {
+    "id": "c3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا تقترب منا مجرة أندروميدا رغم أن الكون يتوسع؟",
+    "keywords": [
+     "جاذبية",
+     "أقوى",
+     "قريب",
+     "محلي",
+     "مجموعة",
+     "مرتبط"
+    ],
+    "why": "على مسافات صغيرة، تكون الجاذبية المتبادلة أقوى من التوسع، والأنظمة المرتبطة — المجرات ومجموعاتها وعناقيدها — لا تتباعد. يظهر التوسع حيث لا تستطيع الجاذبية الاحتفاظ بها: من عشرات الميغابارسك."
+   },
+   {
+    "id": "c4",
+    "type": "estimate",
+    "q": "مجرة تبتعد بسرعة 14,000 km/s. قدر المسافة إليها بالميغابارسك عندما H₀ = 70 km/(s·Mpc).",
+    "answer": 200,
+    "unit": "Mpc",
+    "tolerance": 30,
+    "why": "$d = v/H_0 = 14,000/70 = 200$ Mpc. من السهل الحساب: عندما $H_0 = 70$، كل $70$ km/s تعادل ميغابارسك واحد، لذا $14,000$ km/s تعطي $200$."
+   }
+  ]
+ }
+}
