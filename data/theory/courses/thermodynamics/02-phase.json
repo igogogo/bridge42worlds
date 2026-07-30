@@ -1273,5 +1273,309 @@
  },
  "laws": [
   "law_of_conservation_of_energy"
- ]
+ ],
+ "fr": {
+  "title": "Transitions de phase",
+  "subtitle": "Paragraphe 2 · Chaleur latente et point d'ébullition",
+  "intro": [
+   "Mettez une bouilloire et surveillez le thermomètre. Il monte docilement : $40^\\circ$, $70^\\circ$, $95^\\circ$ — et s'arrête. La plaque continue d'injecter des kilowatts, l'énergie coule à flots, mais l'aiguille reste à cent degrés et ne bouge pas jusqu'à ce que l'eau se soit évaporée complètement.",
+   "La loi de conservation de l'énergie est-elle violée ? Bien sûr que non. L'énergie n'a pas disparu — elle est partie vers un autre travail, invisible au thermomètre.",
+   "Pour qu'une molécule d'eau quitte le liquide et devienne vapeur, il ne suffit pas d'être rapide. Elle doit rompre les liaisons avec ses voisines. Chez l'eau, ces liaisons — les liaisons hydrogène — sont exceptionnellement solides, et c'est à leur rupture que va toute la puissance de la plaque pendant l'ébullition."
+  ],
+  "standNote": "Sur le stand, le curseur de pression est en fait l'altitude au-dessus du niveau de la mer. Réglez $0{,}5$ atm (environ le sommet de l'Elbrouz) — l'eau bout à $81^\\circ$C. Réglez $2$ atm (autocuiseur) — seulement à $121^\\circ$C. Et regardez le graphique : tant que l'ébullition dure, la courbe est strictement horizontale. Ce palier est la chaleur latente en personne.",
+  "formula": {
+   "name": "Équation de Clausius — Clapeyron",
+   "latex": "\\frac{dP}{dT} = \\frac{L}{T\\,\\Delta V}",
+   "alsoKnown": "Loi reliant la pression et la température d'une transition de phase",
+   "authors": [
+    {
+     "who": "Émile Clapeyron",
+     "year": "1834",
+     "what": "a dérivé la relation à partir de l'analyse du cycle de Carnot appliqué à la transition liquide–vapeur"
+    },
+    {
+     "who": "Rudolf Clausius",
+     "year": "1850",
+     "what": "a donné à l'équation une forme thermodynamique rigoureuse, en s'appuyant sur le concept d'entropie qu'il a introduit"
+    }
+   ],
+   "story": "Clapeyron a obtenu cette relation en réfléchissant à une machine à vapeur : il a mentalement fait passer le fluide de travail par un cycle dont une partie suit la limite d'ébullition. Clausius a montré plus tard que l'équation est une conséquence directe du deuxième principe — l'égalité des potentiels chimiques des phases coexistantes."
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Ici, deux questions différentes, et elles se résolvent différemment. La première — où va l'énergie lors de l'ébullition — est une simple arithmétique. La seconde — pourquoi le point d'ébullition dépend de la pression — nécessite une véritable thermodynamique.",
+   "steps": [
+    {
+     "text": "Tant que l'eau chauffe, toute la chaleur apportée sert à augmenter la température. C'est la capacité thermique ordinaire : la masse multipliée par la chaleur massique et par la différence de température.",
+     "latex": "Q_1 = c\\,m\\,\\Delta T",
+     "figure": "heating",
+     "figCaption": "Chauffage : l'énergie accélère les molécules, le thermomètre monte."
+    },
+    {
+     "text": "Pour une bouilloire avec $m = 0{,}2$ kg d'eau chauffée de $20^\\circ$ à $100^\\circ$C, on obtient un nombre concret.",
+     "latex": "Q_1 = 4200 \\cdot 0{,}2 \\cdot 80 \\approx 67\\ \\text{kJ}",
+     "figure": "heatbar1",
+     "figCaption": "Soixante-sept kilojoules — tout le chemin de la température ambiante à l'ébullition."
+    },
+    {
+     "text": "Dès que l'ébullition commence, la température se fige. La chaleur continue d'être fournie, mais va entièrement à la transformation du liquide en vapeur. Il n'y a aucune différence de température ici — seulement la masse et la chaleur latente de vaporisation.",
+     "latex": "Q_2 = L\\,m = 2{,}26\\cdot10^{6} \\cdot 0{,}2 \\approx 452\\ \\text{kJ}",
+     "figure": "boiling",
+     "figCaption": "Ébullition : l'énergie brise les liaisons entre molécules, le thermomètre reste immobile."
+    },
+    {
+     "text": "Comparons les deux nombres. Voici la réponse numérique à l'énigme du début : pour amener l'eau à ébullition, il faut plusieurs fois moins d'énergie que pour la faire évaporer complètement.",
+     "latex": "\\frac{Q_2}{Q_1} = \\frac{L}{c\\,\\Delta T} \\approx 6{,}8",
+     "figure": "heatbar2",
+     "figCaption": "Le rapport est presque de sept — donc ça bout en minutes, mais ça s'évapore en dizaines de minutes."
+    },
+    {
+     "text": "Maintenant, la deuxième tâche. L'ébullition est un équilibre entre liquide et vapeur : autant de molécules s'envolent, autant reviennent. Le déplacement de cet équilibre sous l'effet d'un changement de pression est décrit par l'équation de Clausius-Clapeyron, où $\\Delta V$ est l'augmentation de volume lors de l'évaporation.",
+     "latex": "\\frac{dP}{dT} = \\frac{L_{\\text{mol}}}{T\\,\\Delta V}",
+     "figure": "equilibrium",
+     "figCaption": "Une bulle de vapeur doit écarter l'atmosphère au-dessus de l'eau — plus celle-ci appuie fort, plus il est difficile pour la bulle de naître."
+    },
+    {
+     "text": "La vapeur occupe un volume des milliers de fois plus grand que le liquide qui l'a produite, donc $\\Delta V \\approx V_{\\text{vap}}$. En considérant la vapeur comme un gaz parfait du premier paragraphe, nous substituons $V = RT/P$ et séparons les variables.",
+     "latex": "\\frac{dP}{P} = \\frac{L_{\\text{mol}}}{R}\\,\\frac{dT}{T^{2}}",
+     "figure": "integrate",
+     "figCaption": "Les variables sont séparées : à gauche seulement la pression, à droite seulement la température — on peut intégrer."
+    },
+    {
+     "text": "En intégrant les deux côtés et en supposant la chaleur de vaporisation constante, on obtient la relation entre la pression et la température d'ébullition. C'est exactement cette formule que calcule notre stand.",
+     "latex": "\\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T} - \\frac{1}{T_0}\\right)",
+     "figure": "boilcurve",
+     "figCaption": "Courbe d'ébullition : en montagne, la pression est plus basse — l'eau bout plus tôt, dans un autocuiseur, plus tard."
+    }
+   ],
+   "plate": "Q = L\\,m \\qquad \\ln\\frac{P}{P_0} = -\\frac{L_{\\text{mol}}}{R}\\left(\\frac{1}{T}-\\frac{1}{T_0}\\right)",
+   "plateCap": "À gauche — la chaleur latente : l'énergie partie dans la rupture des liaisons, pas dans les degrés. À droite — la loi qui relie la pression externe à la température d'ébullition.",
+   "note": "Pourquoi l'eau est-elle si particulière ? Ses molécules sont liées par des liaisons hydrogène, anormalement solides pour une si petite molécule. D'où une chaleur de vaporisation record : pour l'acétone, elle est quatre fois moindre, pour l'éther, six fois moindre. Si l'eau se comportait comme un liquide ordinaire, les océans s'évaporeraient rapidement, et l'évaporation de la sueur ne nous sauverait pas de la surchauffe."
+  },
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Séparation des variables",
+     "why": "Une équation de la forme $dP/dT = f(P)\\,g(T)$ se résout ainsi : on regroupe tout ce qui dépend de $P$ à gauche, tout ce qui dépend de $T$ à droite, et on intègre les deux parties indépendamment. C'est une technique standard pour les équations différentielles du premier ordre, et elle est également utilisée pour dériver l'adiabatique dans la section suivante.",
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{mol}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{mol}}}{RT} + \\text{const}"
+    },
+    {
+     "what": "Pourquoi le logarithme apparaît",
+     "why": "L'intégrale de $1/P$ par $dP$ donne le logarithme népérien — c'est la seule fonction dont la dérivée est $1/x$. Les logarithmes apparaissent donc inévitablement partout où le taux de variation d'une grandeur lui est proportionnel : dans la désintégration radioactive, la croissance des populations, la pression de vapeur saturante.",
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Un problème classique qui explique pourquoi il est difficile de cuisiner en montagne.",
+   "given": "Un touriste est monté à une altitude où la pression est de $0{,}6$ atm. À quelle température l'eau bout-elle ? Adopter $L_{\\text{mol}} = 40\\,660$ J/mol, $T_0 = 373$ K, $R = 8{,}314$ J/(mol·K).",
+   "law": "Équation de Clausius–Clapeyron sous forme intégrale, résolue pour $T$",
+   "solution": [
+    {
+     "text": "On calcule le logarithme du rapport des pressions. Il est négatif car la pression a diminué.",
+     "latex": "\\ln(0{,}6) \\approx -0{,}51"
+    },
+    {
+     "text": "Le rapport $R/L_{\\text{mol}}$ donne le facteur d'échelle.",
+     "latex": "\\frac{R}{L_{\\text{mol}}} = \\frac{8{,}314}{40660} \\approx 2{,}04\\cdot10^{-4}"
+    },
+    {
+     "text": "On substitue dans la formule de la température inverse.",
+     "latex": "\\frac{1}{T} = \\frac{1}{373} + 2{,}04\\cdot10^{-4}\\cdot 0{,}51 \\approx 2{,}78\\cdot10^{-3}"
+    },
+    {
+     "text": "On inverse et on convertit en degrés Celsius.",
+     "latex": "T \\approx 360\\ \\text{K} = 87^\\circ\\text{C}"
+    }
+   ],
+   "answer": "L'eau bout environ à $87^\\circ$C",
+   "check": "C'est plausible ? À une altitude d'environ quatre kilomètres, la pression est effectivement proche de $0{,}6$ atm, et les ouvrages de référence donnent une température d'ébullition de $87$–$88^\\circ$C. Il est déjà difficile d'y faire cuire un œuf à la coque : le blanc nécessite une température plus élevée, et l'eau ne deviendra pas plus chaude que l'ébullition, quelle que soit la chaleur apportée."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Remarquez les unités : elles indiquent directement ce que signifie la grandeur et par quoi il faut la multiplier.",
+   "items": [
+    {
+     "sym": "c",
+     "latex": "c",
+     "name": "Capacité thermique massique de l'eau",
+     "value": "4200",
+     "unit": "J / (kg · K)",
+     "why": "L'énergie nécessaire pour chauffer un kilogramme d'eau d'un degré. Les unités se lisent littéralement : joules par kilogramme et par kelvin. Cette valeur est anormalement élevée — pour la plupart des substances, elle est quatre à cinq fois plus faible, et c'est pourquoi l'eau sert de caloporteur dans le chauffage et le refroidissement des moteurs.",
+     "mnemo": "Le nombre $4200$ est facile à retenir : presque notre $42$ avec deux zéros. Lien historique : la calorie a été définie comme l'échauffement d'un gramme d'eau d'un degré, d'où $1$ cal $= 4{,}184$ J."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "Chaleur latente de vaporisation massique",
+     "value": "2 260 000",
+     "unit": "J / kg",
+     "why": "L'énergie nécessaire pour transformer un kilogramme de liquide en vapeur sans aucun échauffement. Les unités sont des joules par kilogramme, sans température, car celle-ci ne change pas lors du changement de phase. Record parmi les liquides courants.",
+     "mnemo": "Gardez en tête non pas le nombre lui-même, mais le rapport : faire bouillir coûte environ sept fois plus d'énergie que chauffer jusqu'à ébullition."
+    },
+    {
+     "sym": "L_mol",
+     "latex": "L_{\\text{mol}}",
+     "name": "Chaleur latente de vaporisation molaire",
+     "value": "40 660",
+     "unit": "J / mol",
+     "why": "La même chose, mais par mole : $L$ multipliée par la masse molaire de l'eau $0{,}018$ kg/mol. C'est cette forme qui entre dans l'équation de Clausius–Clapeyron, car elle est accompagnée de la constante des gaz $R$, également molaire. Les unités des deux grandeurs sont cohérentes — c'est la vérification de l'exactitude de la formule."
+    },
+    {
+     "sym": "T₀, P₀",
+     "latex": "T_0,\\;P_0",
+     "name": "Point d'ébullition normal",
+     "value": "373,15 K à 101,325",
+     "unit": "kPa",
+     "why": "Point de référence à partir duquel la formule calcule le décalage. Il faut comprendre : cent degrés n'est pas une propriété de l'eau elle-même, mais une propriété de l'eau à la pression atmosphérique normale. Initialement, l'échelle Celsius a été construite exactement ainsi : zéro pour la fonte de la glace, cent pour l'ébullition au niveau de la mer."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Lors d'un changement de phase, la température reste constante et l'énergie est utilisée pour rompre les liaisons entre molécules. Le point d'ébullition n'est pas une constante de la substance, mais le résultat d'un accord avec la pression externe.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Chaleur latente",
+     "text": "Énergie qui n'est pas dépensée pour les degrés, mais pour rompre les liaisons. Le thermomètre ne la voit pas."
+    },
+    {
+     "icon": "clock",
+     "title": "Plateau sur le graphique",
+     "text": "Tant que l'ébullition dure, la température est constante, quelle que soit l'augmentation de la puissance de chauffage."
+    },
+    {
+     "icon": "sigma",
+     "title": "Coût septuple",
+     "text": "Faire bouillir de l'eau coûte environ 6,8 fois plus d'énergie que de la chauffer jusqu'à ébullition."
+    },
+    {
+     "icon": "formula",
+     "title": "La pression domine",
+     "text": "Plus la pression est basse, plus l'ébullition est précoce. En montagne 87 °C, en autocuiseur 121 °C."
+    }
+   ],
+   "where": [
+    "Autocuiseur : une pression de 2 atm élève l'ébullition à 121 °C et triple la cuisson",
+    "Réfrigérateur : le réfrigérant bout à −25 °C, extrayant la chaleur de la chambre",
+    "Une brûlure par la vapeur est plus grave qu'une brûlure par l'eau bouillante : la vapeur libère en plus la chaleur latente",
+    "L'évaporation de la sueur refroidit le corps en emportant les molécules les plus rapides"
+   ],
+   "watchOut": "Dans la formule de Clausius–Clapeyron, la température est substituée uniquement en kelvins, et la chaleur sous forme molaire. Mélanger chaleur spécifique et molaire est une source d'erreur d'un facteur 18 (masse molaire de l'eau)."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "Nous avons doublé la puissance de la plaque sous une eau déjà bouillante. Que se passe-t-il ?",
+    "options": [
+     "La température de l'eau dépassera 100 °C",
+     "L'eau bouillira plus fort et s'évaporera deux fois plus vite, mais la température ne changera pas",
+     "Rien ne change : l'ébullition se fait à vitesse constante",
+     "La température d'abord augmente, puis revient à 100 °C"
+    ],
+    "answer": 1,
+    "why": "Toute la puissance supplémentaire sert à la vaporisation, pas au chauffage. Plus d'énergie par seconde signifie plus de vapeur par seconde, mais la température reste au point d'ébullition tant qu'il y a du liquide.",
+    "hint": "Regardez le graphique sur le stand : pendant l'ébullition, la courbe est horizontale. Qu'est-ce qui détermine sa hauteur — la puissance de chauffe ou autre chose ? Et sur quoi la puissance agit-elle alors ?"
+   },
+   {
+    "id": "p2",
+    "type": "free",
+    "q": "Avec vos propres mots : pourquoi l'évaporation de la sueur refroidit le corps, alors que la sueur elle-même est à la même température que la peau ?",
+    "keywords": [
+     "vite",
+     "énergie",
+     "emporte",
+     "latent",
+     "évaporation",
+     "moyenne"
+    ],
+    "needed": 1,
+    "why": "Ce ne sont pas des molécules au hasard qui s'envolent, mais les plus rapides — seules elles ont assez d'énergie pour rompre les liaisons. Elles emportent une part disproportionnée de l'énergie, et la vitesse moyenne des molécules restantes diminue. Or la vitesse moyenne est la température.",
+    "hint": "Demandez-vous : n'importe quelle molécule peut-elle quitter le liquide, ou faut-il une réserve d'énergie ? Si seules quelques-unes s'envolent, que devient l'énergie moyenne de celles qui restent ?"
+   },
+   {
+    "id": "p3",
+    "type": "estimate",
+    "q": "Combien d'énergie faut-il pour évaporer complètement 1 kg d'eau déjà bouillante ? Réponse en kilojoules.",
+    "answer": 2260,
+    "unit": "kJ",
+    "tolerance": 1.5,
+    "why": "C'est exactement la définition de la chaleur latente de vaporisation : $Q = L\\,m = 2{,}26\\cdot10^{6} \\cdot 1 = 2260$ kJ. À titre de comparaison : chauffer le même kilogramme de 0 à 100 degrés ne coûte que 420 kJ.",
+    "hint": "L'eau bout déjà, donc il n'est pas nécessaire de la chauffer — seule une constante de ce paragraphe intervient. Laquelle est mesurée en joules par kilogramme ?"
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosité : vérifiez par vous-même",
+   "lead": "La bouilloire est le meilleur instrument pour étudier les transitions de phase : le thermomètre s'arrête au moment le plus intéressant.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience en cuisine",
+     "h": "Le thermomètre qui reste figé",
+     "text": "Placez une casserole d'eau sur le feu et plongez-y un thermomètre de cuisine. Notez les relevés chaque minute — et continuez à noter quand l'eau bout vigoureusement.",
+     "answer": "Avant l'ébullition, la température augmente régulièrement, puis dès le début de l'ébullition, elle s'arrête net, même si la plaque continue de fournir les mêmes kilowatts. L'énergie ne sert pas à chauffer mais à rompre les liaisons entre molécules — c'est la chaleur latente. Tant qu'il y a de l'eau dans la casserole, la température ne dépassera pas le point d'ébullition d'un degré, quelle que soit l'augmentation du feu. Il est donc inutile d'augmenter le gaz sous une casserole bouillante : la cuisson ne sera pas plus rapide, l'eau s'évaporera simplement plus tôt."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Un fil traverse la glace sans la briser",
+     "text": "Placez un fil fin sur un bloc de glace et suspendez des poids à ses extrémités. Après quelques heures, le fil se retrouvera à l'intérieur du bloc, puis le traversera — mais le bloc ne se cassera pas en deux.",
+     "answer": "Sous le fil, la pression est élevée, et l'eau a une propriété rare : elle se dilate en gelant, donc la pression abaisse le point de fusion. La glace fond sous le fil, celui-ci descend, et l'eau au-dessus, sans pression excessive, gèle immédiatement et referme la coupure. Dans l'équation de Clausius–Clapeyron, cela se voit par le signe : pour l'eau, $\\Delta V$ lors de la fusion est négatif, et la pente de la ligne d'équilibre est inverse par rapport à presque toutes les autres substances."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "La chaleur latente de l'eau est anormalement élevée",
+     "text": "Pour transformer un kilogramme d'eau bouillante en vapeur, il faut 2260 kilojoules — presque sept fois plus que pour chauffer le même kilogramme de la température ambiante à l'ébullition. D'où la conséquence pratique : une brûlure par vapeur à cent degrés est bien plus grave qu'une brûlure par eau bouillante à la même température, car la vapeur qui se condense sur la peau libère toute cette chaleur latente. Pour la même raison, la transpiration est si efficace pour refroidir, et les océans modèrent le climat de la planète."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémotechnique",
+     "h": "L'énergie sert à rompre les liaisons, pas à accélérer",
+     "text": "Lors d'une transition de phase, l'énergie apportée sert à séparer les molécules, pas à augmenter leur vitesse. La vitesse moyenne, c'est la température, et donc celle-ci reste constante. Le processus inverse rend la même énergie : la condensation chauffe, la cristallisation chauffe. D'où la règle : toute grandeur mesurée en joules par kilogramme décrit probablement une réorganisation structurelle."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Pourquoi une bouilloire met si longtemps à s'évaporer",
+     "text": "Chauffer un litre d'eau de 20 à 100 degrés nécessite $4200 \\cdot 80 \\approx 335$ kilojoules. L'évaporer complètement en nécessite 2260 kilojoules, presque sept fois plus. Une bouilloire de deux kilowatts met environ trois minutes à bouillir, et plus de vingt minutes à s'évaporer complètement. La même arithmétique explique pourquoi une casserole n'attache pas tant qu'il y a de l'eau."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Au point critique, la formule ne s'applique plus",
+     "text": "L'équation de Clausius–Clapeyron décrit l'équilibre de deux phases et nécessite qu'elles aient des densités différentes. En approchant du point critique — pour l'eau, 374 degrés et 218 atmosphères — la différence entre liquide et vapeur disparaît, $\\Delta V$ tend vers zéro, et la formule perd son sens. Au-delà du point critique, il n'y a plus de transition de phase : la substance passe de l'état dense à l'état raréfié de manière continue, sans ébullition."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Les utilisations de la chaleur latente",
+   "lead": "La capacité d'une substance à stocker de l'énergie dans la restructuration de sa structure est à la base de toute la technologie de réfrigération.",
+   "items": [
+    {
+     "h": "Réfrigérateurs et climatiseurs",
+     "text": "Le réfrigérant s'évapore à l'intérieur, absorbant la chaleur latente, et se condense à l'extérieur, la restituant. Le transfert de chaleur ne se fait pas par chauffage, mais par changement de phase — c'est pourquoi il est si efficace."
+    },
+    {
+     "h": "Nuages et précipitations",
+     "text": "La condensation de la vapeur dans l'air ascendant libère une énergie énorme qui alimente le courant ascendant. C'est ce mécanisme qui transforme une nébulosité ordinaire en orage, et au-dessus d'un océan chaud, en cyclone tropical."
+    },
+    {
+     "h": "Autocuiseur et autoclave",
+     "text": "Une pression élevée augmente le point d'ébullition : à deux atmosphères, l'eau bout à 120 degrés, et la cuisson est accélérée plusieurs fois. En médecine, le même principe stérilise les instruments car les spores bactériennes ne résistent pas à une telle température."
+    },
+    {
+     "h": "Métallurgie et fonderie",
+     "text": "La chaleur latente de cristallisation détermine la vitesse de refroidissement d'une pièce coulée et la structure du grain qui se forme. La résistance de la pièce finie en dépend directement."
+    },
+    {
+     "h": "Accumulateurs de chaleur",
+     "text": "Des matériaux à changement de phase proche de la température ambiante — comme les paraffines — sont intégrés dans les murs et les vêtements : ils fondent en chauffant et se solidifient en refroidissant, lissant les variations sans aucune électronique."
+    }
+   ]
+  }
+ }
 }

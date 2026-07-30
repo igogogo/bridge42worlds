@@ -1,127 +1,146 @@
 {
-  "id": "phase_transition",
-  "model": "phase_transition",
-  "schema": "b42.theory/1",
-  "entities": {
-    "laws": [
-      "clausius_clapeyron_relation",
-      "latent_heat"
-    ],
-    "tags": [
-      "thermodynamics",
-      "phase_transition",
-      "boiling",
-      "latent_heat"
-    ],
-    "scientists": [
-      "Rudolf Clausius",
-      "Benoît Clapeyron",
-      "James Prescott Joule"
-    ]
-  },
-  "constants": {
-    "R": 8.314,
-    "m": 0.2,
-    "c": 4186,
-    "Lvap": 2260000,
-    "Lmol": 40660,
-    "Tstart": 20,
-    "timescale": 11
-  },
-  "params": [
-    {
-      "key": "power",
-      "min": 500,
-      "max": 3000,
-      "step": 100,
-      "value": 1500,
-      "unit": "unit_W"
-    },
-    {
-      "key": "pressure",
-      "min": 0.5,
-      "max": 2,
-      "step": 0.1,
-      "value": 1,
-      "unit": "unit_atm"
-    }
+ "id": "phase_transition",
+ "model": "phase_transition",
+ "schema": "b42.theory/1",
+ "entities": {
+  "laws": [
+   "clausius_clapeyron_relation",
+   "latent_heat"
   ],
-  "i18n": {
-    "ru": {
-      "title": "Закипающий чайник — фазовый переход",
-      "intro": "Ставим чайник на огонь. Пока вода греется — градусник ползёт вверх. Но у точки кипения он упирается в стену: сколько ни грей, температура стоит на месте — вся энергия идёт не на нагрев, а на разрыв связей между молекулами, превращая воду в пар. Это скрытая теплота, и это и есть фазовый переход. Крути мощность и давление: на «горе» (давление ниже) вода закипает холоднее, в «скороварке» — горячее.",
-      "power": "мощность плитки",
-      "pressure": "давление (высота)",
-      "unit_W": "Вт",
-      "unit_atm": "атм",
-      "unit_kJ": "кДж",
-      "reset": "сброс",
-      "phase_heat": "нагрев воды",
-      "phase_boil": "кипение",
-      "phase_dry": "выкипел — доливаем 💧",
-      "boilpoint": "кипит при",
-      "vapor": "в пар ушло",
-      "energyx": "на кипение энергии больше в",
-      "xHeat": "подведённая теплота, кДж",
-      "yTemp": "температура, °C",
-      "related": "связано"
-    },
-    "en": {
-      "title": "Boiling kettle — phase transition",
-      "intro": "Put the kettle on. While the water heats, the thermometer climbs. But at the boiling point it hits a wall: no matter how hard you heat, the temperature stalls — all the energy goes not into heating but into breaking the bonds between molecules, turning water into vapour. That is latent heat, and that is a phase transition. Turn the power and pressure: on a mountain (lower pressure) water boils cooler, in a pressure cooker — hotter.",
-      "power": "burner power",
-      "pressure": "pressure (altitude)",
-      "unit_W": "W",
-      "unit_atm": "atm",
-      "unit_kJ": "kJ",
-      "reset": "reset",
-      "phase_heat": "heating water",
-      "phase_boil": "boiling",
-      "phase_dry": "boiled dry — refilling 💧",
-      "boilpoint": "boils at",
-      "vapor": "vaporized",
-      "energyx": "boiling needs more energy by",
-      "xHeat": "heat added, kJ",
-      "yTemp": "temperature, °C",
-      "related": "related"
-    },
-    "es": {
-      "title": "Hervidor hirviendo — transición de fase",
-      "intro": "Pon el hervidor. Mientras el agua se calienta, el termómetro sube. Pero en el punto de ebullición choca con un muro: por más que calientes, la temperatura se estanca — toda la energía no va a calentar, sino a romper los enlaces entre moléculas, convirtiendo agua en vapor. Eso es el calor latente, y eso es una transición de fase. Varía la potencia y la presión: en una montaña (menor presión) el agua hierve más fría, en una olla a presión, más caliente.",
-      "power": "potencia del quemador",
-      "pressure": "presión (altitud)",
-      "unit_W": "W",
-      "unit_atm": "atm",
-      "unit_kJ": "kJ",
-      "reset": "reiniciar",
-      "phase_heat": "calentando agua",
-      "phase_boil": "ebullición",
-      "phase_dry": "hervido seco — rellenando 💧",
-      "boilpoint": "hierve a",
-      "vapor": "vapor",
-      "energyx": "energía extra para ebullición",
-      "xHeat": "calor añadido, kJ",
-      "yTemp": "temperatura, °C",
-      "related": "relacionados"
-    },
-    "ar": {
-      "title": "غلاية الغليان — تحول الطور",
-      "intro": "ضع الغلاية. بينما يسخن الماء، يرتفع مقياس الحرارة. لكن عند نقطة الغليان يصطدم بجدار: بغض النظر عن كمية الحرارة، تظل درجة الحرارة ثابتة — كل الطاقة تذهب ليس للتسخين بل لكسر الروابط بين الجزيئات، وتحويل الماء إلى بخار. هذه هي الحرارة الكامنة، وهذا هو تحول الطور. غيّر الطاقة والضغط: على جبل (ضغط أقل) يغلي الماء ببرودة أقل، في قدر الضغط — أكثر سخونة.",
-      "power": "قدرة الموقد",
-      "pressure": "الضغط (الارتفاع)",
-      "unit_W": "W",
-      "unit_atm": "atm",
-      "unit_kJ": "kJ",
-      "reset": "إعادة تعيين",
-      "phase_heat": "تسخين الماء",
-      "phase_boil": "الغليان",
-      "phase_dry": "غلي حتى الجفاف — إعادة ملء 💧",
-      "boilpoint": "يغلي عند",
-      "vapor": "مبخر",
-      "energyx": "الغليان يحتاج طاقة إضافية بمقدار",
-      "xHeat": "الحرارة المضافة، kJ",
-      "yTemp": "درجة الحرارة، °C",
-      "related": "ذات صلة"
-    }
+  "tags": [
+   "thermodynamics",
+   "phase_transition",
+   "boiling",
+   "latent_heat"
+  ],
+  "scientists": [
+   "Rudolf Clausius",
+   "Benoît Clapeyron",
+   "James Prescott Joule"
+  ]
+ },
+ "constants": {
+  "R": 8.314,
+  "m": 0.2,
+  "c": 4186,
+  "Lvap": 2260000,
+  "Lmol": 40660,
+  "Tstart": 20,
+  "timescale": 11
+ },
+ "params": [
+  {
+   "key": "power",
+   "min": 500,
+   "max": 3000,
+   "step": 100,
+   "value": 1500,
+   "unit": "unit_W"
+  },
+  {
+   "key": "pressure",
+   "min": 0.5,
+   "max": 2,
+   "step": 0.1,
+   "value": 1,
+   "unit": "unit_atm"
   }
+ ],
+ "i18n": {
+  "ru": {
+   "title": "Закипающий чайник — фазовый переход",
+   "intro": "Ставим чайник на огонь. Пока вода греется — градусник ползёт вверх. Но у точки кипения он упирается в стену: сколько ни грей, температура стоит на месте — вся энергия идёт не на нагрев, а на разрыв связей между молекулами, превращая воду в пар. Это скрытая теплота, и это и есть фазовый переход. Крути мощность и давление: на «горе» (давление ниже) вода закипает холоднее, в «скороварке» — горячее.",
+   "power": "мощность плитки",
+   "pressure": "давление (высота)",
+   "unit_W": "Вт",
+   "unit_atm": "атм",
+   "unit_kJ": "кДж",
+   "reset": "сброс",
+   "phase_heat": "нагрев воды",
+   "phase_boil": "кипение",
+   "phase_dry": "выкипел — доливаем 💧",
+   "boilpoint": "кипит при",
+   "vapor": "в пар ушло",
+   "energyx": "на кипение энергии больше в",
+   "xHeat": "подведённая теплота, кДж",
+   "yTemp": "температура, °C",
+   "related": "связано"
+  },
+  "en": {
+   "title": "Boiling kettle — phase transition",
+   "intro": "Put the kettle on. While the water heats, the thermometer climbs. But at the boiling point it hits a wall: no matter how hard you heat, the temperature stalls — all the energy goes not into heating but into breaking the bonds between molecules, turning water into vapour. That is latent heat, and that is a phase transition. Turn the power and pressure: on a mountain (lower pressure) water boils cooler, in a pressure cooker — hotter.",
+   "power": "burner power",
+   "pressure": "pressure (altitude)",
+   "unit_W": "W",
+   "unit_atm": "atm",
+   "unit_kJ": "kJ",
+   "reset": "reset",
+   "phase_heat": "heating water",
+   "phase_boil": "boiling",
+   "phase_dry": "boiled dry — refilling 💧",
+   "boilpoint": "boils at",
+   "vapor": "vaporized",
+   "energyx": "boiling needs more energy by",
+   "xHeat": "heat added, kJ",
+   "yTemp": "temperature, °C",
+   "related": "related"
+  },
+  "es": {
+   "title": "Hervidor hirviendo — transición de fase",
+   "intro": "Pon el hervidor. Mientras el agua se calienta, el termómetro sube. Pero en el punto de ebullición choca con un muro: por más que calientes, la temperatura se estanca — toda la energía no va a calentar, sino a romper los enlaces entre moléculas, convirtiendo agua en vapor. Eso es el calor latente, y eso es una transición de fase. Varía la potencia y la presión: en una montaña (menor presión) el agua hierve más fría, en una olla a presión, más caliente.",
+   "power": "potencia del quemador",
+   "pressure": "presión (altitud)",
+   "unit_W": "W",
+   "unit_atm": "atm",
+   "unit_kJ": "kJ",
+   "reset": "reiniciar",
+   "phase_heat": "calentando agua",
+   "phase_boil": "ebullición",
+   "phase_dry": "hervido seco — rellenando 💧",
+   "boilpoint": "hierve a",
+   "vapor": "vapor",
+   "energyx": "energía extra para ebullición",
+   "xHeat": "calor añadido, kJ",
+   "yTemp": "temperatura, °C",
+   "related": "relacionados"
+  },
+  "ar": {
+   "title": "غلاية الغليان — تحول الطور",
+   "intro": "ضع الغلاية. بينما يسخن الماء، يرتفع مقياس الحرارة. لكن عند نقطة الغليان يصطدم بجدار: بغض النظر عن كمية الحرارة، تظل درجة الحرارة ثابتة — كل الطاقة تذهب ليس للتسخين بل لكسر الروابط بين الجزيئات، وتحويل الماء إلى بخار. هذه هي الحرارة الكامنة، وهذا هو تحول الطور. غيّر الطاقة والضغط: على جبل (ضغط أقل) يغلي الماء ببرودة أقل، في قدر الضغط — أكثر سخونة.",
+   "power": "قدرة الموقد",
+   "pressure": "الضغط (الارتفاع)",
+   "unit_W": "W",
+   "unit_atm": "atm",
+   "unit_kJ": "kJ",
+   "reset": "إعادة تعيين",
+   "phase_heat": "تسخين الماء",
+   "phase_boil": "الغليان",
+   "phase_dry": "غلي حتى الجفاف — إعادة ملء 💧",
+   "boilpoint": "يغلي عند",
+   "vapor": "مبخر",
+   "energyx": "الغليان يحتاج طاقة إضافية بمقدار",
+   "xHeat": "الحرارة المضافة، kJ",
+   "yTemp": "درجة الحرارة، °C",
+   "related": "ذات صلة"
+  },
+  "fr": {
+   "title": "Bouilloire bouillante — transition de phase",
+   "intro": "On met la bouilloire sur le feu. Tant que l'eau chauffe, le thermomètre monte. Mais au point d'ébullition, il bute contre un mur : peu importe combien on chauffe, la température reste la même — toute l'énergie va non pas au chauffage, mais à la rupture des liaisons entre les molécules, transformant l'eau en vapeur. C'est la chaleur latente, et c'est cela la transition de phase. Jouez avec la puissance et la pression : sur une « montagne » (pression plus basse), l'eau bout plus froide ; dans un « autocuiseur », plus chaude.",
+   "power": "puissance de la plaque",
+   "pressure": "pression (altitude)",
+   "unit_W": "W",
+   "unit_atm": "atm",
+   "unit_kJ": "kJ",
+   "reset": "Réinitialiser",
+   "phase_heat": "chauffage de l'eau",
+   "phase_boil": "ébullition",
+   "phase_dry": "Évaporé — ajouter de l'eau 💧",
+   "boilpoint": "bout à",
+   "vapor": "parti en vapeur",
+   "energyx": "énergie d'ébullition multipliée par",
+   "xHeat": "chaleur fournie, kJ",
+   "yTemp": "température, °C",
+   "related": "Associé"
+  }
+ }
 }

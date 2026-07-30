@@ -68,6 +68,19 @@
             again: 'سؤال آخر',
             streak: 'متتالية',
             note: 'أجب قبل تحريك المؤشرات: الهدف اختبار حدسك لا النظر إلى النتيجة.'
+        },
+        fr: {
+            head: 'Prédisez d’abord',
+            q: 'Qu’arrive-t-il à « {y} » si vous augmentez « {x} » ?',
+            up: 'augmente', down: 'diminue', same: 'ne change presque pas',
+            checking: 'Voyons…',
+            right: 'Exact.', wrong: 'Raté.',
+            became: 'devient', was: 'était',
+            grew: 'a augmenté', fell: 'a diminué', held: 'est restée presque la même',
+            verdict: '« {y} » {dir} : {a} → {b}.',
+            again: 'Une autre question',
+            streak: 'de suite',
+            note: 'Répondez avant de bouger les curseurs : le but est de vérifier votre intuition, pas de regarder la réponse.'
         }
     };
 

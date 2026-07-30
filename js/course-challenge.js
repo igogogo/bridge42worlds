@@ -44,6 +44,14 @@
             far: 'ما زال بعيداً. فكّر أي مقدار يدفع في الاتجاه الصحيح.',
             moves: 'حركات', hint: 'حرّك المؤشرات. يُحتسب عندما يقل الفارق عن',
             best: 'الأفضل', solved: 'مُنجزة'
+        },
+        fr: {
+            head: 'Défi', start: 'Donne-moi une tâche', again: 'Une autre tâche',
+            goal: 'Cible', now: 'Maintenant', win: 'Touché !',
+            close: 'Tout près — poussez encore dans le même sens.',
+            far: 'Encore loin. Cherchez quelle grandeur tire dans le bon sens.',
+            moves: 'coups', hint: 'Bougez les curseurs du banc. Compté quand l’écart est inférieur à',
+            best: 'Meilleur score', solved: 'résolus'
         }
     };
 
