@@ -267,27 +267,36 @@ def _is_readonly_command():
     return (sys.argv[1] if len(sys.argv) > 1 else "") in READONLY_COMMANDS
 
 
-def _build_search_index():
-    """Лёгкий индекс поиска (lang/*/search-index.json) — последним шагом генерации, до публикации.
+# Производные файлы: собираются из уже готовых индексов и справочников, самостоятельной
+# ценности не имеют, но расходятся с корпусом МОЛЧА — читатель видит вчерашний поиск или
+# английские подписи там, где перевод уже есть. Поэтому пересобираются хвостом КАЖДОЙ
+# изменяющей команды, а не внутри отдельных: забыть один вызов легко, и мы уже забывали.
+# Список один — та же причина, по которой один READONLY_COMMANDS на три хвостовых шага.
+DERIVED_ASSETS = [
+    ("search_index_build.py", "индекс поиска",
+     "поиск покажет прошлый корпус"),
+    ("tools/names_build.py", "справочник имён",
+     "курс и граф покажут связи английскими идентификаторами"),
+]
 
-    Ставится здесь, а не внутри отдельных команд, по той же причине, что публикация и бэкап:
-    индекс собирается из уже готовых articles-index и справочников, и любая команда, которая
-    их меняет, обязана его обновить. Забыть один вызов — значит показывать читателю поиск
-    по вчерашнему корпусу, причём молча. Считается за секунды, поэтому лишний вызов не жалко.
-    Проверки контент не трогают — им индекс пересобирать незачем."""
+
+def _build_derived_assets():
+    """Пересборка производных файлов. Проверки контент не трогают — им это не нужно."""
     if _is_readonly_command():
         return
-    script = Path(__file__).resolve().parent / "search_index_build.py"
-    if not script.exists():
-        return
-    print(f"\n{'=' * 60}\n▶️  индекс поиска\n{'=' * 60}")
+    root = Path(__file__).resolve().parent
     child_env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
-    result = subprocess.run([sys.executable, str(script)], env=child_env)
-    if result.returncode != 0:
-        # Не роняем прогон: сайт сгенерирован, страдает только поиск — но сказать об этом надо
-        # громко, иначе расхождение индекса с корпусом заметит первым читатель.
-        print(f"⚠️  индекс поиска не пересобран (код {result.returncode}) — поиск покажет "
-              f"прошлый корпус, перезапустите search_index_build.py")
+    for rel, title, damage in DERIVED_ASSETS:
+        script = root / rel
+        if not script.exists():
+            continue
+        print(f"\n{'=' * 60}\n▶️  {title}\n{'=' * 60}")
+        result = subprocess.run([sys.executable, str(script)], env=child_env)
+        if result.returncode != 0:
+            # Не роняем прогон: сайт сгенерирован, страдает только производный файл — но
+            # сказать об этом надо громко, иначе расхождение первым заметит читатель.
+            print(f"⚠️  {title} не пересобран (код {result.returncode}) — {damage}; "
+                  f"перезапустите {rel}")
 
 
 def _publish_to_r2():
@@ -1013,6 +1022,6 @@ def build_parser():
 if __name__ == "__main__":
     args = build_parser().parse_args()
     args.func(args)
-    _build_search_index()
+    _build_derived_assets()
     _publish_to_r2()
     _backup_to_r2()

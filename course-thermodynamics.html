@@ -150,23 +150,43 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     return b;
   }
 
-  // Ссылки на наши сущности — показать, где эта тема живёт на сайте
+  /* Ссылки на наши сущности — показать, где эта тема живёт на сайте.
+     Названия берём из lang/<язык>/data/names.json (собирает tools/names_build.py):
+     иначе араб видит «ideal gas law» латиницей посреди арабского урока. Полные
+     справочники ради подписей не тянем — они на три с лишним мегабайта. */
+  var NAMES = { tag: {}, law: {}, sci: {} };
+  fetch('/lang/' + LANG + '/data/names.json', { cache: 'force-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) return;
+      NAMES = d;
+      Array.prototype.forEach.call(document.querySelectorAll('.c-links a[data-ent]'), function (a) {
+        a.textContent = entityName(a.dataset.entKind, a.dataset.ent);
+      });
+    })
+    .catch(function () { /* остаёмся на идентификаторах — хуже, но читаемо */ });
+
+  function entityName(kind, id) {
+    return (NAMES[kind] || {})[id] || id.replace(/_/g, ' ');
+  }
+
   function entityLinks(ent) {
     var wrap = el('div', 'c-links'), any = false;
-    function row(label, items, base, fmt) {
+    function row(label, items, base, fmt, kind) {
       if (!items || !items.length) return;
       any = true;
       var line = el('div', null, '<b>' + label + ':</b> ');
       items.forEach(function (name) {
-        var a = el('a', null, name.replace(/_/g, ' '));
+        var a = el('a', null, entityName(kind, name));
         a.href = base + fmt(name) + '.html';
+        a.dataset.ent = name; a.dataset.entKind = kind;
         line.appendChild(a);
       });
       wrap.appendChild(line);
     }
-    row('Теги', ent.tags, TAG_BASE, function (t) { return encodeURIComponent(t); });
-    row('Законы', ent.laws, LAW_BASE, function (t) { return encodeURIComponent(t); });
-    row('Учёные', ent.scientists, SCI_BASE, function (n) { return n.replace(/\s+/g, '_'); });
+    row('Теги', ent.tags, TAG_BASE, function (t) { return encodeURIComponent(t); }, 'tag');
+    row('Законы', ent.laws, LAW_BASE, function (t) { return encodeURIComponent(t); }, 'law');
+    row('Учёные', ent.scientists, SCI_BASE, function (n) { return n.replace(/\s+/g, '_'); }, 'sci');
     return any ? wrap : null;
   }
 

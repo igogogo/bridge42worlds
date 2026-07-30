@@ -427,23 +427,48 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     return host;
   }
 
+  /* Названия связей на языке страницы. Подписи рядов («Теги», «Законы») переводит
+     course-i18n, а вот САМИ связи рисовались сырым идентификатором: араб видел
+     «ideal gas law» и «phase transition» латиницей посреди арабского урока.
+     Локализованные имена лежат в полных справочниках, но те весят 3,6 + 1,4 МБ —
+     тянуть их сюда ради подписей нельзя. tools/names_build.py собирает из них
+     файл только с парами id → имя (около 25 КБ), его и читаем.
+     Пока файл не приехал, ряды рисуются как раньше — не ждём его. */
+  var NAMES = { tag: {}, law: {}, sci: {} };
+  fetch('/lang/' + LANG + '/data/names.json', { cache: 'force-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) { if (d) { NAMES = d; repaintEntityNames(); } })
+    .catch(function () { /* остаёмся на идентификаторах — это хуже, но читаемо */ });
+
+  function entityName(kind, id) {
+    var dict = NAMES[kind] || {};
+    return dict[id] || id.replace(/_/g, ' ');
+  }
+  // Ряды могли отрисоваться до прихода словаря — тогда переписываем подписи на месте.
+  function repaintEntityNames() {
+    Array.prototype.forEach.call(document.querySelectorAll('.k-links a[data-ent]'), function (a) {
+      a.textContent = entityName(a.dataset.entKind, a.dataset.ent);
+    });
+  }
+
   function entityLinks(ent) {
     if (!ent) return null;
     var wrap = el('div', 'k-links');
-    function row(label, items, base, fmt) {
+    function row(label, items, base, fmt, kind) {
       if (!items || !items.length) return;
       var line = el('div', null, '<b>' + label + ':</b> ');
       items.forEach(function (n, i) {
         if (i) line.appendChild(document.createTextNode(' · '));   // иначе ссылки слипаются в одну
-        var a = el('a', null, n.replace(/_/g, ' '));
+        var a = el('a', null, entityName(kind, n));
         a.href = base + fmt(n) + '.html';
+        a.dataset.ent = n; a.dataset.entKind = kind;
         line.appendChild(a);
       });
       wrap.appendChild(line);
     }
-    row('Теги', ent.tags, '/lang/' + LANG + '/tags/', encodeURIComponent);
-    row('Законы', ent.laws, '/lang/' + LANG + '/laws/', encodeURIComponent);
-    row('Учёные', ent.scientists, '/lang/' + LANG + '/scientists/', function (n) { return n.replace(/\s+/g, '_'); });
+    row('Теги', ent.tags, '/lang/' + LANG + '/tags/', encodeURIComponent, 'tag');
+    row('Законы', ent.laws, '/lang/' + LANG + '/laws/', encodeURIComponent, 'law');
+    row('Учёные', ent.scientists, '/lang/' + LANG + '/scientists/', function (n) { return n.replace(/\s+/g, '_'); }, 'sci');
     // Свежие статьи архива по теме параграфа. Ради этого курс и связывают с сайтом: из урока
     // видно живую науку, а не только учебник. Заголовок берём на языке страницы — он лежит
     // рядом со ссылкой на всех четырёх языках.
