@@ -912,6 +912,15 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions, cover_url=ai_url)
     ai_cover_html = ""
     tags_side_html = gen_tags_side(tags, lang)
+    # Заглушка непереведённой статьи умеет не только извиняться: очередь заказов уже принимает
+    # kind=translate, поэтому читателю предлагаем перевести прямо сейчас. Блок пуст на переведённых
+    # страницах — там предлагать нечего.
+    translate_offer_html = ""
+    if scipop.get("untranslated"):
+        translate_offer_html = (
+            f'<div class="translate-offer" data-arxiv-id="{attr_safe(article["id"])}" '
+            f'data-to="{attr_safe(lang)}"></div>')
+
     if tags_side_html:
         tags_lbl = SIDE_TAGS_LABEL.get(lang, SIDE_TAGS_LABEL["en"])
         tags_side_html = f'<div class="side-tags-label">{safe(tags_lbl)}</div>' + tags_side_html
@@ -999,6 +1008,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         tags_side_html=tags_side_html, article_graph_html=article_graph_html,
         mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
         abstract_html=abstract_html,
+        translate_offer_html=translate_offer_html,
         feedback_html=feedback_html,
         nav_html=nav_html, text_html=text_html,
         formulas_html=formulas_html, key_numbers_html=key_numbers_html,
