@@ -147,6 +147,94 @@ async function handleQuota(request, env) {
   return res;
 }
 
+// ── Очередь заказов ───────────────────────────────────────────────
+// Три кнопки читателя ведут в одну очередь: вопрос боту, «хочу статью про это», «переведи на
+// мой язык». Worker только принимает заказ и показывает статус — исполняет машина с данными:
+// у Worker'а нет ни файлов статей, ни реестров, ни генератора.
+// Схема таблицы и объяснение решений — schema-queue.sql.
+const ORDER_KINDS = {
+  // Приоритет: меньше — раньше. Вопрос читатель ждёт прямо сейчас, статью можно и ночью.
+  ask:       { priority: 10,  cost: 1 },
+  translate: { priority: 50,  cost: 3 },
+  article:   { priority: 100, cost: 10 },
+};
+
+function dedupeKey(kind, p) {
+  // Склеиваем одинаковые заказы, чтобы десять человек, попросивших один и тот же перевод,
+  // не оплатили десять прогонов модели. Вопросы не склеиваем — они у всех свои.
+  if (kind === "translate") return `translate:${p.arxiv_id}:${p.to}`;
+  if (kind === "article") return `article:${String(p.topic || "").toLowerCase().trim().slice(0, 120)}`;
+  return null;
+}
+
+async function handleOrder(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.QUEUE) return Response.json({ error: "queue_not_configured" }, { status: 503 });
+
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  const kind = String(body.kind || "");
+  const spec = ORDER_KINDS[kind];
+  if (!spec) return Response.json({ error: "unknown_kind" }, { status: 400 });
+
+  const uid = "s:" + (sessionId(request) || "anon");
+  const payload = body.payload && typeof body.payload === "object" ? body.payload : {};
+  const dk = dedupeKey(kind, payload);
+
+  // Склейку проверяем ДО списания: если такой заказ уже в работе, читатель получает его же,
+  // и норму за это брать не за что — работы не прибавилось. Обратный порядок (сначала списать)
+  // молча наказывал бы за повторное нажатие кнопки.
+  if (dk) {
+    const found = await env.QUEUE.prepare(
+      "SELECT id, status FROM orders WHERE dedupe_key = ? AND status IN ('queued','running') LIMIT 1"
+    ).bind(dk).first();
+    if (found) return Response.json({ id: found.id, status: found.status, deduped: true });
+  }
+
+  const spent = await quotaSpend(env, uid, spec.cost);
+  if (!spent.ok) {
+    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
+      { status: spent.code });
+  }
+
+  const id = crypto.randomUUID();
+  await env.QUEUE.prepare(
+    `INSERT INTO orders (id, kind, status, priority, user_id, lang, payload, cost, created_at, dedupe_key)
+     VALUES (?, ?, 'queued', ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(id, kind, spec.priority, uid, String(body.lang || "ru"),
+         JSON.stringify(payload), spec.cost, Date.now(), dk).run();
+
+  return Response.json({ id, status: "queued", cost: spec.cost, dayLeft: spent.dayLeft });
+}
+
+// Статус заказа: читателю нужно видеть, что его просьбу не потеряли.
+async function handleOrderStatus(request, env, id) {
+  if (!env.QUEUE) return Response.json({ error: "queue_not_configured" }, { status: 503 });
+  const row = await env.QUEUE.prepare(
+    "SELECT id, kind, status, result, error, created_at, finished_at FROM orders WHERE id = ?"
+  ).bind(id).first();
+  if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+
+  let ahead = 0;
+  if (row.status === "queued") {
+    // «Третья в очереди» понятнее, чем «ожидает»: видно, что дело движется.
+    const r = await env.QUEUE.prepare(
+      `SELECT COUNT(*) AS n FROM orders WHERE status = 'queued'
+         AND (priority < (SELECT priority FROM orders WHERE id = ?)
+              OR (priority = (SELECT priority FROM orders WHERE id = ?)
+                  AND created_at < (SELECT created_at FROM orders WHERE id = ?)))`
+    ).bind(id, id, id).first();
+    ahead = r ? r.n : 0;
+  }
+  return Response.json({
+    id: row.id, kind: row.kind, status: row.status, ahead,
+    result: row.result ? JSON.parse(row.result) : null,
+    error: row.error || null,
+  });
+}
+
 // ── Токен-доступ ──────────────────────────────────────────────────
 // Чтобы нас не вынесли по расходу: доступ по токену, который живёт неделю и имеет лимиты
 // (в день и всего). Токены лежат в KV env.TOKENS. Если KV не привязан — гейта нет
@@ -420,6 +508,10 @@ export default {
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
+    if (url.pathname === "/api/order") return withCors(await handleOrder(request, env));
+    if (url.pathname.startsWith("/api/order/")) {
+      return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
+    }
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
 
     if (request.method !== "GET" && request.method !== "HEAD") {
