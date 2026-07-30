@@ -48,6 +48,105 @@ function tutorSystemPrompt(lang, mode) {
 мысленный эксперимент. Если вопрос про задачу — веди к решению шагами, не решай всё за ученика.`;
 }
 
+// ── Учёт расхода ──────────────────────────────────────────────────
+// Правило владельца: ничего платного не открывается, пока расход не считается. Считаем в трёх
+// местах сразу, и каждое закрывает свой способ разориться:
+//   • сутки на человека   — один любопытный не выжрет общий котёл;
+//   • неделя на человека   — и не растянет то же самое на семь дней;
+//   • сутки на весь проект — предохранитель поверх всего: если мы ошиблись в расчётах или нас
+//     обходят, счёт всё равно упрётся в потолок, а не уедет в тысячи.
+//
+// Нормы — в настройках (vars в wrangler.toml), НЕ константами в коде: мы будем их крутить,
+// и смена числа не должна требовать выкладки кода.
+function quotaLimits(env) {
+  const n = (v, d) => (Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : d);
+  return {
+    dayUser: n(env.QUOTA_DAY_USER, 20),
+    weekUser: n(env.QUOTA_WEEK_USER, 60),
+    dayProject: n(env.QUOTA_DAY_PROJECT, 2000),
+  };
+}
+
+function weekKey() {
+  // Год + номер недели. Нужен только как ключ ведра, поэтому считаем просто и предсказуемо.
+  const d = new Date();
+  const start = Date.UTC(d.getUTCFullYear(), 0, 1);
+  const week = Math.floor((Date.now() - start) / (7 * 864e5));
+  return `${d.getUTCFullYear()}w${week}`;
+}
+
+async function readCounter(env, key) {
+  const raw = await env.TOKENS.get(key);
+  return raw ? Number(raw) || 0 : 0;
+}
+
+// Сколько осталось — БЕЗ списания. Нужно, чтобы показать читателю остаток заранее:
+// «осталось 12 из 20 на сегодня», а не «извините, лимит исчерпан» после того, как он написал.
+async function quotaState(env, uid) {
+  const lim = quotaLimits(env);
+  if (!env.TOKENS) return { ok: true, gateless: true, ...lim };
+  const [day, week, proj] = await Promise.all([
+    readCounter(env, `use:${uid}:${todayKey()}`),
+    readCounter(env, `use:${uid}:${weekKey()}`),
+    readCounter(env, `proj:${todayKey()}`),
+  ]);
+  return {
+    dayUsed: day, weekUsed: week, projectUsed: proj,
+    dayLeft: Math.max(0, lim.dayUser - day),
+    weekLeft: Math.max(0, lim.weekUser - week),
+    dayLimit: lim.dayUser, weekLimit: lim.weekUser,
+    projectLeft: Math.max(0, lim.dayProject - proj),
+  };
+}
+
+// Списание. Возвращает отказ с ПРИЧИНОЙ — читателю важно понимать, кончилось у него личное
+// на сегодня (подождать до завтра) или упёрлись мы всем проектом (это уже наша забота).
+async function quotaSpend(env, uid, cost = 1) {
+  if (!env.TOKENS) return { ok: true, gateless: true };
+  const lim = quotaLimits(env);
+  const st = await quotaState(env, uid);
+  if (st.projectUsed + cost > lim.dayProject) {
+    return { ok: false, code: 503, error: "project_limit", ...st };
+  }
+  if (st.dayUsed + cost > lim.dayUser) return { ok: false, code: 429, error: "day_limit", ...st };
+  if (st.weekUsed + cost > lim.weekUser) return { ok: false, code: 429, error: "week_limit", ...st };
+
+  // Счётчики живут чуть дольше своего ведра и убираются сами — чистить нечего.
+  await Promise.all([
+    env.TOKENS.put(`use:${uid}:${todayKey()}`, String(st.dayUsed + cost), { expirationTtl: 172800 }),
+    env.TOKENS.put(`use:${uid}:${weekKey()}`, String(st.weekUsed + cost), { expirationTtl: 1209600 }),
+    env.TOKENS.put(`proj:${todayKey()}`, String(st.projectUsed + cost), { expirationTtl: 172800 }),
+  ]);
+  return { ok: true, dayLeft: st.dayLeft - cost, weekLeft: st.weekLeft - cost };
+}
+
+// Кто спрашивает. Пока входа нет — считаем по обезличенному номеру сессии из cookie:
+// это не защита (cookie чистится), а честный учёт для обычного читателя. Настоящая
+// привязка к человеку появится вместе с входом через Google — тогда uid станет его id.
+function sessionId(request) {
+  const m = (request.headers.get("cookie") || "").match(/(?:^|;\s*)b42s=([A-Za-z0-9]{8,64})/);
+  return m ? m[1] : null;
+}
+
+function newSessionId() { return crypto.randomUUID().replace(/-/g, ""); }
+
+// Остаток до вопроса: GET /api/quota. Заодно выдаёт номер сессии, если его ещё нет.
+async function handleQuota(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  let uid = sessionId(request);
+  const fresh = !uid;
+  if (!uid) uid = newSessionId();
+  const st = await quotaState(env, "s:" + uid);
+  const res = Response.json({ signedIn: false, ...st });
+  if (fresh) {
+    // 400 дней — предел, который принимают браузеры; SameSite=Lax, чтобы счётчик не терялся
+    // при переходе с внешней ссылки, но и не ездил в чужие запросы.
+    res.headers.append("set-cookie",
+      `b42s=${uid}; Path=/; Max-Age=34560000; SameSite=Lax; Secure; HttpOnly`);
+  }
+  return res;
+}
+
 // ── Токен-доступ ──────────────────────────────────────────────────
 // Чтобы нас не вынесли по расходу: доступ по токену, который живёт неделю и имеет лимиты
 // (в день и всего). Токены лежат в KV env.TOKENS. Если KV не привязан — гейта нет
@@ -237,6 +336,17 @@ async function handleTutor(request, env) {
   const gate = await checkToken(request, env, body);
   if (!gate.ok) return Response.json({ error: gate.error, limit: gate.limit }, { status: gate.code });
 
+  // Второй рубеж поверх токена: общий потолок проекта и норма на человека. Раньше лимит был
+  // только на выданный вручную токен — то есть считался расход одного приглашённого, а не наш.
+  const uid = gate.gateless ? null : "s:" + (sessionId(request) || "anon");
+  if (uid) {
+    const spent = await quotaSpend(env, uid);
+    if (!spent.ok) {
+      return Response.json({ error: spent.error, dayLimit: spent.dayLimit,
+        dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
+    }
+  }
+
   const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
   const mode = body.mode === "hint" ? "hint" : "ask";
   const question = String(body.question || "").slice(0, TUTOR_MAX_CHARS);
@@ -309,6 +419,7 @@ export default {
     if (url.pathname === "/api/tutor/issue") return withCors(await handleIssue(request, env));
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
+    if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
 
     if (request.method !== "GET" && request.method !== "HEAD") {
