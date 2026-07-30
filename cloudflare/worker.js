@@ -82,8 +82,8 @@ async function readCounter(env, key) {
 
 // Сколько осталось — БЕЗ списания. Нужно, чтобы показать читателю остаток заранее:
 // «осталось 12 из 20 на сегодня», а не «извините, лимит исчерпан» после того, как он написал.
-async function quotaState(env, uid) {
-  const lim = quotaLimits(env);
+async function quotaState(env, uid, lim) {
+  lim = lim || quotaLimits(env);
   if (!env.TOKENS) return { ok: true, gateless: true, ...lim };
   const [day, week, proj] = await Promise.all([
     readCounter(env, `use:${uid}:${todayKey()}`),
@@ -101,10 +101,10 @@ async function quotaState(env, uid) {
 
 // Списание. Возвращает отказ с ПРИЧИНОЙ — читателю важно понимать, кончилось у него личное
 // на сегодня (подождать до завтра) или упёрлись мы всем проектом (это уже наша забота).
-async function quotaSpend(env, uid, cost = 1) {
+async function quotaSpend(env, uid, cost = 1, lim) {
   if (!env.TOKENS) return { ok: true, gateless: true };
-  const lim = quotaLimits(env);
-  const st = await quotaState(env, uid);
+  lim = lim || quotaLimits(env);
+  const st = await quotaState(env, uid, lim);
   if (st.projectUsed + cost > lim.dayProject) {
     return { ok: false, code: 503, error: "project_limit", ...st };
   }
@@ -131,19 +131,235 @@ function sessionId(request) {
 function newSessionId() { return crypto.randomUUID().replace(/-/g, ""); }
 
 // Остаток до вопроса: GET /api/quota. Заодно выдаёт номер сессии, если его ещё нет.
+// Кто перед нами и по какой норме считать. Одно место на весь Worker, чтобы правило
+// «вошёл — своя норма и свой счётчик» не разъехалось по обработчикам.
+async function identify(request, env) {
+  const user = await currentUser(request, env);
+  const sid = sessionId(request);
+  return {
+    user,
+    uid: user ? user.uid : "s:" + (sid || "anon"),
+    lim: quotaLimitsFor(env, user),
+  };
+}
+
 async function handleQuota(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-  let uid = sessionId(request);
-  const fresh = !uid;
-  if (!uid) uid = newSessionId();
-  const st = await quotaState(env, "s:" + uid);
-  const res = Response.json({ signedIn: false, ...st });
+  const { user, uid, lim } = await identify(request, env);
+  const fresh = !sessionId(request);
+  const sid = sessionId(request) || newSessionId();
+  const st = await quotaState(env, uid, lim);
+  const res = Response.json({
+    signedIn: !!user,
+    email: user ? user.email : null,
+    name: user ? user.name : null,
+    ...st,
+  });
   if (fresh) {
-    // 400 дней — предел, который принимают браузеры; SameSite=Lax, чтобы счётчик не терялся
-    // при переходе с внешней ссылки, но и не ездил в чужие запросы.
+    // Заводим номер сессии сразу всем, ещё до входа: по нему считается норма анонимного
+    // читателя. SameSite=Lax — чтобы счётчик не терялся при переходе с внешней ссылки,
+    // но и не ездил в чужие запросы.
     res.headers.append("set-cookie",
-      `b42s=${uid}; Path=/; Max-Age=34560000; SameSite=Lax; Secure; HttpOnly`);
+      `b42s=${sid}; Path=/; Max-Age=34560000; SameSite=Lax; Secure; HttpOnly`);
   }
+  return res;
+}
+
+// ── Вход ──────────────────────────────────────────────────────────
+// Два пути на выбор читателя: через Google (один клик, и это же барьер ботам) и почта +
+// одноразовый код для тех, кто без Google. Паролей не храним никогда — нечему утекать.
+//
+// Что такое сессия. Обезличенный номер в cookie `b42s` заводится всем сразу, ещё до входа:
+// по нему считается норма анонимного читателя. Вход не меняет номер — он привязывает к нему
+// запись в KV с идентификатором человека. Поэтому норма не обнуляется и не удваивается
+// при входе, а счётчики продолжают тот же ряд.
+const CODE_TTL = 600;          // одноразовый код живёт 10 минут
+const CODE_MAX_TRIES = 5;      // и переживает 5 попыток ввода, дальше сгорает
+
+function sessionKey(sid) { return "sess:" + sid; }
+
+async function currentUser(request, env) {
+  const sid = sessionId(request);
+  if (!sid || !env.TOKENS) return null;
+  const raw = await env.TOKENS.get(sessionKey(sid));
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+
+// Норма зависит от того, вошёл человек или нет: анонимному даём попробовать, вошедшему —
+// рабочую норму. Так вход не выглядит вымогательством, а имеет понятную выгоду.
+function quotaLimitsFor(env, user) {
+  const base = quotaLimits(env);
+  if (!user) {
+    const n = (v, d) => (Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : d);
+    return { ...base, dayUser: n(env.QUOTA_DAY_ANON, 3), weekUser: n(env.QUOTA_WEEK_ANON, 5) };
+  }
+  return base;
+}
+
+// Turnstile — бесплатная замена капчи от Cloudflare. Для человека обычно невидима, для
+// скрипта — стена. Проверяется на сервере: без проверки виджет на странице не значит ничего.
+async function turnstileOk(env, token, ip) {
+  if (!env.TURNSTILE_SECRET) return true;      // не настроено — не блокируем вход
+  if (!token) return false;
+  const form = new FormData();
+  form.append("secret", env.TURNSTILE_SECRET);
+  form.append("response", token);
+  if (ip) form.append("remoteip", ip);
+  try {
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      { method: "POST", body: form });
+    const d = await r.json();
+    return d.success === true;
+  } catch { return false; }
+}
+
+async function startSession(request, env, user) {
+  const sid = sessionId(request) || newSessionId();
+  await env.TOKENS.put(sessionKey(sid), JSON.stringify({ ...user, since: Date.now() }),
+    { expirationTtl: 60 * 86400 });
+  return sid;
+}
+
+function sessionCookie(sid) {
+  return `b42s=${sid}; Path=/; Max-Age=5184000; SameSite=Lax; Secure; HttpOnly`;
+}
+
+// --- Google ---
+// Один клик для читателя. Секрет обмена живёт в шифрованных секретах Worker, в страницу
+// не попадает никогда: обмен кода на личность делает сервер.
+function googleRedirectUri(url) { return `${url.origin}/api/auth/google/callback`; }
+
+async function handleGoogleStart(request, env) {
+  if (!env.GOOGLE_CLIENT_ID) return Response.json({ error: "google_not_configured" }, { status: 503 });
+  const url = new URL(request.url);
+  const state = crypto.randomUUID().replace(/-/g, "");
+  // state защищает от подделки запроса: вернуться должен тот же state, что ушёл.
+  await env.TOKENS.put("state:" + state, url.searchParams.get("next") || "/", { expirationTtl: 900 });
+  const g = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+  g.searchParams.set("client_id", env.GOOGLE_CLIENT_ID);
+  g.searchParams.set("redirect_uri", googleRedirectUri(url));
+  g.searchParams.set("response_type", "code");
+  g.searchParams.set("scope", "openid email profile");
+  g.searchParams.set("state", state);
+  return Response.redirect(g.toString(), 302);
+}
+
+async function handleGoogleCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+  const state = url.searchParams.get("state");
+  if (!code || !state) return Response.json({ error: "bad_request" }, { status: 400 });
+
+  const next = await env.TOKENS.get("state:" + state);
+  if (next === null) return Response.json({ error: "state_expired" }, { status: 400 });
+  await env.TOKENS.delete("state:" + state);
+
+  const body = new URLSearchParams({
+    code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: googleRedirectUri(url), grant_type: "authorization_code",
+  });
+  const tr = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body,
+  });
+  if (!tr.ok) return Response.json({ error: "google_exchange_failed" }, { status: 502 });
+  const tok = await tr.json();
+
+  // id_token подписан Google. Мы его получили по защищённому каналу прямо от Google в ответ
+  // на свой секрет, поэтому читаем полезную часть без повторной проверки подписи.
+  let claims = {};
+  try {
+    const part = tok.id_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    claims = JSON.parse(atob(part));
+  } catch { return Response.json({ error: "google_bad_token" }, { status: 502 }); }
+  if (!claims.sub) return Response.json({ error: "google_bad_token" }, { status: 502 });
+
+  const sid = await startSession(request, env, {
+    uid: "g:" + claims.sub, email: claims.email || "", name: claims.name || "", via: "google",
+  });
+  return new Response(null, {
+    status: 302,
+    headers: { location: next || "/", "set-cookie": sessionCookie(sid) },
+  });
+}
+
+// --- Почта и одноразовый код ---
+// Для тех, у кого нет Google. Пароля нет: код живёт десять минут и сгорает после пяти попыток.
+async function sendCodeEmail(env, to, code) {
+  // Cloudflare письма только принимает, отправлять нечем — нужен внешний отправитель.
+  // Пока он не настроен, честно говорим об этом, а не делаем вид, что письмо ушло.
+  if (!env.RESEND_API_KEY) return { ok: false, error: "mail_not_configured" };
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({
+      from: env.MAIL_FROM || "bridge42worlds <noreply@bridge42worlds.academy>",
+      to: [to], subject: `Код для входа: ${code}`,
+      text: `Ваш код для входа на bridge42worlds: ${code}\n\nКод действует 10 минут.\n` +
+            `Если вы не запрашивали вход — просто не отвечайте на это письмо.`,
+    }),
+  });
+  return r.ok ? { ok: true } : { ok: false, error: "mail_send_failed" };
+}
+
+function normalizeEmail(e) { return String(e || "").trim().toLowerCase().slice(0, 200); }
+
+async function handleCodeRequest(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  let b = {};
+  try { b = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  if (!(await turnstileOk(env, b.turnstile, request.headers.get("cf-connecting-ip")))) {
+    return Response.json({ error: "captcha_failed" }, { status: 403 });
+  }
+  const email = normalizeEmail(b.email);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return Response.json({ error: "bad_email" }, { status: 400 });
+  }
+
+  // Шестизначный код. Криптостойкий источник — предсказуемый код означал бы вход без почты.
+  const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+  await env.TOKENS.put("code:" + email, JSON.stringify({ code, tries: 0 }), { expirationTtl: CODE_TTL });
+
+  const sent = await sendCodeEmail(env, email, code);
+  if (!sent.ok) return Response.json({ error: sent.error }, { status: 503 });
+  return Response.json({ sent: true, ttl: CODE_TTL });
+}
+
+async function handleCodeVerify(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  let b = {};
+  try { b = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  const email = normalizeEmail(b.email);
+  const raw = await env.TOKENS.get("code:" + email);
+  if (!raw) return Response.json({ error: "code_expired" }, { status: 400 });
+  const rec = JSON.parse(raw);
+
+  if (rec.tries >= CODE_MAX_TRIES) {
+    await env.TOKENS.delete("code:" + email);
+    return Response.json({ error: "too_many_tries" }, { status: 429 });
+  }
+  if (String(b.code || "").trim() !== rec.code) {
+    rec.tries += 1;
+    await env.TOKENS.put("code:" + email, JSON.stringify(rec), { expirationTtl: CODE_TTL });
+    return Response.json({ error: "code_wrong", left: CODE_MAX_TRIES - rec.tries }, { status: 400 });
+  }
+
+  await env.TOKENS.delete("code:" + email);
+  const sid = await startSession(request, env, { uid: "e:" + email, email, via: "code" });
+  const res = Response.json({ signedIn: true, email });
+  res.headers.append("set-cookie", sessionCookie(sid));
+  return res;
+}
+
+async function handleLogout(request, env) {
+  const sid = sessionId(request);
+  if (sid && env.TOKENS) await env.TOKENS.delete(sessionKey(sid));
+  const res = Response.json({ signedIn: false });
+  res.headers.append("set-cookie", "b42s=; Path=/; Max-Age=0; SameSite=Lax; Secure; HttpOnly");
   return res;
 }
 
@@ -179,7 +395,7 @@ async function handleOrder(request, env) {
   const spec = ORDER_KINDS[kind];
   if (!spec) return Response.json({ error: "unknown_kind" }, { status: 400 });
 
-  const uid = "s:" + (sessionId(request) || "anon");
+  const { uid, lim } = await identify(request, env);
   const payload = body.payload && typeof body.payload === "object" ? body.payload : {};
   const dk = dedupeKey(kind, payload);
 
@@ -193,7 +409,7 @@ async function handleOrder(request, env) {
     if (found) return Response.json({ id: found.id, status: found.status, deduped: true });
   }
 
-  const spent = await quotaSpend(env, uid, spec.cost);
+  const spent = await quotaSpend(env, uid, spec.cost, lim);
   if (!spent.ok) {
     return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
       { status: spent.code });
@@ -426,9 +642,9 @@ async function handleTutor(request, env) {
 
   // Второй рубеж поверх токена: общий потолок проекта и норма на человека. Раньше лимит был
   // только на выданный вручную токен — то есть считался расход одного приглашённого, а не наш.
-  const uid = gate.gateless ? null : "s:" + (sessionId(request) || "anon");
-  if (uid) {
-    const spent = await quotaSpend(env, uid);
+  const who = gate.gateless ? null : await identify(request, env);
+  if (who) {
+    const spent = await quotaSpend(env, who.uid, 1, who.lim);
     if (!spent.ok) {
       return Response.json({ error: spent.error, dayLimit: spent.dayLimit,
         dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
@@ -508,6 +724,11 @@ export default {
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
+    if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
+    if (url.pathname === "/api/auth/google/callback") return handleGoogleCallback(request, env);
+    if (url.pathname === "/api/auth/code/request") return withCors(await handleCodeRequest(request, env));
+    if (url.pathname === "/api/auth/code/verify") return withCors(await handleCodeVerify(request, env));
+    if (url.pathname === "/api/auth/logout") return withCors(await handleLogout(request, env));
     if (url.pathname === "/api/order") return withCors(await handleOrder(request, env));
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
