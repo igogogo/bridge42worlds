@@ -91,10 +91,15 @@ def main():
             "text": text,
             "namespace": "ours",
             "metadata": {
-                # 10 KiB на вектор — влезает с запасом; всё нужное для ссылки в ответе бота
+                # 10 KiB на вектор — влезает с запасом; всё нужное для ссылки в ответе бота.
+                # Состав согласован с ведущей сессией (круг 3): title_en, date, has_full —
+                # обязательные; остальное наше.
+                "title_en": (j.get("original_title") or "")[:300],
                 "date": j.get("date"),
+                # has_full=true у наших статей с полным разбором; false — у экспрессов
+                # (сделаны по аннотации) и потом у чужих абстрактов arXiv в namespace `arxiv`.
+                "has_full": not bool(j.get("express")),
                 "cat": j.get("primary_category"),
-                "express": bool(j.get("express")),
                 "title_ru": ((j.get("popular") or {}).get("ru") or {}).get("title", "")[:200],
                 "url": f"/ru/archive/{j.get('date')}/{aid}/",
                 "src": src,
