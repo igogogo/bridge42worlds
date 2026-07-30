@@ -848,6 +848,32 @@ async function dailyDigest(env, latest) {
   } catch (e) {
     lines.push(`Не смог посчитать статьи: ${escapeHtml(e.message)}`);
   }
+
+  // Заказы читателей за сутки. Смотрим не только «сколько попросили», но и «сколько сделали»:
+  // расхождение между ними и есть сигнал, что упёрлись в потолок или что-то падает.
+  if (env.QUEUE) {
+    try {
+      const since = Date.now() - 86400000;
+      const r = await env.QUEUE.prepare(
+        `SELECT kind,
+                COUNT(*) AS asked,
+                SUM(CASE WHEN status='done' THEN 1 ELSE 0 END) AS done,
+                SUM(CASE WHEN status='failed' THEN 1 ELSE 0 END) AS failed
+           FROM orders WHERE created_at > ? GROUP BY kind`).bind(since).all();
+      const rows = r.results || [];
+      if (rows.length) {
+        const label = { ask: "вопросы", article: "статьи", translate: "переводы" };
+        lines.push("");
+        lines.push("<b>Заказы за сутки</b>");
+        for (const x of rows) {
+          lines.push(`• ${label[x.kind] || x.kind}: просили ${x.asked}, сделали ${x.done}` +
+            (x.failed ? `, не вышло ${x.failed}` : ""));
+        }
+      }
+    } catch (e) {
+      lines.push(`Заказы посчитать не смог: ${escapeHtml(e.message)}`);
+    }
+  }
   return lines.join("\n");
 }
 

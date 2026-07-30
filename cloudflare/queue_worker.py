@@ -31,9 +31,48 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 
+# Где лежат данные проекта. По умолчанию — рядом со скриптом, но если исполнителя запускают
+# из рабочей копии (worktree), данных там нет: собранный сайт и архив статей живут только
+# в главной папке. Тогда путь задаётся явно:
+#     B42_DATA_ROOT=C:\...\bridge42worlds python cloudflare/queue_worker.py
+# Без этого генерация молча создала бы пустое дерево в стороне и «сделала» бы статью,
+# которой никто не увидит.
+DATA_ROOT = Path(os.environ.get("B42_DATA_ROOT") or ROOT)
+
 DB_ID = os.environ.get("D1_QUEUE_ID", "44ca0737-e27f-4cb5-bac8-9b132c935e4d")
 MAX_ATTEMPTS = 3          # дальше заказ признаём безнадёжным, а не крутим вечно
 POLL_SECONDS = 30
+
+
+def tg(text):
+    """Сообщение в общий канал. Молчит, если канал не настроен, и никогда не роняет прогон:
+    недоставленное уведомление — не повод считать, что работа не сделана."""
+    token, chat = os.environ.get("TG_BOT_TOKEN"), os.environ.get("TG_CHAT_ID")
+    if not (token and chat):
+        return
+    try:
+        requests.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=20,
+                      json={"chat_id": chat, "parse_mode": "HTML", "text": text})
+    except Exception:
+        pass
+
+
+_cap_notified = set()
+
+
+def notify_cap_reached(msg):
+    """Сообщаем о потолке ОДИН раз в сутки, а не на каждый заказ в очереди: иначе при десяти
+    ждущих заказах канал получит десять одинаковых сообщений подряд."""
+    day = time.strftime("%Y-%m-%d")
+    if day in _cap_notified:
+        return
+    _cap_notified.add(day)
+    tg(f"🛑 <b>Потолок статей на сегодня</b>\n{msg}\nЗаказы ждут в очереди до завтра.")
+
+
+class DailyCapReached(Exception):
+    """Суточный потолок статей исчерпан. Отдельный тип, а не общая ошибка: заказ надо вернуть
+    в очередь до завтра, а не отправлять в повторные попытки и не признавать провалившимся."""
 
 
 def sql(query, params=None):
@@ -88,7 +127,7 @@ def do_translate(payload, lang):
     # Точечный перевод одной статьи существующим механизмом проекта.
     code = subprocess.run(
         [sys.executable, "run.py", "translate-one", "--id", arxiv_id, "--lang", to],
-        cwd=ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
+        cwd=DATA_ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
     if code != 0:
         raise RuntimeError(f"перевод завершился с кодом {code}")
     return {"url": f"/lang/{to}/archive/{arxiv_id}/", "arxiv_id": arxiv_id, "lang": to}
@@ -122,14 +161,24 @@ def find_arxiv_paper(topic):
 
 
 def do_article(payload, lang):
-    """«Хочу статью про это». Путь написан целиком и проверяем, но по умолчанию ВЫКЛЮЧЕН:
-    каждый прогон стоит денег, а потолок на это не назначен — решение архитектора (вопросы
-    в отчёте от 2026-07-30). Включается одной переменной, правка кода не нужна:
-        ORDERS_ARTICLE_ENABLED=1 python cloudflare/queue_worker.py
-    Заказы тем временем принимаются и копятся в очереди — ничего не теряется."""
-    if os.environ.get("ORDERS_ARTICLE_ENABLED", "0") != "1":
-        raise NotImplementedError(
-            "генерация по заказу выключена: ждём решения по потолку расхода")
+    """«Хочу статью про это». Включено 2026-07-30 с потолком владельца: 10 статей в сутки
+    на весь проект (не на человека). Потолок и выключатель — настройками, без правки кода:
+        ORDERS_ARTICLE_ENABLED=0     полностью выключить
+        ORDERS_ARTICLE_DAILY_CAP=10  сменить потолок
+    Потолок считается по факту исполненных за сутки, а не по числу принятых заказов:
+    отклонённые и упавшие денег не стоили, наказывать за них следующего незачем."""
+    if os.environ.get("ORDERS_ARTICLE_ENABLED", "1") == "0":
+        raise NotImplementedError("генерация по заказу выключена настройкой")
+
+    cap = int(os.environ.get("ORDERS_ARTICLE_DAILY_CAP", "10"))
+    since = int(time.time() * 1000) - 86400_000
+    done_today = sql("""SELECT COUNT(*) AS n FROM orders
+                        WHERE kind='article' AND status='done' AND finished_at > ?""", [since])
+    n = done_today[0]["n"] if done_today else 0
+    if n >= cap:
+        # Не ошибка и не вина заказа — просто на сегодня всё. Возвращаем в очередь:
+        # завтра тот же заказ исполнится первым, читателю ничего переделывать не надо.
+        raise DailyCapReached(f"на сегодня потолок статей исчерпан ({n} из {cap})")
 
     arxiv_id = payload.get("hint_arxiv_id")
     title = None
@@ -145,7 +194,7 @@ def do_article(payload, lang):
 
     code = subprocess.run(
         [sys.executable, "run.py", "ids", arxiv_id],
-        cwd=ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
+        cwd=DATA_ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
     if code != 0:
         raise RuntimeError(f"генерация завершилась с кодом {code}")
     return {"arxiv_id": arxiv_id, "title": title, "url": f"/lang/{lang}/archive/"}
@@ -174,6 +223,14 @@ def run_once(dry=False):
         result = HANDLERS[o["kind"]](payload, o.get("lang") or "ru")
         finish(o["id"], result=result)
         print("   готово")
+    except DailyCapReached as e:
+        # Потолок на сегодня. Заказ возвращается в очередь и попытка не засчитывается —
+        # иначе три занятых дня подряд «съели» бы заказ, ничего не сделав.
+        sql("UPDATE orders SET status='queued', attempts=attempts-1, error=? WHERE id=?",
+            [str(e), o["id"]])
+        print(f"   {e} — заказ ждёт завтра")
+        notify_cap_reached(str(e))
+        return False        # дальше по очереди не идём: потолок общий, следующим тоже нельзя
     except NotImplementedError as e:
         # Не ошибка исполнения, а осознанно невключённая ветка — не крутим повторно.
         finish(o["id"], error=str(e))
