@@ -185,6 +185,54 @@
         // из localStorage; в URL не оставляем — сразу чистим адресную строку.
         var TOKEN_KEY = 'b42_tutor_token';
         function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+
+        // ── Проверка «не робот» (Cloudflare Turnstile) ──
+        // Подключаем библиотеку лениво — только когда человек впервые задаёт вопрос.
+        // Грузить её на каждой странице курса ради кнопки, которую нажмут единицы, незачем.
+        // Виджет невидимый: человек ничего не делает, скрипт получает одноразовый пропуск.
+        var TURNSTILE_SITEKEY = global.B42_TURNSTILE_SITEKEY || '0x4AAAAAAEB-LevMvRwY5jR7';
+        var tsReady = null;
+
+        function loadTurnstile() {
+            if (tsReady) return tsReady;
+            tsReady = new Promise(function (resolve) {
+                if (global.turnstile) return resolve(true);
+                var s = document.createElement('script');
+                s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                s.async = true;
+                s.onload = function () { resolve(true); };
+                s.onerror = function () { resolve(false); };   // не роняем диалог из-за сети
+                document.head.appendChild(s);
+            });
+            return tsReady;
+        }
+
+        // Пропуск одноразовый и живёт минуты — поэтому берём новый на каждый вопрос,
+        // а не храним. Если проверка недоступна, возвращаем пустую строку: сервер откажет
+        // сам и скажет об этом человеческим текстом, а мы не притворяемся, что всё хорошо.
+        async function turnstilePass() {
+            var ok = await loadTurnstile();
+            if (!ok || !global.turnstile) return '';
+            var host = document.createElement('div');
+            host.style.display = 'none';
+            document.body.appendChild(host);
+            return new Promise(function (resolve) {
+                var done = false;
+                function finish(v) {
+                    if (done) return;
+                    done = true;
+                    try { host.remove(); } catch (e) {}
+                    resolve(v || '');
+                }
+                try {
+                    global.turnstile.render(host, {
+                        sitekey: TURNSTILE_SITEKEY, size: 'invisible',
+                        callback: finish, 'error-callback': function () { finish(''); },
+                    });
+                } catch (e) { finish(''); }
+                setTimeout(function () { finish(''); }, 8000);  // не ждём вечно
+            });
+        }
         function setToken(t) { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
         (function pickTokenFromUrl() {
             try {
@@ -223,10 +271,15 @@
                 var headers = { 'content-type': 'application/json' };
                 var tok = getToken();
                 if (tok) headers['x-b42-token'] = tok;
+                // Проверка «не робот». Для человека она обычно невидима: виджет решает
+                // задачу сам и отдаёт одноразовый пропуск. Без него сервер откажет —
+                // каждый вопрос стоит денег, и открытая ручка выгребается за ночь.
+                var pass = await turnstilePass();
                 var r = await fetch(API, {
                     method: 'POST', headers: headers,
                     body: JSON.stringify({
                         lang: lang, mode: mode || 'ask', question: question,
+                        turnstile: pass,
                         context: (ctx.title ? ctx.title + '\n\n' : '') + (ctx.text || '')
                     })
                 });

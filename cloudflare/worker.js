@@ -123,19 +123,85 @@ async function quotaSpend(env, uid, cost = 1, lim) {
 // Кто спрашивает. Пока входа нет — считаем по обезличенному номеру сессии из cookie:
 // это не защита (cookie чистится), а честный учёт для обычного читателя. Настоящая
 // привязка к человеку появится вместе с входом через Google — тогда uid станет его id.
-function sessionId(request) {
-  const m = (request.headers.get("cookie") || "").match(/(?:^|;\s*)b42s=([A-Za-z0-9]{8,64})/);
-  return m ? m[1] : null;
+// Номер сессии подписан. Без подписи достаточно было выбросить cookie, чтобы получить
+// свежую норму — то есть «предъяви что угодно» вместо учёта. Теперь номер принимается,
+// только если он выдан нами: подделать подпись нельзя, не зная секрета.
+//
+// Что это НЕ решает: читатель по-прежнему может удалить cookie и попросить новую сессию.
+// Это нормально — cookie не удостоверение личности. Против такого работают предел по
+// адресу и капча, а подпись закрывает более грубое: подстановку произвольных номеров,
+// которой можно было бы обнулять норму без единого запроса к нам.
+async function signSession(env, sid) {
+  const secret = env.SESSION_SECRET || env.WEBHOOK_SECRET;
+  if (!secret) return sid;                       // нечем подписать — работаем как раньше
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(sid));
+  const sig = btoa(String.fromCharCode(...new Uint8Array(mac)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "").slice(0, 32);
+  return `${sid}.${sig}`;
+}
+
+async function sessionId(request, env) {
+  const raw = (request.headers.get("cookie") || "")
+    .match(/(?:^|;\s*)b42s=([A-Za-z0-9._-]{8,120})/);
+  if (!raw) return null;
+  const value = raw[1];
+  const secret = env && (env.SESSION_SECRET || env.WEBHOOK_SECRET);
+  if (!secret) return value.split(".")[0];       // нечем проверить — принимаем как есть
+  const [sid, sig] = value.split(".");
+  if (!sid || !sig) return null;                 // старая неподписанная cookie — не принимаем
+  const expect = await signSession(env, sid);
+  return expect === value ? sid : null;
 }
 
 function newSessionId() { return crypto.randomUUID().replace(/-/g, ""); }
 
 // Остаток до вопроса: GET /api/quota. Заодно выдаёт номер сессии, если его ещё нет.
+// ── Защита от ботов ───────────────────────────────────────────────
+// Норма считается по номеру сессии из cookie. Для человека это честный учёт, для скрипта —
+// не преграда: выбросил cookie, получил новую сессию и новые три действия. Поэтому поверх
+// нормы стоит предел по сетевому адресу — его так просто не сменить.
+//
+// Два рубежа делают разную работу и нужны оба:
+//   • предел по адресу — против перебора с одной машины, невидим человеку;
+//   • Turnstile — против ботоферм с тысячи адресов, где предел по адресу бесполезен.
+function botLimits(env) {
+  const n = (v, d) => (Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : d);
+  return {
+    perMinute: n(env.RATE_IP_MINUTE, 10),   // всплеск: человек столько не настучит
+    perDay: n(env.RATE_IP_DAY, 60),         // сутки: с запасом на семью за одним адресом
+  };
+}
+
+// Предел по адресу. Считаем в KV двумя вёдрами: минутным (ловит всплеск) и суточным
+// (ловит медленный перебор). Оба нужны: только минутное обходится паузами, только
+// суточное пропускает шквал за первые секунды.
+async function ipGuard(env, request) {
+  if (!env.TOKENS) return { ok: true };
+  const ip = request.headers.get("cf-connecting-ip");
+  if (!ip) return { ok: true };            // без адреса судить не о чем
+  const lim = botLimits(env);
+  const minute = Math.floor(Date.now() / 60000);
+  const kMin = `ip:${ip}:m${minute}`;
+  const kDay = `ip:${ip}:${todayKey()}`;
+
+  const [m, d] = await Promise.all([readCounter(env, kMin), readCounter(env, kDay)]);
+  if (m >= lim.perMinute) return { ok: false, code: 429, error: "too_fast" };
+  if (d >= lim.perDay) return { ok: false, code: 429, error: "ip_day_limit" };
+
+  await Promise.all([
+    env.TOKENS.put(kMin, String(m + 1), { expirationTtl: 120 }),
+    env.TOKENS.put(kDay, String(d + 1), { expirationTtl: 172800 }),
+  ]);
+  return { ok: true };
+}
+
 // Кто перед нами и по какой норме считать. Одно место на весь Worker, чтобы правило
 // «вошёл — своя норма и свой счётчик» не разъехалось по обработчикам.
 async function identify(request, env) {
   const user = await currentUser(request, env);
-  const sid = sessionId(request);
+  const sid = await sessionId(request, env);
   return {
     user,
     uid: user ? user.uid : "s:" + (sid || "anon"),
@@ -146,8 +212,8 @@ async function identify(request, env) {
 async function handleQuota(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   const { user, uid, lim } = await identify(request, env);
-  const fresh = !sessionId(request);
-  const sid = sessionId(request) || newSessionId();
+  const fresh = !(await sessionId(request, env));
+  const sid = (await sessionId(request, env)) || newSessionId();
   const st = await quotaState(env, uid, lim);
   const res = Response.json({
     signedIn: !!user,
@@ -160,7 +226,7 @@ async function handleQuota(request, env) {
     // читателя. SameSite=Lax — чтобы счётчик не терялся при переходе с внешней ссылки,
     // но и не ездил в чужие запросы.
     res.headers.append("set-cookie",
-      `b42s=${sid}; Path=/; Max-Age=34560000; SameSite=Lax; Secure; HttpOnly`);
+      `b42s=${await signSession(env, sid)}; Path=/; Max-Age=34560000; SameSite=Lax; Secure; HttpOnly`);
   }
   return res;
 }
@@ -179,7 +245,7 @@ const CODE_MAX_TRIES = 5;      // и переживает 5 попыток вв�
 function sessionKey(sid) { return "sess:" + sid; }
 
 async function currentUser(request, env) {
-  const sid = sessionId(request);
+  const sid = await sessionId(request, env);
   if (!sid || !env.TOKENS) return null;
   const raw = await env.TOKENS.get(sessionKey(sid));
   if (!raw) return null;
@@ -200,7 +266,11 @@ function quotaLimitsFor(env, user) {
 // Turnstile — бесплатная замена капчи от Cloudflare. Для человека обычно невидима, для
 // скрипта — стена. Проверяется на сервере: без проверки виджет на странице не значит ничего.
 async function turnstileOk(env, token, ip) {
-  if (!env.TURNSTILE_SECRET) return true;      // не настроено — не блокируем вход
+  // Отсутствие секрета — это НЕ повод пропустить. Раньше здесь стоял `return true`, и любая
+  // потеря секрета (не выложили, опечатались в имени, снесли при переезде) молча снимала
+  // защиту со всего сайта, причём незаметно: всё «работает». Замок, который открывается,
+  // когда потеряли ключ, — не замок. Теперь при отсутствии секрета отказываем.
+  if (!env.TURNSTILE_SECRET) return false;
   if (!token) return false;
   const form = new FormData();
   form.append("secret", env.TURNSTILE_SECRET);
@@ -215,14 +285,14 @@ async function turnstileOk(env, token, ip) {
 }
 
 async function startSession(request, env, user) {
-  const sid = sessionId(request) || newSessionId();
+  const sid = (await sessionId(request, env)) || newSessionId();
   await env.TOKENS.put(sessionKey(sid), JSON.stringify({ ...user, since: Date.now() }),
     { expirationTtl: 60 * 86400 });
   return sid;
 }
 
-function sessionCookie(sid) {
-  return `b42s=${sid}; Path=/; Max-Age=5184000; SameSite=Lax; Secure; HttpOnly`;
+async function sessionCookie(env, sid) {
+  return `b42s=${await signSession(env, sid)}; Path=/; Max-Age=5184000; SameSite=Lax; Secure; HttpOnly`;
 }
 
 // --- Google ---
@@ -279,7 +349,7 @@ async function handleGoogleCallback(request, env) {
   });
   return new Response(null, {
     status: 302,
-    headers: { location: next || "/", "set-cookie": sessionCookie(sid) },
+    headers: { location: next || "/", "set-cookie": await sessionCookie(env, sid) },
   });
 }
 
@@ -351,12 +421,12 @@ async function handleCodeVerify(request, env) {
   await env.TOKENS.delete("code:" + email);
   const sid = await startSession(request, env, { uid: "e:" + email, email, via: "code" });
   const res = Response.json({ signedIn: true, email });
-  res.headers.append("set-cookie", sessionCookie(sid));
+  res.headers.append("set-cookie", await sessionCookie(env, sid));
   return res;
 }
 
 async function handleLogout(request, env) {
-  const sid = sessionId(request);
+  const sid = await sessionId(request, env);
   if (sid && env.TOKENS) await env.TOKENS.delete(sessionKey(sid));
   const res = Response.json({ signedIn: false });
   res.headers.append("set-cookie", "b42s=; Path=/; Max-Age=0; SameSite=Lax; Secure; HttpOnly");
@@ -394,6 +464,14 @@ async function handleOrder(request, env) {
   const kind = String(body.kind || "");
   const spec = ORDER_KINDS[kind];
   if (!spec) return Response.json({ error: "unknown_kind" }, { status: 400 });
+
+  // Заказ — самая дорогая кнопка на сайте (статья стоит десять единиц и реальных денег),
+  // поэтому здесь оба рубежа обязательны. Интерфейса у неё пока нет, ломать нечего.
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  if (!(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+    return Response.json({ error: "captcha_failed" }, { status: 403 });
+  }
 
   const { uid, lim } = await identify(request, env);
   const payload = body.payload && typeof body.payload === "object" ? body.payload : {};
@@ -657,6 +735,11 @@ async function handleSearch(request, env) {
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
 
+  // Поиск капчей не закрываем: она бы вылезала на каждый запрос и мешала живому человеку,
+  // а поиск дешёвый. Здесь работает предел по адресу — он невидим и ловит перебор.
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+
   // Поиск — тоже расход, считаем с первого дня.
   const who = await identify(request, env);
   const spent = await quotaSpend(env, who.uid, 1, who.lim);
@@ -727,8 +810,17 @@ async function handleTutor(request, env) {
     if (!gate.ok) return Response.json({ error: gate.error, limit: gate.limit }, { status: gate.code });
   }
 
-  // Норма — главный и единственный обязательный рубеж. Считаем всем: и анонимному (3 в сутки),
-  // и вошедшему (20), и поверх этого стоит суточный потолок на весь проект.
+  // Каждый вопрос — это обращение к платной модели, поэтому оба рубежа обязательны.
+  // Предел по адресу невидим человеку; капча отсекает ботоферму, против которой предел
+  // по адресу бесполезен — там адресов тысячи.
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  if (!(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+    return Response.json({ error: "captcha_failed" }, { status: 403 });
+  }
+
+  // Норма — считаем всем: и анонимному (3 в сутки), и вошедшему (20), и поверх этого
+  // стоит суточный потолок на весь проект.
   const who = await identify(request, env);
   const spent = await quotaSpend(env, who.uid, 1, who.lim);
   if (!spent.ok) {
