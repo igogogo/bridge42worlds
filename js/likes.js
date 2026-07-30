@@ -1,9 +1,10 @@
 // bridge42worlds · движок вовлечения: реакции (Supabase) + избранное (localStorage) + обратная связь (Supabase)
 const SUPABASE_URL = 'https://gyfdyfbuolnciaqxgybx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZmR5ZmJ1b2xuY2lhcXhneWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTk0MzQsImV4cCI6MjA5ODM3NTQzNH0.rKsgWoj5ubRpkvElPfELOn-G9StW5RSOkxBbpvFyWc4';
-const REACTIONS = ['like', 'dislike'];
+const REACTIONS = ['like', 'dislike', 'superlike']   // superlike рисуется в ленте — без него его счётчик был локальной фикцией;
 
-let _sb = null, _lock = false;
+let _sb = null;
+const _lock = new Set();   // замок ПО ID: глобальный терял тап по соседней карточке
 async function getSupabase() {
     if (_sb) return _sb;
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
@@ -48,14 +49,14 @@ function bumpCount(id, type, delta) {
 const _pending = new Set();   // id, по которым запись в фоне ещё не завершилась
 
 async function react(id, type, entityType) {
-    if (_lock) return;
-    _lock = true;
+    if (_lock.has(id)) return;
+    _lock.add(id);
     // Замок 350 мс защищал от дребезга, но НЕ от осмысленных повторных тапов: читатель
     // жал «нравится» много раз подряд и видел +1, −1, +2… (владелец, живой телефон
     // 2026-07-30). Сервер при этом получал по строке на каждый тап. Одна реакция на
     // статью с одного устройства — это и есть смысл кнопки: повторный тап по УЖЕ активной
     // снимает её, а дальнейшие быстрые тапы игнорируются до подтверждения записи.
-    if (_pending.has(id)) { _lock = false; return; }
+    if (_pending.has(id)) { _lock.delete(id); return; }
     _pending.add(id);
     // ОПТИМИСТИЧНО: отклик СРАЗУ, до сети (юзер 2026-07-25: «нажал — получил», а загрузка supabase
     // с CDN + insert + повторный запрос счётчика раньше давали заметную задержку). Сеть — в фоне.
@@ -70,7 +71,7 @@ async function react(id, type, entityType) {
         bumpCount(id, type, +1);
     }
     highlightReactions(id);
-    setTimeout(() => { _lock = false; }, 350);
+    setTimeout(() => { _lock.delete(id); }, 350);
     // фоновая запись + тихая ресинхронизация счётчиков с сервером (не блокирует UI)
     try {
         const sb = await getSupabase();
@@ -78,9 +79,17 @@ async function react(id, type, entityType) {
             const { error } = await sb.from('likes').insert({
                 article_id: id, reaction: type, entity_type: entityType || 'article',
             });
-            if (error) console.error('like insert failed:', error.message);
+            if (error) {
+                console.error('like insert failed:', error.message);
+                setMyReaction(id, prev || '');
+                bumpCount(id, type, -1);
+                if (prev) bumpCount(id, prev, +1);
+                highlightReactions(id);
+            }
         }
-        loadReactions(id);   // подтянуть настоящий глобальный счётчик (без await — не тормозим клик)
+        // После СНЯТИЯ не перечитываем: удаления на сервере нет, он вернёт прежнее число
+        // и счётчик отскочит вверх — тот самый «прыгающий счётчик».
+        if (!wasActive) loadReactions(id);
     } catch (e) { console.error('react bg:', e); }
     finally { _pending.delete(id); }
 }

@@ -1365,10 +1365,25 @@ function initAllTooltips() {
                 // выносим ссылку «подробнее» из хвоста текста в шапку, рядом с крестиком.
                 var mTop = content.match(/<a href="([^"]+)"[^>]*>([^<]*)<\/a>\s*$/);
                 if (mTop) {
+                    // Стрелку не дописываем: UI.more уже содержит её и на RTL она своя
+                    // (было «Подробнее → →», на арабском «← →» — стрелки врозь).
                     content = '<div class="tip-top"><a class="tip-more" href="' + mTop[1] + '">' +
-                              mTop[2] + ' →</a></div>' + content.replace(mTop[0], '');
+                              mTop[2] + '</a></div>' + content.replace(mTop[0], '');
                 }
+                // Крестик добавляется при создании тултипа, а этот innerHTML сносил всех
+                // детей — на тач-устройстве закрыть было нечем, только тапом мимо
+                // (найдено проверкой 2026-07-30). Восстанавливаем после каждой отрисовки.
                 tip.innerHTML = content;
+                if (!tip.querySelector('.tip-close')) {
+                    var _x = document.createElement('button');
+                    _x.type = 'button'; _x.className = 'tip-close';
+                    _x.setAttribute('aria-label', 'close');
+                    _x.textContent = '×';
+                    _x.addEventListener('click', function (e) {
+                        e.stopPropagation(); tip.style.display = 'none';
+                    });
+                    tip.appendChild(_x);
+                }
                 tip.style.display = 'block';
                 var rect = el.getBoundingClientRect();
                 tip.style.left = Math.min(rect.left, window.innerWidth - 330) + 'px';
