@@ -1,0 +1,53 @@
+# Cloudflare Worker + R2 — конфиг переезда сайта с GitHub Pages (подготовлено 2026-07-24, НЕ развёрнуто).
+# Активируется, когда у нас будет аккаунт Cloudflare + API-токен (см. cloudflare/MIGRATION.md).
+name = "bridge42worlds"
+main = "worker.js"
+compatibility_date = "2026-07-24"
+# Держим workers.dev-ссылку живой для тестов и на будущее, помимо продовых routes ниже.
+workers_dev = true
+
+# Маршруты на прод. Зона добавлена в Cloudflare 2026-07-28, но nameservers ещё не переключены у
+# регистратора — до переключения эти routes ни на что не влияют (трафик идёт мимо Cloudflare).
+# Задеплоено заранее, чтобы сайт заработал сразу в момент смены nameservers, без отдельного шага.
+routes = [
+  { pattern = "bridge42worlds.academy/*", zone_name = "bridge42worlds.academy" },
+  { pattern = "www.bridge42worlds.academy/*", zone_name = "bridge42worlds.academy" },
+]
+
+# Хранилище статики (HTML/JSON/картинки). Создаётся: wrangler r2 bucket create bridge42worlds-site
+[[r2_buckets]]
+binding = "SITE"
+bucket_name = "bridge42worlds-site"
+
+# Токены доступа к боту-тьютору (/api/tutor). Привязан 2026-07-29 — с этого момента гейт по токену
+# в проде РАБОТАЕТ (без KV код молча пропускал всех, см. checkToken в worker.js).
+# ⚠️ binding именно TOKENS (так обращается worker.js), namespace создавался с титулом TUTOR_TOKENS.
+[[kv_namespaces]]
+binding = "TOKENS"
+id = "bf89cc7963304948a6a7aeeb0a06e43d"
+
+# Сторож. Ежедневно в 9 утра UTC — проверка свежести (молчит, если всё хорошо);
+# по понедельникам дополнительно отметка «я жив», иначе тишину не отличить от поломки.
+[triggers]
+crons = ["0 9 * * *", "0 9 * * 1"]
+
+# Смысловой поиск (/api/search): индекс строит cloudflare/vector_build.py.
+# Один вектор на статью — четыре языка не влезли бы в бесплатные 5 млн измерений,
+# а модель bge-m3 всё равно кросс-язычная. Привязано 2026-07-29.
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "b42-articles"
+
+# Модель эмбеддингов для запроса читателя (сам корпус считается скриптом заранее).
+[ai]
+binding = "AI"
+
+# Секреты (НЕ в этом файле, они шифруются на стороне Cloudflare):
+#   wrangler secret put DEEPSEEK_API_KEY     — ключ DeepSeek для бота
+#   wrangler secret put ADMIN_KEY            — им выдаются токены через POST /api/tutor/issue
+# Выдать токен на неделю:
+#   curl -X POST https://<worker>/api/tutor/issue -H "x-admin-key: <ADMIN_KEY>" \
+#        -H "content-type: application/json" -d '{"days":7,"limitTotal":200,"limitDay":50,"note":"демо"}'
+
+[observability]
+enabled = true

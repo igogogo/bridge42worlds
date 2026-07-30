@@ -41,15 +41,21 @@ product/
 # Источник контента для регенера (не грузится клиентом; держим локально)
 lang/*/archive/*/*/data.json
 
-# Cloudflare-миграция: инфра + хендофф с идентификаторами — НЕ в git и НЕ на публичный сайт
-cloudflare/
 scratch_*
 bridge42worlds_files/
 html-regen-*.log
 
-# Cloudflare Worker: локальные секреты (ключ DeepSeek для бота-тьютора) и кэш wrangler
+# Cloudflare. Папка целиком была вне git — из-за одного файла с доступами. Побочный эффект:
+# код Worker'а, который обслуживает весь сайт, не имел ни истории, ни копии (2026-07-30).
+# Теперь наоборот: код в git, из него исключено поимённо то, что секретно или производно.
+cloudflare/DEVOPS-HANDOFF.md
 cloudflare/.dev.vars
 cloudflare/.wrangler/
+cloudflare/.r2-manifest.json
+cloudflare/.backup-manifest.json
+cloudflare/.vector-manifest.json
+cloudflare/publish-failures.log
+cloudflare/__pycache__/
 data/bulk-select/
 data/arxiv-index.jsonl
 _devops-handoff.zip
