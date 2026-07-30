@@ -266,6 +266,9 @@ if (!window.__favoritesPage) {
 _fullIndexPromise.then(function(primary) {
     searchIndex = primary;   // полный индекс заменяет latest — лента, поиск, фильтры на полном наборе
     window.searchIndex = searchIndex;
+    // Запоминаем отдельно: ensureOtherVersions склеивает три уровня и без этого при повторном
+    // вызове склеил бы уже склеенное — каждая статья размножилась бы в ленте.
+    window.__primaryIndex = primary;
 
     var container = document.getElementById('search-results');
     if (container && !document.querySelector('.search-box')?.value) {
@@ -284,9 +287,39 @@ _fullIndexPromise.then(function(primary) {
     console.error('Init error:', e);
 });
 
+function catFetch(base, lang) {
+    var url = (lang === 'en') ? base + '.json' : base + '-' + lang + '.json';
+    return fetch(url)
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .catch(function () {
+            // Перевода для этого языка ещё нет — берём английскую базу. Это осознанный
+            // откат, и он виден: панель разделов будет по-английски, пока не переведут.
+            if (url === base + '.json') return {};
+            console.info('разделы arXiv: нет перевода для ' + lang + ', беру английские');
+            return fetch(base + '.json').then(function (r) { return r.json(); }).catch(function () { return {}; });
+        });
+}
+
 var OTHER_VERSIONS = ['popular', 'simple', 'advanced'].filter(function(v) { return v !== effVersion(); });
+
+/* Тяжёлое — ПОСЛЕ первой ленты, а не вместе с ней.
+   Замер живого сайта (2026-07-30): первый визит тянул 5,36 МБ, из них первому экрану
+   нужно 317 КБ. Все девять запросов стартовали в одну миллисекунду и делили канал
+   поровну, поэтому 39-килобайтный файл ленты ждал за компанию с двумя индексами чужих
+   уровней (2,5 МБ, 46% веса страницы) и графом авторов (375 КБ по сети, но 10 МБ
+   разбора на главном потоке телефона). На 4G это секунды до первой карточки.
+
+   Индексы других уровней нужны только при переключении «просто/популярно/подробно»,
+   граф авторов — только для @-подсказок и счётчика. Ждём простоя: первая лента к тому
+   моменту нарисована, канал свободен. Если простоя не дождались (страница активна),
+   выходим по таймеру — файлы всё равно понадобятся. */
+function whenIdle(fn) {
+    if (typeof requestIdleCallback === 'function') requestIdleCallback(fn, { timeout: 2500 });
+    else setTimeout(fn, 1200);
+}
+
 Promise.all(
-    OTHER_VERSIONS.map(fetchIndex).concat([
+    [].concat([
         fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
             return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
         }),
@@ -296,27 +329,13 @@ Promise.all(
         fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
         // Локализованный набор названий/описаний разделов, с откатом на английскую базу —
         // она же остаётся источником для lang=en и для категорий, перевода которых ещё нет.
-        fetch('/data/arxiv-categories-' + lang + '.json').then(function(r) {
-            if (!r.ok) throw 0; return r.json();
-        }).catch(function() {
-            return fetch('/data/arxiv-categories.json').then(function(r) { return r.json(); }).catch(function() { return {}; });
-        }),
-        fetch('/data/arxiv-category-descriptions-' + lang + '.json').then(function(r) {
-            if (!r.ok) throw 0; return r.json();
-        }).catch(function() {
-            return fetch('/data/arxiv-category-descriptions.json').then(function(r) { return r.json(); }).catch(function() { return {}; });
-        })
+        // Базовый файл — АНГЛИЙСКИЙ, отдельного -en не существует и не должно. Раньше его
+        // всё равно просили на каждой английской загрузке: два гарантированных 404 и два
+        // лишних round-trip перед отрисовкой панели разделов (замер 2026-07-30).
+        catFetch('/data/arxiv-categories', lang),
+        catFetch('/data/arxiv-category-descriptions', lang)
     ])
-).then(function(results) {
-    var otherIndexes = results.slice(0, OTHER_VERSIONS.length);
-    var rest = results.slice(OTHER_VERSIONS.length);
-
-    var byVersion = {};
-    byVersion[effVersion()] = searchIndex;
-    OTHER_VERSIONS.forEach(function(v, i) { byVersion[v] = otherIndexes[i]; });
-    searchIndex = (byVersion.popular || []).concat(byVersion.simple || []).concat(byVersion.advanced || []);
-    window.searchIndex = searchIndex;
-
+).then(function(rest) {
     tagsLoc = rest[0];
     scientistsData = rest[1];
     lawsData = rest[2] || {};
@@ -331,11 +350,6 @@ Promise.all(
     window.lawsData = lawsData;
 
     renderSiteStats();
-    // Граф авторов — 8.9МБ, самый тяжёлый файл сайта, а нужен он лишь для @-подсказок, тултипа
-    // автора и счётчика в статистике. Раньше он качался в одном Promise.all со справочниками и
-    // индексами и отъедал канал у самого индекса поиска — из-за чего поиск «долго думал» перед
-    // первой выдачей. Теперь стартует только после лёгкой волны (и подтягивается по требованию).
-    ensureAuthorsGraph();
     // Первая лента уже отрисована с тегами как raw id (tagsLoc ещё не пришёл) — теперь, когда
     // справочники подгрузились, перерисовываем дефолтный фид начисто, чтобы подтянуть красивые
     // названия тегов. Если пользователь уже начал искать — его результаты не трогаем.
@@ -343,9 +357,38 @@ Promise.all(
     if (container && !document.querySelector('.search-box')?.value) {
         _defaultFeed();
     }
+    // Только теперь — тяжёлое. Граф авторов: 375 КБ по сети, но 10 МБ разбора на главном
+    // потоке телефона; нужен для @-подсказок, тултипа автора и счётчика в статистике.
+    // Индексы соседних уровней: 2,5 МБ, нужны при переключении «просто/популярно/подробно»
+    // и для того, чтобы поиск находил статьи во всех трёх видах.
+    whenIdle(function () {
+        ensureAuthorsGraph();
+        ensureOtherVersions();
+    });
 }).catch(function(e) {
     console.error('Background data load error:', e);
 });
+
+/* Индексы соседних уровней — по требованию. Пока их нет, поиск ищет по текущему уровню:
+   это меньше, чем обещано, поэтому переключатель уровня и поиск сами дёргают загрузку,
+   а не ждут простоя. Один общий промис, сколько бы раз ни позвали. */
+var _otherVersionsPromise = null;
+function ensureOtherVersions() {
+    if (_otherVersionsPromise) return _otherVersionsPromise;
+    _otherVersionsPromise = Promise.all(OTHER_VERSIONS.map(fetchIndex)).then(function (otherIndexes) {
+        var byVersion = {};
+        byVersion[effVersion()] = window.__primaryIndex || searchIndex;
+        OTHER_VERSIONS.forEach(function (v, i) { byVersion[v] = otherIndexes[i]; });
+        searchIndex = (byVersion.popular || []).concat(byVersion.simple || []).concat(byVersion.advanced || []);
+        window.searchIndex = searchIndex;
+        return searchIndex;
+    }).catch(function (e) {
+        console.error('Other version indexes failed:', e);
+        return searchIndex;
+    });
+    return _otherVersionsPromise;
+}
+window.ensureOtherVersions = ensureOtherVersions;
 
 // Ленивая загрузка графа авторов: один общий промис, сколько бы раз ни позвали.
 var _authorsGraphPromise = null;
@@ -454,6 +497,16 @@ function versionSlice() {
 }
 
 function doFullSearch(query) {
+    // Индексы соседних уровней теперь грузятся в простое, а не в общей волне (см. ниже).
+    // Если читатель начал искать раньше, чем простой наступил, — дёргаем сами и
+    // перерисовываем выдачу, когда они доедут. До того ищем по текущему уровню:
+    // неполно, но мгновенно, и это лучше пустого экрана в ожидании 2,5 МБ.
+    if (typeof ensureOtherVersions === 'function' && !_otherVersionsPromise) {
+        ensureOtherVersions().then(function () {
+            var box = document.querySelector('.search-box');
+            if (box && box.value === query) doFullSearch(query);
+        });
+    }
     var container = document.getElementById('search-results');
     renderActiveFilters(query);
     var filters = parseSearchQuery(query);

@@ -1,6 +1,9 @@
-/* Арабский шрифт — Google отдаёт с unicode-range, поэтому файл качается только
-   на страницах с арабскими глифами. @import обязан быть первым правилом. */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;700&display=swap');
+/* Арабский шрифт (Noto Naskh Arabic) объявлен в <head> ВМЕСТЕ с Inter и Source Serif —
+   одним запросом к Google, а не отдельным @import отсюда. Причина: @import внутри CSS —
+   это последовательная цепочка «скачать style.css → распарсить → только теперь пойти на
+   сторонний хост», то есть лишний блокирующий рендер round-trip на КАЖДОЙ странице всех
+   пяти языков (замер живого сайта 2026-07-30). Сам файл шрифта по-прежнему качается
+   только там, где есть арабские глифы, — за это отвечает unicode-range у Google. */
 
 /* ── RTL (арабский и др.) ─────── */
 html[lang="ar"], html[lang="he"], html[lang="fa"], html[lang="ur"] { direction: rtl; }

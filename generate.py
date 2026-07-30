@@ -642,6 +642,52 @@ def mini_graph_filters_html(lang, center_kind="tag"):
             f'</div>')
 
 
+# Описания сайта для карточки предпросмотра — то, что видит человек, которому кинули
+# ссылку в мессенджер, ДО того как открыл. У главной и гида их не было вовсе: партнёр
+# получал голую ссылку без заголовка, описания и картинки (замер живого сайта 2026-07-30).
+SITE_OG = {
+    "ru": ("bridge42worlds — наука понятным языком",
+           "Свежие препринты arXiv, переписанные так, чтобы их понял любой. "
+           "Четыре глубины на выбор, живая карта науки: темы, законы и учёные за каждым открытием."),
+    "en": ("bridge42worlds — science made simple",
+           "The latest arXiv preprints rewritten so anyone can read them. "
+           "Four depths to choose from, and a living map of science: topics, laws and the people behind them."),
+    "es": ("bridge42worlds — la ciencia simplificada",
+           "Los últimos preprints de arXiv reescritos para que cualquiera pueda leerlos. "
+           "Cuatro niveles a elegir y un mapa vivo de la ciencia: temas, leyes y científicos."),
+    "fr": ("bridge42worlds — la science simplifiée",
+           "Les dernières prépublications arXiv réécrites pour être lues par tous. "
+           "Quatre niveaux au choix et une carte vivante de la science : sujets, lois et scientifiques."),
+    "ar": ("bridge42worlds — العلم ببساطة",
+           "أحدث أبحاث arXiv مُعاد كتابتها ليقرأها الجميع. أربعة مستويات للاختيار، "
+           "وخريطة حيّة للعلم: الموضوعات والقوانين والعلماء وراء كل اكتشاف."),
+}
+
+
+def latest_cover_url(lang):
+    """Картинка предпросмотра для главной и гида — обложка САМОЙ СВЕЖЕЙ статьи.
+    Отдельной брендовой картинки 1200x630 у нас нет, а обложки рисует FLUX и они хороши;
+    заодно карточка ссылки показывает, что на сайте сегодня. Отдаём jpg, а не webp:
+    часть мессенджеров webp в предпросмотре не разбирает."""
+    try:
+        idx = json.loads((Path(LANG_DIR) / lang / "articles-latest.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    for a in idx if isinstance(idx, list) else []:
+        aid, date = a.get("id"), a.get("date")
+        if not (aid and date):
+            continue
+        folder = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date / aid
+        if (folder / "ai.jpg").exists():
+            return f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date}/{aid}/ai.jpg"
+    return ""
+
+
+def site_og_meta(lang, url):
+    title, desc = SITE_OG.get(lang, SITE_OG["en"])
+    return build_og_meta(title, desc, url, latest_cover_url(lang))
+
+
 def build_og_meta(title, description, url, image_url=""):
     """og:/twitter: + meta description — общий блок для тег/закон/учёный страниц
     (у статьи свой набор в шаблоне — там ещё JSON-LD и hreflang)."""
@@ -1221,6 +1267,7 @@ def generate_index_page(lang):
         search_placeholder=safe(loc["search"]), search_hint=safe(loc["hint"]),
         loading_text=safe(loc["loading"]), footer_text=safe(loc["footer"]),
         intro_html=loc["intro"], calendar_title=safe(calendar_title), about_title=safe(about_title),
+        og_meta_html=site_og_meta(lang, f"{SITE_URL}/{LANG_DIR}/{lang}/index.html"),
         version_toggle_html=""
     )
     base = Path(LANG_DIR) / lang
@@ -1248,7 +1295,9 @@ def generate_about_page(lang):
     if not strings:
         return  # нет даже исходного about.json — нечего рендерить
     (Path(LANG_DIR) / lang / "about.html").write_text(
-        tpl.substitute(lang=lang, dir=dir_for(lang), **strings), encoding="utf-8")
+        tpl.substitute(lang=lang, dir=dir_for(lang),
+                       og_meta_html=site_og_meta(lang, f"{SITE_URL}/{LANG_DIR}/{lang}/about.html"),
+                       **strings), encoding="utf-8")
 
 
 # Цвет области науки для treemap-мозаики (дефолтный вид облака тегов). 10 областей + фоллбэк.
