@@ -60,6 +60,26 @@ def asset_ver():
 
 
 # ── Images ──
+def ensure_article_webp(folder):
+    """Webp для картинок ОДНОЙ статьи — внутри конвейера. Третье пришествие webp-граблей
+    (2026-07-30, ночь): шаг жил в обёртках run.py, а исполнитель очереди заказов зовёт
+    генератор напрямую — первая заказанная статья (2310.15936) вышла с 10 jpg и 0 webp,
+    партнёры увидели страницу без единой картинки. Теперь конверсия там, где картинки
+    рождаются, и НИ ОДИН путь вызова её не обойдёт. CLI-шаг _ensure_webp остаётся как
+    страховка-догонялка для старых статей."""
+    try:
+        from PIL import Image
+        Image.MAX_IMAGE_PIXELS = None
+        for jpg in Path(folder).glob("*.jpg"):
+            wp = jpg.with_suffix(".webp")
+            if wp.exists():
+                continue
+            im = Image.open(jpg)
+            im.save(wp, "WEBP", quality=82, method=4)
+    except Exception as e:
+        print(f"    ⚠️ webp для {folder}: {e} — страница может остаться без картинок")
+
+
 def save_images(images, aid, folder, min_size=40000):
     # Имена строго последовательные 0..N-1: og:image и gen_mosaic() рассчитывают
     # на непрерывную нумерацию, пропуски из-за фильтра мелких картинок недопустимы.
@@ -3418,6 +3438,7 @@ def write_article_pages(item, date_str):
                 encoding="utf-8")
     update_authors_graph(a)
     update_tag_counts(versions_ru["advanced"])
+    ensure_article_webp(article_folder)   # webp там, где картинки рождаются (см. функцию)
     print(f"  ✅ {a['id']} done")
 
 

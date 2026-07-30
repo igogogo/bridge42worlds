@@ -1304,13 +1304,17 @@ function initAllTooltips() {
 
         if (TOUCH) {
             // У авторов тултип не нужен (владелец): обычная ссылка, один тап — переход.
-            // Раньше mouseenter-эмуляция «подсвечивала» с первого тапа и пускала со второго.
             if (el.dataset.author) return;
+            // capture=true обязателен: у тегов В ТЕКСТЕ статьи висит собственный
+            // onclick="window.location=..." прямо в разметке генератора, и без перехвата
+            // на фазе погружения наш обработчик приходил вторым — тап давал «подсветку
+            // и ничего» (владелец, 2026-07-30, живой телефон).
             el.addEventListener('click', function (e) {
-                e.preventDefault();          // переход — только через «подробнее» в тултипе
+                e.preventDefault();
                 e.stopPropagation();
+                if (e.stopImmediatePropagation) e.stopImmediatePropagation();
                 showTipFor(el);
-            });
+            }, true);
             return;
         }
         el.addEventListener('mouseenter', function(e) { showTipFor(el); });

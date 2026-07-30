@@ -2626,3 +2626,20 @@ html[data-theme="dark"] .an-stage {
 .related-laws a { font-family: var(--mono); border-style: dashed !important; }
 .related-sci a  { color: #2e7d32 !important; }
 .entity-body .related-tags + .related-tags { margin-top: 8px; }
+
+/* Портрет телефона: связи (теги/законы/учёные) уезжали в самый низ страницы —
+   владелец 2026-07-30: «на карточке статьи вообще нет ни тегов, ни законов, ни учёных;
+   в ландшафте появляются справа». Причина: .article-side — последний потомок обёртки,
+   в колоночной раскладке он оказывался ниже реакций и «похожих». Порядком flex поднимаем
+   его сразу под текст статьи, ещё до отклика. */
+@media (max-width: 640px) {
+  .article-wrapper { display: flex; flex-direction: column; }
+  .article-wrapper > .article-main { order: 1; }
+  .article-wrapper > .article-side { order: 2; margin-top: 18px;
+    padding-top: 14px; border-top: 1px solid var(--hair); }
+  .article-wrapper > *:not(.article-main):not(.article-side) { order: 3; }
+  /* внутри — компактные ряды, метки групп мельче: слова «Учёные/Законы» оставляем
+     только как разделители, стиль плашек уже различает группы */
+  .article-side .side-sci-label, .article-side .side-laws-label,
+  .article-side .side-tags-label { width: 100%; margin: 6px 0 2px; font-size: 10px; }
+}
