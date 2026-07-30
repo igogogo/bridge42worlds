@@ -855,9 +855,9 @@ function cardHTML(item) {
     var _favOn = (typeof isFavorite === 'function' && isFavorite(item.id));
     var cardActions =
         '<div class="card-actions" data-article-id="' + _likeId + '">' +
-        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '</button>' +
-        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '</button>' +
-        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '</button>' +
+        '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '<span class="rc"></span></button>' +
+        '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '<span class="rc"></span></button>' +
+        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '<span class="rc"></span></button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
     // Обложки лежат ОДИН раз, под ru (умысел: экономия гигабайтов). Ссылки — по языку
@@ -1292,6 +1292,10 @@ function descByVersion(obj) {
 }
 
 function initAllTooltips() {
+    // Тач-устройства: mouseenter эмулируется первым тапом, и ссылка открывалась только
+    // со второго (владелец с телефона, 2026-07-30). Без hover тултипы не вешаем вовсе —
+    // тап ведёт на карточку сразу; подсказкой служит сама карточка.
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
     document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author]').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';

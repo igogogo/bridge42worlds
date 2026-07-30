@@ -2606,3 +2606,13 @@ html[data-theme="dark"] .an-stage {
     width: var(--tap-md); height: var(--tap-md);
     transform: translate(-50%, -50%);
 }
+
+/* Мобильные находки владельца 2026-07-30 (ночь) */
+@media (max-width: 640px) {
+  /* «i» у логотипа: попап был absolute от строки логотипа и уезжал за экран строкой —
+     теперь фиксированный лист во всю ширину, текст читается абзацем */
+  .intro-popup { position: fixed; left: 12px; right: 12px; top: 64px; width: auto;
+    max-width: none; white-space: normal; }
+  /* Подпись «Порядок» ломала кнопки сортировки во второй ряд — на узких она лишняя */
+  .feed-sort-label { display: none; }
+}
