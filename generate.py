@@ -3148,11 +3148,20 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
             # Раньше был веер (simple и popular независимо из advanced) — версии расходились по
             # фактам и акцентам. Теперь popular наследует advanced, а simple+mini делаются ОДНИМ
             # вызовом из popular; вся фактура переносится кодом (inherit_facts), не пересказом.
-            scipop_pop = generate_popular(scipop_adv)
-            scipop_simple, mini_ru = generate_simple_mini(scipop_pop)
-            if mini_ru:
-                scipop_pop["mini"] = mini_ru
-                scipop_simple["mini"] = mini_ru
+            # Конвейер 2.0 (владелец 2026-07-30): конструктор — оба тира+mini одним вызовом
+            # из advanced, общие блоки копирует код. Флаг constructor в config.json;
+            # выключен или вызов не удался — старый двухшаговый путь, как было.
+            scipop_pop = scipop_simple = None
+            if config.get("constructor"):
+                scipop_pop, scipop_simple = generate_combo(scipop_adv)
+                if scipop_pop is None:
+                    print("    ⚠️ конструктор не собрал тиры — падаю на старый путь")
+            if scipop_pop is None:
+                scipop_pop = generate_popular(scipop_adv)
+                scipop_simple, mini_ru = generate_simple_mini(scipop_pop)
+                if mini_ru:
+                    scipop_pop["mini"] = mini_ru
+                    scipop_simple["mini"] = mini_ru
             (article_folder / "api" / "simple-ru.json").write_text(
                 json.dumps(scipop_simple, ensure_ascii=False, indent=2), encoding="utf-8")
             (article_folder / "api" / "popular-ru.json").write_text(
@@ -3219,7 +3228,29 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         # читателя напрямую (статичный текст, LLM не нужен, экономия перевода тоже).
         translations = {v: {} for v in VERSIONS}
         real_tiers = [v for v in VERSIONS if not express or v in express_tiers]
-        if targets:
+        use_constructor_translate = bool(config.get("constructor")) and not express
+        if targets and use_constructor_translate:
+            # Конвейер 2.0: на язык — advanced целиком (pro, глоссарий переводится),
+            # затем popular/simple слимом (flash, общие поля из переведённого advanced).
+            # Провал slim — честный откат на полный translate_scipop этого тира.
+            def _translate_lang(l):
+                adv_l = translate_scipop(versions_ru["advanced"], l, translate_glossary=True)
+                out = {"advanced": adv_l}
+                for v in ("popular", "simple"):
+                    res = translate_scipop_slim(versions_ru[v], adv_l, l)
+                    out[v] = res if res is not None else translate_scipop(versions_ru[v], l)
+                return out
+            with ThreadPoolExecutor(max_workers=min(4, len(targets))) as tex:
+                futs = {tex.submit(_translate_lang, l): l for l in targets}
+                for fut, l in futs.items():
+                    try:
+                        per_lang = fut.result()
+                    except Exception as e:
+                        print(f"    ⚠️ {a['id']} перевод {l} не удался ({e}) — оставляю оригинал")
+                        per_lang = {v: versions_ru[v] for v in real_tiers}
+                    for v in real_tiers:
+                        translations[v][l] = per_lang.get(v, versions_ru[v])
+        elif targets:
             with ThreadPoolExecutor(max_workers=min(8, len(targets) * max(1, len(real_tiers)))) as tex:
                 futures = {}
                 for l in targets:

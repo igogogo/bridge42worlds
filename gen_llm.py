@@ -384,6 +384,73 @@ def generate_popular(scipop_adv):
     return inherit_facts(data, scipop_adv)
 
 
+# ── Конвейер 2.0: конструктор (владелец 2026-07-30, обоснование temp/experiment-constructor) ──
+COMBO_SHARED = ("formulas", "key_numbers", "fun_fact", "scifi", "main_tag",
+                "extra_tags", "scientists", "glossary")
+SLIM_SHARED_TRANSLATE = ("fun_fact", "scifi", "formulas", "key_numbers", "glossary")
+
+
+def generate_combo(scipop_adv):
+    """popular + simple + mini ОДНИМ вызовом из advanced. Общие блоки (формулы, числа,
+    факты, теги, глоссарий) модель НЕ пересказывает — копируются кодом из advanced.
+    Доказано на эксперименте: −52% цены генерации тиров, метафора едина между уровнями.
+    Возвращает (pop, simple) с полем mini в обоих, или (None, None) при провале —
+    вызывающий падает на старый путь."""
+    prompt = load_prompt("article-generate-combo").format(
+        advanced_json=json.dumps(scipop_adv, ensure_ascii=False))
+    reinforce = chr(10)*2 + "ВНИМАНИЕ: пиши СТРОГО на русском языке."
+    for attempt in range(2):
+        r = chat("article_popular", prompt if attempt == 0 else prompt + reinforce)
+        try:
+            data = json.loads(clean_json(r.choices[0].message.content))
+            pop, simp = data["popular"], data["simple"]
+            mini = (data.get("mini") or "").strip()
+        except Exception:
+            continue
+        if not (_default_lang_ok(pop) and _default_lang_ok(simp)):
+            continue
+        for tier in (pop, simp):
+            for k in COMBO_SHARED:
+                if k in scipop_adv:
+                    tier[k] = scipop_adv[k]
+        pop["mini"] = simp["mini"] = mini
+        return inherit_facts(pop, scipop_adv), inherit_facts(simp, scipop_adv)
+    return None, None
+
+
+def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
+    """Перевод тира БЕЗ общих полей (они уже переведены в advanced и копируются сюда) —
+    дешёвой моделью. Валидатор судит итоговую сборку. При провале — None, вызывающий
+    падает на полный translate_scipop."""
+    slim = {k: v for k, v in tier.items() if k not in SLIM_SHARED_TRANSLATE}
+    target_language = LANG_NAMES.get(target_lang, target_lang)
+    prompt = load_prompt("article-translate").format(
+        article_json=json.dumps(slim, ensure_ascii=False), target_language=target_language,
+        culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(slim, target_lang)
+    for attempt in range(1, retries + 1):
+        r = chat("translate_flash", prompt, system=_translation_system(target_language, slim))
+        try:
+            out = json.loads(clean_json(r.choices[0].message.content))
+        except Exception:
+            continue
+        for k in ("main_tag", "extra_tags", "tags", "scientists", "laws", "metaphor"):
+            if k in slim:
+                out[k] = slim[k]
+        for k in SLIM_SHARED_TRANSLATE:
+            if k in adv_translated:
+                out[k] = adv_translated[k]
+        ok, problems = validate_translation(tier, out, target_lang)
+        if ok:
+            return out
+        if attempt < retries and all(pr.startswith("кириллица") for pr in problems):
+            if _retranslate_cyrillic_fields(out, target_lang, target_language):
+                ok2, _ = validate_translation(tier, out, target_lang)
+                if ok2:
+                    return out
+        print(f"    ↻ slim-перевод {target_lang}: {problems[0] if problems else '?'} — повтор {attempt}/{retries}")
+    return None
+
+
 def refine_simple(scipop):
     """Рефлексивная шлифовка Simple версии. Тоже используется для экспресс-режима (там в scipop
     есть доп. поле `mini`, которого промт не знает, — защищаем его так же, как main_tag/extra_tags/
@@ -709,7 +776,7 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language):
     return True
 
 
-def translate_scipop(scipop, target_lang, retries=3):
+def translate_scipop(scipop, target_lang, retries=3, translate_glossary=False):
     """retries — сбой здесь почти всегда НЕ сетевой (chat() уже отретраила сетевые сама, см.
     common.chat retries=3), а невалидный/недо-JSON в самом ответе модели — стохастическая штука,
     повторный вызов часто проходит нормально. Раньше единственная попытка молча откатывалась на
@@ -730,7 +797,10 @@ def translate_scipop(scipop, target_lang, retries=3):
         # ссылка. После смены роли переводчика на «редактуру носителем» модель стала переводить и их,
         # отчего ссылки вида /tags/markov_chain.html превращались в /tags/سلاسل ماركوف.html (битые).
         # Возвращаем ключи из оригинала кодом — промпту такое доверять нельзя.
-        for _k in ("main_tag", "extra_tags", "tags", "scientists", "laws", "glossary", "metaphor"):
+        _keep = ["main_tag", "extra_tags", "tags", "scientists", "laws", "metaphor"]
+        if not translate_glossary:
+            _keep.append("glossary")   # находка 0г: глоссарий — читаемый текст, в конструкторе переводится
+        for _k in _keep:
             if _k in scipop:
                 out[_k] = scipop[_k]
         ok, problems = validate_translation(scipop, out, target_lang)
