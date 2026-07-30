@@ -95,7 +95,10 @@
         });
         return out.map(function (x) {
             var r = x.row;
-            return { t: r.t, id: r.id, n: r.n, url: urlFor(r), c: r.c, s: r.s, d: r.d, score: x.s };
+            // nl — имя на языке страницы (у учёных); без него выдача снова показывала бы
+            // «Johannes Kepler» там, где индекс уже знает «Иоганн Кеплер».
+            return { t: r.t, id: r.id, n: r.n, nl: r.nl, url: urlFor(r),
+                     c: r.c, s: r.s, d: r.d, score: x.s };
         });
     }
 

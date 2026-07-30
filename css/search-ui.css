@@ -1,0 +1,86 @@
+/* Выдача единого поиска. Отдельный файл, а не строки в style.css: вид выдачи доводит
+   дизайнер (задачи/ПОИСК-КТО-ЧТО.md — «после того, как разработчик её сделает»), и удобнее,
+   когда он правит один файл, а не ищет мои куски среди трёх тысяч строк общего стиля.
+   Здесь — только то, без чего блок нечитаем: разбивка на группы, строка, режимы. */
+
+.ss-box:empty { display: none; }
+.ss-box {
+    margin: 0 auto 18px;
+    max-width: var(--col-wide, 1100px);
+    padding: 0 16px;
+}
+
+.ss-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.ss-modes { display: flex; gap: 0; }
+.ss-mode {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--soft);
+    font: inherit;
+    font-size: 12.5px;
+    padding: 5px 12px;
+    cursor: pointer;
+    /* логические свойства, чтобы группа не разъезжалась в арабской раскладке */
+    border-start-start-radius: 7px;
+    border-end-start-radius: 7px;
+}
+.ss-mode + .ss-mode {
+    border-inline-start: none;
+    border-radius: 0;
+    border-start-end-radius: 7px;
+    border-end-end-radius: 7px;
+}
+.ss-mode:hover { color: var(--text, var(--ink)); }
+.ss-mode.on { color: var(--accent); border-color: var(--accent); }
+
+.ss-found { font-size: 12.5px; color: var(--muted); }
+
+.ss-group { margin-bottom: 14px; }
+.ss-h {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.ss-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: none;
+}
+.ss-item:hover { background: var(--card-bg, var(--surface)); }
+.ss-name { font-weight: 600; }
+.ss-sub { font-size: 12.5px; color: var(--soft); }
+/* Счётчик прижимается к дальнему краю строки — в RTL это левый, поэтому margin логический. */
+.ss-count { margin-inline-start: auto; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+
+.ss-empty { font-size: 14px; color: var(--soft); padding: 10px; }
+.ss-all { display: inline-block; margin-top: 4px; font-size: 13px; color: var(--accent); }
+
+@media (max-width: 700px) {
+    .ss-box { padding: 0 12px; }
+    /* На узком экране порядок «сначала что нашлось, потом чем искать» читается хуже:
+       режимы должны быть на виду до того, как читатель начнёт скроллить список. */
+    .ss-top { gap: 8px; }
+    /* Палец, а не курсор: правило проекта — контрол не мельче 44px по касанию. */
+    .ss-mode { padding: 8px 14px; min-height: 44px; }
+    .ss-item { padding: 9px 8px; min-height: 44px; }
+}
+
+/* Пометка об откате смыслового режима: должна читаться как факт, а не как ошибка —
+   поиск работает, просто другим способом. */
+.ss-note { font-size: 12px; color: var(--muted); font-style: italic; }
