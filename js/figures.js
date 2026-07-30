@@ -1152,5 +1152,218 @@
         return svg(W, H, s);
     };
 
+    // Одно и то же излучение: сжатое было горячим, растянутое стало холодным.
+    F.cooldown = function () {
+        var W = 430, H = 168, y1 = 62, y2 = 118, x0 = 60;
+        var s = txt(W / 2, 26, 'растяжение остужает', INK, 11.5);
+        function wave(y, step, color, w) {
+            var pts = [], i;
+            for (i = 0; i <= 240; i++) {
+                var x = x0 + i * (330 / 240);
+                pts.push(x + ',' + (y - 13 * Math.sin(i * (330 / 240) / step)));
+            }
+            return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color +
+                '" stroke-width="' + w + '"/>';
+        }
+        s += wave(y1, 4.2, WARN, 2);
+        s += wave(y2, 12, LINK, 2);
+        s += txt(x0 - 8, y1 + 4, '3000 K', WARN, 10.5, 'end');
+        s += txt(x0 - 8, y2 + 4, '2,7 K', LINK, 10.5, 'end');
+        s += txt(W / 2, H - 10, 'T ∝ 1/a: во сколько раз выросла Вселенная, во столько остыл свет', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Плазма непрозрачна, нейтральный газ прозрачен: свет уходит после рекомбинации.
+    F.recombination = function () {
+        var W = 440, H = 170, y = 92, mid = W / 2;
+        var s = txt(W / 4, 26, 'плазма: свет в тумане', WARN, 11);
+        s += txt(3 * W / 4, 26, 'атомы: свет уходит', MOSS, 11);
+        s += '<line x1="' + mid + '" y1="40" x2="' + mid + '" y2="' + (H - 26) +
+            '" stroke="' + BORD + '" stroke-width="1" stroke-dasharray="4 4"/>';
+        var i;
+        for (i = 0; i < 9; i++) {          // слева: электроны врассыпную, путь света ломаный
+            var px = 30 + (i % 3) * 46, py = 58 + Math.floor(i / 3) * 26;
+            s += '<circle cx="' + px + '" cy="' + py + '" r="3.5" fill="' + WARN + '"/>';
+        }
+        s += '<polyline points="34,120 66,96 92,124 128,100 158,126" fill="none" stroke="' + LINK +
+            '" stroke-width="1.6"/>';
+        for (i = 0; i < 6; i++) {          // справа: нейтральные атомы, свет летит прямо
+            var ax = mid + 34 + (i % 3) * 52, ay = 62 + Math.floor(i / 3) * 30;
+            s += '<circle cx="' + ax + '" cy="' + ay + '" r="8" fill="none" stroke="' + SOFT + '" stroke-width="1.2"/>';
+            s += '<circle cx="' + ax + '" cy="' + ay + '" r="2.5" fill="' + SOFT + '"/>';
+        }
+        s += arrow(mid + 16, 124, W - 22, 124, MOSS, 'ahl');
+        s += txt(mid + 90, 140, 'до нас', MOSS, 10.5);
+        s += txt(W / 2, H - 6, '3000 K — граница прозрачности', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Чем холоднее тело, тем правее пик его спектра.
+    F.planckpeak = function () {
+        var W = 430, H = 175, base = 132, x0 = 46, x1 = 396;
+        var s = '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        function hump(cx, hgt, color, w, dash) {
+            var pts = [], x;
+            for (x = x0; x <= x1; x += 4) {
+                var u = (x - cx) / 52;
+                pts.push(x + ',' + (base - hgt * Math.exp(-u * u)));
+            }
+            return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color +
+                '" stroke-width="' + w + '"' + (dash ? ' stroke-dasharray="4 4"' : '') + '/>';
+        }
+        s += hump(150, 86, WARN, 2, false);
+        s += hump(300, 52, LINK, 2.4, false);
+        s += txt(150, 34, '3000 K', WARN, 10.5);
+        s += txt(300, 62, '2,7 K', LINK, 10.5);
+        s += txt(x1, base + 16, 'длина волны →', SOFT, 10, 'end');
+        s += txt(W / 2, H - 6, 'λ пика обратно пропорциональна T', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Две области за горизонтом друг друга: сигнал между ними пройти не успевал.
+    F.horizon = function () {
+        var W = 430, H = 180, cy = 96, r = 58, cx1 = 118, cx2 = 312;
+        var s = txt(W / 2, 26, 'одинаковая температура без общей истории', INK, 11.5);
+        [[cx1, WARN], [cx2, LINK]].forEach(function (p) {
+            s += '<circle cx="' + p[0] + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + p[1] +
+                '" stroke-width="1.4" stroke-dasharray="5 4"/>';
+            s += '<circle cx="' + p[0] + '" cy="' + cy + '" r="7" fill="' + p[1] + '"/>';
+        });
+        s += txt(cx1, cy + r + 18, 'её горизонт', WARN, 10);
+        s += txt(cx2, cy + r + 18, 'её горизонт', LINK, 10);
+        s += txt(W / 2, cy - 6, '2,725 K', INK, 11);
+        s += txt(W / 2, cy + 14, '=', SOFT, 12);
+        s += txt(W / 2, H - 8, 'круги не пересекаются: сигнал не успевал пройти', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Скорость на орбите задаёт только масса внутри неё.
+    F.circularv = function () {
+        var W = 420, H = 175, cx = 200, cy = 96, r1 = 34, r2 = 74;
+        var s = txt(W / 2, 24, 'тянет только то, что внутри орбиты', INK, 11.5);
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r1 + '" fill="' + WARN + '" opacity="0.28"/>';
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r2 + '" fill="none" stroke="' + BORD +
+            '" stroke-width="1" stroke-dasharray="4 4"/>';
+        s += txt(cx, cy + 4, 'M(r)', WARN, 11);
+        s += '<circle cx="' + (cx + r2) + '" cy="' + cy + '" r="5.5" fill="' + LINK + '"/>';
+        s += arrow(cx + r2, cy - 6, cx + r2, cy - 44, LINK, 'ahl');
+        s += txt(cx + r2 + 22, cy - 30, 'v', LINK, 12);
+        s += arrow(cx + r2 - 8, cy, cx + 12, cy, WARN, 'ahl');
+        s += txt(cx + r2 - 34, cy - 10, 'F', WARN, 11);
+        s += txt(W / 2, H - 8, 'внешние слои не притягивают: их вклад взаимно гасится', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Если масса кончилась, кривая скоростей должна падать.
+    F.keplerfall = function () {
+        var W = 420, H = 168, base = 124, x0 = 52, x1 = 380, top = 44;
+        var s = txt(W / 2, 26, 'как должно быть, если вся масса видна', INK, 11.5);
+        var pts = [], x;
+        for (x = x0 + 22; x <= x1; x += 5) {
+            var v = 78 / Math.sqrt((x - x0) / 40);
+            pts.push(x + ',' + (base - Math.min(base - top, v)));
+        }
+        s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + SOFT +
+            '" stroke-width="2" stroke-dasharray="5 4"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(x1, base + 16, 'радиус →', SOFT, 10, 'end');
+        s += txt(x0 + 6, top - 8, 'скорость', SOFT, 10, 'start');
+        s += txt(W / 2, H - 8, 'v ∝ 1/√r — как у планет вокруг Солнца', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Плоская кривая: то, что измеряют на самом деле.
+    F.flatcurve = function () {
+        var W = 420, H = 172, base = 126, x0 = 52, x1 = 380, top = 46;
+        var s = txt(W / 2, 26, 'что измеряют на самом деле', INK, 11.5);
+        var kep = [], flat = [], x;
+        for (x = x0 + 22; x <= x1; x += 5) {
+            kep.push(x + ',' + (base - Math.min(base - top, 78 / Math.sqrt((x - x0) / 40))));
+            flat.push(x + ',' + (base - 62 * Math.sqrt(Math.min(1, (x - x0) / 70))));
+        }
+        s += '<polyline points="' + kep.join(' ') + '" fill="none" stroke="' + SOFT +
+            '" stroke-width="1.6" stroke-dasharray="5 4"/>';
+        s += '<polyline points="' + flat.join(' ') + '" fill="none" stroke="' + WARN + '" stroke-width="2.6"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(x1 - 10, base - 74, 'измерено', WARN, 10.5, 'end');
+        s += txt(x1 - 10, base - 26, 'видимая масса', SOFT, 10, 'end');
+        s += txt(W / 2, H - 8, 'разница и есть тёмное гало', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Материя разбавляется, тёмная энергия — нет.
+    F.friedmann = function () {
+        var W = 430, H = 172, base = 126, x0 = 52, x1 = 386, top = 44;
+        var s = txt(W / 2, 26, 'что происходит с плотностями при росте', INK, 11.5);
+        var mat = [], lam = [], x;
+        for (x = x0; x <= x1; x += 4) {
+            var a = 1 + 3 * (x - x0) / (x1 - x0);
+            mat.push(x + ',' + (base - Math.min(base - top, 80 / (a * a * a))));
+            lam.push(x + ',' + (base - 26));
+        }
+        s += '<polyline points="' + mat.join(' ') + '" fill="none" stroke="' + WARN + '" stroke-width="2.4"/>';
+        s += '<polyline points="' + lam.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.4"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(x0 + 60, top + 2, 'материя ∝ 1/a³', WARN, 10.5);
+        s += txt(x1 - 8, base - 34, 'тёмная энергия — постоянна', LINK, 10.5, 'end');
+        s += txt(x1, base + 16, 'размер a →', SOFT, 10, 'end');
+        s += txt(W / 2, H - 8, 'пересечение кривых — момент смены знака ускорения', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Инфляция: всё видимое вышло из одной успевшей выровняться области.
+    F.inflation = function () {
+        var W = 430, H = 176, y = 92;
+        var s = txt(W / 2, 26, 'раздувание одной выровнявшейся области', INK, 11.5);
+        s += '<circle cx="70" cy="' + y + '" r="12" fill="' + WARN + '" opacity="0.55"/>';
+        s += txt(70, y + 32, 'до: успела выровняться', SOFT, 10);
+        s += arrow(92, y, 168, y, LINK, 'ahl');
+        s += txt(130, y - 14, 'e⁶⁰', LINK, 11.5);
+        s += '<circle cx="300" cy="' + y + '" r="66" fill="none" stroke="' + LINK + '" stroke-width="1.6"/>';
+        s += '<circle cx="300" cy="' + y + '" r="26" fill="' + WARN + '" opacity="0.28"/>';
+        s += txt(300, y + 4, 'видимая часть', INK, 10.5);
+        s += txt(300, y + 96, 'после: та же однородность на всём небе', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Переход от торможения к ускорению: перегиб на кривой роста.
+    F.accelflip = function () {
+        var W = 420, H = 172, base = 130, x0 = 48, x1 = 380, top = 40;
+        var s = txt(W / 2, 24, 'сначала тормозит, потом разгоняется', INK, 11.5);
+        var pts = [], x, xf = x0 + (x1 - x0) * 0.45;
+        for (x = x0; x <= x1; x += 4) {
+            var u = (x - x0) / (x1 - x0);
+            var a = Math.pow(u, 0.62) * 0.72 + Math.pow(Math.max(0, u - 0.45), 2.1) * 1.5;
+            pts.push(x + ',' + (base - Math.min(base - top, a * 96)));
+        }
+        s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.6"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+            '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + xf + '" y1="' + base + '" x2="' + xf + '" y2="' + top +
+            '" stroke="' + WARN + '" stroke-width="1.2" stroke-dasharray="4 4"/>';
+        s += txt(xf, top - 8, 'z ≈ 0,7', WARN, 10.5);
+        s += txt(x0 + 54, base - 16, 'торможение', SOFT, 10);
+        s += txt(x1 - 40, base - 92, 'ускорение', LINK, 10.5, 'end');
+        s += txt(x1, base + 16, 'время →', SOFT, 10, 'end');
+        return svg(W, H, s);
+    };
+
+    // Стандартная свеча: известная светимость плюс видимая яркость дают расстояние.
+    F.standardcandle = function () {
+        var W = 430, H = 168, y = 88;
+        var s = txt(W / 2, 26, 'одинаковая вспышка как линейка', INK, 11.5);
+        [[92, 15, 1], [214, 9, 0.55], [336, 5.5, 0.3]].forEach(function (p, i) {
+            s += '<circle cx="' + p[0] + '" cy="' + y + '" r="' + p[1] + '" fill="' + WARN +
+                '" opacity="' + p[2] + '"/>';
+            s += txt(p[0], y + 40, ['близко', 'дальше', 'ещё дальше'][i], SOFT, 10);
+        });
+        s += txt(W / 2, y + 66, 'светимость одна — значит видимая яркость меряет расстояние', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
     global.B42Figures = F;
 })(window);
