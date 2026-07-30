@@ -115,7 +115,7 @@ def cmd_range(args):
         # (готовые статьи пропускаются).
         from common import deepseek_peak_status
         _is_peak, _ = deepseek_peak_status()
-        if _is_peak and os.environ.get("B42_PEAK_OK") != "1":
+        if _is_peak and os.environ.get("B42_PEAK_ENFORCE") == "1" and os.environ.get("B42_PEAK_OK") != "1":
             print(f"\n⏸️  Наступили пиковые часы DeepSeek (цена x2) — останавливаюсь перед {d:%Y-%m-%d}.")
             print("   Повторный запуск той же команды в дешёвое окно продолжит с этого места.")
             break
@@ -173,6 +173,10 @@ def _refuse_if_peak(command):
 
     Осознанный обход: B42_PEAK_OK=1 (например, срочная починка одной статьи).
     """
+    # 2026-07-30: тариф v4 плоский (подтверждено биллингом) — страж спит,
+    # просыпается только если вернут окна: B42_PEAK_ENFORCE=1.
+    if os.environ.get("B42_PEAK_ENFORCE") != "1":
+        return
     if os.environ.get("B42_PEAK_OK") == "1":
         return
     from common import deepseek_peak_status
