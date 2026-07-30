@@ -370,5 +370,1028 @@
     "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ кг, это примерно $9{,}3\\cdot10^{10}$ масс Солнца, то есть около девяноста миллиардов."
    }
   ]
+ },
+ "en": {
+  "title": "Dark matter and dark energy",
+  "subtitle": "Ninety-five percent of the Universe, of which we only know how they behave",
+  "intro": [
+   "Spin a bucket of water on a rope – and you feel that fast rotation requires a strong rope. The same with a galaxy: the speed of a star in its orbit is maintained by the gravity of the mass inside its orbit. This mass can be calculated in two ways: add up everything that shines, or measure the speeds and see what mass is needed. In the 1970s Vera Rubin did both, and the answers differed by a factor of five.",
+   "Further investigations revealed that the discrepancy is not local. Clusters of galaxies hold together, though the visible mass is insufficient for that. The light from distant galaxies is bent more strongly by clusters than it should be. The cosmic microwave background, from its angular spectrum, also requires extra gravitating matter. Four independent methods give the same answer: there is roughly five times more gravitating matter than luminous matter.",
+   "In 1998 a second, even more troubling puzzle was added. Distant supernovae turned out to be dimmer than expected for any decelerating expansion: meaning the expansion is accelerating. To describe this, one must introduce a component with negative pressure – it was called dark energy. The word 'dark' in both names means the same thing: we know how it acts, and we do not know what it is."
+  ],
+  "standNote": "In 'rotation' mode, set the halo mass to zero: the solid velocity curve will coincide with the dashed one and it will go downward – that's how it should be if all mass is visible. Observations give a flat line, so the halo must be restored. Switch to 'expansion' mode and remove dark energy: the growth curve will bend downward, and there will be no acceleration. Restore 0.7 – a transition point appears near z = 0.7, and that is exactly what is seen from supernovae.",
+  "formula": {
+   "name": "Circular velocity and composition of the Universe",
+   "latex": "v(r) = \\sqrt{\\frac{G M(r)}{r}}, \\qquad \\Omega_m + \\Omega_\\Lambda \\approx 1",
+   "alsoKnown": "The standard cosmological model is called ΛCDM: lambda plus cold dark matter",
+   "authors": [
+    {
+     "who": "Fritz Zwicky",
+     "year": "1933",
+     "what": "first discovered a mass deficit from galaxy velocities in the Coma Cluster and called it 'dark'"
+    },
+    {
+     "who": "Vera Rubin and Kent Ford",
+     "year": "1970s",
+     "what": "measured rotation curves of dozens of galaxies and showed that the speed does not decrease with radius"
+    },
+    {
+     "who": "Saul Perlmutter, Brian Schmidt, Adam Riess",
+     "year": "1998",
+     "what": "discovered accelerated expansion from Type Ia supernovae; Nobel Prize in 2011"
+    },
+    {
+     "who": "WMAP and Planck satellites",
+     "year": "2003–2018",
+     "what": "measured the composition of the Universe from CMB anisotropy: 5% ordinary matter, 27% dark matter, 68% dark energy"
+    }
+   ],
+   "story": "Zwicky's work was considered eccentric for almost forty years: he was known for his sharp judgments and called colleagues 'spherical bastards' — spherical because from any side. When Rubin obtained the same result with different data, his work was remembered. The accelerated expansion was also found by accident: both teams were looking for deceleration and got the opposite sign, which they initially took for an error.",
+   "symbols": [
+    {
+     "sym": "v(r)",
+     "latex": "v(r)",
+     "what": "speed of a star on a circular orbit of radius r",
+     "unit": "km/s"
+    },
+    {
+     "sym": "M(r)",
+     "latex": "M(r)",
+     "what": "mass enclosed within radius r",
+     "unit": "kg"
+    },
+    {
+     "sym": "Ω_m",
+     "latex": "\\Omega_m",
+     "what": "fraction of matter in total density (visible plus dark)",
+     "unit": "—"
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "what": "fraction of dark energy",
+     "unit": "—"
+    },
+    {
+     "sym": "G",
+     "latex": "G",
+     "what": "gravitational constant",
+     "unit": "m³/(kg·s²)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "How measurements lead to conclusions about the invisible",
+   "lead": "Neither dark matter nor dark energy were 'assumed for beauty'. Both emerged as the difference between measurement and calculation. Let's trace both conclusions.",
+   "steps": [
+    {
+     "text": "A star on a circular orbit: the gravity of the mass inside the orbit provides centripetal acceleration. Equate and get the velocity. Importantly, only the mass INSIDE the orbit matters — outer layers of a spherically symmetric distribution exert no net pull.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "Velocity is determined only by the mass inside the orbit: the exterior does not attract"
+    },
+    {
+     "text": "Beyond the visible disk, there is almost no luminous matter, so $M(r)$ ceases to grow. Then the velocity must fall off as the inverse square root of radius — just like planets in the Solar System, where almost all mass is concentrated in the center.",
+     "latex": "M(r) \\approx \\text{const} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "If mass ends, the rotation curve should decline"
+    },
+    {
+     "text": "Measurements show otherwise: the velocity reaches a plateau and remains flat to the observable edge. For this to happen, the mass must continue to grow roughly proportional to radius. No light comes from there — hence the conclusion: the galaxy is surrounded by a halo of invisible gravitating matter.",
+     "latex": "v \\approx \\text{const} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "The flat curve is the observation from which the halo follows"
+    },
+    {
+     "text": "Now the second conclusion. The expansion is governed by the Friedmann equation: the growth rate is set by density. Matter dilutes as (size)^3, while dark energy does not dilute — its density is constant. So over time it inevitably takes over.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "Matter dilutes as 1/a³, dark energy remains constant"
+    },
+    {
+     "text": "As long as matter density is high, gravity decelerates expansion. When it falls below a certain threshold, the sign of acceleration changes. Setting the second derivative to zero gives the transition time — which occurs at a redshift of about 0.7, roughly six billion years ago.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "While matter is abundant, expansion decelerates; when it dilutes, it accelerates"
+    },
+    {
+     "text": "An independent check: Type Ia supernovae explode with nearly the same luminosity, so from apparent brightness we compute distance, and from the spectrum we get redshift. Plotting one against the other, distant supernovae appear farther than any decelerating expansion predicts. That is how acceleration was discovered.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{pc}} \\quad \\text{— distance from apparent brightness}",
+     "figure": "standardcandle",
+     "figCaption": "Known luminosity turns apparent brightness into distance"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "Of the 0.32 matter, only about 0.05 is ordinary matter: stars, gas, planets, and us. The rest is identified only by gravity.",
+   "note": "What is honest here and what is not. Observations are reliable and come from multiple independent methods. The term 'dark matter' describes observations rather than explains them: no particle has been found in any experiment, and the alternative with modified gravity explains rotation curves but fails on clusters and the CMB. Dark energy is even worse: its vacuum density, calculated in quantum field theory, diverges from observation by dozens of orders of magnitude. This is not 'almost closed question' but the biggest hole in modern physics."
+  },
+  "math": {
+   "title": "The mathematics needed here",
+   "lead": "Four subtleties without which the conclusions of this section would sound like magic.",
+   "items": [
+    {
+     "what": "Why outer layers do not attract",
+     "why": "For a spherically symmetric shell, the gravitational force inside it is exactly zero: attractions from opposite sides cancel. Newton proved this for a shell; thus the velocity formula includes only $M(r)$. Without this theorem, the halo conclusion could not be drawn — one would have to account for all mass at once."
+    },
+    {
+     "what": "What are Ω and why do they sum to one",
+     "why": "Ω is density divided by the critical density: the one for which space is exactly flat. Measurements show that the sum of all Ω equals one to within a percent, meaning space is flat. So the fractions sum to one — this is not a definition but a measured fact, and also one of the puzzles that inflation solves."
+    },
+    {
+     "what": "Why constant density leads to acceleration",
+     "why": "In the Friedmann equation, the matter term decays as $1/a^3$, while the dark energy term stays constant. So for large $a$, the right-hand side stops decreasing, the growth rate becomes constant, and the scale factor grows exponentially. Exponential growth is acceleration: not 'something pushes', but 'density does not dilute'."
+    },
+    {
+     "what": "How a supernova works as a ruler",
+     "why": "A Type Ia supernova erupts when a white dwarf reaches a critical mass, so the energy is almost always the same. The same intrinsic brightness plus measured apparent brightness gives distance: brightness falls as the square of distance. Such objects are called standard candles, and the entire distance scale of the Universe is built on them."
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's calculate how much mass is missing in a typical galaxy. We'll do an order-of-magnitude calculation, as done in a seminar.",
+   "given": "At a distance $r = 15$ kpc from the galaxy center, stars move at speed $v = 200$ km/s. The luminous mass inside this radius is about $5 \\cdot 10^{10}$ solar masses. One solar mass is $2 \\cdot 10^{30}$ kg, one parsec is $3.1 \\cdot 10^{16}$ m.",
+   "law": "$M(r) = \\dfrac{v^2 r}{G}$",
+   "solution": [
+    {
+     "text": "Convert the radius to meters: 15 kpc is $15 \\cdot 10^3 \\cdot 3.1 \\cdot 10^{16}$ m.",
+     "latex": "r \\approx 4.6 \\cdot 10^{20}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "Speed in meters per second: $200$ km/s $= 2 \\cdot 10^5$ m/s. Substitute into the mass formula.",
+     "latex": "M = \\frac{(2 \\cdot 10^5)^2 \\cdot 4.6 \\cdot 10^{20}}{6.67 \\cdot 10^{-11}}",
+     "num": ""
+    },
+    {
+     "text": "Calculate: numerator $4 \\cdot 10^{10} \\cdot 4.6 \\cdot 10^{20} = 1.8 \\cdot 10^{31}$, divide.",
+     "latex": "M \\approx 2.8 \\cdot 10^{41}\\ \\text{kg} \\approx 1.4 \\cdot 10^{11}\\ M_\\odot",
+     "num": ""
+    },
+    {
+     "text": "Compare with the visible mass.",
+     "latex": "\\frac{1.4 \\cdot 10^{11}}{5 \\cdot 10^{10}} \\approx 3",
+     "num": ""
+    }
+   ],
+   "answer": "The required mass is about three times the visible mass, meaning about two-thirds of the mass inside this radius does not shine. If we count to the edge of the halo instead of 15 kpc, the ratio reaches five or more — hence the talk of five-sixths.",
+   "sanity": "Sanity check: the mass came out to about $10^{11}$ solar masses — that's what is attributed to a large galaxy, so the order of magnitude is correct. If the result were $10^{6}$ or $10^{20}$, the error would be in converting parsecs or in the square of the velocity, and these are the two most common mistakes."
+  },
+  "constants": {
+   "title": "Constants: where they come from and what they mean",
+   "lead": "The composition of the Universe in four numbers — and one of them is still unexplained.",
+   "items": [
+    {
+     "sym": "Ω_b",
+     "latex": "\\Omega_b",
+     "name": "ordinary matter",
+     "value": "0.049",
+     "why": "Atoms: stars, gas, planets, us. Measured by two independent methods — from the abundances of deuterium and helium left from the first minutes, and from the anisotropy of the CMB. Both give the same answer, and this is one of the most convincing tests of the entire model."
+    },
+    {
+     "sym": "Ω_c",
+     "latex": "\\Omega_c",
+     "name": "dark matter",
+     "value": "0.265",
+     "why": "More than five times as much as ordinary matter. We know that it gravitates, barely interacts with itself, and does not participate in electromagnetic interactions. The particle has not been found: direct detection experiments have been narrowing down possibilities for fifty years and have not caught anything yet."
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "name": "dark energy",
+     "value": "0.685",
+     "why": "The largest component and the most mysterious. It behaves as a constant vacuum energy density with negative pressure. The estimate of this density from quantum field theory disagrees with the observed value by many orders of magnitude — the discrepancy is known as the cosmological constant problem."
+    },
+    {
+     "sym": "z_acc",
+     "latex": "z_{\\text{acc}}",
+     "name": "when acceleration began",
+     "value": "≈ 0.7",
+     "why": "About six billion years ago, the density of matter dropped enough that dark energy took over. The coincidence that we live almost at this moment is called the coincidence problem: it is unclear why we are in precisely this era of sign change."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this connects to the rest of the course",
+   "lead": "The entire section is assembled from school-level pieces — only the conclusions are new.",
+   "items": [
+    {
+     "h": "Gravity",
+     "text": "Circular velocity and the shell theorem come directly from the topic of gravitation. Only the object changes: instead of a planet, a star; instead of the Sun, a galaxy."
+    },
+    {
+     "h": "Optics",
+     "text": "Gravitational lensing — the bending of light by mass — provides an independent way to weigh a cluster without relying on velocities. The answer is the same."
+    },
+    {
+     "h": "Cosmic microwave background",
+     "text": "The angular power spectrum of anisotropy from the previous section is a third independent way to measure the composition of the Universe. It gives the numbers 5%, 27%, and 68%."
+    },
+    {
+     "h": "Thermodynamics",
+     "text": "Negative pressure sounds wild until you remember that pressure is the quantity that enters work when volume changes. A constant energy density during expansion requires exactly this sign."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Home experiments and curious details",
+   "lead": "You cannot weigh a galaxy in the kitchen, but you can test the logic of the conclusion.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Kepler on a string (ten minutes)",
+     "text": "Tie a nut to a string and spin it over your head, letting the string out little by little. The longer the radius, the slower you have to lead the nut to keep the tension the same. This is the same dependence that should work at the edge of a galaxy: the mass in the center does not grow — the speed drops. Now imagine that when the string lengthens, the nut moves at the same speed: that means someone added tension. In the galaxy, the gravity of invisible mass adds it."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Lens from a glass",
+     "text": "Place a glass of water on a page with text and look through it: the letters are shifted and enlarged. A massive galaxy cluster does the same with the light of distant galaxies — it bends the paths. From the magnitude of the distortion, the mass of the cluster is calculated, and again it turns out to be five times greater than the luminous mass."
+    },
+    {
+     "icon": "fact",
+     "kind": "curious detail",
+     "h": "The bullet that separated matter and gas",
+     "text": "In the Bullet Cluster, two galaxy clusters collided. The hot gas braked each other and remained in the middle, while the mass measured by lensing passed further along with the galaxies. This is difficult to explain by modified gravity and easy by the existence of matter that hardly collides."
+    },
+    {
+     "icon": "edge",
+     "kind": "edge of knowledge",
+     "h": "Fifty years of searching without result",
+     "text": "Dark matter is searched for in three ways: direct detection in underground laboratories, production at accelerators, and searching for its decay products in space. All three ways have narrowed the region of possible properties, but found nothing. This does not mean it does not exist: the observations in space have not gone away. But it means the simplest expectations have already been disproved."
+    },
+    {
+     "icon": "fact",
+     "kind": "how it was discovered",
+     "h": "The sign they didn't believe",
+     "text": "Both groups hunting for supernovae expected to measure a deceleration of expansion. When the opposite sign appeared, they first looked for an error: dust, supernova evolution, systematics. What convinced them was that two independent groups with different data and methods got the same result."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Maybe it's the law of gravity, not invisible matter",
+   "text": "This is a legitimate question, and it has been tested for a long time. Modified Newtonian dynamics (MOND) describes galactic rotation curves even better than dark matter: it predicts a relationship between a galaxy's luminosity and its rotation speed that is indeed observed. But then difficulties begin. MOND does not sufficiently hold galaxy clusters together. The angular spectrum of the CMB is reproduced poorly. The Bullet Cluster, where mass and gas separated, is difficult to explain by modified gravity. Therefore, today most work within the framework of dark matter, not considering the question closed: the MOND relation itself remains a fact that dark matter explains uncertainly."
+  },
+  "memo": {
+   "essence": "The speeds of stars at the edges of galaxies, the motion of galaxies in clusters, gravitational lensing, and the anisotropy of the CMB require five times more gravitating matter than visible. The brightness of distant supernovae requires accelerated expansion, that is, a component with constant density and negative pressure. Both components are described quantitatively and not explained in nature.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Speed reveals mass inside the orbit",
+     "text": "$v(r) = \\sqrt{GM(r)/r}$: a flat curve means $M(r) \\propto r$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Composition: 5, 27, 68",
+     "text": "Ordinary matter 5%, dark matter 27%, dark energy 68%"
+    },
+    {
+     "icon": "fact",
+     "title": "Acceleration is a consequence of undilutability",
+     "text": "Matter thins as $1/a^3$, dark energy does not, so it wins over time"
+    },
+    {
+     "icon": "edge",
+     "title": "Names describe, not explain",
+     "text": "The particle has not been found, the vacuum density diverges from calculation by dozens of orders of magnitude"
+    }
+   ],
+   "where": "Weighing galaxies and clusters, modeling structure formation, distance scale from supernovae, experiments for direct search of dark matter particles, testing ΛCDM with the CMB.",
+   "watchOut": "A common mistake is to consider dark matter and dark energy as one phenomenon with a common explanation. These are two different observations: one about missing gravity in structures, the other about the acceleration of expansion overall. Another is to think that dark matter is 'somewhere out there, in the void': the halo surrounds our Galaxy, and through the room where you are reading, dark matter passes constantly, just hardly interacting with anything."
+  },
+  "quiz": [
+   {
+    "id": "d1",
+    "type": "mcq",
+    "q": "What exactly in the rotation curves of galaxies demanded invisible mass?",
+    "options": [
+     "The speed of stars does not fall with distance from the center, although there is almost no luminous mass farther out",
+     "Stars at the edge rotate in the opposite direction",
+     "Galaxies rotate faster than relativity allows",
+     "The speed of stars falls faster than Kepler predicts"
+    ],
+    "answer": 0,
+    "why": "If the mass ended, the speed must fall as $1/\\sqrt{r}$. The measured curve is flat, meaning that the mass continues to grow proportionally to radius — and does not shine."
+   },
+   {
+    "id": "d2",
+    "type": "mcq",
+    "q": "Why does dark energy inevitably take over matter over time?",
+    "options": [
+     "Its density does not decrease with expansion, while matter density falls as the cube of size",
+     "Its amount grows with time",
+     "Matter turns into dark energy",
+     "Matter's gravity weakens with distance"
+    ],
+    "answer": 0,
+    "why": "In the Friedmann equation, the matter contribution goes as $1/a^3$, while the dark energy contribution is constant. Therefore, sooner or later the second term becomes dominant — regardless of initial fractions."
+   },
+   {
+    "id": "d3",
+    "type": "free",
+    "q": "In your own words: why did the discovery of accelerated expansion require type Ia supernovae rather than ordinary galaxies?",
+    "keywords": [
+     "identical",
+     "brightness",
+     "candles",
+     "distance",
+     "standard",
+     "luminosity"
+    ],
+    "why": "Need an object with known true luminosity: then the distance is calculated from apparent brightness. Type Ia supernovae explode almost identically, so they work as standard candles, while galaxies have varying luminosities."
+   },
+   {
+    "id": "d4",
+    "type": "estimate",
+    "q": "Stars at a radius of 10 kpc move at 200 km/s. Estimate the mass inside this orbit in billions of solar masses. (1 kpc ≈ 3.1·10¹⁹ m, G = 6.67·10⁻¹¹, M☉ = 2·10³⁰ kg.)",
+    "answer": 93,
+    "unit": "billion M☉",
+    "tolerance": 25,
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, which is about $9{,}3\\cdot10^{10}$ solar masses, i.e., about ninety billion."
+   }
+  ]
+ },
+ "es": {
+  "title": "Materia oscura y energía oscura",
+  "subtitle": "Noventa y cinco por ciento del universo, del que solo sabemos cómo actúa",
+  "intro": [
+   "Gira un cubo de agua atado a una cuerda — y sentirás que para un giro rápido se necesita una cuerda fuerte. Lo mismo con una galaxia: la velocidad de una estrella en órbita la mantiene la gravedad de la masa que hay dentro de su órbita. Esta masa se puede calcular de dos maneras: sumando todo lo que brilla, o midiendo las velocidades y viendo qué masa se necesita. En la década de 1970, Vera Rubin hizo ambas cosas, y las respuestas diferían por un factor de cinco.",
+   "Luego se descubrió que la discrepancia no era local. Los cúmulos de galaxias se mantienen unidos, aunque la masa visible es insuficiente. La luz de galaxias lejanas se curva en los cúmulos más de lo que debería. La radiación de fondo de microondas, por su espectro angular, también requiere materia gravitante adicional. Cuatro métodos independientes dan la misma respuesta: hay aproximadamente cinco veces más materia gravitante que materia luminosa.",
+   "En 1998 se sumó un segundo enigma, aún más incómodo. Las supernovas lejanas resultaron ser más débiles de lo esperado para cualquier expansión desacelerada: por lo tanto, la expansión se acelera. Para describirlo, hay que introducir un componente con presión negativa — se le llamó energía oscura. La palabra «oscura» en ambos nombres significa lo mismo: sabemos cómo actúa, pero no qué es."
+  ],
+  "standNote": "En el modo «rotación», pon la masa del halo a cero: la curva continua de velocidades coincidirá con la punteada, y bajará — así debería ser si toda la masa fuera visible. Las observaciones dan una línea plana, por lo que hay que devolver el halo. Cambia a «expansión» y elimina la energía oscura: la curva de crecimiento se inclinará hacia abajo, no habrá aceleración. Vuelve a poner 0,7 — aparecerá un punto de inflexión cerca de z = 0,7, y eso es exactamente lo que se observa con las supernovas.",
+  "formula": {
+   "name": "Velocidad circular y composición del universo",
+   "latex": "v(r) = \\sqrt{\\frac{G M(r)}{r}}, \\qquad \\Omega_m + \\Omega_\\Lambda \\approx 1",
+   "alsoKnown": "El modelo cosmológico estándar se llama ΛCDM: lambda más materia oscura fría",
+   "authors": [
+    {
+     "who": "Fritz Zwicky",
+     "year": "1933",
+     "what": "mediante las velocidades de las galaxias en el cúmulo de Coma Berenices, fue el primero en detectar la falta de masa y la llamó «oscura»"
+    },
+    {
+     "who": "Vera Rubin y Kent Ford",
+     "year": "1970s",
+     "what": "midieron las curvas de rotación de decenas de galaxias y mostraron que la velocidad no disminuye con el radio"
+    },
+    {
+     "who": "Saul Perlmutter, Brian Schmidt, Adam Riess",
+     "year": "1998",
+     "what": "descubrieron la expansión acelerada mediante supernovas tipo Ia; Premio Nobel 2011"
+    },
+    {
+     "who": "Satélites WMAP y Planck",
+     "year": "2003–2018",
+     "what": "midieron la composición del universo a partir de la anisotropía del fondo cósmico: 5% materia ordinaria, 27% materia oscura, 68% energía oscura"
+    }
+   ],
+   "story": "El trabajo de Zwicky fue considerado una excentricidad durante casi cuarenta años: era conocido por la dureza de sus juicios y llamaba a sus colegas «bastardos esféricos» — esféricos, porque se les veía igual desde cualquier lado. Cuando Rubin obtuvo el mismo resultado con datos diferentes, también lo recordaron a él. La expansión acelerada tampoco se buscaba donde se encontró: ambos grupos perseguían la desaceleración y obtuvieron el signo opuesto, lo que al principio tomaron por un error.",
+   "symbols": [
+    {
+     "sym": "v(r)",
+     "latex": "v(r)",
+     "what": "velocidad de una estrella en órbita circular de radio r",
+     "unit": "km/s"
+    },
+    {
+     "sym": "M(r)",
+     "latex": "M(r)",
+     "what": "masa encerrada dentro del radio r",
+     "unit": "kg"
+    },
+    {
+     "sym": "Ω_m",
+     "latex": "\\Omega_m",
+     "what": "fracción de materia en la densidad total (visible más oscura)",
+     "unit": "—"
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "what": "fracción de energía oscura",
+     "unit": "—"
+    },
+    {
+     "sym": "G",
+     "latex": "G",
+     "what": "constante gravitacional",
+     "unit": "m³/(kg·s²)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Cómo las mediciones llevan a una conclusión sobre lo invisible",
+   "lead": "Ni la materia oscura ni la energía oscura fueron 'supuestas por belleza'. Ambas surgieron como la diferencia entre lo medido y lo calculado. Sigamos ambas conclusiones.",
+   "steps": [
+    {
+     "text": "Una estrella en órbita circular: la gravedad de la masa dentro de la órbita proporciona la aceleración centrípeta. Igualamos y obtenemos la velocidad. Es importante que solo entra la masa DENTRO de la órbita — las capas externas de una distribución esféricamente simétrica no tiran en ninguna dirección.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "La velocidad está determinada solo por la masa dentro de la órbita: lo externo no atrae"
+    },
+    {
+     "text": "Más allá del borde del disco visible casi no hay materia luminosa, por lo que $M(r)$ apenas crece más allá. Entonces la velocidad debe caer como la raíz del radio inverso — igual que en los planetas del sistema solar, donde casi toda la masa está concentrada en el centro.",
+     "latex": "M(r) \\approx \\text{const} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "Si la masa se acaba, la curva de velocidades debe descender"
+    },
+    {
+     "text": "Las mediciones muestran otra cosa: la velocidad alcanza una meseta y se mantiene hasta el límite de lo medible. Para que esto ocurra, la masa debe seguir creciendo aproximadamente proporcional al radio. No llega luz de allí — de ahí la conclusión: la galaxia está rodeada por un halo de materia invisible que gravita.",
+     "latex": "v \\approx \\text{const} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "La curva plana es la observación de la que se deduce el halo"
+    },
+    {
+     "text": "Ahora la segunda conclusión. La expansión está gobernada por la ecuación de Friedman: la tasa de crecimiento está determinada por la densidad. La materia se diluye con la expansión como el cubo del tamaño, mientras que la energía oscura no se diluye en absoluto, su densidad es constante. Por lo tanto, con el tiempo inevitablemente toma el control.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "La materia se diluye como 1/a³, la energía oscura permanece constante"
+    },
+    {
+     "text": "Mientras la densidad de materia es alta, la gravedad frena la expansión. Cuando cae por debajo de cierto umbral, el signo de la aceleración cambia. Igualando la segunda derivada a cero, obtenemos el momento de transición — y ocurre aproximadamente en un corrimiento al rojo de 0,7, es decir, hace unos seis mil millones de años.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "Cuando hay mucha materia, la expansión frena; cuando se diluye, se acelera"
+    },
+    {
+     "text": "Una verificación independiente: las supernovas de tipo Ia estallan con una luminosidad casi idéntica, por lo que a partir del brillo aparente se calcula la distancia, y a partir del espectro, el corrimiento al rojo. Si se grafica uno contra el otro, las supernovas lejanas resultan más lejanas de lo que predice cualquier expansión desacelerada. Así es como se descubrió la aceleración.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{pc}} \\quad \\text{— distancia a partir del brillo aparente}",
+     "figure": "standardcandle",
+     "figCaption": "La luminosidad conocida convierte el brillo aparente en distancia"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "De la 0,32 de materia, solo alrededor de 0,05 es materia ordinaria: estrellas, gas, planetas y nosotros. El resto solo se reconoce por su gravedad.",
+   "note": "Qué es honesto y qué no. Las observaciones son fiables y se obtuvieron por diferentes métodos independientes. La palabra 'materia oscura' describe las observaciones, no las explica: la partícula no se ha encontrado en ningún experimento, y la alternativa con una ley de gravedad modificada explica las curvas de rotación, pero falla en los cúmulos y en el fondo cósmico de microondas. La energía oscura es aún peor: su densidad en el vacío, calculada en teoría cuántica de campos, difiere de la observada en decenas de órdenes de magnitud. Esto no es 'un tema casi cerrado', sino el mayor agujero en la física moderna."
+  },
+  "math": {
+   "title": "Las matemáticas que fueron necesarias aquí",
+   "lead": "Cuatro precisiones sin las cuales las conclusiones de este párrafo suenan como un truco.",
+   "items": [
+    {
+     "what": "Por qué las capas externas no tiran",
+     "why": "Para una capa de materia esféricamente simétrica, la fuerza gravitatoria dentro de ella es exactamente cero: las atracciones de diferentes lados se cancelan. Newton lo demostró para una capa; por eso en la fórmula de la velocidad solo aparece $M(r)$. Sin este teorema, no se podría construir la conclusión sobre el halo — habría que considerar toda la masa a la vez."
+    },
+    {
+     "what": "Qué son las Ω y por qué suman la unidad",
+     "why": "Ω es la densidad dividida por la densidad crítica: aquella para la cual el espacio es exactamente plano. Las mediciones muestran que la suma de todas las Ω es igual a la unidad con una precisión del uno por ciento, es decir, el espacio es plano. Por lo tanto, las fracciones suman la unidad — esto no es una definición, sino un hecho medido, y es uno de los misterios que resuelve la inflación."
+    },
+    {
+     "what": "Por qué una densidad constante produce aceleración",
+     "why": "En la ecuación de Friedman, la contribución de la materia cae como $1/a^3$, mientras que la contribución de la energía oscura no cambia. Por lo tanto, para $a$ grandes, el lado derecho deja de disminuir, la tasa de crecimiento se vuelve constante y el tamaño comienza a crecer exponencialmente. El crecimiento exponencial es la aceleración: no es que 'algo empuje', sino que 'la densidad no se diluye'."
+    },
+    {
+     "what": "Cómo funciona una supernova como regla",
+     "why": "Una supernova de tipo Ia estalla cuando una enana blanca alcanza una masa crítica, por lo que la energía es casi siempre la misma. La misma luminosidad real más el brillo aparente medido dan la distancia: el brillo cae como el cuadrado de la distancia. Estos objetos se llaman candelas estándar, y toda la escala de distancias del Universo se basa en ellos."
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos cuánta masa falta en una galaxia típica. Contamos por orden de magnitud, como se hace en un seminario.",
+   "given": "A una distancia de $r = 15$ kpc del centro de la galaxia, las estrellas se mueven con velocidad $v = 200$ km/s. La masa luminosa dentro de este radio es de aproximadamente $5 \\cdot 10^{10}$ masas solares. Una masa solar es $2 \\cdot 10^{30}$ kg, un parsec son $3{,}1 \\cdot 10^{16}$ m.",
+   "law": "$M(r) = \\dfrac{v^2 r}{G}$",
+   "solution": [
+    {
+     "text": "Convertimos el radio a metros: 15 kpc son $15 \\cdot 10^3 \\cdot 3{,}1 \\cdot 10^{16}$ m.",
+     "latex": "r \\approx 4{,}6 \\cdot 10^{20}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "Velocidad en metros por segundo: $200$ km/s $= 2 \\cdot 10^5$ m/s. Sustituimos en la fórmula de la masa.",
+     "latex": "M = \\frac{(2 \\cdot 10^5)^2 \\cdot 4{,}6 \\cdot 10^{20}}{6{,}67 \\cdot 10^{-11}}",
+     "num": ""
+    },
+    {
+     "text": "Calculamos: numerador $4 \\cdot 10^{10} \\cdot 4{,}6 \\cdot 10^{20} = 1{,}8 \\cdot 10^{31}$, dividimos.",
+     "latex": "M \\approx 2{,}8 \\cdot 10^{41}\\ \\text{kg} \\approx 1{,}4 \\cdot 10^{11}\\ M_\\odot",
+     "num": ""
+    },
+    {
+     "text": "Comparamos con la masa visible.",
+     "latex": "\\frac{1{,}4 \\cdot 10^{11}}{5 \\cdot 10^{10}} \\approx 3",
+     "num": ""
+    }
+   ],
+   "answer": "La masa necesaria es aproximadamente el triple de la visible, es decir, cerca de dos tercios de la masa dentro de este radio no brillan. Si se cuenta hasta el borde del halo, no hasta 15 kpc, la relación llega a cinco o más — por eso se habla de cinco sextos.",
+   "sanity": "Verificación de sentido común: la masa resultó del orden de $10^{11}$ masas solares — eso es lo que se atribuye a una galaxia grande, por lo que el orden no se perdió. Si hubiera resultado $10^{6}$ o $10^{20}$, el error estaría en la conversión de pársecs o en el cuadrado de la velocidad, y esos son los dos lugares más comunes."
+  },
+  "constants": {
+   "title": "Constantes: de dónde vienen y qué significan",
+   "lead": "La composición del Universo en cuatro números — y uno de ellos aún no tiene explicación.",
+   "items": [
+    {
+     "sym": "Ω_b",
+     "latex": "\\Omega_b",
+     "name": "materia ordinaria",
+     "value": "0,049",
+     "why": "Átomos: estrellas, gas, planetas, nosotros. Se mide por dos métodos independientes — por la abundancia de deuterio y helio remanentes de los primeros minutos, y por la anisotropía del fondo. Ambos dan la misma respuesta, y es una de las verificaciones más convincentes del modelo."
+    },
+    {
+     "sym": "Ω_c",
+     "latex": "\\Omega_c",
+     "name": "materia oscura",
+     "value": "0,265",
+     "why": "Más de cinco veces la ordinaria. Sabemos que gravita, casi no colisiona consigo misma y no participa en interacciones electromagnéticas. La partícula no se ha encontrado: los experimentos de búsqueda directa durante cincuenta años han reducido las opciones posibles y hasta ahora no han capturado nada."
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "name": "energía oscura",
+     "value": "0,685",
+     "why": "El componente más grande y el más incomprendido. Se comporta como una densidad de energía constante del vacío con presión negativa. La estimación de esta densidad desde la teoría cuántica de campos difiere de la observada en decenas de órdenes de magnitud — la discrepancia se conoce como el problema de la constante cosmológica."
+    },
+    {
+     "sym": "z_transición",
+     "latex": "z_{\\text{acel}}",
+     "name": "cuándo comenzó la aceleración",
+     "value": "≈ 0,7",
+     "why": "Hace aproximadamente seis mil millones de años, la densidad de materia disminuyó tanto que la energía oscura tomó el control. La coincidencia de que vivamos casi en este momento se llama el problema de la coincidencia: no se entiende por qué nos ha tocado precisamente la época de cambio de signo."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "Todo el párrafo está compuesto de piezas escolares — solo las conclusiones son nuevas.",
+   "items": [
+    {
+     "h": "Gravedad",
+     "text": "Velocidad circular y el teorema de la capa esférica — directamente del tema de gravitación. Solo cambia el objeto: en lugar de un planeta una estrella, en lugar del Sol una galaxia."
+    },
+    {
+     "h": "Óptica",
+     "text": "Lente gravitacional — curvatura de la luz por la masa — proporciona una forma independiente de pesar un cúmulo, sin depender de las velocidades. La respuesta es la misma."
+    },
+    {
+     "h": "Radiación cósmica de fondo",
+     "text": "El espectro angular de anisotropía del párrafo anterior — el tercer método independiente para medir la composición del Universo. Es el que da los números 5, 27 y 68 por ciento."
+    },
+    {
+     "h": "Termodinámica",
+     "text": "La presión negativa suena extraña hasta que se recuerda que la presión es lo que interviene en el trabajo al cambiar el volumen. Una densidad de energía constante durante la expansión requiere precisamente ese signo."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Experimentos en casa y detalles curiosos",
+   "lead": "No se puede pesar una galaxia en la cocina, pero se puede comprobar la lógica de la conclusión.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "Kepler en una cuerda (diez minutos)",
+     "text": "Ate una tuerca a una cuerda y gírela sobre su cabeza, soltando cuerda poco a poco. Cuanto mayor es el radio, más lento hay que mover la tuerca para que la tensión siga siendo la misma. Es la misma dependencia que debería funcionar en el borde de una galaxia: la masa en el centro no crece, la velocidad disminuye. Ahora imagine que al alargar la cuerda la tuerca se mueve a la misma velocidad: eso significa que alguien ha añadido tensión. En la galaxia, la gravedad de la masa invisible añade tensión."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "Lente de un vaso",
+     "text": "Coloque un vaso de agua sobre una página con texto y mírelo a través: las letras aparecen desplazadas y ampliadas. Un cúmulo masivo de galaxias hace lo mismo con la luz de galaxias lejanas: curva sus trayectorias. Por la magnitud de la distorsión se calcula la masa del cúmulo, y de nuevo resulta ser cinco veces mayor que la masa luminosa."
+    },
+    {
+     "icon": "fact",
+     "kind": "detalle curioso",
+     "h": "La bala que separó la materia y el gas",
+     "text": "En el cúmulo Bala chocaron dos cúmulos de galaxias. El gas caliente frenó mutuamente y quedó en el centro, mientras que la masa medida por lentes gravitacionales viajó más lejos junto con las galaxias. Esto es difícil de explicar con una ley de gravedad modificada y fácil con la existencia de una sustancia que casi no interactúa."
+    },
+    {
+     "icon": "edge",
+     "kind": "frontera del conocimiento",
+     "h": "Cincuenta años de búsqueda sin resultado",
+     "text": "La materia oscura se busca de tres maneras: detección directa en laboratorios subterráneos, producción en aceleradores y búsqueda de productos de su descomposición en el espacio. Las tres vías han reducido el rango de propiedades posibles, pero no han encontrado nada. Esto no significa que no exista: las observaciones astronómicas siguen ahí. Pero sí significa que las expectativas más simples ya han sido refutadas."
+    },
+    {
+     "icon": "fact",
+     "kind": "cómo se supo",
+     "h": "El signo en el que no se creyó",
+     "text": "Ambos grupos que buscaban supernovas esperaban medir una desaceleración de la expansión. Cuando obtuvieron el signo contrario, al principio buscaron un error: polvo, evolución de supernovas, sistemática. Lo que convenció fue que dos grupos independientes con diferentes datos y métodos obtuvieron lo mismo."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Quizás se trate de la ley de gravedad, no de la materia invisible",
+   "text": "Esta es una pregunta legítima, y se ha estado verificando durante mucho tiempo. La dinámica modificada (MOND) describe las curvas de rotación de las galaxias incluso mejor que la materia oscura: predice una relación entre la luminosidad de una galaxia y su velocidad de rotación, que efectivamente se observa. Pero luego vienen las dificultades. MOND no retiene suficientemente los cúmulos de galaxias. El espectro angular del fondo cósmico de microondas se reproduce mal. El cúmulo Bala, donde la masa y el gas se separaron, es difícil de explicar con una ley de gravedad modificada. Por eso hoy la mayoría trabaja en el marco de la materia oscura, sin considerar el tema cerrado: la propia relación MOND sigue siendo un hecho que la materia oscura explica de manera insegura."
+  },
+  "memo": {
+   "essence": "Las velocidades de las estrellas en los bordes de las galaxias, el movimiento de las galaxias en los cúmulos, el lente gravitacional y la anisotropía del fondo cósmico requieren una materia gravitante cinco veces mayor que la visible. El brillo de las supernovas lejanas requiere una expansión acelerada, es decir, un componente con densidad constante y presión negativa. Ambos componentes se describen cuantitativamente y no se explican en su naturaleza.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "La velocidad revela la masa dentro de la órbita",
+     "text": "$v(r) = \\sqrt{GM(r)/r}$: una curva plana significa $M(r) \\propto r$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Composición: 5, 27, 68",
+     "text": "Materia ordinaria 5%, materia oscura 27%, energía oscura 68%"
+    },
+    {
+     "icon": "fact",
+     "title": "La aceleración es consecuencia de la no dilución",
+     "text": "La materia se diluye como $1/a^3$, la energía oscura no, por lo que con el tiempo gana"
+    },
+    {
+     "icon": "edge",
+     "title": "Los nombres describen, no explican",
+     "text": "La partícula no se encuentra, la densidad del vacío diverge del cálculo en docenas de órdenes de magnitud"
+    }
+   ],
+   "where": "Pesaje de galaxias y cúmulos, modelado de la formación de estructuras, escala de distancias con supernovas, experimentos de búsqueda directa de partículas de materia oscura, verificación de ΛCDM con el fondo cósmico.",
+   "watchOut": "Un error frecuente es pensar que la materia oscura y la energía oscura son un mismo fenómeno con una explicación común. Son dos observaciones diferentes: una sobre la gravedad faltante en las estructuras, la otra sobre la aceleración de la expansión en general. Otro error es pensar que la materia oscura está 'allá afuera, en el vacío': el halo rodea nuestra Galaxia, y también atraviesa constantemente la habitación donde usted lee, pero casi no interactúa con nada."
+  },
+  "quiz": [
+   {
+    "id": "d1",
+    "type": "mcq",
+    "q": "¿Qué exactamente en las curvas de rotación de las galaxias requirió masa invisible?",
+    "options": [
+     "La velocidad de las estrellas no disminuye con la distancia al centro, aunque casi no hay masa luminosa más allá",
+     "Las estrellas en el borde giran en dirección opuesta",
+     "Las galaxias giran más rápido de lo que permite la teoría de la relatividad",
+     "La velocidad de las estrellas disminuye más rápido de lo que predice Kepler"
+    ],
+    "answer": 0,
+    "why": "Si la masa se acaba, la velocidad debe caer como $1/\\sqrt{r}$. La curva medida es plana, lo que significa que la masa continúa creciendo proporcionalmente al radio — y no brilla."
+   },
+   {
+    "id": "d2",
+    "type": "mcq",
+    "q": "¿Por qué la energía oscura inevitablemente se impone sobre la materia con el tiempo?",
+    "options": [
+     "Su densidad no disminuye con la expansión, mientras que la densidad de la materia cae como el cubo del tamaño",
+     "Su cantidad aumenta con el tiempo",
+     "La materia se convierte en energía oscura",
+     "La gravedad de la materia se debilita con la distancia"
+    ],
+    "answer": 0,
+    "why": "En la ecuación de Friedman, la contribución de la materia va como $1/a^3$, mientras que la contribución de la energía oscura es constante. Por lo tanto, tarde o temprano el segundo término se vuelve dominante — independientemente de las proporciones iniciales."
+   },
+   {
+    "id": "d3",
+    "type": "free",
+    "q": "En tus propias palabras: ¿por qué el descubrimiento de la expansión acelerada requirió específicamente supernovas tipo Ia, y no galaxias ordinarias?",
+    "keywords": [
+     "igual",
+     "brillo",
+     "vela",
+     "distancia",
+     "estándar",
+     "luminosidad"
+    ],
+    "why": "Se necesita un objeto con luminosidad real conocida: entonces a partir del brillo aparente se calcula la distancia. Las supernovas tipo Ia estallan de manera casi idéntica, por lo que funcionan como velas estándar, mientras que la luminosidad de las galaxias varía."
+   },
+   {
+    "id": "d4",
+    "type": "estimate",
+    "q": "Las estrellas en un radio de 10 kpc se mueven a una velocidad de 200 km/s. Estima la masa dentro de esta órbita en miles de millones de masas solares. (1 kpc ≈ 3,1·10¹⁹ m, G = 6,67·10⁻¹¹, M☉ = 2·10³⁰ kg.)",
+    "answer": 93,
+    "unit": "mil millones M☉",
+    "tolerance": 25,
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, que es aproximadamente $9{,}3\\cdot10^{10}$ masas solares, es decir, alrededor de noventa mil millones."
+   }
+  ]
+ },
+ "ar": {
+  "title": "المادة المظلمة والطاقة المظلمة",
+  "subtitle": "95% من الكون، لا نعرف عنه سوى كيفية تأثيره",
+  "intro": [
+   "دور دلو ماء مربوط بحبل — ستشعر أن الدوران السريع يحتاج إلى حبل قوي. نفس الشيء مع المجرة: سرعة النجم في مداره تحتفظ بها جاذبية الكتلة الموجودة داخل مداره. يمكن حساب هذه الكتلة بطريقتين: جمع كل ما يضيء، أو قياس السرعات ومعرفة الكتلة المطلوبة. في السبعينيات، قامت فيرا روبين بكليهما، واختلفت الإجابات بمقدار خمسة أضعاف.",
+   "ثم تبين أن الاختلاف ليس محليًا. تمسك عناقيد المجرات ببعضها رغم أن الكتلة المرئية قليلة لذلك. ينحني ضوء المجرات البعيدة عند العناقيد أكثر مما ينبغي. الإشعاع الخلفي الكوني الميكروي حسب طيفه الزاوي يتطلب أيضًا مادة جاذبة إضافية. أربع طرق مستقلة تعطي نفس الإجابة: المادة الجاذبة أكثر بخمس مرات تقريبًا من المادة المضيئة.",
+   "في عام 1998، أضيف لغز ثانٍ، أكثر إزعاجًا. تبين أن المستعرات العظمى البعيدة أبهت مما ينبغي في أي توسع متباطئ: يعني أن التوسع يتسارع. لوصف ذلك، يجب إدخال مكون ذي ضغط سلبي — أُطلق عليه الطاقة المظلمة. كلمة «مظلم» في كلا الاسمين تعني نفس الشيء: نعرف كيف يعمل، ولا نعرف ما هو."
+  ],
+  "standNote": "في وضع «الدوران»، اجعل كتلة الهالة صفرًا: سينطبق المنحنى الصلب للسرعات على المنقط، وسينخفض — هكذا ينبغي أن يكون إذا كانت كل الكتلة مرئية. الملاحظات تعطي خطًا مسطحًا، لذلك يجب إعادة الهالة. بدّل إلى «التوسع» وأزل الطاقة المظلمة: سينحني منحنى النمو لأسفل، ولن يكون هناك تسارع. أعد 0.7 — ستظهر نقطة تحول عند z = 0.7، وهذا بالضبط ما يُرى من المستعرات العظمى.",
+  "formula": {
+   "name": "السرعة المدارية ومكونات الكون",
+   "latex": "v(r) = \\sqrt{\\frac{G M(r)}{r}}, \\qquad \\Omega_m + \\Omega_\\Lambda \\approx 1",
+   "alsoKnown": "النموذج الكوني القياسي يُسمى ΛCDM: لامدا + المادة المظلمة الباردة",
+   "authors": [
+    {
+     "who": "فريتز زفيكي",
+     "year": "1933",
+     "what": "أول من اكتشف نقص الكتلة من سرعات المجرات في عنقود الهلبة وأطلق عليها اسم «مظلمة»"
+    },
+    {
+     "who": "فيرا روبين وكينت فورد",
+     "year": "السبعينيات",
+     "what": "قاسا منحنيات دوران عشرات المجرات وأظهرا أن السرعة لا تنخفض مع نصف القطر"
+    },
+    {
+     "who": "سول بيرلموتر، برايان شميدت، آدم ريس",
+     "year": "1998",
+     "what": "اكتشفوا التوسع المتسارع من المستعرات العظمى من النوع Ia; جائزة نوبل 2011"
+    },
+    {
+     "who": "القمران الصناعيان WMAP وPlanck",
+     "year": "2003–2018",
+     "what": "قاسا مكونات الكون من خلال تباين الإشعاع الخلفي: 5% مادة عادية، 27% مادة مظلمة، 68% طاقة مظلمة"
+    }
+   ],
+   "story": "كان عمل زفيكي يُعتبر غرابة لما يقرب من أربعين عامًا: كان معروفًا بحدة أحكامه وكان يسمي زملائه «أوغادًا كرويين» — كرويين لأنه من أي جانب. عندما حصلت روبين على نفس النتيجة من بيانات أخرى، تذكروه أيضًا. التوسع المتسارع أيضًا لم يبحثوا عنه في المكان الصحيح: كلا المجموعتين كانتا تبحثان عن التباطؤ وحصلتا على الإشارة المعاكسة، الذي اعتبر في البداية خطأً.",
+   "symbols": [
+    {
+     "sym": "v(r)",
+     "latex": "v(r)",
+     "what": "سرعة النجم في مدار دائري نصف قطره r",
+     "unit": "km/s"
+    },
+    {
+     "sym": "M(r)",
+     "latex": "M(r)",
+     "what": "الكتلة المحصورة داخل نصف القطر r",
+     "unit": "kg"
+    },
+    {
+     "sym": "Ω_m",
+     "latex": "\\Omega_m",
+     "what": "نسبة المادة في الكثافة الكلية (مرئية + مظلمة)",
+     "unit": "—"
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "what": "نسبة الطاقة المظلمة",
+     "unit": "—"
+    },
+    {
+     "sym": "G",
+     "latex": "G",
+     "what": "ثابت الجاذبية",
+     "unit": "m³/(kg·s²)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "كيف يؤدي القياس إلى استنتاج غير المرئي",
+   "lead": "لا المادة المظلمة ولا الطاقة المظلمة تم افتراضهما 'من أجل الجمال'. كلاهما ظهرا كالفرق بين ما قيس وما حسب. سنتتبع كلا الاستنتاجين.",
+   "steps": [
+    {
+     "text": "نجم في مدار دائري: جاذبية الكتلة داخل المدار توفر التسارع المركزي. نساوي ونحصل على السرعة. المهم أن الكتلة داخل المدار فقط هي التي تدخل — الطبقات الخارجية للتوزيع المتناظر كروياً لا تسحب في أي اتجاه.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "السرعة تُحدد فقط بالكتلة داخل المدار: الخارج لا يجذب"
+    },
+    {
+     "text": "خارج حافة القرص المرئي لا يوجد تقريباً مادة مضيئة، لذا $M(r)$ لا تزداد كثيراً بعد ذلك. إذن السرعة يجب أن تتناقص كجذر معكوس نصف القطر — تماماً كما في الكواكب في النظام الشمسي، حيث تتركز كل الكتلة تقريباً في المركز.",
+     "latex": "M(r) \\approx \\text{ثابت} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "إذا انتهت الكتلة، يجب أن ينخفض منحنى السرعات"
+    },
+    {
+     "text": "القياسات تعطي شيئاً آخر: تصل السرعة إلى هضبة وتبقى حتى أقصى حد يمكن قياسه. لكي يحدث هذا، يجب أن تستمر الكتلة في الزيادة تقريباً خطياً مع نصف القطر. لا يأتي أي ضوء من هناك — ومن هنا الاستنتاج: تحيط بالمجرة هالة من مادة جاذبة غير مرئية.",
+     "latex": "v \\approx \\text{ثابت} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "المنحنى المسطح هو المشاهدة التي تستنتج منها الهالة"
+    },
+    {
+     "text": "الآن الاستنتاج الثاني. التوسع تحكمه معادلة فريدمان: معدل النمو يُحدد بالكثافة. المادة تتبدد مع التوسع كمكعب الحجم، بينما الطاقة المظلمة لا تتبدد أبداً، كثافتها ثابتة. لذا مع الوقت تسيطر حتماً.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "المادة تتبدد كـ 1/a³، الطاقة المظلمة تبقى ثابتة"
+    },
+    {
+     "text": "طالما كثافة المادة كبيرة، تعمل الجاذبية على إبطاء التوسع. عندما تنخفض أقل من حد معين، تتغير إشارة التسارع. بوضع المشتقة الثانية صفراً، نحصل على زمن الانتقال — وهو عند انزياح أحمر حوالي 0.7، أي قبل حوالي ستة مليارات سنة.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "طالما المادة كثيرة، يتباطأ التوسع؛ عندما تتبدد، يتسارع"
+    },
+    {
+     "text": "فحص مستقل: المستعرات العظمى من النوع Ia تتوهج بنفس اللمعان تقريباً، لذا من السطوع الظاهري نحسب المسافة، ومن الطيف نحسب الانزياح الأحمر. إذا رسمنا أحدهما ضد الآخر، تكون المستعرات البعيدة أبعد مما يتوقعه أي توسع متباطئ. وهكذا اكتشف التسارع.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{pc}} \\quad \\text{— المسافة من السطوع الظاهري}",
+     "figure": "standardcandle",
+     "figCaption": "اللمعان المعروف يحول السطوع الظاهري إلى مسافة"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "من 0.32 مادة، فقط حوالي 0.05 هي مادة عادية: نجوم، غاز، كواكب ونحن. الباقي تم التعرف عليه فقط من خلال الجاذبية.",
+   "note": "ما هو صادق هنا وما ليس كذلك. المشاهدات موثوقة وتم الحصول عليها بطرق مستقلة مختلفة. كلمة 'مادة مظلمة' تصف المشاهدات وليس تفسرها: الجسيم لم يُعثر عليه في أي تجربة، والبديل بقانون جاذبية معدل يفسر منحنيات الدوران لكنه يفشل في العناقيد وفي الإشعاع الكوني الميكروي. الطاقة المظلمة أسوأ: كثافتها في الفراغ، المحسوبة في نظرية الحقل الكمومي، تختلف عن المشاهدة بعشرات المراتب. هذه ليست 'مسألة شبه مغلقة'، بل أكبر ثقب في الفيزياء الحديثة."
+  },
+  "math": {
+   "title": "الرياضيات التي احتجناها هنا",
+   "lead": "أربع دقائق، بدونها تبدو استنتاجات هذا القسم كخدعة.",
+   "items": [
+    {
+     "what": "لماذا الطبقات الخارجية لا تجذب",
+     "why": "لطبقة مادة متناظرة كروياً، قوة الجاذبية داخلها تساوي صفراً تماماً: تجاذب من جهات مختلفة يتلاشى. نيوتن أثبت ذلك للقشرة؛ لذلك في معادلة السرعة تدخل فقط $M(r)$. بدون هذه النظرية لا يمكن بناء استنتاج الهالة — سيكون علينا أخذ كل الكتلة بعين الاعتبار."
+    },
+    {
+     "what": "ما هي Ω ولماذا مجموعها واحد",
+     "why": "Ω هي الكثافة مقسومة على الكثافة الحرجة: التي عندها يكون الفضاء مسطحاً تماماً. القياسات تظهر أن مجموع كل Ω يساوي واحداً بدقة نسبة مئوية، أي الفضاء مسطح. لذلك النسب مجموعها واحد — هذا ليس تعريفاً، بل حقيقة مقاسة، وهي أيضاً أحد الألغاز التي يحلها التضخم."
+    },
+    {
+     "what": "لماذا الكثافة الثابتة تعطي تسارعاً",
+     "why": "في معادلة فريدمان، مساهمة المادة تتناقص كـ $1/a^3$، بينما مساهمة الطاقة المظلمة لا تتغير. لذلك عند $a$ كبيرة، يتوقف الجانب الأيمن عن التناقص، ومعدل النمو يصل إلى قيمة ثابتة، ويبدأ الحجم في النمو أُسياً. النمو الأُسي هو التسارع: ليس 'شيئاً يدفع'، بل 'الكثافة لا تتبدد'."
+    },
+    {
+     "what": "كيف يعمل المستعر الأعظم كمسطرة",
+     "why": "المستعر الأعظم من النوع Ia يتوهج عندما ينفجر قزم أبيض يصل إلى كتلة حرجة، لذا الطاقة دائماً تقريباً متساوية. اللمعان الحقيقي الثابت بالإضافة إلى اللمعان الظاهري المقاس يعطيان المسافة: السطوع يتناقص كمربع المسافة. هذه الأجسام تسمى شموعاً قياسية، وكل مقياس المسافات في الكون مبني عليها."
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "دعونا نحسب مقدار الكتلة المفقودة في مجرة نموذجية. نحسب بالتقريب، كما يفعلون في الندوة.",
+   "given": "على مسافة $r = 15$ kpc من مركز المجرة، تتحرك النجوم بسرعة $v = 200$ km/s. كتلة المادة المضيئة داخل هذا نصف القطر حوالي $5 \\cdot 10^{10}$ كتلة شمسية. كتلة الشمس الواحدة $2 \\cdot 10^{30}$ kg، والفرسخ الفلكي الواحد $3{,}1 \\cdot 10^{16}$ m.",
+   "law": "$M(r) = \\dfrac{v^2 r}{G}$",
+   "solution": [
+    {
+     "text": "دعنا نحول نصف القطر إلى أمتار: 15 kpc يساوي $15 \\cdot 10^3 \\cdot 3{,}1 \\cdot 10^{16}$ m.",
+     "latex": "r \\approx 4{,}6 \\cdot 10^{20}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "السرعة بالمتر في الثانية: $200$ km/s $= 2 \\cdot 10^5$ m/s. نعوض في معادلة الكتلة.",
+     "latex": "M = \\frac{(2 \\cdot 10^5)^2 \\cdot 4{,}6 \\cdot 10^{20}}{6{,}67 \\cdot 10^{-11}}",
+     "num": ""
+    },
+    {
+     "text": "نحسب: البسط $4 \\cdot 10^{10} \\cdot 4{,}6 \\cdot 10^{20} = 1{,}8 \\cdot 10^{31}$، ثم نقسم.",
+     "latex": "M \\approx 2{,}8 \\cdot 10^{41}\\ \\text{kg} \\approx 1{,}4 \\cdot 10^{11}\\ M_\\odot",
+     "num": ""
+    },
+    {
+     "text": "نقارن بالكتلة المرئية.",
+     "latex": "\\frac{1{,}4 \\cdot 10^{11}}{5 \\cdot 10^{10}} \\approx 3",
+     "num": ""
+    }
+   ],
+   "answer": "الكتلة المطلوبة أكبر بثلاث مرات تقريبًا من الكتلة المرئية، أي حوالي ثلثي الكتلة داخل هذا نصف القطر غير مضيئة. إذا حسبنا حتى حافة الهالة، وليس حتى 15 kpc، تصل النسبة إلى خمسة أو أكثر — ولهذا يقولون عن خمسة أسداس.",
+   "sanity": "التحقق من المنطق السليم: الكتلة الناتجة من رتبة $10^{11}$ كتلة شمسية — هذا ما يُنسب لمجرة كبيرة، إذن لم نفقد الترتيب. إذا حصلنا على $10^{6}$ أو $10^{20}$، لكان الخطأ في تحويل الفرسخ الفلكي أو في مربع السرعة، وهما أكثر مكانين شيوعًا للخطأ."
+  },
+  "constants": {
+   "title": "الثوابت: من أين أتت وماذا تعني",
+   "lead": "مكونات الكون في أربعة أرقام - وأحدها لم يُفسر بعد.",
+   "items": [
+    {
+     "sym": "Ω_b",
+     "latex": "\\Omega_b",
+     "name": "المادة العادية",
+     "value": "0,049",
+     "why": "الذرات: النجوم، الغاز، الكواكب، نحن. تم قياسها بطريقتين مستقلتين - من خلال محتوى الديوتيريوم والهيليوم المتبقيين من الدقائق الأولى، ومن خلال تباين الخلفية الكونية. كلاهما يعطي إجابة واحدة، وهذا واحد من أقوى اختبارات النموذج بأكمله."
+    },
+    {
+     "sym": "Ω_c",
+     "latex": "\\Omega_c",
+     "name": "المادة المظلمة",
+     "value": "0,265",
+     "why": "أكبر بخمس مرات من المادة العادية. نعلم أنها تتجاذب، ولا تتصادم تقريبًا مع نفسها ولا تشارك في التفاعلات الكهرومغناطيسية. لم يتم العثور على الجسيم: تجارب البحث المباشر على مدى خمسين عامًا تعمل على تضييق الاحتمالات ولم تصطد شيئًا بعد."
+    },
+    {
+     "sym": "Ω_Λ",
+     "latex": "\\Omega_\\Lambda",
+     "name": "الطاقة المظلمة",
+     "value": "0,685",
+     "why": "أكبر مكون وأكثرها غموضًا. تتصرف مثل كثافة طاقة ثابتة للفراغ مع ضغط سلبي. تقدير هذه الكثافة من نظرية المجال الكمومي يختلف عن القيمة المرصودة بعشرات المراتب - يُعرف هذا الاختلاف بمشكلة الثابت الكوني."
+    },
+    {
+     "sym": "z_acc",
+     "latex": "z_{\\text{acc}}",
+     "name": "متى بدأ التسارع",
+     "value": "≈ 0,7",
+     "why": "منذ حوالي ستة مليارات سنة، انخفضت كثافة المادة لدرجة أن الطاقة المظلمة سادت. يُطلق على المصادفة أننا نعيش في هذه اللحظة تقريبًا مشكلة المصادفة: ليس من الواضح لماذا حصلنا على عصر تغير الإشارة بالتحديد."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "الفقرة بأكملها مجمعة من أجزاء مدرسية - الجديد هو الاستنتاجات فقط.",
+   "items": [
+    {
+     "h": "الجاذبية",
+     "text": "السرعة المدارية ونظرية الطبقة الكروية - مباشرة من موضوع الجاذبية. يتغير فقط الجسم: بدلاً من الكوكب نجم، بدلاً من الشمس مجرة."
+    },
+    {
+     "h": "البصريات",
+     "text": "العدسة الجاذبية - انحناء الضوء بالكتلة - تعطي طريقة مستقلة لوزن التجمع دون الاعتماد على السرعات. نفس الإجابة."
+    },
+    {
+     "h": "إشعاع الخلفية الكونية",
+     "text": "طيف التباين الزاوي من الفقرة السابقة - الطريقة المستقلة الثالثة لقياس مكونات الكون. هي التي تعطي الأرقام 5 و 27 و 68 بالمائة."
+    },
+    {
+     "h": "الديناميكا الحرارية",
+     "text": "الضغط السلبي يبدو غريبًا حتى نتذكر أن الضغط هو ما يدخل في العمل عند تغيير الحجم. كثافة الطاقة الثابتة أثناء التمدد تتطلب هذه الإشارة بالضبط."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "تجارب منزلية وتفاصيل مثيرة للاهتمام",
+   "lead": "لا يمكنك وزن مجرة في مطبخك، لكن يمكنك التحقق من منطق الاستنتاج.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "كبلر على حبل (عشر دقائق)",
+     "text": "اربط صامولة بحبل ولفها فوق رأسك، مع إطالة الحبل تدريجياً. كلما زاد نصف القطر، كلما كان عليك تحريك الصامولة ببطء أكبر للحفاظ على نفس الشد. هذا هو نفس الاعتماد الذي يجب أن يعمل على حافة المجرة: الكتلة في المركز لا تزيد — تنخفض السرعة. تخيل الآن أنه عند إطالة الحبل، تتحرك الصامولة بنفس السرعة:这意味着 شخص ما أضاف شداً. في المجرة، تضيف الجاذبية كتلة غير مرئية."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "عدسة من كوب",
+     "text": "ضع كوب ماء على صفحة بها نص وانظر من خلاله: الحروف مزاحة ومكبرة. عنقود مجري ضخم يفعل نفس الشيء مع ضوء المجرات البعيدة — ينحني المسارات. من حجم التشوه، نحسب كتلة العنقود، ومرة أخرى تظهر أكبر بخمس مرات من الكتلة المضيئة."
+    },
+    {
+     "icon": "fact",
+     "kind": "تفاصيل مثيرة للاهتمام",
+     "h": "الرصاصة التي فصلت المادة والغاز",
+     "text": "في عنقود الرصاصة، اصطدم عنقودان مجريان. توقف الغاز الساخن بعضه بعضاً وبقي في الوسط، بينما الكتلة المقاسة بالعدسة الجاذبية مرت إلى الأمام مع المجرات. من الصعب تفسير ذلك بقانون جاذبية معدل، وسهل — بوجود مادة لا تتصادم تقريباً."
+    },
+    {
+     "icon": "edge",
+     "kind": "أقصى ما هو معروف",
+     "h": "خمسون عاماً من البحث دون نتيجة",
+     "text": "يُبحث عن المادة المظلمة بثلاث طرق: الكشف المباشر في مختبرات تحت الأرض، إنتاجها في المسرعات، والبحث عن نواتج اضمحلالها في الفضاء. كل الطرق ضيقت نطاق الخصائص المحتملة، لكن لم يُعثر على شيء. هذا لا يعني أنها غير موجودة: الملاحظات الكونية لا تزال قائمة. لكنه يعني أن أبسط التوقعات قد دُحضت بالفعل."
+    },
+    {
+     "icon": "fact",
+     "kind": "كيف عرفنا ذلك",
+     "h": "إشارة لم يصدقوها",
+     "text": "كلا الفريقين اللذين كانا يصطادان المستعرات العظمى توقعا قياس تباطؤ التوسع. عندما حصلوا على إشارة معاكسة، بحثوا أولاً عن خطأ: الغبار، تطور المستعرات، العوامل المنهجية. الأمر الذي أقنعهم هو أن فريقين مستقلين ببيانات وطرق مختلفة حصلا على نفس النتيجة."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ربما الأمر في قانون الجاذبية، وليس في مادة غير مرئية",
+   "text": "هذا سؤال مشروع، وقد تم اختباره منذ زمن. الديناميكا المعدلة (MOND) تصف منحنيات دوران المجرات حتى أفضل من المادة المظلمة: تتنبأ بربط بين لمعان المجرة وسرعة دورانها، وهو ما يُلاحظ بالفعل. لكن بعد ذلك تبدأ الصعوبات. عناقيد المجرات لا تمسكها MOND بشكل كاف. طيف زاوية الإشعاع الخلفي لا يُعاد إنتاجه جيداً. عنقود الرصاصة، حيث انفصلت الكتلة والغاز، يصعب تفسيره بقانون جاذبية معدل. لذلك اليوم يعمل معظم العلماء في إطار المادة المظلمة، مع عدم اعتبار المسألة مغلقة: علاقة MOND نفسها تبقى حقيقة تفسرها المادة المظلمة بشكل غير مؤكد."
+  },
+  "memo": {
+   "essence": "سرعات النجوم على أطراف المجرات، حركة المجرات في العناقيد، العدسة الجاذبية، وتغاير الخلفية الكونية تتطلب مادة جاذبة أكبر بخمس مرات من المرئية. سطوع المستعرات العظمى البعيدة يتطلب توسعاً متسارعاً، أي مكون بكثافة ثابتة وضغط سالب. كلا المكونين موصوفان كمياً ولم يفسرا طبيعياً.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "السرعة تكشف الكتلة داخل المدار",
+     "text": "$v(r) = \\sqrt{GM(r)/r}$: منحنى مسطح يعني $M(r) \\propto r$"
+    },
+    {
+     "icon": "estimate",
+     "title": "المكونات: 5، 27، 68",
+     "text": "المادة العادية 5%، المادة المظلمة 27%، الطاقة المظلمة 68%"
+    },
+    {
+     "icon": "fact",
+     "title": "التسارع نتيجة عدم التخفيف",
+     "text": "المادة تتخلخل بمعدل $1/a^3$، الطاقة المظلمة لا، لذا مع الوقت تغلب"
+    },
+    {
+     "icon": "edge",
+     "title": "الأسماء تصف ولا تفسر",
+     "text": "الجسيم لم يُعثر عليه، كثافة الفراغ تختلف مع الحساب بعشرات المراتب"
+    }
+   ],
+   "where": "وزن المجرات والعناقيد، نمذجة تشكل البنية، سلم المسافات بالمستعرات العظمى، تجارب البحث المباشر عن جسيمات المادة المظلمة، اختبار ΛCDM عبر الإشعاع الخلفي.",
+   "watchOut": "خطأ شائع هو اعتبار المادة المظلمة والطاقة المظلمة ظاهرة واحدة بتفسير مشترك. هما ملاحظتان مختلفتان: واحدة عن نقص الجاذبية في البنى، والأخرى عن تسارع التوسع ككل. وخطأ آخر هو الاعتقاد بأن المادة المظلمة «في مكان ما هناك، في الفراغ»: الهالة تحيط بمجرتنا، وحتى الغرفة التي تقرأ فيها تعبرها المادة المظلمة باستمرار، لكنها لا تتفاعل تقريباً مع أي شيء."
+  },
+  "quiz": [
+   {
+    "id": "d1",
+    "type": "mcq",
+    "q": "ما الذي تطلب وجود مادة غير مرئية في منحنيات دوران المجرات؟",
+    "options": [
+     "سرعة النجوم لا تنخفض مع المسافة من المركز، رغم أن الكتلة المضيئة تكاد تنعدم في الأطراف",
+     "النجوم عند الحافة تدور في الاتجاه المعاكس",
+     "المجرات تدور أسرع مما تسمح به نظرية النسبية",
+     "سرعة النجوم تنخفض أسرع مما يتنبأ به كبلر"
+    ],
+    "answer": 0,
+    "why": "إذا كانت الكتلة قد انتهت، فمن المفترض أن تنخفض السرعة بمعدل $1/\\sqrt{r}$. المنحنى المقاس مسطح، وهذا يعني أن الكتلة تستمر في النمو بشكل متناسب مع نصف القطر - وهي لا تشع ضوءًا."
+   },
+   {
+    "id": "d2",
+    "type": "mcq",
+    "q": "لماذا تغلب الطاقة المظلمة حتماً على المادة مع مرور الوقت؟",
+    "options": [
+     "كثافتها لا تتناقص مع التمدد، بينما كثافة المادة تنخفض بمكعب الحجم",
+     "كميتها تزداد مع الوقت",
+     "تتحول المادة إلى طاقة مظلمة",
+     "جاذبية المادة تضعف مع المسافة"
+    ],
+    "answer": 0,
+    "why": "في معادلة فريدمان، مساهمة المادة تساوي $1/a^3$ بينما مساهمة الطاقة المظلمة ثابتة. لذلك، عاجلاً أم آجلاً، يصبح الحد الثاني هو المسيطر - بغض النظر عن النسب الأولية."
+   },
+   {
+    "id": "d3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا تطلبت اكتشاف التوسع المتسارع المستعرات العظمى من النوع Ia بدلاً من المجرات العادية؟",
+    "keywords": [
+     "متطابق",
+     "سطوع",
+     "شمعة",
+     "مسافة",
+     "معيار",
+     "لمعان"
+    ],
+    "why": "نحن بحاجة إلى جسم ذي لمعان حقيقي معروف: ثم يتم حساب المسافة من السطوع الظاهري. المستعرات العظمى من النوع Ia تتوهج بشكل متطابق تقريباً، لذا فهي تعمل كشمعة قياسية، بينما لمعان المجرات مختلف."
+   },
+   {
+    "id": "d4",
+    "type": "estimate",
+    "q": "تتحرك النجوم على نصف قطر 10 kpc بسرعة 200 km/s. قدّر الكتلة داخل هذا المدار بمليارات الكتل الشمسية. (1 kpc ≈ 3,1·10¹⁹ m، G = 6,67·10⁻¹¹، M☉ = 2·10³⁰ kg)",
+    "answer": 93,
+    "unit": "مليار M☉",
+    "tolerance": 25,
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg، وهذا تقريباً $9{,}3\\cdot10^{10}$ كتلة شمسية، أي حوالي تسعين مليارًا."
+   }
+  ]
  }
 }

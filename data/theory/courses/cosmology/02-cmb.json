@@ -365,5 +365,1013 @@
     "why": "Длина волны растягивается в $(1+z)$ раз, значит в прошлом она была во столько же раз короче: $1\\ \\text{мм}/10 = 100$ мкм. Считать через температуру не нужно — множитель тот же."
    }
   ]
+ },
+ "en": {
+  "title": "Cosmic Microwave Background and Inflation",
+  "subtitle": "The Oldest Picture in the Universe and What Had to Be Invented to Explain It",
+  "intro": [
+   "In 1964, two engineers were setting up an antenna for satellite communication and could not get rid of a noise. The noise was faint, uniform, and did not go away day or night, nor when the antenna was turned to another part of the sky. Penzias and Wilson checked everything: electronics, connections, even cleaned a bird's nest out of the horn. The noise remained — because it came from the entire sky at once.",
+   "This turned out to be light that set out when the Universe was three hundred eighty thousand years old. Before that, matter was a hot plasma and light could not travel even a meter in it: it scattered off free electrons like in a fog. When the temperature dropped to three thousand kelvins, electrons combined with nuclei into neutral atoms, the fog cleared — and light flew freely. It has been flying ever since, stretched by expansion a thousand times and cooled to a little over two kelvins.",
+   "Then comes the strangeness from which an entire theory grew. This radiation arrives the same from all directions to within one part in a hundred thousand. But regions of the sky separated by more than a degree could never have exchanged a signal: light would not have had time to travel between them in the entire lifetime of the Universe. How do they know each other's temperature? The answer was inflation."
+  ],
+  "standNote": "Move the redshift slider: you go into the past, the CMB heats up, and its spectrum peak shifts left, to shorter wavelengths. Go to z about 1100 — the temperature becomes three thousand kelvins, and the peak moves into microns: this is exactly where matter was still glowing, and further back in time a telescope cannot see. With the second slider, amplify the spots: the caption will honestly tell you by how many times, because in reality they differ by one part in a hundred thousand.",
+  "formula": {
+   "name": "Wien's Displacement Law and Cooling of the CMB",
+   "latex": "\\lambda_{\\max} = \\frac{b}{T}, \\qquad T = T_0 (1 + z)",
+   "alsoKnown": "The spectrum is described by Planck's formula; Wien's law gives the position of its peak",
+   "authors": [
+    {
+     "who": "Wilhelm Wien",
+     "year": "1893",
+     "what": "found that the wavelength at the spectrum maximum is inversely proportional to temperature"
+    },
+    {
+     "who": "Max Planck",
+     "year": "1900",
+     "what": "derived the entire shape of the spectrum by introducing energy quantization — this marked the beginning of quantum physics"
+    },
+    {
+     "who": "George Gamow, Ralph Alpher, Robert Herman",
+     "year": "1948",
+     "what": "predicted that a cooled radiation should remain from the hot beginning, and estimated its temperature"
+    },
+    {
+     "who": "Arno Penzias and Robert Wilson",
+     "year": "1965",
+     "what": "found it by accident while troubleshooting antenna noise, and received the Nobel Prize for it"
+    }
+   ],
+   "story": "Gamow and co-authors predicted a temperature of about five kelvins back in the forties, but the prediction was considered too speculative and was forgotten. When the noise was found, Penzias and Wilson did not understand what they had; the explanation was suggested by Dicke's group from Princeton, which was just building an instrument to search for this radiation — and was a few months late.",
+   "symbols": [
+    {
+     "sym": "λ_max",
+     "latex": "\\lambda_{\\max}",
+     "what": "wavelength at which the radiation is brightest",
+     "unit": "m"
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "what": "Wien displacement constant",
+     "unit": "m·K"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "temperature of the radiation",
+     "unit": "K"
+    },
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "what": "temperature of the CMB today",
+     "unit": "K"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "redshift: how far back in time we are looking",
+     "unit": "—"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Why radiation must exist and why it is exactly that way",
+   "lead": "Let's go from 'earlier it was denser' to the number 2.725 K, and then see what doesn't fit in this picture without inflation.",
+   "steps": [
+    {
+     "text": "Let's go backward in time. Distances shrink, density increases, and radiation contracts along with the expansion: wavelengths become shorter, meaning the energy of each quantum is greater. Compressed radiation is hot radiation. Hence it follows that the early state was hot, and this is not an assumption but expansion reversed.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "The same radiation: compressed was hot, stretched became cold"
+    },
+    {
+     "text": "While the matter is ionized, light does not travel through it: it scatters off free electrons and stalls. Transparency occurs when electrons bind into atoms. For hydrogen, this happens around three thousand kelvins — noticeably lower than 'ionization energy divided by Boltzmann's constant', because there are far more photons than atoms, and even a rare tail of the distribution keeps breaking atoms apart for a long time.",
+     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "Left: plasma and light in fog, right: neutral atoms and light escapes freely"
+    },
+    {
+     "text": "The light that emerged at that moment flies to us unhindered. Along the way, it is stretched by the same expansion: by as many times as the Universe has grown. A thousandfold stretch turns the glow of hot gas into microwaves.",
+     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "The same light on its way to us: stretched as many times as the Universe has grown"
+    },
+    {
+     "text": "The position of the spectrum peak provides a test. Substituting the measured temperature into Wien's law, we get a little more than a millimeter — the microwave range. That is exactly what the antenna in Holmdel saw, and the COBE satellite in 1990 showed that the shape of the spectrum coincides with the Planck spectrum with an accuracy unattainable for any laboratory source.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "The colder the body, the farther right the peak: for the relic it is in millimeter waves"
+    },
+    {
+     "text": "And now for what doesn't fit. Take two points in the sky separated by two degrees. At the moment when the radiation emerged, the distance between them was such that light could not travel it in all the time since the beginning: they were beyond each other's horizon. They had no common history — yet the temperature is the same to the fifth decimal place. This is called the horizon problem.",
+     "latex": "\\text{angle} \\sim 1^\\circ \\;-\\; \\text{limit where contact was possible}",
+     "figure": "horizon",
+     "figCaption": "Two regions beyond each other's horizon: a signal between them could not travel in time"
+    },
+    {
+     "text": "Inflation explains it this way: before the hot stage, the Universe expanded extremely rapidly for a very short time. Then everything we see today came from a single tiny region that had time to become homogeneous before the expansion. At the same time, a second puzzle is solved — why space is so close to flat: any curvature is stretched by the expansion nearly to zero, like wrinkles on an inflating balloon.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "Everything visible today came from a single region that had time to even out before inflation"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "Two simple formulas connect the noise in the antenna to the state of the Universe at an age of three hundred and eighty thousand years. Everything else in this paragraph is consequences and what cannot be derived from them.",
+   "note": "Inflation is not as reliably established a part of the picture as the cooling of the relic. Cooling follows from expansion and is verified by the spectrum; inflation was devised to fit observations and still does not have a single form: there are dozens of models, and which one is correct is unknown. It is worth learning it exactly like this: a strong explanation with an open end."
+  },
+  "math": {
+   "title": "The math that was needed here",
+   "lead": "Three things: how to read the spectrum, why the logarithm on the graph, and what 'sixty e-folds' means.",
+   "items": [
+    {
+     "what": "Spectrum as a distribution, not as a list of lines",
+     "why": "A heated body emits at all wavelengths at once, so it makes sense not to ask 'what is its wavelength' but 'how much energy falls on a wavelength interval'. Planck's formula gives exactly this distribution. It has a single maximum, and its position depends only on temperature — neither on the size of the body nor on the material."
+    },
+    {
+     "what": "Why the logarithmic axis on the graph",
+     "why": "Between microwaves and visible light there are three orders of magnitude in wavelength. On a linear axis, the relic peak would be pressed against the right edge and become indistinguishable, and the hot plasma peak would merge with zero. The logarithm gives equal intervals for equal ratios, so both pictures are visible on the same scale."
+    },
+    {
+     "what": "Sixty e-folds",
+     "why": "Inflation is described by the number $N$ — how many times the size has multiplied by $e \\approx 2{,}718$. Sixty e-folds means an increase by a factor of $e^{60}$, which is about $10^{26}$. Such a number seems arbitrary, but it is not taken from nowhere: less is insufficient to explain homogeneity, and more does not contradict observations."
+    },
+    {
+     "what": "One hundred-thousandth — is it a lot or a little?",
+     "why": "The relative fluctuation $\\Delta T/T \\approx 10^{-5}$ is easier to grasp this way: if the ocean surface were as smooth, the biggest wave would rise only a few centimeters. Yet without these tiny irregularities, there would be no galaxies or stars: it is from them that gravity assembled all structure."
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's estimate what the relic was like at the moment of release — and see that it was ordinary light then.",
+   "given": "Today the relic temperature $T_0 = 2{,}725$ K. The radiation was emitted at redshift $z \\approx 1100$. Wien's displacement constant $b = 2{,}898 \\cdot 10^{-3}$ m·K.",
+   "law": "$T = T_0(1+z)$, then $\\lambda_{\\max} = b/T$",
+   "solution": [
+    {
+     "text": "Temperature at the moment of release: multiply today's by $(1+z)$.",
+     "latex": "T = 2{,}725 \\cdot 1101 \\approx 3000\\ \\text{K}",
+     "num": ""
+    },
+    {
+     "text": "Now the peak of the spectrum at this temperature.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{3000} \\approx 9{,}7 \\cdot 10^{-7}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "Convert to nanometers and compare with the visible range (380–750 nm).",
+     "latex": "\\lambda_{\\max} \\approx 970\\ \\text{nm}",
+     "num": ""
+    }
+   ],
+   "answer": "About 970 nm — the very edge of the infrared, next to visible. Three thousand kelvin is the temperature of a filament in an incandescent lamp, and the matter then glowed roughly the same, dim red. Take $z = 1100$ on the demo and compare both numbers.",
+   "sanity": "Reality check: if we made a mistake and took $z = 11$ instead of $1100$, we would get $33$ K and a peak in tenths of a millimeter — still microwaves. There would be no glow at all. Order of magnitude decides everything here, and that's the point of the estimate: the answer should fall into the range you describe in words."
+  },
+  "constants": {
+   "title": "Constants: where they come from and what they mean",
+   "lead": "Four numbers that make up this entire paragraph.",
+   "items": [
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "name": "CMB temperature today",
+     "value": "2.72548 ± 0.00057 K",
+     "why": "Measured by the COBE satellite and confirmed by WMAP and Planck. It is the most precisely measured temperature in the Universe and simultaneously the most perfect known blackbody spectrum: deviations from the Planck form are less than a hundredth of a percent."
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "name": "Wien's displacement constant",
+     "value": "2.897771955×10⁻³ m·K",
+     "why": "Not an independent constant: it is derived from Planck's formula via $h$, $c$, and $k$. Numerically, it is the root of the equation $x = 5(1-e^{-x})$ divided by the appropriate combination — hence the mysterious 4.965 appears."
+    },
+    {
+     "sym": "z_rec",
+     "latex": "z_{\\text{rec}}",
+     "name": "recombination redshift",
+     "value": "≈ 1090",
+     "why": "The moment when matter became transparent. No telescope can look further into the past, regardless of magnification: it is a wall, not a resolution limit."
+    },
+    {
+     "sym": "ΔT/T",
+     "latex": "\\Delta T/T",
+     "name": "anisotropy amplitude",
+     "value": "≈ 10⁻⁵",
+     "why": "After subtracting the dipole component due to our motion. Galaxies grew from these irregularities; their spectrum as a function of angular scales is the main source of our knowledge about the composition of the Universe."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "This section is a crossroads of four topics you have already covered.",
+   "items": [
+    {
+     "h": "Thermodynamics",
+     "text": "Blackbody spectrum and the concept of equilibrium radiation temperature come from there. The relic cools as it expands for the same reason that gas cools in an expanding balloon."
+    },
+    {
+     "h": "Atom",
+     "text": "Transparency occurs when electrons settle into levels in atoms. The ionization energy of hydrogen from the atom topic here sets the moment after which light traveled."
+    },
+    {
+     "h": "Quantum physics",
+     "text": "Planck's formula arose precisely from this problem: classical physics gave infinite energy at short wavelengths. The relic is the purest observation of that quantum result."
+    },
+    {
+     "h": "Expansion",
+     "text": "The factor $(1+z)$ here is the same one that stretched wavelengths in the first section. One stretching explains both the redshift of galaxies and the cooling of the relic."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Home experiments and curious details",
+   "lead": "The cosmic microwave background is the only cosmological object a part of which can be caught by a household appliance.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Catching the CMB with a TV (ten minutes)",
+     "text": "If you have an old analog TV or a tuner with an antenna, disconnect the antenna and look at the 'snow' on an empty channel. A small fraction of that noise is the cosmic microwave background: the receiver picks it up together with interference. The fraction is small and cannot be distinguished by eye, so it is more honest to describe the experiment this way: part of that noise came from the state of the Universe at an age of three hundred eighty thousand years."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Wien's law with a dimmable lamp",
+     "text": "Take an incandescent lamp with a dimmer and slowly increase the brightness. At first the filament is dim red, then orange, then almost white: as the temperature rises, the spectral peak shifts to shorter wavelengths. This is the same law that shifts the CMB from visible to microwaves, but in the opposite direction. An LED lamp is not suitable for the experiment — its spectrum is not thermal."
+    },
+    {
+     "icon": "fact",
+     "kind": "interesting detail",
+     "h": "We are moving, and it is visible on the map",
+     "text": "The largest inhomogeneity of the CMB is not the structure of the Universe, but our own motion: one half of the sky is slightly warmer, the other slightly colder. From this dipole it follows that the Solar System moves relative to the CMB at a speed of about 370 km/s. Before studying the structure, the dipole is subtracted."
+    },
+    {
+     "icon": "edge",
+     "kind": "frontier of knowledge",
+     "h": "Inflation has no single form",
+     "text": "Inflation solves several problems at once and is therefore convincing, but it has no specific model: there are dozens of variants, they give similar predictions, and there is no way to distinguish them yet. The main hope is the polarization of the CMB: in some models it carries a signature of primordial gravitational waves. In 2014, such a discovery was announced and a year later withdrawn: the signal turned out to be dust from our Galaxy."
+    },
+    {
+     "icon": "fact",
+     "kind": "how it was discovered",
+     "h": "A bird's nest in the history of physics",
+     "text": "Penzias and Wilson, while tuning the antenna, cleaned a pigeon's nest from the horn and covered the interior with aluminum tape — the noise did not disappear. In their paper, they called the interference 'excess antenna temperature,' and this is perhaps the most modest wording of the century's discovery in the history of science."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Why this is a wall, not a telescope limit",
+   "text": "Usually, to see farther, you need a larger telescope. Not here. Before recombination, the Universe was opaque: light did not travel through the plasma but scattered, and no optics can show what was never freely emitted. Therefore, the CMB is not the faintest image available to us, but the last one: beyond it in the electromagnetic range there is nothing. To look deeper, only other messengers can be used: neutrinos, which decoupled from matter even earlier, and primordial gravitational waves, for which the plasma is transparent. Neither of these primary signals has been detected yet."
+  },
+  "memo": {
+   "essence": "The cosmic microwave background is the light that emerged when the Universe was three hundred eighty thousand years old, when matter became transparent at three thousand kelvins. Expansion stretched it over a thousand times, and today it is microwaves with a temperature of 2.725 K. Its near-perfect homogeneity is explained by inflation — a short, extremely rapid expansion before the hot stage.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Temperature decreases as 1/a",
+     "text": "$T = T_0(1+z)$ — the same stretching that gives the redshift of galaxies"
+    },
+    {
+     "icon": "estimate",
+     "title": "The spectral peak sets the temperature",
+     "text": "$\\lambda_{\\max} = b/T$: 2.725 K gives 1.06 mm, 3000 K gives about 970 nm"
+    },
+    {
+     "icon": "fact",
+     "title": "Transparency, not an explosion",
+     "text": "The CMB emerged not 'at the moment of the beginning', but when the plasma became neutral gas"
+    },
+    {
+     "icon": "edge",
+     "title": "Inflation — a strong explanation without a single form",
+     "text": "It solves the horizon and flatness problems, but the specific model is unknown"
+    }
+   ],
+   "where": "Determining the composition of the Universe from the angular spectrum of anisotropy, measuring the Hubble constant from the early Universe, testing inflation models with polarization, calibrating the age of the Universe.",
+   "watchOut": "Three common mistakes. The CMB is not 'the light of the Big Bang', but the light from the moment of transparency, much later than the beginning. It does not come from one point in the sky, but from all directions, because it is the light of matter that was everywhere, including the place where we are now. And inflation does not 'explain the Big Bang': it refers to the stage before the hot expansion and does not describe the beginning itself."
+  },
+  "quiz": [
+   {
+    "id": "m1",
+    "type": "mcq",
+    "q": "Why did the cosmic microwave background appear precisely at three thousand kelvins, not earlier or later?",
+    "options": [
+     "At this temperature, electrons bound into atoms and matter became transparent to light",
+     "At this temperature, the Big Bang ended",
+     "This is the temperature at which galaxies began to form",
+     "Earlier, radiation did not exist at all"
+    ],
+    "answer": 0,
+    "why": "While matter is ionized, light scatters off free electrons and does not escape. Recombination makes the gas neutral and transparent — from that moment, light travels freely."
+   },
+   {
+    "id": "m2",
+    "type": "mcq",
+    "q": "Which puzzle does inflation solve?",
+    "options": [
+     "Why regions of the sky that were never causally connected have the same temperature",
+     "Why galaxies are moving away from us",
+     "Why the CMB has a blackbody spectrum",
+     "Why there is more matter than antimatter in the Universe"
+    ],
+    "answer": 0,
+    "why": "This is the horizon problem. If everything visible came from a single tiny region that had time to equalize, the uniform temperature is no longer a puzzle. It also resolves the flatness problem."
+   },
+   {
+    "id": "m3",
+    "type": "free",
+    "q": "In your own words: why does the CMB come from all directions at once, rather than from a single point in the sky?",
+    "keywords": [
+     "everywhere",
+     "everywhere",
+     "all space",
+     "not a point",
+     "any",
+     "and here"
+    ],
+    "why": "Hot plasma filled all space, including the place where we are now. We see light that came from regions that today are at the same distance in all directions — thus the image comes from the entire sky."
+   },
+   {
+    "id": "m4",
+    "type": "estimate",
+    "q": "The peak of the CMB spectrum today is at about 1 mm. What wavelength did it correspond to at a redshift of 9 (i.e., when the Universe was ten times smaller)? Answer in micrometers.",
+    "answer": 100,
+    "unit": "μm",
+    "tolerance": 20,
+    "why": "Wavelength stretches by a factor of $(1+z)$, so in the past it was shorter by the same factor: $1\\ \\text{mm}/10 = 100$ μm. No need to calculate via temperature — the factor is the same."
+   }
+  ]
+ },
+ "es": {
+  "title": "Radiación cósmica de fondo e inflación",
+  "subtitle": "La imagen más antigua del universo y lo que hubo que inventar para explicarla",
+  "intro": [
+   "En 1964, dos ingenieros estaban ajustando una antena para comunicarse con satélites y no podían deshacerse de un ruido. El ruido era débil, uniforme y no desaparecía ni de día ni de noche, ni al girar la antena hacia otra parte del cielo. Penzias y Wilson revisaron todo: la electrónica, las conexiones, incluso limpiaron un nido de pájaros del cuerno. El ruido permaneció, porque llegaba de todo el cielo a la vez.",
+   "Resultó ser luz que había partido cuando el universo tenía trescientos ochenta mil años. Antes de eso, la materia era un plasma caliente y la luz no podía recorrer ni un metro: se dispersaba en los electrones libres, como en la niebla. Cuando la temperatura bajó a tres mil kelvin, los electrones se combinaron con los núcleos formando átomos neutros, la niebla se disipó y la luz viajó libremente. Sigue viajando hasta hoy, estirada mil veces por la expansión y enfriada a un poco más de dos kelvin.",
+   "Aquí comienza la rareza que dio origen a una teoría completa. Esta radiación llega igual desde todas las direcciones con una precisión de una cienmilésima. Pero regiones del cielo separadas por más de un grado nunca pudieron intercambiar una señal: la luz no habría tenido tiempo de viajar entre ellas durante toda la existencia del universo. ¿Cómo saben la temperatura de la otra? La respuesta fue la inflación."
+  ],
+  "standNote": "Mueva el corrimiento al rojo: viaja hacia el pasado, la radiación de fondo se calienta y el pico de su espectro se desplaza hacia la izquierda, a longitudes de onda cortas. Llegue a z ≈ 1100 — la temperatura será de tres mil kelvin, y el pico se moverá a micras: aquí la materia aún brillaba, y más allá en el pasado no se puede ver con telescopio. Con el segundo control deslice, amplifique las manchas: la leyenda dirá honestamente cuántas veces, porque en realidad difieren en una cienmilésima.",
+  "formula": {
+   "name": "Ley del desplazamiento de Wien y enfriamiento de la radiación de fondo",
+   "latex": "\\lambda_{\\max} = \\frac{b}{T}, \\qquad T = T_0 (1 + z)",
+   "alsoKnown": "El espectro se describe por la fórmula de Planck; la ley de Wien da la posición de su pico",
+   "authors": [
+    {
+     "who": "Wilhelm Wien",
+     "year": "1893",
+     "what": "encontró que la longitud de onda en el máximo del espectro es inversamente proporcional a la temperatura"
+    },
+    {
+     "who": "Max Planck",
+     "year": "1900",
+     "what": "obtuvo la forma completa del espectro, introduciendo la cuantización de la energía — con ello comenzó la física cuántica"
+    },
+    {
+     "who": "George Gamow, Ralph Alpher, Robert Herman",
+     "year": "1948",
+     "what": "predijeron que del comienzo caliente debería quedar una radiación enfriada, y estimaron su temperatura"
+    },
+    {
+     "who": "Arno Penzias y Robert Wilson",
+     "year": "1965",
+     "what": "lo encontraron por casualidad al investigar el ruido de la antena, y recibieron el Premio Nobel por ello"
+    }
+   ],
+   "story": "Gamow y sus coautores predijeron una temperatura de unos cinco kelvin ya en los años cuarenta, pero la predicción se consideró demasiado especulativa y fue olvidada. Cuando se encontró el ruido, Penzias y Wilson no entendían lo que tenían en sus manos; la explicación fue sugerida por el grupo de Dicke de Princeton, que justamente estaba montando un aparato para buscar esa radiación — y llegaron unos meses tarde.",
+   "symbols": [
+    {
+     "sym": "λ_max",
+     "latex": "\\lambda_{\\max}",
+     "what": "longitud de onda en la que la radiación es más brillante",
+     "unit": "m"
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "what": "constante de desplazamiento de Wien",
+     "unit": "m·K"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "temperatura de la radiación",
+     "unit": "K"
+    },
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "what": "temperatura de la radiación de fondo hoy",
+     "unit": "K"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "corrimiento al rojo: qué tan atrás en el pasado miramos",
+     "unit": "—"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Por qué la radiación debe existir y por qué es precisamente así",
+   "lead": "Pasaremos de «antes era más denso» al número 2,725 K, y luego veremos qué no cuadra en este panorama sin la inflación.",
+   "steps": [
+    {
+     "text": "Retrocedamos en el tiempo. Las distancias se acortan, la densidad aumenta, y la radiación se comprime con la expansión: las longitudes de onda se acortan, por lo que la energía de cada cuanto es mayor. La radiación comprimida es radiación caliente. De aquí se deduce que el estado temprano era caliente, y esto no es una suposición, sino la expansión invertida.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "La misma radiación: comprimida era caliente, estirada se ha vuelto fría"
+    },
+    {
+     "text": "Mientras la materia está ionizada, la luz no viaja libremente: se dispersa en electrones libres y se queda en el lugar. La transparencia llega cuando los electrones se enlazan formando átomos. Para el hidrógeno, esto ocurre alrededor de tres mil kelvin — notablemente por debajo de la «energía de ionización dividida por la constante de Boltzmann», porque hay muchos más fotones que átomos, e incluso la cola rara de la distribución desintegra los átomos durante mucho tiempo.",
+     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "A la izquierda, plasma y luz en la niebla; a la derecha, átomos neutros y la luz se va libremente"
+    },
+    {
+     "text": "La luz que salió en ese momento viaja hacia nosotros sin obstáculos. En el camino se estira por la misma expansión: tanto como ha crecido el Universo. Un estiramiento de mil veces convierte el resplandor del gas incandescente en microondas.",
+     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "La misma luz en su camino hacia nosotros: estirada tanto como ha crecido el Universo"
+    },
+    {
+     "text": "La posición del pico del espectro proporciona una verificación. Sustituyendo la temperatura medida en la ley de Wien, obtenemos un poco más de un milímetro — el rango de las microondas. Esto es exactamente lo que vio la antena en Holmdel, y el satélite COBE en 1990 mostró que la forma del espectro coincide con la de Planck con una precisión inalcanzable para cualquier fuente de laboratorio.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "Cuanto más frío es el cuerpo, más a la derecha está el pico: en el relicto está en ondas milimétricas"
+    },
+    {
+     "text": "Y ahora lo que no encaja. Tomemos dos puntos en el cielo separados por dos grados. En el momento en que la radiación salió, la distancia entre ellos era tal que la luz no pudo recorrerla desde el principio: estaban más allá del horizonte el uno del otro. No tenían historia común — y sin embargo la temperatura es igual hasta el quinto decimal. Esto se llama el problema del horizonte.",
+     "latex": "\\text{ángulo} \\sim 1^\\circ \\; - \\; \\text{límite donde la comunicación era posible}",
+     "figure": "horizon",
+     "figCaption": "Dos regiones más allá del horizonte mutuo: una señal no tenía tiempo de viajar entre ellas"
+    },
+    {
+     "text": "La inflación lo explica así: antes de la etapa caliente, el Universo se infló extremadamente rápido durante un breve instante. Entonces, todo lo que vemos hoy provino de una diminuta región que logró homogeneizarse antes de la inflación. Al mismo tiempo se resuelve un segundo enigma — por qué el espacio es tan cercano a plano: cualquier curvatura se estira casi a cero con la inflación, como las arrugas en un globo que se infla.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "Todo lo visible hoy salió de una región que logró uniformizarse antes de la inflación"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "Dos fórmulas simples relacionan el ruido en la antena con el estado del Universo a la edad de trescientos ochenta mil años. Todo lo demás en esta sección son consecuencias y lo que no se deduce de ellas.",
+   "note": "La inflación no es una parte del cuadro tan fiable como el enfriamiento del relicto. El enfriamiento se deduce de la expansión y ha sido verificado por el espectro; la inflación se inventó para ajustarse a las observaciones y hasta ahora no tiene una forma única: hay decenas de modelos, y no se sabe cuál es el correcto. Vale la pena aprenderla así: una explicación poderosa con un final abierto."
+  },
+  "math": {
+   "title": "Las matemáticas necesarias aquí",
+   "lead": "Tres cosas: cómo se lee el espectro, por qué el logaritmo en el gráfico, y qué significa «sesenta e-folds».",
+   "items": [
+    {
+     "what": "Espectro como distribución, no como lista de líneas",
+     "why": "Un cuerpo caliente irradia en todas las longitudes de onda a la vez, por lo que tiene sentido preguntar no «cuál es su longitud de onda», sino «cuánta energía corresponde a un intervalo de longitudes de onda». La fórmula de Planck da precisamente esa distribución. Tiene un único máximo, y su posición depende solo de la temperatura — ni del tamaño del cuerpo ni de la sustancia."
+    },
+    {
+     "what": "Por qué el eje logarítmico en la figura",
+     "why": "Entre las microondas y la luz visible hay tres órdenes de magnitud en longitud de onda. En un eje lineal, el pico del relicto se apretaría contra el borde derecho y sería indistinguible, mientras que el pico del plasma caliente se fusionaría con el cero. El logaritmo da intervalos iguales a relaciones iguales, por lo que ambas imágenes se ven en la misma escala."
+    },
+    {
+     "what": "Sesenta e-folds",
+     "why": "La inflación se describe con el número $N$: cuántas veces el tamaño se multiplicó por $e \\approx 2{,}718$. Sesenta e-folds significa un aumento de $e^{60}$ veces, aproximadamente $10^{26}$. Este número parece arbitrario, pero no se saca de la nada: uno más pequeño no basta para explicar la homogeneidad, y uno más grande no contradice las observaciones."
+    },
+    {
+     "what": "Una cienmilésima: ¿es mucho o poco?",
+     "why": "La amplitud relativa $\\Delta T/T \\approx 10^{-5}$ se puede sentir así: si la superficie del océano fuera igual de lisa, la ola más grande se elevaría unos pocos centímetros. Sin embargo, sin estas ínfimas irregularidades no habría galaxias ni estrellas: de ellas la gravedad formó toda la estructura."
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Estimemos cómo era el fondo cósmico de microondas en el momento de su emisión — y comprobemos que entonces era luz ordinaria.",
+   "given": "Hoy la temperatura del fondo es $T_0 = 2{,}725$ K. La radiación se emitió con un corrimiento al rojo $z \\approx 1100$. La constante de Wien $b = 2{,}898 \\cdot 10^{-3}$ m·K.",
+   "law": "$T = T_0(1+z)$, luego $\\lambda_{\\max} = b/T$",
+   "solution": [
+    {
+     "text": "Temperatura en el momento de la emisión: multiplicamos la actual por $(1+z)$.",
+     "latex": "T = 2{,}725 \\cdot 1101 \\approx 3000\\ \\text{K}",
+     "num": ""
+    },
+    {
+     "text": "Ahora el pico del espectro a esta temperatura.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{3000} \\approx 9{,}7 \\cdot 10^{-7}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "Convirtamos a nanómetros y comparemos con el rango visible (380–750 nm).",
+     "latex": "\\lambda_{\\max} \\approx 970\\ \\text{nm}",
+     "num": ""
+    }
+   ],
+   "answer": "Alrededor de 970 nm — el extremo del infrarrojo, cerca del visible. Tres mil kelvin es la temperatura del filamento en una lámpara incandescente, y la materia entonces brillaba más o menos igual, de un rojo tenue. Ponga $z = 1100$ en la pizarra y verifique ambos números.",
+   "sanity": "Comprobación de sentido común: si nos hubiéramos equivocado y tomado $z = 11$ en lugar de $1100$, obtendríamos $33$ K y un pico en décimas de milímetro — todavía microondas. No habría ninguna luminiscencia. El orden de magnitud lo decide todo, y ese es el sentido de la estimación: la respuesta debe caer en el rango del que se habla."
+  },
+  "constants": {
+   "title": "Constantes: de dónde vienen y qué significan",
+   "lead": "Cuatro números que componen todo este párrafo.",
+   "items": [
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "name": "temperatura del relicto hoy",
+     "value": "2,72548 ± 0,00057 K",
+     "why": "Medida por el satélite COBE y confirmada por WMAP y Planck. Es la temperatura más precisa jamás medida en el Universo y, al mismo tiempo, el espectro de cuerpo negro más perfecto conocido: las desviaciones respecto a la forma de Planck son menores de una centésima de porcentaje."
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "name": "constante de desplazamiento de Wien",
+     "value": "2,897771955·10⁻³ m·K",
+     "why": "No es una constante independiente: se deriva de la fórmula de Planck a través de $h$, $c$ y $k$. Numéricamente es la raíz de la ecuación $x = 5(1-e^{-x})$, dividida por la combinación adecuada — por eso en ella aparece el misterioso 4,965."
+    },
+    {
+     "sym": "z_rec",
+     "latex": "z_{\\text{rec}}",
+     "name": "corrimiento al rojo de recombinación",
+     "value": "≈ 1090",
+     "why": "El momento en que la materia se volvió transparente. Más allá en el pasado, ningún telescopio puede ver, por más aumento que tenga: es un muro, no un límite de resolución."
+    },
+    {
+     "sym": "ΔT/T",
+     "latex": "\\Delta T/T",
+     "name": "amplitud de la anisotropía",
+     "value": "≈ 10⁻⁵",
+     "why": "Después de restar la componente dipolar debida a nuestro movimiento. De estas irregularidades crecieron las galaxias; su espectro en escalas angulares es la principal fuente de nuestro conocimiento sobre la composición del Universo."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "Este párrafo es un cruce de cuatro temas que ya ha visto.",
+   "items": [
+    {
+     "h": "Termodinámica",
+     "text": "El espectro de cuerpo negro y el concepto de temperatura de la radiación de equilibrio provienen de ahí. El fondo se enfría al expandirse por la misma razón por la que se enfría el gas en un globo que se expande."
+    },
+    {
+     "h": "Átomo",
+     "text": "La transparencia llega cuando los electrones se ubican en los niveles de los átomos. La energía de ionización del hidrógeno del tema sobre el átomo aquí determina el momento después del cual la luz viajó."
+    },
+    {
+     "h": "Física cuántica",
+     "text": "La fórmula de Planck surgió precisamente de este problema: la física clásica daba energía infinita en ondas cortas. El fondo es la observación más pura de ese resultado cuántico."
+    },
+    {
+     "h": "Expansión",
+     "text": "El factor $(1+z)$ aquí es el mismo que estiraba las longitudes de onda en el primer párrafo. Un solo estiramiento explica tanto el enrojecimiento de las galaxias como el enfriamiento del fondo."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Experimentos en casa y curiosidades",
+   "lead": "La radiación de fondo de microondas es el único objeto cosmológico del cual se puede captar una parte con un electrodoméstico.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "Atrapamos el fondo cósmico con un televisor (diez minutos)",
+     "text": "Si conserva un televisor analógico antiguo o un sintonizador con antena, desconecte la antena y observe la «nieve» en un canal vacío. Una pequeña fracción de ese ruido es radiación de fondo: el receptor la capta junto con interferencias. La fracción es pequeña, no se puede separar a simple vista, por lo que es más honesto describir el experimento así: parte de ese ruido provino del estado del Universo cuando tenía trescientos ochenta mil años."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento en la cocina",
+     "h": "Ley de Wien en una lámpara con regulador",
+     "text": "Tome una lámpara incandescente con regulador y aumente lentamente el brillo. Primero el filamento es rojo opaco, luego naranja, luego casi blanco: al aumentar la temperatura, el pico del espectro se desplaza hacia longitudes de onda más cortas. Es la misma ley que transforma el fondo cósmico de visible a microondas, pero en dirección inversa. Una lámpara LED no sirve para el experimento — su espectro no es térmico."
+    },
+    {
+     "icon": "fact",
+     "kind": "detalle curioso",
+     "h": "Nos movemos y se ve en el mapa",
+     "text": "La mayor inhomogeneidad del fondo cósmico no es la estructura del Universo, sino nuestro propio movimiento: una mitad del cielo es ligeramente más cálida, la otra ligeramente más fría. De este dipolo se deduce que el Sistema Solar se mueve respecto al fondo cósmico a una velocidad de unos 370 km/s. Antes de estudiar la estructura, se resta el dipolo."
+    },
+    {
+     "icon": "edge",
+     "kind": "frontera del conocimiento",
+     "h": "La inflación no tiene una única forma",
+     "text": "La inflación resuelve varios problemas a la vez y por eso es convincente, pero no tiene un modelo concreto: hay decenas de variantes, dan predicciones similares y aún no se pueden distinguir. La principal esperanza es la polarización del fondo cósmico: en algunos modelos lleva la huella de las ondas gravitacionales primordiales. En 2014 se anunció tal descubrimiento y un año después se retiró: la señal resultó ser polvo de nuestra Galaxia."
+    },
+    {
+     "icon": "fact",
+     "kind": "cómo se supo",
+     "h": "Un nido de pájaros en la historia de la física",
+     "text": "Penzias y Wilson, al ajustar la antena, limpiaron un nido de palomas del cuerno y cubrieron el interior con cinta de aluminio — el ruido no desapareció. En el artículo llamaron a la interferencia «temperatura de antena excesiva», y esta es quizás la formulación más modesta del descubrimiento del siglo en la historia de la ciencia."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Por qué es un muro y no un límite del telescopio",
+   "text": "Normalmente, para ver algo más lejano se necesita un telescopio más grande. Aquí no es así. Antes de la recombinación, el Universo era opaco: la luz en el plasma no viajaba, sino que se dispersaba, y ninguna óptica mostrará lo que no fue emitido libremente. Por lo tanto, el fondo cósmico no es la imagen más débil disponible, sino la última: más allá de ella no hay nada en el rango electromagnético. Se puede mirar más allá solo con otros mensajeros: neutrinos, que se desacoplaron de la materia aún antes, y ondas gravitacionales primordiales, para las que el plasma es transparente. Ni unas ni otras señales primarias han sido registradas hasta ahora."
+  },
+  "memo": {
+   "essence": "La radiación de fondo es la luz que emergió cuando el Universo tenía trescientos ochenta mil años, cuando la materia se volvió transparente a tres mil kelvin. La expansión la estiró más de mil veces, y hoy son microondas con una temperatura de 2,725 K. Su homogeneidad casi perfecta se explica por la inflación — una breve expansión extremadamente rápida antes de la etapa caliente.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "La temperatura disminuye como 1/a",
+     "text": "$T = T_0(1+z)$ — el mismo estiramiento que produce el corrimiento al rojo de las galaxias"
+    },
+    {
+     "icon": "estimate",
+     "title": "El pico del espectro determina la temperatura",
+     "text": "$\\lambda_{\\max} = b/T$: 2,725 K da 1,06 mm, 3000 K — unos 970 nm"
+    },
+    {
+     "icon": "fact",
+     "title": "Transparencia, no explosión",
+     "text": "El fondo no surgió «en el momento del inicio», sino cuando el plasma se convirtió en gas neutro"
+    },
+    {
+     "icon": "edge",
+     "title": "La inflación es una explicación sólida sin una única forma",
+     "text": "Resuelve el problema del horizonte y de la planitud, pero el modelo concreto se desconoce"
+    }
+   ],
+   "where": "Determinación de la composición del Universo mediante el espectro angular de anisotropía, medición de la constante de Hubble a partir del Universo temprano, verificación de modelos de inflación mediante polarización, calibración de la edad del Universo.",
+   "watchOut": "Tres errores comunes. El fondo no es la «luz del Big Bang», sino la luz del momento de transparencia, mucho después del inicio. No proviene de un solo punto del cielo, sino de todas direcciones, porque es la luz de la materia que estaba en todas partes, incluido el lugar donde ahora estamos. Y la inflación no «explica el Big Bang»: se refiere a la etapa anterior a la expansión caliente y no describe el inicio en sí."
+  },
+  "quiz": [
+   {
+    "id": "m1",
+    "type": "mcq",
+    "q": "¿Por qué la radiación cósmica de fondo de microondas se liberó precisamente a tres mil kelvins, y no antes o después?",
+    "options": [
+     "A esta temperatura, los electrones se combinaron en átomos y la materia se volvió transparente para la luz",
+     "A esta temperatura terminó el Big Bang",
+     "Es la temperatura a la que comenzaron a formarse las galaxias",
+     "Antes no existía la radiación en absoluto"
+    ],
+    "answer": 0,
+    "why": "Mientras la materia está ionizada, la luz se dispersa en los electrones libres y no escapa. La recombinación hace que el gas sea neutro y transparente; a partir de ese momento, la luz viaja libremente."
+   },
+   {
+    "id": "m2",
+    "type": "mcq",
+    "q": "¿Qué enigma resuelve la inflación?",
+    "options": [
+     "Por qué regiones del cielo nunca conectadas por una señal tienen la misma temperatura",
+     "Por qué las galaxias se alejan de nosotros",
+     "Por qué la radiación de fondo tiene un espectro de cuerpo negro",
+     "Por qué hay más materia que antimateria en el Universo"
+    ],
+    "answer": 0,
+    "why": "Es el problema del horizonte. Si todo lo visible proviene de una pequeña región que logró equilibrarse, la temperatura uniforme deja de ser un enigma. También se resuelve la cuestión de la planitud del espacio."
+   },
+   {
+    "id": "m3",
+    "type": "free",
+    "q": "En tus propias palabras: ¿por qué la radiación de fondo llega desde todas las direcciones a la vez y no desde un solo punto del cielo?",
+    "keywords": [
+     "en todas partes",
+     "en cualquier lugar",
+     "todo el espacio",
+     "no un punto",
+     "cualquier",
+     "y aquí"
+    ],
+    "why": "El plasma caliente llenaba todo el espacio, incluido el lugar donde estamos ahora. Vemos la luz que salió de regiones que hoy se encuentran a la misma distancia en todas direcciones, por lo que la imagen proviene de todo el cielo."
+   },
+   {
+    "id": "m4",
+    "type": "estimate",
+    "q": "El pico del espectro de la radiación de fondo hoy se encuentra aproximadamente en 1 mm. ¿En qué longitud de onda se encontraba cuando el corrimiento al rojo era 9 (es decir, cuando el Universo era diez veces más pequeño)? Respuesta en micrómetros.",
+    "answer": 100,
+    "unit": "µm",
+    "tolerance": 20,
+    "why": "La longitud de onda se estira en un factor de $(1+z)$, por lo que en el pasado era el mismo número de veces más corta: $1\\ \\text{mm}/10 = 100$ µm. No es necesario calcular mediante la temperatura, el factor es el mismo."
+   }
+  ]
+ },
+ "ar": {
+  "title": "إشعاع الخلفية الميكروي الكوني والتضخم",
+  "subtitle": "أقدم صورة في الكون وما كان لا بد من اختراعه لشرحها",
+  "intro": [
+   "في عام 1964، كان مهندسان يضبطان هوائيًا للاتصال بالأقمار الصناعية ولم يتمكنا من التخلص من الضوضاء. كانت الضوضاء ضعيفة، ثابتة، ولم تختف ليلًا أو نهارًا، ولا عند تدوير الهوائي نحو جهة أخرى من السماء. فحص بينزياس وويلسون كل شيء: الإلكترونيات، التوصيلات، بل نظفا عش طائر من البوق. بقيت الضوضاء لأنها كانت قادمة من كل السماء دفعة واحدة.",
+   "تبين أنه الضوء الذي انطلق عندما كان عمر الكون ثلاثمائة وثمانين ألف سنة. قبل ذلك، كانت المادة بلازما حارة ولم يستطع الضوء أن يقطع مترًا واحدًا فيها: كان يتشتت على الإلكترونات الحرة كما في الضباب. عندما انخفضت درجة الحرارة إلى ثلاثة آلاف كلفن، اتحدت الإلكترونات مع النوى لتكوين ذرات متعادلة، وصفا الضباب، وانطلق الضوء حرًا. لا يزال يسافر حتى الآن، بعد أن تمدد بفعل التوسع ألف مرة وبرد إلى ما يزيد قليلاً عن كلفنين.",
+   "من هنا تبدأ الغرابة التي نشأت منها نظرية كاملة. يأتي هذا الإشعاع متطابقًا من جميع الاتجاهات بدقة تصل إلى جزء من مئة ألف. لكن مناطق السماء التي تفصل بينها أكثر من درجة واحدة لم تتمكن أبدًا من تبادل إشارة: لم يكن الضوء ليتمكن من الانتقال بينها طوال عمر الكون. من أين تعرف درجة حرارة بعضها البعض؟ كان الجواب هو التضخم."
+  ],
+  "standNote": "حرك الانزياح الأحمر: أنت تسافر إلى الماضي، يسخن الإشعاع الأثري، وينتقل ذروة طيفه إلى اليسار، نحو الأمواج القصيرة. وصل عند z حوالي 1100 - ستصبح درجة الحرارة ثلاثة آلاف كلفن، سينتقل الذروة إلى الميكرونات: هنا كانت المادة لا تزال تشع، ولا يمكن للتلسكوب أن ينظر أبعد في الماضي. باستخدام المنزلق الثاني، قم بتكثيف البقع: التسمية ستقول بصدق كم مرة، لأنها في الواقع تختلف بمقدار جزء من مئة ألف.",
+  "formula": {
+   "name": "قانون فين للإزاحة وتبريد الإشعاع الأثري",
+   "latex": "\\lambda_{\\max} = \\frac{b}{T}, \\qquad T = T_0 (1 + z)",
+   "alsoKnown": "يوصف الطيف بصيغة بلانك؛ قانون فين هو موقع ذروتها",
+   "authors": [
+    {
+     "who": "فيلهلم فين",
+     "year": "1893",
+     "what": "وجد أن طول الموجة عند ذروة الطيف يتناسب عكسيًا مع درجة الحرارة"
+    },
+    {
+     "who": "ماكس بلانك",
+     "year": "1900",
+     "what": "حصل على صيغة الطيف كاملة بإدخال تكميم الطاقة - ومن هنا بدأت الفيزياء الكمومية"
+    },
+    {
+     "who": "جورج جامو، رالف ألفر، روبرت هيرمان",
+     "year": "1948",
+     "what": "تنبأوا بوجود إشعاع بارد متبقٍ من البداية الحارة، وقدروا درجة حرارته"
+    },
+    {
+     "who": "أرنو بينزياس وروبرت ويلسون",
+     "year": "1965",
+     "what": "اكتشفوه بالصدفة أثناء معالجة ضوضاء الهوائي، وحصلوا على جائزة نوبل لذلك"
+    }
+   ],
+   "story": "تنبأ جامو مع زملائه بدرجة حرارة حوالي خمسة كلفن في الأربعينيات، لكن التوقع اعتُبر تخمينيًا للغاية ونُسي. عندما عُثر على الضوضاء، لم يفهم بينزياس وويلسون ما لديهما؛ قدم التفسير فريق ديكي من برينستون، الذي كان يجهز جهازًا للبحث عن هذا الإشعاع - وتأخر بضعة أشهر.",
+   "symbols": [
+    {
+     "sym": "λ_max",
+     "latex": "\\lambda_{\\max}",
+     "what": "طول الموجة التي يكون عندها الإشعاع أكثر سطوعًا",
+     "unit": "m"
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "what": "ثابت فين للإزاحة",
+     "unit": "m·K"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "درجة حرارة الإشعاع",
+     "unit": "K"
+    },
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "what": "درجة حرارة الإشعاع الأثري اليوم",
+     "unit": "K"
+    },
+    {
+     "sym": "z",
+     "latex": "z",
+     "what": "الانزياح الأحمر: مدى عمق نظرنا في الماضي",
+     "unit": "—"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "لماذا يجب أن يكون الإشعاع موجودًا ولماذا هو بهذه الصورة بالضبط",
+   "lead": "سننتقل من «في السابق كان أكثر كثافة» إلى الرقم 2,725 K، ثم ننظر ما لا يتوافق في هذه الصورة دون التضخم.",
+   "steps": [
+    {
+     "text": "لنعد بالزمن إلى الوراء. تقل المسافات، وتزداد الكثافة، وينضغط الإشعاع مع التوسع: تصبح أطوال الموجات أقصر، وبالتالي تزداد طاقة كل كم. الإشعاع المضغوط هو إشعاع ساخن. ومن هنا يتبع أن الحالة المبكرة كانت ساخنة، وهذا ليس افتراضًا، بل هو تمدد معكوس.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "نفس الإشعاع: المضغوط كان ساخنًا، والمتمدد أصبح باردًا"
+    },
+    {
+     "text": "طالما أن المادة مؤينة، لا ينتشر الضوء فيها: فهو يتشتت على الإلكترونات الحرة ويدور في مكانه. تحدث الشفافية عندما ترتبط الإلكترونات في ذرات. بالنسبة للهيدروجين، يحدث هذا عند حوالي ثلاثة آلاف كلفن - أقل بشكل ملحوظ من «طاقة التأين مقسومة على ثابت بولتزمان» لأن الفوتونات أكثر بكثير من الذرات، وحتى ذيل التوزيع النادر يعمل على تفكيك الذرات مرة أخرى لفترة طويلة.",
+     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "على اليسار بلازما وضوء في ضباب، وعلى اليمين ذرات متعادلة والضوء يغادر بحرية"
+    },
+    {
+     "text": "الضوء الذي خرج في تلك اللحظة يسافر إلينا دون عائق. على طول الطريق، يتمدد بنفس التمدد: بنفس المقدار الذي نما به الكون. يؤدي التمدد بألف مرة إلى تحويل وهج الغاز الساخن إلى موجات ميكروية.",
+     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "نفس الضوء في طريقه إلينا: متمدد بنفس المقدار الذي نما به الكون"
+    },
+    {
+     "text": "يعطي موضع ذروة الطيف اختبارًا. بتعويض درجة الحرارة المقاسة في قانون فين، نحصل على ما يزيد قليلاً عن ميليمتر - نطاق الموجات الميكروية. وهذا بالضبط ما رآه الهوائي في هولمديل، وأظهر القمر الصناعي COBE في عام 1990 أن شكل الطيف يتطابق مع طيف بلانك بدقة لا يمكن تحقيقها لأي مصدر مختبري.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "كلما كان الجسم أبرد، كانت الذروة إلى اليمين: ذروة الإشعاع الأثري في موجات ميليمترية"
+    },
+    {
+     "text": "والآن ما لا يتوافق. خذ نقطتين في السماء تفصل بينهما درجتان. في اللحظة التي خرج فيها الإشعاع، كانت المسافة بينهما لا يمكن للضوء قطعها منذ البداية: كانتا تقعان خلف أفق بعضهما البعض. لم تكن لهما قصة مشتركة - لكن درجة الحرارة متطابقة حتى الخانة الخامسة. وهذا ما يسمى مشكلة الأفق.",
+     "latex": "\\text{angle} \\sim 1^\\circ \\;-\\; \\text{الحد الذي كان الاتصال ممكنًا}",
+     "figure": "horizon",
+     "figCaption": "منطقتان خلف أفق بعضهما البعض: لم يكن للإشارة وقت لتعبر بينهما"
+    },
+    {
+     "text": "يشرح التضخم ذلك على النحو التالي: قبل المرحلة الساخنة، تمدد الكون لفترة قصيرة جدًا وبسرعة فائقة. عندها، كل ما نراه اليوم خرج من منطقة صغيرة واحدة تمكنت من أن تصبح متجانسة قبل التمدد. وفي الوقت نفسه، يتم حل اللغز الثاني - لماذا الفضاء قريب جدًا من المسطح: أي انحناء يتمدد بفعل التضخم إلى الصفر تقريبًا، مثل التجاعيد على بالون يتم نفخه.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "كل ما هو مرئي اليوم خرج من منطقة واحدة تمكنت من التجانس قبل التمدد"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "صيغتان بسيطتان تربطان الضوضاء في الهوائي بحالة الكون في عمر ثلاثمائة وثمانين ألف سنة. كل شيء آخر في هذه الفقرة هو نتائج وما لا يستنتج منها.",
+   "note": "التضخم ليس جزءًا من الصورة بنفس درجة الموثوقية مثل تبريد الإشعاع الأثري. التبريد يتبع من التمدد وقد تم التحقق منه بواسطة الطيف؛ أما التضخم فقد ابتكر لتفسير المشاهدات ولا يزال ليس له شكل واحد: هناك عشرات النماذج، وأيها صحيح غير معروف. يجدر تعلمه بهذه الطريقة: تفسير قوي بنهاية مفتوحة."
+  },
+  "math": {
+   "title": "الرياضيات التي كانت ضرورية هنا",
+   "lead": "ثلاثة أمور: كيف يُقرأ الطيف، لماذا المحور اللوغاريتمي في الرسم، وماذا يعني «ستون تضاعفًا e».",
+   "items": [
+    {
+     "what": "الطيف كتوزيع، وليس كقائمة من الخطوط",
+     "why": "الجسم الساخن يشع في جميع الأطوال الموجية دفعة واحدة، لذلك من المنطقي أن نسأل ليس «ما طول موجته»، بل «كم طاقة تأتي في فاصل طول موجي». صيغة بلانك تعطي هذا التوزيع تحديدًا. له ذروة واحدة، ومكانها يعتمد فقط على درجة الحرارة - لا على حجم الجسم ولا على المادة."
+    },
+    {
+     "what": "لماذا المحور اللوغاريتمي في الرسم",
+     "why": "بين الموجات الميكروية والضوء المرئي ثلاث مراتب في الطول الموجي. على محور خطي، ستكون ذروة الإشعاع الأثري مضغوطة إلى الحافة اليمنى وتصبح غير قابلة للتمييز، بينما ذروة البلازما الساخنة ستندمج مع الصفر. يعطي اللوغاريتم فترات متساوية لنسب متساوية، لذلك تظهر كلتا الصورتين على مقياس واحد."
+    },
+    {
+     "what": "ستون تضاعفًا e",
+     "why": "يوصف التمدد السريع بالعدد $N$ - كم مرة تضاعف الحجم بالضرب في $e \\approx 2.718$. ستون تضاعفًا e يعني زيادة بمقدار $e^{60}$ مرة، وهو تقريبًا $10^{26}$. هذا الرقم يبدو عشوائيًا، لكنه ليس مأخوذًا من فراغ: الأقل لا يكفي لشرح التجانس، والأكثر لا يتعارض مع المشاهدات."
+    },
+    {
+     "what": "جزء من مائة ألف - هل هو كثير أم قليل",
+     "why": "من السهل تخيل التباين النسبي $\\Delta T/T \\approx 10^{-5}$ على النحو التالي: إذا كان سطح المحيط أملس بنفس الدرجة، فإن أكبر موجة سترتفع بضعة سنتيمترات. ومع ذلك، بدون هذه التموجات الضئيلة، لم تكن لتوجد مجرات ولا نجوم: فمنها تكونت كل البنية بفعل الجاذبية."
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "دعونا نقدر كيف كان الإشعاع الأثري عند لحظة الانبعاث — ونتأكد من أنه كان ضوءًا عاديًا في ذلك الوقت.",
+   "given": "اليوم درجة حرارة الإشعاع الأثري $T_0 = 2{,}725$ K. انبعث الإشعاع عند انزياح أحمر $z \\approx 1100$. ثابت فيينا $b = 2{,}898 \\cdot 10^{-3}$ m·K.",
+   "law": "$T = T_0(1+z)$، ثم $\\lambda_{\\max} = b/T$",
+   "solution": [
+    {
+     "text": "درجة الحرارة عند لحظة الانبعاث: نضرب درجة الحرارة الحالية في $(1+z)$.",
+     "latex": "T = 2{,}725 \\cdot 1101 \\approx 3000\\ \\text{K}",
+     "num": ""
+    },
+    {
+     "text": "الآن ذروة الطيف عند درجة الحرارة هذه.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{3000} \\approx 9{,}7 \\cdot 10^{-7}\\ \\text{m}",
+     "num": ""
+    },
+    {
+     "text": "دعونا نحوله إلى نانومتر ونقارنه بالمدى المرئي (380–750 nm).",
+     "latex": "\\lambda_{\\max} \\approx 970\\ \\text{nm}",
+     "num": ""
+    }
+   ],
+   "answer": "حوالي 970 nm — هي أقصى حافة الأشعة تحت الحمراء، بجوار المرئي. ثلاثة آلاف كلفن هي درجة حرارة فتيل المصباح المتوهج، وكانت المادة تلمع حينها تقريبًا بنفس الطريقة، أحمر باهت. ضع $z = 1100$ وتحقق من كلا الرقمين.",
+   "sanity": "فحص المنطق السليم: إذا أخطأنا وأخذنا $z = 11$ بدلاً من $1100$، لكانت النتيجة $33$ K وذروة في أجزاء من عشرة من المليمتر — لا تزال موجات ميكروية. لم يكن هناك أي توهج. هنا الترتيب يحدد كل شيء، وهذا هو مغزى التقدير: يجب أن تقع الإجابة في النطاق الذي نتحدث عنه بالكلمات."
+  },
+  "constants": {
+   "title": "الثوابت: من أين أتت وماذا تعني",
+   "lead": "أربعة أعداد تشكل هذه الفقرة بأكملها.",
+   "items": [
+    {
+     "sym": "T₀",
+     "latex": "T_0",
+     "name": "درجة حرارة الإشعاع الأثري اليوم",
+     "value": "2,72548 ± 0,00057 K",
+     "why": "قُيست بواسطة القمر الصناعي COBE وأُكِّدت بواسطة WMAP وPlanck. هذه هي أكثر درجة حرارة تم قياسها بدقة في الكون، وفي نفس الوقت أكثر أطياف الجسم الأسود كمالًا المعروفة: الانحرافات عن صيغة بلانك أقل من جزء من مائة من المئة."
+    },
+    {
+     "sym": "b",
+     "latex": "b",
+     "name": "ثابت انزياح فيينا",
+     "value": "2,897771955·10⁻³ m·K",
+     "why": "ليست ثابتًا مستقلاً: يُشتق من صيغة بلانك عبر $h$ و $c$ و $k$. عدديًا هو جذر المعادلة $x = 5(1-e^{-x})$ مقسومًا على التركيبة المناسبة — لذلك يظهر فيه الرقم الغامض 4,965."
+    },
+    {
+     "sym": "z_rec",
+     "latex": "z_{\\text{rec}}",
+     "name": "الانزياح الأحمر لإعادة التركيب",
+     "value": "≈ 1090",
+     "why": "اللحظة التي أصبحت فيها المادة شفافة. لا ينظر التلسكوب أبعد من ذلك في الماضي مهما كان التكبير: هذا جدار وليس حد دقة."
+    },
+    {
+     "sym": "ΔT/T",
+     "latex": "\\Delta T/T",
+     "name": "سعة التباين",
+     "value": "≈ 10⁻⁵",
+     "why": "بعد طرح المكون ثنائي القطب من حركتنا. من هذه التموجات نشأت المجرات؛ طيفها حسب المقاييس الزاوية هو المصدر الرئيسي لمعرفتنا بتكوين الكون."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "هذه الفقرة هي تقاطع أربعة مواضيع مررت بها بالفعل.",
+   "items": [
+    {
+     "h": "الديناميكا الحرارية",
+     "text": "طيف الجسم الأسود ومفهوم درجة حرارة الإشعاع المتوازن من هناك. يبرد الإشعاع الأثري أثناء التمدد لنفس السبب الذي يبرد به الغاز في بالون يتمدد."
+    },
+    {
+     "h": "الذرة",
+     "text": "تحدث الشفافية عندما تستقر الإلكترونات على المستويات في الذرات. طاقة تأين الهيدروجين من موضوع الذرة تحدد هنا اللحظة التي انطلق بعدها الضوء."
+    },
+    {
+     "h": "الفيزياء الكمومية",
+     "text": "ظهرت صيغة بلانك بالضبط من هذه المسألة: كانت الفيزياء التقليدية تعطي طاقة لا نهائية على الأمواج القصيرة. الإشعاع الأثري هو أنقى ملاحظة لتلك النتيجة الكمومية."
+    },
+    {
+     "h": "التمدد",
+     "text": "العامل $(1+z)$ هنا هو نفسه الذي مدد الأطوال الموجية في الفقرة الأولى. نفس التمدد يفسر احمرار المجرات وتبريد الإشعاع الأثري."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "تجارب منزلية وتفاصيل مثيرة للاهتمام",
+   "lead": "الإشعاع الكوني الميكروي هو الجسم الكوني الوحيد الذي يمكن التقاط جزء منه بجهاز منزلي.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "التقاط الإشعاع الكوني الميكروي بالتلفزيون (عشر دقائق)",
+     "text": "إذا كان لديك تلفزيون تناظري قديم أو موالف مع هوائي، فافصل الهوائي وانظر إلى \"الثلج\" على قناة فارغة. جزء صغير من هذه الضوضاء هو الإشعاع الكوني الميكروي: المستقبل يلتقطه مع التداخلات. الحصة صغيرة ولا يمكن فصلها بالعين، لذا من الأكثر صدقًا وصف التجربة هكذا: جزء من تلك الضوضاء جاء من حالة الكون عندما كان عمره ثلاثمائة وثمانين ألف سنة."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "قانون فين على مصباح باهتة",
+     "text": "خذ مصباحًا متوهجًا مع باهتة وارفع السطوع ببطء. في البداية، يكون الخيط أحمر باهتًا، ثم برتقاليًا، ثم أبيض تقريبًا: مع ارتفاع درجة الحرارة، تنتقل ذروة الطيف نحو الأطوال الموجية القصيرة. هذا هو نفس القانون الذي يحول الإشعاع الكوني من مرئي إلى ميكروي، ولكن في الاتجاه المعاكس. المصباح LED غير مناسب للتجربة - طيفه غير حراري."
+    },
+    {
+     "icon": "fact",
+     "kind": "تفاصيل مثيرة للاهتمام",
+     "h": "نحن نتحرك، وهذا واضح على الخريطة",
+     "text": "أكبر عدم تجانس في الإشعاع الكوني ليس بنية الكون، بل حركتنا الخاصة: نصف السماء أكثر دفئًا قليلاً، والنصف الآخر أكثر برودة قليلاً. من هذا الثنائي القطبي يتبين أن النظام الشمسي يتحرك بالنسبة للإشعاع الكوني بسرعة حوالي 370 كم/ث. قبل دراسة الهيكل، يتم طرح الثنائي القطبي."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود المعرفة",
+     "h": "ليس للتضخم شكل واحد",
+     "text": "يحل التضخم عدة مشاكل في وقت واحد، وبالتالي فهو مقنع، لكن ليس له نموذج محدد: عشرات الخيارات المختلفة تعطي تنبؤات متقاربة، ولا توجد طريقة للتمييز بينها حتى الآن. الأمل الرئيسي هو استقطاب الإشعاع الكوني: في بعض النماذج، يحمل أثر موجات الجاذبية الأولية. في عام 2014، تم الإعلان عن مثل هذا الاكتشاف وبعد عام تم سحبه: تبين أن الإشارة كانت غبارًا من مجرتنا."
+    },
+    {
+     "icon": "fact",
+     "kind": "كيف عُرف ذلك",
+     "h": "عش طائر في تاريخ الفيزياء",
+     "text": "بينزياس وويلسون، أثناء ضبط الهوائي، قاما بتنظيف عش الحمام من البوق وتغطية الداخل بشريط ألومنيوم - لم يختفِ الضجيج. في المقال، أطلقوا على التداخل اسم \"درجة حرارة هوائي زائدة\"، وربما تكون هذه أكثر صياغة متواضعة لاكتشاف القرن في تاريخ العلم."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "لماذا هذا جدار وليس حد التلسكوب",
+   "text": "عادة، لرؤية شيء أبعد، تحتاج إلى تلسكوب أكبر. ليس الأمر كذلك هنا. قبل إعادة التركيب، كان الكون معتمًا: الضوء في البلازما لم ينتقل بل تبعثر، ولا يمكن لأي بصريات أن تظهر ما لم ينبعث بحرية. لذلك، الإشعاع الكوني ليس أضعف صورة متاحة لنا، بل هي الأخيرة: خلفها في النطاق الكهرومغناطيسي لا يوجد شيء. يمكن النظر أعمق فقط بواسطة رسل آخرين: النيوترينوات التي انفصلت عن المادة في وقت مبكر، وموجات الجاذبية الأولية التي تكون البلازما شفافة بالنسبة لها. لم يتم تسجيل أي من هذه الإشارات الأولية حتى الآن."
+  },
+  "memo": {
+   "essence": "الإشعاع الكوني الميكروي هو ضوء صدر عندما كان عمر الكون ثلاثمائة وثمانين ألف سنة، عندما أصبحت المادة شفافة عند ثلاثة آلاف كلفن. التمدد مدده أكثر من ألف مرة، واليوم هو موجات ميكروية بدرجة حرارة 2.725 كلفن. تجانسه المثالي تقريبًا يفسره التضخم - تمدد قصير وسريع للغاية قبل المرحلة الساخنة.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "درجة الحرارة تتناقص بمقدار 1/a",
+     "text": "$T = T_0(1+z)$ — نفس التمدد الذي يعطي الإزاحة الحمراء للمجرات"
+    },
+    {
+     "icon": "estimate",
+     "title": "ذروة الطيف تحدد درجة الحرارة",
+     "text": "$\\lambda_{\\max} = b/T$: 2.725 كلفن تعطي 1.06 مم، 3000 كلفن — حوالي 970 نانومتر"
+    },
+    {
+     "icon": "fact",
+     "title": "الشفافية، وليس الانفجار",
+     "text": "الإشعاع الكوني لم يصدر \"في لحظة البداية\"، بل عندما أصبحت البلازما غازًا محايدًا"
+    },
+    {
+     "icon": "edge",
+     "title": "التضخم - تفسير قوي بدون شكل واحد",
+     "text": "يحل مشكلة الأفق والتسطيح، لكن النموذج المحدد غير معروف"
+    }
+   ],
+   "where": "تحديد تركيب الكون من طيف التباين الزاوي، قياس ثابت هابل من الكون المبكر، اختبار نماذج التضخم من الاستقطاب، معايرة عمر الكون.",
+   "watchOut": "ثلاثة أخطاء شائعة. الإشعاع الكوني ليس \"ضوء الانفجار العظيم\"، بل ضوء لحظة الشفافية، بعد وقت طويل من البداية. لا يأتي من نقطة واحدة في السماء، بل من جميع الاتجاهات، لأنه ضوء المادة التي كانت في كل مكان، بما في ذلك المكان الذي نحن فيه الآن. والتضخم لا \"يفسر الانفجار العظيم\": فهو يتعلق بالمرحلة قبل التمدد الساخن ولا يصف البداية نفسها."
+  },
+  "quiz": [
+   {
+    "id": "m1",
+    "type": "mcq",
+    "q": "لماذا خرج الإشعاع الميكروي الخلفي عند ثلاثة آلاف كلفن بالضبط، وليس قبل ذلك أو بعده؟",
+    "options": [
+     "عند درجة الحرارة هذه، ارتبطت الإلكترونات لتشكل ذرات وأصبحت المادة شفافة للضوء",
+     "عند درجة الحرارة هذه، انتهى الانفجار العظيم",
+     "هذه هي درجة الحرارة التي بدأت عندها المجرات في التكون",
+     "لم يكن الإشعاع موجودًا من قبل"
+    ],
+    "answer": 0,
+    "why": "طالما أن المادة متأينة، فإن الضوء يتشتت على الإلكترونات الحرة ولا يهرب. إعادة الاتحاد تجعل الغاز متعادلاً وشفافًا — ومنذ تلك اللحظة، ينتقل الضوء بحرية."
+   },
+   {
+    "id": "m2",
+    "type": "mcq",
+    "q": "أي لغز يحله التضخم؟",
+    "options": [
+     "لماذا تمتلك مناطق من السماء لم تكن مرتبطة أبدًا بإشارة نفس درجة الحرارة",
+     "لماذا تبتعد المجرات عنا",
+     "لماذا طيف الإشعاع الخلفي هو طيف جسم أسود",
+     "لماذا يوجد في الكون مادة أكثر من المادة المضادة"
+    ],
+    "answer": 0,
+    "why": "هذه مشكلة الأفق. إذا كان كل ما نراه قد خرج من منطقة صغيرة واحدة تمكنت من التساوي، فإن درجة الحرارة المتساوية تتوقف عن أن تكون لغزًا. كما يتم حل مسألة استواء الفضاء."
+   },
+   {
+    "id": "m3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا يأتي الإشعاع الخلفي من جميع الاتجاهات في وقت واحد، وليس من نقطة واحدة في السماء؟",
+    "keywords": [
+     "في كل مكان",
+     "في كل الأنحاء",
+     "كل الفضاء",
+     "ليس نقطة",
+     "أي",
+     "وهنا"
+    ],
+    "why": "البلازما الساخنة ملأت كل الفضاء، بما في ذلك المكان الذي نحن فيه الآن. نحن نرى الضوء الذي خرج من مناطق تقع اليوم على نفس المسافة في جميع الاتجاهات — لذلك تأتي الصورة من كل السماء."
+   },
+   {
+    "id": "m4",
+    "type": "estimate",
+    "q": "ذروة طيف الإشعاع الخلفي اليوم تقع عند حوالي 1 مم. على أي طول موجي كانت تقع عند انزياح أحمر 9 (أي عندما كان الكون أصغر بعشر مرات)؟ الإجابة بالميكرومتر.",
+    "answer": 100,
+    "unit": "µm",
+    "tolerance": 20,
+    "why": "الطول الموجي يتمدد بمقدار $(1+z)$ مرة، لذا في الماضي كان أقصر بنفس المقدار: $1\\ \\text{mm}/10 = 100$ µm. لا حاجة للحساب عبر درجة الحرارة — المضاعف نفسه."
+   }
+  ]
  }
 }
