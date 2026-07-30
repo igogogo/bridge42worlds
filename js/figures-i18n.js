@@ -1056,5 +1056,257 @@ window.B42FigText = {
     "es": "el último paso solo vale para z pequeño",
     "ar": "الخطوة الأخيرة تصحّ فقط عند z الصغير",
     "fr": "la dernière étape n'est valable que pour z petit"
+  },
+  "растяжение остужает": {
+    "en": "stretching cools",
+    "es": "el estiramiento enfría",
+    "ar": "التمدّد يبرّد",
+    "fr": "L'étirement refroidit"
+  },
+  "3000 K": {
+    "en": "3000 K",
+    "es": "3000 K",
+    "ar": "3000 K",
+    "fr": "3000 K"
+  },
+  "2,7 K": {
+    "en": "2.7 K",
+    "es": "2,7 K",
+    "ar": "2.7 K",
+    "fr": "2,7 K"
+  },
+  "T ∝ 1/a: во сколько раз выросла Вселенная, во столько остыл свет": {
+    "en": "T ∝ 1/a: the light cooled by the factor the universe grew",
+    "es": "T ∝ 1/a: la luz se enfrió tanto como creció el universo",
+    "ar": "T ∝ 1/a: برد الضوء بمقدار ما نما الكون",
+    "fr": "T ∝ 1/a : la lumière refroidit d'autant que l'Univers grandit"
+  },
+  "плазма: свет в тумане": {
+    "en": "plasma: light in fog",
+    "es": "plasma: luz en la niebla",
+    "ar": "بلازما: ضوء في ضباب",
+    "fr": "plasma : lumière dans le brouillard"
+  },
+  "атомы: свет уходит": {
+    "en": "atoms: light escapes",
+    "es": "átomos: la luz escapa",
+    "ar": "ذرّات: الضوء ينطلق",
+    "fr": "atomes : lumière s'échappe"
+  },
+  "до нас": {
+    "en": "to us",
+    "es": "hasta nosotros",
+    "ar": "إلينا",
+    "fr": "vers nous"
+  },
+  "3000 K — граница прозрачности": {
+    "en": "3000 K — the transparency threshold",
+    "es": "3000 K: el umbral de transparencia",
+    "ar": "3000 K — حدّ الشفافية",
+    "fr": "3000 K — le seuil de transparence"
+  },
+  "длина волны →": {
+    "en": "wavelength →",
+    "es": "longitud de onda →",
+    "ar": "طول الموجة →",
+    "fr": "longueur d'onde →"
+  },
+  "λ пика обратно пропорциональна T": {
+    "en": "the peak λ is inversely proportional to T",
+    "es": "la λ del pico es inversamente proporcional a T",
+    "ar": "λ القمة تتناسب عكسياً مع T",
+    "fr": "λ du pic est inversement proportionnelle à T"
+  },
+  "одинаковая температура без общей истории": {
+    "en": "the same temperature with no shared history",
+    "es": "la misma temperatura sin historia común",
+    "ar": "الحرارة نفسها بلا تاريخ مشترك",
+    "fr": "même température sans histoire commune"
+  },
+  "её горизонт": {
+    "en": "its horizon",
+    "es": "su horizonte",
+    "ar": "أفقها",
+    "fr": "son horizon"
+  },
+  "круги не пересекаются: сигнал не успевал пройти": {
+    "en": "the circles do not overlap: no signal could pass",
+    "es": "los círculos no se cruzan: ninguna señal pudo pasar",
+    "ar": "الدائرتان لا تتقاطعان: لم تمرّ أي إشارة",
+    "fr": "les cercles ne se chevauchent pas : le signal n'a pas pu passer"
+  },
+  "тянет только то, что внутри орбиты": {
+    "en": "only what is inside the orbit pulls",
+    "es": "solo tira lo que está dentro de la órbita",
+    "ar": "لا يجذب إلا ما هو داخل المدار",
+    "fr": "seulement ce qui est à l'intérieur de l'orbite attire"
+  },
+  "внешние слои не притягивают: их вклад взаимно гасится": {
+    "en": "outer shells do not pull: their contributions cancel",
+    "es": "las capas externas no tiran: sus aportes se cancelan",
+    "ar": "الطبقات الخارجية لا تجذب: مساهماتها تتلاشى",
+    "fr": "les couches externes n'attirent pas : leurs contributions s'annulent"
+  },
+  "как должно быть, если вся масса видна": {
+    "en": "how it should look if all mass is visible",
+    "es": "cómo debería ser si toda la masa es visible",
+    "ar": "كيف ينبغي أن يكون لو كانت كل الكتلة مرئية",
+    "fr": "comme cela devrait être si toute la masse est visible"
+  },
+  "радиус →": {
+    "en": "radius →",
+    "es": "radio →",
+    "ar": "نصف القطر →",
+    "fr": "rayon →"
+  },
+  "скорость": {
+    "en": "speed",
+    "es": "velocidad",
+    "ar": "السرعة",
+    "fr": "vitesse"
+  },
+  "v ∝ 1/√r — как у планет вокруг Солнца": {
+    "en": "v ∝ 1/√r — like planets around the Sun",
+    "es": "v ∝ 1/√r: como los planetas alrededor del Sol",
+    "ar": "v ∝ 1/√r — مثل الكواكب حول الشمس",
+    "fr": "v ∝ 1/√r — comme les planètes autour du Soleil"
+  },
+  "что измеряют на самом деле": {
+    "en": "what is actually measured",
+    "es": "lo que se mide en realidad",
+    "ar": "ما يُقاس فعلاً",
+    "fr": "ce qui est effectivement mesuré"
+  },
+  "измерено": {
+    "en": "measured",
+    "es": "medido",
+    "ar": "مقيس",
+    "fr": "mesuré"
+  },
+  "видимая масса": {
+    "en": "visible mass",
+    "es": "masa visible",
+    "ar": "الكتلة المرئية",
+    "fr": "masse visible"
+  },
+  "разница и есть тёмное гало": {
+    "en": "the gap is the dark halo",
+    "es": "la diferencia es el halo oscuro",
+    "ar": "الفرق هو الهالة المعتمة",
+    "fr": "la différence est le halo sombre"
+  },
+  "что происходит с плотностями при росте": {
+    "en": "what happens to the densities as it grows",
+    "es": "qué pasa con las densidades al crecer",
+    "ar": "ماذا يحدث للكثافات مع النمو",
+    "fr": "ce qui arrive aux densités lorsqu'il grandit"
+  },
+  "материя ∝ 1/a³": {
+    "en": "matter ∝ 1/a³",
+    "es": "materia ∝ 1/a³",
+    "ar": "المادة ∝ 1/a³",
+    "fr": "matière ∝ 1/a³"
+  },
+  "тёмная энергия — постоянна": {
+    "en": "dark energy stays constant",
+    "es": "la energía oscura permanece constante",
+    "ar": "الطاقة المعتمة تبقى ثابتة",
+    "fr": "l'énergie sombre reste constante"
+  },
+  "размер a →": {
+    "en": "size a →",
+    "es": "tamaño a →",
+    "ar": "الحجم a →",
+    "fr": "taille a →"
+  },
+  "пересечение кривых — момент смены знака ускорения": {
+    "en": "where the curves cross, the sign of acceleration flips",
+    "es": "donde se cruzan las curvas cambia el signo de la aceleración",
+    "ar": "عند تقاطع المنحنيين تنقلب إشارة التسارع",
+    "fr": "l'intersection des courbes : moment du changement de signe de l'accélération"
+  },
+  "раздувание одной выровнявшейся области": {
+    "en": "one smoothed-out region blown up",
+    "es": "una sola región ya uniforme, inflada",
+    "ar": "منطقة واحدة تجانست ثم انتفخت",
+    "fr": "gonflement d'une région lissée"
+  },
+  "до: успела выровняться": {
+    "en": "before: had time to even out",
+    "es": "antes: tuvo tiempo de uniformarse",
+    "ar": "قبل: أتيح لها أن تتجانس",
+    "fr": "avant : a eu le temps de s'homogénéiser"
+  },
+  "видимая часть": {
+    "en": "the visible part",
+    "es": "la parte visible",
+    "ar": "الجزء المرئي",
+    "fr": "la partie visible"
+  },
+  "после: та же однородность на всём небе": {
+    "en": "after: the same uniformity across the whole sky",
+    "es": "después: la misma uniformidad en todo el cielo",
+    "ar": "بعد: التجانس نفسه في كل السماء",
+    "fr": "après : la même uniformité sur tout le ciel"
+  },
+  "сначала тормозит, потом разгоняется": {
+    "en": "first it slows, then it speeds up",
+    "es": "primero frena, luego acelera",
+    "ar": "يتباطأ أولاً ثم يتسارع",
+    "fr": "d'abord ralentit, puis accélère"
+  },
+  "z ≈ 0,7": {
+    "en": "z ≈ 0.7",
+    "es": "z ≈ 0,7",
+    "ar": "z ≈ 0.7",
+    "fr": "z ≈ 0,7"
+  },
+  "торможение": {
+    "en": "slowing down",
+    "es": "frenado",
+    "ar": "تباطؤ",
+    "fr": "ralentissement"
+  },
+  "ускорение": {
+    "en": "acceleration",
+    "es": "aceleración",
+    "ar": "تسارع",
+    "fr": "accélération"
+  },
+  "время →": {
+    "en": "time →",
+    "es": "tiempo →",
+    "ar": "الزمن →",
+    "fr": "temps →"
+  },
+  "одинаковая вспышка как линейка": {
+    "en": "an identical flash used as a ruler",
+    "es": "un destello idéntico usado como regla",
+    "ar": "وميض متطابق يُستخدم مسطرة",
+    "fr": "un même flash comme règle"
+  },
+  "близко": {
+    "en": "near",
+    "es": "cerca",
+    "ar": "قريب",
+    "fr": "près"
+  },
+  "дальше": {
+    "en": "farther",
+    "es": "más lejos",
+    "ar": "أبعد",
+    "fr": "plus loin"
+  },
+  "ещё дальше": {
+    "en": "farther still",
+    "es": "aún más lejos",
+    "ar": "أبعد أيضاً",
+    "fr": "encore plus loin"
+  },
+  "светимость одна — значит видимая яркость меряет расстояние": {
+    "en": "same luminosity, so apparent brightness measures distance",
+    "es": "misma luminosidad: el brillo aparente mide la distancia",
+    "ar": "اللمعان نفسه، فالسطوع الظاهري يقيس المسافة",
+    "fr": "même luminosité, donc la luminosité apparente donne la distance"
   }
 };

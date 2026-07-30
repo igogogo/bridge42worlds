@@ -19,7 +19,7 @@ from pathlib import Path
 
 from common import chat, clean_json, parse_json_salvage
 
-LANG_NAME = {"en": "English", "es": "Spanish", "ar": "Arabic"}
+LANG_NAME = {"en": "English", "es": "Spanish", "ar": "Arabic", "fr": "French"}
 CYR = re.compile(r"[А-Яа-яЁё]")
 ROOTS = [Path("data/theory/courses"), Path("data/theory/lectures"), Path("data/theory")]
 
@@ -302,12 +302,20 @@ def fill_gaps(files, langs, dry=False, chunk_chars=4000):
 
 def main():
     argv = sys.argv
+    # По умолчанию три языка: французский добавляем явным --langs fr, круг за кругом,
+    # иначе один недосмотр запускает перевод всего курса на пятый язык разом.
     langs = ["en", "es", "ar"]
     if "--langs" in argv:
         langs = argv[argv.index("--langs") + 1].split(",")
     limit = int(argv[argv.index("--limit") + 1]) if "--limit" in argv else 0
+    # --only <кусок пути>: одна тема за круг. Весь курс на новый язык — это полтора миллиона
+    # знаков; без отбора любой прогон превращается в многочасовой и неотменяемый.
+    only = argv[argv.index("--only") + 1] if "--only" in argv else ""
 
     files = targets()
+    if only:
+        files = [f for f in files if only in str(f).replace("\\", "/")]
+        print("отбор «%s»: файлов %d" % (only, len(files)), flush=True)
 
     # --fill: добор отдельных строк вместо перевода блоков целиком (см. fill_gaps)
     if "--fill" in argv:

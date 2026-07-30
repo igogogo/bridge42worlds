@@ -2490,13 +2490,307 @@
         };
     }
 
+    /** Реликтовое излучение: спектр чёрного тела, остывание вместе с расширением, анизотропия. */
+    function cmbModel(data) {
+        var B_WIEN = 2.897771955e-3;                 // м·К, постоянная смещения Вина
+        var T0 = 2.725;                              // К, температура реликта сегодня
+
+        // Температура падает обратно масштабному фактору: T = T₀(1+z). Это не подгонка под
+        // наблюдения, а следствие того же растяжения волн, что даёт красное смещение.
+        function temp(st) { return T0 * (1 + st.z); }
+        function lamMax(T) { return B_WIEN / T; }     // м
+        /** Спектр Планка по длине волны, в условных единицах — важна форма и положение пика. */
+        function planck(lamM, T) {
+            var h = 6.62607015e-34, c = 299792458, k = 1.380649e-23;
+            var x = h * c / (lamM * k * T);
+            if (x > 700) return 0;                   // экспонента ушла за пределы double
+            return 1e-14 / Math.pow(lamM, 5) / (Math.exp(x) - 1);
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t * 0.35) % 1 }; },
+                derive: function (st, a) {
+                    var T = temp(st), lm = lamMax(T);
+                    return { T: T, z: st.z,
+                             lamMM: lm * 1000,                       // пик в миллиметрах
+                             lamUM: lm * 1e6,                        // и в микрометрах
+                             // Размах анизотропии — величина ФИЗИЧЕСКАЯ: ΔT/T ≈ 10⁻⁵ всегда.
+                             // Ползунок усиливает только видимость пятен на карте и в число не
+                             // входит: иначе подпись показывала «±300 000 мкК» и читатель уносил
+                             // с урока неверный порядок.
+                             dT: T * 1e-5,
+                             dTuK: T * 1e-5 * 1e6,
+                             ageKy: 380 / Math.pow((1 + st.z) / 1090, 1.5),  // грубо: t ∝ (1+z)^(-3/2)
+                             visible: lm * 1e9 < 750 && lm * 1e9 > 380,
+                             ph: a.ph };
+                },
+                stage: {
+                    height: 290,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var mapH = 96, pad = 26;
+
+                        // — 1. Карта неба: пятна анизотропии. Размах в реальности одна
+                        // стотысячная градуса, поэтому усиление подписано честно.
+                        var amp = st.aniso;
+                        for (var i = 0; i < 130; i++) {
+                            var px = pad + ((i * 61) % (W - pad * 2));
+                            var py = 34 + ((i * 37) % (mapH - 20));
+                            var s = Math.sin(i * 1.7 + d.ph * 6.28) * amp / 3;
+                            g.fillStyle = s > 0 ? 'rgba(155,44,44,' + Math.min(0.75, 0.12 + s * 0.5) + ')'
+                                                : 'rgba(21,94,116,' + Math.min(0.75, 0.12 - s * 0.5) + ')';
+                            g.beginPath(); g.arc(px, py, 9 + (i % 4) * 2.5, 0, 6.2832); g.fill();
+                        }
+                        KIT.text(g, ctx.T('skyMap'), pad, 20, { size: 10.5, color: col.soft });
+                        KIT.text(g, ctx.T('boosted') + ' ×' + Math.round(st.aniso * 1000), W - pad, 20,
+                                 { size: 10.5, color: col.soft, align: 'right' });
+
+                        // — 2. Спектр: кривая Планка и где стоит её пик
+                        var base = H - 42, top = mapH + 54, x0 = pad, x1 = W - pad;
+                        // ось длин волн: от 0,05 до 5 мм в логарифме — пик влезает при любой T
+                        var LG0 = Math.log10(5e-5), LG1 = Math.log10(5e-3);
+                        var SX = KIT.scale({ min: LG0, max: LG1, from: x0, to: x1 });
+                        var peak = planck(lamMax(d.T), d.T) || 1;
+                        var pts = [];
+                        for (var k = 0; k <= 160; k++) {
+                            var lg = LG0 + (LG1 - LG0) * k / 160;
+                            var lam = Math.pow(10, lg);
+                            pts.push([SX(lg), base - (base - top) * Math.min(1, planck(lam, d.T) / peak)]);
+                        }
+                        KIT.axis(g, x0, x1, base, { color: col.border });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.4 });
+                        var xp = SX(Math.log10(lamMax(d.T)));
+                        KIT.marker(g, xp, top - 12, base, { color: '#9B2C2C', width: 2,
+                            label: d.lamMM < 1 ? Math.round(d.lamUM) + ' ' + ctx.T('unit_um')
+                                               : d.lamMM.toFixed(2) + ' ' + ctx.T('unit_mm'), size: 10.5 });
+                        KIT.text(g, ctx.T('xLam'), x1, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.text(g, ctx.T('peakIs'), xp, base + 16, { size: 10, color: '#9B2C2C', align: 'center' });
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 20, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'T = ' + (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + ctx.T('unit_K'), y: 36, size: 10.5, color: col.soft },
+                            { text: st.z < 1 ? ctx.T('nowIs') : (d.visible ? ctx.T('wasGlow') : ctx.T('wasHot')),
+                              y: 52, size: 10.5, color: st.z > 900 ? '#8F6417' : col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">T = T₀(1 + z) = </span><span class="xf-res">' +
+                        (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + T('unit_K') + '</span>' +
+                        '<span class="xf-op"> · λ<sub>max</sub> = b/T = </span><span class="xf-var">' +
+                        (d.lamMM < 1 ? Math.round(d.lamUM) + ' ' + T('unit_um') : d.lamMM.toFixed(2) + ' ' + T('unit_mm')) +
+                        '</span><br><i>' + T('anisoIs') + ' ±' +
+                        (d.dTuK < 1000 ? Math.round(d.dTuK) + ' ' + T('unit_uK')
+                                       : (d.dT * 1000).toFixed(1) + ' ' + T('unit_mK')) +
+                        ' — ' + T('anisoNote') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xZ', min: 0, max: 1400 },
+                    y: { label: 'yT', min: 0, max: 3900 },
+                    samples: 120,
+                    curve: function (z, s) { return T0 * (1 + z); },
+                    marker: function (s, a, d) { return { x: s.z, y: d.T }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>z</b> ' + Math.round(st.z) + ' &nbsp;·&nbsp; <b>T</b> ' +
+                    (d.T < 10 ? d.T.toFixed(3) : Math.round(d.T)) + ' ' + T('unit_K') +
+                    ' &nbsp;·&nbsp; <b>' + T('ageIs') + '</b> ' +
+                    (d.ageKy > 1000 ? (d.ageKy / 1000).toFixed(1) + ' ' + T('unit_My')
+                                    : Math.round(d.ageKy) + ' ' + T('unit_ky'));
+            }
+        };
+    }
+
+    /** Тёмная материя и тёмная энергия: два измерения, из которых они и взялись.
+     *  Режим «вращение» — кривая скоростей в галактике, режим «расширение» — история a(t). */
+    function darkModel(data) {
+        var mode = 'rotation';
+        var MODES = ['rotation', 'expansion'];
+
+        // Кривая вращения. Видимая масса сосредоточена в диске: за его краем скорость должна
+        // падать как 1/√r (по Кеплеру). Гало добавляет массу, растущую с радиусом, и кривая
+        // выходит плоской — именно это и измерила Вера Рубин.
+        function vDisk(r, st) { return 220 * Math.sqrt(st.mDisk / 5) * Math.sqrt(Math.min(1, 4 / Math.max(0.5, r))); }
+        function vHalo(r, st) { return 200 * Math.sqrt(st.halo / 5) * Math.sqrt(r / (r + 3)); }
+        function vTot(r, st) { var a = vDisk(r, st), b = vHalo(r, st); return Math.sqrt(a * a + b * b); }
+
+        // История расширения: a(t) для смеси материи и тёмной энергии. Считаем численно по
+        // уравнению Фридмана, поэтому «ускорение» на графике — результат счёта, а не рисунок.
+        function history(st, steps) {
+            var OL = st.omegaL, OM = 1 - OL, a = 0.05, t = 0, out = [[0, a]];
+            var dt = 0.02;
+            for (var i = 0; i < (steps || 900); i++) {
+                var H = Math.sqrt(Math.max(1e-9, OM / (a * a * a) + OL));
+                a += a * H * dt; t += dt;
+                if (a > 3) break;
+                out.push([t, a]);
+            }
+            return out;
+        }
+        /** Когда расширение перешло от торможения к ускорению: ä = 0 при a³ = OM/(2·OL). */
+        function aFlip(st) {
+            var OL = st.omegaL, OM = 1 - OL;
+            return OL <= 0 ? Infinity : Math.pow(OM / (2 * OL), 1 / 3);
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t * 0.25) % 1 }; },
+                derive: function (st, a) {
+                    var rEdge = 12;
+                    var flip = aFlip(st);
+                    return { ph: a.ph,
+                             vVis: vDisk(rEdge, st), vAll: vTot(rEdge, st),
+                             ratio: vTot(rEdge, st) / Math.max(1, vDisk(rEdge, st)),
+                             darkShare: 100 * (1 - Math.pow(vDisk(rEdge, st) / Math.max(1, vTot(rEdge, st)), 2)),
+                             omegaL: st.omegaL, flip: flip,
+                             zFlip: flip === Infinity ? null : 1 / flip - 1 };
+                },
+                stage: {
+                    height: 285,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 34, RMAX = 14;
+
+                        if (mode === 'rotation') {
+                            // — галактика сверху: звёзды на орбитах, длина стрелки = скорость
+                            var cx = W * 0.5, cy = 96, RPX = 74;
+                            KIT.alpha(g, 0.45, function () {
+                                KIT.body(g, cx, cy, { shape: 'dot', size: 30, color: '#8F6417' });
+                            });
+                            KIT.text(g, ctx.T('galaxy'), pad, 20, { size: 10.5, color: col.soft });
+                            [2, 4.5, 7.5, 10.5, 13].forEach(function (r, i) {
+                                var rp = RPX * r / RMAX;
+                                KIT.dashed(g, [2, 4], function () {
+                                    g.strokeStyle = col.border; g.lineWidth = 0.8;
+                                    g.beginPath(); g.arc(cx, cy, rp, 0, 6.2832); g.stroke();
+                                });
+                                // звезда идёт по орбите; угловая скорость = v/r, поэтому дальние
+                                // отстают по фазе — плоская кривая скоростей видна прямо в движении
+                                var ang = d.ph * 6.2832 * (vTot(r, st) / r) / 12 + i * 1.1;
+                                var sx = cx + rp * Math.cos(ang), sy = cy + rp * 0.42 * Math.sin(ang);
+                                KIT.body(g, sx, sy, { shape: 'dot', size: 6, color: '#155E74' });
+                                var vLen = 5 + vTot(r, st) * 0.06;
+                                KIT.arrow(g, sx, sy, -vLen * Math.sin(ang), vLen * 0.42 * Math.cos(ang),
+                                          { color: '#155E74', width: 1.2, head: 4 });
+                            });
+
+                            // — кривые скоростей: только видимая масса против наблюдаемой
+                            var base = H - 40, top = 176, x0 = pad, x1 = W - pad;
+                            var SX = KIT.scale({ min: 0, max: RMAX, from: x0, to: x1 });
+                            var SY = KIT.scale({ min: 0, max: 320, from: base, to: top });
+                            KIT.axis(g, x0, x1, base, { color: col.border });
+                            var pv = [], pt = [], i2;
+                            for (i2 = 1; i2 <= 60; i2++) {
+                                var rr = RMAX * i2 / 60;
+                                pv.push([SX(rr), SY(vDisk(rr, st))]);
+                                pt.push([SX(rr), SY(vTot(rr, st))]);
+                            }
+                            KIT.polyline(g, pv, { color: col.soft, width: 1.6, dash: [4, 4] });
+                            KIT.polyline(g, pt, { color: '#9B2C2C', width: 2.4 });
+                            KIT.text(g, ctx.T('visibleOnly'), x1, SY(vDisk(RMAX, st)) - 8,
+                                     { size: 10, color: col.soft, align: 'right' });
+                            KIT.text(g, ctx.T('observed'), x1, SY(vTot(RMAX, st)) - 10,
+                                     { size: 10.5, color: '#9B2C2C', align: 'right' });
+                            KIT.text(g, ctx.T('xR'), x1, base + 15, { size: 10, color: col.soft, align: 'right' });
+
+                            KIT.readout(g, [
+                                { text: ctx.T('mode_rotation'), y: 20, size: 11.5, weight: '600', color: '#9B2C2C' },
+                                { text: Math.round(d.darkShare) + '% ' + ctx.T('isDark'), y: 36, size: 10.5, color: col.soft },
+                                { text: d.ratio > 1.35 ? ctx.T('needHalo') : ctx.T('almostVisible'),
+                                  y: 52, size: 10.5, color: d.ratio > 1.35 ? '#8F6417' : '#4C6B4E' }
+                            ], { x: W - pad, align: 'right' });
+                        } else {
+                            // — история расширения: считаем a(t) и смотрим, где ускорение
+                            var base2 = H - 44, top2 = 44, x02 = pad, x12 = W - pad;
+                            var h = history(st);
+                            var tMax = h[h.length - 1][0] || 1;
+                            var SX2 = KIT.scale({ min: 0, max: tMax, from: x02, to: x12 });
+                            var SY2 = KIT.scale({ min: 0, max: 3, from: base2, to: top2 });
+                            KIT.axis(g, x02, x12, base2, { color: col.border });
+                            KIT.polyline(g, h.map(function (p) { return [SX2(p[0]), SY2(p[1])]; }),
+                                         { color: '#155E74', width: 2.6 });
+                            // та же смесь без тёмной энергии — для сравнения
+                            var h0 = history({ omegaL: 0 });
+                            KIT.polyline(g, h0.filter(function (p) { return p[0] <= tMax; })
+                                             .map(function (p) { return [SX2(p[0]), SY2(p[1])]; }),
+                                         { color: col.soft, width: 1.5, dash: [4, 4] });
+                            KIT.text(g, ctx.T('withDark'), x12, top2 + 4, { size: 10.5, color: '#155E74', align: 'right' });
+                            KIT.text(g, ctx.T('matterOnly'), x12, base2 - 14, { size: 10, color: col.soft, align: 'right' });
+                            KIT.text(g, ctx.T('xT'), x12, base2 + 16, { size: 10, color: col.soft, align: 'right' });
+                            KIT.text(g, ctx.T('yA'), x02, top2 - 16, { size: 10, color: col.soft });
+
+                            // где торможение сменилось ускорением
+                            if (d.flip !== Infinity && d.flip < 3) {
+                                var pFlip = null;
+                                for (var j = 0; j < h.length; j++) if (h[j][1] >= d.flip) { pFlip = h[j]; break; }
+                                if (pFlip) {
+                                    KIT.marker(g, SX2(pFlip[0]), top2, base2, { color: '#8F6417', width: 1.6,
+                                        label: ctx.T('flipHere'), size: 10 });
+                                }
+                            }
+                            KIT.readout(g, [
+                                { text: ctx.T('mode_expansion'), y: 20, size: 11.5, weight: '600', color: '#155E74' },
+                                { text: 'Ω_Λ = ' + st.omegaL.toFixed(2) + ' · Ω_m = ' + (1 - st.omegaL).toFixed(2), y: 36, size: 10.5, color: col.soft },
+                                { text: st.omegaL > 0.5 ? ctx.T('accelNow') : (st.omegaL > 0.1 ? ctx.T('accelLate') : ctx.T('noAccel')),
+                                  y: 52, size: 10.5, color: st.omegaL > 0.1 ? '#4C6B4E' : '#8F6417' }
+                            ]);
+                        }
+                    }
+                },
+                formula: function (st, d, T) {
+                    if (mode === 'rotation') {
+                        return '<span class="xf-op">v(r) = √(GM(r)/r) · ' + T('atEdge') + ': </span>' +
+                            '<span class="xf-res">' + Math.round(d.vAll) + ' ' + T('unit_kms') + '</span>' +
+                            '<span class="xf-op"> · ' + T('visibleGives') + ' </span><span class="xf-var">' +
+                            Math.round(d.vVis) + '</span>' +
+                            '<br><i>' + T('missing') + ' ' + Math.round(d.darkShare) + '% ' + T('ofMass') + '</i>';
+                    }
+                    return '<span class="xf-op">(ȧ/a)² = Ω_m/a³ + Ω_Λ · Ω_Λ = </span>' +
+                        '<span class="xf-res">' + st.omegaL.toFixed(2) + '</span>' +
+                        '<br><i>' + (d.zFlip == null ? T('noFlip')
+                            : T('flipAt') + ' z ≈ ' + d.zFlip.toFixed(2) + ' (' + T('aIs') + ' ' + d.flip.toFixed(2) + ')') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xR', min: 0, max: 14 },
+                    y: { label: 'yV', min: 0, max: 320 },
+                    samples: 80,
+                    curve: function (r, s) { return r < 0.4 ? 0 : vTot(r, s); },
+                    marker: function (s, a, d) { return { x: 12, y: d.vAll }; }
+                }
+            },
+            modes: MODES,
+            getMode: function () { return mode; },
+            setMode: function (m) { if (MODES.indexOf(m) >= 0) mode = m; },
+            extras: function (st, d, T) {
+                if (mode === 'rotation') {
+                    return '<b>v</b> ' + Math.round(d.vAll) + ' ' + T('unit_kms') +
+                        ' &nbsp;·&nbsp; <b>' + T('visibleGives') + '</b> ' + Math.round(d.vVis) +
+                        ' &nbsp;·&nbsp; <b>' + T('isDark') + '</b> ' + Math.round(d.darkShare) + '%';
+                }
+                return '<b>Ω_Λ</b> ' + st.omegaL.toFixed(2) + ' &nbsp;·&nbsp; <b>Ω_m</b> ' +
+                    (1 - st.omegaL).toFixed(2) + ' &nbsp;·&nbsp; <b>' + T('flipAt') + '</b> ' +
+                    (d.zFlip == null ? '—' : 'z ≈ ' + d.zFlip.toFixed(2));
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
                       resonance: resonanceModel, entropy: entropyModel,
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
-                      action: actionModel, expansion: expansionModel };
+                      action: actionModel, expansion: expansionModel, cmb: cmbModel,
+                      dark: darkModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок
