@@ -21,35 +21,40 @@
               found: 'Найдено', nothing: 'Ничего не нашлось',
               tryOther: 'Попробуйте другое слово или посмотрите все понятия',
               allTags: 'все понятия', inSection: 'искать среди статей раздела',
-              everywhere: 'искать по всему сайту →', artCount: 'ст.' },
+              everywhere: 'искать по всему сайту →', artCount: 'ст.',
+              searching: 'Ищем по смыслу' },
         en: { concepts: 'Concepts', laws: 'Laws', people: 'Scientists', sections: 'Sections',
               articles: 'Articles', words: 'by words', meaning: 'by meaning',
               fellBack: 'meaning search is unavailable right now — searching by words',
               found: 'Found', nothing: 'Nothing found',
               tryOther: 'Try another word or browse all concepts',
               allTags: 'all concepts', inSection: 'search within this section',
-              everywhere: 'search the whole site →', artCount: 'art.' },
+              everywhere: 'search the whole site →', artCount: 'art.',
+              searching: 'Searching by meaning' },
         es: { concepts: 'Conceptos', laws: 'Leyes', people: 'Científicos', sections: 'Secciones',
               articles: 'Artículos', words: 'por palabras', meaning: 'por significado',
               fellBack: 'la búsqueda por significado no está disponible — buscamos por palabras',
               found: 'Encontrado', nothing: 'No se encontró nada',
               tryOther: 'Pruebe otra palabra o vea todos los conceptos',
               allTags: 'todos los conceptos', inSection: 'buscar en esta sección',
-              everywhere: 'buscar en todo el sitio →', artCount: 'art.' },
+              everywhere: 'buscar en todo el sitio →', artCount: 'art.',
+              searching: 'Buscando por significado' },
         ar: { concepts: 'المفاهيم', laws: 'القوانين', people: 'العلماء', sections: 'الأقسام',
               articles: 'المقالات', words: 'بالكلمات', meaning: 'بالمعنى',
               fellBack: 'البحث بالمعنى غير متاح الآن — نبحث بالكلمات',
               found: 'وُجد', nothing: 'لم يُعثر على شيء',
               tryOther: 'جرّب كلمة أخرى أو تصفّح كل المفاهيم',
               allTags: 'كل المفاهيم', inSection: 'البحث داخل هذا القسم',
-              everywhere: 'البحث في الموقع كله ←', artCount: 'مقالة' },
+              everywhere: 'البحث في الموقع كله ←', artCount: 'مقالة',
+              searching: 'نبحث بالمعنى' },
         fr: { concepts: 'Notions', laws: 'Lois', people: 'Scientifiques', sections: 'Sections',
               articles: 'Articles', words: 'par mots', meaning: 'par sens',
               fellBack: 'la recherche par sens est indisponible — recherche par mots',
               found: 'Trouvé', nothing: 'Rien trouvé',
               tryOther: 'Essayez un autre mot ou parcourez toutes les notions',
               allTags: 'toutes les notions', inSection: 'chercher dans cette section',
-              everywhere: 'chercher sur tout le site →', artCount: 'art.' }
+              everywhere: 'chercher sur tout le site →', artCount: 'art.',
+              searching: 'Recherche par sens' }
     };
 
     var GROUPS = [
@@ -185,10 +190,21 @@
         lastQuery = query;
         if (!scopeReady) { scoped = scope(); scopeReady = true; }
         var useScope = ignoreScope ? null : scoped;
-        S.search(query, {
-            source: mode === 'meaning' ? 'vector' : 'local',
+        var vector = mode === 'meaning';
+        var p = S.search(query, {
+            source: vector ? 'vector' : 'local',
             scope: useScope
-        }).then(function (res) {
+        });
+
+        /* Поиск по смыслу с холодным индексом отвечает несколько секунд — вместо пустого
+           места показываем факт или мини-опрос из наших же статей (B42Waiting). Порог
+           в 700 мс: локальный поиск и повторный запрос из кэша укладываются быстрее и
+           карточкой не мигают. По словам ищем без сети — там ждать нечего. */
+        if (vector && window.B42Waiting) {
+            p = window.B42Waiting.inline(box(), { promise: p, delay: 700, title: L.searching });
+        }
+
+        p.then(function (res) {
             if (query !== lastQuery) return;       // пришёл ответ на устаревший ввод
             render(res, !!useScope);
         });

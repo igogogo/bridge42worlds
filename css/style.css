@@ -2696,3 +2696,12 @@ body.b42-wait-open { overflow: hidden; }
   .b42-wait { padding: 10px; align-items: flex-end; }
   .b42-wait-box { max-width: none; border-radius: 16px 16px 0 0; padding: 16px 14px 12px; }
 }
+/* Встроенная форма ожидания — та же начинка, но карточкой на месте будущего результата
+   (поиск по смыслу). Шторки нет намеренно: читатель смотрит в своё поле ввода, и окно
+   поверх выдачи прочиталось бы как поломка, а не как «идёт работа». */
+.b42-wait-inline { margin: 10px 0 0; padding: 14px 16px 10px;
+  background: var(--card-bg); border: 1px solid var(--hair); border-radius: var(--radius); }
+.b42-wait-inline .b42-wait-head b { font-size: 15px; }
+.b42-wait-inline .b42-wait-bar { margin: 8px 0 12px; }
+.b42-wait-inline .b42-fact { font-size: 14px; }
+@media (max-width: 640px) { .b42-wait-inline { padding: 12px 12px 8px; } }

@@ -77,25 +77,12 @@
     }
     function pick(a) { return a && a.length ? a[Math.floor(Math.random() * a.length)] : null; }
 
-    function open(opts) {
-        opts = opts || {};
-        var ov = document.createElement('div');
-        ov.className = 'b42-wait';
-        ov.innerHTML =
-            '<div class="b42-wait-box">' +
-              '<div class="b42-wait-head"><b>' + (opts.title || t.wait) + '</b>' +
-                '<span class="b42-wait-sub">' + t.sub + '</span></div>' +
-              '<div class="b42-wait-bar"><i></i></div>' +
-              '<div class="b42-wait-body"></div>' +
-              '<div class="b42-wait-foot"><span class="b42-rank"></span>' +
-                '<button type="button" class="b42-wait-next">' + t.next + '</button></div>' +
-            '</div>';
-        document.body.appendChild(ov);
-        document.body.classList.add('b42-wait-open');
-        var body = ov.querySelector('.b42-wait-body');
-        var foot = ov.querySelector('.b42-rank');
-
+    /* Начинка карточки — общая для полноэкранного ожидания и для встроенного в выдачу:
+       факт или мини-опрос плюс строка звания. Вынесена отдельно, чтобы вторая форма
+       не была копией первой: любая правка вопроса-ответа должна доходить до обеих. */
+    function mount(body, foot) {
         function paintRank() {
+            if (!foot) return;
             var r = rank();
             foot.textContent = r.name + ' · ' + r.points + ' ' + t.score;
         }
@@ -131,12 +118,32 @@
             });
         }
 
-        load().then(function (d) {
+        return load().then(function (d) {
             (Math.random() < 0.55 ? showQuiz : showFact)(d);
-            ov.querySelector('.b42-wait-next').addEventListener('click', function () {
-                (Math.random() < 0.5 ? showQuiz : showFact)(d);
-            });
+            return function again() { (Math.random() < 0.5 ? showQuiz : showFact)(d); };
         });
+    }
+
+    function open(opts) {
+        opts = opts || {};
+        var ov = document.createElement('div');
+        ov.className = 'b42-wait';
+        ov.innerHTML =
+            '<div class="b42-wait-box">' +
+              '<div class="b42-wait-head"><b>' + (opts.title || t.wait) + '</b>' +
+                '<span class="b42-wait-sub">' + t.sub + '</span></div>' +
+              '<div class="b42-wait-bar"><i></i></div>' +
+              '<div class="b42-wait-body"></div>' +
+              '<div class="b42-wait-foot"><span class="b42-rank"></span>' +
+                '<button type="button" class="b42-wait-next">' + t.next + '</button></div>' +
+            '</div>';
+        document.body.appendChild(ov);
+        document.body.classList.add('b42-wait-open');
+
+        mount(ov.querySelector('.b42-wait-body'), ov.querySelector('.b42-rank'))
+            .then(function (again) {
+                ov.querySelector('.b42-wait-next').addEventListener('click', again);
+            });
 
         function close(result) {
             document.body.classList.remove('b42-wait-open');
@@ -149,5 +156,49 @@
         return { close: close };
     }
 
-    window.B42Waiting = { open: open, rank: rank, score: score };
+    /* Встроенная форма — для ожиданий, которые нельзя перекрывать шторкой: поиск по
+       смыслу идёт секунды, но читатель в это время смотрит на своё же поле ввода, и
+       модальное окно поверх выдачи выглядело бы поломкой. Карточка встаёт НА МЕСТО
+       будущего результата и исчезает, когда он приходит.
+
+       Порог delay: быстрый (кэшированный) ответ не должен мигать карточкой — она
+       появляется, только если ждём дольше указанного. */
+    function inline(host, opts) {
+        opts = opts || {};
+        if (!host) return opts.promise;
+        var delay = opts.delay != null ? opts.delay : 700;
+        var node = null, done = false;
+
+        var timer = setTimeout(function () {
+            if (done) return;
+            node = document.createElement('div');
+            node.className = 'b42-wait-inline';
+            node.innerHTML =
+                '<div class="b42-wait-head"><b>' + (opts.title || t.wait) + '</b></div>' +
+                '<div class="b42-wait-bar"><i></i></div>' +
+                '<div class="b42-wait-body"></div>' +
+                '<div class="b42-wait-foot"><span class="b42-rank"></span>' +
+                  '<button type="button" class="b42-wait-next">' + t.next + '</button></div>';
+            // В начало контейнера, а не в конец: в нём может лежать предыдущая выдача,
+            // и карточка «идёт поиск» под старым списком читается как часть результата.
+            host.insertBefore(node, host.firstChild);
+            mount(node.querySelector('.b42-wait-body'), node.querySelector('.b42-rank'))
+                .then(function (again) {
+                    if (node) node.querySelector('.b42-wait-next').addEventListener('click', again);
+                });
+        }, delay);
+
+        function stop(result) {
+            done = true;
+            clearTimeout(timer);
+            if (node) { node.remove(); node = null; }
+            return result;
+        }
+        if (opts.promise && opts.promise.then) {
+            return opts.promise.then(stop, function (e) { stop(); throw e; });
+        }
+        return { close: stop };
+    }
+
+    window.B42Waiting = { open: open, inline: inline, rank: rank, score: score };
 })();
