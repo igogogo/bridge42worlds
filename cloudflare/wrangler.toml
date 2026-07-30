@@ -29,6 +29,13 @@ database_id = "44ca0737-e27f-4cb5-bac8-9b132c935e4d"
 QUOTA_DAY_USER = "20"       # вопросов в сутки на одного читателя
 QUOTA_WEEK_USER = "60"      # и за неделю — чтобы суточную норму не растягивали на семь дней
 QUOTA_DAY_PROJECT = "2000"  # предохранитель на весь проект: счёт не уедет, даже если ошиблись
+QUOTA_DAY_ANON = "3"        # анонимному — попробовать; вход должен давать понятную выгоду,
+QUOTA_WEEK_ANON = "5"       # а не выглядеть вымогательством на пустом месте
+
+# Секреты входа (НЕ здесь, шифруются на стороне Cloudflare — wrangler secret put):
+#   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET  — вход через Google
+#   TURNSTILE_SECRET                        — проверка «не робот»
+#   RESEND_API_KEY, MAIL_FROM               — отправка одноразовых кодов на почту
 
 # Хранилище статики (HTML/JSON/картинки). Создаётся: wrangler r2 bucket create bridge42worlds-site
 [[r2_buckets]]

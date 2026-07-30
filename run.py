@@ -96,6 +96,7 @@ def cmd_daily(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.process_day(args.date or _yesterday(), force=args.force, express=args.express, category=args.category, limit=args.limit)
+    _ensure_webp()   # без этого шага свежие статьи выходят без картинок (возврат QA 2026-07-30)
 
 
 def cmd_range(args):
@@ -164,6 +165,7 @@ def cmd_regen_day(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.process_day(args.date, force=True)
+    _ensure_webp()
 
 
 def _refuse_if_peak(command):
@@ -253,6 +255,18 @@ def _run_chain(chain):
             sys.exit(code)
 
 
+# Команды, которые ничего не меняют: сводки и проверки. Им нельзя ни публиковать сайт, ни
+# трогать индекс поиска, ни гонять бэкап. Список ОДИН на все три хвостовых шага — до 2026-07-30
+# правило жило тремя копиями: в публикации, в индексе, а в бэкапе его не было вовсе, из-за чего
+# `run.py check` всё равно заливал бэкап в облако (нашёл QA). Три копии одного правила
+# разойдутся обязательно, у нас это уже случалось.
+READONLY_COMMANDS = {"stats", "check", "links", "status", "ids"}
+
+
+def _is_readonly_command():
+    return (sys.argv[1] if len(sys.argv) > 1 else "") in READONLY_COMMANDS
+
+
 def _build_search_index():
     """Лёгкий индекс поиска (lang/*/search-index.json) — последним шагом генерации, до публикации.
 
@@ -261,7 +275,7 @@ def _build_search_index():
     их меняет, обязана его обновить. Забыть один вызов — значит показывать читателю поиск
     по вчерашнему корпусу, причём молча. Считается за секунды, поэтому лишний вызов не жалко.
     Проверки контент не трогают — им индекс пересобирать незачем."""
-    if (sys.argv[1] if len(sys.argv) > 1 else "") in {"stats", "check", "links", "status", "ids"}:
+    if _is_readonly_command():
         return
     script = Path(__file__).resolve().parent / "search_index_build.py"
     if not script.exists():
@@ -288,9 +302,7 @@ def _publish_to_r2():
     # по названию ничего не обещает заливать, и о выпуске узнали из уведомления сторожа.
     # Поэтому публикуют только команды, которые меняют сайт по своей сути; проверки
     # и сводки — никогда. Разовый выпуск без пересборки: run.py publish.
-    READONLY = {"stats", "check", "links", "status", "ids"}
-    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
-    if cmd in READONLY:
+    if _is_readonly_command():
         return
     script = Path(__file__).resolve().parent / "cloudflare" / "deploy_r2.py"
     if not script.exists():
@@ -308,16 +320,13 @@ def _publish_to_r2():
 
 
 def _backup_to_r2():
-    # Проверки не трогают ни сайт, ни бэкап (находка QA: READONLY стоял только
-    # на публикации, а бэкап бежал после любой команды).
-    if (sys.argv[1] if len(sys.argv) > 1 else "") in {"stats", "check", "links", "status", "ids"}:
-        return
     """Резервная копия исходников (data.json, реестры, оригиналы обложек) в ПРИВАТНЫЙ бакет.
     Тоже автоматически, по той же причине, что и публикация: то, что нужно помнить запускать
     руками, однажды забудут. До 2026-07-29 копии не существовало нигде — единственный экземпляр
     исходников всех статей лежал на одной машине (задача 00 в задачи/devops.md).
-    Дельта по md5: если ничего не менялось, отрабатывает вхолостую за секунды."""
-    if os.environ.get("SKIP_R2_BACKUP"):
+    Дельта по md5: если ничего не менялось, отрабатывает вхолостую за секунды.
+    Проверки бэкап не гоняют — по тому же правилу, что публикацию и индекс."""
+    if _is_readonly_command() or os.environ.get("SKIP_R2_BACKUP"):
         return
     script = Path(__file__).resolve().parent / "cloudflare" / "backup_r2.py"
     if not script.exists():
@@ -632,6 +641,7 @@ def cmd_regen(args):
         os.environ["REFINE"] = "1"
     import generate
     generate.regenerate_article(args.id)
+    _ensure_webp()   # regen-статья 2607.23119v2 вышла без единого webp — возврат QA
 
 
 def cmd_check(args):

@@ -3230,11 +3230,12 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         real_tiers = [v for v in VERSIONS if not express or v in express_tiers]
         use_constructor_translate = bool(config.get("constructor")) and not express
         if targets and use_constructor_translate:
-            # Конвейер 2.0: на язык — advanced целиком (pro, глоссарий переводится),
-            # затем popular/simple слимом (flash, общие поля из переведённого advanced).
+            # Конвейер 2.0: на язык — advanced целиком (pro), затем popular/simple слимом
+            # (flash, общие поля из переведённого advanced). Служебные поля (metaphor,
+            # glossary) не переводятся вовсе — читатель их не видит, см. _INTERNAL_FIELDS.
             # Провал slim — честный откат на полный translate_scipop этого тира.
             def _translate_lang(l):
-                adv_l = translate_scipop(versions_ru["advanced"], l, translate_glossary=True)
+                adv_l = translate_scipop(versions_ru["advanced"], l)
                 out = {"advanced": adv_l}
                 for v in ("popular", "simple"):
                     res = translate_scipop_slim(versions_ru[v], adv_l, l)

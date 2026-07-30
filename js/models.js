@@ -38,11 +38,11 @@
     // стоит на КАЖДОЙ странице урока, и по-русски он выглядел одинаково для англичанина,
     // испанца и араба. Единицы кириллицей уместны только в русской версии.
     var UNIT_I18N = {
-        si:       { ru: 'СИ',          en: 'SI',        es: 'SI',        ar: 'الدولي' },
-        metric:   { ru: 'бытовая',     en: 'everyday',  es: 'cotidiana', ar: 'اليومي' },
-        bar:      { ru: 'техническая', en: 'technical', es: 'técnica',   ar: 'التقني' },
-        imperial: { ru: 'имперская',   en: 'imperial',  es: 'imperial',  ar: 'الإمبراطوري' },
-        planck:   { ru: 'планковская', en: 'Planck',    es: 'de Planck', ar: 'بلانك' }
+        si:       { ru: 'СИ',          en: 'SI',        es: 'SI',        ar: 'الدولي',        fr: 'SI' },
+        metric:   { ru: 'бытовая',     en: 'everyday',  es: 'cotidiana', ar: 'اليومي',        fr: 'courante' },
+        bar:      { ru: 'техническая', en: 'technical', es: 'técnica',   ar: 'التقني',        fr: 'technique' },
+        imperial: { ru: 'имперская',   en: 'imperial',  es: 'imperial',  ar: 'الإمبراطوري', fr: 'impériale' },
+        planck:   { ru: 'планковская', en: 'Planck',    es: 'de Planck', ar: 'بلانك',         fr: 'de Planck' }
     };
     var UNIT_SYM = { 'Па': 'Pa', 'м³': 'm³', 'атм': 'atm', 'л': 'L', 'бар': 'bar' };
     function pageLang() {

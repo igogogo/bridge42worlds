@@ -47,7 +47,12 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
     --ink: #0F1626;
     --text: #1e2635;
     --muted: #5A6273;
-    --soft: #8A94A6;
+    /* Вторичный текст. Было #8A94A6 — на айвори это контраст 2.73, то есть вдвое ниже
+       порога читаемости (4.5 для обычного текста): QA нашёл такой текст на десяти
+       корневых страницах. Стало 4.63 — «тихо», но читаемо. Разница с --muted
+       сократилась, и это правильно: иерархию держат размер и насыщенность, а не
+       граница видимости. */
+    --soft: #646E7D;
     --faint: rgba(15,22,38,.5);
     --link: #2E8AA0;                 /* циан — интерактив + теги */
     --border: rgba(15,22,38,.11);    /* hairline */
@@ -81,7 +86,9 @@ html[data-theme="dark"] {
     --ink: #ECE9E1;
     --text: #d6d9e1;
     --muted: #9197a5;
-    --soft: #767e8d;
+    /* В тёмной теме та же беда с другой стороны: #767e8d на #1b1f27 давал 4.03.
+       Здесь вторичный текст нужно ОСВЕТЛЯТЬ, а не притемнять. Стало 5.35. */
+    --soft: #8A93A5;
     --faint: rgba(236,233,225,.48);
     --link: #6ec3d8;
     --border: rgba(236,233,225,.13);
@@ -2277,6 +2284,55 @@ html[data-theme="dark"] .an-stage {
    связей она перерастала свою колонку — полоска ложилась поверх названия понятия.
    Колонку не расширяем: тогда на узком экране схлопнутся сами названия. */
 .tn-bar { max-width: 100%; }
+
+/* ═══ Длинные слова: стойкость вёрстки (2026-07-30, дизайн) ═══════════════════
+   Французский добавлен пятым языком, и его слова длиннее английских в разы:
+   «électromagnétisme», «supraconductivité», «antiferromagnétique». Проверено
+   подстановкой таких слов в существующие узлы (fr-страниц ещё нет): на 375
+   подпись рвала пилюлю уровня — 101 пиксель содержимого против 75 доступных,
+   и вместе с ней уезжал весь переключатель. Английский там влезал.
+
+   Лечим по роли узла, а не одним правилом на всё: заголовкам и подписям
+   разрешаем рвать слово, кнопкам — обрезать хвост. Кнопка не должна расти от
+   текста: её ширину держит шкала касания. */
+.card-title, .card-cat, .card-desc, .card-authors,
+.side-tag, .side-law, .side-sci, .related-tags a, .law-chip, .kg-chip,
+.tn-n, .an-card-t, .dash-chip, .cat-chip {
+    overflow-wrap: break-word;
+}
+/* Подпись внутри кнопки уровня: обрезаем хвост, а не растягиваем кнопку.
+   Само слово при этом остаётся узнаваемым по началу — «électromagné…». */
+.lv-btn { overflow: hidden; }
+.lv-btn .lv-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+/* ═══ Плашка молодого языка ═══════════════════════════════════════════════════
+   Язык, у которого переведена ещё не вся начинка (fr — пятый, добавлен 2026-07-30).
+   Честное предупреждение вместо тихой подстановки английского: читатель должен
+   понимать, почему часть страниц не на его языке, иначе это читается как поломка.
+
+   Тон — спокойное уведомление, не ошибка: охра, тонкая линия, без иконки-тревоги.
+   Разметку вставляет генератор; здесь только вид. Ширина по колонке текста, на
+   узком экране во всю ширину; в RTL зеркалится сама (логические свойства). */
+.young-lang {
+    display: flex; align-items: flex-start; gap: 10px;
+    max-width: var(--w-text, 620px); margin: 0 0 18px;
+    padding: 11px 14px; border-radius: var(--radius-sm, 12px);
+    background: color-mix(in srgb, var(--ochre) 9%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--ochre) 30%, var(--hair));
+    font-size: 13.5px; line-height: 1.6; color: var(--text);
+}
+.young-lang::before {
+    content: ""; flex: none; width: 16px; height: 16px; margin-top: 1px;
+    background-color: var(--ochre);
+    -webkit-mask: var(--ic-lamp) center / contain no-repeat;
+    mask: var(--ic-lamp) center / contain no-repeat;
+}
+.young-lang b { font-weight: 600; }
+.young-lang a { color: var(--link); text-decoration: none; border-bottom: 1px solid transparent; }
+.young-lang a:hover { border-bottom-color: var(--link); }
+@media (max-width: 640px) {
+    .young-lang { max-width: none; font-size: 13px; padding: 10px 12px; }
+}
 
 /* Уровень текста на карточке тега/закона/учёного/раздела.
    Стоял в шапке — ломал кластер меню и читался как набор непонятных значков (юзер 2026-07-28).
