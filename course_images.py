@@ -67,6 +67,18 @@ SUBJECTS = {
     "waves/01-travelling": "a long rope tied to a post with a single hump travelling along it, a hand holding the free end",
     "waves/02-standing": "a plucked guitar string vibrating with still points along it, an organ pipe cut away beside it",
     "waves/03-interference": "a ripple tank with two dippers making overlapping circular waves that cross in a pattern",
+
+    # Космология и теоретическая механика: у этих двух тем картинок не было вовсе, и каждая
+    # загрузка урока уходила в 404 (находка QA). Сюжеты, как и везде, предметные: «расширение
+    # Вселенной» FLUX рисует туманным пятном, а растянутая резинка с метками — это вещь.
+    "cosmology/01-expansion": "a wide rubber band stretched between two brass pins on a wooden board, ink marks along it spaced further apart towards the right, a small ruler lying beside it",
+    "cosmology/02-cmb": "a large white horn antenna on a concrete mount against an empty evening sky, an abandoned bird nest on the ground beside it",
+    # «прибор без деталей» FLUX нарисовал целым — нехватка не читается. Просим весы: видимый
+    # груз мал, а перевешивает пустая чаша, и это ровно то, что показали измерения масс.
+    "cosmology/03-dark": "a brass balance scale on a workbench, one pan holding a single small sphere and raised high, the opposite pan empty yet tipped all the way down",
+    "analytical/01-action": "a wire loop dipped in soap solution held by a hand, the film stretched into a smooth curved surface",
+    "analytical/02-lagrange": "a spinning top on a mirror table, its reflection perfectly symmetrical below it",
+    "analytical/03-hamilton": "a pendulum clock with its case open, a paper chart beside it showing a single closed oval curve drawn in ink",
 }
 
 
