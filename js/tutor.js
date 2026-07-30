@@ -115,12 +115,12 @@
         // Локальная разработка: wrangler dev поднимает Worker на 8787, а статику отдаёт другой
         // сервер — тогда в странице задают window.B42_TUTOR_API = 'http://localhost:8787/api/tutor'.
         var API = global.B42_TUTOR_API || '/api/tutor';
-        // Тьютор отвечает через серверный эндпоинт /api/tutor. На статике (GitHub Pages) его нет —
-        // кнопка бы висела и молчала. Поэтому по умолчанию модуль СКРЫТ; включим одной строкой
-        // после переезда на Cloudflare: window.B42_TUTOR_ENABLED = true (владелец 2026-07-27).
-        var ENABLED = global.B42_TUTOR_ENABLED === true
-            || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)   // локальная разработка с wrangler
-            || /workers\.dev$/.test(location.hostname);                 // тестовый Worker
+        // Тьютор отвечает через серверный эндпоинт /api/tutor. Пока сайт жил на GitHub Pages,
+        // эндпоинта не было — кнопка висела бы и молчала, поэтому модуль был скрыт по умолчанию.
+        // С 2026-07-30 включён: сайт на Cloudflare, /api/tutor живой, ключ модели в секретах
+        // Worker'а, расход считается нормой (см. /api/quota). Выключается той же строкой —
+        // window.B42_TUTOR_ENABLED = false в странице, если понадобится погасить без выкладки.
+        var ENABLED = global.B42_TUTOR_ENABLED !== false;
         if (!ENABLED) return { hidden: true };
         var MAX_Q = opts.maxQuestions || 10;      // сколько вопросов/подсказок даётся за сессию
         var MAX_LEN = opts.maxLen || 600;         // ограничение на длину вопроса
