@@ -18,10 +18,17 @@
     --font-body:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
     --font-mono:'Cascadia Code','Cascadia Mono',Consolas,'SFMono-Regular',Menlo,monospace;
   }
-  @media (prefers-color-scheme: dark){
-    :root{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
-      --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
-  }
+  /* Системную тёмную тему эта страница НЕ ловит намеренно, и вот почему.
+     Палитра здесь своя (--paper/--ink/…), а общий css/css/style.css подключён ниже и
+     тему переключает только по атрибуту data-theme — `prefers-color-scheme` в нём
+     не встречается ни разу. Пока тут стоял @media (prefers-color-scheme: dark),
+     на телефоне в ночном режиме переворачивалась половина палитры: фон плашки брался
+     тёмный отсюда (--paper-raised: #1B2128), а цвет текста — светлотемный из общего
+     файла (--ink: #0F1626). Контраст 1.11 у .q-status и 1.07 у .card — читатель видел
+     тёмные прямоугольники без текста, и текст появлялся только после переключения
+     темы туда-обратно, потому что тогда data-theme согласовывал обе палитры.
+     Правило про тему должно жить в одном месте; здесь это data-theme.
+     (QA, 2026-07-29 — баг с мобильной версии от владельца) */
   :root[data-theme="dark"]{--paper:#14181D; --paper-raised:#1B2128; --ink:#ECE7D8; --ink-soft:#9BA6A2;
     --rule:#333B42; --brass:#D6A84A; --steel:#6FC2DD; --moss:#8FC392; --red:#E08585}
   :root[data-theme="light"]{--paper:#EFEEE6; --paper-raised:#F8F7F1; --ink:#1B222B; --ink-soft:#57616B;
