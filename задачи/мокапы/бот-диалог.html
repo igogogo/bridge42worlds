@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мокап — диалог бота-тьютора — bridge42worlds</title>
+<!--
+  Мокап диалога бота-тьютора. Самодостаточный: токены и стили внутри, открывается файлом,
+  сборка не нужна. Реальные стили живут в js/tutor.js (массив CSS), сюда они перенесены
+  один в один, а предлагаемые правки помечены в списке ниже и включаются переключателем —
+  так видно, что именно меняется, а не «стало лучше».
+
+  Зачем мокап, а не правка сразу в tutor.js: диалог виден только на страницах курса и
+  только после ответа модели, поэтому вживую сравнить «как есть» и «как предлагаю»
+  нельзя — а решение тут вкусовое и требует утверждения.
+-->
+<style>
+  :root {
+    --ink: #0F1626; --text: #1e2635; --muted: #5A6273; --soft: #8A94A6;
+    --bg: #F4F2EC; --surface: #FBFAF6; --tag-bg: #ECE9E1;
+    --border: rgba(15,22,38,.11); --hair: rgba(15,22,38,.11);
+    --link: #2E8AA0; --ochre: #C77F3A; --red: #c0392b;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  html[data-theme="dark"] {
+    --ink: #ECE9E1; --text: #d6d9e1; --muted: #9197a5; --soft: #767e8d;
+    --bg: #1b1f27; --surface: #242832; --tag-bg: #2f3542;
+    --border: rgba(236,233,225,.13); --hair: rgba(236,233,225,.13);
+    --link: #6ec3d8; --ochre: #E4A860; --red: #e2685a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans);
+    padding: 28px 22px 60px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; margin: 0 0 6px; color: var(--ink); }
+  .lead { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 62ch; margin: 0 0 22px; }
+  .ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 26px;
+    padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+  .ctl b { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--soft); font-weight: 400; margin-right: 4px; }
+  .ctl button { font: inherit; font-size: 13px; padding: 7px 14px; border-radius: 16px; cursor: pointer;
+    background: none; border: 1px solid var(--border); color: var(--muted); min-height: 34px; }
+  .ctl button.on { border-color: var(--link); color: var(--link); background: color-mix(in srgb, var(--link) 10%, transparent); }
+  .stage { display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-start; }
+  .col-note { flex: 1 1 300px; min-width: 280px; }
+  .col-note h2 { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--soft); font-weight: 500; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .col-note ol { margin: 0; padding-left: 20px; }
+  .col-note li { font-size: 14px; line-height: 1.7; margin-bottom: 12px; color: var(--text); }
+  .col-note li b { font-weight: 600; }
+  .col-note li span { color: var(--muted); }
+
+  /* ── панель диалога: перенесено из js/tutor.js ── */
+  .tb-panel { width: 380px; max-height: 560px; display: flex; flex-direction: column; border-radius: 16px;
+    background: var(--bg); border: 1px solid var(--border); box-shadow: 0 8px 34px rgba(0,0,0,.24);
+    overflow: hidden; flex: 0 0 auto; }
+  .tb-head { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .tb-title { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .tb-ctx { font-size: 11px; color: var(--soft); margin-top: 1px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; max-width: 250px; }
+  .tb-close { background: none; border: none; font-size: 20px; line-height: 1; cursor: pointer; color: var(--soft); }
+  .tb-body { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .tb-msg { font-size: 13.5px; line-height: 1.6; padding: 9px 12px; border-radius: 12px; max-width: 88%; white-space: pre-wrap; }
+  .tb-msg.me { align-self: flex-end; background: var(--link); color: #fff; border-bottom-right-radius: 4px; }
+  .tb-msg.bot { align-self: flex-start; background: var(--tag-bg); color: var(--text); border-bottom-left-radius: 4px; }
+  .tb-msg.sys { align-self: center; font-size: 11.5px; color: var(--soft); background: none; text-align: center; }
+  .tb-foot { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--border); }
+  .tb-foot textarea { flex: 1; min-height: 38px; max-height: 110px; resize: none; font: inherit; font-size: 13.5px;
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); }
+  .tb-foot button { align-self: flex-end; background: var(--link); color: #fff; border: none; border-radius: 10px;
+    padding: 9px 14px; font-size: 13px; cursor: pointer; }
+
+  /* ── предлагаемые правки: включаются классом .v2 на панели ── */
+  .v2 .tb-head { align-items: flex-start; }
+  /* 1. знак у реплик бота — узнаваемость: кто говорит, видно без чтения */
+  .v2 .tb-msg.bot { position: relative; margin-left: 26px; }
+  .v2 .tb-msg.bot::before {
+    content: ""; position: absolute; left: -26px; top: 2px; width: 18px; height: 18px;
+    background-color: var(--link); opacity: .75;
+    -webkit-mask: var(--ic-chat) center / contain no-repeat; mask: var(--ic-chat) center / contain no-repeat;
+  }
+  /* 2. остаток вопросов — тихой строкой в шапке, а не системной репликой в потоке */
+  .v2 .tb-quota { display: block; }
+  /* 3. «думает» — три точки вместо слова: короче и не читается как реплика */
+  .v2 .tb-typing { display: flex; }
+  .v2 .tb-msg.thinking { display: none; }
+  /* 4. системная реплика — со знаком, чтобы отличалась от слов бота */
+  .v2 .tb-msg.sys { display: inline-flex; align-items: center; gap: 6px; }
+  .v2 .tb-msg.sys::before {
+    content: ""; width: 14px; height: 14px; flex: none; background-color: var(--ochre);
+    -webkit-mask: var(--ic-warn) center / contain no-repeat; mask: var(--ic-warn) center / contain no-repeat;
+  }
+  /* 5. у края списка — мягкая растворённая кромка: видно, что выше есть ещё */
+  .v2 .tb-body { position: relative; }
+  .v2 .tb-body::before { content: ""; position: sticky; top: -12px; display: block; height: 14px;
+    margin: -12px -14px 0; background: linear-gradient(var(--bg), transparent); }
+
+  .tb-quota { display: none; font-family: var(--mono); font-size: 10.5px; color: var(--soft);
+    margin-top: 3px; letter-spacing: .02em; }
+  .tb-typing { display: none; align-self: flex-start; gap: 4px; padding: 11px 14px;
+    background: var(--tag-bg); border-radius: 12px; border-bottom-left-radius: 4px; }
+  .tb-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--soft); display: block;
+    animation: dot 1.2s infinite ease-in-out; }
+  .tb-typing i:nth-child(2) { animation-delay: .15s; }
+  .tb-typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot { 0%, 60%, 100% { opacity: .25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+  @media (prefers-reduced-motion: reduce) { .tb-typing i { animation: none; opacity: .5; } }
+
+  :root {
+    --ic-chat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z'/%3E%3Cpath d='M8 9h8'/%3E%3Cpath d='M8 12.5h5'/%3E%3C/svg%3E");
+    --ic-warn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4L2.5 20h19z'/%3E%3Cpath d='M12 10v4.5'/%3E%3Cpath d='M12 17.5v.01'/%3E%3C/svg%3E");
+  }
+  body.narrow .tb-panel { width: 100%; max-width: 359px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Диалог бота-тьютора</h1>
+  <p class="lead">Панель показана в натуральную величину — 380 пикселей, как на странице курса.
+  Слева переключается тема и ширина, «правки» показывают предлагаемые изменения: их пять, каждая
+  подписана справа. Всё остальное — ровно то, что сейчас в <code>js/tutor.js</code>.</p>
+
+  <div class="ctl">
+    <b>тема</b>
+    <button id="t-light" class="on" type="button">светлая</button>
+    <button id="t-dark" type="button">тёмная</button>
+    <b style="margin-left:10px">ширина</b>
+    <button id="w-desk" class="on" type="button">380 · курс</button>
+    <button id="w-narrow" type="button">375 · телефон</button>
+    <b style="margin-left:10px">вид</b>
+    <button id="v-now" type="button">как сейчас</button>
+    <button id="v-next" class="on" type="button">с правками</button>
+  </div>
+
+  <div class="stage">
+    <div class="tb-panel v2" id="panel">
+      <div class="tb-head">
+        <div>
+          <div class="tb-title">Тьютор</div>
+          <div class="tb-ctx">по разделу: Второе начало</div>
+          <div class="tb-quota">осталось вопросов: 17</div>
+        </div>
+        <button class="tb-close" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <div class="tb-body">
+        <div class="tb-msg bot">Спрашивайте что угодно по этому разделу — объясню на пальцах. Я вижу, какой раздел вы читаете.</div>
+        <div class="tb-msg me">почему энтропия растёт, если законы механики обратимы?</div>
+        <div class="tb-msg bot">Обратимы уравнения, но не начальные условия. Молекул много, и способов «беспорядка» несравнимо больше, чем способов «порядка» — поэтому система уходит туда, где состояний больше. Обратный путь не запрещён, он просто невероятен.</div>
+        <div class="tb-msg me">а если молекул всего пять?</div>
+        <div class="tb-msg thinking sys">Думаю…</div>
+        <div class="tb-typing" aria-label="Тьютор печатает"><i></i><i></i><i></i></div>
+        <div class="tb-msg sys">Демо-режим: живой тьютор включается на сервере</div>
+      </div>
+      <div class="tb-foot">
+        <textarea placeholder="Спросите о том, что не сходится…"></textarea>
+        <button type="button">Спросить</button>
+      </div>
+    </div>
+
+    <div class="col-note">
+      <h2>Что предлагаю поправить</h2>
+      <ol>
+        <li><b>Знак у реплик бота.</b> <span>Сейчас чей это пузырь, понятно только по цвету и стороне. Ставим слева наш знак диалога — видно без чтения, а на тёмной теме цвет различается хуже, чем форма.</span></li>
+        <li><b>Остаток вопросов — в шапку.</b> <span>Сейчас лимит приходит системной репликой в поток и уезжает вверх при первой же прокрутке. Место счётчика — рядом с названием, тихой строкой моно.</span></li>
+        <li><b>«Думаю…» → три точки.</b> <span>Слово в потоке читается как ещё одна реплика бота. Точки занимают меньше и однозначно означают ожидание.</span></li>
+        <li><b>Системная реплика со знаком.</b> <span>«Демо-режим», «нужен токен», «лимит» — это не слова тьютора, а состояние. Треугольник охрой отделяет их от разговора.</span></li>
+        <li><b>Мягкая кромка у списка.</b> <span>Сообщения обрезаются ровной линией, и непонятно, есть ли выше ещё. Растворённая кромка показывает, что список прокручивается.</span></li>
+      </ol>
+      <h2 style="margin-top:26px">Чего не трогаю</h2>
+      <ol>
+        <li><b>Синий пузырь пользователя</b> <span>— он же брендовый акцент, и на обеих темах контраст с белым текстом достаточный.</span></li>
+        <li><b>Размер 380 и позиция справа снизу</b> <span>— проверено на курсе, на телефоне панель уже растягивается на всю ширину.</span></li>
+        <li><b>Кнопка «Спросить» словом, а не значком</b> <span>— это главное действие, слово тут понятнее значка.</span></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+  var h = document.documentElement, body = document.body, panel = document.getElementById('panel');
+  function pair(a, b, fn) {
+    document.getElementById(a).onclick = function () { fn(true); sel(a, b); };
+    document.getElementById(b).onclick = function () { fn(false); sel(b, a); };
+  }
+  function sel(on, off) {
+    document.getElementById(on).classList.add('on');
+    document.getElementById(off).classList.remove('on');
+  }
+  pair('t-light', 't-dark', function (light) { h.setAttribute('data-theme', light ? 'light' : 'dark'); });
+  pair('w-desk', 'w-narrow', function (desk) { body.classList.toggle('narrow', !desk); });
+  pair('v-next', 'v-now', function (next) { panel.classList.toggle('v2', next); });
+</script>
+</body>
+</html>
