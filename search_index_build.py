@@ -10,13 +10,18 @@
 
     {"t":"tag", "id":"accretion_disk", "n":"аккреционный диск", "c":142}
     {"t":"law", "id":"kepler_laws",    "n":"Законы Кеплера",    "c":12}
-    {"t":"sci", "id":"Johannes Kepler","n":"Иоганн Кеплер",     "s":"1571–1630", "c":3}
+    {"t":"sci", "id":"Johannes Kepler","n":"Johannes Kepler",   "s":"1571–1630", "c":3,
+                "a":["Кеплер","Иоганн Кеплер"]}
     {"t":"sec", "id":"astro-ph.CO",    "n":"Космология",        "c":88}
     {"t":"art", "id":"2607.00742",     "n":"Заголовок",         "d":"2026-07-01"}
 
 Поля короткие намеренно: на двух с половиной тысячах записей длина ключей заметна в весе.
 `id` служит и адресом (страницу собирает сама выдача), и латинским псевдонимом для поиска —
 человек может набрать `entropy` на русской версии и должен найти «энтропию».
+
+`a` — только у учёных: имена на языке страницы, по которым тоже ищем, а показываем всегда `n`.
+Нужны потому, что в справочнике учёных имя всегда латиницей, и без них арабский читатель
+не найдёт существующего Эйнштейна (нашёл QA). Откуда берутся — см. scientist_aliases().
 
 Счётчики статей считаются ТЕМИ ЖЕ правилами, что и на самих страницах, иначе поиск будет
 обещать одно, а страница показывать другое:
@@ -27,8 +32,9 @@
 Везде учитываются только записи version == "popular": в индексе статья лежит по разу
 на каждый уровень чтения, а искать её надо один раз.
 
-Фактический вес на 2026-07-30 (2,8–2,9 тыс. записей на язык): ru 367 КБ, ar 332 КБ,
-es 287 КБ, en 261 КБ — укладывается в оговорённые 400 КБ. Основной вклад дают статьи
+Фактический вес на 2026-07-30 (2,8–2,9 тыс. записей на язык): ru 384 КБ, ar 343 КБ,
+es 289 КБ, en 265 КБ — укладывается в оговорённые 400 КБ, но у русского запас невелик:
+имена-синонимы учёных добавили около 17 КБ. Основной вклад дают статьи
 (две тысячи заголовков); если однажды перестанет помещаться, резать надо их, а не
 справочники: понятий, законов и учёных всего около 850 на язык.
 
@@ -38,10 +44,26 @@ es 287 КБ, en 261 КБ — укладывается в оговорённые 
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
 from common import LANGUAGES
+
+# Подпись у маркера учёного в тексте статьи: [scientist:Albert Einstein]Эйнштейна[/scientist].
+SCI_MARKER = re.compile(r"\[scientist:([^\]]+)\]([^\[]{1,60})\[/scientist\]")
+
+# Письменность языка. Подпись берём только в «своей» письменности: в арабских текстах у нас
+# местами остались русские подписи маркеров (известный слой утечки перевода), и без этого
+# фильтра в арабский индекс приезжает «Альбертом Эйнштейном» — вес есть, пользы нет.
+SCRIPTS = {
+    "ru": re.compile(r"[А-Яа-яЁё]"),
+    "ar": re.compile(r"[؀-ۿ]"),
+    "en": re.compile(r"[A-Za-z]"),
+    "es": re.compile(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]"),
+}
+MAX_ALIASES = 8          # больше в строку результата всё равно не поместится
+MAX_ALIAS_WORDS = 2      # «Альберт Эйнштейн» — да, «общая теория относительности» — нет
 
 LANG_DIR = "lang"
 CATEGORIES_FILE = "data/arxiv-categories.json"
@@ -78,6 +100,57 @@ def _categories(lang):
     return {code: _name_of(loc.get(code)) or base.get(code) or code for code in sorted(codes)}
 
 
+def scientist_aliases(lang, known_names):
+    """Имена учёных на языке страницы — из подписей к маркерам в текстах статей.
+
+    Зачем. В справочнике `scientists.json` поле `name` не переведено ни на один язык (там
+    всегда латиница), поэтому арабский читатель набирает «أينشتاين» и не находит ничего —
+    учёного, который на сайте есть. Переводить справочник — отдельная задача и деньги;
+    но локализованные имена у нас УЖЕ написаны: авторы текстов размечают упоминания
+    маркером, и подпись внутри маркера — это имя на языке статьи.
+
+    Подписи грязные, и это осознанный размен. Внутри маркера встречаются склонения
+    («Гауссом»), инициалы («В. Рубин») и словосочетания вокруг имени («формула Эйнштейна»,
+    «LIGO»). Склонения для поиска по подстроке полезны, словосочетания — шум, поэтому
+    отсекаем: чужую письменность, длину больше двух слов, совпадение с названием тега или
+    закона (по ним ищут сущность, а не человека). Из оставшегося берём восемь самых частых:
+    настоящее имя встречается в корпусе десятки раз, случайная обёртка — единицы.
+
+    Полное решение — перевести `name` в справочнике; тогда этот сбор станет необязательным.
+    """
+    script = SCRIPTS.get(lang)
+    freq = {}
+    root = Path(LANG_DIR) / "ru" / "archive"     # data.json лежит только у языка-источника
+    if not root.exists():
+        return {}
+    for f in root.glob("*/*/data.json"):
+        try:
+            data = json.loads(f.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        for tier in ("popular", "simple", "advanced"):
+            branch = data.get(tier)
+            if not isinstance(branch, dict):
+                continue
+            text = branch.get(lang)
+            if not text:
+                continue
+            for sid, label in SCI_MARKER.findall(json.dumps(text, ensure_ascii=False)):
+                label = " ".join(label.split())
+                if not label or label == sid or len(label) > 40:
+                    continue
+                if len(label.split()) > MAX_ALIAS_WORDS:
+                    continue
+                if script and not script.search(label):
+                    continue
+                if label.lower() in known_names:
+                    continue
+                by_sci = freq.setdefault(sid, {})
+                by_sci[label] = by_sci.get(label, 0) + 1
+    return {sid: [lbl for lbl, _ in sorted(labels.items(), key=lambda kv: (-kv[1], kv[0]))[:MAX_ALIASES]]
+            for sid, labels in freq.items()}
+
+
 def build_lang(lang):
     articles = [a for a in _load(f"{LANG_DIR}/{lang}/articles-index.json", [])
                 if a.get("version") == "popular"]
@@ -103,11 +176,20 @@ def build_lang(lang):
         law_tags = set(data.get("tags") or [])
         count = sum(1 for a in articles if law_tags & set(a.get("tags") or []))
         rows.append({"t": "law", "id": lid, "n": data.get("name") or lid, "c": count})
+    # Названия понятий и законов на этом языке — фильтр для подписей маркеров: подпись,
+    # совпадающая с тегом или законом, размечает сущность, а не человека.
+    entity_names = {(d.get("name") or "").strip().lower()
+                    for d in list(tags.values()) + list(laws.values())}
+    entity_names.discard("")
+    aliases = scientist_aliases(lang, entity_names)
     for sid, data in scientists.items():
         row = {"t": "sci", "id": sid, "n": data.get("name") or sid,
                "c": sci_count.get(sid, 0)}
         if data.get("lifespan"):
             row["s"] = data["lifespan"]
+        alt = aliases.get(sid) or []
+        if alt:
+            row["a"] = alt          # по этим строкам тоже ищем, показываем всегда `n`
         rows.append(row)
     for code, name in categories.items():
         rows.append({"t": "sec", "id": code, "n": name, "c": sec_count.get(code, 0)})
