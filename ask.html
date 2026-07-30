@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Спросить — bridge42worlds</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Диалог с ботом-исследователем. Отвечает он ТОЛЬКО по нашим статьям, поэтому каждая
+     мысль в ответе должна быть подкреплена карточкой-ссылкой: читателю надо видеть,
+     откуда взят ответ, и иметь возможность проверить. Ответ без источников мы показываем
+     как «в базе этого нет», а не как знание — иначе бот превращается в генератор
+     правдоподобного текста. */
+  .top-bar{display:flex;justify-content:space-between;align-items:center;
+    max-width:var(--col-narrow, 760px);margin:0 auto 18px;padding:16px 16px 0}
+  .logo{font-family:var(--font-display);font-size:15px;color:var(--soft);text-decoration:none}
+  .logo:hover{color:var(--accent)}
+  .theme-toggle{background:none;border:1px solid var(--line);color:var(--soft);border-radius:50%;
+    width:30px;height:30px;cursor:pointer;font-size:13px}
+
+  .ask-wrap{max-width:var(--col-narrow, 760px);margin:0 auto;padding:0 16px 60px}
+  .ask-head h1{font-family:var(--font-display);font-size:clamp(24px,4vw,34px);margin-bottom:6px}
+  .ask-lead{color:var(--soft);font-size:15px;line-height:1.7;margin-bottom:6px}
+
+  /* Остаток нормы виден ДО вопроса, а не после отправки: иначе читатель тратит попытку,
+     чтобы узнать, что попыток не осталось. */
+  .ask-quota{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+  .ask-quota.low{color:#b8860b}
+
+  .ask-form{display:flex;gap:8px;align-items:flex-start;margin-bottom:18px}
+  .ask-input{flex:1;min-width:0;font:inherit;font-size:15px;padding:11px 13px;border-radius:10px;
+    border:1px solid var(--line);background:var(--surface);color:inherit;resize:vertical;min-height:48px}
+  .ask-input:focus{outline:none;border-color:var(--accent)}
+  .ask-send{font:inherit;font-size:14px;padding:11px 18px;border-radius:10px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent);color:var(--bg);min-height:48px;white-space:nowrap}
+  .ask-send[disabled]{opacity:.5;cursor:default}
+
+  .ask-msg{margin-bottom:16px;line-height:1.72;font-size:15px}
+  .ask-q{font-weight:600}
+  .ask-a{white-space:pre-wrap}
+  .ask-state{color:var(--muted);font-size:14px}
+
+  .ask-sources{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .ask-src{display:block;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+    text-decoration:none;color:inherit;border-bottom:1px solid var(--line)}
+  .ask-src:hover{background:var(--card-bg,var(--surface))}
+  .ask-src b{display:block;font-size:14px;font-weight:600}
+  .ask-src i{font-style:normal;font-size:12.5px;color:var(--soft)}
+
+  /* «В базе этого нет» — честный экран, а не извинение: говорим, что именно умеем,
+     и предлагаем поиск, который работает всегда. */
+  .ask-empty{border:1px solid var(--line);border-radius:11px;padding:14px;font-size:14px;
+    line-height:1.7;color:var(--soft)}
+
+  @media (max-width:700px){
+    .ask-form{flex-direction:column}
+    .ask-send{width:100%;min-height:48px}
+  }
+</style>
+<script>
+// Язык — общий с сайтом: ?lang= в адресе → сохранённый выбор → русский.
+(function () {
+  var allowed = ['ru', 'en', 'es', 'ar', 'fr'];
+  var q = (location.search.match(/[?&]lang=([a-z]{2})/) || [])[1];
+  var saved = null;
+  try { saved = localStorage.getItem('b42_lang'); } catch (e) {}
+  var lang = allowed.indexOf(q) >= 0 ? q : (allowed.indexOf(saved) >= 0 ? saved : 'ru');
+  window.B42_LANG = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  try { localStorage.setItem('b42_lang', lang); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
+<div class="ask-wrap">
+  <div class="ask-head">
+    <h1 id="ask-title"></h1>
+    <p class="ask-lead" id="ask-lead"></p>
+    <div class="ask-quota" id="ask-quota"></div>
+  </div>
+
+  <form class="ask-form" id="ask-form">
+    <textarea class="ask-input" id="ask-input" rows="2" autocomplete="off"></textarea>
+    <button type="submit" class="ask-send" id="ask-send"></button>
+  </form>
+
+  <div id="ask-log"></div>
+</div>
+
+<script src="/js/bot-ask.js?v=1"></script>
+<script src="/js/course-i18n.js?v=6"></script>
+<script src="/js/sitenav.js?v=1"></script>
+</body>
+</html>
