@@ -935,7 +935,16 @@ export default {
     const headers = new Headers();
     obj.writeHttpMetadata(headers);          // content-type проставляется при заливке (deploy_r2)
     headers.set("etag", obj.httpEtag);
-    headers.set("cache-control", IMMUTABLE.test(key)
+    // immutable на год честен ТОЛЬКО когда в адресе есть версия: страница, поменяв
+    // ?v=, попросит другой адрес и получит новый файл. Без версии тот же адрес навсегда
+    // означает «этот файл никогда не изменится» — а он меняется, и вернувшийся читатель
+    // остаётся со старым CSS, которого не исправит даже Ctrl+R (immutable запрещает и
+    // условный запрос). Так и вышло: корень и одиннадцать учебных страниц подключают
+    // /css/style.css БЕЗ версии, и в живом Chrome оттуда поднимался css на 34 КБ младше
+    // того, что сервер отдаёт сейчас (замер 2026-07-30). Лечим здесь, а не в одиннадцати
+    // страницах: правило работает и для тех, кто про версию забудет завтра.
+    const versioned = url.search.length > 1;
+    headers.set("cache-control", IMMUTABLE.test(key) && versioned
       ? "public, max-age=31536000, immutable"
       : "public, max-age=300");
 
